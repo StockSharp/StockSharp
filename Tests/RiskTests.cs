@@ -1176,9 +1176,8 @@ public class RiskTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		// Test that RiskMessageAdapter blocks trading when StopTrading action is triggered
-		var emu = new MarketEmulator(new CollectionSecurityProvider([new() { Id = "TEST@TEST" }]), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator());
 		var riskManager = new RiskManager();
-		var adapter = new RiskMessageAdapter(emu, riskManager);
+		var adapter = new RiskMessageAdapter(new TestInnerAdapter(), riskManager);
 
 		var messages = new List<Message>();
 		adapter.NewOutMessage += messages.Add;
@@ -1329,23 +1328,19 @@ public class RiskTests : BaseTestClass
 	}
 
 	// Wrapper adapter that captures all incoming messages
-	private class TestInnerAdapter : MessageAdapterWrapper
+	private class TestInnerAdapter : PassThroughMessageAdapter
 	{
 		public List<Message> ReceivedMessages { get; } = [];
 
 		public TestInnerAdapter()
-			: base(new MarketEmulator(
-				new CollectionSecurityProvider([new() { Id = "TEST@TEST" }]),
-				new CollectionPortfolioProvider([Portfolio.CreateSimulator()]),
-				new InMemoryExchangeInfoProvider(),
-				new IncrementalIdGenerator()))
+			: base(new IncrementalIdGenerator())
 		{
 		}
 
-		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
 			ReceivedMessages.Add(message);
-			return base.OnSendInMessageAsync(message, cancellationToken);
+			return base.SendInMessageAsync(message, cancellationToken);
 		}
 
 		public override IMessageAdapter Clone() => new TestInnerAdapter();
