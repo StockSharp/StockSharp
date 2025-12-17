@@ -33,7 +33,7 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 			}
 		}
 
-		return base.OnSendInMessageAsync(message, cancellationToken);
+		return base.SendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
