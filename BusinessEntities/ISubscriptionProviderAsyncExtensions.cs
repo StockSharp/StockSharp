@@ -27,6 +27,9 @@ public static class ISubscriptionProviderAsyncExtensions
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
+		if (cancellationToken.IsCancellationRequested)
+			yield break;
+
 		var channel = Channel.CreateUnbounded<T>(new UnboundedChannelOptions
 		{
 			SingleReader = true,
@@ -65,8 +68,26 @@ public static class ISubscriptionProviderAsyncExtensions
 		{
 			provider.Subscribe(subscription);
 
-			await foreach (var item in channel.Reader.ReadAllAsync(cancellationToken).WithEnforcedCancellation(cancellationToken))
-				yield return item;
+			await using var enumerator = channel.Reader.ReadAllAsync(cancellationToken).GetAsyncEnumerator(cancellationToken);
+
+			while (true)
+			{
+				bool hasNext;
+
+				try
+				{
+					hasNext = await enumerator.MoveNextAsync();
+				}
+				catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+				{
+					break;
+				}
+
+				if (!hasNext)
+					break;
+
+				yield return enumerator.Current;
+			}
 		}
 		finally
 		{
