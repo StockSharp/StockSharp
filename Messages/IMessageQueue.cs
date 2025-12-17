@@ -39,14 +39,14 @@ public interface IMessageQueue
 	/// </summary>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>The next message in the queue.</returns>
-	ValueTask<Message> DequeueAsync(CancellationToken cancellationToken = default);
+	ValueTask<Message> DequeueAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Returns an async enumerable that yields messages from the queue.
 	/// </summary>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Async enumerable of messages.</returns>
-	IAsyncEnumerable<Message> ReadAllAsync(CancellationToken cancellationToken = default);
+	IAsyncEnumerable<Message> ReadAllAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Removes all messages from the queue.
