@@ -1,21 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_netwindows.props" />
   <ItemGroup>
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Binance\Binance.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\BingX\BingX.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Bitget\Bitget.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\ByBitHistory\ByBitHistory.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\ByBit\ByBit.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Finam\Finam.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Fix\Fix.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Imex\Imex.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Mexc\Mexc.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\OkexHistory\OkexHistory.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Okex\Okex.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Plaza\Plaza.csproj" />
-	  <ProjectReference Include="..\..\..\..\StockSharpApps\Connectors\Transaq\Transaq.csproj" />
-	  <ProjectReference Include="..\..\..\Connectors\Tinkoff\Tinkoff.csproj" />
-	  
     <ProjectReference Include="..\..\..\..\StockSharpApps\Studio\Studio.WebApi.UI\Studio.WebApi.UI.csproj" />
     <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
   </ItemGroup>
