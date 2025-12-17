@@ -170,7 +170,7 @@ public partial class MainWindow
 			{
 				var date = DateTime.MinValue;
 
-				foreach (var tick in storage.GetTickMessageStorage(_securityId, new LocalMarketDataDrive(path)).Load())
+				foreach (var tick in storage.GetTickMessageStorage(_securityId, new LocalMarketDataDrive(path)).Load(null, null))
 				{
 					if (date != tick.ServerTime.Date)
 					{

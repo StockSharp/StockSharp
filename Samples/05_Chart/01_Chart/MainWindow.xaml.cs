@@ -294,7 +294,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 			if (isBuild)
 			{
-				foreach (var tick in storage.GetTickMessageStorage(secId, new LocalMarketDataDrive(path), format).Load())
+				foreach (var tick in storage.GetTickMessageStorage(secId, new LocalMarketDataDrive(path), format).Load(null, null))
 				{
 					if(token.IsCancellationRequested)
 						break;
@@ -329,7 +329,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			}
 			else
 			{
-				foreach (var candleMsg in storage.GetCandleMessageStorage(secId, dt, new LocalMarketDataDrive(path), format).Load())
+				foreach (var candleMsg in storage.GetCandleMessageStorage(secId, dt, new LocalMarketDataDrive(path), format).Load(null, null))
 				{
 					if(token.IsCancellationRequested)
 						break;
