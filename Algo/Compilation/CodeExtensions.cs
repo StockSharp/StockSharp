@@ -35,7 +35,11 @@ public static class CodeExtensions
 			"System.ComponentModel.Annotations",
 			"System.Collections",
 			"System.Drawing.Primitives",
-
+#if NET10_0_OR_GREATER
+			"System.Linq.AsyncEnumerable",
+#else
+			"Ecng.Linq",
+#endif
 			"Ecng.Common",
 			"Ecng.Collections",
 			"Ecng.ComponentModel",
