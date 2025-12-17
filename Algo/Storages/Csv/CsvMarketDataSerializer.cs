@@ -173,14 +173,14 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 
 	private readonly struct CsvAsyncEnumerable(CsvMarketDataSerializer<TData> serializer, Stream stream, IMarketDataMetaInfo metaInfo) : IAsyncEnumerable<TData>
 	{
-		private struct CsvEnumerator(CsvMarketDataSerializer<TData> serializer, FastCsvReader reader, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken) : IAsyncEnumerator<TData>
+		private class CsvEnumerator(CsvMarketDataSerializer<TData> serializer, FastCsvReader reader, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken) : IAsyncEnumerator<TData>
 		{
 			private readonly CsvMarketDataSerializer<TData> _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
 			private readonly FastCsvReader _reader = reader ?? throw new ArgumentNullException(nameof(reader));
 			private readonly IMarketDataMetaInfo _metaInfo = metaInfo ?? throw new ArgumentNullException(nameof(metaInfo));
 			private readonly CancellationToken _cancellationToken = cancellationToken;
 			private TData _current;
-            readonly TData IAsyncEnumerator<TData>.Current => _current;
+            TData IAsyncEnumerator<TData>.Current => _current;
 
 			ValueTask IAsyncDisposable.DisposeAsync()
 			{
