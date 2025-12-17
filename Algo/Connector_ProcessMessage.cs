@@ -406,7 +406,7 @@ partial class Connector
 	/// <summary>
 	/// Storage buffer.
 	/// </summary>
-	public StorageBuffer Buffer { get; }
+	public IStorageBuffer Buffer { get; }
 
 	private (IMessageAdapter prev, IMessageAdapter adapter, IMessageAdapter next) GetAdapter(Type type)
 	{

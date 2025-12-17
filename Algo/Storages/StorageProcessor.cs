@@ -10,35 +10,22 @@ using StockSharp.Algo.Candles.Compression;
 /// </remarks>
 /// <param name="settings">Storage settings.</param>
 /// <param name="candleBuilderProvider">Candle builders provider.</param>
-public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider)
+public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider) : IStorageProcessor
 {
 	private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = [];
 
-	/// <summary>
-	/// Storage settings.
-	/// </summary>
+	/// <inheritdoc/>
 	public StorageCoreSettings Settings { get; } = settings ?? throw new ArgumentNullException(nameof(settings));
 
-	/// <summary>
-	/// Candle builders provider.
-	/// </summary>
+	/// <inheritdoc/>
 	public CandleBuilderProvider CandleBuilderProvider { get; } = candleBuilderProvider ?? throw new ArgumentNullException(nameof(candleBuilderProvider));
 
-	/// <summary>
-	/// To reset the state.
-	/// </summary>
-	public void Reset()
+	void IStorageProcessor.Reset()
 	{
 		_fullyProcessedSubscriptions.Clear();
 	}
 
-	/// <summary>
-	/// Process <see cref="MarketDataMessage"/>.
-	/// </summary>
-	/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-	/// <param name="newOutMessage">New message event.</param>
-	/// <returns>Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</returns>
-	public MarketDataMessage ProcessMarketData(MarketDataMessage message, Action<Message> newOutMessage)
+	MarketDataMessage IStorageProcessor.ProcessMarketData(MarketDataMessage message, Action<Message> newOutMessage)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));

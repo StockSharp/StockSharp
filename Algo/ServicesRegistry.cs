@@ -211,7 +211,7 @@ public static class ServicesRegistry
 	/// <summary>
 	/// Snapshot storage registry.
 	/// </summary>
-	public static SnapshotRegistry SnapshotRegistry => ConfigManager.GetService<SnapshotRegistry>();
+	public static ISnapshotRegistry SnapshotRegistry => ConfigManager.GetService<ISnapshotRegistry>();
 
 	/// <summary>
 	/// The risks control manager.

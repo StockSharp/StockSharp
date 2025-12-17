@@ -1183,7 +1183,7 @@ public static class StorageHelper
 	/// <param name="arg">The parameter associated with the <paramref name="dataType" /> type. For example, candle arg.</param>
 	/// <returns>The snapshot storage.</returns>
 	[Obsolete("Use DataType overload.")]
-	public static ISnapshotStorage GetSnapshotStorage(this SnapshotRegistry registry, Type dataType, object arg)
+	public static ISnapshotStorage GetSnapshotStorage(this ISnapshotRegistry registry, Type dataType, object arg)
 	{
 		if (registry is null)
 			throw new ArgumentNullException(nameof(registry));
@@ -1684,7 +1684,7 @@ public static class StorageHelper
 	/// <summary>
 	/// </summary>
 	[Obsolete("Use InitAsync method instead.")]
-	public static void Init(this SnapshotRegistry registry)
+	public static void Init(this ISnapshotRegistry registry)
 		=> AsyncHelper.Run(() => registry.InitAsync(default));
 
 	/// <summary>

@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Storages;
 /// <summary>
 /// Storage buffer.
 /// </summary>
-public class StorageBuffer : IPersistable
+public class StorageBuffer : IStorageBuffer
 {
 	private class DataBuffer<TKey, TMarketData>
 		where TMarketData : Message

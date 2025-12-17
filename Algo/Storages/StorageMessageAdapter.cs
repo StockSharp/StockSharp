@@ -8,9 +8,9 @@ namespace StockSharp.Algo.Storages;
 /// </remarks>
 /// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 /// <param name="storageProcessor">Storage processor.</param>
-public class StorageMessageAdapter(IMessageAdapter innerAdapter, StorageProcessor storageProcessor) : MessageAdapterWrapper(innerAdapter)
+public class StorageMessageAdapter(IMessageAdapter innerAdapter, IStorageProcessor storageProcessor) : MessageAdapterWrapper(innerAdapter)
 {
-	private readonly StorageProcessor _storageProcessor = storageProcessor ?? throw new ArgumentNullException(nameof(storageProcessor));
+	private readonly IStorageProcessor _storageProcessor = storageProcessor ?? throw new ArgumentNullException(nameof(storageProcessor));
 
 	/// <inheritdoc />
 	public override IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)

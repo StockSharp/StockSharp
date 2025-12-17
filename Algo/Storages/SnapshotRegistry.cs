@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Storages;
 
 using System.Diagnostics;
 
-using Ecng.Reflection;
 using Ecng.Interop;
 
 using StockSharp.Algo.Storages.Binary.Snapshot;
@@ -14,7 +13,7 @@ using StockSharp.Algo.Storages.Binary.Snapshot;
 /// Initializes a new instance of the <see cref="SnapshotRegistry"/>.
 /// </remarks>
 /// <param name="path">Path to storage.</param>
-public class SnapshotRegistry(string path) : Disposable
+public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 {
 	private abstract class SnapshotStorage : ISnapshotStorage
 	{
@@ -506,10 +505,7 @@ public class SnapshotRegistry(string path) : Disposable
 	private readonly CachedSynchronizedDictionary<DataType, SnapshotStorage> _snapshotStorages = [];
 	private Timer _timer;
 
-	/// <summary>
-	/// Initialize the storage.
-	/// </summary>
-	public ValueTask InitAsync(CancellationToken cancellationToken)
+	ValueTask ISnapshotRegistry.InitAsync(CancellationToken cancellationToken)
 	{
 		var isFlushing = false;
 		var flushLock = new Lock();
@@ -559,12 +555,7 @@ public class SnapshotRegistry(string path) : Disposable
 		base.DisposeManaged();
 	}
 
-	/// <summary>
-	/// To get the snapshot storage.
-	/// </summary>
-	/// <param name="dataType"><see cref="DataType"/></param>
-	/// <returns>The snapshot storage.</returns>
-	public ISnapshotStorage GetSnapshotStorage(DataType dataType)
+	ISnapshotStorage ISnapshotRegistry.GetSnapshotStorage(DataType dataType)
 	{
 		return _snapshotStorages.SafeAdd(dataType, key =>
 		{

@@ -45,7 +45,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <param name="initChannels">Initialize channels.</param>
 	public Connector(ISecurityStorage securityStorage, IPositionStorage positionStorage,
 		IExchangeInfoProvider exchangeInfoProvider, IStorageRegistry storageRegistry = null,
-		SnapshotRegistry snapshotRegistry = null, StorageBuffer buffer = null, bool initAdapter = true, bool initChannels = true)
+		ISnapshotRegistry snapshotRegistry = null, IStorageBuffer buffer = null, bool initAdapter = true, bool initChannels = true)
 	{
 		Buffer = buffer;
 
@@ -107,7 +107,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <summary>
 	/// Snapshot storage registry.
 	/// </summary>
-	public SnapshotRegistry SnapshotRegistry { get; private set; }
+	public ISnapshotRegistry SnapshotRegistry { get; private set; }
 
 	private IBasketSecurityProcessorProvider _basketSecurityProcessorProvider = new BasketSecurityProcessorProvider();
 

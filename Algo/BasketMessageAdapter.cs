@@ -264,7 +264,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		CandleBuilderProvider candleBuilderProvider,
 		ISecurityMessageAdapterProvider securityAdapterProvider,
 		IPortfolioMessageAdapterProvider portfolioAdapterProvider,
-		StorageBuffer buffer)
+		IStorageBuffer buffer)
 	{
 		TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 		_innerAdapters = new InnerAdapterList(this);
@@ -290,7 +290,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// <summary>
 	/// Storage buffer.
 	/// </summary>
-	public StorageBuffer Buffer { get; }
+	public IStorageBuffer Buffer { get; }
 
 	/// <summary>
 	/// The security based message adapter's provider.
@@ -513,7 +513,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	/// <summary>
 	/// Storage processor.
 	/// </summary>
-	public StorageProcessor StorageProcessor { get; }
+	public IStorageProcessor StorageProcessor { get; }
 
 	/// <inheritdoc />
 	public bool UseInChannel { get; set; } = true;

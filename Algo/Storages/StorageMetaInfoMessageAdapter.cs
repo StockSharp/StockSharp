@@ -8,8 +8,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 	private readonly ISecurityStorage _securityStorage;
 	private readonly IPositionStorage _positionStorage;
 	private readonly IExchangeInfoProvider _exchangeInfoProvider;
-
-	private readonly StorageProcessor _storageProcessor;
+	private readonly IStorageProcessor _storageProcessor;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StorageMetaInfoMessageAdapter"/>.
@@ -20,7 +19,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 	/// <param name="storageProcessor">Storage processor.</param>
 	public StorageMetaInfoMessageAdapter(IMessageAdapter innerAdapter, ISecurityStorage securityStorage,
-		IPositionStorage positionStorage, IExchangeInfoProvider exchangeInfoProvider, StorageProcessor storageProcessor)
+		IPositionStorage positionStorage, IExchangeInfoProvider exchangeInfoProvider, IStorageProcessor storageProcessor)
 		: base(innerAdapter)
 	{
 		_securityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));

@@ -81,7 +81,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 	/// <summary>
 	/// Storage buffer.
 	/// </summary>
-	public StorageBuffer Buffer { get; set; }
+	public IStorageBuffer Buffer { get; set; }
 
 	/// <inheritdoc />
 	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)

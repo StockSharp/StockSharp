@@ -10,7 +10,7 @@ namespace StockSharp.Algo.Storages;
 /// <param name="settings">Storage settings.</param>
 /// <param name="buffer">Storage buffer.</param>
 /// <param name="snapshotRegistry">Snapshot storage registry.</param>
-public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSettings settings, StorageBuffer buffer, SnapshotRegistry snapshotRegistry) : MessageAdapterWrapper(innerAdapter)
+public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSettings settings, IStorageBuffer buffer, ISnapshotRegistry snapshotRegistry) : MessageAdapterWrapper(innerAdapter)
 {
 	private readonly SynchronizedSet<long> _orderStatusIds = [];
 	private readonly SynchronizedDictionary<long, long> _cancellationTransactions = [];
@@ -20,12 +20,12 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 	/// <summary>
 	/// Storage buffer.
 	/// </summary>
-	public StorageBuffer Buffer { get; } = buffer ?? throw new ArgumentNullException(nameof(buffer));
+	public IStorageBuffer Buffer { get; } = buffer ?? throw new ArgumentNullException(nameof(buffer));
 
 	/// <summary>
 	/// Snapshot storage registry.
 	/// </summary>
-	public SnapshotRegistry SnapshotRegistry { get; } = snapshotRegistry;// ?? throw new ArgumentNullException(nameof(snapshotRegistry));
+	public ISnapshotRegistry SnapshotRegistry { get; } = snapshotRegistry;// ?? throw new ArgumentNullException(nameof(snapshotRegistry));
 
 	/// <summary>
 	/// Storage settings.
