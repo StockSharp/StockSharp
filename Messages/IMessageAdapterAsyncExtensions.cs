@@ -121,11 +121,8 @@ public static class IMessageAdapterAsyncExtensions
 		{
 			await adapter.SendInMessageAsync((Message)subscription, cancellationToken);
 
-			while (await channel.Reader.WaitToReadAsync(cancellationToken).NoWait())
-			{
-				while (channel.Reader.TryRead(out var item))
-					yield return item;
-			}
+			await foreach (var item in channel.Reader.ReadAllAsync(cancellationToken).WithEnforcedCancellation(cancellationToken))
+				yield return item;
 		}
 		finally
 		{

@@ -65,22 +65,8 @@ public static class ISubscriptionProviderAsyncExtensions
 		{
 			provider.Subscribe(subscription);
 
-			while (!cancellationToken.IsCancellationRequested)
-			{
-				try
-				{
-					if (!await channel.Reader.WaitToReadAsync(cancellationToken).NoWait())
-						yield break;
-				}
-				catch (Exception)
-				{
-					if (!cancellationToken.IsCancellationRequested)
-						throw;
-				}
-
-				while (channel.Reader.TryRead(out var item))
-					yield return item;
-			}
+			await foreach (var item in channel.Reader.ReadAllAsync(cancellationToken).WithEnforcedCancellation(cancellationToken))
+				yield return item;
 		}
 		finally
 		{
