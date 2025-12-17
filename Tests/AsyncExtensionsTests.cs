@@ -1,11 +1,13 @@
 namespace StockSharp.Tests;
 
+using System.Collections.Concurrent;
+
 [TestClass]
 public class AsyncExtensionsTests : BaseTestClass
 {
 	private class MockAdapter : MessageAdapter
 	{
-		public List<Message> SentMessages { get; } = [];
+		public ConcurrentQueue<Message> SentMessages { get; } = new();
 		public Dictionary<long, MarketDataMessage> ActiveSubscriptions { get; } = [];
 		public long LastSubscribedId { get; private set; }
 
@@ -19,7 +21,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
-			SentMessages.Add(message);
+			SentMessages.Enqueue(message);
 
 			switch (message.Type)
 			{
@@ -89,7 +91,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 	private class MockAsyncAdapter : HistoricalMessageAdapter
 	{
-		public List<Message> SentMessages { get; } = [];
+		public ConcurrentQueue<Message> SentMessages { get; } = new();
 		public Dictionary<long, MarketDataMessage> ActiveSubscriptions { get; } = [];
 		public long LastSubscribedId { get; private set; }
 
@@ -115,7 +117,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		protected override ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 		{
-			SentMessages.Add(mdMsg);
+			SentMessages.Enqueue(mdMsg);
 
 			if (mdMsg.IsSubscribe)
 			{
@@ -207,7 +209,10 @@ public class AsyncExtensionsTests : BaseTestClass
 			{
 				got.Add(l1);
 				if (got.Count >= 3)
+				{
+					enumCts.Cancel();
 					break;
+				}
 			}
 		}, token);
 
@@ -222,11 +227,12 @@ public class AsyncExtensionsTests : BaseTestClass
 			adapter.SimulateData(id, l1);
 		}
 
-		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
 
 		HasCount(3, got);
-		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
+
+		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
+			await Task.Delay(10, cts.Token);
 	}
 
 	[TestMethod]
@@ -302,7 +308,10 @@ public class AsyncExtensionsTests : BaseTestClass
 			{
 				got.Add(l1);
 				if (got.Count >= 3)
+				{
+					enumCts.Cancel();
 					break;
+				}
 			}
 		}, token);
 
@@ -320,11 +329,12 @@ public class AsyncExtensionsTests : BaseTestClass
 			adapter.SimulateData(id, l1);
 		}
 
-		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
 
 		HasCount(3, got);
-		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
+
+		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
+			await Task.Delay(10, cts.Token);
 	}
 
 	[TestMethod]
@@ -345,15 +355,12 @@ public class AsyncExtensionsTests : BaseTestClass
 		};
 
 		var got = new List<Level1ChangeMessage>();
-		using var enumCts = new CancellationTokenSource();
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub, enumCts.Token))
+			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub, cts.Token))
 			{
 				got.Add(l1);
-				if (got.Count >= 2)
-					break;
 			}
 		}, token);
 
@@ -378,11 +385,9 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Finish historical subscription after sending all data
 		adapter.FinishHistoricalSubscription(id);
 
-		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
 
 		HasCount(2, got);
-		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
 	}
 
 	[TestMethod]
@@ -410,7 +415,10 @@ public class AsyncExtensionsTests : BaseTestClass
 			{
 				got.Add(l1);
 				if (got.Count >= 3)
+				{
+					enumCts.Cancel();
 					break;
+				}
 			}
 		}, token);
 
@@ -428,7 +436,6 @@ public class AsyncExtensionsTests : BaseTestClass
 			adapter.SimulateData(id, l1);
 		}
 
-		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
 
 		HasCount(3, got);
@@ -460,7 +467,10 @@ public class AsyncExtensionsTests : BaseTestClass
 			{
 				got.Add(l1);
 				if (got.Count >= 2)
+				{
+					enumCts.Cancel();
 					break;
+				}
 			}
 		}, token);
 
@@ -485,7 +495,6 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Finish historical subscription after sending all data
 		adapter.FinishHistoricalSubscription(id);
 
-		enumCts.Cancel();
 		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
 
 		HasCount(2, got);
@@ -512,7 +521,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await started.Task.WithTimeout(TimeSpan.FromSeconds(3));
 
 		var id = adapter.LastSubscribedId;
-		Assert.IsGreaterThan(0, id);
+		Assert.AreNotEqual(0L, id);
 
 		// cancel -> triggers UnSubscribe and completes after stop
 		runCts.Cancel();

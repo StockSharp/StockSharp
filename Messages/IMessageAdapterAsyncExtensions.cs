@@ -61,6 +61,9 @@ public static class IMessageAdapterAsyncExtensions
 		if (adapter is null)			throw new ArgumentNullException(nameof(adapter));
 		if (subscription is null)		throw new ArgumentNullException(nameof(subscription));
 
+		if (cancellationToken.IsCancellationRequested)
+			yield break;
+
 		if (subscription.TransactionId == 0)
 			subscription.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 		subscription.IsSubscribe = true;
@@ -119,10 +122,40 @@ public static class IMessageAdapterAsyncExtensions
 
 		try
 		{
-			await adapter.SendInMessageAsync((Message)subscription, cancellationToken);
+			var isCancelled = false;
 
-			await foreach (var item in channel.Reader.ReadAllAsync(cancellationToken).WithEnforcedCancellation(cancellationToken))
-				yield return item;
+			try
+			{
+				await adapter.SendInMessageAsync((Message)subscription, cancellationToken);
+			}
+			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+			{
+				isCancelled = true;
+			}
+
+			if (isCancelled)
+				yield break;
+
+			await using var enumerator = channel.Reader.ReadAllAsync(cancellationToken).GetAsyncEnumerator(cancellationToken);
+
+			while (true)
+			{
+				bool hasNext;
+
+				try
+				{
+					hasNext = await enumerator.MoveNextAsync();
+				}
+				catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+				{
+					break;
+				}
+
+				if (!hasNext)
+					break;
+
+				yield return enumerator.Current;
+			}
 		}
 		finally
 		{
