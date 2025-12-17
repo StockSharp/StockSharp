@@ -21,22 +21,6 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
-	{
-		if (message.IsBack())
-		{
-			if (message.Adapter == this)
-			{
-				message.UndoBack();
-
-				return base.OnSendInMessageAsync(message, cancellationToken);
-			}
-		}
-
-		return base.SendInMessageAsync(message, cancellationToken);
-	}
-
-	/// <inheritdoc />
 	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		// Check if trading is blocked and reject order registration/modification
