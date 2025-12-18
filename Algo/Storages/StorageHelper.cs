@@ -333,9 +333,21 @@ public static class StorageHelper
 	/// <param name="from">The range start time. If the value is not specified, data will be loaded from the start date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>.</param>
 	/// <param name="to">The range end time. If the value is not specified, data will be loaded up to the end date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>, inclusive.</param>
 	/// <returns>All available data within the range.</returns>
+	[Obsolete("Use GetDatesAsync method instead.")]
 	public static IEnumerable<DateTime> GetDates(this IMarketDataStorage storage, DateTime? from, DateTime? to)
+		=> AsyncHelper.Run(() => GetDatesAsync(storage, from, to, default));
+
+	/// <summary>
+	/// To get all dates for stored market data for the specified range.
+	/// </summary>
+	/// <param name="storage">Market-data storage.</param>
+	/// <param name="from">The range start time. If the value is not specified, data will be loaded from the start date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>.</param>
+	/// <param name="to">The range end time. If the value is not specified, data will be loaded up to the end date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>, inclusive.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>All available data within the range.</returns>
+	public static async ValueTask<IEnumerable<DateTime>> GetDatesAsync(this IMarketDataStorage storage, DateTime? from, DateTime? to, CancellationToken cancellationToken)
 	{
-		var dates = storage.GetDates();
+		var dates = await storage.GetDatesAsync(cancellationToken);
 
 		if (from != null)
 			dates = dates.Where(d => d >= from.Value);

@@ -38,7 +38,7 @@ public class Chart3DScript : IAnalyticsScript
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
 			// get available dates for the specified period
-			var dates = candleStorage.GetDates(from, to).ToArray();
+			var dates = (await candleStorage.GetDatesAsync(from, to, cancellationToken)).ToArray();
 
 			if (dates.Length == 0)
 			{
