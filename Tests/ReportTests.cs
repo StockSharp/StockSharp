@@ -70,8 +70,6 @@ public class ReportTests : BaseTestClass
 	{
 		var token = CancellationToken;
 
-		Directory.CreateDirectory(Helper.TempFolder);
-
 		var strategy = CreateTestStrategy();
 
 		IReportGenerator generator = format switch
@@ -83,7 +81,7 @@ public class ReportTests : BaseTestClass
 			_ => throw new ArgumentException($"Unknown format: {format}")
 		};
 
-		using var stream = File.Create(Path.Combine(Helper.TempFolder, $"test_report.{format}"));
+		using var stream = File.Create(Path.Combine(Helper.GetSubTemp(), $"test_report.{format}"));
 
 		await generator.Generate(strategy, stream, token);
 

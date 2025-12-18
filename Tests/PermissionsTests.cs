@@ -335,10 +335,14 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void FileStorage_Constructor_NonExistentDirectoryThrows()
+	public void FileStorage_Constructor_NonExistentDirectory()
 	{
-		var invalidPath = Path.Combine(Helper.TempFolder, Guid.NewGuid().ToString(), "file.txt");
-		ThrowsExactly<InvalidOperationException>(() => new FileCredentialsStorage(invalidPath));
+		var invalidPath = Path.Combine(Helper.GetSubTemp(), "file.txt");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(invalidPath);
+
+		var results = storage.Search("*").ToArray();
+
+		results.Length.AssertEqual(0);
 	}
 
 	[TestMethod]

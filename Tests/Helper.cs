@@ -23,25 +23,37 @@ static class Helper
 	public static IStorageRegistry GetResourceStorage()
 		=> GetStorage(ResFolder);
 
-	public const string TempFolder = "temp";
+	private static string GetTempFolder()
+		=> Path.Combine(AppContext.BaseDirectory, "temp");
 
 	public static string GetSubTemp(string subName = default)
 	{
-		var dir = Path.Combine(TempFolder, Guid.NewGuid().ToString("N"));
+		var root = GetTempFolder();
+		var dir = Path.Combine(root, Guid.NewGuid().ToString("N"));
 		Directory.CreateDirectory(dir);
 
 		if (!subName.IsEmpty())
-			dir = Path.Combine(dir, subName);
+		{
+			var path = Path.Combine(dir, subName);
+			var parent = Path.GetDirectoryName(path);
+
+			if (!parent.IsEmpty())
+				Directory.CreateDirectory(parent);
+
+			return path;
+		}
 
 		return dir;
 	}
 
 	public static void ClearTemp()
 	{
-		if (Directory.Exists(TempFolder))
-			IOHelper.ClearDirectory(TempFolder);
+		var root = GetTempFolder();
+
+		if (Directory.Exists(root))
+			IOHelper.ClearDirectory(root);
 		else
-			Directory.CreateDirectory(TempFolder);
+			Directory.CreateDirectory(root);
 	}
 
 	public static IEntityRegistry GetEntityRegistry(ChannelExecutor executor)
