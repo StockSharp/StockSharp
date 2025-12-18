@@ -21,9 +21,7 @@ public class FileCredentialsStorage : BaseLogReceiver, IPermissionCredentialsSto
 		if (fileName.IsEmpty())
 			throw new ArgumentNullException(nameof(fileName));
 
-		var dir = Path.GetDirectoryName(fileName);
-		if (!Directory.Exists(dir))
-			throw new InvalidOperationException(LocalizedStrings.FileNotExist.Put(fileName));
+		IOHelper.CreateDirIfNotExists(fileName);
 
 		_fileName = fileName;
 		_asEmail = asEmail;
