@@ -125,6 +125,7 @@ public static class StorageHelper
 	/// <param name="from">The start time for data loading. If the value is not specified, data will be loaded from the starting time <see cref="IMarketDataStorageDrive.GetDatesAsync"/>.</param>
 	/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="IMarketDataStorageDrive.GetDatesAsync"/> date, inclusive.</param>
 	/// <returns>The iterative loader of market data.</returns>
+	[Obsolete("Use LoadAsync method instead.")]
 	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from, DateTime? to)
 		where TMessage : Message, IServerTimeMessage
 	{

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Ecng.Collections;
@@ -162,15 +163,17 @@ public partial class MainWindow
 
 		var path = _historyPath;
 
+		var token = CancellationToken.None;
+
 		//_curCandleNum = 0;
 
-		Task.Factory.StartNew(() =>
+		Task.Factory.StartNew(async () =>
 		{
 			try
 			{
 				var date = DateTime.MinValue;
 
-				foreach (var tick in storage.GetTickMessageStorage(_securityId, new LocalMarketDataDrive(path)).Load(null, null))
+				await foreach (var tick in storage.GetTickMessageStorage(_securityId, new LocalMarketDataDrive(path)).LoadAsync(null, null, token))
 				{
 					if (date != tick.ServerTime.Date)
 					{

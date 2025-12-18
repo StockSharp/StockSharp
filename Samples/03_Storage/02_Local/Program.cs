@@ -44,9 +44,9 @@ static class Program
 		//--------------------------------Candles--------------------------------------
 		var candleStorage = storageRegistry.GetTimeFrameCandleMessageStorage(secId,
 			TimeSpan.FromMinutes(1), format: StorageFormats.Binary);
-		var candles = candleStorage.Load(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2));
+		var candles = candleStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2), token);
 
-		foreach (var candle in candles)
+		await foreach (var candle in candles.WithEnforcedCancellation(token))
 		{
 			Console.WriteLine(candle);
 		}
@@ -55,9 +55,9 @@ static class Program
 
 		//--------------------------------Trades--------------------------------------
 		var tradeStorage = storageRegistry.GetTickMessageStorage(secId, format: StorageFormats.Binary);
-		var trades = tradeStorage.Load(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2));
+		var trades = tradeStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2), token);
 
-		foreach (var trade in trades)
+		await foreach (var trade in trades.WithEnforcedCancellation(token))
 		{
 			Console.WriteLine(trade);
 		}
@@ -66,9 +66,9 @@ static class Program
 
 		//--------------------------------MarketDepths--------------------------------------
 		var marketDepthStorage = storageRegistry.GetQuoteMessageStorage(secId, format: StorageFormats.Binary);
-		var marketDepths = marketDepthStorage.Load(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2));
+		var marketDepths = marketDepthStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2), token);
 
-		foreach (var marketDepth in marketDepths)
+		await foreach (var marketDepth in marketDepths.WithEnforcedCancellation(token))
 		{
 			Console.WriteLine(marketDepth);
 		}
@@ -77,9 +77,9 @@ static class Program
 
 		//--------------------------------Level1--------------------------------------------
 		var level1Storage = storageRegistry.GetLevel1MessageStorage(secId, format: StorageFormats.Binary);
-		var levels1 = level1Storage.Load(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2));
+		var levels1 = level1Storage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2), token);
 
-		foreach (var level1 in levels1)
+		await foreach (var level1 in levels1.WithEnforcedCancellation(token))
 		{
 			Console.WriteLine(level1);
 		}
@@ -102,7 +102,7 @@ static class Program
 			var innerStorage = storageRegistry.GetTimeFrameCandleMessageStorage(innerSec,
 				TimeSpan.FromMinutes(1), format: StorageFormats.Binary);
 
-			innerCandleList.Add(innerStorage.Load(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2)));
+			innerCandleList.Add(await innerStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2), token).ToArrayAsync(token));
 		}
 
 		var processorProvider = new BasketSecurityProcessorProvider();

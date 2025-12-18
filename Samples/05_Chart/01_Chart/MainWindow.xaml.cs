@@ -288,17 +288,14 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 		var token = _drawCts.Token;
 
-		Task.Factory.StartNew(() =>
+		Task.Factory.StartNew(async () =>
 		{
 			var date = DateTime.MinValue;
 
 			if (isBuild)
 			{
-				foreach (var tick in storage.GetTickMessageStorage(secId, new LocalMarketDataDrive(path), format).Load(null, null))
+				await foreach (var tick in storage.GetTickMessageStorage(secId, new LocalMarketDataDrive(path), format).LoadAsync(null, null, token).WithEnforcedCancellation(token))
 				{
-					if(token.IsCancellationRequested)
-						break;
-
 					_tradeGenerator.Process(tick);
 
 					if (_candleTransform.Process(tick))
@@ -329,11 +326,8 @@ public partial class MainWindow : ICandleBuilderSubscription
 			}
 			else
 			{
-				foreach (var candleMsg in storage.GetCandleMessageStorage(secId, dt, new LocalMarketDataDrive(path), format).Load(null, null))
+				await foreach (var candleMsg in storage.GetCandleMessageStorage(secId, dt, new LocalMarketDataDrive(path), format).LoadAsync(null, null, token).WithEnforcedCancellation(token))
 				{
-					if(token.IsCancellationRequested)
-						break;
-
 					if (candleMsg.State != CandleStates.Finished)
 						candleMsg.State = CandleStates.Finished;
 

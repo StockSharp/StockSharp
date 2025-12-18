@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Collections.ObjectModel;
@@ -115,7 +116,7 @@ public partial class MainWindow
 		_candle = null;
 		_allCandles.Clear();
 
-		Chart.Reset(new IChartElement[] { _candleElement, _activeOrdersElement });
+		Chart.Reset([_candleElement, _activeOrdersElement]);
 
 		var storage = new StorageRegistry();
 
@@ -125,11 +126,13 @@ public partial class MainWindow
 
 		Chart.IsAutoRange = true;
 
-		Task.Factory.StartNew(() =>
+		var token = CancellationToken.None;
+
+		Task.Factory.StartNew(async () =>
 		{
 			var date = DateTime.MinValue;
 
-			foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(path)).Load(null, null))
+			await foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(path)).LoadAsync(null, null, token))
 			{
 				AppendTick(tick);
 
