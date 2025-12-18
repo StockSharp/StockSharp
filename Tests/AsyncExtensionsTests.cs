@@ -521,7 +521,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await started.Task.WithTimeout(TimeSpan.FromSeconds(3));
 
 		var id = adapter.LastSubscribedId;
-		Assert.AreNotEqual(0L, id);
+		AreNotEqual(0L, id);
 
 		// cancel -> triggers UnSubscribe and completes after stop
 		runCts.Cancel();
