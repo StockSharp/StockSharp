@@ -847,7 +847,7 @@ public class IndicatorTests : BaseTestClass
 							var indCpu = indicators[p].TypedClone();
 							var cpu = runCpu(indCpu, msgSeries[s]);
 
-							CompareValues(gpuOut.Select(r => r.ToValue(indCpu)).ToArray(), cpu, indCpu.ToString(), true);
+							CompareValues([.. gpuOut.Select(r => r.ToValue(indCpu))], cpu, indCpu.ToString(), true);
 						}
 					}
 				}
@@ -1171,8 +1171,8 @@ public class IndicatorTests : BaseTestClass
 			var depth = new QuoteChangeMessage
 			{
 				ServerTime = t,
-				Bids = new[] { new QuoteChange(100m, 10m) },
-				Asks = new[] { new QuoteChange(101m, 11m) }
+				Bids = [new QuoteChange(100m, 10m)],
+				Asks = [new QuoteChange(101m, 11m)]
 			};
 
 			var v1 = new MarketDepthIndicatorValue(ind, depth) { IsFinal = true };

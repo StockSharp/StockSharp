@@ -262,8 +262,8 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		{
 			SecurityId = securityId,
 			ServerTime = serverTime,
-			Bids = bids.Select(b => new QuoteChange(b.price, b.volume)).ToArray(),
-			Asks = asks.Select(a => new QuoteChange(a.price, a.volume)).ToArray(),
+			Bids = [.. bids.Select(b => new QuoteChange(b.price, b.volume))],
+			Asks = [.. asks.Select(a => new QuoteChange(a.price, a.volume))],
 		};
 	}
 
@@ -1834,7 +1834,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), lastTradePrice: 101, lastTradeVolume: 10));
 
 		// Verify candle is now built
-		candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
+		candles = [.. outMessages.OfType<TimeFrameCandleMessage>()];
 		(candles.Count > 0).AssertTrue("Should build candle when required field is present");
 
 		var candle = candles.Last();
