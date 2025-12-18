@@ -54,15 +54,13 @@ public partial class MainWindow
 	private IChartArea _area;
 	private IChartCandleElement _candleElement;
 	private IChartIndicatorElement _indicatorElement;
-	private readonly CachedSynchronizedList<LightCandle> _candles = new();
+	private readonly CachedSynchronizedList<LightCandle> _candles = [];
 	private readonly TimeSpan _tfSpan = TimeSpan.FromTicks(_timeframe);
 	private readonly DispatcherTimer _chartUpdateTimer = new();
 	private decimal _lastPrice;
 	private DateTime _lastTime;
 	private bool _dataIsLoaded;
 	private TimeFrameCandleMessage _lastCandle;
-
-	private readonly IExchangeInfoProvider _exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
 	private MyMovingAverage _indicator;
 	//private readonly MyMovingAverage _fpsAverage;
@@ -153,7 +151,7 @@ public partial class MainWindow
 
 		_candles.Clear();
 
-		Chart.Reset(new IChartElement[] { _candleElement });
+		Chart.Reset([_candleElement]);
 
 		var storage = new StorageRegistry();
 
@@ -252,7 +250,7 @@ public partial class MainWindow
 		});
 
 		TimeFrameCandleMessage candle;
-		var lastLightCandle = _candles[_candles.Count - 1];
+		var lastLightCandle = _candles[^1];
 
 		if (_candles.Count != numCandles && _lastCandle != null)
 		{
@@ -371,16 +369,11 @@ class LightCandle
 	}
 }
 
-class MyMovingAverage : IIndicator
+class MyMovingAverage(int period) : IIndicator
 {
-	private readonly int _period;
-	private readonly Queue<decimal> _values = new();
+	private readonly int _period = period;
+	private readonly Queue<decimal> _values = [];
 	private decimal _sum;
-
-	public MyMovingAverage(int period)
-	{
-		_period = period;
-	}
 
 	public decimal Current { get; private set; }
 

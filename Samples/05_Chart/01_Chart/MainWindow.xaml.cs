@@ -39,14 +39,14 @@ public partial class MainWindow : ICandleBuilderSubscription
 {
 	private IChartArea _areaComb;
 	private IChartCandleElement _candleElement;
-	private readonly SynchronizedList<CandleMessage> _updatedCandles = new();
-	private readonly CachedSynchronizedOrderedDictionary<DateTime, CandleMessage> _allCandles = new();
+	private readonly SynchronizedList<CandleMessage> _updatedCandles = [];
+	private readonly CachedSynchronizedOrderedDictionary<DateTime, CandleMessage> _allCandles = [];
 	private Security _security;
 	private RandomWalkTradeGenerator _tradeGenerator;
-	private readonly CachedSynchronizedDictionary<IChartIndicatorElement, IIndicator> _indicators = new();
+	private readonly CachedSynchronizedDictionary<IChartIndicatorElement, IIndicator> _indicators = [];
 	private ICandleBuilder _candleBuilder;
 	private MarketDataMessage _mdMsg;
-	private readonly ICandleBuilderValueTransform _candleTransform = new TickCandleBuilderValueTransform();
+	private readonly TickCandleBuilderValueTransform _candleTransform = new();
 	private readonly CandleBuilderProvider _builderProvider = new(new InMemoryExchangeInfoProvider());
 	private bool _historyLoaded;
 	private bool _isRealTime;
@@ -169,7 +169,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 		_allCandles.Clear();
 		_updatedCandles.Clear();
 
-		Chart.Reset(new[] {el});
+		Chart.Reset([el]);
 
 		LoadData((SecurityId)Securities.SelectedItem, subscription.DataType);
 	}
@@ -194,7 +194,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			foreach (var candle in _allCandles.CachedValues)
 				chartData.Group(candle.OpenTime).Add(element, indicator.Process(candle));
 
-			Chart.Reset(new[] { element });
+			Chart.Reset([element]);
 			Chart.Draw(chartData);
 
 			_indicators[element] = indicator;
@@ -458,8 +458,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 		foreach (var candle in candlesToUpdate)
 		{
-			if (chartData == null)
-				chartData = Chart.CreateData();
+			chartData ??= Chart.CreateData();
 
 			if (_lastCandleDrawTime != candle.OpenTime)
 			{
@@ -702,7 +701,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 	private class TestMarketSubscriptionProvider : ISubscriptionProvider
 	{
-		private readonly HashSet<Subscription> _l1Subscriptions = new();
+		private readonly HashSet<Subscription> _l1Subscriptions = [];
 
 		public void UpdateData(Security sec, decimal price)
 		{

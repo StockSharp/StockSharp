@@ -28,7 +28,7 @@ using StockSharp.Charting;
 
 public partial class MainWindow
 {
-	private readonly ObservableCollection<Order> _orders = new();
+	private readonly ObservableCollection<Order> _orders = [];
 
 	private IChartArea _area;
 	private IChartCandleElement _candleElement;
@@ -36,8 +36,8 @@ public partial class MainWindow
 	private TimeFrameCandleMessage _candle;
 
 	private readonly DispatcherTimer _chartUpdateTimer = new();
-	private readonly SynchronizedDictionary<DateTime, TimeFrameCandleMessage> _updatedCandles = new();
-	private readonly CachedSynchronizedList<TimeFrameCandleMessage> _allCandles = new();
+	private readonly SynchronizedDictionary<DateTime, TimeFrameCandleMessage> _updatedCandles = [];
+	private readonly CachedSynchronizedList<TimeFrameCandleMessage> _allCandles = [];
 
 	private const decimal _priceStep = 0.0001m;
 	private const int _timeframe = 1;
@@ -56,7 +56,7 @@ public partial class MainWindow
 
 	private readonly PortfolioDataSource _portfolios;
 
-	private readonly IdGenerator _idGenerator = new IncrementalIdGenerator();
+	private readonly IncrementalIdGenerator _idGenerator = new();
 
 	public MainWindow()
 	{
