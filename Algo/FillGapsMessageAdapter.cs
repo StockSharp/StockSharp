@@ -4,7 +4,7 @@
 /// Fill gaps by <see cref="IFillGapsBehaviour"/> message adapter.
 /// </summary>
 /// <remarks>
-/// Initializes a new instance of the <see cref="SecurityMappingMessageAdapter"/>.
+/// Initializes a new instance of the <see cref="FillGapsMessageAdapter"/>.
 /// </remarks>
 /// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
 /// <param name="behaviour"><see cref="IFillGapsBehaviour"/>.</param>
