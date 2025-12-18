@@ -109,7 +109,7 @@ public partial class MainWindow
 		ThemeExtensions.ApplyDefaultTheme();
 	}
 
-	private void InitConnector(IEntityRegistry entityRegistry, SnapshotRegistry snapshotRegistry)
+	private void InitConnector(IEntityRegistry entityRegistry, ISnapshotRegistry snapshotRegistry)
 	{
 		// subscribe on connection successfully event
 		Connector.Connected += () =>
