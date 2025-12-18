@@ -164,6 +164,18 @@ public class StorageBuffer : IStorageBuffer
 		if (!Enabled)
 			return false;
 
+		if (message is IGeneratedMessage genMsg && genMsg.BuildFrom != null)
+		{
+			if (message is ISubscriptionIdMessage subscrIdMsg)
+			{
+				if (IgnoreGenerated.Contains(subscrIdMsg.DataType))
+					return false;
+
+				if (message is CandleMessage candleMsg && IgnoreGenerated.Contains(DataType.Create(candleMsg.GetType(), default)))
+					return false;
+			}
+		}
+
 		static bool IsFailed(ExecutionMessage execMsg)
 			=> execMsg.OrderState == OrderStates.Failed && execMsg.TransactionId != default;
 
