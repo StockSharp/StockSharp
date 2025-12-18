@@ -44,6 +44,7 @@ public class OrderBookTruncateMessageAdapter(IMessageAdapter innerAdapter) : Mes
 							{
 								mdMsg = mdMsg.TypedClone();
 								mdMsg.MaxDepth = supportedDepth;
+								message = mdMsg;
 
 								_depths.Add(mdMsg.TransactionId, actualDepth);
 
