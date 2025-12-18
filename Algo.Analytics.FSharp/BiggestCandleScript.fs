@@ -34,64 +34,61 @@ type BiggestCandleScript() =
                 cancellationToken: CancellationToken
             ) : Task =
 
-            if securities.Length = 0 then
-                logs.LogWarning("No instruments.")
-                Task.CompletedTask
-            else
-                // Create 2D/3D charts for biggest candle by price length and by volume
-                let priceChart = panel.CreateChart<DateTime, decimal, decimal>()
-                let volChart = panel.CreateChart<DateTime, decimal, decimal>()
+            task {
+                if securities.Length = 0 then
+                    logs.LogWarning("No instruments.")
+                else
+                    // Create 2D/3D charts for biggest candle by price length and by volume
+                    let priceChart = panel.CreateChart<DateTime, decimal, decimal>()
+                    let volChart = panel.CreateChart<DateTime, decimal, decimal>()
 
-                // Lists to store the biggest candles
-                let bigPriceCandles = List<CandleMessage>()
-                let bigVolCandles = List<CandleMessage>()
+                    // Lists to store the biggest candles
+                    let bigPriceCandles = List<CandleMessage>()
+                    let bigVolCandles = List<CandleMessage>()
 
-                // Iterate over each security
-                for security in securities do
-                    // Stop calculation if user canceled script execution
-                    if cancellationToken.IsCancellationRequested then
-                        ()
-                    else
-                        // Get candle storage for the specified timeframe
-                        let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
-                        // Load all candles in the specified date range
-                        let allCandles = candleStorage.Load(from, ``to``).ToArray()
+                    // Iterate over each security
+                    for security in securities do
+                        // Stop calculation if user canceled script execution
+                        if not cancellationToken.IsCancellationRequested then
+                            // Get candle storage for the specified timeframe
+                            let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
+                            // Load all candles in the specified date range
+                            let! allCandles = candleStorage.LoadAsync(from, ``to``, cancellationToken).ToArrayAsync(cancellationToken)
 
-                        // The candle with the biggest range (by high-low difference)
-                        let bigPriceCandle =
-                            allCandles
-                                .OrderByDescending(fun c -> c.GetLength())
-                                .FirstOrDefault()
+                            // The candle with the biggest range (by high-low difference)
+                            let bigPriceCandle =
+                                allCandles
+                                    .OrderByDescending(fun c -> c.GetLength())
+                                    .FirstOrDefault()
 
-                        // The candle with the biggest volume
-                        let bigVolCandle =
-                            allCandles
-                                .OrderByDescending(fun c -> c.TotalVolume)
-                                .FirstOrDefault()
+                            // The candle with the biggest volume
+                            let bigVolCandle =
+                                allCandles
+                                    .OrderByDescending(fun c -> c.TotalVolume)
+                                    .FirstOrDefault()
 
-                        // If found, add to respective lists
-                        if not (isNull bigPriceCandle) then
-                            bigPriceCandles.Add(bigPriceCandle)
+                            // If found, add to respective lists
+                            if not (isNull bigPriceCandle) then
+                                bigPriceCandles.Add(bigPriceCandle)
 
-                        if not (isNull bigVolCandle) then
-                            bigVolCandles.Add(bigVolCandle)
+                            if not (isNull bigVolCandle) then
+                                bigVolCandles.Add(bigVolCandle)
 
-                // Draw the biggest price candles on the price chart
-                priceChart.Append(
-                    "prices",
-                    bigPriceCandles.Select(fun c -> c.OpenTime),
-                    bigPriceCandles.Select(fun c -> c.GetMiddlePrice(Nullable())),
-                    bigPriceCandles.Select(fun c -> c.GetLength())
-                )
+                    // Draw the biggest price candles on the price chart
+                    priceChart.Append(
+                        "prices",
+                        bigPriceCandles.Select(fun c -> c.OpenTime),
+                        bigPriceCandles.Select(fun c -> c.GetMiddlePrice(Nullable())),
+                        bigPriceCandles.Select(fun c -> c.GetLength())
+                    )
 
-                // Draw the biggest volume candles on the volume chart
-                volChart.Append(
-                    "prices",
-                    bigVolCandles.Select(fun c -> c.OpenTime),
-                    // Notice that for the Y2 axis we use the middle price from bigPriceCandles 
-                    // to match the C# code; but you may want to adjust this logic if needed
-                    bigPriceCandles.Select(fun c -> c.GetMiddlePrice(Nullable())),
-                    bigVolCandles.Select(fun c -> c.TotalVolume)
-                )
-
-                Task.CompletedTask
+                    // Draw the biggest volume candles on the volume chart
+                    volChart.Append(
+                        "prices",
+                        bigVolCandles.Select(fun c -> c.OpenTime),
+                        // Notice that for the Y2 axis we use the middle price from bigPriceCandles
+                        // to match the C# code; but you may want to adjust this logic if needed
+                        bigPriceCandles.Select(fun c -> c.GetMiddlePrice(Nullable())),
+                        bigVolCandles.Select(fun c -> c.TotalVolume)
+                    )
+            }

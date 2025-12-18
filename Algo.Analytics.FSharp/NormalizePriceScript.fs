@@ -34,42 +34,40 @@ type NormalizePriceScript() =
                 cancellationToken: CancellationToken
             ) : Task =
 
-            if securities.Length = 0 then
-                logs.LogWarning("No instruments.")
-                Task.CompletedTask
-            else
-                // Create a chart for normalized close prices
-                let chart = panel.CreateChart<DateTime, decimal>()
+            task {
+                if securities.Length = 0 then
+                    logs.LogWarning("No instruments.")
+                else
+                    // Create a chart for normalized close prices
+                    let chart = panel.CreateChart<DateTime, decimal>()
 
-                // Iterate over each security
-                for security in securities do
-                    // Stop if user cancels execution
-                    if cancellationToken.IsCancellationRequested then
-                        ()
-                    else
-                        // Dictionary to store time -> normalized close price
-                        let series = Dictionary<DateTime, decimal>()
+                    // Iterate over each security
+                    for security in securities do
+                        // Stop if user cancels execution
+                        if not cancellationToken.IsCancellationRequested then
+                            // Dictionary to store time -> normalized close price
+                            let series = Dictionary<DateTime, decimal>()
 
-                        // Get candle storage for this security
-                        let candleStorage =
-                            storage.GetCandleMessageStorage(security, dataType, drive, format)
+                            // Get candle storage for this security
+                            let candleStorage =
+                                storage.GetCandleMessageStorage(security, dataType, drive, format)
 
-                        // We'll store the first close price in a mutable option
-                        let mutable firstClose: decimal option = None
+                            // We'll store the first close price in a mutable option
+                            let mutable firstClose: decimal option = None
 
-                        // Load candles and normalize close prices
-                        for candle in candleStorage.Load(fromDate, toDate) do
-                            match firstClose with
-                            | None ->
-                                // First close is not set yet, initialize it
-                                firstClose <- Some candle.ClosePrice
-                                // Normalized value is 1 at the first candle
-                                series.[candle.OpenTime] <- 1m
-                            | Some fc ->
-                                // Divide by the first close price to normalize
-                                series.[candle.OpenTime] <- candle.ClosePrice / fc
+                            // Load candles and normalize close prices
+                            let! candles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
+                            for candle in candles do
+                                match firstClose with
+                                | None ->
+                                    // First close is not set yet, initialize it
+                                    firstClose <- Some candle.ClosePrice
+                                    // Normalized value is 1 at the first candle
+                                    series.[candle.OpenTime] <- 1m
+                                | Some fc ->
+                                    // Divide by the first close price to normalize
+                                    series.[candle.OpenTime] <- candle.ClosePrice / fc
 
-                        // Add the series for this security to the chart
-                        chart.Append(security.ToStringId(), series.Keys, series.Values)
-
-                Task.CompletedTask
+                            // Add the series for this security to the chart
+                            chart.Append(security.ToStringId(), series.Keys, series.Values)
+            }

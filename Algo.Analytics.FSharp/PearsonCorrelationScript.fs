@@ -36,56 +36,51 @@ type PearsonCorrelationScript() =
                 cancellationToken: CancellationToken
             ) : Task =
 
-            // If no securities are selected, log a warning and finish
-            if securities.Length = 0 then
-                logs.LogWarning("No instruments.")
-                Task.CompletedTask
-            else
-                // A list of arrays, each array containing double-precision close prices for a single security
-                let closes =
-                    securities
-                    |> Seq.choose (fun security ->
-                        if cancellationToken.IsCancellationRequested then None
-                        else
+            task {
+                // If no securities are selected, log a warning and finish
+                if securities.Length = 0 then
+                    logs.LogWarning("No instruments.")
+                else
+                    // A list of arrays, each array containing double-precision close prices for a single security
+                    let closes = ResizeArray<float[]>()
+
+                    for security in securities do
+                        if not cancellationToken.IsCancellationRequested then
                             let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
-                            let prices = 
-                                candleStorage.Load(fromDate, toDate) 
-                                |> Seq.map (fun c -> float c.ClosePrice)
-                                |> Seq.toArray
+                            let! candles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
+                            let prices = candles |> Seq.map (fun c -> float c.ClosePrice) |> Seq.toArray
                             if prices.Length = 0 then
                                 logs.LogWarning("No data for {0}", security)
-                                None
                             else
-                                Some prices
-                    )
-                    |> Seq.toList
+                                closes.Add(prices)
 
-                // Все массивы должны быть одинаковой длины. Если какие-то длиннее,
-                // обрезаем их до минимальной длины (minLen).
-                let minLen =
-                    closes
-                    |> Seq.map (fun arr -> arr.Length)
-                    |> Seq.min
+                    if closes.Count > 0 then
+                        // Все массивы должны быть одинаковой длины. Если какие-то длиннее,
+                        // обрезаем их до минимальной длины (minLen).
+                        let minLen =
+                            closes
+                            |> Seq.map (fun arr -> arr.Length)
+                            |> Seq.min
 
-                let truncatedCloses =
-                    closes
-                    |> List.map (fun arr ->
-                      if arr.Length > minLen then arr.[0..(minLen - 1)] else arr)
+                        let truncatedCloses =
+                            closes
+                            |> Seq.map (fun arr ->
+                              if arr.Length > minLen then arr.[0..(minLen - 1)] else arr)
+                            |> Seq.toList
 
-                // Вычисляем матрицу корреляции
-                // Correlation.PearsonMatrix принимает последовательность массивов и возвращает матрицу
-                let matrix = Correlation.PearsonMatrix(truncatedCloses :> seq<_>)
+                        // Вычисляем матрицу корреляции
+                        // Correlation.PearsonMatrix принимает последовательность массивов и возвращает матрицу
+                        let matrix = Correlation.PearsonMatrix(truncatedCloses :> seq<_>)
 
-                // Получаем названия инструментов для осей heatmap
-                let ids =
-                    securities
-                    |> Seq.map (fun s -> s.ToStringId())
-                    |> Seq.toArray
+                        // Получаем названия инструментов для осей heatmap
+                        let ids =
+                            securities
+                            |> Seq.map (fun s -> s.ToStringId())
+                            |> Seq.toArray
 
-                // Преобразуем матрицу в двумерный массив для отрисовки
-                let arrMatrix = matrix.ToArray()
+                        // Преобразуем матрицу в двумерный массив для отрисовки
+                        let arrMatrix = matrix.ToArray()
 
-                // Отрисовываем результат в виде heatmap
-                panel.DrawHeatmap(ids, ids, arrMatrix)
-
-                Task.CompletedTask
+                        // Отрисовываем результат в виде heatmap
+                        panel.DrawHeatmap(ids, ids, arrMatrix)
+            }

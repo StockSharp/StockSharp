@@ -34,48 +34,45 @@ type ChartDrawScript() =
                 cancellationToken: CancellationToken
             ) : Task =
 
-            if securities.Length = 0 then
-                logs.LogWarning("No instruments.")
-                Task.CompletedTask
-            else
-                // Create two charts: lineChart and histogramChart
-                let lineChart = panel.CreateChart<DateTime, decimal>()
-                let histogramChart = panel.CreateChart<DateTime, decimal>()
+            task {
+                if securities.Length = 0 then
+                    logs.LogWarning("No instruments.")
+                else
+                    // Create two charts: lineChart and histogramChart
+                    let lineChart = panel.CreateChart<DateTime, decimal>()
+                    let histogramChart = panel.CreateChart<DateTime, decimal>()
 
-                // Iterate over each security
-                for security in securities do
-                    // Stop if user cancels script execution
-                    if cancellationToken.IsCancellationRequested then
-                        ()
-                    else
-                        let candlesSeries = Dictionary<DateTime, decimal>()
-                        let volsSeries = Dictionary<DateTime, decimal>()
+                    // Iterate over each security
+                    for security in securities do
+                        // Stop if user cancels script execution
+                        if not cancellationToken.IsCancellationRequested then
+                            let candlesSeries = Dictionary<DateTime, decimal>()
+                            let volsSeries = Dictionary<DateTime, decimal>()
 
-                        // Get candle storage for this security
-                        let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
+                            // Get candle storage for this security
+                            let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
-                        // Load candles within the specified date range
-                        let candles = candleStorage.Load(fromDate, toDate)
+                            // Load candles within the specified date range
+                            let! candles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
 
-                        // Fill dictionaries with close price and volume
-                        for candle in candles do
-                            candlesSeries.[candle.OpenTime] <- candle.ClosePrice
-                            volsSeries.[candle.OpenTime] <- candle.TotalVolume
+                            // Fill dictionaries with close price and volume
+                            for candle in candles do
+                                candlesSeries.[candle.OpenTime] <- candle.ClosePrice
+                                volsSeries.[candle.OpenTime] <- candle.TotalVolume
 
-                        // Draw close prices as a dashed line
-                        lineChart.Append(
-                            sprintf "%O (close)" security,
-                            candlesSeries.Keys,
-                            candlesSeries.Values,
-                            DrawStyles.DashedLine
-                        )
+                            // Draw close prices as a dashed line
+                            lineChart.Append(
+                                sprintf "%O (close)" security,
+                                candlesSeries.Keys,
+                                candlesSeries.Values,
+                                DrawStyles.DashedLine
+                            )
 
-                        // Draw volumes as a histogram
-                        histogramChart.Append(
-                            sprintf "%O (vol)" security,
-                            volsSeries.Keys,
-                            volsSeries.Values,
-                            DrawStyles.Histogram
-                        )
-
-                Task.CompletedTask
+                            // Draw volumes as a histogram
+                            histogramChart.Append(
+                                sprintf "%O (vol)" security,
+                                volsSeries.Keys,
+                                volsSeries.Values,
+                                DrawStyles.Histogram
+                            )
+            }

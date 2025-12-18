@@ -35,51 +35,48 @@ type IndicatorScript() =
                 cancellationToken: CancellationToken
             ) : Task =
 
-            if securities.Length = 0 then
-                logs.LogWarning("No instruments.")
-                Task.CompletedTask
-            else
-                // create 2 panes for candles (close prices) and indicator (ROC) series
-                let candleChart = panel.CreateChart<DateTime, decimal>()
-                let indicatorChart = panel.CreateChart<DateTime, decimal>()
+            task {
+                if securities.Length = 0 then
+                    logs.LogWarning("No instruments.")
+                else
+                    // create 2 panes for candles (close prices) and indicator (ROC) series
+                    let candleChart = panel.CreateChart<DateTime, decimal>()
+                    let indicatorChart = panel.CreateChart<DateTime, decimal>()
 
-                // process each security
-                for security in securities do
-                    // stop calculation if user cancels script execution
-                    if cancellationToken.IsCancellationRequested then
-                        ()
-                    else
-                        // dictionaries to store candle close prices and ROC values
-                        let candlesSeries = Dictionary<DateTime, decimal>()
-                        let indicatorSeries = Dictionary<DateTime, decimal>()
+                    // process each security
+                    for security in securities do
+                        // stop calculation if user cancels script execution
+                        if not cancellationToken.IsCancellationRequested then
+                            // dictionaries to store candle close prices and ROC values
+                            let candlesSeries = Dictionary<DateTime, decimal>()
+                            let indicatorSeries = Dictionary<DateTime, decimal>()
 
-                        // create ROC indicator
-                        let roc = RateOfChange()
+                            // create ROC indicator
+                            let roc = RateOfChange()
 
-                        // get candle storage
-                        let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
+                            // get candle storage
+                            let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
-                        // load candles in the specified date range
-                        let candles = candleStorage.Load(fromDate, toDate)
+                            // load candles in the specified date range
+                            let! candles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
 
-                        // fill close-price and indicator series
-                        for candle in candles do
-                            candlesSeries.[candle.OpenTime] <- candle.ClosePrice
-                            // Process each candle in the ROC indicator, get result as decimal
-                            indicatorSeries.[candle.OpenTime] <- roc.Process(candle).ToDecimal()
+                            // fill close-price and indicator series
+                            for candle in candles do
+                                candlesSeries.[candle.OpenTime] <- candle.ClosePrice
+                                // Process each candle in the ROC indicator, get result as decimal
+                                indicatorSeries.[candle.OpenTime] <- roc.Process(candle).ToDecimal()
 
-                        // draw close prices on candleChart
-                        candleChart.Append(
-                            sprintf "%O (close)" security,
-                            candlesSeries.Keys,
-                            candlesSeries.Values
-                        )
+                            // draw close prices on candleChart
+                            candleChart.Append(
+                                sprintf "%O (close)" security,
+                                candlesSeries.Keys,
+                                candlesSeries.Values
+                            )
 
-                        // draw ROC values on indicatorChart
-                        indicatorChart.Append(
-                            sprintf "%O (ROC)" security,
-                            indicatorSeries.Keys,
-                            indicatorSeries.Values
-                        )
-
-                Task.CompletedTask
+                            // draw ROC values on indicatorChart
+                            indicatorChart.Append(
+                                sprintf "%O (ROC)" security,
+                                indicatorSeries.Keys,
+                                indicatorSeries.Values
+                            )
+            }

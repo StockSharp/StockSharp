@@ -34,45 +34,44 @@ type TimeVolumeScript() =
                 cancellationToken: CancellationToken
             ) : Task =
 
-            if securities.Length = 0 then
-                logs.LogWarning("No instruments.")
-                Task.CompletedTask
-            else
-                // This script processes only the first instrument
-                let security = securities.First()
-
-                // Get candle storage
-                let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
-
-                // Get available dates within the specified period
-                let dates = candleStorage.GetDates(fromDate, toDate).ToArray()
-
-                if dates.Length = 0 then
-                    logs.LogWarning("no data")
-                    Task.CompletedTask
+            task {
+                if securities.Length = 0 then
+                    logs.LogWarning("No instruments.")
                 else
-                    // Group candles by hour (truncate open time to 1 hour)
-                    let rows =
-                        candleStorage
-                            .Load(fromDate, toDate)
-                            .GroupBy(fun c ->
-                                // c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1))
-                                let truncated = c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1.0))
-                                truncated
-                            )
-                            .ToDictionary(
-                                (fun g -> g.Key),
-                                (fun g -> g.Sum(fun c -> c.TotalVolume))
-                            )
+                    // This script processes only the first instrument
+                    let security = securities.First()
 
-                    // Create a grid with two columns: Time, Volume
-                    let grid = panel.CreateGrid("Time", "Volume")
+                    // Get candle storage
+                    let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
-                    // Fill the grid with data (hour -> volume)
-                    for KeyValue(hour, volume) in rows do
-                        grid.SetRow(hour, volume)
+                    // Get available dates within the specified period
+                    let! datesSeq = candleStorage.GetDatesAsync(fromDate, toDate, cancellationToken)
+                    let dates = datesSeq.ToArray()
 
-                    // Sort the grid by the "Volume" column in descending order
-                    grid.SetSort("Volume", false)
+                    if dates.Length = 0 then
+                        logs.LogWarning("no data")
+                    else
+                        // Group candles by hour (truncate open time to 1 hour)
+                        let! candles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
+                        let rows =
+                            candles
+                                .GroupBy(fun c ->
+                                    // c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1))
+                                    let truncated = c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1.0))
+                                    truncated
+                                )
+                                .ToDictionary(
+                                    (fun g -> g.Key),
+                                    (fun g -> g.Sum(fun c -> c.TotalVolume))
+                                )
 
-                    Task.CompletedTask
+                        // Create a grid with two columns: Time, Volume
+                        let grid = panel.CreateGrid("Time", "Volume")
+
+                        // Fill the grid with data (hour -> volume)
+                        for KeyValue(hour, volume) in rows do
+                            grid.SetRow(hour, volume)
+
+                        // Sort the grid by the "Volume" column in descending order
+                        grid.SetSort("Volume", false)
+            }
