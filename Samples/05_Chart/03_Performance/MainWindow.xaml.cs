@@ -54,7 +54,7 @@ public partial class MainWindow
 	private IChartArea _area;
 	private IChartCandleElement _candleElement;
 	private IChartIndicatorElement _indicatorElement;
-	private readonly CachedSynchronizedList<LightCandle> _candles = [];
+	private readonly CachedSynchronizedList<TimeFrameCandleMessage> _candles = [];
 	private readonly TimeSpan _tfSpan = TimeSpan.FromTicks(_timeframe);
 	private readonly DispatcherTimer _chartUpdateTimer = new();
 	private decimal _lastPrice;
@@ -193,7 +193,7 @@ public partial class MainWindow
 				{
 					var data = new ChartDrawData();
 
-					var candles = _candles.GetRange(i, Math.Min(_candlesPacketSize, _candles.Count - i)).Select(c => c.ToCandle(_tfSpan, _securityId));
+					var candles = _candles.GetRange(i, Math.Min(_candlesPacketSize, _candles.Count - i));
 
 					foreach (var candle in candles)
 					{
@@ -250,7 +250,7 @@ public partial class MainWindow
 		});
 
 		TimeFrameCandleMessage candle;
-		var lastLightCandle = _candles[^1];
+		var lastCandle = _candles[^1];
 
 		if (_candles.Count != numCandles && _lastCandle != null)
 		{
@@ -260,12 +260,17 @@ public partial class MainWindow
 
 		if (_candles.Count != numCandles || _lastCandle == null)
 		{
-			_lastCandle = candle = lastLightCandle.ToCandle(_tfSpan, _securityId);
+			_lastCandle = candle = lastCandle;
 		}
 		else
 		{
 			candle = _lastCandle;
-			lastLightCandle.UpdateCandle(candle);
+
+			candle.OpenPrice = lastCandle.OpenPrice;
+			candle.HighPrice = lastCandle.HighPrice;
+			candle.LowPrice = lastCandle.LowPrice;
+			candle.ClosePrice = lastCandle.ClosePrice;
+			candle.TotalVolume = lastCandle.TotalVolume;
 		}
 
 		DrawCandle(candle);
@@ -291,33 +296,35 @@ public partial class MainWindow
 		var price = tick.TradePrice.Value;
 		var volume = (int)tick.TradeVolume.Value;
 
-		if (candle == null || time >= candle.TimeTo)
+		if (candle == null || time >= candle.CloseTime)
 		{
 			var bounds = _tfSpan.GetCandleBounds(time, _security.Board);
-			candle = new LightCandle
+			candle = new TimeFrameCandleMessage
 			{
-				TimeFrom = bounds.Min,
-				TimeTo = bounds.Max,
-				Open = price + 2 * _priceStep,
-				Close = price,
-				High = price + 4 * _priceStep,
-				Low = price - 2 * _priceStep,
+				OpenTime = bounds.Min,
+				CloseTime = bounds.Max,
+				OpenPrice = price + 2 * _priceStep,
+				ClosePrice = price,
+				HighPrice = price + 4 * _priceStep,
+				LowPrice = price - 2 * _priceStep,
+				SecurityId = _securityId,
+				TypedArg = _tfSpan,
 			};
 
 			_candles.Add(candle);
 		}
 
-		if (time < candle.TimeFrom)
+		if (time < candle.OpenTime)
 			throw new InvalidOperationException("invalid time");
 
-		if (price > candle.High)
-			candle.High = price;
+		if (price > candle.HighPrice)
+			candle.HighPrice = price;
 
-		if (price < candle.Low)
-			candle.Low = price;
+		if (price < candle.LowPrice)
+			candle.LowPrice = price;
 
-		candle.Close = price;
-		candle.Volume += volume;
+		candle.ClosePrice = price;
+		candle.TotalVolume += volume;
 
 		_lastPrice = price;
 		_lastTime = time;
@@ -330,42 +337,6 @@ public partial class MainWindow
 			.Error()
 			.Text(msg)
 			.Show();
-	}
-}
-
-class LightCandle
-{
-	public DateTime TimeFrom { get; set; }
-	public DateTime TimeTo { get; set; }
-	public decimal Open { get; set; }
-	public decimal High { get; set; }
-	public decimal Low { get; set; }
-	public decimal Close { get; set; }
-	public decimal Volume { get; set; }
-
-	public TimeFrameCandleMessage ToCandle(TimeSpan ts, SecurityId securityId)
-	{
-		return new()
-		{
-			SecurityId = securityId,
-			TypedArg = ts,
-			OpenTime = TimeFrom,
-			CloseTime = TimeTo,
-			OpenPrice = Open,
-			HighPrice = High,
-			LowPrice = Low,
-			ClosePrice = Close,
-			TotalVolume = Volume,
-		};
-	}
-
-	public void UpdateCandle(TimeFrameCandleMessage candle)
-	{
-		candle.OpenPrice = Open;
-		candle.HighPrice = High;
-		candle.LowPrice = Low;
-		candle.ClosePrice = Close;
-		candle.TotalVolume = Volume;
 	}
 }
 
