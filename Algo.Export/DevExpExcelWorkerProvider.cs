@@ -19,24 +19,19 @@ public class DevExpExcelWorkerProvider : IExcelWorkerProvider
 {
 	private class DevExpExcelWorker : IExcelWorker
 	{
-		private class SheetData : IDisposable
+		private class SheetData(DevExpExcelWorker worker) : IDisposable
 		{
-			private readonly DevExpExcelWorker _worker;
+			private readonly DevExpExcelWorker _worker = worker ?? throw new ArgumentNullException(nameof(worker));
 			private readonly Dictionary<int, SortedDictionary<int, object>> _cells = [];
 
-			public readonly SortedDictionary<int, RefPair<Type, string>> Columns = [];
+			public readonly SortedDictionary<int, (Type type, string format)> Columns = [];
 			public readonly HashSet<int> Rows = [];
-
-			public SheetData(DevExpExcelWorker worker)
-			{
-				_worker = worker ?? throw new ArgumentNullException(nameof(worker));
-			}
 
 			public string Name { get; set; }
 
 			public void SetCell<T>(int col, int row, T value)
 			{
-				Columns.TryAdd(col, new RefPair<Type, string>());
+				Columns.TryAdd(col, new());
 				Rows.Add(row);
 				_cells.SafeAdd(row, key => [])[col] = value;
 			}
@@ -55,18 +50,18 @@ public class DevExpExcelWorkerProvider : IExcelWorkerProvider
 
 					foreach (var pair in Columns)
 					{
-						if (pair.Value.First != null)
+						if (pair.Value.type != null)
 						{
 
 						}
-						else if (!pair.Value.Second.IsEmpty())
+						else if (!pair.Value.format.IsEmpty())
 						{
 							using var xlCol = sheet.CreateColumn(pair.Key);
 
 							xlCol.Formatting = new XlCellFormatting
 							{
 								IsDateTimeFormatString = true,
-								NetFormatString = pair.Value.Second,
+								NetFormatString = pair.Value.format,
 							};
 						}
 					}
@@ -149,13 +144,13 @@ public class DevExpExcelWorkerProvider : IExcelWorkerProvider
 
 		IExcelWorker IExcelWorker.SetStyle(int col, Type type)
 		{
-			_currSheet.Columns[col] = new RefPair<Type, string>(type, null);
+			_currSheet.Columns[col] = new(type, null);
 			return this;
 		}
 
 		IExcelWorker IExcelWorker.SetStyle(int col, string format)
 		{
-			_currSheet.Columns[col] = new RefPair<Type, string>(null, format);
+			_currSheet.Columns[col] = new(null, format);
 			return this;
 		}
 
