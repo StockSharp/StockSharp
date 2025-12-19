@@ -35,7 +35,7 @@ class normalize_price_script(IAnalyticsScript):
 
             first_close = None
 
-            for candle in load_tf_candles(candle_storage, from_date, to_date):
+            for candle in load_tf_candles(candle_storage, from_date, to_date, cancellation_token):
                 if first_close is None:
                     first_close = candle.ClosePrice
 

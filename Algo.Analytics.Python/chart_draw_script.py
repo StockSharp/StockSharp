@@ -49,7 +49,7 @@ class chart_draw_script(IAnalyticsScript):
             # Get candle storage for the current security
             candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
-            for candle in load_tf_candles(candle_storage, from_date, to_date):
+            for candle in load_tf_candles(candle_storage, from_date, to_date, cancellation_token):
                 # Fill series with closing prices and volumes
                 candles_series[candle.OpenTime] = candle.ClosePrice
                 vols_series[candle.OpenTime] = candle.TotalVolume

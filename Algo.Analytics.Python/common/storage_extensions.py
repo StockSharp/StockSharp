@@ -3,9 +3,11 @@ import clr
 clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.Algo")
 
+from System.Threading import CancellationToken
 from StockSharp.Algo.Storages import StorageHelper
 from StockSharp.Messages import Extensions
 from StockSharp.Messages import TimeFrameCandleMessage
+from StockSharp.Messages import CandleMessage
 
 def to_string_id(security_id):
     """
@@ -15,34 +17,69 @@ def to_string_id(security_id):
     """
     return Extensions.ToStringId(security_id)
 
-def get_dates(storage, from_date, to_date):
+def get_dates(storage, from_date, to_date, cancellation_token=None):
     """
-    Helper function to mimic the GetDates extension method.
+    Helper function to get dates from storage using async API.
     :param storage: The storage object.
     :param from_date: The start date of the range.
     :param to_date: The end date of the range.
+    :param cancellation_token: Optional cancellation token.
     :return: A list of dates within the specified range.
     """
-    # Call the GetDates extension method from StorageHelper.GetDates
-    return list(StorageHelper.GetDates(storage, from_date, to_date))
+    if cancellation_token is None:
+        cancellation_token = CancellationToken()
+    # Call async method and block waiting for result
+    all_dates = storage.GetDatesAsync(cancellation_token).GetAwaiter().GetResult()
+    return [d for d in all_dates if d >= from_date and d <= to_date]
 
-def load_tf_candles(storage, from_date, to_date):
-    return load_range(storage, TimeFrameCandleMessage, from_date, to_date)
-
-def load_range(storage, message_type, from_date, to_date):
+def load_tf_candles(storage, from_date, to_date, cancellation_token=None):
     """
-    Helper function to mimic the Load extension method.
+    Helper function to load CandleMessage from storage.
     :param storage: The storage object.
-    :param message_type: The type of the message (e.g., TimeFrameCandleMessage).
     :param from_date: The start date of the range.
     :param to_date: The end date of the range.
+    :param cancellation_token: Optional cancellation token.
     :return: A list of candles within the specified date range.
     """
-    # Get the generic method Load<TMessage> from StorageHelper
-    load_method = StorageHelper.Load[message_type]
-    
-    # Call the Load method with the specified type
-    return list(load_method(storage, from_date, to_date))
+    return load_async_enumerable(storage, CandleMessage, from_date, to_date, cancellation_token)
+
+def load_range(storage, message_type, from_date, to_date, cancellation_token=None):
+    """
+    Helper function to load messages from storage.
+    :param storage: The storage object.
+    :param message_type: The type of the message (e.g., CandleMessage).
+    :param from_date: The start date of the range.
+    :param to_date: The end date of the range.
+    :param cancellation_token: Optional cancellation token.
+    :return: A list of messages within the specified date range.
+    """
+    return load_async_enumerable(storage, message_type, from_date, to_date, cancellation_token)
+
+def load_async_enumerable(storage, message_type, from_date, to_date, cancellation_token=None):
+    """
+    Helper function to iterate over IAsyncEnumerable from LoadAsync.
+    :param storage: The storage object.
+    :param message_type: The .NET type for generic method (e.g., CandleMessage).
+    :param from_date: The start date of the range.
+    :param to_date: The end date of the range.
+    :param cancellation_token: Optional cancellation token.
+    :return: A list of messages within the specified date range.
+    """
+    if cancellation_token is None:
+        cancellation_token = CancellationToken()
+
+    # Get IAsyncEnumerable from LoadAsync<T> extension method with explicit type
+    async_enumerable = StorageHelper.LoadAsync[message_type](storage, from_date, to_date, cancellation_token)
+
+    # Iterate over IAsyncEnumerable by blocking on each MoveNextAsync
+    enumerator = async_enumerable.GetAsyncEnumerator(cancellation_token)
+    result = []
+    try:
+        while enumerator.MoveNextAsync().GetAwaiter().GetResult():
+            result.append(enumerator.Current)
+    finally:
+        enumerator.DisposeAsync().GetAwaiter().GetResult()
+    return result
 
 def get_candle_storage(registry, security, data_type, drive, format):
     """

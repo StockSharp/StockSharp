@@ -41,7 +41,7 @@ class indicator_script(IAnalyticsScript):
             # get candle storage
             candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
-            for candle in load_tf_candles(candle_storage, from_date, to_date):
+            for candle in load_tf_candles(candle_storage, from_date, to_date, cancellation_token):
                 # fill series
                 candles_series[candle.OpenTime] = candle.ClosePrice
                 indicator_series[candle.OpenTime] = to_decimal(process_candle(roc, candle))

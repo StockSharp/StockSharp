@@ -48,7 +48,7 @@ class pearson_correlation_script(IAnalyticsScript):
             candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
             # get closing prices
-            prices = [float(c.ClosePrice) for c in load_tf_candles(candle_storage, from_date, to_date)]
+            prices = [float(c.ClosePrice) for c in load_tf_candles(candle_storage, from_date, to_date, cancellation_token)]
 
             if len(prices) == 0:
                 logs.LogWarning("No data for {0}", security)

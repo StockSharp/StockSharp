@@ -34,7 +34,7 @@ class biggest_candle_script(IAnalyticsScript):
 
             # get candle storage
             candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
-            all_candles = load_tf_candles(candle_storage, from_date, to_date)
+            all_candles = load_tf_candles(candle_storage, from_date, to_date, cancellation_token)
 
             if len(all_candles) > 0:
                 # first orders by volume desc will be our biggest candle

@@ -41,14 +41,14 @@ class price_volume_script(IAnalyticsScript):
         candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
         # Get available dates for the specified period
-        dates = get_dates(candle_storage, from_date, to_date)
+        dates = get_dates(candle_storage, from_date, to_date, cancellation_token)
 
         if len(dates) == 0:
             logs.LogWarning("no data")
             return Task.CompletedTask
 
         # Grouping candles by middle price and summing their volumes
-        candles = load_tf_candles(candle_storage, from_date, to_date)
+        candles = load_tf_candles(candle_storage, from_date, to_date, cancellation_token)
         rows_dict = {}
         for candle in candles:
             # Calculate middle price of the candle
