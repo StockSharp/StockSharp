@@ -26,7 +26,10 @@ public interface IStorageProcessor
 	/// Process <see cref="MarketDataMessage"/>.
 	/// </summary>
 	/// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-	/// <param name="newOutMessage">New message event.</param>
-	/// <returns>Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</returns>
-	MarketDataMessage ProcessMarketData(MarketDataMessage message, Action<Message> newOutMessage);
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>
+	/// A sequence of outgoing messages. If subscription should be forwarded to an inner adapter,
+	/// the resulting <see cref="MarketDataMessage"/> is returned as the last message in the sequence.
+	/// </returns>
+	IAsyncEnumerable<Message> ProcessMarketData(MarketDataMessage message, CancellationToken cancellationToken);
 }

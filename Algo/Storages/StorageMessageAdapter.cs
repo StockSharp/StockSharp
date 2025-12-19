@@ -28,20 +28,36 @@ public class StorageMessageAdapter(IMessageAdapter innerAdapter, IStorageProcess
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
 			case MessageTypes.Reset:
 				_storageProcessor.Reset();
-				return base.OnSendInMessageAsync(message, cancellationToken);
+				await base.OnSendInMessageAsync(message, cancellationToken);
+				return;
 
 			case MessageTypes.MarketData:
-				message = _storageProcessor.ProcessMarketData((MarketDataMessage)message, RaiseStorageMessage);
-				return message is null ? default : base.OnSendInMessageAsync(message, cancellationToken);
+			{
+				MarketDataMessage forwardMessage = null;
+
+				await foreach (var outMsg in _storageProcessor.ProcessMarketData((MarketDataMessage)message, cancellationToken).WithEnforcedCancellation(cancellationToken))
+				{
+					if (outMsg is MarketDataMessage md)
+						forwardMessage = md;
+					else
+						RaiseStorageMessage(outMsg);
+				}
+
+				if (forwardMessage != null)
+					await base.OnSendInMessageAsync(forwardMessage, cancellationToken);
+
+				return;
+			}
 
 			default:
-				return base.OnSendInMessageAsync(message, cancellationToken);
+				await base.OnSendInMessageAsync(message, cancellationToken);
+				return;
 		}
 	}
 

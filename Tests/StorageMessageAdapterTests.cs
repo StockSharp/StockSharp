@@ -1,5 +1,7 @@
 using StockSharp.Algo.Candles.Compression;
 
+using System.Runtime.CompilerServices;
+
 namespace StockSharp.Tests;
 
 [TestClass]
@@ -24,16 +26,19 @@ public class StorageMessageAdapterTests : BaseTestClass
 
 		public int ResetCalls { get; private set; }
 
-		public Func<MarketDataMessage, Action<Message>, MarketDataMessage> ProcessMarketDataImpl { get; set; }
+		public Func<MarketDataMessage, CancellationToken, IAsyncEnumerable<Message>> ProcessMarketDataImpl { get; set; }
 
 		public void Reset() => ResetCalls++;
 
-		public MarketDataMessage ProcessMarketData(MarketDataMessage message, Action<Message> newOutMessage)
+		public IAsyncEnumerable<Message> ProcessMarketData(MarketDataMessage message, CancellationToken cancellationToken)
 		{
-			if (ProcessMarketDataImpl != null)
-				return ProcessMarketDataImpl(message, newOutMessage);
+			return ProcessMarketDataImpl?.Invoke(message, cancellationToken) ?? Return(message, cancellationToken);
 
-			return message;
+			static async IAsyncEnumerable<Message> Return(MarketDataMessage message, [EnumeratorCancellation] CancellationToken cancellationToken)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
+				yield return message;
+			}
 		}
 	}
 
@@ -84,12 +89,15 @@ public class StorageMessageAdapterTests : BaseTestClass
 
 		var processor = new TestStorageProcessor(settings)
 		{
-			ProcessMarketDataImpl = (md, newOut) =>
-			{
-				newOut(new SubscriptionResponseMessage { OriginalTransactionId = md.TransactionId });
-				return md;
-			}
+			ProcessMarketDataImpl = static (md, ct) => Process(md, ct)
 		};
+
+		static async IAsyncEnumerable<Message> Process(MarketDataMessage message, [EnumeratorCancellation] CancellationToken cancellationToken)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+			yield return new SubscriptionResponseMessage { OriginalTransactionId = message.TransactionId };
+			yield return message;
+		}
 
 		var inner = new TestInnerAdapter();
 		var adapter = new StorageMessageAdapter(inner, processor);
@@ -128,7 +136,7 @@ public class StorageMessageAdapterTests : BaseTestClass
 
 		var processor = new TestStorageProcessor(settings)
 		{
-			ProcessMarketDataImpl = (_, _) => null,
+			ProcessMarketDataImpl = static (_, _) => AsyncEnumerable.Empty<Message>(),
 		};
 
 		var inner = new TestInnerAdapter();

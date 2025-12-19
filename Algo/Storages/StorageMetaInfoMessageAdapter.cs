@@ -59,11 +59,20 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 		}
 	}
 
-	private ValueTask ProcessMarketData(MarketDataMessage message, CancellationToken cancellationToken)
+	private async ValueTask ProcessMarketData(MarketDataMessage message, CancellationToken cancellationToken)
 	{
-		message = _storageProcessor.ProcessMarketData(message, RaiseNewOutMessage);
+		MarketDataMessage forwardMessage = null;
 
-		return message == null ? default : base.OnSendInMessageAsync(message, cancellationToken);
+		await foreach (var outMsg in _storageProcessor.ProcessMarketData(message, cancellationToken).WithEnforcedCancellation(cancellationToken))
+		{
+			if (outMsg is MarketDataMessage md)
+				forwardMessage = md;
+			else
+				RaiseNewOutMessage(outMsg);
+		}
+
+		if (forwardMessage != null)
+			await base.OnSendInMessageAsync(forwardMessage, cancellationToken);
 	}
 
 	/// <inheritdoc />
