@@ -878,6 +878,37 @@ public static partial class TraderHelper
 	}
 
 	/// <summary>
+	/// Convert inner securities messages to basket.
+	/// </summary>
+	/// <typeparam name="TMessage">Message type.</typeparam>
+	/// <param name="innerSecMessages">Inner securities messages.</param>
+	/// <param name="security">Basket security.</param>
+	/// <param name="processorProvider">Basket security processors provider.</param>
+	/// <returns>Messages of basket securities.</returns>
+	public static IAsyncEnumerable<TMessage> ToBasket<TMessage>(this IAsyncEnumerable<TMessage> innerSecMessages, Security security, IBasketSecurityProcessorProvider processorProvider)
+		where TMessage : Message
+	{
+		if (innerSecMessages is null)
+			throw new ArgumentNullException(nameof(innerSecMessages));
+
+		var processor = processorProvider.CreateProcessor(security);
+
+		return Impl(innerSecMessages, processor);
+
+		static async IAsyncEnumerable<TMessage> Impl(IAsyncEnumerable<TMessage> messages, IBasketSecurityProcessor processor, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+		{
+			await foreach (var msg in messages.WithCancellation(cancellationToken))
+			{
+				foreach (var result in processor.Process(msg))
+				{
+					if (result is TMessage typedResult)
+						yield return typedResult;
+				}
+			}
+		}
+	}
+
+	/// <summary>
 	/// Create market data processor for basket securities.
 	/// </summary>
 	/// <param name="processorProvider">Basket security processors provider.</param>
