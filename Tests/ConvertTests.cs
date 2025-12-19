@@ -776,4 +776,523 @@ public class ConvertTests : BaseTestClass
 		Level1Fields.BestBidPrice.ToType().AreEqual(typeof(decimal));
 		Level1Fields.State.ToType().AreEqual(typeof(SecurityStates));
 	}
+
+	private static async IAsyncEnumerable<T> ToAsyncEnumerable<T>(IEnumerable<T> source)
+	{
+		foreach (var item in source)
+		{
+			await Task.Yield();
+			yield return item;
+		}
+	}
+
+	[TestMethod]
+	public async Task QuoteChangeMessages_ToLevel1_SyncVsAsync()
+	{
+		var token = CancellationToken;
+		var quotes = new[]
+		{
+			new QuoteChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 30, 0),
+				Bids = [new QuoteChange(100m, 150), new QuoteChange(99m, 200)],
+				Asks = [new QuoteChange(101m, 200), new QuoteChange(102m, 250)]
+			},
+			new QuoteChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 30, 1),
+				Bids = [new QuoteChange(100.5m, 160)],
+				Asks = [new QuoteChange(101.5m, 210)]
+			}
+		};
+
+		var syncResult = quotes.ToLevel1().ToArray();
+		var asyncResult = await ToAsyncEnumerable(quotes).ToLevel1().ToArrayAsync(token);
+
+		syncResult.Length.AreEqual(asyncResult.Length);
+		for (var i = 0; i < syncResult.Length; i++)
+		{
+			syncResult[i].SecurityId.AreEqual(asyncResult[i].SecurityId);
+			syncResult[i].ServerTime.AreEqual(asyncResult[i].ServerTime);
+			syncResult[i].TryGetDecimal(Level1Fields.BestBidPrice).AreEqual(asyncResult[i].TryGetDecimal(Level1Fields.BestBidPrice));
+			syncResult[i].TryGetDecimal(Level1Fields.BestAskPrice).AreEqual(asyncResult[i].TryGetDecimal(Level1Fields.BestAskPrice));
+			syncResult[i].TryGetDecimal(Level1Fields.BestBidVolume).AreEqual(asyncResult[i].TryGetDecimal(Level1Fields.BestBidVolume));
+			syncResult[i].TryGetDecimal(Level1Fields.BestAskVolume).AreEqual(asyncResult[i].TryGetDecimal(Level1Fields.BestAskVolume));
+		}
+	}
+
+	[TestMethod]
+	public async Task Level1ChangeMessages_ToTicks_SyncVsAsync()
+	{
+		var token = CancellationToken;
+		var level1Messages = new[]
+		{
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 0)
+			}
+			.Add(Level1Fields.LastTradePrice, 100m)
+			.Add(Level1Fields.LastTradeVolume, 50m)
+			.Add(Level1Fields.LastTradeId, 1L),
+
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 1)
+			}
+			.Add(Level1Fields.LastTradePrice, 100.5m)
+			.Add(Level1Fields.LastTradeVolume, 75m)
+			.Add(Level1Fields.LastTradeId, 2L),
+
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 2)
+			}
+			.Add(Level1Fields.LastTradePrice, 101m)
+			.Add(Level1Fields.LastTradeVolume, 100m)
+			.Add(Level1Fields.LastTradeId, 3L)
+		};
+
+		var syncResult = level1Messages.ToTicks().ToArray();
+		var asyncResult = await ToAsyncEnumerable(level1Messages).ToTicks().ToArrayAsync(token);
+
+		syncResult.Length.AreEqual(asyncResult.Length);
+		for (var i = 0; i < syncResult.Length; i++)
+		{
+			syncResult[i].SecurityId.AreEqual(asyncResult[i].SecurityId);
+			syncResult[i].ServerTime.AreEqual(asyncResult[i].ServerTime);
+			syncResult[i].TradePrice.AreEqual(asyncResult[i].TradePrice);
+			syncResult[i].TradeVolume.AreEqual(asyncResult[i].TradeVolume);
+			syncResult[i].TradeId.AreEqual(asyncResult[i].TradeId);
+		}
+	}
+
+	[TestMethod]
+	public async Task Level1ChangeMessages_ToOrderBooks_SyncVsAsync()
+	{
+		var token = CancellationToken;
+		var level1Messages = new[]
+		{
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 0)
+			}
+			.Add(Level1Fields.BestBidPrice, 100m)
+			.Add(Level1Fields.BestBidVolume, 150m)
+			.Add(Level1Fields.BestAskPrice, 101m)
+			.Add(Level1Fields.BestAskVolume, 200m),
+
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 1)
+			}
+			.Add(Level1Fields.BestBidPrice, 100.5m)
+			.Add(Level1Fields.BestBidVolume, 160m)
+			.Add(Level1Fields.BestAskPrice, 101.5m)
+			.Add(Level1Fields.BestAskVolume, 210m),
+
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 2)
+			}
+			.Add(Level1Fields.BestBidPrice, 101m)
+			.Add(Level1Fields.BestBidVolume, 170m)
+			.Add(Level1Fields.BestAskPrice, 102m)
+			.Add(Level1Fields.BestAskVolume, 220m)
+		};
+
+		var syncResult = level1Messages.ToOrderBooks().ToArray();
+		var asyncResult = await ToAsyncEnumerable(level1Messages).ToOrderBooks().ToArrayAsync(token);
+
+		syncResult.Length.AreEqual(asyncResult.Length);
+		for (var i = 0; i < syncResult.Length; i++)
+		{
+			syncResult[i].SecurityId.AreEqual(asyncResult[i].SecurityId);
+			syncResult[i].ServerTime.AreEqual(asyncResult[i].ServerTime);
+			syncResult[i].Bids.Length.AreEqual(asyncResult[i].Bids.Length);
+			syncResult[i].Asks.Length.AreEqual(asyncResult[i].Asks.Length);
+
+			for (var j = 0; j < syncResult[i].Bids.Length; j++)
+			{
+				syncResult[i].Bids[j].Price.AreEqual(asyncResult[i].Bids[j].Price);
+				syncResult[i].Bids[j].Volume.AreEqual(asyncResult[i].Bids[j].Volume);
+			}
+
+			for (var j = 0; j < syncResult[i].Asks.Length; j++)
+			{
+				syncResult[i].Asks[j].Price.AreEqual(asyncResult[i].Asks[j].Price);
+				syncResult[i].Asks[j].Volume.AreEqual(asyncResult[i].Asks[j].Volume);
+			}
+		}
+	}
+
+	[TestMethod]
+	public async Task QuoteChangeMessages_ToLevel1_Async()
+	{
+		var token = CancellationToken;
+		var quotes = new[]
+		{
+			new QuoteChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 30, 0),
+				Bids = [new QuoteChange(100m, 150)],
+				Asks = [new QuoteChange(101m, 200)]
+			},
+			new QuoteChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 30, 1),
+				Bids = [new QuoteChange(100.5m, 160)],
+				Asks = [new QuoteChange(101.5m, 210)]
+			}
+		};
+
+		var level1Messages = await ToAsyncEnumerable(quotes).ToLevel1().ToArrayAsync(token);
+
+		level1Messages.Length.AreEqual(2);
+
+		level1Messages[0].TryGetDecimal(Level1Fields.BestBidPrice).AreEqual(100m);
+		level1Messages[0].TryGetDecimal(Level1Fields.BestAskPrice).AreEqual(101m);
+		level1Messages[0].BuildFrom.AreEqual(DataType.MarketDepth);
+
+		level1Messages[1].TryGetDecimal(Level1Fields.BestBidPrice).AreEqual(100.5m);
+		level1Messages[1].TryGetDecimal(Level1Fields.BestAskPrice).AreEqual(101.5m);
+	}
+
+	[TestMethod]
+	public async Task Level1ChangeMessages_ToTicks_Async()
+	{
+		var token = CancellationToken;
+		var level1Messages = new[]
+		{
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 0)
+			}
+			.Add(Level1Fields.LastTradePrice, 100m)
+			.Add(Level1Fields.LastTradeVolume, 50m)
+			.Add(Level1Fields.LastTradeId, 1L),
+
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 1)
+			}
+			.Add(Level1Fields.LastTradePrice, 100.5m)
+			.Add(Level1Fields.LastTradeVolume, 75m)
+			.Add(Level1Fields.LastTradeId, 2L)
+		};
+
+		var ticks = await ToAsyncEnumerable(level1Messages).ToTicks().ToArrayAsync(token);
+
+		ticks.Length.AreEqual(2);
+
+		ticks[0].TradePrice.AreEqual(100m);
+		ticks[0].TradeVolume.AreEqual(50m);
+		ticks[0].TradeId.AreEqual(1L);
+
+		ticks[1].TradePrice.AreEqual(100.5m);
+		ticks[1].TradeVolume.AreEqual(75m);
+		ticks[1].TradeId.AreEqual(2L);
+	}
+
+	[TestMethod]
+	public async Task Level1ChangeMessages_ToOrderBooks_Async()
+	{
+		var token = CancellationToken;
+		var level1Messages = new[]
+		{
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 0)
+			}
+			.Add(Level1Fields.BestBidPrice, 100m)
+			.Add(Level1Fields.BestBidVolume, 150m)
+			.Add(Level1Fields.BestAskPrice, 101m)
+			.Add(Level1Fields.BestAskVolume, 200m),
+
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 1)
+			}
+			.Add(Level1Fields.BestBidPrice, 100.5m)
+			.Add(Level1Fields.BestBidVolume, 160m)
+			.Add(Level1Fields.BestAskPrice, 101.5m)
+			.Add(Level1Fields.BestAskVolume, 210m)
+		};
+
+		var orderBooks = await ToAsyncEnumerable(level1Messages).ToOrderBooks().ToArrayAsync(token);
+
+		orderBooks.Length.AreEqual(2);
+
+		orderBooks[0].Bids.Length.AreEqual(1);
+		orderBooks[0].Bids[0].Price.AreEqual(100m);
+		orderBooks[0].Bids[0].Volume.AreEqual(150m);
+		orderBooks[0].Asks.Length.AreEqual(1);
+		orderBooks[0].Asks[0].Price.AreEqual(101m);
+		orderBooks[0].Asks[0].Volume.AreEqual(200m);
+
+		orderBooks[1].Bids[0].Price.AreEqual(100.5m);
+		orderBooks[1].Asks[0].Price.AreEqual(101.5m);
+	}
+
+	[TestMethod]
+	public async Task Level1ChangeMessages_ToTicks_FiltersNonTicks_Async()
+	{
+		var token = CancellationToken;
+		var level1Messages = new[]
+		{
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 0)
+			}
+			.Add(Level1Fields.BestBidPrice, 100m), // No tick data - should be filtered
+
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 1)
+			}
+			.Add(Level1Fields.LastTradePrice, 100.5m) // Has tick data
+		};
+
+		var ticks = await ToAsyncEnumerable(level1Messages).ToTicks().ToArrayAsync(token);
+
+		ticks.Length.AreEqual(1);
+		ticks[0].TradePrice.AreEqual(100.5m);
+	}
+
+	[TestMethod]
+	public async Task Level1ChangeMessages_ToOrderBooks_FiltersNonQuotes_Async()
+	{
+		var token = CancellationToken;
+		var level1Messages = new[]
+		{
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 0)
+			}
+			.Add(Level1Fields.LastTradePrice, 100m), // No quote data - should be filtered
+
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 1)
+			}
+			.Add(Level1Fields.BestBidPrice, 100.5m)
+			.Add(Level1Fields.BestBidVolume, 150m)
+		};
+
+		var orderBooks = await ToAsyncEnumerable(level1Messages).ToOrderBooks().ToArrayAsync(token);
+
+		orderBooks.Length.AreEqual(1);
+		orderBooks[0].Bids[0].Price.AreEqual(100.5m);
+	}
+
+	[TestMethod]
+	public async Task Level1ChangeMessages_ToOrderBooks_SkipsDuplicates_Async()
+	{
+		var token = CancellationToken;
+		var level1Messages = new[]
+		{
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 0)
+			}
+			.Add(Level1Fields.BestBidPrice, 100m)
+			.Add(Level1Fields.BestBidVolume, 150m),
+
+			// Same values - should be skipped
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 1)
+			}
+			.Add(Level1Fields.BestBidPrice, 100m)
+			.Add(Level1Fields.BestBidVolume, 150m),
+
+			// Different values - should be included
+			new Level1ChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 2)
+			}
+			.Add(Level1Fields.BestBidPrice, 101m)
+			.Add(Level1Fields.BestBidVolume, 160m)
+		};
+
+		var orderBooks = await ToAsyncEnumerable(level1Messages).ToOrderBooks().ToArrayAsync(token);
+
+		orderBooks.Length.AreEqual(2);
+		orderBooks[0].Bids[0].Price.AreEqual(100m);
+		orderBooks[1].Bids[0].Price.AreEqual(101m);
+	}
+
+	[TestMethod]
+	public async Task BuildIfNeed_FullOrderBook_PassThrough_Async()
+	{
+		var token = CancellationToken;
+		var quotes = new[]
+		{
+			new QuoteChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 30, 0),
+				Bids = [new QuoteChange(100m, 150)],
+				Asks = [new QuoteChange(101m, 200)],
+				State = null // Full order book
+			}
+		};
+
+		var result = await ToAsyncEnumerable(quotes).BuildIfNeed().ToArrayAsync(token);
+
+		result.Length.AreEqual(1);
+		result[0].Bids[0].Price.AreEqual(100m);
+		result[0].Asks[0].Price.AreEqual(101m);
+	}
+
+	[TestMethod]
+	public async Task Cast_Async()
+	{
+		var token = CancellationToken;
+		var quotes = new[]
+		{
+			new QuoteChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 30, 0),
+				Bids = [new QuoteChange(100m, 150)],
+				Asks = [new QuoteChange(101m, 200)]
+			}
+		};
+
+		var result = await ToAsyncEnumerable(quotes)
+			.Cast<QuoteChangeMessage, Level1ChangeMessage>(q => q.ToLevel1())
+			.ToArrayAsync(token);
+
+		result.Length.AreEqual(1);
+		result[0].TryGetDecimal(Level1Fields.BestBidPrice).AreEqual(100m);
+		result[0].TryGetDecimal(Level1Fields.BestAskPrice).AreEqual(101m);
+	}
+
+	[TestMethod]
+	public async Task QuoteChangeMessages_ToLevel1_Empty_Async()
+	{
+		var token = CancellationToken;
+		var quotes = Array.Empty<QuoteChangeMessage>();
+
+		var level1Messages = await ToAsyncEnumerable(quotes).ToLevel1().ToArrayAsync(token);
+
+		level1Messages.Length.AreEqual(0);
+	}
+
+	[TestMethod]
+	public async Task Level1ChangeMessages_ToTicks_Empty_Async()
+	{
+		var token = CancellationToken;
+		var level1Messages = Array.Empty<Level1ChangeMessage>();
+
+		var ticks = await ToAsyncEnumerable(level1Messages).ToTicks().ToArrayAsync(token);
+
+		ticks.Length.AreEqual(0);
+	}
+
+	[TestMethod]
+	public async Task Level1ChangeMessages_ToOrderBooks_Empty_Async()
+	{
+		var token = CancellationToken;
+		var level1Messages = Array.Empty<Level1ChangeMessage>();
+
+		var orderBooks = await ToAsyncEnumerable(level1Messages).ToOrderBooks().ToArrayAsync(token);
+
+		orderBooks.Length.AreEqual(0);
+	}
+
+	[TestMethod]
+	public Task QuoteChangeMessages_ToLevel1_Null_Async()
+	{
+		var token = CancellationToken;
+		return ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		{
+			IAsyncEnumerable<QuoteChangeMessage> quotes = null;
+			await quotes.ToLevel1().ToArrayAsync(token);
+		});
+	}
+
+	[TestMethod]
+	public Task Level1ChangeMessages_ToTicks_Null_Async()
+	{
+		var token = CancellationToken;
+		return ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		{
+			IAsyncEnumerable<Level1ChangeMessage> level1 = null;
+			await level1.ToTicks().ToArrayAsync(token);
+		});
+	}
+
+	[TestMethod]
+	public Task Level1ChangeMessages_ToOrderBooks_Null_Async()
+	{
+		var token = CancellationToken;
+		return ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		{
+			IAsyncEnumerable<Level1ChangeMessage> level1 = null;
+			await level1.ToOrderBooks().ToArrayAsync(token);
+		});
+	}
+
+	[TestMethod]
+	public Task BuildIfNeed_Null_Async()
+	{
+		var token = CancellationToken;
+		return ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		{
+			IAsyncEnumerable<QuoteChangeMessage> quotes = null;
+			await quotes.BuildIfNeed().ToArrayAsync(token);
+		});
+	}
+
+	[TestMethod]
+	public Task Cast_Null_Async()
+	{
+		var token = CancellationToken;
+		return ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		{
+			IAsyncEnumerable<QuoteChangeMessage> quotes = null;
+			await quotes.Cast<QuoteChangeMessage, Level1ChangeMessage>(q => q.ToLevel1()).ToArrayAsync(token);
+		});
+	}
+
+	[TestMethod]
+	public Task Cast_NullConverter_Async()
+	{
+		var token = CancellationToken;
+		var quotes = ToAsyncEnumerable(new[]
+		{
+			new QuoteChangeMessage
+			{
+				SecurityId = TestSecurityId,
+				ServerTime = DateTime.Now
+			}
+		});
+
+		return ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		{
+			await quotes.Cast<QuoteChangeMessage, Level1ChangeMessage>(null).ToArrayAsync(token);
+		});
+	}
 }
