@@ -1,5 +1,7 @@
 namespace StockSharp.Tests;
 
+using Ecng.Linq;
+
 [TestClass]
 public class ConvertTests : BaseTestClass
 {
