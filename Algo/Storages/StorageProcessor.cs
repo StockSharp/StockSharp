@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using System.Threading.Channels;
-
 using StockSharp.Algo.Candles.Compression;
 
 /// <summary>
@@ -38,96 +36,51 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 			yield break;
 		}
 
-		var channel = Channel.CreateBounded<Message>(new BoundedChannelOptions(1024)
-		{
-			SingleReader = true,
-			SingleWriter = true,
-			FullMode = BoundedChannelFullMode.Wait,
-			AllowSynchronousContinuations = true,
-		});
+		MarketDataMessage forwardMessage = message;
 
-		using var producerCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-		var producerToken = producerCts.Token;
-
-		var producerTask = Task.Run(() =>
+		if (message.IsSubscribe)
 		{
-			try
+			if (message.SecurityId != default)
 			{
-				void Write(Message outMsg)
-					=> channel.Writer.WriteAsync(outMsg, producerToken).AsTask().GetAwaiter().GetResult();
+				var transactionId = message.TransactionId;
+				var context = new StorageLoadContext();
 
-				MarketDataMessage forwardMessage = message;
+				await foreach (var outMsg in Settings.LoadMessagesAsync(CandleBuilderProvider, message, context, cancellationToken))
+					yield return outMsg;
 
-				if (message.IsSubscribe)
+				if (message.To != null && context.HasData && (message.To <= context.LastDate || context.Left == 0))
 				{
-					if (message.SecurityId == default)
+					_fullyProcessedSubscriptions.Add(transactionId);
+					yield return new SubscriptionFinishedMessage { OriginalTransactionId = transactionId };
+					forwardMessage = null;
+				}
+				else if (context.HasData)
+				{
+					if (!(message.DataType2 == DataType.MarketDepth && message.From == null && message.To == null))
 					{
-					}
-					else
-					{
-						var transactionId = message.TransactionId;
-
-						var t = Settings.LoadMessages(CandleBuilderProvider, message, Write);
-
-						if (message.To != null && t != null && (message.To <= t.Value.lastDate || t.Value.left == 0))
-						{
-							_fullyProcessedSubscriptions.Add(transactionId);
-							Write(new SubscriptionFinishedMessage { OriginalTransactionId = transactionId });
-							forwardMessage = null;
-						}
-						else if (t != null)
-						{
-							if (!(message.DataType2 == DataType.MarketDepth && message.From == null && message.To == null))
-							{
-								var clone = message.TypedClone();
-								clone.From = t.Value.lastDate;
-								clone.Count = t.Value.left;
-								forwardMessage = clone;
-								forwardMessage.ValidateBounds();
-							}
-						}
+						var clone = message.TypedClone();
+						clone.From = context.LastDate;
+						clone.Count = context.Left;
+						forwardMessage = clone;
+						forwardMessage.ValidateBounds();
 					}
 				}
-				else
+			}
+		}
+		else
+		{
+			if (_fullyProcessedSubscriptions.Remove(message.OriginalTransactionId))
+			{
+				yield return new SubscriptionResponseMessage
 				{
-					if (_fullyProcessedSubscriptions.Remove(message.OriginalTransactionId))
-					{
-						Write(new SubscriptionResponseMessage
-						{
-							OriginalTransactionId = message.TransactionId,
-						});
+					OriginalTransactionId = message.TransactionId,
+				};
 
-						forwardMessage = null;
-					}
-				}
-
-				if (forwardMessage != null)
-					Write(forwardMessage);
-
-				channel.Writer.TryComplete();
-			}
-			catch (Exception ex)
-			{
-				channel.Writer.TryComplete(ex);
-			}
-		}, producerToken);
-
-		try
-		{
-			await foreach (var outMsg in channel.Reader.ReadAllAsync(cancellationToken))
-				yield return outMsg;
-		}
-		finally
-		{
-			producerCts.Cancel();
-
-			try
-			{
-				await producerTask;
-			}
-			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-			{
+				forwardMessage = null;
 			}
 		}
+
+		if (forwardMessage != null)
+			yield return forwardMessage;
 	}
 }

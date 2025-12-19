@@ -761,7 +761,38 @@ public static class StorageHelper
 	/// <param name="subscription">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
 	/// <param name="newOutMessage">New message event.</param>
 	/// <returns>Last date.</returns>
-	public static (DateTime lastDate, long? left)? LoadMessages(this StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider, MarketDataMessage subscription, Action<Message> newOutMessage)
+	[Obsolete("Use LoadMessagesAsync method instead.")]
+	public static (DateTime? lastDate, long? left)? LoadMessages(this StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider, MarketDataMessage subscription, Action<Message> newOutMessage)
+	{
+		if (newOutMessage is null)
+			throw new ArgumentNullException(nameof(newOutMessage));
+
+		return AsyncHelper.Run(async () =>
+		{
+			var context = new StorageLoadContext();
+
+			await foreach (var msg in LoadMessagesAsync(settings, candleBuilderProvider, subscription, context, default))
+				newOutMessage(msg);
+
+			return (context.LastDate, context.Left);
+		});
+	}
+
+	/// <summary>
+	/// Load history messages from storage as async stream.
+	/// </summary>
+	/// <param name="settings">Storage settings.</param>
+	/// <param name="candleBuilderProvider">Candle builders provider.</param>
+	/// <param name="subscription">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
+	/// <param name="context">Context that will be populated with load result metadata after enumeration.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Async stream of messages.</returns>
+	public static async IAsyncEnumerable<Message> LoadMessagesAsync(
+		this StorageCoreSettings settings,
+		CandleBuilderProvider candleBuilderProvider,
+		MarketDataMessage subscription,
+		StorageLoadContext context,
+		[EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		if (settings is null)
 			throw new ArgumentNullException(nameof(settings));
@@ -772,20 +803,11 @@ public static class StorageHelper
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		if (newOutMessage is null)
-			throw new ArgumentNullException(nameof(newOutMessage));
-
-		(DateTime lastTime, long? left)? retVal = default;
+		if (context is null)
+			throw new ArgumentNullException(nameof(context));
 
 		if (subscription.From == null)
-			return retVal;
-
-		void SendReply() => newOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = subscription.TransactionId });
-		void SendOut(Message message)
-		{
-			message.OfflineMode = MessageOfflineModes.Ignore;
-			newOutMessage(message);
-		}
+			yield break;
 
 		IMarketDataStorage<TMessage> GetStorage<TMessage>(SecurityId securityId, DataType dt)
 			where TMessage : Message
@@ -794,13 +816,41 @@ public static class StorageHelper
 		}
 
 		var secId = subscription.SecurityId;
+		var transactionId = subscription.TransactionId;
+
+		async IAsyncEnumerable<Message> LoadFromStorage<TMessage>(IMarketDataStorage<TMessage> storage, Func<TMessage, bool> filter = null)
+			where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
+		{
+			var range = await GetRangeAsync(storage, subscription, cancellationToken);
+
+			if (range == default)
+				yield break;
+
+			var messages = storage.LoadAsync(range.from, range.to, cancellationToken);
+
+			if (subscription.Skip != default)
+				messages = messages.Skip((int)subscription.Skip.Value);
+
+			await foreach (var msg in LoadMessagesAsyncCore(messages, subscription.Count, transactionId, filter, context, cancellationToken))
+				yield return msg;
+		}
+
+		async IAsyncEnumerable<Message> LoadFromEnumerable<TMessage>(IAsyncEnumerable<TMessage> messages, Func<TMessage, bool> filter = null)
+			where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
+		{
+			await foreach (var msg in LoadMessagesAsyncCore(messages, subscription.Count, transactionId, filter, context, cancellationToken))
+				yield return msg;
+		}
 
 		if (subscription.DataType2 == DataType.Level1)
 		{
 			if (subscription.BuildMode != MarketDataBuildModes.Build)
 			{
 				if (settings.IsMode(StorageModes.Incremental))
-					retVal = LoadMessages(GetStorage<Level1ChangeMessage>(secId, subscription.DataType2), subscription, SendReply, SendOut);
+				{
+					await foreach (var msg in LoadFromStorage(GetStorage<Level1ChangeMessage>(secId, subscription.DataType2)).WithCancellation(cancellationToken))
+						yield return msg;
+				}
 			}
 			else
 			{
@@ -808,26 +858,28 @@ public static class StorageHelper
 				{
 					var storage = GetStorage<ExecutionMessage>(secId, subscription.BuildFrom);
 
-					var range = GetRange(storage, subscription);
+					var range = await GetRangeAsync(storage, subscription, cancellationToken);
 
 					if (range != default)
 					{
-						retVal = LoadMessages(storage
-							.Load(range.from, range.to)
-							.ToLevel1(subscription.DepthBuilder, subscription.RefreshSpeed ?? default), subscription.Count, subscription.TransactionId, SendReply, SendOut);
+						await foreach (var msg in LoadFromEnumerable(storage
+							.LoadAsync(range.from, range.to, cancellationToken)
+							.ToLevel1(subscription.DepthBuilder, subscription.RefreshSpeed ?? default)).WithCancellation(cancellationToken))
+							yield return msg;
 					}
 				}
 				else if (subscription.BuildFrom == DataType.MarketDepth)
 				{
 					var storage = GetStorage<QuoteChangeMessage>(secId, subscription.BuildFrom);
 
-					var range = GetRange(storage, subscription);
+					var range = await GetRangeAsync(storage, subscription, cancellationToken);
 
 					if (range != default)
 					{
-						retVal = LoadMessages(storage
-							.Load(range.from, range.to)
-							.ToLevel1(), subscription.Count, subscription.TransactionId, SendReply, SendOut);
+						await foreach (var msg in LoadFromEnumerable(storage
+							.LoadAsync(range.from, range.to, cancellationToken)
+							.ToLevel1()).WithCancellation(cancellationToken))
+							yield return msg;
 					}
 				}
 			}
@@ -837,7 +889,10 @@ public static class StorageHelper
 			if (subscription.BuildMode != MarketDataBuildModes.Build)
 			{
 				if (settings.IsMode(StorageModes.Incremental))
-					retVal = LoadMessages(GetStorage<QuoteChangeMessage>(secId, subscription.DataType2), subscription, SendReply, SendOut);
+				{
+					await foreach (var msg in LoadFromStorage(GetStorage<QuoteChangeMessage>(secId, subscription.DataType2)).WithCancellation(cancellationToken))
+						yield return msg;
+				}
 			}
 			else
 			{
@@ -845,27 +900,29 @@ public static class StorageHelper
 				{
 					var storage = GetStorage<ExecutionMessage>(secId, subscription.BuildFrom);
 
-					var range = GetRange(storage, subscription);
+					var range = await GetRangeAsync(storage, subscription, cancellationToken);
 
 					if (range != default)
 					{
-						retVal = LoadMessages(storage
-							.Load(range.from, range.to)
+						await foreach (var msg in LoadFromEnumerable(storage
+							.LoadAsync(range.from, range.to, cancellationToken)
 							.ToOrderBooks(subscription.DepthBuilder, subscription.RefreshSpeed ?? default, subscription.MaxDepth ?? int.MaxValue)
-							.BuildIfNeed(), subscription.Count, subscription.TransactionId, SendReply, SendOut);
+							.BuildIfNeed()).WithCancellation(cancellationToken))
+							yield return msg;
 					}
 				}
 				else if (subscription.BuildFrom == DataType.Level1)
 				{
 					var storage = GetStorage<Level1ChangeMessage>(secId, subscription.BuildFrom);
 
-					var range = GetRange(storage, subscription);
+					var range = await GetRangeAsync(storage, subscription, cancellationToken);
 
 					if (range != default)
 					{
-						retVal = LoadMessages(storage
-							.Load(range.from, range.to)
-							.ToOrderBooks(), subscription.Count, subscription.TransactionId, SendReply, SendOut);
+						await foreach (var msg in LoadFromEnumerable(storage
+							.LoadAsync(range.from, range.to, cancellationToken)
+							.ToOrderBooks()).WithCancellation(cancellationToken))
+							yield return msg;
 					}
 				}
 			}
@@ -873,55 +930,63 @@ public static class StorageHelper
 		else if (subscription.DataType2 == DataType.Ticks)
 		{
 			if (subscription.BuildMode != MarketDataBuildModes.Build)
-				retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, subscription.DataType2), subscription, SendReply, SendOut);
+			{
+				await foreach (var msg in LoadFromStorage(GetStorage<ExecutionMessage>(secId, subscription.DataType2)).WithCancellation(cancellationToken))
+					yield return msg;
+			}
 			else
 			{
 				if (subscription.BuildFrom == DataType.OrderLog)
 				{
 					var storage = GetStorage<ExecutionMessage>(secId, subscription.BuildFrom);
 
-					var range = GetRange(storage, subscription);
+					var range = await GetRangeAsync(storage, subscription, cancellationToken);
 
 					if (range != default)
 					{
-						retVal = LoadMessages(storage
-							.Load(range.from, range.to)
-							.ToTicks(), subscription.Count, subscription.TransactionId, SendReply, SendOut);
+						await foreach (var msg in LoadFromEnumerable(storage
+							.LoadAsync(range.from, range.to, cancellationToken)
+							.ToTicks()).WithCancellation(cancellationToken))
+							yield return msg;
 					}
 				}
 				else if (subscription.BuildFrom == DataType.Level1)
 				{
 					var storage = GetStorage<Level1ChangeMessage>(secId, subscription.BuildFrom);
 
-					var range = GetRange(storage, subscription);
+					var range = await GetRangeAsync(storage, subscription, cancellationToken);
 
 					if (range != default)
 					{
-						retVal = LoadMessages(storage
-							.Load(range.from, range.to)
-							.ToTicks(), subscription.Count, subscription.TransactionId, SendReply, SendOut);
+						await foreach (var msg in LoadFromEnumerable(storage
+							.LoadAsync(range.from, range.to, cancellationToken)
+							.ToTicks()).WithCancellation(cancellationToken))
+							yield return msg;
 					}
 				}
 			}
 		}
 		else if (subscription.DataType2 == DataType.OrderLog)
 		{
-			retVal = LoadMessages(GetStorage<ExecutionMessage>(secId, subscription.DataType2), subscription, SendReply, SendOut);
+			await foreach (var msg in LoadFromStorage(GetStorage<ExecutionMessage>(secId, subscription.DataType2)).WithCancellation(cancellationToken))
+				yield return msg;
 		}
 		else if (subscription.DataType2 == DataType.News)
 		{
-			retVal = LoadMessages(GetStorage<NewsMessage>(default, subscription.DataType2), subscription, SendReply, SendOut);
+			await foreach (var msg in LoadFromStorage(GetStorage<NewsMessage>(default, subscription.DataType2)).WithCancellation(cancellationToken))
+				yield return msg;
 		}
 		else if (subscription.DataType2 == DataType.BoardState)
 		{
-			retVal = LoadMessages(GetStorage<BoardStateMessage>(default, subscription.DataType2), subscription, SendReply, SendOut);
+			await foreach (var msg in LoadFromStorage(GetStorage<BoardStateMessage>(default, subscription.DataType2)).WithCancellation(cancellationToken))
+				yield return msg;
 		}
 		else if (subscription.DataType2.IsCandles)
 		{
-			(DateTime lastDate, long? left)? TryBuildCandles(MarketDataMessage subscription)
+			async IAsyncEnumerable<Message> TryBuildCandlesAsync(MarketDataMessage subscription)
 			{
 				if (subscription.Count <= 0)
-					return null;
+					yield break;
 
 				IMarketDataStorage storage;
 
@@ -938,21 +1003,21 @@ public static class StorageHelper
 				else
 					throw new ArgumentOutOfRangeException(nameof(subscription), buildFrom, LocalizedStrings.InvalidValue);
 
-				var range = GetRange(storage, subscription);
+				var range = await GetRangeAsync(storage, subscription, cancellationToken);
 
 				if (range != default && buildFrom == null)
 					buildFrom = DataType.Ticks;
 				else if (range == default && buildFrom == null)
 				{
 					storage = GetStorage<Level1ChangeMessage>(secId, DataType.Level1);
-					range = GetRange(storage, subscription);
+					range = await GetRangeAsync(storage, subscription, cancellationToken);
 
 					if (range != default)
 						buildFrom = DataType.Level1;
 				}
 
 				if (range == default)
-					return null;
+					yield break;
 
 				var from = range.from;
 				var to = range.to;
@@ -965,9 +1030,10 @@ public static class StorageHelper
 
 				if (buildFrom == DataType.Ticks)
 				{
-					return LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
-							.Load(from, to)
-							.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), count, transId, SendReply, SendOut);
+					await foreach (var msg in LoadFromEnumerable(((IMarketDataStorage<ExecutionMessage>)storage)
+							.LoadAsync(from, to, cancellationToken)
+							.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider)).WithCancellation(cancellationToken))
+						yield return msg;
 				}
 				else if (buildFrom == DataType.OrderLog)
 				{
@@ -975,17 +1041,19 @@ public static class StorageHelper
 					{
 						case null:
 						case Level1Fields.LastTradePrice:
-							return LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
-									.Load(from, to)
-									.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), count, transId, SendReply, SendOut);
+							await foreach (var msg in LoadFromEnumerable(((IMarketDataStorage<ExecutionMessage>)storage)
+									.LoadAsync(from, to, cancellationToken)
+									.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider)).WithCancellation(cancellationToken))
+								yield return msg;
+							break;
 
-							// TODO
-							//case Level1Fields.SpreadMiddle:
-							//	lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
-							//	    .Load(from, to)
-							//		.ToOrderBooks(OrderLogBuilders.Plaza2.CreateBuilder(security.ToSecurityId()))
-							//	    .ToCandles(mdMsg, false, exchangeInfoProvider: exchangeInfoProvider), transId, SendReply, SendOut);
-							//	break;
+						// TODO
+						//case Level1Fields.SpreadMiddle:
+						//	lastTime = LoadMessages(((IMarketDataStorage<ExecutionMessage>)storage)
+						//	    .Load(from, to)
+						//		.ToOrderBooks(OrderLogBuilders.Plaza2.CreateBuilder(security.ToSecurityId()))
+						//	    .ToCandles(mdMsg, false, exchangeInfoProvider: exchangeInfoProvider), transId, SendReply, SendOut);
+						//	break;
 					}
 				}
 				else if (buildFrom == DataType.Level1)
@@ -994,35 +1062,39 @@ public static class StorageHelper
 					{
 						case null:
 						case Level1Fields.LastTradePrice:
-							return LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
-									.Load(from, to)
+							await foreach (var msg in LoadFromEnumerable(((IMarketDataStorage<Level1ChangeMessage>)storage)
+									.LoadAsync(from, to, cancellationToken)
 									.ToTicks()
-									.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider), count, transId, SendReply, SendOut);
+									.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider)).WithCancellation(cancellationToken))
+								yield return msg;
+							break;
 
 						case Level1Fields.BestBidPrice:
 						case Level1Fields.BestAskPrice:
 						case Level1Fields.SpreadMiddle:
-							return LoadMessages(((IMarketDataStorage<Level1ChangeMessage>)storage)
-									.Load(from, to)
+							await foreach (var msg in LoadFromEnumerable(((IMarketDataStorage<Level1ChangeMessage>)storage)
+									.LoadAsync(from, to, cancellationToken)
 									.ToOrderBooks()
-									.ToCandles(mdMsg, subscription.BuildField.Value, candleBuilderProvider: candleBuilderProvider), count, transId, SendReply, SendOut);
+									.ToCandles(mdMsg, subscription.BuildField.Value, candleBuilderProvider: candleBuilderProvider)).WithCancellation(cancellationToken))
+								yield return msg;
+							break;
 					}
 				}
 				else if (buildFrom == DataType.MarketDepth)
 				{
-					return LoadMessages(((IMarketDataStorage<QuoteChangeMessage>)storage)
-							.Load(from, to)
-							.ToCandles(mdMsg, subscription.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: candleBuilderProvider), count, transId, SendReply, SendOut);
+					await foreach (var msg in LoadFromEnumerable(((IMarketDataStorage<QuoteChangeMessage>)storage)
+							.LoadAsync(from, to, cancellationToken)
+							.ToCandles(mdMsg, subscription.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: candleBuilderProvider)).WithCancellation(cancellationToken))
+						yield return msg;
 				}
 				else
 					throw new ArgumentOutOfRangeException(nameof(subscription), subscription.BuildFrom, LocalizedStrings.InvalidValue);
-
-				return null;
 			}
 
 			if (subscription.BuildMode == MarketDataBuildModes.Build)
 			{
-				retVal = TryBuildCandles(subscription);
+				await foreach (var msg in TryBuildCandlesAsync(subscription).WithCancellation(cancellationToken))
+					yield return msg;
 			}
 			else
 			{
@@ -1051,31 +1123,28 @@ public static class StorageHelper
 					? (Func<CandleMessage, bool>)(c => c.PriceLevels != null)
 					: null;
 
-				retVal = LoadMessages(storage, subscription, SendReply, SendOut, filter);
+				await foreach (var msg in LoadFromStorage(storage, filter).WithCancellation(cancellationToken))
+					yield return msg;
 
-				if (subscription.BuildMode == MarketDataBuildModes.LoadAndBuild && (retVal is null || retVal.Value.lastTime < subscription.To))
+				if (subscription.BuildMode == MarketDataBuildModes.LoadAndBuild && (!context.HasData || context.LastDate < subscription.To))
 				{
 					var buildSubscription = subscription;
 
-					if (retVal is not null)
+					if (context.HasData)
 					{
 						buildSubscription = buildSubscription.TypedClone();
-						buildSubscription.From = retVal.Value.lastTime;
-						buildSubscription.Count = retVal.Value.left;
+						buildSubscription.From = context.LastDate;
+						buildSubscription.Count = context.Left;
 					}
 
-					var buildInfo = TryBuildCandles(buildSubscription);
-
-					if (buildInfo is not null)
-						retVal = buildInfo;
+					await foreach (var msg in TryBuildCandlesAsync(buildSubscription).WithCancellation(cancellationToken))
+						yield return msg;
 				}
 			}
 		}
-
-		return retVal;
 	}
 
-	private static (DateTime from, DateTime to) GetRange(IMarketDataStorage storage, ISubscriptionMessage subscription)
+	private static async ValueTask<(DateTime from, DateTime to)> GetRangeAsync(IMarketDataStorage storage, ISubscriptionMessage subscription, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
@@ -1086,7 +1155,7 @@ public static class StorageHelper
 		if (subscription.From is not DateTime from)
 			return default;
 
-		var dates = storage.GetDates();
+		var dates = await storage.GetDatesAsync(cancellationToken);
 		var last = dates.LastOr();
 
 		if (last == null)
@@ -1105,39 +1174,20 @@ public static class StorageHelper
 		return (from, to);
 	}
 
-	private static (DateTime lastTime, long? left)? LoadMessages<TMessage>(IMarketDataStorage<TMessage> storage, ISubscriptionMessage subscription, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
-		where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
-	{
-		var range = GetRange(storage, subscription);
-
-		if (range == default)
-			return null;
-
-		var messages = storage.Load(range.Item1, range.Item2);
-
-		if (subscription.Skip != default)
-			messages = messages.Skip((int)subscription.Skip.Value);
-
-		return LoadMessages(messages, subscription.Count, subscription.TransactionId, sendReply, newOutMessage, filter);
-	}
-
-	private static (DateTime lastTime, long? left)? LoadMessages<TMessage>(IEnumerable<TMessage> messages, long? count, long transactionId, Action sendReply, Action<Message> newOutMessage, Func<TMessage, bool> filter = null)
+	private static async IAsyncEnumerable<Message> LoadMessagesAsyncCore<TMessage>(
+		IAsyncEnumerable<TMessage> messages,
+		long? count,
+		long transactionId,
+		Func<TMessage, bool> filter,
+		StorageLoadContext context,
+		[EnumeratorCancellation] CancellationToken cancellationToken)
 		where TMessage : Message, ISubscriptionIdMessage, IServerTimeMessage
 	{
 		if (messages == null)
 			throw new ArgumentNullException(nameof(messages));
 
-		if (sendReply == null)
-			throw new ArgumentNullException(nameof(sendReply));
-
-		if (newOutMessage is null)
-			throw new ArgumentNullException(nameof(newOutMessage));
-
 		if (count <= 0)
-		{
-			return null;
-			//throw new ArgumentOutOfRangeException(nameof(count), count, LocalizedStrings.InvalidValue);
-		}
+			yield break;
 
 		if (filter != null)
 			messages = messages.Where(filter);
@@ -1146,11 +1196,11 @@ public static class StorageHelper
 
 		DateTime? lastTime = null;
 
-		foreach (var message in messages)
+		await foreach (var message in messages.WithEnforcedCancellation(cancellationToken))
 		{
 			if (lastTime is null)
 			{
-				sendReply();
+				yield return new SubscriptionResponseMessage { OriginalTransactionId = transactionId };
 				lastTime = message.ServerTime;
 			}
 			else if (message.ServerTime < lastTime)
@@ -1158,16 +1208,17 @@ public static class StorageHelper
 
 			message.OriginalTransactionId = transactionId;
 			message.SetSubscriptionIds(subscriptionId: transactionId);
+			message.OfflineMode = MessageOfflineModes.Ignore;
 
 			lastTime = message.ServerTime;
 
-			newOutMessage(message);
+			yield return message;
 
 			if (--left <= 0)
 				break;
 		}
 
-		return lastTime is null ? null : (lastTime.Value, count is null ? null : left);
+		context.Update(lastTime, count is null ? null : left);
 	}
 
 	/// <summary>
@@ -1705,4 +1756,32 @@ public static class StorageHelper
 	[Obsolete("Use InitAsync method instead.")]
 	public static void Init(this IExchangeInfoProvider provider)
 		=> AsyncHelper.Run(() => provider.InitAsync(default));
+}
+
+/// <summary>
+/// Context for <see cref="StorageHelper.LoadMessagesAsync"/> operation that holds metadata about the load result.
+/// </summary>
+public sealed class StorageLoadContext
+{
+	/// <summary>
+	/// Last message time.
+	/// </summary>
+	public DateTime? LastDate { get; private set; }
+
+	/// <summary>
+	/// Remaining count.
+	/// </summary>
+	public long? Left { get; private set; }
+
+	/// <summary>
+	/// Indicates whether any data was loaded.
+	/// </summary>
+	public bool HasData { get; private set; }
+
+	internal void Update(DateTime? lastDate, long? left)
+	{
+		LastDate = lastDate;
+		Left = left;
+		HasData = lastDate != null;
+	}
 }
