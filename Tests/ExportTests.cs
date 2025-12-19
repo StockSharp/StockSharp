@@ -151,6 +151,36 @@ public class ExportTests : BaseTestClass
 		await Do("xlsx", f => new ExcelExporter(ServicesRegistry.ExcelProvider, dataType, f, () => { }));
 	}
 
+	private async Task ExportAsync<TValue>(
+		DataType dataType, IEnumerable<TValue> values,
+		string fileNameNoExt, string txtTemplate)
+		where TValue : class
+	{
+		var token = CancellationToken;
+		var arr = values.ToArray();
+		var ignoreCount = typeof(TValue) == typeof(QuoteChangeMessage);
+		var hasTime = typeof(TValue).Is<IServerTimeMessage>();
+
+		async Task Do(string extension, Func<Stream, BaseExporter> create)
+		{
+			using var stream = File.OpenWrite(Helper.GetSubTemp($"{fileNameNoExt}_async.{extension}"));
+			var export = create(stream);
+			var (count, lastTime) = await export.Export(arr.ToAsyncEnumerable(), token);
+
+			// Verify returned values: count equals number of elements; lastTime should be non-null for non-empty arrays
+			if (!ignoreCount)
+				count.AreEqual(arr.Length, $"ExportAsync returned unexpected count for {extension}");
+
+			if (hasTime && arr.Length > 0)
+				lastTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime);
+		}
+
+		await Do("txt", f => new TextExporter(dataType, f, txtTemplate, null));
+		await Do("xml", f => new XmlExporter(dataType, f));
+		await Do("json", f => new JsonExporter(dataType, f));
+		await Do("xlsx", f => new ExcelExporter(ServicesRegistry.ExcelProvider, dataType, f, () => { }));
+	}
+
 	[TestMethod]
 	public async Task Cancellation()
 	{
@@ -167,5 +197,137 @@ public class ExportTests : BaseTestClass
 
 		// partial file should exist
 		(new FileInfo(path).Length > 0).AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task CancellationAsync()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var ticks = security.RandomTicks(20000, true).ToArray();
+
+		var path = Helper.GetSubTemp("cancel_test_async.txt");
+		using var stream = File.OpenWrite(path);
+		var exporter = new TextExporter(DataType.Ticks, stream, _txtReg.TemplateTxtTick, null);
+
+		var (_, token) = CancellationToken.CreateChildToken(TimeSpan.FromSeconds(1));
+
+		await ThrowsAsync<OperationCanceledException>(() => exporter.Export(ticks.ToAsyncEnumerable(), token));
+
+		// partial file should exist
+		(new FileInfo(path).Length > 0).AssertTrue();
+	}
+
+	[TestMethod]
+	public Task TicksAsync()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var ticks = security.RandomTicks(1000, true);
+
+		return ExportAsync(DataType.Ticks, ticks, "tick_export", _txtReg.TemplateTxtTick);
+	}
+
+	[TestMethod]
+	public Task DepthsAsync()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var depths = security.RandomDepths(100, ordersCount: true);
+
+		return ExportAsync(DataType.MarketDepth, depths, "depth_export", _txtReg.TemplateTxtDepth);
+	}
+
+	[TestMethod]
+	public Task OrderLogAsync()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var ol = security.RandomOrderLog(1000);
+
+		return ExportAsync(DataType.OrderLog, ol, "ol_export", _txtReg.TemplateTxtOrderLog);
+	}
+
+	[TestMethod]
+	public Task PositionsAsync()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var pos = security.RandomPositionChanges(1000);
+
+		return ExportAsync(DataType.PositionChanges, pos, "pos_export", _txtReg.TemplateTxtPositionChange);
+	}
+
+	[TestMethod]
+	public Task NewsAsync()
+	{
+		var news = Helper.RandomNews();
+
+		return ExportAsync(DataType.News, news, "news_export", _txtReg.TemplateTxtNews);
+	}
+
+	[TestMethod]
+	public Task Level1Async()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var level1 = security.RandomLevel1(count: 1000);
+
+		return ExportAsync(DataType.Level1, level1, "level1_export", _txtReg.TemplateTxtLevel1);
+	}
+
+	[TestMethod]
+	public async Task CandlesAsync()
+	{
+		var security = Helper.CreateStorageSecurity();
+
+		var candles = CandleTests.GenerateCandles(security.RandomTicks(1000, true), security, CandleTests.PriceRange.Pips(security), CandleTests.TotalTicks, CandleTests.TimeFrame, CandleTests.VolumeRange, CandleTests.BoxSize, CandleTests.PnF(security), true);
+
+		foreach (var group in candles.GroupBy(c => (type: c.GetType(), arg: c.Arg)))
+		{
+			var type = group.Key.type;
+			var arg = group.Key.arg;
+			var name = $"candles_{type.Name}_{arg}_export".Replace(":", "_");
+			await ExportAsync(DataType.Create(type, arg), group.ToArray(), name, _txtReg.TemplateTxtCandle);
+		}
+	}
+
+	[TestMethod]
+	public Task IndicatorAsync()
+	{
+		var security = Helper.CreateStorageSecurity();
+		var secId = security.ToSecurityId();
+		var sma = new SimpleMovingAverage();
+
+		var values = new List<IndicatorValue>();
+
+		var ticks = security.RandomTicks(1000, true);
+
+		foreach (var tick in ticks)
+		{
+			values.Add(new IndicatorValue
+			{
+				SecurityId = secId,
+				Time = tick.ServerTime,
+				Value = sma.Process(new TickIndicatorValue(sma, tick) { IsFinal = true }),
+			});
+		}
+
+		return ExportAsync(TraderHelper.IndicatorValue, values, "indicator_export", _txtReg.TemplateTxtIndicator);
+	}
+
+	[TestMethod]
+	public Task BoardAsync()
+	{
+		var boards = Helper.RandomBoards(100);
+		return ExportAsync(DataType.Board, boards, "board_export", _txtReg.TemplateTxtBoard);
+	}
+
+	[TestMethod]
+	public Task BoardStateAsync()
+	{
+		var boardStates = Helper.RandomBoardStates();
+		return ExportAsync(DataType.BoardState, boardStates, "boardstate_export", _txtReg.TemplateTxtBoardState);
+	}
+
+	[TestMethod]
+	public Task SecurityAsync()
+	{
+		var securities = Helper.RandomSecurities(100);
+		return ExportAsync(DataType.Securities, securities, "security_export", _txtReg.TemplateTxtSecurity);
 	}
 }

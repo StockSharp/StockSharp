@@ -65,54 +65,54 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 	public bool CheckUnique { get; set; }
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, CreateExecutionTable, cancellationToken);
+	protected override Task<(int, DateTime?)> ExportOrderLogAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, CreateExecutionTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, CreateExecutionTable, cancellationToken);
+	protected override Task<(int, DateTime?)> ExportTicksAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, CreateExecutionTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, CreateExecutionTable, cancellationToken);
+	protected override Task<(int, DateTime?)> ExportTransactionsAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, CreateExecutionTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages.ToTimeQuotes(), CreateMarketDepthQuoteTable, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages.SelectMany(m => m.ToTimeQuotes()), CreateMarketDepthQuoteTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, CreateLevel1Table, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, CreateLevel1Table, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, CreateCandleTable, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, CreateCandleTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, CreateNewsTable, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, CreateNewsTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, CreateSecurityTable, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, CreateSecurityTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, CreatePositionChangeTable, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, CreatePositionChangeTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
-		=> Do(values, CreateIndicatorValueTable, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
+		=> DoAsync(values, CreateIndicatorValueTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, CreateBoardStateTable, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, CreateBoardStateTable, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, CreateBoardTable, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, CreateBoardTable, cancellationToken);
 
-	private async Task<(int, DateTime?)> Do<TValue>(IEnumerable<TValue> values, Action<string, FluentMappingBuilder> createTable, CancellationToken cancellationToken)
+	private async Task<(int, DateTime?)> DoAsync<TValue>(IAsyncEnumerable<TValue> values, Action<string, FluentMappingBuilder> createTable, CancellationToken cancellationToken)
 		where TValue : class
 	{
 		if (values is null)
@@ -156,7 +156,7 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 			? db.GetTable<TValue>()
 			: db.CreateTable<TValue>();
 
-		foreach (var batch in values.Chunk(BatchSize).Select(b => b.ToArray()))
+		await foreach (var batch in values.Chunk(BatchSize).WithCancellation(cancellationToken))
 		{
 			if (CheckUnique)
 			{

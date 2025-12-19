@@ -26,12 +26,13 @@ public abstract class BaseExporter(DataType dataType)
 	}
 
 	/// <summary>
-	/// To export values.
+	/// To export values asynchronously.
 	/// </summary>
+	/// <typeparam name="T">The type of values.</typeparam>
 	/// <param name="values">Value.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	public Task<(int, DateTime?)> Export(IEnumerable values, CancellationToken cancellationToken)
+	public Task<(int, DateTime?)> Export<T>(IAsyncEnumerable<T> values, CancellationToken cancellationToken)
 	{
 		if (values == null)
 			throw new ArgumentNullException(nameof(values));
@@ -39,127 +40,127 @@ public abstract class BaseExporter(DataType dataType)
 		return Do.InvariantAsync(() =>
 		{
 			if (DataType == DataType.MarketDepth)
-				return Export((IEnumerable<QuoteChangeMessage>)values, cancellationToken);
+				return Export(values.Cast(m => m.To<QuoteChangeMessage>()), cancellationToken);
 			else if (DataType == DataType.Level1)
-				return Export((IEnumerable<Level1ChangeMessage>)values, cancellationToken);
+				return Export(values.Cast(m => m.To<Level1ChangeMessage>()), cancellationToken);
 			else if (DataType == DataType.Ticks)
-				return ExportTicks((IEnumerable<ExecutionMessage>)values, cancellationToken);
+				return ExportTicksAsync(values.Cast(m => m.To<ExecutionMessage>()), cancellationToken);
 			else if (DataType == DataType.OrderLog)
-				return ExportOrderLog((IEnumerable<ExecutionMessage>)values, cancellationToken);
+				return ExportOrderLogAsync(values.Cast(m => m.To<ExecutionMessage>()), cancellationToken);
 			else if (DataType == DataType.Transactions)
-				return ExportTransactions((IEnumerable<ExecutionMessage>)values, cancellationToken);
+				return ExportTransactionsAsync(values.Cast(m => m.To<ExecutionMessage>()), cancellationToken);
 			else if (DataType.IsCandles)
-				return Export((IEnumerable<CandleMessage>)values, cancellationToken);
+				return Export(values.Cast(m => m.To<CandleMessage>()), cancellationToken);
 			else if (DataType == DataType.News)
-				return Export((IEnumerable<NewsMessage>)values, cancellationToken);
+				return Export(values.Cast(m => m.To<NewsMessage>()), cancellationToken);
 			else if (DataType == DataType.Securities)
-				return Export((IEnumerable<SecurityMessage>)values, cancellationToken);
+				return Export(values.Cast(m => m.To<SecurityMessage>()), cancellationToken);
 			else if (DataType == DataType.PositionChanges)
-				return Export((IEnumerable<PositionChangeMessage>)values, cancellationToken);
+				return Export(values.Cast(m => m.To<PositionChangeMessage>()), cancellationToken);
 			else if (DataType == TraderHelper.IndicatorValue)
-				return Export((IEnumerable<IndicatorValue>)values, cancellationToken);
+				return Export(values.Cast(m => m.To<IndicatorValue>()), cancellationToken);
 			else if (DataType == DataType.BoardState)
-				return Export((IEnumerable<BoardStateMessage>)values, cancellationToken);
+				return Export(values.Cast(m => m.To<BoardStateMessage>()), cancellationToken);
 			else if (DataType == DataType.Board)
-				return Export((IEnumerable<BoardMessage>)values, cancellationToken);
+				return Export(values.Cast(m => m.To<BoardMessage>()), cancellationToken);
 			else
 				throw new InvalidOperationException(DataType.ToString());
 		});
 	}
 
 	/// <summary>
-	/// To export <see cref="QuoteChangeMessage"/>.
+	/// To export <see cref="QuoteChangeMessage"/> asynchronously.
 	/// </summary>
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IAsyncEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// To export <see cref="Level1ChangeMessage"/>.
+	/// To export <see cref="Level1ChangeMessage"/> asynchronously.
 	/// </summary>
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IAsyncEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// To export <see cref="DataType.Ticks"/>.
+	/// To export <see cref="DataType.Ticks"/> asynchronously.
 	/// </summary>
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> ExportTicksAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// To export <see cref="DataType.OrderLog"/>.
+	/// To export <see cref="DataType.OrderLog"/> asynchronously.
 	/// </summary>
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> ExportOrderLogAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// To export <see cref="DataType.Transactions"/>.
+	/// To export <see cref="DataType.Transactions"/> asynchronously.
 	/// </summary>
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> ExportTransactionsAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// To export <see cref="CandleMessage"/>.
+	/// To export <see cref="CandleMessage"/> asynchronously.
 	/// </summary>
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IAsyncEnumerable<CandleMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// To export <see cref="NewsMessage"/>.
+	/// To export <see cref="NewsMessage"/> asynchronously.
 	/// </summary>
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IAsyncEnumerable<NewsMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// To export <see cref="SecurityMessage"/>.
+	/// To export <see cref="SecurityMessage"/> asynchronously.
 	/// </summary>
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IAsyncEnumerable<SecurityMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// To export <see cref="PositionChangeMessage"/>.
+	/// To export <see cref="PositionChangeMessage"/> asynchronously.
 	/// </summary>
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IAsyncEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// To export <see cref="IndicatorValue"/>.
+	/// To export <see cref="IndicatorValue"/> asynchronously.
 	/// </summary>
 	/// <param name="values">Values.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IAsyncEnumerable<IndicatorValue> values, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// To export <see cref="BoardStateMessage"/>.
+	/// To export <see cref="BoardStateMessage"/> asynchronously.
 	/// </summary>
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken);
 
 	/// <summary>
-	/// To export <see cref="BoardMessage"/> and its derived types.
+	/// To export <see cref="BoardMessage"/> asynchronously.
 	/// </summary>
 	/// <param name="messages">Messages.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
-	protected abstract Task<(int, DateTime?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken);
+	protected abstract Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardMessage> messages, CancellationToken cancellationToken);
 }

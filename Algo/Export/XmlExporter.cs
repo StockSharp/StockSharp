@@ -40,9 +40,9 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportOrderLogAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "orderLog", async (writer, item) =>
+		return DoAsync(messages, "orderLog", async (writer, item) =>
 		{
 			await writer.WriteStartElementAsync(null, "item", null);
 
@@ -73,9 +73,9 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTicksAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "ticks", async (writer, trade) =>
+		return DoAsync(messages, "ticks", async (writer, trade) =>
 		{
 			await writer.WriteStartElementAsync(null, "trade", null);
 
@@ -114,9 +114,9 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTransactionsAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "transactions", async (writer, item) =>
+		return DoAsync(messages, "transactions", async (writer, item) =>
 		{
 			await writer.WriteStartElementAsync(null, "item", null);
 
@@ -174,9 +174,9 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "depths", async (writer, depth) =>
+		return DoAsync(messages, "depths", async (writer, depth) =>
 		{
 			await writer.WriteStartElementAsync(null, "depth", null);
 
@@ -225,9 +225,9 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "level1", async (writer, message) =>
+		return DoAsync(messages, "level1", async (writer, message) =>
 		{
 			await writer.WriteStartElementAsync(null, "change", null);
 
@@ -248,9 +248,9 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "positions", async (writer, message) =>
+		return DoAsync(messages, "positions", async (writer, message) =>
 		{
 			await writer.WriteStartElementAsync(null, "change", null);
 
@@ -275,15 +275,15 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
 	{
-		return Do(values, "values", async (writer, value) =>
+		return DoAsync(values, "values", async (writer, value) =>
 		{
 			await writer.WriteStartElementAsync(null, "value", null);
 
 			await WriteAttrAsync(writer, "time", value.Time.ToString(_timeFormat));
 
-			var index =1;
+			var index = 1;
 			foreach (var indVal in value.ValuesAsDecimal)
 				await WriteAttrAsync(writer, $"value{index++}", indVal);
 
@@ -292,9 +292,9 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "candles", async (writer, candle) =>
+		return DoAsync(messages, "candles", async (writer, candle) =>
 		{
 			await writer.WriteStartElementAsync(null, "candle", null);
 
@@ -339,9 +339,9 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "news", async (writer, n) =>
+		return DoAsync(messages, "news", async (writer, n) =>
 		{
 			await writer.WriteStartElementAsync(null, "item", null);
 
@@ -385,9 +385,9 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "securities", async (writer, security) =>
+		return DoAsync(messages, "securities", async (writer, security) =>
 		{
 			await writer.WriteStartElementAsync(null, "security", null);
 
@@ -423,10 +423,10 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 
 			if (security.SecurityType != null)
 				await WriteAttrAsync(writer, "type", security.SecurityType.Value);
-			
+
 			if (!security.CfiCode.IsEmpty())
 				await WriteAttrAsync(writer, "cfiCode", security.CfiCode);
-			
+
 			if (security.Shortable != null)
 				await WriteAttrAsync(writer, "shortable", security.Shortable.Value);
 
@@ -510,9 +510,9 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "boardStates", async (writer, msg) =>
+		return DoAsync(messages, "boardStates", async (writer, msg) =>
 		{
 			await writer.WriteStartElementAsync(null, "boardState", null);
 
@@ -525,9 +525,9 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
 	{
-		return Do(messages, "boards", async (writer, msg) =>
+		return DoAsync(messages, "boards", async (writer, msg) =>
 		{
 			await writer.WriteStartElementAsync(null, "board", null);
 
@@ -540,7 +540,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 		}, cancellationToken);
 	}
 
-	private async Task<(int, DateTime?)> Do<TValue>(IEnumerable<TValue> values, string rootElem, Func<XmlWriter, TValue, Task> action, CancellationToken cancellationToken)
+	private async Task<(int, DateTime?)> DoAsync<TValue>(IAsyncEnumerable<TValue> values, string rootElem, Func<XmlWriter, TValue, Task> action, CancellationToken cancellationToken)
 	{
 		var count = 0;
 		var lastTime = default(DateTime?);
@@ -556,10 +556,8 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 		{
 			await writer.WriteStartElementAsync(null, rootElem, null);
 
-			foreach (var value in values)
+			await foreach (var value in values.WithCancellation(cancellationToken))
 			{
-				cancellationToken.ThrowIfCancellationRequested();
-
 				await action(writer, value);
 
 				count++;

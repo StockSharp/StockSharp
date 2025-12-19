@@ -19,54 +19,54 @@ public class TextExporter(DataType dataType, Stream stream, string template, str
 	private readonly string _header = header;
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, cancellationToken);
+	protected override Task<(int, DateTime?)> ExportOrderLogAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, cancellationToken);
+	protected override Task<(int, DateTime?)> ExportTicksAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, cancellationToken);
+	protected override Task<(int, DateTime?)> ExportTransactionsAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages.ToTimeQuotes(), cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages.SelectMany(m => m.ToTimeQuotes()), cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
-		=> Do(values, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
+		=> DoAsync(values, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
-		=> Do(messages, cancellationToken);
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
+		=> DoAsync(messages, cancellationToken);
 
-	private async Task<(int, DateTime?)> Do<TValue>(IEnumerable<TValue> values, CancellationToken cancellationToken)
+	private async Task<(int, DateTime?)> DoAsync<TValue>(IAsyncEnumerable<TValue> values, CancellationToken cancellationToken)
 	{
 		var count = 0;
 		var lastTime = default(DateTime?);
@@ -79,7 +79,7 @@ public class TextExporter(DataType dataType, Stream stream, string template, str
 			FormatCache templateCache = null;
 			var formater = Smart.Default;
 
-			foreach (var value in values)
+			await foreach (var value in values.WithCancellation(cancellationToken))
 			{
 				await writer.WriteLineAsync(formater.FormatWithCache(ref templateCache, _template, value).AsMemory(), cancellationToken);
 
@@ -88,8 +88,6 @@ public class TextExporter(DataType dataType, Stream stream, string template, str
 				if (value is IServerTimeMessage timeMsg)
 					lastTime = timeMsg.ServerTime;
 			}
-
-			//await writer.FlushAsync();
 		}
 
 		return (count, lastTime);

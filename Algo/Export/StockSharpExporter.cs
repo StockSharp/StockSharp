@@ -31,12 +31,13 @@ public class StockSharpExporter(DataType dataType, IStorageRegistry storageRegis
 		}
 	}
 
-	private async Task<(int, DateTime?)> Export(IEnumerable<Message> messages, CancellationToken cancellationToken)
+	private new async Task<(int, DateTime?)> Export<TMessage>(IAsyncEnumerable<TMessage> messages, CancellationToken cancellationToken)
+		where TMessage : Message
 	{
 		var count = 0;
 		var lastTime = default(DateTime?);
 
-		foreach (var batch in messages.Chunk(BatchSize))
+		await foreach (var batch in messages.Chunk(BatchSize).WithCancellation(cancellationToken))
 		{
 			foreach (var group in batch.GroupBy(m => m.TryGetSecurityId()))
 			{
@@ -57,50 +58,50 @@ public class StockSharpExporter(DataType dataType, IStorageRegistry storageRegis
 	}
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportOrderLog(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportOrderLogAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportTicks(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTicksAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> ExportTransactions(IEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> ExportTransactionsAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
 		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
 		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
 		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
 		=> throw new NotSupportedException();
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
 		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
 		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
 		=> throw new NotSupportedException();
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
 		=> Export(messages, cancellationToken);
 
 	/// <inheritdoc />
-	protected override Task<(int, DateTime?)> Export(IEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
+	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
 		=> Export(messages, cancellationToken);
 }
