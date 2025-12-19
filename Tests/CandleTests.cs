@@ -1131,4 +1131,597 @@ public class CandleTests : BaseTestClass
 		bounds.Min.AssertEqual(new DateTime(2024, 4, 1).ApplyTimeZone(board.TimeZone).UtcDateTime);
 		bounds.Max.AssertEqual(new DateTime(2024, 4, 30).EndOfDay().ApplyTimeZone(board.TimeZone).UtcDateTime);
 	}
+
+	private static async IAsyncEnumerable<T> ToAsyncEnumerable<T>(IEnumerable<T> source)
+	{
+		foreach (var item in source)
+		{
+			await Task.Yield();
+			yield return item;
+		}
+	}
+
+	[TestMethod]
+	public async Task ToCandles_FromTicks_SyncVsAsync()
+	{
+		var token = CancellationToken;
+		var security = Helper.CreateSecurity();
+		var secId = security.ToSecurityId();
+
+		var trades = new[]
+		{
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradePrice = 100,
+				TradeVolume = 10,
+				SecurityId = secId,
+				ServerTime = new DateTime(2000, 1, 1, 10, 0, 0, 0).UtcKind()
+			},
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradePrice = 101,
+				TradeVolume = 15,
+				SecurityId = secId,
+				ServerTime = new DateTime(2000, 1, 1, 10, 0, 30, 0).UtcKind()
+			},
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradePrice = 99,
+				TradeVolume = 20,
+				SecurityId = secId,
+				ServerTime = new DateTime(2000, 1, 1, 10, 1, 0, 0).UtcKind()
+			},
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradePrice = 102,
+				TradeVolume = 25,
+				SecurityId = secId,
+				ServerTime = new DateTime(2000, 1, 1, 10, 1, 30, 0).UtcKind()
+			}
+		};
+
+		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), security);
+		var mdMsg = sub.MarketData;
+		mdMsg.IsFinishedOnly = false;
+
+		var syncResult = trades.ToCandles(mdMsg).ToArray();
+		var asyncResult = await ToAsyncEnumerable(trades).ToCandles(mdMsg).ToArrayAsync(token);
+
+		syncResult.Length.AssertEqual(asyncResult.Length);
+		for (var i = 0; i < syncResult.Length; i++)
+		{
+			syncResult[i].SecurityId.AssertEqual(asyncResult[i].SecurityId);
+			syncResult[i].OpenTime.AssertEqual(asyncResult[i].OpenTime);
+			syncResult[i].CloseTime.AssertEqual(asyncResult[i].CloseTime);
+			syncResult[i].OpenPrice.AssertEqual(asyncResult[i].OpenPrice);
+			syncResult[i].HighPrice.AssertEqual(asyncResult[i].HighPrice);
+			syncResult[i].LowPrice.AssertEqual(asyncResult[i].LowPrice);
+			syncResult[i].ClosePrice.AssertEqual(asyncResult[i].ClosePrice);
+			syncResult[i].TotalVolume.AssertEqual(asyncResult[i].TotalVolume);
+			syncResult[i].State.AssertEqual(asyncResult[i].State);
+		}
+	}
+
+	[TestMethod]
+	public async Task ToTrades_FromCandles_SyncVsAsync()
+	{
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		var candles = new[]
+		{
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 5, 0).UtcKind(),
+				OpenPrice = 100m,
+				HighPrice = 105m,
+				LowPrice = 99m,
+				ClosePrice = 103m,
+				TotalVolume = 1000
+			},
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 5, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 10, 0).UtcKind(),
+				OpenPrice = 103m,
+				HighPrice = 108m,
+				LowPrice = 102m,
+				ClosePrice = 107m,
+				TotalVolume = 1500
+			}
+		};
+
+		var volumeStep = 0.01m;
+		var syncResult = candles.ToTrades(volumeStep).ToArray();
+		var asyncResult = await ToAsyncEnumerable(candles).ToTrades(volumeStep).ToArrayAsync(token);
+
+		syncResult.Length.AssertEqual(asyncResult.Length);
+		for (var i = 0; i < syncResult.Length; i++)
+		{
+			syncResult[i].SecurityId.AssertEqual(asyncResult[i].SecurityId);
+			syncResult[i].ServerTime.AssertEqual(asyncResult[i].ServerTime);
+			syncResult[i].TradePrice.AssertEqual(asyncResult[i].TradePrice);
+			syncResult[i].TradeVolume.AssertEqual(asyncResult[i].TradeVolume);
+		}
+	}
+
+	[TestMethod]
+	public async Task Compress_SyncVsAsync()
+	{
+		var token = CancellationToken;
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+		var tf1 = TimeSpan.FromMinutes(1);
+		var tf5 = TimeSpan.FromMinutes(5);
+
+		var security = Helper.CreateSecurity(100);
+		var secId = security.ToSecurityId();
+
+		var candles1 = new[]
+		{
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 1, 0).UtcKind(),
+				OpenPrice = 100m,
+				HighPrice = 102m,
+				LowPrice = 99m,
+				ClosePrice = 101m,
+				TotalVolume = 100,
+				State = CandleStates.Finished
+			},
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 1, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 2, 0).UtcKind(),
+				OpenPrice = 101m,
+				HighPrice = 103m,
+				LowPrice = 100m,
+				ClosePrice = 102m,
+				TotalVolume = 150,
+				State = CandleStates.Finished
+			},
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 2, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 3, 0).UtcKind(),
+				OpenPrice = 102m,
+				HighPrice = 104m,
+				LowPrice = 101m,
+				ClosePrice = 103m,
+				TotalVolume = 200,
+				State = CandleStates.Finished
+			},
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 3, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 4, 0).UtcKind(),
+				OpenPrice = 103m,
+				HighPrice = 105m,
+				LowPrice = 102m,
+				ClosePrice = 104m,
+				TotalVolume = 250,
+				State = CandleStates.Finished
+			},
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 4, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 5, 0).UtcKind(),
+				OpenPrice = 104m,
+				HighPrice = 106m,
+				LowPrice = 103m,
+				ClosePrice = 105m,
+				TotalVolume = 300,
+				State = CandleStates.Finished
+			}
+		};
+
+		var mdMsg5 = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = tf5.TimeFrame(),
+			IsFinishedOnly = false
+		};
+
+		var compressor1 = new BiggerTimeFrameCandleCompressor(mdMsg5, candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)), tf1.TimeFrame());
+		var compressor2 = new BiggerTimeFrameCandleCompressor(mdMsg5, candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)), tf1.TimeFrame());
+
+		var syncResult = candles1.Cast<CandleMessage>().Compress(compressor1, includeLastCandle: true).ToArray();
+		var asyncResult = await ToAsyncEnumerable(candles1.Cast<CandleMessage>()).Compress(compressor2, includeLastCandle: true).ToArrayAsync(token);
+
+		syncResult.Length.AssertEqual(asyncResult.Length);
+		for (var i = 0; i < syncResult.Length; i++)
+		{
+			syncResult[i].SecurityId.AssertEqual(asyncResult[i].SecurityId);
+			syncResult[i].OpenTime.AssertEqual(asyncResult[i].OpenTime);
+			syncResult[i].OpenPrice.AssertEqual(asyncResult[i].OpenPrice);
+			syncResult[i].HighPrice.AssertEqual(asyncResult[i].HighPrice);
+			syncResult[i].LowPrice.AssertEqual(asyncResult[i].LowPrice);
+			syncResult[i].ClosePrice.AssertEqual(asyncResult[i].ClosePrice);
+			syncResult[i].TotalVolume.AssertEqual(asyncResult[i].TotalVolume);
+			syncResult[i].State.AssertEqual(asyncResult[i].State);
+		}
+	}
+
+	[TestMethod]
+	public async Task ToCandles_FromTicks_Async()
+	{
+		var token = CancellationToken;
+		var security = Helper.CreateSecurity();
+		var secId = security.ToSecurityId();
+
+		var trades = new[]
+		{
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradePrice = 11,
+				TradeVolume = 11,
+				SecurityId = secId,
+				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 100).UtcKind()
+			},
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradePrice = 12,
+				TradeVolume = 12,
+				SecurityId = secId,
+				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 200).UtcKind()
+			},
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradePrice = 13,
+				TradeVolume = 13,
+				SecurityId = secId,
+				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 300).UtcKind()
+			}
+		};
+
+		var sub = new Subscription(TimeSpan.FromMilliseconds(100).TimeFrame(), security);
+		var mdMsg = sub.MarketData;
+		mdMsg.IsFinishedOnly = false;
+
+		var candles = await ToAsyncEnumerable(trades).ToCandles(mdMsg).ToArrayAsync(token);
+
+		candles.Length.AssertEqual(3);
+
+		var iter = 1;
+		foreach (var candle in candles)
+		{
+			candle.TotalVolume.AssertEqual(10 + iter);
+			candle.OpenTime.AssertEqual(trades[iter - 1].ServerTime);
+			candle.State.AssertEqual(iter == 3 ? CandleStates.Active : CandleStates.Finished);
+			iter++;
+		}
+	}
+
+	[TestMethod]
+	public async Task ToCandles_FromQuotes_Async()
+	{
+		var token = CancellationToken;
+		var security = Helper.CreateSecurity();
+		var secId = security.ToSecurityId();
+
+		var quotes = new[]
+		{
+			new QuoteChangeMessage
+			{
+				SecurityId = secId,
+				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 100).UtcKind(),
+				Bids = [new QuoteChange(100m, 10)],
+				Asks = [new QuoteChange(101m, 10)]
+			},
+			new QuoteChangeMessage
+			{
+				SecurityId = secId,
+				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 200).UtcKind(),
+				Bids = [new QuoteChange(100.5m, 15)],
+				Asks = [new QuoteChange(101.5m, 15)]
+			},
+			new QuoteChangeMessage
+			{
+				SecurityId = secId,
+				ServerTime = new DateTime(2000, 1, 1, 1, 1, 1, 300).UtcKind(),
+				Bids = [new QuoteChange(101m, 20)],
+				Asks = [new QuoteChange(102m, 20)]
+			}
+		};
+
+		var sub = new Subscription(TimeSpan.FromMilliseconds(100).TimeFrame(), security);
+		var mdMsg = sub.MarketData;
+		mdMsg.IsFinishedOnly = false;
+
+		var candles = await ToAsyncEnumerable(quotes).ToCandles(mdMsg, Level1Fields.SpreadMiddle).ToArrayAsync(token);
+
+		candles.Length.AssertEqual(3);
+		// SpreadMiddle for first quote: (100 + 101) / 2 = 100.5
+		candles[0].OpenPrice.AssertEqual(100.5m);
+	}
+
+	[TestMethod]
+	public async Task ToTrades_FromCandles_Async()
+	{
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		var candles = new[]
+		{
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 5, 0).UtcKind(),
+				OpenPrice = 100m,
+				HighPrice = 105m,
+				LowPrice = 99m,
+				ClosePrice = 103m,
+				TotalVolume = 1000
+			}
+		};
+
+		var volumeStep = 0.01m;
+		var ticks = await ToAsyncEnumerable(candles).ToTrades(volumeStep).ToArrayAsync(token);
+
+		// Each candle generates up to 4 ticks (OHLC)
+		ticks.Length.AssertEqual(4);
+		ticks[0].TradePrice.AssertEqual(100m); // Open
+		ticks[1].TradePrice.AssertEqual(105m); // High
+		ticks[2].TradePrice.AssertEqual(99m);  // Low
+		ticks[3].TradePrice.AssertEqual(103m); // Close
+	}
+
+	[TestMethod]
+	public async Task Compress_Async()
+	{
+		var token = CancellationToken;
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+		var tf1 = TimeSpan.FromMinutes(1);
+		var tf5 = TimeSpan.FromMinutes(5);
+
+		var security = Helper.CreateSecurity(100);
+		var secId = security.ToSecurityId();
+
+		var candles1 = new[]
+		{
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 1, 0).UtcKind(),
+				OpenPrice = 100m,
+				HighPrice = 102m,
+				LowPrice = 99m,
+				ClosePrice = 101m,
+				TotalVolume = 100,
+				State = CandleStates.Finished
+			},
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 1, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 2, 0).UtcKind(),
+				OpenPrice = 101m,
+				HighPrice = 103m,
+				LowPrice = 100m,
+				ClosePrice = 102m,
+				TotalVolume = 150,
+				State = CandleStates.Finished
+			},
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 2, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 3, 0).UtcKind(),
+				OpenPrice = 102m,
+				HighPrice = 104m,
+				LowPrice = 101m,
+				ClosePrice = 103m,
+				TotalVolume = 200,
+				State = CandleStates.Finished
+			},
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 3, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 4, 0).UtcKind(),
+				OpenPrice = 103m,
+				HighPrice = 105m,
+				LowPrice = 102m,
+				ClosePrice = 104m,
+				TotalVolume = 250,
+				State = CandleStates.Finished
+			},
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 4, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 5, 0).UtcKind(),
+				OpenPrice = 104m,
+				HighPrice = 106m,
+				LowPrice = 103m,
+				ClosePrice = 105m,
+				TotalVolume = 300,
+				State = CandleStates.Finished
+			}
+		};
+
+		var mdMsg5 = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = tf5.TimeFrame(),
+			IsFinishedOnly = false
+		};
+
+		var compressor = new BiggerTimeFrameCandleCompressor(mdMsg5, candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)), tf1.TimeFrame());
+
+		var candles5 = await ToAsyncEnumerable(candles1.Cast<CandleMessage>()).Compress(compressor, includeLastCandle: true).ToArrayAsync(token);
+
+		candles5.Length.AssertEqual(1);
+		var c5 = candles5[0];
+		c5.OpenPrice.AssertEqual(100m);
+		c5.HighPrice.AssertEqual(106m);
+		c5.LowPrice.AssertEqual(99m);
+		c5.ClosePrice.AssertEqual(105m);
+		c5.TotalVolume.AssertEqual(1000m);
+	}
+
+	[TestMethod]
+	public async Task ToCandles_FromTicks_Empty_Async()
+	{
+		var token = CancellationToken;
+		var security = Helper.CreateSecurity();
+		var trades = Array.Empty<ExecutionMessage>();
+
+		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), security);
+		var mdMsg = sub.MarketData;
+
+		var candles = await ToAsyncEnumerable(trades).ToCandles(mdMsg).ToArrayAsync(token);
+
+		candles.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task ToTrades_FromCandles_Empty_Async()
+	{
+		var token = CancellationToken;
+		var candles = Array.Empty<TimeFrameCandleMessage>();
+
+		var ticks = await ToAsyncEnumerable(candles).ToTrades(0.01m).ToArrayAsync(token);
+
+		ticks.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task Compress_Empty_Async()
+	{
+		var token = CancellationToken;
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+		var secId = Helper.CreateSecurityId();
+
+		var mdMsg = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame()
+		};
+
+		var compressor = new BiggerTimeFrameCandleCompressor(mdMsg, candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)), TimeSpan.FromMinutes(1).TimeFrame());
+
+		var candles = await ToAsyncEnumerable(Array.Empty<CandleMessage>()).Compress(compressor, includeLastCandle: false).ToArrayAsync(token);
+
+		candles.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task Compress_IncludeLastCandle_False_Async()
+	{
+		var token = CancellationToken;
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+		var tf1 = TimeSpan.FromMinutes(1);
+		var tf5 = TimeSpan.FromMinutes(5);
+
+		var security = Helper.CreateSecurity(100);
+		var secId = security.ToSecurityId();
+
+		// Only 2 candles - not enough for complete 5-min candle
+		var candles1 = new[]
+		{
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 1, 0).UtcKind(),
+				OpenPrice = 100m,
+				HighPrice = 102m,
+				LowPrice = 99m,
+				ClosePrice = 101m,
+				TotalVolume = 100,
+				State = CandleStates.Finished
+			},
+			new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				OpenTime = new DateTime(2024, 1, 15, 10, 1, 0).UtcKind(),
+				CloseTime = new DateTime(2024, 1, 15, 10, 2, 0).UtcKind(),
+				OpenPrice = 101m,
+				HighPrice = 103m,
+				LowPrice = 100m,
+				ClosePrice = 102m,
+				TotalVolume = 150,
+				State = CandleStates.Finished
+			}
+		};
+
+		var mdMsg5 = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = tf5.TimeFrame(),
+			IsFinishedOnly = false
+		};
+
+		var compressor = new BiggerTimeFrameCandleCompressor(mdMsg5, candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)), tf1.TimeFrame());
+
+		// includeLastCandle = false - should not include incomplete candle
+		var candles5 = await ToAsyncEnumerable(candles1.Cast<CandleMessage>()).Compress(compressor, includeLastCandle: false).ToArrayAsync(token);
+
+		candles5.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public Task ToCandles_FromTicks_Null_Async()
+	{
+		var token = CancellationToken;
+		var security = Helper.CreateSecurity();
+		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), security);
+
+		return ThrowsExactlyAsync<NullReferenceException>(async () =>
+		{
+			IAsyncEnumerable<ExecutionMessage> trades = null;
+			await trades.ToCandles(sub.MarketData).ToArrayAsync(token);
+		});
+	}
+
+	[TestMethod]
+	public Task ToTrades_FromCandles_Null_Async()
+	{
+		var token = CancellationToken;
+		return ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		{
+			IAsyncEnumerable<TimeFrameCandleMessage> candles = null;
+			await candles.ToTrades(0.01m).ToArrayAsync(token);
+		});
+	}
+
+	[TestMethod]
+	public Task Compress_Null_Async()
+	{
+		var token = CancellationToken;
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+		var secId = Helper.CreateSecurityId();
+
+		var mdMsg = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame()
+		};
+
+		var compressor = new BiggerTimeFrameCandleCompressor(mdMsg, candleBuilderProvider.Get(typeof(TimeFrameCandleMessage)), TimeSpan.FromMinutes(1).TimeFrame());
+
+		return ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		{
+			IAsyncEnumerable<CandleMessage> candles = null;
+			await candles.Compress(compressor, includeLastCandle: false).ToArrayAsync(token);
+		});
+	}
 }
