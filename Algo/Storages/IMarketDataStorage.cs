@@ -60,9 +60,8 @@ public interface IMarketDataStorage
 	/// To load data.
 	/// </summary>
 	/// <param name="date">Date, for which data shall be loaded.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-	IAsyncEnumerable<Message> LoadAsync(DateTime date, CancellationToken cancellationToken);
+	IAsyncEnumerable<Message> LoadAsync(DateTime date);
 
 	/// <summary>
 	/// To get meta-information on data.
@@ -105,9 +104,8 @@ public interface IMarketDataStorage<TMessage> : IMarketDataStorage
 	/// To load data.
 	/// </summary>
 	/// <param name="date">Date, for which data shall be loaded.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-	new IAsyncEnumerable<TMessage> LoadAsync(DateTime date, CancellationToken cancellationToken);
+	new IAsyncEnumerable<TMessage> LoadAsync(DateTime date);
 
 	/// <summary>
 	/// The serializer.

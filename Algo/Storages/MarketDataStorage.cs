@@ -314,22 +314,27 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 		}
 	}
 
-	public async IAsyncEnumerable<TMessage> LoadAsync(DateTime date, [EnumeratorCancellation]CancellationToken cancellationToken)
+	public IAsyncEnumerable<TMessage> LoadAsync(DateTime date)
 	{
-		date = date.Date;
+		return Impl(this, date);
 
-		using var _ = await GetReadSync(date, cancellationToken);
-
-		using var stream = await LoadStreamAsync(date, true, cancellationToken);
-
-		var metaInfo = await GetInfo(stream, date, cancellationToken);
-
-		if (metaInfo == null)
-			yield break;
-
-		await foreach (var msg in Serializer.DeserializeAsync(stream, metaInfo).WithEnforcedCancellation(cancellationToken))
+		static async IAsyncEnumerable<TMessage> Impl(MarketDataStorage<TMessage, TId> storage, DateTime date, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			yield return msg;
+			date = date.Date;
+
+			using var _ = await storage.GetReadSync(date, cancellationToken);
+
+			using var stream = await storage.LoadStreamAsync(date, true, cancellationToken);
+
+			var metaInfo = await storage.GetInfo(stream, date, cancellationToken);
+
+			if (metaInfo == null)
+				yield break;
+
+			await foreach (var msg in storage.Serializer.DeserializeAsync(stream, metaInfo).WithEnforcedCancellation(cancellationToken))
+			{
+				yield return msg;
+			}
 		}
 	}
 
@@ -385,8 +390,8 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 			_dateMetaInfos.Remove(date);
 	}
 
-	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken)
+	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date)
 	{
-		return LoadAsync(date, cancellationToken);
+		return LoadAsync(date);
 	}
 }

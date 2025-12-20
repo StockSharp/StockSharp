@@ -626,27 +626,31 @@ static partial class Extensions
 	/// </summary>
 	/// <param name="books">Order books (may be incremental).</param>
 	/// <param name="logs">Logs.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Full order books.</returns>
-	public static async IAsyncEnumerable<QuoteChangeMessage> BuildIfNeed(this IAsyncEnumerable<QuoteChangeMessage> books, ILogReceiver logs = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<QuoteChangeMessage> BuildIfNeed(this IAsyncEnumerable<QuoteChangeMessage> books, ILogReceiver logs = null)
 	{
 		if (books is null)
 			throw new ArgumentNullException(nameof(books));
 
-		var builders = new Dictionary<SecurityId, OrderBookIncrementBuilder>();
+		return Impl(books, logs);
 
-		await foreach (var book in books.WithCancellation(cancellationToken))
+		static async IAsyncEnumerable<QuoteChangeMessage> Impl(IAsyncEnumerable<QuoteChangeMessage> books, ILogReceiver logs, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			if (book.State != null)
-			{
-				var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookIncrementBuilder(key) { Parent = logs ?? LogManager.Instance?.Application });
-				var change = builder.TryApply(book);
+			var builders = new Dictionary<SecurityId, OrderBookIncrementBuilder>();
 
-				if (change != null)
-					yield return change;
+			await foreach (var book in books.WithCancellation(cancellationToken))
+			{
+				if (book.State != null)
+				{
+					var builder = builders.SafeAdd(book.SecurityId, key => new OrderBookIncrementBuilder(key) { Parent = logs ?? LogManager.Instance?.Application });
+					var change = builder.TryApply(book);
+
+					if (change != null)
+						yield return change;
+				}
+				else
+					yield return book;
 			}
-			else
-				yield return book;
 		}
 	}
 
@@ -654,37 +658,41 @@ static partial class Extensions
 	/// To build level1 from the order books.
 	/// </summary>
 	/// <param name="quotes">Order books.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Level1.</returns>
-	public static async IAsyncEnumerable<Level1ChangeMessage> ToLevel1(this IAsyncEnumerable<QuoteChangeMessage> quotes, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<Level1ChangeMessage> ToLevel1(this IAsyncEnumerable<QuoteChangeMessage> quotes)
 	{
 		if (quotes is null)
 			throw new ArgumentNullException(nameof(quotes));
 
-		await foreach (var quote in quotes.WithCancellation(cancellationToken))
+		return Impl(quotes);
+
+		static async IAsyncEnumerable<Level1ChangeMessage> Impl(IAsyncEnumerable<QuoteChangeMessage> quotes, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			var l1Msg = new Level1ChangeMessage
+			await foreach (var quote in quotes.WithCancellation(cancellationToken))
 			{
-				SecurityId = quote.SecurityId,
-				ServerTime = quote.ServerTime,
-				BuildFrom = quote.BuildFrom ?? DataType.MarketDepth,
-			};
+				var l1Msg = new Level1ChangeMessage
+				{
+					SecurityId = quote.SecurityId,
+					ServerTime = quote.ServerTime,
+					BuildFrom = quote.BuildFrom ?? DataType.MarketDepth,
+				};
 
-			if (quote.Bids.Length > 0)
-			{
-				l1Msg
-					.TryAdd(Level1Fields.BestBidPrice, quote.Bids[0].Price)
-					.TryAdd(Level1Fields.BestBidVolume, quote.Bids[0].Volume);
+				if (quote.Bids.Length > 0)
+				{
+					l1Msg
+						.TryAdd(Level1Fields.BestBidPrice, quote.Bids[0].Price)
+						.TryAdd(Level1Fields.BestBidVolume, quote.Bids[0].Volume);
+				}
+
+				if (quote.Asks.Length > 0)
+				{
+					l1Msg
+						.TryAdd(Level1Fields.BestAskPrice, quote.Asks[0].Price)
+						.TryAdd(Level1Fields.BestAskVolume, quote.Asks[0].Volume);
+				}
+
+				yield return l1Msg;
 			}
-
-			if (quote.Asks.Length > 0)
-			{
-				l1Msg
-					.TryAdd(Level1Fields.BestAskPrice, quote.Asks[0].Price)
-					.TryAdd(Level1Fields.BestAskVolume, quote.Asks[0].Volume);
-			}
-
-			yield return l1Msg;
 		}
 	}
 
@@ -692,35 +700,39 @@ static partial class Extensions
 	/// To build tick trades from the orders log.
 	/// </summary>
 	/// <param name="items">Orders log lines.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Tick trades.</returns>
-	public static async IAsyncEnumerable<ExecutionMessage> ToTicks(this IAsyncEnumerable<ExecutionMessage> items, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<ExecutionMessage> ToTicks(this IAsyncEnumerable<ExecutionMessage> items)
 	{
 		if (items is null)
 			throw new ArgumentNullException(nameof(items));
 
-		var tradesByNum = new HashSet<long>();
-		var tradesByString = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+		return Impl(items);
 
-		await foreach (var currItem in items.WithCancellation(cancellationToken))
+		static async IAsyncEnumerable<ExecutionMessage> Impl(IAsyncEnumerable<ExecutionMessage> items, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			if (currItem.TradeId != null)
-			{
-				var tradeId = currItem.TradeId.Value;
-				if (!tradesByNum.Add(tradeId))
-					continue;
+			var tradesByNum = new HashSet<long>();
+			var tradesByString = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
-				tradesByNum.Remove(tradeId);
-				yield return currItem.ToTick();
-			}
-			else if (!currItem.TradeStringId.IsEmpty())
+			await foreach (var currItem in items.WithCancellation(cancellationToken))
 			{
-				var tradeId = currItem.TradeStringId;
-				if (!tradesByString.Add(tradeId))
-					continue;
+				if (currItem.TradeId != null)
+				{
+					var tradeId = currItem.TradeId.Value;
+					if (!tradesByNum.Add(tradeId))
+						continue;
 
-				tradesByString.Remove(tradeId);
-				yield return currItem.ToTick();
+					tradesByNum.Remove(tradeId);
+					yield return currItem.ToTick();
+				}
+				else if (!currItem.TradeStringId.IsEmpty())
+				{
+					var tradeId = currItem.TradeStringId;
+					if (!tradesByString.Add(tradeId))
+						continue;
+
+					tradesByString.Remove(tradeId);
+					yield return currItem.ToTick();
+				}
 			}
 		}
 	}
@@ -731,41 +743,45 @@ static partial class Extensions
 	/// <param name="items">Orders log lines.</param>
 	/// <param name="builder">Order log to market depth builder.</param>
 	/// <param name="interval">The interval of the order book generation. The default is <see cref="TimeSpan.Zero"/>, which means order books generation at each new item of orders log.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Tick trades.</returns>
-	public static IAsyncEnumerable<Level1ChangeMessage> ToLevel1(this IAsyncEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default, CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<Level1ChangeMessage> ToLevel1(this IAsyncEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default)
 	{
 		if (builder == null)
-			return items.ToLevel1FromTicks(cancellationToken);
+			return items.ToLevel1FromTicks();
 		else
-			return items.ToOrderBooks(builder, interval, cancellationToken: cancellationToken).BuildIfNeed(cancellationToken: cancellationToken).ToLevel1(cancellationToken);
+			return items.ToOrderBooks(builder, interval).BuildIfNeed().ToLevel1();
 	}
 
-	private static async IAsyncEnumerable<Level1ChangeMessage> ToLevel1FromTicks(this IAsyncEnumerable<ExecutionMessage> items, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	private static IAsyncEnumerable<Level1ChangeMessage> ToLevel1FromTicks(this IAsyncEnumerable<ExecutionMessage> items)
 	{
 		if (items is null)
 			throw new ArgumentNullException(nameof(items));
 
-		await foreach (var tick in items.WithCancellation(cancellationToken))
+		return Impl(items);
+
+		static async IAsyncEnumerable<Level1ChangeMessage> Impl(IAsyncEnumerable<ExecutionMessage> items, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			var l1Msg = new Level1ChangeMessage
+			await foreach (var tick in items.WithCancellation(cancellationToken))
 			{
-				SecurityId = tick.SecurityId,
-				ServerTime = tick.ServerTime,
-				LocalTime = tick.LocalTime,
+				var l1Msg = new Level1ChangeMessage
+				{
+					SecurityId = tick.SecurityId,
+					ServerTime = tick.ServerTime,
+					LocalTime = tick.LocalTime,
+				}
+				.TryAdd(Level1Fields.LastTradeId, tick.TradeId)
+				.TryAdd(Level1Fields.LastTradeStringId, tick.TradeStringId)
+				.TryAdd(Level1Fields.LastTradePrice, tick.TradePrice)
+				.TryAdd(Level1Fields.LastTradeVolume, tick.TradeVolume)
+				.TryAdd(Level1Fields.LastTradeUpDown, tick.IsUpTick)
+				.TryAdd(Level1Fields.LastTradeOrigin, tick.OriginSide)
+				;
+
+				if (!l1Msg.HasChanges())
+					continue;
+
+				yield return l1Msg;
 			}
-			.TryAdd(Level1Fields.LastTradeId, tick.TradeId)
-			.TryAdd(Level1Fields.LastTradeStringId, tick.TradeStringId)
-			.TryAdd(Level1Fields.LastTradePrice, tick.TradePrice)
-			.TryAdd(Level1Fields.LastTradeVolume, tick.TradeVolume)
-			.TryAdd(Level1Fields.LastTradeUpDown, tick.IsUpTick)
-			.TryAdd(Level1Fields.LastTradeOrigin, tick.OriginSide)
-			;
-
-			if (!l1Msg.HasChanges())
-				continue;
-
-			yield return l1Msg;
 		}
 	}
 
@@ -773,19 +789,23 @@ static partial class Extensions
 	/// To convert level1 data into tick data.
 	/// </summary>
 	/// <param name="level1">Level1 data.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Tick data.</returns>
-	public static async IAsyncEnumerable<ExecutionMessage> ToTicks(this IAsyncEnumerable<Level1ChangeMessage> level1, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<ExecutionMessage> ToTicks(this IAsyncEnumerable<Level1ChangeMessage> level1)
 	{
 		if (level1 is null)
 			throw new ArgumentNullException(nameof(level1));
 
-		await foreach (var l1 in level1.WithCancellation(cancellationToken))
-		{
-			if (!l1.IsContainsTick())
-				continue;
+		return Impl(level1);
 
-			yield return l1.ToTick();
+		static async IAsyncEnumerable<ExecutionMessage> Impl(IAsyncEnumerable<Level1ChangeMessage> level1, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+		{
+			await foreach (var l1 in level1.WithCancellation(cancellationToken))
+			{
+				if (!l1.IsContainsTick())
+					continue;
+
+				yield return l1.ToTick();
+			}
 		}
 	}
 
@@ -793,51 +813,55 @@ static partial class Extensions
 	/// To convert level1 data into order books.
 	/// </summary>
 	/// <param name="level1">Level1 data.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Market depths.</returns>
-	public static async IAsyncEnumerable<QuoteChangeMessage> ToOrderBooks(this IAsyncEnumerable<Level1ChangeMessage> level1, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<QuoteChangeMessage> ToOrderBooks(this IAsyncEnumerable<Level1ChangeMessage> level1)
 	{
 		if (level1 is null)
 			throw new ArgumentNullException(nameof(level1));
 
-		decimal? prevBidPrice = null;
-		decimal? prevBidVolume = null;
-		decimal? prevAskPrice = null;
-		decimal? prevAskVolume = null;
+		return Impl(level1);
 
-		await foreach (var l1 in level1.WithCancellation(cancellationToken))
+		static async IAsyncEnumerable<QuoteChangeMessage> Impl(IAsyncEnumerable<Level1ChangeMessage> level1, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			if (!l1.IsContainsQuotes())
-				continue;
+			decimal? prevBidPrice = null;
+			decimal? prevBidVolume = null;
+			decimal? prevAskPrice = null;
+			decimal? prevAskVolume = null;
 
-			var oldBidPrice = prevBidPrice;
-			var oldBidVolume = prevBidVolume;
-			var oldAskPrice = prevAskPrice;
-			var oldAskVolume = prevAskVolume;
-
-			prevBidPrice = l1.TryGetDecimal(Level1Fields.BestBidPrice) ?? prevBidPrice;
-			prevBidVolume = l1.TryGetDecimal(Level1Fields.BestBidVolume) ?? prevBidVolume;
-			prevAskPrice = l1.TryGetDecimal(Level1Fields.BestAskPrice) ?? prevAskPrice;
-			prevAskVolume = l1.TryGetDecimal(Level1Fields.BestAskVolume) ?? prevAskVolume;
-
-			if (prevBidPrice == 0)
-				prevBidPrice = null;
-
-			if (prevAskPrice == 0)
-				prevAskPrice = null;
-
-			if (oldBidPrice == prevBidPrice && oldBidVolume == prevBidVolume && oldAskPrice == prevAskPrice && oldAskVolume == prevAskVolume)
-				continue;
-
-			yield return new QuoteChangeMessage
+			await foreach (var l1 in level1.WithCancellation(cancellationToken))
 			{
-				SecurityId = l1.SecurityId,
-				LocalTime = l1.LocalTime,
-				ServerTime = l1.ServerTime,
-				Bids = prevBidPrice == null ? [] : [new QuoteChange(prevBidPrice.Value, prevBidVolume ?? 0)],
-				Asks = prevAskPrice == null ? [] : [new QuoteChange(prevAskPrice.Value, prevAskVolume ?? 0)],
-				BuildFrom = l1.BuildFrom ?? DataType.Level1,
-			};
+				if (!l1.IsContainsQuotes())
+					continue;
+
+				var oldBidPrice = prevBidPrice;
+				var oldBidVolume = prevBidVolume;
+				var oldAskPrice = prevAskPrice;
+				var oldAskVolume = prevAskVolume;
+
+				prevBidPrice = l1.TryGetDecimal(Level1Fields.BestBidPrice) ?? prevBidPrice;
+				prevBidVolume = l1.TryGetDecimal(Level1Fields.BestBidVolume) ?? prevBidVolume;
+				prevAskPrice = l1.TryGetDecimal(Level1Fields.BestAskPrice) ?? prevAskPrice;
+				prevAskVolume = l1.TryGetDecimal(Level1Fields.BestAskVolume) ?? prevAskVolume;
+
+				if (prevBidPrice == 0)
+					prevBidPrice = null;
+
+				if (prevAskPrice == 0)
+					prevAskPrice = null;
+
+				if (oldBidPrice == prevBidPrice && oldBidVolume == prevBidVolume && oldAskPrice == prevAskPrice && oldAskVolume == prevAskVolume)
+					continue;
+
+				yield return new QuoteChangeMessage
+				{
+					SecurityId = l1.SecurityId,
+					LocalTime = l1.LocalTime,
+					ServerTime = l1.ServerTime,
+					Bids = prevBidPrice == null ? [] : [new QuoteChange(prevBidPrice.Value, prevBidVolume ?? 0)],
+					Asks = prevAskPrice == null ? [] : [new QuoteChange(prevAskPrice.Value, prevAskVolume ?? 0)],
+					BuildFrom = l1.BuildFrom ?? DataType.Level1,
+				};
+			}
 		}
 	}
 
@@ -848,9 +872,8 @@ static partial class Extensions
 	/// <param name="builder">Order log to market depth builder.</param>
 	/// <param name="interval">The interval of the order book generation. The default is <see cref="TimeSpan.Zero"/>, which means order books generation at each new item of orders log.</param>
 	/// <param name="maxDepth">The maximal depth of order book. The default is <see cref="Int32.MaxValue"/>, which means endless depth.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Market depths.</returns>
-	public static async IAsyncEnumerable<QuoteChangeMessage> ToOrderBooks(this IAsyncEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default, int maxDepth = int.MaxValue, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<QuoteChangeMessage> ToOrderBooks(this IAsyncEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default, int maxDepth = int.MaxValue)
 	{
 		if (items is null)
 			throw new ArgumentNullException(nameof(items));
@@ -858,39 +881,44 @@ static partial class Extensions
 		if (builder is null)
 			throw new ArgumentNullException(nameof(builder));
 
-		var snapshotSent = false;
-		var prevTime = default(DateTime?);
+		return Impl(items, builder, interval, maxDepth);
 
-		await foreach (var item in items.WithCancellation(cancellationToken))
+		static async IAsyncEnumerable<QuoteChangeMessage> Impl(IAsyncEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval, int maxDepth, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			if (!snapshotSent)
+			var snapshotSent = false;
+			var prevTime = default(DateTime?);
+
+			await foreach (var item in items.WithCancellation(cancellationToken))
 			{
-				yield return builder.GetSnapshot(item.ServerTime);
-				snapshotSent = true;
+				if (!snapshotSent)
+				{
+					yield return builder.GetSnapshot(item.ServerTime);
+					snapshotSent = true;
+				}
+
+				var depth = builder.Update(item);
+				if (depth is null)
+					continue;
+
+				if (prevTime != null && (depth.ServerTime - prevTime.Value) < interval)
+					continue;
+
+				if (maxDepth < int.MaxValue)
+				{
+					depth = builder.GetSnapshot(item.ServerTime);
+
+					depth.Bids = [.. depth.Bids.Take(maxDepth)];
+					depth.Asks = [.. depth.Asks.Take(maxDepth)];
+				}
+				else if (interval != default)
+				{
+					depth = builder.GetSnapshot(item.ServerTime);
+				}
+
+				yield return depth;
+
+				prevTime = depth.ServerTime;
 			}
-
-			var depth = builder.Update(item);
-			if (depth is null)
-				continue;
-
-			if (prevTime != null && (depth.ServerTime - prevTime.Value) < interval)
-				continue;
-
-			if (maxDepth < int.MaxValue)
-			{
-				depth = builder.GetSnapshot(item.ServerTime);
-
-				depth.Bids = [.. depth.Bids.Take(maxDepth)];
-				depth.Asks = [.. depth.Asks.Take(maxDepth)];
-			}
-			else if (interval != default)
-			{
-				depth = builder.GetSnapshot(item.ServerTime);
-			}
-
-			yield return depth;
-
-			prevTime = depth.ServerTime;
 		}
 	}
 }

@@ -80,9 +80,8 @@ public class RemoteStorageClient : Disposable
 	/// </summary>
 	/// <param name="criteria">Message security lookup for specified criteria.</param>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The sequence of found instruments.</returns>
-	public async IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider, [EnumeratorCancellation]CancellationToken cancellationToken)
+	public IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider)
 	{
 		if (criteria == null)
 			throw new ArgumentNullException(nameof(criteria));
@@ -90,77 +89,82 @@ public class RemoteStorageClient : Disposable
 		if (securityProvider is null)
 			throw new ArgumentNullException(nameof(securityProvider));
 
-		var existingIds = new HashSet<SecurityId>();
-
-		await foreach (var s in securityProvider.LookupAllAsync(cancellationToken).WithEnforcedCancellation(cancellationToken))
+		async IAsyncEnumerable<SecurityMessage> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			existingIds.Add(s.Id.ToSecurityId());
-		}
+			var existingIds = new HashSet<SecurityId>();
 
-		if (criteria.SecurityId != default || criteria.SecurityIds.Length > 0)
-		{
-			var newSecurityIds = new HashSet<SecurityId>();
-
-			void tryAdd(SecurityId secId)
+			await foreach (var s in securityProvider.LookupAllAsync().WithEnforcedCancellation(cancellationToken))
 			{
-				if (!existingIds.Contains(secId))
-					newSecurityIds.Add(secId);
+				existingIds.Add(s.Id.ToSecurityId());
 			}
 
-			if (criteria.SecurityId != default)
-				tryAdd(criteria.SecurityId);
-
-			foreach (var secId in criteria.SecurityIds)
-				tryAdd(secId);
-
-			if (newSecurityIds.Count > 0)
+			if (criteria.SecurityId != default || criteria.SecurityIds.Length > 0)
 			{
-				criteria = criteria.TypedClone();
-				criteria.SecurityId = default;
-				criteria.SecurityIds = [.. newSecurityIds];
+				var newSecurityIds = new HashSet<SecurityId>();
 
-				var (newSecurities, _) = await DoAsync<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString()), cancellationToken);
+				void tryAdd(SecurityId secId)
+				{
+					if (!existingIds.Contains(secId))
+						newSecurityIds.Add(secId);
+				}
 
-				foreach (var security in newSecurities)
-					yield return security;
-			}
-		}
-		else
-		{
-			criteria = criteria.TypedClone();
-			criteria.OnlySecurityId = true;
+				if (criteria.SecurityId != default)
+					tryAdd(criteria.SecurityId);
 
-			var (securities, isFull) = await DoAsync<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString()), cancellationToken);
+				foreach (var secId in criteria.SecurityIds)
+					tryAdd(secId);
 
-			if (isFull)
-			{
-				var newSecurities = securities
-					.Where(s => !existingIds.Contains(s.SecurityId))
-					.ToArray();
+				if (newSecurityIds.Count > 0)
+				{
+					criteria = criteria.TypedClone();
+					criteria.SecurityId = default;
+					criteria.SecurityIds = [.. newSecurityIds];
 
-				foreach (var security in newSecurities)
-					yield return security;
+					var (newSecurities, _) = await DoAsync<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString()));
+
+					foreach (var security in newSecurities)
+						yield return security;
+				}
 			}
 			else
 			{
-				var newSecurityIds = securities
-					.Select(s => s.SecurityId)
-					.Where(id => !existingIds.Contains(id))
-					.ToArray();
+				criteria = criteria.TypedClone();
+				criteria.OnlySecurityId = true;
 
-				var count = 0;
+				var (securities, isFull) = await DoAsync<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString()), cancellationToken);
 
-				foreach (var batch in newSecurityIds.Chunk(_securityBatchSize))
+				if (isFull)
 				{
-					var (batchRes, _) = await DoAsync<SecurityMessage>(new SecurityLookupMessage { SecurityIds = batch }, () => (typeof(SecurityLookupMessage), batch.Select(i => i.To<string>()).JoinComma()), cancellationToken);
+					var newSecurities = securities
+						.Where(s => !existingIds.Contains(s.SecurityId))
+						.ToArray();
 
-					foreach (var security in batchRes)
+					foreach (var security in newSecurities)
 						yield return security;
+				}
+				else
+				{
+					var newSecurityIds = securities
+						.Select(s => s.SecurityId)
+						.Where(id => !existingIds.Contains(id))
+						.ToArray();
 
-					count += batch.Length;
+					var count = 0;
+
+					foreach (var batch in newSecurityIds.Chunk(_securityBatchSize))
+					{
+						var (batchRes, _) = await DoAsync<SecurityMessage>(new SecurityLookupMessage { SecurityIds = batch }, () => (typeof(SecurityLookupMessage), batch.Select(i => i.To<string>()).JoinComma()));
+
+						foreach (var security in batchRes)
+							yield return security;
+
+						count += batch.Length;
+					}
 				}
 			}
 		}
+		
+		return Impl();
 	}
 
 	/// <summary>
@@ -311,7 +315,7 @@ public class RemoteStorageClient : Disposable
 		}, cancellationToken);
 	}
 
-	private async ValueTask<(TResult[] results, bool isFull)> DoAsync<TResult>(ITransactionIdMessage request, Func<object> getKey, CancellationToken cancellationToken)
+	private async ValueTask<(TResult[] results, bool isFull)> DoAsync<TResult>(ITransactionIdMessage request, Func<object> getKey, CancellationToken cancellationToken = default)
 		where TResult : Message
 	{
 		if (request is null)
@@ -373,12 +377,12 @@ public class RemoteStorageClient : Disposable
 
 						if (typeof(TResult) == typeof(SecurityMessage))
 						{
-							result.AddRange(await finishedMsg.Body.ExtractSecuritiesAsync(cancellationToken).ToArrayAsync(cancellationToken));
+							result.AddRange(await finishedMsg.Body.ExtractSecuritiesAsync().ToArrayAsync(cancellationToken));
 							isFull = true;
 						}
 						else if (typeof(TResult) == typeof(BoardMessage))
 						{
-							result.AddRange(await finishedMsg.Body.ExtractBoardsAsync(cancellationToken).ToArrayAsync(cancellationToken));
+							result.AddRange(await finishedMsg.Body.ExtractBoardsAsync().ToArrayAsync(cancellationToken));
 							isFull = true;
 						}
 					}

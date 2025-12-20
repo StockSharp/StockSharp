@@ -17,7 +17,6 @@ public interface ISecurityMessageProvider
 	/// Lookup securities by criteria <paramref name="criteria" />.
 	/// </summary>
 	/// <param name="criteria">Message security lookup for specified criteria.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Found instruments.</returns>
-	IAsyncEnumerable<SecurityMessage> LookupMessagesAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken);
+	IAsyncEnumerable<SecurityMessage> LookupMessagesAsync(SecurityLookupMessage criteria);
 }

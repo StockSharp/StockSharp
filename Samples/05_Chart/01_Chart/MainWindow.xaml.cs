@@ -294,7 +294,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 			if (isBuild)
 			{
-				await foreach (var tick in storage.GetTickMessageStorage(secId, new LocalMarketDataDrive(path), format).LoadAsync(null, null, token).WithEnforcedCancellation(token))
+				await foreach (var tick in storage.GetTickMessageStorage(secId, new LocalMarketDataDrive(path), format).LoadAsync(null, null).WithEnforcedCancellation(token))
 				{
 					_tradeGenerator.Process(tick);
 
@@ -326,7 +326,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			}
 			else
 			{
-				await foreach (var candleMsg in storage.GetCandleMessageStorage(secId, dt, new LocalMarketDataDrive(path), format).LoadAsync(null, null, token).WithEnforcedCancellation(token))
+				await foreach (var candleMsg in storage.GetCandleMessageStorage(secId, dt, new LocalMarketDataDrive(path), format).LoadAsync(null, null).WithEnforcedCancellation(token))
 				{
 					if (candleMsg.State != CandleStates.Finished)
 						candleMsg.State = CandleStates.Finished;

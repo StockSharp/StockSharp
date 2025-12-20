@@ -132,7 +132,7 @@ public partial class MainWindow
 		{
 			var date = DateTime.MinValue;
 
-			await foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(path)).LoadAsync(null, null, token))
+			await foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(path)).LoadAsync(null, null).WithEnforcedCancellation(token))
 			{
 				AppendTick(tick);
 

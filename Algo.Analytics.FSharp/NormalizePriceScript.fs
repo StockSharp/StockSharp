@@ -56,7 +56,7 @@ type NormalizePriceScript() =
                             let mutable firstClose: decimal option = None
 
                             // Load candles and normalize close prices
-                            let! candles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
+                            let! candles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
                             for candle in candles do
                                 match firstClose with
                                 | None ->

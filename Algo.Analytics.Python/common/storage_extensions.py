@@ -69,7 +69,7 @@ def load_async_enumerable(storage, message_type, from_date, to_date, cancellatio
         cancellation_token = CancellationToken()
 
     # Get IAsyncEnumerable from LoadAsync<T> extension method with explicit type
-    async_enumerable = StorageHelper.LoadAsync[message_type](storage, from_date, to_date, cancellation_token)
+    async_enumerable = StorageHelper.LoadAsync[message_type](storage, from_date, to_date)
 
     # Iterate over IAsyncEnumerable by blocking on each MoveNextAsync
     enumerator = async_enumerable.GetAsyncEnumerator(cancellation_token)

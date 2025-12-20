@@ -29,7 +29,7 @@ public class TimeVolumeScript : IAnalyticsScript
 		}
 
 		// grouping candles by opening time (time part only) with 1 hour truncating
-		var rows = (await candleStorage.LoadAsync(from, to, cancellationToken)
+		var rows = (await candleStorage.LoadAsync(from, to)
 			.ToArrayAsync(cancellationToken))
 			.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)))
 			.ToDictionary(g => g.Key, g => g.Sum(c => c.TotalVolume));

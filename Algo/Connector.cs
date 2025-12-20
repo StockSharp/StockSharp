@@ -214,14 +214,14 @@ public partial class Connector : BaseLogReceiver, IConnector
 	public ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)
 		=> SecurityStorage.LookupByIdAsync(id, cancellationToken);
 
-	IAsyncEnumerable<Security> ISecurityProvider.LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
-		=> SecurityStorage.LookupAsync(criteria, cancellationToken);
+	IAsyncEnumerable<Security> ISecurityProvider.LookupAsync(SecurityLookupMessage criteria)
+		=> SecurityStorage.LookupAsync(criteria);
 
 	ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
 		=> SecurityStorage.LookupMessageByIdAsync(id, cancellationToken);
 
-	IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
-		=> SecurityStorage.LookupMessagesAsync(criteria, cancellationToken);
+	IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria)
+		=> SecurityStorage.LookupMessagesAsync(criteria);
 
 	/// <inheritdoc />
 	public virtual IEnumerable<Portfolio> Portfolios => _existingPortfolios.Cache;

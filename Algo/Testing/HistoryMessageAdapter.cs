@@ -492,12 +492,12 @@ public class HistoryMessageAdapter : MessageAdapter
 
 							if (AdapterCache is not null)
 							{
-								messages = AdapterCache.GetMessagesAsync(default, default, loadDateInUtc, _basketStorage.LoadAsync, cancellationToken);
+								messages = AdapterCache.GetMessagesAsync(default, default, loadDateInUtc, _basketStorage.LoadAsync);
 								noData = await messages.FirstOrDefaultAsync(cancellationToken) is null;
 							}
 							else
 							{
-								var enu = _basketStorage.LoadAsync(loadDateInUtc, cancellationToken);
+								var enu = _basketStorage.LoadAsync(loadDateInUtc);
 
 								// storage for the specified date contains only time messages and clearing events
 								noData = !enu.DataTypes.Except(messageTypes).Any();
@@ -566,7 +566,7 @@ public class HistoryMessageAdapter : MessageAdapter
 
 			if (msg.LocalTime < fromTime)
 			{
-				// íå ïðîïóñêàåì òîëüêî ñòàêàíû, òèêè è ÎË
+				// Ð½Ðµ Ð¿Ñ€Ð¾Ð¿ÑƒÑÐºÐ°ÐµÐ¼ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ ÑÑ‚Ð°ÐºÐ°Ð½Ñ‹, Ñ‚Ð¸ÐºÐ¸ Ð¸ ÐžÐ›
 				if (msg.Type is MessageTypes.QuoteChange or MessageTypes.Execution)
 					continue;
 			}

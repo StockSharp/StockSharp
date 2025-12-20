@@ -21,13 +21,13 @@ public class CacheableMarketDataStorageTests : BaseTestClass
 		IMarketDataStorageDrive IMarketDataStorage.Drive => Mock.Of<IMarketDataStorageDrive>();
 		bool IMarketDataStorage.AppendOnlyNew { get; set; }
 
-		IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken)
+		IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date)
 		{
 			LoadCalls++;
-			return LoadImpl(cancellationToken);
+			return LoadImpl();
 		}
 
-		private async IAsyncEnumerable<Message> LoadImpl([EnumeratorCancellation]CancellationToken cancellationToken)
+		private async IAsyncEnumerable<Message> LoadImpl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			foreach (var message in _messages)
 			{
@@ -74,8 +74,8 @@ public class CacheableMarketDataStorageTests : BaseTestClass
 
 		IMarketDataStorage storage = new CacheableMarketDataStorage(underlying, cache);
 
-		var first = await storage.LoadAsync(date, token).ToArrayAsync(token);
-		var second = await storage.LoadAsync(date, token).ToArrayAsync(token);
+		var first = await storage.LoadAsync(date).ToArrayAsync(token);
+		var second = await storage.LoadAsync(date).ToArrayAsync(token);
 
 		first.Length.AssertEqual(1);
 		second.Length.AssertEqual(1);

@@ -49,7 +49,7 @@ public static class StorageHelper
 
 			async ValueTask<bool> IAsyncEnumerator<TData>.MoveNextAsync()
 			{
-				_current ??= _storage.LoadAsync(_currDate, _cancellationToken).GetAsyncEnumerator(_cancellationToken);
+				_current ??= _storage.LoadAsync(_currDate).GetAsyncEnumerator(_cancellationToken);
 
 				while (true)
 				{
@@ -68,7 +68,7 @@ public static class StorageHelper
 
 							_checkBounds = _currDate == _to.Date;
 
-							_current = _storage.LoadAsync(_currDate, _cancellationToken).GetAsyncEnumerator(_cancellationToken);
+							_current = _storage.LoadAsync(_currDate).GetAsyncEnumerator(_cancellationToken);
 
 							canMove = await _current.MoveNextAsync();
 						}
@@ -129,7 +129,7 @@ public static class StorageHelper
 	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from, DateTime? to)
 		where TMessage : Message, IServerTimeMessage
 	{
-		return AsyncHelper.Run(() => LoadAsync(storage, from, to, default).ToArrayAsync(default));
+		return AsyncHelper.Run(() => LoadAsync(storage, from, to).ToArrayAsync(default));
 	}
 
 	/// <summary>
@@ -139,20 +139,27 @@ public static class StorageHelper
 	/// <param name="storage">Market-data storage.</param>
 	/// <param name="from">The start time for data loading. If the value is not specified, data will be loaded from the starting time <see cref="IMarketDataStorageDrive.GetDatesAsync"/>.</param>
 	/// <param name="to">The end time for data loading. If the value is not specified, data will be loaded up to the <see cref="IMarketDataStorageDrive.GetDatesAsync"/> date, inclusive.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The iterative loader of market data.</returns>
-	public static async IAsyncEnumerable<TMessage> LoadAsync<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from, DateTime? to, [EnumeratorCancellation]CancellationToken cancellationToken)
+	public static IAsyncEnumerable<TMessage> LoadAsync<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from, DateTime? to)
 		where TMessage : Message, IServerTimeMessage
 	{
-		var range = await GetRangeAsync(storage, from, to, cancellationToken);
+		if (storage is null)
+			throw new ArgumentNullException(nameof(storage));
 
-		if (range == null)
-			yield break;
+		return Impl(storage, from, to);
 
-		var enumerable = new RangeEnumerable<TMessage>(storage, range.Min, range.Max);
+		static async IAsyncEnumerable<TMessage> Impl(IMarketDataStorage<TMessage> storage, DateTime? from, DateTime? to, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+		{
+			var range = await GetRangeAsync(storage, from, to, cancellationToken);
 
-		await foreach (var msg in enumerable.WithEnforcedCancellation(cancellationToken))
-			yield return msg;
+			if (range == null)
+				yield break;
+
+			var enumerable = new RangeEnumerable<TMessage>(storage, range.Min, range.Max);
+
+			await foreach (var msg in enumerable.WithEnforcedCancellation(cancellationToken))
+				yield return msg;
+		}
 	}
 
 	/// <summary>
@@ -220,7 +227,7 @@ public static class StorageHelper
 				}
 				else
 				{
-					var data = (await storage.LoadAsync(date, cancellationToken).ToArrayAsync(cancellationToken)).ToList();
+					var data = (await storage.LoadAsync(date).ToArrayAsync(cancellationToken)).ToList();
 					data.RemoveWhere(d =>
 					{
 						var t = d.GetServerTime();
@@ -233,7 +240,7 @@ public static class StorageHelper
 				await storage.DeleteAsync(date, cancellationToken);
 			else
 			{
-				var data = (await storage.LoadAsync(date, cancellationToken).ToArrayAsync(cancellationToken)).ToList();
+				var data = (await storage.LoadAsync(date).ToArrayAsync(cancellationToken)).ToList();
 				data.RemoveWhere(d => d.GetServerTime() > range.Max);
 				await storage.DeleteAsync(data, cancellationToken);
 			}
@@ -484,7 +491,7 @@ public static class StorageHelper
 
 		ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken) => _original.DeleteAsync(date, cancellationToken);
 
-		IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken) => ((IMarketDataStorage<CandleMessage>)this).LoadAsync(date, cancellationToken);
+		IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date) => ((IMarketDataStorage<CandleMessage>)this).LoadAsync(date);
 
 		async ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken)
 		{
@@ -503,94 +510,99 @@ public static class StorageHelper
 
 		private DateTime _nextCandleMinTime;
 
-		public async IAsyncEnumerable<CandleMessage> LoadAsync(DateTime date, [EnumeratorCancellation]CancellationToken cancellationToken)
+		public IAsyncEnumerable<CandleMessage> LoadAsync(DateTime date)
 		{
-			if (date <= _prevDate)
+			return Impl(this, date);
+
+			static async IAsyncEnumerable<CandleMessage> Impl(CandleMessageBuildableStorage storage, DateTime date, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 			{
-				_compressors.Values.ForEach(c => c.Reset());
-				_nextCandleMinTime = DateTime.MinValue;
-			}
-
-			_prevDate = date;
-
-			var storagesWithData = new List<(IMarketDataStorage<CandleMessage> storage, IEnumerable<CandleMessage> data)>();
-
-			foreach (var s in GetStorages())
-			{
-				var dates = await s.GetDatesAsync(cancellationToken);
-
-				if (dates.Contains(date))
+				if (date <= storage._prevDate)
 				{
-					var data = await s.LoadAsync(date, cancellationToken).ToArrayAsync(cancellationToken);
-					storagesWithData.Add((s, data));
+					storage._compressors.Values.ForEach(c => c.Reset());
+					storage._nextCandleMinTime = DateTime.MinValue;
 				}
-			}
 
-			var enumerators = storagesWithData.Select(pair =>
-			{
-				var (s, data) = pair;
+				storage._prevDate = date;
 
-				if (s == _original)
-					return data;
+				var storagesWithData = new List<(IMarketDataStorage<CandleMessage> s, IEnumerable<CandleMessage> data)>();
 
-				var compressor = _compressors.TryGetValue(s.DataType.GetTimeFrame());
-
-				if (compressor == null)
-					return [];
-
-				return data.SelectMany(message => compressor.Process(message));
-			}).Select(e => e.GetEnumerator()).ToList();
-
-			if (enumerators.Count == 0)
-				yield break;
-
-			var tf = _dataType.GetTimeFrame();
-			var toRemove = new List<IEnumerator<CandleMessage>>(enumerators.Count);
-
-			while (true)
-			{
-				foreach (var enumerator in enumerators)
+				foreach (var s in storage.GetStorages())
 				{
-					while (true)
+					var dates = await s.GetDatesAsync(cancellationToken);
+
+					if (dates.Contains(date))
 					{
-						if (!enumerator.MoveNext())
-						{
-							toRemove.Add(enumerator);
-							break;
-						}
-						else if (enumerator.Current.OpenTime >= _nextCandleMinTime)
-							break;
+						var data = await s.LoadAsync(date).ToArrayAsync(cancellationToken);
+						storagesWithData.Add((s, data));
 					}
 				}
 
-				toRemove.ForEach(e =>
+				var enumerators = storagesWithData.Select(pair =>
 				{
-					e.Dispose();
-					enumerators.Remove(e);
-				});
+					var (s, data) = pair;
 
-				toRemove.Clear();
+					if (s == storage._original)
+						return data;
+
+					var compressor = storage._compressors.TryGetValue(s.DataType.GetTimeFrame());
+
+					if (compressor == null)
+						return [];
+
+					return data.SelectMany(message => compressor.Process(message));
+				}).Select(e => e.GetEnumerator()).ToList();
 
 				if (enumerators.Count == 0)
 					yield break;
 
-				var nextCandleCompressor = enumerators.OrderBy(e => e.Current.OpenTime).First();
-				var candle = nextCandleCompressor.Current;
+				var tf = storage._dataType.GetTimeFrame();
+				var toRemove = new List<IEnumerator<CandleMessage>>(enumerators.Count);
 
-				while ((candle.OpenTime < _nextCandleMinTime || candle.State != CandleStates.Finished) && nextCandleCompressor.MoveNext())
+				while (true)
 				{
-					/* compress until candle is finished OR no more data */
-					candle = nextCandleCompressor.Current;
-				}
+					foreach (var enumerator in enumerators)
+					{
+						while (true)
+						{
+							if (!enumerator.MoveNext())
+							{
+								toRemove.Add(enumerator);
+								break;
+							}
+							else if (enumerator.Current.OpenTime >= storage._nextCandleMinTime)
+								break;
+						}
+					}
 
-				if (candle.State != CandleStates.Finished)
-				{
-					candle = candle.TypedClone();
-					candle.State = CandleStates.Finished;
-				}
+					toRemove.ForEach(e =>
+					{
+						e.Dispose();
+						enumerators.Remove(e);
+					});
 
-				_nextCandleMinTime = candle.OpenTime + tf;
-				yield return candle;
+					toRemove.Clear();
+
+					if (enumerators.Count == 0)
+						yield break;
+
+					var nextCandleCompressor = enumerators.OrderBy(e => e.Current.OpenTime).First();
+					var candle = nextCandleCompressor.Current;
+
+					while ((candle.OpenTime < storage._nextCandleMinTime || candle.State != CandleStates.Finished) && nextCandleCompressor.MoveNext())
+					{
+						/* compress until candle is finished OR no more data */
+						candle = nextCandleCompressor.Current;
+					}
+
+					if (candle.State != CandleStates.Finished)
+					{
+						candle = candle.TypedClone();
+						candle.State = CandleStates.Finished;
+					}
+
+					storage._nextCandleMinTime = candle.OpenTime + tf;
+					yield return candle;
+				}
 			}
 		}
 
@@ -826,7 +838,7 @@ public static class StorageHelper
 			if (range == default)
 				yield break;
 
-			var messages = storage.LoadAsync(range.from, range.to, cancellationToken);
+			var messages = storage.LoadAsync(range.from, range.to);
 
 			if (subscription.Skip != default)
 				messages = messages.Skip((int)subscription.Skip.Value);
@@ -863,7 +875,7 @@ public static class StorageHelper
 					if (range != default)
 					{
 						await foreach (var msg in LoadFromEnumerable(storage
-							.LoadAsync(range.from, range.to, cancellationToken)
+							.LoadAsync(range.from, range.to)
 							.ToLevel1(subscription.DepthBuilder, subscription.RefreshSpeed ?? default)).WithCancellation(cancellationToken))
 							yield return msg;
 					}
@@ -877,7 +889,7 @@ public static class StorageHelper
 					if (range != default)
 					{
 						await foreach (var msg in LoadFromEnumerable(storage
-							.LoadAsync(range.from, range.to, cancellationToken)
+							.LoadAsync(range.from, range.to)
 							.ToLevel1()).WithCancellation(cancellationToken))
 							yield return msg;
 					}
@@ -905,7 +917,7 @@ public static class StorageHelper
 					if (range != default)
 					{
 						await foreach (var msg in LoadFromEnumerable(storage
-							.LoadAsync(range.from, range.to, cancellationToken)
+							.LoadAsync(range.from, range.to)
 							.ToOrderBooks(subscription.DepthBuilder, subscription.RefreshSpeed ?? default, subscription.MaxDepth ?? int.MaxValue)
 							.BuildIfNeed()).WithCancellation(cancellationToken))
 							yield return msg;
@@ -920,7 +932,7 @@ public static class StorageHelper
 					if (range != default)
 					{
 						await foreach (var msg in LoadFromEnumerable(storage
-							.LoadAsync(range.from, range.to, cancellationToken)
+							.LoadAsync(range.from, range.to)
 							.ToOrderBooks()).WithCancellation(cancellationToken))
 							yield return msg;
 					}
@@ -945,7 +957,7 @@ public static class StorageHelper
 					if (range != default)
 					{
 						await foreach (var msg in LoadFromEnumerable(storage
-							.LoadAsync(range.from, range.to, cancellationToken)
+							.LoadAsync(range.from, range.to)
 							.ToTicks()).WithCancellation(cancellationToken))
 							yield return msg;
 					}
@@ -959,7 +971,7 @@ public static class StorageHelper
 					if (range != default)
 					{
 						await foreach (var msg in LoadFromEnumerable(storage
-							.LoadAsync(range.from, range.to, cancellationToken)
+							.LoadAsync(range.from, range.to)
 							.ToTicks()).WithCancellation(cancellationToken))
 							yield return msg;
 					}
@@ -1031,7 +1043,7 @@ public static class StorageHelper
 				if (buildFrom == DataType.Ticks)
 				{
 					await foreach (var msg in LoadFromEnumerable(((IMarketDataStorage<ExecutionMessage>)storage)
-							.LoadAsync(from, to, cancellationToken)
+							.LoadAsync(from, to)
 							.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider)).WithCancellation(cancellationToken))
 						yield return msg;
 				}
@@ -1042,7 +1054,7 @@ public static class StorageHelper
 						case null:
 						case Level1Fields.LastTradePrice:
 							await foreach (var msg in LoadFromEnumerable(((IMarketDataStorage<ExecutionMessage>)storage)
-									.LoadAsync(from, to, cancellationToken)
+									.LoadAsync(from, to)
 									.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider)).WithCancellation(cancellationToken))
 								yield return msg;
 							break;
@@ -1063,7 +1075,7 @@ public static class StorageHelper
 						case null:
 						case Level1Fields.LastTradePrice:
 							await foreach (var msg in LoadFromEnumerable(((IMarketDataStorage<Level1ChangeMessage>)storage)
-									.LoadAsync(from, to, cancellationToken)
+									.LoadAsync(from, to)
 									.ToTicks()
 									.ToCandles(mdMsg, candleBuilderProvider: candleBuilderProvider)).WithCancellation(cancellationToken))
 								yield return msg;
@@ -1073,7 +1085,7 @@ public static class StorageHelper
 						case Level1Fields.BestAskPrice:
 						case Level1Fields.SpreadMiddle:
 							await foreach (var msg in LoadFromEnumerable(((IMarketDataStorage<Level1ChangeMessage>)storage)
-									.LoadAsync(from, to, cancellationToken)
+									.LoadAsync(from, to)
 									.ToOrderBooks()
 									.ToCandles(mdMsg, subscription.BuildField.Value, candleBuilderProvider: candleBuilderProvider)).WithCancellation(cancellationToken))
 								yield return msg;
@@ -1083,7 +1095,7 @@ public static class StorageHelper
 				else if (buildFrom == DataType.MarketDepth)
 				{
 					await foreach (var msg in LoadFromEnumerable(((IMarketDataStorage<QuoteChangeMessage>)storage)
-							.LoadAsync(from, to, cancellationToken)
+							.LoadAsync(from, to)
 							.ToCandles(mdMsg, subscription.BuildField ?? Level1Fields.SpreadMiddle, candleBuilderProvider: candleBuilderProvider)).WithCancellation(cancellationToken))
 						yield return msg;
 				}
@@ -1655,7 +1667,7 @@ public static class StorageHelper
 	}
 
 	/// <summary>
-	/// Synchronous wrapper for <see cref="IMarketDataStorage.LoadAsync(DateTime, CancellationToken)"/>.
+	/// Synchronous wrapper for <see cref="IMarketDataStorage.LoadAsync(DateTime)"/>.
 	/// </summary>
 	/// <param name="storage">Market data storage.</param>
 	/// <param name="date">Date, for which data shall be loaded.</param>
@@ -1667,7 +1679,7 @@ public static class StorageHelper
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
 
-		return AsyncHelper.Run(() => storage.LoadAsync(date, default).ToArrayAsync(default));
+		return AsyncHelper.Run(() => storage.LoadAsync(date).ToArrayAsync(default));
 	}
 
 	/// <summary>
@@ -1722,7 +1734,7 @@ public static class StorageHelper
 	}
 
 	/// <summary>
-	/// Synchronous wrapper for <see cref="IMarketDataStorage{TMessage}.LoadAsync(DateTime, CancellationToken)"/>.
+	/// Synchronous wrapper for <see cref="IMarketDataStorage{TMessage}.LoadAsync(DateTime)"/>.
 	/// </summary>
 	/// <typeparam name="TMessage">Market data type.</typeparam>
 	/// <param name="storage">Market data storage.</param>
@@ -1736,7 +1748,7 @@ public static class StorageHelper
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
 
-		return AsyncHelper.Run(() => storage.LoadAsync(date, default).ToArrayAsync(default));
+		return AsyncHelper.Run(() => storage.LoadAsync(date).ToArrayAsync(default));
 	}
 
 	/// <summary>

@@ -53,7 +53,7 @@ type BiggestCandleScript() =
                             // Get candle storage for the specified timeframe
                             let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
                             // Load all candles in the specified date range
-                            let! allCandles = candleStorage.LoadAsync(from, ``to``, cancellationToken).ToArrayAsync(cancellationToken)
+                            let! allCandles = candleStorage.LoadAsync(from, ``to``).ToArrayAsync(cancellationToken)
 
                             // The candle with the biggest range (by high-low difference)
                             let bigPriceCandle =

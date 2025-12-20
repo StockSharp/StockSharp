@@ -69,9 +69,9 @@ class Program
 		for (var d = begin; d < end; d += TimeSpan.FromDays(1))
 		{
 			// loading ticks
-			var loadedTrades = tradeStorage.LoadAsync(d, token);
+			var loadedTrades = tradeStorage.LoadAsync(d);
 
-			await foreach (var trade in loadedTrades)
+			await foreach (var trade in loadedTrades.WithCancellation(token))
 			{
 				Console.WriteLine(LocalizedStrings.TradeDetails, trade.TradeId, trade);
 			}

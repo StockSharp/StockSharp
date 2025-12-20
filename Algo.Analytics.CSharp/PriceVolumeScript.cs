@@ -29,7 +29,7 @@ public class PriceVolumeScript : IAnalyticsScript
 		}
 
 		// grouping candles by middle price
-		var rows = (await candleStorage.LoadAsync(from, to, cancellationToken)
+		var rows = (await candleStorage.LoadAsync(from, to)
 			.ToArrayAsync(cancellationToken))
 			.GroupBy(c => c.LowPrice + c.GetLength() / 2)
 			.ToDictionary(g => g.Key, g => g.Sum(c => c.TotalVolume));

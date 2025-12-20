@@ -72,7 +72,7 @@ type Chart3DScript() =
                                 doContinue <- false
                             else
                                 // load all candles and group them by hour
-                                let! allCandles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
+                                let! allCandles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
 
                                 // group by "hour" (truncated)
                                 // byHours : dict<int, decimal> => hour -> summed volume

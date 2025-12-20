@@ -528,20 +528,19 @@ public static partial class TraderHelper
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <returns>All available instruments.</returns>
 	public static IEnumerable<Security> LookupAll(this ISecurityProvider provider)
-		=> AsyncHelper.Run(() => LookupAllAsync(provider, default).ToArrayAsync(default));
+		=> AsyncHelper.Run(() => LookupAllAsync(provider).ToArrayAsync(default));
 
 	/// <summary>
 	/// Get all available instruments.
 	/// </summary>
 	/// <param name="provider">The provider of information about instruments.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>All available instruments.</returns>
-	public static IAsyncEnumerable<Security> LookupAllAsync(this ISecurityProvider provider, CancellationToken cancellationToken)
+	public static IAsyncEnumerable<Security> LookupAllAsync(this ISecurityProvider provider)
 	{
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
 
-		return provider.LookupAsync(Extensions.LookupAllCriteriaMessage, cancellationToken);
+		return provider.LookupAsync(Extensions.LookupAllCriteriaMessage);
 	}
 
 	/// <summary>
@@ -1177,22 +1176,29 @@ public static partial class TraderHelper
 	/// Extract securities from the archive.
 	/// </summary>
 	/// <param name="archive">The archive.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Securities.</returns>
-	public static async IAsyncEnumerable<SecurityMessage> ExtractSecuritiesAsync(this byte[] archive, [EnumeratorCancellation] CancellationToken cancellationToken)
+	public static IAsyncEnumerable<SecurityMessage> ExtractSecuritiesAsync(this byte[] archive)
 	{
-		var encoding = Encoding.UTF8;
+		if (archive is null)
+			throw new ArgumentNullException(nameof(archive));
 
-		using var reader = archive.CreateReader(encoding);
+		return Impl(archive);
 
-		while (await reader.NextLineAsync(cancellationToken))
+		static async IAsyncEnumerable<SecurityMessage> Impl(byte[] archive, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			var security = reader.ReadSecurity();
+			var encoding = Encoding.UTF8;
 
-			if (security.IsAllSecurity())
-				continue;
+			using var reader = archive.CreateReader(encoding);
 
-			yield return security;
+			while (await reader.NextLineAsync(cancellationToken))
+			{
+				var security = reader.ReadSecurity();
+
+				if (security.IsAllSecurity())
+					continue;
+
+				yield return security;
+			}
 		}
 	}
 
@@ -1200,15 +1206,22 @@ public static partial class TraderHelper
 	/// Extract boards from the archive.
 	/// </summary>
 	/// <param name="archive">The archive.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Boards.</returns>
-	public static async IAsyncEnumerable<BoardMessage> ExtractBoardsAsync(this byte[] archive, [EnumeratorCancellation]CancellationToken cancellationToken)
+	public static IAsyncEnumerable<BoardMessage> ExtractBoardsAsync(this byte[] archive)
 	{
-		var encoding = Encoding.UTF8;
-		using var reader = archive.CreateReader(encoding);
+		if (archive is null)
+			throw new ArgumentNullException(nameof(archive));
 
-		while (await reader.NextLineAsync(cancellationToken))
-			yield return reader.ReadBoard(encoding);
+		return Impl(archive);
+
+		static async IAsyncEnumerable<BoardMessage> Impl(byte[] archive, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+		{
+			var encoding = Encoding.UTF8;
+			using var reader = archive.CreateReader(encoding);
+
+			while (await reader.NextLineAsync(cancellationToken))
+				yield return reader.ReadBoard(encoding);
+		}
 	}
 
 	/// <summary>

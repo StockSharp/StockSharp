@@ -678,7 +678,7 @@ static class Helper
 		where T : Message, IServerTimeMessage
 	{
 		await storage.DeleteAsync(default, default, cancellationToken);
-		(await storage.LoadAsync(default, default, cancellationToken).ToArrayAsync(cancellationToken)).Count().AssertEqual(0);
+		(await storage.LoadAsync(default, default).ToArrayAsync(cancellationToken)).Count().AssertEqual(0);
 	}
 
 	public static SecurityId CreateSecurityId()

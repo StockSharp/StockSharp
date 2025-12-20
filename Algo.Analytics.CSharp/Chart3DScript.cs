@@ -47,7 +47,7 @@ public class Chart3DScript : IAnalyticsScript
 			}
 
 			// grouping candles by opening time (time part only) with 1 hour truncating
-			var byHours = (await candleStorage.LoadAsync(from, to, cancellationToken)
+			var byHours = (await candleStorage.LoadAsync(from, to)
 				.ToArrayAsync(cancellationToken))
 				.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)))
 				.ToDictionary(g => g.Key.Hours, g => g.Sum(c => c.TotalVolume));

@@ -68,7 +68,7 @@ static class Program
 
 		//----------------------------------Security------------------------------------------------------------------
 		var exchangeInfoProvider = new InMemoryExchangeInfoProvider();
-		await foreach (var secMsg in remoteDrive.LookupSecuritiesAsync(new() { SecurityId = secId }, registry.Securities, token).WithEnforcedCancellation(token))
+		await foreach (var secMsg in remoteDrive.LookupSecuritiesAsync(new() { SecurityId = secId }, registry.Securities).WithEnforcedCancellation(token))
 		{
 			await securityStorage.SaveAsync(secMsg.ToSecurity(exchangeInfoProvider), false, token);
 			Console.WriteLine($"Downloaded [{secMsg.SecurityId}]");
@@ -113,8 +113,8 @@ static class Program
 				Console.WriteLine($"{dataType}={dateTime}");
 
 				var left = 100;
-				var localStor = localStorage.LoadAsync(dateTime, token);
-				await foreach (var marketDate in localStor)
+				var localStor = localStorage.LoadAsync(dateTime);
+				await foreach (var marketDate in localStor.WithCancellation(token))
 				{
 					Console.WriteLine(marketDate);
 

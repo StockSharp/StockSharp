@@ -98,9 +98,8 @@ public interface IMarketDataDrive : IPersistable, IDisposable
 	/// </summary>
 	/// <param name="criteria">Message security lookup for specified criteria.</param>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The sequence of found instruments.</returns>
-	IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider, CancellationToken cancellationToken);
+	IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider);
 }
 
 /// <summary>
@@ -131,7 +130,7 @@ public abstract class BaseMarketDataDrive : Disposable, IMarketDataDrive
 	public abstract ValueTask VerifyAsync(CancellationToken cancellationToken);
 
 	/// <inheritdoc />
-	public abstract IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider, CancellationToken cancellationToken);
+	public abstract IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider);
 
 	/// <summary>
 	/// Load settings.

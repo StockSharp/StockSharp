@@ -302,8 +302,8 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		=> CreateClient().VerifyAsync(cancellationToken);
 
 	/// <inheritdoc />
-	public override IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider, CancellationToken cancellationToken)
-		=> EnsureGetClient().LookupSecuritiesAsync(criteria, securityProvider, cancellationToken);
+	public override IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider)
+		=> EnsureGetClient().LookupSecuritiesAsync(criteria, securityProvider);
 
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)

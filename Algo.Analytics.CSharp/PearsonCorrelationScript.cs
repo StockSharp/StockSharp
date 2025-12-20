@@ -27,7 +27,7 @@ public class PearsonCorrelationScript : IAnalyticsScript
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
 			// get closing prices
-			var prices = await candleStorage.LoadAsync(from, to, cancellationToken).Select(c => (double)c.ClosePrice).ToArrayAsync(cancellationToken);
+			var prices = await candleStorage.LoadAsync(from, to).Select(c => (double)c.ClosePrice).ToArrayAsync(cancellationToken);
 
 			if (prices.Length == 0)
 			{

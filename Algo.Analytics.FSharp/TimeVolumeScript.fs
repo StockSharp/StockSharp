@@ -52,7 +52,7 @@ type TimeVolumeScript() =
                         logs.LogWarning("no data")
                     else
                         // Group candles by hour (truncate open time to 1 hour)
-                        let! candles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
+                        let! candles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
                         let rows =
                             candles
                                 .GroupBy(fun c ->

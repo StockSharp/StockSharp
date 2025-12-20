@@ -47,7 +47,7 @@ type PearsonCorrelationScript() =
                     for security in securities do
                         if not cancellationToken.IsCancellationRequested then
                             let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
-                            let! candles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
+                            let! candles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
                             let prices = candles |> Seq.map (fun c -> float c.ClosePrice) |> Seq.toArray
                             if prices.Length = 0 then
                                 logs.LogWarning("No data for {0}", security)

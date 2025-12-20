@@ -28,12 +28,12 @@ partial class Strategy
 	public ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)
 		=> SecurityProvider.LookupByIdAsync(id, cancellationToken);
 
-	IAsyncEnumerable<Security> ISecurityProvider.LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
-		=> SecurityProvider.LookupAsync(criteria, cancellationToken);
+	IAsyncEnumerable<Security> ISecurityProvider.LookupAsync(SecurityLookupMessage criteria)
+		=> SecurityProvider.LookupAsync(criteria);
 
 	ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
 		=> SecurityProvider.LookupMessageByIdAsync(id, cancellationToken);
 
-	IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
-		=> SecurityProvider.LookupMessagesAsync(criteria, cancellationToken);
+	IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria)
+		=> SecurityProvider.LookupMessagesAsync(criteria);
 }

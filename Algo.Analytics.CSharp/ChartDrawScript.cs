@@ -28,7 +28,7 @@ public class ChartDrawScript : IAnalyticsScript
 			// get candle storage
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
-			await foreach (var candle in candleStorage.LoadAsync(from, to, cancellationToken).WithEnforcedCancellation(cancellationToken))
+			await foreach (var candle in candleStorage.LoadAsync(from, to).WithCancellation(cancellationToken))
 			{
 				// fill series
 				candlesSeries[candle.OpenTime] = candle.ClosePrice;

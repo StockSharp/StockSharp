@@ -103,194 +103,198 @@ public class CsvParser : BaseLogReceiver
 	/// Parse CSV file.
 	/// </summary>
 	/// <param name="stream">The file stream.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Parsed instances.</returns>
-	public async IAsyncEnumerable<Message> Parse(Stream stream, [EnumeratorCancellation]CancellationToken cancellationToken)
+	public IAsyncEnumerable<Message> Parse(Stream stream)
 	{
 		ArgumentNullException.ThrowIfNull(stream);
 
-		var columnSeparator = ColumnSeparator.ReplaceIgnoreCase("TAB", "\t");
+		return Impl(this, stream);
 
-		using var reader = new CsvFileReader(stream, LineSeparator) { Delimiter = columnSeparator[0] };
-
-		var skipLines = SkipFromHeader;
-		var lineIndex = 0;
-
-		var fields = Fields.ToArray();
-
-		fields.ForEach(f => f.Reset());
-
-		var cells = new List<string>();
-
-		var isDepth = DataType == DataType.MarketDepth;
-
-		var quoteMsg = isDepth ? new QuoteChangeMessage() : null;
-		var bids = isDepth ? new List<QuoteChange>() : null;
-		var asks = isDepth ? new List<QuoteChange>() : null;
-		var hasPos = false;
-
-		void AddQuote(TimeQuoteChange quote)
+		static async IAsyncEnumerable<Message> Impl(CsvParser parser, Stream stream, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			var qq = quote.Quote;
+			var columnSeparator = parser.ColumnSeparator.ReplaceIgnoreCase("TAB", "\t");
 
-			if (qq.StartPosition != default || qq.EndPosition != default)
-				hasPos = true;
+			using var reader = new CsvFileReader(stream, parser.LineSeparator) { Delimiter = columnSeparator[0] };
 
-			(quote.Side == Sides.Buy ? bids : asks).Add(qq);
-		}
+			var skipLines = parser.SkipFromHeader;
+			var lineIndex = 0;
 
-		void FillQuote(TimeQuoteChange quote)
-		{
-			quoteMsg.ServerTime = quote.ServerTime;
-			quoteMsg.SecurityId = quote.SecurityId;
-			quoteMsg.LocalTime = quote.LocalTime;
+			var fields = parser.Fields.ToArray();
 
-			AddQuote(quote);
-		}
+			fields.ForEach(f => f.Reset());
 
-		void FlushQuotes()
-		{
-			quoteMsg.Bids = [.. bids];
-			quoteMsg.Asks = [.. asks];
-			quoteMsg.HasPositions = hasPos;
-		}
+			var cells = new List<string>();
 
-		var adapters = new Dictionary<Type, IMessageAdapter>();
+			var isDepth = parser.DataType == DataType.MarketDepth;
 
-		while (await reader.ReadRowAsync(cells, cancellationToken))
-		{
-			lineIndex++;
+			var quoteMsg = isDepth ? new QuoteChangeMessage() : null;
+			var bids = isDepth ? new List<QuoteChange>() : null;
+			var asks = isDepth ? new List<QuoteChange>() : null;
+			var hasPos = false;
 
-			if (skipLines > 0)
+			void AddQuote(TimeQuoteChange quote)
 			{
-				skipLines--;
-				continue;
+				var qq = quote.Quote;
+
+				if (qq.StartPosition != default || qq.EndPosition != default)
+					hasPos = true;
+
+				(quote.Side == Sides.Buy ? bids : asks).Add(qq);
 			}
 
-			dynamic instance = CreateInstance(isDepth);
-
-			var mappings = new Dictionary<string, SecurityIdMapping>(StringComparer.InvariantCultureIgnoreCase);
-
-			foreach (var field in fields)
+			void FillQuote(TimeQuoteChange quote)
 			{
-				cancellationToken.ThrowIfCancellationRequested();
+				quoteMsg.ServerTime = quote.ServerTime;
+				quoteMsg.SecurityId = quote.SecurityId;
+				quoteMsg.LocalTime = quote.LocalTime;
 
-				if (field.Order >= cells.Count)
-					throw new InvalidOperationException(LocalizedStrings.IndexMoreThanLen.Put(field.DisplayName, field.Order, cells.Count));
-
-				try
-				{
-					if (field.Order == null)
-					{
-						if (field.IsRequired)
-							field.ApplyDefaultValue(instance);
-					}
-					else
-					{
-						var cell = cells[field.Order.Value];
-
-						if (field.IsAdapter)
-						{
-							var adapter = adapters.SafeAdd(field.AdapterType, key => key.CreateAdapter());
-							var info = mappings.SafeAdd(adapter.StorageName, _ => new());
-
-							field.ApplyFileValue(info, cell);
-						}
-						else
-							field.ApplyFileValue(instance, cell);
-					}
-				}
-				catch (Exception ex)
-				{
-					throw new InvalidOperationException(LocalizedStrings.CsvImportError.Put(lineIndex, field.Order, field.Order == null ? "NULL" : cells[field.Order.Value], field.DisplayName), ex);
-				}
+				AddQuote(quote);
 			}
 
-			if (instance is not SecurityMessage secMsg)
+			void FlushQuotes()
 			{
-				switch (instance)
-				{
-					case ExecutionMessage execMsg:
-						execMsg.DataTypeEx = DataType;
-						break;
-					case CandleMessage candleMsg:
-						candleMsg.State = CandleStates.Finished;
-						break;
-				}
+				quoteMsg.Bids = [.. bids];
+				quoteMsg.Asks = [.. asks];
+				quoteMsg.HasPositions = hasPos;
 			}
-			else
-			{
-				if (secMsg.SecurityId.SecurityCode.IsEmpty() || secMsg.SecurityId.BoardCode.IsEmpty())
-				{
-					if (!IgnoreNonIdSecurities)
-						LogError(LocalizedStrings.LineNoSecurityId.Put(reader.CurrLine));
 
+			var adapters = new Dictionary<Type, IMessageAdapter>();
+
+			while (await reader.ReadRowAsync(cells, cancellationToken))
+			{
+				lineIndex++;
+
+				if (skipLines > 0)
+				{
+					skipLines--;
 					continue;
 				}
-				else
+
+				dynamic instance = parser.CreateInstance(isDepth);
+
+				var mappings = new Dictionary<string, SecurityIdMapping>(StringComparer.InvariantCultureIgnoreCase);
+
+				foreach (var field in fields)
 				{
-					foreach (var pair in mappings)
+					cancellationToken.ThrowIfCancellationRequested();
+
+					if (field.Order >= cells.Count)
+						throw new InvalidOperationException(LocalizedStrings.IndexMoreThanLen.Put(field.DisplayName, field.Order, cells.Count));
+
+					try
 					{
-						cancellationToken.ThrowIfCancellationRequested();
-
-						var info = pair.Value;
-
-						if (info.AdapterId.SecurityCode.IsEmpty())
-							continue;
-
-						if (info.AdapterId.BoardCode.IsEmpty())
+						if (field.Order == null)
 						{
-							var adapterId = info.AdapterId;
-							adapterId.BoardCode = secMsg.SecurityId.BoardCode;
-							info.AdapterId = adapterId;
+							if (field.IsRequired)
+								field.ApplyDefaultValue(instance);
 						}
-
-						info.StockSharpId = secMsg.SecurityId;
-
-						yield return new SecurityMappingMessage
+						else
 						{
-							StorageName = pair.Key,
-							Mapping = info,
-						};
+							var cell = cells[field.Order.Value];
+
+							if (field.IsAdapter)
+							{
+								var adapter = adapters.SafeAdd(field.AdapterType, key => key.CreateAdapter());
+								var info = mappings.SafeAdd(adapter.StorageName, _ => new());
+
+								field.ApplyFileValue(info, cell);
+							}
+							else
+								field.ApplyFileValue(instance, cell);
+						}
+					}
+					catch (Exception ex)
+					{
+						throw new InvalidOperationException(LocalizedStrings.CsvImportError.Put(lineIndex, field.Order, field.Order == null ? "NULL" : cells[field.Order.Value], field.DisplayName), ex);
 					}
 				}
-			}
 
-			if (quoteMsg != null)
-			{
-				var quote = (TimeQuoteChange)instance;
-
-				if (bids.IsEmpty() && asks.IsEmpty())
+				if (instance is not SecurityMessage secMsg)
 				{
-					FillQuote(quote);
+					switch (instance)
+					{
+						case ExecutionMessage execMsg:
+							execMsg.DataTypeEx = parser.DataType;
+							break;
+						case CandleMessage candleMsg:
+							candleMsg.State = CandleStates.Finished;
+							break;
+					}
 				}
 				else
 				{
-					if (quoteMsg.ServerTime == quote.ServerTime && quoteMsg.SecurityId == quote.SecurityId)
+					if (secMsg.SecurityId.SecurityCode.IsEmpty() || secMsg.SecurityId.BoardCode.IsEmpty())
 					{
-						AddQuote(quote);
+						if (!parser.IgnoreNonIdSecurities)
+							parser.LogError(LocalizedStrings.LineNoSecurityId.Put(reader.CurrLine));
+
+						continue;
 					}
 					else
 					{
-						FlushQuotes();
-						yield return quoteMsg;
+						foreach (var pair in mappings)
+						{
+							cancellationToken.ThrowIfCancellationRequested();
 
-						quoteMsg = new();
-						bids = [];
-						asks = [];
-						hasPos = false;
-						FillQuote(quote);
+							var info = pair.Value;
+
+							if (info.AdapterId.SecurityCode.IsEmpty())
+								continue;
+
+							if (info.AdapterId.BoardCode.IsEmpty())
+							{
+								var adapterId = info.AdapterId;
+								adapterId.BoardCode = secMsg.SecurityId.BoardCode;
+								info.AdapterId = adapterId;
+							}
+
+							info.StockSharpId = secMsg.SecurityId;
+
+							yield return new SecurityMappingMessage
+							{
+								StorageName = pair.Key,
+								Mapping = info,
+							};
+						}
 					}
 				}
-			}
-			else
-				yield return instance;
-		}
 
-		if (quoteMsg != null && (!bids.IsEmpty() || !asks.IsEmpty()))
-		{
-			FlushQuotes();
-			yield return quoteMsg;
+				if (quoteMsg != null)
+				{
+					var quote = (TimeQuoteChange)instance;
+
+					if (bids.IsEmpty() && asks.IsEmpty())
+					{
+						FillQuote(quote);
+					}
+					else
+					{
+						if (quoteMsg.ServerTime == quote.ServerTime && quoteMsg.SecurityId == quote.SecurityId)
+						{
+							AddQuote(quote);
+						}
+						else
+						{
+							FlushQuotes();
+							yield return quoteMsg;
+
+							quoteMsg = new();
+							bids = [];
+							asks = [];
+							hasPos = false;
+							FillQuote(quote);
+						}
+					}
+				}
+				else
+					yield return instance;
+			}
+
+			if (quoteMsg != null && (!bids.IsEmpty() || !asks.IsEmpty()))
+			{
+				FlushQuotes();
+				yield return quoteMsg;
+			}
 		}
 	}
 

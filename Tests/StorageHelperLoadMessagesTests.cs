@@ -157,22 +157,24 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 	};
 
 	[TestMethod]
-	public void FromNull_ReturnsNull_AndSendsNothing()
+	public async Task FromNull_ReturnsNull_AndSendsNothing()
 	{
 		var (settings, provider, secId) = CreateEnv();
 
 		var output = new List<Message>();
+		var context = new StorageLoadContext();
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 1,
 			IsSubscribe = true,
 			SecurityId = secId,
 			DataType2 = DataType.Ticks,
 			From = null,
-		}, output.Add);
+		}, context))
+			output.Add(msg);
 
-		result.AssertNull();
+		context.HasData.AssertFalse();
 		output.Count.AssertEqual(0);
 	}
 
@@ -193,8 +195,9 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		await settings.GetStorage<ExecutionMessage>(secId, DataType.Ticks).SaveAsync(ticks, token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 100,
 			IsSubscribe = true,
@@ -205,11 +208,12 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			BuildMode = MarketDataBuildModes.Load,
 			Skip = 1,
 			Count = 1,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
-		result.Value.lastDate.AssertEqual(ticks[1].ServerTime);
-		result.Value.left.AssertEqual(0L);
+		context.HasData.AssertTrue();
+		context.LastDate.AssertEqual(ticks[1].ServerTime);
+		context.Left.AssertEqual(0L);
 
 		outMessages.Count.AssertEqual(2);
 		outMessages[0].AssertOfType<SubscriptionResponseMessage>();
@@ -238,8 +242,9 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		], token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 200,
 			IsSubscribe = true,
@@ -250,9 +255,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			From = date.AddMinutes(-1),
 			To = date.AddMinutes(10),
 			Count = 10,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
+		context.HasData.AssertTrue();
 		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
 
 		var level1 = outMessages.OfType<Level1ChangeMessage>().ToArray();
@@ -276,8 +282,9 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		], token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 300,
 			IsSubscribe = true,
@@ -288,9 +295,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			From = date.AddMinutes(-1),
 			To = date.AddMinutes(10),
 			Count = 10,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
+		context.HasData.AssertTrue();
 		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
 
 		var depths = outMessages.OfType<QuoteChangeMessage>().ToArray();
@@ -313,8 +321,9 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		], token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 400,
 			IsSubscribe = true,
@@ -325,9 +334,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			From = date.AddMinutes(-1),
 			To = date.AddMinutes(10),
 			Count = 10,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
+		context.HasData.AssertTrue();
 		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
 
 		var ticks = outMessages.OfType<ExecutionMessage>().ToArray();
@@ -352,10 +362,11 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		], token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 
 		var tf = TimeSpan.FromMinutes(1);
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 500,
 			IsSubscribe = true,
@@ -366,9 +377,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			From = date.AddMinutes(-1),
 			To = date.AddMinutes(10),
 			Count = 10,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
+		context.HasData.AssertTrue();
 		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
@@ -395,9 +407,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		], token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 		var tf = TimeSpan.FromMinutes(1);
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 600,
 			IsSubscribe = true,
@@ -409,9 +422,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			From = date.AddMinutes(-1),
 			To = date.AddMinutes(10),
 			Count = 10,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
+		context.HasData.AssertTrue();
 		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
@@ -438,9 +452,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		], token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 		var tf = TimeSpan.FromMinutes(1);
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 700,
 			IsSubscribe = true,
@@ -451,9 +466,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			From = date.AddMinutes(-1),
 			To = date.AddMinutes(10),
 			Count = 10,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
+		context.HasData.AssertTrue();
 		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
@@ -480,9 +496,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		], token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 		var tf = TimeSpan.FromMinutes(1);
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 800,
 			IsSubscribe = true,
@@ -493,9 +510,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			From = date.AddMinutes(-1),
 			To = date.AddMinutes(10),
 			Count = 10,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
+		context.HasData.AssertTrue();
 		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
@@ -521,8 +539,9 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		], token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 900,
 			IsSubscribe = true,
@@ -533,9 +552,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			From = date,
 			To = date.AddMinutes(10),
 			Count = 10,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
+		context.HasData.AssertTrue();
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
 		candles.Length.AssertEqual(1);
@@ -571,8 +591,9 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		], token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 1000,
 			IsSubscribe = true,
@@ -584,9 +605,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			From = date,
 			To = date.AddMinutes(10),
 			Count = 2,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
+		context.HasData.AssertTrue();
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
 		candles.Length.AssertEqual(2);
@@ -613,8 +635,9 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		await settings.GetStorage<CandleMessage>(secId, smallTf.TimeFrame()).SaveAsync(oneMinCandles, token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 1100,
 			IsSubscribe = true,
@@ -625,9 +648,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			From = date,
 			To = date.AddMinutes(10),
 			Count = 10,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
+		context.HasData.AssertTrue();
 
 		var bigCandles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
 		bigCandles.Length.AssertEqual(2);
@@ -664,8 +688,9 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		], token);
 
 		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
 
-		var result = settings.LoadMessages(provider, new MarketDataMessage
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
 		{
 			TransactionId = 1200,
 			IsSubscribe = true,
@@ -677,9 +702,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			From = date,
 			To = date.AddMinutes(10),
 			Count = 2,
-		}, outMessages.Add);
+		}, context, token))
+			outMessages.Add(msg);
 
-		result.AssertNotNull();
+		context.HasData.AssertTrue();
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
 		candles.Length.AssertEqual(2);

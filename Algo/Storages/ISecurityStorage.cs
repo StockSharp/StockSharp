@@ -155,14 +155,8 @@ public class InMemorySecurityStorage : ISecurityStorage
 	}
 
 	/// <inheritdoc />
-	public async IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-		foreach (var s in _inner.SyncGet(d => d.Values.Filter(criteria).ToArray()).Concat(await _underlying.LookupAsync(criteria, cancellationToken).ToArrayAsync(cancellationToken)).Distinct())
-		{
-			cancellationToken.ThrowIfCancellationRequested();
-			yield return s;
-		}
-    }
+	public IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria)
+		=> _inner.SyncGet(d => d.Values.Filter(criteria).ToArray()).ToAsyncEnumerable().Concat(_underlying.LookupAsync(criteria)).Distinct();
 
 	/// <inheritdoc />
 	public async ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)
@@ -171,11 +165,8 @@ public class InMemorySecurityStorage : ISecurityStorage
 	async ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
 		=> (await LookupByIdAsync(id, cancellationToken))?.ToMessage();
 
-	async IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
-	{
-		await foreach (var s in LookupAsync(criteria, cancellationToken).WithEnforcedCancellation(cancellationToken))
-			yield return s.ToMessage();
-	}
+	IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria)
+		=> LookupAsync(criteria).Select(s => s.ToMessage());
 
 	/// <inheritdoc />
 	public ValueTask SaveAsync(Security security, bool forced, CancellationToken cancellationToken)

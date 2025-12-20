@@ -109,8 +109,8 @@ class CandleStorage<TCandleMessage> :
 		}
 	}
 
-	IAsyncEnumerable<CandleMessage> IMarketDataStorage<CandleMessage>.LoadAsync(DateTime date, CancellationToken cancellationToken)
-		=> LoadAsync(date, cancellationToken);
+	IAsyncEnumerable<CandleMessage> IMarketDataStorage<CandleMessage>.LoadAsync(DateTime date)
+		=> LoadAsync(date);
 
 	IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer => _serializer;
 

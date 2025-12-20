@@ -17,12 +17,6 @@ public static class BaseExporterExtensions
 		if (values == null)
 			throw new ArgumentNullException(nameof(values));
 
-		static async IAsyncEnumerable<object> toAsync(IEnumerable source)
-		{
-			foreach (var item in source)
-				yield return item;
-		}
-
-		return exporter.Export(toAsync(values), cancellationToken);
+		return exporter.Export(values.Cast<object>().ToAsyncEnumerable(), cancellationToken);
 	}
 }

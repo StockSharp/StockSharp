@@ -58,7 +58,7 @@ type IndicatorScript() =
                             let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
                             // load candles in the specified date range
-                            let! candles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
+                            let! candles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
 
                             // fill close-price and indicator series
                             for candle in candles do

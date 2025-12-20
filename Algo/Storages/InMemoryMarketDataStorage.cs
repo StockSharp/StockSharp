@@ -41,10 +41,10 @@ public sealed class InMemoryMarketDataStorage<T> : IMarketDataStorage<T>
 	IMarketDataSerializer<T> IMarketDataStorage<T>.Serializer => throw new NotSupportedException();
 
 	/// <inheritdoc />
-	public IAsyncEnumerable<T> LoadAsync(DateTime date, CancellationToken cancellationToken)
+	public IAsyncEnumerable<T> LoadAsync(DateTime date)
 		=> _getData(date);
 
-	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken) => LoadAsync(date, cancellationToken);
+	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date) => LoadAsync(date);
 
 	ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken) => throw new NotSupportedException();
 	

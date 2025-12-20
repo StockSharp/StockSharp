@@ -53,7 +53,7 @@ type ChartDrawScript() =
                             let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
                             // Load candles within the specified date range
-                            let! candles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
+                            let! candles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
 
                             // Fill dictionaries with close price and volume
                             for candle in candles do

@@ -64,7 +64,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 
 		var isSecurityRequired = DataType.IsSecurityRequired;
 
-		await foreach (var msg in Parse(stream, cancellationToken).WithEnforcedCancellation(cancellationToken))
+		await foreach (var msg in Parse(stream).WithCancellation(cancellationToken))
 		{
 			if (msg is SecurityMappingMessage)
 				continue;

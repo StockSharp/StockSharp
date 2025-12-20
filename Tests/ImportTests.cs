@@ -83,7 +83,7 @@ public class ImportTests : BaseTestClass
 				ColumnSeparator = ";"
 			};
 
-			var msgs = await parser.Parse(stream, token).ToArrayAsync(token);
+			var msgs = await parser.Parse(stream).ToArrayAsync(token);
 
 			msgs.Length.AssertEqual(importCnt.Value);
 

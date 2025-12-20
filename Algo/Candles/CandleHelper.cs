@@ -823,45 +823,53 @@ public static partial class CandleHelper
 		=> candle1 is not null && candle2 is not null && ((candle1 is Candle && ReferenceEquals(candle1, candle2)) || candle1.OpenTime == candle2.OpenTime);
 #pragma warning restore CS0618 // Type or member is obsolete
 
-	private static async IAsyncEnumerable<CandleMessage> ToCandlesAsync<TSourceMessage>(this IAsyncEnumerable<TSourceMessage> messages, MarketDataMessage mdMsg, Func<TSourceMessage, ICandleBuilderValueTransform> createTransform, CandleBuilderProvider candleBuilderProvider = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	private static IAsyncEnumerable<CandleMessage> ToCandlesAsync<TSourceMessage>(this IAsyncEnumerable<TSourceMessage> messages, MarketDataMessage mdMsg, Func<TSourceMessage, ICandleBuilderValueTransform> createTransform, CandleBuilderProvider candleBuilderProvider = null)
 		where TSourceMessage : Message
 	{
+		if (messages is null)
+			throw new ArgumentNullException(nameof(messages));
+
 		if (createTransform is null)
 			throw new ArgumentNullException(nameof(createTransform));
 
-		CandleMessage lastActiveCandle = null;
+		return Impl(messages, mdMsg, createTransform, candleBuilderProvider);
 
-		using var builder = candleBuilderProvider.CreateBuilder(mdMsg.DataType2.MessageType);
-
-		var subscription = new CandleBuilderSubscription(mdMsg);
-		var isFinishedOnly = mdMsg.IsFinishedOnly;
-
-		ICandleBuilderValueTransform transform = null;
-
-		await foreach (var message in messages.WithCancellation(cancellationToken))
+		static async IAsyncEnumerable<CandleMessage> Impl(IAsyncEnumerable<TSourceMessage> messages, MarketDataMessage mdMsg, Func<TSourceMessage, ICandleBuilderValueTransform> createTransform, CandleBuilderProvider candleBuilderProvider, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			transform ??= createTransform(message);
+			CandleMessage lastActiveCandle = null;
 
-			if (!transform.Process(message))
-				continue;
+			using var builder = candleBuilderProvider.CreateBuilder(mdMsg.DataType2.MessageType);
 
-			foreach (var candle in builder.Process(subscription, transform))
+			var subscription = new CandleBuilderSubscription(mdMsg);
+			var isFinishedOnly = mdMsg.IsFinishedOnly;
+
+			ICandleBuilderValueTransform transform = null;
+
+			await foreach (var message in messages.WithCancellation(cancellationToken))
 			{
-				if (candle.State == CandleStates.Finished)
+				transform ??= createTransform(message);
+
+				if (!transform.Process(message))
+					continue;
+
+				foreach (var candle in builder.Process(subscription, transform))
 				{
-					lastActiveCandle = null;
-					yield return candle;
-				}
-				else
-				{
-					if (!isFinishedOnly)
-						lastActiveCandle = candle;
+					if (candle.State == CandleStates.Finished)
+					{
+						lastActiveCandle = null;
+						yield return candle;
+					}
+					else
+					{
+						if (!isFinishedOnly)
+							lastActiveCandle = candle;
+					}
 				}
 			}
-		}
 
-		if (lastActiveCandle != null)
-			yield return lastActiveCandle;
+			if (lastActiveCandle != null)
+				yield return lastActiveCandle;
+		}
 	}
 
 	/// <summary>
@@ -870,14 +878,13 @@ public static partial class CandleHelper
 	/// <param name="executions">Tick data.</param>
 	/// <param name="subscription">Market data subscription.</param>
 	/// <param name="candleBuilderProvider">Candle builders provider.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Candles.</returns>
-	public static IAsyncEnumerable<CandleMessage> ToCandles(this IAsyncEnumerable<ExecutionMessage> executions, Subscription subscription, CandleBuilderProvider candleBuilderProvider = null, CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<CandleMessage> ToCandles(this IAsyncEnumerable<ExecutionMessage> executions, Subscription subscription, CandleBuilderProvider candleBuilderProvider = null)
 	{
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		return ToCandles(executions, subscription.MarketData, candleBuilderProvider, cancellationToken);
+		return ToCandles(executions, subscription.MarketData, candleBuilderProvider);
 	}
 
 	/// <summary>
@@ -886,9 +893,8 @@ public static partial class CandleHelper
 	/// <param name="executions">Tick data.</param>
 	/// <param name="mdMsg">Market data subscription.</param>
 	/// <param name="candleBuilderProvider">Candle builders provider.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Candles.</returns>
-	public static IAsyncEnumerable<CandleMessage> ToCandles(this IAsyncEnumerable<ExecutionMessage> executions, MarketDataMessage mdMsg, CandleBuilderProvider candleBuilderProvider = null, CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<CandleMessage> ToCandles(this IAsyncEnumerable<ExecutionMessage> executions, MarketDataMessage mdMsg, CandleBuilderProvider candleBuilderProvider = null)
 	{
 		return executions.ToCandlesAsync(mdMsg, execMsg =>
 		{
@@ -898,7 +904,7 @@ public static partial class CandleHelper
 				return new OrderLogCandleBuilderValueTransform();
 			else
 				throw new ArgumentOutOfRangeException(nameof(execMsg), execMsg.DataType, LocalizedStrings.InvalidValue);
-		}, candleBuilderProvider, cancellationToken);
+		}, candleBuilderProvider);
 	}
 
 	/// <summary>
@@ -908,14 +914,13 @@ public static partial class CandleHelper
 	/// <param name="subscription">Market data subscription.</param>
 	/// <param name="type">Type of candle depth based data.</param>
 	/// <param name="candleBuilderProvider">Candle builders provider.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Candles.</returns>
-	public static IAsyncEnumerable<CandleMessage> ToCandles(this IAsyncEnumerable<QuoteChangeMessage> depths, Subscription subscription, Level1Fields type = Level1Fields.SpreadMiddle, CandleBuilderProvider candleBuilderProvider = null, CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<CandleMessage> ToCandles(this IAsyncEnumerable<QuoteChangeMessage> depths, Subscription subscription, Level1Fields type = Level1Fields.SpreadMiddle, CandleBuilderProvider candleBuilderProvider = null)
 	{
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		return ToCandles(depths, subscription.MarketData, type, candleBuilderProvider, cancellationToken);
+		return ToCandles(depths, subscription.MarketData, type, candleBuilderProvider);
 	}
 
 	/// <summary>
@@ -925,11 +930,10 @@ public static partial class CandleHelper
 	/// <param name="mdMsg">Market data subscription.</param>
 	/// <param name="type">Type of candle depth based data.</param>
 	/// <param name="candleBuilderProvider">Candle builders provider.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Candles.</returns>
-	public static IAsyncEnumerable<CandleMessage> ToCandles(this IAsyncEnumerable<QuoteChangeMessage> depths, MarketDataMessage mdMsg, Level1Fields type = Level1Fields.SpreadMiddle, CandleBuilderProvider candleBuilderProvider = null, CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<CandleMessage> ToCandles(this IAsyncEnumerable<QuoteChangeMessage> depths, MarketDataMessage mdMsg, Level1Fields type = Level1Fields.SpreadMiddle, CandleBuilderProvider candleBuilderProvider = null)
 	{
-		return depths.ToCandlesAsync(mdMsg, quoteMsg => new QuoteCandleBuilderValueTransform(mdMsg.PriceStep, mdMsg.VolumeStep) { Type = type }, candleBuilderProvider, cancellationToken);
+		return depths.ToCandlesAsync(mdMsg, quoteMsg => new QuoteCandleBuilderValueTransform(mdMsg.PriceStep, mdMsg.VolumeStep) { Type = type }, candleBuilderProvider);
 	}
 
 	/// <summary>
@@ -937,27 +941,31 @@ public static partial class CandleHelper
 	/// </summary>
 	/// <param name="candles">Candles.</param>
 	/// <param name="volumeStep">Volume step.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Tick trades.</returns>
-	public static async IAsyncEnumerable<ExecutionMessage> ToTrades<TCandle>(this IAsyncEnumerable<TCandle> candles, decimal volumeStep, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<ExecutionMessage> ToTrades<TCandle>(this IAsyncEnumerable<TCandle> candles, decimal volumeStep)
 		where TCandle : ICandleMessage
 	{
 		if (candles is null)
 			throw new ArgumentNullException(nameof(candles));
 
-		var decimals = volumeStep.GetCachedDecimals();
-		var ticks = new (Sides? side, decimal price, decimal volume, DateTime time)[4];
+		return Impl(candles, volumeStep);
 
-		await foreach (var candle in candles.WithCancellation(cancellationToken))
+		static async IAsyncEnumerable<ExecutionMessage> Impl(IAsyncEnumerable<TCandle> candles, decimal volumeStep, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			candle.ConvertToTrades(volumeStep, decimals, ticks);
+			var decimals = volumeStep.GetCachedDecimals();
+			var ticks = new (Sides? side, decimal price, decimal volume, DateTime time)[4];
 
-			foreach (var t in ticks)
+			await foreach (var candle in candles.WithCancellation(cancellationToken))
 			{
-				if (t == default)
-					break;
+				candle.ConvertToTrades(volumeStep, decimals, ticks);
 
-				yield return t.ToTickMessage(candle.SecurityId, candle.LocalTime);
+				foreach (var t in ticks)
+				{
+					if (t == default)
+						break;
+
+					yield return t.ToTickMessage(candle.SecurityId, candle.LocalTime);
+				}
 			}
 		}
 	}
@@ -968,9 +976,8 @@ public static partial class CandleHelper
 	/// <param name="source">Smaller time-frame candles.</param>
 	/// <param name="compressor">Compressor of candles from smaller time-frames to bigger.</param>
 	/// <param name="includeLastCandle">Output last active candle as finished.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Bigger time-frame candles.</returns>
-	public static async IAsyncEnumerable<CandleMessage> Compress(this IAsyncEnumerable<CandleMessage> source, BiggerTimeFrameCandleCompressor compressor, bool includeLastCandle, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	public static IAsyncEnumerable<CandleMessage> Compress(this IAsyncEnumerable<CandleMessage> source, BiggerTimeFrameCandleCompressor compressor, bool includeLastCandle)
 	{
 		if (source == null)
 			throw new ArgumentNullException(nameof(source));
@@ -978,26 +985,31 @@ public static partial class CandleHelper
 		if (compressor == null)
 			throw new ArgumentNullException(nameof(compressor));
 
-		CandleMessage lastActiveCandle = null;
+		return Impl(source, compressor, includeLastCandle);
 
-		await foreach (var message in source.WithCancellation(cancellationToken))
+		static async IAsyncEnumerable<CandleMessage> Impl(IAsyncEnumerable<CandleMessage> source, BiggerTimeFrameCandleCompressor compressor, bool includeLastCandle, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			foreach (var candleMessage in compressor.Process(message))
+			CandleMessage lastActiveCandle = null;
+
+			await foreach (var message in source.WithCancellation(cancellationToken))
 			{
-				if (candleMessage.State == CandleStates.Finished)
+				foreach (var candleMessage in compressor.Process(message))
 				{
-					lastActiveCandle = null;
-					yield return candleMessage;
+					if (candleMessage.State == CandleStates.Finished)
+					{
+						lastActiveCandle = null;
+						yield return candleMessage;
+					}
+					else
+						lastActiveCandle = candleMessage;
 				}
-				else
-					lastActiveCandle = candleMessage;
 			}
+
+			if (!includeLastCandle || lastActiveCandle == null)
+				yield break;
+
+			lastActiveCandle.State = CandleStates.Finished;
+			yield return lastActiveCandle;
 		}
-
-		if (!includeLastCandle || lastActiveCandle == null)
-			yield break;
-
-		lastActiveCandle.State = CandleStates.Finished;
-		yield return lastActiveCandle;
 	}
 }

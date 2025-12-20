@@ -885,7 +885,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 	}
 
 	/// <inheritdoc />
-	public override async IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider, [EnumeratorCancellation]CancellationToken cancellationToken)
+	public override IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider)
 	{
 		if (criteria == null)
 			throw new ArgumentNullException(nameof(criteria));
@@ -893,77 +893,76 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		if (securityProvider == null)
 			throw new ArgumentNullException(nameof(securityProvider));
 
-		var securityPaths = new List<string>();
-
-		foreach (var letterDir in IOHelper.GetDirectories(Path))
+		async IAsyncEnumerable<SecurityMessage> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
 		{
-			cancellationToken.ThrowIfCancellationRequested();
+			var securityPaths = new List<string>();
 
-			var name = IOPath.GetFileName(letterDir);
-
-			if (name == null || name.Length != 1)
-				continue;
-
-			securityPaths.AddRange(IOHelper.GetDirectories(letterDir));
-		}
-
-		cancellationToken.ThrowIfCancellationRequested();
-
-		var existingIds = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
-
-		await foreach (var s in securityProvider.LookupAllAsync(cancellationToken).WithEnforcedCancellation(cancellationToken))
-		{
-			existingIds.Add(s.Id);
-		}
-
-		foreach (var securityPath in securityPaths)
-		{
-			cancellationToken.ThrowIfCancellationRequested();
-
-			var securityId = IOPath.GetFileName(securityPath).FolderNameToSecurityId();
-
-			if (existingIds.Contains(securityId))
-				continue;
-
-			var firstDataFile =
-				Directory.EnumerateDirectories(securityPath)
-					.SelectMany(d => Directory.EnumerateFiles(d, "*.bin")
-						.Concat(Directory.EnumerateFiles(d, "*.csv"))
-						.OrderBy(f => IOPath.GetExtension(f).EqualsIgnoreCase(".bin") ? 0 : 1))
-					.FirstOrDefault();
-
-			if (firstDataFile == null)
-				continue;
-
-			var id = securityId.ToSecurityId();
-
-			decimal priceStep;
-
-			if (IOPath.GetExtension(firstDataFile).EqualsIgnoreCase(".bin"))
+			foreach (var letterDir in IOHelper.GetDirectories(Path))
 			{
-				try
-				{
-					var fileBytes = await File.ReadAllBytesAsync(firstDataFile, cancellationToken).NoWait();
-					priceStep = fileBytes.AsSpan().Slice(6, 16).ToArray().To<decimal>();
-				}
-				catch (Exception ex)
-				{
-					throw new InvalidOperationException(LocalizedStrings.FileWrongFormat.Put(firstDataFile), ex);
-				}
+				var name = IOPath.GetFileName(letterDir);
+
+				if (name == null || name.Length != 1)
+					continue;
+
+				securityPaths.AddRange(IOHelper.GetDirectories(letterDir));
 			}
-			else
-				priceStep = 0.01m;
 
-			var security = new SecurityMessage
+			var existingIds = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+
+			await foreach (var s in securityProvider.LookupAllAsync().WithEnforcedCancellation(cancellationToken))
 			{
-				SecurityId = securityId.ToSecurityId(),
-				PriceStep = priceStep,
-				Name = id.SecurityCode,
-			};
+				existingIds.Add(s.Id);
+			}
 
-			if (security.IsMatch(criteria))
-				yield return security;
+			foreach (var securityPath in securityPaths)
+			{
+				var securityId = IOPath.GetFileName(securityPath).FolderNameToSecurityId();
+
+				if (existingIds.Contains(securityId))
+					continue;
+
+				var firstDataFile =
+					Directory.EnumerateDirectories(securityPath)
+						.SelectMany(d => Directory.EnumerateFiles(d, "*.bin")
+							.Concat(Directory.EnumerateFiles(d, "*.csv"))
+							.OrderBy(f => IOPath.GetExtension(f).EqualsIgnoreCase(".bin") ? 0 : 1))
+						.FirstOrDefault();
+
+				if (firstDataFile == null)
+					continue;
+
+				var id = securityId.ToSecurityId();
+
+				decimal priceStep;
+
+				if (IOPath.GetExtension(firstDataFile).EqualsIgnoreCase(".bin"))
+				{
+					try
+					{
+						var fileBytes = await File.ReadAllBytesAsync(firstDataFile, cancellationToken).NoWait();
+						priceStep = fileBytes.AsSpan().Slice(6, 16).ToArray().To<decimal>();
+					}
+					catch (Exception ex)
+					{
+						throw new InvalidOperationException(LocalizedStrings.FileWrongFormat.Put(firstDataFile), ex);
+					}
+				}
+				else
+					priceStep = 0.01m;
+
+				var security = new SecurityMessage
+				{
+					SecurityId = securityId.ToSecurityId(),
+					PriceStep = priceStep,
+					Name = id.SecurityCode,
+				};
+
+				if (security.IsMatch(criteria))
+					yield return security;
+			}
 		}
+
+		return Impl();	
 	}
 
 	/// <summary>

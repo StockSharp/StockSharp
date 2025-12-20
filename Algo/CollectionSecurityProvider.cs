@@ -53,16 +53,21 @@ public class CollectionSecurityProvider : ISecurityProvider
 		=> new(_inner.TryGetValue(id));
 
 	/// <inheritdoc />
-	public IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
+	public IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria)
 		=> new SyncAsyncEnumerable<Security>(_inner.SyncGet(d => d.Values.Filter(criteria)));
 
 	async ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
 		=> (await LookupByIdAsync(id, cancellationToken))?.ToMessage();
 
-	async IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
+	IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria)
 	{
-		await foreach (var s in LookupAsync(criteria, cancellationToken).WithEnforcedCancellation(cancellationToken))
-			yield return s.ToMessage();
+		return Impl(this, criteria);
+
+		static async IAsyncEnumerable<SecurityMessage> Impl(CollectionSecurityProvider provider, SecurityLookupMessage criteria, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+		{
+			await foreach (var s in provider.LookupAsync(criteria).WithEnforcedCancellation(cancellationToken))
+				yield return s.ToMessage();
+		}
 	}
 
 	/// <summary>

@@ -88,11 +88,11 @@ public class BufferMessageAdapterTests : BaseTestClass
 		bool IMarketDataStorage.AppendOnlyNew { get; set; }
 		IMarketDataSerializer IMarketDataStorage.Serializer => Mock.Of<IMarketDataSerializer>();
 
-		public IAsyncEnumerable<ExecutionMessage> LoadAsync(DateTime date, CancellationToken cancellationToken)
+		public IAsyncEnumerable<ExecutionMessage> LoadAsync(DateTime date)
 			=> AsyncEnumerable.Empty<ExecutionMessage>();
 
-		IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken)
-			=> LoadAsync(date, cancellationToken);
+		IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date)
+			=> LoadAsync(date);
 
 		ValueTask<int> IMarketDataStorage.SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken)
 			=> ((IMarketDataStorage<ExecutionMessage>)this).SaveAsync(data.Cast<ExecutionMessage>(), cancellationToken);

@@ -118,7 +118,7 @@ public class CsvEntityRegistry : IEntityRegistry
 
 		ValueTask<Security> ISecurityProvider.LookupByIdAsync(SecurityId id, CancellationToken cancellationToken) => new(GetById(id));
 
-		IAsyncEnumerable<Security> ISecurityProvider.LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
+		IAsyncEnumerable<Security> ISecurityProvider.LookupAsync(SecurityLookupMessage criteria)
 		{
 			Security[] arr;
 
@@ -141,11 +141,8 @@ public class CsvEntityRegistry : IEntityRegistry
 		ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
 			=> new(GetById(id)?.ToMessage());
 
-		async IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
-		{
-			await foreach (var item in ((ISecurityProvider)this).LookupAsync(criteria, cancellationToken).WithEnforcedCancellation(cancellationToken))
-				yield return item.ToMessage();
-		}
+		IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria)
+			=> ((ISecurityProvider)this).LookupAsync(criteria).Select(s => s.ToMessage());
 
 		ValueTask ISecurityStorage.SaveAsync(Security security, bool forced, CancellationToken cancellationToken)
 		{

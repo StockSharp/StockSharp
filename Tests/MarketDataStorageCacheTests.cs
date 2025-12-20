@@ -37,20 +37,19 @@ public class MarketDataStorageCacheTests : BaseTestClass
 
 		var loadCalls = 0;
 
-		async IAsyncEnumerable<Message> Loader(DateTime _, [EnumeratorCancellation]CancellationToken ct)
+		async IAsyncEnumerable<Message> Loader(DateTime _)
 		{
 			loadCalls++;
 
 			foreach (var message in messages)
 			{
-				ct.ThrowIfCancellationRequested();
 				yield return message;
 				await Task.Yield();
 			}
 		}
 
-		var first = await cache.GetMessagesAsync(secId, DataType.Ticks, date, Loader, token).ToArrayAsync(token);
-		var second = await cache.GetMessagesAsync(secId, DataType.Ticks, date, Loader, token).ToArrayAsync(token);
+		var first = await cache.GetMessagesAsync(secId, DataType.Ticks, date, Loader).ToArrayAsync(token);
+		var second = await cache.GetMessagesAsync(secId, DataType.Ticks, date, Loader).ToArrayAsync(token);
 
 		loadCalls.AssertEqual(1);
 		first.Length.AssertEqual(messages.Length);
@@ -64,9 +63,8 @@ public class MarketDataStorageCacheTests : BaseTestClass
 		var secId = CreateSecurityId();
 		var date = new DateTime(2025, 1, 1);
 
-		async IAsyncEnumerable<Message> Loader(DateTime _, [EnumeratorCancellation]CancellationToken ct)
+		async IAsyncEnumerable<Message> Loader(DateTime _)
 		{
-			ct.ThrowIfCancellationRequested();
 			yield return CreateTick(secId, date.AddHours(1));
 			await Task.Yield();
 		}
@@ -76,7 +74,7 @@ public class MarketDataStorageCacheTests : BaseTestClass
 
 		return ThrowsExactlyAsync<OperationCanceledException>(async () =>
 		{
-			await cache.GetMessagesAsync(secId, DataType.Ticks, date, Loader, cts.Token).ToArrayAsync(cts.Token);
+			await cache.GetMessagesAsync(secId, DataType.Ticks, date, Loader).ToArrayAsync(cts.Token);
 		});
 	}
 
@@ -90,22 +88,21 @@ public class MarketDataStorageCacheTests : BaseTestClass
 
 		var loadCalls = 0;
 
-		async IAsyncEnumerable<Message> Loader(DateTime date, [EnumeratorCancellation] CancellationToken ct)
+		async IAsyncEnumerable<Message> Loader(DateTime date)
 		{
 			loadCalls++;
-			ct.ThrowIfCancellationRequested();
 
 			yield return CreateTick(secId, date.AddHours(1));
 			await Task.Yield();
 		}
 
-		await cache.GetMessagesAsync(secId, DataType.Ticks, new DateTime(2025, 1, 1), Loader, token).ToArrayAsync(token);
-		await cache.GetMessagesAsync(secId, DataType.Ticks, new DateTime(2025, 1, 2), Loader, token).ToArrayAsync(token);
-		await cache.GetMessagesAsync(secId, DataType.Ticks, new DateTime(2025, 1, 3), Loader, token).ToArrayAsync(token);
+		await cache.GetMessagesAsync(secId, DataType.Ticks, new DateTime(2025, 1, 1), Loader).ToArrayAsync(token);
+		await cache.GetMessagesAsync(secId, DataType.Ticks, new DateTime(2025, 1, 2), Loader).ToArrayAsync(token);
+		await cache.GetMessagesAsync(secId, DataType.Ticks, new DateTime(2025, 1, 3), Loader).ToArrayAsync(token);
 
 		loadCalls.AssertEqual(3);
 
-		await cache.GetMessagesAsync(secId, DataType.Ticks, new DateTime(2025, 1, 1), Loader, token).ToArrayAsync(token);
+		await cache.GetMessagesAsync(secId, DataType.Ticks, new DateTime(2025, 1, 1), Loader).ToArrayAsync(token);
 		loadCalls.AssertEqual(4);
 	}
 

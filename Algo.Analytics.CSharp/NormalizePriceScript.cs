@@ -28,7 +28,7 @@ public class NormalizePriceScript : IAnalyticsScript
 
 			decimal? firstClose = null;
 
-			await foreach (var candle in candleStorage.LoadAsync(from, to, cancellationToken).WithEnforcedCancellation(cancellationToken))
+			await foreach (var candle in candleStorage.LoadAsync(from, to).WithCancellation(cancellationToken))
 			{
 				firstClose ??= candle.ClosePrice;
 

@@ -122,13 +122,13 @@ public class CandleTests : BaseTestClass
 		var storageRegistry = Helper.GetStorage(Paths.HistoryDataPath);
 		var token = CancellationToken;
 
-		var loadedCandles = await storageRegistry.GetTimeFrameCandleMessageStorage(secId, tf).LoadAsync(Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1), token).ToArrayAsync(token);
+		var loadedCandles = await storageRegistry.GetTimeFrameCandleMessageStorage(secId, tf).LoadAsync(Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1)).ToArrayAsync(token);
 
 		var sub = new Subscription(tf.TimeFrame(), new SecurityMessage { SecurityId = secId });
 		var mdMsg = sub.MarketData;
 		mdMsg.IsFinishedOnly = false;
 
-		var loadedTicks = await storageRegistry.GetTickMessageStorage(secId).LoadAsync(loadedCandles.First().OpenTime, loadedCandles.Last().OpenTime + tf.AddMicroseconds(-1), token).ToArrayAsync(token);
+		var loadedTicks = await storageRegistry.GetTickMessageStorage(secId).LoadAsync(loadedCandles.First().OpenTime, loadedCandles.Last().OpenTime + tf.AddMicroseconds(-1)).ToArrayAsync(token);
 		var buildedCandles = loadedTicks.ToCandles(mdMsg).ToArray();
 
 		buildedCandles.CompareCandles(loadedCandles, checkExtended: false);
@@ -1685,7 +1685,7 @@ public class CandleTests : BaseTestClass
 		var security = Helper.CreateSecurity();
 		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), security);
 
-		return ThrowsExactlyAsync<NullReferenceException>(async () =>
+		return ThrowsExactlyAsync<ArgumentNullException>(async () =>
 		{
 			IAsyncEnumerable<ExecutionMessage> trades = null;
 			await trades.ToCandles(sub.MarketData).ToArrayAsync(token);

@@ -759,7 +759,7 @@ partial class Connector
 			{
 				var secMsgs = new List<SecurityMessage>();
 
-				await foreach (var secMsg in message.Body.ExtractSecuritiesAsync(cancellationToken))
+				await foreach (var secMsg in message.Body.ExtractSecuritiesAsync().WithCancellation(cancellationToken))
 				{
 					ProcessSecurityMessage(secMsg);
 					secMsgs.Add(secMsg);
@@ -771,7 +771,7 @@ partial class Connector
 			{
 				var boardMsgs = new List<BoardMessage>();
 
-				await foreach (var boardMsg in message.Body.ExtractBoardsAsync(cancellationToken))
+				await foreach (var boardMsg in message.Body.ExtractBoardsAsync().WithCancellation(cancellationToken))
 				{
 					ProcessBoardMessage(boardMsg);
 					boardMsgs.Add(boardMsg);

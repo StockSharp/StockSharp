@@ -44,7 +44,7 @@ static class Program
 		//--------------------------------Candles--------------------------------------
 		var candleStorage = storageRegistry.GetTimeFrameCandleMessageStorage(secId,
 			TimeSpan.FromMinutes(1), format: StorageFormats.Binary);
-		var candles = candleStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2), token);
+		var candles = candleStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2));
 
 		await foreach (var candle in candles.WithEnforcedCancellation(token))
 		{
@@ -55,7 +55,7 @@ static class Program
 
 		//--------------------------------Trades--------------------------------------
 		var tradeStorage = storageRegistry.GetTickMessageStorage(secId, format: StorageFormats.Binary);
-		var trades = tradeStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2), token);
+		var trades = tradeStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2));
 
 		await foreach (var trade in trades.WithEnforcedCancellation(token))
 		{
@@ -66,7 +66,7 @@ static class Program
 
 		//--------------------------------MarketDepths--------------------------------------
 		var marketDepthStorage = storageRegistry.GetQuoteMessageStorage(secId, format: StorageFormats.Binary);
-		var marketDepths = marketDepthStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2), token);
+		var marketDepths = marketDepthStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2));
 
 		await foreach (var marketDepth in marketDepths.WithEnforcedCancellation(token))
 		{
@@ -77,7 +77,7 @@ static class Program
 
 		//--------------------------------Level1--------------------------------------------
 		var level1Storage = storageRegistry.GetLevel1MessageStorage(secId, format: StorageFormats.Binary);
-		var levels1 = level1Storage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2), token);
+		var levels1 = level1Storage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2));
 
 		await foreach (var level1 in levels1.WithEnforcedCancellation(token))
 		{
@@ -102,7 +102,7 @@ static class Program
 			var innerStorage = storageRegistry.GetTimeFrameCandleMessageStorage(innerSec,
 				TimeSpan.FromMinutes(1), format: StorageFormats.Binary);
 
-			innerCandleList.Add(await innerStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2), token).ToArrayAsync(token));
+			innerCandleList.Add(await innerStorage.LoadAsync(new DateTime(2020, 4, 1), new DateTime(2020, 4, 2)).ToArrayAsync(token));
 		}
 
 		var processorProvider = new BasketSecurityProcessorProvider();

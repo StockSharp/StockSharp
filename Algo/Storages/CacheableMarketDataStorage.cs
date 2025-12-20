@@ -20,8 +20,8 @@ public class CacheableMarketDataStorage(IMarketDataStorage underlying, MarketDat
 	IMarketDataStorageDrive IMarketDataStorage.Drive => _underlying.Drive;
 	bool IMarketDataStorage.AppendOnlyNew { get => _underlying.AppendOnlyNew; set => _underlying.AppendOnlyNew = value; }
 
-	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date, CancellationToken cancellationToken)
-		=> _cache.GetMessagesAsync(_underlying.SecurityId, _underlying.DataType, date, _underlying.LoadAsync, cancellationToken);
+	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date)
+		=> _cache.GetMessagesAsync(_underlying.SecurityId, _underlying.DataType, date, _underlying.LoadAsync);
 
 	ValueTask<int> IMarketDataStorage.SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => _underlying.SaveAsync(data, cancellationToken);
 	ValueTask IMarketDataStorage.DeleteAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => _underlying.DeleteAsync(data, cancellationToken);

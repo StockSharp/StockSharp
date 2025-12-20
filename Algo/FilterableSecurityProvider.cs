@@ -41,7 +41,7 @@ public class FilterableSecurityProvider : Disposable, ISecurityProvider
 		=> new(_trie.GetById(id));
 
 	/// <inheritdoc />
-	public IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
+	public IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria)
 	{
 		if (criteria == null)
 			throw new ArgumentNullException(nameof(criteria));
@@ -63,10 +63,15 @@ public class FilterableSecurityProvider : Disposable, ISecurityProvider
 	async ValueTask<SecurityMessage> ISecurityMessageProvider.LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
 		=> (await LookupByIdAsync(id, cancellationToken))?.ToMessage();
 
-	async IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria, [EnumeratorCancellation]CancellationToken cancellationToken)
+	IAsyncEnumerable<SecurityMessage> ISecurityMessageProvider.LookupMessagesAsync(SecurityLookupMessage criteria)
 	{
-		await foreach (var s in LookupAsync(criteria, cancellationToken).WithEnforcedCancellation(cancellationToken))
-			yield return s.ToMessage();
+		return Impl(this, criteria);
+
+		static async IAsyncEnumerable<SecurityMessage> Impl(FilterableSecurityProvider provider, SecurityLookupMessage criteria, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+		{
+			await foreach (var s in provider.LookupAsync(criteria).WithEnforcedCancellation(cancellationToken))
+				yield return s.ToMessage();
+		}
 	}
 
 	private void AddSecurities(IEnumerable<Security> securities)

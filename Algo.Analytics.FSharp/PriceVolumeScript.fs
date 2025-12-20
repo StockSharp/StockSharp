@@ -54,7 +54,7 @@ type PriceVolumeScript() =
                         // Group candles by "middle price" = LowPrice + (HighPrice - LowPrice) / 2
                         // In StockSharp code, c.GetLength() == c.HighPrice - c.LowPrice
                         // thus c.LowPrice + c.GetLength() / 2 is the middle
-                        let! candles = candleStorage.LoadAsync(fromDate, toDate, cancellationToken).ToArrayAsync(cancellationToken)
+                        let! candles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
                         let rows =
                             candles
                                 .GroupBy(fun c -> c.LowPrice + (c.GetLength() / 2m))

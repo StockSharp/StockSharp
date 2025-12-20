@@ -587,7 +587,7 @@ public class OrderLogTests : BaseTestClass
 		IOrderLogMarketDepthBuilder builder = typeof(OrderLogMarketDepthBuilder).CreateOrderLogMarketDepthBuilder(secId);
 		var depths = (await registry
 			.GetOrderLogMessageStorage(secId, registry.DefaultDrive, StorageFormats.Binary)
-			.LoadAsync(date, date + TimeSpan.FromDays(1), token)
+			.LoadAsync(date, date + TimeSpan.FromDays(1))
 			.ToArrayAsync(token))
 			.ToOrderBooks(builder);
 
@@ -608,7 +608,7 @@ public class OrderLogTests : BaseTestClass
 		IOrderLogMarketDepthBuilder builder = typeof(OrderLogMarketDepthBuilder).CreateOrderLogMarketDepthBuilder(secId);
 		var depths = (await registry
 			.GetOrderLogMessageStorage(secId, registry.DefaultDrive, StorageFormats.Binary)
-			.LoadAsync(date, date + TimeSpan.FromDays(1), token)
+			.LoadAsync(date, date + TimeSpan.FromDays(1))
 			.ToArrayAsync(token))
 			.ToOrderBooks(builder, TimeSpan.FromSeconds(1), 50);
 

@@ -28,7 +28,7 @@ public class BiggestCandleScript : IAnalyticsScript
 			// get candle storage
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
-			var allCandles = await candleStorage.LoadAsync(from, to, cancellationToken).ToArrayAsync(cancellationToken);
+			var allCandles = await candleStorage.LoadAsync(from, to).ToArrayAsync(cancellationToken);
 
 			// first orders by volume desc will be our biggest candle
 			var bigPriceCandle = allCandles.OrderByDescending(c => c.GetLength()).FirstOrDefault();
