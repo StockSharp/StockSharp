@@ -1208,29 +1208,34 @@ public static class StorageHelper
 
 		DateTime? lastTime = null;
 
-		await foreach (var message in messages.WithEnforcedCancellation(cancellationToken))
+		try
 		{
-			if (lastTime is null)
+			await foreach (var message in messages.WithEnforcedCancellation(cancellationToken))
 			{
-				yield return new SubscriptionResponseMessage { OriginalTransactionId = transactionId };
+				if (lastTime is null)
+				{
+					yield return new SubscriptionResponseMessage { OriginalTransactionId = transactionId };
+					lastTime = message.ServerTime;
+				}
+				else if (message.ServerTime < lastTime)
+					continue;
+
+				message.OriginalTransactionId = transactionId;
+				message.SetSubscriptionIds(subscriptionId: transactionId);
+				message.OfflineMode = MessageOfflineModes.Ignore;
+
 				lastTime = message.ServerTime;
+
+				yield return message;
+
+				if (--left <= 0)
+					break;
 			}
-			else if (message.ServerTime < lastTime)
-				continue;
-
-			message.OriginalTransactionId = transactionId;
-			message.SetSubscriptionIds(subscriptionId: transactionId);
-			message.OfflineMode = MessageOfflineModes.Ignore;
-
-			lastTime = message.ServerTime;
-
-			yield return message;
-
-			if (--left <= 0)
-				break;
 		}
-
-		context.Update(lastTime, count is null ? null : left);
+		finally
+		{
+			context.Update(lastTime, count is null ? null : left);
+		}
 	}
 
 	/// <summary>

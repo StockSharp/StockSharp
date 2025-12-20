@@ -714,4 +714,99 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		AssertTimeFrameCandle(candles[0], secId, bigTf, date, date.AddMinutes(4), 100, 115, 90, 108, totalVolume: 150, totalTicks: 20, CandleStates.Finished, smallTf.TimeFrame(), transactionId: 1200);
 		AssertTimeFrameCandle(candles[1], secId, bigTf, date.AddMinutes(5), date.AddMinutes(9).AddSeconds(50), 200, 205, 198, 202, totalVolume: 10, totalTicks: 4, CandleStates.Active, DataType.Ticks, transactionId: 1200);
 	}
+
+	[TestMethod]
+	public async Task EarlyTermination_Break_UpdatesContext()
+	{
+		var token = CancellationToken;
+		var (settings, provider, secId) = CreateEnv();
+
+		var date = new DateTime(2025, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var ticks = new[]
+		{
+			CreateTick(secId, date.AddMinutes(0), tradeId: 1, price: 100),
+			CreateTick(secId, date.AddMinutes(1), tradeId: 2, price: 101),
+			CreateTick(secId, date.AddMinutes(2), tradeId: 3, price: 102),
+			CreateTick(secId, date.AddMinutes(3), tradeId: 4, price: 103),
+			CreateTick(secId, date.AddMinutes(4), tradeId: 5, price: 104),
+		};
+
+		await settings.GetStorage<ExecutionMessage>(secId, DataType.Ticks).SaveAsync(ticks, token);
+
+		var context = new StorageLoadContext();
+		var receivedCount = 0;
+		DateTime? lastReceivedTime = null;
+
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
+		{
+			TransactionId = 1,
+			IsSubscribe = true,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = date,
+			To = date.AddHours(1),
+		}, context, token))
+		{
+			if (msg is ExecutionMessage exec)
+			{
+				lastReceivedTime = exec.ServerTime;
+				receivedCount++;
+
+				// Early termination after receiving 2 ticks
+				if (receivedCount >= 2)
+					break;
+			}
+		}
+
+		// Context should be updated despite early termination
+		context.HasData.AssertTrue();
+		context.LastDate.AssertNotNull();
+		context.LastDate.Value.AssertEqual(lastReceivedTime.Value);
+	}
+
+	[TestMethod]
+	public async Task EarlyTermination_Dispose_UpdatesContext()
+	{
+		var token = CancellationToken;
+		var (settings, provider, secId) = CreateEnv();
+
+		var date = new DateTime(2025, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var ticks = new[]
+		{
+			CreateTick(secId, date.AddMinutes(0), tradeId: 1, price: 100),
+			CreateTick(secId, date.AddMinutes(1), tradeId: 2, price: 101),
+			CreateTick(secId, date.AddMinutes(2), tradeId: 3, price: 102),
+		};
+
+		await settings.GetStorage<ExecutionMessage>(secId, DataType.Ticks).SaveAsync(ticks, token);
+
+		var context = new StorageLoadContext();
+		DateTime? lastReceivedTime = null;
+
+		await using (var enumerator = settings.LoadMessagesAsync(provider, new MarketDataMessage
+		{
+			TransactionId = 1,
+			IsSubscribe = true,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = date,
+			To = date.AddHours(1),
+		}, context, token).GetAsyncEnumerator(token))
+		{
+			// Move to first message (SubscriptionResponseMessage)
+			await enumerator.MoveNextAsync();
+
+			// Move to first tick
+			await enumerator.MoveNextAsync();
+			if (enumerator.Current is ExecutionMessage exec)
+				lastReceivedTime = exec.ServerTime;
+
+			// Dispose without completing enumeration
+		}
+
+		// Context should be updated on Dispose
+		context.HasData.AssertTrue();
+		context.LastDate.AssertNotNull();
+		context.LastDate.Value.AssertEqual(lastReceivedTime.Value);
+	}
 }
