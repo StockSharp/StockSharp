@@ -1,7 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
 [TestClass]
-public class BasketSecurityTests
+public class BasketSecurityTests : BaseTestClass
 {
 	[TestMethod]
 	public void WeightedIndex()
@@ -194,5 +194,190 @@ public class BasketSecurityTests
 		var prices = innerValues.Select(getDecimal).ToArray();
 		var expected = validateFormula(prices);
 		getDecimal(basketValue).AssertEqual(expected);
+	}
+
+	[TestMethod]
+	public void ToBasket_Sync_EmptyCollection_ReturnsEmpty()
+	{
+		CreateSpot(out var lkoh, out var sber);
+
+		var basket = new WeightedIndexSecurity
+		{
+			Id = "LKOH_SBER_WEI@TQBR",
+			Board = ExchangeBoard.Associated,
+		};
+		basket.Weights[lkoh.ToSecurityId()] = 1;
+		basket.Weights[sber.ToSecurityId()] = 1;
+
+		var processorProvider = new BasketSecurityProcessorProvider();
+		var messages = Array.Empty<ExecutionMessage>();
+
+		var result = messages.ToBasket(basket, processorProvider).ToArray();
+
+		result.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task ToBasket_Async_EmptyCollection_ReturnsEmpty()
+	{
+		CreateSpot(out var lkoh, out var sber);
+
+		var basket = new WeightedIndexSecurity
+		{
+			Id = "LKOH_SBER_WEI@TQBR",
+			Board = ExchangeBoard.Associated,
+		};
+		basket.Weights[lkoh.ToSecurityId()] = 1;
+		basket.Weights[sber.ToSecurityId()] = 1;
+
+		var processorProvider = new BasketSecurityProcessorProvider();
+		var messages = Array.Empty<ExecutionMessage>().ToAsyncEnumerable();
+
+		var result = await messages.ToBasket(basket, processorProvider).ToArrayAsync();
+
+		result.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void ToBasket_Async_NullMessages_ThrowsArgumentNullException()
+	{
+		CreateSpot(out var lkoh, out var sber);
+
+		var basket = new WeightedIndexSecurity
+		{
+			Id = "LKOH_SBER_WEI@TQBR",
+			Board = ExchangeBoard.Associated,
+		};
+		basket.Weights[lkoh.ToSecurityId()] = 1;
+		basket.Weights[sber.ToSecurityId()] = 1;
+
+		var processorProvider = new BasketSecurityProcessorProvider();
+		IAsyncEnumerable<ExecutionMessage> messages = null;
+
+		ThrowsExactly<ArgumentNullException>(() => messages.ToBasket(basket, processorProvider));
+	}
+
+	[TestMethod]
+	public async Task ToBasket_Sync_AndAsync_ProduceSameResults()
+	{
+		CreateSpot(out var lkoh, out var sber);
+
+		var basket = new WeightedIndexSecurity
+		{
+			Id = "LKOH_SBER_WEI@TQBR",
+			Board = ExchangeBoard.Associated,
+		};
+		basket.Weights[lkoh.ToSecurityId()] = 1;
+		basket.Weights[sber.ToSecurityId()] = -1;
+
+		var processorProvider = new BasketSecurityProcessorProvider();
+		var serverTime = DateTime.UtcNow;
+
+		var ticks = new ExecutionMessage[]
+		{
+			new()
+			{
+				SecurityId = lkoh.ToSecurityId(),
+				DataTypeEx = DataType.Ticks,
+				ServerTime = serverTime,
+				TradePrice = 100,
+				TradeVolume = 10,
+			},
+			new()
+			{
+				SecurityId = sber.ToSecurityId(),
+				DataTypeEx = DataType.Ticks,
+				ServerTime = serverTime,
+				TradePrice = 50,
+				TradeVolume = 20,
+			},
+		};
+
+		var syncResult = ticks.ToBasket(basket, processorProvider).ToArray();
+		var asyncResult = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync();
+
+		syncResult.Length.AssertEqual(asyncResult.Length);
+	}
+
+	[TestMethod]
+	public void ToBasket_Sync_WithTicks_ProcessesMessages()
+	{
+		CreateSpot(out var lkoh, out var sber);
+
+		var basket = new WeightedIndexSecurity
+		{
+			Id = "LKOH_SBER_WEI@TQBR",
+			Board = ExchangeBoard.Associated,
+		};
+		basket.Weights[lkoh.ToSecurityId()] = 1;
+		basket.Weights[sber.ToSecurityId()] = -1;
+
+		var processorProvider = new BasketSecurityProcessorProvider();
+		var serverTime = DateTime.UtcNow;
+
+		var ticks = new ExecutionMessage[]
+		{
+			new()
+			{
+				SecurityId = lkoh.ToSecurityId(),
+				DataTypeEx = DataType.Ticks,
+				ServerTime = serverTime,
+				TradePrice = 100,
+				TradeVolume = 10,
+			},
+			new()
+			{
+				SecurityId = sber.ToSecurityId(),
+				DataTypeEx = DataType.Ticks,
+				ServerTime = serverTime,
+				TradePrice = 50,
+				TradeVolume = 20,
+			},
+		};
+
+		var result = ticks.ToBasket(basket, processorProvider).ToArray();
+
+		result.Length.AssertGreater(0);
+	}
+
+	[TestMethod]
+	public async Task ToBasket_Async_WithTicks_ProcessesMessages()
+	{
+		CreateSpot(out var lkoh, out var sber);
+
+		var basket = new WeightedIndexSecurity
+		{
+			Id = "LKOH_SBER_WEI@TQBR",
+			Board = ExchangeBoard.Associated,
+		};
+		basket.Weights[lkoh.ToSecurityId()] = 1;
+		basket.Weights[sber.ToSecurityId()] = -1;
+
+		var processorProvider = new BasketSecurityProcessorProvider();
+		var serverTime = DateTime.UtcNow;
+
+		var ticks = new ExecutionMessage[]
+		{
+			new()
+			{
+				SecurityId = lkoh.ToSecurityId(),
+				DataTypeEx = DataType.Ticks,
+				ServerTime = serverTime,
+				TradePrice = 100,
+				TradeVolume = 10,
+			},
+			new()
+			{
+				SecurityId = sber.ToSecurityId(),
+				DataTypeEx = DataType.Ticks,
+				ServerTime = serverTime,
+				TradePrice = 50,
+				TradeVolume = 20,
+			},
+		};
+
+		var result = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync();
+
+		result.Length.AssertGreater(0);
 	}
 }
