@@ -13,8 +13,9 @@ public interface IFillGapsBehaviour
 	/// <param name="from"><see cref="MarketDataMessage.From"/></param>
 	/// <param name="to"><see cref="MarketDataMessage.To"/></param>
 	/// <param name="fillGaps"><see cref="FillGapsDays"/></param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Operation result. <see langword="null"/> no any gaps.</returns>
-	(DateTime? gapStart, DateTime? gapEnd) TryGetNextGap(SecurityId secId, DataType dataType, DateTime from, DateTime to, FillGapsDays fillGaps);
+	ValueTask<(DateTime? gapStart, DateTime? gapEnd)> TryGetNextGapAsync(SecurityId secId, DataType dataType, DateTime from, DateTime to, FillGapsDays fillGaps, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -29,12 +30,13 @@ public class StorageFillGapsBehaviour(IMarketDataDrive drive, StorageFormats for
 {
 	private readonly IMarketDataDrive _drive = drive ?? throw new ArgumentNullException(nameof(drive));
 
-	(DateTime?, DateTime?) IFillGapsBehaviour.TryGetNextGap(SecurityId secId, DataType dataType, DateTime from, DateTime to, FillGapsDays fillGaps)
+	async ValueTask<(DateTime?, DateTime?)> IFillGapsBehaviour.TryGetNextGapAsync(SecurityId secId, DataType dataType, DateTime from, DateTime to, FillGapsDays fillGaps, CancellationToken cancellationToken)
 	{
 		if (from >= to)
 			return default;
 
-		var existing = _drive.GetStorageDrive(secId, dataType, format).GetDates().Where(d => from <= d || d <= to).ToSet();
+		var dates = await _drive.GetStorageDrive(secId, dataType, format).GetDatesAsync(cancellationToken);
+		var existing = dates.Where(d => from <= d || d <= to).ToSet();
 
 		DateTime? gapStart = null;
 		DateTime? gapEnd = null;

@@ -16,14 +16,14 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 		public SecurityId SecId { get; } = secId;
 		public FillGapsDays Days { get; } = days;
 		public ISubscriptionMessage Current { get; set; }
-        public bool ResponseSent { get; set; }
-    }
+		public bool ResponseSent { get; set; }
+	}
 
 	private readonly SynchronizedDictionary<long, FillGapInfo> _gapsRequests = [];
 	private readonly IFillGapsBehaviour _behaviour = behaviour ?? throw new ArgumentNullException(nameof(behaviour));
 
 	/// <inheritdoc />
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -44,7 +44,7 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 							subscrMsg is ISecurityIdMessage secIdMsg &&
 							!secIdMsg.IsAllSecurity())
 						{
-							var (gapsStart, gapsEnd) = _behaviour.TryGetNextGap(secIdMsg.SecurityId, subscrMsg.DataType, from, subscrMsg.To ?? CurrentTimeUtc, days);
+							var (gapsStart, gapsEnd) = await _behaviour.TryGetNextGapAsync(secIdMsg.SecurityId, subscrMsg.DataType, from, subscrMsg.To ?? CurrentTimeUtc, days, cancellationToken);
 
 							if (gapsStart is null)
 								break;
@@ -70,7 +70,7 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 			}
 		}
 
-		return base.OnSendInMessageAsync(message, cancellationToken);
+		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -81,43 +81,12 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 			case MessageTypes.SubscriptionFinished:
 			{
 				var finished = (SubscriptionFinishedMessage)message;
-				
+
 				if (!_gapsRequests.TryGetValue(finished.OriginalTransactionId, out var info))
 					break;
 
-				var current = info.Current;
-
-				var (gapsStart, gapsEnd) = _behaviour.TryGetNextGap(info.SecId, info.Original.DataType, current.To.Value.AddDays(1), info.Original.To ?? CurrentTimeUtc, info.Days);
-
-				if (gapsStart is null)
-				{
-					_gapsRequests.Remove(finished.OriginalTransactionId);
-
-					if (info.Original.To is null)
-					{
-						var original = info.Original.TypedClone();
-						
-						original.From = null;
-						original.FillGaps = null;
-
-						original.LoopBack(this);
-						message = (Message)original;
-					}
-
-					break;
-				}
-
-				current = current.TypedClone();
-
-				current.From = gapsStart.Value;
-				current.To = gapsEnd.Value;
-
-				info.Current = current;
-
-				current.LoopBack(this);
-				message = (Message)current;
-
-				break;
+				_ = ProcessSubscriptionFinishedAsync(finished, info);
+				return;
 			}
 			case MessageTypes.SubscriptionOnline:
 			{
@@ -147,6 +116,53 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 		}
 
 		base.OnInnerAdapterNewOutMessage(message);
+	}
+
+	private async Task ProcessSubscriptionFinishedAsync(SubscriptionFinishedMessage finished, FillGapInfo info)
+	{
+		try
+		{
+			var current = info.Current;
+
+			var (gapsStart, gapsEnd) = await _behaviour.TryGetNextGapAsync(info.SecId, info.Original.DataType, current.To.Value.AddDays(1), info.Original.To ?? CurrentTimeUtc, info.Days, default);
+
+			if (gapsStart is null)
+			{
+				_gapsRequests.Remove(finished.OriginalTransactionId);
+
+				if (info.Original.To is null)
+				{
+					var original = info.Original.TypedClone();
+
+					original.From = null;
+					original.FillGaps = null;
+
+					original.LoopBack(this);
+					RaiseNewOutMessage((Message)original);
+				}
+				else
+				{
+					base.OnInnerAdapterNewOutMessage(finished);
+				}
+
+				return;
+			}
+
+			current = current.TypedClone();
+
+			current.From = gapsStart.Value;
+			current.To = gapsEnd.Value;
+
+			info.Current = current;
+
+			current.LoopBack(this);
+			RaiseNewOutMessage((Message)current);
+		}
+		catch (Exception ex)
+		{
+			this.AddErrorLog(ex);
+			base.OnInnerAdapterNewOutMessage(finished);
+		}
 	}
 
 	/// <summary>

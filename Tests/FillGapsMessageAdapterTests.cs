@@ -7,12 +7,15 @@ public class FillGapsMessageAdapterTests : BaseTestClass
 	{
 		private readonly Queue<(DateTime gapStart, DateTime gapEnd)> _gaps = new(gaps);
 
-		public (DateTime? gapStart, DateTime? gapEnd) TryGetNextGap(SecurityId secId, DataType dataType, DateTime from, DateTime to, FillGapsDays fillGaps)
-			=> _gaps.TryDequeue(out var gap) ? (gap.gapStart, gap.gapEnd) : default;
+		public ValueTask<(DateTime? gapStart, DateTime? gapEnd)> TryGetNextGapAsync(SecurityId secId, DataType dataType, DateTime from, DateTime to, FillGapsDays fillGaps, CancellationToken cancellationToken)
+			=> new(_gaps.TryDequeue(out var gap) ? (gap.gapStart, gap.gapEnd) : default);
 	}
 
 	private static async Task DrainLoopbacksAsync(IMessageAdapter adapter, Queue<Message> loopbacks, CancellationToken cancellationToken)
 	{
+		// Wait for async gap detection to complete
+		await Task.Delay(50, cancellationToken);
+
 		while (loopbacks.TryDequeue(out var loopback))
 			await adapter.SendInMessageAsync(loopback, cancellationToken);
 	}
