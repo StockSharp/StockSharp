@@ -5,7 +5,11 @@ using Nito.AsyncEx;
 /// <summary>
 /// Async message channel that processes messages via <see cref="IMessageChannel.NewOutMessageAsync"/>.
 /// </summary>
-public class AsyncMessageChannel : Disposable, IMessageChannel
+/// <remarks>
+/// Initializes a new instance of the <see cref="AsyncMessageChannel"/>.
+/// </remarks>
+/// <param name="adapter"><see cref="IMessageAdapter"/>.</param>
+public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessageChannel
 {
 	private class MessageQueueItem
 	{
@@ -54,17 +58,7 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 
 	private bool _isConnectionStarted, _isDisconnecting;
 
-	private readonly IMessageAdapter _adapter;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="AsyncMessageChannel"/>.
-	/// </summary>
-	/// <param name="adapter"><see cref="IMessageAdapter"/>.</param>
-	public AsyncMessageChannel(IMessageAdapter adapter)
-	{
-		_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
-	}
-
+	private readonly IMessageAdapter _adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 	private ChannelStates _state = ChannelStates.Stopped;
 
 	/// <inheritdoc />
@@ -490,9 +484,9 @@ public class AsyncMessageChannel : Disposable, IMessageChannel
 		// token is already canceled in SendInMessage
 		await AsyncHelper.CatchHandle((Func<Task>)(async () =>
 		{
-            using var cts = _adapter.DisconnectTimeout.CreateTimeout();
-            await WhenChildrenComplete(cts.Token);
-        }), default);
+			using var cts = _adapter.DisconnectTimeout.CreateTimeout();
+			await WhenChildrenComplete(cts.Token);
+		}), default);
 
 		foreach (var kv in _subscriptionItems.CopyAndClear())
 		{

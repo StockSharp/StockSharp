@@ -666,7 +666,7 @@ partial class Connector
 					break;
 
 				case ExtendedMessageTypes.RemoveSecurity:
-					ProcessSecurityRemoveMessage((SecurityRemoveMessage)message);
+					await ProcessSecurityRemoveMessage((SecurityRemoveMessage)message, cancellationToken);
 					break;
 
 				case MessageTypes.ChangePassword:
@@ -812,7 +812,7 @@ partial class Connector
 		}
 	}
 
-	private void ProcessSecurityRemoveMessage(SecurityRemoveMessage message)
+	private async ValueTask ProcessSecurityRemoveMessage(SecurityRemoveMessage message, CancellationToken cancellationToken)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -823,7 +823,7 @@ partial class Connector
 
 		if (security != null)
 		{
-			SecurityStorage.Delete(security);
+			await SecurityStorage.DeleteAsync(security, cancellationToken);
 			_removed?.Invoke([security]);
 		}
 	}
