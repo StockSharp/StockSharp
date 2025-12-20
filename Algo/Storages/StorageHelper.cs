@@ -1612,6 +1612,7 @@ public static class StorageHelper
 	/// <param name="storage">Market data storage.</param>
 	/// <returns>Available dates.</returns>
 	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	[Obsolete("Use GetDatesAsync method instead.")]
 	public static IEnumerable<DateTime> GetDates(this IMarketDataStorage storage)
 	{
 		if (storage is null)

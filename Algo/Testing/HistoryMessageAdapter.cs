@@ -189,7 +189,7 @@ public class HistoryMessageAdapter : MessageAdapter
 		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
 
 	/// <inheritdoc />
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -254,7 +254,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			}
 
 			case MessageTypes.MarketData:
-				ProcessMarketDataMessage((MarketDataMessage)message);
+				await ProcessMarketDataMessage((MarketDataMessage)message, cancellationToken);
 				break;
 
 			case MessageTypes.EmulationState:
@@ -301,13 +301,11 @@ public class HistoryMessageAdapter : MessageAdapter
 				break;
 			}
 		}
-
-		return default;
 	}
 
-	private void ProcessMarketDataMessage(MarketDataMessage message)
+	private async ValueTask ProcessMarketDataMessage(MarketDataMessage message, CancellationToken cancellationToken)
 	{
-		void AddStorage(IMarketDataStorage storage, long transactionId)
+		async ValueTask AddStorage(IMarketDataStorage storage, long transactionId)
 		{
 			if (storage == null)
 				throw new ArgumentNullException(nameof(storage));
@@ -315,7 +313,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			if (transactionId == 0)
 				throw new ArgumentNullException(nameof(transactionId));
 
-			var storageDates = storage.GetDates();
+			var storageDates = await storage.GetDatesAsync(cancellationToken);
 			LogInfo("Add storage: {0}/{1} {2}-{3}", storage.SecurityId, storage.DataType, storageDates.FirstOr(), storageDates.LastOr());
 
 			_isChanged = true;
@@ -364,7 +362,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			{
 				if (!HasGenerator(dataType))
 				{
-					AddStorage(StorageRegistry.GetLevel1MessageStorage(securityId, Drive, StorageFormat), transId);
+					await AddStorage(StorageRegistry.GetLevel1MessageStorage(securityId, Drive, StorageFormat), transId);
 				}
 			}
 			else
@@ -379,7 +377,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			{
 				if (!HasGenerator(dataType))
 				{
-					AddStorage(StorageRegistry.GetQuoteMessageStorage(securityId, Drive, StorageFormat, message.DoNotBuildOrderBookIncrement), transId);
+					await AddStorage(StorageRegistry.GetQuoteMessageStorage(securityId, Drive, StorageFormat, message.DoNotBuildOrderBookIncrement), transId);
 				}
 			}
 			else
@@ -391,7 +389,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			{
 				if (!HasGenerator(dataType))
 				{
-					AddStorage(StorageRegistry.GetTickMessageStorage(securityId, Drive, StorageFormat), transId);
+					await AddStorage(StorageRegistry.GetTickMessageStorage(securityId, Drive, StorageFormat), transId);
 				}
 			}
 			else
@@ -403,7 +401,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			{
 				if (!HasGenerator(dataType))
 				{
-					AddStorage(StorageRegistry.GetOrderLogMessageStorage(securityId, Drive, StorageFormat), transId);
+					await AddStorage(StorageRegistry.GetOrderLogMessageStorage(securityId, Drive, StorageFormat), transId);
 				}
 			}
 			else
@@ -419,7 +417,7 @@ public class HistoryMessageAdapter : MessageAdapter
 					return;
 				}
 
-				AddStorage(StorageRegistry.GetCandleMessageStorage(securityId, dataType, Drive, StorageFormat), transId);
+				await AddStorage(StorageRegistry.GetCandleMessageStorage(securityId, dataType, Drive, StorageFormat), transId);
 			}
 			else
 				RemoveStorage(originId);
@@ -500,7 +498,8 @@ public class HistoryMessageAdapter : MessageAdapter
 								var enu = _basketStorage.LoadAsync(loadDateInUtc);
 
 								// storage for the specified date contains only time messages and clearing events
-								noData = !enu.DataTypes.Except(messageTypes).Any();
+								var dataTypes = await enu.GetDataTypesAsync(cancellationToken);
+								noData = !dataTypes.Except(messageTypes).Any();
 
 								messages = enu;
 							}

@@ -9,9 +9,11 @@ using Ecng.Reflection;
 public interface IBasketMarketDataStorageEnumerable<TMessage> : IAsyncEnumerable<TMessage>
 {
 	/// <summary>
-	/// Available message types.
+	/// Get available message types.
 	/// </summary>
-	IEnumerable<MessageTypes> DataTypes { get; }
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Available message types.</returns>
+	ValueTask<IEnumerable<MessageTypes>> GetDataTypesAsync(CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -49,27 +51,43 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 		private readonly Lock _enumsLock = new();
 		private readonly Ecng.Collections.PriorityQueue<long, (IAsyncEnumerator<Message> enu, IMarketDataStorage storage, long transId)> _enumerators = new((p1, p2) => (p1 - p2).Abs());
 
+		private bool _initialized;
+
 		public BasketMarketDataStorageEnumerator(BasketMarketDataStorage<TMessage> storage, DateTime date, CancellationToken cancellationToken)
 		{
 			_storage = storage ?? throw new ArgumentNullException(nameof(storage));
 			_date = date;
 			_cancellationToken = cancellationToken;
 
-			foreach (var s in storage._innerStorages.Cache)
-			{
-				if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.GetDates().Contains(date))
-					continue;
-
-				_actions.Add((ActionTypes.Add, s, storage._innerStorages.TryGetTransactionId(s)));
-			}
-
 			_storage._enumerators.Add(this);
+		}
+
+		private async ValueTask InitializeAsync()
+		{
+			if (_initialized)
+				return;
+
+			_initialized = true;
+
+			foreach (var s in _storage._innerStorages.Cache)
+			{
+				if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null)
+				{
+					var dates = await s.GetDatesAsync(_cancellationToken);
+					if (!dates.Contains(_date))
+						continue;
+				}
+
+				_actions.Add((ActionTypes.Add, s, _storage._innerStorages.TryGetTransactionId(s)));
+			}
 		}
 
 		public TMessage Current { get; private set; }
 
 		async ValueTask<bool> IAsyncEnumerator<TMessage>.MoveNextAsync()
 		{
+			await InitializeAsync();
+
 			while (true)
 			{
 				_cancellationToken.ThrowIfCancellationRequested();
@@ -205,30 +223,35 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 		}
 	}
 
-	private sealed class BasketEnumerable : IBasketMarketDataStorageEnumerable<TMessage>
+	private sealed class BasketEnumerable(BasketMarketDataStorage<TMessage> storage, DateTime date) : IBasketMarketDataStorageEnumerable<TMessage>
 	{
-		private readonly BasketMarketDataStorage<TMessage> _storage;
-		private readonly DateTime _date;
+		private readonly BasketMarketDataStorage<TMessage> _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+		private readonly DateTime _date = date;
 
-		public BasketEnumerable(BasketMarketDataStorage<TMessage> storage, DateTime date)
+		private IEnumerable<MessageTypes> _dataTypesCache;
+
+		public async ValueTask<IEnumerable<MessageTypes>> GetDataTypesAsync(CancellationToken cancellationToken)
 		{
-			_storage = storage ?? throw new ArgumentNullException(nameof(storage));
-			_date = date;
+			if (_dataTypesCache is not null)
+				return _dataTypesCache;
 
 			var dataTypes = new List<MessageTypes>();
 
-			foreach (var s in storage._innerStorages.Cache)
+			foreach (var s in _storage._innerStorages.Cache)
 			{
-				if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null && !s.GetDates().Contains(date))
-					continue;
+				if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null)
+				{
+					var dates = await s.GetDatesAsync(cancellationToken);
+					if (!dates.Contains(_date))
+						continue;
+				}
 
 				dataTypes.Add(s.DataType.ToMessageType2());
 			}
 
-			DataTypes = [.. dataTypes];
+			_dataTypesCache = dataTypes;
+			return dataTypes;
 		}
-
-		public IEnumerable<MessageTypes> DataTypes { get; }
 
 		IAsyncEnumerator<TMessage> IAsyncEnumerable<TMessage>.GetAsyncEnumerator(CancellationToken cancellationToken)
 			=> new BasketMarketDataStorageEnumerator(_storage, _date, cancellationToken);
