@@ -21,7 +21,7 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		// Check if trading is blocked and reject order registration/modification
 		if (_isTradingBlocked)
@@ -31,7 +31,7 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 				case MessageTypes.OrderRegister:
 				{
 					var regMsg = (OrderRegisterMessage)message;
-					RaiseNewOutMessage(new ExecutionMessage
+					await RaiseNewOutMessageAsync(new ExecutionMessage
 					{
 						OriginalTransactionId = regMsg.TransactionId,
 						DataTypeEx = DataType.Transactions,
@@ -39,13 +39,13 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 						HasOrderInfo = true,
 						OrderState = OrderStates.Failed,
 						Error = new InvalidOperationException(LocalizedStrings.TradingDisabled)
-					});
-					return default;
+					}, cancellationToken);
+					return;
 				}
 				case MessageTypes.OrderReplace:
 				{
 					var replaceMsg = (OrderReplaceMessage)message;
-					RaiseNewOutMessage(new ExecutionMessage
+					await RaiseNewOutMessageAsync(new ExecutionMessage
 					{
 						OriginalTransactionId = replaceMsg.TransactionId,
 						DataTypeEx = DataType.Transactions,
@@ -53,37 +53,37 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 						HasOrderInfo = true,
 						OrderState = OrderStates.Failed,
 						Error = new InvalidOperationException(LocalizedStrings.TradingDisabled)
-					});
-					return default;
+					}, cancellationToken);
+					return;
 				}
 			}
 		}
 
-		var extra = ProcessRisk(message);
+		var extra = await ProcessRiskAsync(message, cancellationToken);
 
 		if (extra is not null)
 			message = extra;
 
-		return base.OnSendInMessageAsync(message, cancellationToken);
+		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message.Type != MessageTypes.Reset)
 		{
-			var extra = ProcessRisk(message);
+			var extra = await ProcessRiskAsync(message, cancellationToken);
 			if (extra is not null)
 			{
 				extra.LoopBack(this);
-				RaiseNewOutMessage(extra);
+				await RaiseNewOutMessageAsync(extra, cancellationToken);
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
-	private Message ProcessRisk(Message message)
+	private async ValueTask<Message> ProcessRiskAsync(Message message, CancellationToken cancellationToken)
 	{
 		Message retVal = null;
 		var triggeredRules = _riskManager.ProcessRules(message).ToArray();
@@ -112,7 +112,7 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 					break;
 				}
 				case RiskActions.CancelOrders:
-					RaiseNewOutMessage(new OrderGroupCancelMessage { TransactionId = TransactionIdGenerator.GetNextId() }.LoopBack(this));
+					await RaiseNewOutMessageAsync(new OrderGroupCancelMessage { TransactionId = TransactionIdGenerator.GetNextId() }.LoopBack(this), cancellationToken);
 					break;
 				default:
 					throw new InvalidOperationException(rule.Action.To<string>());

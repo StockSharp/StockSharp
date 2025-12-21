@@ -84,7 +84,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 		return base.SendInMessageAsync(message, cancellationToken);
 	}
 
-	private TMessage TryConvert<TMessage>(TMessage subscrMsg, DataType dataType, Func<TMessage, Level1ChangeMessage> convert)
+	private async ValueTask<TMessage> TryConvertAsync<TMessage>(TMessage subscrMsg, DataType dataType, Func<TMessage, Level1ChangeMessage> convert, CancellationToken cancellationToken)
 		where TMessage : ISubscriptionIdMessage
 	{
 		if (subscrMsg is null)
@@ -119,7 +119,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 
 		var level1 = convert(subscrMsg);
 		level1.SetSubscriptionIds([.. subscriptions]);
-		base.OnInnerAdapterNewOutMessage(level1);
+		await base.OnInnerAdapterNewOutMessageAsync(level1, cancellationToken);
 
 		if (leftSubscriptions == null)
 			return default;
@@ -129,7 +129,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -177,7 +177,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 					if (_level1Subscriptions.TryGetValue(id, out var info))
 						info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Online, id, this);
 				}
-				
+
 				break;
 			}
 
@@ -237,7 +237,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 				if (quotesMsg.State != null)
 					break;
 
-				message = TryConvert(quotesMsg, DataType.MarketDepth, Extensions.ToLevel1);
+				message = await TryConvertAsync(quotesMsg, DataType.MarketDepth, Extensions.ToLevel1, cancellationToken);
 				break;
 			}
 
@@ -248,7 +248,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 				if (execMsg.DataType != DataType.Ticks)
 					break;
 
-				message = TryConvert(execMsg, DataType.Ticks, Extensions.ToLevel1);
+				message = await TryConvertAsync(execMsg, DataType.Ticks, Extensions.ToLevel1, cancellationToken);
 				break;
 			}
 
@@ -256,13 +256,13 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 			{
 				var candleMsg = (TimeFrameCandleMessage)message;
 
-				message = TryConvert(candleMsg, DataType.CandleTimeFrame, Extensions.ToLevel1);
+				message = await TryConvertAsync(candleMsg, DataType.CandleTimeFrame, Extensions.ToLevel1, cancellationToken);
 				break;
 			}
 		}
 
 		if (message != null)
-			base.OnInnerAdapterNewOutMessage(message);
+			await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>

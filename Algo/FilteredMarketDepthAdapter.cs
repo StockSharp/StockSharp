@@ -368,7 +368,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		Message TryApplyState(IOriginalTransactionIdMessage msg, SubscriptionStates state)
 		{
@@ -606,12 +606,12 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 		}
 
 		if (message != null)
-			base.OnInnerAdapterNewOutMessage(message);
+			await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 		if (filtered != null)
 		{
 			foreach (var book in filtered)
-				base.OnInnerAdapterNewOutMessage(book);
+				await base.OnInnerAdapterNewOutMessageAsync(book, cancellationToken);
 		}
 	}
 

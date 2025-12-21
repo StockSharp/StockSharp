@@ -44,9 +44,9 @@ partial class BtceMessageAdapter
 			if (!secMsg.IsMatch(lookupMsg, secTypes))
 				continue;
 
-			SendOutMessage(secMsg);
+			await SendOutMessageAsync(secMsg, cancellationToken);
 
-			SendOutMessage(new Level1ChangeMessage
+			await SendOutMessageAsync(new Level1ChangeMessage
 			{
 				SecurityId = secId,
 				ServerTime = reply.Timestamp.UtcKind()
@@ -54,19 +54,19 @@ partial class BtceMessageAdapter
 			.TryAdd(Level1Fields.MinPrice, minPrice)
 			.TryAdd(Level1Fields.MaxPrice, info.MaxPrice.ToDecimal())
 			.TryAdd(Level1Fields.CommissionTaker, info.Fee.ToDecimal())
-			.Add(Level1Fields.State, info.IsHidden ? SecurityStates.Stoped : SecurityStates.Trading));
+			.Add(Level1Fields.State, info.IsHidden ? SecurityStates.Stoped : SecurityStates.Trading), cancellationToken);
 
 			if (--left <= 0)
 				break;
 		}
 
-		SendSubscriptionResult(lookupMsg);
+		await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
@@ -74,7 +74,7 @@ partial class BtceMessageAdapter
 		{
 			await _pusherClient.SubscribeOrderBook(mdMsg.TransactionId, currency, cancellationToken);
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 			await _pusherClient.UnSubscribeOrderBook(mdMsg.OriginalTransactionId, currency, cancellationToken);
@@ -83,7 +83,7 @@ partial class BtceMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
@@ -106,7 +106,7 @@ partial class BtceMessageAdapter
 						if (trade.Timestamp > to)
 							break;
 
-						SendOutMessage(new ExecutionMessage
+						await SendOutMessageAsync(new ExecutionMessage
 						{
 							DataTypeEx = DataType.Ticks,
 							SecurityId = mdMsg.SecurityId,
@@ -116,46 +116,46 @@ partial class BtceMessageAdapter
 							ServerTime = trade.Timestamp,
 							OriginSide = trade.Side.ToSide(),
 							OriginalTransactionId = mdMsg.TransactionId,
-						});
+						}, cancellationToken);
 
 						if (--left <= 0)
 							break;
 					}
 				}
 			}
-			
+
 			if (!mdMsg.IsHistoryOnly())
 				await _pusherClient.SubscribeTrades(mdMsg.TransactionId, currency, cancellationToken);
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 			await _pusherClient.UnSubscribeTrades(mdMsg.OriginalTransactionId, currency, cancellationToken);
 	}
 
 
-	private void SessionOnOrderBookChanged(string ticker, OrderBook book)
+	private ValueTask SessionOnOrderBookChanged(string ticker, OrderBook book, CancellationToken cancellationToken)
 	{
 		var state = _orderBooks.TryAdd(ticker) ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment;
 
 		static QuoteChange ToChange(OrderBookEntry entry)
 			=> new(entry.Price, entry.Size);
 
-		SendOutMessage(new QuoteChangeMessage
+		return SendOutMessageAsync(new QuoteChangeMessage
 		{
 			SecurityId = ticker.ToStockSharp(),
 			Bids = book.Bids?.Select(ToChange).ToArray() ?? Array.Empty<QuoteChange>(),
 			Asks = book.Asks?.Select(ToChange).ToArray() ?? Array.Empty<QuoteChange>(),
 			State = state,
 			ServerTime = CurrentTimeUtc,
-		});
+		}, cancellationToken);
 	}
 
-	private void SessionOnNewTrades(string ticker, PusherTransaction[] trades)
+	private async ValueTask SessionOnNewTrades(string ticker, PusherTransaction[] trades, CancellationToken cancellationToken)
 	{
 		foreach (var trade in trades)
 		{
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				SecurityId = ticker.ToStockSharp(),
 				DataTypeEx = DataType.Ticks,
@@ -163,7 +163,7 @@ partial class BtceMessageAdapter
 				TradeVolume = trade.Size,
 				ServerTime = CurrentTimeUtc,
 				OriginSide = trade.Side.ToSide()
-			});	
+			}, cancellationToken);
 		}
 	}
 }

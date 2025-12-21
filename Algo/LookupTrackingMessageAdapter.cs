@@ -141,9 +141,9 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 		Message TryInitNextLookup(MessageTypes type, long removingId)
 		{
@@ -208,7 +208,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 		if (nextLookup != null)
 		{
 			nextLookup.LoopBack(this);
-			base.OnInnerAdapterNewOutMessage(nextLookup);
+			await base.OnInnerAdapterNewOutMessageAsync(nextLookup, cancellationToken);
 		}
 
 		if (message.LocalTime == default)
@@ -239,7 +239,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 				_lookups.Remove(transId);
 				LogInfo("Lookup timeout {0}.", transId);
 
-				base.OnInnerAdapterNewOutMessage(info.Subscription.CreateResult());
+				await base.OnInnerAdapterNewOutMessageAsync(info.Subscription.CreateResult(), cancellationToken);
 
 				nextLookups ??= [];
 
@@ -258,7 +258,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 			foreach (var lookup in nextLookups)
 			{
 				lookup.LoopBack(this);
-				base.OnInnerAdapterNewOutMessage(lookup);
+				await base.OnInnerAdapterNewOutMessageAsync(lookup, cancellationToken);
 			}
 		}
 	}

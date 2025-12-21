@@ -53,7 +53,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		=> GetSnapshotStorage<SecurityId, TMessage>(dataType);
 
 	/// <inheritdoc />
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -77,7 +77,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 					break;
 
 				if (Buffer.EnabledTransactions)
-					message = ProcessOrderStatus((OrderStatusMessage)message);
+					message = await ProcessOrderStatusAsync((OrderStatusMessage)message, cancellationToken);
 
 				break;
 			}
@@ -118,17 +118,17 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				break;
 			}
 			case MessageTypes.MarketData:
-				ProcessMarketData((MarketDataMessage)message);
+				await ProcessMarketDataAsync((MarketDataMessage)message, cancellationToken);
 				break;
 		}
 
 		if (message == null)
-			return default;
+			return;
 
-		return base.OnSendInMessageAsync(message, cancellationToken);
+		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
-	private void ProcessMarketData(MarketDataMessage message)
+	private async ValueTask ProcessMarketDataAsync(MarketDataMessage message, CancellationToken cancellationToken)
 	{
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
@@ -137,11 +137,11 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 		if (message.IsSubscribe && message.From == null && message.To == null && Settings.IsMode(StorageModes.Snapshot))
 		{
-			void SendSnapshot<TMessage>(TMessage msg)
+			async ValueTask SendSnapshotAsync<TMessage>(TMessage msg)
 				where TMessage : Message, ISubscriptionIdMessage
 			{
 				msg.SetSubscriptionIds(subscriptionId: message.TransactionId);
-				RaiseNewOutMessage(msg);
+				await RaiseNewOutMessageAsync(msg, cancellationToken);
 			}
 
 			if (message.DataType2 == DataType.Level1)
@@ -151,7 +151,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				if (message.SecurityId == default)
 				{
 					foreach (var msg in l1Storage.GetAll())
-						SendSnapshot(msg);
+						await SendSnapshotAsync(msg);
 				}
 				else
 				{
@@ -160,7 +160,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 					if (level1Msg != null)
 					{
 						//SendReply();
-						SendSnapshot(level1Msg);
+						await SendSnapshotAsync(level1Msg);
 					}
 				}
 			}
@@ -171,7 +171,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				if (message.SecurityId == default)
 				{
 					foreach (var msg in quotesStorage.GetAll())
-						SendSnapshot(msg);
+						await SendSnapshotAsync(msg);
 				}
 				else
 				{
@@ -180,7 +180,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 					if (quotesMsg != null)
 					{
 						//SendReply();
-						SendSnapshot(quotesMsg);
+						await SendSnapshotAsync(quotesMsg);
 					}
 				}
 			}
@@ -191,8 +191,9 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 	/// Process <see cref="OrderStatusMessage"/>.
 	/// </summary>
 	/// <param name="message">A message requesting current registered orders and trades.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>A message requesting current registered orders and trades.</returns>
-	private OrderStatusMessage ProcessOrderStatus(OrderStatusMessage message)
+	private async ValueTask<OrderStatusMessage> ProcessOrderStatusAsync(OrderStatusMessage message, CancellationToken cancellationToken)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -231,7 +232,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 					snapshot.OriginalTransactionId = transId;
 					snapshot.SetSubscriptionIds(subscriptionId: transId);
-					RaiseNewOutMessage(snapshot);
+					await RaiseNewOutMessageAsync(snapshot, cancellationToken);
 
 					from = snapshot.ServerTime;
 				}
@@ -261,11 +262,11 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		Buffer.ProcessOutMessage(message);
 
-		base.OnInnerAdapterNewOutMessage(message);
+		return base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	private CancellationTokenSource _cts;

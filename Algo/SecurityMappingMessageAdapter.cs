@@ -16,7 +16,7 @@ public class SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecuri
 	public ISecurityMappingStorage Storage { get; } = storage ?? throw new ArgumentNullException(nameof(storage));
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -34,7 +34,7 @@ public class SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecuri
 				if (stockSharpId != null)
 					secMsg.SecurityId = stockSharpId.Value;
 
-				base.OnInnerAdapterNewOutMessage(message);
+				await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 				break;
 			}
 
@@ -43,9 +43,9 @@ public class SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecuri
 				var newsMsg = (NewsMessage)message;
 
 				if (newsMsg.SecurityId != null)
-					ProcessMessage(newsMsg.SecurityId.Value, newsMsg);
+					await ProcessMessageAsync(newsMsg.SecurityId.Value, newsMsg, cancellationToken);
 				else
-					base.OnInnerAdapterNewOutMessage(message);
+					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 				break;
 			}
@@ -65,9 +65,9 @@ public class SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecuri
 			default:
 			{
 				if (message is ISecurityIdMessage secIdMsg && !secIdMsg.SecurityId.IsSpecial)
-					ProcessMessage(secIdMsg.SecurityId, message);
+					await ProcessMessageAsync(secIdMsg.SecurityId, message, cancellationToken);
 				else
-					base.OnInnerAdapterNewOutMessage(message);
+					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 				break;
 			}
@@ -114,7 +114,7 @@ public class SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecuri
 		}
 	}
 
-	private void ProcessMessage(SecurityId adapterId, Message message)
+	private ValueTask ProcessMessageAsync(SecurityId adapterId, Message message, CancellationToken cancellationToken)
 	{
 		if (!adapterId.IsSpecial)
 			adapterId.SetNativeId(null);
@@ -127,6 +127,6 @@ public class SecurityMappingMessageAdapter(IMessageAdapter innerAdapter, ISecuri
 				message.ReplaceSecurityId(stockSharpId.Value);
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		return base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 }

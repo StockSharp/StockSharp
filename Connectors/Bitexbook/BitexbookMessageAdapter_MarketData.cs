@@ -11,7 +11,7 @@ public partial class BitexbookMessageAdapter
 
 		foreach (var symbol in await _httpClient.GetSymbols(cancellationToken))
 		{
-			SendOutMessage(new SecurityMessage
+			await SendOutMessageAsync(new SecurityMessage
 			{
 				SecurityId = symbol.Alias.ToStockSharp(),
 				MinVolume = (decimal?)symbol.MinAmount,
@@ -19,19 +19,19 @@ public partial class BitexbookMessageAdapter
 				SecurityType = SecurityTypes.CryptoCurrency,
 			}
 			.TryFillUnderlyingId(symbol.CurrencyBase)
-			.FillDefaultCryptoFields());
+			.FillDefaultCryptoFields(), cancellationToken);
 
 			if (--left <= 0)
 				break;
 		}
 
-		SendSubscriptionResult(lookupMsg);
+		await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var secId = mdMsg.SecurityId;
 		var symbol = secId.ToNative();
@@ -39,7 +39,7 @@ public partial class BitexbookMessageAdapter
 		if (mdMsg.IsSubscribe)
 		{
 			await _pusherClient.SubscribeTicker(mdMsg.TransactionId, symbol, cancellationToken);
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 			await _pusherClient.UnSubscribeTicker(mdMsg.OriginalTransactionId, symbol, cancellationToken);
@@ -48,7 +48,7 @@ public partial class BitexbookMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var secId = mdMsg.SecurityId;
 		var symbol = secId.ToNative();
@@ -65,25 +65,25 @@ public partial class BitexbookMessageAdapter
 
 				foreach (var candle in candles)
 				{
-					ProcessCandle(candle, secId, tf, mdMsg.TransactionId);
+					await ProcessCandleAsync(candle, secId, tf, mdMsg.TransactionId, cancellationToken);
 
 					if (--left <= 0)
 						break;
 				}
 			}
-			
+
 			if (!mdMsg.IsHistoryOnly())
 				_pusherClient.SubscribeCandles(symbol, tfName, cancellationToken);
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 			_pusherClient.UnSubscribeCandles(symbol, tfName, cancellationToken);
 	}
 
-	private void ProcessCandle(Ohlc candle, SecurityId securityId, TimeSpan timeFrame, long originTransId)
+	private ValueTask ProcessCandleAsync(Ohlc candle, SecurityId securityId, TimeSpan timeFrame, long originTransId, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new TimeFrameCandleMessage
+		return SendOutMessageAsync(new TimeFrameCandleMessage
 		{
 			SecurityId = securityId,
 			TypedArg = timeFrame,
@@ -95,12 +95,12 @@ public partial class BitexbookMessageAdapter
 			OpenTime = candle.Time,
 			State = CandleStates.Finished,
 			OriginalTransactionId = originTransId,
-		});
+		}, cancellationToken);
 	}
 
-	private void SessionOnTickerChanged(Ticker ticker)
+	private ValueTask SessionOnTickerChanged(Ticker ticker, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new Level1ChangeMessage
+		return SendOutMessageAsync(new Level1ChangeMessage
 		{
 			SecurityId = _secIdMapping[ticker.Symbol],
 			ServerTime = ticker.Timestamp,
@@ -109,10 +109,10 @@ public partial class BitexbookMessageAdapter
 		.TryAdd(Level1Fields.HighPrice, (decimal?)ticker.High)
 		.TryAdd(Level1Fields.LowPrice, (decimal?)ticker.Low)
 		.TryAdd(Level1Fields.ClosePrice, (decimal?)ticker.Close)
-		.TryAdd(Level1Fields.Volume, (decimal?)ticker.Volume));
+		.TryAdd(Level1Fields.Volume, (decimal?)ticker.Volume), cancellationToken);
 	}
 
-	private void SessionOnNewSymbols(IEnumerable<Symbol> symbols)
+	private ValueTask SessionOnNewSymbols(IEnumerable<Symbol> symbols, CancellationToken cancellationToken)
 	{
 		_secIdMapping.Clear();
 
@@ -120,24 +120,26 @@ public partial class BitexbookMessageAdapter
 		{
 			_secIdMapping.Add(symbol.Code, symbol.Alias.ToStockSharp());
 		}
+
+		return default;
 	}
 
-	private void SessionOnNewTickerChange(TickerChange ticker)
+	private ValueTask SessionOnNewTickerChange(TickerChange ticker, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new Level1ChangeMessage
+		return SendOutMessageAsync(new Level1ChangeMessage
 		{
 			SecurityId = _secIdMapping[ticker.Symbol],
 			ServerTime = CurrentTimeUtc,
 		}
 		.TryAdd(Level1Fields.BestBidPrice, ticker.Bid?.ToDecimal())
-		.TryAdd(Level1Fields.BestAskPrice, ticker.Ask?.ToDecimal()));
+		.TryAdd(Level1Fields.BestAskPrice, ticker.Ask?.ToDecimal()), cancellationToken);
 	}
 
-	private void SessionOnTicketsActive(IEnumerable<Ticket> tickets)
+	private async ValueTask SessionOnTicketsActive(IEnumerable<Ticket> tickets, CancellationToken cancellationToken)
 	{
 		foreach (var ticket in tickets)
 		{
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				DataTypeEx = DataType.OrderLog,
 				SecurityId = _secIdMapping[ticket.Symbol],
@@ -148,13 +150,13 @@ public partial class BitexbookMessageAdapter
 				Balance = ticket.Volume?.ToDecimal(),
 				Side = ticket.Type.ToSide(),
 				OrderState = OrderStates.Active,
-			});
+			}, cancellationToken);
 		}
 	}
 
-	private void SessionOnTicketAdded(Ticket ticket)
+	private ValueTask SessionOnTicketAdded(Ticket ticket, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.OrderLog,
 			SecurityId = _secIdMapping[ticket.Symbol],
@@ -165,12 +167,12 @@ public partial class BitexbookMessageAdapter
 			Balance = ticket.Volume?.ToDecimal(),
 			Side = ticket.Type.ToSide(),
 			OrderState = OrderStates.Active,
-		});
+		}, cancellationToken);
 	}
 
-	private void SessionOnTicketCanceled(Ticket ticket)
+	private ValueTask SessionOnTicketCanceled(Ticket ticket, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.OrderLog,
 			SecurityId = _secIdMapping[ticket.Symbol],
@@ -180,12 +182,12 @@ public partial class BitexbookMessageAdapter
 			Balance = ticket.Volume?.ToDecimal(),
 			Side = ticket.Type.ToSide(),
 			OrderState = OrderStates.Done,
-		});
+		}, cancellationToken);
 	}
 
-	private void SessionOnTicketExecuted(Ticket ticket)
+	private ValueTask SessionOnTicketExecuted(Ticket ticket, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.OrderLog,
 			SecurityId = _secIdMapping[ticket.Symbol],
@@ -196,6 +198,6 @@ public partial class BitexbookMessageAdapter
 			TradeVolume = ticket.StartVolume?.ToDecimal(),
 			Side = ticket.Type.ToSide(),
 			OrderState = OrderStates.Done,
-		});
+		}, cancellationToken);
 	}
 }

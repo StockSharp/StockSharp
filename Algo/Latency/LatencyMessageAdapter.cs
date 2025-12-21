@@ -23,7 +23,7 @@ public class LatencyMessageAdapter(IMessageAdapter innerAdapter, ILatencyManager
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message.Type == MessageTypes.Execution)
 		{
@@ -38,7 +38,7 @@ public class LatencyMessageAdapter(IMessageAdapter innerAdapter, ILatencyManager
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		return base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>

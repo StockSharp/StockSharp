@@ -72,7 +72,7 @@ public class OrderBookTruncateMessageAdapter(IMessageAdapter innerAdapter) : Mes
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		List<QuoteChangeMessage> clones = null;
 
@@ -139,12 +139,12 @@ public class OrderBookTruncateMessageAdapter(IMessageAdapter innerAdapter) : Mes
 		}
 
 		if (message != null)
-			base.OnInnerAdapterNewOutMessage(message);
+			await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 		if (clones != null)
 		{
 			foreach (var clone in clones)
-				base.OnInnerAdapterNewOutMessage(clone);
+				await base.OnInnerAdapterNewOutMessageAsync(clone, cancellationToken);
 		}
 	}
 

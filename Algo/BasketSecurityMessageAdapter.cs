@@ -120,14 +120,14 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
 			case MessageTypes.SubscriptionResponse:
 			{
 				var responseMsg = (SubscriptionResponseMessage)message;
-				
+
 				if (_subscriptionsByChildId.TryGetValue(responseMsg.OriginalTransactionId, out var info))
 				{
 					using (info.LegsSubscriptions.EnterScope())
@@ -187,7 +187,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 							foreach (var basketMsg in basketMsgs)
 							{
 								((ISubscriptionIdMessage)basketMsg).SetSubscriptionIds(subscriptionId: info.TransactionId);
-								base.OnInnerAdapterNewOutMessage(basketMsg);
+								await base.OnInnerAdapterNewOutMessageAsync(basketMsg, cancellationToken);
 							}
 						}
 					}
@@ -197,7 +197,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>

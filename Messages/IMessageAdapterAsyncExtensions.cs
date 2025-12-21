@@ -23,7 +23,7 @@ public static class IMessageAdapterAsyncExtensions
 		var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 		using var ctr = cancellationToken.Register(() => tcs.TrySetCanceled(cancellationToken));
 
-		void OnOut(Message msg)
+		ValueTask OnOut(Message msg, CancellationToken cancellationToken)
 		{
 			if (msg is ConnectMessage cm)
 			{
@@ -32,9 +32,11 @@ public static class IMessageAdapterAsyncExtensions
 				else
 					tcs.TrySetResult(true);
 			}
+
+			return default;
 		}
 
-		adapter.NewOutMessage += OnOut;
+		adapter.NewOutMessageAsync += OnOut;
 		try
 		{
 			await adapter.SendInMessageAsync(new ConnectMessage(), cancellationToken);
@@ -42,7 +44,7 @@ public static class IMessageAdapterAsyncExtensions
 		}
 		finally
 		{
-			adapter.NewOutMessage -= OnOut;
+			adapter.NewOutMessageAsync -= OnOut;
 		}
 	}
 
@@ -77,21 +79,13 @@ public static class IMessageAdapterAsyncExtensions
 			AllowSynchronousContinuations = true,
 		});
 
-		void OnOut(Message msg)
+		ValueTask OnOut(Message msg, CancellationToken cancellationToken)
 		{
 			if (msg is SubscriptionResponseMessage resp && resp.OriginalTransactionId == subId && resp.Error != null)
-			{
 				channel.Writer.TryComplete(resp.Error);
-				return;
-			}
-
-			if (msg is SubscriptionFinishedMessage fin && fin.OriginalTransactionId == subId)
-			{
+			else if (msg is SubscriptionFinishedMessage fin && fin.OriginalTransactionId == subId)
 				channel.Writer.TryComplete();
-				return;
-			}
-
-			if (msg is ISubscriptionIdMessage sid)
+			else if (msg is ISubscriptionIdMessage sid)
 			{
 				var ids = sid.SubscriptionIds ?? (sid.SubscriptionId != 0 ? [sid.SubscriptionId] : Array.Empty<long>());
 				if (ids.Contains(subId) && msg is T t)
@@ -99,9 +93,11 @@ public static class IMessageAdapterAsyncExtensions
 					channel.Writer.TryWrite(t);
 				}
 			}
+
+			return default;
 		}
 
-		adapter.NewOutMessage += OnOut;
+		adapter.NewOutMessageAsync += OnOut;
 
 		using var ctr = cancellationToken.Register(() =>
 		{
@@ -159,7 +155,7 @@ public static class IMessageAdapterAsyncExtensions
 		}
 		finally
 		{
-			adapter.NewOutMessage -= OnOut;
+			adapter.NewOutMessageAsync -= OnOut;
 		}
 	}
 
@@ -190,7 +186,7 @@ public static class IMessageAdapterAsyncExtensions
 		var finishedTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 		var failedTcs = new TaskCompletionSource<Exception>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-		void OnOut(Message msg)
+		ValueTask OnOut(Message msg, CancellationToken ct)
 		{
 			if (msg is SubscriptionResponseMessage resp && resp.OriginalTransactionId == subId)
 			{
@@ -205,9 +201,11 @@ public static class IMessageAdapterAsyncExtensions
 
 			if (msg is SubscriptionFinishedMessage fin && fin.OriginalTransactionId == subId)
 				finishedTcs.TrySetResult(true);
+
+			return default;
 		}
 
-		adapter.NewOutMessage += OnOut;
+		adapter.NewOutMessageAsync += OnOut;
 
 		using var ctr = cancellationToken.Register(() =>
 		{
@@ -254,7 +252,7 @@ public static class IMessageAdapterAsyncExtensions
 		}
 		finally
 		{
-			adapter.NewOutMessage -= OnOut;
+			adapter.NewOutMessageAsync -= OnOut;
 		}
 	}
 }

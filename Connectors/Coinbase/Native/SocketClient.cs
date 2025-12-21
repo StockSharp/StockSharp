@@ -7,14 +7,14 @@ class SocketClient : BaseLogReceiver
 	// to get readable name after obfuscation
 	public override string Name => nameof(Coinbase) + "_" + nameof(SocketClient);
 
-	public event Action<Heartbeat> HeartbeatReceived;
-	public event Action<Ohlc> CandleReceived;
-	public event Action<Ticker> TickerReceived;
-	public event Action<Trade> TradeReceived;
-	public event Action<string, string, IEnumerable<OrderBookChange>> OrderBookReceived;
-	public event Action<Order> OrderReceived;
-	public event Action<Exception> Error;
-	public event Action<ConnectionStates> StateChanged;
+	public event Func<Heartbeat, CancellationToken, ValueTask> HeartbeatReceived;
+	public event Func<Ohlc, CancellationToken, ValueTask> CandleReceived;
+	public event Func<Ticker, CancellationToken, ValueTask> TickerReceived;
+	public event Func<Trade, CancellationToken, ValueTask> TradeReceived;
+	public event Func<string, string, IEnumerable<OrderBookChange>, CancellationToken, ValueTask> OrderBookReceived;
+	public event Func<Order, CancellationToken, ValueTask> OrderReceived;
+	public event Func<Exception, CancellationToken, ValueTask> Error;
+	public event Func<ConnectionStates, CancellationToken, ValueTask> StateChanged;
 
 	private readonly WebSocketClient _client;
 	private readonly Authenticator _authenticator;
@@ -25,11 +25,11 @@ class SocketClient : BaseLogReceiver
 
 		_client = new(
 			"wss://advanced-trade-ws.coinbase.com",
-			state => StateChanged?.Invoke(state),
-			error =>
+			(state, ct) => StateChanged?.Invoke(state, ct) ?? default,
+			(error, ct) =>
 			{
 				this.AddErrorLog(error);
-				Error?.Invoke(error);
+				return Error?.Invoke(error, ct) ?? default;
 			},
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
@@ -58,7 +58,7 @@ class SocketClient : BaseLogReceiver
 		_client.Disconnect();
 	}
 
-	private ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
+	private async ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
 	{
 		var obj = msg.AsObject();
 		var channel = (string)obj.channel;
@@ -67,23 +67,31 @@ class SocketClient : BaseLogReceiver
 		switch (channel)
 		{
 			case "error":
-				Error?.Invoke(new InvalidOperationException((string)obj.message + " " + (string)obj.reason));
+				await (Error?.Invoke(new InvalidOperationException((string)obj.message + " " + (string)obj.reason), cancellationToken) ?? default);
 				break;
 
 			case Channels.Heartbeat:
 			{
-				foreach (var item in arr)
-					HeartbeatReceived?.Invoke(item.DeserializeObject<Heartbeat>());
+				var handler = HeartbeatReceived;
+				if (handler != null)
+				{
+					foreach (var item in arr)
+						await handler(item.DeserializeObject<Heartbeat>(), cancellationToken);
+				}
 
 				break;
 			}
 
 			case Channels.Candles:
 			{
-				foreach (var item in arr)
+				var handler = CandleReceived;
+				if (handler != null)
 				{
-					foreach (var candle in item["candles"].DeserializeObject<IEnumerable<Ohlc>>())
-						CandleReceived?.Invoke(candle);
+					foreach (var item in arr)
+					{
+						foreach (var candle in item["candles"].DeserializeObject<IEnumerable<Ohlc>>())
+							await handler(candle, cancellationToken);
+					}
 				}
 
 				break;
@@ -91,10 +99,14 @@ class SocketClient : BaseLogReceiver
 
 			case Channels.Ticker:
 			{
-				foreach (var item in arr)
+				var handler = TickerReceived;
+				if (handler != null)
 				{
-					foreach (var ticker in item["tickers"].DeserializeObject<IEnumerable<Ticker>>())
-						TickerReceived?.Invoke(ticker);
+					foreach (var item in arr)
+					{
+						foreach (var ticker in item["tickers"].DeserializeObject<IEnumerable<Ticker>>())
+							await handler(ticker, cancellationToken);
+					}
 				}
 
 				break;
@@ -103,12 +115,16 @@ class SocketClient : BaseLogReceiver
 			case "l2_data":
 			case Channels.OrderBook:
 			{
-				foreach (var item in arr)
+				var handler = OrderBookReceived;
+				if (handler != null)
 				{
-					var type = (string)item["type"];
-					var symbol = (string)item["product_id"];
-				
-					OrderBookReceived?.Invoke(type, symbol, item["updates"].DeserializeObject<IEnumerable<OrderBookChange>>());
+					foreach (var item in arr)
+					{
+						var type = (string)item["type"];
+						var symbol = (string)item["product_id"];
+
+						await handler(type, symbol, item["updates"].DeserializeObject<IEnumerable<OrderBookChange>>(), cancellationToken);
+					}
 				}
 
 				break;
@@ -116,10 +132,14 @@ class SocketClient : BaseLogReceiver
 
 			case Channels.Trades:
 			{
-				foreach (var item in arr)
+				var handler = TradeReceived;
+				if (handler != null)
 				{
-					foreach (var trade in item["trades"].DeserializeObject<IEnumerable<Trade>>())
-						TradeReceived?.Invoke(trade);
+					foreach (var item in arr)
+					{
+						foreach (var trade in item["trades"].DeserializeObject<IEnumerable<Trade>>())
+							await handler(trade, cancellationToken);
+					}
 				}
 
 				break;
@@ -131,10 +151,14 @@ class SocketClient : BaseLogReceiver
 
 			case Channels.User:
 			{
-				foreach (var item in arr)
+				var handler = OrderReceived;
+				if (handler != null)
 				{
-					foreach (var order in item["orders"].DeserializeObject<IEnumerable<Order>>())
-						OrderReceived?.Invoke(order);
+					foreach (var item in arr)
+					{
+						foreach (var order in item["orders"].DeserializeObject<IEnumerable<Order>>())
+							await handler(order, cancellationToken);
+					}
 				}
 
 				break;
@@ -144,8 +168,6 @@ class SocketClient : BaseLogReceiver
 				this.AddErrorLog(LocalizedStrings.UnknownEvent, channel);
 				break;
 		}
-
-		return default;
 	}
 
 	private static class Channels

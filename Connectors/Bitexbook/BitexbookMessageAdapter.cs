@@ -33,8 +33,8 @@ public partial class BitexbookMessageAdapter
 
 	private void SubscribePusherClient()
 	{
-		_pusherClient.StateChanged += SendOutConnectionState;
-		_pusherClient.Error += SessionOnPusherError;
+		_pusherClient.StateChanged += OnStateChanged;
+		_pusherClient.Error += OnError;
 		_pusherClient.NewSymbols += SessionOnNewSymbols;
 		_pusherClient.TickerChanged += SessionOnTickerChanged;
 		_pusherClient.NewTickerChange += SessionOnNewTickerChange;
@@ -46,8 +46,8 @@ public partial class BitexbookMessageAdapter
 
 	private void UnsubscribePusherClient()
 	{
-		_pusherClient.StateChanged -= SendOutConnectionState;
-		_pusherClient.Error -= SessionOnPusherError;
+		_pusherClient.StateChanged -= OnStateChanged;
+		_pusherClient.Error -= OnError;
 		_pusherClient.NewSymbols -= SessionOnNewSymbols;
 		_pusherClient.TickerChanged -= SessionOnTickerChanged;
 		_pusherClient.NewTickerChange -= SessionOnNewTickerChange;
@@ -57,8 +57,14 @@ public partial class BitexbookMessageAdapter
 		_pusherClient.TicketExecuted -= SessionOnTicketExecuted;
 	}
 
+	private ValueTask OnStateChanged(ConnectionStates state, CancellationToken cancellationToken)
+		=> SendOutConnectionStateAsync(state, cancellationToken);
+
+	private ValueTask OnError(Exception error, CancellationToken cancellationToken)
+		=> SendOutErrorAsync(error, cancellationToken);
+
 	/// <inheritdoc />
-	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient != null)
 		{
@@ -68,7 +74,7 @@ public partial class BitexbookMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_httpClient = null;
@@ -83,7 +89,7 @@ public partial class BitexbookMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_pusherClient = null;
@@ -94,9 +100,7 @@ public partial class BitexbookMessageAdapter
 		_orderInfo.Clear();
 		_lastTimeBalanceCheck = null;
 
-		SendOutMessage(new ResetMessage());
-
-		return default;
+		await SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -157,8 +161,4 @@ public partial class BitexbookMessageAdapter
 		}
 	}
 
-	private void SessionOnPusherError(Exception exception)
-	{
-		SendOutError(exception);
-	}
 }

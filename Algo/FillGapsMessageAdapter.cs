@@ -74,7 +74,7 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -85,7 +85,7 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 				if (!_gapsRequests.TryGetValue(finished.OriginalTransactionId, out var info))
 					break;
 
-				_ = ProcessSubscriptionFinishedAsync(finished, info);
+				await ProcessSubscriptionFinishedAsync(finished, info, cancellationToken);
 				return;
 			}
 			case MessageTypes.SubscriptionOnline:
@@ -115,16 +115,16 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
-	private async Task ProcessSubscriptionFinishedAsync(SubscriptionFinishedMessage finished, FillGapInfo info)
+	private async ValueTask ProcessSubscriptionFinishedAsync(SubscriptionFinishedMessage finished, FillGapInfo info, CancellationToken cancellationToken)
 	{
 		try
 		{
 			var current = info.Current;
 
-			var (gapsStart, gapsEnd) = await _behaviour.TryGetNextGapAsync(info.SecId, info.Original.DataType, current.To.Value.AddDays(1), info.Original.To ?? CurrentTimeUtc, info.Days, default);
+			var (gapsStart, gapsEnd) = await _behaviour.TryGetNextGapAsync(info.SecId, info.Original.DataType, current.To.Value.AddDays(1), info.Original.To ?? CurrentTimeUtc, info.Days, cancellationToken);
 
 			if (gapsStart is null)
 			{
@@ -138,11 +138,11 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 					original.FillGaps = null;
 
 					original.LoopBack(this);
-					RaiseNewOutMessage((Message)original);
+					await RaiseNewOutMessageAsync((Message)original, cancellationToken);
 				}
 				else
 				{
-					base.OnInnerAdapterNewOutMessage(finished);
+					await base.OnInnerAdapterNewOutMessageAsync(finished, cancellationToken);
 				}
 
 				return;
@@ -156,12 +156,12 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 			info.Current = current;
 
 			current.LoopBack(this);
-			RaiseNewOutMessage((Message)current);
+			await RaiseNewOutMessageAsync((Message)current, cancellationToken);
 		}
 		catch (Exception ex)
 		{
 			this.AddErrorLog(ex);
-			base.OnInnerAdapterNewOutMessage(finished);
+			await base.OnInnerAdapterNewOutMessageAsync(finished, cancellationToken);
 		}
 	}
 

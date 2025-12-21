@@ -46,7 +46,7 @@ public class AutoConnectMessageAdapter(IMessageAdapter innerAdapter) : OfflineMe
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -62,6 +62,6 @@ public class AutoConnectMessageAdapter(IMessageAdapter innerAdapter) : OfflineMe
 				break;
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 }

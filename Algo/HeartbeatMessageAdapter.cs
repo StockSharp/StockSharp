@@ -56,7 +56,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	public bool SuppressReconnectingErrors { get; set; }
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -106,18 +106,18 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 					LogInfo(LocalizedStrings.ConnectionRestored);
 
 					if (SuppressReconnectingErrors)
-						RaiseNewOutMessage(new ConnectionRestoredMessage { IsResetState = true, Adapter = message.Adapter });
+						await RaiseNewOutMessageAsync(new ConnectionRestoredMessage { IsResetState = true, Adapter = message.Adapter }, cancellationToken);
 					else
-						RaiseNewOutMessage(new RestoredConnectMessage { Adapter = message.Adapter });
+						await RaiseNewOutMessageAsync(new RestoredConnectMessage { Adapter = message.Adapter }, cancellationToken);
 				}
 				else
 				{
 					if (connectMsg.IsOk() || !SuppressReconnectingErrors || !isReconnecting)
-						base.OnInnerAdapterNewOutMessage(message);
+						await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 					else if (isReconnectionStarted)
 					{
 						LogInfo(LocalizedStrings.Reconnecting);
-						base.OnInnerAdapterNewOutMessage(new ConnectionLostMessage { IsResetState = true, Adapter = message.Adapter });
+						await base.OnInnerAdapterNewOutMessageAsync(new ConnectionLostMessage { IsResetState = true, Adapter = message.Adapter }, cancellationToken);
 					}
 				}
 
@@ -139,18 +139,18 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 						if (_suppressDisconnectError)
 						{
 							_suppressDisconnectError = false;
-							RaiseNewOutMessage(disconnectMsg.Error.ToErrorMessage());
+							await RaiseNewOutMessageAsync(disconnectMsg.Error.ToErrorMessage(), cancellationToken);
 							disconnectMsg.Error = null;
 						}
 					}
 				}
 
-				base.OnInnerAdapterNewOutMessage(message);
+				await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 				break;
 			}
 
 			default:
-				base.OnInnerAdapterNewOutMessage(message);
+				await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 				break;
 		}
 	}

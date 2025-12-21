@@ -119,7 +119,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		var processSuspended = false;
 
@@ -163,12 +163,12 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 					//	continue;
 					//}
 
-					base.OnInnerAdapterNewOutMessage(order);
+					await base.OnInnerAdapterNewOutMessageAsync(order, cancellationToken);
 
-					ProcessSuspended(order);
+					await ProcessSuspendedAsync(order, cancellationToken);
 
 					foreach (var trade in trades)
-						base.OnInnerAdapterNewOutMessage(trade);
+						await base.OnInnerAdapterNewOutMessageAsync(trade, cancellationToken);
 				}
 
 				break;
@@ -327,25 +327,25 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 		if (processSuspended)
-			ProcessSuspended((ExecutionMessage)message);
+			await ProcessSuspendedAsync((ExecutionMessage)message, cancellationToken);
 	}
 
-	private void ProcessSuspended(ExecutionMessage execMsg)
+	private async ValueTask ProcessSuspendedAsync(ExecutionMessage execMsg, CancellationToken cancellationToken)
 	{
 		if (!execMsg.HasOrderInfo)
 			return;
 
 		if (execMsg.OrderId != null)
-			ProcessSuspended(_nonAssociatedOrderIds, execMsg.OrderId.Value);
+			await ProcessSuspendedAsync(_nonAssociatedOrderIds, execMsg.OrderId.Value, cancellationToken);
 
 		if (!execMsg.OrderStringId.IsEmpty())
-			ProcessSuspended(_nonAssociatedStringOrderIds, execMsg.OrderStringId);
+			await ProcessSuspendedAsync(_nonAssociatedStringOrderIds, execMsg.OrderStringId, cancellationToken);
 	}
 
-	private void ProcessSuspended<TKey>(Dictionary<TKey, List<ExecutionMessage>> nonAssociated, TKey key)
+	private async ValueTask ProcessSuspendedAsync<TKey>(Dictionary<TKey, List<ExecutionMessage>> nonAssociated, TKey key, CancellationToken cancellationToken)
 	{
 		List<ExecutionMessage> trades;
 
@@ -363,7 +363,7 @@ public class TransactionOrderingMessageAdapter(IMessageAdapter innerAdapter) : M
 		LogInfo("{0} resumed.", key);
 
 		foreach (var trade in trades)
-			RaiseNewOutMessage(trade);
+			await RaiseNewOutMessageAsync(trade, cancellationToken);
 	}
 
 	/// <summary>

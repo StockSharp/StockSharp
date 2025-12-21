@@ -149,10 +149,10 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		List<QuoteChangeMessage> books = null;
-		
+
 		switch (message.Type)
 		{
 			case MessageTypes.SubscriptionResponse:
@@ -192,7 +192,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 						}
 					}
 				}
-				
+
 				break;
 			}
 
@@ -216,12 +216,12 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 					{
 						if (!_byId.TryGetValue(id, out var info))
 							continue;
-					
+
 						var quoteMsg = info.Builder.Process(level1Msg);
 
 						if (quoteMsg == null)
 							continue;
-						
+
 						quoteMsg.SetSubscriptionIds(info.SubscriptionIds.Cache);
 
 						books ??= [];
@@ -233,7 +233,7 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 						leftIds.RemoveRange(info.SubscriptionIds.Cache);
 					}
 				}
-					
+
 				if (leftIds != null)
 				{
 					if (leftIds.Count == 0)
@@ -250,13 +250,13 @@ public class Level1DepthBuilderAdapter(IMessageAdapter innerAdapter) : MessageAd
 		}
 
 		if (message != null)
-			base.OnInnerAdapterNewOutMessage(message);
+			await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 		if (books != null)
 		{
 			foreach (var book in books)
 			{
-				base.OnInnerAdapterNewOutMessage(book);
+				await base.OnInnerAdapterNewOutMessageAsync(book, cancellationToken);
 			}
 		}
 	}

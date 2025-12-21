@@ -37,22 +37,28 @@ public partial class BtceMessageAdapter
 
 	private void SubscribePusherClient()
 	{
-		_pusherClient.StateChanged += SendOutConnectionState;
-		_pusherClient.Error += SendOutError;
+		_pusherClient.StateChanged += OnStateChanged;
+		_pusherClient.Error += OnError;
 		_pusherClient.OrderBookChanged += SessionOnOrderBookChanged;
 		_pusherClient.NewTrades += SessionOnNewTrades;
 	}
 
 	private void UnsubscribePusherClient()
 	{
-		_pusherClient.StateChanged -= SendOutConnectionState;
-		_pusherClient.Error -= SendOutError;
+		_pusherClient.StateChanged -= OnStateChanged;
+		_pusherClient.Error -= OnError;
 		_pusherClient.OrderBookChanged -= SessionOnOrderBookChanged;
 		_pusherClient.NewTrades -= SessionOnNewTrades;
 	}
 
+	private ValueTask OnStateChanged(ConnectionStates state, CancellationToken cancellationToken)
+		=> SendOutConnectionStateAsync(state, cancellationToken);
+
+	private ValueTask OnError(Exception error, CancellationToken cancellationToken)
+		=> SendOutErrorAsync(error, cancellationToken);
+
 	/// <inheritdoc />
-	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		_orderBooks.Clear();
 
@@ -71,7 +77,7 @@ public partial class BtceMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_httpClient = null;
@@ -86,14 +92,13 @@ public partial class BtceMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_pusherClient = null;
 		}
 
-		SendOutMessage(new ResetMessage());
-		return default;
+		await SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />

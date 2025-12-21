@@ -98,7 +98,7 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -132,7 +132,7 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 						if (snapshot != null)
 						{
 							snapshot.SetSubscriptionIds(subscriptionId: id);
-							base.OnInnerAdapterNewOutMessage(snapshot);
+							await base.OnInnerAdapterNewOutMessageAsync(snapshot, cancellationToken);
 						}
 					}
 				}
@@ -159,17 +159,17 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 				var execMsg = (ExecutionMessage)message;
 
 				if (execMsg.DataType == DataType.OrderLog && execMsg.IsSystem != false)
-					message = ProcessBuilders(execMsg);
+					message = await ProcessBuildersAsync(execMsg, cancellationToken);
 
 				break;
 			}
 		}
 
 		if (message != null)
-			base.OnInnerAdapterNewOutMessage(message);
+			await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
-	private Message ProcessBuilders(ExecutionMessage execMsg)
+	private async ValueTask<Message> ProcessBuildersAsync(ExecutionMessage execMsg, CancellationToken cancellationToken)
 	{
 		List<long> nonBuilderIds = null;
 
@@ -207,20 +207,20 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 					if (depth != null)
 					{
 						depth.SetSubscriptionIds(subscriptionId: subscriptionId);
-						base.OnInnerAdapterNewOutMessage(depth);
+						await base.OnInnerAdapterNewOutMessageAsync(depth, cancellationToken);
 					}
 				}
 				catch (Exception ex)
 				{
 					// если ОЛ поврежден, то не нарушаем весь цикл обработки сообщения
 					// а только выводим сообщение в лог
-					base.OnInnerAdapterNewOutMessage(ex.ToErrorMessage());
+					await base.OnInnerAdapterNewOutMessageAsync(ex.ToErrorMessage(), cancellationToken);
 				}
 			}
 			else
 			{
 				LogDebug("OL->TICK processing {0}.", execMsg.SecurityId);
-				base.OnInnerAdapterNewOutMessage(execMsg.ToTick());
+				await base.OnInnerAdapterNewOutMessageAsync(execMsg.ToTick(), cancellationToken);
 			}
 		}
 

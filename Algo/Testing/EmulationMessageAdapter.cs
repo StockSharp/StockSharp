@@ -192,12 +192,12 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message.IsBack())
 		{
 			if (OwnInnerAdapter)
-				base.OnInnerAdapterNewOutMessage(message);
+				await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 			return;
 		}
@@ -213,7 +213,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			case MessageTypes.SubscriptionOnline:
 			{
 				if (_subscriptionIds.Contains(((IOriginalTransactionIdMessage)message).OriginalTransactionId))
-					SendToEmulator(message, default);
+					await SendToEmulator(message, cancellationToken);
 
 				break;
 			}
@@ -222,7 +222,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			case MessageTypes.PositionChange:
 			{
 				if (OwnInnerAdapter)
-					base.OnInnerAdapterNewOutMessage(message);
+					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 				break;
 			}
@@ -232,11 +232,11 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				var execMsg = (ExecutionMessage)message;
 
 				if (execMsg.IsMarketData())
-					TrySendToEmulator((ISubscriptionIdMessage)message, default);
+					await TrySendToEmulator((ISubscriptionIdMessage)message, cancellationToken);
 				else
 				{
 					if (OwnInnerAdapter)
-						base.OnInnerAdapterNewOutMessage(message);
+						await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 				}
 
 				break;
@@ -246,15 +246,15 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			case MessageTypes.Board:
 			{
 				if (OwnInnerAdapter)
-					base.OnInnerAdapterNewOutMessage(message);
+					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
-				SendToEmulator(message, default);
+				await SendToEmulator(message, cancellationToken);
 				//TrySendToEmulator((ISubscriptionIdMessage)message);
 				break;
 			}
 
 			case MessageTypes.EmulationState:
-				SendToEmulator(message, default);
+				await SendToEmulator(message, cancellationToken);
 				break;
 
 			case MessageTypes.Time:
@@ -262,9 +262,9 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				if (OwnInnerAdapter)
 				{
 					if (_isEmulationOnly)
-						SendToEmulator(message, default);
+						await SendToEmulator(message, cancellationToken);
 					else
-						base.OnInnerAdapterNewOutMessage(message);
+						await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 				}
 
 				break;
@@ -273,11 +273,11 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			default:
 			{
 				if (message is ISubscriptionIdMessage subscrMsg)
-					TrySendToEmulator(subscrMsg, default);
+					await TrySendToEmulator(subscrMsg, cancellationToken);
 				else
 				{
 					if (OwnInnerAdapter)
-						base.OnInnerAdapterNewOutMessage(message);
+						await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 				}
 
 				break;

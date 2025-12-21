@@ -27,27 +27,27 @@ public partial class BitalongMessageAdapter
 			if (!secMsg.IsMatch(lookupMsg, secTypes))
 				continue;
 
-			SendOutMessage(secMsg);
+			await SendOutMessageAsync(secMsg, cancellationToken);
 
-			SendOutMessage(new Level1ChangeMessage
+			await SendOutMessageAsync(new Level1ChangeMessage
 			{
 				SecurityId = pair.Key.ToStockSharp(),
 				ServerTime = CurrentTimeUtc
 			}
 			.TryAdd(Level1Fields.CommissionMaker, (decimal)symbol.FeeSell)
-			.TryAdd(Level1Fields.CommissionTaker, (decimal)symbol.FeeBuy));
+			.TryAdd(Level1Fields.CommissionTaker, (decimal)symbol.FeeBuy), cancellationToken);
 
 			if (--left <= 0)
 				break;
 		}
 
-		SendSubscriptionResult(lookupMsg);
+		await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var secId = mdMsg.SecurityId;
 		var symbol = secId.ToNative();
@@ -59,7 +59,7 @@ public partial class BitalongMessageAdapter
 			if (!mdMsg.IsHistoryOnly())
 				_level1Subscriptions.Add(symbol);
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 			_level1Subscriptions.Remove(symbol);
@@ -68,7 +68,7 @@ public partial class BitalongMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var secId = mdMsg.SecurityId;
 		var symbol = secId.ToNative();
@@ -80,7 +80,7 @@ public partial class BitalongMessageAdapter
 			if (!mdMsg.IsHistoryOnly())
 				_tradesSubscriptions.Add(symbol, 0);
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 		{
@@ -91,7 +91,7 @@ public partial class BitalongMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var secId = mdMsg.SecurityId;
 		var symbol = secId.ToNative();
@@ -103,7 +103,7 @@ public partial class BitalongMessageAdapter
 			if (!mdMsg.IsHistoryOnly())
 				_orderBookSubscriptions.Add(symbol);
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 			_orderBookSubscriptions.Remove(symbol);
@@ -127,20 +127,20 @@ public partial class BitalongMessageAdapter
 		}
 	}
 
-	private async Task ProcessOrderBookSubscription(string symbol, CancellationToken cancellationToken)
+	private async ValueTask ProcessOrderBookSubscription(string symbol, CancellationToken cancellationToken)
 	{
 		var book = await _httpClient.GetOrderBook(symbol, cancellationToken);
 
-		SendOutMessage(new QuoteChangeMessage
+		await SendOutMessageAsync(new QuoteChangeMessage
 		{
 			SecurityId = symbol.ToStockSharp(),
 			Bids = book.Bids?.Select(e => new QuoteChange((decimal)e.Price, (decimal)e.Size)).ToArray() ?? Array.Empty<QuoteChange>(),
 			Asks = book.Asks?.Select(e => new QuoteChange((decimal)e.Price, (decimal)e.Size)).ToArray() ?? Array.Empty<QuoteChange>(),
 			ServerTime = CurrentTimeUtc,
-		});
+		}, cancellationToken);
 	}
 
-	private async Task ProcessTicksSubscription(long transId, string symbol, CancellationToken cancellationToken)
+	private async ValueTask ProcessTicksSubscription(long transId, string symbol, CancellationToken cancellationToken)
 	{
 		var secId = symbol.ToStockSharp();
 
@@ -152,17 +152,17 @@ public partial class BitalongMessageAdapter
 				continue;
 
 			lastId = trade.Id;
-			ProcessTick(transId, secId, trade);
+			await ProcessTickAsync(transId, secId, trade, cancellationToken);
 
 			_tradesSubscriptions[symbol] = lastId;
 		}
 	}
 
-	private async Task ProcessLevel1Subscriptions(string[] symbols, CancellationToken cancellationToken)
+	private async ValueTask ProcessLevel1Subscriptions(string[] symbols, CancellationToken cancellationToken)
 	{
-		void ProcessTicker(string symbol, Ticker ticker)
+		ValueTask ProcessTickerAsync(string symbol, Ticker ticker)
 		{
-			SendOutMessage(new Level1ChangeMessage
+			return SendOutMessageAsync(new Level1ChangeMessage
 			{
 				SecurityId = symbol.ToStockSharp(),
 				ServerTime = CurrentTimeUtc,
@@ -173,28 +173,28 @@ public partial class BitalongMessageAdapter
 			.TryAdd(Level1Fields.HighBidPrice, (decimal?)ticker.HighestBid)
 			.TryAdd(Level1Fields.LowAskPrice, (decimal?)ticker.LowestAsk)
 			.TryAdd(Level1Fields.Volume, (decimal?)ticker.QuoteVolume)
-			.TryAdd(Level1Fields.Change, (decimal?)ticker.PercentChange));
+			.TryAdd(Level1Fields.Change, (decimal?)ticker.PercentChange), cancellationToken);
 		}
-		
+
 		if (symbols.Length > 2)
 		{
 			foreach (var pair in await _httpClient.GetTickers(cancellationToken))
 			{
-				ProcessTicker(pair.Key, pair.Value);
+				await ProcessTickerAsync(pair.Key, pair.Value);
 			}
 		}
 		else
 		{
 			foreach (var symbol in symbols)
 			{
-				ProcessTicker(symbol, await _httpClient.GetTicker(symbol, cancellationToken));
+				await ProcessTickerAsync(symbol, await _httpClient.GetTicker(symbol, cancellationToken));
 			}
 		}
 	}
 
-	private void ProcessTick(long transactionId, SecurityId securityId, Native.Model.Trade trade)
+	private ValueTask ProcessTickAsync(long transactionId, SecurityId securityId, Native.Model.Trade trade, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			SecurityId = securityId,
@@ -204,6 +204,6 @@ public partial class BitalongMessageAdapter
 			TradeVolume = (decimal)trade.Amount,
 			ServerTime = trade.Timestamp,
 			OriginalTransactionId = transactionId,
-		});
+		}, cancellationToken);
 	}
 }

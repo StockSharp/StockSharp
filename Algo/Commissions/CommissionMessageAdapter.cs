@@ -20,12 +20,12 @@ public class CommissionMessageAdapter(IMessageAdapter innerAdapter, ICommissionM
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message is ExecutionMessage execMsg && execMsg.DataType == DataType.Transactions && execMsg.Commission == null)
 			execMsg.Commission = _commissionManager.Process(execMsg);
 
-		base.OnInnerAdapterNewOutMessage(message);
+		return base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>

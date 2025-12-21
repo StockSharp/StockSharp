@@ -82,7 +82,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		long TryReplaceOriginId(long id)
 		{
@@ -172,7 +172,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 					if (_subscriptionsById.TryGetValue(newOriginId, out var info))
 						ChangeState(info, SubscriptionStates.Finished);
 				}
-				
+
 				break;
 			}
 
@@ -232,7 +232,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 		switch (message.Type)
 		{
@@ -265,7 +265,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 				}
 
 				if (supended != null)
-					base.OnInnerAdapterNewOutMessage(supended);
+					await base.OnInnerAdapterNewOutMessageAsync(supended, cancellationToken);
 
 				break;
 			}
@@ -409,7 +409,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			foreach (var sendOutMsg in sendOutMsgs)
 			{
 				LogDebug("Out: {0}", sendOutMsg);
-				RaiseNewOutMessage(sendOutMsg);	
+				await RaiseNewOutMessageAsync(sendOutMsg, cancellationToken);
 			}
 		}
 	}

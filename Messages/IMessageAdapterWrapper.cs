@@ -50,12 +50,12 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 				return;
 
 			if (_innerAdapter != null)
-				_innerAdapter.NewOutMessage -= InnerAdapterNewOutMessage;
+				_innerAdapter.NewOutMessageAsync -= InnerAdapterNewOutMessageAsync;
 
 			_innerAdapter = value;
 
 			if (_innerAdapter != null)
-				_innerAdapter.NewOutMessage += InnerAdapterNewOutMessage;
+				_innerAdapter.NewOutMessageAsync += InnerAdapterNewOutMessageAsync;
 		}
 	}
 
@@ -68,30 +68,51 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	/// Process <see cref="InnerAdapter"/> output message.
 	/// </summary>
 	/// <param name="message">The message.</param>
-	protected virtual void InnerAdapterNewOutMessage(Message message)
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected virtual ValueTask InnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message.IsBack())
-			RaiseNewOutMessage(message);
+			return RaiseNewOutMessageAsync(message, cancellationToken);
 		else
-			OnInnerAdapterNewOutMessage(message);
+			return OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>
 	/// Process <see cref="InnerAdapter"/> output message.
 	/// </summary>
 	/// <param name="message">The message.</param>
-	protected virtual void OnInnerAdapterNewOutMessage(Message message)
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected virtual ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		RaiseNewOutMessage(message);
+		return RaiseNewOutMessageAsync(message, cancellationToken);
+	}
+
+	/// <summary>
+	/// To call the event <see cref="NewOutMessageAsync"/>.
+	/// </summary>
+	/// <param name="message">The message.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected async ValueTask RaiseNewOutMessageAsync(Message message, CancellationToken cancellationToken)
+	{
+		var handler = NewOutMessageAsync;
+		if (handler is not null)
+			await handler(message, cancellationToken);
+
+#pragma warning disable CS0618 // Type or member is obsolete
+		NewOutMessage?.Invoke(message);
+#pragma warning restore CS0618
 	}
 
 	/// <summary>
 	/// To call the event <see cref="NewOutMessage"/>.
 	/// </summary>
 	/// <param name="message">The message.</param>
+	[Obsolete("Use RaiseNewOutMessageAsync method.")]
 	protected void RaiseNewOutMessage(Message message)
 	{
+#pragma warning disable CS0618 // Type or member is obsolete
 		NewOutMessage?.Invoke(message);
+#pragma warning restore CS0618
 	}
 
 	/// <summary>
@@ -112,18 +133,19 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 			{
 				if (SendInBackFurther)
 				{
-					return InnerAdapter.SendInMessageAsync(message, cancellationToken);
+					await InnerAdapter.SendInMessageAsync(message, cancellationToken);
+					return;
 				}
 			}
 		}
 
 		try
 		{
-			return OnSendInMessageAsync(message, cancellationToken);
+			await OnSendInMessageAsync(message, cancellationToken);
 		}
 		catch (Exception ex)
 		{
-			RaiseNewOutMessage(message.CreateErrorResponse(ex, this));
+			await RaiseNewOutMessageAsync(message.CreateErrorResponse(ex, this), cancellationToken);
 			throw;
 		}
 	}
@@ -140,6 +162,9 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 
 	/// <inheritdoc />
 	public event Action<Message> NewOutMessage;
+
+	/// <inheritdoc />
+	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 
 	/// <summary>
 	/// Load settings.
@@ -335,8 +360,13 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	public virtual bool IsSecurityRequired(DataType dataType)
 		=> InnerAdapter.IsSecurityRequired(dataType);
 
+#pragma warning disable CS0618 // Type or member is obsolete
 	void IMessageAdapter.SendOutMessage(Message message)
 		=> InnerAdapter.SendOutMessage(message);
+#pragma warning restore CS0618 // Type or member is obsolete
+
+    ValueTask IMessageAdapter.SendOutMessageAsync(Message message, CancellationToken cancellationToken)
+		=> InnerAdapter.SendOutMessageAsync(message, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual void Dispose()
@@ -344,7 +374,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 		if (InnerAdapter is null)
 			return;
 
-		InnerAdapter.NewOutMessage -= InnerAdapterNewOutMessage;
+		InnerAdapter.NewOutMessageAsync -= InnerAdapterNewOutMessageAsync;
 
 		if (OwnInnerAdapter)
 			InnerAdapter.Dispose();

@@ -86,9 +86,9 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 		switch (message.Type)
 		{
@@ -135,7 +135,7 @@ public class SnapshotHolderMessageAdapter(IMessageAdapter innerAdapter, ISnapsho
 						subscrIdMsg.SetSubscriptionIds(subscriptionId: online.OriginalTransactionId);
 					}
 
-					base.OnInnerAdapterNewOutMessage(snapshot);
+					await base.OnInnerAdapterNewOutMessageAsync(snapshot, cancellationToken);
 				}
 
 				break;

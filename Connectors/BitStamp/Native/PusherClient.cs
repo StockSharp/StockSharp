@@ -6,11 +6,11 @@ using Newtonsoft.Json.Linq;
 
 class PusherClient : BaseLogReceiver
 {
-	public event Action<string, Trade> NewTrade;
-	public event Action<string, OrderBook> NewOrderBook;
-	public event Action<string, OrderStates, Order> NewOrderLog;
-	public event Action<Exception> Error;
-	public event Action<ConnectionStates> StateChanged;
+	public event Func<string, Trade, CancellationToken, ValueTask> NewTrade;
+	public event Func<string, OrderBook, CancellationToken, ValueTask> NewOrderBook;
+	public event Func<string, OrderStates, Order, CancellationToken, ValueTask> NewOrderLog;
+	public event Func<Exception, CancellationToken, ValueTask> Error;
+	public event Func<ConnectionStates, CancellationToken, ValueTask> StateChanged;
 	public event Action<string> TradesSubscribed;
 	public event Action<string> OrderBookSubscribed;
 	public event Action<string> OrderLogSubscribed;
@@ -27,11 +27,11 @@ class PusherClient : BaseLogReceiver
 	{
 		_client = new(
 			"wss://ws.bitstamp.net",
-			state => StateChanged?.Invoke(state),
-			error =>
+			(state, ct) => StateChanged?.Invoke(state, ct) ?? default,
+			(error, ct) =>
 			{
 				this.AddErrorLog(error);
-				Error?.Invoke(error);
+				return Error?.Invoke(error, ct) ?? default;
 			},
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
@@ -82,7 +82,7 @@ class PusherClient : BaseLogReceiver
 			//	break;
 
 			case "bts:error":
-				Error?.Invoke(new InvalidOperationException((string)data.message));
+				await (Error?.Invoke(new InvalidOperationException((string)data.message), cancellationToken) ?? default);
 				break;
 
 			case "ping":
@@ -121,18 +121,30 @@ class PusherClient : BaseLogReceiver
 			}
 
 			case "trade":
-				NewTrade?.Invoke(GetPair(channel, ChannelNames.Trades), ((JToken)data).DeserializeObject<Trade>());
+			{
+				var handler = NewTrade;
+				if (handler != null)
+					await handler(GetPair(channel, ChannelNames.Trades), ((JToken)data).DeserializeObject<Trade>(), cancellationToken);
 				break;
+			}
 
 			case "data":
-				NewOrderBook?.Invoke(GetPair(channel, ChannelNames.OrderBook), ((JToken)data).DeserializeObject<OrderBook>());
+			{
+				var handler = NewOrderBook;
+				if (handler != null)
+					await handler(GetPair(channel, ChannelNames.OrderBook), ((JToken)data).DeserializeObject<OrderBook>(), cancellationToken);
 				break;
+			}
 
 			case "order_created":
 			case "order_changed":
 			case "order_deleted":
-				NewOrderLog?.Invoke(GetPair(channel, ChannelNames.OrderLog), evt == "order_deleted" ? OrderStates.Done : OrderStates.Active, ((JToken)data).DeserializeObject<Order>());
+			{
+				var handler = NewOrderLog;
+				if (handler != null)
+					await handler(GetPair(channel, ChannelNames.OrderLog), evt == "order_deleted" ? OrderStates.Done : OrderStates.Active, ((JToken)data).DeserializeObject<Order>(), cancellationToken);
 				break;
+			}
 
 			default:
 				this.AddErrorLog(LocalizedStrings.UnknownEvent, evt);

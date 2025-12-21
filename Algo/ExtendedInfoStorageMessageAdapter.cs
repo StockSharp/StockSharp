@@ -41,14 +41,14 @@ public class ExtendedInfoStorageMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		var secMsg = message as SecurityMessage;
 
 		//if (secMsg?.ExtensionInfo != null)
 		//	GetStorageAsync().Add(secMsg.SecurityId, secMsg.ExtensionInfo);
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>

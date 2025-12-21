@@ -58,8 +58,8 @@ public partial class BitStampMessageAdapter : MessageAdapter
 
 	private void SubscribePusherClient()
 	{
-		_pusherClient.StateChanged += SendOutConnectionState;
-		_pusherClient.Error += SendOutError;
+		_pusherClient.StateChanged += OnStateChanged;
+		_pusherClient.Error += OnError;
 		_pusherClient.NewOrderBook += SessionOnNewOrderBook;
 		_pusherClient.NewOrderLog += SessionOnNewOrderLog;
 		_pusherClient.NewTrade += SessionOnNewTrade;
@@ -67,12 +67,18 @@ public partial class BitStampMessageAdapter : MessageAdapter
 
 	private void UnsubscribePusherClient()
 	{
-		_pusherClient.StateChanged -= SendOutConnectionState;
-		_pusherClient.Error -= SendOutError;
+		_pusherClient.StateChanged -= OnStateChanged;
+		_pusherClient.Error -= OnError;
 		_pusherClient.NewOrderBook -= SessionOnNewOrderBook;
 		_pusherClient.NewOrderLog -= SessionOnNewOrderLog;
 		_pusherClient.NewTrade -= SessionOnNewTrade;
 	}
+
+	private ValueTask OnStateChanged(ConnectionStates state, CancellationToken cancellationToken)
+		=> SendOutConnectionStateAsync(state, cancellationToken);
+
+	private ValueTask OnError(Exception error, CancellationToken cancellationToken)
+		=> SendOutErrorAsync(error, cancellationToken);
 
 	/// <inheritdoc />
 	protected override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
@@ -118,7 +124,7 @@ public partial class BitStampMessageAdapter : MessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		_lastMyTradeId = 0;
 		_lastTimeBalanceCheck = null;
@@ -131,7 +137,7 @@ public partial class BitStampMessageAdapter : MessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_httpClient = null;
@@ -146,15 +152,13 @@ public partial class BitStampMessageAdapter : MessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_pusherClient = null;
 		}
 
-		SendOutMessage(new ResetMessage());
-
-		return default;
+		await SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />

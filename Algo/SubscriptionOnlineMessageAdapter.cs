@@ -133,7 +133,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -185,7 +185,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 					foreach (var subscriber in subscribers)
 					{
 						LogInfo(LocalizedStrings.SubscriptionNotifySubscriber, responseMsg.OriginalTransactionId, subscriber);
-						base.OnInnerAdapterNewOutMessage(subscriber.CreateSubscriptionResponse(responseMsg.Error));
+						await base.OnInnerAdapterNewOutMessageAsync(subscriber.CreateSubscriptionResponse(responseMsg.Error), cancellationToken);
 					}
 				}
 
@@ -225,7 +225,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 						}
 					}
 				}
-				
+
 				break;
 			}
 
@@ -285,7 +285,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	private void TryAddOrderTransaction(SubscriptionInfo statusInfo, long transactionId, bool warnOnDuplicate = true)
@@ -483,7 +483,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 				foreach (var sendOutMsg in sendOutMsgs)
 				{
 					LogInfo("Out: {0}", sendOutMsg);
-					RaiseNewOutMessage(sendOutMsg);
+					await RaiseNewOutMessageAsync(sendOutMsg, cancellationToken);
 				}
 			}
 		}

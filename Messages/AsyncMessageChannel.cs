@@ -266,7 +266,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 				if (token.IsCancellationRequested)
 				{
 					if (item.IsTransaction)
-						_adapter.SendOutMessage(msg.CreateErrorResponse(new OperationCanceledException(), _adapter));
+						await _adapter.SendOutMessageAsync(msg.CreateErrorResponse(new OperationCanceledException(), _adapter), token);
 
 					return;
 				}
@@ -361,7 +361,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 					{
 						if (item.UnsubscribeRequest != default)
 						{
-							_adapter.SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = item.UnsubscribeRequest });
+							await _adapter.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = item.UnsubscribeRequest }, token);
 						}
 						else
 						{
@@ -379,7 +379,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 								await _adapter.FaultDelay.Delay(token);
 							}
 
-							_adapter.SendOutMessage(msg.CreateErrorResponse(ex, _adapter));
+							await _adapter.SendOutMessageAsync(msg.CreateErrorResponse(ex, _adapter), token);
 						}
 					}
 					catch (Exception ex2)

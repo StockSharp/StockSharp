@@ -33,7 +33,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 		=> InnerAdapter.NotSupportedResultMessages.Concat([MessageTypes.PortfolioLookup]).Distinct();
 
 	/// <inheritdoc />
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -61,7 +61,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 							_positionManager.ProcessMessage(message);
 					}
 
-					RaiseNewOutMessage(lookupMsg.CreateResult());
+					await RaiseNewOutMessageAsync(lookupMsg.CreateResult(), cancellationToken);
 				}
 				else
 				{
@@ -73,10 +73,10 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 							_positionManager.ProcessMessage(message);
 					}
 
-					RaiseNewOutMessage(lookupMsg.CreateResponse());
+					await RaiseNewOutMessageAsync(lookupMsg.CreateResponse(), cancellationToken);
 				}
 
-				return default;
+				return;
 			}
 
 			default:
@@ -87,12 +87,12 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 				break;
 			}
 		}
-		
-		return base.OnSendInMessageAsync(message, cancellationToken);
+
+		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		PositionChangeMessage change = null;
 
@@ -109,10 +109,10 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 		{
 			change.SetSubscriptionIds(_subscriptions.Cache);
 
-			base.OnInnerAdapterNewOutMessage(change);
+			await base.OnInnerAdapterNewOutMessageAsync(change, cancellationToken);
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>

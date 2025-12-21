@@ -38,7 +38,7 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 	private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -49,7 +49,7 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 				{
 					var clone = secMsg.TypedClone();
 					clone.SecurityId = CreateAssociatedId(clone.SecurityId);
-					base.OnInnerAdapterNewOutMessage(clone);
+					await base.OnInnerAdapterNewOutMessageAsync(clone, cancellationToken);
 				}
 				break;
 			}
@@ -60,10 +60,10 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 
 				if (!IsAssociated(level1Msg.SecurityId.BoardCode))
 				{
-					// обновление BestXXX для ALL из конкретных тикеров
+					// РѕР±РЅРѕРІР»РµРЅРёРµ BestXXX РґР»СЏ ALL РёР· РєРѕРЅРєСЂРµС‚РЅС‹С… С‚РёРєРµСЂРѕРІ
 					var clone = level1Msg.TypedClone();
 					clone.SecurityId = CreateAssociatedId(clone.SecurityId);
-					base.OnInnerAdapterNewOutMessage(clone);
+					await base.OnInnerAdapterNewOutMessageAsync(clone, cancellationToken);
 				}
 
 				break;
@@ -87,7 +87,7 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 
 				quoteMsg = builder.Process(quoteMsg);
 
-				base.OnInnerAdapterNewOutMessage(quoteMsg);
+				await base.OnInnerAdapterNewOutMessageAsync(quoteMsg, cancellationToken);
 
 				break;
 			}
@@ -103,7 +103,7 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 					{
 						var clone = executionMsg.TypedClone();
 						clone.SecurityId = CreateAssociatedId(clone.SecurityId);
-						base.OnInnerAdapterNewOutMessage(clone);
+						await base.OnInnerAdapterNewOutMessageAsync(clone, cancellationToken);
 					}
 				}
 
@@ -111,7 +111,7 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	private static bool IsAssociated(string boardCode)

@@ -32,7 +32,7 @@ public partial class BitalongMessageAdapter
 	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Bitalong };
 
 	/// <inheritdoc />
-	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient != null)
 		{
@@ -42,7 +42,7 @@ public partial class BitalongMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_httpClient = null;
@@ -55,13 +55,11 @@ public partial class BitalongMessageAdapter
 		_tradesSubscriptions.Clear();
 		_level1Subscriptions.Clear();
 
-		SendOutMessage(new ResetMessage());
-
-		return default;
+		await SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
 		if (this.IsTransactional())
 		{
@@ -77,12 +75,11 @@ public partial class BitalongMessageAdapter
 
 		_httpClient = new HttpClient(Address, Key, Secret) { Parent = this };
 
-		SendOutMessage(new ConnectMessage());
-		return default;
+		await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	protected override async ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient == null)
 			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
@@ -90,8 +87,7 @@ public partial class BitalongMessageAdapter
 		_httpClient.Dispose();
 		_httpClient = null;
 
-		SendOutMessage(new DisconnectMessage());
-		return default;
+		await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />

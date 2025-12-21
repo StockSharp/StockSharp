@@ -243,12 +243,12 @@ public class HistoryMessageAdapter : MessageAdapter
 				foreach (var security in securities)
 				{
 					if (security.Board != null && processedBoards.Add(security.Board))
-						SendOutMessage(security.Board.ToMessage());
+						await SendOutMessageAsync(security.Board.ToMessage(), cancellationToken);
 
-					SendOutMessage(security.ToMessage(originalTransactionId: lookupMsg.TransactionId));
+					await SendOutMessageAsync(security.ToMessage(originalTransactionId: lookupMsg.TransactionId), cancellationToken);
 				}
 
-				SendSubscriptionResult(lookupMsg);
+				await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 
 				break;
 			}
@@ -348,7 +348,7 @@ public class HistoryMessageAdapter : MessageAdapter
 
 		if (StorageRegistry == null)
 		{
-			SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.NotSupportedDataForSecurity.Put(dataType, securityId)));
+			await SendSubscriptionReplyAsync(transId, cancellationToken, new InvalidOperationException(LocalizedStrings.NotSupportedDataForSecurity.Put(dataType, securityId)));
 			return;
 		}
 
@@ -413,7 +413,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			{
 				if (HasGenerator(DataType.Ticks))
 				{
-					SendSubscriptionNotSupported(transId);
+					await SendSubscriptionNotSupportedAsync(transId, cancellationToken);
 					return;
 				}
 
@@ -427,10 +427,10 @@ public class HistoryMessageAdapter : MessageAdapter
 			error = new InvalidOperationException(LocalizedStrings.NotSupportedDataForSecurity.Put(dataType, Messages.Extensions.AllSecurityId));
 		}
 
-		SendSubscriptionReply(transId, error);
+		await SendSubscriptionReplyAsync(transId, cancellationToken, error);
 
 		if (isSubscribe && error == null)
-			SendSubscriptionResult(message);
+			await SendSubscriptionResultAsync(message, cancellationToken);
 	}
 
 	private BoardMessage[] GetBoard()

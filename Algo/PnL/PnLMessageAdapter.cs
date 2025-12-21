@@ -20,7 +20,7 @@ public class PnLMessageAdapter(IMessageAdapter innerAdapter, IPnLManager pnlMana
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message.Type != MessageTypes.Reset)
 		{
@@ -32,7 +32,7 @@ public class PnLMessageAdapter(IMessageAdapter innerAdapter, IPnLManager pnlMana
 
 			foreach (var manager in list)
 			{
-				base.OnInnerAdapterNewOutMessage(new PositionChangeMessage
+				await base.OnInnerAdapterNewOutMessageAsync(new PositionChangeMessage
 				{
 					SecurityId = SecurityId.Money,
 					ServerTime = message.LocalTime,
@@ -40,11 +40,11 @@ public class PnLMessageAdapter(IMessageAdapter innerAdapter, IPnLManager pnlMana
 					BuildFrom = DataType.Transactions,
 				}
 				.Add(PositionChangeTypes.RealizedPnL, manager.RealizedPnL)
-				.TryAdd(PositionChangeTypes.UnrealizedPnL, manager.UnrealizedPnL));
+				.TryAdd(PositionChangeTypes.UnrealizedPnL, manager.UnrealizedPnL), cancellationToken);
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>

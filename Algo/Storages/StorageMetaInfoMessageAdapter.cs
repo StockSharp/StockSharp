@@ -68,7 +68,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 			if (outMsg is MarketDataMessage md)
 				forwardMessage = md;
 			else
-				RaiseNewOutMessage(outMsg);
+				await RaiseNewOutMessageAsync(outMsg, cancellationToken);
 		}
 
 		if (forwardMessage != null)
@@ -76,7 +76,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -175,53 +175,62 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
-	private ValueTask ProcessSecurityLookup(SecurityLookupMessage msg, CancellationToken cancellationToken)
+	private async ValueTask ProcessSecurityLookup(SecurityLookupMessage msg, CancellationToken cancellationToken)
 	{
 		if (msg == null)
 			throw new ArgumentNullException(nameof(msg));
 
 		if (/*!msg.IsSubscribe || */(msg.Adapter != null && msg.Adapter != this))
-			return base.OnSendInMessageAsync(msg, cancellationToken);
+		{
+			await base.OnSendInMessageAsync(msg, cancellationToken);
+			return;
+		}
 
 		var transId = msg.TransactionId;
 
 		foreach (var security in _securityStorage.Lookup(msg))
-			RaiseNewOutMessage(security.ToMessage(originalTransactionId: transId).SetSubscriptionIds(subscriptionId: transId));
+			await RaiseNewOutMessageAsync(security.ToMessage(originalTransactionId: transId).SetSubscriptionIds(subscriptionId: transId), cancellationToken);
 
-		return base.OnSendInMessageAsync(msg, cancellationToken);
+		await base.OnSendInMessageAsync(msg, cancellationToken);
 	}
 
-	private ValueTask ProcessBoardLookup(BoardLookupMessage msg, CancellationToken cancellationToken)
+	private async ValueTask ProcessBoardLookup(BoardLookupMessage msg, CancellationToken cancellationToken)
 	{
 		if (msg == null)
 			throw new ArgumentNullException(nameof(msg));
 
 		if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
-			return base.OnSendInMessageAsync(msg, cancellationToken);
+		{
+			await base.OnSendInMessageAsync(msg, cancellationToken);
+			return;
+		}
 
 		var transId = msg.TransactionId;
 
 		foreach (var board in _exchangeInfoProvider.LookupBoards2(msg))
-			RaiseNewOutMessage(board.SetSubscriptionIds(subscriptionId: transId));
+			await RaiseNewOutMessageAsync(board.SetSubscriptionIds(subscriptionId: transId), cancellationToken);
 
-		return base.OnSendInMessageAsync(msg, cancellationToken);
+		await base.OnSendInMessageAsync(msg, cancellationToken);
 	}
 
-	private ValueTask ProcessPortfolioLookup(PortfolioLookupMessage msg, CancellationToken cancellationToken)
+	private async ValueTask ProcessPortfolioLookup(PortfolioLookupMessage msg, CancellationToken cancellationToken)
 	{
 		if (msg == null)
 			throw new ArgumentNullException(nameof(msg));
 
 		if (!msg.IsSubscribe || (msg.Adapter != null && msg.Adapter != this))
-			return base.OnSendInMessageAsync(msg, cancellationToken);
+		{
+			await base.OnSendInMessageAsync(msg, cancellationToken);
+			return;
+		}
 
 		var now = CurrentTimeUtc;
 		var transId = msg.TransactionId;
 
-		void SendOut<TMessage>(TMessage outMsg)
+		async ValueTask SendOutAsync<TMessage>(TMessage outMsg)
 			where TMessage : Message, ISubscriptionIdMessage
 		{
 			outMsg.SetSubscriptionIds(subscriptionId: transId);
@@ -230,18 +239,18 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 				timeMsg.ServerTime = now;
 
 			outMsg.OfflineMode = MessageOfflineModes.Ignore;
-			RaiseNewOutMessage(outMsg);
+			await RaiseNewOutMessageAsync(outMsg, cancellationToken);
 		}
 
 		if (msg.StrategyId.IsEmpty())
 		{
 			foreach (var portfolio in _positionStorage.Portfolios.Filter(msg))
 			{
-				SendOut(portfolio.ToMessage(transId));
-				SendOut(portfolio.ToChangeMessage());
+				await SendOutAsync(portfolio.ToMessage(transId));
+				await SendOutAsync(portfolio.ToChangeMessage());
 			}
 		}
-		
+
 		foreach (var position in _positionStorage.Positions)
 		{
 			var posMsg = position.ToChangeMessage(transId);
@@ -249,10 +258,10 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 			if (!posMsg.IsMatch(msg, false))
 				continue;
 
-			SendOut(posMsg);
+			await SendOutAsync(posMsg);
 		}
 
-		return base.OnSendInMessageAsync(msg, cancellationToken);
+		await base.OnSendInMessageAsync(msg, cancellationToken);
 	}
 
 	private Position GetPosition(SecurityId securityId, string portfolioName, string strategyId, Sides? side)
@@ -332,11 +341,12 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	/// <param name="message"></param>
-	public void SaveDirect(PositionChangeMessage message)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	public ValueTask SaveDirectAsync(PositionChangeMessage message, CancellationToken cancellationToken = default)
 	{
-		OnInnerAdapterNewOutMessage(message);
+		return OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 }

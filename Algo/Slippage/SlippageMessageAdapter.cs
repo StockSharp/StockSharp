@@ -20,7 +20,7 @@ public class SlippageMessageAdapter(IMessageAdapter innerAdapter, ISlippageManag
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message.Type != MessageTypes.Reset)
 		{
@@ -30,7 +30,7 @@ public class SlippageMessageAdapter(IMessageAdapter innerAdapter, ISlippageManag
 				execMsg.Slippage ??= s;
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		return base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>

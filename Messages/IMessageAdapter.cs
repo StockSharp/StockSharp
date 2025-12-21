@@ -254,13 +254,27 @@ public interface IMessageAdapter : IPersistable, ILogReceiver, ICloneable<IMessa
 	/// <summary>
 	/// New message event.
 	/// </summary>
+	[Obsolete("Use NewOutMessageAsync instead.")]
 	event Action<Message> NewOutMessage;
+
+	/// <summary>
+	/// New message async event.
+	/// </summary>
+	event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 
 	/// <summary>
 	/// Send outgoing message and raise <see cref="NewOutMessage"/> event.
 	/// </summary>
 	/// <param name="message">Message.</param>
+	[Obsolete("Use SendOutMessageAsync method.")]
 	void SendOutMessage(Message message);
+
+	/// <summary>
+	/// Send outgoing message and raise <see cref="NewOutMessageAsync"/> event.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken);
 }
 
 /// <summary>

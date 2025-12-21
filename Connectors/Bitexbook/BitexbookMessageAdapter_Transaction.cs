@@ -26,7 +26,7 @@ public partial class BitexbookMessageAdapter
 
 				var withdrawId = await _httpClient.Withdraw(symbol, regMsg.Volume, condition.WithdrawInfo, cancellationToken);
 
-				SendOutMessage(new ExecutionMessage
+				await SendOutMessageAsync(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					OrderId = withdrawId,
@@ -34,7 +34,7 @@ public partial class BitexbookMessageAdapter
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
-				});
+				}, cancellationToken);
 
 				await PortfolioLookupAsync(null, cancellationToken);
 				return;
@@ -48,7 +48,7 @@ public partial class BitexbookMessageAdapter
 
 		var orderId = await _httpClient.RegisterOrder(symbol, regMsg.Side.ToNative(), price, regMsg.Volume, cancellationToken);
 
-		SendOutMessage(new ExecutionMessage
+		await SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			OrderId = orderId,
@@ -57,7 +57,7 @@ public partial class BitexbookMessageAdapter
 			OrderState = isMarket ? OrderStates.Done : OrderStates.Active,
 			Balance = isMarket ? 0 : null,
 			HasOrderInfo = true,
-		});
+		}, cancellationToken);
 
 		if (isMarket)
 		{
@@ -158,36 +158,36 @@ public partial class BitexbookMessageAdapter
 		// Send result with errors if any
 		if (errors.Count > 0)
 		{
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
 				ServerTime = CurrentTimeUtc,
 				HasOrderInfo = true,
 				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
-			});
+			}, cancellationToken);
 		}
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
+	protected override async ValueTask PortfolioLookupAsync(PortfolioLookupMessage lookupMsg, CancellationToken cancellationToken)
 	{
 		if (lookupMsg != null)
 		{
-			SendSubscriptionReply(lookupMsg.TransactionId);
+			await SendSubscriptionReplyAsync(lookupMsg.TransactionId, cancellationToken);
 
 			if (!lookupMsg.IsSubscribe)
-				return default;
+				return;
 
-			SendOutMessage(new PortfolioMessage
+			await SendOutMessageAsync(new PortfolioMessage
 			{
 				PortfolioName = PortfolioName,
 				BoardCode = BoardCodes.Bitexbook,
 				OriginalTransactionId = lookupMsg.TransactionId
-			});
+			}, cancellationToken);
 
-			SendSubscriptionResult(lookupMsg);
-			return default;
+			await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
+			return;
 		}
 
 		//ProcessPosition("BTC", balance.Free?.Btc, balance.Freezed?.Btc);
@@ -198,29 +198,25 @@ public partial class BitexbookMessageAdapter
 		//ProcessPosition("USD", balance.Free?.Usd, balance.Freezed?.Usd);
 
 		_lastTimeBalanceCheck = CurrentTimeUtc;
-
-		return default;
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
 		if (statusMsg == null)
 		{
-			
+
 		}
 		else
 		{
-			SendSubscriptionReply(statusMsg.TransactionId);
-			SendSubscriptionResult(statusMsg);
+			await SendSubscriptionReplyAsync(statusMsg.TransactionId, cancellationToken);
+			await SendSubscriptionResultAsync(statusMsg, cancellationToken);
 		}
-
-		return default;
 	}
 
-	private void ProcessOrder(SecurityId secId, Order order, long transId, long origTransId, OrderStates state)
+	private ValueTask ProcessOrderAsync(SecurityId secId, Order order, long transId, long origTransId, OrderStates state, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -235,21 +231,21 @@ public partial class BitexbookMessageAdapter
 			OrderPrice = (decimal)(order.Price ?? 0),
 			PortfolioName = PortfolioName,
 			OrderState = state,
-		});
+		}, cancellationToken);
 	}
 
-	private void ProcessPosition(string currency, decimal? free, decimal? freezed)
+	private ValueTask ProcessPositionAsync(string currency, decimal? free, decimal? freezed, CancellationToken cancellationToken)
 	{
 		if (free == null && freezed == null)
-			return;
+			return default;
 
-		SendOutMessage(new PositionChangeMessage
+		return SendOutMessageAsync(new PositionChangeMessage
 		{
 			PortfolioName = PortfolioName,
 			SecurityId = currency.ToStockSharp(),
 			ServerTime = CurrentTimeUtc,
 		}
 		.TryAdd(PositionChangeTypes.CurrentValue, free, true)
-		.TryAdd(PositionChangeTypes.BlockedValue, freezed, true));
+		.TryAdd(PositionChangeTypes.BlockedValue, freezed, true), cancellationToken);
 	}
 }

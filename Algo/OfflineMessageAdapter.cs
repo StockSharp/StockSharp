@@ -263,7 +263,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		ConnectMessage connectMessage = null;
 
@@ -314,10 +314,10 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 		if (processMsg != null)
-			base.OnInnerAdapterNewOutMessage(processMsg);
+			await base.OnInnerAdapterNewOutMessageAsync(processMsg, cancellationToken);
 	}
 
 	/// <summary>

@@ -45,18 +45,16 @@ public class ChannelMessageAdapter : MessageAdapterWrapper
 		=> InnerAdapter.SendInMessageAsync(message, cancellationToken);
 
 	private ValueTask OutputChannelOnNewOutMessage(Message message, CancellationToken cancellationToken)
-	{
-		RaiseNewOutMessage(message);
-		return default;
-	}
+		=> RaiseNewOutMessageAsync(message, cancellationToken);
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (!OutputChannel.IsOpened())
 			OutputChannel.Open();
 
 		OutputChannel.SendInMessage(message);
+		return default;
 	}
 
 	/// <inheritdoc />

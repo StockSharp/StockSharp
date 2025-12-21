@@ -36,7 +36,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -52,9 +52,9 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 					}
 				}
 
-				base.OnInnerAdapterNewOutMessage(message);
+				await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
-				ProcessAllSuspended(default);
+				await ProcessAllSuspendedAsync(cancellationToken);
 
 				break;
 			}
@@ -115,9 +115,9 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 				// external code shouldn't receive native ids
 				secMsg.SecurityId = noNative;
 
-				base.OnInnerAdapterNewOutMessage(message);
+				await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
-				ProcessOutSuspended(securityId);
+				await ProcessOutSuspendedAsync(securityId, cancellationToken);
 
 				break;
 			}
@@ -126,7 +126,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			{
 				var positionMsg = (PositionChangeMessage)message;
 
-				ProcessMessage(positionMsg, (prev, curr) =>
+				await ProcessMessageAsync(positionMsg, (prev, curr) =>
 				{
 					foreach (var pair in prev.Changes)
 					{
@@ -134,14 +134,14 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 					}
 
 					return curr;
-				});
+				}, cancellationToken);
 				break;
 			}
 
 			case MessageTypes.Execution:
 			{
 				var execMsg = (ExecutionMessage)message;
-				
+
 				var secId = execMsg.SecurityId;
 				if (execMsg.TransactionId != 0 && secId != default && (!secId.SecurityCode.IsEmpty() || secId.Native != null))
 				{
@@ -168,7 +168,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 					}
 				}
 
-				ProcessMessage(execMsg, null);
+				await ProcessMessageAsync(execMsg, null, cancellationToken);
 				break;
 			}
 
@@ -176,7 +176,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			{
 				var level1Msg = (Level1ChangeMessage)message;
 
-				ProcessMessage(level1Msg, (prev, curr) =>
+				await ProcessMessageAsync(level1Msg, (prev, curr) =>
 				{
 					foreach (var pair in prev.Changes)
 					{
@@ -184,7 +184,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 					}
 
 					return curr;
-				});
+				}, cancellationToken);
 				break;
 			}
 
@@ -192,7 +192,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			{
 				var quotesMsg = (QuoteChangeMessage)message;
 
-				ProcessMessage(quotesMsg, (prev, curr) => curr);
+				await ProcessMessageAsync(quotesMsg, (prev, curr) => curr, cancellationToken);
 				break;
 			}
 
@@ -201,9 +201,9 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 				var newsMsg = (NewsMessage)message;
 
 				if (newsMsg.SecurityId != null)
-					ProcessMessage(newsMsg.SecurityId.Value, newsMsg, null);
+					await ProcessMessageAsync(newsMsg.SecurityId.Value, newsMsg, null, cancellationToken);
 				else
-					base.OnInnerAdapterNewOutMessage(message);
+					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 				break;
 			}
@@ -211,9 +211,9 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			default:
 			{
 				if (message is ISecurityIdMessage secIdMsg)
-					ProcessMessage(secIdMsg.SecurityId, (Message)secIdMsg, null);
+					await ProcessMessageAsync(secIdMsg.SecurityId, (Message)secIdMsg, null, cancellationToken);
 				else
-					base.OnInnerAdapterNewOutMessage(message);
+					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 				break;
 			}
@@ -304,13 +304,13 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		return new SecurityNativeIdMessageAdapter(InnerAdapter.TypedClone(), Storage);
 	}
 
-	private void ProcessMessage<TMessage>(TMessage message, Func<TMessage, TMessage, TMessage> processSuspend)
+	private ValueTask ProcessMessageAsync<TMessage>(TMessage message, Func<TMessage, TMessage, TMessage> processSuspend, CancellationToken cancellationToken)
 		where TMessage : Message, ISecurityIdMessage
 	{
-		ProcessMessage(message.SecurityId, message, processSuspend);
+		return ProcessMessageAsync(message.SecurityId, message, processSuspend, cancellationToken);
 	}
 
-	private void ProcessMessage<TMessage>(SecurityId securityId, TMessage message, Func<TMessage, TMessage, TMessage> processSuspend)
+	private async ValueTask ProcessMessageAsync<TMessage>(SecurityId securityId, TMessage message, Func<TMessage, TMessage, TMessage> processSuspend, CancellationToken cancellationToken)
 		where TMessage : Message
 	{
 		var native = securityId.Native;
@@ -392,10 +392,10 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
-	private async ValueTask ProcessAllSuspended(CancellationToken cancellationToken)
+	private async ValueTask ProcessAllSuspendedAsync(CancellationToken cancellationToken)
 	{
 		List<Message> inMsgs;
 		List<Message> outMsgs;
@@ -460,7 +460,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		}
 
 		foreach (var msg in outMsgs)
-			base.OnInnerAdapterNewOutMessage(msg);
+			await base.OnInnerAdapterNewOutMessageAsync(msg, cancellationToken);
 	}
 
 	private async ValueTask ProcessInSuspended(SecurityId securityId, CancellationToken cancellationToken)
@@ -504,7 +504,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		}
 	}
 
-	private void ProcessOutSuspended(SecurityId securityId)
+	private async ValueTask ProcessOutSuspendedAsync(SecurityId securityId, CancellationToken cancellationToken)
 	{
 		static List<Message> GetMessages(RefPair<List<Message>, Dictionary<MessageTypes, Message>> tuple)
 		{
@@ -585,7 +585,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		securityId.Native = null;
 
 		foreach (var msg in msgs)
-			base.OnInnerAdapterNewOutMessage(msg.ReplaceSecurityId(securityId));
+			await base.OnInnerAdapterNewOutMessageAsync(msg.ReplaceSecurityId(securityId), cancellationToken);
 	}
 
 	private void OnStorageNewIdentifierAdded(string storageName, SecurityId securityId, object nativeId)

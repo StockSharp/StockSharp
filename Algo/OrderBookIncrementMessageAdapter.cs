@@ -130,7 +130,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		List<QuoteChangeMessage> clones = null;
 
@@ -173,7 +173,7 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 						}
 					}
 				}
-				
+
 				break;
 			}
 
@@ -242,12 +242,12 @@ public class OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter) : Me
 		}
 
 		if (message != null)
-			base.OnInnerAdapterNewOutMessage(message);
+			await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 		if (clones != null)
 		{
 			foreach (var clone in clones)
-				base.OnInnerAdapterNewOutMessage(clone);
+				await base.OnInnerAdapterNewOutMessageAsync(clone, cancellationToken);
 		}
 	}
 

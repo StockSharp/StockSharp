@@ -123,18 +123,18 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 							{
 								if (tuple.Second == SubscriptionStates.Finished)
 								{
-									RaiseNewOutMessage(new SubscriptionFinishedMessage
+									await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage
 									{
 										OriginalTransactionId = transactionId,
-									});
+									}, cancellationToken);
 								}
 								else
 								{
-									RaiseNewOutMessage(new SubscriptionResponseMessage
+									await RaiseNewOutMessageAsync(new SubscriptionResponseMessage
 									{
 										OriginalTransactionId = transactionId,
 										Error = new InvalidOperationException(LocalizedStrings.SubscriptionInvalidState.Put(transactionId, tuple.Second)),
-									});
+									}, cancellationToken);
 								}
 
 								return;
@@ -143,7 +143,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 							tuple.Second = SubscriptionStates.Active;
 							LogDebug("New ALL candle-map (active): {0}/{1} TrId={2}", mdMsg.SecurityId, tuple.Second, mdMsg.TransactionId);
 
-							RaiseNewOutMessage(mdMsg.CreateResponse());
+							await RaiseNewOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
 							return;
 						}
 					}
@@ -156,12 +156,12 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 						{
 							if (isLoadOnly)
 							{
-								RaiseNewOutMessage(transactionId.CreateNotSupported());
+								await RaiseNewOutMessageAsync(transactionId.CreateNotSupported(), cancellationToken);
 							}
 							else
 							{
 								if (!await TrySubscribeBuild(mdMsg, cancellationToken))
-									RaiseNewOutMessage(transactionId.CreateNotSupported());
+									await RaiseNewOutMessageAsync(transactionId.CreateNotSupported(), cancellationToken);
 							}
 
 							return;
@@ -171,7 +171,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 					if (mdMsg.BuildMode == MarketDataBuildModes.Build && mdMsg.BuildFrom?.IsTFCandles != true)
 					{
 						if (!await TrySubscribeBuild(mdMsg, cancellationToken))
-							RaiseNewOutMessage(transactionId.CreateNotSupported());
+							await RaiseNewOutMessageAsync(transactionId.CreateNotSupported(), cancellationToken);
 
 						return;
 					}
@@ -214,7 +214,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 						if (isLoadOnly)
 						{
-							RaiseNewOutMessage(transactionId.CreateNotSupported());
+							await RaiseNewOutMessageAsync(transactionId.CreateNotSupported(), cancellationToken);
 
 							return;
 						}
@@ -254,7 +254,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 						if (!await TrySubscribeBuild(mdMsg, cancellationToken))
 						{
-							RaiseNewOutMessage(transactionId.CreateNotSupported());
+							await RaiseNewOutMessageAsync(transactionId.CreateNotSupported(), cancellationToken);
 						}
 					}
 					else
@@ -281,7 +281,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 						{
 							if (isLoadOnly || !await TrySubscribeBuild(mdMsg, cancellationToken))
 							{
-								RaiseNewOutMessage(transactionId.CreateNotSupported());
+								await RaiseNewOutMessageAsync(transactionId.CreateNotSupported(), cancellationToken);
 							}
 						}
 					}
@@ -305,7 +305,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 						if (sentResponse)
 						{
-							RaiseNewOutMessage(mdMsg.CreateResponse());
+							await RaiseNewOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
 							return;
 						}
 
@@ -454,7 +454,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -473,10 +473,10 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				if (response.IsOk())
 				{
 					if (series.Id == requestId)
-						RaiseNewOutMessage(message);
+						await RaiseNewOutMessageAsync(message, cancellationToken);
 				}
 				else
-					UpgradeSubscription(series, response, null);
+					await UpgradeSubscriptionAsync(series, response, null, cancellationToken);
 
 				return;
 			}
@@ -493,7 +493,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				if (series == null)
 					break;
 
-				UpgradeSubscription(series, null, finishMsg);
+				await UpgradeSubscriptionAsync(series, null, finishMsg, cancellationToken);
 				return;
 			}
 
@@ -526,7 +526,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 				var subscrMsg = (ISubscriptionIdMessage)message;
 
-				if (ProcessValue(subscrMsg))
+				if (await ProcessValueAsync(subscrMsg, cancellationToken))
 				{
 					Buffer?.ProcessOutMessage(message);
 					return;
@@ -541,12 +541,12 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				{
 					if (candleMsg.Type == MessageTypes.CandleTimeFrame)
 					{
-						if (ProcessCandleSubscriptions(candleMsg, ProcessTimeFrameCandle))
+						if (await ProcessCandleSubscriptionsAsync(candleMsg, ProcessTimeFrameCandleAsync, cancellationToken))
 							return;
 					}
 					else
 					{
-						if (ProcessCandleSubscriptions(candleMsg, ProcessCandle))
+						if (await ProcessCandleSubscriptionsAsync(candleMsg, ProcessCandleAsync, cancellationToken))
 							return;
 					}
 				}
@@ -555,10 +555,10 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			}
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
-	private bool ProcessCandleSubscriptions(CandleMessage candleMsg, Action<SeriesInfo, CandleMessage> processor)
+	private async ValueTask<bool> ProcessCandleSubscriptionsAsync(CandleMessage candleMsg, Func<SeriesInfo, CandleMessage, CancellationToken, ValueTask> processor, CancellationToken cancellationToken)
 	{
 		var subscriptionIds = candleMsg.GetSubscriptionIds();
 		HashSet<long> newSubscriptionIds = null;
@@ -574,7 +574,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 			newSubscriptionIds.Remove(subscriptionId);
 
-			processor(series, candleMsg);
+			await processor(series, candleMsg, cancellationToken);
 		}
 
 		if (newSubscriptionIds != null)
@@ -588,19 +588,19 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		return false;
 	}
 
-	private void ProcessTimeFrameCandle(SeriesInfo series, CandleMessage candleMsg)
+	private async ValueTask ProcessTimeFrameCandleAsync(SeriesInfo series, CandleMessage candleMsg, CancellationToken cancellationToken)
 	{
 		switch (series.State)
 		{
 			case SeriesStates.Regular:
-				ProcessCandle(series, candleMsg);
+				await ProcessCandleAsync(series, candleMsg, cancellationToken);
 				break;
 
 			case SeriesStates.SmallTimeFrame:
 				if (series.IsCountExhausted)
 				{
 					if (TryRemoveSeries(series.Id, out _))
-						RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = series.Original.TransactionId });
+						await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = series.Original.TransactionId }, cancellationToken);
 
 					break;
 				}
@@ -631,7 +631,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 						}
 					}
 
-					base.OnInnerAdapterNewOutMessage(/*_isHistory ? bigCandle : */bigCandle.TypedClone());
+					await base.OnInnerAdapterNewOutMessageAsync(/*_isHistory ? bigCandle : */bigCandle.TypedClone(), cancellationToken);
 				}
 
 				break;
@@ -641,14 +641,14 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		}
 	}
 
-	private void UpgradeSubscription(SeriesInfo series, SubscriptionResponseMessage response, SubscriptionFinishedMessage finish)
+	private async ValueTask UpgradeSubscriptionAsync(SeriesInfo series, SubscriptionResponseMessage response, SubscriptionFinishedMessage finish, CancellationToken cancellationToken)
 	{
 		if (series == null)
 			throw new ArgumentNullException(nameof(series));
 
 		var original = series.Original;
 
-		void Finish()
+		async ValueTask FinishAsync()
 		{
 			if (!TryRemoveSeries(series.Id, out _))
 				return;
@@ -657,10 +657,10 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			{
 				response = response.TypedClone();
 				response.OriginalTransactionId = original.TransactionId;
-				RaiseNewOutMessage(response);
+				await RaiseNewOutMessageAsync(response, cancellationToken);
 			}
 			else
-				RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = original.TransactionId });
+				await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = original.TransactionId }, cancellationToken);
 		}
 
 		if (finish?.NextFrom != null)
@@ -668,13 +668,13 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		if (original.To != null && series.LastTime != null && original.To <= series.LastTime)
 		{
-			Finish();
+			await FinishAsync();
 			return;
 		}
 
 		if (original.Count != null && series.IsCountExhausted)
 		{
-			Finish();
+			await FinishAsync();
 			return;
 		}
 
@@ -689,7 +689,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				{
 					if (isLoadOnly)
 					{
-						Finish();
+						await FinishAsync();
 						return;
 					}
 
@@ -719,7 +719,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 						// loopback
 						curr.LoopBack(this);
-						RaiseNewOutMessage(curr);
+						await RaiseNewOutMessageAsync(curr, cancellationToken);
 
 						return;
 					}
@@ -727,7 +727,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 				if (response == null && isLoadOnly)
 				{
-					Finish();
+					await FinishAsync();
 					return;
 				}
 
@@ -743,7 +743,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			}
 			case SeriesStates.Compress:
 			{
-				Finish();
+				await FinishAsync();
 				return;
 			}
 			//case SeriesStates.None:
@@ -760,7 +760,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		if (current == null)
 		{
-			Finish();
+			await FinishAsync();
 			return;
 		}
 
@@ -776,10 +776,10 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		// loopback
 		current.LoopBack(this);
-		RaiseNewOutMessage(current);
+		await RaiseNewOutMessageAsync(current, cancellationToken);
 	}
 
-	private void ProcessCandle(SeriesInfo info, CandleMessage candleMsg)
+	private async ValueTask ProcessCandleAsync(SeriesInfo info, CandleMessage candleMsg, CancellationToken cancellationToken)
 	{
 		if (info.LastTime != null && info.LastTime > candleMsg.OpenTime)
 			return;
@@ -787,7 +787,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		if (info.IsCountExhausted)
 		{
 			if (TryRemoveSeries(info.Id, out _))
-				RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = info.Original.TransactionId });
+				await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = info.Original.TransactionId }, cancellationToken);
 
 			return;
 		}
@@ -800,7 +800,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			{
 				nonFinished.State = CandleStates.Finished;
 				nonFinished.LocalTime = candleMsg.LocalTime;
-				RaiseNewOutCandle(info, nonFinished);
+				await RaiseNewOutCandleAsync(info, nonFinished, cancellationToken);
 				info.NonFinishedCandle = null;
 			}
 			else if (candleMsg.State == CandleStates.Finished)
@@ -816,13 +816,13 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		}
 
 		if (!info.Current.IsFinishedOnly || candleMsg.State == CandleStates.Finished)
-			RaiseNewOutCandle(info, candleMsg);
+			await RaiseNewOutCandleAsync(info, candleMsg, cancellationToken);
 
 		if (candleMsg.State != CandleStates.Finished)
 			info.NonFinishedCandle = candleMsg.TypedClone();
 	}
 
-	private bool ProcessValue(ISubscriptionIdMessage message)
+	private async ValueTask<bool> ProcessValueAsync(ISubscriptionIdMessage message, CancellationToken cancellationToken)
 	{
 		var subscriptionIds = message.GetSubscriptionIds();
 
@@ -876,7 +876,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				}
 
 				if (allMsg != null)
-					RaiseNewOutMessage(allMsg);
+					await RaiseNewOutMessageAsync(allMsg, cancellationToken);
 			}
 
 			var transform = series.Transform;
@@ -890,7 +890,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			if (origin.To != null && origin.To.Value < time)
 			{
 				if (TryRemoveSeries(subscriptionId, out _))
-					RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = origin.TransactionId });
+					await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = origin.TransactionId }, cancellationToken);
 
 				continue;
 			}
@@ -901,7 +901,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			if (series.IsCountExhausted)
 			{
 				if (TryRemoveSeries(subscriptionId, out _))
-					RaiseNewOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = origin.TransactionId });
+					await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = origin.TransactionId }, cancellationToken);
 
 				continue;
 			}
@@ -917,7 +917,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				if (series.Original.IsFinishedOnly && candleMessage.State != CandleStates.Finished)
 					continue;
 
-				RaiseNewOutCandle(series, candleMessage.TypedClone());
+				await RaiseNewOutCandleAsync(series, candleMessage.TypedClone(), cancellationToken);
 			}
 		}
 
@@ -932,7 +932,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		return false;
 	}
 
-	private void RaiseNewOutCandle(SeriesInfo info, CandleMessage candleMsg)
+	private async ValueTask RaiseNewOutCandleAsync(SeriesInfo info, CandleMessage candleMsg, CancellationToken cancellationToken)
 	{
 		candleMsg.OriginalTransactionId = info.Id;
 		candleMsg.SetSubscriptionIds(subscriptionId: info.Id);
@@ -943,7 +943,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				info.Count--;
 		}
 
-		RaiseNewOutMessage(candleMsg);
+		await RaiseNewOutMessageAsync(candleMsg, cancellationToken);
 	}
 
 	/// <summary>

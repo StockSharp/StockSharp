@@ -46,7 +46,7 @@ public class CandleHolderMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 	}
 
 	/// <inheritdoc />
-	protected override void OnInnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message)
 		{
@@ -58,7 +58,7 @@ public class CandleHolderMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 				break;
 		}
 
-		base.OnInnerAdapterNewOutMessage(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	private void ProcessCandle(CandleMessage message)
