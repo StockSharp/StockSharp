@@ -15,9 +15,7 @@ static partial class StorageHelper
 	[Obsolete("Use LoadAsync method instead.")]
 	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from, DateTime? to)
 		where TMessage : Message, IServerTimeMessage
-	{
-		return AsyncHelper.Run(() => LoadAsync(storage, from, to).ToArrayAsync(default));
-	}
+		=> LoadAsync(storage, from, to).ToEnumerable();
 
 	/// <summary>
 	/// To delete market data from the storage for the specified time period.
@@ -205,7 +203,7 @@ static partial class StorageHelper
 	/// <param name="storage">Security storage.</param>
 	/// <param name="security">Security.</param>
 	/// <param name="forced">Forced update.</param>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	//[Obsolete("Use SaveAsync method instead.")]
 	public static void Save(this ISecurityStorage storage, Security security, bool forced)
 	{
@@ -220,7 +218,7 @@ static partial class StorageHelper
 	/// </summary>
 	/// <param name="storage">Security storage.</param>
 	/// <param name="security">Security.</param>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use DeleteAsync method instead.")]
 	public static void Delete(this ISecurityStorage storage, Security security)
 	{
@@ -231,11 +229,11 @@ static partial class StorageHelper
 	}
 
 	/// <summary>
-	/// Synchronous wrapper for <see cref="ISecurityStorage.DeleteRangeAsync(System.Collections.Generic.IEnumerable{Security}, CancellationToken)"/>.
+	/// Synchronous wrapper for <see cref="ISecurityStorage.DeleteRangeAsync(IEnumerable{Security}, CancellationToken)"/>.
 	/// </summary>
 	/// <param name="storage">Security storage.</param>
 	/// <param name="securities">Securities.</param>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use DeleteRangeAsync method instead.")]
 	public static void DeleteRange(this ISecurityStorage storage, IEnumerable<Security> securities)
 	{
@@ -250,7 +248,7 @@ static partial class StorageHelper
 	/// </summary>
 	/// <param name="storage">Security storage.</param>
 	/// <param name="criteria">The criterion.</param>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use DeleteByAsync method instead.")]
 	public static void DeleteBy(this ISecurityStorage storage, SecurityLookupMessage criteria)
 	{
@@ -265,7 +263,7 @@ static partial class StorageHelper
 	/// </summary>
 	/// <param name="drive">Market data storage drive.</param>
 	/// <returns>Available dates.</returns>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use GetDatesAsync method instead.")]
 	public static IEnumerable<DateTime> GetDates(this IMarketDataStorageDrive drive)
 	{
@@ -279,7 +277,7 @@ static partial class StorageHelper
 	/// Synchronous wrapper for <see cref="IMarketDataStorageDrive.ClearDatesCacheAsync(CancellationToken)"/>.
 	/// </summary>
 	/// <param name="drive">Market data storage drive.</param>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use ClearDatesCacheAsync method instead.")]
 	public static void ClearDatesCache(this IMarketDataStorageDrive drive)
 	{
@@ -294,7 +292,7 @@ static partial class StorageHelper
 	/// </summary>
 	/// <param name="drive">Market data storage drive.</param>
 	/// <param name="date">Date, for which all data shall be deleted.</param>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use DeleteAsync method instead.")]
 	public static void Delete(this IMarketDataStorageDrive drive, DateTime date)
 	{
@@ -310,7 +308,7 @@ static partial class StorageHelper
 	/// <param name="drive">Market data storage drive.</param>
 	/// <param name="date">The date, for which data shall be saved.</param>
 	/// <param name="stream">Data in the format of StockSharp storage.</param>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use SaveStreamAsync method instead.")]
 	public static void SaveStream(this IMarketDataStorageDrive drive, DateTime date, Stream stream)
 	{
@@ -327,7 +325,7 @@ static partial class StorageHelper
 	/// <param name="date">Date, for which data shall be loaded.</param>
 	/// <param name="readOnly">Get stream in read mode only.</param>
 	/// <returns>Data in the format of StockSharp storage. If no data exists, <see cref="Stream.Null"/> will be returned.</returns>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use LoadStreamAsync method instead.")]
 	public static Stream LoadStream(this IMarketDataStorageDrive drive, DateTime date, bool readOnly = false)
 	{
@@ -342,7 +340,7 @@ static partial class StorageHelper
 	/// </summary>
 	/// <param name="storage">Market data storage.</param>
 	/// <returns>Available dates.</returns>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use GetDatesAsync method instead.")]
 	public static IEnumerable<DateTime> GetDates(this IMarketDataStorage storage)
 	{
@@ -358,7 +356,7 @@ static partial class StorageHelper
 	/// <param name="storage">Market data storage.</param>
 	/// <param name="data">Market data.</param>
 	/// <returns>Count of saved data.</returns>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use SaveAsync method instead.")]
 	public static int Save(this IMarketDataStorage storage, IEnumerable<Message> data)
 	{
@@ -373,7 +371,7 @@ static partial class StorageHelper
 	/// </summary>
 	/// <param name="storage">Market data storage.</param>
 	/// <param name="data">Market data to be deleted.</param>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use DeleteAsync method instead.")]
 	public static void Delete(this IMarketDataStorage storage, IEnumerable<Message> data)
 	{
@@ -388,7 +386,7 @@ static partial class StorageHelper
 	/// </summary>
 	/// <param name="storage">Market data storage.</param>
 	/// <param name="date">Date, for which all data shall be deleted.</param>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use DeleteAsync method instead.")]
 	public static void Delete(this IMarketDataStorage storage, DateTime date)
 	{
@@ -404,15 +402,10 @@ static partial class StorageHelper
 	/// <param name="storage">Market data storage.</param>
 	/// <param name="date">Date, for which data shall be loaded.</param>
 	/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use LoadAsync method instead.")]
 	public static IEnumerable<Message> Load(this IMarketDataStorage storage, DateTime date)
-	{
-		if (storage is null)
-			throw new ArgumentNullException(nameof(storage));
-
-		return AsyncHelper.Run(() => storage.LoadAsync(date).ToArrayAsync(default));
-	}
+		=> storage.CheckOnNull(nameof(storage)).LoadAsync(date).ToEnumerable();
 
 	/// <summary>
 	/// Synchronous wrapper for <see cref="IMarketDataStorage.GetMetaInfoAsync(DateTime, CancellationToken)"/>.
@@ -420,7 +413,7 @@ static partial class StorageHelper
 	/// <param name="storage">Market data storage.</param>
 	/// <param name="date">Date, for which meta-information on data shall be received.</param>
 	/// <returns>Meta-information on data. If there is no such date in history, <see langword="null" /> will be returned.</returns>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use GetMetaInfoAsync method instead.")]
 	public static IMarketDataMetaInfo GetMetaInfo(this IMarketDataStorage storage, DateTime date)
 	{
@@ -437,7 +430,7 @@ static partial class StorageHelper
 	/// <param name="storage">Market data storage.</param>
 	/// <param name="data">Market data.</param>
 	/// <returns>Count of saved data.</returns>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use SaveAsync method instead.")]
 	public static int Save<TMessage>(this IMarketDataStorage<TMessage> storage, IEnumerable<TMessage> data)
 		where TMessage : Message
@@ -454,7 +447,7 @@ static partial class StorageHelper
 	/// <typeparam name="TMessage">Market data type.</typeparam>
 	/// <param name="storage">Market data storage.</param>
 	/// <param name="data">Market data to be deleted.</param>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use DeleteAsync method instead.")]
 	public static void Delete<TMessage>(this IMarketDataStorage<TMessage> storage, IEnumerable<TMessage> data)
 		where TMessage : Message
@@ -472,7 +465,7 @@ static partial class StorageHelper
 	/// <param name="storage">Market data storage.</param>
 	/// <param name="date">Date, for which data shall be loaded.</param>
 	/// <returns>Data. If there is no data, the empty set will be returned.</returns>
-	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(System.Func{System.Threading.Tasks.ValueTask{T}})"/> for backward compatibility.</remarks>
+	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use LoadAsync method instead.")]
 	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime date)
 		where TMessage : Message
