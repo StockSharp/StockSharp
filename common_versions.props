@@ -6,6 +6,7 @@
     <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
     <MsTestVer>3.11.1</MsTestVer>
     <MsTestSdkVer>17.13.0</MsTestSdkVer>
+    <GrpcVer>2.71.0</GrpcVer>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net10'))">
@@ -15,6 +16,7 @@
     <MicrosoftCodeAnalysisAnalyzersVer>3.*</MicrosoftCodeAnalysisAnalyzersVer>
     <MsTestVer>4.*</MsTestVer>
     <MsTestSdkVer>18.*</MsTestSdkVer>
+    <GrpcVer>2.*</GrpcVer>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -33,15 +35,10 @@
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
     <SharpPcapVer>6.3.0</SharpPcapVer>
     <GoogleProtobufVer>3.*</GoogleProtobufVer>
-    <!--<GrpcVer>2.*</GrpcVer>-->
     <PandasVer>0.6.*</PandasVer>
     <NumpyVer>0.9.*</NumpyVer>
     <IronPythonVer>3.4.2</IronPythonVer>
     <MoqVer>4.*</MoqVer>
     <ILGPUVer>1.*</ILGPUVer>
-
-    <!-- temp fixed version for Tinkoff connector compilation  -->
-    <GrpcVer>2.71.0</GrpcVer>
-
   </PropertyGroup>
 </Project>
