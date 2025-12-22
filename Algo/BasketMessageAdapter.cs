@@ -1273,6 +1273,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 				if (!_subscriptions.TryGetValue(originTransId, out var tuple))
 				{
+					Message outMsg = null;
+
 					using (await _connectedResponseLock.LockAsync(cancellationToken))
 					{
 						var suspended = _pendingMessages.FirstOrDefault(m => m is MarketDataMessage prevMdMsg && prevMdMsg.TransactionId == originTransId);
@@ -1280,9 +1282,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 						if (suspended != null)
 						{
 							_pendingMessages.Remove(suspended);
-							await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId }, cancellationToken);
-							return;
+							outMsg = new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId };
 						}
+					}
+
+					if (outMsg != null)
+					{
+						await SendOutMessageAsync(outMsg, cancellationToken);
+						return;
 					}
 
 					LogInfo("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);

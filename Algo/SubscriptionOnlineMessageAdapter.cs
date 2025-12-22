@@ -481,14 +481,14 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 					];
 				}
 			}
+		}
 
-			if (sendOutMsgs != null)
+		if (sendOutMsgs != null)
+		{
+			foreach (var sendOutMsg in sendOutMsgs)
 			{
-				foreach (var sendOutMsg in sendOutMsgs)
-				{
-					LogInfo("Out: {0}", sendOutMsg);
-					await RaiseNewOutMessageAsync(sendOutMsg, cancellationToken);
-				}
+				LogInfo("Out: {0}", sendOutMsg);
+				await RaiseNewOutMessageAsync(sendOutMsg, cancellationToken);
 			}
 		}
 

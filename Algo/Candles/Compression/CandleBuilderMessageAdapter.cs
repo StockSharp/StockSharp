@@ -112,6 +112,8 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 				if (mdMsg.IsSubscribe)
 				{
+					Message outMsg = null;
+
 					using (await _sync.LockAsync(cancellationToken))
 					{
 						if (_replaceId.ContainsKey(transactionId))
@@ -123,29 +125,34 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 							{
 								if (tuple.Second == SubscriptionStates.Finished)
 								{
-									await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage
+									outMsg = new SubscriptionFinishedMessage
 									{
 										OriginalTransactionId = transactionId,
-									}, cancellationToken);
+									};
 								}
 								else
 								{
-									await RaiseNewOutMessageAsync(new SubscriptionResponseMessage
+									outMsg = new SubscriptionResponseMessage
 									{
 										OriginalTransactionId = transactionId,
 										Error = new InvalidOperationException(LocalizedStrings.SubscriptionInvalidState.Put(transactionId, tuple.Second)),
-									}, cancellationToken);
+									};
 								}
-
-								return;
 							}
+							else
+							{
+								tuple.Second = SubscriptionStates.Active;
+								LogDebug("New ALL candle-map (active): {0}/{1} TrId={2}", mdMsg.SecurityId, tuple.Second, mdMsg.TransactionId);
 
-							tuple.Second = SubscriptionStates.Active;
-							LogDebug("New ALL candle-map (active): {0}/{1} TrId={2}", mdMsg.SecurityId, tuple.Second, mdMsg.TransactionId);
-
-							await RaiseNewOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
-							return;
+								outMsg = mdMsg.CreateResponse();
+							}
 						}
+					}
+
+					if (outMsg != null)
+					{
+						await RaiseNewOutMessageAsync(outMsg, cancellationToken);
+						return;
 					}
 
 					var isLoadOnly = mdMsg.BuildMode == MarketDataBuildModes.Load;

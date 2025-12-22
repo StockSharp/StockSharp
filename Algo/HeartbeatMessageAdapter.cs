@@ -134,15 +134,20 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				}
 				else
 				{
+					Message errorMsg = null;
+
 					using (await _sync.LockAsync(cancellationToken))
 					{
 						if (_suppressDisconnectError)
 						{
 							_suppressDisconnectError = false;
-							await RaiseNewOutMessageAsync(disconnectMsg.Error.ToErrorMessage(), cancellationToken);
+							errorMsg = disconnectMsg.Error.ToErrorMessage();
 							disconnectMsg.Error = null;
 						}
 					}
+
+					if (errorMsg != null)
+						await RaiseNewOutMessageAsync(errorMsg, cancellationToken);
 				}
 
 				await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);

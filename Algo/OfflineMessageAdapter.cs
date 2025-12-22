@@ -40,31 +40,34 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 	/// <inheritdoc />
 	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		async ValueTask ProcessOrderReplaceMessage(OrderReplaceMessage replaceMsg)
+		Message ProcessOrderReplaceMessage(OrderReplaceMessage replaceMsg)
 		{
 			if (!_pendingRegistration.TryGetAndRemove(replaceMsg.OriginalTransactionId, out var originOrderMsg))
-				_suspendedIn.Add(replaceMsg);
-			else
 			{
-				_suspendedIn.Remove(originOrderMsg);
-
-				await RaiseNewOutMessageAsync(new ExecutionMessage
-				{
-					DataTypeEx = DataType.Transactions,
-					HasOrderInfo = true,
-					OriginalTransactionId = replaceMsg.OriginalTransactionId,
-					ServerTime = CurrentTimeUtc,
-					OrderState = OrderStates.Done,
-					OrderType = originOrderMsg.OrderType,
-				}, cancellationToken);
-
-				var orderMsg = new OrderRegisterMessage();
-
-				replaceMsg.CopyTo(orderMsg);
-
-				_pendingRegistration.Add(replaceMsg.TransactionId, orderMsg);
-				StoreMessage(orderMsg);
+				_suspendedIn.Add(replaceMsg);
+				return null;
 			}
+
+			_suspendedIn.Remove(originOrderMsg);
+
+			var outMsg = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				HasOrderInfo = true,
+				OriginalTransactionId = replaceMsg.OriginalTransactionId,
+				ServerTime = CurrentTimeUtc,
+				OrderState = OrderStates.Done,
+				OrderType = originOrderMsg.OrderType,
+			};
+
+			var orderMsg = new OrderRegisterMessage();
+
+			replaceMsg.CopyTo(orderMsg);
+
+			_pendingRegistration.Add(replaceMsg.TransactionId, orderMsg);
+			StoreMessage(orderMsg);
+
+			return outMsg;
 		}
 
 		switch (message.Type)
@@ -121,6 +124,8 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 			}
 			case MessageTypes.OrderCancel:
 			{
+				Message outMsg = null;
+
 				using (await _sync.LockAsync(cancellationToken))
 				{
 					if (!_connected)
@@ -133,7 +138,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 						{
 							_suspendedIn.Remove(originOrderMsg);
 
-							await RaiseNewOutMessageAsync(new ExecutionMessage
+							outMsg = new ExecutionMessage
 							{
 								DataTypeEx = DataType.Transactions,
 								HasOrderInfo = true,
@@ -141,24 +146,33 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 								ServerTime = CurrentTimeUtc,
 								OrderState = OrderStates.Done,
 								OrderType = originOrderMsg.OrderType,
-							}, cancellationToken);
+							};
 						}
-
-						return;
 					}
+				}
+
+				if (outMsg != null)
+				{
+					await RaiseNewOutMessageAsync(outMsg, cancellationToken);
+					return;
 				}
 
 				break;
 			}
 			case MessageTypes.OrderReplace:
 			{
+				Message outMsg = null;
+
 				using (await _sync.LockAsync(cancellationToken))
 				{
 					if (!_connected)
-					{
-						await ProcessOrderReplaceMessage((OrderReplaceMessage)message.Clone());
-						return;
-					}
+						outMsg = ProcessOrderReplaceMessage((OrderReplaceMessage)message.Clone());
+				}
+
+				if (outMsg != null)
+				{
+					await RaiseNewOutMessageAsync(outMsg, cancellationToken);
+					return;
 				}
 
 				break;
@@ -188,20 +202,33 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 				switch (message.OfflineMode)
 				{
 					case MessageOfflineModes.None:
+					{
+						Message outMsg = null;
+						var handled = false;
+
 						using (await _sync.LockAsync(cancellationToken))
 						{
 							if (!_connected)
 							{
 								if (message is ISubscriptionMessage subscrMsg)
-									await ProcessSubscriptionMessage(subscrMsg, cancellationToken);
+									outMsg = ProcessSubscriptionMessage(subscrMsg);
 								else
 									StoreMessage(message.Clone());
 
-								return;
+								handled = true;
 							}
 						}
 
+						if (handled)
+						{
+							if (outMsg != null)
+								await RaiseNewOutMessageAsync(outMsg, cancellationToken);
+
+							return;
+						}
+
 						break;
+					}
 					case MessageOfflineModes.Ignore:
 						break;
 					case MessageOfflineModes.Cancel:
@@ -222,7 +249,7 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
-	private async ValueTask ProcessSubscriptionMessage(ISubscriptionMessage subscrMsg, CancellationToken cancellationToken)
+	private Message ProcessSubscriptionMessage(ISubscriptionMessage subscrMsg)
 	{
 		if (subscrMsg.IsSubscribe)
 		{
@@ -241,13 +268,14 @@ public class OfflineMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapte
 				{
 					_suspendedIn.Remove((Message)originMsg);
 
-					await RaiseNewOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = subscrMsg.TransactionId }, cancellationToken);
-					return;
+					return new SubscriptionResponseMessage { OriginalTransactionId = subscrMsg.TransactionId };
 				}
 			}
-							
+
 			StoreMessage((Message)subscrMsg.Clone());
 		}
+
+		return null;
 	}
 
 	private void StoreMessage(Message message)
