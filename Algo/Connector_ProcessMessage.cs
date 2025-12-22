@@ -544,26 +544,30 @@ partial class Connector
 	/// </summary>
 	public StorageMetaInfoMessageAdapter StorageAdapter { get; private set; }
 
-	private void SendMessage(IMessageChannel channel, Message message)
+	private ValueTask SendMessage(IMessageChannel channel, Message message, CancellationToken cancellationToken)
 	{
 		if (channel is null)
-			return;
+			return default;
 
 		message.TryInitLocalTime(this);
 
 		if (!channel.IsOpened())
 			channel.Open();
 
-		channel.SendInMessage(message);
+		return channel.SendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
+	public ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+		=> SendMessage(InMessageChannel, message, cancellationToken);
+
+	/// <inheritdoc />
 	public void SendInMessage(Message message)
-		=> SendMessage(InMessageChannel, message);
+		=> SendInMessageAsync(message, default);
 
 	/// <inheritdoc />
 	public void SendOutMessage(Message message)
-		=> SendMessage(OutMessageChannel, message);
+		=> SendMessage(OutMessageChannel, message, default);
 
 	/// <summary>
 	/// Send error message.

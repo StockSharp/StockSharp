@@ -145,13 +145,13 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 	}
 
 	/// <inheritdoc />
-	public void SendInMessage(Message message)
+	public ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (IsDisposed)
 			throw new ObjectDisposedException(nameof(AsyncMessageChannel));
 
 		if (!this.IsOpened())
-			return;
+			return default;
 
 		using (_messages.EnterScope())
 		{
@@ -165,6 +165,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 		}
 
 		_processMessageEvt.Set();
+		return default;
 	}
 
 	/// <inheritdoc />

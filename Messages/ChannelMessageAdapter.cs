@@ -53,8 +53,7 @@ public class ChannelMessageAdapter : MessageAdapterWrapper
 		if (!OutputChannel.IsOpened())
 			OutputChannel.Open();
 
-		OutputChannel.SendInMessage(message);
-		return default;
+		return OutputChannel.SendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -78,8 +77,7 @@ public class ChannelMessageAdapter : MessageAdapterWrapper
 		if (!InputChannel.IsOpened())
 			InputChannel.Open();
 
-		InputChannel.SendInMessage(message);
-		return default;
+		return InputChannel.SendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>

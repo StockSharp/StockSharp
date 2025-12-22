@@ -142,15 +142,15 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 		_queue.Clear();
 	}
 
-	void IMessageChannel.SendInMessage(Message message)
+	ValueTask IMessageChannel.SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (!this.IsOpened())
 		{
 			//throw new InvalidOperationException();
-			return;
+			return default;
 		}
 
-		_queue.Enqueue(message, default);
+		return _queue.Enqueue(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

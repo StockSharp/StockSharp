@@ -44,7 +44,8 @@ public interface IMessageChannel : IDisposable, ICloneable<IMessageChannel>
 	/// Processes a generic message asynchronously.
 	/// </summary>
 	/// <param name="message">The message to process.</param>
-	void SendInMessage(Message message);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// New message event.
@@ -97,9 +98,9 @@ public class PassThroughMessageChannel : Cloneable<IMessageChannel>, IMessageCha
 	{
 	}
 
-	void IMessageChannel.SendInMessage(Message message)
+	ValueTask IMessageChannel.SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		var _ = _mewOutMessageAsync?.Invoke(message, default);
+		return _mewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 	}
 
 	private Func<Message, CancellationToken, ValueTask> _mewOutMessageAsync;
