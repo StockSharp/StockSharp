@@ -334,17 +334,14 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	/// <inheritdoc />
 	public virtual async ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		if (message.Type == MessageTypes.Connect)
+		if (message.Type == MessageTypes.Connect && !Platform.IsCompatible())
 		{
-			if (!Platform.IsCompatible())
+			SendOutMessage(new ConnectMessage
 			{
-				SendOutMessage(new ConnectMessage
-				{
-					Error = new InvalidOperationException(LocalizedStrings.BitSystemIncompatible.Put(GetType().Name, Platform))
-				});
+				Error = new InvalidOperationException(LocalizedStrings.BitSystemIncompatible.Put(GetType().Name, Platform))
+			});
 
-				return;
-			}
+			return;
 		}
 
 		InitMessageLocalTime(message);
