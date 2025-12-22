@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-using Nito.AsyncEx;
-
 /// <summary>
 /// Extended info storage.
 /// </summary>

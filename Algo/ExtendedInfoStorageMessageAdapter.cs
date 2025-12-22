@@ -1,7 +1,5 @@
 namespace StockSharp.Algo;
 
-using Nito.AsyncEx;
-
 /// <summary>
 /// The message adapter, that save extension info into <see cref="IExtendedInfoStorage"/>.
 /// </summary>

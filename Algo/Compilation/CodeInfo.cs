@@ -3,8 +3,6 @@ namespace StockSharp.Algo.Compilation;
 using Ecng.Compilation;
 using Ecng.Reflection;
 
-using Nito.AsyncEx;
-
 /// <summary>
 /// Code info.
 /// </summary>
