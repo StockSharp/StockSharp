@@ -322,7 +322,8 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				}
 				catch (Exception ex)
 				{
-					this.AddErrorLog(ex);
+					if (!cancellationToken.IsCancellationRequested)
+						this.AddErrorLog(ex);
 				}
 				finally
 				{
@@ -330,7 +331,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 						isProcessing = false;
 				}
 			})
-			.Start(period.Min(outMsgIntervalInitial).Max(TimeSpan.FromSeconds(1)));
+			.Start(period.Min(outMsgIntervalInitial).Max(TimeSpan.FromSeconds(1)), cancellationToken: cancellationToken);
 	}
 
 	private void StopTimer()

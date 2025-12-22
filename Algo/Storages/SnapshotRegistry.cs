@@ -503,14 +503,14 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 	}
 
 	private readonly CachedSynchronizedDictionary<DataType, SnapshotStorage> _snapshotStorages = [];
-	private Timer _timer;
+	private ControllablePeriodicTimer _timer;
 
 	ValueTask ISnapshotRegistry.InitAsync(CancellationToken cancellationToken)
 	{
 		var isFlushing = false;
 		var flushLock = new Lock();
 
-		_timer = ThreadingHelper.Timer(() =>
+		_timer = AsyncHelper.CreatePeriodicTimer(() =>
 		{
 			using (flushLock.EnterScope())
 			{
@@ -536,7 +536,7 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 			{
 				isFlushing = false;
 			}
-		}).Interval(TimeSpan.FromSeconds(10));
+		}).Start(TimeSpan.FromSeconds(10), cancellationToken: cancellationToken);
 
 		return default;
 	}
