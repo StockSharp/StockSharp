@@ -46,6 +46,8 @@ public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 
 		static async IAsyncEnumerable<Message> Impl(MarketDataStorageCache cache, SecurityId securityId, DataType dataType, DateTime date, Func<DateTime, TEnumerable> loadIfNeed, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			var now = DateTime.UtcNow;
 
 			var key = (securityId, dataType, date);
@@ -53,7 +55,7 @@ public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 			if (!cache._cache.TryGetValue(key, out var t))
 			{
 				var data = await loadIfNeed(date).ToArrayAsync(cancellationToken);
-				t = (now, data.ToArray());
+				t = (now, data);
 
 				if (cache._cache.Count > cache.Limit)
 				{
@@ -67,7 +69,10 @@ public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 			cache._cache[key] = t;
 
 			foreach (var msg in t.data)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
 				yield return msg;
+			}
 		}
 	}
 }
