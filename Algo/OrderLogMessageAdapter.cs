@@ -117,10 +117,10 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 				}
 				else if (_subscriptionIds.TryGetValue(id, out var info) && info.State != SubscriptionStates.Online)
 				{
+					QuoteChangeMessage snapshot = null;
+
 					using (await info.Lock.LockAsync(cancellationToken))
 					{
-						QuoteChangeMessage snapshot = null;
-
 						info.State = info.State.ChangeSubscriptionState(SubscriptionStates.Online, id, this);
 
 						if (!info.IsTicks)
@@ -130,11 +130,11 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 						}
 
 						if (snapshot != null)
-						{
 							snapshot.SetSubscriptionIds(subscriptionId: id);
-							await base.OnInnerAdapterNewOutMessageAsync(snapshot, cancellationToken);
-						}
 					}
+
+					if (snapshot != null)
+						await base.OnInnerAdapterNewOutMessageAsync(snapshot, cancellationToken);
 				}
 
 				break;
