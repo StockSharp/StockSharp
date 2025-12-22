@@ -5,7 +5,7 @@ using StockSharp.Algo.Risk;
 partial class Connector
 {
 	private readonly Lock _marketTimerSync = new();
-	private Timer _marketTimer;
+	private ControllablePeriodicTimer _marketTimer;
 	private readonly TimeMessage _marketTimeMessage = new();
 	private bool _isMarketTimeHandled;
 
@@ -18,8 +18,8 @@ partial class Connector
 			if (_marketTimer != null)
 				return;
 
-			_marketTimer = ThreadingHelper
-				.Timer(() =>
+			_marketTimer = AsyncHelper
+				.CreatePeriodicTimer(() =>
 				{
 					try
 					{
@@ -42,7 +42,7 @@ partial class Connector
 						LogError(ex);
 					}
 				})
-				.Interval(MarketTimeChangedInterval);
+				.Start(MarketTimeChangedInterval);
 		}
 	}
 
@@ -65,7 +65,7 @@ partial class Connector
 
 	private readonly ResetMessage _disposeMessage = new();
 
-	private void AdapterOnNewOutMessage(Message message)
+	private ValueTask AdapterOnNewOutMessage(Message message, CancellationToken cancellationToken)
 	{
 		if (message.IsBack())
 		{
@@ -92,13 +92,15 @@ partial class Connector
 			else if (message.Type == ExtendedMessageTypes.SubscriptionSecurityAll)
 			{
 				_subscriptionManager.SubscribeAll((SubscriptionSecurityAllMessage)message);
-				return;
+				return default;
 			}
 
 			SendInMessage(message);
 		}
 		else
 			SendOutMessage(message);
+
+		return default;
 	}
 
 	private IMessageChannel _inMessageChannel;
@@ -170,12 +172,12 @@ partial class Connector
 		return OnProcessMessage(message, cancellationToken);
 	}
 
-	private IMessageAdapter _inAdapter;
+	private IMessageAdapterWrapper _inAdapter;
 
 	/// <summary>
 	/// Inner message adapter.
 	/// </summary>
-	public IMessageAdapter InnerAdapter
+	public IMessageAdapterWrapper InnerAdapter
 	{
 		get => _inAdapter;
 		set
@@ -185,7 +187,7 @@ partial class Connector
 
 			if (_inAdapter != null)
 			{
-				_inAdapter.NewOutMessage -= AdapterOnNewOutMessage;
+				_inAdapter.NewOutMessageAsync -= AdapterOnNewOutMessage;
 			}
 
 			if (_adapter != null)
@@ -225,7 +227,7 @@ partial class Connector
 					InnerAdaptersOnAdded(inner);
 			}
 
-			_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
+			_inAdapter.NewOutMessageAsync += AdapterOnNewOutMessage;
 		}
 	}
 
@@ -253,7 +255,7 @@ partial class Connector
 
 				//SendInMessage(new ResetMessage());
 
-				_inAdapter.NewOutMessage -= AdapterOnNewOutMessage;
+				_inAdapter.NewOutMessageAsync -= AdapterOnNewOutMessage;
 				_inAdapter.Dispose();
 
 				//if (_inAdapter != _adapter)
@@ -304,7 +306,7 @@ partial class Connector
 				if (SupportFilteredMarketDepth)
 					_inAdapter = new FilteredMarketDepthAdapter(_inAdapter) { OwnInnerAdapter = true };
 
-				_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
+				_inAdapter.NewOutMessageAsync += AdapterOnNewOutMessage;
 			}
 		}
 	}
@@ -415,7 +417,7 @@ partial class Connector
 		if (adapter == null)
 			return default;
 
-		var prev = (adapter as IMessageAdapterWrapper)?.InnerAdapter;
+		var prev = adapter?.InnerAdapter;
 		var next = (IMessageAdapter)null;
 
 		while (true)
@@ -424,12 +426,12 @@ partial class Connector
 				return (prev, adapter, next);
 
 			next = adapter;
-			adapter = prev;
+			adapter = prev as IMessageAdapterWrapper;
 
 			if (adapter == null)
 				return default;
 
-			prev = (adapter as IMessageAdapterWrapper)?.InnerAdapter;
+			prev = adapter?.InnerAdapter;
 		}
 	}
 
@@ -476,10 +478,10 @@ partial class Connector
 
 	private void AddAdapter(Func<IMessageAdapter, IMessageAdapterWrapper> create)
 	{
-		_inAdapter.NewOutMessage -= AdapterOnNewOutMessage;
+		_inAdapter.NewOutMessageAsync -= AdapterOnNewOutMessage;
 
 		_inAdapter = create(_inAdapter);
-		_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
+		_inAdapter.NewOutMessageAsync += AdapterOnNewOutMessage;
 	}
 
 	private void DisableAdapter<T>()
@@ -495,10 +497,10 @@ partial class Connector
 
 		if (nextWrapper == null)
 		{
-			adapterWrapper.NewOutMessage -= AdapterOnNewOutMessage;
+			adapterWrapper.NewOutMessageAsync -= AdapterOnNewOutMessage;
 
-			_inAdapter = adapterWrapper.InnerAdapter;
-			_inAdapter.NewOutMessage += AdapterOnNewOutMessage;
+			_inAdapter = (IMessageAdapterWrapper)adapterWrapper.InnerAdapter;
+			_inAdapter.NewOutMessageAsync += AdapterOnNewOutMessage;
 		}
 		else
 			nextWrapper.InnerAdapter = adapterWrapper.InnerAdapter;

@@ -32,7 +32,7 @@ public partial class BitalongMessageAdapter
 	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Bitalong };
 
 	/// <inheritdoc />
-	protected override async ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient != null)
 		{
@@ -42,7 +42,7 @@ public partial class BitalongMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				await SendOutErrorAsync(ex, cancellationToken);
+				SendOutError(ex);
 			}
 
 			_httpClient = null;
@@ -55,11 +55,13 @@ public partial class BitalongMessageAdapter
 		_tradesSubscriptions.Clear();
 		_level1Subscriptions.Clear();
 
-		await SendOutMessageAsync(new ResetMessage(), cancellationToken);
+		SendOutMessage(new ResetMessage());
+
+		return default;
 	}
 
 	/// <inheritdoc />
-	protected override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+	protected override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
 		if (this.IsTransactional())
 		{
@@ -75,11 +77,12 @@ public partial class BitalongMessageAdapter
 
 		_httpClient = new HttpClient(Address, Key, Secret) { Parent = this };
 
-		await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
+		SendOutMessage(new ConnectMessage());
+		return default;
 	}
 
 	/// <inheritdoc />
-	protected override async ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+	protected override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient == null)
 			throw new InvalidOperationException(LocalizedStrings.ConnectionNotOk);
@@ -87,7 +90,8 @@ public partial class BitalongMessageAdapter
 		_httpClient.Dispose();
 		_httpClient = null;
 
-		await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
+		SendOutMessage(new DisconnectMessage());
+		return default;
 	}
 
 	/// <inheritdoc />

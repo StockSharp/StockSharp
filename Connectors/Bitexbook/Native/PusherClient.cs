@@ -9,16 +9,16 @@ class PusherClient : BaseLogReceiver
 	// to get readable name after obfuscation
 	public override string Name => nameof(Bitexbook) + "_" + nameof(PusherClient);
 
-	public event Func<IEnumerable<Symbol>, CancellationToken, ValueTask> NewSymbols;
-	public event Func<TickerChange, CancellationToken, ValueTask> NewTickerChange;
-	public event Func<Ticker, CancellationToken, ValueTask> TickerChanged;
-	public event Func<IEnumerable<Order>, CancellationToken, ValueTask> LatestOrders;
-	public event Func<IEnumerable<Ticket>, CancellationToken, ValueTask> TicketsActive;
-	public event Func<Ticket, CancellationToken, ValueTask> TicketAdded;
-	public event Func<Ticket, CancellationToken, ValueTask> TicketCanceled;
-	public event Func<Ticket, CancellationToken, ValueTask> TicketExecuted;
-	public event Func<Exception, CancellationToken, ValueTask> Error;
-	public event Func<ConnectionStates, CancellationToken, ValueTask> StateChanged;
+	public event Action<IEnumerable<Symbol>> NewSymbols;
+	public event Action<TickerChange> NewTickerChange;
+	public event Action<Ticker> TickerChanged;
+	public event Action<IEnumerable<Order>> LatestOrders;
+	public event Action<IEnumerable<Ticket>> TicketsActive;
+	public event Action<Ticket> TicketAdded;
+	public event Action<Ticket> TicketCanceled;
+	public event Action<Ticket> TicketExecuted;
+	public event Action<Exception> Error;
+	public event Action<ConnectionStates> StateChanged;
 	//public event Action<string> TradesSubscribed;
 	//public event Action<string> OrderBooksSubscribed;
 
@@ -28,11 +28,11 @@ class PusherClient : BaseLogReceiver
 	{
 		_client = new(
 			"wss://api.bitexbook.com/api/v2/ws",
-			(state, ct) => StateChanged?.Invoke(state, ct) ?? default,
-			(error, ct) =>
+			state => StateChanged?.Invoke(state),
+			error =>
 			{
 				this.AddErrorLog(error);
-				return Error?.Invoke(error, ct) ?? default;
+				Error?.Invoke(error);
 			},
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
@@ -61,7 +61,7 @@ class PusherClient : BaseLogReceiver
 		_client.Disconnect();
 	}
 
-	private async ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
+	private ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
 	{
 		var obj = msg.AsObject();
 		var method = (string)obj.method;
@@ -71,41 +71,29 @@ class PusherClient : BaseLogReceiver
 		{
 			case Methods.Welcome:
 			{
-				var handler = NewSymbols;
-				if (handler != null)
-					await handler(((JToken)obj.data.symbols).DeserializeObject<Symbol[]>(), cancellationToken);
+				NewSymbols?.Invoke(((JToken)obj.data.symbols).DeserializeObject<Symbol[]>());
 				break;
 			}
 
 			case Methods.SymbolsLatestStatistic:
 			{
-				var handler = TickerChanged;
-				if (handler != null)
-				{
-					foreach (var ticker in data.DeserializeObject<Ticker[]>())
-						await handler(ticker, cancellationToken);
-				}
+				foreach (var ticker in data.DeserializeObject<Ticker[]>())
+					TickerChanged?.Invoke(ticker);
 
 				break;
 			}
 
 			case Methods.SymbolsChanges:
 			{
-				var handler = NewTickerChange;
-				if (handler != null)
-				{
-					foreach (var ticker in data.DeserializeObject<IDictionary<string, TickerChange>>())
-						await handler(ticker.Value, cancellationToken);
-				}
+				foreach (var ticker in data.DeserializeObject<IDictionary<string, TickerChange>>())
+					NewTickerChange?.Invoke(ticker.Value);
 
 				break;
 			}
 
 			case Methods.OrdersLatest:
 			{
-				var handler = LatestOrders;
-				if (handler != null)
-					await handler(data.DeserializeObject<Order[]>(), cancellationToken);
+				LatestOrders?.Invoke(data.DeserializeObject<Order[]>());
 				break;
 			}
 
@@ -114,15 +102,11 @@ class PusherClient : BaseLogReceiver
 				if (obj.data.tickets == null)
 					break;
 
-				var handler = TicketsActive;
-				if (handler != null)
+				var tickets = ((JToken)obj.data.tickets).DeserializeObject<IDictionary<string, Ticket[]>>();
+				
+				foreach (var pair in tickets)
 				{
-					var tickets = ((JToken)obj.data.tickets).DeserializeObject<IDictionary<string, Ticket[]>>();
-
-					foreach (var pair in tickets)
-					{
-						await handler(pair.Value, cancellationToken);
-					}
+					TicketsActive?.Invoke(pair.Value);
 				}
 
 				break;
@@ -130,25 +114,19 @@ class PusherClient : BaseLogReceiver
 
 			case Methods.TicketAdded:
 			{
-				var handler = TicketAdded;
-				if (handler != null)
-					await handler(((JToken)obj).DeserializeObject<Ticket>(), cancellationToken);
+				TicketAdded?.Invoke(((JToken)obj).DeserializeObject<Ticket>());
 				break;
 			}
 
 			case Methods.TicketCanceled:
 			{
-				var handler = TicketCanceled;
-				if (handler != null)
-					await handler(((JToken)obj).DeserializeObject<Ticket>(), cancellationToken);
+				TicketCanceled?.Invoke(((JToken)obj).DeserializeObject<Ticket>());
 				break;
 			}
 
 			case Methods.TicketExecuted:
 			{
-				var handler = TicketExecuted;
-				if (handler != null)
-					await handler(((JToken)obj).DeserializeObject<Ticket>(), cancellationToken);
+				TicketExecuted?.Invoke(((JToken)obj).DeserializeObject<Ticket>());
 				break;
 			}
 
@@ -156,6 +134,8 @@ class PusherClient : BaseLogReceiver
 				this.AddErrorLog(LocalizedStrings.UnknownEvent, method);
 				break;
 		}
+
+		return default;
 	}
 
 	private static class Commands

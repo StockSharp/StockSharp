@@ -46,7 +46,7 @@ public class StorageMessageAdapter(IMessageAdapter innerAdapter, IStorageProcess
 					if (outMsg is MarketDataMessage md)
 						forwardMessage = md;
 					else
-						RaiseStorageMessage(outMsg);
+						await RaiseStorageMessage(outMsg, cancellationToken);
 				}
 
 				if (forwardMessage != null)
@@ -61,11 +61,11 @@ public class StorageMessageAdapter(IMessageAdapter innerAdapter, IStorageProcess
 		}
 	}
 
-	private void RaiseStorageMessage(Message message)
+	private ValueTask RaiseStorageMessage(Message message, CancellationToken cancellationToken)
 	{
 		message.TryInitLocalTime(this);
 
-		RaiseNewOutMessage(message);
+		return RaiseNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>

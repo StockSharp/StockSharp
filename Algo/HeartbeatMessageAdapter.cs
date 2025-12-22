@@ -24,7 +24,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 	private const ConnectionStates _none = (ConnectionStates)(-1);
 
-	private readonly Lock _timeSync = new();
+	private readonly AsyncLock _sync = new();
 	private readonly TimeMessage _timeMessage = new() { OfflineMode = MessageOfflineModes.Ignore };
 
 	private readonly ReConnectionSettings _reConnectionSettings;
@@ -34,7 +34,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 	private int _connectingAttemptCount;
 	private TimeSpan _connectionTimeOut;
-	private Timer _timer;
+	private ControllablePeriodicTimer _timer;
 	private bool _canSendTime;
 	private bool _isFirstTimeConnect = true;
 	private bool _suppressDisconnectError;
@@ -71,7 +71,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				{
 					isRestored = _currState == ConnectionStates.Connecting && (_prevState == ConnectionStates.Failed || _prevState == ConnectionStates.Reconnecting);
 
-					using (_timeSync.EnterScope())
+					using (await _sync.LockAsync(cancellationToken))
 					{
 						_prevState = _currState = ConnectionStates.Connected;
 
@@ -81,7 +81,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				}
 				else
 				{
-					using (_timeSync.EnterScope())
+					using (await _sync.LockAsync(cancellationToken))
 					{
 						if (_connectingAttemptCount != 0)
 						{
@@ -129,12 +129,12 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 				if (disconnectMsg.IsOk())
 				{
-					using (_timeSync.EnterScope())
+					using (await _sync.LockAsync(cancellationToken))
 						_prevState = _currState = ConnectionStates.Disconnected;
 				}
 				else
 				{
-					using (_timeSync.EnterScope())
+					using (await _sync.LockAsync(cancellationToken))
 					{
 						if (_suppressDisconnectError)
 						{
@@ -166,7 +166,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			{
 				_prevState = _none;
 
-				using (_timeSync.EnterScope())
+				using (await _sync.LockAsync(cancellationToken))
 				{
 					_currState = _none;
 
@@ -188,7 +188,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				else
 					await base.OnSendInMessageAsync(new ResetMessage(), cancellationToken);
 
-				using (_timeSync.EnterScope())
+				using (await _sync.LockAsync(cancellationToken))
 				{
 					_currState = ConnectionStates.Connecting;
 
@@ -205,7 +205,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			}
 			case MessageTypes.Disconnect:
 			{
-				using (_timeSync.EnterScope())
+				using (await _sync.LockAsync(cancellationToken))
 				{
 					_suppressDisconnectError = _timer != null;
 
@@ -223,7 +223,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			{
 				if (_timeMessage == message)
 				{
-					using (_timeSync.EnterScope())
+					using (await _sync.LockAsync(cancellationToken))
 					{
 						if (_currState is ConnectionStates.Disconnecting or ConnectionStates.Disconnected)
 							return;
@@ -244,10 +244,10 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		{
 			await base.OnSendInMessageAsync(message, cancellationToken);
 
-			using (_timeSync.EnterScope())
+			using (await _sync.LockAsync(cancellationToken))
 			{
 				if (isStartTimer && (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected))
-					StartTimer();
+					StartTimer(cancellationToken);
 			}
 
 			return;
@@ -256,13 +256,13 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		{
 			if (message == _timeMessage)
 			{
-				using (_timeSync.EnterScope())
+				using (await _sync.LockAsync(cancellationToken))
 					_canSendTime = true;
 			}
 		}
 	}
 
-	private void StartTimer()
+	private void StartTimer(CancellationToken cancellationToken)
 	{
 		if (_timer != null)
 			return;
@@ -286,51 +286,51 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		var outMsgIntervalInitial = TimeSpan.FromSeconds(5);
 		var outMsgInterval = outMsgIntervalInitial;
 
-		_timer = ThreadingHelper
-		    .Timer(() =>
-		    {
-			    using (sync.EnterScope())
-			    {
-				    if (isProcessing)
-					    return;
+		_timer = AsyncHelper
+			.CreatePeriodicTimer(async () =>
+			{
+				using (sync.EnterScope())
+				{
+					if (isProcessing)
+						return;
 
-				    isProcessing = true;
-			    }
+					isProcessing = true;
+				}
 
-			    try
-			    {
-				    var now = CurrentTimeUtc;
-				    var diff = now - time;
+				try
+				{
+					var now = CurrentTimeUtc;
+					var diff = now - time;
 
-				    if (needHeartbeat && (now - lastHeartBeatTime) >= heartbeat)
-				    {
-					    ProcessHeartbeat();
-					    lastHeartBeatTime = now;
-				    }
+					if (needHeartbeat && (now - lastHeartBeatTime) >= heartbeat)
+					{
+						await ProcessHeartbeat(cancellationToken);
+						lastHeartBeatTime = now;
+					}
 
-				    ProcessReconnection(diff);
+					await ProcessReconnection(diff, cancellationToken);
 
 					outMsgInterval -= diff;
 
 					if (outMsgInterval <= TimeSpan.Zero)
 					{
 						outMsgInterval = outMsgIntervalInitial;
-						RaiseNewOutMessage(new TimeMessage { LocalTime = CurrentTimeUtc });
+						await RaiseNewOutMessageAsync(new TimeMessage { LocalTime = CurrentTimeUtc }, cancellationToken);
 					}
 
-				    time = now;
-			    }
-			    catch (Exception ex)
-			    {
-				    this.AddErrorLog(ex);
-			    }
-			    finally
-			    {
+					time = now;
+				}
+				catch (Exception ex)
+				{
+					this.AddErrorLog(ex);
+				}
+				finally
+				{
 					using (sync.EnterScope())
-					    isProcessing = false;
-			    }
-		    })
-		    .Interval(period.Min(outMsgIntervalInitial).Max(TimeSpan.FromSeconds(1)));
+						isProcessing = false;
+				}
+			})
+			.Start(period.Min(outMsgIntervalInitial).Max(TimeSpan.FromSeconds(1)));
 	}
 
 	private void StopTimer()
@@ -342,7 +342,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		_timer = null;
 	}
 
-	private void ProcessReconnection(TimeSpan diff)
+	private async ValueTask ProcessReconnection(TimeSpan diff, CancellationToken cancellationToken)
 	{
 		switch (_currState)
 		{
@@ -359,10 +359,10 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 					{
 						case ConnectionStates.Connecting:
 							if (!SuppressReconnectingErrors || _connectingAttemptCount == 0)
-								RaiseNewOutMessage(new ConnectMessage { Error = new TimeoutException(LocalizedStrings.ConnectionTimeout) });
+								await RaiseNewOutMessageAsync(new ConnectMessage { Error = new TimeoutException(LocalizedStrings.ConnectionTimeout) }, cancellationToken);
 							break;
 						case ConnectionStates.Disconnecting:
-							RaiseNewOutMessage(new DisconnectMessage { Error = new TimeoutException(LocalizedStrings.DisconnectTimeout) });
+							await RaiseNewOutMessageAsync(new DisconnectMessage { Error = new TimeoutException(LocalizedStrings.DisconnectTimeout) }, cancellationToken);
 							break;
 					}
 
@@ -370,21 +370,21 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 					{
 						LogInfo("RCM: Connecting AttemptError.");
 
-						using (_timeSync.EnterScope())
+						using (await _sync.LockAsync(cancellationToken))
 							_currState = _prevState;
 					}
 					else
 					{
 						if (_currState == ConnectionStates.Connecting && _connectingAttemptCount != 0)
 						{
-							using (_timeSync.EnterScope())
+							using (await _sync.LockAsync(cancellationToken))
 								_currState = ConnectionStates.Reconnecting;
 
 							LogInfo("RCM: To Reconnecting Attempts {0} Timeout {1}.", _connectingAttemptCount, _connectionTimeOut);
 						}
 						else
 						{
-							using (_timeSync.EnterScope())
+							using (await _sync.LockAsync(cancellationToken))
 								_currState = _none;
 						}
 					}
@@ -398,7 +398,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				{
 					LogWarning("RCM: Reconnecting attempts {0} PrevState {1}.", _connectingAttemptCount, FormatState(_prevState));
 
-					using (_timeSync.EnterScope())
+					using (await _sync.LockAsync(cancellationToken))
 						_currState = _none;
 
 					break;
@@ -418,7 +418,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 					_connectionTimeOut = _reConnectionSettings.Interval;
 
-					RaiseNewOutMessage(new ReconnectMessage().LoopBack(this));
+					await RaiseNewOutMessageAsync(new ReconnectMessage().LoopBack(this), cancellationToken);
 				}
 				else
 				{
@@ -446,9 +446,9 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		}
 	}
 
-	private void ProcessHeartbeat()
+	private async ValueTask ProcessHeartbeat(CancellationToken cancellationToken)
 	{
-		using (_timeSync.EnterScope())
+		using (await _sync.LockAsync(cancellationToken))
 		{
 			if (_currState != ConnectionStates.Connected && !InnerAdapter.HeartbeatBeforConnect)
 				return;
@@ -462,7 +462,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		_timeMessage.LoopBack(this);
 		_timeMessage.TransactionId = TransactionIdGenerator.GetNextId();
 
-		RaiseNewOutMessage(_timeMessage);
+		await RaiseNewOutMessageAsync(_timeMessage, cancellationToken);
 	}
 
 	/// <summary>

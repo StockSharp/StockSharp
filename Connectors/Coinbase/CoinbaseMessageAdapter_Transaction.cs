@@ -22,7 +22,7 @@ public partial class CoinbaseMessageAdapter
 
 				var withdrawId = await _restClient.Withdraw(regMsg.SecurityId.SecurityCode, regMsg.Volume, condition.WithdrawInfo, cancellationToken);
 
-				await SendOutMessageAsync(new ExecutionMessage
+				SendOutMessage(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					OrderStringId = withdrawId,
@@ -30,7 +30,7 @@ public partial class CoinbaseMessageAdapter
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
-				}, cancellationToken);
+				});
 
 				await PortfolioLookupAsync(null, cancellationToken);
 				return;
@@ -52,7 +52,7 @@ public partial class CoinbaseMessageAdapter
 
 		if (orderState == OrderStates.Failed)
 		{
-			await SendOutMessageAsync(new ExecutionMessage
+			SendOutMessage(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				ServerTime = result.CreationTime,
@@ -60,7 +60,7 @@ public partial class CoinbaseMessageAdapter
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(),
 				HasOrderInfo = true,
-			}, cancellationToken);
+			});
 		}
 	}
 
@@ -177,14 +177,14 @@ public partial class CoinbaseMessageAdapter
 		// Send result with errors if any
 		if (errors.Count > 0)
 		{
-			await SendOutMessageAsync(new ExecutionMessage
+			SendOutMessage(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
 				ServerTime = CurrentTimeUtc,
 				HasOrderInfo = true,
 				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
-			}, cancellationToken);
+			});
 		}
 	}
 
@@ -193,17 +193,17 @@ public partial class CoinbaseMessageAdapter
 	{
 		var transId = lookupMsg.TransactionId;
 
-		await SendSubscriptionReplyAsync(transId, cancellationToken);
+		SendSubscriptionReply(transId);
 
 		if (!lookupMsg.IsSubscribe)
 			return;
 
-		await SendOutMessageAsync(new PortfolioMessage
+		SendOutMessage(new PortfolioMessage
 		{
 			PortfolioName = PortfolioName,
 			BoardCode = BoardCodes.Coinbase,
 			OriginalTransactionId = transId,
-		}, cancellationToken);
+		});
 
 		var accounts = await _restClient.GetAccounts(cancellationToken);
 
@@ -217,7 +217,7 @@ public partial class CoinbaseMessageAdapter
 			//	currency += "-USD";
 			//}
 
-			await SendOutMessageAsync(new PositionChangeMessage
+			SendOutMessage(new PositionChangeMessage
 			{
 				//PortfolioName = account.Id.To<string>(),
 				PortfolioName = PortfolioName,
@@ -229,16 +229,16 @@ public partial class CoinbaseMessageAdapter
 				ServerTime = CurrentTimeUtc,
 			}
 			.TryAdd(PositionChangeTypes.CurrentValue, (decimal)account.Available, true)
-			.TryAdd(PositionChangeTypes.BlockedValue, (decimal)account.Hold, true), cancellationToken);
+			.TryAdd(PositionChangeTypes.BlockedValue, (decimal)account.Hold, true));
 		}
 
-		await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
+		SendSubscriptionResult(lookupMsg);
 	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
-		await SendSubscriptionReplyAsync(statusMsg.TransactionId, cancellationToken);
+		SendSubscriptionReply(statusMsg.TransactionId);
 
 		if (!statusMsg.IsSubscribe)
 			return;
@@ -246,22 +246,22 @@ public partial class CoinbaseMessageAdapter
 		var orders = await _restClient.GetOrders(cancellationToken);
 
 		foreach (var order in orders)
-			await ProcessOrderAsync(order, statusMsg.TransactionId, cancellationToken);
+			ProcessOrder(order, statusMsg.TransactionId);
 
 		if (!statusMsg.IsHistoryOnly())
 			await _socketClient.SubscribeOrders(statusMsg.TransactionId, cancellationToken);
 
-		await SendSubscriptionResultAsync(statusMsg, cancellationToken);
+		SendSubscriptionResult(statusMsg);
 	}
 
-	private ValueTask ProcessOrderAsync(Order order, long originTransId, CancellationToken cancellationToken)
+	private void ProcessOrder(Order order, long originTransId)
 	{
 		if (!long.TryParse(order.ClientOrderId, out var transId))
-			return default;
+			return;
 
 		var state = order.Status.ToOrderState();
 
-		return SendOutMessageAsync(new ExecutionMessage
+		SendOutMessage(new ExecutionMessage
 		{
 			ServerTime = originTransId == 0 ? CurrentTimeUtc : order.CreationTime,
 			DataTypeEx = DataType.Transactions,
@@ -278,9 +278,9 @@ public partial class CoinbaseMessageAdapter
 			TimeInForce = order.TimeInForce.ToTimeInForce(),
 			Balance = (decimal?)order.LeavesQuantity,
 			HasOrderInfo = true,
-		}, cancellationToken);
+		});
 	}
 
-	private ValueTask SessionOnOrderReceived(Order order, CancellationToken cancellationToken)
-		=> ProcessOrderAsync(order, 0, cancellationToken);
+	private void SessionOnOrderReceived(Order order)
+		=> ProcessOrder(order, 0);
 }

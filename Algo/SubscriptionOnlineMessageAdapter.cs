@@ -66,7 +66,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 		public override string ToString() => (_main != null ? "Linked: " : string.Empty) + Subscription.ToString();
 	}
 
-	private readonly Lock _sync = new();
+	private readonly AsyncLock _sync = new();
 
 	private readonly PairSet<(DataType, SecurityId), SubscriptionInfo> _subscriptionsByKey = [];
 	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = [];
@@ -74,11 +74,11 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 	private readonly HashSet<long> _unsubscribeRequests = [];
 
 	/// <inheritdoc />
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		void TryAddOrderSubscription(OrderMessage orderMsg)
+		async ValueTask TryAddOrderSubscription(OrderMessage orderMsg)
 		{
-			using (_sync.EnterScope())
+			using (await _sync.LockAsync(cancellationToken))
 			{
 				if (_subscriptionsByKey.TryGetValue((DataType.Transactions, default(SecurityId)), out var info))
 					TryAddOrderTransaction(info, orderMsg.TransactionId);
@@ -91,7 +91,8 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 		switch (message.Type)
 		{
 			case MessageTypes.Reset:
-				return ProcessReset(message, cancellationToken);
+				await ProcessReset(message, cancellationToken);
+				break;
 
 			case MessageTypes.OrderRegister:
 			case MessageTypes.OrderReplace:
@@ -100,17 +101,20 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			{
 				var orderMsg = (OrderMessage)message;
 
-				TryAddOrderSubscription(orderMsg);
+				await TryAddOrderSubscription(orderMsg);
 
-				return base.OnSendInMessageAsync(message, cancellationToken);
+				await base.OnSendInMessageAsync(message, cancellationToken);
+				break;
 			}
 
 			default:
 			{
 				if (message is ISubscriptionMessage subscrMsg)
-					return ProcessInSubscriptionMessage(subscrMsg, cancellationToken);
+					await ProcessInSubscriptionMessage(subscrMsg, cancellationToken);
 				else
-					return base.OnSendInMessageAsync(message, cancellationToken);
+					await base.OnSendInMessageAsync(message, cancellationToken);
+
+				break;
 			}
 		}
 	}
@@ -143,7 +147,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 				if (message is ConnectionRestoredMessage restoredMsg && !restoredMsg.IsResetState)
 					break;
 
-				ClearState();
+				await ClearState(cancellationToken);
 				break;
 			}
 
@@ -154,7 +158,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 
 				HashSet<long> subscribers = null;
 
-				using (_sync.EnterScope())
+				using (await _sync.LockAsync(cancellationToken))
 				{
 					if (responseMsg.IsOk())
 					{
@@ -196,7 +200,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			{
 				var originTransId = ((SubscriptionOnlineMessage)message).OriginalTransactionId;
 
-				using (_sync.EnterScope())
+				using (await _sync.LockAsync(cancellationToken))
 				{
 					if (_subscriptionsById.TryGetValue(originTransId, out var info))
 					{
@@ -214,7 +218,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			{
 				var originTransId = ((SubscriptionFinishedMessage)message).OriginalTransactionId;
 
-				using (_sync.EnterScope())
+				using (await _sync.LockAsync(cancellationToken))
 				{
 					if (_subscriptionsById.TryGetValue(originTransId, out var info))
 					{
@@ -233,7 +237,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			{
 				if (message is ISubscriptionIdMessage subscrMsg)
 				{
-					using (_sync.EnterScope())
+					using (await _sync.LockAsync(cancellationToken))
 					{
 						if (subscrMsg.OriginalTransactionId != 0 && _subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info))
 						{
@@ -302,9 +306,9 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 			LogWarning("Order's transaction {0} was handled before.", transactionId);
 	}
 
-	private void ClearState()
+	private async ValueTask ClearState(CancellationToken cancellationToken)
 	{
-		using (_sync.EnterScope())
+		using (await _sync.LockAsync(cancellationToken))
 		{
 			_subscriptionsByKey.Clear();
 			_subscriptionsById.Clear();
@@ -313,11 +317,11 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 		}
 	}
 
-	private ValueTask ProcessReset(Message message, CancellationToken cancellationToken)
+	private async ValueTask ProcessReset(Message message, CancellationToken cancellationToken)
 	{
-		ClearState();
+		await ClearState(cancellationToken);
 
-		return base.OnSendInMessageAsync(message, cancellationToken);
+		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	private async ValueTask ProcessInSubscriptionMessage(ISubscriptionMessage message, CancellationToken cancellationToken)
@@ -331,7 +335,7 @@ public class SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter) : Me
 		ISubscriptionMessage sendInMsg = null;
 		Message[] sendOutMsgs = null;
 
-		using (_sync.EnterScope())
+		using (await _sync.LockAsync(cancellationToken))
 		{
 			if (isSubscribe)
 			{

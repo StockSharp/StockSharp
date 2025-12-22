@@ -14,7 +14,8 @@ public abstract class HistoricalMessageAdapter(IdGenerator transactionIdGenerato
 	{
 		if (!mdMsg.IsSubscribe)
 		{
-			return SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
+			SendSubscriptionReply(mdMsg.TransactionId);
+			return default;
 		}
 
 		var from = mdMsg.From;

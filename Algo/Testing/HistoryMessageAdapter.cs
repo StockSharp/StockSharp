@@ -243,12 +243,12 @@ public class HistoryMessageAdapter : MessageAdapter
 				foreach (var security in securities)
 				{
 					if (security.Board != null && processedBoards.Add(security.Board))
-						await SendOutMessageAsync(security.Board.ToMessage(), cancellationToken);
+						SendOutMessage(security.Board.ToMessage());
 
-					await SendOutMessageAsync(security.ToMessage(originalTransactionId: lookupMsg.TransactionId), cancellationToken);
+					SendOutMessage(security.ToMessage(originalTransactionId: lookupMsg.TransactionId));
 				}
 
-				await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
+				SendSubscriptionResult(lookupMsg);
 
 				break;
 			}
@@ -348,7 +348,7 @@ public class HistoryMessageAdapter : MessageAdapter
 
 		if (StorageRegistry == null)
 		{
-			await SendSubscriptionReplyAsync(transId, cancellationToken, new InvalidOperationException(LocalizedStrings.NotSupportedDataForSecurity.Put(dataType, securityId)));
+			SendSubscriptionReply(transId, new InvalidOperationException(LocalizedStrings.NotSupportedDataForSecurity.Put(dataType, securityId)));
 			return;
 		}
 
@@ -413,7 +413,7 @@ public class HistoryMessageAdapter : MessageAdapter
 			{
 				if (HasGenerator(DataType.Ticks))
 				{
-					await SendSubscriptionNotSupportedAsync(transId, cancellationToken);
+					SendSubscriptionNotSupported(transId);
 					return;
 				}
 
@@ -427,10 +427,10 @@ public class HistoryMessageAdapter : MessageAdapter
 			error = new InvalidOperationException(LocalizedStrings.NotSupportedDataForSecurity.Put(dataType, Messages.Extensions.AllSecurityId));
 		}
 
-		await SendSubscriptionReplyAsync(transId, cancellationToken, error);
+		SendSubscriptionReply(transId, error);
 
 		if (isSubscribe && error == null)
-			await SendSubscriptionResultAsync(message, cancellationToken);
+			SendSubscriptionResult(message);
 	}
 
 	private BoardMessage[] GetBoard()
@@ -505,9 +505,9 @@ public class HistoryMessageAdapter : MessageAdapter
 							}
 
 							if (noData)
-								await EnqueueMessages(startDateTime, stopDateTime, currentTime, new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval)));
+								await EnqueueMessages(startDateTime, stopDateTime, currentTime, new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boards, currentTime, MarketTimeChangedInterval)), cancellationToken);
 							else
-								await EnqueueMessages(startDateTime, stopDateTime, currentTime, messages);
+								await EnqueueMessages(startDateTime, stopDateTime, currentTime, messages, cancellationToken);
 						}
 
 						loadDateInUtc += TimeSpan.FromDays(1);
@@ -549,7 +549,7 @@ public class HistoryMessageAdapter : MessageAdapter
 		_syncRoot.Set();
 	}
 
-	private async ValueTask EnqueueMessages(DateTime fromTime, DateTime toTime, DateTime curTime, IAsyncEnumerable<Message> messages)
+	private async ValueTask EnqueueMessages(DateTime fromTime, DateTime toTime, DateTime curTime, IAsyncEnumerable<Message> messages, CancellationToken cancellationToken)
 	{
 		await foreach (var msg in messages)
 		{

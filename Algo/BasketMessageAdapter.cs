@@ -9,8 +9,6 @@ using StockSharp.Algo.Slippage;
 using StockSharp.Algo.Testing;
 using StockSharp.Algo.Positions;
 
-using Nito.AsyncEx;
-
 /// <summary>
 /// The interface describing the list of adapters to trading systems with which the aggregator operates.
 /// </summary>
@@ -33,7 +31,7 @@ public interface IInnerAdapterList : ISynchronizedCollection<IMessageAdapter>, I
 /// Adapter-aggregator that allows simultaneously to operate multiple adapters connected to different trading systems.
 /// </summary>
 [Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.BasketKey)]
-public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
+public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 {
 	private sealed class InnerAdapterList(BasketMessageAdapter parent) : CachedSynchronizedList<IMessageAdapter>, IInnerAdapterList
 	{
@@ -61,7 +59,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			if (item.Parent == _parent)
 				item.Parent = null;
 
-			using (_parent._connectedResponseLock.EnterScope())
+			using (_parent._connectedResponseLock.Lock())
 				_parent._adapterStates.Remove(item);
 
 			return base.OnRemoving(item);
@@ -78,7 +76,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			});
 			_parent._adapterWrappers.Clear();
 
-			using (_parent._connectedResponseLock.EnterScope())
+			using (_parent._connectedResponseLock.Lock())
 				_parent._adapterStates.Clear();
 
 			return base.OnClearing();
@@ -236,7 +234,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 	private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = [];
 	private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _adapterWrappers = [];
-	private readonly Lock _connectedResponseLock = new();
+	private readonly AsyncLock _connectedResponseLock = new();
 	private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = [];
 	private readonly List<Message> _pendingMessages = [];
 
@@ -551,6 +549,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	TimeSpan IMessageAdapter.DisconnectTimeout => default;
 	int IMessageAdapter.MaxParallelMessages { get => default; set => throw new NotSupportedException(); }
 	TimeSpan IMessageAdapter.FaultDelay { get => default; set => throw new NotSupportedException(); }
+    IMessageAdapter IMessageAdapterWrapper.InnerAdapter
+	{
+		get => null;
+		set => throw new NotSupportedException();
+	}
 
 	private void TryAddOrderAdapter(long transId, IMessageAdapter adapter) => _orderAdapters.TryAdd2(transId, GetUnderlyingAdapter(adapter));
 
@@ -567,7 +570,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		_adapterWrappers.Clear();
 
-		using (_connectedResponseLock.EnterScope())
+		using (await _connectedResponseLock.LockAsync(cancellationToken))
 		{
 			_messageTypeAdapters.Clear();
 
@@ -585,7 +588,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		_parentChildMap.Clear();
 	}
 
-	private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
+	private IMessageAdapterWrapper CreateWrappers(IMessageAdapter adapter)
 	{
 		var first = adapter;
 
@@ -608,13 +611,13 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			adapter = ApplyOwnInner(new OfflineMessageAdapter(adapter));
 
 		if (IgnoreExtraAdapters)
-			return adapter;
+			return (IMessageAdapterWrapper)adapter;
 
 		if (this.UseChannels() && adapter.UseChannels())
 		{
 			adapter = ApplyOwnInner(new ChannelMessageAdapter(adapter,
 				adapter.UseInChannel ? new AsyncMessageChannel(adapter) : new PassThroughMessageChannel(),
-				adapter.UseOutChannel ? new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} Out", SendOutError) : new PassThroughMessageChannel()
+				adapter.UseOutChannel ? new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} Out", ex => SendOutErrorAsync(ex, default)) : new PassThroughMessageChannel()
 			));
 		}
 
@@ -735,7 +738,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			adapter = new FillGapsMessageAdapter(adapter, FillGapsBehaviour);
 		}
 
-		return adapter;
+		return (IMessageAdapterWrapper)adapter;
 	}
 
 	private readonly Dictionary<IMessageAdapter, bool> _hearbeatFlags = [];
@@ -799,8 +802,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		}
 		catch (Exception ex)
 		{
-			SendOutMessage(message.CreateErrorResponse(ex, this, GetSubscribers));
-			return default;
+			return SendOutMessageAsync(message.CreateErrorResponse(ex, this, GetSubscribers), cancellationToken);
 		}
 	}
 
@@ -839,19 +841,17 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 				_currState = ConnectionStates.Connecting;
 
-				_adapterWrappers.AddRange(GetSortedAdapters().ToDictionary(a => a, a =>
+				foreach (var adapter in GetSortedAdapters())
 				{
-					var adapter = a;
-
-					using (_connectedResponseLock.EnterScope())
+					using (await _connectedResponseLock.LockAsync(cancellationToken))
 						_adapterStates.Add(adapter, CreateState(ConnectionStates.Connecting));
 
-					adapter = CreateWrappers(adapter);
+					var wrapper = CreateWrappers(adapter);
 
-					adapter.NewOutMessage += m => OnInnerAdapterNewOutMessage(adapter, m);
+					wrapper.NewOutMessageAsync += (m, ct) => OnInnerAdapterNewOutMessage(adapter, m, ct);
 
-					return adapter;
-				}));
+					_adapterWrappers.Add(adapter, wrapper);
+				}
 
 				if (Wrappers.Length == 0)
 					throw new InvalidOperationException(LocalizedStrings.AtLeastOneConnectionMustBe);
@@ -870,7 +870,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			{
 				IDictionary<IMessageAdapter, IMessageAdapter> adapters;
 
-				using (_connectedResponseLock.EnterScope())
+				using (await _connectedResponseLock.LockAsync(cancellationToken))
 				{
 					_currState = ConnectionStates.Disconnecting;
 
@@ -934,7 +934,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	}
 
 	/// <inheritdoc />
+	[Obsolete]
 	public event Action<Message> NewOutMessage;
+
+	/// <inheritdoc />
+	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 
 	private ValueTask ProcessAdapterMessage(IMessageAdapter adapter, Message message, CancellationToken cancellationToken)
 	{
@@ -952,11 +956,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			return adapter.SendInMessageAsync(message, cancellationToken);
 	}
 
-	private ValueTask ProcessOtherMessage(Message message, CancellationToken cancellationToken)
+	private async ValueTask ProcessOtherMessage(Message message, CancellationToken cancellationToken)
 	{
 		if (message.Adapter != null)
 		{
-			return message.Adapter.SendInMessageAsync(message, cancellationToken);
+			await message.Adapter.SendInMessageAsync(message, cancellationToken);
+			return;
 		}
 
 		if (message is ISubscriptionMessage subscrMsg)
@@ -965,15 +970,16 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 			if (subscrMsg.IsSubscribe)
 			{
-				adapters = GetAdapters(message, out var isPended, out _);
+				var (a, isPended, _) = await GetAdapters(message, cancellationToken);
+				adapters = a;
 
 				if (isPended)
-					return default;
+					return;
 
 				if (adapters.Length == 0)
 				{
-					SendOutMessage(subscrMsg.CreateResult());
-					return default;
+					await SendOutMessageAsync(subscrMsg.CreateResult(), cancellationToken);
+					return;
 				}
 
 				_subscriptions.TryAdd2(subscrMsg.TransactionId, (subscrMsg.TypedClone(), adapters, subscrMsg.DataType));
@@ -981,26 +987,26 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			else
 				adapters = null;
 
-			return ToChild(subscrMsg, adapters).Select(pair => SendRequest(pair.Key, pair.Value, cancellationToken)).WhenAll();
+			await ToChild(subscrMsg, adapters).Select(pair => SendRequest(pair.Key, pair.Value, cancellationToken)).WhenAll();
 		}
 		else
 		{
-			var adapters = GetAdapters(message, out var isPended, out _);
+			var (adapters, isPended, _) = await GetAdapters(message, cancellationToken);
 
 			if (isPended)
-				return default;
+				return;
 
 			if (adapters.Length == 0)
-				return default;
+				return;
 
-			return adapters.Select(a => a.SendInMessageAsync(message, cancellationToken)).WhenAll();
+			await adapters.Select(a => a.SendInMessageAsync(message, cancellationToken)).WhenAll();
 		}
 	}
 
-	private IMessageAdapter[] GetAdapters(Message message, out bool isPended, out bool skipSupportedMessages)
+	private async ValueTask<(IMessageAdapter[] adapters, bool isPended, bool skipSupportedMessages)> GetAdapters(Message message, CancellationToken cancellationToken)
 	{
-		isPended = false;
-		skipSupportedMessages = false;
+		var isPended = false;
+		var skipSupportedMessages = false;
 
 		IMessageAdapter[] adapters = null;
 
@@ -1030,7 +1036,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			}
 		}
 
-		using (_connectedResponseLock.EnterScope())
+		using (await _connectedResponseLock.LockAsync(cancellationToken))
 		{
 			adapters ??= _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
 
@@ -1068,7 +1074,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				{
 					isPended = true;
 					_pendingMessages.Add(message.Clone());
-					return [];
+					return ([], isPended, skipSupportedMessages);
 				}
 			}
 		}
@@ -1081,15 +1087,17 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			//throw new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message));
 		}
 
-		return adapters;
+		return (adapters, isPended, skipSupportedMessages);
 	}
 
 	private bool HasPendingAdapters()
 		=> _adapterStates.Any(p => p.Value.state == ConnectionStates.Connecting);
 
-	private IMessageAdapter[] GetSubscriptionAdapters(MarketDataMessage mdMsg, out bool isPended)
+	private async ValueTask<(IMessageAdapter[] adapters, bool isPended)> GetSubscriptionAdapters(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		var adapters = GetAdapters(mdMsg, out isPended, out var skipSupportedMessages).Where(a =>
+		var (adapters, isPended, skipSupportedMessages) = await GetAdapters(mdMsg, cancellationToken);
+
+		adapters = adapters.Where(a =>
 		{
 			if (skipSupportedMessages)
 				return true;
@@ -1160,7 +1168,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		//if (!isPended && adapters.Length == 0)
 		//	throw new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(mdMsg));
 
-		return adapters;
+		return (adapters, isPended);
 	}
 
 	private IDictionary<ISubscriptionMessage, IMessageAdapter> ToChild(ISubscriptionMessage subscrMsg, IMessageAdapter[] adapters)
@@ -1210,21 +1218,21 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		return adapter.SendInMessageAsync((Message)subscrMsg, cancellationToken);
 	}
 
-	private ValueTask ProcessMarketDataRequest(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+	private async ValueTask ProcessMarketDataRequest(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		IMessageAdapter[] GetAdapters()
+		async ValueTask<IMessageAdapter[]> GetAdapters()
 		{
 			if (!mdMsg.IsSubscribe)
 				return null;
 
-			var adapters = GetSubscriptionAdapters(mdMsg, out var isPended);
+			var (adapters, isPended) = await GetSubscriptionAdapters(mdMsg, cancellationToken);
 
 			if (isPended)
 				return null;
 
 			if (adapters.Length == 0)
 			{
-				SendOutMessage(mdMsg.TransactionId.CreateNotSupported());
+				await SendOutMessageAsync(mdMsg.TransactionId.CreateNotSupported(), cancellationToken);
 				return null;
 			}
 
@@ -1233,17 +1241,17 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (mdMsg.DataType2 == DataType.News || mdMsg.DataType2 == DataType.Board)
 		{
-			var adapters = GetAdapters();
+			var adapters = await GetAdapters();
 
 			if (mdMsg.IsSubscribe)
 			{
 				if (adapters == null)
-					return default;
+					return;
 
 				_subscriptions.TryAdd2(mdMsg.TransactionId, ((ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.DataType2));
 			}
 
-			return ToChild(mdMsg, adapters).Select(pair => SendRequest(pair.Key, pair.Value, cancellationToken)).WhenAll();
+			await ToChild(mdMsg, adapters).Select(pair => SendRequest(pair.Key, pair.Value, cancellationToken)).WhenAll();
 		}
 		else
 		{
@@ -1251,10 +1259,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 			if (mdMsg.IsSubscribe)
 			{
-				adapter = GetAdapters()?.First();
+				adapter = (await GetAdapters())?.First();
 
 				if (adapter == null)
-					return default;
+					return;
 
 				mdMsg = mdMsg.TypedClone();
 				_subscriptions.TryAdd2(mdMsg.TransactionId, ((ISubscriptionMessage)mdMsg.Clone(), new[] { adapter }, mdMsg.DataType2));
@@ -1265,20 +1273,20 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 				if (!_subscriptions.TryGetValue(originTransId, out var tuple))
 				{
-					using (_connectedResponseLock.EnterScope())
+					using (await _connectedResponseLock.LockAsync(cancellationToken))
 					{
 						var suspended = _pendingMessages.FirstOrDefault(m => m is MarketDataMessage prevMdMsg && prevMdMsg.TransactionId == originTransId);
 
 						if (suspended != null)
 						{
 							_pendingMessages.Remove(suspended);
-							SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId });
-							return default;
+							await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId }, cancellationToken);
+							return;
 						}
 					}
 
 					LogInfo("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
-					return default;
+					return;
 				}
 
 				adapter = tuple.adapters.First();
@@ -1286,67 +1294,71 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 				mdMsg = mdMsg.TypedClone();
 			}
 
-			return SendRequest(mdMsg, adapter, cancellationToken);
+			await SendRequest(mdMsg, adapter, cancellationToken);
 		}
 	}
 
-	private ValueTask ProcessPortfolioMessage(string portfolioName, OrderMessage message, CancellationToken cancellationToken)
+	private async ValueTask ProcessPortfolioMessage(string portfolioName, OrderMessage message, CancellationToken cancellationToken)
 	{
 		var adapter = message.Adapter;
 
 		if (adapter == null)
 		{
-			adapter = GetAdapter(portfolioName, message, out var isPending);
+			var (a, isPended) = await GetAdapter(portfolioName, message, cancellationToken);
+			adapter = a;
 
 			if (adapter == null)
 			{
-				if (isPending)
-					return default;
+				if (isPended)
+					return;
 
 				LogDebug("No adapter for {0}", message);
 
-				SendOutMessage(message.CreateReply(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message))));
-				return default;
+				await SendOutMessageAsync(message.CreateReply(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message))), cancellationToken);
+				return;
 			}
 		}
 
 		if (message is OrderRegisterMessage regMsg)
 			TryAddOrderAdapter(regMsg.TransactionId, adapter);
 
-		return adapter.SendInMessageAsync(message, cancellationToken);
+		await adapter.SendInMessageAsync(message, cancellationToken);
 	}
 
-	private ValueTask ProcessOrderMessage(long transId, long originId, Message message, CancellationToken cancellationToken)
+	private async ValueTask ProcessOrderMessage(long transId, long originId, Message message, CancellationToken cancellationToken)
 	{
 		if (!_orderAdapters.TryGetValue(originId, out var adapter))
 		{
 			if (message is OrderMessage ordMsg && !ordMsg.PortfolioName.IsEmpty())
-				adapter = GetAdapter(ordMsg.PortfolioName, message, out _);
+			{
+				var (a, _) = await GetAdapter(ordMsg.PortfolioName, message, cancellationToken);
+				adapter = a;
+			}
 		}
 
-		void sendUnkTrans()
+		ValueTask sendUnkTrans()
 		{
 			LogError(LocalizedStrings.UnknownTransactionId, originId);
 
-			SendOutMessage(new ExecutionMessage
+			return SendOutMessageAsync(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
 				OriginalTransactionId = transId,
 				Error = new InvalidOperationException(LocalizedStrings.UnknownTransactionId.Put(originId)),
-			});
+			}, cancellationToken);
 		}
 
 		if (adapter is null)
 		{
-			sendUnkTrans();
-			return default;
+			await sendUnkTrans();
+			return;
 		}
 
 		if (!_adapterWrappers.TryGetValue(adapter, out var wrapper))
 		{
-			sendUnkTrans();
-			return default;
+			await sendUnkTrans();
+			return;
 		}
 
 		if (message is OrderReplaceMessage replace)
@@ -1354,7 +1366,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			TryAddOrderAdapter(replace.TransactionId, adapter);
 		}
 
-		return wrapper.SendInMessageAsync(message, cancellationToken);
+		await wrapper.SendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>
@@ -1366,7 +1378,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 	public bool TryGetAdapter(string porfolioName, out IMessageAdapter adapter)
 		=> _portfolioAdapters.TryGetValue(porfolioName, out adapter);
 
-	private IMessageAdapter GetAdapter(string portfolioName, Message message, out bool isPended)
+	private async ValueTask<(IMessageAdapter adapter, bool isPended)> GetAdapter(string portfolioName, Message message, CancellationToken cancellationToken)
 	{
 		if (portfolioName.IsEmpty())
 			throw new ArgumentNullException(nameof(portfolioName));
@@ -1376,23 +1388,24 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (!TryGetAdapter(portfolioName, out var adapter))
 		{
-			return GetAdapters(message, out isPended, out _).FirstOrDefault();
+			var (adapters, isPended, _) = (await GetAdapters(message, cancellationToken));
+			return (adapters.FirstOrDefault(), isPended);
 		}
 		else
 		{
-			isPended = false;
+			var wrapper = _adapterWrappers.TryGetValue(adapter) ?? throw new InvalidOperationException(LocalizedStrings.ConnectionIsNotConnected.Put(adapter));
 
-			return _adapterWrappers.TryGetValue(adapter)
-				?? throw new InvalidOperationException(LocalizedStrings.ConnectionIsNotConnected.Put(adapter));
+			return (wrapper, false);
 		}
 	}
 
 	/// <summary>
-	/// The embedded adapter event <see cref="IMessageAdapter.NewOutMessage"/> handler.
+	/// The embedded adapter event <see cref="IMessageAdapterWrapper.NewOutMessageAsync"/> handler.
 	/// </summary>
 	/// <param name="innerAdapter">The embedded adapter.</param>
 	/// <param name="message">Message.</param>
-	protected virtual void OnInnerAdapterNewOutMessage(IMessageAdapter innerAdapter, Message message)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	protected virtual async ValueTask OnInnerAdapterNewOutMessage(IMessageAdapter innerAdapter, Message message, CancellationToken cancellationToken)
 	{
 		List<Message> extra = null;
 
@@ -1408,16 +1421,16 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 				case MessageTypes.Connect:
 					extra = [];
-					ProcessConnectMessage(innerAdapter, (ConnectMessage)message, extra);
+					await ProcessConnectMessage(innerAdapter, (ConnectMessage)message, extra, cancellationToken);
 					break;
 
 				case MessageTypes.Disconnect:
 					extra = [];
-					ProcessDisconnectMessage(innerAdapter, (DisconnectMessage)message, extra);
+					await ProcessDisconnectMessage(innerAdapter, (DisconnectMessage)message, extra, cancellationToken);
 					break;
 
 				case MessageTypes.SubscriptionResponse:
-					message = ProcessSubscriptionResponse(innerAdapter, (SubscriptionResponseMessage)message);
+					message = await ProcessSubscriptionResponse(innerAdapter, (SubscriptionResponseMessage)message, cancellationToken);
 					break;
 
 				case MessageTypes.SubscriptionFinished:
@@ -1475,12 +1488,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		}
 
 		if (message != null)
-			SendOutMessage(message);
+			await SendOutMessageAsync(message, cancellationToken);
 
 		if (extra != null)
 		{
 			foreach (var m in extra)
-				SendOutMessage(m);
+				await SendOutMessageAsync(m, cancellationToken);
 		}
 	}
 
@@ -1514,29 +1527,34 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 			msg.SetSubscriptionIds(ids);
 	}
 
-	private void SendOutError(Exception error)
+	private ValueTask SendOutErrorAsync(Exception error, CancellationToken cancellationToken)
 	{
-		SendOutMessage(error.ToErrorMessage());
+		return SendOutMessageAsync(error.ToErrorMessage(), cancellationToken);
 	}
 
+    void IMessageAdapter.SendOutMessage(Message message)
+		=> AsyncHelper.Run(() => SendOutMessageAsync(message, default));
+
 	/// <inheritdoc />
-	public void SendOutMessage(Message message)
+	public ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		OnSendOutMessage(message);
+		return OnSendOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <summary>
-	/// Send outgoing message and raise <see cref="NewOutMessage"/> event.
+	/// Send outgoing message and raise <see cref="NewOutMessageAsync"/> event.
 	/// </summary>
 	/// <param name="message">Message.</param>
-	protected virtual void OnSendOutMessage(Message message)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	protected virtual ValueTask OnSendOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		message.Adapter ??= this;
 
 		NewOutMessage?.Invoke(message);
+		return NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 	}
 
-	private void ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message, List<Message> extra)
+	private async ValueTask ProcessConnectMessage(IMessageAdapter innerAdapter, ConnectMessage message, List<Message> extra, CancellationToken cancellationToken)
 	{
 		var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
 		var wrapper = _adapterWrappers[underlyingAdapter];
@@ -1550,7 +1568,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		Message[] notSupportedMsgs = null;
 
-		using (_connectedResponseLock.EnterScope())
+		using (await _connectedResponseLock.LockAsync(cancellationToken))
 		{
 			if (error == null)
 			{
@@ -1575,14 +1593,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		{
 			foreach (var notSupportedMsg in notSupportedMsgs)
 			{
-				SendOutError(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(notSupportedMsg.Type)));
+				await SendOutErrorAsync(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(notSupportedMsg.Type)), cancellationToken);
 			}
 		}
 
 		message.Adapter = underlyingAdapter;
 	}
 
-	private void ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message, List<Message> extra)
+	private async ValueTask ProcessDisconnectMessage(IMessageAdapter innerAdapter, DisconnectMessage message, List<Message> extra, CancellationToken cancellationToken)
 	{
 		var underlyingAdapter = GetUnderlyingAdapter(innerAdapter);
 		var wrapper = _adapterWrappers[underlyingAdapter];
@@ -1594,7 +1612,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		else
 			LogError(LocalizedStrings.ErrorDisconnectFor, underlyingAdapter, error);
 
-		using (_connectedResponseLock.EnterScope())
+		using (await _connectedResponseLock.LockAsync(cancellationToken))
 		{
 			foreach (var supportedMessage in innerAdapter.SupportedInMessages)
 			{
@@ -1714,7 +1732,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 		return new SubscriptionFinishedMessage { OriginalTransactionId = parentId.Value, Body = message.Body };
 	}
 
-	private Message ProcessSubscriptionResponse(IMessageAdapter adapter, SubscriptionResponseMessage message)
+	private async ValueTask<Message> ProcessSubscriptionResponse(IMessageAdapter adapter, SubscriptionResponseMessage message, CancellationToken cancellationToken)
 	{
 		var originalTransactionId = message.OriginalTransactionId;
 
@@ -1756,7 +1774,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapter
 
 		if (message.IsNotSupported() && originMsg is ISubscriptionMessage subscrMsg)
 		{
-			using (_connectedResponseLock.EnterScope())
+			using (await _connectedResponseLock.LockAsync(cancellationToken))
 			{
 				// try loopback only subscribe messages
 				if (subscrMsg.IsSubscribe)

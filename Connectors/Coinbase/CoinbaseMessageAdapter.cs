@@ -1,5 +1,8 @@
 namespace StockSharp.Coinbase;
 
+using StockSharp.Coinbase.Native;
+using StockSharp.Coinbase.Native.Model;
+
 [OrderCondition(typeof(CoinbaseOrderCondition))]
 public partial class CoinbaseMessageAdapter
 {
@@ -53,8 +56,8 @@ public partial class CoinbaseMessageAdapter
 
 	private void SubscribePusherClient()
 	{
-		_socketClient.StateChanged += OnStateChanged;
-		_socketClient.Error += OnError;
+		_socketClient.StateChanged += SendOutConnectionState;
+		_socketClient.Error += SendOutError;
 		_socketClient.HeartbeatReceived += SessionOnHeartbeatReceived;
 		_socketClient.TickerReceived += SessionOnTickerChanged;
 		_socketClient.OrderBookReceived += SessionOnOrderBookReceived;
@@ -65,8 +68,8 @@ public partial class CoinbaseMessageAdapter
 
 	private void UnsubscribePusherClient()
 	{
-		_socketClient.StateChanged -= OnStateChanged;
-		_socketClient.Error -= OnError;
+		_socketClient.StateChanged -= SendOutConnectionState;
+		_socketClient.Error -= SendOutError;
 		_socketClient.HeartbeatReceived -= SessionOnHeartbeatReceived;
 		_socketClient.TickerReceived -= SessionOnTickerChanged;
 		_socketClient.OrderBookReceived -= SessionOnOrderBookReceived;
@@ -75,14 +78,8 @@ public partial class CoinbaseMessageAdapter
 		_socketClient.OrderReceived -= SessionOnOrderReceived;
 	}
 
-	private ValueTask OnStateChanged(ConnectionStates state, CancellationToken cancellationToken)
-		=> SendOutConnectionStateAsync(state, cancellationToken);
-
-	private ValueTask OnError(Exception error, CancellationToken cancellationToken)
-		=> SendOutErrorAsync(error, cancellationToken);
-
 	/// <inheritdoc />
-	protected override async ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		if (_restClient != null)
 		{
@@ -92,7 +89,7 @@ public partial class CoinbaseMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				await SendOutErrorAsync(ex, cancellationToken);
+				SendOutError(ex);
 			}
 
 			_restClient = null;
@@ -107,7 +104,7 @@ public partial class CoinbaseMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				await SendOutErrorAsync(ex, cancellationToken);
+				SendOutError(ex);
 			}
 
 			_socketClient = null;
@@ -121,7 +118,7 @@ public partial class CoinbaseMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				await SendOutErrorAsync(ex, cancellationToken);
+				SendOutError(ex);
 			}
 
 			_authenticator = null;
@@ -129,7 +126,8 @@ public partial class CoinbaseMessageAdapter
 
 		_candlesTransIds.Clear();
 
-		await SendOutMessageAsync(new ResetMessage(), cancellationToken);
+		SendOutMessage(new ResetMessage());
+		return default;
 	}
 
 	/// <inheritdoc />
@@ -185,8 +183,8 @@ public partial class CoinbaseMessageAdapter
 		return default;
 	}
 
-	private ValueTask SessionOnHeartbeatReceived(Heartbeat heartbeat, CancellationToken cancellationToken)
+	private void SessionOnHeartbeatReceived(Heartbeat heartbeat)
 	{
-		return default;
+
 	}
 }

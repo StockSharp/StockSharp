@@ -8,7 +8,6 @@ global using global::System.Reflection;
 global using global::Ecng.Common;
 global using global::Ecng.Collections;
 global using global::Ecng.Net;
-global using global::Ecng.ComponentModel;
 global using global::Ecng.Serialization;
 global using global::Ecng.Logging;
 

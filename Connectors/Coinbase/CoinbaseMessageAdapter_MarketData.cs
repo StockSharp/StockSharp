@@ -36,7 +36,7 @@ public partial class CoinbaseMessageAdapter
 				if (!secMsg.IsMatch(lookupMsg, secTypes))
 					continue;
 
-				await SendOutMessageAsync(secMsg, cancellationToken);
+				SendOutMessage(secMsg);
 
 				if (--left <= 0)
 					break;
@@ -46,13 +46,13 @@ public partial class CoinbaseMessageAdapter
 				break;
 		}
 
-		await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
+		SendSubscriptionResult(lookupMsg);
 	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
+		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var symbol = mdMsg.SecurityId.ToSymbol();
 
@@ -60,7 +60,7 @@ public partial class CoinbaseMessageAdapter
 		{
 			await _socketClient.SubscribeTicker(mdMsg.TransactionId, symbol, cancellationToken);
 
-			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 			await _socketClient.UnSubscribeTicker(mdMsg.OriginalTransactionId, symbol, cancellationToken);
@@ -69,7 +69,7 @@ public partial class CoinbaseMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
+		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var symbol = mdMsg.SecurityId.ToSymbol();
 
@@ -77,7 +77,7 @@ public partial class CoinbaseMessageAdapter
 		{
 			await _socketClient.SubscribeOrderBook(mdMsg.TransactionId, symbol, cancellationToken);
 
-			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 			await _socketClient.UnSubscribeOrderBook(mdMsg.OriginalTransactionId, symbol, cancellationToken);
@@ -86,7 +86,7 @@ public partial class CoinbaseMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
+		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var symbol = mdMsg.SecurityId.ToSymbol();
 
@@ -150,7 +150,7 @@ public partial class CoinbaseMessageAdapter
 			if (!mdMsg.IsHistoryOnly())
 				await _socketClient.SubscribeTrades(mdMsg.TransactionId, symbol, cancellationToken);
 
-			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 		{
@@ -161,7 +161,7 @@ public partial class CoinbaseMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
+		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var symbol = mdMsg.SecurityId.ToSymbol();
 
@@ -198,7 +198,7 @@ public partial class CoinbaseMessageAdapter
 							break;
 						}
 
-						await SendOutMessageAsync(new TimeFrameCandleMessage
+						SendOutMessage(new TimeFrameCandleMessage
 						{
 							OpenPrice = (decimal)candle.Open,
 							ClosePrice = (decimal)candle.Close,
@@ -208,7 +208,7 @@ public partial class CoinbaseMessageAdapter
 							OpenTime = candle.Time,
 							State = CandleStates.Finished,
 							OriginalTransactionId = mdMsg.TransactionId,
-						}, cancellationToken);
+						});
 
 						if (--left <= 0)
 						{
@@ -231,10 +231,10 @@ public partial class CoinbaseMessageAdapter
 			{
 				_candlesTransIds[symbol] = mdMsg.TransactionId;
 				await _socketClient.SubscribeCandles(mdMsg.TransactionId, symbol, cancellationToken);
-				await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+				SendSubscriptionResult(mdMsg);
 			}
 			else
-				await SendSubscriptionFinishedAsync(mdMsg.TransactionId, cancellationToken);
+				SendSubscriptionFinished(mdMsg.TransactionId);
 		}
 		else
 		{
@@ -243,9 +243,9 @@ public partial class CoinbaseMessageAdapter
 		}
 	}
 
-	private ValueTask SessionOnTickerChanged(Ticker ticker, CancellationToken cancellationToken)
+	private void SessionOnTickerChanged(Ticker ticker)
 	{
-		return SendOutMessageAsync(new Level1ChangeMessage
+		SendOutMessage(new Level1ChangeMessage
 		{
 			SecurityId = ticker.Product.ToStockSharp(),
 			ServerTime = CurrentTimeUtc,
@@ -262,12 +262,12 @@ public partial class CoinbaseMessageAdapter
 		.TryAdd(Level1Fields.BestAskPrice, ticker.Ask?.ToDecimal())
 		.TryAdd(Level1Fields.BestBidVolume, ticker.BidSize?.ToDecimal())
 		.TryAdd(Level1Fields.BestAskVolume, ticker.AskSize?.ToDecimal())
-		, cancellationToken);
+		);
 	}
 
-	private ValueTask SessionOnTradeReceived(Trade trade, CancellationToken cancellationToken)
+	private void SessionOnTradeReceived(Trade trade)
 	{
-		return SendOutMessageAsync(new ExecutionMessage
+		SendOutMessage(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			SecurityId = trade.ProductId.ToStockSharp(),
@@ -276,10 +276,10 @@ public partial class CoinbaseMessageAdapter
 			TradeVolume = (decimal)trade.Size,
 			ServerTime = trade.Time,
 			OriginSide = trade.Side.ToSide(),
-		}, cancellationToken);
+		});
 	}
 
-	private ValueTask SessionOnOrderBookReceived(string type, string symbol, IEnumerable<OrderBookChange> changes, CancellationToken cancellationToken)
+	private void SessionOnOrderBookReceived(string type, string symbol, IEnumerable<OrderBookChange> changes)
 	{
 		var bids = new List<QuoteChange>();
 		var asks = new List<QuoteChange>();
@@ -293,22 +293,22 @@ public partial class CoinbaseMessageAdapter
 			quotes.Add(new((decimal)change.Price, (decimal)change.Size));
 		}
 
-		return SendOutMessageAsync(new QuoteChangeMessage
+		SendOutMessage(new QuoteChangeMessage
 		{
 			SecurityId = symbol.ToStockSharp(),
 			Bids = bids.ToArray(),
 			Asks = asks.ToArray(),
 			ServerTime = CurrentTimeUtc,
 			State = type == "snapshot" ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment,
-		}, cancellationToken);
+		});
 	}
 
-	private ValueTask SessionOnCandleReceived(Ohlc candle, CancellationToken cancellationToken)
+	private void SessionOnCandleReceived(Ohlc candle)
 	{
 		if (!_candlesTransIds.TryGetValue(candle.Symbol, out var transId))
-			return default;
+			return;
 
-		return SendOutMessageAsync(new TimeFrameCandleMessage
+		SendOutMessage(new TimeFrameCandleMessage
 		{
 			OpenPrice = (decimal)candle.Open,
 			ClosePrice = (decimal)candle.Close,
@@ -318,6 +318,6 @@ public partial class CoinbaseMessageAdapter
 			OpenTime = candle.Time,
 			State = CandleStates.Active,
 			OriginalTransactionId = transId,
-		}, cancellationToken);
+		});
 	}
 }

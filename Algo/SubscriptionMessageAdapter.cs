@@ -273,7 +273,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 	}
 
 	/// <inheritdoc />
-	protected override void InnerAdapterNewOutMessage(Message message)
+	protected override ValueTask InnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -288,7 +288,7 @@ public class SubscriptionMessageAdapter(IMessageAdapter innerAdapter) : MessageA
 			}
 		}
 
-		base.InnerAdapterNewOutMessage(message);
+		return base.InnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	private async ValueTask ProcessInSubscriptionMessage(ISubscriptionMessage message, CancellationToken cancellationToken)

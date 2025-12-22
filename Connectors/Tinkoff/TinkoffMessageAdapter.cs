@@ -104,7 +104,7 @@ public partial class TinkoffMessageAdapter
 		_historyClient = new();
 		_historyClient.SetBearer(Token);
 
-		await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
+		SendOutMessage(new ConnectMessage());
 
 		async Task monitorConnection()
 		{
@@ -132,7 +132,7 @@ public partial class TinkoffMessageAdapter
 								if (isInFailure)
 								{
 									isInFailure = false;
-									await SendOutConnectionStateAsync(ConnectionStates.Restored, cancellationToken);
+									SendOutConnectionState(ConnectionStates.Restored);
 								}
 
 								break;
@@ -140,9 +140,9 @@ public partial class TinkoffMessageAdapter
 								if (!isInFailure)
 								{
 									isInFailure = true;
-									await SendOutConnectionStateAsync(ConnectionStates.Reconnecting, cancellationToken);
+									SendOutConnectionState(ConnectionStates.Reconnecting);
 								}
-
+								
 								break;
 						}
 					}
@@ -169,11 +169,13 @@ public partial class TinkoffMessageAdapter
 		_channel.Dispose();
 		_channel = null;
 
-		return SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
+		SendOutMessage(new DisconnectMessage());
+
+		return default;
 	}
 
 	/// <inheritdoc />
-	protected override async ValueTask ResetAsync(ResetMessage msg, CancellationToken cancellationToken)
+	protected override ValueTask ResetAsync(ResetMessage msg, CancellationToken cancellationToken)
 	{
 		try
 		{
@@ -188,7 +190,7 @@ public partial class TinkoffMessageAdapter
 				}
 				catch (Exception ex)
 				{
-					await SendOutErrorAsync(ex, cancellationToken);
+					SendOutError(ex);
 				}
 
 				_channel = null;
@@ -211,11 +213,13 @@ public partial class TinkoffMessageAdapter
 			_historyClient?.Dispose();
 			_historyClient = null;
 
-			await SendOutMessageAsync(new ResetMessage(), cancellationToken);
+			SendOutMessage(new ResetMessage());
 		}
 		catch (Exception ex)
 		{
-			await SendOutErrorAsync(ex, cancellationToken);
+			SendOutError(ex);
 		}
+
+		return default;
 	}
 }

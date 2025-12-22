@@ -29,7 +29,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 		public Dictionary<SecurityId, ChildSubscription> Child { get; } = [];
 	}
 
-	private readonly Lock _sync = new();
+	private readonly AsyncLock _sync = new();
 
 	private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = [];
 	private readonly Dictionary<long, ParentSubscription> _parents = [];
@@ -37,9 +37,9 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 	private readonly Dictionary<long, (ParentSubscription parent, MarketDataMessage request)> _requests = [];
 	private readonly List<ChildSubscription> _toFlush = [];
 
-	private void ClearState()
+	private async ValueTask ClearState(CancellationToken cancellationToken)
 	{
-		using (_sync.EnterScope())
+		using (await _sync.LockAsync(cancellationToken))
 		{
 			_pendingLoopbacks.Clear();
 			_parents.Clear();
@@ -55,7 +55,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 		switch (message.Type)
 		{
 			case MessageTypes.Reset:
-				ClearState();
+				await ClearState(cancellationToken);
 				break;
 
 			case MessageTypes.MarketData:
@@ -66,7 +66,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 				{
 					var transId = mdMsg.TransactionId;
 
-					using (_sync.EnterScope())
+					using (await _sync.LockAsync(cancellationToken))
 					{
 						if (_pendingLoopbacks.TryGetAndRemove(transId, out var tuple))
 						{
@@ -164,7 +164,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 				{
 					var originId = mdMsg.OriginalTransactionId;
 
-					using (_sync.EnterScope())
+					using (await _sync.LockAsync(cancellationToken))
 					{
 						var found = false;
 
@@ -245,7 +245,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 				if (message is ConnectionRestoredMessage restoredMsg && !restoredMsg.IsResetState)
 					break;
 
-				ClearState();
+				await ClearState(cancellationToken);
 				break;
 			}
 			case MessageTypes.SubscriptionResponse:
@@ -255,7 +255,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 
 				if (!responseMsg.IsOk())
 				{
-					using (_sync.EnterScope())
+					using (await _sync.LockAsync(cancellationToken))
 					{
 						if (_parents.TryGetAndRemove(originId, out var parent))
 						{
@@ -298,7 +298,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 			{
 				var finishMsg = (SubscriptionFinishedMessage)message;
 
-				using (_sync.EnterScope())
+				using (await _sync.LockAsync(cancellationToken))
 				{
 					if (_parents.TryGetAndRemove(finishMsg.OriginalTransactionId, out var parent))
 					{
@@ -323,7 +323,8 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 			}
 			default:
 			{
-				var allMsg = await CheckSubscriptionAsync(ref message, cancellationToken);
+				var (req, allMsg) = await CheckSubscriptionAsync(message, cancellationToken);
+				message = req;
 
 				if (allMsg != null)
 					await base.OnInnerAdapterNewOutMessageAsync(allMsg, cancellationToken);
@@ -364,9 +365,9 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 		ApplySubscriptionIds(subscrMsg, child.Parent, child.Subscribers.CachedKeys);
 	}
 
-	private async ValueTask<SubscriptionSecurityAllMessage> CheckSubscriptionAsync(ref Message message, CancellationToken cancellationToken)
+	private async ValueTask<(Message req, SubscriptionSecurityAllMessage allMsg)> CheckSubscriptionAsync(Message message, CancellationToken cancellationToken)
 	{
-		using (_sync.EnterScope())
+		using (await _sync.LockAsync(cancellationToken))
 		{
 			if (_toFlush.Count > 0)
 			{
@@ -385,7 +386,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 			}
 
 			if (_parents.Count == 0)
-				return null;
+				return (message, null);
 
 			if (message is ISubscriptionIdMessage subscrMsg and ISecurityIdMessage secIdMsg)
 			{
@@ -397,7 +398,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 						if (parent.Origin.SecurityId == secIdMsg.SecurityId)
 						{
 							ApplySubscriptionIds(subscrMsg, parent, [parent.Origin.TransactionId]);
-							return null;
+							return (message, null);
 						}
 
 						SubscriptionSecurityAllMessage allMsg = null;
@@ -433,13 +434,13 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 						else
 							ApplySubscriptionIds(subscrMsg, child);
 
-						return allMsg;
+						return (message, allMsg);
 					}
 				}
 			}
 		}
 
-		return null;
+		return (message, null);
 	}
 
 	/// <summary>

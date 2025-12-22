@@ -588,7 +588,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			await base.OnInnerAdapterNewOutMessageAsync(msg.ReplaceSecurityId(securityId), cancellationToken);
 	}
 
-	private void OnStorageNewIdentifierAdded(string storageName, SecurityId securityId, object nativeId)
+	private async void OnStorageNewIdentifierAdded(string storageName, SecurityId securityId, object nativeId)
 	{
 		if (!StorageName.EqualsIgnoreCase(storageName))
 			return;
@@ -606,7 +606,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		{
 			var temp = securityId;
 			temp.Native = nativeId;
-			RaiseNewOutMessage(new ProcessSuspendedMessage(this, temp));
+			RaiseNewOutMessageAsync(new ProcessSuspendedMessage(this, temp), default);
 		}
 	}
 }

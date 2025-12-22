@@ -64,7 +64,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		public bool IsCountExhausted => Count <= 0;
 	}
 
-	private readonly Lock _syncObject = new();
+	private readonly AsyncLock _sync = new();
 
 	private readonly Dictionary<long, SeriesInfo> _series = [];
 	private readonly Dictionary<long, long> _replaceId = [];
@@ -90,7 +90,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		{
 			case MessageTypes.Reset:
 			{
-				using (_syncObject.EnterScope())
+				using (await _sync.LockAsync(cancellationToken))
 				{
 					_series.Clear();
 					_replaceId.Clear();
@@ -112,7 +112,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 				if (mdMsg.IsSubscribe)
 				{
-					using (_syncObject.EnterScope())
+					using (await _sync.LockAsync(cancellationToken))
 					{
 						if (_replaceId.ContainsKey(transactionId))
 							break;
@@ -198,7 +198,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 									mdMsg.To = CurrentTimeUtc;
 								}
 
-								using (_syncObject.EnterScope())
+								using (await _sync.LockAsync(cancellationToken))
 								{
 									_series.Add(transactionId, new SeriesInfo(original, original)
 									{
@@ -236,7 +236,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 								var current = original.TypedClone();
 								current.DataType2 = s;
 
-								using (_syncObject.EnterScope())
+								using (await _sync.LockAsync(cancellationToken))
 								{
 									_series.Add(transactionId, new SeriesInfo(original, current)
 									{
@@ -265,7 +265,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 							var original = mdMsg.TypedClone();
 
-							using (_syncObject.EnterScope())
+							using (await _sync.LockAsync(cancellationToken))
 							{
 								_series.Add(transactionId, new SeriesInfo(original, original)
 								{
@@ -290,11 +290,12 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				}
 				else
 				{
-					if (!TryRemoveSeries(mdMsg.OriginalTransactionId, out var series))
+					var series = await TryRemoveSeries(mdMsg.OriginalTransactionId, cancellationToken);
+					if (series is null)
 					{
 						var sentResponse = false;
 
-						using (_syncObject.EnterScope())
+						using (await _sync.LockAsync(cancellationToken))
 						{
 							if (_allChilds.TryGetAndRemove(mdMsg.OriginalTransactionId, out var child))
 							{
@@ -332,30 +333,30 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
-	private SeriesInfo TryGetSeries(long id, out long originalId)
+	private async ValueTask<(SeriesInfo info, long originalId)> TryGetSeries(long id, CancellationToken cancellationToken)
 	{
-		using (_syncObject.EnterScope())
+		using (await _sync.LockAsync(cancellationToken))
 		{
-			if (_replaceId.TryGetValue(id, out originalId))
+			if (_replaceId.TryGetValue(id, out var originalId))
 				id = originalId;
 			else
 				originalId = id;
 
-			return _series.TryGetValue(id);
+			return (_series.TryGetValue(id), originalId);
 		}
 	}
 
-	private bool TryRemoveSeries(long id, out SeriesInfo series)
+	private async ValueTask<SeriesInfo> TryRemoveSeries(long id, CancellationToken cancellationToken)
 	{
 		LogDebug("Series removing {0}.", id);
 
-		using (_syncObject.EnterScope())
+		using (await _sync.LockAsync(cancellationToken))
 		{
-			if (!_series.TryGetAndRemove(id, out series))
-				return false;
+			if (!_series.TryGetAndRemove(id, out var series))
+				return null;
 
 			_replaceId.RemoveWhere(p => p.Value == id);
-			return true;
+			return series;
 		}
 	}
 
@@ -403,7 +404,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			State = SeriesStates.Compress,
 		};
 
-		using (_syncObject.EnterScope())
+		using (await _sync.LockAsync(cancellationToken))
 			_series.Add(original.TransactionId, series);
 
 		Buffer?.ProcessInMessage(current);
@@ -465,7 +466,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				var response = (SubscriptionResponseMessage)message;
 				var requestId = response.OriginalTransactionId;
 
-				var series = TryGetSeries(requestId, out _);
+				var (series, _) = await TryGetSeries(requestId, cancellationToken);
 
 				if (series == null)
 					break;
@@ -488,7 +489,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				var finishMsg = (SubscriptionFinishedMessage)message;
 				var subscriptionId = finishMsg.OriginalTransactionId;
 
-				var series = TryGetSeries(subscriptionId, out _);
+				var (series, _) = await TryGetSeries(subscriptionId, cancellationToken);
 
 				if (series == null)
 					break;
@@ -502,7 +503,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 				var onlineMsg = (SubscriptionOnlineMessage)message;
 				var subscriptionId = onlineMsg.OriginalTransactionId;
 
-				using (_syncObject.EnterScope())
+				using (await _sync.LockAsync(cancellationToken))
 				{
 					if (_series.ContainsKey(subscriptionId))
 						LogInfo("Series online {0}.", subscriptionId);
@@ -565,7 +566,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		foreach (var subscriptionId in subscriptionIds)
 		{
-			var series = TryGetSeries(subscriptionId, out _);
+			var (series, _) = await TryGetSeries(subscriptionId, cancellationToken);
 
 			if (series == null)
 				continue;
@@ -599,7 +600,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			case SeriesStates.SmallTimeFrame:
 				if (series.IsCountExhausted)
 				{
-					if (TryRemoveSeries(series.Id, out _))
+					if (await TryRemoveSeries(series.Id, cancellationToken) is not null)
 						await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = series.Original.TransactionId }, cancellationToken);
 
 					break;
@@ -650,7 +651,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		async ValueTask FinishAsync()
 		{
-			if (!TryRemoveSeries(series.Id, out _))
+			if (await TryRemoveSeries(series.Id, cancellationToken) is null)
 				return;
 
 			if (response != null && !response.IsOk())
@@ -712,7 +713,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 						series.State = SeriesStates.SmallTimeFrame;
 						series.NonFinishedCandle = null;
 
-						using (_syncObject.EnterScope())
+						using (await _sync.LockAsync(cancellationToken))
 							_replaceId.Add(curr.TransactionId, series.Id);
 
 						LogInfo("Series smaller tf: ids {0}->{1}", original.TransactionId, newTransId);
@@ -766,7 +767,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		current.TransactionId = TransactionIdGenerator.GetNextId();
 
-		using (_syncObject.EnterScope())
+		using (await _sync.LockAsync(cancellationToken))
 			_replaceId.Add(current.TransactionId, series.Id);
 
 		LogInfo("Series compress: ids {0}->{1}", original.TransactionId, current.TransactionId);
@@ -786,7 +787,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		if (info.IsCountExhausted)
 		{
-			if (TryRemoveSeries(info.Id, out _))
+			if (await TryRemoveSeries(info.Id, cancellationToken) is not null)
 				await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = info.Original.TransactionId }, cancellationToken);
 
 			return;
@@ -830,7 +831,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 		foreach (var id in subscriptionIds)
 		{
-			var series = TryGetSeries(id, out var subscriptionId);
+			var (series, subscriptionId) = await TryGetSeries(id, cancellationToken);
 
 			if (series == null)
 				continue;
@@ -845,7 +846,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 			{
 				SubscriptionSecurityAllMessage allMsg = null;
 
-				using (_syncObject.EnterScope())
+				using (await _sync.LockAsync(cancellationToken))
 				{
 					series = series.Child.SafeAdd(((ISecurityIdMessage)message).SecurityId, key =>
 					{
@@ -889,7 +890,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 			if (origin.To != null && origin.To.Value < time)
 			{
-				if (TryRemoveSeries(subscriptionId, out _))
+				if (await TryRemoveSeries(subscriptionId, cancellationToken) is not null)
 					await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = origin.TransactionId }, cancellationToken);
 
 				continue;
@@ -900,7 +901,7 @@ public class CandleBuilderMessageAdapter(IMessageAdapter innerAdapter, CandleBui
 
 			if (series.IsCountExhausted)
 			{
-				if (TryRemoveSeries(subscriptionId, out _))
+				if (await TryRemoveSeries(subscriptionId, cancellationToken) is not null)
 					await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = origin.TransactionId }, cancellationToken);
 
 				continue;

@@ -102,10 +102,10 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 					}
 				}
 
-				RaiseNewOutMessage(new SubscriptionResponseMessage
+				await RaiseNewOutMessageAsync(new SubscriptionResponseMessage
 				{
 					OriginalTransactionId = mdMsg.TransactionId
-				});
+				}, cancellationToken);
 
 				return;
 			}

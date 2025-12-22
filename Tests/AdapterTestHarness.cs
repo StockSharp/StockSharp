@@ -1,6 +1,16 @@
 namespace StockSharp.Tests;
 
-internal sealed class RecordingPassThroughMessageAdapter : PassThroughMessageAdapter
+class PassThroughMessageAdapter(IdGenerator transactionIdGenerator) : MessageAdapter(transactionIdGenerator)
+{
+	/// <inheritdoc />
+	public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	{
+		SendOutMessage(message);
+		return default;
+	}
+}
+
+class RecordingPassThroughMessageAdapter : PassThroughMessageAdapter
 {
 	private readonly DataType[] _supportedMarketDataTypes;
 	private readonly IEnumerable<int> _supportedOrderBookDepths;

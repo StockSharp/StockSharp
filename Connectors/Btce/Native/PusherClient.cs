@@ -7,10 +7,10 @@ class PusherClient : BaseLogReceiver
 	// to get readable name after obfuscation
 	public override string Name => nameof(Btce) + "_" + nameof(PusherClient);
 
-	public event Func<string, PusherTransaction[], CancellationToken, ValueTask> NewTrades;
-	public event Func<string, OrderBook, CancellationToken, ValueTask> OrderBookChanged;
-	public event Func<Exception, CancellationToken, ValueTask> Error;
-	public event Func<ConnectionStates, CancellationToken, ValueTask> StateChanged;
+	public event Action<string, PusherTransaction[]> NewTrades;
+	public event Action<string, OrderBook> OrderBookChanged;
+	public event Action<Exception> Error;
+	public event Action<ConnectionStates> StateChanged;
 
 	private readonly WebSocketClient _client;
 
@@ -18,11 +18,11 @@ class PusherClient : BaseLogReceiver
 	{
 		_client = new(
 			"wss://ws-eu.pusher.com/app/ee987526a24ba107824c?client=stocksharp&version=1.0&protocol=7",
-			(state, ct) => StateChanged?.Invoke(state, ct) ?? default,
-			(error, ct) =>
+			state => StateChanged?.Invoke(state),
+			error =>
 			{
 				this.AddErrorLog(error);
-				return Error?.Invoke(error, ct) ?? default;
+				Error?.Invoke(error);
 			},
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
@@ -51,7 +51,7 @@ class PusherClient : BaseLogReceiver
 		_client.Disconnect();
 	}
 
-	private async ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
+	private ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
 	{
 		var obj = msg.AsObject();
 		var evt = (string)obj.@event;
@@ -65,25 +65,19 @@ class PusherClient : BaseLogReceiver
 				break;
 
 			case Channels.OrderBook:
-			{
-				var handler = OrderBookChanged;
-				if (handler != null)
-					await handler(((string)obj.channel).Remove("." + Channels.OrderBook), ((string)obj.data).DeserializeObject<OrderBook>(), cancellationToken);
+				OrderBookChanged?.Invoke(((string)obj.channel).Remove("." + Channels.OrderBook), ((string)obj.data).DeserializeObject<OrderBook>());
 				break;
-			}
 
 			case Channels.Trades:
-			{
-				var handler = NewTrades;
-				if (handler != null)
-					await handler(((string)obj.channel).Remove("." + Channels.Trades), ((string)obj.data).DeserializeObject<PusherTransaction[]>(), cancellationToken);
+				NewTrades?.Invoke(((string)obj.channel).Remove("." + Channels.Trades), ((string)obj.data).DeserializeObject<PusherTransaction[]>());
 				break;
-			}
 
 			default:
 				this.AddErrorLog(LocalizedStrings.UnknownEvent, evt);
 				break;
 		}
+
+		return default;
 	}
 
 	private static class Channels

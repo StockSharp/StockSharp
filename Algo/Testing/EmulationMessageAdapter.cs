@@ -17,7 +17,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	private readonly SynchronizedSet<long> _subscriptionIds = [];
 	private readonly SynchronizedSet<long> _emuOrderIds = [];
 
-	private readonly IMessageAdapter _inAdapter;
+	private readonly IMessageAdapterWrapper _inAdapter;
 	private readonly bool _isEmulationOnly;
 
 	/// <summary>
@@ -53,7 +53,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			_inAdapter = new PositionMessageAdapter(_inAdapter, new PositionManager(isPosEmu));
 
 		_inAdapter = new ChannelMessageAdapter(_inAdapter, inChannel, new PassThroughMessageChannel());
-		_inAdapter.NewOutMessage += RaiseNewOutMessage;
+		_inAdapter.NewOutMessageAsync += RaiseNewOutMessageAsync;
 
 		_isEmulationOnly = isEmulationOnly;
 	}
@@ -61,7 +61,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	/// <inheritdoc />
 	public override void Dispose()
 	{
-		_inAdapter.NewOutMessage -= RaiseNewOutMessage;
+		_inAdapter.NewOutMessageAsync -= RaiseNewOutMessageAsync;
 		base.Dispose();
 	}
 
@@ -185,10 +185,10 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	}
 
 	/// <inheritdoc />
-	protected override void InnerAdapterNewOutMessage(Message message)
+	protected override async ValueTask InnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (OwnInnerAdapter || !message.IsBack())
-			base.InnerAdapterNewOutMessage(message);
+			await base.InnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />

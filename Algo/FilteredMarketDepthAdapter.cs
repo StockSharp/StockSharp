@@ -342,11 +342,11 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 					if (bookUnsubscribe == null && ordersUnsubscribe == null)
 					{
-						RaiseNewOutMessage(new SubscriptionResponseMessage
+						await RaiseNewOutMessageAsync(new SubscriptionResponseMessage
 						{
 							OriginalTransactionId = mdMsg.TransactionId,
 							Error = new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(mdMsg.OriginalTransactionId)),
-						});
+						}, cancellationToken);
 					}
 					else
 					{

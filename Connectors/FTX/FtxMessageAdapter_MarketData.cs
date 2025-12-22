@@ -5,11 +5,11 @@ partial class FtxMessageAdapter
 	private const int _tickPaginationLimit = 5000;
 	private const int _candlesPaginationLimit = 1501;
 
-	private async ValueTask SessionOnNewTrade(string pair, List<Trade> trades, CancellationToken cancellationToken)
+	private void SessionOnNewTrade(string pair, List<Trade> trades)
 	{
 		foreach (var trade in trades)
 		{
-			await SendOutMessageAsync(new ExecutionMessage
+			SendOutMessage(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Ticks,
 				SecurityId = pair.ToStockSharp(),
@@ -18,25 +18,25 @@ partial class FtxMessageAdapter
 				TradeVolume = trade.Size,
 				ServerTime = trade.Time,
 				OriginSide = trade.Side.ToSide(),
-			}, default);
+			});
 		}
 	}
 
-	private ValueTask SessionOnNewOrderBook(string pair, OrderBook book, QuoteChangeStates state, CancellationToken cancellationToken)
+	private void SessionOnNewOrderBook(string pair, OrderBook book, QuoteChangeStates state)
 	{
-		return SendOutMessageAsync(new QuoteChangeMessage
+		SendOutMessage(new QuoteChangeMessage
 		{
 			State = state,
 			SecurityId = pair.ToStockSharp(),
 			Bids = book.Bids.Select(e => new QuoteChange(e.Price, e.Size)).ToArray(),
 			Asks = book.Asks.Select(e => new QuoteChange(e.Price, e.Size)).ToArray(),
 			ServerTime = book.Time,
-		}, default);
+		});
 	}
 
-	private ValueTask SessionOnNewLevel1(string pair, Level1 level1, CancellationToken cancellationToken)
+	private void SessionOnNewLevel1(string pair, Level1 level1)
 	{
-		return SendOutMessageAsync(new Level1ChangeMessage()
+		SendOutMessage(new Level1ChangeMessage()
 		{
 			SecurityId = pair.ToStockSharp(),
 			ServerTime = level1.Time
@@ -45,13 +45,13 @@ partial class FtxMessageAdapter
 		.TryAdd(Level1Fields.BestAskPrice, level1.Ask)
 		.TryAdd(Level1Fields.BestBidVolume, level1.BidSize)
 		.TryAdd(Level1Fields.BestAskVolume, level1.AskSize)
-		, default);
+		);
 	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
+		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
@@ -59,7 +59,7 @@ partial class FtxMessageAdapter
 		{
 			await _wsClient.SubscribeLevel1(mdMsg.TransactionId, currency, cancellationToken);
 
-			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 			await _wsClient.UnsubscribeLevel1(mdMsg.OriginalTransactionId, currency, cancellationToken);
@@ -68,7 +68,7 @@ partial class FtxMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
+		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
@@ -76,7 +76,7 @@ partial class FtxMessageAdapter
 		{
 			await _wsClient.SubscribeOrderBook(mdMsg.TransactionId, currency, cancellationToken);
 
-			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 			await _wsClient.UnsubscribeOrderBook(mdMsg.OriginalTransactionId, currency, cancellationToken);
@@ -85,7 +85,7 @@ partial class FtxMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
+		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
@@ -111,7 +111,7 @@ partial class FtxMessageAdapter
 						if (trade.Time > endTime)
 							break;
 
-						await SendOutMessageAsync(new ExecutionMessage
+						SendOutMessage(new ExecutionMessage
 						{
 							DataTypeEx = DataType.Ticks,
 							SecurityId = mdMsg.SecurityId,
@@ -121,7 +121,7 @@ partial class FtxMessageAdapter
 							ServerTime = trade.Time,
 							OriginSide = trade.Side.ToSide(),
 							OriginalTransactionId = mdMsg.TransactionId
-						}, cancellationToken);
+						});
 
 						if (--left <= 0)
 							break;
@@ -139,7 +139,7 @@ partial class FtxMessageAdapter
 			if (!mdMsg.IsHistoryOnly())
 				await _wsClient.SubscribeTradesChannel(mdMsg.TransactionId, currency, WsTradeChannelSubscriber.Trade, cancellationToken);
 
-			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 		{
@@ -150,7 +150,7 @@ partial class FtxMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
+		SendSubscriptionReply(mdMsg.TransactionId);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
@@ -177,7 +177,7 @@ partial class FtxMessageAdapter
 						if (candle.OpenTime > endTime)
 							break;
 
-						await SendOutMessageAsync(new TimeFrameCandleMessage
+						SendOutMessage(new TimeFrameCandleMessage
 						{
 							OriginalTransactionId = mdMsg.TransactionId,
 							ClosePrice = candle.ClosePrice,
@@ -187,7 +187,7 @@ partial class FtxMessageAdapter
 							TotalVolume = candle.WindowVolume,
 							OpenTime = candle.OpenTime,
 							State = CandleStates.Finished,
-						}, cancellationToken);
+						});
 
 						if (--left <= 0)
 							break;
@@ -205,7 +205,7 @@ partial class FtxMessageAdapter
 			if (!mdMsg.IsHistoryOnly())
 				await _wsClient.SubscribeTradesChannel(mdMsg.TransactionId, currency, WsTradeChannelSubscriber.Candles, cancellationToken);
 
-			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+			SendSubscriptionResult(mdMsg);
 		}
 		else
 		{
@@ -237,12 +237,12 @@ partial class FtxMessageAdapter
 			if (!secMsg.IsMatch(lookupMsg, secTypes))
 				continue;
 
-			await SendOutMessageAsync(secMsg, cancellationToken);
+			SendOutMessage(secMsg);
 
 			if (--left <= 0)
 				break;
 		}
 
-		await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
+		SendSubscriptionResult(lookupMsg);
 	}
 }

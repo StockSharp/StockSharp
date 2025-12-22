@@ -1,7 +1,5 @@
 namespace StockSharp.FTX;
 
-using Ecng.ComponentModel;
-
 public partial class FtxMessageAdapter
 {
 	private FtxRestClient _restClient;
@@ -53,7 +51,7 @@ public partial class FtxMessageAdapter
 
 	private void SubscribeWsClient()
 	{
-		_wsClient.StateChanged += OnStateChanged;
+		_wsClient.StateChanged += SendOutConnectionState;
 		_wsClient.Error += SessionOnWsError;
 		_wsClient.NewLevel1 += SessionOnNewLevel1;
 		_wsClient.NewOrderBook += SessionOnNewOrderBook;
@@ -64,7 +62,7 @@ public partial class FtxMessageAdapter
 
 	private void UnsubscribeWsClient()
 	{
-		_wsClient.StateChanged -= OnStateChanged;
+		_wsClient.StateChanged -= SendOutConnectionState;
 		_wsClient.Error -= SessionOnWsError;
 		_wsClient.NewLevel1 -= SessionOnNewLevel1;
 		_wsClient.NewOrderBook -= SessionOnNewOrderBook;
@@ -72,9 +70,6 @@ public partial class FtxMessageAdapter
 		_wsClient.NewFill -= SessionOnNewFill;
 		_wsClient.NewOrder -= SessionOnNewOrder;
 	}
-
-	private ValueTask OnStateChanged(ConnectionStates state, CancellationToken cancellationToken)
-		=> SendOutConnectionStateAsync(state, default);
 
 	/// <inheritdoc />
 	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
@@ -95,7 +90,8 @@ public partial class FtxMessageAdapter
 		_portfolioLookupSubMessageTransactionID = default;
 		_isOrderSubscribed = default;
 
-		return SendOutMessageAsync(new ResetMessage(), cancellationToken);
+		SendOutMessage(new ResetMessage());
+		return default;
 	}
 
 	/// <inheritdoc />
@@ -150,8 +146,8 @@ public partial class FtxMessageAdapter
 			await sc.ProcessPing(cancellationToken);
 	}
 
-	private ValueTask SessionOnWsError(Exception exception, CancellationToken cancellationToken)
+	private void SessionOnWsError(Exception exception)
 	{
-		return SendOutErrorAsync(exception, cancellationToken);
+		SendOutError(exception);
 	}
 }
