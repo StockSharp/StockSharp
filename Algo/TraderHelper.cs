@@ -6,8 +6,6 @@ using Ecng.Compilation;
 using Ecng.Compilation.Expressions;
 using Ecng.IO;
 
-using Nito.AsyncEx;
-
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Storages.Csv;
