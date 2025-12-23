@@ -358,7 +358,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	TimeSpan IMessageAdapter.FaultDelay { get => InnerAdapter.FaultDelay; set => InnerAdapter.FaultDelay = value; }
 
 	ValueTask IMessageAdapter.SendInMessageAsync(Message message, CancellationToken cancellationToken)
-		=> InnerAdapter.SendInMessageAsync(message, cancellationToken);
+		=> SendInMessageAsync(message, cancellationToken);
 
 	IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);
