@@ -924,7 +924,7 @@ public class CsvEntityRegistry : IEntityRegistry
 	/// <inheritdoc />
 	public async ValueTask<Dictionary<object, Exception>> InitAsync(CancellationToken cancellationToken)
 	{
-		Directory.CreateDirectory(Path);
+		FileSystem.CreateDirectory(Path);
 
 		var errors = new Dictionary<object, Exception>();
 

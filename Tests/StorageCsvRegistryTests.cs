@@ -733,4 +733,251 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		await registry.DisposeAsync();
 	}
+
+	#region Long-Lived TransactionFileStream Tests (CsvEntityList pattern)
+
+	private static (MemoryFileSystem fs, string path) CreateMemoryFs()
+	{
+		var fs = new MemoryFileSystem();
+		var path = Path.Combine(Path.GetTempPath(), "test_" + Guid.NewGuid().ToString("N"));
+		return (fs, path);
+	}
+
+	[TestMethod]
+	public async Task CsvEntityList_LongLivedStream_MultipleWrites()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs();
+
+		var registry = new CsvEntityRegistry(fs, path, executor);
+		await registry.InitAsync(token);
+
+		// Multiple writes to the same list (uses long-lived _stream)
+		for (var i = 0; i < 5; i++)
+		{
+			registry.Exchanges.Add(new Exchange
+			{
+				Name = $"EX_{i}",
+				CountryCode = CountryCodes.US,
+				FullNameLoc = $"Exchange {i}"
+			});
+			await FlushAsync(executor, token);
+		}
+
+		// Verify all items are accessible during session
+		AreEqual(5, registry.Exchanges.Count);
+		for (var i = 0; i < 5; i++)
+		{
+			var ex = registry.Exchanges.ReadById($"EX_{i}");
+			IsNotNull(ex, $"Exchange EX_{i} should exist");
+		}
+
+		await registry.DisposeAsync();
+	}
+
+	[TestMethod]
+	public async Task CsvEntityList_DataPersistsAfterDisposeAsync()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs();
+
+		// First session: create registry, add data, dispose
+		var registry1 = new CsvEntityRegistry(fs, path, executor);
+		await registry1.InitAsync(token);
+
+		var testExchange = new Exchange
+		{
+			Name = "TEST_EX",
+			CountryCode = CountryCodes.RU,
+			FullNameLoc = "Test Exchange"
+		};
+		registry1.Exchanges.Add(testExchange);
+
+		registry1.ExchangeBoards.Add(new ExchangeBoard
+		{
+			Code = "TEST_BOARD",
+			Exchange = testExchange  // Use the exchange we created, not static Exchange.Nyse
+		});
+		await FlushAsync(executor, token);
+
+		await registry1.DisposeAsync();
+
+		// Second session: create new registry on same fs, verify data persists
+		var registry2 = new CsvEntityRegistry(fs, path, executor);
+		await registry2.InitAsync(token);
+
+		var loadedEx = registry2.Exchanges.ReadById("TEST_EX");
+		IsNotNull(loadedEx, "Exchange should persist after DisposeAsync");
+		AreEqual("TEST_EX", loadedEx.Name);
+		AreEqual(CountryCodes.RU, loadedEx.CountryCode);
+
+		var loadedBoard = registry2.ExchangeBoards.ReadById("TEST_BOARD");
+		IsNotNull(loadedBoard, "ExchangeBoard should persist after DisposeAsync");
+		AreEqual("TEST_BOARD", loadedBoard.Code);
+		AreEqual("TEST_EX", loadedBoard.Exchange.Name);
+
+		await registry2.DisposeAsync();
+	}
+
+	[TestMethod]
+	public async Task CsvEntityList_TempFileCleanedUpAfterDispose()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs();
+
+		var registry = new CsvEntityRegistry(fs, path, executor);
+		await registry.InitAsync(token);
+
+		registry.Exchanges.Add(new Exchange
+		{
+			Name = "TEMP_TEST",
+			CountryCode = CountryCodes.US,
+			FullNameLoc = "Temp Test Exchange"
+		});
+		await FlushAsync(executor, token);
+
+		var exchangeFile = Path.Combine(path, "exchange.csv");
+		var tempFile = exchangeFile + ".tmp";
+
+		// Main file should exist
+		IsTrue(fs.FileExists(exchangeFile), "Main file should exist");
+
+		await registry.DisposeAsync();
+
+		// After dispose, temp file should not exist
+		IsFalse(fs.FileExists(tempFile), "Temp file should be cleaned up after DisposeAsync");
+
+		// Main file should still exist
+		IsTrue(fs.FileExists(exchangeFile), "Main file should still exist after DisposeAsync");
+	}
+
+	[TestMethod]
+	public async Task CsvEntityList_ThrowsAfterDispose()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs();
+
+		var registry = new CsvEntityRegistry(fs, path, executor);
+		await registry.InitAsync(token);
+
+		registry.Exchanges.Add(new Exchange
+		{
+			Name = "PRE_DISPOSE",
+			CountryCode = CountryCodes.US,
+			FullNameLoc = "Pre Dispose"
+		});
+		await FlushAsync(executor, token);
+
+		await registry.DisposeAsync();
+
+		// After dispose, adding should throw ObjectDisposedException
+		ThrowsExactly<ObjectDisposedException>(() =>
+		{
+			registry.Exchanges.Add(new Exchange
+			{
+				Name = "POST_DISPOSE",
+				CountryCode = CountryCodes.US,
+				FullNameLoc = "Post Dispose"
+			});
+		});
+	}
+
+	[TestMethod]
+	public async Task CsvEntityList_MultipleListsParallelWrites()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs();
+
+		var registry = new CsvEntityRegistry(fs, path, executor);
+		await registry.InitAsync(token);
+
+		// Write to multiple lists (each has its own long-lived stream)
+		var testExchange = new Exchange
+		{
+			Name = "MULTI_EX",
+			CountryCode = CountryCodes.US,
+			FullNameLoc = "Multi Test Exchange"
+		};
+		registry.Exchanges.Add(testExchange);
+
+		registry.ExchangeBoards.Add(new ExchangeBoard
+		{
+			Code = "MULTI_BOARD",
+			Exchange = testExchange  // Use the exchange we created
+		});
+
+		registry.Portfolios.Add(new Portfolio
+		{
+			Name = "MULTI_PORTFOLIO"
+		});
+		await FlushAsync(executor, token);
+
+		// Verify all data
+		IsNotNull(registry.Exchanges.ReadById("MULTI_EX"));
+		IsNotNull(registry.ExchangeBoards.ReadById("MULTI_BOARD"));
+		IsNotNull(registry.Portfolios.ReadById("MULTI_PORTFOLIO"));
+
+		await registry.DisposeAsync();
+
+		// Verify persistence after dispose
+		var registry2 = new CsvEntityRegistry(fs, path, executor);
+		await registry2.InitAsync(token);
+
+		IsNotNull(registry2.Exchanges.ReadById("MULTI_EX"));
+		IsNotNull(registry2.ExchangeBoards.ReadById("MULTI_BOARD"));
+		IsNotNull(registry2.Portfolios.ReadById("MULTI_PORTFOLIO"));
+
+		await registry2.DisposeAsync();
+	}
+
+	[TestMethod]
+	public async Task CsvEntityList_UpdateDuringLongLivedSession()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs();
+
+		var registry = new CsvEntityRegistry(fs, path, executor);
+		await registry.InitAsync(token);
+
+		// Add
+		var exchange = new Exchange
+		{
+			Name = "UPDATE_TEST",
+			CountryCode = CountryCodes.US,
+			FullNameLoc = "Original Name"
+		};
+		registry.Exchanges.Add(exchange);
+		await FlushAsync(executor, token);
+
+		// Update multiple times (triggers full file rewrite)
+		for (var i = 0; i < 3; i++)
+		{
+			exchange.FullNameLoc = $"Updated Name {i}";
+			registry.Exchanges.Save(exchange);
+			await FlushAsync(executor, token);
+		}
+
+		var loaded = registry.Exchanges.ReadById("UPDATE_TEST");
+		AreEqual("Updated Name 2", loaded.FullNameLoc);
+
+		await registry.DisposeAsync();
+
+		// Verify persistence
+		var registry2 = new CsvEntityRegistry(fs, path, executor);
+		await registry2.InitAsync(token);
+
+		var reloaded = registry2.Exchanges.ReadById("UPDATE_TEST");
+		IsNotNull(reloaded);
+		AreEqual("Updated Name 2", reloaded.FullNameLoc);
+
+		await registry2.DisposeAsync();
+	}
+
+	#endregion
 }
