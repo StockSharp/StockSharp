@@ -486,8 +486,9 @@ public static partial class TraderHelper
 	/// <param name="nativeIdStorage">Security native identifier storage.</param>
 	/// <param name="storageName">Storage name.</param>
 	/// <param name="nativeId">Native (internal) trading system security id.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
-	public static Security LookupByNativeId(this ISecurityProvider provider, INativeIdStorage nativeIdStorage, string storageName, object nativeId)
+	public static async ValueTask<Security> LookupByNativeIdAsync(this ISecurityProvider provider, INativeIdStorage nativeIdStorage, string storageName, object nativeId, CancellationToken cancellationToken = default)
 	{
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
@@ -498,9 +499,9 @@ public static partial class TraderHelper
 		if (nativeId == null)
 			throw new ArgumentNullException(nameof(nativeId));
 
-		var secId = nativeIdStorage.TryGetByNativeId(storageName, nativeId);
+		var secId = await nativeIdStorage.TryGetByNativeIdAsync(storageName, nativeId, cancellationToken);
 
-		return secId == null ? null : provider.LookupById(secId.Value);
+		return secId == null ? null : await provider.LookupByIdAsync(secId.Value, cancellationToken);
 	}
 
 	/// <summary>

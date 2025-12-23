@@ -8,7 +8,7 @@ public interface INativeIdStorage
 	/// <summary>
 	/// The new native security identifier added to storage.
 	/// </summary>
-	event Action<string, SecurityId, object> Added;
+	event Func<string, SecurityId, object, CancellationToken, ValueTask> Added;
 
 	/// <summary>
 	/// Initialize the storage.
@@ -21,8 +21,9 @@ public interface INativeIdStorage
 	/// Get native security identifiers for storage.
 	/// </summary>
 	/// <param name="storageName">Storage name.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Security identifiers.</returns>
-	(SecurityId secId, object nativeId)[] Get(string storageName);
+	ValueTask<(SecurityId secId, object nativeId)[]> GetAsync(string storageName, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Try add native security identifier to storage.
@@ -31,39 +32,44 @@ public interface INativeIdStorage
 	/// <param name="securityId">Security identifier.</param>
 	/// <param name="nativeId">Native (internal) trading system security id.</param>
 	/// <param name="isPersistable">Save the identifier as a permanent.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see langword="true"/> if native identifier was added. Otherwise, <see langword="false" />.</returns>
-	bool TryAdd(string storageName, SecurityId securityId, object nativeId, bool isPersistable = true);
+	ValueTask<bool> TryAddAsync(string storageName, SecurityId securityId, object nativeId, bool isPersistable = true, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Try get security identifier by native identifier.
 	/// </summary>
 	/// <param name="storageName">Storage name.</param>
 	/// <param name="nativeId">Native (internal) trading system security id.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Security identifier.</returns>
-	SecurityId? TryGetByNativeId(string storageName, object nativeId);
+	ValueTask<SecurityId?> TryGetByNativeIdAsync(string storageName, object nativeId, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Try get native security identifier by identifier.
 	/// </summary>
 	/// <param name="storageName">Storage name.</param>
 	/// <param name="securityId">Security identifier.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Native (internal) trading system security id.</returns>
-	object TryGetBySecurityId(string storageName, SecurityId securityId);
+	ValueTask<object> TryGetBySecurityIdAsync(string storageName, SecurityId securityId, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Clear storage.
 	/// </summary>
 	/// <param name="storageName">Storage name.</param>
-	void Clear(string storageName);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask ClearAsync(string storageName, CancellationToken cancellationToken = default);
 
 	/// <summary>
-	///Remove by security identifier.
+	/// Remove by security identifier.
 	/// </summary>
 	/// <param name="storageName">Storage name.</param>
 	/// <param name="securityId">Security identifier.</param>
 	/// <param name="isPersistable">Save the identifier as a permanent.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Operation result.</returns>
-	bool RemoveBySecurityId(string storageName, SecurityId securityId, bool isPersistable = true);
+	ValueTask<bool> RemoveBySecurityIdAsync(string storageName, SecurityId securityId, bool isPersistable = true, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Remove by native identifier.
@@ -71,8 +77,9 @@ public interface INativeIdStorage
 	/// <param name="storageName">Storage name.</param>
 	/// <param name="nativeId">Native (internal) trading system security id.</param>
 	/// <param name="isPersistable">Save the identifier as a permanent.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Operation result.</returns>
-	bool RemoveByNativeId(string storageName, object nativeId, bool isPersistable = true);
+	ValueTask<bool> RemoveByNativeIdAsync(string storageName, object nativeId, bool isPersistable = true, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -101,7 +108,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	}
 
 	/// <inheritdoc />
-	public event Action<string, SecurityId, object> Added;
+	public event Func<string, SecurityId, object, CancellationToken, ValueTask> Added;
 
 	/// <inheritdoc />
 	public async ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken)
@@ -128,12 +135,13 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	}
 
 	/// <inheritdoc />
-	public (SecurityId, object)[] Get(string storageName) => _inMemory.Get(storageName);
+	public ValueTask<(SecurityId, object)[]> GetAsync(string storageName, CancellationToken cancellationToken)
+		=> _inMemory.GetAsync(storageName, cancellationToken);
 
 	/// <inheritdoc />
-	public bool TryAdd(string storageName, SecurityId securityId, object nativeId, bool isPersistable)
+	public async ValueTask<bool> TryAddAsync(string storageName, SecurityId securityId, object nativeId, bool isPersistable, CancellationToken cancellationToken)
 	{
-		var added = _inMemory.TryAdd(storageName, securityId, nativeId, isPersistable);
+		var added = await _inMemory.TryAddAsync(storageName, securityId, nativeId, isPersistable, cancellationToken);
 
 		if (!added)
 			return false;
@@ -141,53 +149,56 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 		if (isPersistable)
 			Save(storageName, securityId, nativeId);
 
-		Added?.Invoke(storageName, securityId, nativeId);
+		var evt = Added;
+		if (evt != null)
+			await evt.Invoke(storageName, securityId, nativeId, cancellationToken);
 
 		return true;
 	}
 
 	/// <inheritdoc />
-	public void Clear(string storageName)
+	public async ValueTask ClearAsync(string storageName, CancellationToken cancellationToken)
 	{
-		_inMemory.Clear(storageName);
+		await _inMemory.ClearAsync(storageName, cancellationToken);
 		_buffer.Clear();
 		_executor.Add(() => File.Delete(GetFileName(storageName)));
 	}
 
 	/// <inheritdoc />
-	public bool RemoveBySecurityId(string storageName, SecurityId securityId, bool isPersistable)
+	public async ValueTask<bool> RemoveBySecurityIdAsync(string storageName, SecurityId securityId, bool isPersistable, CancellationToken cancellationToken)
 	{
-		var added = _inMemory.RemoveBySecurityId(storageName, securityId, isPersistable);
+		var removed = await _inMemory.RemoveBySecurityIdAsync(storageName, securityId, isPersistable, cancellationToken);
 
-		if (!added)
+		if (!removed)
 			return false;
 
 		if (isPersistable)
-			SaveAll(storageName);
+			await SaveAllAsync(storageName, cancellationToken);
 
 		return true;
 	}
 
 	/// <inheritdoc />
-	public bool RemoveByNativeId(string storageName, object nativeId, bool isPersistable)
+	public async ValueTask<bool> RemoveByNativeIdAsync(string storageName, object nativeId, bool isPersistable, CancellationToken cancellationToken)
 	{
-		var added = _inMemory.RemoveByNativeId(storageName, nativeId, isPersistable);
+		var removed = await _inMemory.RemoveByNativeIdAsync(storageName, nativeId, isPersistable, cancellationToken);
 
-		if (!added)
+		if (!removed)
 			return false;
 
 		if (isPersistable)
-			SaveAll(storageName);
+			await SaveAllAsync(storageName, cancellationToken);
 
 		return true;
 	}
 
-	private void SaveAll(string storageName)
+	private async ValueTask SaveAllAsync(string storageName, CancellationToken cancellationToken)
 	{
 		_buffer.Clear();
 
 		_executor.Add(() =>
 		{
+			var fileName = GetFileName(storageName);
 			var fileName = GetFileName(storageName);
 
 			File.Delete(fileName);
@@ -207,12 +218,12 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	}
 
 	/// <inheritdoc />
-	public SecurityId? TryGetByNativeId(string storageName, object nativeId)
-		=> _inMemory.TryGetByNativeId(storageName, nativeId);
+	public ValueTask<SecurityId?> TryGetByNativeIdAsync(string storageName, object nativeId, CancellationToken cancellationToken)
+		=> _inMemory.TryGetByNativeIdAsync(storageName, nativeId, cancellationToken);
 
 	/// <inheritdoc />
-	public object TryGetBySecurityId(string storageName, SecurityId securityId)
-		=> _inMemory.TryGetBySecurityId(storageName, securityId);
+	public ValueTask<object> TryGetBySecurityIdAsync(string storageName, SecurityId securityId, CancellationToken cancellationToken)
+		=> _inMemory.TryGetBySecurityIdAsync(storageName, securityId, cancellationToken);
 
 	private static object[] TryTupleToValues(object nativeId)
 	{
@@ -372,9 +383,9 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 	private readonly Dictionary<string, PairSet<SecurityId, object>> _nativeIds = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly Lock _syncRoot = new();
 
-	private Action<string, SecurityId, object> _added;
+	private Func<string, SecurityId, object, CancellationToken, ValueTask> _added;
 
-	event Action<string, SecurityId, object> INativeIdStorage.Added
+	event Func<string, SecurityId, object, CancellationToken, ValueTask> INativeIdStorage.Added
 	{
 		add => _added += value;
 		remove => _added -= value;
@@ -408,7 +419,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 		}
 	}
 
-	bool INativeIdStorage.TryAdd(string storageName, SecurityId securityId, object nativeId, bool isPersistable)
+	async ValueTask<bool> INativeIdStorage.TryAddAsync(string storageName, SecurityId securityId, object nativeId, bool isPersistable, CancellationToken cancellationToken)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
@@ -424,30 +435,34 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 				return false;
 		}
 
-		_added?.Invoke(storageName, securityId, nativeId);
+		var evt = _added;
+		if (evt != null)
+			await evt.Invoke(storageName, securityId, nativeId, cancellationToken);
 
 		return true;
 	}
 
-	object INativeIdStorage.TryGetBySecurityId(string storageName, SecurityId securityId)
+	ValueTask<object> INativeIdStorage.TryGetBySecurityIdAsync(string storageName, SecurityId securityId, CancellationToken cancellationToken)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
 		using (_syncRoot.EnterScope())
-			return _nativeIds.TryGetValue(storageName)?.TryGetValue(securityId);
+			return new(_nativeIds.TryGetValue(storageName)?.TryGetValue(securityId));
 	}
 
-	void INativeIdStorage.Clear(string storageName)
+	ValueTask INativeIdStorage.ClearAsync(string storageName, CancellationToken cancellationToken)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
 		using (_syncRoot.EnterScope())
 			_nativeIds.Remove(storageName);
+
+		return default;
 	}
 
-	SecurityId? INativeIdStorage.TryGetByNativeId(string storageName, object nativeId)
+	ValueTask<SecurityId?> INativeIdStorage.TryGetByNativeIdAsync(string storageName, object nativeId, CancellationToken cancellationToken)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
@@ -457,22 +472,22 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 		using (_syncRoot.EnterScope())
 		{
 			if (_nativeIds.TryGetValue(storageName)?.TryGetKey(nativeId, out securityId) != true)
-				return null;
+				return new((SecurityId?)null);
 		}
 
-		return securityId;
+		return new(securityId);
 	}
 
-	(SecurityId, object)[] INativeIdStorage.Get(string storageName)
+	ValueTask<(SecurityId, object)[]> INativeIdStorage.GetAsync(string storageName, CancellationToken cancellationToken)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
 		using (_syncRoot.EnterScope())
-			return _nativeIds.TryGetValue(storageName)?.Select(p => (p.Key, p.Value)).ToArray() ?? [];
+			return new(_nativeIds.TryGetValue(storageName)?.Select(p => (p.Key, p.Value)).ToArray() ?? []);
 	}
 
-	bool INativeIdStorage.RemoveBySecurityId(string storageName, SecurityId securityId, bool isPersistable)
+	ValueTask<bool> INativeIdStorage.RemoveBySecurityIdAsync(string storageName, SecurityId securityId, bool isPersistable, CancellationToken cancellationToken)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
@@ -482,13 +497,13 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 			var set = _nativeIds.TryGetValue(storageName);
 
 			if (set == null)
-				return false;
+				return new(false);
 
-			return set.Remove(securityId);
+			return new(set.Remove(securityId));
 		}
 	}
 
-	bool INativeIdStorage.RemoveByNativeId(string storageName, object nativeId, bool isPersistable)
+	ValueTask<bool> INativeIdStorage.RemoveByNativeIdAsync(string storageName, object nativeId, bool isPersistable, CancellationToken cancellationToken)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
@@ -498,9 +513,9 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 			var set = _nativeIds.TryGetValue(storageName);
 
 			if (set == null)
-				return false;
+				return new(false);
 
-			return set.RemoveByValue(nativeId);
+			return new(set.RemoveByValue(nativeId));
 		}
 	}
 }

@@ -25,13 +25,13 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		: base(innerAdapter)
 	{
 		Storage = storage ?? throw new ArgumentNullException(nameof(storage));
-		Storage.Added += OnStorageNewIdentifierAdded;
+		Storage.Added += OnStorageNewIdentifierAddedAsync;
 	}
 
 	/// <inheritdoc />
 	public override void Dispose()
 	{
-		Storage.Added -= OnStorageNewIdentifierAdded;
+		Storage.Added -= OnStorageNewIdentifierAddedAsync;
 		base.Dispose();
 	}
 
@@ -42,7 +42,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		{
 			case MessageTypes.Connect:
 			{
-				var nativeIds = Storage.Get(StorageName);
+				var nativeIds = await Storage.GetAsync(StorageName, cancellationToken);
 
 				using (_syncRoot.EnterScope())
 				{
@@ -80,9 +80,9 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 					{
 						var storageName = StorageName;
 
-						if (!Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable))
+						if (!await Storage.TryAddAsync(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable, cancellationToken))
 						{
-							var prevId = Storage.TryGetByNativeId(storageName, nativeSecurityId);
+							var prevId = await Storage.TryGetByNativeIdAsync(storageName, nativeSecurityId, cancellationToken);
 
 							if (prevId != null)
 							{
@@ -90,16 +90,16 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 								{
 									LogWarning(LocalizedStrings.DuplicateSystemId.Put(noNative, prevId.Value, nativeSecurityId));
 
-									Storage.RemoveBySecurityId(storageName, prevId.Value);
-									Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable);
+									await Storage.RemoveBySecurityIdAsync(storageName, prevId.Value, cancellationToken: cancellationToken);
+									await Storage.TryAddAsync(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable, cancellationToken);
 								}
 							}
 							else
 							{
-								LogWarning(LocalizedStrings.DuplicateSystemId.Put(Storage.TryGetBySecurityId(storageName, noNative), nativeSecurityId, noNative));
+								LogWarning(LocalizedStrings.DuplicateSystemId.Put(await Storage.TryGetBySecurityIdAsync(storageName, noNative, cancellationToken), nativeSecurityId, noNative));
 
-								Storage.RemoveByNativeId(storageName, nativeSecurityId);
-								Storage.TryAdd(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable);
+								await Storage.RemoveByNativeIdAsync(storageName, nativeSecurityId, cancellationToken: cancellationToken);
+								await Storage.TryAddAsync(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable, cancellationToken);
 							}
 						}
 
@@ -588,7 +588,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			await base.OnInnerAdapterNewOutMessageAsync(msg.ReplaceSecurityId(securityId), cancellationToken);
 	}
 
-	private async void OnStorageNewIdentifierAdded(string storageName, SecurityId securityId, object nativeId)
+	private async ValueTask OnStorageNewIdentifierAddedAsync(string storageName, SecurityId securityId, object nativeId, CancellationToken cancellationToken)
 	{
 		if (!StorageName.EqualsIgnoreCase(storageName))
 			return;
@@ -606,7 +606,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		{
 			var temp = securityId;
 			temp.Native = nativeId;
-			RaiseNewOutMessageAsync(new ProcessSuspendedMessage(this, temp), default);
+			await RaiseNewOutMessageAsync(new ProcessSuspendedMessage(this, temp), cancellationToken);
 		}
 	}
 }
