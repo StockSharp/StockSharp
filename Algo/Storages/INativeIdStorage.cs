@@ -88,7 +88,7 @@ public interface INativeIdStorage
 public sealed class CsvNativeIdStorage : INativeIdStorage, IDisposable
 {
 	private readonly INativeIdStorage _inMemory = new InMemoryNativeIdStorage();
-	private readonly SynchronizedDictionary<SecurityId, object> _buffer = [];
+	private readonly SynchronizedDictionary<string, SynchronizedDictionary<SecurityId, object>> _buffers = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly Dictionary<string, (TransactionFileStream stream, CsvFileWriter writer)> _streams = new(StringComparer.InvariantCultureIgnoreCase);
 
 	private readonly string _path;
@@ -223,7 +223,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage, IDisposable
 	public async ValueTask ClearAsync(string storageName, CancellationToken cancellationToken)
 	{
 		await _inMemory.ClearAsync(storageName, cancellationToken);
-		_buffer.Clear();
+		_buffers.Remove(storageName);
 		_executor.Add(() =>
 		{
 			ResetStream(storageName);
@@ -261,7 +261,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage, IDisposable
 
 	private async ValueTask SaveAllAsync(string storageName, CancellationToken cancellationToken)
 	{
-		_buffer.Clear();
+		_buffers.Remove(storageName);
 
 		var items = await _inMemory.GetAsync(storageName, cancellationToken);
 
@@ -364,11 +364,12 @@ public sealed class CsvNativeIdStorage : INativeIdStorage, IDisposable
 
 	private void Save(string storageName, SecurityId securityId, object nativeId)
 	{
-		_buffer[securityId] = nativeId;
+		var buffer = _buffers.SafeAdd(storageName, _ => []);
+		buffer[securityId] = nativeId;
 
 		_executor.Add(() =>
 		{
-			var items = _buffer.SyncGet(c => c.CopyAndClear());
+			var items = buffer.SyncGet(c => c.CopyAndClear());
 
 			if (items.Length == 0)
 				return;

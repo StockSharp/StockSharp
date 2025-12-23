@@ -586,6 +586,141 @@ public class CsvStorageTests : BaseTestClass
 		AreEqual("12345", eventNativeId);
 	}
 
+	[TestMethod]
+	public async Task CsvNativeId_MultipleStorages_BufferIsolation()
+	{
+		// This test verifies that items added to different storages
+		// are written to their respective files, not mixed due to shared buffer
+
+		var token = CancellationToken;
+		var (fs, path) = CreateMemoryFs("nativeids");
+		var executor = CreateExecutor(token);
+
+		using var storage = new CsvNativeIdStorage(fs, path, executor);
+		await storage.InitAsync(token);
+
+		var secIdA = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
+		var secIdB = new SecurityId { SecurityCode = "MSFT", BoardCode = "NYSE" };
+
+		// Add to storage "AdapterA"
+		await storage.TryAddAsync("AdapterA", secIdA, 12345L, true, token);
+
+		// Add to storage "AdapterB"
+		await storage.TryAddAsync("AdapterB", secIdB, 67890L, true, token);
+
+		// Wait for executor to process
+		await FlushAsync(executor, token);
+
+		// Verify both files exist
+		var fileA = Path.Combine(path, "AdapterA.csv");
+		var fileB = Path.Combine(path, "AdapterB.csv");
+
+		IsTrue(fs.FileExists(fileA), $"File {fileA} should exist");
+		IsTrue(fs.FileExists(fileB), $"File {fileB} should exist");
+
+		// Read and verify file contents
+		var contentA = ReadFileContent(fs, fileA);
+		var contentB = ReadFileContent(fs, fileB);
+
+		// AdapterA.csv should contain AAPL, NOT MSFT
+		IsTrue(contentA.Contains("AAPL"), "AdapterA.csv should contain AAPL");
+		IsFalse(contentA.Contains("MSFT"), "AdapterA.csv should NOT contain MSFT");
+
+		// AdapterB.csv should contain MSFT, NOT AAPL
+		IsTrue(contentB.Contains("MSFT"), "AdapterB.csv should contain MSFT");
+		IsFalse(contentB.Contains("AAPL"), "AdapterB.csv should NOT contain AAPL");
+	}
+
+	[TestMethod]
+	public async Task CsvNativeId_MultipleStorages_SequentialAdds_CorrectFiles()
+	{
+		// More aggressive test: add multiple items to different storages rapidly
+
+		var token = CancellationToken;
+		var (fs, path) = CreateMemoryFs("nativeids");
+		var executor = CreateExecutor(token);
+
+		using var storage = new CsvNativeIdStorage(fs, path, executor);
+		await storage.InitAsync(token);
+
+		// Add items to different storages in interleaved order
+		await storage.TryAddAsync("Storage1", new SecurityId { SecurityCode = "S1A", BoardCode = "B1" }, 1L, true, token);
+		await storage.TryAddAsync("Storage2", new SecurityId { SecurityCode = "S2A", BoardCode = "B2" }, 2L, true, token);
+		await storage.TryAddAsync("Storage1", new SecurityId { SecurityCode = "S1B", BoardCode = "B1" }, 3L, true, token);
+		await storage.TryAddAsync("Storage2", new SecurityId { SecurityCode = "S2B", BoardCode = "B2" }, 4L, true, token);
+		await storage.TryAddAsync("Storage3", new SecurityId { SecurityCode = "S3A", BoardCode = "B3" }, 5L, true, token);
+
+		// Wait for executor
+		await FlushAsync(executor, token);
+
+		// Verify files
+		var file1 = Path.Combine(path, "Storage1.csv");
+		var file2 = Path.Combine(path, "Storage2.csv");
+		var file3 = Path.Combine(path, "Storage3.csv");
+
+		IsTrue(fs.FileExists(file1), "Storage1.csv should exist");
+		IsTrue(fs.FileExists(file2), "Storage2.csv should exist");
+		IsTrue(fs.FileExists(file3), "Storage3.csv should exist");
+
+		var content1 = ReadFileContent(fs, file1);
+		var content2 = ReadFileContent(fs, file2);
+		var content3 = ReadFileContent(fs, file3);
+
+		// Storage1 should have S1A and S1B only
+		IsTrue(content1.Contains("S1A"), "Storage1.csv should contain S1A");
+		IsTrue(content1.Contains("S1B"), "Storage1.csv should contain S1B");
+		IsFalse(content1.Contains("S2A"), "Storage1.csv should NOT contain S2A");
+		IsFalse(content1.Contains("S3A"), "Storage1.csv should NOT contain S3A");
+
+		// Storage2 should have S2A and S2B only
+		IsTrue(content2.Contains("S2A"), "Storage2.csv should contain S2A");
+		IsTrue(content2.Contains("S2B"), "Storage2.csv should contain S2B");
+		IsFalse(content2.Contains("S1A"), "Storage2.csv should NOT contain S1A");
+
+		// Storage3 should have S3A only
+		IsTrue(content3.Contains("S3A"), "Storage3.csv should contain S3A");
+		IsFalse(content3.Contains("S1A"), "Storage3.csv should NOT contain S1A");
+		IsFalse(content3.Contains("S2A"), "Storage3.csv should NOT contain S2A");
+	}
+
+	[TestMethod]
+	public async Task CsvNativeId_ClearOneStorage_DoesNotAffectOther()
+	{
+		var token = CancellationToken;
+		var (fs, path) = CreateMemoryFs("nativeids");
+		var executor = CreateExecutor(token);
+
+		using var storage = new CsvNativeIdStorage(fs, path, executor);
+		await storage.InitAsync(token);
+
+		// Add to both storages
+		await storage.TryAddAsync("StorageA", new SecurityId { SecurityCode = "AAA", BoardCode = "BA" }, 100L, true, token);
+		await storage.TryAddAsync("StorageB", new SecurityId { SecurityCode = "BBB", BoardCode = "BB" }, 200L, true, token);
+
+		await FlushAsync(executor, token);
+
+		// Clear only StorageA
+		await storage.ClearAsync("StorageA", token);
+
+		await FlushAsync(executor, token);
+
+		// StorageB should still have its data
+		var itemsB = await storage.GetAsync("StorageB", token);
+		AreEqual(1, itemsB.Length, "StorageB should still have 1 item after clearing StorageA");
+		AreEqual("BBB", itemsB[0].Item1.SecurityCode);
+
+		// StorageA should be empty
+		var itemsA = await storage.GetAsync("StorageA", token);
+		AreEqual(0, itemsA.Length, "StorageA should be empty after clear");
+	}
+
+	private static string ReadFileContent(MemoryFileSystem fs, string path)
+	{
+		using var stream = fs.OpenRead(path);
+		using var reader = new StreamReader(stream, Encoding.UTF8);
+		return reader.ReadToEnd();
+	}
+
 	#endregion
 
 	#region File State Verification Tests
