@@ -587,4 +587,168 @@ public class CsvStorageTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region File State Verification Tests
+
+	[TestMethod]
+	public async Task TransactionFileStream_FileExistsAfterCommit()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("portfolios.csv");
+
+		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
+		await provider.InitAsync(token);
+
+		// File should not exist yet (no data)
+		IsFalse(fs.FileExists(path));
+
+		provider.SetAdapter("TestPortfolio", Guid.NewGuid());
+		await FlushAsync(executor, token);
+
+		// File should exist after commit
+		IsTrue(fs.FileExists(path), "File should exist after SetAdapter + Flush");
+	}
+
+	[TestMethod]
+	public async Task TransactionFileStream_FileHasContent()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("portfolios.csv");
+
+		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
+		await provider.InitAsync(token);
+
+		provider.SetAdapter("TestPortfolio", Guid.NewGuid());
+		await FlushAsync(executor, token);
+
+		// File should have content (size > 0)
+		var fileLength = fs.GetFileLength(path);
+		IsTrue(fileLength > 0, $"File should have content, but size is {fileLength}");
+	}
+
+	[TestMethod]
+	public async Task TransactionFileStream_FileContentIsValid()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("portfolios.csv");
+
+		var adapterId = Guid.NewGuid();
+		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
+		await provider.InitAsync(token);
+
+		provider.SetAdapter("TestPortfolio", adapterId);
+		await FlushAsync(executor, token);
+
+		// Read file content and verify
+		using var stream = fs.OpenRead(path);
+		using var reader = new StreamReader(stream);
+		var content = reader.ReadToEnd();
+
+		IsTrue(content.Contains("Portfolio"), "File should contain header 'Portfolio'");
+		IsTrue(content.Contains("Adapter"), "File should contain header 'Adapter'");
+		IsTrue(content.Contains("TestPortfolio"), "File should contain portfolio name");
+		IsTrue(content.Contains(adapterId.ToString()), "File should contain adapter ID");
+	}
+
+	[TestMethod]
+	public async Task TransactionFileStream_MultipleWritesAccumulate()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("portfolios.csv");
+
+		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
+		await provider.InitAsync(token);
+
+		// First write
+		provider.SetAdapter("Portfolio1", Guid.NewGuid());
+		await FlushAsync(executor, token);
+		var size1 = fs.GetFileLength(path);
+
+		// Second write
+		provider.SetAdapter("Portfolio2", Guid.NewGuid());
+		await FlushAsync(executor, token);
+		var size2 = fs.GetFileLength(path);
+
+		IsTrue(size2 > size1, $"File should grow after second write. Size1={size1}, Size2={size2}");
+	}
+
+	[TestMethod]
+	public async Task TransactionFileStream_TempFileCleanedUp()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("portfolios.csv");
+		var tempPath = path + ".tmp";
+
+		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
+		await provider.InitAsync(token);
+
+		provider.SetAdapter("TestPortfolio", Guid.NewGuid());
+		await FlushAsync(executor, token);
+
+		// Temp file should not exist after commit
+		IsFalse(fs.FileExists(tempPath), "Temp file should be cleaned up after commit");
+		IsTrue(fs.FileExists(path), "Final file should exist");
+	}
+
+	[TestMethod]
+	public async Task CsvNativeIdStorage_FilePerStorageName()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("nativeids");
+		var storage = new CsvNativeIdStorage(fs, path, executor);
+
+		await storage.InitAsync(token);
+
+		// Use different SecurityId for each storage to avoid buffer race condition
+		var secId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
+		var secId2 = new SecurityId { SecurityCode = "MSFT", BoardCode = "NASDAQ" };
+		await storage.TryAddAsync("Exchange1", secId1, "111", true, token);
+		await FlushAsync(executor, token);
+		await storage.TryAddAsync("Exchange2", secId2, "222", true, token);
+		await FlushAsync(executor, token);
+
+		// Each storage name should create separate file
+		var file1 = Path.Combine(path, "Exchange1.csv");
+		var file2 = Path.Combine(path, "Exchange2.csv");
+
+		IsTrue(fs.FileExists(file1), "Exchange1.csv should exist");
+		IsTrue(fs.FileExists(file2), "Exchange2.csv should exist");
+		IsTrue(fs.GetFileLength(file1) > 0, "Exchange1.csv should have content");
+		IsTrue(fs.GetFileLength(file2) > 0, "Exchange2.csv should have content");
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_DirectoryCreated()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var storage = new CsvSecurityMappingStorage(fs, path, executor);
+
+		await storage.InitAsync(token);
+
+		var mapping = new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" },
+			AdapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ADAPTER" }
+		};
+
+		storage.Save("TestMapping", mapping);
+		await FlushAsync(executor, token);
+
+		// Directory should be created
+		IsTrue(fs.DirectoryExists(path), "Mapping directory should exist");
+
+		// File should exist
+		var filePath = Path.Combine(path, "TestMapping.csv");
+		IsTrue(fs.FileExists(filePath), "Mapping file should exist");
+	}
+
+	#endregion
 }
