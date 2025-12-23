@@ -7,7 +7,7 @@ using Ecng.IO;
 /// <summary>
 /// The interface for presentation in the form of list of trade objects, received from the external storage.
 /// </summary>
-public interface ICsvEntityList
+public interface ICsvEntityList : IAsyncDisposable
 {
 	/// <summary>
 	/// Initialize the storage.
@@ -38,7 +38,7 @@ public interface ICsvEntityList
 /// </summary>
 /// <typeparam name="TKey">Key type.</typeparam>
 /// <typeparam name="TEntity">Entity type.</typeparam>
-public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, IStorageEntityList<TEntity>, ICsvEntityList, IDisposable
+public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, IStorageEntityList<TEntity>, ICsvEntityList
 	where TEntity : class
 {
 	private readonly CachedSynchronizedDictionary<TKey, TEntity> _items = [];
@@ -49,6 +49,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	private readonly ChannelExecutor _executor;
 	private TransactionFileStream _stream;
 	private CsvFileWriter _writer;
+	private volatile bool _disposed;
 
 	/// <summary>
 	/// The CSV storage of trading objects.
@@ -80,9 +81,14 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// <summary>
 	/// Disposes the resources.
 	/// </summary>
-	public void Dispose()
+	public async ValueTask DisposeAsync()
 	{
-		_executor.Add(() =>
+		if (_disposed)
+			return;
+
+		_disposed = true;
+
+		await _executor.AddAndWaitAsync(() =>
 		{
 			_writer?.Dispose();
 			_writer = null;
@@ -92,6 +98,12 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		});
 
 		GC.SuppressFinalize(this);
+	}
+
+	private void ThrowIfDisposed()
+	{
+		if (_disposed)
+			throw new ObjectDisposedException(GetType().Name);
 	}
 
 	private void EnsureStream()
@@ -263,24 +275,18 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// <returns>Trade object.</returns>
 	protected abstract TEntity Read(FastCsvReader reader);
 
-	/// <summary>
-	///
-	/// </summary>
-	/// <param name="item"></param>
-	/// <returns></returns>
+	/// <inheritdoc />
 	public override bool Contains(TEntity item)
 	{
 		using (EnterScope())
 			return _items.ContainsKey(GetNormalizedKey(item));
 	}
 
-	/// <summary>
-	///
-	/// </summary>
-	/// <param name="item">Trade object.</param>
-	/// <returns></returns>
+	/// <inheritdoc />
 	protected override bool OnAdding(TEntity item)
 	{
+		ThrowIfDisposed();
+
 		using (EnterScope())
 		{
 			if (!_items.TryAdd2(GetNormalizedKey(item), item))
@@ -302,12 +308,11 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		return base.OnAdding(item);
 	}
 
-	/// <summary>
-	///
-	/// </summary>
-	/// <param name="item">Trade object.</param>
+	/// <inheritdoc />
 	protected override void OnRemoved(TEntity item)
 	{
+		ThrowIfDisposed();
+
 		base.OnRemoved(item);
 
 		using (EnterScope())
@@ -319,12 +324,11 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		}
 	}
 
-	/// <summary>
-	///
-	/// </summary>
-	/// <param name="items"></param>
+	/// <inheritdoc />
 	protected void OnRemovedRange(IEnumerable<TEntity> items)
 	{
+		ThrowIfDisposed();
+
 		using (EnterScope())
 		{
 			foreach (var item in items)
@@ -337,11 +341,11 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		}
 	}
 
-	/// <summary>
-	///
-	/// </summary>
+	/// <inheritdoc />
 	protected override void OnCleared()
 	{
+		ThrowIfDisposed();
+
 		base.OnCleared();
 
 		using (EnterScope())
@@ -371,6 +375,8 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// <param name="values">Trading objects.</param>
 	private void WriteMany(TEntity[] values)
 	{
+		ThrowIfDisposed();
+
 		var valuesCopy = values;
 		_executor.Add(() =>
 		{

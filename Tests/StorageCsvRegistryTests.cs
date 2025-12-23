@@ -53,6 +53,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		AreEqual("TEST", loaded.Name);
 		AreEqual(CountryCodes.US, loaded.CountryCode);
 		AreEqual("Test Exchange", loaded.FullNameLoc);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -82,6 +84,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		IsNotNull(loaded);
 		AreEqual(CountryCodes.RU, loaded.CountryCode);
 		AreEqual("Updated Exchange", loaded.FullNameLoc);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -106,6 +110,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		var loaded = registry.Exchanges.ReadById("TEST");
 		IsNull(loaded);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -125,6 +131,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		registry.Exchanges.Count.AreEqual(0);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -159,6 +167,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		IsNotNull(loaded);
 		AreEqual("TEST_BOARD", loaded.Code);
 		AreEqual("TEST_EX", loaded.Exchange.Name);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -195,6 +205,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		AreEqual("TEST", loaded.Code);
 		AreEqual("TBOARD", loaded.Board.Code);
 		AreEqual("Test Security", loaded.Name);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -217,6 +229,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		IsNotNull(loaded);
 		AreEqual("TEST_PORTFOLIO", loaded.Name);
 		AreEqual(CurrencyTypes.USD, loaded.Currency);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -250,6 +264,9 @@ public class StorageCsvRegistryTests : BaseTestClass
 		IsNotNull(loaded);
 		AreEqual("TEST", loaded.Name);
 		AreEqual(CountryCodes.US, loaded.CountryCode);
+
+		await registry1.DisposeAsync();
+		await registry2.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -268,6 +285,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		// Try to add duplicate - should fail
 		var added = registry.Exchanges.Contains(exchange2);
 		IsTrue(added, "Duplicate should be detected");
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -285,6 +304,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		{
 			var copy = exchanges.GetCopy();
 		});
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -310,6 +331,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		var decompressed = resultStream.ToArray();
 
 		IsNotNull(decompressed);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -350,6 +373,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		Contains("New York Stock Exchange", content);
 		Contains("Moscow Exchange", content);
 		Contains("London Stock Exchange", content);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -374,6 +399,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		// Should be the same instance (cached)
 		AreSame(copy1, copy2);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -422,6 +449,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		// Content should be different
 		DoesNotContain("TEST2", content1);
 		Contains("TEST2", content2);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -471,6 +500,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		// Content should be empty or minimal
 		DoesNotContain("TEST1", content2);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -521,6 +552,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		// Content should be updated
 		Contains("Updated Name", content2);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -571,6 +604,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		Contains("NYSE", exchangeContent);
 		Contains("PORT1", portfolioContent);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -614,6 +649,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		Contains("EXCHANGE_000", content);
 		Contains("EXCHANGE_050", content);
 		Contains("EXCHANGE_099", content);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -643,6 +680,8 @@ public class StorageCsvRegistryTests : BaseTestClass
 		{
 			var copy2 = exchanges.GetCopy();
 		});
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]
@@ -691,5 +730,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		Contains("LARGE_EXCHANGE_0000", content);
 		Contains("LARGE_EXCHANGE_0500", content);
 		Contains("LARGE_EXCHANGE_0999", content);
+
+		await registry.DisposeAsync();
 	}
 }

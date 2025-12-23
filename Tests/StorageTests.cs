@@ -2636,7 +2636,8 @@ public class StorageTests : BaseTestClass
 		var securities = Helper.RandomSecurities().Select(s => s.ToSecurity(exchangeProvider)).ToArray();
 		var token = CancellationToken;
 
-		var registry = Helper.GetEntityRegistry(Helper.CreateExecutor(token));
+		var executor = Helper.CreateExecutor(token);
+		var registry = Helper.GetEntityRegistry(executor);
 
 		var storage = registry.Securities;
 
@@ -2657,6 +2658,8 @@ public class StorageTests : BaseTestClass
 
 		await storage.DeleteAllAsync(token);
 		(await storage.LookupAllAsync().ToArrayAsync(token)).Count().AssertEqual(0);
+
+		await registry.DisposeAsync();
 	}
 
 	[TestMethod]

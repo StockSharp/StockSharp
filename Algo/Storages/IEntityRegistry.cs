@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Storages;
 /// <summary>
 /// The interface describing the trade objects storage.
 /// </summary>
-public interface IEntityRegistry
+public interface IEntityRegistry : IAsyncDisposable
 {
 	/// <summary>
 	/// List of exchanges.

@@ -961,4 +961,12 @@ public class CsvEntityRegistry : IEntityRegistry
 
 		return board;
 	}
+
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		await _csvLists.Select(list => list.DisposeAsync()).WhenAll();
+
+		GC.SuppressFinalize(this);
+	}
 }
