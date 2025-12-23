@@ -49,7 +49,7 @@ public partial class MainWindow
 		ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
 		ConfigManager.RegisterService<IStorageRegistry>(storageRegistry);
 
-		INativeIdStorage nativeIdStorage = new CsvNativeIdStorage(Path.Combine(path, "NativeId"), _executor);
+		INativeIdStorageProvider nativeIdStorage = new CsvNativeIdStorageProvider(Path.Combine(path, "NativeId"), _executor);
 		ConfigManager.RegisterService(nativeIdStorage);
 
 		var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));

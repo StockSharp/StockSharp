@@ -12,26 +12,31 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	private readonly Lock _syncRoot = new();
 
 	/// <summary>
-	/// Security native identifier storage.
+	/// Security native identifier storage provider.
 	/// </summary>
-	public INativeIdStorage Storage { get; }
+	public INativeIdStorageProvider StorageProvider { get; }
+
+	private INativeIdStorage _storage;
+
+	private INativeIdStorage Storage => _storage ??= StorageProvider.GetStorage(StorageName);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="SecurityNativeIdMessageAdapter"/>.
 	/// </summary>
 	/// <param name="innerAdapter">The adapter, to which messages will be directed.</param>
-	/// <param name="storage">Security native identifier storage.</param>
-	public SecurityNativeIdMessageAdapter(IMessageAdapter innerAdapter, INativeIdStorage storage)
+	/// <param name="storageProvider">Security native identifier storage provider.</param>
+	public SecurityNativeIdMessageAdapter(IMessageAdapter innerAdapter, INativeIdStorageProvider storageProvider)
 		: base(innerAdapter)
 	{
-		Storage = storage ?? throw new ArgumentNullException(nameof(storage));
-		Storage.Added += OnStorageNewIdentifierAddedAsync;
+		StorageProvider = storageProvider ?? throw new ArgumentNullException(nameof(storageProvider));
 	}
 
 	/// <inheritdoc />
 	public override void Dispose()
 	{
-		Storage.Added -= OnStorageNewIdentifierAddedAsync;
+		if (_storage != null)
+			_storage.Added -= OnStorageNewIdentifierAddedAsync;
+
 		base.Dispose();
 	}
 
@@ -42,7 +47,9 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 		{
 			case MessageTypes.Connect:
 			{
-				var nativeIds = await Storage.GetAsync(StorageName, cancellationToken);
+				Storage.Added += OnStorageNewIdentifierAddedAsync;
+
+				var nativeIds = await Storage.GetAsync(cancellationToken);
 
 				using (_syncRoot.EnterScope())
 				{
@@ -78,11 +85,9 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 				{
 					if (nativeSecurityId != null)
 					{
-						var storageName = StorageName;
-
-						if (!await Storage.TryAddAsync(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable, cancellationToken))
+						if (!await Storage.TryAddAsync(noNative, nativeSecurityId, IsNativeIdentifiersPersistable, cancellationToken))
 						{
-							var prevId = await Storage.TryGetByNativeIdAsync(storageName, nativeSecurityId, cancellationToken);
+							var prevId = await Storage.TryGetByNativeIdAsync(nativeSecurityId, cancellationToken);
 
 							if (prevId != null)
 							{
@@ -90,16 +95,16 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 								{
 									LogWarning(LocalizedStrings.DuplicateSystemId.Put(noNative, prevId.Value, nativeSecurityId));
 
-									await Storage.RemoveBySecurityIdAsync(storageName, prevId.Value, cancellationToken: cancellationToken);
-									await Storage.TryAddAsync(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable, cancellationToken);
+									await Storage.RemoveBySecurityIdAsync(prevId.Value, cancellationToken: cancellationToken);
+									await Storage.TryAddAsync(noNative, nativeSecurityId, IsNativeIdentifiersPersistable, cancellationToken);
 								}
 							}
 							else
 							{
-								LogWarning(LocalizedStrings.DuplicateSystemId.Put(await Storage.TryGetBySecurityIdAsync(storageName, noNative, cancellationToken), nativeSecurityId, noNative));
+								LogWarning(LocalizedStrings.DuplicateSystemId.Put(await Storage.TryGetBySecurityIdAsync(noNative, cancellationToken), nativeSecurityId, noNative));
 
-								await Storage.RemoveByNativeIdAsync(storageName, nativeSecurityId, cancellationToken: cancellationToken);
-								await Storage.TryAddAsync(storageName, noNative, nativeSecurityId, IsNativeIdentifiersPersistable, cancellationToken);
+								await Storage.RemoveByNativeIdAsync(nativeSecurityId, cancellationToken: cancellationToken);
+								await Storage.TryAddAsync(noNative, nativeSecurityId, IsNativeIdentifiersPersistable, cancellationToken);
 							}
 						}
 
@@ -301,7 +306,7 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 	/// <returns>Copy.</returns>
 	public override IMessageAdapter Clone()
 	{
-		return new SecurityNativeIdMessageAdapter(InnerAdapter.TypedClone(), Storage);
+		return new SecurityNativeIdMessageAdapter(InnerAdapter.TypedClone(), StorageProvider);
 	}
 
 	private ValueTask ProcessMessageAsync<TMessage>(TMessage message, Func<TMessage, TMessage, TMessage> processSuspend, CancellationToken cancellationToken)
@@ -588,11 +593,8 @@ public class SecurityNativeIdMessageAdapter : MessageAdapterWrapper
 			await base.OnInnerAdapterNewOutMessageAsync(msg.ReplaceSecurityId(securityId), cancellationToken);
 	}
 
-	private async ValueTask OnStorageNewIdentifierAddedAsync(string storageName, SecurityId securityId, object nativeId, CancellationToken cancellationToken)
+	private async ValueTask OnStorageNewIdentifierAddedAsync(SecurityId securityId, object nativeId, CancellationToken cancellationToken)
 	{
-		if (!StorageName.EqualsIgnoreCase(storageName))
-			return;
-
 		bool needMessage;
 
 		using (_syncRoot.EnterScope())

@@ -302,12 +302,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	/// </summary>
 	public IInnerAdapterList InnerAdapters => _innerAdapters;
 
-	private INativeIdStorage _nativeIdStorage = new InMemoryNativeIdStorage();
+	private INativeIdStorageProvider _nativeIdStorage = new InMemoryNativeIdStorageProvider();
 
 	/// <summary>
-	/// Security native identifier storage.
+	/// Security native identifier storage provider.
 	/// </summary>
-	public INativeIdStorage NativeIdStorage
+	public INativeIdStorageProvider NativeIdStorage
 	{
 		get => _nativeIdStorage;
 		set => _nativeIdStorage = value ?? throw new ArgumentNullException(nameof(value));

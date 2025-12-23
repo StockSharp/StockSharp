@@ -1,117 +1,286 @@
 namespace StockSharp.Algo.Storages;
 
 /// <summary>
-/// Security native identifier storage.
+/// Single storage for security native identifiers.
 /// </summary>
 public interface INativeIdStorage
 {
 	/// <summary>
 	/// The new native security identifier added to storage.
 	/// </summary>
-	event Func<string, SecurityId, object, CancellationToken, ValueTask> Added;
+	event Func<SecurityId, object, CancellationToken, ValueTask> Added;
 
 	/// <summary>
-	/// Initialize the storage.
+	/// Get all native security identifiers.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Security identifiers.</returns>
+	ValueTask<(SecurityId secId, object nativeId)[]> GetAsync(CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Try add native security identifier.
+	/// </summary>
+	/// <param name="securityId">Security identifier.</param>
+	/// <param name="nativeId">Native (internal) trading system security id.</param>
+	/// <param name="isPersistable">Save the identifier as a permanent.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see langword="true"/> if native identifier was added. Otherwise, <see langword="false" />.</returns>
+	ValueTask<bool> TryAddAsync(SecurityId securityId, object nativeId, bool isPersistable = true, CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Try get security identifier by native identifier.
+	/// </summary>
+	/// <param name="nativeId">Native (internal) trading system security id.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Security identifier.</returns>
+	ValueTask<SecurityId?> TryGetByNativeIdAsync(object nativeId, CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Try get native security identifier by identifier.
+	/// </summary>
+	/// <param name="securityId">Security identifier.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Native (internal) trading system security id.</returns>
+	ValueTask<object> TryGetBySecurityIdAsync(SecurityId securityId, CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Clear storage.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask ClearAsync(CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Remove by security identifier.
+	/// </summary>
+	/// <param name="securityId">Security identifier.</param>
+	/// <param name="isPersistable">Save the identifier as a permanent.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Operation result.</returns>
+	ValueTask<bool> RemoveBySecurityIdAsync(SecurityId securityId, bool isPersistable = true, CancellationToken cancellationToken = default);
+
+	/// <summary>
+	/// Remove by native identifier.
+	/// </summary>
+	/// <param name="nativeId">Native (internal) trading system security id.</param>
+	/// <param name="isPersistable">Save the identifier as a permanent.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Operation result.</returns>
+	ValueTask<bool> RemoveByNativeIdAsync(object nativeId, bool isPersistable = true, CancellationToken cancellationToken = default);
+}
+
+/// <summary>
+/// Security native identifier storage provider.
+/// </summary>
+public interface INativeIdStorageProvider : IAsyncDisposable
+{
+	/// <summary>
+	/// Initialize the storage provider.
 	/// </summary>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Possible errors with storage names. Empty dictionary means initialization without any issues.</returns>
 	ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken);
 
 	/// <summary>
-	/// Get native security identifiers for storage.
+	/// Get storage for a specific storage name.
 	/// </summary>
 	/// <param name="storageName">Storage name.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-	/// <returns>Security identifiers.</returns>
-	ValueTask<(SecurityId secId, object nativeId)[]> GetAsync(string storageName, CancellationToken cancellationToken = default);
-
-	/// <summary>
-	/// Try add native security identifier to storage.
-	/// </summary>
-	/// <param name="storageName">Storage name.</param>
-	/// <param name="securityId">Security identifier.</param>
-	/// <param name="nativeId">Native (internal) trading system security id.</param>
-	/// <param name="isPersistable">Save the identifier as a permanent.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-	/// <returns><see langword="true"/> if native identifier was added. Otherwise, <see langword="false" />.</returns>
-	ValueTask<bool> TryAddAsync(string storageName, SecurityId securityId, object nativeId, bool isPersistable = true, CancellationToken cancellationToken = default);
-
-	/// <summary>
-	/// Try get security identifier by native identifier.
-	/// </summary>
-	/// <param name="storageName">Storage name.</param>
-	/// <param name="nativeId">Native (internal) trading system security id.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-	/// <returns>Security identifier.</returns>
-	ValueTask<SecurityId?> TryGetByNativeIdAsync(string storageName, object nativeId, CancellationToken cancellationToken = default);
-
-	/// <summary>
-	/// Try get native security identifier by identifier.
-	/// </summary>
-	/// <param name="storageName">Storage name.</param>
-	/// <param name="securityId">Security identifier.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-	/// <returns>Native (internal) trading system security id.</returns>
-	ValueTask<object> TryGetBySecurityIdAsync(string storageName, SecurityId securityId, CancellationToken cancellationToken = default);
-
-	/// <summary>
-	/// Clear storage.
-	/// </summary>
-	/// <param name="storageName">Storage name.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-	ValueTask ClearAsync(string storageName, CancellationToken cancellationToken = default);
-
-	/// <summary>
-	/// Remove by security identifier.
-	/// </summary>
-	/// <param name="storageName">Storage name.</param>
-	/// <param name="securityId">Security identifier.</param>
-	/// <param name="isPersistable">Save the identifier as a permanent.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-	/// <returns>Operation result.</returns>
-	ValueTask<bool> RemoveBySecurityIdAsync(string storageName, SecurityId securityId, bool isPersistable = true, CancellationToken cancellationToken = default);
-
-	/// <summary>
-	/// Remove by native identifier.
-	/// </summary>
-	/// <param name="storageName">Storage name.</param>
-	/// <param name="nativeId">Native (internal) trading system security id.</param>
-	/// <param name="isPersistable">Save the identifier as a permanent.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-	/// <returns>Operation result.</returns>
-	ValueTask<bool> RemoveByNativeIdAsync(string storageName, object nativeId, bool isPersistable = true, CancellationToken cancellationToken = default);
+	/// <returns>Storage instance.</returns>
+	INativeIdStorage GetStorage(string storageName);
 }
 
 /// <summary>
-/// CSV security native identifier storage.
+/// CSV security native identifier storage provider.
 /// </summary>
-public sealed class CsvNativeIdStorage : INativeIdStorage, IDisposable
+public sealed class CsvNativeIdStorageProvider : INativeIdStorageProvider
 {
-	private readonly INativeIdStorage _inMemory = new InMemoryNativeIdStorage();
-	private readonly SynchronizedDictionary<string, SynchronizedDictionary<SecurityId, object>> _buffers = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly Dictionary<string, (TransactionFileStream stream, CsvFileWriter writer)> _streams = new(StringComparer.InvariantCultureIgnoreCase);
+	private sealed class CsvNativeIdStorage : INativeIdStorage
+	{
+		private readonly CsvNativeIdStorageProvider _provider;
+		private readonly string _storageName;
+		private readonly InMemoryNativeIdStorage _inMemory;
+
+		private readonly SynchronizedDictionary<SecurityId, object> _buffer = [];
+		private TransactionFileStream _stream;
+		private CsvFileWriter _writer;
+
+		public CsvNativeIdStorage(CsvNativeIdStorageProvider provider, string storageName, InMemoryNativeIdStorage inMemory)
+		{
+			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+			_storageName = storageName ?? throw new ArgumentNullException(nameof(storageName));
+			_inMemory = inMemory ?? throw new ArgumentNullException(nameof(inMemory));
+		}
+
+		private Func<SecurityId, object, CancellationToken, ValueTask> _added;
+
+		public event Func<SecurityId, object, CancellationToken, ValueTask> Added
+		{
+			add => _added += value;
+			remove => _added -= value;
+		}
+
+		public ValueTask<(SecurityId secId, object nativeId)[]> GetAsync(CancellationToken cancellationToken)
+			=> _inMemory.GetAsync(cancellationToken);
+
+		public async ValueTask<bool> TryAddAsync(SecurityId securityId, object nativeId, bool isPersistable, CancellationToken cancellationToken)
+		{
+			var added = await _inMemory.TryAddAsync(securityId, nativeId, isPersistable, cancellationToken);
+
+			if (!added)
+				return false;
+
+			if (isPersistable)
+				Save(securityId, nativeId);
+
+			var evt = _added;
+			if (evt != null)
+				await evt.Invoke(securityId, nativeId, cancellationToken);
+
+			return true;
+		}
+
+		public async ValueTask ClearAsync(CancellationToken cancellationToken)
+		{
+			await _inMemory.ClearAsync(cancellationToken);
+			_buffer.Clear();
+			_provider._executor.Add(() =>
+			{
+				ResetStream();
+				_provider._fileSystem.DeleteFile(GetFileName());
+			});
+		}
+
+		public async ValueTask<bool> RemoveBySecurityIdAsync(SecurityId securityId, bool isPersistable, CancellationToken cancellationToken)
+		{
+			var removed = await _inMemory.RemoveBySecurityIdAsync(securityId, isPersistable, cancellationToken);
+
+			if (!removed)
+				return false;
+
+			if (isPersistable)
+				await SaveAllAsync(cancellationToken);
+
+			return true;
+		}
+
+		public async ValueTask<bool> RemoveByNativeIdAsync(object nativeId, bool isPersistable, CancellationToken cancellationToken)
+		{
+			var removed = await _inMemory.RemoveByNativeIdAsync(nativeId, isPersistable, cancellationToken);
+
+			if (!removed)
+				return false;
+
+			if (isPersistable)
+				await SaveAllAsync(cancellationToken);
+
+			return true;
+		}
+
+		public ValueTask<SecurityId?> TryGetByNativeIdAsync(object nativeId, CancellationToken cancellationToken)
+			=> _inMemory.TryGetByNativeIdAsync(nativeId, cancellationToken);
+
+		public ValueTask<object> TryGetBySecurityIdAsync(SecurityId securityId, CancellationToken cancellationToken)
+			=> _inMemory.TryGetBySecurityIdAsync(securityId, cancellationToken);
+
+		private void Save(SecurityId securityId, object nativeId)
+		{
+			_buffer[securityId] = nativeId;
+
+			_provider._executor.Add(() =>
+			{
+				var items = _buffer.SyncGet(c => c.CopyAndClear());
+				WriteItemsToFile(items, rewriteAll: false);
+			});
+		}
+
+		private async ValueTask SaveAllAsync(CancellationToken cancellationToken)
+		{
+			_buffer.Clear();
+
+			var tuples = await _inMemory.GetAsync(cancellationToken);
+			var items = tuples.Select(t => new KeyValuePair<SecurityId, object>(t.Item1, t.Item2)).ToArray();
+
+			_provider._executor.Add(() => WriteItemsToFile(items, rewriteAll: true));
+		}
+
+		private void WriteItemsToFile(KeyValuePair<SecurityId, object>[] items, bool rewriteAll)
+		{
+			var fileName = GetFileName();
+
+			if (rewriteAll)
+			{
+				ResetStream();
+
+				if (_provider._fileSystem.FileExists(fileName))
+					_provider._fileSystem.DeleteFile(fileName);
+
+				if (items.Length == 0)
+					return;
+			}
+			else if (items.Length == 0)
+			{
+				return;
+			}
+
+			var appendHeader = !_provider._fileSystem.FileExists(fileName) || _provider._fileSystem.GetFileLength(fileName) == 0;
+
+			EnsureStream();
+
+			if (appendHeader)
+				WriteHeader(_writer, items[0].Value);
+
+			foreach (var item in items)
+				WriteItem(_writer, item.Key, item.Value);
+
+			_writer.Flush();
+			_stream.Commit();
+		}
+
+		private void EnsureStream()
+		{
+			if (_stream != null)
+				return;
+
+			var fileName = GetFileName();
+			_stream = new TransactionFileStream(_provider._fileSystem, fileName, FileMode.Append);
+			_writer = _stream.CreateCsvWriter();
+		}
+
+		internal void ResetStream()
+		{
+			_writer?.Dispose();
+			_writer = null;
+
+			_stream?.Dispose();
+			_stream = null;
+		}
+
+		private string GetFileName() => Path.Combine(_provider._path, _storageName + ".csv");
+	}
+
+	private readonly SynchronizedDictionary<string, CsvNativeIdStorage> _storages = new(StringComparer.InvariantCultureIgnoreCase);
+	private readonly InMemoryNativeIdStorageProvider _inMemoryProvider = new();
 
 	private readonly string _path;
 	private readonly ChannelExecutor _executor;
 	private readonly IFileSystem _fileSystem;
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="CsvNativeIdStorage"/>.
+	/// Initializes a new instance of the <see cref="CsvNativeIdStorageProvider"/>.
 	/// </summary>
 	/// <param name="path">Path to storage.</param>
 	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
-	public CsvNativeIdStorage(string path, ChannelExecutor executor)
+	public CsvNativeIdStorageProvider(string path, ChannelExecutor executor)
 		: this(new LocalFileSystem(), path, executor)
 	{
 	}
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="CsvNativeIdStorage"/>.
+	/// Initializes a new instance of the <see cref="CsvNativeIdStorageProvider"/>.
 	/// </summary>
 	/// <param name="fileSystem"><see cref="IFileSystem"/></param>
 	/// <param name="path">Path to storage.</param>
 	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
-	public CsvNativeIdStorage(IFileSystem fileSystem, string path, ChannelExecutor executor)
+	public CsvNativeIdStorageProvider(IFileSystem fileSystem, string path, ChannelExecutor executor)
 	{
 		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 
@@ -122,63 +291,39 @@ public sealed class CsvNativeIdStorage : INativeIdStorage, IDisposable
 		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 	}
 
-	/// <summary>
-	/// Disposes the resources.
-	/// </summary>
-	public void Dispose()
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
 	{
-		_executor.Add(() =>
+		await _executor.AddAndWaitAsync(() =>
 		{
-			foreach (var (_, (stream, writer)) in _streams)
-			{
-				writer?.Dispose();
-				stream?.Dispose();
-			}
+			foreach (var storage in _storages.Values)
+				storage.ResetStream();
 
-			_streams.Clear();
+			_storages.Clear();
 		});
-	}
 
-	private (TransactionFileStream stream, CsvFileWriter writer) GetOrCreateStream(string storageName, FileMode mode)
-	{
-		var fileName = GetFileName(storageName);
-
-		if (_streams.TryGetValue(storageName, out var existing))
-		{
-			if (mode == FileMode.Append)
-				return existing;
-
-			// Need to recreate for truncation
-			existing.writer?.Dispose();
-			existing.stream?.Dispose();
-			_streams.Remove(storageName);
-		}
-
-		var stream = new TransactionFileStream(_fileSystem, fileName, mode);
-		var writer = stream.CreateCsvWriter();
-		_streams[storageName] = (stream, writer);
-		return (stream, writer);
-	}
-
-	private void ResetStream(string storageName)
-	{
-		if (_streams.TryGetValue(storageName, out var existing))
-		{
-			existing.writer?.Dispose();
-			existing.stream?.Dispose();
-			_streams.Remove(storageName);
-		}
+		GC.SuppressFinalize(this);
 	}
 
 	/// <inheritdoc />
-	public event Func<string, SecurityId, object, CancellationToken, ValueTask> Added;
+	public INativeIdStorage GetStorage(string storageName)
+	{
+		if (storageName.IsEmpty())
+			throw new ArgumentNullException(nameof(storageName));
+
+		return _storages.SafeAdd(storageName, key =>
+		{
+			var inMemory = (InMemoryNativeIdStorage)_inMemoryProvider.GetStorage(key);
+			return new CsvNativeIdStorage(this, key, inMemory);
+		});
+	}
 
 	/// <inheritdoc />
 	public async ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken)
 	{
 		_fileSystem.CreateDirectory(_path);
 
-		var errors = await _inMemory.InitAsync(cancellationToken);
+		var errors = await _inMemoryProvider.InitAsync(cancellationToken);
 
 		var files = _fileSystem.EnumerateFiles(_path, "*.csv");
 
@@ -197,105 +342,61 @@ public sealed class CsvNativeIdStorage : INativeIdStorage, IDisposable
 		return errors;
 	}
 
-	/// <inheritdoc />
-	public ValueTask<(SecurityId, object)[]> GetAsync(string storageName, CancellationToken cancellationToken)
-		=> _inMemory.GetAsync(storageName, cancellationToken);
-
-	/// <inheritdoc />
-	public async ValueTask<bool> TryAddAsync(string storageName, SecurityId securityId, object nativeId, bool isPersistable, CancellationToken cancellationToken)
+	private async ValueTask LoadFileAsync(string fileName, CancellationToken cancellationToken)
 	{
-		var added = await _inMemory.TryAddAsync(storageName, securityId, nativeId, isPersistable, cancellationToken);
-
-		if (!added)
-			return false;
-
-		if (isPersistable)
-			Save(storageName, securityId, nativeId);
-
-		var evt = Added;
-		if (evt != null)
-			await evt.Invoke(storageName, securityId, nativeId, cancellationToken);
-
-		return true;
-	}
-
-	/// <inheritdoc />
-	public async ValueTask ClearAsync(string storageName, CancellationToken cancellationToken)
-	{
-		await _inMemory.ClearAsync(storageName, cancellationToken);
-		_buffers.Remove(storageName);
-		_executor.Add(() =>
+		await Do.InvariantAsync(async () =>
 		{
-			ResetStream(storageName);
-			_fileSystem.DeleteFile(GetFileName(storageName));
-		});
-	}
-
-	/// <inheritdoc />
-	public async ValueTask<bool> RemoveBySecurityIdAsync(string storageName, SecurityId securityId, bool isPersistable, CancellationToken cancellationToken)
-	{
-		var removed = await _inMemory.RemoveBySecurityIdAsync(storageName, securityId, isPersistable, cancellationToken);
-
-		if (!removed)
-			return false;
-
-		if (isPersistable)
-			await SaveAllAsync(storageName, cancellationToken);
-
-		return true;
-	}
-
-	/// <inheritdoc />
-	public async ValueTask<bool> RemoveByNativeIdAsync(string storageName, object nativeId, bool isPersistable, CancellationToken cancellationToken)
-	{
-		var removed = await _inMemory.RemoveByNativeIdAsync(storageName, nativeId, isPersistable, cancellationToken);
-
-		if (!removed)
-			return false;
-
-		if (isPersistable)
-			await SaveAllAsync(storageName, cancellationToken);
-
-		return true;
-	}
-
-	private async ValueTask SaveAllAsync(string storageName, CancellationToken cancellationToken)
-	{
-		_buffers.Remove(storageName);
-
-		var items = await _inMemory.GetAsync(storageName, cancellationToken);
-
-		_executor.Add(() =>
-		{
-			ResetStream(storageName);
-
-			var fileName = GetFileName(storageName);
-
-			if (_fileSystem.FileExists(fileName))
-				_fileSystem.DeleteFile(fileName);
-
-			if (items.Length == 0)
+			if (!_fileSystem.FileExists(fileName))
 				return;
 
-			var (stream, writer) = GetOrCreateStream(storageName, FileMode.Append);
+			var name = Path.GetFileNameWithoutExtension(fileName);
 
-			WriteHeader(writer, items.FirstOrDefault().nativeId);
+			var pairs = new List<(SecurityId, object)>();
 
-			foreach (var (secId, nativeId) in items)
-				WriteItem(writer, secId, nativeId);
+			using (var stream = _fileSystem.OpenRead(fileName))
+			{
+				var reader = stream.CreateCsvReader(Encoding.UTF8);
 
-			writer.Flush();
-			stream.Commit();
+				await reader.NextLineAsync(cancellationToken);
+				reader.Skip(2);
+
+				var types = new List<Type>();
+
+				while ((reader.ColumnCurr + 1) < reader.ColumnCount)
+					types.Add(reader.ReadString().To<Type>());
+
+				var isTuple = types.Count > 1;
+
+				while (await reader.NextLineAsync(cancellationToken))
+				{
+					var securityId = new SecurityId
+					{
+						SecurityCode = reader.ReadString(),
+						BoardCode = reader.ReadString()
+					};
+
+					object nativeId;
+
+					if (isTuple)
+					{
+						var args = new List<object>();
+
+						for (var i = 0; i < types.Count; i++)
+							args.Add(reader.ReadString().To(types[i]));
+
+						nativeId = args.ToTuple(true);
+					}
+					else
+						nativeId = reader.ReadString().To(types[0]);
+
+					pairs.Add((securityId, nativeId));
+				}
+			}
+
+			var inMemory = (InMemoryNativeIdStorage)_inMemoryProvider.GetStorage(name);
+			inMemory.Add(pairs);
 		});
 	}
-
-	/// <inheritdoc />
-	public ValueTask<SecurityId?> TryGetByNativeIdAsync(string storageName, object nativeId, CancellationToken cancellationToken)
-		=> _inMemory.TryGetByNativeIdAsync(storageName, nativeId, cancellationToken);
-
-	/// <inheritdoc />
-	public ValueTask<object> TryGetBySecurityIdAsync(string storageName, SecurityId securityId, CancellationToken cancellationToken)
-		=> _inMemory.TryGetBySecurityIdAsync(storageName, securityId, cancellationToken);
 
 	private static object[] TryTupleToValues(object nativeId)
 	{
@@ -362,92 +463,7 @@ public sealed class CsvNativeIdStorage : INativeIdStorage, IDisposable
 		}
 	}
 
-	private void Save(string storageName, SecurityId securityId, object nativeId)
-	{
-		var buffer = _buffers.SafeAdd(storageName, _ => []);
-		buffer[securityId] = nativeId;
-
-		_executor.Add(() =>
-		{
-			var items = buffer.SyncGet(c => c.CopyAndClear());
-
-			if (items.Length == 0)
-				return;
-
-			var fileName = GetFileName(storageName);
-			var appendHeader = !_fileSystem.FileExists(fileName) || _fileSystem.GetFileLength(fileName) == 0;
-
-			var (stream, writer) = GetOrCreateStream(storageName, FileMode.Append);
-
-			if (appendHeader)
-				WriteHeader(writer, nativeId);
-
-			foreach (var item in items)
-				WriteItem(writer, item.Key, item.Value);
-
-			writer.Flush();
-			stream.Commit();
-		});
-	}
-
-	private string GetFileName(string storageName) => Path.Combine(_path, storageName + ".csv");
-
 	private static string GetTypeName(Type nativeIdType) => nativeIdType.TryGetCSharpAlias() ?? nativeIdType.GetTypeName(false);
-
-	private async ValueTask LoadFileAsync(string fileName, CancellationToken cancellationToken)
-	{
-		await Do.InvariantAsync(async () =>
-		{
-			if (!_fileSystem.FileExists(fileName))
-				return;
-
-			var name = Path.GetFileNameWithoutExtension(fileName);
-
-			var pairs = new List<(SecurityId, object)>();
-
-			using (var stream = _fileSystem.OpenRead(fileName))
-			{
-				var reader = stream.CreateCsvReader(Encoding.UTF8);
-
-				await reader.NextLineAsync(cancellationToken);
-				reader.Skip(2);
-
-				var types = new List<Type>();
-
-				while ((reader.ColumnCurr + 1) < reader.ColumnCount)
-					types.Add(reader.ReadString().To<Type>());
-
-				var isTuple = types.Count > 1;
-
-				while (await reader.NextLineAsync(cancellationToken))
-				{
-					var securityId = new SecurityId
-					{
-						SecurityCode = reader.ReadString(),
-						BoardCode = reader.ReadString()
-					};
-
-					object nativeId;
-
-					if (isTuple)
-					{
-						var args = new List<object>();
-
-						for (var i = 0; i < types.Count; i++)
-							args.Add(reader.ReadString().To(types[i]));
-
-						nativeId = args.ToTuple(true);
-					}
-					else
-						nativeId = reader.ReadString().To(types[0]);
-
-					pairs.Add((securityId, nativeId));
-				}
-			}
-
-			((InMemoryNativeIdStorage)_inMemory).Add(name, pairs);
-		});
-	}
 }
 
 /// <summary>
@@ -455,56 +471,45 @@ public sealed class CsvNativeIdStorage : INativeIdStorage, IDisposable
 /// </summary>
 public class InMemoryNativeIdStorage : INativeIdStorage
 {
-	private readonly Dictionary<string, PairSet<SecurityId, object>> _nativeIds = new(StringComparer.InvariantCultureIgnoreCase);
+	private readonly PairSet<SecurityId, object> _nativeIds = [];
 	private readonly Lock _syncRoot = new();
 
-	private Func<string, SecurityId, object, CancellationToken, ValueTask> _added;
+	private Func<SecurityId, object, CancellationToken, ValueTask> _added;
 
-	event Func<string, SecurityId, object, CancellationToken, ValueTask> INativeIdStorage.Added
+	/// <inheritdoc />
+	public event Func<SecurityId, object, CancellationToken, ValueTask> Added
 	{
 		add => _added += value;
 		remove => _added -= value;
 	}
 
-	ValueTask<Dictionary<string, Exception>> INativeIdStorage.InitAsync(CancellationToken cancellationToken)
+	internal void Add(IEnumerable<(SecurityId secId, object nativeId)> ids)
 	{
-		return new([]);
-	}
-
-	internal void Add(string storageName, IEnumerable<(SecurityId secId, object nativeId)> ids)
-	{
-		if (storageName.IsEmpty())
-			throw new ArgumentNullException(nameof(storageName));
-
 		if (ids == null)
 			throw new ArgumentNullException(nameof(ids));
 
 		using (_syncRoot.EnterScope())
 		{
-			var dict = _nativeIds.SafeAdd(storageName);
-
 			foreach (var (secId, nativeId) in ids)
 			{
 				// skip duplicates
-				if (dict.ContainsKey(secId) || dict.ContainsValue(nativeId))
+				if (_nativeIds.ContainsKey(secId) || _nativeIds.ContainsValue(nativeId))
 					continue;
 
-				dict.Add(secId, nativeId);
+				_nativeIds.Add(secId, nativeId);
 			}
 		}
 	}
 
-	async ValueTask<bool> INativeIdStorage.TryAddAsync(string storageName, SecurityId securityId, object nativeId, bool isPersistable, CancellationToken cancellationToken)
+	/// <inheritdoc />
+	public async ValueTask<bool> TryAddAsync(SecurityId securityId, object nativeId, bool isPersistable, CancellationToken cancellationToken)
 	{
-		if (storageName.IsEmpty())
-			throw new ArgumentNullException(nameof(storageName));
-
 		if (nativeId == null)
 			throw new ArgumentNullException(nameof(nativeId));
 
 		using (_syncRoot.EnterScope())
 		{
-			var added = _nativeIds.SafeAdd(storageName).TryAdd(securityId, nativeId);
+			var added = _nativeIds.TryAdd(securityId, nativeId);
 
 			if (!added)
 				return false;
@@ -512,85 +517,87 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 
 		var evt = _added;
 		if (evt != null)
-			await evt.Invoke(storageName, securityId, nativeId, cancellationToken);
+			await evt.Invoke(securityId, nativeId, cancellationToken);
 
 		return true;
 	}
 
-	ValueTask<object> INativeIdStorage.TryGetBySecurityIdAsync(string storageName, SecurityId securityId, CancellationToken cancellationToken)
+	/// <inheritdoc />
+	public ValueTask<object> TryGetBySecurityIdAsync(SecurityId securityId, CancellationToken cancellationToken)
 	{
-		if (storageName.IsEmpty())
-			throw new ArgumentNullException(nameof(storageName));
-
 		using (_syncRoot.EnterScope())
-			return new(_nativeIds.TryGetValue(storageName)?.TryGetValue(securityId));
+			return new(_nativeIds.TryGetValue(securityId));
 	}
 
-	ValueTask INativeIdStorage.ClearAsync(string storageName, CancellationToken cancellationToken)
+	/// <inheritdoc />
+	public ValueTask ClearAsync(CancellationToken cancellationToken)
 	{
-		if (storageName.IsEmpty())
-			throw new ArgumentNullException(nameof(storageName));
-
 		using (_syncRoot.EnterScope())
-			_nativeIds.Remove(storageName);
+			_nativeIds.Clear();
 
 		return default;
 	}
 
-	ValueTask<SecurityId?> INativeIdStorage.TryGetByNativeIdAsync(string storageName, object nativeId, CancellationToken cancellationToken)
+	/// <inheritdoc />
+	public ValueTask<SecurityId?> TryGetByNativeIdAsync(object nativeId, CancellationToken cancellationToken)
 	{
-		if (storageName.IsEmpty())
-			throw new ArgumentNullException(nameof(storageName));
-
 		var securityId = default(SecurityId);
 
 		using (_syncRoot.EnterScope())
 		{
-			if (_nativeIds.TryGetValue(storageName)?.TryGetKey(nativeId, out securityId) != true)
+			if (!_nativeIds.TryGetKey(nativeId, out securityId))
 				return new((SecurityId?)null);
 		}
 
 		return new(securityId);
 	}
 
-	ValueTask<(SecurityId, object)[]> INativeIdStorage.GetAsync(string storageName, CancellationToken cancellationToken)
+	/// <inheritdoc />
+	public ValueTask<(SecurityId, object)[]> GetAsync(CancellationToken cancellationToken)
 	{
-		if (storageName.IsEmpty())
-			throw new ArgumentNullException(nameof(storageName));
-
 		using (_syncRoot.EnterScope())
-			return new(_nativeIds.TryGetValue(storageName)?.Select(p => (p.Key, p.Value)).ToArray() ?? []);
+			return new(_nativeIds.Select(p => (p.Key, p.Value)).ToArray());
 	}
 
-	ValueTask<bool> INativeIdStorage.RemoveBySecurityIdAsync(string storageName, SecurityId securityId, bool isPersistable, CancellationToken cancellationToken)
+	/// <inheritdoc />
+	public ValueTask<bool> RemoveBySecurityIdAsync(SecurityId securityId, bool isPersistable, CancellationToken cancellationToken)
 	{
-		if (storageName.IsEmpty())
-			throw new ArgumentNullException(nameof(storageName));
-
 		using (_syncRoot.EnterScope())
-		{
-			var set = _nativeIds.TryGetValue(storageName);
-
-			if (set == null)
-				return new(false);
-
-			return new(set.Remove(securityId));
-		}
+			return new(_nativeIds.Remove(securityId));
 	}
 
-	ValueTask<bool> INativeIdStorage.RemoveByNativeIdAsync(string storageName, object nativeId, bool isPersistable, CancellationToken cancellationToken)
+	/// <inheritdoc />
+	public ValueTask<bool> RemoveByNativeIdAsync(object nativeId, bool isPersistable, CancellationToken cancellationToken)
+	{
+		using (_syncRoot.EnterScope())
+			return new(_nativeIds.RemoveByValue(nativeId));
+	}
+}
+
+/// <summary>
+/// In memory security native identifier storage provider.
+/// </summary>
+public class InMemoryNativeIdStorageProvider : INativeIdStorageProvider
+{
+	private readonly SynchronizedDictionary<string, InMemoryNativeIdStorage> _storages = new(StringComparer.InvariantCultureIgnoreCase);
+
+	/// <inheritdoc />
+	public ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken)
+		=> new([]);
+
+	/// <inheritdoc />
+	public INativeIdStorage GetStorage(string storageName)
 	{
 		if (storageName.IsEmpty())
 			throw new ArgumentNullException(nameof(storageName));
 
-		using (_syncRoot.EnterScope())
-		{
-			var set = _nativeIds.TryGetValue(storageName);
+		return _storages.SafeAdd(storageName, _ => new InMemoryNativeIdStorage());
+	}
 
-			if (set == null)
-				return new(false);
-
-			return new(set.RemoveByValue(nativeId));
-		}
+	/// <inheritdoc />
+	public ValueTask DisposeAsync()
+	{
+		_storages.Clear();
+		return default;
 	}
 }

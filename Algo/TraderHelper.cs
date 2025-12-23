@@ -483,23 +483,23 @@ public static partial class TraderHelper
 	/// To get the instrument by the system identifier.
 	/// </summary>
 	/// <param name="provider">The provider of information about instruments.</param>
-	/// <param name="nativeIdStorage">Security native identifier storage.</param>
+	/// <param name="nativeIdStorageProvider">Security native identifier storage provider.</param>
 	/// <param name="storageName">Storage name.</param>
 	/// <param name="nativeId">Native (internal) trading system security id.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
-	public static async ValueTask<Security> LookupByNativeIdAsync(this ISecurityProvider provider, INativeIdStorage nativeIdStorage, string storageName, object nativeId, CancellationToken cancellationToken = default)
+	public static async ValueTask<Security> LookupByNativeIdAsync(this ISecurityProvider provider, INativeIdStorageProvider nativeIdStorageProvider, string storageName, object nativeId, CancellationToken cancellationToken = default)
 	{
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
 
-		if (nativeIdStorage == null)
-			throw new ArgumentNullException(nameof(nativeIdStorage));
+		if (nativeIdStorageProvider == null)
+			throw new ArgumentNullException(nameof(nativeIdStorageProvider));
 
 		if (nativeId == null)
 			throw new ArgumentNullException(nameof(nativeId));
 
-		var secId = await nativeIdStorage.TryGetByNativeIdAsync(storageName, nativeId, cancellationToken);
+		var secId = await nativeIdStorageProvider.GetStorage(storageName).TryGetByNativeIdAsync(nativeId, cancellationToken);
 
 		return secId == null ? null : await provider.LookupByIdAsync(secId.Value, cancellationToken);
 	}

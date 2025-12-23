@@ -1376,9 +1376,9 @@ static class Helper
 		return isMls ? dt.Truncate(TimeSpan.FromMilliseconds(1)) : dt;
 	}
 
-	public static INativeIdStorage CreateNativeIdStorage()
+	public static INativeIdStorageProvider CreateNativeIdStorage()
 	{
-		return new InMemoryNativeIdStorage();
+		return new InMemoryNativeIdStorageProvider();
 	}
 
 	public static IEnumerable<TCandle> IsAllFinished<TCandle>(this IEnumerable<TCandle> candles)

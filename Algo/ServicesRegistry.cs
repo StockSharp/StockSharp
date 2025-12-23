@@ -129,14 +129,14 @@ public static class ServicesRegistry
 	public static IEntityRegistry TryEntityRegistry => ConfigManager.TryGetService<IEntityRegistry>();
 
 	/// <summary>
-	/// Security native identifier storage.
+	/// Security native identifier storage provider.
 	/// </summary>
-	public static INativeIdStorage TryNativeIdStorage => ConfigManager.TryGetService<INativeIdStorage>();
+	public static INativeIdStorageProvider TryNativeIdStorage => ConfigManager.TryGetService<INativeIdStorageProvider>();
 
 	/// <summary>
-	/// Security native identifier storage.
+	/// Security native identifier storage provider.
 	/// </summary>
-	public static INativeIdStorage NativeIdStorage => ConfigManager.GetService<INativeIdStorage>();
+	public static INativeIdStorageProvider NativeIdStorage => ConfigManager.GetService<INativeIdStorageProvider>();
 
 	/// <summary>
 	/// Extended info storage.

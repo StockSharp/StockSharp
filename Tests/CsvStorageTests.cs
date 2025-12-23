@@ -1,6 +1,7 @@
 namespace StockSharp.Tests;
 
 using System.Collections.Concurrent;
+using System.Text;
 
 using Ecng.Common;
 
@@ -423,19 +424,20 @@ public class CsvStorageTests : BaseTestClass
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
 		var (fs, path) = CreateMemoryFs("nativeids");
-		var storage = new CsvNativeIdStorage(fs, path, executor);
+		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
-		await storage.InitAsync(token);
+		await provider.InitAsync(token);
+		var storage = provider.GetStorage("TestStorage");
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 		var nativeId = "12345";
 
-		var added = await storage.TryAddAsync("TestStorage", secId, nativeId, true, token);
+		var added = await storage.TryAddAsync(secId, nativeId, true, token);
 		await FlushAsync(executor, token);
 
 		IsTrue(added);
-		AreEqual(secId, await storage.TryGetByNativeIdAsync("TestStorage", nativeId, token));
-		AreEqual(nativeId, await storage.TryGetBySecurityIdAsync("TestStorage", secId, token));
+		AreEqual(secId, await storage.TryGetByNativeIdAsync(nativeId, token));
+		AreEqual(nativeId, await storage.TryGetBySecurityIdAsync(secId, token));
 	}
 
 	[TestMethod]
@@ -449,16 +451,16 @@ public class CsvStorageTests : BaseTestClass
 		var nativeId = "12345";
 
 		// Create and save
-		var storage1 = new CsvNativeIdStorage(fs, path, executor);
-		await storage1.InitAsync(token);
-		await storage1.TryAddAsync("TestStorage", secId, nativeId, true, token);
+		var provider1 = new CsvNativeIdStorageProvider(fs, path, executor);
+		await provider1.InitAsync(token);
+		await provider1.GetStorage("TestStorage").TryAddAsync(secId, nativeId, true, token);
 		await FlushAsync(executor, token);
 
 		// Load in new instance
-		var storage2 = new CsvNativeIdStorage(fs, path, executor);
-		await storage2.InitAsync(token);
+		var provider2 = new CsvNativeIdStorageProvider(fs, path, executor);
+		await provider2.InitAsync(token);
 
-		AreEqual(secId, await storage2.TryGetByNativeIdAsync("TestStorage", nativeId, token));
+		AreEqual(secId, await provider2.GetStorage("TestStorage").TryGetByNativeIdAsync(nativeId, token));
 	}
 
 	[TestMethod]
@@ -467,18 +469,19 @@ public class CsvStorageTests : BaseTestClass
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
 		var (fs, path) = CreateMemoryFs("nativeids");
-		var storage = new CsvNativeIdStorage(fs, path, executor);
+		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
-		await storage.InitAsync(token);
+		await provider.InitAsync(token);
+		var storage = provider.GetStorage("TestStorage");
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
-		await storage.TryAddAsync("TestStorage", secId, "12345", true, token);
+		await storage.TryAddAsync(secId, "12345", true, token);
 		await FlushAsync(executor, token);
 
-		await storage.ClearAsync("TestStorage", token);
+		await storage.ClearAsync(token);
 		await FlushAsync(executor, token);
 
-		var items = await storage.GetAsync("TestStorage", token);
+		var items = await storage.GetAsync(token);
 		AreEqual(0, items.Length);
 	}
 
@@ -488,23 +491,24 @@ public class CsvStorageTests : BaseTestClass
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
 		var (fs, path) = CreateMemoryFs("nativeids");
-		var storage = new CsvNativeIdStorage(fs, path, executor);
+		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
-		await storage.InitAsync(token);
+		await provider.InitAsync(token);
+		var storage = provider.GetStorage("TestStorage");
 
 		var secId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 		var secId2 = new SecurityId { SecurityCode = "MSFT", BoardCode = "NYSE" };
 
-		await storage.TryAddAsync("TestStorage", secId1, "12345", true, token);
-		await storage.TryAddAsync("TestStorage", secId2, "67890", true, token);
+		await storage.TryAddAsync(secId1, "12345", true, token);
+		await storage.TryAddAsync(secId2, "67890", true, token);
 		await FlushAsync(executor, token);
 
-		var removed = await storage.RemoveBySecurityIdAsync("TestStorage", secId1, true, token);
+		var removed = await storage.RemoveBySecurityIdAsync(secId1, true, token);
 		await FlushAsync(executor, token);
 
 		IsTrue(removed);
-		IsNull(await storage.TryGetBySecurityIdAsync("TestStorage", secId1, token));
-		IsNotNull(await storage.TryGetBySecurityIdAsync("TestStorage", secId2, token));
+		IsNull(await storage.TryGetBySecurityIdAsync(secId1, token));
+		IsNotNull(await storage.TryGetBySecurityIdAsync(secId2, token));
 	}
 
 	[TestMethod]
@@ -513,23 +517,24 @@ public class CsvStorageTests : BaseTestClass
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
 		var (fs, path) = CreateMemoryFs("nativeids");
-		var storage = new CsvNativeIdStorage(fs, path, executor);
+		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
-		await storage.InitAsync(token);
+		await provider.InitAsync(token);
+		var storage = provider.GetStorage("TestStorage");
 
 		var secId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 		var secId2 = new SecurityId { SecurityCode = "MSFT", BoardCode = "NYSE" };
 
-		await storage.TryAddAsync("TestStorage", secId1, "12345", true, token);
-		await storage.TryAddAsync("TestStorage", secId2, "67890", true, token);
+		await storage.TryAddAsync(secId1, "12345", true, token);
+		await storage.TryAddAsync(secId2, "67890", true, token);
 		await FlushAsync(executor, token);
 
-		var removed = await storage.RemoveByNativeIdAsync("TestStorage", "12345", true, token);
+		var removed = await storage.RemoveByNativeIdAsync("12345", true, token);
 		await FlushAsync(executor, token);
 
 		IsTrue(removed);
-		IsNull(await storage.TryGetByNativeIdAsync("TestStorage", "12345", token));
-		IsNotNull(await storage.TryGetByNativeIdAsync("TestStorage", "67890", token));
+		IsNull(await storage.TryGetByNativeIdAsync("12345", token));
+		IsNotNull(await storage.TryGetByNativeIdAsync("67890", token));
 	}
 
 	[TestMethod]
@@ -538,18 +543,19 @@ public class CsvStorageTests : BaseTestClass
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
 		var (fs, path) = CreateMemoryFs("nativeids");
-		var storage = new CsvNativeIdStorage(fs, path, executor);
+		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
-		await storage.InitAsync(token);
+		await provider.InitAsync(token);
+		var storage = provider.GetStorage("TestStorage");
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 		var nativeId = ("Exchange1", 12345L);
 
-		var added = await storage.TryAddAsync("TestStorage", secId, nativeId, true, token);
+		var added = await storage.TryAddAsync(secId, nativeId, true, token);
 		await FlushAsync(executor, token);
 
 		IsTrue(added);
-		AreEqual(secId, await storage.TryGetByNativeIdAsync("TestStorage", nativeId, token));
+		AreEqual(secId, await storage.TryGetByNativeIdAsync(nativeId, token));
 	}
 
 	[TestMethod]
@@ -558,18 +564,17 @@ public class CsvStorageTests : BaseTestClass
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
 		var (fs, path) = CreateMemoryFs("nativeids");
-		var storage = new CsvNativeIdStorage(fs, path, executor);
+		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
-		await storage.InitAsync(token);
+		await provider.InitAsync(token);
+		var storage = provider.GetStorage("TestStorage");
 
-		string eventStorageName = null;
 		SecurityId eventSecId = default;
 		object eventNativeId = null;
 		var eventFired = false;
 
-		storage.Added += (storageName, secId, nativeId, ct) =>
+		storage.Added += (secId, nativeId, ct) =>
 		{
-			eventStorageName = storageName;
 			eventSecId = secId;
 			eventNativeId = nativeId;
 			eventFired = true;
@@ -577,11 +582,10 @@ public class CsvStorageTests : BaseTestClass
 		};
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
-		await storage.TryAddAsync("TestStorage", secId, "12345", true, token);
+		await storage.TryAddAsync(secId, "12345", true, token);
 		await FlushAsync(executor, token);
 
 		IsTrue(eventFired);
-		AreEqual("TestStorage", eventStorageName);
 		AreEqual(secId, eventSecId);
 		AreEqual("12345", eventNativeId);
 	}
@@ -596,17 +600,17 @@ public class CsvStorageTests : BaseTestClass
 		var (fs, path) = CreateMemoryFs("nativeids");
 		var executor = CreateExecutor(token);
 
-		using var storage = new CsvNativeIdStorage(fs, path, executor);
-		await storage.InitAsync(token);
+		await using var provider = new CsvNativeIdStorageProvider(fs, path, executor);
+		await provider.InitAsync(token);
 
 		var secIdA = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
 		var secIdB = new SecurityId { SecurityCode = "MSFT", BoardCode = "NYSE" };
 
 		// Add to storage "AdapterA"
-		await storage.TryAddAsync("AdapterA", secIdA, 12345L, true, token);
+		await provider.GetStorage("AdapterA").TryAddAsync(secIdA, 12345L, true, token);
 
 		// Add to storage "AdapterB"
-		await storage.TryAddAsync("AdapterB", secIdB, 67890L, true, token);
+		await provider.GetStorage("AdapterB").TryAddAsync(secIdB, 67890L, true, token);
 
 		// Wait for executor to process
 		await FlushAsync(executor, token);
@@ -640,15 +644,15 @@ public class CsvStorageTests : BaseTestClass
 		var (fs, path) = CreateMemoryFs("nativeids");
 		var executor = CreateExecutor(token);
 
-		using var storage = new CsvNativeIdStorage(fs, path, executor);
-		await storage.InitAsync(token);
+		await using var provider = new CsvNativeIdStorageProvider(fs, path, executor);
+		await provider.InitAsync(token);
 
 		// Add items to different storages in interleaved order
-		await storage.TryAddAsync("Storage1", new SecurityId { SecurityCode = "S1A", BoardCode = "B1" }, 1L, true, token);
-		await storage.TryAddAsync("Storage2", new SecurityId { SecurityCode = "S2A", BoardCode = "B2" }, 2L, true, token);
-		await storage.TryAddAsync("Storage1", new SecurityId { SecurityCode = "S1B", BoardCode = "B1" }, 3L, true, token);
-		await storage.TryAddAsync("Storage2", new SecurityId { SecurityCode = "S2B", BoardCode = "B2" }, 4L, true, token);
-		await storage.TryAddAsync("Storage3", new SecurityId { SecurityCode = "S3A", BoardCode = "B3" }, 5L, true, token);
+		await provider.GetStorage("Storage1").TryAddAsync(new SecurityId { SecurityCode = "S1A", BoardCode = "B1" }, 1L, true, token);
+		await provider.GetStorage("Storage2").TryAddAsync(new SecurityId { SecurityCode = "S2A", BoardCode = "B2" }, 2L, true, token);
+		await provider.GetStorage("Storage1").TryAddAsync(new SecurityId { SecurityCode = "S1B", BoardCode = "B1" }, 3L, true, token);
+		await provider.GetStorage("Storage2").TryAddAsync(new SecurityId { SecurityCode = "S2B", BoardCode = "B2" }, 4L, true, token);
+		await provider.GetStorage("Storage3").TryAddAsync(new SecurityId { SecurityCode = "S3A", BoardCode = "B3" }, 5L, true, token);
 
 		// Wait for executor
 		await FlushAsync(executor, token);
@@ -690,27 +694,30 @@ public class CsvStorageTests : BaseTestClass
 		var (fs, path) = CreateMemoryFs("nativeids");
 		var executor = CreateExecutor(token);
 
-		using var storage = new CsvNativeIdStorage(fs, path, executor);
-		await storage.InitAsync(token);
+		await using var provider = new CsvNativeIdStorageProvider(fs, path, executor);
+		await provider.InitAsync(token);
+
+		var storageA = provider.GetStorage("StorageA");
+		var storageB = provider.GetStorage("StorageB");
 
 		// Add to both storages
-		await storage.TryAddAsync("StorageA", new SecurityId { SecurityCode = "AAA", BoardCode = "BA" }, 100L, true, token);
-		await storage.TryAddAsync("StorageB", new SecurityId { SecurityCode = "BBB", BoardCode = "BB" }, 200L, true, token);
+		await storageA.TryAddAsync(new SecurityId { SecurityCode = "AAA", BoardCode = "BA" }, 100L, true, token);
+		await storageB.TryAddAsync(new SecurityId { SecurityCode = "BBB", BoardCode = "BB" }, 200L, true, token);
 
 		await FlushAsync(executor, token);
 
 		// Clear only StorageA
-		await storage.ClearAsync("StorageA", token);
+		await storageA.ClearAsync(token);
 
 		await FlushAsync(executor, token);
 
 		// StorageB should still have its data
-		var itemsB = await storage.GetAsync("StorageB", token);
+		var itemsB = await storageB.GetAsync(token);
 		AreEqual(1, itemsB.Length, "StorageB should still have 1 item after clearing StorageA");
 		AreEqual("BBB", itemsB[0].Item1.SecurityCode);
 
 		// StorageA should be empty
-		var itemsA = await storage.GetAsync("StorageA", token);
+		var itemsA = await storageA.GetAsync(token);
 		AreEqual(0, itemsA.Length, "StorageA should be empty after clear");
 	}
 
@@ -836,16 +843,16 @@ public class CsvStorageTests : BaseTestClass
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
 		var (fs, path) = CreateMemoryFs("nativeids");
-		var storage = new CsvNativeIdStorage(fs, path, executor);
+		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
-		await storage.InitAsync(token);
+		await provider.InitAsync(token);
 
 		// Use different SecurityId for each storage to avoid buffer race condition
 		var secId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 		var secId2 = new SecurityId { SecurityCode = "MSFT", BoardCode = "NASDAQ" };
-		await storage.TryAddAsync("Exchange1", secId1, "111", true, token);
+		await provider.GetStorage("Exchange1").TryAddAsync(secId1, "111", true, token);
 		await FlushAsync(executor, token);
-		await storage.TryAddAsync("Exchange2", secId2, "222", true, token);
+		await provider.GetStorage("Exchange2").TryAddAsync(secId2, "222", true, token);
 		await FlushAsync(executor, token);
 
 		// Each storage name should create separate file
