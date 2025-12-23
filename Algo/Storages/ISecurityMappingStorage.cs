@@ -230,6 +230,7 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 
 	private readonly string _path;
 	private readonly ChannelExecutor _executor;
+	private readonly IFileSystem _fileSystem;
 
 	/// <inheritdoc />
 	public event Action<string, SecurityIdMapping> Changed;
@@ -240,7 +241,20 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 	/// <param name="path">Path to storage.</param>
 	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
 	public CsvSecurityMappingStorage(string path, ChannelExecutor executor)
+		: this(new LocalFileSystem(), path, executor)
 	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CsvSecurityMappingStorage"/>.
+	/// </summary>
+	/// <param name="fileSystem"><see cref="IFileSystem"/></param>
+	/// <param name="path">Path to storage.</param>
+	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	public CsvSecurityMappingStorage(IFileSystem fileSystem, string path, ChannelExecutor executor)
+	{
+		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+
 		if (path == null)
 			throw new ArgumentNullException(nameof(path));
 
@@ -251,11 +265,11 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 	/// <inheritdoc />
 	public async ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken)
 	{
-		Directory.CreateDirectory(_path);
+		_fileSystem.CreateDirectory(_path);
 
 		var errors = await _inMemory.InitAsync(cancellationToken);
 
-		var files = Directory.GetFiles(_path, "*.csv");
+		var files = _fileSystem.EnumerateFiles(_path, "*.csv");
 
 		foreach (var fileName in files)
 		{
@@ -328,12 +342,12 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 	{
 		await Do.InvariantAsync(async () =>
 		{
-			if (!File.Exists(fileName))
+			if (!_fileSystem.FileExists(fileName))
 				return;
 
 			var pairs = new List<(SecurityId, SecurityId)>();
 
-			using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+			using (var stream = _fileSystem.OpenRead(fileName))
 			{
 				var reader = stream.CreateCsvReader(Encoding.UTF8);
 
@@ -366,10 +380,11 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 		{
 			var fileName = Path.Combine(_path, name + ".csv");
 
-			var appendHeader = overwrite || !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
+			var appendHeader = overwrite || !_fileSystem.FileExists(fileName) || _fileSystem.GetFileLength(fileName) == 0;
 			var mode = overwrite ? FileMode.Create : FileMode.Append;
 
-			using var writer = new TransactionFileStream(fileName, mode).CreateCsvWriter();
+			using var stream = new TransactionFileStream(_fileSystem, fileName, mode);
+			using var writer = stream.CreateCsvWriter();
 
 			if (appendHeader)
 			{
@@ -392,6 +407,9 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 					mapping.AdapterId.BoardCode,
 				]);
 			}
+
+			writer.Flush();
+			stream.Commit();
 		});
 	}
 }

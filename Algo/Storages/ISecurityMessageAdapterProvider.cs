@@ -112,6 +112,7 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 
 	private readonly string _fileName;
 	private readonly ChannelExecutor _executor;
+	private readonly IFileSystem _fileSystem;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CsvSecurityMessageAdapterProvider"/>.
@@ -119,7 +120,20 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 	/// <param name="fileName">File name.</param>
 	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
 	public CsvSecurityMessageAdapterProvider(string fileName, ChannelExecutor executor)
+		: this(new LocalFileSystem(), fileName, executor)
 	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CsvSecurityMessageAdapterProvider"/>.
+	/// </summary>
+	/// <param name="fileSystem"><see cref="IFileSystem"/></param>
+	/// <param name="fileName">File name.</param>
+	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	public CsvSecurityMessageAdapterProvider(IFileSystem fileSystem, string fileName, ChannelExecutor executor)
+	{
+		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+
 		if (fileName.IsEmpty())
 			throw new ArgumentNullException(nameof(fileName));
 
@@ -142,7 +156,7 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 	{
 		await _inMemory.InitAsync(cancellationToken);
 
-		if (File.Exists(_fileName))
+		if (_fileSystem.FileExists(_fileName))
 			await LoadAsync(cancellationToken);
 	}
 
@@ -183,7 +197,7 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 
 	private async ValueTask LoadAsync(CancellationToken cancellationToken)
 	{
-		using var stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read);
+		using var stream = _fileSystem.OpenRead(_fileName);
 
 		var reader = stream.CreateCsvReader(Encoding.UTF8);
 
@@ -214,10 +228,11 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 	{
 		_executor.Add(() =>
 		{
-			var appendHeader = overwrite || !File.Exists(_fileName) || new FileInfo(_fileName).Length == 0;
+			var appendHeader = overwrite || !_fileSystem.FileExists(_fileName) || _fileSystem.GetFileLength(_fileName) == 0;
 			var mode = overwrite ? FileMode.Create : FileMode.Append;
 
-			using var writer = new TransactionFileStream(_fileName, mode).CreateCsvWriter();
+			using var stream = new TransactionFileStream(_fileSystem, _fileName, mode);
+			using var writer = stream.CreateCsvWriter();
 
 			if (appendHeader)
 			{
@@ -244,6 +259,9 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 					pair.Value.To<string>()
 				]);
 			}
+
+			writer.Flush();
+			stream.Commit();
 		});
 	}
 }

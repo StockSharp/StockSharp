@@ -38,7 +38,7 @@ public interface ICsvEntityList
 /// </summary>
 /// <typeparam name="TKey">Key type.</typeparam>
 /// <typeparam name="TEntity">Entity type.</typeparam>
-public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, IStorageEntityList<TEntity>, ICsvEntityList
+public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, IStorageEntityList<TEntity>, ICsvEntityList, IDisposable
 	where TEntity : class
 {
 	private readonly CachedSynchronizedDictionary<TKey, TEntity> _items = [];
@@ -46,7 +46,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	private readonly Lock _copySync = new();
 	private byte[] _copy;
 
-	private ChannelExecutor _executor;
+	private readonly ChannelExecutor _executor;
+	private TransactionFileStream _stream;
+	private CsvFileWriter _writer;
 
 	/// <summary>
 	/// The CSV storage of trading objects.
@@ -71,6 +73,47 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 
 		FileName = Path.Combine(Registry.Path, fileName);
+	}
+
+	/// <summary>
+	/// Disposes the resources.
+	/// </summary>
+	public void Dispose()
+	{
+		_executor.Add(() =>
+		{
+			_writer?.Dispose();
+			_writer = null;
+
+			_stream?.Dispose();
+			_stream = null;
+		});
+
+		GC.SuppressFinalize(this);
+	}
+
+	private void EnsureStream()
+	{
+		if (_stream != null)
+			return;
+
+		var dir = Path.GetDirectoryName(FileName);
+		Directory.CreateDirectory(dir);
+
+		if (!File.Exists(FileName))
+			new FileStream(FileName, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read).Dispose();
+
+		_stream = new TransactionFileStream(FileName, FileMode.Append);
+		_writer = _stream.CreateCsvWriter(Registry.Encoding);
+	}
+
+	private void ResetStream()
+	{
+		_writer?.Dispose();
+		_writer = null;
+
+		_stream?.Dispose();
+		_stream = null;
 	}
 
 	/// <inheritdoc />
@@ -244,11 +287,11 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			var itemCopy = item;
 			_executor.Add(() =>
 			{
-				using var stream = new TransactionFileStream(FileName, FileMode.OpenOrCreate);
-				stream.Seek(0, SeekOrigin.End);
-				using var writer = stream.CreateCsvWriter(Registry.Encoding);
+				EnsureStream();
 				ResetCopy();
-				Write(writer, itemCopy);
+				Write(_writer, itemCopy);
+				_writer.Flush();
+				_stream.Commit();
 			});
 		}
 
@@ -304,10 +347,17 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 			_executor.Add(() =>
 			{
-				using var stream = new TransactionFileStream(FileName, FileMode.Create);
-				using var writer = stream.CreateCsvWriter(Registry.Encoding);
+				ResetStream();
+
+				var dir = Path.GetDirectoryName(FileName);
+				Directory.CreateDirectory(dir);
+
+				_stream = new TransactionFileStream(FileName, FileMode.Create);
+				_writer = _stream.CreateCsvWriter(Registry.Encoding);
 				ResetCopy();
-				writer.Truncate();
+				_writer.Truncate();
+				_writer.Flush();
+				_stream.Commit();
 			});
 		}
 	}
@@ -321,14 +371,22 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		var valuesCopy = values;
 		_executor.Add(() =>
 		{
-			using var stream = new TransactionFileStream(FileName, FileMode.Create);
-			using var writer = stream.CreateCsvWriter(Registry.Encoding);
+			ResetStream();
+
+			var dir = Path.GetDirectoryName(FileName);
+			Directory.CreateDirectory(dir);
+
+			_stream = new TransactionFileStream(FileName, FileMode.Create);
+			_writer = _stream.CreateCsvWriter(Registry.Encoding);
 			ResetCopy();
 
-			writer.Truncate();
+			_writer.Truncate();
 
 			foreach (var item in valuesCopy)
-				Write(writer, item);
+				Write(_writer, item);
+
+			_writer.Flush();
+			_stream.Commit();
 		});
 	}
 

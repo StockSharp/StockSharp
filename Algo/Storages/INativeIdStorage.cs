@@ -85,13 +85,15 @@ public interface INativeIdStorage
 /// <summary>
 /// CSV security native identifier storage.
 /// </summary>
-public sealed class CsvNativeIdStorage : INativeIdStorage
+public sealed class CsvNativeIdStorage : INativeIdStorage, IDisposable
 {
 	private readonly INativeIdStorage _inMemory = new InMemoryNativeIdStorage();
 	private readonly SynchronizedDictionary<SecurityId, object> _buffer = [];
+	private readonly Dictionary<string, (TransactionFileStream stream, CsvFileWriter writer)> _streams = new(StringComparer.InvariantCultureIgnoreCase);
 
 	private readonly string _path;
 	private readonly ChannelExecutor _executor;
+	private readonly IFileSystem _fileSystem;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CsvNativeIdStorage"/>.
@@ -99,12 +101,73 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	/// <param name="path">Path to storage.</param>
 	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
 	public CsvNativeIdStorage(string path, ChannelExecutor executor)
+		: this(new LocalFileSystem(), path, executor)
 	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CsvNativeIdStorage"/>.
+	/// </summary>
+	/// <param name="fileSystem"><see cref="IFileSystem"/></param>
+	/// <param name="path">Path to storage.</param>
+	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	public CsvNativeIdStorage(IFileSystem fileSystem, string path, ChannelExecutor executor)
+	{
+		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+
 		if (path == null)
 			throw new ArgumentNullException(nameof(path));
 
 		_path = path.ToFullPath();
 		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
+	}
+
+	/// <summary>
+	/// Disposes the resources.
+	/// </summary>
+	public void Dispose()
+	{
+		_executor.Add(() =>
+		{
+			foreach (var (_, (stream, writer)) in _streams)
+			{
+				writer?.Dispose();
+				stream?.Dispose();
+			}
+
+			_streams.Clear();
+		});
+	}
+
+	private (TransactionFileStream stream, CsvFileWriter writer) GetOrCreateStream(string storageName, FileMode mode)
+	{
+		var fileName = GetFileName(storageName);
+
+		if (_streams.TryGetValue(storageName, out var existing))
+		{
+			if (mode == FileMode.Append)
+				return existing;
+
+			// Need to recreate for truncation
+			existing.writer?.Dispose();
+			existing.stream?.Dispose();
+			_streams.Remove(storageName);
+		}
+
+		var stream = new TransactionFileStream(_fileSystem, fileName, mode);
+		var writer = stream.CreateCsvWriter();
+		_streams[storageName] = (stream, writer);
+		return (stream, writer);
+	}
+
+	private void ResetStream(string storageName)
+	{
+		if (_streams.TryGetValue(storageName, out var existing))
+		{
+			existing.writer?.Dispose();
+			existing.stream?.Dispose();
+			_streams.Remove(storageName);
+		}
 	}
 
 	/// <inheritdoc />
@@ -113,11 +176,11 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	/// <inheritdoc />
 	public async ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken)
 	{
-		Directory.CreateDirectory(_path);
+		_fileSystem.CreateDirectory(_path);
 
 		var errors = await _inMemory.InitAsync(cancellationToken);
 
-		var files = Directory.GetFiles(_path, "*.csv");
+		var files = _fileSystem.EnumerateFiles(_path, "*.csv");
 
 		foreach (var fileName in files)
 		{
@@ -161,7 +224,11 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		await _inMemory.ClearAsync(storageName, cancellationToken);
 		_buffer.Clear();
-		_executor.Add(() => File.Delete(GetFileName(storageName)));
+		_executor.Add(() =>
+		{
+			ResetStream(storageName);
+			_fileSystem.DeleteFile(GetFileName(storageName));
+		});
 	}
 
 	/// <inheritdoc />
@@ -196,23 +263,29 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		_buffer.Clear();
 
-		_executor.Add(async () =>
+		var items = await _inMemory.GetAsync(storageName, cancellationToken);
+
+		_executor.Add(() =>
 		{
+			ResetStream(storageName);
+
 			var fileName = GetFileName(storageName);
 
-			File.Delete(fileName);
-
-			var items = await _inMemory.GetAsync(storageName, cancellationToken);
+			if (_fileSystem.FileExists(fileName))
+				_fileSystem.DeleteFile(fileName);
 
 			if (items.Length == 0)
 				return;
 
-			using var writer = new TransactionFileStream(fileName, FileMode.Append).CreateCsvWriter();
+			var (stream, writer) = GetOrCreateStream(storageName, FileMode.Append);
 
 			WriteHeader(writer, items.FirstOrDefault().nativeId);
 
 			foreach (var (secId, nativeId) in items)
 				WriteItem(writer, secId, nativeId);
+
+			writer.Flush();
+			stream.Commit();
 		});
 	}
 
@@ -301,16 +374,18 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 				return;
 
 			var fileName = GetFileName(storageName);
+			var appendHeader = !_fileSystem.FileExists(fileName) || _fileSystem.GetFileLength(fileName) == 0;
 
-			var appendHeader = !File.Exists(fileName) || new FileInfo(fileName).Length == 0;
-
-			using var writer = new TransactionFileStream(fileName, FileMode.Append).CreateCsvWriter();
+			var (stream, writer) = GetOrCreateStream(storageName, FileMode.Append);
 
 			if (appendHeader)
 				WriteHeader(writer, nativeId);
 
 			foreach (var item in items)
 				WriteItem(writer, item.Key, item.Value);
+
+			writer.Flush();
+			stream.Commit();
 		});
 	}
 
@@ -322,14 +397,14 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		await Do.InvariantAsync(async () =>
 		{
-			if (!File.Exists(fileName))
+			if (!_fileSystem.FileExists(fileName))
 				return;
 
 			var name = Path.GetFileNameWithoutExtension(fileName);
 
 			var pairs = new List<(SecurityId, object)>();
 
-			using (var stream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+			using (var stream = _fileSystem.OpenRead(fileName))
 			{
 				var reader = stream.CreateCsvReader(Encoding.UTF8);
 

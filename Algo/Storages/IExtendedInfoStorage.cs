@@ -119,6 +119,8 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 		private readonly Dictionary<SecurityId, Dictionary<string, object>> _cache = [];
 		private readonly ChannelExecutor _executor;
 
+		private IFileSystem FileSystem => _storage._fileSystem;
+
 		public CsvExtendedInfoStorageItem(CsvExtendedInfoStorage storage, string fileName, ChannelExecutor executor)
 		{
 			if (fileName.IsEmpty())
@@ -145,11 +147,11 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 		public async ValueTask InitAsync(CancellationToken cancellationToken)
 		{
-			if (File.Exists(_fileName))
+			if (FileSystem.FileExists(_fileName))
 			{
 				await Do.InvariantAsync(async () =>
 				{
-					using var stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read);
+					using var stream = FileSystem.OpenRead(_fileName);
 
 					var reader = stream.CreateCsvReader(Encoding.UTF8);
 
@@ -214,7 +216,8 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
 
-			using var writer = new TransactionFileStream(_fileName, FileMode.Create).CreateCsvWriter();
+			using var stream = new TransactionFileStream(FileSystem, _fileName, FileMode.Create);
+			using var writer = stream.CreateCsvWriter();
 
 			writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.name)));
 			writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.type)).Select(t => t.TryGetCSharpAlias() ?? t.GetTypeName(false)));
@@ -223,13 +226,16 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			{
 				writer.WriteRow(new[] { secId.ToStringId() }.Concat(_fields.Select(f => fields.TryGetValue(f.name)?.To<string>())));
 			}
+
+			writer.Flush();
+			stream.Commit();
 		}
 
 		public void Delete()
 		{
 			_executor.Add(() =>
 			{
-				File.Delete(_fileName);
+				FileSystem.DeleteFile(_fileName);
 			});
 
 			_storage._deleted?.Invoke(this);
@@ -306,6 +312,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 	private readonly string _path;
 	private readonly ChannelExecutor _executor;
+	private readonly IFileSystem _fileSystem;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CsvExtendedInfoStorage"/>.
@@ -313,13 +320,26 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 	/// <param name="path">Path to storage.</param>
 	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
 	public CsvExtendedInfoStorage(string path, ChannelExecutor executor)
+		: this(new LocalFileSystem(), path, executor)
 	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CsvExtendedInfoStorage"/>.
+	/// </summary>
+	/// <param name="fileSystem"><see cref="IFileSystem"/></param>
+	/// <param name="path">Path to storage.</param>
+	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	public CsvExtendedInfoStorage(IFileSystem fileSystem, string path, ChannelExecutor executor)
+	{
+		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+
 		if (path == null)
 			throw new ArgumentNullException(nameof(path));
 
 		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 		_path = path.ToFullPath();
-		Directory.CreateDirectory(path);
+		_fileSystem.CreateDirectory(path);
 	}
 
 	async ValueTask<IExtendedInfoStorageItem> IExtendedInfoStorage.CreateAsync(string storageName, IEnumerable<(string, Type)> fields, CancellationToken cancellationToken)
@@ -396,7 +416,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 	{
 		var errors = new Dictionary<IExtendedInfoStorageItem, Exception>();
 
-		foreach (var fileName in Directory.GetFiles(_path, "*.csv"))
+		foreach (var fileName in _fileSystem.EnumerateFiles(_path, "*.csv"))
 		{
 			var item = new CsvExtendedInfoStorageItem(this, fileName, _executor);
 
