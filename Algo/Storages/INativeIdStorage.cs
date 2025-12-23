@@ -196,14 +196,13 @@ public sealed class CsvNativeIdStorage : INativeIdStorage
 	{
 		_buffer.Clear();
 
-		_executor.Add(() =>
+		_executor.Add(async () =>
 		{
-			var fileName = GetFileName(storageName);
 			var fileName = GetFileName(storageName);
 
 			File.Delete(fileName);
 
-			var items = _inMemory.Get(storageName);
+			var items = await _inMemory.GetAsync(storageName, cancellationToken);
 
 			if (items.Length == 0)
 				return;
