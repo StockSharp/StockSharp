@@ -55,6 +55,8 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// </summary>
 	protected CsvEntityRegistry Registry { get; }
 
+	private IFileSystem FileSystem => Registry.FileSystem;
+
 	/// <inheritdoc />
 	public TEntity[] Cache => _items.CachedValues;
 
@@ -98,12 +100,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			return;
 
 		var dir = Path.GetDirectoryName(FileName);
-		Directory.CreateDirectory(dir);
+		FileSystem.CreateDirectory(dir);
 
-		if (!File.Exists(FileName))
-			new FileStream(FileName, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read).Dispose();
-
-		_stream = new TransactionFileStream(FileName, FileMode.Append);
+		_stream = new TransactionFileStream(FileSystem, FileName, FileMode.Append);
 		_writer = _stream.CreateCsvWriter(Registry.Encoding);
 	}
 
@@ -137,8 +136,13 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		{
 			using (_copySync.EnterScope())
 			{
-				if (File.Exists(FileName))
-					body = File.ReadAllBytes(FileName);
+				if (FileSystem.FileExists(FileName))
+				{
+					using var stream = FileSystem.OpenRead(FileName);
+					using var ms = new MemoryStream();
+					stream.CopyTo(ms);
+					body = ms.ToArray();
+				}
 				else
 					body = [];
 			}
@@ -350,12 +354,11 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 				ResetStream();
 
 				var dir = Path.GetDirectoryName(FileName);
-				Directory.CreateDirectory(dir);
+				FileSystem.CreateDirectory(dir);
 
-				_stream = new TransactionFileStream(FileName, FileMode.Create);
+				_stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
 				_writer = _stream.CreateCsvWriter(Registry.Encoding);
 				ResetCopy();
-				_writer.Truncate();
 				_writer.Flush();
 				_stream.Commit();
 			});
@@ -374,13 +377,11 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			ResetStream();
 
 			var dir = Path.GetDirectoryName(FileName);
-			Directory.CreateDirectory(dir);
+			FileSystem.CreateDirectory(dir);
 
-			_stream = new TransactionFileStream(FileName, FileMode.Create);
+			_stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
 			_writer = _stream.CreateCsvWriter(Registry.Encoding);
 			ResetCopy();
-
-			_writer.Truncate();
 
 			foreach (var item in valuesCopy)
 				Write(_writer, item);
@@ -395,16 +396,17 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		if (errors == null)
 			throw new ArgumentNullException(nameof(errors));
 
-		if (!File.Exists(FileName))
+		if (!FileSystem.FileExists(FileName))
 			return;
+
+		var hasDuplicates = false;
 
 		await Do.InvariantAsync(async () =>
 		{
-			using var stream = new FileStream(FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+			using var stream = FileSystem.OpenRead(FileName);
 
 			var reader = stream.CreateCsvReader(Registry.Encoding);
 
-			var hasDuplicates = false;
 			var currErrors = 0;
 
 			while (await reader.NextLineAsync(cancellationToken))
@@ -438,27 +440,29 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 						break;
 				}
 			}
+		});
 
-			if (!hasDuplicates)
-				return;
-
+		if (hasDuplicates)
+		{
 			try
 			{
 				using (EnterScope())
 				{
-					stream.SetLength(0);
-
+					using var stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
 					using var writer = stream.CreateCsvWriter(Registry.Encoding);
 
 					foreach (var item in InnerCollection)
 						Write(writer, item);
+
+					writer.Flush();
+					stream.Commit();
 				}
 			}
 			catch (Exception ex)
 			{
 				errors.Add(ex);
 			}
-		});
+		}
 
 		InnerCollection.ForEach(OnAdded);
 	}

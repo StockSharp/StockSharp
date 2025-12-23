@@ -825,6 +825,11 @@ public class CsvEntityRegistry : IEntityRegistry
 	/// </summary>
 	public string Path { get; set; }
 
+	/// <summary>
+	/// File system.
+	/// </summary>
+	public IFileSystem FileSystem { get; }
+
 	private Encoding _encoding = Encoding.UTF8;
 
 	/// <summary>
@@ -875,7 +880,19 @@ public class CsvEntityRegistry : IEntityRegistry
 	/// <param name="path">The path to data directory.</param>
 	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
 	public CsvEntityRegistry(string path, ChannelExecutor executor)
+		: this(new LocalFileSystem(), path, executor)
 	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="CsvEntityRegistry"/>.
+	/// </summary>
+	/// <param name="fileSystem"><see cref="IFileSystem"/></param>
+	/// <param name="path">The path to data directory.</param>
+	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	public CsvEntityRegistry(IFileSystem fileSystem, string path, ChannelExecutor executor)
+	{
+		FileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 		Path = path ?? throw new ArgumentNullException(nameof(path));
 		var exec = executor ?? throw new ArgumentNullException(nameof(executor));
 
