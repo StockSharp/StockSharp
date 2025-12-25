@@ -105,6 +105,23 @@ public interface IChart : IChartBuilder, IThemeableChart
 	void AddElement(IChartArea area, IChartElement element);
 
 	/// <summary>
+	/// To add a candle element to the chart.
+	/// </summary>
+	/// <param name="area">Chart area.</param>
+	/// <param name="element">The candle chart element.</param>
+	/// <param name="subscription">Subscription.</param>
+	void AddElement(IChartArea area, IChartCandleElement element, Subscription subscription);
+
+	/// <summary>
+	/// To add an indicator element to the chart.
+	/// </summary>
+	/// <param name="area">Chart area.</param>
+	/// <param name="element">The indicator chart element.</param>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="indicator">Indicator.</param>
+	void AddElement(IChartArea area, IChartIndicatorElement element, Subscription subscription, IIndicator indicator);
+
+	/// <summary>
 	/// To remove the element from the chart.
 	/// </summary>
 	/// <param name="area">Chart area.</param>
