@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Candles.Patterns;
 
-using StockSharp.Configuration;
-
 /// <summary>
 /// Provider <see cref="ICandlePattern"/>.
 /// </summary>

@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Binary.Snapshot;
 
-using StockSharp.Configuration;
-
 /// <summary>
 /// Implementation of <see cref="ISnapshotSerializer{TKey,TMessage}"/> in binary format for <see cref="ExecutionMessage"/>.
 /// </summary>

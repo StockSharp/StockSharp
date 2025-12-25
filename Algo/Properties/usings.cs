@@ -26,6 +26,7 @@ global using DecimalBuffer = Ecng.Collections.CircularBufferEx<decimal>;
 
 global using Nito.AsyncEx;
 
+global using StockSharp.Configuration;
 global using StockSharp.Localization;
 global using StockSharp.Messages;
 global using StockSharp.BusinessEntities;
