@@ -92,8 +92,9 @@ public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvid
 	/// </summary>
 	/// <param name="fileName">File name.</param>
 	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	[Obsolete("Use IFileSystem overload.")]
 	public CsvPortfolioMessageAdapterProvider(string fileName, ChannelExecutor executor)
-		: this(new LocalFileSystem(), fileName, executor)
+		: this(Paths.FileSystem, fileName, executor)
 	{
 	}
 

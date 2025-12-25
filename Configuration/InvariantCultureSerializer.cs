@@ -1,10 +1,59 @@
-﻿namespace StockSharp.Configuration;
+namespace StockSharp.Configuration;
+
+using System.IO;
+
+using Ecng.Common;
 
 /// <summary>
 /// Invariant culture <see cref="ISerializer"/>.
 /// </summary>
 public static class InvariantCultureSerializer
 {
+	/// <summary>
+	/// Serialize the specified storage into file using <see cref="IFileSystem"/>.
+	/// </summary>
+	/// <param name="settings"><see cref="SettingsStorage"/></param>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="fileName">File name.</param>
+	/// <param name="bom">Add UTF8 BOM preamble.</param>
+	public static void SerializeInvariant(this SettingsStorage settings, IFileSystem fileSystem, string fileName, bool bom = true)
+	{
+		if (settings is null)
+			throw new ArgumentNullException(nameof(settings));
+
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
+		if (fileName.IsEmpty())
+			throw new ArgumentNullException(nameof(fileName));
+
+		var bytes = settings.SerializeInvariant(bom);
+
+		using var stream = fileSystem.OpenWrite(fileName);
+		stream.Write(bytes, 0, bytes.Length);
+	}
+
+	/// <summary>
+	/// Deserialize storage from the specified file using <see cref="IFileSystem"/>.
+	/// </summary>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="fileName">File name.</param>
+	/// <returns><see cref="SettingsStorage"/></returns>
+	public static SettingsStorage DeserializeInvariant(this IFileSystem fileSystem, string fileName)
+	{
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
+		if (fileName.IsEmpty())
+			throw new ArgumentNullException(nameof(fileName));
+
+		using var stream = fileSystem.OpenRead(fileName);
+		using var ms = new MemoryStream();
+		stream.CopyTo(ms);
+
+		return ms.ToArray().DeserializeInvariant();
+	}
+
 	/// <summary>
 	/// Serialize the specified storage into file.
 	/// </summary>

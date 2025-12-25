@@ -566,6 +566,11 @@ public static class Paths
 		};
 
 	/// <summary>
+	/// Default file system.
+	/// </summary>
+	public static readonly IFileSystem FileSystem = new LocalFileSystem();
+
+	/// <summary>
 	/// Serialize <paramref name="value"/> state into <see cref="string"/> value.
 	/// </summary>
 	/// <typeparam name="T">Type of <paramref name="value"/>.</typeparam>
@@ -593,7 +598,7 @@ public static class Paths
 	/// <param name="filePath">File path.</param>
 	/// <param name="bom">Add UTF8 BOM preamble.</param>
 	public static void Serialize<T>(this T value, string filePath, bool bom = true)
-		=> CreateSerializer<T>(bom).Serialize(value, filePath);
+		=> Serialize(value, FileSystem, filePath, bom);
 
 	/// <summary>
 	/// Serialize value into byte array.
@@ -612,17 +617,7 @@ public static class Paths
 	/// <param name="filePath">File path.</param>
 	/// <returns>Value.</returns>
 	public static T Deserialize<T>(this string filePath)
-	{
-		try
-		{
-			return filePath.DeserializeOrThrow<T>();
-		}
-		catch (Exception e)
-		{
-			new Exception($"Error deserializing '{filePath}'", e).LogError();
-			return default;
-		}
-	}
+		=> Deserialize<T>(FileSystem, filePath);
 
 	/// <summary>
 	/// Deserialize value from the specified file.
@@ -632,17 +627,7 @@ public static class Paths
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Value.</returns>
 	public static ValueTask<T> DeserializeAsync<T>(this string filePath, CancellationToken cancellationToken)
-	{
-		try
-		{
-			return filePath.DeserializeOrThrowAsync<T>(cancellationToken);
-		}
-		catch (Exception e)
-		{
-			new Exception($"Error deserializing '{filePath}'", e).LogError();
-			return default;
-		}
-	}
+		=> DeserializeAsync<T>(FileSystem, filePath, cancellationToken);
 
 	/// <summary>
 	/// Deserialize value from the specified file.
@@ -651,16 +636,7 @@ public static class Paths
 	/// <param name="filePath">File path.</param>
 	/// <returns>Value.</returns>
 	public static T DeserializeOrThrow<T>(this string filePath)
-	{
-		var defFile = Path.ChangeExtension(filePath, DefaultSettingsExt);
-		var defSer = CreateSerializer<T>();
-
-		if(!File.Exists(defFile))
-			throw new FileNotFoundException($"file not found: '{defFile}'");
-
-		using FileStream stream = new FileStream(defFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-		return defSer.Deserialize(stream);
-	}
+		=> DeserializeOrThrow<T>(FileSystem, filePath);
 
 	/// <summary>
 	/// Deserialize value from the specified file.
@@ -670,16 +646,7 @@ public static class Paths
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Value.</returns>
 	public static ValueTask<T> DeserializeOrThrowAsync<T>(this string filePath, CancellationToken cancellationToken)
-	{
-		var defFile = Path.ChangeExtension(filePath, DefaultSettingsExt);
-		var defSer = CreateSerializer<T>();
-
-		if (!File.Exists(defFile))
-			throw new FileNotFoundException($"file not found: '{defFile}'");
-
-		using FileStream stream = new FileStream(defFile, FileMode.Open, FileAccess.Read, FileShare.Read);
-		return defSer.DeserializeAsync(stream, cancellationToken);
-	}
+		=> DeserializeOrThrowAsync<T>(FileSystem, filePath, cancellationToken);
 
 	/// <summary>
 	/// Deserialize value from the serialized data.
@@ -710,6 +677,144 @@ public static class Paths
 		}
 
 		return default;
+	}
+
+	/// <summary>
+	/// Serialize value into the specified file.
+	/// </summary>
+	/// <typeparam name="T">Value type.</typeparam>
+	/// <param name="value">Value.</param>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="filePath">File path.</param>
+	/// <param name="bom">Add UTF8 BOM preamble.</param>
+	public static void Serialize<T>(this T value, IFileSystem fileSystem, string filePath, bool bom = true)
+	{
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
+		if (filePath.IsEmpty())
+			throw new ArgumentNullException(nameof(filePath));
+
+		var bytes = value.Serialize(bom);
+
+		using var stream = fileSystem.OpenWrite(filePath);
+		stream.Write(bytes, 0, bytes.Length);
+	}
+
+	/// <summary>
+	/// Deserialize value from the specified file.
+	/// </summary>
+	/// <typeparam name="T">Value type.</typeparam>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="filePath">File path.</param>
+	/// <returns>Value.</returns>
+	public static T Deserialize<T>(this IFileSystem fileSystem, string filePath)
+	{
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
+		if (filePath.IsEmpty())
+			throw new ArgumentNullException(nameof(filePath));
+
+		try
+		{
+			return fileSystem.DeserializeOrThrow<T>(filePath);
+		}
+		catch (Exception e)
+		{
+			new Exception($"Error deserializing '{filePath}'", e).LogError();
+			return default;
+		}
+	}
+
+	/// <summary>
+	/// Deserialize value from the specified file.
+	/// </summary>
+	/// <typeparam name="T">Value type.</typeparam>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="filePath">File path.</param>
+	/// <returns>Value.</returns>
+	public static T DeserializeOrThrow<T>(this IFileSystem fileSystem, string filePath)
+	{
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
+		if (filePath.IsEmpty())
+			throw new ArgumentNullException(nameof(filePath));
+
+		var defFile = Path.ChangeExtension(filePath, Paths.DefaultSettingsExt);
+
+		if (!fileSystem.FileExists(defFile))
+			throw new FileNotFoundException($"file not found: '{defFile}'");
+
+		using var stream = fileSystem.OpenRead(defFile);
+		return CreateSerializer<T>().Deserialize(stream);
+	}
+
+	/// <summary>
+	/// Deserialize value from the specified file.
+	/// </summary>
+	/// <typeparam name="T">Value type.</typeparam>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="filePath">File path.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Value.</returns>
+	public static async ValueTask<T> DeserializeAsync<T>(this IFileSystem fileSystem, string filePath, CancellationToken cancellationToken)
+	{
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
+		if (filePath.IsEmpty())
+			throw new ArgumentNullException(nameof(filePath));
+
+		try
+		{
+			return await fileSystem.DeserializeOrThrowAsync<T>(filePath, cancellationToken);
+		}
+		catch (Exception e)
+		{
+			new Exception($"Error deserializing '{filePath}'", e).LogError();
+			return default;
+		}
+	}
+
+	/// <summary>
+	/// Deserialize value from the specified file.
+	/// </summary>
+	/// <typeparam name="T">Value type.</typeparam>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="filePath">File path.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Value.</returns>
+	public static ValueTask<T> DeserializeOrThrowAsync<T>(this IFileSystem fileSystem, string filePath, CancellationToken cancellationToken)
+	{
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
+		if (filePath.IsEmpty())
+			throw new ArgumentNullException(nameof(filePath));
+
+		var defFile = Path.ChangeExtension(filePath, Paths.DefaultSettingsExt);
+
+		if (!fileSystem.FileExists(defFile))
+			throw new FileNotFoundException($"file not found: '{defFile}'");
+
+		using var stream = fileSystem.OpenRead(defFile);
+		return CreateSerializer<T>().DeserializeAsync(stream, cancellationToken);
+	}
+
+	/// <summary>
+	/// Determines the specified config file exists.
+	/// </summary>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="configFile">Config file.</param>
+	/// <returns>Check result.</returns>
+	public static bool IsConfigExists(this IFileSystem fileSystem, string configFile)
+	{
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
+		return fileSystem.FileExists(configFile);
 	}
 
 	/// <summary>

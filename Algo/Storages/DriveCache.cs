@@ -38,12 +38,15 @@ public class DriveCache : Disposable, IPersistable
 	}
 
 	private readonly CachedSynchronizedDictionary<PathPair, IMarketDataDrive> _drives = new(new PathComparer());
+	private readonly IFileSystem _fileSystem;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DriveCache"/>.
 	/// </summary>
-	public DriveCache()
+	/// <param name="fileSystem">File system abstraction.</param>
+	public DriveCache(IFileSystem fileSystem)
 	{
+		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 	}
 
 	/// <summary>
@@ -111,7 +114,7 @@ public class DriveCache : Disposable, IPersistable
 			IMarketDataDrive drive;
 
 			if (pair.Item2 == null)
-				drive = new LocalMarketDataDrive(path);
+				drive = new LocalMarketDataDrive(_fileSystem, path);
 			else
 				drive = new RemoteMarketDataDrive(pair.Item2);
 

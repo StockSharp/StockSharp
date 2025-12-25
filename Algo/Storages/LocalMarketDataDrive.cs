@@ -2,6 +2,7 @@ namespace StockSharp.Algo.Storages;
 
 using IOPath = System.IO.Path;
 
+using Ecng.Common;
 using Ecng.Reflection;
 
 using StockSharp.Algo.Storages.Binary;
@@ -24,6 +25,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		private readonly SecurityId _secId;
 		private readonly StorageFormats _format;
 		private readonly Lock _cacheSync = new();
+		private readonly IFileSystem _fileSystem;
 
 		public LocalMarketDataStorageDrive(DataType dataType, SecurityId secId, StorageFormats format, LocalMarketDataDrive drive)
 		{
@@ -31,6 +33,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			_secId = secId;
 			_format = format;
 			_drive = drive ?? throw new ArgumentNullException(nameof(drive));
+			_fileSystem = drive._fileSystem;
 
 			var fileName = GetFileName(_dataType);
 
@@ -53,23 +56,23 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 				{
 					dates = index.GetDates(_secId, _dataType, format);
 				}
-				else if (File.Exists(_datesPath))
+				else if (_fileSystem.FileExists(_datesPath))
 				{
 					dates = LoadDates();
 				}
-				else if (File.Exists(_datesPathObsoleteBin))
+				else if (_fileSystem.FileExists(_datesPathObsoleteBin))
 				{
 					dates = LoadDatesObsoleteBin();
 				}
-				else if (File.Exists(_datesPathObsoleteTxt))
+				else if (_fileSystem.FileExists(_datesPathObsoleteTxt))
 				{
 					dates = LoadDatesObsoleteTxt();
 				}
 				else
 				{
-					dates = IOHelper
-						.GetDirectories(_path)
-						.Where(dir => File.Exists(IOPath.Combine(dir, _fileNameWithExtension)))
+					dates = _fileSystem
+						.EnumerateDirectories(_path)
+						.Where(dir => _fileSystem.FileExists(IOPath.Combine(dir, _fileNameWithExtension)))
 						.Select(dir => GetDate(IOPath.GetFileName(dir)));
 
 					save = true;
@@ -95,13 +98,13 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		ValueTask IMarketDataStorageDrive.ClearDatesCacheAsync(CancellationToken cancellationToken)
 		{
-			if (Directory.Exists(_path))
+			if (_fileSystem.DirectoryExists(_path))
 			{
 				using (_cacheSync.EnterScope())
 				{
-					File.Delete(_datesPath);
-					File.Delete(_datesPathObsoleteBin);
-					File.Delete(_datesPathObsoleteTxt);
+					_fileSystem.DeleteFile(_datesPath);
+					_fileSystem.DeleteFile(_datesPathObsoleteBin);
+					_fileSystem.DeleteFile(_datesPathObsoleteTxt);
 				}
 			}
 
@@ -122,16 +125,16 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 			var path = GetPath(date, true);
 
-			if (File.Exists(path))
+			if (_fileSystem.FileExists(path))
 			{
-				File.Delete(path);
+				_fileSystem.DeleteFile(path);
 
 				var dir = GetDirectoryName(path);
 
-				if (Directory.EnumerateFiles(dir).IsEmpty())
+				if (_fileSystem.EnumerateFiles(dir, "*").IsEmpty())
 				{
 					using (_cacheSync.EnterScope())
-						IOHelper.BlockDeleteDir(dir);
+						_fileSystem.DeleteDirectory(dir);
 				}
 			}
 
@@ -148,9 +151,9 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		{
 			date = date.UtcKind();
 
-			Directory.CreateDirectory(GetDataPath(date));
+			_fileSystem.CreateDirectory(GetDataPath(date));
 
-			using (var file = new FileStream(GetPath(date, false), FileMode.Create, FileAccess.Write))
+			using (var file = _fileSystem.OpenWrite(GetPath(date, false)))
 				stream.CopyTo(file);
 
 			DatesDict[date] = date;
@@ -174,8 +177,8 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		{
 			var path = GetPath(date.UtcKind(), true);
 
-			var stream = File.Exists(path)
-				? File.Open(path, FileMode.Open, readOnly ? FileAccess.Read : FileAccess.ReadWrite, FileShare.Read)
+			var stream = _fileSystem.FileExists(path)
+				? _fileSystem.OpenRead(path)
 				: Stream.Null;
 
 			return new(stream);
@@ -185,8 +188,15 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		{
 			try
 			{
-				var reader = new BitArrayReader(File.ReadAllBytes(_datesPath));
-				
+				byte[] bytes;
+				using (var fs = _fileSystem.OpenRead(_datesPath))
+				{
+					using var ms = new MemoryStream();
+					fs.CopyTo(ms);
+					bytes = ms.ToArray();
+				}
+				var reader = new BitArrayReader(bytes);
+
 				// version
 				reader.ReadInt();
 				reader.ReadInt();
@@ -203,7 +213,14 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		{
 			try
 			{
-				return ReadDatesObsolete(File.ReadAllBytes(_datesPathObsoleteBin).To<Stream>());
+				byte[] bytes;
+				using (var fs = _fileSystem.OpenRead(_datesPathObsoleteBin))
+				{
+					using var ms = new MemoryStream();
+					fs.CopyTo(ms);
+					bytes = ms.ToArray();
+				}
+				return ReadDatesObsolete(bytes.To<Stream>());
 			}
 			catch (Exception ex)
 			{
@@ -217,7 +234,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			{
 				return Do.Invariant(() =>
 				{
-					using var reader = new StreamReader(new FileStream(_datesPathObsoleteTxt, FileMode.Open, FileAccess.Read));
+					using var reader = new StreamReader(_fileSystem.OpenRead(_datesPathObsoleteTxt));
 
 					var dates = new List<DateTime>();
 
@@ -244,12 +261,12 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		{
 			try
 			{
-				if (!Directory.Exists(_path))
+				if (!_fileSystem.DirectoryExists(_path))
 				{
 					if (dates.IsEmpty())
 						return;
 
-					Directory.CreateDirectory(_path);
+					_fileSystem.CreateDirectory(_path);
 				}
 
 				var stream = new MemoryStream();
@@ -266,10 +283,11 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 				using (_cacheSync.EnterScope())
 				{
-					stream.Save(_datesPath);
+					using (var file = _fileSystem.OpenWrite(_datesPath))
+						stream.CopyTo(file);
 
-					File.Delete(_datesPathObsoleteBin);
-					File.Delete(_datesPathObsoleteTxt);
+					_fileSystem.DeleteFile(_datesPathObsoleteBin);
+					_fileSystem.DeleteFile(_datesPathObsoleteTxt);
 				}
 			}
 			catch (UnauthorizedAccessException)
@@ -680,12 +698,13 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 	}
 
 	private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), LocalMarketDataStorageDrive> _drives = [];
+	private readonly IFileSystem _fileSystem;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="LocalMarketDataDrive"/>.
 	/// </summary>
 	public LocalMarketDataDrive()
-		: this(Directory.GetCurrentDirectory())
+		: this(Paths.FileSystem, Directory.GetCurrentDirectory())
 	{
 	}
 
@@ -693,8 +712,20 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 	/// Initializes a new instance of the <see cref="LocalMarketDataDrive"/>.
 	/// </summary>
 	/// <param name="path">The path to the directory with data.</param>
+	[Obsolete("Use IFileSystem overload.")]
 	public LocalMarketDataDrive(string path)
+		: this(Paths.FileSystem, path)
 	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="LocalMarketDataDrive"/>.
+	/// </summary>
+	/// <param name="fileSystem">File system abstraction.</param>
+	/// <param name="path">The path to the directory with data.</param>
+	public LocalMarketDataDrive(IFileSystem fileSystem, string path)
+	{
+		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 		_path = path.ToFullPathIfNeed();
 	}
 
@@ -745,20 +776,27 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			if (index is not null)
 				return true;
 
-			if (!File.Exists(IndexFullPath))
+			if (!_fileSystem.FileExists(IndexFullPath))
 				return false;
 
 			try
 			{
 				index = [];
-				index.Load(File.ReadAllBytes(IndexFullPath));
+				byte[] indexBytes;
+				using (var fs = _fileSystem.OpenRead(IndexFullPath))
+				{
+					using var ms = new MemoryStream();
+					fs.CopyTo(ms);
+					indexBytes = ms.ToArray();
+				}
+				index.Load(indexBytes);
 
 				_index = index;
 			}
 			catch
 			{
 				index = null;
-				File.Delete(IndexFullPath);
+				_fileSystem.DeleteFile(IndexFullPath);
 			}
 
 			return index is not null;
@@ -773,7 +811,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		=> AsyncHelper.Run(() => GetAvailableSecuritiesAsync(default).ToArrayAsync(default));
 
 	/// <inheritdoc />
-	public override async IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync([EnumeratorCancellation]CancellationToken cancellationToken)
+	public override async IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync([EnumeratorCancellation] CancellationToken cancellationToken)
 	{
 		if (TryGetIndex(out var index))
 		{
@@ -788,11 +826,11 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		var path = Path;
 
-		if (!Directory.Exists(path))
+		if (!_fileSystem.DirectoryExists(path))
 			yield break;
 
-		var secIds = (await IOHelper.GetDirectoriesAsync(path, cancellationToken: cancellationToken))
-			.SelectMany(Directory.EnumerateDirectories)
+		var secIds = _fileSystem.EnumerateDirectories(path)
+			.SelectMany(d => _fileSystem.EnumerateDirectories(d))
 			.Select(IOPath.GetFileName)
 			.Select(StorageHelper.FolderNameToSecurityId)
 			.Select(n => idGenerator.Split(n, true))
@@ -817,9 +855,9 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		IEnumerable<DataType> GetDataTypes(string secPath)
 		{
-			return IOHelper
-					.GetDirectories(secPath)
-					.SelectMany(dateDir => Directory.GetFiles(dateDir, "*" + ext))
+			return _fileSystem
+					.EnumerateDirectories(secPath)
+					.SelectMany(dateDir => _fileSystem.EnumerateFiles(dateDir, "*" + ext))
 					.Select(IOPath.GetFileNameWithoutExtension)
 					.Distinct()
 					.Select(GetDataType)
@@ -842,11 +880,11 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 				if (!tuple.Second)
 				{
-					if (Directory.Exists(Path))
+					if (_fileSystem.DirectoryExists(Path))
 					{
-						tuple.First.AddRange(Directory
+						tuple.First.AddRange(_fileSystem
 							.EnumerateDirectories(Path)
-							.SelectMany(Directory.EnumerateDirectories)
+							.SelectMany(d => _fileSystem.EnumerateDirectories(d))
 							.SelectMany(GetDataTypes));
 					}
 
@@ -859,7 +897,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		var s = GetSecurityPath(securityId);
 
-		return new(Directory.Exists(s) ? GetDataTypes(s) : []);
+		return new(_fileSystem.DirectoryExists(s) ? GetDataTypes(s) : []);
 	}
 
 	/// <inheritdoc />
@@ -878,7 +916,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 	/// <inheritdoc />
 	public override ValueTask VerifyAsync(CancellationToken cancellationToken)
 	{
-		if (!Directory.Exists(Path))
+		if (!_fileSystem.DirectoryExists(Path))
 			throw new InvalidOperationException(LocalizedStrings.DirectoryNotExist.Put(Path));
 
 		return default;
@@ -893,18 +931,18 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		if (securityProvider == null)
 			throw new ArgumentNullException(nameof(securityProvider));
 
-		async IAsyncEnumerable<SecurityMessage> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
+		async IAsyncEnumerable<SecurityMessage> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			var securityPaths = new List<string>();
 
-			foreach (var letterDir in IOHelper.GetDirectories(Path))
+			foreach (var letterDir in _fileSystem.EnumerateDirectories(Path))
 			{
 				var name = IOPath.GetFileName(letterDir);
 
 				if (name == null || name.Length != 1)
 					continue;
 
-				securityPaths.AddRange(IOHelper.GetDirectories(letterDir));
+				securityPaths.AddRange(_fileSystem.EnumerateDirectories(letterDir));
 			}
 
 			var existingIds = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
@@ -922,9 +960,9 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 					continue;
 
 				var firstDataFile =
-					Directory.EnumerateDirectories(securityPath)
-						.SelectMany(d => Directory.EnumerateFiles(d, "*.bin")
-							.Concat(Directory.EnumerateFiles(d, "*.csv"))
+					_fileSystem.EnumerateDirectories(securityPath)
+						.SelectMany(d => _fileSystem.EnumerateFiles(d, "*.bin")
+							.Concat(_fileSystem.EnumerateFiles(d, "*.csv"))
 							.OrderBy(f => IOPath.GetExtension(f).EqualsIgnoreCase(".bin") ? 0 : 1))
 						.FirstOrDefault();
 
@@ -939,7 +977,13 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 				{
 					try
 					{
-						var fileBytes = await File.ReadAllBytesAsync(firstDataFile, cancellationToken).NoWait();
+						byte[] fileBytes;
+						using (var fs = _fileSystem.OpenRead(firstDataFile))
+						{
+							using var ms = new MemoryStream();
+							await fs.CopyToAsync(ms, cancellationToken).NoWait();
+							fileBytes = ms.ToArray();
+						}
 						priceStep = fileBytes.AsSpan().Slice(6, 16).ToArray().To<decimal>();
 					}
 					catch (Exception ex)
@@ -962,7 +1006,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			}
 		}
 
-		return Impl();	
+		return Impl();
 	}
 
 	/// <summary>
@@ -1070,11 +1114,11 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		var formats = Enumerator.GetValues<StorageFormats>().ToArray();
 		var path = Path;
 
-		if (Directory.Exists(path))
+		if (_fileSystem.DirectoryExists(path))
 		{
-			var secPaths = Directory
+			var secPaths = _fileSystem
 				.EnumerateDirectories(path)
-				.SelectMany(Directory.EnumerateDirectories)
+				.SelectMany(d => _fileSystem.EnumerateDirectories(d))
 				.ToArray();
 
 			for (var i = 0; i < secPaths.Length; i++)
@@ -1097,17 +1141,17 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 					cancellationToken.ThrowIfCancellationRequested();
 
 					var ext = GetExtension(format);
-					
-					var dates = IOHelper
-						.GetDirectories(secPath)
+
+					var dates = _fileSystem
+						.EnumerateDirectories(secPath)
 						.ToDictionary(
 							dateDir => GetDate(IOPath.GetFileName(dateDir)),
 							dateDir =>
 							{
 								cancellationToken.ThrowIfCancellationRequested();
 
-								return Directory
-									.GetFiles(dateDir, "*" + ext)
+								return _fileSystem
+									.EnumerateFiles(dateDir, "*" + ext)
 									.Select(IOPath.GetFileNameWithoutExtension)
 									.Select(GetDataType)
 									.WhereNotNull()
@@ -1174,6 +1218,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		stream.Position = 0;
 
 		using (_indexLock.EnterScope())
-			stream.Save(IndexFullPath);
+		using (var file = _fileSystem.OpenWrite(IndexFullPath))
+			stream.CopyTo(file);
 	}
 }

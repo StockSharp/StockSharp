@@ -12,8 +12,9 @@ using StockSharp.Algo.Storages.Binary.Snapshot;
 /// <remarks>
 /// Initializes a new instance of the <see cref="SnapshotRegistry"/>.
 /// </remarks>
+/// <param name="fileSystem">File system.</param>
 /// <param name="path">Path to storage.</param>
-public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
+public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable, ISnapshotRegistry
 {
 	private abstract class SnapshotStorage : ISnapshotStorage
 	{
@@ -35,6 +36,7 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 			private readonly SynchronizedDictionary<TKey, TMessage> _snapshots = [];
 			private readonly Dictionary<TKey, byte[]> _buffers = [];
 			private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
+			private readonly IFileSystem _fileSystem;
 			private readonly Version _version;
 			private readonly string _fileName;
 			//private long _currOffset;
@@ -46,15 +48,16 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 			// buffer length 4 bytes
 			//private const int _bufSizeLen = 4;
 
-			public SnapshotStorageDate(string fileName, ISnapshotSerializer<TKey, TMessage> serializer)
+			public SnapshotStorageDate(string fileName, ISnapshotSerializer<TKey, TMessage> serializer, IFileSystem fileSystem)
 			{
 				if (fileName.IsEmpty())
 					throw new ArgumentNullException(nameof(fileName));
 
 				_fileName = fileName;
 				_serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+				_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 
-				if (File.Exists(_fileName))
+				if (_fileSystem.FileExists(_fileName))
 				{
 					Debug.WriteLine($"Snapshot (Load): {_fileName}");
 
@@ -62,7 +65,7 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 					{
 						var allError = true;
 
-						using (var stream = File.OpenRead(_fileName))
+						using (var stream = _fileSystem.OpenRead(_fileName))
 						{
 							_version = new Version(stream.ReadByte(), stream.ReadByte());
 
@@ -102,14 +105,14 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 
 						if (allError)
 						{
-							File.Delete(_fileName);
+							_fileSystem.DeleteFile(_fileName);
 						}
 					}
 					catch (Exception ex)
 					{
 						Debug.WriteLine($"Snapshot (ERROR): {ex.Message}");
 						ex.LogError();
-						File.Delete(_fileName);
+						_fileSystem.DeleteFile(_fileName);
 					}
 				}
 				else
@@ -227,11 +230,11 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 					buffers = [.. _buffers.Values];
 				}
 
-				Directory.CreateDirectory(Path.GetDirectoryName(_fileName));
+				_fileSystem.CreateDirectory(Path.GetDirectoryName(_fileName));
 
 				Debug.WriteLine($"Snapshot (Save): {_fileName}");
 
-				using var stream = new TransactionFileStream(_fileName, FileMode.Create);
+				using var stream = _fileSystem.OpenWrite(_fileName);
 
 				stream.WriteByte((byte)_version.Major);
 				stream.WriteByte((byte)_version.Minor);
@@ -254,13 +257,15 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 		private readonly CachedSynchronizedDictionary<DateTime, SnapshotStorageDate> _dates = [];
 
 		private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
+		private readonly IFileSystem _fileSystem;
 
-		public SnapshotStorage(string path, ISnapshotSerializer<TKey, TMessage> serializer)
+		public SnapshotStorage(string path, ISnapshotSerializer<TKey, TMessage> serializer, IFileSystem fileSystem)
 		{
 			if (path == null)
 				throw new ArgumentNullException(nameof(path));
 
 			_serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+			_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 
 			_path = path.ToFullPath();
 			_fileNameWithExtension = _serializer.Name.ToLowerInvariant() + ".bin";
@@ -270,17 +275,17 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 			{
 				var retVal = new CachedSynchronizedOrderedDictionary<DateTime, DateTime>();
 
-				if (File.Exists(_datesPath))
+				if (_fileSystem.FileExists(_datesPath))
 				{
 					foreach (var date in LoadDates())
 						retVal.Add(date, date);
 				}
 				else
 				{
-					var dates = IOHelper
-					            .GetDirectories(_path)
-					            .Where(dir => File.Exists(Path.Combine(dir, _fileNameWithExtension)))
-					            .Select(dir => LocalMarketDataDrive.GetDate(Path.GetFileName(dir)));
+					var dates = _fileSystem
+						.EnumerateDirectories(_path)
+						.Where(dir => _fileSystem.FileExists(Path.Combine(dir, _fileNameWithExtension)))
+						.Select(dir => LocalMarketDataDrive.GetDate(Path.GetFileName(dir)));
 
 					foreach (var date in dates)
 						retVal.Add(date, date);
@@ -300,10 +305,10 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 
 		public void ClearDatesCache()
 		{
-			if (Directory.Exists(_path))
+			if (_fileSystem.DirectoryExists(_path))
 			{
 				using (_cacheSync.EnterScope())
-					File.Delete(_datesPath);
+					_fileSystem.DeleteFile(_datesPath);
 			}
 
 			ResetCache();
@@ -391,7 +396,7 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 
 		private SnapshotStorageDate GetStorageDate(DateTime date)
 		{
-			return _dates.SafeAdd(date, key => new SnapshotStorageDate(Path.Combine(_path, LocalMarketDataDrive.GetDirName(key), _fileNameWithExtension), _serializer));
+			return _dates.SafeAdd(date, key => new SnapshotStorageDate(Path.Combine(_path, LocalMarketDataDrive.GetDirName(key), _fileNameWithExtension), _serializer, _fileSystem));
 		}
 
 		private IEnumerable<DateTime> LoadDates()
@@ -400,7 +405,7 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 			{
 				return Do.Invariant(() =>
 				{
-					using var reader = new StreamReader(new FileStream(_datesPath, FileMode.Open, FileAccess.Read));
+					using var reader = new StreamReader(_fileSystem.OpenRead(_datesPath));
 
 					var dates = new List<DateTime>();
 
@@ -427,12 +432,12 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 		{
 			try
 			{
-				if (!Directory.Exists(_path))
+				if (!_fileSystem.DirectoryExists(_path))
 				{
 					if (dates.IsEmpty())
 						return;
 
-					Directory.CreateDirectory(_path);
+					_fileSystem.CreateDirectory(_path);
 				}
 
 				var stream = new MemoryStream();
@@ -450,7 +455,7 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 				using (_cacheSync.EnterScope())
 				{
 					stream.Position = 0;
-					stream.Save(_datesPath);
+					_fileSystem.WriteAllBytes(_datesPath, stream.To<byte[]>());
 				}
 			}
 			catch (UnauthorizedAccessException)
@@ -502,8 +507,19 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 		}
 	}
 
+	private readonly IFileSystem _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 	private readonly CachedSynchronizedDictionary<DataType, SnapshotStorage> _snapshotStorages = [];
 	private ControllablePeriodicTimer _timer;
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="SnapshotRegistry"/> class.
+	/// </summary>
+	/// <param name="path">Path to storage.</param>
+	[Obsolete("Use overload with IFileSystem.")]
+	public SnapshotRegistry(string path)
+		: this(Paths.FileSystem, path)
+	{
+	}
 
 	ValueTask ISnapshotRegistry.InitAsync(CancellationToken cancellationToken)
 	{
@@ -560,13 +576,13 @@ public class SnapshotRegistry(string path) : Disposable, ISnapshotRegistry
 		return _snapshotStorages.SafeAdd(dataType, key =>
 		{
 			if (key == DataType.Level1)
-				return new SnapshotStorage<SecurityId, Level1ChangeMessage>(path, new Level1BinarySnapshotSerializer());
+				return new SnapshotStorage<SecurityId, Level1ChangeMessage>(path, new Level1BinarySnapshotSerializer(), _fileSystem);
 			else if (key == DataType.MarketDepth)
-				return new SnapshotStorage<SecurityId, QuoteChangeMessage>(path, new QuotesBinarySnapshotSerializer());
+				return new SnapshotStorage<SecurityId, QuoteChangeMessage>(path, new QuotesBinarySnapshotSerializer(), _fileSystem);
 			else if (key == DataType.PositionChanges)
-				return new SnapshotStorage<(SecurityId, string, string), PositionChangeMessage>(path, new PositionBinarySnapshotSerializer());
+				return new SnapshotStorage<(SecurityId, string, string), PositionChangeMessage>(path, new PositionBinarySnapshotSerializer(), _fileSystem);
 			else if (key == DataType.Transactions)
-				return new SnapshotStorage<string, ExecutionMessage>(path, new TransactionBinarySnapshotSerializer());
+				return new SnapshotStorage<string, ExecutionMessage>(path, new TransactionBinarySnapshotSerializer(), _fileSystem);
 			else
 				throw new ArgumentOutOfRangeException(nameof(dataType), dataType, LocalizedStrings.InvalidValue);
 		});

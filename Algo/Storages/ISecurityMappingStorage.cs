@@ -240,8 +240,9 @@ public sealed class CsvSecurityMappingStorage : ISecurityMappingStorage
 	/// </summary>
 	/// <param name="path">Path to storage.</param>
 	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	[Obsolete("Use IFileSystem overload.")]
 	public CsvSecurityMappingStorage(string path, ChannelExecutor executor)
-		: this(new LocalFileSystem(), path, executor)
+		: this(Paths.FileSystem, path, executor)
 	{
 	}
 

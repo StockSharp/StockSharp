@@ -879,8 +879,9 @@ public class CsvEntityRegistry : IEntityRegistry
 	/// </summary>
 	/// <param name="path">The path to data directory.</param>
 	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	[Obsolete("Use IFileSystem overload.")]	
 	public CsvEntityRegistry(string path, ChannelExecutor executor)
-		: this(new LocalFileSystem(), path, executor)
+		: this(Paths.FileSystem, path, executor)
 	{
 	}
 

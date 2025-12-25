@@ -53,7 +53,6 @@ public interface ICandlePatternProvider
 	void Save(ICandlePattern pattern);
 }
 
-
 /// <summary>
 /// In memory <see cref="ICandlePattern"/> provider.
 /// </summary>
@@ -122,13 +121,15 @@ public class InMemoryCandlePatternProvider : ICandlePatternProvider
 /// <remarks>
 /// Initializes a new instance of the <see cref="CandlePatternFileStorage"/>.
 /// </remarks>
+/// <param name="fileSystem"><see cref="IFileSystem"/></param>
 /// <param name="fileName">File name.</param>
 /// <param name="executor">Sequential operation executor for disk access synchronization.</param>
-public class CandlePatternFileStorage(string fileName, ChannelExecutor executor) : ICandlePatternProvider
+public class CandlePatternFileStorage(IFileSystem fileSystem, string fileName, ChannelExecutor executor) : ICandlePatternProvider
 {
 	private readonly ICandlePatternProvider _inMemory = new InMemoryCandlePatternProvider();
 	private readonly CachedSynchronizedDictionary<string, ICandlePattern> _cache = [];
 	private readonly string _fileName = fileName.ThrowIfEmpty(nameof(fileName));
+	private readonly IFileSystem _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 	private readonly ChannelExecutor _executor = executor ?? throw new ArgumentNullException(nameof(executor));
 
 	/// <inheritdoc/>
@@ -146,9 +147,9 @@ public class CandlePatternFileStorage(string fileName, ChannelExecutor executor)
 
 		var errors = new List<Exception>();
 
-		if (File.Exists(_fileName))
+		if (_fileSystem.FileExists(_fileName))
 		{
-			await Do.InvariantAsync(async () => (await _fileName.DeserializeAsync<SettingsStorage[]>(cancellationToken))?.Select(s =>
+			await Do.InvariantAsync(async () => (await _fileSystem.DeserializeAsync<SettingsStorage[]>(_fileName, cancellationToken))?.Select(s =>
 			{
 				try
 				{
@@ -211,7 +212,7 @@ public class CandlePatternFileStorage(string fileName, ChannelExecutor executor)
 			_cache
 				.CachedValues
 				.Select(i => i.SaveEntire(false))
-				.Serialize(_fileName));
+				.Serialize(_fileSystem, _fileName));
 	}
 
 	bool ICandlePatternProvider.TryFind(string name, out ICandlePattern pattern)

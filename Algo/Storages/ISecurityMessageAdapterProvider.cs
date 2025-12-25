@@ -119,8 +119,9 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 	/// </summary>
 	/// <param name="fileName">File name.</param>
 	/// <param name="executor">Sequential operation executor for disk access synchronization.</param>
+	[Obsolete("Use IFileSystem overload.")]
 	public CsvSecurityMessageAdapterProvider(string fileName, ChannelExecutor executor)
-		: this(new LocalFileSystem(), fileName, executor)
+		: this(Paths.FileSystem, fileName, executor)
 	{
 	}
 
