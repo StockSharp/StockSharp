@@ -91,9 +91,9 @@ public interface INativeIdStorageProvider : IAsyncDisposable
 /// <summary>
 /// CSV security native identifier storage provider.
 /// </summary>
-public sealed class CsvNativeIdStorageProvider : INativeIdStorageProvider
+public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 {
-	private sealed class CsvNativeIdStorage : INativeIdStorage
+	private class CsvNativeIdStorage : Disposable, INativeIdStorage
 	{
 		private readonly CsvNativeIdStorageProvider _provider;
 		private readonly string _storageName;
@@ -245,7 +245,7 @@ public sealed class CsvNativeIdStorageProvider : INativeIdStorageProvider
 			_writer = _stream.CreateCsvWriter();
 		}
 
-		internal void ResetStream()
+		private void ResetStream()
 		{
 			_writer?.Dispose();
 			_writer = null;
@@ -255,6 +255,12 @@ public sealed class CsvNativeIdStorageProvider : INativeIdStorageProvider
 		}
 
 		private string GetFileName() => Path.Combine(_provider._path, _storageName + ".csv");
+
+		protected override void DisposeManaged()
+		{
+			ResetStream();
+			base.DisposeManaged();
+		}
 	}
 
 	private readonly SynchronizedDictionary<string, CsvNativeIdStorage> _storages = new(StringComparer.InvariantCultureIgnoreCase);
@@ -297,7 +303,7 @@ public sealed class CsvNativeIdStorageProvider : INativeIdStorageProvider
 		await _executor.AddAndWaitAsync(() =>
 		{
 			foreach (var storage in _storages.Values)
-				storage.ResetStream();
+				storage.Dispose();
 
 			_storages.Clear();
 		});
@@ -598,6 +604,7 @@ public class InMemoryNativeIdStorageProvider : INativeIdStorageProvider
 	public ValueTask DisposeAsync()
 	{
 		_storages.Clear();
+		GC.SuppressFinalize(this);
 		return default;
 	}
 }
