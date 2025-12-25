@@ -3,6 +3,17 @@ namespace StockSharp.Algo;
 partial class Connector
 {
 	/// <inheritdoc />
+	public IEnumerable<Subscription> Subscriptions => _subscriptionManager.Subscriptions;
+
+	/// <inheritdoc />
+	public void Subscribe(Subscription subscription)
+		=> ApplySubscriptionManagerActions(_subscriptionManager.Subscribe(subscription));
+
+	/// <inheritdoc />
+	public void UnSubscribe(Subscription subscription)
+		=> ApplySubscriptionManagerActions(_subscriptionManager.UnSubscribe(subscription));
+
+	/// <inheritdoc />
 	[Obsolete("Use OwnTradeReceived event.")]
 	public event Action<MyTrade> NewMyTrade;
 
