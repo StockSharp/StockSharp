@@ -269,13 +269,12 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 	private async ValueTask<(Message[] toInner, Message[] toOut)> ProcessMarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		if (!_candleBuilderProvider.IsRegistered(mdMsg.DataType2.MessageType))
-			return ([mdMsg], []);
-
-		var transactionId = mdMsg.TransactionId;
-
 		if (mdMsg.IsSubscribe)
 		{
+			if (!_candleBuilderProvider.IsRegistered(mdMsg.DataType2.MessageType))
+				return ([mdMsg], []);
+
+			var transactionId = mdMsg.TransactionId;
 			Message outMsg = null;
 
 			using (await _sync.LockAsync(cancellationToken))
@@ -458,6 +457,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		}
 		else
 		{
+			var transactionId = mdMsg.TransactionId;
 			var series = await TryRemoveSeries(mdMsg.OriginalTransactionId, cancellationToken);
 			if (series is null)
 			{
@@ -907,7 +907,16 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 						series.Original.CopyTo(allMsg);
 
 						allMsg.ParentTransactionId = series.Original.TransactionId;
-						allMsg.TransactionId = _idGenerator.GetNextId();
+						var childTransactionId = _idGenerator.GetNextId();
+
+						while (_series.ContainsKey(childTransactionId) ||
+						       _allChilds.ContainsKey(childTransactionId) ||
+						       _pendingLoopbacks.ContainsKey(childTransactionId))
+						{
+							childTransactionId = _idGenerator.GetNextId();
+						}
+
+						allMsg.TransactionId = childTransactionId;
 						allMsg.SecurityId = key;
 
 						allMsg.LoopBack(_adapter, MessageBackModes.Chain);
@@ -915,13 +924,16 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 						_logReceiver.AddDebugLog("New ALL candle-map: {0}/{1} TrId={2}-{3}", key, series.Original.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
 
-						return new SeriesInfo(allMsg, allMsg)
+						var childSeries = new SeriesInfo(allMsg, allMsg)
 						{
 							LastTime = allMsg.From,
 							Count = allMsg.Count,
 							Transform = CreateTransform(series.Current),
 							State = SeriesStates.Compress,
 						};
+
+						_allChilds[allMsg.TransactionId] = childSeries;
+						return childSeries;
 					});
 
 					if (series.Stopped)
