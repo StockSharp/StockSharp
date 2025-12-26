@@ -91,7 +91,7 @@ partial class Connector
 			}
 			else if (message.Type == ExtendedMessageTypes.SubscriptionSecurityAll)
 			{
-				_subscriptionManager.SubscribeAll((SubscriptionSecurityAllMessage)message);
+				ApplySubscriptionManagerActions(_subscriptionManager.SubscribeAll((SubscriptionSecurityAllMessage)message));
 				return default;
 			}
 
@@ -267,6 +267,8 @@ partial class Connector
 
 			if (_adapter != null)
 			{
+				_subscriptionManager.TransactionIdGenerator = _adapter.TransactionIdGenerator;
+
 				_adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
 				_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
 				_adapter.InnerAdapters.Cleared += InnerAdaptersOnCleared;
@@ -843,7 +845,7 @@ partial class Connector
 		{
 			if (adapter == Adapter)
 			{
-				_subscriptionManager.HandleConnected([.. _subscriptionsOnConnect.Cache.Where(s => Adapter.IsMessageSupported(s.SubscriptionMessage.Type))]);
+				ApplySubscriptionManagerActions(_subscriptionManager.HandleConnected(subscription => Adapter.IsMessageSupported(subscription.SubscriptionMessage.Type)));
 
 				// raise event after re subscriptions cause handler on Connected event can send some subscriptions
 				RaiseConnected();

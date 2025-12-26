@@ -2,6 +2,30 @@ namespace StockSharp.Algo;
 
 partial class Connector
 {
+	private void ApplySubscriptionManagerActions(ConnectorSubscriptionManager.Actions actions)
+	{
+		if (actions == null)
+			throw new ArgumentNullException(nameof(actions));
+
+		foreach (var action in actions.Items)
+		{
+			switch (action.Type)
+			{
+				case ConnectorSubscriptionManager.Actions.Item.Types.SendInMessage:
+					SendInMessage(action.Message);
+					break;
+				case ConnectorSubscriptionManager.Actions.Item.Types.AddOrderStatus:
+					_entityCache.AddOrderStatusTransactionId(action.TransactionId);
+					break;
+				case ConnectorSubscriptionManager.Actions.Item.Types.RemoveOrderStatus:
+					_entityCache.RemoveOrderStatusTransactionId(action.TransactionId);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(actions), action.Type, LocalizedStrings.InvalidValue);
+			}
+		}
+	}
+
 	/// <inheritdoc />
 	public IEnumerable<Subscription> Subscriptions => _subscriptionManager.Subscriptions;
 

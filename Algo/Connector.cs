@@ -15,7 +15,7 @@ using StockSharp.Algo.Slippage;
 public partial class Connector : BaseLogReceiver, IConnector
 {
 	private readonly EntityCache _entityCache;
-	private readonly SubscriptionManager _subscriptionManager;
+	private readonly ConnectorSubscriptionManager _subscriptionManager;
 
 	// backward compatibility for NewXXX events
 	private readonly CachedSynchronizedSet<Security> _existingSecurities = [];
@@ -52,9 +52,11 @@ public partial class Connector : BaseLogReceiver, IConnector
 		SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
 		PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
 
-		_entityCache = new EntityCache(this, TryGetSecurity, exchangeInfoProvider, PositionStorage);
+		_entityCache = new(this, TryGetSecurity, exchangeInfoProvider, PositionStorage);
 
-		_subscriptionManager = new SubscriptionManager(this);
+		var transactionIdGenerator = new MillisecondIncrementalIdGenerator();
+
+		_subscriptionManager = new(transactionIdGenerator, this is not StockSharp.Algo.Testing.HistoryEmulationConnector) { Parent = this };
 
 		//SupportLevel1DepthBuilder = true;
 		SupportFilteredMarketDepth = true;
@@ -69,7 +71,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 		if (initAdapter)
 		{
-			Adapter = new BasketMessageAdapter(new MillisecondIncrementalIdGenerator(), new CandleBuilderProvider(ExchangeInfoProvider), new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider(), buffer)
+			Adapter = new BasketMessageAdapter(transactionIdGenerator, new CandleBuilderProvider(ExchangeInfoProvider), new InMemorySecurityMessageAdapterProvider(), new InMemoryPortfolioMessageAdapterProvider(), buffer)
 			{
 				StorageSettings = { StorageRegistry = storageRegistry }
 			};
@@ -126,7 +128,11 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <remarks>
 	/// Normal case connect/disconnect.
 	/// </remarks>
-	public bool IsRestoreSubscriptionOnNormalReconnect { get; set; } = true;
+	public bool IsRestoreSubscriptionOnNormalReconnect
+	{
+		get => _subscriptionManager.IsRestoreSubscriptionOnNormalReconnect;
+		set => _subscriptionManager.IsRestoreSubscriptionOnNormalReconnect = value;
+	}
 
 	/// <summary>
 	/// Send unsubscribe on disconnect command.
@@ -147,7 +153,11 @@ public partial class Connector : BaseLogReceiver, IConnector
 	public IdGenerator TransactionIdGenerator
 	{
 		get => Adapter.TransactionIdGenerator;
-		set => Adapter.TransactionIdGenerator = value;
+		set
+		{
+			Adapter.TransactionIdGenerator = value;
+			_subscriptionManager.TransactionIdGenerator = value;
+		}
 	}
 
 	private SecurityIdGenerator _securityIdGenerator = new();
@@ -270,15 +280,13 @@ public partial class Connector : BaseLogReceiver, IConnector
 		set => Adapter.SlippageManager = value;
 	}
 
-	private ConnectionStates _connectionState;
-
 	/// <inheritdoc />
 	public ConnectionStates ConnectionState
 	{
-		get => _connectionState;
+		get => _subscriptionManager.ConnectionState;
 		private set
 		{
-			_connectionState = value;
+			_subscriptionManager.ConnectionState = value;
 			_stateChanged?.Invoke();
 		}
 	}
@@ -345,12 +353,10 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <inheritdoc />
 	public Subscription OrderLookup { get; } = ToSubscription<OrderStatusMessage>();
 
-	private readonly CachedSynchronizedSet<Subscription> _subscriptionsOnConnect = [];
-
 	/// <summary>
 	/// Send subscriptions on connect.
 	/// </summary>
-	public ISet<Subscription> SubscriptionsOnConnect => _subscriptionsOnConnect;
+	public ISet<Subscription> SubscriptionsOnConnect => _subscriptionManager.SubscriptionsOnConnect;
 
 	private class LookupMessagesOnConnectSet(Connector connector) : SynchronizedSet<MessageTypes>
 	{
@@ -481,7 +487,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 	protected virtual void OnDisconnect()
 	{
 		if (IsAutoUnSubscribeOnDisconnect)
-			_subscriptionManager.UnSubscribeAll();
+			ApplySubscriptionManagerActions(_subscriptionManager.UnSubscribeAll());
 
 		SendInMessage(new DisconnectMessage());
 	}
@@ -913,7 +919,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		{
 			var subscrSecId = message
 				.GetSubscriptionIds()
-				.Select(id => _subscriptionManager.TryGetSubscription(id, true, false, null)?.Subscription.SecurityId)
+				.Select(id => _subscriptionManager.TryGetSubscription(id, true, false, null)?.SecurityId)
 				.Where(id => id != null && id.Value != default)
 				.FirstOrDefault();
 
@@ -1114,7 +1120,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 		storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
-		storage.SetValue(nameof(SubscriptionsOnConnect), _subscriptionsOnConnect.Cache.Select(s => s.DataType.Save()).ToArray());
+		storage.SetValue(nameof(SubscriptionsOnConnect), _subscriptionManager.SubscriptionsOnConnect.Cache.Select(s => s.DataType.Save()).ToArray());
 		storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 		storage.SetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 

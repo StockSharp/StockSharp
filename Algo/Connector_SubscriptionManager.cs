@@ -1,14 +1,122 @@
 namespace StockSharp.Algo;
 
-using StockSharp.Algo.Testing;
-
-partial class Connector
+/// <summary>
+/// Manages subscriptions and their lifecycle.
+/// </summary>
+/// <remarks>
+/// Initializes a new instance of the <see cref="ConnectorSubscriptionManager"/>.
+/// </remarks>
+/// <param name="transactionIdGenerator">Transaction id generator.</param>
+/// <param name="sendUnsubscribeWhenDisconnected">Indicates whether to send unsubscribe requests while disconnected.</param>
+public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bool sendUnsubscribeWhenDisconnected) : BaseLogReceiver
 {
-	private class SubscriptionInfo
+	/// <summary>
+	/// Actions produced by <see cref="ConnectorSubscriptionManager"/>.
+	/// </summary>
+	public sealed class Actions
+	{
+		/// <summary>
+		/// Action produced by <see cref="ConnectorSubscriptionManager"/>.
+		/// </summary>
+		public readonly struct Item
+		{
+			/// <summary>
+			/// Types of actions produced by <see cref="ConnectorSubscriptionManager"/>.
+			/// </summary>
+			public enum Types
+			{
+				/// <summary>
+				/// Send a message into the adapter chain.
+				/// </summary>
+				SendInMessage,
+
+				/// <summary>
+				/// Register order status transaction id.
+				/// </summary>
+				AddOrderStatus,
+
+				/// <summary>
+				/// Remove order status transaction id.
+				/// </summary>
+				RemoveOrderStatus,
+			}
+
+			/// <summary>
+			/// Action type.
+			/// </summary>
+			public Types Type { get; }
+
+			/// <summary>
+			/// Message to send.
+			/// </summary>
+			public Message Message { get; }
+
+			/// <summary>
+			/// Transaction id.
+			/// </summary>
+			public long TransactionId { get; }
+
+			private Item(Types type, Message message, long transactionId)
+			{
+				Type = type;
+				Message = message;
+				TransactionId = transactionId;
+			}
+
+			/// <summary>
+			/// Create a message send action.
+			/// </summary>
+			/// <param name="message">Message to send.</param>
+			/// <returns>Action instance.</returns>
+			public static Item SendInMessage(Message message)
+			{
+				if (message is null)
+					throw new ArgumentNullException(nameof(message));
+
+				return new(Types.SendInMessage, message, default);
+			}
+
+			/// <summary>
+			/// Create an order status add action.
+			/// </summary>
+			/// <param name="transactionId">Transaction id.</param>
+			/// <returns>Action instance.</returns>
+			public static Item AddOrderStatusTransactionId(long transactionId)
+				=> new(Types.AddOrderStatus, null, transactionId);
+
+			/// <summary>
+			/// Create an order status remove action.
+			/// </summary>
+			/// <param name="transactionId">Transaction id.</param>
+			/// <returns>Action instance.</returns>
+			public static Item RemoveOrderStatusTransactionId(long transactionId)
+				=> new(Types.RemoveOrderStatus, null, transactionId);
+		}
+
+		/// <summary>
+		/// Empty actions.
+		/// </summary>
+		public static readonly Actions Empty = new();
+
+		/// <summary>
+		/// Action list.
+		/// </summary>
+		public Item[] Items { get; init; } = [];
+	}
+
+	/// <summary>
+	/// Subscription state holder.
+	/// </summary>
+	private sealed class SubscriptionInfo
 	{
 		private DateTime? _last;
 		private ICandleMessage _currentCandle;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SubscriptionInfo"/>.
+		/// </summary>
+		/// <param name="subscription">Subscription.</param>
+		/// <param name="parent">Parent subscription info, if any.</param>
 		public SubscriptionInfo(Subscription subscription, SubscriptionInfo parent)
 		{
 			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
@@ -27,14 +135,30 @@ partial class Connector
 			}
 		}
 
+		/// <summary>
+		/// Parent subscription info, if any.
+		/// </summary>
 		public SubscriptionInfo Parent { get; }
+
+		/// <summary>
+		/// Subscription instance.
+		/// </summary>
 		public Subscription Subscription { get; }
+
+		/// <summary>
+		/// Indicates that lookup response has been received.
+		/// </summary>
 		public bool HasResult { get; set; }
+
+		/// <summary>
+		/// Collected lookup items.
+		/// </summary>
 		public List<object> LookupItems { get; }
 
-		public Security Security { get; set; }
-		public bool SecurityNotFound { get; set; }
-
+		/// <summary>
+		/// Create a subscription request that continues from the last time.
+		/// </summary>
+		/// <returns>Subscription message.</returns>
 		public ISubscriptionMessage CreateSubscriptionContinue()
 		{
 			var subscrMsg = Subscription.SubscriptionMessage.TypedClone();
@@ -45,6 +169,11 @@ partial class Connector
 			return subscrMsg;
 		}
 
+		/// <summary>
+		/// Update last processed time.
+		/// </summary>
+		/// <param name="time">New time.</param>
+		/// <returns><see langword="true"/> if updated.</returns>
 		public bool UpdateLastTime(DateTime time)
 		{
 			if (_last == null || _last.Value <= time)
@@ -56,6 +185,12 @@ partial class Connector
 			return false;
 		}
 
+		/// <summary>
+		/// Update the current candle state.
+		/// </summary>
+		/// <param name="message">Candle message.</param>
+		/// <param name="candle">Updated candle.</param>
+		/// <returns><see langword="true"/> if updated.</returns>
 		public bool UpdateCandle(CandleMessage message, out ICandleMessage candle)
 		{
 			if (message == null)
@@ -77,541 +212,701 @@ partial class Connector
 			return true;
 		}
 
+		/// <inheritdoc />
 		public override string ToString() => Subscription.ToString();
 	}
 
-	private class SubscriptionManager(Connector connector)
+	private sealed class ActionCollector
 	{
-		private readonly Lock _syncObject = new();
+		private readonly List<Actions.Item> _items = [];
 
-		private readonly Dictionary<long, SubscriptionInfo> _subscriptions = [];
-		private readonly Dictionary<long, (ISubscriptionMessage request, Subscription subscription)> _requests = [];
-		private readonly List<SubscriptionInfo> _keeped = [];
-		private readonly HashSet<long> _notFound = [];
-		private readonly Dictionary<long, long> _subscriptionAllMap = [];
+		public void Add(Actions.Item action) => _items.Add(action);
 
-		private readonly Connector _connector = connector ?? throw new ArgumentNullException(nameof(connector));
-		private bool _wasConnected;
-
-		public IEnumerable<Subscription> Subscriptions
+		public Actions ToResult()
 		{
-			get
-			{
-				using (_syncObject.EnterScope())
-				{
-					return [.. _subscriptions.Select(p => p.Value.Subscription)];
-				}
-			}
+			return _items.Count == 0
+				? Actions.Empty
+				: new Actions { Items = [.. _items] };
 		}
+	}
 
-		public void ClearCache()
+	private readonly Lock _syncObject = new();
+
+	private readonly Dictionary<long, SubscriptionInfo> _subscriptions = [];
+	private readonly Dictionary<long, (ISubscriptionMessage request, Subscription subscription)> _requests = [];
+	private readonly List<SubscriptionInfo> _keeped = [];
+	private readonly HashSet<long> _notFound = [];
+	private readonly Dictionary<long, long> _subscriptionAllMap = [];
+	private readonly CachedSynchronizedSet<Subscription> _subscriptionsOnConnect = [];
+	private IdGenerator _transactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
+
+	private bool _wasConnected;
+
+	/// <summary>
+	/// Transaction id generator.
+	/// </summary>
+	public IdGenerator TransactionIdGenerator
+	{
+		get => _transactionIdGenerator;
+		set => _transactionIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
+	/// <summary>
+	/// Indicates whether to send unsubscribe requests while disconnected.
+	/// </summary>
+	public bool SendUnsubscribeWhenDisconnected { get; } = sendUnsubscribeWhenDisconnected;
+
+	/// <summary>
+	/// Current connection state.
+	/// </summary>
+	public ConnectionStates ConnectionState { get; set; } = ConnectionStates.Disconnected;
+
+	/// <summary>
+	/// Restore subscription on reconnect.
+	/// </summary>
+	/// <remarks>
+	/// Normal case connect/disconnect.
+	/// </remarks>
+	public bool IsRestoreSubscriptionOnNormalReconnect { get; set; } = true;
+
+	/// <summary>
+	/// Send subscriptions on connect.
+	/// </summary>
+	public CachedSynchronizedSet<Subscription> SubscriptionsOnConnect => _subscriptionsOnConnect;
+
+	/// <summary>
+	/// Current subscriptions snapshot.
+	/// </summary>
+	public IEnumerable<Subscription> Subscriptions
+	{
+		get
 		{
 			using (_syncObject.EnterScope())
 			{
-				_wasConnected = default;
-				_subscriptions.Clear();
-				_requests.Clear();
-				_keeped.Clear();
-				_notFound.Clear();
-				_subscriptionAllMap.Clear();
+				return [.. _subscriptions.Select(p => p.Value.Subscription)];
 			}
 		}
+	}
 
-		public IEnumerable<Security> GetSubscribers(DataType dataType)
+	/// <summary>
+	/// Clear internal state.
+	/// </summary>
+	public void ClearCache()
+	{
+		using (_syncObject.EnterScope())
 		{
-			return Subscriptions
-			       .Where(s => s.DataType == dataType && s.State.IsActive())
-			       .Select(s => _connector.TryGetSecurity(s.SecurityId))
-					.WhereNotNull();
+			_wasConnected = default;
+			_subscriptions.Clear();
+			_requests.Clear();
+			_keeped.Clear();
+			_notFound.Clear();
+			_subscriptionAllMap.Clear();
 		}
+	}
 
-		private void TryWriteLog(long id)
-		{
-			if (_notFound.Add(id))
-				_connector.LogWarning(LocalizedStrings.SubscriptionNonExist, id);
-		}
+	/// <summary>
+	/// Get securities that have active subscriptions for the specified data type.
+	/// </summary>
+	/// <param name="dataType">Data type.</param>
+	/// <returns>Securities with active subscriptions.</returns>
+	public IEnumerable<SecurityId> GetSubscribers(DataType dataType)
+	{
+		return Subscriptions
+				.Where(s => s.DataType == dataType && s.State.IsActive())
+				.Select(s => s.SecurityId)
+				.WhereNotNull();
+	}
 
-		private void Remove(long id)
-		{
-			_subscriptions.Remove(id);
-			_connector.LogInfo(LocalizedStrings.SubscriptionRemoved, id);
-		}
+	private void TryWriteLog(long id)
+	{
+		if (_notFound.Add(id))
+			this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
+	}
 
-		private SubscriptionInfo TryGetInfo(long id, bool ignoreAll, bool remove, DateTime? time, bool addLog)
+	private void Remove(long id)
+	{
+		_subscriptions.Remove(id);
+		this.AddInfoLog(LocalizedStrings.SubscriptionRemoved, id);
+	}
+
+	private SubscriptionInfo TryGetInfo(long id, bool ignoreAll, bool remove, DateTime? time, bool addLog)
+	{
+		using (_syncObject.EnterScope())
 		{
-			using (_syncObject.EnterScope())
+			if (_subscriptionAllMap.ContainsKey(id))
 			{
-				if (_subscriptionAllMap.ContainsKey(id))
+				if (ignoreAll)
+					return null;
+
+				if (remove)
+					_subscriptionAllMap.Remove(id);
+
+				//id = parentId;
+			}
+
+			if (_subscriptions.TryGetValue(id, out var info))
+			{
+				if (remove)
+					Remove(id);
+				else if (time != null)
 				{
-					if (ignoreAll)
-						return null;
-
-					if (remove)
-						_subscriptionAllMap.Remove(id);
-
-					//id = parentId;
-				}
-
-				if (_subscriptions.TryGetValue(id, out var info))
-				{
-					if (remove)
-						Remove(id);
-					else if (time != null)
+					if (!info.UpdateLastTime(time.Value))
 					{
-						if (!info.UpdateLastTime(time.Value))
-						{
-							//return null;
-						}
+						//return null;
 					}
-
-					return info;
 				}
+
+				return info;
 			}
-
-			if (addLog)
-				TryWriteLog(id);
-
-			return null;
 		}
 
-		public IEnumerable<Subscription> GetSubscriptions(ISubscriptionIdMessage message)
+		if (addLog)
+			TryWriteLog(id);
+
+		return null;
+	}
+
+	/// <summary>
+	/// Resolve subscriptions for the specified message.
+	/// </summary>
+	/// <param name="message">Message with subscription ids.</param>
+	/// <returns>Subscriptions.</returns>
+	public IEnumerable<Subscription> GetSubscriptions(ISubscriptionIdMessage message)
+	{
+		var time = message is IServerTimeMessage timeMsg ? timeMsg.ServerTime : (DateTime?)null;
+
+		var processed = new HashSet<SubscriptionInfo>();
+
+		foreach (var id in message.GetSubscriptionIds())
 		{
-			var time = message is IServerTimeMessage timeMsg ? timeMsg.ServerTime : (DateTime?)null;
+			var info = TryGetInfo(id, false, false, time, true);
 
-			var processed = new HashSet<SubscriptionInfo>();
+			if (info == null)
+				continue;
 
-			foreach (var id in message.GetSubscriptionIds())
+			if (!processed.Add(info))
+				continue;
+
+			if (info.Parent == null)
 			{
-				var info = TryGetSubscription(id, false, false, time);
+				yield return info.Subscription;
+			}
+			else
+			{
+				if (!processed.Add(info.Parent))
+					continue;
+
+				yield return info.Parent.Subscription;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Try get subscription by id.
+	/// </summary>
+	/// <param name="id">Subscription id.</param>
+	/// <param name="ignoreAll">Ignore "all securities" mapping.</param>
+	/// <param name="remove">Remove from cache.</param>
+	/// <param name="time">Optional server time.</param>
+	/// <returns>Subscription or <see langword="null"/>.</returns>
+	public Subscription TryGetSubscription(long id, bool ignoreAll, bool remove, DateTime? time)
+	{
+		return TryGetInfo(id, ignoreAll, remove, time, true)?.Subscription;
+	}
+
+	private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
+	{
+		var subscription = info.Subscription;
+		subscription.State = subscription.State.ChangeSubscriptionState(state, subscription.TransactionId, this);
+	}
+
+	/// <summary>
+	/// Process a subscription response message.
+	/// </summary>
+	/// <param name="response">Response message.</param>
+	/// <param name="originalMsg">Original subscription request.</param>
+	/// <param name="unexpectedCancelled">Indicates that active subscription was canceled due to error.</param>
+	/// <param name="items">Collected lookup items.</param>
+	/// <returns>Subscription instance.</returns>
+	public Subscription ProcessResponse(SubscriptionResponseMessage response, out ISubscriptionMessage originalMsg, out bool unexpectedCancelled, out object[] items)
+	{
+		originalMsg = null;
+
+		SubscriptionInfo info = null;
+
+		items = [];
+
+		try
+		{
+			using (_syncObject.EnterScope())
+			{
+				unexpectedCancelled = false;
+
+				if (!_requests.TryGetValue(response.OriginalTransactionId, out var tuple))
+				{
+					originalMsg = null;
+					return null;
+				}
+
+				// do not remove cause subscription can be interrupted after successful response
+				//_requests.Remove(response.OriginalTransactionId);
+
+				originalMsg = tuple.request;
+
+				info = originalMsg.IsSubscribe
+					? TryGetInfo(originalMsg.TransactionId, false, false, null, false)
+					: TryGetInfo(originalMsg.OriginalTransactionId, false, true, null, false);
 
 				if (info == null)
-					continue;
-
-				if (!processed.Add(info))
-					continue;
-
-				if (info.Parent == null)
 				{
-					yield return info.Subscription;
+					originalMsg = null;
+					return null;
 				}
-				else
+
+				var subscription = info.Subscription;
+
+				if (originalMsg.IsSubscribe)
 				{
-					if (!processed.Add(info.Parent))
-						continue;
-
-					yield return info.Parent.Subscription;
-				}
-			}
-		}
-
-		public SubscriptionInfo TryGetSubscription(long id, bool ignoreAll, bool remove, DateTime? time)
-		{
-			return TryGetInfo(id, ignoreAll, remove, time, true);
-		}
-
-		private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
-		{
-			var subscription = info.Subscription;
-			subscription.State = subscription.State.ChangeSubscriptionState(state, subscription.TransactionId, _connector);
-		}
-
-		public Subscription ProcessResponse(SubscriptionResponseMessage response, out ISubscriptionMessage originalMsg, out bool unexpectedCancelled, out object[] items)
-		{
-			originalMsg = null;
-
-			SubscriptionInfo info = null;
-
-			items = [];
-
-			try
-			{
-				using (_syncObject.EnterScope())
-				{
-					unexpectedCancelled = false;
-
-					if (!_requests.TryGetValue(response.OriginalTransactionId, out var tuple))
+					if (response.IsOk())
 					{
-						originalMsg = null;
-						return null;
-					}
-
-					// do not remove cause subscription can be interrupted after successful response
-					//_requests.Remove(response.OriginalTransactionId);
-
-					originalMsg = tuple.request;
-
-					info = originalMsg.IsSubscribe
-						? TryGetInfo(originalMsg.TransactionId, false, false, null, false)
-						: TryGetInfo(originalMsg.OriginalTransactionId, false, true, null, false);
-
-					if (info == null)
-					{
-						originalMsg = null;
-						return null;
-					}
-
-					var subscription = info.Subscription;
-
-					if (originalMsg.IsSubscribe)
-					{
-						if (response.IsOk())
-						{
-							ChangeState(info, SubscriptionStates.Active);
-						}
-						else
-						{
-							ChangeState(info, SubscriptionStates.Error);
-
-							Remove(subscription.TransactionId);
-
-							unexpectedCancelled = subscription.State.IsActive();
-
-							_requests.Remove(response.OriginalTransactionId);
-
-							if (info.Parent == null)
-								items = info.LookupItems?.CopyAndClear() ?? [];
-						}
+						ChangeState(info, SubscriptionStates.Active);
 					}
 					else
 					{
-						ChangeState(info, SubscriptionStates.Stopped);
+						ChangeState(info, SubscriptionStates.Error);
 
 						Remove(subscription.TransactionId);
 
-						// remove subscribe and unsubscribe requests
-						_requests.Remove(subscription.TransactionId);
+						unexpectedCancelled = subscription.State.IsActive();
+
 						_requests.Remove(response.OriginalTransactionId);
-					}
 
-					if (info.Parent != null)
-					{
-						originalMsg = null;
-						return null;
+						if (info.Parent == null)
+							items = info.LookupItems?.CopyAndClear() ?? [];
 					}
-
-					return subscription;
 				}
-			}
-			finally
-			{
-				if (info == null)
-					TryWriteLog(response.OriginalTransactionId);
-			}
-		}
+				else
+				{
+					ChangeState(info, SubscriptionStates.Stopped);
 
-		private void AddSubscription(Subscription subscription)
-		{
-			if (subscription == null)
-				throw new ArgumentNullException(nameof(subscription));
+					Remove(subscription.TransactionId);
 
-			if (subscription.TransactionId == 0)
-				subscription.TransactionId = _connector.TransactionIdGenerator.GetNextId();
+					// remove subscribe and unsubscribe requests
+					_requests.Remove(subscription.TransactionId);
+					_requests.Remove(response.OriginalTransactionId);
+				}
 
-			using (_syncObject.EnterScope())
-			{
-				var info = new SubscriptionInfo(subscription, _subscriptionAllMap.TryGetValue(subscription.TransactionId, out var parentId) ? _subscriptions.TryGetValue(parentId) : null);
+				if (info.Parent != null)
+				{
+					originalMsg = null;
+					return null;
+				}
 
-				if (subscription.SubscriptionMessage is OrderStatusMessage)
-					_connector._entityCache.AddOrderStatusTransactionId(subscription.TransactionId);
-
-				_subscriptions.Add(subscription.TransactionId, info);
+				return subscription;
 			}
 		}
-
-		public void Subscribe(Subscription subscription, bool isAllExtension = false)
+		finally
 		{
-			AddSubscription(subscription);
-
-			var subscrMsg = subscription.SubscriptionMessage;
-			var clone = subscrMsg.TypedClone();
-			clone.Adapter = subscrMsg.Adapter;
-
-			if (isAllExtension)
-				clone.BackMode = subscrMsg.BackMode;
-
-			SendRequest(clone, subscription, isAllExtension);
+			if (info == null)
+				TryWriteLog(response.OriginalTransactionId);
 		}
+	}
 
-		public void UnSubscribe(Subscription subscription)
+	private void AddSubscription(Subscription subscription, ActionCollector actions)
+	{
+		if (subscription == null)
+			throw new ArgumentNullException(nameof(subscription));
+
+		if (actions == null)
+			throw new ArgumentNullException(nameof(actions));
+
+		if (subscription.TransactionId == 0)
+			subscription.TransactionId = TransactionIdGenerator.GetNextId();
+
+		using (_syncObject.EnterScope())
 		{
-			if (subscription == null)
-				throw new ArgumentNullException(nameof(subscription));
-
-			//if (!subscription.State.IsActive())
-			//{
-			//	_connector.AddWarningLog(LocalizedStrings.SubscriptionInvalidState, subscription.TransactionId, subscription.State);
-			//	return;
-			//}
-
-			var unsubscribe = subscription.SubscriptionMessage.TypedClone();
-
-			unsubscribe.TransactionId = _connector.TransactionIdGenerator.GetNextId();
-			unsubscribe.OriginalTransactionId = subscription.TransactionId;
-			unsubscribe.IsSubscribe = false;
-
-			// some subscription can be only for subscribe
-			if (unsubscribe.IsSubscribe)
-				return;
+			var info = new SubscriptionInfo(subscription, _subscriptionAllMap.TryGetValue(subscription.TransactionId, out var parentId) ? _subscriptions.TryGetValue(parentId) : null);
 
 			if (subscription.SubscriptionMessage is OrderStatusMessage)
-				_connector._entityCache.RemoveOrderStatusTransactionId(subscription.TransactionId);
+				actions.Add(Actions.Item.AddOrderStatusTransactionId(subscription.TransactionId));
 
-			if (_connector is HistoryEmulationConnector && _connector.ConnectionState != ConnectionStates.Connected)
+			_subscriptions.Add(subscription.TransactionId, info);
+		}
+	}
+
+	/// <summary>
+	/// Send a subscription request.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <param name="isAllExtension">Indicates "all securities" extension.</param>
+	/// <returns>Actions to apply.</returns>
+	public Actions Subscribe(Subscription subscription, bool isAllExtension = false)
+	{
+		var actions = new ActionCollector();
+		Subscribe(subscription, isAllExtension, actions);
+		return actions.ToResult();
+	}
+
+	private void Subscribe(Subscription subscription, bool isAllExtension, ActionCollector actions)
+	{
+		AddSubscription(subscription, actions);
+
+		var subscrMsg = subscription.SubscriptionMessage;
+		var clone = subscrMsg.TypedClone();
+		clone.Adapter = subscrMsg.Adapter;
+
+		if (isAllExtension)
+			clone.BackMode = subscrMsg.BackMode;
+
+		SendRequest(clone, subscription, isAllExtension, actions);
+	}
+
+	/// <summary>
+	/// Send an unsubscribe request.
+	/// </summary>
+	/// <param name="subscription">Subscription.</param>
+	/// <returns>Actions to apply.</returns>
+	public Actions UnSubscribe(Subscription subscription)
+	{
+		var actions = new ActionCollector();
+		UnSubscribe(subscription, actions);
+		return actions.ToResult();
+	}
+
+	private void UnSubscribe(Subscription subscription, ActionCollector actions)
+	{
+		if (subscription == null)
+			throw new ArgumentNullException(nameof(subscription));
+
+		if (actions == null)
+			throw new ArgumentNullException(nameof(actions));
+
+		//if (!subscription.State.IsActive())
+		//{
+		//	_host.AddWarningLog(LocalizedStrings.SubscriptionInvalidState, subscription.TransactionId, subscription.State);
+		//	return;
+		//}
+
+		var unsubscribe = subscription.SubscriptionMessage.TypedClone();
+
+		unsubscribe.IsSubscribe = false;
+
+		// some subscription can be only for subscribe
+		if (unsubscribe.IsSubscribe)
+			return;
+
+		unsubscribe.OriginalTransactionId = subscription.TransactionId;
+
+		if (subscription.SubscriptionMessage is OrderStatusMessage)
+			actions.Add(Actions.Item.RemoveOrderStatusTransactionId(subscription.TransactionId));
+
+		if (!SendUnsubscribeWhenDisconnected && ConnectionState != ConnectionStates.Connected)
+		{
+			_subscriptions.Remove(subscription.TransactionId);
+			_requests.Remove(subscription.TransactionId);
+		}
+		else
+		{
+			unsubscribe.TransactionId = TransactionIdGenerator.GetNextId();
+			SendRequest(unsubscribe, subscription, false, actions);
+		}
+	}
+
+	private void SendRequest(ISubscriptionMessage request, Subscription subscription, bool isAllExtension, ActionCollector actions)
+	{
+		using (_syncObject.EnterScope())
+			_requests.Add(request.TransactionId, (request, subscription));
+
+		if (isAllExtension)
+			this.AddVerboseLog("(ALL+) " + (request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent), subscription.SecurityId, request);
+		else
+			this.AddDebugLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.SecurityId, request);
+
+		actions.Add(Actions.Item.SendInMessage((Message)request));
+	}
+
+	/// <summary>
+	/// Handle connection event and restore subscriptions as needed.
+	/// </summary>
+	/// <param name="subscriptionFilter">Filter for <see cref="SubscriptionsOnConnect"/>.</param>
+	/// <returns>Actions to apply.</returns>
+	public Actions HandleConnected(Func<Subscription, bool> subscriptionFilter)
+	{
+		if (subscriptionFilter is null)
+			throw new ArgumentNullException(nameof(subscriptionFilter));
+
+		return HandleConnected([.. SubscriptionsOnConnect.Cache.Where(subscriptionFilter)]);
+	}
+
+	/// <summary>
+	/// Handle connection event and restore subscriptions as needed.
+	/// </summary>
+	/// <param name="subscriptions">Default subscriptions.</param>
+	/// <returns>Actions to apply.</returns>
+	public Actions HandleConnected(Subscription[] subscriptions)
+	{
+		if (subscriptions is null)
+			throw new ArgumentNullException(nameof(subscriptions));
+
+		var actions = new ActionCollector();
+
+		Subscription[] missingSubscriptions;
+
+		using (_syncObject.EnterScope())
+			missingSubscriptions = [.. subscriptions.Where(sub => (!_wasConnected || !SubscriptionsOnConnect.Contains(sub)) && !_subscriptions.ContainsKey(sub.TransactionId))];
+
+		if (_wasConnected)
+		{
+			if (!IsRestoreSubscriptionOnNormalReconnect)
+				return Actions.Empty;
+
+			missingSubscriptions.ForEach(sub =>
 			{
-				_subscriptions.Remove(subscription.TransactionId);
-				_requests.Remove(subscription.TransactionId);
-			}
-			else
-				SendRequest(unsubscribe, subscription, false);
+				this.AddVerboseLog($"adding default subscription {sub.DataType}");
+				AddSubscription(sub, actions);
+			});
+
+			ReSubscribeAll(actions);
+		}
+		else
+		{
+			_wasConnected = true;
+
+			missingSubscriptions.ForEach(sub =>
+			{
+				this.AddVerboseLog($"subscribing default subscription {sub.DataType}");
+				Subscribe(sub, false, actions);
+			});
 		}
 
-		private void SendRequest(ISubscriptionMessage request, Subscription subscription, bool isAllExtension)
+		return actions.ToResult();
+	}
+
+	private void ReSubscribeAll(ActionCollector actions)
+	{
+		if (actions == null)
+			throw new ArgumentNullException(nameof(actions));
+
+		this.AddInfoLog(nameof(ReSubscribeAll));
+
+		var requests = new Dictionary<ISubscriptionMessage, SubscriptionInfo>();
+
+		using (_syncObject.EnterScope())
 		{
-			using (_syncObject.EnterScope())
-				_requests.Add(request.TransactionId, (request, subscription));
+			_requests.Clear();
 
-			if(isAllExtension)
-				_connector.LogVerbose("(ALL+) " + (request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent), subscription.SecurityId, request);
-			else
-				_connector.LogDebug(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.SecurityId, request);
-
-			_connector.SendInMessage((Message)request);
-		}
-
-		public void HandleConnected(Subscription[] subscriptions)
-		{
-			if (subscriptions is null)
-				throw new ArgumentNullException(nameof(subscriptions));
-
-			Subscription[] missingSubscriptions;
-
-			using (_syncObject.EnterScope())
-				missingSubscriptions = [.. subscriptions.Where(sub => (!_wasConnected || !_connector.SubscriptionsOnConnect.Contains(sub)) && !_subscriptions.ContainsKey(sub.TransactionId))];
-
-			if (_wasConnected)
+			foreach (var info in _subscriptions.Values.Concat(_keeped).Distinct())
 			{
-				if (!_connector.IsRestoreSubscriptionOnNormalReconnect)
-					return;
+				var newId = TransactionIdGenerator.GetNextId();
 
-				missingSubscriptions.ForEach(sub =>
+				if (info.Subscription.SubscriptionMessage is OrderStatusMessage)
 				{
-					_connector.LogVerbose($"adding default subscription {sub.DataType}");
-					AddSubscription(sub);
-				});
-
-				ReSubscribeAll();
-			}
-			else
-			{
-				_wasConnected = true;
-
-				missingSubscriptions.ForEach(sub =>
-				{
-					_connector.LogVerbose($"subscribing default subscription {sub.DataType}");
-					Subscribe(sub);
-				});
-			}
-		}
-
-		private void ReSubscribeAll()
-		{
-			_connector.LogInfo(nameof(ReSubscribeAll));
-
-			var requests = new Dictionary<ISubscriptionMessage, SubscriptionInfo>();
-
-			using (_syncObject.EnterScope())
-			{
-				_requests.Clear();
-
-				foreach (var info in _subscriptions.Values.Concat(_keeped).Distinct())
-				{
-					var newId = _connector.TransactionIdGenerator.GetNextId();
-
-					if (info.Subscription.SubscriptionMessage is OrderStatusMessage)
-					{
-						_connector._entityCache.RemoveOrderStatusTransactionId(info.Subscription.TransactionId);
-						_connector._entityCache.AddOrderStatusTransactionId(newId);
-					}
-
-					info.HasResult = false;
-					info.Subscription.TransactionId = newId;
-					requests.Add(info.CreateSubscriptionContinue(), info);
+					actions.Add(Actions.Item.RemoveOrderStatusTransactionId(info.Subscription.TransactionId));
+					actions.Add(Actions.Item.AddOrderStatusTransactionId(newId));
 				}
 
-				_keeped.Clear();
-				_subscriptions.Clear();
-
-				foreach (var (_, info) in requests)
-					_subscriptions.Add(info.Subscription.TransactionId, info);
+				info.HasResult = false;
+				info.Subscription.TransactionId = newId;
+				requests.Add(info.CreateSubscriptionContinue(), info);
 			}
 
-			foreach (var (subMsg, info) in requests)
-			{
-				SendRequest(subMsg, info.Subscription, false);
-			}
+			_keeped.Clear();
+			_subscriptions.Clear();
+
+			foreach (var (_, info) in requests)
+				_subscriptions.Add(info.Subscription.TransactionId, info);
 		}
 
-		public void UnSubscribeAll()
+		foreach (var (subMsg, info) in requests)
 		{
-			_connector.LogInfo(nameof(UnSubscribeAll));
+			SendRequest(subMsg, info.Subscription, false, actions);
+		}
+	}
 
-			var subscriptions = new List<Subscription>();
+	/// <summary>
+	/// Unsubscribe all active subscriptions.
+	/// </summary>
+	/// <returns>Actions to apply.</returns>
+	public Actions UnSubscribeAll()
+	{
+		this.AddInfoLog(nameof(UnSubscribeAll));
 
+		var actions = new ActionCollector();
+
+		var subscriptions = new List<Subscription>();
+
+		using (_syncObject.EnterScope())
+		{
+			_keeped.Clear();
+			_keeped.AddRange(_subscriptions.Values);
+
+			subscriptions.AddRange(Subscriptions.Where(s => s.State.IsActive()));
+		}
+
+		foreach (var subscription in subscriptions)
+		{
+			UnSubscribe(subscription, actions);
+		}
+
+		return actions.ToResult();
+	}
+
+	/// <summary>
+	/// Process a lookup response item.
+	/// </summary>
+	/// <typeparam name="T">Item type.</typeparam>
+	/// <param name="message">Lookup message.</param>
+	/// <param name="item">Lookup item.</param>
+	/// <returns>Subscriptions that received the item.</returns>
+	public IEnumerable<Subscription> ProcessLookupResponse<T>(ISubscriptionIdMessage message, T item)
+	{
+		var subscriptions = new List<Subscription>();
+
+		foreach (var id in message.GetSubscriptionIds())
+		{
+			var info = TryGetInfo(id, true, false, null, true);
+
+			if (info == null || info.HasResult)
+				continue;
+
+			if (info.LookupItems == null)
+			{
+				this.AddWarningLog(LocalizedStrings.UnknownType, info.Subscription.SubscriptionMessage);
+				continue;
+			}
+
+			info.LookupItems.Add(item);
+			subscriptions.Add(info.Subscription);
+		}
+
+		return subscriptions;
+	}
+
+	/// <summary>
+	/// Process a subscription finished message.
+	/// </summary>
+	/// <param name="message">Finished message.</param>
+	/// <param name="items">Collected lookup items.</param>
+	/// <returns>Subscription instance.</returns>
+	public Subscription ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message, out object[] items)
+	{
+		using (_syncObject.EnterScope())
+		{
+			var info = TryGetInfo(message.OriginalTransactionId, false, true, null, true);
+
+			if (info == null)
+			{
+				items = [];
+				return null;
+			}
+
+			if (info.Parent == null)
+				items = info.LookupItems?.CopyAndClear() ?? [];
+			else
+				items = [];
+
+			ChangeState(info, SubscriptionStates.Finished);
+			_requests.Remove(message.OriginalTransactionId);
+
+			if (info.Parent != null)
+				return null;
+
+			return info.Subscription;
+		}
+	}
+
+	/// <summary>
+	/// Process a subscription online message.
+	/// </summary>
+	/// <param name="message">Online message.</param>
+	/// <param name="items">Collected lookup items.</param>
+	/// <returns>Subscription instance.</returns>
+	public Subscription ProcessSubscriptionOnlineMessage(SubscriptionOnlineMessage message, out object[] items)
+	{
+		using (_syncObject.EnterScope())
+		{
+			var info = TryGetInfo(message.OriginalTransactionId, false, false, null, true);
+
+			if (info == null)
+			{
+				items = [];
+				return null;
+			}
+
+			if (info.Parent == null)
+				items = info.LookupItems?.CopyAndClear() ?? [];
+			else
+				items = [];
+
+			ChangeState(info, SubscriptionStates.Online);
+
+			if (info.Parent != null)
+				return null;
+
+			return info.Subscription;
+		}
+	}
+
+	/// <summary>
+	/// Update candles for subscriptions and return updated results.
+	/// </summary>
+	/// <param name="message">Candle message.</param>
+	/// <returns>Updated subscriptions with candles.</returns>
+	public IEnumerable<(Subscription subscription, ICandleMessage candle)> UpdateCandles(CandleMessage message)
+	{
+		var results = new List<(Subscription, ICandleMessage)>();
+
+		foreach (var subscriptionId in message.GetSubscriptionIds())
+		{
 			using (_syncObject.EnterScope())
 			{
-				_keeped.Clear();
-				_keeped.AddRange(_subscriptions.Values);
+				if (!_subscriptions.TryGetValue(subscriptionId, out var info))
+				{
+					TryWriteLog(subscriptionId);
+					continue;
+				}
 
-				subscriptions.AddRange(Subscriptions.Where(s => s.State.IsActive()));
-			}
+				var secId = info.Subscription.SecurityId;
 
-			foreach (var subscription in subscriptions)
-			{
-				UnSubscribe(subscription);
-			}
-		}
+				if (secId?.IsAllSecurity() == true)
+				{
+					results.Add((info.Subscription, message));
+					continue;
+				}
 
-		public IEnumerable<Subscription> ProcessLookupResponse<T>(ISubscriptionIdMessage message, T item)
-		{
-			var subscriptions = new List<Subscription>();
-
-			foreach (var id in message.GetSubscriptionIds())
-			{
-				var info = TryGetInfo(id, true, false, null, true);
-
-				if (info == null || info.HasResult)
+				if (!info.UpdateLastTime(message.OpenTime))
 					continue;
 
-				if (info.LookupItems == null)
-				{
-					_connector.AddWarningLog(LocalizedStrings.UnknownType, info.Subscription.SubscriptionMessage);
+				if (!info.UpdateCandle(message, out var candle))
 					continue;
-				}
 
-				info.LookupItems.Add(item);
-				subscriptions.Add(info.Subscription);
-			}
-
-			return subscriptions;
-		}
-
-		public Subscription ProcessSubscriptionFinishedMessage(SubscriptionFinishedMessage message, out object[] items)
-		{
-			using (_syncObject.EnterScope())
-			{
-				var info = TryGetSubscription(message.OriginalTransactionId, false, true, null);
-
-				if (info == null)
-				{
-					items = [];
-					return null;
-				}
-
-				if (info.Parent == null)
-					items = info.LookupItems?.CopyAndClear() ?? [];
-				else
-					items = [];
-
-				ChangeState(info, SubscriptionStates.Finished);
-				_requests.Remove(message.OriginalTransactionId);
-
-				if (info.Parent != null)
-					return null;
-
-				return info.Subscription;
+				results.Add((info.Subscription, candle));
 			}
 		}
 
-		public Subscription ProcessSubscriptionOnlineMessage(SubscriptionOnlineMessage message, out object[] items)
+		return results;
+	}
+
+	/// <summary>
+	/// Subscribe using an "all securities" message.
+	/// </summary>
+	/// <param name="allMsg">All securities message.</param>
+	/// <returns>Actions to apply.</returns>
+	public Actions SubscribeAll(SubscriptionSecurityAllMessage allMsg)
+	{
+		if (allMsg == null)
+			throw new ArgumentNullException(nameof(allMsg));
+
+		using (_syncObject.EnterScope())
+			_subscriptionAllMap.Add(allMsg.TransactionId, allMsg.ParentTransactionId);
+
+		var mdMsg = new MarketDataMessage
 		{
-			using (_syncObject.EnterScope())
-			{
-				var info = TryGetSubscription(message.OriginalTransactionId, false, false, null);
+			Adapter = allMsg.Adapter,
+			BackMode = allMsg.BackMode,
+		};
+		allMsg.CopyTo(mdMsg);
 
-				if (info == null)
-				{
-					items = [];
-					return null;
-				}
-
-				if (info.Parent == null)
-					items = info.LookupItems?.CopyAndClear() ?? [];
-				else
-					items = [];
-
-				ChangeState(info, SubscriptionStates.Online);
-
-				if (info.Parent != null)
-					return null;
-
-				return info.Subscription;
-			}
-		}
-
-		public IEnumerable<(Subscription subscription, ICandleMessage candle)> UpdateCandles(CandleMessage message)
-		{
-			var results = new List<(Subscription, ICandleMessage)>();
-
-			foreach (var subscriptionId in message.GetSubscriptionIds())
-			{
-				using (_syncObject.EnterScope())
-				{
-					if (!_subscriptions.TryGetValue(subscriptionId, out var info))
-					{
-						TryWriteLog(subscriptionId);
-						continue;
-					}
-
-					var secId = info.Subscription.SecurityId;
-
-					if (secId?.IsAllSecurity() == true)
-					{
-						results.Add((info.Subscription, message));
-						continue;
-					}
-
-					if (info.Security == null)
-					{
-						if (info.SecurityNotFound)
-							continue;
-
-						var security = _connector.TryGetSecurity(secId);
-
-						if (security == null)
-						{
-							info.SecurityNotFound = true;
-							_connector.AddWarningLog(LocalizedStrings.SecurityNoFound.Put(secId));
-							continue;
-						}
-
-						info.Security = security;
-					}
-
-					if (!info.UpdateLastTime(message.OpenTime))
-						continue;
-
-					if (!info.UpdateCandle(message, out var candle))
-						continue;
-
-					results.Add((info.Subscription, candle));
-				}
-			}
-
-			return results;
-		}
-
-		public void SubscribeAll(SubscriptionSecurityAllMessage allMsg)
-		{
-			using (_syncObject.EnterScope())
-				_subscriptionAllMap.Add(allMsg.TransactionId, allMsg.ParentTransactionId);
-
-			var mdMsg = new MarketDataMessage
-			{
-				Adapter = allMsg.Adapter,
-				BackMode = allMsg.BackMode,
-			};
-			allMsg.CopyTo(mdMsg);
-			Subscribe(new Subscription(mdMsg), true);
-		}
+		return Subscribe(new Subscription(mdMsg), true);
 	}
 }
