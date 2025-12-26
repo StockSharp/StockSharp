@@ -20,6 +20,8 @@ public class OrderBookIncrementMessageAdapterTests : BaseTestClass
 		return msg;
 	}
 
+	#region Integration tests (with real manager)
+
 	[TestMethod]
 	public async Task QuoteChange_Increment_BuildsFullBook_AndSuppressesOriginal()
 	{
@@ -145,4 +147,107 @@ public class OrderBookIncrementMessageAdapterTests : BaseTestClass
 		book.State.AssertNull();
 		book.GetSubscriptionIds().OrderBy(i => i).SequenceEqual([1L, 99L]).AssertTrue();
 	}
+
+	#endregion
+
+	#region Mock manager tests
+
+	[TestMethod]
+	public async Task SendInMessage_DelegatesToManager_AndRoutesMessages()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<IOrderBookIncrementManager>();
+
+		var toInner = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.MarketDepth,
+		};
+
+		var toOut = new SubscriptionResponseMessage { OriginalTransactionId = 1 };
+
+		manager
+			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
+			.Returns((toInner: (Message[])[toInner], toOut: (Message[])[toOut]));
+
+		using var adapter = new OrderBookIncrementMessageAdapter(inner, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
+
+		inner.InMessages.Count.AssertEqual(1);
+		inner.InMessages[0].AssertSame(toInner);
+
+		output.Count.AssertEqual(1);
+		output[0].AssertSame(toOut);
+
+		manager.Verify(m => m.ProcessInMessage(It.IsAny<Message>()), Times.Once);
+	}
+
+	[TestMethod]
+	public void InnerMessage_DelegatesToManager_AndRoutesMessages()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<IOrderBookIncrementManager>();
+
+		var forward = new ConnectMessage();
+		var extra = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			Bids = [],
+			Asks = [],
+		};
+
+		manager
+			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
+			.Returns((forward: (Message)forward, extraOut: (Message[])[extra]));
+
+		using var adapter = new OrderBookIncrementMessageAdapter(inner, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		inner.EmitOut(new DisconnectMessage());
+
+		output.Count.AssertEqual(2);
+		output[0].AssertSame(forward);
+		output[1].AssertSame(extra);
+
+		manager.Verify(m => m.ProcessOutMessage(It.IsAny<Message>()), Times.Once);
+	}
+
+	[TestMethod]
+	public void InnerMessage_WhenForwardNull_DoesNotForward()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<IOrderBookIncrementManager>();
+
+		var extra = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			Bids = [],
+			Asks = [],
+		};
+
+		manager
+			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
+			.Returns((forward: (Message)null, extraOut: (Message[])[extra]));
+
+		using var adapter = new OrderBookIncrementMessageAdapter(inner, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		inner.EmitOut(new DisconnectMessage());
+
+		// Only the extra message, not the original
+		output.Count.AssertEqual(1);
+		output[0].AssertSame(extra);
+	}
+
+	#endregion
 }
