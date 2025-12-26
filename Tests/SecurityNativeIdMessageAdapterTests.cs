@@ -495,4 +495,108 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		positions[0].SecurityId.SecurityCode.AssertEqual("AMD");
 		positions[0].SecurityId.BoardCode.AssertEqual("NASDAQ");
 	}
+
+
+	[TestMethod]
+	public async Task SendInMessage_DelegatesToManager_AndRoutesMessages()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<ISecurityNativeIdManager>();
+		var storageProvider = new MockNativeIdStorageProvider();
+
+		var toInner = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.Ticks,
+		};
+
+		var toOut = new SubscriptionResponseMessage { OriginalTransactionId = 1 };
+
+		manager
+			.Setup(m => m.ProcessInMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()))
+			.ReturnsAsync((toInner: (Message[])[toInner], toOut: (Message[])[toOut]));
+
+		manager
+			.Setup(m => m.ProcessOutMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()))
+			.ReturnsAsync((forward: (Message)null, extraOut: Array.Empty<Message>(), loopbackIn: Array.Empty<Message>()));
+
+		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
+
+		inner.InMessages.Count.AssertEqual(1);
+		inner.InMessages[0].AssertSame(toInner);
+
+		output.Count.AssertEqual(1);
+		output[0].AssertSame(toOut);
+
+		manager.Verify(m => m.ProcessInMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Once);
+	}
+
+	[TestMethod]
+	public async Task InnerMessage_DelegatesToManager_AndRoutesMessages()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<ISecurityNativeIdManager>();
+		var storageProvider = new MockNativeIdStorageProvider();
+
+		var forward = new ConnectMessage();
+		var extra = new SubscriptionResponseMessage { OriginalTransactionId = 2 };
+		var loopback = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 3,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.Ticks,
+		};
+
+		manager
+			.Setup(m => m.ProcessOutMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()))
+			.ReturnsAsync((forward: (Message)forward, extraOut: (Message[])[extra], loopbackIn: (Message[])[loopback]));
+
+		manager
+			.Setup(m => m.InitializeAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+			.Returns(ValueTask.CompletedTask);
+
+		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		inner.EmitOut(new ConnectMessage());
+
+		// Should have forwarded + extra
+		output.Count.AssertEqual(2);
+		output[0].AssertSame(forward);
+		output[1].AssertSame(extra);
+
+		// Loopback should have been sent to inner
+		inner.InMessages.Count.AssertEqual(1);
+		inner.InMessages[0].AssertSame(loopback);
+
+		manager.Verify(m => m.ProcessOutMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Once);
+	}
+
+	[TestMethod]
+	public async Task Dispose_UnsubscribesFromManager()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<ISecurityNativeIdManager>();
+		var storageProvider = new MockNativeIdStorageProvider();
+
+		manager
+			.Setup(m => m.ProcessInMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()))
+			.ReturnsAsync((toInner: Array.Empty<Message>(), toOut: Array.Empty<Message>()));
+
+		var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider, manager.Object);
+		adapter.Dispose();
+
+		// Verify Dispose was not called on the manager (since we don't own it)
+		manager.Verify(m => m.Dispose(), Times.Never);
+	}
 }
