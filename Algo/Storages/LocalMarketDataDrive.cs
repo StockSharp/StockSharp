@@ -2,7 +2,6 @@ namespace StockSharp.Algo.Storages;
 
 using IOPath = System.IO.Path;
 
-using Ecng.Common;
 using Ecng.Reflection;
 
 using StockSharp.Algo.Storages.Binary;
