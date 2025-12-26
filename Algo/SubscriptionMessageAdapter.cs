@@ -62,6 +62,14 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 	/// <inheritdoc />
 	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
+		if (!IsRestoreSubscriptionOnErrorReconnect &&
+			message is ConnectionRestoredMessage restoredMsg &&
+			restoredMsg.IsResetState)
+		{
+			await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+			return;
+		}
+
 		var (forward, extraOut) = _manager.ProcessOutMessage(message);
 
 		if (forward != null)

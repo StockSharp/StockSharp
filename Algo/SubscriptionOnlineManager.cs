@@ -139,6 +139,8 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 	/// <inheritdoc />
 	public async ValueTask<(Message forward, Message[] extraOut)> ProcessOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
+		List<Message> extraOut = null;
+
 		switch (message.Type)
 		{
 			case MessageTypes.Disconnect:
@@ -155,6 +157,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 			{
 				var responseMsg = (SubscriptionResponseMessage)message;
 				var originTransId = responseMsg.OriginalTransactionId;
+				long[] notifySubscribers = null;
 
 				using (await _sync.LockAsync(cancellationToken))
 				{
@@ -172,6 +175,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 						{
 							info.OnlineSubscribers.Remove(originTransId);
 							info.Subscribers.Remove(originTransId);
+							notifySubscribers = info.Subscribers.CachedKeys;
 
 							if (!ChangeState(info, originTransId, SubscriptionStates.Error))
 							{
@@ -179,6 +183,17 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 								return (null, []);
 							}
 						}
+					}
+				}
+
+				if (notifySubscribers is { Length: > 0 })
+				{
+					extraOut ??= new List<Message>(notifySubscribers.Length);
+
+					foreach (var subscriber in notifySubscribers)
+					{
+						_logReceiver.AddInfoLog(LocalizedStrings.SubscriptionNotifySubscriber, responseMsg.OriginalTransactionId, subscriber);
+						extraOut.Add(subscriber.CreateSubscriptionResponse(responseMsg.Error));
 					}
 				}
 
@@ -278,7 +293,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 			}
 		}
 
-		return (message, []);
+		return (message, extraOut?.ToArray() ?? []);
 	}
 
 	private bool ChangeState(SubscriptionInfo info, long transId, SubscriptionStates state)
