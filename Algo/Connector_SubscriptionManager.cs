@@ -473,11 +473,13 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 					}
 					else
 					{
+						var wasActive = subscription.State.IsActive();
+
 						ChangeState(info, SubscriptionStates.Error);
 
 						Remove(subscription.TransactionId);
 
-						unexpectedCancelled = subscription.State.IsActive();
+						unexpectedCancelled = wasActive;
 
 						_requests.Remove(response.OriginalTransactionId);
 
