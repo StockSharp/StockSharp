@@ -602,7 +602,7 @@ public class OrderLogTests : BaseTestClass
 		var (sec, registry, date) = Init();
 		var token = CancellationToken;
 
-		using var culture = ThreadingHelper.WithInvariantCulture();
+		using var culture = Do.WithInvariantCulture();
 
 		var secId = sec.Id.ToSecurityId();
 		IOrderLogMarketDepthBuilder builder = typeof(OrderLogMarketDepthBuilder).CreateOrderLogMarketDepthBuilder(secId);

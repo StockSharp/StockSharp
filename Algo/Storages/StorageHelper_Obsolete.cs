@@ -15,7 +15,7 @@ static partial class StorageHelper
 	[Obsolete("Use LoadAsync method instead.")]
 	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from, DateTime? to)
 		where TMessage : Message, IServerTimeMessage
-		=> LoadAsync(storage, from, to).ToEnumerable();
+		=> LoadAsync(storage, from, to).ToBlockingEnumerable();
 
 	/// <summary>
 	/// To delete market data from the storage for the specified time period.
@@ -405,7 +405,7 @@ static partial class StorageHelper
 	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use LoadAsync method instead.")]
 	public static IEnumerable<Message> Load(this IMarketDataStorage storage, DateTime date)
-		=> storage.CheckOnNull(nameof(storage)).LoadAsync(date).ToEnumerable();
+		=> storage.CheckOnNull(nameof(storage)).LoadAsync(date).ToBlockingEnumerable();
 
 	/// <summary>
 	/// Synchronous wrapper for <see cref="IMarketDataStorage.GetMetaInfoAsync(DateTime, CancellationToken)"/>.

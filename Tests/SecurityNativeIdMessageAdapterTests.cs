@@ -40,7 +40,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 
 		public ValueTask<(SecurityId secId, object nativeId)[]> GetAsync(CancellationToken cancellationToken = default)
 		{
-			return new(_bySecurityId.Select(p => (p.Key, p.Value)).ToArray());
+			return new([.. _bySecurityId.Select(p => (p.Key, p.Value))]);
 		}
 
 		public ValueTask<bool> TryAddAsync(SecurityId securityId, object nativeId, bool isPersistable = true, CancellationToken cancellationToken = default)
