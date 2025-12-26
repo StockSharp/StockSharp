@@ -156,5 +156,193 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 		book = output.OfType<QuoteChangeMessage>().Single();
 		book.GetSubscriptionIds().SequenceEqual([2L]).AssertTrue();
 	}
-}
 
+	#region Mocked Manager Tests
+
+	[TestMethod]
+	public async Task SendInMessage_DelegatesToManager_AndRoutesMessages()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<ILevel1DepthBuilderManager>();
+
+		var toInner = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.Level1,
+		};
+
+		var toOut = new SubscriptionResponseMessage { OriginalTransactionId = 1 };
+
+		manager
+			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
+			.Returns((toInner: (Message[])[toInner], toOut: (Message[])[toOut]));
+
+		using var adapter = new Level1DepthBuilderAdapter(inner, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
+
+		inner.InMessages.Count.AssertEqual(1);
+		inner.InMessages[0].AssertSame(toInner);
+
+		output.Count.AssertEqual(1);
+		output[0].AssertSame(toOut);
+
+		manager.Verify(m => m.ProcessInMessage(It.IsAny<Message>()), Times.Once);
+	}
+
+	[TestMethod]
+	public void OutMessage_DelegatesToManager_AndRoutesMessages()
+	{
+		var inner = new RecordingPassThroughMessageAdapter();
+		var manager = new Mock<ILevel1DepthBuilderManager>();
+
+		var forward = new Level1ChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+		};
+		var extra = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+		};
+
+		manager
+			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
+			.Returns((toInner: (Message[])[new ConnectMessage()], toOut: (Message[])[]));
+
+		manager
+			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
+			.Returns((forward: (Message)forward, extraOut: (Message[])[extra]));
+
+		using var adapter = new Level1DepthBuilderAdapter(inner, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		inner.SendOutMessage(new DisconnectMessage());
+
+		output.Count.AssertEqual(2);
+		output[0].AssertSame(forward);
+		output[1].AssertSame(extra);
+
+		manager.Verify(m => m.ProcessOutMessage(It.IsAny<Message>()), Times.Once);
+	}
+
+	[TestMethod]
+	public void OutMessage_WhenForwardIsNull_OnlyRoutesExtraMessages()
+	{
+		var inner = new RecordingPassThroughMessageAdapter();
+		var manager = new Mock<ILevel1DepthBuilderManager>();
+
+		var extra = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+		};
+
+		manager
+			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
+			.Returns((toInner: (Message[])[new ConnectMessage()], toOut: (Message[])[]));
+
+		manager
+			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
+			.Returns((forward: (Message)null, extraOut: (Message[])[extra]));
+
+		using var adapter = new Level1DepthBuilderAdapter(inner, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		inner.SendOutMessage(new Level1ChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+		});
+
+		output.Count.AssertEqual(1);
+		output[0].AssertSame(extra);
+	}
+
+	[TestMethod]
+	public void OutMessage_WhenNoExtraOut_OnlyRoutesForward()
+	{
+		var inner = new RecordingPassThroughMessageAdapter();
+		var manager = new Mock<ILevel1DepthBuilderManager>();
+
+		var forward = new Level1ChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+		};
+
+		manager
+			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
+			.Returns((toInner: (Message[])[new ConnectMessage()], toOut: (Message[])[]));
+
+		manager
+			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
+			.Returns((forward: (Message)forward, extraOut: (Message[])[]));
+
+		using var adapter = new Level1DepthBuilderAdapter(inner, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		inner.SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 1 });
+
+		output.Count.AssertEqual(1);
+		output[0].AssertSame(forward);
+	}
+
+	[TestMethod]
+	public async Task SendInMessage_MultipleToInner_SendsAll()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<ILevel1DepthBuilderManager>();
+
+		var msg1 = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.Level1,
+		};
+
+		var msg2 = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 2,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.Level1,
+		};
+
+		manager
+			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
+			.Returns((toInner: (Message[])[msg1, msg2], toOut: (Message[])[]));
+
+		using var adapter = new Level1DepthBuilderAdapter(inner, manager.Object);
+
+		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
+
+		inner.InMessages.Count.AssertEqual(2);
+		inner.InMessages[0].AssertSame(msg1);
+		inner.InMessages[1].AssertSame(msg2);
+	}
+
+	[TestMethod]
+	public void Constructor_WithNullManager_ThrowsArgumentNullException()
+	{
+		var inner = new RecordingMessageAdapter();
+
+		Assert.ThrowsExactly<ArgumentNullException>(() =>
+			new Level1DepthBuilderAdapter(inner, null));
+	}
+
+	#endregion
+}
