@@ -575,8 +575,8 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		{
 			SecurityId = security.ToSecurityId(),
 			ServerTime = serverTime,
-			Bids = bids.Select(b => new QuoteChange(b.price, b.volume)).ToArray(),
-			Asks = asks.Select(a => new QuoteChange(a.price, a.volume)).ToArray(),
+			Bids = [.. bids.Select(b => new QuoteChange(b.price, b.volume))],
+			Asks = [.. asks.Select(a => new QuoteChange(a.price, a.volume))],
 		};
 	}
 

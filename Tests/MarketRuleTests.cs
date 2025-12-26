@@ -101,6 +101,7 @@ public class MarketRuleTests : BaseTestClass
 		((TestRule)r1).Trigger();
 
 		f1.AssertTrue();
+		f2.AssertFalse();
 
 		// r2 must be removed due to exclusivity after r1 fired
 		container.Rules.Contains(r2).AssertFalse();
@@ -1393,6 +1394,8 @@ public class MarketRuleTests : BaseTestClass
 		// activate the middle
 		((TestRule)b).Trigger();
 		bf.AssertTrue();
+		af.AssertFalse();
+		cf.AssertFalse();
 		container.Rules.Contains(a).AssertFalse();
 		container.Rules.Contains(c).AssertFalse();
 	}
