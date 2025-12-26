@@ -50,7 +50,7 @@ public partial class MainWindow
 		_portfolio = new Portfolio { Name = "test account", BeginValue = 1000000 };
 		var storageRegistry = new StorageRegistry
 		{
-			DefaultDrive = new LocalMarketDataDrive(_pathHistory),
+			DefaultDrive = new LocalMarketDataDrive(Paths.FileSystem, _pathHistory),
 		};
 
 		_connector = new HistoryEmulationConnector(new[] { _security }, new[] { _portfolio })

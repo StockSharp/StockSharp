@@ -239,7 +239,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		var token = CancellationToken;
 		var path = Helper.GetSubTemp();
 		var executor = CreateExecutor(token);
-		var registry1 = new CsvEntityRegistry(path, executor);
+		var registry1 = new CsvEntityRegistry(Helper.MemorySystem, path, executor);
 
 		var exchange = new Exchange
 		{
@@ -256,7 +256,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 		IsTrue(new FileInfo(exchanges1.FileName).Length > 0, $"Expected file '{exchanges1.FileName}' to be non-empty.");
 
 		// Create new registry instance to test loading
-		var registry2 = new CsvEntityRegistry(path, executor);
+		var registry2 = new CsvEntityRegistry(Helper.MemorySystem, path, executor);
 		var errors = await registry2.InitAsync(token);
 		AreEqual(0, errors.Count, "Init should not return errors.");
 

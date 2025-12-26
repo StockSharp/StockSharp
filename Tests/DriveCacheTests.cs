@@ -6,7 +6,7 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void GetDrive_SamePath_ReturnsSameInstance_AndRaisesEventOnce()
 	{
-		using var cache = new DriveCache();
+		using var cache = new DriveCache(Helper.MemorySystem);
 
 		var created = 0;
 		cache.NewDriveCreated += _ => created++;
@@ -25,7 +25,7 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void GetDrive_EmptyPath_ReturnsTryDefaultDrive()
 	{
-		using var cache = new DriveCache();
+		using var cache = new DriveCache(Helper.MemorySystem);
 
 		cache.GetDrive(Helper.GetSubTemp());
 
@@ -39,7 +39,7 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void DeleteDrive_LastLocal_ThrowsInvalidOperationException()
 	{
-		using var cache = new DriveCache();
+		using var cache = new DriveCache(Helper.MemorySystem);
 
 		var drive = cache.GetDrive(Helper.GetSubTemp());
 
@@ -49,7 +49,7 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void DeleteDrive_RemovesAndRaisesEvent()
 	{
-		using var cache = new DriveCache();
+		using var cache = new DriveCache(Helper.MemorySystem);
 
 		var drive1 = cache.GetDrive(Helper.GetSubTemp());
 		cache.GetDrive(Helper.GetSubTemp());
@@ -66,7 +66,7 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void Update_RaisesChanged()
 	{
-		using var cache = new DriveCache();
+		using var cache = new DriveCache(Helper.MemorySystem);
 
 		var changed = 0;
 		cache.Changed += () => changed++;
@@ -79,7 +79,7 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void SaveLoad_Roundtrip_PreservesDrives()
 	{
-		using var cache = new DriveCache();
+		using var cache = new DriveCache(Helper.MemorySystem);
 
 		var localPath = Helper.GetSubTemp();
 		cache.GetDrive(localPath);
@@ -91,7 +91,7 @@ public class DriveCacheTests : BaseTestClass
 		var storage = new SettingsStorage();
 		cache.Save(storage);
 
-		using var cache2 = new DriveCache();
+		using var cache2 = new DriveCache(Helper.MemorySystem);
 		cache2.Load(storage);
 
 		var loaded = cache2.Drives.ToArray();

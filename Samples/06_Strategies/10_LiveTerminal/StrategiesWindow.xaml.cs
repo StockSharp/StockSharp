@@ -8,6 +8,7 @@ using Ecng.Common;
 using Ecng.Serialization;
 using Ecng.Xaml;
 using Ecng.Logging;
+using Ecng.ComponentModel;
 
 using StockSharp.Configuration;
 using StockSharp.Algo;

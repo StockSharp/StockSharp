@@ -1,4 +1,4 @@
-ï»¿namespace StockSharp.Tests;
+namespace StockSharp.Tests;
 
 using Ecng.Reflection;
 
@@ -6,6 +6,9 @@ using StockSharp.Algo.Storages.Csv;
 
 static class Helper
 {
+	public static readonly LocalFileSystem FileSystem = new();
+	public static readonly MemoryFileSystem MemorySystem = new();
+
 	public static LogManager LogManager = new(false);
 
 	public const string ResFolder = "../../../Resources/";
@@ -16,7 +19,7 @@ static class Helper
 	{
 		return new StorageRegistry
 		{
-			DefaultDrive = new LocalMarketDataDrive(path),
+			DefaultDrive = new LocalMarketDataDrive(MemorySystem, path),
 		};
 	}
 
@@ -57,7 +60,7 @@ static class Helper
 	}
 
 	public static IEntityRegistry GetEntityRegistry(ChannelExecutor executor)
-		=> new CsvEntityRegistry(GetSubTemp(), executor);
+		=> new CsvEntityRegistry(MemorySystem, GetSubTemp(), executor);
 
 	public static ExecutionMessage[] RandomTicks(this Security security, int count, bool generateOriginSide, TimeSpan? interval = null, DateTime? start = null)
 	{
@@ -1273,7 +1276,7 @@ static class Helper
 				}
 				else
 				{
-					// TODO Ð¿Ð¾ÑÑ‚Ñ€Ð¾ÐµÐ½Ð¸Ðµ Ð´ÐµÑ‚Ð°Ð»Ð¸Ð·Ð¾Ð²Ð°Ð½Ð½Ñ‹Ñ… ÑƒÑ€Ð¾Ð²Ð½Ðµ Ð±Ñ‹Ð»Ð¾ Ð²Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¾ Ð¿Ð¾ Ð¿Ñ€Ð¸Ñ‡Ð¸Ð½Ðµ Ð¾Ð¿Ñ‚Ð¸Ð¼Ð¸Ð·Ð°Ñ†Ð¸Ð¸
+					// TODO ïîñòðîåíèå äåòàëèçîâàííûõ óðîâíå áûëî âûêëþ÷åíî ïî ïðè÷èíå îïòèìèçàöèè
 
 					//actualLevel.BuyVolumes.Count().AssertEqual(expectedLevel.BuyVolumes.Count());
 
@@ -1380,6 +1383,12 @@ static class Helper
 	{
 		return new InMemoryNativeIdStorageProvider();
 	}
+
+	public static object TryGetBySecurityId(this INativeIdStorageProvider provider, string storageName, SecurityId securityId)
+		=> provider.GetStorage(storageName).TryGetBySecurityIdAsync(securityId).GetAwaiter().GetResult();
+
+	public static bool TryAdd(this INativeIdStorageProvider provider, string storageName, SecurityId securityId, object nativeId)
+		=> provider.GetStorage(storageName).TryAddAsync(securityId, nativeId).GetAwaiter().GetResult();
 
 	public static IEnumerable<TCandle> IsAllFinished<TCandle>(this IEnumerable<TCandle> candles)
 		where TCandle : CandleMessage

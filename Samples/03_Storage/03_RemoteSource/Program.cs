@@ -89,7 +89,7 @@ static class Program
 
 		var storageRegistry = new StorageRegistry
 		{
-			DefaultDrive = new LocalMarketDataDrive(pathHistory)
+			DefaultDrive = new LocalMarketDataDrive(Paths.FileSystem, pathHistory)
 		};
 
 		//------------------------------Save---------------------------------------------------

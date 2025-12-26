@@ -59,7 +59,9 @@ public partial class MainWindow
 		_executor = new(LogManager.Application.AddErrorLog);
 		_ = _executor.RunAsync(default);
 
-		var entityRegistry = new CsvEntityRegistry(path, _executor);
+		var fs = Paths.FileSystem;
+
+		var entityRegistry = new CsvEntityRegistry(fs, path, _executor);
 
 		ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
 
@@ -69,10 +71,10 @@ public partial class MainWindow
 
 		var storageRegistry = new StorageRegistry(exchangeInfoProvider)
 		{
-			DefaultDrive = new LocalMarketDataDrive(Path.Combine(path, "Storage"))
+			DefaultDrive = new LocalMarketDataDrive(fs, Path.Combine(path, "Storage"))
 		};
 
-		var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
+		var snapshotRegistry = new SnapshotRegistry(fs, Path.Combine(path, "Snapshots"));
 
 		Connector = new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.ExchangeInfoProvider, storageRegistry, snapshotRegistry, new StorageBuffer())
 		{

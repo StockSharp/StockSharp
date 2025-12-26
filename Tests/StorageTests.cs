@@ -3372,7 +3372,7 @@ public class StorageTests : BaseTestClass
 
 	private static LocalMarketDataDrive CreateDrive(string path = null)
 	{
-		return new(path ?? Helper.GetSubTemp());
+		return new(Helper.MemorySystem, path ?? Helper.GetSubTemp());
 	}
 
 	private async Task SetupTestDataAsync(LocalMarketDataDrive drive, SecurityId securityId, DataType dataType, StorageFormats format, DateTime[] dates)
@@ -3510,7 +3510,7 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	public Task VerifyAsync_NonExistingPath_ThrowsInvalidOperationException()
 	{
-		var drive = new LocalMarketDataDrive(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()));
+		var drive = new LocalMarketDataDrive(Helper.MemorySystem, Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()));
 		var token = CancellationToken;
 
 		return ThrowsExactlyAsync<InvalidOperationException>(async () =>
@@ -3635,7 +3635,7 @@ public class StorageTests : BaseTestClass
 	public Task VerifyAsync_PathWithNoAccess_ThrowsInvalidOperationException()
 	{
 		var invalidPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "nested", "path");
-		var drive = new LocalMarketDataDrive(invalidPath);
+		var drive = new LocalMarketDataDrive(Helper.MemorySystem, invalidPath);
 		var token = CancellationToken;
 
 		return ThrowsExactlyAsync<InvalidOperationException>(async () =>

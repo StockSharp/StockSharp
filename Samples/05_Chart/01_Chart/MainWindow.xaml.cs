@@ -54,6 +54,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 	private readonly DispatcherTimer _dataTimer;
 	private readonly CollectionSecurityProvider _securityProvider = new();
 	private readonly TestMarketSubscriptionProvider _testProvider = new();
+	private readonly IFileSystem _fs = Paths.FileSystem;
 
 	private static readonly TimeSpan _realtimeInterval = TimeSpan.FromMilliseconds(50);
 	private static readonly TimeSpan _drawInterval = TimeSpan.FromMilliseconds(100);
@@ -116,7 +117,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 
 	private async void HistoryPath_OnFolderChanged(string path)
 	{
-		using var drive = new LocalMarketDataDrive(path);
+		using var drive = new LocalMarketDataDrive(_fs, path);
 		var secs = await drive.GetAvailableSecuritiesAsync(default).ToArrayAsync(default);
 
 		Securities.ItemsSource = secs;
@@ -291,10 +292,11 @@ public partial class MainWindow : ICandleBuilderSubscription
 		Task.Factory.StartNew(async () =>
 		{
 			var date = DateTime.MinValue;
+			var drive = new LocalMarketDataDrive(_fs, path);
 
 			if (isBuild)
 			{
-				await foreach (var tick in storage.GetTickMessageStorage(secId, new LocalMarketDataDrive(path), format).LoadAsync(null, null).WithEnforcedCancellation(token))
+				await foreach (var tick in storage.GetTickMessageStorage(secId, drive, format).LoadAsync(null, null).WithEnforcedCancellation(token))
 				{
 					_tradeGenerator.Process(tick);
 
@@ -326,7 +328,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 			}
 			else
 			{
-				await foreach (var candleMsg in storage.GetCandleMessageStorage(secId, dt, new LocalMarketDataDrive(path), format).LoadAsync(null, null).WithEnforcedCancellation(token))
+				await foreach (var candleMsg in storage.GetCandleMessageStorage(secId, dt, drive, format).LoadAsync(null, null).WithEnforcedCancellation(token))
 				{
 					if (candleMsg.State != CandleStates.Finished)
 						candleMsg.State = CandleStates.Finished;

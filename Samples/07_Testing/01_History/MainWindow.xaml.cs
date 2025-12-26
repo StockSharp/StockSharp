@@ -277,7 +277,7 @@ public partial class MainWindow
 		var storageRegistry = new StorageRegistry
 		{
 			// set historical path
-			DefaultDrive = new LocalMarketDataDrive(HistoryPath.Folder)
+			DefaultDrive = new LocalMarketDataDrive(Paths.FileSystem, HistoryPath.Folder)
 		};
 
 		var startTime = ((DateTime)From.EditValue).UtcKind();

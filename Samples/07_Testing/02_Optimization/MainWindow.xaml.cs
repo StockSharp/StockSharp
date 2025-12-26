@@ -143,7 +143,7 @@ public partial class MainWindow
 		var storageRegistry = new StorageRegistry
 		{
 			// set historical path
-			DefaultDrive = new LocalMarketDataDrive(folder)
+			DefaultDrive = new LocalMarketDataDrive(Paths.FileSystem, folder)
 		};
 
 		// create test security

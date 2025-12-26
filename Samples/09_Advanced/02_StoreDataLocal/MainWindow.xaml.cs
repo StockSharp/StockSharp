@@ -9,6 +9,7 @@ using Ecng.Configuration;
 using Ecng.ComponentModel;
 using Ecng.Logging;
 
+using StockSharp.Configuration;
 using StockSharp.Messages;
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
@@ -35,7 +36,9 @@ public partial class MainWindow
 	{
 		//HistoryPath.Folder = path;
 
-		var entityRegistry = new CsvEntityRegistry(path, _executor);
+		var fs = Paths.FileSystem;
+
+		var entityRegistry = new CsvEntityRegistry(fs, path, _executor);
 
 		var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry);
 		ConfigManager.RegisterService<IExchangeInfoProvider>(exchangeInfoProvider);
@@ -43,16 +46,16 @@ public partial class MainWindow
 
 		var storageRegistry = new StorageRegistry(exchangeInfoProvider)
 		{
-			DefaultDrive = new LocalMarketDataDrive(path)
+			DefaultDrive = new LocalMarketDataDrive(fs, path)
 		};
 
 		ConfigManager.RegisterService<IEntityRegistry>(entityRegistry);
 		ConfigManager.RegisterService<IStorageRegistry>(storageRegistry);
 
-		INativeIdStorageProvider nativeIdStorage = new CsvNativeIdStorageProvider(Path.Combine(path, "NativeId"), _executor);
+		INativeIdStorageProvider nativeIdStorage = new CsvNativeIdStorageProvider(fs, Path.Combine(path, "NativeId"), _executor);
 		ConfigManager.RegisterService(nativeIdStorage);
 
-		var snapshotRegistry = new SnapshotRegistry(Path.Combine(path, "Snapshots"));
+		var snapshotRegistry = new SnapshotRegistry(fs, Path.Combine(path, "Snapshots"));
 
 		return new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, exchangeInfoProvider, storageRegistry, snapshotRegistry, new StorageBuffer());
 	}
@@ -80,7 +83,7 @@ public partial class MainWindow
 		if (connector == null)
 			return;
 
-		connector.Adapter.StorageSettings.Drive = new LocalMarketDataDrive(path.ToFullPath());
+		connector.Adapter.StorageSettings.Drive = new LocalMarketDataDrive(Paths.FileSystem, path.ToFullPath());
 		connector.LookupAll();
 	}
 }

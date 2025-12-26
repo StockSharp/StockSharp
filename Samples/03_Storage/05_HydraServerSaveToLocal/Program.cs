@@ -16,6 +16,7 @@ using StockSharp.Messages;
 using StockSharp.Algo.Storages.Csv;
 using StockSharp.Fix;
 using StockSharp.BusinessEntities;
+using StockSharp.Configuration;
 
 static class Program
 {
@@ -33,11 +34,12 @@ static class Program
 		var logger = new LogManager();
 		logger.Listeners.Add(new ConsoleLogListener());
 
+		var fs = Paths.FileSystem;
 		var storageRegistry = new StorageRegistry();
 
 		await using var executor = new ChannelExecutor(ex => ConsoleHelper.ConsoleError(ex.ToString()));
 		_ = executor.RunAsync(token);
-		var registry = new CsvEntityRegistry(Path.Combine(Directory.GetCurrentDirectory(), "Storage"), executor);
+		var registry = new CsvEntityRegistry(fs, Path.Combine(Directory.GetCurrentDirectory(), "Storage"), executor);
 		var securityStorage = (ISecurityStorage)registry.Securities;
 
 		var remoteDrive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, new FixMessageAdapter(new IncrementalIdGenerator()))
@@ -87,7 +89,7 @@ static class Program
 		var startDate = now.AddDays(-30);
 		var endDate = now;
 
-		var localDrive = new LocalMarketDataDrive(pathHistory);
+		var localDrive = new LocalMarketDataDrive(fs, pathHistory);
 
 		const StorageFormats format = StorageFormats.Binary;
 
