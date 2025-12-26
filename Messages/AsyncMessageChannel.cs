@@ -178,7 +178,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 
 	private Task ProcessMessagesAsync(CancellationToken token)
 	{
-		async ValueTask<bool> nextMessage()
+		bool nextMessage()
 		{
 			MessageQueueItem item;
 
@@ -264,7 +264,9 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 
 			async ValueTask wrapperInner()
 			{
-				if (token.IsCancellationRequested)
+				var localToken = _globalCts.Token;
+
+				if (localToken.IsCancellationRequested)
 				{
 					if (item.IsTransaction)
 						_adapter.SendOutMessage(msg.CreateErrorResponse(new OperationCanceledException(), _adapter));
@@ -287,8 +289,8 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 					{
 						if (subMsg.IsSubscribe)
 						{
-							var (cts, childToken) = token.CreateChildToken();
-							token = childToken;
+							var (cts, childToken) = localToken.CreateChildToken();
+							localToken = childToken;
 							item.Cts = cts;
 							_subscriptionItems.Add(subMsg.TransactionId, item);
 						}
@@ -311,11 +313,11 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 				ValueTask _()
 					=> msg switch
 					{
-						ConnectMessage m			=> ConnectAsync(m, token),
+						ConnectMessage m			=> ConnectAsync(m, localToken),
 						DisconnectMessage m			=> DisconnectAsync(m),
 						ResetMessage m				=> ResetAsync(m),
 
-						_ => RaiseNewOutMessage(msg, token)
+						_ => RaiseNewOutMessage(msg, localToken)
 					};
 
 				void done()
@@ -368,7 +370,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 						{
 							if (msg is ISubscriptionMessage)
 							{
-								if (token.IsCancellationRequested)
+								if (localToken.IsCancellationRequested)
 								{
 									// cancellation not an error for subscriptions as well as all responses
 									// must be reply for request only (see above item.UnsubscribeRequest logic)
@@ -377,7 +379,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 
 								_adapter.AddVerboseLog("endprocess: {0} ({1})", msg.Type, ex);
 
-								await _adapter.FaultDelay.Delay(token);
+								await _adapter.FaultDelay.Delay(localToken);
 							}
 
 							_adapter.SendOutMessage(msg.CreateErrorResponse(ex, _adapter));
@@ -385,7 +387,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 					}
 					catch (Exception ex2)
 					{
-						if (!token.IsCancellationRequested)
+						if (!localToken.IsCancellationRequested)
 							_adapter.AddErrorLog(ex2);
 					}
 				}
@@ -395,14 +397,21 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 				}
 			}
 
-			try
+			async ValueTask wrapper()
 			{
-				await wrapperInner();
+				try
+				{
+					await wrapperInner();
+				}
+				catch (Exception ex)
+				{
+					_adapter.AddErrorLog(ex);
+				}
 			}
-			catch (Exception ex)
-			{
-				_adapter.AddErrorLog(ex);
-			}
+
+#pragma warning disable CA2012
+			_ = wrapper();
+#pragma warning restore CA2012
 
 			return true;
 		}
@@ -428,7 +437,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 
 				try
 				{
-					while (await nextMessage()) { }
+					while (nextMessage()) { }
 				}
 				catch (Exception e)
 				{
