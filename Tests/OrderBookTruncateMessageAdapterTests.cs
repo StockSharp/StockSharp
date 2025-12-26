@@ -337,4 +337,119 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		quote.Bids.Length.AssertEqual(10);
 		quote.Asks.Length.AssertEqual(10);
 	}
+	#region Mock Manager Tests
+
+	[TestMethod]
+	public async Task SendInMessage_DelegatesToManager_AndRoutesMessages()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<IOrderBookTruncateManager>();
+
+		var toInner = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.MarketDepth,
+			MaxDepth = 10,
+		};
+
+		manager
+			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
+			.Returns((toInner: (Message)toInner, toOut: Array.Empty<Message>()));
+
+		using var adapter = new OrderBookTruncateMessageAdapter(inner, manager.Object);
+
+		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
+
+		inner.InMessages.Count.AssertEqual(1);
+		inner.InMessages[0].AssertSame(toInner);
+
+		manager.Verify(m => m.ProcessInMessage(It.IsAny<Message>()), Times.Once);
+	}
+
+	[TestMethod]
+	public void InnerMessage_DelegatesToManager_AndRoutesMessages()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<IOrderBookTruncateManager>();
+
+		var forward = new ConnectMessage();
+		var extra = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			Bids = [],
+			Asks = [],
+		};
+
+		manager
+			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
+			.Returns((forward: (Message)forward, extraOut: new Message[] { extra }));
+
+		using var adapter = new OrderBookTruncateMessageAdapter(inner, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		inner.EmitOut(new DisconnectMessage());
+
+		output.Count.AssertEqual(2);
+		output[0].AssertSame(forward);
+		output[1].AssertSame(extra);
+
+		manager.Verify(m => m.ProcessOutMessage(It.IsAny<Message>()), Times.Once);
+	}
+
+	[TestMethod]
+	public void InnerMessage_WhenForwardIsNull_DoesNotForwardOriginal()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<IOrderBookTruncateManager>();
+
+		var extra = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			Bids = [],
+			Asks = [],
+		};
+
+		manager
+			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
+			.Returns((forward: (Message)null, extraOut: new Message[] { extra }));
+
+		using var adapter = new OrderBookTruncateMessageAdapter(inner, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		inner.EmitOut(new QuoteChangeMessage { SecurityId = Helper.CreateSecurityId(), Bids = [], Asks = [] });
+
+		output.Count.AssertEqual(1);
+		output[0].AssertSame(extra);
+	}
+
+	[TestMethod]
+	public void InnerMessage_WhenNoExtraOut_OnlyForwardsOriginal()
+	{
+		var inner = new RecordingMessageAdapter();
+		var manager = new Mock<IOrderBookTruncateManager>();
+
+		var forward = new ConnectMessage();
+
+		manager
+			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
+			.Returns((forward: (Message)forward, extraOut: Array.Empty<Message>()));
+
+		using var adapter = new OrderBookTruncateMessageAdapter(inner, manager.Object);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		inner.EmitOut(new DisconnectMessage());
+
+		output.Count.AssertEqual(1);
+		output[0].AssertSame(forward);
+	}
+
+	#endregion
 }
