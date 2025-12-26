@@ -177,7 +177,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			var path = GetPath(date.UtcKind(), true);
 
 			var stream = _fileSystem.FileExists(path)
-				? _fileSystem.OpenRead(path)
+				? _fileSystem.Open(path, FileMode.Open, readOnly ? FileAccess.Read : FileAccess.ReadWrite, FileShare.Read)
 				: Stream.Null;
 
 			return new(stream);

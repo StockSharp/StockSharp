@@ -15,16 +15,14 @@ static class Helper
 
 	public static SecurityLookupMessage LookupAll => Messages.Extensions.LookupAllCriteriaMessage;
 
-	public static IStorageRegistry GetStorage(string path)
-	{
-		return new StorageRegistry
+	public static IStorageRegistry GetStorage(string path, IFileSystem fileSystem = null)
+		=> new StorageRegistry
 		{
-			DefaultDrive = new LocalMarketDataDrive(MemorySystem, path),
+			DefaultDrive = new LocalMarketDataDrive(fileSystem ?? MemorySystem, path),
 		};
-	}
 
 	public static IStorageRegistry GetResourceStorage()
-		=> GetStorage(ResFolder);
+		=> GetStorage(ResFolder, FileSystem);
 
 	private static string GetTempFolder()
 		=> Path.Combine(AppContext.BaseDirectory, "temp");
