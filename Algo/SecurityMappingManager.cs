@@ -28,19 +28,23 @@ public interface ISecurityMappingManager
 /// <remarks>
 /// Initializes a new instance of the <see cref="SecurityMappingManager"/>.
 /// </remarks>
-/// <param name="storage">Security identifier mappings storage.</param>
+/// <param name="provider">Security identifier mappings storage provider.</param>
 /// <param name="storageName">Storage name for lookups.</param>
 /// <param name="logInfo">Logger for info messages.</param>
 public sealed class SecurityMappingManager(
-	ISecurityMappingStorage storage,
+	ISecurityMappingStorageProvider provider,
 	Func<string> storageName,
 	Action<string, object, object, object> logInfo) : ISecurityMappingManager
 {
-	private readonly ISecurityMappingStorage _storage = storage ?? throw new ArgumentNullException(nameof(storage));
+	private readonly ISecurityMappingStorageProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
 	private readonly Func<string> _storageName = storageName ?? throw new ArgumentNullException(nameof(storageName));
 	private readonly Action<string, object, object, object> _logInfo = logInfo;
 
 	private string StorageName => _storageName();
+
+	private ISecurityMappingStorage GetStorage() => _provider.GetStorage(StorageName);
+
+	private ISecurityMappingStorage GetStorage(string name) => _provider.GetStorage(name);
 
 	/// <inheritdoc />
 	public (Message message, bool forward) ProcessInMessage(Message message)
@@ -74,7 +78,7 @@ public sealed class SecurityMappingManager(
 				if (adapterId == default)
 					throw new InvalidOperationException(secMsg.ToString());
 
-				var stockSharpId = _storage.TryGetStockSharpId(StorageName, adapterId);
+				var stockSharpId = GetStorage().TryGetStockSharpId(adapterId);
 
 				if (stockSharpId != null)
 					secMsg.SecurityId = stockSharpId.Value;
@@ -88,7 +92,18 @@ public sealed class SecurityMappingManager(
 
 				if (newsMsg.SecurityId != null)
 				{
-					ProcessSecurityIdMessage(newsMsg.SecurityId.Value, message);
+					var adapterId = newsMsg.SecurityId.Value;
+
+					if (!adapterId.IsSpecial)
+						adapterId = adapterId.SetNativeId(null);
+
+					if (adapterId != default)
+					{
+						var stockSharpId = GetStorage().TryGetStockSharpId(adapterId);
+
+						if (stockSharpId != null)
+							newsMsg.SecurityId = stockSharpId;
+					}
 				}
 
 				return (message, true);
@@ -99,9 +114,9 @@ public sealed class SecurityMappingManager(
 				var mappingMsg = (SecurityMappingMessage)message;
 
 				if (mappingMsg.IsDelete)
-					_storage.Remove(mappingMsg.StorageName, mappingMsg.Mapping.StockSharpId);
+					GetStorage(mappingMsg.StorageName).Remove(mappingMsg.Mapping.StockSharpId);
 				else
-					_storage.Save(mappingMsg.StorageName, mappingMsg.Mapping);
+					GetStorage(mappingMsg.StorageName).Save(mappingMsg.Mapping);
 
 				// SecurityMappingMessage is consumed, not forwarded
 				return (null, false);
@@ -125,7 +140,7 @@ public sealed class SecurityMappingManager(
 			return;
 
 		var stockSharpId = secMsg.SecurityId.SetNativeId(null);
-		var adapterId = _storage.TryGetAdapterId(StorageName, stockSharpId);
+		var adapterId = GetStorage().TryGetAdapterId(stockSharpId);
 
 		if (adapterId != null)
 		{
@@ -141,7 +156,7 @@ public sealed class SecurityMappingManager(
 
 		if (adapterId != default)
 		{
-			var stockSharpId = _storage.TryGetStockSharpId(StorageName, adapterId);
+			var stockSharpId = GetStorage().TryGetStockSharpId(adapterId);
 
 			if (stockSharpId != null)
 				message.ReplaceSecurityId(stockSharpId.Value);

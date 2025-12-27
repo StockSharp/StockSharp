@@ -230,7 +230,7 @@ public class CsvStorageTests : BaseTestClass
 
 	#endregion
 
-	#region CsvSecurityMappingStorage Tests
+	#region CsvSecurityMappingStorageProvider Tests
 
 	[TestMethod]
 	public async Task CsvSecurityMapping_SaveAndGet()
@@ -238,20 +238,20 @@ public class CsvStorageTests : BaseTestClass
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
 		var (fs, path) = CreateMemoryFs("mappings");
-		var storage = new CsvSecurityMappingStorage(fs, path, executor);
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
-		await storage.InitAsync(token);
+		provider.Init();
 
 		var stockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 		var adapterId = new SecurityId { SecurityCode = "US0378331005", BoardCode = "ISIN" };
 		var mapping = new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId };
 
-		var added = storage.Save("TestStorage", mapping);
+		var added = provider.GetStorage("TestStorage").Save(mapping);
 		await FlushAsync(executor, token);
 
 		IsTrue(added);
-		AreEqual(stockSharpId, storage.TryGetStockSharpId("TestStorage", adapterId));
-		AreEqual(adapterId, storage.TryGetAdapterId("TestStorage", stockSharpId));
+		AreEqual(stockSharpId, provider.GetStorage("TestStorage").TryGetStockSharpId(adapterId));
+		AreEqual(adapterId, provider.GetStorage("TestStorage").TryGetAdapterId(stockSharpId));
 	}
 
 	[TestMethod]
@@ -266,16 +266,16 @@ public class CsvStorageTests : BaseTestClass
 		var mapping = new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId };
 
 		// Create and save
-		var storage1 = new CsvSecurityMappingStorage(fs, path, executor);
-		await storage1.InitAsync(token);
-		storage1.Save("TestStorage", mapping);
+		var provider1 = new CsvSecurityMappingStorageProvider(fs, path, executor);
+		provider1.Init();
+		provider1.GetStorage("TestStorage").Save(mapping);
 		await FlushAsync(executor, token);
 
 		// Load in new instance
-		var storage2 = new CsvSecurityMappingStorage(fs, path, executor);
-		await storage2.InitAsync(token);
+		var provider2 = new CsvSecurityMappingStorageProvider(fs, path, executor);
+		provider2.Init();
 
-		AreEqual(stockSharpId, storage2.TryGetStockSharpId("TestStorage", adapterId));
+		AreEqual(stockSharpId, provider2.GetStorage("TestStorage").TryGetStockSharpId(adapterId));
 	}
 
 	[TestMethod]
@@ -284,22 +284,22 @@ public class CsvStorageTests : BaseTestClass
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
 		var (fs, path) = CreateMemoryFs("mappings");
-		var storage = new CsvSecurityMappingStorage(fs, path, executor);
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
-		await storage.InitAsync(token);
+		provider.Init();
 
 		var stockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 		var adapterId = new SecurityId { SecurityCode = "US0378331005", BoardCode = "ISIN" };
 		var mapping = new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId };
 
-		storage.Save("TestStorage", mapping);
+		provider.GetStorage("TestStorage").Save(mapping);
 		await FlushAsync(executor, token);
 
-		var removed = storage.Remove("TestStorage", stockSharpId);
+		var removed = provider.GetStorage("TestStorage").Remove(stockSharpId);
 		await FlushAsync(executor, token);
 
 		IsTrue(removed);
-		IsNull(storage.TryGetStockSharpId("TestStorage", adapterId));
+		IsNull(provider.GetStorage("TestStorage").TryGetStockSharpId(adapterId));
 	}
 
 	[TestMethod]
@@ -308,18 +308,18 @@ public class CsvStorageTests : BaseTestClass
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
 		var (fs, path) = CreateMemoryFs("mappings");
-		var storage = new CsvSecurityMappingStorage(fs, path, executor);
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
-		await storage.InitAsync(token);
+		provider.Init();
 
 		var stockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 		var adapterId = new SecurityId { SecurityCode = "US0378331005", BoardCode = "ISIN" };
 
-		storage.Save("Storage1", new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
-		storage.Save("Storage2", new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+		provider.GetStorage("Storage1").Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+		provider.GetStorage("Storage2").Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
 		await FlushAsync(executor, token);
 
-		var names = storage.GetStorageNames().ToArray();
+		var names = provider.GetStorageNames().ToArray();
 		AreEqual(2, names.Length);
 		IsTrue(names.Contains("Storage1"));
 		IsTrue(names.Contains("Storage2"));
@@ -871,9 +871,9 @@ public class CsvStorageTests : BaseTestClass
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
 		var (fs, path) = CreateMemoryFs("mappings");
-		var storage = new CsvSecurityMappingStorage(fs, path, executor);
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
-		await storage.InitAsync(token);
+		provider.Init();
 
 		var mapping = new SecurityIdMapping
 		{
@@ -881,7 +881,7 @@ public class CsvStorageTests : BaseTestClass
 			AdapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ADAPTER" }
 		};
 
-		storage.Save("TestMapping", mapping);
+		provider.GetStorage("TestMapping").Save(mapping);
 		await FlushAsync(executor, token);
 
 		// Directory should be created

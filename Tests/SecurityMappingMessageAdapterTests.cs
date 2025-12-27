@@ -5,12 +5,12 @@ using StockSharp.Algo.Storages;
 [TestClass]
 public class SecurityMappingMessageAdapterTests : BaseTestClass
 {
-	private static ISecurityMappingStorage CreateStorage() => new InMemorySecurityMappingStorage();
+	private static ISecurityMappingStorageProvider CreateProvider() => new InMemorySecurityMappingStorageProvider();
 
 	#region Constructor Tests
 
 	[TestMethod]
-	public void Constructor_NullStorage_ThrowsArgumentNullException()
+	public void Constructor_NullProvider_ThrowsArgumentNullException()
 	{
 		var inner = new RecordingMessageAdapter();
 
@@ -30,12 +30,12 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 	public void Constructor_WithManager_NullManager_ThrowsArgumentNullException()
 	{
 		var inner = new RecordingMessageAdapter();
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 
 		var thrown = false;
 		try
 		{
-			_ = new SecurityMappingMessageAdapter(inner, storage, null);
+			_ = new SecurityMappingMessageAdapter(inner, provider, null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -45,7 +45,7 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Constructor_WithManager_NullStorage_ThrowsArgumentNullException()
+	public void Constructor_WithManager_NullProvider_ThrowsArgumentNullException()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<ISecurityMappingManager>();
@@ -81,8 +81,8 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
 			.Returns((message: message, forward: true));
 
-		var storage = CreateStorage();
-		using var adapter = new SecurityMappingMessageAdapter(inner, storage, manager.Object);
+		var provider = CreateProvider();
+		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
 
 		await adapter.SendInMessageAsync(message, CancellationToken);
 
@@ -107,8 +107,8 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
 			.Returns((message: (Message)null, forward: false));
 
-		var storage = CreateStorage();
-		using var adapter = new SecurityMappingMessageAdapter(inner, storage, manager.Object);
+		var provider = CreateProvider();
+		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
 
 		await adapter.SendInMessageAsync(message, CancellationToken);
 
@@ -130,8 +130,8 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
 			.Returns((message: (Message)null, forward: true));
 
-		var storage = CreateStorage();
-		using var adapter = new SecurityMappingMessageAdapter(inner, storage, manager.Object);
+		var provider = CreateProvider();
+		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
 
 		await adapter.SendInMessageAsync(message, CancellationToken);
 
@@ -157,8 +157,8 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
 			.Returns((message: message, forward: true));
 
-		var storage = CreateStorage();
-		using var adapter = new SecurityMappingMessageAdapter(inner, storage, manager.Object);
+		var provider = CreateProvider();
+		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
 
 		var output = new List<Message>();
 		adapter.NewOutMessage += output.Add;
@@ -191,8 +191,8 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
 			.Returns((message: (Message)null, forward: false));
 
-		var storage = CreateStorage();
-		using var adapter = new SecurityMappingMessageAdapter(inner, storage, manager.Object);
+		var provider = CreateProvider();
+		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
 
 		var output = new List<Message>();
 		adapter.NewOutMessage += output.Add;
@@ -217,8 +217,8 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
 			.Returns((message: (Message)null, forward: true));
 
-		var storage = CreateStorage();
-		using var adapter = new SecurityMappingMessageAdapter(inner, storage, manager.Object);
+		var provider = CreateProvider();
+		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
 
 		var output = new List<Message>();
 		adapter.NewOutMessage += output.Add;
@@ -236,9 +236,9 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 	public async Task Integration_SecurityLookupMessage_PassesThrough()
 	{
 		var inner = new RecordingMessageAdapter();
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 
-		using var adapter = new SecurityMappingMessageAdapter(inner, storage);
+		using var adapter = new SecurityMappingMessageAdapter(inner, provider);
 
 		var message = new SecurityLookupMessage { TransactionId = 123 };
 
@@ -252,9 +252,9 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 	public async Task Integration_ResetMessage_PassesThrough()
 	{
 		var inner = new RecordingMessageAdapter();
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 
-		using var adapter = new SecurityMappingMessageAdapter(inner, storage);
+		using var adapter = new SecurityMappingMessageAdapter(inner, provider);
 
 		var message = new ResetMessage();
 
@@ -269,18 +269,18 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 	#region Clone Tests
 
 	[TestMethod]
-	public void Clone_ReturnsNewInstanceWithSameStorage()
+	public void Clone_ReturnsNewInstanceWithSameProvider()
 	{
 		var inner = new RecordingMessageAdapter();
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 
-		using var adapter = new SecurityMappingMessageAdapter(inner, storage);
+		using var adapter = new SecurityMappingMessageAdapter(inner, provider);
 
 		var clone = (SecurityMappingMessageAdapter)adapter.Clone();
 
 		clone.AssertNotNull();
 		clone.AssertNotSame(adapter);
-		clone.Storage.AssertSame(storage);
+		clone.Provider.AssertSame(provider);
 	}
 
 	#endregion

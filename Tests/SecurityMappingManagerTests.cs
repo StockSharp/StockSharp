@@ -13,15 +13,15 @@ public class SecurityMappingManagerTests : BaseTestClass
 	private static SecurityId CreateStockSharpId(string code = "AAPL", string board = "US")
 		=> new() { SecurityCode = code, BoardCode = board };
 
-	private static ISecurityMappingStorage CreateStorage() => new InMemorySecurityMappingStorage();
+	private static ISecurityMappingStorageProvider CreateProvider() => new InMemorySecurityMappingStorageProvider();
 
 	#region ProcessInMessage Tests
 
 	[TestMethod]
 	public void ProcessInMessage_SecurityLookupMessage_PassesThrough()
 	{
-		var storage = CreateStorage();
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var provider = CreateProvider();
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new SecurityLookupMessage { TransactionId = 123 };
 
@@ -34,13 +34,13 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessInMessage_SecurityMessage_WithMapping_ReplacesSecurityId()
 	{
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 		var stockSharpId = CreateStockSharpId();
 		var adapterId = CreateAdapterId();
 
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+		provider.GetStorage(StorageName).Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
 
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new SecurityMessage { SecurityId = stockSharpId };
 
@@ -54,8 +54,8 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessInMessage_SecurityMessage_WithoutMapping_KeepsOriginalId()
 	{
-		var storage = CreateStorage();
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var provider = CreateProvider();
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var securityId = CreateStockSharpId();
 		var message = new SecurityMessage { SecurityId = securityId };
@@ -70,8 +70,8 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessInMessage_SecurityMessage_DefaultSecurityId_NoChange()
 	{
-		var storage = CreateStorage();
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var provider = CreateProvider();
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new SecurityMessage { SecurityId = default };
 
@@ -85,8 +85,8 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessInMessage_OtherMessage_PassesThrough()
 	{
-		var storage = CreateStorage();
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var provider = CreateProvider();
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new ResetMessage();
 
@@ -103,13 +103,13 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_SecurityMessage_WithMapping_ReplacesSecurityId()
 	{
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 		var stockSharpId = CreateStockSharpId();
 		var adapterId = CreateAdapterId();
 
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+		provider.GetStorage(StorageName).Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
 
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new SecurityMessage { SecurityId = adapterId };
 
@@ -123,8 +123,8 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_SecurityMessage_WithoutMapping_KeepsAdapterId()
 	{
-		var storage = CreateStorage();
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var provider = CreateProvider();
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var adapterId = CreateAdapterId();
 		var message = new SecurityMessage { SecurityId = adapterId };
@@ -139,8 +139,8 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_SecurityMessage_DefaultSecurityId_ThrowsException()
 	{
-		var storage = CreateStorage();
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var provider = CreateProvider();
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new SecurityMessage { SecurityId = default };
 
@@ -159,13 +159,13 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_NewsMessage_WithSecurityId_MapsToStockSharpId()
 	{
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 		var stockSharpId = CreateStockSharpId();
 		var adapterId = CreateAdapterId();
 
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+		provider.GetStorage(StorageName).Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
 
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new NewsMessage
 		{
@@ -183,8 +183,8 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_NewsMessage_WithoutSecurityId_PassesThrough()
 	{
-		var storage = CreateStorage();
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var provider = CreateProvider();
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new NewsMessage { Headline = "Test News" };
 
@@ -198,8 +198,8 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_SecurityMappingMessage_Save_AddsMapping()
 	{
-		var storage = CreateStorage();
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var provider = CreateProvider();
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var stockSharpId = CreateStockSharpId();
 		var adapterId = CreateAdapterId();
@@ -217,7 +217,7 @@ public class SecurityMappingManagerTests : BaseTestClass
 		forward.AssertFalse();
 
 		// Verify mapping was saved
-		var savedAdapterId = storage.TryGetAdapterId(StorageName, stockSharpId);
+		var savedAdapterId = provider.GetStorage(StorageName).TryGetAdapterId(stockSharpId);
 		savedAdapterId.AssertNotNull();
 		savedAdapterId.Value.AssertEqual(adapterId);
 	}
@@ -225,13 +225,13 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_SecurityMappingMessage_Delete_RemovesMapping()
 	{
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 		var stockSharpId = CreateStockSharpId();
 		var adapterId = CreateAdapterId();
 
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+		provider.GetStorage(StorageName).Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
 
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new SecurityMappingMessage
 		{
@@ -246,20 +246,20 @@ public class SecurityMappingManagerTests : BaseTestClass
 		forward.AssertFalse();
 
 		// Verify mapping was removed
-		var savedAdapterId = storage.TryGetAdapterId(StorageName, stockSharpId);
+		var savedAdapterId = provider.GetStorage(StorageName).TryGetAdapterId(stockSharpId);
 		savedAdapterId.AssertNull();
 	}
 
 	[TestMethod]
 	public void ProcessOutMessage_ExecutionMessage_WithMapping_ReplacesSecurityId()
 	{
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 		var stockSharpId = CreateStockSharpId();
 		var adapterId = CreateAdapterId();
 
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+		provider.GetStorage(StorageName).Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
 
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new ExecutionMessage
 		{
@@ -277,13 +277,13 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_Level1ChangeMessage_WithMapping_ReplacesSecurityId()
 	{
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 		var stockSharpId = CreateStockSharpId();
 		var adapterId = CreateAdapterId();
 
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+		provider.GetStorage(StorageName).Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
 
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new Level1ChangeMessage
 		{
@@ -301,13 +301,13 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_QuoteChangeMessage_WithMapping_ReplacesSecurityId()
 	{
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 		var stockSharpId = CreateStockSharpId();
 		var adapterId = CreateAdapterId();
 
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+		provider.GetStorage(StorageName).Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
 
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new QuoteChangeMessage
 		{
@@ -327,8 +327,8 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_SpecialSecurityId_NotMapped()
 	{
-		var storage = CreateStorage();
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var provider = CreateProvider();
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		// Use the predefined special security ID (Money)
 		var specialSecurityId = SecurityId.Money;
@@ -350,8 +350,8 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_ConnectMessage_PassesThrough()
 	{
-		var storage = CreateStorage();
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var provider = CreateProvider();
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		var message = new ConnectMessage();
 
@@ -368,18 +368,18 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessInMessage_SecurityMessage_WithMapping_LogsInfo()
 	{
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 		var stockSharpId = CreateStockSharpId();
 		var adapterId = CreateAdapterId();
 
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+		provider.GetStorage(StorageName).Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
 
 		var logCalled = false;
 		object loggedArg0 = null;
 		object loggedArg1 = null;
 
 		var manager = new SecurityMappingManager(
-			storage,
+			provider,
 			() => StorageName,
 			(format, arg0, arg1, arg2) =>
 			{
@@ -404,7 +404,8 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_MultipleMappings_UsesCorrectOne()
 	{
-		var storage = CreateStorage();
+		var provider = CreateProvider();
+		var storage = provider.GetStorage(StorageName);
 
 		var stockSharpId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "US" };
 		var adapterId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
@@ -412,10 +413,10 @@ public class SecurityMappingManagerTests : BaseTestClass
 		var stockSharpId2 = new SecurityId { SecurityCode = "MSFT", BoardCode = "US" };
 		var adapterId2 = new SecurityId { SecurityCode = "MSFT", BoardCode = "NASDAQ" };
 
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId1, AdapterId = adapterId1 });
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId2, AdapterId = adapterId2 });
+		storage.Save(new SecurityIdMapping { StockSharpId = stockSharpId1, AdapterId = adapterId1 });
+		storage.Save(new SecurityIdMapping { StockSharpId = stockSharpId2, AdapterId = adapterId2 });
 
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		// Test first mapping
 		var message1 = new SecurityMessage { SecurityId = adapterId1 };
@@ -431,7 +432,8 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessInMessage_MultipleMappings_UsesCorrectOne()
 	{
-		var storage = CreateStorage();
+		var provider = CreateProvider();
+		var storage = provider.GetStorage(StorageName);
 
 		var stockSharpId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "US" };
 		var adapterId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
@@ -439,10 +441,10 @@ public class SecurityMappingManagerTests : BaseTestClass
 		var stockSharpId2 = new SecurityId { SecurityCode = "MSFT", BoardCode = "US" };
 		var adapterId2 = new SecurityId { SecurityCode = "MSFT", BoardCode = "NASDAQ" };
 
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId1, AdapterId = adapterId1 });
-		storage.Save(StorageName, new SecurityIdMapping { StockSharpId = stockSharpId2, AdapterId = adapterId2 });
+		storage.Save(new SecurityIdMapping { StockSharpId = stockSharpId1, AdapterId = adapterId1 });
+		storage.Save(new SecurityIdMapping { StockSharpId = stockSharpId2, AdapterId = adapterId2 });
 
-		var manager = new SecurityMappingManager(storage, () => StorageName, null);
+		var manager = new SecurityMappingManager(provider, () => StorageName, null);
 
 		// Test first mapping
 		var message1 = new SecurityMessage { SecurityId = stockSharpId1 };
@@ -462,17 +464,17 @@ public class SecurityMappingManagerTests : BaseTestClass
 	[TestMethod]
 	public void ProcessInMessage_DifferentStorageNames_UsesCorrectStorage()
 	{
-		var storage = CreateStorage();
+		var provider = CreateProvider();
 
 		var stockSharpId = CreateStockSharpId();
 		var adapterId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
 		var adapterId2 = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 
-		storage.Save("Adapter1", new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId1 });
-		storage.Save("Adapter2", new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId2 });
+		provider.GetStorage("Adapter1").Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId1 });
+		provider.GetStorage("Adapter2").Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId2 });
 
 		var currentStorageName = "Adapter1";
-		var manager = new SecurityMappingManager(storage, () => currentStorageName, null);
+		var manager = new SecurityMappingManager(provider, () => currentStorageName, null);
 
 		var message = new SecurityMessage { SecurityId = stockSharpId };
 		var (result1, _) = manager.ProcessInMessage(message);
