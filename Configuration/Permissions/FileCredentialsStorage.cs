@@ -2,34 +2,48 @@ namespace StockSharp.Configuration.Permissions;
 
 using System.Text.RegularExpressions;
 
+using Ecng.Common;
+
 /// <summary>
 /// File-based storage for <see cref="PermissionCredentials"/>.
 /// </summary>
-public class FileCredentialsStorage : BaseLogReceiver, IPermissionCredentialsStorage
+/// <remarks>
+/// Initializes a new instance of the <see cref="FileCredentialsStorage"/>.
+/// </remarks>
+/// <param name="fileName">File name to persist credentials.</param>
+/// <param name="asEmail">Use email as login. If <see langword="false"/>, then login can be any string.</param>
+/// <param name="fileSystem">File system. If null, uses <see cref="Paths.FileSystem"/>.</param>
+public class FileCredentialsStorage(string fileName, bool asEmail = false, IFileSystem fileSystem = null) : BaseLogReceiver, IPermissionCredentialsStorage
 {
-	private readonly string _fileName;
-	private readonly bool _asEmail;
+	private readonly IFileSystem _fileSystem = fileSystem ?? Paths.FileSystem;
+	private readonly string _fileName = fileName.ThrowIfEmpty(nameof(fileName));
+	private readonly bool _asEmail = asEmail;
 	private readonly CachedSynchronizedDictionary<string, PermissionCredentials> _credentials = new(StringComparer.InvariantCultureIgnoreCase);
 
-	/// <summary>
-	/// Initializes a new instance of the <see cref="FileCredentialsStorage"/>.
-	/// </summary>
-	/// <param name="fileName">File name to persist credentials.</param>
-	/// <param name="asEmail">Use email as login. If <see langword="false"/>, then login can be any string.</param>
-	public FileCredentialsStorage(string fileName, bool asEmail = false)
+	private bool _initialized;
+
+	private void EnsureInitialized()
 	{
-		if (fileName.IsEmpty())
-			throw new ArgumentNullException(nameof(fileName));
+		if (_initialized)
+			return;
 
-		IOHelper.CreateDirIfNotExists(fileName);
+		_initialized = true;
 
-		_fileName = fileName;
-		_asEmail = asEmail;
+		var dir = Path.GetDirectoryName(_fileName);
+		if (!dir.IsEmpty())
+			_fileSystem.CreateDirectory(dir);
 
 		LoadFromFile();
 	}
 
-	private PermissionCredentials[] Cache => _credentials.CachedValues;
+	private PermissionCredentials[] Cache
+	{
+		get
+		{
+			EnsureInitialized();
+			return _credentials.CachedValues;
+		}
+	}
 
 	IEnumerable<PermissionCredentials> IPermissionCredentialsStorage.Search(string loginPattern)
 	{
@@ -47,6 +61,8 @@ public class FileCredentialsStorage : BaseLogReceiver, IPermissionCredentialsSto
 		if (credentials == null)
 			throw new ArgumentNullException(nameof(credentials));
 
+		EnsureInitialized();
+
 		if (!credentials.Email.IsValidLogin(_asEmail))
 			throw new ArgumentException(credentials.Email, nameof(credentials));
 
@@ -57,6 +73,8 @@ public class FileCredentialsStorage : BaseLogReceiver, IPermissionCredentialsSto
 
 	bool IPermissionCredentialsStorage.Delete(string login)
 	{
+		EnsureInitialized();
+
 		var res = _credentials.Remove(login);
 
 		if (res)
@@ -69,12 +87,12 @@ public class FileCredentialsStorage : BaseLogReceiver, IPermissionCredentialsSto
 	{
 		try
 		{
-			if (!_fileName.IsConfigExists())
+			if (!_fileSystem.IsConfigExists(_fileName))
 				return;
 
 			Do.Invariant(() =>
 			{
-				var storages = _fileName.Deserialize<SettingsStorage[]>();
+				var storages = Paths.Deserialize<SettingsStorage[]>(_fileSystem, _fileName);
 				if (storages == null)
 					return;
 
@@ -109,8 +127,8 @@ public class FileCredentialsStorage : BaseLogReceiver, IPermissionCredentialsSto
 		{
 			Do.Invariant(() =>
 			{
-				var arr = Cache.Select(i => i.Save()).ToArray();
-				arr.Serialize(_fileName);
+				var arr = _credentials.CachedValues.Select(i => i.Save()).ToArray();
+				arr.Serialize(_fileSystem, _fileName);
 			});
 		}
 		catch (Exception ex)
