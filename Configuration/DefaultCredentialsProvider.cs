@@ -2,12 +2,26 @@
 
 using System.Threading;
 
+using Ecng.Common;
+
 /// <summary>
 /// Default implementation of <see cref="ICredentialsProvider"/>.
 /// </summary>
-public class DefaultCredentialsProvider : ICredentialsProvider
+/// <remarks>
+/// Initializes a new instance of the <see cref="DefaultCredentialsProvider"/>.
+/// </remarks>
+/// <param name="fileSystem">File system. If null, uses <see cref="Paths.FileSystem"/>.</param>
+/// <param name="credentialsFile">Credentials file path. If null, uses <see cref="Paths.CredentialsFile"/>.</param>
+/// <param name="companyPath">Company directory path. If null, uses <see cref="Paths.CompanyPath"/>.</param>
+public class DefaultCredentialsProvider(
+	IFileSystem fileSystem = null,
+	string credentialsFile = null,
+	string companyPath = null) : ICredentialsProvider
 {
 	private readonly Lock _lock = new();
+	private readonly IFileSystem _fileSystem = fileSystem ?? Paths.FileSystem;
+	private readonly string _credentialsFile = credentialsFile ?? Paths.CredentialsFile;
+	private readonly string _companyPath = companyPath ?? Paths.CompanyPath;
 
 	private ServerCredentials _credentials;
 
@@ -21,15 +35,14 @@ public class DefaultCredentialsProvider : ICredentialsProvider
 				return credentials.CanAutoLogin();
 			}
 
-			var file = Paths.CredentialsFile;
 			credentials = null;
 
 			try
 			{
-				if (file.IsConfigExists())
+				if (_fileSystem.IsConfigExists(_credentialsFile))
 				{
 					credentials = new ServerCredentials();
-					credentials.LoadIfNotNull(file.Deserialize<SettingsStorage>());
+					credentials.LoadIfNotNull(Paths.Deserialize<SettingsStorage>(_fileSystem, _credentialsFile));
 
 					_credentials = credentials.Clone();
 				}
@@ -52,24 +65,22 @@ public class DefaultCredentialsProvider : ICredentialsProvider
 		{
 			_credentials = credentials.Clone();
 
-			Directory.CreateDirectory(Paths.CompanyPath);
+			_fileSystem.CreateDirectory(_companyPath);
 
 			var clone = credentials.Clone();
 			if (!keepSecret)
 				clone.Password = clone.Token = null;
 
-			clone.Save().Serialize(Paths.CredentialsFile);
+			clone.Save().Serialize(_fileSystem, _credentialsFile);
 		}
 	}
 
 	void ICredentialsProvider.Delete()
 	{
-		var fileName = Paths.CredentialsFile;
-
 		using (_lock.EnterScope())
 		{
-			if (File.Exists(fileName))
-				File.Delete(fileName);
+			if (_fileSystem.FileExists(_credentialsFile))
+				_fileSystem.DeleteFile(_credentialsFile);
 
 			_credentials = null;
 		}
