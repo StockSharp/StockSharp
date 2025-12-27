@@ -130,14 +130,17 @@ public static class CompilationExtensions
 	/// <summary>
 	/// Initializes the compilation environment, including Python engine setup, resource extraction, and compiler registration.
 	/// </summary>
+	/// <param name="fileSystem">File system.</param>
 	/// <param name="logs">The log receiver for output and error messages.</param>
 	/// <param name="extraPythonCommon">Additional Python common files to include.</param>
 	/// <param name="cancellationToken">A cancellation token for async operations.</param>
-	public static async Task Init(ILogReceiver logs, IEnumerable<(string name, string body)> extraPythonCommon, CancellationToken cancellationToken)
+	public static async Task Init(IFileSystem fileSystem, ILogReceiver logs, IEnumerable<(string name, string body)> extraPythonCommon, CancellationToken cancellationToken)
 	{
 		await Task.Yield();
 
-		Directory.CreateDirectory(Paths.PythonUtilsPath);
+		ArgumentNullException.ThrowIfNull(fileSystem);
+
+		fileSystem.CreateDirectory(Paths.PythonUtilsPath);
 
 		var pythonEngine = Python.CreateEngine();
 
@@ -154,7 +157,7 @@ public static class CompilationExtensions
 		{
 			try
 			{
-				await File.WriteAllTextAsync(Path.Combine(Paths.PythonUtilsPath, name), body, cancellationToken);
+				await fileSystem.WriteAllTextAsync(Path.Combine(Paths.PythonUtilsPath, name), body, cancellationToken: cancellationToken);
 			}
 			catch (Exception ex)
 			{
