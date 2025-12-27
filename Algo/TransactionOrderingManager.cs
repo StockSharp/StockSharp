@@ -256,25 +256,17 @@ public sealed class TransactionOrderingManager : ITransactionOrderingManager
 						return (null, [], false);
 					}
 
+					// Try to resolve OriginalTransactionId from known order mappings.
+					// If not found, let the code continue to suspension logic below.
 					if (execMsg.OrderId != null)
 					{
 						if (_orderIds.TryGetValue(execMsg.OrderId.Value, out var originId))
 							execMsg.OriginalTransactionId = originId;
-						else
-						{
-							_logReceiver.AddWarningLog("Trade doesn't have origin trans id: {0}", execMsg);
-							return (null, [], false);
-						}
 					}
 					else if (!execMsg.OrderStringId.IsEmpty())
 					{
 						if (_orderStringIds.TryGetValue(execMsg.OrderStringId, out var originId))
 							execMsg.OriginalTransactionId = originId;
-						else
-						{
-							_logReceiver.AddWarningLog("Trade doesn't have origin trans id: {0}", execMsg);
-							return (null, [], false);
-						}
 					}
 				}
 

@@ -224,11 +224,21 @@ public class TransactionOrderingManagerTests : BaseTestClass
 
 		var secId = CreateSecurityId();
 
+		// First register an order
+		manager.ProcessInMessage(new OrderRegisterMessage
+		{
+			TransactionId = 100,
+			SecurityId = secId,
+			Price = 10m,
+			Volume = 5m,
+		});
+
 		var execMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = secId,
 			TransactionId = 100,
+			OriginalTransactionId = 100,
 			HasOrderInfo = true,
 			OrderId = 12345,
 			OrderState = OrderStates.Active,
@@ -267,6 +277,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => false);
 
+		// Trade arrives before order confirmation - should be suspended
 		var execMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
@@ -291,7 +302,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => false);
 
-		// Suspend a trade
+		// Trade arrives before order - gets suspended
 		var suspendedTrade = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
@@ -305,7 +316,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 
 		manager.ProcessOutMessage(suspendedTrade);
 
-		// Now create an order that should release the trade
+		// Now order confirmation arrives - should release the suspended trade
 		var orderMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
@@ -320,7 +331,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		suspendedTrades.Length.AssertEqual(1);
 		((ExecutionMessage)suspendedTrades[0]).TradeId.AssertEqual(55555);
 
-		// Second call should return empty
+		// Second call should return empty (trades already released)
 		var secondCall = manager.GetSuspendedTrades(orderMsg);
 		secondCall.Length.AssertEqual(0);
 	}
@@ -331,7 +342,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 		var manager = new TransactionOrderingManager(logReceiver, () => false);
 
-		// Suspend a trade
+		// Trade arrives before order - gets suspended
 		var suspendedTrade = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
@@ -345,7 +356,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 
 		manager.ProcessOutMessage(suspendedTrade);
 
-		// Now create an order that should release the trade
+		// Now order confirmation arrives - should release the suspended trade
 		var orderMsg = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
