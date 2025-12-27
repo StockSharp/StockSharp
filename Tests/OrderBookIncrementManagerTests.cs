@@ -293,15 +293,15 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 		forward.AssertSame(errorResponse);
 		extraOut.Length.AssertEqual(0);
 
-		// Subscription should be removed - quote change should be suppressed (no subscription to build)
+		// Subscription should be removed - quote change should pass through (no subscription to build)
 		var quoteMsg = CreateIncrement(secId, DateTime.UtcNow, QuoteChangeStates.SnapshotComplete, [1],
 			bids: [new QuoteChange(100m, 10m)],
 			asks: [new QuoteChange(101m, 20m)]);
 
 		(forward, extraOut) = manager.ProcessOutMessage(quoteMsg);
 
-		// No subscription found so original message should be suppressed
-		forward.AssertNull();
+		// No subscription found so original message passes through
+		forward.AssertSame(quoteMsg);
 		extraOut.Length.AssertEqual(0);
 	}
 
