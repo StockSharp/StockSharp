@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Strategies.Reporting;
+namespace StockSharp.Algo.Strategies.Reporting;
 
 using Newtonsoft.Json;
 
@@ -14,7 +14,7 @@ public class JsonReportGenerator : BaseReportGenerator
 	public override string Extension => "json";
 
 	/// <inheritdoc />
-	public override async ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
+	public override async ValueTask Generate(IReportSource source, Stream stream, CancellationToken cancellationToken)
 	{
 		using var textWriter = new StreamWriter(stream, Encoding, leaveOpen: true);
 		using var writer = new JsonTextWriter(textWriter) { Formatting = Formatting.Indented };
@@ -37,40 +37,33 @@ public class JsonReportGenerator : BaseReportGenerator
 
 		await WriteStartElement();
 
-		await WriteElementAsync("name", strategy.Name);
+		await WriteElementAsync("name", source.Name);
 
-		foreach (var p in strategy.GetParameters())
+		foreach (var (name, value) in source.Parameters)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			if (p.Value is WorkingTime)
+			if (value is WorkingTime)
 				continue;
 
-			var value = p.Value;
-
-			if (value is Security sec)
-				value = sec.Id;
-			else if (value is Portfolio pf)
-				value = pf.Name;
-
-			await WriteElementAsync(p.GetName(), value);
+			await WriteElementAsync(name, value);
 		}
 
-		await WriteElementAsync("totalWorkingTime", strategy.TotalWorkingTime);
-		await WriteElementAsync("commission", strategy.Commission);
-		await WriteElementAsync("position", strategy.Position);
-		await WriteElementAsync("PnL", strategy.PnL);
-		await WriteElementAsync("slippage", strategy.Slippage);
-		await WriteElementAsync("latency", strategy.Latency);
+		await WriteElementAsync("totalWorkingTime", source.TotalWorkingTime);
+		await WriteElementAsync("commission", source.Commission);
+		await WriteElementAsync("position", source.Position);
+		await WriteElementAsync("PnL", source.PnL);
+		await WriteElementAsync("slippage", source.Slippage);
+		await WriteElementAsync("latency", source.Latency);
 
 		await WritePropertyName("statistics");
 		await WriteStartElement();
 
-		foreach (var p in strategy.StatisticManager.Parameters)
+		foreach (var (name, value) in source.StatisticParameters)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			await WriteElementAsync(p.Name, p.Value);
+			await WriteElementAsync(name, value);
 		}
 
 		await WriteEndElement();
@@ -80,7 +73,7 @@ public class JsonReportGenerator : BaseReportGenerator
 			await WritePropertyName("orders");
 			await WriteStartArray();
 
-			foreach (var o in strategy.Orders)
+			foreach (var o in source.Orders)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 
@@ -107,18 +100,18 @@ public class JsonReportGenerator : BaseReportGenerator
 			await WritePropertyName("trades");
 			await WriteStartArray();
 
-			foreach (var t in strategy.MyTrades)
+			foreach (var t in source.MyTrades)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 
 				await WriteStartElement();
 
-				await WriteElementAsync("id", t.Trade.Id);
-				await WriteElementAsync("transactionId", t.Order.TransactionId);
-				await WriteElementAsync("time", t.Trade.ServerTime);
-				await WriteElementAsync("price", t.Trade.Price);
-				await WriteElementAsync("volume", t.Trade.Volume);
-				await WriteElementAsync("order", t.Order.Id);
+				await WriteElementAsync("id", t.TradeId);
+				await WriteElementAsync("transactionId", t.OrderTransactionId);
+				await WriteElementAsync("time", t.Time);
+				await WriteElementAsync("price", t.TradePrice);
+				await WriteElementAsync("volume", t.Volume);
+				await WriteElementAsync("order", t.OrderId);
 				await WriteElementAsync("PnL", t.PnL);
 				await WriteElementAsync("slippage", t.Slippage);
 

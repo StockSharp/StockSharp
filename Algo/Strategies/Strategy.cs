@@ -6,6 +6,7 @@ using StockSharp.Algo.Statistics;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Testing;
 using StockSharp.Algo.Strategies.Protective;
+using StockSharp.Algo.Strategies.Reporting;
 
 /// <summary>
 /// <see cref="Order.Comment"/> auto-fill modes.
@@ -95,7 +96,7 @@ public enum StrategyTradingModes
 public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMarketRuleContainer,
 	ICloneable<Strategy>, IMarketDataProvider, ISubscriptionProvider, ISecurityProvider,
 	ITransactionProvider, IScheduledTask, ICustomTypeDescriptor, ITimeProvider,
-	IPortfolioProvider, IPositionProvider
+	IPortfolioProvider, IPositionProvider, IReportSource
 {
 	private class StrategyChangeStateMessage(Strategy strategy, ProcessStates state)
 		: Message(ExtendedMessageTypes.StrategyChangeState)
@@ -596,6 +597,50 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		get => _statisticManager;
 		protected set => _statisticManager = value ?? throw new ArgumentNullException(nameof(value));
 	}
+
+	#region IReportSource implementation
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	IEnumerable<(string Name, object Value)> IReportSource.StatisticParameters
+		=> StatisticManager.Parameters.Select(p => (p.Name, p.Value));
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	IEnumerable<(string Name, object Value)> IReportSource.Parameters
+		=> GetParameters().Select(p => (p.GetName(), p.Value));
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	IEnumerable<ReportOrder> IReportSource.Orders => Orders.Select(o => new ReportOrder(
+		o.Id,
+		o.TransactionId,
+		o.Side,
+		o.ServerTime,
+		o.Price,
+		o.State,
+		o.Balance,
+		o.Volume,
+		o.Type
+	));
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	IEnumerable<ReportTrade> IReportSource.MyTrades => MyTrades.Select(t => new ReportTrade(
+		t.Trade?.Id,
+		t.Order.TransactionId,
+		t.Trade?.ServerTime ?? default,
+		t.Trade?.Price ?? 0,
+		t.Order.Price,
+		t.Trade?.Volume ?? 0,
+		t.Order.Side,
+		t.Order.Id,
+		t.Slippage,
+		t.PnL,
+		t.Position
+	));
+
+	#endregion
 
 	private IRiskManager _riskManager;
 

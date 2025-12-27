@@ -14,7 +14,7 @@ public class XmlReportGenerator : BaseReportGenerator
 	public override string Extension => "xml";
 
 	/// <inheritdoc />
-	public override async ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
+	public override async ValueTask Generate(IReportSource source, Stream stream, CancellationToken cancellationToken)
 	{
 		var settings = new XmlWriterSettings
 		{
@@ -31,27 +31,27 @@ public class XmlReportGenerator : BaseReportGenerator
 
 		await WriteStartElement("strategy");
 
-		await WriteAttributeString("name", strategy.Name);
-		await WriteAttributeString("totalWorkingTime", strategy.TotalWorkingTime);
-		await WriteAttributeString("commission", strategy.Commission);
-		await WriteAttributeString("position", strategy.Position);
-		await WriteAttributeString("PnL", strategy.PnL);
-		await WriteAttributeString("slippage", strategy.Slippage);
-		await WriteAttributeString("latency", strategy.Latency);
+		await WriteAttributeString("name", source.Name);
+		await WriteAttributeString("totalWorkingTime", source.TotalWorkingTime);
+		await WriteAttributeString("commission", source.Commission);
+		await WriteAttributeString("position", source.Position);
+		await WriteAttributeString("PnL", source.PnL);
+		await WriteAttributeString("slippage", source.Slippage);
+		await WriteAttributeString("latency", source.Latency);
 
 		await WriteStartElement("parameters");
 
-		foreach (var p in strategy.GetParameters())
+		foreach (var (name, value) in source.Parameters)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			if (p.Value is WorkingTime)
+			if (value is WorkingTime)
 				continue;
 
 			await WriteStartElement("parameter");
 
-			await WriteAttributeString("name", p.GetName());
-			await WriteAttributeString("value", p.Value);
+			await WriteAttributeString("name", name);
+			await WriteAttributeString("value", value);
 
 			await WriteEndElement();
 		}
@@ -60,14 +60,14 @@ public class XmlReportGenerator : BaseReportGenerator
 
 		await WriteStartElement("statistics");
 
-		foreach (var p in strategy.StatisticManager.Parameters)
+		foreach (var (name, value) in source.StatisticParameters)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
 			await WriteStartElement("parameter");
 
-			await WriteAttributeString("name", p.Name);
-			await WriteAttributeString("value", p.Value);
+			await WriteAttributeString("name", name);
+			await WriteAttributeString("value", value);
 
 			await WriteEndElement();
 		}
@@ -78,7 +78,7 @@ public class XmlReportGenerator : BaseReportGenerator
 		{
 			await WriteStartElement("orders");
 
-			foreach (var o in strategy.Orders)
+			foreach (var o in source.Orders)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 
@@ -93,7 +93,6 @@ public class XmlReportGenerator : BaseReportGenerator
 				await WriteAttributeString("balance", o.Balance);
 				await WriteAttributeString("volume", o.Volume);
 				await WriteAttributeString("type", o.Type);
-				await WriteAttributeString("comment", o.Comment);
 
 				await WriteEndElement();
 			}
@@ -105,18 +104,18 @@ public class XmlReportGenerator : BaseReportGenerator
 		{
 			await WriteStartElement("trades");
 
-			foreach (var t in strategy.MyTrades)
+			foreach (var t in source.MyTrades)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 
 				await WriteStartElement("trade");
 
-				await WriteAttributeString("id", t.Trade.Id);
-				await WriteAttributeString("transactionId", t.Order.TransactionId);
-				await WriteAttributeString("time", t.Trade.ServerTime);
-				await WriteAttributeString("price", t.Trade.Price);
-				await WriteAttributeString("volume", t.Trade.Volume);
-				await WriteAttributeString("order", t.Order.Id);
+				await WriteAttributeString("id", t.TradeId);
+				await WriteAttributeString("transactionId", t.OrderTransactionId);
+				await WriteAttributeString("time", t.Time);
+				await WriteAttributeString("price", t.TradePrice);
+				await WriteAttributeString("volume", t.Volume);
+				await WriteAttributeString("order", t.OrderId);
 				await WriteAttributeString("PnL", t.PnL);
 				await WriteAttributeString("slippage", t.Slippage);
 

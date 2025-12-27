@@ -2,8 +2,6 @@ namespace StockSharp.Algo.Strategies.Reporting;
 
 using System.Globalization;
 
-using StockSharp.Algo.Strategies;
-
 /// <summary>
 /// The generator of report on equity in the csv format.
 /// </summary>
@@ -18,7 +16,7 @@ public class CsvReportGenerator : BaseReportGenerator
 	public override string Extension => "csv";
 
 	/// <inheritdoc />
-	public override async ValueTask Generate(Strategy strategy, Stream stream, CancellationToken cancellationToken)
+	public override async ValueTask Generate(IReportSource source, Stream stream, CancellationToken cancellationToken)
 	{
 		using var writer = new StreamWriter(stream, Encoding, leaveOpen: true);
 
@@ -33,6 +31,8 @@ public class CsvReportGenerator : BaseReportGenerator
 
 				if (value is DateTime dt)
 					value = dt.Format();
+				else if (value is DateTimeOffset dto)
+					value = dto.Format();
 				else if (value is TimeSpan ts)
 					value = ts.Format();
 
@@ -48,14 +48,14 @@ public class CsvReportGenerator : BaseReportGenerator
 		}
 
 		await WriteValuesAsync(LocalizedStrings.Strategy, LocalizedStrings.WorkingTime, LocalizedStrings.Position, LocalizedStrings.PnL, LocalizedStrings.Commission, LocalizedStrings.Slippage, LocalizedStrings.Latency);
-		await WriteValuesAsync(strategy.Name, strategy.TotalWorkingTime, strategy.Position, strategy.PnL, strategy.Commission, strategy.Slippage, strategy.Latency);
+		await WriteValuesAsync(source.Name, source.TotalWorkingTime, source.Position, source.PnL, source.Commission, source.Slippage, source.Latency);
 
-		var parameters = strategy.GetParameters();
+		var parameters = source.Parameters.ToArray();
 		await WriteValuesAsync(LocalizedStrings.Parameters);
-		await WriteValuesAsync([.. parameters.Select(p => (object)p.GetName())]);
+		await WriteValuesAsync([.. parameters.Select(p => (object)p.Name)]);
 		await WriteValuesAsync([.. parameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : p.Value)]);
 
-		var statParameters = strategy.StatisticManager.Parameters;
+		var statParameters = source.StatisticParameters.ToArray();
 		await WriteValuesAsync(LocalizedStrings.Statistics);
 		await WriteValuesAsync([.. statParameters.Select(p => (object)p.Name)]);
 		await WriteValuesAsync([.. statParameters.Select(p => p.Value is TimeSpan ts ? ts.Format() : (p.Value is DateTime dt ? dt.Format() : p.Value))]);
@@ -64,14 +64,12 @@ public class CsvReportGenerator : BaseReportGenerator
 		{
 			await WriteValuesAsync(LocalizedStrings.Orders);
 			await WriteValuesAsync(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.Direction, LocalizedStrings.Time, LocalizedStrings.Price,
-				LocalizedStrings.Status, LocalizedStrings.State, LocalizedStrings.Balance,
-				LocalizedStrings.Volume, LocalizedStrings.Type, LocalizedStrings.LatencyReg, LocalizedStrings.LatencyCancel, LocalizedStrings.EditionLatency);
+				LocalizedStrings.Status, LocalizedStrings.Balance, LocalizedStrings.Volume, LocalizedStrings.Type);
 
-			foreach (var order in strategy.Orders)
+			foreach (var order in source.Orders)
 			{
 				await WriteValuesAsync(order.Id, order.TransactionId, order.Side.GetDisplayName(), order.Time, order.Price,
-					order.State.GetDisplayName(), order.IsMatched() ? LocalizedStrings.Done : (order.IsCanceled() ? LocalizedStrings.Cancelled : LocalizedStrings.Active), order.Balance,
-						order.Volume, order.Type.GetDisplayName(), order.LatencyRegistration.Format(), order.LatencyCancellation.Format(), order.LatencyEdition.Format());
+					order.State.GetDisplayName(), order.Balance, order.Volume, order.Type.GetDisplayName());
 			}
 		}
 
@@ -81,10 +79,10 @@ public class CsvReportGenerator : BaseReportGenerator
 			await WriteValuesAsync(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
 				LocalizedStrings.Direction, LocalizedStrings.OrderId, LocalizedStrings.PnL, LocalizedStrings.Slippage);
 
-			foreach (var trade in strategy.MyTrades)
+			foreach (var trade in source.MyTrades)
 			{
-				await WriteValuesAsync(trade.Trade.Id, trade.Order.TransactionId, trade.Trade.ServerTime.Format(), trade.Trade.Price, trade.Trade.Volume,
-					trade.Order.Side.GetDisplayName(), trade.Order.Id, trade.PnL, trade.Slippage);
+				await WriteValuesAsync(trade.TradeId, trade.OrderTransactionId, trade.Time.Format(), trade.TradePrice, trade.Volume,
+					trade.Side.GetDisplayName(), trade.OrderId, trade.PnL, trade.Slippage);
 			}
 		}
 	}
