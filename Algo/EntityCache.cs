@@ -1,18 +1,49 @@
 namespace StockSharp.Algo;
 
-enum OrderOperations
+/// <summary>
+/// Order operation types.
+/// </summary>
+public enum OrderOperations
 {
+	/// <summary>
+	/// Order registration.
+	/// </summary>
 	Register,
+
+	/// <summary>
+	/// Order cancellation.
+	/// </summary>
 	Cancel,
+
+	/// <summary>
+	/// Order modification.
+	/// </summary>
 	Edit,
 }
 
-class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSecurity, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider) : ISnapshotHolder
+/// <summary>
+/// Entity cache for storing orders, trades, news and other trading entities.
+/// </summary>
+/// <param name="logReceiver">Log receiver for logging messages.</param>
+/// <param name="tryGetSecurity">Function to get security by id.</param>
+/// <param name="exchangeInfoProvider">Exchange info provider.</param>
+/// <param name="positionProvider">Position provider.</param>
+public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSecurity, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider) : ISnapshotHolder
 {
+	/// <summary>
+	/// Information about order state change.
+	/// </summary>
 	public class OrderChangeInfo
 	{
 		private OrderChangeInfo() { }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="OrderChangeInfo"/>.
+		/// </summary>
+		/// <param name="order">Order.</param>
+		/// <param name="isNew">Is new order.</param>
+		/// <param name="isChanged">Is order changed.</param>
+		/// <param name="isEdit">Is order edited.</param>
 		public OrderChangeInfo(Order order, bool isNew, bool isChanged, bool isEdit)
 		{
 			Order = order ?? throw new ArgumentNullException(nameof(order));
@@ -22,12 +53,29 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 			IsEdit = isEdit;
 		}
 
+		/// <summary>
+		/// Order.
+		/// </summary>
 		public Order Order { get; }
 
+		/// <summary>
+		/// Is new order.
+		/// </summary>
 		public bool IsNew { get; }
+
+		/// <summary>
+		/// Is order changed.
+		/// </summary>
 		public bool IsChanged { get; }
+
+		/// <summary>
+		/// Is order edited.
+		/// </summary>
 		public bool IsEdit { get; }
 
+		/// <summary>
+		/// Order does not exist.
+		/// </summary>
 		public static readonly OrderChangeInfo NotExist = new();
 	}
 
@@ -201,10 +249,16 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 	private readonly SynchronizedDictionary<string, News> _newsById = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly SynchronizedList<News> _newsWithoutId = [];
 
+	/// <summary>
+	/// All news.
+	/// </summary>
 	public IEnumerable<News> News => [.. _newsWithoutId.SyncGet(t => t.ToArray()), .. _newsById.SyncGet(t => t.Values.ToArray())];
 
 	private int _ordersKeepCount = 1000;
 
+	/// <summary>
+	/// Maximum number of orders to keep in cache. Default is 1000.
+	/// </summary>
 	public int OrdersKeepCount
 	{
 		get => _ordersKeepCount;
@@ -235,27 +289,53 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 	private readonly HashSet<long> _orderStatusTransactions = [];
 	private readonly HashSet<long> _massCancelationTransactions = [];
 
+	/// <summary>
+	/// Exchange info provider.
+	/// </summary>
 	public IExchangeInfoProvider ExchangeInfoProvider { get; } = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 
 	private readonly CachedSynchronizedDictionary<Order, IMessageAdapter> _orders = [];
+
+	/// <summary>
+	/// All orders.
+	/// </summary>
 	public IEnumerable<Order> Orders => _orders.CachedKeys;
 
 	private readonly CachedSynchronizedList<MyTrade> _myTrades = [];
+
+	/// <summary>
+	/// All own trades.
+	/// </summary>
 	public IEnumerable<MyTrade> MyTrades => _myTrades.Cache;
 
 	private readonly SynchronizedList<OrderFail> _orderRegisterFails = [];
+
+	/// <summary>
+	/// Order registration failures.
+	/// </summary>
 	public IEnumerable<OrderFail> OrderRegisterFails => _orderRegisterFails.SyncGet(c => c.ToArray());
 
 	private readonly SynchronizedList<OrderFail> _orderCancelFails = [];
+
+	/// <summary>
+	/// Order cancellation failures.
+	/// </summary>
 	public IEnumerable<OrderFail> OrderCancelFails => _orderCancelFails.SyncGet(c => c.ToArray());
 
 	private readonly SynchronizedList<OrderFail> _orderEditFails = [];
+
+	/// <summary>
+	/// Order modification failures.
+	/// </summary>
 	public IEnumerable<OrderFail> OrderEditFails => _orderEditFails.SyncGet(c => c.ToArray());
 
 	private readonly ILogReceiver _logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
 	private readonly Func<SecurityId?, Security> _tryGetSecurity = tryGetSecurity ?? throw new ArgumentNullException(nameof(tryGetSecurity));
 	private readonly IPositionProvider _positionProvider = positionProvider ?? throw new ArgumentNullException(nameof(positionProvider));
 
+	/// <summary>
+	/// Clear all cached data.
+	/// </summary>
 	public void Clear()
 	{
 		_securityData.Clear();
@@ -281,17 +361,31 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		_securityValues.Clear();
 	}
 
+	/// <summary>
+	/// Add order status transaction id.
+	/// </summary>
+	/// <param name="transactionId">Transaction id.</param>
 	public void AddOrderStatusTransactionId(long transactionId)
 	{
 		if (!_orderStatusTransactions.Add(transactionId))
 			throw new InvalidOperationException();
 	}
 
+	/// <summary>
+	/// Remove order status transaction id.
+	/// </summary>
+	/// <param name="transactionId">Transaction id.</param>
 	public void RemoveOrderStatusTransactionId(long transactionId)
 	{
 		_orderStatusTransactions.Remove(transactionId);
 	}
 
+	/// <summary>
+	/// Get orders by security and state.
+	/// </summary>
+	/// <param name="security">Security.</param>
+	/// <param name="state">Order state.</param>
+	/// <returns>Orders.</returns>
 	public IEnumerable<Order> GetOrders(Security security, OrderStates state)
 	{
 		if (security == null)
@@ -300,6 +394,10 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		return GetData(security).Orders.CachedValues.Select(info => info.Order).Filter(state);
 	}
 
+	/// <summary>
+	/// Try add mass cancelation transaction id.
+	/// </summary>
+	/// <param name="transactionId">Transaction id.</param>
 	public void TryAddMassCancelationId(long transactionId)
 	{
 		_massCancelationTransactions.TryAdd(transactionId);
@@ -307,25 +405,56 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		//	throw new InvalidOperationException();
 	}
 
+	/// <summary>
+	/// Check if transaction is mass cancelation.
+	/// </summary>
+	/// <param name="transactionId">Transaction id.</param>
+	/// <returns><see langword="true"/> if mass cancelation.</returns>
 	public bool IsMassCancelation(long transactionId) => _massCancelationTransactions.Contains(transactionId);
+
+	/// <summary>
+	/// Check if transaction is order status request.
+	/// </summary>
+	/// <param name="transactionId">Transaction id.</param>
+	/// <returns><see langword="true"/> if order status request.</returns>
 	public bool IsOrderStatusRequest(long transactionId) => _orderStatusTransactions.Contains(transactionId);
 
+	/// <summary>
+	/// Add order by cancelation transaction id.
+	/// </summary>
+	/// <param name="order">Order.</param>
+	/// <param name="transactionId">Transaction id.</param>
 	public void AddOrderByCancelationId(Order order, long transactionId)
 	{
 		AddOrderByTransactionId(order, transactionId, OrderOperations.Cancel);
 	}
 
+	/// <summary>
+	/// Add order by registration transaction id.
+	/// </summary>
+	/// <param name="order">Order.</param>
 	public void AddOrderByRegistrationId(Order order)
 	{
 		AddOrder(order);
 		AddOrderByTransactionId(order, order.TransactionId, OrderOperations.Register);
 	}
 
+	/// <summary>
+	/// Add order by edition transaction id.
+	/// </summary>
+	/// <param name="order">Order.</param>
+	/// <param name="transactionId">Transaction id.</param>
 	public void AddOrderByEditionId(Order order, long transactionId)
 	{
 		AddOrderByTransactionId(order, transactionId, OrderOperations.Edit);
 	}
 
+	/// <summary>
+	/// Add order fail by transaction id.
+	/// </summary>
+	/// <param name="fail">Order fail.</param>
+	/// <param name="operation">Order operation.</param>
+	/// <param name="transactionId">Transaction id.</param>
 	public void AddOrderFailById(OrderFail fail, OrderOperations operation, long transactionId)
 	{
 		_allOrdersByFailedId.TryAdd2((transactionId, operation), fail);
@@ -340,11 +469,23 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		_allOrdersByTransactionId.Add((transactionId, operation), order);
 	}
 
+	/// <summary>
+	/// Try get order by id.
+	/// </summary>
+	/// <param name="orderId">Order id.</param>
+	/// <param name="orderStringId">Order string id.</param>
+	/// <returns>Order or <see langword="null"/>.</returns>
 	public Order TryGetOrder(long? orderId, string orderStringId)
 		=> orderId != null
 			? _allOrdersById.TryGetValue(orderId.Value)
 			: (orderStringId.IsEmpty() ? null : _allOrdersByStringId.TryGetValue(orderStringId));
 
+	/// <summary>
+	/// Try get order by transaction id and operation.
+	/// </summary>
+	/// <param name="transactionId">Transaction id.</param>
+	/// <param name="operation">Operation.</param>
+	/// <returns>Order or <see langword="null"/>.</returns>
 	public Order TryGetOrder(long transactionId, OrderOperations operation)
 		=> _allOrdersByTransactionId.TryGetValue((transactionId, operation));
 
@@ -365,6 +506,11 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		}
 	}
 
+	/// <summary>
+	/// Try get message adapter for order.
+	/// </summary>
+	/// <param name="order">Order.</param>
+	/// <returns>Adapter or <see langword="null"/>.</returns>
 	public IMessageAdapter TryGetAdapter(Order order)
 	{
 		if (order is null)
@@ -373,6 +519,11 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		return _orders.TryGetValue(order);
 	}
 
+	/// <summary>
+	/// Try set message adapter for order.
+	/// </summary>
+	/// <param name="order">Order.</param>
+	/// <param name="adapter">Adapter.</param>
 	public void TrySetAdapter(Order order, IMessageAdapter adapter)
 	{
 		if (order is null)
@@ -384,6 +535,15 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		_orders[order] = adapter;
 	}
 
+	/// <summary>
+	/// Process order message.
+	/// </summary>
+	/// <param name="order">Order.</param>
+	/// <param name="security">Security.</param>
+	/// <param name="message">Message.</param>
+	/// <param name="transactionId">Transaction id.</param>
+	/// <param name="getPortfolio">Function to get portfolio.</param>
+	/// <returns>Order change info.</returns>
 	public IEnumerable<OrderChangeInfo> ProcessOrderMessage(Order order, Security security, ExecutionMessage message, long transactionId, Func<string, Portfolio> getPortfolio)
 	{
 		if (security is null)
@@ -545,6 +705,13 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		}
 	}
 
+	/// <summary>
+	/// Process order fail message.
+	/// </summary>
+	/// <param name="order">Order.</param>
+	/// <param name="security">Security.</param>
+	/// <param name="message">Message.</param>
+	/// <returns>Order fails with operations.</returns>
 	public IEnumerable<(OrderFail, OrderOperations)> ProcessOrderFailMessage(Order order, Security security, ExecutionMessage message)
 	{
 		if (security == null)
@@ -682,6 +849,14 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		});
 	}
 
+	/// <summary>
+	/// Process own trade message.
+	/// </summary>
+	/// <param name="order">Order.</param>
+	/// <param name="security">Security.</param>
+	/// <param name="message">Message.</param>
+	/// <param name="transactionId">Transaction id.</param>
+	/// <returns>Trade and is new flag.</returns>
 	public (MyTrade trade, bool isNew) ProcessOwnTradeMessage(Order order, Security security, ExecutionMessage message, long transactionId)
 	{
 		if (security == null)
@@ -790,6 +965,12 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		return (myTrade, isNew);
 	}
 
+	/// <summary>
+	/// Process news message.
+	/// </summary>
+	/// <param name="security">Security.</param>
+	/// <param name="message">Message.</param>
+	/// <returns>News and is new flag.</returns>
 	public (News news, bool isNew) ProcessNewsMessage(Security security, NewsMessage message)
 	{
 		if (message == null)
@@ -862,6 +1043,11 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		return (transactionId, type == OrderTypes.Conditional, operation);
 	}
 
+	/// <summary>
+	/// Add order fail.
+	/// </summary>
+	/// <param name="operation">Operation.</param>
+	/// <param name="fail">Fail.</param>
 	public void AddFail(OrderOperations operation, OrderFail fail)
 	{
 		switch (operation)
@@ -936,11 +1122,19 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		}
 	}
 
+	/// <summary>
+	/// Level1 market data info.
+	/// </summary>
 	public class Level1Info
 	{
 		private readonly Lock _sync = new();
 		private readonly Level1ChangeMessage _snapshot;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Level1Info"/>.
+		/// </summary>
+		/// <param name="securityId">Security id.</param>
+		/// <param name="serverTime">Server time.</param>
 		public Level1Info(SecurityId securityId, DateTime serverTime)
 		{
 			_snapshot = new Level1ChangeMessage
@@ -950,15 +1144,29 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 			};
 		}
 
+		/// <summary>
+		/// Get snapshot copy.
+		/// </summary>
+		/// <returns>Level1 message copy.</returns>
 		public Level1ChangeMessage GetCopy()
 		{
 			using (_sync.EnterScope())
 				return _snapshot.TypedClone();
 		}
 
+		/// <summary>
+		/// Can use best quotes.
+		/// </summary>
 		public bool CanBestQuotes { get; private set; } = true;
+
+		/// <summary>
+		/// Can use last trade.
+		/// </summary>
 		public bool CanLastTrade { get; private set; } = true;
 
+		/// <summary>
+		/// Available Level1 fields.
+		/// </summary>
 		public IEnumerable<Level1Fields> Level1Fields
 		{
 			get
@@ -968,6 +1176,12 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 			}
 		}
 
+		/// <summary>
+		/// Set field value.
+		/// </summary>
+		/// <param name="serverTime">Server time.</param>
+		/// <param name="field">Field.</param>
+		/// <param name="value">Value.</param>
 		public void SetValue(DateTime serverTime, Level1Fields field, object value)
 		{
 			using (_sync.EnterScope())
@@ -977,6 +1191,11 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 			}
 		}
 
+		/// <summary>
+		/// Get field value.
+		/// </summary>
+		/// <param name="field">Field.</param>
+		/// <returns>Value.</returns>
 		public object GetValue(Level1Fields field)
 		{
 			using (_sync.EnterScope())
@@ -989,6 +1208,10 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 				_snapshot.Changes.Remove(field);
 		}
 
+		/// <summary>
+		/// Clear best quotes data.
+		/// </summary>
+		/// <param name="serverTime">Server time.</param>
 		public void ClearBestQuotes(DateTime serverTime)
 		{
 			using (_sync.EnterScope())
@@ -1005,6 +1228,10 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 			}
 		}
 
+		/// <summary>
+		/// Clear last trade data.
+		/// </summary>
+		/// <param name="serverTime">Server time.</param>
 		public void ClearLastTrade(DateTime serverTime)
 		{
 			using (_sync.EnterScope())
@@ -1023,6 +1250,12 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 
 	private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = [];
 
+	/// <summary>
+	/// Get security Level1 field value.
+	/// </summary>
+	/// <param name="security">Security.</param>
+	/// <param name="field">Field.</param>
+	/// <returns>Value.</returns>
 	public object GetSecurityValue(Security security, Level1Fields field)
 	{
 		if (security == null)
@@ -1031,6 +1264,11 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		return _securityValues.TryGetValue(security)?.GetValue(field);
 	}
 
+	/// <summary>
+	/// Get available Level1 fields for security.
+	/// </summary>
+	/// <param name="security">Security.</param>
+	/// <returns>Fields.</returns>
 	public IEnumerable<Level1Fields> GetLevel1Fields(Security security)
 	{
 		if (security == null)
@@ -1042,9 +1280,20 @@ class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSe
 		return [];
 	}
 
+	/// <summary>
+	/// Check if security has Level1 info.
+	/// </summary>
+	/// <param name="security">Security.</param>
+	/// <returns><see langword="true"/> if has info.</returns>
 	public bool HasLevel1Info(Security security)
 		=> _securityValues.ContainsKey(security);
 
+	/// <summary>
+	/// Get or create Level1 info for security.
+	/// </summary>
+	/// <param name="security">Security.</param>
+	/// <param name="serverTime">Server time.</param>
+	/// <returns>Level1 info.</returns>
 	public Level1Info GetSecurityValues(Security security, DateTime serverTime)
 		=> _securityValues.SafeAdd(security, key => new Level1Info(security.ToSecurityId(), serverTime));
 
