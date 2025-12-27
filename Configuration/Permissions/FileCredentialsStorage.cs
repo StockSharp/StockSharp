@@ -2,8 +2,6 @@ namespace StockSharp.Configuration.Permissions;
 
 using System.Text.RegularExpressions;
 
-using Ecng.Common;
-
 /// <summary>
 /// File-based storage for <see cref="PermissionCredentials"/>.
 /// </summary>
@@ -92,7 +90,7 @@ public class FileCredentialsStorage(string fileName, bool asEmail = false, IFile
 
 			Do.Invariant(() =>
 			{
-				var storages = Paths.Deserialize<SettingsStorage[]>(_fileSystem, _fileName);
+				var storages = _fileSystem.Deserialize<SettingsStorage[]>(_fileName);
 				if (storages == null)
 					return;
 
