@@ -482,7 +482,7 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 		// Process suspended message
 		var tempSecId = secId;
 		tempSecId.Native = nativeId;
-		var suspendMsg = new ProcessSuspendedMessage(null, tempSecId);
+		var suspendMsg = new ProcessSuspendedMessage(new PassThroughMessageAdapter(new IncrementalIdGenerator()), tempSecId);
 
 		var (toInner2, toOut2) = await manager.ProcessInMessageAsync(suspendMsg, token);
 
