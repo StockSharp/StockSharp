@@ -63,9 +63,11 @@ public class ImportTests : BaseTestClass
 
 		var token = CancellationToken;
 
+		var fs = Helper.MemorySystem;
 		var filePath = Helper.GetSubTemp($"{dataType.DataTypeToFileName()}_import.csv");
 
-		using (var stream = File.Create(filePath))
+		// Export to memory file system
+		using (var stream = fs.OpenWrite(filePath))
 		{
 			var (count, lastTime) = await new TextExporter(dataType, stream, template, null).Export(arr, token);
 
@@ -76,7 +78,7 @@ public class ImportTests : BaseTestClass
 		}
 
 		// Parser check
-		using (var stream = File.OpenRead(filePath))
+		using (var stream = fs.OpenRead(filePath))
 		{
 			var parser = new CsvParser(dataType, fields)
 			{
@@ -93,7 +95,8 @@ public class ImportTests : BaseTestClass
 
 		var storageRegistry = Helper.GetStorage(Helper.GetSubTemp());
 
-		using (var stream = File.OpenRead(filePath))
+		// Importer check
+		using (var stream = fs.OpenRead(filePath))
 		{
 			var importer = new CsvImporter(dataType, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storageRegistry.GetStorage(secId, dataType))
 			{
@@ -494,10 +497,11 @@ public class ImportTests : BaseTestClass
 
 		var arr = security.RandomTicks(1000, true);
 
-		using var stream = File.Create(Helper.GetSubTemp($"ticks_progress_import.csv"));
-		await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
-		stream.Flush();
-		stream.Position = 0;
+		var fs = Helper.MemorySystem;
+		var filePath = Helper.GetSubTemp("ticks_progress_import.csv");
+
+		using (var stream = fs.OpenWrite(filePath))
+			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
 
 		var storage = Helper.GetStorage(Helper.GetSubTemp());
 
@@ -508,29 +512,32 @@ public class ImportTests : BaseTestClass
 
 		var progresses = new List<int>();
 
-		var (count, lastTime) = await importer.Import(stream, p =>
+		using (var stream = fs.OpenRead(filePath))
 		{
-			if (progresses.Count > 0 && progresses.Last() >= p)
-				throw new DuplicateException($"Progress {p} already exist.");
+			var (count, lastTime) = await importer.Import(stream, p =>
+			{
+				if (progresses.Count > 0 && progresses.Last() >= p)
+					throw new DuplicateException($"Progress {p} already exist.");
 
-			progresses.Add(p);
-		}, CancellationToken);
+				progresses.Add(p);
+			}, CancellationToken);
 
-		// Ensure we reported some progress values and they are non-decreasing
-		(progresses.Count > 0).AssertTrue();
-		for (var i = 1; i < progresses.Count; i++)
-			(progresses[i] >= progresses[i - 1]).AssertTrue();
+			// Ensure we reported some progress values and they are non-decreasing
+			(progresses.Count > 0).AssertTrue();
+			for (var i = 1; i < progresses.Count; i++)
+				(progresses[i] >= progresses[i - 1]).AssertTrue();
 
-		(progresses.Max() <= 100).AssertTrue();
-		(progresses.Min() >= 0).AssertTrue();
+			(progresses.Max() <= 100).AssertTrue();
+			(progresses.Min() >= 0).AssertTrue();
 
-		progresses.First().AssertEqual(1);
-		progresses.Last().AssertEqual(100);
+			progresses.First().AssertEqual(1);
+			progresses.Last().AssertEqual(100);
 
-		// Ensure importer processed all messages and returned last time equals last message server time
-		count.AssertEqual(arr.Length);
-		lastTime.AssertNotNull();
-		lastTime.Value.AssertEqual(arr.Last().ServerTime.Truncate(_1mcs));
+			// Ensure importer processed all messages and returned last time equals last message server time
+			count.AssertEqual(arr.Length);
+			lastTime.AssertNotNull();
+			lastTime.Value.AssertEqual(arr.Last().ServerTime.Truncate(_1mcs));
+		}
 	}
 
 	[TestMethod]
@@ -554,10 +561,11 @@ public class ImportTests : BaseTestClass
 
 		var arr = security.RandomTicks(20000, true);
 
-		using var stream = File.Create(Helper.GetSubTemp($"ticks_cancel_import.csv"));
-		await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
-		stream.Flush();
-		stream.Position = 0;
+		var fs = Helper.MemorySystem;
+		var filePath = Helper.GetSubTemp("ticks_cancel_import.csv");
+
+		using (var stream = fs.OpenWrite(filePath))
+			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
 
 		var storage = Helper.GetStorage(Helper.GetSubTemp());
 
@@ -569,16 +577,19 @@ public class ImportTests : BaseTestClass
 		var progresses = new List<int>();
 		using var cts = new CancellationTokenSource();
 
-		await ThrowsExactlyAsync<OperationCanceledException>(() => importer.Import(stream, p =>
+		using (var stream = fs.OpenRead(filePath))
 		{
-			if (progresses.Count > 0 && progresses.Last() >= p)
-				throw new DuplicateException($"Progress {p} already exist.");
+			await ThrowsExactlyAsync<OperationCanceledException>(() => importer.Import(stream, p =>
+			{
+				if (progresses.Count > 0 && progresses.Last() >= p)
+					throw new DuplicateException($"Progress {p} already exist.");
 
-			progresses.Add(p);
+				progresses.Add(p);
 
-			if (p >= 40)
-				cts.Cancel();
-		}, cts.Token).AsTask());
+				if (p >= 40)
+					cts.Cancel();
+			}, cts.Token).AsTask());
+		}
 
 		(progresses.Count > 0).AssertTrue();
 	}
@@ -604,10 +615,11 @@ public class ImportTests : BaseTestClass
 
 		var arr = security.RandomTicks(1000, true);
 
-		using var stream = File.Create(Helper.GetSubTemp($"ticks_error_import.csv"));
-		await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
-		stream.Flush();
-		stream.Position = 0;
+		var fs = Helper.MemorySystem;
+		var filePath = Helper.GetSubTemp("ticks_error_import.csv");
+
+		using (var stream = fs.OpenWrite(filePath))
+			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
 
 		// Make one of the field orders invalid (beyond column count) to provoke parsing error
 		fields[0].Order = 9999;
@@ -619,6 +631,7 @@ public class ImportTests : BaseTestClass
 			ColumnSeparator = ";"
 		};
 
-		await ThrowsExactlyAsync<InvalidOperationException>(() => importer.Import(stream, _ => { }, CancellationToken).AsTask());
+		using (var stream = fs.OpenRead(filePath))
+			await ThrowsExactlyAsync<InvalidOperationException>(() => importer.Import(stream, _ => { }, CancellationToken).AsTask());
 	}
 }

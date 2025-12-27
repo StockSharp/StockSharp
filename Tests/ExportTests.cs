@@ -133,7 +133,7 @@ public class ExportTests : BaseTestClass
 
 		async Task Do(string extension, Func<Stream, BaseExporter> create)
 		{
-			using var stream = File.OpenWrite(Helper.GetSubTemp($"{fileNameNoExt}.{extension}"));
+			using var stream = new MemoryStream();
 			var export = create(stream);
 			var (count, lastTime) = await export.Export(arr, token);
 
@@ -143,6 +143,9 @@ public class ExportTests : BaseTestClass
 
 			if (hasTime && arr.Length > 0)
 				lastTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime);
+
+			// Verify something was written
+			(stream.Length > 0).AssertTrue($"Export {extension} should write data");
 		}
 
 		await Do("txt", f => new TextExporter(dataType, f, txtTemplate, null));
@@ -163,7 +166,7 @@ public class ExportTests : BaseTestClass
 
 		async Task Do(string extension, Func<Stream, BaseExporter> create)
 		{
-			using var stream = File.OpenWrite(Helper.GetSubTemp($"{fileNameNoExt}_async.{extension}"));
+			using var stream = new MemoryStream();
 			var export = create(stream);
 			var (count, lastTime) = await export.Export(arr.ToAsyncEnumerable(), token);
 
@@ -173,6 +176,9 @@ public class ExportTests : BaseTestClass
 
 			if (hasTime && arr.Length > 0)
 				lastTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime);
+
+			// Verify something was written
+			(stream.Length > 0).AssertTrue($"ExportAsync {extension} should write data");
 		}
 
 		await Do("txt", f => new TextExporter(dataType, f, txtTemplate, null));
@@ -187,16 +193,15 @@ public class ExportTests : BaseTestClass
 		var security = Helper.CreateStorageSecurity();
 		var ticks = security.RandomTicks(20000, true).ToArray();
 
-		var path = Helper.GetSubTemp("cancel_test.txt");
-		using var stream = File.OpenWrite(path);
+		using var stream = new MemoryStream();
 		var exporter = new TextExporter(DataType.Ticks, stream, _txtReg.TemplateTxtTick, null);
 
 		var (_, token) = CancellationToken.CreateChildToken(TimeSpan.FromSeconds(1));
 
 		await ThrowsAsync<OperationCanceledException>(() => exporter.Export(ticks, token));
 
-		// partial file should exist
-		(new FileInfo(path).Length > 0).AssertTrue();
+		// partial data should be written
+		(stream.Length > 0).AssertTrue();
 	}
 
 	[TestMethod]
@@ -205,16 +210,15 @@ public class ExportTests : BaseTestClass
 		var security = Helper.CreateStorageSecurity();
 		var ticks = security.RandomTicks(20000, true).ToArray();
 
-		var path = Helper.GetSubTemp("cancel_test_async.txt");
-		using var stream = File.OpenWrite(path);
+		using var stream = new MemoryStream();
 		var exporter = new TextExporter(DataType.Ticks, stream, _txtReg.TemplateTxtTick, null);
 
 		var (_, token) = CancellationToken.CreateChildToken(TimeSpan.FromSeconds(1));
 
 		await ThrowsAsync<OperationCanceledException>(() => exporter.Export(ticks.ToAsyncEnumerable(), token));
 
-		// partial file should exist
-		(new FileInfo(path).Length > 0).AssertTrue();
+		// partial data should be written
+		(stream.Length > 0).AssertTrue();
 	}
 
 	[TestMethod]
