@@ -81,18 +81,37 @@ public class ReportTests : BaseTestClass
 			_ => throw new ArgumentException($"Unknown format: {format}")
 		};
 
-		using var stream = File.Create(Path.Combine(Helper.GetSubTemp(), $"test_report.{format}"));
+		using var stream = new MemoryStream();
 
 		await generator.Generate(strategy, stream, token);
 
-		stream.Flush();
-		stream.Position = 0;
+		(stream.Length > 0).AssertTrue($"Report {format} should write data");
+	}
 
-		var content = await new StreamReader(stream, leaveOpen: true).ReadToEndAsync(
-#if NET7_0_OR_GREATER
-token
-#endif
-			);
-		content.IsEmptyOrWhiteSpace().AssertFalse();
+	[TestMethod]
+	public async Task ExcelReportWithTemplate()
+	{
+		var token = CancellationToken;
+
+		var strategy = CreateTestStrategy();
+
+		// Create a template xlsx in memory
+		using var templateStream = new MemoryStream();
+		using (var worker = ServicesRegistry.ExcelProvider.CreateNew(templateStream))
+		{
+			worker
+				.AddSheet()
+				.RenameSheet("Summary")
+				.SetCell(0, 0, "Template Header");
+		}
+		templateStream.Position = 0;
+
+		var generator = new ExcelReportGenerator(ServicesRegistry.ExcelProvider, templateStream);
+
+		using var outputStream = new MemoryStream();
+
+		await generator.Generate(strategy, outputStream, token);
+
+		(outputStream.Length > 0).AssertTrue("Excel report with template should write data");
 	}
 }

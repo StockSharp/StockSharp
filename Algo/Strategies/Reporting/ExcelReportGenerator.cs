@@ -9,15 +9,15 @@ using Ecng.Interop;
 /// Initializes a new instance of the <see cref="ExcelReportGenerator"/>.
 /// </remarks>
 /// <param name="provider"><see cref="IExcelWorkerProvider"/>.</param>
-/// <param name="template"><see cref="Template"/></param>
-public class ExcelReportGenerator(IExcelWorkerProvider provider, string template = null) : BaseReportGenerator
+/// <param name="templateStream">The template stream to be copied into report and filled up with Strategy, Orders and Trades sheets.</param>
+public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream templateStream = null) : BaseReportGenerator
 {
 	private readonly IExcelWorkerProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
 
 	/// <summary>
-	/// The template file, to be copied into report and filled up with Strategy, Orders and Trades sheets.
+	/// The template stream to be copied into report and filled up with Strategy, Orders and Trades sheets.
 	/// </summary>
-	public string Template { get; } = template;
+	public Stream TemplateStream { get; } = templateStream;
 
 	/// <summary>
 	/// The number of decimal places. By default, it equals to 2.
@@ -36,18 +36,17 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, string template
 		if (stream == null)
 			throw new ArgumentNullException(nameof(stream));
 
-		var hasTemplate = !Template.IsEmpty();
+		var hasTemplate = TemplateStream is not null;
 
 		if (hasTemplate)
 		{
-			using var templateStream = File.OpenRead(Template);
-			templateStream.CopyTo(stream);
+			TemplateStream.CopyTo(stream);
 			stream.Position = 0;
 		}
 
 		using var worker = hasTemplate ? _provider.OpenExist(stream) : _provider.CreateNew(stream);
 
-		if (Template.IsEmpty())
+		if (!hasTemplate)
 		{
 			worker.AddSheet();
 			worker.RenameSheet(strategy.Name);
