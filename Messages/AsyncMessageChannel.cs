@@ -108,9 +108,11 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 			{
 				item.Cts?.Cancel();
 			}
+			catch { }
 			finally
 			{
-				item.Cts?.Dispose();
+				try { item.Cts?.Dispose(); }
+				catch { }
 			}
 		}
 
@@ -122,6 +124,9 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 
 		_messages.Clear();
 		_childTasks.Clear();
+
+		_isConnectionStarted = false;
+		_isDisconnecting = false;
 
 		State = ChannelStates.Stopped;
 	}

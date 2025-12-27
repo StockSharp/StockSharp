@@ -439,4 +439,464 @@ public class AsyncMessageChannelTests : BaseTestClass
 		await secondStarted.Task.WithTimeout(TimeSpan.FromSeconds(2));
 		await allCompleted.Task.WithTimeout(TimeSpan.FromSeconds(2));
 	}
+
+	#region Close/Dispose/Reopen Tests
+
+	[TestMethod]
+	public async Task Close_StopsProcessing()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+
+		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var messageStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var messageRelease = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		channel.NewOutMessageAsync += async (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					connected.TrySetResult(true);
+					return;
+				case ExecutionMessage:
+					messageStarted.TrySetResult(true);
+					await messageRelease.Task;
+					return;
+			}
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		await channel.SendInMessageAsync(new ExecutionMessage(), CancellationToken);
+		await messageStarted.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		messageRelease.TrySetResult(true);
+		channel.Close();
+
+		channel.State.AssertEqual(ChannelStates.Stopped);
+	}
+
+	[TestMethod]
+	public async Task Close_CancelsSubscriptions()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+
+		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var subscriptionStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var subscriptionCancelled = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		channel.NewOutMessageAsync += async (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					connected.TrySetResult(true);
+					return;
+				case MarketDataMessage { IsSubscribe: true }:
+					subscriptionStarted.TrySetResult(true);
+					try
+					{
+						await Task.Delay(Timeout.Infinite, token);
+					}
+					catch (OperationCanceledException)
+					{
+						subscriptionCancelled.TrySetResult(true);
+						throw;
+					}
+					return;
+			}
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		await channel.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+		}, CancellationToken);
+
+		await subscriptionStarted.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		channel.Close();
+
+		await subscriptionCancelled.Task.WithTimeout(TimeSpan.FromSeconds(2));
+	}
+
+	[TestMethod]
+	public async Task Dispose_ClosesChannel()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2
+		};
+
+		var channel = new AsyncMessageChannel(adapter);
+
+		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		channel.NewOutMessageAsync += (message, token) =>
+		{
+			if (message is ConnectMessage)
+				connected.TrySetResult(true);
+			return default;
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		channel.Dispose();
+
+		channel.State.AssertEqual(ChannelStates.Stopped);
+		await Assert.ThrowsExactlyAsync<ObjectDisposedException>(async () =>
+			await channel.SendInMessageAsync(new TimeMessage(), CancellationToken));
+	}
+
+	[TestMethod]
+	public async Task Reopen_WorksAfterClose()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+
+		var connectCount = 0;
+		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		channel.NewOutMessageAsync += (message, token) =>
+		{
+			if (message is ConnectMessage)
+			{
+				Interlocked.Increment(ref connectCount);
+				connected.TrySetResult(true);
+			}
+			return default;
+		};
+
+		// First open
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+		connectCount.AssertEqual(1);
+
+		// Close
+		channel.Close();
+		channel.State.AssertEqual(ChannelStates.Stopped);
+
+		// Reopen
+		connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+		connectCount.AssertEqual(2);
+	}
+
+	#endregion
+
+	#region Unsubscribe Tests
+
+	[TestMethod]
+	public async Task Unsubscribe_CancelsRunningSubscription()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+
+		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var subscriptionStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var subscriptionCancelled = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var unsubscribeResponse = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		const long subscriptionId = 100;
+		const long unsubscribeId = 101;
+
+		channel.NewOutMessageAsync += async (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					connected.TrySetResult(true);
+					return;
+				case MarketDataMessage { IsSubscribe: true }:
+					subscriptionStarted.TrySetResult(true);
+					try
+					{
+						await Task.Delay(Timeout.Infinite, token);
+					}
+					catch (OperationCanceledException)
+					{
+						subscriptionCancelled.TrySetResult(true);
+						throw;
+					}
+					return;
+			}
+		};
+
+		adapter.NewOutMessage += message =>
+		{
+			if (message is SubscriptionResponseMessage resp && resp.OriginalTransactionId == unsubscribeId)
+				unsubscribeResponse.TrySetResult(true);
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		await channel.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = subscriptionId,
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+		}, CancellationToken);
+
+		await subscriptionStarted.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		await channel.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			OriginalTransactionId = subscriptionId,
+			TransactionId = unsubscribeId,
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+		}, CancellationToken);
+
+		await subscriptionCancelled.Task.WithTimeout(TimeSpan.FromSeconds(2));
+		await unsubscribeResponse.Task.WithTimeout(TimeSpan.FromSeconds(2));
+	}
+
+	#endregion
+
+	#region Disconnect Tests
+
+	[TestMethod]
+	public async Task Disconnect_CancelsRunningOperations()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2,
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+
+		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var subscriptionStarted = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var subscriptionCancelled = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var disconnected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		channel.NewOutMessageAsync += async (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					connected.TrySetResult(true);
+					return;
+				case MarketDataMessage { IsSubscribe: true }:
+					subscriptionStarted.TrySetResult(true);
+					try
+					{
+						await Task.Delay(Timeout.Infinite, token);
+					}
+					catch (OperationCanceledException)
+					{
+						subscriptionCancelled.TrySetResult(true);
+						throw;
+					}
+					return;
+				case DisconnectMessage:
+					disconnected.TrySetResult(true);
+					return;
+			}
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		await channel.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+		}, CancellationToken);
+
+		await subscriptionStarted.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		await channel.SendInMessageAsync(new DisconnectMessage(), CancellationToken);
+
+		await subscriptionCancelled.Task.WithTimeout(TimeSpan.FromSeconds(2));
+		await disconnected.Task.WithTimeout(TimeSpan.FromSeconds(5));
+	}
+
+	#endregion
+
+	#region Error Handling Tests
+
+	[TestMethod]
+	public async Task ErrorInHandler_SendsErrorResponse()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+
+		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var errorResponse = new TaskCompletionSource<Message>(TaskCreationOptions.RunContinuationsAsynchronously);
+		const long transactionId = 100;
+
+		channel.NewOutMessageAsync += (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					connected.TrySetResult(true);
+					return default;
+				case MarketDataMessage { IsSubscribe: true }:
+					throw new InvalidOperationException("Test error");
+			}
+			return default;
+		};
+
+		adapter.NewOutMessage += message =>
+		{
+			if (message is SubscriptionResponseMessage resp && resp.OriginalTransactionId == transactionId)
+				errorResponse.TrySetResult(message);
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		await channel.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = transactionId,
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+		}, CancellationToken);
+
+		var response = await errorResponse.Task.WithTimeout(TimeSpan.FromSeconds(2));
+		response.AssertNotNull();
+		((SubscriptionResponseMessage)response).Error.AssertNotNull();
+	}
+
+	[TestMethod]
+	public async Task TransactionError_SendsErrorResponse()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+
+		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var errorResponse = new TaskCompletionSource<Message>(TaskCreationOptions.RunContinuationsAsynchronously);
+		const long transactionId = 100;
+
+		channel.NewOutMessageAsync += (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					connected.TrySetResult(true);
+					return default;
+				case OrderRegisterMessage:
+					throw new InvalidOperationException("Order failed");
+			}
+			return default;
+		};
+
+		adapter.NewOutMessage += message =>
+		{
+			if (message is ExecutionMessage exec && exec.OriginalTransactionId == transactionId && exec.Error != null)
+				errorResponse.TrySetResult(message);
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		await channel.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = transactionId,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+			Price = 100,
+			Volume = 1,
+		}, CancellationToken);
+
+		var response = await errorResponse.Task.WithTimeout(TimeSpan.FromSeconds(2));
+		response.AssertNotNull();
+		((ExecutionMessage)response).Error.AssertNotNull();
+	}
+
+	#endregion
+
+	#region Suspend/Resume Tests
+
+	[TestMethod]
+	public async Task Suspend_PausesProcessing()
+	{
+		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
+		{
+			MaxParallelMessages = 2
+		};
+
+		using var channel = new AsyncMessageChannel(adapter);
+
+		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var messageProcessed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		channel.NewOutMessageAsync += (message, token) =>
+		{
+			switch (message)
+			{
+				case ConnectMessage:
+					connected.TrySetResult(true);
+					return default;
+				case ExecutionMessage:
+					messageProcessed.TrySetResult(true);
+					return default;
+			}
+			return default;
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+
+		channel.Suspend();
+		channel.State.AssertEqual(ChannelStates.Suspended);
+
+		await channel.SendInMessageAsync(new ExecutionMessage(), CancellationToken);
+		await AssertNotCompleted(messageProcessed.Task, TimeSpan.FromMilliseconds(300), CancellationToken);
+
+		channel.Resume();
+		await messageProcessed.Task.WithTimeout(TimeSpan.FromSeconds(2));
+	}
+
+	#endregion
 }
