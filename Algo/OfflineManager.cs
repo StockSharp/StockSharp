@@ -119,11 +119,13 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 			case MessageTypes.OrderCancel:
 			{
 				Message outMsg = null;
+				var handled = false;
 
 				using (_sync.EnterScope())
 				{
 					if (!_connected)
 					{
+						handled = true;
 						var cancelMsg = (OrderCancelMessage)message.Clone();
 
 						if (!_pendingRegistration.TryGetAndRemove(cancelMsg.OriginalTransactionId, out var originOrderMsg))
@@ -145,8 +147,13 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 					}
 				}
 
-				if (outMsg != null)
-					return ([], [outMsg], false);
+				if (handled)
+				{
+					if (outMsg != null)
+						return ([], [outMsg], false);
+
+					return ([], [], false);
+				}
 
 				return ([], [], true);
 			}
