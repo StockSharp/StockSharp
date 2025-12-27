@@ -306,8 +306,8 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 
 		// No book should be generated for duplicate values
 		extraOut2.Length.AssertEqual(0);
-		// Level1 should still be forwarded (we have no other subscribers in this test)
-		forward.AssertNull();
+		// Level1 should still be forwarded (duplicates don't affect forwarding)
+		forward.AssertNotNull();
 	}
 
 	[TestMethod]
