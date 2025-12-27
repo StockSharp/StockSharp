@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies.Reporting;
+namespace StockSharp.Algo.Reporting;
 
 /// <summary>
 /// The interface describe report generator for strategies.
@@ -16,12 +16,12 @@ public interface IReportGenerator
 	string Extension { get; }
 
 	/// <summary>
-	/// To add <see cref="Order"/> to the report. <see cref="Order"/> are added by default.
+	/// To add orders to the report. Orders are added by default.
 	/// </summary>
 	bool IncludeOrders { get; set; }
 
 	/// <summary>
-	/// To add <see cref="MyTrade"/> to the report. <see cref="MyTrade"/> are added by default.
+	/// To add trades to the report. Trades are added by default.
 	/// </summary>
 	bool IncludeTrades { get; set; }
 

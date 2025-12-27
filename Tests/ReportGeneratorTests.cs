@@ -4,7 +4,7 @@ using System.Text;
 
 using StockSharp.Algo.Statistics;
 using StockSharp.Algo.Strategies;
-using StockSharp.Algo.Strategies.Reporting;
+using StockSharp.Algo.Reporting;
 
 /// <summary>
 /// Tests for report generators using IReportSource mock.
@@ -124,7 +124,7 @@ public class ReportGeneratorTests : BaseTestClass
 			Id: 12345,
 			TransactionId: 100,
 			Side: Sides.Buy,
-			Time: DateTimeOffset.Now,
+			Time: DateTime.UtcNow,
 			Price: 150m,
 			State: OrderStates.Done,
 			Balance: 0m,
@@ -155,7 +155,7 @@ public class ReportGeneratorTests : BaseTestClass
 			Id: 99999,
 			TransactionId: 1,
 			Side: Sides.Buy,
-			Time: DateTimeOffset.Now,
+			Time: DateTime.UtcNow,
 			Price: 100m,
 			State: null,
 			Balance: null,

@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies.Reporting;
+namespace StockSharp.Algo.Reporting;
 
 using System.Globalization;
 

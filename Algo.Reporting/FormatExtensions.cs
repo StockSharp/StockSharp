@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Strategies.Reporting;
+﻿namespace StockSharp.Algo.Reporting;
 
 /// <summary>
 /// Format extensions.
@@ -27,13 +27,5 @@ public static class FormatExtensions
 	/// <param name="time"><see cref="DateTime"/> value.</param>
 	/// <returns><see cref="string"/>.</returns>
 	public static string Format(this DateTime time)
-		=> time.To<string>();
-
-	/// <summary>
-	/// To format the <see cref="DateTimeOffset"/> in <see cref="string"/>.
-	/// </summary>
-	/// <param name="time"><see cref="DateTimeOffset"/> value.</param>
-	/// <returns><see cref="string"/>.</returns>
-	public static string Format(this DateTimeOffset time)
 		=> time.To<string>();
 }

@@ -8,7 +8,7 @@ using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Candles.Patterns;
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.Risk;
-using StockSharp.Algo.Strategies.Reporting;
+using StockSharp.Algo.Reporting;
 
 /// <summary>
 /// Services registry.

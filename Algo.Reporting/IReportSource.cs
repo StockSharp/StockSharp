@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies.Reporting;
+namespace StockSharp.Algo.Reporting;
 
 /// <summary>
 /// Order data for reports.
@@ -16,7 +16,7 @@ public record ReportOrder(
 	long? Id,
 	long TransactionId,
 	Sides Side,
-	DateTimeOffset Time,
+	DateTime Time,
 	decimal Price,
 	OrderStates? State,
 	decimal? Balance,
@@ -41,7 +41,7 @@ public record ReportOrder(
 public record ReportTrade(
 	long? TradeId,
 	long OrderTransactionId,
-	DateTimeOffset Time,
+	DateTime Time,
 	decimal TradePrice,
 	decimal OrderPrice,
 	decimal Volume,
@@ -54,7 +54,7 @@ public record ReportTrade(
 
 /// <summary>
 /// The interface for providing data to report generators.
-/// Decouples reports from concrete <see cref="Strategy"/> implementation.
+/// Decouples reports from concrete strategy implementation.
 /// </summary>
 public interface IReportSource
 {
