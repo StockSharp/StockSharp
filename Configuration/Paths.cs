@@ -598,6 +598,7 @@ public static class Paths
 	/// <param name="value">Value.</param>
 	/// <param name="filePath">File path.</param>
 	/// <param name="bom">Add UTF8 BOM preamble.</param>
+	[Obsolete("Use IFileSystem overload.")]
 	public static void Serialize<T>(this T value, string filePath, bool bom = true)
 		=> Serialize(value, FileSystem, filePath, bom);
 
@@ -617,6 +618,7 @@ public static class Paths
 	/// <typeparam name="T">Value type.</typeparam>
 	/// <param name="filePath">File path.</param>
 	/// <returns>Value.</returns>
+	[Obsolete("Use IFileSystem overload.")]
 	public static T Deserialize<T>(this string filePath)
 		=> Deserialize<T>(FileSystem, filePath);
 
@@ -627,6 +629,7 @@ public static class Paths
 	/// <param name="filePath">File path.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Value.</returns>
+	[Obsolete("Use IFileSystem overload.")]
 	public static ValueTask<T> DeserializeAsync<T>(this string filePath, CancellationToken cancellationToken)
 		=> DeserializeAsync<T>(FileSystem, filePath, cancellationToken);
 
@@ -636,6 +639,7 @@ public static class Paths
 	/// <typeparam name="T">Value type.</typeparam>
 	/// <param name="filePath">File path.</param>
 	/// <returns>Value.</returns>
+	[Obsolete("Use IFileSystem overload.")]
 	public static T DeserializeOrThrow<T>(this string filePath)
 		=> DeserializeOrThrow<T>(FileSystem, filePath);
 
@@ -646,6 +650,7 @@ public static class Paths
 	/// <param name="filePath">File path.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Value.</returns>
+	[Obsolete("Use IFileSystem overload.")]
 	public static ValueTask<T> DeserializeOrThrowAsync<T>(this string filePath, CancellationToken cancellationToken)
 		=> DeserializeOrThrowAsync<T>(FileSystem, filePath, cancellationToken);
 
