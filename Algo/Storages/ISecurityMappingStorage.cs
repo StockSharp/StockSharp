@@ -13,8 +13,7 @@ public interface ISecurityMappingStorage
 	/// <summary>
 	/// Get all security identifier mappings.
 	/// </summary>
-	/// <returns>Security identifiers mapping.</returns>
-	IEnumerable<SecurityIdMapping> Get();
+	IEnumerable<SecurityIdMapping> Mappings { get; }
 
 	/// <summary>
 	/// Save security identifier mapping.
@@ -53,14 +52,14 @@ public interface ISecurityMappingStorageProvider : IDisposable
 	/// <summary>
 	/// Initialize the storage provider.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Possible errors with storage names. Empty dictionary means initialization without any issues.</returns>
-	Dictionary<string, Exception> Init();
+	ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Get storage names.
 	/// </summary>
-	/// <returns>Storage names.</returns>
-	IEnumerable<string> GetStorageNames();
+	IEnumerable<string> StorageNames { get; }
 
 	/// <summary>
 	/// Get storage for a specific storage name.
@@ -88,10 +87,13 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 	}
 
 	/// <inheritdoc />
-	public IEnumerable<SecurityIdMapping> Get()
+	public IEnumerable<SecurityIdMapping> Mappings
 	{
-		using (_syncRoot.EnterScope())
-			return [.. _mappings.Select(p => (SecurityIdMapping)p)];
+		get
+		{
+			using (_syncRoot.EnterScope())
+				return [.. _mappings.Select(p => (SecurityIdMapping)p)];
+		}
 	}
 
 	/// <inheritdoc />
@@ -205,13 +207,16 @@ public class InMemorySecurityMappingStorageProvider : ISecurityMappingStoragePro
 	private readonly SynchronizedDictionary<string, InMemorySecurityMappingStorage> _storages = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <inheritdoc />
-	public Dictionary<string, Exception> Init() => [];
+	public ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken) => new([]);
 
 	/// <inheritdoc />
-	public IEnumerable<string> GetStorageNames()
+	public IEnumerable<string> StorageNames
 	{
-		using (_storages.EnterScope())
-			return [.. _storages.Keys];
+		get
+		{
+			using (_storages.EnterScope())
+				return [.. _storages.Keys];
+		}
 	}
 
 	/// <inheritdoc />
@@ -234,21 +239,13 @@ public class InMemorySecurityMappingStorageProvider : ISecurityMappingStoragePro
 /// <summary>
 /// CSV security identifier mappings storage provider.
 /// </summary>
-public sealed class CsvSecurityMappingStorageProvider : ISecurityMappingStorageProvider
+public sealed class CsvSecurityMappingStorageProvider : Disposable, ISecurityMappingStorageProvider
 {
-	private class CsvSecurityMappingStorage : ISecurityMappingStorage
+	private class CsvSecurityMappingStorage(CsvSecurityMappingStorageProvider provider, string storageName, InMemorySecurityMappingStorage inMemory) : ISecurityMappingStorage
 	{
-		private readonly CsvSecurityMappingStorageProvider _provider;
-		private readonly string _storageName;
-		private readonly InMemorySecurityMappingStorage _inMemory;
-
-		public CsvSecurityMappingStorage(CsvSecurityMappingStorageProvider provider, string storageName, InMemorySecurityMappingStorage inMemory)
-		{
-			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
-			_storageName = storageName ?? throw new ArgumentNullException(nameof(storageName));
-			_inMemory = inMemory ?? throw new ArgumentNullException(nameof(inMemory));
-		}
-
+		private readonly CsvSecurityMappingStorageProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+		private readonly string _storageName = storageName ?? throw new ArgumentNullException(nameof(storageName));
+		private readonly InMemorySecurityMappingStorage _inMemory = inMemory ?? throw new ArgumentNullException(nameof(inMemory));
 		private Action<SecurityIdMapping> _changed;
 
 		/// <inheritdoc />
@@ -259,7 +256,7 @@ public sealed class CsvSecurityMappingStorageProvider : ISecurityMappingStorageP
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<SecurityIdMapping> Get() => _inMemory.Get();
+		public IEnumerable<SecurityIdMapping> Mappings => _inMemory.Mappings;
 
 		/// <inheritdoc />
 		public bool Save(SecurityIdMapping mapping)
@@ -374,15 +371,16 @@ public sealed class CsvSecurityMappingStorageProvider : ISecurityMappingStorageP
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
+	protected override void DisposeManaged()
 	{
 		_storages.Clear();
 		_inMemoryProvider.Dispose();
-		GC.SuppressFinalize(this);
+
+		base.DisposeManaged();
 	}
 
 	/// <inheritdoc />
-	public IEnumerable<string> GetStorageNames() => _inMemoryProvider.GetStorageNames();
+	public IEnumerable<string> StorageNames => _inMemoryProvider.StorageNames;
 
 	/// <inheritdoc />
 	public ISecurityMappingStorage GetStorage(string storageName)
@@ -398,11 +396,11 @@ public sealed class CsvSecurityMappingStorageProvider : ISecurityMappingStorageP
 	}
 
 	/// <inheritdoc />
-	public Dictionary<string, Exception> Init()
+	public async ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken)
 	{
 		_fileSystem.CreateDirectory(_path);
 
-		var errors = _inMemoryProvider.Init();
+		var errors = await _inMemoryProvider.InitAsync(cancellationToken);
 
 		var files = _fileSystem.EnumerateFiles(_path, "*.csv");
 
@@ -410,7 +408,7 @@ public sealed class CsvSecurityMappingStorageProvider : ISecurityMappingStorageP
 		{
 			try
 			{
-				LoadFile(fileName);
+				await LoadFileAsync(fileName, cancellationToken);
 			}
 			catch (Exception ex)
 			{
@@ -421,9 +419,9 @@ public sealed class CsvSecurityMappingStorageProvider : ISecurityMappingStorageP
 		return errors;
 	}
 
-	private void LoadFile(string fileName)
+	private Task LoadFileAsync(string fileName, CancellationToken cancellationToken)
 	{
-		Do.Invariant(() =>
+		return Do.InvariantAsync(async () =>
 		{
 			if (!_fileSystem.FileExists(fileName))
 				return;
@@ -434,9 +432,9 @@ public sealed class CsvSecurityMappingStorageProvider : ISecurityMappingStorageP
 			{
 				var reader = stream.CreateCsvReader(Encoding.UTF8);
 
-				reader.NextLine();
+				await reader.NextLineAsync(cancellationToken);
 
-				while (reader.NextLine())
+				while (await reader.NextLineAsync(cancellationToken))
 				{
 					var stockSharpId = new SecurityId
 					{

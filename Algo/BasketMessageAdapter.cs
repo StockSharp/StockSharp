@@ -313,15 +313,15 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		set => _nativeIdStorage = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
-	private ISecurityMappingStorageProvider _securityMappingStorageProvider;
+	private ISecurityMappingStorageProvider _mappingProvider;
 
 	/// <summary>
 	/// Security identifier mappings storage provider.
 	/// </summary>
-	public ISecurityMappingStorageProvider SecurityMappingStorageProvider
+	public ISecurityMappingStorageProvider MappingProvider
 	{
-		get => _securityMappingStorageProvider;
-		set => _securityMappingStorageProvider = value ?? throw new ArgumentNullException(nameof(value));
+		get => _mappingProvider;
+		set => _mappingProvider = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
 	/// <summary>
@@ -636,9 +636,9 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			adapter = ApplyOwnInner(new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage));
 		}
 
-		if (SecurityMappingStorageProvider != null)
+		if (MappingProvider != null)
 		{
-			adapter = ApplyOwnInner(new SecurityMappingMessageAdapter(adapter, SecurityMappingStorageProvider));
+			adapter = ApplyOwnInner(new SecurityMappingMessageAdapter(adapter, MappingProvider));
 		}
 
 		if (SupportLookupTracking)

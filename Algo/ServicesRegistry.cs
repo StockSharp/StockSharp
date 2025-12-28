@@ -41,7 +41,7 @@ public static class ServicesRegistry
 	/// <summary>
 	/// Security identifier mappings storage provider.
 	/// </summary>
-	public static ISecurityMappingStorageProvider MappingStorageProvider => ConfigManager.GetService<ISecurityMappingStorageProvider>();
+	public static ISecurityMappingStorageProvider MappingProvider => ConfigManager.GetService<ISecurityMappingStorageProvider>();
 
 	/// <summary>
 	/// Position storage.
