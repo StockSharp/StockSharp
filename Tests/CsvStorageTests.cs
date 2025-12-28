@@ -324,6 +324,585 @@ public class CsvStorageTests : BaseTestClass
 		IsTrue(names.Contains("Storage2"));
 	}
 
+	[TestMethod]
+	public async Task CsvSecurityMapping_Mappings_ReturnsAllMappings()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		var storage = provider.GetStorage("TestStorage");
+
+		var mapping1 = new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" },
+			AdapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" }
+		};
+		var mapping2 = new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "MSFT", BoardCode = "NYSE" },
+			AdapterId = new SecurityId { SecurityCode = "MSFT.US", BoardCode = "ISIN" }
+		};
+		var mapping3 = new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "GOOG", BoardCode = "NASDAQ" },
+			AdapterId = new SecurityId { SecurityCode = "GOOG.US", BoardCode = "ISIN" }
+		};
+
+		storage.Save(mapping1);
+		storage.Save(mapping2);
+		storage.Save(mapping3);
+		await FlushAsync(executor, token);
+
+		var mappings = storage.Mappings.ToArray();
+
+		AreEqual(3, mappings.Length);
+		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "AAPL"));
+		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "MSFT"));
+		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "GOOG"));
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_Mappings_EmptyWhenNoData()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		var storage = provider.GetStorage("EmptyStorage");
+		var mappings = storage.Mappings.ToArray();
+
+		AreEqual(0, mappings.Length);
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_Mappings_UpdatesAfterRemove()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		var storage = provider.GetStorage("TestStorage");
+
+		var stockSharpId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
+		var stockSharpId2 = new SecurityId { SecurityCode = "MSFT", BoardCode = "NYSE" };
+
+		storage.Save(new SecurityIdMapping
+		{
+			StockSharpId = stockSharpId1,
+			AdapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" }
+		});
+		storage.Save(new SecurityIdMapping
+		{
+			StockSharpId = stockSharpId2,
+			AdapterId = new SecurityId { SecurityCode = "MSFT.US", BoardCode = "ISIN" }
+		});
+		await FlushAsync(executor, token);
+
+		AreEqual(2, storage.Mappings.Count());
+
+		storage.Remove(stockSharpId1);
+		await FlushAsync(executor, token);
+
+		var mappings = storage.Mappings.ToArray();
+		AreEqual(1, mappings.Length);
+		AreEqual("MSFT", mappings[0].StockSharpId.SecurityCode);
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_Mappings_PersistsAfterReload()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+
+		var mapping1 = new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" },
+			AdapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" }
+		};
+		var mapping2 = new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "MSFT", BoardCode = "NYSE" },
+			AdapterId = new SecurityId { SecurityCode = "MSFT.US", BoardCode = "ISIN" }
+		};
+
+		// Save mappings
+		var provider1 = new CsvSecurityMappingStorageProvider(fs, path, executor);
+		await provider1.InitAsync(token);
+		provider1.GetStorage("TestStorage").Save(mapping1);
+		provider1.GetStorage("TestStorage").Save(mapping2);
+		await FlushAsync(executor, token);
+
+		// Reload and verify Mappings property
+		var provider2 = new CsvSecurityMappingStorageProvider(fs, path, executor);
+		await provider2.InitAsync(token);
+
+		var mappings = provider2.GetStorage("TestStorage").Mappings.ToArray();
+		AreEqual(2, mappings.Length);
+		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "AAPL" && m.AdapterId.SecurityCode == "AAPL.US"));
+		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "MSFT" && m.AdapterId.SecurityCode == "MSFT.US"));
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_ChangedEvent_FiresOnSave()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		var storage = provider.GetStorage("TestStorage");
+
+		SecurityIdMapping changedMapping = default;
+		var eventCount = 0;
+
+		storage.Changed += mapping =>
+		{
+			changedMapping = mapping;
+			eventCount++;
+		};
+
+		var mapping = new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" },
+			AdapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" }
+		};
+
+		storage.Save(mapping);
+		await FlushAsync(executor, token);
+
+		AreEqual(1, eventCount);
+		AreEqual("AAPL", changedMapping.StockSharpId.SecurityCode);
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_ChangedEvent_FiresOnRemove()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		var storage = provider.GetStorage("TestStorage");
+
+		var stockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
+		storage.Save(new SecurityIdMapping
+		{
+			StockSharpId = stockSharpId,
+			AdapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" }
+		});
+		await FlushAsync(executor, token);
+
+		SecurityIdMapping changedMapping = default;
+		var eventFired = false;
+		storage.Changed += mapping =>
+		{
+			changedMapping = mapping;
+			eventFired = true;
+		};
+
+		storage.Remove(stockSharpId);
+		await FlushAsync(executor, token);
+
+		IsTrue(eventFired);
+		AreEqual("AAPL", changedMapping.StockSharpId.SecurityCode);
+		// On remove, AdapterId should be default
+		AreEqual(default, changedMapping.AdapterId);
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_ChangedEvent_FiresOnUpdate()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		var storage = provider.GetStorage("TestStorage");
+
+		var stockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
+
+		// First save
+		storage.Save(new SecurityIdMapping
+		{
+			StockSharpId = stockSharpId,
+			AdapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" }
+		});
+		await FlushAsync(executor, token);
+
+		var eventCount = 0;
+		SecurityIdMapping lastMapping = default;
+		storage.Changed += mapping =>
+		{
+			lastMapping = mapping;
+			eventCount++;
+		};
+
+		// Update with new adapter id
+		storage.Save(new SecurityIdMapping
+		{
+			StockSharpId = stockSharpId,
+			AdapterId = new SecurityId { SecurityCode = "AAPL-NEW", BoardCode = "ISIN2" }
+		});
+		await FlushAsync(executor, token);
+
+		AreEqual(1, eventCount);
+		AreEqual("AAPL-NEW", lastMapping.AdapterId.SecurityCode);
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_StorageNames_EmptyInitially()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		var names = provider.StorageNames.ToArray();
+		AreEqual(0, names.Length);
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_StorageNames_UpdatesOnGetStorage()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		// Just getting storage should add it to names
+		_ = provider.GetStorage("NewStorage");
+
+		var names = provider.StorageNames.ToArray();
+		AreEqual(1, names.Length);
+		AreEqual("NewStorage", names[0]);
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_StorageNames_PersistsAfterReload()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+
+		// Create storages with data
+		var provider1 = new CsvSecurityMappingStorageProvider(fs, path, executor);
+		await provider1.InitAsync(token);
+
+		provider1.GetStorage("Alpha").Save(new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "A", BoardCode = "B" },
+			AdapterId = new SecurityId { SecurityCode = "C", BoardCode = "D" }
+		});
+		provider1.GetStorage("Beta").Save(new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "E", BoardCode = "F" },
+			AdapterId = new SecurityId { SecurityCode = "G", BoardCode = "H" }
+		});
+		await FlushAsync(executor, token);
+
+		// Reload
+		var provider2 = new CsvSecurityMappingStorageProvider(fs, path, executor);
+		await provider2.InitAsync(token);
+
+		var names = provider2.StorageNames.ToArray();
+		AreEqual(2, names.Length);
+		IsTrue(names.Contains("Alpha"));
+		IsTrue(names.Contains("Beta"));
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_InitAsync_ReturnsEmptyOnSuccess()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		var errors = await provider.InitAsync(token);
+
+		AreEqual(0, errors.Count);
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_TryGetStockSharpId_ReturnsNullWhenNotFound()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		var storage = provider.GetStorage("TestStorage");
+		var result = storage.TryGetStockSharpId(new SecurityId { SecurityCode = "UNKNOWN", BoardCode = "XXX" });
+
+		IsNull(result);
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_TryGetAdapterId_ReturnsNullWhenNotFound()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		var storage = provider.GetStorage("TestStorage");
+		var result = storage.TryGetAdapterId(new SecurityId { SecurityCode = "UNKNOWN", BoardCode = "XXX" });
+
+		IsNull(result);
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_Save_ReturnsTrueOnAdd_FalseOnUpdate()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		var storage = provider.GetStorage("TestStorage");
+
+		var stockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
+
+		// First save - should return true (added)
+		var added = storage.Save(new SecurityIdMapping
+		{
+			StockSharpId = stockSharpId,
+			AdapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" }
+		});
+		IsTrue(added);
+
+		// Second save with same StockSharpId - should return false (updated)
+		var updated = storage.Save(new SecurityIdMapping
+		{
+			StockSharpId = stockSharpId,
+			AdapterId = new SecurityId { SecurityCode = "AAPL-V2", BoardCode = "ISIN2" }
+		});
+		IsFalse(updated);
+	}
+
+	[TestMethod]
+	public async Task CsvSecurityMapping_Remove_ReturnsFalseWhenNotExists()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var (fs, path) = CreateMemoryFs("mappings");
+		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
+
+		await provider.InitAsync(token);
+
+		var storage = provider.GetStorage("TestStorage");
+		var removed = storage.Remove(new SecurityId { SecurityCode = "NOTEXIST", BoardCode = "XXX" });
+
+		IsFalse(removed);
+	}
+
+	[TestMethod]
+	public void InMemorySecurityMapping_Mappings_ReturnsAllMappings()
+	{
+		var storage = new InMemorySecurityMappingStorage();
+
+		var mapping1 = new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" },
+			AdapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" }
+		};
+		var mapping2 = new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "MSFT", BoardCode = "NYSE" },
+			AdapterId = new SecurityId { SecurityCode = "MSFT.US", BoardCode = "ISIN" }
+		};
+
+		storage.Save(mapping1);
+		storage.Save(mapping2);
+
+		var mappings = storage.Mappings.ToArray();
+
+		AreEqual(2, mappings.Length);
+		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "AAPL"));
+		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "MSFT"));
+	}
+
+	[TestMethod]
+	public void InMemorySecurityMapping_ChangedEvent_FiresOnSave()
+	{
+		var storage = new InMemorySecurityMappingStorage();
+
+		SecurityIdMapping changedMapping = default;
+		var eventCount = 0;
+		storage.Changed += mapping =>
+		{
+			changedMapping = mapping;
+			eventCount++;
+		};
+
+		var mapping = new SecurityIdMapping
+		{
+			StockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" },
+			AdapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" }
+		};
+
+		storage.Save(mapping);
+
+		AreEqual(1, eventCount);
+		AreEqual("AAPL", changedMapping.StockSharpId.SecurityCode);
+	}
+
+	[TestMethod]
+	public void InMemorySecurityMapping_SaveAndLookup()
+	{
+		var storage = new InMemorySecurityMappingStorage();
+
+		var stockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
+		var adapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" };
+
+		storage.Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+
+		AreEqual(stockSharpId, storage.TryGetStockSharpId(adapterId));
+		AreEqual(adapterId, storage.TryGetAdapterId(stockSharpId));
+	}
+
+	[TestMethod]
+	public void InMemorySecurityMapping_Remove()
+	{
+		var storage = new InMemorySecurityMappingStorage();
+
+		var stockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
+		var adapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" };
+
+		storage.Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId });
+		AreEqual(1, storage.Mappings.Count());
+
+		var removed = storage.Remove(stockSharpId);
+
+		IsTrue(removed);
+		AreEqual(0, storage.Mappings.Count());
+		IsNull(storage.TryGetStockSharpId(adapterId));
+		IsNull(storage.TryGetAdapterId(stockSharpId));
+	}
+
+	[TestMethod]
+	public void InMemorySecurityMapping_Update_ByStockSharpId()
+	{
+		var storage = new InMemorySecurityMappingStorage();
+
+		var stockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
+		var adapterId1 = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" };
+		var adapterId2 = new SecurityId { SecurityCode = "AAPL-NEW", BoardCode = "ISIN2" };
+
+		// First save
+		var added = storage.Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId1 });
+		IsTrue(added);
+
+		// Update (same StockSharpId, different AdapterId)
+		var updated = storage.Save(new SecurityIdMapping { StockSharpId = stockSharpId, AdapterId = adapterId2 });
+		IsFalse(updated); // Returns false on update
+
+		// Should have new mapping
+		AreEqual(adapterId2, storage.TryGetAdapterId(stockSharpId));
+		// Old adapterId lookup should fail
+		IsNull(storage.TryGetStockSharpId(adapterId1));
+		// New adapterId lookup should work
+		AreEqual(stockSharpId, storage.TryGetStockSharpId(adapterId2));
+	}
+
+	[TestMethod]
+	public void InMemorySecurityMapping_Update_ByAdapterId()
+	{
+		var storage = new InMemorySecurityMappingStorage();
+
+		var stockSharpId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
+		var stockSharpId2 = new SecurityId { SecurityCode = "APPLE", BoardCode = "NASDAQ" };
+		var adapterId = new SecurityId { SecurityCode = "AAPL.US", BoardCode = "ISIN" };
+
+		// First save
+		storage.Save(new SecurityIdMapping { StockSharpId = stockSharpId1, AdapterId = adapterId });
+
+		// Update (different StockSharpId, same AdapterId) - should replace
+		storage.Save(new SecurityIdMapping { StockSharpId = stockSharpId2, AdapterId = adapterId });
+
+		// Should have new mapping
+		AreEqual(stockSharpId2, storage.TryGetStockSharpId(adapterId));
+		// Old stockSharpId lookup should fail
+		IsNull(storage.TryGetAdapterId(stockSharpId1));
+	}
+
+	[TestMethod]
+	public async Task InMemorySecurityMappingProvider_StorageNames()
+	{
+		using var provider = new InMemorySecurityMappingStorageProvider();
+		await provider.InitAsync(CancellationToken);
+
+		AreEqual(0, provider.StorageNames.Count());
+
+		_ = provider.GetStorage("Storage1");
+		_ = provider.GetStorage("Storage2");
+
+		var names = provider.StorageNames.ToArray();
+		AreEqual(2, names.Length);
+		IsTrue(names.Contains("Storage1"));
+		IsTrue(names.Contains("Storage2"));
+	}
+
+	[TestMethod]
+	public async Task InMemorySecurityMappingProvider_InitAsync_ReturnsEmpty()
+	{
+		using var provider = new InMemorySecurityMappingStorageProvider();
+		var errors = await provider.InitAsync(CancellationToken);
+
+		AreEqual(0, errors.Count);
+	}
+
+	[TestMethod]
+	public void InMemorySecurityMappingProvider_GetStorage_ReturnsSameInstance()
+	{
+		using var provider = new InMemorySecurityMappingStorageProvider();
+
+		var storage1 = provider.GetStorage("TestStorage");
+		var storage2 = provider.GetStorage("TestStorage");
+
+		AreSame(storage1, storage2);
+	}
+
+	[TestMethod]
+	public void InMemorySecurityMappingProvider_GetStorage_CaseInsensitive()
+	{
+		using var provider = new InMemorySecurityMappingStorageProvider();
+
+		var storage1 = provider.GetStorage("TestStorage");
+		var storage2 = provider.GetStorage("TESTSTORAGE");
+		var storage3 = provider.GetStorage("teststorage");
+
+		AreSame(storage1, storage2);
+		AreSame(storage2, storage3);
+	}
+
 	#endregion
 
 	#region CsvExtendedInfoStorage Tests
