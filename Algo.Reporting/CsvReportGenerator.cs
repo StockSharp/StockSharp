@@ -31,8 +31,6 @@ public class CsvReportGenerator : BaseReportGenerator
 
 				if (value is DateTime dt)
 					value = dt.Format();
-				else if (value is DateTimeOffset dto)
-					value = dto.Format();
 				else if (value is TimeSpan ts)
 					value = ts.Format();
 
