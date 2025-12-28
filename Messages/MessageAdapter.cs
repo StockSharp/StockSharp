@@ -211,7 +211,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual bool HeartbeatBeforConnect => false;
+	public virtual bool HeartbeatBeforeConnect => false;
 
 	/// <inheritdoc />
 	[Browsable(false)]

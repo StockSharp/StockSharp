@@ -3762,7 +3762,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	bool IMessageAdapter.IsSupportExecutionsPnL => true;
 	bool IMessageAdapter.IsSecurityNewsOnly => false;
 	Type IMessageAdapter.OrderConditionType => null;
-	bool IMessageAdapter.HeartbeatBeforConnect => false;
+	bool IMessageAdapter.HeartbeatBeforeConnect => false;
 	Uri IMessageAdapter.Icon => null;
 	bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => true;
 	bool IMessageAdapter.EnqueueSubscriptions { get; set; }

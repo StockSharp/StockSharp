@@ -144,7 +144,7 @@ public interface IMessageAdapter : IPersistable, ILogReceiver, ICloneable<IMessa
 	/// <summary>
 	/// Start sending <see cref="TimeMessage"/> before connection established.
 	/// </summary>
-	bool HeartbeatBeforConnect { get; }
+	bool HeartbeatBeforeConnect { get; }
 
 	/// <summary>
 	/// Icon.

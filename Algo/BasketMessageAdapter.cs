@@ -413,7 +413,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 	Type IMessageAdapter.OrderConditionType => null;
 
-	bool IMessageAdapter.HeartbeatBeforConnect => false;
+	bool IMessageAdapter.HeartbeatBeforeConnect => false;
 
 	Uri IMessageAdapter.Icon => GetType().TryGetIconUrl();
 

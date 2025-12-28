@@ -322,7 +322,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 
 	Type IMessageAdapter.OrderConditionType => InnerAdapter.OrderConditionType;
 
-	bool IMessageAdapter.HeartbeatBeforConnect => InnerAdapter.HeartbeatBeforConnect;
+	bool IMessageAdapter.HeartbeatBeforeConnect => InnerAdapter.HeartbeatBeforeConnect;
 
 	Uri IMessageAdapter.Icon => InnerAdapter.Icon;
 
