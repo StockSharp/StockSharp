@@ -56,6 +56,8 @@ public class TrueRange : BaseIndicator
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
+		if (candle is null)
+			return new DecimalIndicatorValue(this, input.Time);
 
 		if (_prevCandle != null)
 		{

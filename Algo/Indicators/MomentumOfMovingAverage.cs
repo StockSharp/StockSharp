@@ -47,7 +47,7 @@ public class MomentumOfMovingAverage : SimpleMovingAverage
 	{
 		var maValue = base.OnProcessDecimal(input);
 
-		if (IsFormed)
+		if (IsFormed && maValue is not null)
 		{
 			var ma = maValue.Value;
 
@@ -60,10 +60,13 @@ public class MomentumOfMovingAverage : SimpleMovingAverage
 			}
 			else
 			{
+				if (Buffer.Count < 2)
+					return null;
+
 				firstBuffer = Buffer[1];
 			}
 
-			if (IsFormed && firstBuffer != 0)
+			if (firstBuffer != 0)
 			{
 				var momentum = (ma - firstBuffer) / firstBuffer * 100;
 				return momentum;

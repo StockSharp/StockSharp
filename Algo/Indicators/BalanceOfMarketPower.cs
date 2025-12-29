@@ -26,6 +26,8 @@ public class BalanceOfMarketPower : SimpleMovingAverage
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
+		if (candle is null)
+			return null;
 
 		var bmp = candle.TotalVolume != 0
 			? ((candle.ClosePrice - candle.OpenPrice) / (candle.HighPrice == candle.LowPrice ? 0.01m : candle.HighPrice - candle.LowPrice))
@@ -33,7 +35,7 @@ public class BalanceOfMarketPower : SimpleMovingAverage
 
 		var smaValue = base.OnProcessDecimal(input.SetValue(this, bmp));
 
-		return IsFormed
+		return IsFormed && smaValue is not null
 			? smaValue.Value
 			: null;
 	}

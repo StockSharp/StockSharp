@@ -33,6 +33,8 @@ public class DemandIndex : SimpleMovingAverage
 	protected override decimal? OnProcessDecimal(IIndicatorValue input)
 	{
 		var candle = input.ToCandle();
+		if (candle is null)
+			return null;
 
 		if (_prevClose == 0 || _prevVolume == 0)
 		{
@@ -70,7 +72,9 @@ public class DemandIndex : SimpleMovingAverage
 		{
 			_prevClose = candle.ClosePrice;
 			_prevVolume = candle.TotalVolume;
-			_prevValue = result.Value;
+
+			if (result is not null)
+				_prevValue = result.Value;
 		}
 
 		return result;

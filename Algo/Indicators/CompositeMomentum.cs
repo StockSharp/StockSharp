@@ -131,7 +131,8 @@ public class CompositeMomentum : BaseComplexIndicator<ICompositeMomentumValue>
 			var normalizedLongRoc = longRocValue.ToDecimal(Source) / 100m;
 			var normalizedRsi = (rsiValue.ToDecimal(Source) - 50m) / 50m;
 
-			var macdLine = (emaFastValue.ToDecimal(Source) - emaSlowValue.ToDecimal(Source)) / emaSlowValue.ToDecimal(Source);
+			var emaSlow = emaSlowValue.ToDecimal(Source);
+			var macdLine = emaSlow != 0 ? (emaFastValue.ToDecimal(Source) - emaSlow) / emaSlow : 0;
 
 			var compMomentum = (normalizedShortRoc + normalizedLongRoc + normalizedRsi + macdLine) / 4m;
 			compMomentum *= 100m;

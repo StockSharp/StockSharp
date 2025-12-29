@@ -23,7 +23,11 @@ public sealed class Trough : ZigZag
 	/// <inheritdoc />
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
-		var value = CalcZigZag(input, input.ToCandle().LowPrice);
+		var candle = input.ToCandle();
+		if (candle is null)
+			return new ZigZagIndicatorValue(this, input.Time);
+
+		var value = CalcZigZag(input, candle.LowPrice);
 
 		if (!value.IsEmpty)
 		{

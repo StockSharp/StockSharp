@@ -28,9 +28,9 @@ public class RateOfChange : Momentum
 	{
 		var result = base.OnProcessDecimal(input);
 
-		if (Buffer.Count > 0 && Buffer[0] != 0)
+		if (result is not null && Buffer.Count > 0 && Buffer[0] != 0)
 			return result.Value / Buffer[0] * 100;
-		
+
 		return null;
 	}
 }
