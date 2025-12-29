@@ -53,7 +53,7 @@ public class DataTypeInfoMessage : BaseSubscriptionIdMessage<DataTypeInfoMessage
 
 		destination.SecurityId = SecurityId;
 		destination.FileDataType = FileDataType?.TypedClone();
-		destination.Dates = Dates?.ToArray();
+		destination.Dates = [.. Dates];
 		destination.Format = Format;
 	}
 

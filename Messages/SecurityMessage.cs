@@ -460,7 +460,7 @@ public class SecurityMessage : BaseSubscriptionIdMessage<SecurityMessage>, ISecu
 			str += $",Bin={BinaryOptionType}";
 
 		if (Shortable != null)
-			str += $",Strike={Shortable}";
+			str += $",Shortable={Shortable}";
 
 		if (BasketCode != null)
 			str += $",Basket={BasketCode}/{BasketExpression}";

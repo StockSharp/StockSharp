@@ -371,9 +371,9 @@ public class WithdrawInfo : IPersistable
 		storage.SetValue(nameof(Type), Type);
 		storage.SetValue(nameof(Express), Express);
 		storage.SetValue(nameof(ChargeFee), ChargeFee);
-		storage.SetValue(nameof(BankDetails), BankDetails.Save());
-		storage.SetValue(nameof(IntermediaryBankDetails), IntermediaryBankDetails.Save());
-		storage.SetValue(nameof(CompanyDetails), CompanyDetails.Save());
+		storage.SetValue(nameof(BankDetails), BankDetails?.Save());
+		storage.SetValue(nameof(IntermediaryBankDetails), IntermediaryBankDetails?.Save());
+		storage.SetValue(nameof(CompanyDetails), CompanyDetails?.Save());
 		storage.SetValue(nameof(CardNumber), CardNumber);
 		storage.SetValue(nameof(PaymentId), PaymentId);
 		storage.SetValue(nameof(CryptoAddress), CryptoAddress);

@@ -36,7 +36,7 @@ public class SecurityLegsInfoMessage : BaseSubscriptionIdMessage<SecurityLegsInf
 	{
 		base.CopyTo(destination);
 
-		destination.Legs = Legs.ToDictionary(p => p.Key, p => (IEnumerable<SecurityId>)[.. p.Value]);
+		destination.Legs = Legs.ToDictionary(p => p.Key, p => p.Value is null ? null : (IEnumerable<SecurityId>)[.. p.Value]);
 	}
 
 	/// <inheritdoc />

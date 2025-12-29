@@ -40,6 +40,9 @@ public class SecurityIdMapping : IPersistable
 	/// <returns><see cref="KeyValuePair{T1,T2}"/> value.</returns>
 	public static explicit operator KeyValuePair<SecurityId, SecurityId>(SecurityIdMapping mapping)
 	{
+		if (mapping is null)
+			throw new ArgumentNullException(nameof(mapping));
+
 		return new KeyValuePair<SecurityId, SecurityId>(mapping.StockSharpId, mapping.AdapterId);
 	}
 
@@ -55,8 +58,8 @@ public class SecurityIdMapping : IPersistable
 	/// <param name="storage">Settings storage.</param>
 	public void Load(SettingsStorage storage)
 	{
-		StockSharpId = storage.GetValue<SettingsStorage>(nameof(StockSharpId)).Load<SecurityId>();
-		AdapterId = storage.GetValue<SettingsStorage>(nameof(AdapterId)).Load<SecurityId>();
+		StockSharpId = storage.GetValue<SettingsStorage>(nameof(StockSharpId)).Load<SecurityId>() ?? default;
+		AdapterId = storage.GetValue<SettingsStorage>(nameof(AdapterId)).Load<SecurityId>() ?? default;
 	}
 
 	/// <summary>

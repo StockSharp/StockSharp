@@ -37,12 +37,15 @@ public class EmulationStateMessage : Message, IErrorMessage
 	/// <returns>Copy.</returns>
 	public override Message Clone()
 	{
-		return new EmulationStateMessage
+		var clone = new EmulationStateMessage
 		{
 			State = State,
 			StartDate = StartDate,
 			StopDate = StopDate,
 			Error = Error,
 		};
+
+		CopyTo(clone);
+		return clone;
 	}
 }

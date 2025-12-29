@@ -87,7 +87,7 @@ public class SecurityMappingMessage : Message, ISubscriptionMessage
 	{
 		var clone = new SecurityMappingMessage
 		{
-			Mapping = Mapping.Clone(),
+			Mapping = Mapping?.Clone(),
 			StorageName = StorageName,
 			IsDelete = IsDelete,
 			TransactionId = TransactionId,
