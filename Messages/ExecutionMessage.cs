@@ -169,7 +169,7 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 	/// <summary>
 	/// Is the message contains trade info.
 	/// </summary>
-	public bool HasTradeInfo => TradePrice is not null || TradeId is not null || TradeVolume is not null || !TradeStringId.IsEmpty();
+	public bool HasTradeInfo => TradePrice is not null || TradeId is not null || TradeVolume is not null || !TradeStringId.IsEmptyOrWhiteSpace();
 
 	/// <summary>
 	/// Order price.

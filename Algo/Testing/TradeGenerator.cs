@@ -121,7 +121,7 @@ public class RandomWalkTradeGenerator(SecurityId securityId) : TradeGenerator(se
 			DataTypeEx = DataType.Ticks
 		};
 
-		var priceStep = SecurityDefinition.PriceStep ?? 0.01m;
+		var priceStep = SecurityDefinition?.PriceStep ?? 0.01m;
 
 		_lastTradePrice += RandomGen.GetInt(-MaxPriceStepCount, MaxPriceStepCount) * priceStep;
 

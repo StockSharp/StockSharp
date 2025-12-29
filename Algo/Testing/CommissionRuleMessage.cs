@@ -31,10 +31,14 @@ public class CommissionRuleMessage : Message
 	/// <returns>Copy.</returns>
 	public override Message Clone()
 	{
-		return new CommissionRuleMessage
+		var clone = new CommissionRuleMessage
 		{
 			Rule = Rule?.Clone(),
 			PortfolioName = PortfolioName,
 		};
+
+		CopyTo(clone);
+
+		return clone;
 	}
 }

@@ -239,7 +239,7 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 			case ModelChange.ChangedNodesSource:
 			{
 				var oldValues = (IEnumerable<TNode>)t.oldValue;
-				oldValues?.ForEach(e => OnElementAdded(e));
+				oldValues?.ForEach(e => OnElementRemoved(e));
 
 				var newValues = (IEnumerable<TNode>)t.newValue;
 				newValues?.ForEach(e => OnElementAdded(e));
@@ -385,6 +385,7 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 
 		GetLinks(node, socket)
 			.Where(l => !checkCanConnect || !IsConnected(l) || !CanConnect(l))
+			.ToArray()
 			.ForEach(_behavior.RemoveLink);
 
 		_behavior.RaiseLinksRemoved(node);

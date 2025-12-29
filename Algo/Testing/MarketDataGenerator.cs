@@ -203,7 +203,7 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 		destination.MinVolume = MinVolume;
 		destination.MaxVolume = MaxVolume;
 		destination.MaxPriceStepCount = MaxPriceStepCount;
-		destination._volumes = _volumes;
-		destination._steps = _steps;
+		destination._volumes = _volumes?.ToArray();
+		destination._steps = _steps?.ToArray();
 	}
 }

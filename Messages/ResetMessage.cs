@@ -19,5 +19,10 @@ public sealed class ResetMessage : Message
 	/// Create a copy of <see cref="ResetMessage"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override Message Clone() => new ResetMessage();
+	public override Message Clone()
+	{
+		var clone = new ResetMessage();
+		CopyTo(clone);
+		return clone;
+	}
 }
