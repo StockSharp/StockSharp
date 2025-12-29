@@ -1,9 +1,9 @@
-﻿namespace StockSharp.Algo.Reporting;
+﻿namespace StockSharp.Reporting;
 
 /// <summary>
 /// Format extensions.
 /// </summary>
-public static class FormatExtensions
+static class FormatExtensions
 {
 	/// <summary>
 	/// To format the <see cref="TimeSpan"/> in <see cref="string"/>.

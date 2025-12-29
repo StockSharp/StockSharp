@@ -4,7 +4,7 @@ using System.Text;
 
 using StockSharp.Algo.Statistics;
 using StockSharp.Algo.Strategies;
-using StockSharp.Algo.Reporting;
+using StockSharp.Reporting;
 
 /// <summary>
 /// Tests for report generators using IReportSource mock.
@@ -174,6 +174,6 @@ public class ReportGeneratorTests : BaseTestClass
 		var json = new StreamReader(stream).ReadToEnd();
 
 		// Should not contain orders section
-		Assert.IsFalse(json.Contains("\"orders\""), "Orders section should not be present when IncludeOrders=false");
+		IsFalse(json.Contains("\"orders\""), "Orders section should not be present when IncludeOrders=false");
 	}
 }

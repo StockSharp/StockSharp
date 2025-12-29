@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Reporting;
+namespace StockSharp.Reporting;
 
 /// <summary>
 /// Order data for reports.

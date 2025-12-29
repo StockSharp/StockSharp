@@ -149,7 +149,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Extractor", "L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo.Gpu", "Algo.Gpu\Algo.Gpu.csproj", "{79E2F1FD-C849-A0C3-537F-01D9F9BADCFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo.Reporting", "Algo.Reporting\Algo.Reporting.csproj", "{1895D6B3-5566-4CC8-BDB9-7A2CBF1DB1BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting", "Reporting\Algo.Reporting.csproj", "{1895D6B3-5566-4CC8-BDB9-7A2CBF1DB1BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

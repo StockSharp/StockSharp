@@ -1,6 +1,6 @@
 ﻿namespace StockSharp.Tests;
 
-using StockSharp.Algo.Reporting;
+using StockSharp.Reporting;
 
 [TestClass]
 public class ReportTests : BaseTestClass

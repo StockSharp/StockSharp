@@ -6,7 +6,7 @@ using StockSharp.Algo.Statistics;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Testing;
 using StockSharp.Algo.Strategies.Protective;
-using StockSharp.Algo.Reporting;
+using StockSharp.Reporting;
 
 /// <summary>
 /// <see cref="Order.Comment"/> auto-fill modes.
