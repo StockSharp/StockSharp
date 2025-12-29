@@ -456,7 +456,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	{
 		using (await _sync.LockAsync(cancellationToken))
 		{
-			if (_currState != ConnectionStates.Connected && !InnerAdapter.HeartbeatBeforConnect)
+			if (_currState != ConnectionStates.Connected && !InnerAdapter.HeartbeatBeforeConnect)
 				return;
 
 			if (!_canSendTime)
