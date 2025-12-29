@@ -100,15 +100,15 @@ public class PassThroughMessageChannel : Cloneable<IMessageChannel>, IMessageCha
 
 	ValueTask IMessageChannel.SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		return _mewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		return _newOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 	}
 
-	private Func<Message, CancellationToken, ValueTask> _mewOutMessageAsync;
+	private Func<Message, CancellationToken, ValueTask> _newOutMessageAsync;
 
 	event Func<Message, CancellationToken, ValueTask> IMessageChannel.NewOutMessageAsync
 	{
-		add => _mewOutMessageAsync += value;
-		remove => _mewOutMessageAsync -= value;
+		add => _newOutMessageAsync += value;
+		remove => _newOutMessageAsync -= value;
 	}
 
 	/// <summary>
