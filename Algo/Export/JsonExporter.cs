@@ -487,9 +487,8 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 		var lastTime = default(DateTime?);
 
 		using (var writer = new StreamWriter(stream, Encoding, leaveOpen: true))
+		await using (var json = new JsonTextWriter(writer))
 		{
-			var json = new JsonTextWriter(writer);
-
 			if (Indent)
 				json.Formatting = Formatting.Indented;
 

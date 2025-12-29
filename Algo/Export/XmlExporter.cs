@@ -552,7 +552,8 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 			Async = true
 		};
 
-		using (var writer = XmlWriter.Create(new StreamWriter(stream, Encoding, leaveOpen: true), settings))
+		using (var streamWriter = new StreamWriter(stream, Encoding, leaveOpen: true))
+		using (var writer = XmlWriter.Create(streamWriter, settings))
 		{
 			await writer.WriteStartElementAsync(null, rootElem, null);
 
