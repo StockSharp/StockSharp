@@ -156,12 +156,9 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 	/// <inheritdoc />
 	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 
-	/// <summary>
-	/// Create a copy of <see cref="InMemoryMessageChannel"/>.
-	/// </summary>
-	/// <returns>Copy.</returns>
+	/// <inheritdoc />
 	public virtual IMessageChannel Clone()
-		=> new InMemoryMessageChannel(_queue, Name, _errorHandler);
+		=> new InMemoryMessageChannel(_queue.Clone(), Name, _errorHandler);
 
 	object ICloneable.Clone() => Clone();
 

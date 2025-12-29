@@ -5,7 +5,7 @@ using Ecng.Collections;
 /// <summary>
 /// Describes a message queue with asynchronous semantics.
 /// </summary>
-public interface IMessageQueue
+public interface IMessageQueue : ICloneable<IMessageQueue>
 {
 	/// <summary>
 	/// Gets the current number of messages buffered in the queue.
@@ -64,6 +64,11 @@ public abstract class BaseMessageQueue() : BaseOrderedChannel<long, Message, Pri
 {
 	/// <inheritdoc />
 	public abstract ValueTask Enqueue(Message message, CancellationToken cancellationToken);
+
+	/// <inheritdoc />
+	public abstract IMessageQueue Clone();
+
+	object ICloneable.Clone() => Clone();
 }
 
 /// <summary>
@@ -86,6 +91,9 @@ public class MessageByLocalTimeQueue : BaseMessageQueue
 
 		return Enqueue(message.LocalTime.Ticks, message, cancellationToken);
 	}
+
+	/// <inheritdoc />
+	public override IMessageQueue Clone() => new MessageByLocalTimeQueue();
 }
 
 /// <summary>
@@ -110,4 +118,7 @@ public class MessageByOrderQueue : BaseMessageQueue
 
 		return Enqueue(_idGen.GetNextId(), message, cancellationToken);
 	}
+
+	/// <inheritdoc />
+	public override IMessageQueue Clone() => new MessageByOrderQueue();
 }
