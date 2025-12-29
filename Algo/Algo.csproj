@@ -4,7 +4,6 @@
     <ProjectGuid>{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ecng.Interop" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.Net" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.StringSearch" Version="$(EcngVer)" />
