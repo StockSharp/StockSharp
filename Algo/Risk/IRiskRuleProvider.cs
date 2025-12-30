@@ -5,24 +5,8 @@ using Ecng.Reflection;
 /// <summary>
 /// The <see cref="IRiskRule"/> provider.
 /// </summary>
-public interface IRiskRuleProvider
+public interface IRiskRuleProvider : ICustomProvider<Type>
 {
-	/// <summary>
-	/// Rules.
-	/// </summary>
-	IEnumerable<Type> Rules { get; }
-
-	/// <summary>
-	/// Add rule.
-	/// </summary>
-	/// <param name="rule">Type of <see cref="IRiskRule"/>.</param>
-	void AddRule(Type rule);
-
-	/// <summary>
-	/// Remove rule.
-	/// </summary>
-	/// <param name="rule">Type of <see cref="IRiskRule"/>.</param>
-	void RemoveRule(Type rule);
 }
 
 /// <summary>
@@ -30,25 +14,16 @@ public interface IRiskRuleProvider
 /// </summary>
 public class InMemoryRiskRuleProvider : IRiskRuleProvider
 {
-	private readonly List<Type> _rules = [];
+	private readonly List<Type> _all = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="InMemoryRiskRuleProvider"/>.
 	/// </summary>
-    public InMemoryRiskRuleProvider()
-    {
-		_rules.AddRange(GetType().Assembly.FindImplementations<IRiskRule>(extraFilter: t => t.GetConstructor(Type.EmptyTypes) != null));
-	}
+	public InMemoryRiskRuleProvider()
+		=> _all.AddRange(GetType().Assembly.FindImplementations<IRiskRule>(extraFilter: t => t.GetConstructor(Type.EmptyTypes) != null));
 
-    IEnumerable<Type> IRiskRuleProvider.Rules => _rules;
+	IEnumerable<Type> ICustomProvider<Type>.All => _all;
 
-	void IRiskRuleProvider.AddRule(Type rule)
-	{
-		_rules.Add(rule);
-	}
-
-	void IRiskRuleProvider.RemoveRule(Type rule)
-	{
-		_rules.Remove(rule);
-	}
+	void ICustomProvider<Type>.Add(Type rule) => _all.Add(rule);
+	void ICustomProvider<Type>.Remove(Type rule) => _all.Remove(rule);
 }

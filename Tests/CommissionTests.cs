@@ -692,7 +692,7 @@ public class CommissionTests
 		ICommissionRuleProvider provider = new InMemoryCommissionRuleProvider();
 
 		// Assert
-		var rules = provider.Rules.ToList();
+		var rules = provider.All.ToList();
 		rules.Count.AssertGreater(0);
 
 		// Verify that common rule types are included
@@ -718,10 +718,10 @@ public class CommissionTests
 		var customRuleType = typeof(CustomCommissionRule);
 
 		// Act
-		provider.AddRule(customRuleType);
+		provider.Add(customRuleType);
 
 		// Assert
-		var rules = provider.Rules.ToList();
+		var rules = provider.All.ToList();
 		rules.Contains(customRuleType).AssertTrue();
 	}
 
@@ -732,13 +732,13 @@ public class CommissionTests
 
 		// Arrange
 		var ruleType = typeof(CommissionOrderRule);
-		provider.Rules.Contains(ruleType).AssertTrue();
+		provider.All.Contains(ruleType).AssertTrue();
 
 		// Act
-		provider.RemoveRule(ruleType);
+		provider.Remove(ruleType);
 
 		// Assert
-		provider.Rules.Contains(ruleType).AssertFalse();
+		provider.All.Contains(ruleType).AssertFalse();
 	}
 
 	[TestMethod]
@@ -748,13 +748,13 @@ public class CommissionTests
 
 		// Arrange
 		var nonExistingRuleType = typeof(CustomCommissionRule);
-		provider.Rules.Contains(nonExistingRuleType).AssertFalse();
+		provider.All.Contains(nonExistingRuleType).AssertFalse();
 
 		// Act
-		provider.RemoveRule(nonExistingRuleType);
+		provider.Remove(nonExistingRuleType);
 
 		// Assert - should not throw exception
-		provider.Rules.Contains(nonExistingRuleType).AssertFalse();
+		provider.All.Contains(nonExistingRuleType).AssertFalse();
 	}
 
 	[TestMethod]
@@ -765,7 +765,7 @@ public class CommissionTests
 		ICommissionRuleProvider provider = new InMemoryCommissionRuleProvider();
 
 		// Arrange
-		var rules = provider.Rules.ToArray();
+		var rules = provider.All.ToArray();
 
 		foreach (var type in rules)
 		{

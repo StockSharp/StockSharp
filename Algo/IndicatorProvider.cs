@@ -10,7 +10,7 @@ using StockSharp.Algo.Indicators;
 /// </summary>
 public class IndicatorProvider : IIndicatorProvider
 {
-	private readonly CachedSynchronizedSet<IndicatorType> _indicatorTypes = [];
+	private readonly CachedSynchronizedSet<IndicatorType> _all = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="IndicatorProvider"/>.
@@ -22,11 +22,9 @@ public class IndicatorProvider : IIndicatorProvider
 	/// <inheritdoc />
 	public virtual void Init()
 	{
-		_indicatorTypes.Clear();
-
 		var ns = typeof(IIndicator).Namespace;
 
-		_indicatorTypes.AddRange(typeof(BaseIndicator)
+		_all.AddRange(typeof(BaseIndicator)
 			.Assembly
 			.FindImplementations<IIndicator>(showObsolete: true, extraFilter: t => t.Namespace == ns && t.GetConstructor(Type.EmptyTypes) != null && t.GetAttribute<IndicatorHiddenAttribute>() is null)
 			.Select(t => new IndicatorType(t))
@@ -34,22 +32,8 @@ public class IndicatorProvider : IIndicatorProvider
 	}
 
 	/// <inheritdoc />
-	public IEnumerable<IndicatorType> All => _indicatorTypes.Cache;
+	public IEnumerable<IndicatorType> All => _all.Cache;
 
-	/// <inheritdoc />
-	public void Add(IndicatorType type)
-	{
-		if (type is null)
-			throw new ArgumentNullException(nameof(type));
-
-		_indicatorTypes.Add(type);
-	}
-
-	void IIndicatorProvider.Remove(IndicatorType type)
-	{
-		if (type is null)
-			throw new ArgumentNullException(nameof(type));
-
-		_indicatorTypes.Remove(type);
-	}
+	void ICustomProvider<IndicatorType>.Add(IndicatorType type) => _all.Add(type);
+	void ICustomProvider<IndicatorType>.Remove(IndicatorType type) => _all.Remove(type);
 }

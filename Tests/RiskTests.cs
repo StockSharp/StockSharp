@@ -893,7 +893,7 @@ public class RiskTests : BaseTestClass
 	{
 		IRiskRuleProvider provider = new InMemoryRiskRuleProvider();
 
-		var rules = provider.Rules.ToList();
+		var rules = provider.All.ToList();
 		rules.Count.AssertGreater(0);
 
 		rules.Contains(typeof(RiskPnLRule)).AssertTrue();
@@ -918,11 +918,11 @@ public class RiskTests : BaseTestClass
 
 		var customRuleType = typeof(TestRiskRule);
 
-		provider.AddRule(customRuleType);
-		provider.Rules.Contains(customRuleType).AssertTrue();
+		provider.Add(customRuleType);
+		provider.All.Contains(customRuleType).AssertTrue();
 
-		provider.RemoveRule(customRuleType);
-		provider.Rules.Contains(customRuleType).AssertFalse();
+		provider.Remove(customRuleType);
+		provider.All.Contains(customRuleType).AssertFalse();
 	}
 
 	[TestMethod]
@@ -937,7 +937,7 @@ public class RiskTests : BaseTestClass
 			nameof(ILogSource.IsRoot),
 		};
 
-		foreach (var ruleType in provider.Rules)
+		foreach (var ruleType in provider.All)
 		{
 			var rule = ruleType.CreateInstance<IRiskRule>();
 
