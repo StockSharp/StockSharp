@@ -1,18 +1,15 @@
 namespace StockSharp.Algo.Storages;
 
-#if NET10_0_OR_GREATER
-using SyncObject = System.Threading.Lock;
-#endif
-
 /// <summary>
 /// The interface for access to the storage of information on instruments.
 /// </summary>
 public interface ISecurityStorage : ISecurityProvider
 {
 	/// <summary>
-	/// Sync object.
+	/// Enter sync scope.
 	/// </summary>
-	SyncObject SyncRoot { get; }
+	/// <returns>Sync scope.</returns>
+	Lock.Scope EnterScope();
 
 	/// <summary>
 	/// Save security.
@@ -73,7 +70,7 @@ public class InMemorySecurityStorage : ISecurityStorage
 		_underlying = underlying ?? throw new ArgumentNullException(nameof(underlying));
 	}
 
-	SyncObject ISecurityStorage.SyncRoot => _inner.SyncRoot;
+	Lock.Scope ISecurityStorage.EnterScope() => _inner.EnterScope();
 
 	int ISecurityProvider.Count => _inner.Count;
 

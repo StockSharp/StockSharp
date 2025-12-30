@@ -1,9 +1,5 @@
 ﻿namespace StockSharp.Algo.Storages;
 
-#if NET10_0_OR_GREATER
-using SyncObject = System.Threading.Lock;
-#endif
-
 using Key = ValueTuple<Portfolio, Security, string, Sides?, string, string, TPlusLimits?>;
 
 /// <summary>
@@ -12,9 +8,10 @@ using Key = ValueTuple<Portfolio, Security, string, Sides?, string, string, TPlu
 public interface IPositionStorage : IPositionProvider, IPortfolioProvider
 {
 	/// <summary>
-	/// Sync object.
+	/// Enter sync scope.
 	/// </summary>
-	SyncObject SyncRoot { get; }
+	/// <returns>Sync scope.</returns>
+	Lock.Scope EnterScope();
 
 	/// <summary>
 	/// Save portfolio.
@@ -75,7 +72,7 @@ public class InMemoryPositionStorage : IPositionStorage
 	public IEnumerable<Portfolio> Portfolios => _portfolios.CachedValues;
 
 	/// <inheritdoc />
-	public SyncObject SyncRoot => _positions.SyncRoot;
+	public Lock.Scope EnterScope() => _positions.EnterScope();
 
 	/// <inheritdoc />
 	public event Action<Position> NewPosition;

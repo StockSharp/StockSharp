@@ -1,9 +1,5 @@
 namespace StockSharp.Algo.Storages;
 
-#if NET10_0_OR_GREATER
-using SyncObject = System.Threading.Lock;
-#endif
-
 class PositionStorage(IEntityRegistry entityRegistry) : IPositionStorage
 {
 	private readonly IEntityRegistry _entityRegistry = entityRegistry ?? throw new ArgumentNullException(nameof(entityRegistry));
@@ -32,7 +28,7 @@ class PositionStorage(IEntityRegistry entityRegistry) : IPositionStorage
 
 	IEnumerable<Portfolio> IPortfolioProvider.Portfolios => _entityRegistry.Portfolios.Cache;
 
-	SyncObject IPositionStorage.SyncRoot => _entityRegistry.Portfolios.SyncRoot;
+	Lock.Scope IPositionStorage.EnterScope() => _entityRegistry.Portfolios.EnterScope();
 
 	event Action<Portfolio> IPortfolioProvider.NewPortfolio
 	{
