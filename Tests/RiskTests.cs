@@ -1306,6 +1306,52 @@ public class RiskTests : BaseTestClass
 		sentOrder.AssertNotNull();
 	}
 
+	[TestMethod]
+	public void TradePriceNullPrice()
+	{
+		var rule = new RiskTradePriceRule
+		{
+			Price = 1000,
+			Action = RiskActions.CancelOrders
+		};
+
+		// Trade message with null TradeVolume should not throw and should return false
+		var execMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			TradePrice = null,
+			TradeVolume = 10
+		};
+
+		// Should not throw and should return false since volume is null
+		rule.ProcessMessage(execMsg).AssertFalse();
+	}
+
+	[TestMethod]
+	public void TradeVolumeNullVolume()
+	{
+		var rule = new RiskTradeVolumeRule
+		{
+			Volume = 1000,
+			Action = RiskActions.CancelOrders
+		};
+
+		// Trade message with null TradeVolume should not throw and should return false
+		var execMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 100,
+			TradeVolume = null
+		};
+
+		// Should not throw and should return false since volume is null
+		rule.ProcessMessage(execMsg).AssertFalse();
+	}
+
 	private class TestRiskRule : RiskRule
 	{
 		public bool ShouldActivate { get; set; }
