@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using DrawingColor = System.Drawing.Color;
 
+using Ecng.IO;
 using Ecng.Collections;
 using Ecng.Common;
 using Ecng.Configuration;

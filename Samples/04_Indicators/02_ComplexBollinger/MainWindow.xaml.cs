@@ -1,8 +1,11 @@
 ﻿namespace StockSharp.Samples.Indicators.ComplexBollinger;
 
 using System;
+using System.Windows;
+using System.Threading.Tasks;
 
 using Ecng.Drawing;
+using Ecng.IO;
 
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Storages;
@@ -19,10 +22,16 @@ using StockSharp.Messages;
 public partial class MainWindow
 {
 	private readonly string _pathHistory = Paths.HistoryDataPath;
+	private readonly IFileSystem _fileSystem = Paths.FileSystem;
 
 	public MainWindow()
 	{
 		InitializeComponent();
+	}
+
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
 
 		var chartArea = new ChartArea();
 		Chart.AddArea(chartArea);
@@ -39,26 +48,24 @@ public partial class MainWindow
 
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 
-		var candleStorage = new StorageRegistry().GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(1), new LocalMarketDataDrive(_pathHistory), StorageFormats.Binary);
-		var candles = candleStorage.Load(Paths.HistoryBeginDate, Paths.HistoryEndDate);
-
-		var indicator = new BollingerBands();
-
-		foreach (var candle in candles)
+		Task.Run(async () =>
 		{
-			var indicatorValue = indicator.Process(candle);
-			var chartDrawData = new ChartDrawData();
+			var candleStorage = new StorageRegistry().GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(1), new LocalMarketDataDrive(_fileSystem, _pathHistory), StorageFormats.Binary);
+			var candles = candleStorage.LoadAsync(Paths.HistoryBeginDate, Paths.HistoryEndDate);
 
-			chartDrawData.Group(candle.OpenTime)
-				.Add(chartCandleElement, candle)
-				.Add(chartIndicatorElement, indicatorValue);
+			var indicator = new BollingerBands();
 
-			Chart.Draw(chartDrawData);
-		}
-	}
+			await foreach (var candle in candles)
+			{
+				var indicatorValue = indicator.Process(candle);
+				var chartDrawData = new ChartDrawData();
 
-	private void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
-	{
-		ThemeExtensions.ApplyDefaultTheme();
+				chartDrawData.Group(candle.OpenTime)
+					.Add(chartCandleElement, candle)
+					.Add(chartIndicatorElement, indicatorValue);
+
+				Chart.Draw(chartDrawData);
+			}
+		});
 	}
 }

@@ -564,7 +564,7 @@ public class AsyncMessageChannelTests : BaseTestClass
 		channel.Dispose();
 
 		channel.State.AssertEqual(ChannelStates.Stopped);
-		await Assert.ThrowsExactlyAsync<ObjectDisposedException>(async () =>
+		await ThrowsExactlyAsync<ObjectDisposedException>(async () =>
 			await channel.SendInMessageAsync(new TimeMessage(), CancellationToken));
 	}
 

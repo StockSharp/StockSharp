@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 
-using Ecng.IO;
+using Ecng.IO.Compression;
 
 using Google.Protobuf.Collections;
 

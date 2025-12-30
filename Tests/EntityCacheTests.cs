@@ -55,7 +55,7 @@ public class EntityCacheTests : BaseTestClass
 	[TestMethod]
 	public void OrdersKeepCount_SetNegative_ThrowsArgumentOutOfRangeException()
 	{
-		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _cache.OrdersKeepCount = -1);
+		ThrowsExactly<ArgumentOutOfRangeException>(() => _cache.OrdersKeepCount = -1);
 	}
 
 	[TestMethod]

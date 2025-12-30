@@ -358,14 +358,18 @@ public class ImportSettings : NotifiableObject, IPersistable
 	/// <summary>
 	/// Find files for importing.
 	/// </summary>
+	/// <param name="fileSystem">File system.</param>
 	/// <returns>File list.</returns>
-	public IEnumerable<string> GetFiles()
+	public IEnumerable<string> GetFiles(IFileSystem fileSystem)
 	{
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
 		if (!FileName.IsEmpty())
 			return [FileName];
 
 		if (!Directory.IsEmpty())
-			return System.IO.Directory.GetFiles(Directory, FileMask, IncludeSubDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+			return fileSystem.EnumerateFiles(Directory, FileMask, IncludeSubDirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
 
 		throw new InvalidOperationException("No any directory or file was set for import.");
 	}

@@ -313,6 +313,18 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 		}
 	}
 
+	private IFileSystem _fileSystem = Extensions.DefaultFileSystem;
+
+	/// <summary>
+	/// <see cref="IFileSystem"/>
+	/// </summary>
+	[Browsable(false)]
+	public IFileSystem FileSystem
+	{
+		get => _fileSystem;
+		set => _fileSystem = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
 	/// <summary>
 	/// Validate the specified security id is supported by the adapter and subscription can be done.
 	/// </summary>

@@ -6,7 +6,7 @@ using StockSharp.Algo.Storages.Csv;
 
 static class Helper
 {
-	public static readonly LocalFileSystem FileSystem = new();
+	public static readonly LocalFileSystem FileSystem = LocalFileSystem.Instance;
 	public static readonly MemoryFileSystem MemorySystem = new();
 
 	public static LogManager LogManager = new(false);
@@ -52,7 +52,7 @@ static class Helper
 		var root = GetTempFolder();
 
 		if (Directory.Exists(root))
-			IOHelper.ClearDirectory(root);
+			FileSystem.ClearDirectory(root);
 		else
 			Directory.CreateDirectory(root);
 	}

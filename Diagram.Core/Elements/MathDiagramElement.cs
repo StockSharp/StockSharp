@@ -3,6 +3,8 @@
 using Ecng.Compilation;
 using Ecng.Compilation.Expressions;
 
+using StockSharp.Configuration;
+
 /// <summary>
 /// Formula with two arguments element.
 /// </summary>
@@ -122,7 +124,7 @@ public class MathDiagramElement : DiagramElement
 					return;
 				}
 
-				_formula = value.Compile(_formulaCtx);
+				_formula = value.Compile(Paths.FileSystem, _formulaCtx);
 
 				if (!_formula.Error.IsEmpty())
 					return;
@@ -158,7 +160,7 @@ public class MathDiagramElement : DiagramElement
 				if (value.IsEmpty())
 					return;
 
-				_validator = value.Compile<bool>(_validatorCtx);
+				_validator = value.Compile<bool>(Paths.FileSystem, _validatorCtx);
 
 				if (!_validator.Error.IsEmpty())
 					return;

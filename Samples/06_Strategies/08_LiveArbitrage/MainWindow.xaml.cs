@@ -8,6 +8,8 @@ using Ecng.Xaml;
 using Ecng.Configuration;
 using Ecng.Collections;
 using Ecng.Logging;
+using Ecng.Common;
+using Ecng.IO;
 
 using StockSharp.Messages;
 using StockSharp.Algo;
@@ -21,6 +23,7 @@ public partial class MainWindow
 
 	private readonly Connector _connector = new();
 	private const string _connectorFile = "ConnectorFile.json";
+	private readonly IFileSystem _fileSystem = Paths.FileSystem;
 
 	public MainWindow()
 	{
@@ -29,9 +32,9 @@ public partial class MainWindow
 		// registering all connectors
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_connector.Adapter.InnerAdapters));
 
-		if (File.Exists(_connectorFile))
+		if (_fileSystem.FileExists(_connectorFile))
 		{
-			_connector.Load(_connectorFile.Deserialize<SettingsStorage>());
+			_connector.Load(_connectorFile.Deserialize<SettingsStorage>(_fileSystem));
 		}
 		_logManager = new LogManager();
 		_logManager.Listeners.Add(new GuiLogListener(Monitor));
@@ -46,7 +49,7 @@ public partial class MainWindow
 	{
 		if (_connector.Configure(this))
 		{
-			_connector.Save().Serialize(_connectorFile);
+			_connector.Save().Serialize(_fileSystem, _connectorFile);
 		}
 	}
 

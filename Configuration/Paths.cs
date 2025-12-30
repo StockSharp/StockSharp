@@ -380,7 +380,7 @@ public static class Paths
 
 			try
 			{
-				_installedVersion = TryGetInstalledVersion(Directory.GetCurrentDirectory()).IsEmpty(ConfigManager.TryGet("actualVersion", "5.0.0").IsEmpty(GetAssemblyVersion()));
+				_installedVersion = TryGetInstalledVersion(Directory.GetCurrentDirectory(), FileSystem).IsEmpty(ConfigManager.TryGet("actualVersion", "5.0.0").IsEmpty(GetAssemblyVersion()));
 			}
 			catch
 			{
@@ -404,15 +404,15 @@ public static class Paths
 
 	private static readonly Lock _installationsLock = new();
 
-	private static SettingsStorage[] GetInstallations()
+	private static SettingsStorage[] GetInstallations(IFileSystem fileSystem)
 	{
-		if (!InstallerInstallationsConfigPath.IsConfigExists())
+		if (!InstallerInstallationsConfigPath.IsConfigExists(fileSystem))
 			return null;
 
 		SettingsStorage storage;
 
 		using (_installationsLock.EnterScope())
-			storage = InstallerInstallationsConfigPath.DeserializeInvariant();
+			storage = InstallerInstallationsConfigPath.DeserializeInvariant(fileSystem);
 
 		if (storage is null)
 			return null;
@@ -428,10 +428,11 @@ public static class Paths
 	/// Try get installed path by product id.
 	/// </summary>
 	/// <param name="productId">Identifier.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <returns>Installed path.</returns>
-	public static string TryGetInstalledPath(long productId)
+	public static string TryGetInstalledPath(long productId, IFileSystem fileSystem)
 	{
-		var installations = GetInstallations();
+		var installations = GetInstallations(fileSystem);
 		if (installations == null)
 			return null;
 
@@ -446,13 +447,14 @@ public static class Paths
 	/// Get currently installed version of the product.
 	/// </summary>
 	/// <param name="productInstallPath">File system path to product installation.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <returns>Installed version of the product.</returns>
-	public static string TryGetInstalledVersion(string productInstallPath)
+	public static string TryGetInstalledVersion(string productInstallPath, IFileSystem fileSystem)
 	{
 		if (productInstallPath.IsEmpty())
 			throw new ArgumentException(nameof(productInstallPath));
 
-		var installations = GetInstallations();
+		var installations = GetInstallations(fileSystem);
 		if (installations == null)
 			return null;
 
@@ -519,8 +521,19 @@ public static class Paths
 	/// <param name="path">The relative or absolute path to the directory to search.</param>
 	/// <param name="filter">The search string to match against the names of files in path.</param>
 	/// <returns>Files.</returns>
+	[Obsolete("Use IFileSystem overload.")]
 	public static IEnumerable<string> EnumerateConfigs(this string path, string filter = "*")
-		=> Directory.EnumerateFiles(path, $"{filter}{DefaultSettingsExt}");
+		=> EnumerateConfigs(path, FileSystem, filter);
+
+	/// <summary>
+	/// Returns an files with <see cref="DefaultSettingsExt"/> extension.
+	/// </summary>
+	/// <param name="path">The relative or absolute path to the directory to search.</param>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="filter">The search string to match against the names of files in path.</param>
+	/// <returns>Files.</returns>
+	public static IEnumerable<string> EnumerateConfigs(this string path, IFileSystem fileSystem, string filter = "*")
+		=> fileSystem.CheckOnNull(nameof(fileSystem)).EnumerateFiles(path, $"{filter}{DefaultSettingsExt}");
 
 	/// <summary>
 	/// Make the specified <paramref name="filePath"/> with <see cref="FileExts.Backup"/> extension.
@@ -534,21 +547,25 @@ public static class Paths
 	/// Rename the specified file with <see cref="FileExts.Backup"/> extension.
 	/// </summary>
 	/// <param name="filePath">File path.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <param name="backupFilePath">Backup file path.</param>
-	public static void MoveToBackup(this string filePath, string backupFilePath = null)
+	public static void MoveToBackup(this string filePath, IFileSystem fileSystem, string backupFilePath = null)
 	{
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
 		var target = backupFilePath ?? filePath;
 		var bak = target.MakeBackup();
 		var idx = 0;
 		do
 		{
-			if(!File.Exists(bak))
+			if(!fileSystem.FileExists(bak))
 				break;
 
 			bak = (target + $".{++idx}").MakeBackup();
 		} while(true);
 
-		File.Move(filePath, bak);
+		fileSystem.MoveFile(filePath, bak);
 	}
 
 	/// <summary>
@@ -569,7 +586,7 @@ public static class Paths
 	/// <summary>
 	/// Default file system.
 	/// </summary>
-	public static readonly IFileSystem FileSystem = new LocalFileSystem();
+	public static readonly IFileSystem FileSystem = Messages.Extensions.DefaultFileSystem;
 
 	/// <summary>
 	/// Serialize <paramref name="value"/> state into <see cref="string"/> value.
@@ -620,7 +637,7 @@ public static class Paths
 	/// <returns>Value.</returns>
 	[Obsolete("Use IFileSystem overload.")]
 	public static T Deserialize<T>(this string filePath)
-		=> Deserialize<T>(FileSystem, filePath);
+		=> Deserialize<T>(filePath, FileSystem);
 
 	/// <summary>
 	/// Deserialize value from the specified file.
@@ -631,7 +648,7 @@ public static class Paths
 	/// <returns>Value.</returns>
 	[Obsolete("Use IFileSystem overload.")]
 	public static ValueTask<T> DeserializeAsync<T>(this string filePath, CancellationToken cancellationToken)
-		=> DeserializeAsync<T>(FileSystem, filePath, cancellationToken);
+		=> DeserializeAsync<T>(filePath, FileSystem, cancellationToken);
 
 	/// <summary>
 	/// Deserialize value from the specified file.
@@ -641,7 +658,7 @@ public static class Paths
 	/// <returns>Value.</returns>
 	[Obsolete("Use IFileSystem overload.")]
 	public static T DeserializeOrThrow<T>(this string filePath)
-		=> DeserializeOrThrow<T>(FileSystem, filePath);
+		=> DeserializeOrThrow<T>(filePath, FileSystem);
 
 	/// <summary>
 	/// Deserialize value from the specified file.
@@ -652,7 +669,7 @@ public static class Paths
 	/// <returns>Value.</returns>
 	[Obsolete("Use IFileSystem overload.")]
 	public static ValueTask<T> DeserializeOrThrowAsync<T>(this string filePath, CancellationToken cancellationToken)
-		=> DeserializeOrThrowAsync<T>(FileSystem, filePath, cancellationToken);
+		=> DeserializeOrThrowAsync<T>(filePath, FileSystem, cancellationToken);
 
 	/// <summary>
 	/// Deserialize value from the serialized data.
@@ -711,20 +728,20 @@ public static class Paths
 	/// Deserialize value from the specified file.
 	/// </summary>
 	/// <typeparam name="T">Value type.</typeparam>
-	/// <param name="fileSystem">File system.</param>
 	/// <param name="filePath">File path.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <returns>Value.</returns>
-	public static T Deserialize<T>(this IFileSystem fileSystem, string filePath)
+	public static T Deserialize<T>(this string filePath, IFileSystem fileSystem)
 	{
-		if (fileSystem is null)
-			throw new ArgumentNullException(nameof(fileSystem));
-
 		if (filePath.IsEmpty())
 			throw new ArgumentNullException(nameof(filePath));
 
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
 		try
 		{
-			return fileSystem.DeserializeOrThrow<T>(filePath);
+			return filePath.DeserializeOrThrow<T>(fileSystem);
 		}
 		catch (Exception e)
 		{
@@ -737,16 +754,16 @@ public static class Paths
 	/// Deserialize value from the specified file.
 	/// </summary>
 	/// <typeparam name="T">Value type.</typeparam>
-	/// <param name="fileSystem">File system.</param>
 	/// <param name="filePath">File path.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <returns>Value.</returns>
-	public static T DeserializeOrThrow<T>(this IFileSystem fileSystem, string filePath)
+	public static T DeserializeOrThrow<T>(this string filePath, IFileSystem fileSystem)
 	{
-		if (fileSystem is null)
-			throw new ArgumentNullException(nameof(fileSystem));
-
 		if (filePath.IsEmpty())
 			throw new ArgumentNullException(nameof(filePath));
+
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
 
 		var defFile = Path.ChangeExtension(filePath, Paths.DefaultSettingsExt);
 
@@ -761,21 +778,21 @@ public static class Paths
 	/// Deserialize value from the specified file.
 	/// </summary>
 	/// <typeparam name="T">Value type.</typeparam>
-	/// <param name="fileSystem">File system.</param>
 	/// <param name="filePath">File path.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Value.</returns>
-	public static async ValueTask<T> DeserializeAsync<T>(this IFileSystem fileSystem, string filePath, CancellationToken cancellationToken)
+	public static async ValueTask<T> DeserializeAsync<T>(this string filePath, IFileSystem fileSystem, CancellationToken cancellationToken)
 	{
-		if (fileSystem is null)
-			throw new ArgumentNullException(nameof(fileSystem));
-
 		if (filePath.IsEmpty())
 			throw new ArgumentNullException(nameof(filePath));
 
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
 		try
 		{
-			return await fileSystem.DeserializeOrThrowAsync<T>(filePath, cancellationToken);
+			return await filePath.DeserializeOrThrowAsync<T>(fileSystem, cancellationToken);
 		}
 		catch (Exception e)
 		{
@@ -788,19 +805,19 @@ public static class Paths
 	/// Deserialize value from the specified file.
 	/// </summary>
 	/// <typeparam name="T">Value type.</typeparam>
-	/// <param name="fileSystem">File system.</param>
 	/// <param name="filePath">File path.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Value.</returns>
-	public static ValueTask<T> DeserializeOrThrowAsync<T>(this IFileSystem fileSystem, string filePath, CancellationToken cancellationToken)
+	public static ValueTask<T> DeserializeOrThrowAsync<T>(this string filePath, IFileSystem fileSystem, CancellationToken cancellationToken)
 	{
-		if (fileSystem is null)
-			throw new ArgumentNullException(nameof(fileSystem));
-
 		if (filePath.IsEmpty())
 			throw new ArgumentNullException(nameof(filePath));
 
-		var defFile = Path.ChangeExtension(filePath, Paths.DefaultSettingsExt);
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
+		var defFile = Path.ChangeExtension(filePath, DefaultSettingsExt);
 
 		if (!fileSystem.FileExists(defFile))
 			throw new FileNotFoundException($"file not found: '{defFile}'");
@@ -812,16 +829,25 @@ public static class Paths
 	/// <summary>
 	/// Determines the specified config file exists.
 	/// </summary>
-	/// <param name="fileSystem">File system.</param>
 	/// <param name="configFile">Config file.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <returns>Check result.</returns>
-	public static bool IsConfigExists(this IFileSystem fileSystem, string configFile)
+	public static bool IsConfigExists(this string configFile, IFileSystem fileSystem)
 	{
 		if (fileSystem is null)
 			throw new ArgumentNullException(nameof(fileSystem));
 
 		return fileSystem.FileExists(configFile);
 	}
+
+	/// <summary>
+	/// Determines the specified config file exists.
+	/// </summary>
+	/// <param name="configFile">Config file.</param>
+	/// <returns>Check result.</returns>
+	[Obsolete("Use IFileSystem overload.")]
+	public static bool IsConfigExists(this string configFile)
+		=> IsConfigExists(configFile, FileSystem);
 
 	/// <summary>
 	/// Get file name without extension for the specified id.
@@ -843,14 +869,6 @@ public static class Paths
 	/// <returns>File name.</returns>
 	public static string GetFileName(this Guid id)
 		=> $"{id.GetFileNameWithoutExtension()}{DefaultSettingsExt}";
-
-	/// <summary>
-	/// Determines the specified config file exists.
-	/// </summary>
-	/// <param name="configFile">Config file.</param>
-	/// <returns>Check result.</returns>
-	public static bool IsConfigExists(this string configFile)
-		=> File.Exists(configFile);
 
 	/// <summary>
 	/// <see cref="ServerCredentials.Email"/> in case <see cref="ServerCredentials.Token"/>.

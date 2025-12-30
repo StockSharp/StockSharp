@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Ecng.Common;
+using Ecng.IO;
 using Ecng.Configuration;
 using Ecng.Reflection;
 using Ecng.Logging;

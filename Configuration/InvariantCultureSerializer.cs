@@ -56,16 +56,9 @@ public static class InvariantCultureSerializer
 	/// <param name="settings"><see cref="SettingsStorage"/></param>
 	/// <param name="fileName">File name.</param>
 	/// <param name="bom">Add UTF8 BOM preamble.</param>
+	[Obsolete("Use IFileSystem overload.")]
 	public static void SerializeInvariant(this SettingsStorage settings, string fileName, bool bom = true)
-	{
-		if (settings is null)
-			throw new ArgumentNullException(nameof(settings));
-
-		if (fileName.IsEmpty())
-			throw new ArgumentNullException(nameof(fileName));
-
-		Do.Invariant(() => settings.Serialize(fileName, bom));
-	}
+		=> SerializeInvariant(settings, Paths.FileSystem, fileName, bom);
 
 	/// <summary>
 	/// Serialize the specified storage into byte array.
@@ -90,17 +83,28 @@ public static class InvariantCultureSerializer
 	/// </summary>
 	/// <param name="fileName">File name.</param>
 	/// <returns><see cref="SettingsStorage"/></returns>
+	[Obsolete("Use IFileSystem overload.")]
 	public static SettingsStorage DeserializeInvariant(this string fileName)
-		=> DeserializeInvariant<SettingsStorage>(fileName);
+		=> DeserializeInvariant(fileName, Paths.FileSystem);
+
+	/// <summary>
+	/// Deserialize storage from the specified file.
+	/// </summary>
+	/// <param name="fileName">File name.</param>
+	/// <param name="fileSystem">File system.</param>
+	/// <returns><see cref="SettingsStorage"/></returns>
+	public static SettingsStorage DeserializeInvariant(this string fileName, IFileSystem fileSystem)
+		=> DeserializeInvariant<SettingsStorage>(fileName, fileSystem);
 
 	/// <summary>
 	/// Deserialize storage from the specified file.
 	/// </summary>
 	/// <typeparam name="T">Type implemented <see cref="IPersistable"/>.</typeparam>
 	/// <param name="fileName">File name.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <returns><typeparamref name="T"/></returns>
-	public static T DeserializeInvariant<T>(this string fileName)
-		=> Do.Invariant(fileName.Deserialize<T>);
+	public static T DeserializeInvariant<T>(this string fileName, IFileSystem fileSystem)
+		=> Do.Invariant(() => fileName.Deserialize<T>(fileSystem));
 
 	/// <summary>
 	/// Deserialize storage from the specified byte array.

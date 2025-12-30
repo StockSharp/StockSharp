@@ -13,6 +13,7 @@ using Ecng.Xaml;
 using Ecng.Collections;
 using Ecng.Logging;
 using Ecng.ComponentModel;
+using Ecng.IO;
 
 using Nito.AsyncEx;
 
@@ -45,6 +46,7 @@ public partial class MainPanel
 
 	private readonly string _defaultDataPath = "Data";
 	private readonly string _settingsFile;
+	private readonly IFileSystem _fileSystem = Paths.FileSystem;
 
 	public MainPanel()
 	{
@@ -252,13 +254,13 @@ public partial class MainPanel
 
 		try
 		{
-			if (_settingsFile.IsConfigExists())
+			if (_settingsFile.IsConfigExists(_fileSystem))
 			{
 				var ctx = new ContinueOnExceptionContext();
 				ctx.Error += ex => ex.LogError();
 
 				using (ctx.ToScope())
-					Connector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>());
+					Connector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>(_fileSystem));
 			}
 		}
 		catch
@@ -296,7 +298,7 @@ public partial class MainPanel
 	private void SettingsClick(object sender, RoutedEventArgs e)
 	{
 		if (Connector.Configure(this.GetWindow()))
-			Connector.Save().Serialize(_settingsFile);
+			Connector.Save().Serialize(_fileSystem, _settingsFile);
 	}
 
 	private void ConnectClick(object sender, RoutedEventArgs e)

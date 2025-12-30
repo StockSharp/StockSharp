@@ -14,5 +14,6 @@ global using Ecng.ComponentModel;
 global using Ecng.Collections;
 global using Ecng.Serialization;
 global using Ecng.Logging;
+global using Ecng.IO;
 
 global using StockSharp.Localization;

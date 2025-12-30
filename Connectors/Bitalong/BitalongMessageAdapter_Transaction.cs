@@ -232,7 +232,7 @@ public partial class BitalongMessageAdapter
 
 			var opened = await _httpClient.GetOrders(cancellationToken);
 
-			var uuids = _orderInfo.Keys.ToSet();
+			var uuids = _orderInfo.Keys.ToHashSet();
 
 			foreach (var order in opened)
 			{

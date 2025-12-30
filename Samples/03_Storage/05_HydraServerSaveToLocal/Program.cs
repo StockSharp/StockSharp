@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Ecng.Common;
 using Ecng.Logging;
 using Ecng.ComponentModel;
+using Ecng.IO;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
@@ -23,18 +24,18 @@ static class Program
 	static async Task Main()
 	{
 		var token = CancellationToken.None;
+		var fs = Paths.FileSystem;
 
 		const string pathHistory = "Storage";
 
-		if (Directory.Exists(pathHistory))
-			IOHelper.ClearDirectory(pathHistory);
+		if (fs.DirectoryExists(pathHistory))
+			fs.ClearDirectory(pathHistory);
 		else
-			Directory.CreateDirectory(pathHistory);
+			fs.CreateDirectory(pathHistory);
 
 		var logger = new LogManager();
 		logger.Listeners.Add(new ConsoleLogListener());
 
-		var fs = Paths.FileSystem;
 		var storageRegistry = new StorageRegistry();
 
 		await using var executor = new ChannelExecutor(ex => ConsoleHelper.ConsoleError(ex.ToString()));

@@ -2,13 +2,13 @@
 
 using System;
 using System.Windows;
-using System.IO;
 
 using Ecng.Common;
 using Ecng.Serialization;
 using Ecng.Configuration;
 using Ecng.ComponentModel;
 using Ecng.Logging;
+using Ecng.IO;
 
 using StockSharp.Configuration;
 using StockSharp.Algo;
@@ -29,6 +29,7 @@ public partial class MainWindow
 	private const string _connectorFile = "ConnectorFile.json";
 
 	private readonly string _pathHistory = Paths.HistoryDataPath;
+	private readonly IFileSystem _fileSystem = Paths.FileSystem;
 
 	private Subscription _subscription;
 	private ChartCandleElement _candleElement;
@@ -41,19 +42,19 @@ public partial class MainWindow
 
 		_executor = new(ex => ex.LogError());
 
-		var entityRegistry = new CsvEntityRegistry(_pathHistory, _executor);
+		var entityRegistry = new CsvEntityRegistry(_fileSystem, _pathHistory, _executor);
 		var storageRegistry = new StorageRegistry
 		{
-			DefaultDrive = new LocalMarketDataDrive(_pathHistory)
+			DefaultDrive = new LocalMarketDataDrive(_fileSystem, _pathHistory)
 		};
-		_connector = new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, new InMemoryExchangeInfoProvider(), storageRegistry, new SnapshotRegistry("SnapshotRegistry"));
+		_connector = new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, new InMemoryExchangeInfoProvider(), storageRegistry, new SnapshotRegistry(_fileSystem, "SnapshotRegistry"));
 
 		// registering all connectors
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_connector.Adapter.InnerAdapters));
 
-		if (File.Exists(_connectorFile))
+		if (_fileSystem.FileExists(_connectorFile))
 		{
-			_connector.Load(_connectorFile.Deserialize<SettingsStorage>());
+			_connector.Load(_connectorFile.Deserialize<SettingsStorage>(_fileSystem));
 		}
 
 		CandleDataTypeEdit.DataType = TimeSpan.FromMinutes(5).TimeFrame();
@@ -75,7 +76,7 @@ public partial class MainWindow
 	{
 		if (_connector.Configure(this))
 		{
-			_connector.Save().Serialize(_connectorFile);
+			_connector.Save().Serialize(_fileSystem, _connectorFile);
 		}
 	}
 

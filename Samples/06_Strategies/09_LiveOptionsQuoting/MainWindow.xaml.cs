@@ -17,6 +17,7 @@ using Ecng.Common;
 using Ecng.Serialization;
 using Ecng.Xaml;
 using Ecng.Logging;
+using Ecng.IO;
 
 using StockSharp.Configuration;
 using StockSharp.Algo;
@@ -31,6 +32,7 @@ using StockSharp.Algo.Strategies.Quoting;
 public partial class MainWindow
 {
 	private static readonly string _settingsFile = $"connection{Paths.DefaultSettingsExt}";
+	private readonly IFileSystem _fileSystem = Paths.FileSystem;
 
 	public readonly Connector Connector = new();
 
@@ -315,13 +317,13 @@ public partial class MainWindow
 
 		try
 		{
-			if (_settingsFile.IsConfigExists())
+			if (_settingsFile.IsConfigExists(_fileSystem))
 			{
 				var ctx = new ContinueOnExceptionContext();
 				ctx.Error += ex => ex.LogError();
 
 				using (ctx.ToScope())
-					Connector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>());
+					Connector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>(_fileSystem));
 			}
 		}
 		catch
@@ -341,7 +343,7 @@ public partial class MainWindow
 	private void SettingsClick(object sender, RoutedEventArgs e)
 	{
 		if (Connector.Configure(this))
-			Connector.Save().Serialize(_settingsFile);
+			Connector.Save().Serialize(_fileSystem, _settingsFile);
 	}
 
 	private void Level1FieldsCtrl_OnEditValueChanged(object sender, EditValueChangedEventArgs e)

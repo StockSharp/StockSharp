@@ -11,6 +11,7 @@ using Ecng.Serialization;
 using Ecng.Xaml;
 using Ecng.Configuration;
 using Ecng.Logging;
+using Ecng.IO;
 
 using DevExpress.Xpf.Editors;
 
@@ -38,6 +39,7 @@ public partial class MainWindow
 	private Security _security;
 	private SecurityId _securityId;
 	private DataType _tempCandleSub; // used to determine if chart settings have changed and new chart is needed
+	private readonly IFileSystem _fileSystem = Paths.FileSystem;
 
 	private static readonly string _settingsFile = $"connection{Paths.DefaultSettingsExt}";
 
@@ -95,13 +97,13 @@ public partial class MainWindow
 
 		try
 		{
-			if (_settingsFile.IsConfigExists())
+			if (_settingsFile.IsConfigExists(_fileSystem))
 			{
 				var ctx = new ContinueOnExceptionContext();
 				ctx.Error += ex => ex.LogError();
 
 				using (ctx.ToScope())
-					_realConnector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>());
+					_realConnector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>(_fileSystem));
 			}
 		}
 		catch
@@ -213,7 +215,7 @@ public partial class MainWindow
 		if (!_realConnector.Configure(this))
 			return;
 
-		_realConnector.Save().Serialize(_settingsFile);
+		_realConnector.Save().Serialize(_fileSystem, _settingsFile);
 		InitEmuConnector();
 	}
 

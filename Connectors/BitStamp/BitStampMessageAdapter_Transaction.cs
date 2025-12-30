@@ -265,7 +265,7 @@ partial class BitStampMessageAdapter
 
 			var orders = await _httpClient.RequestOpenOrders("all", cancellationToken);
 
-			var ids = _orderInfo.Keys.ToSet();
+			var ids = _orderInfo.Keys.ToHashSet();
 
 			foreach (var order in orders)
 			{

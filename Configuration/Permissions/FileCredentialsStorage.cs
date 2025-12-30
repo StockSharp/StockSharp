@@ -85,12 +85,12 @@ public class FileCredentialsStorage(string fileName, bool asEmail = false, IFile
 	{
 		try
 		{
-			if (!_fileSystem.IsConfigExists(_fileName))
+			if (!_fileName.IsConfigExists(_fileSystem))
 				return;
 
 			Do.Invariant(() =>
 			{
-				var storages = _fileSystem.Deserialize<SettingsStorage[]>(_fileName);
+				var storages = _fileName.Deserialize<SettingsStorage[]>(_fileSystem);
 				if (storages == null)
 					return;
 

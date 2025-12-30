@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Net" Version="$(EcngVer)" />
-    <PackageReference Include="Ecng.IO" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.IO.Compression" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.StringSearch" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.Compilation" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.MathLight" Version="$(EcngVer)" />

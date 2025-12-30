@@ -15,6 +15,7 @@ using Ecng.Compilation.Roslyn;
 using Ecng.ComponentModel;
 using Ecng.Collections;
 using Ecng.Logging;
+using Ecng.IO;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
@@ -29,6 +30,8 @@ using StockSharp.Xaml;
 
 public partial class MainWindow
 {
+	private readonly IFileSystem _fileSystem = Paths.FileSystem;
+
 	private DateTime _startEmulationTime;
 
 	private BaseOptimizer _optimizer;
@@ -304,7 +307,7 @@ public partial class MainWindow
 				// Specifing time frame range as exact 2 values (Min and Max).
 				// In that case generic will select from them only instead of random from range.
 				(strategy.Parameters[nameof(strategy.CandleTimeFrame)], null, null, tfRange.step, new[] { tfRange.min, tfRange.max }),
-			]);
+			], _fileSystem);
 		}
 	}
 

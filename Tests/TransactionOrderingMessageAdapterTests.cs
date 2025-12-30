@@ -271,7 +271,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 	{
 		var inner = new RecordingMessageAdapter();
 
-		Assert.ThrowsExactly<ArgumentNullException>(() =>
+		ThrowsExactly<ArgumentNullException>(() =>
 		{
 			new TransactionOrderingMessageAdapter(inner, null);
 		});

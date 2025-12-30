@@ -5,6 +5,7 @@ using System.IO.Compression;
 using Ecng.Compilation;
 using Ecng.Compilation.Expressions;
 using Ecng.IO;
+using Ecng.IO.Compression;
 
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.PnL;
@@ -1016,20 +1017,22 @@ public static partial class TraderHelper
 	/// Compile mathematical formula.
 	/// </summary>
 	/// <param name="expression">Text expression.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
-	public static ExpressionFormula<decimal> Compile(this string expression, AssemblyLoadContextTracker tracker)
-		=> AsyncContext.Run(() => CompileAsync(expression, tracker, default));
+	public static ExpressionFormula<decimal> Compile(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker)
+		=> AsyncContext.Run(() => CompileAsync(expression, fileSystem, tracker, default));
 
 	/// <summary>
 	/// Compile mathematical formula.
 	/// </summary>
 	/// <param name="expression">Text expression.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
-	public static Task<ExpressionFormula<decimal>> CompileAsync(this string expression, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
-		=> CompileAsync<decimal>(expression, tracker, cancellationToken);
+	public static Task<ExpressionFormula<decimal>> CompileAsync(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
+		=> CompileAsync<decimal>(expression, fileSystem, tracker, cancellationToken);
 
 	private static class CacheHolder<TResult>
 	{
@@ -1041,26 +1044,28 @@ public static partial class TraderHelper
 	/// </summary>
 	/// <typeparam name="TResult">Result type.</typeparam>
 	/// <param name="expression">Text expression.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
-	public static ExpressionFormula<TResult> Compile<TResult>(this string expression, AssemblyLoadContextTracker tracker)
-		=> AsyncContext.Run(() => CompileAsync<TResult>(expression, tracker, default));
+	public static ExpressionFormula<TResult> Compile<TResult>(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker)
+		=> AsyncContext.Run(() => CompileAsync<TResult>(expression, fileSystem, tracker, default));
 
 	/// <summary>
 	/// Compile mathematical formula.
 	/// </summary>
 	/// <typeparam name="TResult">Result type.</typeparam>
 	/// <param name="expression">Text expression.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
-	public static async Task<ExpressionFormula<TResult>> CompileAsync<TResult>(this string expression, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
+	public static async Task<ExpressionFormula<TResult>> CompileAsync<TResult>(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
 	{
 		var cache = CacheHolder<TResult>.Cache;
 
 		if (!cache.TryGetValue(expression, out var formula))
 		{
-			formula = await CodeExtensions.GetCSharpCompiler().Compile<TResult>(tracker, expression, ServicesRegistry.TryCompilerCache, cancellationToken);
+			formula = await CodeExtensions.GetCSharpCompiler().Compile<TResult>(tracker, fileSystem, expression, ServicesRegistry.TryCompilerCache, cancellationToken);
 			cache.TryAdd(expression, formula);
 		}
 

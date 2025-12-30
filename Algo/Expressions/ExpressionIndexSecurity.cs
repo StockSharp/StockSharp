@@ -62,7 +62,7 @@ public class ExpressionIndexSecurity : IndexSecurity, IDisposable
 
 			if (CodeExtensions.TryGetCSharpCompiler() is not null)
 			{
-				Formula = value.Compile(_context);
+				Formula = value.Compile(Paths.FileSystem, _context);
 
 				if (Formula.Error.IsEmpty())
 				{

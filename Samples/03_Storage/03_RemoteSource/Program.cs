@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using Ecng.Common;
 using Ecng.Configuration;
+using Ecng.IO;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
@@ -23,6 +24,7 @@ static class Program
 	private static async Task Main()
 	{
 		var ct = CancellationToken.None;
+		var fs = Paths.FileSystem;
 
 		ICredentialsProvider credProvider = new DefaultCredentialsProvider();
 
@@ -85,7 +87,7 @@ static class Program
 
 		//---------------------------------------------------------------------------------------------
 		const string pathHistory = "Storage";
-		pathHistory.SafeDeleteDir();
+		fs.SafeDeleteDir(pathHistory);
 
 		var storageRegistry = new StorageRegistry
 		{

@@ -15,6 +15,7 @@ using Ecng.Common;
 using Ecng.Xaml;
 using Ecng.Configuration;
 using Ecng.Serialization;
+using Ecng.IO;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Candles;
@@ -38,6 +39,7 @@ public partial class MainWindow
 	private readonly DispatcherTimer _chartUpdateTimer = new();
 	private readonly SynchronizedDictionary<DateTime, TimeFrameCandleMessage> _updatedCandles = [];
 	private readonly CachedSynchronizedList<TimeFrameCandleMessage> _allCandles = [];
+	private readonly IFileSystem _fileSystem = Paths.FileSystem;
 
 	private const decimal _priceStep = 0.0001m;
 	private const int _timeframe = 1;
@@ -132,7 +134,7 @@ public partial class MainWindow
 		{
 			var date = DateTime.MinValue;
 
-			await foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(Paths.FileSystem, path)).LoadAsync(null, null).WithEnforcedCancellation(token))
+			await foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(_fileSystem, path)).LoadAsync(null, null).WithEnforcedCancellation(token))
 			{
 				AppendTick(tick);
 
@@ -268,7 +270,7 @@ public partial class MainWindow
 		if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}"))
 		{
 			var settingsStorage = (AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}")
-				.Deserialize<SettingsStorage>();
+				.Deserialize<SettingsStorage>(_fileSystem);
 
 			Chart.LoadIfNotNull(settingsStorage);
 
@@ -282,7 +284,7 @@ public partial class MainWindow
 	{
 		var settingsStorage = new SettingsStorage();
 		Chart.Save(settingsStorage);
-		settingsStorage.Serialize(AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}");
+		settingsStorage.Serialize(_fileSystem, AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}");
 	}
 
 	private void Cancel_Click(object sender, RoutedEventArgs e)

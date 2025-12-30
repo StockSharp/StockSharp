@@ -12,6 +12,7 @@ using Ecng.Xaml;
 using Ecng.Collections;
 using Ecng.Logging;
 using Ecng.ComponentModel;
+using Ecng.IO;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
@@ -40,6 +41,8 @@ public partial class MainWindow
 	private readonly string _settingsFile;
 
 	private readonly ChannelExecutor _executor;
+
+	public readonly IFileSystem FileSystem = Paths.FileSystem;
 
 	public MainWindow()
 	{
@@ -173,13 +176,13 @@ public partial class MainWindow
 
 		try
 		{
-			if (_settingsFile.IsConfigExists())
+			if (_settingsFile.IsConfigExists(FileSystem))
 			{
 				var ctx = new ContinueOnExceptionContext();
 				ctx.Error += ex => ex.LogError();
 
 				using (ctx.ToScope())
-					Connector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>());
+					Connector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>(FileSystem));
 			}
 		}
 		catch
@@ -211,7 +214,7 @@ public partial class MainWindow
 	private void SettingsClick(object sender, RoutedEventArgs e)
 	{
 		if (Connector.Configure(this))
-			Connector.Save().Serialize(_settingsFile);
+			Connector.Save().Serialize(FileSystem, _settingsFile);
 	}
 
 	private void ConnectClick(object sender, RoutedEventArgs e)

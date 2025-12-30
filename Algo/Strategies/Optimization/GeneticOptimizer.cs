@@ -197,7 +197,7 @@ public class GeneticOptimizer : BaseOptimizer
 	/// </summary>
 	public GeneticSettings Settings { get; } = new();
 
-	private Func<Strategy, decimal> ToFitness(string formula)
+	private Func<Strategy, decimal> ToFitness(string formula, IFileSystem fileSystem)
 	{
 		if (formula.IsEmpty())
 			throw new ArgumentNullException(nameof(formula));
@@ -205,7 +205,7 @@ public class GeneticOptimizer : BaseOptimizer
 		if (CodeExtensions.TryGetCSharpCompiler() is null)
 			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 
-		var expression = formula.Compile<decimal>(_context);
+		var expression = formula.Compile<decimal>(fileSystem, _context);
 
 		if (!expression.Error.IsEmpty())
 			throw new InvalidOperationException(expression.Error);
@@ -245,6 +245,7 @@ public class GeneticOptimizer : BaseOptimizer
 	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
 	/// <param name="strategy">Strategy.</param>
 	/// <param name="parameters">Parameters used to generate chromosomes.</param>
+	/// <param name="fileSystem">File system.</param>
 	/// <param name="calcFitness">Calc fitness value function. If <see langword="null"/> the value from <see cref="GeneticSettings.Fitness"/> will be used.</param>
 	/// <param name="selection"><see cref="ISelection"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Selection"/> will be used.</param>
 	/// <param name="crossover"><see cref="ICrossover"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Crossover"/> will be used.</param>
@@ -255,6 +256,7 @@ public class GeneticOptimizer : BaseOptimizer
 		DateTime stopTime,
 		Strategy strategy,
 		IEnumerable<(IStrategyParam param, object from, object to, object step, IEnumerable values)> parameters,
+		IFileSystem fileSystem,
 		Func<Strategy, decimal> calcFitness = default,
 		ISelection selection = default,
 		ICrossover crossover = default,
@@ -388,7 +390,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(paramArr));
 
-		calcFitness ??= ToFitness(Settings.Fitness);
+		calcFitness ??= ToFitness(Settings.Fitness, fileSystem);
 		selection ??= Settings.Selection.CreateInstance<ISelection>();
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();

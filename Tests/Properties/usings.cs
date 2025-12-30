@@ -14,6 +14,7 @@ global using global::Ecng.ComponentModel;
 global using global::Ecng.Configuration;
 global using global::Ecng.Logging;
 global using global::Ecng.UnitTesting;
+global using global::Ecng.IO;
 
 global using global::Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -149,7 +149,7 @@ public class CandlePatternFileStorage(IFileSystem fileSystem, string fileName, C
 
 		if (_fileSystem.FileExists(_fileName))
 		{
-			await Do.InvariantAsync(async () => (await _fileSystem.DeserializeAsync<SettingsStorage[]>(_fileName, cancellationToken))?.Select(s =>
+			await Do.InvariantAsync(async () => (await _fileName.DeserializeAsync<SettingsStorage[]>(_fileSystem, cancellationToken))?.Select(s =>
 			{
 				try
 				{

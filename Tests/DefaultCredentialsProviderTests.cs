@@ -195,6 +195,6 @@ public class DefaultCredentialsProviderTests : BaseTestClass
 		var fs = CreateFileSystem();
 		ICredentialsProvider provider = new DefaultCredentialsProvider(fs, "/credentials.json", "/company");
 
-		Assert.ThrowsExactly<ArgumentNullException>(() => provider.Save(null, true));
+		ThrowsExactly<ArgumentNullException>(() => provider.Save(null, true));
 	}
 }

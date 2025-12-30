@@ -57,26 +57,32 @@ public class AppStartSettings : IPersistable
 	/// <summary>
 	/// Try load settings, if config file exists.
 	/// </summary>
-	public static AppStartSettings TryLoad()
+	public static AppStartSettings TryLoad(IFileSystem fileSystem)
 	{
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
 		var configFile = Paths.PlatformConfigurationFile;
 
-		if (configFile.IsEmptyOrWhiteSpace() || !configFile.IsConfigExists())
+		if (configFile.IsEmptyOrWhiteSpace() || !configFile.IsConfigExists(fileSystem))
 			return null;
 
-		return configFile.Deserialize<SettingsStorage>()?.Load<AppStartSettings>();
+		return configFile.Deserialize<SettingsStorage>(fileSystem)?.Load<AppStartSettings>();
 	}
 
 	/// <summary>
 	/// Save settings into <see cref="Paths.PlatformConfigurationFile"/> if it is defined.
 	/// </summary>
-	public void TrySave()
+	public void TrySave(IFileSystem fileSystem)
 	{
+		if (fileSystem is null)
+			throw new ArgumentNullException(nameof(fileSystem));
+
 		var configFile = Paths.PlatformConfigurationFile;
 		if (configFile.IsEmptyOrWhiteSpace())
 			return;
 
-		configFile.CreateDirIfNotExists();
-		this.Save().Serialize(configFile);
+		fileSystem.CreateDirIfNotExists(configFile);
+		this.Save().Serialize(fileSystem, configFile);
 	}
 }

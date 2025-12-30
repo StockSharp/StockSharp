@@ -6,6 +6,7 @@ using System.IO;
 
 using Ecng.Serialization;
 using Ecng.Configuration;
+using Ecng.IO;
 
 using StockSharp.Configuration;
 using StockSharp.Messages;
@@ -20,6 +21,7 @@ public partial class MainWindow
 {
 	private readonly Connector _connector = new();
 	private const string _connectorFile = "ConnectorFile.json";
+	private readonly IFileSystem _fileSystem = Paths.FileSystem;
 
 	private readonly List<Subscription> _subscriptions = new();
 	private SecurityId? _selectedSecurityId;
@@ -31,9 +33,9 @@ public partial class MainWindow
 		// registering all connectors
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_connector.Adapter.InnerAdapters));
 
-		if (File.Exists(_connectorFile))
+		if (_fileSystem.FileExists(_connectorFile))
 		{
-			_connector.Load(_connectorFile.Deserialize<SettingsStorage>());
+			_connector.Load(_connectorFile.Deserialize<SettingsStorage>(_fileSystem));
 		}
 	}
 
@@ -46,7 +48,7 @@ public partial class MainWindow
 	{
 		if (_connector.Configure(this))
 		{
-			_connector.Save().Serialize(_connectorFile);
+			_connector.Save().Serialize(_fileSystem, _connectorFile);
 		}
 	}
 

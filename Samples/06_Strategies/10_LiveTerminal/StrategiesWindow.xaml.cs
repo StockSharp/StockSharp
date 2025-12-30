@@ -34,13 +34,14 @@ public partial class StrategiesWindow
 	{
 		_dir = Path.Combine(path, "Strategies");
 
-		Directory.CreateDirectory(_dir);
+		var fs = MainWindow.Instance.FileSystem;
+		fs.CreateDirectory(_dir);
 
-		foreach (var xml in _dir.EnumerateConfigs())
+		foreach (var xml in _dir.EnumerateConfigs(fs))
 		{
 			try
 			{
-				var strategy = xml.Deserialize<SettingsStorage>()?.LoadEntire<Strategy>();
+				var strategy = xml.Deserialize<SettingsStorage>(fs)?.LoadEntire<Strategy>();
 
 				if (strategy is null)
 					continue;
@@ -131,6 +132,7 @@ public partial class StrategiesWindow
 		if (strategy is null)
 			throw new ArgumentNullException(nameof(strategy));
 
-		strategy.SaveEntire(false).Serialize(Path.Combine(_dir, $"{strategy.Id}{Paths.DefaultSettingsExt}"));
+		var fs = MainWindow.Instance.FileSystem;
+		strategy.SaveEntire(false).Serialize(fs, Path.Combine(_dir, $"{strategy.Id}{Paths.DefaultSettingsExt}"));
 	}
 }

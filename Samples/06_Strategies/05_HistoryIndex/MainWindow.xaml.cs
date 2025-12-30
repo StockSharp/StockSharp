@@ -8,8 +8,8 @@ using Ecng.Compilation;
 using Ecng.Configuration;
 using Ecng.Compilation.Roslyn;
 using Ecng.Logging;
+using Ecng.IO;
 
-using StockSharp.Algo;
 using StockSharp.Algo.Expressions;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Testing;
@@ -35,6 +35,7 @@ public partial class MainWindow
 	private readonly LogManager _logManager;
 
 	private readonly string _pathHistory = Paths.HistoryDataPath;
+	private readonly IFileSystem _fileSystem = Paths.FileSystem;
 
 	public MainWindow()
 	{
@@ -72,7 +73,7 @@ public partial class MainWindow
 		_portfolio = new Portfolio { Name = "test portfolio", BeginValue = 10000000 };
 		var storageRegistry = new StorageRegistry
 		{
-			DefaultDrive = new LocalMarketDataDrive(_pathHistory),
+			DefaultDrive = new LocalMarketDataDrive(_fileSystem, _pathHistory),
 		};
 		_connector = new HistoryEmulationConnector(new[] { _security, _indexSecurity }, new[] { _portfolio })
 		{

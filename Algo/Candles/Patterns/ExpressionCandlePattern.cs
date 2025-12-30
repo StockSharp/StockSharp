@@ -57,13 +57,18 @@ public class CandleExpressionCondition : IPersistable
 	internal int MinIndex { get; private set; }
 	internal int MaxIndex { get; private set; }
 
+	private readonly IFileSystem _fileSystem;
+
 	/// <summary>
 	/// Create instance.
 	/// </summary>
 	/// <param name="expression"><see cref="Expression"/></param>
-	public CandleExpressionCondition(string expression)
+	/// <param name="fileSystem">File system.</param>
+	public CandleExpressionCondition(string expression, IFileSystem fileSystem = null)
 	{
 		Expression = expression;
+		_fileSystem = fileSystem ?? Paths.FileSystem;
+
 		Init();
 	}
 
@@ -82,7 +87,7 @@ public class CandleExpressionCondition : IPersistable
 		if (CodeExtensions.TryGetCSharpCompiler() is null)
 			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 
-		_formula = Expression.Compile<bool>(_context);
+		_formula = Expression.Compile<bool>(_fileSystem, _context);
 
 		if (!_formula.Error.IsEmpty())
 			throw new InvalidOperationException(_formula.Error);

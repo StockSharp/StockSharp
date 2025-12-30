@@ -340,7 +340,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 	{
 		var inner = new RecordingMessageAdapter();
 
-		Assert.ThrowsExactly<ArgumentNullException>(() =>
+		ThrowsExactly<ArgumentNullException>(() =>
 			new Level1DepthBuilderAdapter(inner, null));
 	}
 

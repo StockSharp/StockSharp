@@ -39,10 +39,10 @@ public class DefaultCredentialsProvider(
 
 			try
 			{
-				if (_fileSystem.IsConfigExists(_credentialsFile))
+				if (_credentialsFile.IsConfigExists(_fileSystem))
 				{
 					credentials = new ServerCredentials();
-					credentials.LoadIfNotNull(Paths.Deserialize<SettingsStorage>(_fileSystem, _credentialsFile));
+					credentials.LoadIfNotNull(_credentialsFile.Deserialize<SettingsStorage>(_fileSystem));
 
 					_credentials = credentials.Clone();
 				}

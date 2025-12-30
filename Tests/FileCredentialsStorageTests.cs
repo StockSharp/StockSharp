@@ -160,7 +160,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 		var fs = CreateFileSystem();
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage("/credentials.json", fileSystem: fs);
 
-		Assert.ThrowsExactly<ArgumentNullException>(() => storage.Save(null));
+		ThrowsExactly<ArgumentNullException>(() => storage.Save(null));
 	}
 
 	[TestMethod]
@@ -171,7 +171,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 
 		var credentials = CreateCredentials("invalid-email");
 
-		Assert.ThrowsExactly<ArgumentException>(() => storage.Save(credentials));
+		ThrowsExactly<ArgumentException>(() => storage.Save(credentials));
 	}
 
 	[TestMethod]

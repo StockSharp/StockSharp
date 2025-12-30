@@ -8,6 +8,7 @@ using Ecng.Common;
 using Ecng.Configuration;
 using Ecng.ComponentModel;
 using Ecng.Logging;
+using Ecng.IO;
 
 using StockSharp.Configuration;
 using StockSharp.Messages;

@@ -385,7 +385,7 @@ partial class BtceMessageAdapter
 
 			var orders = (await _httpClient.GetActiveOrders(cancellationToken)).Items.Values;
 
-			var ids = _orderInfo.Keys.ToSet();
+			var ids = _orderInfo.Keys.ToHashSet();
 			
 			foreach (var order in orders)
 			{

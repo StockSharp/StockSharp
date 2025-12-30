@@ -1,9 +1,12 @@
 ﻿namespace StockSharp.Samples.Indicators.CreateOwn;
 
 using System;
+using System.Windows;
 using System.Windows.Media;
+using System.Threading.Tasks;
 
 using Ecng.Drawing;
+using Ecng.IO;
 
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Storages;
@@ -19,10 +22,16 @@ using StockSharp.Messages;
 public partial class MainWindow
 {
 	private readonly string _pathHistory = Paths.HistoryDataPath;
+	private readonly IFileSystem _fileSystem = Paths.FileSystem;
 
 	public MainWindow()
 	{
 		InitializeComponent();
+	}
+
+	private void OnLoaded(object sender, RoutedEventArgs e)
+	{
+		ThemeExtensions.ApplyDefaultTheme();
 
 		var chartArea = new ChartArea();
 		Chart.AddArea(chartArea);
@@ -46,37 +55,35 @@ public partial class MainWindow
 		Chart.AddElement(chartArea, chartIndicatorElement1);
 		Chart.AddElement(chartArea, chartIndicatorElement2);
 
-		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
-
-		var candleStorage = new StorageRegistry().GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(1), new LocalMarketDataDrive(_pathHistory), StorageFormats.Binary);
-		var candles = candleStorage.Load(Paths.HistoryBeginDate, Paths.HistoryEndDate);
-
-		var indicator1 = new SimpleMovingAverage()
+		Task.Run(async () =>
 		{
-			Length = 10
-		};
-		var indicator2 = new LazyMovingAverage()
-		{
-			Length = 10
-		};
+			var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 
-		foreach (var candle in candles)
-		{
-			var indicatorValue1 = indicator1.Process(candle);
-			var indicatorValue2 = indicator2.Process(candle);
-			var chartDrawData = new ChartDrawData();
+			var candleStorage = new StorageRegistry().GetTimeFrameCandleMessageStorage(secId, TimeSpan.FromMinutes(1), new LocalMarketDataDrive(_fileSystem, _pathHistory), StorageFormats.Binary);
+			var candles = candleStorage.LoadAsync(Paths.HistoryBeginDate, Paths.HistoryEndDate);
 
-			chartDrawData.Group(candle.OpenTime)
-				.Add(chartCandleElement, candle)
-				.Add(chartIndicatorElement1, indicatorValue1)
-				.Add(chartIndicatorElement2, indicatorValue2);
-			Chart.Draw(chartDrawData);
-		}
-	}
+			var indicator1 = new SimpleMovingAverage()
+			{
+				Length = 10
+			};
+			var indicator2 = new LazyMovingAverage()
+			{
+				Length = 10
+			};
 
-	private void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
-	{
-		ThemeExtensions.ApplyDefaultTheme();
+			await foreach (var candle in candles)
+			{
+				var indicatorValue1 = indicator1.Process(candle);
+				var indicatorValue2 = indicator2.Process(candle);
+				var chartDrawData = new ChartDrawData();
+
+				chartDrawData.Group(candle.OpenTime)
+					.Add(chartCandleElement, candle)
+					.Add(chartIndicatorElement1, indicatorValue1)
+					.Add(chartIndicatorElement2, indicatorValue2);
+				Chart.Draw(chartDrawData);
+			}
+		});
 	}
 }
 
