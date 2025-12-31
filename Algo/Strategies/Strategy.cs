@@ -603,12 +603,27 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <inheritdoc />
 	[Browsable(false)]
 	IEnumerable<(string Name, object Value)> IReportSource.StatisticParameters
-		=> StatisticManager.Parameters.Select(p => (p.Name, p.Value));
+		=> StatisticManager.Parameters.Select(p => (p.Name, ToReportValue(p.Value)));
 
 	/// <inheritdoc />
 	[Browsable(false)]
 	IEnumerable<(string Name, object Value)> IReportSource.Parameters
-		=> GetParameters().Select(p => (p.GetName(), p.Value));
+		=> GetParameters().Select(p => (p.GetName(), ToReportValue(p.Value)));
+
+	/// <summary>
+	/// To convert parameter value to report value.
+	/// </summary>
+	/// <param name="value">The parameter value.</param>
+	/// <returns>The report value.</returns>
+	protected virtual object ToReportValue(object value)
+	{
+		if (value is BusinessEntities.Security s)
+			return s.Id;
+		else if (value is BusinessEntities.Position p)
+			return p.ToString();
+
+		return value.To<string>();
+	}
 
 	/// <inheritdoc />
 	[Browsable(false)]
