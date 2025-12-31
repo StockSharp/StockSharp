@@ -528,7 +528,7 @@ public static partial class TraderHelper
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <returns>All available instruments.</returns>
 	public static IEnumerable<Security> LookupAll(this ISecurityProvider provider)
-		=> AsyncHelper.Run(() => LookupAllAsync(provider).ToArrayAsync(default));
+		=> LookupAllAsync(provider).ToBlockingEnumerable();
 
 	/// <summary>
 	/// Get all available instruments.

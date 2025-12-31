@@ -28,7 +28,7 @@ static class Program
 		var pathHistory = Paths.HistoryDataPath;
 		var localDrive = new LocalMarketDataDrive(Paths.FileSystem, pathHistory);
 
-		await foreach (var sec in localDrive.GetAvailableSecuritiesAsync(token).WithEnforcedCancellation(token))
+		await foreach (var sec in localDrive.GetAvailableSecuritiesAsync().WithEnforcedCancellation(token))
 		{
 			Console.WriteLine(sec);
 		}

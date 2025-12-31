@@ -64,9 +64,8 @@ public interface IMarketDataDrive : IPersistable, IDisposable
 	/// <summary>
 	/// Get all available instruments.
 	/// </summary>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Available instruments.</returns>
-	IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync(CancellationToken cancellationToken);
+	IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync();
 
 	/// <summary>
 	/// Get all available data types.
@@ -118,7 +117,7 @@ public abstract class BaseMarketDataDrive : Disposable, IMarketDataDrive
 	public abstract string Path { get; set; }
 
 	/// <inheritdoc />
-	public abstract IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync(CancellationToken cancellationToken);
+	public abstract IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync();
 
 	/// <inheritdoc />
 	public abstract ValueTask<IEnumerable<DataType>> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format, CancellationToken cancellationToken);

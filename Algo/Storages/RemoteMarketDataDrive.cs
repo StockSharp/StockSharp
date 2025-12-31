@@ -280,8 +280,8 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	}
 
 	/// <inheritdoc />
-	public override IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync(CancellationToken cancellationToken)
-		=> EnsureGetClient().GetAvailableSecuritiesAsync(cancellationToken);
+	public override IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync()
+		=> EnsureGetClient().GetAvailableSecuritiesAsync();
 
 	/// <inheritdoc />
 	public override ValueTask<IEnumerable<DataType>> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format, CancellationToken cancellationToken)

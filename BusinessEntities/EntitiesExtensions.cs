@@ -2354,6 +2354,6 @@ public static partial class EntitiesExtensions
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
 
-		return AsyncHelper.Run(() => provider.LookupAsync(criteria).ToArrayAsync(default));
+		return provider.LookupAsync(criteria).ToBlockingEnumerable();
 	}
 }

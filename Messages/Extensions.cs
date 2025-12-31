@@ -4559,7 +4559,7 @@ public static partial class Extensions
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
 	[Obsolete("Use LookupByCodeAsync method.")]
 	public static IEnumerable<SecurityMessage> LookupByCode(this ISecurityMessageProvider provider, string code, SecurityTypes? type = null)
-		=> AsyncHelper.Run(() => provider.LookupByCodeAsync(code, type).ToArrayAsync(default));
+		=> provider.LookupByCodeAsync(code, type).ToBlockingEnumerable();
 
 	/// <summary>
 	/// To get the instrument by the instrument code.
@@ -5138,7 +5138,7 @@ public static partial class Extensions
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
 
-		return AsyncHelper.Run(() => provider.LookupMessagesAsync(criteria).ToArrayAsync(default));
+		return provider.LookupMessagesAsync(criteria).ToBlockingEnumerable();
 	}
 
 	/// <summary>

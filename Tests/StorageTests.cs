@@ -3397,7 +3397,7 @@ public class StorageTests : BaseTestClass
 		var drive = CreateDrive();
 		var token = CancellationToken;
 
-		var securities = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync(token);
+		var securities = await drive.GetAvailableSecuritiesAsync().ToArrayAsync(token);
 
 		securities.Length.AssertEqual(0);
 	}
@@ -3414,7 +3414,7 @@ public class StorageTests : BaseTestClass
 		await SetupTestDataAsync(drive, security1, DataType.Ticks, StorageFormats.Binary, dates);
 		await SetupTestDataAsync(drive, security2, DataType.Ticks, StorageFormats.Binary, dates);
 
-		var securities = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync(token);
+		var securities = await drive.GetAvailableSecuritiesAsync().ToArrayAsync(token);
 
 		(securities.Length >= 2).AssertTrue();
 		securities.Any(s => s.SecurityCode == "TEST1" && s.BoardCode == BoardCodes.Test).AssertTrue();
@@ -3435,7 +3435,7 @@ public class StorageTests : BaseTestClass
 		cts.Cancel();
 
 		await ThrowsAsync<OperationCanceledException>(async () =>
-			await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync(token));
+			await drive.GetAvailableSecuritiesAsync().ToArrayAsync(token));
 	}
 
 	[TestMethod]
@@ -3622,7 +3622,7 @@ public class StorageTests : BaseTestClass
 			await SetupTestDataAsync(drive, secId, DataType.Ticks, StorageFormats.Binary, dates);
 		}
 
-		var result = await drive.GetAvailableSecuritiesAsync(token).ToArrayAsync(token);
+		var result = await drive.GetAvailableSecuritiesAsync().ToArrayAsync(token);
 
 		(result.Length >= 3).AssertTrue();
 		foreach (var secId in securities)

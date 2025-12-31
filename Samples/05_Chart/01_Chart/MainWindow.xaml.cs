@@ -119,7 +119,7 @@ public partial class MainWindow : ICandleBuilderSubscription
 	private async void HistoryPath_OnFolderChanged(string path)
 	{
 		using var drive = new LocalMarketDataDrive(_fs, path);
-		var secs = await drive.GetAvailableSecuritiesAsync(default).ToArrayAsync(default);
+		var secs = await drive.GetAvailableSecuritiesAsync().ToArrayAsync(default);
 
 		Securities.ItemsSource = secs;
 

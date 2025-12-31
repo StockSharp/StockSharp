@@ -473,7 +473,7 @@ static partial class StorageHelper
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
 
-		return AsyncHelper.Run(() => storage.LoadAsync(date).ToArrayAsync(default));
+		return storage.LoadAsync(date).ToBlockingEnumerable();
 	}
 
 	/// <summary>

@@ -807,39 +807,44 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 	/// </summary>
 	[Obsolete("Use GetAvailableSecuritiesAsync instead.")]
 	public IEnumerable<SecurityId> AvailableSecurities
-		=> AsyncHelper.Run(() => GetAvailableSecuritiesAsync(default).ToArrayAsync(default));
+		=> GetAvailableSecuritiesAsync().ToBlockingEnumerable(default);
 
 	/// <inheritdoc />
-	public override async IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+	public override IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync()
 	{
-		if (TryGetIndex(out var index))
+		async IAsyncEnumerable<SecurityId> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			foreach (var secId in index.AvailableSecurities)
+			if (TryGetIndex(out var index))
+			{
+				foreach (var secId in index.AvailableSecurities)
+				{
+					cancellationToken.ThrowIfCancellationRequested();
+					yield return secId;
+				}
+			}
+
+			var idGenerator = new SecurityIdGenerator();
+
+			var path = Path;
+
+			if (!_fileSystem.DirectoryExists(path))
+				yield break;
+
+			var secIds = _fileSystem.EnumerateDirectories(path)
+				.SelectMany(d => _fileSystem.EnumerateDirectories(d))
+				.Select(IOPath.GetFileName)
+				.Select(StorageHelper.FolderNameToSecurityId)
+				.Select(n => idGenerator.Split(n, true))
+				.Where(t => t != default);
+
+			foreach (var secId in secIds)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 				yield return secId;
 			}
 		}
 
-		var idGenerator = new SecurityIdGenerator();
-
-		var path = Path;
-
-		if (!_fileSystem.DirectoryExists(path))
-			yield break;
-
-		var secIds = _fileSystem.EnumerateDirectories(path)
-			.SelectMany(d => _fileSystem.EnumerateDirectories(d))
-			.Select(IOPath.GetFileName)
-			.Select(StorageHelper.FolderNameToSecurityId)
-			.Select(n => idGenerator.Split(n, true))
-			.Where(t => t != default);
-
-		foreach (var secId in secIds)
-		{
-			cancellationToken.ThrowIfCancellationRequested();
-			yield return secId;
-		}
+		return Impl();
 	}
 
 	private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new(StringComparer.InvariantCultureIgnoreCase);

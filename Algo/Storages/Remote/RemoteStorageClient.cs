@@ -63,16 +63,18 @@ public class RemoteStorageClient : Disposable
 	/// <summary>
 	/// Get all available instruments as async stream.
 	/// </summary>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Available instruments.</returns>
-	public async IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync([EnumeratorCancellation]CancellationToken cancellationToken)
+	public IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync()
 	{
-		var (msgs, _) = await DoAsync<SecurityMessage>(new SecurityLookupMessage { OnlySecurityId = true }, () => (typeof(SecurityLookupMessage), Extensions.LookupAllCriteriaMessage.ToString()), cancellationToken);
-
-		foreach (var s in msgs)
+		async IAsyncEnumerable<SecurityId> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
 		{
-			yield return s.SecurityId;
+			var (msgs, _) = await DoAsync<SecurityMessage>(new SecurityLookupMessage { OnlySecurityId = true }, () => (typeof(SecurityLookupMessage), Extensions.LookupAllCriteriaMessage.ToString()), cancellationToken);
+
+			foreach (var s in msgs)
+				yield return s.SecurityId;
 		}
+
+		return Impl();
 	}
 
 	/// <summary>
@@ -377,12 +379,16 @@ public class RemoteStorageClient : Disposable
 
 						if (typeof(TResult) == typeof(SecurityMessage))
 						{
-							result.AddRange(await finishedMsg.Body.ExtractSecuritiesAsync().ToArrayAsync(cancellationToken));
+							await foreach (var item in finishedMsg.Body.ExtractSecuritiesAsync().WithEnforcedCancellation(cancellationToken))
+								result.Add(item);
+
 							isFull = true;
 						}
 						else if (typeof(TResult) == typeof(BoardMessage))
 						{
-							result.AddRange(await finishedMsg.Body.ExtractBoardsAsync().ToArrayAsync(cancellationToken));
+							await foreach (var item in finishedMsg.Body.ExtractBoardsAsync().WithEnforcedCancellation(cancellationToken))
+								result.Add(item);
+
 							isFull = true;
 						}
 					}
