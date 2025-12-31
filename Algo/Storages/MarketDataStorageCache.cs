@@ -28,6 +28,15 @@ public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 	public override MarketDataStorageCache Clone() => new() { Limit = Limit };
 
 	/// <summary>
+	/// Invalidate cache for specified key.
+	/// </summary>
+	/// <param name="securityId"><see cref="SecurityId"/>.</param>
+	/// <param name="dataType"><see cref="DataType"/>.</param>
+	/// <param name="date">Date to invalidate.</param>
+	public void Invalidate(SecurityId securityId, DataType dataType, DateTime date)
+		=> _cache.Remove((securityId, dataType, date));
+
+	/// <summary>
 	/// Get data asynchronously.
 	/// </summary>
 	/// <typeparam name="TEnumerable">Type of data collection.</typeparam>

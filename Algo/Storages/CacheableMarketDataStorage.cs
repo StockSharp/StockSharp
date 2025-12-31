@@ -23,8 +23,44 @@ public class CacheableMarketDataStorage(IMarketDataStorage underlying, MarketDat
 	IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date)
 		=> _cache.GetMessagesAsync(_underlying.SecurityId, _underlying.DataType, date, _underlying.LoadAsync);
 
-	ValueTask<int> IMarketDataStorage.SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => _underlying.SaveAsync(data, cancellationToken);
-	ValueTask IMarketDataStorage.DeleteAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => _underlying.DeleteAsync(data, cancellationToken);
-	ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken) => _underlying.DeleteAsync(date, cancellationToken);
+	async ValueTask<int> IMarketDataStorage.SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken)
+	{
+		var list = data as IList<Message> ?? [.. data];
+
+		var result = await _underlying.SaveAsync(list, cancellationToken);
+
+		var dates = list
+			.OfType<IServerTimeMessage>()
+			.Select(m => m.ServerTime.Date)
+			.Distinct();
+
+		foreach (var date in dates)
+			_cache.Invalidate(_underlying.SecurityId, _underlying.DataType, date);
+
+		return result;
+	}
+
+	async ValueTask IMarketDataStorage.DeleteAsync(IEnumerable<Message> data, CancellationToken cancellationToken)
+	{
+		var list = data as IList<Message> ?? [.. data];
+
+		await _underlying.DeleteAsync(list, cancellationToken);
+
+		var dates = list
+			.OfType<IServerTimeMessage>()
+			.Select(m => m.ServerTime.Date)
+			.Distinct();
+
+		foreach (var date in dates)
+			_cache.Invalidate(_underlying.SecurityId, _underlying.DataType, date);
+	}
+
+	async ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken)
+	{
+		await _underlying.DeleteAsync(date, cancellationToken);
+
+		_cache.Invalidate(_underlying.SecurityId, _underlying.DataType, date);
+	}
+
 	ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken) => _underlying.GetMetaInfoAsync(date, cancellationToken);
 }

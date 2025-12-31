@@ -100,4 +100,117 @@ public class CacheableMarketDataStorageTests : BaseTestClass
 		saved.AssertEqual(7);
 		underlying.SaveCalls.AssertEqual(1);
 	}
+
+	[TestMethod]
+	public async Task SaveAsync_InvalidatesCache()
+	{
+		var token = CancellationToken;
+
+		var secId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var date = new DateTime(2025, 1, 1);
+
+		var messages = new Message[]
+		{
+			new ExecutionMessage
+			{
+				SecurityId = secId,
+				DataTypeEx = DataType.Ticks,
+				ServerTime = date.AddHours(1),
+				TradePrice = 1,
+				TradeVolume = 1,
+			},
+		};
+
+		var underlying = new TestMarketDataStorage(secId, DataType.Ticks, messages, saveReturn: 1);
+		var cache = new MarketDataStorageCache();
+
+		IMarketDataStorage storage = new CacheableMarketDataStorage(underlying, cache);
+
+		// Load data - should cache it
+		var first = await storage.LoadAsync(date).ToArrayAsync(token);
+		first.Length.AssertEqual(1);
+		underlying.LoadCalls.AssertEqual(1);
+
+		// Save new data - should invalidate cache
+		await storage.SaveAsync([new ExecutionMessage { ServerTime = date.AddHours(2) }], token);
+
+		// Load again - bug: before fix, cache was not invalidated, so LoadCalls would still be 1
+		var second = await storage.LoadAsync(date).ToArrayAsync(token);
+
+		underlying.LoadCalls.AssertEqual(2);
+	}
+
+	[TestMethod]
+	public async Task DeleteAsync_Messages_InvalidatesCache()
+	{
+		var token = CancellationToken;
+
+		var secId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var date = new DateTime(2025, 1, 1);
+
+		var messages = new Message[]
+		{
+			new ExecutionMessage
+			{
+				SecurityId = secId,
+				DataTypeEx = DataType.Ticks,
+				ServerTime = date.AddHours(1),
+				TradePrice = 1,
+				TradeVolume = 1,
+			},
+		};
+
+		var underlying = new TestMarketDataStorage(secId, DataType.Ticks, messages, saveReturn: 0);
+		var cache = new MarketDataStorageCache();
+
+		IMarketDataStorage storage = new CacheableMarketDataStorage(underlying, cache);
+
+		// Load data - should cache it
+		var first = await storage.LoadAsync(date).ToArrayAsync(token);
+		underlying.LoadCalls.AssertEqual(1);
+
+		// Delete data - should invalidate cache
+		await storage.DeleteAsync([new ExecutionMessage { ServerTime = date.AddHours(1) }], token);
+
+		// Load again - cache should be invalidated
+		var second = await storage.LoadAsync(date).ToArrayAsync(token);
+		underlying.LoadCalls.AssertEqual(2);
+	}
+
+	[TestMethod]
+	public async Task DeleteAsync_Date_InvalidatesCache()
+	{
+		var token = CancellationToken;
+
+		var secId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var date = new DateTime(2025, 1, 1);
+
+		var messages = new Message[]
+		{
+			new ExecutionMessage
+			{
+				SecurityId = secId,
+				DataTypeEx = DataType.Ticks,
+				ServerTime = date.AddHours(1),
+				TradePrice = 1,
+				TradeVolume = 1,
+			},
+		};
+
+		var underlying = new TestMarketDataStorage(secId, DataType.Ticks, messages, saveReturn: 0);
+		var cache = new MarketDataStorageCache();
+
+		IMarketDataStorage storage = new CacheableMarketDataStorage(underlying, cache);
+
+		// Load data - should cache it
+		var first = await storage.LoadAsync(date).ToArrayAsync(token);
+		underlying.LoadCalls.AssertEqual(1);
+
+		// Delete by date - should invalidate cache
+		await storage.DeleteAsync(date, token);
+
+		// Load again - cache should be invalidated
+		var second = await storage.LoadAsync(date).ToArrayAsync(token);
+		underlying.LoadCalls.AssertEqual(2);
+	}
 }
