@@ -1111,6 +1111,7 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 			_allOrdersByTransactionId.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
 			_allOrdersById.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
 			_allOrdersByStringId.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Value)));
+			_ordersAvgPrices.SyncDo(d => d.RemoveWhere(t => toRemove.Contains(t.Key)));
 
 			foreach (var pair in _securityData)
 			{
