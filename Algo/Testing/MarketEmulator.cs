@@ -2942,10 +2942,12 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			var tradePrice = tradeMsg.TradePrice.Value;
 			var currPos = pos.CurrentValue;
 
-			if (prevPos.Sign() == currPos.Sign())
+			if (currPos == 0)
+				pos.AveragePrice = 0;
+			else if (prevPos.Sign() == currPos.Sign())
 				pos.AveragePrice = (pos.AveragePrice * prevPos + position.Value * tradePrice) / currPos;
 			else
-				pos.AveragePrice = currPos == 0 ? 0 : tradePrice;
+				pos.AveragePrice = tradePrice;
 
 			_totalBlockedMoney = _totalBlockedMoney - prevPrice + pos.TotalPrice;
 
