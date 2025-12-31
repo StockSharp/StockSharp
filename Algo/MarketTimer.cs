@@ -77,6 +77,8 @@ public class MarketTimer(ITimeProvider provider, Action activated) : Disposable
 
 	private void OnCurrentTimeChanged(TimeSpan diff)
 	{
+		Action act;
+
 		using (_syncLock.EnterScope())
 		{
 			if (!_started)
@@ -88,8 +90,10 @@ public class MarketTimer(ITimeProvider provider, Action activated) : Disposable
 				return;
 
 			_elapsedTime = TimeSpan.Zero;
-			_activated();
+			act = _activated;
 		}
+
+		act();
 	}
 
 	/// <summary>
