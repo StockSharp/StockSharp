@@ -661,7 +661,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 
 	private void UpdateSubscribedElements()
 	{
-		var need = _activeConnections.Select(c => c.from.Parent).Distinct().ToSet();
+		var need = _activeConnections.Select(c => c.from.Parent).Distinct().ToHashSet();
 
 		var toUnsubscribe = new HashSet<DiagramElement>(_subscribedElements);
 		toUnsubscribe.ExceptWith(need);

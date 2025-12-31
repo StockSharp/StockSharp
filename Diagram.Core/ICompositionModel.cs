@@ -357,7 +357,7 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 		if (node == null)
 			return;
 
-		foreach (var link in GetLinks(node, socket))
+		foreach (var link in GetLinks(node, socket).ToArray())
 		{
 			if (!IsConnected(link))
 				_behavior.RemoveLink(link);

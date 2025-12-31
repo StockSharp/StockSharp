@@ -119,7 +119,7 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 		if (Scope<IgnoreRefresh>.IsDefined)
 			return;
 
-		var toRemove = _diagramParam.ToSet();
+		var toRemove = _diagramParam.ToHashSet();
 
 		foreach (var p in GetOptimizedParams(composition))
 		{

@@ -133,6 +133,8 @@ public sealed class AlertDiagramElement : DiagramElement
 		var caption = Caption;
 		var lvl = LogLevel;
 
-		_ = svc.NotifyAsync(type, channelId, lvl, caption, message, time, default);
+		svc.NotifyAsync(type, channelId, lvl, caption, message, time, default)
+			.AsTask()
+			.ObserveErrorAndLog();
 	}
 }

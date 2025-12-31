@@ -227,7 +227,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 
 	private readonly Dictionary<SecurityId, Security> _foundSecIds = [];
 
-	private readonly Dictionary<IChartIndicatorElement, IndicatorTimes> _indicatorTimes = [];
+	private readonly CachedSynchronizedDictionary<IChartIndicatorElement, IndicatorTimes> _indicatorTimes = [];
 
 	/// <inheritdoc />
 	public override Guid TypeId { get; } = "1926C40E-AAA3-4948-98E6-FBA4B38B580E".To<Guid>();
@@ -461,7 +461,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 							candleElement.PriceStep = security?.PriceStep;
 						}
 
-						foreach (var (_, it) in _indicatorTimes)
+						foreach (var (_, it) in _indicatorTimes.CachedPairs)
 						{
 							if (it.Last < time && it.Pending.LastOrDefault() < time)
 								it.Pending.Add(time);
@@ -845,7 +845,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 		Load(storage, nameof(OrderElements), _chartBuilder.CreateOrderElement, e => newElements[e.Id] = e);
 		Load(storage, nameof(TradeElements), _chartBuilder.CreateTradeElement, e => newElements[e.Id] = e);
 
-		var newIds = newElements.Select(e => e.Value.Id).ToSet();
+		var newIds = newElements.Select(e => e.Value.Id).ToHashSet();
 
 		_candleElements.RemoveWhere(e => !newIds.Contains(e.Id));
 		_indicatorElements.RemoveWhere(e => !newIds.Contains(e.Element.Id));
