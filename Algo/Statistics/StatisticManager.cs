@@ -5,7 +5,7 @@ using StockSharp.Algo.PnL;
 /// <summary>
 /// The statistics manager.
 /// </summary>
-public class StatisticManager : IStatisticManager
+public class StatisticManager : Disposable, IStatisticManager
 {
 	private class EquityParameterList : CachedSynchronizedSet<IStatisticParameter>
 	{
@@ -125,7 +125,7 @@ public class StatisticManager : IStatisticManager
 		=> _parameters.OrderParams.ForEach(p => p.CancelFailed(fail));
 
 	void IStatisticManager.Reset()
-		=> _parameters.SyncDo(c => c.ForEach(p => p.Reset()));
+		=> _parameters.Cache.ForEach(p => p.Reset());
 
 	void IPersistable.Load(SettingsStorage storage)
 	{
@@ -149,5 +149,14 @@ public class StatisticManager : IStatisticManager
 			s.Set(nameof(p.Type), (int)p.Type);
 			return s;
 		}).ToArray());
+	}
+
+	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		foreach (var parameter in Parameters)
+			parameter.Dispose();
+
+		base.DisposeManaged();
 	}
 }

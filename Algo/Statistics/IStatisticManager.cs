@@ -5,7 +5,7 @@ using StockSharp.Algo.PnL;
 /// <summary>
 /// The statistics manager.
 /// </summary>
-public interface IStatisticManager : IPersistable
+public interface IStatisticManager : IPersistable, IDisposable
 {
 	/// <summary>
 	/// Calculated parameters.

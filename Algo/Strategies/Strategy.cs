@@ -2999,6 +2999,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		_posManager.PositionProcessed -= OnManagerPositionProcessed;
 
+		StatisticManager.Dispose();
+
 		base.DisposeManaged();
 	}
 }

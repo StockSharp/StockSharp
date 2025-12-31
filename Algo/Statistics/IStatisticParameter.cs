@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Statistics;
 /// <summary>
 /// The interface, describing statistic parameter.
 /// </summary>
-public interface IStatisticParameter : IPersistable, INotifyPropertyChanged
+public interface IStatisticParameter : IPersistable, INotifyPropertyChanged, IDisposable
 {
 	/// <summary>
 	/// Parameter name.
@@ -92,6 +92,8 @@ public interface IStatisticParameter<TValue> : IStatisticParameter
 public abstract class BaseStatisticParameter<TValue> : NotifiableObject, IStatisticParameter<TValue>
 	where TValue : IComparable<TValue>
 {
+	private bool _disposed;
+
 	/// <summary>
 	/// Initialize <see cref="BaseStatisticParameter{T}"/>.
 	/// </summary>
@@ -198,5 +200,15 @@ public abstract class BaseStatisticParameter<TValue> : NotifiableObject, IStatis
 	public virtual void Save(SettingsStorage storage)
 	{
 		storage.SetValue(nameof(Value), Value);
+	}
+
+	/// <inheritdoc />
+	public void Dispose()
+	{
+		if (_disposed)
+			return;
+
+		_disposed = true;
+		LocalizedStrings.ActiveLanguageChanged -= ChangeNameAndDescription;
 	}
 }
