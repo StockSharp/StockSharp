@@ -869,6 +869,13 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
+		// Validate trade price and volume to avoid downstream division by zero or invalid data
+		if (message.TradePrice == null || message.TradePrice <= 0)
+			throw new ArgumentException("Trade price must be a positive value.", nameof(message));
+
+		if (message.TradeVolume == null || message.TradeVolume <= 0)
+			throw new ArgumentException("Trade volume must be a positive value.", nameof(message));
+
 		var securityData = GetData(security);
 
 		if (transactionId == 0 && message.OrderId == null && message.OrderStringId.IsEmpty())

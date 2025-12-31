@@ -366,4 +366,184 @@ public class EntityCacheTests : BaseTestClass
 			Side = Sides.Buy,
 		};
 	}
+
+	[TestMethod]
+	public void EntityCache_ProcessOwnTradeMessage_ZeroVolume()
+	{
+		// Create dependencies
+		var logReceiver = new Mock<ILogReceiver>();
+		var exchangeInfoProvider = new Mock<IExchangeInfoProvider>();
+		var positionProvider = new Mock<IPositionProvider>();
+
+		var security = new Security
+		{
+			Id = "AAPL@NASDAQ",
+			Code = "AAPL",
+			Board = ExchangeBoard.Nasdaq
+		};
+
+		// Create EntityCache
+		var cache = new EntityCache(
+			logReceiver.Object,
+			_ => security,
+			exchangeInfoProvider.Object,
+			positionProvider.Object);
+
+		// Create order
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			TransactionId = 123,
+			Type = OrderTypes.Limit,
+			Price = 100m,
+			Volume = 10m,
+			State = OrderStates.Active,
+			// AveragePrice is null - this triggers the average price calculation
+		};
+
+		// Create ExecutionMessage with ZERO volume - this should cause division by zero
+		var message = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = security.ToSecurityId(),
+			OrderId = 456,
+			TradeId = 789,
+			TradePrice = 100m,
+			TradeVolume = 0m, // BUG: Zero volume will cause division by zero
+			ServerTime = DateTime.UtcNow,
+		};
+
+		Throws<ArgumentException>(() => cache.ProcessOwnTradeMessage(order, security, message, order.TransactionId));
+	}
+
+	[TestMethod]
+	public void EntityCache_ProcessOwnTradeMessage_ZeroPrice()
+	{
+		var logReceiver = new Mock<ILogReceiver>();
+		var exchangeInfoProvider = new Mock<IExchangeInfoProvider>();
+		var positionProvider = new Mock<IPositionProvider>();
+
+		var security = new Security { Id = "AAPL@NASDAQ", Code = "AAPL", Board = ExchangeBoard.Nasdaq };
+		var cache = new EntityCache(logReceiver.Object, _ => security, exchangeInfoProvider.Object, positionProvider.Object);
+
+		var order = new Order { Security = security, Portfolio = new Portfolio { Name = "Test" }, TransactionId = 123, Type = OrderTypes.Limit, Price = 100m, Volume = 10m, State = OrderStates.Active };
+
+		var message = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = security.ToSecurityId(),
+			OrderId = 456,
+			TradeId = 789,
+			TradePrice = 0m,
+			TradeVolume = 1m,
+			ServerTime = DateTime.UtcNow,
+		};
+
+		Throws<ArgumentException>(() => cache.ProcessOwnTradeMessage(order, security, message, order.TransactionId));
+	}
+
+	[TestMethod]
+	public void EntityCache_ProcessOwnTradeMessage_NegativePrice()
+	{
+		var logReceiver = new Mock<ILogReceiver>();
+		var exchangeInfoProvider = new Mock<IExchangeInfoProvider>();
+		var positionProvider = new Mock<IPositionProvider>();
+
+		var security = new Security { Id = "AAPL@NASDAQ", Code = "AAPL", Board = ExchangeBoard.Nasdaq };
+		var cache = new EntityCache(logReceiver.Object, _ => security, exchangeInfoProvider.Object, positionProvider.Object);
+
+		var order = new Order { Security = security, Portfolio = new Portfolio { Name = "Test" }, TransactionId = 124, Type = OrderTypes.Limit, Price = 100m, Volume = 10m, State = OrderStates.Active };
+
+		var message = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = security.ToSecurityId(),
+			OrderId = 456,
+			TradeId = 790,
+			TradePrice = -1m,
+			TradeVolume = 1m,
+			ServerTime = DateTime.UtcNow,
+		};
+
+		Throws<ArgumentException>(() => cache.ProcessOwnTradeMessage(order, security, message, order.TransactionId));
+	}
+
+	[TestMethod]
+	public void EntityCache_ProcessOwnTradeMessage_NullPrice()
+	{
+		var logReceiver = new Mock<ILogReceiver>();
+		var exchangeInfoProvider = new Mock<IExchangeInfoProvider>();
+		var positionProvider = new Mock<IPositionProvider>();
+
+		var security = new Security { Id = "AAPL@NASDAQ", Code = "AAPL", Board = ExchangeBoard.Nasdaq };
+		var cache = new EntityCache(logReceiver.Object, _ => security, exchangeInfoProvider.Object, positionProvider.Object);
+
+		var order = new Order { Security = security, Portfolio = new Portfolio { Name = "Test" }, TransactionId = 125, Type = OrderTypes.Limit, Price = 100m, Volume = 10m, State = OrderStates.Active };
+
+		var message = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = security.ToSecurityId(),
+			OrderId = 456,
+			TradeId = 791,
+			TradePrice = null,
+			TradeVolume = 1m,
+			ServerTime = DateTime.UtcNow,
+		};
+
+		Throws<ArgumentException>(() => cache.ProcessOwnTradeMessage(order, security, message, order.TransactionId));
+	}
+
+	[TestMethod]
+	public void EntityCache_ProcessOwnTradeMessage_NullVolume()
+	{
+		var logReceiver = new Mock<ILogReceiver>();
+		var exchangeInfoProvider = new Mock<IExchangeInfoProvider>();
+		var positionProvider = new Mock<IPositionProvider>();
+
+		var security = new Security { Id = "AAPL@NASDAQ", Code = "AAPL", Board = ExchangeBoard.Nasdaq };
+		var cache = new EntityCache(logReceiver.Object, _ => security, exchangeInfoProvider.Object, positionProvider.Object);
+
+		var order = new Order { Security = security, Portfolio = new Portfolio { Name = "Test" }, TransactionId = 126, Type = OrderTypes.Limit, Price = 100m, Volume = 10m, State = OrderStates.Active };
+
+		var message = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = security.ToSecurityId(),
+			OrderId = 456,
+			TradeId = 792,
+			TradePrice = 100m,
+			TradeVolume = null,
+			ServerTime = DateTime.UtcNow,
+		};
+
+		Throws<ArgumentException>(() => cache.ProcessOwnTradeMessage(order, security, message, order.TransactionId));
+	}
+
+	[TestMethod]
+	public void EntityCache_ProcessOwnTradeMessage_NegativeVolume()
+	{
+		var logReceiver = new Mock<ILogReceiver>();
+		var exchangeInfoProvider = new Mock<IExchangeInfoProvider>();
+		var positionProvider = new Mock<IPositionProvider>();
+
+		var security = new Security { Id = "AAPL@NASDAQ", Code = "AAPL", Board = ExchangeBoard.Nasdaq };
+		var cache = new EntityCache(logReceiver.Object, _ => security, exchangeInfoProvider.Object, positionProvider.Object);
+
+		var order = new Order { Security = security, Portfolio = new Portfolio { Name = "Test" }, TransactionId = 127, Type = OrderTypes.Limit, Price = 100m, Volume = 10m, State = OrderStates.Active };
+
+		var message = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = security.ToSecurityId(),
+			OrderId = 456,
+			TradeId = 793,
+			TradePrice = 100m,
+			TradeVolume = -1m,
+			ServerTime = DateTime.UtcNow,
+		};
+
+		Throws<ArgumentException>(() => cache.ProcessOwnTradeMessage(order, security, message, order.TransactionId));
+	}
 }
