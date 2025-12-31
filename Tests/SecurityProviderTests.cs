@@ -3,8 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class SecurityProviderTests : BaseTestClass
 {
-	private static readonly CancellationToken _token = CancellationToken.None;
-
 	[TestMethod]
 	public async Task CollectionSecurityProvider_LookupByIdAsync_ReturnsSecurityWhenExists()
 	{
@@ -12,7 +10,7 @@ public class SecurityProviderTests : BaseTestClass
 		var securityId = security.ToSecurityId();
 		var provider = new CollectionSecurityProvider([security]);
 
-		var result = await provider.LookupByIdAsync(securityId, _token);
+		var result = await provider.LookupByIdAsync(securityId, CancellationToken);
 
 		result.AssertNotNull();
 		result.Id.AssertEqual(security.Id);
@@ -23,7 +21,7 @@ public class SecurityProviderTests : BaseTestClass
 	{
 		var provider = new CollectionSecurityProvider();
 
-		var result = await provider.LookupByIdAsync(new SecurityId { SecurityCode = "UNKNOWN", BoardCode = BoardCodes.Test }, _token);
+		var result = await provider.LookupByIdAsync(new SecurityId { SecurityCode = "UNKNOWN", BoardCode = BoardCodes.Test }, CancellationToken);
 
 		result.AssertNull();
 	}
@@ -35,7 +33,7 @@ public class SecurityProviderTests : BaseTestClass
 		var security2 = Helper.CreateSecurity();
 		var provider = new CollectionSecurityProvider([security1, security2]);
 
-		var results = await provider.LookupAsync(Helper.LookupAll).ToArrayAsync(_token);
+		var results = await provider.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(2);
 	}
@@ -45,7 +43,7 @@ public class SecurityProviderTests : BaseTestClass
 	{
 		var provider = new CollectionSecurityProvider();
 
-		var results = await provider.LookupAsync(Helper.LookupAll).ToArrayAsync(_token);
+		var results = await provider.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(0);
 	}
@@ -140,7 +138,7 @@ public class SecurityProviderTests : BaseTestClass
 		var securityId = security.ToSecurityId();
 		ISecurityMessageProvider provider = new CollectionSecurityProvider([security]);
 
-		var result = await provider.LookupMessageByIdAsync(securityId, _token);
+		var result = await provider.LookupMessageByIdAsync(securityId, CancellationToken);
 
 		result.AssertNotNull();
 		result.SecurityId.AssertEqual(securityId);
@@ -151,7 +149,7 @@ public class SecurityProviderTests : BaseTestClass
 	{
 		ISecurityMessageProvider provider = new CollectionSecurityProvider();
 
-		var result = await provider.LookupMessageByIdAsync(new SecurityId { SecurityCode = "UNKNOWN", BoardCode = BoardCodes.Test }, _token);
+		var result = await provider.LookupMessageByIdAsync(new SecurityId { SecurityCode = "UNKNOWN", BoardCode = BoardCodes.Test }, CancellationToken);
 
 		result.AssertNull();
 	}
@@ -163,7 +161,7 @@ public class SecurityProviderTests : BaseTestClass
 		var security2 = Helper.CreateSecurity();
 		ISecurityMessageProvider provider = new CollectionSecurityProvider([security1, security2]);
 
-		var results = await provider.LookupMessagesAsync(Helper.LookupAll).ToArrayAsync(_token);
+		var results = await provider.LookupMessagesAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(2);
 	}
@@ -175,7 +173,7 @@ public class SecurityProviderTests : BaseTestClass
 		var securityId = security.ToSecurityId();
 		ISecurityMessageProvider provider = new CollectionSecurityProvider([security]);
 
-		var results = await provider.LookupMessagesAsync(Helper.LookupAll).ToArrayAsync(_token);
+		var results = await provider.LookupMessagesAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(1);
 		results[0].SecurityId.AssertEqual(securityId);
@@ -192,7 +190,7 @@ public class SecurityProviderTests : BaseTestClass
 
 		provider.Count.AssertEqual(2);
 
-		var results = await provider.LookupAsync(Helper.LookupAll).ToArrayAsync(_token);
+		var results = await provider.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
 		results.Length.AssertEqual(2);
 	}
 
@@ -215,7 +213,7 @@ public class SecurityProviderTests : BaseTestClass
 		var security2 = Helper.CreateSecurity();
 		ISecurityProvider provider = new CollectionSecurityProvider([security1, security2]);
 
-		var results = await provider.LookupAllAsync().ToArrayAsync(_token);
+		var results = await provider.LookupAllAsync().ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(2);
 	}
@@ -434,7 +432,7 @@ public class SecurityProviderTests : BaseTestClass
 			SecurityId = new SecurityId { SecurityCode = "AA" }
 		};
 
-		var results = await provider.LookupAsync(criteria).ToArrayAsync(_token);
+		var results = await provider.LookupAsync(criteria).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(1);
 		results[0].Code.AssertEqual("AAPL");
@@ -452,7 +450,7 @@ public class SecurityProviderTests : BaseTestClass
 			SecurityId = new SecurityId { BoardCode = "NASDAQ" }
 		};
 
-		var results = await provider.LookupAsync(criteria).ToArrayAsync(_token);
+		var results = await provider.LookupAsync(criteria).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(1);
 		results[0].Code.AssertEqual("AAPL");
@@ -468,7 +466,7 @@ public class SecurityProviderTests : BaseTestClass
 
 		var criteria = new SecurityLookupMessage { SecurityType = SecurityTypes.Stock };
 
-		var results = await provider.LookupAsync(criteria).ToArrayAsync(_token);
+		var results = await provider.LookupAsync(criteria).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(1);
 		results[0].Code.AssertEqual("AAPL");
@@ -485,7 +483,7 @@ public class SecurityProviderTests : BaseTestClass
 		var criteria = new SecurityLookupMessage();
 		criteria.SetSecurityTypes(null, new[] { SecurityTypes.Stock, SecurityTypes.Future });
 
-		var results = await provider.LookupAsync(criteria).ToArrayAsync(_token);
+		var results = await provider.LookupAsync(criteria).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(2);
 	}
@@ -504,7 +502,7 @@ public class SecurityProviderTests : BaseTestClass
 			SecurityType = SecurityTypes.Stock,
 		};
 
-		var results = await provider.LookupAsync(criteria).ToArrayAsync(_token);
+		var results = await provider.LookupAsync(criteria).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(1);
 		results[0].Code.AssertEqual("AAPL");
@@ -524,7 +522,7 @@ public class SecurityProviderTests : BaseTestClass
 			Count = 4,
 		};
 
-		var results = await provider.LookupAsync(criteria).ToArrayAsync(_token);
+		var results = await provider.LookupAsync(criteria).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(4);
 	}
@@ -539,9 +537,9 @@ public class SecurityProviderTests : BaseTestClass
 		var storage = new InMemorySecurityStorage();
 		var security = Helper.CreateSecurity();
 
-		await storage.SaveAsync(security, false, _token);
+		await storage.SaveAsync(security, false, CancellationToken);
 
-		var result = await storage.LookupByIdAsync(security.ToSecurityId(), _token);
+		var result = await storage.LookupByIdAsync(security.ToSecurityId(), CancellationToken);
 		result.AssertNotNull();
 		result.Id.AssertEqual(security.Id);
 	}
@@ -554,7 +552,7 @@ public class SecurityProviderTests : BaseTestClass
 		var addedCalled = false;
 
 		storage.Added += _ => addedCalled = true;
-		await storage.SaveAsync(security, false, _token);
+		await storage.SaveAsync(security, false, CancellationToken);
 
 		addedCalled.AssertTrue();
 	}
@@ -565,10 +563,10 @@ public class SecurityProviderTests : BaseTestClass
 		var storage = new InMemorySecurityStorage();
 		var security = Helper.CreateSecurity();
 
-		await storage.SaveAsync(security, false, _token);
-		await storage.SaveAsync(security, false, _token);
+		await storage.SaveAsync(security, false, CancellationToken);
+		await storage.SaveAsync(security, false, CancellationToken);
 
-		var results = await storage.LookupAsync(Helper.LookupAll).ToArrayAsync(_token);
+		var results = await storage.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
 		results.Length.AssertEqual(1);
 	}
 
@@ -577,11 +575,11 @@ public class SecurityProviderTests : BaseTestClass
 	{
 		var storage = new InMemorySecurityStorage();
 		var security = Helper.CreateSecurity();
-		await storage.SaveAsync(security, false, _token);
+		await storage.SaveAsync(security, false, CancellationToken);
 
-		await storage.DeleteAsync(security, _token);
+		await storage.DeleteAsync(security, CancellationToken);
 
-		var result = await storage.LookupByIdAsync(security.ToSecurityId(), _token);
+		var result = await storage.LookupByIdAsync(security.ToSecurityId(), CancellationToken);
 		result.AssertNull();
 	}
 
@@ -590,11 +588,11 @@ public class SecurityProviderTests : BaseTestClass
 	{
 		var storage = new InMemorySecurityStorage();
 		var security = Helper.CreateSecurity();
-		await storage.SaveAsync(security, false, _token);
+		await storage.SaveAsync(security, false, CancellationToken);
 		var removedCalled = false;
 
 		storage.Removed += _ => removedCalled = true;
-		await storage.DeleteAsync(security, _token);
+		await storage.DeleteAsync(security, CancellationToken);
 
 		removedCalled.AssertTrue();
 	}
@@ -606,13 +604,13 @@ public class SecurityProviderTests : BaseTestClass
 		var sec1 = Helper.CreateSecurity();
 		var sec2 = Helper.CreateSecurity();
 		var sec3 = Helper.CreateSecurity();
-		await storage.SaveAsync(sec1, false, _token);
-		await storage.SaveAsync(sec2, false, _token);
-		await storage.SaveAsync(sec3, false, _token);
+		await storage.SaveAsync(sec1, false, CancellationToken);
+		await storage.SaveAsync(sec2, false, CancellationToken);
+		await storage.SaveAsync(sec3, false, CancellationToken);
 
-		await storage.DeleteRangeAsync([sec1, sec2], _token);
+		await storage.DeleteRangeAsync([sec1, sec2], CancellationToken);
 
-		var results = await storage.LookupAsync(Helper.LookupAll).ToArrayAsync(_token);
+		var results = await storage.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
 		results.Length.AssertEqual(1);
 		results[0].Id.AssertEqual(sec3.Id);
 	}
@@ -624,14 +622,14 @@ public class SecurityProviderTests : BaseTestClass
 		var sec1 = Helper.CreateSecurity();
 		var sec2 = Helper.CreateSecurity();
 		var sec3 = Helper.CreateSecurity(); // This one won't be saved - delete should not include it
-		await storage.SaveAsync(sec1, false, _token);
-		await storage.SaveAsync(sec2, false, _token);
+		await storage.SaveAsync(sec1, false, CancellationToken);
+		await storage.SaveAsync(sec2, false, CancellationToken);
 
 		var removedSecurities = new List<Security>();
 		storage.Removed += removedSecurities.AddRange;
 
 		// Try to delete sec1, sec2 (existing) and sec3 (not existing)
-		await storage.DeleteRangeAsync([sec1, sec2, sec3], _token);
+		await storage.DeleteRangeAsync([sec1, sec2, sec3], CancellationToken);
 
 		removedSecurities.Count.AssertEqual(2);
 		removedSecurities.Any(s => s.Id == sec1.Id).AssertTrue();
@@ -650,7 +648,7 @@ public class SecurityProviderTests : BaseTestClass
 		var removedSecurities = new List<Security>();
 		storage.Removed += removedSecurities.AddRange;
 
-		await storage.DeleteRangeAsync([sec1, sec2, sec3], _token);
+		await storage.DeleteRangeAsync([sec1, sec2, sec3], CancellationToken);
 
 		removedSecurities.Count.AssertEqual(0);
 	}
@@ -666,7 +664,7 @@ public class SecurityProviderTests : BaseTestClass
 		storage.Removed += _ => removedCalled = true;
 
 		// Try to delete non-existing security
-		await storage.DeleteRangeAsync([sec1], _token);
+		await storage.DeleteRangeAsync([sec1], CancellationToken);
 
 		removedCalled.AssertFalse();
 	}
@@ -677,15 +675,15 @@ public class SecurityProviderTests : BaseTestClass
 		var storage = new InMemorySecurityStorage();
 		var sec1 = Helper.CreateSecurity();
 		var sec2 = Helper.CreateSecurity();
-		await storage.SaveAsync(sec1, false, _token);
-		await storage.SaveAsync(sec2, false, _token);
+		await storage.SaveAsync(sec1, false, CancellationToken);
+		await storage.SaveAsync(sec2, false, CancellationToken);
 		var clearedCalled = false;
 
 		storage.Cleared += () => clearedCalled = true;
-		await storage.DeleteByAsync(Helper.LookupAll, _token);
+		await storage.DeleteByAsync(Helper.LookupAll, CancellationToken);
 
 		clearedCalled.AssertTrue();
-		var results = await storage.LookupAsync(Helper.LookupAll).ToArrayAsync(_token);
+		var results = await storage.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
 		results.Length.AssertEqual(0);
 	}
 
@@ -695,13 +693,13 @@ public class SecurityProviderTests : BaseTestClass
 		var storage = new InMemorySecurityStorage();
 		var stock = CreateSecurityWithType("AAPL", SecurityTypes.Stock);
 		var option = CreateSecurityWithType("AAPL230120C150", SecurityTypes.Option);
-		await storage.SaveAsync(stock, false, _token);
-		await storage.SaveAsync(option, false, _token);
+		await storage.SaveAsync(stock, false, CancellationToken);
+		await storage.SaveAsync(option, false, CancellationToken);
 
 		var criteria = new SecurityLookupMessage { SecurityType = SecurityTypes.Stock };
-		await storage.DeleteByAsync(criteria, _token);
+		await storage.DeleteByAsync(criteria, CancellationToken);
 
-		var results = await storage.LookupAsync(Helper.LookupAll).ToArrayAsync(_token);
+		var results = await storage.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
 		results.Length.AssertEqual(1);
 		results[0].Type.AssertEqual(SecurityTypes.Option);
 	}
@@ -712,15 +710,15 @@ public class SecurityProviderTests : BaseTestClass
 		var storage = new InMemorySecurityStorage();
 		var nasdaqStock = CreateSecurityFull("AAPL", "NASDAQ", SecurityTypes.Stock);
 		var nyseStock = CreateSecurityFull("IBM", "NYSE", SecurityTypes.Stock);
-		await storage.SaveAsync(nasdaqStock, false, _token);
-		await storage.SaveAsync(nyseStock, false, _token);
+		await storage.SaveAsync(nasdaqStock, false, CancellationToken);
+		await storage.SaveAsync(nyseStock, false, CancellationToken);
 
 		var criteria = new SecurityLookupMessage
 		{
 			SecurityId = new SecurityId { BoardCode = "NASDAQ" }
 		};
 
-		var results = await storage.LookupAsync(criteria).ToArrayAsync(_token);
+		var results = await storage.LookupAsync(criteria).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(1);
 		results[0].Code.AssertEqual("AAPL");
@@ -733,10 +731,10 @@ public class SecurityProviderTests : BaseTestClass
 		var underlying = new CollectionSecurityProvider([underlyingSec]);
 		var storage = new InMemorySecurityStorage(underlying);
 		var storageSec = Helper.CreateSecurity();
-		await storage.SaveAsync(storageSec, false, _token);
+		await storage.SaveAsync(storageSec, false, CancellationToken);
 
-		var storageResult = await storage.LookupByIdAsync(storageSec.ToSecurityId(), _token);
-		var underlyingResult = await storage.LookupByIdAsync(underlyingSec.ToSecurityId(), _token);
+		var storageResult = await storage.LookupByIdAsync(storageSec.ToSecurityId(), CancellationToken);
+		var underlyingResult = await storage.LookupByIdAsync(underlyingSec.ToSecurityId(), CancellationToken);
 
 		storageResult.AssertNotNull();
 		underlyingResult.AssertNotNull();
@@ -749,9 +747,9 @@ public class SecurityProviderTests : BaseTestClass
 		var underlying = new CollectionSecurityProvider([underlyingSec]);
 		var storage = new InMemorySecurityStorage(underlying);
 		var storageSec = Helper.CreateSecurity();
-		await storage.SaveAsync(storageSec, false, _token);
+		await storage.SaveAsync(storageSec, false, CancellationToken);
 
-		var results = await storage.LookupAsync(Helper.LookupAll).ToArrayAsync(_token);
+		var results = await storage.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(2);
 	}
@@ -762,7 +760,7 @@ public class SecurityProviderTests : BaseTestClass
 		var storage = new InMemorySecurityStorage();
 
 		ThrowsExactlyAsync<ArgumentNullException>(async () =>
-			await storage.SaveAsync(null, false, _token));
+			await storage.SaveAsync(null, false, CancellationToken));
 	}
 
 	[TestMethod]
@@ -771,7 +769,7 @@ public class SecurityProviderTests : BaseTestClass
 		var storage = new InMemorySecurityStorage();
 
 		ThrowsExactlyAsync<ArgumentNullException>(async () =>
-			await storage.DeleteAsync(null, _token));
+			await storage.DeleteAsync(null, CancellationToken));
 	}
 
 	[TestMethod]
@@ -780,7 +778,7 @@ public class SecurityProviderTests : BaseTestClass
 		var storage = new InMemorySecurityStorage();
 
 		ThrowsExactlyAsync<ArgumentNullException>(async () =>
-			await storage.DeleteByAsync(null, _token));
+			await storage.DeleteByAsync(null, CancellationToken));
 	}
 
 	#endregion
@@ -820,4 +818,115 @@ public class SecurityProviderTests : BaseTestClass
 	}
 
 	#endregion
+
+	[TestMethod]
+	public async Task CollectionSecurityProvider_Add_EventContainsSecurity()
+	{
+		var provider = new CollectionSecurityProvider();
+		var security = Helper.CreateSecurity();
+		IEnumerable<Security> added = null;
+
+		((ISecurityProvider)provider).Added += s => added = s;
+
+		provider.Add(security);
+
+		// Event payload should contain the added security
+		added.AssertNotNull();
+		added.Count().AssertEqual(1);
+		added.First().Id.AssertEqual(security.Id);
+
+		// Provider should contain the security
+		var got = await provider.LookupByIdAsync(security.ToSecurityId(), CancellationToken);
+		got.AssertNotNull();
+		got.Id.AssertEqual(security.Id);
+	}
+
+	[TestMethod]
+	public async Task CollectionSecurityProvider_Remove_EventContainsSecurityAndProviderLosesIt()
+	{
+		var security = Helper.CreateSecurity();
+		var provider = new CollectionSecurityProvider([security]);
+
+		IEnumerable<Security> removed = null;
+		((ISecurityProvider)provider).Removed += s => removed = s;
+
+		var res = provider.Remove(security);
+		res.AssertTrue();
+
+		// Event payload should contain the removed security
+		removed.AssertNotNull();
+		removed.Count().AssertEqual(1);
+		removed.First().Id.AssertEqual(security.Id);
+
+		// Provider should no longer contain the security
+		var got = await provider.LookupByIdAsync(security.ToSecurityId(), CancellationToken);
+		got.AssertNull();
+	}
+
+	[TestMethod]
+	public async Task CollectionSecurityProvider_RemoveRange_NoEventWhenNothingRemoved()
+	{
+		var existing = Helper.CreateSecurity();
+		var notExisting = Helper.CreateSecurity();
+		var provider = new CollectionSecurityProvider([existing]);
+
+		IEnumerable<Security> removed = null;
+		((ISecurityProvider)provider).Removed += s => removed = s;
+
+		// Attempt to remove a security that is not present
+		provider.RemoveRange([notExisting]);
+
+		// Event should NOT be invoked when nothing was actually removed
+		removed.AssertNull();
+
+		// Existing security must still be present
+		var got = await provider.LookupByIdAsync(existing.ToSecurityId(), CancellationToken);
+		got.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void CollectionSecurityProvider_Clear_NoEventWhenAlreadyEmpty()
+	{
+		var provider = new CollectionSecurityProvider();
+		var clearedCalled = false;
+		((ISecurityProvider)provider).Cleared += () => clearedCalled = true;
+
+		// Clearing empty provider should NOT trigger event
+		provider.Clear();
+
+		clearedCalled.AssertFalse();
+	}
+
+	[TestMethod]
+	public async Task InMemorySecurityStorage_DeleteAsync_RemovedEventContainsSecurity()
+	{
+		var storage = new InMemorySecurityStorage();
+		var security = Helper.CreateSecurity();
+		await storage.SaveAsync(security, false, CancellationToken);
+
+		var removed = new List<Security>();
+		storage.Removed += removed.AddRange;
+
+		await storage.DeleteAsync(security, CancellationToken);
+
+		// Event payload should contain the removed security
+		removed.Count.AssertEqual(1);
+		removed[0].Id.AssertEqual(security.Id);
+	}
+
+	[TestMethod]
+	public async Task InMemorySecurityStorage_DeleteByAsync_NoEventWhenNothingDeleted()
+	{
+		var storage = new InMemorySecurityStorage();
+		// storage is empty
+
+		var clearedCalled = false;
+		storage.Cleared += () => clearedCalled = true;
+
+		// Delete by criteria that matches nothing
+		await storage.DeleteByAsync(Helper.LookupAll, CancellationToken);
+
+		// Cleared should not be called because nothing was deleted
+		clearedCalled.AssertFalse();
+	}
 }

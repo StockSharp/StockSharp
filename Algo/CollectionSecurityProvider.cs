@@ -84,13 +84,16 @@ public class CollectionSecurityProvider : ISecurityProvider
 	/// Remove security.
 	/// </summary>
 	/// <param name="security">Security.</param>
-	/// <returns>Check result.</returns>
+	/// <returns><see langword="true"/> if security was removed, otherwise <see langword="false"/>.</returns>
 	public bool Remove(Security security)
 	{
 		if (security is null)
 			throw new ArgumentNullException(nameof(security));
 
-		RemoveRange([security]);
+		if (!_inner.Remove(security.ToSecurityId()))
+			return false;
+
+		_removed?.Invoke([security]);
 		return true;
 	}
 
@@ -103,15 +106,19 @@ public class CollectionSecurityProvider : ISecurityProvider
 		if (securities is null)
 			throw new ArgumentNullException(nameof(securities));
 
-		var added = new HashSet<Security>(securities);
+		HashSet<Security> added = null;
 
 		foreach (var security in securities)
 		{
 			if (!_inner.TryAdd2(security.ToSecurityId(), security))
-				added.Remove(security);
+				continue;
+
+			added ??= [];
+			added.Add(security);
 		}
 
-		_added?.Invoke(added);
+		if (added is { Count: > 0 })
+			_added?.Invoke(added);
 	}
 
 	/// <summary>
@@ -123,15 +130,19 @@ public class CollectionSecurityProvider : ISecurityProvider
 		if (securities is null)
 			throw new ArgumentNullException(nameof(securities));
 
-		var removed = new HashSet<Security>(securities);
+		HashSet<Security> removed = null;
 
 		foreach (var security in securities)
 		{
 			if (!_inner.Remove(security.ToSecurityId()))
-				removed.Remove(security);
+				continue;
+
+			removed ??= [];
+			removed.Add(security);
 		}
 
-		_removed?.Invoke(removed);
+		if (removed is { Count: > 0 })
+			_removed?.Invoke(removed);
 	}
 
 	/// <summary>
@@ -139,7 +150,14 @@ public class CollectionSecurityProvider : ISecurityProvider
 	/// </summary>
 	public void Clear()
 	{
-		_inner.Clear();
+		using (_inner.EnterScope())
+		{
+			if (_inner.Count == 0)
+				return;
+
+			_inner.Clear();
+		}
+
 		_cleared?.Invoke();
 	}
 }

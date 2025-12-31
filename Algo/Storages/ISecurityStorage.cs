@@ -105,23 +105,33 @@ public class InMemorySecurityStorage : ISecurityStorage
 
 		if (criteria.IsLookupAll())
 		{
-			_inner.Clear();
+			using (_inner.EnterScope())
+			{
+				if (_inner.Count == 0)
+					return default;
+
+				_inner.Clear();
+			}
+
 			Cleared?.Invoke();
 			return default;
 		}
 
-		Security[] toDelete;
+		Security[] removed;
 
 		using (_inner.EnterScope())
 		{
-			toDelete = [.. _inner.Values.Filter(criteria)];
+			removed = [.. _inner.Values.Filter(criteria)];
 
-			foreach (var security in toDelete)
+			foreach (var security in removed)
 				_inner.Remove(security.ToSecurityId());
 		}
 
 		cancellationToken.ThrowIfCancellationRequested();
-		Removed?.Invoke(toDelete);
+
+		if (removed is { Length: > 0 })
+			Removed?.Invoke(removed);
+
 		return default;
 	}
 
@@ -131,7 +141,7 @@ public class InMemorySecurityStorage : ISecurityStorage
 		if (securities is null)
 			throw new ArgumentNullException(nameof(securities));
 
-		HashSet<Security> toDelete = null;
+		HashSet<Security> removed = null;
 
 		using (_inner.EnterScope())
 		{
@@ -140,15 +150,15 @@ public class InMemorySecurityStorage : ISecurityStorage
 				if (!_inner.Remove(security.ToSecurityId()))
 					continue;
 
-				toDelete ??= [];
-				toDelete.Add(security);
+				removed ??= [];
+				removed.Add(security);
 			}
 		}
 
 		cancellationToken.ThrowIfCancellationRequested();
 
-		if (toDelete is { Count: > 0 })
-			Removed?.Invoke(toDelete);
+		if (removed is { Count: > 0 })
+			Removed?.Invoke(removed);
 
 		return default;
 	}
