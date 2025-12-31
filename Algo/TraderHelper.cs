@@ -1174,7 +1174,7 @@ public static partial class TraderHelper
 		};
 
 	private static FastCsvReader CreateReader(this byte[] archive, Encoding encoding)
-		=> archive.Uncompress<GZipStream>().To<Stream>().CreateCsvReader(encoding);
+		=> archive.Uncompress<GZipStream>().To<Stream>().CreateCsvReader(encoding, false);
 
 	/// <summary>
 	/// Extract securities from the archive.
@@ -1239,9 +1239,9 @@ public static partial class TraderHelper
 		return manager.UnrealizedPnL + manager.RealizedPnL;
 	}
 
-	internal static FastCsvReader CreateCsvReader(this Stream stream, Encoding encoding)
-		=> new(stream, encoding, StringHelper.RN);
+	internal static FastCsvReader CreateCsvReader(this Stream stream, Encoding encoding, bool leaveOpen = true)
+		=> new(new StreamReader(stream, encoding, leaveOpen: leaveOpen), StringHelper.RN);
 
-	internal static CsvFileWriter CreateCsvWriter(this Stream stream, Encoding encoding = null)
-		=> new(stream, encoding) { LineSeparator = StringHelper.RN };
+	internal static CsvFileWriter CreateCsvWriter(this Stream stream, Encoding encoding = null, bool leaveOpen = true)
+		=> new(new StreamWriter(stream, encoding, leaveOpen: leaveOpen)) { LineSeparator = StringHelper.RN };
 }

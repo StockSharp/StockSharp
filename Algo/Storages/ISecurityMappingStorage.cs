@@ -428,10 +428,8 @@ public sealed class CsvSecurityMappingStorageProvider : Disposable, ISecurityMap
 
 			var pairs = new List<(SecurityId, SecurityId)>();
 
-			using (var stream = _fileSystem.OpenRead(fileName))
+			using (var reader = _fileSystem.OpenRead(fileName).CreateCsvReader(Encoding.UTF8, false))
 			{
-				var reader = stream.CreateCsvReader(Encoding.UTF8);
-
 				await reader.NextLineAsync(cancellationToken);
 
 				while (await reader.NextLineAsync(cancellationToken))

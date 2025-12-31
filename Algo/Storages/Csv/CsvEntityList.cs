@@ -89,14 +89,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 		_disposed = true;
 
-		await _executor.AddAndWaitAsync(() =>
-		{
-			_writer?.Dispose();
-			_writer = null;
-
-			_stream?.Dispose();
-			_stream = null;
-		});
+		await _executor.AddAndWaitAsync(ResetStream);
 
 		GC.SuppressFinalize(this);
 	}
@@ -116,16 +109,13 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		FileSystem.CreateDirectory(dir);
 
 		_stream = new TransactionFileStream(FileSystem, FileName, FileMode.Append);
-		_writer = _stream.CreateCsvWriter(Registry.Encoding);
+		_writer = _stream.CreateCsvWriter(Registry.Encoding, false);
 	}
 
 	private void ResetStream()
 	{
 		_writer?.Dispose();
 		_writer = null;
-
-		_stream?.Dispose();
-		_stream = null;
 	}
 
 	/// <inheritdoc />
@@ -362,7 +352,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 				FileSystem.CreateDirectory(dir);
 
 				_stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
-				_writer = _stream.CreateCsvWriter(Registry.Encoding);
+				_writer = _stream.CreateCsvWriter(Registry.Encoding, false);
 				ResetCopy();
 				_writer.Flush();
 				_stream.Commit();
@@ -387,7 +377,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			FileSystem.CreateDirectory(dir);
 
 			_stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
-			_writer = _stream.CreateCsvWriter(Registry.Encoding);
+			_writer = _stream.CreateCsvWriter(Registry.Encoding, false);
 			ResetCopy();
 
 			foreach (var item in valuesCopy)
@@ -410,9 +400,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 		await Do.InvariantAsync(async () =>
 		{
-			using var stream = FileSystem.OpenRead(FileName);
-
-			var reader = stream.CreateCsvReader(Registry.Encoding);
+			using var reader = FileSystem.OpenRead(FileName).CreateCsvReader(Registry.Encoding, leaveOpen: false);
 
 			var currErrors = 0;
 

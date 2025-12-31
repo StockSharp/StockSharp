@@ -164,9 +164,7 @@ public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvid
 
 	private async ValueTask LoadAsync(CancellationToken cancellationToken)
 	{
-		using var stream = _fileSystem.OpenRead(_fileName);
-
-		var reader = stream.CreateCsvReader(Encoding.UTF8);
+		using var reader = _fileSystem.OpenRead(_fileName).CreateCsvReader(Encoding.UTF8, false);
 
 		await reader.NextLineAsync(cancellationToken);
 

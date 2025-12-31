@@ -151,9 +151,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			{
 				await Do.InvariantAsync(async () =>
 				{
-					using var stream = FileSystem.OpenRead(_fileName);
-
-					var reader = stream.CreateCsvReader(Encoding.UTF8);
+					using var reader = FileSystem.OpenRead(_fileName).CreateCsvReader(Encoding.UTF8, false);
 
 					await reader.NextLineAsync(cancellationToken);
 					reader.Skip();

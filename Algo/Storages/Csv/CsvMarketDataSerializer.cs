@@ -39,7 +39,7 @@ class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> 
 			var firstTimeRead = false;
 			string lastLine = null;
 
-			var reader = stream.CreateCsvReader(_encoding);
+			using var reader = stream.CreateCsvReader(_encoding);
 
 			while (await reader.NextLineAsync(cancellationToken))
 			{
@@ -58,14 +58,14 @@ class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> 
 
 			if (lastLine != null)
 			{
-				reader = new FastCsvReader(lastLine, StringHelper.RN);
+				using var lastLineReader = new FastCsvReader(lastLine, StringHelper.RN);
 
-				if (!await reader.NextLineAsync(cancellationToken))
+				if (!await lastLineReader.NextLineAsync(cancellationToken))
 					throw new InvalidOperationException();
 
-				LastTime = reader.ReadTime(Date);
-				_lastId = readId?.Invoke(reader);
-				IncrementalOnly = readIncrementalOnly?.Invoke(reader);
+				LastTime = lastLineReader.ReadTime(Date);
+				_lastId = readId?.Invoke(lastLineReader);
+				IncrementalOnly = readIncrementalOnly?.Invoke(lastLineReader);
 			}
 
 			stream.Position = 0;
@@ -147,18 +147,11 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 	{
 		Do.Invariant(() =>
 		{
-			var writer = stream.CreateCsvWriter(Encoding);
+			using var writer = stream.CreateCsvWriter(Encoding);
 
-			try
+			foreach (var item in data)
 			{
-				foreach (var item in data)
-				{
-					Write(writer, item, metaInfo);
-				}
-			}
-			finally
-			{
-				writer.Flush();
+				Write(writer, item, metaInfo);
 			}
 		});
 	}
@@ -185,6 +178,7 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 			ValueTask IAsyncDisposable.DisposeAsync()
 			{
 				_current = default;
+				_reader.Dispose();
 				return default;
 			}
 

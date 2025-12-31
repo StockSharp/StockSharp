@@ -28,7 +28,7 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 				var count = 0;
 				var firstTimeRead = false;
 
-				var reader = stream.CreateCsvReader(serializer.Encoding);
+				using var reader = stream.CreateCsvReader(serializer.Encoding);
 
 				while (await reader.NextLineAsync(cancellationToken))
 				{
@@ -85,18 +85,11 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 
 		Do.Invariant(() =>
 		{
-			var writer = stream.CreateCsvWriter(Encoding);
+			using var writer = stream.CreateCsvWriter(Encoding);
 
-			try
+			foreach (var item in toWrite)
 			{
-				foreach (var item in toWrite)
-				{
-					Write(writer, item, candleMetaInfo);
-				}
-			}
-			finally
-			{
-				writer.Flush();
+				Write(writer, item, candleMetaInfo);
 			}
 		});
 	}

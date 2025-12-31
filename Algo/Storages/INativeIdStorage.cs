@@ -242,16 +242,13 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 
 			var fileName = GetFileName();
 			_stream = new TransactionFileStream(_provider._fileSystem, fileName, FileMode.Append);
-			_writer = _stream.CreateCsvWriter();
+			_writer = _stream.CreateCsvWriter(leaveOpen: false);
 		}
 
 		private void ResetStream()
 		{
 			_writer?.Dispose();
 			_writer = null;
-
-			_stream?.Dispose();
-			_stream = null;
 		}
 
 		private string GetFileName() => Path.Combine(_provider._path, _storageName + ".csv");
@@ -360,10 +357,8 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 
 			var pairs = new List<(SecurityId, object)>();
 
-			using (var stream = _fileSystem.OpenRead(fileName))
+			using (var reader = _fileSystem.OpenRead(fileName).CreateCsvReader(Encoding.UTF8, false))
 			{
-				var reader = stream.CreateCsvReader(Encoding.UTF8);
-
 				await reader.NextLineAsync(cancellationToken);
 				reader.Skip(2);
 
