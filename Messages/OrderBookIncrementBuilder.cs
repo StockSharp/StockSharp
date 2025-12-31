@@ -120,6 +120,8 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 
 				_bidsByPos.Clear();
 				_asksByPos.Clear();
+
+				_invalidSubscriptions.Clear();
 			}
 
 			_state = currState = newState;
@@ -136,11 +138,18 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 			}
 		}
 
-		static void ApplyByPos(IEnumerable<QuoteChange> from, List<QuoteChange> to)
+		bool ApplyByPos(IEnumerable<QuoteChange> from, List<QuoteChange> to)
 		{
+			var tmp = new List<QuoteChange>(to);
+
 			foreach (var quote in from)
 			{
-				var startPos = quote.StartPosition.Value;
+				if (quote.StartPosition is not { } startPos)
+				{
+					// StartPosition required for positional updates
+					LogWarning("StartPosition is required for positional order book updates");
+					return false;
+				}
 
 				switch (quote.Action)
 				{
@@ -148,39 +157,58 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 					{
 						var newQuote = new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
 
-						if (startPos > to.Count)
-							throw new InvalidOperationException($"Pos={startPos}>Count={to.Count}");
-						else if (startPos == to.Count)
-							to.Add(newQuote);
+						if (startPos > tmp.Count)
+							return false;
+						else if (startPos == tmp.Count)
+							tmp.Add(newQuote);
 						else
-							to.Insert(startPos, newQuote);
+							tmp.Insert(startPos, newQuote);
 
 						break;
 					}
 					case QuoteChangeActions.Update:
 					{
-						to[startPos] = new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
+						if (startPos < 0 || startPos >= tmp.Count)
+							return false;
+
+						tmp[startPos] = new QuoteChange(quote.Price, quote.Volume, quote.OrdersCount, quote.Condition);
 						break;
 					}
 					case QuoteChangeActions.Delete:
 					{
+						if (startPos < 0 || startPos >= tmp.Count)
+							return false;
+
 						if (quote.EndPosition == null)
-							to.RemoveAt(startPos);
+							tmp.RemoveAt(startPos);
 						else
-							to.RemoveRange(startPos, (quote.EndPosition.Value - startPos) + 1);
+						{
+							var endPos = quote.EndPosition.Value;
+							if (endPos < startPos || endPos >= tmp.Count)
+								return false;
+
+							tmp.RemoveRange(startPos, (endPos - startPos) + 1);
+						}
 
 						break;
 					}
 					default:
-						throw new ArgumentOutOfRangeException(nameof(from), quote.Action, LocalizedStrings.InvalidValue);
+						LogWarning($"Invalid action {quote.Action}");
+						return false;
 				}
 			}
+
+			// commit
+			to.Clear();
+			to.AddRange(tmp);
+
+			return true;
 		}
 
 		if (change.HasPositions)
 		{
-			ApplyByPos(change.Bids, _bidsByPos);
-			ApplyByPos(change.Asks, _asksByPos);
+			if (!ApplyByPos(change.Bids, _bidsByPos) || !ApplyByPos(change.Asks, _asksByPos))
+				return null;
 		}
 		else
 		{
@@ -214,7 +242,7 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 			asks = [.. _asks.Values];
 		}
 
-		return new QuoteChangeMessage
+		return new()
 		{
 			SecurityId = SecurityId,
 			Bids = bids,
