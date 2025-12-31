@@ -571,7 +571,7 @@ public class CompositionDiagramElement : DiagramElement
 		static (string nodeKey, DiagramSocketDirection dir, string socketId, DiagramSocketType sockType, int linkMax) CreateSocketKey(string nodeKey, DiagramSocket socket)
 			=> (nodeKey, socket?.Direction ?? DiagramSocketDirection.In, socket?.Id, socket?.Type, socket?.LinkableMaximum ?? 0);
 
-		var needKeys = sockets.Select(s => CreateSocketKey(s.nodeKey, s.socket)).ToSet();
+		var needKeys = sockets.Select(s => CreateSocketKey(s.nodeKey, s.socket)).ToHashSet();
 
 		RemoveSockets(s =>
 		{

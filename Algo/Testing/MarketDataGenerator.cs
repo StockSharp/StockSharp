@@ -38,8 +38,8 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 	{
 		LastGenerationTime = DateTime.MinValue;
 
-		Volumes = new RandomArray<int>(MinVolume, MaxVolume, RandomArrayLength);
-		Steps = new RandomArray<int>(1, MaxPriceStepCount, RandomArrayLength);
+		Volumes = new(MinVolume, MaxVolume, RandomArrayLength);
+		Steps = new(1, MaxPriceStepCount, RandomArrayLength);
 
 		SecurityDefinition = null;
 	}
@@ -173,7 +173,7 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 
 			return _volumes;
 		}
-		protected set => _volumes = value ?? throw new ArgumentNullException(nameof(value));
+		private set => _volumes = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
 	private RandomArray<int> _steps;
@@ -190,7 +190,7 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 
 			return _steps;
 		}
-		protected set => _steps = value ?? throw new ArgumentNullException(nameof(value));
+		private set => _steps = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
 	/// <summary>
@@ -203,7 +203,7 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 		destination.MinVolume = MinVolume;
 		destination.MaxVolume = MaxVolume;
 		destination.MaxPriceStepCount = MaxPriceStepCount;
-		destination._volumes = _volumes?.ToArray();
-		destination._steps = _steps?.ToArray();
+		destination.Volumes = new(MinVolume, MaxVolume, RandomArrayLength);
+		destination.Steps = new(1, MaxPriceStepCount, RandomArrayLength);
 	}
 }

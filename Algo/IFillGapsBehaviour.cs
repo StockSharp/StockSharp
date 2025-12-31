@@ -36,7 +36,7 @@ public class StorageFillGapsBehaviour(IMarketDataDrive drive, StorageFormats for
 			return default;
 
 		var dates = await _drive.GetStorageDrive(secId, dataType, format).GetDatesAsync(cancellationToken);
-		var existing = dates.Where(d => from <= d || d <= to).ToSet();
+		var existing = dates.Where(d => from <= d || d <= to).ToHashSet();
 
 		DateTime? gapStart = null;
 		DateTime? gapEnd = null;
