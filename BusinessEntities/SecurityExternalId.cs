@@ -238,9 +238,7 @@ public class SecurityExternalId : NotifiableObject, ICloneable<SecurityExternalI
 	/// <param name="other">Another value with which to compare.</param>
 	/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
 	public override bool Equals(object other)
-	{
-		return Equals((SecurityExternalId)other);
-	}
+		=> other is SecurityExternalId typedOther && Equals(typedOther);
 
 	/// <inheritdoc />
 	public bool Equals(SecurityExternalId other)

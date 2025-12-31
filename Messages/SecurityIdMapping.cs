@@ -58,8 +58,8 @@ public class SecurityIdMapping : IPersistable
 	/// <param name="storage">Settings storage.</param>
 	public void Load(SettingsStorage storage)
 	{
-		StockSharpId = storage.GetValue<SettingsStorage>(nameof(StockSharpId)).Load<SecurityId>() ?? default;
-		AdapterId = storage.GetValue<SettingsStorage>(nameof(AdapterId)).Load<SecurityId>() ?? default;
+		StockSharpId = storage.GetValue<SettingsStorage>(nameof(StockSharpId)).Load<SecurityId>();
+		AdapterId = storage.GetValue<SettingsStorage>(nameof(AdapterId)).Load<SecurityId>();
 	}
 
 	/// <summary>

@@ -180,19 +180,14 @@ public partial class ExchangeBoard : Equatable<ExchangeBoard>, IPersistable, INo
 		return Code == other.Code && Exchange == other.Exchange;
 	}
 
-	private int _hashCode;
+	private int? _hashCode;
 
 	/// <summary>
 	/// Get the hash code of the object <see cref="ExchangeBoard"/>.
 	/// </summary>
 	/// <returns>A hash code.</returns>
 	public override int GetHashCode()
-	{
-		if (_hashCode == 0)
-			_hashCode = Code.GetHashCode() ^ (Exchange == null ? 0 : Exchange.GetHashCode());
-
-		return _hashCode;
-	}
+		=> _hashCode ??= Code.GetHashCode() ^ (Exchange == null ? 0 : Exchange.GetHashCode());
 
 	/// <summary>
 	/// Create a copy of <see cref="ExchangeBoard"/>.
