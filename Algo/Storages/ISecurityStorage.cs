@@ -131,23 +131,25 @@ public class InMemorySecurityStorage : ISecurityStorage
 		if (securities is null)
 			throw new ArgumentNullException(nameof(securities));
 
-		ISet<Security> toDelete = null;
+		HashSet<Security> toDelete = null;
 
 		using (_inner.EnterScope())
 		{
 			foreach (var security in securities)
 			{
 				if (!_inner.Remove(security.ToSecurityId()))
-				{
-					toDelete ??= securities.ToSet();
+					continue;
 
-					toDelete.Remove(security);
-				}
+				toDelete ??= [];
+				toDelete.Add(security);
 			}
 		}
 
 		cancellationToken.ThrowIfCancellationRequested();
-		Removed?.Invoke(toDelete);
+
+		if (toDelete is { Count: > 0 })
+			Removed?.Invoke(toDelete);
+
 		return default;
 	}
 

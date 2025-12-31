@@ -618,6 +618,60 @@ public class SecurityProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task InMemorySecurityStorage_DeleteRangeAsync_TriggersRemovedEventCorrectly()
+	{
+		var storage = new InMemorySecurityStorage();
+		var sec1 = Helper.CreateSecurity();
+		var sec2 = Helper.CreateSecurity();
+		var sec3 = Helper.CreateSecurity(); // This one won't be saved - delete should not include it
+		await storage.SaveAsync(sec1, false, _token);
+		await storage.SaveAsync(sec2, false, _token);
+
+		var removedSecurities = new List<Security>();
+		storage.Removed += removedSecurities.AddRange;
+
+		// Try to delete sec1, sec2 (existing) and sec3 (not existing)
+		await storage.DeleteRangeAsync([sec1, sec2, sec3], _token);
+
+		removedSecurities.Count.AssertEqual(2);
+		removedSecurities.Any(s => s.Id == sec1.Id).AssertTrue();
+		removedSecurities.Any(s => s.Id == sec2.Id).AssertTrue();
+		removedSecurities.Any(s => s.Id == sec3.Id).AssertFalse();
+	}
+
+	[TestMethod]
+	public async Task InMemorySecurityStorage_Empty_DeleteRangeAsync_TriggersRemovedEventCorrectly()
+	{
+		var storage = new InMemorySecurityStorage();
+		var sec1 = Helper.CreateSecurity();
+		var sec2 = Helper.CreateSecurity();
+		var sec3 = Helper.CreateSecurity();
+
+		var removedSecurities = new List<Security>();
+		storage.Removed += removedSecurities.AddRange;
+
+		await storage.DeleteRangeAsync([sec1, sec2, sec3], _token);
+
+		removedSecurities.Count.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task InMemorySecurityStorage_DeleteRangeAsync_NoEventWhenNothingDeleted()
+	{
+		var storage = new InMemorySecurityStorage();
+		var sec1 = Helper.CreateSecurity();
+		// Don't save sec1 - it doesn't exist in storage
+
+		var removedCalled = false;
+		storage.Removed += _ => removedCalled = true;
+
+		// Try to delete non-existing security
+		await storage.DeleteRangeAsync([sec1], _token);
+
+		removedCalled.AssertFalse();
+	}
+
+	[TestMethod]
 	public async Task InMemorySecurityStorage_DeleteByAsync_LookupAll_ClearsAll()
 	{
 		var storage = new InMemorySecurityStorage();
