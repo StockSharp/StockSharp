@@ -24,16 +24,11 @@ public class RiskTests : BaseTestClass
 		manager.Rules.Contains(rule1).AssertTrue();
 		manager.Rules.Contains(rule2).AssertTrue();
 
-		rule1.Parent.AssertEqual(manager);
-		rule2.Parent.AssertEqual(manager);
-
 		manager.Rules.Remove(rule1);
 		manager.Rules.Count.AssertEqual(1);
-		rule1.Parent.AssertNull();
 
 		manager.Rules.Clear();
 		manager.Rules.Count.AssertEqual(0);
-		rule2.Parent.AssertNull();
 	}
 
 	[TestMethod]

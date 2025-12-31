@@ -10,14 +10,6 @@ public class RiskManager : BaseLogReceiver, IRiskManager
 	/// </summary>
 	public RiskManager()
 	{
-		_rules.Added += r => r.Parent = this;
-		_rules.Removed += r => r.Parent = null;
-		_rules.Inserted += (i, r) => r.Parent = this;
-		_rules.Clearing += () =>
-		{
-			_rules.Cache.ForEach(r => r.Parent = null);
-			return true;
-		};
 	}
 
 	private readonly CachedSynchronizedList<IRiskRule> _rules = [];

@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Risk;
 /// <summary>
 /// Base risk-rule.
 /// </summary>
-public abstract class RiskRule : BaseLogReceiver, IRiskRule, INotifyPropertyChanged
+public abstract class RiskRule : IRiskRule, INotifyPropertyChanged
 {
 	/// <summary>
 	/// Initialize <see cref="RiskRule"/>.
@@ -12,14 +12,6 @@ public abstract class RiskRule : BaseLogReceiver, IRiskRule, INotifyPropertyChan
 	{
 		UpdateTitle();
 	}
-
-	/// <inheritdoc/>
-	[Browsable(false)]
-	public override Guid Id { get => base.Id; set => base.Id = value; }
-
-	/// <inheritdoc/>
-	[Browsable(false)]
-	public override string Name { get => base.Name; set => base.Name = value; }
 
 	/// <summary>
 	/// Get title.
@@ -78,19 +70,15 @@ public abstract class RiskRule : BaseLogReceiver, IRiskRule, INotifyPropertyChan
 	public abstract bool ProcessMessage(Message message);
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public virtual void Load(SettingsStorage storage)
 	{
 		Action = storage.GetValue<RiskActions>(nameof(Action));
-
-		base.Load(storage);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public virtual void Save(SettingsStorage storage)
 	{
 		storage.SetValue(nameof(Action), Action.To<string>());
-
-		base.Save(storage);
 	}
 
 	private PropertyChangedEventHandler _propertyChanged;
