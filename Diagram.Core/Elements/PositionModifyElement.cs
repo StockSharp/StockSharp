@@ -357,7 +357,7 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 			_cumulativePriceVolume += decPrice * decVol;
 			_cumulativeVolume += decVol;
 
-			_currentVwap = _cumulativePriceVolume / _cumulativeVolume;
+			_currentVwap = _cumulativeVolume != 0 ? _cumulativePriceVolume / _cumulativeVolume : decPrice;
 
 			if (CurrOrder is null)
 				RegisterOrder();
@@ -729,13 +729,14 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 			}
 			case PositionConditions.IncreaseOnly:
 			{
-				if (posDir is null || (direction is not null && posDir != direction))
+				// Allow if position is zero (posDir is null) or same direction as current position
+				if (posDir is not null && direction is not null && posDir != direction)
 				{
 					raiseInvalid();
 					return;
 				}
 
-				operationDir = posDir.Value;
+				operationDir = posDir ?? direction ?? throw new InvalidOperationException(LocalizedStrings.OrderSideNotSpecified);
 				operationVol = volume ?? throw new InvalidOperationException(LocalizedStrings.OrderVolumeNotSpecified);
 				break;
 			}
