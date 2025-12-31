@@ -42,7 +42,7 @@ public enum BlackScholesGreeks
 	Premium,
 
 	/// <summary>
-	/// Premium.
+	/// Implied Volatility.
 	/// </summary>
 	[Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.IVKey)]
 	IV,

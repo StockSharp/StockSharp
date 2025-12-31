@@ -741,11 +741,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		return (IMessageAdapterWrapper)adapter;
 	}
 
-	private readonly Dictionary<IMessageAdapter, bool> _hearbeatFlags = [];
+	private readonly Dictionary<IMessageAdapter, bool> _heartbeatFlags = [];
 
 	private bool IsHeartbeatOn(IMessageAdapter adapter)
 	{
-		return _hearbeatFlags.TryGetValue2(adapter) ?? true;
+		return _heartbeatFlags.TryGetValue2(adapter) ?? true;
 	}
 
 	/// <summary>
@@ -755,7 +755,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	/// <param name="on">Is active.</param>
 	public void ApplyHeartbeat(IMessageAdapter adapter, bool on)
 	{
-		_hearbeatFlags[adapter] = on;
+		_heartbeatFlags[adapter] = on;
 	}
 
 	private static IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter)

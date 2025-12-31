@@ -1099,7 +1099,7 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 		{
 			var toRemove = _orders.SyncGet(d =>
 			{
-				var tmp = d.Where(o => o.Key.State.IsFinal()).Take(countToRemove).Select(p => p.Key).ToSet();
+				var tmp = d.Where(o => o.Key.State.IsFinal()).Take(countToRemove).Select(p => p.Key).ToHashSet();
 
 				foreach (var order in tmp)
 					d.Remove(order);
