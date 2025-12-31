@@ -306,7 +306,7 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
-			OriginalTransactionId = replaceMsg.OriginalTransactionId,
+			OriginalTransactionId = replaceMsg.TransactionId,
 			ServerTime = CurrentTimeUtc,
 			OrderState = OrderStates.Done,
 			OrderType = originOrderMsg.OrderType,

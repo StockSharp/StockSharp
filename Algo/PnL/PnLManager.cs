@@ -75,7 +75,8 @@ public class PnLManager : IPnLManager
 
 		l1Msg = l1Msg.TypedClone();
 
-		_secLevel1[l1Msg.SecurityId] = l1Msg;
+		using (_managersByPf.EnterScope())
+			_secLevel1[l1Msg.SecurityId] = l1Msg;
 
 		foreach (var manager in _managersByPf.CachedValues)
 			manager.UpdateSecurity(l1Msg);

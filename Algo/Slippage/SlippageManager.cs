@@ -5,6 +5,7 @@ namespace StockSharp.Algo.Slippage;
 /// </summary>
 public class SlippageManager : ISlippageManager
 {
+	private readonly Lock _syncRoot = new();
 	private readonly SynchronizedDictionary<SecurityId, RefPair<decimal, decimal>> _bestPrices = [];
 	private readonly SynchronizedDictionary<long, (Sides side, decimal price)> _plannedPrices = [];
 
@@ -27,7 +28,9 @@ public class SlippageManager : ISlippageManager
 	/// <inheritdoc />
 	public void Reset()
 	{
-		Slippage = 0;
+		using (_syncRoot.EnterScope())
+			Slippage = 0;
+
 		_bestPrices.Clear();
 		_plannedPrices.Clear();
 	}
@@ -131,7 +134,8 @@ public class SlippageManager : ISlippageManager
 						if (!CalculateNegative && weighted < 0)
 							weighted = 0;
 
-						Slippage += weighted;
+						using (_syncRoot.EnterScope())
+							Slippage += weighted;
 
 						// cleanup only when order is completed (if such info present)
 						if (execMsg.HasOrderInfo() && (execMsg.OrderState == OrderStates.Done || execMsg.Balance == 0))

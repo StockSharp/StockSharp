@@ -59,7 +59,7 @@ public class FractalDimension : DecimalLengthIndicator
 		if (!input.IsFinal)
 		{
 			maxHigh = maxHigh.Max(price);
-			minLow = minLow.Max(price);
+			minLow = minLow.Min(price);
 
 			pathLength += (price - buffer.Last()).Abs();
 		}
