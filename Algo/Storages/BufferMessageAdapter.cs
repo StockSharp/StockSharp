@@ -96,8 +96,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 					var replaceMsg = (OrderReplaceMessage)message;
 
 					// can be looped back from offline
-					if (!_replaceTransactions.ContainsKey(replaceMsg.TransactionId))
-						_replaceTransactions.Add(replaceMsg.TransactionId, replaceMsg.OriginalTransactionId);
+					_replaceTransactions.TryAdd(replaceMsg.TransactionId, replaceMsg.OriginalTransactionId);
 
 					Buffer.ProcessInMessage(replaceMsg);
 				}
@@ -111,8 +110,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 					var cancelMsg = (OrderCancelMessage)message;
 
 					// can be looped back from offline
-					if (!_cancellationTransactions.ContainsKey(cancelMsg.TransactionId))
-						_cancellationTransactions.Add(cancelMsg.TransactionId, cancelMsg.OriginalTransactionId);
+					_cancellationTransactions.TryAdd(cancelMsg.TransactionId, cancelMsg.OriginalTransactionId);
 				}
 
 				break;
@@ -212,7 +210,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 			if (Settings.IsMode(StorageModes.Snapshot))
 			{
-				var states = message.States.ToSet();
+				var states = message.States.ToHashSet();
 
 				var ordersIds = new HashSet<long>();
 
