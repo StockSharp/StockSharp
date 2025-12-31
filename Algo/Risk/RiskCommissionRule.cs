@@ -40,6 +40,9 @@ public class RiskCommissionRule : RiskRule
 	/// <inheritdoc />
 	public override bool ProcessMessage(Message message)
 	{
+		if (Commission == 0)
+			return false; // No limit when Commission is 0
+
 		if (message.Type != MessageTypes.PositionChange)
 			return false;
 
@@ -54,7 +57,7 @@ public class RiskCommissionRule : RiskRule
 			return false;
 
 		// Handle both positive (upper bound) and negative (lower bound) commission limits
-		if (Commission >= 0)
+		if (Commission > 0)
 			return currValue >= Commission;
 		else
 			return currValue <= Commission;
