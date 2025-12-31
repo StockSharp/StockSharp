@@ -69,6 +69,24 @@ public class CandleBuilderValueTransformTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void TickTransform_NullTradePrice_ReturnsFalse()
+	{
+		var transform = new TickCandleBuilderValueTransform();
+
+		var tick = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			ServerTime = DateTime.Now,
+			TradePrice = null,
+			TradeVolume = 1000m,
+		};
+
+		var result = transform.Process(tick);
+
+		IsFalse(result, "Should not process tick without TradePrice");
+	}
+
+	[TestMethod]
 	public void TickTransform_Reset_ClearsState()
 	{
 		var transform = new TickCandleBuilderValueTransform();

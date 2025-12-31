@@ -136,7 +136,10 @@ public class TickCandleBuilderValueTransform : BaseCandleBuilderValueTransform
 		if (message is not ExecutionMessage tick || tick.DataType != DataType.Ticks)
 			return base.Process(message);
 
-		Update(tick.ServerTime, tick.TradePrice.Value, tick.TradeVolume, tick.OriginSide, tick.OpenInterest, null);
+		if (tick.TradePrice is not { } price)
+			return false;
+
+		Update(tick.ServerTime, price, tick.TradeVolume, tick.OriginSide, tick.OpenInterest, null);
 
 		return true;
 	}
