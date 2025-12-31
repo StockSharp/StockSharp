@@ -267,17 +267,18 @@ public partial class MainWindow
 
 	private void Load_Click(object sender, RoutedEventArgs e)
 	{
-		if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}"))
-		{
-			var settingsStorage = (AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}")
-				.Deserialize<SettingsStorage>(_fileSystem);
+		var filePath = AppDomain.CurrentDomain.BaseDirectory + $"/SettingsStorage{Paths.DefaultSettingsExt}";
 
-			Chart.LoadIfNotNull(settingsStorage);
+		if (!_fileSystem.FileExists(filePath))
+			return;
 
-			_area = Chart.Areas.First();
-			_candleElement = Chart.GetElements<IChartCandleElement>().First();
-			_activeOrdersElement = Chart.GetElements<IChartActiveOrdersElement>().First();
-		}
+		var settingsStorage = filePath.Deserialize<SettingsStorage>(_fileSystem);
+
+		Chart.LoadIfNotNull(settingsStorage);
+
+		_area = Chart.Areas.First();
+		_candleElement = Chart.GetElements<IChartCandleElement>().First();
+		_activeOrdersElement = Chart.GetElements<IChartActiveOrdersElement>().First();
 	}
 
 	private void Save_Click(object sender, RoutedEventArgs e)
