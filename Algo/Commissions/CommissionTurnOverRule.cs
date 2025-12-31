@@ -37,7 +37,9 @@ public class CommissionTurnOverRule : CommissionRule
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_currentTurnOver = 0;
+		using (EnterScope())
+			_currentTurnOver = 0;
+
 		base.Reset();
 	}
 
@@ -47,22 +49,27 @@ public class CommissionTurnOverRule : CommissionRule
 		if (!message.HasTradeInfo())
 			return null;
 
-		_currentTurnOver += message.GetTradePrice() * message.SafeGetVolume();
+		var turnOver = TurnOver;
 
-		if (TurnOver <= 0m)
+		if (turnOver <= 0m)
 			return null;
 
-		// Number of full thresholds passed
-		var times = (int)(_currentTurnOver / TurnOver);
+		using (EnterScope())
+		{
+			_currentTurnOver += message.GetTradePrice() * message.SafeGetVolume();
 
-		if (times == 0)
-			return null;
+			// Number of full thresholds passed
+			var times = (int)(_currentTurnOver / turnOver);
 
-		// Subtract applied thresholds, keep remainder
-		_currentTurnOver -= times * TurnOver;
+			if (times == 0)
+				return null;
 
-		// Return aggregated commission for passed thresholds
-		return (decimal)Value * times;
+			// Subtract applied thresholds, keep remainder
+			_currentTurnOver -= times * turnOver;
+
+			// Return aggregated commission for passed thresholds
+			return (decimal)Value * times;
+		}
 	}
 
 	/// <inheritdoc />

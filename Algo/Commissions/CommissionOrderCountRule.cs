@@ -40,7 +40,9 @@ public class CommissionOrderCountRule : CommissionRule
 	/// <inheritdoc />
 	public override void Reset()
 	{
-		_currentCount = 0;
+		using (EnterScope())
+			_currentCount = 0;
+
 		base.Reset();
 	}
 
@@ -52,11 +54,14 @@ public class CommissionOrderCountRule : CommissionRule
 		if (!message.HasOrderInfo() || message.HasTradeInfo())
 			return null;
 
-		if (++_currentCount < Count)
-			return null;
+		using (EnterScope())
+		{
+			if (++_currentCount < Count)
+				return null;
 
-		_currentCount = 0;
-		return (decimal)Value;
+			_currentCount = 0;
+			return (decimal)Value;
+		}
 	}
 
 	/// <inheritdoc />

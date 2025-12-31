@@ -34,6 +34,8 @@ public interface ICommissionRule : IPersistable
 [DataContract]
 public abstract class CommissionRule : NotifiableObject, ICommissionRule
 {
+	private readonly Lock _syncRoot = new();
+
 	/// <summary>
 	/// Initialize <see cref="CommissionRule"/>.
 	/// </summary>
@@ -110,6 +112,12 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 	{
 		storage.SetValue(nameof(Value), Value);
 	}
+
+	/// <summary>
+	/// Enter sync scope.
+	/// </summary>
+	/// <returns><see cref="Lock.Scope"/></returns>
+	protected Lock.Scope EnterScope() => _syncRoot.EnterScope();
 
 	/// <summary>
 	/// Get commission value using price and volume. For percent units, uses turnover (price * volume).
