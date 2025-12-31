@@ -380,4 +380,106 @@ public class BasketSecurityTests : BaseTestClass
 
 		result.Length.AssertGreater(0);
 	}
+
+	[TestMethod]
+	public void BasketSecurity_MissingBasketCodeAttribute_ThrowsMeaningfulException()
+	{
+		// Custom basket without BasketCodeAttribute - should throw meaningful exception
+		var basket = new TestBasketSecurityWithoutAttribute
+		{
+			Id = "TEST@TEST",
+			Board = ExchangeBoard.Test,
+		};
+
+		// Should throw InvalidOperationException, not NullReferenceException
+		ThrowsExactly<InvalidOperationException>(() =>
+		{
+			var _ = basket.BasketCode;
+		});
+	}
+
+	[TestMethod]
+	public void ContinuousSecurity_InvalidExpressionFormat_ThrowsMeaningfulException()
+	{
+		var basket = new ExpirationContinuousSecurity
+		{
+			Id = "RI@FORTS",
+			Board = ExchangeBoard.Forts,
+		};
+
+		// Invalid format - missing '=' separator
+		ThrowsExactly<InvalidOperationException>(() =>
+		{
+			basket.BasketExpression = "RIU8@FORTS"; // Missing "=date" part
+		});
+	}
+
+	[TestMethod]
+	public void ContinuousSecurity_EmptyParts_ThrowsMeaningfulException()
+	{
+		var basket = new ExpirationContinuousSecurity
+		{
+			Id = "RI@FORTS",
+			Board = ExchangeBoard.Forts,
+		};
+
+		// Invalid format - only separator, no content
+		ThrowsExactly<InvalidOperationException>(() =>
+		{
+			basket.BasketExpression = "=";
+		});
+	}
+
+	// Test basket security without BasketCodeAttribute for testing
+	private class TestBasketSecurityWithoutAttribute : BasketSecurity
+	{
+		public override IEnumerable<SecurityId> InnerSecurityIds => [];
+		protected override string ToSerializedString() => string.Empty;
+		protected override void FromSerializedString(string text) { }
+	}
+
+	[TestMethod]
+	public void WeightedPortfolio_PositionWithMissingWeight_SkipsGracefully()
+	{
+		var connector = new Mock<IConnector>(MockBehavior.Loose);
+
+		// Create portfolios
+		var portfolio1 = new Portfolio { Name = "P1" };
+		var portfolio2 = new Portfolio { Name = "P2" }; // This one will have no weight
+
+		var security = new Security { Id = "SEC@TEST", Board = ExchangeBoard.Test };
+
+		// Create positions
+		var pos1 = new Position { Portfolio = portfolio1, Security = security, CurrentValue = 100 };
+		var pos2 = new Position { Portfolio = portfolio2, Security = security, CurrentValue = 50 };
+
+		connector.Setup(c => c.Positions).Returns([pos1, pos2]);
+
+		var basket = new WeightedPortfolio(connector.Object);
+		// Only add weight for portfolio1, NOT for portfolio2
+		basket.Weights.Add(portfolio1, 1.0m);
+		// portfolio2 is NOT added to Weights
+
+		// Bug: Before fix, accessing InnerPositions would throw KeyNotFoundException
+		// After fix, it should skip positions with missing weights gracefully
+		var innerPositions = basket.InnerPositions.ToArray();
+
+		// Should work without exception
+		innerPositions.Length.AssertEqual(1); // Only one security
+		// The position value should only include portfolio1's contribution (100 * 1.0 = 100)
+		innerPositions[0].CurrentValue.AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void WeightedPortfolio_EmptyWeights_NoDivisionByZero()
+	{
+		var connector = new Mock<IConnector>(MockBehavior.Loose);
+		connector.Setup(c => c.Positions).Returns([]);
+
+		var basket = new WeightedPortfolio(connector.Object);
+		// Don't add any weights - Count will be 0
+
+		// should be 0 when Count == 0
+		basket.Leverage.AssertEqual(0m);
+	}
 }

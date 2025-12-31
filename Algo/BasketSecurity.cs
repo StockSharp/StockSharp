@@ -45,7 +45,7 @@ public abstract class BasketSecurity : Security
 	public abstract IEnumerable<SecurityId> InnerSecurityIds { get; }
 
 	/// <inheritdoc />
-	public override string BasketCode => GetType().GetAttribute<BasketCodeAttribute>().Code;
+	public override string BasketCode => GetType().GetAttribute<BasketCodeAttribute>()?.Code ?? throw new InvalidOperationException($"Type {GetType().Name} missing {nameof(BasketCodeAttribute)}");
 
 	/// <inheritdoc />
 	public override string BasketExpression

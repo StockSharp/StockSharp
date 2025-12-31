@@ -37,7 +37,8 @@ public class WeightedPortfolio : BasketPortfolio
 
 				foreach (var position in _innerPositions)
 				{
-					var mult = portfolio.Weights[position.Portfolio];
+					if (!portfolio.Weights.TryGetValue(position.Portfolio, out var mult))
+						continue;
 
 					if (beginValue == null)
 						beginValue = mult * position.BeginValue;
@@ -136,7 +137,7 @@ public class WeightedPortfolio : BasketPortfolio
 
 			_parent.BeginValue = beginValue.Value;
 			_parent.CurrentValue = currentValue.Value;
-			_parent.Leverage = leverage.Value / Count;
+			_parent.Leverage = Count > 0 ? leverage.Value / Count : 0;
 			_parent.Commission = commission.Value;
 		}
 
@@ -146,9 +147,9 @@ public class WeightedPortfolio : BasketPortfolio
 				throw new ArgumentNullException(nameof(currency));
 
 			if (part is null)
-				throw new ArgumentNullException(nameof(part));
+				return 0m.ToCurrency(currency.Type);
 
-			return (currency.Value * weight * part.Value).ToCurrency(currency.Type);
+			return (weight * part.Value).ToCurrency(currency.Type);
 		}
 	}
 
