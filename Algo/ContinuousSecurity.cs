@@ -269,6 +269,10 @@ public class ExpirationContinuousSecurity : ContinuousSecurity
 			_expirationJumps.AddRange(text.SplitByComma().Select(p =>
 			{
 				var parts = p.SplitByEqual();
+
+				if (parts.Length < 2)
+					throw new InvalidOperationException($"Invalid format: {p}");
+
 				return new KeyValuePair<SecurityId, DateTime>(parts[0].ToSecurityId(), parts[1].ToDateTime(_dateFormat).UtcKind());
 			}));
 		}

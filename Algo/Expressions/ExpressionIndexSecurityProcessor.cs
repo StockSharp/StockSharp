@@ -18,6 +18,7 @@ public class ExpressionIndexSecurityProcessor(Security basketSecurity) : IndexSe
 		if (values.Length != BasketLegs.Length)
 			throw new ArgumentOutOfRangeException(nameof(values));
 
-		return BasketSecurity.Formula.Calculate(values);
+		var formula = BasketSecurity.Formula ?? throw new InvalidOperationException("Formula is not set.");
+		return formula.Calculate(values);
 	}
 }
