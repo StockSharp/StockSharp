@@ -18,7 +18,8 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 
 		private readonly VariableDiagramElement _element = element ?? throw new ArgumentNullException(nameof(element));
 		private string _securityId;
-		private bool _newSecuritiesSubscribed;
+		private ISecurityProvider _subscribedSecProvider;
+		private Action<IEnumerable<Security>> _newSecuritiesHandler;
 		private bool _suspendPropertyChanged;
 		private bool _hasValue;
 
@@ -159,6 +160,8 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 
 		private void LoadSecurity(string id)
 		{
+			UnsubscribeFromSecurities();
+
 			if (id.IsEmpty())
 			{
 				SetValueSuspended(null);
@@ -187,10 +190,7 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 
 			SetValueSuspended(tempSecurity);
 
-			if (_newSecuritiesSubscribed)
-				return;
-
-			void NewSecurities(IEnumerable<Security> securities)
+			_newSecuritiesHandler = securities =>
 			{
 				var sec = securities.FirstOrDefault(s => s.Id.EqualsIgnoreCase(_securityId));
 
@@ -198,13 +198,21 @@ public class VariableDiagramElement : TypedDiagramElement<VariableDiagramElement
 					return;
 
 				SetValueSuspended(sec);
-				secProvider.Added -= NewSecurities;
-				_newSecuritiesSubscribed = false;
+				UnsubscribeFromSecurities();
+			};
+
+			_subscribedSecProvider = secProvider;
+			secProvider.Added += _newSecuritiesHandler;
+		}
+
+		private void UnsubscribeFromSecurities()
+		{
+			if (_subscribedSecProvider != null && _newSecuritiesHandler != null)
+			{
+				_subscribedSecProvider.Added -= _newSecuritiesHandler;
+				_subscribedSecProvider = null;
+				_newSecuritiesHandler = null;
 			}
-
-			secProvider.Added += NewSecurities;
-
-			_newSecuritiesSubscribed = true;
 		}
 
 		private void LoadPortfolio(string name)
