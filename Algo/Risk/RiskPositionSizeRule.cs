@@ -49,6 +49,9 @@ public class RiskPositionSizeRule : RiskRule
 		if (currValue == null)
 			return false;
 
+		if (Position == 0)
+			return false; // No limit when Position is 0
+
 		if (Position > 0)
 			return currValue >= Position;
 		else

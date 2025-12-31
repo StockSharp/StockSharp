@@ -385,6 +385,56 @@ public class RiskTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void PositionSizeZero()
+	{
+		var rule = new RiskPositionSizeRule
+		{
+			Position = 0,
+			Action = RiskActions.CancelOrders
+		};
+
+		var positionMsg = new PositionChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, 100m);
+
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, -100m);
+
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		// Missing current value should be ignored as well
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			PortfolioName = _pfName
+		};
+
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.CurrentValue, 0m);
+
+		rule.ProcessMessage(positionMsg).AssertFalse();
+	}
+
+	[TestMethod]
 	public void PositionTime()
 	{
 		var rule = new RiskPositionTimeRule
@@ -563,6 +613,38 @@ public class RiskTests : BaseTestClass
 
 		execMsg.Slippage = -15;
 		rule.ProcessMessage(execMsg).AssertTrue();
+	}
+
+	[TestMethod]
+	public void SlippageZero()
+	{
+		var rule = new RiskSlippageRule
+		{
+			Slippage = 0,
+			Action = RiskActions.CancelOrders
+		};
+
+		var execMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Slippage = 100
+		};
+
+		// Should not activate for positive slippage when limit is zero
+		rule.ProcessMessage(execMsg).AssertFalse();
+
+		execMsg.Slippage = -100;
+		// Should not activate for negative slippage either
+		rule.ProcessMessage(execMsg).AssertFalse();
+
+		execMsg.Slippage = null;
+		// Null slippage must be ignored
+		rule.ProcessMessage(execMsg).AssertFalse();
+
+		execMsg.Slippage = 0;
+		rule.ProcessMessage(execMsg).AssertFalse();
 	}
 
 	[TestMethod]

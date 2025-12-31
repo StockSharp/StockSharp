@@ -49,6 +49,9 @@ public class RiskSlippageRule : RiskRule
 		if (currValue == null)
 			return false;
 
+		if (Slippage == 0)
+			return false; // No limit when Slippage is 0
+
 		if (Slippage > 0)
 			return currValue > Slippage;
 		else
