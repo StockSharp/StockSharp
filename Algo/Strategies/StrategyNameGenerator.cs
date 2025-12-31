@@ -7,7 +7,7 @@ using SmartFormat.Core.Parsing;
 /// <summary>
 /// The class for the strategy name formation.
 /// </summary>
-public sealed class StrategyNameGenerator
+public sealed class StrategyNameGenerator : Disposable
 {
 	private sealed class Source : ISource
 	{
@@ -53,11 +53,7 @@ public sealed class StrategyNameGenerator
 	public StrategyNameGenerator(Strategy strategy)
 	{
 		_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
-		_strategy.PropertyChanged += (s, e) =>
-		{
-			if (_selectors.Contains(e.PropertyName))
-				Refresh();
-		};
+		_strategy.PropertyChanged += StrategyChanged;
 
 		ShortName = new string([.. _strategy.GetType().Name.Where(char.IsUpper)]);
 
@@ -72,6 +68,12 @@ public sealed class StrategyNameGenerator
 
 		AutoGenerateStrategyName = true;
 		Pattern = "{ShortName}{Security:_{0.Security}|}{Portfolio:_{0.Portfolio}|}";
+	}
+
+	private void StrategyChanged(object sender, PropertyChangedEventArgs e)
+	{
+		if (_selectors.Contains(e.PropertyName))
+			Refresh();
 	}
 
 	/// <summary>
@@ -140,5 +142,14 @@ public sealed class StrategyNameGenerator
 
 		_value = _formatter.Format(Pattern, _strategy);
 		Changed?.Invoke(_value);
+	}
+
+	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		if (!IsDisposed)
+			_strategy.PropertyChanged -= StrategyChanged;
+
+		base.DisposeManaged();
 	}
 }

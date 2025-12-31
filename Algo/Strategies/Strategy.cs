@@ -2718,12 +2718,15 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (getMessage is null)
 			throw new ArgumentNullException(nameof(getMessage));
 
-		var triggeredRules = RiskManager.ProcessRules(getMessage()).ToArray();
+		var triggeredCnt = 0;
+		var triggeredRules = RiskManager.ProcessRules(getMessage());
 
 		foreach (var rule in triggeredRules)
 		{
+			triggeredCnt++;
+
 			LogWarning(LocalizedStrings.ActivatingRiskRule,
-				rule.Name, rule.Title, rule.Action);
+				rule.GetType().Name, rule.Title, rule.Action);
 
 			switch (rule.Action)
 			{
@@ -2743,7 +2746,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 
 		// Check if trading should be unblocked: if no rules triggered, clear the flag
-		if (_isTradingBlocked && triggeredRules.Length == 0)
+		if (_isTradingBlocked && triggeredCnt == 0)
 		{
 			_isTradingBlocked = false;
 			LogInfo("Trading unblocked - risk limits no longer exceeded.");

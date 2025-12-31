@@ -40,10 +40,33 @@ public class EmulationOrderCondition : OrderCondition, IStopLossOrderCondition, 
 		set => Parameters[nameof(StopPrice)] = value;
 	}
 
-	decimal? IStopLossOrderCondition.ClosePositionPrice { get; set; }
-	decimal? IStopLossOrderCondition.ActivationPrice { get; set; }
-	bool IStopLossOrderCondition.IsTrailing { get; set; }
+	decimal? IStopLossOrderCondition.ClosePositionPrice
+	{
+		get => (decimal?)Parameters.TryGetValue(nameof(IStopLossOrderCondition.ClosePositionPrice));
+		set => Parameters[nameof(IStopLossOrderCondition.ClosePositionPrice)] = value;
+	}
 
-	decimal? ITakeProfitOrderCondition.ClosePositionPrice { get; set; }
-	decimal? ITakeProfitOrderCondition.ActivationPrice { get; set; }
+	decimal? IStopLossOrderCondition.ActivationPrice
+	{
+		get => (decimal?)Parameters.TryGetValue(nameof(IStopLossOrderCondition.ActivationPrice));
+		set => Parameters[nameof(IStopLossOrderCondition.ActivationPrice)] = value;
+	}
+
+	bool IStopLossOrderCondition.IsTrailing
+	{
+		get => (bool?)Parameters.TryGetValue(nameof(IStopLossOrderCondition.IsTrailing)) == true;
+		set => Parameters[nameof(IStopLossOrderCondition.IsTrailing)] = value;
+	}
+
+	decimal? ITakeProfitOrderCondition.ClosePositionPrice
+	{
+		get => (decimal?)Parameters.TryGetValue(nameof(ITakeProfitOrderCondition.ClosePositionPrice));
+		set => Parameters[nameof(ITakeProfitOrderCondition.ClosePositionPrice)] = value;
+	}
+
+	decimal? ITakeProfitOrderCondition.ActivationPrice
+	{
+		get => (decimal?)Parameters.TryGetValue(nameof(ITakeProfitOrderCondition.ActivationPrice));
+		set => Parameters[nameof(ITakeProfitOrderCondition.ActivationPrice)] = value;
+	}
 }
