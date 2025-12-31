@@ -12,14 +12,13 @@ public abstract class TypedDiagramElement<T> : DiagramElement
 	protected sealed class SocketTypesSource : ItemsSourceBase<DiagramSocketType>
 	{
 		// ReSharper disable once StaticMemberInGenericType
-		private static readonly List<DiagramSocketType> _collection = [];
+		private static DiagramSocketType[] _collection = [];
 
 		/// <summary>
 		/// </summary>
 		public static void SetValues(IEnumerable<DiagramSocketType> sockets)
 		{
-			_collection.Clear();
-			_collection.AddRange(sockets);
+			_collection = sockets?.ToArray() ?? [];
 		}
 
 		/// <inheritdoc />

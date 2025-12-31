@@ -75,6 +75,9 @@ public class OptionsPositionChartDiagramElement : OptionsBaseModelDiagramElement
 
 	private void Refresh(DiagramSocketValue value)
 	{
+		if (_assetPrice is null)
+			return;
+
 		_chart.Refresh(_assetPrice.Value, value.Time);
 	}
 }

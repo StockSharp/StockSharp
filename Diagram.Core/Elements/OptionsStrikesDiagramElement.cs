@@ -113,6 +113,9 @@ public class OptionsStrikesDiagramElement : DiagramElement
 
 		var centralStike = arr.GetCentralStrike(assetPrice);
 
+		if (centralStike is null)
+			return;
+
 		var leftOffset = LeftOffset;
 
 		if (leftOffset != null)

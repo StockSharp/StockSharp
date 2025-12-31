@@ -14,6 +14,7 @@ public class RandomDiagramElement : DiagramElement
 {
 	private readonly DiagramSocket _outputSocket;
 	private readonly HashSet<DiagramSocket> _triggerLinks = [];
+	private DiagramSocket _triggerSocket;
 
 	/// <inheritdoc />
 	public override Guid TypeId { get; } = "F75E5DA0-36C4-44A0-9DA1-9E0174E30729".To<Guid>();
@@ -48,10 +49,10 @@ public class RandomDiagramElement : DiagramElement
 	/// </summary>
 	public RandomDiagramElement()
 	{
-		var triggerSocket = AddInput(StaticSocketIds.Trigger, LocalizedStrings.Trigger, DiagramSocketType.Any, OnProcessTrigger, int.MaxValue);
+		_triggerSocket = AddInput(StaticSocketIds.Trigger, LocalizedStrings.Trigger, DiagramSocketType.Any, OnProcessTrigger, int.MaxValue);
 
-		triggerSocket.Connected += OnTriggerSocketConnected;
-		triggerSocket.Disconnected += OnTriggerSocketDisconnected;
+		_triggerSocket.Connected += OnTriggerSocketConnected;
+		_triggerSocket.Disconnected += OnTriggerSocketDisconnected;
 
 		_min = AddParam<decimal>(nameof(Min), 0)
 			.SetBasic(true)
@@ -66,6 +67,15 @@ public class RandomDiagramElement : DiagramElement
 		_outputSocket = AddOutput(StaticSocketIds.Output, LocalizedStrings.Value, DiagramSocketType.Unit);
 
 		ShowParameters = true;
+	}
+
+	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		_triggerSocket.Connected -= OnTriggerSocketConnected;
+		_triggerSocket.Disconnected -= OnTriggerSocketDisconnected;
+
+		base.DisposeManaged();
 	}
 
 	/// <inheritdoc />
