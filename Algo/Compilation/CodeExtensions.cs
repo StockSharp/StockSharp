@@ -56,6 +56,7 @@ public static class CodeExtensions
 			"StockSharp.Diagram.Core",
 			"StockSharp.Charting.Interfaces",
 			"StockSharp.Alerts.Interfaces",
+			"StockSharp.Reporting",
 		]);
 
 	/// <summary>

@@ -647,6 +647,7 @@ public static partial class CandleHelper
 
 				if (_valuesEnumerator.MoveNext())
 				{
+					_currCandleEnumerator?.Dispose();
 					_currCandleEnumerator = ToTicks(_valuesEnumerator.Current).GetEnumerator();
 
 					_currCandleEnumerator.MoveNext();
@@ -668,6 +669,7 @@ public static partial class CandleHelper
 			public void Dispose()
 			{
 				Current = null;
+				_currCandleEnumerator?.Dispose();
 				_valuesEnumerator.Dispose();
 			}
 

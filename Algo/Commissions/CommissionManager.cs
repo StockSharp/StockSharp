@@ -5,6 +5,8 @@ namespace StockSharp.Algo.Commissions;
 /// </summary>
 public class CommissionManager : ICommissionManager
 {
+	private readonly Lock _syncRoot = new();
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CommissionManager"/>.
 	/// </summary>
@@ -23,7 +25,9 @@ public class CommissionManager : ICommissionManager
 	/// <inheritdoc />
 	public virtual void Reset()
 	{
-		Commission = 0;
+		using (_syncRoot.EnterScope())
+			Commission = 0;
+
 		_rules.Cache.ForEach(r => r.Reset());
 	}
 
@@ -55,7 +59,10 @@ public class CommissionManager : ICommissionManager
 				}
 
 				if (commission != null)
-					Commission += commission.Value;
+				{
+					using (_syncRoot.EnterScope())
+						Commission += commission.Value;
+				}
 
 				return commission;
 			}
