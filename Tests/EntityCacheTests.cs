@@ -98,7 +98,7 @@ public class EntityCacheTests : BaseTestClass
 		// Order is added but not yet processed with an exchange ID
 		var found = _cache.TryGetOrder(123L, null);
 
-		Assert.IsNull(found);
+		found.IsNull();
 	}
 
 	[TestMethod]
@@ -178,6 +178,83 @@ public class EntityCacheTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void ProcessOrderMessage_DoneThenActive_IgnoresStateRegression()
+	{
+		var order = CreateOrder();
+		_cache.AddOrderByRegistrationId(order);
+
+		var doneMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _security.ToSecurityId(),
+			OrderState = OrderStates.Done,
+			ServerTime = DateTime.UtcNow,
+			LocalTime = DateTime.UtcNow,
+		};
+
+		foreach (var _ in _cache.ProcessOrderMessage(order, _security, doneMsg, order.TransactionId, _ => order.Portfolio))
+		{
+			// Process
+		}
+
+		order.State.AssertEqual(OrderStates.Done);
+
+		var activeMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _security.ToSecurityId(),
+			OrderState = OrderStates.Active,
+			ServerTime = DateTime.UtcNow.AddSeconds(1),
+			LocalTime = DateTime.UtcNow.AddSeconds(1),
+		};
+		  
+		foreach (var _ in _cache.ProcessOrderMessage(order, _security, activeMsg, order.TransactionId, _ => order.Portfolio))
+		{
+			// Process
+		}
+
+		order.State.AssertEqual(OrderStates.Done);
+	}
+
+	[TestMethod]
+	public void ProcessOrderFailMessage_FailedThenActive_IgnoresStateResurrection()
+	{
+		var order = CreateOrder();
+		_cache.AddOrderByRegistrationId(order);
+
+		var failMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _security.ToSecurityId(),
+			OrderType = order.Type,
+			OriginalTransactionId = order.TransactionId,
+			Error = new InvalidOperationException("Test fail"),
+			ServerTime = DateTime.UtcNow,
+			LocalTime = DateTime.UtcNow,
+		};
+
+		_cache.ProcessOrderFailMessage(order, _security, failMsg).ToArray();
+
+		order.State.AssertEqual(OrderStates.Failed);
+
+		var activeMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _security.ToSecurityId(),
+			OrderState = OrderStates.Active,
+			ServerTime = DateTime.UtcNow.AddSeconds(1),
+			LocalTime = DateTime.UtcNow.AddSeconds(1),
+		};
+
+		foreach (var _ in _cache.ProcessOrderMessage(order, _security, activeMsg, order.TransactionId, _ => order.Portfolio))
+		{
+			// Process
+		}
+
+		order.State.AssertEqual(OrderStates.Failed);
+	}
+
+	[TestMethod]
 	public void ProcessNewsMessage_NewNews_ReturnsIsNewTrue()
 	{
 		var newsMessage = new NewsMessage
@@ -240,7 +317,7 @@ public class EntityCacheTests : BaseTestClass
 	{
 		var value = _cache.GetSecurityValue(_security, Level1Fields.LastTradePrice);
 
-		Assert.IsNull(value);
+		value.IsNull();
 	}
 
 	[TestMethod]

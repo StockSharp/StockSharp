@@ -138,7 +138,11 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 				order.Balance = ((decimal?)order.Balance).ApplyNewBalance(message.Balance.Value, order.TransactionId, _parent._logReceiver);
 
 			if (message.OrderState != null)
-				order.ApplyNewState(message.OrderState.Value, _parent._logReceiver);
+			{
+				// Do not allow state "resurrection" after Done (out-of-order updates can arrive).
+				if (order.State != OrderStates.Done || message.OrderState.Value == OrderStates.Done)
+					order.ApplyNewState(message.OrderState.Value, _parent._logReceiver);
+			}
 
 			if (order.Time == DateTime.MinValue)
 				order.Time = message.ServerTime;
