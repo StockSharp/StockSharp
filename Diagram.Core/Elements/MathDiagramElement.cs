@@ -202,6 +202,27 @@ public class MathDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
+	protected override void OnReseted()
+	{
+		base.OnReseted();
+
+		_formula = null;
+		_validator = null;
+
+		try
+		{
+			_formulaCtx.Unload();
+		}
+		catch { }
+
+		try
+		{
+			_validatorCtx.Unload();
+		}
+		catch { }
+	}
+
+	/// <inheritdoc />
 	protected override void OnProcess(DateTime time, IDictionary<DiagramSocket, DiagramSocketValue> values, DiagramSocketValue source)
 	{
 		var valuesByName = values.ToDictionary(p => p.Key.Name, p => p.Value.GetValue<decimal>());

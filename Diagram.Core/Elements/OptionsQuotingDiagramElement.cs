@@ -134,6 +134,9 @@ public class OptionsQuotingDiagramElement : OptionsBaseModelDiagramElement<IBlac
 			_ => throw new InvalidOperationException(QuotingType.ToString()),
 		};
 
+		// Dispose old processor before creating new one
+		OnProcessorFinished(true);
+
 		_processor = new(behavior, Strategy.Security, Strategy.Portfolio, QuotingSide, _volume.Value, Strategy.Volume, default, Strategy, Strategy, Strategy, Strategy, Strategy, Strategy.IsFormedAndOnlineAndAllowTrading, true, false)
 		{
 			Parent = this

@@ -210,5 +210,7 @@ public abstract class BaseStatisticParameter<TValue> : NotifiableObject, IStatis
 
 		_disposed = true;
 		LocalizedStrings.ActiveLanguageChanged -= ChangeNameAndDescription;
+
+		GC.SuppressFinalize(this);
 	}
 }

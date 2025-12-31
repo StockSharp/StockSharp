@@ -53,6 +53,8 @@ public class MarketDepthGroupedDiagramElement : DiagramElement
 	private void OnProcessMarketDepth(DiagramSocketValue value)
 	{
 		var depth = value.GetValue<IOrderBookMessage>();
+		if (depth is null)
+			return;
 
 		var result = depth.Group(PriceRange);
 
