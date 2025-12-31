@@ -1468,4 +1468,98 @@ public class RiskTests : BaseTestClass
 
 		public override IMessageAdapter Clone() => new TestInnerAdapter();
 	}
+
+	[TestMethod]
+	public void CommissionZero()
+	{
+		var rule = new RiskCommissionRule
+		{
+			Commission = 0,
+			Action = RiskActions.StopTrading
+		};
+
+		var positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTime.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.Commission, 1500m);
+
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTime.UtcNow,
+			PortfolioName = _pfName
+		};
+		positionMsg.Add(PositionChangeTypes.Commission, -1500m);
+
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		positionMsg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = DateTime.UtcNow,
+			PortfolioName = _pfName
+		};
+		// No commission value
+		rule.ProcessMessage(positionMsg).AssertFalse();
+	}
+
+	[TestMethod]
+	public void CommissionTradeZero()
+	{
+		var rule = new RiskTradeCommissionRule
+		{
+			Commission = 0,
+			Action = RiskActions.StopTrading
+		};
+
+		var execMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Commission = 600m,
+			TradePrice = 100,
+			TradeVolume = 10
+		};
+
+		rule.ProcessMessage(execMsg).AssertFalse();
+
+		execMsg.Commission = -600m;
+		rule.ProcessMessage(execMsg).AssertFalse();
+
+		execMsg.Commission = null;
+		rule.ProcessMessage(execMsg).AssertFalse();
+	}
+
+	[TestMethod]
+	public void CommissionOrderZero()
+	{
+		var rule = new RiskOrderCommissionRule
+		{
+			Commission = 0,
+			Action = RiskActions.CancelOrders
+		};
+
+		var execMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Commission = 150m,
+			HasOrderInfo = true
+		};
+
+		rule.ProcessMessage(execMsg).AssertFalse();
+
+		execMsg.Commission = -150m;
+		rule.ProcessMessage(execMsg).AssertFalse();
+
+		execMsg.Commission = null;
+		rule.ProcessMessage(execMsg).AssertFalse();
+	}
 }

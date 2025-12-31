@@ -61,7 +61,10 @@ public abstract class RiskTransactionCommissionRule : RiskRule
 
 		_totalCommission += commission;
 
-		if (Commission >= 0)
+		if (Commission == 0)
+			return false; // No limit when Commission is 0
+
+		if (Commission > 0)
 			return _totalCommission >= Commission;
 		else
 			return _totalCommission <= Commission;
