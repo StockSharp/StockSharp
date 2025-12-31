@@ -164,7 +164,7 @@ public abstract class BaseWithdrawOrderCondition : OrderCondition, IWithdrawOrde
 		Order = 10)]
 	public bool IsWithdraw
 	{
-		get => (bool)Parameters[nameof(IsWithdraw)];
+		get => Parameters.TryGetValue(nameof(IsWithdraw), out var value) && value is bool b && b;
 		set => Parameters[nameof(IsWithdraw)] = value;
 	}
 
@@ -178,7 +178,7 @@ public abstract class BaseWithdrawOrderCondition : OrderCondition, IWithdrawOrde
 		Order = 11)]
 	public WithdrawInfo WithdrawInfo
 	{
-		get => (WithdrawInfo)Parameters[nameof(WithdrawInfo)];
+		get => Parameters.TryGetValue(nameof(WithdrawInfo), out var value) ? value as WithdrawInfo : null;
 		set => Parameters[nameof(WithdrawInfo)] = value ?? throw new ArgumentNullException(nameof(value));
 	}
 }

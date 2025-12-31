@@ -1454,7 +1454,7 @@ public static partial class Extensions
 			message.SecurityType = type.Value;
 		else if (types != null)
 		{
-			var set = types.ToSet();
+			var set = types.ToHashSet();
 
 			if (set.Count <= 0)
 				return;
@@ -2573,7 +2573,7 @@ public static partial class Extensions
 
 		if (!criteria.PortfolioName.IsEmpty())
 		{
-			if (compareName && !!portfolio.PortfolioName.EqualsIgnoreCase(criteria.PortfolioName))
+			if (compareName && !portfolio.PortfolioName.EqualsIgnoreCase(criteria.PortfolioName))
 				return false;
 			else if (!compareName && !portfolio.PortfolioName.ContainsIgnoreCase(criteria.PortfolioName))
 				return false;
@@ -2608,7 +2608,7 @@ public static partial class Extensions
 
 		if (!criteria.PortfolioName.IsEmpty())
 		{
-			if (compareName && !!position.PortfolioName.EqualsIgnoreCase(criteria.PortfolioName))
+			if (compareName && !position.PortfolioName.EqualsIgnoreCase(criteria.PortfolioName))
 				return false;
 			else if (!compareName && !position.PortfolioName.ContainsIgnoreCase(criteria.PortfolioName))
 				return false;
@@ -2646,7 +2646,7 @@ public static partial class Extensions
 		if (criteria is null)
 			throw new ArgumentNullException(nameof(criteria));
 
-		return transaction.IsMatch(criteria, criteria.States.ToSet());
+		return transaction.IsMatch(criteria, criteria.States.ToHashSet());
 	}
 
 	/// <summary>
@@ -5140,4 +5140,9 @@ public static partial class Extensions
 
 		return AsyncHelper.Run(() => provider.LookupMessagesAsync(criteria).ToArrayAsync(default));
 	}
+
+	/// <summary>
+	/// Default <see cref="IFileSystem"/>.
+	/// </summary>
+	public static readonly IFileSystem DefaultFileSystem = LocalFileSystem.Instance;
 }
