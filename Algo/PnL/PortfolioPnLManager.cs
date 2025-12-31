@@ -29,6 +29,8 @@ public class PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1Ch
 	/// <inheritdoc />
 	public void Reset()
 	{
+		using var _ = _securityPnLs.EnterScope();
+
 		RealizedPnL = default;
 
 		_securityPnLs.Clear();
@@ -77,6 +79,8 @@ public class PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1Ch
 
 		if (tradeId != null)
 		{
+			using var _ = _securityPnLs.EnterScope();
+			
 			if (_tradeByIdInfos.TryGetValue(tradeId.Value, out info))
 				return false;
 
@@ -90,6 +94,8 @@ public class PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1Ch
 		}
 		else if (!tradeStringId.IsEmpty())
 		{
+			using var _ = _securityPnLs.EnterScope();
+			
 			if (_tradeByStringIdInfos.TryGetValue(tradeStringId, out info))
 				return false;
 
