@@ -35,7 +35,8 @@ public class SharpeRatioParameter : RiskAdjustedRatioParameter
 			return 0;
 
 		var avg = sumReturn / count;
-		return (decimal)Math.Sqrt((double)((_sumSq - avg * avg * count) / (count - 1)));
+		var variance = (_sumSq - avg * avg * count) / (count - 1);
+		return variance > 0 ? (decimal)Math.Sqrt((double)variance) : 0;
 	}
 
 	/// <inheritdoc />
