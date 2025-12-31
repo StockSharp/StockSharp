@@ -108,10 +108,9 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 				if (canUpdateOrder)
 				{
 					var oldBalance = execMsg.TransactionId != 0 ? execMsg.OrderVolume : info.Balance;
-					balDiff = oldBalance - execMsg.Balance;
+					balDiff = execMsg.Balance is { } newBalance ? oldBalance - newBalance : null;
 					if (balDiff.HasValue && balDiff != 0)
 					{
-						// ReSharper disable once PossibleInvalidOperationException
 						info.Balance = execMsg.Balance.Value;
 						LogDebug("{0} bal_upd {1}/{2}.", info.TransactionId, info.Balance, info.Volume);
 					}
