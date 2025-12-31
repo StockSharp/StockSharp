@@ -70,6 +70,10 @@ public class WeightedIndexSecurity : IndexSecurity
 			Weights.AddRange(text.SplitByComma().Select(p =>
 			{
 				var parts = p.SplitByEqual();
+
+				if (parts.Length < 2)
+					throw new InvalidOperationException($"Invalid format: {p}");
+
 				return new KeyValuePair<SecurityId, decimal>(parts[0].ToSecurityId(), parts[1].To<decimal>());
 			}));
 		}
