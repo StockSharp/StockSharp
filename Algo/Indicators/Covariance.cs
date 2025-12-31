@@ -64,10 +64,10 @@ public class Covariance : LengthIndicator<(decimal, decimal), CircularBufferEx<(
 
 		if (!input.IsFinal)
 		{
+			Buffer.PopBack();
+
 			if (first != null)
 				Buffer.PushFront(first.Value);
-
-			Buffer.PopBack();
 		}
 
 		return new DecimalIndicatorValue(this, covariance / len, input.Time);
