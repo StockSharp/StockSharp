@@ -696,8 +696,12 @@ public static class DerivativesHelper
 		if (deviation < 0)
 			throw new ArgumentOutOfRangeException(nameof(deviation), deviation, LocalizedStrings.InvalidValue);
 
+		var divisor = (double)deviation * timeToExp.Sqrt();
+		if (divisor == 0)
+			return 0;
+
 		return ((double)(assetPrice / strike).Log() +
-			(double)(riskFree - dividend + deviation * deviation / 2.0m) * timeToExp) / ((double)deviation * timeToExp.Sqrt());
+			(double)(riskFree - dividend + deviation * deviation / 2.0m) * timeToExp) / divisor;
 	}
 
 	/// <summary>

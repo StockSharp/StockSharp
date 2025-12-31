@@ -92,7 +92,7 @@ public class BlackScholes : IBlackScholes
 	/// <summary>
 	/// The standard deviation by default.
 	/// </summary>
-	public decimal DefaultDeviation => ((decimal?)DataProvider.GetSecurityValue(Option, Level1Fields.ImpliedVolatility) ?? 0) / 100;
+	public decimal DefaultDeviation => Option is null ? 0 : ((decimal?)DataProvider.GetSecurityValue(Option, Level1Fields.ImpliedVolatility) ?? 0) / 100;
 
 	/// <summary>
 	/// The time before expiration calculation.
@@ -129,7 +129,9 @@ public class BlackScholes : IBlackScholes
 	/// Option type.
 	/// </summary>
 	protected OptionTypes OptionType
-		=> Option.OptionType ?? throw new InvalidOperationException(LocalizedStrings.OrderTypeMissed.Put(Option));
+		=> Option is null
+			? throw new InvalidOperationException(LocalizedStrings.NoData)
+			: Option.OptionType ?? throw new InvalidOperationException(LocalizedStrings.OrderTypeMissed.Put(Option));
 
 	/// <summary>
 	/// To round to <see cref="RoundDecimals"/>.
@@ -265,6 +267,9 @@ public class BlackScholes : IBlackScholes
 
 	internal decimal GetStrike()
 	{
-		return Option.Strike.Value;
+		if (Option is null)
+			throw new InvalidOperationException(LocalizedStrings.NoData);
+
+		return Option.Strike ?? throw new InvalidOperationException(LocalizedStrings.NoData);
 	}
 }
