@@ -93,23 +93,15 @@ public interface INativeIdStorageProvider : IAsyncDisposable
 /// </summary>
 public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 {
-	private class CsvNativeIdStorage : Disposable, INativeIdStorage
+	private class CsvNativeIdStorage(CsvNativeIdStorageProvider provider, string storageName, InMemoryNativeIdStorage inMemory) : Disposable, INativeIdStorage
 	{
-		private readonly CsvNativeIdStorageProvider _provider;
-		private readonly string _storageName;
-		private readonly InMemoryNativeIdStorage _inMemory;
+		private readonly CsvNativeIdStorageProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+		private readonly string _storageName = storageName ?? throw new ArgumentNullException(nameof(storageName));
+		private readonly InMemoryNativeIdStorage _inMemory = inMemory ?? throw new ArgumentNullException(nameof(inMemory));
 
 		private readonly SynchronizedDictionary<SecurityId, object> _buffer = [];
 		private TransactionFileStream _stream;
 		private CsvFileWriter _writer;
-
-		public CsvNativeIdStorage(CsvNativeIdStorageProvider provider, string storageName, InMemoryNativeIdStorage inMemory)
-		{
-			_provider = provider ?? throw new ArgumentNullException(nameof(provider));
-			_storageName = storageName ?? throw new ArgumentNullException(nameof(storageName));
-			_inMemory = inMemory ?? throw new ArgumentNullException(nameof(inMemory));
-		}
-
 		private Func<SecurityId, object, CancellationToken, ValueTask> _added;
 
 		public event Func<SecurityId, object, CancellationToken, ValueTask> Added
@@ -206,13 +198,14 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 		private void WriteItemsToFile((SecurityId secId, object nativeId)[] items, bool rewriteAll)
 		{
 			var fileName = GetFileName();
+			var fs = _provider._fileSystem;
 
 			if (rewriteAll)
 			{
 				ResetStream();
 
-				if (_provider._fileSystem.FileExists(fileName))
-					_provider._fileSystem.DeleteFile(fileName);
+				if (fs.FileExists(fileName))
+					fs.DeleteFile(fileName);
 
 				if (items.Length == 0)
 					return;
@@ -222,15 +215,15 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 				return;
 			}
 
-			var appendHeader = !_provider._fileSystem.FileExists(fileName) || _provider._fileSystem.GetFileLength(fileName) == 0;
+			var appendHeader = !fs.FileExists(fileName) || fs.GetFileLength(fileName) == 0;
 
 			EnsureStream();
 
 			if (appendHeader)
 				WriteHeader(_writer, items[0].nativeId);
 
-			foreach (var item in items)
-				WriteItem(_writer, item.secId, item.nativeId);
+			foreach (var (secId, nativeId) in items)
+				WriteItem(_writer, secId, nativeId);
 
 			_writer.Flush();
 			_stream.Commit();
