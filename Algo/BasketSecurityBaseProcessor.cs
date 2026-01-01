@@ -68,7 +68,6 @@ public abstract class BasketSecurityBaseProcessor<TBasketSecurity> : IBasketSecu
 public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity>(Security security) : BasketSecurityBaseProcessor<TBasketSecurity>(security)
 	where TBasketSecurity : ContinuousSecurity, new()
 {
-
 	/// <inheritdoc />
 	public override IEnumerable<Message> Process(Message message)
 	{
@@ -87,7 +86,7 @@ public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity>(Security 
 				var volume = bestBid?.Volume;
 
 				if (bestAsk?.Volume != null)
-					volume = volume ?? 0 + bestAsk?.Volume;
+					volume = (volume ?? 0) + bestAsk?.Volume;
 
 				if (!CanProcess(quoteMsg.SecurityId, quoteMsg.ServerTime, (bestBid?.Price).GetSpreadMiddle(bestAsk?.Price, Security.PriceStep), volume, null))
 					yield break;
