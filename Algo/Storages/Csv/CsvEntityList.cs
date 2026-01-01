@@ -116,6 +116,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	{
 		_writer?.Dispose();
 		_writer = null;
+		_stream = null;
 	}
 
 	/// <inheritdoc />

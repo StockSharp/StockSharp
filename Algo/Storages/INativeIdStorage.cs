@@ -243,6 +243,7 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 		{
 			_writer?.Dispose();
 			_writer = null;
+			_stream = null;
 		}
 
 		private string GetFileName() => Path.Combine(_provider._path, _storageName + ".csv");
