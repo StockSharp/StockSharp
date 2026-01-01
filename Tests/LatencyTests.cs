@@ -111,11 +111,6 @@ public class LatencyTests
 		mgr.LatencyCancellation.AreEqual(TimeSpan.Zero);
 	}
 
-	/// <summary>
-	/// Bug: Replace used OriginalTransactionId for AddCancel instead of TransactionId.
-	/// The cancel part of replace should be tracked by TransactionId (the new transaction),
-	/// not OriginalTransactionId (the order being replaced).
-	/// </summary>
 	[TestMethod]
 	public void ReplaceUsesTransactionIdForCancelTracking()
 	{

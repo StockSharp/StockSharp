@@ -996,6 +996,35 @@ public class CommissionTests
 		result.AssertEqual(50m);
 	}
 
+	[TestMethod]
+	public void PerOrderVolumeRuleWithNullValues()
+	{
+		var now = DateTime.UtcNow;
+
+		// Test with absolute value commission
+		var rule = new CommissionOrderVolumeRule
+		{
+			Value = 0.5m
+		};
+
+		// Test with null OrderVolume
+		var orderMsgNullVolume = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderPrice = 100m,
+			OrderVolume = null,
+			ServerTime = Inc(ref now)
+		};
+		var result = rule.Process(orderMsgNullVolume);
+		result.AssertNull();
+
+		// Test with percent-based commission and null volume
+		rule.Value = new Unit { Value = 10m, Type = UnitTypes.Percent };
+		result = rule.Process(orderMsgNullVolume);
+		result.AssertNull(); // percent commission needs volume for turnover calculation
+	}
+
 	// A custom rule class for testing
 	private class CustomCommissionRule : CommissionRule
 	{
