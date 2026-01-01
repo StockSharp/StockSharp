@@ -592,9 +592,7 @@ public partial class TinkoffMessageAdapter
 
 			using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
 
-			using var entries = stream.Unzip(true);
-
-			foreach (var (name, body) in entries.Select(t => (t.name, t.body.To<byte[]>())).OrderBy(t => t.name))
+			foreach (var (name, body) in stream.Unzip(true).Select(t => (t.name, t.body.To<byte[]>())).OrderBy(t => t.name))
 			{
 				var fileDate = name.Substring(name.Length - 12, 8).ToDateTime("yyyyMMdd");
 
