@@ -141,7 +141,9 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 		public async ValueTask ClearAsync(CancellationToken cancellationToken)
 		{
 			await _inMemory.ClearAsync(cancellationToken);
+
 			_buffer.Clear();
+
 			_provider._executor.Add(() =>
 			{
 				ResetStream();
@@ -187,7 +189,7 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 
 			_provider._executor.Add(() =>
 			{
-				var items = _buffer.SyncGet(c => c.CopyAndClear());
+				var items = _buffer.SyncGet(c => c.CopyAndClear()).Select(t => (t.Key, t.Value)).ToArray();
 				WriteItemsToFile(items, rewriteAll: false);
 			});
 		}
@@ -196,13 +198,12 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 		{
 			_buffer.Clear();
 
-			var tuples = await _inMemory.GetAsync(cancellationToken);
-			var items = tuples.Select(t => new KeyValuePair<SecurityId, object>(t.Item1, t.Item2)).ToArray();
+			var items = await _inMemory.GetAsync(cancellationToken);
 
 			_provider._executor.Add(() => WriteItemsToFile(items, rewriteAll: true));
 		}
 
-		private void WriteItemsToFile(KeyValuePair<SecurityId, object>[] items, bool rewriteAll)
+		private void WriteItemsToFile((SecurityId secId, object nativeId)[] items, bool rewriteAll)
 		{
 			var fileName = GetFileName();
 
@@ -226,10 +227,10 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 			EnsureStream();
 
 			if (appendHeader)
-				WriteHeader(_writer, items[0].Value);
+				WriteHeader(_writer, items[0].nativeId);
 
 			foreach (var item in items)
-				WriteItem(_writer, item.Key, item.Value);
+				WriteItem(_writer, item.secId, item.nativeId);
 
 			_writer.Flush();
 			_stream.Commit();
@@ -555,10 +556,10 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 	}
 
 	/// <inheritdoc />
-	public ValueTask<(SecurityId, object)[]> GetAsync(CancellationToken cancellationToken)
+	public ValueTask<(SecurityId secId, object nativeId)[]> GetAsync(CancellationToken cancellationToken)
 	{
 		using (_syncRoot.EnterScope())
-			return new(_nativeIds.Select(p => (p.Key, p.Value)).ToArray());
+			return new([.. _nativeIds.Select(p => (p.Key, p.Value))]);
 	}
 
 	/// <inheritdoc />
