@@ -50,7 +50,7 @@ public class LatencyManager : ILatencyManager
 
 				using (_syncObject.EnterScope())
 				{
-					AddCancel(replaceMsg.OriginalTransactionId, replaceMsg.LocalTime);
+					AddCancel(replaceMsg.TransactionId, replaceMsg.LocalTime);
 					AddRegister(replaceMsg.TransactionId, replaceMsg.LocalTime);
 				}
 

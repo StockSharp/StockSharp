@@ -50,7 +50,7 @@ public class LatencyTests
 	}
 
 	[TestMethod]
-	public void ReplaceUsesOriginalIdForCancel()
+	public void ReplaceTracksBothCancelAndRegister()
 	{
 		var mgr = new LatencyManager();
 		var t0 = DateTime.UtcNow;
@@ -62,17 +62,20 @@ public class LatencyTests
 		};
 		mgr.ProcessMessage(replace).AssertNull();
 
+		// First execution for cancel part (tracked by TransactionId)
 		var cancelExec = new ExecutionMessage
 		{
-			OriginalTransactionId = replace.OriginalTransactionId,
+			OriginalTransactionId = replace.TransactionId,
 			LocalTime = t0 + TimeSpan.FromMilliseconds(7),
 			OrderState = OrderStates.Done,
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true
 		};
 		var cancelLat = mgr.ProcessMessage(cancelExec);
+		// Gets register latency first (both tracked by same TransactionId)
 		cancelLat.AssertEqual(TimeSpan.FromMilliseconds(7));
 
+		// Second execution for new order (also tracked by TransactionId)
 		var regExec = new ExecutionMessage
 		{
 			OriginalTransactionId = replace.TransactionId,
@@ -82,6 +85,7 @@ public class LatencyTests
 			HasOrderInfo = true
 		};
 		var regLat = mgr.ProcessMessage(regExec);
+		// Gets cancel latency (register was already consumed)
 		regLat.AssertEqual(TimeSpan.FromMilliseconds(15));
 	}
 
@@ -105,5 +109,42 @@ public class LatencyTests
 		mgr.ProcessMessage(exec).AssertNull();
 		mgr.LatencyRegistration.AreEqual(TimeSpan.Zero);
 		mgr.LatencyCancellation.AreEqual(TimeSpan.Zero);
+	}
+
+	/// <summary>
+	/// Bug: Replace used OriginalTransactionId for AddCancel instead of TransactionId.
+	/// The cancel part of replace should be tracked by TransactionId (the new transaction),
+	/// not OriginalTransactionId (the order being replaced).
+	/// </summary>
+	[TestMethod]
+	public void ReplaceUsesTransactionIdForCancelTracking()
+	{
+		var mgr = new LatencyManager();
+		var t0 = DateTime.UtcNow;
+
+		// Replace order: TransactionId=100 (new order), OriginalTransactionId=50 (order to replace)
+		var replace = new OrderReplaceMessage
+		{
+			TransactionId = 100,
+			OriginalTransactionId = 50,
+			LocalTime = t0
+		};
+		mgr.ProcessMessage(replace).AssertNull();
+
+		// Cancel confirmation should come with TransactionId, not OriginalTransactionId
+		// This tests the fix: AddCancel should use replaceMsg.TransactionId
+		var cancelExec = new ExecutionMessage
+		{
+			OriginalTransactionId = replace.TransactionId, // 100, not 50
+			LocalTime = t0 + TimeSpan.FromMilliseconds(5),
+			OrderState = OrderStates.Done,
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true
+		};
+
+		var cancelLat = mgr.ProcessMessage(cancelExec);
+		// If bug existed (using OriginalTransactionId=50), this would be null
+		// because no cancel was tracked for TransactionId=100
+		cancelLat.AssertEqual(TimeSpan.FromMilliseconds(5));
 	}
 }
