@@ -132,30 +132,33 @@ public class CompilationTests : BaseTestClass
 	// Test implementation of IAnalyticsPanel to verify script execution
 	private class TestAnalyticsPanel : IAnalyticsPanel
 	{
-		private bool _gridCreated;
-		private bool _chartCreated;
-		private bool _heatmapCreated;
-		private bool _chart3dCreated;
+		private readonly List<TestAnalyticsGrid> _grids = [];
+		private readonly List<ITestAnalyticsChart> _charts = [];
+		private bool _heatmapHasData;
+		private bool _chart3dHasData;
 
 		public IAnalyticsGrid CreateGrid(params string[] columns)
 		{
 			columns.AssertNotNull();
 			columns.Length.AssertGreater(0);
 
-			_gridCreated = true;
-			return new TestAnalyticsGrid(columns);
+			var grid = new TestAnalyticsGrid(columns);
+			_grids.Add(grid);
+			return grid;
 		}
 
 		public IAnalyticsChart<X, Y, Z> CreateChart<X, Y, Z>()
 		{
-			_chartCreated = true;
-			return new TestAnalyticsChart<X, Y, Z>();
+			var chart = new TestAnalyticsChart<X, Y, Z>();
+			_charts.Add(chart);
+			return chart;
 		}
 
 		public IAnalyticsChart<X, Y, VoidType> CreateChart<X, Y>()
 		{
-			_chartCreated = true;
-			return new TestAnalyticsChart<X, Y, VoidType>();
+			var chart = new TestAnalyticsChart<X, Y, VoidType>();
+			_charts.Add(chart);
+			return chart;
 		}
 
 		public void DrawHeatmap(IEnumerable<string> xTitles, IEnumerable<string> yTitles, double[,] data)
@@ -164,7 +167,10 @@ public class CompilationTests : BaseTestClass
 			yTitles.AssertNotNull();
 			data.AssertNotNull();
 
-			_heatmapCreated = true;
+			// Check that data has actual content
+			var hasData = data.GetLength(0) > 0 && data.GetLength(1) > 0;
+			if (hasData)
+				_heatmapHasData = true;
 		}
 
 		public void Draw3D(IEnumerable<string> xTitles, IEnumerable<string> yTitles, double[,] data, string xTitle, string yTitle, string zTitle)
@@ -173,13 +179,28 @@ public class CompilationTests : BaseTestClass
 			yTitles.AssertNotNull();
 			data.AssertNotNull();
 
-			_chart3dCreated = true;
+			// Check that data has actual content
+			var hasData = data.GetLength(0) > 0 && data.GetLength(1) > 0;
+			if (hasData)
+				_chart3dHasData = true;
 		}
 
 		public void VerifyOutputProduced()
 		{
-			// At least one type of output should have been produced
-			(_gridCreated || _chartCreated || _heatmapCreated || _chart3dCreated).AssertTrue();
+			// Check grids have rows
+			var gridsHaveData = _grids.Count > 0 && _grids.Any(g => g.RowCount > 0);
+
+			// Check charts have series with data points
+			var chartsHaveData = _charts.Count > 0 && _charts.Any(c => c.SeriesCount > 0 && c.TotalDataPoints > 0);
+
+			// At least one type of output should have been produced with actual data
+			(gridsHaveData || chartsHaveData || _heatmapHasData || _chart3dHasData).AssertTrue();
+		}
+
+		private interface ITestAnalyticsChart
+		{
+			int SeriesCount { get; }
+			int TotalDataPoints { get; }
 		}
 
 		private class TestAnalyticsGrid(string[] columns) : IAnalyticsGrid
@@ -202,15 +223,23 @@ public class CompilationTests : BaseTestClass
 			public int RowCount => _rows.Count;
 		}
 
-		private class TestAnalyticsChart<X, Y, Z> : IAnalyticsChart<X, Y, Z>
+		private class TestAnalyticsChart<X, Y, Z> : IAnalyticsChart<X, Y, Z>, ITestAnalyticsChart
 		{
 			private int _seriesCount;
+			private int _totalDataPoints;
 
 			public void Append(string title, IEnumerable<X> xValues, IEnumerable<Y> yValues, DrawStyles style, Color? color)
 			{
 				title.IsEmpty().AssertFalse();
 				xValues.AssertNotNull();
 				yValues.AssertNotNull();
+
+				// Count actual data points
+				var xCount = xValues.Count();
+				var yCount = yValues.Count();
+				xCount.AssertEqual(yCount);
+
+				_totalDataPoints += xCount;
 				_seriesCount++;
 			}
 
@@ -220,10 +249,20 @@ public class CompilationTests : BaseTestClass
 				xValues.AssertNotNull();
 				yValues.AssertNotNull();
 				zValues.AssertNotNull();
+
+				// Count actual data points
+				var xCount = xValues.Count();
+				var yCount = yValues.Count();
+				var zCount = zValues.Count();
+				xCount.AssertEqual(yCount);
+				xCount.AssertEqual(zCount);
+
+				_totalDataPoints += xCount;
 				_seriesCount++;
 			}
 
 			public int SeriesCount => _seriesCount;
+			public int TotalDataPoints => _totalDataPoints;
 		}
 	}
 
