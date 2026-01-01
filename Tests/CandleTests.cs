@@ -119,7 +119,8 @@ public class CandleTests : BaseTestClass
 	{
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 		var tf = TimeSpan.FromMinutes(1);
-		var storageRegistry = Helper.GetStorage(Paths.HistoryDataPath, Helper.FileSystem);
+		var fs = Helper.FileSystem;
+		var storageRegistry = fs.GetStorage(Paths.HistoryDataPath);
 		var token = CancellationToken;
 
 		var loadedCandles = await storageRegistry.GetTimeFrameCandleMessageStorage(secId, tf).LoadAsync(Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1)).ToArrayAsync(token);

@@ -64,7 +64,7 @@ public class ImportTests : BaseTestClass
 		var token = CancellationToken;
 
 		var fs = Helper.MemorySystem;
-		var filePath = Helper.GetSubTemp($"{dataType.DataTypeToFileName()}_import.csv");
+		var filePath = fs.GetSubTemp($"{dataType.DataTypeToFileName()}_import.csv");
 
 		// Export to memory file system
 		using (var stream = fs.OpenWrite(filePath))
@@ -93,7 +93,7 @@ public class ImportTests : BaseTestClass
 				((IServerTimeMessage)msgs.Last()).ServerTime.AssertEqual((lastTime2 ?? ((IServerTimeMessage)arr.Last()).ServerTime).Truncate(truncate));
 		}
 
-		var storageRegistry = Helper.GetStorage(Helper.GetSubTemp());
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
 
 		// Importer check
 		using (var stream = fs.OpenRead(filePath))
@@ -498,12 +498,12 @@ public class ImportTests : BaseTestClass
 		var arr = security.RandomTicks(1000, true);
 
 		var fs = Helper.MemorySystem;
-		var filePath = Helper.GetSubTemp("ticks_progress_import.csv");
+		var filePath = fs.GetSubTemp("ticks_progress_import.csv");
 
 		using (var stream = fs.OpenWrite(filePath))
 			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
 
-		var storage = Helper.GetStorage(Helper.GetSubTemp());
+		var storage = fs.GetStorage(fs.GetSubTemp());
 
 		var importer = new CsvImporter(DataType.Ticks, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storage.GetTickMessageStorage(secId))
 		{
@@ -562,12 +562,12 @@ public class ImportTests : BaseTestClass
 		var arr = security.RandomTicks(20000, true);
 
 		var fs = Helper.MemorySystem;
-		var filePath = Helper.GetSubTemp("ticks_cancel_import.csv");
+		var filePath = fs.GetSubTemp("ticks_cancel_import.csv");
 
 		using (var stream = fs.OpenWrite(filePath))
 			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
 
-		var storage = Helper.GetStorage(Helper.GetSubTemp());
+		var storage = fs.GetStorage(fs.GetSubTemp());
 
 		var importer = new CsvImporter(DataType.Ticks, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storage.GetTickMessageStorage(secId))
 		{
@@ -616,7 +616,7 @@ public class ImportTests : BaseTestClass
 		var arr = security.RandomTicks(1000, true);
 
 		var fs = Helper.MemorySystem;
-		var filePath = Helper.GetSubTemp("ticks_error_import.csv");
+		var filePath = fs.GetSubTemp("ticks_error_import.csv");
 
 		using (var stream = fs.OpenWrite(filePath))
 			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
@@ -624,7 +624,7 @@ public class ImportTests : BaseTestClass
 		// Make one of the field orders invalid (beyond column count) to provoke parsing error
 		fields[0].Order = 9999;
 
-		var storage = Helper.GetStorage(Helper.GetSubTemp());
+		var storage = fs.GetStorage(fs.GetSubTemp());
 
 		var importer = new CsvImporter(DataType.Ticks, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storage.GetTickMessageStorage(secId))
 		{

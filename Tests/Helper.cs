@@ -15,23 +15,23 @@ static class Helper
 
 	public static SecurityLookupMessage LookupAll => Messages.Extensions.LookupAllCriteriaMessage;
 
-	public static IStorageRegistry GetStorage(string path, IFileSystem fileSystem = null)
+	public static IStorageRegistry GetStorage(this IFileSystem fileSystem, string path)
 		=> new StorageRegistry
 		{
-			DefaultDrive = new LocalMarketDataDrive(fileSystem ?? MemorySystem, path),
+			DefaultDrive = new LocalMarketDataDrive(fileSystem, path),
 		};
 
 	public static IStorageRegistry GetResourceStorage()
-		=> GetStorage(ResFolder, FileSystem);
+		=> FileSystem.GetStorage(ResFolder);
 
 	private static string GetTempFolder()
 		=> Path.Combine(AppContext.BaseDirectory, "temp");
 
-	public static string GetSubTemp(string subName = default)
+	public static string GetSubTemp(this IFileSystem fileSystem, string subName = default)
 	{
 		var root = GetTempFolder();
 		var dir = Path.Combine(root, Guid.NewGuid().ToString("N"));
-		Directory.CreateDirectory(dir);
+		fileSystem.CreateDirectory(dir);
 
 		if (!subName.IsEmpty())
 		{
@@ -39,7 +39,7 @@ static class Helper
 			var parent = Path.GetDirectoryName(path);
 
 			if (!parent.IsEmpty())
-				Directory.CreateDirectory(parent);
+				fileSystem.CreateDirectory(parent);
 
 			return path;
 		}
@@ -47,18 +47,18 @@ static class Helper
 		return dir;
 	}
 
-	public static void ClearTemp()
+	public static void ClearTemp(this IFileSystem fileSystem)
 	{
 		var root = GetTempFolder();
 
-		if (Directory.Exists(root))
-			FileSystem.ClearDirectory(root);
+		if (fileSystem.DirectoryExists(root))
+			fileSystem.ClearDirectory(root);
 		else
-			Directory.CreateDirectory(root);
+			fileSystem.CreateDirectory(root);
 	}
 
-	public static IEntityRegistry GetEntityRegistry(ChannelExecutor executor)
-		=> new CsvEntityRegistry(MemorySystem, GetSubTemp(), executor);
+	public static IEntityRegistry GetEntityRegistry(this IFileSystem fileSystem, ChannelExecutor executor)
+		=> new CsvEntityRegistry(fileSystem, GetSubTemp(fileSystem), executor);
 
 	public static ExecutionMessage[] RandomTicks(this Security security, int count, bool generateOriginSide, TimeSpan? interval = null, DateTime? start = null)
 	{

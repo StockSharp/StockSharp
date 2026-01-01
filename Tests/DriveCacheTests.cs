@@ -6,12 +6,13 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void GetDrive_SamePath_ReturnsSameInstance_AndRaisesEventOnce()
 	{
-		using var cache = new DriveCache(Helper.MemorySystem);
+		var fs = Helper.MemorySystem;
+		using var cache = new DriveCache(fs);
 
 		var created = 0;
 		cache.NewDriveCreated += _ => created++;
 
-		var path = Helper.GetSubTemp();
+		var path = fs.GetSubTemp();
 
 		var drive1 = cache.GetDrive(path);
 		var drive2 = cache.GetDrive(path);
@@ -25,9 +26,10 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void GetDrive_EmptyPath_ReturnsTryDefaultDrive()
 	{
-		using var cache = new DriveCache(Helper.MemorySystem);
+		var fs = Helper.MemorySystem;
+		using var cache = new DriveCache(fs);
 
-		cache.GetDrive(Helper.GetSubTemp());
+		cache.GetDrive(fs.GetSubTemp());
 
 		var drive = cache.GetDrive(string.Empty);
 
@@ -39,9 +41,10 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void DeleteDrive_LastLocal_ThrowsInvalidOperationException()
 	{
-		using var cache = new DriveCache(Helper.MemorySystem);
+		var fs = Helper.MemorySystem;
+		using var cache = new DriveCache(fs);
 
-		var drive = cache.GetDrive(Helper.GetSubTemp());
+		var drive = cache.GetDrive(fs.GetSubTemp());
 
 		ThrowsExactly<InvalidOperationException>(() => cache.DeleteDrive(drive));
 	}
@@ -49,10 +52,11 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void DeleteDrive_RemovesAndRaisesEvent()
 	{
-		using var cache = new DriveCache(Helper.MemorySystem);
+		var fs = Helper.MemorySystem;
+		using var cache = new DriveCache(fs);
 
-		var drive1 = cache.GetDrive(Helper.GetSubTemp());
-		cache.GetDrive(Helper.GetSubTemp());
+		var drive1 = cache.GetDrive(fs.GetSubTemp());
+		cache.GetDrive(fs.GetSubTemp());
 
 		var deleted = 0;
 		cache.DriveDeleted += _ => deleted++;
@@ -66,7 +70,8 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void Update_RaisesChanged()
 	{
-		using var cache = new DriveCache(Helper.MemorySystem);
+		var fs = Helper.MemorySystem;
+		using var cache = new DriveCache(fs);
 
 		var changed = 0;
 		cache.Changed += () => changed++;
@@ -79,9 +84,10 @@ public class DriveCacheTests : BaseTestClass
 	[TestMethod]
 	public void SaveLoad_Roundtrip_PreservesDrives()
 	{
-		using var cache = new DriveCache(Helper.MemorySystem);
+		var fs = Helper.MemorySystem;
+		using var cache = new DriveCache(fs);
 
-		var localPath = Helper.GetSubTemp();
+		var localPath = fs.GetSubTemp();
 		cache.GetDrive(localPath);
 
 		var remotePath = RemoteMarketDataDrive.DefaultAddress.To<string>();
@@ -91,7 +97,7 @@ public class DriveCacheTests : BaseTestClass
 		var storage = new SettingsStorage();
 		cache.Save(storage);
 
-		using var cache2 = new DriveCache(Helper.MemorySystem);
+		using var cache2 = new DriveCache(fs);
 		cache2.Load(storage);
 
 		var loaded = cache2.Drives.ToArray();

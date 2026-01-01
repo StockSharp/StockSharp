@@ -8,12 +8,12 @@ using System.Text.RegularExpressions;
 /// <remarks>
 /// Initializes a new instance of the <see cref="FileCredentialsStorage"/>.
 /// </remarks>
+/// <param name="fileSystem">File system.</param>
 /// <param name="fileName">File name to persist credentials.</param>
 /// <param name="asEmail">Use email as login. If <see langword="false"/>, then login can be any string.</param>
-/// <param name="fileSystem">File system. If null, uses <see cref="Paths.FileSystem"/>.</param>
-public class FileCredentialsStorage(string fileName, bool asEmail = false, IFileSystem fileSystem = null) : BaseLogReceiver, IPermissionCredentialsStorage
+public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, bool asEmail = false) : BaseLogReceiver, IPermissionCredentialsStorage
 {
-	private readonly IFileSystem _fileSystem = fileSystem ?? Paths.FileSystem;
+	private readonly IFileSystem _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 	private readonly string _fileName = fileName.ThrowIfEmpty(nameof(fileName));
 	private readonly bool _asEmail = asEmail;
 	private readonly CachedSynchronizedDictionary<string, PermissionCredentials> _credentials = new(StringComparer.InvariantCultureIgnoreCase);

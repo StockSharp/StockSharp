@@ -7,7 +7,8 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 {
 	private static (StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider, SecurityId secId) CreateEnv(StorageModes mode = StorageModes.Incremental)
 	{
-		var registry = Helper.GetStorage(Helper.GetSubTemp());
+		var fs = Helper.MemorySystem;
+		var registry = fs.GetStorage(fs.GetSubTemp());
 
 		var settings = new StorageCoreSettings
 		{

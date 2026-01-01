@@ -255,16 +255,18 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void Extensions_TryGetByLogin_EmptyLoginThrows()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 		ThrowsExactly<ArgumentNullException>(() => storage.TryGetByLogin(""));
 	}
 
 	[TestMethod]
 	public void Extensions_TryGetByLogin_ExactMatch()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		storage.Save(new PermissionCredentials { Email = "user", Password = ToSecureString("pass") });
 		storage.Save(new PermissionCredentials { Email = "user123", Password = ToSecureString("pass") });
@@ -278,8 +280,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void Extensions_TryGetByLogin_NotFound()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		storage.Save(new PermissionCredentials { Email = "user", Password = ToSecureString("pass") });
 
@@ -292,8 +295,9 @@ public class PermissionsTests : BaseTestClass
 	public void Extensions_TryGetByLogin_EscapesWildcards()
 	{
 		// Check that '*' is not treated as wildcard in exact match
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		storage.Save(new PermissionCredentials { Email = "user-star", Password = ToSecureString("pass1") });
 		storage.Save(new PermissionCredentials { Email = "user123", Password = ToSecureString("pass2") });
@@ -307,8 +311,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void Extensions_TryGetByLogin_CaseInsensitive()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		storage.Save(new PermissionCredentials { Email = "User", Password = ToSecureString("pass") });
 
@@ -325,20 +330,23 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Constructor_NullFileNameThrows()
 	{
-		ThrowsExactly<ArgumentNullException>(() => new FileCredentialsStorage(null));
+		var fs = Helper.MemorySystem;
+		ThrowsExactly<ArgumentNullException>(() => new FileCredentialsStorage(fs, null));
 	}
 
 	[TestMethod]
 	public void FileStorage_Constructor_EmptyFileNameThrows()
 	{
-		ThrowsExactly<ArgumentNullException>(() => new FileCredentialsStorage(""));
+		var fs = Helper.MemorySystem;
+		ThrowsExactly<ArgumentNullException>(() => new FileCredentialsStorage(fs, ""));
 	}
 
 	[TestMethod]
 	public void FileStorage_Constructor_NonExistentDirectory()
 	{
-		var invalidPath = Path.Combine(Helper.GetSubTemp(), "file.txt");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(invalidPath);
+		var fs = Helper.MemorySystem;
+		var invalidPath = Path.Combine(fs.GetSubTemp(), "file.txt");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, invalidPath);
 
 		var results = storage.Search("*").ToArray();
 
@@ -348,8 +356,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Search_AllPattern_ReturnsAll()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		storage.Save(new PermissionCredentials { Email = "alice", Password = ToSecureString("pass1") });
 		storage.Save(new PermissionCredentials { Email = "bob", Password = ToSecureString("pass2") });
@@ -362,8 +371,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Search_EmptyPattern_ReturnsAll()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		storage.Save(new PermissionCredentials { Email = "test1", Password = ToSecureString("pass") });
 		storage.Save(new PermissionCredentials { Email = "test2", Password = ToSecureString("pass") });
@@ -376,8 +386,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Search_WildcardPattern_MatchesCorrectly()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		storage.Save(new PermissionCredentials { Email = "admin", Password = ToSecureString("pass") });
 		storage.Save(new PermissionCredentials { Email = "user", Password = ToSecureString("pass") });
@@ -392,8 +403,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Search_ExactPattern_MatchesCaseInsensitive()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		storage.Save(new PermissionCredentials { Email = "User", Password = ToSecureString("pass") });
 
@@ -406,8 +418,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Search_ReturnsClones()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		var original = new PermissionCredentials { Email = "test", Password = ToSecureString("pass") };
 		storage.Save(original);
@@ -420,16 +433,18 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Save_NullThrows()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 		ThrowsExactly<ArgumentNullException>(() => storage.Save(null));
 	}
 
 	[TestMethod]
 	public void FileStorage_Save_AddsNewCredentials()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		var creds = new PermissionCredentials { Email = "new", Password = ToSecureString("pass") };
 		storage.Save(creds);
@@ -441,8 +456,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Save_UpdatesExistingCredentials()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		storage.Save(new PermissionCredentials { Email = "user", Password = ToSecureString("oldpass") });
 
@@ -463,8 +479,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Save_InvalidLoginWithAsterisk_Throws()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user*", Password = ToSecureString("pass") }));
 	}
@@ -472,8 +489,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Save_Null_Throws()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = null, Password = ToSecureString("pass") }));
 	}
@@ -481,8 +499,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Save_Whitespace_Throws()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = " ", Password = ToSecureString("pass") }));
 	}
@@ -490,8 +509,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Save_WithInnerSpaces_Throws()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user test@example.com", Password = ToSecureString("pass") }));
 	}
@@ -499,8 +519,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Save_InvalidPlus()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user+tag", Password = ToSecureString("pass") }));
 	}
@@ -508,8 +529,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Delete_RemovesCredentials()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		storage.Save(new PermissionCredentials { Email = "delete", Password = ToSecureString("pass") });
 
@@ -522,8 +544,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_Delete_NonExistent_ReturnsFalse()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		var deleted = storage.Delete("nonexistent");
 
@@ -533,12 +556,13 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public void FileStorage_PersistenceAcrossInstances()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
 		var login = "persistent";
 
 		// First instance: save data
 		{
-			IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+			IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 			storage.Save(new PermissionCredentials
 			{
 				Email = login,
@@ -549,7 +573,7 @@ public class PermissionsTests : BaseTestClass
 
 		// Second instance: load data
 		{
-			IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+			IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 			var result = storage.TryGetByLogin(login);
 
 			result.AssertNotNull();
@@ -571,8 +595,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public Task Authorization_ValidateCredentials_EmptyLoginThrows()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
 		return ThrowsExactlyAsync<ArgumentNullException>(() =>
@@ -582,8 +607,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public Task Authorization_ValidateCredentials_EmptyPasswordThrows()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
 		return ThrowsExactlyAsync<ArgumentNullException>(() =>
@@ -593,8 +619,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public Task Authorization_ValidateCredentials_NullPasswordThrows()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
 		return ThrowsExactlyAsync<ArgumentNullException>(() =>
@@ -604,8 +631,9 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public Task Authorization_ValidateCredentials_NonExistentUser_Throws()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
 		return ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
@@ -615,10 +643,11 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public Task Authorization_ValidateCredentials_WrongPassword_Throws()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
 		var login = "user1";
 
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 		storage.Save(new PermissionCredentials
 		{
 			Email = login,
@@ -634,11 +663,12 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public async Task Authorization_ValidateCredentials_Success_NoIpRestrictions()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
 		var login = "user1";
 		var password = ToSecureString("password");
 
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 		storage.Save(new PermissionCredentials
 		{
 			Email = login,
@@ -657,11 +687,12 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public async Task Authorization_ValidateCredentials_Success_WithIpRestrictions()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
 		var login = "user1";
 		var password = ToSecureString("password");
 
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 		storage.Save(new PermissionCredentials
 		{
 			Email = login,
@@ -680,11 +711,12 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public Task Authorization_ValidateCredentials_IpRestriction_Blocked()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
 		var login = "user1";
 		var password = ToSecureString("password");
 
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 		storage.Save(new PermissionCredentials
 		{
 			Email = login,
@@ -701,11 +733,12 @@ public class PermissionsTests : BaseTestClass
 	[TestMethod]
 	public Task Authorization_ValidateCredentials_IpRestriction_NullClientAddress_Blocked()
 	{
-		var tempFile = Helper.GetSubTemp("creds.json");
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
 		var login = "user1";
 		var password = ToSecureString("password");
 
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(tempFile);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 		storage.Save(new PermissionCredentials
 		{
 			Email = login,

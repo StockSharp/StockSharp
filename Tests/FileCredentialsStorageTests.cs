@@ -1,7 +1,5 @@
 namespace StockSharp.Tests;
 
-using Ecng.Common;
-
 using StockSharp.Configuration.Permissions;
 
 [TestClass]
@@ -22,7 +20,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	public void Search_EmptyStorage_ReturnsEmpty()
 	{
 		var fs = CreateFileSystem();
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage("/credentials.json", fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, "/credentials.json");
 
 		var result = storage.Search("*").ToArray();
 
@@ -34,7 +32,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/company/credentials.json";
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
 		var credentials = CreateCredentials("test@example.com");
 
@@ -49,14 +47,14 @@ public class FileCredentialsStorageTests : BaseTestClass
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/company/credentials.json";
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
 		var original = CreateCredentials("test@example.com");
 
 		storage.Save(original);
 
 		// Create new storage to test loading from file
-		IPermissionCredentialsStorage storage2 = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage2 = new FileCredentialsStorage(fs, filePath, asEmail: true);
 		var result = storage2.Search("test@example.com").ToArray();
 
 		result.Length.AssertEqual(1);
@@ -68,7 +66,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
 		storage.Save(CreateCredentials("admin@example.com"));
 		storage.Save(CreateCredentials("user@example.com"));
@@ -84,7 +82,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
 		storage.Save(CreateCredentials("admin@example.com"));
 		storage.Save(CreateCredentials("user@example.com"));
@@ -99,7 +97,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
 		storage.Save(CreateCredentials("admin@example.com"));
 		storage.Save(CreateCredentials("user@example.com"));
@@ -114,7 +112,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
 		storage.Save(CreateCredentials("test@example.com"));
 
@@ -129,7 +127,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(filePath, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath);
 
 		var result = storage.Delete("nonexistent");
 
@@ -141,7 +139,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
 		var original = CreateCredentials("test@example.com", "password1");
 		storage.Save(original);
@@ -158,7 +156,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	public void Save_NullCredentials_ThrowsArgumentNullException()
 	{
 		var fs = CreateFileSystem();
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage("/credentials.json", fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, "/credentials.json");
 
 		ThrowsExactly<ArgumentNullException>(() => storage.Save(null));
 	}
@@ -167,7 +165,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	public void Save_InvalidEmail_ThrowsArgumentException()
 	{
 		var fs = CreateFileSystem();
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage("/credentials.json", asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, "/credentials.json", asEmail: true);
 
 		var credentials = CreateCredentials("invalid-email");
 
@@ -178,7 +176,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	public void Save_ValidUsername_WhenAsEmailFalse()
 	{
 		var fs = CreateFileSystem();
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage("/credentials.json", asEmail: false, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, "/credentials.json", asEmail: false);
 
 		// Username: letters, numbers, dots, hyphens, underscores; 3-64 chars
 		var credentials = CreateCredentials("admin_user.123");
@@ -194,7 +192,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
 		storage.Save(CreateCredentials("Test@Example.com"));
 
@@ -208,7 +206,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
 		storage.Save(CreateCredentials("Test@Example.com"));
 
@@ -224,14 +222,14 @@ public class FileCredentialsStorageTests : BaseTestClass
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
 
-		IPermissionCredentialsStorage storage1 = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage1 = new FileCredentialsStorage(fs, filePath, asEmail: true);
 		storage1.Save(CreateCredentials("user1@example.com"));
 
-		IPermissionCredentialsStorage storage2 = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage2 = new FileCredentialsStorage(fs, filePath, asEmail: true);
 		storage2.Save(CreateCredentials("user2@example.com"));
 
 		// storage1 won't see storage2's changes without reload, but storage2 should have both
-		IPermissionCredentialsStorage storage3 = new FileCredentialsStorage(filePath, asEmail: true, fileSystem: fs);
+		IPermissionCredentialsStorage storage3 = new FileCredentialsStorage(fs, filePath, asEmail: true);
 		var result = storage3.Search("*").ToArray();
 
 		result.Length.AssertEqual(2);

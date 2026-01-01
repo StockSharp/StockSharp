@@ -336,9 +336,11 @@ public class PatternsTests : BaseTestClass
 	[TestMethod]
 	public void CustomExpression()
 	{
+		var fs = Helper.MemorySystem;
+		
 		// Test custom pattern: Large white candle (body > 5 and O < C)
 		var customPattern = new ExpressionCandlePattern("CustomLargeWhite",
-			[new CandleExpressionCondition("(B > 5) && (O < C)")]);
+			[new CandleExpressionCondition(fs, "(B > 5) && (O < C)")]);
 
 		var largeWhite = CreateCandle(100m, 110m, 100m, 108m); // Body = 8
 		var smallWhite = CreateCandle(100m, 105m, 100m, 102m); // Body = 2
@@ -352,11 +354,13 @@ public class PatternsTests : BaseTestClass
 	[TestMethod]
 	public void CustomMultiCandle()
 	{
+		var fs = Helper.MemorySystem;
+		
 		// Test custom pattern: Two consecutive white candles
 		var customPattern = new ExpressionCandlePattern("TwoWhiteCandles",
 		[
-			new CandleExpressionCondition("O < C"),
-			new CandleExpressionCondition("O < C")
+			new CandleExpressionCondition(fs, "O < C"),
+			new CandleExpressionCondition(fs, "O < C")
 		]);
 
 		var whiteCandle1 = CreateCandle(100m, 110m, 100m, 108m);
@@ -371,11 +375,13 @@ public class PatternsTests : BaseTestClass
 	[TestMethod]
 	public void PreviousReference()
 	{
+		var fs = Helper.MemorySystem;
+		
 		// Test pattern using previous candle reference (pO, pC, etc.)
 		var customPattern = new ExpressionCandlePattern("HigherClose",
 		[
-			new CandleExpressionCondition("O < C"), // First candle is white
-			new CandleExpressionCondition("C > pC") // Second candle closes higher than first
+			new CandleExpressionCondition(fs, "O < C"), // First candle is white
+			new CandleExpressionCondition(fs, "C > pC") // Second candle closes higher than first
 		]);
 
 		var firstCandle = CreateCandle(100m, 110m, 100m, 108m); // White candle
@@ -427,10 +433,11 @@ public class PatternsTests : BaseTestClass
 	[TestMethod]
 	public void SaveLoad()
 	{
+		var fs = Helper.MemorySystem;
 		var pattern = new ExpressionCandlePattern("TestPattern",
 		[
-			new CandleExpressionCondition("O < C"),
-			new CandleExpressionCondition("B > 2")
+			new CandleExpressionCondition(fs, "O < C"),
+			new CandleExpressionCondition(fs, "B > 2")
 		]);
 
 		var storage = new SettingsStorage();
@@ -451,9 +458,11 @@ public class PatternsTests : BaseTestClass
 	[TestMethod]
 	public void SaveLoadWithCustomName()
 	{
+		var fs = Helper.MemorySystem;
+
 		var pattern = new ExpressionCandlePattern("CustomName",
 		[
-			new CandleExpressionCondition("O > C")
+			new CandleExpressionCondition(fs, "O > C")
 		]);
 
 		var storage = new SettingsStorage();

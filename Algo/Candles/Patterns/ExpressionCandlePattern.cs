@@ -62,12 +62,12 @@ public class CandleExpressionCondition : IPersistable
 	/// <summary>
 	/// Create instance.
 	/// </summary>
-	/// <param name="expression"><see cref="Expression"/></param>
 	/// <param name="fileSystem">File system.</param>
-	public CandleExpressionCondition(string expression, IFileSystem fileSystem = null)
+	/// <param name="expression"><see cref="Expression"/></param>
+	public CandleExpressionCondition(IFileSystem fileSystem, string expression)
 	{
+		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 		Expression = expression;
-		_fileSystem = fileSystem ?? Paths.FileSystem;
 
 		Init();
 	}
@@ -287,7 +287,7 @@ public class ExpressionCandlePattern : ICandlePattern
 
 		Conditions = [.. storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Conditions)).Select(ss =>
 		{
-			var cond = new CandleExpressionCondition(null);
+			var cond = new CandleExpressionCondition(Paths.FileSystem, null);
 			cond.Load(ss);
 			return cond;
 		})];

@@ -15,7 +15,10 @@ public class StorageTests : BaseTestClass
 	private static readonly int[] _sourceArray = [01, 02, 03, 06, 07, 08, 09, 10, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 27, 28, 29, 30];
 
 	private static IStorageRegistry GetStorageRegistry()
-		=> Helper.GetStorage(Helper.GetSubTemp());
+	{
+		var fs = Helper.MemorySystem;
+		return fs.GetStorage(fs.GetSubTemp());
+	}
 
 	private static IMarketDataStorage<ExecutionMessage> GetTradeStorage(SecurityId security, StorageFormats format)
 	{
@@ -2635,9 +2638,9 @@ public class StorageTests : BaseTestClass
 		var exchangeProvider = ServicesRegistry.ExchangeInfoProvider;
 		var securities = Helper.RandomSecurities().Select(s => s.ToSecurity(exchangeProvider)).ToArray();
 		var token = CancellationToken;
-
+		var fs = Helper.MemorySystem;
 		var executor = Helper.CreateExecutor(token);
-		var registry = Helper.GetEntityRegistry(executor);
+		var registry = fs.GetEntityRegistry(executor);
 
 		var storage = registry.Securities;
 
@@ -2772,13 +2775,14 @@ public class StorageTests : BaseTestClass
 		};
 
 		const string namesFolder = "FolderNames";
+		var fs = Helper.FileSystem;
 
 		foreach (var secId in secIds)
 		{
 			var folderName = secId.SecurityIdToFolderName();
 			folderName.FolderNameToSecurityId().AssertEqual(secId);
 
-			var di = Directory.CreateDirectory(Path.Combine(Helper.GetSubTemp(namesFolder), folderName));
+			var di = Directory.CreateDirectory(Path.Combine(fs.GetSubTemp(namesFolder), folderName));
 			di.Parent.Name.AssertEqual(namesFolder);
 		}
 	}
@@ -3372,7 +3376,8 @@ public class StorageTests : BaseTestClass
 
 	private static LocalMarketDataDrive CreateDrive(string path = null)
 	{
-		return new(Helper.MemorySystem, path ?? Helper.GetSubTemp());
+		var fs = Helper.MemorySystem;
+		return new(fs, path ?? fs.GetSubTemp());
 	}
 
 	private async Task SetupTestDataAsync(LocalMarketDataDrive drive, SecurityId securityId, DataType dataType, StorageFormats format, DateTime[] dates)

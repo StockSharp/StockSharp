@@ -163,7 +163,8 @@ public class StorageMessageAdapterTests : BaseTestClass
 	{
 		var token = CancellationToken;
 
-		using var drive = new LocalMarketDataDrive(Helper.MemorySystem, Helper.GetSubTemp());
+		var fs = Helper.MemorySystem;
+		using var drive = new LocalMarketDataDrive(fs, fs.GetSubTemp());
 		var secId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
 		var date = DateTime.UtcNow.Date;
 

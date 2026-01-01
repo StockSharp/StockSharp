@@ -32,8 +32,9 @@ public class SnapshotRegistryTests : BaseTestClass
 	[TestMethod]
 	public void Level1_Update_Get_ReturnsLatestAcrossDates()
 	{
-		var path = Helper.GetSubTemp();
-		using var registry = new SnapshotRegistry(Helper.MemorySystem, path);
+		var fs = Helper.MemorySystem;
+		var path = fs.GetSubTemp();
+		using var registry = new SnapshotRegistry(fs, path);
 
 		var snapshotRegistry = (ISnapshotRegistry)registry;
 		var storage = (ISnapshotStorage<SecurityId, Level1ChangeMessage>)snapshotRegistry.GetSnapshotStorage(DataType.Level1);
@@ -79,8 +80,9 @@ public class SnapshotRegistryTests : BaseTestClass
 	[TestMethod]
 	public void Level1_Clear_And_ClearAll()
 	{
-		var path = Helper.GetSubTemp();
-		using var registry = new SnapshotRegistry(Helper.MemorySystem, path);
+		var fs = Helper.MemorySystem;
+		var path = fs.GetSubTemp();
+		using var registry = new SnapshotRegistry(fs, path);
 
 		var snapshotRegistry = (ISnapshotRegistry)registry;
 		var storage = (ISnapshotStorage<SecurityId, Level1ChangeMessage>)snapshotRegistry.GetSnapshotStorage(DataType.Level1);
@@ -112,8 +114,9 @@ public class SnapshotRegistryTests : BaseTestClass
 	[TestMethod]
 	public void MarketDepth_Update_Get_And_ClonesSnapshots()
 	{
-		var path = Helper.GetSubTemp();
-		using var registry = new SnapshotRegistry(Helper.MemorySystem, path);
+		var fs = Helper.MemorySystem;
+		var path = fs.GetSubTemp();
+		using var registry = new SnapshotRegistry(fs, path);
 
 		var snapshotRegistry = (ISnapshotRegistry)registry;
 		var storage = (ISnapshotStorage<SecurityId, QuoteChangeMessage>)snapshotRegistry.GetSnapshotStorage(DataType.MarketDepth);
@@ -154,8 +157,9 @@ public class SnapshotRegistryTests : BaseTestClass
 	[TestMethod]
 	public void UnsupportedDataType_Throws()
 	{
-		var path = Helper.GetSubTemp();
-		using var registry = new SnapshotRegistry(Helper.MemorySystem, path);
+		var fs = Helper.MemorySystem;
+		var path = fs.GetSubTemp();
+		using var registry = new SnapshotRegistry(fs, path);
 
 		var snapshotRegistry = (ISnapshotRegistry)registry;
 		ThrowsExactly<ArgumentOutOfRangeException>(() => snapshotRegistry.GetSnapshotStorage(DataType.Ticks));

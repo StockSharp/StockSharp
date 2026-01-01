@@ -22,12 +22,12 @@ public static class AsmInit
 
 		await CompilationExtensions.Init(Paths.FileSystem, Helper.LogManager.Application, [("designer_extensions.py", File.ReadAllText("../../../../Diagram.Core/python/designer_extensions.py"))], default);
 
-		Helper.ClearTemp();
+		Helper.FileSystem.ClearTemp();
 	}
 
 	[AssemblyCleanup]
 	public static void UnInit()
 	{
-		Helper.ClearTemp();
+		Helper.FileSystem.ClearTemp();
 	}
 }
