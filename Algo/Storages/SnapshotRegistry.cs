@@ -283,7 +283,7 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 				else
 				{
 					var dates = _fileSystem
-						.EnumerateDirectories(_path)
+						.GetDirectories(_path)
 						.Where(dir => _fileSystem.FileExists(Path.Combine(dir, _fileNameWithExtension)))
 						.Select(dir => LocalMarketDataDrive.GetDate(Path.GetFileName(dir)));
 

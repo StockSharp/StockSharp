@@ -139,15 +139,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		{
 			using (_copySync.EnterScope())
 			{
-				if (FileSystem.FileExists(FileName))
-				{
-					using var stream = FileSystem.OpenRead(FileName);
-					using var ms = new MemoryStream();
-					stream.CopyTo(ms);
-					body = ms.ToArray();
-				}
-				else
-					body = [];
+				body = FileSystem.FileExists(FileName)
+					? FileSystem.ReadAllBytes(FileName)
+					: [];
 			}
 
 			body = body.Compress<GZipStream>();
