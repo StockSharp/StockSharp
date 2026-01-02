@@ -1725,4 +1725,869 @@ public class CandleTests : BaseTestClass
 			await candles.Compress(compressor, includeLastCandle: false).ToArrayAsync(token);
 		});
 	}
+
+	#region Candle Geometry Methods
+
+	[TestMethod]
+	public void CandleHelper_GetLength_ReturnsHighMinusLow()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			HighPrice = 110m,
+			LowPrice = 100m
+		};
+
+		var length = candle.GetLength();
+
+		length.AssertEqual(10m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetLength_Null_Throws()
+	{
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			ICandleMessage candle = null;
+			candle.GetLength();
+		});
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetBody_ReturnsAbsDifference()
+	{
+		// Bullish candle
+		var bullish = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			ClosePrice = 110m
+		};
+		bullish.GetBody().AssertEqual(10m);
+
+		// Bearish candle
+		var bearish = new TimeFrameCandleMessage
+		{
+			OpenPrice = 110m,
+			ClosePrice = 100m
+		};
+		bearish.GetBody().AssertEqual(10m);
+
+		// Doji
+		var doji = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			ClosePrice = 100m
+		};
+		doji.GetBody().AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetBody_Null_Throws()
+	{
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			ICandleMessage candle = null;
+			candle.GetBody();
+		});
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetTopShadow_BullishCandle()
+	{
+		// Bullish candle: Close > Open, top shadow = High - Close
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			HighPrice = 115m,
+			LowPrice = 95m,
+			ClosePrice = 110m
+		};
+
+		var topShadow = candle.GetTopShadow();
+
+		topShadow.AssertEqual(5m); // 115 - 110
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetTopShadow_BearishCandle()
+	{
+		// Bearish candle: Open > Close, top shadow = High - Open
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 110m,
+			HighPrice = 115m,
+			LowPrice = 95m,
+			ClosePrice = 100m
+		};
+
+		var topShadow = candle.GetTopShadow();
+
+		topShadow.AssertEqual(5m); // 115 - 110
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetTopShadow_NoShadow()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			HighPrice = 110m,
+			LowPrice = 95m,
+			ClosePrice = 110m // Close equals High
+		};
+
+		var topShadow = candle.GetTopShadow();
+
+		topShadow.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetTopShadow_Null_Throws()
+	{
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			ICandleMessage candle = null;
+			candle.GetTopShadow();
+		});
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetBottomShadow_BullishCandle()
+	{
+		// Bullish candle: Close > Open, bottom shadow = Open - Low
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			HighPrice = 115m,
+			LowPrice = 95m,
+			ClosePrice = 110m
+		};
+
+		var bottomShadow = candle.GetBottomShadow();
+
+		bottomShadow.AssertEqual(5m); // 100 - 95
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetBottomShadow_BearishCandle()
+	{
+		// Bearish candle: Open > Close, bottom shadow = Close - Low
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 110m,
+			HighPrice = 115m,
+			LowPrice = 95m,
+			ClosePrice = 100m
+		};
+
+		var bottomShadow = candle.GetBottomShadow();
+
+		bottomShadow.AssertEqual(5m); // 100 - 95
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetBottomShadow_NoShadow()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			HighPrice = 110m,
+			LowPrice = 100m, // Low equals Open
+			ClosePrice = 105m
+		};
+
+		var bottomShadow = candle.GetBottomShadow();
+
+		bottomShadow.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetBottomShadow_Null_Throws()
+	{
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			ICandleMessage candle = null;
+			candle.GetBottomShadow();
+		});
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetMiddlePrice_ReturnsCorrectValue()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			HighPrice = 110m,
+			LowPrice = 100m
+		};
+
+		var middlePrice = candle.GetMiddlePrice(null);
+
+		middlePrice.AssertEqual(105m); // 100 + (110-100)/2
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetMiddlePrice_WithPriceStep()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			HighPrice = 110m,
+			LowPrice = 100m
+		};
+
+		// With price step 0.5, result should be rounded
+		var middlePrice = candle.GetMiddlePrice(0.5m);
+
+		middlePrice.AssertEqual(105m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetMiddlePrice_Null_Throws()
+	{
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			ICandleMessage candle = null;
+			candle.GetMiddlePrice(null);
+		});
+	}
+
+	#endregion
+
+	#region VolumeProfile Count Methods
+
+	[TestMethod]
+	public void CandleHelper_TotalBuyCount_ReturnsSum()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		builder.Update(100m, 10m, Sides.Buy);
+		builder.Update(100m, 20m, Sides.Buy);
+		builder.Update(101m, 15m, Sides.Buy);
+
+		var count = builder.TotalBuyCount();
+
+		count.AssertEqual(3m); // 3 buy transactions
+	}
+
+	[TestMethod]
+	public void CandleHelper_TotalBuyCount_EmptyCollection_ReturnsZero()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		var count = builder.TotalBuyCount();
+
+		count.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_TotalBuyCount_Null_Throws()
+	{
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			VolumeProfileBuilder builder = null;
+			builder.TotalBuyCount();
+		});
+	}
+
+	[TestMethod]
+	public void CandleHelper_TotalSellCount_ReturnsSum()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		builder.Update(100m, 10m, Sides.Sell);
+		builder.Update(100m, 20m, Sides.Sell);
+		builder.Update(101m, 15m, Sides.Sell);
+
+		var count = builder.TotalSellCount();
+
+		count.AssertEqual(3m); // 3 sell transactions
+	}
+
+	[TestMethod]
+	public void CandleHelper_TotalSellCount_EmptyCollection_ReturnsZero()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		var count = builder.TotalSellCount();
+
+		count.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_TotalSellCount_Null_Throws()
+	{
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			VolumeProfileBuilder builder = null;
+			builder.TotalSellCount();
+		});
+	}
+
+	#endregion
+
+	#region MinPriceLevel / MaxPriceLevel
+
+	[TestMethod]
+	public void CandleHelper_MinPriceLevel_ReturnsLevelWithMinVolume()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			PriceLevels =
+			[
+				new CandlePriceLevel { Price = 100m, TotalVolume = 50m },
+				new CandlePriceLevel { Price = 101m, TotalVolume = 10m }, // Min
+				new CandlePriceLevel { Price = 102m, TotalVolume = 30m }
+			]
+		};
+
+		var minLevel = candle.MinPriceLevel();
+
+		minLevel.AssertNotNull();
+		minLevel.Value.Price.AssertEqual(101m);
+		minLevel.Value.TotalVolume.AssertEqual(10m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_MinPriceLevel_NullPriceLevels_ReturnsNull()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			PriceLevels = null
+		};
+
+		var minLevel = candle.MinPriceLevel();
+
+		minLevel.AssertNull();
+	}
+
+	[TestMethod]
+	public void CandleHelper_MinPriceLevel_EmptyPriceLevels_ReturnsNull()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			PriceLevels = []
+		};
+
+		var minLevel = candle.MinPriceLevel();
+
+		minLevel.AssertNull();
+	}
+
+	[TestMethod]
+	public void CandleHelper_MaxPriceLevel_ReturnsLevelWithMaxVolume()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			PriceLevels =
+			[
+				new CandlePriceLevel { Price = 100m, TotalVolume = 50m }, // Max
+				new CandlePriceLevel { Price = 101m, TotalVolume = 10m },
+				new CandlePriceLevel { Price = 102m, TotalVolume = 30m }
+			]
+		};
+
+		var maxLevel = candle.MaxPriceLevel();
+
+		maxLevel.AssertNotNull();
+		maxLevel.Value.Price.AssertEqual(100m);
+		maxLevel.Value.TotalVolume.AssertEqual(50m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_MaxPriceLevel_NullPriceLevels_ReturnsNull()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			PriceLevels = null
+		};
+
+		var maxLevel = candle.MaxPriceLevel();
+
+		maxLevel.AssertNull();
+	}
+
+	#endregion
+
+	#region FilterSmallerTimeFrames
+
+	[TestMethod]
+	public void CandleHelper_FilterSmallerTimeFrames_ReturnsMultiples()
+	{
+		var timeFrames = new[]
+		{
+			TimeSpan.FromMinutes(1),
+			TimeSpan.FromMinutes(2),
+			TimeSpan.FromMinutes(3),
+			TimeSpan.FromMinutes(5),
+			TimeSpan.FromMinutes(10),
+			TimeSpan.FromMinutes(15),
+			TimeSpan.FromMinutes(30)
+		};
+
+		var original = TimeSpan.FromMinutes(30);
+
+		var filtered = timeFrames.FilterSmallerTimeFrames(original).ToArray();
+
+		// 30 is divisible by 1, 2, 3, 5, 6, 10, 15
+		// From our list: 1, 2, 3, 5, 10, 15
+		filtered.Contains(TimeSpan.FromMinutes(1)).AssertTrue();
+		filtered.Contains(TimeSpan.FromMinutes(2)).AssertTrue();
+		filtered.Contains(TimeSpan.FromMinutes(3)).AssertTrue();
+		filtered.Contains(TimeSpan.FromMinutes(5)).AssertTrue();
+		filtered.Contains(TimeSpan.FromMinutes(10)).AssertTrue();
+		filtered.Contains(TimeSpan.FromMinutes(15)).AssertTrue();
+		filtered.Contains(TimeSpan.FromMinutes(30)).AssertFalse(); // Not smaller
+	}
+
+	[TestMethod]
+	public void CandleHelper_FilterSmallerTimeFrames_ExcludesNonMultiples()
+	{
+		var timeFrames = new[]
+		{
+			TimeSpan.FromMinutes(1),
+			TimeSpan.FromMinutes(7),
+			TimeSpan.FromMinutes(11),
+			TimeSpan.FromMinutes(13)
+		};
+
+		var original = TimeSpan.FromMinutes(30);
+
+		var filtered = timeFrames.FilterSmallerTimeFrames(original).ToArray();
+
+		// Only 1 is a divisor of 30
+		filtered.Contains(TimeSpan.FromMinutes(1)).AssertTrue();
+		filtered.Contains(TimeSpan.FromMinutes(7)).AssertFalse();
+		filtered.Contains(TimeSpan.FromMinutes(11)).AssertFalse();
+		filtered.Contains(TimeSpan.FromMinutes(13)).AssertFalse();
+	}
+
+	#endregion
+
+	#region IsSame
+
+	[TestMethod]
+	public void CandleHelper_IsSame_SameOpenTime_ReturnsTrue()
+	{
+		var openTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind();
+
+		var candle1 = new TimeFrameCandleMessage { OpenTime = openTime };
+		var candle2 = new TimeFrameCandleMessage { OpenTime = openTime };
+
+		candle1.IsSame(candle2).AssertTrue();
+	}
+
+	[TestMethod]
+	public void CandleHelper_IsSame_DifferentOpenTime_ReturnsFalse()
+	{
+		var candle1 = new TimeFrameCandleMessage { OpenTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind() };
+		var candle2 = new TimeFrameCandleMessage { OpenTime = new DateTime(2024, 1, 15, 10, 1, 0).UtcKind() };
+
+		candle1.IsSame(candle2).AssertFalse();
+	}
+
+	[TestMethod]
+	public void CandleHelper_IsSame_NullFirst_ReturnsFalse()
+	{
+		TimeFrameCandleMessage candle1 = null;
+		var candle2 = new TimeFrameCandleMessage { OpenTime = DateTime.UtcNow };
+
+		candle1.IsSame(candle2).AssertFalse();
+	}
+
+	[TestMethod]
+	public void CandleHelper_IsSame_NullSecond_ReturnsFalse()
+	{
+		var candle1 = new TimeFrameCandleMessage { OpenTime = DateTime.UtcNow };
+		TimeFrameCandleMessage candle2 = null;
+
+		candle1.IsSame(candle2).AssertFalse();
+	}
+
+	[TestMethod]
+	public void CandleHelper_IsSame_BothNull_ReturnsFalse()
+	{
+		TimeFrameCandleMessage candle1 = null;
+		TimeFrameCandleMessage candle2 = null;
+
+		candle1.IsSame(candle2).AssertFalse();
+	}
+
+	#endregion
+
+	#region GetValueArea
+
+	[TestMethod]
+	public void CandleHelper_GetValueArea_BuildsFromCandlePriceLevels()
+	{
+		var candles = new[]
+		{
+			new TimeFrameCandleMessage
+			{
+				PriceLevels =
+				[
+					new CandlePriceLevel { Price = 100m, BuyVolume = 10m, SellVolume = 5m },
+					new CandlePriceLevel { Price = 101m, BuyVolume = 20m, SellVolume = 10m }
+				]
+			},
+			new TimeFrameCandleMessage
+			{
+				PriceLevels =
+				[
+					new CandlePriceLevel { Price = 100m, BuyVolume = 15m, SellVolume = 5m },
+					new CandlePriceLevel { Price = 102m, BuyVolume = 30m, SellVolume = 20m }
+				]
+			}
+		};
+
+		var area = candles.GetValueArea();
+
+		area.AssertNotNull();
+		area.PriceLevels.Any().AssertTrue();
+
+		// Should have 3 unique price levels: 100, 101, 102
+		var prices = area.PriceLevels.Select(l => l.Price).OrderBy(p => p).ToArray();
+		prices.Length.AssertEqual(3);
+		prices[0].AssertEqual(100m);
+		prices[1].AssertEqual(101m);
+		prices[2].AssertEqual(102m);
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetValueArea_SkipsCandlesWithNullPriceLevels()
+	{
+		var candles = new[]
+		{
+			new TimeFrameCandleMessage
+			{
+				PriceLevels =
+				[
+					new CandlePriceLevel { Price = 100m, BuyVolume = 10m, SellVolume = 5m }
+				]
+			},
+			new TimeFrameCandleMessage
+			{
+				PriceLevels = null // Should be skipped
+			}
+		};
+
+		var area = candles.GetValueArea();
+
+		area.AssertNotNull();
+		area.PriceLevels.Count().AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetValueArea_EmptyCandles_ReturnsEmptyArea()
+	{
+		var candles = Array.Empty<TimeFrameCandleMessage>();
+
+		var area = candles.GetValueArea();
+
+		area.AssertNotNull();
+		area.PriceLevels.Any().AssertFalse();
+	}
+
+	#endregion
+
+	#region ToTickMessage
+
+	[TestMethod]
+	public void CandleHelper_ToTickMessage_ConvertsCorrectly()
+	{
+		var tick = ((Sides?)Sides.Buy, 100m, 50m, new DateTime(2024, 1, 15, 10, 0, 0).UtcKind());
+		var secId = Helper.CreateSecurityId();
+		var localTime = new DateTime(2024, 1, 15, 10, 0, 1).UtcKind();
+
+		var execMsg = tick.ToTickMessage(secId, localTime);
+
+		execMsg.SecurityId.AssertEqual(secId);
+		execMsg.LocalTime.AssertEqual(localTime);
+		execMsg.ServerTime.AssertEqual(tick.Item4);
+		execMsg.TradePrice.AssertEqual(100m);
+		execMsg.TradeVolume.AssertEqual(50m);
+		execMsg.OriginSide.AssertEqual(Sides.Buy);
+		execMsg.DataTypeEx.AssertEqual(DataType.Ticks);
+	}
+
+	[TestMethod]
+	public void CandleHelper_ToTickMessage_NullSide()
+	{
+		var tick = ((Sides?)null, 100m, 50m, new DateTime(2024, 1, 15, 10, 0, 0).UtcKind());
+		var secId = Helper.CreateSecurityId();
+		var localTime = DateTime.UtcNow;
+
+		var execMsg = tick.ToTickMessage(secId, localTime);
+
+		execMsg.OriginSide.AssertNull();
+	}
+
+	#endregion
+
+	#region ConvertToTrades
+
+	[TestMethod]
+	public void CandleHelper_ConvertToTrades_NormalCandle()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			HighPrice = 110m,
+			LowPrice = 95m,
+			ClosePrice = 105m,
+			TotalVolume = 100m,
+			OpenTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind()
+		};
+
+		var ticks = new (Sides? side, decimal price, decimal volume, DateTime time)[4];
+		candle.ConvertToTrades(0.01m, 2, ticks);
+
+		// Should have 4 ticks for normal candle
+		ticks[0].price.AssertEqual(100m); // Open
+		ticks[1].price.AssertEqual(110m); // High
+		ticks[2].price.AssertEqual(95m);  // Low
+		ticks[3].price.AssertEqual(105m); // Close
+	}
+
+	[TestMethod]
+	public void CandleHelper_ConvertToTrades_SinglePriceCandle()
+	{
+		// Candle where all prices are the same
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			HighPrice = 100m,
+			LowPrice = 100m,
+			ClosePrice = 100m,
+			TotalVolume = 50m,
+			OpenTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind()
+		};
+
+		var ticks = new (Sides? side, decimal price, decimal volume, DateTime time)[4];
+		candle.ConvertToTrades(0.01m, 2, ticks);
+
+		// Should have 1 tick only
+		ticks[0].price.AssertEqual(100m);
+		ticks[0].volume.AssertEqual(50m);
+		ticks[1].AssertEqual(default);
+	}
+
+	[TestMethod]
+	public void CandleHelper_ConvertToTrades_Volume1()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			HighPrice = 110m,
+			LowPrice = 95m,
+			ClosePrice = 105m,
+			TotalVolume = 1m,
+			OpenTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind()
+		};
+
+		var ticks = new (Sides? side, decimal price, decimal volume, DateTime time)[4];
+		candle.ConvertToTrades(0.01m, 2, ticks);
+
+		// Should have 1 tick only for volume=1
+		ticks[0].volume.AssertEqual(1m);
+		ticks[1].AssertEqual(default);
+	}
+
+	[TestMethod]
+	public void CandleHelper_ConvertToTrades_Volume2()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			HighPrice = 110m,
+			LowPrice = 95m,
+			ClosePrice = 105m,
+			TotalVolume = 2m,
+			OpenTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind()
+		};
+
+		var ticks = new (Sides? side, decimal price, decimal volume, DateTime time)[4];
+		candle.ConvertToTrades(0.01m, 2, ticks);
+
+		// Should have 2 ticks for volume=2
+		ticks[0].price.AssertEqual(110m); // High
+		ticks[0].volume.AssertEqual(1m);
+		ticks[1].price.AssertEqual(95m);  // Low
+		ticks[1].volume.AssertEqual(1m);
+		ticks[2].AssertEqual(default);
+	}
+
+	[TestMethod]
+	public void CandleHelper_ConvertToTrades_Volume3()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			HighPrice = 110m,
+			LowPrice = 95m,
+			ClosePrice = 105m,
+			TotalVolume = 3m,
+			OpenTime = new DateTime(2024, 1, 15, 10, 0, 0).UtcKind()
+		};
+
+		var ticks = new (Sides? side, decimal price, decimal volume, DateTime time)[4];
+		candle.ConvertToTrades(0.01m, 2, ticks);
+
+		// Should have 3 ticks for volume=3
+		ticks[0].price.AssertEqual(100m); // Open
+		ticks[1].price.AssertEqual(110m); // High
+		ticks[2].price.AssertEqual(95m);  // Low
+		ticks[3].AssertEqual(default);
+	}
+
+	[TestMethod]
+	public void CandleHelper_ConvertToTrades_InvalidArraySize_Throws()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			OpenPrice = 100m,
+			HighPrice = 110m,
+			LowPrice = 95m,
+			ClosePrice = 105m,
+			TotalVolume = 100m
+		};
+
+		var ticks = new (Sides? side, decimal price, decimal volume, DateTime time)[3]; // Wrong size
+
+		ThrowsExactly<ArgumentOutOfRangeException>(() =>
+		{
+			candle.ConvertToTrades(0.01m, 2, ticks);
+		});
+	}
+
+	[TestMethod]
+	public void CandleHelper_ConvertToTrades_Null_Throws()
+	{
+		var ticks = new (Sides? side, decimal price, decimal volume, DateTime time)[4];
+
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			ICandleMessage candle = null;
+			candle.ConvertToTrades(0.01m, 2, ticks);
+		});
+	}
+
+	#endregion
+
+	#region BoardMessage overloads
+
+	[TestMethod]
+	public void CandleHelper_GetCandleBounds_BoardMessage()
+	{
+		var board = new BoardMessage
+		{
+			TimeZone = TimeZoneInfo.Utc,
+			WorkingTime = ExchangeBoard.Forts.WorkingTime
+		};
+
+		var currentTime = new DateTime(2024, 1, 15, 14, 30, 0).UtcKind();
+		var tf = TimeSpan.FromMinutes(5);
+
+		var bounds = tf.GetCandleBounds(currentTime, board);
+
+		bounds.Min.AssertEqual(new DateTime(2024, 1, 15, 14, 30, 0).UtcKind());
+		bounds.Max.AssertEqual(new DateTime(2024, 1, 15, 14, 35, 0).UtcKind());
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetCandleBounds_BoardMessage_Null_Throws()
+	{
+		var tf = TimeSpan.FromMinutes(5);
+		var currentTime = DateTime.UtcNow;
+
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			tf.GetCandleBounds(currentTime, (BoardMessage)null);
+		});
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetTimeFrameCount_BoardMessage()
+	{
+		var board = new BoardMessage
+		{
+			TimeZone = TimeZoneInfo.Utc,
+			WorkingTime = ExchangeBoard.Forts.WorkingTime
+		};
+
+		var range = new Range<DateTime>(
+			new DateTime(2024, 1, 15, 10, 0, 0).UtcKind(),
+			new DateTime(2024, 1, 15, 11, 0, 0).UtcKind()
+		);
+
+		var tf = TimeSpan.FromMinutes(5);
+
+		var count = range.GetTimeFrameCount(tf, board);
+
+		// Should have 12 5-minute candles in 1 hour
+		count.AssertEqual(12);
+	}
+
+	[TestMethod]
+	public void CandleHelper_GetTimeFrameCount_BoardMessage_Null_Throws()
+	{
+		var range = new Range<DateTime>(DateTime.UtcNow, DateTime.UtcNow.AddHours(1));
+		var tf = TimeSpan.FromMinutes(5);
+
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			range.GetTimeFrameCount(tf, (BoardMessage)null);
+		});
+	}
+
+	#endregion
+
+	#region VolumeProfile Update with Transform
+
+	[TestMethod]
+	public void CandleHelper_VolumeProfileUpdate_WithTransform()
+	{
+		var builder = new VolumeProfileBuilder();
+		var transform = new TickCandleBuilderValueTransform();
+
+		var tick = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 50m,
+			OriginSide = Sides.Buy,
+			ServerTime = DateTime.UtcNow
+		};
+
+		transform.Process(tick);
+
+		builder.Update(transform);
+
+		var level = builder.PriceLevels.Single();
+		level.Price.AssertEqual(100m);
+		level.BuyVolume.AssertEqual(50m);
+		level.BuyCount.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void CandleHelper_VolumeProfileUpdate_WithTransform_Null_Throws()
+	{
+		var builder = new VolumeProfileBuilder();
+
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			builder.Update((ICandleBuilderValueTransform)null);
+		});
+	}
+
+	[TestMethod]
+	public void CandleHelper_VolumeProfileUpdate_NullBuilder_Throws()
+	{
+		var transform = new TickCandleBuilderValueTransform();
+
+		ThrowsExactly<ArgumentNullException>(() =>
+		{
+			VolumeProfileBuilder builder = null;
+			builder.Update(transform);
+		});
+	}
+
+	#endregion
 }
