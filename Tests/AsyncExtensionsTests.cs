@@ -7,7 +7,7 @@ public class AsyncExtensionsTests : BaseTestClass
 {
 	private class MockAdapter : MessageAdapter
 	{
-		public ConcurrentQueue<Message> SentMessages { get; } = new();
+		public ConcurrentQueue<Message> SentMessages { get; } = [];
 		public Dictionary<long, MarketDataMessage> ActiveSubscriptions { get; } = [];
 		public long LastSubscribedId { get; private set; }
 
@@ -91,7 +91,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 	private class MockAsyncAdapter : HistoricalMessageAdapter
 	{
-		public ConcurrentQueue<Message> SentMessages { get; } = new();
+		public ConcurrentQueue<Message> SentMessages { get; } = [];
 		public Dictionary<long, MarketDataMessage> ActiveSubscriptions { get; } = [];
 		public long LastSubscribedId { get; private set; }
 
