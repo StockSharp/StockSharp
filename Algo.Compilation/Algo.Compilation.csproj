@@ -10,6 +10,8 @@
     <PackageReference Include="IronPython.StdLib" Version="$(IronPythonVer)" />
     <PackageReference Include="MathNet.Numerics.FSharp" Version="$(MathNumVer)" />
     <PackageReference Include="NumpyDotNet" Version="$(NumpyVer)" />
+    <PackageReference Include="FSharp.Control.TaskSeq" Version="$(FSharpControlTaskSeqVer)" />
+    <PackageReference Include="FSharpPlus" Version="$(FSharpPlusVer)" />
   </ItemGroup>
 
   <ItemGroup>

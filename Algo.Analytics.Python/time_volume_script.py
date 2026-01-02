@@ -37,6 +37,8 @@ class time_volume_script(IAnalyticsScript):
         # Script can process only 1 instrument
         security = securities[0]
 
+        logs.LogInfo("Processing {0}...", security)
+
         # Get candle storage
         candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
@@ -48,9 +50,16 @@ class time_volume_script(IAnalyticsScript):
             return Task.CompletedTask
 
         # Grouping candles by opening time (hourly truncation) and summing their volumes
-        candles = load_tf_candles(candle_storage, from_date, to_date, cancellation_token)
         rows = {}
-        for candle in candles:
+        prev_date = None
+
+        for candle in iter_candles(candle_storage, from_date, to_date, cancellation_token):
+            # Log date change
+            curr_date = candle.OpenTime.Date
+            if curr_date != prev_date:
+                prev_date = curr_date
+                logs.LogInfo("  {0}...", curr_date.ToString("yyyy-MM-dd"))
+
             # Truncate TimeOfDay to the nearest hour
             time_of_day = candle.OpenTime.TimeOfDay
             truncated = TimeSpan.FromHours(int(time_of_day.TotalHours))

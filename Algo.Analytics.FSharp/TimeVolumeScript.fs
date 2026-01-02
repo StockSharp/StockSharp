@@ -10,6 +10,8 @@ open Ecng.Common
 open Ecng.Drawing
 open Ecng.Logging
 
+open FSharp.Control
+
 open StockSharp.Algo.Analytics
 open StockSharp.Algo.Storages
 open StockSharp.Algo.Candles
@@ -41,6 +43,8 @@ type TimeVolumeScript() =
                     // This script processes only the first instrument
                     let security = securities.First()
 
+                    logs.LogInfo("Processing {0}...", security)
+
                     // Get candle storage
                     let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
@@ -52,18 +56,21 @@ type TimeVolumeScript() =
                         logs.LogWarning("no data")
                     else
                         // Group candles by hour (truncate open time to 1 hour)
-                        let! candles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
-                        let rows =
-                            candles
-                                .GroupBy(fun c ->
-                                    // c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1))
-                                    let truncated = c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1.0))
-                                    truncated
-                                )
-                                .ToDictionary(
-                                    (fun g -> g.Key),
-                                    (fun g -> g.Sum(fun c -> c.TotalVolume))
-                                )
+                        let rows = Dictionary<TimeSpan, decimal>()
+                        let mutable prevDate = DateOnly.MinValue
+
+                        do! candleStorage.LoadAsync(fromDate, toDate)
+                            |> TaskSeq.iter (fun candle ->
+                                let currDate = DateOnly.FromDateTime(candle.OpenTime.Date)
+                                if currDate <> prevDate then
+                                    prevDate <- currDate
+                                    logs.LogInfo("  {0}...", currDate)
+
+                                let hour = candle.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1.0))
+                                match rows.TryGetValue(hour) with
+                                | true, volume -> rows.[hour] <- volume + candle.TotalVolume
+                                | false, _ -> rows.[hour] <- candle.TotalVolume
+                            )
 
                         // Create a grid with two columns: Time, Volume
                         let grid = panel.CreateGrid("Time", "Volume")

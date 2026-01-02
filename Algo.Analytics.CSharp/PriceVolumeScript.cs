@@ -16,6 +16,8 @@ public class PriceVolumeScript : IAnalyticsScript
 		// script can process only 1 instrument
 		var security = securities.First();
 
+		logs.LogInfo("Processing {0}...", security);
+
 		// get candle storage
 		var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
@@ -29,10 +31,25 @@ public class PriceVolumeScript : IAnalyticsScript
 		}
 
 		// grouping candles by middle price
-		var rows = (await candleStorage.LoadAsync(from, to)
-			.ToArrayAsync(cancellationToken))
-			.GroupBy(c => c.LowPrice + c.GetLength() / 2)
-			.ToDictionary(g => g.Key, g => g.Sum(c => c.TotalVolume));
+		var rows = new Dictionary<decimal, decimal>();
+		var prevDate = default(DateOnly);
+
+		await foreach (var candle in candleStorage.LoadAsync(from, to).WithCancellation(cancellationToken))
+		{
+			var currDate = DateOnly.FromDateTime(candle.OpenTime.Date);
+			if (currDate != prevDate)
+			{
+				prevDate = currDate;
+				logs.LogInfo("  {0}...", currDate);
+			}
+
+			var midPrice = candle.LowPrice + candle.GetLength() / 2;
+
+			if (rows.TryGetValue(midPrice, out var volume))
+				rows[midPrice] = volume + candle.TotalVolume;
+			else
+				rows[midPrice] = candle.TotalVolume;
+		}
 
 		// draw on chart
 		panel.CreateChart<decimal, decimal>()

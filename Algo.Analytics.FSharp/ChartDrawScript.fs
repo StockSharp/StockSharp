@@ -10,6 +10,8 @@ open Ecng.Common
 open Ecng.Drawing
 open Ecng.Logging
 
+open FSharp.Control
+
 open StockSharp.Algo.Analytics
 open StockSharp.Algo.Storages
 open StockSharp.Algo.Candles
@@ -41,24 +43,33 @@ type ChartDrawScript() =
                     // Create two charts: lineChart and histogramChart
                     let lineChart = panel.CreateChart<DateTime, decimal>()
                     let histogramChart = panel.CreateChart<DateTime, decimal>()
+                    let mutable idx = 0
 
                     // Iterate over each security
                     for security in securities do
                         // Stop if user cancels script execution
                         if not cancellationToken.IsCancellationRequested then
+                            idx <- idx + 1
+                            logs.LogInfo("Processing {0} of {1}: {2}...", idx, securities.Length, security)
+
                             let candlesSeries = Dictionary<DateTime, decimal>()
                             let volsSeries = Dictionary<DateTime, decimal>()
 
                             // Get candle storage for this security
                             let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
+                            let mutable prevDate = DateOnly.MinValue
 
-                            // Load candles within the specified date range
-                            let! candles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
+                            // Load candles and fill dictionaries
+                            do! candleStorage.LoadAsync(fromDate, toDate)
+                                |> TaskSeq.iter (fun candle ->
+                                    let currDate = DateOnly.FromDateTime(candle.OpenTime.Date)
+                                    if currDate <> prevDate then
+                                        prevDate <- currDate
+                                        logs.LogInfo("  {0}...", currDate)
 
-                            // Fill dictionaries with close price and volume
-                            for candle in candles do
-                                candlesSeries.[candle.OpenTime] <- candle.ClosePrice
-                                volsSeries.[candle.OpenTime] <- candle.TotalVolume
+                                    candlesSeries.[candle.OpenTime] <- candle.ClosePrice
+                                    volsSeries.[candle.OpenTime] <- candle.TotalVolume
+                                )
 
                             // Draw close prices as a dashed line
                             lineChart.Append(

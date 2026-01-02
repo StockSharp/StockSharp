@@ -10,6 +10,8 @@ open Ecng.Common
 open Ecng.Drawing
 open Ecng.Logging
 
+open FSharp.Control
+
 open StockSharp.Algo.Analytics
 open StockSharp.Algo.Storages
 open StockSharp.Algo.Candles
@@ -43,20 +45,35 @@ type PearsonCorrelationScript() =
                 else
                     // A list of arrays, each array containing double-precision close prices for a single security
                     let closes = ResizeArray<float[]>()
+                    let mutable idx = 0
 
                     for security in securities do
                         if not cancellationToken.IsCancellationRequested then
+                            idx <- idx + 1
+                            logs.LogInfo("Processing {0} of {1}: {2}...", idx, securities.Length, security)
+
                             let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
-                            let! candles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
-                            let prices = candles |> Seq.map (fun c -> float c.ClosePrice) |> Seq.toArray
+                            let pricesList = ResizeArray<float>()
+                            let mutable prevDate = DateOnly.MinValue
+
+                            do! candleStorage.LoadAsync(fromDate, toDate)
+                                |> TaskSeq.iter (fun candle ->
+                                    let currDate = DateOnly.FromDateTime(candle.OpenTime.Date)
+                                    if currDate <> prevDate then
+                                        prevDate <- currDate
+                                        logs.LogInfo("  {0}...", currDate)
+
+                                    pricesList.Add(float candle.ClosePrice)
+                                )
+
+                            let prices = pricesList.ToArray()
                             if prices.Length = 0 then
                                 logs.LogWarning("No data for {0}", security)
                             else
                                 closes.Add(prices)
 
                     if closes.Count > 0 then
-                        // Все массивы должны быть одинаковой длины. Если какие-то длиннее,
-                        // обрезаем их до минимальной длины (minLen).
+                        // All arrays must be same length, truncate longer ones
                         let minLen =
                             closes
                             |> Seq.map (fun arr -> arr.Length)
@@ -68,19 +85,18 @@ type PearsonCorrelationScript() =
                               if arr.Length > minLen then arr.[0..(minLen - 1)] else arr)
                             |> Seq.toList
 
-                        // Вычисляем матрицу корреляции
-                        // Correlation.PearsonMatrix принимает последовательность массивов и возвращает матрицу
+                        // Calculate correlation matrix
                         let matrix = Correlation.PearsonMatrix(truncatedCloses :> seq<_>)
 
-                        // Получаем названия инструментов для осей heatmap
+                        // Get security names for heatmap axes
                         let ids =
                             securities
                             |> Seq.map (fun s -> s.ToStringId())
                             |> Seq.toArray
 
-                        // Преобразуем матрицу в двумерный массив для отрисовки
+                        // Convert matrix to 2D array for drawing
                         let arrMatrix = matrix.ToArray()
 
-                        // Отрисовываем результат в виде heatmap
+                        // Draw result as heatmap
                         panel.DrawHeatmap(ids, ids, arrMatrix)
             }

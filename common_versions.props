@@ -40,5 +40,7 @@
     <IronPythonVer>3.4.2</IronPythonVer>
     <MoqVer>4.*</MoqVer>
     <ILGPUVer>1.*</ILGPUVer>
+    <FSharpControlTaskSeqVer>0.*</FSharpControlTaskSeqVer>
+    <FSharpPlusVer>1.*</FSharpPlusVer>
   </PropertyGroup>
 </Project>

@@ -66,6 +66,7 @@ public static class CodeExtensions
 		=> CreateAssemblyReferences(
 		[
 			"FSharp.Core",
+			"FSharp.Control.TaskSeq",
 			"System.Runtime.Numerics",
 			"System.Numerics",
 			"System.Net.Requests",

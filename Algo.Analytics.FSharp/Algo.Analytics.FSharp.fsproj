@@ -11,6 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MathNet.Numerics.FSharp" Version="$(MathNumVer)" />
+    <PackageReference Include="FSharp.Control.TaskSeq" Version="$(FSharpControlTaskSeqVer)" />
   </ItemGroup>
 	
   <ItemGroup>

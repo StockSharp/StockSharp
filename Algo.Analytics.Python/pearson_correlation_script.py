@@ -39,16 +39,28 @@ class pearson_correlation_script(IAnalyticsScript):
 
         closes = []
 
-        for security in securities:
+        for idx, security in enumerate(securities):
             # stop calculation if user cancel script execution
             if cancellation_token.IsCancellationRequested:
                 break
+
+            logs.LogInfo("Processing {0} of {1}: {2}...", idx + 1, len(securities), security)
 
             # get candle storage
             candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
             # get closing prices
-            prices = [float(c.ClosePrice) for c in load_tf_candles(candle_storage, from_date, to_date, cancellation_token)]
+            prices = []
+            prev_date = None
+
+            for candle in iter_candles(candle_storage, from_date, to_date, cancellation_token):
+                # Log date change
+                curr_date = candle.OpenTime.Date
+                if curr_date != prev_date:
+                    prev_date = curr_date
+                    logs.LogInfo("  {0}...", curr_date.ToString("yyyy-MM-dd"))
+
+                prices.append(float(candle.ClosePrice))
 
             if len(prices) == 0:
                 logs.LogWarning("No data for {0}", security)
@@ -59,10 +71,10 @@ class pearson_correlation_script(IAnalyticsScript):
         # all arrays must be the same length, so truncate longer ones
         min_length = min(len(arr) for arr in closes)
         closes = [arr[:min_length] for arr in closes]
-        
+
         # convert list or array into 2D array
         array2d = nx.to2darray(closes)
-        
+
         # calculating correlation using NumSharp
         np_array = np.array(array2d)
         matrix = np.corrcoef(np_array)

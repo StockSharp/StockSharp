@@ -19,20 +19,47 @@ public class BiggestCandleScript : IAnalyticsScript
 		var bigPriceCandles = new List<CandleMessage>();
 		var bigVolCandles = new List<CandleMessage>();
 
+		var idx = 0;
 		foreach (var security in securities)
 		{
 			// stop calculation if user cancel script execution
 			if (cancellationToken.IsCancellationRequested)
 				break;
 
+			logs.LogInfo("Processing {0} of {1}: {2}...", ++idx, securities.Length, security);
+
 			// get candle storage
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
-			var allCandles = await candleStorage.LoadAsync(from, to).ToArrayAsync(cancellationToken);
+			// find biggest candles by iterating through stream
+			CandleMessage bigPriceCandle = null;
+			CandleMessage bigVolCandle = null;
+			decimal maxLength = 0;
+			decimal maxVolume = 0;
+			var prevDate = default(DateOnly);
 
-			// first orders by volume desc will be our biggest candle
-			var bigPriceCandle = allCandles.OrderByDescending(c => c.GetLength()).FirstOrDefault();
-			var bigVolCandle = allCandles.OrderByDescending(c => c.TotalVolume).FirstOrDefault();
+			await foreach (var candle in candleStorage.LoadAsync(from, to).WithCancellation(cancellationToken))
+			{
+				var currDate = DateOnly.FromDateTime(candle.OpenTime.Date);
+				if (currDate != prevDate)
+				{
+					prevDate = currDate;
+					logs.LogInfo("  {0}...", currDate);
+				}
+
+				var length = candle.GetLength();
+				if (bigPriceCandle == null || length > maxLength)
+				{
+					maxLength = length;
+					bigPriceCandle = candle;
+				}
+
+				if (bigVolCandle == null || candle.TotalVolume > maxVolume)
+				{
+					maxVolume = candle.TotalVolume;
+					bigVolCandle = candle;
+				}
+			}
 
 			if (bigPriceCandle != null)
 				bigPriceCandles.Add(bigPriceCandle);

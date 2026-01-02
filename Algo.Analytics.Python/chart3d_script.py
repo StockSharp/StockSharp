@@ -51,6 +51,8 @@ class chart3d_script(IAnalyticsScript):
 
             security = securities[i]
 
+            logs.LogInfo("Processing {0} of {1}: {2}...", i + 1, securities.Length, security)
+
             # Fill X labels with security identifiers
             x.append(to_string_id(security))
 
@@ -65,9 +67,16 @@ class chart3d_script(IAnalyticsScript):
                 return Task.CompletedTask
 
             # Grouping candles by opening time (truncated to the nearest hour) and summing volumes
-            candles = load_tf_candles(candle_storage, from_date, to_date, cancellation_token)
             by_hours = {}
-            for candle in candles:
+            prev_date = None
+
+            for candle in iter_candles(candle_storage, from_date, to_date, cancellation_token):
+                # Log date change
+                curr_date = candle.OpenTime.Date
+                if curr_date != prev_date:
+                    prev_date = curr_date
+                    logs.LogInfo("  {0}...", curr_date.ToString("yyyy-MM-dd"))
+
                 # Truncate TimeOfDay to the nearest hour
                 tod = candle.OpenTime.TimeOfDay
                 truncated = TimeSpan.FromHours(int(tod.TotalHours))
@@ -79,10 +88,10 @@ class chart3d_script(IAnalyticsScript):
             for hour, volume in by_hours.items():
                 # Set volume at position [i, hour] in the 2D array
                 # Ensure hour is within the range of y labels
-                
+
                 if hour < len(y):
                     z[i][hour] = float(volume)
-                    
+
         # Draw the 3D chart using panel
         panel.Draw3D(x, y, nx.to2darray(z), "Instruments", "Hours", "Volume")
 

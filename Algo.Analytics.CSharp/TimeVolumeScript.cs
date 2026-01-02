@@ -16,6 +16,8 @@ public class TimeVolumeScript : IAnalyticsScript
 		// script can process only 1 instrument
 		var security = securities.First();
 
+		logs.LogInfo("Processing {0}...", security);
+
 		// get candle storage
 		var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
@@ -29,10 +31,25 @@ public class TimeVolumeScript : IAnalyticsScript
 		}
 
 		// grouping candles by opening time (time part only) with 1 hour truncating
-		var rows = (await candleStorage.LoadAsync(from, to)
-			.ToArrayAsync(cancellationToken))
-			.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)))
-			.ToDictionary(g => g.Key, g => g.Sum(c => c.TotalVolume));
+		var rows = new Dictionary<TimeSpan, decimal>();
+		var prevDate = default(DateOnly);
+
+		await foreach (var candle in candleStorage.LoadAsync(from, to).WithCancellation(cancellationToken))
+		{
+			var currDate = DateOnly.FromDateTime(candle.OpenTime.Date);
+			if (currDate != prevDate)
+			{
+				prevDate = currDate;
+				logs.LogInfo("  {0}...", currDate);
+			}
+
+			var hour = candle.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1));
+
+			if (rows.TryGetValue(hour, out var volume))
+				rows[hour] = volume + candle.TotalVolume;
+			else
+				rows[hour] = candle.TotalVolume;
+		}
 
 		// put our calculations into grid
 		var grid = panel.CreateGrid("Time", "Volume");

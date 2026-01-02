@@ -27,10 +27,12 @@ class indicator_script(IAnalyticsScript):
         candle_chart = create_chart(panel, datetime, float)
         indicator_chart = create_chart(panel, datetime, float)
 
-        for security in securities:
+        for idx, security in enumerate(securities):
             # stop calculation if user cancel script execution
             if cancellation_token.IsCancellationRequested:
                 break
+
+            logs.LogInfo("Processing {0} of {1}: {2}...", idx + 1, len(securities), security)
 
             candles_series = {}
             indicator_series = {}
@@ -40,8 +42,15 @@ class indicator_script(IAnalyticsScript):
 
             # get candle storage
             candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
+            prev_date = None
 
-            for candle in load_tf_candles(candle_storage, from_date, to_date, cancellation_token):
+            for candle in iter_candles(candle_storage, from_date, to_date, cancellation_token):
+                # Log date change
+                curr_date = candle.OpenTime.Date
+                if curr_date != prev_date:
+                    prev_date = curr_date
+                    logs.LogInfo("  {0}...", curr_date.ToString("yyyy-MM-dd"))
+
                 # fill series
                 candles_series[candle.OpenTime] = candle.ClosePrice
                 indicator_series[candle.OpenTime] = to_decimal(process_candle(roc, candle))

@@ -10,6 +10,8 @@ open Ecng.Common
 open Ecng.Drawing
 open Ecng.Logging
 
+open FSharp.Control
+
 open StockSharp.Algo.Analytics
 open StockSharp.Algo.Storages
 open StockSharp.Algo.Candles
@@ -41,6 +43,8 @@ type PriceVolumeScript() =
                     // This script processes only the first instrument
                     let security = securities.First()
 
+                    logs.LogInfo("Processing {0}...", security)
+
                     // Get candle storage
                     let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
@@ -52,16 +56,21 @@ type PriceVolumeScript() =
                         logs.LogWarning("no data")
                     else
                         // Group candles by "middle price" = LowPrice + (HighPrice - LowPrice) / 2
-                        // In StockSharp code, c.GetLength() == c.HighPrice - c.LowPrice
-                        // thus c.LowPrice + c.GetLength() / 2 is the middle
-                        let! candles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
-                        let rows =
-                            candles
-                                .GroupBy(fun c -> c.LowPrice + (c.GetLength() / 2m))
-                                .ToDictionary(
-                                    (fun g -> g.Key),
-                                    (fun g -> g.Sum(fun c -> c.TotalVolume))
-                                )
+                        let rows = Dictionary<decimal, decimal>()
+                        let mutable prevDate = DateOnly.MinValue
+
+                        do! candleStorage.LoadAsync(fromDate, toDate)
+                            |> TaskSeq.iter (fun candle ->
+                                let currDate = DateOnly.FromDateTime(candle.OpenTime.Date)
+                                if currDate <> prevDate then
+                                    prevDate <- currDate
+                                    logs.LogInfo("  {0}...", currDate)
+
+                                let midPrice = candle.LowPrice + (candle.GetLength() / 2m)
+                                match rows.TryGetValue(midPrice) with
+                                | true, volume -> rows.[midPrice] <- volume + candle.TotalVolume
+                                | false, _ -> rows.[midPrice] <- candle.TotalVolume
+                            )
 
                         // Draw histogram on the chart
                         panel.CreateChart<decimal, decimal>()

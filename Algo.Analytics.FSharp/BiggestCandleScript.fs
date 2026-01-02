@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Analytics
+namespace StockSharp.Algo.Analytics
 
 open System
 open System.Linq
@@ -9,6 +9,8 @@ open System.Threading.Tasks
 open Ecng.Common
 open Ecng.Drawing
 open Ecng.Logging
+
+open FSharp.Control
 
 open StockSharp.Messages
 open StockSharp.Algo.Analytics
@@ -45,27 +47,41 @@ type BiggestCandleScript() =
                     // Lists to store the biggest candles
                     let bigPriceCandles = List<CandleMessage>()
                     let bigVolCandles = List<CandleMessage>()
+                    let mutable idx = 0
 
                     // Iterate over each security
                     for security in securities do
                         // Stop calculation if user canceled script execution
                         if not cancellationToken.IsCancellationRequested then
+                            idx <- idx + 1
+                            logs.LogInfo("Processing {0} of {1}: {2}...", idx, securities.Length, security)
+
                             // Get candle storage for the specified timeframe
                             let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
-                            // Load all candles in the specified date range
-                            let! allCandles = candleStorage.LoadAsync(from, ``to``).ToArrayAsync(cancellationToken)
 
-                            // The candle with the biggest range (by high-low difference)
-                            let bigPriceCandle =
-                                allCandles
-                                    .OrderByDescending(fun c -> c.GetLength())
-                                    .FirstOrDefault()
+                            // Find biggest candles by iterating through stream
+                            let mutable bigPriceCandle: CandleMessage = null
+                            let mutable bigVolCandle: CandleMessage = null
+                            let mutable maxLength = 0m
+                            let mutable maxVolume = 0m
+                            let mutable prevDate = DateOnly.MinValue
 
-                            // The candle with the biggest volume
-                            let bigVolCandle =
-                                allCandles
-                                    .OrderByDescending(fun c -> c.TotalVolume)
-                                    .FirstOrDefault()
+                            do! candleStorage.LoadAsync(from, ``to``)
+                                |> TaskSeq.iter (fun candle ->
+                                    let currDate = DateOnly.FromDateTime(candle.OpenTime.Date)
+                                    if currDate <> prevDate then
+                                        prevDate <- currDate
+                                        logs.LogInfo("  {0}...", currDate)
+
+                                    let length = candle.GetLength()
+                                    if isNull bigPriceCandle || length > maxLength then
+                                        maxLength <- length
+                                        bigPriceCandle <- candle
+
+                                    if isNull bigVolCandle || candle.TotalVolume > maxVolume then
+                                        maxVolume <- candle.TotalVolume
+                                        bigVolCandle <- candle
+                                )
 
                             // If found, add to respective lists
                             if not (isNull bigPriceCandle) then
@@ -86,8 +102,6 @@ type BiggestCandleScript() =
                     volChart.Append(
                         "prices",
                         bigVolCandles.Select(fun c -> c.OpenTime),
-                        // Notice that for the Y2 axis we use the middle price from bigPriceCandles
-                        // to match the C# code; but you may want to adjust this logic if needed
                         bigPriceCandles.Select(fun c -> c.GetMiddlePrice(Nullable())),
                         bigVolCandles.Select(fun c -> c.TotalVolume)
                     )

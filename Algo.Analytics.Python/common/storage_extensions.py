@@ -65,6 +65,19 @@ def load_async_enumerable(storage, message_type, from_date, to_date, cancellatio
     :param cancellation_token: Optional cancellation token.
     :return: A list of messages within the specified date range.
     """
+    # Use generator and convert to list for backward compatibility
+    return list(iter_async_enumerable(storage, message_type, from_date, to_date, cancellation_token))
+
+def iter_async_enumerable(storage, message_type, from_date, to_date, cancellation_token=None):
+    """
+    Generator to iterate over IAsyncEnumerable from LoadAsync without loading all into memory.
+    :param storage: The storage object.
+    :param message_type: The .NET type for generic method (e.g., CandleMessage).
+    :param from_date: The start date of the range.
+    :param to_date: The end date of the range.
+    :param cancellation_token: Optional cancellation token.
+    :yields: Messages one by one.
+    """
     if cancellation_token is None:
         cancellation_token = CancellationToken()
 
@@ -73,13 +86,22 @@ def load_async_enumerable(storage, message_type, from_date, to_date, cancellatio
 
     # Iterate over IAsyncEnumerable by blocking on each MoveNextAsync
     enumerator = async_enumerable.GetAsyncEnumerator(cancellation_token)
-    result = []
     try:
         while enumerator.MoveNextAsync().GetAwaiter().GetResult():
-            result.append(enumerator.Current)
+            yield enumerator.Current
     finally:
         enumerator.DisposeAsync().GetAwaiter().GetResult()
-    return result
+
+def iter_candles(storage, from_date, to_date, cancellation_token=None):
+    """
+    Generator to iterate over candles without loading all into memory.
+    :param storage: The candle storage object.
+    :param from_date: The start date of the range.
+    :param to_date: The end date of the range.
+    :param cancellation_token: Optional cancellation token.
+    :yields: CandleMessage one by one.
+    """
+    return iter_async_enumerable(storage, CandleMessage, from_date, to_date, cancellation_token)
 
 def get_candle_storage(registry, security, data_type, drive, format):
     """

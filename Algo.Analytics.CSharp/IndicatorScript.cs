@@ -17,11 +17,14 @@ public class IndicatorScript : IAnalyticsScript
 		var candleChart = panel.CreateChart<DateTime, decimal>();
 		var indicatorChart = panel.CreateChart<DateTime, decimal>();
 
+		var idx = 0;
 		foreach (var security in securities)
 		{
 			// stop calculation if user cancel script execution
 			if (cancellationToken.IsCancellationRequested)
 				break;
+
+			logs.LogInfo("Processing {0} of {1}: {2}...", ++idx, securities.Length, security);
 
 			var candlesSeries = new Dictionary<DateTime, decimal>();
 			var indicatorSeries = new Dictionary<DateTime, decimal>();
@@ -31,9 +34,17 @@ public class IndicatorScript : IAnalyticsScript
 
 			// get candle storage
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
+			var prevDate = default(DateOnly);
 
 			await foreach (var candle in candleStorage.LoadAsync(from, to).WithCancellation(cancellationToken))
 			{
+				var currDate = DateOnly.FromDateTime(candle.OpenTime.Date);
+				if (currDate != prevDate)
+				{
+					prevDate = currDate;
+					logs.LogInfo("  {0}...", currDate);
+				}
+
 				// fill series
 				candlesSeries[candle.OpenTime] = candle.ClosePrice;
 				indicatorSeries[candle.OpenTime] = roc.Process(candle).ToDecimal();

@@ -38,18 +38,27 @@ class chart_draw_script(IAnalyticsScript):
         line_chart = create_chart(panel, datetime, float)
         histogram_chart = create_chart(panel, datetime, float)
 
-        for security in securities:
+        for idx, security in enumerate(securities):
             # Stop calculation if user cancels script execution
             if cancellation_token.IsCancellationRequested:
                 break
+
+            logs.LogInfo("Processing {0} of {1}: {2}...", idx + 1, len(securities), security)
 
             candles_series = {}
             vols_series = {}
 
             # Get candle storage for the current security
             candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
+            prev_date = None
 
-            for candle in load_tf_candles(candle_storage, from_date, to_date, cancellation_token):
+            for candle in iter_candles(candle_storage, from_date, to_date, cancellation_token):
+                # Log date change
+                curr_date = candle.OpenTime.Date
+                if curr_date != prev_date:
+                    prev_date = curr_date
+                    logs.LogInfo("  {0}...", curr_date.ToString("yyyy-MM-dd"))
+
                 # Fill series with closing prices and volumes
                 candles_series[candle.OpenTime] = candle.ClosePrice
                 vols_series[candle.OpenTime] = candle.TotalVolume

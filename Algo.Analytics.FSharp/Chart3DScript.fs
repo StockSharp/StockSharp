@@ -10,6 +10,8 @@ open Ecng.Common
 open Ecng.Drawing
 open Ecng.Logging
 
+open FSharp.Control
+
 open StockSharp.Messages
 open StockSharp.Algo.Analytics
 open StockSharp.Algo.Storages
@@ -58,6 +60,8 @@ type Chart3DScript() =
                         if (not cancellationToken.IsCancellationRequested) && doContinue then
                             let security = securities.[i]
 
+                            logs.LogInfo("Processing {0} of {1}: {2}...", i + 1, securities.Length, security)
+
                             // fill X label
                             x.Add(security.ToStringId())
 
@@ -71,23 +75,22 @@ type Chart3DScript() =
                                 logs.LogWarning("no data")
                                 doContinue <- false
                             else
-                                // load all candles and group them by hour
-                                let! allCandles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
+                                // load candles and group them by hour
+                                let byHours = Dictionary<int, decimal>()
+                                let mutable prevDate = DateOnly.MinValue
 
-                                // group by "hour" (truncated)
-                                // byHours : dict<int, decimal> => hour -> summed volume
-                                let byHours =
-                                    allCandles
-                                    |> Seq.groupBy (fun c ->
-                                        // truncate time to hour
-                                        let time = c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1.0))
-                                        time.Hours
+                                do! candleStorage.LoadAsync(fromDate, toDate)
+                                    |> TaskSeq.iter (fun candle ->
+                                        let currDate = DateOnly.FromDateTime(candle.OpenTime.Date)
+                                        if currDate <> prevDate then
+                                            prevDate <- currDate
+                                            logs.LogInfo("  {0}...", currDate)
+
+                                        let hour = candle.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1.0)).Hours
+                                        match byHours.TryGetValue(hour) with
+                                        | true, volume -> byHours.[hour] <- volume + candle.TotalVolume
+                                        | false, _ -> byHours.[hour] <- candle.TotalVolume
                                     )
-                                    |> Seq.map (fun (hour, group) ->
-                                        let sumVolume = group |> Seq.sumBy (fun c -> c.TotalVolume)
-                                        (hour, sumVolume)
-                                    )
-                                    |> dict
 
                                 // fill Z values
                                 for KeyValue(hour, totalVol) in byHours do

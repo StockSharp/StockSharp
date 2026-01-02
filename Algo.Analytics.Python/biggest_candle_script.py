@@ -27,25 +27,44 @@ class biggest_candle_script(IAnalyticsScript):
         big_price_candles = []
         big_vol_candles = []
 
-        for security in securities:
+        for idx, security in enumerate(securities):
             # stop calculation if user cancel script execution
             if cancellation_token.IsCancellationRequested:
                 break
 
+            logs.LogInfo("Processing {0} of {1}: {2}...", idx + 1, len(securities), security)
+
             # get candle storage
             candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
-            all_candles = load_tf_candles(candle_storage, from_date, to_date, cancellation_token)
 
-            if len(all_candles) > 0:
-                # first orders by volume desc will be our biggest candle
-                big_price_candle = max(all_candles, key=lambda c: get_length(c))
-                big_vol_candle = max(all_candles, key=lambda c: c.TotalVolume)
+            # find biggest candles by iterating through stream
+            big_price_candle = None
+            big_vol_candle = None
+            max_length = 0
+            max_volume = 0
+            prev_date = None
 
-                if big_price_candle is not None:
-                    big_price_candles.append(big_price_candle)
+            for candle in iter_candles(candle_storage, from_date, to_date, cancellation_token):
+                # Log date change
+                curr_date = candle.OpenTime.Date
+                if curr_date != prev_date:
+                    prev_date = curr_date
+                    logs.LogInfo("  {0}...", curr_date.ToString("yyyy-MM-dd"))
 
-                if big_vol_candle is not None:
-                    big_vol_candles.append(big_vol_candle)
+                length = get_length(candle)
+                if big_price_candle is None or length > max_length:
+                    max_length = length
+                    big_price_candle = candle
+
+                if big_vol_candle is None or candle.TotalVolume > max_volume:
+                    max_volume = candle.TotalVolume
+                    big_vol_candle = candle
+
+            if big_price_candle is not None:
+                big_price_candles.append(big_price_candle)
+
+            if big_vol_candle is not None:
+                big_vol_candles.append(big_vol_candle)
 
         # draw series on chart
         price_chart.Append(

@@ -23,10 +23,12 @@ class normalize_price_script(IAnalyticsScript):
 
         chart = create_chart(panel, datetime, float)
 
-        for security in securities:
+        for idx, security in enumerate(securities):
             # stop calculation if user cancel script execution
             if cancellation_token.IsCancellationRequested:
                 break
+
+            logs.LogInfo("Processing {0} of {1}: {2}...", idx + 1, len(securities), security)
 
             series = {}
 
@@ -34,8 +36,15 @@ class normalize_price_script(IAnalyticsScript):
             candle_storage = get_candle_storage(storage, security, time_frame, drive, format)
 
             first_close = None
+            prev_date = None
 
-            for candle in load_tf_candles(candle_storage, from_date, to_date, cancellation_token):
+            for candle in iter_candles(candle_storage, from_date, to_date, cancellation_token):
+                # Log date change
+                curr_date = candle.OpenTime.Date
+                if curr_date != prev_date:
+                    prev_date = curr_date
+                    logs.LogInfo("  {0}...", curr_date.ToString("yyyy-MM-dd"))
+
                 if first_close is None:
                     first_close = candle.ClosePrice
 

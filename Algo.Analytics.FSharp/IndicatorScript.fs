@@ -10,6 +10,8 @@ open Ecng.Common
 open Ecng.Drawing
 open Ecng.Logging
 
+open FSharp.Control
+
 open StockSharp.Algo.Analytics
 open StockSharp.Algo.Storages
 open StockSharp.Algo.Indicators
@@ -42,11 +44,15 @@ type IndicatorScript() =
                     // create 2 panes for candles (close prices) and indicator (ROC) series
                     let candleChart = panel.CreateChart<DateTime, decimal>()
                     let indicatorChart = panel.CreateChart<DateTime, decimal>()
+                    let mutable idx = 0
 
                     // process each security
                     for security in securities do
                         // stop calculation if user cancels script execution
                         if not cancellationToken.IsCancellationRequested then
+                            idx <- idx + 1
+                            logs.LogInfo("Processing {0} of {1}: {2}...", idx, securities.Length, security)
+
                             // dictionaries to store candle close prices and ROC values
                             let candlesSeries = Dictionary<DateTime, decimal>()
                             let indicatorSeries = Dictionary<DateTime, decimal>()
@@ -56,15 +62,20 @@ type IndicatorScript() =
 
                             // get candle storage
                             let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
+                            let mutable prevDate = DateOnly.MinValue
 
-                            // load candles in the specified date range
-                            let! candles = candleStorage.LoadAsync(fromDate, toDate).ToArrayAsync(cancellationToken)
+                            // load candles and fill series
+                            do! candleStorage.LoadAsync(fromDate, toDate)
+                                |> TaskSeq.iter (fun candle ->
+                                    let currDate = DateOnly.FromDateTime(candle.OpenTime.Date)
+                                    if currDate <> prevDate then
+                                        prevDate <- currDate
+                                        logs.LogInfo("  {0}...", currDate)
 
-                            // fill close-price and indicator series
-                            for candle in candles do
-                                candlesSeries.[candle.OpenTime] <- candle.ClosePrice
-                                // Process each candle in the ROC indicator, get result as decimal
-                                indicatorSeries.[candle.OpenTime] <- roc.Process(candle).ToDecimal()
+                                    candlesSeries.[candle.OpenTime] <- candle.ClosePrice
+                                    // Process each candle in the ROC indicator, get result as decimal
+                                    indicatorSeries.[candle.OpenTime] <- roc.Process(candle).ToDecimal()
+                                )
 
                             // draw close prices on candleChart
                             candleChart.Append(

@@ -17,17 +17,35 @@ public class PearsonCorrelationScript : IAnalyticsScript
 
 		var closes = new List<double[]>();
 
+		var idx = 0;
 		foreach (var security in securities)
 		{
 			// stop calculation if user cancel script execution
 			if (cancellationToken.IsCancellationRequested)
 				break;
 
+			logs.LogInfo("Processing {0} of {1}: {2}...", ++idx, securities.Length, security);
+
 			// get candle storage
 			var candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format);
 
 			// get closing prices
-			var prices = await candleStorage.LoadAsync(from, to).Select(c => (double)c.ClosePrice).ToArrayAsync(cancellationToken);
+			var pricesList = new List<double>();
+			var prevDate = default(DateOnly);
+
+			await foreach (var candle in candleStorage.LoadAsync(from, to).WithCancellation(cancellationToken))
+			{
+				var currDate = DateOnly.FromDateTime(candle.OpenTime.Date);
+				if (currDate != prevDate)
+				{
+					prevDate = currDate;
+					logs.LogInfo("  {0}...", currDate);
+				}
+
+				pricesList.Add((double)candle.ClosePrice);
+			}
+
+			var prices = pricesList.ToArray();
 
 			if (prices.Length == 0)
 			{

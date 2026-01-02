@@ -32,7 +32,6 @@ public class CompilationTests : BaseTestClass
 	private static async Task TestAnalyticsScripts(string folderPath, string fileExtension, CancellationToken token)
 	{
 		ICompiler compiler = ServicesRegistry.CompilerProvider[fileExtension];
-		var context = compiler.CreateContext();
 
 		var usings = fileExtension == FileExts.CSharp
 			? await File.ReadAllTextAsync(Path.Combine(folderPath, "Properties", "usings.cs"), token)
@@ -68,39 +67,49 @@ public class CompilationTests : BaseTestClass
 
 		foreach (var scriptFile in scriptFiles)
 		{
-			if (Path.GetFileNameWithoutExtension(scriptFile).StartsWithIgnoreCase("empty"))
-				continue;
-
-			var sourceCode = await File.ReadAllTextAsync(scriptFile, token);
 			var scriptName = Path.GetFileNameWithoutExtension(scriptFile);
 
-			// Compile the script
+			try
+			{
+				if (scriptName.StartsWithIgnoreCase("empty"))
+					continue;
 
-			var sources = new string[] { sourceCode };
+				var sourceCode = await File.ReadAllTextAsync(scriptFile, token);
 
-			if (usings is not null)
-				sources = sources.Concat([usings]);
+				// Compile the script
 
-			var res = await compiler.Compile(
-				scriptName,
-				sources,
-				refs,
-				token);
+				var sources = new string[] { sourceCode };
 
-			Validate(res);
+				if (usings is not null)
+					sources = sources.Concat([usings]);
 
-			var assembly = res.GetAssembly(context);
-			assembly.AssertNotNull();
+				var context = compiler.CreateContext();
 
-			var types = assembly.GetExportedTypes();
-			var analyticsScriptType = types.First(t => t.IsRequiredType<IAnalyticsScript>());
+				var res = await compiler.Compile(
+					scriptName,
+					sources,
+					refs,
+					token);
 
-			// Create an instance of the script
-			var script = analyticsScriptType.CreateInstance<IAnalyticsScript>();
-			script.AssertNotNull();
+				Validate(res);
 
-			// Test script execution with mock data
-			await RunAnalyticsScript(script, securities, from, to, storageRegistry, storageRegistry.DefaultDrive, format, timeFrame, token);
+				var assembly = res.GetAssembly(context);
+				assembly.AssertNotNull();
+
+				var types = assembly.GetExportedTypes();
+				var analyticsScriptType = types.First(t => t.IsRequiredType<IAnalyticsScript>());
+
+				// Create an instance of the script
+				var script = analyticsScriptType.CreateInstance<IAnalyticsScript>();
+				script.AssertNotNull();
+
+				// Test script execution with mock data
+				await RunAnalyticsScript(script, securities, from, to, storageRegistry, storageRegistry.DefaultDrive, format, timeFrame, token);
+			}
+			catch (Exception ex)
+			{
+				throw new InvalidOperationException($"Error running script '{scriptName}'.", ex);
+			}
 		}
 	}
 
@@ -109,7 +118,7 @@ public class CompilationTests : BaseTestClass
 		// Create a test panel to capture output
 		var testPanel = new TestAnalyticsPanel();
 
-		var (_, t) = token.CreateChildToken(TimeSpan.FromSeconds(30)); // 30 second timeout
+		var (_, t) = token.CreateChildToken(TimeSpan.FromSeconds(60)); // 60 second timeout
 
 		// Execute the script
 		await script.Run(

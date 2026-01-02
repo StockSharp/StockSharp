@@ -31,6 +31,8 @@ public class Chart3DScript : IAnalyticsScript
 
 			var security = securities[i];
 
+			logs.LogInfo("Processing {0} of {1}: {2}...", i + 1, securities.Length, security);
+
 			// fill X labels
 			x.Add(security.ToStringId());
 
@@ -47,10 +49,25 @@ public class Chart3DScript : IAnalyticsScript
 			}
 
 			// grouping candles by opening time (time part only) with 1 hour truncating
-			var byHours = (await candleStorage.LoadAsync(from, to)
-				.ToArrayAsync(cancellationToken))
-				.GroupBy(c => c.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)))
-				.ToDictionary(g => g.Key.Hours, g => g.Sum(c => c.TotalVolume));
+			var byHours = new Dictionary<int, decimal>();
+			var prevDate = default(DateOnly);
+
+			await foreach (var candle in candleStorage.LoadAsync(from, to).WithCancellation(cancellationToken))
+			{
+				var currDate = DateOnly.FromDateTime(candle.OpenTime.Date);
+				if (currDate != prevDate)
+				{
+					prevDate = currDate;
+					logs.LogInfo("  {0}...", currDate);
+				}
+
+				var hour = candle.OpenTime.TimeOfDay.Truncate(TimeSpan.FromHours(1)).Hours;
+
+				if (byHours.TryGetValue(hour, out var volume))
+					byHours[hour] = volume + candle.TotalVolume;
+				else
+					byHours[hour] = candle.TotalVolume;
+			}
 
 			// fill Z values
 			foreach (var pair in byHours)
