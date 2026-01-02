@@ -253,6 +253,48 @@ public class OfflineMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task OrderReplace_WhileOffline_PendingOrder_ReturnsExecutionMessage()
+	{
+		var inner = new RecordingMessageAdapter();
+
+		using var adapter = new OfflineMessageAdapter(inner);
+
+		var output = new List<Message>();
+		adapter.NewOutMessage += output.Add;
+
+		// Register order while offline
+		var orderMsg = new OrderRegisterMessage
+		{
+			TransactionId = 100,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 10,
+			OrderType = OrderTypes.Limit,
+		};
+
+		await adapter.SendInMessageAsync(orderMsg, CancellationToken);
+
+		// Replace order while still offline
+		var replaceMsg = new OrderReplaceMessage
+		{
+			TransactionId = 201,
+			OriginalTransactionId = 100,
+			Price = 105m,
+			Volume = 10,
+		};
+
+		await adapter.SendInMessageAsync(replaceMsg, CancellationToken);
+
+		// Should receive an ExecutionMessage indicating old order is Done
+		output.Count.AssertEqual(1);
+		var execMsg = (ExecutionMessage)output[0];
+		execMsg.OrderState.AssertEqual(OrderStates.Done);
+
+		execMsg.OriginalTransactionId.AssertEqual(replaceMsg.TransactionId);
+	}
+
+	[TestMethod]
 	public void Clone_CreatesNewAdapter()
 	{
 		var inner = new RecordingMessageAdapter();

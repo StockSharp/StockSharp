@@ -245,7 +245,7 @@ public class OfflineManagerTests : BaseTestClass
 		var execMsg = (ExecutionMessage)toOut[0];
 		execMsg.DataTypeEx.AssertEqual(DataType.Transactions);
 		execMsg.HasOrderInfo.AssertTrue();
-		execMsg.OriginalTransactionId.AssertEqual(100);
+		execMsg.OriginalTransactionId.AssertEqual(replaceMsg.TransactionId);
 		execMsg.OrderState.AssertEqual(OrderStates.Done);
 		execMsg.OrderType.AssertEqual(OrderTypes.Limit);
 	}
