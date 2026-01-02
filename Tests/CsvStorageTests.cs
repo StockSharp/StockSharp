@@ -3,14 +3,12 @@ namespace StockSharp.Tests;
 using System.Collections.Concurrent;
 using System.Text;
 
-using Ecng.Common;
-
 using StockSharp.Algo.Storages;
 
 [TestClass]
 public class CsvStorageTests : BaseTestClass
 {
-	private static readonly ConcurrentQueue<Exception> _executorErrors = new();
+	private static readonly ConcurrentQueue<Exception> _executorErrors = [];
 
 	private static ChannelExecutor CreateExecutor(CancellationToken token)
 	{
@@ -18,7 +16,7 @@ public class CsvStorageTests : BaseTestClass
 		{
 		}
 
-		var executor = new ChannelExecutor(ex => _executorErrors.Enqueue(ex));
+		var executor = new ChannelExecutor(_executorErrors.Enqueue);
 		_ = executor.RunAsync(token);
 		return executor;
 	}
@@ -33,11 +31,10 @@ public class CsvStorageTests : BaseTestClass
 			throw new AggregateException([.. _executorErrors]);
 	}
 
-	private static (MemoryFileSystem fs, string path) CreateMemoryFs(string name)
+	private static (IFileSystem fs, string path) CreateFs(string name)
 	{
 		var fs = new MemoryFileSystem();
-		var path = Path.Combine(Path.GetTempPath(), "test_" + Guid.NewGuid().ToString("N"), name);
-		return (fs, path);
+		return (fs, fs.GetSubTemp(name));
 	}
 
 	#region CsvPortfolioMessageAdapterProvider Tests
@@ -47,7 +44,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("portfolios.csv");
+		var (fs, path) = CreateFs("portfolios.csv");
 		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -65,7 +62,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("portfolios.csv");
+		var (fs, path) = CreateFs("portfolios.csv");
 		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -87,7 +84,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("portfolios.csv");
+		var (fs, path) = CreateFs("portfolios.csv");
 		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -108,7 +105,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("portfolios.csv");
+		var (fs, path) = CreateFs("portfolios.csv");
 
 		var adapterId = Guid.NewGuid();
 
@@ -130,7 +127,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("portfolios.csv");
+		var (fs, path) = CreateFs("portfolios.csv");
 		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -164,7 +161,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("securities.csv");
+		var (fs, path) = CreateFs("securities.csv");
 		var provider = new CsvSecurityMessageAdapterProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -185,7 +182,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("securities.csv");
+		var (fs, path) = CreateFs("securities.csv");
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 		var dataType = DataType.Ticks;
@@ -209,7 +206,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("securities.csv");
+		var (fs, path) = CreateFs("securities.csv");
 		var provider = new CsvSecurityMessageAdapterProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -237,7 +234,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -259,7 +256,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 
 		var stockSharpId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 		var adapterId = new SecurityId { SecurityCode = "US0378331005", BoardCode = "ISIN" };
@@ -282,7 +279,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -306,7 +303,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -329,7 +326,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -370,7 +367,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -386,7 +383,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -423,7 +420,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 
 		var mapping1 = new SecurityIdMapping
 		{
@@ -458,7 +455,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -492,7 +489,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -529,7 +526,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -571,7 +568,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -585,7 +582,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -603,7 +600,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 
 		// Create storages with data
 		var provider1 = new CsvSecurityMappingStorageProvider(fs, path, executor);
@@ -636,7 +633,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		var errors = await provider.InitAsync(token);
@@ -649,7 +646,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -665,7 +662,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -681,7 +678,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -712,7 +709,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -912,7 +909,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("extinfo");
+		var (fs, path) = CreateFs("extinfo");
 		var storage = new CsvExtendedInfoStorage(fs, path, executor);
 
 		await storage.InitAsync(token);
@@ -940,7 +937,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("extinfo");
+		var (fs, path) = CreateFs("extinfo");
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 
@@ -973,7 +970,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("extinfo");
+		var (fs, path) = CreateFs("extinfo");
 		var storage = new CsvExtendedInfoStorage(fs, path, executor);
 
 		await storage.InitAsync(token);
@@ -1001,7 +998,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("nativeids");
+		var (fs, path) = CreateFs("nativeids");
 		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -1023,7 +1020,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("nativeids");
+		var (fs, path) = CreateFs("nativeids");
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" };
 		var nativeId = "12345";
@@ -1046,7 +1043,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("nativeids");
+		var (fs, path) = CreateFs("nativeids");
 		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -1068,7 +1065,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("nativeids");
+		var (fs, path) = CreateFs("nativeids");
 		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -1094,7 +1091,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("nativeids");
+		var (fs, path) = CreateFs("nativeids");
 		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -1120,7 +1117,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("nativeids");
+		var (fs, path) = CreateFs("nativeids");
 		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -1141,7 +1138,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("nativeids");
+		var (fs, path) = CreateFs("nativeids");
 		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -1175,7 +1172,7 @@ public class CsvStorageTests : BaseTestClass
 		// are written to their respective files, not mixed due to shared buffer
 
 		var token = CancellationToken;
-		var (fs, path) = CreateMemoryFs("nativeids");
+		var (fs, path) = CreateFs("nativeids");
 		var executor = CreateExecutor(token);
 
 		await using var provider = new CsvNativeIdStorageProvider(fs, path, executor);
@@ -1219,7 +1216,7 @@ public class CsvStorageTests : BaseTestClass
 		// More aggressive test: add multiple items to different storages rapidly
 
 		var token = CancellationToken;
-		var (fs, path) = CreateMemoryFs("nativeids");
+		var (fs, path) = CreateFs("nativeids");
 		var executor = CreateExecutor(token);
 
 		await using var provider = new CsvNativeIdStorageProvider(fs, path, executor);
@@ -1269,7 +1266,7 @@ public class CsvStorageTests : BaseTestClass
 	public async Task CsvNativeId_ClearOneStorage_DoesNotAffectOther()
 	{
 		var token = CancellationToken;
-		var (fs, path) = CreateMemoryFs("nativeids");
+		var (fs, path) = CreateFs("nativeids");
 		var executor = CreateExecutor(token);
 
 		await using var provider = new CsvNativeIdStorageProvider(fs, path, executor);
@@ -1292,14 +1289,14 @@ public class CsvStorageTests : BaseTestClass
 		// StorageB should still have its data
 		var itemsB = await storageB.GetAsync(token);
 		AreEqual(1, itemsB.Length, "StorageB should still have 1 item after clearing StorageA");
-		AreEqual("BBB", itemsB[0].Item1.SecurityCode);
+		AreEqual("BBB", itemsB[0].secId.SecurityCode);
 
 		// StorageA should be empty
 		var itemsA = await storageA.GetAsync(token);
 		AreEqual(0, itemsA.Length, "StorageA should be empty after clear");
 	}
 
-	private static string ReadFileContent(MemoryFileSystem fs, string path)
+	private static string ReadFileContent(IFileSystem fs, string path)
 	{
 		using var stream = fs.OpenRead(path);
 		using var reader = new StreamReader(stream, Encoding.UTF8);
@@ -1315,7 +1312,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("portfolios.csv");
+		var (fs, path) = CreateFs("portfolios.csv");
 
 		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
 		await provider.InitAsync(token);
@@ -1335,7 +1332,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("portfolios.csv");
+		var (fs, path) = CreateFs("portfolios.csv");
 
 		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
 		await provider.InitAsync(token);
@@ -1353,7 +1350,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("portfolios.csv");
+		var (fs, path) = CreateFs("portfolios.csv");
 
 		var adapterId = Guid.NewGuid();
 		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
@@ -1378,7 +1375,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("portfolios.csv");
+		var (fs, path) = CreateFs("portfolios.csv");
 
 		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
 		await provider.InitAsync(token);
@@ -1401,7 +1398,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("portfolios.csv");
+		var (fs, path) = CreateFs("portfolios.csv");
 		var tempPath = path + ".tmp";
 
 		var provider = new CsvPortfolioMessageAdapterProvider(fs, path, executor);
@@ -1420,7 +1417,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("nativeids");
+		var (fs, path) = CreateFs("nativeids");
 		var provider = new CsvNativeIdStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);
@@ -1448,7 +1445,7 @@ public class CsvStorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs("mappings");
+		var (fs, path) = CreateFs("mappings");
 		var provider = new CsvSecurityMappingStorageProvider(fs, path, executor);
 
 		await provider.InitAsync(token);

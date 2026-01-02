@@ -130,7 +130,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 
 		public ValueTask<Dictionary<string, Exception>> InitAsync(CancellationToken cancellationToken)
 		{
-			return new(new Dictionary<string, Exception>());
+			return new([]);
 		}
 
 		public ValueTask DisposeAsync() => default;

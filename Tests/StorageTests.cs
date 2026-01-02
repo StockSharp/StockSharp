@@ -16,7 +16,7 @@ public class StorageTests : BaseTestClass
 
 	private static IStorageRegistry GetStorageRegistry()
 	{
-		var fs = Helper.MemorySystem;
+		var fs = Helper.FileSystem;
 		return fs.GetStorage(fs.GetSubTemp());
 	}
 

@@ -8,7 +8,7 @@ using StockSharp.Algo.Storages.Csv;
 [TestClass]
 public class StorageCsvRegistryTests : BaseTestClass
 {
-	private static readonly ConcurrentQueue<Exception> _executorErrors = new();
+	private static readonly ConcurrentQueue<Exception> _executorErrors = [];
 
 	private static ChannelExecutor CreateExecutor(CancellationToken token)
 	{
@@ -756,11 +756,10 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 	#region Long-Lived TransactionFileStream Tests (CsvEntityList pattern)
 
-	private static (MemoryFileSystem fs, string path) CreateMemoryFs()
+	private static (IFileSystem fs, string path) CreateFs()
 	{
 		var fs = new MemoryFileSystem();
-		var path = Path.Combine(Path.GetTempPath(), "test_" + Guid.NewGuid().ToString("N"));
-		return (fs, path);
+		return (fs, fs.GetSubTemp());
 	}
 
 	[TestMethod]
@@ -768,7 +767,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs();
+		var (fs, path) = CreateFs();
 
 		var registry = new CsvEntityRegistry(fs, path, executor);
 		await registry.InitAsync(token);
@@ -801,7 +800,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs();
+		var (fs, path) = CreateFs();
 
 		// First session: create registry, add data, dispose
 		var registry1 = new CsvEntityRegistry(fs, path, executor);
@@ -846,7 +845,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs();
+		var (fs, path) = CreateFs();
 
 		var registry = new CsvEntityRegistry(fs, path, executor);
 		await registry.InitAsync(token);
@@ -879,7 +878,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs();
+		var (fs, path) = CreateFs();
 
 		var registry = new CsvEntityRegistry(fs, path, executor);
 		await registry.InitAsync(token);
@@ -911,7 +910,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs();
+		var (fs, path) = CreateFs();
 
 		var registry = new CsvEntityRegistry(fs, path, executor);
 		await registry.InitAsync(token);
@@ -960,7 +959,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var executor = CreateExecutor(token);
-		var (fs, path) = CreateMemoryFs();
+		var (fs, path) = CreateFs();
 
 		var registry = new CsvEntityRegistry(fs, path, executor);
 		await registry.InitAsync(token);
