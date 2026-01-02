@@ -60,6 +60,9 @@ public partial class MainWindow
 
 	private readonly IncrementalIdGenerator _idGenerator = new();
 
+	private readonly Lock _loadLock = new();
+	private CancellationTokenSource _loadCts;
+
 	public MainWindow()
 	{
 		InitializeComponent();
@@ -84,8 +87,19 @@ public partial class MainWindow
 	private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
 	{
 		ThemeExtensions.ApplyDefaultTheme();
+
+		// Cancel any previous loading operation and create a fresh token
+		using (_loadLock.EnterScope())
+		{
+			_loadCts?.Cancel();
+			_loadCts?.Dispose();
+			_loadCts = new();
+		}
+
 		InitCharts();
-		LoadData(Paths.HistoryDataPath);
+
+		// start load with new cancellation token
+		_ = LoadDataAsync(Paths.HistoryDataPath, _loadCts.Token);
 	}
 
 	private void InitCharts()
@@ -113,59 +127,63 @@ public partial class MainWindow
 		Chart.AddElement(_area, _activeOrdersElement);
 	}
 
-	private void LoadData(string path)
+	// Reworked to be cancellable and safe for multiple OnLoaded calls
+	private Task LoadDataAsync(string path, CancellationToken token)
 	{
-		_candle = null;
-		_allCandles.Clear();
-
-		Chart.Reset([_candleElement, _activeOrdersElement]);
+		// Reset UI state synchronously
+		this.GuiAsync(() =>
+		{
+			_candle = null;
+			_allCandles.Clear();
+			_updatedCandles.Clear();
+			Chart.Reset([_candleElement, _activeOrdersElement]);
+			Chart.IsAutoRange = true;
+		});
 
 		var storage = new StorageRegistry();
-
 		var maxDays = 2;
 
-		//BusyIndicator.IsBusy = true;
-
-		Chart.IsAutoRange = true;
-
-		var token = CancellationToken.None;
-
-		Task.Factory.StartNew(async () =>
+		return Task.Run(async () =>
 		{
-			var date = DateTime.MinValue;
-
-			await foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(_fileSystem, path)).LoadAsync(null, null).WithEnforcedCancellation(token))
+			try
 			{
-				AppendTick(tick);
+				var date = DateTime.MinValue;
 
-				if (date == tick.ServerTime.Date)
-					continue;
+				await foreach (var tick in storage.GetTickMessageStorage(_security.ToSecurityId(), new LocalMarketDataDrive(_fileSystem, path)).LoadAsync(null, null).WithEnforcedCancellation(token))
+				{
+					if (token.IsCancellationRequested)
+						break;
 
-				date = tick.ServerTime.Date;
+					AppendTick(tick);
 
-				//var str = date.To<string>();
-				//this.GuiAsync(() => BusyIndicator.BusyContent = str);
+					if (date == tick.ServerTime.Date)
+						continue;
 
-				maxDays--;
+					date = tick.ServerTime.Date;
 
-				if (maxDays == 0)
-					break;
+					maxDays--;
+
+					if (maxDays == 0)
+						break;
+				}
 			}
-		})
-		.ContinueWith(t =>
-		{
-			if (t.Exception != null)
-				Error(t.Exception.Message);
-
-			this.GuiAsync(() =>
+			catch (OperationCanceledException)
 			{
-				//BusyIndicator.IsBusy = false;
-				Chart.IsAutoRange = false;
-
-				Log($"Loaded {_allCandles.Count} candles");
-			});
-
-		}, TaskScheduler.FromCurrentSynchronizationContext());
+				// expected when cancelled
+			}
+			catch (Exception ex)
+			{
+				this.GuiAsync(() => Error(ex.Message));
+			}
+			finally
+			{
+				this.GuiAsync(() =>
+				{
+					Chart.IsAutoRange = false;
+					Log($"Loaded {_allCandles.Count} candles");
+				});
+			}
+		}, token);
 	}
 
 	private void ChartUpdateTimerOnTick(object sender, EventArgs eventArgs)

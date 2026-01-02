@@ -76,6 +76,9 @@ public partial class MainWindow
 
 	private readonly LoadingContext _loadingContext;
 
+	private readonly Lock _loadLock = new();
+	private CancellationTokenSource _loadCts;
+
 	public MainWindow()
 	{
 		InitializeComponent();
@@ -102,8 +105,18 @@ public partial class MainWindow
 	{
 		ThemeExtensions.ApplyDefaultTheme();
 		Chart.FillIndicators();
+
+		// Cancel any previous load and start a fresh one.
+		using (_loadLock.EnterScope())
+		{
+			_loadCts?.Cancel();
+			_loadCts?.Dispose();
+			_loadCts = new();
+		}
+
 		InitCharts();
-		LoadData();
+
+		_ = LoadDataAsync(_loadCts.Token);
 	}
 
 	private void InitCharts()
@@ -145,27 +158,24 @@ public partial class MainWindow
 		}
 	}
 
-	private void LoadData()
+	// Reworked load method: cancellable, idempotent, safe for multiple OnLoaded calls.
+	private Task LoadDataAsync(CancellationToken token)
 	{
-		_lastPrice = 0m;
-
-		_candles.Clear();
-
-		Chart.Reset([_candleElement]);
+		// Reset state synchronously on UI thread
+		this.GuiAsync(() =>
+		{
+			_lastPrice = 0m;
+			_candles.Clear();
+			Chart.Reset([_candleElement]);
+			_dataIsLoaded = false;
+			BusyIndicator.IsSplashScreenShown = true;
+		});
 
 		var storage = new StorageRegistry();
-
 		var maxDays = 50;
-
-		BusyIndicator.IsSplashScreenShown = true;
-
 		var path = _historyPath;
 
-		var token = CancellationToken.None;
-
-		//_curCandleNum = 0;
-
-		Task.Factory.StartNew(async () =>
+		return Task.Run(async () =>
 		{
 			try
 			{
@@ -173,6 +183,9 @@ public partial class MainWindow
 
 				await foreach (var tick in storage.GetTickMessageStorage(_securityId, new LocalMarketDataDrive(Paths.FileSystem, path)).LoadAsync(null, null).WithEnforcedCancellation(token))
 				{
+					if (token.IsCancellationRequested)
+						break;
+
 					if (date != tick.ServerTime.Date)
 					{
 						date = tick.ServerTime.Date;
@@ -187,10 +200,16 @@ public partial class MainWindow
 					AppendTick(tick);
 				}
 
+				if (token.IsCancellationRequested)
+					return;
+
 				this.GuiAsync(() => BusyIndicator.IsSplashScreenShown = false);
 
 				for (var i = 0; i < _candles.Count; i += _candlesPacketSize)
 				{
+					if (token.IsCancellationRequested)
+						break;
+
 					var data = new ChartDrawData();
 
 					var candles = _candles.GetRange(i, Math.Min(_candlesPacketSize, _candles.Count - i));
@@ -210,6 +229,10 @@ public partial class MainWindow
 					Chart.Draw(data);
 				}
 			}
+			catch (OperationCanceledException)
+			{
+				// expected
+			}
 			catch (Exception e)
 			{
 				this.GuiAsync(() => Error(e.Message));
@@ -218,15 +241,12 @@ public partial class MainWindow
 			{
 				this.GuiAsync(() =>
 				{
-					_dataIsLoaded = true;
-
+					_dataIsLoaded = !token.IsCancellationRequested;
 					BusyIndicator.IsSplashScreenShown = false;
-
 					Chart.IsAutoRange = false;
-					//_area.YAxises.FirstOrDefault().Do(a => a.AutoRange = false);
 				});
 			}
-		}, TaskCreationOptions.LongRunning);
+		}, token);
 	}
 
 	public static decimal Round(decimal value, decimal nearest)
