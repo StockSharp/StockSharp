@@ -1297,4 +1297,198 @@ public class ConvertTests : BaseTestClass
 			await quotes.Cast<QuoteChangeMessage, Level1ChangeMessage>(null).ToArrayAsync(token);
 		});
 	}
+
+	[TestMethod]
+	public void OrderLog_ToTicks_FiltersDuplicateTradeIds()
+	{
+		// This test verifies the fix for duplicate trade filtering bug.
+		var orderLogItems = new[]
+		{
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 0),
+				TradeId = 1001,
+				TradePrice = 100m,
+				OrderVolume = 50
+			},
+			// Duplicate trade ID - should be filtered
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 1),
+				TradeId = 1001,
+				TradePrice = 100m,
+				OrderVolume = 50
+			},
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 2),
+				TradeId = 1002,
+				TradePrice = 101m,
+				OrderVolume = 75
+			}
+		};
+
+		var ticks = orderLogItems.ToTicks().ToArray();
+
+		// Should only have 2 unique trades (1001 and 1002), not 3
+		ticks.Length.AreEqual(2);
+		ticks[0].TradeId.AreEqual(1001L);
+		ticks[1].TradeId.AreEqual(1002L);
+	}
+
+	[TestMethod]
+	public void OrderLog_ToTicks_FiltersDuplicateTradeStringIds()
+	{
+		// Tests duplicate filtering for string trade IDs
+		var orderLogItems = new[]
+		{
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 0),
+				TradeStringId = "TRADE-001",
+				TradePrice = 100m,
+				OrderVolume = 50
+			},
+			// Duplicate trade string ID - should be filtered
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 1),
+				TradeStringId = "TRADE-001",
+				TradePrice = 100m,
+				OrderVolume = 50
+			},
+			// Same ID but different case - should be filtered (case-insensitive)
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 2),
+				TradeStringId = "trade-001",
+				TradePrice = 100m,
+				OrderVolume = 50
+			},
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 3),
+				TradeStringId = "TRADE-002",
+				TradePrice = 101m,
+				OrderVolume = 75
+			}
+		};
+
+		var ticks = orderLogItems.ToTicks().ToArray();
+
+		// Should only have 2 unique trades
+		ticks.Length.AreEqual(2);
+		ticks[0].TradeStringId.AreEqual("TRADE-001");
+		ticks[1].TradeStringId.AreEqual("TRADE-002");
+	}
+
+	[TestMethod]
+	public async Task OrderLog_ToTicks_FiltersDuplicateTradeIds_Async()
+	{
+		var token = CancellationToken;
+		var orderLogItems = new[]
+		{
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 0),
+				TradeId = 2001,
+				TradePrice = 100m,
+				OrderVolume = 50
+			},
+			// Duplicate - should be filtered
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 1),
+				TradeId = 2001,
+				TradePrice = 100m,
+				OrderVolume = 50
+			},
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 2),
+				TradeId = 2002,
+				TradePrice = 101m,
+				OrderVolume = 75
+			},
+			// Another duplicate
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 3),
+				TradeId = 2002,
+				TradePrice = 101m,
+				OrderVolume = 75
+			}
+		};
+
+		var ticks = await ToAsyncEnumerable(orderLogItems).ToTicks().ToArrayAsync(token);
+
+		ticks.Length.AreEqual(2);
+		ticks[0].TradeId.AreEqual(2001L);
+		ticks[1].TradeId.AreEqual(2002L);
+	}
+
+	[TestMethod]
+	public async Task OrderLog_ToTicks_FiltersDuplicateTradeStringIds_Async()
+	{
+		var token = CancellationToken;
+		var orderLogItems = new[]
+		{
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 0),
+				TradeStringId = "ASYNC-001",
+				TradePrice = 100m,
+				OrderVolume = 50
+			},
+			// Duplicate
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 1),
+				TradeStringId = "ASYNC-001",
+				TradePrice = 100m,
+				OrderVolume = 50
+			},
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.OrderLog,
+				SecurityId = TestSecurityId,
+				ServerTime = new DateTime(2024, 1, 15, 10, 0, 2),
+				TradeStringId = "ASYNC-002",
+				TradePrice = 101m,
+				OrderVolume = 75
+			}
+		};
+
+		var ticks = await ToAsyncEnumerable(orderLogItems).ToTicks().ToArrayAsync(token);
+
+		ticks.Length.AreEqual(2);
+		ticks[0].TradeStringId.AreEqual("ASYNC-001");
+		ticks[1].TradeStringId.AreEqual("ASYNC-002");
+	}
 }

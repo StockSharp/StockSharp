@@ -182,9 +182,7 @@ public static partial class CandleHelper
 	/// <returns>Tick trades.</returns>
 	public static IEnumerable<ExecutionMessage> ToTrades<TCandle>(this IEnumerable<TCandle> candles, decimal volumeStep)
 		where TCandle : ICandleMessage
-	{
-		return new TradeEnumerable<TCandle>(candles, volumeStep);
-	}
+		=> candles.ToAsyncEnumerable().ToTrades(volumeStep).ToBlockingEnumerable();
 
 	/// <summary>
 	/// To get candle time frames relatively to the exchange working hours.
@@ -599,97 +597,6 @@ public static partial class CandleHelper
 			DataTypeEx = DataType.Ticks,
 			//OpenInterest = openInterest
 		};
-	}
-
-	private class TradeEnumerable<TCandle> : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
-		where TCandle : ICandleMessage
-	{
-		private sealed class TradeEnumerator(IEnumerable<TCandle> candles, decimal volumeStep) : IEnumerator<ExecutionMessage>
-		{
-			private readonly IEnumerator<TCandle> _valuesEnumerator = candles.GetEnumerator();
-			private IEnumerator<ExecutionMessage> _currCandleEnumerator;
-			private readonly int _decimals = volumeStep.GetCachedDecimals();
-			private readonly (Sides? side, decimal price, decimal volume, DateTime time)[] _ticks = new (Sides?, decimal, decimal, DateTime)[4];
-
-			private IEnumerable<ExecutionMessage> ToTicks(TCandle candleMsg)
-			{
-				candleMsg.ConvertToTrades(volumeStep, _decimals, _ticks);
-
-				foreach (var t in _ticks)
-				{
-					if (t == default)
-						yield break;
-
-					yield return t.ToTickMessage(candleMsg.SecurityId, candleMsg.LocalTime);
-				}
-			}
-
-			public bool MoveNext()
-			{
-				if (_currCandleEnumerator == null)
-				{
-					if (_valuesEnumerator.MoveNext())
-					{
-						_currCandleEnumerator = ToTicks(_valuesEnumerator.Current).GetEnumerator();
-					}
-					else
-					{
-						Current = null;
-						return false;
-					}
-				}
-
-				if (_currCandleEnumerator.MoveNext())
-				{
-					Current = _currCandleEnumerator.Current;
-					return true;
-				}
-
-				if (_valuesEnumerator.MoveNext())
-				{
-					_currCandleEnumerator?.Dispose();
-					_currCandleEnumerator = ToTicks(_valuesEnumerator.Current).GetEnumerator();
-
-					_currCandleEnumerator.MoveNext();
-					Current = _currCandleEnumerator.Current;
-
-					return true;
-				}
-
-				Current = null;
-				return false;
-			}
-
-			public void Reset()
-			{
-				_valuesEnumerator.Reset();
-				Current = null;
-			}
-
-			public void Dispose()
-			{
-				Current = null;
-				_currCandleEnumerator?.Dispose();
-				_valuesEnumerator.Dispose();
-			}
-
-			public ExecutionMessage Current { get; private set; }
-
-			object IEnumerator.Current => Current;
-		}
-
-		public TradeEnumerable(IEnumerable<TCandle> candles, decimal volumeStep)
-			: base(() => new TradeEnumerator(candles, volumeStep))
-		{
-			if (candles == null)
-				throw new ArgumentNullException(nameof(candles));
-
-			//_values = candles;
-		}
-
-		//private readonly IEnumerableEx<CandleMessage> _values;
-
-		//public int Count => _values.Count * 4;
 	}
 
 	/// <summary>

@@ -122,92 +122,6 @@ static partial class Extensions
 		}
 	}
 
-	private sealed class OrderLogTickEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
-	{
-		private sealed class OrderLogTickEnumerator : IEnumerator<ExecutionMessage>
-		{
-			private readonly IEnumerator<ExecutionMessage> _itemsEnumerator;
-
-			private readonly HashSet<long> _tradesByNum = [];
-			private readonly HashSet<string> _tradesByString = new(StringComparer.InvariantCultureIgnoreCase);
-
-			public OrderLogTickEnumerator(IEnumerable<ExecutionMessage> items)
-			{
-				if (items == null)
-					throw new ArgumentNullException(nameof(items));
-
-				_itemsEnumerator = items.GetEnumerator();
-			}
-
-			public ExecutionMessage Current { get; private set; }
-
-			bool IEnumerator.MoveNext()
-			{
-				while (_itemsEnumerator.MoveNext())
-				{
-					var currItem = _itemsEnumerator.Current;
-
-					if (currItem.TradeId != null)
-					{
-						if (TryProcess(currItem.TradeId.Value, _tradesByNum, currItem))
-							return true;
-					}
-					else if (!currItem.TradeStringId.IsEmpty())
-					{
-						if (TryProcess(currItem.TradeStringId, _tradesByString, currItem))
-							return true;
-					}
-				}
-
-				Current = null;
-				return false;
-			}
-
-			private bool TryProcess<T>(T tradeId, HashSet<T> trades, ExecutionMessage currItem)
-			{
-				if (!trades.Add(tradeId))
-					return false;
-
-				trades.Remove(tradeId);
-				Current = currItem.ToTick();
-				return true;
-			}
-
-			void IEnumerator.Reset()
-			{
-				_itemsEnumerator.Reset();
-
-				_tradesByNum.Clear();
-				_tradesByString.Clear();
-
-				Current = null;
-			}
-
-			object IEnumerator.Current => Current;
-
-			void IDisposable.Dispose()
-			{
-				Current = null;
-				_itemsEnumerator.Dispose();
-
-				GC.SuppressFinalize(this);
-			}
-		}
-
-		//private readonly IEnumerable<ExecutionMessage> _items;
-
-		public OrderLogTickEnumerable(IEnumerable<ExecutionMessage> items)
-			: base(() => new OrderLogTickEnumerator(items))
-		{
-			if (items == null)
-				throw new ArgumentNullException(nameof(items));
-
-			//_items = items;
-		}
-
-		//int IEnumerableEx.Count => _items.Count;
-	}
-
 	/// <summary>
 	/// To tick trade from the order log.
 	/// </summary>
@@ -248,81 +162,7 @@ static partial class Extensions
 	/// <param name="items">Orders log lines.</param>
 	/// <returns>Tick trades.</returns>
 	public static IEnumerable<ExecutionMessage> ToTicks(this IEnumerable<ExecutionMessage> items)
-	{
-		return new OrderLogTickEnumerable(items);
-	}
-
-	private sealed class TickLevel1Enumerable : SimpleEnumerable<Level1ChangeMessage>
-	{
-		private sealed class TickLevel1Enumerator : IEnumerator<Level1ChangeMessage>
-		{
-			private readonly IEnumerator<ExecutionMessage> _itemsEnumerator;
-
-			public TickLevel1Enumerator(IEnumerable<ExecutionMessage> items)
-			{
-				if (items is null)
-					throw new ArgumentNullException(nameof(items));
-
-				_itemsEnumerator = items.GetEnumerator();
-			}
-
-			public Level1ChangeMessage Current { get; private set; }
-
-			bool IEnumerator.MoveNext()
-			{
-				while (_itemsEnumerator.MoveNext())
-				{
-					var tick = _itemsEnumerator.Current;
-
-					var l1Msg = new Level1ChangeMessage
-					{
-						SecurityId = tick.SecurityId,
-						ServerTime = tick.ServerTime,
-						LocalTime = tick.LocalTime,
-					}
-					.TryAdd(Level1Fields.LastTradeId, tick.TradeId)
-					.TryAdd(Level1Fields.LastTradeStringId, tick.TradeStringId)
-					.TryAdd(Level1Fields.LastTradePrice, tick.TradePrice)
-					.TryAdd(Level1Fields.LastTradeVolume, tick.TradeVolume)
-					.TryAdd(Level1Fields.LastTradeUpDown, tick.IsUpTick)
-					.TryAdd(Level1Fields.LastTradeOrigin, tick.OriginSide)
-					;
-
-					if (!l1Msg.HasChanges())
-						continue;
-
-					Current = l1Msg;
-					return true;
-				}
-
-				Current = null;
-				return false;
-			}
-
-			void IEnumerator.Reset()
-			{
-				_itemsEnumerator.Reset();
-				Current = null;
-			}
-
-			object IEnumerator.Current => Current;
-
-			void IDisposable.Dispose()
-			{
-				Current = null;
-				_itemsEnumerator.Dispose();
-
-				GC.SuppressFinalize(this);
-			}
-		}
-
-		public TickLevel1Enumerable(IEnumerable<ExecutionMessage> items)
-			: base(() => new TickLevel1Enumerator(items))
-		{
-			if (items is null)
-				throw new ArgumentNullException(nameof(items));
-		}
-	}
+		=> items.ToAsyncEnumerable().ToTicks().ToBlockingEnumerable();
 
 	/// <summary>
 	/// To build level1 from the orders log.
@@ -332,69 +172,7 @@ static partial class Extensions
 	/// <param name="interval">The interval of the order book generation. The default is <see cref="TimeSpan.Zero"/>, which means order books generation at each new item of orders log.</param>
 	/// <returns>Tick trades.</returns>
 	public static IEnumerable<Level1ChangeMessage> ToLevel1(this IEnumerable<ExecutionMessage> items, IOrderLogMarketDepthBuilder builder, TimeSpan interval = default)
-	{
-		if (builder == null)
-			return new TickLevel1Enumerable(items);
-		else
-			return items.ToOrderBooks(builder, interval, 1).BuildIfNeed().ToLevel1();
-	}
-
-
-	private class TickEnumerable : SimpleEnumerable<ExecutionMessage>//, IEnumerableEx<ExecutionMessage>
-	{
-		private class TickEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator) : IEnumerator<ExecutionMessage>
-		{
-			private readonly IEnumerator<Level1ChangeMessage> _level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
-
-			public ExecutionMessage Current { get; private set; }
-
-			bool IEnumerator.MoveNext()
-			{
-				while (_level1Enumerator.MoveNext())
-				{
-					var level1 = _level1Enumerator.Current;
-
-					if (!level1.IsContainsTick())
-						continue;
-
-					Current = level1.ToTick();
-					return true;
-				}
-
-				Current = null;
-				return false;
-			}
-
-			public void Reset()
-			{
-				_level1Enumerator.Reset();
-				Current = null;
-			}
-
-			object IEnumerator.Current => Current;
-
-			void IDisposable.Dispose()
-			{
-				Current = null;
-				_level1Enumerator.Dispose();
-
-				GC.SuppressFinalize(this);
-			}
-		}
-
-		//private readonly IEnumerable<Level1ChangeMessage> _level1;
-
-		public TickEnumerable(IEnumerable<Level1ChangeMessage> level1)
-			: base(() => new TickEnumerator(level1.GetEnumerator()))
-		{
-			if (level1 == null)
-				throw new ArgumentNullException(nameof(level1));
-
-			//_level1 = level1;
-		}
-
-		//int IEnumerableEx.Count => _level1.Count;
-	}
+		=> items.ToAsyncEnumerable().ToLevel1(builder, interval).ToBlockingEnumerable();
 
 	/// <summary>
 	/// To convert level1 data into tick data.
@@ -402,9 +180,7 @@ static partial class Extensions
 	/// <param name="level1">Level1 data.</param>
 	/// <returns>Tick data.</returns>
 	public static IEnumerable<ExecutionMessage> ToTicks(this IEnumerable<Level1ChangeMessage> level1)
-	{
-		return new TickEnumerable(level1);
-	}
+		=> level1.ToAsyncEnumerable().ToTicks().ToBlockingEnumerable();
 
 	/// <summary>
 	/// To check, are there tick data in the level1 data.
@@ -463,104 +239,13 @@ static partial class Extensions
 			changes.ContainsKey(Level1Fields.ClosePrice);
 	}
 
-	private class OrderBookEnumerable : SimpleEnumerable<QuoteChangeMessage>//, IEnumerableEx<QuoteChangeMessage>
-	{
-		private class OrderBookEnumerator(IEnumerator<Level1ChangeMessage> level1Enumerator) : IEnumerator<QuoteChangeMessage>
-		{
-			private readonly IEnumerator<Level1ChangeMessage> _level1Enumerator = level1Enumerator ?? throw new ArgumentNullException(nameof(level1Enumerator));
-
-			private decimal? _prevBidPrice;
-			private decimal? _prevBidVolume;
-			private decimal? _prevAskPrice;
-			private decimal? _prevAskVolume;
-
-			public QuoteChangeMessage Current { get; private set; }
-
-			bool IEnumerator.MoveNext()
-			{
-				while (_level1Enumerator.MoveNext())
-				{
-					var level1 = _level1Enumerator.Current;
-
-					if (!level1.IsContainsQuotes())
-						continue;
-
-					var prevBidPrice = _prevBidPrice;
-					var prevBidVolume = _prevBidVolume;
-					var prevAskPrice = _prevAskPrice;
-					var prevAskVolume = _prevAskVolume;
-
-					_prevBidPrice = level1.TryGetDecimal(Level1Fields.BestBidPrice) ?? _prevBidPrice;
-					_prevBidVolume = level1.TryGetDecimal(Level1Fields.BestBidVolume) ?? _prevBidVolume;
-					_prevAskPrice = level1.TryGetDecimal(Level1Fields.BestAskPrice) ?? _prevAskPrice;
-					_prevAskVolume = level1.TryGetDecimal(Level1Fields.BestAskVolume) ?? _prevAskVolume;
-
-					if (_prevBidPrice == 0)
-						_prevBidPrice = null;
-
-					if (_prevAskPrice == 0)
-						_prevAskPrice = null;
-
-					if (prevBidPrice == _prevBidPrice && prevBidVolume == _prevBidVolume && prevAskPrice == _prevAskPrice && prevAskVolume == _prevAskVolume)
-						continue;
-
-					Current = new QuoteChangeMessage
-					{
-						SecurityId = level1.SecurityId,
-						LocalTime = level1.LocalTime,
-						ServerTime = level1.ServerTime,
-						Bids = _prevBidPrice == null ? [] : [new QuoteChange(_prevBidPrice.Value, _prevBidVolume ?? 0)],
-						Asks = _prevAskPrice == null ? [] : [new QuoteChange(_prevAskPrice.Value, _prevAskVolume ?? 0)],
-						BuildFrom = level1.BuildFrom ?? DataType.Level1,
-					};
-
-					return true;
-				}
-
-				Current = null;
-				return false;
-			}
-
-			public void Reset()
-			{
-				_level1Enumerator.Reset();
-				Current = null;
-			}
-
-			object IEnumerator.Current => Current;
-
-			void IDisposable.Dispose()
-			{
-				Current = null;
-				_level1Enumerator.Dispose();
-
-				GC.SuppressFinalize(this);
-			}
-		}
-
-		//private readonly IEnumerable<Level1ChangeMessage> _level1;
-
-		public OrderBookEnumerable(IEnumerable<Level1ChangeMessage> level1)
-			: base(() => new OrderBookEnumerator(level1.GetEnumerator()))
-		{
-			if (level1 == null)
-				throw new ArgumentNullException(nameof(level1));
-
-			//_level1 = level1;
-		}
-
-		//int IEnumerableEx.Count => _level1.Count;
-	}
-
 	/// <summary>
 	/// To convert level1 data into order books.
 	/// </summary>
 	/// <param name="level1">Level1 data.</param>
 	/// <returns>Market depths.</returns>
 	public static IEnumerable<QuoteChangeMessage> ToOrderBooks(this IEnumerable<Level1ChangeMessage> level1)
-	{
-		return new OrderBookEnumerable(level1);
-	}
+		=> level1.ToAsyncEnumerable().ToOrderBooks().ToBlockingEnumerable();
 
 	/// <summary>
 	/// To check, are there quotes in the level1.
@@ -721,7 +406,6 @@ static partial class Extensions
 					if (!tradesByNum.Add(tradeId))
 						continue;
 
-					tradesByNum.Remove(tradeId);
 					yield return currItem.ToTick();
 				}
 				else if (!currItem.TradeStringId.IsEmpty())
@@ -730,7 +414,6 @@ static partial class Extensions
 					if (!tradesByString.Add(tradeId))
 						continue;
 
-					tradesByString.Remove(tradeId);
 					yield return currItem.ToTick();
 				}
 			}
