@@ -758,7 +758,8 @@ public class AsyncMessageChannelTests : BaseTestClass
 	{
 		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
 		{
-			MaxParallelMessages = 2
+			MaxParallelMessages = 2,
+			FaultDelay = TimeSpan.Zero,
 		};
 
 		using var channel = new AsyncMessageChannel(adapter);
