@@ -79,7 +79,7 @@ public class SmaStrategy : Strategy
 
 	// to show in Designer what securities and data types are used
 	public override IEnumerable<(Security sec, DataType dt)> GetWorkingSecurities()
-		=> new[] { (Security, CandleType) };
+		=> [(Security, CandleType)];
 
 	protected override void OnReseted()
 	{
