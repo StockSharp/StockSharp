@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Strategies.Optimization;
+namespace StockSharp.Algo.Strategies.Optimization;
 
 using StockSharp.Algo.Testing;
 
@@ -51,7 +51,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			=> LookupByPortfolioName(portfolio.CheckOnNull(nameof(portfolio)).Name);
 
 		public Portfolio LookupByPortfolioName(string name)
-			=> _copies.SafeAdd(name, key => (Portfolio)_provider.LookupByPortfolioName(key)?.Clone() ?? new Portfolio { Name = name });
+			=> _copies.SafeAdd(name, key => (Portfolio)_provider.LookupByPortfolioName(key)?.Clone() ?? new Portfolio { Name = key });
 
 		public IEnumerable<Portfolio> Portfolios => _provider.Portfolios.Select(GetCopy);
 
@@ -60,10 +60,6 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	}
 
 	private readonly HashSet<HistoryEmulationConnector> _startedConnectors = [];
-	private bool _cancelEmulation;
-	private bool _finished;
-	private int _lastTotalProgress;
-	private DateTime _startedAt;
 
 	private MarketDataStorageCache _adapterCache;
 	private MarketDataStorageCache _storageCache;
@@ -72,6 +68,19 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	private CacheAllocator _storageCacheAllocator;
 
 	private readonly Lock _sync = new();
+	private ChannelStates _state = ChannelStates.Stopped;
+	private bool _cancelEmulation;
+	private bool _allIterationsStarted;
+
+	/// <summary>
+	/// Batch manager for concurrent iteration control.
+	/// </summary>
+	protected readonly OptimizationBatchManager BatchManager = new();
+
+	/// <summary>
+	/// Progress tracker.
+	/// </summary>
+	protected readonly OptimizationProgressTracker ProgressTracker = new();
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BaseOptimizer"/>.
@@ -163,7 +172,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		=> _storageCacheAllocator?.Free(cache);
 
 	/// <summary>
-	/// <see cref="IPortfolioProvider"/>
+	/// <see cref="ISecurityProvider"/>
 	/// </summary>
 	public ISecurityProvider SecurityProvider { get; }
 
@@ -181,8 +190,6 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="Stop"/> method.
 	/// </summary>
 	public bool IsCancelled { get; private set; }
-
-	private ChannelStates _state = ChannelStates.Stopped;
 
 	/// <summary>
 	/// The emulator state.
@@ -234,12 +241,19 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <summary>
 	/// Start optimization.
 	/// </summary>
-	protected void OnStart()
+	/// <param name="totalIterations">Total number of iterations.</param>
+	protected void OnStart(int totalIterations)
 	{
+		var maxIters = EmulationSettings.MaxIterations;
+		if (maxIters > 0 && totalIterations > maxIters)
+			totalIterations = maxIters;
+
 		_cancelEmulation = false;
-		_finished = false;
-		_startedAt = DateTime.UtcNow;
-		_lastTotalProgress = -1;
+		_allIterationsStarted = false;
+		IsCancelled = false;
+
+		ProgressTracker.Reset(totalIterations);
+		BatchManager.Reset(EmulationSettings.BatchSize, totalIterations);
 
 		State = ChannelStates.Starting;
 		State = ChannelStates.Started;
@@ -300,7 +314,6 @@ public abstract class BaseOptimizer : BaseLogReceiver
 				return;
 
 			State = ChannelStates.Stopping;
-
 			_cancelEmulation = true;
 
 			foreach (var connector in _startedConnectors)
@@ -312,6 +325,9 @@ public abstract class BaseOptimizer : BaseLogReceiver
 					ChannelStates.Suspending)
 					connector.Disconnect();
 			}
+
+			if (BatchManager.RunningCount == 0)
+				RaiseStopped();
 		}
 	}
 
@@ -327,16 +343,14 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// </summary>
 	protected void RaiseStopped()
 	{
+		if (State == ChannelStates.Stopped)
+			return;
+
 		if (State != ChannelStates.Stopping)
 			State = ChannelStates.Stopping;
 
-		var needProgress = false;
-
-		using (_sync.EnterScope())
-			needProgress = !_cancelEmulation && _lastTotalProgress < 100;
-
-		if (needProgress)
-			TotalProgressChanged?.Invoke(100, DateTime.UtcNow - _startedAt, default);
+		if (ProgressTracker.TotalProgress < 100 && !_cancelEmulation)
+			TotalProgressChanged?.Invoke(100, ProgressTracker.Elapsed, default);
 
 		IsCancelled = _cancelEmulation;
 		State = ChannelStates.Stopped;
@@ -365,67 +379,101 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		Strategy strategy;
 		IStrategyParam[] parameters;
 		HistoryEmulationConnector connector;
+		Guid iterationId;
 
 		using (_sync.EnterScope())
 		{
-			if (State == ChannelStates.Suspending || State == ChannelStates.Suspended)
+			// Check if we can start a new iteration
+			if (State is ChannelStates.Suspended or ChannelStates.Suspending or ChannelStates.Stopping or ChannelStates.Stopped)
 				return;
 
-			var pfProvider = new CopyPortfolioProvider(PortfolioProvider);
-
-			(Strategy strategy, IStrategyParam[] parameters)? t;
-
-			if (_cancelEmulation || (t = tryGetNext(pfProvider)) is null)
+			if (_cancelEmulation || _allIterationsStarted)
 			{
-				if (_finished || State == ChannelStates.Stopped)
-					return;
-
-				if (State != ChannelStates.Stopping)
-					State = ChannelStates.Stopping;
-
-				if (_cancelEmulation || _startedConnectors.IsEmpty())
-				{
-					Stop();
-					RaiseStopped();
-				}
-				else
-				{
-					_finished = true;
-				}
-
+				CheckFinished();
 				return;
 			}
 
-			strategy = t.Value.strategy;
-			parameters = t.Value.parameters;
+			if (!BatchManager.CanStartNext)
+			{
+				_allIterationsStarted = true;
+				CheckFinished();
+				return;
+			}
+
+			// Try to get next strategy
+			var pfProvider = new CopyPortfolioProvider(PortfolioProvider);
+			var next = tryGetNext(pfProvider);
+
+			if (next is null)
+			{
+				_allIterationsStarted = true;
+				CheckFinished();
+				return;
+			}
+
+			(strategy, parameters) = next.Value;
+
+			// Reserve slot in batch
+			if (!BatchManager.TryReserveSlot(out iterationId))
+				return;
+
+			ProgressTracker.IterationStarted();
 
 			strategy.Parent ??= this;
 
-			connector = new(SecurityProvider, pfProvider, ExchangeInfoProvider, StorageSettings.StorageRegistry)
-			{
-				Parent = this,
-				StopOnSubscriptionError = StopOnSubscriptionError,
-
-				HistoryMessageAdapter =
-				{
-					Drive = StorageSettings.Drive,
-					StorageFormat = StorageSettings.Format,
-
-					StartDate = startTime,
-					StopDate = stopTime,
-
-					AdapterCache = adapterCache,
-					StorageCache = storageCache,
-				},
-
-				MaxMessageCount = EmulationSettings.MaxMessageCount,
-			};
-
+			connector = CreateConnector(pfProvider, adapterCache, storageCache, startTime, stopTime);
 			_startedConnectors.Add(connector);
 		}
 
+		SetupIteration(connector, strategy, parameters, iterationId, iterationFinished);
+		StartIteration(connector, strategy, parameters);
+	}
+
+	private void CheckFinished()
+	{
+		if (BatchManager.IsFinished)
+			RaiseStopped();
+	}
+
+	private HistoryEmulationConnector CreateConnector(
+		IPortfolioProvider pfProvider,
+		MarketDataStorageCache adapterCache,
+		MarketDataStorageCache storageCache,
+		DateTime startTime,
+		DateTime stopTime)
+	{
+		var connector = new HistoryEmulationConnector(SecurityProvider, pfProvider, ExchangeInfoProvider, StorageSettings.StorageRegistry)
+		{
+			Parent = this,
+			StopOnSubscriptionError = StopOnSubscriptionError,
+
+			HistoryMessageAdapter =
+			{
+				Drive = StorageSettings.Drive,
+				StorageFormat = StorageSettings.Format,
+
+				StartDate = startTime,
+				StopDate = stopTime,
+
+				AdapterCache = adapterCache,
+				StorageCache = storageCache,
+			},
+
+			MaxMessageCount = EmulationSettings.MaxMessageCount,
+		};
+
 		connector.EmulationSettings.Load(EmulationSettings.Save());
 
+		return connector;
+	}
+
+	private void SetupIteration(
+		HistoryEmulationConnector connector,
+		Strategy strategy,
+		IStrategyParam[] parameters,
+		Guid iterationId,
+		Action iterationFinished)
+	{
 		var lastStep = 0;
 
 		connector.ProgressChanged += step => SingleProgressChanged?.Invoke(strategy, parameters, lastStep = step);
@@ -435,55 +483,49 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			if (state != ChannelStates.Stopped)
 				return;
 
-			if (lastStep < 100)
-			{
-				SingleProgressChanged?.Invoke(strategy, parameters, 100);
-
-				strategy.Stop();
-
-				// strategy object can be used in SingleProgressChanged callback
-				//strategy.Dispose();
-			}
-
-			var needStop = false;
-
-			int? progress;
-
-			using (_sync.EnterScope())
-			{
-				_startedConnectors.Remove(connector);
-
-				progress = GetProgress();
-
-				if (_lastTotalProgress > progress)
-					progress = null;
-				else
-					_lastTotalProgress = progress.Value;
-
-				needStop = _finished && _startedConnectors.IsEmpty();
-			}
-
-			if (progress is not null)
-			{
-				var evt = TotalProgressChanged;
-
-				if (evt is not null)
-				{
-					var duration = DateTime.UtcNow - _startedAt;
-
-					evt(progress.Value.Abs(), duration, progress < 1 ? TimeSpan.MaxValue : duration * 100.0 / progress.Value - duration);
-				}
-			}
-
-			iterationFinished();
-
-			if (needStop)
-			{
-				Stop();
-				RaiseStopped();
-			}
+			OnIterationCompleted(connector, strategy, parameters, iterationId, lastStep, iterationFinished);
 		};
+	}
 
+	private void OnIterationCompleted(
+		HistoryEmulationConnector connector,
+		Strategy strategy,
+		IStrategyParam[] parameters,
+		Guid iterationId,
+		int lastStep,
+		Action iterationFinished)
+	{
+		if (lastStep < 100)
+		{
+			SingleProgressChanged?.Invoke(strategy, parameters, 100);
+			strategy.Stop();
+		}
+
+		bool isFinished;
+
+		using (_sync.EnterScope())
+		{
+			_startedConnectors.Remove(connector);
+			BatchManager.CompleteIteration(iterationId);
+			isFinished = _allIterationsStarted && BatchManager.IsFinished;
+		}
+
+		ProgressTracker.IterationCompleted();
+
+		// Report total progress
+		var progress = ProgressTracker.TotalProgress;
+		TotalProgressChanged?.Invoke(progress, ProgressTracker.Elapsed, ProgressTracker.Remaining);
+
+		// Trigger next iteration
+		iterationFinished();
+
+		// Check if we should stop
+		if (isFinished || (_cancelEmulation && BatchManager.RunningCount == 0))
+			RaiseStopped();
+	}
+
+	private void StartIteration(HistoryEmulationConnector connector, Strategy strategy, IStrategyParam[] parameters)
+	{
 		strategy.Connector = connector;
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
@@ -493,9 +535,9 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 		if (StopOnSubscriptionError)
 		{
-			strategy.ProcessStateChanged += (s) =>
+			strategy.ProcessStateChanged += s =>
 			{
-				if (s == strategy && s.ProcessState == ProcessStates.Started && !((ISubscriptionProvider)s).Subscriptions.Any(s => s.DataType.IsMarketData))
+				if (s == strategy && s.ProcessState == ProcessStates.Started && !((ISubscriptionProvider)s).Subscriptions.Any(sub => sub.DataType.IsMarketData))
 				{
 					s.LogError("No any market data subscription.");
 					connector.Disconnect();
@@ -508,10 +550,4 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		connector.Connect();
 		connector.Start();
 	}
-
-	/// <summary>
-	/// Get progress value. 0..100 or <see langword="null"/> if progress is unknown.
-	/// </summary>
-	/// <returns>Operation result.</returns>
-	protected abstract int? GetProgress();
 }

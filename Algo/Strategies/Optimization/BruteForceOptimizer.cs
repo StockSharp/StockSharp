@@ -5,9 +5,6 @@ namespace StockSharp.Algo.Strategies.Optimization;
 /// </summary>
 public class BruteForceOptimizer : BaseOptimizer
 {
-	private int _itersCount;
-	private int _itersDone;
-
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BruteForceOptimizer"/>.
 	/// </summary>
@@ -81,20 +78,13 @@ public class BruteForceOptimizer : BaseOptimizer
 		if (iterationCount <= 0)
 			throw new ArgumentOutOfRangeException(nameof(iterationCount), iterationCount, LocalizedStrings.InvalidValue);
 
-		var maxIters = EmulationSettings.MaxIterations;
-		if (maxIters > 0 && iterationCount > maxIters)
-		{
-			iterationCount = maxIters;
-		}
+		OnStart(iterationCount);
 
-		_itersCount = iterationCount;
-		_itersDone = 0;
+		StartInitialBatch(startTime, stopTime, tryGetNext);
+	}
 
-		var leftSync = new Lock();
-		var left = iterationCount;
-
-		OnStart();
-
+	private void StartInitialBatch(DateTime startTime, DateTime stopTime, Func<IPortfolioProvider, (Strategy strategy, IStrategyParam[] parameters)?> tryGetNext)
+	{
 		var batchSize = EmulationSettings.BatchSize;
 
 		for (var i = 0; i < batchSize; i++)
@@ -102,30 +92,12 @@ public class BruteForceOptimizer : BaseOptimizer
 			var adapterCache = AllocateAdapterCache();
 			var storageCache = AllocateStorageCache();
 
-			void _()
+			void runNext()
 			{
-				TryNextRun(startTime, stopTime,
-					pfProvider =>
-					{
-						using (leftSync.EnterScope())
-						{
-							if (left <= 0)
-								return null;
-
-							left--;
-						}
-
-						return tryGetNext(pfProvider);
-					},
-					adapterCache, storageCache,
-					() => _());
+				TryNextRun(startTime, stopTime, tryGetNext, adapterCache, storageCache, runNext);
 			}
 
-			_();
+			runNext();
 		}
 	}
-
-	/// <inheritdoc />
-	protected override int? GetProgress()
-		=> _itersCount == int.MaxValue ? null : (int)(++_itersDone * 100.0 / _itersCount);
 }

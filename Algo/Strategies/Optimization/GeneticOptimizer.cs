@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Algo.Strategies.Optimization;
+namespace StockSharp.Algo.Strategies.Optimization;
 
 using Ecng.Compilation;
 
@@ -61,16 +61,9 @@ public class GeneticOptimizer : BaseOptimizer
 			if (_cache.TryGetValue(key, out var fitVal))
 				return (double)fitVal;
 
-			if (_optimizer._leftIterations is not null)
-			{
-				using (_optimizer._leftIterLock.EnterScope())
-				{
-					_optimizer._leftIterations = _optimizer._leftIterations.Value - 1;
-
-					if (_optimizer._leftIterations < 0)
-						return double.MinValue;
-				}
-			}
+			// Check iteration limit
+			if (!_optimizer.TryConsumeIteration())
+				return double.MinValue;
 
 			using var wait = new ManualResetEvent(false);
 
@@ -112,7 +105,7 @@ public class GeneticOptimizer : BaseOptimizer
 				fitVal = _calcFitness(strategy);
 
 				_cache[key] = fitVal;
-				
+
 				return (double)fitVal;
 			}
 			finally
@@ -153,18 +146,17 @@ public class GeneticOptimizer : BaseOptimizer
 		private readonly GeneticOptimizer _optimizer = optimizer ?? throw new ArgumentNullException(nameof(optimizer));
 
 		protected override bool PerformHasReached(IGeneticAlgorithm geneticAlgorithm)
-		{
-			using (_optimizer._leftIterLock.EnterScope())
-				return _optimizer._leftIterations <= 0;
-		}
+			=> !_optimizer.HasRemainingIterations();
 	}
 
 	private readonly SynchronizedSet<ManualResetEvent> _events = [];
 	private GeneticAlgorithm _ga;
 
-	private readonly Lock _leftIterLock = new();
-	private int? _leftIterations;
+	private readonly Lock _iterLock = new();
+	private int? _maxIterations;
+	private int _consumedIterations;
 
+	private readonly IFileSystem _fileSystem;
 	private readonly AssemblyLoadContextTracker _context = new();
 
 	/// <summary>
@@ -173,9 +165,11 @@ public class GeneticOptimizer : BaseOptimizer
 	/// <param name="securityProvider">The provider of information about instruments.</param>
 	/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 	/// <param name="storageRegistry">Market data storage.</param>
-	public GeneticOptimizer(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IStorageRegistry storageRegistry)
+	/// <param name="fileSystem">File system.</param>
+	public GeneticOptimizer(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IStorageRegistry storageRegistry, IFileSystem fileSystem)
 		: base(securityProvider, portfolioProvider, storageRegistry.CheckOnNull(nameof(storageRegistry)).ExchangeInfoProvider, storageRegistry, StorageFormats.Binary, storageRegistry.DefaultDrive)
 	{
+		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 	}
 
 	/// <summary>
@@ -187,9 +181,11 @@ public class GeneticOptimizer : BaseOptimizer
 	/// <param name="storageRegistry">Market data storage.</param>
 	/// <param name="storageFormat">The format of market data. <see cref="StorageFormats.Binary"/> is used by default.</param>
 	/// <param name="drive">The storage which is used by default. By default, <see cref="IStorageRegistry.DefaultDrive"/> is used.</param>
-	public GeneticOptimizer(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, IStorageRegistry storageRegistry, StorageFormats storageFormat, IMarketDataDrive drive)
+	/// <param name="fileSystem">File system.</param>
+	public GeneticOptimizer(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, IStorageRegistry storageRegistry, StorageFormats storageFormat, IMarketDataDrive drive, IFileSystem fileSystem)
 		: base(securityProvider, portfolioProvider, exchangeInfoProvider, storageRegistry, storageFormat, drive)
 	{
+		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 	}
 
 	/// <summary>
@@ -197,7 +193,40 @@ public class GeneticOptimizer : BaseOptimizer
 	/// </summary>
 	public GeneticSettings Settings { get; } = new();
 
-	private Func<Strategy, decimal> ToFitness(string formula, IFileSystem fileSystem)
+	/// <summary>
+	/// Try to consume one iteration from the limit.
+	/// </summary>
+	/// <returns>True if iteration was consumed, false if limit reached.</returns>
+	private bool TryConsumeIteration()
+	{
+		using (_iterLock.EnterScope())
+		{
+			if (_maxIterations is null)
+				return true;
+
+			if (_consumedIterations >= _maxIterations.Value)
+				return false;
+
+			_consumedIterations++;
+			return true;
+		}
+	}
+
+	/// <summary>
+	/// Check if there are remaining iterations.
+	/// </summary>
+	private bool HasRemainingIterations()
+	{
+		using (_iterLock.EnterScope())
+		{
+			if (_maxIterations is null)
+				return true;
+
+			return _consumedIterations < _maxIterations.Value;
+		}
+	}
+
+	private Func<Strategy, decimal> ToFitness(string formula)
 	{
 		if (formula.IsEmpty())
 			throw new ArgumentNullException(nameof(formula));
@@ -205,7 +234,7 @@ public class GeneticOptimizer : BaseOptimizer
 		if (CodeExtensions.TryGetCSharpCompiler() is null)
 			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 
-		var expression = formula.Compile<decimal>(fileSystem, _context);
+		var expression = formula.Compile<decimal>(_fileSystem, _context);
 
 		if (!expression.Error.IsEmpty())
 			throw new InvalidOperationException(expression.Error);
@@ -223,7 +252,7 @@ public class GeneticOptimizer : BaseOptimizer
 		{
 			var varValues = new decimal[vars.Length];
 
-			for(var i = 0; i < varValues.Length; ++i)
+			for (var i = 0; i < varValues.Length; ++i)
 				varValues[i] = varGetters[i](stra);
 
 			try
@@ -245,7 +274,6 @@ public class GeneticOptimizer : BaseOptimizer
 	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
 	/// <param name="strategy">Strategy.</param>
 	/// <param name="parameters">Parameters used to generate chromosomes.</param>
-	/// <param name="fileSystem">File system.</param>
 	/// <param name="calcFitness">Calc fitness value function. If <see langword="null"/> the value from <see cref="GeneticSettings.Fitness"/> will be used.</param>
 	/// <param name="selection"><see cref="ISelection"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Selection"/> will be used.</param>
 	/// <param name="crossover"><see cref="ICrossover"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Crossover"/> will be used.</param>
@@ -256,7 +284,6 @@ public class GeneticOptimizer : BaseOptimizer
 		DateTime stopTime,
 		Strategy strategy,
 		IEnumerable<(IStrategyParam param, object from, object to, object step, IEnumerable values)> parameters,
-		IFileSystem fileSystem,
 		Func<Strategy, decimal> calcFitness = default,
 		ISelection selection = default,
 		ICrossover crossover = default,
@@ -390,7 +417,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(paramArr));
 
-		calcFitness ??= ToFitness(Settings.Fitness, fileSystem);
+		calcFitness ??= ToFitness(Settings.Fitness);
 		selection ??= Settings.Selection.CreateInstance<ISelection>();
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();
@@ -398,7 +425,12 @@ public class GeneticOptimizer : BaseOptimizer
 		if (mutation is SequenceMutationBase && paramArr.Length < 3)
 			throw new InvalidOperationException($"Optimization parameters for '{mutation.GetType()}' mutation must be at least 3.");
 
-		_leftIterations = null;
+		// Setup iteration limit
+		using (_iterLock.EnterScope())
+		{
+			_maxIterations = EmulationSettings.MaxIterations > 0 ? EmulationSettings.MaxIterations : null;
+			_consumedIterations = 0;
+		}
 
 		var terminations = new List<ITermination>();
 
@@ -408,11 +440,8 @@ public class GeneticOptimizer : BaseOptimizer
 		if (Settings.GenerationsMax > 0)
 			terminations.Add(new GenerationNumberTermination(Settings.GenerationsMax));
 
-		if (EmulationSettings.MaxIterations > 0)
-		{
-			_leftIterations = EmulationSettings.MaxIterations;
+		if (_maxIterations is not null)
 			terminations.Add(new MaxIterationsTermination(this));
-		}
 
 		if (terminations.Count == 0)
 			throw new InvalidOperationException("No termination set.");
@@ -437,31 +466,19 @@ public class GeneticOptimizer : BaseOptimizer
 			Reinsertion = Settings.Reinsertion.CreateInstance<IReinsertion>(),
 		};
 
-		//_ga.GenerationRan += OnGenerationRan;
 		_ga.TerminationReached += OnTerminationReached;
 
-		OnStart();
+		// Use estimated iteration count for genetic (population * max generations)
+		var estimatedIterations = Settings.Population * Math.Max(1, Settings.GenerationsMax);
+		OnStart(estimatedIterations);
 
 		Task.Run(_ga.Start);
-	}
-
-	/// <inheritdoc />
-	protected override int? GetProgress()
-	{
-		var max = Settings.GenerationsMax;
-		var ga = _ga;
-
-		return max > 0 && ga is not null ? (int)(ga.GenerationsNumber * 100.0 / max) : null;
 	}
 
 	private void OnTerminationReached(object sender, EventArgs e)
 	{
 		RaiseStopped();
 	}
-
-	//private void OnGenerationRan(object sender, EventArgs e)
-	//{
-	//}
 
 	/// <inheritdoc />
 	public override void Suspend()
