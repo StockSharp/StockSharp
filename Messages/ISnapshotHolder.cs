@@ -252,15 +252,27 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 						{
 							var snapshot = info.Builder.TryApply(quoteMsg);
 
-							// reset error count (no exception)
-							info.ErrorCount = 0;
-
 							if (snapshot is null)
 							{
+								// TryApply returned null - this is an error
+								if (info.ErrorCount < _maxError)
+								{
+									info.ErrorCount++;
+
+									if (info.ErrorCount == _maxError)
+									{
+										logTurnedOff = true;
+										logErrorCount = info.ErrorCount;
+									}
+								}
+
 								result = null;
 							}
 							else
 							{
+								// success - reset error count
+								info.ErrorCount = 0;
+
 								snapshot.State = QuoteChangeStates.SnapshotComplete;
 								info.Snapshot = snapshot;
 								result = quoteMsg;
