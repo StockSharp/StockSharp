@@ -520,7 +520,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 
 		manager
 			.Setup(m => m.ProcessOutMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync((forward: (Message)null, extraOut: Array.Empty<Message>(), loopbackIn: Array.Empty<Message>()));
+			.ReturnsAsync((forward: (Message)null, extraOut: [], loopbackIn: []));
 
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider, manager.Object);
 
@@ -591,7 +591,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 
 		manager
 			.Setup(m => m.ProcessInMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync((toInner: Array.Empty<Message>(), toOut: Array.Empty<Message>()));
+			.ReturnsAsync((toInner: [], toOut: []));
 
 		var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider, manager.Object);
 		adapter.Dispose();

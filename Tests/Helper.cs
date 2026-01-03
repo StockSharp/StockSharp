@@ -1382,12 +1382,6 @@ static class Helper
 		return new InMemoryNativeIdStorageProvider();
 	}
 
-	public static object TryGetBySecurityId(this INativeIdStorageProvider provider, string storageName, SecurityId securityId)
-		=> provider.GetStorage(storageName).TryGetBySecurityIdAsync(securityId).GetAwaiter().GetResult();
-
-	public static bool TryAdd(this INativeIdStorageProvider provider, string storageName, SecurityId securityId, object nativeId)
-		=> provider.GetStorage(storageName).TryAddAsync(securityId, nativeId).GetAwaiter().GetResult();
-
 	public static IEnumerable<TCandle> IsAllFinished<TCandle>(this IEnumerable<TCandle> candles)
 		where TCandle : CandleMessage
 	{

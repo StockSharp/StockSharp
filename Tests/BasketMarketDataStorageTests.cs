@@ -674,21 +674,21 @@ public class BasketMarketDataStorageTests : BaseTestClass
 	#region Tests - NotSupported Operations
 
 	[TestMethod]
-	public void SaveAsync_ThrowsNotSupported()
+	public async Task SaveAsync_ThrowsNotSupported()
 	{
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 
-		ThrowsExactly<NotSupportedException>(() =>
-			((IMarketDataStorage)basket).SaveAsync(Array.Empty<Message>(), CancellationToken).GetAwaiter().GetResult());
+		await ThrowsExactlyAsync<NotSupportedException>(() =>
+			((IMarketDataStorage)basket).SaveAsync([], CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void DeleteAsync_ThrowsNotSupported()
+	public async Task DeleteAsync_ThrowsNotSupported()
 	{
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 
-		ThrowsExactly<NotSupportedException>(() =>
-			((IMarketDataStorage)basket).DeleteAsync(Array.Empty<Message>(), CancellationToken).GetAwaiter().GetResult());
+		await ThrowsExactlyAsync<NotSupportedException>(async () =>
+			await ((IMarketDataStorage)basket).DeleteAsync([], CancellationToken).AsTask());
 	}
 
 	[TestMethod]
