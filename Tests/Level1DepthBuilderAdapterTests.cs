@@ -57,20 +57,20 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Level1Change_SplitsSubscriptionIdsAndBuildsBook()
+	public async Task Level1Change_SplitsSubscriptionIdsAndBuildsBook()
 	{
 		var secId = Helper.CreateSecurityId();
 		var inner = new RecordingPassThroughMessageAdapter();
 
 		using var adapter = new Level1DepthBuilderAdapter(inner);
 
-		AsyncHelper.Run(() => adapter.SendInMessageAsync(new MarketDataMessage
+		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
 			IsSubscribe = true,
 			TransactionId = 1,
 			SecurityId = secId,
 			DataType2 = DataType.MarketDepth,
-		}, CancellationToken.None));
+		}, CancellationToken);
 
 		var output = new List<Message>();
 		adapter.NewOutMessage += output.Add;

@@ -53,7 +53,7 @@ public class ReportGeneratorTests : BaseTestClass
 		using var stream = new MemoryStream();
 
 		// Act
-		await generator.Generate(source, stream, CancellationToken.None);
+		await generator.Generate(source, stream, CancellationToken);
 
 		// Assert
 		stream.Position = 0;
@@ -80,7 +80,7 @@ public class ReportGeneratorTests : BaseTestClass
 		using var stream = new MemoryStream();
 
 		// Act
-		await generator.Generate(source, stream, CancellationToken.None);
+		await generator.Generate(source, stream, CancellationToken);
 
 		// Assert
 		stream.Position = 0;
@@ -104,7 +104,7 @@ public class ReportGeneratorTests : BaseTestClass
 		using var stream = new MemoryStream();
 
 		// Act
-		await generator.Generate(source, stream, CancellationToken.None);
+		await generator.Generate(source, stream, CancellationToken);
 
 		// Assert
 		stream.Position = 0;
@@ -136,7 +136,7 @@ public class ReportGeneratorTests : BaseTestClass
 		using var stream = new MemoryStream();
 
 		// Act
-		await generator.Generate(source, stream, CancellationToken.None);
+		await generator.Generate(source, stream, CancellationToken);
 
 		// Assert
 		stream.Position = 0;
@@ -167,7 +167,7 @@ public class ReportGeneratorTests : BaseTestClass
 		using var stream = new MemoryStream();
 
 		// Act
-		await generator.Generate(source, stream, CancellationToken.None);
+		await generator.Generate(source, stream, CancellationToken);
 
 		// Assert
 		stream.Position = 0;

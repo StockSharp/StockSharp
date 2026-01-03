@@ -1,13 +1,9 @@
 namespace StockSharp.Tests;
 
-using StockSharp.Algo;
 using StockSharp.Algo.Candles.Compression;
-using StockSharp.Algo.Storages;
-using StockSharp.BusinessEntities;
-using StockSharp.Messages;
 
 [TestClass]
-public class StorageMetaInfoMessageAdapterTests
+public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 {
 	#region Random Data Generators
 
@@ -132,7 +128,7 @@ public class StorageMetaInfoMessageAdapterTests
 		var exchProvider = new InMemoryExchangeInfoProvider();
 		var storageProcessor = new TestStorageProcessor();
 
-		Assert.ThrowsExactly<ArgumentNullException>(() =>
+		ThrowsExactly<ArgumentNullException>(() =>
 			new StorageMetaInfoMessageAdapter(null, secStorage, posStorage, exchProvider, storageProcessor));
 	}
 
@@ -144,7 +140,7 @@ public class StorageMetaInfoMessageAdapterTests
 		var exchProvider = new InMemoryExchangeInfoProvider();
 		var storageProcessor = new TestStorageProcessor();
 
-		Assert.ThrowsExactly<ArgumentNullException>(() =>
+		ThrowsExactly<ArgumentNullException>(() =>
 			new StorageMetaInfoMessageAdapter(inner, null, posStorage, exchProvider, storageProcessor));
 	}
 
@@ -156,7 +152,7 @@ public class StorageMetaInfoMessageAdapterTests
 		var exchProvider = new InMemoryExchangeInfoProvider();
 		var storageProcessor = new TestStorageProcessor();
 
-		Assert.ThrowsExactly<ArgumentNullException>(() =>
+		ThrowsExactly<ArgumentNullException>(() =>
 			new StorageMetaInfoMessageAdapter(inner, secStorage, null, exchProvider, storageProcessor));
 	}
 
@@ -168,7 +164,7 @@ public class StorageMetaInfoMessageAdapterTests
 		var posStorage = new InMemoryPositionStorage();
 		var storageProcessor = new TestStorageProcessor();
 
-		Assert.ThrowsExactly<ArgumentNullException>(() =>
+		ThrowsExactly<ArgumentNullException>(() =>
 			new StorageMetaInfoMessageAdapter(inner, secStorage, posStorage, null, storageProcessor));
 	}
 
@@ -180,7 +176,7 @@ public class StorageMetaInfoMessageAdapterTests
 		var posStorage = new InMemoryPositionStorage();
 		var exchProvider = new InMemoryExchangeInfoProvider();
 
-		Assert.ThrowsExactly<ArgumentNullException>(() =>
+		ThrowsExactly<ArgumentNullException>(() =>
 			new StorageMetaInfoMessageAdapter(inner, secStorage, posStorage, exchProvider, null));
 	}
 
@@ -199,7 +195,7 @@ public class StorageMetaInfoMessageAdapterTests
 	public void OverrideSecurityData_DefaultIsFalse()
 	{
 		var (adapter, _, _, _, _) = CreateAdapter();
-		Assert.IsFalse(adapter.OverrideSecurityData);
+		IsFalse(adapter.OverrideSecurityData);
 	}
 
 	[TestMethod]
@@ -207,7 +203,7 @@ public class StorageMetaInfoMessageAdapterTests
 	{
 		var (adapter, _, _, _, _) = CreateAdapter();
 		adapter.OverrideSecurityData = true;
-		Assert.IsTrue(adapter.OverrideSecurityData);
+		IsTrue(adapter.OverrideSecurityData);
 	}
 
 	#endregion
@@ -217,7 +213,7 @@ public class StorageMetaInfoMessageAdapterTests
 	[TestMethod]
 	public async Task SecurityStorage_100Securities_SavesCorrectly()
 	{
-		var (adapter, secStorage, _, _, _) = CreateAdapter();
+		var (_, secStorage, _, _, _) = CreateAdapter();
 
 		// Pre-populate storage with securities
 		var securities = new List<Security>();
@@ -228,18 +224,16 @@ public class StorageMetaInfoMessageAdapterTests
 			secStorage.Save(sec, false);
 		}
 
-		Assert.AreEqual(100, ((ISecurityProvider)secStorage).Count);
+		AreEqual(100, ((ISecurityProvider)secStorage).Count);
 
 		// Verify all securities are in storage
 		foreach (var sec in securities)
 		{
-			var found = secStorage.LookupById(sec.ToSecurityId());
+			var found = await secStorage.LookupByIdAsync(sec.ToSecurityId(), CancellationToken);
 			found.AssertNotNull();
-			Assert.AreEqual(sec.Code, found.Code);
-			Assert.AreEqual(sec.Type, found.Type);
+			AreEqual(sec.Code, found.Code);
+			AreEqual(sec.Type, found.Type);
 		}
-
-		await Task.CompletedTask;
 	}
 
 	[TestMethod]
@@ -272,23 +266,21 @@ public class StorageMetaInfoMessageAdapterTests
 			secStorage.Save(sec, false);
 		}
 
-		Assert.AreEqual(80, ((ISecurityProvider)secStorage).Count);
+		AreEqual(80, ((ISecurityProvider)secStorage).Count);
 
 		// Lookup only stocks
 		var stockCriteria = new SecurityLookupMessage { SecurityType = SecurityTypes.Stock };
-		var stocks = secStorage.Lookup(stockCriteria).ToList();
+		var stocks = await secStorage.LookupAsync(stockCriteria).ToListAsync(CancellationToken);
 
-		Assert.AreEqual(50, stocks.Count);
-		Assert.IsTrue(stocks.All(s => s.Type == SecurityTypes.Stock));
+		AreEqual(50, stocks.Count);
+		IsTrue(stocks.All(s => s.Type == SecurityTypes.Stock));
 
 		// Lookup only futures
 		var futureCriteria = new SecurityLookupMessage { SecurityType = SecurityTypes.Future };
-		var futures = secStorage.Lookup(futureCriteria).ToList();
+		var futures = await secStorage.LookupAsync(futureCriteria).ToListAsync(CancellationToken);
 
-		Assert.AreEqual(30, futures.Count);
-		Assert.IsTrue(futures.All(s => s.Type == SecurityTypes.Future));
-
-		await Task.CompletedTask;
+		AreEqual(30, futures.Count);
+		IsTrue(futures.All(s => s.Type == SecurityTypes.Future));
 	}
 
 	[TestMethod]
@@ -319,25 +311,23 @@ public class StorageMetaInfoMessageAdapterTests
 			secStorage.Save(sec, false);
 		}
 
-		Assert.AreEqual(100, ((ISecurityProvider)secStorage).Count);
+		AreEqual(100, ((ISecurityProvider)secStorage).Count);
 
 		// Lookup by board
 		var nasdaqCriteria = new SecurityLookupMessage
 		{
 			SecurityId = new SecurityId { BoardCode = "NASDAQ" }
 		};
-		var nasdaqSecurities = secStorage.Lookup(nasdaqCriteria).ToList();
+		var nasdaqSecurities = await secStorage.LookupAsync(nasdaqCriteria).ToListAsync(CancellationToken);
 
-		Assert.AreEqual(40, nasdaqSecurities.Count);
-		Assert.IsTrue(nasdaqSecurities.All(s => s.Board?.Code == "NASDAQ"));
-
-		await Task.CompletedTask;
+		AreEqual(40, nasdaqSecurities.Count);
+		IsTrue(nasdaqSecurities.All(s => s.Board?.Code == "NASDAQ"));
 	}
 
 	[TestMethod]
 	public async Task SecurityLookup_ByCurrency_FiltersCorrectly()
 	{
-		var (adapter, secStorage, _, _, _) = CreateAdapter();
+		var (_, secStorage, _, _, _) = CreateAdapter();
 
 		// Add securities with different currencies
 		for (int i = 0; i < 30; i++)
@@ -364,22 +354,20 @@ public class StorageMetaInfoMessageAdapterTests
 			secStorage.Save(sec, false);
 		}
 
-		Assert.AreEqual(50, ((ISecurityProvider)secStorage).Count);
+		AreEqual(50, ((ISecurityProvider)secStorage).Count);
 
 		// Lookup by currency
 		var usdCriteria = new SecurityLookupMessage { Currency = CurrencyTypes.USD };
-		var usdSecurities = secStorage.Lookup(usdCriteria).ToList();
+		var usdSecurities = await secStorage.LookupAsync(usdCriteria).ToListAsync(CancellationToken);
 
-		Assert.AreEqual(30, usdSecurities.Count);
-		Assert.IsTrue(usdSecurities.All(s => s.Currency == CurrencyTypes.USD));
-
-		await Task.CompletedTask;
+		AreEqual(30, usdSecurities.Count);
+		IsTrue(usdSecurities.All(s => s.Currency == CurrencyTypes.USD));
 	}
 
 	[TestMethod]
 	public async Task SecurityStorage_DuplicateSave_DoesNotDuplicate()
 	{
-		var (adapter, secStorage, _, _, _) = CreateAdapter();
+		var (_, secStorage, _, _, _) = CreateAdapter();
 
 		var sec = new Security
 		{
@@ -390,13 +378,11 @@ public class StorageMetaInfoMessageAdapterTests
 		};
 
 		secStorage.Save(sec, false);
-		Assert.AreEqual(1, ((ISecurityProvider)secStorage).Count);
+		AreEqual(1, ((ISecurityProvider)secStorage).Count);
 
 		// Save again with same ID
 		secStorage.Save(sec, false);
-		Assert.AreEqual(1, ((ISecurityProvider)secStorage).Count);
-
-		await Task.CompletedTask;
+		AreEqual(1, ((ISecurityProvider)secStorage).Count);
 	}
 
 	#endregion
@@ -406,7 +392,7 @@ public class StorageMetaInfoMessageAdapterTests
 	[TestMethod]
 	public async Task PortfolioStorage_100Portfolios_SavesCorrectly()
 	{
-		var (adapter, _, posStorage, _, _) = CreateAdapter();
+		var (_, _, posStorage, _, _) = CreateAdapter();
 
 		var portfolios = new List<Portfolio>();
 		for (int i = 0; i < 100; i++)
@@ -416,23 +402,21 @@ public class StorageMetaInfoMessageAdapterTests
 			posStorage.Save(portfolio);
 		}
 
-		Assert.AreEqual(100, posStorage.Portfolios.Count());
+		AreEqual(100, posStorage.Portfolios.Count());
 
 		// Verify all portfolios are retrievable
 		foreach (var pf in portfolios)
 		{
 			var found = posStorage.LookupByPortfolioName(pf.Name);
 			found.AssertNotNull();
-			Assert.AreEqual(pf.Name, found.Name);
+			AreEqual(pf.Name, found.Name);
 		}
-
-		await Task.CompletedTask;
 	}
 
 	[TestMethod]
 	public async Task PortfolioStorage_LookupByName_FindsCorrectPortfolio()
 	{
-		var (adapter, _, posStorage, _, _) = CreateAdapter();
+		var (_, _, posStorage, _, _) = CreateAdapter();
 
 		var portfolio = new Portfolio
 		{
@@ -446,22 +430,18 @@ public class StorageMetaInfoMessageAdapterTests
 
 		var found = posStorage.LookupByPortfolioName("TestPortfolio");
 		found.AssertNotNull();
-		Assert.AreEqual("TestPortfolio", found.Name);
-		Assert.AreEqual(CurrencyTypes.USD, found.Currency);
-		Assert.AreEqual(100000, found.BeginValue);
-
-		await Task.CompletedTask;
+		AreEqual("TestPortfolio", found.Name);
+		AreEqual(CurrencyTypes.USD, found.Currency);
+		AreEqual(100000, found.BeginValue);
 	}
 
 	[TestMethod]
 	public async Task PortfolioStorage_LookupNonExistent_ReturnsNull()
 	{
-		var (adapter, _, posStorage, _, _) = CreateAdapter();
+		var (_, _, posStorage, _, _) = CreateAdapter();
 
 		var found = posStorage.LookupByPortfolioName("NonExistent");
-		Assert.IsNull(found);
-
-		await Task.CompletedTask;
+		IsNull(found);
 	}
 
 	#endregion
@@ -471,7 +451,7 @@ public class StorageMetaInfoMessageAdapterTests
 	[TestMethod]
 	public async Task PositionStorage_200Positions_SavesCorrectly()
 	{
-		var (adapter, secStorage, posStorage, _, _) = CreateAdapter();
+		var (_, secStorage, posStorage, _, _) = CreateAdapter();
 
 		// Create portfolios and securities first
 		var portfolios = new List<Portfolio>();
@@ -503,15 +483,13 @@ public class StorageMetaInfoMessageAdapterTests
 
 		// Note: Positions with same portfolio+security will overwrite each other
 		// So we won't have exactly 200 unique positions
-		Assert.IsTrue(posStorage.Positions.Count() > 0);
-
-		await Task.CompletedTask;
+		IsTrue(posStorage.Positions.Count() > 0);
 	}
 
 	[TestMethod]
 	public async Task PositionStorage_GetPosition_ReturnsCorrectPosition()
 	{
-		var (adapter, secStorage, posStorage, _, _) = CreateAdapter();
+		var (_, secStorage, posStorage, _, _) = CreateAdapter();
 
 		var portfolio = new Portfolio { Name = "PF1" };
 		var security = new Security
@@ -536,10 +514,8 @@ public class StorageMetaInfoMessageAdapterTests
 
 		var found = posStorage.GetPosition(portfolio, security, null, null);
 		found.AssertNotNull();
-		Assert.AreEqual(1000, found.CurrentValue);
-		Assert.AreEqual(500, found.BeginValue);
-
-		await Task.CompletedTask;
+		AreEqual(1000, found.CurrentValue);
+		AreEqual(500, found.BeginValue);
 	}
 
 	#endregion
@@ -549,7 +525,7 @@ public class StorageMetaInfoMessageAdapterTests
 	[TestMethod]
 	public async Task BoardStorage_SaveAndRetrieve_WorksCorrectly()
 	{
-		var (adapter, _, _, exchProvider, _) = CreateAdapter();
+		var (_, _, _, exchProvider, _) = CreateAdapter();
 
 		var exchange = new Exchange { Name = "TestExchange" };
 		var board = new ExchangeBoard
@@ -564,20 +540,18 @@ public class StorageMetaInfoMessageAdapterTests
 
 		var foundBoard = exchProvider.TryGetExchangeBoard("TESTBOARD");
 		foundBoard.AssertNotNull();
-		Assert.AreEqual("TESTBOARD", foundBoard.Code);
-		Assert.AreEqual("TestExchange", foundBoard.Exchange.Name);
+		AreEqual("TESTBOARD", foundBoard.Code);
+		AreEqual("TestExchange", foundBoard.Exchange.Name);
 
 		var foundExchange = exchProvider.TryGetExchange("TestExchange");
 		foundExchange.AssertNotNull();
-		Assert.AreEqual("TestExchange", foundExchange.Name);
-
-		await Task.CompletedTask;
+		AreEqual("TestExchange", foundExchange.Name);
 	}
 
 	[TestMethod]
 	public async Task BoardStorage_50Boards_SavesAllCorrectly()
 	{
-		var (adapter, _, _, exchProvider, _) = CreateAdapter();
+		var (_, _, _, exchProvider, _) = CreateAdapter();
 
 		var initialBoardCount = exchProvider.Boards.Count();
 
@@ -596,17 +570,15 @@ public class StorageMetaInfoMessageAdapterTests
 
 		// Verify boards were added
 		var addedBoards = exchProvider.Boards.Count() - initialBoardCount;
-		Assert.AreEqual(50, addedBoards);
+		AreEqual(50, addedBoards);
 
 		// Verify each board is retrievable
 		for (int i = 0; i < 50; i++)
 		{
 			var found = exchProvider.TryGetExchangeBoard($"BOARD{i:D2}");
 			found.AssertNotNull();
-			Assert.AreEqual($"BOARD{i:D2}", found.Code);
+			AreEqual($"BOARD{i:D2}", found.Code);
 		}
-
-		await Task.CompletedTask;
 	}
 
 	#endregion
@@ -627,13 +599,11 @@ public class StorageMetaInfoMessageAdapterTests
 		};
 
 		// Send message through adapter
-		await adapter.SendInMessageAsync(mdMessage, CancellationToken.None);
+		await adapter.SendInMessageAsync(mdMessage, CancellationToken);
 
-		Assert.IsTrue(storageProcessor.ProcessMarketDataCalled);
+		IsTrue(storageProcessor.ProcessMarketDataCalled);
 		storageProcessor.LastMessage.AssertNotNull();
-		Assert.AreEqual(mdMessage.SecurityId, storageProcessor.LastMessage.SecurityId);
-
-		await Task.CompletedTask;
+		AreEqual(mdMessage.SecurityId, storageProcessor.LastMessage.SecurityId);
 	}
 
 	#endregion
@@ -649,7 +619,7 @@ public class StorageMetaInfoMessageAdapterTests
 		var clone = (StorageMetaInfoMessageAdapter)adapter.Clone();
 
 		clone.AssertNotNull();
-		Assert.AreEqual(true, clone.OverrideSecurityData);
+		AreEqual(true, clone.OverrideSecurityData);
 	}
 
 	#endregion
@@ -668,7 +638,7 @@ public class StorageMetaInfoMessageAdapterTests
 		var (adapter2, _, _, _, _) = CreateAdapter();
 		adapter2.Load(storage);
 
-		Assert.AreEqual(true, adapter2.OverrideSecurityData);
+		AreEqual(true, adapter2.OverrideSecurityData);
 	}
 
 	#endregion
@@ -678,7 +648,7 @@ public class StorageMetaInfoMessageAdapterTests
 	[TestMethod]
 	public async Task FullWorkflow_SecuritiesPortfoliosPositions_SavesAndRetrieves()
 	{
-		var (adapter, secStorage, posStorage, exchProvider, _) = CreateAdapter();
+		var (_, secStorage, posStorage, exchProvider, _) = CreateAdapter();
 
 		// 1. Save boards
 		var board1 = new ExchangeBoard { Code = "TESTBOARD1", Exchange = new Exchange { Name = "TESTEXCH1" } };
@@ -705,7 +675,7 @@ public class StorageMetaInfoMessageAdapterTests
 			secStorage.Save(sec, false);
 		}
 
-		Assert.AreEqual(50, ((ISecurityProvider)secStorage).Count);
+		AreEqual(50, ((ISecurityProvider)secStorage).Count);
 
 		// 3. Save portfolios
 		var portfolios = new List<Portfolio>();
@@ -721,7 +691,7 @@ public class StorageMetaInfoMessageAdapterTests
 			posStorage.Save(pf);
 		}
 
-		Assert.AreEqual(5, posStorage.Portfolios.Count());
+		AreEqual(5, posStorage.Portfolios.Count());
 
 		// 4. Save positions
 		foreach (var pf in portfolios)
@@ -741,13 +711,13 @@ public class StorageMetaInfoMessageAdapterTests
 
 		// 5. Verify retrieval
 		// - Securities by board
-		var board1Securities = secStorage.Lookup(new SecurityLookupMessage
+		var board1Securities = await secStorage.LookupAsync(new SecurityLookupMessage
 		{
 			SecurityId = new SecurityId { BoardCode = board1.Code }
-		}).ToList();
+		}).ToListAsync(CancellationToken);
 
-		Assert.AreEqual(25, board1Securities.Count);
-		Assert.IsTrue(board1Securities.All(s => s.Board?.Code == board1.Code));
+		AreEqual(25, board1Securities.Count);
+		IsTrue(board1Securities.All(s => s.Board?.Code == board1.Code));
 
 		// - Portfolio lookup
 		var foundPf = posStorage.LookupByPortfolioName("Portfolio0");
@@ -756,8 +726,6 @@ public class StorageMetaInfoMessageAdapterTests
 		// - Position lookup
 		var foundPos = posStorage.GetPosition(portfolios[0], securities[0], null, null);
 		foundPos.AssertNotNull();
-
-		await Task.CompletedTask;
 	}
 
 	#endregion

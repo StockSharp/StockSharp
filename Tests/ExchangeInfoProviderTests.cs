@@ -267,7 +267,7 @@ public class ExchangeInfoProviderTests : BaseTestClass
 	{
 		var provider = new InMemoryExchangeInfoProvider();
 
-		await provider.InitAsync(CancellationToken.None);
+		await provider.InitAsync(CancellationToken);
 
 		// InitAsync for InMemoryExchangeInfoProvider does nothing but should complete without error
 	}

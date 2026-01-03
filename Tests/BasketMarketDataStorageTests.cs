@@ -1,20 +1,15 @@
 namespace StockSharp.Tests;
 
-using StockSharp.Algo.Storages;
-using StockSharp.Messages;
-
 [TestClass]
-public class BasketMarketDataStorageTests
+public class BasketMarketDataStorageTests : BaseTestClass
 {
 	#region Random Data Generators
-
-	private static readonly Random _random = new(42);
 
 	private static List<ExecutionMessage> GenerateRandomTicks(SecurityId securityId, DateTime date, int count)
 	{
 		var ticks = new List<ExecutionMessage>();
 		var baseTime = date.Date.AddHours(10);
-		var basePrice = 100m + (decimal)(_random.NextDouble() * 900);
+		var basePrice = 100m + (decimal)(RandomGen.GetDouble() * 900);
 
 		for (int i = 0; i < count; i++)
 		{
@@ -22,30 +17,30 @@ public class BasketMarketDataStorageTests
 			{
 				SecurityId = securityId,
 				DataTypeEx = DataType.Ticks,
-				ServerTime = baseTime.AddMilliseconds(i * 100 + _random.Next(50)),
-				TradePrice = basePrice + (decimal)((_random.NextDouble() - 0.5) * 10),
-				TradeVolume = _random.Next(1, 1000),
+				ServerTime = baseTime.AddMilliseconds(i * 100 + RandomGen.GetInt(50)),
+				TradePrice = basePrice + (decimal)((RandomGen.GetDouble() - 0.5) * 10),
+				TradeVolume = RandomGen.GetInt(1, 1000),
 				TradeId = i + 1,
-				OriginSide = _random.Next(2) == 0 ? Sides.Buy : Sides.Sell,
+				OriginSide = RandomGen.GetInt(2) == 0 ? Sides.Buy : Sides.Sell,
 			};
 			ticks.Add(tick);
 		}
 
-		return ticks.OrderBy(t => t.ServerTime).ToList();
+		return [.. ticks.OrderBy(t => t.ServerTime)];
 	}
 
 	private static List<TimeFrameCandleMessage> GenerateRandomCandles(SecurityId securityId, DateTime date, TimeSpan timeFrame, int count)
 	{
 		var candles = new List<TimeFrameCandleMessage>();
 		var baseTime = date.Date.AddHours(10);
-		var basePrice = 100m + (decimal)(_random.NextDouble() * 900);
+		var basePrice = 100m + (decimal)(RandomGen.GetDouble() * 900);
 
 		for (int i = 0; i < count; i++)
 		{
-			var open = basePrice + (decimal)((_random.NextDouble() - 0.5) * 10);
-			var close = open + (decimal)((_random.NextDouble() - 0.5) * 5);
-			var high = Math.Max(open, close) + (decimal)(_random.NextDouble() * 3);
-			var low = Math.Min(open, close) - (decimal)(_random.NextDouble() * 3);
+			var open = basePrice + (decimal)((RandomGen.GetDouble() - 0.5) * 10);
+			var close = open + (decimal)((RandomGen.GetDouble() - 0.5) * 5);
+			var high = Math.Max(open, close) + (decimal)(RandomGen.GetDouble() * 3);
+			var low = Math.Min(open, close) - (decimal)(RandomGen.GetDouble() * 3);
 
 			var candle = new TimeFrameCandleMessage
 			{
@@ -56,7 +51,7 @@ public class BasketMarketDataStorageTests
 				HighPrice = high,
 				LowPrice = low,
 				ClosePrice = close,
-				TotalVolume = _random.Next(100, 10000),
+				TotalVolume = RandomGen.GetInt(100, 10000),
 				State = CandleStates.Finished,
 			};
 			candles.Add(candle);
@@ -70,7 +65,7 @@ public class BasketMarketDataStorageTests
 	{
 		var messages = new List<Level1ChangeMessage>();
 		var baseTime = date.Date.AddHours(10);
-		var basePrice = 100m + (decimal)(_random.NextDouble() * 900);
+		var basePrice = 100m + (decimal)(RandomGen.GetDouble() * 900);
 
 		for (int i = 0; i < count; i++)
 		{
@@ -80,14 +75,14 @@ public class BasketMarketDataStorageTests
 				ServerTime = baseTime.AddMilliseconds(i * 100),
 			};
 
-			msg.Changes.Add(Level1Fields.BestBidPrice, basePrice - (decimal)(_random.NextDouble() * 0.5));
-			msg.Changes.Add(Level1Fields.BestAskPrice, basePrice + (decimal)(_random.NextDouble() * 0.5));
-			msg.Changes.Add(Level1Fields.BestBidVolume, (decimal)_random.Next(1, 1000));
-			msg.Changes.Add(Level1Fields.BestAskVolume, (decimal)_random.Next(1, 1000));
+			msg.Changes.Add(Level1Fields.BestBidPrice, basePrice - (decimal)(RandomGen.GetDouble() * 0.5));
+			msg.Changes.Add(Level1Fields.BestAskPrice, basePrice + (decimal)(RandomGen.GetDouble() * 0.5));
+			msg.Changes.Add(Level1Fields.BestBidVolume, (decimal)RandomGen.GetInt(1, 1000));
+			msg.Changes.Add(Level1Fields.BestAskVolume, (decimal)RandomGen.GetInt(1, 1000));
 			msg.Changes.Add(Level1Fields.LastTradePrice, basePrice);
 
 			messages.Add(msg);
-			basePrice += (decimal)((_random.NextDouble() - 0.5) * 2);
+			basePrice += (decimal)((RandomGen.GetDouble() - 0.5) * 2);
 		}
 
 		return messages;
@@ -97,7 +92,7 @@ public class BasketMarketDataStorageTests
 	{
 		var books = new List<QuoteChangeMessage>();
 		var baseTime = date.Date.AddHours(10);
-		var basePrice = 100m + (decimal)(_random.NextDouble() * 900);
+		var basePrice = 100m + (decimal)(RandomGen.GetDouble() * 900);
 
 		for (int i = 0; i < count; i++)
 		{
@@ -106,8 +101,8 @@ public class BasketMarketDataStorageTests
 
 			for (int j = 0; j < depth; j++)
 			{
-				bids[j] = new QuoteChange(basePrice - (decimal)(j + 1) * 0.1m - (decimal)(_random.NextDouble() * 0.05), _random.Next(1, 1000));
-				asks[j] = new QuoteChange(basePrice + (decimal)(j + 1) * 0.1m + (decimal)(_random.NextDouble() * 0.05), _random.Next(1, 1000));
+				bids[j] = new QuoteChange(basePrice - (decimal)(j + 1) * 0.1m - (decimal)(RandomGen.GetDouble() * 0.05), RandomGen.GetInt(1, 1000));
+				asks[j] = new QuoteChange(basePrice + (decimal)(j + 1) * 0.1m + (decimal)(RandomGen.GetDouble() * 0.05), RandomGen.GetInt(1, 1000));
 			}
 
 			var book = new QuoteChangeMessage
@@ -119,7 +114,7 @@ public class BasketMarketDataStorageTests
 			};
 
 			books.Add(book);
-			basePrice += (decimal)((_random.NextDouble() - 0.5) * 2);
+			basePrice += (decimal)((RandomGen.GetDouble() - 0.5) * 2);
 		}
 
 		return books;
@@ -134,13 +129,13 @@ public class BasketMarketDataStorageTests
 
 	private static IMarketDataStorage<TMessage> CreateTestStorage<TMessage>(
 		SecurityId securityId,
-		object arg,
+		DataType dataType,
 		Dictionary<DateTime, List<TMessage>> data)
 		where TMessage : Message
 	{
 		return new InMemoryMarketDataStorage<TMessage>(
 			securityId,
-			arg,
+			dataType,
 			date =>
 			{
 				if (data.TryGetValue(date.Date, out var list))
@@ -159,7 +154,7 @@ public class BasketMarketDataStorageTests
 		using var storage = new BasketMarketDataStorage<ExecutionMessage>();
 
 		storage.InnerStorages.AssertNotNull();
-		Assert.AreEqual(0, storage.InnerStorages.Count);
+		AreEqual(0, storage.InnerStorages.Count);
 	}
 
 	[TestMethod]
@@ -167,9 +162,9 @@ public class BasketMarketDataStorageTests
 	{
 		using var storage = new BasketMarketDataStorage<ExecutionMessage>();
 
-		var dates = await ((IMarketDataStorage)storage).GetDatesAsync(CancellationToken.None);
+		var dates = await ((IMarketDataStorage)storage).GetDatesAsync(CancellationToken);
 
-		Assert.AreEqual(0, dates.Count());
+		AreEqual(0, dates.Count());
 	}
 
 	[TestMethod]
@@ -184,7 +179,7 @@ public class BasketMarketDataStorageTests
 		await foreach (var item in data)
 			list.Add(item);
 
-		Assert.AreEqual(0, list.Count);
+		AreEqual(0, list.Count);
 	}
 
 	#endregion
@@ -199,7 +194,7 @@ public class BasketMarketDataStorageTests
 		var ticks = GenerateRandomTicks(secId, date, 1000);
 
 		var data = new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks } };
-		var innerStorage = CreateTestStorage(secId, ExecutionTypes.Tick, data);
+		var innerStorage = CreateTestStorage(secId, DataType.Ticks, data);
 
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 		basket.InnerStorages.Add(innerStorage);
@@ -208,12 +203,12 @@ public class BasketMarketDataStorageTests
 		await foreach (var tick in basket.LoadAsync(date))
 			loaded.Add(tick);
 
-		Assert.AreEqual(1000, loaded.Count);
+		AreEqual(1000, loaded.Count);
 
 		// Verify chronological order
 		for (int i = 1; i < loaded.Count; i++)
 		{
-			Assert.IsTrue(loaded[i].ServerTime >= loaded[i - 1].ServerTime,
+			IsTrue(loaded[i].ServerTime >= loaded[i - 1].ServerTime,
 				$"Tick {i} time {loaded[i].ServerTime} is before tick {i - 1} time {loaded[i - 1].ServerTime}");
 		}
 
@@ -221,10 +216,10 @@ public class BasketMarketDataStorageTests
 		var ticksDict = ticks.ToDictionary(t => t.TradeId);
 		foreach (var tick in loaded)
 		{
-			Assert.IsTrue(ticksDict.TryGetValue(tick.TradeId, out var original),
+			IsTrue(ticksDict.TryGetValue(tick.TradeId, out var original),
 				$"Tick with TradeId {tick.TradeId} not found in original");
-			Assert.AreEqual(original.TradePrice, tick.TradePrice, $"Price mismatch for TradeId {tick.TradeId}");
-			Assert.AreEqual(original.TradeVolume, tick.TradeVolume, $"Volume mismatch for TradeId {tick.TradeId}");
+			AreEqual(original.TradePrice, tick.TradePrice, $"Price mismatch for TradeId {tick.TradeId}");
+			AreEqual(original.TradeVolume, tick.TradeVolume, $"Volume mismatch for TradeId {tick.TradeId}");
 		}
 	}
 
@@ -238,15 +233,15 @@ public class BasketMarketDataStorageTests
 		{
 			{ date1, GenerateRandomTicks(secId, date1, 100) }
 		};
-		var innerStorage = CreateTestStorage(secId, ExecutionTypes.Tick, data);
+		var innerStorage = CreateTestStorage(secId, DataType.Ticks, data);
 
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 		basket.InnerStorages.Add(innerStorage);
 
 		// InMemoryMarketDataStorage.GetDatesAsync throws NotSupportedException,
 		// and BasketMarketDataStorage.GetDatesAsync propagates it
-		await Assert.ThrowsExactlyAsync<NotSupportedException>(async () =>
-			await ((IMarketDataStorage)basket).GetDatesAsync(CancellationToken.None));
+		await ThrowsExactlyAsync<NotSupportedException>(async () =>
+			await ((IMarketDataStorage)basket).GetDatesAsync(CancellationToken));
 	}
 
 	#endregion
@@ -266,9 +261,9 @@ public class BasketMarketDataStorageTests
 		var ticks2 = GenerateRandomTicks(secId2, date, 500);
 		var ticks3 = GenerateRandomTicks(secId3, date, 500);
 
-		var storage1 = CreateTestStorage(secId1, ExecutionTypes.Tick, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks1 } });
-		var storage2 = CreateTestStorage(secId2, ExecutionTypes.Tick, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks2 } });
-		var storage3 = CreateTestStorage(secId3, ExecutionTypes.Tick, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks3 } });
+		var storage1 = CreateTestStorage(secId1, DataType.Ticks, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks1 } });
+		var storage2 = CreateTestStorage(secId2, DataType.Ticks, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks2 } });
+		var storage3 = CreateTestStorage(secId3, DataType.Ticks, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks3 } });
 
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 		basket.InnerStorages.Add(storage1);
@@ -279,21 +274,21 @@ public class BasketMarketDataStorageTests
 		await foreach (var tick in basket.LoadAsync(date))
 			loaded.Add(tick);
 
-		Assert.AreEqual(1500, loaded.Count);
+		AreEqual(1500, loaded.Count);
 
 		// Verify strictly chronological order across all sources
 		for (int i = 1; i < loaded.Count; i++)
 		{
-			Assert.IsTrue(loaded[i].ServerTime >= loaded[i - 1].ServerTime,
+			IsTrue(loaded[i].ServerTime >= loaded[i - 1].ServerTime,
 				$"Tick {i} at {loaded[i].ServerTime} from {loaded[i].SecurityId} is before tick {i - 1} at {loaded[i - 1].ServerTime}");
 		}
 
 		// Verify all securities are present
 		var bySecurity = loaded.GroupBy(t => t.SecurityId).ToDictionary(g => g.Key, g => g.Count());
-		Assert.AreEqual(3, bySecurity.Count);
-		Assert.AreEqual(500, bySecurity[secId1]);
-		Assert.AreEqual(500, bySecurity[secId2]);
-		Assert.AreEqual(500, bySecurity[secId3]);
+		AreEqual(3, bySecurity.Count);
+		AreEqual(500, bySecurity[secId1]);
+		AreEqual(500, bySecurity[secId2]);
+		AreEqual(500, bySecurity[secId3]);
 	}
 
 	[TestMethod]
@@ -312,7 +307,7 @@ public class BasketMarketDataStorageTests
 			{ date1, GenerateRandomTicks(secId1, date1, 100) },
 			{ date2, GenerateRandomTicks(secId1, date2, 100) }
 		};
-		var storage1 = CreateTestStorage(secId1, ExecutionTypes.Tick, data1);
+		var storage1 = CreateTestStorage(secId1, DataType.Ticks, data1);
 
 		// Storage2 has dates 2 and 3
 		var data2 = new Dictionary<DateTime, List<ExecutionMessage>>
@@ -320,7 +315,7 @@ public class BasketMarketDataStorageTests
 			{ date2, GenerateRandomTicks(secId2, date2, 100) },
 			{ date3, GenerateRandomTicks(secId2, date3, 100) }
 		};
-		var storage2 = CreateTestStorage(secId2, ExecutionTypes.Tick, data2);
+		var storage2 = CreateTestStorage(secId2, DataType.Ticks, data2);
 
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 		basket.InnerStorages.Add(storage1);
@@ -331,25 +326,25 @@ public class BasketMarketDataStorageTests
 		await foreach (var tick in basket.LoadAsync(date2))
 			date2Data.Add(tick);
 
-		Assert.AreEqual(200, date2Data.Count);
-		Assert.AreEqual(100, date2Data.Count(t => t.SecurityId == secId1));
-		Assert.AreEqual(100, date2Data.Count(t => t.SecurityId == secId2));
+		AreEqual(200, date2Data.Count);
+		AreEqual(100, date2Data.Count(t => t.SecurityId == secId1));
+		AreEqual(100, date2Data.Count(t => t.SecurityId == secId2));
 
 		// Verify date1 loads only from storage1
 		var date1Data = new List<ExecutionMessage>();
 		await foreach (var tick in basket.LoadAsync(date1))
 			date1Data.Add(tick);
 
-		Assert.AreEqual(100, date1Data.Count);
-		Assert.IsTrue(date1Data.All(t => t.SecurityId == secId1));
+		AreEqual(100, date1Data.Count);
+		IsTrue(date1Data.All(t => t.SecurityId == secId1));
 
 		// Verify date3 loads only from storage2
 		var date3Data = new List<ExecutionMessage>();
 		await foreach (var tick in basket.LoadAsync(date3))
 			date3Data.Add(tick);
 
-		Assert.AreEqual(100, date3Data.Count);
-		Assert.IsTrue(date3Data.All(t => t.SecurityId == secId2));
+		AreEqual(100, date3Data.Count);
+		IsTrue(date3Data.All(t => t.SecurityId == secId2));
 	}
 
 	#endregion
@@ -365,7 +360,7 @@ public class BasketMarketDataStorageTests
 		var candles = GenerateRandomCandles(secId, date, timeFrame, 500);
 
 		var data = new Dictionary<DateTime, List<TimeFrameCandleMessage>> { { date, candles } };
-		var innerStorage = CreateTestStorage(secId, timeFrame, data);
+		var innerStorage = CreateTestStorage(secId, timeFrame.TimeFrame(), data);
 
 		using var basket = new BasketMarketDataStorage<TimeFrameCandleMessage>();
 		basket.InnerStorages.Add(innerStorage);
@@ -374,7 +369,7 @@ public class BasketMarketDataStorageTests
 		await foreach (var candle in basket.LoadAsync(date))
 			loaded.Add(candle);
 
-		Assert.AreEqual(500, loaded.Count);
+		AreEqual(500, loaded.Count);
 
 		// Verify OHLCV integrity
 		for (int i = 0; i < loaded.Count; i++)
@@ -382,17 +377,17 @@ public class BasketMarketDataStorageTests
 			var orig = candles[i];
 			var load = loaded[i];
 
-			Assert.AreEqual(orig.OpenPrice, load.OpenPrice, $"OpenPrice mismatch at {i}");
-			Assert.AreEqual(orig.HighPrice, load.HighPrice, $"HighPrice mismatch at {i}");
-			Assert.AreEqual(orig.LowPrice, load.LowPrice, $"LowPrice mismatch at {i}");
-			Assert.AreEqual(orig.ClosePrice, load.ClosePrice, $"ClosePrice mismatch at {i}");
-			Assert.AreEqual(orig.TotalVolume, load.TotalVolume, $"Volume mismatch at {i}");
+			AreEqual(orig.OpenPrice, load.OpenPrice, $"OpenPrice mismatch at {i}");
+			AreEqual(orig.HighPrice, load.HighPrice, $"HighPrice mismatch at {i}");
+			AreEqual(orig.LowPrice, load.LowPrice, $"LowPrice mismatch at {i}");
+			AreEqual(orig.ClosePrice, load.ClosePrice, $"ClosePrice mismatch at {i}");
+			AreEqual(orig.TotalVolume, load.TotalVolume, $"Volume mismatch at {i}");
 
 			// Verify High >= Low always
-			Assert.IsTrue(load.HighPrice >= load.LowPrice, $"High < Low at {i}");
+			IsTrue(load.HighPrice >= load.LowPrice, $"High < Low at {i}");
 			// Verify Open and Close are within High-Low range
-			Assert.IsTrue(load.OpenPrice >= load.LowPrice && load.OpenPrice <= load.HighPrice, $"Open out of range at {i}");
-			Assert.IsTrue(load.ClosePrice >= load.LowPrice && load.ClosePrice <= load.HighPrice, $"Close out of range at {i}");
+			IsTrue(load.OpenPrice >= load.LowPrice && load.OpenPrice <= load.HighPrice, $"Open out of range at {i}");
+			IsTrue(load.ClosePrice >= load.LowPrice && load.ClosePrice <= load.HighPrice, $"Close out of range at {i}");
 		}
 	}
 
@@ -410,11 +405,11 @@ public class BasketMarketDataStorageTests
 		var candles5 = GenerateRandomCandles(secId, date, tf5, 50);
 		var candles15 = GenerateRandomCandles(secId, date, tf15, 30);
 
-		var storage1 = CreateTestStorage(secId, tf1,
+		var storage1 = CreateTestStorage(secId, tf1.TimeFrame(),
 			new Dictionary<DateTime, List<TimeFrameCandleMessage>> { { date, candles1 } });
-		var storage5 = CreateTestStorage(secId, tf5,
+		var storage5 = CreateTestStorage(secId, tf5.TimeFrame(),
 			new Dictionary<DateTime, List<TimeFrameCandleMessage>> { { date, candles5 } });
-		var storage15 = CreateTestStorage(secId, tf15,
+		var storage15 = CreateTestStorage(secId, tf15.TimeFrame(),
 			new Dictionary<DateTime, List<TimeFrameCandleMessage>> { { date, candles15 } });
 
 		using var basket = new BasketMarketDataStorage<TimeFrameCandleMessage>();
@@ -426,12 +421,12 @@ public class BasketMarketDataStorageTests
 		await foreach (var candle in basket.LoadAsync(date))
 			loaded.Add(candle);
 
-		Assert.AreEqual(180, loaded.Count);
+		AreEqual(180, loaded.Count);
 
 		// Verify chronological order
 		for (int i = 1; i < loaded.Count; i++)
 		{
-			Assert.IsTrue(loaded[i].OpenTime >= loaded[i - 1].OpenTime,
+			IsTrue(loaded[i].OpenTime >= loaded[i - 1].OpenTime,
 				$"Candle {i} time {loaded[i].OpenTime} is before candle {i - 1} time {loaded[i - 1].OpenTime}");
 		}
 	}
@@ -448,7 +443,7 @@ public class BasketMarketDataStorageTests
 		var updates = GenerateRandomLevel1(secId, date, 1000);
 
 		var data = new Dictionary<DateTime, List<Level1ChangeMessage>> { { date, updates } };
-		var innerStorage = CreateTestStorage(secId, null, data);
+		var innerStorage = CreateTestStorage(secId, DataType.Level1, data);
 
 		using var basket = new BasketMarketDataStorage<Level1ChangeMessage>();
 		basket.InnerStorages.Add(innerStorage);
@@ -457,24 +452,24 @@ public class BasketMarketDataStorageTests
 		await foreach (var msg in basket.LoadAsync(date))
 			loaded.Add(msg);
 
-		Assert.AreEqual(1000, loaded.Count);
+		AreEqual(1000, loaded.Count);
 
 		// Verify all expected fields are present
 		foreach (var msg in loaded)
 		{
-			Assert.IsTrue(msg.Changes.ContainsKey(Level1Fields.BestBidPrice), "Missing BestBidPrice");
-			Assert.IsTrue(msg.Changes.ContainsKey(Level1Fields.BestAskPrice), "Missing BestAskPrice");
-			Assert.IsTrue(msg.Changes.ContainsKey(Level1Fields.LastTradePrice), "Missing LastTradePrice");
+			IsTrue(msg.Changes.ContainsKey(Level1Fields.BestBidPrice), "Missing BestBidPrice");
+			IsTrue(msg.Changes.ContainsKey(Level1Fields.BestAskPrice), "Missing BestAskPrice");
+			IsTrue(msg.Changes.ContainsKey(Level1Fields.LastTradePrice), "Missing LastTradePrice");
 
 			var bid = (decimal)msg.Changes[Level1Fields.BestBidPrice];
 			var ask = (decimal)msg.Changes[Level1Fields.BestAskPrice];
-			Assert.IsTrue(bid < ask, $"Bid {bid} >= Ask {ask}");
+			IsTrue(bid < ask, $"Bid {bid} >= Ask {ask}");
 		}
 
 		// Verify chronological order
 		for (int i = 1; i < loaded.Count; i++)
 		{
-			Assert.IsTrue(loaded[i].ServerTime >= loaded[i - 1].ServerTime);
+			IsTrue(loaded[i].ServerTime >= loaded[i - 1].ServerTime);
 		}
 	}
 
@@ -491,7 +486,7 @@ public class BasketMarketDataStorageTests
 		var books = GenerateRandomOrderBooks(secId, date, 500, depth);
 
 		var data = new Dictionary<DateTime, List<QuoteChangeMessage>> { { date, books } };
-		var innerStorage = CreateTestStorage(secId, null, data);
+		var innerStorage = CreateTestStorage(secId, DataType.MarketDepth, data);
 
 		using var basket = new BasketMarketDataStorage<QuoteChangeMessage>();
 		basket.InnerStorages.Add(innerStorage);
@@ -500,29 +495,29 @@ public class BasketMarketDataStorageTests
 		await foreach (var book in basket.LoadAsync(date))
 			loaded.Add(book);
 
-		Assert.AreEqual(500, loaded.Count);
+		AreEqual(500, loaded.Count);
 
 		foreach (var book in loaded)
 		{
-			Assert.AreEqual(depth, book.Bids.Length, "Bids depth mismatch");
-			Assert.AreEqual(depth, book.Asks.Length, "Asks depth mismatch");
+			AreEqual(depth, book.Bids.Length, "Bids depth mismatch");
+			AreEqual(depth, book.Asks.Length, "Asks depth mismatch");
 
 			// Verify bids are sorted descending by price
 			for (int i = 1; i < book.Bids.Length; i++)
 			{
-				Assert.IsTrue(book.Bids[i].Price <= book.Bids[i - 1].Price,
+				IsTrue(book.Bids[i].Price <= book.Bids[i - 1].Price,
 					$"Bids not sorted: {book.Bids[i - 1].Price} -> {book.Bids[i].Price}");
 			}
 
 			// Verify asks are sorted ascending by price
 			for (int i = 1; i < book.Asks.Length; i++)
 			{
-				Assert.IsTrue(book.Asks[i].Price >= book.Asks[i - 1].Price,
+				IsTrue(book.Asks[i].Price >= book.Asks[i - 1].Price,
 					$"Asks not sorted: {book.Asks[i - 1].Price} -> {book.Asks[i].Price}");
 			}
 
 			// Verify best bid < best ask
-			Assert.IsTrue(book.Bids[0].Price < book.Asks[0].Price,
+			IsTrue(book.Bids[0].Price < book.Asks[0].Price,
 				$"Best bid {book.Bids[0].Price} >= best ask {book.Asks[0].Price}");
 		}
 	}
@@ -541,8 +536,8 @@ public class BasketMarketDataStorageTests
 		var ticks1 = GenerateRandomTicks(secId1, date, 100);
 		var ticks2 = GenerateRandomTicks(secId2, date, 100);
 
-		var storage1 = CreateTestStorage(secId1, ExecutionTypes.Tick, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks1 } });
-		var storage2 = CreateTestStorage(secId2, ExecutionTypes.Tick, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks2 } });
+		var storage1 = CreateTestStorage(secId1, DataType.Ticks, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks1 } });
+		var storage2 = CreateTestStorage(secId2, DataType.Ticks, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks2 } });
 
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 		basket.InnerStorages.Add(storage1);
@@ -565,8 +560,8 @@ public class BasketMarketDataStorageTests
 		await enumerator.DisposeAsync();
 
 		// Should have data from both storages
-		Assert.IsTrue(loaded.Count >= 100, $"Expected at least 100 items, got {loaded.Count}");
-		Assert.IsTrue(loaded.Any(t => t.SecurityId == secId1), "Missing AAPL data");
+		IsTrue(loaded.Count >= 100, $"Expected at least 100 items, got {loaded.Count}");
+		IsTrue(loaded.Any(t => t.SecurityId == secId1), "Missing AAPL data");
 	}
 
 	[TestMethod]
@@ -575,25 +570,25 @@ public class BasketMarketDataStorageTests
 		var secId1 = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
 		var secId2 = new SecurityId { SecurityCode = "MSFT", BoardCode = "NASDAQ" };
 
-		var storage1 = CreateTestStorage(secId1, ExecutionTypes.Tick, new Dictionary<DateTime, List<ExecutionMessage>>());
-		var storage2 = CreateTestStorage(secId2, ExecutionTypes.Tick, new Dictionary<DateTime, List<ExecutionMessage>>());
+		var storage1 = CreateTestStorage(secId1, DataType.Ticks, new Dictionary<DateTime, List<ExecutionMessage>>());
+		var storage2 = CreateTestStorage(secId2, DataType.Ticks, new Dictionary<DateTime, List<ExecutionMessage>>());
 
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 
 		// Add
 		basket.InnerStorages.Add(storage1);
-		Assert.AreEqual(1, basket.InnerStorages.Count);
+		AreEqual(1, basket.InnerStorages.Count);
 
 		basket.InnerStorages.Add(storage2);
-		Assert.AreEqual(2, basket.InnerStorages.Count);
+		AreEqual(2, basket.InnerStorages.Count);
 
 		// Remove
 		basket.InnerStorages.Remove(storage1);
-		Assert.AreEqual(1, basket.InnerStorages.Count);
+		AreEqual(1, basket.InnerStorages.Count);
 
 		// Clear
 		basket.InnerStorages.Clear();
-		Assert.AreEqual(0, basket.InnerStorages.Count);
+		AreEqual(0, basket.InnerStorages.Count);
 	}
 
 	#endregion
@@ -618,7 +613,7 @@ public class BasketMarketDataStorageTests
 		foreach (var secId in securities)
 		{
 			var ticks = GenerateRandomTicks(secId, date, 1000);
-			var storage = CreateTestStorage(secId, ExecutionTypes.Tick, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks } });
+			var storage = CreateTestStorage(secId, DataType.Ticks, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks } });
 			basket.InnerStorages.Add(storage);
 		}
 
@@ -626,18 +621,18 @@ public class BasketMarketDataStorageTests
 		await foreach (var tick in basket.LoadAsync(date))
 			loaded.Add(tick);
 
-		Assert.AreEqual(5000, loaded.Count);
+		AreEqual(5000, loaded.Count);
 
 		// Verify all securities present
 		var bySec = loaded.GroupBy(t => t.SecurityId).ToDictionary(g => g.Key, g => g.Count());
-		Assert.AreEqual(5, bySec.Count);
+		AreEqual(5, bySec.Count);
 		foreach (var secId in securities)
-			Assert.AreEqual(1000, bySec[secId]);
+			AreEqual(1000, bySec[secId]);
 
 		// Verify global chronological order
 		for (int i = 1; i < loaded.Count; i++)
 		{
-			Assert.IsTrue(loaded[i].ServerTime >= loaded[i - 1].ServerTime,
+			IsTrue(loaded[i].ServerTime >= loaded[i - 1].ServerTime,
 				$"Order violation at {i}: {loaded[i - 1].ServerTime} -> {loaded[i].ServerTime}");
 		}
 	}
@@ -653,7 +648,7 @@ public class BasketMarketDataStorageTests
 		var date = new DateTime(2024, 1, 15);
 		var ticks = GenerateRandomTicks(secId, date, 100);
 
-		var storage = CreateTestStorage(secId, ExecutionTypes.Tick, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks } });
+		var storage = CreateTestStorage(secId, DataType.Ticks, new Dictionary<DateTime, List<ExecutionMessage>> { { date, ticks } });
 
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 
@@ -664,13 +659,13 @@ public class BasketMarketDataStorageTests
 		await foreach (var tick in basket.LoadAsync(date))
 			loaded.Add(tick);
 
-		Assert.AreEqual(100, loaded.Count);
+		AreEqual(100, loaded.Count);
 
 		// All messages should have the transaction id set
 		foreach (var tick in loaded)
 		{
 			var ids = tick.GetSubscriptionIds();
-			Assert.IsTrue(ids.Contains(transactionId), $"Message missing transactionId {transactionId}");
+			IsTrue(ids.Contains(transactionId), $"Message missing transactionId {transactionId}");
 		}
 	}
 
@@ -683,8 +678,8 @@ public class BasketMarketDataStorageTests
 	{
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 
-		Assert.ThrowsExactly<NotSupportedException>(() =>
-			((IMarketDataStorage)basket).SaveAsync(Array.Empty<Message>(), CancellationToken.None).GetAwaiter().GetResult());
+		ThrowsExactly<NotSupportedException>(() =>
+			((IMarketDataStorage)basket).SaveAsync(Array.Empty<Message>(), CancellationToken).GetAwaiter().GetResult());
 	}
 
 	[TestMethod]
@@ -692,8 +687,8 @@ public class BasketMarketDataStorageTests
 	{
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 
-		Assert.ThrowsExactly<NotSupportedException>(() =>
-			((IMarketDataStorage)basket).DeleteAsync(Array.Empty<Message>(), CancellationToken.None).GetAwaiter().GetResult());
+		ThrowsExactly<NotSupportedException>(() =>
+			((IMarketDataStorage)basket).DeleteAsync(Array.Empty<Message>(), CancellationToken).GetAwaiter().GetResult());
 	}
 
 	[TestMethod]
@@ -701,7 +696,7 @@ public class BasketMarketDataStorageTests
 	{
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 
-		Assert.ThrowsExactly<NotSupportedException>(() => _ = basket.DataType);
+		ThrowsExactly<NotSupportedException>(() => _ = basket.DataType);
 	}
 
 	[TestMethod]
@@ -709,7 +704,7 @@ public class BasketMarketDataStorageTests
 	{
 		using var basket = new BasketMarketDataStorage<ExecutionMessage>();
 
-		Assert.ThrowsExactly<NotSupportedException>(() => _ = basket.SecurityId);
+		ThrowsExactly<NotSupportedException>(() => _ = basket.SecurityId);
 	}
 
 	#endregion
