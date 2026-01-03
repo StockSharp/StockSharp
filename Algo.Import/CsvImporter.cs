@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Algo.Import;
 
-using StockSharp.Algo.Indicators;
-
 /// <summary>
 /// Messages importer from text file in CSV format into storage.
 /// </summary>

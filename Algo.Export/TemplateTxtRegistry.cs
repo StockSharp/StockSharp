@@ -1,5 +1,8 @@
 namespace StockSharp.Algo.Export;
 
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
 /// <summary>
 /// Txt templates registry.
 /// </summary>

@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Export;
 
+using System.Collections;
+
 /// <summary>
 /// Extensions for <see cref="BaseExporter"/>.
 /// </summary>

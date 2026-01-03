@@ -1,5 +1,10 @@
 namespace StockSharp.Algo.Import;
 
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+using DataType = StockSharp.Messages.DataType;
+
 /// <summary>
 /// Settings of import.
 /// </summary>

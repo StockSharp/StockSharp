@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.3.32804.467
+# Visual Studio Version 18
+VisualStudioVersion = 18.1.11312.151 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Algo", "Algo\Algo.csproj", "{2A5C6FAD-106C-4A4A-B602-77A6B1034CA2}"
 EndProject
@@ -34,7 +34,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo.Analytics", "Algo.Anal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo.Gpu", "Algo.Gpu\Algo.Gpu.csproj", "{79E2F1FD-C849-A0C3-537F-01D9F9BADCFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting", "Reporting\Algo.Reporting.csproj", "{1895D6B3-5566-4CC8-BDB9-7A2CBF1DB1BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting", "Reporting\Reporting.csproj", "{1895D6B3-5566-4CC8-BDB9-7A2CBF1DB1BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo.Import", "Algo.Import\Algo.Import.csproj", "{FFB58CBB-0E58-4DC8-02EB-005C98390744}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo.Export.Drivers", "Algo.Export.Drivers\Algo.Export.Drivers.csproj", "{FA2F863A-5705-DA7A-E37E-91A7629E4AB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -110,6 +114,14 @@ Global
 		{1895D6B3-5566-4CC8-BDB9-7A2CBF1DB1BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1895D6B3-5566-4CC8-BDB9-7A2CBF1DB1BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1895D6B3-5566-4CC8-BDB9-7A2CBF1DB1BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFB58CBB-0E58-4DC8-02EB-005C98390744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFB58CBB-0E58-4DC8-02EB-005C98390744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFB58CBB-0E58-4DC8-02EB-005C98390744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFB58CBB-0E58-4DC8-02EB-005C98390744}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA2F863A-5705-DA7A-E37E-91A7629E4AB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA2F863A-5705-DA7A-E37E-91A7629E4AB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA2F863A-5705-DA7A-E37E-91A7629E4AB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA2F863A-5705-DA7A-E37E-91A7629E4AB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
