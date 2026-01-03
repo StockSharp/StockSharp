@@ -115,7 +115,7 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 						//	loaded = quotes.BuildIfNeed();
 						//}
 
-						await using var enu = loaded.GetAsyncEnumerator(_cancellationToken);
+						var enu = loaded.GetAsyncEnumerator(_cancellationToken);
 						var lastTime = Current?.GetServerTime() ?? DateTime.MinValue;
 
 						var hasValues = true;
