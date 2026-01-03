@@ -384,7 +384,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 
 		manager
 			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
-			.Returns((forward: (Message)forward, extraOut: new Message[] { extra }));
+			.Returns((forward: (Message)forward, extraOut: [extra]));
 
 		using var adapter = new OrderBookTruncateMessageAdapter(inner, manager.Object);
 
@@ -415,7 +415,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 
 		manager
 			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
-			.Returns((forward: (Message)null, extraOut: new Message[] { extra }));
+			.Returns((forward: (Message)null, extraOut: [extra]));
 
 		using var adapter = new OrderBookTruncateMessageAdapter(inner, manager.Object);
 
