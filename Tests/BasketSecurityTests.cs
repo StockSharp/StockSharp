@@ -60,7 +60,8 @@ public class BasketSecurityTests : BaseTestClass
 		{
 			Id = "RI@FORTS",
 			Board = ExchangeBoard.Forts,
-			VolumeLevel = 1000,
+			// High VolumeLevel to prevent switching during test (switching is tested separately)
+			VolumeLevel = decimal.MaxValue / 2,
 		};
 
 		basket.InnerSecurities.Add(riu.ToSecurityId());
