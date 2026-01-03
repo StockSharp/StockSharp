@@ -1,10 +1,5 @@
 namespace StockSharp.Tests;
 
-using StockSharp.Configuration;
-
-/// <summary>
-/// Tests for transaction ID storage implementations.
-/// </summary>
 [TestClass]
 public class TransactionIdStorageTests : BaseTestClass
 {

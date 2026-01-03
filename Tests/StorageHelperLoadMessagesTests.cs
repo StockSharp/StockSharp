@@ -1,6 +1,6 @@
-using StockSharp.Algo.Candles.Compression;
-
 namespace StockSharp.Tests;
+
+using StockSharp.Algo.Candles.Compression;
 
 [TestClass]
 public class StorageHelperLoadMessagesTests : BaseTestClass
