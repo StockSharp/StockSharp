@@ -1,6 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_target_tests.props" />
   <ItemGroup>
+    <Compile Include="..\Designer.Templates\Backtest\SmaStrategy.cs" Link="SmaStrategy.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Moq" Version="$(MoqVer)" />
     <PackageReference Include="System.Drawing.Common" Version="$(MsExtensionsVer)" />
   </ItemGroup>
