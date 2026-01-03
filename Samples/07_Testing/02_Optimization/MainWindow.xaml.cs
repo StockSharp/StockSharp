@@ -30,8 +30,6 @@ using StockSharp.Xaml;
 
 public partial class MainWindow
 {
-	private readonly IFileSystem _fileSystem = Paths.FileSystem;
-
 	private DateTime _startEmulationTime;
 
 	private BaseOptimizer _optimizer;
@@ -79,69 +77,6 @@ public partial class MainWindow
 		var fileLogListener = new FileLogListener("sample.log");
 		logManager.Listeners.Add(fileLogListener);
 
-		(int min, int max, int step) longRange = new(50, 100, 5);
-		(int min, int max, int step) shortRange = new(20, 40, 1);
-		(TimeSpan min, TimeSpan max, TimeSpan step) tfRange = new(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15), TimeSpan.FromMinutes(5));
-
-		// SMA periods
-		var periods = new List<(int longMa, int shortMa, TimeSpan tf)>();
-
-		var isRandomMode = RandomMode.IsChecked == true;
-		var randomCount = isRandomMode ? int.Parse(RandomCount.Text) : 0;
-
-		if (isRandomMode)
-		{
-			// Random mode: generate randomCount random combinations using GetRandomOptimizeValue()
-			// Create temporary strategy to use StrategyParam.GetRandomOptimizeValue()
-			var tempStrategy = new History.SmaStrategy();
-
-			var longParam = (StrategyParam<int>)tempStrategy.Parameters[nameof(tempStrategy.LongSma)];
-			var shortParam = (StrategyParam<int>)tempStrategy.Parameters[nameof(tempStrategy.ShortSma)];
-			var tfParam = (StrategyParam<TimeSpan?>)tempStrategy.Parameters[nameof(tempStrategy.CandleTimeFrame)];
-
-			var longValues = new HashSet<int>();
-			var shortValues = new HashSet<int>();
-			var tfValues = new HashSet<TimeSpan>();
-
-			for (var i = 0; i < randomCount; i++)
-				longValues.Add(longParam.GetRandom());
-
-			for (var i = 0; i < randomCount; i++)
-				shortValues.Add(shortParam.GetRandom());
-
-			for (var i = 0; i < randomCount; i++)
-			{
-				if (tfParam.GetRandom() is TimeSpan tf)
-					tfValues.Add(tf);
-			}
-
-			// Create all combinations from random samples
-			foreach (var l in longValues)
-			{
-				foreach (var s in shortValues)
-				{
-					foreach (var t in tfValues)
-					{
-						periods.Add((l, s, t));
-					}
-				}
-			}
-		}
-		else
-		{
-			// Step-based mode: generate with step
-			for (var l = longRange.max; l >= longRange.min; l -= longRange.step)
-			{
-				for (var s = shortRange.max; s >= shortRange.min; s -= shortRange.step)
-				{
-					for (var t = tfRange.max; t >= tfRange.min; t -= tfRange.step)
-					{
-						periods.Add((l, s, t));
-					}
-				}
-			}
-		}
-
 		// storage to historical data
 		var storageRegistry = new StorageRegistry
 		{
@@ -168,7 +103,7 @@ public partial class MainWindow
 		if (BruteForce.IsChecked == true)
 			_optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
 		else
-			_optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry);
+			_optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
 
 		var settings = _optimizer.EmulationSettings;
 
@@ -247,67 +182,64 @@ public partial class MainWindow
 
 		_startEmulationTime = DateTime.UtcNow;
 
+		// Create base strategy with optimization ranges configured
+		var strategy = new History.SmaStrategy
+		{
+			Volume = 1,
+			Security = security,
+			Portfolio = portfolio,
+
+			// by default interval is 1 min,
+			// it is excessively for time range with several months
+			UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>(),
+		};
+
+		// Configure optimization ranges on parameters
+		var longParam = (StrategyParam<int>)strategy.Parameters[nameof(strategy.LongSma)];
+		var shortParam = (StrategyParam<int>)strategy.Parameters[nameof(strategy.ShortSma)];
+		var tfParam = (StrategyParam<TimeSpan?>)strategy.Parameters[nameof(strategy.CandleTimeFrame)];
+
+		longParam.SetOptimize(50, 100, 5);
+		shortParam.SetOptimize(20, 40, 1);
+		tfParam.SetOptimize(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15), TimeSpan.FromMinutes(5));
+
+		var optimizeParams = new IStrategyParam[] { longParam, shortParam, tfParam };
+
 		if (_optimizer is BruteForceOptimizer btOptimizer)
 		{
-			var strategies = periods
-				.Select(period =>
-				{
-					// create strategy based SMA
-					var strategy = new History.SmaStrategy
-					{
-						ShortSma = period.shortMa,
-						LongSma = period.longMa,
+			var isRandomMode = RandomMode.IsChecked == true;
+			var randomCount = isRandomMode ? int.Parse(RandomCount.Text) : 0;
 
-						Volume = 1,
-						Security = security,
-						Portfolio = portfolio,
-						//Connector = connector,
+			IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies;
+			int totalCount;
 
-						// by default interval is 1 min,
-						// it is excessively for time range with several months
-						UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>(),
-
-						Name = $"L={period.longMa} S={period.shortMa}",
-
-						CandleTimeFrame = period.tf,
-					};
-
-					return ((Strategy)strategy, new IStrategyParam[]
-					{
-						strategy.Parameters[nameof(strategy.ShortSma)],
-						strategy.Parameters[nameof(strategy.LongSma)],
-						strategy.Parameters[nameof(strategy.CandleTimeFrame)],
-					});
-				});
+			if (isRandomMode)
+			{
+				// Random mode
+				strategies = strategy.ToBruteForceRandom(optimizeParams, randomCount, out _, out totalCount);
+			}
+			else
+			{
+				// Step-based mode
+				strategies = strategy.ToBruteForce(optimizeParams, out _, out totalCount);
+			}
 
 			// start emulation
-			btOptimizer.Start(startTime, stopTime, strategies, periods.Count);
+			btOptimizer.Start(startTime, stopTime, strategies, totalCount);
 		}
 		else
 		{
-			var strategy = new History.SmaStrategy
-			{
-				Volume = 1,
-				Security = security,
-				Portfolio = portfolio,
-				//Connector = connector,
-
-				// by default interval is 1 min,
-				// it is excessively for time range with several months
-				UnrealizedPnLInterval = ((stopTime - startTime).Ticks / 1000).To<TimeSpan>(),
-			};
-
 			var go = (GeneticOptimizer)_optimizer;
 			go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
-			go.Start(startTime, stopTime, strategy,
-			[
-				(strategy.Parameters[nameof(strategy.ShortSma)], shortRange.min, shortRange.max, shortRange.step, null),
-				(strategy.Parameters[nameof(strategy.LongSma)], longRange.min, longRange.max, longRange.step, null),
 
-				// Specifing time frame range as exact 2 values (Min and Max).
-				// In that case generic will select from them only instead of random from range.
-				(strategy.Parameters[nameof(strategy.CandleTimeFrame)], null, null, tfRange.step, new[] { tfRange.min, tfRange.max }),
-			], _fileSystem);
+			// Convert parameters to genetic format
+			var geneticParams = strategy.ToGeneticParameters([
+				(tfParam, new[] { TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15) }), // explicit values for timeframe
+				(longParam, null), // use range from SetOptimize
+				(shortParam, null), // use range from SetOptimize
+			]);
+
+			go.Start(startTime, stopTime, strategy, geneticParams);
 		}
 	}
 
