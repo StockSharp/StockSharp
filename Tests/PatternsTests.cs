@@ -336,7 +336,7 @@ public class PatternsTests : BaseTestClass
 	[TestMethod]
 	public void CustomExpression()
 	{
-		var fs = Helper.MemorySystem;
+		var fs = Helper.FileSystem;
 		
 		// Test custom pattern: Large white candle (body > 5 and O < C)
 		var customPattern = new ExpressionCandlePattern("CustomLargeWhite",
@@ -375,7 +375,7 @@ public class PatternsTests : BaseTestClass
 	[TestMethod]
 	public void PreviousReference()
 	{
-		var fs = Helper.MemorySystem;
+		var fs = Helper.FileSystem;
 		
 		// Test pattern using previous candle reference (pO, pC, etc.)
 		var customPattern = new ExpressionCandlePattern("HigherClose",
@@ -433,7 +433,8 @@ public class PatternsTests : BaseTestClass
 	[TestMethod]
 	public void SaveLoad()
 	{
-		var fs = Helper.MemorySystem;
+		var fs = Helper.FileSystem;
+
 		var pattern = new ExpressionCandlePattern("TestPattern",
 		[
 			new CandleExpressionCondition(fs, "O < C"),
