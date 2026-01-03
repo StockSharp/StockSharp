@@ -23,7 +23,7 @@ public abstract class BasketPortfolio : Portfolio
 /// </summary>
 public class WeightedPortfolio : BasketPortfolio
 {
-	private sealed class WeightsDictionary(WeightedPortfolio parent, IConnector connector) : CachedSynchronizedDictionary<Portfolio, decimal>
+	private sealed class WeightsDictionary : CachedSynchronizedDictionary<Portfolio, decimal>
 	{
 		private sealed class WeightedPosition : BasketPosition
 		{
@@ -66,14 +66,24 @@ public class WeightedPortfolio : BasketPortfolio
 			public override IEnumerable<Position> InnerPositions => _innerPositions;
 		}
 
-		private readonly WeightedPortfolio _parent = parent ?? throw new ArgumentNullException(nameof(parent));
+		private readonly WeightedPortfolio _parent;
+		private readonly IConnector _connector;
+
+		public WeightsDictionary(WeightedPortfolio parent, IConnector connector)
+		{
+			_parent = parent ?? throw new ArgumentNullException(nameof(parent));
+			_connector = connector ?? throw new ArgumentNullException(nameof(connector));
+
+			// Initialize parent properties with defaults
+			RefreshParent();
+		}
 
 		public IEnumerable<BasketPosition> Positions
 		{
 			get
 			{
 				return CachedKeys
-					.SelectMany(pf => connector.Positions.Where(pos => pos.Portfolio == pf))
+					.SelectMany(pf => _connector.Positions.Where(pos => pos.Portfolio == pf))
 					.GroupBy(pos => pos.Security)
 					.Select(g => new WeightedPosition(_parent, g));
 			}

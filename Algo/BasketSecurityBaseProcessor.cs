@@ -250,10 +250,12 @@ public class ContinuousSecurityVolumeProcessor : ContinuousSecurityBaseProcessor
 		if ((_currVolume.Value + BasketSecurity.VolumeLevel) >= _nextVolume.Value)
 			return securityId == _currId;
 
+		// Volume switched - next security is now active
 		if (!NextId())
 		{
+			// No more legs after _nextId, switch to _nextId as final active leg
+			_currId = _nextId;
 			_finished = true;
-			return false;
 		}
 
 		return _currId == securityId;
