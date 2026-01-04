@@ -2,8 +2,8 @@
   <PropertyGroup Condition="$(TargetFramework.StartsWith('netstandard')) OR $(TargetFramework.StartsWith('net6'))">
     <LangVersion>12.0</LangVersion>
     <MsExtensionsVer>8.*</MsExtensionsVer>
-    <MicrosoftCodeAnalysisVer>4.12.0</MicrosoftCodeAnalysisVer>
-    <MicrosoftCodeAnalysisAnalyzersVer>3.3.4</MicrosoftCodeAnalysisAnalyzersVer>
+    <MsCodeAnalysisVer>4.12.0</MsCodeAnalysisVer>
+    <MsCodeAnalysisAnalyzersVer>3.3.4</MsCodeAnalysisAnalyzersVer>
     <MsTestVer>3.11.1</MsTestVer>
     <MsTestSdkVer>17.13.0</MsTestSdkVer>
     <GrpcVer>2.71.0</GrpcVer>
@@ -12,8 +12,8 @@
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net10'))">
     <LangVersion>14.0</LangVersion>
     <MsExtensionsVer>10.*</MsExtensionsVer>
-    <MicrosoftCodeAnalysisVer>4.*</MicrosoftCodeAnalysisVer>
-    <MicrosoftCodeAnalysisAnalyzersVer>3.*</MicrosoftCodeAnalysisAnalyzersVer>
+    <MsCodeAnalysisVer>4.*</MsCodeAnalysisVer>
+    <MsCodeAnalysisAnalyzersVer>3.*</MsCodeAnalysisAnalyzersVer>
     <MsTestVer>4.*</MsTestVer>
     <MsTestSdkVer>18.*</MsTestSdkVer>
     <GrpcVer>2.*</GrpcVer>
@@ -42,5 +42,6 @@
     <ILGPUVer>1.*</ILGPUVer>
     <FSharpControlTaskSeqVer>0.*</FSharpControlTaskSeqVer>
     <FSharpPlusVer>1.*</FSharpPlusVer>
+    <MsSqlClientVer>6.*</MsSqlClientVer>
   </PropertyGroup>
 </Project>
