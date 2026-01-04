@@ -43,7 +43,7 @@ public class OptimizerTests : BaseTestClass
 					Security = security,
 					Portfolio = portfolio,
 					Volume = 1,
-					CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+					CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 					Long = l,
 					Short = s,
 				};
@@ -71,8 +71,8 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7); // Short period for faster test
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6); // Short period for faster test
 
 		var strategies = CreateStrategyIterations(security, portfolio, 20, 30, 10, 60, 80, 20).ToList();
 
@@ -112,8 +112,8 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		var strategies = CreateStrategyIterations(security, portfolio, 20, 30, 10, 60, 80, 20).ToList();
 
@@ -169,8 +169,8 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		var strategies = CreateStrategyIterations(security, portfolio, 25, 35, 10, 70, 90, 20).ToList();
 
@@ -219,8 +219,8 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30); // Longer period
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate; // Longer period
 
 		// Create many iterations so we can stop mid-run
 		var strategies = CreateStrategyIterations(security, portfolio, 20, 40, 5, 50, 100, 10).ToList();
@@ -271,8 +271,8 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
 
 		var strategies = CreateStrategyIterations(security, portfolio, 20, 35, 5, 60, 90, 10).ToList();
 
@@ -356,8 +356,8 @@ public class OptimizerTests : BaseTestClass
 		// Limit iterations
 		optimizer.EmulationSettings.MaxIterations = 2;
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		// Create more iterations than MaxIterations
 		var strategies = CreateStrategyIterations(security, portfolio, 20, 40, 5, 60, 100, 10).ToList();
@@ -403,15 +403,15 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		var strategy = new SmaStrategy
 		{
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -465,15 +465,15 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		var strategy = new SmaStrategy
 		{
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -530,15 +530,15 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
 
 		var strategy = new SmaStrategy
 		{
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -592,15 +592,7 @@ public class OptimizerTests : BaseTestClass
 	public async Task OptimizerHandlesMultipleSecurities()
 	{
 		var security1 = CreateTestSecurity();
-		var security2 = new Security
-		{
-			Id = "GAZP@TQBR",
-			Code = "GAZP",
-			Name = "Gazprom",
-			PriceStep = 0.01m,
-			VolumeStep = 1,
-			Board = ExchangeBoard.MicexTqbr,
-		};
+		var security2 = new Security { Id = Paths.HistoryDefaultSecurity2 };
 
 		var portfolio = CreateTestPortfolio();
 
@@ -610,8 +602,8 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		// Create strategies for both securities
 		var strategies = new List<(Strategy strategy, IStrategyParam[] parameters)>();
@@ -623,7 +615,7 @@ public class OptimizerTests : BaseTestClass
 				Security = security,
 				Portfolio = portfolio,
 				Volume = 1,
-				CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+				CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 				Long = 80,
 				Short = 30,
 			};
@@ -668,8 +660,8 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		var strategies = CreateStrategyIterations(security, portfolio, 25, 35, 10, 70, 90, 20).ToList();
 
@@ -730,8 +722,8 @@ public class OptimizerTests : BaseTestClass
 		// Set batch size for parallel execution
 		optimizer.EmulationSettings.BatchSize = 2;
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		var strategies = CreateStrategyIterations(security, portfolio, 20, 30, 10, 60, 80, 20).ToList();
 
@@ -767,27 +759,27 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		var strategies = CreateStrategyIterations(security, portfolio, 20, 30, 10, 60, 80, 20).ToList();
 		var expectedIterations = strategies.Count;
 
-		var completedIterations = new List<(Strategy strategy, DateTimeOffset? endTime, int progress)>();
+		var completedIterations = new List<(Strategy strategy, DateTime? endTime, int progress)>();
 		var timeErrors = new List<string>();
 		var syncLock = new object();
-		DateTimeOffset? lastIterationEndTime = null;
+		DateTime? lastIterationEndTime = null;
 
 		optimizer.SingleProgressChanged += (strategy, parameters, progress) =>
 		{
 			// Get the strategy's end time from its statistics or trades
-			DateTimeOffset? endTime = null;
+			DateTime? endTime = null;
 
 			// Try to get the last trade time as the end time of the strategy run
-			var lastTrade = strategy.MyTrades.OrderByDescending(t => t.Trade.Time).FirstOrDefault();
+			var lastTrade = strategy.MyTrades.OrderByDescending(t => t.Trade.ServerTime).FirstOrDefault();
 			if (lastTrade != null)
 			{
-				endTime = lastTrade.Trade.Time;
+				endTime = lastTrade.Trade.ServerTime;
 			}
 			else
 			{
@@ -875,8 +867,8 @@ public class OptimizerTests : BaseTestClass
 		// Force sequential execution for easier time validation
 		optimizer.EmulationSettings.BatchSize = 1;
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		var strategies = CreateStrategyIterations(security, portfolio, 25, 35, 10, 70, 90, 20).ToList();
 
@@ -886,7 +878,7 @@ public class OptimizerTests : BaseTestClass
 		optimizer.StrategyInitialized += (strategy, parameters) =>
 		{
 			// Subscribe to strategy events to check time ordering within each iteration
-			DateTimeOffset? lastEventTime = null;
+			DateTime? lastEventTime = null;
 			var strategyErrors = new List<string>();
 
 			strategy.OrderReceived += (sub, order) =>
@@ -901,7 +893,7 @@ public class OptimizerTests : BaseTestClass
 
 			strategy.OwnTradeReceived += (sub, trade) =>
 			{
-				var time = trade.Trade.Time;
+				var time = trade.Trade.ServerTime;
 				if (lastEventTime.HasValue && time < lastEventTime.Value)
 				{
 					strategyErrors.Add($"Trade time {time} < last event time {lastEventTime.Value}");
