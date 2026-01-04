@@ -48,7 +48,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	private byte[] _copy;
 
 	private readonly ChannelExecutor _executor;
-	private TransactionFileStream _stream;
 	private CsvFileWriter _writer;
 	private volatile bool _disposed;
 
@@ -102,21 +101,20 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 	private void EnsureStream()
 	{
-		if (_stream != null)
+		if (_writer != null)
 			return;
 
 		var dir = Path.GetDirectoryName(FileName);
 		FileSystem.CreateDirectory(dir);
 
-		_stream = new TransactionFileStream(FileSystem, FileName, FileMode.Append);
-		_writer = _stream.CreateCsvWriter(Registry.Encoding, false);
+		var stream = new TransactionFileStream(FileSystem, FileName, FileMode.Append);
+		_writer = stream.CreateCsvWriter(Registry.Encoding, false);
 	}
 
 	private void ResetStream()
 	{
 		_writer?.Dispose();
 		_writer = null;
-		_stream = null;
 	}
 
 	/// <inheritdoc />
@@ -285,9 +283,11 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			{
 				EnsureStream();
 				ResetCopy();
+
 				Write(_writer, itemCopy);
+
 				_writer.Flush();
-				_stream.Commit();
+				_writer.Commit();
 			});
 		}
 
@@ -346,11 +346,13 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 				var dir = Path.GetDirectoryName(FileName);
 				FileSystem.CreateDirectory(dir);
 
-				_stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
-				_writer = _stream.CreateCsvWriter(Registry.Encoding, false);
+				var stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
+				_writer = stream.CreateCsvWriter(Registry.Encoding, false);
+
 				ResetCopy();
+
 				_writer.Flush();
-				_stream.Commit();
+				_writer.Commit();
 			});
 		}
 	}
@@ -371,15 +373,16 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			var dir = Path.GetDirectoryName(FileName);
 			FileSystem.CreateDirectory(dir);
 
-			_stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
-			_writer = _stream.CreateCsvWriter(Registry.Encoding, false);
+			var stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
+			_writer = stream.CreateCsvWriter(Registry.Encoding, false);
+
 			ResetCopy();
 
 			foreach (var item in valuesCopy)
 				Write(_writer, item);
 
 			_writer.Flush();
-			_stream.Commit();
+			_writer.Commit();
 		});
 	}
 

@@ -5,7 +5,6 @@ using Ecng.Compilation.Roslyn;
 using Ecng.Interop;
 
 using StockSharp.Algo.Compilation;
-using StockSharp.Algo.Export;
 
 [TestClass]
 public static class AsmInit

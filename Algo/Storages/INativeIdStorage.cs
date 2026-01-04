@@ -100,7 +100,6 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 		private readonly InMemoryNativeIdStorage _inMemory = inMemory ?? throw new ArgumentNullException(nameof(inMemory));
 
 		private readonly SynchronizedDictionary<SecurityId, object> _buffer = [];
-		private TransactionFileStream _stream;
 		private CsvFileWriter _writer;
 		private Func<SecurityId, object, CancellationToken, ValueTask> _added;
 
@@ -226,24 +225,23 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 				WriteItem(_writer, secId, nativeId);
 
 			_writer.Flush();
-			_stream.Commit();
+			_writer.Commit();
 		}
 
 		private void EnsureStream()
 		{
-			if (_stream != null)
+			if (_writer != null)
 				return;
 
 			var fileName = GetFileName();
-			_stream = new TransactionFileStream(_provider._fileSystem, fileName, FileMode.Append);
-			_writer = _stream.CreateCsvWriter(leaveOpen: false);
+			var stream = new TransactionFileStream(_provider._fileSystem, fileName, FileMode.Append);
+			_writer = stream.CreateCsvWriter(leaveOpen: false);
 		}
 
 		private void ResetStream()
 		{
 			_writer?.Dispose();
 			_writer = null;
-			_stream = null;
 		}
 
 		private string GetFileName() => Path.Combine(_provider._path, _storageName + ".csv");

@@ -4,6 +4,9 @@
     <ProjectGuid>{D5A9DBB4-8732-412B-989E-ACFAAA275E4B}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Ecng.Data" Version="$(EcngVer)" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Algo\Algo.csproj" />
   </ItemGroup>
 </Project>

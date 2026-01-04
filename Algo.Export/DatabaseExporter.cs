@@ -1,22 +1,6 @@
 namespace StockSharp.Algo.Export;
 
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Linq;
-
-using Ecng.Common;
 using Ecng.Data;
-using Ecng.Collections;
-
-using StockSharp.Messages;
-using StockSharp.Localization;
-using DataType = StockSharp.Messages.DataType;
-
-using LinqToDB;
-using LinqToDB.Data;
-using LinqToDB.Mapping;
 
 /// <summary>
 /// The export into database.
@@ -28,9 +12,11 @@ using LinqToDB.Mapping;
 /// <param name="volumeStep">Minimum volume step.</param>
 /// <param name="dataType">Data type info.</param>
 /// <param name="connection">The connection to DB.</param>
-public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType dataType, DatabaseConnectionPair connection) : BaseExporter(dataType)
+/// <param name="dbProvider"><see cref="IDatabaseBatchInserterProvider"/></param>
+public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType dataType, DatabaseConnectionPair connection, IDatabaseBatchInserterProvider dbProvider) : BaseExporter(dataType)
 {
 	private readonly DatabaseConnectionPair _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+	private readonly IDatabaseBatchInserterProvider _dbProvider = dbProvider ?? throw new ArgumentNullException(nameof(dbProvider));
 
 	/// <summary>
 	/// Minimum price step.
@@ -112,7 +98,7 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
 		=> DoAsync(messages, CreateBoardTable, cancellationToken);
 
-	private async Task<(int, DateTime?)> DoAsync<TValue>(IAsyncEnumerable<TValue> values, Action<string, FluentMappingBuilder> createTable, CancellationToken cancellationToken)
+	private async Task<(int, DateTime?)> DoAsync<TValue>(IAsyncEnumerable<TValue> values, Action<IDatabaseMappingBuilder<TValue>> createTable, CancellationToken cancellationToken)
 		where TValue : class
 	{
 		if (values is null)
@@ -124,47 +110,32 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 		var count = 0;
 		var lastTime = default(DateTime?);
 
-		using var db = _connection.CreateConnection();
-		
-		//provider.CheckUnique = CheckUnique;
-
-		var sp = db.DataProvider.GetSchemaProvider();
-		var dbSchema = sp.GetSchema(db);
-
 		var tableName = typeof(TValue).Name.Remove(nameof(Message)).Remove("Change");
 
-		var schema = db.MappingSchema;
+		using var db = _dbProvider.CreateConnection(_connection);
 
-		schema.SetConverter<object, DataParameter>(obj => new()
+		using var inserter = _dbProvider.Create<TValue>(db, tableName, builder =>
 		{
-			Value = obj switch
+			builder.SetParameterValueConverter(obj => obj switch
 			{
 				TimeSpan tf => tf.Ticks,
 				Unit u => u.ToString(),
 				PnFArg pnf => pnf.ToString(),
 				_ => obj,
-			}
+			});
+
+			createTable(builder);
 		});
-
-		var builder = new FluentMappingBuilder(schema);
-		createTable(tableName, builder);
-		builder.Build();
-
-		var exist = dbSchema.Tables.Any(t => t.TableName == tableName);
-
-		var table = exist
-			? db.GetTable<TValue>()
-			: db.CreateTable<TValue>();
 
 		await foreach (var batch in values.Chunk(BatchSize).WithCancellation(cancellationToken))
 		{
 			if (CheckUnique)
 			{
 				foreach (var item in batch)
-					await table.InsertAsync(() => item, cancellationToken);
+					await inserter.InsertAsync(item, cancellationToken);
 			}
 			else
-				await table.BulkCopyAsync(batch, cancellationToken);
+				await inserter.BulkCopyAsync(batch, cancellationToken);
 
 			count += batch.Length;
 
@@ -178,14 +149,13 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 	private int GetPriceScale() => (PriceStep ?? 1m).GetCachedDecimals();
 	private int GetVolumeScale() => (VolumeStep ?? 1m).GetCachedDecimals();
 
-	private void CreateCandleTable(string tableName, FluentMappingBuilder builder)
+	private void CreateCandleTable(IDatabaseMappingBuilder<CandleMessage> builder)
 	{
 		var priceScale = GetPriceScale();
 		var volScale = GetVolumeScale();
 
 		builder
-			.Entity<CandleMessage>()
-			.HasTableName(tableName)
+			.HasTableName(typeof(CandleMessage).Name.Remove(nameof(Message)))
 			.IsColumnRequired()
 			.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 			.Property(m => m.SecurityId.BoardCode).HasLength(256)
@@ -208,11 +178,10 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 		;
 	}
 
-	private void CreateIndicatorValueTable(string tableName, FluentMappingBuilder builder)
+	private void CreateIndicatorValueTable(IDatabaseMappingBuilder<IndicatorValue> builder)
 	{
 		builder
-			.Entity<IndicatorValue>()
-			.HasTableName(tableName)
+			.HasTableName(typeof(IndicatorValue).Name)
 			.IsColumnRequired()
 			.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 			.Property(m => m.SecurityId.BoardCode).HasLength(256)
@@ -224,15 +193,11 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 		;
 	}
 
-	private void CreatePositionChangeTable(string tableName, FluentMappingBuilder builder)
+	private void CreatePositionChangeTable(IDatabaseMappingBuilder<PositionChangeMessage> builder)
 	{
-		var entityBuilder = builder
-			.Entity<PositionChangeMessage>()
-			.HasTableName(tableName)
+		builder
+			.HasTableName(typeof(PositionChangeMessage).Name.Remove(nameof(Message)).Remove("Change"))
 			.IsColumnRequired()
-			;
-
-		entityBuilder
 			.Property(m => m.ServerTime).IsNotNull()
 			.Property(m => m.LocalTime).IsNotNull()
 			.Property(m => m.PortfolioName)
@@ -242,20 +207,19 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 
 		foreach (var item in Enumerator.GetValues<PositionChangeTypes>().ExcludeObsolete())
 		{
-			entityBuilder.Property(x => Sql.Property<object>(x, item.To<string>()));
+			builder.DynamicProperty(item.To<string>());
 		}
 
-		entityBuilder.DynamicPropertyAccessors(
+		builder.DynamicPropertyAccessors(
 			(entity, fieldName, defaultValue) => entity.Changes.TryGetValue(fieldName.To<PositionChangeTypes>()),
 			(entity, fieldName, value) => SetValue(entity, fieldName, value));
 	}
 
-	private void CreateSecurityTable(string tableName, FluentMappingBuilder builder)
+	private void CreateSecurityTable(IDatabaseMappingBuilder<SecurityMessage> builder)
 	{
 		builder
-			.Entity<SecurityMessage>()
 			.IsColumnRequired()
-			.HasTableName(tableName)
+			.HasTableName(typeof(SecurityMessage).Name.Remove(nameof(Message)))
 			.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 			.Property(m => m.SecurityId.BoardCode).HasLength(256)
 			.Property(m => m.Name).HasLength(256)
@@ -299,12 +263,11 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 		;
 	}
 
-	private void CreateNewsTable(string tableName, FluentMappingBuilder builder)
+	private void CreateNewsTable(IDatabaseMappingBuilder<NewsMessage> builder)
 	{
 		builder
-			.Entity<NewsMessage>()
 			.IsColumnRequired()
-			.HasTableName(tableName)
+			.HasTableName(typeof(NewsMessage).Name.Remove(nameof(Message)))
 			.Property(m => m.Id).HasLength(32)
 			.Property(m => m.ServerTime)
 			.Property(m => m.LocalTime)
@@ -321,15 +284,11 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 		;
 	}
 
-	private void CreateLevel1Table(string tableName, FluentMappingBuilder builder)
+	private void CreateLevel1Table(IDatabaseMappingBuilder<Level1ChangeMessage> builder)
 	{
-		var entityBuilder = builder
-			.Entity<Level1ChangeMessage>()
+		builder
 			.IsColumnRequired()
-			.HasTableName(tableName)
-		;
-
-		entityBuilder
+			.HasTableName(typeof(Level1ChangeMessage).Name.Remove(nameof(Message)).Remove("Change"))
 			.Property(m => m.ServerTime).IsNotNull()
 			.Property(m => m.LocalTime).IsNotNull()
 			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
@@ -338,23 +297,22 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 
 		foreach (var item in Enumerator.GetValues<Level1Fields>().ExcludeObsolete())
 		{
-			entityBuilder.Property(x => Sql.Property<object>(x, item.To<string>()));
+			builder.DynamicProperty(item.To<string>());
 		}
 
-		entityBuilder.DynamicPropertyAccessors(
+		builder.DynamicPropertyAccessors(
 			(entity, fieldName, defaultValue) => entity.Changes.TryGetValue(fieldName.To<Level1Fields>()),
 			(entity, fieldName, value) => SetValue(entity, fieldName, value));
 	}
 
-	private void CreateMarketDepthQuoteTable(string tableName, FluentMappingBuilder builder)
+	private void CreateMarketDepthQuoteTable(IDatabaseMappingBuilder<TimeQuoteChange> builder)
 	{
 		var priceScale = GetPriceScale();
 		var volScale = GetVolumeScale();
 
 		builder
-			.Entity<TimeQuoteChange>()
 			.IsColumnRequired()
-			.HasTableName(tableName)
+			.HasTableName(typeof(TimeQuoteChange).Name)
 			.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 			.Property(m => m.SecurityId.BoardCode).HasLength(256)
 			.Property(m => m.ServerTime)
@@ -370,15 +328,14 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 		;
 	}
 
-	private void CreateExecutionTable(string tableName, FluentMappingBuilder builder)
+	private void CreateExecutionTable(IDatabaseMappingBuilder<ExecutionMessage> builder)
 	{
 		var priceScale = GetPriceScale();
 		var volScale = GetVolumeScale();
 
 		builder
-			.Entity<ExecutionMessage>()
 			.IsColumnRequired()
-			.HasTableName(tableName)
+			.HasTableName(typeof(ExecutionMessage).Name.Remove(nameof(Message)))
 			.Property(m => m.SecurityId.SecurityCode).HasLength(256)
 			.Property(m => m.SecurityId.BoardCode).HasLength(256)
 			.Property(m => m.ServerTime)
@@ -419,7 +376,7 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 
 			.Property(m => m.Comment).HasLength(1024)
 			.Property(m => m.SystemComment).HasLength(1024)
-			.Property(m => m.Error).HasDataType(LinqToDB.DataType.NVarChar).HasLength(1024)
+			.Property(m => m.Error).HasDataType(DatabaseDataType.NVarChar).HasLength(1024)
 
 			.Property(m => m.Commission)
 			.Property(m => m.CommissionCurrency).HasLength(32)
@@ -447,22 +404,20 @@ public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType 
 		;
 	}
 
-	private void CreateBoardStateTable(string tableName, FluentMappingBuilder builder)
+	private void CreateBoardStateTable(IDatabaseMappingBuilder<BoardStateMessage> builder)
 	{
 		builder
-			.Entity<BoardStateMessage>()
-			.HasTableName(tableName)
+			.HasTableName(typeof(BoardStateMessage).Name.Remove(nameof(Message)))
 			.IsColumnRequired()
 			.Property(m => m.ServerTime)
 			.Property(m => m.BoardCode).HasLength(256)
 			.Property(m => m.State);
 	}
 
-	private void CreateBoardTable(string tableName, FluentMappingBuilder builder)
+	private void CreateBoardTable(IDatabaseMappingBuilder<BoardMessage> builder)
 	{
 		builder
-			.Entity<BoardMessage>()
-			.HasTableName(tableName)
+			.HasTableName(typeof(BoardMessage).Name.Remove(nameof(Message)))
 			.IsColumnRequired()
 			.Property(m => m.Code).HasLength(256)
 			.Property(m => m.ExchangeCode).HasLength(256)

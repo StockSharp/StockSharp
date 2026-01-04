@@ -362,43 +362,39 @@ abstract class BinaryMetaInfo : MetaInfo
 abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSerializer<TData>
 	where TMetaInfo : BinaryMetaInfo
 {
-	public class MarketDataEnumerator(BinaryMarketDataSerializer<TData, TMetaInfo> serializer, BitArrayReader reader, TMetaInfo metaInfo) : SimpleEnumerator<TData>
+	public class MarketDataEnumerator(BinaryMarketDataSerializer<TData, TMetaInfo> serializer, BitArrayReader reader, TMetaInfo metaInfo) : IAsyncEnumerable<TData>, IAsyncEnumerator<TData>
 	{
 		private readonly TMetaInfo _originalMetaInfo = metaInfo ?? throw new ArgumentNullException(nameof(metaInfo));
+		private readonly BinaryMarketDataSerializer<TData, TMetaInfo> _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
 
 		public BitArrayReader Reader { get; } = reader ?? throw new ArgumentNullException(nameof(reader));
-
 		public TMetaInfo MetaInfo { get; private set; }
 
-		public BinaryMarketDataSerializer<TData, TMetaInfo> Serializer { get; } = serializer ?? throw new ArgumentNullException(nameof(serializer));
-
-		public int Index { get; private set; } = -1;
-
-		public int PartSize { get; private set; }
+		private int _index = -1;
+		private int _partSize;
 
 		public TData Previous { get; private set; }
+		public TData Current { get; private set; }
 
-		public TData Delta { get; internal set; }
-
-		public override bool MoveNext()
+		ValueTask<bool> IAsyncEnumerator<TData>.MoveNextAsync()
 		{
-			if (Index < 0) // enumerator стоит перед первой записью
+			if (_index < 0) // enumerator стоит перед первой записью
 			{
-				MetaInfo = (TMetaInfo)((IMarketDataSerializer)Serializer).CreateMetaInfo(_originalMetaInfo.Date);
+				MetaInfo = (TMetaInfo)((IMarketDataSerializer)_serializer).CreateMetaInfo(_originalMetaInfo.Date);
 				MetaInfo.CopyFrom(_originalMetaInfo);
-				Index = 0;
+				_index = 0;
 			}
 
-			if (Index >= MetaInfo.Count)
-				return false;
+			if (_index >= MetaInfo.Count)
+				return new(false);
 
-			if (Index == PartSize)
-				PartSize += Reader.ReadInt();
+			if (_index == _partSize)
+				_partSize += Reader.ReadInt();
 
-			Current = Serializer.MoveNext(this);
+			Current = _serializer.MoveNext(this);
 			Previous = Current;
 
-			if (Index == (PartSize - 1))
+			if (_index == (_partSize - 1))
 			{
 				//Reader.AlignReader();
 				if ((Reader.Offset % 8) != 0)
@@ -408,21 +404,27 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 				}
 			}
 
-			Index++;
+			_index++;
 
-			return true;
+			return new(true);
 		}
 
-		public override void Reset()
+		ValueTask IAsyncDisposable.DisposeAsync()
 		{
-			Index = -1;
+			_index = -1;
 			MetaInfo = null;
 			Previous = Current = default;
-			PartSize = 0;
+			_partSize = 0;
 
 			if (Reader != null)
 				Reader.Offset = 0;
+
+			GC.SuppressFinalize(this);
+
+			return default;
 		}
+
+		IAsyncEnumerator<TData> IAsyncEnumerable<TData>.GetAsyncEnumerator(CancellationToken cancellationToken) => this;
 	}
 
 	protected BinaryMarketDataSerializer(SecurityId securityId, DataType dataType, int dataSize, Version version, IExchangeInfoProvider exchangeInfoProvider)
@@ -485,7 +487,7 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 		var typedInfo = (TMetaInfo)metaInfo;
 		CheckVersion(typedInfo, "Load");
 
-		return new SyncAsyncEnumerable<TData>(new SimpleEnumerable<TData>(() => new MarketDataEnumerator(this, new BitArrayReader(stream), typedInfo)));
+		return new MarketDataEnumerator(this, new BitArrayReader(stream), typedInfo);
 	}
 
 	protected abstract void OnSave(BitArrayWriter writer, IEnumerable<TData> data, TMetaInfo metaInfo);

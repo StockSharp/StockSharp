@@ -5,12 +5,12 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Moq" Version="$(MoqVer)" />
-    <PackageReference Include="System.Drawing.Common" Version="$(MsExtensionsVer)" />
+    <PackageReference Include="Ecng.Interop.Excel" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Algo.Analytics\Algo.Analytics.csproj" />
     <ProjectReference Include="..\Algo.Compilation\Algo.Compilation.csproj" />
-    <ProjectReference Include="..\Algo.Export.Drivers\Algo.Export.Drivers.csproj" />
+    <ProjectReference Include="..\Algo.Export\Algo.Export.csproj" />
     <ProjectReference Include="..\Algo.Import\Algo.Import.csproj" />
     <ProjectReference Include="..\Algo.Gpu\Algo.Gpu.csproj" />
     <ProjectReference Include="..\Diagram.Core\Diagram.Core.csproj" />

@@ -38,8 +38,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting", "Reporting\Repo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo.Import", "Algo.Import\Algo.Import.csproj", "{FFB58CBB-0E58-4DC8-02EB-005C98390744}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo.Export.Drivers", "Algo.Export.Drivers\Algo.Export.Drivers.csproj", "{FA2F863A-5705-DA7A-E37E-91A7629E4AB0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,10 +116,6 @@ Global
 		{FFB58CBB-0E58-4DC8-02EB-005C98390744}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFB58CBB-0E58-4DC8-02EB-005C98390744}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFB58CBB-0E58-4DC8-02EB-005C98390744}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA2F863A-5705-DA7A-E37E-91A7629E4AB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA2F863A-5705-DA7A-E37E-91A7629E4AB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA2F863A-5705-DA7A-E37E-91A7629E4AB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA2F863A-5705-DA7A-E37E-91A7629E4AB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
