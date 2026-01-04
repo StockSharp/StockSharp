@@ -779,4 +779,200 @@ public class BacktestingTests : BaseTestClass
 		strategy1.ProcessState.AssertEqual(ProcessStates.Stopped, "Strategy 1 should be stopped");
 		strategy2.ProcessState.AssertEqual(ProcessStates.Stopped, "Strategy 2 should be stopped");
 	}
+
+	/// <summary>
+	/// Tests that all event times are monotonically increasing during backtesting.
+	/// Time should always increase - both within same event type and across different event types.
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestEventTimesAreMonotonicallyIncreasing()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = new DateTime(2020, 4, 1);
+		var stopTime = new DateTime(2020, 4, 30);
+
+		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
+		{
+			HistoryMessageAdapter =
+			{
+				StartDate = startTime,
+				StopDate = stopTime,
+			},
+		};
+
+		connector.EmulationAdapter.Settings.MatchOnTouch = true;
+
+		var strategy = new SmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		// Track all event times globally
+		var allEventTimes = new List<(DateTimeOffset time, string eventType)>();
+		var syncLock = new object();
+
+		// Track times per event type
+		DateTimeOffset? lastOrderTime = null;
+		DateTimeOffset? lastTradeTime = null;
+		DateTimeOffset? lastPnLTime = null;
+		DateTimeOffset? lastPositionTime = null;
+
+		var orderTimeErrors = new List<string>();
+		var tradeTimeErrors = new List<string>();
+		var pnlTimeErrors = new List<string>();
+		var positionTimeErrors = new List<string>();
+		var globalTimeErrors = new List<string>();
+
+		strategy.OrderReceived += (sub, order) =>
+		{
+			var time = order.Time;
+			lock (syncLock)
+			{
+				// Check within order events
+				if (lastOrderTime.HasValue && time < lastOrderTime.Value)
+				{
+					orderTimeErrors.Add($"Order time decreased: {lastOrderTime.Value} -> {time}");
+				}
+				lastOrderTime = time;
+
+				// Check global time ordering
+				if (allEventTimes.Count > 0)
+				{
+					var lastGlobal = allEventTimes[^1];
+					if (time < lastGlobal.time)
+					{
+						globalTimeErrors.Add($"Order time {time} is less than previous {lastGlobal.eventType} time {lastGlobal.time}");
+					}
+				}
+				allEventTimes.Add((time, "Order"));
+			}
+		};
+
+		strategy.OwnTradeReceived += (sub, trade) =>
+		{
+			var time = trade.Trade.Time;
+			lock (syncLock)
+			{
+				// Check within trade events
+				if (lastTradeTime.HasValue && time < lastTradeTime.Value)
+				{
+					tradeTimeErrors.Add($"Trade time decreased: {lastTradeTime.Value} -> {time}");
+				}
+				lastTradeTime = time;
+
+				// Check global time ordering
+				if (allEventTimes.Count > 0)
+				{
+					var lastGlobal = allEventTimes[^1];
+					if (time < lastGlobal.time)
+					{
+						globalTimeErrors.Add($"Trade time {time} is less than previous {lastGlobal.eventType} time {lastGlobal.time}");
+					}
+				}
+				allEventTimes.Add((time, "Trade"));
+			}
+		};
+
+		strategy.PnLReceived2 += (s, pf, time, realized, unrealized, commission) =>
+		{
+			lock (syncLock)
+			{
+				// Check within PnL events
+				if (lastPnLTime.HasValue && time < lastPnLTime.Value)
+				{
+					pnlTimeErrors.Add($"PnL time decreased: {lastPnLTime.Value} -> {time}");
+				}
+				lastPnLTime = time;
+
+				// Check global time ordering
+				if (allEventTimes.Count > 0)
+				{
+					var lastGlobal = allEventTimes[^1];
+					if (time < lastGlobal.time)
+					{
+						globalTimeErrors.Add($"PnL time {time} is less than previous {lastGlobal.eventType} time {lastGlobal.time}");
+					}
+				}
+				allEventTimes.Add((time, "PnL"));
+			}
+		};
+
+		strategy.PositionReceived += (s, pos) =>
+		{
+			var time = pos.LastChangeTime ?? DateTimeOffset.MinValue;
+			if (time == DateTimeOffset.MinValue)
+				return;
+
+			lock (syncLock)
+			{
+				// Check within position events
+				if (lastPositionTime.HasValue && time < lastPositionTime.Value)
+				{
+					positionTimeErrors.Add($"Position time decreased: {lastPositionTime.Value} -> {time}");
+				}
+				lastPositionTime = time;
+
+				// Check global time ordering
+				if (allEventTimes.Count > 0)
+				{
+					var lastGlobal = allEventTimes[^1];
+					if (time < lastGlobal.time)
+					{
+						globalTimeErrors.Add($"Position time {time} is less than previous {lastGlobal.eventType} time {lastGlobal.time}");
+					}
+				}
+				allEventTimes.Add((time, "Position"));
+			}
+		};
+
+		var tcs = new TaskCompletionSource<bool>();
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				tcs.TrySetResult(true);
+		};
+
+		connector.Connected += () =>
+		{
+			strategy.Start();
+			connector.Start();
+		};
+
+		connector.Connect();
+
+		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
+
+		if (completed != tcs.Task)
+		{
+			connector.Disconnect();
+			Fail("Backtest did not complete in time");
+		}
+
+		// Verify we received some events
+		IsTrue(allEventTimes.Count > 0, "Expected to receive some events");
+
+		// Report all errors
+		var allErrors = new List<string>();
+		allErrors.AddRange(orderTimeErrors);
+		allErrors.AddRange(tradeTimeErrors);
+		allErrors.AddRange(pnlTimeErrors);
+		allErrors.AddRange(positionTimeErrors);
+		allErrors.AddRange(globalTimeErrors);
+
+		if (allErrors.Count > 0)
+		{
+			Fail($"Time ordering violations detected:\n{string.Join("\n", allErrors.Take(20))}");
+		}
+	}
 }

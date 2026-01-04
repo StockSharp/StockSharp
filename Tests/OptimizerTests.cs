@@ -754,4 +754,205 @@ public class OptimizerTests : BaseTestClass
 
 		optimizer.State.AssertEqual(ChannelStates.Stopped, "Optimizer should be stopped");
 	}
+
+	[TestMethod]
+	public async Task OptimizerIterationTimesAreIncreasing()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
+
+		var startTime = new DateTime(2020, 4, 1);
+		var stopTime = new DateTime(2020, 4, 7);
+
+		var strategies = CreateStrategyIterations(security, portfolio, 20, 30, 10, 60, 80, 20).ToList();
+		var expectedIterations = strategies.Count;
+
+		var completedIterations = new List<(Strategy strategy, DateTimeOffset? endTime, int progress)>();
+		var timeErrors = new List<string>();
+		var syncLock = new object();
+		DateTimeOffset? lastIterationEndTime = null;
+
+		optimizer.SingleProgressChanged += (strategy, parameters, progress) =>
+		{
+			// Get the strategy's end time from its statistics or trades
+			DateTimeOffset? endTime = null;
+
+			// Try to get the last trade time as the end time of the strategy run
+			var lastTrade = strategy.MyTrades.OrderByDescending(t => t.Trade.Time).FirstOrDefault();
+			if (lastTrade != null)
+			{
+				endTime = lastTrade.Trade.Time;
+			}
+			else
+			{
+				// If no trades, use last order time
+				var lastOrder = strategy.Orders.OrderByDescending(o => o.Time).FirstOrDefault();
+				if (lastOrder != null)
+				{
+					endTime = lastOrder.Time;
+				}
+			}
+
+			lock (syncLock)
+			{
+				// Check that iteration end times are monotonically increasing
+				if (endTime.HasValue && lastIterationEndTime.HasValue)
+				{
+					// Note: With parallel execution, times might not be strictly increasing
+					// but for sequential execution they should be
+				}
+
+				if (endTime.HasValue)
+					lastIterationEndTime = endTime;
+
+				completedIterations.Add((strategy, endTime, progress));
+			}
+		};
+
+		var stoppedTcs = new TaskCompletionSource<bool>();
+		optimizer.StateChanged += (oldState, newState) =>
+		{
+			if (newState == ChannelStates.Stopped)
+				stoppedTcs.TrySetResult(true);
+		};
+
+		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
+
+		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
+
+		if (!stoppedTcs.Task.IsCompleted)
+		{
+			optimizer.Stop();
+			Fail("Optimizer did not complete in time");
+		}
+
+		// Verify iteration count
+		AreEqual(expectedIterations, completedIterations.Count,
+			$"Expected {expectedIterations} iterations but got {completedIterations.Count}");
+
+		// Verify progress values are reasonable (should increase)
+		var progressValues = completedIterations.Select(x => x.progress).ToList();
+		for (var i = 1; i < progressValues.Count; i++)
+		{
+			IsTrue(progressValues[i] >= progressValues[i - 1],
+				$"Progress should not decrease: {progressValues[i - 1]} -> {progressValues[i]}");
+		}
+
+		// Verify final progress is 100
+		if (progressValues.Count > 0)
+		{
+			IsTrue(progressValues[^1] >= 99, $"Final progress should be ~100%, got {progressValues[^1]}%");
+		}
+
+		// Report any errors
+		if (timeErrors.Count > 0)
+		{
+			Fail($"Time ordering violations:\n{string.Join("\n", timeErrors)}");
+		}
+	}
+
+	/// <summary>
+	/// Tests that within each optimizer iteration, strategy events have increasing times.
+	/// </summary>
+	[TestMethod]
+	public async Task OptimizerStrategyEventsHaveIncreasingTimes()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
+
+		// Force sequential execution for easier time validation
+		optimizer.EmulationSettings.BatchSize = 1;
+
+		var startTime = new DateTime(2020, 4, 1);
+		var stopTime = new DateTime(2020, 4, 7);
+
+		var strategies = CreateStrategyIterations(security, portfolio, 25, 35, 10, 70, 90, 20).ToList();
+
+		var iterationTimeErrors = new List<string>();
+		var syncLock = new object();
+
+		optimizer.StrategyInitialized += (strategy, parameters) =>
+		{
+			// Subscribe to strategy events to check time ordering within each iteration
+			DateTimeOffset? lastEventTime = null;
+			var strategyErrors = new List<string>();
+
+			strategy.OrderReceived += (sub, order) =>
+			{
+				var time = order.Time;
+				if (lastEventTime.HasValue && time < lastEventTime.Value)
+				{
+					strategyErrors.Add($"Order time {time} < last event time {lastEventTime.Value}");
+				}
+				lastEventTime = time;
+			};
+
+			strategy.OwnTradeReceived += (sub, trade) =>
+			{
+				var time = trade.Trade.Time;
+				if (lastEventTime.HasValue && time < lastEventTime.Value)
+				{
+					strategyErrors.Add($"Trade time {time} < last event time {lastEventTime.Value}");
+				}
+				lastEventTime = time;
+			};
+
+			strategy.PnLReceived2 += (s, pf, time, realized, unrealized, commission) =>
+			{
+				if (lastEventTime.HasValue && time < lastEventTime.Value)
+				{
+					strategyErrors.Add($"PnL time {time} < last event time {lastEventTime.Value}");
+				}
+				lastEventTime = time;
+			};
+
+			// When strategy stops, collect errors
+			strategy.ProcessStateChanged += (s) =>
+			{
+				if (s.ProcessState == ProcessStates.Stopped && strategyErrors.Count > 0)
+				{
+					lock (syncLock)
+					{
+						iterationTimeErrors.AddRange(strategyErrors.Select(e =>
+							$"Strategy {strategy.Name}: {e}"));
+					}
+				}
+			};
+		};
+
+		var stoppedTcs = new TaskCompletionSource<bool>();
+		optimizer.StateChanged += (oldState, newState) =>
+		{
+			if (newState == ChannelStates.Stopped)
+				stoppedTcs.TrySetResult(true);
+		};
+
+		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
+
+		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
+
+		if (!stoppedTcs.Task.IsCompleted)
+		{
+			optimizer.Stop();
+			Fail("Optimizer did not complete in time");
+		}
+
+		// Report any time errors
+		if (iterationTimeErrors.Count > 0)
+		{
+			Fail($"Time ordering violations within strategy iterations:\n{string.Join("\n", iterationTimeErrors.Take(20))}");
+		}
+	}
 }

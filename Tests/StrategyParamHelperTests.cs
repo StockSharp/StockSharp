@@ -97,7 +97,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<int>().ToArray();
 
-		AreEqual([1, 2, 3, 4, 5], values);
+		values.SequenceEqual([1, 2, 3, 4, 5]).AssertTrue();
 	}
 
 	[TestMethod]
@@ -108,7 +108,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<int>().ToArray();
 
-		AreEqual([10, 20, 30, 40, 50], values);
+		values.SequenceEqual([10, 20, 30, 40, 50]).AssertTrue();
 	}
 
 	[TestMethod]
@@ -119,7 +119,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<decimal>().ToArray();
 
-		AreEqual([1.0m, 1.5m, 2.0m], values);
+		values.SequenceEqual([1.0m, 1.5m, 2.0m]).AssertTrue();
 	}
 
 	[TestMethod]
@@ -130,7 +130,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<bool>().ToArray();
 
-		AreEqual([false, true], values);
+		values.SequenceEqual([false, true]).AssertTrue();
 	}
 
 	[TestMethod]
@@ -144,12 +144,11 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<TimeSpan>().ToArray();
 
-		AreEqual(
-        [
-            TimeSpan.FromMinutes(5),
+		values.SequenceEqual([
+			TimeSpan.FromMinutes(5),
 			TimeSpan.FromMinutes(10),
 			TimeSpan.FromMinutes(15)
-		], values);
+		]).AssertTrue();
 	}
 
 	[TestMethod]
@@ -159,7 +158,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<int>().ToArray();
 
-		AreEqual([42], values);
+		values.SequenceEqual([42]).AssertTrue();
 	}
 
 	[TestMethod]
@@ -170,7 +169,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<long>().ToArray();
 
-		AreEqual([100L, 200L, 300L, 400L, 500L], values);
+		values.SequenceEqual([100L, 200L, 300L, 400L, 500L]).AssertTrue();
 	}
 
 	[TestMethod]
@@ -245,7 +244,7 @@ public class StrategyParamHelperTests : BaseTestClass
 	[TestMethod]
 	public void GetRandom_ThrowsWhenCanOptimizeFalse()
 	{
-		var param = new StrategyParam<int>("test") { Value = 42 };
+		var param = new StrategyParam<int>("test") { Value = 42, CanOptimize = false };
 
 		Throws<InvalidOperationException>(() => param.GetRandom());
 	}
@@ -357,7 +356,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<int>().ToArray();
 
-		AreEqual([5], values);
+		values.SequenceEqual([5]).AssertTrue();
 	}
 
 	[TestMethod]
@@ -383,7 +382,7 @@ public class StrategyParamHelperTests : BaseTestClass
 		// Take only first 5
 		var first5 = enumerable.Take(5).Cast<int>().ToArray();
 
-		AreEqual([1, 2, 3, 4, 5], first5);
+		first5.SequenceEqual([1, 2, 3, 4, 5]).AssertTrue();
 	}
 
 	#endregion
@@ -492,6 +491,77 @@ public class StrategyParamHelperTests : BaseTestClass
 		var param = new StrategyParam<DataType>("test");
 		param.CanOptimize = true;
 		// No OptimizeValues, no From/To - should return 1
+
+		var count = param.GetIterationsCount();
+
+		AreEqual(1, count);
+	}
+
+	#endregion
+
+	#region Security Explicit Values
+
+	[TestMethod]
+	public void CanOptimize_SecurityNotSupportedByDefault()
+	{
+		// Security doesn't support CanOptimize by default (not numeric, bool, Unit, TimeSpan, DataType)
+		IsFalse(typeof(Security).CanOptimize());
+	}
+
+	[TestMethod]
+	public void GetIterationsCount_SecurityWithExplicitValues()
+	{
+		var sec1 = new Security { Id = "AAPL@NASDAQ" };
+		var sec2 = new Security { Id = "MSFT@NASDAQ" };
+		var sec3 = new Security { Id = "GOOG@NASDAQ" };
+
+		var param = new StrategyParam<Security>("test") { CanOptimize = true };
+		param.SetOptimizeValues([sec1, sec2, sec3]);
+
+		var count = param.GetIterationsCount();
+
+		AreEqual(3, count);
+	}
+
+	[TestMethod]
+	public void GetOptimizationValues_SecurityExplicit()
+	{
+		var sec1 = new Security { Id = "AAPL@NASDAQ" };
+		var sec2 = new Security { Id = "MSFT@NASDAQ" };
+
+		var param = new StrategyParam<Security>("test") { CanOptimize = true };
+		param.SetOptimizeValues([sec1, sec2]);
+
+		var values = param.GetOptimizationValues().Cast<Security>().ToArray();
+
+		AreEqual(2, values.Length);
+		AreEqual(sec1.Id, values[0].Id);
+		AreEqual(sec2.Id, values[1].Id);
+	}
+
+	[TestMethod]
+	public void GetRandom_SecurityExplicit()
+	{
+		var sec1 = new Security { Id = "AAPL@NASDAQ" };
+		var sec2 = new Security { Id = "MSFT@NASDAQ" };
+		var sec3 = new Security { Id = "GOOG@NASDAQ" };
+		var expected = new[] { sec1, sec2, sec3 };
+
+		var param = new StrategyParam<Security>("test") { CanOptimize = true };
+		param.SetOptimizeValues(expected);
+
+		for (var i = 0; i < 50; i++)
+		{
+			var value = param.GetRandom();
+			IsTrue(expected.Contains(value));
+		}
+	}
+
+	[TestMethod]
+	public void GetIterationsCount_SecurityNoValues_Returns1()
+	{
+		var param = new StrategyParam<Security>("test") { CanOptimize = true };
+		// No OptimizeValues set - should return 1
 
 		var count = param.GetIterationsCount();
 
