@@ -7,6 +7,10 @@
     <PackageReference Include="Moq" Version="$(MoqVer)" />
     <PackageReference Include="Ecng.Interop.Excel" Version="$(EcngVer)" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
+    <PackageReference Include="Ecng.Data.Ado" Version="$(EcngVer)" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="$(MsSqlClientVer)" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Algo.Analytics\Algo.Analytics.csproj" />
     <ProjectReference Include="..\Algo.Compilation\Algo.Compilation.csproj" />

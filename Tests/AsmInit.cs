@@ -3,6 +3,11 @@
 using Ecng.Compilation;
 using Ecng.Compilation.Roslyn;
 using Ecng.Interop;
+#if NET10_0_OR_GREATER
+using Ecng.Data;
+
+using Microsoft.Data.SqlClient;
+#endif
 
 using StockSharp.Algo.Compilation;
 
@@ -18,8 +23,12 @@ public static class AsmInit
 		ConfigManager.RegisterService<ISecurityStorage>(new InMemorySecurityStorage(secProvider));
 		ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
 		ConfigManager.RegisterService<IExcelWorkerProvider>(new DevExpExcelWorkerProvider());
-
 		await CompilationExtensions.Init(Paths.FileSystem, Helper.LogManager.Application, [("designer_extensions.py", File.ReadAllText("../../../../Diagram.Core/python/designer_extensions.py"))], default);
+
+#if NET10_0_OR_GREATER
+		ConfigManager.RegisterService<IDatabaseBatchInserterProvider>(new AdoBatchInserterProvider());
+		DatabaseProviderRegistry.Register(DatabaseProviderRegistry.SqlServer, SqlClientFactory.Instance);
+#endif
 
 		Helper.FileSystem.ClearTemp();
 	}
