@@ -228,7 +228,7 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 					case MessageOfflineModes.Cancel:
 					{
 						if (message is ISubscriptionMessage subscrMsg)
-							return ([], [subscrMsg.CreateResult()], false);
+							return ([], [subscrMsg.CreateResponse()], false);
 
 						return ([], [], false);
 					}
