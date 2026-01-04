@@ -551,6 +551,8 @@ public class OfflineManagerTests : BaseTestClass
 		shouldForward.AssertFalse();
 		toInner.Length.AssertEqual(0);
 		toOut.Length.AssertEqual(1);
+		var response = (SubscriptionResponseMessage)toOut[0];
+		response.OriginalTransactionId.AssertEqual(100);
 	}
 
 	[TestMethod]

@@ -451,9 +451,10 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 		toInner[0].AssertSame(connectMsg);
 		toOut.Length.AssertEqual(0);
 
-		var (forward, extraOut) = manager.ProcessOutMessage(new DisconnectMessage());
+		var disconnectMsg = new DisconnectMessage();
+		var (forward, extraOut) = manager.ProcessOutMessage(disconnectMsg);
 
-		forward.AssertNotNull();
+		forward.AssertSame(disconnectMsg);
 		extraOut.Length.AssertEqual(0);
 	}
 

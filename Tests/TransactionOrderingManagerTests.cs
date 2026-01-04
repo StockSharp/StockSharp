@@ -127,6 +127,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var (toInner, toOut) = manager.ProcessInMessage(statusMsg);
 
 		toInner.Length.AssertEqual(1);
+		toInner[0].AssertSame(statusMsg);
 		toOut.Length.AssertEqual(0);
 	}
 
@@ -145,6 +146,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var (toInner, toOut) = manager.ProcessInMessage(statusMsg);
 
 		toInner.Length.AssertEqual(1);
+		toInner[0].AssertSame(statusMsg);
 		toOut.Length.AssertEqual(0);
 	}
 
@@ -170,8 +172,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 
 		var (forward, extraOut, processSuspended) = manager.ProcessOutMessage(errorResponse);
 
-		forward.AssertNotNull();
-		forward.Type.AssertEqual(MessageTypes.SubscriptionResponse);
+		forward.AssertSame(errorResponse);
 		extraOut.Length.AssertEqual(0);
 		processSuspended.AssertFalse();
 	}
@@ -192,7 +193,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 
 		var (forward, extraOut, processSuspended) = manager.ProcessOutMessage(execMsg);
 
-		forward.AssertNotNull();
+		forward.AssertSame(execMsg);
 		processSuspended.AssertFalse();
 	}
 
@@ -212,7 +213,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 
 		var (forward, extraOut, processSuspended) = manager.ProcessOutMessage(execMsg);
 
-		forward.AssertNotNull();
+		forward.AssertSame(execMsg);
 		processSuspended.AssertFalse();
 	}
 
@@ -246,7 +247,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 
 		var (forward, extraOut, processSuspended) = manager.ProcessOutMessage(execMsg);
 
-		forward.AssertNotNull();
+		forward.AssertSame(execMsg);
 		processSuspended.AssertTrue();
 	}
 

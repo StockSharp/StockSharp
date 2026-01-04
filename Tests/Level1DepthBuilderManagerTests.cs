@@ -63,7 +63,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 		var l1 = CreateBestBidAsk(secId, DateTime.UtcNow, [1], bidPrice: 100, askPrice: 101);
 		var (forward, extraOut) = manager.ProcessOutMessage(l1);
 
-		forward.AssertNotNull();
+		forward.AssertSame(l1);
 		extraOut.Length.AssertEqual(0);
 	}
 
@@ -299,6 +299,10 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 		var l1First = CreateBestBidAsk(secId, now, [1], bidPrice: 100, askPrice: 101, bidVolume: 10, askVolume: 20);
 		var (_, extraOut1) = manager.ProcessOutMessage(l1First);
 		extraOut1.Length.AssertEqual(1);
+		var book1 = (QuoteChangeMessage)extraOut1[0];
+		book1.SecurityId.AssertEqual(secId);
+		book1.Bids[0].Price.AssertEqual(100m);
+		book1.Asks[0].Price.AssertEqual(101m);
 
 		// Same values again - should not produce a book
 		var l1Second = CreateBestBidAsk(secId, now.AddSeconds(1), [1], bidPrice: 100, askPrice: 101, bidVolume: 10, askVolume: 20);
@@ -307,7 +311,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 		// No book should be generated for duplicate values
 		extraOut2.Length.AssertEqual(0);
 		// Level1 should still be forwarded (duplicates don't affect forwarding)
-		forward.AssertNotNull();
+		forward.AssertSame(l1Second);
 	}
 
 	[TestMethod]
@@ -376,7 +380,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 		var l1 = CreateBestBidAsk(secId, DateTime.UtcNow, [1], bidPrice: 100, askPrice: 101);
 		var (forward, extraOut) = manager.ProcessOutMessage(l1);
 
-		forward.AssertNotNull();
+		forward.AssertSame(l1);
 		extraOut.Length.AssertEqual(0);
 	}
 
@@ -409,7 +413,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 		var l1 = CreateBestBidAsk(secId, DateTime.UtcNow, [1], bidPrice: 100, askPrice: 101);
 		var (forward, extraOut) = manager.ProcessOutMessage(l1);
 
-		forward.AssertNotNull();
+		forward.AssertSame(l1);
 		extraOut.Length.AssertEqual(0);
 	}
 
@@ -444,6 +448,14 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 
 		forward.AssertNull();
 		extraOut.Length.AssertEqual(1);
+
+		var book = (QuoteChangeMessage)extraOut[0];
+		book.SecurityId.AssertEqual(secId);
+		book.GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();
+		book.Bids.Length.AssertEqual(1);
+		book.Bids[0].Price.AssertEqual(100m);
+		book.Asks.Length.AssertEqual(1);
+		book.Asks[0].Price.AssertEqual(101m);
 	}
 
 	[TestMethod]
@@ -505,22 +517,25 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 		});
 
 		// Unsubscribe
-		var (toInner, toOut) = manager.ProcessInMessage(new MarketDataMessage
+		var unsubscribe = new MarketDataMessage
 		{
 			IsSubscribe = false,
 			OriginalTransactionId = 1,
 			SecurityId = secId,
 			DataType2 = DataType.MarketDepth,
-		});
+		};
+		var (toInner, toOut) = manager.ProcessInMessage(unsubscribe);
 
 		toInner.Length.AssertEqual(1);
+		toInner[0].Type.AssertEqual(MessageTypes.MarketData);
+		((MarketDataMessage)toInner[0]).IsSubscribe.AssertFalse();
 		toOut.Length.AssertEqual(0);
 
 		// Now Level1 should not produce a book
 		var l1 = CreateBestBidAsk(secId, DateTime.UtcNow, [1], bidPrice: 100, askPrice: 101);
 		var (forward, extraOut) = manager.ProcessOutMessage(l1);
 
-		forward.AssertNotNull();
+		forward.AssertSame(l1);
 		extraOut.Length.AssertEqual(0);
 	}
 

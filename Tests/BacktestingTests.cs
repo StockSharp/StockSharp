@@ -39,8 +39,8 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
 
 		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
 		{
@@ -55,10 +55,11 @@ public class BacktestingTests : BaseTestClass
 
 		var strategy = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -109,8 +110,8 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
 
 		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
 		{
@@ -125,10 +126,11 @@ public class BacktestingTests : BaseTestClass
 
 		var strategy = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -179,8 +181,8 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
 
 		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
 		{
@@ -195,10 +197,11 @@ public class BacktestingTests : BaseTestClass
 
 		var strategy = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -253,8 +256,8 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
 
 		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
 		{
@@ -269,10 +272,11 @@ public class BacktestingTests : BaseTestClass
 
 		var strategy = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -326,8 +330,8 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
 
 		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
 		{
@@ -342,10 +346,11 @@ public class BacktestingTests : BaseTestClass
 
 		var strategy = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -395,8 +400,8 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
 
 		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
 		{
@@ -414,10 +419,11 @@ public class BacktestingTests : BaseTestClass
 
 		var strategy = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -472,8 +478,8 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 7); // Short period for faster test
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6); // Short period for faster test
 
 		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
 		{
@@ -486,10 +492,11 @@ public class BacktestingTests : BaseTestClass
 
 		var strategy = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -534,8 +541,8 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
 
 		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
 		{
@@ -554,10 +561,11 @@ public class BacktestingTests : BaseTestClass
 
 		var strategy = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -606,8 +614,8 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
 
 		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
 		{
@@ -620,10 +628,11 @@ public class BacktestingTests : BaseTestClass
 
 		var strategy = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -701,15 +710,7 @@ public class BacktestingTests : BaseTestClass
 	public async Task BacktestWithMultipleSecurities()
 	{
 		var security1 = CreateTestSecurity();
-		var security2 = new Security
-		{
-			Id = "GAZP@TQBR",
-			Code = "GAZP",
-			Name = "Gazprom",
-			PriceStep = 0.01m,
-			VolumeStep = 1,
-			Board = ExchangeBoard.MicexTqbr,
-		};
+		var security2 = new Security { Id = Paths.HistoryDefaultSecurity2 };
 
 		var portfolio = CreateTestPortfolio();
 
@@ -717,8 +718,8 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 15);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(14);
 
 		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
 		{
@@ -733,20 +734,22 @@ public class BacktestingTests : BaseTestClass
 
 		var strategy1 = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security1,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
 
 		var strategy2 = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security2,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -755,7 +758,11 @@ public class BacktestingTests : BaseTestClass
 		connector.StateChanged2 += state =>
 		{
 			if (state == ChannelStates.Stopped)
+			{
+				strategy1.Stop();
+				strategy2.Stop();
 				tcs.TrySetResult(true);
+			}
 		};
 
 		connector.Connected += () =>
@@ -794,8 +801,8 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		var startTime = new DateTime(2020, 4, 1);
-		var stopTime = new DateTime(2020, 4, 30);
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
 
 		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
 		{
@@ -810,10 +817,11 @@ public class BacktestingTests : BaseTestClass
 
 		var strategy = new SmaStrategy
 		{
+			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
 		};
@@ -861,7 +869,7 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.OwnTradeReceived += (sub, trade) =>
 		{
-			var time = trade.Trade.Time;
+			var time = new DateTimeOffset(trade.Trade.ServerTime);
 			lock (syncLock)
 			{
 				// Check within trade events
@@ -910,7 +918,7 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.PositionReceived += (s, pos) =>
 		{
-			var time = pos.LastChangeTime ?? DateTimeOffset.MinValue;
+			var time = pos.ServerTime != default ? new DateTimeOffset(pos.ServerTime) : DateTimeOffset.MinValue;
 			if (time == DateTimeOffset.MinValue)
 				return;
 

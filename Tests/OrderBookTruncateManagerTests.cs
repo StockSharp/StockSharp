@@ -411,7 +411,6 @@ public class OrderBookTruncateManagerTests : BaseTestClass
 		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
 
 		// Original should keep untracked id
-		forward.AssertNotNull();
 		forward.AssertSame(snapshot);
 		((QuoteChangeMessage)forward).GetSubscriptionIds().SequenceEqual([99L]).AssertTrue();
 

@@ -14,6 +14,7 @@ public static class BaseExporterExtensions
 	/// <param name="values">Value.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Count and last time.</returns>
+	[Obsolete("Use Export(IAsyncEnumerable<object>, CancellationToken) method.")]
 	public static Task<(int, DateTime?)> Export(this BaseExporter exporter, IEnumerable values, CancellationToken cancellationToken)
 	{
 		if (values == null)

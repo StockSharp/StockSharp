@@ -26,6 +26,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 
 		var (toInner, toOut) = await manager.ProcessInMessageAsync(first, token);
 		toInner.Length.AssertEqual(1);
+		toInner[0].AssertSame(first);
 		toOut.Length.AssertEqual(0);
 
 		var second = new MarketDataMessage

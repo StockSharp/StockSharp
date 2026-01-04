@@ -69,7 +69,7 @@ public class ImportTests : BaseTestClass
 		// Export to memory file system
 		using (var stream = fs.OpenWrite(filePath))
 		{
-			var (count, lastTime) = await new TextExporter(dataType, stream, template, null).Export(arr, token);
+			var (count, lastTime) = await new TextExporter(dataType, stream, template, null).Export(arr.ToAsyncEnumerable(), token);
 
 			count.AssertEqual(exportCnt.Value);
 
@@ -501,7 +501,7 @@ public class ImportTests : BaseTestClass
 		var filePath = fs.GetSubTemp("ticks_progress_import.csv");
 
 		using (var stream = fs.OpenWrite(filePath))
-			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
+			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr.ToAsyncEnumerable(), CancellationToken);
 
 		var storage = fs.GetStorage(fs.GetSubTemp());
 
@@ -565,7 +565,7 @@ public class ImportTests : BaseTestClass
 		var filePath = fs.GetSubTemp("ticks_cancel_import.csv");
 
 		using (var stream = fs.OpenWrite(filePath))
-			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
+			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr.ToAsyncEnumerable(), CancellationToken);
 
 		var storage = fs.GetStorage(fs.GetSubTemp());
 
@@ -619,7 +619,7 @@ public class ImportTests : BaseTestClass
 		var filePath = fs.GetSubTemp("ticks_error_import.csv");
 
 		using (var stream = fs.OpenWrite(filePath))
-			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr, CancellationToken);
+			await new TextExporter(DataType.Ticks, stream, _tickFullTemplate, null).Export(arr.ToAsyncEnumerable(), CancellationToken);
 
 		// Make one of the field orders invalid (beyond column count) to provoke parsing error
 		fields[0].Order = 9999;

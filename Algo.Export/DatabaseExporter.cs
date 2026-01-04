@@ -8,12 +8,12 @@ using Ecng.Data;
 /// <remarks>
 /// Initializes a new instance of the <see cref="DatabaseExporter"/>.
 /// </remarks>
-/// <param name="priceStep">Minimum price step.</param>
-/// <param name="volumeStep">Minimum volume step.</param>
+/// <param name="dbProvider"><see cref="IDatabaseBatchInserterProvider"/></param>
 /// <param name="dataType">Data type info.</param>
 /// <param name="connection">The connection to DB.</param>
-/// <param name="dbProvider"><see cref="IDatabaseBatchInserterProvider"/></param>
-public class DatabaseExporter(decimal? priceStep, decimal? volumeStep, DataType dataType, DatabaseConnectionPair connection, IDatabaseBatchInserterProvider dbProvider) : BaseExporter(dataType)
+/// <param name="priceStep">Minimum price step.</param>
+/// <param name="volumeStep">Minimum volume step.</param>
+public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataType dataType, DatabaseConnectionPair connection, decimal? priceStep = null, decimal? volumeStep = null) : BaseExporter(dataType)
 {
 	private readonly DatabaseConnectionPair _connection = connection ?? throw new ArgumentNullException(nameof(connection));
 	private readonly IDatabaseBatchInserterProvider _dbProvider = dbProvider ?? throw new ArgumentNullException(nameof(dbProvider));
