@@ -73,14 +73,9 @@ public static class StrategyParamHelper
 			throw new InvalidOperationException($"Parameter '{param.Id}' cannot be optimized. Set CanOptimize to true.");
 
 		// Check for explicit values first (for Security, DataType, etc.)
-		var explicitValues = param.OptimizeValues;
-		if (explicitValues is not null)
-		{
-			var arr = explicitValues.Cast<object>().ToArray();
-			if (arr.Length == 0)
-				throw new InvalidOperationException($"Parameter '{param.Id}' has empty OptimizeValues.");
-			return RandomGen.GetElement(arr);
-		}
+		var explicitValues = param.OptimizeValues.Cast<object>().ToArray();
+		if (explicitValues.Length > 0)
+			return RandomGen.GetElement(explicitValues);
 
 		if (param.OptimizeFrom == null || param.OptimizeTo == null)
 			throw new InvalidOperationException($"Parameter '{param.Id}' optimization range is not set. Use SetOptimize or SetOptimizeValues method.");
@@ -199,12 +194,9 @@ public static class StrategyParamHelper
 			return 1;
 
 		// Check for explicit values first (for Security, DataType, etc.)
-		var explicitValues = param.OptimizeValues;
-		if (explicitValues is not null)
-		{
-			var count = explicitValues.Cast<object>().Count();
-			return count > 0 ? count : 1;
-		}
+		var explicitValues = param.OptimizeValues.Cast<object>().ToArray();
+		if (explicitValues.Length > 0)
+			return explicitValues.Length;
 
 		var from = param.OptimizeFrom;
 		var to = param.OptimizeTo;
@@ -269,8 +261,8 @@ public static class StrategyParamHelper
 		}
 
 		// Check for explicit values first (for Security, DataType, etc.)
-		var explicitValues = param.OptimizeValues;
-		if (explicitValues is not null)
+		var explicitValues = param.OptimizeValues.Cast<object>().ToArray();
+		if (explicitValues.Length > 0)
 		{
 			foreach (var v in explicitValues)
 				yield return v;
