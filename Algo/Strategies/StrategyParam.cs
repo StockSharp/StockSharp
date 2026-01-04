@@ -39,6 +39,11 @@ public interface IStrategyParam : IPersistable, INotifyPropertyChanged, IAttribu
 	/// The Increment value at optimization.
 	/// </summary>
 	object OptimizeStep { get; set; }
+
+	/// <summary>
+	/// Explicit values for optimization (for types like Security, DataType that don't support ranges).
+	/// </summary>
+	IEnumerable OptimizeValues { get; set; }
 }
 
 /// <summary>
@@ -47,7 +52,7 @@ public interface IStrategyParam : IPersistable, INotifyPropertyChanged, IAttribu
 /// <typeparam name="T">The type of the parameter value.</typeparam>
 public class StrategyParam<T> : NotifiableObject, IStrategyParam
 {
-	private readonly IEqualityComparer<T> _comparer;
+	private readonly EqualityComparer<T> _comparer;
 	private static readonly Type _valueType = typeof(T).GetUnderlyingType() ?? typeof(T);
 	private static readonly bool _isNullable = Nullable.GetUnderlyingType(typeof(T)) != null;
 
@@ -111,6 +116,23 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <inheritdoc />
 	public object OptimizeStep { get; set; }
 
+	private T[] _optimizeValues = [];
+
+	/// <summary>
+	/// Explicit values for optimization (for types like Security, DataType that don't support ranges).
+	/// </summary>
+	public IEnumerable<T> OptimizeValues
+	{
+		get => _optimizeValues;
+		set => _optimizeValues = value?.ToArray() ?? throw new ArgumentNullException(nameof(value));
+	}
+
+	IEnumerable IStrategyParam.OptimizeValues
+	{
+		get => OptimizeValues;
+		set => OptimizeValues = (IEnumerable<T>)value;
+	}
+
 	/// <inheritdoc />
 	public IList<Attribute> Attributes { get; } = [];
 
@@ -127,6 +149,17 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 		OptimizeTo = optimizeTo;
 		OptimizeStep = optimizeStep;
 
+		return this;
+	}
+
+	/// <summary>
+	/// Set explicit values for optimization (for types like Security, DataType).
+	/// </summary>
+	/// <param name="values">The values to iterate during optimization.</param>
+	/// <returns>The strategy parameter.</returns>
+	public StrategyParam<T> SetOptimizeValues(IEnumerable<T> values)
+	{
+		OptimizeValues = values ?? throw new ArgumentNullException(nameof(values));
 		return this;
 	}
 

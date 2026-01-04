@@ -1,5 +1,7 @@
 namespace StockSharp.Tests;
 
+using System.Collections;
+
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Optimization;
 using StockSharp.Designer;
@@ -7,19 +9,9 @@ using StockSharp.Designer;
 [TestClass]
 public class OptimizerTests : BaseTestClass
 {
-	private const string _historyPath = "../../../../StockSharp.Samples.HistoryData/";
-
 	private static Security CreateTestSecurity()
 	{
-		return new Security
-		{
-			Id = "SBER@TQBR",
-			Code = "SBER",
-			Name = "Sberbank",
-			PriceStep = 0.01m,
-			VolumeStep = 1,
-			Board = ExchangeBoard.MicexTqbr,
-		};
+		return new() { Id = Paths.HistoryDefaultSecurity };
 	}
 
 	private static Portfolio CreateTestPortfolio()
@@ -30,7 +22,7 @@ public class OptimizerTests : BaseTestClass
 	private static IStorageRegistry GetHistoryStorage()
 	{
 		var fs = Helper.FileSystem;
-		return fs.GetStorage(_historyPath);
+		return fs.GetStorage(Paths.HistoryDataPath);
 	}
 
 	/// <summary>
@@ -440,7 +432,7 @@ public class OptimizerTests : BaseTestClass
 
 		// Use fitness function based on PnL
 		// Parameters format: (param, from, to, step, values)
-		var geneticParams = new (IStrategyParam param, object from, object to, object step, System.Collections.IEnumerable values)[]
+		var geneticParams = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
 		{
 			(shortParam, 20, 40, 5, null),
 			(longParam, 60, 100, 10, null),
@@ -504,7 +496,7 @@ public class OptimizerTests : BaseTestClass
 
 		optimizer.EmulationSettings.MaxIterations = 5;
 
-		var geneticParams = new (IStrategyParam param, object from, object to, object step, System.Collections.IEnumerable values)[]
+		var geneticParams = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
 		{
 			(shortParam, 20, 40, 5, null),
 			(longParam, 60, 100, 10, null),
@@ -568,7 +560,7 @@ public class OptimizerTests : BaseTestClass
 		// Many iterations so we can stop mid-run
 		optimizer.EmulationSettings.MaxIterations = 100;
 
-		var geneticParams = new (IStrategyParam param, object from, object to, object step, System.Collections.IEnumerable values)[]
+		var geneticParams = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
 		{
 			(shortParam, 20, 40, 5, null),
 			(longParam, 60, 100, 10, null),

@@ -261,7 +261,7 @@ public class StorageCsvRegistryTests : BaseTestClass
 
 		var exchanges1 = (ICsvEntityList)registry1.Exchanges;
 		IsTrue(fs.FileExists(exchanges1.FileName), $"Expected file '{exchanges1.FileName}' to exist.");
-		IsTrue(fs.ReadAllBytes(exchanges1.FileName).Length > 0, $"Expected file '{exchanges1.FileName}' to be non-empty.");
+		IsTrue(fs.GetFileLength(exchanges1.FileName) > 0, $"Expected file '{exchanges1.FileName}' to be non-empty.");
 
 		// Create new registry instance to test loading
 		var registry2 = new CsvEntityRegistry(fs, path, executor);

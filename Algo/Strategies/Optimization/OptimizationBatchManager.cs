@@ -44,6 +44,13 @@ public interface IOptimizationBatchManager
 	/// <param name="batchSize">Batch size.</param>
 	/// <param name="totalIterations">Total iterations count.</param>
 	void Reset(int batchSize, int totalIterations);
+
+	/// <summary>
+	/// Try to reserve a slot for a new iteration.
+	/// </summary>
+	/// <param name="iterationId">Output: new iteration ID if reserved.</param>
+	/// <returns>True if slot was reserved.</returns>
+	bool TryReserveSlot(out Guid iterationId);
 }
 
 /// <summary>

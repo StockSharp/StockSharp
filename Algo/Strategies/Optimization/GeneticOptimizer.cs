@@ -301,7 +301,7 @@ public class GeneticOptimizer : BaseOptimizer
 			var param = t.param;
 			var values = t.values?.Cast<object>().ToArray();
 
-			if (values?.Any() == true)
+			if (values?.Length > 0)
 				return (param, () => RandomGen.GetElement(values));
 
 			var from = t.from ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(param.Id, LocalizedStrings.From));

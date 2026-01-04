@@ -387,4 +387,116 @@ public class StrategyParamHelperTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Float/Double Ranges
+
+	[TestMethod]
+	public void GetIterationsCount_FloatRange()
+	{
+		var param = new StrategyParam<float>("test");
+		param.SetOptimize(1.0f, 2.0f, 0.5f);
+
+		var count = param.GetIterationsCount();
+
+		AreEqual(3, count); // 1.0, 1.5, 2.0
+	}
+
+	[TestMethod]
+	public void GetIterationsCount_DoubleRange()
+	{
+		var param = new StrategyParam<double>("test");
+		param.SetOptimize(0.1, 0.5, 0.1);
+
+		var count = param.GetIterationsCount();
+
+		AreEqual(5, count); // 0.1, 0.2, 0.3, 0.4, 0.5
+	}
+
+	[TestMethod]
+	public void GetRandom_FloatRange()
+	{
+		var param = new StrategyParam<float>("test");
+		param.SetOptimize(1.0f, 10.0f, 0.5f);
+
+		for (var i = 0; i < 100; i++)
+		{
+			var value = param.GetRandom();
+			IsInRange(value, 1.0f, 10.0f);
+		}
+	}
+
+	[TestMethod]
+	public void GetRandom_DoubleRange()
+	{
+		var param = new StrategyParam<double>("test");
+		param.SetOptimize(0.0, 1.0, 0.1);
+
+		for (var i = 0; i < 100; i++)
+		{
+			var value = param.GetRandom();
+			IsInRange(value, 0.0, 1.0);
+		}
+	}
+
+	#endregion
+
+	#region DataType Explicit Values
+
+	[TestMethod]
+	public void CanOptimize_DataType()
+	{
+		IsTrue(typeof(DataType).CanOptimize());
+	}
+
+	[TestMethod]
+	public void GetIterationsCount_DataTypeWithExplicitValues()
+	{
+		var param = new StrategyParam<DataType>("test");
+		param.SetOptimizeValues([DataType.Ticks, DataType.Level1, DataType.MarketDepth]);
+
+		var count = param.GetIterationsCount();
+
+		AreEqual(3, count);
+	}
+
+	[TestMethod]
+	public void GetOptimizationValues_DataTypeExplicit()
+	{
+		var param = new StrategyParam<DataType>("test");
+		param.SetOptimizeValues([DataType.Ticks, DataType.Level1]);
+
+		var values = param.GetOptimizationValues().Cast<DataType>().ToArray();
+
+		AreEqual(2, values.Length);
+		AreEqual(DataType.Ticks, values[0]);
+		AreEqual(DataType.Level1, values[1]);
+	}
+
+	[TestMethod]
+	public void GetRandom_DataTypeExplicit()
+	{
+		var param = new StrategyParam<DataType>("test");
+		var expected = new[] { DataType.Ticks, DataType.Level1, DataType.MarketDepth };
+		param.SetOptimizeValues(expected);
+
+		for (var i = 0; i < 50; i++)
+		{
+			var value = param.GetRandom();
+			IsTrue(expected.Contains(value));
+		}
+	}
+
+	[TestMethod]
+	public void GetIterationsCount_NoExplicitValues_Returns1()
+	{
+		var param = new StrategyParam<DataType>("test");
+		param.CanOptimize = true;
+		// No OptimizeValues, no From/To - should return 1
+
+		var count = param.GetIterationsCount();
+
+		AreEqual(1, count);
+	}
+
+	#endregion
 }

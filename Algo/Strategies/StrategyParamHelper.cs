@@ -72,8 +72,18 @@ public static class StrategyParamHelper
 		if (!param.CanOptimize)
 			throw new InvalidOperationException($"Parameter '{param.Id}' cannot be optimized. Set CanOptimize to true.");
 
+		// Check for explicit values first (for Security, DataType, etc.)
+		var explicitValues = param.OptimizeValues;
+		if (explicitValues is not null)
+		{
+			var arr = explicitValues.Cast<object>().ToArray();
+			if (arr.Length == 0)
+				throw new InvalidOperationException($"Parameter '{param.Id}' has empty OptimizeValues.");
+			return RandomGen.GetElement(arr);
+		}
+
 		if (param.OptimizeFrom == null || param.OptimizeTo == null)
-			throw new InvalidOperationException($"Parameter '{param.Id}' optimization range is not set. Use SetOptimize method to configure optimization range.");
+			throw new InvalidOperationException($"Parameter '{param.Id}' optimization range is not set. Use SetOptimize or SetOptimizeValues method.");
 
 		var type = param.Type.GetUnderlyingType() ?? param.Type;
 
@@ -188,6 +198,14 @@ public static class StrategyParamHelper
 		if (!param.CanOptimize)
 			return 1;
 
+		// Check for explicit values first (for Security, DataType, etc.)
+		var explicitValues = param.OptimizeValues;
+		if (explicitValues is not null)
+		{
+			var count = explicitValues.Cast<object>().Count();
+			return count > 0 ? count : 1;
+		}
+
 		var from = param.OptimizeFrom;
 		var to = param.OptimizeTo;
 		var step = param.OptimizeStep;
@@ -247,6 +265,15 @@ public static class StrategyParamHelper
 		if (!param.CanOptimize)
 		{
 			yield return param.Value;
+			yield break;
+		}
+
+		// Check for explicit values first (for Security, DataType, etc.)
+		var explicitValues = param.OptimizeValues;
+		if (explicitValues is not null)
+		{
+			foreach (var v in explicitValues)
+				yield return v;
 			yield break;
 		}
 
@@ -467,6 +494,110 @@ public static class StrategyParamHelper
 	}
 
 	/// <summary>
+	/// Generate all strategy clones with parameter permutations for brute force optimization.
+	/// Supports explicit value lists for parameters like Security, DataType.
+	/// </summary>
+	/// <param name="strategy">The base strategy to clone.</param>
+	/// <param name="parameters">The parameters with optional explicit values to use instead of range.</param>
+	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
+	/// <param name="totalCount">Output: total number of iterations.</param>
+	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	public static IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForce(
+		this Strategy strategy,
+		IEnumerable<(IStrategyParam param, IEnumerable values)> parameters,
+		out IStrategyParam[] optimizedParams,
+		out int totalCount)
+	{
+		if (strategy is null)
+			throw new ArgumentNullException(nameof(strategy));
+
+		if (parameters is null)
+			throw new ArgumentNullException(nameof(parameters));
+
+		var paramArr = parameters.ToArray();
+
+		if (paramArr.Length == 0)
+			throw new ArgumentOutOfRangeException(nameof(parameters), "No optimization parameters.");
+
+		var singleParams = new List<IStrategyParam>();
+		var optimizeDict = new Dictionary<string, (IStrategyParam param, IEnumerable<object> values, int iterCount)>();
+
+		foreach (var (param, explicitValues) in paramArr)
+		{
+			if (!param.CanOptimize)
+			{
+				singleParams.Add(param);
+				continue;
+			}
+
+			IEnumerable<object> values;
+			int iterCount;
+
+			if (explicitValues?.Cast<object>().Any() == true)
+			{
+				// Use explicit values (for Security, DataType, etc.)
+				values = explicitValues.Cast<object>();
+				iterCount = values.Count();
+			}
+			else
+			{
+				// Use range from/to/step
+				iterCount = param.GetIterationsCount();
+				values = param.GetOptimizationValues();
+			}
+
+			if (iterCount == 0)
+				continue;
+			else if (iterCount == 1)
+			{
+				singleParams.Add(param);
+				continue;
+			}
+			else
+				optimizeDict[param.Id] = (param, values, iterCount);
+		}
+
+		if (optimizeDict.IsEmpty() && singleParams.IsEmpty())
+			throw new ArgumentException("No any params for optimize.", nameof(parameters));
+
+		totalCount = optimizeDict.Aggregate(1, (c, p) => c * p.Value.iterCount);
+		optimizedParams = [.. singleParams.Concat(optimizeDict.Values.Select(p => p.param)).Distinct()];
+
+		IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _()
+		{
+			if (optimizeDict.IsEmpty())
+			{
+				if (singleParams.IsEmpty())
+					throw new InvalidOperationException("singleParams empty");
+
+				yield return (strategy, singleParams.ToArray());
+				yield break;
+			}
+
+			foreach (var combination in GetParameterCombinations(optimizeDict))
+			{
+				Strategy iter;
+
+				using (new Scope<StrategyContext>(new() { ExcludeUI = true }))
+					iter = strategy.Clone();
+
+				var resultParams = new List<IStrategyParam>();
+
+				foreach (var (id, value) in combination)
+				{
+					var clonedParam = iter.Parameters[id];
+					clonedParam.Value = value;
+					resultParams.Add(clonedParam);
+				}
+
+				yield return (iter, resultParams.ToArray());
+			}
+		}
+
+		return _();
+	}
+
+	/// <summary>
 	/// Generate all strategy clones with random parameter values for brute force optimization.
 	/// </summary>
 	/// <param name="strategy">The base strategy to clone.</param>
@@ -632,15 +763,20 @@ public static class StrategyParamHelper
 			if (!param.CanOptimize)
 				continue;
 
+			// Check for explicit values first
+			var explicitValues = param.OptimizeValues;
+			if (explicitValues?.Cast<object>().Any() == true)
+			{
+				result.Add((param, null, null, param.OptimizeStep, explicitValues));
+				continue;
+			}
+
 			var from = param.OptimizeFrom;
 			var to = param.OptimizeTo;
 			var step = param.OptimizeStep;
 
 			if (from is null || to is null)
-			{
-				// Single value - skip or add as fixed
 				continue;
-			}
 
 			result.Add((param, from, to, step, null));
 		}

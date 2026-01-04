@@ -10,19 +10,9 @@ using StockSharp.Designer;
 [TestClass]
 public class BacktestingTests : BaseTestClass
 {
-	private const string _historyPath = "../../../../StockSharp.Samples.HistoryData/";
-
 	private static Security CreateTestSecurity()
 	{
-		return new Security
-		{
-			Id = "SBER@TQBR",
-			Code = "SBER",
-			Name = "Sberbank",
-			PriceStep = 0.01m,
-			VolumeStep = 1,
-			Board = ExchangeBoard.MicexTqbr,
-		};
+		return new() { Id = Paths.HistoryDefaultSecurity };
 	}
 
 	private static Portfolio CreateTestPortfolio()
@@ -33,7 +23,7 @@ public class BacktestingTests : BaseTestClass
 	private static IStorageRegistry GetHistoryStorage()
 	{
 		var fs = Helper.FileSystem;
-		return fs.GetStorage(_historyPath);
+		return fs.GetStorage(Paths.HistoryDataPath);
 	}
 
 	/// <summary>

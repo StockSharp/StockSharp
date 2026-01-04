@@ -72,15 +72,26 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	private bool _cancelEmulation;
 	private bool _allIterationsStarted;
 
+	private IOptimizationBatchManager _batchManager = new OptimizationBatchManager();
+	private IOptimizationProgressTracker _progressTracker = new OptimizationProgressTracker();
+
 	/// <summary>
 	/// Batch manager for concurrent iteration control.
 	/// </summary>
-	protected readonly OptimizationBatchManager BatchManager = new();
+	public IOptimizationBatchManager BatchManager
+	{
+		get => _batchManager;
+		set => _batchManager = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
 	/// <summary>
 	/// Progress tracker.
 	/// </summary>
-	protected readonly OptimizationProgressTracker ProgressTracker = new();
+	public IOptimizationProgressTracker ProgressTracker
+	{
+		get => _progressTracker;
+		set => _progressTracker = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BaseOptimizer"/>.
