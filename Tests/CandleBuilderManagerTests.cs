@@ -134,7 +134,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 		manager.Verify(m => m.ProcessOutMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()), Times.Once);
 	}
 
-	private CandleBuilderManager CreateManager(out TestWrapper wrapper, out IncrementalIdGenerator idGenerator)
+	private static CandleBuilderManager CreateManager(out TestWrapper wrapper, out IncrementalIdGenerator idGenerator)
 	{
 		var inner = new TestInnerAdapter([DataType.Ticks]);
 		var logReceiver = new TestReceiver();
