@@ -1594,7 +1594,12 @@ public class CandleBuilderTests : BaseTestClass
 
 		public decimal MedianPrice => Prices.Count == 0 ? 0 : Prices.OrderBy(p => p).ElementAt(Prices.Count / 2);
 
-		public override Message Clone() => CopyTo(new MedianPriceCandleMessage());
+		public override Message Clone()
+		{
+			var clone = (MedianPriceCandleMessage)CopyTo(new MedianPriceCandleMessage());
+			clone.Prices.AddRange(Prices);
+			return clone;
+		}
 	}
 
 	/// <summary>
@@ -1606,7 +1611,7 @@ public class CandleBuilderTests : BaseTestClass
 		{
 			var time = transform.Time;
 
-			return FirstInitCandle(subscription, new()
+			var candle = FirstInitCandle(subscription, new()
 			{
 				TypedArg = subscription.Message.GetArg<int>(),
 				OpenTime = time,
@@ -1614,6 +1619,11 @@ public class CandleBuilderTests : BaseTestClass
 				HighTime = time,
 				LowTime = time,
 			}, transform);
+
+			// FirstInitCandle doesn't call UpdateCandle, so add the first price manually
+			candle.Prices.Add(transform.Price);
+
+			return candle;
 		}
 
 		protected override bool IsCandleFinishedBeforeChange(ICandleBuilderSubscription subscription, MedianPriceCandleMessage candle, ICandleBuilderValueTransform transform)
@@ -1662,9 +1672,10 @@ public class CandleBuilderTests : BaseTestClass
 		var candles = new List<CandleMessage>();
 		var time = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
-		// Send 5 ticks with prices: 100, 110, 90, 105, 95
-		// Sorted: 90, 95, 100, 105, 110 -> median = 100
-		decimal[] prices = [100m, 110m, 90m, 105m, 95m];
+		// Send 6 ticks with prices: 100, 110, 90, 105, 95, 200
+		// First 5 ticks form finished candle, 6th tick triggers finish check
+		// Sorted first 5: 90, 95, 100, 105, 110 -> median = 100
+		decimal[] prices = [100m, 110m, 90m, 105m, 95m, 200m];
 
 		for (int i = 0; i < prices.Length; i++)
 		{
@@ -1678,11 +1689,17 @@ public class CandleBuilderTests : BaseTestClass
 			candles.AddRange(result);
 		}
 
-		// Should have finished candle
-		var finishedCandles = candles.Where(c => c.State == CandleStates.Finished).ToList();
-		finishedCandles.Count.AssertEqual(1);
+		// Should have finished candle (finished when 6th tick arrives)
+		// Note: builder.Process yields same object multiple times, so we group by OpenTime to get unique candles
+		var uniqueFinished = candles
+			.Where(c => c.State == CandleStates.Finished)
+			.GroupBy(c => c.OpenTime)
+			.Select(g => g.Last())
+			.ToList();
 
-		var candle = finishedCandles[0] as MedianPriceCandleMessage;
+		uniqueFinished.Count.AssertEqual(1);
+
+		var candle = uniqueFinished[0] as MedianPriceCandleMessage;
 		IsNotNull(candle);
 		candle.TotalTicks.AssertEqual(5);
 		candle.MedianPrice.AssertEqual(100m);
@@ -1733,16 +1750,23 @@ public class CandleBuilderTests : BaseTestClass
 			candles.AddRange(result);
 		}
 
-		var finishedCandles = candles.Where(c => c.State == CandleStates.Finished).ToList();
-		finishedCandles.Count.AssertEqual(2);
+		// Note: builder.Process yields same object multiple times, so we group by OpenTime to get unique candles
+		var uniqueFinished = candles
+			.Where(c => c.State == CandleStates.Finished)
+			.GroupBy(c => c.OpenTime)
+			.Select(g => g.Last())
+			.OrderBy(c => c.OpenTime)
+			.ToList();
+
+		uniqueFinished.Count.AssertEqual(2);
 
 		// First candle: prices 100, 101, 102 -> median = 101
-		var first = finishedCandles[0] as MedianPriceCandleMessage;
+		var first = uniqueFinished[0] as MedianPriceCandleMessage;
 		IsNotNull(first);
 		first.MedianPrice.AssertEqual(101m);
 
 		// Second candle: prices 103, 104, 105 -> median = 104
-		var second = finishedCandles[1] as MedianPriceCandleMessage;
+		var second = uniqueFinished[1] as MedianPriceCandleMessage;
 		IsNotNull(second);
 		second.MedianPrice.AssertEqual(104m);
 

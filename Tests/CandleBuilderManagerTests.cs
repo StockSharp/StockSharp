@@ -322,12 +322,12 @@ public class CandleBuilderManagerTests : BaseTestClass
 
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(errorResponse, CancellationToken);
 
-		// Error should be forwarded as-is since there's no fallback available
-		forward.AssertSame(errorResponse);
-		var response = (SubscriptionResponseMessage)forward;
+		// Manager consumes the message and outputs result via extraOut
+		forward.AssertNull();
+		extraOut.Length.AssertEqual(1);
+		var response = (SubscriptionResponseMessage)extraOut[0];
 		response.OriginalTransactionId.AssertEqual(1);
 		response.Error.AssertNotNull();
-		extraOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -362,12 +362,12 @@ public class CandleBuilderManagerTests : BaseTestClass
 
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(finishedMsg, CancellationToken);
 
-		// Finished message should be forwarded, series is done
-		forward.AssertNotNull();
-		forward.Type.AssertEqual(MessageTypes.SubscriptionFinished);
-		var finished = (SubscriptionFinishedMessage)forward;
+		// Manager consumes the message and outputs result via extraOut
+		forward.AssertNull();
+		extraOut.Length.AssertEqual(1);
+		extraOut[0].Type.AssertEqual(MessageTypes.SubscriptionFinished);
+		var finished = (SubscriptionFinishedMessage)extraOut[0];
 		finished.OriginalTransactionId.AssertEqual(1);
-		extraOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
