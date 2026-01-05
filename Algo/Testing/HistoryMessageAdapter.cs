@@ -328,7 +328,7 @@ public class HistoryMessageAdapter : MessageAdapter
 				throw new ArgumentNullException(nameof(originalTransactionId));
 
 			_isChanged = true;
-			_actions.Add(((IMarketDataStorage)null, originalTransactionId));
+			_actions.Add((null, originalTransactionId));
 
 			_syncRoot.Set();
 		}
@@ -551,7 +551,7 @@ public class HistoryMessageAdapter : MessageAdapter
 
 	private async ValueTask EnqueueMessages(DateTime fromTime, DateTime toTime, DateTime curTime, IAsyncEnumerable<Message> messages, CancellationToken cancellationToken)
 	{
-		await foreach (var msg in messages)
+		await foreach (var msg in messages.WithEnforcedCancellation(cancellationToken))
 		{
 			if (_isChanged)
 				break;
@@ -589,25 +589,25 @@ public class HistoryMessageAdapter : MessageAdapter
 				var period = board.WorkingTime.GetPeriod(date);
 
 				return period == null || period.Times.Count == 0
-					       ? [(board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay))]
-					       : period.Times.Select(t => (board, ToUtc(board, t)));
+					? [(board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay))]
+					: period.Times.Select(t => (board, ranges: ToUtc(board, t)));
 			})
-			.OrderBy(i => i.Item2.Min)
+			.OrderBy(i => i.ranges.Min)
 			.ToList();
 
 		for (var i = 0; i < orderedRanges.Count - 1; )
 		{
-			if (orderedRanges[i].Item2.Contains(orderedRanges[i + 1].Item2))
+			if (orderedRanges[i].ranges.Contains(orderedRanges[i + 1].ranges))
 			{
 				orderedRanges.RemoveAt(i + 1);
 			}
-			else if (orderedRanges[i + 1].Item2.Contains(orderedRanges[i].Item2))
+			else if (orderedRanges[i + 1].ranges.Contains(orderedRanges[i].ranges))
 			{
 				orderedRanges.RemoveAt(i);
 			}
-			else if (orderedRanges[i].Item2.Intersect(orderedRanges[i + 1].Item2) != null)
+			else if (orderedRanges[i].ranges.Intersect(orderedRanges[i + 1].ranges) != null)
 			{
-				orderedRanges[i] = (orderedRanges[i].board, new Range<TimeSpan>(orderedRanges[i].Item2.Min, orderedRanges[i + 1].Item2.Max));
+				orderedRanges[i] = (orderedRanges[i].board, new Range<TimeSpan>(orderedRanges[i].ranges.Min, orderedRanges[i + 1].ranges.Max));
 				orderedRanges.RemoveAt(i + 1);
 			}
 			else
@@ -627,33 +627,6 @@ public class HistoryMessageAdapter : MessageAdapter
 
 		return new Range<TimeSpan>(utcMin.TimeOfDay, utcMax.TimeOfDay);
 	}
-
-	/*
-	private IEnumerable<TimeMessage> GetTimeLine(BoardMessage[] boards, DateTime date, TimeSpan interval)
-	{
-		var ranges = GetOrderedRanges(boards, date);
-		var lastTime = TimeSpan.Zero;
-
-		foreach (var range in ranges)
-		{
-			for (var time = range.Item2.Min; time <= range.Item2.Max; time += interval)
-			{
-				var serverTime = GetTime(date, time);
-
-				if (serverTime.Date < date.Date)
-					continue;
-
-				lastTime = serverTime.TimeOfDay;
-				yield return new TimeMessage { ServerTime = serverTime };
-			}
-		}
-
-		foreach (var m in GetPostTradeTimeMessages(date, lastTime, interval))
-		{
-			yield return m;
-		}
-	}
-	*/
 
 	private IEnumerable<TimeMessage> GetSimpleTimeLine(BoardMessage[] boards, DateTime date, TimeSpan interval)
 	{
