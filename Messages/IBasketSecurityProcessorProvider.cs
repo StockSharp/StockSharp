@@ -6,6 +6,11 @@ namespace StockSharp.Messages;
 public interface IBasketSecurityProcessorProvider
 {
 	/// <summary>
+	/// All registered basket codes.
+	/// </summary>
+	IEnumerable<string> AllCodes { get; }
+
+	/// <summary>
 	/// Register new security type.
 	/// </summary>
 	/// <param name="basketCode">Basket security type.</param>
@@ -17,19 +22,22 @@ public interface IBasketSecurityProcessorProvider
 	/// Remove old security type.
 	/// </summary>
 	/// <param name="basketCode">Basket security type.</param>
-	void UnRegister(string basketCode);
+	/// <returns><see langword="true"/> if the code was found and removed; otherwise, <see langword="false"/>.</returns>
+	bool UnRegister(string basketCode);
 
 	/// <summary>
-	/// Get processor type.
+	/// Try get processor type.
 	/// </summary>
 	/// <param name="basketCode">Basket security type.</param>
-	/// <returns>Processor type.</returns>
-	Type GetProcessorType(string basketCode);
+	/// <param name="processorType">Processor type.</param>
+	/// <returns><see langword="true"/> if the processor type was found; otherwise, <see langword="false"/>.</returns>
+	bool TryGetProcessorType(string basketCode, out Type processorType);
 
 	/// <summary>
-	/// Get security type.
+	/// Try get security type.
 	/// </summary>
 	/// <param name="basketCode">Basket security type.</param>
-	/// <returns>Security type.</returns>
-	Type GetSecurityType(string basketCode);
+	/// <param name="securityType">Security type.</param>
+	/// <returns><see langword="true"/> if the security type was found; otherwise, <see langword="false"/>.</returns>
+	bool TryGetSecurityType(string basketCode, out Type securityType);
 }

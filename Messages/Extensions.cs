@@ -5134,15 +5134,38 @@ public static partial class Extensions
 	/// <returns>Found instruments.</returns>
 	[Obsolete("Use LookupMessagesAsync method.")]
 	public static IEnumerable<SecurityMessage> LookupMessages(this ISecurityMessageProvider provider, SecurityLookupMessage criteria)
-	{
-		if (provider is null)
-			throw new ArgumentNullException(nameof(provider));
-
-		return provider.LookupMessagesAsync(criteria).ToBlockingEnumerable();
-	}
+		=> provider.CheckOnNull(nameof(provider)).LookupMessagesAsync(criteria).ToBlockingEnumerable();
 
 	/// <summary>
 	/// Default <see cref="IFileSystem"/>.
 	/// </summary>
 	public static readonly IFileSystem DefaultFileSystem = LocalFileSystem.Instance;
+
+	/// <summary>
+	/// Get processor type.
+	/// </summary>
+	/// <param name="provider"><see cref="IBasketSecurityProcessorProvider"/></param>
+	/// <param name="basketCode">Basket security type.</param>
+	/// <returns>Processor type.</returns>
+	public static Type GetProcessorType(this IBasketSecurityProcessorProvider provider, string basketCode)
+	{
+		if (!provider.CheckOnNull(nameof(provider)).TryGetProcessorType(basketCode, out var type))
+			throw new ArgumentException(LocalizedStrings.UnknownType.Put(basketCode), nameof(basketCode));
+
+		return type;
+	}
+
+	/// <summary>
+	/// Get security type.
+	/// </summary>
+	/// <param name="provider"><see cref="IBasketSecurityProcessorProvider"/></param>
+	/// <param name="basketCode">Basket security type.</param>
+	/// <returns>Security type.</returns>
+	public static Type GetSecurityType(this IBasketSecurityProcessorProvider provider, string basketCode)
+	{
+		if (!provider.CheckOnNull(nameof(provider)).TryGetSecurityType(basketCode, out var type))
+			throw new ArgumentException(LocalizedStrings.UnknownType.Put(basketCode), nameof(basketCode));
+
+		return type;
+	}
 }

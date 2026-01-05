@@ -7,7 +7,7 @@ using StockSharp.Algo.Expressions;
 /// </summary>
 public class BasketSecurityProcessorProvider : IBasketSecurityProcessorProvider
 {
-	private readonly SynchronizedDictionary<string, (Type processor, Type security)> _processors = new(StringComparer.InvariantCultureIgnoreCase);
+	private readonly CachedSynchronizedDictionary<string, (Type processor, Type security)> _processors = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BasketSecurityProcessorProvider"/>.
@@ -19,6 +19,9 @@ public class BasketSecurityProcessorProvider : IBasketSecurityProcessorProvider
 		Register(typeof(ExpressionIndexSecurityProcessor), typeof(ExpressionIndexSecurity));
 		Register(typeof(WeightedIndexSecurityProcessor), typeof(WeightedIndexSecurity));
 	}
+
+	/// <inheritdoc />
+	public IEnumerable<string> AllCodes => _processors.CachedKeys;
 
 	private void Register(Type processorType, Type securityType)
 	{
@@ -48,28 +51,45 @@ public class BasketSecurityProcessorProvider : IBasketSecurityProcessorProvider
 		_processors.Add(basketCode, (processorType, securityType));
 	}
 
-	void IBasketSecurityProcessorProvider.UnRegister(string basketCode)
+	bool IBasketSecurityProcessorProvider.UnRegister(string basketCode)
 	{
 		if (basketCode.IsEmpty())
 			throw new ArgumentNullException(nameof(basketCode));
 
-		_processors.Remove(basketCode);
+		return _processors.Remove(basketCode);
 	}
 
-	private (Type processor, Type security) GetInfo(string basketCode)
+	private bool TryGetInfo(string basketCode, out (Type processor, Type security) info)
 	{
+		info = default;
+
 		if (basketCode.IsEmpty())
-			throw new ArgumentNullException(nameof(basketCode));
+			return false;
 
-		if (_processors.TryGetValue(basketCode, out var processor))
-			return processor;
-
-		throw new ArgumentException(LocalizedStrings.UnknownType.Put(basketCode));
+		return _processors.TryGetValue(basketCode, out info);
 	}
 
-	Type IBasketSecurityProcessorProvider.GetProcessorType(string basketCode)
-		=> GetInfo(basketCode).processor;
+	bool IBasketSecurityProcessorProvider.TryGetProcessorType(string basketCode, out Type processorType)
+	{
+		if (TryGetInfo(basketCode, out var info))
+		{
+			processorType = info.processor;
+			return true;
+		}
 
-	Type IBasketSecurityProcessorProvider.GetSecurityType(string basketCode)
-		=> GetInfo(basketCode).security;
+		processorType = null;
+		return false;
+	}
+
+	bool IBasketSecurityProcessorProvider.TryGetSecurityType(string basketCode, out Type securityType)
+	{
+		if (TryGetInfo(basketCode, out var info))
+		{
+			securityType = info.security;
+			return true;
+		}
+
+		securityType = null;
+		return false;
+	}
 }

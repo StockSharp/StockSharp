@@ -914,4 +914,266 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Provider Registration Tests
+
+	[TestMethod]
+	public void Provider_AllCodes_ReturnsDefaultCodes()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		var codes = provider.AllCodes.ToArray();
+
+		codes.Length.AssertEqual(4);
+		Assert.Contains(BasketCodes.ExpirationContinuous, codes);
+		Assert.Contains(BasketCodes.VolumeContinuous, codes);
+		Assert.Contains(BasketCodes.WeightedIndex, codes);
+		Assert.Contains(BasketCodes.ExpressionIndex, codes);
+	}
+
+	[TestMethod]
+	public void Provider_TryGetProcessorType_ReturnsTrue_ForKnownCode()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		var result = provider.TryGetProcessorType(BasketCodes.WeightedIndex, out var processorType);
+
+		result.AssertTrue();
+		processorType.AssertEqual(typeof(WeightedIndexSecurityProcessor));
+	}
+
+	[TestMethod]
+	public void Provider_TryGetProcessorType_ReturnsFalse_ForUnknownCode()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		var result = provider.TryGetProcessorType("UNKNOWN", out var processorType);
+
+		result.AssertFalse();
+		IsNull(processorType);
+	}
+
+	[TestMethod]
+	public void Provider_TryGetSecurityType_ReturnsTrue_ForKnownCode()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		var result = provider.TryGetSecurityType(BasketCodes.ExpressionIndex, out var securityType);
+
+		result.AssertTrue();
+		securityType.AssertEqual(typeof(ExpressionIndexSecurity));
+	}
+
+	[TestMethod]
+	public void Provider_TryGetSecurityType_ReturnsFalse_ForUnknownCode()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		var result = provider.TryGetSecurityType("UNKNOWN", out var securityType);
+
+		result.AssertFalse();
+		IsNull(securityType);
+	}
+
+	[TestMethod]
+	public void Provider_GetProcessorType_ThrowsForUnknownCode()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		ThrowsExactly<ArgumentException>(() => provider.GetProcessorType("UNKNOWN"));
+	}
+
+	[TestMethod]
+	public void Provider_GetSecurityType_ThrowsForUnknownCode()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		ThrowsExactly<ArgumentException>(() => provider.GetSecurityType("UNKNOWN"));
+	}
+
+	[TestMethod]
+	public void Provider_Register_AddsNewCode()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		provider.Register("CUSTOM", typeof(CustomBasketProcessor), typeof(CustomBasketSecurity));
+
+		Assert.Contains("CUSTOM", provider.AllCodes.ToArray());
+
+		provider.TryGetProcessorType("CUSTOM", out var processorType).AssertTrue();
+		processorType.AssertEqual(typeof(CustomBasketProcessor));
+
+		provider.TryGetSecurityType("CUSTOM", out var securityType).AssertTrue();
+		securityType.AssertEqual(typeof(CustomBasketSecurity));
+	}
+
+	[TestMethod]
+	public void Provider_Register_ThrowsForNullCode()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		ThrowsExactly<ArgumentNullException>(() => provider.Register(null, typeof(CustomBasketProcessor), typeof(CustomBasketSecurity)));
+		ThrowsExactly<ArgumentNullException>(() => provider.Register(string.Empty, typeof(CustomBasketProcessor), typeof(CustomBasketSecurity)));
+	}
+
+	[TestMethod]
+	public void Provider_Register_ThrowsForNullTypes()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		ThrowsExactly<ArgumentNullException>(() => provider.Register("X", null, typeof(CustomBasketSecurity)));
+		ThrowsExactly<ArgumentNullException>(() => provider.Register("X", typeof(CustomBasketProcessor), null));
+	}
+
+	[TestMethod]
+	public void Provider_UnRegister_RemovesCode()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		provider.Register("CUSTOM", typeof(CustomBasketProcessor), typeof(CustomBasketSecurity));
+		Assert.Contains("CUSTOM", provider.AllCodes.ToArray());
+
+		var result = provider.UnRegister("CUSTOM");
+
+		result.AssertTrue();
+		provider.TryGetProcessorType("CUSTOM", out _).AssertFalse();
+	}
+
+	[TestMethod]
+	public void Provider_UnRegister_ReturnsFalseForUnknownCode()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		var result = provider.UnRegister("UNKNOWN");
+
+		result.AssertFalse();
+	}
+
+	[TestMethod]
+	public void Provider_UnRegister_ThrowsForNullCode()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		ThrowsExactly<ArgumentNullException>(() => provider.UnRegister(null));
+		ThrowsExactly<ArgumentNullException>(() => provider.UnRegister(string.Empty));
+	}
+
+	[TestMethod]
+	public void Provider_CaseInsensitive()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		provider.TryGetProcessorType("wi", out var type1).AssertTrue();
+		provider.TryGetProcessorType("WI", out var type2).AssertTrue();
+		provider.TryGetProcessorType("Wi", out var type3).AssertTrue();
+
+		type1.AssertEqual(typeof(WeightedIndexSecurityProcessor));
+		type2.AssertEqual(typeof(WeightedIndexSecurityProcessor));
+		type3.AssertEqual(typeof(WeightedIndexSecurityProcessor));
+	}
+
+	#endregion
+
+	#region Custom Basket Processor Tests
+
+	[TestMethod]
+	public void CustomProcessor_ProcessesTicks()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		provider.Register("CUSTOM", typeof(CustomBasketProcessor), typeof(CustomBasketSecurity));
+
+		var lkoh = CreateTestSecurity("LKOH", "TQBR");
+		var sber = CreateTestSecurity("SBER", "TQBR");
+
+		var basket = new CustomBasketSecurity
+		{
+			Id = "CUSTOM_BASKET@TQBR",
+			Board = ExchangeBoard.MicexTqbr,
+			Multiplier = 10m,
+		};
+		basket.SecurityIds.Add(lkoh.ToSecurityId());
+		basket.SecurityIds.Add(sber.ToSecurityId());
+
+		var processor = provider.CreateProcessor(basket);
+		processor.GetType().AssertEqual(typeof(CustomBasketProcessor));
+
+		var serverTime = DateTime.UtcNow;
+
+		processor.Process(CreateTick(lkoh, serverTime, 100m, 10m)).ToArray();
+		var result = processor.Process(CreateTick(sber, serverTime, 50m, 5m)).ToArray();
+
+		result.Length.AssertEqual(1);
+		var basketTick = (ExecutionMessage)result[0];
+
+		// Custom processor: (100 + 50) * 10 = 1500
+		basketTick.TradePrice.AssertEqual(1500m);
+	}
+
+	[TestMethod]
+	public void CustomProcessor_ToBasket_ConvertsSecurity()
+	{
+		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
+
+		provider.Register("CUSTOM", typeof(CustomBasketProcessor), typeof(CustomBasketSecurity));
+
+		var security = new Security
+		{
+			Id = "TEST@TQBR",
+			Code = "TEST",
+			Board = ExchangeBoard.MicexTqbr,
+			BasketCode = "CUSTOM",
+			BasketExpression = "10,LKOH@TQBR,SBER@TQBR",
+		};
+
+		var basketSecurity = security.ToBasket(provider);
+
+		basketSecurity.GetType().AssertEqual(typeof(CustomBasketSecurity));
+		var custom = (CustomBasketSecurity)basketSecurity;
+		custom.Multiplier.AssertEqual(10m);
+		custom.SecurityIds.Count.AssertEqual(2);
+	}
+
+	#endregion
+
+	#region Custom Basket Security & Processor (Test Classes)
+
+	[BasketCode("CUSTOM")]
+	private class CustomBasketSecurity : IndexSecurity
+	{
+		public new decimal Multiplier { get; set; } = 1m;
+
+		public SynchronizedList<SecurityId> SecurityIds { get; } = [];
+
+		public override IEnumerable<SecurityId> InnerSecurityIds => SecurityIds;
+
+		protected override string ToSerializedString()
+		{
+			return $"{Multiplier},{string.Join(",", SecurityIds.Select(s => s.ToStringId()))}";
+		}
+
+		protected override void FromSerializedString(string text)
+		{
+			var parts = text.SplitByComma();
+			Multiplier = parts[0].To<decimal>();
+
+			SecurityIds.Clear();
+			SecurityIds.AddRange(parts.Skip(1).Select(p => p.ToSecurityId()));
+		}
+	}
+
+	private class CustomBasketProcessor : IndexSecurityBaseProcessor<CustomBasketSecurity>
+	{
+		public CustomBasketProcessor(BasketSecurity security)
+			: base(security)
+		{
+		}
+
+		protected override decimal OnCalculate(decimal[] prices)
+		{
+			return prices.Sum() * BasketSecurity.Multiplier;
+		}
+	}
+
+	#endregion
 }
