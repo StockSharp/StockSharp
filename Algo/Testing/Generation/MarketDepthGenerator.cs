@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Testing;
+namespace StockSharp.Algo.Testing.Generation;
 
 /// <summary>
 /// The order book generator using random method.

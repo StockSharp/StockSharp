@@ -3,6 +3,7 @@ namespace StockSharp.Tests;
 using Ecng.Reflection;
 
 using StockSharp.Algo.Storages.Csv;
+using StockSharp.Algo.Testing.Generation;
 
 static class Helper
 {

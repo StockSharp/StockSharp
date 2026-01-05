@@ -2,6 +2,7 @@
 
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Storages.Binary.Snapshot;
+using StockSharp.Algo.Testing.Generation;
 
 [TestClass]
 [DoNotParallelize]

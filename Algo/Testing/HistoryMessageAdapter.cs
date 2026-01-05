@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Testing;
 
+using StockSharp.Algo.Testing.Generation;
+
 /// <summary>
 /// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 /// </summary>

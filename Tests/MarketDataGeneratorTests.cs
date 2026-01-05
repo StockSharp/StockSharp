@@ -1,6 +1,7 @@
 namespace StockSharp.Tests;
 
 using StockSharp.Algo.Testing;
+using StockSharp.Algo.Testing.Generation;
 
 [TestClass]
 public class MarketDataGeneratorTests : BaseTestClass

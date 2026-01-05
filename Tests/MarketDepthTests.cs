@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
+using StockSharp.Algo.Testing.Generation;
+
 [TestClass]
 public class MarketDepthTests
 {

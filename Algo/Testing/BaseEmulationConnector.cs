@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Testing;
 
+using StockSharp.Algo.Testing.Generation;
+
 /// <summary>
 /// The base connection of emulation.
 /// </summary>

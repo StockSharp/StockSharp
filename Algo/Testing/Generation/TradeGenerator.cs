@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Testing;
+namespace StockSharp.Algo.Testing.Generation;
 
 /// <summary>
 /// Tick trades generator using random method.
