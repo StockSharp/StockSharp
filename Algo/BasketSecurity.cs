@@ -27,7 +27,7 @@ public class BasketCodeAttribute : Attribute
 /// <summary>
 /// Instruments basket.
 /// </summary>
-[System.Runtime.Serialization.DataContract]
+[DataContract]
 [Serializable]
 public abstract class BasketSecurity : Security
 {

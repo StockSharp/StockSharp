@@ -25,6 +25,45 @@ public static class BasketCodes
 	/// <see cref="VolumeContinuousSecurity"/>
 	/// </summary>
 	public const string VolumeContinuous = "CV";
+
+	/// <summary>
+	/// <see cref="WeightedIndexSecurity"/>
+	/// </summary>
+	public const string WeightedIndex = "WI";
+
+	/// <summary>
+	/// <see cref="Expressions.ExpressionIndexSecurity"/>
+	/// </summary>
+	public const string ExpressionIndex = "EI";
+
+	/// <summary>
+	/// All continuous security codes.
+	/// </summary>
+	public static readonly ISet<string> AllContinuous = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+	{
+		ExpirationContinuous,
+		VolumeContinuous,
+	};
+
+	/// <summary>
+	/// All index security codes.
+	/// </summary>
+	public static readonly ISet<string> AllIndexes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+	{
+		WeightedIndex,
+		ExpressionIndex,
+	};
+
+	/// <summary>
+	/// All basket security codes.
+	/// </summary>
+	public static readonly ISet<string> All = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+	{
+		ExpirationContinuous,
+		VolumeContinuous,
+		WeightedIndex,
+		ExpressionIndex,
+	};
 }
 
 /// <summary>

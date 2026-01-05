@@ -947,7 +947,7 @@ public static partial class TraderHelper
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
 
-		return security.BasketCode is "WI" or "EI";
+		return security.BasketCode is not null && BasketCodes.AllIndexes.Contains(security.BasketCode);
 	}
 
 	/// <summary>
@@ -960,7 +960,7 @@ public static partial class TraderHelper
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
 
-		return security.BasketCode is BasketCodes.ExpirationContinuous or BasketCodes.VolumeContinuous;
+		return security.BasketCode is not null && BasketCodes.AllContinuous.Contains(security.BasketCode);
 	}
 
 	/// <summary>
@@ -973,7 +973,7 @@ public static partial class TraderHelper
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
 
-		return security.BasketCode is BasketCodes.ExpirationContinuous or BasketCodes.VolumeContinuous;
+		return security.BasketCode is not null && BasketCodes.AllContinuous.Contains(security.BasketCode);
 	}
 
 	/// <summary>

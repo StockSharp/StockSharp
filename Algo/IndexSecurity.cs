@@ -33,7 +33,7 @@ public abstract class IndexSecurity : BasketSecurity
 /// <summary>
 /// The instruments basket, based on weigh-scales <see cref="Weights"/>.
 /// </summary>
-[BasketCode("WI")]
+[BasketCode(BasketCodes.WeightedIndex)]
 public class WeightedIndexSecurity : IndexSecurity
 {
 	/// <summary>

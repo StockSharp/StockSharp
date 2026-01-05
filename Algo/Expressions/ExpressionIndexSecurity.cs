@@ -10,7 +10,7 @@ using Ecng.Compilation;
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.IndexKey,
 	Description = LocalizedStrings.IndexSecurityKey)]
-[BasketCode("EI")]
+[BasketCode(BasketCodes.ExpressionIndex)]
 public class ExpressionIndexSecurity : IndexSecurity, IDisposable
 {
 	private readonly AssemblyLoadContextTracker _context = new();
