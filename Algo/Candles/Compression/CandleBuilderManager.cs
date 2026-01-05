@@ -161,7 +161,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 	public async ValueTask<(Message forward, Message[] extraOut)> ProcessOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		var extraOut = new List<Message>();
-		var forward = (Message)message;
+		var forward = message;
 
 		switch (message.Type)
 		{
@@ -269,12 +269,13 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 	private async ValueTask<(Message[] toInner, Message[] toOut)> ProcessMarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
+		var transactionId = mdMsg.TransactionId;
+
 		if (mdMsg.IsSubscribe)
 		{
 			if (!_candleBuilderProvider.IsRegistered(mdMsg.DataType2.MessageType))
 				return ([mdMsg], []);
 
-			var transactionId = mdMsg.TransactionId;
 			Message outMsg = null;
 
 			using (await _sync.LockAsync(cancellationToken))
@@ -457,7 +458,6 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		}
 		else
 		{
-			var transactionId = mdMsg.TransactionId;
 			var series = await TryRemoveSeries(mdMsg.OriginalTransactionId, cancellationToken);
 			if (series is null)
 			{
@@ -908,13 +908,6 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 						allMsg.ParentTransactionId = series.Original.TransactionId;
 						var childTransactionId = _idGenerator.GetNextId();
-
-						while (_series.ContainsKey(childTransactionId) ||
-						       _allChilds.ContainsKey(childTransactionId) ||
-						       _pendingLoopbacks.ContainsKey(childTransactionId))
-						{
-							childTransactionId = _idGenerator.GetNextId();
-						}
 
 						allMsg.TransactionId = childTransactionId;
 						allMsg.SecurityId = key;
