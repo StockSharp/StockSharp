@@ -141,16 +141,6 @@ public class HistoryMessageAdapter : MessageAdapter
 	/// </summary>
 	/// <param name="transactionIdGenerator">Transaction id generator.</param>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
-	public HistoryMessageAdapter(IdGenerator transactionIdGenerator, ISecurityProvider securityProvider)
-		: this(transactionIdGenerator, securityProvider, new HistoryMarketDataManager())
-	{
-	}
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="HistoryMessageAdapter"/>.
-	/// </summary>
-	/// <param name="transactionIdGenerator">Transaction id generator.</param>
-	/// <param name="securityProvider">The provider of information about instruments.</param>
 	/// <param name="marketDataManager">Market data manager.</param>
 	public HistoryMessageAdapter(IdGenerator transactionIdGenerator, ISecurityProvider securityProvider, IHistoryMarketDataManager marketDataManager)
 		: base(transactionIdGenerator)

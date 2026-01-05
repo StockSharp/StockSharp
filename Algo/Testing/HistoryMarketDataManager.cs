@@ -176,14 +176,16 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 	/// <inheritdoc />
 	public IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId)
 	{
+		var dataTypes = new HashSet<DataType>();
+
 		var drive = DriveInternal;
 
-		if (drive == null)
-			return [];
+		if (drive != null)
+			dataTypes.AddRange(drive.GetAvailableDataTypes(securityId, StorageFormat));
 
-		var dataTypes = new HashSet<DataType>();
-		dataTypes.AddRange(drive.GetAvailableDataTypes(securityId, StorageFormat));
-		dataTypes.AddRange(_generators.Select(t => t.Key.dataType));
+		dataTypes.AddRange(_generators
+			.Where(g => g.Key.secId == securityId)
+			.Select(t => t.Key.dataType));
 
 		return dataTypes;
 	}

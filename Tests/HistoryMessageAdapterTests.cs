@@ -1,5 +1,7 @@
 namespace StockSharp.Tests;
 
+using System.Runtime.CompilerServices;
+
 using StockSharp.Algo.Testing;
 using StockSharp.Algo.Testing.Generation;
 
@@ -8,72 +10,192 @@ public class HistoryMessageAdapterTests : BaseTestClass
 {
 	private static SecurityId CreateSecurityId() => Helper.CreateSecurityId();
 
-	private static Mock<ISecurityProvider> CreateSecurityProviderMock()
+	private class TestSecurityProvider : ISecurityProvider
 	{
-		var mock = new Mock<ISecurityProvider>();
-		mock.Setup(p => p.LookupAll()).Returns([]);
-		return mock;
+		private readonly List<Security> _securities = [];
+
+		public int Count => _securities.Count;
+
+		public event Action<IEnumerable<Security>> Added;
+		public event Action<IEnumerable<Security>> Removed;
+		public event Action Cleared;
+
+		public ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)
+			=> new(_securities.FirstOrDefault(s => s.ToSecurityId() == id));
+
+		public async IAsyncEnumerable<Security> LookupAsync(SecurityLookupMessage criteria)
+		{
+			foreach (var s in _securities)
+				yield return s;
+		}
+
+		public ValueTask<SecurityMessage> LookupMessageByIdAsync(SecurityId id, CancellationToken cancellationToken)
+			=> new(_securities.FirstOrDefault(s => s.ToSecurityId() == id)?.ToMessage());
+
+		public async IAsyncEnumerable<SecurityMessage> LookupMessagesAsync(SecurityLookupMessage criteria)
+		{
+			foreach (var s in _securities)
+				yield return s.ToMessage();
+		}
+
+		public void Add(Security security) => _securities.Add(security);
 	}
 
-	private static Mock<IHistoryMarketDataManager> CreateManagerMock()
+	private static TestSecurityProvider CreateSecurityProvider() => new();
+
+	#region Test Implementation
+
+	private class TestHistoryMarketDataManager : IHistoryMarketDataManager
 	{
-		var mock = new Mock<IHistoryMarketDataManager>();
-		mock.SetupProperty(m => m.StartDate, DateTime.MinValue);
-		mock.SetupProperty(m => m.StopDate, DateTime.MaxValue);
-		mock.SetupProperty(m => m.MarketTimeChangedInterval, TimeSpan.FromSeconds(1));
-		mock.SetupProperty(m => m.PostTradeMarketTimeChangedCount, 2);
-		mock.SetupProperty(m => m.CheckTradableDates, false);
-		mock.SetupProperty(m => m.StorageRegistry, null);
-		mock.SetupProperty(m => m.Drive, null);
-		mock.SetupProperty(m => m.StorageFormat, StorageFormats.Binary);
-		mock.SetupProperty(m => m.StorageCache, null);
-		mock.SetupProperty(m => m.AdapterCache, null);
-		mock.Setup(m => m.LoadedMessageCount).Returns(0);
-		mock.Setup(m => m.CurrentTime).Returns(DateTime.MinValue);
-		mock.Setup(m => m.IsStarted).Returns(false);
-		return mock;
+		private readonly Dictionary<(SecurityId, DataType), (MarketDataGenerator, long)> _generators = [];
+		private readonly List<MarketDataMessage> _subscriptions = [];
+		private readonly List<long> _unsubscriptions = [];
+
+		public DateTime StartDate { get; set; } = DateTime.MinValue;
+		public DateTime StopDate { get; set; } = DateTime.MaxValue;
+		public TimeSpan MarketTimeChangedInterval { get; set; } = TimeSpan.FromSeconds(1);
+		public int PostTradeMarketTimeChangedCount { get; set; } = 2;
+		public bool CheckTradableDates { get; set; }
+		public IStorageRegistry StorageRegistry { get; set; }
+		public IMarketDataDrive Drive { get; set; }
+		public StorageFormats StorageFormat { get; set; }
+		public MarketDataStorageCache StorageCache { get; set; }
+		public MarketDataStorageCache AdapterCache { get; set; }
+		public int LoadedMessageCount { get; set; }
+		public DateTime CurrentTime { get; set; }
+		public bool IsStarted { get; set; }
+
+		public bool ResetCalled { get; private set; }
+		public bool StopCalled { get; private set; }
+		public IReadOnlyList<MarketDataMessage> Subscriptions => _subscriptions;
+		public IReadOnlyList<long> Unsubscriptions => _unsubscriptions;
+
+		// For controlling StartAsync behavior
+		public List<Message> MessagesToYield { get; } = [];
+		public Exception ExceptionToThrow { get; set; }
+		public bool ShouldWaitForCancellation { get; set; }
+
+		public ValueTask<Exception> SubscribeAsync(MarketDataMessage message, CancellationToken cancellationToken)
+		{
+			if (message == null)
+				throw new ArgumentNullException(nameof(message));
+
+			_subscriptions.Add(message);
+			return new ValueTask<Exception>((Exception)null);
+		}
+
+		public void Unsubscribe(long originalTransactionId)
+		{
+			_unsubscriptions.Add(originalTransactionId);
+		}
+
+		public void RegisterGenerator(SecurityId securityId, DataType dataType, MarketDataGenerator generator, long transactionId)
+		{
+			_generators[(securityId, dataType)] = (generator, transactionId);
+		}
+
+		public bool UnregisterGenerator(long originalTransactionId)
+		{
+			var key = _generators.FirstOrDefault(p => p.Value.Item2 == originalTransactionId).Key;
+			if (key == default)
+				return false;
+
+			_generators.Remove(key);
+			return true;
+		}
+
+		public bool HasGenerator(SecurityId securityId, DataType dataType)
+			=> _generators.ContainsKey((securityId, dataType));
+
+		public IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId)
+			=> _generators.Where(g => g.Key.Item1 == securityId).Select(g => g.Key.Item2);
+
+		public IAsyncEnumerable<Message> StartAsync(IEnumerable<BoardMessage> boards)
+		{
+			IsStarted = true;
+
+			if (ExceptionToThrow != null)
+				throw ExceptionToThrow;
+
+			return Impl();
+
+			async IAsyncEnumerable<Message> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
+			{
+				foreach (var msg in MessagesToYield)
+				{
+					cancellationToken.ThrowIfCancellationRequested();
+					yield return msg;
+				}
+
+				if (ShouldWaitForCancellation)
+				{
+					await Task.Delay(Timeout.Infinite, cancellationToken);
+				}
+
+				yield return new EmulationStateMessage
+				{
+					LocalTime = StopDate,
+					State = ChannelStates.Stopping,
+				};
+
+				IsStarted = false;
+			}
+		}
+
+		public void Stop()
+		{
+			StopCalled = true;
+			IsStarted = false;
+		}
+
+		public void Reset()
+		{
+			ResetCalled = true;
+			_generators.Clear();
+			_subscriptions.Clear();
+			_unsubscriptions.Clear();
+			IsStarted = false;
+		}
+
+		public void Dispose()
+		{
+		}
 	}
+
+	#endregion
 
 	#region Constructor Tests
 
 	[TestMethod]
-	public void Constructor_WithSecurityProvider_CreatesDefaultManager()
-	{
-		var secProvider = CreateSecurityProviderMock();
-
-		using var adapter = new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider.Object);
-
-		adapter.SecurityProvider.AssertEqual(secProvider.Object);
-	}
-
-	[TestMethod]
 	public void Constructor_WithManager_UsesProvidedManager()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
-		adapter.SecurityProvider.AssertEqual(secProvider.Object);
+		adapter.SecurityProvider.AssertEqual(secProvider);
 	}
 
 	[TestMethod]
 	public void Constructor_ThrowsOnNullSecurityProvider()
 	{
+		var manager = new TestHistoryMarketDataManager();
+
 		ThrowsExactly<ArgumentNullException>(() =>
-			new HistoryMessageAdapter(new IncrementalIdGenerator(), null));
+			new HistoryMessageAdapter(new IncrementalIdGenerator(), null, manager));
 	}
 
 	[TestMethod]
 	public void Constructor_ThrowsOnNullManager()
 	{
-		var secProvider = CreateSecurityProviderMock();
+		var secProvider = CreateSecurityProvider();
 
 		ThrowsExactly<ArgumentNullException>(() =>
-			new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider.Object, null));
+			new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider, null));
 	}
 
 	#endregion
@@ -83,13 +205,13 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public void Properties_DelegateToManager()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		var startDate = DateTime.UtcNow;
 		var stopDate = DateTime.UtcNow.AddDays(1);
@@ -101,24 +223,23 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		adapter.PostTradeMarketTimeChangedCount = 5;
 		adapter.CheckTradableDates = true;
 
-		manager.Object.StartDate.AssertEqual(startDate);
-		manager.Object.StopDate.AssertEqual(stopDate);
-		manager.Object.MarketTimeChangedInterval.AssertEqual(interval);
-		manager.Object.PostTradeMarketTimeChangedCount.AssertEqual(5);
-		manager.Object.CheckTradableDates.AssertEqual(true);
+		manager.StartDate.AssertEqual(startDate);
+		manager.StopDate.AssertEqual(stopDate);
+		manager.MarketTimeChangedInterval.AssertEqual(interval);
+		manager.PostTradeMarketTimeChangedCount.AssertEqual(5);
+		manager.CheckTradableDates.AssertEqual(true);
 	}
 
 	[TestMethod]
 	public void LoadedMessageCount_DelegatesToManager()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
-		manager.Setup(m => m.LoadedMessageCount).Returns(42);
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager { LoadedMessageCount = 42 };
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		adapter.LoadedMessageCount.AssertEqual(42);
 	}
@@ -126,15 +247,14 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public void CurrentTimeUtc_DelegatesToManager()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
+		var secProvider = CreateSecurityProvider();
 		var expectedTime = DateTime.UtcNow;
-		manager.Setup(m => m.CurrentTime).Returns(expectedTime);
+		var manager = new TestHistoryMarketDataManager { CurrentTime = expectedTime };
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		adapter.CurrentTimeUtc.AssertEqual(expectedTime);
 	}
@@ -146,9 +266,10 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public void UseOutChannel_ReturnsFalse()
 	{
-		var secProvider = CreateSecurityProviderMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 
-		using var adapter = new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider.Object);
+		using var adapter = new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider, manager);
 
 		adapter.UseOutChannel.AssertFalse();
 	}
@@ -156,9 +277,10 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public void IsFullCandlesOnly_ReturnsFalse()
 	{
-		var secProvider = CreateSecurityProviderMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 
-		using var adapter = new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider.Object);
+		using var adapter = new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider, manager);
 
 		adapter.IsFullCandlesOnly.AssertFalse();
 	}
@@ -166,9 +288,10 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public void IsSupportCandlesUpdates_ReturnsTrue()
 	{
-		var secProvider = CreateSecurityProviderMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 
-		using var adapter = new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider.Object);
+		using var adapter = new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider, manager);
 
 		var subscription = new MarketDataMessage
 		{
@@ -182,9 +305,10 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public void IsAllDownloadingSupported_ReturnsTrueForSecurities()
 	{
-		var secProvider = CreateSecurityProviderMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 
-		using var adapter = new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider.Object);
+		using var adapter = new HistoryMessageAdapter(new IncrementalIdGenerator(), secProvider, manager);
 
 		adapter.IsAllDownloadingSupported(DataType.Securities).AssertTrue();
 	}
@@ -196,15 +320,15 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public async Task GeneratorMessage_Subscribe_RegistersGenerator()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 		var secId = CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		var generatorMsg = new GeneratorMessage
 		{
@@ -217,20 +341,23 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(generatorMsg, CancellationToken);
 
-		manager.Verify(m => m.RegisterGenerator(secId, DataType.Ticks, generator, 1), Times.Once);
+		manager.HasGenerator(secId, DataType.Ticks).AssertTrue();
 	}
 
 	[TestMethod]
 	public async Task GeneratorMessage_Unsubscribe_UnregistersGenerator()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 		var secId = CreateSecurityId();
+		var generator = new RandomWalkTradeGenerator(secId);
+
+		manager.RegisterGenerator(secId, DataType.Ticks, generator, 1);
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		var generatorMsg = new GeneratorMessage
 		{
@@ -242,7 +369,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(generatorMsg, CancellationToken);
 
-		manager.Verify(m => m.UnregisterGenerator(1), Times.Once);
+		manager.HasGenerator(secId, DataType.Ticks).AssertFalse();
 	}
 
 	#endregion
@@ -252,18 +379,17 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public async Task ResetMessage_CallsManagerReset()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
-		manager.Setup(m => m.IsStarted).Returns(false);
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
-		manager.Verify(m => m.Reset(), Times.Once);
+		manager.ResetCalled.AssertTrue();
 	}
 
 	#endregion
@@ -271,19 +397,22 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	#region Connect Tests
 
 	[TestMethod]
-	public async Task ConnectMessage_ThrowsWhenAlreadyStarted()
+	public async Task ConnectMessage_WhenNotStarted_SendsConnectMessage()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
-		manager.Setup(m => m.IsStarted).Returns(true);
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager { IsStarted = false };
+		var outMessages = new List<Message>();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
-		await ThrowsExactlyAsync<InvalidOperationException>(() =>
-			adapter.SendInMessageAsync(new ConnectMessage(), CancellationToken).AsTask());
+		adapter.NewOutMessage += outMessages.Add;
+
+		await adapter.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+
+		outMessages.OfType<ConnectMessage>().Any().AssertTrue();
 	}
 
 	#endregion
@@ -293,17 +422,17 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public async Task DisconnectMessage_StopsManager()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		await adapter.SendInMessageAsync(new DisconnectMessage(), CancellationToken);
 
-		manager.Verify(m => m.Stop(), Times.Once);
+		manager.StopCalled.AssertTrue();
 	}
 
 	#endregion
@@ -313,17 +442,14 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public async Task MarketDataMessage_Subscribe_CallsManagerSubscribe()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 		var secId = CreateSecurityId();
-
-		manager.Setup(m => m.SubscribeAsync(It.IsAny<MarketDataMessage>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync((Exception)null);
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		var mdMsg = new MarketDataMessage
 		{
@@ -335,20 +461,21 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(mdMsg, CancellationToken);
 
-		manager.Verify(m => m.SubscribeAsync(mdMsg, It.IsAny<CancellationToken>()), Times.Once);
+		manager.Subscriptions.Count.AssertEqual(1);
+		manager.Subscriptions[0].SecurityId.AssertEqual(secId);
 	}
 
 	[TestMethod]
 	public async Task MarketDataMessage_Unsubscribe_CallsManagerUnsubscribe()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 		var secId = CreateSecurityId();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		var mdMsg = new MarketDataMessage
 		{
@@ -361,7 +488,8 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(mdMsg, CancellationToken);
 
-		manager.Verify(m => m.Unsubscribe(1), Times.Once);
+		manager.Unsubscriptions.Count.AssertEqual(1);
+		manager.Unsubscriptions[0].AssertEqual(1);
 	}
 
 	#endregion
@@ -371,17 +499,17 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public void GetSupportedMarketDataTypes_DelegatesToManager()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 		var secId = CreateSecurityId();
-		var expectedTypes = new[] { DataType.Ticks, DataType.Level1 };
 
-		manager.Setup(m => m.GetSupportedDataTypes(secId)).Returns(expectedTypes);
+		manager.RegisterGenerator(secId, DataType.Ticks, new RandomWalkTradeGenerator(secId), 1);
+		manager.RegisterGenerator(secId, DataType.Level1, new RandomWalkTradeGenerator(secId), 2);
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		var result = adapter.GetSupportedMarketDataTypes(secId, null, null).ToList();
 
@@ -397,18 +525,17 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public void ToString_ReturnsFormattedString()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
-		var startDate = new DateTime(2024, 1, 1);
-		var stopDate = new DateTime(2024, 12, 31);
-
-		manager.Setup(m => m.StartDate).Returns(startDate);
-		manager.Setup(m => m.StopDate).Returns(stopDate);
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager
+		{
+			StartDate = new DateTime(2024, 1, 1),
+			StopDate = new DateTime(2024, 12, 31)
+		};
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		var result = adapter.ToString();
 
@@ -422,13 +549,13 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public async Task EmulationStateMessage_Stopping_StopsManager()
 	{
-		var secProvider = CreateSecurityProviderMock();
-		var manager = CreateManagerMock();
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
-			secProvider.Object,
-			manager.Object);
+			secProvider,
+			manager);
 
 		var stateMsg = new EmulationStateMessage
 		{
@@ -437,7 +564,132 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
 
-		manager.Verify(m => m.Stop(), Times.Once);
+		manager.StopCalled.AssertTrue();
+	}
+
+	#endregion
+
+	#region Error Handling Tests
+
+	[TestMethod]
+	public async Task StartAsync_WhenManagerThrows_SendsErrorAndStoppingState()
+	{
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager
+		{
+			ExceptionToThrow = new InvalidOperationException("Test error")
+		};
+
+		var outMessages = new List<Message>();
+
+		using var adapter = new HistoryMessageAdapter(
+			new IncrementalIdGenerator(),
+			secProvider,
+			manager);
+
+		adapter.NewOutMessage += outMessages.Add;
+
+		var stateMsg = new EmulationStateMessage
+		{
+			State = ChannelStates.Starting,
+		};
+
+		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
+
+		// Give time for background task to process
+		await Task.Delay(100);
+
+		// Should have EmulationStateMessage with Stopping state
+		var stoppingState = outMessages.OfType<EmulationStateMessage>()
+			.FirstOrDefault(m => m.State == ChannelStates.Stopping);
+
+		stoppingState.AssertNotNull();
+	}
+
+	[TestMethod]
+	public async Task StartAsync_WhenCancelled_SendsStoppingState()
+	{
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager
+		{
+			ShouldWaitForCancellation = true
+		};
+
+		var outMessages = new List<Message>();
+
+		using var adapter = new HistoryMessageAdapter(
+			new IncrementalIdGenerator(),
+			secProvider,
+			manager);
+
+		adapter.NewOutMessage += outMessages.Add;
+
+		var stateMsg = new EmulationStateMessage
+		{
+			State = ChannelStates.Starting,
+		};
+
+		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
+
+		// Give time for background task to start
+		await Task.Delay(50);
+
+		// Stop the adapter
+		await adapter.SendInMessageAsync(new EmulationStateMessage { State = ChannelStates.Stopping }, CancellationToken);
+
+		// Give time for cancellation to propagate
+		await Task.Delay(100);
+
+		// Should have EmulationStateMessage with Stopping state
+		var stoppingState = outMessages.OfType<EmulationStateMessage>()
+			.FirstOrDefault(m => m.State == ChannelStates.Stopping);
+
+		stoppingState.AssertNotNull();
+	}
+
+	[TestMethod]
+	public async Task StartAsync_YieldsMessages_SendsThemViaNewOutMessage()
+	{
+		var secProvider = CreateSecurityProvider();
+		var secId = CreateSecurityId();
+		var manager = new TestHistoryMarketDataManager();
+
+		var tickMessage = new ExecutionMessage
+		{
+			SecurityId = secId,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+
+		manager.MessagesToYield.Add(tickMessage);
+
+		var outMessages = new List<Message>();
+
+		using var adapter = new HistoryMessageAdapter(
+			new IncrementalIdGenerator(),
+			secProvider,
+			manager);
+
+		adapter.NewOutMessage += outMessages.Add;
+
+		var stateMsg = new EmulationStateMessage
+		{
+			State = ChannelStates.Starting,
+		};
+
+		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
+
+		// Give time for background task to process
+		await Task.Delay(100);
+
+		// Should have received the tick message
+		var receivedTick = outMessages.OfType<ExecutionMessage>()
+			.FirstOrDefault(m => m.DataTypeEx == DataType.Ticks);
+
+		receivedTick.AssertNotNull();
+		receivedTick.TradePrice.AssertEqual(100m);
 	}
 
 	#endregion
