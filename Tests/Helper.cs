@@ -616,6 +616,7 @@ static class Helper
 			new BoardStateMessage
 			{
 				State = SessionStates.Paused,
+				BoardCode = ExchangeBoard.Nyse.Code,
 				ServerTime = DateTime.UtcNow,
 			},
 		];
@@ -1274,7 +1275,7 @@ static class Helper
 				}
 				else
 				{
-					// TODO построение детализованных уровне было выключено по причине оптимизации
+					// TODO пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 					//actualLevel.BuyVolumes.Count().AssertEqual(expectedLevel.BuyVolumes.Count());
 

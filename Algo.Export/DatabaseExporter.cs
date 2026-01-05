@@ -156,19 +156,18 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 
 		builder
 			.HasTableName(typeof(CandleMessage).Name.Remove(nameof(Message)))
-			.IsColumnRequired()
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256)
-			.Property(m => m.SecurityId.BoardCode).HasLength(256)
+			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
+			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
 			.Property(m => m.Type).HasLength(32)
 			.Property(m => m.DataType.Arg).HasLength(100)
-			.Property(m => m.OpenTime)
+			.Property(m => m.OpenTime).IsNotNull()
 			.Property(m => m.CloseTime)
 			.Property(m => m.HighTime)
 			.Property(m => m.LowTime)
-			.Property(m => m.OpenPrice).HasScale(priceScale)
-			.Property(m => m.HighPrice).HasScale(priceScale)
-			.Property(m => m.LowPrice).HasScale(priceScale)
-			.Property(m => m.ClosePrice).HasScale(priceScale)
+			.Property(m => m.OpenPrice).HasScale(priceScale).IsNotNull()
+			.Property(m => m.HighPrice).HasScale(priceScale).IsNotNull()
+			.Property(m => m.LowPrice).HasScale(priceScale).IsNotNull()
+			.Property(m => m.ClosePrice).HasScale(priceScale).IsNotNull()
 			.Property(m => m.TotalVolume).HasScale(volScale)
 			.Property(m => m.OpenInterest).HasScale(volScale)
 			.Property(m => m.TotalTicks)
@@ -182,10 +181,9 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 	{
 		builder
 			.HasTableName(typeof(IndicatorValue).Name)
-			.IsColumnRequired()
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256)
-			.Property(m => m.SecurityId.BoardCode).HasLength(256)
-			.Property(m => m.Time)
+			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
+			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
+			.Property(m => m.Time).IsNotNull()
 			.Property(m => m.Value1)
 			.Property(m => m.Value2)
 			.Property(m => m.Value3)
@@ -197,7 +195,6 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 	{
 		builder
 			.HasTableName(typeof(PositionChangeMessage).Name.Remove(nameof(Message)).Remove("Change"))
-			.IsColumnRequired()
 			.Property(m => m.ServerTime).IsNotNull()
 			.Property(m => m.LocalTime).IsNotNull()
 			.Property(m => m.PortfolioName)
@@ -218,10 +215,9 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 	private void CreateSecurityTable(IDatabaseMappingBuilder<SecurityMessage> builder)
 	{
 		builder
-			.IsColumnRequired()
 			.HasTableName(typeof(SecurityMessage).Name.Remove(nameof(Message)))
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256)
-			.Property(m => m.SecurityId.BoardCode).HasLength(256)
+			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
+			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
 			.Property(m => m.Name).HasLength(256)
 			.Property(m => m.ShortName).HasLength(64)
 			.Property(m => m.PriceStep)
@@ -234,8 +230,8 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 			.Property(m => m.OptionType).HasLength(32)
 			.Property(m => m.BinaryOptionType).HasLength(256)
 			.Property(m => m.Strike)
-			.Property(m => m.UnderlyingSecurityId.SecurityCode).HasLength(256)
-			.Property(m => m.UnderlyingSecurityId.BoardCode).HasLength(256)
+			.Property(m => m.UnderlyingSecurityId.SecurityCode).HasColumnName(nameof(SecurityMessage.UnderlyingSecurityId) + nameof(SecurityId.SecurityCode)).HasLength(256)
+			.Property(m => m.UnderlyingSecurityId.BoardCode).HasColumnName(nameof(SecurityMessage.UnderlyingSecurityId) + nameof(SecurityId.BoardCode)).HasLength(256)
 			.Property(m => m.UnderlyingSecurityType).HasLength(32)
 			.Property(m => m.UnderlyingSecurityMinVolume).HasScale(1)
 			.Property(m => m.ExpiryDate)
@@ -266,13 +262,11 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 	private void CreateNewsTable(IDatabaseMappingBuilder<NewsMessage> builder)
 	{
 		builder
-			.IsColumnRequired()
 			.HasTableName(typeof(NewsMessage).Name.Remove(nameof(Message)))
 			.Property(m => m.Id).HasLength(32)
-			.Property(m => m.ServerTime)
+			.Property(m => m.ServerTime).IsNotNull()
 			.Property(m => m.LocalTime)
-			.Property(m => m.SecurityId.Value.SecurityCode).HasLength(256)
-			.Property(m => m.SecurityId.Value.BoardCode).HasLength(256)
+			.Property(m => m.BoardCode).HasLength(256)
 			.Property(m => m.Headline).HasLength(256)
 			.Property(m => m.Story)
 			.Property(m => m.Source).HasLength(256)
@@ -287,7 +281,6 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 	private void CreateLevel1Table(IDatabaseMappingBuilder<Level1ChangeMessage> builder)
 	{
 		builder
-			.IsColumnRequired()
 			.HasTableName(typeof(Level1ChangeMessage).Name.Remove(nameof(Message)).Remove("Change"))
 			.Property(m => m.ServerTime).IsNotNull()
 			.Property(m => m.LocalTime).IsNotNull()
@@ -311,13 +304,12 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 		var volScale = GetVolumeScale();
 
 		builder
-			.IsColumnRequired()
 			.HasTableName(typeof(TimeQuoteChange).Name)
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256)
-			.Property(m => m.SecurityId.BoardCode).HasLength(256)
-			.Property(m => m.ServerTime)
+			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
+			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
+			.Property(m => m.ServerTime).IsNotNull()
 			.Property(m => m.LocalTime)
-			.Property(m => m.Quote.Price).HasScale(priceScale)
+			.Property(m => m.Quote.Price).HasScale(priceScale).IsNotNull()
 			.Property(m => m.Quote.Volume).HasScale(volScale)
 			.Property(m => m.Side)
 			.Property(m => m.Quote.OrdersCount)
@@ -334,12 +326,11 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 		var volScale = GetVolumeScale();
 
 		builder
-			.IsColumnRequired()
 			.HasTableName(typeof(ExecutionMessage).Name.Remove(nameof(Message)))
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256)
-			.Property(m => m.SecurityId.BoardCode).HasLength(256)
-			.Property(m => m.ServerTime)
-			.Property(m => m.LocalTime)
+			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
+			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
+			.Property(m => m.ServerTime).IsNotNull()
+			.Property(m => m.LocalTime).IsNotNull()
 
 			.Property(m => m.TransactionId)
 			.Property(m => m.OriginalTransactionId)
@@ -408,18 +399,16 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 	{
 		builder
 			.HasTableName(typeof(BoardStateMessage).Name.Remove(nameof(Message)))
-			.IsColumnRequired()
-			.Property(m => m.ServerTime)
-			.Property(m => m.BoardCode).HasLength(256)
-			.Property(m => m.State);
+			.Property(m => m.ServerTime).IsNotNull()
+			.Property(m => m.BoardCode).HasLength(256).IsNotNull()
+			.Property(m => m.State).IsNotNull();
 	}
 
 	private void CreateBoardTable(IDatabaseMappingBuilder<BoardMessage> builder)
 	{
 		builder
 			.HasTableName(typeof(BoardMessage).Name.Remove(nameof(Message)))
-			.IsColumnRequired()
-			.Property(m => m.Code).HasLength(256)
+			.Property(m => m.Code).HasLength(256).IsNotNull()
 			.Property(m => m.ExchangeCode).HasLength(256)
 			.Property(m => m.ExpiryTime)
 			.Property(m => m.TimeZone);
