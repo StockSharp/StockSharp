@@ -80,7 +80,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	/// <param name="storageRegistry">Market data storage.</param>
 	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 	public HistoryEmulationConnector(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, IStorageRegistry storageRegistry)
-		: this(new HistoryMessageAdapter(new IncrementalIdGenerator(), securityProvider, new HistoryMarketDataManager { StorageRegistry = storageRegistry }), true, new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "Emulator in", err => err.LogError()), securityProvider, portfolioProvider, exchangeInfoProvider)
+		: this(new HistoryMessageAdapter(new IncrementalIdGenerator(), securityProvider, new HistoryMarketDataManager(new TradingTimeLineGenerator()) { StorageRegistry = storageRegistry }), true, new InMemoryMessageChannel(new MessageByLocalTimeQueue(), "Emulator in", err => err.LogError()), securityProvider, portfolioProvider, exchangeInfoProvider)
 	{
 	}
 

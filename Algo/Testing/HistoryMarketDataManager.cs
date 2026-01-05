@@ -13,9 +13,19 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 	private readonly List<(IMarketDataStorage storage, long subscriptionId)> _actions = [];
 	private readonly AutoResetEvent _syncRoot = new(false);
 	private readonly BasketMarketDataStorage<Message> _basketStorage = new();
+	private readonly ITradingTimeLineGenerator _timeLineGenerator;
 
 	private bool _isChanged;
 	private DateTime _currentTime;
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="HistoryMarketDataManager"/>.
+	/// </summary>
+	/// <param name="timeLineGenerator">Trading time line generator.</param>
+	public HistoryMarketDataManager(ITradingTimeLineGenerator timeLineGenerator)
+	{
+		_timeLineGenerator = timeLineGenerator ?? throw new ArgumentNullException(nameof(timeLineGenerator));
+	}
 
 	/// <inheritdoc />
 	public DateTime StartDate { get; set; } = DateTime.MinValue;
@@ -196,13 +206,13 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 		if (boards == null)
 			throw new ArgumentNullException(nameof(boards));
 
-		IsStarted = true;
-
 		var boardsArray = boards.ToArray();
 		var messageTypes = new[] { MessageTypes.Time };
 
 		var startDateTime = StartDate;
 		var stopDateTime = StopDate;
+
+		IsStarted = true;
 
 		return Impl();
 
@@ -230,7 +240,7 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 
 				while (loadDateInUtc <= stopDateInUtc && !_isChanged && !cancellationToken.IsCancellationRequested)
 				{
-					if (!checkDates || boardsArray.Any(b => b.IsTradeDate(currentTime, true)))
+					if (!checkDates || _timeLineGenerator.IsTradeDate(boardsArray, currentTime))
 					{
 						IAsyncEnumerable<Message> messages;
 						bool noData;
@@ -249,7 +259,7 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 						}
 
 						var source = noData
-							? new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boardsArray, currentTime, MarketTimeChangedInterval))
+							? new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boardsArray, currentTime))
 							: messages;
 
 						await foreach (var msg in FilterMessages(source, startDateTime, stopDateTime, currentTime).WithCancellation(cancellationToken))
@@ -343,98 +353,16 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 		}
 	}
 
-	private IEnumerable<TimeMessage> GetSimpleTimeLine(BoardMessage[] boards, DateTime date, TimeSpan interval)
+	private IEnumerable<TimeMessage> GetSimpleTimeLine(BoardMessage[] boards, DateTime date)
 	{
-		var ranges = GetOrderedRanges(boards, date);
-		var lastTime = TimeSpan.Zero;
+		foreach (var msg in _timeLineGenerator.GetSimpleTimeLine(boards, date, MarketTimeChangedInterval))
+			yield return msg;
 
-		foreach (var range in ranges)
-		{
-			var time = GetTime(date, range.range.Min);
-			if (time.Date >= date.Date)
-				yield return new TimeMessage { ServerTime = time };
+		var ranges = _timeLineGenerator.GetOrderedRanges(boards, date);
+		var lastTime = ranges.LastOrDefault().range?.Max ?? TimeSpan.Zero;
 
-			time = GetTime(date, range.range.Max);
-			if (time.Date >= date.Date)
-				yield return new TimeMessage { ServerTime = time };
-
-			lastTime = range.range.Max;
-		}
-
-		foreach (var m in GetPostTradeTimeMessages(date, lastTime, interval))
-		{
-			yield return m;
-		}
-	}
-
-	private static IEnumerable<(BoardMessage board, Range<TimeSpan> range)> GetOrderedRanges(BoardMessage[] boards, DateTime date)
-	{
-		if (boards is null)
-			throw new ArgumentNullException(nameof(boards));
-
-		var orderedRanges = boards
-			.Where(b => b.IsTradeDate(date, true))
-			.SelectMany(board =>
-			{
-				var period = board.WorkingTime.GetPeriod(date);
-
-				return period == null || period.Times.Count == 0
-					? [(board, new Range<TimeSpan>(TimeSpan.Zero, TimeHelper.LessOneDay))]
-					: period.Times.Select(t => (board, ranges: ToUtc(board, t)));
-			})
-			.OrderBy(i => i.ranges.Min)
-			.ToList();
-
-		for (var i = 0; i < orderedRanges.Count - 1;)
-		{
-			if (orderedRanges[i].ranges.Contains(orderedRanges[i + 1].ranges))
-			{
-				orderedRanges.RemoveAt(i + 1);
-			}
-			else if (orderedRanges[i + 1].ranges.Contains(orderedRanges[i].ranges))
-			{
-				orderedRanges.RemoveAt(i);
-			}
-			else if (orderedRanges[i].ranges.Intersect(orderedRanges[i + 1].ranges) != null)
-			{
-				orderedRanges[i] = (orderedRanges[i].board, new Range<TimeSpan>(orderedRanges[i].ranges.Min, orderedRanges[i + 1].ranges.Max));
-				orderedRanges.RemoveAt(i + 1);
-			}
-			else
-				i++;
-		}
-
-		return orderedRanges;
-	}
-
-	private static Range<TimeSpan> ToUtc(BoardMessage board, Range<TimeSpan> range)
-	{
-		var min = DateTime.MinValue + range.Min;
-		var max = DateTime.MinValue + range.Max;
-
-		var utcMin = min.To(board.TimeZone);
-		var utcMax = max.To(board.TimeZone);
-
-		return new Range<TimeSpan>(utcMin.TimeOfDay, utcMax.TimeOfDay);
-	}
-
-	private static DateTime GetTime(DateTime date, TimeSpan timeOfDay)
-		=> date.Date + timeOfDay;
-
-	private IEnumerable<TimeMessage> GetPostTradeTimeMessages(DateTime date, TimeSpan lastTime, TimeSpan interval)
-	{
-		for (var i = 0; i < PostTradeMarketTimeChangedCount; i++)
-		{
-			lastTime += interval;
-
-			if (lastTime > TimeHelper.LessOneDay)
-				break;
-
-			yield return new TimeMessage
-			{
-				ServerTime = GetTime(date, lastTime)
-			};
-		}
+		foreach (var msg in _timeLineGenerator.GetPostTradeTimeMessages(date, lastTime, MarketTimeChangedInterval, PostTradeMarketTimeChangedCount))
+			yield return msg;
 	}
 
 	/// <inheritdoc />

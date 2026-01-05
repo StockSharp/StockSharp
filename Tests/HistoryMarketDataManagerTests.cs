@@ -12,6 +12,23 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var fs = Helper.FileSystem;
 		return fs.GetStorage(Paths.HistoryDataPath);
 	}
+
+	private static HistoryMarketDataManager CreateManager()
+		=> new(new TradingTimeLineGenerator());
+
+	private static HistoryMarketDataManager CreateManager(IStorageRegistry storageRegistry, DateTime? startDate = null, DateTime? stopDate = null)
+	{
+		var manager = new HistoryMarketDataManager(new TradingTimeLineGenerator())
+		{
+			StorageRegistry = storageRegistry,
+		};
+		if (startDate.HasValue)
+			manager.StartDate = startDate.Value;
+		if (stopDate.HasValue)
+			manager.StopDate = stopDate.Value;
+		return manager;
+	}
+
 	private static SecurityId CreateSecurityId() => Helper.CreateSecurityId();
 
 	#region Property Tests
@@ -19,7 +36,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void Constructor_SetsDefaultValues()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 
 		manager.StartDate.AssertEqual(DateTime.MinValue);
 		manager.StopDate.AssertEqual(DateTime.MaxValue);
@@ -33,7 +50,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void MarketTimeChangedInterval_ThrowsOnInvalidValue()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 
 		ThrowsExactly<ArgumentOutOfRangeException>(() =>
 			manager.MarketTimeChangedInterval = TimeSpan.Zero);
@@ -45,7 +62,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void PostTradeMarketTimeChangedCount_ThrowsOnNegativeValue()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 
 		ThrowsExactly<ArgumentOutOfRangeException>(() =>
 			manager.PostTradeMarketTimeChangedCount = -1);
@@ -54,7 +71,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void PostTradeMarketTimeChangedCount_AcceptsZero()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 
 		manager.PostTradeMarketTimeChangedCount = 0;
 		manager.PostTradeMarketTimeChangedCount.AssertEqual(0);
@@ -67,7 +84,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void RegisterGenerator_AddsGenerator()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 		var secId = CreateSecurityId();
 		var dataType = DataType.Ticks;
 		var generator = new RandomWalkTradeGenerator(secId);
@@ -80,7 +97,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void RegisterGenerator_ThrowsOnNullGenerator()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 		var secId = CreateSecurityId();
 
 		ThrowsExactly<ArgumentNullException>(() =>
@@ -90,7 +107,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void HasGenerator_ReturnsFalseWhenNotRegistered()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 		var secId = CreateSecurityId();
 
 		manager.HasGenerator(secId, DataType.Ticks).AssertFalse();
@@ -99,7 +116,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void UnregisterGenerator_RemovesGenerator()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 		var secId = CreateSecurityId();
 		var dataType = DataType.Ticks;
 		var generator = new RandomWalkTradeGenerator(secId);
@@ -117,7 +134,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void UnregisterGenerator_ReturnsFalseWhenNotFound()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 
 		var result = manager.UnregisterGenerator(999);
 
@@ -131,7 +148,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task SubscribeAsync_ReturnsErrorWithoutStorageRegistry()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 		var secId = CreateSecurityId();
 
 		var message = new MarketDataMessage
@@ -151,7 +168,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task SubscribeAsync_ThrowsOnNullMessage()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 
 		await ThrowsExactlyAsync<ArgumentNullException>(() =>
 			manager.SubscribeAsync(null, CancellationToken).AsTask());
@@ -160,7 +177,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task SubscribeAsync_ThrowsOnUnsubscribeMessage()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 		var secId = CreateSecurityId();
 
 		var message = new MarketDataMessage
@@ -178,7 +195,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void Unsubscribe_ThrowsOnZeroTransactionId()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 
 		ThrowsExactly<ArgumentException>(() =>
 			manager.Unsubscribe(0));
@@ -191,7 +208,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void Reset_ClearsGenerators()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 		var secId = CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 
@@ -206,7 +223,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void Reset_ResetsLoadedMessageCount()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 
 		manager.Reset();
 
@@ -221,7 +238,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void GetSupportedDataTypes_ReturnsEmptyWithoutDriveAndGenerators()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 		var secId = CreateSecurityId();
 
 		var dataTypes = manager.GetSupportedDataTypes(secId);
@@ -232,7 +249,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void GetSupportedDataTypes_IncludesGeneratorDataTypes()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 		var secId = CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 
@@ -246,7 +263,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void GetSupportedDataTypes_WithoutDrive_ReturnsOnlyGenerators()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 		var secId = CreateSecurityId();
 
 		manager.RegisterGenerator(secId, DataType.Ticks, new RandomWalkTradeGenerator(secId), 1);
@@ -262,7 +279,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void GetSupportedDataTypes_FiltersGeneratorsBySecurityId()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 		var secId1 = CreateSecurityId();
 		var secId2 = CreateSecurityId();
 
@@ -286,7 +303,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void Stop_CanBeCalledMultipleTimes()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 
 		manager.Stop();
 		manager.Stop();
@@ -300,11 +317,9 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task StartAsync_WithoutStorageOrGenerators_YieldsOnlyTimeAndStoppingMessages()
 	{
-		using var manager = new HistoryMarketDataManager
-		{
-			StartDate = DateTime.UtcNow,
-			StopDate = DateTime.UtcNow.AddMinutes(1),
-		};
+		using var manager = CreateManager();
+		manager.StartDate = DateTime.UtcNow;
+		manager.StopDate = DateTime.UtcNow.AddMinutes(1);
 
 		var messages = new List<Message>();
 		var boards = Array.Empty<BoardMessage>();
@@ -323,11 +338,9 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task StartAsync_SetsIsStartedTrue()
 	{
-		using var manager = new HistoryMarketDataManager
-		{
-			StartDate = DateTime.UtcNow,
-			StopDate = DateTime.UtcNow.AddSeconds(1),
-		};
+		using var manager = CreateManager();
+		manager.StartDate = DateTime.UtcNow;
+		manager.StopDate = DateTime.UtcNow.AddSeconds(1);
 
 		var boards = Array.Empty<BoardMessage>();
 		var enumerator = manager.StartAsync(boards).GetAsyncEnumerator(CancellationToken);
@@ -347,11 +360,9 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task StartAsync_IncrementsLoadedMessageCount()
 	{
-		using var manager = new HistoryMarketDataManager
-		{
-			StartDate = DateTime.UtcNow,
-			StopDate = DateTime.UtcNow.AddSeconds(1),
-		};
+		using var manager = CreateManager();
+		manager.StartDate = DateTime.UtcNow;
+		manager.StopDate = DateTime.UtcNow.AddSeconds(1);
 
 		var initialCount = manager.LoadedMessageCount;
 		var boards = Array.Empty<BoardMessage>();
@@ -368,7 +379,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[TestMethod]
 	public void StartAsync_ThrowsOnNullBoards()
 	{
-		using var manager = new HistoryMarketDataManager();
+		using var manager = CreateManager();
 
 		ThrowsExactly<ArgumentNullException>(() =>
 			manager.StartAsync(null).GetAsyncEnumerator());
@@ -390,12 +401,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 
-		using var manager = new HistoryMarketDataManager
-		{
-			StorageRegistry = storageRegistry,
-			StartDate = Paths.HistoryBeginDate,
-			StopDate = Paths.HistoryBeginDate.AddDays(1),
-		};
+		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1));
 
 		// Subscribe to ticks
 		var subscribeMsg = new MarketDataMessage
@@ -440,12 +446,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 
-		using var manager = new HistoryMarketDataManager
-		{
-			StorageRegistry = storageRegistry,
-			StartDate = Paths.HistoryBeginDate,
-			StopDate = Paths.HistoryBeginDate.AddDays(1),
-		};
+		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1));
 
 		// Subscribe to 1-minute candles
 		var subscribeMsg = new MarketDataMessage
@@ -489,10 +490,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 
-		using var manager = new HistoryMarketDataManager
-		{
-			StorageRegistry = storageRegistry,
-		};
+		using var manager = CreateManager(storageRegistry);
 
 		var dataTypes = manager.GetSupportedDataTypes(secId).ToList();
 
@@ -511,12 +509,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 
-		using var manager = new HistoryMarketDataManager
-		{
-			StorageRegistry = storageRegistry,
-			StartDate = Paths.HistoryBeginDate,
-			StopDate = Paths.HistoryBeginDate.AddHours(1),
-		};
+		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddHours(1));
 
 		// Subscribe to both ticks and candles
 		var tickSubscribe = new MarketDataMessage
@@ -571,12 +564,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 
-		using var manager = new HistoryMarketDataManager
-		{
-			StorageRegistry = storageRegistry,
-			StartDate = Paths.HistoryBeginDate,
-			StopDate = Paths.HistoryBeginDate.AddDays(1),
-		};
+		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1));
 
 		var subscribeMsg = new MarketDataMessage
 		{
@@ -623,12 +611,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 
-		using var manager = new HistoryMarketDataManager
-		{
-			StorageRegistry = storageRegistry,
-			StartDate = Paths.HistoryBeginDate,
-			StopDate = Paths.HistoryBeginDate.AddDays(1),
-		};
+		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1));
 
 		var subscribeMsg = new MarketDataMessage
 		{
@@ -673,12 +656,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 
-		using var manager = new HistoryMarketDataManager
-		{
-			StorageRegistry = storageRegistry,
-			StartDate = Paths.HistoryBeginDate,
-			StopDate = Paths.HistoryBeginDate.AddDays(1),
-		};
+		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1));
 
 		var subscribeMsg = new MarketDataMessage
 		{
