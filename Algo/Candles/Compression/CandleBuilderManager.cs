@@ -150,6 +150,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			}
 
 			case MessageTypes.MarketData:
+			case ExtendedMessageTypes.SubscriptionSecurityAll:
 				return await ProcessMarketDataAsync((MarketDataMessage)message, cancellationToken);
 
 			default:
