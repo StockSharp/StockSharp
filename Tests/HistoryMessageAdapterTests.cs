@@ -597,7 +597,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
 
 		// Give time for background task to process
-		await Task.Delay(100);
+		await Task.Delay(100, CancellationToken);
 
 		// Should have EmulationStateMessage with Stopping state
 		var stoppingState = outMessages.OfType<EmulationStateMessage>()
@@ -632,13 +632,13 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
 
 		// Give time for background task to start
-		await Task.Delay(50);
+		await Task.Delay(50, CancellationToken);
 
 		// Stop the adapter
 		await adapter.SendInMessageAsync(new EmulationStateMessage { State = ChannelStates.Stopping }, CancellationToken);
 
 		// Give time for cancellation to propagate
-		await Task.Delay(100);
+		await Task.Delay(100, CancellationToken);
 
 		// Should have EmulationStateMessage with Stopping state
 		var stoppingState = outMessages.OfType<EmulationStateMessage>()
@@ -682,7 +682,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
 
 		// Give time for background task to process
-		await Task.Delay(100);
+		await Task.Delay(100, CancellationToken);
 
 		// Should have received the tick message
 		var receivedTick = outMessages.OfType<ExecutionMessage>()
@@ -690,6 +690,166 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		receivedTick.AssertNotNull();
 		receivedTick.TradePrice.AssertEqual(100m);
+	}
+
+	#endregion
+
+	#region Generator Data Tests (without history)
+
+	[TestMethod]
+	public async Task StartAsync_WithGenerator_NoHistory_YieldsGeneratorData()
+	{
+		var secProvider = CreateSecurityProvider();
+		var secId = CreateSecurityId();
+
+		// Create manager that simulates generator-only data (no storage)
+		var manager = new TestHistoryMarketDataManager();
+		var generator = new RandomWalkTradeGenerator(secId);
+		manager.RegisterGenerator(secId, DataType.Ticks, generator, 1);
+
+		// Add simulated generator output
+		var generatedTick = new ExecutionMessage
+		{
+			SecurityId = secId,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 150m,
+			TradeVolume = 25m,
+		};
+		manager.MessagesToYield.Add(generatedTick);
+
+		var outMessages = new List<Message>();
+
+		using var adapter = new HistoryMessageAdapter(
+			new IncrementalIdGenerator(),
+			secProvider,
+			manager);
+
+		adapter.NewOutMessage += outMessages.Add;
+
+		var stateMsg = new EmulationStateMessage
+		{
+			State = ChannelStates.Starting,
+		};
+
+		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
+
+		// Give time for background task to process
+		await Task.Delay(100, CancellationToken);
+
+		// Should have received generator-produced tick
+		var receivedTick = outMessages.OfType<ExecutionMessage>()
+			.FirstOrDefault(m => m.DataTypeEx == DataType.Ticks);
+
+		receivedTick.AssertNotNull();
+		receivedTick.TradePrice.AssertEqual(150m);
+		receivedTick.TradeVolume.AssertEqual(25m);
+	}
+
+	[TestMethod]
+	public void GetSupportedMarketDataTypes_WithGeneratorOnly_ReturnsGeneratorTypes()
+	{
+		var secProvider = CreateSecurityProvider();
+		var manager = new TestHistoryMarketDataManager();
+		var secId = CreateSecurityId();
+
+		// No storage, only generator
+		manager.RegisterGenerator(secId, DataType.Ticks, new RandomWalkTradeGenerator(secId), 1);
+
+		using var adapter = new HistoryMessageAdapter(
+			new IncrementalIdGenerator(),
+			secProvider,
+			manager);
+
+		var dataTypes = adapter.GetSupportedMarketDataTypes(secId, null, null).ToList();
+
+		dataTypes.Count.AssertEqual(1);
+		dataTypes.Contains(DataType.Ticks).AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task StartAsync_WithMultipleGenerators_YieldsAllData()
+	{
+		var secProvider = CreateSecurityProvider();
+		var secId = CreateSecurityId();
+
+		var manager = new TestHistoryMarketDataManager();
+
+		// Register multiple generators
+		manager.RegisterGenerator(secId, DataType.Ticks, new RandomWalkTradeGenerator(secId), 1);
+		manager.RegisterGenerator(secId, DataType.Level1, new RandomWalkTradeGenerator(secId), 2);
+
+		// Simulate output from both generators
+		var tickMessage = new ExecutionMessage
+		{
+			SecurityId = secId,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 100m,
+		};
+
+		var level1Message = new Level1ChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+		};
+		level1Message.Changes.Add(Level1Fields.BestBidPrice, 99m);
+		level1Message.Changes.Add(Level1Fields.BestAskPrice, 101m);
+
+		manager.MessagesToYield.Add(tickMessage);
+		manager.MessagesToYield.Add(level1Message);
+
+		var outMessages = new List<Message>();
+
+		using var adapter = new HistoryMessageAdapter(
+			new IncrementalIdGenerator(),
+			secProvider,
+			manager);
+
+		adapter.NewOutMessage += outMessages.Add;
+
+		await adapter.SendInMessageAsync(new EmulationStateMessage { State = ChannelStates.Starting }, CancellationToken);
+
+		await Task.Delay(100, CancellationToken);
+
+		// Should have received both types of messages
+		var ticks = outMessages.OfType<ExecutionMessage>().Where(m => m.DataTypeEx == DataType.Ticks).ToList();
+		var level1s = outMessages.OfType<Level1ChangeMessage>().ToList();
+
+		ticks.Count.AssertEqual(1);
+		level1s.Count.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public async Task StartAsync_GeneratorRegisteredAfterStart_ManagerTracksIt()
+	{
+		var secProvider = CreateSecurityProvider();
+		var secId = CreateSecurityId();
+		var manager = new TestHistoryMarketDataManager();
+
+		using var adapter = new HistoryMessageAdapter(
+			new IncrementalIdGenerator(),
+			secProvider,
+			manager);
+
+		// Register generator through adapter
+		var generatorMsg = new GeneratorMessage
+		{
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			Generator = new RandomWalkTradeGenerator(secId),
+			TransactionId = 1,
+			IsSubscribe = true,
+		};
+
+		await adapter.SendInMessageAsync(generatorMsg, CancellationToken);
+
+		// Verify generator is tracked
+		manager.HasGenerator(secId, DataType.Ticks).AssertTrue();
+
+		// Verify GetSupportedMarketDataTypes includes the generator
+		var dataTypes = adapter.GetSupportedMarketDataTypes(secId, null, null).ToList();
+		dataTypes.Contains(DataType.Ticks).AssertTrue();
 	}
 
 	#endregion
