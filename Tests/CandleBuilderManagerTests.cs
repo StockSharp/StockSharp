@@ -170,7 +170,14 @@ public class CandleBuilderManagerTests : BaseTestClass
 			BuildFrom = DataType.Ticks,
 		};
 
-		await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		var (subToInner, subToOut) = await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		subToInner.Length.AssertEqual(1);
+		var subSent = (MarketDataMessage)subToInner[0];
+		subSent.DataType2.AssertEqual(DataType.Ticks);
+		subSent.SecurityId.AssertEqual(secId);
+		subSent.IsSubscribe.AssertTrue();
+		subSent.TransactionId.AssertEqual(100);
+		subToOut.Length.AssertEqual(0);
 
 		// Reset
 		var (toInner, toOut) = await manager.ProcessInMessageAsync(new ResetMessage(), CancellationToken);
@@ -197,7 +204,11 @@ public class CandleBuilderManagerTests : BaseTestClass
 			BuildFrom = DataType.Ticks,
 		};
 
-		await manager.ProcessInMessageAsync(parentMsg, CancellationToken);
+		var (parentToInner, parentToOut) = await manager.ProcessInMessageAsync(parentMsg, CancellationToken);
+		parentToInner.Length.AssertEqual(1);
+		var parentSent = (MarketDataMessage)parentToInner[0];
+		parentSent.DataType2.AssertEqual(DataType.Ticks);
+		parentToOut.Length.AssertEqual(0);
 
 		// Now simulate a tick coming in which creates a child
 		var secId = Helper.CreateSecurityId();
@@ -226,6 +237,9 @@ public class CandleBuilderManagerTests : BaseTestClass
 		toInner2.Length.AssertEqual(0);
 		toOut2.Length.AssertEqual(1);
 		toOut2[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
+		var response = (SubscriptionResponseMessage)toOut2[0];
+		response.OriginalTransactionId.AssertEqual(childMsg.TransactionId);
+		response.Error.AssertNull();
 	}
 
 	[TestMethod]
@@ -246,7 +260,13 @@ public class CandleBuilderManagerTests : BaseTestClass
 			BuildFrom = DataType.Ticks,
 		};
 
-		await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		var (subToInner, subToOut) = await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		subToInner.Length.AssertEqual(1);
+		var subSent = (MarketDataMessage)subToInner[0];
+		subSent.DataType2.AssertEqual(DataType.Ticks);
+		subSent.SecurityId.AssertEqual(secId);
+		subSent.IsSubscribe.AssertTrue();
+		subToOut.Length.AssertEqual(0);
 
 		// Unsubscribe
 		var unsubscribeMsg = new MarketDataMessage
@@ -261,6 +281,9 @@ public class CandleBuilderManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		var sent = (MarketDataMessage)toInner[0];
 		sent.IsSubscribe.AssertFalse();
+		sent.OriginalTransactionId.AssertEqual(1);
+		sent.TransactionId.AssertEqual(2);
+		toOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -281,7 +304,14 @@ public class CandleBuilderManagerTests : BaseTestClass
 			BuildFrom = DataType.Ticks,
 		};
 
-		await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		var (subToInner, subToOut) = await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		subToInner.Length.AssertEqual(1);
+		var subSent = (MarketDataMessage)subToInner[0];
+		subSent.DataType2.AssertEqual(DataType.Ticks);
+		subSent.SecurityId.AssertEqual(secId);
+		subSent.IsSubscribe.AssertTrue();
+		subSent.TransactionId.AssertEqual(1);
+		subToOut.Length.AssertEqual(0);
 
 		// Error response
 		var errorResponse = new SubscriptionResponseMessage
@@ -292,9 +322,12 @@ public class CandleBuilderManagerTests : BaseTestClass
 
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(errorResponse, CancellationToken);
 
-		// Error should trigger fallback logic or be forwarded
-		// The exact behavior depends on whether fallback is possible
-		(extraOut.Length >= 0).AssertTrue();
+		// Error should be forwarded as-is since there's no fallback available
+		forward.AssertSame(errorResponse);
+		var response = (SubscriptionResponseMessage)forward;
+		response.OriginalTransactionId.AssertEqual(1);
+		response.Error.AssertNotNull();
+		extraOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -315,16 +348,26 @@ public class CandleBuilderManagerTests : BaseTestClass
 			BuildFrom = DataType.Ticks,
 		};
 
-		await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		var (subToInner, subToOut) = await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		subToInner.Length.AssertEqual(1);
+		var subSent = (MarketDataMessage)subToInner[0];
+		subSent.DataType2.AssertEqual(DataType.Ticks);
+		subSent.SecurityId.AssertEqual(secId);
+		subSent.IsSubscribe.AssertTrue();
+		subSent.TransactionId.AssertEqual(1);
+		subToOut.Length.AssertEqual(0);
 
 		// Finished
 		var finishedMsg = new SubscriptionFinishedMessage { OriginalTransactionId = 1 };
 
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(finishedMsg, CancellationToken);
 
-		// Should trigger upgrade logic or finish
-		// The series was for build-from-ticks, so finish means series is done
-		(extraOut.Length >= 0).AssertTrue();
+		// Finished message should be forwarded, series is done
+		forward.AssertNotNull();
+		forward.Type.AssertEqual(MessageTypes.SubscriptionFinished);
+		var finished = (SubscriptionFinishedMessage)forward;
+		finished.OriginalTransactionId.AssertEqual(1);
+		extraOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -345,7 +388,14 @@ public class CandleBuilderManagerTests : BaseTestClass
 			BuildFrom = DataType.Ticks,
 		};
 
-		await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		var (subToInner, subToOut) = await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		subToInner.Length.AssertEqual(1);
+		var subSent = (MarketDataMessage)subToInner[0];
+		subSent.DataType2.AssertEqual(DataType.Ticks);
+		subSent.SecurityId.AssertEqual(secId);
+		subSent.IsSubscribe.AssertTrue();
+		subSent.TransactionId.AssertEqual(1);
+		subToOut.Length.AssertEqual(0);
 
 		// Online
 		var onlineMsg = new SubscriptionOnlineMessage { OriginalTransactionId = 1 };
@@ -353,6 +403,9 @@ public class CandleBuilderManagerTests : BaseTestClass
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(onlineMsg, CancellationToken);
 
 		forward.AssertSame(onlineMsg);
+		var online = (SubscriptionOnlineMessage)forward;
+		online.OriginalTransactionId.AssertEqual(1);
+		extraOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -372,7 +425,14 @@ public class CandleBuilderManagerTests : BaseTestClass
 			BuildFrom = DataType.Ticks,
 		};
 
-		await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		var (subToInner, subToOut) = await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		subToInner.Length.AssertEqual(1);
+		var subSent = (MarketDataMessage)subToInner[0];
+		subSent.DataType2.AssertEqual(DataType.Ticks);
+		subSent.SecurityId.AssertEqual(default(SecurityId)); // all securities
+		subSent.IsSubscribe.AssertTrue();
+		subSent.TransactionId.AssertEqual(parentTransId);
+		subToOut.Length.AssertEqual(0);
 
 		// Send a tick for a specific security
 		var secId = Helper.CreateSecurityId();
@@ -413,7 +473,14 @@ public class CandleBuilderManagerTests : BaseTestClass
 			BuildFrom = DataType.Ticks,
 		};
 
-		await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		var (subToInner, subToOut) = await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		subToInner.Length.AssertEqual(1);
+		var subSent = (MarketDataMessage)subToInner[0];
+		subSent.DataType2.AssertEqual(DataType.Ticks);
+		subSent.SecurityId.AssertEqual(default(SecurityId)); // all securities
+		subSent.IsSubscribe.AssertTrue();
+		subSent.TransactionId.AssertEqual(parentTransId);
+		subToOut.Length.AssertEqual(0);
 
 		// Send a tick to create child
 		var secId = Helper.CreateSecurityId();
@@ -427,11 +494,22 @@ public class CandleBuilderManagerTests : BaseTestClass
 		};
 		tick.SetSubscriptionIds([parentTransId]);
 
-		var (_, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
+		var (tickForward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
+		tickForward.AssertNull(); // tick is consumed, not forwarded
 		var childMsg = extraOut.OfType<SubscriptionSecurityAllMessage>().First();
+		IsNotNull(childMsg);
+		childMsg.SecurityId.AssertEqual(secId);
+		childMsg.ParentTransactionId.AssertEqual(parentTransId);
+		childMsg.IsSubscribe.AssertTrue();
 
 		// Send child back (loopback)
-		await manager.ProcessInMessageAsync(childMsg, CancellationToken);
+		var (childToInner, childToOut) = await manager.ProcessInMessageAsync(childMsg, CancellationToken);
+		childToInner.Length.AssertEqual(0);
+		childToOut.Length.AssertEqual(1);
+		childToOut[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
+		var childResponse = (SubscriptionResponseMessage)childToOut[0];
+		childResponse.OriginalTransactionId.AssertEqual(childMsg.TransactionId);
+		childResponse.Error.AssertNull();
 
 		// Now unsubscribe the child
 		var unsubscribeMsg = new MarketDataMessage
@@ -447,6 +525,9 @@ public class CandleBuilderManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(0);
 		toOut.Length.AssertEqual(1);
 		toOut[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
+		var unsubResponse = (SubscriptionResponseMessage)toOut[0];
+		unsubResponse.OriginalTransactionId.AssertEqual(200);
+		unsubResponse.Error.AssertNull();
 	}
 
 	[TestMethod]
@@ -534,6 +615,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 		toOut[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
 
 		var response = (SubscriptionResponseMessage)toOut[0];
+		response.OriginalTransactionId.AssertEqual(1);
 		response.IsNotSupported().AssertTrue();
 	}
 
@@ -555,10 +637,19 @@ public class CandleBuilderManagerTests : BaseTestClass
 			BuildFrom = DataType.Ticks,
 		};
 
-		await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		var (subToInner, subToOut) = await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
+		subToInner.Length.AssertEqual(1);
+		var subSent = (MarketDataMessage)subToInner[0];
+		subSent.DataType2.AssertEqual(DataType.Ticks);
+		subSent.SecurityId.AssertEqual(secId);
+		subSent.IsSubscribe.AssertTrue();
+		subSent.TransactionId.AssertEqual(1);
+		subToOut.Length.AssertEqual(0);
 
-		// Send ticks
-		var now = DateTime.UtcNow;
+		// Use a specific time that aligns to minute boundary for predictable candle creation
+		var now = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		// Send first tick
 		var tick1 = new ExecutionMessage
 		{
 			SecurityId = secId,
@@ -571,9 +662,21 @@ public class CandleBuilderManagerTests : BaseTestClass
 
 		var (forward1, extraOut1) = await manager.ProcessOutMessageAsync(tick1, CancellationToken);
 
-		// First tick should create a candle
-		(extraOut1.Length >= 0).AssertTrue(); // May or may not have candle depending on timing
+		// Tick is consumed for building, not forwarded
+		forward1.AssertNull();
+		// First tick creates initial candle state
+		extraOut1.Length.AssertEqual(1);
+		var candle1 = extraOut1[0] as CandleMessage;
+		IsNotNull(candle1);
+		candle1.OpenPrice.AssertEqual(100m);
+		candle1.HighPrice.AssertEqual(100m);
+		candle1.LowPrice.AssertEqual(100m);
+		candle1.ClosePrice.AssertEqual(100m);
+		candle1.TotalVolume.AssertEqual(10m);
+		candle1.SecurityId.AssertEqual(secId);
+		candle1.State.AssertEqual(CandleStates.Active);
 
+		// Send second tick within same candle
 		var tick2 = new ExecutionMessage
 		{
 			SecurityId = secId,
@@ -586,7 +689,17 @@ public class CandleBuilderManagerTests : BaseTestClass
 
 		var (forward2, extraOut2) = await manager.ProcessOutMessageAsync(tick2, CancellationToken);
 
-		// Should have candle updates
-		// The exact output depends on candle builder logic
+		// Second tick updates the candle
+		forward2.AssertNull();
+		extraOut2.Length.AssertEqual(1);
+		var candle2 = extraOut2[0] as CandleMessage;
+		IsNotNull(candle2);
+		candle2.OpenPrice.AssertEqual(100m);
+		candle2.HighPrice.AssertEqual(105m);
+		candle2.LowPrice.AssertEqual(100m);
+		candle2.ClosePrice.AssertEqual(105m);
+		candle2.TotalVolume.AssertEqual(30m);
+		candle2.SecurityId.AssertEqual(secId);
+		candle2.State.AssertEqual(CandleStates.Active);
 	}
 }

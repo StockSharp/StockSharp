@@ -42,7 +42,7 @@ public class EntityCacheTests : BaseTestClass
 	[TestMethod]
 	public void Constructor_WithValidArgs_CreatesInstance()
 	{
-		Assert.IsNotNull(_cache);
+		IsNotNull(_cache);
 		_cache.ExchangeInfoProvider.AssertEqual(_exchangeInfoProvider.Object);
 	}
 

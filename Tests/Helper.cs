@@ -495,7 +495,7 @@ static class Helper
 			msg.OrderPrice = RandomGen.GetInt(10);
 			msg.OrderState = RandomGen.GetBool() ? RandomGen.GetEnum<OrderStates>() : null;
 			msg.OrderStatus = RandomGen.GetBool() ? RandomGen.GetInt(-1000, 1000) : null;
-			msg.TimeInForce = RandomGen.GetBool() ? RandomGen.GetEnum<TimeInForce>() : null;
+			msg.TimeInForce = RandomGen.GetBool() ? RandomGen.GetEnum<Messages.TimeInForce>() : null;
 			msg.Balance = RandomGen.GetBool() ? RandomGen.GetInt(10) : null;
 			msg.OrderVolume = RandomGen.GetBool() ? RandomGen.GetInt(1, 10) : null;
 			msg.Side = RandomGen.GetBool() ? Sides.Buy : Sides.Sell;

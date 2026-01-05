@@ -1577,4 +1577,181 @@ public class CandleBuilderTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Custom Candle Builder Tests
+
+	/// <summary>
+	/// Custom candle message that closes after N ticks with median price.
+	/// </summary>
+	private class MedianPriceCandleMessage : TypedCandleMessage<int>
+	{
+		public MedianPriceCandleMessage()
+			: base(MessageTypes.CandleTick, default)
+		{
+		}
+
+		public List<decimal> Prices { get; } = [];
+
+		public decimal MedianPrice => Prices.Count == 0 ? 0 : Prices.OrderBy(p => p).ElementAt(Prices.Count / 2);
+
+		public override Message Clone() => CopyTo(new MedianPriceCandleMessage());
+	}
+
+	/// <summary>
+	/// Custom candle builder that calculates median price.
+	/// </summary>
+	private class MedianPriceCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<MedianPriceCandleMessage>(exchangeInfoProvider)
+	{
+		protected override MedianPriceCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
+		{
+			var time = transform.Time;
+
+			return FirstInitCandle(subscription, new()
+			{
+				TypedArg = subscription.Message.GetArg<int>(),
+				OpenTime = time,
+				CloseTime = time,
+				HighTime = time,
+				LowTime = time,
+			}, transform);
+		}
+
+		protected override bool IsCandleFinishedBeforeChange(ICandleBuilderSubscription subscription, MedianPriceCandleMessage candle, ICandleBuilderValueTransform transform)
+		{
+			return candle.TotalTicks != null && candle.TotalTicks.Value >= candle.TypedArg;
+		}
+
+		protected override void UpdateCandle(ICandleBuilderSubscription subscription, MedianPriceCandleMessage candle, ICandleBuilderValueTransform transform)
+		{
+			base.UpdateCandle(subscription, candle, transform);
+
+			candle.Prices.Add(transform.Price);
+		}
+	}
+
+	[TestMethod]
+	public void CustomCandleBuilder_RegisterAndProcess()
+	{
+		var provider = new CandleBuilderProvider(new MockExchangeInfoProvider());
+
+		// Register custom builder
+		var customBuilder = new MedianPriceCandleBuilder(new MockExchangeInfoProvider());
+		provider.Register(customBuilder);
+
+		// Verify registration
+		provider.IsRegistered(typeof(MedianPriceCandleMessage)).AssertTrue();
+
+		var builder = provider.Get(typeof(MedianPriceCandleMessage));
+		builder.AssertEqual(customBuilder);
+	}
+
+	[TestMethod]
+	public void CustomCandleBuilder_ProcessesTicks()
+	{
+		var builder = new MedianPriceCandleBuilder(new MockExchangeInfoProvider());
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<MedianPriceCandleMessage>(5), // Close after 5 ticks
+			}
+		};
+
+		var candles = new List<CandleMessage>();
+		var time = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		// Send 5 ticks with prices: 100, 110, 90, 105, 95
+		// Sorted: 90, 95, 100, 105, 110 -> median = 100
+		decimal[] prices = [100m, 110m, 90m, 105m, 95m];
+
+		for (int i = 0; i < prices.Length; i++)
+		{
+			var result = builder.Process(subscription, new MockTransform
+			{
+				Price = prices[i],
+				Volume = 10m,
+				Time = time.AddSeconds(i)
+			});
+
+			candles.AddRange(result);
+		}
+
+		// Should have finished candle
+		var finishedCandles = candles.Where(c => c.State == CandleStates.Finished).ToList();
+		finishedCandles.Count.AssertEqual(1);
+
+		var candle = finishedCandles[0] as MedianPriceCandleMessage;
+		IsNotNull(candle);
+		candle.TotalTicks.AssertEqual(5);
+		candle.MedianPrice.AssertEqual(100m);
+		candle.Prices.Count.AssertEqual(5);
+	}
+
+	[TestMethod]
+	public void CustomCandleBuilder_UnregisterWorks()
+	{
+		var exchangeProvider = new MockExchangeInfoProvider();
+		var provider = new CandleBuilderProvider(exchangeProvider);
+
+		var customBuilder = new MedianPriceCandleBuilder(exchangeProvider);
+		provider.Register(customBuilder);
+		provider.IsRegistered(typeof(MedianPriceCandleMessage)).AssertTrue();
+
+		provider.UnRegister(customBuilder);
+		provider.IsRegistered(typeof(MedianPriceCandleMessage)).AssertFalse();
+	}
+
+	[TestMethod]
+	public void CustomCandleBuilder_MultipleCandles()
+	{
+		var builder = new MedianPriceCandleBuilder(new MockExchangeInfoProvider());
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<MedianPriceCandleMessage>(3), // Close after 3 ticks
+			}
+		};
+
+		var candles = new List<CandleMessage>();
+		var time = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		// Send 7 ticks -> should produce 2 finished candles + 1 active
+		for (int i = 0; i < 7; i++)
+		{
+			var result = builder.Process(subscription, new MockTransform
+			{
+				Price = 100m + i,
+				Volume = 10m,
+				Time = time.AddSeconds(i)
+			});
+
+			candles.AddRange(result);
+		}
+
+		var finishedCandles = candles.Where(c => c.State == CandleStates.Finished).ToList();
+		finishedCandles.Count.AssertEqual(2);
+
+		// First candle: prices 100, 101, 102 -> median = 101
+		var first = finishedCandles[0] as MedianPriceCandleMessage;
+		IsNotNull(first);
+		first.MedianPrice.AssertEqual(101m);
+
+		// Second candle: prices 103, 104, 105 -> median = 104
+		var second = finishedCandles[1] as MedianPriceCandleMessage;
+		IsNotNull(second);
+		second.MedianPrice.AssertEqual(104m);
+
+		// Active candle has 1 tick (106)
+		var active = subscription.CurrentCandle as MedianPriceCandleMessage;
+		IsNotNull(active);
+		active.TotalTicks.AssertEqual(1);
+		active.Prices.Count.AssertEqual(1);
+	}
+
+	#endregion
 }

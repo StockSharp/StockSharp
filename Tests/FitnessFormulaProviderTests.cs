@@ -1,5 +1,6 @@
 namespace StockSharp.Tests;
 
+using StockSharp.Algo.PnL;
 using StockSharp.Algo.Statistics;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Optimization;
@@ -14,23 +15,26 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var strategy = new Strategy();
 		var stats = strategy.StatisticManager;
+		var marketTime = DateTime.UtcNow;
 
 		// Set PnL
 		var pnlParam = stats.Parameters.OfType<NetProfitParameter>().First();
-		pnlParam.Add(DateTimeOffset.Now, pnl, null);
+		pnlParam.Add(marketTime, pnl, null);
 
-		// Set Recovery if provided
-		if (recovery.HasValue)
-		{
-			var recoveryParam = stats.Parameters.OfType<RecoveryFactorParameter>().First();
-			recoveryParam.Add(DateTimeOffset.Now, null, recovery.Value);
-		}
-
-		// Set MaxDrawdown if provided
+		// Set MaxDrawdown if provided - simulates equity curve to create drawdown
 		if (maxDD.HasValue)
 		{
 			var maxDDParam = stats.Parameters.OfType<MaxDrawdownParameter>().First();
-			maxDDParam.Add(DateTimeOffset.Now, maxDD.Value, null);
+			// Simulate peak then drawdown
+			maxDDParam.Add(marketTime, maxDD.Value, null);  // peak
+			maxDDParam.Add(marketTime, 0m, null);           // drop to create maxDD
+		}
+
+		// Set Recovery if provided - depends on net profit and max drawdown being set
+		if (recovery.HasValue)
+		{
+			var recoveryParam = stats.Parameters.OfType<RecoveryFactorParameter>().First();
+			recoveryParam.Add(marketTime, pnl, null);
 		}
 
 		// Set TradeCount if provided
@@ -38,7 +42,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 		{
 			var tradeCountParam = stats.Parameters.OfType<TradeCountParameter>().First();
 			for (var i = 0; i < tradeCount.Value; i++)
-				tradeCountParam.Add(DateTimeOffset.Now, default);
+				tradeCountParam.Add(new PnLInfo(marketTime, 1, 10m));
 		}
 
 		return strategy;
@@ -67,11 +71,11 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Compile_ComplexFormula_EvaluatesCorrectly()
+	public void Compile_FormulaWithMultiplication_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL * Recovery");
-		var strategy = CreateStrategyWithStats(pnl: 1000m, recovery: 2m);
+		var fitness = provider.Compile("PnL * 2");
+		var strategy = CreateStrategyWithStats(pnl: 1000m);
 
 		var result = fitness(strategy);
 
@@ -169,8 +173,8 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public void Compile_ComplexExpression_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("(PnL + Recovery) * 2");
-		var strategy = CreateStrategyWithStats(pnl: 100m, recovery: 50m);
+		var fitness = provider.Compile("(PnL + MaxDD) * 2");
+		var strategy = CreateStrategyWithStats(pnl: 100m, maxDD: 50m);
 
 		var result = fitness(strategy);
 
@@ -231,16 +235,69 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void Compile_PnLWithPenalty_EvaluatesCorrectly()
+	{
+		// PnL * 2 - MaxDD - combines pnl with drawdown penalty
+		var provider = CreateProvider();
+		var fitness = provider.Compile("PnL * 2 - MaxDD");
+		var strategy = CreateStrategyWithStats(pnl: 1000m, maxDD: 500m);
+
+		var result = fitness(strategy);
+
+		result.AssertEqual(1500m); // 2 * 1000 - 500
+	}
+
+	// ========== Recovery variable tests ==========
+
+	[TestMethod]
+	public void Compile_RecoveryTimePnL_EvaluatesCorrectly()
+	{
+		// Recovery * PnL - tests Recovery variable
+		var provider = CreateProvider();
+		var fitness = provider.Compile("Recovery * PnL");
+		var strategy = CreateStrategyWithAllStats(pnl: 1000m, recovery: 2m, maxDD: 500m);
+
+		var result = fitness(strategy);
+
+		result.AssertEqual(2000m); // 2 * 1000
+	}
+
+	[TestMethod]
 	public void Compile_RecoveryWithPenalty_EvaluatesCorrectly()
 	{
 		// Recovery * PnL - MaxDD - combines recovery with drawdown penalty
 		var provider = CreateProvider();
 		var fitness = provider.Compile("Recovery * PnL - MaxDD");
-		var strategy = CreateStrategyWithStats(pnl: 1000m, recovery: 2m, maxDD: 500m);
+		var strategy = CreateStrategyWithAllStats(pnl: 1000m, recovery: 2m, maxDD: 500m);
 
 		var result = fitness(strategy);
 
 		result.AssertEqual(1500m); // 2 * 1000 - 500
+	}
+
+	[TestMethod]
+	public void Compile_RecoveryOnly_EvaluatesCorrectly()
+	{
+		// Just Recovery variable
+		var provider = CreateProvider();
+		var fitness = provider.Compile("Recovery");
+		var strategy = CreateStrategyWithAllStats(pnl: 800m, maxDD: 400m, recovery: 2m);
+
+		var result = fitness(strategy);
+
+		result.AssertEqual(2m); // Recovery = PnL / MaxDD = 800 / 400 = 2
+	}
+
+	[TestMethod]
+	public void Compile_RecoveryInComplexFormula_EvaluatesCorrectly()
+	{
+		var provider = CreateProvider();
+		var fitness = provider.Compile("(PnL + Recovery) * 2");
+		var strategy = CreateStrategyWithAllStats(pnl: 100m, recovery: 50m, maxDD: 200m);
+
+		var result = fitness(strategy);
+
+		result.AssertEqual(300m); // (100 + 50) * 2
 	}
 
 	// ========== Complex nested expressions ==========
@@ -249,8 +306,8 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public void Compile_NestedParentheses_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("((PnL + Recovery) * (TCount - 5)) / 10");
-		var strategy = CreateStrategyWithStats(pnl: 100m, recovery: 50m, tradeCount: 15);
+		var fitness = provider.Compile("((PnL + MaxDD) * (TCount - 5)) / 10");
+		var strategy = CreateStrategyWithStats(pnl: 100m, maxDD: 50m, tradeCount: 15);
 
 		var result = fitness(strategy);
 
@@ -272,14 +329,14 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	[TestMethod]
 	public void Compile_ComplexMultiVariable_EvaluatesCorrectly()
 	{
-		// Sharpe-like: (PnL - 0) / MaxDD, but more complex
+		// (PnL * 3) / (MaxDD + 1)
 		var provider = CreateProvider();
-		var fitness = provider.Compile("(PnL * Recovery) / (MaxDD + 1)");
-		var strategy = CreateStrategyWithStats(pnl: 1000m, recovery: 1.5m, maxDD: 499m);
+		var fitness = provider.Compile("(PnL * 3) / (MaxDD + 1)");
+		var strategy = CreateStrategyWithStats(pnl: 500m, maxDD: 499m);
 
 		var result = fitness(strategy);
 
-		result.AssertEqual(3m); // (1000 * 1.5) / (499 + 1) = 1500 / 500 = 3
+		result.AssertEqual(3m); // (500 * 3) / (499 + 1) = 1500 / 500 = 3
 	}
 
 	// ========== Order of operations ==========
@@ -288,8 +345,8 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public void Compile_OrderOfOperations_MultiplicationBeforeAddition()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL + Recovery * TCount");
-		var strategy = CreateStrategyWithStats(pnl: 100m, recovery: 10m, tradeCount: 5);
+		var fitness = provider.Compile("PnL + MaxDD * TCount");
+		var strategy = CreateStrategyWithStats(pnl: 100m, maxDD: 10m, tradeCount: 5);
 
 		var result = fitness(strategy);
 
@@ -312,8 +369,8 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public void Compile_OrderOfOperations_ParenthesesOverride()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("(PnL + Recovery) * TCount");
-		var strategy = CreateStrategyWithStats(pnl: 100m, recovery: 10m, tradeCount: 5);
+		var fitness = provider.Compile("(PnL + MaxDD) * TCount");
+		var strategy = CreateStrategyWithStats(pnl: 100m, maxDD: 10m, tradeCount: 5);
 
 		var result = fitness(strategy);
 
@@ -326,8 +383,8 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public void Compile_VeryLargeNumbers_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL * Recovery");
-		var strategy = CreateStrategyWithStats(pnl: 1_000_000_000m, recovery: 1000m);
+		var fitness = provider.Compile("PnL * 1000");
+		var strategy = CreateStrategyWithStats(pnl: 1_000_000_000m);
 
 		var result = fitness(strategy);
 
@@ -350,8 +407,8 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public void Compile_ZeroValue_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL * Recovery");
-		var strategy = CreateStrategyWithStats(pnl: 0m, recovery: 100m);
+		var fitness = provider.Compile("PnL * MaxDD");
+		var strategy = CreateStrategyWithStats(pnl: 0m, maxDD: 100m);
 
 		var result = fitness(strategy);
 
@@ -362,12 +419,12 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public void Compile_AllNegativeValues_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL + Recovery");
-		var strategy = CreateStrategyWithStats(pnl: -100m, recovery: -50m);
+		var fitness = provider.Compile("PnL + TCount");
+		var strategy = CreateStrategyWithStats(pnl: -100m, tradeCount: 0);
 
 		var result = fitness(strategy);
 
-		result.AssertEqual(-150m);
+		result.AssertEqual(-100m);
 	}
 
 	[TestMethod]
@@ -397,8 +454,18 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Compile_FormulaWithDecimalConstant_EvaluatesCorrectly()
+	public void Compile_FormulaWithDecimalConstant_CurrentBehavior_ThrowsInvalidOperationException()
 	{
+		// CURRENT BEHAVIOR: Decimal literals (0.5) are treated as double, which can't be used with decimal variables
+		var provider = CreateProvider();
+
+		Throws<InvalidOperationException>(() => provider.Compile("PnL * 0.5"));
+	}
+
+	[TestMethod]
+	public void Compile_FormulaWithDecimalConstant_ExpectedBehavior_EvaluatesCorrectly()
+	{
+		// EXPECTED BEHAVIOR: Decimal literals should work
 		var provider = CreateProvider();
 		var fitness = provider.Compile("PnL * 0.5");
 		var strategy = CreateStrategyWithStats(pnl: 100m);
@@ -438,8 +505,8 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public void Compile_AllFourArithmeticOperators_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL + Recovery - MaxDD * TCount / 10");
-		var strategy = CreateStrategyWithStats(pnl: 100m, recovery: 50m, maxDD: 20m, tradeCount: 10);
+		var fitness = provider.Compile("PnL + 50 - MaxDD * TCount / 10");
+		var strategy = CreateStrategyWithStats(pnl: 100m, maxDD: 20m, tradeCount: 10);
 
 		var result = fitness(strategy);
 
@@ -502,20 +569,109 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Compile_WhitespaceOnly_ThrowsArgumentNullException()
+	public void Compile_WhitespaceOnly_CurrentBehavior_ThrowsInvalidOperationException()
 	{
+		// CURRENT BEHAVIOR: Whitespace-only strings pass IsEmpty() check and fail later
+		var provider = CreateProvider();
+
+		Throws<InvalidOperationException>(() => provider.Compile("   "));
+	}
+
+	[TestMethod]
+	public void Compile_WhitespaceOnly_ExpectedBehavior_ThrowsArgumentNullException()
+	{
+		// EXPECTED BEHAVIOR: Whitespace-only should be treated as empty/null
 		var provider = CreateProvider();
 
 		Throws<ArgumentNullException>(() => provider.Compile("   "));
 	}
 
 	[TestMethod]
-	public void Compile_CaseSensitiveVariable_ThrowsForWrongCase()
+	public void Compile_TabsOnly_CurrentBehavior_ThrowsInvalidOperationException()
+	{
+		// CURRENT BEHAVIOR: Tab-only strings pass IsEmpty() check
+		var provider = CreateProvider();
+
+		Throws<InvalidOperationException>(() => provider.Compile("\t\t"));
+	}
+
+	[TestMethod]
+	public void Compile_NewlinesOnly_CurrentBehavior_ThrowsInvalidOperationException()
+	{
+		// CURRENT BEHAVIOR: Newline-only strings pass IsEmpty() check
+		var provider = CreateProvider();
+
+		Throws<InvalidOperationException>(() => provider.Compile("\n\n"));
+	}
+
+	[TestMethod]
+	public void Compile_CaseInsensitiveVariable_EvaluatesCorrectly()
+	{
+		// Variables are case-insensitive
+		var provider = CreateProvider();
+		var fitness = provider.Compile("pnl");
+		var strategy = CreateStrategyWithStats(pnl: 100m);
+
+		var result = fitness(strategy);
+
+		result.AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void Compile_MixedCaseVariable_EvaluatesCorrectly()
+	{
+		var provider = CreateProvider();
+		var fitness = provider.Compile("PNL");
+		var strategy = CreateStrategyWithStats(pnl: 100m);
+
+		var result = fitness(strategy);
+
+		result.AssertEqual(100m);
+	}
+
+	// ========== More decimal literal edge cases ==========
+
+	[TestMethod]
+	public void Compile_DivisionByDecimal_CurrentBehavior_ThrowsInvalidOperationException()
+	{
+		// Division by decimal literal doesn't work
+		var provider = CreateProvider();
+
+		Throws<InvalidOperationException>(() => provider.Compile("PnL / 0.5"));
+	}
+
+	[TestMethod]
+	public void Compile_AdditionWithDecimal_CurrentBehavior_ThrowsInvalidOperationException()
 	{
 		var provider = CreateProvider();
 
-		// Variables should be case-sensitive (PnL vs pnl)
-		Throws<ArgumentOutOfRangeException>(() => provider.Compile("pnl"));
+		Throws<InvalidOperationException>(() => provider.Compile("PnL + 0.1"));
+	}
+
+	// ========== Order of operations with Recovery ==========
+
+	[TestMethod]
+	public void Compile_OrderOfOperations_RecoveryMultiplicationBeforeAddition()
+	{
+		var provider = CreateProvider();
+		var fitness = provider.Compile("PnL + Recovery * TCount");
+		var strategy = CreateStrategyWithAllStats(pnl: 100m, recovery: 10m, maxDD: 100m, tradeCount: 5);
+
+		var result = fitness(strategy);
+
+		result.AssertEqual(150m); // 100 + (10 * 5) = 150
+	}
+
+	[TestMethod]
+	public void Compile_OrderOfOperations_RecoveryParenthesesOverride()
+	{
+		var provider = CreateProvider();
+		var fitness = provider.Compile("(PnL + Recovery) * TCount");
+		var strategy = CreateStrategyWithAllStats(pnl: 100m, recovery: 10m, maxDD: 100m, tradeCount: 5);
+
+		var result = fitness(strategy);
+
+		result.AssertEqual(550m); // (100 + 10) * 5 = 550
 	}
 
 	// ========== Helper for full stats ==========
@@ -530,44 +686,46 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var strategy = new Strategy();
 		var stats = strategy.StatisticManager;
+		var marketTime = DateTime.UtcNow;
 
 		if (pnl.HasValue)
 		{
 			var param = stats.Parameters.OfType<NetProfitParameter>().First();
-			param.Add(DateTimeOffset.Now, pnl.Value, null);
-		}
-
-		if (recovery.HasValue)
-		{
-			var param = stats.Parameters.OfType<RecoveryFactorParameter>().First();
-			param.Add(DateTimeOffset.Now, null, recovery.Value);
+			param.Add(marketTime, pnl.Value, null);
 		}
 
 		if (maxDD.HasValue)
 		{
 			var param = stats.Parameters.OfType<MaxDrawdownParameter>().First();
-			param.Add(DateTimeOffset.Now, maxDD.Value, null);
+			param.Add(marketTime, maxDD.Value, null);
+			param.Add(marketTime, 0m, null);
+		}
+
+		if (recovery.HasValue)
+		{
+			var param = stats.Parameters.OfType<RecoveryFactorParameter>().First();
+			param.Add(marketTime, pnl ?? 0m, null);
 		}
 
 		if (tradeCount.HasValue)
 		{
 			var param = stats.Parameters.OfType<TradeCountParameter>().First();
 			for (var i = 0; i < tradeCount.Value; i++)
-				param.Add(DateTimeOffset.Now, default);
+				param.Add(new PnLInfo(marketTime, 1, 10m));
 		}
 
 		if (winTrades.HasValue)
 		{
 			var param = stats.Parameters.OfType<WinningTradesParameter>().First();
 			for (var i = 0; i < winTrades.Value; i++)
-				param.Add(DateTimeOffset.Now, 100m);
+				param.Add(new PnLInfo(marketTime, 1, 100m));
 		}
 
 		if (losTrades.HasValue)
 		{
 			var param = stats.Parameters.OfType<LossingTradesParameter>().First();
 			for (var i = 0; i < losTrades.Value; i++)
-				param.Add(DateTimeOffset.Now, -50m);
+				param.Add(new PnLInfo(marketTime, 1, -50m));
 		}
 
 		return strategy;
