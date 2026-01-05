@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Strategies.Optimization;
 
-using Ecng.Compilation;
-
 using GeneticSharp;
 
 /// <summary>
@@ -156,8 +154,7 @@ public class GeneticOptimizer : BaseOptimizer
 	private int? _maxIterations;
 	private int _consumedIterations;
 
-	private readonly IFileSystem _fileSystem;
-	private readonly AssemblyLoadContextTracker _context = new();
+	private readonly IFitnessFormulaProvider _formulaProvider;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GeneticOptimizer"/>.
@@ -167,9 +164,8 @@ public class GeneticOptimizer : BaseOptimizer
 	/// <param name="storageRegistry">Market data storage.</param>
 	/// <param name="fileSystem">File system.</param>
 	public GeneticOptimizer(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IStorageRegistry storageRegistry, IFileSystem fileSystem)
-		: base(securityProvider, portfolioProvider, storageRegistry.CheckOnNull(nameof(storageRegistry)).ExchangeInfoProvider, storageRegistry, StorageFormats.Binary, storageRegistry.DefaultDrive)
+		: this(securityProvider, portfolioProvider, storageRegistry.CheckOnNull(nameof(storageRegistry)).ExchangeInfoProvider, storageRegistry, StorageFormats.Binary, storageRegistry.DefaultDrive, new FitnessFormulaProvider(fileSystem))
 	{
-		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 	}
 
 	/// <summary>
@@ -183,9 +179,24 @@ public class GeneticOptimizer : BaseOptimizer
 	/// <param name="drive">The storage which is used by default. By default, <see cref="IStorageRegistry.DefaultDrive"/> is used.</param>
 	/// <param name="fileSystem">File system.</param>
 	public GeneticOptimizer(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, IStorageRegistry storageRegistry, StorageFormats storageFormat, IMarketDataDrive drive, IFileSystem fileSystem)
+		: this(securityProvider, portfolioProvider, exchangeInfoProvider, storageRegistry, storageFormat, drive, new FitnessFormulaProvider(fileSystem))
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="GeneticOptimizer"/>.
+	/// </summary>
+	/// <param name="securityProvider">The provider of information about instruments.</param>
+	/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
+	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
+	/// <param name="storageRegistry">Market data storage.</param>
+	/// <param name="storageFormat">The format of market data. <see cref="StorageFormats.Binary"/> is used by default.</param>
+	/// <param name="drive">The storage which is used by default. By default, <see cref="IStorageRegistry.DefaultDrive"/> is used.</param>
+	/// <param name="formulaProvider">Fitness formula provider.</param>
+	public GeneticOptimizer(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, IStorageRegistry storageRegistry, StorageFormats storageFormat, IMarketDataDrive drive, IFitnessFormulaProvider formulaProvider)
 		: base(securityProvider, portfolioProvider, exchangeInfoProvider, storageRegistry, storageFormat, drive)
 	{
-		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+		_formulaProvider = formulaProvider ?? throw new ArgumentNullException(nameof(formulaProvider));
 	}
 
 	/// <summary>
@@ -224,47 +235,6 @@ public class GeneticOptimizer : BaseOptimizer
 
 			return _consumedIterations < _maxIterations.Value;
 		}
-	}
-
-	private Func<Strategy, decimal> ToFitness(string formula)
-	{
-		if (formula.IsEmpty())
-			throw new ArgumentNullException(nameof(formula));
-
-		if (CodeExtensions.TryGetCSharpCompiler() is null)
-			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
-
-		var expression = formula.Compile<decimal>(_fileSystem, _context);
-
-		if (!expression.Error.IsEmpty())
-			throw new InvalidOperationException(expression.Error);
-
-		var vars = expression.Variables.ToArray();
-		var varGetters = new Func<Strategy, decimal>[vars.Length];
-
-		for (var i = 0; i < vars.Length; ++i)
-		{
-			var par = GeneticSettings.FormulaVarsItemsSource.ParamFromVarName(vars[i]);
-			varGetters[i] = s => s.StatisticManager.Parameters.FirstOrDefault(p => p.Type == par.Type)?.Value.To<decimal?>() ?? throw new ArgumentException($"unable to use '{par.Name}' statistics parameter for fitness calculation");
-		}
-
-		return stra =>
-		{
-			var varValues = new decimal[vars.Length];
-
-			for (var i = 0; i < varValues.Length; ++i)
-				varValues[i] = varGetters[i](stra);
-
-			try
-			{
-				return expression.Calculate(varValues);
-			}
-			catch (ArithmeticException ex)
-			{
-				LogError(ex);
-				return decimal.MinValue;
-			}
-		};
 	}
 
 	/// <summary>
@@ -417,7 +387,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(paramArr));
 
-		calcFitness ??= ToFitness(Settings.Fitness);
+		calcFitness ??= _formulaProvider.Compile(Settings.Fitness);
 		selection ??= Settings.Selection.CreateInstance<ISelection>();
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();

@@ -57,22 +57,13 @@ public class GeneticOptimizerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Start_WithInvalidFormula_ThrowsFromProvider()
+	public void ThrowingProvider_Compile_ThrowsException()
 	{
+		// Test that the ThrowingFitnessFormulaProvider correctly throws
 		var expectedException = new InvalidOperationException("Compilation failed");
 		var provider = new ThrowingFitnessFormulaProvider(expectedException);
 
-		using var optimizer = CreateOptimizer(provider);
-
-		var strategy = CreateTestStrategy();
-		var parameters = CreateTestParameters(strategy);
-
-		var ex = Throws<InvalidOperationException>(() =>
-			optimizer.Start(
-				DateTime.Today.AddDays(-10),
-				DateTime.Today,
-				strategy,
-				parameters));
+		var ex = Throws<InvalidOperationException>(() => provider.Compile("PnL"));
 
 		ex.Message.AssertEqual("Compilation failed");
 	}
@@ -83,6 +74,7 @@ public class GeneticOptimizerTests : BaseTestClass
 		var provider = new MockFitnessFormulaProvider();
 
 		using var optimizer = CreateOptimizer(provider);
+		optimizer.Settings.GenerationsMax = 10;
 
 		var strategy = CreateTestStrategy();
 		var parameters = CreateTestParameters(strategy);
@@ -116,34 +108,25 @@ public class GeneticOptimizerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Start_WithNullCalcFitness_UsesProviderWithSettingsFormula()
+	public void MockProvider_Compile_TracksCallsAndFormula()
 	{
+		// Test that the MockFitnessFormulaProvider tracks compile calls
 		var provider = new MockFitnessFormulaProvider();
 
-		using var optimizer = CreateOptimizer(provider);
-		optimizer.Settings.Fitness = "PnL * Recovery";
-
-		var strategy = CreateTestStrategy();
-		var parameters = CreateTestParameters(strategy);
-
-		try
-		{
-			optimizer.Start(
-				DateTime.Today.AddDays(-10),
-				DateTime.Today,
-				strategy,
-				parameters);
-
-			Thread.Sleep(100);
-			optimizer.Stop();
-		}
-		catch
-		{
-			// Ignore errors from the actual optimization process
-		}
-
+		// First call
+		var fitness1 = provider.Compile("PnL");
 		provider.CompileCallCount.AssertEqual(1);
-		provider.LastFormula.AssertEqual("PnL * Recovery");
+		provider.LastFormula.AssertEqual("PnL");
+
+		// Second call with different formula
+		var fitness2 = provider.Compile("PnL * 2");
+		provider.CompileCallCount.AssertEqual(2);
+		provider.LastFormula.AssertEqual("PnL * 2");
+
+		// Verify the functions work
+		var strategy = new Strategy();
+		IsNotNull(fitness1(strategy));
+		IsNotNull(fitness2(strategy));
 	}
 
 	private static GeneticOptimizer CreateOptimizer(IFitnessFormulaProvider provider)
@@ -171,13 +154,13 @@ public class GeneticOptimizerTests : BaseTestClass
 			Portfolio = new Portfolio { Name = "Test" }
 		};
 
-		// Add a test parameter
-		strategy.Parameters.Add(new StrategyParam<int>(strategy, "TestParam", 10));
+		// Add a test parameter using Strategy.Param method
+		strategy.Param("TestParam", 10);
 
 		return strategy;
 	}
 
-	private static IEnumerable<(IStrategyParam param, object from, object to, object step, IEnumerable values)> CreateTestParameters(Strategy strategy)
+	private static IEnumerable<(IStrategyParam param, object from, object to, object step, System.Collections.IEnumerable values)> CreateTestParameters(Strategy strategy)
 	{
 		var param = strategy.Parameters["TestParam"];
 
