@@ -110,6 +110,15 @@ public abstract class MarketDepthGenerator(SecurityId securityId) : MarketDataGe
 	/// </summary>
 	public bool GenerateOrdersCount { get; set; }
 
+	/// <inheritdoc />
+	public override void Init()
+	{
+		if (MinSpreadStepCount > MaxSpreadStepCount)
+			throw new ArgumentException($"{nameof(MinSpreadStepCount)} ({MinSpreadStepCount}) > {nameof(MaxSpreadStepCount)} ({MaxSpreadStepCount})");
+
+		base.Init();
+	}
+
 	private int _maxGenerations = 20;
 
 	/// <summary>
@@ -167,6 +176,8 @@ public abstract class MarketDepthGenerator(SecurityId securityId) : MarketDataGe
 		destination.MaxBidsDepth = MaxBidsDepth;
 		destination.MaxAsksDepth = MaxAsksDepth;
 		destination.MaxGenerations = MaxGenerations;
+		destination.GenerateDepthOnEachTrade = GenerateDepthOnEachTrade;
+		destination.GenerateOrdersCount = GenerateOrdersCount;
 	}
 }
 

@@ -144,7 +144,6 @@ public class RandomWalkTradeGenerator(SecurityId securityId) : TradeGenerator(se
 		var clone = new RandomWalkTradeGenerator(SecurityId)
 		{
 			GenerateOriginSide = GenerateOriginSide,
-			IdGenerator = IdGenerator
 		};
 
 		CopyTo(clone);

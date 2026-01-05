@@ -749,6 +749,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 		var generator = new OrderLogGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
+		generator.TradeGenerator.Interval = TimeSpan.Zero;
 
 		var secMsg = CreateSecurityMessage(secId);
 		generator.Process(secMsg);
@@ -882,23 +883,25 @@ public class MarketDataGeneratorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Generator_MinVolumeGreaterThanMaxVolume_ShouldThrow()
+	public void Generator_MinVolumeGreaterThanMaxVolume_ThrowsOnInit()
 	{
-		// MinVolume > MaxVolume should throw exception
+		// MinVolume > MaxVolume throws ArgumentException during Init() when RandomArray is created
 		var secId = CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.MaxVolume = 5;
-		ThrowsExactly<ArgumentOutOfRangeException>(() => generator.MinVolume = 10);
+		generator.MinVolume = 10; // min > max
+		ThrowsExactly<ArgumentException>(() => generator.Init());
 	}
 
 	[TestMethod]
-	public void DepthGenerator_MinSpreadGreaterThanMaxSpread_ShouldThrow()
+	public void DepthGenerator_MinSpreadGreaterThanMaxSpread_ThrowsOnInit()
 	{
-		// MinSpreadStepCount > MaxSpreadStepCount should throw exception
+		// MinSpreadStepCount > MaxSpreadStepCount throws ArgumentException during Init()
 		var secId = CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.MaxSpreadStepCount = 2;
-		ThrowsExactly<ArgumentOutOfRangeException>(() => generator.MinSpreadStepCount = 5);
+		generator.MinSpreadStepCount = 5; // min > max
+		ThrowsExactly<ArgumentException>(() => generator.Init());
 	}
 
 	[TestMethod]
