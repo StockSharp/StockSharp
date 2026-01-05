@@ -50,6 +50,11 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 	/// </summary>
 	public bool CheckUnique { get; set; }
 
+	/// <summary>
+	/// Drop existing table before export. The default is disabled.
+	/// </summary>
+	public bool DropExisting { get; set; }
+
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> ExportOrderLogAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 		=> DoAsync(messages, CreateExecutionTable, cancellationToken);
@@ -113,6 +118,9 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 		var tableName = typeof(TValue).Name.Remove(nameof(Message)).Remove("Change");
 
 		using var db = _dbProvider.CreateConnection(_connection);
+
+		if (DropExisting)
+			_dbProvider.DropTable(db, tableName);
 
 		using var inserter = _dbProvider.Create<TValue>(db, tableName, builder =>
 		{

@@ -9,33 +9,6 @@ public class ExportTests : BaseTestClass
 {
 	private static readonly TemplateTxtRegistry _txtReg = new();
 
-#if NET10_0_OR_GREATER
-	[ClassInitialize]
-	public static void ClassInit(TestContext context)
-	{
-		// Drop test tables to ensure fresh schema (handles column additions like MarginMode)
-		var connStr = GetSecret("DB_CONNECTION_STRING");
-		if (connStr.IsEmpty())
-			return;
-
-		var tables = new[]
-		{
-			"Execution", "TimeQuoteChange", "Level1", "Candle", "News",
-			"Security", "Position", "IndicatorValue", "BoardState", "Board"
-		};
-
-		using var conn = new Microsoft.Data.SqlClient.SqlConnection(connStr);
-		conn.Open();
-
-		foreach (var table in tables)
-		{
-			using var cmd = conn.CreateCommand();
-			cmd.CommandText = $"IF OBJECT_ID('{table}', 'U') IS NOT NULL DROP TABLE [{table}]";
-			cmd.ExecuteNonQuery();
-		}
-	}
-#endif
-
 	private async Task ExportAsync<TValue>(DataType dataType, IEnumerable<TValue> values, string txtTemplate)
 		where TValue : class
 	{
@@ -76,7 +49,10 @@ public class ExportTests : BaseTestClass
 		{
 			Provider = DatabaseProviderRegistry.AllProviders.First(),
 			ConnectionString = GetSecret("DB_CONNECTION_STRING"),
-		});
+		})
+		{
+			DropExisting = true,
+		};
 		var (dbCount, dbLastTime) = await dbExporter.Export(arr.ToAsyncEnumerable(), token);
 		validateResult(dbCount, dbLastTime, "DB");
 #endif
