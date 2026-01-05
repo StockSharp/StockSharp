@@ -1275,7 +1275,7 @@ static class Helper
 				}
 				else
 				{
-					// TODO ���������� �������������� ������ ���� ��������� �� ������� �����������
+					// TODO построение детализованных уровней было выключено по причине оптимизации
 
 					//actualLevel.BuyVolumes.Count().AssertEqual(expectedLevel.BuyVolumes.Count());
 
