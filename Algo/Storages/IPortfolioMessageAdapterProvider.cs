@@ -179,9 +179,20 @@ public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvid
 
 	private void Save(bool overwrite, IEnumerable<KeyValuePair<string, Guid>> adapters)
 	{
+		var arr = adapters.ToArray();
+
 		_executor.Add(() =>
 		{
 			var appendHeader = overwrite || !_fileSystem.FileExists(_fileName) || _fileSystem.GetFileLength(_fileName) == 0;
+
+			if (arr.Length == 0)
+			{
+				if (appendHeader)
+					_fileSystem.DeleteFile(_fileName);
+
+				return;
+			}
+
 			var mode = overwrite ? FileMode.Create : FileMode.Append;
 
 			using var stream = new TransactionFileStream(_fileSystem, _fileName, mode);
@@ -196,7 +207,7 @@ public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvid
 				]);
 			}
 
-			foreach (var pair in adapters)
+			foreach (var pair in arr)
 			{
 				writer.WriteRow(
 				[

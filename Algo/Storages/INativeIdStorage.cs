@@ -216,7 +216,11 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 
 			var appendHeader = !fs.FileExists(fileName) || fs.GetFileLength(fileName) == 0;
 
-			EnsureStream();
+			if (_writer == null)
+			{
+				var stream = new TransactionFileStream(_provider._fileSystem, fileName, FileMode.Append);
+				_writer = stream.CreateCsvWriter(leaveOpen: false);
+			}
 
 			if (appendHeader)
 				WriteHeader(_writer, items[0].nativeId);
@@ -225,16 +229,6 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 				WriteItem(_writer, secId, nativeId);
 
 			_writer.Commit();
-		}
-
-		private void EnsureStream()
-		{
-			if (_writer != null)
-				return;
-
-			var fileName = GetFileName();
-			var stream = new TransactionFileStream(_provider._fileSystem, fileName, FileMode.Append);
-			_writer = stream.CreateCsvWriter(leaveOpen: false);
 		}
 
 		private void ResetStream()

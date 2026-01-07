@@ -214,13 +214,21 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
 
+			var arr = values.ToArray();
+
+			if (arr.Length == 0)
+			{
+				FileSystem.DeleteFile(_fileName);
+				return;
+			}
+
 			using var stream = new TransactionFileStream(FileSystem, _fileName, FileMode.Create);
 			using var writer = stream.CreateCsvWriter();
 
 			writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.name)));
 			writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.type)).Select(t => t.TryGetCSharpAlias() ?? t.GetTypeName(false)));
 
-			foreach (var (secId, fields) in values)
+			foreach (var (secId, fields) in arr)
 			{
 				writer.WriteRow(new[] { secId.ToStringId() }.Concat(_fields.Select(f => fields.TryGetValue(f.name)?.To<string>())));
 			}

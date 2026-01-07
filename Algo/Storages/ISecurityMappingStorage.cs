@@ -297,11 +297,22 @@ public sealed class CsvSecurityMappingStorageProvider : Disposable, ISecurityMap
 
 		private void SaveToFile(bool overwrite, IEnumerable<SecurityIdMapping> mappings)
 		{
+			var arr = mappings.ToArray();
+
 			_provider._executor.Add(() =>
 			{
 				var fileName = Path.Combine(_provider._path, _storageName + ".csv");
 
 				var appendHeader = overwrite || !_provider._fileSystem.FileExists(fileName) || _provider._fileSystem.GetFileLength(fileName) == 0;
+
+				if (arr.Length == 0)
+				{
+					if (appendHeader)
+						_provider._fileSystem.DeleteFile(fileName);
+
+					return;
+				}
+
 				var mode = overwrite ? FileMode.Create : FileMode.Append;
 
 				using var stream = new TransactionFileStream(_provider._fileSystem, fileName, mode);
@@ -318,7 +329,7 @@ public sealed class CsvSecurityMappingStorageProvider : Disposable, ISecurityMap
 					]);
 				}
 
-				foreach (var mapping in mappings)
+				foreach (var mapping in arr)
 				{
 					writer.WriteRow(
 					[

@@ -341,16 +341,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			_executor.Add(() =>
 			{
 				ResetStream();
-
-				var dir = Path.GetDirectoryName(FileName);
-				FileSystem.CreateDirectory(dir);
-
-				var stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
-				_writer = stream.CreateCsvWriter(Registry.Encoding, false);
-
 				ResetCopy();
 
-				_writer.Commit();
+				FileSystem.DeleteFile(FileName);
 			});
 		}
 	}
