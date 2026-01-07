@@ -452,7 +452,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var subscribeMsg = new MarketDataMessage
 		{
 			SecurityId = secId,
-			DataType2 = DataType.TimeFrame(TimeSpan.FromMinutes(1)),
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
 			TransactionId = 1,
 			IsSubscribe = true,
 		};
@@ -523,7 +523,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var candleSubscribe = new MarketDataMessage
 		{
 			SecurityId = secId,
-			DataType2 = DataType.TimeFrame(TimeSpan.FromMinutes(1)),
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
 			TransactionId = 2,
 			IsSubscribe = true,
 		};

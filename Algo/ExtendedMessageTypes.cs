@@ -1,19 +1,17 @@
 ﻿namespace StockSharp.Algo;
 
-using StockSharp.Algo.Testing;
-
 /// <summary>
 /// Extended <see cref="MessageTypes"/>.
 /// </summary>
 public static class ExtendedMessageTypes
 {
 	/// <summary>
-	/// <see cref="GeneratorMessage"/>.
+	/// <see cref="Testing.Generation.GeneratorMessage"/>.
 	/// </summary>
 	public const MessageTypes Generator = (MessageTypes)(-6);
 
 	/// <summary>
-	/// <see cref="CommissionRuleMessage"/>.
+	/// <see cref="Testing.CommissionRuleMessage"/>.
 	/// </summary>
 	public const MessageTypes CommissionRule = (MessageTypes)(-7);
 	

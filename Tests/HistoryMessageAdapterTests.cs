@@ -16,9 +16,9 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		public int Count => _securities.Count;
 
-		public event Action<IEnumerable<Security>> Added;
-		public event Action<IEnumerable<Security>> Removed;
-		public event Action Cleared;
+		event Action<IEnumerable<Security>> ISecurityProvider.Added { add { } remove { } }
+		event Action<IEnumerable<Security>> ISecurityProvider.Removed { add { } remove { } }
+		event Action ISecurityProvider.Cleared { add { } remove { } }
 
 		public ValueTask<Security> LookupByIdAsync(SecurityId id, CancellationToken cancellationToken)
 			=> new(_securities.FirstOrDefault(s => s.ToSecurityId() == id));

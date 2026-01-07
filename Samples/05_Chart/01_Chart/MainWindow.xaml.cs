@@ -27,7 +27,7 @@ using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Candles.Patterns;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Storages;
-using StockSharp.Algo.Testing;
+using StockSharp.Algo.Testing.Generation;
 using StockSharp.BusinessEntities;
 using StockSharp.Localization;
 using StockSharp.Messages;

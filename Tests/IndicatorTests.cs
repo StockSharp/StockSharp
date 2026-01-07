@@ -499,34 +499,34 @@ public class IndicatorTests : BaseTestClass
 						// choose random within [min; max]
 						if (propType == typeof(int) || propType == typeof(short) || propType == typeof(sbyte) || propType == typeof(byte) || propType == typeof(ushort) || propType == typeof(uint))
 						{
-							var minI = Convert.ToInt32(min);
-							var maxI = Convert.ToInt32(max);
+							var minI = min.To<int>();
+							var maxI = max.To<int>();
 							value = RandomGen.GetInt(minI, maxI).To(propType);
 						}
 						else if (propType == typeof(long))
 						{
-							var minL = Convert.ToInt64(min);
-							var maxL = Convert.ToInt64(max);
+							var minL = min.To<long>();
+							var maxL = max.To<long>();
 							var rnd = RandomGen.GetDouble();
 							var v = minL + (long)Math.Round((maxL - minL) * rnd);
 							value = v;
 						}
 						else if (propType == typeof(double))
 						{
-							var minD = Convert.ToDouble(min);
-							var maxD = Convert.ToDouble(max);
+							var minD = min.To<double>();
+							var maxD = max.To<double>();
 							value = minD + (maxD - minD) * RandomGen.GetDouble();
 						}
 						else if (propType == typeof(float))
 						{
-							var minF = Convert.ToSingle(min);
-							var maxF = Convert.ToSingle(max);
+							var minF = min.To<float>();
+							var maxF = max.To<float>();
 							value = (float)(minF + (maxF - minF) * RandomGen.GetDouble());
 						}
 						else if (propType == typeof(decimal))
 						{
-							var minM = Convert.ToDecimal(min);
-							var maxM = Convert.ToDecimal(max);
+							var minM = min.To<decimal>();
+							var maxM = max.To<decimal>();
 							value = minM + (decimal)RandomGen.GetDouble() * (maxM - minM);
 						}
 						else
@@ -534,8 +534,8 @@ public class IndicatorTests : BaseTestClass
 							// fallback to numeric conversion if possible
 							if (propType.IsNumeric())
 							{
-								var minD = Convert.ToDouble(min);
-								var maxD = Convert.ToDouble(max);
+								var minD = min.To<double>();
+								var maxD = max.To<double>();
 								var d = minD + (maxD - minD) * RandomGen.GetDouble();
 								value = d.To(propType);
 							}

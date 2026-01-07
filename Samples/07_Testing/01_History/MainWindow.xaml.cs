@@ -18,7 +18,7 @@ using StockSharp.Algo;
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Testing;
-using StockSharp.Algo.Strategies;
+using StockSharp.Algo.Testing.Generation;
 using StockSharp.BusinessEntities;
 using StockSharp.Messages;
 using StockSharp.Charting;
