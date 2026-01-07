@@ -205,8 +205,7 @@ public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvid
 				]);
 			}
 
-			writer.Flush();
-			stream.Commit();
+			writer.Commit();
 		});
 	}
 }

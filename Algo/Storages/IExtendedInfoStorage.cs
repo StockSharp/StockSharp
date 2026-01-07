@@ -225,8 +225,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 				writer.WriteRow(new[] { secId.ToStringId() }.Concat(_fields.Select(f => fields.TryGetValue(f.name)?.To<string>())));
 			}
 
-			writer.Flush();
-			stream.Commit();
+			writer.Commit();
 		}
 
 		public void Delete()

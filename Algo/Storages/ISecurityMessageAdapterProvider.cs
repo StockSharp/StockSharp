@@ -259,8 +259,7 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 				]);
 			}
 
-			writer.Flush();
-			stream.Commit();
+			writer.Commit();
 		});
 	}
 }

@@ -329,8 +329,7 @@ public sealed class CsvSecurityMappingStorageProvider : Disposable, ISecurityMap
 					]);
 				}
 
-				writer.Flush();
-				stream.Commit();
+				writer.Commit();
 			});
 		}
 	}

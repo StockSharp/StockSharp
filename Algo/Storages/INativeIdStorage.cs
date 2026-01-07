@@ -224,7 +224,6 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 			foreach (var (secId, nativeId) in items)
 				WriteItem(_writer, secId, nativeId);
 
-			_writer.Flush();
 			_writer.Commit();
 		}
 

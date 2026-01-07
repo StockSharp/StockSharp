@@ -286,7 +286,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 				Write(_writer, itemCopy);
 
-				_writer.Flush();
 				_writer.Commit();
 			});
 		}
@@ -351,7 +350,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 				ResetCopy();
 
-				_writer.Flush();
 				_writer.Commit();
 			});
 		}
@@ -381,7 +379,6 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			foreach (var item in valuesCopy)
 				Write(_writer, item);
 
-			_writer.Flush();
 			_writer.Commit();
 		});
 	}
@@ -447,8 +444,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 					foreach (var item in InnerCollection)
 						Write(writer, item);
 
-					writer.Flush();
-					stream.Commit();
+					writer.Commit();
 				}
 			}
 			catch (Exception ex)
