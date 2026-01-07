@@ -255,6 +255,9 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 			LocalTime = regMsg.LocalTime,
 		};
 
+		// Track order registration for blocked funds
+		portfolio.ProcessOrderRegistration(regMsg.SecurityId, regMsg.Side, regMsg.Volume, regMsg.Price);
+
 		// Match order
 		var matcher = new OrderMatcher();
 		var matchSettings = new MatchingSettings
@@ -268,6 +271,8 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 		// Process result
 		if (matchResult.IsRejected)
 		{
+			// Unblock funds on rejection
+			portfolio.ProcessOrderCancellation(regMsg.SecurityId, regMsg.Side, regMsg.Volume, regMsg.Price);
 			results.Add(CreateOrderResponse(regMsg, OrderStates.Done, balance: regMsg.Volume,
 				error: new InvalidOperationException(matchResult.RejectionReason)));
 			return;
@@ -279,8 +284,20 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 		{
 			var tradeId = TradeIdGenerator.GetNextId();
 
+			// Calculate commission
+			var commission = _commissionManager.Process(new ExecutionMessage
+			{
+				TradePrice = trade.Price,
+				TradeVolume = trade.Volume,
+				Side = regMsg.Side,
+			});
+
+			// Update portfolio and get position info
+			var (realizedPnL, positionChange, position) = portfolio.ProcessTrade(
+				regMsg.SecurityId, regMsg.Side, trade.Price, trade.Volume, commission);
+
 			// Trade for our order
-			results.Add(new ExecutionMessage
+			var tradeMsg = new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				SecurityId = regMsg.SecurityId,
@@ -292,10 +309,20 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 				TradePrice = trade.Price,
 				TradeVolume = trade.Volume,
 				Side = regMsg.Side,
-			});
+				Commission = commission,
+			};
+			results.Add(tradeMsg);
 
-			// Update portfolio
-			portfolio.ProcessTrade(regMsg.Side, trade.Price, trade.Volume);
+			// Send position change for the security
+			results.Add(new PositionChangeMessage
+			{
+				SecurityId = regMsg.SecurityId,
+				ServerTime = serverTime,
+				LocalTime = regMsg.LocalTime,
+				PortfolioName = regMsg.PortfolioName,
+			}
+			.Add(PositionChangeTypes.CurrentValue, position.CurrentValue)
+			.TryAdd(PositionChangeTypes.AveragePrice, position.AveragePrice));
 
 			// Generate trades for matched counter orders
 			foreach (var counterOrder in trade.CounterOrders)
@@ -303,7 +330,17 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 				if (counterOrder.IsUserOrder)
 				{
 					var counterPortfolio = GetPortfolio(counterOrder.PortfolioName);
-					counterPortfolio.ProcessTrade(counterOrder.Side, trade.Price, trade.Volume);
+					var counterVolume = Math.Min(trade.Volume, counterOrder.Balance);
+
+					var counterCommission = _commissionManager.Process(new ExecutionMessage
+					{
+						TradePrice = trade.Price,
+						TradeVolume = counterVolume,
+						Side = counterOrder.Side,
+					});
+
+					var (_, _, counterPosition) = counterPortfolio.ProcessTrade(
+						regMsg.SecurityId, counterOrder.Side, trade.Price, counterVolume, counterCommission);
 
 					results.Add(new ExecutionMessage
 					{
@@ -314,9 +351,24 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 						OriginalTransactionId = counterOrder.TransactionId,
 						TradeId = tradeId,
 						TradePrice = trade.Price,
-						TradeVolume = Math.Min(trade.Volume, counterOrder.Balance),
+						TradeVolume = counterVolume,
 						Side = counterOrder.Side,
+						Commission = counterCommission,
 					});
+
+					// Send position change for counter order
+					results.Add(new PositionChangeMessage
+					{
+						SecurityId = regMsg.SecurityId,
+						ServerTime = serverTime,
+						LocalTime = regMsg.LocalTime,
+						PortfolioName = counterOrder.PortfolioName,
+					}
+					.Add(PositionChangeTypes.CurrentValue, counterPosition.CurrentValue)
+					.TryAdd(PositionChangeTypes.AveragePrice, counterPosition.AveragePrice));
+
+					// Send portfolio (money) update for counter order
+					AddPortfolioUpdate(counterPortfolio, regMsg.LocalTime, results);
 				}
 			}
 		}
@@ -337,6 +389,10 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 			emulator.OrderBook.AddQuote(order);
 			emulator.OrderManager.RegisterOrder(order, regMsg.LocalTime);
 		}
+		else if (finalBalance == 0)
+		{
+			// Order fully executed - already handled in ProcessTrade
+		}
 
 		// Send depth update
 		if (emulator.HasDepthSubscription)
@@ -344,7 +400,7 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 			results.Add(emulator.OrderBook.ToMessage(regMsg.LocalTime, serverTime));
 		}
 
-		// Send portfolio update
+		// Send portfolio (money) update
 		AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 	}
 
@@ -372,6 +428,10 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 		// Remove from order book
 		emulator.OrderBook.RemoveQuote(order.TransactionId, order.Side, order.Price);
 
+		// Unblock funds
+		var portfolio = GetPortfolio(order.PortfolioName);
+		portfolio.ProcessOrderCancellation(cancelMsg.SecurityId, order.Side, order.Balance, order.Price);
+
 		// Send cancellation confirmation
 		results.Add(new ExecutionMessage
 		{
@@ -391,6 +451,9 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 		{
 			results.Add(emulator.OrderBook.ToMessage(cancelMsg.LocalTime, serverTime));
 		}
+
+		// Send portfolio update after cancellation
+		AddPortfolioUpdate(portfolio, cancelMsg.LocalTime, results);
 	}
 
 	private void ProcessOrderReplace(OrderReplaceMessage replaceMsg, List<Message> results)
@@ -718,6 +781,8 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 
 	private void AddPortfolioUpdate(PortfolioEmulator2 portfolio, DateTimeOffset time, List<Message> results)
 	{
+		var totalPnL = portfolio.RealizedPnL - portfolio.Commission;
+
 		results.Add(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
@@ -725,8 +790,11 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 			LocalTime = time.DateTime,
 			PortfolioName = portfolio.Name,
 		}
+		.Add(PositionChangeTypes.RealizedPnL, portfolio.RealizedPnL)
+		.Add(PositionChangeTypes.VariationMargin, totalPnL)
 		.Add(PositionChangeTypes.CurrentValue, portfolio.AvailableMoney)
-		.Add(PositionChangeTypes.RealizedPnL, portfolio.RealizedPnL));
+		.Add(PositionChangeTypes.BlockedValue, portfolio.BlockedMoney)
+		.Add(PositionChangeTypes.Commission, portfolio.Commission));
 	}
 
 	#region IMessageAdapter implementation
@@ -976,13 +1044,19 @@ internal class SecurityEmulator(MarketEmulator2 parent, SecurityId securityId)
 /// </summary>
 internal class PortfolioEmulator2
 {
-	private readonly Dictionary<SecurityId, (decimal volume, decimal avgPrice)> _positions = [];
-	private decimal _money;
+	private readonly Dictionary<SecurityId, PositionInfo> _positions = [];
+	private decimal _beginMoney;
+	private decimal _currentMoney;
 	private decimal _realizedPnL;
+	private decimal _totalBlockedMoney;
+	private decimal _commission;
 
 	public string Name { get; }
-	public decimal AvailableMoney => _money;
+	public decimal BeginMoney => _beginMoney;
+	public decimal AvailableMoney => _currentMoney;
 	public decimal RealizedPnL => _realizedPnL;
+	public decimal BlockedMoney => _totalBlockedMoney;
+	public decimal Commission => _commission;
 
 	public PortfolioEmulator2(string name)
 	{
@@ -991,23 +1065,203 @@ internal class PortfolioEmulator2
 
 	public void SetMoney(decimal money)
 	{
-		_money = money;
+		_beginMoney = money;
+		_currentMoney = money;
 	}
 
-	public void SetPosition(SecurityId secId, decimal volume)
+	public void SetPosition(SecurityId secId, decimal volume, decimal avgPrice = 0)
 	{
-		_positions[secId] = (volume, 0);
+		var pos = GetOrCreatePosition(secId);
+		pos.BeginValue = volume;
+		pos.Diff = 0;
+		pos.AveragePrice = avgPrice;
 	}
 
-	public void ProcessTrade(Sides side, decimal price, decimal volume)
+	private PositionInfo GetOrCreatePosition(SecurityId secId)
 	{
-		// Update money
+		if (!_positions.TryGetValue(secId, out var pos))
+		{
+			pos = new PositionInfo(secId);
+			_positions[secId] = pos;
+		}
+		return pos;
+	}
+
+	public PositionInfo GetPosition(SecurityId secId)
+	{
+		return _positions.TryGetValue(secId, out var pos) ? pos : null;
+	}
+
+	public (decimal realizedPnL, decimal positionChange, PositionInfo position) ProcessTrade(
+		SecurityId secId, Sides side, decimal price, decimal volume, decimal? commission = null)
+	{
+		var pos = GetOrCreatePosition(secId);
+
+		// Update commission
+		if (commission.HasValue)
+			_commission += commission.Value;
+
+		// Calculate position change
+		var positionDelta = side == Sides.Buy ? volume : -volume;
+		var prevPos = pos.CurrentValue;
+		var prevAvgPrice = pos.AveragePrice;
+
+		pos.Diff += positionDelta;
+
+		var currPos = pos.CurrentValue;
+		var tradeRealizedPnL = 0m;
+
+		// Calculate AveragePrice and RealizedPnL
+		if (currPos == 0)
+		{
+			// Position closed completely
+			if (prevPos != 0)
+			{
+				// Realized PnL = (exit price - entry price) * volume * direction
+				tradeRealizedPnL = (price - prevAvgPrice) * Math.Abs(prevPos) * Math.Sign(prevPos);
+				_realizedPnL += tradeRealizedPnL;
+			}
+			pos.AveragePrice = 0;
+		}
+		else if (prevPos == 0)
+		{
+			// New position opened
+			pos.AveragePrice = price;
+		}
+		else if (Math.Sign(prevPos) == Math.Sign(currPos))
+		{
+			// Position increased or partially closed
+			if (Math.Abs(currPos) > Math.Abs(prevPos))
+			{
+				// Position increased - recalculate average price
+				pos.AveragePrice = (prevAvgPrice * Math.Abs(prevPos) + price * volume) / Math.Abs(currPos);
+			}
+			else
+			{
+				// Position partially closed - realize PnL for closed portion
+				var closedVolume = Math.Abs(prevPos) - Math.Abs(currPos);
+				tradeRealizedPnL = (price - prevAvgPrice) * closedVolume * Math.Sign(prevPos);
+				_realizedPnL += tradeRealizedPnL;
+				// Average price remains the same for remaining position
+			}
+		}
+		else
+		{
+			// Position flipped (was long, now short or vice versa)
+			// First close old position completely
+			tradeRealizedPnL = (price - prevAvgPrice) * Math.Abs(prevPos) * Math.Sign(prevPos);
+			_realizedPnL += tradeRealizedPnL;
+			// Then open new position at current price
+			pos.AveragePrice = price;
+		}
+
+		// Update blocked volume/value for active orders (order was executed)
+		var value = volume * price;
+		if (side == Sides.Buy)
+		{
+			pos.TotalBidsVolume -= volume;
+			pos.TotalBidsValue -= value;
+		}
+		else
+		{
+			pos.TotalAsksVolume -= volume;
+			pos.TotalAsksValue -= value;
+		}
+
+		UpdateBlockedMoney();
+
+		// Update current money (simple: just track cost)
 		var cost = price * volume * (side == Sides.Buy ? -1 : 1);
-		_money += cost;
+		_currentMoney += cost;
+
+		return (tradeRealizedPnL, positionDelta, pos);
+	}
+
+	public void ProcessOrderRegistration(SecurityId secId, Sides side, decimal volume, decimal price)
+	{
+		var pos = GetOrCreatePosition(secId);
+		var value = volume * price;
+
+		if (side == Sides.Buy)
+		{
+			pos.TotalBidsVolume += volume;
+			pos.TotalBidsValue += value;
+		}
+		else
+		{
+			pos.TotalAsksVolume += volume;
+			pos.TotalAsksValue += value;
+		}
+
+		UpdateBlockedMoney();
+	}
+
+	public void ProcessOrderCancellation(SecurityId secId, Sides side, decimal volume, decimal price = 0)
+	{
+		var pos = GetOrCreatePosition(secId);
+		var value = volume * price;
+
+		if (side == Sides.Buy)
+		{
+			pos.TotalBidsVolume -= volume;
+			pos.TotalBidsValue -= value;
+		}
+		else
+		{
+			pos.TotalAsksVolume -= volume;
+			pos.TotalAsksValue -= value;
+		}
+
+		UpdateBlockedMoney();
+	}
+
+	public void ProcessTradeExecution(SecurityId secId, Sides side, decimal volume, decimal price)
+	{
+		var pos = GetOrCreatePosition(secId);
+		var value = volume * price;
+
+		// Reduce blocked amount when order is executed
+		if (side == Sides.Buy)
+		{
+			pos.TotalBidsVolume -= volume;
+			pos.TotalBidsValue -= value;
+		}
+		else
+		{
+			pos.TotalAsksVolume -= volume;
+			pos.TotalAsksValue -= value;
+		}
+
+		UpdateBlockedMoney();
+	}
+
+	private void UpdateBlockedMoney()
+	{
+		_totalBlockedMoney = 0;
+		foreach (var pos in _positions.Values)
+		{
+			// Blocked = value of all active orders
+			_totalBlockedMoney += pos.TotalBidsValue + pos.TotalAsksValue;
+		}
 	}
 
 	public IEnumerable<(SecurityId securityId, decimal volume, decimal avgPrice)> GetPositions()
 	{
-		return _positions.Select(kvp => (kvp.Key, kvp.Value.volume, kvp.Value.avgPrice));
+		return _positions.Select(kvp => (kvp.Key, kvp.Value.CurrentValue, kvp.Value.AveragePrice));
+	}
+
+	public IEnumerable<PositionInfo> GetAllPositions() => _positions.Values;
+
+	internal class PositionInfo(SecurityId securityId)
+	{
+		public SecurityId SecurityId { get; } = securityId;
+		public decimal BeginValue;
+		public decimal Diff;
+		public decimal CurrentValue => BeginValue + Diff;
+		public decimal AveragePrice;
+		public decimal TotalBidsVolume;
+		public decimal TotalAsksVolume;
+		public decimal TotalBidsValue; // volume * price
+		public decimal TotalAsksValue; // volume * price
 	}
 }
