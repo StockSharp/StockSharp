@@ -22,11 +22,15 @@ public class MarketEmulatorFeatureTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([Portfolio.CreateSimulator()]);
 		var exchProvider = new InMemoryExchangeInfoProvider();
 
+		// Mock random for reproducible tests
+		var mockRandom = new MockRandomProvider();
+
 		// V1
 		var idGen1 = new IncrementalIdGenerator();
 		var emu1 = new MarketEmulatorOld(secProvider, pfProvider, exchProvider, idGen1) { VerifyMode = false };
 		emu1.Settings.Failing = 0;
 		emu1.Settings.Latency = TimeSpan.Zero;
+		emu1.RandomProvider = mockRandom;
 		var res1 = new List<Message>();
 		emu1.NewOutMessage += res1.Add;
 
@@ -35,6 +39,7 @@ public class MarketEmulatorFeatureTests : BaseTestClass
 		var emu2 = new MarketEmulator(secProvider, pfProvider, exchProvider, idGen2) { VerifyMode = false };
 		emu2.OrderIdGenerator = new IncrementalIdGenerator();
 		emu2.TradeIdGenerator = new IncrementalIdGenerator();
+		emu2.RandomProvider = mockRandom;
 		var res2 = new List<Message>();
 		emu2.NewOutMessage += res2.Add;
 

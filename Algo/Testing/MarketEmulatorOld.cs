@@ -100,9 +100,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 		private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = [];
 		private DateTime _prevTime;
 		private readonly MarketEmulatorSettings _settings = parent.Settings;
-		private readonly Random _volumeRandom = new(DateTime.UtcNow.Millisecond);
-		private readonly Random _priceRandom = new(DateTime.UtcNow.Millisecond);
-		private readonly RandomArray<bool> _isMatch = new(100);
+		private IRandomProvider RandomProvider => _parent.RandomProvider;
 		private int _volumeDecimals;
 		private readonly SortedDictionary<DateTime, List<(CandleMessage candle, (Sides? side, decimal price, decimal vol, DateTime time)[] ticks)>> _candleInfo = [];
 		private LogLevels? _logLevel;
@@ -651,7 +649,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 			}
 		}
 
-		private decimal GetRandomVolume() => _volumeRandom.Next(10, 100);
+		private decimal GetRandomVolume() => RandomProvider.NextVolume();
 
 		private void ProcessLevel1(Level1ChangeMessage message, ICollection<Message> result)
 		{
@@ -944,7 +942,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 								volume = volume.Abs();
 
 								// matching only top orders (spread)
-								if (isSpread && volume > 1 && _isMatch.Next())
+								if (isSpread && volume > 1 && RandomProvider.ShouldMatch())
 								{
 									var tradeVolume = (int)volume / 2;
 
@@ -1506,7 +1504,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 					if (bestAsk.Key > newBestPrice)
 					{
 						UpdateQuote(CreateMessage(localTime, serverTime, Sides.Sell, newBestPrice, GetRandomVolume()), true);
-						newBestPrice += spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
+						newBestPrice += spreadStep * RandomProvider.NextSpreadStep(_settings.SpreadSize);
 					}
 					else
 						break;
@@ -1520,7 +1518,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 					if (newBestPrice > bestBid.Key)
 					{
 						UpdateQuote(CreateMessage(localTime, serverTime, Sides.Buy, newBestPrice, GetRandomVolume()), true);
-						newBestPrice -= spreadStep * _priceRandom.Next(1, _settings.SpreadSize);
+						newBestPrice -= spreadStep * RandomProvider.NextSpreadStep(_settings.SpreadSize);
 					}
 					else
 						break;
@@ -1752,7 +1750,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 		{
 			if (_settings.Failing > 0)
 			{
-				if (RandomGen.GetDouble() < (_settings.Failing / 100.0))
+				if (RandomProvider.ShouldFail(_settings.Failing))
 				{
 					LogError(LocalizedStrings.ErrorForOrder, execution.IsCancellation ? LocalizedStrings.Cancellation : LocalizedStrings.Registration, execution.OriginalTransactionId == 0 ? execution.TransactionId : execution.OriginalTransactionId);
 
@@ -3067,6 +3065,10 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	private readonly ICommissionManager _commissionManager = new CommissionManager();
 	private readonly Dictionary<string, SessionStates> _boardStates = new(StringComparer.InvariantCultureIgnoreCase);
 
+	private IRandomProvider _randomProvider = new DefaultRandomProvider();
+	private IncrementalIdGenerator _orderIdGenerator = new();
+	private IncrementalIdGenerator _tradeIdGenerator = new();
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MarketEmulatorOld"/>.
 	/// </summary>
@@ -3101,6 +3103,13 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	/// <inheritdoc />
 	public MarketEmulatorSettings Settings { get; } = new MarketEmulatorSettings();
 
+	/// <inheritdoc />
+	public IRandomProvider RandomProvider
+	{
+		get => _randomProvider;
+		set => _randomProvider = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
 	/// <summary>
 	/// The number of processed messages.
 	/// </summary>
@@ -3109,12 +3118,20 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	/// <summary>
 	/// The generator of identifiers for orders.
 	/// </summary>
-	public IncrementalIdGenerator OrderIdGenerator { get; set; } = new IncrementalIdGenerator();
+	public IncrementalIdGenerator OrderIdGenerator
+	{
+		get => _orderIdGenerator;
+		set => _orderIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
 	/// <summary>
 	/// The generator of identifiers for trades.
 	/// </summary>
-	public IncrementalIdGenerator TradeIdGenerator { get; set; } = new IncrementalIdGenerator();
+	public IncrementalIdGenerator TradeIdGenerator
+	{
+		get => _tradeIdGenerator;
+		set => _tradeIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
 	private DateTime _currentTime;
 

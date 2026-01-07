@@ -12,6 +12,7 @@ public class MarketEmulatorTests : BaseTestClass
 	private static IMarketEmulator CreateEmuWithEvents(IEnumerable<SecurityId> secIds, out List<Message> result)
 	{
 		var emu = new MarketEmulator(new CollectionSecurityProvider(secIds.Select(id => new Security { Id = id.ToStringId() })), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()) { VerifyMode = true };
+		emu.RandomProvider = new MockRandomProvider();
 		var result2 = new List<Message>();
 		emu.NewOutMessage += result2.Add;
 		result = result2;

@@ -13,6 +13,10 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	private readonly ICommissionManager _commissionManager = new CommissionManager();
 	private DateTime _currentTime;
 
+	private IRandomProvider _randomProvider = new DefaultRandomProvider();
+	private IncrementalIdGenerator _orderIdGenerator = new();
+	private IncrementalIdGenerator _tradeIdGenerator = new();
+
 	/// <summary>
 	/// Initializes a new instance.
 	/// </summary>
@@ -47,15 +51,30 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	/// <inheritdoc />
 	public MarketEmulatorSettings Settings { get; } = new();
 
+	/// <inheritdoc />
+	public IRandomProvider RandomProvider
+	{
+		get => _randomProvider;
+		set => _randomProvider = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
 	/// <summary>
 	/// Order ID generator.
 	/// </summary>
-	public IncrementalIdGenerator OrderIdGenerator { get; set; } = new();
+	public IncrementalIdGenerator OrderIdGenerator
+	{
+		get => _orderIdGenerator;
+		set => _orderIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
 	/// <summary>
 	/// Trade ID generator.
 	/// </summary>
-	public IncrementalIdGenerator TradeIdGenerator { get; set; } = new();
+	public IncrementalIdGenerator TradeIdGenerator
+	{
+		get => _tradeIdGenerator;
+		set => _tradeIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
 	/// <summary>
 	/// Processed message count.
