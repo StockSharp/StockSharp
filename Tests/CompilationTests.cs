@@ -18,6 +18,10 @@ using StockSharp.Diagram;
 [TestClass]
 public class CompilationTests : BaseTestClass
 {
+	// Synchronization object for Python script execution
+	// IronPython's ScriptEngine is not thread-safe
+	private static readonly object _pythonSyncRoot = new();
+
 	private static readonly string _analyticsFolder = "../../../../Algo.Analytics.{0}";
 
 	[TestMethod]
@@ -28,6 +32,91 @@ public class CompilationTests : BaseTestClass
 
 	[TestMethod]
 	public Task PythonAnalyticsScripts() => TestAnalyticsScripts(_analyticsFolder.Put("Python"), FileExts.Python, CancellationToken);
+
+	[TestMethod]
+	public Task PythonAnalyticsScriptsParallel() => TestAnalyticsScriptsParallel(_analyticsFolder.Put("Python"), FileExts.Python, CancellationToken);
+
+	private static async Task TestAnalyticsScriptsParallel(string folderPath, string fileExtension, CancellationToken token)
+	{
+		ICompiler compiler = ServicesRegistry.CompilerProvider[fileExtension];
+
+		// Get all script files in the folder
+		var scriptFiles = Directory.GetFiles(folderPath, $"*{fileExtension}");
+		scriptFiles.Length.AssertGreater(0); // Ensure there are scripts to test
+
+		var securities = new[]
+		{
+			"EUR/USD@DUKAS".ToSecurityId(),
+			"EUR/AUD@DUKAS".ToSecurityId(),
+			"GBP/AUD@DUKAS".ToSecurityId(),
+		};
+		var from = new DateTime(2025, 4, 1).UtcKind();
+		var to = new DateTime(2025, 4, 30).UtcKind();
+		var storageRegistry = Helper.GetResourceStorage();
+		var format = StorageFormats.Binary;
+		var timeFrame = TimeSpan.FromMinutes(1).TimeFrame();
+
+		var references = CodeExtensions.DefaultReferences
+			.Concat(CodeExtensions.CreateAssemblyReferences(
+			[
+				"StockSharp.Algo.Analytics",
+				"MathNet.Numerics"
+			]));
+
+		var refs = (await references.ToValidRefImages(token)).ToArray();
+
+		// Run all scripts in parallel
+		// Note: We wrap the entire compile + execute in a lock because IronPython's
+		// ScriptEngine is not thread-safe for compilation, module loading, or execution
+		var tasks = scriptFiles.Select(async scriptFile =>
+		{
+			var scriptName = Path.GetFileNameWithoutExtension(scriptFile);
+
+			try
+			{
+				if (scriptName.StartsWithIgnoreCase("empty"))
+					return;
+
+				var sourceCode = await File.ReadAllTextAsync(scriptFile, token);
+
+				// Compile the script
+				var sources = new string[] { sourceCode };
+
+				// ScriptEngine is not thread-safe - synchronize all engine operations
+				lock (_pythonSyncRoot)
+				{
+					var context = compiler.CreateContext();
+
+					var res = compiler.Compile(
+						scriptName,
+						sources,
+						refs,
+						token).Result;
+
+					Validate(res);
+
+					var assembly = res.GetAssembly(context);
+					assembly.AssertNotNull();
+
+					var types = assembly.GetExportedTypes();
+					var analyticsScriptType = types.First(t => t.IsRequiredType<IAnalyticsScript>());
+
+					// Create an instance of the script and run
+					var script = analyticsScriptType.CreateInstance<IAnalyticsScript>();
+					script.AssertNotNull();
+
+					// Test script execution with mock data
+					RunAnalyticsScript(script, securities, from, to, storageRegistry, storageRegistry.DefaultDrive, format, timeFrame, token).Wait();
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new InvalidOperationException($"Error running script '{scriptName}'.", ex);
+			}
+		});
+
+		await Task.WhenAll(tasks);
+	}
 
 	private static async Task TestAnalyticsScripts(string folderPath, string fileExtension, CancellationToken token)
 	{
