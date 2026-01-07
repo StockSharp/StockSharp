@@ -3,6 +3,7 @@
 using System.ComponentModel;
 
 using StockSharp.Algo.Risk;
+using StockSharp.Algo.Testing.Emulation;
 
 [TestClass]
 public class RiskTests : BaseTestClass
