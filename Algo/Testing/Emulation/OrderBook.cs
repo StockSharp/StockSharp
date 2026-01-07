@@ -3,21 +3,16 @@ namespace StockSharp.Algo.Testing.Emulation;
 /// <summary>
 /// Order book level containing orders.
 /// </summary>
-internal class OrderBookLevelImpl
+class OrderBookLevelImpl(decimal price)
 {
 	private readonly Dictionary<long, EmulatorOrder> _ordersByTransId = [];
 
-	public decimal Price { get; }
+	public decimal Price { get; } = price;
 	public decimal MarketVolume { get; set; }
 
 	public decimal TotalVolume => MarketVolume + _ordersByTransId.Values.Sum(o => o.Balance);
 	public int OrderCount => _ordersByTransId.Count;
 	public IEnumerable<EmulatorOrder> Orders => _ordersByTransId.Values;
-
-	public OrderBookLevelImpl(decimal price)
-	{
-		Price = price;
-	}
 
 	public void AddOrder(EmulatorOrder order)
 	{
@@ -37,7 +32,7 @@ internal class OrderBookLevelImpl
 		return _ordersByTransId.TryGetValue(transactionId, out order);
 	}
 
-	public IEnumerable<EmulatorOrder> GetAllOrders() => _ordersByTransId.Values.ToList();
+	public IEnumerable<EmulatorOrder> GetAllOrders() => [.. _ordersByTransId.Values];
 
 	public bool IsEmpty => MarketVolume <= 0 && _ordersByTransId.Count == 0;
 }
@@ -45,7 +40,10 @@ internal class OrderBookLevelImpl
 /// <summary>
 /// Order book implementation.
 /// </summary>
-public class OrderBook : IOrderBook
+/// <remarks>
+/// Create a new order book.
+/// </remarks>
+public class OrderBook(SecurityId securityId) : IOrderBook
 {
 	private readonly SortedDictionary<decimal, OrderBookLevelImpl> _bids = new(new BackwardComparer<decimal>());
 	private readonly SortedDictionary<decimal, OrderBookLevelImpl> _asks = [];
@@ -54,15 +52,7 @@ public class OrderBook : IOrderBook
 	private decimal _totalAskVolume;
 
 	/// <inheritdoc />
-	public SecurityId SecurityId { get; }
-
-	/// <summary>
-	/// Create a new order book.
-	/// </summary>
-	public OrderBook(SecurityId securityId)
-	{
-		SecurityId = securityId;
-	}
+	public SecurityId SecurityId { get; } = securityId;
 
 	/// <inheritdoc />
 	public (decimal price, decimal volume)? BestBid
@@ -197,7 +187,7 @@ public class OrderBook : IOrderBook
 
 		foreach (var kvp in quotes)
 		{
-			yield return new OrderBookLevel(kvp.Key, kvp.Value.TotalVolume, kvp.Value.Orders.ToList());
+			yield return new OrderBookLevel(kvp.Key, kvp.Value.TotalVolume, [.. kvp.Value.Orders]);
 		}
 	}
 

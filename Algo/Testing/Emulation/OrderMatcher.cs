@@ -31,7 +31,6 @@ public class OrderMatcher : IOrderMatcher
 
 		var trades = new List<MatchTrade>();
 		var matchedOrders = new List<EmulatorOrder>();
-		var remaining = order.Balance;
 
 		// Market orders
 		if (order.OrderType == OrderTypes.Market)
@@ -43,7 +42,7 @@ public class OrderMatcher : IOrderMatcher
 		return MatchLimitOrder(order, book, settings, trades, matchedOrders);
 	}
 
-	private MatchResult MatchMarketOrder(
+	private static MatchResult MatchMarketOrder(
 		EmulatorOrder order,
 		IOrderBook book,
 		MatchingSettings settings,
@@ -78,7 +77,7 @@ public class OrderMatcher : IOrderMatcher
 		};
 	}
 
-	private MatchResult MatchLimitOrder(
+	private static MatchResult MatchLimitOrder(
 		EmulatorOrder order,
 		IOrderBook book,
 		MatchingSettings settings,
@@ -144,7 +143,7 @@ public class OrderMatcher : IOrderMatcher
 		};
 	}
 
-	private MatchResult MatchFOK(EmulatorOrder order, IOrderBook book, MatchingSettings settings)
+	private static MatchResult MatchFOK(EmulatorOrder order, IOrderBook book, MatchingSettings settings)
 	{
 		var oppositeSide = order.Side.Invert();
 		var limitPrice = order.Price;
@@ -229,16 +228,4 @@ public class OrderMatcher : IOrderMatcher
 		var oppositeBest = side == Sides.Buy ? book.BestAsk : book.BestBid;
 		return oppositeBest?.price;
 	}
-}
-
-/// <summary>
-/// Extension methods for Sides.
-/// </summary>
-public static class SidesExtensions
-{
-	/// <summary>
-	/// Get the opposite side.
-	/// </summary>
-	public static Sides Invert(this Sides side)
-		=> side == Sides.Buy ? Sides.Sell : Sides.Buy;
 }
