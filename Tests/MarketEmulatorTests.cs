@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
 using StockSharp.Algo.Testing;
+using StockSharp.Algo.Testing.Emulation;
 
 [TestClass]
 public class MarketEmulatorTests : BaseTestClass

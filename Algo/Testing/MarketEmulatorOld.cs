@@ -60,7 +60,7 @@ class LevelOrders : IEnumerable<ExecutionMessage>
 /// <summary>
 /// Emulator.
 /// </summary>
-public class MarketEmulator : BaseLogReceiver, IMarketEmulator
+public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 {
 	private abstract class Pool<T>
 	{
@@ -90,9 +90,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			=> new (Sides?, decimal, decimal, DateTime)[4];
 	}
 
-	private sealed class SecurityMarketEmulator(MarketEmulator parent, SecurityId securityId) : BaseLogReceiver//, IMarketEmulator
+	private sealed class SecurityMarketEmulator(MarketEmulatorOld parent, SecurityId securityId) : BaseLogReceiver//, IMarketEmulator
 	{
-		private readonly MarketEmulator _parent = parent ?? throw new ArgumentNullException(nameof(parent));
+		private readonly MarketEmulatorOld _parent = parent ?? throw new ArgumentNullException(nameof(parent));
 		private readonly Dictionary<ExecutionMessage, TimeSpan> _expirableOrders = [];
 		private readonly Dictionary<long, ExecutionMessage> _activeOrders = [];
 		private readonly QuotesDict _bids = new(new BackwardComparer<decimal>());
@@ -2740,7 +2740,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		}
 	}
 
-	private class PortfolioEmulator(MarketEmulator parent, string portfolioName)
+	private class PortfolioEmulator(MarketEmulatorOld parent, string portfolioName)
 	{
 		public class PositionInfo(SecurityMarketEmulator secEmu, SecurityId secId, string portfolioName)
 		{
@@ -3068,13 +3068,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	private readonly Dictionary<string, SessionStates> _boardStates = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="MarketEmulator"/>.
+	/// Initializes a new instance of the <see cref="MarketEmulatorOld"/>.
 	/// </summary>
 	/// <param name="securityProvider">The provider of information about instruments.</param>
 	/// <param name="portfolioProvider">The portfolio to be used to register orders. If value is not given, the portfolio with default name Simulator will be created.</param>
 	/// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 	/// <param name="transactionIdGenerator">Transaction id generator.</param>
-	public MarketEmulator(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, IdGenerator transactionIdGenerator)
+	public MarketEmulatorOld(ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, IdGenerator transactionIdGenerator)
 	{
 		SecurityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 		PortfolioProvider = portfolioProvider ?? throw new ArgumentNullException(nameof(portfolioProvider));
@@ -3167,7 +3167,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 				if (Settings.CheckTradingState)
 				{
-					var state = _boardStates.TryGetValue2(nameof(MarketEmulator)) ?? _boardStates.TryGetValue2(secId.BoardCode);
+					var state = _boardStates.TryGetValue2(nameof(MarketEmulatorOld)) ?? _boardStates.TryGetValue2(secId.BoardCode);
 
 					switch (state)
 					{
@@ -3471,7 +3471,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					var board = boardStateMsg.BoardCode;
 
 					if (board.IsEmpty())
-						board = nameof(MarketEmulator);
+						board = nameof(MarketEmulatorOld);
 
 					_boardStates[board] = boardStateMsg.State;
 				}
@@ -3796,7 +3796,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	TimeSpan IMessageAdapter.FaultDelay { get => default; set => throw new NotSupportedException(); }
 
 	IMessageAdapter ICloneable<IMessageAdapter>.Clone()
-		=> new MarketEmulator(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, TransactionIdGenerator) { VerifyMode = VerifyMode };
+		=> new MarketEmulatorOld(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, TransactionIdGenerator) { VerifyMode = VerifyMode };
 
 	object ICloneable.Clone() => ((ICloneable<IMessageChannel>)this).Clone();
 

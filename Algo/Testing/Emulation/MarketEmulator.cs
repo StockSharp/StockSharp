@@ -6,17 +6,17 @@ using StockSharp.Algo.Testing;
 /// <summary>
 /// Market emulator v2 with modular architecture.
 /// </summary>
-public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
+public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 {
 	private readonly Dictionary<SecurityId, SecurityEmulator> _securityEmulators = [];
-	private readonly Dictionary<string, PortfolioEmulator2> _portfolios = [];
+	private readonly Dictionary<string, PortfolioEmulator> _portfolios = [];
 	private readonly ICommissionManager _commissionManager = new CommissionManager();
 	private DateTime _currentTime;
 
 	/// <summary>
 	/// Initializes a new instance.
 	/// </summary>
-	public MarketEmulator2(
+	public MarketEmulator(
 		ISecurityProvider securityProvider,
 		IPortfolioProvider portfolioProvider,
 		IExchangeInfoProvider exchangeInfoProvider,
@@ -90,11 +90,11 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 		return emulator;
 	}
 
-	private PortfolioEmulator2 GetPortfolio(string name)
+	private PortfolioEmulator GetPortfolio(string name)
 	{
 		if (!_portfolios.TryGetValue(name, out var portfolio))
 		{
-			portfolio = new PortfolioEmulator2(name);
+			portfolio = new PortfolioEmulator(name);
 			_portfolios[name] = portfolio;
 		}
 		return portfolio;
@@ -779,7 +779,7 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 		};
 	}
 
-	private void AddPortfolioUpdate(PortfolioEmulator2 portfolio, DateTimeOffset time, List<Message> results)
+	private static void AddPortfolioUpdate(PortfolioEmulator portfolio, DateTimeOffset time, List<Message> results)
 	{
 		var totalPnL = portfolio.RealizedPnL - portfolio.Commission;
 
@@ -878,7 +878,7 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 	TimeSpan IMessageAdapter.FaultDelay { get => default; set => throw new NotSupportedException(); }
 
 	IMessageAdapter ICloneable<IMessageAdapter>.Clone()
-		=> new MarketEmulator2(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, TransactionIdGenerator) { VerifyMode = VerifyMode };
+		=> new MarketEmulator(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, TransactionIdGenerator) { VerifyMode = VerifyMode };
 
 	object ICloneable.Clone() => ((ICloneable<IMessageAdapter>)this).Clone();
 
@@ -891,9 +891,9 @@ public class MarketEmulator2 : BaseLogReceiver, IMarketEmulator
 /// <summary>
 /// Security-specific emulator state.
 /// </summary>
-internal class SecurityEmulator(MarketEmulator2 parent, SecurityId securityId)
+internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 {
-	private readonly MarketEmulator2 _parent = parent;
+	private readonly MarketEmulator _parent = parent;
 	private SecurityMessage _securityDefinition;
 	private long? _depthSubscription;
 
@@ -1042,7 +1042,7 @@ internal class SecurityEmulator(MarketEmulator2 parent, SecurityId securityId)
 /// <summary>
 /// Simple portfolio emulator.
 /// </summary>
-internal class PortfolioEmulator2
+internal class PortfolioEmulator(string name)
 {
 	private readonly Dictionary<SecurityId, PositionInfo> _positions = [];
 	private decimal _beginMoney;
@@ -1051,17 +1051,12 @@ internal class PortfolioEmulator2
 	private decimal _totalBlockedMoney;
 	private decimal _commission;
 
-	public string Name { get; }
+	public string Name { get; } = name;
 	public decimal BeginMoney => _beginMoney;
 	public decimal AvailableMoney => _currentMoney;
 	public decimal RealizedPnL => _realizedPnL;
 	public decimal BlockedMoney => _totalBlockedMoney;
 	public decimal Commission => _commission;
-
-	public PortfolioEmulator2(string name)
-	{
-		Name = name;
-	}
 
 	public void SetMoney(decimal money)
 	{

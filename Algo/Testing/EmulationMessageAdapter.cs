@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Testing;
 
 using StockSharp.Algo.Positions;
+using StockSharp.Algo.Testing.Emulation;
 
 /// <summary>
 /// The interface of the real time market data adapter.
