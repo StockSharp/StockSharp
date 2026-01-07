@@ -10,13 +10,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region Parameterized Index Processor Tests
 
 	[TestMethod]
-	[DataRow(typeof(WeightedIndexSecurityProcessor))]
-	[DataRow(typeof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_Ticks_CalculatesCorrectly(Type processorType)
+	[DataRow(nameof(WeightedIndexSecurityProcessor))]
+	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
+	public void IndexProcessor_Ticks_CalculatesCorrectly(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
-		var (basket, expectedPrice) = CreateIndexBasket(processorType, lkoh, sber, weight1: 1, weight2: 2);
+		var (basket, expectedPrice) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 2);
 		var processor = CreateProcessor(basket);
 
 		var serverTime = DateTime.UtcNow;
@@ -41,13 +41,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[DataRow(typeof(WeightedIndexSecurityProcessor))]
-	[DataRow(typeof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_Ticks_MultipleRounds(Type processorType)
+	[DataRow(nameof(WeightedIndexSecurityProcessor))]
+	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
+	public void IndexProcessor_Ticks_MultipleRounds(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
-		var (basket, _) = CreateIndexBasket(processorType, lkoh, sber, weight1: 1, weight2: 1);
+		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
 		var processor = CreateProcessor(basket);
 
 		var time1 = DateTime.UtcNow;
@@ -67,13 +67,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[DataRow(typeof(WeightedIndexSecurityProcessor))]
-	[DataRow(typeof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_OrderBook_CalculatesCorrectDepth(Type processorType)
+	[DataRow(nameof(WeightedIndexSecurityProcessor))]
+	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
+	public void IndexProcessor_OrderBook_CalculatesCorrectDepth(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
-		var (basket, _) = CreateIndexBasket(processorType, lkoh, sber, weight1: 1, weight2: 1);
+		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
 		var processor = CreateProcessor(basket);
 
 		var serverTime = DateTime.UtcNow;
@@ -104,13 +104,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[DataRow(typeof(WeightedIndexSecurityProcessor))]
-	[DataRow(typeof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_Candles_CalculatesOHLC(Type processorType)
+	[DataRow(nameof(WeightedIndexSecurityProcessor))]
+	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
+	public void IndexProcessor_Candles_CalculatesOHLC(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
-		var (basket, _) = CreateIndexBasket(processorType, lkoh, sber, weight1: 1, weight2: 2);
+		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 2);
 		var processor = CreateProcessor(basket);
 
 		var openTime = new DateTime(2024, 1, 1, 10, 0, 0);
@@ -144,13 +144,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[DataRow(typeof(WeightedIndexSecurityProcessor))]
-	[DataRow(typeof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_IncompleteLegs_NoOutput(Type processorType)
+	[DataRow(nameof(WeightedIndexSecurityProcessor))]
+	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
+	public void IndexProcessor_IncompleteLegs_NoOutput(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
-		var (basket, _) = CreateIndexBasket(processorType, lkoh, sber, weight1: 1, weight2: 1);
+		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
 		var processor = CreateProcessor(basket);
 
 		// Only one leg - no output
@@ -160,13 +160,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[DataRow(typeof(WeightedIndexSecurityProcessor))]
-	[DataRow(typeof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_OrderBook_IgnoresStateMessages(Type processorType)
+	[DataRow(nameof(WeightedIndexSecurityProcessor))]
+	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
+	public void IndexProcessor_OrderBook_IgnoresStateMessages(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
-		var (basket, _) = CreateIndexBasket(processorType, lkoh, sber, weight1: 1, weight2: 1);
+		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
 		var processor = CreateProcessor(basket);
 
 		// State message (reset)
@@ -188,17 +188,17 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region Parameterized Continuous Processor Tests
 
 	[TestMethod]
-	[DataRow(typeof(ContinuousSecurityExpirationProcessor))]
-	[DataRow(typeof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_SwitchesToNextContract(Type processorType)
+	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
+	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
+	public void ContinuousProcessor_SwitchesToNextContract(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
-		var basket = CreateContinuousBasket(processorType, riu, riz);
+		var basket = CreateContinuousBasket(processorName, riu, riz);
 		var processor = CreateProcessor(basket);
 
-		if (processorType == typeof(ContinuousSecurityExpirationProcessor))
+		if (processorName == nameof(ContinuousSecurityExpirationProcessor))
 		{
 			// Before expiry - RIU8 is active
 			var beforeExpiry = new DateTime(2024, 9, 10);
@@ -240,15 +240,15 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[DataRow(typeof(ContinuousSecurityExpirationProcessor))]
-	[DataRow(typeof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_IgnoresNonLegSecurities(Type processorType)
+	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
+	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
+	public void ContinuousProcessor_IgnoresNonLegSecurities(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 		var other = CreateTestSecurity("OTHER", "FORTS");
 
-		var basket = CreateContinuousBasket(processorType, riu, riz);
+		var basket = CreateContinuousBasket(processorName, riu, riz);
 		var processor = CreateProcessor(basket);
 
 		var time = new DateTime(2024, 9, 10);
@@ -259,14 +259,14 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[DataRow(typeof(ContinuousSecurityExpirationProcessor))]
-	[DataRow(typeof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_ProcessesCandles(Type processorType)
+	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
+	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
+	public void ContinuousProcessor_ProcessesCandles(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
-		var basket = CreateContinuousBasket(processorType, riu, riz);
+		var basket = CreateContinuousBasket(processorName, riu, riz);
 		var processor = CreateProcessor(basket);
 
 		var openTime = new DateTime(2024, 9, 10, 10, 0, 0);
@@ -276,7 +276,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		var result = processor.Process(candle).ToArray();
 
-		if (processorType == typeof(ContinuousSecurityExpirationProcessor))
+		if (processorName == nameof(ContinuousSecurityExpirationProcessor))
 		{
 			// Before expiry - should pass through
 			result.Length.AssertEqual(1);
@@ -288,14 +288,14 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[DataRow(typeof(ContinuousSecurityExpirationProcessor))]
-	[DataRow(typeof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_ProcessesOrderBook(Type processorType)
+	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
+	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
+	public void ContinuousProcessor_ProcessesOrderBook(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
-		var basket = CreateContinuousBasket(processorType, riu, riz);
+		var basket = CreateContinuousBasket(processorName, riu, riz);
 		var processor = CreateProcessor(basket);
 
 		var serverTime = new DateTime(2024, 9, 10);
@@ -306,7 +306,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		var result = processor.Process(depth).ToArray();
 
-		if (processorType == typeof(ContinuousSecurityExpirationProcessor))
+		if (processorName == nameof(ContinuousSecurityExpirationProcessor))
 		{
 			// Before expiry - should pass through
 			result.Length.AssertEqual(1);
@@ -321,14 +321,14 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	/// Fixed:   volume = (volume ?? 0) + bestAsk?.Volume
 	/// </summary>
 	[TestMethod]
-	[DataRow(typeof(ContinuousSecurityExpirationProcessor))]
-	[DataRow(typeof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_OrderBook_SumsBidAndAskVolumes(Type processorType)
+	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
+	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
+	public void ContinuousProcessor_OrderBook_SumsBidAndAskVolumes(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
-		var basket = CreateContinuousBasket(processorType, riu, riz);
+		var basket = CreateContinuousBasket(processorName, riu, riz);
 		var processor = CreateProcessor(basket);
 
 		var time = new DateTime(2024, 9, 10);
@@ -342,7 +342,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		var result = processor.Process(depth).ToArray();
 
-		if (processorType == typeof(ContinuousSecurityExpirationProcessor))
+		if (processorName == nameof(ContinuousSecurityExpirationProcessor))
 		{
 			// Before expiry - should pass through with correct volume calculation
 			result.Length.AssertEqual(1);
@@ -750,7 +750,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region Helper Methods
 
 	private static (Security basket, decimal expectedPrice) CreateIndexBasket(
-		Type processorType,
+		string processorName,
 		Security security1,
 		Security security2,
 		decimal weight1,
@@ -759,7 +759,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		Security basket;
 		decimal expectedPrice;
 
-		if (processorType == typeof(WeightedIndexSecurityProcessor))
+		if (processorName == nameof(WeightedIndexSecurityProcessor))
 		{
 			var weightedBasket = new WeightedIndexSecurity
 			{
@@ -772,7 +772,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			// For test: 100 * weight1 + 50 * weight2
 			expectedPrice = 100m * weight1 + 50m * weight2;
 		}
-		else if (processorType == typeof(ExpressionIndexSecurityProcessor))
+		else if (processorName == nameof(ExpressionIndexSecurityProcessor))
 		{
 			var expressionBasket = new ExpressionIndexSecurity
 			{
@@ -785,17 +785,17 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			expectedPrice = 100m + weight2 * 50m;
 		}
 		else
-			throw new ArgumentException($"Unknown processor type: {processorType}");
+			throw new ArgumentException($"Unknown processor name: {processorName}");
 
 		return (basket, expectedPrice);
 	}
 
 	private static Security CreateContinuousBasket(
-		Type processorType,
+		string processorName,
 		Security future1,
 		Security future2)
 	{
-		if (processorType == typeof(ContinuousSecurityExpirationProcessor))
+		if (processorName == nameof(ContinuousSecurityExpirationProcessor))
 		{
 			var basket = new ExpirationContinuousSecurity
 			{
@@ -806,7 +806,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			basket.ExpirationJumps.Add(future2.ToSecurityId(), future2.ExpiryDate!.Value);
 			return basket;
 		}
-		else if (processorType == typeof(ContinuousSecurityVolumeProcessor))
+		else if (processorName == nameof(ContinuousSecurityVolumeProcessor))
 		{
 			var basket = new VolumeContinuousSecurity
 			{
@@ -819,7 +819,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			return basket;
 		}
 		else
-			throw new ArgumentException($"Unknown processor type: {processorType}");
+			throw new ArgumentException($"Unknown processor name: {processorName}");
 	}
 
 	private static (Security basket, Security lkoh, Security sber) CreateWeightedBasket(

@@ -62,10 +62,10 @@ public class ReportTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[DataRow("csv")]
-	[DataRow("json")]
-	[DataRow("xml")]
-	[DataRow("xlsx")]
+	[DataRow(FileExts.Csv)]
+	[DataRow(FileExts.Json)]
+	[DataRow(FileExts.Xml)]
+	[DataRow(FileExts.Xlsx)]
 	public async Task Reports(string format)
 	{
 		var token = CancellationToken;
@@ -74,10 +74,10 @@ public class ReportTests : BaseTestClass
 
 		IReportGenerator generator = format switch
 		{
-			"csv" => new CsvReportGenerator(),
-			"json" => new JsonReportGenerator(),
-			"xml" => new XmlReportGenerator(),
-			"xlsx" => new ExcelReportGenerator(ServicesRegistry.ExcelProvider),
+			FileExts.Csv => new CsvReportGenerator(),
+			FileExts.Json => new JsonReportGenerator(),
+			FileExts.Xml => new XmlReportGenerator(),
+			FileExts.Xlsx => new ExcelReportGenerator(ServicesRegistry.ExcelProvider),
 			_ => throw new ArgumentException($"Unknown format: {format}")
 		};
 
