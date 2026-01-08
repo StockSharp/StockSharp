@@ -220,7 +220,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				break;
 		}
 
-		// Process expired orders on every message (like V1)
+		// Process time-based events (expired orders, stored candles)
 		ProcessTime(message.LocalTime, results);
 	}
 
@@ -274,7 +274,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			return;
 		}
 
-		// [0] Create order response first (like V1 - will be mutated later)
+		// [0] Create order response first (will be mutated later)
 		var replyMsg = new ExecutionMessage
 		{
 			HasOrderInfo = true,
@@ -286,9 +286,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		results.Add(replyMsg);
 
 		// Track order registration for blocked funds
-		// Use market price (bid for buy, ask for sell) like V1 GetMarginPrice
-		// V1 returns 0 if no quotes available on that side (not order price)
-		// In candle mode, V1 doesn't update order book so margin is always 0
+		// Use market price (bid for buy, ask for sell) for margin calculation
+		// Returns 0 if no quotes available on that side
+		// In candle mode, order book is not populated so margin is always 0
 		var marginPrice = emulator.IsCandleMatchingMode
 			? 0
 			: regMsg.Side == Sides.Buy
@@ -317,11 +317,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		var orderId = OrderIdGenerator.GetNextId();
 		order.OrderId = orderId;
 
-		// Check PostOnly BEFORE blocking funds (like V1's early return in AcceptExecution)
+		// Check PostOnly BEFORE blocking funds
 		var matcher = new OrderMatcher();
 		if (order.PostOnly && matcher.WouldCross(order, emulator.OrderBook))
 		{
-			// Like V1 - just set Done state, no Error, no portfolio update
+			// Just set Done state, no Error, no portfolio update
 			replyMsg.Balance = regMsg.Volume;
 			replyMsg.OrderVolume = regMsg.Volume;
 			replyMsg.OrderState = OrderStates.Done;
@@ -330,7 +330,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		portfolio.ProcessOrderRegistration(regMsg.SecurityId, regMsg.Side, regMsg.Volume, marginPrice);
 
-		// [1] Portfolio change message after order registration (like V1 ProcessOrder -> AddPortfolioChangeMessage)
+		// [1] Portfolio change message after order registration
 		AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 
 		// Match order - use candle matching if candle subscription is active and candle is available
@@ -339,7 +339,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		if (candle is not null)
 		{
-			// Match against candle (like V1's MatchOrderByCandle)
+			// Match against candle directly
 			matchResult = MatchOrderByCandle(order, candle);
 		}
 		else
@@ -368,12 +368,12 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			return;
 		}
 
-		// Handle IOC/FOK order state messages (like V1's MatchOrderPostProcess - sends Done before trades)
+		// Handle IOC/FOK order state messages - send Done before trades
 		var isIOC = regMsg.TimeInForce == TimeInForce.CancelBalance;
 		var isFOK = regMsg.TimeInForce == TimeInForce.MatchOrCancel;
 		var hasTrades = matchResult.Trades.Count > 0;
 
-		// For IOC/FOK with trades, send Done message BEFORE trades (like V1)
+		// For IOC/FOK with trades, send Done message BEFORE trades
 		if ((isIOC || isFOK) && hasTrades)
 		{
 			results.Add(new ExecutionMessage
@@ -392,7 +392,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			});
 		}
 
-		// Generate trades (like V1 ProcessTrade - no order state message in trade loop for IOC/FOK)
+		// Generate trades - no order state message in trade loop for IOC/FOK
 		foreach (var trade in matchResult.Trades)
 		{
 			var tradeId = TradeIdGenerator.GetNextId();
@@ -409,7 +409,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			var (realizedPnL, positionChange, position) = portfolio.ProcessTrade(
 				regMsg.SecurityId, regMsg.Side, trade.Price, trade.Volume, commission);
 
-			// For non-IOC/FOK orders: send order state update in trade loop (like V1 PutInQueue)
+			// For non-IOC/FOK orders: send order state update in trade loop
 			if (!isIOC && !isFOK)
 			{
 				results.Add(new ExecutionMessage
@@ -428,7 +428,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				});
 			}
 
-			// Trade message (like V1 ProcessTrade)
+			// Trade message
 			results.Add(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
@@ -444,7 +444,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				Commission = commission,
 			});
 
-			// Position change (like V1 ProcessTrade -> result.Add PositionChangeMessage)
+			// Position change
 			results.Add(new PositionChangeMessage
 			{
 				SecurityId = SecurityId.Money,
@@ -455,7 +455,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			.Add(PositionChangeTypes.CurrentValue, position.CurrentValue)
 			.TryAdd(PositionChangeTypes.AveragePrice, position.AveragePrice));
 
-			// Portfolio money update (like V1 ProcessTrade -> AddPortfolioChangeMessage)
+			// Portfolio money update
 			AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 
 			// Generate trades for matched counter orders
@@ -505,7 +505,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			}
 		}
 
-		// Handle IOC/FOK cancelled portion (like V1's IsCanceled block in AcceptExecution)
+		// Handle IOC/FOK cancelled portion
 		var isCancelled = matchResult.FinalState == OrderStates.Done && matchResult.RemainingVolume > 0;
 
 		if ((isIOC || isFOK) && isCancelled)
@@ -532,7 +532,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			// Unblock funds for cancelled portion
 			portfolio.ProcessOrderCancellation(regMsg.SecurityId, regMsg.Side, matchResult.RemainingVolume, marginPrice);
 
-			// Add portfolio update for cancelled balance (like V1 IsCanceled block)
+			// Add portfolio update for cancelled balance
 			AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 		}
 		// Update the initial reply message with final state if no trades and not IOC/FOK
@@ -540,7 +540,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		{
 			replyMsg.OrderId = orderId;
 			replyMsg.OrderState = matchResult.FinalState;
-			// Only set Balance/OrderVolume for non-active orders (like V1)
+			// Only set Balance/OrderVolume for non-active orders
 			if (matchResult.FinalState != OrderStates.Active)
 			{
 				replyMsg.Balance = matchResult.RemainingVolume;
@@ -548,14 +548,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			}
 		}
 
-		// Add to order book if needed (check expiry date like V1's AddActiveOrder)
+		// Add to order book if needed (check expiry date)
 		if (matchResult.ShouldPlaceInBook && matchResult.RemainingVolume > 0)
 		{
-			// Check expiry date (like V1's AddActiveOrder - returns false if expired)
+			// Check expiry date - reject if already expired
 			if (regMsg.TillDate.HasValue && regMsg.TillDate.Value <= regMsg.LocalTime)
 			{
 				// Order expired - don't add to book, just set Done
-				// V1 doesn't unblock portfolio here - it just returns
+				// Note: portfolio remains blocked (consistent with expiry behavior)
 				replyMsg.OrderState = OrderStates.Done;
 				replyMsg.Balance = matchResult.RemainingVolume;
 				replyMsg.OrderVolume = regMsg.Volume;
@@ -603,7 +603,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		var portfolio = GetPortfolio(order.PortfolioName);
 		portfolio.ProcessOrderCancellation(cancelMsg.SecurityId, order.Side, order.Balance, order.MarginPrice);
 
-		// Send cancellation confirmation (like V1 - no SecurityId, no IsCancellation flag)
+		// Send cancellation confirmation (no SecurityId, no IsCancellation flag)
 		results.Add(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
@@ -664,11 +664,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		emulator.OrderBook.RemoveQuote(oldOrder.TransactionId, oldOrder.Side, oldOrder.Price);
 
-		// Unblock funds for old order (like V1's ProcessOrder for cancellation)
+		// Unblock funds for old order
 		var portfolio = GetPortfolio(oldOrder.PortfolioName);
 		portfolio.ProcessOrderCancellation(replaceMsg.SecurityId, oldOrder.Side, oldOrder.Balance, oldOrder.MarginPrice);
 
-		// Send old order cancellation (like V1's CreateReply - no SecurityId, no IsCancellation)
+		// Send old order cancellation (no SecurityId, no IsCancellation)
 		results.Add(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
@@ -681,7 +681,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			HasOrderInfo = true,
 		});
 
-		// Portfolio update for cancellation (like V1's ProcessOrder -> AddPortfolioChangeMessage)
+		// Portfolio update for cancellation
 		AddPortfolioUpdate(portfolio, replaceMsg.LocalTime, results);
 
 		// Register new order
@@ -707,7 +707,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	{
 		var mode = groupMsg.Mode;
 
-		// V1 requires PortfolioName for ClosePositions mode
+		// ClosePositions mode requires PortfolioName
 		if (mode.HasFlag(OrderGroupCancelModes.ClosePositions) && string.IsNullOrEmpty(groupMsg.PortfolioName))
 		{
 			results.Add(new ExecutionMessage
@@ -807,7 +807,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	private void ProcessOrderStatus(OrderStatusMessage statusMsg, List<Message> results)
 	{
-		// Like V1: add SubscriptionResponseMessage first
+		// Add SubscriptionResponseMessage first
 		results.Add(statusMsg.CreateResponse());
 
 		if (!statusMsg.IsSubscribe)
@@ -844,7 +844,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			}
 		}
 
-		// Like V1: add SubscriptionOnlineMessage at the end
+		// Add SubscriptionOnlineMessage at the end
 		results.Add(statusMsg.CreateResult());
 	}
 
@@ -932,18 +932,16 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					HasOrderInfo = true,
 				});
 
-				// V1 doesn't unblock portfolio or output PositionChangeMessage for expired orders
-				// It just outputs ExecutionMessage. This appears to be a bug in V1 (portfolio remains blocked),
-				// but we replicate it for compatibility.
+				// Note: portfolio remains blocked for expired orders (only ExecutionMessage is output)
 			}
 
-			// Process stored candles (like V1's ProcessCandles)
+			// Process stored candles
 			emulator.ProcessStoredCandles(time, results);
 		}
 	}
 
 	/// <summary>
-	/// Match order against candle (like V1's MatchOrderByCandle).
+	/// Match order against candle data directly.
 	/// </summary>
 	private static MatchResult MatchOrderByCandle(EmulatorOrder order, CandleMessage candle)
 	{
@@ -973,7 +971,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		if (order.OrderType == OrderTypes.Market)
 		{
-			// For market orders, use middle price (like V1 default CandlePrice.Middle)
+			// For market orders, use middle price
 			execPrice = (candle.HighPrice + candle.LowPrice) / 2;
 
 			// Price step is wrong, so adjust by candle boundaries
@@ -997,7 +995,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				};
 			}
 
-			// Use order price for execution (like V1)
+			// Use order price for execution
 			execPrice = order.Price;
 		}
 
@@ -1208,7 +1206,7 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 
 	/// <summary>
 	/// True when order book was populated from candle data.
-	/// In this mode, limit orders should use order price for trades (like V1's MatchOrderByCandle).
+	/// In this mode, limit orders use order price for trades.
 	/// </summary>
 	public bool IsCandleMatchingMode { get; private set; }
 
@@ -1219,7 +1217,7 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 
 	private void UpdateSteps(decimal price, decimal? volume)
 	{
-		// Auto-detect price/volume step from market data (like V1)
+		// Auto-detect price/volume step from market data
 		if (!_priceStepUpdated && price > 0)
 		{
 			_securityDefinition ??= new SecurityMessage { SecurityId = SecurityId };
@@ -1237,7 +1235,7 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 
 	private void UpdatePriceLimits(decimal price, DateTime localTime, DateTime serverTime, List<Message> results)
 	{
-		// V1's UpdatePriceLimits - called once per day to output Level1ChangeMessage with price limits
+		// Called once per day to output Level1ChangeMessage with price limits
 		if (_lastPriceLimitDate == localTime.Date)
 			return;
 
@@ -1294,7 +1292,7 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 		// Exit candle matching mode when receiving real quotes
 		IsCandleMatchingMode = false;
 
-		// Update steps from quote data (like V1)
+		// Update steps from quote data
 		if (!_priceStepUpdated || !_volumeStepUpdated)
 		{
 			var quote = msg.GetBestBid() ?? msg.GetBestAsk();
@@ -1323,7 +1321,7 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 		var bidVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestBidVolume) ?? 10;
 		var askVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestAskVolume) ?? 10;
 
-		// Update steps from Level1 data (like V1)
+		// Update steps from Level1 data
 		UpdateSteps(bidPrice ?? askPrice ?? 0, bidVol);
 
 		if (bidPrice.HasValue)
@@ -1346,10 +1344,10 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 		var tradePrice = tick.TradePrice ?? 0;
 		var tradeVolume = tick.TradeVolume ?? 10m;
 
-		// Update steps from tick data (like V1's UpdateSteps)
+		// Update steps from tick data
 		UpdateSteps(tradePrice, tradeVolume);
 
-		// Update price limits (like V1's UpdatePriceLimits - once per day)
+		// Update price limits (once per day)
 		if (tradePrice > 0)
 			UpdatePriceLimits(tradePrice, tick.LocalTime, tick.ServerTime, results);
 
@@ -1366,7 +1364,7 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 		var bestBid = OrderBook.BestBid;
 		var bestAsk = OrderBook.BestAsk;
 
-		// Determine tick origin side (like V1's GetOrderSide)
+		// Determine tick origin side
 		Sides originSide;
 		if (tick.OriginSide.HasValue)
 			originSide = tick.OriginSide.Value.Invert();
@@ -1419,7 +1417,7 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 		if (ol.TradeId is not null)
 			return; // Trade, not order
 
-		// Update steps from order log data (like V1)
+		// Update steps from order log data
 		UpdateSteps(ol.OrderPrice, ol.OrderVolume);
 
 		if (ol.IsCancellation)
@@ -1446,7 +1444,7 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 	public bool HasCandleSubscription => _candlesSubscription.HasValue;
 
 	/// <summary>
-	/// Get the last stored candle for order matching (like V1's _candleInfo.LastOrDefault()).
+	/// Get the last stored candle for order matching.
 	/// </summary>
 	public CandleMessage GetLastStoredCandle()
 	{
@@ -1459,17 +1457,16 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 
 	public void ProcessCandle(CandleMessage candle, List<Message> results)
 	{
-		// Update steps from candle data (like V1)
+		// Update steps from candle data
 		UpdateSteps(candle.ClosePrice, candle.TotalVolume);
 
-		// Store candle for later processing (like V1's _candleInfo)
-		// V1 processes candles during ProcessTime, not immediately
+		// Store candle for later processing (output during ProcessTime)
 		var candles = _storedCandles.SafeAdd(candle.OpenTime, key => []);
 		candles.Add(candle);
 	}
 
 	/// <summary>
-	/// Process stored candles for output and order matching (like V1's ProcessCandles).
+	/// Process stored candles for output and order matching.
 	/// Called during ProcessTime.
 	/// </summary>
 	public void ProcessStoredCandles(DateTime currentTime, List<Message> results)
@@ -1516,7 +1513,7 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 				}
 			}
 
-			// Output TimeMessage before final candle (like V1)
+			// Output TimeMessage before final candle
 			results.Add(new TimeMessage { LocalTime = currentTime });
 
 			// Output final candle and match orders
@@ -1540,10 +1537,10 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 
 	private void ApplyCandleToOrderBook(CandleMessage candle, List<Message> results)
 	{
-		// Enter candle matching mode (like V1's MatchOrderByCandle - uses order price for trades)
+		// Enter candle matching mode (uses order price for trades)
 		IsCandleMatchingMode = true;
 
-		// Generate pseudo order book from candle (like V1's MatchOrderByCandle)
+		// Generate pseudo order book from candle
 		// Create quotes at Low/High to allow matching within candle range
 		var vol = candle.TotalVolume > 0 ? candle.TotalVolume / 2 : 10m;
 
@@ -1578,7 +1575,7 @@ internal class PortfolioEmulator(string name)
 	public string Name { get; } = name;
 	public decimal BeginMoney => _beginMoney;
 	/// <summary>
-	/// Current money = begin money + total PnL (like V1).
+	/// Current money = begin money + total PnL.
 	/// </summary>
 	public decimal CurrentMoney => _beginMoney + TotalPnL;
 	public decimal AvailableMoney => CurrentMoney - _totalBlockedMoney;
@@ -1763,7 +1760,7 @@ internal class PortfolioEmulator(string name)
 		_totalBlockedMoney = 0;
 		foreach (var pos in _positions.Values)
 		{
-			// V1's TotalPrice logic:
+			// TotalPrice logic:
 			// - If no position: blocked = buys + sells
 			// - If long position: blocked = max(position + buys, sells)
 			// - If short position: blocked = max(position + sells, buys)

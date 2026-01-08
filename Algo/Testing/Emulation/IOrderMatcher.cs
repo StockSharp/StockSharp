@@ -98,7 +98,7 @@ public class MatchingSettings
 
 	/// <summary>
 	/// When true, use order price instead of market price for limit order trades.
-	/// This is used for candle-based matching (like V1's MatchOrderByCandle).
+	/// This is used for candle-based matching.
 	/// </summary>
 	public bool UseOrderPriceForLimitTrades { get; init; }
 }
