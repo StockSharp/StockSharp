@@ -165,23 +165,18 @@ public class CsvEntityRegistry : IEntityRegistry
 		}
 
 		ValueTask ISecurityStorage.DeleteByAsync(SecurityLookupMessage criteria, CancellationToken cancellationToken)
-		{
-			if (criteria is null)
-				throw new ArgumentNullException(nameof(criteria));
+			=> DeleteRangeAsync(this.Filter(criteria), cancellationToken);
 
-			cancellationToken.ThrowIfCancellationRequested();
-			this.Filter(criteria).ForEach(s => Remove(s));
-			return default;
-		}
-
-		ValueTask ISecurityStorage.DeleteRangeAsync(IEnumerable<Security> securities, CancellationToken cancellationToken)
+		public ValueTask DeleteRangeAsync(IEnumerable<Security> securities, CancellationToken cancellationToken)
 		{
 			if (securities is null)
 				throw new ArgumentNullException(nameof(securities));
 
+			var arr = securities.ToArray();
+
 			cancellationToken.ThrowIfCancellationRequested();
-			RemoveRange(securities);
-			OnRemovedRange(securities);
+			RemoveRange(arr);
+			OnRemovedRange(arr);
 			return default;
 		}
 
