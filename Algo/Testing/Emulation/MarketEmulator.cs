@@ -257,6 +257,23 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			return;
 		}
 
+		// [0] Create order response first (like V1 - will be mutated later)
+		var replyMsg = new ExecutionMessage
+		{
+			HasOrderInfo = true,
+			DataTypeEx = DataType.Transactions,
+			ServerTime = serverTime,
+			LocalTime = regMsg.LocalTime,
+			OriginalTransactionId = regMsg.TransactionId,
+		};
+		results.Add(replyMsg);
+
+		// Track order registration for blocked funds
+		// Use market price (bid for buy, ask for sell) like V1 GetMarginPrice
+		var marginPrice = regMsg.Side == Sides.Buy
+			? emulator.OrderBook.BestBid?.price ?? regMsg.Price
+			: emulator.OrderBook.BestAsk?.price ?? regMsg.Price;
+
 		// Create emulator order
 		var order = new EmulatorOrder
 		{
@@ -272,13 +289,29 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			ExpiryDate = regMsg.TillDate,
 			ServerTime = serverTime,
 			LocalTime = regMsg.LocalTime,
+			MarginPrice = marginPrice,
 		};
 
-		// Track order registration for blocked funds
-		portfolio.ProcessOrderRegistration(regMsg.SecurityId, regMsg.Side, regMsg.Volume, regMsg.Price);
+		// Assign order ID
+		var orderId = OrderIdGenerator.GetNextId();
+
+		// Check PostOnly BEFORE blocking funds (like V1's early return in AcceptExecution)
+		var matcher = new OrderMatcher();
+		if (order.PostOnly && matcher.WouldCross(order, emulator.OrderBook))
+		{
+			// Like V1 - just set Done state, no Error, no portfolio update
+			replyMsg.Balance = regMsg.Volume;
+			replyMsg.OrderVolume = regMsg.Volume;
+			replyMsg.OrderState = OrderStates.Done;
+			return;
+		}
+
+		portfolio.ProcessOrderRegistration(regMsg.SecurityId, regMsg.Side, regMsg.Volume, marginPrice);
+
+		// [1] Portfolio change message after order registration (like V1 ProcessOrder -> AddPortfolioChangeMessage)
+		AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 
 		// Match order
-		var matcher = new OrderMatcher();
 		var matchSettings = new MatchingSettings
 		{
 			PriceStep = emulator.PriceStep,
@@ -287,23 +320,49 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		var matchResult = matcher.Match(order, emulator.OrderBook, matchSettings);
 
-		// Process result
+		// Process result (for non-PostOnly rejections like FOK)
 		if (matchResult.IsRejected)
 		{
 			// Unblock funds on rejection
-			portfolio.ProcessOrderCancellation(regMsg.SecurityId, regMsg.Side, regMsg.Volume, regMsg.Price);
-			results.Add(CreateOrderResponse(regMsg, OrderStates.Done, balance: regMsg.Volume,
-				error: new InvalidOperationException(matchResult.RejectionReason)));
+			portfolio.ProcessOrderCancellation(regMsg.SecurityId, regMsg.Side, regMsg.Volume, marginPrice);
+
+			replyMsg.OrderState = OrderStates.Done;
+			replyMsg.Balance = regMsg.Volume;
+			replyMsg.OrderVolume = regMsg.Volume;
+			replyMsg.Error = new InvalidOperationException(matchResult.RejectionReason);
 			return;
 		}
 
-		// Generate trades
-		var orderId = OrderIdGenerator.GetNextId();
+		// Handle IOC/FOK order state messages (like V1's MatchOrderPostProcess - sends Done before trades)
+		var isIOC = regMsg.TimeInForce == TimeInForce.CancelBalance;
+		var isFOK = regMsg.TimeInForce == TimeInForce.MatchOrCancel;
+		var hasTrades = matchResult.Trades.Count > 0;
+
+		// For IOC/FOK with trades, send Done message BEFORE trades (like V1)
+		if ((isIOC || isFOK) && hasTrades)
+		{
+			results.Add(new ExecutionMessage
+			{
+				LocalTime = regMsg.LocalTime,
+				SecurityId = regMsg.SecurityId,
+				OrderId = orderId,
+				OriginalTransactionId = regMsg.TransactionId,
+				Balance = matchResult.RemainingVolume,
+				OrderVolume = regMsg.Volume,
+				OrderState = OrderStates.Done,
+				PortfolioName = regMsg.PortfolioName,
+				DataTypeEx = DataType.Transactions,
+				HasOrderInfo = true,
+				ServerTime = serverTime,
+			});
+		}
+
+		// Generate trades (like V1 ProcessTrade - no order state message in trade loop for IOC/FOK)
 		foreach (var trade in matchResult.Trades)
 		{
 			var tradeId = TradeIdGenerator.GetNextId();
 
-			// Calculate commission
+			// Calculate commission for trade
 			var commission = _commissionManager.Process(new ExecutionMessage
 			{
 				TradePrice = trade.Price,
@@ -315,8 +374,27 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			var (realizedPnL, positionChange, position) = portfolio.ProcessTrade(
 				regMsg.SecurityId, regMsg.Side, trade.Price, trade.Volume, commission);
 
-			// Trade for our order
-			var tradeMsg = new ExecutionMessage
+			// For non-IOC/FOK orders: send order state update in trade loop (like V1 PutInQueue)
+			if (!isIOC && !isFOK)
+			{
+				results.Add(new ExecutionMessage
+				{
+					DataTypeEx = DataType.Transactions,
+					LocalTime = regMsg.LocalTime,
+					ServerTime = serverTime,
+					SecurityId = regMsg.SecurityId,
+					OrderId = orderId,
+					OriginalTransactionId = regMsg.TransactionId,
+					Balance = matchResult.RemainingVolume,
+					OrderVolume = regMsg.Volume,
+					OrderState = matchResult.FinalState,
+					PortfolioName = regMsg.PortfolioName,
+					HasOrderInfo = true,
+				});
+			}
+
+			// Trade message (like V1 ProcessTrade)
+			results.Add(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				SecurityId = regMsg.SecurityId,
@@ -329,19 +407,21 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				TradeVolume = trade.Volume,
 				Side = regMsg.Side,
 				Commission = commission,
-			};
-			results.Add(tradeMsg);
+			});
 
-			// Send position change for the security
+			// Position change (like V1 ProcessTrade -> result.Add PositionChangeMessage)
 			results.Add(new PositionChangeMessage
 			{
-				SecurityId = regMsg.SecurityId,
+				SecurityId = SecurityId.Money,
 				ServerTime = serverTime,
 				LocalTime = regMsg.LocalTime,
 				PortfolioName = regMsg.PortfolioName,
 			}
 			.Add(PositionChangeTypes.CurrentValue, position.CurrentValue)
 			.TryAdd(PositionChangeTypes.AveragePrice, position.AveragePrice));
+
+			// Portfolio money update (like V1 ProcessTrade -> AddPortfolioChangeMessage)
+			AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 
 			// Generate trades for matched counter orders
 			foreach (var counterOrder in trade.CounterOrders)
@@ -375,10 +455,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						Commission = counterCommission,
 					});
 
-					// Send position change for counter order
 					results.Add(new PositionChangeMessage
 					{
-						SecurityId = regMsg.SecurityId,
+						SecurityId = SecurityId.Money,
 						ServerTime = serverTime,
 						LocalTime = regMsg.LocalTime,
 						PortfolioName = counterOrder.PortfolioName,
@@ -386,31 +465,54 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					.Add(PositionChangeTypes.CurrentValue, counterPosition.CurrentValue)
 					.TryAdd(PositionChangeTypes.AveragePrice, counterPosition.AveragePrice));
 
-					// Send portfolio (money) update for counter order
 					AddPortfolioUpdate(counterPortfolio, regMsg.LocalTime, results);
 				}
 			}
 		}
 
-		// Send order response
-		var finalBalance = matchResult.RemainingVolume;
-		var finalState = matchResult.FinalState;
+		// Handle IOC/FOK cancelled portion (like V1's IsCanceled block in AcceptExecution)
+		var isCancelled = matchResult.FinalState == OrderStates.Done && matchResult.RemainingVolume > 0;
 
-		results.Add(CreateOrderResponse(regMsg, finalState,
-			orderId: orderId,
-			balance: finalBalance,
-			volume: regMsg.Volume));
+		if ((isIOC || isFOK) && isCancelled)
+		{
+			// For no trades case, need to send Done message here (Done was only sent before trades if hasTrades)
+			if (!hasTrades)
+			{
+				results.Add(new ExecutionMessage
+				{
+					LocalTime = regMsg.LocalTime,
+					SecurityId = regMsg.SecurityId,
+					OrderId = orderId,
+					OriginalTransactionId = regMsg.TransactionId,
+					Balance = matchResult.RemainingVolume,
+					OrderVolume = regMsg.Volume,
+					OrderState = OrderStates.Done,
+					PortfolioName = regMsg.PortfolioName,
+					DataTypeEx = DataType.Transactions,
+					HasOrderInfo = true,
+					ServerTime = serverTime,
+				});
+			}
+
+			// Unblock funds for cancelled portion
+			portfolio.ProcessOrderCancellation(regMsg.SecurityId, regMsg.Side, matchResult.RemainingVolume, marginPrice);
+
+			// Add portfolio update for cancelled balance (like V1 IsCanceled block)
+			AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
+		}
+		// Update the initial reply message with final state if no trades and not IOC/FOK
+		else if (matchResult.Trades.Count == 0)
+		{
+			replyMsg.OrderId = orderId;
+			replyMsg.OrderState = matchResult.FinalState;
+		}
 
 		// Add to order book if needed
-		if (matchResult.ShouldPlaceInBook && finalBalance > 0)
+		if (matchResult.ShouldPlaceInBook && matchResult.RemainingVolume > 0)
 		{
-			order.Balance = finalBalance;
+			order.Balance = matchResult.RemainingVolume;
 			emulator.OrderBook.AddQuote(order);
 			emulator.OrderManager.RegisterOrder(order, regMsg.LocalTime);
-		}
-		else if (finalBalance == 0)
-		{
-			// Order fully executed - already handled in ProcessTrade
 		}
 
 		// Send depth update
@@ -418,9 +520,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		{
 			results.Add(emulator.OrderBook.ToMessage(regMsg.LocalTime, serverTime));
 		}
-
-		// Send portfolio (money) update
-		AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 	}
 
 	private void ProcessOrderCancel(OrderCancelMessage cancelMsg, List<Message> results)
@@ -447,22 +546,20 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		// Remove from order book
 		emulator.OrderBook.RemoveQuote(order.TransactionId, order.Side, order.Price);
 
-		// Unblock funds
+		// Unblock funds (use MarginPrice that was used for blocking)
 		var portfolio = GetPortfolio(order.PortfolioName);
-		portfolio.ProcessOrderCancellation(cancelMsg.SecurityId, order.Side, order.Balance, order.Price);
+		portfolio.ProcessOrderCancellation(cancelMsg.SecurityId, order.Side, order.Balance, order.MarginPrice);
 
-		// Send cancellation confirmation
+		// Send cancellation confirmation (like V1 - no SecurityId, no IsCancellation flag)
 		results.Add(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			SecurityId = cancelMsg.SecurityId,
 			LocalTime = cancelMsg.LocalTime,
 			ServerTime = serverTime,
 			OriginalTransactionId = cancelMsg.OriginalTransactionId,
 			OrderState = OrderStates.Done,
 			Balance = order.Balance,
 			OrderVolume = order.Volume,
-			IsCancellation = true,
 			HasOrderInfo = true,
 		});
 
@@ -514,20 +611,25 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		emulator.OrderBook.RemoveQuote(oldOrder.TransactionId, oldOrder.Side, oldOrder.Price);
 
-		// Send old order cancellation
+		// Unblock funds for old order (like V1's ProcessOrder for cancellation)
+		var portfolio = GetPortfolio(oldOrder.PortfolioName);
+		portfolio.ProcessOrderCancellation(replaceMsg.SecurityId, oldOrder.Side, oldOrder.Balance, oldOrder.MarginPrice);
+
+		// Send old order cancellation (like V1's CreateReply - no SecurityId, no IsCancellation)
 		results.Add(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
-			SecurityId = replaceMsg.SecurityId,
 			LocalTime = replaceMsg.LocalTime,
 			ServerTime = serverTime,
 			OriginalTransactionId = replaceMsg.OriginalTransactionId,
 			OrderState = OrderStates.Done,
 			Balance = oldOrder.Balance,
 			OrderVolume = oldOrder.Volume,
-			IsCancellation = true,
 			HasOrderInfo = true,
 		});
+
+		// Portfolio update for cancellation (like V1's ProcessOrder -> AddPortfolioChangeMessage)
+		AddPortfolioUpdate(portfolio, replaceMsg.LocalTime, results);
 
 		// Register new order
 		var newRegMsg = new OrderRegisterMessage
@@ -542,7 +644,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			PortfolioName = replaceMsg.PortfolioName ?? oldOrder.PortfolioName,
 			TimeInForce = replaceMsg.TimeInForce ?? oldOrder.TimeInForce,
 			PostOnly = replaceMsg.PostOnly ?? oldOrder.PostOnly,
-			TillDate = replaceMsg.TillDate ?? oldOrder.ExpiryDate?.DateTime,
+			TillDate = replaceMsg.TillDate ?? oldOrder.ExpiryDate,
 		};
 
 		ProcessOrderRegister(newRegMsg, results);
@@ -636,6 +738,12 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	private void ProcessOrderStatus(OrderStatusMessage statusMsg, List<Message> results)
 	{
+		// Like V1: add SubscriptionResponseMessage first
+		results.Add(statusMsg.CreateResponse());
+
+		if (!statusMsg.IsSubscribe)
+			return;
+
 		foreach (var emulator in _securityEmulators.Values)
 		{
 			var orders = string.IsNullOrEmpty(statusMsg.PortfolioName)
@@ -652,7 +760,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					DataTypeEx = DataType.Transactions,
 					SecurityId = emulator.SecurityId,
 					LocalTime = statusMsg.LocalTime,
-					ServerTime = order.ServerTime.DateTime,
+					ServerTime = order.ServerTime,
 					OriginalTransactionId = statusMsg.TransactionId,
 					TransactionId = order.TransactionId,
 					OrderState = OrderStates.Active,
@@ -661,11 +769,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					OrderPrice = order.Price,
 					Side = order.Side,
 					PortfolioName = order.PortfolioName,
+					OrderType = order.OrderType ?? OrderTypes.Limit,
 					HasOrderInfo = true,
 				});
 			}
 		}
 
+		// Like V1: add SubscriptionOnlineMessage at the end
 		results.Add(statusMsg.CreateResult());
 	}
 
@@ -728,7 +838,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		results.Add(posMsg.Clone());
 	}
 
-	private void ProcessTime(DateTimeOffset time, List<Message> results)
+	private void ProcessTime(DateTime time, List<Message> results)
 	{
 		foreach (var emulator in _securityEmulators.Values)
 		{
@@ -742,8 +852,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				{
 					DataTypeEx = DataType.Transactions,
 					SecurityId = emulator.SecurityId,
-					LocalTime = time.DateTime,
-					ServerTime = time.DateTime,
+					LocalTime = time,
+					ServerTime = time,
 					OriginalTransactionId = order.TransactionId,
 					OrderState = OrderStates.Done,
 					Balance = order.Balance,
@@ -798,20 +908,21 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		};
 	}
 
-	private static void AddPortfolioUpdate(PortfolioEmulator portfolio, DateTimeOffset time, List<Message> results)
+	private static void AddPortfolioUpdate(PortfolioEmulator portfolio, DateTime time, List<Message> results)
 	{
 		var totalPnL = portfolio.RealizedPnL - portfolio.Commission;
 
 		results.Add(new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
-			ServerTime = time.DateTime,
-			LocalTime = time.DateTime,
+			ServerTime = time,
+			LocalTime = time,
 			PortfolioName = portfolio.Name,
 		}
 		.Add(PositionChangeTypes.RealizedPnL, portfolio.RealizedPnL)
+		.TryAdd(PositionChangeTypes.UnrealizedPnL, 0m, true)
 		.Add(PositionChangeTypes.VariationMargin, totalPnL)
-		.Add(PositionChangeTypes.CurrentValue, portfolio.AvailableMoney)
+		.Add(PositionChangeTypes.CurrentValue, portfolio.CurrentMoney)
 		.Add(PositionChangeTypes.BlockedValue, portfolio.BlockedMoney)
 		.Add(PositionChangeTypes.Commission, portfolio.Commission));
 	}
@@ -1065,22 +1176,25 @@ internal class PortfolioEmulator(string name)
 {
 	private readonly Dictionary<SecurityId, PositionInfo> _positions = [];
 	private decimal _beginMoney;
-	private decimal _currentMoney;
 	private decimal _realizedPnL;
 	private decimal _totalBlockedMoney;
 	private decimal _commission;
 
 	public string Name { get; } = name;
 	public decimal BeginMoney => _beginMoney;
-	public decimal AvailableMoney => _currentMoney;
+	/// <summary>
+	/// Current money = begin money + total PnL (like V1).
+	/// </summary>
+	public decimal CurrentMoney => _beginMoney + TotalPnL;
+	public decimal AvailableMoney => CurrentMoney - _totalBlockedMoney;
 	public decimal RealizedPnL => _realizedPnL;
+	public decimal TotalPnL => _realizedPnL - _commission;
 	public decimal BlockedMoney => _totalBlockedMoney;
 	public decimal Commission => _commission;
 
 	public void SetMoney(decimal money)
 	{
 		_beginMoney = money;
-		_currentMoney = money;
 	}
 
 	public void SetPosition(SecurityId secId, decimal volume, decimal avgPrice = 0)
@@ -1170,23 +1284,23 @@ internal class PortfolioEmulator(string name)
 		}
 
 		// Update blocked volume/value for active orders (order was executed)
-		var value = volume * price;
+		// Use the average blocked price, not the trade price, to properly unblock
 		if (side == Sides.Buy)
 		{
+			var avgBlockedPrice = pos.TotalBidsVolume > 0 ? pos.TotalBidsValue / pos.TotalBidsVolume : price;
+			var blockedValue = volume * avgBlockedPrice;
 			pos.TotalBidsVolume -= volume;
-			pos.TotalBidsValue -= value;
+			pos.TotalBidsValue -= blockedValue;
 		}
 		else
 		{
+			var avgBlockedPrice = pos.TotalAsksVolume > 0 ? pos.TotalAsksValue / pos.TotalAsksVolume : price;
+			var blockedValue = volume * avgBlockedPrice;
 			pos.TotalAsksVolume -= volume;
-			pos.TotalAsksValue -= value;
+			pos.TotalAsksValue -= blockedValue;
 		}
 
 		UpdateBlockedMoney();
-
-		// Update current money (simple: just track cost)
-		var cost = price * volume * (side == Sides.Buy ? -1 : 1);
-		_currentMoney += cost;
 
 		return (tradeRealizedPnL, positionDelta, pos);
 	}
@@ -1254,8 +1368,31 @@ internal class PortfolioEmulator(string name)
 		_totalBlockedMoney = 0;
 		foreach (var pos in _positions.Values)
 		{
-			// Blocked = value of all active orders
-			_totalBlockedMoney += pos.TotalBidsValue + pos.TotalAsksValue;
+			// V1's TotalPrice logic:
+			// - If no position: blocked = buys + sells
+			// - If long position: blocked = max(position + buys, sells)
+			// - If short position: blocked = max(position + sells, buys)
+			var positionValue = Math.Abs(pos.CurrentValue) * pos.AveragePrice;
+			var buyOrderValue = pos.TotalBidsValue;
+			var sellOrderValue = pos.TotalAsksValue;
+
+			decimal blocked;
+			if (positionValue == 0)
+			{
+				blocked = buyOrderValue + sellOrderValue;
+			}
+			else if (pos.CurrentValue > 0)
+			{
+				// Long position: max(position + buys, sells)
+				blocked = Math.Max(positionValue + buyOrderValue, sellOrderValue);
+			}
+			else
+			{
+				// Short position: max(position + sells, buys)
+				blocked = Math.Max(positionValue + sellOrderValue, buyOrderValue);
+			}
+
+			_totalBlockedMoney += blocked;
 		}
 	}
 
