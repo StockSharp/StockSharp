@@ -92,7 +92,9 @@ public class OrderMatcher : IOrderMatcher
 		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
 		{
 			var consumed = Math.Min(volume, remaining);
-			trades.Add(new MatchTrade(price, consumed, order.Side, orders));
+			// Use order price for candle-based matching (like V1's MatchOrderByCandle)
+			var tradePrice = settings.UseOrderPriceForLimitTrades ? limitPrice : price;
+			trades.Add(new MatchTrade(tradePrice, consumed, order.Side, orders));
 			matchedOrders.AddRange(orders.Where(o => o.IsUserOrder));
 			remaining -= consumed;
 

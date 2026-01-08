@@ -19,6 +19,11 @@ public class EmulatorOrder
 	public long TransactionId { get; init; }
 
 	/// <summary>
+	/// Order ID assigned by exchange/emulator.
+	/// </summary>
+	public long? OrderId { get; set; }
+
+	/// <summary>
 	/// Order side.
 	/// </summary>
 	public Sides Side { get; init; }

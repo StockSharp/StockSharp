@@ -219,6 +219,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					GetEmulator(candleMsg.SecurityId).ProcessCandle(candleMsg, results);
 				break;
 		}
+
+		// Process expired orders on every message (like V1)
+		ProcessTime(message.LocalTime, results);
 	}
 
 	private void ProcessExecution(ExecutionMessage execMsg, List<Message> results)
@@ -237,8 +240,22 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		{
 			if (execMsg.HasOrderInfo())
 			{
-				// Internal order processing
-				emulator.ProcessOrderExecution(execMsg, results);
+				// Convert ExecutionMessage to OrderRegisterMessage and process
+				var regMsg = new OrderRegisterMessage
+				{
+					TransactionId = execMsg.TransactionId,
+					SecurityId = execMsg.SecurityId,
+					PortfolioName = execMsg.PortfolioName,
+					Side = execMsg.Side,
+					Price = execMsg.OrderPrice,
+					Volume = execMsg.OrderVolume ?? 0,
+					OrderType = execMsg.OrderType ?? OrderTypes.Limit,
+					TimeInForce = execMsg.TimeInForce,
+					TillDate = execMsg.ExpiryDate,
+					PostOnly = execMsg.PostOnly,
+					LocalTime = execMsg.LocalTime,
+				};
+				ProcessOrderRegister(regMsg, results);
 			}
 		}
 	}
@@ -270,9 +287,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		// Track order registration for blocked funds
 		// Use market price (bid for buy, ask for sell) like V1 GetMarginPrice
-		var marginPrice = regMsg.Side == Sides.Buy
-			? emulator.OrderBook.BestBid?.price ?? regMsg.Price
-			: emulator.OrderBook.BestAsk?.price ?? regMsg.Price;
+		// V1 returns 0 if no quotes available on that side (not order price)
+		// In candle mode, V1 doesn't update order book so margin is always 0
+		var marginPrice = emulator.IsCandleMatchingMode
+			? 0
+			: regMsg.Side == Sides.Buy
+				? emulator.OrderBook.BestBid?.price ?? 0
+				: emulator.OrderBook.BestAsk?.price ?? 0;
 
 		// Create emulator order
 		var order = new EmulatorOrder
@@ -294,6 +315,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		// Assign order ID
 		var orderId = OrderIdGenerator.GetNextId();
+		order.OrderId = orderId;
 
 		// Check PostOnly BEFORE blocking funds (like V1's early return in AcceptExecution)
 		var matcher = new OrderMatcher();
@@ -311,14 +333,27 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		// [1] Portfolio change message after order registration (like V1 ProcessOrder -> AddPortfolioChangeMessage)
 		AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 
-		// Match order
-		var matchSettings = new MatchingSettings
-		{
-			PriceStep = emulator.PriceStep,
-			VolumeStep = emulator.VolumeStep,
-		};
+		// Match order - use candle matching if candle subscription is active and candle is available
+		MatchResult matchResult;
+		var candle = emulator.HasCandleSubscription ? emulator.GetLastStoredCandle() : null;
 
-		var matchResult = matcher.Match(order, emulator.OrderBook, matchSettings);
+		if (candle is not null)
+		{
+			// Match against candle (like V1's MatchOrderByCandle)
+			matchResult = MatchOrderByCandle(order, candle);
+		}
+		else
+		{
+			// Match against order book
+			var matchSettings = new MatchingSettings
+			{
+				PriceStep = emulator.PriceStep,
+				VolumeStep = emulator.VolumeStep,
+				UseOrderPriceForLimitTrades = emulator.IsCandleMatchingMode,
+			};
+
+			matchResult = matcher.Match(order, emulator.OrderBook, matchSettings);
+		}
 
 		// Process result (for non-PostOnly rejections like FOK)
 		if (matchResult.IsRejected)
@@ -505,14 +540,32 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		{
 			replyMsg.OrderId = orderId;
 			replyMsg.OrderState = matchResult.FinalState;
+			// Only set Balance/OrderVolume for non-active orders (like V1)
+			if (matchResult.FinalState != OrderStates.Active)
+			{
+				replyMsg.Balance = matchResult.RemainingVolume;
+				replyMsg.OrderVolume = regMsg.Volume;
+			}
 		}
 
-		// Add to order book if needed
+		// Add to order book if needed (check expiry date like V1's AddActiveOrder)
 		if (matchResult.ShouldPlaceInBook && matchResult.RemainingVolume > 0)
 		{
-			order.Balance = matchResult.RemainingVolume;
-			emulator.OrderBook.AddQuote(order);
-			emulator.OrderManager.RegisterOrder(order, regMsg.LocalTime);
+			// Check expiry date (like V1's AddActiveOrder - returns false if expired)
+			if (regMsg.TillDate.HasValue && regMsg.TillDate.Value <= regMsg.LocalTime)
+			{
+				// Order expired - don't add to book, just set Done
+				// V1 doesn't unblock portfolio here - it just returns
+				replyMsg.OrderState = OrderStates.Done;
+				replyMsg.Balance = matchResult.RemainingVolume;
+				replyMsg.OrderVolume = regMsg.Volume;
+			}
+			else
+			{
+				order.Balance = matchResult.RemainingVolume;
+				emulator.OrderBook.AddQuote(order);
+				emulator.OrderManager.RegisterOrder(order, regMsg.LocalTime);
+			}
 		}
 
 		// Send depth update
@@ -653,6 +706,22 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	private void ProcessOrderGroupCancel(OrderGroupCancelMessage groupMsg, List<Message> results)
 	{
 		var mode = groupMsg.Mode;
+
+		// V1 requires PortfolioName for ClosePositions mode
+		if (mode.HasFlag(OrderGroupCancelModes.ClosePositions) && string.IsNullOrEmpty(groupMsg.PortfolioName))
+		{
+			results.Add(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				OriginalTransactionId = groupMsg.TransactionId,
+				OrderState = OrderStates.Failed,
+				Error = new InvalidOperationException($"{nameof(OrderGroupCancelMessage)}: PortfolioName is required for ClosePositions mode"),
+				LocalTime = groupMsg.LocalTime,
+				ServerTime = groupMsg.LocalTime,
+				HasOrderInfo = true,
+			});
+			return;
+		}
 
 		if (mode.HasFlag(OrderGroupCancelModes.CancelOrders))
 		{
@@ -855,13 +924,108 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					LocalTime = time,
 					ServerTime = time,
 					OriginalTransactionId = order.TransactionId,
+					OrderId = order.OrderId,
 					OrderState = OrderStates.Done,
 					Balance = order.Balance,
 					OrderVolume = order.Volume,
+					PortfolioName = order.PortfolioName,
 					HasOrderInfo = true,
 				});
+
+				// V1 doesn't unblock portfolio or output PositionChangeMessage for expired orders
+				// It just outputs ExecutionMessage. This appears to be a bug in V1 (portfolio remains blocked),
+				// but we replicate it for compatibility.
 			}
+
+			// Process stored candles (like V1's ProcessCandles)
+			emulator.ProcessStoredCandles(time, results);
 		}
+	}
+
+	/// <summary>
+	/// Match order against candle (like V1's MatchOrderByCandle).
+	/// </summary>
+	private static MatchResult MatchOrderByCandle(EmulatorOrder order, CandleMessage candle)
+	{
+		var balance = order.Balance;
+
+		// Calculate left balance after matching against candle volume
+		// If candle has no volume info, assume candle's volume is much more than order's balance
+		var leftBalance = candle.TotalVolume == 0
+			? 0
+			: Math.Max(0, balance - candle.TotalVolume);
+
+		// FOK check - if can't fill entirely, don't execute
+		if (leftBalance > 0 && order.TimeInForce == TimeInForce.MatchOrCancel)
+		{
+			return new MatchResult
+			{
+				Order = order,
+				Trades = [],
+				MatchedOrders = [],
+				RemainingVolume = balance,
+				ShouldPlaceInBook = false,
+				FinalState = OrderStates.Done,
+			};
+		}
+
+		decimal execPrice;
+
+		if (order.OrderType == OrderTypes.Market)
+		{
+			// For market orders, use middle price (like V1 default CandlePrice.Middle)
+			execPrice = (candle.HighPrice + candle.LowPrice) / 2;
+
+			// Price step is wrong, so adjust by candle boundaries
+			if (execPrice > candle.HighPrice || execPrice < candle.LowPrice)
+				execPrice = candle.ClosePrice;
+		}
+		else
+		{
+			// For limit orders, check if price is within candle range
+			if (order.Price > candle.HighPrice || order.Price < candle.LowPrice)
+			{
+				// Order price is outside candle range - no match, go to book as Active
+				return new MatchResult
+				{
+					Order = order,
+					Trades = [],
+					MatchedOrders = [],
+					RemainingVolume = balance,
+					ShouldPlaceInBook = order.TimeInForce != TimeInForce.CancelBalance,
+					FinalState = order.TimeInForce == TimeInForce.CancelBalance ? OrderStates.Done : OrderStates.Active,
+				};
+			}
+
+			// Use order price for execution (like V1)
+			execPrice = order.Price;
+		}
+
+		// Create trade
+		var tradeVolume = balance - leftBalance;
+		var trades = new List<MatchTrade>
+		{
+			new(execPrice, tradeVolume, order.Side, [])
+		};
+
+		// Determine final state
+		var isFullyMatched = leftBalance <= 0;
+		var finalState = isFullyMatched ? OrderStates.Done : OrderStates.Active;
+		var shouldPlaceInBook = !isFullyMatched && order.TimeInForce != TimeInForce.CancelBalance;
+
+		// IOC (CancelBalance) orders are always Done
+		if (order.TimeInForce == TimeInForce.CancelBalance)
+			finalState = OrderStates.Done;
+
+		return new MatchResult
+		{
+			Order = order,
+			Trades = trades,
+			MatchedOrders = [],
+			RemainingVolume = leftBalance,
+			ShouldPlaceInBook = shouldPlaceInBook,
+			FinalState = finalState,
+		};
 	}
 
 	private void Reset()
@@ -1026,18 +1190,79 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 	private readonly MarketEmulator _parent = parent;
 	private SecurityMessage _securityDefinition;
 	private long? _depthSubscription;
+	private long? _candlesSubscription;
+	private bool _candlesNonFinished;
+	private readonly SortedDictionary<DateTime, List<CandleMessage>> _storedCandles = [];
 
 	public SecurityId SecurityId { get; } = securityId;
 	public OrderBook OrderBook { get; } = new(securityId);
 	public OrderLifecycleManager OrderManager { get; } = new();
 
+	private bool _priceStepUpdated;
+	private bool _volumeStepUpdated;
+	private DateTime _lastPriceLimitDate;
+
 	public decimal PriceStep => _securityDefinition?.PriceStep ?? 0.01m;
 	public decimal VolumeStep => _securityDefinition?.VolumeStep ?? 1m;
 	public bool HasDepthSubscription => _depthSubscription.HasValue;
 
+	/// <summary>
+	/// True when order book was populated from candle data.
+	/// In this mode, limit orders should use order price for trades (like V1's MatchOrderByCandle).
+	/// </summary>
+	public bool IsCandleMatchingMode { get; private set; }
+
 	public void ProcessSecurity(SecurityMessage msg)
 	{
 		_securityDefinition = msg;
+	}
+
+	private void UpdateSteps(decimal price, decimal? volume)
+	{
+		// Auto-detect price/volume step from market data (like V1)
+		if (!_priceStepUpdated && price > 0)
+		{
+			_securityDefinition ??= new SecurityMessage { SecurityId = SecurityId };
+			_securityDefinition.PriceStep = price.GetDecimalInfo().EffectiveScale.GetPriceStep();
+			_priceStepUpdated = true;
+		}
+
+		if (!_volumeStepUpdated && volume > 0)
+		{
+			_securityDefinition ??= new SecurityMessage { SecurityId = SecurityId };
+			_securityDefinition.VolumeStep = volume.Value.GetDecimalInfo().EffectiveScale.GetPriceStep();
+			_volumeStepUpdated = true;
+		}
+	}
+
+	private void UpdatePriceLimits(decimal price, DateTime localTime, DateTime serverTime, List<Message> results)
+	{
+		// V1's UpdatePriceLimits - called once per day to output Level1ChangeMessage with price limits
+		if (_lastPriceLimitDate == localTime.Date)
+			return;
+
+		_lastPriceLimitDate = localTime.Date;
+
+		var priceOffset = _parent.Settings.PriceLimitOffset;
+		var priceStep = PriceStep;
+
+		var level1Msg = new Level1ChangeMessage
+		{
+			SecurityId = SecurityId,
+			LocalTime = localTime,
+			ServerTime = serverTime,
+		}
+		.Add(Level1Fields.MinPrice, ShrinkPrice((decimal)(price - priceOffset), priceStep))
+		.Add(Level1Fields.MaxPrice, ShrinkPrice((decimal)(price + priceOffset), priceStep));
+
+		results.Add(level1Msg);
+	}
+
+	private static decimal ShrinkPrice(decimal price, decimal step)
+	{
+		if (step == 0)
+			return price;
+		return Math.Round(price / step) * step;
 	}
 
 	public void ProcessMarketData(MarketDataMessage msg)
@@ -1046,16 +1271,37 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 		{
 			if (msg.DataType2 == DataType.MarketDepth)
 				_depthSubscription = msg.TransactionId;
+			else if (msg.DataType2.IsCandles)
+			{
+				_candlesSubscription = msg.TransactionId;
+				_candlesNonFinished = !msg.IsFinishedOnly;
+			}
 		}
 		else
 		{
 			if (_depthSubscription == msg.OriginalTransactionId)
 				_depthSubscription = null;
+			else if (_candlesSubscription == msg.OriginalTransactionId)
+			{
+				_candlesSubscription = null;
+				_candlesNonFinished = false;
+			}
 		}
 	}
 
 	public void ProcessQuoteChange(QuoteChangeMessage msg, List<Message> results)
 	{
+		// Exit candle matching mode when receiving real quotes
+		IsCandleMatchingMode = false;
+
+		// Update steps from quote data (like V1)
+		if (!_priceStepUpdated || !_volumeStepUpdated)
+		{
+			var quote = msg.GetBestBid() ?? msg.GetBestAsk();
+			if (quote != null)
+				UpdateSteps(quote.Value.Price, quote.Value.Volume);
+		}
+
 		if (msg.State is null)
 		{
 			OrderBook.SetSnapshot(msg.Bids, msg.Asks);
@@ -1069,10 +1315,16 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 
 	public void ProcessLevel1(Level1ChangeMessage msg, List<Message> results)
 	{
+		// Exit candle matching mode when receiving real Level1
+		IsCandleMatchingMode = false;
+
 		var bidPrice = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestBidPrice);
 		var askPrice = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestAskPrice);
 		var bidVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestBidVolume) ?? 10;
 		var askVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestAskVolume) ?? 10;
+
+		// Update steps from Level1 data (like V1)
+		UpdateSteps(bidPrice ?? askPrice ?? 0, bidVol);
 
 		if (bidPrice.HasValue)
 			OrderBook.UpdateLevel(Sides.Buy, bidPrice.Value, bidVol);
@@ -1088,35 +1340,68 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 
 	public void ProcessTick(ExecutionMessage tick, List<Message> results)
 	{
-		// Generate order book from tick if empty
+		// Exit candle matching mode when receiving real ticks
+		IsCandleMatchingMode = false;
+
+		var tradePrice = tick.TradePrice ?? 0;
+		var tradeVolume = tick.TradeVolume ?? 10m;
+
+		// Update steps from tick data (like V1's UpdateSteps)
+		UpdateSteps(tradePrice, tradeVolume);
+
+		// Update price limits (like V1's UpdatePriceLimits - once per day)
+		if (tradePrice > 0)
+			UpdatePriceLimits(tradePrice, tick.LocalTime, tick.ServerTime, results);
+
 		var priceStep = PriceStep;
 		var spread = priceStep * _parent.Settings.SpreadSize;
 
-		if (OrderBook.BidLevels == 0 && OrderBook.AskLevels == 0)
+		if (tradePrice <= 0)
 		{
-			var price = tick.TradePrice ?? 100m;
-			var vol = tick.TradeVolume ?? 10m;
-
-			OrderBook.UpdateLevel(Sides.Buy, price - spread, vol);
-			OrderBook.UpdateLevel(Sides.Sell, price + spread, vol);
+			if (_depthSubscription.HasValue)
+				results.Add(OrderBook.ToMessage(tick.LocalTime, tick.ServerTime));
+			return;
 		}
 
-		// Match orders against tick price
-		var tradePrice = tick.TradePrice ?? 0;
-		if (tradePrice > 0)
-		{
-			// Update best prices based on tick
-			var bestBid = OrderBook.BestBid;
-			var bestAsk = OrderBook.BestAsk;
+		var bestBid = OrderBook.BestBid;
+		var bestAsk = OrderBook.BestAsk;
 
+		// Determine tick origin side (like V1's GetOrderSide)
+		Sides originSide;
+		if (tick.OriginSide.HasValue)
+			originSide = tick.OriginSide.Value.Invert();
+		else if (bestBid.HasValue && !bestAsk.HasValue)
+			originSide = Sides.Sell;
+		else if (bestAsk.HasValue && !bestBid.HasValue)
+			originSide = Sides.Buy;
+		else
+			originSide = Sides.Sell; // default: tick was from a sell order
+
+		if (OrderBook.BidLevels == 0 && OrderBook.AskLevels == 0)
+		{
+			// Empty book: create quote at tick price and opposite at tick ± spread
+			OrderBook.UpdateLevel(originSide, tradePrice, tradeVolume);
+			var oppositePrice = tradePrice + spread * (originSide == Sides.Buy ? 1 : -1);
+			if (oppositePrice > 0)
+				OrderBook.UpdateLevel(originSide.Invert(), oppositePrice, tradeVolume);
+		}
+		else
+		{
+			// Non-empty book: update levels based on tick
 			if (bestBid.HasValue && tradePrice <= bestBid.Value.price)
 			{
-				// Tick at or below best bid - might execute sell orders
+				// Tick at or below best bid - update/create sell level
+				OrderBook.UpdateLevel(Sides.Sell, tradePrice, tradeVolume);
 			}
-
-			if (bestAsk.HasValue && tradePrice >= bestAsk.Value.price)
+			else if (bestAsk.HasValue && tradePrice >= bestAsk.Value.price)
 			{
-				// Tick at or above best ask - might execute buy orders
+				// Tick at or above best ask - update/create buy level
+				OrderBook.UpdateLevel(Sides.Buy, tradePrice, tradeVolume);
+			}
+			else
+			{
+				// Tick in spread or outside - create level at tick price
+				OrderBook.UpdateLevel(originSide, tradePrice, tradeVolume);
 			}
 		}
 
@@ -1128,8 +1413,14 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 
 	public void ProcessOrderLog(ExecutionMessage ol, List<Message> results)
 	{
+		// Exit candle matching mode when receiving real order log
+		IsCandleMatchingMode = false;
+
 		if (ol.TradeId is not null)
 			return; // Trade, not order
+
+		// Update steps from order log data (like V1)
+		UpdateSteps(ol.OrderPrice, ol.OrderVolume);
 
 		if (ol.IsCancellation)
 		{
@@ -1149,13 +1440,117 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 		}
 	}
 
+	/// <summary>
+	/// True if candle subscription is active (for candle-based matching).
+	/// </summary>
+	public bool HasCandleSubscription => _candlesSubscription.HasValue;
+
+	/// <summary>
+	/// Get the last stored candle for order matching (like V1's _candleInfo.LastOrDefault()).
+	/// </summary>
+	public CandleMessage GetLastStoredCandle()
+	{
+		if (_storedCandles.Count == 0)
+			return null;
+
+		var lastPair = _storedCandles.Last();
+		return lastPair.Value.FirstOrDefault();
+	}
+
 	public void ProcessCandle(CandleMessage candle, List<Message> results)
 	{
-		// Generate pseudo order book from candle
-		var spread = PriceStep * _parent.Settings.SpreadSize;
+		// Update steps from candle data (like V1)
+		UpdateSteps(candle.ClosePrice, candle.TotalVolume);
 
-		OrderBook.UpdateLevel(Sides.Buy, candle.ClosePrice - spread, candle.TotalVolume / 2);
-		OrderBook.UpdateLevel(Sides.Sell, candle.ClosePrice + spread, candle.TotalVolume / 2);
+		// Store candle for later processing (like V1's _candleInfo)
+		// V1 processes candles during ProcessTime, not immediately
+		var candles = _storedCandles.SafeAdd(candle.OpenTime, key => []);
+		candles.Add(candle);
+	}
+
+	/// <summary>
+	/// Process stored candles for output and order matching (like V1's ProcessCandles).
+	/// Called during ProcessTime.
+	/// </summary>
+	public void ProcessStoredCandles(DateTime currentTime, List<Message> results)
+	{
+		if (_storedCandles.Count == 0)
+			return;
+
+		List<DateTime> toRemove = null;
+
+		foreach (var pair in _storedCandles)
+		{
+			if (pair.Key >= currentTime)
+				break;
+
+			toRemove ??= [];
+			toRemove.Add(pair.Key);
+
+			// Output intermediate candle states if _candlesNonFinished
+			if (_candlesNonFinished)
+			{
+				foreach (var candle in pair.Value)
+				{
+					// Open state (Active)
+					var openState = candle.TypedClone();
+					openState.State = CandleStates.Active;
+					openState.HighPrice = openState.LowPrice = openState.ClosePrice = openState.OpenPrice;
+					if (candle.OpenTime != default)
+						openState.LocalTime = candle.OpenTime;
+					results.Add(openState);
+
+					// High state
+					var highState = openState.TypedClone();
+					highState.HighPrice = candle.HighPrice;
+					if (candle.HighTime != default)
+						highState.LocalTime = candle.HighTime;
+					results.Add(highState);
+
+					// Low state
+					var lowState = openState.TypedClone();
+					lowState.HighPrice = candle.HighPrice;
+					if (candle.LowTime != default)
+						lowState.LocalTime = candle.LowTime;
+					results.Add(lowState);
+				}
+			}
+
+			// Output TimeMessage before final candle (like V1)
+			results.Add(new TimeMessage { LocalTime = currentTime });
+
+			// Output final candle and match orders
+			foreach (var candle in pair.Value)
+			{
+				var finalCandle = candle.TypedClone();
+				finalCandle.LocalTime = currentTime;
+				results.Add(finalCandle);
+
+				// Update order book from candle for matching
+				ApplyCandleToOrderBook(candle, results);
+			}
+		}
+
+		if (toRemove is not null)
+		{
+			foreach (var key in toRemove)
+				_storedCandles.Remove(key);
+		}
+	}
+
+	private void ApplyCandleToOrderBook(CandleMessage candle, List<Message> results)
+	{
+		// Enter candle matching mode (like V1's MatchOrderByCandle - uses order price for trades)
+		IsCandleMatchingMode = true;
+
+		// Generate pseudo order book from candle (like V1's MatchOrderByCandle)
+		// Create quotes at Low/High to allow matching within candle range
+		var vol = candle.TotalVolume > 0 ? candle.TotalVolume / 2 : 10m;
+
+		// Ask at LowPrice - allows Buy orders at Low or above to match
+		OrderBook.UpdateLevel(Sides.Sell, candle.LowPrice, vol);
+		// Bid at HighPrice - allows Sell orders at High or below to match
+		OrderBook.UpdateLevel(Sides.Buy, candle.HighPrice, vol);
 
 		if (_depthSubscription.HasValue)
 		{

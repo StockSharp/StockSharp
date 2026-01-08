@@ -95,6 +95,12 @@ public class MatchingSettings
 	/// Whether to match market orders at any price.
 	/// </summary>
 	public bool AllowMarketOrdersWithoutBook { get; init; } = true;
+
+	/// <summary>
+	/// When true, use order price instead of market price for limit order trades.
+	/// This is used for candle-based matching (like V1's MatchOrderByCandle).
+	/// </summary>
+	public bool UseOrderPriceForLimitTrades { get; init; }
 }
 
 /// <summary>
