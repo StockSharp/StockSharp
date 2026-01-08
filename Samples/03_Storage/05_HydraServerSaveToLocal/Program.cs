@@ -38,8 +38,7 @@ static class Program
 
 		var storageRegistry = new StorageRegistry();
 
-		await using var executor = new ChannelExecutor(ex => ConsoleHelper.ConsoleError(ex.ToString()));
-		_ = executor.RunAsync(token);
+		await using var executor = TimeSpan.FromSeconds(1).CreateExecutorAndRun(ex => ConsoleHelper.ConsoleError(ex.ToString()));
 		var registry = new CsvEntityRegistry(fs, Path.Combine(Directory.GetCurrentDirectory(), "Storage"), executor);
 		var securityStorage = (ISecurityStorage)registry.Securities;
 

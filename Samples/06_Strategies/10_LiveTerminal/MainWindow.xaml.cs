@@ -59,8 +59,7 @@ public partial class MainWindow
 		LogManager.Listeners.Add(new FileLogListener { LogDirectory = Path.Combine(path, "Logs") });
 		LogManager.Listeners.Add(new GuiLogListener(Monitor));
 
-		_executor = new(LogManager.Application.AddErrorLog);
-		_ = _executor.RunAsync(default);
+		_executor = TimeSpan.FromSeconds(1).CreateExecutorAndRun(LogManager.Application.AddErrorLog);
 
 		var fs = Paths.FileSystem;
 

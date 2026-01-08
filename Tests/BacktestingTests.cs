@@ -827,14 +827,14 @@ public class BacktestingTests : BaseTestClass
 		};
 
 		// Track all event times globally
-		var allEventTimes = new List<(DateTimeOffset time, string eventType)>();
+		var allEventTimes = new List<(DateTime time, string eventType)>();
 		var syncLock = new object();
 
 		// Track times per event type
-		DateTimeOffset? lastOrderTime = null;
-		DateTimeOffset? lastTradeTime = null;
-		DateTimeOffset? lastPnLTime = null;
-		DateTimeOffset? lastPositionTime = null;
+		DateTime? lastOrderTime = null;
+		DateTime? lastTradeTime = null;
+		DateTime? lastPnLTime = null;
+		DateTime? lastPositionTime = null;
 
 		var orderTimeErrors = new List<string>();
 		var tradeTimeErrors = new List<string>();
@@ -869,7 +869,7 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.OwnTradeReceived += (sub, trade) =>
 		{
-			var time = new DateTimeOffset(trade.Trade.ServerTime);
+			var time = trade.Trade.ServerTime;
 			lock (syncLock)
 			{
 				// Check within trade events
@@ -918,8 +918,8 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.PositionReceived += (s, pos) =>
 		{
-			var time = pos.ServerTime != default ? new DateTimeOffset(pos.ServerTime) : DateTimeOffset.MinValue;
-			if (time == DateTimeOffset.MinValue)
+			var time = pos.ServerTime != default ? pos.ServerTime : DateTime.MinValue;
+			if (time == DateTime.MinValue)
 				return;
 
 			lock (syncLock)

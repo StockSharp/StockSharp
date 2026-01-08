@@ -11,7 +11,7 @@ public interface IOrderLifecycleManager
 	/// <param name="order">Order to register.</param>
 	/// <param name="currentTime">Current time for expiry calculation.</param>
 	/// <returns>True if registered, false if already exists.</returns>
-	bool RegisterOrder(EmulatorOrder order, DateTimeOffset currentTime);
+	bool RegisterOrder(EmulatorOrder order, DateTime currentTime);
 
 	/// <summary>
 	/// Get an active order by transaction ID.
@@ -77,14 +77,14 @@ public interface IOrderLifecycleManager
 	/// </summary>
 	/// <param name="currentTime">Time to check expirations against.</param>
 	/// <returns>Expired orders at the specified time.</returns>
-	IEnumerable<EmulatorOrder> GetExpiredOrders(DateTimeOffset currentTime);
+	IEnumerable<EmulatorOrder> GetExpiredOrders(DateTime currentTime);
 
 	/// <summary>
 	/// Process time passage and return expired orders.
 	/// </summary>
 	/// <param name="currentTime">Current time to process expiries.</param>
 	/// <returns>Orders that expired during processing.</returns>
-	IEnumerable<EmulatorOrder> ProcessTime(DateTimeOffset currentTime);
+	IEnumerable<EmulatorOrder> ProcessTime(DateTime currentTime);
 
 	/// <summary>
 	/// Clear all orders.
@@ -103,13 +103,13 @@ public interface IOrderLifecycleManager
 public class OrderLifecycleManager : IOrderLifecycleManager
 {
 	private readonly Dictionary<long, EmulatorOrder> _activeOrders = [];
-	private readonly Dictionary<long, DateTimeOffset> _expiryTimes = [];
+	private readonly Dictionary<long, DateTime> _expiryTimes = [];
 
 	/// <inheritdoc />
 	public int Count => _activeOrders.Count;
 
 	/// <inheritdoc />
-	public bool RegisterOrder(EmulatorOrder order, DateTimeOffset currentTime)
+	public bool RegisterOrder(EmulatorOrder order, DateTime currentTime)
 	{
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
@@ -199,7 +199,7 @@ public class OrderLifecycleManager : IOrderLifecycleManager
 	}
 
 	/// <inheritdoc />
-	public IEnumerable<EmulatorOrder> GetExpiredOrders(DateTimeOffset currentTime)
+	public IEnumerable<EmulatorOrder> GetExpiredOrders(DateTime currentTime)
 	{
 		var expired = new List<EmulatorOrder>();
 
@@ -215,7 +215,7 @@ public class OrderLifecycleManager : IOrderLifecycleManager
 	}
 
 	/// <inheritdoc />
-	public IEnumerable<EmulatorOrder> ProcessTime(DateTimeOffset currentTime)
+	public IEnumerable<EmulatorOrder> ProcessTime(DateTime currentTime)
 	{
 		var expired = GetExpiredOrders(currentTime).ToList();
 

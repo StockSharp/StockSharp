@@ -278,13 +278,13 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 	}
 
 	/// <inheritdoc />
-	public QuoteChangeMessage ToMessage(DateTimeOffset localTime, DateTimeOffset serverTime)
+	public QuoteChangeMessage ToMessage(DateTime localTime, DateTime serverTime)
 	{
 		return new QuoteChangeMessage
 		{
 			SecurityId = SecurityId,
-			LocalTime = localTime.DateTime,
-			ServerTime = serverTime.DateTime,
+			LocalTime = localTime,
+			ServerTime = serverTime,
 			Bids = [.. _bids.Select(kvp => new QuoteChange(kvp.Key, kvp.Value.TotalVolume))],
 			Asks = [.. _asks.Select(kvp => new QuoteChange(kvp.Key, kvp.Value.TotalVolume))],
 		};

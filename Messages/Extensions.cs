@@ -5168,4 +5168,18 @@ public static partial class Extensions
 
 		return type;
 	}
+
+	/// <summary>
+	/// Create and run <see cref="ChannelExecutor"/>.
+	/// </summary>
+	/// <param name="interval">The time interval between processing of messages.</param>
+	/// <param name="errorHandler">Error handler.</param>
+	/// <param name="token"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ChannelExecutor"/></returns>
+	public static ChannelExecutor CreateExecutorAndRun(this TimeSpan interval, Action<Exception> errorHandler, CancellationToken token = default)
+	{
+		var executor = new ChannelExecutor(errorHandler, interval);
+		_ = executor.RunAsync(token);
+		return executor;
+	}
 }

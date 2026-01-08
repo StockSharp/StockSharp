@@ -293,7 +293,7 @@ public class OrderBookTests : BaseTestClass
 	{
 		var secId = CreateSecId();
 		var book = new OrderBook(secId);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		book.UpdateLevel(Sides.Buy, 100, 10);
 		book.UpdateLevel(Sides.Buy, 99, 20);

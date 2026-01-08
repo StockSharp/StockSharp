@@ -61,17 +61,22 @@ public class EmulatorOrder
 	/// <summary>
 	/// Expiry date.
 	/// </summary>
-	public DateTimeOffset? ExpiryDate { get; init; }
+	public DateTime? ExpiryDate { get; init; }
 
 	/// <summary>
 	/// Server time when order was registered.
 	/// </summary>
-	public DateTimeOffset ServerTime { get; init; }
+	public DateTime ServerTime { get; init; }
 
 	/// <summary>
 	/// Local time when order was registered.
 	/// </summary>
-	public DateTimeOffset LocalTime { get; init; }
+	public DateTime LocalTime { get; init; }
+
+	/// <summary>
+	/// Margin price used for blocking funds (may differ from order price).
+	/// </summary>
+	public decimal MarginPrice { get; init; }
 
 	/// <summary>
 	/// Indicates if this is a user order (has portfolio) or market quote.
@@ -200,7 +205,7 @@ public interface IOrderBook
 	/// </summary>
 	/// <param name="localTime">Local time to set on the generated message.</param>
 	/// <param name="serverTime">Server time to set on the generated message.</param>
-	QuoteChangeMessage ToMessage(DateTimeOffset localTime, DateTimeOffset serverTime);
+	QuoteChangeMessage ToMessage(DateTime localTime, DateTime serverTime);
 
 	/// <summary>
 	/// Get total volume for a side.

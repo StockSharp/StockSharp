@@ -5,7 +5,7 @@ using StockSharp.Algo.Testing.Emulation;
 [TestClass]
 public class OrderLifecycleManagerTests : BaseTestClass
 {
-	private static EmulatorOrder CreateOrder(long transactionId, string portfolio = "Test", Sides side = Sides.Buy, DateTimeOffset? expiry = null)
+	private static EmulatorOrder CreateOrder(long transactionId, string portfolio = "Test", Sides side = Sides.Buy, DateTime? expiry = null)
 	{
 		return new EmulatorOrder
 		{
@@ -24,7 +24,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	{
 		var manager = new OrderLifecycleManager();
 		var order = CreateOrder(1);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		var result = manager.RegisterOrder(order, now);
 
@@ -38,7 +38,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 		var manager = new OrderLifecycleManager();
 		var order1 = CreateOrder(1);
 		var order2 = CreateOrder(1); // Same transaction ID
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		manager.RegisterOrder(order1, now);
 		var result = manager.RegisterOrder(order2, now);
@@ -52,7 +52,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	{
 		var manager = new OrderLifecycleManager();
 		var order = CreateOrder(1);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		manager.RegisterOrder(order, now);
 		var retrieved = manager.GetOrder(1);
@@ -76,7 +76,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	{
 		var manager = new OrderLifecycleManager();
 		var order = CreateOrder(1);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		manager.RegisterOrder(order, now);
 		var found = manager.TryGetOrder(1, out var retrieved);
@@ -102,7 +102,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	{
 		var manager = new OrderLifecycleManager();
 		var order = CreateOrder(1);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		manager.RegisterOrder(order, now);
 		var result = manager.RemoveOrder(1);
@@ -126,7 +126,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	{
 		var manager = new OrderLifecycleManager();
 		var order = CreateOrder(1);
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		manager.RegisterOrder(order, now);
 		var found = manager.TryRemoveOrder(1, out var retrieved);
@@ -152,7 +152,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void GetActiveOrders_ReturnsAllOrders()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		manager.RegisterOrder(CreateOrder(1), now);
 		manager.RegisterOrder(CreateOrder(2), now);
@@ -167,7 +167,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void GetActiveOrders_ByPortfolio_FiltersCorrectly()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		manager.RegisterOrder(CreateOrder(1, "Portfolio1"), now);
 		manager.RegisterOrder(CreateOrder(2, "Portfolio1"), now);
@@ -183,7 +183,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void GetActiveOrders_ByPortfolioAndSide_FiltersCorrectly()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		manager.RegisterOrder(CreateOrder(1, "Portfolio1", Sides.Buy), now);
 		manager.RegisterOrder(CreateOrder(2, "Portfolio1", Sides.Sell), now);
@@ -199,7 +199,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void GetExpiredOrders_OrderExpired_ReturnsOrder()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var expiry = now.AddHours(1);
 
 		manager.RegisterOrder(CreateOrder(1, expiry: expiry), now);
@@ -218,7 +218,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void GetExpiredOrders_OrderWithoutExpiry_NotReturned()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		manager.RegisterOrder(CreateOrder(1, expiry: null), now);
 
@@ -231,7 +231,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void ProcessTime_RemovesExpiredOrders()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var expiry = now.AddHours(1);
 
 		manager.RegisterOrder(CreateOrder(1, expiry: expiry), now);
@@ -251,7 +251,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void Clear_RemovesAllOrders()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		manager.RegisterOrder(CreateOrder(1), now);
 		manager.RegisterOrder(CreateOrder(2), now);
@@ -269,7 +269,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void RegisterOrder_ExpiredAtRegistration_NotTrackedForExpiry()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var pastExpiry = now.AddHours(-1); // Already expired
 
 		manager.RegisterOrder(CreateOrder(1, expiry: pastExpiry), now);
@@ -287,7 +287,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void Count_ReturnsCorrectCount()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		AreEqual(0, manager.Count);
 
@@ -315,7 +315,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void RemoveOrder_AlsoRemovesExpiry()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var expiry = now.AddHours(1);
 
 		manager.RegisterOrder(CreateOrder(1, expiry: expiry), now);
@@ -333,7 +333,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void GetActiveOrders_CaseInsensitivePortfolioMatch()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 
 		manager.RegisterOrder(CreateOrder(1, "TestPortfolio"), now);
 
@@ -350,7 +350,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 	public void MultipleOrdersWithSameExpiry_AllProcessed()
 	{
 		var manager = new OrderLifecycleManager();
-		var now = DateTimeOffset.UtcNow;
+		var now = DateTime.UtcNow;
 		var expiry = now.AddHours(1);
 
 		manager.RegisterOrder(CreateOrder(1, expiry: expiry), now);

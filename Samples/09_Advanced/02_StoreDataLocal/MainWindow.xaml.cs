@@ -1,5 +1,6 @@
 namespace StockSharp.Samples.Advanced.MultiConnect;
 
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
@@ -29,8 +30,7 @@ public partial class MainWindow
 
 		Title = Title.Put("Connections with storage");
 
-		_executor = new(ex => ex.LogError());
-		_ = _executor.RunAsync(default);
+		_executor = TimeSpan.FromSeconds(1).CreateExecutorAndRun(ex => ex.LogError());
 	}
 
 	private Connector MainPanel_OnCreateConnector(string path)
