@@ -200,16 +200,16 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 				if (_fields == null)
 					throw new InvalidOperationException();
 
-				Write([]);
+				await WriteAsync([], cancellationToken);
 			}
 		}
 
 		private void Flush()
 		{
-			_executor.Add(() => Write(((IExtendedInfoStorageItem)this).Load()));
+			_executor.Add(t => WriteAsync(((IExtendedInfoStorageItem)this).Load(), t));
 		}
 
-		private void Write(IEnumerable<(SecurityId secId, IDictionary<string, object> fields)> values)
+		private async ValueTask WriteAsync(IEnumerable<(SecurityId secId, IDictionary<string, object> fields)> values, CancellationToken cancellationToken)
 		{
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
@@ -225,22 +225,23 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 			using var stream = new TransactionFileStream(FileSystem, _fileName, FileMode.Create);
 			using var writer = stream.CreateCsvWriter();
 
-			writer.WriteRow(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.name)));
-			writer.WriteRow(new[] { typeof(string) }.Concat(_fields.Select(f => f.type)).Select(t => t.TryGetCSharpAlias() ?? t.GetTypeName(false)));
+			await writer.WriteRowAsync(new[] { nameof(SecurityId) }.Concat(_fields.Select(f => f.name)), cancellationToken);
+			await writer.WriteRowAsync(new[] { typeof(string) }.Concat(_fields.Select(f => f.type)).Select(t => t.TryGetCSharpAlias() ?? t.GetTypeName(false)), cancellationToken);
 
 			foreach (var (secId, fields) in arr)
 			{
-				writer.WriteRow(new[] { secId.ToStringId() }.Concat(_fields.Select(f => fields.TryGetValue(f.name)?.To<string>())));
+				await writer.WriteRowAsync(new[] { secId.ToStringId() }.Concat(_fields.Select(f => fields.TryGetValue(f.name)?.To<string>())), cancellationToken);
 			}
 
-			writer.Commit();
+			await writer.CommitAsync(cancellationToken);
 		}
 
 		public void Delete()
 		{
-			_executor.Add(() =>
+			_executor.Add(_ =>
 			{
 				FileSystem.DeleteFile(_fileName);
+				return default;
 			});
 
 			_storage._deleted?.Invoke(this);

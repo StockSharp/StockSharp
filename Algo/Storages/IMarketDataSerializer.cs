@@ -28,7 +28,8 @@ public interface IMarketDataSerializer
 	/// <param name="stream">Data stream.</param>
 	/// <param name="data">Data.</param>
 	/// <param name="metaInfo">Meta-information on data for one day.</param>
-	void Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask SerializeAsync(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -43,7 +44,8 @@ public interface IMarketDataSerializer<TData> : IMarketDataSerializer
 	/// <param name="stream">Data stream.</param>
 	/// <param name="data">Data.</param>
 	/// <param name="metaInfo">Meta-information on data for one day.</param>
-	void Serialize(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask SerializeAsync(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To load data from the stream.

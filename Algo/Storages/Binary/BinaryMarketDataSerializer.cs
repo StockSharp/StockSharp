@@ -457,10 +457,8 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 		return info;
 	}
 
-	void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
-	{
-		Serialize(stream, data.Cast<TData>(), metaInfo);
-	}
+	ValueTask IMarketDataSerializer.SerializeAsync(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
+		=> SerializeAsync(stream, data.Cast<TData>(), metaInfo, cancellationToken);
 
 	private void CheckVersion(TMetaInfo metaInfo, string operation)
 	{
@@ -473,13 +471,15 @@ abstract class BinaryMarketDataSerializer<TData, TMetaInfo> : IMarketDataSeriali
 		throw new InvalidOperationException(LocalizedStrings.StorageVersionNewerKey.Put(name, metaInfo.Version, Version));
 	}
 
-	public void Serialize(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
+	public ValueTask SerializeAsync(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
 		var typedInfo = (TMetaInfo)metaInfo;
 		CheckVersion(typedInfo, "Save");
 
 		using var writer = new BitArrayWriter(stream);
 		OnSave(writer, data, typedInfo);
+
+		return default;
 	}
 
 	public IAsyncEnumerable<TData> DeserializeAsync(Stream stream, IMarketDataMetaInfo metaInfo)

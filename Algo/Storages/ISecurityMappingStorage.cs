@@ -299,7 +299,7 @@ public sealed class CsvSecurityMappingStorageProvider : Disposable, ISecurityMap
 		{
 			var arr = mappings.ToArray();
 
-			_provider._executor.Add(() =>
+			_provider._executor.Add(async t =>
 			{
 				var fileName = Path.Combine(_provider._path, _storageName + ".csv");
 
@@ -320,27 +320,27 @@ public sealed class CsvSecurityMappingStorageProvider : Disposable, ISecurityMap
 
 				if (appendHeader)
 				{
-					writer.WriteRow(
+					await writer.WriteRowAsync(
 					[
 						"SecurityCode",
 						"BoardCode",
 						"AdapterCode",
 						"AdapterBoard",
-					]);
+					], t);
 				}
 
 				foreach (var mapping in arr)
 				{
-					writer.WriteRow(
+					await writer.WriteRowAsync(
 					[
 						mapping.StockSharpId.SecurityCode,
 						mapping.StockSharpId.BoardCode,
 						mapping.AdapterId.SecurityCode,
 						mapping.AdapterId.BoardCode,
-					]);
+					], t);
 				}
 
-				writer.Commit();
+				await writer.CommitAsync(t);
 			});
 		}
 	}

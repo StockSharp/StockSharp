@@ -181,7 +181,7 @@ public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvid
 	{
 		var arr = adapters.ToArray();
 
-		_executor.Add(() =>
+		_executor.Add(async t =>
 		{
 			var appendHeader = overwrite || !_fileSystem.FileExists(_fileName) || _fileSystem.GetFileLength(_fileName) == 0;
 
@@ -200,23 +200,23 @@ public class CsvPortfolioMessageAdapterProvider : IPortfolioMessageAdapterProvid
 
 			if (appendHeader)
 			{
-				writer.WriteRow(
+				await writer.WriteRowAsync(
 				[
 					"Portfolio",
 					"Adapter",
-				]);
+				], t);
 			}
 
 			foreach (var pair in arr)
 			{
-				writer.WriteRow(
+				await writer.WriteRowAsync(
 				[
 					pair.Key,
 					pair.Value.To<string>(),
-				]);
+				], t);
 			}
 
-			writer.Commit();
+			await writer.CommitAsync(t);
 		});
 	}
 }

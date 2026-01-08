@@ -10,15 +10,13 @@ namespace StockSharp.Algo.Storages.Csv;
 public class BoardStateCsvSerializer(Encoding encoding) : CsvMarketDataSerializer<BoardStateMessage>(encoding)
 {
 	/// <inheritdoc />
-	protected override void Write(CsvFileWriter writer, BoardStateMessage data, IMarketDataMetaInfo metaInfo)
+	protected override ValueTask WriteAsync(CsvFileWriter writer, BoardStateMessage data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
-		writer.WriteRow(data.ServerTime.WriteTime().Concat(
+		return writer.WriteRowAsync(data.ServerTime.WriteTime().Concat(
 		[
 			data.BoardCode,
 			((int)data.State).To<string>(),
-		]));
-
-		metaInfo.LastTime = data.ServerTime;
+		]), cancellationToken);
 	}
 
 	/// <inheritdoc />

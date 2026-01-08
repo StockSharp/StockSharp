@@ -24,7 +24,11 @@ public class CsvStorageTests : BaseTestClass
 	private static async Task FlushAsync(ChannelExecutor executor, CancellationToken token)
 	{
 		var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-		executor.Add(() => tcs.TrySetResult());
+		executor.Add(_ =>
+		{
+			tcs.TrySetResult();
+			return default;
+		});
 		await tcs.Task.WaitAsync(token);
 
 		if (!_executorErrors.IsEmpty)

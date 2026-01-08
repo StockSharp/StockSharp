@@ -10,9 +10,9 @@ namespace StockSharp.Algo.Storages.Csv;
 public class NewsCsvSerializer(Encoding encoding) : CsvMarketDataSerializer<NewsMessage>(encoding)
 {
 	/// <inheritdoc />
-	protected override void Write(CsvFileWriter writer, NewsMessage data, IMarketDataMetaInfo metaInfo)
+	protected override ValueTask WriteAsync(CsvFileWriter writer, NewsMessage data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
-		writer.WriteRow(data.ServerTime.WriteTime().Concat(
+		return writer.WriteRowAsync(data.ServerTime.WriteTime().Concat(
 		[
 			data.Headline,
 			data.Source,
@@ -25,9 +25,7 @@ public class NewsCsvSerializer(Encoding encoding) : CsvMarketDataSerializer<News
 			data.SecurityId?.BoardCode,
 			data.ExpiryDate?.WriteDateTimeEx(),
 			data.SeqNum.DefaultAsNull().ToString(),
-		]));
-
-		metaInfo.LastTime = data.ServerTime;
+		]), cancellationToken);
 	}
 
 	/// <inheritdoc />

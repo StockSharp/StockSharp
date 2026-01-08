@@ -48,7 +48,8 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	private byte[] _copy;
 
 	private readonly ChannelExecutor _executor;
-	private CsvFileWriter _writer;
+    private readonly IChannelExecutorGroup _group;
+    private CsvFileWriter _writer;
 	private volatile bool _disposed;
 
 	/// <summary>
@@ -74,6 +75,12 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 		Registry = registry ?? throw new ArgumentNullException(nameof(registry));
 		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
+		_group = _executor.CreateGroup(t =>
+		{
+			EnsureStream();
+			ResetCopy();
+			return default;
+		}, t => _writer.CommitAsync(t));
 
 		FileName = Path.Combine(Registry.Path, fileName);
 	}
@@ -88,7 +95,11 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 		_disposed = true;
 
-		await _executor.AddAndWaitAsync(ResetStream);
+		await _executor.AddAndWaitAsync(_ =>
+		{
+			ResetStream();
+			return default;
+		});
 
 		GC.SuppressFinalize(this);
 	}
@@ -250,7 +261,8 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// </summary>
 	/// <param name="writer">CSV writer.</param>
 	/// <param name="data">Trade object.</param>
-	protected abstract void Write(CsvFileWriter writer, TEntity data);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	protected abstract ValueTask WriteAsync(CsvFileWriter writer, TEntity data, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Read data from CSV.
@@ -278,16 +290,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 			AddCache(item);
 
-			var itemCopy = item;
-			_executor.Add(() =>
-			{
-				EnsureStream();
-				ResetCopy();
-
-				Write(_writer, itemCopy);
-
-				_writer.Commit();
-			});
+			_group.Add(t => WriteAsync(_writer, item, t));
 		}
 
 		return base.OnAdding(item);
@@ -338,12 +341,13 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			_items.Clear();
 			ClearCache();
 
-			_executor.Add(() =>
+			_executor.Add(_ =>
 			{
 				ResetStream();
 				ResetCopy();
 
 				FileSystem.DeleteFile(FileName);
+				return default;
 			});
 		}
 	}
@@ -357,7 +361,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		ThrowIfDisposed();
 
 		var valuesCopy = values;
-		_executor.Add(() =>
+		_executor.Add(async t =>
 		{
 			ResetStream();
 
@@ -370,9 +374,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			ResetCopy();
 
 			foreach (var item in valuesCopy)
-				Write(_writer, item);
+				await WriteAsync(_writer, item, t);
 
-			_writer.Commit();
+			await _writer.CommitAsync(t);
 		});
 	}
 
@@ -429,16 +433,15 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		{
 			try
 			{
-				using (EnterScope())
-				{
-					using var stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
-					using var writer = stream.CreateCsvWriter(Registry.Encoding);
+				var arr = this.SyncGet(c => c.ToArray());
 
-					foreach (var item in InnerCollection)
-						Write(writer, item);
+				using var stream = new TransactionFileStream(FileSystem, FileName, FileMode.Create);
+				using var writer = stream.CreateCsvWriter(Registry.Encoding);
 
-					writer.Commit();
-				}
+				foreach (var item in arr)
+					await WriteAsync(writer, item, cancellationToken);
+
+				await writer.CommitAsync(cancellationToken);
 			}
 			catch (Exception ex)
 			{

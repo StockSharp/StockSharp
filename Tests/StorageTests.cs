@@ -2640,7 +2640,7 @@ public class StorageTests : BaseTestClass
 		var securities = Helper.RandomSecurities().Select(s => s.ToSecurity(exchangeProvider)).ToArray();
 		var token = CancellationToken;
 		var fs = Helper.MemorySystem;
-		var executor = TimeSpan.FromSeconds(1).CreateExecutorAndRun(err => { }, token);
+		var executor = TimeSpan.FromSeconds(5).CreateExecutorAndRun(err => { }, token);
 		var registry = fs.GetEntityRegistry(executor);
 
 		var storage = registry.Securities;

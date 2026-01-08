@@ -1,6 +1,6 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-class NullableTimeQuoteChange
+class NullableTimeQuoteChange : IServerTimeMessage
 {
 	public DateTime ServerTime { get; set; }
 	public DateTime LocalTime { get; set; }
@@ -32,14 +32,14 @@ class QuoteCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMarketDa
 	}
 
 	/// <inheritdoc />
-	protected override void Write(CsvFileWriter writer, NullableTimeQuoteChange data, IMarketDataMetaInfo metaInfo)
+	protected override ValueTask WriteAsync(CsvFileWriter writer, NullableTimeQuoteChange data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
 		var quote = data.Quote;
 
 		if (quote != null && quote.Value.Volume < 0)
 			throw new ArgumentOutOfRangeException(nameof(data), quote.Value.Volume, LocalizedStrings.InvalidValue);
 
-		writer.WriteRow(data.ServerTime.WriteTime().Concat(
+		return writer.WriteRowAsync(data.ServerTime.WriteTime().Concat(
 		[
 			quote?.Price.To<string>(),
 			quote?.Volume.To<string>(),
@@ -51,9 +51,8 @@ class QuoteCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMarketDa
 			quote?.Action.To<int?>().ToString(),
 			data?.State.To<int?>().ToString(),
 			data?.SeqNum.ToString(),
-		]).Concat(data.BuildFrom.ToCsv()));
-
-		metaInfo.LastTime = data.ServerTime;
+		]).Concat(data.BuildFrom.ToCsv())
+		, cancellationToken);
 	}
 
 	/// <inheritdoc />

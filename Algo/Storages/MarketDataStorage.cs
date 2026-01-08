@@ -92,7 +92,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 					metaInfo = Serializer.CreateMetaInfo(date);
 				}
 
-				var diff = Save(stream, metaInfo, newItems, false);
+				var diff = await SaveAsync(stream, metaInfo, newItems, false, cancellationToken);
 
 				if (diff == 0)
 					continue;
@@ -114,7 +114,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 		return count;
 	}
 
-	private int Save(Stream stream, IMarketDataMetaInfo metaInfo, TMessage[] data, bool isOverride)
+	private async ValueTask<int> SaveAsync(Stream stream, IMarketDataMetaInfo metaInfo, TMessage[] data, bool isOverride, CancellationToken cancellationToken)
 	{
 		if (stream == null)
 			throw new ArgumentNullException(nameof(stream));
@@ -188,7 +188,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 
 		var newDayData = new MemoryStream();
 
-		Serializer.Serialize(newDayData, data, metaInfo);
+		await Serializer.SerializeAsync(newDayData, data, metaInfo, cancellationToken);
 
 		if (isOverride)
 			metaInfo.Count = data.Length;
@@ -286,8 +286,9 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 					{
 						stream = await LoadStreamAsync(date, false, cancellationToken);
 
-						Save(stream, Serializer.CreateMetaInfo(date),
-							[.. loadedData.Values.SelectMany(l => l)], true);
+						await SaveAsync(stream, Serializer.CreateMetaInfo(date),
+							[.. loadedData.Values.SelectMany(l => l)], true,
+							cancellationToken);
 
 						stream.Dispose();
 						stream = null;

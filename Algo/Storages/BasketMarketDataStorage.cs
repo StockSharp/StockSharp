@@ -308,13 +308,13 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 		IMarketDataMetaInfo IMarketDataSerializer.CreateMetaInfo(DateTime date)
 			=> throw new NotSupportedException();
 
-		void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
+		ValueTask IMarketDataSerializer.SerializeAsync(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 			=> throw new NotSupportedException();
 
 		IAsyncEnumerable<TMessage> IMarketDataSerializer<TMessage>.DeserializeAsync(Stream stream, IMarketDataMetaInfo metaInfo)
 			=> throw new NotSupportedException();
 
-		void IMarketDataSerializer<TMessage>.Serialize(Stream stream, IEnumerable<TMessage> data, IMarketDataMetaInfo metaInfo)
+		ValueTask IMarketDataSerializer<TMessage>.SerializeAsync(Stream stream, IEnumerable<TMessage> data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 			=> throw new NotSupportedException();
 	}
 

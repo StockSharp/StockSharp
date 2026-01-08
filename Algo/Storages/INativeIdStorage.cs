@@ -135,10 +135,11 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 
 			_buffer.Clear();
 
-			_provider._executor.Add(() =>
+			_provider._executor.Add(_ =>
 			{
 				ResetStream();
 				_provider._fileSystem.DeleteFile(GetFileName());
+				return default;
 			});
 		}
 
@@ -178,10 +179,10 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 		{
 			_buffer[securityId] = nativeId;
 
-			_provider._executor.Add(() =>
+			_provider._executor.Add(t =>
 			{
 				var items = _buffer.SyncGet(c => c.CopyAndClear()).Select(t => (t.Key, t.Value)).ToArray();
-				WriteItemsToFile(items, rewriteAll: false);
+				return WriteItemsToFile(items, rewriteAll: false, t);
 			});
 		}
 
@@ -191,10 +192,10 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 
 			var items = await _inMemory.GetAsync(cancellationToken);
 
-			_provider._executor.Add(() => WriteItemsToFile(items, rewriteAll: true));
+			_provider._executor.Add(t => WriteItemsToFile(items, rewriteAll: true, cancellationToken));
 		}
 
-		private void WriteItemsToFile((SecurityId secId, object nativeId)[] items, bool rewriteAll)
+		private async ValueTask WriteItemsToFile((SecurityId secId, object nativeId)[] items, bool rewriteAll, CancellationToken cancellationToken)
 		{
 			var fileName = GetFileName();
 			var fs = _provider._fileSystem;
@@ -223,12 +224,12 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 			}
 
 			if (appendHeader)
-				WriteHeader(_writer, items[0].nativeId);
+				await WriteHeaderAsync(_writer, items[0].nativeId, cancellationToken);
 
 			foreach (var (secId, nativeId) in items)
-				WriteItem(_writer, secId, nativeId);
+				await WriteItemAsync(_writer, secId, nativeId, cancellationToken);
 
-			_writer.Commit();
+			await _writer.CommitAsync(cancellationToken);
 		}
 
 		private void ResetStream()
@@ -284,12 +285,13 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 	/// <inheritdoc />
 	public async ValueTask DisposeAsync()
 	{
-		await _executor.AddAndWaitAsync(() =>
+		await _executor.AddAndWaitAsync(_ =>
 		{
 			foreach (var storage in _storages.Values)
 				storage.Dispose();
 
 			_storages.Clear();
+			return default;
 		});
 
 		GC.SuppressFinalize(this);
@@ -402,7 +404,7 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 		return tupleValues;
 	}
 
-	private static void WriteHeader(CsvFileWriter writer, object nativeId)
+	private static ValueTask WriteHeaderAsync(CsvFileWriter writer, object nativeId, CancellationToken cancellationToken)
 	{
 		var tupleValues = TryTupleToValues(nativeId);
 
@@ -411,43 +413,44 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 
 		if (tupleValues is not null)
 		{
-			writer.WriteRow(new[]
+			return writer.WriteRowAsync(new[]
 			{
 				symbol,
 				board,
-			}.Concat(tupleValues.Select(v => GetTypeName(v.GetType()))));
+			}.Concat(tupleValues.Select(v => GetTypeName(v.GetType()))),
+			cancellationToken);
 		}
 		else
 		{
-			writer.WriteRow(
+			return writer.WriteRowAsync(
 			[
 				symbol,
 				board,
 				GetTypeName(nativeId.GetType()),
-			]);
+			], cancellationToken);
 		}
 	}
 
-	private static void WriteItem(CsvFileWriter writer, SecurityId securityId, object nativeId)
+	private static ValueTask WriteItemAsync(CsvFileWriter writer, SecurityId securityId, object nativeId, CancellationToken cancellationToken)
 	{
 		var tupleValues = TryTupleToValues(nativeId);
 
 		if (tupleValues is not null)
 		{
-			writer.WriteRow(new[]
+			return writer.WriteRowAsync(new[]
 			{
 				securityId.SecurityCode,
 				securityId.BoardCode
-			}.Concat(tupleValues.Select(v => v.To<string>())));
+			}.Concat(tupleValues.Select(v => v.To<string>())), cancellationToken);
 		}
 		else
 		{
-			writer.WriteRow(
+			return writer.WriteRowAsync(
 			[
 				securityId.SecurityCode,
 				securityId.BoardCode,
 				nativeId.ToString()
-			]);
+			], cancellationToken);
 		}
 	}
 

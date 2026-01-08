@@ -17,9 +17,9 @@ public class TickCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 	}
 
 	/// <inheritdoc />
-	protected override void Write(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo)
+	protected override async ValueTask WriteAsync(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
-		writer.WriteRow(data.ServerTime.WriteTime().Concat(
+		await writer.WriteRowAsync(data.ServerTime.WriteTime().Concat(
 		[
 			data.TradeId.ToString(),
 			data.TradePrice.ToString(),
@@ -35,9 +35,8 @@ public class TickCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 			data.SeqNum.DefaultAsNull().ToString(),
 			data.OrderBuyId.ToString(),
 			data.OrderSellId.ToString(),
-		]));
+		]), cancellationToken);
 
-		metaInfo.LastTime = data.ServerTime;
 		metaInfo.LastId = data.TradeId;
 	}
 

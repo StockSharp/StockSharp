@@ -227,7 +227,7 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 	{
 		var arr = adapters.ToArray();
 
-		_executor.Add(() =>
+		_executor.Add(async t =>
 		{
 			var appendHeader = overwrite || !_fileSystem.FileExists(_fileName) || _fileSystem.GetFileLength(_fileName) == 0;
 
@@ -246,31 +246,31 @@ public class CsvSecurityMessageAdapterProvider : ISecurityMessageAdapterProvider
 
 			if (appendHeader)
 			{
-				writer.WriteRow(
+				await writer.WriteRowAsync(
 				[
 					"Symbol",
 					"Board",
 					"MessageType",
 					"Arg",
 					"Adapter",
-				]);
+				], t);
 			}
 
 			foreach (var pair in arr)
 			{
 				var dataType = pair.Key.Item2?.FormatToString();
 
-				writer.WriteRow(
+				await writer.WriteRowAsync(
 				[
 					pair.Key.Item1.SecurityCode,
 					pair.Key.Item1.BoardCode,
 					dataType?.type,
 					dataType?.arg,
 					pair.Value.To<string>()
-				]);
+				], t);
 			}
 
-			writer.Commit();
+			await writer.CommitAsync(t);
 		});
 	}
 }

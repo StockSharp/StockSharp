@@ -14,18 +14,14 @@ public class Level1CsvSerializer(SecurityId securityId, Encoding encoding) : Csv
 	private static readonly string[] _reserved = new string[9];
 
 	/// <inheritdoc />
-	protected override void Write(CsvFileWriter writer, Level1ChangeMessage data, IMarketDataMetaInfo metaInfo)
+	protected override ValueTask WriteAsync(CsvFileWriter writer, Level1ChangeMessage data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
 		var row = new List<string>();
 
 		row.AddRange(data.ServerTime.WriteTime());
-
 		row.AddRange(data.BuildFrom.ToCsv());
-
 		row.Add(data.SeqNum.DefaultAsNull().ToString());
-
 		row.AddRange(_reserved);
-
 		row.Add(_level1Fields.Count.To<string>());
 
 		foreach (var pair in _level1Fields)
@@ -44,9 +40,7 @@ public class Level1CsvSerializer(SecurityId securityId, Encoding encoding) : Csv
 			}
 		}
 
-		writer.WriteRow(row);
-
-		metaInfo.LastTime = data.ServerTime;
+		return writer.WriteRowAsync(row, cancellationToken);
 	}
 
 	/// <inheritdoc />

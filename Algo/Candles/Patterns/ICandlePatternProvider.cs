@@ -208,11 +208,15 @@ public class CandlePatternFileStorage(IFileSystem fileSystem, string fileName, C
 
 	private void Save()
 	{
-		_executor.Add(() =>
+		_executor.Add(_ =>
+		{
 			_cache
 				.CachedValues
 				.Select(i => i.SaveEntire(false))
-				.Serialize(_fileSystem, _fileName));
+				.Serialize(_fileSystem, _fileName);
+
+			return default;
+		});
 	}
 
 	bool ICandlePatternProvider.TryFind(string name, out ICandlePattern pattern)

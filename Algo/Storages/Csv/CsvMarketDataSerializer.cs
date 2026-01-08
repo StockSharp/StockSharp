@@ -78,6 +78,7 @@ class CsvMetaInfo(DateTime date, Encoding encoding, Func<FastCsvReader, object> 
 /// </summary>
 /// <typeparam name="TData">Data type.</typeparam>
 public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TData>
+	where TData : IServerTimeMessage
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CsvMarketDataSerializer{T}"/>.
@@ -132,9 +133,9 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 		return new CsvMetaInfo(date, Encoding, null);
 	}
 
-	void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
+	ValueTask IMarketDataSerializer.SerializeAsync(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
-		Serialize(stream, data.Cast<TData>(), metaInfo);
+		return SerializeAsync(stream, data.Cast<TData>(), metaInfo, cancellationToken);
 	}
 
 	/// <summary>
@@ -143,17 +144,19 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 	/// <param name="stream">Data stream.</param>
 	/// <param name="data">Data.</param>
 	/// <param name="metaInfo">Meta-information on data for one day.</param>
-	public virtual void Serialize(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	public virtual ValueTask SerializeAsync(Stream stream, IEnumerable<TData> data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
-		Do.Invariant(() =>
+		return Do.InvariantAsync(async () =>
 		{
 			using var writer = stream.CreateCsvWriter(Encoding);
 
 			foreach (var item in data)
 			{
-				Write(writer, item, metaInfo);
+				await WriteAsync(writer, item, metaInfo, cancellationToken);
+				metaInfo.LastTime = item.ServerTime;
 			}
-		});
+		}).AsValueTask();
 	}
 
 	/// <summary>
@@ -162,7 +165,8 @@ public abstract class CsvMarketDataSerializer<TData> : IMarketDataSerializer<TDa
 	/// <param name="writer">CSV writer.</param>
 	/// <param name="data">Data.</param>
 	/// <param name="metaInfo">Meta-information on data for one day.</param>
-	protected abstract void Write(CsvFileWriter writer, TData data, IMarketDataMetaInfo metaInfo);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	protected abstract ValueTask WriteAsync(CsvFileWriter writer, TData data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken);
 
 	private readonly struct CsvAsyncEnumerable(CsvMarketDataSerializer<TData> serializer, Stream stream, IMarketDataMetaInfo metaInfo) : IAsyncEnumerable<TData>
 	{

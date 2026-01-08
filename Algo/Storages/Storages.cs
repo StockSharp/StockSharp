@@ -72,14 +72,14 @@ class CandleStorage<TCandleMessage> :
 
 		IMarketDataMetaInfo IMarketDataSerializer.CreateMetaInfo(DateTime date) => _serializer.CreateMetaInfo(date);
 
-		void IMarketDataSerializer.Serialize(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo)
-			=> _serializer.Serialize(stream, data, metaInfo);
+		ValueTask IMarketDataSerializer.SerializeAsync(Stream stream, IEnumerable data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
+			=> _serializer.SerializeAsync(stream, data, metaInfo, cancellationToken);
 
 		IAsyncEnumerable<CandleMessage> IMarketDataSerializer<CandleMessage>.DeserializeAsync(Stream stream, IMarketDataMetaInfo metaInfo)
 			=> _serializer.DeserializeAsync(stream, metaInfo);
 
-		void IMarketDataSerializer<CandleMessage>.Serialize(Stream stream, IEnumerable<CandleMessage> data, IMarketDataMetaInfo metaInfo)
-			=> _serializer.Serialize(stream, data, metaInfo);
+		ValueTask IMarketDataSerializer<CandleMessage>.SerializeAsync(Stream stream, IEnumerable<CandleMessage> data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
+			=> _serializer.SerializeAsync(stream, data, metaInfo, cancellationToken);
 	}
 
 	private readonly CandleSerializer _serializer;

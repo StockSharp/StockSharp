@@ -11,7 +11,7 @@ namespace StockSharp.Algo.Storages.Csv;
 public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMarketDataSerializer<ExecutionMessage>(securityId, encoding)
 {
 	/// <inheritdoc />
-	protected override void Write(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo)
+	protected override ValueTask WriteAsync(CsvFileWriter writer, ExecutionMessage data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
 		var row = new List<string>();
 		row.AddRange(data.ServerTime.WriteTime());
@@ -78,9 +78,8 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding) 
 			data.Leverage.To<string>(),
 		]);
 		row.AddRange(data.BuildFrom.ToCsv());
-		writer.WriteRow(row);
 
-		metaInfo.LastTime = data.ServerTime;
+		return writer.WriteRowAsync(row, cancellationToken);
 	}
 
 	/// <inheritdoc />

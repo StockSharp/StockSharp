@@ -32,16 +32,16 @@ public class CsvEntityRegistry : IEntityRegistry
 			return board;
 		}
 
-		protected override void Write(CsvFileWriter writer, Exchange data)
+		protected override ValueTask WriteAsync(CsvFileWriter writer, Exchange data, CancellationToken cancellationToken)
 		{
-			writer.WriteRow(
+			return writer.WriteRowAsync(
 			[
 				data.Name,
 				data.CountryCode.To<string>(),
 				string.Empty/*data.EngName*/,
 				string.Empty/*data.RusName*/,
 				data.FullNameLoc,
-			]);
+			], cancellationToken);
 		}
 	}
 
@@ -66,9 +66,9 @@ public class CsvEntityRegistry : IEntityRegistry
 			return board;
 		}
 
-		protected override void Write(CsvFileWriter writer, ExchangeBoard data)
+		protected override ValueTask WriteAsync(CsvFileWriter writer, ExchangeBoard data, CancellationToken cancellationToken)
 		{
-			writer.WriteRow(
+			return writer.WriteRowAsync(
 			[
 				data.Code,
 				data.Exchange.Name,
@@ -83,7 +83,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.WorkingTime.SpecialDays.EncodeToString(),
 				string.Empty,
 				data.WorkingTime.IsEnabled.ToString(),
-			]);
+			], cancellationToken);
 		}
 	}
 
@@ -429,9 +429,9 @@ public class CsvEntityRegistry : IEntityRegistry
 			};
 		}
 
-		protected override void Write(CsvFileWriter writer, Security data)
+		protected override ValueTask WriteAsync(CsvFileWriter writer, Security data, CancellationToken cancellationToken)
 		{
-			writer.WriteRow(
+			return writer.WriteRowAsync(
 			[
 				data.Id,
 				data.Name,
@@ -472,7 +472,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.PrimaryId,
 				data.SettlementType.To<string>(),
 				data.OptionStyle.To<string>(),
-			]);
+			], cancellationToken);
 		}
 
 		public override void Save(Security entity, bool forced)
@@ -547,9 +547,9 @@ public class CsvEntityRegistry : IEntityRegistry
 			return boardCode.IsEmpty() ? null : Registry.GetBoard(boardCode);
 		}
 
-		protected override void Write(CsvFileWriter writer, Portfolio data)
+		protected override ValueTask WriteAsync(CsvFileWriter writer, Portfolio data, CancellationToken cancellationToken)
 		{
-			writer.WriteRow(
+			return writer.WriteRowAsync(
 			[
 				data.Name,
 				data.Board?.Code,
@@ -570,7 +570,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.CommissionMaker.To<string>(),
 				data.CommissionTaker.To<string>(),
 				/*data.InternalId.To<string>()*/string.Empty,
-			]);
+			], cancellationToken);
 		}
 	}
 
@@ -658,9 +658,9 @@ public class CsvEntityRegistry : IEntityRegistry
 			return position;
 		}
 
-		protected override void Write(CsvFileWriter writer, Position data)
+		protected override ValueTask WriteAsync(CsvFileWriter writer, Position data, CancellationToken cancellationToken)
 		{
-			writer.WriteRow(
+			return writer.WriteRowAsync(
 			[
 				data.Portfolio.Name,
 				data.Security.Id,
@@ -695,7 +695,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.StrategyId,
 				data.Side.To<string>(),
 				data.LiquidationPrice.To<string>(),
-			]);
+			], cancellationToken);
 		}
 
 		public Position GetPosition(Portfolio portfolio, Security security, string strategyId, Sides? side, string clientCode = "", string depoName = "", TPlusLimits? limit = null)
@@ -710,7 +710,7 @@ public class CsvEntityRegistry : IEntityRegistry
 		protected override (SecurityId, DataType) GetKey(MarketDataMessage item)
 			=> (item.SecurityId, item.DataType2);
 
-		protected override void Write(CsvFileWriter writer, MarketDataMessage data)
+		protected override ValueTask WriteAsync(CsvFileWriter writer, MarketDataMessage data, CancellationToken cancellationToken)
 		{
 			if (data == null)
 				throw new ArgumentNullException(nameof(data));
@@ -721,7 +721,7 @@ public class CsvEntityRegistry : IEntityRegistry
 			var (type, arg) = data.DataType2.FormatToString();
 			var buildFromTuples = data.BuildFrom?.FormatToString();
 
-			writer.WriteRow(
+			return writer.WriteRowAsync(
 			[
 				string.Empty,//data.TransactionId.To<string>(),
 				data.SecurityId.SecurityCode,
@@ -747,7 +747,7 @@ public class CsvEntityRegistry : IEntityRegistry
 				data.DoNotBuildOrderBookIncrement.To<string>(),
 				data.Fields?.Select(f => ((int)f).To<string>()).JoinComma(),
 				data.FillGaps.To<string>(),
-			]);
+			], cancellationToken);
 		}
 
 		protected override MarketDataMessage Read(FastCsvReader reader)

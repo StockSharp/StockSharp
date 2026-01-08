@@ -77,30 +77,30 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 	}
 
 	/// <inheritdoc />
-	public override void Serialize(Stream stream, IEnumerable<TCandleMessage> data, IMarketDataMetaInfo metaInfo)
+	public override ValueTask SerializeAsync(Stream stream, IEnumerable<TCandleMessage> data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
 		var candleMetaInfo = (CandleCsvMetaInfo)metaInfo;
 
 		var toWrite = candleMetaInfo.Process(data);
 
-		Do.Invariant(() =>
+		return Do.InvariantAsync(async () =>
 		{
 			using var writer = stream.CreateCsvWriter(Encoding);
 
 			foreach (var item in toWrite)
 			{
-				Write(writer, item, candleMetaInfo);
+				await WriteAsync(writer, item, candleMetaInfo, cancellationToken);
 			}
-		});
+		}).AsValueTask();
 	}
 
 	/// <inheritdoc />
-	protected override void Write(CsvFileWriter writer, TCandleMessage data, IMarketDataMetaInfo metaInfo)
+	protected override ValueTask WriteAsync(CsvFileWriter writer, TCandleMessage data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
 		if (data.State == CandleStates.Active)
 			throw new ArgumentException(LocalizedStrings.CandleActiveNotSupport.Put(data), nameof(data));
 
-		writer.WriteRow(data.OpenTime.WriteTime().Concat(
+		return writer.WriteRowAsync(data.OpenTime.WriteTime().Concat(
 		[
 			data.OpenPrice.ToString(),
 			data.HighPrice.ToString(),
@@ -110,7 +110,7 @@ public class CandleCsvSerializer<TCandleMessage>(SecurityId securityId, DataType
 		]).Concat(data.BuildFrom.ToCsv()).Concat(
 		[
 			data.SeqNum.DefaultAsNull().ToString(),
-		]));
+		]), cancellationToken);
 	}
 
 	/// <inheritdoc />

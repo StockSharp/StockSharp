@@ -136,7 +136,7 @@ class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 		};
 	}
 
-	public override void Serialize(Stream stream, IEnumerable<QuoteChangeMessage> data, IMarketDataMetaInfo metaInfo)
+	public override ValueTask SerializeAsync(Stream stream, IEnumerable<QuoteChangeMessage> data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
 		var csvInfo = (CsvMetaInfo)metaInfo;
 		var incOnly = csvInfo.IncrementalOnly;
@@ -192,7 +192,7 @@ class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 			return items;
 		});
 
-		_quoteSerializer.Serialize(stream, list, metaInfo);
+		return _quoteSerializer.SerializeAsync(stream, list, metaInfo, cancellationToken);
 	}
 
 	public override IAsyncEnumerable<QuoteChangeMessage> DeserializeAsync(Stream stream, IMarketDataMetaInfo metaInfo)
@@ -200,7 +200,7 @@ class MarketDepthCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 		return new QuoteEnumerable(_quoteSerializer.DeserializeAsync(stream, metaInfo), SecurityId);
 	}
 
-	protected override void Write(CsvFileWriter writer, QuoteChangeMessage data, IMarketDataMetaInfo metaInfo)
+	protected override ValueTask WriteAsync(CsvFileWriter writer, QuoteChangeMessage data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
 		throw new NotSupportedException();
 	}

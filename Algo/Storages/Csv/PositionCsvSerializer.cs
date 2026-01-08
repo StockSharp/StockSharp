@@ -14,7 +14,7 @@ public class PositionCsvSerializer(SecurityId securityId, Encoding encoding) : C
 	private static readonly string[] _reserved = new string[10];
 
 	/// <inheritdoc />
-	protected override void Write(CsvFileWriter writer, PositionChangeMessage data, IMarketDataMetaInfo metaInfo)
+	protected override ValueTask WriteAsync(CsvFileWriter writer, PositionChangeMessage data, IMarketDataMetaInfo metaInfo, CancellationToken cancellationToken)
 	{
 		var row = new List<string>();
 
@@ -49,9 +49,7 @@ public class PositionCsvSerializer(SecurityId securityId, Encoding encoding) : C
 				row.Add(value?.ToString());
 		}
 
-		writer.WriteRow(row);
-
-		metaInfo.LastTime = data.ServerTime;
+		return writer.WriteRowAsync(row, cancellationToken);
 	}
 
 	/// <inheritdoc />
