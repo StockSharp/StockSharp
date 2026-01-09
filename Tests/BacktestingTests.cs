@@ -26,12 +26,24 @@ public class BacktestingTests : BaseTestClass
 		return fs.GetStorage(Paths.HistoryDataPath);
 	}
 
+	private static bool SkipIfNoHistoryData()
+	{
+		if (Paths.HistoryDataPath == null)
+		{
+			Console.WriteLine("Skipping test: HistoryDataPath is null (stocksharp.samples.historydata package not installed)");
+			return true;
+		}
+		return false;
+	}
+
 	/// <summary>
 	/// Tests that orders are generated during backtesting when SMA crossover occurs.
 	/// </summary>
 	[TestMethod]
 	public async Task BacktestGeneratesOrders()
 	{
+		if (SkipIfNoHistoryData()) return;
+
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
 
@@ -77,13 +89,12 @@ public class BacktestingTests : BaseTestClass
 				tcs.TrySetResult(true);
 		};
 
-		connector.Connected += () =>
-		{
-			strategy.Start();
-			connector.Start();
-		};
-
+		// Start strategy before emulation (like BaseOptimizer.StartIteration)
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
 		connector.Connect();
+		connector.Start();
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -103,6 +114,8 @@ public class BacktestingTests : BaseTestClass
 	[TestMethod]
 	public async Task BacktestGeneratesTrades()
 	{
+		if (SkipIfNoHistoryData()) return;
+
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
 
@@ -148,13 +161,12 @@ public class BacktestingTests : BaseTestClass
 				tcs.TrySetResult(true);
 		};
 
-		connector.Connected += () =>
-		{
-			strategy.Start();
-			connector.Start();
-		};
-
+		// Start strategy before emulation (like BaseOptimizer.StartIteration)
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
 		connector.Connect();
+		connector.Start();
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -174,6 +186,8 @@ public class BacktestingTests : BaseTestClass
 	[TestMethod]
 	public async Task BacktestGeneratesPnLChanges()
 	{
+		if (SkipIfNoHistoryData()) return;
+
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
 
@@ -219,13 +233,12 @@ public class BacktestingTests : BaseTestClass
 				tcs.TrySetResult(true);
 		};
 
-		connector.Connected += () =>
-		{
-			strategy.Start();
-			connector.Start();
-		};
-
+		// Start strategy before emulation (like BaseOptimizer.StartIteration)
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
 		connector.Connect();
+		connector.Start();
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -249,6 +262,8 @@ public class BacktestingTests : BaseTestClass
 	[TestMethod]
 	public async Task BacktestGeneratesPositionChanges()
 	{
+		if (SkipIfNoHistoryData()) return;
+
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
 
@@ -294,13 +309,12 @@ public class BacktestingTests : BaseTestClass
 				tcs.TrySetResult(true);
 		};
 
-		connector.Connected += () =>
-		{
-			strategy.Start();
-			connector.Start();
-		};
-
+		// Start strategy before emulation (like BaseOptimizer.StartIteration)
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
 		connector.Connect();
+		connector.Start();
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -323,6 +337,8 @@ public class BacktestingTests : BaseTestClass
 	[TestMethod]
 	public async Task BacktestTracksStatistics()
 	{
+		if (SkipIfNoHistoryData()) return;
+
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
 
@@ -362,13 +378,12 @@ public class BacktestingTests : BaseTestClass
 				tcs.TrySetResult(true);
 		};
 
-		connector.Connected += () =>
-		{
-			strategy.Start();
-			connector.Start();
-		};
-
+		// Start strategy before emulation (like BaseOptimizer.StartIteration)
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
 		connector.Connect();
+		connector.Start();
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -393,6 +408,8 @@ public class BacktestingTests : BaseTestClass
 	[TestMethod]
 	public async Task BacktestAppliesCommission()
 	{
+		if (SkipIfNoHistoryData()) return;
+
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
 
@@ -442,13 +459,12 @@ public class BacktestingTests : BaseTestClass
 				tcs.TrySetResult(true);
 		};
 
-		connector.Connected += () =>
-		{
-			strategy.Start();
-			connector.Start();
-		};
-
+		// Start strategy before emulation (like BaseOptimizer.StartIteration)
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
 		connector.Connect();
+		connector.Start();
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -471,6 +487,8 @@ public class BacktestingTests : BaseTestClass
 	[TestMethod]
 	public async Task BacktestSetsIsFinished()
 	{
+		if (SkipIfNoHistoryData()) return;
+
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
 
@@ -508,13 +526,12 @@ public class BacktestingTests : BaseTestClass
 				tcs.TrySetResult(true);
 		};
 
-		connector.Connected += () =>
-		{
-			strategy.Start();
-			connector.Start();
-		};
-
+		// Start strategy before emulation (like BaseOptimizer.StartIteration)
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
 		connector.Connect();
+		connector.Start();
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
 
@@ -534,6 +551,8 @@ public class BacktestingTests : BaseTestClass
 	[TestMethod]
 	public async Task BacktestRaisesProgressEvents()
 	{
+		if (SkipIfNoHistoryData()) return;
+
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
 
@@ -577,13 +596,12 @@ public class BacktestingTests : BaseTestClass
 				tcs.TrySetResult(true);
 		};
 
-		connector.Connected += () =>
-		{
-			strategy.Start();
-			connector.Start();
-		};
-
+		// Start strategy before emulation (like BaseOptimizer.StartIteration)
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
 		connector.Connect();
+		connector.Start();
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -607,6 +625,8 @@ public class BacktestingTests : BaseTestClass
 	[TestMethod]
 	public async Task BacktestCanBeSuspendedAndResumed()
 	{
+		if (SkipIfNoHistoryData()) return;
+
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
 
@@ -657,13 +677,12 @@ public class BacktestingTests : BaseTestClass
 			}
 		};
 
-		connector.Connected += () =>
-		{
-			strategy.Start();
-			connector.Start();
-		};
-
+		// Start strategy before emulation (like BaseOptimizer.StartIteration)
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
 		connector.Connect();
+		connector.Start();
 
 		// Wait for started
 		await Task.WhenAny(startedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
@@ -709,6 +728,8 @@ public class BacktestingTests : BaseTestClass
 	[TestMethod]
 	public async Task BacktestWithMultipleSecurities()
 	{
+		if (SkipIfNoHistoryData()) return;
+
 		var security1 = CreateTestSecurity();
 		var security2 = new Security { Id = Paths.HistoryDefaultSecurity2 };
 
@@ -765,14 +786,15 @@ public class BacktestingTests : BaseTestClass
 			}
 		};
 
-		connector.Connected += () =>
-		{
-			strategy1.Start();
-			strategy2.Start();
-			connector.Start();
-		};
-
+		// Start strategies before emulation (like BaseOptimizer.StartIteration)
+		strategy1.WaitRulesOnStop = false;
+		strategy1.Reset();
+		strategy2.WaitRulesOnStop = false;
+		strategy2.Reset();
+		strategy1.Start();
+		strategy2.Start();
 		connector.Connect();
+		connector.Start();
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -794,6 +816,8 @@ public class BacktestingTests : BaseTestClass
 	[TestMethod]
 	public async Task BacktestEventTimesAreMonotonicallyIncreasing()
 	{
+		if (SkipIfNoHistoryData()) return;
+
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
 
@@ -951,13 +975,12 @@ public class BacktestingTests : BaseTestClass
 				tcs.TrySetResult(true);
 		};
 
-		connector.Connected += () =>
-		{
-			strategy.Start();
-			connector.Start();
-		};
-
+		// Start strategy before emulation (like BaseOptimizer.StartIteration)
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
 		connector.Connect();
+		connector.Start();
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 

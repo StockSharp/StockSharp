@@ -201,7 +201,12 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			case MessageTypes.Connect:
 			case MessageTypes.Disconnect:
 			case MessageTypes.Reset:
+			{
+				if (OwnInnerAdapter)
+					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+
 				break;
+			}
 			case MessageTypes.SubscriptionResponse:
 			case MessageTypes.SubscriptionFinished:
 			case MessageTypes.SubscriptionOnline:
@@ -248,8 +253,13 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			}
 
 			case MessageTypes.EmulationState:
+			{
+				if (OwnInnerAdapter)
+					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+
 				await SendToEmulator(message, cancellationToken);
 				break;
+			}
 
 			case MessageTypes.Time:
 			{
