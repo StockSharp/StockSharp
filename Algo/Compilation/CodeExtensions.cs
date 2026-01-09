@@ -51,6 +51,7 @@ public static class CodeExtensions
 
 			"StockSharp.Algo",
 			"StockSharp.Algo.Indicators",
+			"StockSharp.Algo.Strategies",
 			"StockSharp.Messages",
 			"StockSharp.BusinessEntities",
 			"StockSharp.Localization",
