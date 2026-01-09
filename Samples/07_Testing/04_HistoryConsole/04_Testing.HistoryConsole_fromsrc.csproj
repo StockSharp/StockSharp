@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_net.props" />
+  <ItemGroup>
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj" />
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Testing\Algo.Testing.csproj" />
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Indicators\Algo.Indicators.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\01_History\SmaStrategy.cs" Link="SmaStrategy.cs" />
+  </ItemGroup>
+</Project>
