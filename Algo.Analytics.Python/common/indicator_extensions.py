@@ -3,6 +3,7 @@ import clr
 # Add references to required assemblies
 clr.AddReference("StockSharp.Messages")
 clr.AddReference("StockSharp.BusinessEntities")
+clr.AddReference("StockSharp.Algo.Indicators")
 
 from StockSharp.Messages import ICandleMessage
 from StockSharp.Algo.Indicators import IndicatorHelper, IIndicator, IIndicatorValue

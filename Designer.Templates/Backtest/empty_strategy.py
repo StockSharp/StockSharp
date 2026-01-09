@@ -1,6 +1,7 @@
 import clr
 
-clr.AddReference("StockSharp.Algo")
+clr.AddReference("StockSharp.Algo.Strategies")
+clr.AddReference("StockSharp.Algo.Indicators")
 
 from StockSharp.Algo.Strategies import Strategy
 
