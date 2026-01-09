@@ -3,7 +3,7 @@ namespace StockSharp.Tests;
 using System;
 using System.IO;
 
-using Ecng.Interop;
+using Ecng.Excel;
 
 /// <summary>
 /// Utility for generating strategy report Excel templates.

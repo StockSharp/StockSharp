@@ -2,7 +2,7 @@ namespace StockSharp.Algo;
 
 using Ecng.Compilation;
 using Ecng.Configuration;
-using Ecng.Interop;
+using Ecng.Excel;
 
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Candles.Patterns;

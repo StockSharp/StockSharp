@@ -1,6 +1,6 @@
 namespace StockSharp.Algo.Export;
 
-using Ecng.Interop;
+using Ecng.Excel;
 
 /// <summary>
 /// The export into Excel.

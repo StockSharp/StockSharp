@@ -2,7 +2,7 @@
 
 using Ecng.Compilation;
 using Ecng.Compilation.Roslyn;
-using Ecng.Interop;
+using Ecng.Excel;
 #if NET10_0_OR_GREATER
 using Ecng.Data;
 
@@ -22,7 +22,7 @@ public static class AsmInit
 		ConfigManager.RegisterService<ISecurityProvider>(secProvider);
 		ConfigManager.RegisterService<ISecurityStorage>(new InMemorySecurityStorage(secProvider));
 		ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
-		ConfigManager.RegisterService<IExcelWorkerProvider>(new DevExpExcelWorkerProvider());
+		ConfigManager.RegisterService<IExcelWorkerProvider>(new OpenXmlExcelWorkerProvider());
 		await CompilationExtensions.Init(Paths.FileSystem, Helper.LogManager.Application, [("designer_extensions.py", File.ReadAllText("../../../../Diagram.Core/python/designer_extensions.py"))], default);
 
 #if NET10_0_OR_GREATER

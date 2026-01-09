@@ -8,7 +8,6 @@ global using System.Linq;
 
 global using Ecng.Common;
 global using Ecng.Collections;
-global using Ecng.Interop;
 global using Ecng.ComponentModel;
 
 global using StockSharp.Localization;
