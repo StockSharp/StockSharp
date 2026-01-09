@@ -1437,4 +1437,769 @@ public class SnapshotHolderTests : BaseTestClass
 		// Because snap2 processing failed, state should not have changed
 		snapAfter.Bids[0].Price.AssertEqual(100m); // FAILS - will be 200m
 	}
+
+	#region OrderSnapshotHolder Tests
+
+	[TestMethod]
+	public void Order_FirstProcess_CreatesSnapshot()
+	{
+		var holder = new OrderSnapshotHolder();
+		var msg = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+			OrderPrice = 100m,
+			OrderVolume = 10,
+			Side = Sides.Buy,
+		};
+
+		var result = holder.Process(msg);
+
+		result.AssertNotNull();
+		result.TransactionId.AssertEqual(1);
+		result.OrderState.AssertEqual(OrderStates.Pending);
+		result.OrderPrice.AssertEqual(100m);
+		result.OrderVolume.AssertEqual(10);
+	}
+
+	[TestMethod]
+	public void Order_TryGetSnapshot_ReturnsSnapshot()
+	{
+		var holder = new OrderSnapshotHolder();
+		var msg = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+		};
+
+		holder.Process(msg);
+
+		holder.TryGetSnapshot(1, out var snapshot).AssertTrue();
+		snapshot.AssertNotNull();
+		snapshot.OrderState.AssertEqual(OrderStates.Pending);
+	}
+
+	[TestMethod]
+	public void Order_TryGetSnapshot_NoSnapshot_ReturnsFalse()
+	{
+		var holder = new OrderSnapshotHolder();
+		holder.TryGetSnapshot(1, out var snapshot).AssertFalse();
+		snapshot.AssertNull();
+	}
+
+	[TestMethod]
+	public void Order_Process_ReturnsSameReference()
+	{
+		var holder = new OrderSnapshotHolder();
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+		};
+
+		var result1 = holder.Process(msg1);
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+		};
+
+		var result2 = holder.Process(msg2);
+
+		// Must return same reference
+		result1.AssertSame(result2);
+	}
+
+	[TestMethod]
+	public void Order_Process_UpdatesExistingSnapshot()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+			OrderPrice = 100m,
+			OrderVolume = 10,
+			Balance = 10,
+		};
+
+		var snapshot = holder.Process(msg1);
+		snapshot.OrderState.AssertEqual(OrderStates.Pending);
+		snapshot.Balance.AssertEqual(10);
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+			OrderId = 12345,
+		};
+
+		holder.Process(msg2);
+
+		// Same snapshot should be updated
+		snapshot.OrderState.AssertEqual(OrderStates.Active);
+		snapshot.OrderId.AssertEqual(12345);
+		// Balance not updated since msg2 has no balance
+		snapshot.Balance.AssertEqual(10);
+	}
+
+	[TestMethod]
+	public void Order_Process_NullMessage_ThrowsException()
+	{
+		var holder = new OrderSnapshotHolder();
+		ThrowsExactly<ArgumentNullException>(() => holder.Process(null));
+	}
+
+	[TestMethod]
+	public void Order_Process_NoOrderInfo_ReturnsNull()
+	{
+		var holder = new OrderSnapshotHolder();
+		var msg = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = false,
+		};
+
+		var result = holder.Process(msg);
+		result.AssertNull();
+	}
+
+	[TestMethod]
+	public void Order_Process_ZeroTransactionId_ThrowsException()
+	{
+		var holder = new OrderSnapshotHolder();
+		var msg = new ExecutionMessage
+		{
+			TransactionId = 0,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+		};
+
+		ThrowsExactly<ArgumentException>(() => holder.Process(msg));
+	}
+
+	[TestMethod]
+	public void Order_ResetSnapshot_SpecificTransaction_RemovesSnapshot()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		var msg1 = new ExecutionMessage { TransactionId = 1, SecurityId = _secId1, ServerTime = _now, HasOrderInfo = true };
+		var msg2 = new ExecutionMessage { TransactionId = 2, SecurityId = _secId2, ServerTime = _now, HasOrderInfo = true };
+
+		holder.Process(msg1);
+		holder.Process(msg2);
+
+		holder.ResetSnapshot(1);
+
+		holder.TryGetSnapshot(1, out var snap1).AssertFalse();
+		snap1.AssertNull();
+		holder.TryGetSnapshot(2, out var snap2).AssertTrue();
+		snap2.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void Order_ResetSnapshot_Zero_ClearsAll()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		var msg1 = new ExecutionMessage { TransactionId = 1, SecurityId = _secId1, ServerTime = _now, HasOrderInfo = true };
+		var msg2 = new ExecutionMessage { TransactionId = 2, SecurityId = _secId2, ServerTime = _now, HasOrderInfo = true };
+
+		holder.Process(msg1);
+		holder.Process(msg2);
+
+		holder.ResetSnapshot(0);
+
+		holder.TryGetSnapshot(1, out var snap1).AssertFalse();
+		snap1.AssertNull();
+		holder.TryGetSnapshot(2, out var snap2).AssertFalse();
+		snap2.AssertNull();
+	}
+
+	[TestMethod]
+	public void Order_Process_AppliesAllFields()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+			OrderPrice = 100m,
+			OrderVolume = 10,
+		};
+
+		var snapshot = holder.Process(msg1);
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderId = 12345,
+			OrderStringId = "ORD-123",
+			OrderBoardId = "BOARD-1",
+			Balance = 8,
+			OrderState = OrderStates.Active,
+			PnL = 50m,
+			Position = 2m,
+			Commission = 0.5m,
+			CommissionCurrency = "USD",
+			AveragePrice = 100.5m,
+			Latency = TimeSpan.FromMilliseconds(10),
+		};
+
+		holder.Process(msg2);
+
+		snapshot.OrderId.AssertEqual(12345);
+		snapshot.OrderStringId.AssertEqual("ORD-123");
+		snapshot.OrderBoardId.AssertEqual("BOARD-1");
+		snapshot.Balance.AssertEqual(8);
+		snapshot.OrderState.AssertEqual(OrderStates.Active);
+		snapshot.PnL.AssertEqual(50m);
+		snapshot.Position.AssertEqual(2m);
+		snapshot.Commission.AssertEqual(0.5m);
+		snapshot.CommissionCurrency.AssertEqual("USD");
+		snapshot.AveragePrice.AssertEqual(100.5m);
+		snapshot.Latency.AssertEqual(TimeSpan.FromMilliseconds(10));
+		snapshot.ServerTime.AssertEqual(_now.AddSeconds(1));
+	}
+
+	[TestMethod]
+	public void Order_Process_DoneState_StopsUpdating()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+			Balance = 10,
+		};
+
+		var snapshot = holder.Process(msg1);
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+			Balance = 5,
+		};
+
+		holder.Process(msg2);
+		snapshot.OrderState.AssertEqual(OrderStates.Active);
+		snapshot.Balance.AssertEqual(5);
+
+		var msg3 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(2),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Done,
+			Balance = 0,
+		};
+
+		holder.Process(msg3);
+		snapshot.OrderState.AssertEqual(OrderStates.Done);
+		snapshot.Balance.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void Order_MultipleTransactions_AreIsolated()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+			OrderPrice = 100m,
+		};
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 2,
+			SecurityId = _secId2,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+			OrderPrice = 200m,
+		};
+
+		var snap1 = holder.Process(msg1);
+		var snap2 = holder.Process(msg2);
+
+		snap1.AssertNotSame(snap2);
+		snap1.OrderPrice.AssertEqual(100m);
+		snap2.OrderPrice.AssertEqual(200m);
+
+		// Update only first order
+		var msg3 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+		};
+
+		holder.Process(msg3);
+
+		snap1.OrderState.AssertEqual(OrderStates.Active);
+		snap2.OrderState.AssertEqual(OrderStates.Pending);
+	}
+
+	[TestMethod]
+	public Task Order_ConcurrentAccess_ThreadSafe()
+	{
+		var holder = new OrderSnapshotHolder();
+		var token = CancellationToken;
+
+		var tasks = Enumerable.Range(0, 100).Select(i => Task.Run(() =>
+		{
+			var transId = i % 10 + 1;
+			var msg = new ExecutionMessage
+			{
+				TransactionId = transId,
+				SecurityId = _secId1,
+				ServerTime = _now.AddMilliseconds(i),
+				HasOrderInfo = true,
+				OrderState = i < 50 ? OrderStates.Pending : OrderStates.Active,
+				Balance = 100 - i,
+			};
+			holder.Process(msg);
+			holder.TryGetSnapshot(transId, out var _);
+		}, token)).ToArray();
+
+		return Task.WhenAll(tasks);
+	}
+
+	[TestMethod]
+	public void Order_FirstMessage_IsCloned()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		var original = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+			OrderPrice = 100m,
+		};
+
+		var snapshot = holder.Process(original);
+
+		// Modifying original should not affect snapshot
+		original.OrderPrice = 200m;
+
+		snapshot.OrderPrice.AssertEqual(100m);
+	}
+
+	#endregion
+
+	#region PositionSnapshotHolder Tests
+
+	[TestMethod]
+	public void Position_FirstProcess_CreatesSnapshot()
+	{
+		var holder = new PositionSnapshotHolder();
+		var msg = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m)
+		.TryAdd(PositionChangeTypes.AveragePrice, 50m);
+
+		var result = holder.Process(msg);
+
+		result.AssertNotNull();
+		result.PortfolioName.AssertEqual("Portfolio1");
+		result.SecurityId.AssertEqual(_secId1);
+		result.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
+		result.Changes[PositionChangeTypes.AveragePrice].AssertEqual(50m);
+	}
+
+	[TestMethod]
+	public void Position_TryGetSnapshot_ReturnsSnapshot()
+	{
+		var holder = new PositionSnapshotHolder();
+		var msg = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+
+		holder.Process(msg);
+
+		holder.TryGetSnapshot("Portfolio1", _secId1, null, null, null, null, null, out var snapshot).AssertTrue();
+		snapshot.AssertNotNull();
+		snapshot.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void Position_TryGetSnapshot_ByMessage_ReturnsSnapshot()
+	{
+		var holder = new PositionSnapshotHolder();
+		var msg = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+
+		holder.Process(msg);
+
+		holder.TryGetSnapshot(msg, out var snapshot).AssertTrue();
+		snapshot.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void Position_TryGetSnapshot_NoSnapshot_ReturnsFalse()
+	{
+		var holder = new PositionSnapshotHolder();
+		holder.TryGetSnapshot("Portfolio1", _secId1, null, null, null, null, null, out var snapshot).AssertFalse();
+		snapshot.AssertNull();
+	}
+
+	[TestMethod]
+	public void Position_Process_ReturnsSameReference()
+	{
+		var holder = new PositionSnapshotHolder();
+		var msg1 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+
+		var result1 = holder.Process(msg1);
+
+		var msg2 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 150m);
+
+		var result2 = holder.Process(msg2);
+
+		// Must return same reference
+		result1.AssertSame(result2);
+	}
+
+	[TestMethod]
+	public void Position_Process_UpdatesExistingSnapshot()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		var msg1 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m)
+		.TryAdd(PositionChangeTypes.AveragePrice, 50m);
+
+		var snapshot = holder.Process(msg1);
+		snapshot.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
+		snapshot.Changes[PositionChangeTypes.AveragePrice].AssertEqual(50m);
+
+		var msg2 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 150m)
+		.TryAdd(PositionChangeTypes.UnrealizedPnL, 25m);
+
+		holder.Process(msg2);
+
+		// Same snapshot should be updated
+		snapshot.Changes[PositionChangeTypes.CurrentValue].AssertEqual(150m);
+		snapshot.Changes[PositionChangeTypes.AveragePrice].AssertEqual(50m); // unchanged
+		snapshot.Changes[PositionChangeTypes.UnrealizedPnL].AssertEqual(25m); // new field
+	}
+
+	[TestMethod]
+	public void Position_Process_NullMessage_ThrowsException()
+	{
+		var holder = new PositionSnapshotHolder();
+		ThrowsExactly<ArgumentNullException>(() => holder.Process(null));
+	}
+
+	[TestMethod]
+	public void Position_ResetSnapshot_SpecificPosition_RemovesSnapshot()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		var msg1 = new PositionChangeMessage { PortfolioName = "Portfolio1", SecurityId = _secId1, ServerTime = _now }
+			.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+		var msg2 = new PositionChangeMessage { PortfolioName = "Portfolio2", SecurityId = _secId2, ServerTime = _now }
+			.TryAdd(PositionChangeTypes.CurrentValue, 200m);
+
+		holder.Process(msg1);
+		holder.Process(msg2);
+
+		holder.ResetSnapshot("Portfolio1", _secId1);
+
+		holder.TryGetSnapshot(msg1, out var snap1).AssertFalse();
+		snap1.AssertNull();
+		holder.TryGetSnapshot(msg2, out var snap2).AssertTrue();
+		snap2.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void Position_ResetSnapshot_Null_ClearsAll()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		var msg1 = new PositionChangeMessage { PortfolioName = "Portfolio1", SecurityId = _secId1, ServerTime = _now }
+			.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+		var msg2 = new PositionChangeMessage { PortfolioName = "Portfolio2", SecurityId = _secId2, ServerTime = _now }
+			.TryAdd(PositionChangeTypes.CurrentValue, 200m);
+
+		holder.Process(msg1);
+		holder.Process(msg2);
+
+		holder.ResetSnapshot(null);
+
+		holder.TryGetSnapshot(msg1, out var snap1).AssertFalse();
+		snap1.AssertNull();
+		holder.TryGetSnapshot(msg2, out var snap2).AssertFalse();
+		snap2.AssertNull();
+	}
+
+	[TestMethod]
+	public void Position_MultiplePositions_AreIsolated()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		var msg1 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+
+		var msg2 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio2",
+			SecurityId = _secId2,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 200m);
+
+		var snap1 = holder.Process(msg1);
+		var snap2 = holder.Process(msg2);
+
+		snap1.AssertNotSame(snap2);
+		snap1.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
+		snap2.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
+
+		// Update only first position
+		var msg3 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 150m);
+
+		holder.Process(msg3);
+
+		snap1.Changes[PositionChangeTypes.CurrentValue].AssertEqual(150m);
+		snap2.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
+	}
+
+	[TestMethod]
+	public void Position_DifferentSides_AreIsolated()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		var msgLong = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			Side = Sides.Buy,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+
+		var msgShort = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			Side = Sides.Sell,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, -50m);
+
+		var snapLong = holder.Process(msgLong);
+		var snapShort = holder.Process(msgShort);
+
+		snapLong.AssertNotSame(snapShort);
+		snapLong.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
+		snapShort.Changes[PositionChangeTypes.CurrentValue].AssertEqual(-50m);
+	}
+
+	[TestMethod]
+	public void Position_DifferentStrategies_AreIsolated()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		var msg1 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			StrategyId = "Strategy1",
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+
+		var msg2 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			StrategyId = "Strategy2",
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 200m);
+
+		var snap1 = holder.Process(msg1);
+		var snap2 = holder.Process(msg2);
+
+		snap1.AssertNotSame(snap2);
+		snap1.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
+		snap2.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
+	}
+
+	[TestMethod]
+	public Task Position_ConcurrentAccess_ThreadSafe()
+	{
+		var holder = new PositionSnapshotHolder();
+		var token = CancellationToken;
+
+		var tasks = Enumerable.Range(0, 100).Select(i => Task.Run(() =>
+		{
+			var portfolioName = $"Portfolio{i % 5}";
+			var secId = i % 2 == 0 ? _secId1 : _secId2;
+			var msg = new PositionChangeMessage
+			{
+				PortfolioName = portfolioName,
+				SecurityId = secId,
+				ServerTime = _now.AddMilliseconds(i),
+			}
+			.TryAdd(PositionChangeTypes.CurrentValue, i);
+			holder.Process(msg);
+			holder.TryGetSnapshot(msg, out var _);
+		}, token)).ToArray();
+
+		return Task.WhenAll(tasks);
+	}
+
+	[TestMethod]
+	public void Position_FirstMessage_IsCloned()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		var original = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+
+		var snapshot = holder.Process(original);
+
+		// Modifying original should not affect snapshot
+		original.Changes[PositionChangeTypes.CurrentValue] = 200m;
+
+		snapshot.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void Position_KeyIsCaseInsensitive()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		var msg1 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			StrategyId = "STRATEGY",
+			ClientCode = "CLIENT",
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+
+		var snap1 = holder.Process(msg1);
+
+		var msg2 = new PositionChangeMessage
+		{
+			PortfolioName = "PORTFOLIO1",
+			SecurityId = _secId1,
+			StrategyId = "strategy",
+			ClientCode = "client",
+			ServerTime = _now.AddSeconds(1),
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 200m);
+
+		var snap2 = holder.Process(msg2);
+
+		// Should be same reference due to case-insensitive key
+		snap1.AssertSame(snap2);
+		snap1.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
+	}
+
+	#endregion
 }
