@@ -2,8 +2,6 @@ namespace StockSharp.Algo.Storages;
 
 using System.Net;
 
-using StockSharp.Algo.Storages.Remote;
-
 /// <summary>
 /// Remote storage of market data working via <see cref="RemoteStorageClient"/>.
 /// </summary>

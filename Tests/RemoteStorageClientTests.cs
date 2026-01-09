@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 
 using StockSharp.Algo.Storages.Csv;
-using StockSharp.Algo.Storages.Remote;
 
 /// <summary>
 /// Tests for RemoteStorageClient using mock adapter.
