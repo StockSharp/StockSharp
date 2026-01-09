@@ -10,7 +10,7 @@ public class RemoteStorageClient : Disposable
 	private readonly int _securityBatchSize;
 	private readonly TimeSpan _timeout;
 
-	private readonly Connector _connector;
+	private bool _isConnected;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
@@ -32,31 +32,12 @@ public class RemoteStorageClient : Disposable
 		_cache = cache;
 		_securityBatchSize = securityBatchSize;
 		_timeout = timeout;
-
-		_connector = new();
-
-		_connector.Adapter.InnerAdapters.Add(_adapter);
 	}
 
 	/// <inheritdoc />
 	protected override void DisposeManaged()
 	{
 		_adapter.Dispose();
-
-		try
-		{
-			_connector.Disconnect();
-		}
-		catch
-		{ }
-
-		try
-		{
-			_connector.Dispose();
-		}
-		catch
-		{ }
-
 		base.DisposeManaged();
 	}
 
@@ -209,15 +190,8 @@ public class RemoteStorageClient : Disposable
 	/// <returns><see cref="ValueTask"/></returns>
 	public async ValueTask VerifyAsync(CancellationToken cancellationToken)
 	{
-		await _connector.ConnectAsync(cancellationToken).NoWait();
-
-		try
-		{
-			await _connector.DisconnectAsync(cancellationToken).NoWait();
-		}
-		catch
-		{
-		}
+		await _adapter.ConnectAsync(cancellationToken);
+		_isConnected = true;
 	}
 
 	/// <summary>
@@ -342,18 +316,18 @@ public class RemoteStorageClient : Disposable
 
 		// create subscription from request
 		var subscrMsg = ((ISubscriptionMessage)request).TypedClone();
-		var subscription = new Subscription(subscrMsg);
 
 		using var timeoutCts = new CancellationTokenSource(_timeout);
 		using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutCts.Token);
 		var token = linked.Token;
 
-		// ensure connector is connected
-		if (_connector.ConnectionState != ConnectionStates.Connected)
+		// ensure adapter is connected
+		if (!_isConnected)
 		{
 			try
 			{
-				await _connector.ConnectAsync(token).NoWait();
+				await _adapter.ConnectAsync(token);
+				_isConnected = true;
 			}
 			catch (OperationCanceledException)
 			{
@@ -369,7 +343,7 @@ public class RemoteStorageClient : Disposable
 
 		try
 		{
-			await foreach (var msg in _connector.SubscribeAsync<Message>(subscription, token).WithEnforcedCancellation(cancellationToken))
+			await foreach (var msg in _adapter.SubscribeAsync<Message>(subscrMsg, token).WithEnforcedCancellation(cancellationToken))
 			{
 				if (msg is SubscriptionFinishedMessage finishedMsg)
 				{
@@ -416,14 +390,6 @@ public class RemoteStorageClient : Disposable
 		catch (Exception ex)
 		{
 			throw new InvalidOperationException(LocalizedStrings.SomeConnectionFailed, ex);
-		}
-		finally
-		{
-			try
-			{
-				_connector.UnSubscribe(subscription);
-			}
-			catch { }
 		}
 
 		if (needCache)
