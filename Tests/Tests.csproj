@@ -5,7 +5,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Moq" Version="$(MoqVer)" />
-    <PackageReference Include="Ecng.Interop.Excel" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Excel.OpenXml" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0' ">
     <PackageReference Include="Ecng.Data.Ado" Version="$(EcngVer)" />
