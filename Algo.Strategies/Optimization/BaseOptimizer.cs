@@ -7,25 +7,13 @@ using StockSharp.Algo.Testing;
 /// </summary>
 public abstract class BaseOptimizer : BaseLogReceiver
 {
-	private class CacheAllocator
+	private class CacheAllocator(MarketDataStorageCache original)
 	{
-		private readonly SynchronizedQueue<MarketDataStorageCache> _cache;
-		private readonly MarketDataStorageCache _original;
+		private readonly MarketDataStorageCache _original = original ?? throw new ArgumentNullException(nameof(original));
 
-		public CacheAllocator(int capacity, MarketDataStorageCache original)
-		{
-			_cache = [];
-			_original = original ?? throw new ArgumentNullException(nameof(original));
+		public MarketDataStorageCache Allocate() => _original;
 
-			for (var i = 0; i < capacity; i++)
-				Free(Allocate());
-		}
-
-		public MarketDataStorageCache Allocate()
-			=> _cache.TryDequeue() ?? _original.Clone();
-
-		public void Free(MarketDataStorageCache cache)
-			=> _cache.Enqueue(cache ?? throw new ArgumentNullException(nameof(cache)));
+		public void Free(MarketDataStorageCache cache) { }
 	}
 
 	private class CopyPortfolioProvider : IPortfolioProvider
@@ -137,7 +125,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		set
 		{
 			_adapterCache = value;
-			_adapterCacheAllocator = value is null ? null : new(10, value);
+			_adapterCacheAllocator = value is null ? null : new(value);
 		}
 	}
 
@@ -150,7 +138,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		set
 		{
 			_storageCache = value;
-			_storageCacheAllocator = value is null ? null : new(10, value);
+			_storageCacheAllocator = value is null ? null : new(value);
 		}
 	}
 

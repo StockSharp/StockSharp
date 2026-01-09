@@ -3,7 +3,7 @@
 /// <summary>
 /// <see cref="IMarketDataStorage"/> cache.
 /// </summary>
-public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
+public class MarketDataStorageCache
 {
 	private readonly SynchronizedDictionary<(SecurityId, DataType, DateTime), (DateTime lastAccess, Message[] data)> _cache = [];
 
@@ -23,9 +23,6 @@ public class MarketDataStorageCache : Cloneable<MarketDataStorageCache>
 			_limit = value;
 		}
 	}
-
-	/// <inheritdoc/>
-	public override MarketDataStorageCache Clone() => new() { Limit = Limit };
 
 	/// <summary>
 	/// Invalidate cache for specified key.

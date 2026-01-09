@@ -113,10 +113,4 @@ public class MarketDataStorageCacheTests : BaseTestClass
 		ThrowsExactly<ArgumentOutOfRangeException>(() => cache.Limit = 0);
 	}
 
-	[TestMethod]
-	public void Clone_CopiesLimit()
-	{
-		var cache = new MarketDataStorageCache { Limit = 123 };
-		cache.Clone().Limit.AssertEqual(123);
-	}
 }
