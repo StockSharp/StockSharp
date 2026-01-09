@@ -98,8 +98,10 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	ITransactionProvider, IScheduledTask, ICustomTypeDescriptor, ITimeProvider,
 	IPortfolioProvider, IPositionProvider, IReportSource
 {
+	private const MessageTypes _strategyChangeState = (MessageTypes)(-11);
+
 	private class StrategyChangeStateMessage(Strategy strategy, ProcessStates state)
-		: Message(ExtendedMessageTypes.StrategyChangeState)
+		: Message(_strategyChangeState)
 	{
 		public Strategy Strategy { get; } = strategy ?? throw new ArgumentNullException(nameof(strategy));
 		public ProcessStates State { get; } = state;
@@ -2171,7 +2173,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				break;
 			}
 
-			case ExtendedMessageTypes.StrategyChangeState:
+			case _strategyChangeState:
 			{
 				var stateMsg = (StrategyChangeStateMessage)message;
 

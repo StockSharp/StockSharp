@@ -3472,7 +3472,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 				break;
 			}
 
-			case ExtendedMessageTypes.CommissionRule:
+			case HistoryMessageTypes.CommissionRule:
 			{
 				var ruleMsg = (CommissionRuleMessage)message;
 				_commissionManager.Rules.Add(ruleMsg.Rule);
@@ -3743,7 +3743,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 		MessageTypes.QuoteChange.ToInfo(),
 		MessageTypes.Level1Change.ToInfo(),
 		MessageTypes.EmulationState.ToInfo(),
-		ExtendedMessageTypes.CommissionRule.ToInfo(),
+		HistoryMessageTypes.CommissionRule.ToInfo(),
 		//ExtendedMessageTypes.Clearing.ToInfo(),
 	];
 	IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages { get; set; }

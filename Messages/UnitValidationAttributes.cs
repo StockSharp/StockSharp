@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies;
+namespace StockSharp.Messages;
 
 /// <summary>
 /// Validates that a <see cref="Unit"/> value is greater than zero.

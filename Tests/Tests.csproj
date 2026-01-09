@@ -17,6 +17,9 @@
     <ProjectReference Include="..\Algo.Export\Algo.Export.csproj" />
     <ProjectReference Include="..\Algo.Import\Algo.Import.csproj" />
     <ProjectReference Include="..\Algo.Gpu\Algo.Gpu.csproj" />
+    <ProjectReference Include="..\Algo.Indicators\Algo.Indicators.csproj" />
+    <ProjectReference Include="..\Algo.Strategies\Algo.Strategies.csproj" />
+    <ProjectReference Include="..\Algo.Testing\Algo.Testing.csproj" />
     <ProjectReference Include="..\Diagram.Core\Diagram.Core.csproj" />
   </ItemGroup>
 </Project>

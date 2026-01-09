@@ -56,7 +56,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 		var transactionIdGenerator = new MillisecondIncrementalIdGenerator();
 
-		_subscriptionManager = new(transactionIdGenerator, this is not StockSharp.Algo.Testing.HistoryEmulationConnector) { Parent = this };
+		_subscriptionManager = new(transactionIdGenerator, this is not Algo.Testing.IEmulationConnector) { Parent = this };
 
 		//SupportLevel1DepthBuilder = true;
 		SupportFilteredMarketDepth = true;

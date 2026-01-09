@@ -11,7 +11,7 @@ public class CommissionRuleMessage : Message
 	/// Initializes a new instance of the <see cref="CommissionRuleMessage"/>.
 	/// </summary>
 	public CommissionRuleMessage()
-		: base(ExtendedMessageTypes.CommissionRule)
+		: base(HistoryMessageTypes.CommissionRule)
 	{
 	}
 

@@ -14,7 +14,7 @@ public class GeneratorMessage : MarketDataMessage
 	/// Initializes a new instance of the <see cref="GeneratorMessage"/>.
 	/// </summary>
 	public GeneratorMessage()
-		: base(ExtendedMessageTypes.Generator)
+		: base(HistoryMessageTypes.Generator)
 	{
 	}
 

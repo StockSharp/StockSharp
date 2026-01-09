@@ -4,13 +4,6 @@ using StockSharp.Algo.Positions;
 using StockSharp.Algo.Testing.Emulation;
 
 /// <summary>
-/// The interface of the real time market data adapter.
-/// </summary>
-public interface IEmulationMessageAdapter : IMessageAdapterWrapper
-{
-}
-
-/// <summary>
 /// Emulation message adapter.
 /// </summary>
 public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageAdapter
@@ -169,7 +162,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			}
 
 			case MessageTypes.Level1Change:
-			case ExtendedMessageTypes.CommissionRule:
+			case HistoryMessageTypes.CommissionRule:
 			{
 				await SendToEmulator(message, cancellationToken);
 				return;

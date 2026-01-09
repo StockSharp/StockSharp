@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Alerts.Interfaces\Alerts.Interfaces.csproj" />
-    <ProjectReference Include="..\Algo\Algo.csproj" />
+    <ProjectReference Include="..\Algo.Strategies\Algo.Strategies.csproj" />
+    <ProjectReference Include="..\Algo.Indicators\Algo.Indicators.csproj" />
   </ItemGroup>
 </Project>

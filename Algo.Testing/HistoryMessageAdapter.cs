@@ -5,7 +5,7 @@ using StockSharp.Algo.Testing.Generation;
 /// <summary>
 /// The adapter, receiving messages form the storage <see cref="IStorageRegistry"/>.
 /// </summary>
-public class HistoryMessageAdapter : MessageAdapter
+public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 {
 	private readonly IHistoryMarketDataManager _marketDataManager;
 
@@ -150,7 +150,7 @@ public class HistoryMessageAdapter : MessageAdapter
 
 		this.AddMarketDataSupport();
 		this.AddSupportedMessage(MessageTypes.EmulationState, null);
-		this.AddSupportedMessage(ExtendedMessageTypes.Generator, true);
+		this.AddSupportedMessage(HistoryMessageTypes.Generator, true);
 	}
 
 	private readonly Dictionary<SecurityId, HashSet<DataType>> _supportedMarketDataTypes = [];
@@ -245,7 +245,7 @@ public class HistoryMessageAdapter : MessageAdapter
 				break;
 			}
 
-			case ExtendedMessageTypes.Generator:
+			case HistoryMessageTypes.Generator:
 			{
 				var generatorMsg = (GeneratorMessage)message;
 

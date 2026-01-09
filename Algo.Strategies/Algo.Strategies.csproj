@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_target_net.props" />
   <ItemGroup>
-    <ProjectReference Include="..\Algo.Indicators\Algo.Indicators.csproj" />
+    <ProjectReference Include="..\Algo.Testing\Algo.Testing.csproj" />
   </ItemGroup>
 </Project>

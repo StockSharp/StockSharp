@@ -7,6 +7,6 @@
     <PackageReference Include="Ecng.Data" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Algo\Algo.csproj" />
+    <ProjectReference Include="..\Algo.Indicators\Algo.Indicators.csproj" />
   </ItemGroup>
 </Project>

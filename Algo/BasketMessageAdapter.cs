@@ -765,7 +765,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 		if (adapter is IMessageAdapterWrapper wrapper)
 		{
-			return wrapper is IEmulationMessageAdapter or HistoryMessageAdapter
+			return wrapper is IEmulationMessageAdapter
 				? wrapper
 				: GetUnderlyingAdapter(wrapper.InnerAdapter);
 		}
