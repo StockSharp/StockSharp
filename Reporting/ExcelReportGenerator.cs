@@ -130,24 +130,78 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		// Header
-		worker
-			.SetCell(0, 0, "Parameter")
-			.SetCell(1, 0, "Value");
+		// Header styling (same as template)
+		const string headerBg = "4472C4";
+		const string headerFg = "FFFFFF";
 
-		// Strategy Name and Report Date
+		// Create layout matching template structure
+		// Row 0: Title row
+		worker
+			.SetCell(0, 0, "Strategy Report")
+			.SetCellColor(0, 0, headerBg, headerFg)
+			.MergeCells(0, 0, 4, 0)
+			.SetColumnWidth(0, 20)
+			.SetColumnWidth(1, 25)
+			.SetColumnWidth(2, 5)
+			.SetColumnWidth(3, 20)
+			.SetColumnWidth(4, 25);
+
+		// Strategy info section (matching template: B2, B3, B4, B5, B6)
 		worker
 			.SetCell(0, 1, "Strategy Name")
 			.SetCell(1, 1, source.Name)
 			.SetCell(0, 2, "Report Date")
-			.SetCell(1, 2, DateTimeOffset.Now);
+			.SetCell(1, 2, DateTimeOffset.Now)
+			.SetCellFormat(1, 2, "yyyy-MM-dd HH:mm:ss");
 
-		// Fill Parameters
-		var row = 4;
+		// Try to get common params like template expects
+		WriteParamIfExistsCreate(worker, source, "Symbol", 0, 3, 1, 3);
+		WriteParamIfExistsCreate(worker, source, "TimeFrame", 0, 4, 1, 4);
+		WriteParamIfExistsCreate(worker, source, "InitialCapital", 0, 5, 1, 5);
+
+		// Summary section
 		worker
-			.SetCell(0, 3, "Parameters")
-			.SetCell(1, 3, "");
+			.SetCell(0, 7, "Summary")
+			.SetCellColor(0, 7, headerBg, headerFg)
+			.MergeCells(0, 7, 1, 7)
+			.SetCell(0, 8, "Total PnL")
+			.SetCell(1, 8, source.PnL)
+			.SetCell(0, 9, "Position")
+			.SetCell(1, 9, source.Position)
+			.SetCell(0, 10, "Commission")
+			.SetCell(1, 10, source.Commission)
+			.SetCell(0, 11, "Working Time")
+			.SetCell(1, 11, source.TotalWorkingTime.Format());
 
+		// Statistics table header (row 14, matching template ~row 15/16)
+		worker
+			.SetCell(0, 14, "Statistic")
+			.SetCell(1, 14, "Value")
+			.SetCellColor(0, 14, headerBg, headerFg)
+			.SetCellColor(1, 14, headerBg, headerFg);
+
+		// Parameters table header
+		worker
+			.SetCell(3, 14, "Parameter")
+			.SetCell(4, 14, "Value")
+			.SetCellColor(3, 14, headerBg, headerFg)
+			.SetCellColor(4, 14, headerBg, headerFg);
+
+		// Fill Statistics (A16:B...)
+		var statRow = 15;
+		foreach (var (name, value) in source.StatisticParameters)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			worker
+				.SetCell(0, statRow, name)
+				.SetCell(1, statRow, NormalizeCellValue(value));
+
+			statRow++;
+		}
+
+		// Fill Parameters (D16:E...)
+		var paramRow = 15;
 		foreach (var (name, value) in source.Parameters)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
@@ -156,28 +210,26 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 				continue;
 
 			worker
-				.SetCell(0, row, name)
-				.SetCell(1, row, NormalizeCellValue(value));
+				.SetCell(3, paramRow, name)
+				.SetCell(4, paramRow, NormalizeCellValue(value));
 
-			row++;
+			paramRow++;
 		}
 
-		// Fill Statistic Parameters
-		row++;
-		worker
-			.SetCell(0, row, "Statistics")
-			.SetCell(1, row, "");
-		row++;
+		worker.FreezeRows(1);
+	}
 
-		foreach (var (name, value) in source.StatisticParameters)
+	private void WriteParamIfExistsCreate(IExcelWorker worker, IReportSource source, string key, int labelCol, int labelRow, int valueCol, int valueRow)
+	{
+		worker.SetCell(labelCol, labelRow, key);
+
+		foreach (var (name, value) in source.Parameters)
 		{
-			cancellationToken.ThrowIfCancellationRequested();
-
-			worker
-				.SetCell(0, row, name)
-				.SetCell(1, row, NormalizeCellValue(value));
-
-			row++;
+			if (string.Equals(name, key, StringComparison.OrdinalIgnoreCase))
+			{
+				worker.SetCell(valueCol, valueRow, NormalizeCellValue(value));
+				return;
+			}
 		}
 	}
 
@@ -185,17 +237,39 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		// Header row
+		const string headerBg = "4472C4";
+		const string headerFg = "FFFFFF";
+
+		// Header row matching template: EntryTime, ExitTime, Side, Qty, EntryPrice, ExitPrice, PnL, PnL%, TotalPnL, Position
+		var headers = new[] { "Entry Time", "Exit Time", "Side", "Qty", "Entry Price", "Exit Price", "PnL", "PnL%", "Total PnL", "Position" };
+		for (var i = 0; i < headers.Length; i++)
+		{
+			worker
+				.SetCell(i, 0, headers[i])
+				.SetCellColor(i, 0, headerBg, headerFg);
+		}
+
 		worker
-			.SetCell(0, 0, "Time")
-			.SetCell(1, 0, "Side")
-			.SetCell(2, 0, "Volume")
-			.SetCell(3, 0, "Order Price")
-			.SetCell(4, 0, "Trade Price")
-			.SetCell(5, 0, "PnL")
-			.SetCell(6, 0, "PnL%")
-			.SetCell(7, 0, "Total PnL")
-			.SetCell(8, 0, "Position");
+			.SetColumnWidth(0, 18)  // Entry Time
+			.SetColumnWidth(1, 18)  // Exit Time
+			.SetColumnWidth(2, 8)   // Side
+			.SetColumnWidth(3, 10)  // Qty
+			.SetColumnWidth(4, 12)  // Entry Price
+			.SetColumnWidth(5, 12)  // Exit Price
+			.SetColumnWidth(6, 12)  // PnL
+			.SetColumnWidth(7, 10)  // PnL%
+			.SetColumnWidth(8, 12)  // Total PnL
+			.SetColumnWidth(9, 10)  // Position
+			.SetStyle(0, typeof(DateTime))
+			.SetStyle(1, typeof(DateTime))
+			.SetStyle(4, typeof(decimal))
+			.SetStyle(5, typeof(decimal))
+			.SetStyle(6, typeof(decimal))
+			.SetStyle(7, "0.00%")
+			.SetStyle(8, typeof(decimal))
+			.FreezeRows(1)
+			.SetConditionalFormatting(6, ComparisonOperator.Less, "0", "FFC7CE", "9C0006")
+			.SetConditionalFormatting(6, ComparisonOperator.Greater, "0", "C6EFCE", "006100");
 
 		var row = 1;
 		decimal totalPnL = 0m;
@@ -219,15 +293,16 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 				pnlPct = pnl / denom;
 
 			worker
-				.SetCell(0, row, trade.Time)
-				.SetCell(1, row, trade.Side.GetDisplayName())
-				.SetCell(2, row, qty)
-				.SetCell(3, row, entryPrice)
-				.SetCell(4, row, exitPrice)
-				.SetCell(5, row, pnl.Round(Decimals))
-				.SetCell(6, row, pnlPct)
-				.SetCell(7, row, totalPnL.Round(Decimals))
-				.SetCell(8, row, position);
+				.SetCell(0, row, trade.Time)                       // Entry Time (fallback to trade time)
+				.SetCell(1, row, trade.Time)                       // Exit Time (fallback to trade time)
+				.SetCell(2, row, trade.Side.GetDisplayName())      // Side
+				.SetCell(3, row, qty)                              // Qty
+				.SetCell(4, row, entryPrice)                       // Entry Price
+				.SetCell(5, row, exitPrice)                        // Exit Price
+				.SetCell(6, row, pnl.Round(Decimals))              // PnL
+				.SetCell(7, row, pnlPct)                           // PnL%
+				.SetCell(8, row, totalPnL.Round(Decimals))         // Total PnL
+				.SetCell(9, row, position);                        // Position
 
 			row++;
 		}
@@ -237,17 +312,33 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		// Header row
+		const string headerBg = "4472C4";
+		const string headerFg = "FFFFFF";
+
+		// Header row matching template
+		var headers = new[] { "Order ID", "Transaction ID", "Side", "Time", "Price", "State", "Balance", "Volume", "Type" };
+		for (var i = 0; i < headers.Length; i++)
+		{
+			worker
+				.SetCell(i, 0, headers[i])
+				.SetCellColor(i, 0, headerBg, headerFg);
+		}
+
 		worker
-			.SetCell(0, 0, "Order ID")
-			.SetCell(1, 0, "Transaction ID")
-			.SetCell(2, 0, "Side")
-			.SetCell(3, 0, "Time")
-			.SetCell(4, 0, "Price")
-			.SetCell(5, 0, "State")
-			.SetCell(6, 0, "Balance")
-			.SetCell(7, 0, "Volume")
-			.SetCell(8, 0, "Type");
+			.SetColumnWidth(0, 14)  // Order ID
+			.SetColumnWidth(1, 14)  // Transaction ID
+			.SetColumnWidth(2, 8)   // Side
+			.SetColumnWidth(3, 18)  // Time
+			.SetColumnWidth(4, 12)  // Price
+			.SetColumnWidth(5, 10)  // State
+			.SetColumnWidth(6, 10)  // Balance
+			.SetColumnWidth(7, 10)  // Volume
+			.SetColumnWidth(8, 10)  // Type
+			.SetStyle(3, typeof(DateTime))
+			.SetStyle(4, typeof(decimal))
+			.SetStyle(6, typeof(decimal))
+			.SetStyle(7, typeof(decimal))
+			.FreezeRows(1);
 
 		var row = 1;
 
@@ -274,11 +365,27 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		// Header row
+		const string headerBg = "4472C4";
+		const string headerFg = "FFFFFF";
+
+		// Header row matching template
+		var headers = new[] { "Date", "Equity", "Drawdown" };
+		for (var i = 0; i < headers.Length; i++)
+		{
+			worker
+				.SetCell(i, 0, headers[i])
+				.SetCellColor(i, 0, headerBg, headerFg);
+		}
+
 		worker
-			.SetCell(0, 0, "Date")
-			.SetCell(1, 0, "Equity")
-			.SetCell(2, 0, "Drawdown");
+			.SetColumnWidth(0, 12)  // Date
+			.SetColumnWidth(1, 15)  // Equity
+			.SetColumnWidth(2, 12)  // Drawdown
+			.SetStyle(0, "yyyy-MM-dd")
+			.SetStyle(1, typeof(decimal))
+			.SetStyle(2, "0.00%")
+			.FreezeRows(1)
+			.SetConditionalFormatting(2, ComparisonOperator.Less, "0", "FFC7CE", "9C0006");
 
 		var trades = source.MyTrades.ToArray();
 		if (trades.Length == 0)
