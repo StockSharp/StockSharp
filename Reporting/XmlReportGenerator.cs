@@ -104,7 +104,7 @@ public class XmlReportGenerator : BaseReportGenerator
 		{
 			await WriteStartElement("trades");
 
-			foreach (var t in source.MyTrades)
+			foreach (var t in source.OwnTrades)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 

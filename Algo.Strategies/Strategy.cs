@@ -643,7 +643,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	IEnumerable<ReportTrade> IReportSource.MyTrades => MyTrades.Select(t => new ReportTrade(
+	IEnumerable<ReportTrade> IReportSource.OwnTrades => MyTrades.Select(t => new ReportTrade(
 		t.Trade?.Id,
 		t.Order.TransactionId,
 		t.Trade?.ServerTime ?? default,

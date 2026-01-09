@@ -77,7 +77,7 @@ public class CsvReportGenerator : BaseReportGenerator
 			await WriteValuesAsync(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
 				LocalizedStrings.Direction, LocalizedStrings.OrderId, LocalizedStrings.PnL, LocalizedStrings.Slippage);
 
-			foreach (var trade in source.MyTrades)
+			foreach (var trade in source.OwnTrades)
 			{
 				await WriteValuesAsync(trade.TradeId, trade.OrderTransactionId, trade.Time.Format(), trade.TradePrice, trade.Volume,
 					trade.Side.GetDisplayName(), trade.OrderId, trade.PnL, trade.Slippage);

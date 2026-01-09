@@ -111,7 +111,7 @@ public class ReportTests : BaseTestClass
 		public List<(string Name, object Value)> ParametersList { get; } = [];
 
 		public IEnumerable<ReportOrder> Orders => OrdersList;
-		public IEnumerable<ReportTrade> MyTrades => TradesList;
+		public IEnumerable<ReportTrade> OwnTrades => TradesList;
 		public IEnumerable<(string Name, object Value)> StatisticParameters => StatisticsList;
 		public IEnumerable<(string Name, object Value)> Parameters => ParametersList;
 	}

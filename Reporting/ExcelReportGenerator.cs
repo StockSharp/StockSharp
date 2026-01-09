@@ -275,7 +275,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 		decimal totalPnL = 0m;
 		decimal position = 0m;
 
-		foreach (var trade in source.MyTrades.ToArray())
+		foreach (var trade in source.OwnTrades.ToArray())
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
@@ -387,7 +387,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 			.FreezeRows(1)
 			.SetConditionalFormatting(2, ComparisonOperator.Less, "0", "FFC7CE", "9C0006");
 
-		var trades = source.MyTrades.ToArray();
+		var trades = source.OwnTrades.ToArray();
 		if (trades.Length == 0)
 			return;
 
@@ -490,7 +490,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 		decimal totalPnL = 0m;
 		decimal position = 0m;
 
-		foreach (var trade in source.MyTrades.ToArray())
+		foreach (var trade in source.OwnTrades.ToArray())
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
@@ -558,7 +558,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var trades = source.MyTrades.ToArray();
+		var trades = source.OwnTrades.ToArray();
 		if (trades.Length == 0)
 			return;
 

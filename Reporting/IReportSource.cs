@@ -111,5 +111,5 @@ public interface IReportSource
 	/// <summary>
 	/// Own trades collection.
 	/// </summary>
-	IEnumerable<ReportTrade> MyTrades { get; }
+	IEnumerable<ReportTrade> OwnTrades { get; }
 }

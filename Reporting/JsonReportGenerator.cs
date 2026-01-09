@@ -100,7 +100,7 @@ public class JsonReportGenerator : BaseReportGenerator
 			await WritePropertyName("trades");
 			await WriteStartArray();
 
-			foreach (var t in source.MyTrades)
+			foreach (var t in source.OwnTrades)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
 
