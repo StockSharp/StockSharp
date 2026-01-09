@@ -6,4 +6,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Messages\Messages.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\StrategyReportTemplate.xlsx" />
+  </ItemGroup>
 </Project>
