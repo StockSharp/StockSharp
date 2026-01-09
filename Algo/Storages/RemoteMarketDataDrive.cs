@@ -235,11 +235,6 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		}
 	}
 
-	/// <summary>
-	/// Cache.
-	/// </summary>
-	public RemoteStorageCache Cache { get; set; }
-
 	private RemoteStorageClient CreateClient()
 	{
 		var adapter = _createAdapter();
@@ -267,7 +262,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 
 		adapter.Parent ??= Logs ?? ServicesRegistry.LogManager?.Application;
 
-		return new(adapter, Cache, SecurityBatchSize, Timeout);
+		return new(adapter, SecurityBatchSize, Timeout);
 	}
 
 	private RemoteStorageClient EnsureGetClient()

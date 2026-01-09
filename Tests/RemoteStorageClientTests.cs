@@ -237,7 +237,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		var thrown = false;
 		try
 		{
-			_ = new RemoteStorageClient(null, null, 100, TimeSpan.FromSeconds(30));
+			_ = new RemoteStorageClient(null, 100, TimeSpan.FromSeconds(30));
 		}
 		catch (ArgumentNullException)
 		{
@@ -254,7 +254,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		var thrown1 = false;
 		try
 		{
-			_ = new RemoteStorageClient(adapter, null, 0, TimeSpan.FromSeconds(30));
+			_ = new RemoteStorageClient(adapter, 0, TimeSpan.FromSeconds(30));
 		}
 		catch (ArgumentOutOfRangeException)
 		{
@@ -266,7 +266,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		var thrown2 = false;
 		try
 		{
-			_ = new RemoteStorageClient(adapter, null, -1, TimeSpan.FromSeconds(30));
+			_ = new RemoteStorageClient(adapter, -1, TimeSpan.FromSeconds(30));
 		}
 		catch (ArgumentOutOfRangeException)
 		{
@@ -283,7 +283,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		var thrown1 = false;
 		try
 		{
-			_ = new RemoteStorageClient(adapter, null, 100, TimeSpan.Zero);
+			_ = new RemoteStorageClient(adapter, 100, TimeSpan.Zero);
 		}
 		catch (ArgumentOutOfRangeException)
 		{
@@ -295,7 +295,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		var thrown2 = false;
 		try
 		{
-			_ = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(-1));
+			_ = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(-1));
 		}
 		catch (ArgumentOutOfRangeException)
 		{
@@ -308,7 +308,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	public void Constructor_CreatesClient()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		client.AssertNotNull();
 	}
@@ -322,7 +322,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	public async Task VerifyAsync_ConnectsAndDisconnects()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		await client.VerifyAsync(CancellationToken);
 
@@ -353,7 +353,7 @@ public class RemoteStorageClientTests : BaseTestClass
 			return (securities, null);
 		};
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var result = new List<SecurityId>();
 		await foreach (var id in client.GetAvailableSecuritiesAsync())
@@ -376,7 +376,7 @@ public class RemoteStorageClientTests : BaseTestClass
 			return ([], null);
 		};
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var result = new List<SecurityId>();
 		await foreach (var id in client.GetAvailableSecuritiesAsync())
@@ -423,7 +423,7 @@ public class RemoteStorageClientTests : BaseTestClass
 			return ([], archive);
 		};
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var result = new List<SecurityId>();
 		await foreach (var id in client.GetAvailableSecuritiesAsync())
@@ -472,7 +472,7 @@ public class RemoteStorageClientTests : BaseTestClass
 
 		adapter.SecurityLookupHandler = lookup => ([], corruptedArchive);
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var thrown = false;
 		try
@@ -499,7 +499,7 @@ public class RemoteStorageClientTests : BaseTestClass
 
 		adapter.SecurityLookupHandler = lookup => ([], archive);
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var thrown = false;
 		try
@@ -544,7 +544,7 @@ public class RemoteStorageClientTests : BaseTestClass
 			new DataTypeInfoMessage { FileDataType = DataType.MarketDepth },
 		];
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var result = await client.GetAvailableDataTypesAsync(secId, StorageFormats.Binary, CancellationToken);
 
@@ -570,7 +570,7 @@ public class RemoteStorageClientTests : BaseTestClass
 			new DataTypeInfoMessage { FileDataType = DataType.Level1 },
 		];
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var result = await client.GetAvailableDataTypesAsync(secId, StorageFormats.Binary, CancellationToken);
 
@@ -599,7 +599,7 @@ public class RemoteStorageClientTests : BaseTestClass
 			new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [date3] },
 		];
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var result = await client.GetDatesAsync(secId, DataType.Ticks, StorageFormats.Binary, CancellationToken);
 
@@ -621,7 +621,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	public async Task SaveSecuritiesAsync_SendsMessages()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var securities = new[]
 		{
@@ -639,7 +639,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	public async Task SaveSecuritiesAsync_ThrowsOnNull()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var thrown = false;
 		try
@@ -672,7 +672,7 @@ public class RemoteStorageClientTests : BaseTestClass
 			return null;
 		};
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
 		var result = await client.LoadStreamAsync(secId, DataType.Ticks, StorageFormats.Binary, new DateTime(2024, 1, 15), CancellationToken);
@@ -693,7 +693,7 @@ public class RemoteStorageClientTests : BaseTestClass
 
 		adapter.FileCommandHandler = cmd => null; // No data
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
 		var result = await client.LoadStreamAsync(secId, DataType.Ticks, StorageFormats.Binary, new DateTime(2024, 1, 15), CancellationToken);
@@ -710,7 +710,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	public async Task SaveStreamAsync_SendsCommand()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var data = "test data"u8.ToArray();
 		using var stream = new MemoryStream(data);
@@ -729,7 +729,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	public async Task SaveStreamAsync_ThrowsOnNullStream()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
 
@@ -754,7 +754,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	public async Task DeleteAsync_SendsCommand()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
 		await client.DeleteAsync(secId, DataType.Ticks, StorageFormats.Binary, new DateTime(2024, 1, 15), CancellationToken);
@@ -795,7 +795,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		var provider = new MockSecurityProvider();
 		provider.Securities.Add(new Security { Id = "AAPL@NASDAQ" }); // existing
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		// Use criteria with specific security IDs - existing AAPL should be filtered out, only MSFT requested
 		var criteria = new SecurityLookupMessage
@@ -817,7 +817,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	public async Task LookupSecuritiesAsync_ThrowsOnNullCriteria()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var provider = new MockSecurityProvider();
 
@@ -837,7 +837,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	public async Task LookupSecuritiesAsync_ThrowsOnNullProvider()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var thrown = false;
 		try
@@ -871,7 +871,7 @@ public class RemoteStorageClientTests : BaseTestClass
 			return (boards, null);
 		};
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var result = new List<BoardMessage>();
 		await foreach (var board in client.LookupBoardsAsync(new BoardLookupMessage()))
@@ -905,7 +905,7 @@ public class RemoteStorageClientTests : BaseTestClass
 
 		adapter.BoardLookupHandler = lookup => ([], archive);
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var result = new List<BoardMessage>();
 		await foreach (var board in client.LookupBoardsAsync(new BoardLookupMessage()))
@@ -926,7 +926,7 @@ public class RemoteStorageClientTests : BaseTestClass
 
 		adapter.BoardLookupHandler = lookup => ([], corruptedArchive);
 
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var thrown = false;
 		try
@@ -945,7 +945,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	public async Task LookupBoardsAsync_ThrowsOnNullCriteria()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
-		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		using var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		var thrown = false;
 		try
@@ -994,7 +994,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	public void Dispose_DisposesAdapter()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
-		var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+		var client = new RemoteStorageClient(adapter, 100, TimeSpan.FromSeconds(30));
 
 		client.Dispose();
 

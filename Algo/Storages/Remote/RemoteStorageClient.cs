@@ -6,7 +6,6 @@ namespace StockSharp.Algo.Storages.Remote;
 public class RemoteStorageClient : Disposable
 {
 	private readonly IMessageAdapter _adapter;
-	private readonly RemoteStorageCache _cache;
 	private readonly int _securityBatchSize;
 	private readonly TimeSpan _timeout;
 
@@ -16,10 +15,9 @@ public class RemoteStorageClient : Disposable
 	/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
 	/// </summary>
 	/// <param name="adapter">Message adapter.</param>
-	/// <param name="cache">Cache.</param>
 	/// <param name="securityBatchSize">The new instruments request block size.</param>
 	/// <param name="timeout">Timeout.</param>
-	public RemoteStorageClient(IMessageAdapter adapter, RemoteStorageCache cache, int securityBatchSize, TimeSpan timeout)
+	public RemoteStorageClient(IMessageAdapter adapter, int securityBatchSize, TimeSpan timeout)
 	{
 		if (securityBatchSize <= 0)
 			throw new ArgumentOutOfRangeException(nameof(securityBatchSize), securityBatchSize, LocalizedStrings.InvalidValue);
@@ -29,7 +27,6 @@ public class RemoteStorageClient : Disposable
 
 		_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 
-		_cache = cache;
 		_securityBatchSize = securityBatchSize;
 		_timeout = timeout;
 	}
@@ -49,7 +46,7 @@ public class RemoteStorageClient : Disposable
 	{
 		async IAsyncEnumerable<SecurityId> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
 		{
-			var (msgs, _) = await DoAsync<SecurityMessage>(new SecurityLookupMessage { OnlySecurityId = true }, () => (typeof(SecurityLookupMessage), Extensions.LookupAllCriteriaMessage.ToString()), cancellationToken);
+			var (msgs, _) = await DoAsync<SecurityMessage>(new SecurityLookupMessage { OnlySecurityId = true }, cancellationToken);
 
 			foreach (var s in msgs)
 				yield return s.SecurityId;
@@ -103,7 +100,7 @@ public class RemoteStorageClient : Disposable
 					criteria.SecurityId = default;
 					criteria.SecurityIds = [.. newSecurityIds];
 
-					var (newSecurities, _) = await DoAsync<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString()));
+					var (newSecurities, _) = await DoAsync<SecurityMessage>(criteria, cancellationToken);
 
 					foreach (var security in newSecurities)
 						yield return security;
@@ -114,7 +111,7 @@ public class RemoteStorageClient : Disposable
 				criteria = criteria.TypedClone();
 				criteria.OnlySecurityId = true;
 
-				var (securities, isFull) = await DoAsync<SecurityMessage>(criteria, () => (typeof(SecurityLookupMessage), criteria.ToString()), cancellationToken);
+				var (securities, isFull) = await DoAsync<SecurityMessage>(criteria, cancellationToken);
 
 				if (isFull)
 				{
@@ -136,7 +133,7 @@ public class RemoteStorageClient : Disposable
 
 					foreach (var batch in newSecurityIds.Chunk(_securityBatchSize))
 					{
-						var (batchRes, _) = await DoAsync<SecurityMessage>(new SecurityLookupMessage { SecurityIds = batch }, () => (typeof(SecurityLookupMessage), batch.Select(i => i.To<string>()).JoinComma()));
+						var (batchRes, _) = await DoAsync<SecurityMessage>(new SecurityLookupMessage { SecurityIds = batch }, cancellationToken);
 
 						foreach (var security in batchRes)
 							yield return security;
@@ -177,7 +174,7 @@ public class RemoteStorageClient : Disposable
 
 		async IAsyncEnumerable<BoardMessage> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			var (boards, _) = await DoAsync<BoardMessage>(criteria, () => (typeof(BoardLookupMessage), criteria.ToString()), cancellationToken);
+			var (boards, _) = await DoAsync<BoardMessage>(criteria, cancellationToken);
 
 			foreach (var board in boards)
 				yield return board;
@@ -199,7 +196,7 @@ public class RemoteStorageClient : Disposable
 		{
 			SecurityId = securityId,
 			Format = (int)format,
-		}, () => (typeof(DataTypeLookupMessage), securityId, format), cancellationToken);
+		}, cancellationToken);
 
 		return [.. msgs.Select(m => m.FileDataType).Distinct()];
 	}
@@ -232,7 +229,7 @@ public class RemoteStorageClient : Disposable
 			RequestDataType = dataType,
 			Format = (int)format,
 			IncludeDates = true,
-		}, () => (typeof(DataTypeLookupMessage), securityId, dataType, format), cancellationToken);
+		}, cancellationToken);
 
 		return [.. msgs.SelectMany(i => i.Dates).OrderBy().Distinct()];
 	}
@@ -285,7 +282,7 @@ public class RemoteStorageClient : Disposable
 			From = date,
 			To = date.AddDays(1),
 			Format = (int)format,
-		}, () => null, cancellationToken);
+		}, cancellationToken);
 
 		return results.FirstOrDefault()?.Body.To<Stream>() ?? Stream.Null;
 	}
@@ -313,21 +310,11 @@ public class RemoteStorageClient : Disposable
 		}, cancellationToken);
 	}
 
-	private async ValueTask<(TResult[] results, bool isFull)> DoAsync<TResult>(ITransactionIdMessage request, Func<object> getKey, CancellationToken cancellationToken = default)
+	private async ValueTask<(TResult[] results, bool isFull)> DoAsync<TResult>(ITransactionIdMessage request, CancellationToken cancellationToken = default)
 		where TResult : Message
 	{
 		if (request is null)
 			throw new ArgumentNullException(nameof(request));
-
-		if (getKey is null)
-			throw new ArgumentNullException(nameof(getKey));
-
-		var cache = _cache;
-		var key = cache is null ? null : getKey();
-		var needCache = key is not null;
-
-		if (needCache && cache.TryGet(key, out var cached))
-			return (cached.Cast<TResult>().ToArray(), false);
 
 		// if request is not a subscription message - just send and return empty
 		if (request is not ISubscriptionMessage)
@@ -412,11 +399,6 @@ public class RemoteStorageClient : Disposable
 		catch (Exception ex)
 		{
 			throw new InvalidOperationException(LocalizedStrings.SomeConnectionFailed, ex);
-		}
-
-		if (needCache)
-		{
-			cache.Set(key, [.. result]);
 		}
 
 		return (result.OfType<TResult>().ToArray(), isFull);
