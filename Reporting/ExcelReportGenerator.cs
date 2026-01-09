@@ -151,7 +151,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 			.SetCell(0, 1, "Strategy Name")
 			.SetCell(1, 1, source.Name)
 			.SetCell(0, 2, "Report Date")
-			.SetCell(1, 2, DateTimeOffset.Now)
+			.SetCell(1, 2, DateTime.Now)
 			.SetCellFormat(1, 2, "yyyy-MM-dd HH:mm:ss");
 
 		// Try to get common params like template expects
@@ -438,7 +438,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 		// B3 -> (col=1,row=2) Report Date/Time
 		worker
 			.SetCell(1, 1, source.Name)
-			.SetCell(1, 2, DateTimeOffset.Now);
+			.SetCell(1, 2, DateTime.Now);
 
 		// Optional: try to populate commonly used params if present in source.Parameters
 		WriteParamIfExists(worker, source, "Symbol", 1, 3);         // B4
