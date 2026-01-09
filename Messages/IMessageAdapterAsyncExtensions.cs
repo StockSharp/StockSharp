@@ -47,6 +47,44 @@ public static class IMessageAdapterAsyncExtensions
 	}
 
 	/// <summary>
+	/// Async disconnect for <see cref="IMessageAdapter"/> via <see cref="DisconnectMessage"/>.
+	/// Completes when an outgoing <see cref="DisconnectMessage"/> without error is received.
+	/// </summary>
+	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	public static async ValueTask DisconnectAsync(this IMessageAdapter adapter, CancellationToken cancellationToken)
+	{
+		if (adapter is null)
+			throw new ArgumentNullException(nameof(adapter));
+
+		var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		using var ctr = cancellationToken.Register(() => tcs.TrySetCanceled(cancellationToken));
+
+		void OnOut(Message msg)
+		{
+			if (msg is DisconnectMessage dm)
+			{
+				if (dm.Error != null)
+					tcs.TrySetException(dm.Error);
+				else
+					tcs.TrySetResult(true);
+			}
+		}
+
+		adapter.NewOutMessage += OnOut;
+		try
+		{
+			await adapter.SendInMessageAsync(new DisconnectMessage(), cancellationToken);
+			await tcs.Task;
+		}
+		finally
+		{
+			adapter.NewOutMessage -= OnOut;
+		}
+	}
+
+	/// <summary>
 	/// Subscribe and get an async stream of outgoing data messages of type <typeparamref name="T"/> associated with the given <paramref name="subscription"/>.
 	/// </summary>
 	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
@@ -82,7 +120,12 @@ public static class IMessageAdapterAsyncExtensions
 			if (msg is SubscriptionResponseMessage resp && resp.OriginalTransactionId == subId && resp.Error != null)
 				channel.Writer.TryComplete(resp.Error);
 			else if (msg is SubscriptionFinishedMessage fin && fin.OriginalTransactionId == subId)
+			{
+				// Write the finished message so callers can process Body (e.g., archive data)
+				if (msg is T t)
+					channel.Writer.TryWrite(t);
 				channel.Writer.TryComplete();
+			}
 			else if (msg is ISubscriptionIdMessage sid)
 			{
 				var ids = sid.SubscriptionIds ?? (sid.SubscriptionId != 0 ? [sid.SubscriptionId] : Array.Empty<long>());

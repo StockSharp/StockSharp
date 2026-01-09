@@ -1,8 +1,11 @@
 namespace StockSharp.Tests;
 
 using System.Collections.Concurrent;
+using System.IO.Compression;
 using System.Runtime.CompilerServices;
+using System.Text;
 
+using StockSharp.Algo.Storages.Csv;
 using StockSharp.Algo.Storages.Remote;
 
 /// <summary>
@@ -19,6 +22,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		public Dictionary<long, ISubscriptionMessage> ActiveSubscriptions { get; } = [];
 
 		public Func<SecurityLookupMessage, (SecurityMessage[] securities, byte[] archive)> SecurityLookupHandler { get; set; }
+		public Func<BoardLookupMessage, (BoardMessage[] boards, byte[] archive)> BoardLookupHandler { get; set; }
 		public Func<DataTypeLookupMessage, DataTypeInfoMessage[]> DataTypeLookupHandler { get; set; }
 		public Func<RemoteFileCommandMessage, RemoteFileMessage> FileCommandHandler { get; set; }
 		public bool SimulateTimeout { get; set; }
@@ -139,6 +143,44 @@ public class RemoteStorageClientTests : BaseTestClass
 
 							SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = cmd.TransactionId });
 						}
+					}
+					break;
+				}
+
+				case MessageTypes.BoardLookup:
+				{
+					var lookup = (BoardLookupMessage)message;
+					var isSubscribe = ((ISubscriptionMessage)lookup).IsSubscribe;
+
+					if (isSubscribe)
+					{
+						ActiveSubscriptions[lookup.TransactionId] = lookup;
+
+						SendOutMessage(lookup.CreateResponse());
+
+						if (BoardLookupHandler != null && !SimulateTimeout)
+						{
+							var (boards, archive) = BoardLookupHandler(lookup);
+
+							foreach (var board in boards)
+							{
+								board.OriginalTransactionId = lookup.TransactionId;
+								board.SetSubscriptionIds([lookup.TransactionId]);
+								SendOutMessage(board);
+							}
+
+							var finished = new SubscriptionFinishedMessage { OriginalTransactionId = lookup.TransactionId };
+
+							if (archive != null && archive.Length > 0)
+								finished.Body = archive;
+
+							SendOutMessage(finished);
+						}
+					}
+					else
+					{
+						ActiveSubscriptions.Remove(lookup.OriginalTransactionId);
+						SendOutMessage(lookup.CreateResponse());
 					}
 					break;
 				}
@@ -277,14 +319,15 @@ public class RemoteStorageClientTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(5000, CooperativeCancellation = true)]
-	public async Task VerifyAsync_ConnectsSuccessfully()
+	public async Task VerifyAsync_ConnectsAndDisconnects()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
 		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
 
 		await client.VerifyAsync(CancellationToken);
 
-		IsTrue(adapter.SentMessages.OfType<ConnectMessage>().Any());
+		IsTrue(adapter.SentMessages.OfType<ConnectMessage>().Any(), "Should send ConnectMessage");
+		IsTrue(adapter.SentMessages.OfType<DisconnectMessage>().Any(), "Should send DisconnectMessage after verify");
 	}
 
 	#endregion
@@ -340,6 +383,146 @@ public class RemoteStorageClientTests : BaseTestClass
 			result.Add(id);
 
 		HasCount(0, result);
+	}
+
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task GetAvailableSecuritiesAsync_WithArchive_ExtractsSecurities()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		// Create archive using CsvEntityList (same way server does)
+		var archive = await CreateSecuritiesArchiveAsync([
+			new Security
+			{
+				Id = "AAPL@NASDAQ",
+				Code = "AAPL",
+				Name = "Apple Inc",
+				Board = ExchangeBoard.Nasdaq,
+				Type = SecurityTypes.Stock,
+				PriceStep = 0.01m,
+				VolumeStep = 1m,
+				Decimals = 2,
+			},
+			new Security
+			{
+				Id = "MSFT@NASDAQ",
+				Code = "MSFT",
+				Name = "Microsoft Corp",
+				Board = ExchangeBoard.Nasdaq,
+				Type = SecurityTypes.Stock,
+				PriceStep = 0.01m,
+				VolumeStep = 1m,
+				Decimals = 2,
+			},
+		], CancellationToken);
+
+		adapter.SecurityLookupHandler = lookup =>
+		{
+			// Return empty securities array but with archive in finished message body
+			return ([], archive);
+		};
+
+		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+
+		var result = new List<SecurityId>();
+		await foreach (var id in client.GetAvailableSecuritiesAsync())
+			result.Add(id);
+
+		HasCount(2, result);
+		result.AssertContains(new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" });
+		result.AssertContains(new SecurityId { SecurityCode = "MSFT", BoardCode = "NASDAQ" });
+	}
+
+	private static async Task<byte[]> CreateSecuritiesArchiveAsync(Security[] securities, CancellationToken cancellationToken)
+	{
+		var fs = Helper.MemorySystem;
+		var path = fs.GetSubTemp();
+
+		await using var executor = TimeSpan.FromSeconds(1).CreateExecutorAndRun(_ => { }, cancellationToken);
+		await using var registry = new CsvEntityRegistry(fs, path, executor);
+		await registry.InitAsync(cancellationToken);
+
+		var securitiesList = (ICsvEntityList)registry.Securities;
+		securitiesList.CreateArchivedCopy = true;
+
+		foreach (var security in securities)
+			registry.Securities.Save(security);
+
+		// Wait for executor to process
+		var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+		executor.Add(_ =>
+		{
+			tcs.TrySetResult();
+			return default;
+		});
+		await tcs.Task.WaitAsync(cancellationToken);
+
+		return securitiesList.GetCopy();
+	}
+
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task GetAvailableSecuritiesAsync_WithCorruptedArchive_ThrowsException()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		// Corrupted GZip data (not valid GZip)
+		var corruptedArchive = new byte[] { 0x00, 0x01, 0x02, 0x03, 0xFF, 0xFE };
+
+		adapter.SecurityLookupHandler = lookup => ([], corruptedArchive);
+
+		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+
+		var thrown = false;
+		try
+		{
+			await foreach (var _ in client.GetAvailableSecuritiesAsync()) { }
+		}
+		catch (InvalidOperationException)
+		{
+			thrown = true;
+		}
+
+		IsTrue(thrown, "Should throw InvalidOperationException for corrupted archive");
+	}
+
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task GetAvailableSecuritiesAsync_WithInvalidCsvInArchive_ThrowsException()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		// Valid GZip but invalid CSV content (not enough columns)
+		var invalidCsv = "invalid;csv;data";
+		var archive = CreateGZipArchive(invalidCsv);
+
+		adapter.SecurityLookupHandler = lookup => ([], archive);
+
+		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+
+		var thrown = false;
+		try
+		{
+			await foreach (var _ in client.GetAvailableSecuritiesAsync()) { }
+		}
+		catch (InvalidOperationException)
+		{
+			thrown = true;
+		}
+
+		IsTrue(thrown, "Should throw InvalidOperationException for invalid CSV in archive");
+	}
+
+	private static byte[] CreateGZipArchive(string content)
+	{
+		var bytes = Encoding.UTF8.GetBytes(content);
+		using var outputStream = new MemoryStream();
+		using (var gzipStream = new GZipStream(outputStream, CompressionMode.Compress, leaveOpen: true))
+		{
+			gzipStream.Write(bytes, 0, bytes.Length);
+		}
+		return outputStream.ToArray();
 	}
 
 	#endregion
@@ -666,6 +849,141 @@ public class RemoteStorageClientTests : BaseTestClass
 			thrown = true;
 		}
 		IsTrue(thrown);
+	}
+
+	#endregion
+
+	#region LookupBoardsAsync Tests
+
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task LookupBoardsAsync_ReturnsBoards()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		adapter.BoardLookupHandler = lookup =>
+		{
+			var boards = new[]
+			{
+				new BoardMessage { Code = "NASDAQ", ExchangeCode = "NASDAQ" },
+				new BoardMessage { Code = "NYSE", ExchangeCode = "NYSE" },
+			};
+			return (boards, null);
+		};
+
+		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+
+		var result = new List<BoardMessage>();
+		await foreach (var board in client.LookupBoardsAsync(new BoardLookupMessage()))
+			result.Add(board);
+
+		HasCount(2, result);
+		IsTrue(result.Any(b => b.Code == "NASDAQ"));
+		IsTrue(result.Any(b => b.Code == "NYSE"));
+	}
+
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task LookupBoardsAsync_WithArchive_ExtractsBoards()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		var archive = await CreateBoardsArchiveAsync([
+			new ExchangeBoard
+			{
+				Code = "TBOARD1",
+				Exchange = Exchange.Nyse,
+				TimeZone = TimeZoneInfo.Utc,
+			},
+			new ExchangeBoard
+			{
+				Code = "TBOARD2",
+				Exchange = Exchange.Nasdaq,
+				TimeZone = TimeZoneInfo.Utc,
+			},
+		], CancellationToken);
+
+		adapter.BoardLookupHandler = lookup => ([], archive);
+
+		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+
+		var result = new List<BoardMessage>();
+		await foreach (var board in client.LookupBoardsAsync(new BoardLookupMessage()))
+			result.Add(board);
+
+		HasCount(2, result);
+		IsTrue(result.Any(b => b.Code == "TBOARD1"));
+		IsTrue(result.Any(b => b.Code == "TBOARD2"));
+	}
+
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task LookupBoardsAsync_WithCorruptedArchive_ThrowsException()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		var corruptedArchive = new byte[] { 0x00, 0x01, 0x02, 0x03, 0xFF, 0xFE };
+
+		adapter.BoardLookupHandler = lookup => ([], corruptedArchive);
+
+		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+
+		var thrown = false;
+		try
+		{
+			await foreach (var _ in client.LookupBoardsAsync(new BoardLookupMessage())) { }
+		}
+		catch (InvalidOperationException)
+		{
+			thrown = true;
+		}
+
+		IsTrue(thrown, "Should throw InvalidOperationException for corrupted archive");
+	}
+
+	[TestMethod]
+	public async Task LookupBoardsAsync_ThrowsOnNullCriteria()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+		using var client = new RemoteStorageClient(adapter, null, 100, TimeSpan.FromSeconds(30));
+
+		var thrown = false;
+		try
+		{
+			await foreach (var _ in client.LookupBoardsAsync(null)) { }
+		}
+		catch (ArgumentNullException)
+		{
+			thrown = true;
+		}
+		IsTrue(thrown);
+	}
+
+	private static async Task<byte[]> CreateBoardsArchiveAsync(ExchangeBoard[] boards, CancellationToken cancellationToken)
+	{
+		var fs = Helper.MemorySystem;
+		var path = fs.GetSubTemp();
+
+		await using var executor = TimeSpan.FromSeconds(1).CreateExecutorAndRun(_ => { }, cancellationToken);
+		await using var registry = new CsvEntityRegistry(fs, path, executor);
+		await registry.InitAsync(cancellationToken);
+
+		var boardsList = (ICsvEntityList)registry.ExchangeBoards;
+		boardsList.CreateArchivedCopy = true;
+
+		foreach (var board in boards)
+			registry.ExchangeBoards.Add(board);
+
+		// Wait for executor to process
+		var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+		executor.Add(_ =>
+		{
+			tcs.TrySetResult();
+			return default;
+		});
+		await tcs.Task.WaitAsync(cancellationToken);
+
+		return boardsList.GetCopy();
 	}
 
 	#endregion

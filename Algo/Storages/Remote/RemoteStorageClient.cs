@@ -166,6 +166,27 @@ public class RemoteStorageClient : Disposable
 	}
 
 	/// <summary>
+	/// Download boards by the specified criteria.
+	/// </summary>
+	/// <param name="criteria">Message board lookup for specified criteria.</param>
+	/// <returns>The sequence of found boards.</returns>
+	public IAsyncEnumerable<BoardMessage> LookupBoardsAsync(BoardLookupMessage criteria)
+	{
+		if (criteria is null)
+			throw new ArgumentNullException(nameof(criteria));
+
+		async IAsyncEnumerable<BoardMessage> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
+		{
+			var (boards, _) = await DoAsync<BoardMessage>(criteria, () => (typeof(BoardLookupMessage), criteria.ToString()), cancellationToken);
+
+			foreach (var board in boards)
+				yield return board;
+		}
+
+		return Impl();
+	}
+
+	/// <summary>
 	/// Get all available data types.
 	/// </summary>
 	/// <param name="securityId">Instrument identifier.</param>
@@ -184,14 +205,15 @@ public class RemoteStorageClient : Disposable
 	}
 
 	/// <summary>
-	/// Verify.
+	/// Verify connection to the server.
+	/// Connects and then disconnects to test connectivity.
 	/// </summary>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see cref="ValueTask"/></returns>
 	public async ValueTask VerifyAsync(CancellationToken cancellationToken)
 	{
 		await _adapter.ConnectAsync(cancellationToken);
-		_isConnected = true;
+		await _adapter.DisconnectAsync(cancellationToken);
 	}
 
 	/// <summary>
