@@ -50,6 +50,7 @@ public static class CodeExtensions
 			"Ecng.Logging",
 
 			"StockSharp.Algo",
+			"StockSharp.Algo.Indicators",
 			"StockSharp.Messages",
 			"StockSharp.BusinessEntities",
 			"StockSharp.Localization",
