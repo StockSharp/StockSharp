@@ -247,21 +247,21 @@ public class ReportTests : BaseTestClass
 	[TestMethod]
 	public void ExcelReportGenerator_GetTemplateStream_ReturnsStream()
 	{
-		using var templateStream = ExcelReportGenerator.GetTemplateStream();
+		var template = ExcelReportGenerator.GetTemplate();
 
-		templateStream.AssertNotNull("Template stream should not be null");
-		IsTrue(templateStream.Length > 0, "Template stream should have content");
+		template.AssertNotNull("Template stream should not be null");
+		IsTrue(template.Length > 0, "Template stream should have content");
 	}
 
 	[TestMethod]
 	public async Task ExcelReportGenerator_WithTemplate_GeneratesValidXlsx()
 	{
 		var source = CreateMockSourceWithData();
-		using var templateStream = ExcelReportGenerator.GetTemplateStream();
-		templateStream.AssertNotNull("Template must be available for this test");
+		var template = ExcelReportGenerator.GetTemplate();
+		template.AssertNotNull("Template must be available for this test");
 
 		var provider = new OpenXmlExcelWorkerProvider();
-		var generator = new ExcelReportGenerator(provider, templateStream)
+		var generator = new ExcelReportGenerator(provider, template)
 		{
 			IncludeTrades = true,
 			IncludeOrders = true
@@ -366,11 +366,11 @@ public class ReportTests : BaseTestClass
 	public async Task ExcelReportGenerator_WithTemplate_ContainsTradeData()
 	{
 		var source = CreateMockSourceWithData();
-		using var templateStream = ExcelReportGenerator.GetTemplateStream();
-		templateStream.AssertNotNull("Template must be available for this test");
+		var template = ExcelReportGenerator.GetTemplate();
+		template.AssertNotNull("Template must be available for this test");
 
 		var provider = new OpenXmlExcelWorkerProvider();
-		var generator = new ExcelReportGenerator(provider, templateStream)
+		var generator = new ExcelReportGenerator(provider, template)
 		{
 			IncludeTrades = true
 		};

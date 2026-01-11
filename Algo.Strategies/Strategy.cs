@@ -610,7 +610,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <inheritdoc />
 	[Browsable(false)]
 	IEnumerable<(string Name, object Value)> IReportSource.Parameters
-		=> GetParameters().Select(p => (p.GetName(), ToReportValue(p.Value)));
+		=> GetParameters().Where(p => p.IsBrowsable()).Select(p => (p.GetName(), ToReportValue(p.Value)));
 
 	/// <summary>
 	/// To convert parameter value to report value.

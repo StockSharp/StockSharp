@@ -9,18 +9,18 @@ using Ecng.Excel;
 /// Initializes a new instance of the <see cref="ExcelReportGenerator"/>.
 /// </remarks>
 /// <param name="provider"><see cref="IExcelWorkerProvider"/>.</param>
-/// <param name="templateStream">The template stream to be copied into report and filled.</param>
-public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream templateStream = null) : BaseReportGenerator
+/// <param name="template">The template bytes to be copied into report and filled. Thread-safe for parallel use.</param>
+public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<byte> template = default) : BaseReportGenerator
 {
 	private readonly IExcelWorkerProvider _provider = provider ?? throw new ArgumentNullException(nameof(provider));
 
 	/// <summary>
-	/// The template stream to be copied into report and filled.
+	/// The template bytes to be copied into report and filled.
 	/// </summary>
-	public Stream TemplateStream { get; } = templateStream;
+	public ReadOnlyMemory<byte> Template { get; } = template;
 
 	/// <summary>
-	/// The number of decimal places. By default, it equals to 2.
+	/// The number of decimal places for formatting. By default, it equals to 2.
 	/// </summary>
 	public int Decimals { get; set; } = 2;
 
@@ -41,25 +41,28 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 	private const string _templateResourceName = "StockSharp.Reporting.Resources.StrategyReportTemplate.xlsx";
 
 	/// <summary>
-	/// Gets the embedded template stream from resources.
+	/// Gets the embedded template from resources as byte array.
 	/// </summary>
-	/// <returns>Stream containing the template, or null if not found.</returns>
-	public static Stream GetTemplateStream()
+	/// <returns>Template bytes, or empty if not found.</returns>
+	public static byte[] GetTemplate()
 	{
 		var assembly = typeof(ExcelReportGenerator).Assembly;
-		return assembly.GetManifestResourceStream(_templateResourceName);
+		using var stream = assembly.GetManifestResourceStream(_templateResourceName);
+		if (stream == null)
+			return [];
+
+		using var ms = new MemoryStream();
+		stream.CopyTo(ms);
+		return ms.ToArray();
 	}
 
 	/// <inheritdoc />
 	public override ValueTask Generate(IReportSource source, Stream stream, CancellationToken cancellationToken)
 	{
-		if (source == null)
-			throw new ArgumentNullException(nameof(source));
+		ArgumentNullException.ThrowIfNull(source);
+		ArgumentNullException.ThrowIfNull(stream);
 
-		if (stream == null)
-			throw new ArgumentNullException(nameof(stream));
-
-		if (TemplateStream != null)
+		if (!Template.IsEmpty)
 			GenerateWithTemplate(source, stream, cancellationToken);
 		else
 			GenerateWithoutTemplate(source, stream, cancellationToken);
@@ -69,12 +72,9 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 
 	private void GenerateWithTemplate(IReportSource source, Stream stream, CancellationToken cancellationToken)
 	{
-		// Copy template into output stream (do not append).
-		if (TemplateStream.CanSeek)
-			TemplateStream.Position = 0;
-
+		// Copy template into output stream
 		stream.SetLength(0);
-		TemplateStream.CopyTo(stream);
+		stream.Write(Template.Span);
 		stream.Position = 0;
 
 		using var worker = _provider.OpenExist(stream);
@@ -125,6 +125,9 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 		// Switch back to Params as the default sheet
 		worker.SwitchSheet(_paramsSheet);
 	}
+
+	private string GetDecimalFormat()
+		=> Decimals <= 0 ? "#,##0" : $"#,##0.{new string('0', Decimals)}";
 
 	private void CreateParamsSheet(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
 	{
@@ -197,6 +200,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 				.SetCell(0, statRow, name)
 				.SetCell(1, statRow, NormalizeCellValue(value));
 
+			ApplyCellFormat(worker, 1, statRow, value);
 			statRow++;
 		}
 
@@ -213,6 +217,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 				.SetCell(3, paramRow, name)
 				.SetCell(4, paramRow, NormalizeCellValue(value));
 
+			ApplyCellFormat(worker, 4, paramRow, value);
 			paramRow++;
 		}
 
@@ -249,6 +254,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 				.SetCellColor(i, 0, headerBg, headerFg);
 		}
 
+		var decimalFormat = GetDecimalFormat();
+
 		worker
 			.SetColumnWidth(0, 18)  // Entry Time
 			.SetColumnWidth(1, 18)  // Exit Time
@@ -262,11 +269,13 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 			.SetColumnWidth(9, 10)  // Position
 			.SetStyle(0, typeof(DateTime))
 			.SetStyle(1, typeof(DateTime))
-			.SetStyle(4, typeof(decimal))
-			.SetStyle(5, typeof(decimal))
-			.SetStyle(6, typeof(decimal))
+			.SetStyle(3, decimalFormat)
+			.SetStyle(4, decimalFormat)
+			.SetStyle(5, decimalFormat)
+			.SetStyle(6, decimalFormat)
 			.SetStyle(7, "0.00%")
-			.SetStyle(8, typeof(decimal))
+			.SetStyle(8, decimalFormat)
+			.SetStyle(9, decimalFormat)
 			.FreezeRows(1)
 			.SetConditionalFormatting(6, ComparisonOperator.Less, "0", "FFC7CE", "9C0006")
 			.SetConditionalFormatting(6, ComparisonOperator.Greater, "0", "C6EFCE", "006100");
@@ -293,22 +302,22 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 				pnlPct = pnl / denom;
 
 			worker
-				.SetCell(0, row, trade.Time)                       // Entry Time (fallback to trade time)
-				.SetCell(1, row, trade.Time)                       // Exit Time (fallback to trade time)
-				.SetCell(2, row, trade.Side.GetDisplayName())      // Side
-				.SetCell(3, row, qty)                              // Qty
-				.SetCell(4, row, entryPrice)                       // Entry Price
-				.SetCell(5, row, exitPrice)                        // Exit Price
-				.SetCell(6, row, pnl.Round(Decimals))              // PnL
-				.SetCell(7, row, pnlPct)                           // PnL%
-				.SetCell(8, row, totalPnL.Round(Decimals))         // Total PnL
-				.SetCell(9, row, position);                        // Position
+				.SetCell(0, row, trade.Time)           // Entry Time
+				.SetCell(1, row, trade.Time)           // Exit Time
+				.SetCell(2, row, trade.Side.GetDisplayName())
+				.SetCell(3, row, qty)                  // Qty
+				.SetCell(4, row, entryPrice)           // Entry Price
+				.SetCell(5, row, exitPrice)            // Exit Price
+				.SetCell(6, row, pnl)                  // PnL
+				.SetCell(7, row, pnlPct)               // PnL%
+				.SetCell(8, row, totalPnL)             // Total PnL
+				.SetCell(9, row, position);            // Position
 
 			row++;
 		}
 	}
 
-	private static void CreateOrdersSheet(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
+	private void CreateOrdersSheet(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -324,6 +333,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 				.SetCellColor(i, 0, headerBg, headerFg);
 		}
 
+		var decimalFormat = GetDecimalFormat();
+
 		worker
 			.SetColumnWidth(0, 14)  // Order ID
 			.SetColumnWidth(1, 14)  // Transaction ID
@@ -334,10 +345,12 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 			.SetColumnWidth(6, 10)  // Balance
 			.SetColumnWidth(7, 10)  // Volume
 			.SetColumnWidth(8, 10)  // Type
+			.SetStyle(0, "0")       // Order ID as integer
+			.SetStyle(1, "0")       // Transaction ID as integer
 			.SetStyle(3, typeof(DateTime))
-			.SetStyle(4, typeof(decimal))
-			.SetStyle(6, typeof(decimal))
-			.SetStyle(7, typeof(decimal))
+			.SetStyle(4, decimalFormat)
+			.SetStyle(6, decimalFormat)
+			.SetStyle(7, decimalFormat)
 			.FreezeRows(1);
 
 		var row = 1;
@@ -382,7 +395,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 			.SetColumnWidth(1, 15)  // Equity
 			.SetColumnWidth(2, 12)  // Drawdown
 			.SetStyle(0, "yyyy-MM-dd")
-			.SetStyle(1, typeof(decimal))
+			.SetStyle(1, GetDecimalFormat())
 			.SetStyle(2, "0.00%")
 			.FreezeRows(1)
 			.SetConditionalFormatting(2, ComparisonOperator.Less, "0", "FFC7CE", "9C0006");
@@ -420,10 +433,17 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 
 			worker
 				.SetCell(0, row, d)
-				.SetCell(1, row, equity.Round(Decimals))
+				.SetCell(1, row, equity)
 				.SetCell(2, row, dd);
 
 			row++;
+		}
+
+		// Add Equity line chart
+		if (row > 1)
+		{
+			var dataRange = $"{_equitySheet}!$A$2:$B${row}";
+			worker.AddLineChart("Equity Curve", dataRange, 1, 2, 4, 1, 400, 250);
 		}
 	}
 
@@ -455,6 +475,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 				.SetCell(0, row, name)
 				.SetCell(1, row, NormalizeCellValue(value));
 
+			ApplyCellFormat(worker, 1, row, value);
 			row++;
 		}
 
@@ -471,6 +492,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 				.SetCell(3, row, name)
 				.SetCell(4, row, NormalizeCellValue(value));
 
+			ApplyCellFormat(worker, 4, row, value);
 			row++;
 		}
 	}
@@ -484,8 +506,6 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 		// Trades template columns:
 		// A EntryTime, B ExitTime, C Side, D Qty, E EntryPrice, F ExitPrice,
 		// G PnL, H PnL%, I TotalPnL, J Position
-		//
-		// We only have MyTrades (single fill). For Entry/Exit we use trade.Time as fallback.
 		var row = 1; // data starts from Excel row 2
 		decimal totalPnL = 0m;
 		decimal position = 0m;
@@ -496,8 +516,6 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 
 			var pnl = trade.PnL ?? 0m;
 			totalPnL += pnl;
-
-			// Keep the same "position accumulation" semantics as your original code.
 			position += trade.Position ?? 0m;
 
 			var qty = trade.Volume;
@@ -510,22 +528,22 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 				pnlPct = pnl / denom;
 
 			worker
-				.SetCell(0, row, trade.Time)                       // EntryTime (fallback)
-				.SetCell(1, row, trade.Time)                       // ExitTime (fallback)
-				.SetCell(2, row, trade.Side.GetDisplayName())      // Side
-				.SetCell(3, row, qty)                              // Qty
-				.SetCell(4, row, entryPrice)                       // EntryPrice
-				.SetCell(5, row, exitPrice)                        // ExitPrice
-				.SetCell(6, row, pnl.Round(Decimals))              // PnL
-				.SetCell(7, row, pnlPct)                           // PnL%
-				.SetCell(8, row, totalPnL.Round(Decimals))         // TotalPnL
-				.SetCell(9, row, position);                        // Position
+				.SetCell(0, row, trade.Time)           // EntryTime
+				.SetCell(1, row, trade.Time)           // ExitTime
+				.SetCell(2, row, trade.Side.GetDisplayName())
+				.SetCell(3, row, qty)                  // Qty
+				.SetCell(4, row, entryPrice)           // EntryPrice
+				.SetCell(5, row, exitPrice)            // ExitPrice
+				.SetCell(6, row, pnl)                  // PnL
+				.SetCell(7, row, pnlPct)               // PnL%
+				.SetCell(8, row, totalPnL)             // TotalPnL
+				.SetCell(9, row, position);            // Position
 
 			row++;
 		}
 	}
 
-	private static void FillOrders(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
+	private void FillOrders(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
@@ -543,12 +561,17 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 				.SetCell(0, row, order.Id)
 				.SetCell(1, row, order.TransactionId)
 				.SetCell(2, row, order.Side.GetDisplayName())
-				.SetCell(3, row, order.Time) // IMPORTANT: native DateTime/DateTimeOffset, not string
+				.SetCell(3, row, order.Time)
 				.SetCell(4, row, order.Price)
 				.SetCell(5, row, order.State.GetDisplayName())
 				.SetCell(6, row, order.Balance)
 				.SetCell(7, row, order.Volume)
 				.SetCell(8, row, order.Type.GetDisplayName());
+
+			// Ensure Order ID and Transaction ID are formatted as numbers, not dates
+			worker
+				.SetCellFormat(0, row, "0")
+				.SetCellFormat(1, row, "0");
 
 			row++;
 		}
@@ -596,10 +619,17 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 
 			worker
 				.SetCell(0, row, d)
-				.SetCell(1, row, equity.Round(Decimals))
+				.SetCell(1, row, equity)
 				.SetCell(2, row, dd);
 
 			row++;
+		}
+
+		// Add Equity line chart
+		if (row > 1)
+		{
+			var dataRange = $"{_equitySheet}!$A$2:$B${row}";
+			worker.AddLineChart("Equity Curve", dataRange, 1, 2, 4, 1, 400, 250);
 		}
 
 		// Stats sheet is formula-driven; just ensure it exists and can be recalculated.
@@ -635,7 +665,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 		return 0m;
 	}
 
-	private object NormalizeCellValue(object value)
+	private static object NormalizeCellValue(object value)
 	{
 		if (value is null)
 			return null;
@@ -649,9 +679,24 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, Stream template
 		if (value is TimeSpan ts)
 			return ts.Format();
 
-		if (value is decimal dec)
-			return dec.Round(Decimals);
-
 		return value;
+	}
+
+	private void ApplyCellFormat(IExcelWorker worker, int col, int row, object value)
+	{
+		var format = value switch
+		{
+			decimal => GetDecimalFormat(),
+			double => GetDecimalFormat(),
+			float => GetDecimalFormat(),
+			int => "0",
+			long => "0",
+			DateTime => "yyyy-MM-dd HH:mm:ss",
+			DateTimeOffset => "yyyy-MM-dd HH:mm:ss",
+			_ => null
+		};
+
+		if (format != null)
+			worker.SetCellFormat(col, row, format);
 	}
 }
