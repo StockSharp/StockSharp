@@ -454,18 +454,9 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Compile_FormulaWithDecimalConstant_CurrentBehavior_ThrowsInvalidOperationException()
+	public void Compile_FormulaWithDecimalConstant_EvaluatesCorrectly()
 	{
-		// CURRENT BEHAVIOR: Decimal literals (0.5) are treated as double, which can't be used with decimal variables
-		var provider = CreateProvider();
-
-		Throws<InvalidOperationException>(() => provider.Compile("PnL * 0.5"));
-	}
-
-	[TestMethod]
-	public void Compile_FormulaWithDecimalConstant_ExpectedBehavior_EvaluatesCorrectly()
-	{
-		// EXPECTED BEHAVIOR: Decimal literals should work
+		// Decimal literals are auto-converted (0.5 → 0.5m) by ExpressionHelper
 		var provider = CreateProvider();
 		var fitness = provider.Compile("PnL * 0.5");
 		var strategy = CreateStrategyWithStats(pnl: 100m);
@@ -632,20 +623,29 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	// ========== More decimal literal edge cases ==========
 
 	[TestMethod]
-	public void Compile_DivisionByDecimal_CurrentBehavior_ThrowsInvalidOperationException()
+	public void Compile_DivisionByDecimal_EvaluatesCorrectly()
 	{
-		// Division by decimal literal doesn't work
+		// Decimal literals are auto-converted (0.5 → 0.5m) by ExpressionHelper
 		var provider = CreateProvider();
+		var fitness = provider.Compile("PnL / 0.5");
+		var strategy = CreateStrategyWithStats(pnl: 100m);
 
-		Throws<InvalidOperationException>(() => provider.Compile("PnL / 0.5"));
+		var result = fitness(strategy);
+
+		result.AssertEqual(200m); // 100 / 0.5 = 200
 	}
 
 	[TestMethod]
-	public void Compile_AdditionWithDecimal_CurrentBehavior_ThrowsInvalidOperationException()
+	public void Compile_AdditionWithDecimal_EvaluatesCorrectly()
 	{
+		// Decimal literals are auto-converted (0.1 → 0.1m) by ExpressionHelper
 		var provider = CreateProvider();
+		var fitness = provider.Compile("PnL + 0.1");
+		var strategy = CreateStrategyWithStats(pnl: 100m);
 
-		Throws<InvalidOperationException>(() => provider.Compile("PnL + 0.1"));
+		var result = fitness(strategy);
+
+		result.AssertEqual(100.1m);
 	}
 
 	// ========== Order of operations with Recovery ==========
