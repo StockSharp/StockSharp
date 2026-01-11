@@ -486,7 +486,7 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 		var count = 0;
 		var lastTime = default(DateTime?);
 
-		using (var writer = new StreamWriter(stream, Encoding, leaveOpen: true))
+		await using (var writer = new StreamWriter(stream, Encoding, leaveOpen: true))
 		await using (var json = new JsonTextWriter(writer))
 		{
 			if (Indent)
