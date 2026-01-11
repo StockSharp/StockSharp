@@ -11,10 +11,7 @@ public class TradingTimeLineGenerator : ITradingTimeLineGenerator
 		if (boards == null)
 			throw new ArgumentNullException(nameof(boards));
 
-		var ranges = GetOrderedRanges(boards, date);
-		var lastTime = TimeSpan.Zero;
-
-		foreach (var range in ranges)
+		foreach (var range in GetOrderedRanges(boards, date))
 		{
 			var time = GetTime(date, range.range.Min);
 			if (time.Date >= date.Date)
@@ -23,8 +20,6 @@ public class TradingTimeLineGenerator : ITradingTimeLineGenerator
 			time = GetTime(date, range.range.Max);
 			if (time.Date >= date.Date)
 				yield return new TimeMessage { ServerTime = time };
-
-			lastTime = range.range.Max;
 		}
 	}
 
