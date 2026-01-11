@@ -49,7 +49,8 @@ class normalize_price_script(IAnalyticsScript):
                     first_close = candle.ClosePrice
 
                 # normalize close prices by dividing on first close
-                series[candle.OpenTime] = candle.ClosePrice / first_close
+                if first_close != 0:
+                    series[candle.OpenTime] = candle.ClosePrice / first_close
 
             # draw series on chart
             chart.Append(to_string_id(security), list(series.keys()), list(series.values()))

@@ -77,7 +77,8 @@ type NormalizePriceScript() =
                                         series.[candle.OpenTime] <- 1m
                                     | Some fc ->
                                         // Divide by the first close price to normalize
-                                        series.[candle.OpenTime] <- candle.ClosePrice / fc
+                                        if fc <> 0m then
+                                            series.[candle.OpenTime] <- candle.ClosePrice / fc
                                 )
 
                             // Add the series for this security to the chart

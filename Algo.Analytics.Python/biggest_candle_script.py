@@ -75,9 +75,9 @@ class biggest_candle_script(IAnalyticsScript):
         )
 
         vol_chart.Append(
-            "prices",
+            "volumes",
             [c.OpenTime for c in big_vol_candles],
-            [get_middle_price(c) for c in big_price_candles],
+            [c.TotalVolume for c in big_vol_candles],
             [c.TotalVolume for c in big_vol_candles]
         )
 

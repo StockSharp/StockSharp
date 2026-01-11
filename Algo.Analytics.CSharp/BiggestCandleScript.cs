@@ -70,6 +70,6 @@ public class BiggestCandleScript : IAnalyticsScript
 
 		// draw series on chart
 		priceChart.Append("prices", bigPriceCandles.Select(c => c.OpenTime), bigPriceCandles.Select(c => c.GetMiddlePrice(null)), bigPriceCandles.Select(c => c.GetLength()));
-		volChart.Append("prices", bigVolCandles.Select(c => c.OpenTime), bigPriceCandles.Select(c => c.GetMiddlePrice(null)), bigVolCandles.Select(c => c.TotalVolume));
+		volChart.Append("volumes", bigVolCandles.Select(c => c.OpenTime), bigVolCandles.Select(c => c.TotalVolume), bigVolCandles.Select(c => c.TotalVolume));
 	}
 }

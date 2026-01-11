@@ -100,9 +100,9 @@ type BiggestCandleScript() =
 
                     // Draw the biggest volume candles on the volume chart
                     volChart.Append(
-                        "prices",
+                        "volumes",
                         bigVolCandles.Select(fun c -> c.OpenTime),
-                        bigPriceCandles.Select(fun c -> c.GetMiddlePrice(Nullable())),
+                        bigVolCandles.Select(fun c -> c.TotalVolume),
                         bigVolCandles.Select(fun c -> c.TotalVolume)
                     )
             }

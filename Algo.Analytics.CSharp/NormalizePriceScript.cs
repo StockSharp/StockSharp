@@ -44,7 +44,8 @@ public class NormalizePriceScript : IAnalyticsScript
 				firstClose ??= candle.ClosePrice;
 
 				// normalize close prices by dividing on first close
-				series[candle.OpenTime] = candle.ClosePrice / firstClose.Value;
+				if (firstClose.Value != 0)
+					series[candle.OpenTime] = candle.ClosePrice / firstClose.Value;
 			}
 
 			// draw series on chart
