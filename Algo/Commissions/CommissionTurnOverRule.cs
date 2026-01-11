@@ -59,10 +59,12 @@ public class CommissionTurnOverRule : CommissionRule
 			_currentTurnOver += message.GetTradePrice() * message.SafeGetVolume();
 
 			// Number of full thresholds passed
-			var times = (int)(_currentTurnOver / turnOver);
+			var timesDecimal = _currentTurnOver / turnOver;
 
-			if (times == 0)
+			if (timesDecimal < 1m)
 				return null;
+
+			var times = (long)timesDecimal;
 
 			// Subtract applied thresholds, keep remainder
 			_currentTurnOver -= times * turnOver;

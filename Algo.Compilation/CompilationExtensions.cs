@@ -140,6 +140,7 @@ public static class CompilationExtensions
 		await Task.Yield();
 
 		ArgumentNullException.ThrowIfNull(fileSystem);
+		ArgumentNullException.ThrowIfNull(extraPythonCommon);
 
 		fileSystem.CreateDirectory(Paths.PythonUtilsPath);
 

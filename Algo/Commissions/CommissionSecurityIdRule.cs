@@ -63,14 +63,18 @@ public class CommissionSecurityIdRule : CommissionRule
 		if (storage.Contains(nameof(Security)))
 		{
 			var secId = storage.GetValue<string>(nameof(Security));
-			_securityId = secId.ToSecurityId();
 
-			var secProvider = ServicesRegistry.TrySecurityProvider;
+			if (!secId.IsEmpty())
+			{
+				_securityId = secId.ToSecurityId();
 
-			if (secProvider is not null)
-				_security = secProvider.LookupById(secId);
+				var secProvider = ServicesRegistry.TrySecurityProvider;
 
-			UpdateTitle();
+				if (secProvider is not null)
+					_security = secProvider.LookupById(secId);
+
+				UpdateTitle();
+			}
 		}
 	}
 }

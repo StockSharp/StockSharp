@@ -116,10 +116,10 @@ public class LatencyManager : ILatencyManager
 	private void AddRegister(long transactionId, DateTime localTime)
 	{
 		if (transactionId == 0)
-			throw new ArgumentNullException(nameof(transactionId));
+			throw new ArgumentOutOfRangeException(nameof(transactionId), transactionId, LocalizedStrings.InvalidValue);
 
 		if (localTime == default)
-			throw new ArgumentNullException(nameof(localTime));
+			throw new ArgumentOutOfRangeException(nameof(localTime), localTime, LocalizedStrings.InvalidValue);
 
 		if (_register.ContainsKey(transactionId))
 			throw new ArgumentException(LocalizedStrings.TransactionRegAlreadyAdded.Put(transactionId), nameof(transactionId));
@@ -133,7 +133,7 @@ public class LatencyManager : ILatencyManager
 			throw new ArgumentOutOfRangeException(nameof(transactionId), transactionId, LocalizedStrings.InvalidValue);
 
 		if (localTime == default)
-			throw new ArgumentNullException(nameof(localTime));
+			throw new ArgumentOutOfRangeException(nameof(localTime), localTime, LocalizedStrings.InvalidValue);
 
 		if (_cancel.ContainsKey(transactionId))
 			throw new ArgumentException(LocalizedStrings.TransactionCancelAlreadyAdded.Put(transactionId), nameof(transactionId));

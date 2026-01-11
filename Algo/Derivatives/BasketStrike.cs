@@ -105,6 +105,10 @@ public class OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider s
 	protected override void FromSerializedString(string text)
 	{
 		var parts = text.Split('-');
+
+		if (parts.Length < 2)
+			throw new InvalidOperationException($"Invalid serialized string format: {text}");
+
 		_strikeOffset = new(parts[0].To<int>(), parts[1].To<int>());
 	}
 }
@@ -141,6 +145,10 @@ public class VolatilityBasketStrike(Security underlyingAsset, ISecurityProvider 
 	protected override void FromSerializedString(string text)
 	{
 		var parts = text.Split('-');
+
+		if (parts.Length < 2)
+			throw new InvalidOperationException($"Invalid serialized string format: {text}");
+
 		_volatilityRange = new(parts[0].To<decimal>(), parts[1].To<decimal>());
 	}
 }

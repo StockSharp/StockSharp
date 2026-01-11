@@ -56,6 +56,9 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 			if (_state == value)
 				return;
 
+			if (!_state.ValidateChannelState(value))
+				return;
+
 			_state = value;
 			StateChanged?.Invoke();
 		}
@@ -70,12 +73,13 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 		if (Disabled)
 			return;
 
-		State = ChannelStates.Started;
+		State = ChannelStates.Starting;
 		_queue.Open();
 
 		_cancellationTokenSource = new();
 
 		_processingTask = ProcessMessagesAsync(_cancellationTokenSource.Token);
+		State = ChannelStates.Started;
 	}
 
 	private async Task ProcessMessagesAsync(CancellationToken cancellationToken)
@@ -129,11 +133,13 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 
 	void IMessageChannel.Suspend()
 	{
+		State = ChannelStates.Suspending;
 		State = ChannelStates.Suspended;
 	}
 
 	void IMessageChannel.Resume()
 	{
+		State = ChannelStates.Starting;
 		State = ChannelStates.Started;
 	}
 

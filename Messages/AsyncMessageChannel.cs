@@ -70,6 +70,9 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 			if (_state == value)
 				return;
 
+			if (!_state.ValidateChannelState(value))
+				return;
+
 			_state = value;
 			StateChanged?.Invoke();
 		}
@@ -81,10 +84,12 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 	/// <inheritdoc />
 	public void Open()
 	{
-		State = ChannelStates.Started;
+		State = ChannelStates.Starting;
 
 		var token = _globalCts.Token;
 		_processorTask = Task.Run(() => ProcessMessagesAsync(token), token);
+
+		State = ChannelStates.Started;
 	}
 
 	/// <inheritdoc />
@@ -134,12 +139,14 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 	/// <inheritdoc />
 	public void Suspend()
 	{
+		State = ChannelStates.Suspending;
 		State = ChannelStates.Suspended;
 	}
 
 	/// <inheritdoc />
 	public void Resume()
 	{
+		State = ChannelStates.Starting;
 		State = ChannelStates.Started;
 	}
 

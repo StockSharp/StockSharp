@@ -201,6 +201,9 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			if (_state == value)
 				return;
 
+			if (!_state.ValidateChannelState(value))
+				return;
+
 			var oldState = _state;
 			_state = value;
 			StateChanged?.Invoke(oldState, _state);
