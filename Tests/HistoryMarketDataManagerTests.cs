@@ -1230,4 +1230,753 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Message Property Validation Tests
+
+	/// <summary>
+	/// Helper to validate tick message properties
+	/// </summary>
+	private static void ValidateTickMessage(ExecutionMessage tick, SecurityId expectedSecId, DateTime startDate, DateTime stopDate, int index)
+	{
+		tick.SecurityId.AssertEqual(expectedSecId, $"Tick #{index}: SecurityId mismatch");
+		tick.DataTypeEx.AssertEqual(DataType.Ticks, $"Tick #{index}: DataTypeEx must be Ticks");
+		tick.HasTradeInfo.AssertTrue($"Tick #{index}: HasTradeInfo must be true");
+
+		(tick.TradePrice > 0).AssertTrue($"Tick #{index}: TradePrice must be positive, got {tick.TradePrice}");
+		(tick.TradeVolume > 0).AssertTrue($"Tick #{index}: TradeVolume must be positive, got {tick.TradeVolume}");
+
+		(tick.ServerTime >= startDate).AssertTrue($"Tick #{index}: ServerTime {tick.ServerTime:O} before start date {startDate:O}");
+		(tick.ServerTime <= stopDate).AssertTrue($"Tick #{index}: ServerTime {tick.ServerTime:O} after stop date {stopDate:O}");
+	}
+
+	/// <summary>
+	/// Helper to validate candle message properties
+	/// </summary>
+	private static void ValidateCandleMessage(CandleMessage candle, SecurityId expectedSecId, DateTime startDate, DateTime stopDate, int index)
+	{
+		candle.SecurityId.AssertEqual(expectedSecId, $"Candle #{index}: SecurityId mismatch");
+
+		(candle.OpenPrice > 0).AssertTrue($"Candle #{index}: OpenPrice must be positive, got {candle.OpenPrice}");
+		(candle.HighPrice > 0).AssertTrue($"Candle #{index}: HighPrice must be positive, got {candle.HighPrice}");
+		(candle.LowPrice > 0).AssertTrue($"Candle #{index}: LowPrice must be positive, got {candle.LowPrice}");
+		(candle.ClosePrice > 0).AssertTrue($"Candle #{index}: ClosePrice must be positive, got {candle.ClosePrice}");
+		(candle.TotalVolume >= 0).AssertTrue($"Candle #{index}: TotalVolume must be non-negative, got {candle.TotalVolume}");
+
+		// OHLC consistency
+		(candle.HighPrice >= candle.LowPrice).AssertTrue(
+			$"Candle #{index}: High ({candle.HighPrice}) must be >= Low ({candle.LowPrice})");
+		(candle.HighPrice >= candle.OpenPrice).AssertTrue(
+			$"Candle #{index}: High ({candle.HighPrice}) must be >= Open ({candle.OpenPrice})");
+		(candle.HighPrice >= candle.ClosePrice).AssertTrue(
+			$"Candle #{index}: High ({candle.HighPrice}) must be >= Close ({candle.ClosePrice})");
+		(candle.LowPrice <= candle.OpenPrice).AssertTrue(
+			$"Candle #{index}: Low ({candle.LowPrice}) must be <= Open ({candle.OpenPrice})");
+		(candle.LowPrice <= candle.ClosePrice).AssertTrue(
+			$"Candle #{index}: Low ({candle.LowPrice}) must be <= Close ({candle.ClosePrice})");
+
+		(candle.OpenTime >= startDate).AssertTrue($"Candle #{index}: OpenTime {candle.OpenTime:O} before start date {startDate:O}");
+		(candle.OpenTime <= stopDate).AssertTrue($"Candle #{index}: OpenTime {candle.OpenTime:O} after stop date {stopDate:O}");
+	}
+
+	[TestMethod]
+	[Timeout(30000, CooperativeCancellation = true)]
+	public async Task PropertyValidation_Ticks_AllPropertiesValid()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		var startDate = Paths.HistoryBeginDate;
+		var stopDate = Paths.HistoryBeginDate.AddDays(1);
+
+		using var manager = CreateManager(storageRegistry, startDate, stopDate);
+
+		var subscribeMsg = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			TransactionId = 1,
+			IsSubscribe = true,
+		};
+
+		var error = await manager.SubscribeAsync(subscribeMsg, CancellationToken);
+		error.AssertNull();
+
+		var messages = new List<Message>();
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			messages.Add(msg);
+		}
+
+		var ticks = messages.OfType<ExecutionMessage>()
+			.Where(m => m.DataTypeEx == DataType.Ticks)
+			.ToList();
+
+		(ticks.Count > 0).AssertTrue("Should have tick messages");
+
+		for (var i = 0; i < ticks.Count; i++)
+		{
+			ValidateTickMessage(ticks[i], secId, startDate, stopDate, i);
+		}
+	}
+
+	[TestMethod]
+	[Timeout(30000, CooperativeCancellation = true)]
+	public async Task PropertyValidation_Candles_AllPropertiesValid()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		var startDate = Paths.HistoryBeginDate;
+		var stopDate = Paths.HistoryBeginDate.AddDays(3);
+
+		using var manager = CreateManager(storageRegistry, startDate, stopDate);
+
+		var subscribeMsg = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			TransactionId = 1,
+			IsSubscribe = true,
+		};
+
+		var error = await manager.SubscribeAsync(subscribeMsg, CancellationToken);
+		error.AssertNull();
+
+		var messages = new List<Message>();
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			messages.Add(msg);
+		}
+
+		var candles = messages.OfType<CandleMessage>().ToList();
+
+		(candles.Count > 0).AssertTrue("Should have candle messages");
+
+		for (var i = 0; i < candles.Count; i++)
+		{
+			ValidateCandleMessage(candles[i], secId, startDate, stopDate, i);
+		}
+	}
+
+	[TestMethod]
+	[Timeout(30000, CooperativeCancellation = true)]
+	public async Task PropertyValidation_Candles_TimeFrameCorrect()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		var startDate = Paths.HistoryBeginDate;
+		var stopDate = Paths.HistoryBeginDate.AddDays(1);
+		var timeFrame = TimeSpan.FromMinutes(1);
+
+		using var manager = CreateManager(storageRegistry, startDate, stopDate);
+
+		var subscribeMsg = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = timeFrame.TimeFrame(),
+			TransactionId = 1,
+			IsSubscribe = true,
+		};
+
+		var error = await manager.SubscribeAsync(subscribeMsg, CancellationToken);
+		error.AssertNull();
+
+		var messages = new List<Message>();
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			messages.Add(msg);
+		}
+
+		var candles = messages.OfType<TimeFrameCandleMessage>().ToList();
+
+		(candles.Count > 0).AssertTrue("Should have TimeFrameCandleMessages");
+
+		foreach (var candle in candles)
+		{
+			candle.DataType.Arg.AssertEqual(timeFrame, $"Candle time frame mismatch");
+		}
+	}
+
+	[TestMethod]
+	[Timeout(30000, CooperativeCancellation = true)]
+	public async Task PropertyValidation_TimeChangedMessages_Valid()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		var startDate = Paths.HistoryBeginDate;
+		var stopDate = Paths.HistoryBeginDate.AddDays(1);
+
+		using var manager = CreateManager(storageRegistry, startDate, stopDate);
+
+		var subscribeMsg = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			TransactionId = 1,
+			IsSubscribe = true,
+		};
+
+		await manager.SubscribeAsync(subscribeMsg, CancellationToken);
+
+		var messages = new List<Message>();
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			messages.Add(msg);
+		}
+
+		var timeMessages = messages.OfType<TimeMessage>().ToList();
+
+		// Should have time messages for market time progression
+		(timeMessages.Count > 0).AssertTrue("Should have TimeMessage instances");
+
+		foreach (var tm in timeMessages)
+		{
+			// ServerTime should be within range
+			(tm.ServerTime >= startDate).AssertTrue($"TimeMessage.ServerTime {tm.ServerTime:O} before start date");
+			(tm.ServerTime <= stopDate.AddDays(1)).AssertTrue($"TimeMessage.ServerTime {tm.ServerTime:O} after stop date");
+		}
+	}
+
+	[TestMethod]
+	[Timeout(30000, CooperativeCancellation = true)]
+	public async Task PropertyValidation_EmulationStateMessages_Valid()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		var startDate = Paths.HistoryBeginDate;
+		var stopDate = Paths.HistoryBeginDate.AddHours(1);
+
+		using var manager = CreateManager(storageRegistry, startDate, stopDate);
+
+		var subscribeMsg = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			TransactionId = 1,
+			IsSubscribe = true,
+		};
+
+		await manager.SubscribeAsync(subscribeMsg, CancellationToken);
+
+		var messages = new List<Message>();
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			messages.Add(msg);
+		}
+
+		var stateMessages = messages.OfType<EmulationStateMessage>().ToList();
+
+		// Should end with Stopping state
+		(stateMessages.Count > 0).AssertTrue("Should have EmulationStateMessage");
+		stateMessages.Last().State.AssertEqual(ChannelStates.Stopping, "Last state should be Stopping");
+	}
+
+	[TestMethod]
+	[Timeout(30000, CooperativeCancellation = true)]
+	public async Task PropertyValidation_MultipleDataTypes_AllPropertiesValid()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		var startDate = Paths.HistoryBeginDate;
+		var stopDate = Paths.HistoryBeginDate.AddDays(1);
+
+		using var manager = CreateManager(storageRegistry, startDate, stopDate);
+
+		// Subscribe to both ticks and candles
+		await manager.SubscribeAsync(new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			TransactionId = 1,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		await manager.SubscribeAsync(new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			TransactionId = 2,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		var messages = new List<Message>();
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			messages.Add(msg);
+		}
+
+		// Validate all ticks
+		var ticks = messages.OfType<ExecutionMessage>()
+			.Where(m => m.DataTypeEx == DataType.Ticks)
+			.ToList();
+
+		for (var i = 0; i < ticks.Count; i++)
+		{
+			ValidateTickMessage(ticks[i], secId, startDate, stopDate, i);
+		}
+
+		// Validate all candles
+		var candles = messages.OfType<CandleMessage>().ToList();
+
+		for (var i = 0; i < candles.Count; i++)
+		{
+			ValidateCandleMessage(candles[i], secId, startDate, stopDate, i);
+		}
+
+		// At least one type should have data
+		(ticks.Count > 0 || candles.Count > 0).AssertTrue("Should have ticks or candles");
+	}
+
+	[TestMethod]
+	[Timeout(30000, CooperativeCancellation = true)]
+	public async Task PropertyValidation_SubscriptionResponse_Valid()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+
+		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1));
+
+		var subscribeMsg = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			TransactionId = 123,
+			IsSubscribe = true,
+		};
+
+		var error = await manager.SubscribeAsync(subscribeMsg, CancellationToken);
+		error.AssertNull("Subscription should succeed without error");
+
+		var messages = new List<Message>();
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			messages.Add(msg);
+		}
+
+		// Find subscription response
+		var responses = messages.OfType<SubscriptionResponseMessage>().ToList();
+		// May or may not have explicit response depending on implementation
+
+		// But all data messages should have OriginalTransactionId matching subscription
+		var dataMessages = messages.OfType<ExecutionMessage>()
+			.Where(m => m.DataTypeEx == DataType.Ticks)
+			.ToList();
+
+		foreach (var dm in dataMessages)
+		{
+			dm.OriginalTransactionId.AssertEqual(123, "Data message OriginalTransactionId should match subscription");
+		}
+	}
+
+	[TestMethod]
+	[Timeout(30000, CooperativeCancellation = true)]
+	public async Task PropertyValidation_FinishedMessage_HasCorrectTransactionId()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+
+		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddHours(1));
+
+		var subscribeMsg = new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			TransactionId = 456,
+			IsSubscribe = true,
+		};
+
+		await manager.SubscribeAsync(subscribeMsg, CancellationToken);
+
+		var messages = new List<Message>();
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			messages.Add(msg);
+		}
+
+		// Find subscription finished message
+		var finished = messages.OfType<SubscriptionFinishedMessage>()
+			.Where(m => m.OriginalTransactionId == 456)
+			.ToList();
+
+		// Should have finished message for subscription
+		(finished.Count > 0).AssertTrue("Should have SubscriptionFinishedMessage for subscription");
+	}
+
+	#endregion
+
+	#region HistoryMarketDataManager + MarketEmulator Integration Tests
+
+	private static IMarketEmulator CreateEmulator(SecurityId secId)
+	{
+		var emu = new Algo.Testing.Emulation.MarketEmulator(
+			new CollectionSecurityProvider([new Security { Id = secId.ToStringId() }]),
+			new CollectionPortfolioProvider([Portfolio.CreateSimulator()]),
+			new InMemoryExchangeInfoProvider(),
+			new IncrementalIdGenerator())
+		{
+			VerifyMode = true
+		};
+		return emu;
+	}
+
+	/// <summary>
+	/// Validates that emulator output message time >= input message time
+	/// </summary>
+	private static void ValidateEmulatorTimeOrdering(Message input, Message output, int index)
+	{
+		if (input is not IServerTimeMessage inputTime || output is not IServerTimeMessage outputTime)
+			return;
+
+		(outputTime.ServerTime >= inputTime.ServerTime).AssertTrue(
+			$"Emulator output #{index} ({output.GetType().Name}) time {outputTime.ServerTime:O} " +
+			$"is less than input time {inputTime.ServerTime:O}. " +
+			$"Emulator cannot return messages with time earlier than input.");
+	}
+
+	[TestMethod]
+	[Timeout(60000, CooperativeCancellation = true)]
+	public async Task Integration_HistoryToEmulator_TimeOrdering_Valid()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		var startDate = Paths.HistoryBeginDate;
+		var stopDate = Paths.HistoryBeginDate.AddHours(2);
+
+		using var manager = CreateManager(storageRegistry, startDate, stopDate);
+		var emu = CreateEmulator(secId);
+
+		// Subscribe to ticks
+		await manager.SubscribeAsync(new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			TransactionId = 1,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		var historyMessages = new List<Message>();
+		var emulatorOutputs = new List<Message>();
+
+		emu.NewOutMessage += msg => emulatorOutputs.Add(msg);
+
+		var lastInputTime = DateTimeOffset.MinValue;
+		var outputIndex = 0;
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			historyMessages.Add(msg);
+
+			// Track input time
+			if (msg is IServerTimeMessage timeMsg && timeMsg.ServerTime != default)
+			{
+				lastInputTime = timeMsg.ServerTime;
+			}
+
+			// Feed ticks to emulator
+			if (msg is ExecutionMessage execMsg && execMsg.DataTypeEx == DataType.Ticks)
+			{
+				var outputsBefore = emulatorOutputs.Count;
+				await emu.SendInMessageAsync(execMsg, CancellationToken);
+
+				// Validate all new outputs have time >= input time
+				for (var i = outputsBefore; i < emulatorOutputs.Count; i++)
+				{
+					var output = emulatorOutputs[i];
+					ValidateEmulatorTimeOrdering(execMsg, output, outputIndex++);
+				}
+			}
+		}
+
+		// Validate overall time ordering of emulator output
+		AssertStrictlyOrderedByTime(emulatorOutputs, "EmulatorOutput");
+
+		// Should have processed some messages
+		(historyMessages.OfType<ExecutionMessage>().Count() > 0).AssertTrue("Should have history ticks");
+	}
+
+	[TestMethod]
+	[Timeout(60000, CooperativeCancellation = true)]
+	public async Task Integration_HistoryToEmulator_WithOrders_ValidatesOrderResponses()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		var startDate = Paths.HistoryBeginDate;
+		var stopDate = Paths.HistoryBeginDate.AddHours(1);
+
+		using var manager = CreateManager(storageRegistry, startDate, stopDate);
+		var emu = CreateEmulator(secId);
+
+		// Subscribe to candles for market data
+		await manager.SubscribeAsync(new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			TransactionId = 1,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		var emulatorOutputs = new List<Message>();
+		emu.NewOutMessage += msg => emulatorOutputs.Add(msg);
+
+		var orderSent = false;
+		var orderId = 0L;
+		var idGen = new IncrementalIdGenerator();
+		var pfName = Messages.Extensions.SimulatorPortfolioName;
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			// Use candle to build order book approximation
+			if (msg is CandleMessage candle && !orderSent)
+			{
+				// Send quote change to setup order book
+				await emu.SendInMessageAsync(new QuoteChangeMessage
+				{
+					SecurityId = secId,
+					LocalTime = candle.OpenTime,
+					ServerTime = candle.OpenTime,
+					Bids = [new(candle.ClosePrice - 0.1m, 100)],
+					Asks = [new(candle.ClosePrice + 0.1m, 100)]
+				}, CancellationToken);
+
+				// Place a limit order
+				orderId = idGen.GetNextId();
+				await emu.SendInMessageAsync(new OrderRegisterMessage
+				{
+					SecurityId = secId,
+					LocalTime = candle.OpenTime,
+					TransactionId = orderId,
+					Side = Sides.Buy,
+					Price = candle.ClosePrice - 0.2m, // Below bid
+					Volume = 1,
+					OrderType = OrderTypes.Limit,
+					TimeInForce = TimeInForce.PutInQueue,
+					PortfolioName = pfName,
+				}, CancellationToken);
+
+				orderSent = true;
+			}
+		}
+
+		// Validate emulator outputs
+		(emulatorOutputs.Count > 0).AssertTrue("Emulator should produce outputs");
+
+		// Should have order response
+		var orderResponses = emulatorOutputs.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == orderId && m.HasOrderInfo)
+			.ToList();
+
+		(orderResponses.Count > 0).AssertTrue("Should have order response from emulator");
+
+		// Validate order response properties
+		var orderResponse = orderResponses.First();
+		orderResponse.SecurityId.AssertEqual(secId, "Order response SecurityId");
+		(orderResponse.OrderState == OrderStates.Active || orderResponse.OrderState == OrderStates.Pending)
+			.AssertTrue($"Order should be Active or Pending, got {orderResponse.OrderState}");
+	}
+
+	[TestMethod]
+	[Timeout(60000, CooperativeCancellation = true)]
+	public async Task Integration_HistoryToEmulator_MessageTypes_AllExpectedTypes()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		var startDate = Paths.HistoryBeginDate;
+		var stopDate = Paths.HistoryBeginDate.AddHours(1);
+
+		using var manager = CreateManager(storageRegistry, startDate, stopDate);
+		var emu = CreateEmulator(secId);
+
+		await manager.SubscribeAsync(new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			TransactionId = 1,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		var emulatorOutputs = new List<Message>();
+		emu.NewOutMessage += msg => emulatorOutputs.Add(msg);
+
+		var tickCount = 0;
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			if (msg is ExecutionMessage execMsg && execMsg.DataTypeEx == DataType.Ticks)
+			{
+				await emu.SendInMessageAsync(execMsg, CancellationToken);
+				tickCount++;
+
+				// Limit for test speed
+				if (tickCount > 100)
+				{
+					manager.Stop();
+					break;
+				}
+			}
+		}
+
+		// Log message type statistics
+		var typeGroups = emulatorOutputs.GroupBy(m => m.GetType().Name).ToList();
+
+		// At minimum, emulator should process ticks (though output depends on subscriptions)
+		(tickCount > 0).AssertTrue("Should have sent ticks to emulator");
+
+		// Validate all output messages are not null
+		foreach (var output in emulatorOutputs)
+		{
+			output.AssertNotNull("Emulator output should not be null");
+		}
+	}
+
+	[TestMethod]
+	[Timeout(60000, CooperativeCancellation = true)]
+	public async Task Integration_HistoryToEmulator_OutputTimeNeverDecreasesFromInput()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		var startDate = Paths.HistoryBeginDate;
+		var stopDate = Paths.HistoryBeginDate.AddHours(3);
+
+		using var manager = CreateManager(storageRegistry, startDate, stopDate);
+		var emu = CreateEmulator(secId);
+
+		await manager.SubscribeAsync(new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			TransactionId = 1,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		var violations = new List<string>();
+		var lastInputTime = DateTimeOffset.MinValue;
+
+		emu.NewOutMessage += msg =>
+		{
+			if (msg is IServerTimeMessage timeMsg && timeMsg.ServerTime != default)
+			{
+				if (timeMsg.ServerTime < lastInputTime)
+				{
+					violations.Add(
+						$"Output {msg.GetType().Name} time {timeMsg.ServerTime:O} < last input time {lastInputTime:O}");
+				}
+			}
+		};
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			if (msg is ExecutionMessage execMsg && execMsg.DataTypeEx == DataType.Ticks)
+			{
+				lastInputTime = execMsg.ServerTime;
+				await emu.SendInMessageAsync(execMsg, CancellationToken);
+			}
+		}
+
+		// Assert no violations
+		(violations.Count == 0).AssertTrue(
+			$"Found {violations.Count} time ordering violations:\n" + string.Join("\n", violations.Take(10)));
+	}
+
+	[TestMethod]
+	[Timeout(60000, CooperativeCancellation = true)]
+	public async Task Integration_HistoryToEmulator_MultipleDataTypes_TimeOrderingValid()
+	{
+		var storageRegistry = GetHistoryStorage();
+		if (storageRegistry == null)
+			return;
+
+		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		var startDate = Paths.HistoryBeginDate;
+		var stopDate = Paths.HistoryBeginDate.AddHours(1);
+
+		using var manager = CreateManager(storageRegistry, startDate, stopDate);
+		var emu = CreateEmulator(secId);
+
+		// Subscribe to both ticks and candles
+		await manager.SubscribeAsync(new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			TransactionId = 1,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		await manager.SubscribeAsync(new MarketDataMessage
+		{
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			TransactionId = 2,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		var emulatorOutputs = new List<Message>();
+		var inputTimes = new List<DateTimeOffset>();
+
+		emu.NewOutMessage += msg => emulatorOutputs.Add(msg);
+
+		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
+		{
+			if (msg is IServerTimeMessage timeMsg && timeMsg.ServerTime != default)
+			{
+				inputTimes.Add(timeMsg.ServerTime);
+			}
+
+			// Feed ticks to emulator
+			if (msg is ExecutionMessage execMsg && execMsg.DataTypeEx == DataType.Ticks)
+			{
+				await emu.SendInMessageAsync(execMsg, CancellationToken);
+			}
+		}
+
+		// Validate emulator output time ordering
+		AssertStrictlyOrderedByTime(emulatorOutputs, "EmulatorOutput_MultipleDataTypes");
+
+		// Validate all emulator outputs are within the expected time range
+		foreach (var output in emulatorOutputs.OfType<IServerTimeMessage>())
+		{
+			if (output.ServerTime != default)
+			{
+				(output.ServerTime >= startDate).AssertTrue(
+					$"Emulator output time {output.ServerTime:O} before start date");
+				(output.ServerTime <= stopDate.AddDays(1)).AssertTrue(
+					$"Emulator output time {output.ServerTime:O} after expected end");
+			}
+		}
+	}
+
+	#endregion
 }

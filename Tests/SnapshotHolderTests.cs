@@ -1834,6 +1834,268 @@ public class SnapshotHolderTests : BaseTestClass
 		snapshot.OrderPrice.AssertEqual(100m);
 	}
 
+	[TestMethod]
+	public void Order_StateTransition_DoneToPending_ThrowsWhenEnabled()
+	{
+		var holder = new OrderSnapshotHolder { ThrowOnInvalidStateTransition = true };
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Done,
+		};
+
+		holder.Process(msg1);
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+		};
+
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(msg2));
+	}
+
+	[TestMethod]
+	public void Order_StateTransition_DoneToActive_ThrowsWhenEnabled()
+	{
+		var holder = new OrderSnapshotHolder { ThrowOnInvalidStateTransition = true };
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Done,
+		};
+
+		holder.Process(msg1);
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+		};
+
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(msg2));
+	}
+
+	[TestMethod]
+	public void Order_StateTransition_FailedToPending_ThrowsWhenEnabled()
+	{
+		var holder = new OrderSnapshotHolder { ThrowOnInvalidStateTransition = true };
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Failed,
+		};
+
+		holder.Process(msg1);
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+		};
+
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(msg2));
+	}
+
+	[TestMethod]
+	public void Order_StateTransition_FailedToActive_ThrowsWhenEnabled()
+	{
+		var holder = new OrderSnapshotHolder { ThrowOnInvalidStateTransition = true };
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Failed,
+		};
+
+		holder.Process(msg1);
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+		};
+
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(msg2));
+	}
+
+	[TestMethod]
+	public void Order_StateTransition_ActiveToPending_ThrowsWhenEnabled()
+	{
+		var holder = new OrderSnapshotHolder { ThrowOnInvalidStateTransition = true };
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+		};
+
+		holder.Process(msg1);
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+		};
+
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(msg2));
+	}
+
+	[TestMethod]
+	public void Order_StateTransition_InvalidTransition_OnlyLogsWhenDisabled()
+	{
+		var holder = new OrderSnapshotHolder { ThrowOnInvalidStateTransition = false };
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Done,
+		};
+
+		holder.Process(msg1);
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+		};
+
+		// Should not throw, only log warning
+		var snapshot = holder.Process(msg2);
+		snapshot.AssertNotNull();
+		// State should still be updated (holder doesn't block it)
+		snapshot.OrderState.AssertEqual(OrderStates.Pending);
+	}
+
+	[TestMethod]
+	public void Order_StateTransition_ValidTransitions_DoNotThrow()
+	{
+		var holder = new OrderSnapshotHolder { ThrowOnInvalidStateTransition = true };
+
+		// None -> Pending
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+		};
+		holder.Process(msg1);
+
+		// Pending -> Active
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+		};
+		holder.Process(msg2);
+
+		// Active -> Done
+		var msg3 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(2),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Done,
+		};
+		var snapshot = holder.Process(msg3);
+
+		snapshot.AssertNotNull();
+		snapshot.OrderState.AssertEqual(OrderStates.Done);
+	}
+
+	[TestMethod]
+	public void Order_StateTransition_PendingToFailed_Valid()
+	{
+		var holder = new OrderSnapshotHolder { ThrowOnInvalidStateTransition = true };
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+		};
+		holder.Process(msg1);
+
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Failed,
+		};
+		var snapshot = holder.Process(msg2);
+
+		snapshot.AssertNotNull();
+		snapshot.OrderState.AssertEqual(OrderStates.Failed);
+	}
+
+	[TestMethod]
+	public void Order_StateTransition_NoneToFailed_Valid()
+	{
+		var holder = new OrderSnapshotHolder { ThrowOnInvalidStateTransition = true };
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Failed,
+		};
+		var snapshot = holder.Process(msg1);
+
+		snapshot.AssertNotNull();
+		snapshot.OrderState.AssertEqual(OrderStates.Failed);
+	}
+
 	#endregion
 
 	#region PositionSnapshotHolder Tests
