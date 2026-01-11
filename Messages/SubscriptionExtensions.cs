@@ -11,9 +11,7 @@ public static class SubscriptionExtensions
 	/// <param name="state">State.</param>
 	/// <returns>Check result.</returns>
 	public static bool IsActive(this SubscriptionStates state)
-	{
-		return state is SubscriptionStates.Active or SubscriptionStates.Online;
-	}
+		=> StateValidator.IsActive(state);
 
 	/// <summary>
 	/// Change subscription state.
@@ -25,20 +23,7 @@ public static class SubscriptionExtensions
 	/// <returns>New state.</returns>
 	public static SubscriptionStates ChangeSubscriptionState(this SubscriptionStates currState, SubscriptionStates newState, long subscriptionId, ILogReceiver receiver)
 	{
-		bool isOk;
-
-		if (currState == newState)
-			isOk = false;
-		else
-		{
-			isOk = currState switch
-			{
-				SubscriptionStates.Stopped or SubscriptionStates.Active => true,
-				SubscriptionStates.Error or SubscriptionStates.Finished => false,
-				SubscriptionStates.Online => newState != SubscriptionStates.Active,
-				_ => throw new ArgumentOutOfRangeException(nameof(currState), currState, LocalizedStrings.InvalidValue),
-			};
-		}
+		var isOk = StateValidator.IsValid(currState, newState);
 
 		const string text = "Subscription {0} {1}->{2}.";
 

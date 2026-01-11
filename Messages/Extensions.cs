@@ -7,32 +7,6 @@ using Ecng.Reflection;
 /// </summary>
 public static partial class Extensions
 {
-	private class StateChangeValidator<T>
-	{
-		private readonly bool[][] _map;
-
-		private readonly Func<T, int> _converter;
-
-		public StateChangeValidator(Func<T, int> converter)
-		{
-			_converter = converter ?? throw new ArgumentNullException(nameof(converter));
-
-			_map = new bool[Enumerator.GetValues<T>().Count()][];
-
-			for (var i = 0; i < _map.Length; i++)
-				_map[i] = new bool[_map.Length];
-		}
-
-		public bool this[T from, T to]
-		{
-			get => _map[_converter(from)][_converter(to)];
-			set => _map[_converter(from)][_converter(to)] = value;
-		}
-	}
-
-	private static readonly StateChangeValidator<OrderStates> _orderStateValidator;
-	private static readonly StateChangeValidator<ChannelStates> _channelStateValidator;
-
 	static Extensions()
 	{
 		static string TimeSpanToString(TimeSpan arg) => arg.ToString().Replace(':', '-');
@@ -56,28 +30,6 @@ public static partial class Extensions
 			};
 		}, pnf => $"{pnf.BoxSize}_{pnf.ReversalAmount}", a => a is not null && validateUnit(a.BoxSize) && a.ReversalAmount > 0);
 		RegisterCandleType(typeof(HeikinAshiCandleMessage), MessageTypes.CandleHeikinAshi, typeof(HeikinAshiCandleMessage).Name.Remove(nameof(Message)), StringToTimeSpan, TimeSpanToString, a => a > TimeSpan.Zero);
-
-		_orderStateValidator = new(s => (int)s);
-
-		_orderStateValidator[OrderStates.None, OrderStates.Pending] = true;
-		_orderStateValidator[OrderStates.None, OrderStates.Active] = true;
-		_orderStateValidator[OrderStates.None, OrderStates.Done] = true;
-		_orderStateValidator[OrderStates.None, OrderStates.Failed] = true;
-		_orderStateValidator[OrderStates.Pending, OrderStates.Active] = true;
-		_orderStateValidator[OrderStates.Pending, OrderStates.Failed] = true;
-		_orderStateValidator[OrderStates.Active, OrderStates.Done] = true;
-
-		_channelStateValidator = new(s => (int)s);
-
-		_channelStateValidator[ChannelStates.Stopped, ChannelStates.Starting] = true;
-		_channelStateValidator[ChannelStates.Starting, ChannelStates.Stopped] = true;
-		_channelStateValidator[ChannelStates.Starting, ChannelStates.Started] = true;
-		_channelStateValidator[ChannelStates.Started, ChannelStates.Stopping] = true;
-		_channelStateValidator[ChannelStates.Started, ChannelStates.Suspending] = true;
-		_channelStateValidator[ChannelStates.Suspending, ChannelStates.Suspended] = true;
-		_channelStateValidator[ChannelStates.Suspended, ChannelStates.Starting] = true;
-		_channelStateValidator[ChannelStates.Suspended, ChannelStates.Stopping] = true;
-		_channelStateValidator[ChannelStates.Stopping, ChannelStates.Stopped] = true;
 	}
 
 	/// <summary>
@@ -4340,7 +4292,7 @@ public static partial class Extensions
 	/// <param name="state">Order state.</param>
 	/// <returns>Check result.</returns>
 	public static bool IsFinal(this OrderStates state)
-		=> state is OrderStates.Done or OrderStates.Failed;
+		=> StateValidator.IsTerminal(state);
 
 	/// <summary>
 	/// Extract <see cref="TimeInForce"/> from bits flag.
@@ -4981,7 +4933,7 @@ public static partial class Extensions
 	/// <param name="currState">Current state.</param>
 	/// <param name="newState">New state.</param>
 	public static bool ValidateChannelState(this ChannelStates currState, ChannelStates newState)
-		=> _channelStateValidator[currState, newState];
+		=> StateValidator.IsValid(currState, newState);
 
 	/// <summary>
 	/// Check the possibility <see cref="OrderStates"/> change.
@@ -4990,16 +4942,10 @@ public static partial class Extensions
 	/// <param name="newState">New state.</param>
 	/// <param name="transactionId">Transaction id.</param>
 	/// <param name="logs">Logs.</param>
+	/// <param name="throwOnInvalid">Throw exception on invalid transition.</param>
 	/// <returns>Check result.</returns>
-	public static bool VerifyOrderState(this OrderStates? currState, OrderStates newState, long transactionId, ILogReceiver logs)
-	{
-		var isInvalid = currState is not null && currState != newState && !_orderStateValidator[currState.Value, newState];
-
-		if (isInvalid)
-			logs?.AddWarningLog($"Order {transactionId} invalid state change: {currState} -> {newState}");
-
-		return !isInvalid;
-	}
+	public static bool VerifyOrderState(this OrderStates? currState, OrderStates newState, long transactionId, ILogReceiver logs, bool throwOnInvalid = false)
+		=> StateValidator.Validate(currState, newState, transactionId, logs, throwOnInvalid);
 
 	/// <summary>
 	/// Determines the value is set.

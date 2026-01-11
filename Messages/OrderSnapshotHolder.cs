@@ -18,6 +18,11 @@ public class OrderSnapshotHolder : BaseLogReceiver
 	}
 
 	/// <summary>
+	/// Throw exception on invalid order state transition.
+	/// </summary>
+	public bool ThrowOnInvalidStateTransition { get; set; }
+
+	/// <summary>
 	/// Try get snapshot for the specified transaction id.
 	/// </summary>
 	/// <param name="transactionId">Transaction ID.</param>
@@ -72,7 +77,7 @@ public class OrderSnapshotHolder : BaseLogReceiver
 
 		if (execMsg.OrderState != null)
 		{
-			snapshot.OrderState.VerifyOrderState(execMsg.OrderState.Value, transactionId, this);
+			snapshot.OrderState.VerifyOrderState(execMsg.OrderState.Value, transactionId, this, ThrowOnInvalidStateTransition);
 			snapshot.OrderState = execMsg.OrderState.Value;
 		}
 
