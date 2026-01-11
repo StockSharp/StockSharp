@@ -7,7 +7,6 @@ public class RemoteStorageClient : Disposable
 {
 	private readonly IMessageAdapter _adapter;
 	private readonly int _securityBatchSize;
-	private readonly TimeSpan _timeout;
 
 	private bool _isConnected;
 
@@ -16,19 +15,14 @@ public class RemoteStorageClient : Disposable
 	/// </summary>
 	/// <param name="adapter">Message adapter.</param>
 	/// <param name="securityBatchSize">The new instruments request block size.</param>
-	/// <param name="timeout">Timeout.</param>
-	public RemoteStorageClient(IMessageAdapter adapter, int securityBatchSize, TimeSpan timeout)
+	public RemoteStorageClient(IMessageAdapter adapter, int securityBatchSize)
 	{
 		if (securityBatchSize <= 0)
 			throw new ArgumentOutOfRangeException(nameof(securityBatchSize), securityBatchSize, LocalizedStrings.InvalidValue);
 
-		if (timeout <= TimeSpan.Zero)
-			throw new ArgumentOutOfRangeException(nameof(timeout), timeout, LocalizedStrings.InvalidValue);
-
 		_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
 
 		_securityBatchSize = securityBatchSize;
-		_timeout = timeout;
 	}
 
 	/// <inheritdoc />
@@ -326,25 +320,11 @@ public class RemoteStorageClient : Disposable
 		// create subscription from request
 		var subscrMsg = ((ISubscriptionMessage)request).TypedClone();
 
-		using var timeoutCts = new CancellationTokenSource(_timeout);
-		using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutCts.Token);
-		var token = linked.Token;
-
 		// ensure adapter is connected
 		if (!_isConnected)
 		{
-			try
-			{
-				await _adapter.ConnectAsync(token);
-				_isConnected = true;
-			}
-			catch (OperationCanceledException)
-			{
-				if (timeoutCts.IsCancellationRequested)
-					throw new TimeoutException(request.ToString());
-
-				throw;
-			}
+			await _adapter.ConnectAsync(cancellationToken);
+			_isConnected = true;
 		}
 
 		var result = new List<Message>();
@@ -352,7 +332,7 @@ public class RemoteStorageClient : Disposable
 
 		try
 		{
-			await foreach (var msg in _adapter.SubscribeAsync<Message>(subscrMsg, token).WithEnforcedCancellation(cancellationToken))
+			await foreach (var msg in _adapter.SubscribeAsync<Message>(subscrMsg, cancellationToken))
 			{
 				if (msg is SubscriptionFinishedMessage finishedMsg)
 				{
@@ -389,14 +369,7 @@ public class RemoteStorageClient : Disposable
 				}
 			}
 		}
-		catch (OperationCanceledException)
-		{
-			if (timeoutCts.IsCancellationRequested)
-				throw new TimeoutException(request.ToString());
-
-			throw;
-		}
-		catch (Exception ex)
+		catch (Exception ex) when (ex is not OperationCanceledException)
 		{
 			throw new InvalidOperationException(LocalizedStrings.SomeConnectionFailed, ex);
 		}
