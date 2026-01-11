@@ -260,7 +260,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 
 		adapter.Parent ??= Logs ?? ServicesRegistry.LogManager?.Application;
 
-		return new(adapter, SecurityBatchSize, Timeout);
+		return new(adapter, SecurityBatchSize);
 	}
 
 	private RemoteStorageClient EnsureGetClient()
