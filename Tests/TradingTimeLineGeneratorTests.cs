@@ -5,6 +5,9 @@ using StockSharp.Algo.Testing;
 [TestClass]
 public class TradingTimeLineGeneratorTests : BaseTestClass
 {
+	// Use a fixed weekday date (Monday) to avoid weekend failures
+	private static readonly DateTime TestDate = new(2024, 1, 15); // Monday
+
 	private static TradingTimeLineGenerator CreateGenerator() => new();
 
 	private static BoardMessage CreateBoard(string code, TimeZoneInfo timeZone = null, params (TimeSpan from, TimeSpan to)[] workingTimes)
@@ -37,7 +40,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var generator = CreateGenerator();
 		var boards = Array.Empty<BoardMessage>();
 
-		var ranges = generator.GetOrderedRanges(boards, DateTime.Today).ToList();
+		var ranges = generator.GetOrderedRanges(boards, TestDate).ToList();
 
 		ranges.Count.AssertEqual(0);
 	}
@@ -49,7 +52,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var board = CreateBoard("TEST", TimeZoneInfo.Utc, (TimeSpan.FromHours(9), TimeSpan.FromHours(18)));
 		var boards = new[] { board };
 
-		var ranges = generator.GetOrderedRanges(boards, DateTime.Today).ToList();
+		var ranges = generator.GetOrderedRanges(boards, TestDate).ToList();
 
 		ranges.Count.AssertEqual(1);
 		ranges[0].range.Min.AssertEqual(TimeSpan.FromHours(9));
@@ -64,7 +67,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var board2 = CreateBoard("TEST2", TimeZoneInfo.Utc, (TimeSpan.FromHours(12), TimeSpan.FromHours(18)));
 		var boards = new[] { board1, board2 };
 
-		var ranges = generator.GetOrderedRanges(boards, DateTime.Today).ToList();
+		var ranges = generator.GetOrderedRanges(boards, TestDate).ToList();
 
 		// Should merge overlapping ranges
 		ranges.Count.AssertEqual(1);
@@ -80,7 +83,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var board2 = CreateBoard("TEST2", TimeZoneInfo.Utc, (TimeSpan.FromHours(14), TimeSpan.FromHours(18)));
 		var boards = new[] { board1, board2 };
 
-		var ranges = generator.GetOrderedRanges(boards, DateTime.Today).ToList();
+		var ranges = generator.GetOrderedRanges(boards, TestDate).ToList();
 
 		ranges.Count.AssertEqual(2);
 		ranges[0].range.Min.AssertEqual(TimeSpan.FromHours(9));
@@ -97,7 +100,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var board2 = CreateBoard("TEST2", TimeZoneInfo.Utc, (TimeSpan.FromHours(10), TimeSpan.FromHours(16)));
 		var boards = new[] { board1, board2 };
 
-		var ranges = generator.GetOrderedRanges(boards, DateTime.Today).ToList();
+		var ranges = generator.GetOrderedRanges(boards, TestDate).ToList();
 
 		// Inner range should be removed
 		ranges.Count.AssertEqual(1);
@@ -111,7 +114,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var generator = CreateGenerator();
 
 		ThrowsExactly<ArgumentNullException>(() =>
-			generator.GetOrderedRanges(null, DateTime.Today).ToList());
+			generator.GetOrderedRanges(null, TestDate).ToList());
 	}
 
 	[TestMethod]
@@ -121,7 +124,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var board = CreateBoard("TEST", TimeZoneInfo.Utc);
 		var boards = new[] { board };
 
-		var ranges = generator.GetOrderedRanges(boards, DateTime.Today).ToList();
+		var ranges = generator.GetOrderedRanges(boards, TestDate).ToList();
 
 		ranges.Count.AssertEqual(1);
 		ranges[0].range.Min.AssertEqual(TimeSpan.Zero);
@@ -136,7 +139,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 	public void GetPostTradeTimeMessages_ZeroCount_ReturnsEmpty()
 	{
 		var generator = CreateGenerator();
-		var date = DateTime.Today;
+		var date = TestDate;
 		var lastTime = TimeSpan.FromHours(18);
 		var interval = TimeSpan.FromSeconds(1);
 
@@ -149,7 +152,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 	public void GetPostTradeTimeMessages_ValidCount_ReturnsCorrectNumber()
 	{
 		var generator = CreateGenerator();
-		var date = DateTime.Today;
+		var date = TestDate;
 		var lastTime = TimeSpan.FromHours(18);
 		var interval = TimeSpan.FromSeconds(1);
 		var count = 5;
@@ -163,7 +166,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 	public void GetPostTradeTimeMessages_CorrectTimes()
 	{
 		var generator = CreateGenerator();
-		var date = DateTime.Today;
+		var date = TestDate;
 		var lastTime = TimeSpan.FromHours(18);
 		var interval = TimeSpan.FromMinutes(1);
 		var count = 3;
@@ -179,7 +182,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 	public void GetPostTradeTimeMessages_StopsAtEndOfDay()
 	{
 		var generator = CreateGenerator();
-		var date = DateTime.Today;
+		var date = TestDate;
 		var lastTime = TimeSpan.FromHours(23) + TimeSpan.FromMinutes(59);
 		var interval = TimeSpan.FromMinutes(5);
 		var count = 10;
@@ -196,7 +199,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var generator = CreateGenerator();
 
 		ThrowsExactly<ArgumentOutOfRangeException>(() =>
-			generator.GetPostTradeTimeMessages(DateTime.Today, TimeSpan.Zero, TimeSpan.FromSeconds(1), -1).ToList());
+			generator.GetPostTradeTimeMessages(TestDate, TimeSpan.Zero, TimeSpan.FromSeconds(1), -1).ToList());
 	}
 
 	[TestMethod]
@@ -205,7 +208,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var generator = CreateGenerator();
 
 		ThrowsExactly<ArgumentOutOfRangeException>(() =>
-			generator.GetPostTradeTimeMessages(DateTime.Today, TimeSpan.Zero, TimeSpan.Zero, 1).ToList());
+			generator.GetPostTradeTimeMessages(TestDate, TimeSpan.Zero, TimeSpan.Zero, 1).ToList());
 	}
 
 	#endregion
@@ -218,7 +221,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var generator = CreateGenerator();
 		var boards = Array.Empty<BoardMessage>();
 
-		var messages = generator.GetSimpleTimeLine(boards, DateTime.Today, TimeSpan.FromSeconds(1)).ToList();
+		var messages = generator.GetSimpleTimeLine(boards, TestDate, TimeSpan.FromSeconds(1)).ToList();
 
 		messages.Count.AssertEqual(0);
 	}
@@ -230,7 +233,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var board = CreateBoard("TEST", TimeZoneInfo.Utc, (TimeSpan.FromHours(9), TimeSpan.FromHours(18)));
 		var boards = new[] { board };
 
-		var messages = generator.GetSimpleTimeLine(boards, DateTime.Today, TimeSpan.FromSeconds(1)).ToList();
+		var messages = generator.GetSimpleTimeLine(boards, TestDate, TimeSpan.FromSeconds(1)).ToList();
 
 		// Should have at least start and end times
 		(messages.Count >= 2).AssertTrue();
@@ -244,7 +247,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var generator = CreateGenerator();
 
 		ThrowsExactly<ArgumentNullException>(() =>
-			generator.GetSimpleTimeLine(null, DateTime.Today, TimeSpan.FromSeconds(1)).ToList());
+			generator.GetSimpleTimeLine(null, TestDate, TimeSpan.FromSeconds(1)).ToList());
 	}
 
 	#endregion
@@ -257,7 +260,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var generator = CreateGenerator();
 		var boards = Array.Empty<BoardMessage>();
 
-		var result = generator.IsTradeDate(boards, DateTime.Today);
+		var result = generator.IsTradeDate(boards, TestDate);
 
 		result.AssertFalse();
 	}
@@ -268,7 +271,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 		var generator = CreateGenerator();
 
 		ThrowsExactly<ArgumentNullException>(() =>
-			generator.IsTradeDate(null, DateTime.Today));
+			generator.IsTradeDate(null, TestDate));
 	}
 
 	#endregion
