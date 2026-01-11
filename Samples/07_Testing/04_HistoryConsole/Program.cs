@@ -43,6 +43,8 @@ class Program
 		logManager.Listeners.Add(new ConsoleLogListener());
 		logManager.Listeners.Add(new FileLogListener("backtest.log"));
 
+		var token = CancellationToken.None;
+
 		var exchangeInfoProvider = new InMemoryExchangeInfoProvider();
 
 		var id = Paths.HistoryDefaultSecurity.ToSecurityId();
@@ -211,18 +213,18 @@ class Program
 		};
 
 		if (generator is not null)
-			await GenerateReport(strategy, generator);
+			await GenerateReport(strategy, generator, token);
 	}
 
-	private static async Task GenerateReport(SmaStrategy strategy, IReportGenerator generator)
+	private static async Task GenerateReport(SmaStrategy strategy, IReportGenerator generator, CancellationToken token)
 	{
 		var reportPath = $"backtest_report.{generator.Extension}";
 
 		Console.WriteLine();
 		Console.WriteLine($"Generating {generator.Name} report to {reportPath}...");
 
-		await using var stream = new FileStream(reportPath, FileMode.Create, FileAccess.Write);
-		await generator.Generate(strategy, stream, CancellationToken.None);
+		await using var stream = File.OpenWrite(reportPath);
+		await generator.Generate(strategy, stream, token);
 
 		Console.WriteLine($"Report saved: {reportPath}");
 		reportPath.OpenLink(false);
