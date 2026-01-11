@@ -26,6 +26,7 @@ public class SterlingRatioParameter(NetProfitParameter profit, AverageDrawdownPa
 		var annualizedProfit = _profit.Value;
 		var avgDrawdown = _avgDrawdown.Value;
 
-		Value = avgDrawdown != 0 ? annualizedProfit / avgDrawdown : 0;
+		// When no drawdown, ratio is effectively infinite (use MaxValue as proxy)
+		Value = avgDrawdown != 0 ? annualizedProfit / avgDrawdown : (annualizedProfit > 0 ? decimal.MaxValue : 0);
 	}
 }

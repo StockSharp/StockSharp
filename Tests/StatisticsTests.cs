@@ -1589,4 +1589,150 @@ public class StatisticsTests : BaseTestClass
 
 		Math.Abs(r1.Value - r2.Value).AssertEqual(0m);
 	}
+
+	#region Zero Denominator Tests (decimal.MaxValue)
+
+	/// <summary>
+	/// Test that ProfitFactor returns decimal.MaxValue when there are profits but no losses.
+	/// This test will FAIL if the fix is reverted (Value would be 0 instead of MaxValue).
+	/// </summary>
+	[TestMethod]
+	public void ProfitFactor_NoLosses_ReturnsMaxValue()
+	{
+		var parameter = new ProfitFactorParameter();
+		var t = DateTime.UtcNow;
+
+		// Only winning trades, no losses
+		parameter.Add(new(t, 1, 100m));
+		parameter.Add(new(t, 1, 50m));
+		parameter.Add(new(t, 1, 200m));
+
+		// With no losses, profit factor should be MaxValue (not 0)
+		parameter.Value.AssertEqual(decimal.MaxValue);
+	}
+
+	/// <summary>
+	/// Test that ProfitFactor returns 0 when there are no profits and no losses.
+	/// </summary>
+	[TestMethod]
+	public void ProfitFactor_NoProfitsNoLosses_ReturnsZero()
+	{
+		var parameter = new ProfitFactorParameter();
+		var t = DateTime.UtcNow;
+
+		// Only zero trades
+		parameter.Add(new(t, 1, 0m));
+		parameter.Add(new(t, 1, 0m));
+
+		// With no profits and no losses, profit factor should be 0
+		parameter.Value.AssertEqual(0m);
+	}
+
+	/// <summary>
+	/// Test that RecoveryFactor returns decimal.MaxValue when there's profit but no drawdown.
+	/// This test will FAIL if the fix is reverted (Value would remain default/unchanged).
+	/// </summary>
+	[TestMethod]
+	public void RecoveryFactor_NoDrawdown_ReturnsMaxValue()
+	{
+		var maxDrawdown = new MaxDrawdownParameter();
+		var netProfit = new NetProfitParameter();
+		var parameter = new RecoveryFactorParameter(maxDrawdown, netProfit);
+		var t = DateTime.UtcNow;
+
+		// Monotonically increasing equity - no drawdown
+		maxDrawdown.Add(t, 1000m, null);
+		netProfit.Add(t, 1000m, null);
+		parameter.Add(t, 1000m, null);
+
+		maxDrawdown.Add(t, 1100m, null);
+		netProfit.Add(t, 1100m, null);
+		parameter.Add(t, 1100m, null);
+
+		maxDrawdown.Add(t, 1200m, null);
+		netProfit.Add(t, 1200m, null);
+		parameter.Add(t, 1200m, null);
+
+		// MaxDrawdown should be 0, so recovery factor should be MaxValue
+		maxDrawdown.Value.AssertEqual(0m);
+		parameter.Value.AssertEqual(decimal.MaxValue);
+	}
+
+	/// <summary>
+	/// Test that CalmarRatio returns decimal.MaxValue when there's profit but no drawdown.
+	/// This test will FAIL if the fix is reverted (Value would be 0).
+	/// </summary>
+	[TestMethod]
+	public void CalmarRatio_NoDrawdown_ReturnsMaxValue()
+	{
+		var profit = new NetProfitParameter();
+		var maxDrawdown = new MaxDrawdownParameter();
+		var parameter = new CalmarRatioParameter(profit, maxDrawdown);
+		var t = DateTime.UtcNow;
+
+		// Monotonically increasing equity - no drawdown
+		profit.Add(t, 1000m, null);
+		maxDrawdown.Add(t, 1000m, null);
+		parameter.Add(t, 1000m, null);
+
+		profit.Add(t, 1500m, null);
+		maxDrawdown.Add(t, 1500m, null);
+		parameter.Add(t, 1500m, null);
+
+		// MaxDrawdown is 0, profit is positive -> CalmarRatio should be MaxValue
+		maxDrawdown.Value.AssertEqual(0m);
+		parameter.Value.AssertEqual(decimal.MaxValue);
+	}
+
+	/// <summary>
+	/// Test that SterlingRatio returns decimal.MaxValue when there's profit but no average drawdown.
+	/// This test will FAIL if the fix is reverted (Value would be 0).
+	/// </summary>
+	[TestMethod]
+	public void SterlingRatio_NoDrawdown_ReturnsMaxValue()
+	{
+		var profit = new NetProfitParameter();
+		var avgDrawdown = new AverageDrawdownParameter();
+		var parameter = new SterlingRatioParameter(profit, avgDrawdown);
+		var t = DateTime.UtcNow;
+
+		// Monotonically increasing equity - no drawdown
+		profit.Add(t, 1000m, null);
+		avgDrawdown.Add(t, 1000m, null);
+		parameter.Add(t, 1000m, null);
+
+		profit.Add(t, 1500m, null);
+		avgDrawdown.Add(t, 1500m, null);
+		parameter.Add(t, 1500m, null);
+
+		profit.Add(t, 2000m, null);
+		avgDrawdown.Add(t, 2000m, null);
+		parameter.Add(t, 2000m, null);
+
+		// AvgDrawdown is 0, profit is positive -> SterlingRatio should be MaxValue
+		avgDrawdown.Value.AssertEqual(0m);
+		parameter.Value.AssertEqual(decimal.MaxValue);
+	}
+
+	/// <summary>
+	/// Test that ratios return 0 (not MaxValue) when both numerator and denominator are zero.
+	/// </summary>
+	[TestMethod]
+	public void Ratios_ZeroProfitZeroDrawdown_ReturnsZero()
+	{
+		var profit = new NetProfitParameter();
+		var maxDrawdown = new MaxDrawdownParameter();
+		var calmar = new CalmarRatioParameter(profit, maxDrawdown);
+		var t = DateTime.UtcNow;
+
+		// Flat equity - no profit, no drawdown
+		profit.Add(t, 0m, null);
+		maxDrawdown.Add(t, 0m, null);
+		calmar.Add(t, 0m, null);
+
+		// Both zero -> should return 0 (not MaxValue)
+		calmar.Value.AssertEqual(0m);
+	}
+
+	#endregion
 }

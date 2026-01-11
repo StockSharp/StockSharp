@@ -23,7 +23,9 @@ public class RecoveryFactorParameter(MaxDrawdownParameter maxDrawdown, NetProfit
 	/// <inheritdoc />
 	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
-		if (_maxDrawdown.Value != 0)
-			Value = _netProfit.Value / _maxDrawdown.Value;
+		// When no drawdown, recovery factor is effectively infinite (use MaxValue as proxy)
+		Value = _maxDrawdown.Value != 0
+			? _netProfit.Value / _maxDrawdown.Value
+			: (_netProfit.Value > 0 ? decimal.MaxValue : 0);
 	}
 }

@@ -37,7 +37,8 @@ public class ProfitFactorParameter : BaseStatisticParameter<decimal>, ITradeStat
 		else if (info.PnL < 0)
 			_grossLoss -= info.PnL;
 
-		Value = _grossLoss > 0 ? _grossProfit / _grossLoss : 0;
+		// When no losses, profit factor is effectively infinite (use MaxValue as proxy)
+		Value = _grossLoss > 0 ? _grossProfit / _grossLoss : (_grossProfit > 0 ? decimal.MaxValue : 0);
 	}
 
 	/// <inheritdoc/>

@@ -26,6 +26,7 @@ public class CalmarRatioParameter(NetProfitParameter profit, MaxDrawdownParamete
 		var annualizedProfit = _profit.Value;
 		var maxDrawdown = _maxDrawdown.Value;
 
-		Value = maxDrawdown != 0 ? annualizedProfit / maxDrawdown : 0;
+		// When no drawdown, ratio is effectively infinite (use MaxValue as proxy)
+		Value = maxDrawdown != 0 ? annualizedProfit / maxDrawdown : (annualizedProfit > 0 ? decimal.MaxValue : 0);
 	}
 }
