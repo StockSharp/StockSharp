@@ -1,11 +1,16 @@
 namespace StockSharp.Samples.Testing.HistoryConsole;
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 using Ecng.Common;
+using Ecng.Excel;
 using Ecng.Logging;
+using Ecng.Interop;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Commissions;
@@ -14,11 +19,12 @@ using StockSharp.Algo.Testing;
 using StockSharp.BusinessEntities;
 using StockSharp.Messages;
 using StockSharp.Configuration;
+using StockSharp.Reporting;
 using StockSharp.Samples.Testing.History;
 
 class Program
 {
-	static void Main()
+	static async Task Main()
 	{
 		// check history data path
 		if (Paths.HistoryDataPath == null)
@@ -183,5 +189,42 @@ class Program
 		finishedEvent.WaitOne();
 
 		logManager.Dispose();
+
+		// Generate report - choose format
+		Console.WriteLine();
+		Console.WriteLine("Select report format:");
+		Console.WriteLine("  1. JSON (default)");
+		Console.WriteLine("  2. XML");
+		Console.WriteLine("  3. CSV");
+		Console.WriteLine("  4. Excel");
+		Console.Write("Enter choice (1-4): ");
+
+		var choice = Console.ReadLine()?.Trim();
+
+		IReportGenerator generator = choice switch
+		{
+			"1" => new JsonReportGenerator(),
+			"2" => new XmlReportGenerator(),
+			"3" => new CsvReportGenerator(),
+			"4" => new ExcelReportGenerator(new OpenXmlExcelWorkerProvider()),
+			_ => null,
+		};
+
+		if (generator is not null)
+			await GenerateReport(strategy, generator);
+	}
+
+	private static async Task GenerateReport(SmaStrategy strategy, IReportGenerator generator)
+	{
+		var reportPath = $"backtest_report.{generator.Extension}";
+
+		Console.WriteLine();
+		Console.WriteLine($"Generating {generator.Name} report to {reportPath}...");
+
+		await using var stream = new FileStream(reportPath, FileMode.Create, FileAccess.Write);
+		await generator.Generate(strategy, stream, CancellationToken.None);
+
+		Console.WriteLine($"Report saved: {reportPath}");
+		reportPath.OpenLink(false);
 	}
 }

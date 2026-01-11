@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_net.props" />
   <ItemGroup>
     <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
+    <PackageReference Include="Ecng.Excel.OpenXml" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Strategies\Algo.Strategies.csproj" />
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Testing\Algo.Testing.csproj" />
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Algo.Indicators\Algo.Indicators.csproj" />
+    <ProjectReference Include="..\..\..\Algo.Indicators\Algo.Indicators.csproj" />
+    <ProjectReference Include="..\..\..\Algo.Strategies\Algo.Strategies.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\01_History\SmaStrategy.cs" Link="SmaStrategy.cs" />
