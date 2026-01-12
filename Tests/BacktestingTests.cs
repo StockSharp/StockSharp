@@ -2,6 +2,7 @@ namespace StockSharp.Tests;
 
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.Testing;
+using StockSharp.Algo.Testing.Emulation;
 using StockSharp.Designer;
 
 /// <summary>
@@ -36,6 +37,29 @@ public class BacktestingTests : BaseTestClass
 		return false;
 	}
 
+	private static HistoryEmulationConnector CreateConnector(
+		ISecurityProvider secProvider,
+		IPortfolioProvider pfProvider,
+		IStorageRegistry storageRegistry,
+		DateTime startTime,
+		DateTime stopTime,
+		bool verifyMode = true)
+	{
+		var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
+		{
+			HistoryMessageAdapter =
+			{
+				StartDate = startTime,
+				StopDate = stopTime,
+			},
+		};
+
+		connector.EmulationAdapter.Settings.MatchOnTouch = true;
+		((MarketEmulator)connector.EmulationAdapter.Emulator).VerifyMode = verifyMode;
+
+		return connector;
+	}
+
 	/// <summary>
 	/// Tests that orders are generated during backtesting when SMA crossover occurs.
 	/// </summary>
@@ -54,16 +78,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
-		{
-			HistoryMessageAdapter =
-			{
-				StartDate = startTime,
-				StopDate = stopTime,
-			},
-		};
-
-		connector.EmulationAdapter.Settings.MatchOnTouch = true;
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -126,16 +141,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
-		{
-			HistoryMessageAdapter =
-			{
-				StartDate = startTime,
-				StopDate = stopTime,
-			},
-		};
-
-		connector.EmulationAdapter.Settings.MatchOnTouch = true;
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -198,16 +204,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
-		{
-			HistoryMessageAdapter =
-			{
-				StartDate = startTime,
-				StopDate = stopTime,
-			},
-		};
-
-		connector.EmulationAdapter.Settings.MatchOnTouch = true;
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -274,16 +271,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
-		{
-			HistoryMessageAdapter =
-			{
-				StartDate = startTime,
-				StopDate = stopTime,
-			},
-		};
-
-		connector.EmulationAdapter.Settings.MatchOnTouch = true;
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -349,16 +337,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
-		{
-			HistoryMessageAdapter =
-			{
-				StartDate = startTime,
-				StopDate = stopTime,
-			},
-		};
-
-		connector.EmulationAdapter.Settings.MatchOnTouch = true;
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -420,16 +399,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
-		{
-			HistoryMessageAdapter =
-			{
-				StartDate = startTime,
-				StopDate = stopTime,
-			},
-		};
-
-		connector.EmulationAdapter.Settings.MatchOnTouch = true;
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		// Add commission rule - 0.1% per trade
 		connector.EmulationAdapter.Settings.CommissionRules = [new CommissionTradeRule { Value = 0.001m }];
@@ -499,14 +469,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(6); // Short period for faster test
 
-		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
-		{
-			HistoryMessageAdapter =
-			{
-				StartDate = startTime,
-				StopDate = stopTime,
-			},
-		};
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -563,14 +526,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
-		{
-			HistoryMessageAdapter =
-			{
-				StartDate = startTime,
-				StopDate = stopTime,
-			},
-		};
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var progressValues = new List<int>();
 		connector.ProgressChanged += progress =>
@@ -637,14 +593,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
-		{
-			HistoryMessageAdapter =
-			{
-				StartDate = startTime,
-				StopDate = stopTime,
-			},
-		};
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -742,16 +691,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(14);
 
-		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
-		{
-			HistoryMessageAdapter =
-			{
-				StartDate = startTime,
-				StopDate = stopTime,
-			},
-		};
-
-		connector.EmulationAdapter.Settings.MatchOnTouch = true;
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy1 = new SmaStrategy
 		{
@@ -828,16 +768,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
-		{
-			HistoryMessageAdapter =
-			{
-				StartDate = startTime,
-				StopDate = stopTime,
-			},
-		};
-
-		connector.EmulationAdapter.Settings.MatchOnTouch = true;
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -1005,5 +936,247 @@ public class BacktestingTests : BaseTestClass
 		{
 			Fail($"Time ordering violations detected:\n{string.Join("\n", allErrors.Take(20))}");
 		}
+	}
+
+	/// <summary>
+	/// Tests that backtesting with VerifyMode enabled completes successfully (no violations detected in normal flow).
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestWithVerifyModeCompletes()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(7); // Short period
+
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode: true);
+
+		var strategy = new SmaStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		var tcs = new TaskCompletionSource<bool>();
+		Exception caughtException = null;
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				tcs.TrySetResult(true);
+		};
+
+		connector.Error += ex =>
+		{
+			caughtException = ex;
+			tcs.TrySetResult(false);
+		};
+
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
+		connector.Connect();
+		connector.Start();
+
+		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+
+		if (completed != tcs.Task)
+		{
+			connector.Disconnect();
+			Fail("Backtest did not complete in time");
+		}
+
+		// Should complete without VerifyMode throwing
+		IsNull(caughtException, $"No exception expected with VerifyMode, but got: {caughtException?.Message}");
+		IsTrue(connector.IsFinished, "Backtest should be marked finished");
+	}
+
+	/// <summary>
+	/// Tests that two emulation runs with same deterministic random seed produce identical output messages.
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestWithSameRandomSeedProducesIdenticalMessages()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(3); // Short period for faster test
+
+		const int randomSeed = 42;
+
+		// Helper to run emulation and collect messages
+		async Task<List<Message>> RunEmulation(bool verifyMode)
+		{
+			var messages = new List<Message>();
+
+			using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
+			{
+				HistoryMessageAdapter =
+				{
+					StartDate = startTime,
+					StopDate = stopTime,
+				},
+			};
+
+			connector.EmulationAdapter.Settings.MatchOnTouch = true;
+			var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
+			emulator.VerifyMode = verifyMode;
+			emulator.RandomProvider = new DefaultRandomProvider(randomSeed);
+
+			// Capture emulator output messages
+			emulator.NewOutMessage += msg =>
+			{
+				// Skip non-deterministic messages
+				if (msg is TimeMessage or ResetMessage)
+					return;
+
+				messages.Add(msg.TypedClone());
+			};
+
+			var strategy = new SmaStrategy
+			{
+				Connector = connector,
+				Security = security,
+				Portfolio = portfolio,
+				Volume = 1,
+				CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+				Long = 80,
+				Short = 30,
+			};
+
+			var tcs = new TaskCompletionSource<bool>();
+			connector.StateChanged2 += state =>
+			{
+				if (state == ChannelStates.Stopped)
+					tcs.TrySetResult(true);
+			};
+
+			strategy.WaitRulesOnStop = false;
+			strategy.Reset();
+			strategy.Start();
+			connector.Connect();
+			connector.Start();
+
+			await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+
+			return messages;
+		}
+
+		// Run twice with same seed
+		var messages1 = await RunEmulation(verifyMode: true);
+		var messages2 = await RunEmulation(verifyMode: true);
+
+		// Compare using existing CheckEqual method
+		messages1.Count.AssertEqual(messages2.Count);
+
+		for (var i = 0; i < messages1.Count; i++)
+			Helper.CheckEqual(messages1[i], messages2[i]);
+	}
+
+	/// <summary>
+	/// Tests that VerifyMode does not change emulation results (same random seed).
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestVerifyModeDoesNotAffectResults()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(3); // Short period
+
+		const int randomSeed = 42;
+
+		// Helper to run emulation and collect messages
+		async Task<List<Message>> RunEmulation(bool verifyMode)
+		{
+			var messages = new List<Message>();
+
+			using var connector = new HistoryEmulationConnector(secProvider, pfProvider, storageRegistry)
+			{
+				HistoryMessageAdapter =
+				{
+					StartDate = startTime,
+					StopDate = stopTime,
+				},
+			};
+
+			connector.EmulationAdapter.Settings.MatchOnTouch = true;
+			var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
+			emulator.VerifyMode = verifyMode;
+			emulator.RandomProvider = new DefaultRandomProvider(randomSeed);
+
+			emulator.NewOutMessage += msg =>
+			{
+				// Skip non-deterministic messages
+				if (msg is TimeMessage or ResetMessage)
+					return;
+
+				messages.Add(msg.TypedClone());
+			};
+
+			var strategy = new SmaStrategy
+			{
+				Connector = connector,
+				Security = security,
+				Portfolio = portfolio,
+				Volume = 1,
+				CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+				Long = 80,
+				Short = 30,
+			};
+
+			var tcs = new TaskCompletionSource<bool>();
+			connector.StateChanged2 += state =>
+			{
+				if (state == ChannelStates.Stopped)
+					tcs.TrySetResult(true);
+			};
+
+			strategy.WaitRulesOnStop = false;
+			strategy.Reset();
+			strategy.Start();
+			connector.Connect();
+			connector.Start();
+
+			await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+
+			return messages;
+		}
+
+		// Run with VerifyMode on and off
+		var messagesWithVerify = await RunEmulation(verifyMode: true);
+		var messagesWithoutVerify = await RunEmulation(verifyMode: false);
+
+		// Compare using existing CheckEqual method
+		messagesWithVerify.Count.AssertEqual(messagesWithoutVerify.Count);
+
+		for (var i = 0; i < messagesWithVerify.Count; i++)
+			Helper.CheckEqual(messagesWithVerify[i], messagesWithoutVerify[i]);
 	}
 }

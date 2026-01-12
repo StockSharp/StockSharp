@@ -66,155 +66,15 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 		}, CancellationToken);
 	}
 
-	/// <summary>
-	/// Compare ALL fields of two ExecutionMessages.
-	/// </summary>
-	private static List<string> CompareExecutionMessages(ExecutionMessage v1, ExecutionMessage v2, string context)
-	{
-		var diffs = new List<string>();
-
-		if (v1.SecurityId != v2.SecurityId)
-			diffs.Add($"{context}: SecurityId V1={v1.SecurityId}, V2={v2.SecurityId}");
-		if (v1.PortfolioName != v2.PortfolioName)
-			diffs.Add($"{context}: PortfolioName V1={v1.PortfolioName}, V2={v2.PortfolioName}");
-		if (v1.TransactionId != v2.TransactionId)
-			diffs.Add($"{context}: TransactionId V1={v1.TransactionId}, V2={v2.TransactionId}");
-		if (v1.OriginalTransactionId != v2.OriginalTransactionId)
-			diffs.Add($"{context}: OriginalTransactionId V1={v1.OriginalTransactionId}, V2={v2.OriginalTransactionId}");
-		if (v1.HasOrderInfo != v2.HasOrderInfo)
-			diffs.Add($"{context}: HasOrderInfo V1={v1.HasOrderInfo}, V2={v2.HasOrderInfo}");
-		if (v1.IsCancellation != v2.IsCancellation)
-			diffs.Add($"{context}: IsCancellation V1={v1.IsCancellation}, V2={v2.IsCancellation}");
-		if (v1.OrderPrice != v2.OrderPrice)
-			diffs.Add($"{context}: OrderPrice V1={v1.OrderPrice}, V2={v2.OrderPrice}");
-		if (v1.OrderVolume != v2.OrderVolume)
-			diffs.Add($"{context}: OrderVolume V1={v1.OrderVolume}, V2={v2.OrderVolume}");
-		if (v1.VisibleVolume != v2.VisibleVolume)
-			diffs.Add($"{context}: VisibleVolume V1={v1.VisibleVolume}, V2={v2.VisibleVolume}");
-		if (v1.Side != v2.Side)
-			diffs.Add($"{context}: Side V1={v1.Side}, V2={v2.Side}");
-		if (v1.Balance != v2.Balance)
-			diffs.Add($"{context}: Balance V1={v1.Balance}, V2={v2.Balance}");
-		if (v1.OrderType != v2.OrderType)
-			diffs.Add($"{context}: OrderType V1={v1.OrderType}, V2={v2.OrderType}");
-		if (v1.OrderState != v2.OrderState)
-			diffs.Add($"{context}: OrderState V1={v1.OrderState}, V2={v2.OrderState}");
-		if (v1.TimeInForce != v2.TimeInForce)
-			diffs.Add($"{context}: TimeInForce V1={v1.TimeInForce}, V2={v2.TimeInForce}");
-		if (v1.TradePrice != v2.TradePrice)
-			diffs.Add($"{context}: TradePrice V1={v1.TradePrice}, V2={v2.TradePrice}");
-		if (v1.TradeVolume != v2.TradeVolume)
-			diffs.Add($"{context}: TradeVolume V1={v1.TradeVolume}, V2={v2.TradeVolume}");
-		if (v1.Commission != v2.Commission)
-			diffs.Add($"{context}: Commission V1={v1.Commission}, V2={v2.Commission}");
-		if (v1.Slippage != v2.Slippage)
-			diffs.Add($"{context}: Slippage V1={v1.Slippage}, V2={v2.Slippage}");
-
-		var err1 = v1.Error?.Message;
-		var err2 = v2.Error?.Message;
-		if (err1 != err2)
-			diffs.Add($"{context}: Error V1={err1}, V2={err2}");
-
-		return diffs;
-	}
-
-	/// <summary>
-	/// Compare ALL fields of two PositionChangeMessages.
-	/// </summary>
-	private static List<string> ComparePositionMessages(PositionChangeMessage v1, PositionChangeMessage v2, string context)
-	{
-		var diffs = new List<string>();
-
-		if (v1.SecurityId != v2.SecurityId)
-			diffs.Add($"{context}: SecurityId V1={v1.SecurityId}, V2={v2.SecurityId}");
-		if (v1.PortfolioName != v2.PortfolioName)
-			diffs.Add($"{context}: PortfolioName V1={v1.PortfolioName}, V2={v2.PortfolioName}");
-
-		var allKeys = v1.Changes.Keys.Union(v2.Changes.Keys).ToList();
-		foreach (var key in allKeys)
-		{
-			var hasV1 = v1.Changes.TryGetValue(key, out var val1);
-			var hasV2 = v2.Changes.TryGetValue(key, out var val2);
-
-			if (hasV1 && !hasV2)
-				diffs.Add($"{context}: {key} V1={val1}, V2=MISSING");
-			else if (!hasV1 && hasV2)
-				diffs.Add($"{context}: {key} V1=MISSING, V2={val2}");
-			else if (hasV1 && hasV2 && !Equals(val1, val2))
-				diffs.Add($"{context}: {key} V1={val1}, V2={val2}");
-		}
-
-		return diffs;
-	}
-
-	/// <summary>
-	/// Compare single message.
-	/// </summary>
-	private static List<string> CompareMessage(Message v1, Message v2, string context)
-	{
-		var diffs = new List<string>();
-
-		if (v1.GetType() != v2.GetType())
-		{
-			diffs.Add($"{context}: Type V1={v1.GetType().Name}, V2={v2.GetType().Name}");
-			return diffs;
-		}
-
-		if (v1 is ExecutionMessage exec1 && v2 is ExecutionMessage exec2)
-			diffs.AddRange(CompareExecutionMessages(exec1, exec2, context));
-		else if (v1 is PositionChangeMessage pos1 && v2 is PositionChangeMessage pos2)
-			diffs.AddRange(ComparePositionMessages(pos1, pos2, context));
-
-		return diffs;
-	}
-
-	/// <summary>
-	/// Full 1:1 comparison of all messages.
-	/// </summary>
-	private static List<string> Compare(List<Message> v1, List<Message> v2)
-	{
-		var diffs = new List<string>();
-
-		if (v1.Count != v2.Count)
-			diffs.Add($"Count: V1={v1.Count}, V2={v2.Count}");
-
-		var max = Math.Max(v1.Count, v2.Count);
-		for (int i = 0; i < max; i++)
-		{
-			if (i >= v1.Count)
-			{
-				diffs.Add($"[{i}]: V1=MISSING, V2={v2[i].GetType().Name}");
-				continue;
-			}
-			if (i >= v2.Count)
-			{
-				diffs.Add($"[{i}]: V1={v1[i].GetType().Name}, V2=MISSING");
-				continue;
-			}
-
-			diffs.AddRange(CompareMessage(v1[i], v2[i], $"[{i}]"));
-		}
-
-		return diffs;
-	}
-
 	private void AssertEqual(List<Message> resV1, List<Message> resV2, string testName)
 	{
-		var diffs = Compare(resV1, resV2);
-
 		Console.WriteLine($"\n=== {testName} ===");
 		Console.WriteLine($"V1: {resV1.Count} messages, V2: {resV2.Count} messages");
 
-		if (diffs.Count > 0)
-		{
-			Console.WriteLine($"Differences: {diffs.Count}");
-			foreach (var d in diffs.Take(50))
-				Console.WriteLine($"  {d}");
-			if (diffs.Count > 50)
-				Console.WriteLine($"  ... and {diffs.Count - 50} more");
-		}
+		resV1.Count.AssertEqual(resV2.Count);
 
-		AreEqual(0, diffs.Count, $"{testName}: {diffs.Count} differences");
+		for (var i = 0; i < resV1.Count; i++)
+			Helper.CheckEqual(resV1[i], resV2[i]);
 	}
 
 	#endregion
