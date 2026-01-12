@@ -98,32 +98,45 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 	{
 		stream.SetLength(0);
 
-		using var worker = _provider.CreateNew(stream);
+		using var worker = _provider.CreateNew(stream, false);
 
-		// Create Params sheet (first sheet - AddSheet creates a new one since CreateNew doesn't create initial sheet)
+		// Create sheets in template order: Dashboard, Params, Equity, Trades, Stats, Orders
+
+		// 1. Dashboard sheet
+		worker.AddSheet().RenameSheet(_dashboardSheet);
+		CreateDashboardSheet(worker, source, cancellationToken);
+
+		// 2. Params sheet
 		worker.AddSheet().RenameSheet(_paramsSheet);
 		CreateParamsSheet(worker, source, cancellationToken);
 
-		// Create Trades sheet
+		// 3. Equity sheet
+		worker.AddSheet().RenameSheet(_equitySheet);
+		CreateEquitySheet(worker, source, cancellationToken);
+
+		// 4. Trades sheet
 		if (IncludeTrades)
 		{
 			worker.AddSheet().RenameSheet(_tradesSheet);
 			CreateTradesSheet(worker, source, cancellationToken);
 		}
 
-		// Create Orders sheet
+		// 5. Stats sheet
+		worker.AddSheet().RenameSheet(_statsSheet);
+		CreateStatsSheet(worker, source, cancellationToken);
+
+		// 6. Orders sheet
 		if (IncludeOrders)
 		{
 			worker.AddSheet().RenameSheet(_ordersSheet);
 			CreateOrdersSheet(worker, source, cancellationToken);
 		}
 
-		// Create Equity sheet
-		worker.AddSheet().RenameSheet(_equitySheet);
-		CreateEquitySheet(worker, source, cancellationToken);
+		// Add charts to Dashboard (after all data sheets are populated)
+		AddDashboardCharts(worker, source);
 
-		// Switch back to Params as the default sheet
-		worker.SwitchSheet(_paramsSheet);
+		// Switch to Dashboard as the default sheet (like template)
+		worker.SwitchSheet(_dashboardSheet);
 	}
 
 	private string GetDecimalFormat()
@@ -136,59 +149,92 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		// Header styling (same as template)
 		const string headerBg = "4472C4";
 		const string headerFg = "FFFFFF";
+		const string labelBg = "D9E2F3";
 
-		// Create layout matching template structure
-		// Row 0: Title row
+		// Column widths matching template
 		worker
-			.SetCell(0, 0, "Strategy Report")
-			.SetCellColor(0, 0, headerBg, headerFg)
-			.MergeCells(0, 0, 4, 0)
-			.SetColumnWidth(0, 20)
-			.SetColumnWidth(1, 25)
-			.SetColumnWidth(2, 5)
-			.SetColumnWidth(3, 20)
-			.SetColumnWidth(4, 25);
+			.SetColumnWidth(0, 26)  // A - labels
+			.SetColumnWidth(1, 20)  // B - values
+			.SetColumnWidth(2, 3)   // C - spacer
+			.SetColumnWidth(3, 26)  // D - labels
+			.SetColumnWidth(4, 20); // E - values
 
-		// Strategy info section (matching template: B2, B3, B4, B5, B6)
+		// Row 0 (Excel row 1): Title "Parameters"
+		worker
+			.SetCell(0, 0, "Parameters")
+			.SetCellColor(0, 0, headerBg, headerFg)
+			.MergeCells(0, 0, 3, 0);
+
+		// Rows 1-10: Strategy parameters (matching template structure)
+		// Row 1: Strategy Name
 		worker
 			.SetCell(0, 1, "Strategy Name")
-			.SetCell(1, 1, source.Name)
-			.SetCell(0, 2, "Report Date")
+			.SetCellColor(0, 1, labelBg, null)
+			.SetCell(1, 1, source.Name);
+
+		// Row 2: Run Date
+		worker
+			.SetCell(0, 2, "Run Date")
+			.SetCellColor(0, 2, labelBg, null)
 			.SetCell(1, 2, DateTime.Now)
 			.SetCellFormat(1, 2, "yyyy-MM-dd HH:mm:ss");
 
-		// Try to get common params like template expects
-		WriteParamIfExistsCreate(worker, source, "Symbol", 0, 3, 1, 3);
-		WriteParamIfExistsCreate(worker, source, "TimeFrame", 0, 4, 1, 4);
-		WriteParamIfExistsCreate(worker, source, "InitialCapital", 0, 5, 1, 5);
+		// Row 3: Symbol
+		worker.SetCell(0, 3, "Symbol").SetCellColor(0, 3, labelBg, null);
+		WriteParamIfExistsCreate(worker, source, "Symbol", 1, 3);
 
-		// Summary section
-		worker
-			.SetCell(0, 7, "Summary")
-			.SetCellColor(0, 7, headerBg, headerFg)
-			.MergeCells(0, 7, 1, 7)
-			.SetCell(0, 8, "Total PnL")
-			.SetCell(1, 8, source.PnL)
-			.SetCell(0, 9, "Position")
-			.SetCell(1, 9, source.Position)
-			.SetCell(0, 10, "Commission")
-			.SetCell(1, 10, source.Commission)
-			.SetCell(0, 11, "Working Time")
-			.SetCell(1, 11, source.TotalWorkingTime.Format());
+		// Row 4: Timeframe
+		worker.SetCell(0, 4, "Timeframe").SetCellColor(0, 4, labelBg, null);
+		WriteParamIfExistsCreate(worker, source, "TimeFrame", 1, 4);
 
-		// Statistics table header (row 14, matching template ~row 15/16)
+		// Row 5: Initial Capital
+		worker.SetCell(0, 5, "Initial Capital").SetCellColor(0, 5, labelBg, null);
+		var initialCapital = GetDecimalParam(source, "InitialCapital");
+		worker.SetCell(1, 5, initialCapital > 0 ? initialCapital : 100000m)
+			.SetCellFormat(1, 5, GetDecimalFormat());
+
+		// Row 6: Currency
+		worker.SetCell(0, 6, "Currency").SetCellColor(0, 6, labelBg, null);
+		WriteParamIfExistsCreate(worker, source, "Currency", 1, 6);
+		if (worker.GetCell<string>(1, 6).IsEmpty())
+			worker.SetCell(1, 6, "USD");
+
+		// Row 7: Commission (per trade)
+		worker.SetCell(0, 7, "Commission (per trade)").SetCellColor(0, 7, labelBg, null)
+			.SetCell(1, 7, source.Commission ?? 0m)
+			.SetCellFormat(1, 7, GetDecimalFormat());
+
+		// Row 8: Slippage (per trade)
+		worker.SetCell(0, 8, "Slippage (per trade)").SetCellColor(0, 8, labelBg, null)
+			.SetCell(1, 8, source.Slippage ?? 0m)
+			.SetCellFormat(1, 8, GetDecimalFormat());
+
+		// Row 9: Risk-free rate (annual)
+		worker.SetCell(0, 9, "Risk-free rate (annual)").SetCellColor(0, 9, labelBg, null)
+			.SetCell(1, 9, 0m)
+			.SetCellFormat(1, 9, "0.00%");
+
+		// Row 10: Sharpe (placeholder for Stats sheet)
+		worker.SetCell(0, 10, "Sharpe").SetCellColor(0, 10, labelBg, null)
+			.SetCell(1, 10, "");
+
+		// Row 13: Section headers
 		worker
-			.SetCell(0, 14, "Statistic")
+			.SetCell(0, 13, "StatisticParameters")
+			.SetCellColor(0, 13, headerBg, headerFg)
+			.SetCell(3, 13, "Parameters")
+			.SetCellColor(3, 13, headerBg, headerFg);
+
+		// Row 14: Column headers for tables
+		worker
+			.SetCell(0, 14, "Name")
 			.SetCell(1, 14, "Value")
-			.SetCellColor(0, 14, headerBg, headerFg)
-			.SetCellColor(1, 14, headerBg, headerFg);
-
-		// Parameters table header
-		worker
-			.SetCell(3, 14, "Parameter")
+			.SetCellColor(0, 14, labelBg, null)
+			.SetCellColor(1, 14, labelBg, null)
+			.SetCell(3, 14, "Name")
 			.SetCell(4, 14, "Value")
-			.SetCellColor(3, 14, headerBg, headerFg)
-			.SetCellColor(4, 14, headerBg, headerFg);
+			.SetCellColor(3, 14, labelBg, null)
+			.SetCellColor(4, 14, labelBg, null);
 
 		// Fill Statistics (A16:B...)
 		var statRow = 15;
@@ -224,18 +270,259 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		worker.FreezeRows(1);
 	}
 
-	private void WriteParamIfExistsCreate(IExcelWorker worker, IReportSource source, string key, int labelCol, int labelRow, int valueCol, int valueRow)
+	private void WriteParamIfExistsCreate(IExcelWorker worker, IReportSource source, string key, int col, int row)
 	{
-		worker.SetCell(labelCol, labelRow, key);
-
 		foreach (var (name, value) in source.Parameters)
 		{
 			if (string.Equals(name, key, StringComparison.OrdinalIgnoreCase))
 			{
-				worker.SetCell(valueCol, valueRow, NormalizeCellValue(value));
+				worker.SetCell(col, row, NormalizeCellValue(value));
 				return;
 			}
 		}
+	}
+
+	private void CreateDashboardSheet(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		const string headerBg = "4472C4";
+		const string headerFg = "FFFFFF";
+		const string labelBg = "D9E2F3";
+
+		// Column widths matching template
+		worker
+			.SetColumnWidth(0, 22)
+			.SetColumnWidth(1, 22);
+
+		// Row 0: Title "Strategy Report" merged A1:H1
+		worker
+			.SetCell(0, 0, "Strategy Report")
+			.SetCellColor(0, 0, headerBg, headerFg)
+			.MergeCells(0, 0, 7, 0);
+
+		// Rows 3-9: Summary metrics (matching template structure)
+		// Note: Template uses formulas, but without template we fill static values
+
+		// Row 3: Strategy
+		worker
+			.SetCell(0, 3, "Strategy")
+			.SetCellColor(0, 3, labelBg, null)
+			.SetCell(1, 3, source.Name);
+
+		// Row 4: Run Date
+		worker
+			.SetCell(0, 4, "Run Date")
+			.SetCellColor(0, 4, labelBg, null)
+			.SetCell(1, 4, DateTime.Now)
+			.SetCellFormat(1, 4, "yyyy-MM-dd HH:mm:ss");
+
+		// Row 5: Net PnL
+		worker
+			.SetCell(0, 5, "Net PnL")
+			.SetCellColor(0, 5, labelBg, null)
+			.SetCell(1, 5, source.PnL)
+			.SetCellFormat(1, 5, GetDecimalFormat());
+
+		// Row 6: Max Drawdown (calculate from trades)
+		var maxDrawdown = CalculateMaxDrawdown(source);
+		worker
+			.SetCell(0, 6, "Max Drawdown")
+			.SetCellColor(0, 6, labelBg, null)
+			.SetCell(1, 6, maxDrawdown)
+			.SetCellFormat(1, 6, "0.00%");
+
+		// Row 7: Sharpe (placeholder)
+		worker
+			.SetCell(0, 7, "Sharpe")
+			.SetCellColor(0, 7, labelBg, null)
+			.SetCell(1, 7, GetStatParam(source, "Sharpe"));
+
+		// Row 8: Win Rate
+		var winRate = CalculateWinRate(source);
+		worker
+			.SetCell(0, 8, "Win Rate")
+			.SetCellColor(0, 8, labelBg, null)
+			.SetCell(1, 8, winRate)
+			.SetCellFormat(1, 8, "0.00%");
+
+		// Row 9: Trades count
+		var tradesCount = source.OwnTrades.Count();
+		worker
+			.SetCell(0, 9, "Trades")
+			.SetCellColor(0, 9, labelBg, null)
+			.SetCell(1, 9, tradesCount);
+
+		// Charts will be added later after Equity data is populated
+	}
+
+	private void AddDashboardCharts(IExcelWorker worker, IReportSource source)
+	{
+		var trades = source.OwnTrades.ToArray();
+		if (trades.Length == 0)
+			return;
+
+		// Calculate equity data row count
+		var byDay = trades
+			.OrderBy(t => t.Time)
+			.GroupBy(t => t.Time.Date)
+			.Count();
+
+		if (byDay == 0)
+			return;
+
+		var equityRowCount = byDay + 1; // +1 for header
+
+		worker.SwitchSheet(_dashboardSheet);
+
+		// Chart 1: "Equity Curve" at anchor col=4 (D), row=4 - matches template
+		// xCol=1 (A - Date), yCol=2 (B - Equity), wider chart with more space
+		var equityDataRange = $"{_equitySheet}!$A$1:$B${equityRowCount}";
+		worker.AddLineChart("Equity Curve", equityDataRange, 1, 2, 4, 4, 700, 280);
+
+		// Chart 2: "Drawdown" at anchor col=4 (D), row=22 - more spacing from first chart
+		// xCol=1 (A - Date), yCol=3 (C - Drawdown)
+		var drawdownDataRange = $"{_equitySheet}!$A$1:$C${equityRowCount}";
+		worker.AddLineChart("Drawdown", drawdownDataRange, 1, 3, 4, 22, 700, 280);
+	}
+
+	private void CreateStatsSheet(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		const string headerBg = "4472C4";
+		const string headerFg = "FFFFFF";
+		const string labelBg = "D9E2F3";
+
+		// Column widths and styles matching template
+		worker
+			.SetColumnWidth(0, 10)  // Year
+			.SetColumnWidth(1, 10)  // Month
+			.SetColumnWidth(2, 12)  // Return
+			.SetColumnWidth(3, 14)  // Cumulative
+			.SetStyle(0, "0")       // Year as integer
+			.SetStyle(1, "0")       // Month as integer
+			.SetStyle(2, "0.00%")   // Return as percent
+			.SetStyle(3, "0.00%")   // Cumulative as percent
+			// ColorScale for Return (col 2) starting from row 3 (after headers) - matching template
+			.SetColorScale(2, 3, "F8696B", "FFEB84", "63BE7B");
+
+		// Row 0: Title
+		worker
+			.SetCell(0, 0, "Monthly Returns")
+			.SetCellColor(0, 0, headerBg, headerFg)
+			.MergeCells(0, 0, 5, 0);
+
+		// Row 2: Headers
+		worker
+			.SetCell(0, 2, "Year")
+			.SetCellColor(0, 2, labelBg, null)
+			.SetCell(1, 2, "Month")
+			.SetCellColor(1, 2, labelBg, null)
+			.SetCell(2, 2, "Return")
+			.SetCellColor(2, 2, labelBg, null)
+			.SetCell(3, 2, "Cumulative")
+			.SetCellColor(3, 2, labelBg, null);
+
+		// Calculate monthly returns from trades
+		var trades = source.OwnTrades.ToArray();
+		if (trades.Length == 0)
+		{
+			worker.FreezeRows(3);
+			return;
+		}
+
+		var monthlyReturns = trades
+			.GroupBy(t => new { t.Time.Year, t.Time.Month })
+			.OrderBy(g => g.Key.Year)
+			.ThenBy(g => g.Key.Month)
+			.Select(g => new
+			{
+				g.Key.Year,
+				g.Key.Month,
+				Return = g.Sum(t => t.PnL ?? 0m)
+			})
+			.ToList();
+
+		var row = 3;
+		decimal cumulative = 0m;
+		var initialCapital = GetDecimalParam(source, "InitialCapital");
+		if (initialCapital <= 0) initialCapital = 100000m;
+
+		foreach (var mr in monthlyReturns)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			var returnPct = mr.Return / initialCapital;
+			cumulative += returnPct;
+
+			worker
+				.SetCell(0, row, mr.Year)
+				.SetCell(1, row, mr.Month)
+				.SetCell(2, row, returnPct)
+				.SetCellFormat(2, row, "0.00%")
+				.SetCell(3, row, cumulative)
+				.SetCellFormat(3, row, "0.00%");
+
+			row++;
+		}
+
+		worker.FreezeRows(3);
+
+		// Add Monthly Returns chart at anchor col=6 (F), row=3 (matching template)
+		if (row > 3)
+		{
+			// Use columns A-D, xCol=2 (Month), yCol=3 (Return)
+			var returnDataRange = $"{_statsSheet}!$A$3:$D${row}";
+			worker.AddLineChart("Monthly Returns", returnDataRange, 2, 3, 6, 3, 500, 300);
+		}
+	}
+
+	private static decimal CalculateMaxDrawdown(IReportSource source)
+	{
+		var trades = source.OwnTrades.ToArray();
+		if (trades.Length == 0)
+			return 0m;
+
+		decimal cumPnL = 0m;
+		decimal peak = 0m;
+		decimal maxDrawdown = 0m;
+
+		foreach (var trade in trades.OrderBy(t => t.Time))
+		{
+			cumPnL += trade.PnL ?? 0m;
+			if (cumPnL > peak)
+				peak = cumPnL;
+
+			if (peak > 0)
+			{
+				var drawdown = (cumPnL - peak) / peak;
+				if (drawdown < maxDrawdown)
+					maxDrawdown = drawdown;
+			}
+		}
+
+		return maxDrawdown;
+	}
+
+	private static decimal CalculateWinRate(IReportSource source)
+	{
+		var trades = source.OwnTrades.ToArray();
+		if (trades.Length == 0)
+			return 0m;
+
+		var winningTrades = trades.Count(t => (t.PnL ?? 0m) > 0);
+		return (decimal)winningTrades / trades.Length;
+	}
+
+	private static object GetStatParam(IReportSource source, string key)
+	{
+		foreach (var (name, value) in source.StatisticParameters)
+		{
+			if (string.Equals(name, key, StringComparison.OrdinalIgnoreCase))
+				return value;
+		}
+		return "";
 	}
 
 	private void CreateTradesSheet(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
@@ -246,7 +533,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		const string headerFg = "FFFFFF";
 
 		// Header row matching template: EntryTime, ExitTime, Side, Qty, EntryPrice, ExitPrice, PnL, PnL%, TotalPnL, Position
-		var headers = new[] { "Entry Time", "Exit Time", "Side", "Qty", "Entry Price", "Exit Price", "PnL", "PnL%", "Total PnL", "Position" };
+		var headers = new[] { "EntryTime", "ExitTime", "Side", "Qty", "EntryPrice", "ExitPrice", "PnL", "PnL%", "TotalPnL", "Position" };
 		for (var i = 0; i < headers.Length; i++)
 		{
 			worker
@@ -277,8 +564,9 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			.SetStyle(8, decimalFormat)
 			.SetStyle(9, decimalFormat)
 			.FreezeRows(1)
-			.SetConditionalFormatting(6, ComparisonOperator.Less, "0", "FFC7CE", "9C0006")
-			.SetConditionalFormatting(6, ComparisonOperator.Greater, "0", "C6EFCE", "006100");
+			// ColorScale for PnL (col 6) and TotalPnL (col 8) - matching template
+			.SetColorScale(6, 1, "F8696B", "FFEB84", "63BE7B")
+			.SetColorScale(8, 1, "F8696B", "FFEB84", "63BE7B");
 
 		var row = 1;
 		decimal totalPnL = 0m;
@@ -313,6 +601,12 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 				.SetCell(8, row, totalPnL)             // Total PnL
 				.SetCell(9, row, position);            // Position
 
+			// Color Side column: Buy = green, Sell = red
+			var (sideBg, sideFg) = trade.Side == Sides.Buy
+				? ("C6EFCE", "006100")  // Light green bg, dark green text
+				: ("FFC7CE", "9C0006"); // Light red bg, dark red text
+			worker.SetCellColor(2, row, sideBg, sideFg);
+
 			row++;
 		}
 	}
@@ -325,7 +619,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		const string headerFg = "FFFFFF";
 
 		// Header row matching template
-		var headers = new[] { "Order ID", "Transaction ID", "Side", "Time", "Price", "State", "Balance", "Volume", "Type" };
+		var headers = new[] { "OrderId", "TransactionId", "Side", "Time", "Price", "State", "Balance", "Volume", "Type" };
 		for (var i = 0; i < headers.Length; i++)
 		{
 			worker
@@ -351,7 +645,9 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			.SetStyle(4, decimalFormat)
 			.SetStyle(6, decimalFormat)
 			.SetStyle(7, decimalFormat)
-			.FreezeRows(1);
+			.FreezeRows(1)
+			// ColorScale for Balance (col 6) - matching template
+			.SetColorScale(6, 1, "F8696B", "FFEB84", "63BE7B");
 
 		var row = 1;
 
@@ -369,6 +665,23 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 				.SetCell(6, row, order.Balance)
 				.SetCell(7, row, order.Volume)
 				.SetCell(8, row, order.Type.GetDisplayName());
+
+			// Color Side column: Buy = green, Sell = red
+			var (sideBg, sideFg) = order.Side == Sides.Buy
+				? ("C6EFCE", "006100")  // Light green bg, dark green text
+				: ("FFC7CE", "9C0006"); // Light red bg, dark red text
+			worker.SetCellColor(2, row, sideBg, sideFg);
+
+			// Color State column based on order state
+			var (stateBg, stateFg) = order.State switch
+			{
+				OrderStates.Done => ("C6EFCE", "006100"),    // Green - completed
+				OrderStates.Failed => ("FFC7CE", "9C0006"), // Red - failed/error
+				OrderStates.Active => ("FFEB84", "806000"), // Yellow - active
+				_ => (null as string, null as string)       // No color for others
+			};
+			if (stateBg != null)
+				worker.SetCellColor(5, row, stateBg, stateFg);
 
 			row++;
 		}
@@ -398,7 +711,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			.SetStyle(1, GetDecimalFormat())
 			.SetStyle(2, "0.00%")
 			.FreezeRows(1)
-			.SetConditionalFormatting(2, ComparisonOperator.Less, "0", "FFC7CE", "9C0006");
+			// ColorScale for Drawdown (col 2) - matching template
+			.SetColorScale(2, 1, "F8696B", "FFEB84", "63BE7B");
 
 		var trades = source.OwnTrades.ToArray();
 		if (trades.Length == 0)
