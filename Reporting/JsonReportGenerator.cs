@@ -14,7 +14,7 @@ public class JsonReportGenerator : BaseReportGenerator
 	public override string Extension => "json";
 
 	/// <inheritdoc />
-	public override async ValueTask Generate(IReportSource source, Stream stream, CancellationToken cancellationToken)
+	protected override async ValueTask OnGenerate(IReportSource source, Stream stream, CancellationToken cancellationToken)
 	{
 		using var textWriter = new StreamWriter(stream, Encoding, leaveOpen: true);
 		using var writer = new JsonTextWriter(textWriter) { Formatting = Formatting.Indented };

@@ -16,7 +16,7 @@ public class CsvReportGenerator : BaseReportGenerator
 	public override string Extension => "csv";
 
 	/// <inheritdoc />
-	public override async ValueTask Generate(IReportSource source, Stream stream, CancellationToken cancellationToken)
+	protected override async ValueTask OnGenerate(IReportSource source, Stream stream, CancellationToken cancellationToken)
 	{
 		using var writer = new StreamWriter(stream, Encoding, leaveOpen: true);
 

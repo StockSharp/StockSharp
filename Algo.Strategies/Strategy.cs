@@ -274,6 +274,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		NameGenerator.Changed += name => _name.Value = name;
 
 		RiskManager = new RiskManager();
+		_reportSource = new();
 		_indicators = new(this);
 
 		_posManager = new(EnsureGetId);
@@ -602,6 +603,64 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	#region IReportSource implementation
 
+	private readonly ReportSource _reportSource;
+
+	/// <summary>
+	/// Report data source with aggregation support.
+	/// </summary>
+	[Browsable(false)]
+	public ReportSource ReportSource => _reportSource;
+
+	/// <inheritdoc />
+	public void Prepare()
+	{
+		_reportSource.Name = Name;
+		_reportSource.TotalWorkingTime = TotalWorkingTime;
+		_reportSource.Commission = Commission;
+		_reportSource.Position = Position;
+		_reportSource.PnL = PnL;
+		_reportSource.Slippage = Slippage;
+		_reportSource.Latency = Latency;
+
+		// Sync parameters
+		_reportSource.ClearParameters();
+		foreach (var p in GetParameters().Where(p => p.IsBrowsable()))
+			_reportSource.AddParameter(p.GetName(), ToReportValue(p.Value));
+
+		// Sync statistic parameters
+		_reportSource.ClearStatisticParameters();
+		foreach (var p in StatisticManager.Parameters)
+			_reportSource.AddStatisticParameter(p.Name, ToReportValue(p.Value));
+	}
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	string IReportSource.Name => Name;
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	TimeSpan IReportSource.TotalWorkingTime => TotalWorkingTime;
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	decimal? IReportSource.Commission => Commission;
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	decimal IReportSource.Position => Position;
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	decimal IReportSource.PnL => PnL;
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	decimal? IReportSource.Slippage => Slippage;
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	TimeSpan? IReportSource.Latency => Latency;
+
 	/// <inheritdoc />
 	[Browsable(false)]
 	IEnumerable<(string Name, object Value)> IReportSource.StatisticParameters
@@ -629,33 +688,49 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	IEnumerable<ReportOrder> IReportSource.Orders => Orders.Select(o => new ReportOrder(
-		o.Id,
-		o.TransactionId,
-		o.Side,
-		o.ServerTime,
-		o.Price,
-		o.State,
-		o.Balance,
-		o.Volume,
-		o.Type
-	));
+	IEnumerable<ReportOrder> IReportSource.Orders => _reportSource.Orders;
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	IEnumerable<ReportTrade> IReportSource.OwnTrades => MyTrades.Select(t => new ReportTrade(
-		t.Trade?.Id,
-		t.Order.TransactionId,
-		t.Trade?.ServerTime ?? default,
-		t.Trade?.Price ?? 0,
-		t.Order.Price,
-		t.Trade?.Volume ?? 0,
-		t.Order.Side,
-		t.Order.Id,
-		t.Slippage,
-		t.PnL,
-		t.Position
-	));
+	IEnumerable<ReportTrade> IReportSource.OwnTrades => _reportSource.OwnTrades;
+
+	private void AddOrderToReport(Order order)
+	{
+		if (order is null)
+			return;
+
+		_reportSource.AddOrder(new ReportOrder(
+			order.Id,
+			order.TransactionId,
+			order.Side,
+			order.ServerTime,
+			order.Price,
+			order.State,
+			order.Balance,
+			order.Volume,
+			order.Type
+		));
+	}
+
+	private void AddTradeToReport(MyTrade trade)
+	{
+		if (trade is null)
+			return;
+
+		_reportSource.AddTrade(new ReportTrade(
+			trade.Trade?.Id,
+			trade.Order.TransactionId,
+			trade.Trade?.ServerTime ?? default,
+			trade.Trade?.Price ?? 0,
+			trade.Order.Price,
+			trade.Trade?.Volume ?? 0,
+			trade.Order.Side,
+			trade.Order.Id,
+			trade.Slippage,
+			trade.PnL,
+			trade.Position
+		));
+	}
 
 	#endregion
 
@@ -1720,6 +1795,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				}
 			}
 
+			AddOrderToReport(order);
+
 			if (_firstOrderTime == default)
 				_firstOrderTime = order.Time;
 
@@ -2445,6 +2522,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		}
 
 		trade.Position ??= GetPositionValue(tradeSec, order.Portfolio);
+
+		AddTradeToReport(trade);
 
 		NewMyTrade?.Invoke(trade);
 

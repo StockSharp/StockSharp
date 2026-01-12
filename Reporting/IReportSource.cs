@@ -59,6 +59,12 @@ public record ReportTrade(
 public interface IReportSource
 {
 	/// <summary>
+	/// Prepare data for report generation.
+	/// Call this before accessing any data to ensure all values are up-to-date.
+	/// </summary>
+	void Prepare();
+
+	/// <summary>
 	/// Strategy name.
 	/// </summary>
 	string Name { get; }

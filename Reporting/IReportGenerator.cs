@@ -73,5 +73,17 @@ public abstract class BaseReportGenerator : IReportGenerator
 	public abstract string Extension { get; }
 
 	/// <inheritdoc />
-	public abstract ValueTask Generate(IReportSource source, Stream stream, CancellationToken cancellationToken);
+	public ValueTask Generate(IReportSource source, Stream stream, CancellationToken cancellationToken)
+	{
+		source.Prepare();
+		return OnGenerate(source, stream, cancellationToken);
+	}
+
+	/// <summary>
+	/// Generates the report content.
+	/// </summary>
+	/// <param name="source"><see cref="IReportSource"/>.</param>
+	/// <param name="stream">The stream to write the report to.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
+	protected abstract ValueTask OnGenerate(IReportSource source, Stream stream, CancellationToken cancellationToken);
 }

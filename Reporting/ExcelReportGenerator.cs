@@ -57,7 +57,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 	}
 
 	/// <inheritdoc />
-	public override ValueTask Generate(IReportSource source, Stream stream, CancellationToken cancellationToken)
+	protected override ValueTask OnGenerate(IReportSource source, Stream stream, CancellationToken cancellationToken)
 	{
 		ArgumentNullException.ThrowIfNull(source);
 		ArgumentNullException.ThrowIfNull(stream);

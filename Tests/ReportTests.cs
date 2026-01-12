@@ -90,38 +90,13 @@ public class ReportTests : BaseTestClass
 		(stream.Length > 0).AssertTrue($"Report {format} should write data");
 	}
 
-	#region Mock-based tests
-
-	/// <summary>
-	/// Mock implementation of IReportSource for testing.
-	/// </summary>
-	private class MockReportSource : IReportSource
-	{
-		public string Name { get; set; } = "TestStrategy";
-		public TimeSpan TotalWorkingTime { get; set; } = TimeSpan.FromHours(2);
-		public decimal? Commission { get; set; } = 10.5m;
-		public decimal Position { get; set; } = 100m;
-		public decimal PnL { get; set; } = 500m;
-		public decimal? Slippage { get; set; } = 2.5m;
-		public TimeSpan? Latency { get; set; } = TimeSpan.FromMilliseconds(50);
-
-		public List<ReportOrder> OrdersList { get; } = [];
-		public List<ReportTrade> TradesList { get; } = [];
-		public List<(string Name, object Value)> StatisticsList { get; } = [];
-		public List<(string Name, object Value)> ParametersList { get; } = [];
-
-		public IEnumerable<ReportOrder> Orders => OrdersList;
-		public IEnumerable<ReportTrade> OwnTrades => TradesList;
-		public IEnumerable<(string Name, object Value)> StatisticParameters => StatisticsList;
-		public IEnumerable<(string Name, object Value)> Parameters => ParametersList;
-	}
+	#region ReportSource tests
 
 	[TestMethod]
 	public async Task JsonReportGenerator_GeneratesValidJson()
 	{
-		var source = new MockReportSource
+		var source = new ReportSource("TestStrategy")
 		{
-			Name = "TestStrategy",
 			PnL = 1000m,
 			Position = 50m,
 			Commission = 25m
@@ -144,9 +119,8 @@ public class ReportTests : BaseTestClass
 	[TestMethod]
 	public async Task CsvReportGenerator_GeneratesValidCsv()
 	{
-		var source = new MockReportSource
+		var source = new ReportSource("CsvTestStrategy")
 		{
-			Name = "CsvTestStrategy",
 			PnL = 2000m,
 			Position = 75m,
 		};
@@ -166,9 +140,8 @@ public class ReportTests : BaseTestClass
 	[TestMethod]
 	public async Task XmlReportGenerator_GeneratesValidXml()
 	{
-		var source = new MockReportSource
+		var source = new ReportSource("XmlTestStrategy")
 		{
-			Name = "XmlTestStrategy",
 			PnL = 3000m,
 		};
 
@@ -188,8 +161,8 @@ public class ReportTests : BaseTestClass
 	[TestMethod]
 	public async Task JsonReportGenerator_IncludesOrders_WhenEnabled()
 	{
-		var source = new MockReportSource { Name = "OrderTest" };
-		source.OrdersList.Add(new ReportOrder(
+		var source = new ReportSource("OrderTest");
+		source.AddOrder(new ReportOrder(
 			Id: 12345,
 			TransactionId: 100,
 			Side: Sides.Buy,
@@ -216,8 +189,8 @@ public class ReportTests : BaseTestClass
 	[TestMethod]
 	public async Task JsonReportGenerator_ExcludesOrders_WhenDisabled()
 	{
-		var source = new MockReportSource { Name = "NoOrderTest" };
-		source.OrdersList.Add(new ReportOrder(
+		var source = new ReportSource("NoOrderTest");
+		source.AddOrder(new ReportOrder(
 			Id: 99999,
 			TransactionId: 1,
 			Side: Sides.Buy,
@@ -238,6 +211,224 @@ public class ReportTests : BaseTestClass
 		var json = new StreamReader(stream).ReadToEnd();
 
 		IsFalse(json.Contains("\"orders\""), "Orders section should not be present when IncludeOrders=false");
+	}
+
+	[TestMethod]
+	public void ReportSource_AddParameter_Works()
+	{
+		var source = new ReportSource("Test")
+			.AddParameter("Param1", 100)
+			.AddParameter("Param2", "Value");
+
+		var parameters = source.Parameters.ToList();
+		parameters.Count.AssertEqual(2);
+		parameters[0].Name.AssertEqual("Param1");
+		parameters[0].Value.AssertEqual(100);
+		parameters[1].Name.AssertEqual("Param2");
+		parameters[1].Value.AssertEqual("Value");
+	}
+
+	[TestMethod]
+	public void ReportSource_AddStatisticParameter_Works()
+	{
+		var source = new ReportSource("Test")
+			.AddStatisticParameter("WinRate", 0.65m)
+			.AddStatisticParameter("Sharpe", 1.5m);
+
+		var stats = source.StatisticParameters.ToList();
+		stats.Count.AssertEqual(2);
+		stats[0].Name.AssertEqual("WinRate");
+		stats[0].Value.AssertEqual(0.65m);
+	}
+
+	[TestMethod]
+	public void ReportSource_AddOrder_Works()
+	{
+		var source = new ReportSource("Test");
+		var time = DateTime.UtcNow;
+
+		source.AddOrder(1, 100, Sides.Buy, time, 50000m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+
+		source.OrdersCount.AssertEqual(1);
+		var order = source.Orders.First();
+		order.Id.AssertEqual(1);
+		order.TransactionId.AssertEqual(100);
+		order.Side.AssertEqual(Sides.Buy);
+		order.Price.AssertEqual(50000m);
+	}
+
+	[TestMethod]
+	public void ReportSource_AddTrade_Works()
+	{
+		var source = new ReportSource("Test");
+		var time = DateTime.UtcNow;
+
+		source.AddTrade(1001, 100, time, 50000m, 50000m, 1m, Sides.Buy, 1, 0m, 100m, 1m);
+
+		source.TradesCount.AssertEqual(1);
+		var trade = source.OwnTrades.First();
+		trade.TradeId.AssertEqual(1001);
+		trade.TradePrice.AssertEqual(50000m);
+		trade.PnL.AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void ReportSource_AggregateOrders_ByHour_Works()
+	{
+		var source = new ReportSource("Test");
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		// Add 5 buy orders in the same hour
+		for (var i = 0; i < 5; i++)
+		{
+			source.AddOrder(i, i, Sides.Buy, baseTime.AddMinutes(i * 10), 100m + i, OrderStates.Done, 0m, 10m, OrderTypes.Limit);
+		}
+
+		// Add 3 sell orders in the same hour
+		for (var i = 0; i < 3; i++)
+		{
+			source.AddOrder(100 + i, 100 + i, Sides.Sell, baseTime.AddMinutes(i * 15), 105m + i, OrderStates.Done, 0m, 5m, OrderTypes.Limit);
+		}
+
+		source.OrdersCount.AssertEqual(8);
+
+		source.AggregateOrders(AggregationModes.ByHour);
+
+		// Should be aggregated to 2 orders (1 buy, 1 sell)
+		source.OrdersCount.AssertEqual(2);
+
+		var orders = source.Orders.ToList();
+		var buyOrder = orders.First(o => o.Side == Sides.Buy);
+		var sellOrder = orders.First(o => o.Side == Sides.Sell);
+
+		buyOrder.Volume.AssertEqual(50m); // 5 * 10
+		sellOrder.Volume.AssertEqual(15m); // 3 * 5
+	}
+
+	[TestMethod]
+	public void ReportSource_AggregateTrades_ByHour_Works()
+	{
+		var source = new ReportSource("Test");
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		// Add 5 buy trades in the same hour
+		for (var i = 0; i < 5; i++)
+		{
+			source.AddTrade(i, i, baseTime.AddMinutes(i * 10), 100m, 100m, 1m, Sides.Buy, i, 0.1m, 10m, i);
+		}
+
+		source.TradesCount.AssertEqual(5);
+
+		source.AggregateTrades(AggregationModes.ByHour);
+
+		// Should be aggregated to 1 trade
+		source.TradesCount.AssertEqual(1);
+
+		var trade = source.OwnTrades.First();
+		trade.Volume.AssertEqual(5m); // 5 * 1
+		trade.PnL.AssertEqual(50m); // 5 * 10
+		trade.Slippage.AssertEqual(0.5m); // 5 * 0.1
+	}
+
+	[TestMethod]
+	public void ReportSource_AggregateTrades_ByDay_Works()
+	{
+		var source = new ReportSource("Test");
+		var baseTime = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		// Add trades across different hours but same day
+		source.AddTrade(1, 1, baseTime.AddHours(1), 100m, 100m, 1m, Sides.Buy, 1, null, 10m, 1m);
+		source.AddTrade(2, 2, baseTime.AddHours(5), 101m, 101m, 2m, Sides.Buy, 2, null, 20m, 3m);
+		source.AddTrade(3, 3, baseTime.AddHours(10), 102m, 102m, 3m, Sides.Buy, 3, null, 30m, 6m);
+
+		source.TradesCount.AssertEqual(3);
+
+		source.AggregateTrades(AggregationModes.ByDay);
+
+		source.TradesCount.AssertEqual(1);
+
+		var trade = source.OwnTrades.First();
+		trade.Volume.AssertEqual(6m); // 1 + 2 + 3
+		trade.PnL.AssertEqual(60m); // 10 + 20 + 30
+		trade.Position.AssertEqual(6m); // last position
+	}
+
+	[TestMethod]
+	public void ReportSource_AutoAggregation_TriggersWhenThresholdExceeded()
+	{
+		var source = new ReportSource("Test")
+		{
+			MaxOrdersBeforeAggregation = 10,
+			AutoAggregationMode = AggregationModes.ByHour
+		};
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		// Add 15 orders in the same hour - should trigger auto-aggregation
+		for (var i = 0; i < 15; i++)
+		{
+			source.AddOrder(i, i, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		}
+
+		// After auto-aggregation, should have 1 aggregated order
+		source.OrdersCount.AssertEqual(1);
+		source.Orders.First().Volume.AssertEqual(15m);
+	}
+
+	[TestMethod]
+	public void ReportSource_NoAutoAggregation_WhenDisabled()
+	{
+		var source = new ReportSource("Test")
+		{
+			MaxOrdersBeforeAggregation = 0 // Disabled
+		};
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		for (var i = 0; i < 100; i++)
+		{
+			source.AddOrder(i, i, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		}
+
+		source.OrdersCount.AssertEqual(100);
+	}
+
+	[TestMethod]
+	public void ReportSource_Clear_RemovesAllData()
+	{
+		var source = new ReportSource("Test")
+			.AddParameter("P1", 1)
+			.AddStatisticParameter("S1", 2);
+
+		source.AddOrder(1, 1, Sides.Buy, DateTime.UtcNow, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddTrade(1, 1, DateTime.UtcNow, 100m, 100m, 1m, Sides.Buy, 1, null, null, null);
+
+		source.Clear();
+
+		source.OrdersCount.AssertEqual(0);
+		source.TradesCount.AssertEqual(0);
+		source.Parameters.Count().AssertEqual(0);
+		source.StatisticParameters.Count().AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void ReportSource_AggregateOrders_PreservesWeightedAveragePrice()
+	{
+		var source = new ReportSource("Test");
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		// Order 1: 100 @ 10 volume = 1000 total cost
+		// Order 2: 200 @ 20 volume = 4000 total cost
+		// Weighted avg = 5000 / 30 = 166.67
+		source.AddOrder(1, 1, Sides.Buy, time, 100m, OrderStates.Done, 0m, 10m, OrderTypes.Limit);
+		source.AddOrder(2, 2, Sides.Buy, time.AddMinutes(5), 200m, OrderStates.Done, 0m, 20m, OrderTypes.Limit);
+
+		source.AggregateOrders(AggregationModes.ByHour);
+
+		var order = source.Orders.First();
+		order.Volume.AssertEqual(30m);
+		// Weighted average: (100*10 + 200*20) / 30 = 5000/30 = 166.666...
+		IsTrue(order.Price > 166m && order.Price < 167m, $"Expected weighted average ~166.67, got {order.Price}");
 	}
 
 	#endregion
@@ -387,27 +578,26 @@ public class ReportTests : BaseTestClass
 		IsTrue(rowCount > 0, "Trades sheet should have data");
 	}
 
-	private static MockReportSource CreateMockSourceWithData()
+	private static ReportSource CreateMockSourceWithData()
 	{
-		var source = new MockReportSource
+		var source = new ReportSource("ExcelTestStrategy")
 		{
-			Name = "ExcelTestStrategy",
 			PnL = 5000m,
 			Position = 100m,
 			Commission = 50m,
 			TotalWorkingTime = TimeSpan.FromHours(8),
 		};
 
-		source.ParametersList.Add(("Symbol", "BTCUSD"));
-		source.ParametersList.Add(("TimeFrame", "1m"));
-		source.ParametersList.Add(("InitialCapital", 10000m));
+		source.AddParameter("Symbol", "BTCUSD");
+		source.AddParameter("TimeFrame", "1m");
+		source.AddParameter("InitialCapital", 10000m);
 
-		source.StatisticsList.Add(("Win Rate", 0.65m));
-		source.StatisticsList.Add(("Sharpe Ratio", 1.5m));
-		source.StatisticsList.Add(("Max Drawdown", -0.12m));
+		source.AddStatisticParameter("Win Rate", 0.65m);
+		source.AddStatisticParameter("Sharpe Ratio", 1.5m);
+		source.AddStatisticParameter("Max Drawdown", -0.12m);
 
 		var baseTime = new DateTime(2024, 3, 1, 10, 0, 0, DateTimeKind.Utc);
-		source.TradesList.Add(new ReportTrade(
+		source.AddTrade(new ReportTrade(
 			TradeId: 1001,
 			OrderTransactionId: 100,
 			Time: baseTime,
@@ -420,7 +610,7 @@ public class ReportTests : BaseTestClass
 			PnL: 100m,
 			Position: 0.1m
 		));
-		source.TradesList.Add(new ReportTrade(
+		source.AddTrade(new ReportTrade(
 			TradeId: 1002,
 			OrderTransactionId: 101,
 			Time: baseTime.AddHours(1),
@@ -434,7 +624,7 @@ public class ReportTests : BaseTestClass
 			Position: 0m
 		));
 
-		source.OrdersList.Add(new ReportOrder(
+		source.AddOrder(new ReportOrder(
 			Id: 1,
 			TransactionId: 100,
 			Side: Sides.Buy,
@@ -445,7 +635,7 @@ public class ReportTests : BaseTestClass
 			Volume: 0.1m,
 			Type: OrderTypes.Limit
 		));
-		source.OrdersList.Add(new ReportOrder(
+		source.AddOrder(new ReportOrder(
 			Id: 2,
 			TransactionId: 101,
 			Side: Sides.Sell,
