@@ -774,7 +774,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	ValueTask IMessageAdapter.SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	ValueTask IMessageTransport.SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		return OnSendInMessageAsync(message, cancellationToken);
 	}
@@ -1407,7 +1407,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	}
 
 	/// <summary>
-	/// The embedded adapter event <see cref="IMessageAdapterWrapper.NewOutMessageAsync"/> handler.
+	/// The embedded adapter event <see cref="IMessageTransport.NewOutMessageAsync"/> handler.
 	/// </summary>
 	/// <param name="innerAdapter">The embedded adapter.</param>
 	/// <param name="message">Message.</param>

@@ -9,11 +9,6 @@ public interface IMessageAdapterWrapper : IMessageAdapter
 	/// Underlying adapter.
 	/// </summary>
 	IMessageAdapter InnerAdapter { get; set; }
-
-	/// <summary>
-	/// New message async event.
-	/// </summary>
-	event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 }
 
 /// <summary>
@@ -356,9 +351,6 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 
 	int IMessageAdapter.MaxParallelMessages { get => InnerAdapter.MaxParallelMessages; set => InnerAdapter.MaxParallelMessages = value; }
 	TimeSpan IMessageAdapter.FaultDelay { get => InnerAdapter.FaultDelay; set => InnerAdapter.FaultDelay = value; }
-
-	ValueTask IMessageAdapter.SendInMessageAsync(Message message, CancellationToken cancellationToken)
-		=> SendInMessageAsync(message, cancellationToken);
 
 	IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
 		=> InnerAdapter.CreateOrderLogMarketDepthBuilder(securityId);

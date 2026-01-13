@@ -3,7 +3,7 @@ namespace StockSharp.BusinessEntities;
 /// <summary>
 /// The main interface providing the connection to the trading systems.
 /// </summary>
-public interface IConnector : IMessageChannel, IPersistable, ILogReceiver,
+public interface IConnector : IMessageTransport, IPersistable, ILogReceiver,
 	IMarketDataProvider, ITransactionProvider, ISecurityProvider,
 	ISubscriptionProvider, ITimeProvider,
 	IPortfolioProvider, IPositionProvider

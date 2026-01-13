@@ -3,7 +3,7 @@ namespace StockSharp.Messages;
 using Nito.AsyncEx;
 
 /// <summary>
-/// Async message channel that processes messages via <see cref="IMessageChannel.NewOutMessageAsync"/>.
+/// Async message channel that processes messages via <see cref="IMessageTransport.NewOutMessageAsync"/>.
 /// </summary>
 /// <remarks>
 /// Initializes a new instance of the <see cref="AsyncMessageChannel"/>.

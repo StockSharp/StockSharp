@@ -263,6 +263,12 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	/// <inheritdoc />
 	public event Action<Message> NewOutMessage;
 
+	event Func<Message, CancellationToken, ValueTask> IMessageTransport.NewOutMessageAsync
+	{
+		add => throw new NotSupportedException();
+		remove => throw new NotSupportedException();
+	}
+
 	/// <inheritdoc />
 	[Browsable(false)]
 	public virtual string[] AssociatedBoards => [];
@@ -616,6 +622,9 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 			this.AddSupportedMarketDataType(dt);
 
 		NewOutMessage?.Invoke(message);
+
+		// TODO
+		//NewOutMessageAsync?.Invoke(message, CancellationToken.None).GetAwaiter().GetResult();
 	}
 
 	/// <summary>

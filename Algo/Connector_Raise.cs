@@ -98,6 +98,9 @@ partial class Connector
 	public event Action<Message> NewMessage;
 
 	/// <inheritdoc />
+	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
+
+	/// <inheritdoc />
 	public event Action<TimeSpan> CurrentTimeChanged;
 
 	/// <inheritdoc />
@@ -569,7 +572,7 @@ partial class Connector
 	private ValueTask RaiseNewMessage(Message message, CancellationToken cancellationToken)
 	{
 		NewMessage?.Invoke(message);
-		return _newOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		return NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 	}
 
 	private void RaiseValuesChanged(Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTime serverTime, DateTime localTime)

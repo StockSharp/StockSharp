@@ -148,7 +148,7 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 		_queue.Clear();
 	}
 
-	ValueTask IMessageChannel.SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	ValueTask IMessageTransport.SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (!this.IsOpened())
 		{

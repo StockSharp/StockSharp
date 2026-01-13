@@ -3,7 +3,7 @@ namespace StockSharp.Messages;
 /// <summary>
 /// Message channel base interface.
 /// </summary>
-public interface IMessageChannel : IDisposable, ICloneable<IMessageChannel>
+public interface IMessageChannel : IMessageTransport, IDisposable, ICloneable<IMessageChannel>
 {
 	/// <summary>
 	/// State.
@@ -39,18 +39,6 @@ public interface IMessageChannel : IDisposable, ICloneable<IMessageChannel>
 	/// Clear.
 	/// </summary>
 	void Clear();
-
-	/// <summary>
-	/// Processes a generic message asynchronously.
-	/// </summary>
-	/// <param name="message">The message to process.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-	ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken);
-
-	/// <summary>
-	/// New message event.
-	/// </summary>
-	event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 }
 
 /// <summary>
@@ -98,14 +86,14 @@ public class PassThroughMessageChannel : Cloneable<IMessageChannel>, IMessageCha
 	{
 	}
 
-	ValueTask IMessageChannel.SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	ValueTask IMessageTransport.SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		return _newOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 	}
 
 	private Func<Message, CancellationToken, ValueTask> _newOutMessageAsync;
 
-	event Func<Message, CancellationToken, ValueTask> IMessageChannel.NewOutMessageAsync
+	event Func<Message, CancellationToken, ValueTask> IMessageTransport.NewOutMessageAsync
 	{
 		add => _newOutMessageAsync += value;
 		remove => _newOutMessageAsync -= value;

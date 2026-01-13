@@ -87,6 +87,12 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	/// <inheritdoc />
 	public event Action<Message> NewOutMessage;
 
+	event Func<Message, CancellationToken, ValueTask> IMessageTransport.NewOutMessageAsync
+	{
+		add => throw new NotSupportedException();
+		remove => throw new NotSupportedException();
+	}
+
 	/// <summary>
 	/// Extended verification mode.
 	/// </summary>
@@ -120,7 +126,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	}
 
 	/// <inheritdoc />
-	ValueTask IMessageAdapter.SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	ValueTask IMessageTransport.SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));

@@ -3139,7 +3139,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	public override DateTime CurrentTimeUtc => _currentTime;
 
 	/// <inheritdoc />
-	ValueTask IMessageAdapter.SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	ValueTask IMessageTransport.SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -3555,6 +3555,12 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 
 	/// <inheritdoc />
 	public event Action<Message> NewOutMessage;
+
+	event Func<Message, CancellationToken, ValueTask> IMessageTransport.NewOutMessageAsync
+	{
+		add => throw new NotSupportedException();
+		remove => throw new NotSupportedException();
+	}
 
 	private void RaiseNewOutMessage(Message message)
 	{

@@ -5,7 +5,7 @@ using System.Security;
 /// <summary>
 /// Base message adapter interface which convert messages <see cref="Message"/> to native commands and back.
 /// </summary>
-public interface IMessageAdapter : IPersistable, ILogReceiver, ICloneable<IMessageAdapter>
+public interface IMessageAdapter : IMessageTransport, IPersistable, ILogReceiver, ICloneable<IMessageAdapter>
 {
 	/// <summary>
 	/// Transaction id generator.
@@ -243,13 +243,6 @@ public interface IMessageAdapter : IPersistable, ILogReceiver, ICloneable<IMessa
 	/// Lookup timeout.
 	/// </summary>
 	TimeSpan? LookupTimeout { get; }
-
-	/// <summary>
-	/// Processes a generic message asynchronously.
-	/// </summary>
-	/// <param name="message">The message to process.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
-	ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// New message event.

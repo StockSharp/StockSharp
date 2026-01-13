@@ -284,11 +284,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 	public ConnectionStates ConnectionState
 	{
 		get => _subscriptionManager.ConnectionState;
-		private set
-		{
-			_subscriptionManager.ConnectionState = value;
-			_stateChanged?.Invoke();
-		}
+		private set => _subscriptionManager.ConnectionState = value;
 	}
 
 	/// <summary>
@@ -1129,36 +1125,4 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 		base.Save(storage);
 	}
-
-	#region IMessageChannel implementation
-
-	private Func<Message, CancellationToken, ValueTask> _newOutMessageAsync;
-
-	/// <inheritdoc />
-	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync
-	{
-		add => _newOutMessageAsync += value;
-		remove => _newOutMessageAsync -= value;
-	}
-
-	ChannelStates IMessageChannel.State => ConnectionState == ConnectionStates.Connected ? ChannelStates.Started : ChannelStates.Stopped;
-
-	private Action _stateChanged;
-
-	event Action IMessageChannel.StateChanged
-	{
-		add => _stateChanged += value;
-		remove => _stateChanged -= value;
-	}
-
-	void IMessageChannel.Open() => Connect();
-	void IMessageChannel.Close() => Disconnect();
-	void IMessageChannel.Suspend() { }
-	void IMessageChannel.Resume() { }
-	void IMessageChannel.Clear() { }
-
-	IMessageChannel ICloneable<IMessageChannel>.Clone() => this.Clone();
-	object ICloneable.Clone() => this.Clone();
-
-	#endregion
 }
