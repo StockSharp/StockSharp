@@ -202,7 +202,7 @@ public class InMemorySecurityMappingStorage : ISecurityMappingStorage
 /// <summary>
 /// In memory security identifier mappings storage provider.
 /// </summary>
-public class InMemorySecurityMappingStorageProvider : ISecurityMappingStorageProvider
+public class InMemorySecurityMappingStorageProvider : Disposable, ISecurityMappingStorageProvider
 {
 	private readonly SynchronizedDictionary<string, InMemorySecurityMappingStorage> _storages = new(StringComparer.InvariantCultureIgnoreCase);
 
@@ -229,10 +229,9 @@ public class InMemorySecurityMappingStorageProvider : ISecurityMappingStoragePro
 	}
 
 	/// <inheritdoc />
-	public void Dispose()
+	protected override void DisposeManaged()
 	{
 		_storages.Clear();
-		GC.SuppressFinalize(this);
 	}
 }
 

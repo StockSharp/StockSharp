@@ -91,7 +91,7 @@ public interface INativeIdStorageProvider : IAsyncDisposable
 /// <summary>
 /// CSV security native identifier storage provider.
 /// </summary>
-public class CsvNativeIdStorageProvider : INativeIdStorageProvider
+public class CsvNativeIdStorageProvider : AsyncDisposable, INativeIdStorageProvider
 {
 	private class CsvNativeIdStorage(CsvNativeIdStorageProvider provider, string storageName, InMemoryNativeIdStorage inMemory) : Disposable, INativeIdStorage
 	{
@@ -283,18 +283,16 @@ public class CsvNativeIdStorageProvider : INativeIdStorageProvider
 	}
 
 	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
+	protected override ValueTask DisposeManaged()
 	{
-		await _executor.AddAndWaitAsync(_ =>
+		return _executor.AddAndWaitAsync(_ =>
 		{
 			foreach (var storage in _storages.Values)
 				storage.Dispose();
 
 			_storages.Clear();
 			return default;
-		});
-
-		GC.SuppressFinalize(this);
+		}).AsValueTask();
 	}
 
 	/// <inheritdoc />
@@ -568,7 +566,7 @@ public class InMemoryNativeIdStorage : INativeIdStorage
 /// <summary>
 /// In memory security native identifier storage provider.
 /// </summary>
-public class InMemoryNativeIdStorageProvider : INativeIdStorageProvider
+public class InMemoryNativeIdStorageProvider : AsyncDisposable, INativeIdStorageProvider
 {
 	private readonly SynchronizedDictionary<string, InMemoryNativeIdStorage> _storages = new(StringComparer.InvariantCultureIgnoreCase);
 
@@ -586,10 +584,9 @@ public class InMemoryNativeIdStorageProvider : INativeIdStorageProvider
 	}
 
 	/// <inheritdoc />
-	public ValueTask DisposeAsync()
+	protected override ValueTask DisposeManaged()
 	{
 		_storages.Clear();
-		GC.SuppressFinalize(this);
 		return default;
 	}
 }

@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Storages.Csv;
 /// <summary>
 /// The CSV storage of trading objects.
 /// </summary>
-public class CsvEntityRegistry : IEntityRegistry
+public class CsvEntityRegistry : AsyncDisposable, IEntityRegistry
 {
 	private class ExchangeCsvList(CsvEntityRegistry registry, ChannelExecutor executor) : CsvEntityList<string, Exchange>(registry, "exchange.csv", executor)
 	{
@@ -959,10 +959,6 @@ public class CsvEntityRegistry : IEntityRegistry
 	}
 
 	/// <inheritdoc />
-	public async ValueTask DisposeAsync()
-	{
-		await _csvLists.Select(list => list.DisposeAsync()).WhenAll();
-
-		GC.SuppressFinalize(this);
-	}
+	protected override ValueTask DisposeManaged()
+		=> _csvLists.Select(list => list.DisposeAsync()).WhenAll();
 }
