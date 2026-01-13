@@ -139,8 +139,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		if (message.Type != MessageTypes.Reset)
 			ProcessedMessageCount++;
 
+		var allowStore = Settings.AllowStoreGenerateMessages;
+
 		foreach (var msg in results)
 		{
+			if (!allowStore)
+				msg.OfflineMode = MessageOfflineModes.Ignore;
+
 			_currentTime = msg.LocalTime;
 			NewOutMessage?.Invoke(msg);
 		}
@@ -538,7 +543,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		// Update the initial reply message with final state if no trades and not IOC/FOK
 		else if (matchResult.Trades.Count == 0)
 		{
-			replyMsg.OrderId = orderId;
+			// Note: OrderId is not set here to match old emulator behavior
+			// The old emulator doesn't include OrderId in the initial reply message
 			replyMsg.OrderState = matchResult.FinalState;
 			// Only set Balance/OrderVolume for non-active orders
 			if (matchResult.FinalState != OrderStates.Active)
@@ -828,10 +834,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				{
 					DataTypeEx = DataType.Transactions,
 					SecurityId = emulator.SecurityId,
-					LocalTime = statusMsg.LocalTime,
+					LocalTime = order.LocalTime,
 					ServerTime = order.ServerTime,
 					OriginalTransactionId = statusMsg.TransactionId,
 					TransactionId = order.TransactionId,
+					OrderId = order.OrderId,
 					OrderState = OrderStates.Active,
 					Balance = order.Balance,
 					OrderVolume = order.Volume,

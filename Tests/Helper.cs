@@ -1347,6 +1347,27 @@ static class Helper
 				}
 			}
 		}
+		else if (type == typeof(SubscriptionResponseMessage))
+		{
+			var e = expected.To<SubscriptionResponseMessage>();
+			var a = actual.To<SubscriptionResponseMessage>();
+
+			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
+			a.Error?.Message.AssertEqual(e.Error?.Message);
+			a.LocalTime.AssertEqual(e.LocalTime.TruncateTime(isMls));
+			a.OfflineMode.AssertEqual(e.OfflineMode);
+			a.BackMode.AssertEqual(e.BackMode);
+		}
+		else if (type == typeof(SubscriptionOnlineMessage))
+		{
+			var e = expected.To<SubscriptionOnlineMessage>();
+			var a = actual.To<SubscriptionOnlineMessage>();
+
+			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
+			a.LocalTime.AssertEqual(e.LocalTime.TruncateTime(isMls));
+			a.OfflineMode.AssertEqual(e.OfflineMode);
+			a.BackMode.AssertEqual(e.BackMode);
+		}
 		else
 			actual.AssertEqual(expected);
 	}
