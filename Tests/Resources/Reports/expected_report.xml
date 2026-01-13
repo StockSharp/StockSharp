@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strategy name="TestStrategy" totalWorkingTime="08:00:00" commission="25" position="100" PnL="5000" slippage="1.5" latency="00:00:00">
+  <parameters>
+    <parameter name="Symbol" value="BTCUSD" />
+    <parameter name="Period" value="1h" />
+  </parameters>
+  <statistics>
+    <parameter name="WinRate" value="0.65" />
+    <parameter name="MaxDrawdown" value="-500" />
+  </statistics>
+  <orders>
+    <order id="1" transactionId="100" direction="Buy" time="1/15/2024 10:00:00 AM" price="50000" state="Done" balance="0" volume="1" type="Limit" />
+    <order id="2" transactionId="101" direction="Sell" time="1/15/2024 11:00:00 AM" price="50500" state="Done" balance="0" volume="1" type="Limit" />
+  </orders>
+  <trades>
+    <trade id="1001" transactionId="100" time="1/15/2024 10:00:00 AM" price="50000" volume="1" order="1" PnL="0" slippage="0" />
+    <trade id="1002" transactionId="101" time="1/15/2024 11:00:00 AM" price="50500" volume="1" order="2" PnL="500" slippage="0" />
+  </trades>
+</strategy>

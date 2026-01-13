@@ -5,35 +5,26 @@ namespace StockSharp.Reporting;
 /// </summary>
 public class ReportSource : IReportSource
 {
-	private readonly List<ReportOrder> _orders = [];
-	private readonly List<ReportTrade> _trades = [];
-	private readonly List<(string Name, object Value)> _parameters = [];
-	private readonly List<(string Name, object Value)> _statisticParameters = [];
-
-	private readonly Lock _lock = new();
+	private readonly CachedSynchronizedList<ReportOrder> _orders = [];
+	private readonly CachedSynchronizedList<ReportTrade> _trades = [];
+	private readonly CachedSynchronizedList<(string Name, object Value)> _parameters = [];
+	private readonly CachedSynchronizedList<(string Name, object Value)> _statisticParameters = [];
 
 	private bool _ordersAggregationTriggered;
 	private bool _tradesAggregationTriggered;
+
+	private int _maxOrdersBeforeAggregation = 10000;
+	private int _maxTradesBeforeAggregation = 10000;
+	private TimeSpan _aggregationInterval = TimeSpan.FromHours(1);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ReportSource"/>.
 	/// </summary>
 	public ReportSource()
-		: this(string.Empty)
 	{
 	}
 
-	/// <summary>
-	/// Initializes a new instance of the <see cref="ReportSource"/>.
-	/// </summary>
-	/// <param name="name">Strategy name.</param>
-	public ReportSource(string name)
-	{
-		Name = name ?? throw new ArgumentNullException(nameof(name));
-	}
-
-	/// <inheritdoc />
-	public void Prepare()
+	void IReportSource.Prepare()
 	{
 		// Data is already up-to-date in ReportSource, nothing to do
 	}
@@ -63,84 +54,74 @@ public class ReportSource : IReportSource
 	/// Maximum number of orders before automatic aggregation is triggered.
 	/// Default is 10000. Set to 0 to disable automatic aggregation.
 	/// </summary>
-	public int MaxOrdersBeforeAggregation { get; set; } = 10000;
+	public int MaxOrdersBeforeAggregation
+	{
+		get => _maxOrdersBeforeAggregation;
+		set
+		{
+			if (value < 0)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_maxOrdersBeforeAggregation = value;
+		}
+	}
 
 	/// <summary>
 	/// Maximum number of trades before automatic aggregation is triggered.
 	/// Default is 10000. Set to 0 to disable automatic aggregation.
 	/// </summary>
-	public int MaxTradesBeforeAggregation { get; set; } = 10000;
+	public int MaxTradesBeforeAggregation
+	{
+		get => _maxTradesBeforeAggregation;
+		set
+		{
+			if (value < 0)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_maxTradesBeforeAggregation = value;
+		}
+	}
 
 	/// <summary>
 	/// Time interval for aggregation. Orders/trades within the same interval are grouped together.
 	/// Default is 1 hour. Set to <see cref="TimeSpan.Zero"/> to disable time-based grouping
 	/// (items will be aggregated by count only when threshold is exceeded).
 	/// </summary>
-	public TimeSpan AggregationInterval { get; set; } = TimeSpan.FromHours(1);
+	public TimeSpan AggregationInterval
+	{
+		get => _aggregationInterval;
+		set
+		{
+			if (value < TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_aggregationInterval = value;
+		}
+	}
 
 	/// <inheritdoc />
 	public IEnumerable<(string Name, object Value)> Parameters
-	{
-		get
-		{
-			using (_lock.EnterScope())
-				return [.. _parameters];
-		}
-	}
+		=> _parameters.Cache;
 
 	/// <inheritdoc />
 	public IEnumerable<(string Name, object Value)> StatisticParameters
-	{
-		get
-		{
-			using (_lock.EnterScope())
-				return [.. _statisticParameters];
-		}
-	}
+		=> _statisticParameters.Cache;
 
 	/// <inheritdoc />
-	public IEnumerable<ReportOrder> Orders
-	{
-		get
-		{
-			using (_lock.EnterScope())
-				return [.. _orders];
-		}
-	}
+	public IEnumerable<ReportOrder> Orders => _orders.Cache;
 
 	/// <inheritdoc />
-	public IEnumerable<ReportTrade> OwnTrades
-	{
-		get
-		{
-			using (_lock.EnterScope())
-				return [.. _trades];
-		}
-	}
+	public IEnumerable<ReportTrade> OwnTrades => _trades.Cache;
 
 	/// <summary>
 	/// Current orders count.
 	/// </summary>
-	public int OrdersCount
-	{
-		get
-		{
-			using (_lock.EnterScope())
-				return _orders.Count;
-		}
-	}
+	public int OrdersCount => _orders.Count;
 
 	/// <summary>
 	/// Current trades count.
 	/// </summary>
-	public int TradesCount
-	{
-		get
-		{
-			using (_lock.EnterScope())
-				return _trades.Count;
-		}
-	}
+	public int TradesCount => _trades.Count;
 
 	/// <summary>
 	/// Add a parameter.
@@ -153,8 +134,7 @@ public class ReportSource : IReportSource
 		if (name.IsEmpty())
 			throw new ArgumentNullException(nameof(name));
 
-		using (_lock.EnterScope())
-			_parameters.Add((name, value));
+		_parameters.Add((name, value));
 
 		return this;
 	}
@@ -169,8 +149,8 @@ public class ReportSource : IReportSource
 		if (parameters is null)
 			throw new ArgumentNullException(nameof(parameters));
 
-		using (_lock.EnterScope())
-			_parameters.AddRange(parameters);
+		foreach (var (name, value) in parameters)
+			AddParameter(name, value);
 
 		return this;
 	}
@@ -186,8 +166,7 @@ public class ReportSource : IReportSource
 		if (name.IsEmpty())
 			throw new ArgumentNullException(nameof(name));
 
-		using (_lock.EnterScope())
-			_statisticParameters.Add((name, value));
+		_statisticParameters.Add((name, value));
 
 		return this;
 	}
@@ -202,8 +181,8 @@ public class ReportSource : IReportSource
 		if (parameters is null)
 			throw new ArgumentNullException(nameof(parameters));
 
-		using (_lock.EnterScope())
-			_statisticParameters.AddRange(parameters);
+		foreach (var (name, value) in parameters)
+			AddStatisticParameter(name, value);
 
 		return this;
 	}
@@ -218,7 +197,7 @@ public class ReportSource : IReportSource
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		using (_lock.EnterScope())
+		using (_orders.EnterScope())
 		{
 			_orders.Add(order);
 			CheckAndAggregateOrders();
@@ -254,7 +233,7 @@ public class ReportSource : IReportSource
 		if (orders is null)
 			throw new ArgumentNullException(nameof(orders));
 
-		using (_lock.EnterScope())
+		using (_orders.EnterScope())
 		{
 			_orders.AddRange(orders);
 			CheckAndAggregateOrders();
@@ -273,7 +252,7 @@ public class ReportSource : IReportSource
 		if (trade is null)
 			throw new ArgumentNullException(nameof(trade));
 
-		using (_lock.EnterScope())
+		using (_trades.EnterScope())
 		{
 			_trades.Add(trade);
 			CheckAndAggregateTrades();
@@ -311,7 +290,7 @@ public class ReportSource : IReportSource
 		if (trades is null)
 			throw new ArgumentNullException(nameof(trades));
 
-		using (_lock.EnterScope())
+		using (_trades.EnterScope())
 		{
 			_trades.AddRange(trades);
 			CheckAndAggregateTrades();
@@ -327,9 +306,9 @@ public class ReportSource : IReportSource
 	/// <returns>This instance for chaining.</returns>
 	public ReportSource AggregateOrders(TimeSpan interval)
 	{
-		using (_lock.EnterScope())
+		using (_orders.EnterScope())
 		{
-			var aggregated = AggregateOrdersInternal(_orders, interval);
+			var aggregated = AggregateOrdersInternal(_orders.Cache, interval);
 			_orders.Clear();
 			_orders.AddRange(aggregated);
 		}
@@ -344,9 +323,9 @@ public class ReportSource : IReportSource
 	/// <returns>This instance for chaining.</returns>
 	public ReportSource AggregateTrades(TimeSpan interval)
 	{
-		using (_lock.EnterScope())
+		using (_trades.EnterScope())
 		{
-			var aggregated = AggregateTradesInternal(_trades, interval);
+			var aggregated = AggregateTradesInternal(_trades.Cache, interval);
 			_trades.Clear();
 			_trades.AddRange(aggregated);
 		}
@@ -360,7 +339,7 @@ public class ReportSource : IReportSource
 	/// <returns>This instance for chaining.</returns>
 	public ReportSource ClearOrders()
 	{
-		using (_lock.EnterScope())
+		using (_orders.EnterScope())
 		{
 			_orders.Clear();
 			_ordersAggregationTriggered = false;
@@ -375,7 +354,7 @@ public class ReportSource : IReportSource
 	/// <returns>This instance for chaining.</returns>
 	public ReportSource ClearTrades()
 	{
-		using (_lock.EnterScope())
+		using (_trades.EnterScope())
 		{
 			_trades.Clear();
 			_tradesAggregationTriggered = false;
@@ -390,8 +369,7 @@ public class ReportSource : IReportSource
 	/// <returns>This instance for chaining.</returns>
 	public ReportSource ClearParameters()
 	{
-		using (_lock.EnterScope())
-			_parameters.Clear();
+		_parameters.Clear();
 
 		return this;
 	}
@@ -402,8 +380,7 @@ public class ReportSource : IReportSource
 	/// <returns>This instance for chaining.</returns>
 	public ReportSource ClearStatisticParameters()
 	{
-		using (_lock.EnterScope())
-			_statisticParameters.Clear();
+		_statisticParameters.Clear();
 
 		return this;
 	}
@@ -414,15 +391,12 @@ public class ReportSource : IReportSource
 	/// <returns>This instance for chaining.</returns>
 	public ReportSource Clear()
 	{
-		using (_lock.EnterScope())
-		{
-			_orders.Clear();
-			_trades.Clear();
-			_parameters.Clear();
-			_statisticParameters.Clear();
-			_ordersAggregationTriggered = false;
-			_tradesAggregationTriggered = false;
-		}
+		_orders.Clear();
+		_trades.Clear();
+		_parameters.Clear();
+		_statisticParameters.Clear();
+		_ordersAggregationTriggered = false;
+		_tradesAggregationTriggered = false;
 
 		return this;
 	}
@@ -439,7 +413,7 @@ public class ReportSource : IReportSource
 		// Once in aggregation mode, always aggregate (new orders join the tail)
 		if (_ordersAggregationTriggered)
 		{
-			var aggregated = AggregateOrdersInternal(_orders, AggregationInterval);
+			var aggregated = AggregateOrdersInternal(_orders.Cache, AggregationInterval);
 			_orders.Clear();
 			_orders.AddRange(aggregated);
 		}
@@ -457,7 +431,7 @@ public class ReportSource : IReportSource
 		// Once in aggregation mode, always aggregate (new trades join the tail)
 		if (_tradesAggregationTriggered)
 		{
-			var aggregated = AggregateTradesInternal(_trades, AggregationInterval);
+			var aggregated = AggregateTradesInternal(_trades.Cache, AggregationInterval);
 			_trades.Clear();
 			_trades.AddRange(aggregated);
 		}
@@ -484,9 +458,9 @@ public class ReportSource : IReportSource
 		return null;
 	}
 
-	private static List<ReportOrder> AggregateOrdersInternal(List<ReportOrder> orders, TimeSpan interval)
+	private static IEnumerable<ReportOrder> AggregateOrdersInternal(ReportOrder[] orders, TimeSpan interval)
 	{
-		if (orders.Count == 0)
+		if (orders.Length == 0)
 			return orders;
 
 		// Group by time period, side, and type
@@ -535,9 +509,9 @@ public class ReportSource : IReportSource
 		return result;
 	}
 
-	private static List<ReportTrade> AggregateTradesInternal(List<ReportTrade> trades, TimeSpan interval)
+	private static IEnumerable<ReportTrade> AggregateTradesInternal(ReportTrade[] trades, TimeSpan interval)
 	{
-		if (trades.Count == 0)
+		if (trades.Length == 0)
 			return trades;
 
 		// Group by time period and side
