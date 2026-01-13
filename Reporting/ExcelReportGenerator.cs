@@ -532,8 +532,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		const string headerBg = "4472C4";
 		const string headerFg = "FFFFFF";
 
-		// Header row matching template: EntryTime, ExitTime, Side, Qty, EntryPrice, ExitPrice, PnL, PnL%, TotalPnL, Position
-		var headers = new[] { "EntryTime", "ExitTime", "Side", "Qty", "EntryPrice", "ExitPrice", "PnL", "PnL%", "TotalPnL", "Position" };
+		// Header row matching template: EntryTime, ExitTime, Security, Side, Qty, EntryPrice, ExitPrice, PnL, PnL%, TotalPnL, Position
+		var headers = new[] { "EntryTime", "ExitTime", "Security", "Side", "Qty", "EntryPrice", "ExitPrice", "PnL", "PnL%", "TotalPnL", "Position" };
 		for (var i = 0; i < headers.Length; i++)
 		{
 			worker
@@ -546,27 +546,28 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		worker
 			.SetColumnWidth(0, 18)  // Entry Time
 			.SetColumnWidth(1, 18)  // Exit Time
-			.SetColumnWidth(2, 8)   // Side
-			.SetColumnWidth(3, 10)  // Qty
-			.SetColumnWidth(4, 12)  // Entry Price
-			.SetColumnWidth(5, 12)  // Exit Price
-			.SetColumnWidth(6, 12)  // PnL
-			.SetColumnWidth(7, 10)  // PnL%
-			.SetColumnWidth(8, 12)  // Total PnL
-			.SetColumnWidth(9, 10)  // Position
+			.SetColumnWidth(2, 16)  // Security
+			.SetColumnWidth(3, 8)   // Side
+			.SetColumnWidth(4, 10)  // Qty
+			.SetColumnWidth(5, 12)  // Entry Price
+			.SetColumnWidth(6, 12)  // Exit Price
+			.SetColumnWidth(7, 12)  // PnL
+			.SetColumnWidth(8, 10)  // PnL%
+			.SetColumnWidth(9, 12)  // Total PnL
+			.SetColumnWidth(10, 10) // Position
 			.SetStyle(0, typeof(DateTime))
 			.SetStyle(1, typeof(DateTime))
-			.SetStyle(3, decimalFormat)
 			.SetStyle(4, decimalFormat)
 			.SetStyle(5, decimalFormat)
 			.SetStyle(6, decimalFormat)
-			.SetStyle(7, "0.00%")
-			.SetStyle(8, decimalFormat)
+			.SetStyle(7, decimalFormat)
+			.SetStyle(8, "0.00%")
 			.SetStyle(9, decimalFormat)
+			.SetStyle(10, decimalFormat)
 			.FreezeRows(1)
-			// ColorScale for PnL (col 6) and TotalPnL (col 8) - matching template
-			.SetColorScale(6, 1, "F8696B", "FFEB84", "63BE7B")
-			.SetColorScale(8, 1, "F8696B", "FFEB84", "63BE7B");
+			// ColorScale for PnL (col 7) and TotalPnL (col 9) - matching template
+			.SetColorScale(7, 1, "F8696B", "FFEB84", "63BE7B")
+			.SetColorScale(9, 1, "F8696B", "FFEB84", "63BE7B");
 
 		var row = 1;
 		decimal totalPnL = 0m;
@@ -592,20 +593,21 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			worker
 				.SetCell(0, row, trade.Time)           // Entry Time
 				.SetCell(1, row, trade.Time)           // Exit Time
-				.SetCell(2, row, trade.Side.GetDisplayName())
-				.SetCell(3, row, qty)                  // Qty
-				.SetCell(4, row, entryPrice)           // Entry Price
-				.SetCell(5, row, exitPrice)            // Exit Price
-				.SetCell(6, row, pnl)                  // PnL
-				.SetCell(7, row, pnlPct)               // PnL%
-				.SetCell(8, row, totalPnL)             // Total PnL
-				.SetCell(9, row, position);            // Position
+				.SetCell(2, row, trade.SecurityId.ToStringId()) // Security
+				.SetCell(3, row, trade.Side.GetDisplayName())
+				.SetCell(4, row, qty)                  // Qty
+				.SetCell(5, row, entryPrice)           // Entry Price
+				.SetCell(6, row, exitPrice)            // Exit Price
+				.SetCell(7, row, pnl)                  // PnL
+				.SetCell(8, row, pnlPct)               // PnL%
+				.SetCell(9, row, totalPnL)             // Total PnL
+				.SetCell(10, row, position);           // Position
 
 			// Color Side column: Buy = green, Sell = red
 			var (sideBg, sideFg) = trade.Side == Sides.Buy
 				? ("C6EFCE", "006100")  // Light green bg, dark green text
 				: ("FFC7CE", "9C0006"); // Light red bg, dark red text
-			worker.SetCellColor(2, row, sideBg, sideFg);
+			worker.SetCellColor(3, row, sideBg, sideFg);
 
 			row++;
 		}
@@ -619,7 +621,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		const string headerFg = "FFFFFF";
 
 		// Header row matching template
-		var headers = new[] { "OrderId", "TransactionId", "Side", "Time", "Price", "State", "Balance", "Volume", "Type" };
+		var headers = new[] { "OrderId", "TransactionId", "Security", "Side", "Time", "Price", "State", "Balance", "Volume", "Type" };
 		for (var i = 0; i < headers.Length; i++)
 		{
 			worker
@@ -632,22 +634,23 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		worker
 			.SetColumnWidth(0, 14)  // Order ID
 			.SetColumnWidth(1, 14)  // Transaction ID
-			.SetColumnWidth(2, 8)   // Side
-			.SetColumnWidth(3, 18)  // Time
-			.SetColumnWidth(4, 12)  // Price
-			.SetColumnWidth(5, 10)  // State
-			.SetColumnWidth(6, 10)  // Balance
-			.SetColumnWidth(7, 10)  // Volume
-			.SetColumnWidth(8, 10)  // Type
+			.SetColumnWidth(2, 16)  // Security
+			.SetColumnWidth(3, 8)   // Side
+			.SetColumnWidth(4, 18)  // Time
+			.SetColumnWidth(5, 12)  // Price
+			.SetColumnWidth(6, 10)  // State
+			.SetColumnWidth(7, 10)  // Balance
+			.SetColumnWidth(8, 10)  // Volume
+			.SetColumnWidth(9, 10)  // Type
 			.SetStyle(0, "0")       // Order ID as integer
 			.SetStyle(1, "0")       // Transaction ID as integer
-			.SetStyle(3, typeof(DateTime))
-			.SetStyle(4, decimalFormat)
-			.SetStyle(6, decimalFormat)
+			.SetStyle(4, typeof(DateTime))
+			.SetStyle(5, decimalFormat)
 			.SetStyle(7, decimalFormat)
+			.SetStyle(8, decimalFormat)
 			.FreezeRows(1)
-			// ColorScale for Balance (col 6) - matching template
-			.SetColorScale(6, 1, "F8696B", "FFEB84", "63BE7B");
+			// ColorScale for Balance (col 7) - matching template
+			.SetColorScale(7, 1, "F8696B", "FFEB84", "63BE7B");
 
 		var row = 1;
 
@@ -658,19 +661,20 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			worker
 				.SetCell(0, row, order.Id)
 				.SetCell(1, row, order.TransactionId)
-				.SetCell(2, row, order.Side.GetDisplayName())
-				.SetCell(3, row, order.Time)
-				.SetCell(4, row, order.Price)
-				.SetCell(5, row, order.State.GetDisplayName())
-				.SetCell(6, row, order.Balance)
-				.SetCell(7, row, order.Volume)
-				.SetCell(8, row, order.Type.GetDisplayName());
+				.SetCell(2, row, order.SecurityId.ToStringId())
+				.SetCell(3, row, order.Side.GetDisplayName())
+				.SetCell(4, row, order.Time)
+				.SetCell(5, row, order.Price)
+				.SetCell(6, row, order.State.GetDisplayName())
+				.SetCell(7, row, order.Balance)
+				.SetCell(8, row, order.Volume)
+				.SetCell(9, row, order.Type.GetDisplayName());
 
 			// Color Side column: Buy = green, Sell = red
 			var (sideBg, sideFg) = order.Side == Sides.Buy
 				? ("C6EFCE", "006100")  // Light green bg, dark green text
 				: ("FFC7CE", "9C0006"); // Light red bg, dark red text
-			worker.SetCellColor(2, row, sideBg, sideFg);
+			worker.SetCellColor(3, row, sideBg, sideFg);
 
 			// Color State column based on order state
 			var (stateBg, stateFg) = order.State switch
@@ -681,7 +685,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 				_ => (null as string, null as string)       // No color for others
 			};
 			if (stateBg != null)
-				worker.SetCellColor(5, row, stateBg, stateFg);
+				worker.SetCellColor(6, row, stateBg, stateFg);
 
 			row++;
 		}
@@ -818,8 +822,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		worker.SwitchSheet(_tradesSheet);
 
 		// Trades template columns:
-		// A EntryTime, B ExitTime, C Side, D Qty, E EntryPrice, F ExitPrice,
-		// G PnL, H PnL%, I TotalPnL, J Position
+		// A EntryTime, B ExitTime, C Security, D Side, E Qty, F EntryPrice, G ExitPrice,
+		// H PnL, I PnL%, J TotalPnL, K Position
 		var row = 1; // data starts from Excel row 2
 		decimal totalPnL = 0m;
 		decimal position = 0m;
@@ -844,14 +848,15 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			worker
 				.SetCell(0, row, trade.Time)           // EntryTime
 				.SetCell(1, row, trade.Time)           // ExitTime
-				.SetCell(2, row, trade.Side.GetDisplayName())
-				.SetCell(3, row, qty)                  // Qty
-				.SetCell(4, row, entryPrice)           // EntryPrice
-				.SetCell(5, row, exitPrice)            // ExitPrice
-				.SetCell(6, row, pnl)                  // PnL
-				.SetCell(7, row, pnlPct)               // PnL%
-				.SetCell(8, row, totalPnL)             // TotalPnL
-				.SetCell(9, row, position);            // Position
+				.SetCell(2, row, trade.SecurityId.ToStringId()) // Security
+				.SetCell(3, row, trade.Side.GetDisplayName())
+				.SetCell(4, row, qty)                  // Qty
+				.SetCell(5, row, entryPrice)           // EntryPrice
+				.SetCell(6, row, exitPrice)            // ExitPrice
+				.SetCell(7, row, pnl)                  // PnL
+				.SetCell(8, row, pnlPct)               // PnL%
+				.SetCell(9, row, totalPnL)             // TotalPnL
+				.SetCell(10, row, position);           // Position
 
 			row++;
 		}
@@ -864,7 +869,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		worker.SwitchSheet(_ordersSheet);
 
 		// Orders template columns:
-		// A OrderId, B TransactionId, C Side, D Time, E Price, F State, G Balance, H Volume, I Type
+		// A OrderId, B TransactionId, C Security, D Side, E Time, F Price, G State, H Balance, I Volume, J Type
 		var row = 1; // data starts from Excel row 2
 
 		foreach (var order in source.Orders.ToArray())
@@ -874,13 +879,14 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			worker
 				.SetCell(0, row, order.Id)
 				.SetCell(1, row, order.TransactionId)
-				.SetCell(2, row, order.Side.GetDisplayName())
-				.SetCell(3, row, order.Time)
-				.SetCell(4, row, order.Price)
-				.SetCell(5, row, order.State.GetDisplayName())
-				.SetCell(6, row, order.Balance)
-				.SetCell(7, row, order.Volume)
-				.SetCell(8, row, order.Type.GetDisplayName());
+				.SetCell(2, row, order.SecurityId.ToStringId())
+				.SetCell(3, row, order.Side.GetDisplayName())
+				.SetCell(4, row, order.Time)
+				.SetCell(5, row, order.Price)
+				.SetCell(6, row, order.State.GetDisplayName())
+				.SetCell(7, row, order.Balance)
+				.SetCell(8, row, order.Volume)
+				.SetCell(9, row, order.Type.GetDisplayName());
 
 			// Ensure Order ID and Transaction ID are formatted as numbers, not dates
 			worker

@@ -212,6 +212,7 @@ public class ReportSource : IReportSource
 	public ReportSource AddOrder(
 		long? id,
 		long transactionId,
+		SecurityId securityId,
 		Sides side,
 		DateTime time,
 		decimal price,
@@ -220,7 +221,7 @@ public class ReportSource : IReportSource
 		decimal? volume,
 		OrderTypes? type)
 	{
-		return AddOrder(new ReportOrder(id, transactionId, side, time, price, state, balance, volume, type));
+		return AddOrder(new ReportOrder(id, transactionId, securityId, side, time, price, state, balance, volume, type));
 	}
 
 	/// <summary>
@@ -267,6 +268,7 @@ public class ReportSource : IReportSource
 	public ReportSource AddTrade(
 		long? tradeId,
 		long orderTransactionId,
+		SecurityId securityId,
 		DateTime time,
 		decimal tradePrice,
 		decimal orderPrice,
@@ -277,7 +279,7 @@ public class ReportSource : IReportSource
 		decimal? pnl,
 		decimal? position)
 	{
-		return AddTrade(new ReportTrade(tradeId, orderTransactionId, time, tradePrice, orderPrice, volume, side, orderId, slippage, pnl, position));
+		return AddTrade(new ReportTrade(tradeId, orderTransactionId, securityId, time, tradePrice, orderPrice, volume, side, orderId, slippage, pnl, position));
 	}
 
 	/// <summary>
@@ -463,9 +465,9 @@ public class ReportSource : IReportSource
 		if (orders.Length == 0)
 			return orders;
 
-		// Group by time period, side, and type
+		// Group by time period, security, side, and type
 		var groups = orders
-			.GroupBy(o => (TruncateTime(o.Time, interval), o.Side, o.Type))
+			.GroupBy(o => (TruncateTime(o.Time, interval), o.SecurityId, o.Side, o.Type))
 			.OrderBy(g => g.Key.Item1)
 			.ThenBy(g => g.Key.Side);
 
@@ -496,6 +498,7 @@ public class ReportSource : IReportSource
 			result.Add(new ReportOrder(
 				Id: null,
 				TransactionId: aggregatedTransactionId--,
+				SecurityId: group.Key.SecurityId,
 				Side: group.Key.Side,
 				Time: aggregatedTime,
 				Price: weightedPrice,
@@ -514,9 +517,9 @@ public class ReportSource : IReportSource
 		if (trades.Length == 0)
 			return trades;
 
-		// Group by time period and side
+		// Group by time period, security, and side
 		var groups = trades
-			.GroupBy(t => (TruncateTime(t.Time, interval), t.Side))
+			.GroupBy(t => (TruncateTime(t.Time, interval), t.SecurityId, t.Side))
 			.OrderBy(g => g.Key.Item1)
 			.ThenBy(g => g.Key.Side);
 
@@ -564,6 +567,7 @@ public class ReportSource : IReportSource
 			result.Add(new ReportTrade(
 				TradeId: null,
 				OrderTransactionId: aggregatedTransactionId--,
+				SecurityId: group.Key.SecurityId,
 				Time: aggregatedTime,
 				TradePrice: weightedTradePrice,
 				OrderPrice: weightedOrderPrice,

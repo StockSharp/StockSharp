@@ -735,6 +735,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_reportSource.AddOrder(new ReportOrder(
 			order.Id,
 			order.TransactionId,
+			order.Security.ToSecurityId(),
 			order.Side,
 			order.ServerTime,
 			order.Price,
@@ -753,10 +754,11 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_reportSource.AddTrade(new ReportTrade(
 			trade.Trade?.Id,
 			trade.Order.TransactionId,
-			trade.Trade?.ServerTime ?? default,
-			trade.Trade?.Price ?? 0,
+			trade.Trade.SecurityId,
+			trade.Trade.ServerTime,
+			trade.Trade.Price,
 			trade.Order.Price,
-			trade.Trade?.Volume ?? 0,
+			trade.Trade.Volume,
 			trade.Order.Side,
 			trade.Order.Id,
 			trade.Slippage,

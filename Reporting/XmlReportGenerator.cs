@@ -86,6 +86,7 @@ public class XmlReportGenerator : BaseReportGenerator
 
 				await WriteAttributeString("id", o.Id);
 				await WriteAttributeString("transactionId", o.TransactionId);
+				await WriteAttributeString("securityId", o.SecurityId.ToStringId());
 				await WriteAttributeString("direction", o.Side);
 				await WriteAttributeString("time", o.Time);
 				await WriteAttributeString("price", o.Price);
@@ -112,6 +113,7 @@ public class XmlReportGenerator : BaseReportGenerator
 
 				await WriteAttributeString("id", t.TradeId);
 				await WriteAttributeString("transactionId", t.OrderTransactionId);
+				await WriteAttributeString("securityId", t.SecurityId.ToStringId());
 				await WriteAttributeString("time", t.Time);
 				await WriteAttributeString("price", t.TradePrice);
 				await WriteAttributeString("volume", t.Volume);

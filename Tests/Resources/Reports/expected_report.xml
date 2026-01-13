@@ -17,11 +17,11 @@
     <parameter name="SharpeRatio" value="1.85" />
   </statistics>
   <orders>
-    <order id="1" transactionId="100" direction="Buy" time="1/15/2024 10:00:00 AM" price="50000" state="Done" balance="0" volume="1" type="Limit" />
-    <order id="2" transactionId="101" direction="Sell" time="1/15/2024 11:00:00 AM" price="50500" state="Done" balance="0" volume="1" type="Limit" />
+    <order id="1" transactionId="100" securityId="BTCUSD@CRYPTO" direction="Buy" time="1/15/2024 10:00:00 AM" price="50000" state="Done" balance="0" volume="1" type="Limit" />
+    <order id="2" transactionId="101" securityId="BTCUSD@CRYPTO" direction="Sell" time="1/15/2024 11:00:00 AM" price="50500" state="Done" balance="0" volume="1" type="Limit" />
   </orders>
   <trades>
-    <trade id="1001" transactionId="100" time="1/15/2024 10:00:00 AM" price="50000" volume="1" order="1" PnL="0" slippage="0" />
-    <trade id="1002" transactionId="101" time="1/15/2024 11:00:00 AM" price="50500" volume="1" order="2" PnL="500" slippage="0" />
+    <trade id="1001" transactionId="100" securityId="BTCUSD@CRYPTO" time="1/15/2024 10:00:00 AM" price="50000" volume="1" order="1" PnL="0" slippage="0" />
+    <trade id="1002" transactionId="101" securityId="BTCUSD@CRYPTO" time="1/15/2024 11:00:00 AM" price="50500" volume="1" order="2" PnL="500" slippage="0" />
   </trades>
 </strategy>

@@ -7,10 +7,10 @@ Statistics
 WinRate,MaxDrawdown,TradesCount,AverageTradeTime,BestTradeDate,SharpeRatio
 0.65,-500,42,00:15:00,1/15/2024 2:30:00 PM,1.85
 Orders
-Identifier,Transaction,Direction,Time,Price,Status,Balance,Volume,Type
-1,100,Buy,1/15/2024 10:00:00 AM,50000,Done,0,1,Limit
-2,101,Sell,1/15/2024 11:00:00 AM,50500,Done,0,1,Limit
+Identifier,Transaction,Security,Direction,Time,Price,Status,Balance,Volume,Type
+1,100,BTCUSD@CRYPTO,Buy,1/15/2024 10:00:00 AM,50000,Done,0,1,Limit
+2,101,BTCUSD@CRYPTO,Sell,1/15/2024 11:00:00 AM,50500,Done,0,1,Limit
 Trades
-Identifier,Transaction,Time,Price,Volume,Direction,Order ID,P&L,Slippage
-1001,100,1/15/2024 10:00:00 AM,50000,1,Buy,1,0,0
-1002,101,1/15/2024 11:00:00 AM,50500,1,Sell,2,500,0
+Identifier,Transaction,Security,Time,Price,Volume,Direction,Order ID,P&L,Slippage
+1001,100,BTCUSD@CRYPTO,1/15/2024 10:00:00 AM,50000,1,Buy,1,0,0
+1002,101,BTCUSD@CRYPTO,1/15/2024 11:00:00 AM,50500,1,Sell,2,500,0

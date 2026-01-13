@@ -24,6 +24,7 @@
     {
       "id": 1,
       "transactionId": 100,
+      "securityId": "BTCUSD@CRYPTO",
       "direction": 0,
       "time": "2024-01-15T10:00:00Z",
       "price": 50000.0,
@@ -35,6 +36,7 @@
     {
       "id": 2,
       "transactionId": 101,
+      "securityId": "BTCUSD@CRYPTO",
       "direction": 1,
       "time": "2024-01-15T11:00:00Z",
       "price": 50500.0,
@@ -48,6 +50,7 @@
     {
       "id": 1001,
       "transactionId": 100,
+      "securityId": "BTCUSD@CRYPTO",
       "time": "2024-01-15T10:00:00Z",
       "price": 50000.0,
       "volume": 1.0,
@@ -58,6 +61,7 @@
     {
       "id": 1002,
       "transactionId": 101,
+      "securityId": "BTCUSD@CRYPTO",
       "time": "2024-01-15T11:00:00Z",
       "price": 50500.0,
       "volume": 1.0,

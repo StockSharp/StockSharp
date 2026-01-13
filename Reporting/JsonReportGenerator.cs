@@ -81,6 +81,7 @@ public class JsonReportGenerator : BaseReportGenerator
 
 				await WriteElementAsync("id", o.Id);
 				await WriteElementAsync("transactionId", o.TransactionId);
+				await WriteElementAsync("securityId", o.SecurityId.ToStringId());
 				await WriteElementAsync("direction", o.Side);
 				await WriteElementAsync("time", o.Time);
 				await WriteElementAsync("price", o.Price);
@@ -108,6 +109,7 @@ public class JsonReportGenerator : BaseReportGenerator
 
 				await WriteElementAsync("id", t.TradeId);
 				await WriteElementAsync("transactionId", t.OrderTransactionId);
+				await WriteElementAsync("securityId", t.SecurityId.ToStringId());
 				await WriteElementAsync("time", t.Time);
 				await WriteElementAsync("price", t.TradePrice);
 				await WriteElementAsync("volume", t.Volume);

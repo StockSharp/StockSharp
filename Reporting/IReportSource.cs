@@ -5,6 +5,7 @@ namespace StockSharp.Reporting;
 /// </summary>
 /// <param name="Id">Order id.</param>
 /// <param name="TransactionId">Transaction id.</param>
+/// <param name="SecurityId">Security id.</param>
 /// <param name="Side">Side (buy/sell).</param>
 /// <param name="Time">Order time.</param>
 /// <param name="Price">Order price.</param>
@@ -15,6 +16,7 @@ namespace StockSharp.Reporting;
 public record ReportOrder(
 	long? Id,
 	long TransactionId,
+	SecurityId SecurityId,
 	Sides Side,
 	DateTime Time,
 	decimal Price,
@@ -29,6 +31,7 @@ public record ReportOrder(
 /// </summary>
 /// <param name="TradeId">Trade id.</param>
 /// <param name="OrderTransactionId">Order transaction id.</param>
+/// <param name="SecurityId">Security id.</param>
 /// <param name="Time">Trade time.</param>
 /// <param name="TradePrice">Trade price.</param>
 /// <param name="OrderPrice">Order price.</param>
@@ -41,6 +44,7 @@ public record ReportOrder(
 public record ReportTrade(
 	long? TradeId,
 	long OrderTransactionId,
+	SecurityId SecurityId,
 	DateTime Time,
 	decimal TradePrice,
 	decimal OrderPrice,

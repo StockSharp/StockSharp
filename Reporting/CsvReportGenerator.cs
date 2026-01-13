@@ -61,12 +61,12 @@ public class CsvReportGenerator : BaseReportGenerator
 		if (IncludeOrders)
 		{
 			await WriteValuesAsync(LocalizedStrings.Orders);
-			await WriteValuesAsync(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.Direction, LocalizedStrings.Time, LocalizedStrings.Price,
+			await WriteValuesAsync(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.SecurityKey, LocalizedStrings.Direction, LocalizedStrings.Time, LocalizedStrings.Price,
 				LocalizedStrings.Status, LocalizedStrings.Balance, LocalizedStrings.Volume, LocalizedStrings.Type);
 
 			foreach (var order in source.Orders)
 			{
-				await WriteValuesAsync(order.Id, order.TransactionId, order.Side.GetDisplayName(), order.Time, order.Price,
+				await WriteValuesAsync(order.Id, order.TransactionId, order.SecurityId.ToStringId(), order.Side.GetDisplayName(), order.Time, order.Price,
 					order.State.GetDisplayName(), order.Balance, order.Volume, order.Type.GetDisplayName());
 			}
 		}
@@ -74,12 +74,12 @@ public class CsvReportGenerator : BaseReportGenerator
 		if (IncludeTrades)
 		{
 			await WriteValuesAsync(LocalizedStrings.Trades);
-			await WriteValuesAsync(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
+			await WriteValuesAsync(LocalizedStrings.Identifier, LocalizedStrings.Transaction, LocalizedStrings.SecurityKey, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.Volume,
 				LocalizedStrings.Direction, LocalizedStrings.OrderId, LocalizedStrings.PnL, LocalizedStrings.Slippage);
 
 			foreach (var trade in source.OwnTrades)
 			{
-				await WriteValuesAsync(trade.TradeId, trade.OrderTransactionId, trade.Time.Format(), trade.TradePrice, trade.Volume,
+				await WriteValuesAsync(trade.TradeId, trade.OrderTransactionId, trade.SecurityId.ToStringId(), trade.Time.Format(), trade.TradePrice, trade.Volume,
 					trade.Side.GetDisplayName(), trade.OrderId, trade.PnL, trade.Slippage);
 			}
 		}

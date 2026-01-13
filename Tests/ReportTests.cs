@@ -122,20 +122,21 @@ public class ReportTests : BaseTestClass
 		source.AddStatisticParameter("SharpeRatio", 1.85m);
 
 		var baseTime = new DateTime(2024, 1, 15, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "BTCUSD", BoardCode = "CRYPTO" };
 
 		source.AddOrder(new ReportOrder(
-			Id: 1, TransactionId: 100, Side: Sides.Buy, Time: baseTime,
+			Id: 1, TransactionId: 100, SecurityId: securityId, Side: Sides.Buy, Time: baseTime,
 			Price: 50000m, State: OrderStates.Done, Balance: 0m, Volume: 1m, Type: OrderTypes.Limit));
 		source.AddOrder(new ReportOrder(
-			Id: 2, TransactionId: 101, Side: Sides.Sell, Time: baseTime.AddHours(1),
+			Id: 2, TransactionId: 101, SecurityId: securityId, Side: Sides.Sell, Time: baseTime.AddHours(1),
 			Price: 50500m, State: OrderStates.Done, Balance: 0m, Volume: 1m, Type: OrderTypes.Limit));
 
 		source.AddTrade(new ReportTrade(
-			TradeId: 1001, OrderTransactionId: 100, Time: baseTime,
+			TradeId: 1001, OrderTransactionId: 100, SecurityId: securityId, Time: baseTime,
 			TradePrice: 50000m, OrderPrice: 50000m, Volume: 1m, Side: Sides.Buy,
 			OrderId: 1, Slippage: 0m, PnL: 0m, Position: 1m));
 		source.AddTrade(new ReportTrade(
-			TradeId: 1002, OrderTransactionId: 101, Time: baseTime.AddHours(1),
+			TradeId: 1002, OrderTransactionId: 101, SecurityId: securityId, Time: baseTime.AddHours(1),
 			TradePrice: 50500m, OrderPrice: 50500m, Volume: 1m, Side: Sides.Sell,
 			OrderId: 2, Slippage: 0m, PnL: 500m, Position: 0m));
 
@@ -341,6 +342,7 @@ public class ReportTests : BaseTestClass
 		source.AddOrder(new ReportOrder(
 			Id: 12345,
 			TransactionId: 100,
+			SecurityId: new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" },
 			Side: Sides.Buy,
 			Time: DateTime.UtcNow,
 			Price: 150m,
@@ -369,6 +371,7 @@ public class ReportTests : BaseTestClass
 		source.AddOrder(new ReportOrder(
 			Id: 99999,
 			TransactionId: 1,
+			SecurityId: new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" },
 			Side: Sides.Buy,
 			Time: DateTime.UtcNow,
 			Price: 100m,
@@ -422,13 +425,15 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var time = DateTime.UtcNow;
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
-		source.AddOrder(1, 100, Sides.Buy, time, 50000m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(1, 100, securityId, Sides.Buy, time, 50000m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 
 		source.OrdersCount.AssertEqual(1);
 		var order = source.Orders.First();
 		order.Id.AssertEqual(1);
 		order.TransactionId.AssertEqual(100);
+		order.SecurityId.AssertEqual(securityId);
 		order.Side.AssertEqual(Sides.Buy);
 		order.Price.AssertEqual(50000m);
 	}
@@ -438,12 +443,14 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var time = DateTime.UtcNow;
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
-		source.AddTrade(1001, 100, time, 50000m, 50000m, 1m, Sides.Buy, 1, 0m, 100m, 1m);
+		source.AddTrade(1001, 100, securityId, time, 50000m, 50000m, 1m, Sides.Buy, 1, 0m, 100m, 1m);
 
 		source.TradesCount.AssertEqual(1);
 		var trade = source.OwnTrades.First();
 		trade.TradeId.AssertEqual(1001);
+		trade.SecurityId.AssertEqual(securityId);
 		trade.TradePrice.AssertEqual(50000m);
 		trade.PnL.AssertEqual(100m);
 	}
@@ -453,17 +460,18 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add 5 buy orders in the same hour
 		for (var i = 0; i < 5; i++)
 		{
-			source.AddOrder(i, i, Sides.Buy, baseTime.AddMinutes(i * 10), 100m + i, OrderStates.Done, 0m, 10m, OrderTypes.Limit);
+			source.AddOrder(i, i, securityId, Sides.Buy, baseTime.AddMinutes(i * 10), 100m + i, OrderStates.Done, 0m, 10m, OrderTypes.Limit);
 		}
 
 		// Add 3 sell orders in the same hour
 		for (var i = 0; i < 3; i++)
 		{
-			source.AddOrder(100 + i, 100 + i, Sides.Sell, baseTime.AddMinutes(i * 15), 105m + i, OrderStates.Done, 0m, 5m, OrderTypes.Limit);
+			source.AddOrder(100 + i, 100 + i, securityId, Sides.Sell, baseTime.AddMinutes(i * 15), 105m + i, OrderStates.Done, 0m, 5m, OrderTypes.Limit);
 		}
 
 		source.OrdersCount.AssertEqual(8);
@@ -486,11 +494,12 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add 5 buy trades in the same hour
 		for (var i = 0; i < 5; i++)
 		{
-			source.AddTrade(i, i, baseTime.AddMinutes(i * 10), 100m, 100m, 1m, Sides.Buy, i, 0.1m, 10m, i);
+			source.AddTrade(i, i, securityId, baseTime.AddMinutes(i * 10), 100m, 100m, 1m, Sides.Buy, i, 0.1m, 10m, i);
 		}
 
 		source.TradesCount.AssertEqual(5);
@@ -511,11 +520,12 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var baseTime = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add trades across different hours but same day
-		source.AddTrade(1, 1, baseTime.AddHours(1), 100m, 100m, 1m, Sides.Buy, 1, null, 10m, 1m);
-		source.AddTrade(2, 2, baseTime.AddHours(5), 101m, 101m, 2m, Sides.Buy, 2, null, 20m, 3m);
-		source.AddTrade(3, 3, baseTime.AddHours(10), 102m, 102m, 3m, Sides.Buy, 3, null, 30m, 6m);
+		source.AddTrade(1, 1, securityId, baseTime.AddHours(1), 100m, 100m, 1m, Sides.Buy, 1, null, 10m, 1m);
+		source.AddTrade(2, 2, securityId, baseTime.AddHours(5), 101m, 101m, 2m, Sides.Buy, 2, null, 20m, 3m);
+		source.AddTrade(3, 3, securityId, baseTime.AddHours(10), 102m, 102m, 3m, Sides.Buy, 3, null, 30m, 6m);
 
 		source.TradesCount.AssertEqual(3);
 
@@ -540,12 +550,13 @@ public class ReportTests : BaseTestClass
 		};
 
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add 15 orders in the same hour - should trigger auto-aggregation at 11th
 		// and continue aggregating new orders into the same time bucket
 		for (var i = 0; i < 15; i++)
 		{
-			source.AddOrder(i, i, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+			source.AddOrder(i, i, securityId, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 		}
 
 		// All orders are in the same hour, so after aggregation = 1 order
@@ -564,17 +575,18 @@ public class ReportTests : BaseTestClass
 		};
 
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add 8 orders in hour 10 (not enough to trigger)
 		for (var i = 0; i < 8; i++)
 		{
-			source.AddOrder(i, i, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+			source.AddOrder(i, i, securityId, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 		}
 
 		// Add 5 orders in hour 11 - this brings total to 13 which exceeds threshold
 		for (var i = 0; i < 5; i++)
 		{
-			source.AddOrder(100 + i, 100 + i, Sides.Buy, baseTime.AddHours(1).AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+			source.AddOrder(100 + i, 100 + i, securityId, Sides.Buy, baseTime.AddHours(1).AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 		}
 
 		// Should be 2 orders: 1 for hour 10 (8 orders) + 1 for hour 11 (5 orders)
@@ -595,10 +607,11 @@ public class ReportTests : BaseTestClass
 		};
 
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		for (var i = 0; i < 100; i++)
 		{
-			source.AddOrder(i, i, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+			source.AddOrder(i, i, securityId, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 		}
 
 		source.OrdersCount.AssertEqual(100);
@@ -610,9 +623,10 @@ public class ReportTests : BaseTestClass
 		var source = new ReportSource { Name = "Test" }
 			.AddParameter("P1", 1)
 			.AddStatisticParameter("S1", 2);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
-		source.AddOrder(1, 1, Sides.Buy, DateTime.UtcNow, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
-		source.AddTrade(1, 1, DateTime.UtcNow, 100m, 100m, 1m, Sides.Buy, 1, null, null, null);
+		source.AddOrder(1, 1, securityId, Sides.Buy, DateTime.UtcNow, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddTrade(1, 1, securityId, DateTime.UtcNow, 100m, 100m, 1m, Sides.Buy, 1, null, null, null);
 
 		source.Clear();
 
@@ -627,12 +641,13 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Order 1: 100 @ 10 volume = 1000 total cost
 		// Order 2: 200 @ 20 volume = 4000 total cost
 		// Weighted avg = 5000 / 30 = 166.666...
-		source.AddOrder(1, 1, Sides.Buy, time, 100m, OrderStates.Done, 0m, 10m, OrderTypes.Limit);
-		source.AddOrder(2, 2, Sides.Buy, time.AddMinutes(5), 200m, OrderStates.Done, 0m, 20m, OrderTypes.Limit);
+		source.AddOrder(1, 1, securityId, Sides.Buy, time, 100m, OrderStates.Done, 0m, 10m, OrderTypes.Limit);
+		source.AddOrder(2, 2, securityId, Sides.Buy, time.AddMinutes(5), 200m, OrderStates.Done, 0m, 20m, OrderTypes.Limit);
 
 		source.AggregateOrders(TimeSpan.FromHours(1));
 
@@ -648,13 +663,14 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Trade 1: TradePrice=100, OrderPrice=99, Volume=2
 		// Trade 2: TradePrice=110, OrderPrice=108, Volume=3
 		// Weighted TradePrice = (100*2 + 110*3) / 5 = 530/5 = 106
 		// Weighted OrderPrice = (99*2 + 108*3) / 5 = 522/5 = 104.4
-		source.AddTrade(1, 1, time, 100m, 99m, 2m, Sides.Buy, 1, 0.1m, 10m, 2m);
-		source.AddTrade(2, 2, time.AddMinutes(5), 110m, 108m, 3m, Sides.Buy, 2, 0.2m, 20m, 5m);
+		source.AddTrade(1, 1, securityId, time, 100m, 99m, 2m, Sides.Buy, 1, 0.1m, 10m, 2m);
+		source.AddTrade(2, 2, securityId, time.AddMinutes(5), 110m, 108m, 3m, Sides.Buy, 2, 0.2m, 20m, 5m);
 
 		source.AggregateTrades(TimeSpan.FromHours(1));
 
@@ -681,11 +697,12 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var bucketStart = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Orders at different times within the hour
-		source.AddOrder(1, 1, Sides.Buy, bucketStart.AddMinutes(15), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
-		source.AddOrder(2, 2, Sides.Buy, bucketStart.AddMinutes(30), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
-		source.AddOrder(3, 3, Sides.Buy, bucketStart.AddMinutes(45), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(1, 1, securityId, Sides.Buy, bucketStart.AddMinutes(15), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(2, 2, securityId, Sides.Buy, bucketStart.AddMinutes(30), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(3, 3, securityId, Sides.Buy, bucketStart.AddMinutes(45), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 
 		source.AggregateOrders(TimeSpan.FromHours(1));
 
@@ -698,14 +715,15 @@ public class ReportTests : BaseTestClass
 	public void ReportSource_AggregateOrders_TimeIsMinTime_WhenIntervalZero()
 	{
 		var source = new ReportSource { Name = "Test" };
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		var time1 = new DateTime(2024, 1, 1, 10, 30, 0, DateTimeKind.Utc);
 		var time2 = new DateTime(2024, 1, 2, 15, 45, 0, DateTimeKind.Utc);
 		var time3 = new DateTime(2024, 1, 3, 8, 15, 0, DateTimeKind.Utc);
 
-		source.AddOrder(1, 1, Sides.Buy, time2, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
-		source.AddOrder(2, 2, Sides.Buy, time1, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit); // earliest
-		source.AddOrder(3, 3, Sides.Buy, time3, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(1, 1, securityId, Sides.Buy, time2, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(2, 2, securityId, Sides.Buy, time1, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit); // earliest
+		source.AddOrder(3, 3, securityId, Sides.Buy, time3, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 
 		source.AggregateOrders(TimeSpan.Zero);
 
@@ -719,10 +737,11 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// All trades have null PnL
-		source.AddTrade(1, 1, time, 100m, 100m, 1m, Sides.Buy, 1, null, null, null);
-		source.AddTrade(2, 2, time.AddMinutes(5), 100m, 100m, 1m, Sides.Buy, 2, null, null, null);
+		source.AddTrade(1, 1, securityId, time, 100m, 100m, 1m, Sides.Buy, 1, null, null, null);
+		source.AddTrade(2, 2, securityId, time.AddMinutes(5), 100m, 100m, 1m, Sides.Buy, 2, null, null, null);
 
 		source.AggregateTrades(TimeSpan.FromHours(1));
 
@@ -738,11 +757,12 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Mix of null and non-null PnL
-		source.AddTrade(1, 1, time, 100m, 100m, 1m, Sides.Buy, 1, null, 10m, null);
-		source.AddTrade(2, 2, time.AddMinutes(5), 100m, 100m, 1m, Sides.Buy, 2, 0.5m, null, null); // null PnL treated as 0
-		source.AddTrade(3, 3, time.AddMinutes(10), 100m, 100m, 1m, Sides.Buy, 3, null, 20m, null);
+		source.AddTrade(1, 1, securityId, time, 100m, 100m, 1m, Sides.Buy, 1, null, 10m, null);
+		source.AddTrade(2, 2, securityId, time.AddMinutes(5), 100m, 100m, 1m, Sides.Buy, 2, 0.5m, null, null); // null PnL treated as 0
+		source.AddTrade(3, 3, securityId, time.AddMinutes(10), 100m, 100m, 1m, Sides.Buy, 3, null, 20m, null);
 
 		source.AggregateTrades(TimeSpan.FromHours(1));
 
@@ -760,11 +780,12 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Orders with null volume - weighted average falls back to simple average
-		source.AddOrder(1, 1, Sides.Buy, time, 100m, OrderStates.Done, null, null, OrderTypes.Limit);
-		source.AddOrder(2, 2, Sides.Buy, time.AddMinutes(5), 200m, OrderStates.Done, null, null, OrderTypes.Limit);
-		source.AddOrder(3, 3, Sides.Buy, time.AddMinutes(10), 300m, OrderStates.Done, null, null, OrderTypes.Limit);
+		source.AddOrder(1, 1, securityId, Sides.Buy, time, 100m, OrderStates.Done, null, null, OrderTypes.Limit);
+		source.AddOrder(2, 2, securityId, Sides.Buy, time.AddMinutes(5), 200m, OrderStates.Done, null, null, OrderTypes.Limit);
+		source.AddOrder(3, 3, securityId, Sides.Buy, time.AddMinutes(10), 300m, OrderStates.Done, null, null, OrderTypes.Limit);
 
 		source.AggregateOrders(TimeSpan.FromHours(1));
 
@@ -782,9 +803,10 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
-		source.AddOrder(1, 1, Sides.Buy, time, 100m, OrderStates.Done, 5m, 10m, OrderTypes.Limit);
-		source.AddOrder(2, 2, Sides.Buy, time.AddMinutes(5), 100m, OrderStates.Done, 3m, 10m, OrderTypes.Limit);
+		source.AddOrder(1, 1, securityId, Sides.Buy, time, 100m, OrderStates.Done, 5m, 10m, OrderTypes.Limit);
+		source.AddOrder(2, 2, securityId, Sides.Buy, time.AddMinutes(5), 100m, OrderStates.Done, 3m, 10m, OrderTypes.Limit);
 
 		source.AggregateOrders(TimeSpan.FromHours(1));
 
@@ -804,11 +826,12 @@ public class ReportTests : BaseTestClass
 		};
 
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add exactly 10 orders - should NOT trigger aggregation (trigger is > threshold)
 		for (var i = 0; i < 10; i++)
 		{
-			source.AddOrder(i, i, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+			source.AddOrder(i, i, securityId, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 		}
 
 		// Should still have 10 orders (not aggregated)
@@ -826,11 +849,12 @@ public class ReportTests : BaseTestClass
 		};
 
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add 11 orders - should trigger aggregation (count > threshold)
 		for (var i = 0; i < 11; i++)
 		{
-			source.AddOrder(i, i, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+			source.AddOrder(i, i, securityId, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 		}
 
 		// Should be aggregated to 1 (all in same hour, same side, same type)
@@ -843,11 +867,12 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add orders with different states in the same hour
-		source.AddOrder(1, 1, Sides.Buy, time, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
-		source.AddOrder(2, 2, Sides.Buy, time.AddMinutes(1), 100m, OrderStates.Failed, 0m, 1m, OrderTypes.Limit);
-		source.AddOrder(3, 3, Sides.Buy, time.AddMinutes(2), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(1, 1, securityId, Sides.Buy, time, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(2, 2, securityId, Sides.Buy, time.AddMinutes(1), 100m, OrderStates.Failed, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(3, 3, securityId, Sides.Buy, time.AddMinutes(2), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 
 		source.AggregateOrders(TimeSpan.FromHours(1));
 
@@ -861,10 +886,11 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
-		source.AddOrder(1, 1, Sides.Buy, time, 100m, OrderStates.Failed, 0m, 1m, OrderTypes.Limit);
-		source.AddOrder(2, 2, Sides.Buy, time.AddMinutes(1), 100m, OrderStates.Active, 5m, 10m, OrderTypes.Limit);
-		source.AddOrder(3, 3, Sides.Buy, time.AddMinutes(2), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(1, 1, securityId, Sides.Buy, time, 100m, OrderStates.Failed, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(2, 2, securityId, Sides.Buy, time.AddMinutes(1), 100m, OrderStates.Active, 5m, 10m, OrderTypes.Limit);
+		source.AddOrder(3, 3, securityId, Sides.Buy, time.AddMinutes(2), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 
 		source.AggregateOrders(TimeSpan.FromHours(1));
 
@@ -878,14 +904,15 @@ public class ReportTests : BaseTestClass
 	{
 		var source = new ReportSource { Name = "Test" };
 		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add Limit orders
-		source.AddOrder(1, 1, Sides.Buy, time, 100m, OrderStates.Done, 0m, 5m, OrderTypes.Limit);
-		source.AddOrder(2, 2, Sides.Buy, time.AddMinutes(1), 101m, OrderStates.Done, 0m, 5m, OrderTypes.Limit);
+		source.AddOrder(1, 1, securityId, Sides.Buy, time, 100m, OrderStates.Done, 0m, 5m, OrderTypes.Limit);
+		source.AddOrder(2, 2, securityId, Sides.Buy, time.AddMinutes(1), 101m, OrderStates.Done, 0m, 5m, OrderTypes.Limit);
 
 		// Add Market orders in the same hour
-		source.AddOrder(3, 3, Sides.Buy, time.AddMinutes(2), 102m, OrderStates.Done, 0m, 3m, OrderTypes.Market);
-		source.AddOrder(4, 4, Sides.Buy, time.AddMinutes(3), 103m, OrderStates.Done, 0m, 3m, OrderTypes.Market);
+		source.AddOrder(3, 3, securityId, Sides.Buy, time.AddMinutes(2), 102m, OrderStates.Done, 0m, 3m, OrderTypes.Market);
+		source.AddOrder(4, 4, securityId, Sides.Buy, time.AddMinutes(3), 103m, OrderStates.Done, 0m, 3m, OrderTypes.Market);
 
 		source.AggregateOrders(TimeSpan.FromHours(1));
 
@@ -904,12 +931,13 @@ public class ReportTests : BaseTestClass
 	public void ReportSource_AggregateOrders_ZeroInterval_AllInOneBucket()
 	{
 		var source = new ReportSource { Name = "Test" };
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add orders across different days
-		source.AddOrder(1, 1, Sides.Buy, new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
-		source.AddOrder(2, 2, Sides.Buy, new DateTime(2024, 1, 2, 15, 0, 0, DateTimeKind.Utc), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
-		source.AddOrder(3, 3, Sides.Buy, new DateTime(2024, 1, 3, 20, 0, 0, DateTimeKind.Utc), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
-		source.AddOrder(4, 4, Sides.Buy, new DateTime(2024, 2, 1, 10, 0, 0, DateTimeKind.Utc), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(1, 1, securityId, Sides.Buy, new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(2, 2, securityId, Sides.Buy, new DateTime(2024, 1, 2, 15, 0, 0, DateTimeKind.Utc), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(3, 3, securityId, Sides.Buy, new DateTime(2024, 1, 3, 20, 0, 0, DateTimeKind.Utc), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		source.AddOrder(4, 4, securityId, Sides.Buy, new DateTime(2024, 2, 1, 10, 0, 0, DateTimeKind.Utc), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 
 		// Zero interval = no time grouping, all collapse into one bucket
 		source.AggregateOrders(TimeSpan.Zero);
@@ -922,11 +950,12 @@ public class ReportTests : BaseTestClass
 	public void ReportSource_AggregateTrades_ZeroInterval_AllInOneBucket()
 	{
 		var source = new ReportSource { Name = "Test" };
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add trades across different days
-		source.AddTrade(1, 1, new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc), 100m, 100m, 1m, Sides.Buy, 1, 0.1m, 10m, 1m);
-		source.AddTrade(2, 2, new DateTime(2024, 1, 2, 15, 0, 0, DateTimeKind.Utc), 100m, 100m, 2m, Sides.Buy, 2, 0.2m, 20m, 3m);
-		source.AddTrade(3, 3, new DateTime(2024, 1, 3, 20, 0, 0, DateTimeKind.Utc), 100m, 100m, 3m, Sides.Buy, 3, 0.3m, 30m, 6m);
+		source.AddTrade(1, 1, securityId, new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc), 100m, 100m, 1m, Sides.Buy, 1, 0.1m, 10m, 1m);
+		source.AddTrade(2, 2, securityId, new DateTime(2024, 1, 2, 15, 0, 0, DateTimeKind.Utc), 100m, 100m, 2m, Sides.Buy, 2, 0.2m, 20m, 3m);
+		source.AddTrade(3, 3, securityId, new DateTime(2024, 1, 3, 20, 0, 0, DateTimeKind.Utc), 100m, 100m, 3m, Sides.Buy, 3, 0.3m, 30m, 6m);
 
 		source.AggregateTrades(TimeSpan.Zero);
 
@@ -948,12 +977,13 @@ public class ReportTests : BaseTestClass
 			MaxOrdersBeforeAggregation = 5,
 			AggregationInterval = TimeSpan.Zero // No time grouping
 		};
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add 10 orders across different days - all should collapse into one
 		for (var i = 0; i < 10; i++)
 		{
 			var time = new DateTime(2024, 1, 1 + i, 10, 0, 0, DateTimeKind.Utc);
-			source.AddOrder(i, i, Sides.Buy, time, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+			source.AddOrder(i, i, securityId, Sides.Buy, time, 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 		}
 
 		// All orders in same bucket (no time grouping), same side, same type = 1 aggregate
@@ -975,6 +1005,7 @@ public class ReportTests : BaseTestClass
 		var baseTime = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 		const int totalOrders = 50_000;
 		const int totalTrades = 50_000;
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
 		// Add 50k orders spread across 24 hours (~ 2000 per hour)
 		for (var i = 0; i < totalOrders; i++)
@@ -984,7 +1015,7 @@ public class ReportTests : BaseTestClass
 			var time = baseTime.AddHours(hour).AddMinutes(minute).AddSeconds(i % 60);
 			var side = i % 2 == 0 ? Sides.Buy : Sides.Sell;
 
-			source.AddOrder(i, i, side, time, 100m + (i % 100), OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+			source.AddOrder(i, i, securityId, side, time, 100m + (i % 100), OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 		}
 
 		// Add 50k trades spread across 24 hours
@@ -995,7 +1026,7 @@ public class ReportTests : BaseTestClass
 			var time = baseTime.AddHours(hour).AddMinutes(minute).AddSeconds(i % 60);
 			var side = i % 2 == 0 ? Sides.Buy : Sides.Sell;
 
-			source.AddTrade(i, i, time, 100m + (i % 100), 100m, 1m, side, i, 0.01m, 1m, i % 100);
+			source.AddTrade(i, i, securityId, time, 100m + (i % 100), 100m, 1m, side, i, 0.01m, 1m, i % 100);
 		}
 
 		// After auto-aggregation, should have much fewer items
@@ -1221,9 +1252,11 @@ public class ReportTests : BaseTestClass
 		source.AddStatisticParameter("Max Drawdown", -0.12m);
 
 		var baseTime = new DateTime(2024, 3, 1, 10, 0, 0, DateTimeKind.Utc);
+		var securityId = new SecurityId { SecurityCode = "BTCUSD", BoardCode = "CRYPTO" };
 		source.AddTrade(new ReportTrade(
 			TradeId: 1001,
 			OrderTransactionId: 100,
+			SecurityId: securityId,
 			Time: baseTime,
 			TradePrice: 50000m,
 			OrderPrice: 50000m,
@@ -1237,6 +1270,7 @@ public class ReportTests : BaseTestClass
 		source.AddTrade(new ReportTrade(
 			TradeId: 1002,
 			OrderTransactionId: 101,
+			SecurityId: securityId,
 			Time: baseTime.AddHours(1),
 			TradePrice: 50500m,
 			OrderPrice: 50500m,
@@ -1251,6 +1285,7 @@ public class ReportTests : BaseTestClass
 		source.AddOrder(new ReportOrder(
 			Id: 1,
 			TransactionId: 100,
+			SecurityId: securityId,
 			Side: Sides.Buy,
 			Time: baseTime,
 			Price: 50000m,
@@ -1262,6 +1297,7 @@ public class ReportTests : BaseTestClass
 		source.AddOrder(new ReportOrder(
 			Id: 2,
 			TransactionId: 101,
+			SecurityId: securityId,
 			Side: Sides.Sell,
 			Time: baseTime.AddHours(1),
 			Price: 50500m,
