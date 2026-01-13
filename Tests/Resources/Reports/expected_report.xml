@@ -1,12 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <strategy name="TestStrategy" totalWorkingTime="08:00:00" commission="25" position="100" PnL="5000" slippage="1.5" latency="00:00:00">
   <parameters>
     <parameter name="Symbol" value="BTCUSD" />
-    <parameter name="Period" value="1h" />
+    <parameter name="TimeFrame" value="00:05:00" />
+    <parameter name="StartDate" value="1/1/2024 12:00:00 AM" />
+    <parameter name="Volume" value="100" />
+    <parameter name="IsLong" value="True" />
+    <parameter name="MaxPositions" value="5" />
   </parameters>
   <statistics>
     <parameter name="WinRate" value="0.65" />
     <parameter name="MaxDrawdown" value="-500" />
+    <parameter name="TradesCount" value="42" />
+    <parameter name="AverageTradeTime" value="00:15:00" />
+    <parameter name="BestTradeDate" value="1/15/2024 2:30:00 PM" />
+    <parameter name="SharpeRatio" value="1.85" />
   </statistics>
   <orders>
     <order id="1" transactionId="100" direction="Buy" time="1/15/2024 10:00:00 AM" price="50000" state="Done" balance="0" volume="1" type="Limit" />

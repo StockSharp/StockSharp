@@ -1,7 +1,11 @@
-{
+﻿{
   "name": "TestStrategy",
   "Symbol": "BTCUSD",
-  "Period": "1h",
+  "TimeFrame": "00:05:00",
+  "StartDate": "2024-01-01T00:00:00Z",
+  "Volume": 100.0,
+  "IsLong": true,
+  "MaxPositions": 5,
   "totalWorkingTime": "08:00:00",
   "commission": 25.0,
   "position": 100.0,
@@ -10,7 +14,11 @@
   "latency": "00:00:00.0500000",
   "statistics": {
     "WinRate": 0.65,
-    "MaxDrawdown": -500.0
+    "MaxDrawdown": -500.0,
+    "TradesCount": 42,
+    "AverageTradeTime": "00:15:00",
+    "BestTradeDate": "2024-01-15T14:30:00Z",
+    "SharpeRatio": 1.85
   },
   "orders": [
     {

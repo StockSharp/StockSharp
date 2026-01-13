@@ -105,11 +105,21 @@ public class ReportTests : BaseTestClass
 			TotalWorkingTime = TimeSpan.FromHours(8),
 		};
 
+		// Diverse parameter types
 		source.AddParameter("Symbol", "BTCUSD");
-		source.AddParameter("Period", "1h");
+		source.AddParameter("TimeFrame", TimeSpan.FromMinutes(5));
+		source.AddParameter("StartDate", new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+		source.AddParameter("Volume", 100m);
+		source.AddParameter("IsLong", true);
+		source.AddParameter("MaxPositions", 5);
 
+		// Diverse statistic types
 		source.AddStatisticParameter("WinRate", 0.65m);
 		source.AddStatisticParameter("MaxDrawdown", -500m);
+		source.AddStatisticParameter("TradesCount", 42);
+		source.AddStatisticParameter("AverageTradeTime", TimeSpan.FromMinutes(15));
+		source.AddStatisticParameter("BestTradeDate", new DateTime(2024, 1, 15, 14, 30, 0, DateTimeKind.Utc));
+		source.AddStatisticParameter("SharpeRatio", 1.85m);
 
 		var baseTime = new DateTime(2024, 1, 15, 10, 0, 0, DateTimeKind.Utc);
 
@@ -139,10 +149,20 @@ public class ReportTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task JsonReportGenerator_MatchesExpectedOutput()
+	[DataRow(FileExts.Json)]
+	[DataRow(FileExts.Xml)]
+	[DataRow(FileExts.Csv)]
+	public async Task ReportGenerator_MatchesExpectedOutput(string format)
 	{
 		var source = CreateDeterministicSource();
-		var generator = new JsonReportGenerator { IncludeOrders = true, IncludeTrades = true };
+
+		IReportGenerator generator = format switch
+		{
+			FileExts.Json => new JsonReportGenerator { IncludeOrders = true, IncludeTrades = true },
+			FileExts.Xml => new XmlReportGenerator { IncludeOrders = true, IncludeTrades = true },
+			FileExts.Csv => new CsvReportGenerator { IncludeOrders = true, IncludeTrades = true },
+			_ => throw new ArgumentException($"Unknown format: {format}")
+		};
 
 		using var stream = new MemoryStream();
 		await generator.Generate(source, stream, CancellationToken);
@@ -150,36 +170,14 @@ public class ReportTests : BaseTestClass
 		stream.Position = 0;
 		var actual = new StreamReader(stream).ReadToEnd();
 
-		var expectedPath = GetExpectedFilePath("expected_report.json");
+		var expectedPath = GetExpectedFilePath($"expected_report{format}");
 		var expected = File.ReadAllText(expectedPath);
 
 		// Normalize line endings for comparison
 		actual = actual.Replace("\r\n", "\n").Trim();
 		expected = expected.Replace("\r\n", "\n").Trim();
 
-		actual.AssertEqual(expected, "JSON output should match expected file");
-	}
-
-	[TestMethod]
-	public async Task XmlReportGenerator_MatchesExpectedOutput()
-	{
-		var source = CreateDeterministicSource();
-		var generator = new XmlReportGenerator { IncludeOrders = true, IncludeTrades = true };
-
-		using var stream = new MemoryStream();
-		await generator.Generate(source, stream, CancellationToken);
-
-		stream.Position = 0;
-		var actual = new StreamReader(stream).ReadToEnd();
-
-		var expectedPath = GetExpectedFilePath("expected_report.xml");
-		var expected = File.ReadAllText(expectedPath);
-
-		// Normalize line endings
-		actual = actual.Replace("\r\n", "\n").Trim();
-		expected = expected.Replace("\r\n", "\n").Trim();
-
-		actual.AssertEqual(expected, "XML output should match expected file");
+		actual.AssertEqual(expected, $"{format} output should match expected file");
 	}
 
 	[TestMethod]
@@ -203,8 +201,6 @@ public class ReportTests : BaseTestClass
 		// Verify parameters
 		csv.AssertContains("Symbol");
 		csv.AssertContains("BTCUSD");
-		csv.AssertContains("Period");
-		csv.AssertContains("1h");
 
 		// Verify statistics
 		csv.AssertContains("WinRate");
@@ -220,6 +216,53 @@ public class ReportTests : BaseTestClass
 		csv.AssertContains("1001"); // Trade ID
 		csv.AssertContains("1002"); // Trade ID
 		csv.AssertContains("500"); // PnL
+
+		// Verify diverse parameter types
+		csv.AssertContains("TimeFrame");
+		csv.AssertContains("00:05:00"); // TimeSpan
+		csv.AssertContains("StartDate");
+		csv.AssertContains("IsLong");
+		csv.AssertContains("True");
+		csv.AssertContains("MaxPositions");
+		csv.AssertContains("5");
+
+		// Verify diverse statistic types
+		csv.AssertContains("TradesCount");
+		csv.AssertContains("42");
+		csv.AssertContains("AverageTradeTime");
+		csv.AssertContains("00:15:00");
+		csv.AssertContains("SharpeRatio");
+		csv.AssertContains("1.85");
+	}
+
+	/// <summary>
+	/// Helper test to generate expected report files. Run manually to regenerate.
+	/// </summary>
+	[TestMethod]
+	[Ignore("Run manually to regenerate expected files")]
+	public async Task GenerateExpectedReportFiles()
+	{
+		var source = CreateDeterministicSource();
+		var outputDir = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "..", "..", "..", "Resources", "Reports");
+		Directory.CreateDirectory(outputDir);
+
+		// Generate JSON
+		var jsonGenerator = new JsonReportGenerator { IncludeOrders = true, IncludeTrades = true };
+		using (var stream = new FileStream(Path.Combine(outputDir, "expected_report.json"), FileMode.Create))
+			await jsonGenerator.Generate(source, stream, CancellationToken);
+
+		// Generate XML
+		var xmlGenerator = new XmlReportGenerator { IncludeOrders = true, IncludeTrades = true };
+		using (var stream = new FileStream(Path.Combine(outputDir, "expected_report.xml"), FileMode.Create))
+			await xmlGenerator.Generate(source, stream, CancellationToken);
+
+		// Generate CSV
+		var csvGenerator = new CsvReportGenerator { IncludeOrders = true, IncludeTrades = true };
+		using (var stream = new FileStream(Path.Combine(outputDir, "expected_report.csv"), FileMode.Create))
+			await csvGenerator.Generate(source, stream, CancellationToken);
+
+		// Output the path for easy access
+		Console.WriteLine($"Expected files generated at: {outputDir}");
 	}
 
 	[TestMethod]
