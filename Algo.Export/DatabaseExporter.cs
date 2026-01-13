@@ -8,15 +8,15 @@ using Ecng.Data;
 /// <remarks>
 /// Initializes a new instance of the <see cref="DatabaseExporter"/>.
 /// </remarks>
-/// <param name="dbProvider"><see cref="IDatabaseBatchInserterProvider"/></param>
+/// <param name="dbProvider"><see cref="IDatabaseProvider"/></param>
 /// <param name="dataType">Data type info.</param>
 /// <param name="connection">The connection to DB.</param>
 /// <param name="priceStep">Minimum price step.</param>
 /// <param name="volumeStep">Minimum volume step.</param>
-public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataType dataType, DatabaseConnectionPair connection, decimal? priceStep = null, decimal? volumeStep = null) : BaseExporter(dataType)
+public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, DatabaseConnectionPair connection, decimal? priceStep = null, decimal? volumeStep = null) : BaseExporter(dataType)
 {
 	private readonly DatabaseConnectionPair _connection = connection ?? throw new ArgumentNullException(nameof(connection));
-	private readonly IDatabaseBatchInserterProvider _dbProvider = dbProvider ?? throw new ArgumentNullException(nameof(dbProvider));
+	private readonly IDatabaseProvider _dbProvider = dbProvider ?? throw new ArgumentNullException(nameof(dbProvider));
 
 	/// <summary>
 	/// Minimum price step.
@@ -57,93 +57,84 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> ExportOrderLogAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
-		=> DoAsync(messages, CreateExecutionTable, cancellationToken);
+		=> DoAsync(messages, nameof(ExecutionMessage).Remove(nameof(Message)), GetExecutionColumns, ToExecutionDict, cancellationToken);
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> ExportTicksAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
-		=> DoAsync(messages, CreateExecutionTable, cancellationToken);
+		=> DoAsync(messages, nameof(ExecutionMessage).Remove(nameof(Message)), GetExecutionColumns, ToExecutionDict, cancellationToken);
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> ExportTransactionsAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
-		=> DoAsync(messages, CreateExecutionTable, cancellationToken);
+		=> DoAsync(messages, nameof(ExecutionMessage).Remove(nameof(Message)), GetExecutionColumns, ToExecutionDict, cancellationToken);
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<QuoteChangeMessage> messages, CancellationToken cancellationToken)
-		=> DoAsync(messages.SelectMany(m => m.ToTimeQuotes()), CreateMarketDepthQuoteTable, cancellationToken);
+		=> DoAsync(messages.SelectMany(m => m.ToTimeQuotes()), nameof(TimeQuoteChange), GetMarketDepthQuoteColumns, ToMarketDepthQuoteDict, cancellationToken);
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<Level1ChangeMessage> messages, CancellationToken cancellationToken)
-		=> DoAsync(messages, CreateLevel1Table, cancellationToken);
+		=> DoAsync(messages, nameof(Level1ChangeMessage).Remove(nameof(Message)).Remove("Change"), GetLevel1Columns, ToLevel1Dict, cancellationToken);
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<CandleMessage> messages, CancellationToken cancellationToken)
-		=> DoAsync(messages, CreateCandleTable, cancellationToken);
+		=> DoAsync(messages, nameof(CandleMessage).Remove(nameof(Message)), GetCandleColumns, ToCandleDict, cancellationToken);
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<NewsMessage> messages, CancellationToken cancellationToken)
-		=> DoAsync(messages, CreateNewsTable, cancellationToken);
+		=> DoAsync(messages, nameof(NewsMessage).Remove(nameof(Message)), GetNewsColumns, ToNewsDict, cancellationToken);
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<SecurityMessage> messages, CancellationToken cancellationToken)
-		=> DoAsync(messages, CreateSecurityTable, cancellationToken);
+		=> DoAsync(messages, nameof(SecurityMessage).Remove(nameof(Message)), GetSecurityColumns, ToSecurityDict, cancellationToken);
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<PositionChangeMessage> messages, CancellationToken cancellationToken)
-		=> DoAsync(messages, CreatePositionChangeTable, cancellationToken);
+		=> DoAsync(messages, nameof(PositionChangeMessage).Remove(nameof(Message)).Remove("Change"), GetPositionChangeColumns, ToPositionChangeDict, cancellationToken);
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<IndicatorValue> values, CancellationToken cancellationToken)
-		=> DoAsync(values, CreateIndicatorValueTable, cancellationToken);
+		=> DoAsync(values, nameof(IndicatorValue), GetIndicatorValueColumns, ToIndicatorValueDict, cancellationToken);
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardStateMessage> messages, CancellationToken cancellationToken)
-		=> DoAsync(messages, CreateBoardStateTable, cancellationToken);
+		=> DoAsync(messages, nameof(BoardStateMessage).Remove(nameof(Message)), GetBoardStateColumns, ToBoardStateDict, cancellationToken);
 
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> Export(IAsyncEnumerable<BoardMessage> messages, CancellationToken cancellationToken)
-		=> DoAsync(messages, CreateBoardTable, cancellationToken);
+		=> DoAsync(messages, nameof(BoardMessage).Remove(nameof(Message)), GetBoardColumns, ToBoardDict, cancellationToken);
 
-	private async Task<(int, DateTime?)> DoAsync<TValue>(IAsyncEnumerable<TValue> values, Action<IDatabaseMappingBuilder<TValue>> createTable, CancellationToken cancellationToken)
-		where TValue : class
+	private async Task<(int, DateTime?)> DoAsync<TValue>(
+		IAsyncEnumerable<TValue> values,
+		string tableName,
+		Func<IDictionary<string, Type>> getColumns,
+		Func<TValue, IDictionary<string, object>> toDict,
+		CancellationToken cancellationToken)
 	{
 		if (values is null)
 			throw new ArgumentNullException(nameof(values));
 
-		if (createTable is null)
-			throw new ArgumentNullException(nameof(createTable));
-
 		var count = 0;
 		var lastTime = default(DateTime?);
 
-		var tableName = typeof(TValue).Name.Remove(nameof(Message)).Remove("Change");
-
 		using var db = _dbProvider.CreateConnection(_connection);
+		var table = _dbProvider.GetTable(db, tableName);
 
 		if (DropExisting)
-			_dbProvider.DropTable(db, tableName);
+			await table.DropAsync(cancellationToken);
 
-		using var inserter = _dbProvider.Create<TValue>(db, tableName, builder =>
-		{
-			builder.SetParameterValueConverter(obj => obj switch
-			{
-				TimeSpan tf => tf.Ticks,
-				Unit u => u.ToString(),
-				PnFArg pnf => pnf.ToString(),
-				_ => obj,
-			});
-
-			createTable(builder);
-		});
+		await table.CreateAsync(getColumns(), cancellationToken);
 
 		await foreach (var batch in values.Chunk(BatchSize).WithCancellation(cancellationToken))
 		{
+			var rows = batch.Select(toDict).ToList();
+
 			if (CheckUnique)
 			{
-				foreach (var item in batch)
-					await inserter.InsertAsync(item, cancellationToken);
+				foreach (var row in rows)
+					await table.InsertAsync(row, cancellationToken);
 			}
 			else
-				await inserter.BulkCopyAsync(batch, cancellationToken);
+				await table.BulkInsertAsync(rows, cancellationToken);
 
 			count += batch.Length;
 
@@ -154,276 +145,441 @@ public class DatabaseExporter(IDatabaseBatchInserterProvider dbProvider, DataTyp
 		return (count, lastTime);
 	}
 
-	private int GetPriceScale() => (PriceStep ?? 1m).GetCachedDecimals();
-	private int GetVolumeScale() => (VolumeStep ?? 1m).GetCachedDecimals();
+	#region Column Definitions
 
-	private void CreateCandleTable(IDatabaseMappingBuilder<CandleMessage> builder)
+	private IDictionary<string, Type> GetCandleColumns() => new Dictionary<string, Type>
 	{
-		var priceScale = GetPriceScale();
-		var volScale = GetVolumeScale();
+		["SecurityCode"] = typeof(string),
+		["BoardCode"] = typeof(string),
+		["Type"] = typeof(string),
+		["Arg"] = typeof(string),
+		["OpenTime"] = typeof(DateTimeOffset),
+		["CloseTime"] = typeof(DateTimeOffset?),
+		["HighTime"] = typeof(DateTimeOffset?),
+		["LowTime"] = typeof(DateTimeOffset?),
+		["OpenPrice"] = typeof(decimal),
+		["HighPrice"] = typeof(decimal),
+		["LowPrice"] = typeof(decimal),
+		["ClosePrice"] = typeof(decimal),
+		["TotalVolume"] = typeof(decimal?),
+		["OpenInterest"] = typeof(decimal?),
+		["TotalTicks"] = typeof(int?),
+		["UpTicks"] = typeof(int?),
+		["DownTicks"] = typeof(int?),
+		["SeqNum"] = typeof(long?),
+	};
 
-		builder
-			.HasTableName(typeof(CandleMessage).Name.Remove(nameof(Message)))
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
-			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
-			.Property(m => m.Type).HasLength(32).IsNotNull()
-			.Property(m => m.DataType.Arg).HasLength(100).IsNotNull()
-			.Property(m => m.OpenTime).IsNotNull()
-			.Property(m => m.CloseTime)
-			.Property(m => m.HighTime)
-			.Property(m => m.LowTime)
-			.Property(m => m.OpenPrice).HasScale(priceScale).IsNotNull()
-			.Property(m => m.HighPrice).HasScale(priceScale).IsNotNull()
-			.Property(m => m.LowPrice).HasScale(priceScale).IsNotNull()
-			.Property(m => m.ClosePrice).HasScale(priceScale).IsNotNull()
-			.Property(m => m.TotalVolume).HasScale(volScale)
-			.Property(m => m.OpenInterest).HasScale(volScale)
-			.Property(m => m.TotalTicks)
-			.Property(m => m.UpTicks)
-			.Property(m => m.DownTicks)
-			.Property(m => m.SeqNum)
-		;
-	}
-
-	private void CreateIndicatorValueTable(IDatabaseMappingBuilder<IndicatorValue> builder)
+	private IDictionary<string, Type> GetIndicatorValueColumns() => new Dictionary<string, Type>
 	{
-		builder
-			.HasTableName(typeof(IndicatorValue).Name)
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
-			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
-			.Property(m => m.Time).IsNotNull()
-			.Property(m => m.Value1)
-			.Property(m => m.Value2)
-			.Property(m => m.Value3)
-			.Property(m => m.Value4)
-		;
-	}
+		["SecurityCode"] = typeof(string),
+		["BoardCode"] = typeof(string),
+		["Time"] = typeof(DateTimeOffset),
+		["Value1"] = typeof(decimal?),
+		["Value2"] = typeof(decimal?),
+		["Value3"] = typeof(decimal?),
+		["Value4"] = typeof(decimal?),
+	};
 
-	private void CreatePositionChangeTable(IDatabaseMappingBuilder<PositionChangeMessage> builder)
+	private IDictionary<string, Type> GetPositionChangeColumns()
 	{
-		builder
-			.HasTableName(typeof(PositionChangeMessage).Name.Remove(nameof(Message)).Remove("Change"))
-			.Property(m => m.ServerTime).IsNotNull()
-			.Property(m => m.LocalTime)
-			.Property(m => m.PortfolioName).IsNotNull()
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
-			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
-		;
-
-		foreach (var item in Enumerator.GetValues<PositionChangeTypes>().ExcludeObsolete())
+		var columns = new Dictionary<string, Type>
 		{
-			builder.DynamicProperty(item.To<string>());
-		}
+			["ServerTime"] = typeof(DateTimeOffset),
+			["LocalTime"] = typeof(DateTimeOffset?),
+			["PortfolioName"] = typeof(string),
+			["SecurityCode"] = typeof(string),
+			["BoardCode"] = typeof(string),
+		};
 
-		builder.DynamicPropertyAccessors(
-			(entity, fieldName, defaultValue) => entity.Changes.TryGetValue(fieldName.To<PositionChangeTypes>()),
-			(entity, fieldName, value) => SetValue(entity, fieldName, value));
+		foreach (var field in Enumerator.GetValues<PositionChangeTypes>().ExcludeObsolete())
+			columns[field.To<string>()] = typeof(decimal?);
+
+		return columns;
 	}
 
-	private void CreateSecurityTable(IDatabaseMappingBuilder<SecurityMessage> builder)
+	private IDictionary<string, Type> GetSecurityColumns() => new Dictionary<string, Type>
 	{
-		builder
-			.HasTableName(typeof(SecurityMessage).Name.Remove(nameof(Message)))
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
-			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
-			.Property(m => m.Name).HasLength(256)
-			.Property(m => m.ShortName).HasLength(64)
-			.Property(m => m.PriceStep)
-			.Property(m => m.VolumeStep)
-			.Property(m => m.MinVolume).HasScale(1)
-			.Property(m => m.MaxVolume).HasScale(1)
-			.Property(m => m.Multiplier).HasScale(1)
-			.Property(m => m.Decimals)
-			.Property(m => m.SecurityType).HasLength(32)
-			.Property(m => m.OptionType).HasLength(32)
-			.Property(m => m.BinaryOptionType).HasLength(256)
-			.Property(m => m.Strike)
-			.Property(m => m.UnderlyingSecurityId.SecurityCode).HasColumnName(nameof(SecurityMessage.UnderlyingSecurityId) + nameof(SecurityId.SecurityCode)).HasLength(256)
-			.Property(m => m.UnderlyingSecurityId.BoardCode).HasColumnName(nameof(SecurityMessage.UnderlyingSecurityId) + nameof(SecurityId.BoardCode)).HasLength(256)
-			.Property(m => m.UnderlyingSecurityType).HasLength(32)
-			.Property(m => m.UnderlyingSecurityMinVolume).HasScale(1)
-			.Property(m => m.ExpiryDate)
-			.Property(m => m.Currency).HasLength(3)
-			.Property(m => m.SettlementDate)
-			.Property(m => m.IssueDate)
-			.Property(m => m.IssueSize)
-			.Property(m => m.CfiCode).HasLength(6)
-			.Property(m => m.Shortable)
-			.Property(m => m.BasketCode).HasLength(2)
-			.Property(m => m.BasketExpression)
-			.Property(m => m.FaceValue)
-			.Property(m => m.OptionStyle)
-			.Property(m => m.SettlementType)
-			.Property(m => m.SecurityId.Bloomberg).HasLength(16)
-			.Property(m => m.SecurityId.Cusip).HasLength(16)
-			.Property(m => m.SecurityId.IQFeed).HasLength(16)
-			.Property(m => m.SecurityId.InteractiveBrokers)
-			.Property(m => m.SecurityId.Isin).HasLength(16)
-			.Property(m => m.SecurityId.Plaza).HasLength(16)
-			.Property(m => m.SecurityId.Ric).HasLength(16)
-			.Property(m => m.SecurityId.Sedol).HasLength(16)
-			.Property(m => m.PrimaryId.SecurityCode).HasColumnName(nameof(SecurityMessage.PrimaryId) + nameof(SecurityId.SecurityCode)).HasLength(64)
-			.Property(m => m.PrimaryId.BoardCode).HasColumnName(nameof(SecurityMessage.PrimaryId) + nameof(SecurityId.BoardCode)).HasLength(32)
-		;
-	}
+		["SecurityCode"] = typeof(string),
+		["BoardCode"] = typeof(string),
+		["Name"] = typeof(string),
+		["ShortName"] = typeof(string),
+		["PriceStep"] = typeof(decimal?),
+		["VolumeStep"] = typeof(decimal?),
+		["MinVolume"] = typeof(decimal?),
+		["MaxVolume"] = typeof(decimal?),
+		["Multiplier"] = typeof(decimal?),
+		["Decimals"] = typeof(int?),
+		["SecurityType"] = typeof(string),
+		["OptionType"] = typeof(string),
+		["BinaryOptionType"] = typeof(string),
+		["Strike"] = typeof(decimal?),
+		["UnderlyingSecurityCode"] = typeof(string),
+		["UnderlyingBoardCode"] = typeof(string),
+		["UnderlyingSecurityType"] = typeof(string),
+		["UnderlyingSecurityMinVolume"] = typeof(decimal?),
+		["ExpiryDate"] = typeof(DateTimeOffset?),
+		["Currency"] = typeof(string),
+		["SettlementDate"] = typeof(DateTimeOffset?),
+		["IssueDate"] = typeof(DateTimeOffset?),
+		["IssueSize"] = typeof(decimal?),
+		["CfiCode"] = typeof(string),
+		["Shortable"] = typeof(bool?),
+		["BasketCode"] = typeof(string),
+		["BasketExpression"] = typeof(string),
+		["FaceValue"] = typeof(decimal?),
+		["OptionStyle"] = typeof(int?),
+		["SettlementType"] = typeof(int?),
+		["Bloomberg"] = typeof(string),
+		["Cusip"] = typeof(string),
+		["IQFeed"] = typeof(string),
+		["InteractiveBrokers"] = typeof(int?),
+		["Isin"] = typeof(string),
+		["Plaza"] = typeof(string),
+		["Ric"] = typeof(string),
+		["Sedol"] = typeof(string),
+		["PrimarySecurityCode"] = typeof(string),
+		["PrimaryBoardCode"] = typeof(string),
+	};
 
-	private void CreateNewsTable(IDatabaseMappingBuilder<NewsMessage> builder)
+	private IDictionary<string, Type> GetNewsColumns() => new Dictionary<string, Type>
 	{
-		builder
-			.HasTableName(typeof(NewsMessage).Name.Remove(nameof(Message)))
-			.Property(m => m.Id).HasLength(32)
-			.Property(m => m.ServerTime).IsNotNull()
-			.Property(m => m.LocalTime)
-			.Property(m => m.BoardCode).HasLength(256)
-			.Property(m => m.Headline).HasLength(256).IsNotNull()
-			.Property(m => m.Story)
-			.Property(m => m.Source).HasLength(256)
-			.Property(m => m.Url).HasLength(1024)
-			.Property(m => m.Priority)
-			.Property(m => m.Language).HasLength(8)
-			.Property(m => m.ExpiryDate)
-			.Property(m => m.SeqNum)
-		;
-	}
+		["Id"] = typeof(string),
+		["ServerTime"] = typeof(DateTimeOffset),
+		["LocalTime"] = typeof(DateTimeOffset?),
+		["BoardCode"] = typeof(string),
+		["Headline"] = typeof(string),
+		["Story"] = typeof(string),
+		["Source"] = typeof(string),
+		["Url"] = typeof(string),
+		["Priority"] = typeof(int?),
+		["Language"] = typeof(string),
+		["ExpiryDate"] = typeof(DateTimeOffset?),
+		["SeqNum"] = typeof(long?),
+	};
 
-	private void CreateLevel1Table(IDatabaseMappingBuilder<Level1ChangeMessage> builder)
+	private IDictionary<string, Type> GetLevel1Columns()
 	{
-		builder
-			.HasTableName(typeof(Level1ChangeMessage).Name.Remove(nameof(Message)).Remove("Change"))
-			.Property(m => m.ServerTime).IsNotNull()
-			.Property(m => m.LocalTime)
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
-			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
-		;
-
-		foreach (var item in Enumerator.GetValues<Level1Fields>().ExcludeObsolete())
+		var columns = new Dictionary<string, Type>
 		{
-			builder.DynamicProperty(item.To<string>());
-		}
+			["ServerTime"] = typeof(DateTimeOffset),
+			["LocalTime"] = typeof(DateTimeOffset?),
+			["SecurityCode"] = typeof(string),
+			["BoardCode"] = typeof(string),
+		};
 
-		builder.DynamicPropertyAccessors(
-			(entity, fieldName, defaultValue) => entity.Changes.TryGetValue(fieldName.To<Level1Fields>()),
-			(entity, fieldName, value) => SetValue(entity, fieldName, value));
+		foreach (var field in Enumerator.GetValues<Level1Fields>().ExcludeObsolete())
+			columns[field.To<string>()] = typeof(decimal?);
+
+		return columns;
 	}
 
-	private void CreateMarketDepthQuoteTable(IDatabaseMappingBuilder<TimeQuoteChange> builder)
+	private IDictionary<string, Type> GetMarketDepthQuoteColumns() => new Dictionary<string, Type>
 	{
-		var priceScale = GetPriceScale();
-		var volScale = GetVolumeScale();
+		["SecurityCode"] = typeof(string),
+		["BoardCode"] = typeof(string),
+		["ServerTime"] = typeof(DateTimeOffset),
+		["LocalTime"] = typeof(DateTimeOffset?),
+		["Price"] = typeof(decimal),
+		["Volume"] = typeof(decimal),
+		["Side"] = typeof(int),
+		["OrdersCount"] = typeof(int?),
+		["Condition"] = typeof(int?),
+		["StartPosition"] = typeof(int?),
+		["EndPosition"] = typeof(int?),
+		["Action"] = typeof(int?),
+	};
 
-		builder
-			.HasTableName(typeof(TimeQuoteChange).Name)
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
-			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
-			.Property(m => m.ServerTime).IsNotNull()
-			.Property(m => m.LocalTime)
-			.Property(m => m.Quote.Price).HasScale(priceScale).IsNotNull()
-			.Property(m => m.Quote.Volume).HasScale(volScale).IsNotNull()
-			.Property(m => m.Side).IsNotNull()
-			.Property(m => m.Quote.OrdersCount)
-			.Property(m => m.Quote.Condition)
-			.Property(m => m.Quote.StartPosition)
-			.Property(m => m.Quote.EndPosition)
-			.Property(m => m.Quote.Action)
-		;
-	}
-
-	private void CreateExecutionTable(IDatabaseMappingBuilder<ExecutionMessage> builder)
+	private IDictionary<string, Type> GetExecutionColumns() => new Dictionary<string, Type>
 	{
-		var priceScale = GetPriceScale();
-		var volScale = GetVolumeScale();
+		["SecurityCode"] = typeof(string),
+		["BoardCode"] = typeof(string),
+		["ServerTime"] = typeof(DateTimeOffset),
+		["LocalTime"] = typeof(DateTimeOffset?),
+		["TransactionId"] = typeof(long?),
+		["OriginalTransactionId"] = typeof(long?),
+		["OrderId"] = typeof(string),
+		["OrderPrice"] = typeof(decimal?),
+		["OrderVolume"] = typeof(decimal?),
+		["VisibleVolume"] = typeof(decimal?),
+		["Balance"] = typeof(decimal?),
+		["Side"] = typeof(int?),
+		["OrderType"] = typeof(int?),
+		["OrderStatus"] = typeof(long?),
+		["OrderState"] = typeof(int?),
+		["TimeInForce"] = typeof(int?),
+		["PortfolioName"] = typeof(string),
+		["ClientCode"] = typeof(string),
+		["BrokerCode"] = typeof(string),
+		["DepoName"] = typeof(string),
+		["ExpiryDate"] = typeof(DateTimeOffset?),
+		["TradeId"] = typeof(string),
+		["TradePrice"] = typeof(decimal?),
+		["TradeVolume"] = typeof(decimal?),
+		["OpenInterest"] = typeof(decimal?),
+		["OriginSide"] = typeof(int?),
+		["TradeStatus"] = typeof(int?),
+		["IsUpTick"] = typeof(bool?),
+		["HasOrderInfo"] = typeof(bool?),
+		["IsSystem"] = typeof(bool?),
+		["IsCancellation"] = typeof(bool?),
+		["Currency"] = typeof(int?),
+		["Comment"] = typeof(string),
+		["SystemComment"] = typeof(string),
+		["Error"] = typeof(string),
+		["Commission"] = typeof(decimal?),
+		["CommissionCurrency"] = typeof(string),
+		["Slippage"] = typeof(decimal?),
+		["Latency"] = typeof(long?),
+		["Position"] = typeof(decimal?),
+		["PnL"] = typeof(decimal?),
+		["UserOrderId"] = typeof(string),
+		["StrategyId"] = typeof(string),
+		["MarginMode"] = typeof(int?),
+		["IsMarketMaker"] = typeof(bool?),
+		["IsManual"] = typeof(bool?),
+		["AveragePrice"] = typeof(decimal?),
+		["Yield"] = typeof(decimal?),
+		["MinVolume"] = typeof(decimal?),
+		["PositionEffect"] = typeof(int?),
+		["PostOnly"] = typeof(bool?),
+		["Initiator"] = typeof(bool?),
+		["Leverage"] = typeof(int?),
+		["SeqNum"] = typeof(long?),
+	};
 
-		builder
-			.HasTableName(typeof(ExecutionMessage).Name.Remove(nameof(Message)))
-			.Property(m => m.SecurityId.SecurityCode).HasLength(256).IsNotNull()
-			.Property(m => m.SecurityId.BoardCode).HasLength(256).IsNotNull()
-			.Property(m => m.ServerTime).IsNotNull()
-			.Property(m => m.LocalTime)
-
-			.Property(m => m.TransactionId)
-			.Property(m => m.OriginalTransactionId)
-
-			.Property(m => m.OrderId).HasLength(32)
-			.Property(m => m.OrderPrice).HasScale(priceScale)
-			.Property(m => m.OrderVolume).HasScale(volScale)
-			.Property(m => m.VisibleVolume).HasScale(volScale)
-			.Property(m => m.Balance).HasScale(volScale)
-			.Property(m => m.Side)
-			.Property(m => m.OrderType)
-			.Property(m => m.OrderStatus)
-			.Property(m => m.OrderState)
-			.Property(m => m.TimeInForce)
-			.Property(m => m.PortfolioName).HasLength(32)
-			.Property(m => m.ClientCode).HasLength(32)
-			.Property(m => m.BrokerCode).HasLength(32)
-			.Property(m => m.DepoName).HasLength(32)
-			.Property(m => m.ExpiryDate)
-
-			.Property(m => m.TradeId).HasLength(32)
-			.Property(m => m.TradePrice).HasScale(priceScale)
-			.Property(m => m.TradeVolume).HasScale(volScale)
-			.Property(m => m.OpenInterest).HasScale(volScale)
-			.Property(m => m.OriginSide)
-			.Property(m => m.TradeStatus)
-			.Property(m => m.IsUpTick)
-
-			.Property(m => m.HasOrderInfo)
-
-			.Property(m => m.IsSystem)
-			.Property(m => m.IsCancellation)
-			.Property(m => m.Currency)
-
-			.Property(m => m.Comment).HasLength(1024)
-			.Property(m => m.SystemComment).HasLength(1024)
-			.Property(m => m.Error).HasDataType(DatabaseDataType.NVarChar).HasLength(1024)
-
-			.Property(m => m.Commission)
-			.Property(m => m.CommissionCurrency).HasLength(32)
-
-			.Property(m => m.Slippage).HasScale(priceScale)
-			.Property(m => m.Latency)
-			.Property(m => m.Position).HasScale(volScale)
-			.Property(m => m.PnL).HasScale(priceScale)
-
-			.Property(m => m.UserOrderId).HasLength(32)
-			.Property(m => m.StrategyId).HasLength(32)
-
-			.Property(m => m.MarginMode)
-			.Property(m => m.IsMarketMaker)
-			.Property(m => m.IsManual)
-			.Property(m => m.AveragePrice)
-			.Property(m => m.Yield)
-			.Property(m => m.MinVolume)
-			.Property(m => m.PositionEffect)
-			.Property(m => m.PostOnly)
-			.Property(m => m.Initiator)
-			.Property(m => m.Leverage)
-
-			.Property(m => m.SeqNum)
-		;
-	}
-
-	private void CreateBoardStateTable(IDatabaseMappingBuilder<BoardStateMessage> builder)
+	private IDictionary<string, Type> GetBoardStateColumns() => new Dictionary<string, Type>
 	{
-		builder
-			.HasTableName(typeof(BoardStateMessage).Name.Remove(nameof(Message)))
-			.Property(m => m.ServerTime).IsNotNull()
-			.Property(m => m.BoardCode).HasLength(256).IsNotNull()
-			.Property(m => m.State).IsNotNull();
+		["ServerTime"] = typeof(DateTimeOffset),
+		["BoardCode"] = typeof(string),
+		["State"] = typeof(int),
+	};
+
+	private IDictionary<string, Type> GetBoardColumns() => new Dictionary<string, Type>
+	{
+		["Code"] = typeof(string),
+		["ExchangeCode"] = typeof(string),
+		["ExpiryTime"] = typeof(TimeSpan?),
+		["TimeZone"] = typeof(string),
+	};
+
+	#endregion
+
+	#region Value Converters
+
+	private IDictionary<string, object> ToCandleDict(CandleMessage m) => new Dictionary<string, object>
+	{
+		["SecurityCode"] = m.SecurityId.SecurityCode,
+		["BoardCode"] = m.SecurityId.BoardCode,
+		["Type"] = m.Type.To<string>(),
+		["Arg"] = m.DataType.Arg switch { TimeSpan tf => tf.Ticks, Unit u => u.ToString(), PnFArg pnf => pnf.ToString(), var x => x?.ToString() },
+		["OpenTime"] = m.OpenTime,
+		["CloseTime"] = m.CloseTime,
+		["HighTime"] = m.HighTime,
+		["LowTime"] = m.LowTime,
+		["OpenPrice"] = m.OpenPrice,
+		["HighPrice"] = m.HighPrice,
+		["LowPrice"] = m.LowPrice,
+		["ClosePrice"] = m.ClosePrice,
+		["TotalVolume"] = m.TotalVolume,
+		["OpenInterest"] = m.OpenInterest,
+		["TotalTicks"] = m.TotalTicks,
+		["UpTicks"] = m.UpTicks,
+		["DownTicks"] = m.DownTicks,
+		["SeqNum"] = m.SeqNum,
+	};
+
+	private IDictionary<string, object> ToIndicatorValueDict(IndicatorValue m) => new Dictionary<string, object>
+	{
+		["SecurityCode"] = m.SecurityId.SecurityCode,
+		["BoardCode"] = m.SecurityId.BoardCode,
+		["Time"] = m.Time,
+		["Value1"] = m.Value1,
+		["Value2"] = m.Value2,
+		["Value3"] = m.Value3,
+		["Value4"] = m.Value4,
+	};
+
+	private IDictionary<string, object> ToPositionChangeDict(PositionChangeMessage m)
+	{
+		var dict = new Dictionary<string, object>
+		{
+			["ServerTime"] = m.ServerTime,
+			["LocalTime"] = m.LocalTime,
+			["PortfolioName"] = m.PortfolioName,
+			["SecurityCode"] = m.SecurityId.SecurityCode,
+			["BoardCode"] = m.SecurityId.BoardCode,
+		};
+
+		foreach (var change in m.Changes)
+			dict[change.Key.To<string>()] = change.Value;
+
+		return dict;
 	}
 
-	private void CreateBoardTable(IDatabaseMappingBuilder<BoardMessage> builder)
+	private IDictionary<string, object> ToSecurityDict(SecurityMessage m) => new Dictionary<string, object>
 	{
-		builder
-			.HasTableName(typeof(BoardMessage).Name.Remove(nameof(Message)))
-			.Property(m => m.Code).HasLength(256).IsNotNull()
-			.Property(m => m.ExchangeCode).HasLength(256)
-			.Property(m => m.ExpiryTime)
-			.Property(m => m.TimeZone);
+		["SecurityCode"] = m.SecurityId.SecurityCode,
+		["BoardCode"] = m.SecurityId.BoardCode,
+		["Name"] = m.Name,
+		["ShortName"] = m.ShortName,
+		["PriceStep"] = m.PriceStep,
+		["VolumeStep"] = m.VolumeStep,
+		["MinVolume"] = m.MinVolume,
+		["MaxVolume"] = m.MaxVolume,
+		["Multiplier"] = m.Multiplier,
+		["Decimals"] = m.Decimals,
+		["SecurityType"] = m.SecurityType?.To<string>(),
+		["OptionType"] = m.OptionType?.To<string>(),
+		["BinaryOptionType"] = m.BinaryOptionType,
+		["Strike"] = m.Strike,
+		["UnderlyingSecurityCode"] = m.UnderlyingSecurityId.SecurityCode,
+		["UnderlyingBoardCode"] = m.UnderlyingSecurityId.BoardCode,
+		["UnderlyingSecurityType"] = m.UnderlyingSecurityType?.To<string>(),
+		["UnderlyingSecurityMinVolume"] = m.UnderlyingSecurityMinVolume,
+		["ExpiryDate"] = m.ExpiryDate,
+		["Currency"] = m.Currency?.To<string>(),
+		["SettlementDate"] = m.SettlementDate,
+		["IssueDate"] = m.IssueDate,
+		["IssueSize"] = m.IssueSize,
+		["CfiCode"] = m.CfiCode,
+		["Shortable"] = m.Shortable,
+		["BasketCode"] = m.BasketCode,
+		["BasketExpression"] = m.BasketExpression,
+		["FaceValue"] = m.FaceValue,
+		["OptionStyle"] = (int?)m.OptionStyle,
+		["SettlementType"] = (int?)m.SettlementType,
+		["Bloomberg"] = m.SecurityId.Bloomberg,
+		["Cusip"] = m.SecurityId.Cusip,
+		["IQFeed"] = m.SecurityId.IQFeed,
+		["InteractiveBrokers"] = m.SecurityId.InteractiveBrokers,
+		["Isin"] = m.SecurityId.Isin,
+		["Plaza"] = m.SecurityId.Plaza,
+		["Ric"] = m.SecurityId.Ric,
+		["Sedol"] = m.SecurityId.Sedol,
+		["PrimarySecurityCode"] = m.PrimaryId.SecurityCode,
+		["PrimaryBoardCode"] = m.PrimaryId.BoardCode,
+	};
+
+	private IDictionary<string, object> ToNewsDict(NewsMessage m) => new Dictionary<string, object>
+	{
+		["Id"] = m.Id,
+		["ServerTime"] = m.ServerTime,
+		["LocalTime"] = m.LocalTime,
+		["BoardCode"] = m.BoardCode,
+		["Headline"] = m.Headline,
+		["Story"] = m.Story,
+		["Source"] = m.Source,
+		["Url"] = m.Url,
+		["Priority"] = (int?)m.Priority,
+		["Language"] = m.Language,
+		["ExpiryDate"] = m.ExpiryDate,
+		["SeqNum"] = m.SeqNum,
+	};
+
+	private IDictionary<string, object> ToLevel1Dict(Level1ChangeMessage m)
+	{
+		var dict = new Dictionary<string, object>
+		{
+			["ServerTime"] = m.ServerTime,
+			["LocalTime"] = m.LocalTime,
+			["SecurityCode"] = m.SecurityId.SecurityCode,
+			["BoardCode"] = m.SecurityId.BoardCode,
+		};
+
+		foreach (var change in m.Changes)
+			dict[change.Key.To<string>()] = change.Value;
+
+		return dict;
 	}
 
-	private static void SetValue<T>(T _, string _1, object _2)
-		where T : Message
+	private IDictionary<string, object> ToMarketDepthQuoteDict(TimeQuoteChange m) => new Dictionary<string, object>
 	{
-	}
+		["SecurityCode"] = m.SecurityId.SecurityCode,
+		["BoardCode"] = m.SecurityId.BoardCode,
+		["ServerTime"] = m.ServerTime,
+		["LocalTime"] = m.LocalTime,
+		["Price"] = m.Quote.Price,
+		["Volume"] = m.Quote.Volume,
+		["Side"] = (int)m.Side,
+		["OrdersCount"] = m.Quote.OrdersCount,
+		["Condition"] = (int?)m.Quote.Condition,
+		["StartPosition"] = m.Quote.StartPosition,
+		["EndPosition"] = m.Quote.EndPosition,
+		["Action"] = (int?)m.Quote.Action,
+	};
+
+	private IDictionary<string, object> ToExecutionDict(ExecutionMessage m) => new Dictionary<string, object>
+	{
+		["SecurityCode"] = m.SecurityId.SecurityCode,
+		["BoardCode"] = m.SecurityId.BoardCode,
+		["ServerTime"] = m.ServerTime,
+		["LocalTime"] = m.LocalTime,
+		["TransactionId"] = m.TransactionId,
+		["OriginalTransactionId"] = m.OriginalTransactionId,
+		["OrderId"] = m.OrderId?.To<string>(),
+		["OrderPrice"] = m.OrderPrice,
+		["OrderVolume"] = m.OrderVolume,
+		["VisibleVolume"] = m.VisibleVolume,
+		["Balance"] = m.Balance,
+		["Side"] = (int?)m.Side,
+		["OrderType"] = (int?)m.OrderType,
+		["OrderStatus"] = m.OrderStatus,
+		["OrderState"] = (int?)m.OrderState,
+		["TimeInForce"] = (int?)m.TimeInForce,
+		["PortfolioName"] = m.PortfolioName,
+		["ClientCode"] = m.ClientCode,
+		["BrokerCode"] = m.BrokerCode,
+		["DepoName"] = m.DepoName,
+		["ExpiryDate"] = m.ExpiryDate,
+		["TradeId"] = m.TradeId?.To<string>(),
+		["TradePrice"] = m.TradePrice,
+		["TradeVolume"] = m.TradeVolume,
+		["OpenInterest"] = m.OpenInterest,
+		["OriginSide"] = (int?)m.OriginSide,
+		["TradeStatus"] = m.TradeStatus,
+		["IsUpTick"] = m.IsUpTick,
+		["HasOrderInfo"] = m.HasOrderInfo,
+		["IsSystem"] = m.IsSystem,
+		["IsCancellation"] = m.IsCancellation,
+		["Currency"] = (int?)m.Currency,
+		["Comment"] = m.Comment,
+		["SystemComment"] = m.SystemComment,
+		["Error"] = m.Error?.Message,
+		["Commission"] = m.Commission,
+		["CommissionCurrency"] = m.CommissionCurrency,
+		["Slippage"] = m.Slippage,
+		["Latency"] = m.Latency?.Ticks,
+		["Position"] = m.Position,
+		["PnL"] = m.PnL,
+		["UserOrderId"] = m.UserOrderId,
+		["StrategyId"] = m.StrategyId,
+		["MarginMode"] = (int?)m.MarginMode,
+		["IsMarketMaker"] = m.IsMarketMaker,
+		["IsManual"] = m.IsManual,
+		["AveragePrice"] = m.AveragePrice,
+		["Yield"] = m.Yield,
+		["MinVolume"] = m.MinVolume,
+		["PositionEffect"] = (int?)m.PositionEffect,
+		["PostOnly"] = m.PostOnly,
+		["Initiator"] = m.Initiator,
+		["Leverage"] = m.Leverage,
+		["SeqNum"] = m.SeqNum,
+	};
+
+	private IDictionary<string, object> ToBoardStateDict(BoardStateMessage m) => new Dictionary<string, object>
+	{
+		["ServerTime"] = m.ServerTime,
+		["BoardCode"] = m.BoardCode,
+		["State"] = (int)m.State,
+	};
+
+	private IDictionary<string, object> ToBoardDict(BoardMessage m) => new Dictionary<string, object>
+	{
+		["Code"] = m.Code,
+		["ExchangeCode"] = m.ExchangeCode,
+		["ExpiryTime"] = m.ExpiryTime.Ticks,
+		["TimeZone"] = m.TimeZone?.Id,
+	};
+
+	#endregion
 }

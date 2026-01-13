@@ -9,9 +9,9 @@ using Ecng.Data;
 public static class DatabaseRegistry
 {
 	/// <summary>
-	/// <see cref="IDatabaseBatchInserterProvider"/>
+	/// <see cref="IDatabaseProvider"/>
 	/// </summary>
-	public static IDatabaseBatchInserterProvider Provider => ConfigManager.GetService<IDatabaseBatchInserterProvider>();
+	public static IDatabaseProvider Provider => ConfigManager.GetService<IDatabaseProvider>();
 
 	/// <summary>
 	/// Cache.
