@@ -980,21 +980,21 @@ public class ReportTests : BaseTestClass
 	public void ReportSource_MaxOrdersBeforeAggregation_ThrowsOnNegative()
 	{
 		var source = new ReportSource();
-		Assert.ThrowsException<ArgumentOutOfRangeException>(() => source.MaxOrdersBeforeAggregation = -1);
+		ThrowsExactly<ArgumentOutOfRangeException>(() => source.MaxOrdersBeforeAggregation = -1);
 	}
 
 	[TestMethod]
 	public void ReportSource_MaxTradesBeforeAggregation_ThrowsOnNegative()
 	{
 		var source = new ReportSource();
-		Assert.ThrowsException<ArgumentOutOfRangeException>(() => source.MaxTradesBeforeAggregation = -1);
+		ThrowsExactly<ArgumentOutOfRangeException>(() => source.MaxTradesBeforeAggregation = -1);
 	}
 
 	[TestMethod]
 	public void ReportSource_AggregationInterval_ThrowsOnNegative()
 	{
 		var source = new ReportSource();
-		Assert.ThrowsException<ArgumentOutOfRangeException>(() => source.AggregationInterval = TimeSpan.FromSeconds(-1));
+		ThrowsExactly<ArgumentOutOfRangeException>(() => source.AggregationInterval = TimeSpan.FromSeconds(-1));
 	}
 
 	[TestMethod]
