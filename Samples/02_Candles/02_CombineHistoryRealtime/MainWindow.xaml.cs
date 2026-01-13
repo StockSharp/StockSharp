@@ -40,7 +40,7 @@ public partial class MainWindow
 	{
 		InitializeComponent();
 
-		_executor = new(ex => ex.LogError());
+		_executor = TimeSpan.FromSeconds(1).CreateExecutorAndRun(ex => ex.LogError());
 
 		var entityRegistry = new CsvEntityRegistry(_fileSystem, _pathHistory, _executor);
 		var storageRegistry = new StorageRegistry
