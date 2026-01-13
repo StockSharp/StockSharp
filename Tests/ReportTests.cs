@@ -292,7 +292,7 @@ public class ReportTests : BaseTestClass
 
 		source.OrdersCount.AssertEqual(8);
 
-		source.AggregateOrders(AggregationModes.ByHour);
+		source.AggregateOrders(TimeSpan.FromHours(1));
 
 		// Should be aggregated to 2 orders (1 buy, 1 sell)
 		source.OrdersCount.AssertEqual(2);
@@ -319,7 +319,7 @@ public class ReportTests : BaseTestClass
 
 		source.TradesCount.AssertEqual(5);
 
-		source.AggregateTrades(AggregationModes.ByHour);
+		source.AggregateTrades(TimeSpan.FromHours(1));
 
 		// Should be aggregated to 1 trade
 		source.TradesCount.AssertEqual(1);
@@ -343,7 +343,7 @@ public class ReportTests : BaseTestClass
 
 		source.TradesCount.AssertEqual(3);
 
-		source.AggregateTrades(AggregationModes.ByDay);
+		source.AggregateTrades(TimeSpan.FromDays(1));
 
 		source.TradesCount.AssertEqual(1);
 
@@ -359,20 +359,52 @@ public class ReportTests : BaseTestClass
 		var source = new ReportSource("Test")
 		{
 			MaxOrdersBeforeAggregation = 10,
-			AutoAggregationMode = AggregationModes.ByHour
+			AggregationInterval = TimeSpan.FromHours(1)
 		};
 
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 
-		// Add 15 orders in the same hour - should trigger auto-aggregation
+		// Add 15 orders in the same hour - should trigger auto-aggregation at 11th
+		// and continue aggregating new orders into the same time bucket
 		for (var i = 0; i < 15; i++)
 		{
 			source.AddOrder(i, i, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
 		}
 
-		// After auto-aggregation, should have 1 aggregated order
+		// All orders are in the same hour, so after aggregation = 1 order
 		source.OrdersCount.AssertEqual(1);
 		source.Orders.First().Volume.AssertEqual(15m);
+	}
+
+	[TestMethod]
+	public void ReportSource_AutoAggregation_GroupsByTimeBucket()
+	{
+		var source = new ReportSource("Test")
+		{
+			MaxOrdersBeforeAggregation = 10,
+			AggregationInterval = TimeSpan.FromHours(1)
+		};
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		// Add 8 orders in hour 10 (not enough to trigger)
+		for (var i = 0; i < 8; i++)
+		{
+			source.AddOrder(i, i, Sides.Buy, baseTime.AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		}
+
+		// Add 5 orders in hour 11 - this brings total to 13 which exceeds threshold
+		for (var i = 0; i < 5; i++)
+		{
+			source.AddOrder(100 + i, 100 + i, Sides.Buy, baseTime.AddHours(1).AddMinutes(i), 100m, OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		}
+
+		// Should be 2 orders: 1 for hour 10 (8 orders) + 1 for hour 11 (5 orders)
+		source.OrdersCount.AssertEqual(2);
+
+		var orders = source.Orders.OrderBy(o => o.Time).ToList();
+		orders[0].Volume.AssertEqual(8m);
+		orders[1].Volume.AssertEqual(5m);
 	}
 
 	[TestMethod]
@@ -423,12 +455,69 @@ public class ReportTests : BaseTestClass
 		source.AddOrder(1, 1, Sides.Buy, time, 100m, OrderStates.Done, 0m, 10m, OrderTypes.Limit);
 		source.AddOrder(2, 2, Sides.Buy, time.AddMinutes(5), 200m, OrderStates.Done, 0m, 20m, OrderTypes.Limit);
 
-		source.AggregateOrders(AggregationModes.ByHour);
+		source.AggregateOrders(TimeSpan.FromHours(1));
 
 		var order = source.Orders.First();
 		order.Volume.AssertEqual(30m);
 		// Weighted average: (100*10 + 200*20) / 30 = 5000/30 = 166.666...
 		IsTrue(order.Price > 166m && order.Price < 167m, $"Expected weighted average ~166.67, got {order.Price}");
+	}
+
+	[TestMethod]
+	public void ReportSource_LoadTest_AggregationReducesCount()
+	{
+		var source = new ReportSource("LoadTest")
+		{
+			MaxOrdersBeforeAggregation = 1000,
+			MaxTradesBeforeAggregation = 1000,
+			AggregationInterval = TimeSpan.FromHours(1)
+		};
+
+		var baseTime = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		const int totalOrders = 50_000;
+		const int totalTrades = 50_000;
+
+		// Add 50k orders spread across 24 hours (~ 2000 per hour)
+		for (var i = 0; i < totalOrders; i++)
+		{
+			var hour = i % 24;
+			var minute = (i / 24) % 60;
+			var time = baseTime.AddHours(hour).AddMinutes(minute).AddSeconds(i % 60);
+			var side = i % 2 == 0 ? Sides.Buy : Sides.Sell;
+
+			source.AddOrder(i, i, side, time, 100m + (i % 100), OrderStates.Done, 0m, 1m, OrderTypes.Limit);
+		}
+
+		// Add 50k trades spread across 24 hours
+		for (var i = 0; i < totalTrades; i++)
+		{
+			var hour = i % 24;
+			var minute = (i / 24) % 60;
+			var time = baseTime.AddHours(hour).AddMinutes(minute).AddSeconds(i % 60);
+			var side = i % 2 == 0 ? Sides.Buy : Sides.Sell;
+
+			source.AddTrade(i, i, time, 100m + (i % 100), 100m, 1m, side, i, 0.01m, 1m, i % 100);
+		}
+
+		// After auto-aggregation, should have much fewer items
+		// 24 hours * 2 sides * 1 type = 48 max orders (grouped by hour, side, type)
+		// 24 hours * 2 sides = 48 max trades (grouped by hour, side)
+		var ordersCount = source.OrdersCount;
+		var tradesCount = source.TradesCount;
+
+		IsTrue(ordersCount < 100, $"Expected orders to be aggregated to <100, got {ordersCount}");
+		IsTrue(tradesCount < 100, $"Expected trades to be aggregated to <100, got {tradesCount}");
+
+		// Verify total volume is preserved
+		var totalOrderVolume = source.Orders.Sum(o => o.Volume ?? 0);
+		var totalTradeVolume = source.OwnTrades.Sum(t => t.Volume);
+
+		totalOrderVolume.AssertEqual(totalOrders, "Total order volume should be preserved after aggregation");
+		totalTradeVolume.AssertEqual(totalTrades, "Total trade volume should be preserved after aggregation");
+
+		// Verify PnL is preserved for trades
+		var totalPnL = source.OwnTrades.Sum(t => t.PnL ?? 0);
+		totalPnL.AssertEqual(totalTrades, $"Total PnL should be {totalTrades} (1m per trade)");
 	}
 
 	#endregion

@@ -1,32 +1,6 @@
 namespace StockSharp.Reporting;
 
 /// <summary>
-/// Aggregation modes for orders and trades.
-/// </summary>
-public enum AggregationModes
-{
-	/// <summary>
-	/// No aggregation, keep all items.
-	/// </summary>
-	None,
-
-	/// <summary>
-	/// Aggregate by minute.
-	/// </summary>
-	ByMinute,
-
-	/// <summary>
-	/// Aggregate by hour.
-	/// </summary>
-	ByHour,
-
-	/// <summary>
-	/// Aggregate by day.
-	/// </summary>
-	ByDay,
-}
-
-/// <summary>
 /// Report data source that allows external code to add information and supports aggregation.
 /// </summary>
 public class ReportSource : IReportSource
@@ -37,6 +11,9 @@ public class ReportSource : IReportSource
 	private readonly List<(string Name, object Value)> _statisticParameters = [];
 
 	private readonly Lock _lock = new();
+
+	private bool _ordersAggregationTriggered;
+	private bool _tradesAggregationTriggered;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ReportSource"/>.
@@ -95,10 +72,11 @@ public class ReportSource : IReportSource
 	public int MaxTradesBeforeAggregation { get; set; } = 10000;
 
 	/// <summary>
-	/// Aggregation mode used when automatic aggregation is triggered.
-	/// Default is <see cref="AggregationModes.ByHour"/>.
+	/// Time interval for aggregation. Orders/trades within the same interval are grouped together.
+	/// Default is 1 hour. Set to <see cref="TimeSpan.Zero"/> to disable time-based grouping
+	/// (items will be aggregated by count only when threshold is exceeded).
 	/// </summary>
-	public AggregationModes AutoAggregationMode { get; set; } = AggregationModes.ByHour;
+	public TimeSpan AggregationInterval { get; set; } = TimeSpan.FromHours(1);
 
 	/// <inheritdoc />
 	public IEnumerable<(string Name, object Value)> Parameters
@@ -345,16 +323,13 @@ public class ReportSource : IReportSource
 	/// <summary>
 	/// Manually trigger orders aggregation.
 	/// </summary>
-	/// <param name="mode">Aggregation mode.</param>
+	/// <param name="interval">Time interval for grouping. Use <see cref="TimeSpan.Zero"/> for no time grouping.</param>
 	/// <returns>This instance for chaining.</returns>
-	public ReportSource AggregateOrders(AggregationModes mode)
+	public ReportSource AggregateOrders(TimeSpan interval)
 	{
-		if (mode == AggregationModes.None)
-			return this;
-
 		using (_lock.EnterScope())
 		{
-			var aggregated = AggregateOrdersInternal(_orders, mode);
+			var aggregated = AggregateOrdersInternal(_orders, interval);
 			_orders.Clear();
 			_orders.AddRange(aggregated);
 		}
@@ -365,16 +340,13 @@ public class ReportSource : IReportSource
 	/// <summary>
 	/// Manually trigger trades aggregation.
 	/// </summary>
-	/// <param name="mode">Aggregation mode.</param>
+	/// <param name="interval">Time interval for grouping. Use <see cref="TimeSpan.Zero"/> for no time grouping.</param>
 	/// <returns>This instance for chaining.</returns>
-	public ReportSource AggregateTrades(AggregationModes mode)
+	public ReportSource AggregateTrades(TimeSpan interval)
 	{
-		if (mode == AggregationModes.None)
-			return this;
-
 		using (_lock.EnterScope())
 		{
-			var aggregated = AggregateTradesInternal(_trades, mode);
+			var aggregated = AggregateTradesInternal(_trades, interval);
 			_trades.Clear();
 			_trades.AddRange(aggregated);
 		}
@@ -389,7 +361,10 @@ public class ReportSource : IReportSource
 	public ReportSource ClearOrders()
 	{
 		using (_lock.EnterScope())
+		{
 			_orders.Clear();
+			_ordersAggregationTriggered = false;
+		}
 
 		return this;
 	}
@@ -401,7 +376,10 @@ public class ReportSource : IReportSource
 	public ReportSource ClearTrades()
 	{
 		using (_lock.EnterScope())
+		{
 			_trades.Clear();
+			_tradesAggregationTriggered = false;
+		}
 
 		return this;
 	}
@@ -442,6 +420,8 @@ public class ReportSource : IReportSource
 			_trades.Clear();
 			_parameters.Clear();
 			_statisticParameters.Clear();
+			_ordersAggregationTriggered = false;
+			_tradesAggregationTriggered = false;
 		}
 
 		return this;
@@ -449,43 +429,69 @@ public class ReportSource : IReportSource
 
 	private void CheckAndAggregateOrders()
 	{
-		if (MaxOrdersBeforeAggregation <= 0 || _orders.Count <= MaxOrdersBeforeAggregation)
+		if (MaxOrdersBeforeAggregation <= 0)
 			return;
 
-		var aggregated = AggregateOrdersInternal(_orders, AutoAggregationMode);
-		_orders.Clear();
-		_orders.AddRange(aggregated);
+		// First time threshold exceeded - enter aggregation mode
+		if (!_ordersAggregationTriggered && _orders.Count > MaxOrdersBeforeAggregation)
+			_ordersAggregationTriggered = true;
+
+		// Once in aggregation mode, always aggregate (new orders join the tail)
+		if (_ordersAggregationTriggered)
+		{
+			var aggregated = AggregateOrdersInternal(_orders, AggregationInterval);
+			_orders.Clear();
+			_orders.AddRange(aggregated);
+		}
 	}
 
 	private void CheckAndAggregateTrades()
 	{
-		if (MaxTradesBeforeAggregation <= 0 || _trades.Count <= MaxTradesBeforeAggregation)
+		if (MaxTradesBeforeAggregation <= 0)
 			return;
 
-		var aggregated = AggregateTradesInternal(_trades, AutoAggregationMode);
-		_trades.Clear();
-		_trades.AddRange(aggregated);
-	}
+		// First time threshold exceeded - enter aggregation mode
+		if (!_tradesAggregationTriggered && _trades.Count > MaxTradesBeforeAggregation)
+			_tradesAggregationTriggered = true;
 
-	private static DateTime TruncateTime(DateTime time, AggregationModes mode)
-	{
-		return mode switch
+		// Once in aggregation mode, always aggregate (new trades join the tail)
+		if (_tradesAggregationTriggered)
 		{
-			AggregationModes.ByMinute => new DateTime(time.Year, time.Month, time.Day, time.Hour, time.Minute, 0, time.Kind),
-			AggregationModes.ByHour => new DateTime(time.Year, time.Month, time.Day, time.Hour, 0, 0, time.Kind),
-			AggregationModes.ByDay => new DateTime(time.Year, time.Month, time.Day, 0, 0, 0, time.Kind),
-			_ => time
-		};
+			var aggregated = AggregateTradesInternal(_trades, AggregationInterval);
+			_trades.Clear();
+			_trades.AddRange(aggregated);
+		}
 	}
 
-	private static List<ReportOrder> AggregateOrdersInternal(List<ReportOrder> orders, AggregationModes mode)
+	private static DateTime TruncateTime(DateTime time, TimeSpan interval)
 	{
-		if (mode == AggregationModes.None || orders.Count == 0)
-			return [.. orders];
+		if (interval <= TimeSpan.Zero)
+			return DateTime.MinValue; // All items go to same bucket when no time grouping
 
-		// Group by time period and side
+		var ticks = time.Ticks / interval.Ticks * interval.Ticks;
+		return new DateTime(ticks, time.Kind);
+	}
+
+	private static OrderStates? CalculateAggregatedState(IReadOnlyList<ReportOrder> items)
+	{
+		// Priority: Active > Failed > Done > null
+		if (items.Any(o => o.State == OrderStates.Active))
+			return OrderStates.Active;
+		if (items.Any(o => o.State == OrderStates.Failed))
+			return OrderStates.Failed;
+		if (items.Any(o => o.State == OrderStates.Done))
+			return OrderStates.Done;
+		return null;
+	}
+
+	private static List<ReportOrder> AggregateOrdersInternal(List<ReportOrder> orders, TimeSpan interval)
+	{
+		if (orders.Count == 0)
+			return orders;
+
+		// Group by time period, side, and type
 		var groups = orders
-			.GroupBy(o => (TruncateTime(o.Time, mode), o.Side))
+			.GroupBy(o => (TruncateTime(o.Time, interval), o.Side, o.Type))
 			.OrderBy(g => g.Key.Item1)
 			.ThenBy(g => g.Key.Side);
 
@@ -508,32 +514,35 @@ public class ReportSource : IReportSource
 				? items.Sum(o => o.Price * (o.Volume ?? 0)) / totalVolume
 				: items.Average(o => o.Price);
 
-			var totalBalance = items.Sum(o => o.Balance ?? 0);
+			// Use the earliest time in the group for the aggregated order
+			var aggregatedTime = interval > TimeSpan.Zero
+				? group.Key.Item1
+				: items.Min(o => o.Time);
 
 			result.Add(new ReportOrder(
 				Id: null,
 				TransactionId: aggregatedTransactionId--,
 				Side: group.Key.Side,
-				Time: group.Key.Item1,
-				Price: Math.Round(weightedPrice, 8),
-				State: OrderStates.Done,
-				Balance: totalBalance > 0 ? totalBalance : null,
+				Time: aggregatedTime,
+				Price: weightedPrice,
+				State: CalculateAggregatedState(items),
+				Balance: null,
 				Volume: totalVolume > 0 ? totalVolume : null,
-				Type: items.FirstOrDefault()?.Type
+				Type: group.Key.Type
 			));
 		}
 
 		return result;
 	}
 
-	private static List<ReportTrade> AggregateTradesInternal(List<ReportTrade> trades, AggregationModes mode)
+	private static List<ReportTrade> AggregateTradesInternal(List<ReportTrade> trades, TimeSpan interval)
 	{
-		if (mode == AggregationModes.None || trades.Count == 0)
-			return [.. trades];
+		if (trades.Count == 0)
+			return trades;
 
 		// Group by time period and side
 		var groups = trades
-			.GroupBy(t => (TruncateTime(t.Time, mode), t.Side))
+			.GroupBy(t => (TruncateTime(t.Time, interval), t.Side))
 			.OrderBy(g => g.Key.Item1)
 			.ThenBy(g => g.Key.Side);
 
@@ -573,12 +582,17 @@ public class ReportSource : IReportSource
 				.OrderBy(t => t.Time)
 				.LastOrDefault()?.Position;
 
+			// Use the earliest time in the group for the aggregated trade
+			var aggregatedTime = interval > TimeSpan.Zero
+				? group.Key.Item1
+				: items.Min(t => t.Time);
+
 			result.Add(new ReportTrade(
 				TradeId: null,
 				OrderTransactionId: aggregatedTransactionId--,
-				Time: group.Key.Item1,
-				TradePrice: Math.Round(weightedTradePrice, 8),
-				OrderPrice: Math.Round(weightedOrderPrice, 8),
+				Time: aggregatedTime,
+				TradePrice: weightedTradePrice,
+				OrderPrice: weightedOrderPrice,
 				Volume: totalVolume,
 				Side: group.Key.Side,
 				OrderId: null,

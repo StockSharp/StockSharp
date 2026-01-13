@@ -611,6 +611,39 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	[Browsable(false)]
 	public ReportSource ReportSource => _reportSource;
 
+	/// <summary>
+	/// Maximum number of orders before automatic aggregation is triggered.
+	/// Default is 10000. Set to 0 to disable automatic aggregation.
+	/// </summary>
+	[Browsable(false)]
+	public int MaxOrdersBeforeAggregation
+	{
+		get => _reportSource.MaxOrdersBeforeAggregation;
+		set => _reportSource.MaxOrdersBeforeAggregation = value;
+	}
+
+	/// <summary>
+	/// Maximum number of trades before automatic aggregation is triggered.
+	/// Default is 10000. Set to 0 to disable automatic aggregation.
+	/// </summary>
+	[Browsable(false)]
+	public int MaxTradesBeforeAggregation
+	{
+		get => _reportSource.MaxTradesBeforeAggregation;
+		set => _reportSource.MaxTradesBeforeAggregation = value;
+	}
+
+	/// <summary>
+	/// Time interval for aggregation. Orders/trades within the same interval are grouped together.
+	/// Default is 1 hour. Set to <see cref="TimeSpan.Zero"/> to disable time-based grouping.
+	/// </summary>
+	[Browsable(false)]
+	public TimeSpan AggregationInterval
+	{
+		get => _reportSource.AggregationInterval;
+		set => _reportSource.AggregationInterval = value;
+	}
+
 	/// <inheritdoc />
 	public void Prepare()
 	{
