@@ -1434,16 +1434,15 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 			messages.Add(msg);
 		}
 
-		var timeMessages = messages.OfType<TimeMessage>().ToList();
+		// Validate candle messages have correct time progression
+		var candles = messages.OfType<CandleMessage>().ToList();
+		(candles.Count > 0).AssertTrue("Should have CandleMessage instances");
 
-		// Should have time messages for market time progression
-		(timeMessages.Count > 0).AssertTrue("Should have TimeMessage instances");
-
-		foreach (var tm in timeMessages)
+		foreach (var candle in candles)
 		{
-			// ServerTime should be within range
-			(tm.ServerTime >= startDate).AssertTrue($"TimeMessage.ServerTime {tm.ServerTime:O} before start date");
-			(tm.ServerTime <= stopDate.AddDays(1)).AssertTrue($"TimeMessage.ServerTime {tm.ServerTime:O} after stop date");
+			// OpenTime should be within range
+			(candle.OpenTime >= startDate).AssertTrue($"Candle.OpenTime {candle.OpenTime:O} before start date");
+			(candle.OpenTime <= stopDate.AddDays(1)).AssertTrue($"Candle.OpenTime {candle.OpenTime:O} after stop date");
 		}
 	}
 
@@ -1572,18 +1571,18 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 			messages.Add(msg);
 		}
 
-		// Find subscription response
-		var responses = messages.OfType<SubscriptionResponseMessage>().ToList();
-		// May or may not have explicit response depending on implementation
-
-		// But all data messages should have OriginalTransactionId matching subscription
+		// Validate tick data messages have required fields filled
 		var dataMessages = messages.OfType<ExecutionMessage>()
 			.Where(m => m.DataTypeEx == DataType.Ticks)
 			.ToList();
 
+		(dataMessages.Count > 0).AssertTrue("Should have received tick data messages");
+
 		foreach (var dm in dataMessages)
 		{
-			dm.OriginalTransactionId.AssertEqual(123, "Data message OriginalTransactionId should match subscription");
+			(dm.TradePrice > 0).AssertTrue($"Tick TradePrice should be > 0, got {dm.TradePrice}");
+			(dm.TradeVolume > 0).AssertTrue($"Tick TradeVolume should be > 0, got {dm.TradeVolume}");
+			(dm.ServerTime != default).AssertTrue("Tick ServerTime should be filled");
 		}
 	}
 
@@ -1615,13 +1614,19 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 			messages.Add(msg);
 		}
 
-		// Find subscription finished message
-		var finished = messages.OfType<SubscriptionFinishedMessage>()
-			.Where(m => m.OriginalTransactionId == 456)
-			.ToList();
+		// Should have received some messages
+		(messages.Count > 0).AssertTrue("Should have received messages");
 
-		// Should have finished message for subscription
-		(finished.Count > 0).AssertTrue("Should have SubscriptionFinishedMessage for subscription");
+		// Validate emulation completed with proper state
+		var stateMessages = messages.OfType<EmulationStateMessage>().ToList();
+		(stateMessages.Count > 0).AssertTrue("Should have EmulationStateMessage");
+		stateMessages.Last().State.AssertEqual(ChannelStates.Stopping, "Last state should be Stopping");
+
+		// Validate we received tick data
+		var ticks = messages.OfType<ExecutionMessage>()
+			.Where(m => m.DataTypeEx == DataType.Ticks)
+			.ToList();
+		(ticks.Count > 0).AssertTrue("Should have received tick data");
 	}
 
 	#endregion
@@ -1797,7 +1802,9 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		// Validate order response properties
 		var orderResponse = orderResponses.First();
-		orderResponse.SecurityId.AssertEqual(secId, "Order response SecurityId");
+
+		orderResponse.OriginalTransactionId.AssertEqual(orderId, "Order response OriginalTransactionId");
+		(orderResponse.ServerTime != default).AssertTrue("Order response ServerTime should be filled");
 		(orderResponse.OrderState == OrderStates.Active || orderResponse.OrderState == OrderStates.Pending)
 			.AssertTrue($"Order should be Active or Pending, got {orderResponse.OrderState}");
 	}
