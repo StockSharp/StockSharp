@@ -31,12 +31,12 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 	public override string Extension => "xlsx";
 
 	// Template sheet names
-	private const string _dashboardSheet = "Dashboard";
-	private const string _paramsSheet = "Params";
-	private const string _equitySheet = "Equity";
-	private const string _tradesSheet = "Trades";
-	private const string _ordersSheet = "Orders";
-	private const string _statsSheet = "Stats";
+	private readonly string _dashboardSheet = LocalizedStrings.Dashboard;
+	private readonly string _paramsSheet = LocalizedStrings.Params;
+	private readonly string _equitySheet = LocalizedStrings.Equity;
+	private readonly string _tradesSheet = LocalizedStrings.Trades;
+	private readonly string _ordersSheet = LocalizedStrings.Orders;
+	private readonly string _statsSheet = LocalizedStrings.Statistics;
 
 	private const string _templateResourceName = "StockSharp.Reporting.Resources.StrategyReportTemplate.xlsx";
 
@@ -161,31 +161,31 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 
 		// Row 0 (Excel row 1): Title "Parameters"
 		worker
-			.SetCell(0, 0, "Parameters")
+			.SetCell(0, 0, LocalizedStrings.Parameters)
 			.SetCellColor(0, 0, headerBg, headerFg)
 			.MergeCells(0, 0, 3, 0);
 
 		// Rows 1-10: Strategy parameters (matching template structure)
 		// Row 1: Strategy Name
 		worker
-			.SetCell(0, 1, "Strategy Name")
+			.SetCell(0, 1, LocalizedStrings.StrategyName)
 			.SetCellColor(0, 1, labelBg, null)
 			.SetCell(1, 1, source.Name);
 
 		// Row 2: Run Date
 		worker
-			.SetCell(0, 2, "Run Date")
+			.SetCell(0, 2, LocalizedStrings.StartTime)
 			.SetCellColor(0, 2, labelBg, null)
 			.SetCell(1, 2, DateTime.Now)
 			.SetCellFormat(1, 2, "yyyy-MM-dd HH:mm:ss");
 
 		// Row 3: Symbol
-		worker.SetCell(0, 3, "Symbol").SetCellColor(0, 3, labelBg, null);
-		WriteParamIfExistsCreate(worker, source, "Symbol", 1, 3);
+		worker.SetCell(0, 3, LocalizedStrings.Security).SetCellColor(0, 3, labelBg, null);
+		WriteParamIfExistsCreate(worker, source, LocalizedStrings.Security, 1, 3);
 
 		// Row 4: Timeframe
-		worker.SetCell(0, 4, "Timeframe").SetCellColor(0, 4, labelBg, null);
-		WriteParamIfExistsCreate(worker, source, "TimeFrame", 1, 4);
+		worker.SetCell(0, 4, LocalizedStrings.TimeFrame).SetCellColor(0, 4, labelBg, null);
+		WriteParamIfExistsCreate(worker, source, LocalizedStrings.TimeFrame, 1, 4);
 
 		// Row 5: Initial Capital
 		worker.SetCell(0, 5, "Initial Capital").SetCellColor(0, 5, labelBg, null);
@@ -194,45 +194,45 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			.SetCellFormat(1, 5, GetDecimalFormat());
 
 		// Row 6: Currency
-		worker.SetCell(0, 6, "Currency").SetCellColor(0, 6, labelBg, null);
-		WriteParamIfExistsCreate(worker, source, "Currency", 1, 6);
+		worker.SetCell(0, 6, LocalizedStrings.Currency).SetCellColor(0, 6, labelBg, null);
+		WriteParamIfExistsCreate(worker, source, LocalizedStrings.Currency, 1, 6);
 		if (worker.GetCell<string>(1, 6).IsEmpty())
 			worker.SetCell(1, 6, "USD");
 
 		// Row 7: Commission (per trade)
-		worker.SetCell(0, 7, "Commission (per trade)").SetCellColor(0, 7, labelBg, null)
+		worker.SetCell(0, 7, LocalizedStrings.TradeCommission).SetCellColor(0, 7, labelBg, null)
 			.SetCell(1, 7, source.Commission ?? 0m)
 			.SetCellFormat(1, 7, GetDecimalFormat());
 
 		// Row 8: Slippage (per trade)
-		worker.SetCell(0, 8, "Slippage (per trade)").SetCellColor(0, 8, labelBg, null)
+		worker.SetCell(0, 8, LocalizedStrings.SlippageTrade).SetCellColor(0, 8, labelBg, null)
 			.SetCell(1, 8, source.Slippage ?? 0m)
 			.SetCellFormat(1, 8, GetDecimalFormat());
 
 		// Row 9: Risk-free rate (annual)
-		worker.SetCell(0, 9, "Risk-free rate (annual)").SetCellColor(0, 9, labelBg, null)
+		worker.SetCell(0, 9, LocalizedStrings.RiskFreeRate).SetCellColor(0, 9, labelBg, null)
 			.SetCell(1, 9, 0m)
 			.SetCellFormat(1, 9, "0.00%");
 
 		// Row 10: Sharpe (placeholder for Stats sheet)
-		worker.SetCell(0, 10, "Sharpe").SetCellColor(0, 10, labelBg, null)
+		worker.SetCell(0, 10, LocalizedStrings.Sharpe).SetCellColor(0, 10, labelBg, null)
 			.SetCell(1, 10, "");
 
 		// Row 13: Section headers
 		worker
-			.SetCell(0, 13, "StatisticParameters")
+			.SetCell(0, 13, LocalizedStrings.Statistics)
 			.SetCellColor(0, 13, headerBg, headerFg)
-			.SetCell(3, 13, "Parameters")
+			.SetCell(3, 13, LocalizedStrings.Parameters)
 			.SetCellColor(3, 13, headerBg, headerFg);
 
 		// Row 14: Column headers for tables
 		worker
-			.SetCell(0, 14, "Name")
-			.SetCell(1, 14, "Value")
+			.SetCell(0, 14, LocalizedStrings.Name)
+			.SetCell(1, 14, LocalizedStrings.Value)
 			.SetCellColor(0, 14, labelBg, null)
 			.SetCellColor(1, 14, labelBg, null)
-			.SetCell(3, 14, "Name")
-			.SetCell(4, 14, "Value")
+			.SetCell(3, 14, LocalizedStrings.Name)
+			.SetCell(4, 14, LocalizedStrings.Value)
 			.SetCellColor(3, 14, labelBg, null)
 			.SetCellColor(4, 14, labelBg, null);
 
@@ -270,7 +270,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		worker.FreezeRows(1);
 	}
 
-	private void WriteParamIfExistsCreate(IExcelWorker worker, IReportSource source, string key, int col, int row)
+	private static void WriteParamIfExistsCreate(IExcelWorker worker, IReportSource source, string key, int col, int row)
 	{
 		foreach (var (name, value) in source.Parameters)
 		{
@@ -297,7 +297,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 
 		// Row 0: Title "Strategy Report" merged A1:H1
 		worker
-			.SetCell(0, 0, "Strategy Report")
+			.SetCell(0, 0, LocalizedStrings.Report)
 			.SetCellColor(0, 0, headerBg, headerFg)
 			.MergeCells(0, 0, 7, 0);
 
@@ -306,20 +306,20 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 
 		// Row 3: Strategy
 		worker
-			.SetCell(0, 3, "Strategy")
+			.SetCell(0, 3, LocalizedStrings.Strategy)
 			.SetCellColor(0, 3, labelBg, null)
 			.SetCell(1, 3, source.Name);
 
 		// Row 4: Run Date
 		worker
-			.SetCell(0, 4, "Run Date")
+			.SetCell(0, 4, LocalizedStrings.StartTime)
 			.SetCellColor(0, 4, labelBg, null)
 			.SetCell(1, 4, DateTime.Now)
 			.SetCellFormat(1, 4, "yyyy-MM-dd HH:mm:ss");
 
 		// Row 5: Net PnL
 		worker
-			.SetCell(0, 5, "Net PnL")
+			.SetCell(0, 5, LocalizedStrings.PnL)
 			.SetCellColor(0, 5, labelBg, null)
 			.SetCell(1, 5, source.PnL)
 			.SetCellFormat(1, 5, GetDecimalFormat());
@@ -327,21 +327,21 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		// Row 6: Max Drawdown (calculate from trades)
 		var maxDrawdown = CalculateMaxDrawdown(source);
 		worker
-			.SetCell(0, 6, "Max Drawdown")
+			.SetCell(0, 6, LocalizedStrings.MaxDrawdown)
 			.SetCellColor(0, 6, labelBg, null)
 			.SetCell(1, 6, maxDrawdown)
 			.SetCellFormat(1, 6, "0.00%");
 
 		// Row 7: Sharpe (placeholder)
 		worker
-			.SetCell(0, 7, "Sharpe")
+			.SetCell(0, 7, LocalizedStrings.Sharpe)
 			.SetCellColor(0, 7, labelBg, null)
-			.SetCell(1, 7, GetStatParam(source, "Sharpe"));
+			.SetCell(1, 7, GetStatParam(source, LocalizedStrings.Sharpe));
 
 		// Row 8: Win Rate
 		var winRate = CalculateWinRate(source);
 		worker
-			.SetCell(0, 8, "Win Rate")
+			.SetCell(0, 8, LocalizedStrings.WinRate)
 			.SetCellColor(0, 8, labelBg, null)
 			.SetCell(1, 8, winRate)
 			.SetCellFormat(1, 8, "0.00%");
@@ -349,7 +349,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		// Row 9: Trades count
 		var tradesCount = source.OwnTrades.Count();
 		worker
-			.SetCell(0, 9, "Trades")
+			.SetCell(0, 9, LocalizedStrings.Trades)
 			.SetCellColor(0, 9, labelBg, null)
 			.SetCell(1, 9, tradesCount);
 
@@ -378,12 +378,12 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		// Chart 1: "Equity Curve" at anchor col=4 (D), row=4 - matches template
 		// xCol=1 (A - Date), yCol=2 (B - Equity), wider chart with more space
 		var equityDataRange = $"{_equitySheet}!$A$1:$B${equityRowCount}";
-		worker.AddLineChart("Equity Curve", equityDataRange, 1, 2, 4, 4, 700, 280);
+		worker.AddLineChart(LocalizedStrings.EquityCurve, equityDataRange, 1, 2, 4, 4, 700, 280);
 
 		// Chart 2: "Drawdown" at anchor col=4 (D), row=22 - more spacing from first chart
 		// xCol=1 (A - Date), yCol=3 (C - Drawdown)
 		var drawdownDataRange = $"{_equitySheet}!$A$1:$C${equityRowCount}";
-		worker.AddLineChart("Drawdown", drawdownDataRange, 1, 3, 4, 22, 700, 280);
+		worker.AddLineChart(LocalizedStrings.Drawdown, drawdownDataRange, 1, 3, 4, 22, 700, 280);
 	}
 
 	private void CreateStatsSheet(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
@@ -409,19 +409,19 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 
 		// Row 0: Title
 		worker
-			.SetCell(0, 0, "Monthly Returns")
+			.SetCell(0, 0, LocalizedStrings.MonthlyReturns)
 			.SetCellColor(0, 0, headerBg, headerFg)
 			.MergeCells(0, 0, 5, 0);
 
 		// Row 2: Headers
 		worker
-			.SetCell(0, 2, "Year")
+			.SetCell(0, 2, LocalizedStrings.Year)
 			.SetCellColor(0, 2, labelBg, null)
-			.SetCell(1, 2, "Month")
+			.SetCell(1, 2, LocalizedStrings.Month)
 			.SetCellColor(1, 2, labelBg, null)
-			.SetCell(2, 2, "Return")
+			.SetCell(2, 2, LocalizedStrings.Return)
 			.SetCellColor(2, 2, labelBg, null)
-			.SetCell(3, 2, "Cumulative")
+			.SetCell(3, 2, LocalizedStrings.Cumulative)
 			.SetCellColor(3, 2, labelBg, null);
 
 		// Calculate monthly returns from trades
@@ -446,7 +446,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 
 		var row = 3;
 		decimal cumulative = 0m;
-		var initialCapital = GetDecimalParam(source, "InitialCapital");
+		var initialCapital = GetDecimalParam(source, LocalizedStrings.InitialCapital);
 		if (initialCapital <= 0) initialCapital = 100000m;
 
 		foreach (var mr in monthlyReturns)
@@ -474,7 +474,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		{
 			// Use columns A-D, xCol=2 (Month), yCol=3 (Return)
 			var returnDataRange = $"{_statsSheet}!$A$3:$D${row}";
-			worker.AddLineChart("Monthly Returns", returnDataRange, 2, 3, 6, 3, 500, 300);
+			worker.AddLineChart(LocalizedStrings.MonthlyReturns, returnDataRange, 2, 3, 6, 3, 500, 300);
 		}
 	}
 
@@ -533,7 +533,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		const string headerFg = "FFFFFF";
 
 		// Header row matching template: EntryTime, ExitTime, Security, Side, Qty, EntryPrice, ExitPrice, PnL, PnL%, TotalPnL, Position
-		var headers = new[] { "EntryTime", "ExitTime", "Security", "Side", "Qty", "EntryPrice", "ExitPrice", "PnL", "PnL%", "TotalPnL", "Position" };
+		var headers = new[] { LocalizedStrings.EntryTime, LocalizedStrings.ExitTime, LocalizedStrings.Security, LocalizedStrings.Side, LocalizedStrings.Volume, LocalizedStrings.Enter, LocalizedStrings.Exit, LocalizedStrings.PnL, LocalizedStrings.PnLChange, LocalizedStrings.TotalPnL, LocalizedStrings.Position };
 		for (var i = 0; i < headers.Length; i++)
 		{
 			worker
@@ -621,7 +621,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		const string headerFg = "FFFFFF";
 
 		// Header row matching template
-		var headers = new[] { "OrderId", "TransactionId", "Security", "Side", "Time", "Price", "State", "Balance", "Volume", "Type" };
+		var headers = new[] { LocalizedStrings.OrderId, LocalizedStrings.TransactionId, LocalizedStrings.Security, LocalizedStrings.Side, LocalizedStrings.Time, LocalizedStrings.Price, LocalizedStrings.State, LocalizedStrings.Balance, LocalizedStrings.Volume, LocalizedStrings.Type };
 		for (var i = 0; i < headers.Length; i++)
 		{
 			worker
@@ -682,7 +682,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 				OrderStates.Done => ("C6EFCE", "006100"),    // Green - completed
 				OrderStates.Failed => ("FFC7CE", "9C0006"), // Red - failed/error
 				OrderStates.Active => ("FFEB84", "806000"), // Yellow - active
-				_ => (null as string, null as string)       // No color for others
+				_ => (null, null)       // No color for others
 			};
 			if (stateBg != null)
 				worker.SetCellColor(6, row, stateBg, stateFg);
@@ -699,7 +699,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		const string headerFg = "FFFFFF";
 
 		// Header row matching template
-		var headers = new[] { "Date", "Equity", "Drawdown" };
+		var headers = new[] { LocalizedStrings.Date, LocalizedStrings.Equity, LocalizedStrings.Drawdown };
 		for (var i = 0; i < headers.Length; i++)
 		{
 			worker
@@ -722,7 +722,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		if (trades.Length == 0)
 			return;
 
-		var initial = GetDecimalParam(source, "InitialCapital");
+		var initial = GetDecimalParam(source, LocalizedStrings.InitialCapital);
 
 		// Build a daily equity curve from cumulative trade PnL at day close.
 		var byDay = new SortedDictionary<DateTime, decimal>();
@@ -761,7 +761,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		if (row > 1)
 		{
 			var dataRange = $"{_equitySheet}!$A$2:$B${row}";
-			worker.AddLineChart("Equity Curve", dataRange, 1, 2, 4, 1, 400, 250);
+			worker.AddLineChart(LocalizedStrings.EquityCurve, dataRange, 1, 2, 4, 1, 400, 250);
 		}
 	}
 
@@ -779,9 +779,9 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			.SetCell(1, 2, DateTime.Now);
 
 		// Optional: try to populate commonly used params if present in source.Parameters
-		WriteParamIfExists(worker, source, "Symbol", 1, 3);         // B4
-		WriteParamIfExists(worker, source, "TimeFrame", 1, 4);      // B5
-		WriteParamIfExists(worker, source, "InitialCapital", 1, 5); // B6
+		WriteParamIfExists(worker, source, LocalizedStrings.Security, 1, 3);         // B4
+		WriteParamIfExists(worker, source, LocalizedStrings.TimeFrame, 1, 4);      // B5
+		WriteParamIfExists(worker, source, LocalizedStrings.InitialCapital, 1, 5); // B6
 
 		// Fill StatisticParameters table: A16:B...
 		var row = 15; // 0-based row => Excel row 16
@@ -906,7 +906,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			return;
 
 		// InitialCapital can be provided as a strategy parameter. If missing, equity becomes cumulative PnL.
-		var initial = GetDecimalParam(source, "InitialCapital");
+		var initial = GetDecimalParam(source, LocalizedStrings.InitialCapital);
 
 		// Build a daily equity curve from cumulative trade PnL at day close.
 		var byDay = new SortedDictionary<DateTime, decimal>();
@@ -949,14 +949,14 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		if (row > 1)
 		{
 			var dataRange = $"{_equitySheet}!$A$2:$B${row}";
-			worker.AddLineChart("Equity Curve", dataRange, 1, 2, 4, 1, 400, 250);
+			worker.AddLineChart(LocalizedStrings.EquityCurve, dataRange, 1, 2, 4, 1, 400, 250);
 		}
 
 		// Stats sheet is formula-driven; just ensure it exists and can be recalculated.
 		worker.SwitchSheet(_statsSheet);
 	}
 
-	private void WriteParamIfExists(IExcelWorker worker, IReportSource source, string key, int col, int row)
+	private static void WriteParamIfExists(IExcelWorker worker, IReportSource source, string key, int col, int row)
 	{
 		foreach (var (name, value) in source.Parameters)
 		{

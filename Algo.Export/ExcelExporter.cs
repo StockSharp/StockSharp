@@ -79,7 +79,7 @@ public class ExcelExporter(IExcelWorkerProvider provider, DataType dataType, Str
 			.SetCell(3, 0, LocalizedStrings.Volume).SetStyle(3, typeof(decimal))
 			.SetCell(4, 0, LocalizedStrings.Direction)
 			.SetCell(5, 0, LocalizedStrings.OI).SetStyle(5, typeof(decimal))
-			.SetCell(6, 0, "UP_DOWN").SetStyle(6, typeof(bool))
+			.SetCell(6, 0, LocalizedStrings.UpTrend).SetStyle(6, typeof(bool))
 			.SetCell(7, 0, LocalizedStrings.Currency);
 
 		var row = 1;
