@@ -649,8 +649,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			.SetStyle(7, decimalFormat)
 			.SetStyle(8, decimalFormat)
 			.FreezeRows(1)
-			// ColorScale for Balance (col 7) - matching template
-			.SetColorScale(7, 1, "F8696B", "FFEB84", "63BE7B");
+			// ColorScale for Balance (col 7) - 0 = green (fully executed), >0 = red (has remaining)
+			.SetColorScale(7, 1, "63BE7B", "FFEB84", "F8696B");
 
 		var row = 1;
 
