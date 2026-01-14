@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Configuration.Permissions;
+namespace StockSharp.Configuration.Permissions;
 
 /// <summary>
 /// Extensions.
@@ -65,16 +65,17 @@ public static class PermissionCredentialsExtensions
 	/// </summary>
 	/// <param name="storage">The storage to be used.</param>
 	/// <returns>All stored credentials.</returns>
-	public static IEnumerable<PermissionCredentials> GetAll(this IPermissionCredentialsStorage storage)
-		=> storage.CheckOnNull(nameof(storage)).Search("*");
+	public static IAsyncEnumerable<PermissionCredentials> GetAllAsync(this IPermissionCredentialsStorage storage)
+		=> storage.CheckOnNull(nameof(storage)).SearchAsync("*");
 
 	/// <summary>
 	/// Find credentials by exact login.
 	/// </summary>
 	/// <param name="storage">Credentials storage.</param>
 	/// <param name="login">Login.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Credentials with permissions or <c>null</c> if not found.</returns>
-	public static PermissionCredentials TryGetByLogin(this IPermissionCredentialsStorage storage, string login)
+	public static async ValueTask<PermissionCredentials> TryGetByLoginAsync(this IPermissionCredentialsStorage storage, string login, CancellationToken cancellationToken = default)
 	{
 		storage.CheckOnNull(nameof(storage));
 		login.ThrowIfEmpty(nameof(login));
@@ -84,6 +85,12 @@ public static class PermissionCredentialsExtensions
 			.Replace("\\", "\\\\")
 			.Replace("*", "\\*");
 
-		return storage.Search(pattern).FirstOrDefault(c => c.Email.EqualsIgnoreCase(login));
+		await foreach (var c in storage.SearchAsync(pattern).WithEnforcedCancellation(cancellationToken))
+		{
+			if (c.Email.EqualsIgnoreCase(login))
+				return c;
+		}
+
+		return null;
 	}
 }

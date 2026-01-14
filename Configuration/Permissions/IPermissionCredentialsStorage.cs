@@ -10,18 +10,20 @@ public interface IPermissionCredentialsStorage
 	/// </summary>
 	/// <param name="loginPattern">Login pattern (supports '*').</param>
 	/// <returns>Matched credentials.</returns>
-	IEnumerable<PermissionCredentials> Search(string loginPattern);
+	IAsyncEnumerable<PermissionCredentials> SearchAsync(string loginPattern);
 
 	/// <summary>
 	/// Save credentials (add or update by login).
 	/// </summary>
 	/// <param name="credentials">Credentials to persist.</param>
-	void Save(PermissionCredentials credentials);
+	/// <param name="cancellationToken">Cancellation token.</param>
+	ValueTask SaveAsync(PermissionCredentials credentials, CancellationToken cancellationToken = default);
 
 	/// <summary>
 	/// Delete credentials by login.
 	/// </summary>
 	/// <param name="login">Login.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Operation result.</returns>
-	bool Delete(string login);
+	ValueTask<bool> DeleteAsync(string login, CancellationToken cancellationToken = default);
 }

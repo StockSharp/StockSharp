@@ -1,8 +1,6 @@
 namespace StockSharp.Configuration.Permissions;
 
 using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
 
 using Ecng.Security;
 
@@ -17,7 +15,7 @@ public class PermissionCredentialsAuthorization(IPermissionCredentialsStorage st
 {
 	private readonly IPermissionCredentialsStorage _storage = storage ?? throw new ArgumentNullException(nameof(storage));
 
-	ValueTask<string> IAuthorization.ValidateCredentials(string login, SecureString password, IPAddress clientAddress, CancellationToken cancellationToken)
+	async ValueTask<string> IAuthorization.ValidateCredentials(string login, SecureString password, IPAddress clientAddress, CancellationToken cancellationToken)
 	{
 		if (login.IsEmpty())
 			throw new ArgumentNullException(nameof(login), LocalizedStrings.LoginNotSpecified);
@@ -25,7 +23,7 @@ public class PermissionCredentialsAuthorization(IPermissionCredentialsStorage st
 		if (password.IsEmpty())
 			throw new ArgumentNullException(nameof(password), LocalizedStrings.PasswordNotSpecified);
 
-		var credentials = _storage.TryGetByLogin(login);
+		var credentials = await _storage.TryGetByLoginAsync(login, cancellationToken);
 
 		if (credentials == null || !credentials.Password.IsEqualTo(password))
 			throw new UnauthorizedAccessException(LocalizedStrings.WrongLoginOrPassword);
@@ -35,6 +33,6 @@ public class PermissionCredentialsAuthorization(IPermissionCredentialsStorage st
 		if (ipRestrictions.Length > 0 && (clientAddress == null || !ipRestrictions.Contains(clientAddress)))
 			throw new UnauthorizedAccessException(LocalizedStrings.IpAddrNotValid.Put(clientAddress));
 
-		return new(Guid.NewGuid().To<string>());
+		return Guid.NewGuid().To<string>();
 	}
 }

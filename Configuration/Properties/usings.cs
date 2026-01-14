@@ -4,6 +4,8 @@ global using System.Linq;
 global using System.IO;
 global using System.Reflection;
 global using System.Security;
+global using System.Threading;
+global using System.Threading.Tasks;
 
 global using Ecng.Common;
 global using Ecng.ComponentModel;

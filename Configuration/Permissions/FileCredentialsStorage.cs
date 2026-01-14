@@ -1,5 +1,6 @@
 namespace StockSharp.Configuration.Permissions;
 
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 /// <summary>
@@ -43,18 +44,35 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 		}
 	}
 
-	IEnumerable<PermissionCredentials> IPermissionCredentialsStorage.Search(string loginPattern)
+	IAsyncEnumerable<PermissionCredentials> IPermissionCredentialsStorage.SearchAsync(string loginPattern)
 	{
-		if (loginPattern.IsEmpty() || loginPattern == "*")
-			return [.. Cache.Select(c => c.Clone())];
+		return Impl();
 
-		var pattern = "^" + Regex.Escape(loginPattern).Replace("\\*", ".*") + "$";
-		var re = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		async IAsyncEnumerable<PermissionCredentials> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
+		{
+			IEnumerable<PermissionCredentials> results;
 
-		return [.. Cache.Where(c => re.IsMatch(c.Email ?? string.Empty)).Select(c => c.Clone())];
+			if (loginPattern.IsEmpty() || loginPattern == "*")
+			{
+				results = Cache.Select(c => c.Clone());
+			}
+			else
+			{
+				var pattern = "^" + Regex.Escape(loginPattern).Replace("\\*", ".*") + "$";
+				var re = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+				results = Cache.Where(c => re.IsMatch(c.Email ?? string.Empty)).Select(c => c.Clone());
+			}
+
+			foreach (var result in results)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
+				yield return result;
+			}
+		}
 	}
 
-	void IPermissionCredentialsStorage.Save(PermissionCredentials credentials)
+	ValueTask IPermissionCredentialsStorage.SaveAsync(PermissionCredentials credentials, CancellationToken cancellationToken)
 	{
 		if (credentials == null)
 			throw new ArgumentNullException(nameof(credentials));
@@ -67,9 +85,11 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 		_credentials[credentials.Email] = credentials;
 
 		SaveToFile();
+
+		return default;
 	}
 
-	bool IPermissionCredentialsStorage.Delete(string login)
+	ValueTask<bool> IPermissionCredentialsStorage.DeleteAsync(string login, CancellationToken cancellationToken)
 	{
 		EnsureInitialized();
 
@@ -78,7 +98,7 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 		if (res)
 			SaveToFile();
 
-		return res;
+		return new(res);
 	}
 
 	private void LoadFromFile()
