@@ -17,18 +17,18 @@ public class FileCredentialsStorageTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Search_EmptyStorage_ReturnsEmpty()
+	public async Task Search_EmptyStorage_ReturnsEmpty()
 	{
 		var fs = CreateFileSystem();
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, "/credentials.json");
 
-		var result = storage.Search("*").ToArray();
+		var result = await storage.SearchAsync("*").ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
-	public void Save_CreatesDirectoryAndFile()
+	public async Task Save_CreatesDirectoryAndFile()
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/company/credentials.json";
@@ -36,14 +36,14 @@ public class FileCredentialsStorageTests : BaseTestClass
 
 		var credentials = CreateCredentials("test@example.com");
 
-		storage.Save(credentials);
+		await storage.SaveAsync(credentials, CancellationToken);
 
 		fs.DirectoryExists("/company").AssertTrue();
 		fs.FileExists(filePath).AssertTrue();
 	}
 
 	[TestMethod]
-	public void SaveAndSearch_RoundTrip_PreservesCredentials()
+	public async Task SaveAndSearch_RoundTrip_PreservesCredentials()
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/company/credentials.json";
@@ -51,103 +51,103 @@ public class FileCredentialsStorageTests : BaseTestClass
 
 		var original = CreateCredentials("test@example.com");
 
-		storage.Save(original);
+		await storage.SaveAsync(original, CancellationToken);
 
 		// Create new storage to test loading from file
 		IPermissionCredentialsStorage storage2 = new FileCredentialsStorage(fs, filePath, asEmail: true);
-		var result = storage2.Search("test@example.com").ToArray();
+		var result = await storage2.SearchAsync("test@example.com").ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(1);
 		result[0].Email.AssertEqual("test@example.com");
 	}
 
 	[TestMethod]
-	public void Search_WildcardPattern_ReturnsMatching()
+	public async Task Search_WildcardPattern_ReturnsMatching()
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
-		storage.Save(CreateCredentials("admin@example.com"));
-		storage.Save(CreateCredentials("user@example.com"));
-		storage.Save(CreateCredentials("test@other.com"));
+		await storage.SaveAsync(CreateCredentials("admin@example.com"), CancellationToken);
+		await storage.SaveAsync(CreateCredentials("user@example.com"), CancellationToken);
+		await storage.SaveAsync(CreateCredentials("test@other.com"), CancellationToken);
 
-		var result = storage.Search("*@example.com").ToArray();
+		var result = await storage.SearchAsync("*@example.com").ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(2);
 	}
 
 	[TestMethod]
-	public void Search_AllPattern_ReturnsAll()
+	public async Task Search_AllPattern_ReturnsAll()
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
-		storage.Save(CreateCredentials("admin@example.com"));
-		storage.Save(CreateCredentials("user@example.com"));
+		await storage.SaveAsync(CreateCredentials("admin@example.com"), CancellationToken);
+		await storage.SaveAsync(CreateCredentials("user@example.com"), CancellationToken);
 
-		var result = storage.Search("*").ToArray();
+		var result = await storage.SearchAsync("*").ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(2);
 	}
 
 	[TestMethod]
-	public void Search_EmptyPattern_ReturnsAll()
+	public async Task Search_EmptyPattern_ReturnsAll()
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
-		storage.Save(CreateCredentials("admin@example.com"));
-		storage.Save(CreateCredentials("user@example.com"));
+		await storage.SaveAsync(CreateCredentials("admin@example.com"), CancellationToken);
+		await storage.SaveAsync(CreateCredentials("user@example.com"), CancellationToken);
 
-		var result = storage.Search("").ToArray();
+		var result = await storage.SearchAsync("").ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(2);
 	}
 
 	[TestMethod]
-	public void Delete_ExistingCredentials_ReturnsTrue()
+	public async Task Delete_ExistingCredentials_ReturnsTrue()
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
-		storage.Save(CreateCredentials("test@example.com"));
+		await storage.SaveAsync(CreateCredentials("test@example.com"), CancellationToken);
 
-		var result = storage.Delete("test@example.com");
+		var result = await storage.DeleteAsync("test@example.com", CancellationToken);
 
 		result.AssertTrue();
-		storage.Search("test@example.com").ToArray().Length.AssertEqual(0);
+		(await storage.SearchAsync("test@example.com").ToArrayAsync(CancellationToken)).Length.AssertEqual(0);
 	}
 
 	[TestMethod]
-	public void Delete_NonExistingCredentials_ReturnsFalse()
+	public async Task Delete_NonExistingCredentials_ReturnsFalse()
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath);
 
-		var result = storage.Delete("nonexistent");
+		var result = await storage.DeleteAsync("nonexistent", CancellationToken);
 
 		result.AssertFalse();
 	}
 
 	[TestMethod]
-	public void Save_UpdateExisting_OverwritesCredentials()
+	public async Task Save_UpdateExisting_OverwritesCredentials()
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
 		var original = CreateCredentials("test@example.com", "password1");
-		storage.Save(original);
+		await storage.SaveAsync(original, CancellationToken);
 
 		var updated = CreateCredentials("test@example.com", "password2");
-		storage.Save(updated);
+		await storage.SaveAsync(updated, CancellationToken);
 
-		var result = storage.Search("test@example.com").ToArray();
+		var result = await storage.SearchAsync("test@example.com").ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(1);
 	}
@@ -158,7 +158,7 @@ public class FileCredentialsStorageTests : BaseTestClass
 		var fs = CreateFileSystem();
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, "/credentials.json");
 
-		ThrowsExactly<ArgumentNullException>(() => storage.Save(null));
+		ThrowsExactlyAsync<ArgumentNullException>(async () => await storage.SaveAsync(null, CancellationToken));
 	}
 
 	[TestMethod]
@@ -169,11 +169,11 @@ public class FileCredentialsStorageTests : BaseTestClass
 
 		var credentials = CreateCredentials("invalid-email");
 
-		ThrowsExactly<ArgumentException>(() => storage.Save(credentials));
+		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(credentials, CancellationToken));
 	}
 
 	[TestMethod]
-	public void Save_ValidUsername_WhenAsEmailFalse()
+	public async Task Save_ValidUsername_WhenAsEmailFalse()
 	{
 		var fs = CreateFileSystem();
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, "/credentials.json", asEmail: false);
@@ -181,56 +181,56 @@ public class FileCredentialsStorageTests : BaseTestClass
 		// Username: letters, numbers, dots, hyphens, underscores; 3-64 chars
 		var credentials = CreateCredentials("admin_user.123");
 
-		storage.Save(credentials);
+		await storage.SaveAsync(credentials, CancellationToken);
 
-		var result = storage.Search("admin_user.123").ToArray();
+		var result = await storage.SearchAsync("admin_user.123").ToArrayAsync(CancellationToken);
 		result.Length.AssertEqual(1);
 	}
 
 	[TestMethod]
-	public void Search_CaseInsensitive()
+	public async Task Search_CaseInsensitive()
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
-		storage.Save(CreateCredentials("Test@Example.com"));
+		await storage.SaveAsync(CreateCredentials("Test@Example.com"), CancellationToken);
 
-		var result = storage.Search("test@example.com").ToArray();
+		var result = await storage.SearchAsync("test@example.com").ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(1);
 	}
 
 	[TestMethod]
-	public void Delete_CaseInsensitive()
+	public async Task Delete_CaseInsensitive()
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
 
-		storage.Save(CreateCredentials("Test@Example.com"));
+		await storage.SaveAsync(CreateCredentials("Test@Example.com"), CancellationToken);
 
-		var result = storage.Delete("TEST@EXAMPLE.COM");
+		var result = await storage.DeleteAsync("TEST@EXAMPLE.COM", CancellationToken);
 
 		result.AssertTrue();
-		storage.Search("*").ToArray().Length.AssertEqual(0);
+		(await storage.SearchAsync("*").ToArrayAsync(CancellationToken)).Length.AssertEqual(0);
 	}
 
 	[TestMethod]
-	public void MultipleInstances_ShareSameFile()
+	public async Task MultipleInstances_ShareSameFile()
 	{
 		var fs = CreateFileSystem();
 		var filePath = "/credentials.json";
 
 		IPermissionCredentialsStorage storage1 = new FileCredentialsStorage(fs, filePath, asEmail: true);
-		storage1.Save(CreateCredentials("user1@example.com"));
+		await storage1.SaveAsync(CreateCredentials("user1@example.com"), CancellationToken);
 
 		IPermissionCredentialsStorage storage2 = new FileCredentialsStorage(fs, filePath, asEmail: true);
-		storage2.Save(CreateCredentials("user2@example.com"));
+		await storage2.SaveAsync(CreateCredentials("user2@example.com"), CancellationToken);
 
 		// storage1 won't see storage2's changes without reload, but storage2 should have both
 		IPermissionCredentialsStorage storage3 = new FileCredentialsStorage(fs, filePath, asEmail: true);
-		var result = storage3.Search("*").ToArray();
+		var result = await storage3.SearchAsync("*").ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(2);
 	}

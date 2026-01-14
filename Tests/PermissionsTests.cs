@@ -247,77 +247,77 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Extensions_TryGetByLogin_NullStorageThrows()
+	public void Extensions_TryGetByLoginAsync_NullStorageThrows()
 	{
-		ThrowsExactly<ArgumentNullException>(() => ((IPermissionCredentialsStorage)null).TryGetByLogin("test"));
+		ThrowsExactlyAsync<ArgumentNullException>(async () => await ((IPermissionCredentialsStorage)null).TryGetByLoginAsync("test", CancellationToken));
 	}
 
 	[TestMethod]
-	public void Extensions_TryGetByLogin_EmptyLoginThrows()
+	public void Extensions_TryGetByLoginAsync_EmptyLoginThrows()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
-		ThrowsExactly<ArgumentNullException>(() => storage.TryGetByLogin(""));
+		ThrowsExactlyAsync<ArgumentNullException>(async () => await storage.TryGetByLoginAsync("", CancellationToken));
 	}
 
 	[TestMethod]
-	public void Extensions_TryGetByLogin_ExactMatch()
+	public async Task Extensions_TryGetByLoginAsync_ExactMatch()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		storage.Save(new PermissionCredentials { Email = "user", Password = ToSecureString("pass") });
-		storage.Save(new PermissionCredentials { Email = "user123", Password = ToSecureString("pass") });
+		await storage.SaveAsync(new PermissionCredentials { Email = "user", Password = ToSecureString("pass") }, CancellationToken);
+		await storage.SaveAsync(new PermissionCredentials { Email = "user123", Password = ToSecureString("pass") }, CancellationToken);
 
-		var result = storage.TryGetByLogin("user");
+		var result = await storage.TryGetByLoginAsync("user", CancellationToken);
 
 		result.AssertNotNull();
 		result.Email.AssertEqual("user");
 	}
 
 	[TestMethod]
-	public void Extensions_TryGetByLogin_NotFound()
+	public async Task Extensions_TryGetByLoginAsync_NotFound()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		storage.Save(new PermissionCredentials { Email = "user", Password = ToSecureString("pass") });
+		await storage.SaveAsync(new PermissionCredentials { Email = "user", Password = ToSecureString("pass") }, CancellationToken);
 
-		var result = storage.TryGetByLogin("nonexistent");
+		var result = await storage.TryGetByLoginAsync("nonexistent", CancellationToken);
 
 		result.AssertNull();
 	}
 
 	[TestMethod]
-	public void Extensions_TryGetByLogin_EscapesWildcards()
+	public async Task Extensions_TryGetByLoginAsync_EscapesWildcards()
 	{
 		// Check that '*' is not treated as wildcard in exact match
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		storage.Save(new PermissionCredentials { Email = "user-star", Password = ToSecureString("pass1") });
-		storage.Save(new PermissionCredentials { Email = "user123", Password = ToSecureString("pass2") });
+		await storage.SaveAsync(new PermissionCredentials { Email = "user-star", Password = ToSecureString("pass1") }, CancellationToken);
+		await storage.SaveAsync(new PermissionCredentials { Email = "user123", Password = ToSecureString("pass2") }, CancellationToken);
 
-		var result = storage.TryGetByLogin("user-star");
+		var result = await storage.TryGetByLoginAsync("user-star", CancellationToken);
 
 		result.AssertNotNull();
 		result.Email.AssertEqual("user-star");
 	}
 
 	[TestMethod]
-	public void Extensions_TryGetByLogin_CaseInsensitive()
+	public async Task Extensions_TryGetByLoginAsync_CaseInsensitive()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		storage.Save(new PermissionCredentials { Email = "User", Password = ToSecureString("pass") });
+		await storage.SaveAsync(new PermissionCredentials { Email = "User", Password = ToSecureString("pass") }, CancellationToken);
 
-		var result = storage.TryGetByLogin("user");
+		var result = await storage.TryGetByLoginAsync("user", CancellationToken);
 
 		result.AssertNotNull();
 		result.Email.AssertEqual("User");
@@ -342,125 +342,125 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void FileStorage_Constructor_NonExistentDirectory()
+	public async Task FileStorage_Constructor_NonExistentDirectory()
 	{
 		var fs = Helper.MemorySystem;
 		var invalidPath = Path.Combine(fs.GetSubTemp(), "file.txt");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, invalidPath);
 
-		var results = storage.Search("*").ToArray();
+		var results = await storage.SearchAsync("*").ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
-	public void FileStorage_Search_AllPattern_ReturnsAll()
+	public async Task FileStorage_SearchAsync_AllPattern_ReturnsAll()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		storage.Save(new PermissionCredentials { Email = "alice", Password = ToSecureString("pass1") });
-		storage.Save(new PermissionCredentials { Email = "bob", Password = ToSecureString("pass2") });
+		await storage.SaveAsync(new PermissionCredentials { Email = "alice", Password = ToSecureString("pass1") }, CancellationToken);
+		await storage.SaveAsync(new PermissionCredentials { Email = "bob", Password = ToSecureString("pass2") }, CancellationToken);
 
-		var results = storage.Search("*").ToArray();
+		var results = await storage.SearchAsync("*").ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(2);
 	}
 
 	[TestMethod]
-	public void FileStorage_Search_EmptyPattern_ReturnsAll()
+	public async Task FileStorage_SearchAsync_EmptyPattern_ReturnsAll()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		storage.Save(new PermissionCredentials { Email = "test1", Password = ToSecureString("pass") });
-		storage.Save(new PermissionCredentials { Email = "test2", Password = ToSecureString("pass") });
+		await storage.SaveAsync(new PermissionCredentials { Email = "test1", Password = ToSecureString("pass") }, CancellationToken);
+		await storage.SaveAsync(new PermissionCredentials { Email = "test2", Password = ToSecureString("pass") }, CancellationToken);
 
-		var results = storage.Search("").ToArray();
+		var results = await storage.SearchAsync("").ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(2);
 	}
 
 	[TestMethod]
-	public void FileStorage_Search_WildcardPattern_MatchesCorrectly()
+	public async Task FileStorage_SearchAsync_WildcardPattern_MatchesCorrectly()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		storage.Save(new PermissionCredentials { Email = "admin", Password = ToSecureString("pass") });
-		storage.Save(new PermissionCredentials { Email = "user", Password = ToSecureString("pass") });
-		storage.Save(new PermissionCredentials { Email = "Admin", Password = ToSecureString("pass") });
+		await storage.SaveAsync(new PermissionCredentials { Email = "admin", Password = ToSecureString("pass") }, CancellationToken);
+		await storage.SaveAsync(new PermissionCredentials { Email = "user", Password = ToSecureString("pass") }, CancellationToken);
+		await storage.SaveAsync(new PermissionCredentials { Email = "Admin", Password = ToSecureString("pass") }, CancellationToken);
 
-		var results = storage.Search("admin*").ToArray();
+		var results = await storage.SearchAsync("admin*").ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(1);
 		results.All(r => r.Email.StartsWithIgnoreCase("admin")).AssertTrue();
 	}
 
 	[TestMethod]
-	public void FileStorage_Search_ExactPattern_MatchesCaseInsensitive()
+	public async Task FileStorage_SearchAsync_ExactPattern_MatchesCaseInsensitive()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		storage.Save(new PermissionCredentials { Email = "User", Password = ToSecureString("pass") });
+		await storage.SaveAsync(new PermissionCredentials { Email = "User", Password = ToSecureString("pass") }, CancellationToken);
 
-		var results = storage.Search("user").ToArray();
+		var results = await storage.SearchAsync("user").ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(1);
 		results[0].Email.AssertEqual("User");
 	}
 
 	[TestMethod]
-	public void FileStorage_Search_ReturnsClones()
+	public async Task FileStorage_SearchAsync_ReturnsClones()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		var original = new PermissionCredentials { Email = "test", Password = ToSecureString("pass") };
-		storage.Save(original);
+		await storage.SaveAsync(original, CancellationToken);
 
-		var result = storage.Search("test").First();
+		var result = await storage.SearchAsync("test").FirstAsync(CancellationToken);
 
 		result.AssertNotSame(original);
 	}
 
 	[TestMethod]
-	public void FileStorage_Save_NullThrows()
+	public void FileStorage_SaveAsync_NullThrows()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
-		ThrowsExactly<ArgumentNullException>(() => storage.Save(null));
+		ThrowsExactlyAsync<ArgumentNullException>(async () => await storage.SaveAsync(null, CancellationToken));
 	}
 
 	[TestMethod]
-	public void FileStorage_Save_AddsNewCredentials()
+	public async Task FileStorage_SaveAsync_AddsNewCredentials()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
 		var creds = new PermissionCredentials { Email = "new", Password = ToSecureString("pass") };
-		storage.Save(creds);
+		await storage.SaveAsync(creds, CancellationToken);
 
-		var result = storage.TryGetByLogin("new");
+		var result = await storage.TryGetByLoginAsync("new", CancellationToken);
 		result.AssertNotNull();
 	}
 
 	[TestMethod]
-	public void FileStorage_Save_UpdatesExistingCredentials()
+	public async Task FileStorage_SaveAsync_UpdatesExistingCredentials()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		storage.Save(new PermissionCredentials { Email = "user", Password = ToSecureString("oldpass") });
+		await storage.SaveAsync(new PermissionCredentials { Email = "user", Password = ToSecureString("oldpass") }, CancellationToken);
 
 		var updated = new PermissionCredentials
 		{
@@ -468,93 +468,93 @@ public class PermissionsTests : BaseTestClass
 			Password = ToSecureString("newpass"),
 			IpRestrictions = [_ip1]
 		};
-		storage.Save(updated);
+		await storage.SaveAsync(updated, CancellationToken);
 
-		var result = storage.TryGetByLogin("user");
+		var result = await storage.TryGetByLoginAsync("user", CancellationToken);
 		result.AssertNotNull();
 		result.Password.IsEqualTo(ToSecureString("newpass")).AssertTrue();
 		result.IpRestrictions.Count().AssertEqual(1);
 	}
 
 	[TestMethod]
-	public void FileStorage_Save_InvalidLoginWithAsterisk_Throws()
+	public void FileStorage_SaveAsync_InvalidLoginWithAsterisk_Throws()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user*", Password = ToSecureString("pass") }));
+		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(new PermissionCredentials { Email = "user*", Password = ToSecureString("pass") }, CancellationToken));
 	}
 
 	[TestMethod]
-	public void FileStorage_Save_Null_Throws()
+	public void FileStorage_SaveAsync_Null_Throws()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = null, Password = ToSecureString("pass") }));
+		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(new PermissionCredentials { Email = null, Password = ToSecureString("pass") }, CancellationToken));
 	}
 
 	[TestMethod]
-	public void FileStorage_Save_Whitespace_Throws()
+	public void FileStorage_SaveAsync_Whitespace_Throws()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = " ", Password = ToSecureString("pass") }));
+		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(new PermissionCredentials { Email = " ", Password = ToSecureString("pass") }, CancellationToken));
 	}
 
 	[TestMethod]
-	public void FileStorage_Save_WithInnerSpaces_Throws()
+	public void FileStorage_SaveAsync_WithInnerSpaces_Throws()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user test@example.com", Password = ToSecureString("pass") }));
+		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(new PermissionCredentials { Email = "user test@example.com", Password = ToSecureString("pass") }, CancellationToken));
 	}
 
 	[TestMethod]
-	public void FileStorage_Save_InvalidPlus()
+	public void FileStorage_SaveAsync_InvalidPlus()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		ThrowsExactly<ArgumentException>(() => storage.Save(new PermissionCredentials { Email = "user+tag", Password = ToSecureString("pass") }));
+		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(new PermissionCredentials { Email = "user+tag", Password = ToSecureString("pass") }, CancellationToken));
 	}
 
 	[TestMethod]
-	public void FileStorage_Delete_RemovesCredentials()
+	public async Task FileStorage_DeleteAsync_RemovesCredentials()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		storage.Save(new PermissionCredentials { Email = "delete", Password = ToSecureString("pass") });
+		await storage.SaveAsync(new PermissionCredentials { Email = "delete", Password = ToSecureString("pass") }, CancellationToken);
 
-		var deleted = storage.Delete("delete");
+		var deleted = await storage.DeleteAsync("delete", CancellationToken);
 
 		deleted.AssertTrue();
-		storage.TryGetByLogin("delete").AssertNull();
+		(await storage.TryGetByLoginAsync("delete", CancellationToken)).AssertNull();
 	}
 
 	[TestMethod]
-	public void FileStorage_Delete_NonExistent_ReturnsFalse()
+	public async Task FileStorage_DeleteAsync_NonExistent_ReturnsFalse()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		var deleted = storage.Delete("nonexistent");
+		var deleted = await storage.DeleteAsync("nonexistent", CancellationToken);
 
 		deleted.AssertFalse();
 	}
 
 	[TestMethod]
-	public void FileStorage_PersistenceAcrossInstances()
+	public async Task FileStorage_PersistenceAcrossInstances()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
@@ -563,18 +563,18 @@ public class PermissionsTests : BaseTestClass
 		// First instance: save data
 		{
 			IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
-			storage.Save(new PermissionCredentials
+			await storage.SaveAsync(new PermissionCredentials
 			{
 				Email = login,
 				Password = ToSecureString("password"),
 				IpRestrictions = [_ip1, _ip2]
-			});
+			}, CancellationToken);
 		}
 
 		// Second instance: load data
 		{
 			IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
-			var result = storage.TryGetByLogin(login);
+			var result = await storage.TryGetByLoginAsync(login, CancellationToken);
 
 			result.AssertNotNull();
 			result.Email.AssertEqual(login);
@@ -641,22 +641,22 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public Task Authorization_ValidateCredentials_WrongPassword_Throws()
+	public async Task Authorization_ValidateCredentials_WrongPassword_Throws()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		var login = "user1";
 
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
-		storage.Save(new PermissionCredentials
+		await storage.SaveAsync(new PermissionCredentials
 		{
 			Email = login,
 			Password = ToSecureString("correctpass")
-		});
+		}, CancellationToken);
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		return ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
+		await ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
 			auth.ValidateCredentials(login, ToSecureString("wrongpass"), _ip1, CancellationToken).AsTask());
 	}
 
@@ -669,12 +669,12 @@ public class PermissionsTests : BaseTestClass
 		var password = ToSecureString("password");
 
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
-		storage.Save(new PermissionCredentials
+		await storage.SaveAsync(new PermissionCredentials
 		{
 			Email = login,
 			Password = password,
 			IpRestrictions = []
-		});
+		}, CancellationToken);
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
@@ -693,12 +693,12 @@ public class PermissionsTests : BaseTestClass
 		var password = ToSecureString("password");
 
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
-		storage.Save(new PermissionCredentials
+		await storage.SaveAsync(new PermissionCredentials
 		{
 			Email = login,
 			Password = password,
 			IpRestrictions = [_ip1, _ip2]
-		});
+		}, CancellationToken);
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
@@ -709,7 +709,7 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public Task Authorization_ValidateCredentials_IpRestriction_Blocked()
+	public async Task Authorization_ValidateCredentials_IpRestriction_Blocked()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
@@ -717,21 +717,21 @@ public class PermissionsTests : BaseTestClass
 		var password = ToSecureString("password");
 
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
-		storage.Save(new PermissionCredentials
+		await storage.SaveAsync(new PermissionCredentials
 		{
 			Email = login,
 			Password = password,
 			IpRestrictions = [_ip1, _ip2]  // only these IPs allowed
-		});
+		}, CancellationToken);
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		return ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
+		await ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
 			auth.ValidateCredentials(login, password, _ip3, CancellationToken).AsTask());  // different IP
 	}
 
 	[TestMethod]
-	public Task Authorization_ValidateCredentials_IpRestriction_NullClientAddress_Blocked()
+	public async Task Authorization_ValidateCredentials_IpRestriction_NullClientAddress_Blocked()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
@@ -739,16 +739,16 @@ public class PermissionsTests : BaseTestClass
 		var password = ToSecureString("password");
 
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
-		storage.Save(new PermissionCredentials
+		await storage.SaveAsync(new PermissionCredentials
 		{
 			Email = login,
 			Password = password,
 			IpRestrictions = [_ip1]
-		});
+		}, CancellationToken);
 
 		IAuthorization auth = new PermissionCredentialsAuthorization(storage);
 
-		return ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
+		await ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
 			auth.ValidateCredentials(login, password, null, CancellationToken).AsTask());
 	}
 
