@@ -560,39 +560,27 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Compile_WhitespaceOnly_CurrentBehavior_ThrowsInvalidOperationException()
+	public void Compile_WhitespaceOnly()
 	{
-		// CURRENT BEHAVIOR: Whitespace-only strings pass IsEmpty() check and fail later
 		var provider = CreateProvider();
 
-		Throws<InvalidOperationException>(() => provider.Compile("   "));
+		Throws<ArgumentException>(() => provider.Compile("   "));
 	}
 
 	[TestMethod]
-	public void Compile_WhitespaceOnly_ExpectedBehavior_ThrowsArgumentNullException()
+	public void Compile_TabsOnly()
 	{
-		// EXPECTED BEHAVIOR: Whitespace-only should be treated as empty/null
 		var provider = CreateProvider();
 
-		Throws<ArgumentNullException>(() => provider.Compile("   "));
+		Throws<ArgumentException>(() => provider.Compile("\t\t"));
 	}
 
 	[TestMethod]
-	public void Compile_TabsOnly_CurrentBehavior_ThrowsInvalidOperationException()
+	public void Compile_NewlinesOnly()
 	{
-		// CURRENT BEHAVIOR: Tab-only strings pass IsEmpty() check
 		var provider = CreateProvider();
 
-		Throws<InvalidOperationException>(() => provider.Compile("\t\t"));
-	}
-
-	[TestMethod]
-	public void Compile_NewlinesOnly_CurrentBehavior_ThrowsInvalidOperationException()
-	{
-		// CURRENT BEHAVIOR: Newline-only strings pass IsEmpty() check
-		var provider = CreateProvider();
-
-		Throws<InvalidOperationException>(() => provider.Compile("\n\n"));
+		Throws<ArgumentException>(() => provider.Compile("\n\n"));
 	}
 
 	[TestMethod]

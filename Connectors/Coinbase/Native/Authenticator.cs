@@ -171,7 +171,7 @@ class Authenticator : Disposable
 
 	private static string Base64UrlEncode(byte[] data)
 	{
-		return Convert.ToBase64String(data)
+		return data.Base64()
 			.TrimEnd('=')
 			.Replace('+', '-')
 			.Replace('/', '_');
