@@ -1,6 +1,5 @@
 namespace StockSharp.Tests;
 
-using StockSharp.Algo.PnL;
 using StockSharp.Algo.Statistics;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Optimization;
@@ -15,35 +14,49 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var strategy = new Strategy();
 		var stats = strategy.StatisticManager;
-		var marketTime = DateTime.UtcNow;
 
-		// Set PnL
-		var pnlParam = stats.Parameters.OfType<NetProfitParameter>().First();
-		pnlParam.Add(marketTime, pnl, null);
+		stats.SetValue<NetProfitParameter, decimal>(pnl);
 
-		// Set MaxDrawdown if provided - simulates equity curve to create drawdown
 		if (maxDD.HasValue)
-		{
-			var maxDDParam = stats.Parameters.OfType<MaxDrawdownParameter>().First();
-			// Simulate peak then drawdown
-			maxDDParam.Add(marketTime, maxDD.Value, null);  // peak
-			maxDDParam.Add(marketTime, 0m, null);           // drop to create maxDD
-		}
+			stats.SetValue<MaxDrawdownParameter, decimal>(maxDD.Value);
 
-		// Set Recovery if provided - depends on net profit and max drawdown being set
 		if (recovery.HasValue)
-		{
-			var recoveryParam = stats.Parameters.OfType<RecoveryFactorParameter>().First();
-			recoveryParam.Add(marketTime, pnl, null);
-		}
+			stats.SetValue<RecoveryFactorParameter, decimal>(recovery.Value);
 
-		// Set TradeCount if provided
 		if (tradeCount.HasValue)
-		{
-			var tradeCountParam = stats.Parameters.OfType<TradeCountParameter>().First();
-			for (var i = 0; i < tradeCount.Value; i++)
-				tradeCountParam.Add(new PnLInfo(marketTime, 1, 10m));
-		}
+			stats.SetValue<TradeCountParameter, int>(tradeCount.Value);
+
+		return strategy;
+	}
+
+	private static Strategy CreateStrategyWithAllStats(
+		decimal? pnl = null,
+		decimal? recovery = null,
+		decimal? maxDD = null,
+		int? tradeCount = null,
+		int? winTrades = null,
+		int? losTrades = null)
+	{
+		var strategy = new Strategy();
+		var stats = strategy.StatisticManager;
+
+		if (pnl.HasValue)
+			stats.SetValue<NetProfitParameter, decimal>(pnl.Value);
+
+		if (maxDD.HasValue)
+			stats.SetValue<MaxDrawdownParameter, decimal>(maxDD.Value);
+
+		if (recovery.HasValue)
+			stats.SetValue<RecoveryFactorParameter, decimal>(recovery.Value);
+
+		if (tradeCount.HasValue)
+			stats.SetValue<TradeCountParameter, int>(tradeCount.Value);
+
+		if (winTrades.HasValue)
+			stats.SetValue<WinningTradesParameter, int>(winTrades.Value);
+
+		if (losTrades.HasValue)
+			stats.SetValue<LossingTradesParameter, int>(losTrades.Value);
 
 		return strategy;
 	}
@@ -661,61 +674,15 @@ public class FitnessFormulaProviderTests : BaseTestClass
 
 		result.AssertEqual(550m); // (100 + 10) * 5 = 550
 	}
+}
 
-	// ========== Helper for full stats ==========
-
-	private static Strategy CreateStrategyWithAllStats(
-		decimal? pnl = null,
-		decimal? recovery = null,
-		decimal? maxDD = null,
-		int? tradeCount = null,
-		int? winTrades = null,
-		int? losTrades = null)
+file static class StatisticManagerTestExtensions
+{
+	public static void SetValue<TParam, TValue>(this IStatisticManager stats, TValue value)
+		where TParam : IStatisticParameter<TValue>
+		where TValue : IComparable<TValue>
 	{
-		var strategy = new Strategy();
-		var stats = strategy.StatisticManager;
-		var marketTime = DateTime.UtcNow;
-
-		if (pnl.HasValue)
-		{
-			var param = stats.Parameters.OfType<NetProfitParameter>().First();
-			param.Add(marketTime, pnl.Value, null);
-		}
-
-		if (maxDD.HasValue)
-		{
-			var param = stats.Parameters.OfType<MaxDrawdownParameter>().First();
-			param.Add(marketTime, maxDD.Value, null);
-			param.Add(marketTime, 0m, null);
-		}
-
-		if (recovery.HasValue)
-		{
-			var param = stats.Parameters.OfType<RecoveryFactorParameter>().First();
-			param.Add(marketTime, pnl ?? 0m, null);
-		}
-
-		if (tradeCount.HasValue)
-		{
-			var param = stats.Parameters.OfType<TradeCountParameter>().First();
-			for (var i = 0; i < tradeCount.Value; i++)
-				param.Add(new PnLInfo(marketTime, 1, 10m));
-		}
-
-		if (winTrades.HasValue)
-		{
-			var param = stats.Parameters.OfType<WinningTradesParameter>().First();
-			for (var i = 0; i < winTrades.Value; i++)
-				param.Add(new PnLInfo(marketTime, 1, 100m));
-		}
-
-		if (losTrades.HasValue)
-		{
-			var param = stats.Parameters.OfType<LossingTradesParameter>().First();
-			for (var i = 0; i < losTrades.Value; i++)
-				param.Add(new PnLInfo(marketTime, 1, -50m));
-		}
-
-		return strategy;
+		var param = stats.Parameters.OfType<TParam>().First();
+		param.Load(new SettingsStorage { { nameof(IStatisticParameter<TValue>.Value), value } });
 	}
 }
