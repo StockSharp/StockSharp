@@ -38,7 +38,19 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		private readonly BasketMessageAdapter _parent = parent ?? throw new ArgumentNullException(nameof(parent));
 		private readonly Dictionary<IMessageAdapter, int> _enables = [];
 
-		public IEnumerable<IMessageAdapter> SortedAdapters => Cache.Where(t => this[t] != -1).OrderBy(t => this[t]);
+		public IEnumerable<IMessageAdapter> SortedAdapters
+		{
+			get
+			{
+				using var _ = EnterScope();
+
+				return this
+					.Select(a => (Adapter: a, Priority: _enables.TryGetValue(a, out var p) ? p : -1))
+					.Where(x => x.Priority != -1)
+					.OrderBy(x => x.Priority)
+					.Select(x => x.Adapter);
+			}
+		}
 
 		protected override bool OnAdding(IMessageAdapter item)
 		{
