@@ -73,6 +73,25 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 		if (Disabled)
 			return;
 
+		if (State == ChannelStates.Started || State == ChannelStates.Starting)
+			return;
+
+		// Close previous task if exists
+		if (_processingTask != null)
+		{
+			_cancellationTokenSource?.Cancel();
+
+			try
+			{
+				_processingTask.Wait(TimeSpan.FromSeconds(1));
+			}
+			catch (AggregateException)
+			{
+			}
+
+			_cancellationTokenSource?.Dispose();
+		}
+
 		State = ChannelStates.Starting;
 		_queue.Open();
 
@@ -88,6 +107,24 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 		{
 			await foreach (var message in _queue.ReadAllAsync(cancellationToken).NoWait())
 			{
+				var state = State;
+
+				if (state != ChannelStates.Started)
+				{
+					// Wait while suspended
+					while (state == ChannelStates.Suspended || state == ChannelStates.Suspending)
+					{
+						if (cancellationToken.IsCancellationRequested)
+							return;
+
+						await Task.Delay(10, cancellationToken);
+						state = State;
+					}
+
+					if (state == ChannelStates.Stopping || state == ChannelStates.Stopped)
+						break;
+				}
+
 				try
 				{
 					await (NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default);
@@ -112,11 +149,13 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 	/// <inheritdoc />
 	public void Close()
 	{
+		if (State == ChannelStates.Stopped || State == ChannelStates.Stopping)
+			return;
+
 		State = ChannelStates.Stopping;
 
 		_cancellationTokenSource?.Cancel();
 		_queue.Close();
-		_queue.Clear();
 
 		try
 		{
@@ -127,8 +166,12 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 			// Ignore cancellation exceptions
 		}
 
+		// Clear queue only after processing task has stopped
+		_queue.Clear();
+
 		_cancellationTokenSource?.Dispose();
 		_cancellationTokenSource = null;
+		_processingTask = null;
 	}
 
 	void IMessageChannel.Suspend()
