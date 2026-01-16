@@ -196,6 +196,7 @@ message InstrumentsRequest {
 message FilterOptionsRequest {
   optional string basic_asset_uid = 1; //Идентификатор базового актива опциона.  Обязательный параметр.
   optional string basic_asset_position_uid = 2; //Идентификатор позиции базового актива опциона.
+  optional string basic_instrument_id = 3; //Идентификатор базового инструмента, принимает значение принимает значения figi, instrument_uid или ticker+"_"+classCode.
 }
 
 //Информация об облигации.
@@ -546,6 +547,8 @@ message Currency {
   string position_uid = 29; //Уникальный идентификатор позиции инструмента.
 
   repeated string required_tests = 30; //Тесты, которые необходимо пройти клиенту, чтобы совершать сделки по инструменту.
+
+  string asset_uid = 31; //Уникальный идентификатор актива.
 
   bool for_iis_flag = 41; //Признак доступности для ИИС.
   bool for_qual_investor_flag = 52; //Флаг, отображающий доступность торговли инструментом только для квалифицированных инвесторов.

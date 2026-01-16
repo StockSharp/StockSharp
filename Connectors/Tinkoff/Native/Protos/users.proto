@@ -39,6 +39,10 @@ service UsersService { /*С помощью сервиса можно получ�
   //CurrencyTransfer — перевод денежных средств между счетами
   //Перевести денежные средства между брокерскими счетами
   rpc CurrencyTransfer(CurrencyTransferRequest) returns (CurrencyTransferResponse);
+
+  //PayIn — пополнение брокерского счета
+  //Пополнить брокерский счёт с банковского
+  rpc PayIn(PayInRequest) returns (PayInResponse);
 }
 
 //Запрос получения счетов пользователя.
@@ -198,5 +202,15 @@ message CurrencyTransferRequest {
 }
 
 message CurrencyTransferResponse {
+
+}
+
+message PayInRequest {
+  string from_account_id = 1 [(google.api.field_behavior) = REQUIRED]; // Номер счета списания.
+  string to_account_id = 2 [(google.api.field_behavior) = REQUIRED]; // Номер брокерского счета зачисления.
+  MoneyValue amount = 3 [(google.api.field_behavior) = REQUIRED]; // Сумма перевода с указанием валюты.
+}
+
+message PayInResponse {
 
 }

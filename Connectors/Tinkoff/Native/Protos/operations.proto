@@ -46,6 +46,9 @@ service OperationsStreamService {
 
   //PositionsStream — стрим обновлений информации по изменению позиций портфеля
   rpc PositionsStream(PositionsStreamRequest) returns (stream PositionsStreamResponse);
+
+  //OperationsStream — стрим обновлений операций
+  rpc OperationsStream(OperationsStreamRequest) returns (stream OperationsStreamResponse);
 }
 
 //Запрос получения списка операций по счету.
@@ -363,6 +366,10 @@ enum OperationType {
   OPERATION_TYPE_OVER_INCOME	= 63;		//  Доход от оверанайта.
   OPERATION_TYPE_OPTION_EXPIRATION = 64;	// Экспирация опциона.
   OPERATION_TYPE_FUTURE_EXPIRATION = 65;	// Экспирация фьючерса.
+  OPERATION_TYPE_OTHER_FEE = 66;  //  Прочие комиссии;
+  OPERATION_TYPE_OTHER = 67; //  Операция по счету;
+  OPERATION_TYPE_DFA_REDEMPTION = 68; // погашение ЦФА-токена;
+  OPERATION_TYPE_PRIMARY_ORDER =69; //  отмена заявки на первичное размещение по ЦФА;
 }
 
 message GetDividendsForeignIssuerRequest {
@@ -584,4 +591,54 @@ message PositionsMoney {
 message ChildOperationItem {
   string instrument_uid = 1; //Уникальный идентификатор инструмента.
   MoneyValue payment = 2; //Сумма операции.
+}
+
+//Запрос установки stream-соединения операций.
+message OperationsStreamRequest {
+  repeated string accounts = 1; //Массив идентификаторов счетов пользователя.
+  PingDelaySettings ping_settings = 15; //Запрос настройки пинга.
+}
+
+//Информация по операциям.
+message OperationsStreamResponse {
+  oneof payload {
+    OperationsSubscriptionResult subscriptions = 1; //Объект результата подписки.
+    OperationData operation = 2; //Объект стриминга операций.
+    Ping ping = 3; //Проверка активности стрима.
+  }
+}
+
+//Объект результата подписки.
+message OperationsSubscriptionResult {
+  repeated string accounts = 1; //Массив счетов клиента.
+  OperationsAccountSubscriptionStatus subscription_status = 2; //Результат подписки.
+  string tracking_id = 7; //Уникальный идентификатор запроса, подробнее: [tracking_id](/invest/intro/developer/protocols/grpc#tracking-id).
+  string stream_id = 8; //Идентификатор открытого соединения
+}
+
+//Результат подписки.
+enum OperationsAccountSubscriptionStatus {
+  OPERATIONS_SUBSCRIPTION_STATUS_UNSPECIFIED = 0; //Тип не определен.
+  OPERATIONS_SUBSCRIPTION_STATUS_SUCCESS = 1; //Успешно.
+  OPERATIONS_SUBSCRIPTION_STATUS_ACCOUNT_NOT_FOUND = 2; //Счет не найден или недостаточно прав.
+  OPERATIONS_SUBSCRIPTION_STATUS_INTERNAL_ERROR = 3; //Произошла ошибка.
+}
+
+//Данные об операции.
+message OperationData {
+  string broker_account_id = 1; //Идентификатор счета.
+  string id = 2; //Номер поручения.
+  string parent_operation_id = 3; //Номер родительского поручения.
+  string name = 4; //Название инструмента.
+  google.protobuf.Timestamp date = 5; //Дата.
+  OperationType type = 6; //Тип операции.
+  OperationState state = 7; //Статус поручения.
+  string instrument_uid = 8; //Уникальный идентификатор инструмента.
+  string figi = 9; //FIGI-идентификатор инструмента.
+  string instrument_type = 10; //Тип инструмента.
+  InstrumentType instrument_kind = 11; //Тип инструмента.
+  string position_uid = 12; //Идентификатор позиции.
+  string ticker = 13; //Тикер инструмента.
+  string class_code = 14; //Класс-код (секция торгов).
+  MoneyValue payment = 15; //Сумма операции.
 }

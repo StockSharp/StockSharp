@@ -330,6 +330,7 @@ message OrderStateStreamResponse {
     TimeInForceType time_in_force = 11; //Алгоритм исполнения поручения.
     OrderType order_type = 12; //Тип заявки.
     string account_id = 13; //Номер счета.
+    string trade_order_id = 14 [(google.api.field_behavior) = REQUIRED]; //Идентификатор торгового поручения.
     MoneyValue initial_order_price = 22; //Начальная цена заявки.
     MoneyValue order_price = 23; //Цена выставления заявки.
     optional MoneyValue amount = 24; //Предрассчитанная стоимость полной заявки.
