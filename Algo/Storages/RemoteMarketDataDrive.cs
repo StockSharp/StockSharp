@@ -22,10 +22,6 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 			if (dataType == null)
 				throw new ArgumentNullException(nameof(dataType));
 
-			// TODO
-			//if (drive == null)
-			//	throw new ArgumentNullException(nameof(drive));
-
 			_parent = parent ?? throw new ArgumentNullException(nameof(parent));
 			_securityId = securityId;
 			_dataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
@@ -41,8 +37,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		{
 			if (_prevDatesSync == default || (DateTime.UtcNow - _prevDatesSync).TotalSeconds > 3)
 			{
-				var client = _parent.EnsureGetClient();
-				_dates = await client.GetDatesAsync(_securityId, _dataType, _format, cancellationToken);
+				_dates = await _parent.Client.GetDatesAsync(_securityId, _dataType, _format, cancellationToken);
 
 				_prevDatesSync = DateTime.UtcNow;
 			}
@@ -57,29 +52,16 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		}
 
 		ValueTask IMarketDataStorageDrive.DeleteAsync(DateTime date, CancellationToken cancellationToken)
-		{
-			var client = _parent.EnsureGetClient();
-			return client.DeleteAsync(_securityId, _dataType, _format, date, cancellationToken);
-		}
+			=> _parent.Client.DeleteAsync(_securityId, _dataType, _format, date, cancellationToken);
 
 		ValueTask IMarketDataStorageDrive.SaveStreamAsync(DateTime date, Stream stream, CancellationToken cancellationToken)
-		{
-			var client = _parent.EnsureGetClient();
-			return client.SaveStreamAsync(_securityId, _dataType, _format, date, stream, cancellationToken);
-		}
+			=> _parent.Client.SaveStreamAsync(_securityId, _dataType, _format, date, stream, cancellationToken);
 
 		ValueTask<Stream> IMarketDataStorageDrive.LoadStreamAsync(DateTime date, bool readOnly, CancellationToken cancellationToken)
-		{
-			var client = _parent.EnsureGetClient();
-			return client.LoadStreamAsync(_securityId, _dataType, _format, date, cancellationToken);
-		}
+			=> _parent.Client.LoadStreamAsync(_securityId, _dataType, _format, date, cancellationToken);
 	}
 
 	private readonly SynchronizedDictionary<(SecurityId, DataType, StorageFormats), RemoteStorageDrive> _remoteStorages = [];
-	private readonly Func<IMessageAdapter> _createAdapter;
-	
-	private readonly Lock _clientSync = new();
-	private RemoteStorageClient _client;
 
 	/// <summary>
 	/// Default value for <see cref="Address"/>.
@@ -90,6 +72,8 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	/// Default value for <see cref="TargetCompId"/>.
 	/// </summary>
 	public static readonly string DefaultTargetCompId = "StockSharpHydraMD";
+
+	private readonly IMessageAdapter _adapter;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RemoteMarketDataDrive"/>.
@@ -104,7 +88,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	/// </summary>
 	/// <param name="address">Server address.</param>
 	public RemoteMarketDataDrive(EndPoint address)
-		: this(address, () => ServicesRegistry.AdapterProvider.CreateTransportAdapter(new IncrementalIdGenerator()))
+		: this(address, ServicesRegistry.AdapterProvider.CreateTransportAdapter(new IncrementalIdGenerator()))
 	{
 	}
 
@@ -114,34 +98,21 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	/// <param name="address">Server address.</param>
 	/// <param name="adapter">Message adapter.</param>
 	public RemoteMarketDataDrive(EndPoint address, IMessageAdapter adapter)
-		: this(address, adapter.TypedClone)
 	{
-		if (adapter is null)
-			throw new ArgumentNullException(nameof(adapter));
-	}
-
-	private RemoteMarketDataDrive(EndPoint address, Func<IMessageAdapter> createAdapter)
-	{
-		Address = address;
-		_createAdapter = createAdapter ?? throw new ArgumentNullException(nameof(createAdapter));
-	}
-
-	private void ResetClient()
-	{
-		using (_clientSync.EnterScope())
-		{
-			_client?.Dispose();
-			_client = null;
-		}
+		_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
+		Address = address ?? throw new ArgumentNullException(nameof(address));
 	}
 
 	/// <inheritdoc />
 	protected override void DisposeManaged()
 	{
-		ResetClient();
+		Client?.Dispose();
 
 		base.DisposeManaged();
 	}
+
+	private RemoteStorageClient _client;
+	private RemoteStorageClient Client => _client ??= CreateClient();
 
 	/// <summary>
 	/// Information about the login and password for access to remote storage.
@@ -235,9 +206,10 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 
 	private RemoteStorageClient CreateClient()
 	{
-		var adapter = _createAdapter();
+		var adapter = _adapter;
 
-		((IAddressAdapter<EndPoint>)adapter).Address = Address;
+		if (adapter is IAddressAdapter<EndPoint> addressAdapter)
+			addressAdapter.Address = Address;
 
 		var login = Credentials.Email.IsEmpty("stocksharp");
 
@@ -263,22 +235,13 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		return new(adapter, SecurityBatchSize);
 	}
 
-	private RemoteStorageClient EnsureGetClient()
-	{
-		using (_clientSync.EnterScope())
-		{
-			_client ??= CreateClient();
-			return _client;
-		}
-	}
-
 	/// <inheritdoc />
 	public override IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync()
-		=> EnsureGetClient().GetAvailableSecuritiesAsync();
+		=> Client.GetAvailableSecuritiesAsync();
 
 	/// <inheritdoc />
 	public override ValueTask<IEnumerable<DataType>> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format, CancellationToken cancellationToken)
-		=> EnsureGetClient().GetAvailableDataTypesAsync(securityId, format, cancellationToken);
+		=> Client.GetAvailableDataTypesAsync(securityId, format, cancellationToken);
 
 	/// <inheritdoc />
 	public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format)
@@ -292,11 +255,11 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 
 	/// <inheritdoc />
 	public override ValueTask VerifyAsync(CancellationToken cancellationToken)
-		=> CreateClient().VerifyAsync(cancellationToken);
+		=> Client.VerifyAsync(cancellationToken);
 
 	/// <inheritdoc />
 	public override IAsyncEnumerable<SecurityMessage> LookupSecuritiesAsync(SecurityLookupMessage criteria, ISecurityProvider securityProvider)
-		=> EnsureGetClient().LookupSecuritiesAsync(criteria, securityProvider);
+		=> Client.LookupSecuritiesAsync(criteria, securityProvider);
 
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)
@@ -309,8 +272,6 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		SecurityBatchSize = storage.GetValue(nameof(SecurityBatchSize), SecurityBatchSize);
 		Timeout = storage.GetValue(nameof(Timeout), Timeout);
 		IsBinaryEnabled = storage.GetValue(nameof(IsBinaryEnabled), IsBinaryEnabled);
-
-		ResetClient();
 	}
 
 	/// <inheritdoc />
