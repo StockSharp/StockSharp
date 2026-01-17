@@ -160,16 +160,14 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_ConnectAsync()
 	{
-		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-
 		var connector = new Connector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
-		await connector.ConnectAsync(cts.Token);
+		await connector.ConnectAsync(CancellationToken);
 		AreEqual(ConnectionStates.Connected, connector.ConnectionState);
 
-		await connector.DisconnectAsync(cts.Token);
+		await connector.DisconnectAsync(CancellationToken);
 		AreEqual(ConnectionStates.Disconnected, connector.ConnectionState);
 	}
 
@@ -177,23 +175,18 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Adapter_ConnectAsync()
 	{
-		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-
 		var adapter = new MockAdapter(new IncrementalIdGenerator());
 
-		await adapter.ConnectAsync(cts.Token);
+		await adapter.ConnectAsync(CancellationToken);
 	}
 
 	[TestMethod]
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Adapter_Subscription_Live_SyncAdapter()
 	{
-		var token = CancellationToken;
-		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-
 		var adapter = new MockAdapter(new IncrementalIdGenerator());
 
-		await adapter.ConnectAsync(cts.Token);
+		await adapter.ConnectAsync(CancellationToken);
 
 		var subMsg = new MarketDataMessage
 		{
@@ -217,10 +210,10 @@ public class AsyncExtensionsTests : BaseTestClass
 					break;
 				}
 			}
-		}, token);
+		}, CancellationToken);
 
 		// Give time for enumeration to start
-		await Task.Delay(200, cts.Token);
+		await Task.Delay(200, CancellationToken);
 
 		var id = subMsg.TransactionId;
 
@@ -230,23 +223,20 @@ public class AsyncExtensionsTests : BaseTestClass
 			adapter.SimulateData(id, l1);
 		}
 
-		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
+		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(3, got);
 
 		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
-			await Task.Delay(10, cts.Token);
+			await Task.Delay(10, CancellationToken);
 	}
 
 	[TestMethod]
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Adapter_Subscription_History_SyncAdapter()
 	{
-		var token = CancellationToken;
-		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-
 		var adapter = new MockAdapter(new IncrementalIdGenerator());
-		await adapter.ConnectAsync(cts.Token);
+		await adapter.ConnectAsync(CancellationToken);
 
 		var subMsg = new MarketDataMessage
 		{
@@ -268,10 +258,10 @@ public class AsyncExtensionsTests : BaseTestClass
 				if (got.Count >= 2)
 					break;
 			}
-		}, token);
+		}, CancellationToken);
 
 		// wait activation
-		await Task.Delay(100, cts.Token);
+		await Task.Delay(100, CancellationToken);
 
 		var id = subMsg.TransactionId;
 
@@ -282,7 +272,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}
 
 		adapter.FinishHistoricalSubscription(id);
-		await run.WithTimeout(TimeSpan.FromSeconds(5));
+		await run.WithCancellation(CancellationToken);
 
 		HasCount(2, got);
 	}
@@ -291,20 +281,18 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Live_SyncAdapter()
 	{
-		var token = CancellationToken;
-		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 		var connector = new Connector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
-		await connector.ConnectAsync(cts.Token);
+		await connector.ConnectAsync(CancellationToken);
 
 		var sub = new Subscription(DataType.Level1);
 
 		var got = new List<Level1ChangeMessage>();
 		using var enumCts = new CancellationTokenSource();
 
-		var started = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
 		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
 
 		var enumerating = Task.Run(async () =>
@@ -318,13 +306,13 @@ public class AsyncExtensionsTests : BaseTestClass
 					break;
 				}
 			}
-		}, token);
+		}, CancellationToken);
 
 		// Wait until subscription is started (online message received)
-		await started.Task.WithTimeout(TimeSpan.FromSeconds(3));
+		await started.Task.WithCancellation(CancellationToken);
 
 		// Give time for enumeration to start
-		await Task.Delay(200, cts.Token);
+		await Task.Delay(200, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
@@ -334,25 +322,23 @@ public class AsyncExtensionsTests : BaseTestClass
 			adapter.SimulateData(id, l1);
 		}
 
-		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
+		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(3, got);
 
 		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
-			await Task.Delay(10, cts.Token);
+			await Task.Delay(10, CancellationToken);
 	}
 
 	[TestMethod]
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_History_SyncAdapter()
 	{
-		var token = CancellationToken;
-		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 		var connector = new Connector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
-		await connector.ConnectAsync(cts.Token);
+		await connector.ConnectAsync(CancellationToken);
 
 		var sub = new Subscription(DataType.Level1)
 		{
@@ -364,21 +350,21 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub, cts.Token))
+			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub, CancellationToken))
 			{
 				got.Add(l1);
 			}
-		}, token);
+		}, CancellationToken);
 
 		// Wait for subscription to be processed
 		await Task.Run(async () =>
 		{
 			while (adapter.ActiveSubscriptions.Count == 0)
-				await Task.Delay(10, cts.Token);
-		}, cts.Token);
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
 
 		// Give time for subscription to fully activate
-		await Task.Delay(100, cts.Token);
+		await Task.Delay(100, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
@@ -391,7 +377,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Finish historical subscription after sending all data
 		adapter.FinishHistoricalSubscription(id);
 
-		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
+		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(2, got);
 	}
@@ -400,20 +386,18 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Live_AsyncAdapter()
 	{
-		var token = CancellationToken;
-		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 		var connector = new Connector();
 		var adapter = new MockAsyncAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
-		await connector.ConnectAsync(cts.Token);
+		await connector.ConnectAsync(CancellationToken);
 
 		var sub = new Subscription(DataType.Level1);
 
 		var got = new List<Level1ChangeMessage>();
 		using var enumCts = new CancellationTokenSource();
 
-		var started = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
 		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
 
 		var enumerating = Task.Run(async () =>
@@ -427,13 +411,13 @@ public class AsyncExtensionsTests : BaseTestClass
 					break;
 				}
 			}
-		}, token);
+		}, CancellationToken);
 
 		// Wait until subscription is started (online message received)
-		await started.Task.WithTimeout(TimeSpan.FromSeconds(3));
+		await started.Task.WithCancellation(CancellationToken);
 
 		// Give time for enumeration to start
-		await Task.Delay(200, cts.Token);
+		await Task.Delay(200, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
@@ -443,7 +427,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			adapter.SimulateData(id, l1);
 		}
 
-		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
+		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(3, got);
 	}
@@ -452,13 +436,11 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_History_AsyncAdapter()
 	{
-		var token = CancellationToken;
-		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 		var connector = new Connector();
 		var adapter = new MockAsyncAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
-		await connector.ConnectAsync(cts.Token);
+		await connector.ConnectAsync(CancellationToken);
 
 		var sub = new Subscription(DataType.Level1)
 		{
@@ -480,17 +462,17 @@ public class AsyncExtensionsTests : BaseTestClass
 					break;
 				}
 			}
-		}, token);
+		}, CancellationToken);
 
 		// Wait for subscription to be processed
 		await Task.Run(async () =>
 		{
 			while (adapter.ActiveSubscriptions.Count == 0)
-				await Task.Delay(10, cts.Token);
-		}, cts.Token);
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
 
 		// Give time for subscription to fully activate
-		await Task.Delay(100, cts.Token);
+		await Task.Delay(100, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
@@ -503,7 +485,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Finish historical subscription after sending all data
 		adapter.FinishHistoricalSubscription(id);
 
-		await enumerating.WithTimeout(TimeSpan.FromSeconds(5));
+		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(2, got);
 	}
@@ -512,29 +494,28 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Lifecycle()
 	{
-		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 		var connector = new Connector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
-		await connector.ConnectAsync(cts.Token);
+		await connector.ConnectAsync(CancellationToken);
 
 		var sub = new Subscription(DataType.Level1);
 
-		var started = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
 		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
 
 		using var runCts = new CancellationTokenSource();
 		var run = connector.SubscribeAsync(sub, runCts.Token).AsTask();
 
-		await started.Task.WithTimeout(TimeSpan.FromSeconds(3));
+		await started.Task.WithCancellation(CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 		AreNotEqual(0L, id);
 
 		// cancel -> triggers UnSubscribe and completes after stop
 		runCts.Cancel();
-		await run.WithTimeout(TimeSpan.FromSeconds(3));
+		await run.WithCancellation(CancellationToken);
 
 		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
 	}
@@ -563,23 +544,27 @@ public class AsyncExtensionsTests : BaseTestClass
 			To = null, // live subscription
 		};
 
-		using var cts = new CancellationTokenSource();
+		using var subCts = new CancellationTokenSource();
 
 		// Act: start subscription
-		var subscribeTask = adapter.SubscribeAsync(subscription, cts.Token).AsTask();
+		var subscribeTask = adapter.SubscribeAsync(subscription, subCts.Token).AsTask();
 
 		// Wait for subscription to be established
-		await adapter.WaitForSubscriptionStarted(TimeSpan.FromSeconds(2));
+		await adapter.WaitForSubscriptionStarted(CancellationToken);
 
 		// Cancel the subscription
-		cts.Cancel();
+		subCts.Cancel();
 
-		// Assert: method should complete within reasonable time, not hang
-		var completedTask = await Task.WhenAny(subscribeTask, Task.Delay(TimeSpan.FromSeconds(2), CancellationToken));
+		// Assert: method should complete within 2 seconds, not hang
+		var (cts, token) = CancellationToken.CreateChildToken(TimeSpan.FromSeconds(2));
+		using (cts)
+		{
+			var completedTask = await Task.WhenAny(subscribeTask, Task.Delay(Timeout.Infinite, token));
 
-		// If this fails, the method is hanging (bug exists)
-		(completedTask == subscribeTask).AssertTrue(
-			"SubscribeAsync should not hang when cancelled, even if adapter doesn't send SubscriptionFinishedMessage");
+			// If this fails, the method is hanging (bug exists)
+			(completedTask == subscribeTask).AssertTrue(
+				"SubscribeAsync should not hang when cancelled, even if adapter doesn't send SubscriptionFinishedMessage");
+		}
 	}
 
 	/// <summary>
@@ -605,14 +590,18 @@ public class AsyncExtensionsTests : BaseTestClass
 		var subscribeTask = adapter.SubscribeAsync(subscription, CancellationToken).AsTask();
 
 		// Wait for subscription to be established
-		await adapter.WaitForSubscriptionStarted(TimeSpan.FromSeconds(2));
+		await adapter.WaitForSubscriptionStarted(CancellationToken);
 
 		// Send finished message
 		adapter.SendSubscriptionFinished(subscription.TransactionId);
 
-		// Assert: should complete
-		var completedTask = await Task.WhenAny(subscribeTask, Task.Delay(TimeSpan.FromSeconds(2), CancellationToken));
-		(completedTask == subscribeTask).AssertTrue("SubscribeAsync should complete when SubscriptionFinishedMessage is received");
+		// Assert: should complete within 2 seconds
+		var (cts, token) = CancellationToken.CreateChildToken(TimeSpan.FromSeconds(2));
+		using (cts)
+		{
+			var completedTask = await Task.WhenAny(subscribeTask, Task.Delay(Timeout.Infinite, token));
+			(completedTask == subscribeTask).AssertTrue("SubscribeAsync should complete when SubscriptionFinishedMessage is received");
+		}
 	}
 
 	/// <summary>
@@ -674,7 +663,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			}
 		}, CancellationToken);
 
-		await adapter.WaitForSubscriptionStarted(TimeSpan.FromSeconds(2));
+		await adapter.WaitForSubscriptionStarted(CancellationToken);
 
 		// Send some data
 		adapter.SendLevel1Data(subscription.TransactionId);
@@ -684,9 +673,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Cancel
 		cts.Cancel();
 
-		// Assert: enumeration should complete
-		var completedTask = await Task.WhenAny(enumerateTask, Task.Delay(TimeSpan.FromSeconds(2), CancellationToken));
-		(completedTask == enumerateTask).AssertTrue("SubscribeAsync<T> should complete on cancellation");
+		// Assert: enumeration should complete within 2 seconds
+		var (childCts, childToken) = CancellationToken.CreateChildToken(TimeSpan.FromSeconds(2));
+		using (childCts)
+		{
+			var completedTask = await Task.WhenAny(enumerateTask, Task.Delay(Timeout.Infinite, childToken));
+			(completedTask == enumerateTask).AssertTrue("SubscribeAsync<T> should complete on cancellation");
+		}
 
 		items.Count.AssertGreater(0);
 	}
@@ -720,7 +713,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			}
 		}, CancellationToken);
 
-		await adapter.WaitForSubscriptionStarted(TimeSpan.FromSeconds(2));
+		await adapter.WaitForSubscriptionStarted(CancellationToken);
 
 		// Send data
 		for (int i = 0; i < 5; i++)
@@ -731,7 +724,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Finish
 		adapter.SendSubscriptionFinished(subscription.TransactionId);
 
-		await enumerateTask.WithTimeout(TimeSpan.FromSeconds(2));
+		await enumerateTask.WithCancellation(CancellationToken);
 
 		// Assert
 		items.Count.AssertEqual(5);
@@ -747,12 +740,12 @@ public class AsyncExtensionsTests : BaseTestClass
 	/// </summary>
 	private class NoFinishedMessageAdapter : MessageAdapter
 	{
-		private readonly TaskCompletionSource<bool> _subscriptionStarted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+		private readonly TaskCompletionSource<bool> _subscriptionStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
 
 		public NoFinishedMessageAdapter() : base(new IncrementalIdGenerator()) { }
 
-		public Task WaitForSubscriptionStarted(TimeSpan timeout)
-			=> _subscriptionStarted.Task.WithTimeout(timeout);
+		public Task WaitForSubscriptionStarted(CancellationToken cancellationToken)
+			=> _subscriptionStarted.Task.WithCancellation(cancellationToken);
 
 		public void SendLevel1Data(long subscriptionId, decimal price = 100m)
 		{
@@ -791,12 +784,12 @@ public class AsyncExtensionsTests : BaseTestClass
 	/// </summary>
 	private class ControlledTestAdapter : MessageAdapter
 	{
-		private readonly TaskCompletionSource<bool> _subscriptionStarted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+		private readonly TaskCompletionSource<bool> _subscriptionStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
 
 		public ControlledTestAdapter() : base(new IncrementalIdGenerator()) { }
 
-		public Task WaitForSubscriptionStarted(TimeSpan timeout)
-			=> _subscriptionStarted.Task.WithTimeout(timeout);
+		public Task WaitForSubscriptionStarted(CancellationToken cancellationToken)
+			=> _subscriptionStarted.Task.WithCancellation(cancellationToken);
 
 		public void SendSubscriptionFinished(long subscriptionId)
 		{
@@ -845,33 +838,4 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	#endregion
-}
-
-static class TestTaskExtensions
-{
-	public static async Task WithTimeout(this Task task, TimeSpan timeout)
-	{
-		using var cts = new CancellationTokenSource(timeout);
-		var delay = Task.Delay(Timeout.Infinite, cts.Token);
-		
-		var completed = await Task.WhenAny(task, delay).NoWait();
-		
-		if (completed == delay)
-			throw new TimeoutException("Task did not complete in time.");
-
-		await task.NoWait();
-	}
-
-	public static async Task<T> WithTimeout<T>(this Task<T> task, TimeSpan timeout)
-	{
-		using var cts = new CancellationTokenSource(timeout);
-		var delay = Task.Delay(Timeout.Infinite, cts.Token);
-
-		var completed = await Task.WhenAny(task, delay).NoWait();
-
-		if (completed == delay)
-			throw new TimeoutException("Task did not complete in time.");
-
-		return await task.NoWait();
-	}
 }

@@ -81,7 +81,7 @@ public class MessageChannelTests : BaseTestClass
 	public async Task SendInMessageAsync_WhenClosed_DropsMessage(ChannelType channelType)
 	{
 		using var channel = CreateChannel(channelType);
-		var processed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var processed = AsyncHelper.CreateTaskCompletionSource<bool>();
 
 		channel.NewOutMessageAsync += (msg, ct) =>
 		{
@@ -102,7 +102,7 @@ public class MessageChannelTests : BaseTestClass
 	public async Task SendInMessageAsync_WhenOpen_ProcessesMessage(ChannelType channelType)
 	{
 		using var channel = CreateChannel(channelType);
-		var processed = new TaskCompletionSource<Message>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var processed = AsyncHelper.CreateTaskCompletionSource<Message>();
 
 		channel.NewOutMessageAsync += (msg, ct) =>
 		{
@@ -122,14 +122,14 @@ public class MessageChannelTests : BaseTestClass
 		{
 			var message = new ConnectMessage();
 			await channel.SendInMessageAsync(message, CancellationToken);
-			var result = await processed.Task.WithTimeout(TimeSpan.FromSeconds(2));
+			var result = await processed.Task.WithCancellation(CancellationToken);
 			result.AssertEqual(message);
 		}
 		else
 		{
 			var message = CreateTimeMessage(DateTime.UtcNow);
 			await channel.SendInMessageAsync(message, CancellationToken);
-			var result = await processed.Task.WithTimeout(TimeSpan.FromSeconds(2));
+			var result = await processed.Task.WithCancellation(CancellationToken);
 			result.AssertEqual(message);
 		}
 	}
@@ -144,8 +144,8 @@ public class MessageChannelTests : BaseTestClass
 	public async Task Suspend_PausesProcessing(ChannelType channelType)
 	{
 		using var channel = CreateChannel(channelType);
-		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-		var messageProcessed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var messageProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
 
 		channel.NewOutMessageAsync += (msg, ct) =>
 		{
@@ -158,7 +158,7 @@ public class MessageChannelTests : BaseTestClass
 
 		channel.Open();
 		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
-		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+		await connected.Task.WithCancellation(CancellationToken);
 
 		channel.Suspend();
 		channel.State.AssertEqual(ChannelStates.Suspended);
@@ -168,7 +168,7 @@ public class MessageChannelTests : BaseTestClass
 		messageProcessed.Task.IsCompleted.AssertFalse();
 
 		channel.Resume();
-		await messageProcessed.Task.WithTimeout(TimeSpan.FromSeconds(2));
+		await messageProcessed.Task.WithCancellation(CancellationToken);
 	}
 
 	[TestMethod]
@@ -209,9 +209,9 @@ public class MessageChannelTests : BaseTestClass
 	{
 		using var channel = CreateChannel(channelType);
 		var processedCount = 0;
-		var gate = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-		var firstNonConnectProcessed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var gate = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var firstNonConnectProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
 
 		channel.NewOutMessageAsync += async (msg, ct) =>
 		{
@@ -234,7 +234,7 @@ public class MessageChannelTests : BaseTestClass
 		if (channelType == ChannelType.Async)
 		{
 			await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
-			await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+			await connected.Task.WithCancellation(CancellationToken);
 		}
 
 		// Send multiple messages
@@ -245,7 +245,7 @@ public class MessageChannelTests : BaseTestClass
 		}
 
 		// Wait for first to start processing
-		await firstNonConnectProcessed.Task.WithTimeout(TimeSpan.FromSeconds(2));
+		await firstNonConnectProcessed.Task.WithCancellation(CancellationToken);
 
 		// Clear pending messages
 		channel.Clear();
@@ -269,9 +269,9 @@ public class MessageChannelTests : BaseTestClass
 	[DataRow(ChannelType.Async)]
 	public async Task ErrorInHandler_DoesNotStopChannel(ChannelType channelType)
 	{
-		var errorCaught = new TaskCompletionSource<Exception>(TaskCreationOptions.RunContinuationsAsynchronously);
-		var secondMessageProcessed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var errorCaught = AsyncHelper.CreateTaskCompletionSource<Exception>();
+		var secondMessageProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
 		var messageCount = 0;
 
 		IMessageChannel channel;
@@ -316,14 +316,14 @@ public class MessageChannelTests : BaseTestClass
 		if (channelType == ChannelType.Async)
 		{
 			await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
-			await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+			await connected.Task.WithCancellation(CancellationToken);
 		}
 
 		await channel.SendInMessageAsync(CreateTimeMessage(DateTime.UtcNow), CancellationToken);
 		await channel.SendInMessageAsync(CreateTimeMessage(DateTime.UtcNow.AddSeconds(1)), CancellationToken);
 
 		// Second message should still be processed after error in first
-		await secondMessageProcessed.Task.WithTimeout(TimeSpan.FromSeconds(5));
+		await secondMessageProcessed.Task.WithCancellation(CancellationToken);
 
 		channel.State.AssertEqual(ChannelStates.Started);
 	}
@@ -358,8 +358,8 @@ public class MessageChannelTests : BaseTestClass
 	{
 		using var channel = CreateChannel(channelType);
 		var processedMessages = new System.Collections.Concurrent.ConcurrentBag<Message>();
-		var allProcessed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var allProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
 		const int messageCount = 50;
 
 		channel.NewOutMessageAsync += (msg, ct) =>
@@ -382,7 +382,7 @@ public class MessageChannelTests : BaseTestClass
 		if (channelType == ChannelType.Async)
 		{
 			await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
-			await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+			await connected.Task.WithCancellation(CancellationToken);
 		}
 
 		// Send messages concurrently
@@ -391,7 +391,7 @@ public class MessageChannelTests : BaseTestClass
 			.Select(i => channel.SendInMessageAsync(CreateTimeMessage(baseTime.AddMilliseconds(i)), CancellationToken).AsTask());
 		await Task.WhenAll(tasks);
 
-		await allProcessed.Task.WithTimeout(TimeSpan.FromSeconds(10));
+		await allProcessed.Task.WithCancellation(CancellationToken);
 
 		processedMessages.Count.AssertEqual(messageCount);
 	}
@@ -425,7 +425,7 @@ public class MessageChannelTests : BaseTestClass
 		using var channel = CreateChannel(channelType);
 
 		var connectCount = 0;
-		var connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
 
 		channel.NewOutMessageAsync += (message, token) =>
 		{
@@ -440,7 +440,7 @@ public class MessageChannelTests : BaseTestClass
 		// First open
 		channel.Open();
 		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
-		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+		await connected.Task.WithCancellation(CancellationToken);
 		connectCount.AssertEqual(1);
 
 		// Close
@@ -448,10 +448,10 @@ public class MessageChannelTests : BaseTestClass
 		channel.State.AssertEqual(ChannelStates.Stopped);
 
 		// Reopen
-		connected = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		connected = AsyncHelper.CreateTaskCompletionSource<bool>();
 		channel.Open();
 		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
-		await connected.Task.WithTimeout(TimeSpan.FromSeconds(2));
+		await connected.Task.WithCancellation(CancellationToken);
 		connectCount.AssertEqual(2);
 	}
 
@@ -501,7 +501,7 @@ public class MessageChannelTests : BaseTestClass
 	{
 		using var channel = CreateInMemoryChannel(new MessageByLocalTimeQueue());
 		var processedMessages = new List<Message>();
-		var allProcessed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var allProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
 
 		channel.NewOutMessageAsync += (msg, ct) =>
 		{
@@ -526,7 +526,7 @@ public class MessageChannelTests : BaseTestClass
 		await channel.SendInMessageAsync(msg2, CancellationToken);
 		await channel.SendInMessageAsync(msg3, CancellationToken);
 
-		await allProcessed.Task.WithTimeout(TimeSpan.FromSeconds(5));
+		await allProcessed.Task.WithCancellation(CancellationToken);
 
 		// Should be processed in LocalTime order
 		processedMessages[0].AssertEqual(msg2); // Earliest
@@ -539,7 +539,7 @@ public class MessageChannelTests : BaseTestClass
 	{
 		using var channel = CreateInMemoryChannel(new MessageByOrderQueue());
 		var processedMessages = new List<Message>();
-		var allProcessed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var allProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
 
 		channel.NewOutMessageAsync += (msg, ct) =>
 		{
@@ -563,7 +563,7 @@ public class MessageChannelTests : BaseTestClass
 		await channel.SendInMessageAsync(msg2, CancellationToken);
 		await channel.SendInMessageAsync(msg3, CancellationToken);
 
-		await allProcessed.Task.WithTimeout(TimeSpan.FromSeconds(5));
+		await allProcessed.Task.WithCancellation(CancellationToken);
 
 		// Should be processed in FIFO order (send order)
 		processedMessages[0].AssertEqual(msg1);
@@ -576,7 +576,7 @@ public class MessageChannelTests : BaseTestClass
 	{
 		using var channel = CreateInMemoryChannel(new MessageByLocalTimeQueue());
 		var processedMessages = new List<Message>();
-		var allProcessed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var allProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
 		const int messageCount = 50;
 
 		channel.NewOutMessageAsync += (msg, ct) =>
@@ -608,7 +608,7 @@ public class MessageChannelTests : BaseTestClass
 			await channel.SendInMessageAsync(msg, CancellationToken);
 		}
 
-		await allProcessed.Task.WithTimeout(TimeSpan.FromSeconds(10));
+		await allProcessed.Task.WithCancellation(CancellationToken);
 
 		// Verify messages are processed in LocalTime order
 		for (int i = 1; i < processedMessages.Count; i++)
@@ -623,7 +623,7 @@ public class MessageChannelTests : BaseTestClass
 	{
 		using var channel = CreateInMemoryChannel(new MessageByLocalTimeQueue());
 		var processedMessages = new List<Message>();
-		var allProcessed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var allProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
 
 		channel.NewOutMessageAsync += (msg, ct) =>
 		{
@@ -648,7 +648,7 @@ public class MessageChannelTests : BaseTestClass
 		await channel.SendInMessageAsync(pastMsg, CancellationToken);
 		await channel.SendInMessageAsync(currentMsg, CancellationToken);
 
-		await allProcessed.Task.WithTimeout(TimeSpan.FromSeconds(5));
+		await allProcessed.Task.WithCancellation(CancellationToken);
 
 		// Should be in time order: past, current, future
 		processedMessages[0].AssertEqual(pastMsg);
@@ -666,7 +666,7 @@ public class MessageChannelTests : BaseTestClass
 	{
 		using var channel = CreateInMemoryChannel(new MessageByLocalTimeQueue());
 		var processedMessages = new List<(Message Message, DateTime ProcessedAt)>();
-		var allProcessed = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var allProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
 		const int expectedCount = 6;
 
 		channel.NewOutMessageAsync += (msg, ct) =>
@@ -705,7 +705,7 @@ public class MessageChannelTests : BaseTestClass
 		await channel.SendInMessageAsync(tick2, CancellationToken);
 		await channel.SendInMessageAsync(order3, CancellationToken);
 
-		await allProcessed.Task.WithTimeout(TimeSpan.FromSeconds(10));
+		await allProcessed.Task.WithCancellation(CancellationToken);
 
 		// Verify strict time ordering
 		var orderedMessages = processedMessages.OrderBy(x => x.Message.LocalTime).ToList();
