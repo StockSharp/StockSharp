@@ -1581,9 +1581,9 @@ public class SnapshotHolderTests : BaseTestClass
 			OrderId = 12345,
 		};
 
-		holder.Process(msg2);
+		snapshot = holder.Process(msg2);
 
-		// Same snapshot should be updated
+		// Snapshot is updated via new clone
 		snapshot.OrderState.AssertEqual(OrderStates.Active);
 		snapshot.OrderId.AssertEqual(12345);
 		// Balance not updated since msg2 has no balance
@@ -1703,7 +1703,7 @@ public class SnapshotHolderTests : BaseTestClass
 			Latency = TimeSpan.FromMilliseconds(10),
 		};
 
-		holder.Process(msg2);
+		snapshot = holder.Process(msg2);
 
 		snapshot.OrderId.AssertEqual(12345);
 		snapshot.OrderStringId.AssertEqual("ORD-123");
@@ -1746,7 +1746,7 @@ public class SnapshotHolderTests : BaseTestClass
 			Balance = 5,
 		};
 
-		holder.Process(msg2);
+		snapshot = holder.Process(msg2);
 		snapshot.OrderState.AssertEqual(OrderStates.Active);
 		snapshot.Balance.AssertEqual(5);
 
@@ -1760,7 +1760,7 @@ public class SnapshotHolderTests : BaseTestClass
 			Balance = 0,
 		};
 
-		holder.Process(msg3);
+		snapshot = holder.Process(msg3);
 		snapshot.OrderState.AssertEqual(OrderStates.Done);
 		snapshot.Balance.AssertEqual(0);
 	}
@@ -1807,9 +1807,10 @@ public class SnapshotHolderTests : BaseTestClass
 			OrderState = OrderStates.Active,
 		};
 
-		holder.Process(msg3);
+		var snap1Updated = holder.Process(msg3);
 
-		snap1.OrderState.AssertEqual(OrderStates.Active);
+		// Process returns a new clone, original snap1 is unchanged
+		snap1Updated.OrderState.AssertEqual(OrderStates.Active);
 		snap2.OrderState.AssertEqual(OrderStates.Pending);
 	}
 
@@ -2343,9 +2344,9 @@ public class SnapshotHolderTests : BaseTestClass
 		}
 		.TryAdd(PositionChangeTypes.CurrentValue, 150m);
 
-		holder.Process(msg3);
+		var snap1Updated = holder.Process(msg3);
 
-		snap1.Changes[PositionChangeTypes.CurrentValue].AssertEqual(150m);
+		snap1Updated.Changes[PositionChangeTypes.CurrentValue].AssertEqual(150m);
 		snap2.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
 	}
 
@@ -2628,7 +2629,7 @@ public class SnapshotHolderTests : BaseTestClass
 			Commission = 1.5m,
 		};
 
-		holder.Process(msg2);
+		snapshot = holder.Process(msg2);
 
 		snapshot.OrderState.AssertEqual(OrderStates.Active);
 		snapshot.Balance.AssertEqual(5);

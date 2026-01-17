@@ -126,13 +126,13 @@ public class OrderSnapshotHolder : BaseLogReceiver
 
 	private void ValidateImmutableFields(ExecutionMessage snapshot, ExecutionMessage execMsg, long transactionId)
 	{
-		if (execMsg.SecurityId != default && snapshot.SecurityId != default && execMsg.SecurityId != snapshot.SecurityId)
+		if (execMsg.SecurityId != default && execMsg.SecurityId != snapshot.SecurityId)
 			throw new InvalidOperationException($"Order {transactionId}: SecurityId changed from {snapshot.SecurityId} to {execMsg.SecurityId}");
 
-		if (execMsg.Side != default && snapshot.Side != default && execMsg.Side != snapshot.Side)
+		if (execMsg.Side != default && execMsg.Side != snapshot.Side)
 			throw new InvalidOperationException($"Order {transactionId}: Side changed from {snapshot.Side} to {execMsg.Side}");
 
-		if (execMsg.OrderPrice != default && snapshot.OrderPrice != default && execMsg.OrderPrice != snapshot.OrderPrice)
+		if (execMsg.OrderPrice != default && execMsg.OrderPrice != snapshot.OrderPrice)
 			throw new InvalidOperationException($"Order {transactionId}: OrderPrice changed from {snapshot.OrderPrice} to {execMsg.OrderPrice}");
 
 		if (execMsg.OrderVolume != null && snapshot.OrderVolume != null && execMsg.OrderVolume != snapshot.OrderVolume)
