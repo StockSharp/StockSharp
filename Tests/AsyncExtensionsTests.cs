@@ -157,6 +157,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_ConnectAsync()
 	{
 		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
@@ -173,6 +174,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Adapter_ConnectAsync()
 	{
 		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
@@ -183,6 +185,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Adapter_Subscription_Live_SyncAdapter()
 	{
 		var token = CancellationToken;
@@ -236,6 +239,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Adapter_Subscription_History_SyncAdapter()
 	{
 		var token = CancellationToken;
@@ -284,6 +288,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Live_SyncAdapter()
 	{
 		var token = CancellationToken;
@@ -338,6 +343,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_History_SyncAdapter()
 	{
 		var token = CancellationToken;
@@ -391,6 +397,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Live_AsyncAdapter()
 	{
 		var token = CancellationToken;
@@ -442,6 +449,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_History_AsyncAdapter()
 	{
 		var token = CancellationToken;
@@ -501,6 +509,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Lifecycle()
 	{
 		using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
@@ -529,6 +538,313 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
 	}
+
+	#region SubscribeAsync Bug Tests
+
+	/// <summary>
+	/// Test that SubscribeAsync (non-generic) does not hang when cancellation token is cancelled
+	/// and adapter does not send SubscriptionFinishedMessage.
+	///
+	/// BUG: Currently the method hangs because it awaits finishedTcs.Task after cancellation,
+	/// but not all adapters send SubscriptionFinishedMessage on unsubscribe.
+	/// </summary>
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task SubscribeAsync_LiveSubscription_Cancel_ShouldNotHang()
+	{
+		// Arrange: adapter that does NOT send SubscriptionFinishedMessage on unsubscribe
+		var adapter = new NoFinishedMessageAdapter();
+
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+			IsSubscribe = true,
+			To = null, // live subscription
+		};
+
+		using var cts = new CancellationTokenSource();
+
+		// Act: start subscription
+		var subscribeTask = adapter.SubscribeAsync(subscription, cts.Token).AsTask();
+
+		// Wait for subscription to be established
+		await adapter.WaitForSubscriptionStarted(TimeSpan.FromSeconds(2));
+
+		// Cancel the subscription
+		cts.Cancel();
+
+		// Assert: method should complete within reasonable time, not hang
+		var completedTask = await Task.WhenAny(subscribeTask, Task.Delay(TimeSpan.FromSeconds(2), CancellationToken));
+
+		// If this fails, the method is hanging (bug exists)
+		(completedTask == subscribeTask).AssertTrue(
+			"SubscribeAsync should not hang when cancelled, even if adapter doesn't send SubscriptionFinishedMessage");
+	}
+
+	/// <summary>
+	/// Test that SubscribeAsync (non-generic) completes normally for historical subscription
+	/// when SubscriptionFinishedMessage is received.
+	/// </summary>
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task SubscribeAsync_HistoricalSubscription_CompletesOnFinished()
+	{
+		var adapter = new ControlledTestAdapter();
+
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+			IsSubscribe = true,
+			From = DateTime.UtcNow.AddDays(-1),
+			To = DateTime.UtcNow, // historical subscription
+		};
+
+		// Act: start subscription
+		var subscribeTask = adapter.SubscribeAsync(subscription, CancellationToken).AsTask();
+
+		// Wait for subscription to be established
+		await adapter.WaitForSubscriptionStarted(TimeSpan.FromSeconds(2));
+
+		// Send finished message
+		adapter.SendSubscriptionFinished(subscription.TransactionId);
+
+		// Assert: should complete
+		var completedTask = await Task.WhenAny(subscribeTask, Task.Delay(TimeSpan.FromSeconds(2), CancellationToken));
+		(completedTask == subscribeTask).AssertTrue("SubscribeAsync should complete when SubscriptionFinishedMessage is received");
+	}
+
+	/// <summary>
+	/// Test that SubscribeAsync (non-generic) throws on subscription error.
+	/// </summary>
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task SubscribeAsync_SubscriptionError_Throws()
+	{
+		var adapter = new ControlledTestAdapter();
+
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+			IsSubscribe = true,
+			To = null,
+		};
+
+		// Act: start subscription
+		var subscribeTask = adapter.SubscribeAsync(subscription, CancellationToken).AsTask();
+
+		// Wait a bit for subscription message to be processed
+		await Task.Delay(50, CancellationToken);
+
+		// Send error response
+		adapter.SendSubscriptionError(subscription.TransactionId, new InvalidOperationException("Test error"));
+
+		// Assert: should throw
+		await ThrowsExactlyAsync<InvalidOperationException>(async () => await subscribeTask);
+	}
+
+	/// <summary>
+	/// Test that generic SubscribeAsync completes on cancellation without hanging.
+	/// </summary>
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task SubscribeAsyncGeneric_Cancel_CompletesWithoutHang()
+	{
+		var adapter = new NoFinishedMessageAdapter();
+
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+			IsSubscribe = true,
+			To = null,
+		};
+
+		using var cts = new CancellationTokenSource();
+
+		// Act: start enumeration
+		var items = new List<Level1ChangeMessage>();
+		var enumerateTask = Task.Run(async () =>
+		{
+			await foreach (var item in adapter.SubscribeAsync<Level1ChangeMessage>(subscription, cts.Token))
+			{
+				items.Add(item);
+			}
+		}, CancellationToken);
+
+		await adapter.WaitForSubscriptionStarted(TimeSpan.FromSeconds(2));
+
+		// Send some data
+		adapter.SendLevel1Data(subscription.TransactionId);
+
+		await Task.Delay(100, CancellationToken);
+
+		// Cancel
+		cts.Cancel();
+
+		// Assert: enumeration should complete
+		var completedTask = await Task.WhenAny(enumerateTask, Task.Delay(TimeSpan.FromSeconds(2), CancellationToken));
+		(completedTask == enumerateTask).AssertTrue("SubscribeAsync<T> should complete on cancellation");
+
+		items.Count.AssertGreater(0);
+	}
+
+	/// <summary>
+	/// Test that generic SubscribeAsync yields messages correctly.
+	/// </summary>
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task SubscribeAsyncGeneric_YieldsMessages()
+	{
+		var adapter = new ControlledTestAdapter();
+
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Level1,
+			SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+			IsSubscribe = true,
+			From = DateTime.UtcNow.AddDays(-1),
+			To = DateTime.UtcNow,
+		};
+
+		var items = new List<Level1ChangeMessage>();
+
+		// Act
+		var enumerateTask = Task.Run(async () =>
+		{
+			await foreach (var item in adapter.SubscribeAsync<Level1ChangeMessage>(subscription, CancellationToken))
+			{
+				items.Add(item);
+			}
+		}, CancellationToken);
+
+		await adapter.WaitForSubscriptionStarted(TimeSpan.FromSeconds(2));
+
+		// Send data
+		for (int i = 0; i < 5; i++)
+		{
+			adapter.SendLevel1Data(subscription.TransactionId, 100 + i);
+		}
+
+		// Finish
+		adapter.SendSubscriptionFinished(subscription.TransactionId);
+
+		await enumerateTask.WithTimeout(TimeSpan.FromSeconds(2));
+
+		// Assert
+		items.Count.AssertEqual(5);
+	}
+
+	#endregion
+
+	#region Bug Test Helper Adapters
+
+	/// <summary>
+	/// Adapter that does NOT send SubscriptionFinishedMessage on unsubscribe.
+	/// This simulates real-world adapters that don't always send finish messages.
+	/// </summary>
+	private class NoFinishedMessageAdapter : MessageAdapter
+	{
+		private readonly TaskCompletionSource<bool> _subscriptionStarted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		public NoFinishedMessageAdapter() : base(new IncrementalIdGenerator()) { }
+
+		public Task WaitForSubscriptionStarted(TimeSpan timeout)
+			=> _subscriptionStarted.Task.WithTimeout(timeout);
+
+		public void SendLevel1Data(long subscriptionId, decimal price = 100m)
+		{
+			var msg = new Level1ChangeMessage
+			{
+				SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+				ServerTime = DateTime.UtcNow,
+				SubscriptionId = subscriptionId,
+			}.TryAdd(Level1Fields.LastTradePrice, price);
+
+			SendOutMessage(msg);
+		}
+
+		public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			switch (message)
+			{
+				case MarketDataMessage mdm when mdm.IsSubscribe:
+					// Send response (subscription started)
+					SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId });
+					_subscriptionStarted.TrySetResult(true);
+					break;
+
+				case MarketDataMessage mdm when !mdm.IsSubscribe:
+					// Unsubscribe - intentionally do NOT send SubscriptionFinishedMessage
+					// This is the bug scenario - adapter doesn't confirm unsubscribe
+					break;
+			}
+
+			return default;
+		}
+	}
+
+	/// <summary>
+	/// Adapter that allows controlled sending of responses.
+	/// </summary>
+	private class ControlledTestAdapter : MessageAdapter
+	{
+		private readonly TaskCompletionSource<bool> _subscriptionStarted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		public ControlledTestAdapter() : base(new IncrementalIdGenerator()) { }
+
+		public Task WaitForSubscriptionStarted(TimeSpan timeout)
+			=> _subscriptionStarted.Task.WithTimeout(timeout);
+
+		public void SendSubscriptionFinished(long subscriptionId)
+		{
+			SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = subscriptionId });
+		}
+
+		public void SendSubscriptionError(long subscriptionId, Exception error)
+		{
+			SendOutMessage(new SubscriptionResponseMessage
+			{
+				OriginalTransactionId = subscriptionId,
+				Error = error,
+			});
+		}
+
+		public void SendLevel1Data(long subscriptionId, decimal price = 100m)
+		{
+			var msg = new Level1ChangeMessage
+			{
+				SecurityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test },
+				ServerTime = DateTime.UtcNow,
+				SubscriptionId = subscriptionId,
+			}.TryAdd(Level1Fields.LastTradePrice, price);
+
+			SendOutMessage(msg);
+		}
+
+		public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			switch (message)
+			{
+				case MarketDataMessage mdm when mdm.IsSubscribe:
+					// Send response (subscription started)
+					SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId });
+					_subscriptionStarted.TrySetResult(true);
+					break;
+
+				case MarketDataMessage mdm when !mdm.IsSubscribe:
+					// Unsubscribe - send finished
+					SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = mdm.OriginalTransactionId });
+					break;
+			}
+
+			return default;
+		}
+	}
+
+	#endregion
 }
 
 static class TestTaskExtensions

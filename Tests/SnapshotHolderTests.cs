@@ -374,8 +374,8 @@ public class SnapshotHolderTests : BaseTestClass
 
 		var delta = holder.Process(snap2);
 		delta.AssertNotNull();
-		// Expect delta (increment), not full snapshot
-		(delta.State == QuoteChangeStates.Increment || delta.State == null).AssertTrue();
+		// GetDelta returns increment with changes
+		delta.State.AssertEqual(QuoteChangeStates.Increment);
 
 		// Ensure error counter reset to 0
 		var err = holder.GetErrorCount(_secId1);
@@ -396,8 +396,16 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
+		// First increment without prior snapshot - builder may build snapshot or return null
 		var res = holder.Process(inc);
-		(res == null || res.State == QuoteChangeStates.SnapshotComplete || res.State == QuoteChangeStates.Increment).AssertTrue();
+
+		// If result is not null, it must be a SnapshotComplete (builder constructed snapshot from increment)
+		if (res != null)
+		{
+			res.State.AssertEqual(QuoteChangeStates.SnapshotComplete);
+			holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
+			snap.AssertNotNull();
+		}
 	}
 
 	[TestMethod]
@@ -443,12 +451,12 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OrderBook_InvalidFullSnapshot_ThrowsException()
+	public void OrderBook_InvalidFullSnapshot_ThrowsOrCreatesSnapshot()
 	{
 		var holder = new OrderBookSnapshotHolder();
 
-		// try to force builder.TryApply to fail by using positions in full snapshot (potentially invalid)
-		var invalidFull = new QuoteChangeMessage
+		// Full snapshot with positions may be invalid depending on builder implementation
+		var fullWithPositions = new QuoteChangeMessage
 		{
 			SecurityId = _secId1,
 			ServerTime = _now,
@@ -458,14 +466,30 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
+		Exception caught = null;
+		QuoteChangeMessage result = null;
+
 		try
 		{
-			ThrowsExactly<InvalidOperationException>(() => holder.Process(invalidFull));
+			result = holder.Process(fullWithPositions);
 		}
-		catch
+		catch (InvalidOperationException ex)
 		{
-			// if builder accepts it, mark as inconclusive by asserting non-null snapshot
+			caught = ex;
+		}
+
+		// Either throws InvalidOperationException OR creates snapshot - but must be one of these
+		if (caught != null)
+		{
+			// If it throws, no snapshot should exist
+			holder.TryGetSnapshot(_secId1, out var snap).AssertFalse();
+		}
+		else
+		{
+			// If it doesn't throw, result must be valid and snapshot must exist
+			result.AssertNotNull();
 			holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
+			snap.AssertNotNull();
 		}
 	}
 
@@ -541,20 +565,19 @@ public class SnapshotHolderTests : BaseTestClass
 		var full = new QuoteChangeMessage { SecurityId = _secId1, ServerTime = _now, State = null, Bids = [ new QuoteChange(100m, 1) ], Asks = [] };
 		holder.Process(full);
 
-		var beforeSnap = holder.TryGetSnapshot(_secId1, out var snap1) ? snap1 : null;
+		holder.TryGetSnapshot(_secId1, out var beforeSnap).AssertTrue();
+		beforeSnap.AssertNotNull();
 
 		var inc = new QuoteChangeMessage { SecurityId = _secId1, ServerTime = _now.AddSeconds(1), State = QuoteChangeStates.Increment, Bids = [], Asks = [] };
 		var res = holder.Process(inc);
 
-		(res == null || res == inc).AssertTrue();
+		// Empty increment should return the original increment message (no changes)
+		res.AssertEqual(inc);
 
-		holder.TryGetSnapshot(_secId1, out var snap2).AssertTrue();
-		// snapshot should not change for empty increment
-		if (beforeSnap != null)
-		{
-			snap2.Bids.Length.AssertEqual(beforeSnap.Bids.Length);
-			snap2.Asks.Length.AssertEqual(beforeSnap.Asks.Length);
-		}
+		holder.TryGetSnapshot(_secId1, out var afterSnap).AssertTrue();
+		// snapshot bids/asks should not change for empty increment
+		afterSnap.Bids.Length.AssertEqual(beforeSnap.Bids.Length);
+		afterSnap.Asks.Length.AssertEqual(beforeSnap.Asks.Length);
 	}
 
 	#endregion
@@ -1494,7 +1517,7 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Order_Process_ReturnsSameReference()
+	public void Order_Process_ReturnsCopy()
 	{
 		var holder = new OrderSnapshotHolder();
 		var msg1 = new ExecutionMessage
@@ -1519,8 +1542,12 @@ public class SnapshotHolderTests : BaseTestClass
 
 		var result2 = holder.Process(msg2);
 
-		// Must return same reference
-		result1.AssertSame(result2);
+		// Returns different references (copies)
+		result1.AssertNotSame(result2);
+
+		// But both have correct state for their point in time
+		result1.OrderState.AssertEqual(OrderStates.Pending);
+		result2.OrderState.AssertEqual(OrderStates.Active);
 	}
 
 	[TestMethod]
@@ -2461,6 +2488,367 @@ public class SnapshotHolderTests : BaseTestClass
 		// Should be same reference due to case-insensitive key
 		snap1.AssertSame(snap2);
 		snap1.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
+	}
+
+	#endregion
+
+	#region Order Immutability and Behavior Tests
+
+	/// <summary>
+	/// Immutable fields (SecurityId, Side, Price, Volume, Portfolio, OrderType, TimeInForce)
+	/// cannot be changed after order is created. Attempting to change them throws an exception.
+	/// </summary>
+	[TestMethod]
+	public void Order_ImmutableFields_ThrowOnChange()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		// First message sets all base fields
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+			Side = Sides.Buy,
+			OrderPrice = 100m,
+			OrderVolume = 10,
+			PortfolioName = "Portfolio1",
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.PutInQueue,
+		};
+
+		holder.Process(msg1);
+
+		// Try to change Side - should throw
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			Side = Sides.Sell,
+		}));
+
+		// Try to change SecurityId - should throw
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId2,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+		}));
+
+		// Try to change OrderPrice - should throw
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderPrice = 200m,
+		}));
+
+		// Try to change OrderVolume - should throw
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderVolume = 20,
+		}));
+
+		// Try to change PortfolioName - should throw
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			PortfolioName = "Portfolio2",
+		}));
+
+		// Try to change OrderType - should throw
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderType = OrderTypes.Market,
+		}));
+
+		// Try to change TimeInForce - should throw
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			TimeInForce = TimeInForce.MatchOrCancel,
+		}));
+	}
+
+	/// <summary>
+	/// Mutable fields (Balance, OrderState, Commission, etc.) can be updated normally.
+	/// </summary>
+	[TestMethod]
+	public void Order_MutableFields_UpdateNormally()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+			Side = Sides.Buy,
+			OrderPrice = 100m,
+			OrderVolume = 10,
+			Balance = 10,
+		};
+
+		var snapshot = holder.Process(msg1);
+		snapshot.OrderState.AssertEqual(OrderStates.Pending);
+		snapshot.Balance.AssertEqual(10);
+
+		// Update mutable fields - should work
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+			Balance = 5,
+			Commission = 1.5m,
+		};
+
+		holder.Process(msg2);
+
+		snapshot.OrderState.AssertEqual(OrderStates.Active);
+		snapshot.Balance.AssertEqual(5);
+		snapshot.Commission.AssertEqual(1.5m);
+
+		// Immutable fields unchanged
+		snapshot.Side.AssertEqual(Sides.Buy);
+		snapshot.OrderPrice.AssertEqual(100m);
+		snapshot.OrderVolume.AssertEqual(10);
+	}
+
+	/// <summary>
+	/// Snapshots remain in memory after order is Done.
+	/// This is by design - cleanup is application responsibility via ResetSnapshot.
+	/// </summary>
+	[TestMethod]
+	public void Order_Snapshots_RemainAfterDone()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		// Simulate long-running system with many orders
+		const int orderCount = 1000;
+
+		for (var i = 1; i <= orderCount; i++)
+		{
+			var msg = new ExecutionMessage
+			{
+				TransactionId = i,
+				SecurityId = _secId1,
+				ServerTime = _now,
+				HasOrderInfo = true,
+				OrderState = OrderStates.Done, // Order is finished
+			};
+			holder.Process(msg);
+		}
+
+		// All 1000 snapshots are still in memory - by design
+		// Cleanup is application responsibility
+
+		var foundCount = 0;
+		for (var i = 1; i <= orderCount; i++)
+		{
+			if (holder.TryGetSnapshot(i, out _))
+				foundCount++;
+		}
+
+		// All snapshots still exist
+		foundCount.AssertEqual(orderCount);
+
+		// Manual ResetSnapshot cleans them
+		holder.ResetSnapshot(0);
+
+		foundCount = 0;
+		for (var i = 1; i <= orderCount; i++)
+		{
+			if (holder.TryGetSnapshot(i, out _))
+				foundCount++;
+		}
+
+		foundCount.AssertEqual(0); // Only after manual reset
+	}
+
+	/// <summary>
+	/// Position snapshots remain in memory even when position is closed.
+	/// This is by design - cleanup is application responsibility via ResetSnapshot.
+	/// </summary>
+	[TestMethod]
+	public void Position_Snapshots_RemainAfterClosed()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		const int positionCount = 1000;
+
+		for (var i = 0; i < positionCount; i++)
+		{
+			var msg = new PositionChangeMessage
+			{
+				PortfolioName = $"Portfolio{i}",
+				SecurityId = _secId1,
+				ServerTime = _now,
+			}
+			.TryAdd(PositionChangeTypes.CurrentValue, 0m); // Position closed
+
+			holder.Process(msg);
+		}
+
+		// All positions still in memory - by design, cleanup is application responsibility
+
+		var foundCount = 0;
+		for (var i = 0; i < positionCount; i++)
+		{
+			if (holder.TryGetSnapshot($"Portfolio{i}", _secId1, null, null, null, null, null, out _))
+				foundCount++;
+		}
+
+		foundCount.AssertEqual(positionCount);
+
+		// Manual ResetSnapshot cleans them
+		holder.ResetSnapshot(null);
+
+		foundCount = 0;
+		for (var i = 0; i < positionCount; i++)
+		{
+			if (holder.TryGetSnapshot($"Portfolio{i}", _secId1, null, null, null, null, null, out _))
+				foundCount++;
+		}
+
+		foundCount.AssertEqual(0);
+	}
+
+	/// <summary>
+	/// Verifies that TryGetSnapshot returns a copy, not the internal reference.
+	/// This ensures thread-safety - concurrent readers get consistent snapshots.
+	/// </summary>
+	[TestMethod]
+	public void Order_TryGetSnapshot_ReturnsCopy()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Pending,
+			Balance = 100,
+		};
+
+		holder.Process(msg1);
+
+		// Get snapshot twice
+		holder.TryGetSnapshot(1, out var snap1);
+		holder.TryGetSnapshot(1, out var snap2);
+
+		// Should be different references (copies)
+		snap1.AssertNotSame(snap2);
+
+		// But with same data
+		snap1.OrderState.AssertEqual(snap2.OrderState);
+		snap1.Balance.AssertEqual(snap2.Balance);
+	}
+
+	/// <summary>
+	/// BUG #3: Position holder also returns live reference.
+	/// </summary>
+	[TestMethod]
+	public void Position_LiveReference_CanBeMutatedExternally_Bug()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		var msg1 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+
+		var snapshot = holder.Process(msg1);
+
+		// Get snapshot via TryGetSnapshot
+		holder.TryGetSnapshot(msg1, out var retrieved);
+
+		// BUG: Same reference returned
+		snapshot.AssertSame(retrieved);
+
+		// External code can mutate the internal state!
+		retrieved.Changes[PositionChangeTypes.CurrentValue] = 999m;
+
+		// This affects the internal snapshot
+		holder.TryGetSnapshot(msg1, out var afterMutation);
+		afterMutation.Changes[PositionChangeTypes.CurrentValue].AssertEqual(999m);
+
+		// Original 'snapshot' variable is also affected (same reference)
+		snapshot.Changes[PositionChangeTypes.CurrentValue].AssertEqual(999m);
+	}
+
+	/// <summary>
+	/// Verifies that returned copies are isolated from internal state changes.
+	/// When component A gets a snapshot, subsequent updates don't affect it.
+	/// </summary>
+	[TestMethod]
+	public void Order_ReturnedCopy_IsIsolated()
+	{
+		var holder = new OrderSnapshotHolder();
+
+		var msg1 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+			Balance = 100,
+		};
+
+		holder.Process(msg1);
+
+		// Component A gets snapshot for reporting
+		holder.TryGetSnapshot(1, out var forReport);
+		forReport.Balance.AssertEqual(100);
+
+		// Component B updates the order
+		var msg2 = new ExecutionMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			HasOrderInfo = true,
+			Balance = 50,
+		};
+		holder.Process(msg2);
+
+		// Component A's copy is NOT affected - it's isolated
+		forReport.Balance.AssertEqual(100);
+
+		// New snapshot shows updated value
+		holder.TryGetSnapshot(1, out var updated);
+		updated.Balance.AssertEqual(50);
 	}
 
 	#endregion

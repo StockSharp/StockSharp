@@ -3,9 +3,6 @@ namespace StockSharp.Messages;
 /// <summary>
 /// <see cref="ExecutionMessage"/> order snapshots holder.
 /// </summary>
-/// <remarks>
-/// Unlike other snapshot holders, this one returns the same reference for the same <see cref="ExecutionMessage.TransactionId"/>.
-/// </remarks>
 public class OrderSnapshotHolder : BaseLogReceiver
 {
 	private readonly SynchronizedDictionary<long, ExecutionMessage> _snapshots = [];
@@ -26,11 +23,18 @@ public class OrderSnapshotHolder : BaseLogReceiver
 	/// Try get snapshot for the specified transaction id.
 	/// </summary>
 	/// <param name="transactionId">Transaction ID.</param>
-	/// <param name="snapshot">Snapshot if exists, otherwise <see langword="null"/>.</param>
+	/// <param name="snapshot">Snapshot copy if exists, otherwise <see langword="null"/>.</param>
 	/// <returns><c>true</c> if snapshot exists; otherwise <c>false</c>.</returns>
 	public bool TryGetSnapshot(long transactionId, out ExecutionMessage snapshot)
 	{
-		return _snapshots.TryGetValue(transactionId, out snapshot);
+		if (_snapshots.TryGetValue(transactionId, out var stored))
+		{
+			snapshot = stored.TypedClone();
+			return true;
+		}
+
+		snapshot = null;
+		return false;
 	}
 
 	/// <summary>
@@ -38,7 +42,7 @@ public class OrderSnapshotHolder : BaseLogReceiver
 	/// </summary>
 	/// <param name="execMsg"><see cref="ExecutionMessage"/> change.</param>
 	/// <returns>
-	/// Order snapshot. Returns the same reference for the same <see cref="ExecutionMessage.TransactionId"/>.
+	/// Order snapshot copy.
 	/// Returns <see langword="null"/> if <see cref="ExecutionMessage.HasOrderInfo"/> is <see langword="false"/>.
 	/// </returns>
 	public ExecutionMessage Process(ExecutionMessage execMsg)
@@ -59,19 +63,21 @@ public class OrderSnapshotHolder : BaseLogReceiver
 			if (_snapshots.TryGetValue(transactionId, out var snapshot))
 			{
 				ApplyChanges(snapshot, execMsg, transactionId);
-				return snapshot;
+				return snapshot.TypedClone();
 			}
 			else
 			{
 				snapshot = execMsg.TypedClone();
 				_snapshots.Add(transactionId, snapshot);
-				return snapshot;
+				return snapshot.TypedClone();
 			}
 		}
 	}
 
 	private void ApplyChanges(ExecutionMessage snapshot, ExecutionMessage execMsg, long transactionId)
 	{
+		ValidateImmutableFields(snapshot, execMsg, transactionId);
+
 		if (execMsg.Balance != null)
 			snapshot.Balance = snapshot.Balance.ApplyNewBalance(execMsg.Balance.Value, transactionId, this);
 
@@ -116,6 +122,30 @@ public class OrderSnapshotHolder : BaseLogReceiver
 
 		if (execMsg.LocalTime != default)
 			snapshot.LocalTime = execMsg.LocalTime;
+	}
+
+	private void ValidateImmutableFields(ExecutionMessage snapshot, ExecutionMessage execMsg, long transactionId)
+	{
+		if (execMsg.SecurityId != default && snapshot.SecurityId != default && execMsg.SecurityId != snapshot.SecurityId)
+			throw new InvalidOperationException($"Order {transactionId}: SecurityId changed from {snapshot.SecurityId} to {execMsg.SecurityId}");
+
+		if (execMsg.Side != default && snapshot.Side != default && execMsg.Side != snapshot.Side)
+			throw new InvalidOperationException($"Order {transactionId}: Side changed from {snapshot.Side} to {execMsg.Side}");
+
+		if (execMsg.OrderPrice != default && snapshot.OrderPrice != default && execMsg.OrderPrice != snapshot.OrderPrice)
+			throw new InvalidOperationException($"Order {transactionId}: OrderPrice changed from {snapshot.OrderPrice} to {execMsg.OrderPrice}");
+
+		if (execMsg.OrderVolume != null && snapshot.OrderVolume != null && execMsg.OrderVolume != snapshot.OrderVolume)
+			throw new InvalidOperationException($"Order {transactionId}: OrderVolume changed from {snapshot.OrderVolume} to {execMsg.OrderVolume}");
+
+		if (!execMsg.PortfolioName.IsEmpty() && !snapshot.PortfolioName.IsEmpty() && execMsg.PortfolioName != snapshot.PortfolioName)
+			throw new InvalidOperationException($"Order {transactionId}: PortfolioName changed from {snapshot.PortfolioName} to {execMsg.PortfolioName}");
+
+		if (execMsg.OrderType != null && snapshot.OrderType != null && execMsg.OrderType != snapshot.OrderType)
+			throw new InvalidOperationException($"Order {transactionId}: OrderType changed from {snapshot.OrderType} to {execMsg.OrderType}");
+
+		if (execMsg.TimeInForce != null && snapshot.TimeInForce != null && execMsg.TimeInForce != snapshot.TimeInForce)
+			throw new InvalidOperationException($"Order {transactionId}: TimeInForce changed from {snapshot.TimeInForce} to {execMsg.TimeInForce}");
 	}
 
 	/// <summary>
