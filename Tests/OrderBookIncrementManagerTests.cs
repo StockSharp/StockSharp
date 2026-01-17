@@ -481,4 +481,62 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 		toInner[0].AssertSame(subscribeMsg);
 		toOut.Length.AssertEqual(0);
 	}
+
+	/// <summary>
+	/// BUG: Same issue as Level1DepthBuilderManager - when second subscription goes online,
+	/// its id is removed from _byId. Incremental updates with only the second id are ignored.
+	///
+	/// Expected: QuoteChange with only second subscription id should be processed and produce
+	/// a book with both subscription ids.
+	/// Actual: Update is skipped because second id is not found in _byId.
+	/// </summary>
+	[TestMethod]
+	public void ProcessOutMessage_MultipleSubscriptions_OnlySecondId_ShouldProcessIncrement()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new OrderBookIncrementManager(logReceiver);
+
+		var secId = Helper.CreateSecurityId();
+
+		// Subscribe first
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.MarketDepth,
+		});
+
+		// Subscribe second to same security
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 2,
+			SecurityId = secId,
+			DataType2 = DataType.MarketDepth,
+		});
+
+		// Both go online - this removes second id from _byId
+		manager.ProcessOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 1 });
+		manager.ProcessOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 2 });
+
+		// First snapshot comes with both ids - this works
+		var snapshot = CreateIncrement(secId, DateTime.UtcNow, QuoteChangeStates.SnapshotComplete, [1, 2],
+			bids: [new QuoteChange(100m, 10m)],
+			asks: [new QuoteChange(101m, 20m)]);
+		manager.ProcessOutMessage(snapshot);
+
+		// Increment with ONLY second subscription id
+		// BUG: This should be processed but is skipped because id 2 is not in _byId
+		var increment = CreateIncrement(secId, DateTime.UtcNow.AddSeconds(1), QuoteChangeStates.Increment, [2],
+			bids: [new QuoteChange(99m, 5m)]);
+		var (forward, extraOut) = manager.ProcessOutMessage(increment);
+
+		// Expected: Increment should be processed and produce book with merged subscription ids
+		extraOut.Length.AssertEqual(1, "Increment should be processed even when it has only second subscription id");
+
+		var book = (QuoteChangeMessage)extraOut[0];
+		book.GetSubscriptionIds().OrderBy(i => i).SequenceEqual([1L, 2L]).AssertTrue(
+			"Book should have both subscription ids since they're merged online");
+	}
 }

@@ -626,4 +626,56 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 		book.Bids[0].Volume.AssertEqual(0m);
 		book.Asks[0].Volume.AssertEqual(0m);
 	}
+
+	/// <summary>
+	/// BUG: When second subscription goes online, its id is removed from _byId.
+	/// Level1Change processing only checks _byId, so messages with only the second
+	/// subscription id are ignored after both subscriptions are online.
+	///
+	/// Expected: Level1Change with only second subscription id should produce a book
+	/// with both subscription ids (since they're merged online).
+	/// Actual: No book is generated because second id is not found in _byId.
+	/// </summary>
+	[TestMethod]
+	public void ProcessOutMessage_MultipleSubscriptions_OnlySecondId_ShouldProduceBook()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new Level1DepthBuilderManager(logReceiver);
+
+		var secId = Helper.CreateSecurityId();
+
+		// Subscribe first
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.MarketDepth,
+		});
+
+		// Subscribe second to same security
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 2,
+			SecurityId = secId,
+			DataType2 = DataType.MarketDepth,
+		});
+
+		// Both go online - this is when second id gets removed from _byId
+		manager.ProcessOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 1 });
+		manager.ProcessOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 2 });
+
+		// Level1 with ONLY second subscription id (simulates inner adapter sending to second subscriber)
+		// BUG: This should produce a book with both subscription ids but doesn't because id 2 is not in _byId
+		var l1 = CreateBestBidAsk(secId, DateTime.UtcNow, [2], bidPrice: 100, askPrice: 101);
+		var (forward, extraOut) = manager.ProcessOutMessage(l1);
+
+		// Expected: book should be generated with merged subscription ids [1, 2]
+		extraOut.Length.AssertEqual(1, "Book should be generated even when Level1 has only second subscription id");
+
+		var book = (QuoteChangeMessage)extraOut[0];
+		book.GetSubscriptionIds().OrderBy(i => i).SequenceEqual([1L, 2L]).AssertTrue(
+			"Book should have both subscription ids since they're merged online");
+	}
 }

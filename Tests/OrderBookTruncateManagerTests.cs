@@ -518,4 +518,40 @@ public class OrderBookTruncateManagerTests : BaseTestClass
 		var mdMsg = (MarketDataMessage)toInner;
 		mdMsg.MaxDepth.AssertEqual(5);
 	}
+
+	/// <summary>
+	/// BUG: When nearestSupportedDepth returns null, the comparison supportedDepth != actualDepth
+	/// is true, and the subscription is sent with MaxDepth = null (no limit).
+	/// This can dramatically increase traffic/load.
+	///
+	/// Expected: When supportedDepth is null, should either keep original MaxDepth or handle explicitly.
+	/// Actual: MaxDepth becomes null (full depth subscription).
+	/// </summary>
+	[TestMethod]
+	public void ProcessInMessage_NullSupportedDepth_ShouldNotRequestFullDepth()
+	{
+		var logReceiver = new TestReceiver();
+		// nearestSupportedDepth returns null for any depth (unsupported)
+		var manager = new OrderBookTruncateManager(logReceiver, depth => (int?)null);
+
+		var secId = Helper.CreateSecurityId();
+
+		var subscription = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.MarketDepth,
+			MaxDepth = 20,
+		};
+
+		var (toInner, _) = manager.ProcessInMessage(subscription);
+
+		var mdMsg = (MarketDataMessage)toInner;
+
+		// Expected: MaxDepth should NOT become null (that would mean "full depth")
+		// When supportedDepth is null, should keep original depth or handle explicitly
+		IsTrue(mdMsg.MaxDepth.HasValue,
+			$"MaxDepth should not become null when supportedDepth is null. Original was 20, got {mdMsg.MaxDepth}");
+	}
 }
