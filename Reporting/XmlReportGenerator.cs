@@ -25,8 +25,13 @@ public class XmlReportGenerator : BaseReportGenerator
 
 		using var writer = XmlWriter.Create(new StreamWriter(stream, Encoding, leaveOpen: true), settings);
 
-		Task WriteStartElement(string name) => writer.WriteStartElementAsync(null, name, null);
-		Task WriteEndElement() => writer.WriteEndElementAsync();
+        Task WriteStartElement(string name)
+        {
+			cancellationToken.ThrowIfCancellationRequested();
+			return writer.WriteStartElementAsync(null, name, null);
+        }
+
+        Task WriteEndElement() => writer.WriteEndElementAsync();
 		Task WriteAttributeString(string name, object value) => writer.WriteAttributeStringAsync(null, name, null, value is TimeSpan ts ? ts.Format() : (value is DateTime dto ? dto.Format() : value.To<string>()));
 
 		await WriteStartElement("strategy");
@@ -43,10 +48,11 @@ public class XmlReportGenerator : BaseReportGenerator
 
 		foreach (var (name, value) in source.Parameters)
 		{
-			cancellationToken.ThrowIfCancellationRequested();
-
 			if (value is WorkingTime)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
 				continue;
+			}
 
 			await WriteStartElement("parameter");
 
@@ -62,8 +68,6 @@ public class XmlReportGenerator : BaseReportGenerator
 
 		foreach (var (name, value) in source.StatisticParameters)
 		{
-			cancellationToken.ThrowIfCancellationRequested();
-
 			await WriteStartElement("parameter");
 
 			await WriteAttributeString("name", name);
@@ -80,8 +84,6 @@ public class XmlReportGenerator : BaseReportGenerator
 
 			foreach (var o in source.Orders)
 			{
-				cancellationToken.ThrowIfCancellationRequested();
-
 				await WriteStartElement("order");
 
 				await WriteAttributeString("id", o.Id);
@@ -107,8 +109,6 @@ public class XmlReportGenerator : BaseReportGenerator
 
 			foreach (var t in source.OwnTrades)
 			{
-				cancellationToken.ThrowIfCancellationRequested();
-
 				await WriteStartElement("trade");
 
 				await WriteAttributeString("id", t.TradeId);
