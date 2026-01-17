@@ -16,194 +16,6 @@ public class RemoteStorageClientTests : BaseTestClass
 {
 	#region Mock Adapter
 
-	private class MockRemoteAdapter : MessageAdapter,
-		IAddressAdapter<System.Net.EndPoint>,
-		ISenderTargetAdapter,
-		ILoginPasswordAdapter
-	{
-		public ConcurrentQueue<Message> SentMessages { get; } = [];
-		public Dictionary<long, ISubscriptionMessage> ActiveSubscriptions { get; } = [];
-
-		public Func<SecurityLookupMessage, (SecurityMessage[] securities, byte[] archive)> SecurityLookupHandler { get; set; }
-		public Func<BoardLookupMessage, (BoardMessage[] boards, byte[] archive)> BoardLookupHandler { get; set; }
-		public Func<DataTypeLookupMessage, DataTypeInfoMessage[]> DataTypeLookupHandler { get; set; }
-		public Func<RemoteFileCommandMessage, RemoteFileMessage> FileCommandHandler { get; set; }
-		public bool SimulateTimeout { get; set; }
-
-		// IAddressAdapter<EndPoint>
-		public System.Net.EndPoint Address { get; set; }
-
-		// ISenderTargetAdapter
-		public string SenderCompId { get; set; }
-		public string TargetCompId { get; set; }
-
-		// ILoginPasswordAdapter
-		public string Login { get; set; }
-		public SecureString Password { get; set; }
-
-		public MockRemoteAdapter(IdGenerator transactionIdGenerator)
-			: base(transactionIdGenerator)
-		{
-			this.AddMarketDataSupport();
-			this.AddTransactionalSupport();
-
-			this.AddSupportedMarketDataType(DataType.Securities);
-			this.AddSupportedMarketDataType(DataType.Level1);
-		}
-
-		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
-		{
-			SentMessages.Enqueue(message);
-
-			switch (message.Type)
-			{
-				case MessageTypes.Connect:
-					if (!SimulateTimeout)
-						SendOutMessage(new ConnectMessage());
-					break;
-
-				case MessageTypes.Disconnect:
-					SendOutMessage(new DisconnectMessage());
-					break;
-
-				case MessageTypes.SecurityLookup:
-				{
-					var lookup = (SecurityLookupMessage)message;
-					var isSubscribe = ((ISubscriptionMessage)lookup).IsSubscribe;
-
-					if (isSubscribe)
-					{
-						ActiveSubscriptions[lookup.TransactionId] = lookup;
-
-						// Send subscription response
-						SendOutMessage(lookup.CreateResponse());
-
-						if (SecurityLookupHandler != null && !SimulateTimeout)
-						{
-							var (securities, archive) = SecurityLookupHandler(lookup);
-
-							foreach (var sec in securities)
-							{
-								sec.OriginalTransactionId = lookup.TransactionId;
-								sec.SetSubscriptionIds([lookup.TransactionId]);
-								SendOutMessage(sec);
-							}
-
-							// Send finished message with optional archive
-							var finished = new SubscriptionFinishedMessage { OriginalTransactionId = lookup.TransactionId };
-
-							if (archive != null && archive.Length > 0)
-								finished.Body = archive;
-
-							SendOutMessage(finished);
-						}
-					}
-					else
-					{
-						ActiveSubscriptions.Remove(lookup.OriginalTransactionId);
-						SendOutMessage(lookup.CreateResponse());
-					}
-					break;
-				}
-
-				case MessageTypes.DataTypeLookup:
-				{
-					var lookup = (DataTypeLookupMessage)message;
-					var isSubscribe = ((ISubscriptionMessage)lookup).IsSubscribe;
-
-					if (isSubscribe)
-					{
-						ActiveSubscriptions[lookup.TransactionId] = lookup;
-
-						// Send subscription response
-						SendOutMessage(lookup.CreateResponse());
-
-						if (DataTypeLookupHandler != null && !SimulateTimeout)
-						{
-							var results = DataTypeLookupHandler(lookup);
-
-							foreach (var info in results)
-							{
-								info.OriginalTransactionId = lookup.TransactionId;
-								info.SetSubscriptionIds([lookup.TransactionId]);
-								SendOutMessage(info);
-							}
-
-							SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = lookup.TransactionId });
-						}
-					}
-					break;
-				}
-
-				case MessageTypes.RemoteFileCommand:
-				{
-					var cmd = (RemoteFileCommandMessage)message;
-
-					if (cmd.Command == CommandTypes.Get)
-					{
-						ActiveSubscriptions[cmd.TransactionId] = cmd;
-						SendOutMessage(cmd.CreateResponse());
-
-						if (FileCommandHandler != null && !SimulateTimeout)
-						{
-							var result = FileCommandHandler(cmd);
-
-							if (result != null)
-							{
-								result.OriginalTransactionId = cmd.TransactionId;
-								result.SetSubscriptionIds([cmd.TransactionId]);
-								SendOutMessage(result);
-							}
-
-							SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = cmd.TransactionId });
-						}
-					}
-					break;
-				}
-
-				case MessageTypes.BoardLookup:
-				{
-					var lookup = (BoardLookupMessage)message;
-					var isSubscribe = ((ISubscriptionMessage)lookup).IsSubscribe;
-
-					if (isSubscribe)
-					{
-						ActiveSubscriptions[lookup.TransactionId] = lookup;
-
-						SendOutMessage(lookup.CreateResponse());
-
-						if (BoardLookupHandler != null && !SimulateTimeout)
-						{
-							var (boards, archive) = BoardLookupHandler(lookup);
-
-							foreach (var board in boards)
-							{
-								board.OriginalTransactionId = lookup.TransactionId;
-								board.SetSubscriptionIds([lookup.TransactionId]);
-								SendOutMessage(board);
-							}
-
-							var finished = new SubscriptionFinishedMessage { OriginalTransactionId = lookup.TransactionId };
-
-							if (archive != null && archive.Length > 0)
-								finished.Body = archive;
-
-							SendOutMessage(finished);
-						}
-					}
-					else
-					{
-						ActiveSubscriptions.Remove(lookup.OriginalTransactionId);
-						SendOutMessage(lookup.CreateResponse());
-					}
-					break;
-				}
-			}
-
-			return default;
-		}
-	}
-
 	private class MockSecurityProvider : ISecurityProvider
 	{
 		public HashSet<Security> Securities { get; } = [];
@@ -1574,4 +1386,192 @@ public class RemoteStorageClientTests : BaseTestClass
 	#endregion
 
 	#endregion
+}
+
+class MockRemoteAdapter : MessageAdapter,
+	IAddressAdapter<System.Net.EndPoint>,
+	ISenderTargetAdapter,
+	ILoginPasswordAdapter
+{
+	public ConcurrentQueue<Message> SentMessages { get; } = [];
+	public Dictionary<long, ISubscriptionMessage> ActiveSubscriptions { get; } = [];
+
+	public Func<SecurityLookupMessage, (SecurityMessage[] securities, byte[] archive)> SecurityLookupHandler { get; set; }
+	public Func<BoardLookupMessage, (BoardMessage[] boards, byte[] archive)> BoardLookupHandler { get; set; }
+	public Func<DataTypeLookupMessage, DataTypeInfoMessage[]> DataTypeLookupHandler { get; set; }
+	public Func<RemoteFileCommandMessage, RemoteFileMessage> FileCommandHandler { get; set; }
+	public bool SimulateTimeout { get; set; }
+
+	// IAddressAdapter<EndPoint>
+	public System.Net.EndPoint Address { get; set; }
+
+	// ISenderTargetAdapter
+	public string SenderCompId { get; set; }
+	public string TargetCompId { get; set; }
+
+	// ILoginPasswordAdapter
+	public string Login { get; set; }
+	public SecureString Password { get; set; }
+
+	public MockRemoteAdapter(IdGenerator transactionIdGenerator)
+		: base(transactionIdGenerator)
+	{
+		this.AddMarketDataSupport();
+		this.AddTransactionalSupport();
+
+		this.AddSupportedMarketDataType(DataType.Securities);
+		this.AddSupportedMarketDataType(DataType.Level1);
+	}
+
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	{
+		SentMessages.Enqueue(message);
+
+		switch (message.Type)
+		{
+			case MessageTypes.Connect:
+				if (!SimulateTimeout)
+					SendOutMessage(new ConnectMessage());
+				break;
+
+			case MessageTypes.Disconnect:
+				SendOutMessage(new DisconnectMessage());
+				break;
+
+			case MessageTypes.SecurityLookup:
+			{
+				var lookup = (SecurityLookupMessage)message;
+				var isSubscribe = ((ISubscriptionMessage)lookup).IsSubscribe;
+
+				if (isSubscribe)
+				{
+					ActiveSubscriptions[lookup.TransactionId] = lookup;
+
+					// Send subscription response
+					SendOutMessage(lookup.CreateResponse());
+
+					if (SecurityLookupHandler != null && !SimulateTimeout)
+					{
+						var (securities, archive) = SecurityLookupHandler(lookup);
+
+						foreach (var sec in securities)
+						{
+							sec.OriginalTransactionId = lookup.TransactionId;
+							sec.SetSubscriptionIds([lookup.TransactionId]);
+							SendOutMessage(sec);
+						}
+
+						// Send finished message with optional archive
+						var finished = new SubscriptionFinishedMessage { OriginalTransactionId = lookup.TransactionId };
+
+						if (archive != null && archive.Length > 0)
+							finished.Body = archive;
+
+						SendOutMessage(finished);
+					}
+				}
+				else
+				{
+					ActiveSubscriptions.Remove(lookup.OriginalTransactionId);
+					SendOutMessage(lookup.CreateResponse());
+				}
+				break;
+			}
+
+			case MessageTypes.DataTypeLookup:
+			{
+				var lookup = (DataTypeLookupMessage)message;
+				var isSubscribe = ((ISubscriptionMessage)lookup).IsSubscribe;
+
+				if (isSubscribe)
+				{
+					ActiveSubscriptions[lookup.TransactionId] = lookup;
+
+					// Send subscription response
+					SendOutMessage(lookup.CreateResponse());
+
+					if (DataTypeLookupHandler != null && !SimulateTimeout)
+					{
+						var results = DataTypeLookupHandler(lookup);
+
+						foreach (var info in results)
+						{
+							info.OriginalTransactionId = lookup.TransactionId;
+							info.SetSubscriptionIds([lookup.TransactionId]);
+							SendOutMessage(info);
+						}
+
+						SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = lookup.TransactionId });
+					}
+				}
+				break;
+			}
+
+			case MessageTypes.RemoteFileCommand:
+			{
+				var cmd = (RemoteFileCommandMessage)message;
+
+				if (cmd.Command == CommandTypes.Get)
+				{
+					ActiveSubscriptions[cmd.TransactionId] = cmd;
+					SendOutMessage(cmd.CreateResponse());
+
+					if (FileCommandHandler != null && !SimulateTimeout)
+					{
+						var result = FileCommandHandler(cmd);
+
+						if (result != null)
+						{
+							result.OriginalTransactionId = cmd.TransactionId;
+							result.SetSubscriptionIds([cmd.TransactionId]);
+							SendOutMessage(result);
+						}
+
+						SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = cmd.TransactionId });
+					}
+				}
+				break;
+			}
+
+			case MessageTypes.BoardLookup:
+			{
+				var lookup = (BoardLookupMessage)message;
+				var isSubscribe = ((ISubscriptionMessage)lookup).IsSubscribe;
+
+				if (isSubscribe)
+				{
+					ActiveSubscriptions[lookup.TransactionId] = lookup;
+
+					SendOutMessage(lookup.CreateResponse());
+
+					if (BoardLookupHandler != null && !SimulateTimeout)
+					{
+						var (boards, archive) = BoardLookupHandler(lookup);
+
+						foreach (var board in boards)
+						{
+							board.OriginalTransactionId = lookup.TransactionId;
+							board.SetSubscriptionIds([lookup.TransactionId]);
+							SendOutMessage(board);
+						}
+
+						var finished = new SubscriptionFinishedMessage { OriginalTransactionId = lookup.TransactionId };
+
+						if (archive != null && archive.Length > 0)
+							finished.Body = archive;
+
+						SendOutMessage(finished);
+					}
+				}
+				else
+				{
+					ActiveSubscriptions.Remove(lookup.OriginalTransactionId);
+					SendOutMessage(lookup.CreateResponse());
+				}
+				break;
+			}
+		}
+
+		return default;
+	}
 }
