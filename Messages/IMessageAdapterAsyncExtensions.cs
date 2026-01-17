@@ -224,15 +224,24 @@ public static class IMessageAdapterAsyncExtensions
 		var startedTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 		var finishedTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 		var failedTcs = new TaskCompletionSource<Exception>(TaskCreationOptions.RunContinuationsAsynchronously);
+		var unsubTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		long unsubTransId = 0;
 
 		void OnOut(Message msg)
 		{
-			if (msg is SubscriptionResponseMessage resp && resp.OriginalTransactionId == subId)
+			if (msg is SubscriptionResponseMessage resp)
 			{
-				if (resp.Error != null)
-					failedTcs.TrySetException(resp.Error);
-				else
-					startedTcs.TrySetResult(true);
+				if (resp.OriginalTransactionId == subId)
+				{
+					if (resp.Error != null)
+						failedTcs.TrySetException(resp.Error);
+					else
+						startedTcs.TrySetResult(true);
+				}
+				else if (resp.OriginalTransactionId == Interlocked.Read(ref unsubTransId))
+				{
+					unsubTcs.TrySetResult(true);
+				}
 			}
 
 			if (msg is SubscriptionOnlineMessage on && on.OriginalTransactionId == subId)
@@ -249,16 +258,18 @@ public static class IMessageAdapterAsyncExtensions
 			try
 			{
 				var unsub = subscription.TypedClone();
-				
+
 				unsub.IsSubscribe = false;
 				unsub.OriginalTransactionId = subId;
 				unsub.TransactionId = adapter.TransactionIdGenerator.GetNextId();
 
+				Interlocked.Exchange(ref unsubTransId, unsub.TransactionId);
+
 				_ = adapter.SendInMessageAsync((Message)unsub, CancellationToken.None);
 			}
-			finally
+			catch
 			{
-				// rely on finishedTcs after unsubscription processed by adapter
+				unsubTcs.TrySetResult(true);
 			}
 		});
 
@@ -279,7 +290,8 @@ public static class IMessageAdapterAsyncExtensions
 				}
 				catch (OperationCanceledException)
 				{
-					await finishedTcs.Task.NoWait();
+					// Wait for unsubscribe response with timeout
+					await Task.WhenAny(unsubTcs.Task, Task.Delay(TimeSpan.FromSeconds(5))).NoWait();
 				}
 			}
 			else

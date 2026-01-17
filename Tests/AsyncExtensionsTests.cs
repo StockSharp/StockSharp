@@ -828,8 +828,8 @@ public class AsyncExtensionsTests : BaseTestClass
 					break;
 
 				case MarketDataMessage mdm when !mdm.IsSubscribe:
-					// Unsubscribe - send finished
-					SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = mdm.OriginalTransactionId });
+					// Unsubscribe - send response (not finished - finished is for subscription completion)
+					SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId });
 					break;
 			}
 
