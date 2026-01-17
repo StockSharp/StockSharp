@@ -1368,6 +1368,352 @@ static class Helper
 			a.OfflineMode.AssertEqual(e.OfflineMode);
 			a.BackMode.AssertEqual(e.BackMode);
 		}
+		else if (type == typeof(OrderRegisterMessage))
+		{
+			var e = expected.To<OrderRegisterMessage>();
+			var a = actual.To<OrderRegisterMessage>();
+
+			// OrderRegisterMessage fields
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.SecurityId.AssertEqual(e.SecurityId);
+			a.PortfolioName.AssertEqual(e.PortfolioName);
+			a.Side.AssertEqual(e.Side);
+			a.Price.AssertEqual(e.Price);
+			a.Volume.AssertEqual(e.Volume);
+			a.VisibleVolume.AssertEqual(e.VisibleVolume);
+			a.OrderType.AssertEqual(e.OrderType);
+			a.TimeInForce.AssertEqual(e.TimeInForce);
+			a.TillDate.AssertEqual(e.TillDate);
+			a.IsMarketMaker.AssertEqual(e.IsMarketMaker);
+			a.Slippage.AssertEqual(e.Slippage);
+			a.IsManual.AssertEqual(e.IsManual);
+			a.MinOrderVolume.AssertEqual(e.MinOrderVolume);
+			a.PositionEffect.AssertEqual(e.PositionEffect);
+			a.PostOnly.AssertEqual(e.PostOnly);
+			a.Leverage.AssertEqual(e.Leverage);
+			// OrderMessage fields
+			a.UserOrderId.AssertEqual(e.UserOrderId);
+			a.StrategyId.AssertEqual(e.StrategyId);
+			a.BrokerCode.AssertEqual(e.BrokerCode);
+			a.ClientCode.AssertEqual(e.ClientCode);
+			a.Comment.AssertEqual(e.Comment);
+			a.MarginMode.AssertEqual(e.MarginMode);
+		}
+		else if (type == typeof(OrderCancelMessage))
+		{
+			var e = expected.To<OrderCancelMessage>();
+			var a = actual.To<OrderCancelMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.SecurityId.AssertEqual(e.SecurityId);
+			a.PortfolioName.AssertEqual(e.PortfolioName);
+			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
+			a.Side.AssertEqual(e.Side);
+			a.Volume.AssertEqual(e.Volume);
+			a.OrderId.AssertEqual(e.OrderId);
+			a.OrderStringId.AssertEqual(e.OrderStringId);
+			a.Balance.AssertEqual(e.Balance);
+			// OrderMessage fields
+			a.OrderType.AssertEqual(e.OrderType);
+			a.UserOrderId.AssertEqual(e.UserOrderId);
+			a.StrategyId.AssertEqual(e.StrategyId);
+			a.BrokerCode.AssertEqual(e.BrokerCode);
+			a.ClientCode.AssertEqual(e.ClientCode);
+			a.Comment.AssertEqual(e.Comment);
+			a.MarginMode.AssertEqual(e.MarginMode);
+		}
+		else if (type == typeof(OrderReplaceMessage))
+		{
+			var e = expected.To<OrderReplaceMessage>();
+			var a = actual.To<OrderReplaceMessage>();
+
+			// OrderReplaceMessage fields
+			a.OldOrderId.AssertEqual(e.OldOrderId);
+			a.OldOrderStringId.AssertEqual(e.OldOrderStringId);
+			a.OldOrderPrice.AssertEqual(e.OldOrderPrice);
+			a.OldOrderVolume.AssertEqual(e.OldOrderVolume);
+			// OrderRegisterMessage fields
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.SecurityId.AssertEqual(e.SecurityId);
+			a.PortfolioName.AssertEqual(e.PortfolioName);
+			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
+			a.Side.AssertEqual(e.Side);
+			a.Price.AssertEqual(e.Price);
+			a.Volume.AssertEqual(e.Volume);
+			a.VisibleVolume.AssertEqual(e.VisibleVolume);
+			a.OrderType.AssertEqual(e.OrderType);
+			a.TimeInForce.AssertEqual(e.TimeInForce);
+			a.TillDate.AssertEqual(e.TillDate);
+			a.IsMarketMaker.AssertEqual(e.IsMarketMaker);
+			a.Slippage.AssertEqual(e.Slippage);
+			a.IsManual.AssertEqual(e.IsManual);
+			a.MinOrderVolume.AssertEqual(e.MinOrderVolume);
+			a.PositionEffect.AssertEqual(e.PositionEffect);
+			a.PostOnly.AssertEqual(e.PostOnly);
+			a.Leverage.AssertEqual(e.Leverage);
+			// OrderMessage fields
+			a.UserOrderId.AssertEqual(e.UserOrderId);
+			a.StrategyId.AssertEqual(e.StrategyId);
+			a.BrokerCode.AssertEqual(e.BrokerCode);
+			a.ClientCode.AssertEqual(e.ClientCode);
+			a.Comment.AssertEqual(e.Comment);
+			a.MarginMode.AssertEqual(e.MarginMode);
+		}
+		else if (type == typeof(OrderGroupCancelMessage))
+		{
+			var e = expected.To<OrderGroupCancelMessage>();
+			var a = actual.To<OrderGroupCancelMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.SecurityId.AssertEqual(e.SecurityId);
+			a.PortfolioName.AssertEqual(e.PortfolioName);
+			a.IsStop.AssertEqual(e.IsStop);
+			a.Side.AssertEqual(e.Side);
+			a.Mode.AssertEqual(e.Mode);
+			(a.SecurityTypes ?? []).SequenceEqual(e.SecurityTypes ?? []).AssertTrue();
+			// OrderMessage fields
+			a.OrderType.AssertEqual(e.OrderType);
+			a.UserOrderId.AssertEqual(e.UserOrderId);
+			a.StrategyId.AssertEqual(e.StrategyId);
+			a.BrokerCode.AssertEqual(e.BrokerCode);
+			a.ClientCode.AssertEqual(e.ClientCode);
+			a.Comment.AssertEqual(e.Comment);
+			a.MarginMode.AssertEqual(e.MarginMode);
+		}
+		else if (type == typeof(OrderStatusMessage))
+		{
+			var e = expected.To<OrderStatusMessage>();
+			var a = actual.To<OrderStatusMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
+			// OrderStatusMessage fields
+			a.From.AssertEqual(e.From);
+			a.To.AssertEqual(e.To);
+			a.Skip.AssertEqual(e.Skip);
+			a.Count.AssertEqual(e.Count);
+			a.FillGaps.AssertEqual(e.FillGaps);
+			a.IsSubscribe.AssertEqual(e.IsSubscribe);
+			(a.States ?? []).SequenceEqual(e.States ?? []).AssertTrue();
+			// OrderCancelMessage fields
+			a.SecurityId.AssertEqual(e.SecurityId);
+			a.PortfolioName.AssertEqual(e.PortfolioName);
+			a.Side.AssertEqual(e.Side);
+			a.Volume.AssertEqual(e.Volume);
+			a.OrderId.AssertEqual(e.OrderId);
+			a.OrderStringId.AssertEqual(e.OrderStringId);
+			a.Balance.AssertEqual(e.Balance);
+		}
+		else if (type == typeof(MarketDataMessage))
+		{
+			var e = expected.To<MarketDataMessage>();
+			var a = actual.To<MarketDataMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.SecurityId.AssertEqual(e.SecurityId);
+			a.DataType2.AssertEqual(e.DataType2);
+			a.IsSubscribe.AssertEqual(e.IsSubscribe);
+			a.From.AssertEqual(e.From);
+			a.To.AssertEqual(e.To);
+			a.Skip.AssertEqual(e.Skip);
+			a.Count.AssertEqual(e.Count);
+			a.MaxDepth.AssertEqual(e.MaxDepth);
+			a.NewsId.AssertEqual(e.NewsId);
+			a.IsCalcVolumeProfile.AssertEqual(e.IsCalcVolumeProfile);
+			a.BuildMode.AssertEqual(e.BuildMode);
+			a.BuildFrom.AssertEqual(e.BuildFrom);
+			a.BuildField.AssertEqual(e.BuildField);
+			a.AllowBuildFromSmallerTimeFrame.AssertEqual(e.AllowBuildFromSmallerTimeFrame);
+			a.IsRegularTradingHours.AssertEqual(e.IsRegularTradingHours);
+			a.IsFinishedOnly.AssertEqual(e.IsFinishedOnly);
+			a.BoardCode.AssertEqual(e.BoardCode);
+			a.RefreshSpeed.AssertEqual(e.RefreshSpeed);
+			a.FillGaps.AssertEqual(e.FillGaps);
+			a.DoNotBuildOrderBookIncrement.AssertEqual(e.DoNotBuildOrderBookIncrement);
+		}
+		else if (type == typeof(SecurityLookupMessage))
+		{
+			var e = expected.To<SecurityLookupMessage>();
+			var a = actual.To<SecurityLookupMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.SecurityId.AssertEqual(e.SecurityId);
+			(a.SecurityTypes ?? []).SequenceEqual(e.SecurityTypes ?? []).AssertTrue();
+			a.OnlySecurityId.AssertEqual(e.OnlySecurityId);
+			a.Skip.AssertEqual(e.Skip);
+			a.Count.AssertEqual(e.Count);
+			a.FillGaps.AssertEqual(e.FillGaps);
+			(a.SecurityIds ?? []).SequenceEqual(e.SecurityIds ?? []).AssertTrue();
+			a.IncludeExpired.AssertEqual(e.IncludeExpired);
+			a.DisableArchive.AssertEqual(e.DisableArchive);
+		}
+		else if (type == typeof(PortfolioLookupMessage))
+		{
+			var e = expected.To<PortfolioLookupMessage>();
+			var a = actual.To<PortfolioLookupMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.PortfolioName.AssertEqual(e.PortfolioName);
+			a.IsSubscribe.AssertEqual(e.IsSubscribe);
+			a.From.AssertEqual(e.From);
+			a.To.AssertEqual(e.To);
+			a.Skip.AssertEqual(e.Skip);
+			a.Count.AssertEqual(e.Count);
+			a.FillGaps.AssertEqual(e.FillGaps);
+			a.StrategyId.AssertEqual(e.StrategyId);
+			a.Side.AssertEqual(e.Side);
+			a.SecurityId.AssertEqual(e.SecurityId);
+		}
+		else if (type == typeof(UserLookupMessage))
+		{
+			var e = expected.To<UserLookupMessage>();
+			var a = actual.To<UserLookupMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.Like.AssertEqual(e.Like);
+			a.Own.AssertEqual(e.Own);
+			a.UserId.AssertEqual(e.UserId);
+		}
+		else if (type == typeof(UserRequestMessage))
+		{
+			var e = expected.To<UserRequestMessage>();
+			var a = actual.To<UserRequestMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.Login.AssertEqual(e.Login);
+			a.Id.AssertEqual(e.Id);
+		}
+		else if (type == typeof(UserInfoMessage))
+		{
+			var e = expected.To<UserInfoMessage>();
+			var a = actual.To<UserInfoMessage>();
+
+			a.Login.AssertEqual(e.Login);
+			a.Id.AssertEqual(e.Id);
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
+			a.IsBlocked.AssertEqual(e.IsBlocked);
+			a.DisplayName.AssertEqual(e.DisplayName);
+			a.Phone.AssertEqual(e.Phone);
+			a.Homepage.AssertEqual(e.Homepage);
+			a.Skype.AssertEqual(e.Skype);
+			a.City.AssertEqual(e.City);
+			a.Gender.AssertEqual(e.Gender);
+			a.IsSubscription.AssertEqual(e.IsSubscription);
+			a.Language.AssertEqual(e.Language);
+			a.Balance.AssertEqual(e.Balance);
+			a.Avatar.AssertEqual(e.Avatar);
+			a.CreationDate.AssertEqual(e.CreationDate);
+			a.AuthToken.AssertEqual(e.AuthToken);
+			a.CanPublish.AssertEqual(e.CanPublish);
+			a.IsAgreementAccepted.AssertEqual(e.IsAgreementAccepted);
+			a.UploadLimit.AssertEqual(e.UploadLimit);
+			a.IsTrialVerified.AssertEqual(e.IsTrialVerified);
+		}
+		else if (type == typeof(DataTypeInfoMessage))
+		{
+			var e = expected.To<DataTypeInfoMessage>();
+			var a = actual.To<DataTypeInfoMessage>();
+
+			a.SecurityId.AssertEqual(e.SecurityId);
+			a.FileDataType.AssertEqual(e.FileDataType);
+			(a.Dates ?? []).SequenceEqual(e.Dates ?? []).AssertTrue();
+			a.Format.AssertEqual(e.Format);
+			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
+		}
+		else if (type == typeof(SubscriptionFinishedMessage))
+		{
+			var e = expected.To<SubscriptionFinishedMessage>();
+			var a = actual.To<SubscriptionFinishedMessage>();
+
+			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
+			a.NextFrom.AssertEqual(e.NextFrom);
+			(a.Body ?? []).SequenceEqual(e.Body ?? []).AssertTrue();
+		}
+		else if (type == typeof(TimeMessage))
+		{
+			var e = expected.To<TimeMessage>();
+			var a = actual.To<TimeMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+		}
+		else if (type == typeof(SecurityMappingMessage))
+		{
+			var e = expected.To<SecurityMappingMessage>();
+			var a = actual.To<SecurityMappingMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
+			a.StorageName.AssertEqual(e.StorageName);
+			a.IsDelete.AssertEqual(e.IsDelete);
+			a.Mapping.StockSharpId.AssertEqual(e.Mapping.StockSharpId);
+			a.Mapping.AdapterId.AssertEqual(e.Mapping.AdapterId);
+		}
+		else if (type == typeof(RemoveMessage))
+		{
+			var e = expected.To<RemoveMessage>();
+			var a = actual.To<RemoveMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.RemoveType.AssertEqual(e.RemoveType);
+			a.RemoveId.AssertEqual(e.RemoveId);
+		}
+		else if (type == typeof(DataTypeLookupMessage))
+		{
+			var e = expected.To<DataTypeLookupMessage>();
+			var a = actual.To<DataTypeLookupMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.SecurityId.AssertEqual(e.SecurityId);
+			a.IncludeDates.AssertEqual(e.IncludeDates);
+			a.Format.AssertEqual(e.Format);
+			a.RequestDataType.AssertEqual(e.RequestDataType);
+		}
+		else if (type == typeof(SecurityLegsRequestMessage))
+		{
+			var e = expected.To<SecurityLegsRequestMessage>();
+			var a = actual.To<SecurityLegsRequestMessage>();
+
+			a.TransactionId.AssertEqual(e.TransactionId);
+			a.Like.AssertEqual(e.Like);
+		}
+		else if (type == typeof(SecurityMessage))
+		{
+			var e = expected.To<SecurityMessage>();
+			var a = actual.To<SecurityMessage>();
+
+			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
+			a.SecurityId.AssertEqual(e.SecurityId);
+			a.SecurityType.AssertEqual(e.SecurityType);
+			a.Name.AssertEqual(e.Name);
+			a.ShortName.AssertEqual(e.ShortName);
+			a.Currency.AssertEqual(e.Currency);
+			a.ExpiryDate.AssertEqual(e.ExpiryDate);
+			a.OptionType.AssertEqual(e.OptionType);
+			a.PriceStep.AssertEqual(e.PriceStep);
+			a.Decimals.AssertEqual(e.Decimals);
+			a.CfiCode.AssertEqual(e.CfiCode);
+			a.SettlementDate.AssertEqual(e.SettlementDate);
+			a.Strike.AssertEqual(e.Strike);
+			a.UnderlyingSecurityId.AssertEqual(e.UnderlyingSecurityId);
+			a.VolumeStep.AssertEqual(e.VolumeStep);
+			a.MinVolume.AssertEqual(e.MinVolume);
+			a.MaxVolume.AssertEqual(e.MaxVolume);
+			a.Multiplier.AssertEqual(e.Multiplier);
+			a.Class.AssertEqual(e.Class);
+			a.BinaryOptionType.AssertEqual(e.BinaryOptionType);
+			a.IssueSize.AssertEqual(e.IssueSize);
+			a.IssueDate.AssertEqual(e.IssueDate);
+			a.UnderlyingSecurityType.AssertEqual(e.UnderlyingSecurityType);
+			a.UnderlyingSecurityMinVolume.AssertEqual(e.UnderlyingSecurityMinVolume);
+			a.Shortable.AssertEqual(e.Shortable);
+			a.BasketCode.AssertEqual(e.BasketCode);
+			a.BasketExpression.AssertEqual(e.BasketExpression);
+			a.FaceValue.AssertEqual(e.FaceValue);
+			a.SettlementType.AssertEqual(e.SettlementType);
+			a.OptionStyle.AssertEqual(e.OptionStyle);
+			a.PrimaryId.AssertEqual(e.PrimaryId);
+		}
 		else
 			actual.AssertEqual(expected);
 	}
