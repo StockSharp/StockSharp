@@ -150,7 +150,7 @@ public sealed class OrderBookIncrementManager : IOrderBookIncrementManager
 						if (_online.TryGetValue(secId, out var online))
 						{
 							online.SubscriptionIds.Add(id);
-							_byId.Remove(id);
+							_byId[id] = online;
 						}
 						else
 						{
@@ -268,7 +268,7 @@ public sealed class OrderBookIncrementManager : IOrderBookIncrementManager
 
 			if (ids.Length == 0)
 				_online.Remove(secId);
-			else if (changeId)
+			else if (changeId && !_byId.ContainsKey(ids[0]))
 				_byId.Add(ids[0], info);
 		}
 
