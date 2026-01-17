@@ -30,13 +30,21 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 	/// <inheritdoc />
 	public override string Extension => "xlsx";
 
-	// Template sheet names
+	// Template sheet names (localized)
 	private readonly string _dashboardSheet = LocalizedStrings.Dashboard;
 	private readonly string _paramsSheet = LocalizedStrings.Params;
 	private readonly string _equitySheet = LocalizedStrings.Equity;
 	private readonly string _tradesSheet = LocalizedStrings.Trades;
 	private readonly string _ordersSheet = LocalizedStrings.Orders;
 	private readonly string _statsSheet = LocalizedStrings.Statistics;
+
+	// English fallback names for template (template uses English sheet names)
+	private const string _dashboardSheetEn = "Dashboard";
+	private const string _paramsSheetEn = "Params";
+	private const string _equitySheetEn = "Equity";
+	private const string _tradesSheetEn = "Trades";
+	private const string _ordersSheetEn = "Orders";
+	private const string _statsSheetEn = "Stats";
 
 	private const string _templateResourceName = "StockSharp.Reporting.Resources.StrategyReportTemplate.xlsx";
 
@@ -70,6 +78,14 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		return default;
 	}
 
+	/// <summary>
+	/// Switch to sheet by localized name, falling back to English name if not found.
+	/// </summary>
+	private static void SwitchSheet(IExcelWorker worker, string localizedName, string englishName)
+	{
+		worker.SwitchSheet(worker.ContainsSheet(localizedName) ? localizedName : englishName);
+	}
+
 	private void GenerateWithTemplate(IReportSource source, Stream stream, CancellationToken cancellationToken)
 	{
 		// Copy template into output stream
@@ -91,7 +107,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		FillEquity(worker, source, cancellationToken);
 
 		// Dashboard/Stats are template-formula driven.
-		worker.SwitchSheet(_dashboardSheet);
+		SwitchSheet(worker, _dashboardSheet, _dashboardSheetEn);
 	}
 
 	private void GenerateWithoutTemplate(IReportSource source, Stream stream, CancellationToken cancellationToken)
@@ -769,7 +785,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		worker.SwitchSheet(_paramsSheet);
+		SwitchSheet(worker, _paramsSheet, _paramsSheetEn);
 
 		// Template cells (0-based indices):
 		// B2 -> (col=1,row=1) Strategy Name
@@ -819,7 +835,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		worker.SwitchSheet(_tradesSheet);
+		SwitchSheet(worker, _tradesSheet, _tradesSheetEn);
 
 		// Trades template columns:
 		// A EntryTime, B ExitTime, C Security, D Side, E Qty, F EntryPrice, G ExitPrice,
@@ -866,7 +882,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		worker.SwitchSheet(_ordersSheet);
+		SwitchSheet(worker, _ordersSheet, _ordersSheetEn);
 
 		// Orders template columns:
 		// A OrderId, B TransactionId, C Security, D Side, E Time, F Price, G State, H Balance, I Volume, J Type
@@ -920,7 +936,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			byDay[tr.Time.Date] = cumPnL;
 		}
 
-		worker.SwitchSheet(_equitySheet);
+		SwitchSheet(worker, _equitySheet, _equitySheetEn);
 
 		// Equity template columns:
 		// A Date, B Equity, C Drawdown
@@ -953,7 +969,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		}
 
 		// Stats sheet is formula-driven; just ensure it exists and can be recalculated.
-		worker.SwitchSheet(_statsSheet);
+		SwitchSheet(worker, _statsSheet, _statsSheetEn);
 	}
 
 	private static void WriteParamIfExists(IExcelWorker worker, IReportSource source, string key, int col, int row)

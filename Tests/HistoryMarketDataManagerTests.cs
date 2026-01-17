@@ -1689,7 +1689,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		emu.NewOutMessage += msg => emulatorOutputs.Add(msg);
 
-		var lastInputTime = DateTimeOffset.MinValue;
+		var lastInputTime = DateTime.MinValue;
 		var outputIndex = 0;
 
 		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
@@ -1890,7 +1890,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		}, CancellationToken);
 
 		var violations = new List<string>();
-		var lastInputTime = DateTimeOffset.MinValue;
+		var lastInputTime = DateTime.MinValue;
 
 		emu.NewOutMessage += msg =>
 		{
@@ -1951,7 +1951,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		}, CancellationToken);
 
 		var emulatorOutputs = new List<Message>();
-		var inputTimes = new List<DateTimeOffset>();
+		var inputTimes = new List<DateTime>();
 
 		emu.NewOutMessage += msg => emulatorOutputs.Add(msg);
 

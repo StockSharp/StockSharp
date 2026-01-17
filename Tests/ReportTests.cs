@@ -236,36 +236,6 @@ public class ReportTests : BaseTestClass
 		csv.AssertContains("1.85");
 	}
 
-	/// <summary>
-	/// Helper test to generate expected report files. Run manually to regenerate.
-	/// </summary>
-	[TestMethod]
-	[Ignore("Run manually to regenerate expected files")]
-	public async Task GenerateExpectedReportFiles()
-	{
-		var source = CreateDeterministicSource();
-		var outputDir = Path.Combine(Path.GetDirectoryName(GetType().Assembly.Location), "..", "..", "..", "Resources", "Reports");
-		Directory.CreateDirectory(outputDir);
-
-		// Generate JSON
-		var jsonGenerator = new JsonReportGenerator { IncludeOrders = true, IncludeTrades = true };
-		using (var stream = new FileStream(Path.Combine(outputDir, "expected_report.json"), FileMode.Create))
-			await jsonGenerator.Generate(source, stream, CancellationToken);
-
-		// Generate XML
-		var xmlGenerator = new XmlReportGenerator { IncludeOrders = true, IncludeTrades = true };
-		using (var stream = new FileStream(Path.Combine(outputDir, "expected_report.xml"), FileMode.Create))
-			await xmlGenerator.Generate(source, stream, CancellationToken);
-
-		// Generate CSV
-		var csvGenerator = new CsvReportGenerator { IncludeOrders = true, IncludeTrades = true };
-		using (var stream = new FileStream(Path.Combine(outputDir, "expected_report.csv"), FileMode.Create))
-			await csvGenerator.Generate(source, stream, CancellationToken);
-
-		// Output the path for easy access
-		Console.WriteLine($"Expected files generated at: {outputDir}");
-	}
-
 	[TestMethod]
 	public async Task JsonReportGenerator_GeneratesValidJson()
 	{
