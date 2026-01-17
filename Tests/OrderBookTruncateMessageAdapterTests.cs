@@ -133,7 +133,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task MarketDepthSubscribe_WhenNoSupportedDepths_ForwardsNullMaxDepth_AndTruncatesSnapshot()
+	public async Task MarketDepthSubscribe_WhenNoSupportedDepths_KeepsMaxDepth_AndTruncatesSnapshot()
 	{
 		var token = CancellationToken;
 
@@ -155,12 +155,15 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		}, token);
 
 		inner.InMessages.Count.AssertEqual(1);
-		((MarketDataMessage)inner.InMessages[0]).MaxDepth.AssertNull();
+		// When no supported depths, keep original MaxDepth (don't set to null)
+		((MarketDataMessage)inner.InMessages[0]).MaxDepth.AssertEqual(5);
 
 		output.Clear();
 
+		// Inner adapter might still return more than requested
 		inner.SendOutMessage(CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1], depth: 10));
 
+		// But we still truncate to the originally requested depth
 		var truncated = output.OfType<QuoteChangeMessage>().Single();
 		truncated.Bids.Length.AssertEqual(5);
 		truncated.Asks.Length.AssertEqual(5);

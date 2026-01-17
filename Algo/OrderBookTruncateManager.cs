@@ -65,13 +65,20 @@ public sealed class OrderBookTruncateManager(ILogReceiver logReceiver, Func<int,
 
 							if (supportedDepth != actualDepth)
 							{
-								mdMsg = mdMsg.TypedClone();
-								mdMsg.MaxDepth = supportedDepth;
-								message = mdMsg;
-
 								_depths.Add(mdMsg.TransactionId, actualDepth);
 
-								_logReceiver.AddInfoLog("MD truncate {0}/{1} ({2}->{3}).", mdMsg.SecurityId, mdMsg.TransactionId, actualDepth, supportedDepth);
+								if (supportedDepth != null)
+								{
+									mdMsg = mdMsg.TypedClone();
+									mdMsg.MaxDepth = supportedDepth;
+									message = mdMsg;
+
+									_logReceiver.AddInfoLog("MD truncate {0}/{1} ({2}->{3}).", mdMsg.SecurityId, mdMsg.TransactionId, actualDepth, supportedDepth);
+								}
+								else
+								{
+									_logReceiver.AddInfoLog("MD truncate {0}/{1} (no supported depths, will truncate to {2}).", mdMsg.SecurityId, mdMsg.TransactionId, actualDepth);
+								}
 							}
 						}
 					}
