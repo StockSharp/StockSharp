@@ -290,8 +290,9 @@ public static class IMessageAdapterAsyncExtensions
 				}
 				catch (OperationCanceledException)
 				{
-					// Wait for unsubscribe response with timeout
-					await Task.WhenAny(unsubTcs.Task, Task.Delay(TimeSpan.FromSeconds(5))).NoWait();
+					// Wait for unsubscribe response with short timeout
+					// Don't wait too long - user cancelled, so exit promptly
+					await Task.WhenAny(unsubTcs.Task, Task.Delay(TimeSpan.FromSeconds(1))).NoWait();
 				}
 			}
 			else

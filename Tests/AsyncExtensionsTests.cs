@@ -611,7 +611,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task SubscribeAsync_SubscriptionError_Throws()
 	{
-		var adapter = new ControlledTestAdapter();
+		var adapter = new ControlledTestAdapter { AutoSendSubscriptionResponse = false };
 
 		var subscription = new MarketDataMessage
 		{
@@ -624,10 +624,10 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Act: start subscription
 		var subscribeTask = adapter.SubscribeAsync(subscription, CancellationToken).AsTask();
 
-		// Wait a bit for subscription message to be processed
-		await Task.Delay(50, CancellationToken);
+		// Wait for subscription message to be received by adapter
+		await adapter.WaitForSubscriptionStarted(CancellationToken);
 
-		// Send error response
+		// Send error response (instead of success)
 		adapter.SendSubscriptionError(subscription.TransactionId, new InvalidOperationException("Test error"));
 
 		// Assert: should throw
@@ -788,8 +788,19 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		public ControlledTestAdapter() : base(new IncrementalIdGenerator()) { }
 
+		/// <summary>
+		/// If true, automatically sends success response when subscribe message is received.
+		/// Set to false to manually control responses (e.g., for error testing).
+		/// </summary>
+		public bool AutoSendSubscriptionResponse { get; set; } = true;
+
 		public Task WaitForSubscriptionStarted(CancellationToken cancellationToken)
 			=> _subscriptionStarted.Task.WithCancellation(cancellationToken);
+
+		public void SendSubscriptionResponse(long subscriptionId)
+		{
+			SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = subscriptionId });
+		}
 
 		public void SendSubscriptionFinished(long subscriptionId)
 		{
@@ -822,9 +833,9 @@ public class AsyncExtensionsTests : BaseTestClass
 			switch (message)
 			{
 				case MarketDataMessage mdm when mdm.IsSubscribe:
-					// Send response (subscription started)
-					SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId });
 					_subscriptionStarted.TrySetResult(true);
+					if (AutoSendSubscriptionResponse)
+						SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId });
 					break;
 
 				case MarketDataMessage mdm when !mdm.IsSubscribe:
