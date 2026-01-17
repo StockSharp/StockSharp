@@ -153,10 +153,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		["BoardCode"] = typeof(string),
 		["Type"] = typeof(string),
 		["Arg"] = typeof(string),
-		["OpenTime"] = typeof(DateTimeOffset),
-		["CloseTime"] = typeof(DateTimeOffset?),
-		["HighTime"] = typeof(DateTimeOffset?),
-		["LowTime"] = typeof(DateTimeOffset?),
+		["OpenTime"] = typeof(DateTime),
 		["OpenPrice"] = typeof(decimal),
 		["HighPrice"] = typeof(decimal),
 		["LowPrice"] = typeof(decimal),
@@ -173,7 +170,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 	{
 		["SecurityCode"] = typeof(string),
 		["BoardCode"] = typeof(string),
-		["Time"] = typeof(DateTimeOffset),
+		["Time"] = typeof(DateTime),
 		["Value1"] = typeof(decimal?),
 		["Value2"] = typeof(decimal?),
 		["Value3"] = typeof(decimal?),
@@ -184,8 +181,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 	{
 		var columns = new Dictionary<string, Type>
 		{
-			["ServerTime"] = typeof(DateTimeOffset),
-			["LocalTime"] = typeof(DateTimeOffset?),
+			["ServerTime"] = typeof(DateTime),
 			["PortfolioName"] = typeof(string),
 			["SecurityCode"] = typeof(string),
 			["BoardCode"] = typeof(string),
@@ -217,10 +213,10 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		["UnderlyingBoardCode"] = typeof(string),
 		["UnderlyingSecurityType"] = typeof(string),
 		["UnderlyingSecurityMinVolume"] = typeof(decimal?),
-		["ExpiryDate"] = typeof(DateTimeOffset?),
+		["ExpiryDate"] = typeof(DateTime?),
 		["Currency"] = typeof(string),
-		["SettlementDate"] = typeof(DateTimeOffset?),
-		["IssueDate"] = typeof(DateTimeOffset?),
+		["SettlementDate"] = typeof(DateTime?),
+		["IssueDate"] = typeof(DateTime?),
 		["IssueSize"] = typeof(decimal?),
 		["CfiCode"] = typeof(string),
 		["Shortable"] = typeof(bool?),
@@ -244,8 +240,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 	private IDictionary<string, Type> GetNewsColumns() => new Dictionary<string, Type>
 	{
 		["Id"] = typeof(string),
-		["ServerTime"] = typeof(DateTimeOffset),
-		["LocalTime"] = typeof(DateTimeOffset?),
+		["ServerTime"] = typeof(DateTime),
 		["BoardCode"] = typeof(string),
 		["Headline"] = typeof(string),
 		["Story"] = typeof(string),
@@ -253,7 +248,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		["Url"] = typeof(string),
 		["Priority"] = typeof(int?),
 		["Language"] = typeof(string),
-		["ExpiryDate"] = typeof(DateTimeOffset?),
+		["ExpiryDate"] = typeof(DateTime?),
 		["SeqNum"] = typeof(long?),
 	};
 
@@ -261,8 +256,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 	{
 		var columns = new Dictionary<string, Type>
 		{
-			["ServerTime"] = typeof(DateTimeOffset),
-			["LocalTime"] = typeof(DateTimeOffset?),
+			["ServerTime"] = typeof(DateTime),
 			["SecurityCode"] = typeof(string),
 			["BoardCode"] = typeof(string),
 		};
@@ -277,8 +271,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 	{
 		["SecurityCode"] = typeof(string),
 		["BoardCode"] = typeof(string),
-		["ServerTime"] = typeof(DateTimeOffset),
-		["LocalTime"] = typeof(DateTimeOffset?),
+		["ServerTime"] = typeof(DateTime),
 		["Price"] = typeof(decimal),
 		["Volume"] = typeof(decimal),
 		["Side"] = typeof(int),
@@ -293,8 +286,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 	{
 		["SecurityCode"] = typeof(string),
 		["BoardCode"] = typeof(string),
-		["ServerTime"] = typeof(DateTimeOffset),
-		["LocalTime"] = typeof(DateTimeOffset?),
+		["ServerTime"] = typeof(DateTime),
 		["TransactionId"] = typeof(long?),
 		["OriginalTransactionId"] = typeof(long?),
 		["OrderId"] = typeof(string),
@@ -311,7 +303,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		["ClientCode"] = typeof(string),
 		["BrokerCode"] = typeof(string),
 		["DepoName"] = typeof(string),
-		["ExpiryDate"] = typeof(DateTimeOffset?),
+		["ExpiryDate"] = typeof(DateTime?),
 		["TradeId"] = typeof(string),
 		["TradePrice"] = typeof(decimal?),
 		["TradeVolume"] = typeof(decimal?),
@@ -349,7 +341,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 
 	private IDictionary<string, Type> GetBoardStateColumns() => new Dictionary<string, Type>
 	{
-		["ServerTime"] = typeof(DateTimeOffset),
+		["ServerTime"] = typeof(DateTime),
 		["BoardCode"] = typeof(string),
 		["State"] = typeof(int),
 	};
@@ -373,9 +365,6 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		["Type"] = m.Type.To<string>(),
 		["Arg"] = m.DataType.Arg switch { TimeSpan tf => tf.Ticks, Unit u => u.ToString(), PnFArg pnf => pnf.ToString(), var x => x?.ToString() },
 		["OpenTime"] = m.OpenTime,
-		["CloseTime"] = m.CloseTime,
-		["HighTime"] = m.HighTime,
-		["LowTime"] = m.LowTime,
 		["OpenPrice"] = m.OpenPrice,
 		["HighPrice"] = m.HighPrice,
 		["LowPrice"] = m.LowPrice,
@@ -404,7 +393,6 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		var dict = new Dictionary<string, object>
 		{
 			["ServerTime"] = m.ServerTime,
-			["LocalTime"] = m.LocalTime,
 			["PortfolioName"] = m.PortfolioName,
 			["SecurityCode"] = m.SecurityId.SecurityCode,
 			["BoardCode"] = m.SecurityId.BoardCode,
@@ -464,7 +452,6 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 	{
 		["Id"] = m.Id,
 		["ServerTime"] = m.ServerTime,
-		["LocalTime"] = m.LocalTime,
 		["BoardCode"] = m.BoardCode,
 		["Headline"] = m.Headline,
 		["Story"] = m.Story,
@@ -481,7 +468,6 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		var dict = new Dictionary<string, object>
 		{
 			["ServerTime"] = m.ServerTime,
-			["LocalTime"] = m.LocalTime,
 			["SecurityCode"] = m.SecurityId.SecurityCode,
 			["BoardCode"] = m.SecurityId.BoardCode,
 		};
@@ -497,7 +483,6 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		["SecurityCode"] = m.SecurityId.SecurityCode,
 		["BoardCode"] = m.SecurityId.BoardCode,
 		["ServerTime"] = m.ServerTime,
-		["LocalTime"] = m.LocalTime,
 		["Price"] = m.Quote.Price,
 		["Volume"] = m.Quote.Volume,
 		["Side"] = (int)m.Side,
@@ -513,7 +498,6 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		["SecurityCode"] = m.SecurityId.SecurityCode,
 		["BoardCode"] = m.SecurityId.BoardCode,
 		["ServerTime"] = m.ServerTime,
-		["LocalTime"] = m.LocalTime,
 		["TransactionId"] = m.TransactionId,
 		["OriginalTransactionId"] = m.OriginalTransactionId,
 		["OrderId"] = m.OrderId?.To<string>(),
