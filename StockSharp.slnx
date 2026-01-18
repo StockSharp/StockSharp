@@ -1,0 +1,92 @@
+<Solution>
+  <Folder Name="/Connectors/">
+    <Project Path="Connectors/Bitalong/Bitalong.csproj" />
+    <Project Path="Connectors/Bitexbook/Bitexbook.csproj" />
+    <Project Path="Connectors/BitStamp/BitStamp.csproj" />
+    <Project Path="Connectors/Btce/Btce.csproj" />
+    <Project Path="Connectors/Coinbase/Coinbase.csproj" />
+    <Project Path="Connectors/FTX/FTX.csproj" />
+    <Project Path="Connectors/Tinkoff/Tinkoff.csproj" />
+  </Folder>
+  <Folder Name="/Samples/" />
+  <Folder Name="/Samples/01_Basic/">
+    <Project Path="Samples/01_Basic/01_ConnectAndDownloadInstruments/01_Basic.ConnectAndDownloadInstruments.csproj" />
+    <Project Path="Samples/01_Basic/02_MarketDepths/02_Basic.MarketDepths.csproj" />
+    <Project Path="Samples/01_Basic/03_Orders/03_Basic.Orders.csproj" />
+  </Folder>
+  <Folder Name="/Samples/02_Candles/">
+    <Project Path="Samples/02_Candles/01_Realtime/01_Candles.Realtime.csproj" />
+    <Project Path="Samples/02_Candles/02_CombineHistoryRealtime/02_Candles.CombineHistoryRealtime.csproj" />
+  </Folder>
+  <Folder Name="/Samples/03_Storage/">
+    <Project Path="Samples/03_Storage/01_Random/01_Storage.Random.csproj" />
+    <Project Path="Samples/03_Storage/02_Local/02_Storage.Local.csproj" />
+    <Project Path="Samples/03_Storage/03_RemoteSource/03_Storage.RemoteSource.csproj" />
+    <Project Path="Samples/03_Storage/04_HydraServerConnect/04_Storage.HydraServerConnect.csproj" />
+    <Project Path="Samples/03_Storage/05_HydraServerSaveToLocal/05_Storage.HydraServerSaveToLocal.csproj" />
+  </Folder>
+  <Folder Name="/Samples/04_Indicators/">
+    <Project Path="Samples/04_Indicators/01_SimpleSMA/01_Indicators.SimpleSMA.csproj" />
+    <Project Path="Samples/04_Indicators/02_ComplexBollinger/02_Indicators.ComplexBollinger.csproj" />
+    <Project Path="Samples/04_Indicators/03_CreateOwn/03_Indicators.CreateOwn.csproj" />
+  </Folder>
+  <Folder Name="/Samples/05_Chart/">
+    <Project Path="Samples/05_Chart/01_Chart/01_Chart.csproj" />
+    <Project Path="Samples/05_Chart/02_ActiveOrders/02_Chart.ActiveOrders.csproj" />
+    <Project Path="Samples/05_Chart/03_Performance/03_Chart.Performance.csproj" />
+  </Folder>
+  <Folder Name="/Samples/06_Strategies/">
+    <Project Path="Samples/06_Strategies/01_HistorySMA/01_Strategies.HistorySMA.csproj" />
+    <Project Path="Samples/06_Strategies/02_HistoryBollingerBands/02_Strategies.HistoryBollingerBands.csproj" />
+    <Project Path="Samples/06_Strategies/03_HistoryTrend/03_Strategies.HistoryTrend.csproj" />
+    <Project Path="Samples/06_Strategies/04_HistoryMarketRule/04_Strategies.HistoryMarketRule.csproj" />
+    <Project Path="Samples/06_Strategies/05_HistoryIndex/05_Strategies.HistoryIndex.csproj" />
+    <Project Path="Samples/06_Strategies/06_HistoryQuoting/06_Strategies.HistoryQuoting.csproj" />
+    <Project Path="Samples/06_Strategies/07_LiveSpread/07_Strategies.LiveSpread.csproj" />
+    <Project Path="Samples/06_Strategies/08_LiveArbitrage/08_Strategies.LiveArbitrage.csproj" />
+    <Project Path="Samples/06_Strategies/09_LiveOptionsQuoting/09_Strategies.LiveOptionsQuoting.csproj" />
+    <Project Path="Samples/06_Strategies/10_LiveTerminal/10_Strategies.LiveTerminal.csproj" />
+  </Folder>
+  <Folder Name="/Samples/07_Testing/">
+    <Project Path="Samples/07_Testing/01_History/01_Testing.History.csproj" />
+    <Project Path="Samples/07_Testing/02_Optimization/02_Testing.Optimization.csproj" />
+    <Project Path="Samples/07_Testing/03_RealTime/03_Testing.RealTime.csproj" />
+    <Project Path="Samples/07_Testing/04_HistoryConsole/04_Testing.HistoryConsole.csproj" />
+  </Folder>
+  <Folder Name="/Samples/08_Misc/">
+    <Project Path="Samples/08_Misc/01_Logging/01_Misc.Logging.csproj" />
+    <Project Path="Samples/08_Misc/02_Unit/02_Misc.Unit.csproj" />
+  </Folder>
+  <Folder Name="/Samples/09_Advanced/">
+    <Project Path="Samples/09_Advanced/01_MultiConnect/01_Advanced.MultiConnect.csproj" />
+    <Project Path="Samples/09_Advanced/02_StoreDataLocal/02_Advanced.SaveDataLocal.csproj" />
+  </Folder>
+  <Folder Name="/Samples/10_CrossPlatform/">
+    <Project Path="Samples/10_CrossPlatform/01_ConsoleApp/01_CrossPlatform.ConsoleApp.csproj" />
+  </Folder>
+  <Project Path="Alerts.Interfaces/Alerts.Interfaces.csproj" />
+  <Project Path="Algo.Analytics.CSharp/Algo.Analytics.CSharp.csproj" />
+  <Project Path="Algo.Analytics.FSharp/Algo.Analytics.FSharp.fsproj" />
+  <Project Path="Algo.Analytics/Algo.Analytics.csproj" />
+  <Project Path="Algo.Compilation/Algo.Compilation.csproj" />
+  <Project Path="Algo.Export/Algo.Export.csproj" />
+  <Project Path="Algo.Gpu/Algo.Gpu.csproj" />
+  <Project Path="Algo.Import/Algo.Import.csproj" />
+  <Project Path="Algo.Indicators/Algo.Indicators.csproj" />
+  <Project Path="Algo.Strategies/Algo.Strategies.csproj" />
+  <Project Path="Algo.Testing/Algo.Testing.csproj" />
+  <Project Path="Algo/Algo.csproj" />
+  <Project Path="BusinessEntities/BusinessEntities.csproj" />
+  <Project Path="Charting.Interfaces/Charting.Interfaces.csproj" />
+  <Project Path="Configuration/Configuration.csproj" />
+  <Project Path="Diagram.Core/Diagram.Core.csproj" />
+  <Project Path="Localization.Extractor/Localization.Extractor.csproj" />
+  <Project Path="Localization.Generator/Localization.Generator.csproj" />
+  <Project Path="Localization/Localization.csproj" />
+  <Project Path="Media.Generator/Media.Generator.csproj" />
+  <Project Path="Media.Names/Media.Names.csproj" />
+  <Project Path="Media/Media.csproj" />
+  <Project Path="Messages/Messages.csproj" />
+  <Project Path="Reporting/Reporting.csproj" />
+  <Project Path="Tests/Tests.csproj" />
+</Solution>

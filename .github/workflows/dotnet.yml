@@ -24,12 +24,12 @@ jobs:
             6.0.x
             10.0.x
 
-      - name: Build StockSharp.sln (Windows only)
+      - name: Build StockSharp.slnx (Windows only)
         if: matrix.os == 'windows-latest'
-        run: dotnet build StockSharp.sln --configuration Release
+        run: dotnet build StockSharp.slnx --configuration Release
 
       - name: Build
-        run: dotnet build StockSharp_Tests.sln --configuration Release
+        run: dotnet build StockSharp_Tests.slnx --configuration Release
 
       - name: Run tests
-        run: dotnet test StockSharp_Tests.sln --no-build --configuration Release
+        run: dotnet test StockSharp_Tests.slnx --no-build --configuration Release

@@ -1,0 +1,23 @@
+<Solution>
+  <Project Path="Alerts.Interfaces/Alerts.Interfaces.csproj" />
+  <Project Path="Algo.Analytics/Algo.Analytics.csproj" />
+  <Project Path="Algo.Compilation/Algo.Compilation.csproj" />
+  <Project Path="Algo.Export/Algo.Export.csproj" />
+  <Project Path="Algo.Gpu/Algo.Gpu.csproj" />
+  <Project Path="Algo.Import/Algo.Import.csproj" />
+  <Project Path="Algo.Indicators/Algo.Indicators.csproj" />
+  <Project Path="Algo.Strategies/Algo.Strategies.csproj" />
+  <Project Path="Algo.Testing/Algo.Testing.csproj" />
+  <Project Path="Algo/Algo.csproj" />
+  <Project Path="BusinessEntities/BusinessEntities.csproj" />
+  <Project Path="Charting.Interfaces/Charting.Interfaces.csproj" />
+  <Project Path="Configuration/Configuration.csproj" />
+  <Project Path="Diagram.Core/Diagram.Core.csproj" />
+  <Project Path="Localization.Generator/Localization.Generator.csproj" />
+  <Project Path="Localization/Localization.csproj" />
+  <Project Path="Media.Generator/Media.Generator.csproj" />
+  <Project Path="Media.Names/Media.Names.csproj" />
+  <Project Path="Messages/Messages.csproj" />
+  <Project Path="Reporting/Reporting.csproj" />
+  <Project Path="Tests/Tests.csproj" />
+</Solution>

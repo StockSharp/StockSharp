@@ -1,0 +1,56 @@
+<Solution>
+  <Folder Name="/01_Basic/">
+    <Project Path="01_Basic/01_ConnectAndDownloadInstruments/01_Basic.ConnectAndDownloadInstruments.csproj" />
+    <Project Path="01_Basic/02_MarketDepths/02_Basic.MarketDepths.csproj" />
+    <Project Path="01_Basic/03_Orders/03_Basic.Orders.csproj" />
+  </Folder>
+  <Folder Name="/02_Candles/">
+    <Project Path="02_Candles/01_Realtime/01_Candles.Realtime.csproj" />
+    <Project Path="02_Candles/02_CombineHistoryRealtime/02_Candles.CombineHistoryRealtime.csproj" />
+  </Folder>
+  <Folder Name="/03_Storage/">
+    <Project Path="03_Storage/01_Random/01_Storage.Random.csproj" />
+    <Project Path="03_Storage/02_Local/02_Storage.Local.csproj" />
+    <Project Path="03_Storage/03_RemoteSource/03_Storage.RemoteSource.csproj" />
+    <Project Path="03_Storage/04_HydraServerConnect/04_Storage.HydraServerConnect.csproj" />
+    <Project Path="03_Storage/05_HydraServerSaveToLocal/05_Storage.HydraServerSaveToLocal.csproj" />
+  </Folder>
+  <Folder Name="/04_Indicators/">
+    <Project Path="04_Indicators/01_SimpleSMA/01_Indicators.SimpleSMA.csproj" />
+    <Project Path="04_Indicators/02_ComplexBollinger/02_Indicators.ComplexBollinger.csproj" />
+    <Project Path="04_Indicators/03_CreateOwn/03_Indicators.CreateOwn.csproj" />
+  </Folder>
+  <Folder Name="/05_Chart/">
+    <Project Path="05_Chart/01_Chart/01_Chart.csproj" />
+    <Project Path="05_Chart/02_ActiveOrders/02_Chart.ActiveOrders.csproj" />
+    <Project Path="05_Chart/03_Performance/03_Chart.Performance.csproj" />
+  </Folder>
+  <Folder Name="/06_Strategies/">
+    <Project Path="06_Strategies/01_HistorySMA/01_Strategies.HistorySMA.csproj" />
+    <Project Path="06_Strategies/02_HistoryBollingerBands/02_Strategies.HistoryBollingerBands.csproj" />
+    <Project Path="06_Strategies/03_HistoryTrend/03_Strategies.HistoryTrend.csproj" />
+    <Project Path="06_Strategies/04_HistoryMarketRule/04_Strategies.HistoryMarketRule.csproj" />
+    <Project Path="06_Strategies/05_HistoryIndex/05_Strategies.HistoryIndex.csproj" />
+    <Project Path="06_Strategies/06_HistoryQuoting/06_Strategies.HistoryQuoting.csproj" />
+    <Project Path="06_Strategies/07_LiveSpread/07_Strategies.LiveSpread.csproj" />
+    <Project Path="06_Strategies/08_LiveArbitrage/08_Strategies.LiveArbitrage.csproj" />
+    <Project Path="06_Strategies/09_LiveOptionsQuoting/09_Strategies.LiveOptionsQuoting.csproj" />
+    <Project Path="06_Strategies/10_LiveTerminal/10_Strategies.LiveTerminal.csproj" />
+  </Folder>
+  <Folder Name="/07_Testing/">
+    <Project Path="07_Testing/01_History/01_Testing.History.csproj" />
+    <Project Path="07_Testing/02_Optimization/02_Testing.Optimization.csproj" />
+    <Project Path="07_Testing/03_RealTime/03_Testing.RealTime.csproj" />
+  </Folder>
+  <Folder Name="/08_Misc/">
+    <Project Path="08_Misc/01_Logging/01_Misc.Logging.csproj" />
+    <Project Path="08_Misc/02_Unit/02_Misc.Unit.csproj" />
+  </Folder>
+  <Folder Name="/09_Advanced/">
+    <Project Path="09_Advanced/01_MultiConnect/01_Advanced.MultiConnect.csproj" />
+    <Project Path="09_Advanced/02_StoreDataLocal/02_Advanced.SaveDataLocal.csproj" />
+  </Folder>
+  <Folder Name="/10_CrossPlatform/">
+    <Project Path="10_CrossPlatform/01_ConsoleApp/01_CrossPlatform.ConsoleApp.csproj" />
+  </Folder>
+</Solution>
