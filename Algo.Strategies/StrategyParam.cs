@@ -143,8 +143,19 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 	/// <param name="optimizeTo">The To value at optimization.</param>
 	/// <param name="optimizeStep">The Increment value at optimization.</param>
 	/// <returns>The strategy parameter.</returns>
+	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="optimizeFrom"/> is greater than <paramref name="optimizeTo"/>.</exception>
+	/// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="optimizeStep"/> is less than or equal to zero for numeric types or TimeSpan.</exception>
 	public StrategyParam<T> SetOptimize(T optimizeFrom = default, T optimizeTo = default, T optimizeStep = default)
 	{
+		if (optimizeFrom is not null && optimizeTo is not null && Comparer<T>.Default.Compare(optimizeFrom, optimizeTo) > 0)
+			throw new ArgumentOutOfRangeException(nameof(optimizeFrom), optimizeFrom, $"'from' ({optimizeFrom}) must be less than or equal to 'to' ({optimizeTo}).");
+
+		if ((_valueType.IsNumeric() || _valueType == typeof(TimeSpan)) && _valueType != typeof(bool))
+		{
+			if (optimizeStep is not null && Comparer<T>.Default.Compare(optimizeStep, default) <= 0)
+				throw new ArgumentOutOfRangeException(nameof(optimizeStep), optimizeStep, $"'step' ({optimizeStep}) must be greater than zero.");
+		}
+
 		OptimizeFrom = optimizeFrom;
 		OptimizeTo = optimizeTo;
 		OptimizeStep = optimizeStep;

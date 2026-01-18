@@ -569,4 +569,183 @@ public class StrategyParamHelperTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Inverted Range (from > to)
+
+	[TestMethod]
+	public void SetOptimize_IntRange_FromGreaterThanTo_ShouldThrow()
+	{
+		var param = new StrategyParam<int>("test");
+
+		var ex = ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			param.SetOptimize(100, 10, 10)); // from > to
+
+		IsTrue(ex.Message.Contains("from") && ex.Message.Contains("to"));
+	}
+
+	[TestMethod]
+	public void SetOptimize_DecimalRange_FromGreaterThanTo_ShouldThrow()
+	{
+		var param = new StrategyParam<decimal>("test");
+
+		var ex = ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			param.SetOptimize(10.0m, 1.0m, 0.5m)); // from > to
+
+		IsTrue(ex.Message.Contains("from") && ex.Message.Contains("to"));
+	}
+
+	[TestMethod]
+	public void SetOptimize_LongRange_FromGreaterThanTo_ShouldThrow()
+	{
+		var param = new StrategyParam<long>("test");
+
+		var ex = ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			param.SetOptimize(1000L, 100L, 100L)); // from > to
+
+		IsTrue(ex.Message.Contains("from") && ex.Message.Contains("to"));
+	}
+
+	[TestMethod]
+	public void SetOptimize_DoubleRange_FromGreaterThanTo_ShouldThrow()
+	{
+		var param = new StrategyParam<double>("test");
+
+		var ex = ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			param.SetOptimize(10.0, 1.0, 0.5)); // from > to
+
+		IsTrue(ex.Message.Contains("from") && ex.Message.Contains("to"));
+	}
+
+	[TestMethod]
+	public void SetOptimize_FloatRange_FromGreaterThanTo_ShouldThrow()
+	{
+		var param = new StrategyParam<float>("test");
+
+		var ex = ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			param.SetOptimize(10.0f, 1.0f, 0.5f)); // from > to
+
+		IsTrue(ex.Message.Contains("from") && ex.Message.Contains("to"));
+	}
+
+	[TestMethod]
+	public void SetOptimize_TimeSpanRange_FromGreaterThanTo_ShouldThrow()
+	{
+		var param = new StrategyParam<TimeSpan>("test");
+
+		var ex = ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			param.SetOptimize(
+				TimeSpan.FromMinutes(60),
+				TimeSpan.FromMinutes(5),
+				TimeSpan.FromMinutes(5))); // from > to
+
+		IsTrue(ex.Message.Contains("from") && ex.Message.Contains("to"));
+	}
+
+	#endregion
+
+	#region Step Larger Than Range
+
+	[TestMethod]
+	public void GetRandom_IntRange_StepLargerThanRange_ShouldReturnValidValue()
+	{
+		var param = new StrategyParam<int>("test");
+		param.SetOptimize(10, 15, 100); // step (100) > range (5)
+
+		for (var i = 0; i < 10; i++)
+		{
+			var value = param.GetRandom();
+			// With step > range, should return from value or handle gracefully
+			IsTrue(value >= 10 && value <= 15, $"Value {value} is outside expected range [10, 15]");
+		}
+	}
+
+	[TestMethod]
+	public void GetRandom_DecimalRange_StepLargerThanRange_ShouldReturnValidValue()
+	{
+		var param = new StrategyParam<decimal>("test");
+		param.SetOptimize(1.0m, 1.5m, 10.0m); // step (10) > range (0.5)
+
+		for (var i = 0; i < 10; i++)
+		{
+			var value = param.GetRandom();
+			IsTrue(value >= 1.0m && value <= 1.5m, $"Value {value} is outside expected range [1.0, 1.5]");
+		}
+	}
+
+	[TestMethod]
+	public void GetIterationsCount_StepLargerThanRange_ShouldReturn1()
+	{
+		var param = new StrategyParam<int>("test");
+		param.SetOptimize(10, 15, 100); // step (100) > range (5)
+
+		var count = param.GetIterationsCount();
+
+		// With step > range, only 1 iteration possible (the from value)
+		AreEqual(1, count);
+	}
+
+	#endregion
+
+	#region Zero and Negative Step
+
+	[TestMethod]
+	public void SetOptimize_IntRange_ZeroStep_ShouldThrow()
+	{
+		var param = new StrategyParam<int>("test");
+
+		var ex = ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			param.SetOptimize(10, 100, 0)); // zero step
+
+		IsTrue(ex.Message.Contains("step"));
+	}
+
+	[TestMethod]
+	public void SetOptimize_IntRange_NegativeStep_ShouldThrow()
+	{
+		var param = new StrategyParam<int>("test");
+
+		var ex = ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			param.SetOptimize(10, 100, -10)); // negative step
+
+		IsTrue(ex.Message.Contains("step"));
+	}
+
+	[TestMethod]
+	public void SetOptimize_DecimalRange_ZeroStep_ShouldThrow()
+	{
+		var param = new StrategyParam<decimal>("test");
+
+		var ex = ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			param.SetOptimize(1.0m, 10.0m, 0m)); // zero step
+
+		IsTrue(ex.Message.Contains("step"));
+	}
+
+	[TestMethod]
+	public void SetOptimize_TimeSpanRange_ZeroStep_ShouldThrow()
+	{
+		var param = new StrategyParam<TimeSpan>("test");
+
+		var ex = ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			param.SetOptimize(
+				TimeSpan.FromMinutes(1),
+				TimeSpan.FromMinutes(10),
+				TimeSpan.Zero)); // zero step
+
+		IsTrue(ex.Message.Contains("step"));
+	}
+
+	[TestMethod]
+	public void SetOptimize_BoolRange_DefaultStep_ShouldNotThrow()
+	{
+		var param = new StrategyParam<bool>("test");
+
+		// Bool type should allow default step (step doesn't apply to bool)
+		param.SetOptimize(false, true, default);
+
+		// Should work without exception
+		IsNotNull(param.OptimizeFrom);
+	}
+
+	#endregion
 }
