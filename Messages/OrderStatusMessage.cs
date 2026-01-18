@@ -41,6 +41,19 @@ public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 	[DataMember]
 	public bool IsSubscribe { get; set; }
 
+	/// <summary>
+	/// Request incremental updates instead of full snapshots.
+	/// </summary>
+	[DataMember]
+	public bool IsIncremental { get; set; }
+
+	/// <summary>
+	/// User identifier for filtering data.
+	/// If set, data is filtered by this user instead of the session.
+	/// </summary>
+	[DataMember]
+	public string UserId { get; set; }
+
 	private OrderStates[] _states = [];
 
 	/// <summary>
@@ -84,6 +97,8 @@ public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 		destination.Count = Count;
 		destination.FillGaps = FillGaps;
 		destination.IsSubscribe = IsSubscribe;
+		destination.IsIncremental = IsIncremental;
+		destination.UserId = UserId;
 		destination.States = [.. States];
 	}
 
@@ -104,6 +119,12 @@ public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 		var str = base.ToString();
 
 		str += $",IsSubscribe={IsSubscribe}";
+
+		if (IsIncremental)
+			str += ",IsIncremental=True";
+
+		if (!UserId.IsEmpty())
+			str += $",UserId={UserId}";
 
 		if (From != default)
 			str += $",From={From}";

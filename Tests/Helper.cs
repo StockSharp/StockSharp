@@ -1503,6 +1503,8 @@ static class Helper
 			a.OrderId.AssertEqual(e.OrderId);
 			a.OrderStringId.AssertEqual(e.OrderStringId);
 			a.Balance.AssertEqual(e.Balance);
+			a.IsIncremental.AssertEqual(e.IsIncremental);
+			a.UserId.AssertEqual(e.UserId);
 		}
 		else if (type == typeof(MarketDataMessage))
 		{
@@ -1563,6 +1565,8 @@ static class Helper
 			a.StrategyId.AssertEqual(e.StrategyId);
 			a.Side.AssertEqual(e.Side);
 			a.SecurityId.AssertEqual(e.SecurityId);
+			a.IsIncremental.AssertEqual(e.IsIncremental);
+			a.UserId.AssertEqual(e.UserId);
 		}
 		else if (type == typeof(UserLookupMessage))
 		{

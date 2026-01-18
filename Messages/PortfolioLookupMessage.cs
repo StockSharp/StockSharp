@@ -28,6 +28,19 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 	[DataMember]
 	public bool IsSubscribe { get; set; }
 
+	/// <summary>
+	/// Request incremental updates instead of full snapshots.
+	/// </summary>
+	[DataMember]
+	public bool IsIncremental { get; set; }
+
+	/// <summary>
+	/// User identifier for filtering data.
+	/// If set, data is filtered by this user instead of the session.
+	/// </summary>
+	[DataMember]
+	public string UserId { get; set; }
+
 	/// <inheritdoc />
 	[DataMember]
 	[Display(
@@ -106,6 +119,8 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 		destination.StrategyId = StrategyId;
 		destination.Side = Side;
 		destination.IsSubscribe = IsSubscribe;
+		destination.IsIncremental = IsIncremental;
+		destination.UserId = UserId;
 		destination.From = From;
 		destination.To = To;
 		destination.Skip = Skip;
@@ -123,6 +138,12 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 
 		if (!IsSubscribe)
 			str += $",IsSubscribe={IsSubscribe}";
+
+		if (IsIncremental)
+			str += ",IsIncremental=True";
+
+		if (!UserId.IsEmpty())
+			str += $",UserId={UserId}";
 
 		if (SecurityId != null)
 			str += $",Sec={SecurityId}";
