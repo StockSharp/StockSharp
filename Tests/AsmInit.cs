@@ -3,11 +3,9 @@
 using Ecng.Compilation;
 using Ecng.Compilation.Roslyn;
 using Ecng.Excel;
-#if NET10_0_OR_GREATER
 using Ecng.Data;
 
 using Microsoft.Data.SqlClient;
-#endif
 
 using StockSharp.Algo.Compilation;
 
@@ -26,10 +24,8 @@ public static class AsmInit
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider([], typeof(MockRemoteAdapter)));
 		await CompilationExtensions.Init(Paths.FileSystem, Helper.LogManager.Application, [("designer_extensions.py", File.ReadAllText("../../../../Diagram.Core/python/designer_extensions.py"))], default);
 
-#if NET10_0_OR_GREATER
 		ConfigManager.RegisterService<IDatabaseProvider>(new AdoDatabaseProvider());
 		DatabaseProviderRegistry.Register(DatabaseProviderRegistry.SqlServer, SqlClientFactory.Instance);
-#endif
 
 		Helper.FileSystem.ClearTemp();
 	}
