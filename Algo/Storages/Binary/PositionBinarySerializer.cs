@@ -63,6 +63,12 @@ class PositionMetaInfo(DateTime date) : BinaryMetaInfo(date)
 			return;
 
 		Write(stream, LiquidationPrice);
+
+		if (Version < MarketDataVersions.Version41)
+			return;
+
+		WriteLocalTime(stream, MarketDataVersions.Version41);
+		WriteOffsets(stream);
 	}
 
 	public override async ValueTask ReadAsync(Stream stream, CancellationToken cancellationToken)
@@ -105,6 +111,12 @@ class PositionMetaInfo(DateTime date) : BinaryMetaInfo(date)
 			return;
 
 		LiquidationPrice = ReadInfo(stream);
+
+		if (Version < MarketDataVersions.Version41)
+			return;
+
+		ReadLocalTime(stream, MarketDataVersions.Version41);
+		ReadOffsets(stream);
 	}
 
 	private static void Write(Stream stream, RefPair<decimal, decimal> info)
@@ -155,7 +167,7 @@ class PositionMetaInfo(DateTime date) : BinaryMetaInfo(date)
 	}
 }
 
-class PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<PositionChangeMessage, PositionMetaInfo>(securityId, DataType.PositionChanges, 20, MarketDataVersions.Version40, exchangeInfoProvider)
+class PositionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<PositionChangeMessage, PositionMetaInfo>(securityId, DataType.PositionChanges, 20, MarketDataVersions.Version41, exchangeInfoProvider)
 {
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<PositionChangeMessage> messages, PositionMetaInfo metaInfo)
 	{
