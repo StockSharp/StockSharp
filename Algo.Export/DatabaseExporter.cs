@@ -18,6 +18,17 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 	private readonly DatabaseConnectionPair _connection = connection ?? throw new ArgumentNullException(nameof(connection));
 	private readonly IDatabaseProvider _dbProvider = dbProvider ?? throw new ArgumentNullException(nameof(dbProvider));
 
+	private static Type ToNullableDbType(Type t)
+	{
+		if (t == typeof(string))
+			return t;
+
+		if (t.IsEnum)
+			t = t.GetEnumBaseType();
+
+		return t.MakeNullable();
+	}
+
 	/// <summary>
 	/// Minimum price step.
 	/// </summary>
@@ -188,7 +199,11 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		};
 
 		foreach (var field in Enumerator.GetValues<PositionChangeTypes>().ExcludeObsolete())
-			columns[field.To<string>()] = typeof(decimal?);
+		{
+			var t = field.ToType();
+			if (t != null)
+				columns[field.To<string>()] = ToNullableDbType(t);
+		}
 
 		return columns;
 	}
@@ -262,7 +277,11 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		};
 
 		foreach (var field in Enumerator.GetValues<Level1Fields>().ExcludeObsolete())
-			columns[field.To<string>()] = typeof(decimal?);
+		{
+			var t = field.ToType();
+			if (t != null)
+				columns[field.To<string>()] = ToNullableDbType(t);
+		}
 
 		return columns;
 	}
