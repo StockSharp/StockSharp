@@ -78,7 +78,7 @@ class TickMetaInfo(DateTime date) : BinaryMetaInfo(date)
 	}
 }
 
-class TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>(securityId, DataType.Ticks, 50, MarketDataVersions.Version61, exchangeInfoProvider)
+class TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<ExecutionMessage, TickMetaInfo>(securityId, DataType.Ticks, 50, MarketDataVersions.Version62, exchangeInfoProvider)
 {
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, TickMetaInfo metaInfo)
 	{
@@ -103,6 +103,7 @@ class TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchange
 		var seqNum = metaInfo.Version >= MarketDataVersions.Version59;
 		var largeDecimal = metaInfo.Version >= MarketDataVersions.Version60;
 		var orderIds = metaInfo.Version >= MarketDataVersions.Version61;
+		var yield = metaInfo.Version >= MarketDataVersions.Version62;
 
 		foreach (var msg in messages)
 		{
@@ -249,6 +250,11 @@ class TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchange
 
 			writer.WriteNullableLong(msg.OrderBuyId);
 			writer.WriteNullableLong(msg.OrderSellId);
+
+			if (!yield)
+				continue;
+
+			writer.WriteNullableDecimal(msg.Yield);
 		}
 	}
 
@@ -267,6 +273,7 @@ class TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchange
 		var seqNum = metaInfo.Version >= MarketDataVersions.Version59;
 		var largeDecimal = metaInfo.Version >= MarketDataVersions.Version60;
 		var orderIds = metaInfo.Version >= MarketDataVersions.Version61;
+		var yield = metaInfo.Version >= MarketDataVersions.Version62;
 
 		metaInfo.FirstId += reader.ReadLong();
 
@@ -372,6 +379,11 @@ class TickBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchange
 
 		msg.OrderBuyId = reader.ReadNullableLong();
 		msg.OrderSellId = reader.ReadNullableLong();
+
+		if (!yield)
+			return msg;
+
+		msg.Yield = reader.ReadNullableDecimal();
 
 		return msg;
 	}

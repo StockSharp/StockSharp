@@ -35,6 +35,7 @@ public class TickCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 			data.SeqNum.DefaultAsNull().ToString(),
 			data.OrderBuyId.ToString(),
 			data.OrderSellId.ToString(),
+			data.Yield.ToString(),
 		]), cancellationToken);
 
 		metaInfo.LastId = data.TradeId;
@@ -74,6 +75,9 @@ public class TickCsvSerializer(SecurityId securityId, Encoding encoding) : CsvMa
 			execMsg.OrderBuyId = reader.ReadNullableLong();
 			execMsg.OrderSellId = reader.ReadNullableLong();
 		}
+
+		if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			execMsg.Yield = reader.ReadNullableDecimal();
 
 		return execMsg;
 	}
