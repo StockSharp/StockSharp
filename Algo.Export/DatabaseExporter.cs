@@ -309,7 +309,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		["TradeVolume"] = typeof(decimal?),
 		["OpenInterest"] = typeof(decimal?),
 		["OriginSide"] = typeof(int?),
-		["TradeStatus"] = typeof(int?),
+		["TradeStatus"] = typeof(long?),
 		["IsUpTick"] = typeof(bool?),
 		["HasOrderInfo"] = typeof(bool?),
 		["IsSystem"] = typeof(bool?),

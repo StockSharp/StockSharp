@@ -2423,7 +2423,8 @@ public class StorageTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var loadedItems = await storage.LoadAsync(items.First().ServerTime, items.Last().ServerTime).ToArrayAsync(token);
-		loadedItems.CompareMessages(items);
+		// LocalTime is not preserved by storage, so skip checking it
+		loadedItems.CompareMessages(items, skipLocalTime: true);
 	}
 
 	[TestMethod]
@@ -2826,10 +2827,10 @@ public class StorageTests : BaseTestClass
 	[TestMethod]
 	public void Snapshot()
 	{
-		static void Check<TKey, TMessage>(ISnapshotSerializer<TKey, TMessage> serializer, TMessage message)
+		static void Check<TKey, TMessage>(ISnapshotSerializer<TKey, TMessage> serializer, TMessage message, bool skipOriginalTransactionId = false)
 			where TMessage : Message
 		{
-			Helper.CheckEqual(message, serializer.Deserialize(serializer.Version, serializer.Serialize(serializer.Version, message)));
+			Helper.CheckEqual(message, serializer.Deserialize(serializer.Version, serializer.Serialize(serializer.Version, message)), skipOriginalTransactionId: skipOriginalTransactionId);
 		}
 
 		var security = Helper.CreateStorageSecurity();
@@ -2853,7 +2854,7 @@ public class StorageTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			Check(new TransactionBinarySnapshotSerializer(), Helper.RandomTransaction(secId, i));
+			Check(new TransactionBinarySnapshotSerializer(), Helper.RandomTransaction(secId, i), skipOriginalTransactionId: true);
 		}
 	}
 

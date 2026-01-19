@@ -722,7 +722,7 @@ static class Helper
 		return Portfolio.CreateSimulator();
 	}
 
-	public static void CheckEqual<T>(T expected, T actual, bool isMls = false, bool isSerializer = false, bool checkExtended = false)
+	public static void CheckEqual<T>(T expected, T actual, bool isMls = false, bool isSerializer = false, bool checkExtended = false, bool skipLocalTime = false, bool skipOriginalTransactionId = false)
 	{
 		if (expected.IsNull(true) && actual.IsNull(true))
 			return;
@@ -1029,9 +1029,11 @@ static class Helper
 			a.SecurityId.AssertEqual(e.SecurityId);
 			a.PortfolioName.AssertEqual(e.PortfolioName, true);
 			a.ServerTime.AssertEqual(e.ServerTime.TruncateTime(isMls));
-			a.LocalTime.AssertEqual(e.LocalTime.TruncateTime(isMls));
+			if (!skipLocalTime)
+				a.LocalTime.AssertEqual(e.LocalTime.TruncateTime(isMls));
 			a.TransactionId.AssertEqual(e.TransactionId);
-			a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
+			if (!skipOriginalTransactionId)
+				a.OriginalTransactionId.AssertEqual(e.OriginalTransactionId);
 			a.HasOrderInfo.AssertEqual(e.HasOrderInfo);
 			a.HasTradeInfo.AssertEqual(e.HasTradeInfo);
 			a.IsCancellation.AssertEqual(e.IsCancellation);
@@ -1722,7 +1724,7 @@ static class Helper
 			actual.AssertEqual(expected);
 	}
 
-	public static void CompareMessages<T>(this IList<T> actual, IList<T> expected)
+	public static void CompareMessages<T>(this IList<T> actual, IList<T> expected, bool skipLocalTime = false, bool isMls = false)
 		where T : IServerTimeMessage
 	{
 		actual.Count.AssertEqual(expected.Count);
@@ -1732,7 +1734,7 @@ static class Helper
 			var d1 = expected[i];
 			var d2 = actual.ElementAt(i);
 
-			CheckEqual(d1, d2);
+			CheckEqual(d1, d2, isMls: isMls, skipLocalTime: skipLocalTime);
 		}
 	}
 

@@ -810,7 +810,17 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(new EmulationStateMessage { State = ChannelStates.Starting }, CancellationToken);
 
-		await Task.Delay(100, CancellationToken);
+		// Wait for messages with retry - more robust than fixed delay
+		const int maxRetries = 50;
+		const int delayMs = 50;
+		for (var i = 0; i < maxRetries; i++)
+		{
+			var hasTicks = outMessages.OfType<ExecutionMessage>().Any(m => m.DataTypeEx == DataType.Ticks);
+			var hasLevel1 = outMessages.OfType<Level1ChangeMessage>().Any();
+			if (hasTicks && hasLevel1)
+				break;
+			await Task.Delay(delayMs, CancellationToken);
+		}
 
 		// Should have received both types of messages
 		var ticks = outMessages.OfType<ExecutionMessage>().Where(m => m.DataTypeEx == DataType.Ticks).ToList();

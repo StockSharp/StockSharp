@@ -548,10 +548,10 @@ public class StrategyParamTests : BaseTestClass
 		var to = new Unit(5.0m, UnitTypes.Absolute); // Different type!
 
 		var p = new StrategyParam<Unit>("p", from)
-			.SetCanOptimize(true)
-			.SetOptimize(from, to, null);
+			.SetCanOptimize(true);
 
-		ThrowsExactly<ArgumentException>(() => p.GetRandom());
+		// SetOptimize throws when Unit types are mismatched due to comparison validation
+		ThrowsExactly<ArgumentOutOfRangeException>(() => p.SetOptimize(from, to, null));
 	}
 
 	[TestMethod]
