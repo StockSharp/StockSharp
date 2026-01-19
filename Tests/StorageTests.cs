@@ -311,7 +311,7 @@ public class StorageTests : BaseTestClass
 
 		var storage = GetTradeStorage(secId, format);
 		await storage.SaveAsync(trades, token);
-		await LoadTradesAndCompare(storage, trades);
+		await LoadTradesAndCompare(storage, trades, format);
 		await storage.DeleteWithCheckAsync(token);
 	}
 
@@ -331,12 +331,12 @@ public class StorageTests : BaseTestClass
 		var tradeStorage = GetTradeStorage(secId, format);
 
 		await tradeStorage.SaveAsync(trades.Take(halfTicks), token);
-		await LoadTradesAndCompare(tradeStorage, [.. trades.Take(halfTicks)]);
+		await LoadTradesAndCompare(tradeStorage, [.. trades.Take(halfTicks)], format);
 
 		await tradeStorage.SaveAsync([.. trades.Skip(halfTicks)], token);
-		await LoadTradesAndCompare(tradeStorage, [.. trades.Skip(halfTicks)]);
+		await LoadTradesAndCompare(tradeStorage, [.. trades.Skip(halfTicks)], format);
 
-		await LoadTradesAndCompare(tradeStorage, trades);
+		await LoadTradesAndCompare(tradeStorage, trades, format);
 		await tradeStorage.DeleteWithCheckAsync(token);
 	}
 
@@ -358,7 +358,7 @@ public class StorageTests : BaseTestClass
 		var randomDeleteTrades = trades.Select(t => RandomGen.GetInt(5) == 2 ? null : t).WhereNotNull().ToList();
 		await tradeStorage.DeleteAsync(randomDeleteTrades, token);
 
-		await LoadTradesAndCompare(tradeStorage, [.. trades.Except(randomDeleteTrades)]);
+		await LoadTradesAndCompare(tradeStorage, [.. trades.Except(randomDeleteTrades)], format);
 		await tradeStorage.DeleteWithCheckAsync(token);
 	}
 
@@ -384,7 +384,7 @@ public class StorageTests : BaseTestClass
 
 		await tradeStorage.SaveAsync(trades, token);
 
-		await LoadTradesAndCompare(tradeStorage, trades);
+		await LoadTradesAndCompare(tradeStorage, trades, format);
 
 		await tradeStorage.DeleteAsync(trades, token);
 
@@ -438,7 +438,7 @@ public class StorageTests : BaseTestClass
 		var to = maxTime - third;
 		await tradeStorage.DeleteAsync(from, to, token);
 
-		await LoadTradesAndCompare(tradeStorage, [.. trades.Where(t => t.ServerTime < from || t.ServerTime > to)]);
+		await LoadTradesAndCompare(tradeStorage, [.. trades.Where(t => t.ServerTime < from || t.ServerTime > to)], format);
 
 		await tradeStorage.DeleteWithCheckAsync(token);
 	}
@@ -480,17 +480,17 @@ public class StorageTests : BaseTestClass
 		await tradeStorage.SaveAsync([trades[0]], token);
 		await tradeStorage.SaveAsync([trades[1]], token);
 
-		await LoadTradesAndCompare(tradeStorage, trades);
+		await LoadTradesAndCompare(tradeStorage, trades, format);
 		await tradeStorage.DeleteWithCheckAsync(token);
 	}
 
-	private async Task LoadTradesAndCompare(IMarketDataStorage<ExecutionMessage> tradeStorage, ExecutionMessage[] trades)
+	private async Task LoadTradesAndCompare(IMarketDataStorage<ExecutionMessage> tradeStorage, ExecutionMessage[] trades, StorageFormats format)
 	{
 		var token = CancellationToken;
-		
+
 		var loadedTrades = await tradeStorage.LoadAsync(trades.First().ServerTime, trades.Last().ServerTime).ToArrayAsync(token);
 
-		loadedTrades.CompareMessages(trades);
+		loadedTrades.CompareMessages(trades, skipLocalTime: format == StorageFormats.Csv);
 	}
 
 	[TestMethod]
@@ -2348,7 +2348,7 @@ public class StorageTests : BaseTestClass
 
 		var logStorage = storage.GetOrderLogMessageStorage(secId, null, format);
 		await logStorage.SaveAsync(quotes, token);
-		await LoadOrderLogAndCompare(logStorage, quotes);
+		await LoadOrderLogAndCompare(logStorage, quotes, format);
 		await logStorage.DeleteWithCheckAsync(token);
 	}
 
@@ -2373,7 +2373,7 @@ public class StorageTests : BaseTestClass
 				OrderPrice = 100,
 				OrderState = OrderStates.Active,
 				SecurityId = secId,
-				LocalTime = dt,
+				LocalTime = dt.AddMilliseconds(10),
 				ServerTime = dt,
 				OrderVolume = 1,
 				TransactionId = 1,
@@ -2386,7 +2386,7 @@ public class StorageTests : BaseTestClass
 				OrderPrice = 100,
 				OrderState = OrderStates.Done,
 				SecurityId = secId,
-				LocalTime = dt,
+				LocalTime = dt.AddMilliseconds(10),
 				ServerTime = dt,
 				OrderVolume = 1,
 				TransactionId = 2,
@@ -2397,7 +2397,7 @@ public class StorageTests : BaseTestClass
 		await olStorage.SaveAsync([ol[0]], token);
 		await olStorage.SaveAsync([ol[1]], token);
 
-		await LoadOrderLogAndCompare(olStorage, ol);
+		await LoadOrderLogAndCompare(olStorage, ol, format);
 		await olStorage.DeleteWithCheckAsync(token);
 	}
 
@@ -2415,15 +2415,15 @@ public class StorageTests : BaseTestClass
 
 		var logStorage = storage.GetOrderLogMessageStorage(secId, null, format);
 		await logStorage.SaveAsync(items, token);
-		await LoadOrderLogAndCompare(logStorage, items);
+		await LoadOrderLogAndCompare(logStorage, items, format);
 		await logStorage.DeleteWithCheckAsync(token);
 	}
 
-	private async Task LoadOrderLogAndCompare(IMarketDataStorage<ExecutionMessage> storage, IList<ExecutionMessage> items)
+	private async Task LoadOrderLogAndCompare(IMarketDataStorage<ExecutionMessage> storage, IList<ExecutionMessage> items, StorageFormats format)
 	{
 		var token = CancellationToken;
 		var loadedItems = await storage.LoadAsync(items.First().ServerTime, items.Last().ServerTime).ToArrayAsync(token);
-		// LocalTime is not preserved by storage, so skip checking it
+		// OrderLog binary serializer does not save LocalTime
 		loadedItems.CompareMessages(items, skipLocalTime: true);
 	}
 
@@ -2477,10 +2477,10 @@ public class StorageTests : BaseTestClass
 
 		await l1Storage.SaveAsync(testValues, token);
 		var loaded = await l1Storage.LoadAsync(DateTime.MinValue, default).ToArrayAsync(token);
-		loaded.CompareMessages(testValues);
+		loaded.CompareMessages(testValues, skipLocalTime: format == StorageFormats.Csv);
 
 		var loadedItems = await l1Storage.LoadAsync(testValues.First().ServerTime, testValues.Last().ServerTime).ToArrayAsync(token);
-		loadedItems.CompareMessages(testValues);
+		loadedItems.CompareMessages(testValues, skipLocalTime: format == StorageFormats.Csv);
 
 		await l1Storage.DeleteWithCheckAsync(token);
 	}
@@ -2572,10 +2572,10 @@ public class StorageTests : BaseTestClass
 
 		await l1Storage.SaveAsync(testValues, token);
 		var loaded = await l1Storage.LoadAsync(DateTime.MinValue, default).ToArrayAsync(token);
-		loaded.CompareMessages(testValues);
+		loaded.CompareMessages(testValues, skipLocalTime: format == StorageFormats.Csv);
 
 		var loadedItems = await l1Storage.LoadAsync(testValues.First().ServerTime, testValues.Last().ServerTime).ToArrayAsync(token);
-		loadedItems.CompareMessages(testValues);
+		loadedItems.CompareMessages(testValues, skipLocalTime: format == StorageFormats.Csv);
 
 		await l1Storage.DeleteWithCheckAsync(token);
 	}
@@ -2680,7 +2680,7 @@ public class StorageTests : BaseTestClass
 		await storage.SaveAsync(transactions, token);
 		var loaded = await storage.LoadAsync(DateTime.MinValue, default).ToArrayAsync(token);
 
-		loaded.CompareMessages(transactions);
+		loaded.CompareMessages(transactions, skipLocalTime: false);
 
 		await storage.DeleteAsync(default, default, token);
 		(await storage.LoadAsync(DateTime.MinValue, default).ToArrayAsync(token)).Length.AssertEqual(0);
@@ -2704,7 +2704,7 @@ public class StorageTests : BaseTestClass
 
 		testValues = [.. testValues.Where(t => t.HasChanges())];
 
-		loaded.CompareMessages(testValues);
+		loaded.CompareMessages(testValues, skipLocalTime: format == StorageFormats.Csv);
 
 		await storage.DeleteAsync(default, default, token);
 		(await storage.LoadAsync(DateTime.MinValue, default).ToArrayAsync(token)).Length.AssertEqual(0);

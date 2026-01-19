@@ -104,6 +104,9 @@ static class Helper
 			if (msg == null)
 				continue;
 
+			// Set LocalTime to a different value than ServerTime to ensure HasLocalTime returns true
+			msg.LocalTime = msg.ServerTime.AddMilliseconds(RandomGen.GetInt(1, 100));
+
 			if (RandomGen.GetBool())
 				msg.TradeId = ++i;
 			else
@@ -189,6 +192,9 @@ static class Helper
 
 			if (ol == null)
 				continue;
+
+			// Set LocalTime to a different value than ServerTime to ensure HasLocalTime returns true
+			ol.LocalTime = ol.ServerTime.AddMilliseconds(RandomGen.GetInt(1, 100));
 
 			items.Add(ol);
 
@@ -285,6 +291,9 @@ static class Helper
 			if (msg is null)
 				continue;
 
+			// Set LocalTime to a different value than ServerTime to ensure HasLocalTime returns true
+			msg.LocalTime = msg.ServerTime.AddMilliseconds(RandomGen.GetInt(1, 100));
+
 			if (RandomGen.GetBool())
 				msg.SeqNum = i;
 
@@ -307,6 +316,7 @@ static class Helper
 		{
 			SecurityId = secId,
 			ServerTime = serverTime,
+			LocalTime = serverTime.AddMilliseconds(RandomGen.GetInt(1, 100)),
 		};
 
 		foreach (var field in _l1Fields)
@@ -417,11 +427,13 @@ static class Helper
 
 	public static PositionChangeMessage RandomPositionChange(SecurityId secId)
 	{
+		var serverTime = DateTime.UtcNow;
+
 		var posMsg = new PositionChangeMessage
 		{
 			SecurityId = secId,
-			ServerTime = DateTime.UtcNow,
-			LocalTime = DateTime.UtcNow,
+			ServerTime = serverTime,
+			LocalTime = serverTime.AddMilliseconds(RandomGen.GetInt(1, 100)),
 			PortfolioName = $"Pf{RandomGen.GetInt(2)}",
 			ClientCode = RandomGen.GetBool() ? $"ClCode{RandomGen.GetInt(2)}" : null,
 			DepoName = RandomGen.GetBool() ? $"Depo{RandomGen.GetInt(2)}" : null,
@@ -474,6 +486,8 @@ static class Helper
 
 	public static ExecutionMessage RandomTransaction(SecurityId secId, int i)
 	{
+		var serverTime = DateTime.UtcNow;
+
 		var msg = new ExecutionMessage
 		{
 			SecurityId = secId,
@@ -486,8 +500,8 @@ static class Helper
 			Error = RandomGen.GetInt(10) == 5 ? new InvalidOperationException("Test error") : null,
 			Latency = RandomGen.GetBool() ? ((long)RandomGen.GetInt()).To<TimeSpan>() : null,
 			DataTypeEx = DataType.Transactions,
-			ServerTime = DateTime.UtcNow,
-			LocalTime = DateTime.UtcNow,
+			ServerTime = serverTime,
+			LocalTime = serverTime.AddMilliseconds(RandomGen.GetInt(1, 100)),
 			HasOrderInfo = RandomGen.GetBool(),
 		};
 
@@ -951,7 +965,10 @@ static class Helper
 			a.SecurityId.AssertEqual(e.SecurityId);
 			a.PortfolioName.AssertEqual(e.PortfolioName);
 			a.ServerTime.AssertEqual(e.ServerTime);
-			a.LocalTime.AssertEqual(e.LocalTime);
+
+			if (!skipLocalTime)
+				a.LocalTime.AssertEqual(e.LocalTime);
+
 			a.ClientCode.AssertEqual(e.ClientCode, true);
 			a.BoardCode.AssertEqual(e.BoardCode, true);
 			a.Description.AssertEqual(e.Description, true);
