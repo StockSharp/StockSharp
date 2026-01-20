@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Storages;
+﻿namespace StockSharp.Algo.Storages;
 
 /// <summary>
 /// The client for access to the history server.
@@ -332,7 +332,7 @@ public class RemoteStorageClient : Disposable
 
 		try
 		{
-			await foreach (var msg in _adapter.SubscribeAsync<Message>(subscrMsg, cancellationToken))
+			await foreach (var msg in _adapter.SubscribeAsync<Message>(subscrMsg).WithEnforcedCancellation(cancellationToken))
 			{
 				if (msg is SubscriptionFinishedMessage finishedMsg)
 				{
