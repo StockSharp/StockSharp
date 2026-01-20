@@ -5,7 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
-public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessage, IStrategyIdMessage, ISubscriptionMessage
+public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessage, IStrategyIdMessage, ISubscriptionMessage, ISecurityIdsMessage
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PortfolioLookupMessage"/>.

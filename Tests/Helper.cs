@@ -1513,7 +1513,8 @@ static class Helper
 			a.Count.AssertEqual(e.Count);
 			a.FillGaps.AssertEqual(e.FillGaps);
 			a.IsSubscribe.AssertEqual(e.IsSubscribe);
-			(a.States ?? []).SequenceEqual(e.States ?? []).AssertTrue();
+			a.States.SequenceEqual(e.States).AssertTrue();
+			a.SecurityIds.SequenceEqual(e.SecurityIds).AssertTrue();
 			// OrderCancelMessage fields
 			a.SecurityId.AssertEqual(e.SecurityId);
 			a.PortfolioName.AssertEqual(e.PortfolioName);
@@ -1584,6 +1585,7 @@ static class Helper
 			a.StrategyId.AssertEqual(e.StrategyId);
 			a.Side.AssertEqual(e.Side);
 			a.SecurityId.AssertEqual(e.SecurityId);
+			a.SecurityIds.SequenceEqual(e.SecurityIds).AssertTrue();
 			a.IsIncremental.AssertEqual(e.IsIncremental);
 			a.UserId.AssertEqual(e.UserId);
 		}

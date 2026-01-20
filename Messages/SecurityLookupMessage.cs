@@ -5,7 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
-public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage, ISecurityTypesMessage
+public class SecurityLookupMessage : SecurityMessage, ISubscriptionMessage, ISecurityTypesMessage, ISecurityIdsMessage
 {
 	/// <inheritdoc />
 	[DataMember]

@@ -5,7 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
-public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
+public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage, ISecurityIdsMessage
 {
 	/// <inheritdoc />
 	[DataMember]
