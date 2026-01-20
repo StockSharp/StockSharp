@@ -88,10 +88,23 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 	[TypeConverter(typeof(StringToSecurityIdTypeConverter))]
 	public SecurityId? SecurityId { get; set; }
 
+	private SecurityId[] _securityIds = [];
+
+	/// <summary>
+	/// Security identifiers for filtering.
+	/// </summary>
+	[DataMember]
+	public SecurityId[] SecurityIds
+	{
+		get => _securityIds;
+		set => _securityIds = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
 	bool ISubscriptionMessage.FilterEnabled
 		=>
 		!PortfolioName.IsEmpty() || Currency != null ||
-		!BoardCode.IsEmpty() || !ClientCode.IsEmpty();
+		!BoardCode.IsEmpty() || !ClientCode.IsEmpty() ||
+		SecurityId != null || SecurityIds.Length != 0;
 
 	bool ISubscriptionMessage.SpecificItemRequest => false;
 
@@ -126,6 +139,7 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 		destination.Skip = Skip;
 		destination.Count = Count;
 		destination.FillGaps = FillGaps;
+		destination.SecurityIds = [.. SecurityIds];
 	}
 
 	/// <inheritdoc />
@@ -168,6 +182,9 @@ public class PortfolioLookupMessage : PortfolioMessage, INullableSecurityIdMessa
 
 		if (FillGaps != default)
 			str += $",Gaps={FillGaps}";
+
+		if (SecurityIds.Length > 0)
+			str += $",SecurityIds={SecurityIds.Select(id => id.ToString()).JoinComma()}";
 
 		return str;
 	}

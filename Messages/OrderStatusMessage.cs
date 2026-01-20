@@ -66,9 +66,21 @@ public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 		set => _states = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
+	private SecurityId[] _securityIds = [];
+
+	/// <summary>
+	/// Security identifiers for filtering.
+	/// </summary>
+	[DataMember]
+	public SecurityId[] SecurityIds
+	{
+		get => _securityIds;
+		set => _securityIds = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
 	bool ISubscriptionMessage.FilterEnabled
 		=>
-		States.Length != 0 || SecurityId != default ||
+		States.Length != 0 || SecurityId != default || SecurityIds.Length != 0 ||
 		!PortfolioName.IsEmpty() || Side != null || Volume != null;
 
 	bool ISubscriptionMessage.SpecificItemRequest => this.HasOrderId();
@@ -100,6 +112,7 @@ public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 		destination.IsIncremental = IsIncremental;
 		destination.UserId = UserId;
 		destination.States = [.. States];
+		destination.SecurityIds = [.. SecurityIds];
 	}
 
 	/// <summary>
@@ -143,6 +156,9 @@ public class OrderStatusMessage : OrderCancelMessage, ISubscriptionMessage
 
 		if (States.Length > 0)
 			str += $",States={States.Select(s => s.To<string>()).JoinComma()}";
+
+		if (SecurityIds.Length > 0)
+			str += $",SecurityIds={SecurityIds.Select(id => id.ToString()).JoinComma()}";
 
 		return str;
 	}
