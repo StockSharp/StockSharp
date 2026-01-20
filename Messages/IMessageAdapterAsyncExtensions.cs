@@ -316,6 +316,49 @@ public static class IMessageAdapterAsyncExtensions
 	}
 
 	/// <summary>
+	/// Connect, subscribe and get an async stream of messages, then disconnect on completion.
+	/// This is a convenience method that handles the full lifecycle: connect -> subscribe -> disconnect.
+	/// </summary>
+	/// <typeparam name="T">Message type to receive.</typeparam>
+	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+	/// <param name="subscription"><see cref="ISubscriptionMessage"/></param>
+	/// <returns>Async stream of messages.</returns>
+	public static IAsyncEnumerable<T> ConnectAndDownloadAsync<T>(
+		this IMessageAdapter adapter,
+		ISubscriptionMessage subscription)
+		where T : Message
+	{
+		if (adapter is null)
+			throw new ArgumentNullException(nameof(adapter));
+		if (subscription is null)
+			throw new ArgumentNullException(nameof(subscription));
+
+		return ConnectAndDownloadAsyncImpl<T>(adapter, subscription);
+	}
+
+	private static async IAsyncEnumerable<T> ConnectAndDownloadAsyncImpl<T>(
+		IMessageAdapter adapter,
+		ISubscriptionMessage subscription,
+		[EnumeratorCancellation] CancellationToken cancellationToken = default)
+		where T : Message
+	{
+		if (cancellationToken.IsCancellationRequested)
+			yield break;
+
+		await adapter.ConnectAsync(cancellationToken);
+
+		try
+		{
+			await foreach (var msg in adapter.SubscribeAsync<T>(subscription).WithCancellation(cancellationToken))
+				yield return msg;
+		}
+		finally
+		{
+			await adapter.SendInMessageAsync(new DisconnectMessage(), CancellationToken.None);
+		}
+	}
+
+	/// <summary>
 	/// Register order and get an async stream of <see cref="ExecutionMessage"/> (order state changes and own trades).
 	/// When cancellation token (via <c>.WithCancellation(token)</c>) is canceled, the order is automatically canceled.
 	/// Completes when the order reaches a final state (<see cref="OrderStates.Done"/> or <see cref="OrderStates.Failed"/>).

@@ -224,6 +224,62 @@ public class AsyncExtensionsTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task Connector_RegisterOrder_Basic()
+	{
+		var connector = new Connector();
+		var adapter = new MockAdapter(connector.TransactionIdGenerator);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		// Track events
+		var orderReceived = new List<Order>();
+		connector.OrderReceived += (_, o) => orderReceived.Add(o);
+
+		// Register order
+		connector.RegisterOrder(order);
+
+		// Wait for Pending state
+		await Task.Run(async () =>
+		{
+			while (order.State == OrderStates.None)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		AreEqual(OrderStates.Pending, order.State);
+		AreNotEqual(0L, order.TransactionId);
+
+		// Simulate acceptance
+		adapter.SimulateOrderExecution(order.TransactionId, OrderStates.Active, orderId: 123);
+
+		// Wait for Active state
+		await Task.Run(async () =>
+		{
+			while (order.State != OrderStates.Active)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		AreEqual(OrderStates.Active, order.State);
+		AreEqual(123L, order.Id);
+
+		// Check events were received
+		orderReceived.Count.AssertGreater(0);
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Adapter_Subscription_Live_SyncAdapter()
 	{
 		var adapter = new MockAdapter(new IncrementalIdGenerator());
@@ -1436,23 +1492,41 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var events = new List<(Order order, MyTrade trade)>();
 
+		// track all OrderReceived events
+		var allOrderReceived = new List<Order>();
+		connector.OrderReceived += (_, o) => allOrderReceived.Add(o);
+
 		var enumTask = Task.Run(async () =>
 		{
 			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
 				events.Add(evt);
 		}, CancellationToken);
 
-		// Wait for order to be registered
+		// Wait for order to reach Pending state (connector processed registration)
 		await Task.Run(async () =>
 		{
-			while (adapter.LastOrderTransactionId == 0)
+			while (order.State == OrderStates.None)
 				await Task.Delay(10, CancellationToken);
 		}, CancellationToken);
 
-		var transId = adapter.LastOrderTransactionId;
+		var transId = order.TransactionId;
 
 		// Simulate order accepted
 		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
+
+		// Wait for state change via order object
+		await Task.Run(async () =>
+		{
+			while (order.State != OrderStates.Active)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		// Give connector time to process and fire events
+		await Task.Delay(100, CancellationToken);
+
+		// Debug check: did OrderReceived fire?
+		allOrderReceived.Count.AssertGreater(0, $"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
+
 		// Simulate order filled
 		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
 
@@ -1766,6 +1840,246 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Event 5: Done
 		AreEqual(OrderStates.Done, events[5].order.State);
 		events[5].trade.AssertNull();
+	}
+
+	#endregion
+
+	#region ConnectAndDownloadAsync Tests
+
+	[TestMethod]
+	public void ConnectAndDownloadAsync_NullAdapter_Throws()
+	{
+		IMessageAdapter adapter = null;
+		var subscription = new MarketDataMessage { DataType2 = DataType.Ticks };
+
+		Throws<ArgumentNullException>(() => adapter.ConnectAndDownloadAsync<ExecutionMessage>(subscription));
+	}
+
+	[TestMethod]
+	public void ConnectAndDownloadAsync_NullSubscription_Throws()
+	{
+		var adapter = new RecordingMessageAdapter();
+
+		Throws<ArgumentNullException>(() => adapter.ConnectAndDownloadAsync<ExecutionMessage>(null));
+	}
+
+	[TestMethod]
+	public async Task ConnectAndDownloadAsync_ConnectsSubscribesAndDisconnects()
+	{
+		var adapter = new RecordingMessageAdapter();
+		var secId = Helper.CreateSecurityId();
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Ticks,
+			SecurityId = secId,
+			IsSubscribe = true,
+		};
+
+		var messages = new List<ExecutionMessage>();
+
+		// Start enumeration in background
+		var enumerationTask = Task.Run(async () =>
+		{
+			await foreach (var msg in adapter.ConnectAndDownloadAsync<ExecutionMessage>(subscription).WithCancellation(CancellationToken))
+				messages.Add(msg);
+		}, CancellationToken);
+
+		// Wait for connect message
+		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+
+		// Emit connect response
+		adapter.EmitOut(new ConnectMessage());
+
+		// Wait for subscription message
+		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
+
+		var subMsg = adapter.InMessages.OfType<MarketDataMessage>().First();
+		var subId = subMsg.TransactionId;
+
+		// Emit subscription response
+		adapter.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = subId });
+
+		// Emit data messages
+		var tick1 = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			TradePrice = 100,
+			SubscriptionId = subId,
+		};
+		var tick2 = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			TradePrice = 101,
+			SubscriptionId = subId,
+		};
+
+		adapter.EmitOut(tick1);
+		adapter.EmitOut(tick2);
+
+		// Emit subscription finished
+		adapter.EmitOut(new SubscriptionFinishedMessage { OriginalTransactionId = subId });
+
+		// Wait for enumeration to complete
+		await enumerationTask.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken);
+
+		// Verify messages received
+		messages.Count.AssertEqual(2);
+		messages[0].TradePrice.AssertEqual(100);
+		messages[1].TradePrice.AssertEqual(101);
+
+		// Verify disconnect was sent
+		adapter.InMessages.OfType<DisconnectMessage>().Any().AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task ConnectAndDownloadAsync_OnCancellation_Disconnects()
+	{
+		var adapter = new RecordingMessageAdapter();
+		var secId = Helper.CreateSecurityId();
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Ticks,
+			SecurityId = secId,
+			IsSubscribe = true,
+		};
+
+		using var cts = new CancellationTokenSource();
+		var messages = new List<ExecutionMessage>();
+
+		// Start enumeration in background
+		var enumerationTask = Task.Run(async () =>
+		{
+			await foreach (var msg in adapter.ConnectAndDownloadAsync<ExecutionMessage>(subscription).WithCancellation(cts.Token))
+				messages.Add(msg);
+		}, CancellationToken);
+
+		// Wait for connect message
+		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+
+		// Emit connect response
+		adapter.EmitOut(new ConnectMessage());
+
+		// Wait for subscription message
+		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
+
+		var subMsg = adapter.InMessages.OfType<MarketDataMessage>().First();
+		var subId = subMsg.TransactionId;
+
+		// Emit subscription response
+		adapter.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = subId });
+
+		// Emit one data message
+		adapter.EmitOut(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			TradePrice = 100,
+			SubscriptionId = subId,
+		});
+
+		// Wait for message to be received
+		await WaitForConditionAsync(() => messages.Count > 0, TimeSpan.FromSeconds(5));
+
+		// Cancel
+		await cts.CancelAsync();
+
+		// Wait for enumeration to complete
+		try
+		{
+			await enumerationTask.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken);
+		}
+		catch (OperationCanceledException)
+		{
+			// Expected
+		}
+
+		// Verify disconnect was sent
+		await WaitForConditionAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		adapter.InMessages.OfType<DisconnectMessage>().Any().AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task ConnectAndDownloadAsync_OnConnectError_Throws()
+	{
+		var adapter = new RecordingMessageAdapter();
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Ticks,
+			SecurityId = Helper.CreateSecurityId(),
+		};
+
+		// Start enumeration in background
+		var enumerationTask = Task.Run(async () =>
+		{
+			await foreach (var _ in adapter.ConnectAndDownloadAsync<ExecutionMessage>(subscription).WithCancellation(CancellationToken))
+			{
+				// Should not get here
+			}
+		}, CancellationToken);
+
+		// Wait for connect message
+		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+
+		// Emit connect error
+		adapter.EmitOut(new ConnectMessage { Error = new InvalidOperationException("Connection failed") });
+
+		// Verify exception is thrown
+		await ThrowsAsync<InvalidOperationException>(async () => await enumerationTask.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken));
+	}
+
+	[TestMethod]
+	public async Task ConnectAndDownloadAsync_OnSubscriptionError_ThrowsAndDisconnects()
+	{
+		var adapter = new RecordingMessageAdapter();
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = DataType.Ticks,
+			SecurityId = Helper.CreateSecurityId(),
+		};
+
+		// Start enumeration in background
+		var enumerationTask = Task.Run(async () =>
+		{
+			await foreach (var _ in adapter.ConnectAndDownloadAsync<ExecutionMessage>(subscription).WithCancellation(CancellationToken))
+			{
+				// Should not get here
+			}
+		}, CancellationToken);
+
+		// Wait for connect message
+		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+
+		// Emit connect response
+		adapter.EmitOut(new ConnectMessage());
+
+		// Wait for subscription message
+		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
+
+		var subMsg = adapter.InMessages.OfType<MarketDataMessage>().First();
+		var subId = subMsg.TransactionId;
+
+		// Emit subscription error
+		adapter.EmitOut(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = subId,
+			Error = new InvalidOperationException("Subscription failed")
+		});
+
+		// Verify exception is thrown
+		await ThrowsAsync<InvalidOperationException>(async () => await enumerationTask.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken));
+
+		// Verify disconnect was sent (finally block should execute)
+		await WaitForConditionAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		adapter.InMessages.OfType<DisconnectMessage>().Any().AssertTrue();
+	}
+
+	private async Task WaitForConditionAsync(Func<bool> condition, TimeSpan timeout)
+	{
+		var deadline = DateTime.UtcNow + timeout;
+		while (!condition() && DateTime.UtcNow < deadline)
+			await Task.Delay(10, CancellationToken);
 	}
 
 	#endregion
