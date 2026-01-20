@@ -9,7 +9,10 @@ public class AsyncExtensionsTests : BaseTestClass
 	{
 		public ConcurrentQueue<Message> SentMessages { get; } = [];
 		public Dictionary<long, MarketDataMessage> ActiveSubscriptions { get; } = [];
+		public Dictionary<long, OrderRegisterMessage> ActiveOrders { get; } = [];
 		public long LastSubscribedId { get; private set; }
+		public long LastOrderTransactionId { get; private set; }
+		public OrderCancelMessage LastCancelMessage { get; private set; }
 
 		public MockAdapter(IdGenerator transactionIdGenerator) : base(transactionIdGenerator)
 		{
@@ -64,9 +67,25 @@ public class AsyncExtensionsTests : BaseTestClass
 					break;
 				}
 
+				case MessageTypes.OrderRegister:
+				{
+					var regMsg = (OrderRegisterMessage)message;
+					ActiveOrders[regMsg.TransactionId] = regMsg;
+					LastOrderTransactionId = regMsg.TransactionId;
+					// Don't auto-respond - let tests control responses via SimulateOrderExecution
+					break;
+				}
+
+				case MessageTypes.OrderCancel:
+				{
+					LastCancelMessage = (OrderCancelMessage)message;
+					break;
+				}
+
 				case MessageTypes.Reset:
 				{
 					ActiveSubscriptions.Clear();
+					ActiveOrders.Clear();
 					break;
 				}
 			}
@@ -86,6 +105,29 @@ public class AsyncExtensionsTests : BaseTestClass
 		{
 			if (ActiveSubscriptions.TryGetValue(subscriptionId, out var mdMsg))
 				SendSubscriptionResult(mdMsg);
+		}
+
+		public void SimulateOrderExecution(long origTransId, OrderStates? state = null, long? orderId = null,
+			decimal? tradePrice = null, decimal? tradeVolume = null, long? tradeId = null, Exception error = null)
+		{
+			var exec = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				OriginalTransactionId = origTransId,
+				OrderId = orderId,
+				OrderState = state,
+				TradePrice = tradePrice,
+				TradeVolume = tradeVolume,
+				TradeId = tradeId,
+				Error = error,
+				HasOrderInfo = state != null || orderId != null || error != null,
+				ServerTime = DateTime.UtcNow,
+			};
+
+			if (ActiveOrders.TryGetValue(origTransId, out var regMsg))
+				exec.SecurityId = regMsg.SecurityId;
+
+			SendOutMessage(exec);
 		}
 	}
 
@@ -201,7 +243,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg, enumCts.Token))
+			await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg).WithCancellation(enumCts.Token))
 			{
 				got.Add(l1);
 				if (got.Count >= 3)
@@ -252,7 +294,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var run = Task.Run(async () =>
 		{
-			await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg, CancellationToken))
+			await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg).WithCancellation(CancellationToken))
 			{
 				got.Add(l1);
 				if (got.Count >= 2)
@@ -297,7 +339,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub, enumCts.Token))
+			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
 			{
 				got.Add(l1);
 				if (got.Count >= 3)
@@ -350,7 +392,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub, CancellationToken))
+			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(CancellationToken))
 			{
 				got.Add(l1);
 			}
@@ -402,7 +444,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub, enumCts.Token))
+			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
 			{
 				got.Add(l1);
 				if (got.Count >= 3)
@@ -453,7 +495,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub, enumCts.Token))
+			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
 			{
 				got.Add(l1);
 				if (got.Count >= 2)
@@ -657,7 +699,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		var items = new List<Level1ChangeMessage>();
 		var enumerateTask = Task.Run(async () =>
 		{
-			await foreach (var item in adapter.SubscribeAsync<Level1ChangeMessage>(subscription, cts.Token))
+			await foreach (var item in adapter.SubscribeAsync<Level1ChangeMessage>(subscription).WithCancellation(cts.Token))
 			{
 				items.Add(item);
 			}
@@ -681,7 +723,8 @@ public class AsyncExtensionsTests : BaseTestClass
 			(completedTask == enumerateTask).AssertTrue("SubscribeAsync<T> should complete on cancellation");
 		}
 
-		items.Count.AssertGreater(0);
+		// Sent exactly 1 data message, should receive exactly 1
+		HasCount(1, items);
 	}
 
 	/// <summary>
@@ -707,7 +750,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Act
 		var enumerateTask = Task.Run(async () =>
 		{
-			await foreach (var item in adapter.SubscribeAsync<Level1ChangeMessage>(subscription, CancellationToken))
+			await foreach (var item in adapter.SubscribeAsync<Level1ChangeMessage>(subscription).WithCancellation(CancellationToken))
 			{
 				items.Add(item);
 			}
@@ -846,6 +889,883 @@ public class AsyncExtensionsTests : BaseTestClass
 
 			return default;
 		}
+	}
+
+	#endregion
+
+	#region RegisterOrderAsync Tests
+
+	/// <summary>
+	/// Adapter for order lifecycle tests.
+	/// </summary>
+	private class OrderTestAdapter : MessageAdapter
+	{
+		private readonly TaskCompletionSource<bool> _orderReceived = AsyncHelper.CreateTaskCompletionSource<bool>();
+		private OrderRegisterMessage _lastOrder;
+		private OrderCancelMessage _lastCancel;
+
+		public OrderTestAdapter() : base(new IncrementalIdGenerator()) { }
+
+		public OrderRegisterMessage LastOrder => _lastOrder;
+		public OrderCancelMessage LastCancel => _lastCancel;
+
+		public Task WaitForOrderReceived(CancellationToken cancellationToken)
+			=> _orderReceived.Task.WithCancellation(cancellationToken);
+
+		public void SendOrderExecution(long origTransId, OrderStates? state = null, long? orderId = null,
+			decimal? tradePrice = null, decimal? tradeVolume = null, Exception error = null)
+		{
+			SendOutMessage(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				OriginalTransactionId = origTransId,
+				OrderId = orderId,
+				OrderState = state,
+				TradePrice = tradePrice,
+				TradeVolume = tradeVolume,
+				Error = error,
+				HasOrderInfo = state != null || orderId != null,
+				ServerTime = DateTime.UtcNow,
+			});
+		}
+
+		public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			switch (message)
+			{
+				case OrderRegisterMessage reg:
+					_lastOrder = reg;
+					_orderReceived.TrySetResult(true);
+					break;
+
+				case OrderCancelMessage cancel:
+					_lastCancel = cancel;
+					break;
+			}
+
+			return default;
+		}
+	}
+
+	[TestMethod]
+	public void RegisterOrderAsync_NullAdapter_Throws()
+	{
+		IMessageAdapter adapter = null;
+		var order = new OrderRegisterMessage();
+
+		ThrowsExactly<ArgumentNullException>(() => adapter.RegisterOrderAsync(order));
+	}
+
+	[TestMethod]
+	public void RegisterOrderAsync_NullOrder_Throws()
+	{
+		var adapter = new OrderTestAdapter();
+
+		ThrowsExactly<ArgumentNullException>(() => adapter.RegisterOrderAsync(null));
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task RegisterOrderAsync_OrderAccepted_ReturnsExecutions()
+	{
+		var adapter = new OrderTestAdapter();
+
+		var order = new OrderRegisterMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Test },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var executions = new List<ExecutionMessage>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				executions.Add(exec);
+		}, CancellationToken);
+
+		await adapter.WaitForOrderReceived(CancellationToken);
+
+		var transId = order.TransactionId;
+		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 123);
+		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 123);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		HasCount(2, executions);
+		AreEqual(OrderStates.Active, executions[0].OrderState);
+		AreEqual(123L, executions[0].OrderId);
+		AreEqual(OrderStates.Done, executions[1].OrderState);
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task RegisterOrderAsync_WithTrades_ReturnsAllExecutions()
+	{
+		var adapter = new OrderTestAdapter();
+
+		var order = new OrderRegisterMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Test },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var executions = new List<ExecutionMessage>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				executions.Add(exec);
+		}, CancellationToken);
+
+		await adapter.WaitForOrderReceived(CancellationToken);
+
+		var transId = order.TransactionId;
+		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 123);
+		adapter.SendOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5);
+		adapter.SendOrderExecution(transId, orderId: 123, tradePrice: 100.6m, tradeVolume: 5);
+		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 123);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		HasCount(4, executions);
+		AreEqual(100.5m, executions[1].TradePrice);
+		AreEqual(5m, executions[1].TradeVolume);
+		AreEqual(100.6m, executions[2].TradePrice);
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task RegisterOrderAsync_CancellationSendsCancelMessage()
+	{
+		var adapter = new OrderTestAdapter();
+
+		var order = new OrderRegisterMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Test },
+			PortfolioName = "TestPortfolio",
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		using var cts = new CancellationTokenSource();
+
+		var executions = new List<ExecutionMessage>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(cts.Token))
+			{
+				executions.Add(exec);
+				if (exec.OrderState == OrderStates.Active)
+					cts.Cancel();
+			}
+		}, CancellationToken);
+
+		await adapter.WaitForOrderReceived(CancellationToken);
+
+		var transId = order.TransactionId;
+		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 456);
+
+		// Wait for cancel to be sent
+		await Task.Run(async () =>
+		{
+			while (adapter.LastCancel == null)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		// Send done after cancel
+		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 456);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		adapter.LastCancel.AssertNotNull();
+		AreEqual(456L, adapter.LastCancel.OrderId);
+		AreEqual("AAPL", adapter.LastCancel.SecurityId.SecurityCode);
+		AreEqual("TestPortfolio", adapter.LastCancel.PortfolioName);
+		AreEqual(Sides.Buy, adapter.LastCancel.Side);
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task RegisterOrderAsync_AssignsTransactionIdIfZero()
+	{
+		var adapter = new OrderTestAdapter();
+
+		var order = new OrderRegisterMessage
+		{
+			TransactionId = 0,
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Test },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var _ in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			{ }
+		}, CancellationToken);
+
+		await adapter.WaitForOrderReceived(CancellationToken);
+
+		AreNotEqual(0L, order.TransactionId);
+
+		adapter.SendOrderExecution(order.TransactionId, OrderStates.Done, orderId: 123);
+
+		await enumTask.WithCancellation(CancellationToken);
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task RegisterOrderAsync_CancelledToken_YieldsNothing()
+	{
+		var adapter = new OrderTestAdapter();
+
+		var order = new OrderRegisterMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Test },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		using var cts = new CancellationTokenSource();
+		cts.Cancel();
+
+		var count = 0;
+		await foreach (var _ in adapter.RegisterOrderAsync(order).WithCancellation(cts.Token))
+			count++;
+
+		AreEqual(0, count);
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task RegisterOrderAsync_OrderFailed_CompletesWithError()
+	{
+		var adapter = new OrderTestAdapter();
+
+		var order = new OrderRegisterMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Test },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var executions = new List<ExecutionMessage>();
+		Exception caughtError = null;
+
+		var enumTask = Task.Run(async () =>
+		{
+			try
+			{
+				await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+					executions.Add(exec);
+			}
+			catch (InvalidOperationException ex)
+			{
+				caughtError = ex;
+			}
+		}, CancellationToken);
+
+		await adapter.WaitForOrderReceived(CancellationToken);
+
+		adapter.SendOrderExecution(order.TransactionId, OrderStates.Failed, error: new InvalidOperationException("Order rejected"));
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		HasCount(1, executions);
+		AreEqual(OrderStates.Failed, executions[0].OrderState);
+		caughtError.AssertNotNull();
+		AreEqual("Order rejected", caughtError.Message);
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task RegisterOrderAsync_FiltersOtherTransactions()
+	{
+		var adapter = new OrderTestAdapter();
+
+		var order = new OrderRegisterMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Test },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var executions = new List<ExecutionMessage>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				executions.Add(exec);
+		}, CancellationToken);
+
+		await adapter.WaitForOrderReceived(CancellationToken);
+
+		var transId = order.TransactionId;
+		var otherTransId1 = transId + 100;
+		var otherTransId2 = transId + 200;
+
+		// Send updates for OTHER transactions - should be filtered out
+		adapter.SendOrderExecution(otherTransId1, OrderStates.Active, orderId: 999);
+		adapter.SendOrderExecution(otherTransId2, OrderStates.Active, orderId: 888);
+
+		// Send updates for OUR transaction
+		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 123);
+
+		// More updates for other transactions
+		adapter.SendOrderExecution(otherTransId1, orderId: 999, tradePrice: 50m, tradeVolume: 5);
+		adapter.SendOrderExecution(otherTransId2, OrderStates.Done, orderId: 888);
+
+		// Trade for our order
+		adapter.SendOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5);
+
+		// More noise
+		adapter.SendOrderExecution(otherTransId1, OrderStates.Done, orderId: 999);
+
+		// Complete our order
+		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 123);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		// Should only have 3 executions for our order: Active, Trade, Done
+		HasCount(3, executions);
+		AreEqual(OrderStates.Active, executions[0].OrderState);
+		AreEqual(123L, executions[0].OrderId);
+		AreEqual(100.5m, executions[1].TradePrice);
+		AreEqual(5m, executions[1].TradeVolume);
+		AreEqual(OrderStates.Done, executions[2].OrderState);
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task RegisterOrderAsync_MatchesByOrderIdAfterAssignment()
+	{
+		var adapter = new OrderTestAdapter();
+
+		var order = new OrderRegisterMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Test },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var executions = new List<ExecutionMessage>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				executions.Add(exec);
+		}, CancellationToken);
+
+		await adapter.WaitForOrderReceived(CancellationToken);
+
+		var transId = order.TransactionId;
+
+		// First message assigns OrderId
+		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 555);
+
+		// Subsequent messages come with OrderId but different OriginalTransactionId (some exchanges do this)
+		// Should still match because we track OrderId after it's assigned
+		var exec2 = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 0, // No transaction ID
+			OrderId = 555,             // But has our OrderId
+			TradePrice = 100.5m,
+			TradeVolume = 3,
+			HasOrderInfo = true,
+			ServerTime = DateTime.UtcNow,
+		};
+		adapter.SendOutMessage(exec2);
+
+		// Complete
+		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 555);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		// Should have all 3: Active, Trade (matched by OrderId), Done
+		HasCount(3, executions);
+		AreEqual(OrderStates.Active, executions[0].OrderState);
+		AreEqual(100.5m, executions[1].TradePrice);
+		AreEqual(OrderStates.Done, executions[2].OrderState);
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task RegisterOrderAsync_FullLifecycle_AllStatesAndTrades()
+	{
+		var adapter = new OrderTestAdapter();
+
+		var order = new OrderRegisterMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "SBER", BoardCode = "TQBR" },
+			PortfolioName = "TestPortfolio",
+			Price = 250,
+			Volume = 100,
+			Side = Sides.Buy,
+		};
+
+		var executions = new List<ExecutionMessage>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				executions.Add(exec);
+		}, CancellationToken);
+
+		await adapter.WaitForOrderReceived(CancellationToken);
+
+		var transId = order.TransactionId;
+
+		// 1. Order pending (some exchanges send this)
+		adapter.SendOrderExecution(transId, OrderStates.Pending);
+
+		// 2. Order accepted and active
+		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 12345);
+
+		// 3. First partial fill - 30 units
+		adapter.SendOrderExecution(transId, orderId: 12345, tradePrice: 249.5m, tradeVolume: 30);
+
+		// 4. Second partial fill - 50 units
+		adapter.SendOrderExecution(transId, orderId: 12345, tradePrice: 249.8m, tradeVolume: 50);
+
+		// 5. Final fill - 20 units, order complete
+		adapter.SendOrderExecution(transId, orderId: 12345, tradePrice: 250.0m, tradeVolume: 20);
+		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 12345);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		// Verify all states and trades received
+		HasCount(6, executions);
+
+		// State progression
+		AreEqual(OrderStates.Pending, executions[0].OrderState);
+		AreEqual(OrderStates.Active, executions[1].OrderState);
+		AreEqual(12345L, executions[1].OrderId);
+
+		// Trades
+		AreEqual(249.5m, executions[2].TradePrice);
+		AreEqual(30m, executions[2].TradeVolume);
+
+		AreEqual(249.8m, executions[3].TradePrice);
+		AreEqual(50m, executions[3].TradeVolume);
+
+		AreEqual(250.0m, executions[4].TradePrice);
+		AreEqual(20m, executions[4].TradeVolume);
+
+		// Final state
+		AreEqual(OrderStates.Done, executions[5].OrderState);
+	}
+
+	#endregion
+
+	#region IConnector.RegisterOrderAsync Tests
+
+	[TestMethod]
+	public void Connector_RegisterOrderAsync_NullConnector_Throws()
+	{
+		IConnector connector = null;
+		var order = new Order();
+
+		ThrowsExactly<ArgumentNullException>(() => connector.RegisterOrderAsync(order));
+	}
+
+	[TestMethod]
+	public void Connector_RegisterOrderAsync_NullOrder_Throws()
+	{
+		var connector = new Connector();
+
+		ThrowsExactly<ArgumentNullException>(() => connector.RegisterOrderAsync(null));
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task Connector_RegisterOrderAsync_CancelledToken_YieldsNothing()
+	{
+		var connector = new Connector();
+		var order = new Order
+		{
+			Security = new Security { Id = "AAPL@TEST" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		using var cts = new CancellationTokenSource();
+		cts.Cancel();
+
+		var count = 0;
+		await foreach (var _ in connector.RegisterOrderAsync(order).WithCancellation(cts.Token))
+			count++;
+
+		AreEqual(0, count);
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task Connector_RegisterOrderAsync_OrderAccepted_ReturnsEvents()
+	{
+		var connector = new Connector();
+		var adapter = new MockAdapter(connector.TransactionIdGenerator);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var events = new List<(Order order, MyTrade trade)>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				events.Add(evt);
+		}, CancellationToken);
+
+		// Wait for order to be registered
+		await Task.Run(async () =>
+		{
+			while (adapter.LastOrderTransactionId == 0)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var transId = adapter.LastOrderTransactionId;
+
+		// Simulate order accepted
+		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
+		// Simulate order filled
+		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		HasCount(2, events);
+		AreEqual(OrderStates.Active, events[0].order.State);
+		AreEqual(123L, events[0].order.Id);
+		AreEqual(OrderStates.Done, events[1].order.State);
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task Connector_RegisterOrderAsync_WithTrades_ReturnsTradeEvents()
+	{
+		var connector = new Connector();
+		var adapter = new MockAdapter(connector.TransactionIdGenerator);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var events = new List<(Order order, MyTrade trade)>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				events.Add(evt);
+		}, CancellationToken);
+
+		await Task.Run(async () =>
+		{
+			while (adapter.LastOrderTransactionId == 0)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var transId = adapter.LastOrderTransactionId;
+
+		// Simulate order accepted
+		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
+		// Simulate partial fill (trade)
+		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 1001);
+		// Simulate second fill (trade)
+		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.6m, tradeVolume: 5, tradeId: 1002);
+		// Simulate order done
+		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		// Exact verification: 4 events (Active, Trade1, Trade2, Done)
+		HasCount(4, events);
+
+		// Event 0: Order Active
+		AreEqual(OrderStates.Active, events[0].order.State);
+		AreEqual(123L, events[0].order.Id);
+		events[0].trade.AssertNull();
+
+		// Event 1: First trade
+		events[1].trade.AssertNotNull();
+		AreEqual(100.5m, events[1].trade.Trade.Price);
+		AreEqual(5m, events[1].trade.Trade.Volume);
+
+		// Event 2: Second trade
+		events[2].trade.AssertNotNull();
+		AreEqual(100.6m, events[2].trade.Trade.Price);
+		AreEqual(5m, events[2].trade.Trade.Volume);
+
+		// Event 3: Order Done
+		AreEqual(OrderStates.Done, events[3].order.State);
+		events[3].trade.AssertNull();
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task Connector_RegisterOrderAsync_CancellationSendsCancelOrder()
+	{
+		var connector = new Connector();
+		var adapter = new MockAdapter(connector.TransactionIdGenerator);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		using var cts = new CancellationTokenSource();
+
+		var events = new List<(Order order, MyTrade trade)>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(cts.Token))
+			{
+				events.Add(evt);
+				if (evt.order.State == OrderStates.Active)
+					cts.Cancel(); // Cancel after order becomes active
+			}
+		}, CancellationToken);
+
+		await Task.Run(async () =>
+		{
+			while (adapter.LastOrderTransactionId == 0)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var transId = adapter.LastOrderTransactionId;
+
+		// Simulate order accepted
+		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 456);
+
+		// Wait for cancel message to be sent
+		await Task.Run(async () =>
+		{
+			while (adapter.LastCancelMessage == null)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		// Simulate order cancelled
+		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 456);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		adapter.LastCancelMessage.AssertNotNull();
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task Connector_RegisterOrderAsync_FiltersOtherOrders()
+	{
+		var connector = new Connector();
+		var adapter = new MockAdapter(connector.TransactionIdGenerator);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var events = new List<(Order order, MyTrade trade)>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				events.Add(evt);
+		}, CancellationToken);
+
+		await Task.Run(async () =>
+		{
+			while (adapter.LastOrderTransactionId == 0)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var transId = adapter.LastOrderTransactionId;
+		var otherTransId1 = transId + 100;
+		var otherTransId2 = transId + 200;
+
+		// Send updates for OTHER orders - should be filtered out
+		adapter.SimulateOrderExecution(otherTransId1, OrderStates.Active, orderId: 999);
+		adapter.SimulateOrderExecution(otherTransId2, OrderStates.Active, orderId: 888);
+
+		// Send update for OUR order
+		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
+
+		// More updates for other orders
+		adapter.SimulateOrderExecution(otherTransId1, orderId: 999, tradePrice: 50m, tradeVolume: 5, tradeId: 5001);
+		adapter.SimulateOrderExecution(otherTransId2, OrderStates.Done, orderId: 888);
+
+		// Trade for our order
+		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 2001);
+
+		// More noise
+		adapter.SimulateOrderExecution(otherTransId1, OrderStates.Done, orderId: 999);
+
+		// Complete our order
+		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		// Exact verification: 3 events for our order (Active, Trade, Done)
+		HasCount(3, events);
+
+		// Event 0: Active
+		AreEqual(OrderStates.Active, events[0].order.State);
+		AreEqual(123L, events[0].order.Id);
+		events[0].trade.AssertNull();
+
+		// Event 1: Trade
+		events[1].trade.AssertNotNull();
+		AreEqual(100.5m, events[1].trade.Trade.Price);
+		AreEqual(5m, events[1].trade.Trade.Volume);
+
+		// Event 2: Done
+		AreEqual(OrderStates.Done, events[2].order.State);
+		events[2].trade.AssertNull();
+	}
+
+	[TestMethod]
+	[Timeout(6000, CooperativeCancellation = true)]
+	public async Task Connector_RegisterOrderAsync_FullLifecycle_AllStatesAndTrades()
+	{
+		var connector = new Connector();
+		var adapter = new MockAdapter(connector.TransactionIdGenerator);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "SBER@TQBR" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "TestPortfolio" },
+			Price = 250,
+			Volume = 100,
+			Side = Sides.Buy,
+		};
+
+		var events = new List<(Order order, MyTrade trade)>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				events.Add(evt);
+		}, CancellationToken);
+
+		await Task.Run(async () =>
+		{
+			while (adapter.LastOrderTransactionId == 0)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var transId = adapter.LastOrderTransactionId;
+
+		// 1. Order pending
+		adapter.SimulateOrderExecution(transId, OrderStates.Pending);
+
+		// 2. Order accepted and active
+		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 12345);
+
+		// 3. First partial fill - 30 units
+		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 249.5m, tradeVolume: 30, tradeId: 3001);
+
+		// 4. Second partial fill - 50 units
+		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 249.8m, tradeVolume: 50, tradeId: 3002);
+
+		// 5. Final fill - 20 units
+		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 250.0m, tradeVolume: 20, tradeId: 3003);
+
+		// 6. Order complete
+		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 12345);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		// Exact verification: 6 events (Pending, Active, Trade1, Trade2, Trade3, Done)
+		HasCount(6, events);
+
+		// Event 0: Pending
+		AreEqual(OrderStates.Pending, events[0].order.State);
+		events[0].trade.AssertNull();
+
+		// Event 1: Active
+		AreEqual(OrderStates.Active, events[1].order.State);
+		AreEqual(12345L, events[1].order.Id);
+		events[1].trade.AssertNull();
+
+		// Event 2: Trade 1 - 30 units @ 249.5
+		events[2].trade.AssertNotNull();
+		AreEqual(249.5m, events[2].trade.Trade.Price);
+		AreEqual(30m, events[2].trade.Trade.Volume);
+
+		// Event 3: Trade 2 - 50 units @ 249.8
+		events[3].trade.AssertNotNull();
+		AreEqual(249.8m, events[3].trade.Trade.Price);
+		AreEqual(50m, events[3].trade.Trade.Volume);
+
+		// Event 4: Trade 3 - 20 units @ 250.0
+		events[4].trade.AssertNotNull();
+		AreEqual(250.0m, events[4].trade.Trade.Price);
+		AreEqual(20m, events[4].trade.Trade.Volume);
+
+		// Event 5: Done
+		AreEqual(OrderStates.Done, events[5].order.State);
+		events[5].trade.AssertNull();
 	}
 
 	#endregion

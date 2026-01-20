@@ -1,5 +1,6 @@
 namespace StockSharp.BusinessEntities;
 
+using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 
 /// <summary>
@@ -9,24 +10,29 @@ public static class ISubscriptionProviderAsyncExtensions
 {
 	/// <summary>
 	/// Subscribe and get an async stream of incoming data of type <typeparamref name="T"/> for the specified <paramref name="subscription"/>.
-	/// Enumeration can be canceled via <paramref name="cancellationToken"/>, which triggers <see cref="ISubscriptionProvider.UnSubscribe(Subscription)"/>.
+	/// Use <c>.WithCancellation(token)</c> to cancel, which triggers <see cref="ISubscriptionProvider.UnSubscribe(Subscription)"/>.
 	/// The stream completes when the subscription stops or fails.
 	/// </summary>
 	/// <param name="provider">Subscription provider.</param>
 	/// <param name="subscription">Target subscription.</param>
-	/// <param name="cancellationToken">Cancellation token controlling the stream and lifetime of the subscription.</param>
 	/// <returns>Async stream of incoming data objects for the given subscription filtered to <typeparamref name="T"/>.</returns>
-	public static async IAsyncEnumerable<T> SubscribeAsync<T>(
+	public static IAsyncEnumerable<T> SubscribeAsync<T>(
 		this ISubscriptionProvider provider,
-		Subscription subscription,
-		[EnumeratorCancellation]CancellationToken cancellationToken)
+		Subscription subscription)
 	{
 		if (provider is null)
 			throw new ArgumentNullException(nameof(provider));
-
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
+		return SubscribeAsyncImpl<T>(provider, subscription);
+	}
+
+	private static async IAsyncEnumerable<T> SubscribeAsyncImpl<T>(
+		ISubscriptionProvider provider,
+		Subscription subscription,
+		[EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
 		if (cancellationToken.IsCancellationRequested)
 			yield break;
 

@@ -86,19 +86,28 @@ public static class IMessageAdapterAsyncExtensions
 
 	/// <summary>
 	/// Subscribe and get an async stream of outgoing data messages of type <typeparamref name="T"/> associated with the given <paramref name="subscription"/>.
+	/// Use <c>.WithCancellation(token)</c> to pass cancellation token.
 	/// </summary>
 	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
 	/// <param name="subscription"><see cref="ISubscriptionMessage"/></param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-	/// <returns><see cref="ValueTask"/></returns>
-	public static async IAsyncEnumerable<T> SubscribeAsync<T>(
+	/// <returns>Async stream of messages.</returns>
+	public static IAsyncEnumerable<T> SubscribeAsync<T>(
 		this IMessageAdapter adapter,
-		ISubscriptionMessage subscription,
-		[EnumeratorCancellation] CancellationToken cancellationToken)
+		ISubscriptionMessage subscription)
 	{
-		if (adapter is null)			throw new ArgumentNullException(nameof(adapter));
-		if (subscription is null)		throw new ArgumentNullException(nameof(subscription));
+		if (adapter is null)
+			throw new ArgumentNullException(nameof(adapter));
+		if (subscription is null)
+			throw new ArgumentNullException(nameof(subscription));
 
+		return SubscribeAsyncImpl<T>(adapter, subscription);
+	}
+
+	private static async IAsyncEnumerable<T> SubscribeAsyncImpl<T>(
+		IMessageAdapter adapter,
+		ISubscriptionMessage subscription,
+		[EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
 		if (cancellationToken.IsCancellationRequested)
 			yield break;
 
@@ -298,6 +307,151 @@ public static class IMessageAdapterAsyncExtensions
 			else
 			{
 				await finishedTcs.Task.NoWait();
+			}
+		}
+		finally
+		{
+			adapter.NewOutMessage -= OnOut;
+		}
+	}
+
+	/// <summary>
+	/// Register order and get an async stream of <see cref="ExecutionMessage"/> (order state changes and own trades).
+	/// When cancellation token (via <c>.WithCancellation(token)</c>) is canceled, the order is automatically canceled.
+	/// Completes when the order reaches a final state (<see cref="OrderStates.Done"/> or <see cref="OrderStates.Failed"/>).
+	/// </summary>
+	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+	/// <param name="order"><see cref="OrderRegisterMessage"/> to register.</param>
+	/// <returns>Async stream of <see cref="ExecutionMessage"/> with order info and trades.</returns>
+	public static IAsyncEnumerable<ExecutionMessage> RegisterOrderAsync(
+		this IMessageAdapter adapter,
+		OrderRegisterMessage order)
+	{
+		if (adapter is null)
+			throw new ArgumentNullException(nameof(adapter));
+		if (order is null)
+			throw new ArgumentNullException(nameof(order));
+
+		return RegisterOrderAsyncImpl(adapter, order);
+	}
+
+	private static async IAsyncEnumerable<ExecutionMessage> RegisterOrderAsyncImpl(
+		IMessageAdapter adapter,
+		OrderRegisterMessage order,
+		[EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		if (cancellationToken.IsCancellationRequested)
+			yield break;
+
+		if (order.TransactionId == 0)
+			order.TransactionId = adapter.TransactionIdGenerator.GetNextId();
+
+		var transId = order.TransactionId;
+		long? orderId = null;
+		string orderStringId = null;
+
+		var channel = Channel.CreateUnbounded<ExecutionMessage>(new UnboundedChannelOptions
+		{
+			SingleReader = true,
+			SingleWriter = false,
+			AllowSynchronousContinuations = true,
+		});
+
+		void OnOut(Message msg)
+		{
+			if (msg is not ExecutionMessage exec || exec.DataType != DataType.Transactions)
+				return;
+
+			// Match by OriginalTransactionId or by OrderId/OrderStringId
+			var isMatch =
+				exec.OriginalTransactionId == transId ||
+				(orderId != null && exec.OrderId == orderId) ||
+				(!orderStringId.IsEmpty() && exec.OrderStringId == orderStringId);
+
+			if (!isMatch)
+				return;
+
+			// Track order ID for subsequent matching
+			if (exec.OrderId != null)
+				orderId = exec.OrderId;
+			if (!exec.OrderStringId.IsEmpty())
+				orderStringId = exec.OrderStringId;
+
+			// Check for error
+			if (exec.Error != null)
+			{
+				channel.Writer.TryWrite(exec);
+				channel.Writer.TryComplete(exec.Error);
+				return;
+			}
+
+			channel.Writer.TryWrite(exec);
+
+			// Complete on final state
+			if (exec.OrderState is OrderStates.Done or OrderStates.Failed)
+				channel.Writer.TryComplete();
+		}
+
+		adapter.NewOutMessage += OnOut;
+
+		using var ctr = cancellationToken.Register(() =>
+		{
+			// Send cancel message
+			try
+			{
+				var cancel = new OrderCancelMessage
+				{
+					TransactionId = adapter.TransactionIdGenerator.GetNextId(),
+					OrderId = orderId,
+					OrderStringId = orderStringId,
+					SecurityId = order.SecurityId,
+					PortfolioName = order.PortfolioName,
+					Side = order.Side,
+				};
+
+				_ = adapter.SendInMessageAsync(cancel, CancellationToken.None);
+			}
+			catch
+			{
+				// ignore cancel errors
+			}
+		});
+
+		try
+		{
+			var isCancelled = false;
+
+			try
+			{
+				await adapter.SendInMessageAsync(order, cancellationToken);
+			}
+			catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+			{
+				isCancelled = true;
+			}
+
+			if (isCancelled)
+				yield break;
+
+			await using var enumerator = channel.Reader.ReadAllAsync(CancellationToken.None).GetAsyncEnumerator();
+
+			while (true)
+			{
+				bool hasNext;
+
+				try
+				{
+					hasNext = await enumerator.MoveNextAsync();
+				}
+				catch (ChannelClosedException)
+				{
+					break;
+				}
+
+				if (!hasNext)
+					break;
+
+				yield return enumerator.Current;
 			}
 		}
 		finally
