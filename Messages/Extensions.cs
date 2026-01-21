@@ -1925,6 +1925,24 @@ public static partial class Extensions
 	}
 
 	/// <summary>
+	/// Check subscription identifiers in the specified message.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <returns>Identifiers.</returns>
+	public static bool HasSubscriptionId(this ISubscriptionIdMessage message)
+	{
+		if (message == null)
+			throw new ArgumentNullException(nameof(message));
+
+		if (message.SubscriptionIds != null)
+			return message.SubscriptionIds.Length > 0;
+		else if (message.SubscriptionId > 0)
+			return true;
+
+		return false;
+	}
+
+	/// <summary>
 	/// Determines whether the <paramref name="execMsg"/> contains market-data info.
 	/// </summary>
 	/// <param name="execMsg">The message contains information about the execution.</param>
