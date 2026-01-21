@@ -97,8 +97,8 @@ public class InMemoryMessageChannel : Disposable, IMessageChannel
 
 		_cancellationTokenSource = new();
 
-		_processingTask = ProcessMessagesAsync(_cancellationTokenSource.Token);
 		State = ChannelStates.Started;
+		_processingTask = ProcessMessagesAsync(_cancellationTokenSource.Token);
 	}
 
 	private async Task ProcessMessagesAsync(CancellationToken cancellationToken)
