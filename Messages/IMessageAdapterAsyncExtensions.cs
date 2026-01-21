@@ -137,7 +137,7 @@ public static class IMessageAdapterAsyncExtensions
 			}
 			else if (msg is ISubscriptionIdMessage sid)
 			{
-				var ids = sid.SubscriptionIds ?? (sid.SubscriptionId != 0 ? [sid.SubscriptionId] : Array.Empty<long>());
+				var ids = sid.GetSubscriptionIds();
 				if (ids.Contains(subId) && msg is T t)
 				{
 					channel.Writer.TryWrite(t);
