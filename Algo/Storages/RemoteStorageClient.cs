@@ -226,7 +226,14 @@ public class RemoteStorageClient : Disposable
 	public async ValueTask VerifyAsync(CancellationToken cancellationToken)
 	{
 		await _adapter.ConnectAsync(cancellationToken);
-		await _adapter.DisconnectAsync(cancellationToken);
+
+		try
+		{
+			await _adapter.DisconnectAsync(cancellationToken);
+		}
+		catch
+		{
+		}
 	}
 
 	/// <summary>

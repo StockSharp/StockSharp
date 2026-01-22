@@ -476,7 +476,7 @@ public static class IMessageAdapterAsyncExtensions
 			if (isCancelled)
 				yield break;
 
-			await using var enumerator = channel.Reader.ReadAllAsync(CancellationToken.None).GetAsyncEnumerator();
+			await using var enumerator = channel.Reader.ReadAllAsync(cancellationToken).GetAsyncEnumerator();
 
 			while (true)
 			{

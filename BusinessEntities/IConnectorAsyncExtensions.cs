@@ -175,7 +175,7 @@ public static class IConnectorAsyncExtensions
 		{
 			connector.RegisterOrder(order);
 
-			await using var enumerator = channel.Reader.ReadAllAsync(CancellationToken.None).GetAsyncEnumerator();
+			await using var enumerator = channel.Reader.ReadAllAsync(cancellationToken).GetAsyncEnumerator();
 
 			while (true)
 			{
