@@ -13,7 +13,8 @@ public class RemoteStorageClient : Disposable
 		/// <inheritdoc />
 		protected override ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 		{
-			if (message is ISubscriptionIdMessage subscrMsg && subscrMsg.HasSubscriptionId() && subscrMsg.OriginalTransactionId != 0)
+			// Set SubscriptionIds from OriginalTransactionId if not already set
+			if (message is ISubscriptionIdMessage subscrMsg && subscrMsg.OriginalTransactionId != 0 && !subscrMsg.HasSubscriptionId())
 				subscrMsg.SetSubscriptionIds([subscrMsg.OriginalTransactionId]);
 
 			return base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
