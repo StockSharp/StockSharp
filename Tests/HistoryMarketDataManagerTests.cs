@@ -423,7 +423,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		using var manager = CreateManager();
 
 		ThrowsExactly<ArgumentNullException>(() =>
-			manager.StartAsync(null).GetAsyncEnumerator());
+			manager.StartAsync(null).GetAsyncEnumerator(CancellationToken));
 	}
 
 	#endregion

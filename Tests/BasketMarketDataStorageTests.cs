@@ -544,7 +544,7 @@ public class BasketMarketDataStorageTests : BaseTestClass
 
 		// Start enumeration
 		var loaded = new List<ExecutionMessage>();
-		var enumerator = basket.LoadAsync(date).GetAsyncEnumerator();
+		var enumerator = basket.LoadAsync(date).GetAsyncEnumerator(CancellationToken);
 
 		// Read some data
 		for (int i = 0; i < 50 && await enumerator.MoveNextAsync(); i++)

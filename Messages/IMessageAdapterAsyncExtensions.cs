@@ -151,7 +151,7 @@ public static class IMessageAdapterAsyncExtensions
 		{
 			try
 			{
-				var unsub = (ISubscriptionMessage)((Message)subscription).Clone();
+				var unsub = subscription.TypedClone();
 				unsub.IsSubscribe = false;
 				unsub.OriginalTransactionId = subId;
 				unsub.TransactionId = adapter.TransactionIdGenerator.GetNextId();
@@ -476,7 +476,7 @@ public static class IMessageAdapterAsyncExtensions
 			if (isCancelled)
 				yield break;
 
-			await using var enumerator = channel.Reader.ReadAllAsync(cancellationToken).GetAsyncEnumerator();
+			await using var enumerator = channel.Reader.ReadAllAsync(cancellationToken).GetAsyncEnumerator(cancellationToken);
 
 			while (true)
 			{
