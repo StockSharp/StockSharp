@@ -9,7 +9,7 @@ using StockSharp.Algo.Testing;
 public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 {
 	private readonly Dictionary<SecurityId, SecurityEmulator> _securityEmulators = [];
-	private readonly Dictionary<string, PortfolioEmulator> _portfolios = [];
+	private IPortfolioManager _portfolioManager = new EmulatedPortfolioManager();
 	private readonly ICommissionManager _commissionManager = new CommissionManager();
 	private DateTime _currentTime;
 
@@ -98,6 +98,15 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	/// </summary>
 	public bool VerifyMode { get; set; }
 
+	/// <summary>
+	/// Portfolio manager for handling portfolio state.
+	/// </summary>
+	public IPortfolioManager PortfolioManager
+	{
+		get => _portfolioManager;
+		set => _portfolioManager = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
 	private SecurityEmulator GetEmulator(SecurityId securityId)
 	{
 		securityId.GetHashCode(); // force caching
@@ -115,14 +124,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		return emulator;
 	}
 
-	private PortfolioEmulator GetPortfolio(string name)
+	private IPortfolio GetPortfolio(string name)
 	{
-		if (!_portfolios.TryGetValue(name, out var portfolio))
-		{
-			portfolio = new PortfolioEmulator(name);
-			_portfolios[name] = portfolio;
-		}
-		return portfolio;
+		return _portfolioManager.GetPortfolio(name);
 	}
 
 	/// <inheritdoc />
@@ -764,13 +768,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		if (mode.HasFlag(OrderGroupCancelModes.ClosePositions))
 		{
-			foreach (var kvp in _portfolios)
+			foreach (var portfolio in _portfolioManager.GetAllPortfolios())
 			{
 				if (!string.IsNullOrEmpty(groupMsg.PortfolioName) &&
-					!groupMsg.PortfolioName.Equals(kvp.Key, StringComparison.OrdinalIgnoreCase))
+					!groupMsg.PortfolioName.Equals(portfolio.Name, StringComparison.OrdinalIgnoreCase))
 					continue;
-
-				var portfolio = kvp.Value;
 
 				foreach (var (securityId, volume, _) in portfolio.GetPositions())
 				{
@@ -807,7 +809,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 							Price = bestPrice.Value,
 							Volume = closeVolume,
 							OrderType = OrderTypes.Limit,
-							PortfolioName = kvp.Key,
+							PortfolioName = portfolio.Name,
 						};
 
 						ProcessOrderRegister(closeMsg, results);
@@ -868,19 +870,19 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		if (!lookupMsg.IsSubscribe)
 			return;
 
-		foreach (var kvp in _portfolios)
+		foreach (var portfolio in _portfolioManager.GetAllPortfolios())
 		{
 			if (!string.IsNullOrEmpty(lookupMsg.PortfolioName) &&
-				!lookupMsg.PortfolioName.Equals(kvp.Key, StringComparison.OrdinalIgnoreCase))
+				!lookupMsg.PortfolioName.Equals(portfolio.Name, StringComparison.OrdinalIgnoreCase))
 				continue;
 
 			results.Add(new PortfolioMessage
 			{
-				PortfolioName = kvp.Key,
+				PortfolioName = portfolio.Name,
 				OriginalTransactionId = lookupMsg.TransactionId,
 			});
 
-			foreach (var (securityId, volume, avgPrice) in kvp.Value.GetPositions())
+			foreach (var (securityId, volume, avgPrice) in portfolio.GetPositions())
 			{
 				if (volume == 0)
 					continue;
@@ -890,7 +892,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					SecurityId = securityId,
 					ServerTime = lookupMsg.LocalTime,
 					LocalTime = lookupMsg.LocalTime,
-					PortfolioName = kvp.Key,
+					PortfolioName = portfolio.Name,
 				}
 				.Add(PositionChangeTypes.CurrentValue, volume)
 				.TryAdd(PositionChangeTypes.AveragePrice, avgPrice));
@@ -1042,15 +1044,16 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	private void Reset()
 	{
 		_securityEmulators.Clear();
-		_portfolios.Clear();
+		_portfolioManager.Clear();
 		ProcessedMessageCount = 0;
 	}
 
 	private InvalidOperationException ValidateRegistration(OrderRegisterMessage regMsg)
 	{
 		// Check portfolio funds if needed
-		if (Settings.CheckMoney && _portfolios.TryGetValue(regMsg.PortfolioName, out var portfolio))
+		if (Settings.CheckMoney && _portfolioManager.HasPortfolio(regMsg.PortfolioName))
 		{
+			var portfolio = _portfolioManager.GetPortfolio(regMsg.PortfolioName);
 			var needMoney = regMsg.Price * regMsg.Volume;
 			if (portfolio.AvailableMoney < needMoney)
 			{
@@ -1083,7 +1086,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		};
 	}
 
-	private static void AddPortfolioUpdate(PortfolioEmulator portfolio, DateTime time, List<Message> results)
+	private static void AddPortfolioUpdate(IPortfolio portfolio, DateTime time, List<Message> results)
 	{
 		var totalPnL = portfolio.RealizedPnL - portfolio.Commission;
 
@@ -1571,253 +1574,5 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 	public void ProcessOrderExecution(ExecutionMessage exec, List<Message> results)
 	{
 		// Internal processing - not typically used directly
-	}
-}
-
-/// <summary>
-/// Simple portfolio emulator.
-/// </summary>
-internal class PortfolioEmulator(string name)
-{
-	private readonly Dictionary<SecurityId, PositionInfo> _positions = [];
-	private decimal _beginMoney;
-	private decimal _realizedPnL;
-	private decimal _totalBlockedMoney;
-	private decimal _commission;
-
-	public string Name { get; } = name;
-	public decimal BeginMoney => _beginMoney;
-	/// <summary>
-	/// Current money = begin money + total PnL.
-	/// </summary>
-	public decimal CurrentMoney => _beginMoney + TotalPnL;
-	public decimal AvailableMoney => CurrentMoney - _totalBlockedMoney;
-	public decimal RealizedPnL => _realizedPnL;
-	public decimal TotalPnL => _realizedPnL - _commission;
-	public decimal BlockedMoney => _totalBlockedMoney;
-	public decimal Commission => _commission;
-
-	public void SetMoney(decimal money)
-	{
-		_beginMoney = money;
-	}
-
-	public void SetPosition(SecurityId secId, decimal volume, decimal avgPrice = 0)
-	{
-		var pos = GetOrCreatePosition(secId);
-		pos.BeginValue = volume;
-		pos.Diff = 0;
-		pos.AveragePrice = avgPrice;
-	}
-
-	private PositionInfo GetOrCreatePosition(SecurityId secId)
-	{
-		if (!_positions.TryGetValue(secId, out var pos))
-		{
-			pos = new PositionInfo(secId);
-			_positions[secId] = pos;
-		}
-		return pos;
-	}
-
-	public PositionInfo GetPosition(SecurityId secId)
-	{
-		return _positions.TryGetValue(secId, out var pos) ? pos : null;
-	}
-
-	public (decimal realizedPnL, decimal positionChange, PositionInfo position) ProcessTrade(
-		SecurityId secId, Sides side, decimal price, decimal volume, decimal? commission = null)
-	{
-		var pos = GetOrCreatePosition(secId);
-
-		// Update commission
-		if (commission.HasValue)
-			_commission += commission.Value;
-
-		// Calculate position change
-		var positionDelta = side == Sides.Buy ? volume : -volume;
-		var prevPos = pos.CurrentValue;
-		var prevAvgPrice = pos.AveragePrice;
-
-		pos.Diff += positionDelta;
-
-		var currPos = pos.CurrentValue;
-		var tradeRealizedPnL = 0m;
-
-		// Calculate AveragePrice and RealizedPnL
-		if (currPos == 0)
-		{
-			// Position closed completely
-			if (prevPos != 0)
-			{
-				// Realized PnL = (exit price - entry price) * volume * direction
-				tradeRealizedPnL = (price - prevAvgPrice) * Math.Abs(prevPos) * Math.Sign(prevPos);
-				_realizedPnL += tradeRealizedPnL;
-			}
-			pos.AveragePrice = 0;
-		}
-		else if (prevPos == 0)
-		{
-			// New position opened
-			pos.AveragePrice = price;
-		}
-		else if (Math.Sign(prevPos) == Math.Sign(currPos))
-		{
-			// Position increased or partially closed
-			if (Math.Abs(currPos) > Math.Abs(prevPos))
-			{
-				// Position increased - recalculate average price
-				pos.AveragePrice = (prevAvgPrice * Math.Abs(prevPos) + price * volume) / Math.Abs(currPos);
-			}
-			else
-			{
-				// Position partially closed - realize PnL for closed portion
-				var closedVolume = Math.Abs(prevPos) - Math.Abs(currPos);
-				tradeRealizedPnL = (price - prevAvgPrice) * closedVolume * Math.Sign(prevPos);
-				_realizedPnL += tradeRealizedPnL;
-				// Average price remains the same for remaining position
-			}
-		}
-		else
-		{
-			// Position flipped (was long, now short or vice versa)
-			// First close old position completely
-			tradeRealizedPnL = (price - prevAvgPrice) * Math.Abs(prevPos) * Math.Sign(prevPos);
-			_realizedPnL += tradeRealizedPnL;
-			// Then open new position at current price
-			pos.AveragePrice = price;
-		}
-
-		// Update blocked volume/value for active orders (order was executed)
-		// Use the average blocked price, not the trade price, to properly unblock
-		if (side == Sides.Buy)
-		{
-			var avgBlockedPrice = pos.TotalBidsVolume > 0 ? pos.TotalBidsValue / pos.TotalBidsVolume : price;
-			var blockedValue = volume * avgBlockedPrice;
-			pos.TotalBidsVolume -= volume;
-			pos.TotalBidsValue -= blockedValue;
-		}
-		else
-		{
-			var avgBlockedPrice = pos.TotalAsksVolume > 0 ? pos.TotalAsksValue / pos.TotalAsksVolume : price;
-			var blockedValue = volume * avgBlockedPrice;
-			pos.TotalAsksVolume -= volume;
-			pos.TotalAsksValue -= blockedValue;
-		}
-
-		UpdateBlockedMoney();
-
-		return (tradeRealizedPnL, positionDelta, pos);
-	}
-
-	public void ProcessOrderRegistration(SecurityId secId, Sides side, decimal volume, decimal price)
-	{
-		var pos = GetOrCreatePosition(secId);
-		var value = volume * price;
-
-		if (side == Sides.Buy)
-		{
-			pos.TotalBidsVolume += volume;
-			pos.TotalBidsValue += value;
-		}
-		else
-		{
-			pos.TotalAsksVolume += volume;
-			pos.TotalAsksValue += value;
-		}
-
-		UpdateBlockedMoney();
-	}
-
-	public void ProcessOrderCancellation(SecurityId secId, Sides side, decimal volume, decimal price = 0)
-	{
-		var pos = GetOrCreatePosition(secId);
-		var value = volume * price;
-
-		if (side == Sides.Buy)
-		{
-			pos.TotalBidsVolume -= volume;
-			pos.TotalBidsValue -= value;
-		}
-		else
-		{
-			pos.TotalAsksVolume -= volume;
-			pos.TotalAsksValue -= value;
-		}
-
-		UpdateBlockedMoney();
-	}
-
-	public void ProcessTradeExecution(SecurityId secId, Sides side, decimal volume, decimal price)
-	{
-		var pos = GetOrCreatePosition(secId);
-		var value = volume * price;
-
-		// Reduce blocked amount when order is executed
-		if (side == Sides.Buy)
-		{
-			pos.TotalBidsVolume -= volume;
-			pos.TotalBidsValue -= value;
-		}
-		else
-		{
-			pos.TotalAsksVolume -= volume;
-			pos.TotalAsksValue -= value;
-		}
-
-		UpdateBlockedMoney();
-	}
-
-	private void UpdateBlockedMoney()
-	{
-		_totalBlockedMoney = 0;
-		foreach (var pos in _positions.Values)
-		{
-			// TotalPrice logic:
-			// - If no position: blocked = buys + sells
-			// - If long position: blocked = max(position + buys, sells)
-			// - If short position: blocked = max(position + sells, buys)
-			var positionValue = Math.Abs(pos.CurrentValue) * pos.AveragePrice;
-			var buyOrderValue = pos.TotalBidsValue;
-			var sellOrderValue = pos.TotalAsksValue;
-
-			decimal blocked;
-			if (positionValue == 0)
-			{
-				blocked = buyOrderValue + sellOrderValue;
-			}
-			else if (pos.CurrentValue > 0)
-			{
-				// Long position: max(position + buys, sells)
-				blocked = Math.Max(positionValue + buyOrderValue, sellOrderValue);
-			}
-			else
-			{
-				// Short position: max(position + sells, buys)
-				blocked = Math.Max(positionValue + sellOrderValue, buyOrderValue);
-			}
-
-			_totalBlockedMoney += blocked;
-		}
-	}
-
-	public IEnumerable<(SecurityId securityId, decimal volume, decimal avgPrice)> GetPositions()
-	{
-		return _positions.Select(kvp => (kvp.Key, kvp.Value.CurrentValue, kvp.Value.AveragePrice));
-	}
-
-	public IEnumerable<PositionInfo> GetAllPositions() => _positions.Values;
-
-	internal class PositionInfo(SecurityId securityId)
-	{
-		public SecurityId SecurityId { get; } = securityId;
-		public decimal BeginValue;
-		public decimal Diff;
-		public decimal CurrentValue => BeginValue + Diff;
-		public decimal AveragePrice;
-		public decimal TotalBidsVolume;
-		public decimal TotalAsksVolume;
-		public decimal TotalBidsValue; // volume * price
-		public decimal TotalAsksValue; // volume * price
 	}
 }
