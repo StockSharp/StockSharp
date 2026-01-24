@@ -5,25 +5,6 @@
 /// </summary>
 public class RemoteStorageClient : Disposable
 {
-	/// <summary>
-	/// Adapter wrapper that ensures SubscriptionId is set from OriginalTransactionId.
-	/// </summary>
-	private sealed class SubscriptionIdAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
-	{
-		/// <inheritdoc />
-		protected override ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
-		{
-			// Set SubscriptionIds from OriginalTransactionId if not already set
-			if (message is ISubscriptionIdMessage subscrMsg && subscrMsg.OriginalTransactionId != 0 && !subscrMsg.HasSubscriptionId())
-				subscrMsg.SetSubscriptionIds([subscrMsg.OriginalTransactionId]);
-
-			return base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
-		}
-
-		/// <inheritdoc />
-		public override IMessageAdapter Clone() => new SubscriptionIdAdapter(InnerAdapter.TypedClone());
-	}
-
 	private readonly IMessageAdapter _adapter;
 	private readonly int _securityBatchSize;
 
@@ -42,7 +23,7 @@ public class RemoteStorageClient : Disposable
 		if (adapter is null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		_adapter = new SubscriptionIdAdapter(adapter);
+		_adapter = new SubscriptionMessageAdapter(adapter);
 
 		_securityBatchSize = securityBatchSize;
 	}
