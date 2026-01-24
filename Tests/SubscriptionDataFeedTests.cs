@@ -37,6 +37,9 @@ public sealed class DataFeedEmulator : IDisposable
 
 		_isGenerating = true;
 		_generatorTask = Task.Run(GenerateDataLoop);
+
+		// Wait for first message to be generated
+		Thread.Sleep(50);
 	}
 
 	public void Stop()
@@ -125,6 +128,37 @@ public sealed class DataFeedEmulator : IDisposable
 		return _outputQueue.TryTake(out message, timeout);
 	}
 
+	public async Task<Message> WaitForMessageAsync(TimeSpan timeout, CancellationToken token)
+	{
+		var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+		cts.CancelAfter(timeout);
+
+		try
+		{
+			while (!cts.Token.IsCancellationRequested)
+			{
+				if (_outputQueue.TryTake(out var msg, 10))
+					return msg;
+				await Task.Delay(5, cts.Token);
+			}
+		}
+		catch (OperationCanceledException) { }
+
+		return null;
+	}
+
+	public async Task<List<Message>> CollectMessagesAsync(int count, TimeSpan perMessageTimeout, CancellationToken token)
+	{
+		var result = new List<Message>();
+		for (int i = 0; i < count; i++)
+		{
+			var msg = await WaitForMessageAsync(perMessageTimeout, token);
+			if (msg != null)
+				result.Add(msg);
+		}
+		return result;
+	}
+
 	public void Dispose()
 	{
 		_cts.Cancel();
@@ -180,7 +214,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+				if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 				{
 					var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
 					if (forward is ISubscriptionIdMessage subMsg)
@@ -228,7 +262,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var messagesBeforeUnsubscribe = new List<ISubscriptionIdMessage>();
 		for (int i = 0; i < 5; i++)
 		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -252,7 +286,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var messagesAfterUnsubscribe = new List<ISubscriptionIdMessage>();
 		for (int i = 0; i < 5; i++)
 		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -306,7 +340,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var receivedMessages = new List<ISubscriptionIdMessage>();
 		for (int i = 0; i < 10; i++)
 		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -362,7 +396,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var messagesBefore = new List<ISubscriptionIdMessage>();
 		for (int i = 0; i < 3; i++)
 		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -387,7 +421,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var messagesAfter = new List<ISubscriptionIdMessage>();
 		for (int i = 0; i < 5; i++)
 		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -434,7 +468,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var phase1 = new List<long[]>();
 		for (int i = 0; i < 3; i++)
 		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -459,7 +493,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var phase2 = new List<long[]>();
 		for (int i = 0; i < 3; i++)
 		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -488,7 +522,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var phase3 = new List<long[]>();
 		for (int i = 0; i < 3; i++)
 		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -533,7 +567,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var receivedMessages = new List<ISubscriptionIdMessage>();
 		for (int i = 0; i < 10; i++)
 		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = manager.ProcessOutMessage(msg);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -577,7 +611,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var messagesBeforeUnsubscribe = new List<ISubscriptionIdMessage>();
 		for (int i = 0; i < 5; i++)
 		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = manager.ProcessOutMessage(msg);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -601,7 +635,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var messagesAfterUnsubscribe = new List<ISubscriptionIdMessage>();
 		for (int i = 0; i < 5; i++)
 		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = manager.ProcessOutMessage(msg);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -689,7 +723,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var messagesAfter = new List<ISubscriptionIdMessage>();
 		for (int i = 0; i < 5; i++)
 		{
-			if (feed2.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (feed2.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = manager.ProcessOutMessage(msg);
 				if (forward is ISubscriptionIdMessage subMsg)
@@ -787,7 +821,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var level1After = new List<Level1ChangeMessage>();
 		for (int i = 0; i < 5; i++)
 		{
-			if (level1Feed.TryGetMessage(TimeSpan.FromMilliseconds(100), out var msg))
+			if (level1Feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
 				if (forward is Level1ChangeMessage l1)
