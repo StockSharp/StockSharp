@@ -213,7 +213,10 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 							var secId = (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default;
 
 							if (!_state.TryGetSubscriptionByKey((dataType, secId), out info) && (secId == default || !_state.TryGetSubscriptionByKey((dataType, default(SecurityId)), out info)))
-								break;
+							{
+								// No subscription found - don't forward message
+								return (null, []);
+							}
 						}
 
 						var ids = info.IsMarketData ? info.OnlineSubscribers.Cache : info.Subscribers.CachedKeys;
@@ -231,6 +234,10 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 							if (ids.Length != set.Count)
 								ids = [.. set];
 						}
+
+						// If no subscribers after filtering, don't forward
+						if (ids.Length == 0)
+							return (null, []);
 
 						subscrMsg.SetSubscriptionIds(ids);
 					}

@@ -187,31 +187,27 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 					}
 					else
 					{
-						// Optimized remap: avoid LINQ and allocations when possible
-						if (_state.ReplaceIdCount > 0)
+						// Filter out unknown subscription IDs
+						var validIds = new List<long>(ids.Length);
+						for (var i = 0; i < ids.Length; i++)
 						{
-							// First pass: check if any remapping is needed
-							var needsRemap = false;
-							for (var i = 0; i < ids.Length; i++)
-							{
-								if (_state.ContainsReplaceId(ids[i]))
-								{
-									needsRemap = true;
-									break;
-								}
-							}
+							var id = ids[i];
+							var origId = _state.TryGetOriginalId(id, out var oid) ? oid : id;
 
-							// Only allocate new array if remapping is actually needed
-							if (needsRemap)
-							{
-								var remappedIds = new long[ids.Length];
-								for (var i = 0; i < ids.Length; i++)
-								{
-									remappedIds[i] = _state.TryGetOriginalId(ids[i], out var origId) ? origId : ids[i];
-								}
-								subscrMsg.SetSubscriptionIds(remappedIds);
-							}
+							// Check if subscription exists and is active
+							if (_state.TryGetSubscription(origId, out _, out var subState) && subState.IsActive())
+								validIds.Add(origId);
+							else if (_state.ContainsHistoricalRequest(origId))
+								validIds.Add(origId);
 						}
+
+						// If no valid subscriptions, don't forward the message
+						if (validIds.Count == 0)
+							return (null, []);
+
+						// Update subscription IDs with valid ones only
+						if (validIds.Count != ids.Length || _state.ReplaceIdCount > 0)
+							subscrMsg.SetSubscriptionIds([.. validIds]);
 					}
 
 					if (subscrMsg is ISecurityIdMessage secIdMsg &&
