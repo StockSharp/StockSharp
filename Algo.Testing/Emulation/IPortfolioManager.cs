@@ -192,6 +192,15 @@ public interface IPortfolioManager
 	IEnumerable<IPortfolio> GetAllPortfolios();
 
 	/// <summary>
+	/// Validate that portfolio has sufficient funds for order registration.
+	/// </summary>
+	/// <param name="portfolioName">Portfolio name.</param>
+	/// <param name="price">Order price.</param>
+	/// <param name="volume">Order volume.</param>
+	/// <returns>Error if insufficient funds, null otherwise.</returns>
+	InvalidOperationException ValidateFunds(string portfolioName, decimal price, decimal volume);
+
+	/// <summary>
 	/// Clear all portfolio state.
 	/// </summary>
 	void Clear();

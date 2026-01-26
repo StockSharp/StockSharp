@@ -286,6 +286,21 @@ public class EmulatedPortfolioManager : IPortfolioManager
 	}
 
 	/// <inheritdoc />
+	public InvalidOperationException ValidateFunds(string portfolioName, decimal price, decimal volume)
+	{
+		if (!HasPortfolio(portfolioName))
+			return null;
+
+		var portfolio = GetPortfolio(portfolioName);
+		var needMoney = price * volume;
+
+		if (portfolio.AvailableMoney < needMoney)
+			return new InvalidOperationException($"Insufficient funds: need {needMoney}, available {portfolio.AvailableMoney}");
+
+		return null;
+	}
+
+	/// <inheritdoc />
 	public void Clear()
 	{
 		_portfolios.Clear();

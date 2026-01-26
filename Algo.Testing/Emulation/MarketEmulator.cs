@@ -1051,15 +1051,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	private InvalidOperationException ValidateRegistration(OrderRegisterMessage regMsg)
 	{
 		// Check portfolio funds if needed
-		if (Settings.CheckMoney && _portfolioManager.HasPortfolio(regMsg.PortfolioName))
-		{
-			var portfolio = _portfolioManager.GetPortfolio(regMsg.PortfolioName);
-			var needMoney = regMsg.Price * regMsg.Volume;
-			if (portfolio.AvailableMoney < needMoney)
-			{
-				return new InvalidOperationException($"Insufficient funds: need {needMoney}, available {portfolio.AvailableMoney}");
-			}
-		}
+		if (Settings.CheckMoney)
+			return _portfolioManager.ValidateFunds(regMsg.PortfolioName, regMsg.Price, regMsg.Volume);
 
 		return null;
 	}
