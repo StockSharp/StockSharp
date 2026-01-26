@@ -20,11 +20,18 @@ public static class Extensions
 		"StockSharp.Alerts",
 		"StockSharp.Alerts.Interfaces",
 		"StockSharp.Algo",
+		"StockSharp.Algo.Testing",
+		"StockSharp.Algo.Gpu",
+		"StockSharp.Algo.Strategies",
+		"StockSharp.Algo.Indicators",
+		"StockSharp.Algo.Compilation",
+		"StockSharp.Algo.Analytics",
+		"StockSharp.Algo.Import",
 		"StockSharp.Algo.Export",
+		"StockSharp.Reporting",
 		"StockSharp.BusinessEntities",
 		"StockSharp.Charting.Interfaces",
 		"StockSharp.Configuration",
-		"StockSharp.Configuration.Adapters",
 		"StockSharp.Diagram.Core",
 		"StockSharp.Fix.Core",
 		"StockSharp.Licensing",
@@ -49,6 +56,7 @@ public static class Extensions
 		"StockSharp.Server.Core",
 		"StockSharp.Server.Fix",
 		"StockSharp.Server.Utils",
+		"StockSharp.Tests",
 	};
 
 
