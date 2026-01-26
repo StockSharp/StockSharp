@@ -274,7 +274,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	#region Message Without Subscription Tests
 
 	[TestMethod]
-	public async Task OutMessage_WithNoSubscription_StillForwarded()
+	public async Task OutMessage_WithNoSubscription_NotForwarded()
 	{
 		var logReceiver = new TestReceiver();
 		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
@@ -291,9 +291,8 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(dataMessage, token);
 
-		// Current behavior: message is still forwarded
-		// Expected behavior according to task: should NOT be forwarded if no subscription exists
-		forward.AssertNotNull();
+		// Message should NOT be forwarded if no subscription exists
+		forward.AssertNull();
 		extraOut.Length.AssertEqual(0);
 	}
 
@@ -344,7 +343,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		};
 		await manager.ProcessInMessageAsync(unsubscribe, token);
 
-		// After unsubscribe, data message should not have subscription IDs (empty)
+		// After unsubscribe, data message should NOT be forwarded
 		var dataMessage2 = new ExecutionMessage
 		{
 			SecurityId = secId,
@@ -356,8 +355,8 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		// Don't set subscription IDs - let manager handle it based on (dataType, secId) lookup
 
 		var (forward2, _) = await manager.ProcessOutMessageAsync(dataMessage2, token);
-		// Message is forwarded but subscription IDs should be empty (no active subscription)
-		forward2.AssertNotNull();
+		// Message should NOT be forwarded after unsubscribe
+		forward2.AssertNull();
 	}
 
 	[TestMethod]

@@ -259,7 +259,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	#region Message Without Subscription Tests
 
 	[TestMethod]
-	public void OutMessage_WithUnknownSubscription_SetsEmptyIds()
+	public void OutMessage_WithUnknownSubscription_NotForwarded()
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
@@ -276,8 +276,8 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		var (forward, extraOut) = manager.ProcessOutMessage(dataMessage);
 
-		// Message should be forwarded (current behavior)
-		forward.AssertNotNull();
+		// Message should NOT be forwarded if subscription doesn't exist
+		forward.AssertNull();
 		extraOut.Length.AssertEqual(0);
 	}
 
@@ -304,7 +304,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OutMessage_AfterUnsubscribe_OriginIdRemapped()
+	public void OutMessage_AfterUnsubscribe_NotForwarded()
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
@@ -347,8 +347,8 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		var (forward, extraOut) = manager.ProcessOutMessage(dataMessage);
 
-		// Message is forwarded but subscription ID mapping may be affected
-		forward.AssertNotNull();
+		// Message should NOT be forwarded after unsubscribe
+		forward.AssertNull();
 	}
 
 	[TestMethod]

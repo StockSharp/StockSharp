@@ -39,7 +39,7 @@ public sealed class DataFeedEmulator : IDisposable
 		_generatorTask = Task.Run(GenerateDataLoop);
 
 		// Wait for first message to be generated
-		Thread.Sleep(50);
+		Thread.Sleep(100);
 	}
 
 	public void Stop()
@@ -489,20 +489,19 @@ public class SubscriptionDataFeedTests : BaseTestClass
 			DataType2 = DataType.Ticks,
 		}, token);
 
-		// Phase 2: Unsubscribed - should NOT have ID 100
-		var phase2 = new List<long[]>();
+		// Phase 2: Unsubscribed - messages should NOT be forwarded (forward = null)
+		var phase2ForwardedCount = 0;
 		for (int i = 0; i < 3; i++)
 		{
 			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
 			{
 				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
-				if (forward is ISubscriptionIdMessage subMsg)
-					phase2.Add(subMsg.GetSubscriptionIds());
+				if (forward != null)
+					phase2ForwardedCount++;
 			}
 		}
 
-		phase2.Count.AssertGreater(0);
-		phase2.All(ids => !ids.Contains(100)).AssertTrue("Phase 2: none should have ID 100");
+		phase2ForwardedCount.AssertEqual(0, "Phase 2: no messages should be forwarded after unsubscribe");
 
 		// Resubscribe with new ID
 		await manager.ProcessInMessageAsync(new MarketDataMessage

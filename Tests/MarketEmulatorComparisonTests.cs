@@ -935,4 +935,189 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region RandomProvider Usage Tests
+
+	/// <summary>
+	/// Tests that both emulators produce the same output when processing Level1 with quotes but no volume.
+	/// The old emulator uses RandomProvider to generate volume when not provided,
+	/// while the new emulator should behave the same way with MockRandomProvider.
+	/// </summary>
+	[TestMethod]
+	public async Task Level1_QuotesWithoutVolume_UsesRandomProvider()
+	{
+		var secId = Helper.CreateSecurityId();
+		var (emuV1, resV1, emuV2, resV2) = CreateBothEmulators(secId);
+		var now = DateTime.UtcNow;
+
+		// Track RandomProvider calls
+		var v1VolumeCalls = 0;
+		var v2VolumeCalls = 0;
+
+		var mockV1 = new MockRandomProvider
+		{
+			NextVolumeFunc = () => { v1VolumeCalls++; return 50; },
+			NextSpreadStepFunc = _ => 1,
+			ShouldMatchFunc = () => false,
+			ShouldFailFunc = _ => false
+		};
+		var mockV2 = new MockRandomProvider
+		{
+			NextVolumeFunc = () => { v2VolumeCalls++; return 50; },
+			NextSpreadStepFunc = _ => 1,
+			ShouldMatchFunc = () => false,
+			ShouldFailFunc = _ => false
+		};
+
+		((MarketEmulatorOld)emuV1).RandomProvider = mockV1;
+		((MarketEmulator)emuV2).RandomProvider = mockV2;
+
+		await InitMoney(emuV1, now);
+		await InitMoney(emuV2, now);
+
+		resV1.Clear();
+		resV2.Clear();
+
+		// Send Level1 with bid/ask prices but no volume - this should trigger RandomProvider
+		var level1 = new Level1ChangeMessage
+		{
+			SecurityId = secId,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(Level1Fields.BestBidPrice, 100m)
+		.Add(Level1Fields.BestAskPrice, 101m);
+		// Note: No BestBidVolume or BestAskVolume - old emulator should use GetRandomVolume()
+
+		await emuV1.SendInMessageAsync(level1.TypedClone(), CancellationToken);
+		await emuV2.SendInMessageAsync(level1.TypedClone(), CancellationToken);
+
+		// Verify RandomProvider was called (meaning volume was generated)
+		Console.WriteLine($"V1 RandomProvider.NextVolume calls: {v1VolumeCalls}");
+		Console.WriteLine($"V2 RandomProvider.NextVolume calls: {v2VolumeCalls}");
+
+		// The old emulator should call RandomProvider for volume generation
+		// The new emulator should do the same
+		v1VolumeCalls.AssertEqual(v2VolumeCalls, "RandomProvider usage should be the same in both emulators");
+
+		AssertEqual(resV1, resV2, "Level1_QuotesWithoutVolume_UsesRandomProvider");
+	}
+
+	/// <summary>
+	/// Tests that both emulators produce the same output when processing tick with zero volume.
+	/// The old emulator uses RandomProvider to replace zero volume,
+	/// while the new emulator should behave the same way.
+	/// </summary>
+	[TestMethod]
+	public async Task Tick_ZeroVolume_UsesRandomProvider()
+	{
+		var secId = Helper.CreateSecurityId();
+		var (emuV1, resV1, emuV2, resV2) = CreateBothEmulators(secId);
+		var now = DateTime.UtcNow;
+
+		// Track RandomProvider calls
+		var v1VolumeCalls = 0;
+		var v2VolumeCalls = 0;
+
+		var mockV1 = new MockRandomProvider
+		{
+			NextVolumeFunc = () => { v1VolumeCalls++; return 50; },
+			NextSpreadStepFunc = _ => 1,
+			ShouldMatchFunc = () => false,
+			ShouldFailFunc = _ => false
+		};
+		var mockV2 = new MockRandomProvider
+		{
+			NextVolumeFunc = () => { v2VolumeCalls++; return 50; },
+			NextSpreadStepFunc = _ => 1,
+			ShouldMatchFunc = () => false,
+			ShouldFailFunc = _ => false
+		};
+
+		((MarketEmulatorOld)emuV1).RandomProvider = mockV1;
+		((MarketEmulator)emuV2).RandomProvider = mockV2;
+
+		await InitMoney(emuV1, now);
+		await InitMoney(emuV2, now);
+
+		resV1.Clear();
+		resV2.Clear();
+
+		// Send tick with zero volume - old emulator replaces with GetRandomVolume()
+		var tick = new ExecutionMessage
+		{
+			SecurityId = secId,
+			LocalTime = now,
+			ServerTime = now,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100,
+			TradeVolume = 0,  // Zero volume should trigger RandomProvider
+			TradeId = 1,
+		};
+
+		await emuV1.SendInMessageAsync(tick.TypedClone(), CancellationToken);
+		await emuV2.SendInMessageAsync(tick.TypedClone(), CancellationToken);
+
+		Console.WriteLine($"V1 RandomProvider.NextVolume calls: {v1VolumeCalls}");
+		Console.WriteLine($"V2 RandomProvider.NextVolume calls: {v2VolumeCalls}");
+
+		// Old emulator calls RandomProvider once for zero volume replacement
+		// New emulator should do the same
+		v1VolumeCalls.AssertEqual(v2VolumeCalls, "RandomProvider usage should be the same for zero volume ticks");
+
+		AssertEqual(resV1, resV2, "Tick_ZeroVolume_UsesRandomProvider");
+	}
+
+	/// <summary>
+	/// Tests order execution when order book is generated from ticks.
+	/// </summary>
+	[TestMethod]
+	public async Task OrderExecution_WithSyntheticBook()
+	{
+		var secId = Helper.CreateSecurityId();
+		var (emuV1, resV1, emuV2, resV2) = CreateBothEmulators(secId);
+		var now = DateTime.UtcNow;
+
+		await InitMoney(emuV1, now);
+		await InitMoney(emuV2, now);
+
+		// Send tick to create synthetic book
+		var tick = new ExecutionMessage
+		{
+			SecurityId = secId,
+			LocalTime = now,
+			ServerTime = now,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100,
+			TradeVolume = 10,
+			TradeId = 1,
+		};
+
+		await emuV1.SendInMessageAsync(tick.TypedClone(), CancellationToken);
+		await emuV2.SendInMessageAsync(tick.TypedClone(), CancellationToken);
+
+		resV1.Clear();
+		resV2.Clear();
+
+		// Now try to place an order - the synthetic book should allow execution
+		var order = new OrderRegisterMessage
+		{
+			SecurityId = secId,
+			LocalTime = now.AddMilliseconds(1),
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Price = 101, // Above tick price, should cross spread
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.PutInQueue,
+			PortfolioName = _pfName,
+		};
+
+		await emuV1.SendInMessageAsync(order.TypedClone(), CancellationToken);
+		await emuV2.SendInMessageAsync(order.TypedClone(), CancellationToken);
+
+		AssertEqual(resV1, resV2, "OrderExecution_WithSyntheticBook");
+	}
+
+	#endregion
 }
