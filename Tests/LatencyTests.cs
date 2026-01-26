@@ -8,7 +8,7 @@ public class LatencyTests
 	[TestMethod]
 	public void RegisterLatencyCalculated()
 	{
-		var mgr = new LatencyManager();
+		var mgr = new LatencyManager(new LatencyManagerState());
 		var t0 = DateTime.UtcNow;
 		var reg = new OrderRegisterMessage { TransactionId = 1, LocalTime = t0 };
 		mgr.ProcessMessage(reg).AssertNull();
@@ -30,7 +30,7 @@ public class LatencyTests
 	[TestMethod]
 	public void CancelLatencyCalculated()
 	{
-		var mgr = new LatencyManager();
+		var mgr = new LatencyManager(new LatencyManagerState());
 		var t0 = DateTime.UtcNow;
 		var cancel = new OrderCancelMessage { TransactionId = 2, LocalTime = t0 };
 		mgr.ProcessMessage(cancel).AssertNull();
@@ -52,7 +52,7 @@ public class LatencyTests
 	[TestMethod]
 	public void ReplaceTracksBothCancelAndRegister()
 	{
-		var mgr = new LatencyManager();
+		var mgr = new LatencyManager(new LatencyManagerState());
 		var t0 = DateTime.UtcNow;
 		var replace = new OrderReplaceMessage
 		{
@@ -92,7 +92,7 @@ public class LatencyTests
 	[TestMethod]
 	public void ResetClearsState()
 	{
-		var mgr = new LatencyManager();
+		var mgr = new LatencyManager(new LatencyManagerState());
 		var t0 = DateTime.UtcNow;
 		var transId = 5L;
 		mgr.ProcessMessage(new OrderRegisterMessage { TransactionId = transId, LocalTime = t0 });
@@ -114,7 +114,7 @@ public class LatencyTests
 	[TestMethod]
 	public void ReplaceUsesTransactionIdForCancelTracking()
 	{
-		var mgr = new LatencyManager();
+		var mgr = new LatencyManager(new LatencyManagerState());
 		var t0 = DateTime.UtcNow;
 
 		// Replace order: TransactionId=100 (new order), OriginalTransactionId=50 (order to replace)

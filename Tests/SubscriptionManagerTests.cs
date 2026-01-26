@@ -12,7 +12,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var message = new MarketDataMessage
 		{
@@ -38,7 +38,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var subscription = new MarketDataMessage
 		{
@@ -70,7 +70,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -126,7 +126,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var secId1 = new SecurityId { SecurityCode = "SEC1", BoardCode = "BOARD" };
 		var secId2 = new SecurityId { SecurityCode = "SEC2", BoardCode = "BOARD" };
@@ -181,7 +181,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var secId = Helper.CreateSecurityId();
 		var transId = 100L;
@@ -235,7 +235,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var unsubscribe = new MarketDataMessage
 		{
@@ -263,7 +263,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		// Create a data message with unknown subscription ID
 		var dataMessage = new Level1ChangeMessage
@@ -286,7 +286,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		// Create a data message with no subscription IDs
 		var dataMessage = new Level1ChangeMessage
@@ -308,7 +308,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -356,7 +356,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -413,7 +413,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -468,7 +468,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var secId = Helper.CreateSecurityId();
 

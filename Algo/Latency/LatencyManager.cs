@@ -3,24 +3,19 @@ namespace StockSharp.Algo.Latency;
 /// <summary>
 /// Orders registration delay calculation manager.
 /// </summary>
-public class LatencyManager : ILatencyManager
+/// <remarks>
+/// Initializes a new instance of the <see cref="LatencyManager"/>.
+/// </remarks>
+/// <param name="state">State storage.</param>
+public class LatencyManager(ILatencyManagerState state) : ILatencyManager
 {
-	private readonly Lock _syncObject = new();
-	private readonly Dictionary<long, DateTime> _register = [];
-	private readonly Dictionary<long, DateTime> _cancel = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="LatencyManager"/>.
-	/// </summary>
-	public LatencyManager()
-	{
-	}
+	private readonly ILatencyManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
 
 	/// <inheritdoc />
-	public TimeSpan LatencyRegistration { get; private set; }
+	public TimeSpan LatencyRegistration => _state.LatencyRegistration;
 
 	/// <inheritdoc />
-	public TimeSpan LatencyCancellation { get; private set; }
+	public TimeSpan LatencyCancellation => _state.LatencyCancellation;
 
 	/// <inheritdoc />
 	public TimeSpan? ProcessMessage(Message message)
@@ -36,35 +31,25 @@ public class LatencyManager : ILatencyManager
 			case MessageTypes.OrderRegister:
 			{
 				var regMsg = (OrderRegisterMessage)message;
-
-				using (_syncObject.EnterScope())
-				{
-					AddRegister(regMsg.TransactionId, regMsg.LocalTime);
-				}
-
+				_state.AddRegistration(regMsg.TransactionId, regMsg.LocalTime);
 				break;
 			}
+
 			case MessageTypes.OrderReplace:
 			{
 				var replaceMsg = (OrderReplaceMessage)message;
-
-				using (_syncObject.EnterScope())
-				{
-					AddCancel(replaceMsg.TransactionId, replaceMsg.LocalTime);
-					AddRegister(replaceMsg.TransactionId, replaceMsg.LocalTime);
-				}
-
+				_state.AddCancellation(replaceMsg.TransactionId, replaceMsg.LocalTime);
+				_state.AddRegistration(replaceMsg.TransactionId, replaceMsg.LocalTime);
 				break;
 			}
+
 			case MessageTypes.OrderCancel:
 			{
 				var cancelMsg = (OrderCancelMessage)message;
-
-				using (_syncObject.EnterScope())
-					AddCancel(cancelMsg.TransactionId, cancelMsg.LocalTime);
-
+				_state.AddCancellation(cancelMsg.TransactionId, cancelMsg.LocalTime);
 				break;
 			}
+
 			case MessageTypes.Execution:
 			{
 				var execMsg = (ExecutionMessage)message;
@@ -77,33 +62,26 @@ public class LatencyManager : ILatencyManager
 
 				var transId = execMsg.OriginalTransactionId;
 
-				using (_syncObject.EnterScope())
+				if (!_state.TryGetAndRemoveRegistration(transId, out var time))
 				{
-					if (!_register.TryGetValue(transId, out var time))
+					if (_state.TryGetAndRemoveCancellation(transId, out time))
 					{
-						if (_cancel.TryGetValue(transId, out time))
-						{
-							_cancel.Remove(transId);
-
-							if (execMsg.OrderState == OrderStates.Failed)
-								break;
-
-							var latency = execMsg.LocalTime - time;
-							LatencyCancellation += latency;
-							return latency;
-						}
-					}
-					else
-					{
-						_register.Remove(transId);
-
 						if (execMsg.OrderState == OrderStates.Failed)
 							break;
 
 						var latency = execMsg.LocalTime - time;
-						LatencyRegistration += latency;
+						_state.AddLatencyCancellation(latency);
 						return latency;
 					}
+				}
+				else
+				{
+					if (execMsg.OrderState == OrderStates.Failed)
+						break;
+
+					var latency = execMsg.LocalTime - time;
+					_state.AddLatencyRegistration(latency);
+					return latency;
 				}
 
 				break;
@@ -113,44 +91,10 @@ public class LatencyManager : ILatencyManager
 		return null;
 	}
 
-	private void AddRegister(long transactionId, DateTime localTime)
-	{
-		if (transactionId == 0)
-			throw new ArgumentOutOfRangeException(nameof(transactionId), transactionId, LocalizedStrings.InvalidValue);
-
-		if (localTime == default)
-			throw new ArgumentOutOfRangeException(nameof(localTime), localTime, LocalizedStrings.InvalidValue);
-
-		if (_register.ContainsKey(transactionId))
-			throw new ArgumentException(LocalizedStrings.TransactionRegAlreadyAdded.Put(transactionId), nameof(transactionId));
-
-		_register.Add(transactionId, localTime);
-	}
-
-	private void AddCancel(long transactionId, DateTime localTime)
-	{
-		if (transactionId <= 0)
-			throw new ArgumentOutOfRangeException(nameof(transactionId), transactionId, LocalizedStrings.InvalidValue);
-
-		if (localTime == default)
-			throw new ArgumentOutOfRangeException(nameof(localTime), localTime, LocalizedStrings.InvalidValue);
-
-		if (_cancel.ContainsKey(transactionId))
-			throw new ArgumentException(LocalizedStrings.TransactionCancelAlreadyAdded.Put(transactionId), nameof(transactionId));
-
-		_cancel.Add(transactionId, localTime);
-	}
-
 	/// <inheritdoc />
 	public void Reset()
 	{
-		using (_syncObject.EnterScope())
-		{
-			LatencyRegistration = LatencyCancellation = default;
-
-			_register.Clear();
-			_cancel.Clear();
-		}
+		_state.Clear();
 	}
 
 	/// <summary>

@@ -7,55 +7,32 @@ namespace StockSharp.Algo.Positions;
 /// Initializes a new instance of the <see cref="PositionManager"/>.
 /// </remarks>
 /// <param name="byOrders">To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).</param>
-public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
+/// <param name="state">State storage.</param>
+public class PositionManager(bool byOrders, IPositionManagerState state) : BaseLogReceiver, IPositionManager
 {
-	private class OrderInfo(long transactionId, SecurityId securityId, string portfolioName, Sides side, decimal volume, decimal balance)
+	private readonly IPositionManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
+
+    /// <summary>
+    /// To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).
+    /// </summary>
+    public bool ByOrders { get; } = byOrders;
+
+    /// <inheritdoc />
+    public virtual PositionChangeMessage ProcessMessage(Message message)
 	{
-		public long TransactionId { get; } = transactionId;
-		public SecurityId SecurityId { get; } = securityId;
-		public string PortfolioName { get; } = portfolioName;
-		public Sides Side { get; } = side;
-		public decimal Volume { get; } = volume;
-		public decimal Balance { get; set; } = balance;
-
-		public override string ToString() => $"{TransactionId}: {Balance}/{Volume}";
-	}
-
-	private class PositionInfo
-	{
-		public decimal Value { get; set; }
-
-		public override string ToString() => Value.ToString();
-	}
-
-	private readonly Dictionary<long, OrderInfo> _ordersInfo = [];
-	private readonly Dictionary<(SecurityId, string), PositionInfo> _positions = [];
-
-	/// <summary>
-	/// To calculate the position on realized volume for orders (<see langword="true" />) or by trades (<see langword="false" />).
-	/// </summary>
-	public bool ByOrders { get; } = byOrders;
-
-	/// <inheritdoc />
-	public virtual PositionChangeMessage ProcessMessage(Message message)
-	{
-		static (SecurityId, string) CreateKey(SecurityId secId, string pf)
-			=> (secId, pf.ToLowerInvariant());
-
-		OrderInfo EnsureGetInfo<TMessage>(TMessage msg, Sides side, decimal volume, decimal balance)
+		decimal EnsureGetOrderBalance<TMessage>(TMessage msg, Sides side, decimal volume, decimal balance)
 			where TMessage : Message, ITransactionIdMessage, ISecurityIdMessage, IPortfolioNameMessage
 		{
 			LogDebug("{0} bal_new {1}/{2}.", msg.TransactionId, balance, volume);
-			return _ordersInfo.SafeAdd(msg.TransactionId, key => new OrderInfo(key, msg.SecurityId, msg.PortfolioName, side, volume, balance));
+			return _state.AddOrGetOrder(msg.TransactionId, msg.SecurityId, msg.PortfolioName, side, volume, balance);
 		}
 
 		void ProcessRegOrder(OrderRegisterMessage regMsg)
-			=> EnsureGetInfo(regMsg, regMsg.Side, regMsg.Volume, regMsg.Volume);
+			=> EnsureGetOrderBalance(regMsg, regMsg.Side, regMsg.Volume, regMsg.Volume);
 
 		PositionChangeMessage UpdatePositions(SecurityId secId, string portfolioName, decimal diff, DateTime time)
 		{
-			var position = _positions.SafeAdd(CreateKey(secId, portfolioName));
-			position.Value += diff;
+			var newPosition = _state.UpdatePosition(secId, portfolioName, diff);
 
 			return new PositionChangeMessage
 			{
@@ -63,16 +40,14 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 				PortfolioName = portfolioName,
 				ServerTime = time,
 				BuildFrom = DataType.Transactions,
-			}.Add(PositionChangeTypes.CurrentValue, position.Value);
+			}.Add(PositionChangeTypes.CurrentValue, newPosition);
 		}
 
 		switch (message.Type)
 		{
 			case MessageTypes.Reset:
 			{
-				_ordersInfo.Clear();
-				_positions.Clear();
-
+				_state.Clear();
 				break;
 			}
 
@@ -92,31 +67,48 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 
 				var isOrderInfo = execMsg.HasOrderInfo();
 
-				var info =
-					isOrderInfo
-						? execMsg.TransactionId != 0
-							? EnsureGetInfo(execMsg, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0)
-							: _ordersInfo.TryGetValue(execMsg.OriginalTransactionId)
-						: execMsg.OriginalTransactionId != 0 && execMsg.HasTradeInfo()
-							? _ordersInfo.TryGetValue(execMsg.OriginalTransactionId)
-							: null;
+				SecurityId infoSecId = default;
+				string infoPfName = null;
+				Sides infoSide = default;
+				decimal infoBalance = 0;
+				var hasInfo = false;
 
-				var canUpdateOrder = isOrderInfo && info != null;
+				if (isOrderInfo)
+				{
+					if (execMsg.TransactionId != 0)
+					{
+						infoBalance = EnsureGetOrderBalance(execMsg, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0);
+						infoSecId = execMsg.SecurityId;
+						infoPfName = execMsg.PortfolioName;
+						infoSide = execMsg.Side;
+						hasInfo = true;
+					}
+					else
+					{
+						hasInfo = _state.TryGetOrder(execMsg.OriginalTransactionId, out infoSecId, out infoPfName, out infoSide, out infoBalance);
+					}
+				}
+				else if (execMsg.OriginalTransactionId != 0 && execMsg.HasTradeInfo())
+				{
+					hasInfo = _state.TryGetOrder(execMsg.OriginalTransactionId, out infoSecId, out infoPfName, out infoSide, out infoBalance);
+				}
+
+				var canUpdateOrder = isOrderInfo && hasInfo;
 
 				decimal? balDiff = null;
 
 				if (canUpdateOrder)
 				{
-					var oldBalance = execMsg.TransactionId != 0 ? execMsg.OrderVolume : info.Balance;
+					var oldBalance = execMsg.TransactionId != 0 ? execMsg.OrderVolume : infoBalance;
 					balDiff = execMsg.Balance is { } newBalance ? oldBalance - newBalance : null;
 					if (balDiff.HasValue && balDiff != 0)
 					{
-						info.Balance = execMsg.Balance.Value;
-						LogDebug("{0} bal_upd {1}/{2}.", info.TransactionId, info.Balance, info.Volume);
+						_state.UpdateOrderBalance(execMsg.TransactionId != 0 ? execMsg.TransactionId : execMsg.OriginalTransactionId, execMsg.Balance.Value);
+						LogDebug("{0} bal_upd {1}.", execMsg.TransactionId != 0 ? execMsg.TransactionId : execMsg.OriginalTransactionId, execMsg.Balance.Value);
 					}
 
 					if (execMsg.OrderState?.IsFinal() == true)
-						_ordersInfo.Remove(info.TransactionId);
+						_state.RemoveOrder(execMsg.TransactionId != 0 ? execMsg.TransactionId : execMsg.OriginalTransactionId);
 				}
 
 				if (ByOrders)
@@ -126,8 +118,8 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 
 					if (balDiff.HasValue && balDiff != 0)
 					{
-						var posDiff = info.Side == Sides.Buy ? balDiff.Value : -balDiff.Value;
-						return UpdatePositions(info.SecurityId, info.PortfolioName, posDiff, execMsg.ServerTime);
+						var posDiff = infoSide == Sides.Buy ? balDiff.Value : -balDiff.Value;
+						return UpdatePositions(infoSecId, infoPfName, posDiff, execMsg.ServerTime);
 					}
 				}
 				else
@@ -149,8 +141,8 @@ public class PositionManager(bool byOrders) : BaseLogReceiver, IPositionManager
 					if (execMsg.Side == Sides.Sell)
 						tradeVol = -tradeVol;
 
-					var secId = info?.SecurityId ?? execMsg.SecurityId;
-					var portfolioName = info?.PortfolioName ?? execMsg.PortfolioName;
+					var secId = hasInfo ? infoSecId : execMsg.SecurityId;
+					var portfolioName = hasInfo ? infoPfName : execMsg.PortfolioName;
 
 					return UpdatePositions(secId, portfolioName, tradeVol.Value, execMsg.ServerTime);
 				}

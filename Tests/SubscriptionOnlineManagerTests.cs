@@ -11,7 +11,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task Subscribe_SecondSubscription_JoinsAndReturnsResponseAndOnline()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -49,7 +49,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task SubscriptionError_ShouldNotifyJoinedSubscribers()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -87,7 +87,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task SubscribeUnsubscribeResubscribe_WorksCorrectly()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -140,7 +140,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task MultipleSubscriptions_AllActiveNoneActiveSomeActive()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId1 = new SecurityId { SecurityCode = "SEC1", BoardCode = "BOARD" };
@@ -195,7 +195,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task RapidSubscribeUnsubscribeCycles_HandlesCorrectly()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -249,7 +249,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task UnsubscribeNonExistent_ReturnsError()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var unsubscribe = new MarketDataMessage
@@ -277,7 +277,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task OutMessage_WithNoSubscription_NotForwarded()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		// Create a data message with unknown subscription ID (no subscription registered)
@@ -300,7 +300,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task OutMessage_AfterUnsubscribe_ShouldNotReceiveData()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -363,7 +363,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task OutMessage_WithOnlineSubscription_GetsCorrectIds()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -401,7 +401,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task TwoSubscriptions_SameSecuritySameDataType_DataHasBothIds()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -451,7 +451,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task TwoSubscriptions_UnsubscribeFirst_DataHasOnlySecondId()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -527,7 +527,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	public async Task MultipleDataTypes_SameSecurityId_IndependentSubscriptions()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();

@@ -14,7 +14,7 @@ public class OfflineMessageAdapter : MessageAdapterWrapper
 	public OfflineMessageAdapter(IMessageAdapter innerAdapter)
 		: base(innerAdapter)
 	{
-		_manager = new OfflineManager(this, () => new ProcessSuspendedMessage(this));
+		_manager = new OfflineManager(this, () => new ProcessSuspendedMessage(this), new OfflineManagerState());
 	}
 
 	/// <summary>

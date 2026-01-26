@@ -33,16 +33,12 @@ public interface IOfflineManager
 /// </remarks>
 /// <param name="logReceiver">Log receiver.</param>
 /// <param name="createProcessSuspendedMessage">Create a message that resumes processing after connection is restored.</param>
-public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> createProcessSuspendedMessage) : IOfflineManager
+/// <param name="state">State storage.</param>
+public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> createProcessSuspendedMessage, IOfflineManagerState state) : IOfflineManager
 {
 	private readonly ILogReceiver _logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
 	private readonly Func<Message> _createProcessSuspendedMessage = createProcessSuspendedMessage ?? throw new ArgumentNullException(nameof(createProcessSuspendedMessage));
-	private readonly Lock _sync = new();
-
-	private bool _connected;
-	private readonly List<Message> _suspendedIn = [];
-	private readonly PairSet<long, ISubscriptionMessage> _pendingSubscriptions = [];
-	private readonly PairSet<long, OrderRegisterMessage> _pendingRegistration = [];
+	private readonly IOfflineManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
 	private int _maxMessageCount = 10000;
 
 	/// <inheritdoc />
@@ -67,14 +63,7 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 		{
 			case MessageTypes.Reset:
 			{
-				using (_sync.EnterScope())
-				{
-					_connected = false;
-					_suspendedIn.Clear();
-					_pendingSubscriptions.Clear();
-					_pendingRegistration.Clear();
-				}
-
+				_state.Clear();
 				return ([], [], true);
 			}
 			case MessageTypes.Connect:
@@ -84,34 +73,28 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 
 			case MessageTypes.Time:
 			{
-				using (_sync.EnterScope())
+				if (!_state.IsConnected)
 				{
-					if (!_connected)
-					{
-						var timeMsg = (TimeMessage)message;
+					var timeMsg = (TimeMessage)message;
 
-						if (timeMsg.OfflineMode == MessageOfflineModes.Ignore)
-							return ([], [], true);
+					if (timeMsg.OfflineMode == MessageOfflineModes.Ignore)
+						return ([], [], true);
 
-						return ([], [], false);
-					}
+					return ([], [], false);
 				}
 
 				return ([], [], true);
 			}
 			case MessageTypes.OrderRegister:
 			{
-				using (_sync.EnterScope())
+				if (!_state.IsConnected)
 				{
-					if (!_connected)
-					{
-						var orderMsg = (OrderRegisterMessage)message.Clone();
+					var orderMsg = (OrderRegisterMessage)message.Clone();
 
-						_pendingRegistration.Add(orderMsg.TransactionId, orderMsg);
-						StoreMessage(orderMsg);
+					_state.AddPendingRegistration(orderMsg.TransactionId, orderMsg);
+					StoreMessage(orderMsg);
 
-						return ([], [], false);
-					}
+					return ([], [], false);
 				}
 
 				return ([], [], true);
@@ -121,29 +104,26 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 				Message outMsg = null;
 				var handled = false;
 
-				using (_sync.EnterScope())
+				if (!_state.IsConnected)
 				{
-					if (!_connected)
+					handled = true;
+					var cancelMsg = (OrderCancelMessage)message.Clone();
+
+					if (!_state.TryGetAndRemovePendingRegistration(cancelMsg.OriginalTransactionId, out var originOrderMsg))
+						_state.AddSuspended(cancelMsg);
+					else
 					{
-						handled = true;
-						var cancelMsg = (OrderCancelMessage)message.Clone();
+						_state.RemoveSuspended(originOrderMsg);
 
-						if (!_pendingRegistration.TryGetAndRemove(cancelMsg.OriginalTransactionId, out var originOrderMsg))
-							_suspendedIn.Add(cancelMsg);
-						else
+						outMsg = new ExecutionMessage
 						{
-							_suspendedIn.Remove(originOrderMsg);
-
-							outMsg = new ExecutionMessage
-							{
-								DataTypeEx = DataType.Transactions,
-								HasOrderInfo = true,
-								OriginalTransactionId = cancelMsg.TransactionId,
-								ServerTime = CurrentTimeUtc,
-								OrderState = OrderStates.Done,
-								OrderType = originOrderMsg.OrderType,
-							};
-						}
+							DataTypeEx = DataType.Transactions,
+							HasOrderInfo = true,
+							OriginalTransactionId = cancelMsg.TransactionId,
+							ServerTime = CurrentTimeUtc,
+							OrderState = OrderStates.Done,
+							OrderType = originOrderMsg.OrderType,
+						};
 					}
 				}
 
@@ -161,11 +141,8 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 			{
 				Message outMsg = null;
 
-				using (_sync.EnterScope())
-				{
-					if (!_connected)
-						outMsg = ProcessOrderReplaceMessage((OrderReplaceMessage)message.Clone());
-				}
+				if (!_state.IsConnected)
+					outMsg = ProcessOrderReplaceMessage((OrderReplaceMessage)message.Clone());
 
 				if (outMsg != null)
 					return ([], [outMsg], false);
@@ -174,19 +151,14 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 			}
 			case MessageTypes.ProcessSuspended:
 			{
-				Message[] msgs;
+				var msgs = _state.GetAndClearSuspended();
 
-				using (_sync.EnterScope())
+				foreach (var msg in msgs)
 				{
-					msgs = _suspendedIn.CopyAndClear();
-
-					foreach (var msg in msgs)
-					{
-						if (msg is ISubscriptionMessage subscrMsg)
-							_pendingSubscriptions.RemoveByValue(subscrMsg);
-						else if (msg is OrderRegisterMessage orderMsg)
-							_pendingRegistration.RemoveByValue(orderMsg);
-					}
+					if (msg is ISubscriptionMessage subscrMsg)
+						_state.RemovePendingSubscriptionByValue(subscrMsg);
+					else if (msg is OrderRegisterMessage orderMsg)
+						_state.RemovePendingRegistrationByValue(orderMsg);
 				}
 
 				return (msgs, [], false);
@@ -200,17 +172,14 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 						Message outMsg = null;
 						var handled = false;
 
-						using (_sync.EnterScope())
+						if (!_state.IsConnected)
 						{
-							if (!_connected)
-							{
-								if (message is ISubscriptionMessage subscrMsg)
-									outMsg = ProcessSubscriptionMessage(subscrMsg);
-								else
-									StoreMessage(message.Clone());
+							if (message is ISubscriptionMessage subscrMsg)
+								outMsg = ProcessSubscriptionMessage(subscrMsg);
+							else
+								StoreMessage(message.Clone());
 
-								handled = true;
-							}
+							handled = true;
 						}
 
 						if (handled)
@@ -250,9 +219,7 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 
 				if (connectMessage.IsOk())
 				{
-					using (_sync.EnterScope())
-						_connected = true;
-
+					_state.SetConnected(true);
 					return (false, [_createProcessSuspendedMessage()]);
 				}
 
@@ -261,16 +228,13 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 
 			case MessageTypes.Disconnect:
 			{
-				using (_sync.EnterScope())
-					_connected = false;
-
+				_state.SetConnected(false);
 				return (false, []);
 			}
 
 			case MessageTypes.ConnectionLost:
 			{
-				using (_sync.EnterScope())
-					_connected = false;
+				_state.SetConnected(false);
 
 				var lostMsg = (ConnectionLostMessage)message;
 
@@ -282,9 +246,7 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 
 			case MessageTypes.ConnectionRestored:
 			{
-				using (_sync.EnterScope())
-					_connected = true;
-
+				_state.SetConnected(true);
 				return (false, [_createProcessSuspendedMessage()]);
 			}
 		}
@@ -294,13 +256,13 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 
 	private Message ProcessOrderReplaceMessage(OrderReplaceMessage replaceMsg)
 	{
-		if (!_pendingRegistration.TryGetAndRemove(replaceMsg.OriginalTransactionId, out var originOrderMsg))
+		if (!_state.TryGetAndRemovePendingRegistration(replaceMsg.OriginalTransactionId, out var originOrderMsg))
 		{
-			_suspendedIn.Add(replaceMsg);
+			_state.AddSuspended(replaceMsg);
 			return null;
 		}
 
-		_suspendedIn.Remove(originOrderMsg);
+		_state.RemoveSuspended(originOrderMsg);
 
 		var outMsg = new ExecutionMessage
 		{
@@ -316,7 +278,7 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 
 		replaceMsg.CopyTo(orderMsg);
 
-		_pendingRegistration.Add(replaceMsg.TransactionId, orderMsg);
+		_state.AddPendingRegistration(replaceMsg.TransactionId, orderMsg);
 		StoreMessage(orderMsg);
 
 		return outMsg;
@@ -329,7 +291,7 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 			var clone = subscrMsg.TypedClone();
 
 			if (subscrMsg.TransactionId != 0)
-				_pendingSubscriptions.Add(subscrMsg.TransactionId, clone);
+				_state.AddPendingSubscription(subscrMsg.TransactionId, clone);
 
 			StoreMessage((Message)clone);
 		}
@@ -337,9 +299,9 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 		{
 			if (subscrMsg.OriginalTransactionId != 0)
 			{
-				if (_pendingSubscriptions.TryGetAndRemove(subscrMsg.OriginalTransactionId, out var originMsg))
+				if (_state.TryGetAndRemovePendingSubscription(subscrMsg.OriginalTransactionId, out var originMsg))
 				{
-					_suspendedIn.Remove((Message)originMsg);
+					_state.RemoveSuspended((Message)originMsg);
 
 					return new SubscriptionResponseMessage { OriginalTransactionId = subscrMsg.TransactionId };
 				}
@@ -356,10 +318,10 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
-		if (_maxMessageCount > 0 && _suspendedIn.Count == _maxMessageCount)
+		if (_maxMessageCount > 0 && _state.SuspendedCount == _maxMessageCount)
 			throw new InvalidOperationException(LocalizedStrings.MaxMessageCountExceed);
 
-		_suspendedIn.Add(message);
+		_state.AddSuspended(message);
 
 		_logReceiver.AddInfoLog("Message {0} stored in offline.", message);
 	}

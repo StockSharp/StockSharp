@@ -35,27 +35,18 @@ public interface ISubscriptionManager
 /// <param name="logReceiver">Log receiver.</param>
 /// <param name="transactionIdGenerator">Transaction id generator.</param>
 /// <param name="createProcessSuspendedMessage">Create a message that resumes processing after remapped subscriptions are enqueued.</param>
-public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator transactionIdGenerator, Func<Message> createProcessSuspendedMessage) : ISubscriptionManager
+/// <param name="state">State storage.</param>
+public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator transactionIdGenerator, Func<Message> createProcessSuspendedMessage, ISubscriptionManagerState state) : ISubscriptionManager
 {
-	private sealed class SubscriptionInfo(ISubscriptionMessage subscription)
-	{
-		public ISubscriptionMessage Subscription { get; } = subscription ?? throw new ArgumentNullException(nameof(subscription));
-
-		public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
-
-		public override string ToString() => Subscription.ToString();
-	}
-
 	private readonly ILogReceiver _logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
 	private readonly IdGenerator _transactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 	private readonly Func<Message> _createProcessSuspendedMessage = createProcessSuspendedMessage ?? throw new ArgumentNullException(nameof(createProcessSuspendedMessage));
-	private readonly Lock _sync = new();
+	private readonly ISubscriptionManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
 
-	private readonly Dictionary<long, ISubscriptionMessage> _historicalRequests = [];
-	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = [];
-	private readonly PairSet<long, long> _replaceId = [];
-	private readonly HashSet<long> _allSecIdChilds = [];
-	private readonly List<Message> _reMapSubscriptions = [];
+	/// <summary>
+	/// State storage.
+	/// </summary>
+	public ISubscriptionManagerState State => _state;
 
 	/// <inheritdoc />
 	public void OnInnerAdapterMessage(Message message)
@@ -64,9 +55,7 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 			return;
 
 		var allMsg = (SubscriptionSecurityAllMessage)message;
-
-		using (_sync.EnterScope())
-			_allSecIdChilds.Add(allMsg.TransactionId);
+		_state.AddAllSecIdChild(allMsg.TransactionId);
 	}
 
 	/// <inheritdoc />
@@ -76,16 +65,12 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 		{
 			case MessageTypes.Reset:
 			{
-				ClearState();
+				_state.Clear();
 				return ([message], []);
 			}
 			case MessageTypes.ProcessSuspended:
 			{
-				Message[] reMapSubscriptions;
-
-				using (_sync.EnterScope())
-					reMapSubscriptions = _reMapSubscriptions.CopyAndClear();
-
+				var reMapSubscriptions = _state.GetAndClearReMapSubscriptions();
 				return (reMapSubscriptions, []);
 			}
 			default:
@@ -106,8 +91,7 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 			if (id == 0)
 				return 0;
 
-			using (_sync.EnterScope())
-				return _replaceId.TryGetValue(id, out var prevId) ? prevId : id;
+			return _state.TryGetOriginalId(id, out var prevId) ? prevId : id;
 		}
 
 		var prevOriginId = 0L;
@@ -123,32 +107,33 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 		{
 			case MessageTypes.SubscriptionResponse:
 			{
-				using (_sync.EnterScope())
+				if (((SubscriptionResponseMessage)message).IsOk())
 				{
-					if (((SubscriptionResponseMessage)message).IsOk())
+					if (_state.TryGetSubscription(prevOriginId, out var subscription, out var state))
 					{
-						if (_subscriptionsById.TryGetValue(prevOriginId, out var info))
+						// no need send response after re-subscribe cause response was handled prev time
+						if (_state.ContainsReplaceId(newOriginId))
 						{
-							// no need send response after re-subscribe cause response was handled prev time
-							if (_replaceId.ContainsKey(newOriginId))
-							{
-								if (info.State != SubscriptionStates.Stopped)
-									return (null, []);
-							}
-							else
-								ChangeState(info, SubscriptionStates.Active);
+							if (state != SubscriptionStates.Stopped)
+								return (null, []);
+						}
+						else
+						{
+							var newState = state.ChangeSubscriptionState(SubscriptionStates.Active, subscription.TransactionId, _logReceiver);
+							_state.UpdateSubscriptionState(prevOriginId, newState);
 						}
 					}
-					else
+				}
+				else
+				{
+					if (!_state.RemoveHistoricalRequest(prevOriginId))
 					{
-						if (!_historicalRequests.Remove(prevOriginId))
+						if (_state.TryGetSubscription(prevOriginId, out var subscription, out var state))
 						{
-							if (_subscriptionsById.TryGetAndRemove(prevOriginId, out var info))
-							{
-								ChangeState(info, SubscriptionStates.Error);
-
-								_replaceId.Remove(newOriginId);
-							}
+							var newState = state.ChangeSubscriptionState(SubscriptionStates.Error, subscription.TransactionId, _logReceiver);
+							_state.UpdateSubscriptionState(prevOriginId, newState);
+							_state.RemoveSubscription(prevOriginId);
+							_state.RemoveReplaceId(newOriginId);
 						}
 					}
 				}
@@ -157,35 +142,34 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 			}
 			case MessageTypes.SubscriptionOnline:
 			{
-				using (_sync.EnterScope())
+				if (!_state.TryGetSubscription(prevOriginId, out var subscription, out var state))
+					break;
+
+				if (_state.ContainsReplaceId(newOriginId))
 				{
-					if (!_subscriptionsById.TryGetValue(prevOriginId, out var info))
-						break;
-
-					if (_replaceId.ContainsKey(newOriginId))
-					{
-						// no need send response after re-subscribe cause response was handled prev time
-
-						if (info.State == SubscriptionStates.Online)
-							return (null, []);
-					}
-					else
-						ChangeState(info, SubscriptionStates.Online);
+					// no need send response after re-subscribe cause response was handled prev time
+					if (state == SubscriptionStates.Online)
+						return (null, []);
+				}
+				else
+				{
+					var newState = state.ChangeSubscriptionState(SubscriptionStates.Online, subscription.TransactionId, _logReceiver);
+					_state.UpdateSubscriptionState(prevOriginId, newState);
 				}
 
 				break;
 			}
 			case MessageTypes.SubscriptionFinished:
 			{
-				using (_sync.EnterScope())
+				if (_state.ContainsReplaceId(newOriginId))
+					return (null, []);
+
+				_state.RemoveHistoricalRequest(prevOriginId);
+
+				if (_state.TryGetSubscription(newOriginId, out var subscription, out var state))
 				{
-					if (_replaceId.ContainsKey(newOriginId))
-						return (null, []);
-
-					_historicalRequests.Remove(prevOriginId);
-
-					if (_subscriptionsById.TryGetValue(newOriginId, out var info))
-						ChangeState(info, SubscriptionStates.Finished);
+					var newState = state.ChangeSubscriptionState(SubscriptionStates.Finished, subscription.TransactionId, _logReceiver);
+					_state.UpdateSubscriptionState(newOriginId, newState);
 				}
 
 				break;
@@ -194,50 +178,67 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 			{
 				if (message is ISubscriptionIdMessage subscrMsg)
 				{
-					using (_sync.EnterScope())
+					var ids = subscrMsg.GetSubscriptionIds();
+
+					if (ids.Length == 0)
 					{
-						var ids = subscrMsg.GetSubscriptionIds();
-
-						if (ids.Length == 0)
+						if (subscrMsg.OriginalTransactionId != 0 && _state.ContainsHistoricalRequest(subscrMsg.OriginalTransactionId))
+							subscrMsg.SetSubscriptionIds(subscriptionId: subscrMsg.OriginalTransactionId);
+					}
+					else
+					{
+						// Optimized remap: avoid LINQ and allocations when possible
+						if (_state.ReplaceIdCount > 0)
 						{
-							if (subscrMsg.OriginalTransactionId != 0 && _historicalRequests.ContainsKey(subscrMsg.OriginalTransactionId))
-								subscrMsg.SetSubscriptionIds(subscriptionId: subscrMsg.OriginalTransactionId);
+							// First pass: check if any remapping is needed
+							var needsRemap = false;
+							for (var i = 0; i < ids.Length; i++)
+							{
+								if (_state.ContainsReplaceId(ids[i]))
+								{
+									needsRemap = true;
+									break;
+								}
+							}
+
+							// Only allocate new array if remapping is actually needed
+							if (needsRemap)
+							{
+								var remappedIds = new long[ids.Length];
+								for (var i = 0; i < ids.Length; i++)
+								{
+									remappedIds[i] = _state.TryGetOriginalId(ids[i], out var origId) ? origId : ids[i];
+								}
+								subscrMsg.SetSubscriptionIds(remappedIds);
+							}
 						}
-						else
+					}
+
+					if (subscrMsg is ISecurityIdMessage secIdMsg &&
+						secIdMsg.SecurityId == default &&
+						subscrMsg.OriginalTransactionId != default)
+					{
+						SecurityId getSecId(ISecurityIdMessage secIdMsg)
 						{
-							using (_sync.EnterScope())
-							{
-								if (_replaceId.Count > 0)
-									subscrMsg.SetSubscriptionIds([.. ids.Select(id => _replaceId.TryGetValue2(id) ?? id)]);
-							}
+							var secId = secIdMsg.SecurityId;
+
+							if (secId.Native is not null && !secId.SecurityCode.IsEmpty() && !secId.BoardCode.IsEmpty())
+								secId.Native = null;
+
+							return secId;
 						}
 
-						if (subscrMsg is ISecurityIdMessage secIdMsg &&
-							secIdMsg.SecurityId == default &&
-							subscrMsg.OriginalTransactionId != default)
+						if (_state.TryGetSubscription(subscrMsg.OriginalTransactionId, out var subscription, out _) &&
+							subscription is ISecurityIdMessage subscriptionMsg &&
+							!subscriptionMsg.IsAllSecurity())
 						{
-							SecurityId getSecId(ISecurityIdMessage secIdMsg)
-							{
-								var secId = secIdMsg.SecurityId;
-
-								if (secId.Native is not null && !secId.SecurityCode.IsEmpty() && !secId.BoardCode.IsEmpty())
-									secId.Native = null;
-
-								return secId;
-							}
-
-							if (_subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info) &&
-								info.Subscription is ISecurityIdMessage subscriptionMsg &&
-								!subscriptionMsg.IsAllSecurity())
-							{
-								secIdMsg.SecurityId = getSecId(subscriptionMsg);
-							}
-							else if (_historicalRequests.TryGetValue(subscrMsg.OriginalTransactionId, out var hist) &&
-								hist is ISecurityIdMessage subscriptionMsg2 &&
-								!subscriptionMsg2.IsAllSecurity())
-							{
-								secIdMsg.SecurityId = getSecId(subscriptionMsg2);
-							}
+							secIdMsg.SecurityId = getSecId(subscriptionMsg);
+						}
+						else if (_state.TryGetHistoricalRequest(subscrMsg.OriginalTransactionId, out var hist) &&
+							hist is ISecurityIdMessage subscriptionMsg2 &&
+							!subscriptionMsg2.IsAllSecurity())
+						{
+							secIdMsg.SecurityId = getSecId(subscriptionMsg2);
 						}
 					}
 				}
@@ -255,49 +256,29 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 
 			Message suspended = null;
 
-			using (_sync.EnterScope())
+			_state.ClearReplaceIds();
+			_state.ClearReMapSubscriptions();
+
+			foreach (var (transactionId, subscription) in _state.GetActiveSubscriptions())
 			{
-				_replaceId.Clear();
-				_reMapSubscriptions.Clear();
+				var clone = subscription.TypedClone();
+				clone.TransactionId = _transactionIdGenerator.GetNextId();
 
-				_reMapSubscriptions.AddRange(_subscriptionsById.Values.Distinct().Where(i => i.State.IsActive()).Select(i =>
-				{
-					var subscription = i.Subscription.TypedClone();
-					subscription.TransactionId = _transactionIdGenerator.GetNextId();
+				_state.AddReplaceId(clone.TransactionId, transactionId);
 
-					_replaceId.Add(subscription.TransactionId, i.Subscription.TransactionId);
+				_logReceiver.AddInfoLog("Re-map subscription: {0}->{1} for '{2}'.", transactionId, clone.TransactionId, subscription);
 
-					_logReceiver.AddInfoLog("Re-map subscription: {0}->{1} for '{2}'.", i.Subscription.TransactionId, subscription.TransactionId, i.Subscription);
-
-					return (Message)subscription;
-				}));
-
-				if (_reMapSubscriptions.Count > 0)
-					suspended = _createProcessSuspendedMessage();
+				_state.AddReMapSubscription((Message)clone);
 			}
+
+			if (_state.ReMapSubscriptionCount > 0)
+				suspended = _createProcessSuspendedMessage();
 
 			if (suspended != null)
 				extraOut = [suspended];
 		}
 
 		return (message, extraOut);
-	}
-
-	private void ClearState()
-	{
-		using (_sync.EnterScope())
-		{
-			_historicalRequests.Clear();
-			_subscriptionsById.Clear();
-			_replaceId.Clear();
-			_allSecIdChilds.Clear();
-			_reMapSubscriptions.Clear();
-		}
-	}
-
-	private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
-	{
-		info.State = info.State.ChangeSubscriptionState(state, info.Subscription.TransactionId, _logReceiver);
 	}
 
 	private (Message[] ToInner, Message[] ToOut) ProcessInSubscriptionMessage(ISubscriptionMessage message)
@@ -311,93 +292,86 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 		ISubscriptionMessage sendInMsg = null;
 		Message[] sendOutMsgs = null;
 
-		using (_sync.EnterScope())
+		if (isSubscribe)
 		{
-			if (isSubscribe)
+			if (message.SpecificItemRequest)
 			{
-				if (message.SpecificItemRequest)
-				{
-					sendInMsg = message;
-				}
-				else
-				{
-					var now = _logReceiver.CurrentTimeUtc;
-
-					if (message.From > now)
-					{
-						message = message.TypedClone();
-						message.From = now;
-					}
-
-					if (message.From >= message.To)
-					{
-						sendOutMsgs = [message.CreateResult()];
-					}
-					else
-					{
-						if (_replaceId.ContainsKey(transId))
-						{
-							sendInMsg = message;
-						}
-						else
-						{
-							var clone = message.TypedClone();
-
-							if (message.IsHistoryOnly())
-								_historicalRequests.Add(transId, clone);
-							else
-								_subscriptionsById.Add(transId, new SubscriptionInfo(clone));
-
-							sendInMsg = message;
-						}
-
-						//isInfoLevel = !_allSecIdChilds.Contains(transId);
-					}
-				}
+				sendInMsg = message;
 			}
 			else
 			{
-				ISubscriptionMessage MakeUnsubscribe(ISubscriptionMessage m)
+				var now = _logReceiver.CurrentTimeUtc;
+
+				if (message.From > now)
 				{
-					m = m.TypedClone();
-
-					m.IsSubscribe = false;
-					m.OriginalTransactionId = m.TransactionId;
-					m.TransactionId = transId;
-
-					if (_replaceId.TryGetKey(m.OriginalTransactionId, out var oldOriginId))
-						m.OriginalTransactionId = oldOriginId;
-
-					return m;
+					message = message.TypedClone();
+					message.From = now;
 				}
 
-				var originId = message.OriginalTransactionId;
-
-				if (_historicalRequests.TryGetAndRemove(originId, out var subscription))
+				if (message.From >= message.To)
 				{
-					sendInMsg = MakeUnsubscribe(subscription);
-				}
-				else if (_subscriptionsById.TryGetValue(originId, out var info))
-				{
-					if (info.State.IsActive())
-					{
-						// copy full subscription's details into unsubscribe request
-						sendInMsg = MakeUnsubscribe(info.Subscription);
-						ChangeState(info, SubscriptionStates.Stopped);
-					}
-					else
-						_logReceiver.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, info.State);
+					sendOutMsgs = [message.CreateResult()];
 				}
 				else
 				{
-					sendOutMsgs =
-					[
-						(originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId))))
-					];
-				}
+					if (_state.ContainsReplaceId(transId))
+					{
+						sendInMsg = message;
+					}
+					else
+					{
+						var clone = message.TypedClone();
 
-				//if (sendInMsg != null)
-				//	isInfoLevel = !_allSecIdChilds.Contains(originId);
+						if (message.IsHistoryOnly())
+							_state.AddHistoricalRequest(transId, clone);
+						else
+							_state.AddSubscription(transId, clone, SubscriptionStates.Stopped);
+
+						sendInMsg = message;
+					}
+				}
+			}
+		}
+		else
+		{
+			ISubscriptionMessage MakeUnsubscribe(ISubscriptionMessage m)
+			{
+				m = m.TypedClone();
+
+				m.IsSubscribe = false;
+				m.OriginalTransactionId = m.TransactionId;
+				m.TransactionId = transId;
+
+				if (_state.TryGetNewId(m.OriginalTransactionId, out var oldOriginId))
+					m.OriginalTransactionId = oldOriginId;
+
+				return m;
+			}
+
+			var originId = message.OriginalTransactionId;
+
+			if (_state.TryGetAndRemoveHistoricalRequest(originId, out var subscription))
+			{
+				sendInMsg = MakeUnsubscribe(subscription);
+			}
+			else if (_state.TryGetSubscription(originId, out var info, out var state))
+			{
+				if (state.IsActive())
+				{
+					// copy full subscription's details into unsubscribe request
+					sendInMsg = MakeUnsubscribe(info);
+					var newState = state.ChangeSubscriptionState(SubscriptionStates.Stopped, info.TransactionId, _logReceiver);
+					_state.UpdateSubscriptionState(originId, newState);
+				}
+				else
+					_logReceiver.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, state);
+			}
+			else
+			{
+				sendOutMsgs =
+				[
+					(originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId))))
+				];
 			}
 		}
 

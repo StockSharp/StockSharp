@@ -17,7 +17,7 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 	public SubscriptionMessageAdapter(IMessageAdapter innerAdapter)
 		: base(innerAdapter)
 	{
-		_manager = new SubscriptionManager(this, TransactionIdGenerator, () => new ProcessSuspendedMessage(this));
+		_manager = new SubscriptionManager(this, TransactionIdGenerator, () => new ProcessSuspendedMessage(this), new SubscriptionManagerState());
 	}
 
 	/// <summary>

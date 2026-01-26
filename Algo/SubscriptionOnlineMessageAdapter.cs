@@ -17,7 +17,7 @@ public class SubscriptionOnlineMessageAdapter : MessageAdapterWrapper
 	public SubscriptionOnlineMessageAdapter(IMessageAdapter innerAdapter)
 		: base(innerAdapter)
 	{
-		_manager = new SubscriptionOnlineManager(this, IsSecurityRequired);
+		_manager = new SubscriptionOnlineManager(this, IsSecurityRequired, new SubscriptionOnlineManagerState());
 	}
 
 	/// <summary>

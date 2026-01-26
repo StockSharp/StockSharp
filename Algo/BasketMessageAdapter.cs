@@ -283,10 +283,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		Buffer = buffer;
 		StorageProcessor = new StorageProcessor(StorageSettings, candleBuilderProvider);
 
-		LatencyManager = new LatencyManager();
+		LatencyManager = new LatencyManager(new LatencyManagerState());
 		CommissionManager = new CommissionManager();
 		//PnLManager = new PnLManager();
-		SlippageManager = new SlippageManager();
+		SlippageManager = new SlippageManager(new SlippageManagerState());
 
 		SecurityAdapterProvider.Changed += SecurityAdapterProviderOnChanged;
 		PortfolioAdapterProvider.Changed += PortfolioAdapterProviderOnChanged;
@@ -665,7 +665,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 		if (adapter.IsPositionsEmulationRequired is bool isPosEmu)
 		{
-			adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, new PositionManager(isPosEmu)));
+			adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, new PositionManager(isPosEmu, new PositionManagerState())));
 		}
 
 		if (adapter.IsSupportSubscriptions)

@@ -10,7 +10,7 @@ public class SlippageTests
 	[TestMethod]
 	public void Level1AndOrderRegisterBuy()
 	{
-		var mgr = new SlippageManager();
+		var mgr = new SlippageManager(new SlippageManagerState());
 
 		mgr.ProcessMessage(new Level1ChangeMessage
 		{
@@ -46,7 +46,7 @@ public class SlippageTests
 	[TestMethod]
 	public void Level1AndOrderRegisterSell()
 	{
-		var mgr = new SlippageManager();
+		var mgr = new SlippageManager(new SlippageManagerState());
 
 		mgr.ProcessMessage(new Level1ChangeMessage
 		{
@@ -80,7 +80,7 @@ public class SlippageTests
 	[TestMethod]
 	public void QuoteChangeRegisterAndExecution()
 	{
-		var mgr = new SlippageManager();
+		var mgr = new SlippageManager(new SlippageManagerState());
 
 		mgr.ProcessMessage(new QuoteChangeMessage
 		{
@@ -114,7 +114,7 @@ public class SlippageTests
 	[TestMethod]
 	public void SlippageNegativeAndOption()
 	{
-		var mgr = new SlippageManager();
+		var mgr = new SlippageManager(new SlippageManagerState());
 
 		mgr.ProcessMessage(new Level1ChangeMessage
 		{
@@ -165,7 +165,7 @@ public class SlippageTests
 	[TestMethod]
 	public void NoBestPrices()
 	{
-		var mgr = new SlippageManager();
+		var mgr = new SlippageManager(new SlippageManagerState());
 
 		// Without Level1/QuoteChange: OrderRegister doesn't add plannedPrice
 		var regMsg = new OrderRegisterMessage
@@ -194,7 +194,7 @@ public class SlippageTests
 	[TestMethod]
 	public void NoPlannedPrice()
 	{
-		var mgr = new SlippageManager();
+		var mgr = new SlippageManager(new SlippageManagerState());
 
 		mgr.ProcessMessage(new Level1ChangeMessage
 		{
@@ -221,7 +221,7 @@ public class SlippageTests
 	[TestMethod]
 	public void ResetWorks()
 	{
-		var mgr = new SlippageManager();
+		var mgr = new SlippageManager(new SlippageManagerState());
 
 		mgr.ProcessMessage(new Level1ChangeMessage
 		{
@@ -271,7 +271,7 @@ public class SlippageTests
 	[TestMethod]
 	public void SaveLoadSettings()
 	{
-		var mgr = new SlippageManager
+		var mgr = new SlippageManager(new SlippageManagerState())
 		{
 			CalculateNegative = false
 		};
@@ -279,7 +279,7 @@ public class SlippageTests
 		var storage = new SettingsStorage();
 		mgr.Save(storage);
 
-		var mgr2 = new SlippageManager
+		var mgr2 = new SlippageManager(new SlippageManagerState())
 		{
 			CalculateNegative = true
 		};
@@ -292,7 +292,7 @@ public class SlippageTests
 	[TestMethod]
 	public void MultipleExecutionsSlippageSum()
 	{
-		var mgr = new SlippageManager();
+		var mgr = new SlippageManager(new SlippageManagerState());
 
 		mgr.ProcessMessage(new Level1ChangeMessage
 		{
@@ -371,7 +371,7 @@ public class SlippageTests
 	[TestMethod]
 	public void MissingTradePrice()
 	{
-		var mgr = new SlippageManager();
+		var mgr = new SlippageManager(new SlippageManagerState());
 
 		mgr.ProcessMessage(new Level1ChangeMessage
 		{
@@ -405,7 +405,7 @@ public class SlippageTests
 	[TestMethod]
 	public void PlannedPriceRemoved()
 	{
-		var mgr = new SlippageManager();
+		var mgr = new SlippageManager(new SlippageManagerState());
 
 		mgr.ProcessMessage(new Level1ChangeMessage
 		{
@@ -475,7 +475,7 @@ public class SlippageTests
 	[TestMethod]
 	public void MissingTradeVolume()
 	{
-		var mgr = new SlippageManager();
+		var mgr = new SlippageManager(new SlippageManagerState());
 
 		mgr.ProcessMessage(new Level1ChangeMessage
 		{

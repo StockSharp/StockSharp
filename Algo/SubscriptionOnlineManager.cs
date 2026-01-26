@@ -30,68 +30,18 @@ public interface ISubscriptionOnlineManager
 /// </remarks>
 /// <param name="logReceiver">Log receiver.</param>
 /// <param name="isSecurityRequired">Check if a security id is required for the specified data type.</param>
-public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<DataType, bool> isSecurityRequired) : ISubscriptionOnlineManager
+/// <param name="state">State storage.</param>
+public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<DataType, bool> isSecurityRequired, ISubscriptionOnlineManagerState state) : ISubscriptionOnlineManager
 {
-	private sealed class SubscriptionInfo(ISubscriptionMessage subscription)
-	{
-		private readonly SubscriptionInfo _main;
-
-		public ISubscriptionMessage Subscription { get; } = subscription ?? throw new ArgumentNullException(nameof(subscription));
-
-		public SubscriptionInfo(SubscriptionInfo main)
-			: this(main.CheckOnNull(nameof(main)).Subscription)
-		{
-			_main = main;
-			Subscribers = main.Subscribers;
-		}
-
-		private void CheckOnLinked()
-		{
-			if (_main != null)
-				throw new InvalidOperationException();
-		}
-
-		private SubscriptionStates _state = SubscriptionStates.Stopped;
-
-		public SubscriptionStates State
-		{
-			get => _main?.State ?? _state;
-			set
-			{
-				CheckOnLinked();
-				_state = value;
-			}
-		}
-
-		public readonly HashSet<long> ExtraFilters = [];
-		public readonly CachedSynchronizedDictionary<long, ISubscriptionMessage> Subscribers = [];
-		public readonly CachedSynchronizedSet<long> OnlineSubscribers = [];
-		public readonly SynchronizedSet<long> HistLive = [];
-		public readonly bool IsMarketData = subscription.DataType.IsMarketData;
-
-		private readonly List<long> _linked = [];
-
-		public List<long> Linked
-		{
-			get
-			{
-				CheckOnLinked();
-				return _linked;
-			}
-		}
-
-		public override string ToString() => (_main != null ? "Linked: " : string.Empty) + Subscription.ToString();
-	}
-
 	private readonly AsyncLock _sync = new();
-
-	private readonly PairSet<(DataType, SecurityId), SubscriptionInfo> _subscriptionsByKey = [];
-	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = [];
-	private readonly HashSet<long> _skipSubscriptions = [];
-	private readonly HashSet<long> _unsubscribeRequests = [];
-
 	private readonly ILogReceiver _logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
 	private readonly Func<DataType, bool> _isSecurityRequired = isSecurityRequired ?? throw new ArgumentNullException(nameof(isSecurityRequired));
+	private readonly ISubscriptionOnlineManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
+
+	/// <summary>
+	/// State storage.
+	/// </summary>
+	public ISubscriptionOnlineManagerState State => _state;
 
 	/// <inheritdoc />
 	public async ValueTask<(Message[] toInner, Message[] toOut)> ProcessInMessageAsync(Message message, CancellationToken cancellationToken)
@@ -100,11 +50,8 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 		{
 			using (await _sync.LockAsync(cancellationToken))
 			{
-				if (_subscriptionsByKey.TryGetValue((DataType.Transactions, default(SecurityId)), out var info))
+				if (_state.TryGetSubscriptionByKey((DataType.Transactions, default(SecurityId)), out var info))
 					TryAddOrderTransaction(info, orderMsg.TransactionId);
-
-				//if (_subscriptionsByKey.TryGetValue((DataType.Transactions, orderMsg.SecurityId), out info))
-				//	TryAddOrderTransaction(info, orderMsg.TransactionId);
 			}
 		}
 
@@ -163,15 +110,15 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 				{
 					if (responseMsg.IsOk())
 					{
-						if (_subscriptionsById.TryGetValue(originTransId, out var info))
+						if (_state.TryGetSubscriptionById(originTransId, out var info))
 						{
-							if (!ChangeState(info, originTransId, _unsubscribeRequests.Contains(originTransId) ? SubscriptionStates.Stopped : SubscriptionStates.Active))
+							if (!ChangeState(info, originTransId, _state.ContainsUnsubscribeRequest(originTransId) ? SubscriptionStates.Stopped : SubscriptionStates.Active))
 								return (null, []);
 						}
 					}
 					else
 					{
-						if (_subscriptionsById.TryGetAndRemove(originTransId, out var info))
+						if (_state.TryGetAndRemoveSubscriptionById(originTransId, out var info))
 						{
 							info.OnlineSubscribers.Remove(originTransId);
 							info.Subscribers.Remove(originTransId);
@@ -206,7 +153,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 				using (await _sync.LockAsync(cancellationToken))
 				{
-					if (_subscriptionsById.TryGetValue(originTransId, out var info))
+					if (_state.TryGetSubscriptionById(originTransId, out var info))
 					{
 						info.OnlineSubscribers.Add(originTransId);
 
@@ -224,7 +171,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 				using (await _sync.LockAsync(cancellationToken))
 				{
-					if (_subscriptionsById.TryGetValue(originTransId, out var info))
+					if (_state.TryGetSubscriptionById(originTransId, out var info))
 					{
 						if (!ChangeState(info, originTransId, SubscriptionStates.Finished))
 						{
@@ -243,7 +190,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 				{
 					using (await _sync.LockAsync(cancellationToken))
 					{
-						if (subscrMsg.OriginalTransactionId != 0 && _subscriptionsById.TryGetValue(subscrMsg.OriginalTransactionId, out var info))
+						if (subscrMsg.OriginalTransactionId != 0 && _state.TryGetSubscriptionById(subscrMsg.OriginalTransactionId, out var info))
 						{
 							if (message is ExecutionMessage execMsg &&
 								execMsg.DataType == DataType.Transactions &&
@@ -265,7 +212,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 							var dataType = subscrMsg.DataType;
 							var secId = (subscrMsg as ISecurityIdMessage)?.SecurityId ?? default;
 
-							if (!_subscriptionsByKey.TryGetValue((dataType, secId), out info) && (secId == default || !_subscriptionsByKey.TryGetValue((dataType, default(SecurityId)), out info)))
+							if (!_state.TryGetSubscriptionByKey((dataType, secId), out info) && (secId == default || !_state.TryGetSubscriptionByKey((dataType, default(SecurityId)), out info)))
 								break;
 						}
 
@@ -296,7 +243,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 		return (message, extraOut?.ToArray() ?? []);
 	}
 
-	private bool ChangeState(SubscriptionInfo info, long transId, SubscriptionStates state)
+	private bool ChangeState(ISubscriptionOnlineInfo info, long transId, SubscriptionStates state)
 	{
 		// secondary hist+live cannot change main subscription state
 		if (info.HistLive.Contains(transId))
@@ -306,20 +253,20 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 		if (!state.IsActive())
 		{
-			_subscriptionsByKey.RemoveByValue(info);
+			_state.RemoveSubscriptionByKeyValue(info);
 			_logReceiver.AddInfoLog(LocalizedStrings.SubscriptionRemoved, info.Subscription.TransactionId);
 		}
 
 		return true;
 	}
 
-	private void TryAddOrderTransaction(SubscriptionInfo statusInfo, long transactionId, bool warnOnDuplicate = true)
+	private void TryAddOrderTransaction(ISubscriptionOnlineInfo statusInfo, long transactionId, bool warnOnDuplicate = true)
 	{
-		if (!_subscriptionsById.ContainsKey(transactionId))
+		if (!_state.ContainsSubscriptionById(transactionId))
 		{
-			var orderSubscription = new SubscriptionInfo(statusInfo);
+			var orderSubscription = _state.CreateLinkedSubscriptionInfo(statusInfo);
 
-			_subscriptionsById.Add(transactionId, orderSubscription);
+			_state.AddSubscriptionById(transactionId, orderSubscription);
 
 			statusInfo.Linked.Add(transactionId);
 		}
@@ -330,12 +277,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 	private async ValueTask ClearState(CancellationToken cancellationToken)
 	{
 		using (await _sync.LockAsync(cancellationToken))
-		{
-			_subscriptionsByKey.Clear();
-			_subscriptionsById.Clear();
-			_skipSubscriptions.Clear();
-			_unsubscribeRequests.Clear();
-		}
+			_state.Clear();
 	}
 
 	private async ValueTask<(Message[] ToInner, Message[] ToOut)> ProcessInSubscriptionMessage(ISubscriptionMessage message, CancellationToken cancellationToken)
@@ -355,7 +297,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 			{
 				if (message.SpecificItemRequest || message.IsHistoryOnly())
 				{
-					_skipSubscriptions.Add(message.TransactionId);
+					_state.AddSkipSubscription(message.TransactionId);
 					sendInMsg = message;
 				}
 				else
@@ -373,7 +315,6 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 							_logReceiver.AddWarningLog("Subscription {0} required security id.", dataType);
 						else if (secId != default && !_isSecurityRequired(dataType))
 						{
-							//_logReceiver.AddWarningLog("Subscription {0} doesn't required security id.", dataType);
 							extraFilter = true;
 							secId = default;
 						}
@@ -384,15 +325,15 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 					var key = (dataType, secId);
 
-					if (!_subscriptionsByKey.TryGetValue(key, out var info))
+					if (!_state.TryGetSubscriptionByKey(key, out var info))
 					{
 						_logReceiver.AddDebugLog("Subscription {0} ({1}/{2}) initial.", transId, dataType, secId);
 
 						sendInMsg = message;
 
-						info = new(message.TypedClone());
+						info = _state.CreateSubscriptionInfo(message.TypedClone());
 
-						_subscriptionsByKey.Add(key, info);
+						_state.AddSubscriptionByKey(key, info);
 					}
 					else
 					{
@@ -420,7 +361,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 						}
 					}
 
-					_subscriptionsById.Add(transId, info);
+					_state.AddSubscriptionById(transId, info);
 
 					info.Subscribers.Add(transId, message.TypedClone());
 
@@ -441,7 +382,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 				var originId = message.OriginalTransactionId;
 
-				if (_subscriptionsById.TryGetValue(originId, out var info))
+				if (_state.TryGetSubscriptionById(originId, out var info))
 				{
 					if (!info.Subscribers.Remove(originId))
 					{
@@ -459,17 +400,17 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 						if (info.Linked.Count > 0)
 						{
 							foreach (var linked in info.Linked)
-								_subscriptionsById.Remove(linked);
+								_state.RemoveSubscriptionById(linked);
 						}
 
 						if (info.Subscribers.Count == 0)
 						{
-							_subscriptionsByKey.RemoveByValue(info);
-							_subscriptionsById.Remove(originId);
+							_state.RemoveSubscriptionByKeyValue(info);
+							_state.RemoveSubscriptionById(originId);
 
 							if (info.State.IsActive())
 							{
-								_unsubscribeRequests.Add(transId);
+								_state.AddUnsubscribeRequest(transId);
 
 								// copy full subscription's details into unsubscribe request
 								sendInMsg = MakeUnsubscribe(info.Subscription.TypedClone(), info.Subscription.TransactionId);
@@ -483,7 +424,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 						}
 					}
 				}
-				else if (_skipSubscriptions.Remove(originId))
+				else if (_state.RemoveSkipSubscription(originId))
 				{
 					sendInMsg = message;
 				}

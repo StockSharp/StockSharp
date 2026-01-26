@@ -11,7 +11,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void Reset_ClearsState()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Store a subscription while offline
 		var subscription = new MarketDataMessage
@@ -36,7 +36,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void Connect_AlwaysForwardsMessage()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		var (toInner, toOut, shouldForward) = manager.ProcessInMessage(new ConnectMessage());
 
@@ -49,7 +49,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void Disconnect_AlwaysForwardsMessage()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		var (toInner, toOut, shouldForward) = manager.ProcessInMessage(new DisconnectMessage());
 
@@ -62,7 +62,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void Time_NotConnected_DoesNotForward()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		var (toInner, toOut, shouldForward) = manager.ProcessInMessage(new TimeMessage());
 
@@ -75,7 +75,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void Time_NotConnected_IgnoreMode_Forwards()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		var timeMsg = new TimeMessage { OfflineMode = MessageOfflineModes.Ignore };
 		var (toInner, toOut, shouldForward) = manager.ProcessInMessage(timeMsg);
@@ -89,7 +89,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void Time_Connected_Forwards()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Connect
 		manager.ProcessOutMessage(new ConnectMessage());
@@ -105,7 +105,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void OrderRegister_NotConnected_StoresMessage()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		var orderMsg = new OrderRegisterMessage
 		{
@@ -127,7 +127,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void OrderRegister_Connected_ForwardsMessage()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Connect
 		manager.ProcessOutMessage(new ConnectMessage());
@@ -152,7 +152,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void OrderCancel_NotConnected_PendingOrder_EmitsExecutionMessage()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Register order first
 		var orderMsg = new OrderRegisterMessage
@@ -192,7 +192,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void OrderCancel_NotConnected_NoPendingOrder_StoresCancel()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Cancel without prior registration
 		var cancelMsg = new OrderCancelMessage
@@ -212,7 +212,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void OrderReplace_NotConnected_PendingOrder_EmitsExecutionAndStoresNew()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Register order first
 		var orderMsg = new OrderRegisterMessage
@@ -254,7 +254,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void Subscription_NotConnected_StoresMessage()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		var subscription = new MarketDataMessage
 		{
@@ -275,7 +275,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void Unsubscription_NotConnected_PendingSubscription_EmitsResponse()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Subscribe first
 		var subscription = new MarketDataMessage
@@ -310,7 +310,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void ProcessSuspended_SendsSuspendedMessages()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Store messages while offline
 		var subscription = new MarketDataMessage
@@ -351,7 +351,7 @@ public class OfflineManagerTests : BaseTestClass
 		{
 			processSuspendedCreated = true;
 			return new ProcessSuspendedMessage();
-		});
+		}, new OfflineManagerState());
 
 		var (suppressOriginal, extraOut) = manager.ProcessOutMessage(new ConnectMessage());
 
@@ -365,7 +365,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void Connect_Error_DoesNotEmitProcessSuspended()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		var connectMsg = new ConnectMessage { Error = new InvalidOperationException("Connection failed") };
 		var (suppressOriginal, extraOut) = manager.ProcessOutMessage(connectMsg);
@@ -378,7 +378,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void Disconnect_SetsDisconnected()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Connect
 		manager.ProcessOutMessage(new ConnectMessage());
@@ -398,7 +398,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void ConnectionLost_SetsDisconnected()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Connect
 		manager.ProcessOutMessage(new ConnectMessage());
@@ -414,7 +414,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void ConnectionLost_IsResetState_SuppressesOriginal()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Connect
 		manager.ProcessOutMessage(new ConnectMessage());
@@ -431,7 +431,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void ConnectionRestored_EmitsProcessSuspended()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		// Connect, then lose connection
 		manager.ProcessOutMessage(new ConnectMessage());
@@ -449,7 +449,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void MaxMessageCount_ThrowsWhenExceeded()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage())
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState())
 		{
 			MaxMessageCount = 2
 		};
@@ -495,7 +495,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void MaxMessageCount_InvalidValue_Throws()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		var thrown = false;
 		try
@@ -513,7 +513,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void MaxMessageCount_MinusOne_AllowsUnlimited()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage())
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState())
 		{
 			MaxMessageCount = -1
 		};
@@ -535,7 +535,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void OfflineMode_Cancel_EmitsSubscriptionResult()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		var subscription = new MarketDataMessage
 		{
@@ -559,7 +559,7 @@ public class OfflineManagerTests : BaseTestClass
 	public void OfflineMode_Ignore_Forwards()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage());
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
 
 		var subscription = new MarketDataMessage
 		{

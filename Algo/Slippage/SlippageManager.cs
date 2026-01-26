@@ -3,36 +3,26 @@ namespace StockSharp.Algo.Slippage;
 /// <summary>
 /// The slippage manager.
 /// </summary>
-public class SlippageManager : ISlippageManager
+/// <remarks>
+/// Initializes a new instance of the <see cref="SlippageManager"/>.
+/// </remarks>
+/// <param name="state">State storage.</param>
+public class SlippageManager(ISlippageManagerState state) : ISlippageManager
 {
-	private readonly Lock _syncRoot = new();
-	private readonly SynchronizedDictionary<SecurityId, RefPair<decimal, decimal>> _bestPrices = [];
-	private readonly SynchronizedDictionary<long, (Sides side, decimal price)> _plannedPrices = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="SlippageManager"/>.
-	/// </summary>
-	public SlippageManager()
-	{
-		CalculateNegative = true;
-	}
+	private readonly ISlippageManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
 
 	/// <inheritdoc />
-	public decimal Slippage { get; private set; }
+	public decimal Slippage => _state.Slippage;
 
 	/// <summary>
 	/// To calculate negative slippage. By default, the calculation is enabled.
 	/// </summary>
-	public bool CalculateNegative { get; set; }
+	public bool CalculateNegative { get; set; } = true;
 
 	/// <inheritdoc />
 	public void Reset()
 	{
-		using (_syncRoot.EnterScope())
-			Slippage = 0;
-
-		_bestPrices.Clear();
-		_plannedPrices.Clear();
+		_state.Clear();
 	}
 
 	/// <inheritdoc />
@@ -49,15 +39,12 @@ public class SlippageManager : ISlippageManager
 			case MessageTypes.Level1Change:
 			{
 				var l1Msg = (Level1ChangeMessage)message;
-				var pair = _bestPrices.SafeAdd(l1Msg.SecurityId);
 
 				var bidPrice = l1Msg.TryGetDecimal(Level1Fields.BestBidPrice);
-				if (bidPrice != null)
-					pair.First = bidPrice.Value;
-
 				var askPrice = l1Msg.TryGetDecimal(Level1Fields.BestAskPrice);
-				if (askPrice != null)
-					pair.Second = askPrice.Value;
+
+				if (bidPrice != null || askPrice != null)
+					_state.UpdateBestPrices(l1Msg.SecurityId, bidPrice, askPrice);
 
 				break;
 			}
@@ -69,15 +56,11 @@ public class SlippageManager : ISlippageManager
 				if (quotesMsg.State != null)
 					break;
 
-				var pair = _bestPrices.SafeAdd(quotesMsg.SecurityId);
-
 				var bid = quotesMsg.GetBestBid();
-				if (bid != null)
-					pair.First = bid.Value.Price;
-
 				var ask = quotesMsg.GetBestAsk();
-				if (ask != null)
-					pair.Second = ask.Value.Price;
+
+				if (bid != null || ask != null)
+					_state.UpdateBestPrices(quotesMsg.SecurityId, bid?.Price, ask?.Price);
 
 				break;
 			}
@@ -86,15 +69,8 @@ public class SlippageManager : ISlippageManager
 			{
 				var regMsg = (OrderRegisterMessage)message;
 
-				var prices = _bestPrices.TryGetValue(regMsg.SecurityId);
-
-				if (prices != null)
-				{
-					var price = regMsg.Side == Sides.Buy ? prices.Second : prices.First;
-
-					if (price != 0)
-						_plannedPrices[regMsg.TransactionId] = (regMsg.Side, price);
-				}
+				if (_state.TryGetBestPrice(regMsg.SecurityId, regMsg.Side, out var price))
+					_state.AddPlannedPrice(regMsg.TransactionId, regMsg.Side, price);
 
 				break;
 			}
@@ -107,14 +83,14 @@ public class SlippageManager : ISlippageManager
 				if (!execMsg.HasTradeInfo() && execMsg.HasOrderInfo())
 				{
 					if (execMsg.OrderState?.IsFinal() == true)
-						_plannedPrices.Remove(execMsg.OriginalTransactionId);
+						_state.RemovePlannedPrice(execMsg.OriginalTransactionId);
 
 					break;
 				}
-				
+
 				if (execMsg.HasTradeInfo())
 				{
-					if (_plannedPrices.TryGetValue(execMsg.OriginalTransactionId, out var t))
+					if (_state.TryGetPlannedPrice(execMsg.OriginalTransactionId, out var side, out var plannedPrice))
 					{
 						// If there is no trade price, cannot compute slippage; keep planned price for future executions.
 						if (execMsg.TradePrice == null)
@@ -124,22 +100,20 @@ public class SlippageManager : ISlippageManager
 						if (execMsg.TradeVolume is not decimal trVol)
 							return null;
 
-						var diff = t.side == Sides.Buy
-							? execMsg.TradePrice.Value - t.price
-							: t.price - execMsg.TradePrice.Value;
+						var diff = side == Sides.Buy
+							? execMsg.TradePrice.Value - plannedPrice
+							: plannedPrice - execMsg.TradePrice.Value;
 
-						var volume = trVol;
-						var weighted = diff * volume;
+						var weighted = diff * trVol;
 
 						if (!CalculateNegative && weighted < 0)
 							weighted = 0;
 
-						using (_syncRoot.EnterScope())
-							Slippage += weighted;
+						_state.AddSlippage(weighted);
 
 						// cleanup only when order is completed (if such info present)
 						if (execMsg.HasOrderInfo() && (execMsg.OrderState == OrderStates.Done || execMsg.Balance == 0))
-							_plannedPrices.Remove(execMsg.OriginalTransactionId);
+							_state.RemovePlannedPrice(execMsg.OriginalTransactionId);
 
 						return weighted;
 					}

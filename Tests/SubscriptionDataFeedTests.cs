@@ -185,7 +185,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	public async Task OnlineManager_Subscribe_ReceivesDataWithCorrectId()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -238,7 +238,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	public async Task OnlineManager_Unsubscribe_StopsReceivingData()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -307,7 +307,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	public async Task OnlineManager_TwoSubscriptions_BothReceiveData()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -364,7 +364,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	public async Task OnlineManager_TwoSubscriptions_UnsubscribeFirst_SecondStillReceives()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -444,7 +444,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	public async Task OnlineManager_SubscribeUnsubscribeResubscribe_DataFlowCorrect()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();
@@ -544,7 +544,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var secId = Helper.CreateSecurityId();
 		using var feed = new DataFeedEmulator(secId, DataType.Ticks, TimeSpan.FromMilliseconds(10));
@@ -588,7 +588,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var secId = Helper.CreateSecurityId();
 		using var feed = new DataFeedEmulator(secId, DataType.Ticks, TimeSpan.FromMilliseconds(10));
@@ -655,7 +655,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
-		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage());
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var secId1 = new SecurityId { SecurityCode = "SEC1", BoardCode = "BOARD" };
 		var secId2 = new SecurityId { SecurityCode = "SEC2", BoardCode = "BOARD" };
@@ -751,7 +751,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	public async Task OnlineManager_DifferentDataTypes_IndependentStreams()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new SubscriptionOnlineManager(logReceiver, _ => true);
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
 		var token = CancellationToken;
 
 		var secId = Helper.CreateSecurityId();

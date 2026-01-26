@@ -9,7 +9,7 @@ public class PositionTests : BaseTestClass
 	public void UpdateByOrders()
 	{
 		var secId = Helper.CreateSecurityId();
-		var manager = new PositionManager(true);
+		var manager = new PositionManager(true, new PositionManagerState());
 
 		manager.ProcessMessage(new OrderRegisterMessage
 		{
@@ -41,7 +41,7 @@ public class PositionTests : BaseTestClass
 	public void UpdateByTrades()
 	{
 		var secId = Helper.CreateSecurityId();
-		var manager = new PositionManager(false);
+		var manager = new PositionManager(false, new PositionManagerState());
 
 		manager.ProcessMessage(new OrderRegisterMessage
 		{
@@ -71,7 +71,7 @@ public class PositionTests : BaseTestClass
 	public void ResetClearsState()
 	{
 		var secId = Helper.CreateSecurityId();
-		var manager = new PositionManager(true);
+		var manager = new PositionManager(true, new PositionManagerState());
 
 		var regMsg = new OrderRegisterMessage
 		{
@@ -118,7 +118,7 @@ public class PositionTests : BaseTestClass
 	public void ApplyPositionChange()
 	{
 		var secId = Helper.CreateSecurityId();
-		var manager = new PositionManager(true);
+		var manager = new PositionManager(true, new PositionManagerState());
 
 		manager.ProcessMessage(new OrderRegisterMessage
 		{
@@ -150,7 +150,7 @@ public class PositionTests : BaseTestClass
 	public void IgnoreFurtherOrderUpdates()
 	{
 		var secId = Helper.CreateSecurityId();
-		var manager = new PositionManager(true);
+		var manager = new PositionManager(true, new PositionManagerState());
 
 		var reg = new OrderRegisterMessage
 		{
