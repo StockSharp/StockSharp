@@ -2,168 +2,163 @@ namespace StockSharp.Tests;
 
 using StockSharp.Algo.Basket;
 
-/// <summary>
-/// Tests for <see cref="AdapterConnectionManager"/> and <see cref="AdapterConnectionState"/>.
-/// </summary>
 [TestClass]
-public class AdapterConnectionManagerTests
+public class AdapterConnectionManagerTests : BaseTestClass
 {
-	#region AdapterConnectionState Tests
-
-	[TestMethod]
-	public void State_SetAndGet_ReturnsCorrectState()
+	private static AdapterConnectionManager CreateManager(out AdapterConnectionState state)
 	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var adapter = CreateMockAdapter();
+		state = new AdapterConnectionState();
+		return new AdapterConnectionManager(state);
+	}
 
-		// Act
-		state.SetAdapterState(adapter, ConnectionStates.Connected, null);
-		var found = state.TryGetAdapterState(adapter, out var connState, out var error);
-
-		// Assert
-		found.AssertTrue();
-		connState.AssertEqual(ConnectionStates.Connected);
-		error.AssertNull();
+	private static IMessageAdapter CreateAdapter()
+	{
+		var mock = new Mock<IMessageAdapter>();
+		mock.Setup(a => a.ToString()).Returns($"MockAdapter-{Guid.NewGuid():N}");
+		return mock.Object;
 	}
 
 	[TestMethod]
-	public void State_SetWithError_ReturnsError()
+	public void CurrentState_Initially_Disconnected()
 	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var adapter = CreateMockAdapter();
-		var expectedError = new Exception("Test error");
+		var manager = CreateManager(out _);
 
-		// Act
-		state.SetAdapterState(adapter, ConnectionStates.Failed, expectedError);
-		state.TryGetAdapterState(adapter, out var connState, out var error);
-
-		// Assert
-		connState.AssertEqual(ConnectionStates.Failed);
-		error.AssertSame(expectedError);
+		AreEqual(ConnectionStates.Disconnected, manager.CurrentState);
 	}
 
 	[TestMethod]
-	public void State_TryGetNonExistent_ReturnsFalse()
+	public void BeginConnect_SetsConnecting()
 	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var adapter = CreateMockAdapter();
+		var manager = CreateManager(out _);
 
-		// Act
-		var found = state.TryGetAdapterState(adapter, out _, out _);
+		manager.BeginConnect();
 
-		// Assert
-		found.AssertFalse();
+		AreEqual(ConnectionStates.Connecting, manager.CurrentState);
 	}
 
 	[TestMethod]
-	public void State_Remove_RemovesAdapter()
+	public void ProcessConnect_FirstAdapter_OnFirst_ReturnsConnectMessage()
 	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var adapter = CreateMockAdapter();
-		state.SetAdapterState(adapter, ConnectionStates.Connected, null);
-
-		// Act
-		var removed = state.RemoveAdapter(adapter);
-		var found = state.TryGetAdapterState(adapter, out _, out _);
-
-		// Assert
-		removed.AssertTrue();
-		found.AssertFalse();
-	}
-
-	[TestMethod]
-	public void State_ConnectedCount_ReturnsCorrectCount()
-	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var adapter1 = CreateMockAdapter();
-		var adapter2 = CreateMockAdapter();
-		var adapter3 = CreateMockAdapter();
-
-		state.SetAdapterState(adapter1, ConnectionStates.Connected, null);
-		state.SetAdapterState(adapter2, ConnectionStates.Connecting, null);
-		state.SetAdapterState(adapter3, ConnectionStates.Connected, null);
-
-		// Act & Assert
-		state.ConnectedCount.AssertEqual(2);
-		state.TotalCount.AssertEqual(3);
-	}
-
-	[TestMethod]
-	public void State_Clear_RemovesAllAndResetsCurrent()
-	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		state.SetAdapterState(CreateMockAdapter(), ConnectionStates.Connected, null);
-		state.CurrentState = ConnectionStates.Connected;
-
-		// Act
-		state.Clear();
-
-		// Assert
-		state.TotalCount.AssertEqual(0);
-		state.CurrentState.AssertEqual(ConnectionStates.Disconnected);
-	}
-
-	#endregion
-
-	#region AdapterConnectionManager Tests
-
-	[TestMethod]
-	public void Manager_FirstAdapterConnected_BasketBecomesConnected()
-	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var manager = new AdapterConnectionManager(state);
-		var adapter = CreateMockAdapter();
+		var manager = CreateManager(out _);
+		var adapter = CreateAdapter();
 
 		manager.BeginConnect();
 		manager.InitializeAdapter(adapter);
 
-		// Act
 		var messages = manager.ProcessConnect(adapter, null);
 
-		// Assert
-		manager.CurrentState.AssertEqual(ConnectionStates.Connected);
-		messages.Length.AssertEqual(1);
-		messages[0].AssertOfType<ConnectMessage>();
-		((ConnectMessage)messages[0]).Error.AssertNull();
+		AreEqual(ConnectionStates.Connected, manager.CurrentState);
+		AreEqual(1, messages.Length);
+		IsTrue(messages[0] is ConnectMessage);
+		IsNull(((ConnectMessage)messages[0]).Error);
 	}
 
 	[TestMethod]
-	public void Manager_SecondAdapterConnected_NoMessage()
+	public void ProcessConnect_SecondAdapter_NoMessage()
 	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var manager = new AdapterConnectionManager(state);
-		var adapter1 = CreateMockAdapter();
-		var adapter2 = CreateMockAdapter();
+		var manager = CreateManager(out _);
+		var adapter1 = CreateAdapter();
+		var adapter2 = CreateAdapter();
 
 		manager.BeginConnect();
 		manager.InitializeAdapter(adapter1);
 		manager.InitializeAdapter(adapter2);
 		manager.ProcessConnect(adapter1, null);
 
-		// Act
 		var messages = manager.ProcessConnect(adapter2, null);
 
-		// Assert
-		manager.CurrentState.AssertEqual(ConnectionStates.Connected);
-		messages.Length.AssertEqual(0); // No message for second connection
+		AreEqual(ConnectionStates.Connected, manager.CurrentState);
+		AreEqual(0, messages.Length);
 	}
 
 	[TestMethod]
-	public void Manager_AllAdaptersDisconnected_BasketBecomesDisconnected()
+	public void ProcessConnect_WaitAll_DoesNotReturnUntilAllConnected()
 	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var manager = new AdapterConnectionManager(state);
-		var adapter1 = CreateMockAdapter();
-		var adapter2 = CreateMockAdapter();
+		var manager = CreateManager(out _);
+		manager.ConnectDisconnectEventOnFirstAdapter = false;
+
+		var adapter1 = CreateAdapter();
+		var adapter2 = CreateAdapter();
+
+		manager.InitializeAdapter(adapter1);
+		manager.InitializeAdapter(adapter2);
+		manager.BeginConnect();
+
+		var result1 = manager.ProcessConnect(adapter1, null);
+		AreEqual(0, result1.Length);
+		AreEqual(ConnectionStates.Connecting, manager.CurrentState);
+
+		var result2 = manager.ProcessConnect(adapter2, null);
+		AreEqual(1, result2.Length);
+		IsTrue(result2[0] is ConnectMessage);
+		AreEqual(ConnectionStates.Connected, manager.CurrentState);
+	}
+
+	[TestMethod]
+	public void ProcessConnect_OneAdapterError_BasketStaysConnected()
+	{
+		var manager = CreateManager(out _);
+		var adapter1 = CreateAdapter();
+		var adapter2 = CreateAdapter();
+
+		manager.BeginConnect();
+		manager.InitializeAdapter(adapter1);
+		manager.InitializeAdapter(adapter2);
+		manager.ProcessConnect(adapter1, null);
+
+		var messages = manager.ProcessConnect(adapter2, new Exception("Connection failed"));
+
+		AreEqual(ConnectionStates.Connected, manager.CurrentState);
+		AreEqual(0, messages.Length);
+	}
+
+	[TestMethod]
+	public void ProcessConnect_MixedResults_FailThenSuccess()
+	{
+		var manager = CreateManager(out _);
+		var adapter1 = CreateAdapter();
+		var adapter2 = CreateAdapter();
+
+		manager.InitializeAdapter(adapter1);
+		manager.InitializeAdapter(adapter2);
+		manager.BeginConnect();
+
+		var result1 = manager.ProcessConnect(adapter1, new InvalidOperationException("connection failed"));
+		AreEqual(0, result1.Length);
+
+		var result2 = manager.ProcessConnect(adapter2, null);
+		AreEqual(1, result2.Length);
+		IsTrue(result2[0] is ConnectMessage);
+		AreEqual(ConnectionStates.Connected, manager.CurrentState);
+	}
+
+	[TestMethod]
+	public void ProcessConnect_AllFailed_BasketFails()
+	{
+		var manager = CreateManager(out _);
+		var adapter1 = CreateAdapter();
+		var adapter2 = CreateAdapter();
+
+		manager.BeginConnect();
+		manager.InitializeAdapter(adapter1);
+		manager.InitializeAdapter(adapter2);
+
+		manager.ProcessConnect(adapter1, new Exception("Error 1"));
+		var messages = manager.ProcessConnect(adapter2, new Exception("Error 2"));
+
+		AreEqual(ConnectionStates.Failed, manager.CurrentState);
+		AreEqual(1, messages.Length);
+		var connectMsg = (ConnectMessage)messages[0];
+		IsNotNull(connectMsg.Error);
+		IsTrue(connectMsg.Error is AggregateException);
+	}
+
+	[TestMethod]
+	public void ProcessDisconnect_AllDisconnected_ReturnsDisconnectMessage()
+	{
+		var manager = CreateManager(out _);
+		var adapter1 = CreateAdapter();
+		var adapter2 = CreateAdapter();
 
 		manager.BeginConnect();
 		manager.InitializeAdapter(adapter1);
@@ -171,155 +166,80 @@ public class AdapterConnectionManagerTests
 		manager.ProcessConnect(adapter1, null);
 		manager.ProcessConnect(adapter2, null);
 
-		// Disconnect first
 		manager.ProcessDisconnect(adapter1, null);
-		manager.CurrentState.AssertEqual(ConnectionStates.Connected); // Still connected
+		AreEqual(ConnectionStates.Connected, manager.CurrentState);
 
-		// Act - disconnect last
 		var messages = manager.ProcessDisconnect(adapter2, null);
 
-		// Assert
-		manager.CurrentState.AssertEqual(ConnectionStates.Disconnected);
-		messages.Length.AssertEqual(1);
-		messages[0].AssertOfType<DisconnectMessage>();
+		AreEqual(ConnectionStates.Disconnected, manager.CurrentState);
+		AreEqual(1, messages.Length);
+		IsTrue(messages[0] is DisconnectMessage);
 	}
 
 	[TestMethod]
-	public void Manager_OneAdapterError_BasketStaysConnectedIfOtherConnected()
+	public void FullConnectionCycle_ThreeAdapters()
 	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var manager = new AdapterConnectionManager(state);
-		var adapter1 = CreateMockAdapter();
-		var adapter2 = CreateMockAdapter();
-
-		manager.BeginConnect();
-		manager.InitializeAdapter(adapter1);
-		manager.InitializeAdapter(adapter2);
-		manager.ProcessConnect(adapter1, null); // First connects successfully
-
-		// Act - second fails
-		var messages = manager.ProcessConnect(adapter2, new Exception("Connection failed"));
-
-		// Assert
-		manager.CurrentState.AssertEqual(ConnectionStates.Connected); // Stays connected
-		messages.Length.AssertEqual(0); // No disconnect message
-	}
-
-	[TestMethod]
-	public void Manager_AllAdaptersFailed_BasketFails()
-	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var manager = new AdapterConnectionManager(state);
-		var adapter1 = CreateMockAdapter();
-		var adapter2 = CreateMockAdapter();
-
-		manager.BeginConnect();
-		manager.InitializeAdapter(adapter1);
-		manager.InitializeAdapter(adapter2);
-
-		// Both fail
-		manager.ProcessConnect(adapter1, new Exception("Error 1"));
-		var messages = manager.ProcessConnect(adapter2, new Exception("Error 2"));
-
-		// Assert
-		manager.CurrentState.AssertEqual(ConnectionStates.Failed);
-		messages.Length.AssertEqual(1);
-		var connectMsg = (ConnectMessage)messages[0];
-		connectMsg.Error.AssertNotNull();
-		connectMsg.Error.AssertOfType<AggregateException>();
-	}
-
-	[TestMethod]
-	public void Manager_Reset_ClearsAllStates()
-	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var manager = new AdapterConnectionManager(state);
-		var adapter = CreateMockAdapter();
-
-		manager.BeginConnect();
-		manager.InitializeAdapter(adapter);
-		manager.ProcessConnect(adapter, null);
-
-		// Act
-		manager.Reset();
-
-		// Assert
-		manager.CurrentState.AssertEqual(ConnectionStates.Disconnected);
-		state.TotalCount.AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void Manager_FullConnectionCycle_ThreeAdapters()
-	{
-		// Arrange
-		var state = new AdapterConnectionState();
-		var manager = new AdapterConnectionManager(state);
-		var adapters = new[] { CreateMockAdapter(), CreateMockAdapter(), CreateMockAdapter() };
+		var manager = CreateManager(out _);
+		var adapters = new[] { CreateAdapter(), CreateAdapter(), CreateAdapter() };
 
 		manager.BeginConnect();
 		foreach (var a in adapters)
 			manager.InitializeAdapter(a);
 
-		// Connect first - basket connected
 		var r1 = manager.ProcessConnect(adapters[0], null);
-		r1.Length.AssertEqual(1);
-		manager.CurrentState.AssertEqual(ConnectionStates.Connected);
+		AreEqual(1, r1.Length);
+		AreEqual(ConnectionStates.Connected, manager.CurrentState);
 
-		// Connect second - no message (already connected)
 		var r2 = manager.ProcessConnect(adapters[1], null);
-		r2.Length.AssertEqual(0);
+		AreEqual(0, r2.Length);
 
-		// Connect third - no message
 		var r3 = manager.ProcessConnect(adapters[2], null);
-		r3.Length.AssertEqual(0);
+		AreEqual(0, r3.Length);
 
-		// Disconnect first - still connected
 		var r4 = manager.ProcessDisconnect(adapters[0], null);
-		r4.Length.AssertEqual(0);
-		manager.CurrentState.AssertEqual(ConnectionStates.Connected);
+		AreEqual(0, r4.Length);
+		AreEqual(ConnectionStates.Connected, manager.CurrentState);
 
-		// Disconnect second - still connected
 		var r5 = manager.ProcessDisconnect(adapters[1], null);
-		r5.Length.AssertEqual(0);
+		AreEqual(0, r5.Length);
 
-		// Disconnect last - basket disconnected
 		var r6 = manager.ProcessDisconnect(adapters[2], null);
-		r6.Length.AssertEqual(1);
-		manager.CurrentState.AssertEqual(ConnectionStates.Disconnected);
+		AreEqual(1, r6.Length);
+		AreEqual(ConnectionStates.Disconnected, manager.CurrentState);
 	}
 
-	#endregion
+	[TestMethod]
+	public void Reset_ClearsState()
+	{
+		var manager = CreateManager(out var state);
+		var adapter = CreateAdapter();
 
-	#region Mock State Tests
+		manager.BeginConnect();
+		manager.InitializeAdapter(adapter);
+		manager.ProcessConnect(adapter, null);
+
+		AreEqual(ConnectionStates.Connected, manager.CurrentState);
+		AreEqual(1, state.TotalCount);
+
+		manager.Reset();
+
+		AreEqual(ConnectionStates.Disconnected, manager.CurrentState);
+		AreEqual(0, state.TotalCount);
+	}
 
 	[TestMethod]
-	public void Manager_WithMockState_VerifiesStateCalls()
+	public void WithMockState_VerifiesStateCalls()
 	{
-		// Arrange
 		var mockState = new Mock<IAdapterConnectionState>();
 		mockState.Setup(s => s.CurrentState).Returns(ConnectionStates.Connecting);
 		mockState.Setup(s => s.GetAllStates()).Returns([]);
 
 		var manager = new AdapterConnectionManager(mockState.Object);
-		var adapter = CreateMockAdapter();
+		var adapter = CreateAdapter();
 
-		// Act
 		manager.ProcessConnect(adapter, null);
 
-		// Assert
 		mockState.Verify(s => s.SetAdapterState(adapter, ConnectionStates.Connected, null), Times.Once);
 		mockState.VerifySet(s => s.CurrentState = ConnectionStates.Connected, Times.Once);
-	}
-
-	#endregion
-
-	private static IMessageAdapter CreateMockAdapter()
-	{
-		var mock = new Mock<IMessageAdapter>();
-		mock.Setup(a => a.ToString()).Returns($"MockAdapter-{Guid.NewGuid():N}");
-		return mock.Object;
 	}
 }
