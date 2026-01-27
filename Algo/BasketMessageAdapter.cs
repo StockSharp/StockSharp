@@ -147,6 +147,26 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		ISecurityMessageAdapterProvider securityAdapterProvider,
 		IPortfolioMessageAdapterProvider portfolioAdapterProvider,
 		IStorageBuffer buffer)
+		: this(transactionIdGenerator, candleBuilderProvider, securityAdapterProvider, portfolioAdapterProvider, buffer,
+			null, null, null, null, null, null, null)
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="BasketMessageAdapter"/> with injectable state dependencies.
+	/// </summary>
+	public BasketMessageAdapter(IdGenerator transactionIdGenerator,
+		CandleBuilderProvider candleBuilderProvider,
+		ISecurityMessageAdapterProvider securityAdapterProvider,
+		IPortfolioMessageAdapterProvider portfolioAdapterProvider,
+		IStorageBuffer buffer,
+		IAdapterConnectionState connectionState,
+		IAdapterConnectionManager connectionManager,
+		IPendingMessageState pendingState,
+		IPendingMessageManager pendingManager,
+		ISubscriptionRoutingState subscriptionRouting,
+		IParentChildMap parentChildMap,
+		IOrderRoutingState orderRouting)
 	{
 		TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 		_innerAdapters = new InnerAdapterList(this);
@@ -160,13 +180,15 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		//PnLManager = new PnLManager();
 		SlippageManager = new SlippageManager(new SlippageManagerState());
 
-		_connectionState = new AdapterConnectionState();
-		_connectionManager = new AdapterConnectionManager(_connectionState);
-		_pendingState = new PendingMessageState();
-		_pendingManager = new PendingMessageManager(_pendingState);
-		_subscriptionRouting = new SubscriptionRoutingState();
-		_parentChildMap = new ParentChildMap();
-		_orderRouting = new OrderRoutingState();
+		var cs = connectionState ?? new AdapterConnectionState();
+		_connectionState = cs;
+		_connectionManager = connectionManager ?? new AdapterConnectionManager(cs);
+		var ps = pendingState ?? new PendingMessageState();
+		_pendingState = ps;
+		_pendingManager = pendingManager ?? new PendingMessageManager(ps);
+		_subscriptionRouting = subscriptionRouting ?? new SubscriptionRoutingState();
+		_parentChildMap = parentChildMap ?? new ParentChildMap();
+		_orderRouting = orderRouting ?? new OrderRoutingState();
 
 		SecurityAdapterProvider.Changed += SecurityAdapterProviderOnChanged;
 		PortfolioAdapterProvider.Changed += PortfolioAdapterProviderOnChanged;
@@ -482,7 +504,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		_parentChildMap.Clear();
 	}
 
-	private IMessageAdapterWrapper CreateWrappers(IMessageAdapter adapter)
+	private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 	{
 		var first = adapter;
 
@@ -505,7 +527,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			adapter = ApplyOwnInner(new OfflineMessageAdapter(adapter));
 
 		if (IgnoreExtraAdapters)
-			return (IMessageAdapterWrapper)adapter;
+			return adapter;
 
 		if (this.UseChannels() && adapter.UseChannels())
 		{
@@ -734,7 +756,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 					var wrapper = CreateWrappers(adapter);
 
-					wrapper.NewOutMessageAsync += (m, ct) => OnInnerAdapterNewOutMessage(adapter, m, ct);
+					if (wrapper is IMessageAdapterWrapper adapterWrapper)
+					{
+						adapterWrapper.NewOutMessageAsync += (m, ct) => OnInnerAdapterNewOutMessage(adapter, m, ct);
+					}
+					else
+					{
+						wrapper.NewOutMessage += m => AsyncHelper.Run(() => OnInnerAdapterNewOutMessage(adapter, m, default));
+					}
 
 					_adapterWrappers.Add(adapter, wrapper);
 				}
