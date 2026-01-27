@@ -199,6 +199,9 @@ public class PositionTests : BaseTestClass
 
 		void IPersistable.Load(SettingsStorage storage) { }
 		void IPersistable.Save(SettingsStorage storage) { }
+
+		public IPositionManager Clone() => new TestPositionManager();
+		object ICloneable.Clone() => Clone();
 	}
 
 	private class TestInnerAdapter(bool? emulate) : PassThroughMessageAdapter(new IncrementalIdGenerator())
