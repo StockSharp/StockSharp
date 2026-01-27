@@ -22,6 +22,9 @@ public class AsyncExtensionsTests : BaseTestClass
 			this.AddSupportedMarketDataType(DataType.Level1);
 		}
 
+		public override bool IsAllDownloadingSupported(DataType dataType)
+			=> dataType == DataType.Securities || dataType == DataType.Transactions;
+
 		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
 			SentMessages.Enqueue(message);
