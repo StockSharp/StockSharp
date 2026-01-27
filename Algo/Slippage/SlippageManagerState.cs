@@ -6,7 +6,7 @@ namespace StockSharp.Algo.Slippage;
 public class SlippageManagerState : ISlippageManagerState
 {
 	private readonly Lock _sync = new();
-	private readonly Dictionary<SecurityId, (decimal bid, decimal ask)> _bestPrices = [];
+	private readonly Dictionary<SecurityId, (DateTimeOffset time, decimal bid, decimal ask)> _bestPrices = [];
 	private readonly Dictionary<long, (Sides side, decimal price)> _plannedPrices = [];
 
 	private decimal _slippage;
@@ -29,14 +29,18 @@ public class SlippageManagerState : ISlippageManagerState
 	}
 
 	/// <inheritdoc />
-	public void UpdateBestPrices(SecurityId securityId, decimal? bidPrice, decimal? askPrice)
+	public void UpdateBestPrices(SecurityId securityId, decimal? bidPrice, decimal? askPrice, DateTimeOffset time)
 	{
+		if (bidPrice is null && askPrice is null)
+			return;
+
 		using (_sync.EnterScope())
 		{
-			if (!_bestPrices.TryGetValue(securityId, out var current))
-				current = (0, 0);
+			if (_bestPrices.TryGetValue(securityId, out var current) && time < current.time)
+				return;
 
 			_bestPrices[securityId] = (
+				time,
 				bidPrice ?? current.bid,
 				askPrice ?? current.ask
 			);

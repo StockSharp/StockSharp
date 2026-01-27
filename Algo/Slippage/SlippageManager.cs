@@ -44,7 +44,7 @@ public class SlippageManager(ISlippageManagerState state) : ISlippageManager
 				var askPrice = l1Msg.TryGetDecimal(Level1Fields.BestAskPrice);
 
 				if (bidPrice != null || askPrice != null)
-					_state.UpdateBestPrices(l1Msg.SecurityId, bidPrice, askPrice);
+					_state.UpdateBestPrices(l1Msg.SecurityId, bidPrice, askPrice, l1Msg.ServerTime);
 
 				break;
 			}
@@ -60,7 +60,7 @@ public class SlippageManager(ISlippageManagerState state) : ISlippageManager
 				var ask = quotesMsg.GetBestAsk();
 
 				if (bid != null || ask != null)
-					_state.UpdateBestPrices(quotesMsg.SecurityId, bid?.Price, ask?.Price);
+					_state.UpdateBestPrices(quotesMsg.SecurityId, bid?.Price, ask?.Price, quotesMsg.ServerTime);
 
 				break;
 			}
