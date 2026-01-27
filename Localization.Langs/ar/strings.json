@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "لا يمكن إلغاء أمر السوق.",
   "MarketOrders": "أوامر السوق",
   "MarketOrdersSupported": "هل الطلبات السوقية مدعومة؟",
+  "MarketPrice": "سعر السوق",
   "MarketPriceToday": "سعر السوق اليوم",
   "MarketPriceYesterday": "سعر السوق (أمس)",
   "MarketToLimit": "من السوق إلى الحد",

@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Bozor buyurtmasini bekor qilib bo'lmaydi.",
   "MarketOrders": "Bozor buyurtmalari",
   "MarketOrdersSupported": "Bozor buyurtmalari qo'llab-quvvatlanadimi?",
+  "MarketPrice": "Bozor narxi",
   "MarketPriceToday": "Bugungi bozor narxi",
   "MarketPriceYesterday": "Bozor narxi (kecha)",
   "MarketToLimit": "Bozordan limitga",

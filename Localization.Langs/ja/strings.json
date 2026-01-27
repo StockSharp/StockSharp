@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "マーケットオーダーはキャンセルできません。",
   "MarketOrders": "市場注文",
   "MarketOrdersSupported": "マーケットオーダーはサポートされていますか。",
+  "MarketPrice": "市場価格",
   "MarketPriceToday": "今日の市場価格",
   "MarketPriceYesterday": "昨日の市場価格",
   "MarketToLimit": "成行から指値へ",

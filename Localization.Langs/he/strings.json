@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "לא ניתן לבטל הצעה רגילה.",
   "MarketOrders": "הזמנות שוק",
   "MarketOrdersSupported": "האם הזמנות שוק נתמכות?",
+  "MarketPrice": "מחיר שוק",
   "MarketPriceToday": "מחיר השוק היום",
   "MarketPriceYesterday": "מחיר שוק (אתמול)",
   "MarketToLimit": "משוק למוגבל",

@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Поруђбину са трга није могуће отказати.",
   "MarketOrders": "Тржишне наруџбе",
   "MarketOrdersSupported": "Да ли су подржане тржишне наруџбе?",
+  "MarketPrice": "Тржишна цена",
   "MarketPriceToday": "Данашња тржишна цена",
   "MarketPriceYesterday": "Цена на тржишту (јуче)",
   "MarketToLimit": "Са тржишта на лимит",

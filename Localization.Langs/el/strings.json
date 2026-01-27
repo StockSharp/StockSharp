@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Η αγοραία παραγγελία δεν μπορεί να ακυρωθεί.",
   "MarketOrders": "Εντολές αγοράς",
   "MarketOrdersSupported": "Υποστηρίζονται οι εντολές αγοράς;",
+  "MarketPrice": "Τιμή αγοράς",
   "MarketPriceToday": "Σημερινή τιμή αγοράς",
   "MarketPriceYesterday": "Τιμή αγοράς (χθες)",
   "MarketToLimit": "Από την αγορά στο όριο",

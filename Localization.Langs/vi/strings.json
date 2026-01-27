@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Không thể hủy đơn hàng thị trường.",
   "MarketOrders": "Lệnh thị trường",
   "MarketOrdersSupported": "Các lệnh thị trường có được hỗ trợ không?",
+  "MarketPrice": "Giá thị trường",
   "MarketPriceToday": "Giá Thị trường Hôm nay",
   "MarketPriceYesterday": "Giá thị trường (hôm qua)",
   "MarketToLimit": "Từ thị trường đến giới hạn",

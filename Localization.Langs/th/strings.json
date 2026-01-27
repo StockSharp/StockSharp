@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "ไม่สามารถยกเลิกคำสั่งซื้อของตลาด",
   "MarketOrders": "คำสั่งซื้อขายในตลาด",
   "MarketOrdersSupported": "รองรับคำสั่งซื้อตลาดหรือไม่?",
+  "MarketPrice": "ราคาตลาด",
   "MarketPriceToday": "ราคาตลาดวันนี้",
   "MarketPriceYesterday": "ราคาตลาดเมื่อวาน",
   "MarketToLimit": "จากตลาดไปยังจำกัด",

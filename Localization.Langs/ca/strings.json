@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "No es pot cancel·lar una comanda de mercat.",
   "MarketOrders": "Comandes de mercat",
   "MarketOrdersSupported": "Es donen suport a les comandes de mercat.",
+  "MarketPrice": "Preu de mercat",
   "MarketPriceToday": "Preu de mercat (avui)",
   "MarketPriceYesterday": "Preu de mercat (ahir)",
   "MarketToLimit": "De mercat a límit",

@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Impossibile annullare l'ordine di mercato.",
   "MarketOrders": "Ordini di mercato",
   "MarketOrdersSupported": "Gli ordini di mercato sono supportati?",
+  "MarketPrice": "Prezzo di mercato",
   "MarketPriceToday": "Prezzo di mercato oggi",
   "MarketPriceYesterday": "Prezzo di mercato (ieri)",
   "MarketToLimit": "Da mercato a limite",

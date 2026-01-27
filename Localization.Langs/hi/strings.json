@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "बाज़ार आदेश रद्द नहीं किया जा सकता।",
   "MarketOrders": "बाजार आदेश",
   "MarketOrdersSupported": "क्या बाज़ार के ऑर्डर समर्थित हैं?",
+  "MarketPrice": "बाजार मूल्य",
   "MarketPriceToday": "बाजार मूल्य आज",
   "MarketPriceYesterday": "बाजार मूल्य (कल)",
   "MarketToLimit": "बाजार से सीमा तक",

@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "دستور بازار قابل لغو نیست.",
   "MarketOrders": "سفارش‌های بازار",
   "MarketOrdersSupported": "آیا سفارش‌های بازار پشتیبانی می‌شوند؟",
+  "MarketPrice": "قیمت بازار",
   "MarketPriceToday": "قیمت بازار امروز",
   "MarketPriceYesterday": "قیمت بازار (دیروز)",
   "MarketToLimit": "از بازار به محدود",

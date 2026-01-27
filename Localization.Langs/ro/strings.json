@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Comanda de pe piață nu poate fi anulată.",
   "MarketOrders": "Ordine de piață",
   "MarketOrdersSupported": "Comenzile de piață sunt acceptate?",
+  "MarketPrice": "Preț de piață",
   "MarketPriceToday": "Prețul pieței azi",
   "MarketPriceYesterday": "Prețul pe piață (ieri)",
   "MarketToLimit": "De la piață la limită",

@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "বাজার অর্ডারটি বাতিল করা যায় না।",
   "MarketOrders": "মার্কেট অর্ডার",
   "MarketOrdersSupported": "মার্কেট অর্ডার সমর্থিত কি?",
+  "MarketPrice": "বাজার মূল্য",
   "MarketPriceToday": "বাজারের দাম আজ",
   "MarketPriceYesterday": "গতকালের বাজার মূল্য",
   "MarketToLimit": "মার্কেট টু লিমিট",

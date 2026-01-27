@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Piyasa emri iptal edilemez.",
   "MarketOrders": "Piyasa emirleri",
   "MarketOrdersSupported": "Piyasa emirleri destekleniyor mu?",
+  "MarketPrice": "Piyasa fiyatı",
   "MarketPriceToday": "Bugünkü Piyasa Fiyatı",
   "MarketPriceYesterday": "Piyasa Fiyatı (dün)",
   "MarketToLimit": "Piyasadan Limitliye",

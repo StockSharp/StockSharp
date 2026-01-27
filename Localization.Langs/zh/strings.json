@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "无法取消市场订单。",
   "MarketOrders": "市场订单",
   "MarketOrdersSupported": "是否支持市场订单。",
+  "MarketPrice": "市场价格",
   "MarketPriceToday": "今日市场价格",
   "MarketPriceYesterday": "昨天的市场价格",
   "MarketToLimit": "市场转限价",

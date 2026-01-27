@@ -2018,6 +2018,7 @@
   "MarketOrderCannotCancel": "Hindi maaaring kanselahin ang mga market order.",
   "MarketOrders": "Mga Market Order",
   "MarketOrdersSupported": "Tinutukoy kung suportado ang mga market order.",
+  "MarketPrice": "Presyo sa merkado",
   "MarketPriceToday": "Market price (ngayon)",
   "MarketPriceYesterday": "Market price (kahapon)",
   "MarketToLimit": "Market->Limit",

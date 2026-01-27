@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "En marknadsorder kan inte avbokas.",
   "MarketOrders": "Marknadsorder",
   "MarketOrdersSupported": "Stöds marknadsordrar?",
+  "MarketPrice": "Marknadspris",
   "MarketPriceToday": "Dagens marknadspris",
   "MarketPriceYesterday": "Marknadspris (igår)",
   "MarketToLimit": "Från marknad till begränsning",

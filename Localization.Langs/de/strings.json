@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Marktauftrag kann nicht storniert werden.",
   "MarketOrders": "Marktorders",
   "MarketOrdersSupported": "Werden Marktaufträge unterstützt?",
+  "MarketPrice": "Marktpreis",
   "MarketPriceToday": "Marktpreis heute",
   "MarketPriceYesterday": "Marktpreis (gestern)",
   "MarketToLimit": "Vom Markt zum Limit",

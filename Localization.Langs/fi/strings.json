@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Markkinatilausta ei voi peruuttaa.",
   "MarketOrders": "Markkinaorderit",
   "MarketOrdersSupported": "Tuetaanko markkinatilauksia?",
+  "MarketPrice": "Markkinahinta",
   "MarketPriceToday": "Tämän päivän markkinahinta",
   "MarketPriceYesterday": "Markkinahinta (eilen)",
   "MarketToLimit": "Markkinoilta rajoitukseen",

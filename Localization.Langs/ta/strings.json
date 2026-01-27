@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "மார்க்கெட் ஆர்டரை ரத்து செய்ய முடியவில்லை.",
   "MarketOrders": "சந்தை ஆர்டர்கள்",
   "MarketOrdersSupported": "சந்தை ஆர்டர்கள் ஆதரிக்கப்படுகின்றனவா?",
+  "MarketPrice": "சந்தை விலை",
   "MarketPriceToday": "இன்றைய சந்தை விலை",
   "MarketPriceYesterday": "நேற்றைய சந்தை விலை",
   "MarketToLimit": "சந்தையிலிருந்து வரம்புக்கு",

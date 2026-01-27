@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Рыночную заявку невозможно отменить.",
   "MarketOrders": "Рыночные заявки",
   "MarketOrdersSupported": "Поддерживаются ли рыночные заявки.",
+  "MarketPrice": "Рыночная цена",
   "MarketPriceToday": "Рын цена (сегодня)",
   "MarketPriceYesterday": "Рын цена (вчера)",
   "MarketToLimit": "Рыночная->Лимитная",

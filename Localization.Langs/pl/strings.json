@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Zlecenia rynkowego nie można anulować.",
   "MarketOrders": "Zlecenia rynkowe",
   "MarketOrdersSupported": "Czy zamówienia rynkowe są obsługiwane?",
+  "MarketPrice": "Cena rynkowa",
   "MarketPriceToday": "Cena rynkowa dzisiaj",
   "MarketPriceYesterday": "Cena rynkowa (wczoraj)",
   "MarketToLimit": "Z rynkowego na limitowy",

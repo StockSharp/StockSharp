@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "A piaci megrendelést nem lehet törölni.",
   "MarketOrders": "Piaci megbízások",
   "MarketOrdersSupported": "Támogatottak a piaci megbízások?",
+  "MarketPrice": "Piaci ár",
   "MarketPriceToday": "A mai piaci ár",
   "MarketPriceYesterday": "Tegnapi piaci ár",
   "MarketToLimit": "Piaci-ről limitált-ra",

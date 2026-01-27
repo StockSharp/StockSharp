@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Tidak boleh membatalkan pesanan pasaran.",
   "MarketOrders": "Pesanan Pasaran",
   "MarketOrdersSupported": "Adakah arahan pasaran disokong?",
+  "MarketPrice": "Harga pasaran",
   "MarketPriceToday": "Harga Pasaran Hari Ini",
   "MarketPriceYesterday": "Harga Pasaran (semalam)",
   "MarketToLimit": "Pasaran ke Had",

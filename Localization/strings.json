@@ -2020,6 +2020,7 @@
   "MarketOrderCannotCancel": "Market orders cannot be cancelled.",
   "MarketOrders": "Market Orders",
   "MarketOrdersSupported": "Determines market orders supported.",
+  "MarketPrice": "Market price",
   "MarketPriceToday": "Market price (today)",
   "MarketPriceYesterday": "Market price (yesterday)",
   "MarketToLimit": "Market->Limit",

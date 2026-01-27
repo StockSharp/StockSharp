@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "시장 주문을 취소할 수 없습니다.",
   "MarketOrders": "시장 주문",
   "MarketOrdersSupported": "마켓 오더가 지원됩니까?",
+  "MarketPrice": "시장 가격",
   "MarketPriceToday": "금일 시장 가격",
   "MarketPriceYesterday": "어제의 시장 가격",
   "MarketToLimit": "시장에서 한도로",

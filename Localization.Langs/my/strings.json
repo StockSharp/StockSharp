@@ -2017,6 +2017,7 @@
   "MarketOrderCannotCancel": "စျေးကွက် အော်ဒါများကို ပယ်ဖျက်၍ မရနိုင်ပါ။",
   "MarketOrders": "စျေးကွက် အော်ဒါများ",
   "MarketOrdersSupported": "စျေးကွက် အော်ဒါများ ပံ့ပိုးမှု ဆုံးဖြတ်သည်။",
+  "MarketPrice": "ဈေးကွက်စျေးနှုန်း",
   "MarketPriceToday": "စျေးကွက်ဈေး (ယနေ့)",
   "MarketPriceYesterday": "စျေးကွက်ဈေး (မနေ့က)",
   "MarketToLimit": "စျေးကွက်->ကန့်သတ်ချက်",

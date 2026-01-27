@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Markedsordre kan ikke annulleres.",
   "MarketOrders": "Markedsordrer",
   "MarketOrdersSupported": "Understøttes markedsordrer?",
+  "MarketPrice": "Markedspris",
   "MarketPriceToday": "Dagens markedspris",
   "MarketPriceYesterday": "Markedspris (i går)",
   "MarketToLimit": "Fra marked til grænse",

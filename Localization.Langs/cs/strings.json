@@ -2013,6 +2013,7 @@
   "MarketOrderCannotCancel": "Tržní objednávku nelze zrušit.",
   "MarketOrders": "Tržní objednávky",
   "MarketOrdersSupported": "Jsou podporovány tržní objednávky?",
+  "MarketPrice": "Tržní cena",
   "MarketPriceToday": "Dnešní tržní cena",
   "MarketPriceYesterday": "Včerejší tržní cena",
   "MarketToLimit": "Z trhu na limit",
