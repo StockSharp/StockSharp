@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Slippage;
 /// <summary>
 /// The interface for the slippage calculation manager.
 /// </summary>
-public interface ISlippageManager : IPersistable
+public interface ISlippageManager : IPersistable, ICloneable<ISlippageManager>
 {
 	/// <summary>
 	/// Total slippage.

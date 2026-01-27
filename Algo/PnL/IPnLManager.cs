@@ -3,7 +3,7 @@ namespace StockSharp.Algo.PnL;
 /// <summary>
 /// The interface of the profit-loss calculation manager.
 /// </summary>
-public interface IPnLManager : IPersistable
+public interface IPnLManager : IPersistable, ICloneable<IPnLManager>
 {
 	/// <summary>
 	/// The value of realized profit-loss.

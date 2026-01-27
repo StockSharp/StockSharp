@@ -153,4 +153,13 @@ public class PositionManager(bool byOrders, IPositionManagerState state) : BaseL
 
 		return null;
 	}
+
+	/// <inheritdoc />
+	public IPositionManager Clone()
+	{
+		var newState = _state.GetType().CreateInstance<IPositionManagerState>();
+		return new PositionManager(ByOrders, newState);
+	}
+
+	object ICloneable.Clone() => Clone();
 }

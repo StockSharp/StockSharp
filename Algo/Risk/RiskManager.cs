@@ -56,4 +56,14 @@ public class RiskManager : BaseLogReceiver, IRiskManager
 
 		base.Save(storage);
 	}
+
+	/// <inheritdoc />
+	public IRiskManager Clone()
+	{
+		var clone = new RiskManager();
+		clone.Load(this.Save());
+		return clone;
+	}
+
+	object ICloneable.Clone() => Clone();
 }

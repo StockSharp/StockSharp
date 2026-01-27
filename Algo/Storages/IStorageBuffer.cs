@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Storages;
 /// <summary>
 /// The interface for storage buffer.
 /// </summary>
-public interface IStorageBuffer : IPersistable
+public interface IStorageBuffer : IPersistable, ICloneable<IStorageBuffer>
 {
 	/// <summary>
 	/// Save data only for subscriptions.

@@ -89,4 +89,14 @@ public class CommissionManager : ICommissionManager
 	{
 		storage.SetValue(nameof(Rules), Rules.Select(r => r.SaveEntire(false)).ToArray());
 	}
+
+	/// <inheritdoc />
+	public ICommissionManager Clone()
+	{
+		var clone = new CommissionManager();
+		clone.Load(this.Save());
+		return clone;
+	}
+
+	object ICloneable.Clone() => Clone();
 }

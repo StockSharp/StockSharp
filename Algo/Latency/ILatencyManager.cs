@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Latency;
 /// <summary>
 /// The interface of the order registration delay calculation manager.
 /// </summary>
-public interface ILatencyManager : IPersistable
+public interface ILatencyManager : IPersistable, ICloneable<ILatencyManager>
 {
 	/// <summary>
 	/// To zero calculations.

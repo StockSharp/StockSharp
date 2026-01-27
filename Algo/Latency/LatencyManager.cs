@@ -112,4 +112,17 @@ public class LatencyManager(ILatencyManagerState state) : ILatencyManager
 	public void Save(SettingsStorage storage)
 	{
 	}
+
+	/// <summary>
+	/// Creates a clone of this manager with new state.
+	/// </summary>
+	/// <returns>Cloned manager.</returns>
+	public ILatencyManager Clone()
+	{
+		var clone = new LatencyManager(_state.GetType().CreateInstance<ILatencyManagerState>());
+		clone.Load(this.Save());
+		return clone;
+	}
+
+	object ICloneable.Clone() => Clone();
 }

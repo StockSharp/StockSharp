@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Risk;
 /// <summary>
 /// The interface, describing risks control manager.
 /// </summary>
-public interface IRiskManager : ILogSource, IPersistable
+public interface IRiskManager : ILogSource, IPersistable, ICloneable<IRiskManager>
 {
 	/// <summary>
 	/// Rule list.

@@ -444,4 +444,14 @@ public class StorageBuffer : IStorageBuffer
 		IgnoreGenerated.Clear();
 		IgnoreGenerated.AddRange((storage.GetValue<IEnumerable<SettingsStorage>>(nameof(IgnoreGenerated)) ?? []).Select(s => s.Load<DataType>()));
 	}
+
+	/// <inheritdoc />
+	public IStorageBuffer Clone()
+	{
+		var clone = new StorageBuffer();
+		((IPersistable)clone).Load(((IPersistable)this).Save());
+		return clone;
+	}
+
+	object ICloneable.Clone() => Clone();
 }

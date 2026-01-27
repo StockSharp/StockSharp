@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Commissions;
 /// <summary>
 /// The commission calculating manager interface.
 /// </summary>
-public interface ICommissionManager : IPersistable
+public interface ICommissionManager : IPersistable, ICloneable<ICommissionManager>
 {
 	/// <summary>
 	/// The list of commission calculating rules.

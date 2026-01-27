@@ -146,4 +146,17 @@ public class SlippageManager(ISlippageManagerState state) : ISlippageManager
 	{
 		storage.SetValue(nameof(CalculateNegative), CalculateNegative);
 	}
+
+	/// <summary>
+	/// Creates a clone of this manager with new state.
+	/// </summary>
+	/// <returns>Cloned manager.</returns>
+	public ISlippageManager Clone()
+	{
+		var clone = new SlippageManager(_state.GetType().CreateInstance<ISlippageManagerState>());
+		clone.Load(this.Save());
+		return clone;
+	}
+
+	object ICloneable.Clone() => Clone();
 }

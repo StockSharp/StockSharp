@@ -197,11 +197,15 @@ public class PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1Ch
 
 	void IPersistable.Load(SettingsStorage storage)
 	{
-		
 	}
 
 	void IPersistable.Save(SettingsStorage storage)
 	{
-		
 	}
+
+	/// <inheritdoc />
+	public IPnLManager Clone()
+		=> new PortfolioPnLManager(PortfolioName, _getSecDefinition);
+
+	object ICloneable.Clone() => Clone();
 }

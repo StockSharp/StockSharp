@@ -250,4 +250,14 @@ public class PnLManager : IPnLManager
 		storage.Set(nameof(UseOrderLog), UseOrderLog);
 		storage.Set(nameof(UseTick), UseTick);
 	}
+
+	/// <inheritdoc />
+	public IPnLManager Clone()
+	{
+		var clone = new PnLManager();
+		clone.Load(this.Save());
+		return clone;
+	}
+
+	object ICloneable.Clone() => Clone();
 }
