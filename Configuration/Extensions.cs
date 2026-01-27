@@ -61,9 +61,27 @@ public static class Extensions
 
 
 	/// <summary>
+	/// Checks if the type has a public constructor accepting <see cref="IdGenerator"/>.
+	/// </summary>
+	/// <param name="type">Type to check.</param>
+	/// <returns><see langword="true"/> if the type has a valid adapter constructor.</returns>
+	public static bool HasValidAdapterConstructor(this Type type)
+	{
+		if (type is null)
+			throw new ArgumentNullException(nameof(type));
+
+		return type.GetConstructor(
+			BindingFlags.Public | BindingFlags.Instance,
+			null,
+			[typeof(IdGenerator)],
+			null) != null;
+	}
+
+	/// <summary>
 	/// Finds and returns adapter types in the specified directory.
 	/// Scans for assemblies starting with "StockSharp." (except a known exclusion list),
-	/// loads them, and collects types implementing <see cref="IMessageAdapter"/> (excluding dialects).
+	/// loads them, and collects types implementing <see cref="IMessageAdapter"/> (excluding dialects)
+	/// that have a public constructor accepting <see cref="IdGenerator"/>.
 	/// </summary>
 	/// <param name="dir">The directory path to scan for adapter assemblies (.dll files).</param>
 	/// <param name="errorHandler">An action to handle exceptions that occur during assembly loading.</param>
@@ -95,8 +113,7 @@ public static class Extensions
 				try
 				{
 					var asm = Assembly.Load(AssemblyName.GetAssemblyName(assembly));
-
-					adapters.AddRange(asm.FindImplementations<IMessageAdapter>(extraFilter: t => !t.Name.EndsWith("Dialect")));
+					adapters.AddRange(asm.GetAdapters());
 				}
 				catch (Exception e)
 				{
@@ -110,6 +127,22 @@ public static class Extensions
 		}
 
 		return adapters;
+	}
+
+	/// <summary>
+	/// Gets adapter types from the specified assembly.
+	/// Filters types implementing <see cref="IMessageAdapter"/> (excluding dialects)
+	/// that have a public constructor accepting <see cref="IdGenerator"/>.
+	/// </summary>
+	/// <param name="assembly">Assembly to scan.</param>
+	/// <returns>An enumeration of adapter <see cref="Type"/>s found in the assembly.</returns>
+	public static IEnumerable<Type> GetAdapters(this Assembly assembly)
+	{
+		if (assembly is null)
+			throw new ArgumentNullException(nameof(assembly));
+
+		return assembly.FindImplementations<IMessageAdapter>(extraFilter: t =>
+			!t.Name.EndsWith("Dialect") && t.HasValidAdapterConstructor());
 	}
 
 	/// <summary>
