@@ -27,7 +27,7 @@ public partial class BtceMessageAdapter
 
 	/// <inheritdoc />
 	public override bool IsAllDownloadingSupported(DataType dataType)
-		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
+		=> dataType == DataType.Securities || dataType == DataType.Transactions || dataType == DataType.PositionChanges || base.IsAllDownloadingSupported(dataType);
 
 	/// <inheritdoc />
 	public override bool IsSupportOrderBookIncrements => true;
