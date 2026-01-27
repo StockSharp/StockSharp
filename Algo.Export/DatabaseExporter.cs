@@ -356,6 +356,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		["Initiator"] = typeof(bool?),
 		["Leverage"] = typeof(int?),
 		["SeqNum"] = typeof(long?),
+		["MarketPrice"] = typeof(decimal?),
 	};
 
 	private IDictionary<string, Type> GetBoardStateColumns() => new Dictionary<string, Type>
@@ -567,6 +568,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		["Initiator"] = m.Initiator,
 		["Leverage"] = m.Leverage,
 		["SeqNum"] = m.SeqNum,
+		["MarketPrice"] = m.MarketPrice,
 	};
 
 	private IDictionary<string, object> ToBoardStateDict(BoardStateMessage m) => new Dictionary<string, object>

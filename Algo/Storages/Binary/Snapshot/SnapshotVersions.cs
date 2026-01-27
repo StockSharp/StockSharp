@@ -7,4 +7,5 @@ static class SnapshotVersions
 	public static readonly Version V22 = new(2, 2);
 	public static readonly Version V23 = new(2, 3);
 	public static readonly Version V24 = new(2, 4);
+	public static readonly Version V25 = new(2, 5);
 }

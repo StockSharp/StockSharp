@@ -701,6 +701,12 @@ public class Order : NotifiableObject, IOrderMessage
 	public decimal? AveragePrice { get; set; }
 
 	/// <summary>
+	/// Market price at the moment of order registration (best opposite-side price).
+	/// </summary>
+	[DataMember]
+	public decimal? MarketPrice { get; set; }
+
+	/// <summary>
 	/// Yield.
 	/// </summary>
 	[DataMember]
@@ -797,6 +803,9 @@ public class Order : NotifiableObject, IOrderMessage
 
 		if (AveragePrice != null)
 			str += $" AvgPrice={AveragePrice}";
+
+		if (MarketPrice != null)
+			str += $" MktPrice={MarketPrice}";
 
 		if (MinVolume != null)
 			str += $" MinVolume={MinVolume}";

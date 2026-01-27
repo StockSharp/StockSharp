@@ -2673,6 +2673,11 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 			if (volume <= 0)
 				throw new ArgumentOutOfRangeException(nameof(volume), volume, LocalizedStrings.InvalidValue);
 
+			// best opposite-side price at the moment of trade
+			var marketPrice = order.Side == Sides.Buy
+				? _asks.Count > 0 ? _asks.First().Key : null
+				: _bids.Count > 0 ? _bids.First().Key : null;
+
 			var tradeMsg = new ExecutionMessage
 			{
 				LocalTime = time,
@@ -2685,6 +2690,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 				DataTypeEx = DataType.Transactions,
 				ServerTime = GetServerTime(time),
 				Side = order.Side,
+				MarketPrice = marketPrice,
 			};
 			result.Add(tradeMsg);
 

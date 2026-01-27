@@ -217,6 +217,9 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 			if (message.Leverage != default)
 				order.Leverage = message.Leverage;
 
+			if (message.MarketPrice != default)
+				order.MarketPrice = message.MarketPrice;
+
 			retVal = new OrderChangeInfo(order, raiseNewOrder, true, operation == OrderOperations.Edit);
 			raiseNewOrder = false;
 			process(order);

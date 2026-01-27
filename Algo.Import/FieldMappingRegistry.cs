@@ -135,6 +135,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<ExecutionMessage, int>(nameof(ExecutionMessage.Leverage), () => LocalizedStrings.Leverage, () => LocalizedStrings.MarginLeverage, (i, v) => i.Leverage = v) { IsRequired = false });
 			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradePrice), () => LocalizedStrings.Price, () => LocalizedStrings.Price, (i, v) => i.TradePrice = v) { IsRequired = true });
 			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.TradeVolume), () => LocalizedStrings.Volume, () => LocalizedStrings.Volume, (i, v) => i.TradeVolume = v) { IsRequired = true });
+			fields.Add(new FieldMapping<ExecutionMessage, decimal>(nameof(ExecutionMessage.MarketPrice), () => LocalizedStrings.MarketPrice, () => LocalizedStrings.MarketPrice, (i, v) => i.MarketPrice = v) { IsRequired = false });
 		}
 		else if (dataType.IsCandles)
 		{

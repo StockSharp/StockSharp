@@ -939,6 +939,7 @@ public static partial class EntitiesExtensions
 		order.PostOnly = message.PostOnly;
 		order.SeqNum = message.SeqNum;
 		order.Leverage = message.Leverage;
+		order.MarketPrice = message.MarketPrice;
 
 		if (message.OrderState != null)
 			order.ApplyNewState(message.OrderState.Value);

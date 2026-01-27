@@ -5,7 +5,7 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot;
 /// </summary>
 public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, ExecutionMessage>
 {
-	Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = SnapshotVersions.V24;
+	Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = SnapshotVersions.V25;
 
 	string ISnapshotSerializer<string, ExecutionMessage>.Name => "Transactions";
 
@@ -95,6 +95,7 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 			8 + // SeqNum
 			1 + 1 + // BuildFrom (nullable)
 			1 + 4 + // Leverage (nullable)
+			1 + 16 + // MarketPrice (nullable)
 			4 + conditionTypeBytes.Length +
 			4 + // ConditionParamsCount
 			conParams.Length * 200; // approximate per condition parameter
@@ -228,6 +229,7 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 			((SnapshotDataType)message.BuildFrom).Write(ref writer);
 
 		WriteNullableInt(ref writer, message.Leverage);
+		WriteNullableDecimal(ref writer, message.MarketPrice);
 
 		WriteNullableString(ref writer, conditionTypeBytes);
 
@@ -465,6 +467,7 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 			buildFrom = SnapshotDataType.Read(ref reader);
 
 		var leverage = ReadNullableInt(ref reader);
+		var marketPrice = ReadNullableDecimal(ref reader);
 
 		var conditionType = ReadNullableString(ref reader);
 
@@ -533,6 +536,7 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 			SeqNum = seqNum,
 			BuildFrom = buildFrom,
 			Leverage = leverage,
+			MarketPrice = marketPrice,
 		};
 
 		// Read condition parameters
@@ -790,6 +794,9 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 
 		if (changes.Leverage != default)
 			message.Leverage = changes.Leverage;
+
+		if (changes.MarketPrice != default)
+			message.MarketPrice = changes.MarketPrice;
 
 		message.LocalTime = changes.LocalTime;
 		message.ServerTime = changes.ServerTime;

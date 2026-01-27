@@ -41,6 +41,7 @@ static class MarketDataVersions
 	public static readonly Version Version68 = new(6, 8);
 	public static readonly Version Version69 = new(6, 9);
 	public static readonly Version Version70 = new(7, 0);
+	public static readonly Version Version71 = new(7, 1);
 }
 
 abstract class BinaryMetaInfo : MetaInfo

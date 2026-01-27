@@ -92,6 +92,9 @@ public class SlippageManager(ISlippageManagerState state) : ISlippageManager
 				{
 					if (_state.TryGetPlannedPrice(execMsg.OriginalTransactionId, out var side, out var plannedPrice))
 					{
+						// fill MarketPrice if not already set by emulator or external source
+						execMsg.MarketPrice ??= plannedPrice;
+
 						// If there is no trade price, cannot compute slippage; keep planned price for future executions.
 						if (execMsg.TradePrice == null)
 							return null;

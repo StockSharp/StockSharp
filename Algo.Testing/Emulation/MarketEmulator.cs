@@ -407,6 +407,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			});
 		}
 
+		// Best opposite-side price at the moment of order registration
+		var marketPrice = regMsg.Side == Sides.Buy
+			? emulator.OrderBook.BestAsk?.price
+			: emulator.OrderBook.BestBid?.price;
+
 		// Generate trades - no order state message in trade loop for IOC/FOK
 		foreach (var trade in matchResult.Trades)
 		{
@@ -457,6 +462,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				TradeVolume = trade.Volume,
 				Side = regMsg.Side,
 				Commission = commission,
+				MarketPrice = marketPrice,
 			});
 
 			// Position change
@@ -491,6 +497,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					var (_, _, counterPosition) = counterPortfolio.ProcessTrade(
 						regMsg.SecurityId, counterOrder.Side, trade.Price, counterVolume, counterCommission);
 
+					// Counter-order's market price is opposite side
+					var counterMarketPrice = counterOrder.Side == Sides.Buy
+						? emulator.OrderBook.BestAsk?.price
+						: emulator.OrderBook.BestBid?.price;
+
 					results.Add(new ExecutionMessage
 					{
 						DataTypeEx = DataType.Transactions,
@@ -503,6 +514,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						TradeVolume = counterVolume,
 						Side = counterOrder.Side,
 						Commission = counterCommission,
+						MarketPrice = counterMarketPrice,
 					});
 
 					results.Add(new PositionChangeMessage

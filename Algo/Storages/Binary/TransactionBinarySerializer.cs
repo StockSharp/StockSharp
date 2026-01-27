@@ -209,7 +209,7 @@ class TransactionSerializerMetaInfo(DateTime date) : BinaryMetaInfo(date)
 	}
 }
 
-class TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>(securityId, DataType.Transactions, 200, MarketDataVersions.Version70, exchangeInfoProvider)
+class TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider exchangeInfoProvider) : BinaryMarketDataSerializer<ExecutionMessage, TransactionSerializerMetaInfo>(securityId, DataType.Transactions, 200, MarketDataVersions.Version71, exchangeInfoProvider)
 {
 	protected override void OnSave(BitArrayWriter writer, IEnumerable<ExecutionMessage> messages, TransactionSerializerMetaInfo metaInfo)
 	{
@@ -450,6 +450,11 @@ class TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider e
 				continue;
 
 			writer.WriteNullableDecimal(msg.MinVolume);
+
+			if (metaInfo.Version < MarketDataVersions.Version71)
+				continue;
+
+			writer.WriteNullableDecimal(msg.MarketPrice);
 		}
 	}
 
@@ -659,6 +664,11 @@ class TransactionBinarySerializer(SecurityId securityId, IExchangeInfoProvider e
 			return msg;
 
 		msg.MinVolume = reader.ReadNullableDecimal();
+
+		if (metaInfo.Version < MarketDataVersions.Version71)
+			return msg;
+
+		msg.MarketPrice = reader.ReadNullableDecimal();
 
 		return msg;
 	}

@@ -4912,6 +4912,9 @@ public static partial class Extensions
 				if (execMsg.AveragePrice != null)
 					snapshot.AveragePrice = execMsg.AveragePrice;
 
+				if (execMsg.MarketPrice != null)
+					snapshot.MarketPrice = execMsg.MarketPrice;
+
 				if (execMsg.Latency != null)
 					snapshot.Latency = execMsg.Latency;
 			}

@@ -455,6 +455,7 @@ public class JsonExporter(DataType dataType, Stream stream) : BaseExporter(dataT
 			await WriteProperty(writer, "initiator", item.Initiator, t);
 			await WriteProperty(writer, "sn", item.SeqNum, t);
 			await WriteProperty(writer, "leverage", item.Leverage, t);
+			await WriteProperty(writer, "marketPrice", item.MarketPrice, t);
 		}, cancellationToken);
 	}
 

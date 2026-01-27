@@ -556,6 +556,12 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 	public decimal? AveragePrice { get; set; }
 
 	/// <summary>
+	/// Market price at the moment of order registration (best opposite-side price).
+	/// </summary>
+	[DataMember]
+	public decimal? MarketPrice { get; set; }
+
+	/// <summary>
 	/// Yield.
 	/// </summary>
 	[DataMember]
@@ -666,6 +672,9 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		if (OrderSellId != null)
 			str += $",sell (id)={OrderSellId.Value}";
 
+		if (MarketPrice != null)
+			str += $",MktPrice={MarketPrice.Value}";
+
 		return str;
 	}
 
@@ -738,5 +747,6 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		destination.Leverage = Leverage;
 		destination.OrderBuyId = OrderBuyId;
 		destination.OrderSellId = OrderSellId;
+		destination.MarketPrice = MarketPrice;
 	}
 }

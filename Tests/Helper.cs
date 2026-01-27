@@ -1103,6 +1103,7 @@ static class Helper
 			a.PnL.AssertEqual(e.PnL);
 			a.Position.AssertEqual(e.Position);
 			a.Leverage.AssertEqual(e.Leverage);
+			a.MarketPrice.AssertEqual(e.MarketPrice);
 		}
 		else if (type == typeof(BoardLookupMessage))
 		{

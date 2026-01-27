@@ -78,6 +78,7 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding) 
 			data.Leverage.To<string>(),
 		]);
 		row.AddRange(data.BuildFrom.ToCsv());
+		row.Add(data.MarketPrice.To<string>());
 
 		return writer.WriteRowAsync(row, cancellationToken);
 	}
@@ -179,6 +180,9 @@ public class TransactionCsvSerializer(SecurityId securityId, Encoding encoding) 
 
 		if ((reader.ColumnCurr + 1) < reader.ColumnCount)
 			msg.BuildFrom = reader.ReadBuildFrom();
+
+		if ((reader.ColumnCurr + 1) < reader.ColumnCount)
+			msg.MarketPrice = reader.ReadNullableDecimal();
 
 		return msg;
 	}

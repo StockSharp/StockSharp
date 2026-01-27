@@ -168,6 +168,7 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 			await WriteAttrAsync(writer, "initiator", item.Initiator);
 			await WriteAttrAsync(writer, "seqNum", item.SeqNum);
 			await WriteAttrAsync(writer, "leverage", item.Leverage);
+			await WriteAttrAsync(writer, "marketPrice", item.MarketPrice);
 
 			await writer.WriteEndElementAsync();
 		}, cancellationToken);
