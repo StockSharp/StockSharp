@@ -3,7 +3,7 @@ namespace StockSharp.Algo;
 /// <summary>
 /// Level1 depth builder message processing logic.
 /// </summary>
-public interface ILevel1DepthBuilderManager
+public interface ILevel1DepthBuilderManager : ICloneable<ILevel1DepthBuilderManager>
 {
 	/// <summary>
 	/// Process a message going into the inner adapter.
@@ -24,58 +24,14 @@ public interface ILevel1DepthBuilderManager
 /// Level1 depth builder message processing implementation.
 /// </summary>
 /// <remarks>
-/// Initializes a new instance of the <see cref="Level1DepthBuilderManager"/>.
+/// Initializes a new instance of the <see cref="Level1DepthBuilderManager"/> with explicit state.
 /// </remarks>
 /// <param name="logReceiver">Log receiver.</param>
-public sealed class Level1DepthBuilderManager(ILogReceiver logReceiver) : ILevel1DepthBuilderManager
+/// <param name="state">State storage.</param>
+public sealed class Level1DepthBuilderManager(ILogReceiver logReceiver, ILevel1DepthBuilderManagerState state) : ILevel1DepthBuilderManager
 {
-	private sealed class Level1DepthBuilder(SecurityId securityId)
-	{
-		private decimal? _bidPrice, _askPrice, _bidVolume, _askVolume;
-		public readonly SecurityId SecurityId = securityId;
-
-		public QuoteChangeMessage Process(Level1ChangeMessage message)
-		{
-			var bidPrice = message.TryGetDecimal(Level1Fields.BestBidPrice);
-			var askPrice = message.TryGetDecimal(Level1Fields.BestAskPrice);
-
-			if (bidPrice == null && askPrice == null)
-				return null;
-
-			var bidVolume = message.TryGetDecimal(Level1Fields.BestBidVolume);
-			var askVolume = message.TryGetDecimal(Level1Fields.BestAskVolume);
-
-			if (_bidPrice == bidPrice && _askPrice == askPrice && _bidVolume == bidVolume && _askVolume == askVolume)
-				return null;
-
-			_bidPrice = bidPrice;
-			_askPrice = askPrice;
-			_bidVolume = bidVolume;
-			_askVolume = askVolume;
-
-			return new()
-			{
-				SecurityId = SecurityId,
-				ServerTime = message.ServerTime,
-				LocalTime = message.LocalTime,
-				BuildFrom = DataType.Level1,
-				Bids = bidPrice == null ? [] : [new QuoteChange(bidPrice.Value, bidVolume ?? 0)],
-				Asks = askPrice == null ? [] : [new QuoteChange(askPrice.Value, askVolume ?? 0)],
-			};
-		}
-	}
-
-	private class BookInfo(Level1DepthBuilder builder)
-	{
-		public readonly Level1DepthBuilder Builder = builder;
-		public readonly CachedSynchronizedSet<long> SubscriptionIds = [];
-	}
-
 	private readonly ILogReceiver _logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
-	private readonly Lock _syncObject = new();
-
-	private readonly Dictionary<long, BookInfo> _byId = [];
-	private readonly Dictionary<SecurityId, BookInfo> _online = [];
+	private readonly ILevel1DepthBuilderManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
 
 	/// <inheritdoc />
 	public (Message[] toInner, Message[] toOut) ProcessInMessage(Message message)
@@ -84,12 +40,7 @@ public sealed class Level1DepthBuilderManager(ILogReceiver logReceiver) : ILevel
 		{
 			case MessageTypes.Reset:
 			{
-				using (_syncObject.EnterScope())
-				{
-					_byId.Clear();
-					_online.Clear();
-				}
-
+				_state.Clear();
 				return ([message], []);
 			}
 
@@ -110,12 +61,7 @@ public sealed class Level1DepthBuilderManager(ILogReceiver logReceiver) : ILevel
 
 					var transId = mdMsg.TransactionId;
 
-					using (_syncObject.EnterScope())
-					{
-						var info = new BookInfo(new(mdMsg.SecurityId));
-						info.SubscriptionIds.Add(transId);
-						_byId.Add(transId, info);
-					}
+					_state.AddSubscription(transId, mdMsg.SecurityId);
 
 					mdMsg = mdMsg.TypedClone();
 					mdMsg.DataType2 = DataType.Level1;
@@ -162,35 +108,14 @@ public sealed class Level1DepthBuilderManager(ILogReceiver logReceiver) : ILevel
 			case MessageTypes.SubscriptionOnline:
 			{
 				var id = ((SubscriptionOnlineMessage)message).OriginalTransactionId;
-
-				using (_syncObject.EnterScope())
-				{
-					if (_byId.TryGetValue(id, out var info))
-					{
-						var secId = info.Builder.SecurityId;
-
-						if (_online.TryGetValue(secId, out var online))
-						{
-							online.SubscriptionIds.Add(id);
-							_byId[id] = online;
-						}
-						else
-						{
-							_online.Add(secId, info);
-						}
-					}
-				}
-
+				_state.OnSubscriptionOnline(id);
 				break;
 			}
 
 			case MessageTypes.Level1Change:
 			{
-				using (_syncObject.EnterScope())
-				{
-					if (_byId.Count == 0 && _online.Count == 0)
-						break;
-				}
+				if (!_state.HasAnySubscriptions)
+					break;
 
 				var level1Msg = (Level1ChangeMessage)message;
 
@@ -198,28 +123,22 @@ public sealed class Level1DepthBuilderManager(ILogReceiver logReceiver) : ILevel
 
 				HashSet<long> leftIds = null;
 
-				using (_syncObject.EnterScope())
+				foreach (var id in ids)
 				{
-					foreach (var id in ids)
-					{
-						if (!_byId.TryGetValue(id, out var info))
-							continue;
+					var quoteMsg = _state.TryBuildDepth(id, level1Msg, out var subscriptionIds);
 
-						var quoteMsg = info.Builder.Process(level1Msg);
+					if (quoteMsg == null)
+						continue;
 
-						if (quoteMsg == null)
-							continue;
+					quoteMsg.SetSubscriptionIds(subscriptionIds);
 
-						quoteMsg.SetSubscriptionIds(info.SubscriptionIds.Cache);
+					books ??= [];
 
-						books ??= [];
+					books.Add(quoteMsg);
 
-						books.Add(quoteMsg);
+					leftIds ??= [.. ids];
 
-						leftIds ??= [.. ids];
-
-						leftIds.RemoveRange(info.SubscriptionIds.Cache);
-					}
+					leftIds.RemoveRange(subscriptionIds);
 				}
 
 				if (leftIds != null)
@@ -241,35 +160,13 @@ public sealed class Level1DepthBuilderManager(ILogReceiver logReceiver) : ILevel
 
 	private void RemoveSubscription(long id)
 	{
-		using (_syncObject.EnterScope())
-		{
-			var changeId = true;
-
-			if (!_byId.TryGetAndRemove(id, out var info))
-			{
-				changeId = false;
-
-				info = _online.FirstOrDefault(p => p.Value.SubscriptionIds.Contains(id)).Value;
-
-				if (info == null)
-					return;
-			}
-
-			var secId = info.Builder.SecurityId;
-
-			if (info != _online.TryGetValue(secId))
-				return;
-
-			info.SubscriptionIds.Remove(id);
-
-			var ids = info.SubscriptionIds.Cache;
-
-			if (ids.Length == 0)
-				_online.Remove(secId);
-			else if (changeId && !_byId.ContainsKey(ids[0]))
-				_byId.Add(ids[0], info);
-		}
-
+		_state.RemoveSubscription(id);
 		_logReceiver.AddDebugLog("L1->OB {0} removed.", id);
 	}
+
+	/// <inheritdoc/>
+	public ILevel1DepthBuilderManager Clone()
+		=> new Level1DepthBuilderManager(_logReceiver, _state.GetType().CreateInstance<ILevel1DepthBuilderManagerState>());
+
+	object ICloneable.Clone() => Clone();
 }

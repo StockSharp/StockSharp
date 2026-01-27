@@ -3,7 +3,7 @@ namespace StockSharp.Algo;
 /// <summary>
 /// Order book increment message processing logic.
 /// </summary>
-public interface IOrderBookIncrementManager
+public interface IOrderBookIncrementManager : ICloneable<IOrderBookIncrementManager>
 {
 	/// <summary>
 	/// Process a message going into the inner adapter.
@@ -24,31 +24,15 @@ public interface IOrderBookIncrementManager
 /// Order book increment message processing implementation.
 /// Builds full order books from incremental updates <see cref="QuoteChangeStates.Increment"/>.
 /// </summary>
-public sealed class OrderBookIncrementManager : IOrderBookIncrementManager
+/// <remarks>
+/// Initializes a new instance of the <see cref="OrderBookIncrementManager"/> with explicit state.
+/// </remarks>
+/// <param name="logReceiver">Log receiver.</param>
+/// <param name="state">State storage.</param>
+public sealed class OrderBookIncrementManager(ILogReceiver logReceiver, IOrderBookIncrementManagerState state) : IOrderBookIncrementManager
 {
-	private class BookInfo(SecurityId securityId)
-	{
-		public readonly OrderBookIncrementBuilder Builder = new(securityId);
-		public readonly CachedSynchronizedSet<long> SubscriptionIds = [];
-	}
-
-	private readonly ILogReceiver _logReceiver;
-	private readonly Lock _syncObject = new();
-
-	private readonly Dictionary<long, BookInfo> _byId = [];
-	private readonly Dictionary<SecurityId, BookInfo> _online = [];
-	private readonly HashSet<long> _passThrough = [];
-	private readonly CachedSynchronizedSet<long> _allSecSubscriptions = [];
-	private readonly CachedSynchronizedSet<long> _allSecSubscriptionsPassThrough = [];
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="OrderBookIncrementManager"/>.
-	/// </summary>
-	/// <param name="logReceiver">Log receiver.</param>
-	public OrderBookIncrementManager(ILogReceiver logReceiver)
-	{
-		_logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
-	}
+	private readonly ILogReceiver _logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
+	private readonly IOrderBookIncrementManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
 
 	/// <inheritdoc />
 	public (Message[] toInner, Message[] toOut) ProcessInMessage(Message message)
@@ -57,7 +41,7 @@ public sealed class OrderBookIncrementManager : IOrderBookIncrementManager
 		{
 			case MessageTypes.Reset:
 			{
-				ClearState();
+				_state.Clear();
 				return ([message], []);
 			}
 
@@ -71,33 +55,23 @@ public sealed class OrderBookIncrementManager : IOrderBookIncrementManager
 					{
 						var transId = mdMsg.TransactionId;
 
-						using (_syncObject.EnterScope())
+						if (mdMsg.SecurityId == default)
 						{
-							if (mdMsg.SecurityId == default)
-							{
-								if (mdMsg.DoNotBuildOrderBookIncrement)
-									_allSecSubscriptionsPassThrough.Add(transId);
-								else
-									_allSecSubscriptions.Add(transId);
-
-								break;
-							}
-
 							if (mdMsg.DoNotBuildOrderBookIncrement)
-							{
-								_passThrough.Add(transId);
-								break;
-							}
+								_state.AddAllSecPassThrough(transId);
+							else
+								_state.AddAllSecSubscription(transId);
 
-							var info = new BookInfo(mdMsg.SecurityId)
-							{
-								Builder = { Parent = _logReceiver }
-							};
-
-							info.SubscriptionIds.Add(transId);
-
-							_byId.Add(transId, info);
+							break;
 						}
+
+						if (mdMsg.DoNotBuildOrderBookIncrement)
+						{
+							_state.AddPassThrough(transId);
+							break;
+						}
+
+						_state.AddSubscription(transId, mdMsg.SecurityId, _logReceiver);
 
 						_logReceiver.AddInfoLog("OB incr subscribed {0}/{1}.", mdMsg.SecurityId, transId);
 					}
@@ -140,25 +114,7 @@ public sealed class OrderBookIncrementManager : IOrderBookIncrementManager
 			case MessageTypes.SubscriptionOnline:
 			{
 				var id = ((SubscriptionOnlineMessage)message).OriginalTransactionId;
-
-				using (_syncObject.EnterScope())
-				{
-					if (_byId.TryGetValue(id, out var info))
-					{
-						var secId = info.Builder.SecurityId;
-
-						if (_online.TryGetValue(secId, out var online))
-						{
-							online.SubscriptionIds.Add(id);
-							_byId[id] = online;
-						}
-						else
-						{
-							_online.Add(secId, info);
-						}
-					}
-				}
-
+				_state.OnSubscriptionOnline(id);
 				break;
 			}
 
@@ -169,52 +125,27 @@ public sealed class OrderBookIncrementManager : IOrderBookIncrementManager
 				if (quoteMsg.State == null)
 					break;
 
-				using (_syncObject.EnterScope())
-				{
-					if (_allSecSubscriptions.Count == 0 &&
-						_allSecSubscriptionsPassThrough.Count == 0 &&
-						_byId.Count == 0 &&
-						_passThrough.Count == 0 &&
-						_online.Count == 0)
-						break;
-				}
+				if (!_state.HasAnySubscriptions)
+					break;
 
 				List<long> passThrough = null;
 
 				foreach (var subscriptionId in quoteMsg.GetSubscriptionIds())
 				{
-					QuoteChangeMessage newQuoteMsg;
-					long[] ids;
+					var newQuoteMsg = _state.TryApply(subscriptionId, quoteMsg, out var ids);
 
-					using (_syncObject.EnterScope())
+					if (newQuoteMsg != null)
 					{
-						if (!_byId.TryGetValue(subscriptionId, out var info))
-						{
-							if (_passThrough.Contains(subscriptionId) || _allSecSubscriptionsPassThrough.Contains(subscriptionId))
-							{
-								passThrough ??= [];
+						clones ??= [];
 
-								passThrough.Add(subscriptionId);
-							}
-
-							continue;
-						}
-
-						newQuoteMsg = info.Builder.TryApply(quoteMsg, subscriptionId);
-
-						if (newQuoteMsg == null)
-							continue;
-
-						ids = info.SubscriptionIds.Cache;
+						newQuoteMsg.SetSubscriptionIds(ids);
+						clones.Add(newQuoteMsg);
 					}
-
-					if (_allSecSubscriptions.Count > 0)
-						ids = ids.Concat(_allSecSubscriptions.Cache);
-
-					clones ??= [];
-
-					newQuoteMsg.SetSubscriptionIds(ids);
-					clones.Add(newQuoteMsg);
+					else if (_state.IsPassThrough(subscriptionId) || _state.IsAllSecPassThrough(subscriptionId))
+					{
+						passThrough ??= [];
+						passThrough.Add(subscriptionId);
+					}
 				}
 
 				if (passThrough is null)
@@ -229,49 +160,15 @@ public sealed class OrderBookIncrementManager : IOrderBookIncrementManager
 		return (message, clones?.ToArray() ?? []);
 	}
 
-	private void ClearState()
-	{
-		using (_syncObject.EnterScope())
-		{
-			_byId.Clear();
-			_online.Clear();
-			_passThrough.Clear();
-			_allSecSubscriptions.Clear();
-			_allSecSubscriptionsPassThrough.Clear();
-		}
-	}
-
 	private void RemoveSubscription(long id)
 	{
-		using (_syncObject.EnterScope())
-		{
-			var changeId = true;
-
-			if (!_byId.TryGetAndRemove(id, out var info))
-			{
-				changeId = false;
-
-				info = _online.FirstOrDefault(p => p.Value.SubscriptionIds.Contains(id)).Value;
-
-				if (info == null)
-					return;
-			}
-
-			var secId = info.Builder.SecurityId;
-
-			if (info != _online.TryGetValue(secId))
-				return;
-
-			info.SubscriptionIds.Remove(id);
-
-			var ids = info.SubscriptionIds.Cache;
-
-			if (ids.Length == 0)
-				_online.Remove(secId);
-			else if (changeId && !_byId.ContainsKey(ids[0]))
-				_byId.Add(ids[0], info);
-		}
-
+		_state.RemoveSubscription(id);
 		_logReceiver.AddInfoLog("Unsubscribed {0}.", id);
 	}
+
+	/// <inheritdoc/>
+	public IOrderBookIncrementManager Clone()
+		=> new OrderBookIncrementManager(_logReceiver, _state.GetType().CreateInstance<IOrderBookIncrementManagerState>());
+
+	object ICloneable.Clone() => Clone();
 }

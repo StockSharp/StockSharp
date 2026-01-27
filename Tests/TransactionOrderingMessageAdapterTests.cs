@@ -251,7 +251,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		var clone = adapter.Clone();
 
 		clone.AssertNotNull();
-		Assert.IsInstanceOfType(clone, typeof(TransactionOrderingMessageAdapter));
+		(clone is TransactionOrderingMessageAdapter).AssertTrue();
 		clone.AssertNotSame(adapter);
 	}
 

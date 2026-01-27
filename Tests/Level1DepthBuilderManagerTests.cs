@@ -37,7 +37,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessInMessage_Reset_ClearsState()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -71,7 +71,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessInMessage_MarketDepthSubscribe_RewritesToLevel1()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -98,7 +98,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessInMessage_MarketDepthSubscribe_DoesNotCloneOriginal()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -123,7 +123,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessInMessage_BuildModeLoad_PassesThrough()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -150,7 +150,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessInMessage_BuildFromNotLevel1_PassesThrough()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -177,7 +177,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessInMessage_DefaultSecurityId_PassesThrough()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var subscribe = new MarketDataMessage
 		{
@@ -201,7 +201,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_Level1Change_BuildsOrderBook()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 		var now = DateTime.UtcNow;
@@ -246,7 +246,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_Level1Change_WithMixedSubscriptionIds_SplitsCorrectly()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 		var now = DateTime.UtcNow;
@@ -280,7 +280,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_Level1Change_DuplicateValuesAreFiltered()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 		var now = DateTime.UtcNow;
@@ -318,7 +318,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_Level1Change_NoPrices_NoBook()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 		var now = DateTime.UtcNow;
@@ -354,7 +354,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_SubscriptionResponse_Error_RemovesSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -388,7 +388,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_SubscriptionFinished_RemovesSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -421,7 +421,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_SubscriptionOnline_MovesToOnlineState()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -462,7 +462,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_MultipleSubscriptions_MergeOnline()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -503,7 +503,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessInMessage_Unsubscribe_RemovesSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -543,7 +543,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_OnlyBidPrice_CreatesBidOnlyBook()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -573,7 +573,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_OnlyAskPrice_CreatesAskOnlyBook()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -603,7 +603,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_NoVolume_UsesZeroVolume()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -640,7 +640,7 @@ public class Level1DepthBuilderManagerTests : BaseTestClass
 	public void ProcessOutMessage_MultipleSubscriptions_OnlySecondId_ShouldProduceBook()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new Level1DepthBuilderManager(logReceiver);
+		var manager = new Level1DepthBuilderManager(logReceiver, new Level1DepthBuilderManagerState());
 
 		var secId = Helper.CreateSecurityId();
 

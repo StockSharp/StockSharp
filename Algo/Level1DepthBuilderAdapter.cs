@@ -14,7 +14,7 @@ public class Level1DepthBuilderAdapter : MessageAdapterWrapper
 	public Level1DepthBuilderAdapter(IMessageAdapter innerAdapter)
 		: base(innerAdapter)
 	{
-		_manager = new Level1DepthBuilderManager(this);
+		_manager = new Level1DepthBuilderManager(this, new Level1DepthBuilderManagerState());
 	}
 
 	/// <summary>

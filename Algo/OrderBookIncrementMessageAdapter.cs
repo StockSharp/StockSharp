@@ -14,7 +14,7 @@ public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 	public OrderBookIncrementMessageAdapter(IMessageAdapter innerAdapter)
 		: base(innerAdapter)
 	{
-		_manager = new OrderBookIncrementManager(this);
+		_manager = new OrderBookIncrementManager(this, new OrderBookIncrementManagerState());
 	}
 
 	/// <summary>

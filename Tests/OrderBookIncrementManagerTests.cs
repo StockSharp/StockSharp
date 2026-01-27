@@ -28,7 +28,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void Reset_ClearsState()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -66,7 +66,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void Subscribe_MarketDepth_AddsSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -89,7 +89,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void Subscribe_AllSecurity_AddsAllSecSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var subscribeMsg = new MarketDataMessage
 		{
@@ -110,7 +110,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void Subscribe_DoNotBuild_AddsPassThrough()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -145,7 +145,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void QuoteChange_Increment_BuildsFullBook()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -186,7 +186,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void QuoteChange_ApplyIncrement_UpdatesBook()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -230,7 +230,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void QuoteChange_NoState_PassesThrough()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -266,7 +266,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void SubscriptionResponse_Error_RemovesSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -309,7 +309,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void SubscriptionFinished_RemovesSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -337,7 +337,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void Unsubscribe_RemovesSubscription()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -371,7 +371,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void SubscriptionOnline_MovesToOnline()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -399,7 +399,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void AllSecSubscription_AppendsToBuiltBook()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -441,7 +441,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void NonMarketDataMessage_PassesThrough()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var connectMsg = new ConnectMessage();
 
@@ -462,7 +462,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void MarketData_NonDepth_PassesThrough()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 
@@ -494,7 +494,7 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	public void ProcessOutMessage_MultipleSubscriptions_OnlySecondId_ShouldProcessIncrement()
 	{
 		var logReceiver = new TestReceiver();
-		var manager = new OrderBookIncrementManager(logReceiver);
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
 
 		var secId = Helper.CreateSecurityId();
 

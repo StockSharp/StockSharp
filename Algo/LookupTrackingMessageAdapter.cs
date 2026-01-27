@@ -4,48 +4,13 @@ namespace StockSharp.Algo;
 /// Message adapter that tracks multiple lookups requests and put them into single queue.
 /// </summary>
 /// <remarks>
-/// Initializes a new instance of the <see cref="LookupTrackingMessageAdapter"/>.
+/// Initializes a new instance of the <see cref="LookupTrackingMessageAdapter"/> with explicit state.
 /// </remarks>
 /// <param name="innerAdapter">Inner message adapter.</param>
-public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
+/// <param name="state">State storage.</param>
+public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupTrackingManagerState state) : MessageAdapterWrapper(innerAdapter)
 {
-	private class LookupInfo(ISubscriptionMessage subscription, TimeSpan left)
-	{
-		private readonly TimeSpan _initLeft = left;
-		private TimeSpan _left = left;
-
-		public ISubscriptionMessage Subscription { get; } = subscription ?? throw new ArgumentNullException(nameof(subscription));
-
-		public bool ProcessTime(TimeSpan diff)
-		{
-			try
-			{
-				if (diff <= TimeSpan.Zero)
-					return false;
-
-				var left = _left - diff;
-
-				if (left <= TimeSpan.Zero)
-					return true;
-
-				_left = left;
-				return false;
-			}
-			catch (OverflowException ex)
-			{
-				throw new InvalidOperationException($"Left='{_left}' Diff='{diff}'", ex);
-			}
-		}
-
-		public void IncreaseTimeOut()
-		{
-			_left = _initLeft;
-		}
-	}
-
-	private readonly CachedSynchronizedDictionary<long, LookupInfo> _lookups = [];
-	private readonly Dictionary<MessageTypes, Dictionary<long, ISubscriptionMessage>> _queue = [];
-	private DateTime _prevTime;
+	private readonly ILookupTrackingManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
 	private static readonly TimeSpan _defaultTimeOut = TimeSpan.FromSeconds(10);
 
 	private TimeSpan? _timeOut;
@@ -69,13 +34,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 		{
 			case MessageTypes.Reset:
 			{
-				using (_lookups.EnterScope())
-				{
-					_prevTime = default;
-					_lookups.Clear();
-					_queue.Clear();
-				}
-
+				_state.Clear();
 				break;
 			}
 
@@ -103,28 +62,19 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 		{
 			if (message.IsSubscribe)
 			{
-				using (_lookups.EnterScope())
+				if (InnerAdapter.EnqueueSubscriptions)
 				{
-					if (InnerAdapter.EnqueueSubscriptions)
+					if (_state.TryEnqueue(message.Type, transId, message.TypedClone()))
 					{
-						var queue = _queue.SafeAdd(message.Type);
-
-						// not prev queued lookup
-						if (queue.TryAdd2(transId, message.TypedClone()))
-						{
-							if (queue.Count > 1)
-							{
-								isEnqueue = true;
-								return false;
-							}
-						}
+						isEnqueue = true;
+						return false;
 					}
+				}
 
-					if (this.IsResultMessageNotSupported(message.Type) && TimeOut > TimeSpan.Zero)
-					{
-						_lookups.Add(transId, new LookupInfo(message.TypedClone(), TimeOut));
-						isStarted = true;
-					}
+				if (this.IsResultMessageNotSupported(message.Type) && TimeOut > TimeSpan.Zero)
+				{
+					_state.AddLookup(transId, message.TypedClone(), TimeOut);
+					isStarted = true;
 				}
 			}
 
@@ -145,63 +95,31 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 	{
 		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
-		Message TryInitNextLookup(MessageTypes type, long removingId)
-		{
-			if (!_queue.TryGetValue(type, out var queue) || !queue.Remove(removingId))
-				return null;
-
-			if (queue.Count == 0)
-			{
-				_queue.Remove(type);
-				return null;
-			}
-
-			return (Message)queue.First().Value;
-		}
-
 		long[] ignoreIds = null;
 		Message nextLookup = null;
 
 		if (message is IOriginalTransactionIdMessage originIdMsg)
 		{
 			if (originIdMsg is SubscriptionFinishedMessage ||
-			    originIdMsg is SubscriptionOnlineMessage ||
-			    originIdMsg is SubscriptionResponseMessage resp && !resp.IsOk())
+				originIdMsg is SubscriptionOnlineMessage ||
+				originIdMsg is SubscriptionResponseMessage resp && !resp.IsOk())
 			{
 				var id = originIdMsg.OriginalTransactionId;
 
-				using (_lookups.EnterScope())
+				if (_state.TryGetAndRemoveLookup(id, out var info))
 				{
-					if (_lookups.TryGetAndRemove(id, out var info))
-					{
-						LogInfo("Lookup response {0}.", id);
-
-						nextLookup = TryInitNextLookup(info.Subscription.Type, info.Subscription.TransactionId);
-					}
-					else
-					{
-						foreach (var type in _queue.Keys.ToArray())
-						{
-							nextLookup = TryInitNextLookup(type, id);
-
-							if (nextLookup != null)
-								break;
-						}
-					}
+					LogInfo("Lookup response {0}.", id);
+					nextLookup = _state.TryDequeueNext(info.Type, info.TransactionId);
+				}
+				else
+				{
+					nextLookup = _state.TryDequeueFromAnyType(id);
 				}
 			}
 			else if (message is ISubscriptionIdMessage subscrMsg)
 			{
 				ignoreIds = subscrMsg.GetSubscriptionIds();
-
-				using (_lookups.EnterScope())
-				{
-					foreach (var id in ignoreIds)
-					{
-						if (_lookups.TryGetValue(id, out var info))
-							info.IncreaseTimeOut();
-					}
-				}
+				_state.IncreaseTimeOut(ignoreIds);
 			}
 		}
 
@@ -216,39 +134,27 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 
 		List<Message> nextLookups = null;
 
-		if(_prevTime == default)
+		if (_state.PreviousTime == default)
 		{
-			_prevTime = message.LocalTime;
+			_state.PreviousTime = message.LocalTime;
 		}
-		else if (message.LocalTime > _prevTime)
+		else if (message.LocalTime > _state.PreviousTime)
 		{
-			var diff = message.LocalTime - _prevTime;
-			_prevTime = message.LocalTime;
+			var diff = message.LocalTime - _state.PreviousTime;
+			_state.PreviousTime = message.LocalTime;
 
-			foreach (var pair in _lookups.CachedPairs)
+			foreach (var (subscription, nextInQueue) in _state.ProcessTimeouts(diff, ignoreIds))
 			{
-				var info = pair.Value;
-				var transId = info.Subscription.TransactionId;
+				var transId = subscription.TransactionId;
 
-				if (ignoreIds != null && ignoreIds.Contains(transId))
-					continue;
-
-				if (!info.ProcessTime(diff))
-					continue;
-
-				_lookups.Remove(transId);
 				LogInfo("Lookup timeout {0}.", transId);
 
-				await base.OnInnerAdapterNewOutMessageAsync(info.Subscription.CreateResult(), cancellationToken);
+				await base.OnInnerAdapterNewOutMessageAsync(subscription.CreateResult(), cancellationToken);
 
-				nextLookups ??= [];
-
-				using (_lookups.EnterScope())
+				if (nextInQueue != null)
 				{
-					var next = TryInitNextLookup(info.Subscription.Type, info.Subscription.TransactionId);
-
-					if (next != null)
-						nextLookups.Add(next);
+					nextLookups ??= [];
+					nextLookups.Add(nextInQueue);
 				}
 			}
 		}
@@ -268,7 +174,5 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter) : Messag
 	/// </summary>
 	/// <returns>Copy.</returns>
 	public override IMessageAdapter Clone()
-	{
-		return new LookupTrackingMessageAdapter(InnerAdapter.TypedClone()) { _timeOut = _timeOut };
-	}
+		=> new LookupTrackingMessageAdapter(InnerAdapter.TypedClone(), _state.GetType().CreateInstance<ILookupTrackingManagerState>()) { _timeOut = _timeOut };
 }

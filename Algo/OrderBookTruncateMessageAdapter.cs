@@ -14,7 +14,7 @@ public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 	public OrderBookTruncateMessageAdapter(IMessageAdapter innerAdapter)
 		: base(innerAdapter)
 	{
-		_manager = new OrderBookTruncateManager(this, InnerAdapter.NearestSupportedDepth);
+		_manager = new OrderBookTruncateManager(this, InnerAdapter.NearestSupportedDepth, new OrderBookTruncateManagerState());
 	}
 
 	/// <summary>

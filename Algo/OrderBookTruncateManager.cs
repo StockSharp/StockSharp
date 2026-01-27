@@ -3,7 +3,7 @@ namespace StockSharp.Algo;
 /// <summary>
 /// Order book truncation logic interface.
 /// </summary>
-public interface IOrderBookTruncateManager
+public interface IOrderBookTruncateManager : ICloneable<IOrderBookTruncateManager>
 {
 	/// <summary>
 	/// Process a message going into the inner adapter.
@@ -24,15 +24,16 @@ public interface IOrderBookTruncateManager
 /// Order book truncation logic implementation.
 /// </summary>
 /// <remarks>
-/// Initializes a new instance of the <see cref="OrderBookTruncateManager"/>.
+/// Initializes a new instance of the <see cref="OrderBookTruncateManager"/> with explicit state.
 /// </remarks>
 /// <param name="logReceiver">Log receiver.</param>
 /// <param name="nearestSupportedDepth">Function to get nearest supported depth.</param>
-public sealed class OrderBookTruncateManager(ILogReceiver logReceiver, Func<int, int?> nearestSupportedDepth) : IOrderBookTruncateManager
+/// <param name="state">State storage.</param>
+public sealed class OrderBookTruncateManager(ILogReceiver logReceiver, Func<int, int?> nearestSupportedDepth, IOrderBookTruncateManagerState state) : IOrderBookTruncateManager
 {
 	private readonly ILogReceiver _logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
 	private readonly Func<int, int?> _nearestSupportedDepth = nearestSupportedDepth ?? throw new ArgumentNullException(nameof(nearestSupportedDepth));
-	private readonly SynchronizedDictionary<long, int> _depths = [];
+	private readonly IOrderBookTruncateManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
 
 	/// <inheritdoc />
 	public (Message toInner, Message[] toOut) ProcessInMessage(Message message)
@@ -40,7 +41,7 @@ public sealed class OrderBookTruncateManager(ILogReceiver logReceiver, Func<int,
 		switch (message.Type)
 		{
 			case MessageTypes.Reset:
-				_depths.Clear();
+				_state.Clear();
 				return (message, []);
 
 			case MessageTypes.MarketData:
@@ -65,7 +66,7 @@ public sealed class OrderBookTruncateManager(ILogReceiver logReceiver, Func<int,
 
 							if (supportedDepth != actualDepth)
 							{
-								_depths.Add(mdMsg.TransactionId, actualDepth);
+								_state.AddDepth(mdMsg.TransactionId, actualDepth);
 
 								if (supportedDepth != null)
 								{
@@ -118,7 +119,7 @@ public sealed class OrderBookTruncateManager(ILogReceiver logReceiver, Func<int,
 			}
 			case MessageTypes.QuoteChange:
 			{
-				if (_depths.Count == 0)
+				if (!_state.HasDepths)
 					break;
 
 				var quoteMsg = (QuoteChangeMessage)message;
@@ -126,18 +127,18 @@ public sealed class OrderBookTruncateManager(ILogReceiver logReceiver, Func<int,
 				if (quoteMsg.State != null)
 					break;
 
-				foreach (var group in quoteMsg.GetSubscriptionIds().GroupBy(_depths.TryGetValue2))
+				foreach (var (depth, ids) in _state.GroupByDepth(quoteMsg.GetSubscriptionIds()))
 				{
-					if (group.Key == null)
+					if (depth == null)
 						continue;
 
 					clones ??= [];
 
-					var maxDepth = group.Key.Value;
+					var maxDepth = depth.Value;
 
 					var clone = quoteMsg.TypedClone();
 
-					clone.SetSubscriptionIds([.. group]);
+					clone.SetSubscriptionIds(ids);
 
 					if (clone.Bids.Length > maxDepth)
 						clone.Bids = [.. clone.Bids.Take(maxDepth)];
@@ -150,10 +151,10 @@ public sealed class OrderBookTruncateManager(ILogReceiver logReceiver, Func<int,
 
 				if (clones != null)
 				{
-					var ids = quoteMsg.GetSubscriptionIds().Except(clones.SelectMany(c => c.GetSubscriptionIds())).ToArray();
+					var remainingIds = quoteMsg.GetSubscriptionIds().Except(clones.SelectMany(c => c.GetSubscriptionIds())).ToArray();
 
-					if (ids.Length > 0)
-						quoteMsg.SetSubscriptionIds(ids);
+					if (remainingIds.Length > 0)
+						quoteMsg.SetSubscriptionIds(remainingIds);
 					else
 						message = null;
 				}
@@ -167,7 +168,13 @@ public sealed class OrderBookTruncateManager(ILogReceiver logReceiver, Func<int,
 
 	private void RemoveSubscription(long id)
 	{
-		if (_depths.Remove(id))
+		if (_state.RemoveDepth(id))
 			_logReceiver.AddInfoLog("Unsubscribed {0}.", id);
 	}
+
+	/// <inheritdoc/>
+	public IOrderBookTruncateManager Clone()
+		=> new OrderBookTruncateManager(_logReceiver, _nearestSupportedDepth, _state.GetType().CreateInstance<IOrderBookTruncateManagerState>());
+
+	object ICloneable.Clone() => Clone();
 }

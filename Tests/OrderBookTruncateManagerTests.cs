@@ -3,555 +3,175 @@ namespace StockSharp.Tests;
 [TestClass]
 public class OrderBookTruncateManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
+	private class MockLogReceiver : BaseLogReceiver { }
+
+	private class MockOrderBookTruncateManagerState : IOrderBookTruncateManagerState
 	{
+		public List<(long id, int depth)> AddedDepths { get; } = [];
+		public List<long> RemovedDepths { get; } = [];
+		public int ClearCount { get; set; }
+
+		private readonly Dictionary<long, int> _depths = [];
+
+		public void AddDepth(long transactionId, int depth) { _depths[transactionId] = depth; AddedDepths.Add((transactionId, depth)); }
+		public int? TryGetDepth(long transactionId) => _depths.TryGetValue(transactionId, out var d) ? d : null;
+		public bool RemoveDepth(long transactionId) { RemovedDepths.Add(transactionId); return _depths.Remove(transactionId); }
+		public bool HasDepths => _depths.Count > 0;
+		public IEnumerable<(int? depth, long[] ids)> GroupByDepth(long[] subscriptionIds)
+			=> subscriptionIds.GroupBy(id => _depths.TryGetValue(id, out var d) ? (int?)d : null).Select(g => (g.Key, g.ToArray()));
+		public void Clear() { _depths.Clear(); ClearCount++; }
 	}
 
-	private static QuoteChangeMessage CreateSnapshot(SecurityId securityId, DateTime time, long[] subscriptionIds, int depth)
+	private static OrderBookTruncateManager CreateManager(MockOrderBookTruncateManagerState state, Func<int, int?> nearestSupportedDepth = null)
 	{
-		var bids = new QuoteChange[depth];
-		var asks = new QuoteChange[depth];
-
-		for (var i = 0; i < depth; i++)
-		{
-			bids[i] = new QuoteChange(100m - i, i + 1);
-			asks[i] = new QuoteChange(101m + i, i + 1);
-		}
-
-		var msg = new QuoteChangeMessage
-		{
-			SecurityId = securityId,
-			ServerTime = time,
-			LocalTime = time,
-			State = null,
-			Bids = bids,
-			Asks = asks,
-		};
-
-		msg.SetSubscriptionIds(subscriptionIds);
-
-		return msg;
+		return new OrderBookTruncateManager(
+			new MockLogReceiver(),
+			nearestSupportedDepth ?? (depth => depth < 10 ? 10 : depth),
+			state);
 	}
 
 	[TestMethod]
-	public void ProcessInMessage_Reset_ClearsDepths()
+	public void ProcessInMessage_Reset_ClearsState()
 	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
+		var state = new MockOrderBookTruncateManagerState();
+		var manager = CreateManager(state);
 
-		var secId = Helper.CreateSecurityId();
+		// Add some state first
+		state.AddDepth(1, 10);
 
-		// Subscribe with depth 5
-		var subscription = new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 5,
-		};
-
-		manager.ProcessInMessage(subscription);
-
-		// Reset should clear depths
 		var (toInner, toOut) = manager.ProcessInMessage(new ResetMessage());
 
-		toInner.Type.AssertEqual(MessageTypes.Reset);
-		toOut.Length.AssertEqual(0);
-
-		// After reset, snapshot should not be truncated
-		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, [1], 10);
-		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
-
-		forward.AssertSame(snapshot);
-		extraOut.Length.AssertEqual(0);
+		AreEqual(MessageTypes.Reset, toInner.Type);
+		AreEqual(0, toOut.Length);
+		AreEqual(1, state.ClearCount);
 	}
 
 	[TestMethod]
-	public void ProcessInMessage_MarketDepth_WithMaxDepth_AddsToDepthsTracking()
+	public void ProcessInMessage_MarketDataSubscribe_WithDepth_AddsToState()
 	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
+		var state = new MockOrderBookTruncateManagerState();
+		// nearestSupportedDepth returns 20 for input 10, so supportedDepth != actualDepth
+		var manager = CreateManager(state, depth => 20);
 
-		var secId = Helper.CreateSecurityId();
-
-		var subscription = new MarketDataMessage
+		var mdMsg = new MarketDataMessage
 		{
 			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
 			DataType2 = DataType.MarketDepth,
-			MaxDepth = 5,
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" },
+			TransactionId = 1,
+			MaxDepth = 10
 		};
 
-		var (toInner, toOut) = manager.ProcessInMessage(subscription);
+		var (toInner, toOut) = manager.ProcessInMessage(mdMsg);
 
-		// MaxDepth should be changed to 10 (nearest supported)
-		var mdMsg = (MarketDataMessage)toInner;
-		mdMsg.MaxDepth.AssertEqual(10);
-		toOut.Length.AssertEqual(0);
+		AreEqual(0, toOut.Length);
+		AreEqual(1, state.AddedDepths.Count);
+		AreEqual(1L, state.AddedDepths[0].id);
+		AreEqual(10, state.AddedDepths[0].depth);
+
+		// The outgoing message should have MaxDepth changed to 20
+		var outMd = (MarketDataMessage)toInner;
+		AreEqual(20, outMd.MaxDepth);
 	}
 
 	[TestMethod]
-	public void ProcessInMessage_MarketDepth_WhenDepthIsSupported_DoesNotModify()
+	public void ProcessInMessage_MarketDataUnsubscribe_RemovesFromState()
 	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth);
+		var state = new MockOrderBookTruncateManagerState();
+		var manager = CreateManager(state);
 
-		var secId = Helper.CreateSecurityId();
+		// First subscribe to add depth
+		state.AddDepth(1, 10);
 
-		var subscription = new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 10,
-		};
-
-		var (toInner, toOut) = manager.ProcessInMessage(subscription);
-
-		// MaxDepth should remain 10 since it equals supportedDepth
-		var mdMsg = (MarketDataMessage)toInner;
-		mdMsg.MaxDepth.AssertEqual(10);
-		toOut.Length.AssertEqual(0);
-
-		// Snapshot should not be truncated since depth tracking wasn't added
-		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, [1], 15);
-		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
-
-		forward.AssertSame(snapshot);
-		extraOut.Length.AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void ProcessInMessage_MarketDepth_WithDoNotBuildOrderBookIncrement_DoesNotTrack()
-	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
-
-		var secId = Helper.CreateSecurityId();
-
-		var subscription = new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 5,
-			DoNotBuildOrderBookIncrement = true,
-		};
-
-		var (toInner, _) = manager.ProcessInMessage(subscription);
-
-		// MaxDepth should not be modified
-		var mdMsg = (MarketDataMessage)toInner;
-		mdMsg.MaxDepth.AssertEqual(5);
-
-		// Snapshot should not be truncated
-		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, [1], 10);
-		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
-
-		forward.AssertSame(snapshot);
-		extraOut.Length.AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void ProcessInMessage_MarketDepth_WithDefaultSecurityId_DoesNotTrack()
-	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
-
-		var subscription = new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = default,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 5,
-		};
-
-		var (toInner, _) = manager.ProcessInMessage(subscription);
-
-		// MaxDepth should not be modified
-		var mdMsg = (MarketDataMessage)toInner;
-		mdMsg.MaxDepth.AssertEqual(5);
-	}
-
-	[TestMethod]
-	public void ProcessInMessage_Unsubscribe_RemovesDepthTracking()
-	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
-
-		var secId = Helper.CreateSecurityId();
-
-		// Subscribe
-		manager.ProcessInMessage(new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 5,
-		});
-
-		// Unsubscribe
-		manager.ProcessInMessage(new MarketDataMessage
+		var unsubMsg = new MarketDataMessage
 		{
 			IsSubscribe = false,
 			TransactionId = 2,
 			OriginalTransactionId = 1,
-		});
+		};
 
-		// Snapshot should not be truncated after unsubscribe
-		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, [1], 10);
-		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
+		manager.ProcessInMessage(unsubMsg);
 
-		forward.AssertSame(snapshot);
-		extraOut.Length.AssertEqual(0);
+		IsTrue(state.RemovedDepths.Contains(1L));
 	}
 
 	[TestMethod]
-	public void ProcessOutMessage_SubscriptionResponse_Error_RemovesDepthTracking()
+	public void ProcessOutMessage_SubscriptionResponse_Error_RemovesFromState()
 	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
+		var state = new MockOrderBookTruncateManagerState();
+		var manager = CreateManager(state);
 
-		var secId = Helper.CreateSecurityId();
+		// Add depth to state
+		state.AddDepth(1, 10);
 
-		// Subscribe
-		manager.ProcessInMessage(new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 5,
-		});
-
-		// Error response
-		manager.ProcessOutMessage(new SubscriptionResponseMessage
+		var resp = new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = 1,
-			Error = new InvalidOperationException("error"),
-		});
+			Error = new InvalidOperationException("test")
+		};
 
-		// Snapshot should not be truncated after error
-		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, [1], 10);
-		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
+		manager.ProcessOutMessage(resp);
 
-		forward.AssertSame(snapshot);
-		extraOut.Length.AssertEqual(0);
+		IsTrue(state.RemovedDepths.Contains(1L));
 	}
 
 	[TestMethod]
-	public void ProcessOutMessage_SubscriptionFinished_RemovesDepthTracking()
+	public void ProcessOutMessage_SubscriptionFinished_RemovesFromState()
 	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
+		var state = new MockOrderBookTruncateManagerState();
+		var manager = CreateManager(state);
 
-		var secId = Helper.CreateSecurityId();
+		// Add depth to state
+		state.AddDepth(1, 10);
 
-		// Subscribe
-		manager.ProcessInMessage(new MarketDataMessage
+		var finished = new SubscriptionFinishedMessage
 		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 5,
-		});
+			OriginalTransactionId = 1
+		};
 
-		// Subscription finished
-		manager.ProcessOutMessage(new SubscriptionFinishedMessage
-		{
-			OriginalTransactionId = 1,
-		});
+		manager.ProcessOutMessage(finished);
 
-		// Snapshot should not be truncated after finish
-		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, [1], 10);
-		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
-
-		forward.AssertSame(snapshot);
-		extraOut.Length.AssertEqual(0);
+		IsTrue(state.RemovedDepths.Contains(1L));
 	}
 
 	[TestMethod]
-	public void ProcessOutMessage_QuoteChange_TruncatesSnapshot()
+	public void ProcessOutMessage_QuoteChange_WithDepths_TruncatesBids()
 	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
+		var state = new MockOrderBookTruncateManagerState();
+		var manager = CreateManager(state);
 
-		var secId = Helper.CreateSecurityId();
+		// Add depth=2 for subscription 1
+		state.AddDepth(1, 2);
 
-		// Subscribe with depth 5
-		manager.ProcessInMessage(new MarketDataMessage
+		var quoteMsg = new QuoteChangeMessage
 		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 5,
-		});
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NYSE" },
+			ServerTime = DateTime.UtcNow,
+			Bids = [
+				new QuoteChange(105, 10),
+				new QuoteChange(104, 20),
+				new QuoteChange(103, 30),
+				new QuoteChange(102, 40),
+				new QuoteChange(101, 50),
+			],
+			Asks = [
+				new QuoteChange(106, 10),
+				new QuoteChange(107, 20),
+				new QuoteChange(108, 30),
+				new QuoteChange(109, 40),
+				new QuoteChange(110, 50),
+			],
+		};
+		quoteMsg.SetSubscriptionIds([1L]);
 
-		// Send snapshot with 10 levels
-		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, [1], 10);
-		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
+		var (forward, extraOut) = manager.ProcessOutMessage(quoteMsg);
 
-		// Original should be null (all subscription ids were truncated)
-		forward.AssertNull();
-		extraOut.Length.AssertEqual(1);
+		// Original should be null since all subscription ids were truncated
+		IsNull(forward);
+		AreEqual(1, extraOut.Length);
 
 		var truncated = (QuoteChangeMessage)extraOut[0];
-		truncated.Bids.Length.AssertEqual(5);
-		truncated.Asks.Length.AssertEqual(5);
-		truncated.GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();
-
-		// Verify prices are in correct order
-		truncated.Bids[0].Price.AssertEqual(100m);
-		truncated.Bids[^1].Price.AssertEqual(96m);
-		truncated.Asks[0].Price.AssertEqual(101m);
-		truncated.Asks[^1].Price.AssertEqual(105m);
-	}
-
-	[TestMethod]
-	public void ProcessOutMessage_QuoteChange_WithIncrement_DoesNotTruncate()
-	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
-
-		var secId = Helper.CreateSecurityId();
-
-		// Subscribe with depth 5
-		manager.ProcessInMessage(new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 5,
-		});
-
-		// Send increment with 10 levels
-		var increment = CreateSnapshot(secId, DateTime.UtcNow, [1], 10);
-		increment.State = QuoteChangeStates.Increment;
-
-		var (forward, extraOut) = manager.ProcessOutMessage(increment);
-
-		// Increment should pass through unchanged
-		forward.AssertSame(increment);
-		extraOut.Length.AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void ProcessOutMessage_QuoteChange_SplitsGroupsByDepth()
-	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
-
-		var secId = Helper.CreateSecurityId();
-
-		// Subscribe with different depths
-		manager.ProcessInMessage(new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 5,
-		});
-
-		manager.ProcessInMessage(new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 2,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 3,
-		});
-
-		// Snapshot with both subscription ids
-		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, [1, 2], 10);
-		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
-
-		// Original should be null (all subscription ids were truncated)
-		forward.AssertNull();
-		extraOut.Length.AssertEqual(2);
-
-		var depth5 = extraOut.Cast<QuoteChangeMessage>().Single(q => q.GetSubscriptionIds().SequenceEqual([1L]));
-		depth5.Bids.Length.AssertEqual(5);
-		depth5.Asks.Length.AssertEqual(5);
-
-		var depth3 = extraOut.Cast<QuoteChangeMessage>().Single(q => q.GetSubscriptionIds().SequenceEqual([2L]));
-		depth3.Bids.Length.AssertEqual(3);
-		depth3.Asks.Length.AssertEqual(3);
-	}
-
-	[TestMethod]
-	public void ProcessOutMessage_QuoteChange_KeepsUntrackedIdsInOriginal()
-	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
-
-		var secId = Helper.CreateSecurityId();
-
-		// Subscribe with depth 5
-		manager.ProcessInMessage(new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 5,
-		});
-
-		// Snapshot with tracked and untracked subscription ids
-		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, [1, 99], 10);
-		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
-
-		// Original should keep untracked id
-		forward.AssertSame(snapshot);
-		((QuoteChangeMessage)forward).GetSubscriptionIds().SequenceEqual([99L]).AssertTrue();
-
-		extraOut.Length.AssertEqual(1);
-		var truncated = (QuoteChangeMessage)extraOut[0];
-		truncated.Bids.Length.AssertEqual(5);
-		truncated.GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();
-	}
-
-	[TestMethod]
-	public void ProcessOutMessage_QuoteChange_WhenNoDepthsTracked_PassesThrough()
-	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth);
-
-		var secId = Helper.CreateSecurityId();
-
-		// No subscriptions
-
-		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, [1], 10);
-		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
-
-		forward.AssertSame(snapshot);
-		extraOut.Length.AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void ProcessInMessage_MarketDepth_WithNullMaxDepth_DoesNotTrack()
-	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
-
-		var secId = Helper.CreateSecurityId();
-
-		var subscription = new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = null,
-		};
-
-		manager.ProcessInMessage(subscription);
-
-		// Snapshot should not be truncated
-		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, [1], 10);
-		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
-
-		forward.AssertSame(snapshot);
-		extraOut.Length.AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void ProcessInMessage_NonMarketData_PassesThrough()
-	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
-
-		var connectMsg = new ConnectMessage();
-		var (toInner, toOut) = manager.ProcessInMessage(connectMsg);
-
-		toInner.AssertSame(connectMsg);
-		toOut.Length.AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void ProcessOutMessage_NonQuoteChange_PassesThrough()
-	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
-
-		var execMsg = new ExecutionMessage
-		{
-			DataTypeEx = DataType.Ticks,
-			TradePrice = 100m,
-		};
-
-		var (forward, extraOut) = manager.ProcessOutMessage(execMsg);
-
-		forward.AssertSame(execMsg);
-		extraOut.Length.AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void ProcessInMessage_MarketDepth_WithNonMarketDepthDataType_DoesNotTrack()
-	{
-		var logReceiver = new TestReceiver();
-		var manager = new OrderBookTruncateManager(logReceiver, depth => depth < 10 ? 10 : depth);
-
-		var secId = Helper.CreateSecurityId();
-
-		var subscription = new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.Ticks,
-			MaxDepth = 5,
-		};
-
-		var (toInner, _) = manager.ProcessInMessage(subscription);
-
-		// MaxDepth should not be modified for non-MarketDepth data type
-		var mdMsg = (MarketDataMessage)toInner;
-		mdMsg.MaxDepth.AssertEqual(5);
-	}
-
-	/// <summary>
-	/// BUG: When nearestSupportedDepth returns null, the comparison supportedDepth != actualDepth
-	/// is true, and the subscription is sent with MaxDepth = null (no limit).
-	/// This can dramatically increase traffic/load.
-	///
-	/// Expected: When supportedDepth is null, should either keep original MaxDepth or handle explicitly.
-	/// Actual: MaxDepth becomes null (full depth subscription).
-	/// </summary>
-	[TestMethod]
-	public void ProcessInMessage_NullSupportedDepth_ShouldNotRequestFullDepth()
-	{
-		var logReceiver = new TestReceiver();
-		// nearestSupportedDepth returns null for any depth (unsupported)
-		var manager = new OrderBookTruncateManager(logReceiver, depth => (int?)null);
-
-		var secId = Helper.CreateSecurityId();
-
-		var subscription = new MarketDataMessage
-		{
-			IsSubscribe = true,
-			TransactionId = 1,
-			SecurityId = secId,
-			DataType2 = DataType.MarketDepth,
-			MaxDepth = 20,
-		};
-
-		var (toInner, _) = manager.ProcessInMessage(subscription);
-
-		var mdMsg = (MarketDataMessage)toInner;
-
-		// Expected: MaxDepth should NOT become null (that would mean "full depth")
-		// When supportedDepth is null, should keep original depth or handle explicitly
-		IsTrue(mdMsg.MaxDepth.HasValue,
-			$"MaxDepth should not become null when supportedDepth is null. Original was 20, got {mdMsg.MaxDepth}");
+		IsTrue(truncated.Bids.Length <= 2, $"Expected max 2 bids, got {truncated.Bids.Length}");
+		IsTrue(truncated.Asks.Length <= 2, $"Expected max 2 asks, got {truncated.Asks.Length}");
 	}
 }

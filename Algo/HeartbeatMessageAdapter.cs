@@ -22,30 +22,32 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		}
 	}
 
-	private const ConnectionStates _none = (ConnectionStates)(-1);
-
 	private readonly AsyncLock _sync = new();
 	private readonly TimeMessage _timeMessage = new() { OfflineMode = MessageOfflineModes.Ignore };
 
 	private readonly ReConnectionSettings _reConnectionSettings;
+	private readonly IHeartbeatManagerState _state;
 
-	private ConnectionStates _currState = _none;
-	private ConnectionStates _prevState = _none;
-
-	private int _connectingAttemptCount;
-	private TimeSpan _connectionTimeOut;
 	private ControllablePeriodicTimer _timer;
-	private bool _canSendTime;
-	private bool _isFirstTimeConnect = true;
-	private bool _suppressDisconnectError;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="HeartbeatMessageAdapter"/>.
 	/// </summary>
 	/// <param name="innerAdapter">Underlying adapter.</param>
 	public HeartbeatMessageAdapter(IMessageAdapter innerAdapter)
+		: this(innerAdapter, new HeartbeatManagerState())
+	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="HeartbeatMessageAdapter"/> with explicit state.
+	/// </summary>
+	/// <param name="innerAdapter">Underlying adapter.</param>
+	/// <param name="state">State storage.</param>
+	public HeartbeatMessageAdapter(IMessageAdapter innerAdapter, IHeartbeatManagerState state)
 		: base(innerAdapter)
 	{
+		_state = state ?? throw new ArgumentNullException(nameof(state));
 		_reConnectionSettings = ReConnectionSettings;
 		_timeMessage.Adapter = this;
 	}
@@ -69,36 +71,36 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 				if (connectMsg.IsOk())
 				{
-					isRestored = _currState == ConnectionStates.Connecting && (_prevState == ConnectionStates.Failed || _prevState == ConnectionStates.Reconnecting);
+					isRestored = _state.CurrentState == ConnectionStates.Connecting && (_state.PreviousState == ConnectionStates.Failed || _state.PreviousState == ConnectionStates.Reconnecting);
 
 					using (await _sync.LockAsync(cancellationToken))
 					{
-						_prevState = _currState = ConnectionStates.Connected;
+						_state.PreviousState = _state.CurrentState = ConnectionStates.Connected;
 
-						_connectionTimeOut = _reConnectionSettings.Interval;
-						_connectingAttemptCount = _reConnectionSettings.ReAttemptCount;
+						_state.ConnectionTimeOut = _reConnectionSettings.Interval;
+						_state.ConnectingAttemptCount = _reConnectionSettings.ReAttemptCount;
 					}
 				}
 				else
 				{
 					using (await _sync.LockAsync(cancellationToken))
 					{
-						if (_connectingAttemptCount != 0)
+						if (_state.ConnectingAttemptCount != 0)
 						{
-							isReconnectionStarted = _prevState == ConnectionStates.Connected;
+							isReconnectionStarted = _state.PreviousState == ConnectionStates.Connected;
 
-							_prevState = _currState == ConnectionStates.Connected
+							_state.PreviousState = _state.CurrentState == ConnectionStates.Connected
 								? ConnectionStates.Reconnecting
 								: ConnectionStates.Failed;
 
-							_currState = ConnectionStates.Reconnecting;
+							_state.CurrentState = ConnectionStates.Reconnecting;
 							isReconnecting = true;
 						}
 						else
-							_prevState = _currState = ConnectionStates.Failed;
+							_state.PreviousState = _state.CurrentState = ConnectionStates.Failed;
 					}
 
-					this.AddLog(LogLevels.Warning, () => $"RCM: got error, new state={_currState}\n{connectMsg.Error}");
+					this.AddLog(LogLevels.Warning, () => $"RCM: got error, new state={_state.CurrentState}\n{connectMsg.Error}");
 				}
 
 				if (isRestored)
@@ -130,7 +132,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				if (disconnectMsg.IsOk())
 				{
 					using (await _sync.LockAsync(cancellationToken))
-						_prevState = _currState = ConnectionStates.Disconnected;
+						_state.PreviousState = _state.CurrentState = ConnectionStates.Disconnected;
 				}
 				else
 				{
@@ -138,9 +140,9 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 					using (await _sync.LockAsync(cancellationToken))
 					{
-						if (_suppressDisconnectError)
+						if (_state.SuppressDisconnectError)
 						{
-							_suppressDisconnectError = false;
+							_state.SuppressDisconnectError = false;
 							errorMsg = disconnectMsg.Error.ToErrorMessage();
 							disconnectMsg.Error = null;
 						}
@@ -169,18 +171,18 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		{
 			case MessageTypes.Reset:
 			{
-				_prevState = _none;
+				_state.PreviousState = HeartbeatManagerState.None;
 
 				using (await _sync.LockAsync(cancellationToken))
 				{
-					_currState = _none;
+					_state.CurrentState = HeartbeatManagerState.None;
 
 					StopTimer();
 
-					_connectingAttemptCount = 0;
-					_connectionTimeOut = default;
-					_canSendTime = false;
-					_suppressDisconnectError = false;
+					_state.ConnectingAttemptCount = 0;
+					_state.ConnectionTimeOut = default;
+					_state.CanSendTime = false;
+					_state.SuppressDisconnectError = false;
 				}
 
 				break;
@@ -188,19 +190,19 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 			case MessageTypes.Connect:
 			{
-				if (_isFirstTimeConnect)
-					_isFirstTimeConnect = false;
+				if (_state.IsFirstTimeConnect)
+					_state.IsFirstTimeConnect = false;
 				else
 					await base.OnSendInMessageAsync(new ResetMessage(), cancellationToken);
 
 				using (await _sync.LockAsync(cancellationToken))
 				{
-					_currState = ConnectionStates.Connecting;
+					_state.CurrentState = ConnectionStates.Connecting;
 
-					if (_prevState == _none)
+					if (_state.PreviousState == HeartbeatManagerState.None)
 					{
-						_connectionTimeOut = _reConnectionSettings.TimeOutInterval;
-						_connectingAttemptCount = _reConnectionSettings.AttemptCount;
+						_state.ConnectionTimeOut = _reConnectionSettings.TimeOutInterval;
+						_state.ConnectingAttemptCount = _reConnectionSettings.AttemptCount;
 					}
 
 					isStartTimer = true;
@@ -212,13 +214,13 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			{
 				using (await _sync.LockAsync(cancellationToken))
 				{
-					_suppressDisconnectError = _timer != null;
+					_state.SuppressDisconnectError = _timer != null;
 
-					_currState = ConnectionStates.Disconnecting;
-					_connectionTimeOut = _reConnectionSettings.TimeOutInterval;
+					_state.CurrentState = ConnectionStates.Disconnecting;
+					_state.ConnectionTimeOut = _reConnectionSettings.TimeOutInterval;
 
 					StopTimer();
-					_canSendTime = false;
+					_state.CanSendTime = false;
 				}
 
 				break;
@@ -230,7 +232,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				{
 					using (await _sync.LockAsync(cancellationToken))
 					{
-						if (_currState is ConnectionStates.Disconnecting or ConnectionStates.Disconnected)
+						if (_state.CurrentState is ConnectionStates.Disconnecting or ConnectionStates.Disconnected)
 							return;
 					}
 				}
@@ -251,7 +253,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 			using (await _sync.LockAsync(cancellationToken))
 			{
-				if (isStartTimer && (_currState == ConnectionStates.Connecting || _currState == ConnectionStates.Connected))
+				if (isStartTimer && (_state.CurrentState == ConnectionStates.Connecting || _state.CurrentState == ConnectionStates.Connected))
 					StartTimer(cancellationToken);
 			}
 
@@ -262,7 +264,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			if (message == _timeMessage)
 			{
 				using (await _sync.LockAsync(cancellationToken))
-					_canSendTime = true;
+					_state.CanSendTime = true;
 			}
 		}
 	}
@@ -284,7 +286,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 		if (needHeartbeat)
 		{
-			_canSendTime = true;
+			_state.CanSendTime = true;
 			period = period.Min(heartbeat);
 		}
 
@@ -350,21 +352,21 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 	private async ValueTask ProcessReconnection(TimeSpan diff, CancellationToken cancellationToken)
 	{
-		switch (_currState)
+		switch (_state.CurrentState)
 		{
 			case ConnectionStates.Disconnecting:
 			case ConnectionStates.Connecting:
 			{
-				_connectionTimeOut -= diff;
+				_state.ConnectionTimeOut -= diff;
 
-				if (_connectionTimeOut <= TimeSpan.Zero)
+				if (_state.ConnectionTimeOut <= TimeSpan.Zero)
 				{
-					LogWarning("RCM: Connecting Timeout Left {0}.", _connectionTimeOut);
+					LogWarning("RCM: Connecting Timeout Left {0}.", _state.ConnectionTimeOut);
 
-					switch (_currState)
+					switch (_state.CurrentState)
 					{
 						case ConnectionStates.Connecting:
-							if (!SuppressReconnectingErrors || _connectingAttemptCount == 0)
+							if (!SuppressReconnectingErrors || _state.ConnectingAttemptCount == 0)
 								await RaiseNewOutMessageAsync(new ConnectMessage { Error = new TimeoutException(LocalizedStrings.ConnectionTimeout) }, cancellationToken);
 							break;
 						case ConnectionStates.Disconnecting:
@@ -372,26 +374,26 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 							break;
 					}
 
-					if (_prevState != _none)
+					if (_state.PreviousState != HeartbeatManagerState.None)
 					{
 						LogInfo("RCM: Connecting AttemptError.");
 
 						using (await _sync.LockAsync(cancellationToken))
-							_currState = _prevState;
+							_state.CurrentState = _state.PreviousState;
 					}
 					else
 					{
-						if (_currState == ConnectionStates.Connecting && _connectingAttemptCount != 0)
+						if (_state.CurrentState == ConnectionStates.Connecting && _state.ConnectingAttemptCount != 0)
 						{
 							using (await _sync.LockAsync(cancellationToken))
-								_currState = ConnectionStates.Reconnecting;
+								_state.CurrentState = ConnectionStates.Reconnecting;
 
-							LogInfo("RCM: To Reconnecting Attempts {0} Timeout {1}.", _connectingAttemptCount, _connectionTimeOut);
+							LogInfo("RCM: To Reconnecting Attempts {0} Timeout {1}.", _state.ConnectingAttemptCount, _state.ConnectionTimeOut);
 						}
 						else
 						{
 							using (await _sync.LockAsync(cancellationToken))
-								_currState = _none;
+								_state.CurrentState = HeartbeatManagerState.None;
 						}
 					}
 				}
@@ -400,36 +402,36 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			}
 			case ConnectionStates.Reconnecting:
 			{
-				if (_connectingAttemptCount == 0)
+				if (_state.ConnectingAttemptCount == 0)
 				{
-					LogWarning("RCM: Reconnecting attempts {0} PrevState {1}.", _connectingAttemptCount, FormatState(_prevState));
+					LogWarning("RCM: Reconnecting attempts {0} PrevState {1}.", _state.ConnectingAttemptCount, FormatState(_state.PreviousState));
 
 					using (await _sync.LockAsync(cancellationToken))
-						_currState = _none;
+						_state.CurrentState = HeartbeatManagerState.None;
 
 					break;
 				}
 
-				_connectionTimeOut -= diff;
+				_state.ConnectionTimeOut -= diff;
 
-				if (_connectionTimeOut > TimeSpan.Zero)
+				if (_state.ConnectionTimeOut > TimeSpan.Zero)
 					break;
 
 				if (_reConnectionSettings.WorkingTime.IsTradeTime(CurrentTimeUtc, out _, out _))
 				{
-					LogInfo("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", FormatState(_currState), FormatState(_prevState), _connectingAttemptCount);
+					LogInfo("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", FormatState(_state.CurrentState), FormatState(_state.PreviousState), _state.ConnectingAttemptCount);
 
-					if (_connectingAttemptCount != -1)
-						_connectingAttemptCount--;
+					if (_state.ConnectingAttemptCount != -1)
+						_state.ConnectingAttemptCount--;
 
-					_connectionTimeOut = _reConnectionSettings.Interval;
+					_state.ConnectionTimeOut = _reConnectionSettings.Interval;
 
 					await RaiseNewOutMessageAsync(new ReconnectMessage().LoopBack(this), cancellationToken);
 				}
 				else
 				{
-					LogWarning("RCM: Out of trade time. CurrState {0}.", FormatState(_currState));
-					_connectionTimeOut = TimeSpan.FromMinutes(1);
+					LogWarning("RCM: Out of trade time. CurrState {0}.", FormatState(_state.CurrentState));
+					_state.ConnectionTimeOut = TimeSpan.FromMinutes(1);
 				}
 
 				break;
@@ -444,7 +446,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 			case ConnectionStates.Reconnecting:
 				return LocalizedStrings.Reconnecting;
 
-			case _none:
+			case HeartbeatManagerState.None:
 				return LocalizedStrings.None;
 
 			default:
@@ -456,13 +458,13 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	{
 		using (await _sync.LockAsync(cancellationToken))
 		{
-			if (_currState != ConnectionStates.Connected && !InnerAdapter.HeartbeatBeforeConnect)
+			if (_state.CurrentState != ConnectionStates.Connected && !InnerAdapter.HeartbeatBeforeConnect)
 				return;
 
-			if (!_canSendTime)
+			if (!_state.CanSendTime)
 				return;
 
-			_canSendTime = false;
+			_state.CanSendTime = false;
 		}
 
 		_timeMessage.LoopBack(this);
