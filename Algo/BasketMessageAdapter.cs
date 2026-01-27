@@ -1,5 +1,6 @@
 namespace StockSharp.Algo;
 
+using StockSharp.Algo.Basket;
 using StockSharp.Algo.Candles;
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Commissions;
@@ -72,7 +73,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 				item.Parent = null;
 
 			using (_parent._connectedResponseLock.Lock())
-				_parent._adapterStates.Remove(item);
+				_parent._connectionState.RemoveAdapter(item);
 
 			return base.OnRemoving(item);
 		}
@@ -89,7 +90,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			_parent._adapterWrappers.Clear();
 
 			using (_parent._connectedResponseLock.Lock())
-				_parent._adapterStates.Clear();
+				_parent._connectionState.Clear();
 
 			return base.OnClearing();
 		}
@@ -117,150 +118,21 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		}
 	}
 
-	private class ParentChildMap
-	{
-		private readonly Lock _syncObject = new();
-		private readonly Dictionary<long, RefQuadruple<long, SubscriptionStates, IMessageAdapter, Exception>> _childToParentIds = [];
-
-		public void AddMapping(long childId, ISubscriptionMessage parentMsg, IMessageAdapter adapter)
-		{
-			if (childId <= 0)
-				throw new ArgumentOutOfRangeException(nameof(childId));
-
-			if (parentMsg == null)
-				throw new ArgumentNullException(nameof(parentMsg));
-
-			if (adapter == null)
-				throw new ArgumentNullException(nameof(adapter));
-
-			using (_syncObject.EnterScope())
-				_childToParentIds.Add(childId, RefTuple.Create(parentMsg.TransactionId, SubscriptionStates.Stopped, adapter, default(Exception)));
-		}
-
-		public IDictionary<long, IMessageAdapter> GetChild(long parentId)
-		{
-			if (parentId <= 0)
-				throw new ArgumentOutOfRangeException(nameof(parentId));
-
-			using (_syncObject.EnterScope())
-				return FilterByParent(parentId).Where(p => p.Value.Second.IsActive()).ToDictionary(p => p.Key, p => p.Value.Third);
-		}
-
-		private IEnumerable<KeyValuePair<long, RefQuadruple<long, SubscriptionStates, IMessageAdapter, Exception>>> FilterByParent(long parentId) => _childToParentIds.Where(p => p.Value.First == parentId);
-
-		public long? ProcessChildResponse(long childId, Exception error, out bool needParentResponse, out bool allError, out IEnumerable<Exception> innerErrors)
-		{
-			allError = true;
-			needParentResponse = true;
-			innerErrors = [];
-
-			if (childId == 0)
-				return null;
-
-			using (_syncObject.EnterScope())
-			{
-				if (!_childToParentIds.TryGetValue(childId, out var tuple))
-					return null;
-
-				var parentId = tuple.First;
-				tuple.Second = error == null ? SubscriptionStates.Active : SubscriptionStates.Error;
-				tuple.Fourth = error;
-
-				var errors = new List<Exception>();
-
-				foreach (var pair in FilterByParent(parentId))
-				{
-					var t = pair.Value;
-
-					// one of adapter still not yet response.
-					if (t.Second == SubscriptionStates.Stopped)
-					{
-						needParentResponse = false;
-						break;
-					}
-
-					if (t.Second != SubscriptionStates.Error)
-						allError = false;
-					else if (t.Fourth != null)
-						errors.Add(t.Fourth);
-				}
-
-				innerErrors = errors;
-				return parentId;
-			}
-		}
-
-		public long? ProcessChildFinish(long childId, out bool needParentResponse)
-			=> ProcessChild(childId, SubscriptionStates.Finished, out needParentResponse);
-
-		public long? ProcessChildOnline(long childId, out bool needParentResponse)
-			=> ProcessChild(childId, SubscriptionStates.Online, out needParentResponse);
-
-		private long? ProcessChild(long childId, SubscriptionStates state, out bool needParentResponse)
-		{
-			needParentResponse = true;
-
-			using (_syncObject.EnterScope())
-			{
-				if (!_childToParentIds.TryGetValue(childId, out var tuple))
-					return null;
-
-				var parentId = tuple.First;
-				tuple.Second = state;
-
-				foreach (var pair in FilterByParent(parentId))
-				{
-					var t = pair.Value;
-
-					if (t.Second != SubscriptionStates.Error && t.Second != state)
-					{
-						needParentResponse = false;
-						break;
-					}
-				}
-
-				return parentId;
-			}
-		}
-
-		public void Clear()
-		{
-			using (_syncObject.EnterScope())
-				_childToParentIds.Clear();
-		}
-
-		public bool TryGetParent(long childId, out long parentId)
-		{
-			parentId = default;
-
-			using (_syncObject.EnterScope())
-			{
-				if (!_childToParentIds.TryGetValue(childId, out var t))
-					return false;
-
-				parentId = t.First;
-				return true;
-			}
-		}
-	}
-
 	private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = [];
 	private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _adapterWrappers = [];
 	private readonly AsyncLock _connectedResponseLock = new();
 	private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = [];
-	private readonly List<Message> _pendingMessages = [];
 
-	private readonly Dictionary<IMessageAdapter, (ConnectionStates state, Exception err)> _adapterStates = [];
-	private ConnectionStates _currState = ConnectionStates.Disconnected;
+	private readonly IAdapterConnectionState _connectionState;
+	private readonly IAdapterConnectionManager _connectionManager;
+	private readonly IPendingMessageState _pendingState;
+	private readonly IPendingMessageManager _pendingManager;
+	private readonly ISubscriptionRoutingState _subscriptionRouting;
+	private readonly IParentChildMap _parentChildMap;
+	private readonly IOrderRoutingState _orderRouting;
 
 	private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new(StringComparer.InvariantCultureIgnoreCase);
 	private readonly SynchronizedDictionary<(SecurityId secId, DataType dt), IMessageAdapter> _securityAdapters = [];
-
-	private readonly SynchronizedDictionary<long, (ISubscriptionMessage subMsg, IMessageAdapter[] adapters, DataType dt)> _subscriptions = [];
-	private readonly SynchronizedDictionary<long, (ISubscriptionMessage subMsg, IMessageAdapter adapter)> _requestsById = [];
-	private readonly ParentChildMap _parentChildMap = new();
-
-	private readonly SynchronizedDictionary<long, IMessageAdapter> _orderAdapters = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
@@ -287,6 +159,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		CommissionManager = new CommissionManager();
 		//PnLManager = new PnLManager();
 		SlippageManager = new SlippageManager(new SlippageManagerState());
+
+		_connectionState = new AdapterConnectionState();
+		_connectionManager = new AdapterConnectionManager(_connectionState);
+		_pendingState = new PendingMessageState();
+		_pendingManager = new PendingMessageManager(_pendingState);
+		_subscriptionRouting = new SubscriptionRoutingState();
+		_parentChildMap = new ParentChildMap();
+		_orderRouting = new OrderRoutingState();
 
 		SecurityAdapterProvider.Changed += SecurityAdapterProviderOnChanged;
 		PortfolioAdapterProvider.Changed += PortfolioAdapterProviderOnChanged;
@@ -518,7 +398,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	/// <summary>
 	/// To call the <see cref="ConnectMessage"/> event when the first adapter connects to <see cref="InnerAdapters"/>.
 	/// </summary>
-	public bool ConnectDisconnectEventOnFirstAdapter { get; set; } = true;
+	public bool ConnectDisconnectEventOnFirstAdapter
+	{
+		get => _connectionManager.ConnectDisconnectEventOnFirstAdapter;
+		set => _connectionManager.ConnectDisconnectEventOnFirstAdapter = value;
+	}
 
 	/// <summary>
 	/// Storage processor.
@@ -567,7 +451,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		set => throw new NotSupportedException();
 	}
 
-	private void TryAddOrderAdapter(long transId, IMessageAdapter adapter) => _orderAdapters.TryAdd2(transId, GetUnderlyingAdapter(adapter));
+	private void TryAddOrderAdapter(long transId, IMessageAdapter adapter) => _orderRouting.TryAddOrderAdapter(transId, GetUnderlyingAdapter(adapter));
 
 	private async ValueTask ProcessReset(ResetMessage message, bool isConnect, CancellationToken cancellationToken)
 	{
@@ -587,16 +471,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			_messageTypeAdapters.Clear();
 
 			if (!isConnect)
-				_pendingMessages.Clear();
+				_pendingState.Clear();
 
 			_nonSupportedAdapters.Clear();
 
-			_adapterStates.Clear();
-			_currState = ConnectionStates.Disconnected;
+			_connectionManager.Reset();
 		}
 
-		_requestsById.Clear();
-		_subscriptions.Clear();
+		_subscriptionRouting.Clear();
 		_parentChildMap.Clear();
 	}
 
@@ -655,7 +537,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 		if (SupportLookupTracking)
 		{
-			adapter = ApplyOwnInner(new LookupTrackingMessageAdapter(adapter));
+			adapter = ApplyOwnInner(new LookupTrackingMessageAdapter(adapter, new LookupTrackingManagerState()));
 		}
 
 		if (IsSupportTransactionLog)
@@ -791,15 +673,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		return OnSendInMessageAsync(message, cancellationToken);
 	}
 
-	private static (ConnectionStates, Exception) CreateState(ConnectionStates state, Exception error = null)
-	{
-		if (state == ConnectionStates.Failed && error == null)
-			throw new ArgumentNullException(nameof(error));
-
-		return (state, error);
-	}
-
-	private long[] GetSubscribers(DataType dataType) => _subscriptions.SyncGet(c => c.Where(p => p.Value.dt == dataType).Select(p => p.Key).ToArray());
+	private long[] GetSubscribers(DataType dataType) => _subscriptionRouting.GetSubscribers(dataType);
 
 	/// <summary>
 	/// Send message.
@@ -851,12 +725,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			{
 				await ProcessReset(new ResetMessage(), true, cancellationToken);
 
-				_currState = ConnectionStates.Connecting;
+				_connectionManager.BeginConnect();
 
 				foreach (var adapter in GetSortedAdapters())
 				{
 					using (await _connectedResponseLock.LockAsync(cancellationToken))
-						_adapterStates.Add(adapter, CreateState(ConnectionStates.Connecting));
+						_connectionManager.InitializeAdapter(adapter);
 
 					var wrapper = CreateWrappers(adapter);
 
@@ -884,14 +758,16 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 				using (await _connectedResponseLock.LockAsync(cancellationToken))
 				{
-					_currState = ConnectionStates.Disconnecting;
+					_connectionManager.BeginDisconnect();
 
-					adapters = _adapterStates.ToArray().Where(p => _adapterWrappers.ContainsKey(p.Key) && (p.Value.state == ConnectionStates.Connecting || p.Value.state == ConnectionStates.Connected)).ToDictionary(p => _adapterWrappers[p.Key], p =>
-					{
-						var underlying = p.Key;
-						_adapterStates[underlying] = CreateState(ConnectionStates.Disconnecting);
-						return underlying;
-					});
+					adapters = _connectionState.GetAllStates()
+						.Where(s => _adapterWrappers.ContainsKey(s.adapter) && (s.state == ConnectionStates.Connecting || s.state == ConnectionStates.Connected))
+						.ToDictionary(s => _adapterWrappers[s.adapter], s =>
+						{
+							var underlying = s.adapter;
+							_connectionState.SetAdapterState(underlying, ConnectionStates.Disconnecting, null);
+							return underlying;
+						});
 				}
 
 				await adapters.Select(a =>
@@ -961,7 +837,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 		if (message is ISubscriptionMessage subscrMsg)
 		{
-			_subscriptions.TryAdd2(subscrMsg.TransactionId, (subscrMsg.TypedClone(), new[] { adapter }, subscrMsg.DataType));
+			_subscriptionRouting.AddSubscription(subscrMsg.TransactionId, subscrMsg.TypedClone(), new[] { adapter }, subscrMsg.DataType);
 			return SendRequest(subscrMsg.TypedClone(), adapter, cancellationToken);
 		}
 		else
@@ -994,7 +870,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 					return;
 				}
 
-				_subscriptions.TryAdd2(subscrMsg.TransactionId, (subscrMsg.TypedClone(), adapters, subscrMsg.DataType));
+				_subscriptionRouting.AddSubscription(subscrMsg.TransactionId, subscrMsg.TypedClone(), adapters, subscrMsg.DataType);
 			}
 			else
 				adapters = null;
@@ -1082,10 +958,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 			if (adapters == null)
 			{
-				if (HasPendingAdapters() || _adapterStates.Count == 0 || _adapterStates.All(p => p.Value.state is ConnectionStates.Disconnected or ConnectionStates.Failed))
+				if (_connectionState.HasPendingAdapters || _connectionState.TotalCount == 0 || _connectionState.AllDisconnectedOrFailed)
 				{
 					isPended = true;
-					_pendingMessages.Add(message.Clone());
+					_pendingState.Add(message.Clone());
 					return ([], isPended, skipSupportedMessages);
 				}
 			}
@@ -1101,9 +977,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 		return (adapters, isPended, skipSupportedMessages);
 	}
-
-	private bool HasPendingAdapters()
-		=> _adapterStates.Any(p => p.Value.state == ConnectionStates.Connecting);
 
 	private async ValueTask<(IMessageAdapter[] adapters, bool isPended)> GetSubscriptionAdapters(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
@@ -1225,7 +1098,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	private ValueTask SendRequest(ISubscriptionMessage subscrMsg, IMessageAdapter adapter, CancellationToken cancellationToken)
 	{
 		// if the message was looped back via IsBack=true
-		_requestsById.TryAdd2(subscrMsg.TransactionId, (subscrMsg, GetUnderlyingAdapter(adapter)));
+		_subscriptionRouting.AddRequest(subscrMsg.TransactionId, subscrMsg, GetUnderlyingAdapter(adapter));
 		LogDebug("Send to {0}: {1}", adapter, subscrMsg);
 		return adapter.SendInMessageAsync((Message)subscrMsg, cancellationToken);
 	}
@@ -1260,7 +1133,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 				if (adapters == null)
 					return;
 
-				_subscriptions.TryAdd2(mdMsg.TransactionId, ((ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.DataType2));
+				_subscriptionRouting.AddSubscription(mdMsg.TransactionId, (ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.DataType2);
 			}
 
 			await ToChild(mdMsg, adapters).Select(pair => SendRequest(pair.Key, pair.Value, cancellationToken)).WhenAll();
@@ -1277,23 +1150,22 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 					return;
 
 				mdMsg = mdMsg.TypedClone();
-				_subscriptions.TryAdd2(mdMsg.TransactionId, ((ISubscriptionMessage)mdMsg.Clone(), new[] { adapter }, mdMsg.DataType2));
+				_subscriptionRouting.AddSubscription(mdMsg.TransactionId, (ISubscriptionMessage)mdMsg.Clone(), new[] { adapter }, mdMsg.DataType2);
 			}
 			else
 			{
 				var originTransId = mdMsg.OriginalTransactionId;
 
-				if (!_subscriptions.TryGetValue(originTransId, out var tuple))
+				if (!_subscriptionRouting.TryGetSubscription(originTransId, out _, out var adapters, out _))
 				{
 					Message outMsg = null;
 
 					using (await _connectedResponseLock.LockAsync(cancellationToken))
 					{
-						var suspended = _pendingMessages.FirstOrDefault(m => m is MarketDataMessage prevMdMsg && prevMdMsg.TransactionId == originTransId);
+						var suspended = _pendingState.TryRemoveMarketData(originTransId);
 
 						if (suspended != null)
 						{
-							_pendingMessages.Remove(suspended);
 							outMsg = new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId };
 						}
 					}
@@ -1308,7 +1180,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 					return;
 				}
 
-				adapter = tuple.adapters.First();
+				adapter = adapters.First();
 
 				mdMsg = mdMsg.TypedClone();
 			}
@@ -1346,7 +1218,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 	private async ValueTask ProcessOrderMessage(long transId, long originId, Message message, CancellationToken cancellationToken)
 	{
-		if (!_orderAdapters.TryGetValue(originId, out var adapter))
+		IMessageAdapter adapter = null;
+
+		if (_orderRouting.TryGetOrderAdapter(originId, out var orderAdapter))
+			adapter = orderAdapter;
+
+		if (adapter == null)
 		{
 			if (message is OrderMessage ordMsg && !ordMsg.PortfolioName.IsEmpty())
 			{
@@ -1595,13 +1472,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 					_messageTypeAdapters.SafeAdd(supportedMessage).Add(wrapper);
 			}
 
-			UpdateAdapterState(underlyingAdapter, true, error, extra);
+			var msgs = _connectionManager.ProcessConnect(underlyingAdapter, error);
+			extra.AddRange(msgs);
 
-			if (!HasPendingAdapters())
+			if (!_connectionState.HasPendingAdapters)
 			{
-				var pending = _pendingMessages.CopyAndClear();
+				var pending = _pendingState.GetAndClear();
 
-				if (_adapterStates.Any(p => p.Value.state == ConnectionStates.Connected))
+				if (_connectionState.ConnectedCount > 0)
 					extra.AddRange(pending.Select(m => m.LoopBack(this)));
 				else
 					notSupportedMsgs = pending;
@@ -1646,73 +1524,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 					_messageTypeAdapters.Remove(supportedMessage);
 			}
 
-			UpdateAdapterState(underlyingAdapter, false, error, extra);
+			var msgs = _connectionManager.ProcessDisconnect(underlyingAdapter, error);
+			extra.AddRange(msgs);
 		}
 
 		message.Adapter = underlyingAdapter;
-	}
-
-	private void UpdateAdapterState(IMessageAdapter adapter, bool isConnect, Exception error, List<Message> extra)
-	{
-		if (isConnect)
-		{
-			void CreateConnectedMsg(ConnectionStates newState, Exception e = null)
-			{
-				extra.Add(new ConnectMessage { Error = e });
-				_currState = newState;
-			}
-
-			if (error == null)
-			{
-				_adapterStates[adapter] = CreateState(ConnectionStates.Connected);
-
-				if (_currState == ConnectionStates.Connecting)
-				{
-					if (ConnectDisconnectEventOnFirstAdapter)
-					{
-						// raise Connected event only one time for the first adapter
-						CreateConnectedMsg(ConnectionStates.Connected);
-					}
-					else
-					{
-						var noPending = _adapterStates.All(v => v.Value.state != ConnectionStates.Connecting);
-
-						if (noPending)
-							CreateConnectedMsg(ConnectionStates.Connected);
-					}
-				}
-			}
-			else
-			{
-				_adapterStates[adapter] = CreateState(ConnectionStates.Failed, error);
-
-				if (_currState is ConnectionStates.Connecting or ConnectionStates.Connected)
-				{
-					var allFailed = _adapterStates.All(v => v.Value.state == ConnectionStates.Failed);
-
-					if (allFailed)
-					{
-						var errors = _adapterStates.Select(v => v.Value.err).WhereNotNull().ToArray();
-						CreateConnectedMsg(ConnectionStates.Failed, errors.SingleOrAggr());
-					}
-				}
-			}
-		}
-		else
-		{
-			if (error == null)
-				_adapterStates[adapter] = CreateState(ConnectionStates.Disconnected);
-			else
-				_adapterStates[adapter] = CreateState(ConnectionStates.Failed, error);
-
-			var noPending = _adapterStates.All(v => v.Value.state is ConnectionStates.Disconnected or ConnectionStates.Failed);
-
-			if (noPending)
-			{
-				extra.Add(new DisconnectMessage());
-				_currState = ConnectionStates.Disconnected;
-			}
-		}
 	}
 
 	private SubscriptionOnlineMessage ProcessSubscriptionOnline(SubscriptionOnlineMessage message)
@@ -1734,20 +1550,20 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	{
 		var originalTransactionId = message.OriginalTransactionId;
 
-		_requestsById.Remove(originalTransactionId);
+		_subscriptionRouting.RemoveRequest(originalTransactionId);
 
 		var parentId = _parentChildMap.ProcessChildFinish(originalTransactionId, out var needParentResponse);
 
 		if (parentId == null)
 		{
-			_subscriptions.Remove(originalTransactionId);
+			_subscriptionRouting.RemoveSubscription(originalTransactionId);
 			return message;
 		}
 
 		if (!needParentResponse)
 			return null;
 
-		_subscriptions.Remove(parentId.Value);
+		_subscriptionRouting.RemoveSubscription(parentId.Value);
 		return new SubscriptionFinishedMessage { OriginalTransactionId = parentId.Value, Body = message.Body };
 	}
 
@@ -1755,23 +1571,22 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	{
 		var originalTransactionId = message.OriginalTransactionId;
 
-		if (!_requestsById.TryGetValue(originalTransactionId, out var tuple))
+		if (!_subscriptionRouting.TryGetRequest(originalTransactionId, out var originMsg, out _))
 			return message;
 
 		var error = message.Error;
-		var originMsg = tuple.subMsg;
 
 		if (error != null)
 		{
 			LogWarning("Subscription Error out: {0}", message);
-			_subscriptions.Remove(originalTransactionId);
-			_requestsById.Remove(originalTransactionId);
+			_subscriptionRouting.RemoveSubscription(originalTransactionId);
+			_subscriptionRouting.RemoveRequest(originalTransactionId);
 		}
 		else if (!originMsg.IsSubscribe)
 		{
 			// remove subscribe and unsubscribe requests
-			_requestsById.Remove(originMsg.OriginalTransactionId);
-			_requestsById.Remove(originalTransactionId);
+			_subscriptionRouting.RemoveRequest(originMsg.OriginalTransactionId);
+			_subscriptionRouting.RemoveRequest(originalTransactionId);
 		}
 
 		var parentId = _parentChildMap.ProcessChildResponse(originalTransactionId, error, out var needParentResponse, out var allError, out var innerErrors);
@@ -1779,7 +1594,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		if (parentId != null)
 		{
 			if (allError)
-				_subscriptions.Remove(parentId.Value);
+				_subscriptionRouting.RemoveSubscription(parentId.Value);
 
 			return needParentResponse
 				? parentId.Value.CreateSubscriptionResponse(allError ? new AggregateException(LocalizedStrings.NoAdapterFoundFor.Put(originMsg), innerErrors) : null)
@@ -1788,7 +1603,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		else
 		{
 			if (!originMsg.IsSubscribe)
-				_subscriptions.Remove(originMsg.OriginalTransactionId);
+				_subscriptionRouting.RemoveSubscription(originMsg.OriginalTransactionId);
 		}
 
 		if (message.IsNotSupported() && originMsg is ISubscriptionMessage subscrMsg)
