@@ -74,13 +74,14 @@ public class OrderBookIncrementManagerState : IOrderBookIncrementManagerState
 	public QuoteChangeMessage TryApply(long subscriptionId, QuoteChangeMessage quoteMsg, out long[] subscriptionIds)
 	{
 		subscriptionIds = null;
+		QuoteChangeMessage newQuoteMsg;
 
 		using (_sync.EnterScope())
 		{
 			if (!_byId.TryGetValue(subscriptionId, out var info))
 				return null;
 
-			var newQuoteMsg = info.Builder.TryApply(quoteMsg, subscriptionId);
+			newQuoteMsg = info.Builder.TryApply(quoteMsg, subscriptionId);
 
 			if (newQuoteMsg == null)
 				return null;
@@ -91,7 +92,7 @@ public class OrderBookIncrementManagerState : IOrderBookIncrementManagerState
 		if (_allSecSubscriptions.Count > 0)
 			subscriptionIds = subscriptionIds.Concat(_allSecSubscriptions.Cache);
 
-		return quoteMsg;
+		return newQuoteMsg;
 	}
 
 	/// <inheritdoc />
