@@ -983,6 +983,16 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 					if (isAll)
 						adapters = [.. adapters.Where(a => a.IsSupportSecuritiesLookupAll())];
 				}
+				else if (message.Type == MessageTypes.OrderStatus)
+				{
+					if (!((ISubscriptionMessage)message).FilterEnabled)
+						adapters = [.. adapters.Where(a => a.IsAllDownloadingSupported(DataType.Transactions))];
+				}
+				else if (message.Type == MessageTypes.PortfolioLookup)
+				{
+					if (!((ISubscriptionMessage)message).FilterEnabled)
+						adapters = [.. adapters.Where(a => a.IsAllDownloadingSupported(DataType.PositionChanges))];
+				}
 			}
 
 			if (adapters == null)
