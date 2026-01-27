@@ -1007,7 +1007,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			return null;
 
 		if (value is DateTimeOffset dto)
-			return dto;
+			value = dto.UtcDateTime;
 
 		if (value is DateTime dt)
 			return dt;

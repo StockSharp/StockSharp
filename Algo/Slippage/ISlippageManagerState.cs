@@ -23,7 +23,7 @@ public interface ISlippageManagerState
 	/// <param name="bidPrice">Best bid price (null to keep existing).</param>
 	/// <param name="askPrice">Best ask price (null to keep existing).</param>
 	/// <param name="time">Market data time. If both Level1 and order books are streamed, prices update only when time increases.</param>
-	void UpdateBestPrices(SecurityId securityId, decimal? bidPrice, decimal? askPrice, DateTimeOffset time);
+	void UpdateBestPrices(SecurityId securityId, decimal? bidPrice, decimal? askPrice, DateTime time);
 
 	/// <summary>
 	/// Try get best price for order side.

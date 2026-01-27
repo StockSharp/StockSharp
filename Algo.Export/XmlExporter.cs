@@ -28,9 +28,11 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 		if (value is null)
 			return Task.CompletedTask;
 
+		if (value is DateTimeOffset dto)
+			value = dto.UtcDateTime;
+
 		string str = value switch
 		{
-			DateTimeOffset dto => dto.ToString(_timeFormat, CultureInfo.InvariantCulture),
 			DateTime dt => dt.ToString(_timeFormat, CultureInfo.InvariantCulture),
 			IFormattable f => f.ToString(null, CultureInfo.InvariantCulture),
 			_ => value.ToString(),

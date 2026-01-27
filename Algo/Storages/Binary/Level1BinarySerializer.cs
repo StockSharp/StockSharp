@@ -606,6 +606,9 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 
 					if (!isKnown)
 					{
+						if (value is DateTimeOffset dto)
+							value = dto.UtcDateTime;
+
 						switch (value)
 						{
 							case decimal d:
@@ -620,9 +623,9 @@ class Level1BinarySerializer(SecurityId securityId, IExchangeInfoProvider exchan
 								writer.WriteInt(2);
 								writer.WriteInt(i);
 								break;
-							case DateTimeOffset d:
+							case DateTime dt:
 								writer.WriteInt(3);
-								writer.WriteLong(d.To<long>());
+								writer.WriteLong(dt.To<long>());
 								break;
 							case string s:
 								writer.WriteInt(4);
