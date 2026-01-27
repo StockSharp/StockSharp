@@ -10,9 +10,9 @@ using StockSharp.Configuration.Permissions;
 [TestClass]
 public class PermissionsTests : BaseTestClass
 {
-	private static readonly IPAddress _ip1 = IPAddress.Parse("192.168.1.1");
-	private static readonly IPAddress _ip2 = IPAddress.Parse("10.0.0.1");
-	private static readonly IPAddress _ip3 = IPAddress.Parse("172.16.0.1");
+	private static readonly IPAddress _ip1 = "192.168.1.1".To<IPAddress>();
+	private static readonly IPAddress _ip2 = "10.0.0.1".To<IPAddress>();
+	private static readonly IPAddress _ip3 = "172.16.0.1".To<IPAddress>();
 
 	private static SecureString ToSecureString(string s)
 	{
