@@ -1986,7 +1986,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await WaitForConditionAsync(() => messages.Count > 0, TimeSpan.FromSeconds(5));
 
 		// Cancel
-		await cts.CancelAsync();
+		cts.Cancel();
 
 		// Wait for enumeration to complete
 		try
