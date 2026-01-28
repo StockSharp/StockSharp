@@ -751,7 +751,26 @@ public async Task Subscribe_Unsubscribe_StateUpdatedCorrectly()
 
 ## Этап 2: Фиксы замечаний Basket
 
-**Статус:** не начато
+**Статус:** завершён
+
+### Замечание 1: Единый путь MarketData
+- Убрано ветвление по `DataType.News || DataType.Board` в `ProcessMarketDataRequest`
+- Все типы MarketData теперь идут через `ToChild()` и `ParentChildMap`
+- Сохранена обработка pending-подписок для unsubscribe
+- **3 теста стали зелёными**
+
+### Замечание 2: IsAllDownloading для OrderStatus и PortfolioLookup
+- Добавлена фильтрация `IsAllDownloadingSupported(DataType.Transactions)` для `OrderStatus`
+- Добавлена фильтрация `IsAllDownloadingSupported(DataType.PositionChanges)` для `PortfolioLookup`
+- Используется `FilterEnabled` для определения "lookup all" запроса
+- **4 теста стали зелёными**
+
+### Замечание 3: NotSupported retry
+- Все тесты прошли без изменений — retry механизм работает корректно
+- SecurityLookup/OrderStatus/PortfolioLookup не зацикливаются
+- MarketData retry через loopback работает
+
+**Итог: все 21 routing тест + 15 оригинальных тестов = 36/36 passed**
 
 ## Этап 3: Выделение роутера
 
