@@ -1353,13 +1353,19 @@ public class ExtensionsMethodsTests : BaseTestClass
 		// Bids sorted descending: 100, 99, 98
 		result.Bids.Length.AssertEqual(3);
 		result.Bids[0].Price.AssertEqual(100m);
+		result.Bids[0].Volume.AssertEqual(10m);
 		result.Bids[1].Price.AssertEqual(99m);
+		result.Bids[1].Volume.AssertEqual(3m);
 		result.Bids[2].Price.AssertEqual(98m);
+		result.Bids[2].Volume.AssertEqual(5m);
 		// Asks sorted ascending: 101, 102, 103
 		result.Asks.Length.AssertEqual(3);
 		result.Asks[0].Price.AssertEqual(101m);
+		result.Asks[0].Volume.AssertEqual(10m);
 		result.Asks[1].Price.AssertEqual(102m);
+		result.Asks[1].Volume.AssertEqual(3m);
 		result.Asks[2].Price.AssertEqual(103m);
+		result.Asks[2].Volume.AssertEqual(5m);
 	}
 
 	[TestMethod]
@@ -1371,7 +1377,7 @@ public class ExtensionsMethodsTests : BaseTestClass
 			SecurityId = secId,
 			ServerTime = DateTime.UtcNow,
 			Bids = [new QuoteChange(100m, 10)],
-			Asks = [new QuoteChange(101m, 10)],
+			Asks = [new QuoteChange(101m, 15)],
 		};
 		var rare = new QuoteChangeMessage
 		{
@@ -1384,7 +1390,45 @@ public class ExtensionsMethodsTests : BaseTestClass
 		var result = original.Join(rare);
 
 		result.Bids.Length.AssertEqual(1);
+		result.Bids[0].Price.AssertEqual(100m);
+		result.Bids[0].Volume.AssertEqual(10m);
 		result.Asks.Length.AssertEqual(1);
+		result.Asks[0].Price.AssertEqual(101m);
+		result.Asks[0].Volume.AssertEqual(15m);
+	}
+
+	[TestMethod]
+	public void Join_DuplicatePrices_KeepsBothQuotes()
+	{
+		// Note: Join does NOT merge quotes with same price - it keeps both.
+		// This test documents this behavior.
+		var secId = Helper.CreateSecurityId();
+		var original = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [new QuoteChange(101m, 10)],
+		};
+		var rare = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 5)], // same price!
+			Asks = [new QuoteChange(101m, 5)], // same price!
+		};
+
+		var result = original.Join(rare);
+
+		// Both quotes with same price are kept (not merged)
+		result.Bids.Length.AssertEqual(2);
+		result.Bids[0].Price.AssertEqual(100m);
+		result.Bids[1].Price.AssertEqual(100m);
+		// Volumes are NOT merged
+		(result.Bids[0].Volume + result.Bids[1].Volume).AssertEqual(15m);
+		result.Asks.Length.AssertEqual(2);
+		result.Asks[0].Price.AssertEqual(101m);
+		result.Asks[1].Price.AssertEqual(101m);
 	}
 
 	#endregion

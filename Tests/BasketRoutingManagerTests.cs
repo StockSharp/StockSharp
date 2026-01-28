@@ -140,15 +140,25 @@ public class BasketRoutingManagerTests : BaseTestClass
 		result.RoutingDecisions.Count.AssertGreater(0, "Should have routing decisions");
 		result.Handled.AssertTrue("Message should be handled");
 		result.IsPended.AssertFalse("Message should not be pended");
+		result.OutMessages.Count.AssertEqual(0, "Should not have out messages for successful routing");
+		result.LoopbackMessages.Count.AssertEqual(0, "Should not have loopback messages");
+
+		// Verify routing decision content
+		var (routedAdapter, routedMsg) = result.RoutingDecisions[0];
+		routedAdapter.AssertEqual(adapter, "Should route to the adapter");
+		var childMdMsg = routedMsg as MarketDataMessage;
+		childMdMsg.AssertNotNull("Routed message should be MarketDataMessage");
+		childMdMsg.SecurityId.AssertEqual(_secId1, "SecurityId should match");
+		childMdMsg.DataType2.AssertEqual(DataType.Ticks, "DataType should match");
+		childMdMsg.IsSubscribe.AssertTrue("Should be subscribe");
 
 		// Verify subscription routing recorded
 		ctx.SubscriptionRouting.TryGetSubscription(transId, out _, out _, out _)
 			.AssertTrue("Subscription should be recorded");
 
 		// Verify parent-child mapping created
-		var childTransId = result.RoutingDecisions[0].Message is ISubscriptionMessage subMsg
-			? subMsg.TransactionId
-			: 0;
+		var childTransId = childMdMsg.TransactionId;
+		childTransId.AssertNotEqual(transId, "Child should have different transactionId");
 
 		ctx.ParentChildMap.TryGetParent(childTransId, out var parentId)
 			.AssertTrue("ParentChildMap should have mapping");
@@ -277,6 +287,9 @@ public class BasketRoutingManagerTests : BaseTestClass
 
 		result.IsPended.AssertTrue("Message should be pended");
 		result.Handled.AssertTrue("Pended message is handled");
+		result.RoutingDecisions.Count.AssertEqual(0, "Should not have routing decisions when pended");
+		result.OutMessages.Count.AssertEqual(0, "Should not have out messages when pended");
+		result.LoopbackMessages.Count.AssertEqual(0, "Should not have loopback messages when pended");
 		ctx.PendingState.Count.AssertGreater(0, "Message should be in pending state");
 	}
 

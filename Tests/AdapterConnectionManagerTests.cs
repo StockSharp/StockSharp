@@ -242,4 +242,71 @@ public class AdapterConnectionManagerTests : BaseTestClass
 		mockState.Verify(s => s.SetAdapterState(adapter, ConnectionStates.Connected, null), Times.Once);
 		mockState.VerifySet(s => s.CurrentState = ConnectionStates.Connected, Times.Once);
 	}
+
+	[TestMethod]
+	public void BeginDisconnect_SetsDisconnecting()
+	{
+		var manager = CreateManager(out _);
+		var adapter = CreateAdapter();
+
+		manager.BeginConnect();
+		manager.InitializeAdapter(adapter);
+		manager.ProcessConnect(adapter, null);
+
+		AreEqual(ConnectionStates.Connected, manager.CurrentState);
+
+		manager.BeginDisconnect();
+
+		AreEqual(ConnectionStates.Disconnecting, manager.CurrentState);
+	}
+
+	[TestMethod]
+	public void HasPendingAdapters_WhenConnecting_ReturnsTrue()
+	{
+		var manager = CreateManager(out _);
+		var adapter = CreateAdapter();
+
+		IsFalse(manager.HasPendingAdapters);
+
+		manager.BeginConnect();
+		manager.InitializeAdapter(adapter);
+
+		IsTrue(manager.HasPendingAdapters);
+	}
+
+	[TestMethod]
+	public void HasPendingAdapters_WhenConnected_ReturnsFalse()
+	{
+		var manager = CreateManager(out _);
+		var adapter = CreateAdapter();
+
+		manager.BeginConnect();
+		manager.InitializeAdapter(adapter);
+		manager.ProcessConnect(adapter, null);
+
+		IsFalse(manager.HasPendingAdapters);
+	}
+
+	[TestMethod]
+	public void HasPendingAdapters_MultipleAdapters_TrueUntilAllConnected()
+	{
+		var manager = CreateManager(out _);
+		var adapter1 = CreateAdapter();
+		var adapter2 = CreateAdapter();
+
+		manager.BeginConnect();
+		manager.InitializeAdapter(adapter1);
+		manager.InitializeAdapter(adapter2);
+
+		IsTrue(manager.HasPendingAdapters);
+
+		manager.ProcessConnect(adapter1, null);
+
+		// Still has pending - adapter2 not connected yet
+		IsTrue(manager.HasPendingAdapters);
+
+		manager.ProcessConnect(adapter2, null);
+
+		IsFalse(manager.HasPendingAdapters);
+	}
 }
