@@ -613,6 +613,277 @@ public class BasketMessageAdapterTests : BaseTestClass
 			.AssertTrue("Basket should emit SubscriptionFinishedMessage with parent transId");
 	}
 
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task SecurityLookup_TwoAdapters_OneSubscriptionError_ParentSucceeds()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket();
+
+		// Connect both adapters (auto-respond to Connect)
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+
+		// Disable auto-respond so we control SecurityLookup responses
+		adapter1.AutoRespond = false;
+		adapter2.AutoRespond = false;
+		ClearOut();
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var lookupMsg = new SecurityLookupMessage
+		{
+			TransactionId = transId,
+			SecurityId = _secId1,
+		};
+		await SendToBasket(basket, lookupMsg, TestContext.CancellationToken);
+
+		// Both adapters should receive child SecurityLookup
+		var child1 = adapter1.GetMessages<SecurityLookupMessage>().Last();
+		var child2 = adapter2.GetMessages<SecurityLookupMessage>().Last();
+		child1.TransactionId.AssertNotEqual(transId, "Child1 should have its own transaction ID");
+		child2.TransactionId.AssertNotEqual(transId, "Child2 should have its own transaction ID");
+		child1.TransactionId.AssertNotEqual(child2.TransactionId, "Children should have different IDs");
+
+		// Adapter1 responds with subscription error
+		adapter1.EmitOut(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = child1.TransactionId,
+			Error = new InvalidOperationException("Securities not available"),
+		});
+
+		// Parent should NOT have response yet — adapter2 hasn't responded
+		GetOut<SubscriptionResponseMessage>()
+			.Any(r => r.OriginalTransactionId == transId)
+			.AssertFalse("Parent response should wait for all children");
+
+		// Adapter2 responds with success + finished
+		adapter2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = child2.TransactionId });
+		adapter2.EmitOut(new SubscriptionFinishedMessage { OriginalTransactionId = child2.TransactionId });
+
+		// Now parent should have a success response (at least one child succeeded)
+		var parentResponses = GetOut<SubscriptionResponseMessage>()
+			.Where(r => r.OriginalTransactionId == transId)
+			.ToArray();
+		parentResponses.Length.AssertEqual(1, "Should have exactly one parent response");
+		parentResponses[0].Error.AssertNull("Parent should succeed — one adapter succeeded");
+
+		// Parent should get SubscriptionFinished (child1 errored → skipped, child2 finished → last active)
+		GetOut<SubscriptionFinishedMessage>()
+			.Any(m => m.OriginalTransactionId == transId)
+			.AssertTrue("Parent should get SubscriptionFinished");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task SecurityLookup_TwoAdapters_OneConnectionError_OnlyLiveAdapterQueried()
+	{
+		var connectionState = new AdapterConnectionState();
+		var connectionManager = new AdapterConnectionManager(connectionState);
+
+		var (basket, adapter1, adapter2) = CreateBasket(
+			connectionState: connectionState,
+			connectionManager: connectionManager);
+
+		// Adapters do NOT auto-respond to Connect
+		adapter1.AutoRespond = false;
+		adapter2.AutoRespond = false;
+
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+
+		// Adapter1 connects OK
+		adapter1.EmitOut(new ConnectMessage());
+
+		// Adapter2 FAILS to connect
+		adapter2.EmitOut(new ConnectMessage { Error = new Exception("Connection refused") });
+
+		connectionState.HasPendingAdapters.AssertFalse("Both adapters resolved");
+		connectionState.ConnectedCount.AssertEqual(1, "Only adapter1 connected");
+
+		// Enable auto-respond for adapter1 (the connected one)
+		adapter1.AutoRespond = true;
+		ClearOut();
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var lookupMsg = new SecurityLookupMessage
+		{
+			TransactionId = transId,
+			SecurityId = _secId1,
+		};
+		await SendToBasket(basket, lookupMsg, TestContext.CancellationToken);
+
+		// Only adapter1 should receive the SecurityLookup
+		adapter1.GetMessages<SecurityLookupMessage>().Any()
+			.AssertTrue("Connected adapter1 should receive SecurityLookup");
+		adapter2.GetMessages<SecurityLookupMessage>().Any()
+			.AssertFalse("Failed adapter2 should NOT receive SecurityLookup");
+
+		// Parent should get response (only one child, auto-responded)
+		GetOut<SubscriptionResponseMessage>()
+			.Any(r => r.OriginalTransactionId == transId)
+			.AssertTrue("Parent should get SubscriptionResponse from live adapter");
+
+		GetOut<SubscriptionFinishedMessage>()
+			.Any(m => m.OriginalTransactionId == transId)
+			.AssertTrue("Parent should get SubscriptionFinished from live adapter");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task SecurityLookup_TwoAdapters_AllSubscriptionErrors_ParentGetsError()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket();
+
+		// Connect both adapters
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+
+		adapter1.AutoRespond = false;
+		adapter2.AutoRespond = false;
+		ClearOut();
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var lookupMsg = new SecurityLookupMessage
+		{
+			TransactionId = transId,
+			SecurityId = _secId1,
+		};
+		await SendToBasket(basket, lookupMsg, TestContext.CancellationToken);
+
+		var child1 = adapter1.GetMessages<SecurityLookupMessage>().Last();
+		var child2 = adapter2.GetMessages<SecurityLookupMessage>().Last();
+
+		// Adapter1 responds with error
+		adapter1.EmitOut(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = child1.TransactionId,
+			Error = new InvalidOperationException("Adapter1 failed"),
+		});
+
+		// Parent should NOT respond yet — adapter2 hasn't responded
+		GetOut<SubscriptionResponseMessage>()
+			.Any(r => r.OriginalTransactionId == transId)
+			.AssertFalse("Parent should wait for all children");
+
+		// Adapter2 also responds with error
+		adapter2.EmitOut(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = child2.TransactionId,
+			Error = new InvalidOperationException("Adapter2 failed"),
+		});
+
+		// Now parent should get error response (ALL children failed)
+		var parentResponses = GetOut<SubscriptionResponseMessage>()
+			.Where(r => r.OriginalTransactionId == transId)
+			.ToArray();
+		parentResponses.Length.AssertEqual(1, "Should have exactly one parent response");
+		parentResponses[0].Error.AssertNotNull("Parent should get error — all adapters failed");
+		parentResponses[0].Error.AssertOfType<AggregateException>();
+
+		var aggEx = (AggregateException)parentResponses[0].Error;
+		aggEx.InnerExceptions.Count.AssertEqual(2, "Should aggregate errors from both adapters");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task SecurityLookup_ThreeAdapters_TwoErrors_ParentSucceeds()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+
+		var cs = new AdapterConnectionState();
+		var cm = new AdapterConnectionManager(cs);
+		var ps = new PendingMessageState();
+		var sr = new SubscriptionRoutingState();
+		var pcm = new ParentChildMap();
+		var or = new OrderRoutingState();
+
+		var routingManager = new BasketRoutingManager(
+			cs, cm, ps, sr, pcm, or,
+			a => a, candleBuilderProvider, () => false, idGen);
+
+		var basket = new BasketMessageAdapter(
+			idGen,
+			candleBuilderProvider,
+			new InMemorySecurityMessageAdapterProvider(),
+			new InMemoryPortfolioMessageAdapterProvider(),
+			null,
+			null,
+			routingManager);
+
+		basket.IgnoreExtraAdapters = true;
+		basket.LatencyManager = null;
+		basket.SlippageManager = null;
+		basket.CommissionManager = null;
+
+		var adapter1 = new TestBasketInnerAdapter(idGen);
+		var adapter2 = new TestBasketInnerAdapter(idGen);
+		var adapter3 = new TestBasketInnerAdapter(idGen);
+		basket.InnerAdapters.Add(adapter1);
+		basket.InnerAdapters.Add(adapter2);
+		basket.InnerAdapters.Add(adapter3);
+		basket.ApplyHeartbeat(adapter1, false);
+		basket.ApplyHeartbeat(adapter2, false);
+		basket.ApplyHeartbeat(adapter3, false);
+
+		_outMessages = new ConcurrentQueue<Message>();
+		basket.NewOutMessageAsync += (msg, ct) =>
+		{
+			_outMessages.Enqueue(msg);
+			return default;
+		};
+
+		// Connect all 3 adapters
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+
+		adapter1.AutoRespond = false;
+		adapter2.AutoRespond = false;
+		adapter3.AutoRespond = false;
+		ClearOut();
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var lookupMsg = new SecurityLookupMessage
+		{
+			TransactionId = transId,
+			SecurityId = _secId1,
+		};
+		await SendToBasket(basket, lookupMsg, TestContext.CancellationToken);
+
+		var child1 = adapter1.GetMessages<SecurityLookupMessage>().Last();
+		var child2 = adapter2.GetMessages<SecurityLookupMessage>().Last();
+		var child3 = adapter3.GetMessages<SecurityLookupMessage>().Last();
+
+		// Adapter1 errors
+		adapter1.EmitOut(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = child1.TransactionId,
+			Error = new InvalidOperationException("Adapter1 failed"),
+		});
+
+		// Adapter2 errors
+		adapter2.EmitOut(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = child2.TransactionId,
+			Error = new InvalidOperationException("Adapter2 failed"),
+		});
+
+		// Still no parent response — adapter3 pending
+		GetOut<SubscriptionResponseMessage>()
+			.Any(r => r.OriginalTransactionId == transId)
+			.AssertFalse("Parent should wait for adapter3");
+
+		// Adapter3 succeeds + finishes
+		adapter3.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = child3.TransactionId });
+		adapter3.EmitOut(new SubscriptionFinishedMessage { OriginalTransactionId = child3.TransactionId });
+
+		// Parent should succeed (at least one adapter OK)
+		var parentResponses = GetOut<SubscriptionResponseMessage>()
+			.Where(r => r.OriginalTransactionId == transId)
+			.ToArray();
+		parentResponses.Length.AssertEqual(1);
+		parentResponses[0].Error.AssertNull("Parent should succeed — adapter3 succeeded");
+
+		GetOut<SubscriptionFinishedMessage>()
+			.Any(m => m.OriginalTransactionId == transId)
+			.AssertTrue("Parent should get SubscriptionFinished");
+	}
+
 	#endregion
 
 	#region 5. Reset
@@ -713,6 +984,86 @@ public class BasketMessageAdapterTests : BaseTestClass
 		// After connect, pending messages should be drained
 		connectionState.ConnectedCount.AssertEqual(1);
 		pendingState.Count.AssertEqual(0, "Pending state should be empty after connect");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task MessagePended_TwoAdapters_OneFailsOneConnects_ReleasedToLive()
+	{
+		var connectionState = new AdapterConnectionState();
+		var connectionManager = new AdapterConnectionManager(connectionState);
+		var pendingState = new PendingMessageState();
+
+		var (basket, adapter1, adapter2) = CreateBasket(
+			connectionState: connectionState,
+			connectionManager: connectionManager,
+			pendingState: pendingState,
+			twoAdapters: true);
+
+		// Both adapters do NOT auto-respond
+		adapter1.AutoRespond = false;
+		adapter2.AutoRespond = false;
+
+		// Start connection — both adapters go to Connecting
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+
+		connectionState.HasPendingAdapters.AssertTrue("Both adapters should be pending");
+
+		// Send a MarketData subscribe while both still connecting
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var mdMsg = new MarketDataMessage
+		{
+			SecurityId = _secId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = transId,
+		};
+		await SendToBasket(basket, mdMsg, TestContext.CancellationToken);
+
+		// Message should be pended
+		pendingState.Count.AssertGreater(0, "Message should be pended while adapters connecting");
+
+		// Neither adapter should have received the MarketData
+		adapter1.GetMessages<MarketDataMessage>().Any()
+			.AssertFalse("Adapter1 should not receive MarketData while connecting");
+		adapter2.GetMessages<MarketDataMessage>().Any()
+			.AssertFalse("Adapter2 should not receive MarketData while connecting");
+
+		// Adapter1 connects successfully
+		adapter1.AutoRespond = true;
+		adapter1.EmitOut(new ConnectMessage());
+
+		// Still pending — adapter2 is still Connecting
+		connectionState.HasPendingAdapters.AssertTrue("Adapter2 still connecting");
+		pendingState.Count.AssertGreater(0, "Message should still be pended — adapter2 not done");
+		adapter1.GetMessages<MarketDataMessage>().Any()
+			.AssertFalse("Adapter1 should not receive MarketData yet — adapter2 still pending");
+
+		// Adapter2 FAILS
+		adapter2.EmitOut(new ConnectMessage { Error = new Exception("Connection refused") });
+
+		// Now HasPendingAdapters should be false — all adapters resolved
+		connectionState.HasPendingAdapters.AssertFalse("No more pending — all resolved");
+		pendingState.Count.AssertEqual(0, "Pending should be drained after all adapters resolved");
+
+		// Pending messages are released as loopback messages via SendOutMessageAsync.
+		// We must re-send them to the basket to complete the routing cycle.
+		var loopbacks = _outMessages.Where(m => m.IsBack()).ToArray();
+		loopbacks.Length.AssertGreater(0, "Should have loopback messages from released pending");
+
+		foreach (var lb in loopbacks)
+		{
+			lb.BackMode = MessageBackModes.None;
+			await SendToBasket(basket, lb, TestContext.CancellationToken);
+		}
+
+		// Adapter1 (the live one) should have received the MarketData
+		adapter1.GetMessages<MarketDataMessage>().Any()
+			.AssertTrue("Adapter1 should receive MarketData after pending released");
+
+		// Adapter2 (failed) should NOT have received the MarketData
+		adapter2.GetMessages<MarketDataMessage>().Any()
+			.AssertFalse("Failed adapter2 should not receive MarketData");
 	}
 
 	#endregion
