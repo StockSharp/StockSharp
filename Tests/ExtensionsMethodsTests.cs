@@ -852,4 +852,455 @@ public class ExtensionsMethodsTests : BaseTestClass
 	}
 
 	#endregion
+
+	// ===== Tier 2 =====
+
+	#region ToReg / ToExec roundtrip
+
+	[TestMethod]
+	public void ToReg_CopiesAllFields()
+	{
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			SecurityId = Helper.CreateSecurityId(),
+			TransactionId = 42,
+			OrderPrice = 100m,
+			OrderVolume = 10,
+			Balance = 7m,
+			Currency = CurrencyTypes.USD,
+			PortfolioName = "pf1",
+			ClientCode = "cc",
+			BrokerCode = "bc",
+			Comment = "test",
+			Side = Sides.Buy,
+			TimeInForce = TimeInForce.PutInQueue,
+			OrderType = OrderTypes.Limit,
+			UserOrderId = "u1",
+			StrategyId = "s1",
+		};
+
+		var reg = exec.ToReg();
+
+		reg.SecurityId.AssertEqual(exec.SecurityId);
+		reg.TransactionId.AssertEqual(42L);
+		reg.Price.AssertEqual(100m);
+		reg.Volume.AssertEqual(7m); // Balance ?? OrderVolume
+		reg.Currency.AssertEqual(CurrencyTypes.USD);
+		reg.PortfolioName.AssertEqual("pf1");
+		reg.Side.AssertEqual(Sides.Buy);
+		reg.OrderType.AssertEqual(OrderTypes.Limit);
+	}
+
+	[TestMethod]
+	public void ToExec_CopiesAllFields()
+	{
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			TransactionId = 42,
+			Price = 100m,
+			Volume = 10,
+			Currency = CurrencyTypes.USD,
+			PortfolioName = "pf1",
+			Side = Sides.Buy,
+			OrderType = OrderTypes.Limit,
+			UserOrderId = "u1",
+		};
+
+		var exec = reg.ToExec();
+
+		exec.SecurityId.AssertEqual(reg.SecurityId);
+		exec.TransactionId.AssertEqual(42L);
+		exec.OrderPrice.AssertEqual(100m);
+		exec.OrderVolume.AssertEqual(10m);
+		exec.Balance.AssertEqual(10m);
+		exec.PortfolioName.AssertEqual("pf1");
+		exec.Side.AssertEqual(Sides.Buy);
+		exec.OrderType.AssertEqual(OrderTypes.Limit);
+		exec.OrderState.AssertEqual(OrderStates.Pending);
+		exec.HasOrderInfo.AssertTrue();
+	}
+
+	[TestMethod]
+	public void ToReg_ToExec_Roundtrip()
+	{
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			SecurityId = Helper.CreateSecurityId(),
+			TransactionId = 42,
+			OrderPrice = 100m,
+			OrderVolume = 10,
+			Side = Sides.Sell,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = "pf",
+		};
+
+		var reg = exec.ToReg();
+		var back = reg.ToExec();
+
+		back.SecurityId.AssertEqual(exec.SecurityId);
+		back.TransactionId.AssertEqual(exec.TransactionId);
+		back.OrderPrice.AssertEqual(exec.OrderPrice);
+		back.Side.AssertEqual(exec.Side);
+		back.OrderType.AssertEqual(exec.OrderType);
+		back.PortfolioName.AssertEqual(exec.PortfolioName);
+	}
+
+	#endregion
+
+	#region IsCanceled / IsMatched / IsMatchedPartially / IsMatchedEmpty
+
+	[TestMethod]
+	public void IsCanceled_DoneWithBalance_ReturnsTrue()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Done,
+			Balance = 5m,
+			OrderVolume = 10m,
+		};
+
+		((IOrderMessage)msg).IsCanceled().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsCanceled_DoneZeroBalance_ReturnsFalse()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Done,
+			Balance = 0m,
+			OrderVolume = 10m,
+		};
+
+		((IOrderMessage)msg).IsCanceled().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsMatched_DoneZeroBalance_ReturnsTrue()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Done,
+			Balance = 0m,
+			OrderVolume = 10m,
+		};
+
+		((IOrderMessage)msg).IsMatched().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsMatched_DoneWithBalance_ReturnsFalse()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Done,
+			Balance = 5m,
+			OrderVolume = 10m,
+		};
+
+		((IOrderMessage)msg).IsMatched().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsMatchedPartially_BalanceLessThanVolume_ReturnsTrue()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			Balance = 5m,
+			OrderVolume = 10m,
+		};
+
+		((IOrderMessage)msg).IsMatchedPartially().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsMatchedPartially_BalanceEqualsVolume_ReturnsFalse()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			Balance = 10m,
+			OrderVolume = 10m,
+		};
+
+		((IOrderMessage)msg).IsMatchedPartially().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsMatchedEmpty_BalanceEqualsVolume_ReturnsTrue()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			Balance = 10m,
+			OrderVolume = 10m,
+		};
+
+		((IOrderMessage)msg).IsMatchedEmpty().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsMatchedEmpty_BalanceLessThanVolume_ReturnsFalse()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			Balance = 5m,
+			OrderVolume = 10m,
+		};
+
+		((IOrderMessage)msg).IsMatchedEmpty().AssertFalse();
+	}
+
+	#endregion
+
+	#region ApplyNewBalance
+
+	[TestMethod]
+	public void ApplyNewBalance_ReturnsNewValue()
+	{
+		var result = ((decimal?)10m).ApplyNewBalance(7m, 1, new TestReceiver());
+		result.AssertEqual(7m);
+	}
+
+	[TestMethod]
+	public void ApplyNewBalance_NegativeBalance_LogsError()
+	{
+		var logger = new TestReceiver();
+		((decimal?)10m).ApplyNewBalance(-1m, 1, logger);
+		IsTrue(logger.Logs.Count > 0);
+	}
+
+	[TestMethod]
+	public void ApplyNewBalance_IncreasingBalance_LogsError()
+	{
+		var logger = new TestReceiver();
+		((decimal?)5m).ApplyNewBalance(10m, 1, logger);
+		IsTrue(logger.Logs.Count > 0);
+	}
+
+	#endregion
+
+	#region SafeGetVolume
+
+	[TestMethod]
+	public void SafeGetVolume_HasOrderVolume_ReturnsIt()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderVolume = 10m,
+		};
+
+		msg.SafeGetVolume().AssertEqual(10m);
+	}
+
+	[TestMethod]
+	public void SafeGetVolume_HasTradeVolume_ReturnsIt()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			TradeVolume = 5m,
+		};
+
+		msg.SafeGetVolume().AssertEqual(5m);
+	}
+
+	[TestMethod]
+	public void SafeGetVolume_NoVolume_Throws()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+		};
+
+		Throws<ArgumentOutOfRangeException>(() => msg.SafeGetVolume());
+	}
+
+	#endregion
+
+	#region IsAllSecurity
+
+	[TestMethod]
+	public void IsAllSecurity_Default_ReturnsTrue()
+	{
+		default(SecurityId).IsAllSecurity().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsAllSecurity_AssociatedBoard_ReturnsTrue()
+	{
+		var secId = new SecurityId
+		{
+			SecurityCode = SecurityId.AssociatedBoardCode,
+			BoardCode = SecurityId.AssociatedBoardCode,
+		};
+		secId.IsAllSecurity().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsAllSecurity_Specific_ReturnsFalse()
+	{
+		Helper.CreateSecurityId().IsAllSecurity().AssertFalse();
+	}
+
+	#endregion
+
+	#region IsLookupAll
+
+	[TestMethod]
+	public void IsLookupAll_EmptyCriteria_ReturnsTrue()
+	{
+		var msg = new SecurityLookupMessage();
+		msg.IsLookupAll().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsLookupAll_WithSecurityType_ReturnsFalse()
+	{
+		var msg = new SecurityLookupMessage { SecurityType = SecurityTypes.Stock };
+		msg.IsLookupAll().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsLookupAll_WithName_ReturnsFalse()
+	{
+		var msg = new SecurityLookupMessage { Name = "test" };
+		msg.IsLookupAll().AssertFalse();
+	}
+
+	#endregion
+
+	#region ToMessageType2
+
+	[TestMethod]
+	public void ToMessageType2_Level1()
+	{
+		DataType.Level1.ToMessageType2().AssertEqual(MessageTypes.Level1Change);
+	}
+
+	[TestMethod]
+	public void ToMessageType2_MarketDepth()
+	{
+		DataType.MarketDepth.ToMessageType2().AssertEqual(MessageTypes.QuoteChange);
+	}
+
+	[TestMethod]
+	public void ToMessageType2_Ticks()
+	{
+		DataType.Ticks.ToMessageType2().AssertEqual(MessageTypes.Execution);
+	}
+
+	[TestMethod]
+	public void ToMessageType2_News()
+	{
+		DataType.News.ToMessageType2().AssertEqual(MessageTypes.News);
+	}
+
+	[TestMethod]
+	public void ToMessageType2_Securities()
+	{
+		DataType.Securities.ToMessageType2().AssertEqual(MessageTypes.Security);
+	}
+
+	#endregion
+
+	#region GetPlazaTimeInForce
+
+	[TestMethod]
+	public void GetPlazaTimeInForce_Bit1_PutInQueue()
+	{
+		0x1L.GetPlazaTimeInForce().AssertEqual(TimeInForce.PutInQueue);
+	}
+
+	[TestMethod]
+	public void GetPlazaTimeInForce_Bit2_CancelBalance()
+	{
+		0x2L.GetPlazaTimeInForce().AssertEqual(TimeInForce.CancelBalance);
+	}
+
+	[TestMethod]
+	public void GetPlazaTimeInForce_Bit80000_MatchOrCancel()
+	{
+		0x80000L.GetPlazaTimeInForce().AssertEqual(TimeInForce.MatchOrCancel);
+	}
+
+	[TestMethod]
+	public void GetPlazaTimeInForce_NoBits_ReturnsNull()
+	{
+		0L.GetPlazaTimeInForce().AssertNull();
+	}
+
+	#endregion
+
+	#region LastTradeDay
+
+	[TestMethod]
+	public void LastTradeDay_AlreadyTradeDay_ReturnsSame()
+	{
+		var monday = new DateTime(2025, 1, 6); // Monday
+		var board = new BoardMessage
+		{
+			WorkingTime = new WorkingTime
+			{
+				IsEnabled = true,
+				Periods =
+				[
+					new WorkingTimePeriod
+					{
+						Till = new DateTime(2026, 1, 1),
+						Times = [new Range<TimeSpan>(new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0))],
+					}
+				],
+			},
+		};
+
+		board.LastTradeDay(monday, true).AssertEqual(monday);
+	}
+
+	[TestMethod]
+	public void LastTradeDay_Sunday_ReturnsFriday()
+	{
+		var sunday = new DateTime(2025, 1, 5); // Sunday
+		var board = new BoardMessage
+		{
+			WorkingTime = new WorkingTime
+			{
+				IsEnabled = true,
+				Periods =
+				[
+					new WorkingTimePeriod
+					{
+						Till = new DateTime(2026, 1, 1),
+						Times = [new Range<TimeSpan>(new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0))],
+					}
+				],
+			},
+		};
+
+		board.LastTradeDay(sunday, true).AssertEqual(new DateTime(2025, 1, 3));
+	}
+
+	#endregion
 }
