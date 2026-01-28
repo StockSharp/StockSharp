@@ -156,7 +156,8 @@ public class BasketMessageAdapterTests : BaseTestClass
 			pendingManager,
 			subscriptionRouting,
 			parentChildMap,
-			orderRouting);
+			orderRouting,
+			null);
 
 		basket.IgnoreExtraAdapters = true;
 		basket.LatencyManager = null;

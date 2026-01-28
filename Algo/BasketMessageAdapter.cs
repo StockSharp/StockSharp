@@ -129,6 +129,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	private readonly IParentChildMap _parentChildMap;
 	private readonly IOrderRoutingState _orderRouting;
 	private readonly AdapterRouter _router;
+	private readonly IAdapterWrapperPipelineBuilder _pipelineBuilder;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
@@ -144,7 +145,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		IPortfolioMessageAdapterProvider portfolioAdapterProvider,
 		IStorageBuffer buffer)
 		: this(transactionIdGenerator, candleBuilderProvider, securityAdapterProvider, portfolioAdapterProvider, buffer,
-			null, null, null, null, null, null, null)
+			null, null, null, null, null, null, null, null)
 	{
 	}
 
@@ -162,7 +163,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		IPendingMessageManager pendingManager,
 		ISubscriptionRoutingState subscriptionRouting,
 		IParentChildMap parentChildMap,
-		IOrderRoutingState orderRouting)
+		IOrderRoutingState orderRouting,
+		IAdapterWrapperPipelineBuilder pipelineBuilder)
 	{
 		TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 		_innerAdapters = new InnerAdapterList(this);
@@ -186,6 +188,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		_parentChildMap = parentChildMap ?? new ParentChildMap();
 		_orderRouting = orderRouting ?? new OrderRoutingState();
 		_router = new AdapterRouter(_orderRouting, GetUnderlyingAdapter, StorageProcessor.CandleBuilderProvider, () => Level1Extend);
+		_pipelineBuilder = pipelineBuilder ?? new AdapterWrapperPipelineBuilder();
 
 		SecurityAdapterProvider.Changed += SecurityAdapterProviderOnChanged;
 		PortfolioAdapterProvider.Changed += PortfolioAdapterProviderOnChanged;
@@ -501,155 +504,39 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 	private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
 	{
-		var first = adapter;
-
-		IMessageAdapter ApplyOwnInner(MessageAdapterWrapper a)
+		var config = new AdapterWrapperConfiguration
 		{
-			a.OwnInnerAdapter = first != adapter;
-			return a;
-		}
+			SupportOffline = SupportOffline,
+			IgnoreExtraAdapters = IgnoreExtraAdapters,
+			SupportCandlesCompression = SupportCandlesCompression,
+			SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
+			SupportOrderBookTruncate = SupportOrderBookTruncate,
+			SupportLookupTracking = SupportLookupTracking,
+			IsSupportTransactionLog = IsSupportTransactionLog,
+			SupportSecurityAll = SupportSecurityAll,
+			SupportStorage = SupportStorage,
+			GenerateOrderBookFromLevel1 = GenerateOrderBookFromLevel1,
+			Level1Extend = Level1Extend,
+			IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
+			SuppressReconnectingErrors = SuppressReconnectingErrors,
+			SendFinishedCandlesImmediatelly = SendFinishedCandlesImmediatelly,
+			UseChannels = this.UseChannels(),
+			LatencyManager = LatencyManager,
+			SlippageManager = SlippageManager,
+			PnLManager = PnLManager,
+			CommissionManager = CommissionManager,
+			NativeIdStorage = NativeIdStorage,
+			MappingProvider = MappingProvider,
+			ExtendedInfoStorage = ExtendedInfoStorage,
+			StorageProcessor = StorageProcessor,
+			Buffer = Buffer,
+			FillGapsBehaviour = FillGapsBehaviour,
+			IsHeartbeatOn = IsHeartbeatOn,
+			SendOutErrorAsync = SendOutErrorAsync,
+			Parent = this,
+		};
 
-		if (IsHeartbeatOn(adapter))
-		{
-			adapter = ApplyOwnInner(new HeartbeatMessageAdapter(adapter)
-			{
-				SuppressReconnectingErrors = SuppressReconnectingErrors,
-				Parent = this,
-			});
-		}
-
-		if (SupportOffline)
-			adapter = ApplyOwnInner(new OfflineMessageAdapter(adapter));
-
-		if (IgnoreExtraAdapters)
-			return adapter;
-
-		if (this.UseChannels() && adapter.UseChannels())
-		{
-			adapter = ApplyOwnInner(new ChannelMessageAdapter(adapter,
-				adapter.UseInChannel ? new AsyncMessageChannel(adapter) : new PassThroughMessageChannel(),
-				adapter.UseOutChannel ? new InMemoryMessageChannel(new MessageByOrderQueue(), $"{adapter} Out", ex => SendOutErrorAsync(ex, default)) : new PassThroughMessageChannel()
-			));
-		}
-
-		if (LatencyManager != null)
-		{
-			adapter = ApplyOwnInner(new LatencyMessageAdapter(adapter, LatencyManager.Clone()));
-		}
-
-		if (SlippageManager != null)
-		{
-			adapter = ApplyOwnInner(new SlippageMessageAdapter(adapter, SlippageManager.Clone()));
-		}
-
-		if (adapter.IsNativeIdentifiers)
-		{
-			adapter = ApplyOwnInner(new SecurityNativeIdMessageAdapter(adapter, NativeIdStorage));
-		}
-
-		if (MappingProvider != null)
-		{
-			adapter = ApplyOwnInner(new SecurityMappingMessageAdapter(adapter, MappingProvider));
-		}
-
-		if (SupportLookupTracking)
-		{
-			adapter = ApplyOwnInner(new LookupTrackingMessageAdapter(adapter, new LookupTrackingManagerState()));
-		}
-
-		if (IsSupportTransactionLog)
-		{
-			adapter = ApplyOwnInner(new TransactionOrderingMessageAdapter(adapter));
-		}
-
-		if (adapter.IsPositionsEmulationRequired is bool isPosEmu)
-		{
-			adapter = ApplyOwnInner(new PositionMessageAdapter(adapter, new PositionManager(isPosEmu, new PositionManagerState())));
-		}
-
-		if (adapter.IsSupportSubscriptions)
-		{
-			adapter = ApplyOwnInner(new SubscriptionOnlineMessageAdapter(adapter));
-		}
-
-		if (SupportSecurityAll)
-		{
-			adapter = ApplyOwnInner(new SubscriptionSecurityAllMessageAdapter(adapter));
-		}
-
-		if (GenerateOrderBookFromLevel1 && adapter.GetSupportedMarketDataTypes().Contains(DataType.Level1) && !adapter.GetSupportedMarketDataTypes().Contains(DataType.MarketDepth))
-		{
-			adapter = ApplyOwnInner(new Level1DepthBuilderAdapter(adapter));
-		}
-
-		if (Level1Extend && !adapter.GetSupportedMarketDataTypes().Contains(DataType.Level1))
-		{
-			adapter = ApplyOwnInner(new Level1ExtendBuilderAdapter(adapter));
-		}
-
-		if (PnLManager != null && !adapter.IsSupportExecutionsPnL)
-		{
-			adapter = ApplyOwnInner(new PnLMessageAdapter(adapter, PnLManager.Clone()));
-		}
-
-		if (CommissionManager != null)
-		{
-			adapter = ApplyOwnInner(new CommissionMessageAdapter(adapter, CommissionManager.Clone()));
-		}
-
-		if (adapter.IsSupportSubscriptions)
-		{
-			adapter = ApplyOwnInner(new SubscriptionMessageAdapter(adapter)
-			{
-				IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
-			});
-		}
-
-		if (adapter.IsFullCandlesOnly)
-		{
-			adapter = ApplyOwnInner(new CandleHolderMessageAdapter(adapter));
-		}
-
-		if (SupportStorage && StorageProcessor.Settings.StorageRegistry != null)
-		{
-			adapter = ApplyOwnInner(new StorageMessageAdapter(adapter, StorageProcessor));
-		}
-
-		if (SupportBuildingFromOrderLog)
-		{
-			adapter = ApplyOwnInner(new OrderLogMessageAdapter(adapter));
-		}
-
-		if (SupportBuildingFromOrderLog || adapter.IsSupportOrderBookIncrements)
-		{
-			adapter = ApplyOwnInner(new OrderBookIncrementMessageAdapter(adapter));
-		}
-
-		if (SupportOrderBookTruncate)
-		{
-			adapter = ApplyOwnInner(new OrderBookTruncateMessageAdapter(adapter));
-		}
-
-		if (SupportCandlesCompression)
-		{
-			adapter = ApplyOwnInner(new CandleBuilderMessageAdapter(adapter, StorageProcessor.CandleBuilderProvider)
-			{
-				SendFinishedCandlesImmediatelly = SendFinishedCandlesImmediatelly,
-				Buffer = Buffer,
-			});
-		}
-
-		if (ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
-		{
-			adapter = ApplyOwnInner(new ExtendedInfoStorageMessageAdapter(adapter, ExtendedInfoStorage));
-		}
-
-		if (FillGapsBehaviour is not null)
-		{
-			adapter = new FillGapsMessageAdapter(adapter, FillGapsBehaviour);
-		}
-
-		return (IMessageAdapterWrapper)adapter;
+		return _pipelineBuilder.Build(adapter, config);
 	}
 
 	private readonly Dictionary<IMessageAdapter, bool> _heartbeatFlags = [];
