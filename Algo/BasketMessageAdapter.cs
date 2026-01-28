@@ -1144,88 +1144,58 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 	private async ValueTask ProcessMarketDataRequest(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		async ValueTask<IMessageAdapter[]> GetAdapters()
-		{
-			if (!mdMsg.IsSubscribe)
-				return null;
+		IMessageAdapter[] adapters;
 
-			var (adapters, isPended) = await GetSubscriptionAdapters(mdMsg, cancellationToken);
+		if (mdMsg.IsSubscribe)
+		{
+			var (a, isPended) = await GetSubscriptionAdapters(mdMsg, cancellationToken);
 
 			if (isPended)
-				return null;
+				return;
+
+			adapters = a;
 
 			if (adapters.Length == 0)
 			{
 				await SendOutMessageAsync(mdMsg.TransactionId.CreateNotSupported(), cancellationToken);
-				return null;
+				return;
 			}
 
-			return adapters;
-		}
-
-		if (mdMsg.DataType2 == DataType.News || mdMsg.DataType2 == DataType.Board)
-		{
-			var adapters = await GetAdapters();
-
-			if (mdMsg.IsSubscribe)
-			{
-				if (adapters == null)
-					return;
-
-				_subscriptionRouting.AddSubscription(mdMsg.TransactionId, (ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.DataType2);
-			}
-
-			await ToChild(mdMsg, adapters).Select(pair => SendRequest(pair.Key, pair.Value, cancellationToken)).WhenAll();
+			_subscriptionRouting.AddSubscription(mdMsg.TransactionId, (ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.DataType2);
 		}
 		else
 		{
-			IMessageAdapter adapter;
+			adapters = null;
 
-			if (mdMsg.IsSubscribe)
+			var originTransId = mdMsg.OriginalTransactionId;
+
+			if (!_subscriptionRouting.TryGetSubscription(originTransId, out _, out _, out _))
 			{
-				adapter = (await GetAdapters())?.First();
+				Message outMsg = null;
 
-				if (adapter == null)
-					return;
-
-				mdMsg = mdMsg.TypedClone();
-				_subscriptionRouting.AddSubscription(mdMsg.TransactionId, (ISubscriptionMessage)mdMsg.Clone(), new[] { adapter }, mdMsg.DataType2);
-			}
-			else
-			{
-				var originTransId = mdMsg.OriginalTransactionId;
-
-				if (!_subscriptionRouting.TryGetSubscription(originTransId, out _, out var adapters, out _))
+				using (await _connectedResponseLock.LockAsync(cancellationToken))
 				{
-					Message outMsg = null;
+					var suspended = _pendingState.TryRemoveMarketData(originTransId);
 
-					using (await _connectedResponseLock.LockAsync(cancellationToken))
+					if (suspended != null)
 					{
-						var suspended = _pendingState.TryRemoveMarketData(originTransId);
-
-						if (suspended != null)
-						{
-							outMsg = new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId };
-						}
+						outMsg = new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId };
 					}
+				}
 
-					if (outMsg != null)
-					{
-						await SendOutMessageAsync(outMsg, cancellationToken);
-						return;
-					}
-
-					LogInfo("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
+				if (outMsg != null)
+				{
+					await SendOutMessageAsync(outMsg, cancellationToken);
 					return;
 				}
 
-				adapter = adapters.First();
-
-				mdMsg = mdMsg.TypedClone();
+				LogInfo("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
+				return;
 			}
-
-			await SendRequest(mdMsg, adapter, cancellationToken);
 		}
+
+		// Unified path: always use ToChild for consistent ParentChildMap tracking
+		await ToChild(mdMsg, adapters).Select(pair => SendRequest(pair.Key, pair.Value, cancellationToken)).WhenAll();
 	}
 
 	private async ValueTask ProcessPortfolioMessage(string portfolioName, OrderMessage message, CancellationToken cancellationToken)
