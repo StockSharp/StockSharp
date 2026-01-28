@@ -1303,4 +1303,149 @@ public class ExtensionsMethodsTests : BaseTestClass
 	}
 
 	#endregion
+
+	// ===== Tier 3 =====
+
+	#region ToReadableString (DataType)
+
+	[TestMethod]
+	public void ToReadableString_Days()
+	{
+		var dt = Extensions.TimeFrame(TimeSpan.FromDays(1));
+		var str = dt.ToReadableString();
+		IsTrue(str.Length > 0);
+	}
+
+	[TestMethod]
+	public void ToReadableString_Minutes()
+	{
+		var dt = Extensions.TimeFrame(TimeSpan.FromMinutes(5));
+		var str = dt.ToReadableString();
+		IsTrue(str.Length > 0);
+	}
+
+	#endregion
+
+	#region Join (OrderBook)
+
+	[TestMethod]
+	public void Join_MergesAndSortsBidsAsks()
+	{
+		var secId = Helper.CreateSecurityId();
+		var original = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10), new QuoteChange(98m, 5)],
+			Asks = [new QuoteChange(101m, 10), new QuoteChange(103m, 5)],
+		};
+		var rare = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(99m, 3)],
+			Asks = [new QuoteChange(102m, 3)],
+		};
+
+		var result = original.Join(rare);
+
+		result.SecurityId.AssertEqual(secId);
+		// Bids sorted descending: 100, 99, 98
+		result.Bids.Length.AssertEqual(3);
+		result.Bids[0].Price.AssertEqual(100m);
+		result.Bids[1].Price.AssertEqual(99m);
+		result.Bids[2].Price.AssertEqual(98m);
+		// Asks sorted ascending: 101, 102, 103
+		result.Asks.Length.AssertEqual(3);
+		result.Asks[0].Price.AssertEqual(101m);
+		result.Asks[1].Price.AssertEqual(102m);
+		result.Asks[2].Price.AssertEqual(103m);
+	}
+
+	[TestMethod]
+	public void Join_EmptyRare_ReturnsOriginal()
+	{
+		var secId = Helper.CreateSecurityId();
+		var original = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [new QuoteChange(101m, 10)],
+		};
+		var rare = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			Bids = [],
+			Asks = [],
+		};
+
+		var result = original.Join(rare);
+
+		result.Bids.Length.AssertEqual(1);
+		result.Asks.Length.AssertEqual(1);
+	}
+
+	#endregion
+
+	#region IsHalfEmpty
+
+	[TestMethod]
+	public void IsHalfEmpty_OnlyBids_ReturnsTrue()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [],
+		};
+
+		msg.IsHalfEmpty().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsHalfEmpty_OnlyAsks_ReturnsTrue()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [],
+			Asks = [new QuoteChange(101m, 10)],
+		};
+
+		msg.IsHalfEmpty().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsHalfEmpty_BothSides_ReturnsFalse()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [new QuoteChange(101m, 10)],
+		};
+
+		msg.IsHalfEmpty().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsHalfEmpty_Empty_ReturnsFalse()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [],
+			Asks = [],
+		};
+
+		msg.IsHalfEmpty().AssertFalse();
+	}
+
+	#endregion
 }
