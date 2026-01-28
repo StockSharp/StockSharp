@@ -118,10 +118,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		}
 	}
 
-	private readonly Dictionary<long, HashSet<IMessageAdapter>> _nonSupportedAdapters = [];
 	private readonly CachedSynchronizedDictionary<IMessageAdapter, IMessageAdapter> _adapterWrappers = [];
 	private readonly AsyncLock _connectedResponseLock = new();
-	private readonly Dictionary<MessageTypes, CachedSynchronizedSet<IMessageAdapter>> _messageTypeAdapters = [];
 
 	private readonly IAdapterConnectionState _connectionState;
 	private readonly IAdapterConnectionManager _connectionManager;
@@ -130,9 +128,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	private readonly ISubscriptionRoutingState _subscriptionRouting;
 	private readonly IParentChildMap _parentChildMap;
 	private readonly IOrderRoutingState _orderRouting;
-
-	private readonly SynchronizedDictionary<string, IMessageAdapter> _portfolioAdapters = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly SynchronizedDictionary<(SecurityId secId, DataType dt), IMessageAdapter> _securityAdapters = [];
+	private readonly AdapterRouter _router;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
@@ -189,6 +185,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		_subscriptionRouting = subscriptionRouting ?? new SubscriptionRoutingState();
 		_parentChildMap = parentChildMap ?? new ParentChildMap();
 		_orderRouting = orderRouting ?? new OrderRoutingState();
+		_router = new AdapterRouter(_orderRouting, GetUnderlyingAdapter, StorageProcessor.CandleBuilderProvider, () => Level1Extend);
 
 		SecurityAdapterProvider.Changed += SecurityAdapterProviderOnChanged;
 		PortfolioAdapterProvider.Changed += PortfolioAdapterProviderOnChanged;
@@ -473,7 +470,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		set => throw new NotSupportedException();
 	}
 
-	private void TryAddOrderAdapter(long transId, IMessageAdapter adapter) => _orderRouting.TryAddOrderAdapter(transId, GetUnderlyingAdapter(adapter));
+	private void TryAddOrderAdapter(long transId, IMessageAdapter adapter) => _router.AddOrderAdapter(transId, adapter);
 
 	private async ValueTask ProcessReset(ResetMessage message, bool isConnect, CancellationToken cancellationToken)
 	{
@@ -490,12 +487,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 		using (await _connectedResponseLock.LockAsync(cancellationToken))
 		{
-			_messageTypeAdapters.Clear();
+			_router.Clear();
 
 			if (!isConnect)
 				_pendingState.Clear();
-
-			_nonSupportedAdapters.Clear();
 
 			_connectionManager.Reset();
 		}
@@ -923,77 +918,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	private async ValueTask<(IMessageAdapter[] adapters, bool isPended, bool skipSupportedMessages)> GetAdapters(Message message, CancellationToken cancellationToken)
 	{
 		var isPended = false;
-		var skipSupportedMessages = false;
-
-		IMessageAdapter[] adapters = null;
-
-		var adapter = message.Adapter;
-
-		if (adapter != null)
-			adapter = GetUnderlyingAdapter(adapter);
-
-		if (adapter == null && message is MarketDataMessage mdMsg && mdMsg.DataType2.IsSecurityRequired && mdMsg.SecurityId != default)
-		{
-			adapter = _securityAdapters.TryGetValue((mdMsg.SecurityId, mdMsg.DataType2)) ?? _securityAdapters.TryGetValue((mdMsg.SecurityId, (DataType)null));
-
-			if (adapter != null && !adapter.IsMessageSupported(message.Type))
-			{
-				adapter = null;
-			}
-		}
-
-		if (adapter != null)
-		{
-			adapter = _adapterWrappers.TryGetValue(adapter);
-
-			if (adapter != null)
-			{
-				adapters = [adapter];
-				skipSupportedMessages = true;
-			}
-		}
 
 		using (await _connectedResponseLock.LockAsync(cancellationToken))
 		{
-			adapters ??= _messageTypeAdapters.TryGetValue(message.Type)?.Cache;
-
-			if (adapters != null)
-			{
-				if (message.Type == MessageTypes.MarketData)
-				{
-					var mdMsg1 = (MarketDataMessage)message;
-					var set = _nonSupportedAdapters.TryGetValue(mdMsg1.TransactionId);
-
-					if (set != null)
-					{
-						adapters = [.. adapters.Where(a => !set.Contains(GetUnderlyingAdapter(a)))];
-					}
-					else if (mdMsg1.DataType2 == DataType.News && (mdMsg1.SecurityId == default || mdMsg1.SecurityId == SecurityId.News))
-					{
-						adapters = [.. adapters.Where(a => !a.IsSecurityNewsOnly)];
-					}
-
-					if (adapters.Length == 0)
-						adapters = null;
-				}
-				else if (message.Type == MessageTypes.SecurityLookup)
-				{
-					var isAll = ((SecurityLookupMessage)message).IsLookupAll();
-
-					if (isAll)
-						adapters = [.. adapters.Where(a => a.IsSupportSecuritiesLookupAll())];
-				}
-				else if (message.Type == MessageTypes.OrderStatus)
-				{
-					if (!((ISubscriptionMessage)message).FilterEnabled)
-						adapters = [.. adapters.Where(a => a.IsAllDownloadingSupported(DataType.Transactions))];
-				}
-				else if (message.Type == MessageTypes.PortfolioLookup)
-				{
-					if (!((ISubscriptionMessage)message).FilterEnabled)
-						adapters = [.. adapters.Where(a => a.IsAllDownloadingSupported(DataType.PositionChanges))];
-				}
-			}
+			var (adapters, skipSupportedMessages) = _router.GetAdapters(message, a => _adapterWrappers.TryGetValue(a));
 
 			if (adapters == null)
 			{
@@ -1004,93 +932,23 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 					return ([], isPended, skipSupportedMessages);
 				}
 			}
+
+			adapters ??= [];
+
+			if (adapters.Length == 0)
+			{
+				LogInfo(LocalizedStrings.NoAdapterFoundFor.Put(message));
+			}
+
+			return (adapters, isPended, skipSupportedMessages);
 		}
-
-		adapters ??= [];
-
-		if (adapters.Length == 0)
-		{
-			LogInfo(LocalizedStrings.NoAdapterFoundFor.Put(message));
-			//throw new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(message));
-		}
-
-		return (adapters, isPended, skipSupportedMessages);
 	}
 
 	private async ValueTask<(IMessageAdapter[] adapters, bool isPended)> GetSubscriptionAdapters(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		var (adapters, isPended, skipSupportedMessages) = await GetAdapters(mdMsg, cancellationToken);
 
-		adapters = adapters.Where(a =>
-		{
-			if (skipSupportedMessages)
-				return true;
-
-			if (!mdMsg.DataType2.IsTFCandles)
-			{
-				var isCandles = mdMsg.DataType2.IsCandles;
-
-				if (a.IsMarketDataTypeSupported(mdMsg.DataType2) && (!isCandles || a.IsCandlesSupported(mdMsg)))
-					return true;
-				else
-				{
-					if (mdMsg.DataType2 == DataType.MarketDepth)
-					{
-						if (mdMsg.BuildMode == MarketDataBuildModes.Load)
-							return false;
-
-						if (mdMsg.BuildFrom == DataType.Level1 || mdMsg.BuildFrom == DataType.OrderLog)
-							return a.IsMarketDataTypeSupported(mdMsg.BuildFrom);
-						else if (mdMsg.BuildFrom == null)
-						{
-							if (a.IsMarketDataTypeSupported(DataType.OrderLog))
-								mdMsg.BuildFrom = DataType.OrderLog;
-							else if (a.IsMarketDataTypeSupported(DataType.Level1))
-								mdMsg.BuildFrom = DataType.Level1;
-							else
-								return false;
-
-							return true;
-						}
-
-						return false;
-					}
-					else if (mdMsg.DataType2 == DataType.Level1)
-						return Level1Extend && a.IsMarketDataTypeSupported(mdMsg.BuildFrom ?? DataType.MarketDepth);
-					else if (mdMsg.DataType2 == DataType.Ticks)
-						return a.IsMarketDataTypeSupported(DataType.OrderLog);
-					else
-					{
-						if (isCandles && a.TryGetCandlesBuildFrom(mdMsg, StorageProcessor.CandleBuilderProvider) != null)
-							return true;
-
-						return false;
-					}
-				}
-			}
-
-			var original = mdMsg.GetTimeFrame();
-			var timeFrames = a.GetTimeFrames(mdMsg.SecurityId, mdMsg.From, mdMsg.To).ToArray();
-
-			if (timeFrames.Contains(original) || a.CheckTimeFrameByRequest)
-				return true;
-
-			if (mdMsg.AllowBuildFromSmallerTimeFrame)
-			{
-				var smaller = timeFrames
-							  .FilterSmallerTimeFrames(original)
-							  .OrderByDescending()
-							  .FirstOr();
-
-				if (smaller != null)
-					return true;
-			}
-
-			return a.TryGetCandlesBuildFrom(mdMsg, StorageProcessor.CandleBuilderProvider) != null;
-		}).ToArray();
-
-		//if (!isPended && adapters.Length == 0)
-		//	throw new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(mdMsg));
+		adapters = _router.GetSubscriptionAdapters(mdMsg, adapters, skipSupportedMessages);
 
 		return (adapters, isPended);
 	}
@@ -1229,7 +1087,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	{
 		IMessageAdapter adapter = null;
 
-		if (_orderRouting.TryGetOrderAdapter(originId, out var orderAdapter))
+		if (_router.TryGetOrderAdapter(originId, out var orderAdapter))
 			adapter = orderAdapter;
 
 		if (adapter == null)
@@ -1281,7 +1139,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
 	/// <returns>Found <see cref="IMessageAdapter"/>.</returns>
 	public bool TryGetAdapter(string porfolioName, out IMessageAdapter adapter)
-		=> _portfolioAdapters.TryGetValue(porfolioName, out adapter);
+	{
+		adapter = _router.GetPortfolioAdapter(porfolioName, a => a);
+		return adapter != null;
+	}
 
 	private async ValueTask<(IMessageAdapter adapter, bool isPended)> GetAdapter(string portfolioName, Message message, CancellationToken cancellationToken)
 	{
@@ -1291,14 +1152,17 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
-		if (!TryGetAdapter(portfolioName, out var adapter))
+		// check if portfolio has a dedicated adapter
+		var underlyingAdapter = _router.GetPortfolioAdapter(portfolioName, a => a);
+
+		if (underlyingAdapter == null)
 		{
 			var (adapters, isPended, _) = (await GetAdapters(message, cancellationToken));
 			return (adapters.FirstOrDefault(), isPended);
 		}
 		else
 		{
-			var wrapper = _adapterWrappers.TryGetValue(adapter) ?? throw new InvalidOperationException(LocalizedStrings.ConnectionIsNotConnected.Put(adapter));
+			var wrapper = _adapterWrappers.TryGetValue(underlyingAdapter) ?? throw new InvalidOperationException(LocalizedStrings.ConnectionIsNotConnected.Put(underlyingAdapter));
 
 			return (wrapper, false);
 		}
@@ -1478,7 +1342,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			if (error == null)
 			{
 				foreach (var supportedMessage in innerAdapter.SupportedInMessages)
-					_messageTypeAdapters.SafeAdd(supportedMessage).Add(wrapper);
+					_router.AddMessageTypeAdapter(supportedMessage, wrapper);
 			}
 
 			var msgs = _connectionManager.ProcessConnect(underlyingAdapter, error);
@@ -1521,17 +1385,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		using (await _connectedResponseLock.LockAsync(cancellationToken))
 		{
 			foreach (var supportedMessage in innerAdapter.SupportedInMessages)
-			{
-				var list = _messageTypeAdapters.TryGetValue(supportedMessage);
-
-				if (list == null)
-					continue;
-
-				list.Remove(wrapper);
-
-				if (list.Count == 0)
-					_messageTypeAdapters.Remove(supportedMessage);
-			}
+				_router.RemoveMessageTypeAdapter(supportedMessage, wrapper);
 
 			var msgs = _connectionManager.ProcessDisconnect(underlyingAdapter, error);
 			extra.AddRange(msgs);
@@ -1622,8 +1476,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 				// try loopback only subscribe messages
 				if (subscrMsg.IsSubscribe)
 				{
-					var set = _nonSupportedAdapters.SafeAdd(originalTransactionId, _ => []);
-					set.Add(GetUnderlyingAdapter(adapter));
+					_router.AddNotSupported(originalTransactionId, adapter);
 
 					subscrMsg.LoopBack(this);
 				}
@@ -1642,12 +1495,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			var adapter = InnerAdapters.SyncGet(c => c.FindById(adapterId));
 
 			if (adapter == null)
-				_securityAdapters.Remove(t);
+				_router.RemoveSecurityAdapter(t.Item1, t.Item2);
 			else
-				_securityAdapters[t] = adapter;
+				_router.SetSecurityAdapter(t.Item1, t.Item2, adapter);
 		}
 		else
-			_securityAdapters.Remove(t);
+			_router.RemoveSecurityAdapter(t.Item1, t.Item2);
 	}
 
 	private void PortfolioAdapterProviderOnChanged(string key, Guid adapterId, bool changeType)
@@ -1657,12 +1510,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			var adapter = InnerAdapters.SyncGet(c => c.FindById(adapterId));
 
 			if (adapter == null)
-				_portfolioAdapters.Remove(key);
+				_router.RemovePortfolioAdapter(key);
 			else
-				_portfolioAdapters[key] = adapter;
+				_router.SetPortfolioAdapter(key, adapter);
 		}
 		else
-			_portfolioAdapters.Remove(key);
+			_router.RemovePortfolioAdapter(key);
 	}
 
 	/// <inheritdoc />
@@ -1710,24 +1563,24 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 				}
 			}
 
-			_securityAdapters.Clear();
+			_router.ClearSecurityAdapters();
 
 			foreach (var pair in SecurityAdapterProvider.Adapters)
 			{
 				if (!adapters.TryGetValue(pair.Value, out var adapter))
 					continue;
 
-				_securityAdapters.Add(pair.Key, adapter);
+				_router.AddSecurityAdapter(pair.Key, adapter);
 			}
 
-			_portfolioAdapters.Clear();
+			_router.ClearPortfolioAdapters();
 
 			foreach (var pair in PortfolioAdapterProvider.Adapters)
 			{
 				if (!adapters.TryGetValue(pair.Value, out var adapter))
 					continue;
 
-				_portfolioAdapters.Add(pair.Key, adapter);
+				_router.AddPortfolioAdapter(pair.Key, adapter);
 			}
 		}
 
