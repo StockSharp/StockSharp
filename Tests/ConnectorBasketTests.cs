@@ -1,0 +1,838 @@
+namespace StockSharp.Tests;
+
+using System.Collections.Concurrent;
+
+using StockSharp.Algo.Basket;
+using StockSharp.Algo.Candles.Compression;
+
+/// <summary>
+/// Connector tests with injected basket state objects for white-box validation.
+/// Each test is an analog of AsyncExtensionsTests Connector tests,
+/// but validates internal BasketMessageAdapter state at every step.
+/// </summary>
+[TestClass]
+public class ConnectorBasketTests : BaseTestClass
+{
+	#region Infrastructure
+
+	/// <summary>
+	/// Subclass to allow setting custom Adapter with injected routing manager.
+	/// </summary>
+	private sealed class TestConnector : Connector
+	{
+		public TestConnector(BasketMessageAdapter adapter)
+			: base(initAdapter: false)
+		{
+			Adapter = adapter;
+		}
+	}
+
+	/// <summary>
+	/// Mock adapter identical to AsyncExtensionsTests.MockAdapter.
+	/// </summary>
+	private sealed class MockAdapter : MessageAdapter
+	{
+		public ConcurrentQueue<Message> SentMessages { get; } = [];
+		public Dictionary<long, MarketDataMessage> ActiveSubscriptions { get; } = [];
+		public Dictionary<long, OrderRegisterMessage> ActiveOrders { get; } = [];
+		public long LastSubscribedId { get; private set; }
+		public long LastOrderTransactionId { get; private set; }
+		public OrderCancelMessage LastCancelMessage { get; private set; }
+
+		public MockAdapter(IdGenerator transactionIdGenerator) : base(transactionIdGenerator)
+		{
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
+			this.AddSupportedMarketDataType(DataType.Level1);
+		}
+
+		public override bool IsAllDownloadingSupported(DataType dataType)
+			=> dataType == DataType.Securities || dataType == DataType.Transactions;
+
+		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			SentMessages.Enqueue(message);
+
+			switch (message.Type)
+			{
+				case MessageTypes.Connect:
+					SendOutMessage(new ConnectMessage());
+					break;
+				case MessageTypes.Disconnect:
+					SendOutMessage(new DisconnectMessage());
+					break;
+				case MessageTypes.MarketData:
+				{
+					var mdMsg = (MarketDataMessage)message;
+					if (mdMsg.IsSubscribe)
+					{
+						SendOutMessage(mdMsg.CreateResponse());
+						ActiveSubscriptions[mdMsg.TransactionId] = mdMsg;
+						LastSubscribedId = mdMsg.TransactionId;
+						if (mdMsg.To == null)
+							SendSubscriptionResult(mdMsg);
+					}
+					else
+					{
+						ActiveSubscriptions.Remove(mdMsg.OriginalTransactionId);
+						SendOutMessage(mdMsg.CreateResponse());
+					}
+					break;
+				}
+				case MessageTypes.OrderRegister:
+				{
+					var regMsg = (OrderRegisterMessage)message;
+					ActiveOrders[regMsg.TransactionId] = regMsg;
+					LastOrderTransactionId = regMsg.TransactionId;
+					break;
+				}
+				case MessageTypes.OrderCancel:
+				{
+					LastCancelMessage = (OrderCancelMessage)message;
+					break;
+				}
+				case MessageTypes.OrderStatus:
+				{
+					var osm = (OrderStatusMessage)message;
+					if (osm.IsSubscribe)
+					{
+						SendOutMessage(osm.CreateResponse());
+						SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = osm.TransactionId });
+					}
+					break;
+				}
+				case MessageTypes.Reset:
+				{
+					ActiveSubscriptions.Clear();
+					ActiveOrders.Clear();
+					break;
+				}
+			}
+
+			return default;
+		}
+
+		public void SimulateData(long subscriptionId, Message data)
+		{
+			if (data is ISubscriptionIdMessage sid)
+				sid.SetSubscriptionIds([subscriptionId]);
+			SendOutMessage(data);
+		}
+
+		public void FinishHistoricalSubscription(long subscriptionId)
+		{
+			if (ActiveSubscriptions.TryGetValue(subscriptionId, out var mdMsg))
+				SendSubscriptionResult(mdMsg);
+		}
+
+		public void SimulateOrderExecution(long origTransId, OrderStates? state = null, long? orderId = null,
+			decimal? tradePrice = null, decimal? tradeVolume = null, long? tradeId = null, Exception error = null)
+		{
+			var exec = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				OriginalTransactionId = origTransId,
+				OrderId = orderId,
+				OrderState = state,
+				TradePrice = tradePrice,
+				TradeVolume = tradeVolume,
+				TradeId = tradeId,
+				Error = error,
+				HasOrderInfo = state != null || orderId != null || error != null,
+				ServerTime = DateTime.UtcNow,
+			};
+
+			if (ActiveOrders.TryGetValue(origTransId, out var regMsg))
+				exec.SecurityId = regMsg.SecurityId;
+
+			SendOutMessage(exec);
+		}
+	}
+
+	/// <summary>
+	/// Holds all injectable state objects for white-box validation.
+	/// </summary>
+	private sealed class BasketState
+	{
+		public AdapterConnectionState ConnectionState { get; } = new();
+		public AdapterConnectionManager ConnectionManager { get; }
+		public SubscriptionRoutingState SubscriptionRouting { get; } = new();
+		public ParentChildMap ParentChildMap { get; } = new();
+		public PendingMessageState PendingState { get; } = new();
+		public OrderRoutingState OrderRouting { get; } = new();
+
+		public BasketState()
+		{
+			ConnectionManager = new AdapterConnectionManager(ConnectionState);
+		}
+	}
+
+	private static (TestConnector connector, MockAdapter adapter, BasketState state) CreateConnectorWithBasketState()
+	{
+		var state = new BasketState();
+
+		var idGen = new MillisecondIncrementalIdGenerator();
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+
+		var routingManager = new BasketRoutingManager(
+			state.ConnectionState,
+			state.ConnectionManager,
+			state.PendingState,
+			state.SubscriptionRouting,
+			state.ParentChildMap,
+			state.OrderRouting,
+			a => a, candleBuilderProvider, () => false, idGen);
+
+		var basket = new BasketMessageAdapter(
+			idGen,
+			candleBuilderProvider,
+			new InMemorySecurityMessageAdapterProvider(),
+			new InMemoryPortfolioMessageAdapterProvider(),
+			null, null, routingManager);
+
+		basket.IgnoreExtraAdapters = true;
+		basket.LatencyManager = null;
+		basket.SlippageManager = null;
+		basket.CommissionManager = null;
+
+		var connector = new TestConnector(basket);
+
+		var adapter = new MockAdapter(connector.TransactionIdGenerator);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
+		return (connector, adapter, state);
+	}
+
+	#endregion
+
+	#region Connection
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_ConnectAsync()
+	{
+		var (connector, adapter, state) = CreateConnectorWithBasketState();
+
+		// --- Before connect ---
+		state.ConnectionState.ConnectedCount.AssertEqual(0, "ConnectedCount before connect");
+		state.ConnectionState.HasPendingAdapters.AssertFalse("HasPendingAdapters before connect");
+		state.PendingState.Count.AssertEqual(0, "PendingState before connect");
+
+		// --- Connect ---
+		await connector.ConnectAsync(CancellationToken);
+
+		// --- After connect: validate state ---
+		AreEqual(ConnectionStates.Connected, connector.ConnectionState);
+		state.ConnectionState.ConnectedCount.AssertGreater(0, "At least one adapter connected");
+		state.ConnectionState.HasPendingAdapters.AssertFalse("No pending adapters after connect");
+		state.ConnectionState.AllFailed.AssertFalse("No failures");
+		state.PendingState.Count.AssertEqual(0, "No pending messages");
+
+		// --- Disconnect ---
+		await connector.DisconnectAsync(CancellationToken);
+
+		// --- After disconnect: validate state ---
+		AreEqual(ConnectionStates.Disconnected, connector.ConnectionState);
+		state.ConnectionState.AllDisconnectedOrFailed.AssertTrue("All disconnected after disconnect");
+		state.ConnectionState.ConnectedCount.AssertEqual(0, "No connected adapters after disconnect");
+		state.PendingState.Count.AssertEqual(0);
+	}
+
+	#endregion
+
+	#region Order Registration
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_RegisterOrder_Basic()
+	{
+		var (connector, adapter, state) = CreateConnectorWithBasketState();
+
+		await connector.ConnectAsync(CancellationToken);
+
+		// --- After connect: validate state ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.HasPendingAdapters.AssertFalse();
+		state.PendingState.Count.AssertEqual(0);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var orderReceived = new List<Order>();
+		connector.OrderReceived += (_, o) => orderReceived.Add(o);
+
+		// --- Register order ---
+		connector.RegisterOrder(order);
+
+		// Wait for Pending state
+		await Task.Run(async () =>
+		{
+			while (order.State == OrderStates.None)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		AreEqual(OrderStates.Pending, order.State);
+		AreNotEqual(0L, order.TransactionId);
+
+		// --- Validate state after registration ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0, "Still connected");
+		state.PendingState.Count.AssertEqual(0, "No pending messages");
+
+		// orderRouting should have the mapping
+		state.OrderRouting.TryGetOrderAdapter(order.TransactionId, out var routedAdapter)
+			.AssertTrue("OrderRouting should have transId→adapter mapping");
+
+		// --- Simulate acceptance ---
+		adapter.SimulateOrderExecution(order.TransactionId, OrderStates.Active, orderId: 123);
+
+		await Task.Run(async () =>
+		{
+			while (order.State != OrderStates.Active)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		AreEqual(OrderStates.Active, order.State);
+		AreEqual(123L, order.Id);
+
+		await Task.Delay(100, CancellationToken);
+
+		orderReceived.Count.AssertGreater(0);
+
+		// --- State still consistent ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.OrderRouting.TryGetOrderAdapter(order.TransactionId, out _).AssertTrue("Order mapping preserved");
+	}
+
+	#endregion
+
+	#region Subscription Live
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_Subscription_Live()
+	{
+		var (connector, adapter, state) = CreateConnectorWithBasketState();
+
+		await connector.ConnectAsync(CancellationToken);
+
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.HasPendingAdapters.AssertFalse();
+
+		var sub = new Subscription(DataType.Level1);
+
+		var got = new List<Level1ChangeMessage>();
+		using var enumCts = new CancellationTokenSource();
+
+		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
+		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
+
+		var enumerating = Task.Run(async () =>
+		{
+			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+			{
+				got.Add(l1);
+				if (got.Count >= 3)
+				{
+					enumCts.Cancel();
+					break;
+				}
+			}
+		}, CancellationToken);
+
+		await started.Task.WithCancellation(CancellationToken);
+		await Task.Delay(200, CancellationToken);
+
+		var id = adapter.LastSubscribedId;
+		AreNotEqual(0L, id);
+
+		// --- Validate state after subscription started ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0, "Still connected");
+		state.PendingState.Count.AssertEqual(0, "No pending messages");
+		// subscriptionRouting should have an entry for the subscription
+		// (the connector generates its own transId, basket creates child)
+
+		// --- Send data ---
+		for (var i = 0; i < 3; i++)
+		{
+			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
+			adapter.SimulateData(id, l1);
+		}
+
+		await enumerating.WithCancellation(CancellationToken);
+		HasCount(3, got);
+
+		// Wait for unsubscribe
+		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
+			await Task.Delay(10, CancellationToken);
+
+		// --- State after unsubscribe ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0, "Still connected after unsub");
+		state.PendingState.Count.AssertEqual(0);
+	}
+
+	#endregion
+
+	#region Subscription History
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_Subscription_History()
+	{
+		var (connector, adapter, state) = CreateConnectorWithBasketState();
+
+		await connector.ConnectAsync(CancellationToken);
+
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+
+		var sub = new Subscription(DataType.Level1)
+		{
+			From = DateTime.UtcNow.AddDays(-2),
+			To = DateTime.UtcNow.AddDays(-1),
+		};
+
+		var got = new List<Level1ChangeMessage>();
+
+		var enumerating = Task.Run(async () =>
+		{
+			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(CancellationToken))
+				got.Add(l1);
+		}, CancellationToken);
+
+		// Wait for subscription to be processed
+		await Task.Run(async () =>
+		{
+			while (adapter.ActiveSubscriptions.Count == 0)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		await Task.Delay(100, CancellationToken);
+
+		var id = adapter.LastSubscribedId;
+		AreNotEqual(0L, id);
+
+		// --- Validate state after subscribe ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.PendingState.Count.AssertEqual(0);
+
+		// --- Send historical data ---
+		for (var i = 0; i < 2; i++)
+		{
+			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
+			adapter.SimulateData(id, l1);
+		}
+
+		adapter.FinishHistoricalSubscription(id);
+
+		await enumerating.WithCancellation(CancellationToken);
+		HasCount(2, got);
+
+		// --- State after history completed ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.PendingState.Count.AssertEqual(0);
+	}
+
+	#endregion
+
+	#region Subscription Lifecycle
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_Subscription_Lifecycle()
+	{
+		var (connector, adapter, state) = CreateConnectorWithBasketState();
+
+		await connector.ConnectAsync(CancellationToken);
+
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+
+		var sub = new Subscription(DataType.Level1);
+
+		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
+		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
+
+		using var runCts = new CancellationTokenSource();
+		var run = connector.SubscribeAsync(sub, runCts.Token).AsTask();
+
+		await started.Task.WithCancellation(CancellationToken);
+
+		var id = adapter.LastSubscribedId;
+		AreNotEqual(0L, id);
+
+		// --- State after subscribe ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.PendingState.Count.AssertEqual(0);
+
+		// --- Cancel → triggers UnSubscribe ---
+		runCts.Cancel();
+		await run.WithCancellation(CancellationToken);
+
+		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
+
+		// --- State after unsubscribe ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0, "Still connected");
+		state.PendingState.Count.AssertEqual(0);
+	}
+
+	#endregion
+
+	#region RegisterOrderAsync
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_RegisterOrderAsync_OrderAccepted_ReturnsEvents()
+	{
+		var (connector, adapter, state) = CreateConnectorWithBasketState();
+
+		await connector.ConnectAsync(CancellationToken);
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var events = new List<(Order order, MyTrade trade)>();
+		var allOrderReceived = new List<Order>();
+		connector.OrderReceived += (_, o) => allOrderReceived.Add(o);
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				events.Add(evt);
+		}, CancellationToken);
+
+		await Task.Run(async () =>
+		{
+			while (order.State == OrderStates.None)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var transId = order.TransactionId;
+
+		// --- Validate state after order sent ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.PendingState.Count.AssertEqual(0);
+		state.OrderRouting.TryGetOrderAdapter(transId, out _)
+			.AssertTrue("OrderRouting should have mapping after registration");
+
+		// Simulate acceptance
+		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
+
+		await Task.Run(async () =>
+		{
+			while (order.State != OrderStates.Active)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		await Task.Delay(100, CancellationToken);
+
+		allOrderReceived.Count.AssertGreater(0,
+			$"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
+
+		// --- State after active ---
+		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("Mapping preserved after active");
+
+		// Simulate done
+		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		events.Count.AssertGreater(0, "Should receive at least one event");
+		AreEqual(OrderStates.Done, order.State);
+		AreEqual(123L, order.Id);
+
+		// --- Final state ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.PendingState.Count.AssertEqual(0);
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_RegisterOrderAsync_WithTrades_ReturnsTradeEvents()
+	{
+		var (connector, adapter, state) = CreateConnectorWithBasketState();
+
+		await connector.ConnectAsync(CancellationToken);
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var events = new List<(Order order, MyTrade trade)>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				events.Add(evt);
+		}, CancellationToken);
+
+		await Task.Run(async () =>
+		{
+			while (adapter.LastOrderTransactionId == 0)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var transId = adapter.LastOrderTransactionId;
+
+		// --- Validate order routing ---
+		state.OrderRouting.TryGetOrderAdapter(transId, out _)
+			.AssertTrue("OrderRouting should have mapping");
+
+		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
+		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 1001);
+		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.6m, tradeVolume: 5, tradeId: 1002);
+		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		events.Count.AssertGreater(3, "Should receive events for order states and trades");
+		AreEqual(OrderStates.Done, order.State);
+		AreEqual(123L, order.Id);
+
+		var tradeEvents = events.Where(e => e.trade != null).ToList();
+		tradeEvents.Count.AssertGreater(1, "Should have received trade events");
+
+		var tradePrices = tradeEvents.Select(e => e.trade.Trade.Price).ToList();
+		tradePrices.AssertContains(100.5m);
+		tradePrices.AssertContains(100.6m);
+
+		// --- Final state ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.PendingState.Count.AssertEqual(0);
+		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("Mapping preserved");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_RegisterOrderAsync_CancellationSendsCancelOrder()
+	{
+		var (connector, adapter, state) = CreateConnectorWithBasketState();
+
+		await connector.ConnectAsync(CancellationToken);
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		using var cts = new CancellationTokenSource();
+		var events = new List<(Order order, MyTrade trade)>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(cts.Token))
+			{
+				events.Add(evt);
+				if (evt.order.State == OrderStates.Active)
+					cts.Cancel();
+			}
+		}, CancellationToken);
+
+		await Task.Run(async () =>
+		{
+			while (adapter.LastOrderTransactionId == 0)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var transId = adapter.LastOrderTransactionId;
+
+		// Validate order routing
+		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("OrderRouting mapping exists");
+
+		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 456);
+
+		await Task.Run(async () =>
+		{
+			while (adapter.LastCancelMessage == null)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 456);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		adapter.LastCancelMessage.AssertNotNull();
+		AreEqual(456L, adapter.LastCancelMessage.OrderId);
+
+		// State after cancel
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.PendingState.Count.AssertEqual(0);
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_RegisterOrderAsync_FiltersOtherOrders()
+	{
+		var (connector, adapter, state) = CreateConnectorWithBasketState();
+
+		await connector.ConnectAsync(CancellationToken);
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var events = new List<(Order order, MyTrade trade)>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				events.Add(evt);
+		}, CancellationToken);
+
+		await Task.Run(async () =>
+		{
+			while (adapter.LastOrderTransactionId == 0)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var transId = adapter.LastOrderTransactionId;
+
+		// Validate routing
+		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue();
+
+		var otherTransId1 = transId + 100;
+		var otherTransId2 = transId + 200;
+
+		adapter.SimulateOrderExecution(otherTransId1, OrderStates.Active, orderId: 999);
+		adapter.SimulateOrderExecution(otherTransId2, OrderStates.Active, orderId: 888);
+		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
+		adapter.SimulateOrderExecution(otherTransId1, orderId: 999, tradePrice: 50m, tradeVolume: 5, tradeId: 5001);
+		adapter.SimulateOrderExecution(otherTransId2, OrderStates.Done, orderId: 888);
+		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 2001);
+		adapter.SimulateOrderExecution(otherTransId1, OrderStates.Done, orderId: 999);
+		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		events.Count.AssertGreater(0, "Should receive events for our order");
+		AreEqual(OrderStates.Done, order.State);
+		AreEqual(123L, order.Id);
+
+		var tradeEvents = events.Where(e => e.trade != null).ToList();
+		tradeEvents.Count.AssertGreater(0, "Should have received our trade");
+		tradeEvents.Any(e => e.trade.Trade.Price == 100.5m).AssertTrue("Should have our trade at 100.5");
+		tradeEvents.Any(e => e.trade.Trade.Price == 50m).AssertFalse("Should NOT have trade from other order");
+
+		// State
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.PendingState.Count.AssertEqual(0);
+		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("Our order mapping preserved");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_RegisterOrderAsync_FullLifecycle()
+	{
+		var (connector, adapter, state) = CreateConnectorWithBasketState();
+
+		await connector.ConnectAsync(CancellationToken);
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+
+		var security = new Security { Id = "SBER@TQBR" };
+		connector.SendOutMessage(security.ToMessage());
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "TestPortfolio" },
+			Price = 250,
+			Volume = 100,
+			Side = Sides.Buy,
+		};
+
+		var events = new List<(Order order, MyTrade trade)>();
+
+		var enumTask = Task.Run(async () =>
+		{
+			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				events.Add(evt);
+		}, CancellationToken);
+
+		await Task.Run(async () =>
+		{
+			while (adapter.LastOrderTransactionId == 0)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var transId = adapter.LastOrderTransactionId;
+
+		// --- State after registration ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.PendingState.Count.AssertEqual(0);
+		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("OrderRouting has mapping");
+
+		// Full lifecycle
+		adapter.SimulateOrderExecution(transId, OrderStates.Pending);
+		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 12345);
+		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 249.5m, tradeVolume: 30, tradeId: 3001);
+		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 249.8m, tradeVolume: 50, tradeId: 3002);
+		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 250.0m, tradeVolume: 20, tradeId: 3003);
+		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 12345);
+
+		await enumTask.WithCancellation(CancellationToken);
+
+		events.Count.AssertGreater(5, "Should receive events for states and trades");
+		AreEqual(OrderStates.Done, order.State);
+		AreEqual(12345L, order.Id);
+
+		var tradeEvents = events.Where(e => e.trade != null).ToList();
+		tradeEvents.Count.AssertGreater(2, "Should have received all 3 trades");
+
+		var tradePrices = tradeEvents.Select(e => e.trade.Trade.Price).ToList();
+		tradePrices.AssertContains(249.5m);
+		tradePrices.AssertContains(249.8m);
+		tradePrices.AssertContains(250.0m);
+
+		var totalVolume = tradeEvents.Sum(e => e.trade.Trade.Volume);
+		AreEqual(100m, totalVolume);
+
+		// --- Final state ---
+		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.PendingState.Count.AssertEqual(0);
+		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("Mapping preserved after full lifecycle");
+	}
+
+	#endregion
+}
