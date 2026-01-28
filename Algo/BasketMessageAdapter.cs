@@ -123,13 +123,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 	private readonly IAdapterConnectionState _connectionState;
 	private readonly IAdapterConnectionManager _connectionManager;
-	private readonly IPendingMessageState _pendingState;
-	private readonly IPendingMessageManager _pendingManager;
-	private readonly ISubscriptionRoutingState _subscriptionRouting;
-	private readonly IParentChildMap _parentChildMap;
-	private readonly IOrderRoutingState _orderRouting;
-	private readonly AdapterRouter _router;
 	private readonly IAdapterWrapperPipelineBuilder _pipelineBuilder;
+	private readonly IBasketRoutingManager _routingManager;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BasketMessageAdapter"/>.
@@ -164,7 +159,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		ISubscriptionRoutingState subscriptionRouting,
 		IParentChildMap parentChildMap,
 		IOrderRoutingState orderRouting,
-		IAdapterWrapperPipelineBuilder pipelineBuilder)
+		IAdapterWrapperPipelineBuilder pipelineBuilder,
+		IBasketRoutingManager routingManager = null)
 	{
 		TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 		_innerAdapters = new InnerAdapterList(this);
@@ -182,17 +178,25 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		_connectionState = cs;
 		_connectionManager = connectionManager ?? new AdapterConnectionManager(cs);
 		var ps = pendingState ?? new PendingMessageState();
-		_pendingState = ps;
-		_pendingManager = pendingManager ?? new PendingMessageManager(ps);
-		_subscriptionRouting = subscriptionRouting ?? new SubscriptionRoutingState();
-		_parentChildMap = parentChildMap ?? new ParentChildMap();
-		_orderRouting = orderRouting ?? new OrderRoutingState();
-		_router = new AdapterRouter(_orderRouting, GetUnderlyingAdapter, StorageProcessor.CandleBuilderProvider, () => Level1Extend);
+		var pm = pendingManager ?? new PendingMessageManager(ps);
+		var sr = subscriptionRouting ?? new SubscriptionRoutingState();
+		var pcm = parentChildMap ?? new ParentChildMap();
+		var or = orderRouting ?? new OrderRoutingState();
+
 		_pipelineBuilder = pipelineBuilder ?? new AdapterWrapperPipelineBuilder();
+		_routingManager = routingManager ?? new Basket.BasketRoutingManager(
+			cs, _connectionManager, ps, pm, sr, pcm, or,
+			GetUnderlyingAdapter, StorageProcessor.CandleBuilderProvider,
+			() => Level1Extend, transactionIdGenerator, this);
 
 		SecurityAdapterProvider.Changed += SecurityAdapterProviderOnChanged;
 		PortfolioAdapterProvider.Changed += PortfolioAdapterProviderOnChanged;
 	}
+
+	/// <summary>
+	/// Gets the routing manager if one was injected.
+	/// </summary>
+	public IBasketRoutingManager RoutingManager => _routingManager;
 
 	/// <summary>
 	/// The portfolio based message adapter's provider.
@@ -473,7 +477,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		set => throw new NotSupportedException();
 	}
 
-	private void TryAddOrderAdapter(long transId, IMessageAdapter adapter) => _router.AddOrderAdapter(transId, adapter);
+	private void TryAddOrderAdapter(long transId, IMessageAdapter adapter)
+		=> _routingManager.AddOrderAdapter(transId, adapter);
 
 	private async ValueTask ProcessReset(ResetMessage message, bool isConnect, CancellationToken cancellationToken)
 	{
@@ -489,17 +494,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		_adapterWrappers.Clear();
 
 		using (await _connectedResponseLock.LockAsync(cancellationToken))
-		{
-			_router.Clear();
-
-			if (!isConnect)
-				_pendingState.Clear();
-
-			_connectionManager.Reset();
-		}
-
-		_subscriptionRouting.Clear();
-		_parentChildMap.Clear();
+			_routingManager.Reset(!isConnect);
 	}
 
 	private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
@@ -577,7 +572,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		return OnSendInMessageAsync(message, cancellationToken);
 	}
 
-	private long[] GetSubscribers(DataType dataType) => _subscriptionRouting.GetSubscribers(dataType);
+	private long[] GetSubscribers(DataType dataType)
+		=> _routingManager.GetSubscribers(dataType);
 
 	/// <summary>
 	/// Send message.
@@ -748,11 +744,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 		if (message is ISubscriptionMessage subscrMsg)
 		{
-			_subscriptionRouting.AddSubscription(subscrMsg.TransactionId, subscrMsg.TypedClone(), new[] { adapter }, subscrMsg.DataType);
-			return SendRequest(subscrMsg.TypedClone(), adapter, cancellationToken);
+			_routingManager.SubscriptionRouting.AddSubscription(subscrMsg.TransactionId, subscrMsg.TypedClone(), new[] { adapter }, subscrMsg.DataType);
+			_routingManager.SubscriptionRouting.AddRequest(subscrMsg.TransactionId, subscrMsg, GetUnderlyingAdapter(adapter));
 		}
-		else
-			return adapter.SendInMessageAsync(message, cancellationToken);
+
+		return adapter.SendInMessageAsync(message, cancellationToken);
 	}
 
 	private async ValueTask ProcessOtherMessage(Message message, CancellationToken cancellationToken)
@@ -763,184 +759,47 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			return;
 		}
 
-		if (message is ISubscriptionMessage subscrMsg)
-		{
-			IMessageAdapter[] adapters;
-
-			if (subscrMsg.IsSubscribe)
-			{
-				var (a, isPended, _) = await GetAdapters(message, cancellationToken);
-				adapters = a;
-
-				if (isPended)
-					return;
-
-				if (adapters.Length == 0)
-				{
-					await SendOutMessageAsync(subscrMsg.CreateResult(), cancellationToken);
-					return;
-				}
-
-				_subscriptionRouting.AddSubscription(subscrMsg.TransactionId, subscrMsg.TypedClone(), adapters, subscrMsg.DataType);
-			}
-			else
-				adapters = null;
-
-			await ToChild(subscrMsg, adapters).Select(pair => SendRequest(pair.Key, pair.Value, cancellationToken)).WhenAll();
-		}
-		else
-		{
-			var (adapters, isPended, _) = await GetAdapters(message, cancellationToken);
-
-			if (isPended)
-				return;
-
-			if (adapters.Length == 0)
-				return;
-
-			await adapters.Select(a => a.SendInMessageAsync(message, cancellationToken)).WhenAll();
-		}
+		var result = await _routingManager.ProcessInMessageAsync(message, a => _adapterWrappers.TryGetValue(a), cancellationToken);
+		await ApplyRoutingResult(result, cancellationToken);
 	}
 
-	private async ValueTask<(IMessageAdapter[] adapters, bool isPended, bool skipSupportedMessages)> GetAdapters(Message message, CancellationToken cancellationToken)
+	private async ValueTask ApplyRoutingResult(Basket.RoutingInResult result, CancellationToken cancellationToken)
 	{
-		var isPended = false;
-
-		using (await _connectedResponseLock.LockAsync(cancellationToken))
+		// Send messages to adapters
+		foreach (var (adapter, message) in result.RoutingDecisions)
 		{
-			var (adapters, skipSupportedMessages) = _router.GetAdapters(message, a => _adapterWrappers.TryGetValue(a));
-
-			if (adapters == null)
-			{
-				if (_connectionState.HasPendingAdapters || _connectionState.TotalCount == 0 || _connectionState.AllDisconnectedOrFailed)
-				{
-					isPended = true;
-					_pendingState.Add(message.Clone());
-					return ([], isPended, skipSupportedMessages);
-				}
-			}
-
-			adapters ??= [];
-
-			if (adapters.Length == 0)
-			{
-				LogInfo(LocalizedStrings.NoAdapterFoundFor.Put(message));
-			}
-
-			return (adapters, isPended, skipSupportedMessages);
-		}
-	}
-
-	private async ValueTask<(IMessageAdapter[] adapters, bool isPended)> GetSubscriptionAdapters(MarketDataMessage mdMsg, CancellationToken cancellationToken)
-	{
-		var (adapters, isPended, skipSupportedMessages) = await GetAdapters(mdMsg, cancellationToken);
-
-		adapters = _router.GetSubscriptionAdapters(mdMsg, adapters, skipSupportedMessages);
-
-		return (adapters, isPended);
-	}
-
-	private IDictionary<ISubscriptionMessage, IMessageAdapter> ToChild(ISubscriptionMessage subscrMsg, IMessageAdapter[] adapters)
-	{
-		// sending to inner adapters unique child requests
-
-		var child = new Dictionary<ISubscriptionMessage, IMessageAdapter>();
-
-		if (subscrMsg.IsSubscribe)
-		{
-			foreach (var adapter in adapters)
-			{
-				var clone = subscrMsg.TypedClone();
-				clone.TransactionId = adapter.TransactionIdGenerator.GetNextId();
-
-				child.Add(clone, adapter);
-
-				_parentChildMap.AddMapping(clone.TransactionId, subscrMsg, adapter);
-			}
-		}
-		else
-		{
-			var originTransId = subscrMsg.OriginalTransactionId;
-
-			foreach (var pair in _parentChildMap.GetChild(originTransId))
-			{
-				var adapter = pair.Value;
-
-				var clone = subscrMsg.TypedClone();
-				clone.TransactionId = adapter.TransactionIdGenerator.GetNextId();
-				clone.OriginalTransactionId = pair.Key;
-
-				child.Add(clone, adapter);
-
-				_parentChildMap.AddMapping(clone.TransactionId, subscrMsg, adapter);
-			}
+			LogDebug("Send to {0}: {1}", adapter, message);
+			await adapter.SendInMessageAsync(message, cancellationToken);
 		}
 
-		return child;
+		// Send out messages (responses, errors)
+		foreach (var outMsg in result.OutMessages)
+			await SendOutMessageAsync(outMsg, cancellationToken);
+
+		// Loop back messages
+		foreach (var loopMsg in result.LoopbackMessages)
+			await ((IMessageTransport)this).SendInMessageAsync(loopMsg.LoopBack(this), cancellationToken);
 	}
 
-	private ValueTask SendRequest(ISubscriptionMessage subscrMsg, IMessageAdapter adapter, CancellationToken cancellationToken)
+	private async ValueTask ApplyRoutingOutResult(Basket.RoutingOutResult result, CancellationToken cancellationToken)
 	{
-		// if the message was looped back via IsBack=true
-		_subscriptionRouting.AddRequest(subscrMsg.TransactionId, subscrMsg, GetUnderlyingAdapter(adapter));
-		LogDebug("Send to {0}: {1}", adapter, subscrMsg);
-		return adapter.SendInMessageAsync((Message)subscrMsg, cancellationToken);
+		// Send transformed message
+		if (result.TransformedMessage != null)
+			await SendOutMessageAsync(result.TransformedMessage, cancellationToken);
+
+		// Send extra messages
+		foreach (var extra in result.ExtraMessages)
+			await SendOutMessageAsync(extra, cancellationToken);
+
+		// Loop back messages for retry
+		foreach (var loopMsg in result.LoopbackMessages)
+			await ((IMessageTransport)this).SendInMessageAsync(loopMsg.LoopBack(this), cancellationToken);
 	}
 
 	private async ValueTask ProcessMarketDataRequest(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		IMessageAdapter[] adapters;
-
-		if (mdMsg.IsSubscribe)
-		{
-			var (a, isPended) = await GetSubscriptionAdapters(mdMsg, cancellationToken);
-
-			if (isPended)
-				return;
-
-			adapters = a;
-
-			if (adapters.Length == 0)
-			{
-				await SendOutMessageAsync(mdMsg.TransactionId.CreateNotSupported(), cancellationToken);
-				return;
-			}
-
-			_subscriptionRouting.AddSubscription(mdMsg.TransactionId, (ISubscriptionMessage)mdMsg.Clone(), adapters, mdMsg.DataType2);
-		}
-		else
-		{
-			adapters = null;
-
-			var originTransId = mdMsg.OriginalTransactionId;
-
-			if (!_subscriptionRouting.TryGetSubscription(originTransId, out _, out _, out _))
-			{
-				Message outMsg = null;
-
-				using (await _connectedResponseLock.LockAsync(cancellationToken))
-				{
-					var suspended = _pendingState.TryRemoveMarketData(originTransId);
-
-					if (suspended != null)
-					{
-						outMsg = new SubscriptionResponseMessage { OriginalTransactionId = mdMsg.TransactionId };
-					}
-				}
-
-				if (outMsg != null)
-				{
-					await SendOutMessageAsync(outMsg, cancellationToken);
-					return;
-				}
-
-				LogInfo("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
-				return;
-			}
-		}
-
-		// Unified path: always use ToChild for consistent ParentChildMap tracking
-		await ToChild(mdMsg, adapters).Select(pair => SendRequest(pair.Key, pair.Value, cancellationToken)).WhenAll();
+		var result = await _routingManager.ProcessInMessageAsync(mdMsg, a => _adapterWrappers.TryGetValue(a), cancellationToken);
+		await ApplyRoutingResult(result, cancellationToken);
 	}
 
 	private async ValueTask ProcessPortfolioMessage(string portfolioName, OrderMessage message, CancellationToken cancellationToken)
@@ -974,7 +833,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	{
 		IMessageAdapter adapter = null;
 
-		if (_router.TryGetOrderAdapter(originId, out var orderAdapter))
+		if (_routingManager.TryGetOrderAdapter(originId, out var orderAdapter))
 			adapter = orderAdapter;
 
 		if (adapter == null)
@@ -1027,7 +886,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	/// <returns>Found <see cref="IMessageAdapter"/>.</returns>
 	public bool TryGetAdapter(string porfolioName, out IMessageAdapter adapter)
 	{
-		adapter = _router.GetPortfolioAdapter(porfolioName, a => a);
+		adapter = _routingManager.Router.GetPortfolioAdapter(porfolioName, a => a);
 		return adapter != null;
 	}
 
@@ -1040,12 +899,15 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			throw new ArgumentNullException(nameof(message));
 
 		// check if portfolio has a dedicated adapter
-		var underlyingAdapter = _router.GetPortfolioAdapter(portfolioName, a => a);
+		var underlyingAdapter = _routingManager.Router.GetPortfolioAdapter(portfolioName, a => a);
 
 		if (underlyingAdapter == null)
 		{
-			var (adapters, isPended, _) = (await GetAdapters(message, cancellationToken));
-			return (adapters.FirstOrDefault(), isPended);
+			// Use routing manager to find adapter
+			var result = await _routingManager.ProcessInMessageAsync(message, a => _adapterWrappers.TryGetValue(a), cancellationToken);
+			if (result.IsPended)
+				return (null, true);
+			return (result.RoutingDecisions.FirstOrDefault().Adapter, false);
 		}
 		else
 		{
@@ -1086,16 +948,13 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 					break;
 
 				case MessageTypes.SubscriptionResponse:
-					message = await ProcessSubscriptionResponse(innerAdapter, (SubscriptionResponseMessage)message, cancellationToken);
-					break;
-
 				case MessageTypes.SubscriptionFinished:
-					message = ProcessSubscriptionFinished((SubscriptionFinishedMessage)message);
-					break;
-
 				case MessageTypes.SubscriptionOnline:
-					message = ProcessSubscriptionOnline((SubscriptionOnlineMessage)message);
-					break;
+				{
+					var result = await _routingManager.ProcessOutMessageAsync(innerAdapter, message, a => _adapterWrappers.TryGetValue(a), cancellationToken);
+					await ApplyRoutingOutResult(result, cancellationToken);
+					return;
+				}
 
 				case MessageTypes.Portfolio:
 				//case MessageTypes.PortfolioChange:
@@ -1135,10 +994,9 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 				default:
 				{
-					if (message is ISubscriptionIdMessage subscrIdMsg)
-						ApplyParentLookupId(subscrIdMsg);
-
-					break;
+					var result = await _routingManager.ProcessOutMessageAsync(innerAdapter, message, a => _adapterWrappers.TryGetValue(a), cancellationToken);
+					await ApplyRoutingOutResult(result, cancellationToken);
+					return;
 				}
 			}
 		}
@@ -1164,7 +1022,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 		for (var i = 0; i < ids.Length; i++)
 		{
-			if (!_parentChildMap.TryGetParent(ids[i], out var parentId))
+			if (!_routingManager.ParentChildMap.TryGetParent(ids[i], out var parentId))
 				continue;
 
 			if (!changed)
@@ -1227,17 +1085,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		using (await _connectedResponseLock.LockAsync(cancellationToken))
 		{
 			if (error == null)
-			{
-				foreach (var supportedMessage in innerAdapter.SupportedInMessages)
-					_router.AddMessageTypeAdapter(supportedMessage, wrapper);
-			}
+				_routingManager.RegisterAdapterMessageTypes(wrapper, innerAdapter.SupportedInMessages);
 
 			var msgs = _connectionManager.ProcessConnect(underlyingAdapter, error);
 			extra.AddRange(msgs);
 
 			if (!_connectionState.HasPendingAdapters)
 			{
-				var pending = _pendingState.GetAndClear();
+				var pending = _routingManager.PendingState.GetAndClear();
 
 				if (_connectionState.ConnectedCount > 0)
 					extra.AddRange(pending.Select(m => m.LoopBack(this)));
@@ -1271,108 +1126,13 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 		using (await _connectedResponseLock.LockAsync(cancellationToken))
 		{
-			foreach (var supportedMessage in innerAdapter.SupportedInMessages)
-				_router.RemoveMessageTypeAdapter(supportedMessage, wrapper);
+			_routingManager.UnregisterAdapterMessageTypes(wrapper, innerAdapter.SupportedInMessages);
 
 			var msgs = _connectionManager.ProcessDisconnect(underlyingAdapter, error);
 			extra.AddRange(msgs);
 		}
 
 		message.Adapter = underlyingAdapter;
-	}
-
-	private SubscriptionOnlineMessage ProcessSubscriptionOnline(SubscriptionOnlineMessage message)
-	{
-		var originalTransactionId = message.OriginalTransactionId;
-
-		var parentId = _parentChildMap.ProcessChildOnline(originalTransactionId, out var needParentResponse);
-
-		if (parentId == null)
-			return message;
-
-		if (!needParentResponse)
-			return null;
-
-		return new SubscriptionOnlineMessage { OriginalTransactionId = parentId.Value };
-	}
-
-	private SubscriptionFinishedMessage ProcessSubscriptionFinished(SubscriptionFinishedMessage message)
-	{
-		var originalTransactionId = message.OriginalTransactionId;
-
-		_subscriptionRouting.RemoveRequest(originalTransactionId);
-
-		var parentId = _parentChildMap.ProcessChildFinish(originalTransactionId, out var needParentResponse);
-
-		if (parentId == null)
-		{
-			_subscriptionRouting.RemoveSubscription(originalTransactionId);
-			return message;
-		}
-
-		if (!needParentResponse)
-			return null;
-
-		_subscriptionRouting.RemoveSubscription(parentId.Value);
-		return new SubscriptionFinishedMessage { OriginalTransactionId = parentId.Value, Body = message.Body };
-	}
-
-	private async ValueTask<Message> ProcessSubscriptionResponse(IMessageAdapter adapter, SubscriptionResponseMessage message, CancellationToken cancellationToken)
-	{
-		var originalTransactionId = message.OriginalTransactionId;
-
-		if (!_subscriptionRouting.TryGetRequest(originalTransactionId, out var originMsg, out _))
-			return message;
-
-		var error = message.Error;
-
-		if (error != null)
-		{
-			LogWarning("Subscription Error out: {0}", message);
-			_subscriptionRouting.RemoveSubscription(originalTransactionId);
-			_subscriptionRouting.RemoveRequest(originalTransactionId);
-		}
-		else if (!originMsg.IsSubscribe)
-		{
-			// remove subscribe and unsubscribe requests
-			_subscriptionRouting.RemoveRequest(originMsg.OriginalTransactionId);
-			_subscriptionRouting.RemoveRequest(originalTransactionId);
-		}
-
-		var parentId = _parentChildMap.ProcessChildResponse(originalTransactionId, error, out var needParentResponse, out var allError, out var innerErrors);
-
-		if (parentId != null)
-		{
-			if (allError)
-				_subscriptionRouting.RemoveSubscription(parentId.Value);
-
-			return needParentResponse
-				? parentId.Value.CreateSubscriptionResponse(allError ? new AggregateException(LocalizedStrings.NoAdapterFoundFor.Put(originMsg), innerErrors) : null)
-				: null;
-		}
-		else
-		{
-			if (!originMsg.IsSubscribe)
-				_subscriptionRouting.RemoveSubscription(originMsg.OriginalTransactionId);
-		}
-
-		if (message.IsNotSupported() && originMsg is ISubscriptionMessage subscrMsg)
-		{
-			using (await _connectedResponseLock.LockAsync(cancellationToken))
-			{
-				// try loopback only subscribe messages
-				if (subscrMsg.IsSubscribe)
-				{
-					_router.AddNotSupported(originalTransactionId, adapter);
-
-					subscrMsg.LoopBack(this);
-				}
-			}
-
-			return (Message)subscrMsg;
-		}
-
-		return message;
 	}
 
 	private void SecurityAdapterProviderOnChanged((SecurityId, DataType) t, Guid adapterId, bool changeType)
@@ -1382,12 +1142,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			var adapter = InnerAdapters.SyncGet(c => c.FindById(adapterId));
 
 			if (adapter == null)
-				_router.RemoveSecurityAdapter(t.Item1, t.Item2);
+				_routingManager.Router.RemoveSecurityAdapter(t.Item1, t.Item2);
 			else
-				_router.SetSecurityAdapter(t.Item1, t.Item2, adapter);
+				_routingManager.Router.SetSecurityAdapter(t.Item1, t.Item2, adapter);
 		}
 		else
-			_router.RemoveSecurityAdapter(t.Item1, t.Item2);
+			_routingManager.Router.RemoveSecurityAdapter(t.Item1, t.Item2);
 	}
 
 	private void PortfolioAdapterProviderOnChanged(string key, Guid adapterId, bool changeType)
@@ -1397,12 +1157,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			var adapter = InnerAdapters.SyncGet(c => c.FindById(adapterId));
 
 			if (adapter == null)
-				_router.RemovePortfolioAdapter(key);
+				_routingManager.Router.RemovePortfolioAdapter(key);
 			else
-				_router.SetPortfolioAdapter(key, adapter);
+				_routingManager.Router.SetPortfolioAdapter(key, adapter);
 		}
 		else
-			_router.RemovePortfolioAdapter(key);
+			_routingManager.Router.RemovePortfolioAdapter(key);
 	}
 
 	/// <inheritdoc />
@@ -1450,24 +1210,24 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 				}
 			}
 
-			_router.ClearSecurityAdapters();
+			_routingManager.Router.ClearSecurityAdapters();
 
 			foreach (var pair in SecurityAdapterProvider.Adapters)
 			{
 				if (!adapters.TryGetValue(pair.Value, out var adapter))
 					continue;
 
-				_router.AddSecurityAdapter(pair.Key, adapter);
+				_routingManager.Router.AddSecurityAdapter(pair.Key, adapter);
 			}
 
-			_router.ClearPortfolioAdapters();
+			_routingManager.Router.ClearPortfolioAdapters();
 
 			foreach (var pair in PortfolioAdapterProvider.Adapters)
 			{
 				if (!adapters.TryGetValue(pair.Value, out var adapter))
 					continue;
 
-				_router.AddPortfolioAdapter(pair.Key, adapter);
+				_routingManager.Router.AddPortfolioAdapter(pair.Key, adapter);
 			}
 		}
 
