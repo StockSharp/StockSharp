@@ -136,28 +136,34 @@ public class BasketMessageAdapterTests : BaseTestClass
 			IAdapterConnectionState connectionState = null,
 			IAdapterConnectionManager connectionManager = null,
 			IPendingMessageState pendingState = null,
-			IPendingMessageManager pendingManager = null,
 			ISubscriptionRoutingState subscriptionRouting = null,
 			IParentChildMap parentChildMap = null,
 			IOrderRoutingState orderRouting = null,
 			bool twoAdapters = true)
 	{
 		var idGen = new IncrementalIdGenerator();
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+
+		// Create routing manager with optional injected state
+		var cs = connectionState ?? new AdapterConnectionState();
+		var cm = connectionManager ?? new AdapterConnectionManager(cs);
+		var ps = pendingState ?? new PendingMessageState();
+		var sr = subscriptionRouting ?? new SubscriptionRoutingState();
+		var pcm = parentChildMap ?? new ParentChildMap();
+		var or = orderRouting ?? new OrderRoutingState();
+
+		var routingManager = new BasketRoutingManager(
+			cs, cm, ps, sr, pcm, or,
+			a => a, candleBuilderProvider, () => false, idGen);
 
 		var basket = new BasketMessageAdapter(
 			idGen,
-			new CandleBuilderProvider(new InMemoryExchangeInfoProvider()),
+			candleBuilderProvider,
 			new InMemorySecurityMessageAdapterProvider(),
 			new InMemoryPortfolioMessageAdapterProvider(),
 			null,
-			connectionState,
-			connectionManager,
-			pendingState,
-			pendingManager,
-			subscriptionRouting,
-			parentChildMap,
-			orderRouting,
-			null);
+			null,
+			routingManager);
 
 		basket.IgnoreExtraAdapters = true;
 		basket.LatencyManager = null;
@@ -669,13 +675,11 @@ public class BasketMessageAdapterTests : BaseTestClass
 		var connectionState = new AdapterConnectionState();
 		var connectionManager = new AdapterConnectionManager(connectionState);
 		var pendingState = new PendingMessageState();
-		var pendingManager = new PendingMessageManager(pendingState);
 
 		var (basket, adapter1, _) = CreateBasket(
 			connectionState: connectionState,
 			connectionManager: connectionManager,
 			pendingState: pendingState,
-			pendingManager: pendingManager,
 			twoAdapters: false);
 
 		// Adapter does NOT auto-respond to Connect (simulates slow connection)

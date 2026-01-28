@@ -152,18 +152,28 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 			bool twoAdapters = true)
 	{
 		var idGen = new IncrementalIdGenerator();
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+
+		// Create routing manager with optional injected state
+		var cs = new AdapterConnectionState();
+		var cm = new AdapterConnectionManager(cs);
+		var ps = new PendingMessageState();
+		var sr = subscriptionRouting ?? new SubscriptionRoutingState();
+		var pcm = parentChildMap ?? new ParentChildMap();
+		var or = new OrderRoutingState();
+
+		var routingManager = new BasketRoutingManager(
+			cs, cm, ps, sr, pcm, or,
+			a => a, candleBuilderProvider, () => false, idGen);
 
 		var basket = new BasketMessageAdapter(
 			idGen,
-			new CandleBuilderProvider(new InMemoryExchangeInfoProvider()),
+			candleBuilderProvider,
 			new InMemorySecurityMessageAdapterProvider(),
 			new InMemoryPortfolioMessageAdapterProvider(),
 			null,
-			null, null, null, null,
-			subscriptionRouting,
-			parentChildMap,
 			null,
-			null);
+			routingManager);
 
 		basket.IgnoreExtraAdapters = true;
 		basket.LatencyManager = null;

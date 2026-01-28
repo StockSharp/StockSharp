@@ -2,17 +2,15 @@ namespace StockSharp.Algo.Basket;
 
 /// <summary>
 /// Interface for managing message routing in basket adapter.
-/// Extracts routing logic from BasketMessageAdapter for testability.
+/// Encapsulates all routing, connection, and subscription logic.
 /// </summary>
 public interface IBasketRoutingManager
 {
+	#region Message Processing
+
 	/// <summary>
 	/// Process an incoming message and determine routing decisions.
 	/// </summary>
-	/// <param name="message">The message to process.</param>
-	/// <param name="adapterLookup">Function to resolve wrapper adapter from underlying adapter.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
-	/// <returns>Routing result with decisions and any output messages.</returns>
 	ValueTask<RoutingInResult> ProcessInMessageAsync(
 		Message message,
 		Func<IMessageAdapter, IMessageAdapter> adapterLookup,
@@ -21,11 +19,6 @@ public interface IBasketRoutingManager
 	/// <summary>
 	/// Process an outgoing message from an inner adapter.
 	/// </summary>
-	/// <param name="innerAdapter">The adapter that sent the message.</param>
-	/// <param name="message">The message from the adapter.</param>
-	/// <param name="adapterLookup">Function to resolve wrapper adapter from underlying adapter.</param>
-	/// <param name="cancellationToken">Cancellation token.</param>
-	/// <returns>Routing result with transformed message and any extra messages.</returns>
 	ValueTask<RoutingOutResult> ProcessOutMessageAsync(
 		IMessageAdapter innerAdapter,
 		Message message,
@@ -33,46 +26,18 @@ public interface IBasketRoutingManager
 		CancellationToken cancellationToken);
 
 	/// <summary>
-	/// Register adapter's supported message types after connection.
+	/// Process a back message with subscription tracking.
 	/// </summary>
-	/// <param name="adapter">The connected adapter (wrapper).</param>
-	/// <param name="supportedTypes">The message types supported by the adapter.</param>
-	void RegisterAdapterMessageTypes(IMessageAdapter adapter, IEnumerable<MessageTypes> supportedTypes);
+	void ProcessBackMessage(IMessageAdapter adapter, ISubscriptionMessage subscrMsg, Func<IMessageAdapter, IMessageAdapter> adapterLookup);
+
+	#endregion
+
+	#region Connection Management
 
 	/// <summary>
-	/// Unregister adapter's message types on disconnection.
+	/// Gets or sets whether to fire connect/disconnect event on first adapter.
 	/// </summary>
-	/// <param name="adapter">The disconnected adapter (wrapper).</param>
-	/// <param name="supportedTypes">The message types to unregister.</param>
-	void UnregisterAdapterMessageTypes(IMessageAdapter adapter, IEnumerable<MessageTypes> supportedTypes);
-
-	/// <summary>
-	/// Add order transaction to adapter mapping.
-	/// </summary>
-	/// <param name="transactionId">The order transaction ID.</param>
-	/// <param name="adapter">The adapter that handles the order.</param>
-	void AddOrderAdapter(long transactionId, IMessageAdapter adapter);
-
-	/// <summary>
-	/// Try get adapter for an order by its transaction ID.
-	/// </summary>
-	/// <param name="transactionId">The order transaction ID.</param>
-	/// <param name="adapter">The adapter if found.</param>
-	/// <returns>True if found.</returns>
-	bool TryGetOrderAdapter(long transactionId, out IMessageAdapter adapter);
-
-	/// <summary>
-	/// Get subscriber IDs for a data type.
-	/// </summary>
-	/// <param name="dataType">The data type.</param>
-	/// <returns>Array of subscription IDs.</returns>
-	long[] GetSubscribers(DataType dataType);
-
-	/// <summary>
-	/// Reset all routing state.
-	/// </summary>
-	/// <param name="clearPending">Whether to clear pending messages.</param>
-	void Reset(bool clearPending);
+	bool ConnectDisconnectEventOnFirstAdapter { get; set; }
 
 	/// <summary>
 	/// Gets whether there are adapters still connecting.
@@ -80,47 +45,152 @@ public interface IBasketRoutingManager
 	bool HasPendingAdapters { get; }
 
 	/// <summary>
-	/// Gets whether all adapters are disconnected or failed.
-	/// </summary>
-	bool AllDisconnectedOrFailed { get; }
-
-	/// <summary>
 	/// Gets the count of connected adapters.
 	/// </summary>
 	int ConnectedCount { get; }
 
 	/// <summary>
-	/// Gets the total count of adapters.
+	/// Begin connection process.
 	/// </summary>
-	int TotalCount { get; }
+	void BeginConnect();
 
 	/// <summary>
-	/// Gets the underlying adapter router.
+	/// Initialize adapter for connection.
 	/// </summary>
-	IAdapterRouter Router { get; }
+	void InitializeAdapter(IMessageAdapter adapter);
 
 	/// <summary>
-	/// Gets the subscription routing state.
+	/// Process successful or failed connection.
 	/// </summary>
-	ISubscriptionRoutingState SubscriptionRouting { get; }
+	/// <param name="adapter">The adapter that connected.</param>
+	/// <param name="wrapper">The wrapper for the adapter.</param>
+	/// <param name="supportedMessages">Supported message types.</param>
+	/// <param name="error">Connection error if any.</param>
+	/// <returns>Extra messages to send out and pending messages to loop back.</returns>
+	(IEnumerable<Message> outMessages, Message[] pendingToLoopback, Message[] notSupportedMsgs) ProcessConnect(
+		IMessageAdapter adapter,
+		IMessageAdapter wrapper,
+		IEnumerable<MessageTypes> supportedMessages,
+		Exception error);
 
 	/// <summary>
-	/// Gets the parent-child mapping.
+	/// Begin disconnection process.
 	/// </summary>
-	IParentChildMap ParentChildMap { get; }
+	void BeginDisconnect();
 
 	/// <summary>
-	/// Gets the pending message state.
+	/// Get adapters that need to be disconnected.
 	/// </summary>
-	IPendingMessageState PendingState { get; }
+	/// <param name="adapterLookup">Function to get wrapper from underlying adapter.</param>
+	/// <returns>Dictionary of wrapper to underlying adapter.</returns>
+	IDictionary<IMessageAdapter, IMessageAdapter> GetAdaptersToDisconnect(Func<IMessageAdapter, IMessageAdapter> adapterLookup);
 
 	/// <summary>
-	/// Gets the connection state.
+	/// Process disconnection.
 	/// </summary>
-	IAdapterConnectionState ConnectionState { get; }
+	/// <param name="adapter">The adapter that disconnected.</param>
+	/// <param name="wrapper">The wrapper for the adapter.</param>
+	/// <param name="supportedMessages">Supported message types.</param>
+	/// <param name="error">Disconnection error if any.</param>
+	/// <returns>Extra messages to send out.</returns>
+	IEnumerable<Message> ProcessDisconnect(
+		IMessageAdapter adapter,
+		IMessageAdapter wrapper,
+		IEnumerable<MessageTypes> supportedMessages,
+		Exception error);
+
+	#endregion
+
+	#region Adapter List Management
 
 	/// <summary>
-	/// Gets the connection manager.
+	/// Called when an adapter is removed from the inner adapters list.
 	/// </summary>
-	IAdapterConnectionManager ConnectionManager { get; }
+	void OnAdapterRemoved(IMessageAdapter adapter);
+
+	/// <summary>
+	/// Called when all adapters are cleared from the inner adapters list.
+	/// </summary>
+	void OnAdaptersCleared();
+
+	#endregion
+
+	#region Order Routing
+
+	/// <summary>
+	/// Add order transaction to adapter mapping.
+	/// </summary>
+	void AddOrderAdapter(long transactionId, IMessageAdapter adapter);
+
+	/// <summary>
+	/// Try get adapter for an order by its transaction ID.
+	/// </summary>
+	bool TryGetOrderAdapter(long transactionId, out IMessageAdapter adapter);
+
+	/// <summary>
+	/// Get adapter for portfolio-based routing.
+	/// </summary>
+	IMessageAdapter GetPortfolioAdapter(string portfolioName, Func<IMessageAdapter, IMessageAdapter> adapterLookup);
+
+	#endregion
+
+	#region Subscriptions
+
+	/// <summary>
+	/// Get subscriber IDs for a data type.
+	/// </summary>
+	long[] GetSubscribers(DataType dataType);
+
+	/// <summary>
+	/// Apply parent lookup ID remapping to subscription message.
+	/// </summary>
+	void ApplyParentLookupId(ISubscriptionIdMessage msg);
+
+	#endregion
+
+	#region Provider Change Handlers
+
+	/// <summary>
+	/// Handle security adapter provider change.
+	/// </summary>
+	void OnSecurityAdapterProviderChanged(
+		(SecurityId, DataType) key,
+		Guid adapterId,
+		bool isAdd,
+		Func<Guid, IMessageAdapter> findAdapter);
+
+	/// <summary>
+	/// Handle portfolio adapter provider change.
+	/// </summary>
+	void OnPortfolioAdapterProviderChanged(
+		string portfolioName,
+		Guid adapterId,
+		bool isAdd,
+		Func<Guid, IMessageAdapter> findAdapter);
+
+	#endregion
+
+	#region Load/Save
+
+	/// <summary>
+	/// Clear and load security adapter mappings.
+	/// </summary>
+	void LoadSecurityAdapters(IEnumerable<((SecurityId, DataType) key, IMessageAdapter adapter)> mappings);
+
+	/// <summary>
+	/// Clear and load portfolio adapter mappings.
+	/// </summary>
+	void LoadPortfolioAdapters(IEnumerable<(string portfolio, IMessageAdapter adapter)> mappings);
+
+	#endregion
+
+	#region Reset
+
+	/// <summary>
+	/// Reset all routing state.
+	/// </summary>
+	/// <param name="clearPending">Whether to clear pending messages.</param>
+	void Reset(bool clearPending);
+
+	#endregion
 }

@@ -76,6 +76,26 @@ public interface IAdapterRouter
 	void RemovePortfolioAdapter(string portfolio);
 
 	/// <summary>
+	/// Clear all security adapter mappings.
+	/// </summary>
+	void ClearSecurityAdapters();
+
+	/// <summary>
+	/// Add adapter for security with key.
+	/// </summary>
+	void AddSecurityAdapter((SecurityId, DataType) key, IMessageAdapter adapter);
+
+	/// <summary>
+	/// Clear all portfolio adapter mappings.
+	/// </summary>
+	void ClearPortfolioAdapters();
+
+	/// <summary>
+	/// Add adapter for portfolio.
+	/// </summary>
+	void AddPortfolioAdapter(string portfolio, IMessageAdapter adapter);
+
+	/// <summary>
 	/// Clear all routing state (message type adapters, non-supported adapters, security/portfolio caches).
 	/// </summary>
 	void Clear();

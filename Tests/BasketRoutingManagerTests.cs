@@ -50,37 +50,58 @@ public class BasketRoutingManagerTests : BaseTestClass
 
 	private static readonly SecurityId _secId1 = "AAPL@NASDAQ".ToSecurityId();
 
-	private BasketRoutingManager CreateManager(
-		IAdapterConnectionState connectionState = null,
-		IAdapterConnectionManager connectionManager = null,
-		IPendingMessageState pendingState = null,
-		IPendingMessageManager pendingManager = null,
-		ISubscriptionRoutingState subscriptionRouting = null,
-		IParentChildMap parentChildMap = null,
-		IOrderRoutingState orderRouting = null,
-		IdGenerator idGen = null)
+	private sealed class RoutingTestContext
 	{
-		connectionState ??= new AdapterConnectionState();
-		connectionManager ??= new AdapterConnectionManager(connectionState);
-		pendingState ??= new PendingMessageState();
-		pendingManager ??= new PendingMessageManager(pendingState);
-		subscriptionRouting ??= new SubscriptionRoutingState();
-		parentChildMap ??= new ParentChildMap();
-		orderRouting ??= new OrderRoutingState();
-		idGen ??= new IncrementalIdGenerator();
+		public BasketRoutingManager Manager { get; init; }
+		public IAdapterConnectionState ConnectionState { get; init; }
+		public IAdapterConnectionManager ConnectionManager { get; init; }
+		public IPendingMessageState PendingState { get; init; }
+		public ISubscriptionRoutingState SubscriptionRouting { get; init; }
+		public IParentChildMap ParentChildMap { get; init; }
+		public IOrderRoutingState OrderRouting { get; init; }
+		public IAdapterRouter Router { get; init; }
+		public IdGenerator IdGen { get; init; }
+	}
 
-		return new BasketRoutingManager(
+	private RoutingTestContext CreateTestContext(IdGenerator idGen = null)
+	{
+		idGen ??= new IncrementalIdGenerator();
+		var connectionState = new AdapterConnectionState();
+		var connectionManager = new AdapterConnectionManager(connectionState);
+		var pendingState = new PendingMessageState();
+		var subscriptionRouting = new SubscriptionRoutingState();
+		var parentChildMap = new ParentChildMap();
+		var orderRouting = new OrderRoutingState();
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+
+		var router = new AdapterRouter(orderRouting, GetUnderlyingAdapter, candleBuilderProvider, () => false);
+
+		var manager = new BasketRoutingManager(
 			connectionState,
 			connectionManager,
 			pendingState,
-			pendingManager,
 			subscriptionRouting,
 			parentChildMap,
 			orderRouting,
 			GetUnderlyingAdapter,
-			new CandleBuilderProvider(new InMemoryExchangeInfoProvider()),
+			candleBuilderProvider,
 			() => false,
-			idGen);
+			idGen,
+			null,
+			router);
+
+		return new RoutingTestContext
+		{
+			Manager = manager,
+			ConnectionState = connectionState,
+			ConnectionManager = connectionManager,
+			PendingState = pendingState,
+			SubscriptionRouting = subscriptionRouting,
+			ParentChildMap = parentChildMap,
+			OrderRouting = orderRouting,
+			Router = router,
+			IdGen = idGen,
+		};
 	}
 
 	private static IMessageAdapter GetUnderlyingAdapter(IMessageAdapter adapter) => adapter;
@@ -95,20 +116,14 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task ProcessInMessage_MarketData_Subscribe_CreatesChildMappings()
 	{
-		var parentChildMap = new ParentChildMap();
-		var subscriptionRouting = new SubscriptionRoutingState();
 		var idGen = new IncrementalIdGenerator();
-
-		var manager = CreateManager(
-			parentChildMap: parentChildMap,
-			subscriptionRouting: subscriptionRouting,
-			idGen: idGen);
+		var ctx = CreateTestContext(idGen);
 
 		var adapter = CreateAdapter(idGen);
-		manager.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter);
 
 		// Simulate connected state
-		manager.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
 
 		var transId = idGen.GetNextId();
 		var mdMsg = new MarketDataMessage
@@ -119,7 +134,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 			TransactionId = transId,
 		};
 
-		var result = await manager.ProcessInMessageAsync(mdMsg, a => a, CancellationToken);
+		var result = await ctx.Manager.ProcessInMessageAsync(mdMsg, a => a, CancellationToken);
 
 		// Verify routing decisions exist
 		result.RoutingDecisions.Count.AssertGreater(0, "Should have routing decisions");
@@ -127,7 +142,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 		result.IsPended.AssertFalse("Message should not be pended");
 
 		// Verify subscription routing recorded
-		subscriptionRouting.TryGetSubscription(transId, out _, out _, out _)
+		ctx.SubscriptionRouting.TryGetSubscription(transId, out _, out _, out _)
 			.AssertTrue("Subscription should be recorded");
 
 		// Verify parent-child mapping created
@@ -135,7 +150,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 			? subMsg.TransactionId
 			: 0;
 
-		parentChildMap.TryGetParent(childTransId, out var parentId)
+		ctx.ParentChildMap.TryGetParent(childTransId, out var parentId)
 			.AssertTrue("ParentChildMap should have mapping");
 		parentId.AssertEqual(transId, "Parent ID should match");
 	}
@@ -143,10 +158,10 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task ProcessInMessage_MarketData_Subscribe_NoAdapters_ReturnsNotSupported()
 	{
-		var manager = CreateManager();
+		var ctx = CreateTestContext();
 
 		// Simulate connected but no adapters for MarketData
-		manager.ConnectionState.SetAdapterState(CreateAdapter(), ConnectionStates.Connected, null);
+		ctx.ConnectionState.SetAdapterState(CreateAdapter(), ConnectionStates.Connected, null);
 
 		var transId = 100L;
 		var mdMsg = new MarketDataMessage
@@ -157,7 +172,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 			TransactionId = transId,
 		};
 
-		var result = await manager.ProcessInMessageAsync(mdMsg, a => a, CancellationToken);
+		var result = await ctx.Manager.ProcessInMessageAsync(mdMsg, a => a, CancellationToken);
 
 		// Should return not supported message
 		result.OutMessages.Count.AssertEqual(1, "Should have one out message");
@@ -173,18 +188,12 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task ProcessInMessage_MarketData_Unsubscribe_RemovesMapping()
 	{
-		var parentChildMap = new ParentChildMap();
-		var subscriptionRouting = new SubscriptionRoutingState();
 		var idGen = new IncrementalIdGenerator();
-
-		var manager = CreateManager(
-			parentChildMap: parentChildMap,
-			subscriptionRouting: subscriptionRouting,
-			idGen: idGen);
+		var ctx = CreateTestContext(idGen);
 
 		var adapter = CreateAdapter(idGen);
-		manager.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter);
-		manager.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
 
 		// First subscribe
 		var subscribeTransId = idGen.GetNextId();
@@ -196,11 +205,11 @@ public class BasketRoutingManagerTests : BaseTestClass
 			TransactionId = subscribeTransId,
 		};
 
-		var subscribeResult = await manager.ProcessInMessageAsync(subscribeMsg, a => a, CancellationToken);
+		var subscribeResult = await ctx.Manager.ProcessInMessageAsync(subscribeMsg, a => a, CancellationToken);
 		subscribeResult.RoutingDecisions.Count.AssertGreater(0);
 
 		// Verify subscription exists
-		subscriptionRouting.TryGetSubscription(subscribeTransId, out _, out _, out _).AssertTrue();
+		ctx.SubscriptionRouting.TryGetSubscription(subscribeTransId, out _, out _, out _).AssertTrue();
 
 		// Now unsubscribe
 		var unsubscribeTransId = idGen.GetNextId();
@@ -213,7 +222,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 			OriginalTransactionId = subscribeTransId,
 		};
 
-		var unsubscribeResult = await manager.ProcessInMessageAsync(unsubscribeMsg, a => a, CancellationToken);
+		var unsubscribeResult = await ctx.Manager.ProcessInMessageAsync(unsubscribeMsg, a => a, CancellationToken);
 
 		// Should have routing decisions for unsubscribe
 		// (actual removal happens in ProcessOutMessage when response comes)
@@ -223,9 +232,9 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task ProcessInMessage_MarketData_Unsubscribe_NotFound_ReturnsHandled()
 	{
-		var manager = CreateManager();
+		var ctx = CreateTestContext();
 		var adapter = CreateAdapter();
-		manager.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
 
 		var unsubscribeMsg = new MarketDataMessage
 		{
@@ -236,7 +245,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 			OriginalTransactionId = 100, // non-existent
 		};
 
-		var result = await manager.ProcessInMessageAsync(unsubscribeMsg, a => a, CancellationToken);
+		var result = await ctx.Manager.ProcessInMessageAsync(unsubscribeMsg, a => a, CancellationToken);
 
 		// Should be handled (logged and ignored)
 		result.Handled.AssertTrue("Unknown unsubscribe should be handled");
@@ -250,16 +259,11 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task ProcessInMessage_HasPendingAdapters_Pends()
 	{
-		var pendingState = new PendingMessageState();
-		var connectionState = new AdapterConnectionState();
-
-		var manager = CreateManager(
-			connectionState: connectionState,
-			pendingState: pendingState);
+		var ctx = CreateTestContext();
 
 		// Simulate adapter in Connecting state
 		var adapter = CreateAdapter();
-		connectionState.SetAdapterState(adapter, ConnectionStates.Connecting, null);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connecting, null);
 
 		var mdMsg = new MarketDataMessage
 		{
@@ -269,11 +273,11 @@ public class BasketRoutingManagerTests : BaseTestClass
 			TransactionId = 100,
 		};
 
-		var result = await manager.ProcessInMessageAsync(mdMsg, a => a, CancellationToken);
+		var result = await ctx.Manager.ProcessInMessageAsync(mdMsg, a => a, CancellationToken);
 
 		result.IsPended.AssertTrue("Message should be pended");
 		result.Handled.AssertTrue("Pended message is handled");
-		pendingState.Count.AssertGreater(0, "Message should be in pending state");
+		ctx.PendingState.Count.AssertGreater(0, "Message should be in pending state");
 	}
 
 	#endregion
@@ -283,18 +287,12 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task ProcessOutMessage_SubscriptionResponse_RemapsToParent()
 	{
-		var parentChildMap = new ParentChildMap();
-		var subscriptionRouting = new SubscriptionRoutingState();
 		var idGen = new IncrementalIdGenerator();
-
-		var manager = CreateManager(
-			parentChildMap: parentChildMap,
-			subscriptionRouting: subscriptionRouting,
-			idGen: idGen);
+		var ctx = CreateTestContext(idGen);
 
 		var adapter = CreateAdapter(idGen);
-		manager.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter);
-		manager.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
 
 		// Subscribe to create child mapping
 		var parentTransId = idGen.GetNextId();
@@ -306,7 +304,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 			TransactionId = parentTransId,
 		};
 
-		var subscribeResult = await manager.ProcessInMessageAsync(subscribeMsg, a => a, CancellationToken);
+		var subscribeResult = await ctx.Manager.ProcessInMessageAsync(subscribeMsg, a => a, CancellationToken);
 		var childMsg = (ISubscriptionMessage)subscribeResult.RoutingDecisions[0].Message;
 		var childTransId = childMsg.TransactionId;
 
@@ -316,7 +314,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 			OriginalTransactionId = childTransId,
 		};
 
-		var outResult = await manager.ProcessOutMessageAsync(adapter, responseMsg, a => a, CancellationToken);
+		var outResult = await ctx.Manager.ProcessOutMessageAsync(adapter, responseMsg, a => a, CancellationToken);
 
 		// Should remap to parent
 		outResult.TransformedMessage.AssertNotNull("Should have transformed message");
@@ -331,21 +329,15 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task ProcessOutMessage_SubscriptionFinished_WaitsForAll()
 	{
-		var parentChildMap = new ParentChildMap();
-		var subscriptionRouting = new SubscriptionRoutingState();
 		var idGen = new IncrementalIdGenerator();
-
-		var manager = CreateManager(
-			parentChildMap: parentChildMap,
-			subscriptionRouting: subscriptionRouting,
-			idGen: idGen);
+		var ctx = CreateTestContext(idGen);
 
 		var adapter1 = CreateAdapter(idGen);
 		var adapter2 = CreateAdapter(idGen);
-		manager.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter1);
-		manager.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter2);
-		manager.ConnectionState.SetAdapterState(adapter1, ConnectionStates.Connected, null);
-		manager.ConnectionState.SetAdapterState(adapter2, ConnectionStates.Connected, null);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter1);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter2);
+		ctx.ConnectionState.SetAdapterState(adapter1, ConnectionStates.Connected, null);
+		ctx.ConnectionState.SetAdapterState(adapter2, ConnectionStates.Connected, null);
 
 		// Subscribe (goes to both adapters)
 		var parentTransId = idGen.GetNextId();
@@ -357,7 +349,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 			TransactionId = parentTransId,
 		};
 
-		var subscribeResult = await manager.ProcessInMessageAsync(subscribeMsg, a => a, CancellationToken);
+		var subscribeResult = await ctx.Manager.ProcessInMessageAsync(subscribeMsg, a => a, CancellationToken);
 
 		// Should have 2 child subscriptions
 		subscribeResult.RoutingDecisions.Count.AssertEqual(2, "Should route to both adapters");
@@ -366,20 +358,20 @@ public class BasketRoutingManagerTests : BaseTestClass
 		var childTransId2 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[1].Message).TransactionId;
 
 		// Simulate responses
-		await manager.ProcessOutMessageAsync(adapter1,
+		await ctx.Manager.ProcessOutMessageAsync(adapter1,
 			new SubscriptionResponseMessage { OriginalTransactionId = childTransId1 }, a => a, CancellationToken);
-		await manager.ProcessOutMessageAsync(adapter2,
+		await ctx.Manager.ProcessOutMessageAsync(adapter2,
 			new SubscriptionResponseMessage { OriginalTransactionId = childTransId2 }, a => a, CancellationToken);
 
 		// First adapter finishes
-		var finish1Result = await manager.ProcessOutMessageAsync(adapter1,
+		var finish1Result = await ctx.Manager.ProcessOutMessageAsync(adapter1,
 			new SubscriptionFinishedMessage { OriginalTransactionId = childTransId1 }, a => a, CancellationToken);
 
 		// Should NOT emit parent finish yet
 		finish1Result.TransformedMessage.AssertNull("Should not emit finish until all children done");
 
 		// Second adapter finishes
-		var finish2Result = await manager.ProcessOutMessageAsync(adapter2,
+		var finish2Result = await ctx.Manager.ProcessOutMessageAsync(adapter2,
 			new SubscriptionFinishedMessage { OriginalTransactionId = childTransId2 }, a => a, CancellationToken);
 
 		// NOW should emit parent finish
@@ -395,21 +387,15 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task ProcessOutMessage_SubscriptionOnline_Aggregates()
 	{
-		var parentChildMap = new ParentChildMap();
-		var subscriptionRouting = new SubscriptionRoutingState();
 		var idGen = new IncrementalIdGenerator();
-
-		var manager = CreateManager(
-			parentChildMap: parentChildMap,
-			subscriptionRouting: subscriptionRouting,
-			idGen: idGen);
+		var ctx = CreateTestContext(idGen);
 
 		var adapter1 = CreateAdapter(idGen);
 		var adapter2 = CreateAdapter(idGen);
-		manager.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter1);
-		manager.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter2);
-		manager.ConnectionState.SetAdapterState(adapter1, ConnectionStates.Connected, null);
-		manager.ConnectionState.SetAdapterState(adapter2, ConnectionStates.Connected, null);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter1);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter2);
+		ctx.ConnectionState.SetAdapterState(adapter1, ConnectionStates.Connected, null);
+		ctx.ConnectionState.SetAdapterState(adapter2, ConnectionStates.Connected, null);
 
 		var parentTransId = idGen.GetNextId();
 		var subscribeMsg = new MarketDataMessage
@@ -420,25 +406,25 @@ public class BasketRoutingManagerTests : BaseTestClass
 			TransactionId = parentTransId,
 		};
 
-		var subscribeResult = await manager.ProcessInMessageAsync(subscribeMsg, a => a, CancellationToken);
+		var subscribeResult = await ctx.Manager.ProcessInMessageAsync(subscribeMsg, a => a, CancellationToken);
 		var childTransId1 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[0].Message).TransactionId;
 		var childTransId2 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[1].Message).TransactionId;
 
 		// Send responses
-		await manager.ProcessOutMessageAsync(adapter1,
+		await ctx.Manager.ProcessOutMessageAsync(adapter1,
 			new SubscriptionResponseMessage { OriginalTransactionId = childTransId1 }, a => a, CancellationToken);
-		await manager.ProcessOutMessageAsync(adapter2,
+		await ctx.Manager.ProcessOutMessageAsync(adapter2,
 			new SubscriptionResponseMessage { OriginalTransactionId = childTransId2 }, a => a, CancellationToken);
 
 		// First online
-		var online1Result = await manager.ProcessOutMessageAsync(adapter1,
+		var online1Result = await ctx.Manager.ProcessOutMessageAsync(adapter1,
 			new SubscriptionOnlineMessage { OriginalTransactionId = childTransId1 }, a => a, CancellationToken);
 
 		// Should not emit until all are online
 		online1Result.TransformedMessage.AssertNull("Should not emit online until all children");
 
 		// Second online
-		var online2Result = await manager.ProcessOutMessageAsync(adapter2,
+		var online2Result = await ctx.Manager.ProcessOutMessageAsync(adapter2,
 			new SubscriptionOnlineMessage { OriginalTransactionId = childTransId2 }, a => a, CancellationToken);
 
 		online2Result.TransformedMessage.AssertNotNull("Should emit online after all children");
@@ -453,36 +439,41 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public void AddOrderAdapter_StoresMapping()
 	{
-		var orderRouting = new OrderRoutingState();
-		var manager = CreateManager(orderRouting: orderRouting);
+		var ctx = CreateTestContext();
 		var adapter = CreateAdapter();
 
-		manager.AddOrderAdapter(100, adapter);
+		ctx.Manager.AddOrderAdapter(100, adapter);
 
-		manager.TryGetOrderAdapter(100, out var found).AssertTrue("Should find adapter");
+		ctx.Manager.TryGetOrderAdapter(100, out var found).AssertTrue("Should find adapter");
 		found.AssertEqual(adapter, "Should be same adapter");
 	}
 
 	[TestMethod]
 	public void TryGetOrderAdapter_NotFound_ReturnsFalse()
 	{
-		var manager = CreateManager();
+		var ctx = CreateTestContext();
 
-		manager.TryGetOrderAdapter(999, out _).AssertFalse("Should not find adapter");
+		ctx.Manager.TryGetOrderAdapter(999, out _).AssertFalse("Should not find adapter");
 	}
 
 	#endregion
 
-	#region Register/Unregister Message Types
+	#region ProcessConnect
 
 	[TestMethod]
-	public void RegisterAdapterMessageTypes_AddsToRouter()
+	public void ProcessConnect_AddsMessageTypeAdapters()
 	{
-		var manager = CreateManager();
+		var ctx = CreateTestContext();
 		var adapter = CreateAdapter();
 
-		manager.RegisterAdapterMessageTypes(adapter, [MessageTypes.MarketData, MessageTypes.OrderRegister]);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connecting, null);
+		ctx.Manager.BeginConnect();
 
+		// Process successful connection
+		var (outMsgs, pending, notSupported) = ctx.Manager.ProcessConnect(
+			adapter, adapter, adapter.SupportedInMessages, null);
+
+		// After connect, adapter should be registered for its supported message types
 		var mdMsg = new MarketDataMessage
 		{
 			SecurityId = _secId1,
@@ -491,21 +482,24 @@ public class BasketRoutingManagerTests : BaseTestClass
 			TransactionId = 100,
 		};
 
-		var (adapters, _) = manager.Router.GetAdapters(mdMsg, a => a);
-
-		adapters.AssertNotNull("Should find adapter");
-		adapters.Length.AssertEqual(1);
+		var (adapters, _) = ctx.Router.GetAdapters(mdMsg, a => a);
+		adapters.AssertNotNull("Should find adapter after ProcessConnect");
 	}
 
 	[TestMethod]
-	public void UnregisterAdapterMessageTypes_RemovesFromRouter()
+	public void ProcessConnect_WithError_DoesNotAddAdapters()
 	{
-		var manager = CreateManager();
+		var ctx = CreateTestContext();
 		var adapter = CreateAdapter();
 
-		manager.RegisterAdapterMessageTypes(adapter, [MessageTypes.MarketData]);
-		manager.UnregisterAdapterMessageTypes(adapter, [MessageTypes.MarketData]);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connecting, null);
+		ctx.Manager.BeginConnect();
 
+		// Process failed connection
+		var (outMsgs, pending, notSupported) = ctx.Manager.ProcessConnect(
+			adapter, adapter, adapter.SupportedInMessages, new Exception("Connection failed"));
+
+		// Should not register adapters on error
 		var mdMsg = new MarketDataMessage
 		{
 			SecurityId = _secId1,
@@ -514,9 +508,42 @@ public class BasketRoutingManagerTests : BaseTestClass
 			TransactionId = 100,
 		};
 
-		var (adapters, _) = manager.Router.GetAdapters(mdMsg, a => a);
+		var (adapters, _) = ctx.Router.GetAdapters(mdMsg, a => a);
+		adapters.AssertNull("Should not find adapter after failed connection");
+	}
 
-		adapters.AssertNull("Should not find adapter after unregister");
+	#endregion
+
+	#region ProcessDisconnect
+
+	[TestMethod]
+	public void ProcessDisconnect_RemovesMessageTypeAdapters()
+	{
+		var ctx = CreateTestContext();
+		var adapter = CreateAdapter();
+
+		// First connect
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connecting, null);
+		ctx.Manager.BeginConnect();
+		ctx.Manager.ProcessConnect(adapter, adapter, adapter.SupportedInMessages, null);
+
+		// Verify adapter is registered
+		var mdMsg = new MarketDataMessage
+		{
+			SecurityId = _secId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = 100,
+		};
+		var (adapters, _) = ctx.Router.GetAdapters(mdMsg, a => a);
+		adapters.AssertNotNull("Should find adapter before disconnect");
+
+		// Now disconnect
+		ctx.Manager.ProcessDisconnect(adapter, adapter, adapter.SupportedInMessages, null);
+
+		// Verify adapter is removed
+		(adapters, _) = ctx.Router.GetAdapters(mdMsg, a => a);
+		adapters.AssertNull("Should not find adapter after disconnect");
 	}
 
 	#endregion
@@ -526,42 +553,36 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public void Reset_ClearsAllState()
 	{
-		var subscriptionRouting = new SubscriptionRoutingState();
-		var parentChildMap = new ParentChildMap();
-		var pendingState = new PendingMessageState();
-
-		var manager = CreateManager(
-			subscriptionRouting: subscriptionRouting,
-			parentChildMap: parentChildMap,
-			pendingState: pendingState);
-
+		var ctx = CreateTestContext();
 		var adapter = CreateAdapter();
 
 		// Add some state
-		manager.RegisterAdapterMessageTypes(adapter, [MessageTypes.MarketData]);
-		subscriptionRouting.AddSubscription(100, new MarketDataMessage { TransactionId = 100 }, [adapter], DataType.Ticks);
-		pendingState.Add(new SecurityLookupMessage { TransactionId = 200 });
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connecting, null);
+		ctx.Manager.BeginConnect();
+		ctx.Manager.ProcessConnect(adapter, adapter, adapter.SupportedInMessages, null);
+
+		ctx.SubscriptionRouting.AddSubscription(100, new MarketDataMessage { TransactionId = 100 }, [adapter], DataType.Ticks);
+		ctx.PendingState.Add(new SecurityLookupMessage { TransactionId = 200 });
 
 		// Reset with clearPending=true
-		manager.Reset(true);
+		ctx.Manager.Reset(true);
 
 		// Verify cleared
-		subscriptionRouting.TryGetSubscription(100, out _, out _, out _)
+		ctx.SubscriptionRouting.TryGetSubscription(100, out _, out _, out _)
 			.AssertFalse("Subscription routing should be cleared");
-		pendingState.Count.AssertEqual(0, "Pending state should be cleared");
+		ctx.PendingState.Count.AssertEqual(0, "Pending state should be cleared");
 	}
 
 	[TestMethod]
 	public void Reset_PreservesPending_WhenClearPendingFalse()
 	{
-		var pendingState = new PendingMessageState();
-		var manager = CreateManager(pendingState: pendingState);
+		var ctx = CreateTestContext();
 
-		pendingState.Add(new SecurityLookupMessage { TransactionId = 200 });
+		ctx.PendingState.Add(new SecurityLookupMessage { TransactionId = 200 });
 
-		manager.Reset(false);
+		ctx.Manager.Reset(false);
 
-		pendingState.Count.AssertGreater(0, "Pending should be preserved when clearPending=false");
+		ctx.PendingState.Count.AssertGreater(0, "Pending should be preserved when clearPending=false");
 	}
 
 	#endregion
@@ -571,15 +592,14 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public void GetSubscribers_ReturnsCorrectIds()
 	{
-		var subscriptionRouting = new SubscriptionRoutingState();
-		var manager = CreateManager(subscriptionRouting: subscriptionRouting);
+		var ctx = CreateTestContext();
 		var adapter = CreateAdapter();
 
-		subscriptionRouting.AddSubscription(100, new MarketDataMessage { TransactionId = 100 }, [adapter], DataType.Ticks);
-		subscriptionRouting.AddSubscription(101, new MarketDataMessage { TransactionId = 101 }, [adapter], DataType.Ticks);
-		subscriptionRouting.AddSubscription(102, new MarketDataMessage { TransactionId = 102 }, [adapter], DataType.Level1);
+		ctx.SubscriptionRouting.AddSubscription(100, new MarketDataMessage { TransactionId = 100 }, [adapter], DataType.Ticks);
+		ctx.SubscriptionRouting.AddSubscription(101, new MarketDataMessage { TransactionId = 101 }, [adapter], DataType.Ticks);
+		ctx.SubscriptionRouting.AddSubscription(102, new MarketDataMessage { TransactionId = 102 }, [adapter], DataType.Level1);
 
-		var tickSubscribers = manager.GetSubscribers(DataType.Ticks);
+		var tickSubscribers = ctx.Manager.GetSubscribers(DataType.Ticks);
 
 		tickSubscribers.Length.AssertEqual(2, "Should have 2 tick subscribers");
 		tickSubscribers.AssertContains(100L);
@@ -593,31 +613,29 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public void HasPendingAdapters_ReflectsConnectionState()
 	{
-		var connectionState = new AdapterConnectionState();
-		var manager = CreateManager(connectionState: connectionState);
+		var ctx = CreateTestContext();
 
-		manager.HasPendingAdapters.AssertFalse("Initially no pending");
+		ctx.Manager.HasPendingAdapters.AssertFalse("Initially no pending");
 
 		var adapter = CreateAdapter();
-		connectionState.SetAdapterState(adapter, ConnectionStates.Connecting, null);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connecting, null);
 
-		manager.HasPendingAdapters.AssertTrue("Should have pending after Connecting");
+		ctx.Manager.HasPendingAdapters.AssertTrue("Should have pending after Connecting");
 	}
 
 	[TestMethod]
 	public void ConnectedCount_ReflectsConnectionState()
 	{
-		var connectionState = new AdapterConnectionState();
-		var manager = CreateManager(connectionState: connectionState);
+		var ctx = CreateTestContext();
 
-		manager.ConnectedCount.AssertEqual(0, "Initially 0");
+		ctx.Manager.ConnectedCount.AssertEqual(0, "Initially 0");
 
 		var adapter1 = CreateAdapter();
 		var adapter2 = CreateAdapter();
-		connectionState.SetAdapterState(adapter1, ConnectionStates.Connected, null);
-		connectionState.SetAdapterState(adapter2, ConnectionStates.Connected, null);
+		ctx.ConnectionState.SetAdapterState(adapter1, ConnectionStates.Connected, null);
+		ctx.ConnectionState.SetAdapterState(adapter2, ConnectionStates.Connected, null);
 
-		manager.ConnectedCount.AssertEqual(2, "Should be 2 after connections");
+		ctx.Manager.ConnectedCount.AssertEqual(2, "Should be 2 after connections");
 	}
 
 	#endregion
@@ -627,19 +645,13 @@ public class BasketRoutingManagerTests : BaseTestClass
 	[TestMethod]
 	public async Task ProcessInMessage_SecurityLookup_CreatesChildMappings()
 	{
-		var parentChildMap = new ParentChildMap();
-		var subscriptionRouting = new SubscriptionRoutingState();
 		var idGen = new IncrementalIdGenerator();
-
-		var manager = CreateManager(
-			parentChildMap: parentChildMap,
-			subscriptionRouting: subscriptionRouting,
-			idGen: idGen);
+		var ctx = CreateTestContext(idGen);
 
 		var adapter = CreateAdapter(idGen);
 		adapter.SetAllDownloadingSupported(DataType.Securities);
-		manager.Router.AddMessageTypeAdapter(MessageTypes.SecurityLookup, adapter);
-		manager.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.SecurityLookup, adapter);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
 
 		var transId = idGen.GetNextId();
 		var lookupMsg = new SecurityLookupMessage
@@ -647,14 +659,14 @@ public class BasketRoutingManagerTests : BaseTestClass
 			TransactionId = transId,
 		};
 
-		var result = await manager.ProcessInMessageAsync(lookupMsg, a => a, CancellationToken);
+		var result = await ctx.Manager.ProcessInMessageAsync(lookupMsg, a => a, CancellationToken);
 
 		result.RoutingDecisions.Count.AssertGreater(0, "Should have routing decisions");
 		result.Handled.AssertTrue("Should be handled");
 
 		// Verify child mapping
 		var childTransId = ((ISubscriptionMessage)result.RoutingDecisions[0].Message).TransactionId;
-		parentChildMap.TryGetParent(childTransId, out var parentId).AssertTrue("Should have mapping");
+		ctx.ParentChildMap.TryGetParent(childTransId, out var parentId).AssertTrue("Should have mapping");
 		parentId.AssertEqual(transId, "Parent should match");
 	}
 

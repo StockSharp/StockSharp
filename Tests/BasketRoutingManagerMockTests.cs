@@ -88,43 +88,22 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 		CreateBasketWithMock()
 	{
 		var idGen = new IncrementalIdGenerator();
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
 
-		var connectionState = new AdapterConnectionState();
-		var connectionManager = new AdapterConnectionManager(connectionState);
-		var subscriptionRouting = new SubscriptionRoutingState();
-		var parentChildMap = new ParentChildMap();
-		var pendingState = new PendingMessageState();
-		var pendingManager = new PendingMessageManager(pendingState);
-		var orderRouting = new OrderRoutingState();
-
-		// Use real BasketRoutingManager for integration tests
-		var routingManager = new BasketRoutingManager(
-			connectionState,
-			connectionManager,
-			pendingState,
-			pendingManager,
-			subscriptionRouting,
-			parentChildMap,
-			orderRouting,
+		// Create routing manager with all state components
+		var routingManager = BasketRoutingManager.CreateDefault(
 			a => a, // GetUnderlyingAdapter - simplified for tests
-			new CandleBuilderProvider(new InMemoryExchangeInfoProvider()),
+			candleBuilderProvider,
 			() => false,
 			idGen);
 
 		var basket = new BasketMessageAdapter(
 			idGen,
-			new CandleBuilderProvider(new InMemoryExchangeInfoProvider()),
+			candleBuilderProvider,
 			new InMemorySecurityMessageAdapterProvider(),
 			new InMemoryPortfolioMessageAdapterProvider(),
 			null,
-			connectionState,
-			connectionManager,
-			pendingState,
-			pendingManager,
-			subscriptionRouting,
-			parentChildMap,
-			orderRouting,
-			null,
+			null, // pipelineBuilder
 			routingManager);
 
 		basket.IgnoreExtraAdapters = true;
@@ -169,7 +148,7 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void BasketMessageAdapter_NoRoutingManager_ReturnsNull()
+	public void BasketMessageAdapter_DefaultRoutingManager_CreatedAutomatically()
 	{
 		var idGen = new IncrementalIdGenerator();
 		var basket = new BasketMessageAdapter(
@@ -179,7 +158,7 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 			new InMemoryPortfolioMessageAdapterProvider(),
 			null);
 
-		basket.RoutingManager.AssertNull("RoutingManager should be null when not injected");
+		basket.RoutingManager.AssertNotNull("Default RoutingManager should be created automatically");
 	}
 
 	#endregion
@@ -194,8 +173,8 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 
-		// Verify connection state updated
-		routingManager.ConnectionState.ConnectedCount.AssertEqual(1, "Should have 1 connected adapter");
+		// Verify connection state updated through public properties
+		routingManager.ConnectedCount.AssertEqual(1, "Should have 1 connected adapter");
 		routingManager.HasPendingAdapters.AssertFalse("No adapters should be pending");
 	}
 
@@ -206,23 +185,23 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 		var (basket, adapter1, routingManager) = CreateBasketWithMock();
 
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
-		routingManager.ConnectionState.ConnectedCount.AssertEqual(1);
+		routingManager.ConnectedCount.AssertEqual(1);
 		ClearOut();
 
 		await SendToBasket(basket, new DisconnectMessage(), TestContext.CancellationToken);
 
-		routingManager.ConnectionState.AllDisconnectedOrFailed.AssertTrue("All should be disconnected");
+		routingManager.ConnectedCount.AssertEqual(0, "ConnectedCount should be 0 after disconnect");
 	}
 
 	#endregion
 
-	#region Subscription Routing State Integration
+	#region Subscription Routing Integration
 
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
-	public async Task MarketData_Subscribe_UsesSubscriptionRouting()
+	public async Task MarketData_Subscribe_RoutedToAdapter()
 	{
-		var (basket, adapter1, mockManager) = CreateBasketWithMock();
+		var (basket, adapter1, routingManager) = CreateBasketWithMock();
 
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 		ClearOut();
@@ -237,23 +216,14 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 		};
 		await SendToBasket(basket, mdMsg, TestContext.CancellationToken);
 
-		// Verify subscription was recorded (using manager's state)
-		mockManager.SubscriptionRouting.TryGetSubscription(transId, out _, out _, out _)
-			.AssertTrue("Subscription should be recorded");
-
-		// Verify child mapping created (since we use ToChild path)
+		// Verify adapter received message
 		var adapterMsgs = adapter1.GetMessages<MarketDataMessage>().ToArray();
 		adapterMsgs.Length.AssertGreater(0, "Adapter should receive message");
-
-		var childTransId = adapterMsgs[0].TransactionId;
-		mockManager.ParentChildMap.TryGetParent(childTransId, out var parentId)
-			.AssertTrue("Child mapping should exist");
-		parentId.AssertEqual(transId, "Parent should match");
 	}
 
 	#endregion
 
-	#region Order Routing State Integration
+	#region Order Routing Integration
 
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -292,7 +262,7 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task Message_BeforeConnect_PendedInState()
 	{
-		var (basket, adapter1, mockManager) = CreateBasketWithMock();
+		var (basket, adapter1, routingManager) = CreateBasketWithMock();
 
 		// Don't auto respond to keep adapter in Connecting state
 		adapter1.AutoRespond = false;
@@ -301,30 +271,27 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 
 		// Adapter is connecting
-		mockManager.HasPendingAdapters.AssertTrue("Adapter should be pending");
+		routingManager.HasPendingAdapters.AssertTrue("Adapter should be pending");
 
 		// Send a message that should be pended
 		var transId = basket.TransactionIdGenerator.GetNextId();
 		var lookupMsg = new SecurityLookupMessage { TransactionId = transId };
 		await SendToBasket(basket, lookupMsg, TestContext.CancellationToken);
 
-		// Verify message was pended (using manager's state)
-		mockManager.PendingState.Count.AssertGreater(0, "Message should be in pending state");
-
-		// Adapter should NOT have received the lookup
+		// Adapter should NOT have received the lookup (it should be pended)
 		adapter1.GetMessages<SecurityLookupMessage>().Any()
 			.AssertFalse("Adapter should not receive message while connecting");
 	}
 
 	#endregion
 
-	#region ParentChildMap Integration
+	#region Response Remapping Integration
 
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task SubscriptionResponse_RemapsChildToParent()
 	{
-		var (basket, adapter1, mockManager) = CreateBasketWithMock();
+		var (basket, adapter1, routingManager) = CreateBasketWithMock();
 
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 		ClearOut();
@@ -338,11 +305,6 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 			TransactionId = transId,
 		};
 		await SendToBasket(basket, mdMsg, TestContext.CancellationToken);
-
-		// Find the child transaction ID sent to adapter
-		var adapterMsgs = adapter1.GetMessages<MarketDataMessage>().ToArray();
-		adapterMsgs.Length.AssertGreater(0, "Adapter should receive message");
-		var childTransId = adapterMsgs[0].TransactionId;
 
 		// Verify response was remapped to parent
 		var responses = GetOut<SubscriptionResponseMessage>();
@@ -362,11 +324,11 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task Reset_ClearsAllRoutingState()
 	{
-		var (basket, adapter1, mockManager) = CreateBasketWithMock();
+		var (basket, adapter1, routingManager) = CreateBasketWithMock();
 
 		// Connect
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
-		mockManager.ConnectionState.ConnectedCount.AssertEqual(1);
+		routingManager.ConnectedCount.AssertEqual(1);
 
 		// Subscribe to add some state
 		var transId = basket.TransactionIdGenerator.GetNextId();
@@ -378,16 +340,40 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 			TransactionId = transId,
 		}, TestContext.CancellationToken);
 
-		mockManager.SubscriptionRouting.TryGetSubscription(transId, out _, out _, out _).AssertTrue();
 		ClearOut();
 
 		// Reset
 		await SendToBasket(basket, new ResetMessage(), TestContext.CancellationToken);
 
-		// Verify state cleared
-		mockManager.SubscriptionRouting.TryGetSubscription(transId, out _, out _, out _)
-			.AssertFalse("Subscription routing should be cleared");
-		mockManager.ConnectionState.ConnectedCount.AssertEqual(0, "Connection count should be 0");
+		// Verify state cleared (connection count should be 0)
+		routingManager.ConnectedCount.AssertEqual(0, "Connection count should be 0 after reset");
+	}
+
+	#endregion
+
+	#region GetSubscribers Integration
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task GetSubscribers_ReturnsActiveSubscriptions()
+	{
+		var (basket, adapter1, routingManager) = CreateBasketWithMock();
+
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+		ClearOut();
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		await SendToBasket(basket, new MarketDataMessage
+		{
+			SecurityId = _secId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = transId,
+		}, TestContext.CancellationToken);
+
+		var subscribers = routingManager.GetSubscribers(DataType.Ticks);
+		subscribers.Length.AssertGreater(0, "Should have subscribers for Ticks");
+		subscribers.AssertContains(transId, "Should contain the subscription transId");
 	}
 
 	#endregion
