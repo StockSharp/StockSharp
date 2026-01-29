@@ -54,6 +54,7 @@ public static partial class EntitiesExtensions
 	/// <param name="value"><see cref="int"/> value.</param>
 	/// <param name="security">The instrument from which information about the price increment cost is taken.</param>
 	/// <returns>Points.</returns>
+	[Obsolete]
 	public static Unit Points(this int value, Security security)
 	{
 		return Points((decimal)value, security);
@@ -65,6 +66,7 @@ public static partial class EntitiesExtensions
 	/// <param name="value"><see cref="double"/> value.</param>
 	/// <param name="security">The instrument from which information about the price increment cost is taken.</param>
 	/// <returns>Points.</returns>
+	[Obsolete]
 	public static Unit Points(this double value, Security security)
 	{
 		return Points((decimal)value, security);
@@ -76,6 +78,7 @@ public static partial class EntitiesExtensions
 	/// <param name="value"><see cref="decimal"/> value.</param>
 	/// <param name="security">The instrument from which information about the price increment cost is taken.</param>
 	/// <returns>Points.</returns>
+	[Obsolete]
 	public static Unit Points(this decimal value, Security security)
 	{
 		if (security == null)
@@ -1465,6 +1468,7 @@ public static partial class EntitiesExtensions
 	/// <param name="serverTime">Change server time.</param>
 	/// <param name="localTime">Local timestamp when a message was received/created.</param>
 	/// <param name="defaultHandler">Default handler.</param>
+	[Obsolete("Use Level1ChangeMessage.")]
 	public static void ApplyChanges(this Security security, IEnumerable<KeyValuePair<Level1Fields, object>> changes, DateTime serverTime, DateTime localTime, Action<Security, Level1Fields, object> defaultHandler = null)
 	{
 		if (security == null)
@@ -1719,6 +1723,7 @@ public static partial class EntitiesExtensions
 	/// </summary>
 	/// <param name="security">Security.</param>
 	/// <param name="message">Changes.</param>
+	[Obsolete("Use Level1ChangeMessage.")]
 	public static void ApplyChanges(this Security security, Level1ChangeMessage message)
 	{
 		if (security == null)

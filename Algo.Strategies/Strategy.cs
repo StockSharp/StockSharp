@@ -2528,7 +2528,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			ServerTime = CurrentTimeUtc
 		}
 		.TryAdd(Level1Fields.PriceStep, tradeSec.PriceStep)
-		.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(tradeSec, Level1Fields.StepPrice) ?? tradeSec.StepPrice)
+		.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(tradeSec, Level1Fields.StepPrice) /*?? tradeSec.StepPrice*/)
 		.TryAdd(Level1Fields.Multiplier, this.GetSecurityValue<decimal?>(tradeSec, Level1Fields.Multiplier) ?? tradeSec.Multiplier)
 		);
 

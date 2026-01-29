@@ -79,7 +79,9 @@ public class BasketSecurityTests : BaseTestClass
 			Name = "RIU8",
 			PriceStep = 10m,
 			Board = ExchangeBoard.Associated,
+#pragma warning disable CS0618 // Type or member is obsolete
 			LastTick = new ExecutionMessage { DataTypeEx = DataType.Ticks, TradePrice = 98440 },
+#pragma warning restore CS0618 // Type or member is obsolete
 			ExpiryDate = new DateTime(2018, 09, 15).UtcKind(),
 		};
 
@@ -90,7 +92,9 @@ public class BasketSecurityTests : BaseTestClass
 			Name = "RIZ8",
 			PriceStep = 10m,
 			Board = ExchangeBoard.Associated,
+#pragma warning disable CS0618 // Type or member is obsolete
 			LastTick = new ExecutionMessage { DataTypeEx = DataType.Ticks, TradePrice = 100440 },
+#pragma warning restore CS0618 // Type or member is obsolete
 			ExpiryDate = new DateTime(2018, 12, 15).UtcKind(),
 		};
 	}
@@ -105,11 +109,13 @@ public class BasketSecurityTests : BaseTestClass
 			PriceStep = 0.01m,
 			Decimals = 2,
 			Board = ExchangeBoard.Associated,
+#pragma warning disable CS0618 // Type or member is obsolete
 			LastTick = new ExecutionMessage
 			{
 				DataTypeEx = DataType.Ticks,
 				TradePrice = 854.98m
 			}
+#pragma warning restore CS0618 // Type or member is obsolete
 		};
 
 		sber = new Security
@@ -120,11 +126,13 @@ public class BasketSecurityTests : BaseTestClass
 			PriceStep = 0.01m,
 			Decimals = 2,
 			Board = ExchangeBoard.Associated,
+#pragma warning disable CS0618 // Type or member is obsolete
 			LastTick = new ExecutionMessage
 			{
 				DataTypeEx = DataType.Ticks,
 				TradePrice = 99.13m
 			}
+#pragma warning restore CS0618 // Type or member is obsolete
 		};
 	}
 
@@ -234,7 +242,7 @@ public class BasketSecurityTests : BaseTestClass
 		var processorProvider = new BasketSecurityProcessorProvider();
 		var messages = Array.Empty<ExecutionMessage>().ToAsyncEnumerable();
 
-		var result = await messages.ToBasket(basket, processorProvider).ToArrayAsync();
+		var result = await messages.ToBasket(basket, processorProvider).ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(0);
 	}
@@ -295,7 +303,7 @@ public class BasketSecurityTests : BaseTestClass
 		};
 
 		var syncResult = ticks.ToBasket(basket, processorProvider).ToArray();
-		var asyncResult = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync();
+		var asyncResult = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync(CancellationToken);
 
 		syncResult.Length.AssertEqual(asyncResult.Length);
 	}
@@ -377,7 +385,7 @@ public class BasketSecurityTests : BaseTestClass
 			},
 		};
 
-		var result = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync();
+		var result = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync(CancellationToken);
 
 		result.Length.AssertGreater(0);
 	}

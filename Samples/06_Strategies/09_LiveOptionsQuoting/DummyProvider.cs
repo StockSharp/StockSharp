@@ -19,6 +19,7 @@ class DummyProvider(IEnumerable<Security> securities, IEnumerable<Position> posi
 	object IMarketDataProvider.GetSecurityValue(Security security, Level1Fields field)
 		=> field switch
 		{
+#pragma warning disable CS0618 // Type or member is obsolete
 			Level1Fields.OpenInterest => security.OpenInterest,
 			Level1Fields.ImpliedVolatility => security.ImpliedVolatility,
 			Level1Fields.HistoricalVolatility => security.HistoricalVolatility,
@@ -29,6 +30,7 @@ class DummyProvider(IEnumerable<Security> securities, IEnumerable<Position> posi
 			Level1Fields.BestBidVolume => security.BestBid?.Volume,
 			Level1Fields.BestAskPrice => security.BestAsk?.Price,
 			Level1Fields.BestAskVolume => security.BestAsk?.Volume,
+#pragma warning restore CS0618 // Type or member is obsolete
 			_ => null,
 		};
 

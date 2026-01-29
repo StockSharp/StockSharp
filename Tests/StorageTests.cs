@@ -2545,6 +2545,7 @@ public class StorageTests : BaseTestClass
 		var security = Helper.CreateSecurity();
 		var token = CancellationToken;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 		security.PriceStep = security.MinPrice = 0.0000001m;
 		security.MaxPrice = 100000000m;
 
@@ -2567,6 +2568,7 @@ public class StorageTests : BaseTestClass
 			SecurityId = securityId,
 			ServerTime = serverTime,
 		}.TryAdd(Level1Fields.MaxPrice, security.MaxPrice));
+#pragma warning restore CS0618 // Type or member is obsolete
 
 		var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 

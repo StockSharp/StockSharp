@@ -80,11 +80,13 @@ static class Helper
 
 		var dt = start ?? DateTime.UtcNow;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 		tradeGenerator.Process(new Level1ChangeMessage
 		{
 			SecurityId = secMsg.SecurityId,
 			ServerTime = dt//.StorageTruncate()
 		}.TryAdd(Level1Fields.LastTradePrice, security.LastTick.Price));
+#pragma warning restore CS0618 // Type or member is obsolete
 
 		//var rnd = new Random((int)DateTime.Now.Ticks);
 
@@ -165,11 +167,13 @@ static class Helper
 
 		var dt = start ?? DateTime.UtcNow;
 
+#pragma warning disable CS0618 // Type or member is obsolete
 		generator.Process(new Level1ChangeMessage
 		{
 			SecurityId = secMsg.SecurityId,
 			ServerTime = dt
 		}.TryAdd(Level1Fields.LastTradePrice, security.LastTick.Price));
+#pragma warning restore CS0618 // Type or member is obsolete
 
 		if (generator.Interval.Ticks == 0)
 			throw new InvalidOperationException();
@@ -711,23 +715,27 @@ static class Helper
 			Code = "TestCode",
 			//Name = "TestName",
 			PriceStep = 0.1m,
-			StepPrice = 2,
 			//Decimals = 1,
 			Board = ExchangeBoard.Test
 		};
+#pragma warning disable CS0618 // Type or member is obsolete
 		security.LastTick = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			SecurityId = security.ToSecurityId(),
 			TradePrice = lastTickPrice,
 		};
+		security.StepPrice = 2;
+#pragma warning restore CS0618 // Type or member is obsolete
 		return security;
 	}
 
 	public static Security CreateStorageSecurity()
 	{
 		var security = CreateSecurity();
+#pragma warning disable CS0618 // Type or member is obsolete
 		security.BestBid = new() { Price = 87 };
+#pragma warning restore CS0618 // Type or member is obsolete
 		return security;
 	}
 
@@ -778,6 +786,7 @@ static class Helper
 
 			if (!isSerializer)
 			{
+#pragma warning disable CS0618 // Type or member is obsolete
 				s2.OpenPrice.AssertEqual(s1.OpenPrice);
 				s2.HighPrice.AssertEqual(s1.HighPrice);
 				s2.LowPrice.AssertEqual(s1.LowPrice);
@@ -791,6 +800,7 @@ static class Helper
 
 				s2.StepPrice.AssertEqual(s1.StepPrice);
 				s2.State.AssertEqual(s1.State);
+#pragma warning restore CS0618 // Type or member is obsolete
 			}
 
 			s2.VolumeStep.AssertEqual(s1.VolumeStep);
