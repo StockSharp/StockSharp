@@ -123,8 +123,6 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		Disconnected += OnDisconnected;
 
 		SupportFilteredMarketDepth = false;
-		UpdateSecurityLastQuotes = false;
-		UpdateSecurityByLevel1 = false;
 		UpdatePortfolioByChange = false;
 		SupportBasketSecurities = true;
 
