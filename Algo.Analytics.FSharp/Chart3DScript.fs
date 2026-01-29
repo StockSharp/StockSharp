@@ -69,8 +69,8 @@ type Chart3DScript() =
                             let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
                             // get available dates for the specified period
-                            let! datesSeq = candleStorage.GetDatesAsync(fromDate, toDate, cancellationToken)
-                            let dates = datesSeq.ToArray()
+                            let datesSeq = candleStorage.GetDatesAsync(fromDate, toDate)
+                            let! dates = datesSeq.ToArrayAsync(cancellationToken)
                             if dates.Length = 0 then
                                 logs.LogWarning("no data")
                                 doContinue <- false

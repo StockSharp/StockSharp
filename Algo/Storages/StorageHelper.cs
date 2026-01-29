@@ -241,7 +241,7 @@ public static partial class StorageHelper
 			return null;
 		}
 
-		var dates = (await storage.GetDatesAsync(cancellationToken)).ToArray();
+		var dates = await storage.GetDatesAsync().ToArrayAsync(cancellationToken);
 
 		if (dates.IsEmpty())
 			return null;
@@ -284,19 +284,24 @@ public static partial class StorageHelper
 	/// <param name="storage">Market-data storage.</param>
 	/// <param name="from">The range start time. If the value is not specified, data will be loaded from the start date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>.</param>
 	/// <param name="to">The range end time. If the value is not specified, data will be loaded up to the end date <see cref="IMarketDataStorageDrive.GetDatesAsync"/>, inclusive.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>All available data within the range.</returns>
-	public static async ValueTask<IEnumerable<DateTime>> GetDatesAsync(this IMarketDataStorage storage, DateTime? from, DateTime? to, CancellationToken cancellationToken)
+	public static IAsyncEnumerable<DateTime> GetDatesAsync(this IMarketDataStorage storage, DateTime? from, DateTime? to)
 	{
-		var dates = await storage.GetDatesAsync(cancellationToken);
+		return Impl();
 
-		if (from != null)
-			dates = dates.Where(d => d >= from.Value);
+		async IAsyncEnumerable<DateTime> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
+		{
+			var dates = storage.GetDatesAsync();
 
-		if (to != null)
-			dates = dates.Where(d => d <= to.Value);
+			if (from != null)
+				dates = dates.Where(d => d >= from.Value);
 
-		return dates;
+			if (to != null)
+				dates = dates.Where(d => d <= to.Value);
+
+			await foreach (var date in dates.WithEnforcedCancellation(cancellationToken))
+				yield return date;
+		}
 	}
 
 	internal static DateTime StorageTruncate(this DateTime time, TimeSpan precision)
@@ -310,16 +315,6 @@ public static partial class StorageHelper
 	{
 		return time.StorageTruncate(TimeSpan.FromMilliseconds(1));
 	}
-
-	/// <summary>
-	/// Get all available data types.
-	/// </summary>
-	/// <param name="drive"><see cref="IMarketDataDrive"/></param>
-	/// <param name="securityId">Instrument identifier.</param>
-	/// <param name="format">Format type.</param>
-	/// <returns>Data types.</returns>
-	public static IEnumerable<DataType> GetAvailableDataTypes(this IMarketDataDrive drive, SecurityId securityId, StorageFormats format)
-		=> AsyncHelper.Run(() => drive.GetAvailableDataTypesAsync(securityId, format, default));
 
 	/// <summary>
 	/// Delete instrument by identifier.
@@ -355,55 +350,50 @@ public static partial class StorageHelper
 		private readonly Func<TimeSpan, IMarketDataStorage<CandleMessage>> _getStorage;
 		private readonly Dictionary<TimeSpan, BiggerTimeFrameCandleCompressor> _compressors;
 		private readonly TimeSpan _timeFrame;
+		private readonly IEnumerable<TimeSpan> _smallerTimeFrames;
 		private DateTime _prevDate;
 
-		public CandleMessageBuildableStorage(CandleBuilderProvider provider, IStorageRegistry registry, SecurityId securityId, TimeSpan timeFrame, IMarketDataDrive drive, StorageFormats format)
+		public CandleMessageBuildableStorage(CandleBuilderProvider provider, SecurityId securityId, TimeSpan timeFrame, IMarketDataDrive drive, StorageFormats format, Func<TimeSpan, IMarketDataStorage<CandleMessage>> getStorage, IEnumerable<TimeSpan> smallerTimeFrames)
 		{
-			if (registry == null)
-				throw new ArgumentNullException(nameof(registry));
+			_getStorage = getStorage ?? throw new ArgumentNullException(nameof(getStorage));
+			_smallerTimeFrames = smallerTimeFrames ?? throw new ArgumentNullException(nameof(smallerTimeFrames));
 
-			_getStorage = tf => registry.GetTimeFrameCandleMessageStorage(securityId, tf, drive, format);
+			_dataType = DataType.Create<TimeFrameCandleMessage>(timeFrame);
 			_original = _getStorage(timeFrame);
-
 			_timeFrame = timeFrame;
 
-			var origin = timeFrame.TimeFrame();
+			var origin = _timeFrame.TimeFrame();
 
-			_compressors = GetSmallerTimeFrames().ToDictionary(tf => tf, tf => new BiggerTimeFrameCandleCompressor(new MarketDataMessage
+			_compressors = smallerTimeFrames.ToDictionary(tf => tf, tf => new BiggerTimeFrameCandleCompressor(new MarketDataMessage
 			{
 				SecurityId = securityId,
 				DataType2 = origin,
 				IsSubscribe = true,
 			}, provider.Get(typeof(TimeFrameCandleMessage)), tf.TimeFrame()));
-
-			_dataType = DataType.Create<TimeFrameCandleMessage>(_original.DataType.Arg);
-		}
-
-		private IEnumerable<TimeSpan> GetSmallerTimeFrames()
-		{
-			return _original.Drive.Drive
-				.GetAvailableDataTypes(_original.SecurityId, ((IMarketDataStorage<CandleMessage>)this).Serializer.Format)
-				.FilterTimeFrames()
-				.FilterSmallerTimeFrames(_timeFrame)
-				.OrderByDescending();
 		}
 
 		private IEnumerable<IMarketDataStorage<CandleMessage>> GetStorages()
-			=> new[] { _original }.Concat(GetSmallerTimeFrames().Select(_getStorage));
+			=> new[] { _original }.Concat(_smallerTimeFrames.Select(_getStorage));
 
-		async ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken)
+		IAsyncEnumerable<DateTime> IMarketDataStorage.GetDatesAsync()
 		{
-			var dates = new HashSet<DateTime>();
+			return Impl();
 
-			foreach (var storage in GetStorages())
+			async IAsyncEnumerable<DateTime> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
 			{
-				var storageDates = await storage.GetDatesAsync(cancellationToken);
+				var dates = new HashSet<DateTime>();
 
-				foreach (var date in storageDates)
-					dates.Add(date);
+				foreach (var storage in GetStorages())
+				{
+					var storageDates = storage.GetDatesAsync();
+
+					await foreach(var date in storageDates.WithEnforcedCancellation(cancellationToken))
+						dates.Add(date);
+				}
+
+				foreach (var date in dates.OrderBy())
+					yield return date;
 			}
-
-			return dates.OrderBy();
 		}
 
 		private readonly DataType _dataType;
@@ -462,7 +452,7 @@ public static partial class StorageHelper
 
 				foreach (var s in storage.GetStorages())
 				{
-					var dates = await s.GetDatesAsync(cancellationToken);
+					var dates = await s.GetDatesAsync().ToArrayAsync(cancellationToken);
 
 					if (dates.Contains(date))
 					{
@@ -588,10 +578,26 @@ public static partial class StorageHelper
 	/// <param name="timeFrame">Time-frame.</param>
 	/// <param name="drive">The storage. If a value is <see langword="null" />, <see cref="IStorageRegistry.DefaultDrive"/> will be used.</param>
 	/// <param name="format">The format type. By default <see cref="StorageFormats.Binary"/> is passed.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The candles storage.</returns>
-	public static IMarketDataStorage<CandleMessage> GetCandleMessageBuildableStorage(this CandleBuilderProvider provider, IStorageRegistry registry, SecurityId securityId, TimeSpan timeFrame, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary)
+	public static async ValueTask<IMarketDataStorage<CandleMessage>> GetCandleMessageBuildableStorage(this CandleBuilderProvider provider, IStorageRegistry registry, SecurityId securityId, TimeSpan timeFrame, IMarketDataDrive drive = null, StorageFormats format = StorageFormats.Binary, CancellationToken cancellationToken = default)
 	{
-		return new CandleMessageBuildableStorage(provider, registry, securityId, timeFrame, drive, format);
+		ArgumentNullException.ThrowIfNull(registry);
+
+		async ValueTask<IEnumerable<TimeSpan>> smallerTimeFrames()
+		{
+			return (await (drive ?? registry.DefaultDrive)
+				.GetAvailableDataTypesAsync(securityId, format)
+				.ToArrayAsync(cancellationToken))
+				.FilterTimeFrames()
+				.FilterSmallerTimeFrames(timeFrame)
+				.OrderByDescending();
+		}
+
+		return new CandleMessageBuildableStorage(provider, securityId,
+			timeFrame, drive, format,
+			tf => registry.GetTimeFrameCandleMessageStorage(securityId, tf, drive, format),
+			await smallerTimeFrames());
 	}
 
 	/// <summary>
@@ -1025,15 +1031,15 @@ public static partial class StorageHelper
 				{
 					var tf = subscription.GetTimeFrame();
 
-					IMarketDataStorage<CandleMessage> GetTimeFrameCandleMessageStorage(SecurityId securityId, TimeSpan timeFrame, bool allowBuildFromSmallerTimeFrame)
+					ValueTask<IMarketDataStorage<CandleMessage>> GetTimeFrameCandleMessageStorage(SecurityId securityId, TimeSpan timeFrame, bool allowBuildFromSmallerTimeFrame)
 					{
 						if (!allowBuildFromSmallerTimeFrame)
-							return (IMarketDataStorage<CandleMessage>)settings.GetStorage(securityId, timeFrame.TimeFrame());
+							return new((IMarketDataStorage<CandleMessage>)settings.GetStorage(securityId, timeFrame.TimeFrame()));
 
-						return candleBuilderProvider.GetCandleMessageBuildableStorage(settings.StorageRegistry, securityId, timeFrame, settings.Drive, settings.Format);
+						return candleBuilderProvider.GetCandleMessageBuildableStorage(settings.StorageRegistry, securityId, timeFrame, settings.Drive, settings.Format, cancellationToken);
 					}
 
-					storage = GetTimeFrameCandleMessageStorage(secId, tf, subscription.AllowBuildFromSmallerTimeFrame);
+					storage = await GetTimeFrameCandleMessageStorage(secId, tf, subscription.AllowBuildFromSmallerTimeFrame);
 				}
 				else
 				{
@@ -1076,7 +1082,7 @@ public static partial class StorageHelper
 		if (subscription.From is not DateTime from)
 			return default;
 
-		var dates = await storage.GetDatesAsync(cancellationToken);
+		var dates = await storage.GetDatesAsync().ToArrayAsync(cancellationToken);
 		var last = dates.LastOr();
 
 		if (last == null)

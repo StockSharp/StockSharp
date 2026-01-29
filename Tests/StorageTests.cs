@@ -3360,10 +3360,10 @@ public class StorageTests : BaseTestClass
 		var securityId = new SecurityId { SecurityCode = "EMPTY", BoardCode = BoardCodes.Test };
 		var token = CancellationToken;
 
-		var dataTypes = await drive.GetAvailableDataTypesAsync(securityId, format, token);
+		var dataTypes = await drive.GetAvailableDataTypesAsync(securityId, format).ToArrayAsync(token);
 
 		dataTypes.AssertNotNull();
-		dataTypes.Count().AssertEqual(0);
+		dataTypes.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -3379,7 +3379,7 @@ public class StorageTests : BaseTestClass
 		await SetupTestDataAsync(drive, securityId, DataType.Ticks, format, dates);
 		await SetupTestDataAsync(drive, securityId, DataType.Level1, format, dates);
 
-		var dataTypes = (await drive.GetAvailableDataTypesAsync(securityId, format, token)).ToArray();
+		var dataTypes = await drive.GetAvailableDataTypesAsync(securityId, format).ToArrayAsync(token);
 
 		(dataTypes.Length >= 2).AssertTrue();
 		dataTypes.Contains(DataType.Ticks).AssertTrue();
@@ -3401,7 +3401,7 @@ public class StorageTests : BaseTestClass
 		await SetupTestDataAsync(drive, security2, DataType.Level1, format, dates);
 		await SetupTestDataAsync(drive, security2, DataType.MarketDepth, format, dates);
 
-		var dataTypes = (await drive.GetAvailableDataTypesAsync(default, format, token)).ToArray();
+		var dataTypes = await drive.GetAvailableDataTypesAsync(default, format).ToArrayAsync(token);
 
 		(dataTypes.Length >= 3).AssertTrue();
 		dataTypes.Contains(DataType.Ticks).AssertTrue();
@@ -3511,7 +3511,7 @@ public class StorageTests : BaseTestClass
 
 		await SetupTestDataAsync(drive, securityId, DataType.Ticks, format, dates);
 
-		var dataTypes = (await drive.GetAvailableDataTypesAsync(securityId, format, token)).ToArray();
+		var dataTypes = await drive.GetAvailableDataTypesAsync(securityId, format).ToArrayAsync(token);
 
 		(dataTypes.Length >= 1).AssertTrue();
 		dataTypes.Contains(DataType.Ticks).AssertTrue();

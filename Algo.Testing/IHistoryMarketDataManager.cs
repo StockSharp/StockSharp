@@ -115,7 +115,7 @@ public interface IHistoryMarketDataManager : IDisposable
 	/// </summary>
 	/// <param name="securityId">Security ID.</param>
 	/// <returns>Supported data types.</returns>
-	IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId);
+	IAsyncEnumerable<DataType> GetSupportedDataTypesAsync(SecurityId securityId);
 
 	/// <summary>
 	/// Start market data generation.

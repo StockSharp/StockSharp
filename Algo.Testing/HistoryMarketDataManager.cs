@@ -1,8 +1,7 @@
 namespace StockSharp.Algo.Testing;
 
-using System.Runtime.CompilerServices;
-
 using StockSharp.Algo.Testing.Generation;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// History market data manager implementation.
@@ -184,20 +183,29 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 		=> _generators.ContainsKey((securityId, dataType));
 
 	/// <inheritdoc />
-	public IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId)
+	public IAsyncEnumerable<DataType> GetSupportedDataTypesAsync(SecurityId securityId)
 	{
-		var dataTypes = new HashSet<DataType>();
+		return Impl();
 
-		var drive = DriveInternal;
+		async IAsyncEnumerable<DataType> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
+		{
+			var dataTypes = new HashSet<DataType>();
 
-		if (drive != null)
-			dataTypes.AddRange(drive.GetAvailableDataTypes(securityId, StorageFormat));
+			var drive = DriveInternal;
 
-		dataTypes.AddRange(_generators
-			.Where(g => g.Key.secId == securityId)
-			.Select(t => t.Key.dataType));
+			if (drive != null)
+				dataTypes.AddRange(await drive.GetAvailableDataTypesAsync(securityId, StorageFormat).ToArrayAsync(cancellationToken));
 
-		return dataTypes;
+			dataTypes.AddRange(_generators
+				.Where(g => g.Key.secId == securityId)
+				.Select(t => t.Key.dataType));
+
+			foreach (var dataType in dataTypes)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
+				yield return dataType;
+			}
+		}
 	}
 
 	/// <inheritdoc />

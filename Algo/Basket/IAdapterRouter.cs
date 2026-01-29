@@ -19,8 +19,9 @@ public interface IAdapterRouter
 	/// <param name="mdMsg">Market data message.</param>
 	/// <param name="adapters">Pre-filtered adapters from <see cref="GetAdapters"/>.</param>
 	/// <param name="skipSupportedMessages">Whether supported-message filtering was skipped.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Filtered adapters.</returns>
-	IMessageAdapter[] GetSubscriptionAdapters(MarketDataMessage mdMsg, IMessageAdapter[] adapters, bool skipSupportedMessages);
+	ValueTask<IMessageAdapter[]> GetSubscriptionAdaptersAsync(MarketDataMessage mdMsg, IMessageAdapter[] adapters, bool skipSupportedMessages, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Get adapter for portfolio-based routing.

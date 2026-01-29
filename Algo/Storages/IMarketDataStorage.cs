@@ -8,9 +8,8 @@ public interface IMarketDataStorage
 	/// <summary>
 	/// To get all the dates for which market data are recorded.
 	/// </summary>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Available dates.</returns>
-	ValueTask<IEnumerable<DateTime>> GetDatesAsync(CancellationToken cancellationToken);
+	IAsyncEnumerable<DateTime> GetDatesAsync();
 
 	/// <summary>
 	/// The type of market-data, operated by given storage.

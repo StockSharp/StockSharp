@@ -81,7 +81,7 @@ public class BufferMessageAdapterTests : BaseTestClass
 
 		public TaskCompletionSource<IReadOnlyList<ExecutionMessage>> Saved { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-		ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken) => new([]);
+		IAsyncEnumerable<DateTime> IMarketDataStorage.GetDatesAsync() => AsyncEnumerable.Empty<DateTime>();
 		DataType IMarketDataStorage.DataType => DataType.Ticks;
 		SecurityId IMarketDataStorage.SecurityId => _securityId;
 		IMarketDataStorageDrive IMarketDataStorage.Drive => Mock.Of<IMarketDataStorageDrive>();

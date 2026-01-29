@@ -350,7 +350,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			if (mdMsg.DataType2.IsTFCandles)
 			{
 				var originalTf = mdMsg.GetTimeFrame();
-				var timeFrames = InnerAdapter.GetTimeFrames(mdMsg.SecurityId, mdMsg.From, mdMsg.To).ToArray();
+				var timeFrames = await InnerAdapter.GetTimeFramesAsync(mdMsg.SecurityId, mdMsg.From, mdMsg.To).ToArrayAsync(cancellationToken);
 
 				if (timeFrames.Contains(originalTf) || InnerAdapter.CheckTimeFrameByRequest)
 				{
@@ -364,7 +364,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 							mdMsg.BuildMode == MarketDataBuildModes.LoadAndBuild &&
 							!mdMsg.IsFinishedOnly &&
 							!InnerAdapter.IsSupportCandlesUpdates(mdMsg) &&
-							InnerAdapter.TryGetCandlesBuildFrom(original, _candleBuilderProvider) != null)
+							await InnerAdapter.TryGetCandlesBuildFromAsync(original, _candleBuilderProvider, cancellationToken) != null)
 						{
 							mdMsg.To = _logReceiver.CurrentTimeUtc;
 						}
@@ -426,7 +426,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			}
 			else
 			{
-				if (InnerAdapter.IsCandlesSupported(mdMsg))
+				if (await InnerAdapter.IsCandlesSupportedAsync(mdMsg, cancellationToken))
 				{
 					_logReceiver.AddInfoLog("Origin arg: {0}", mdMsg.GetArg());
 
@@ -520,12 +520,12 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		}
 	}
 
-	private MarketDataMessage TryCreateBuildSubscription(MarketDataMessage original, DateTime? lastTime)
+	private async ValueTask<MarketDataMessage> TryCreateBuildSubscription(MarketDataMessage original, DateTime? lastTime, CancellationToken cancellationToken)
 	{
 		if (original == null)
 			throw new ArgumentNullException(nameof(original));
 
-		var buildFrom = InnerAdapter.TryGetCandlesBuildFrom(original, _candleBuilderProvider);
+		var buildFrom = await InnerAdapter.TryGetCandlesBuildFromAsync(original, _candleBuilderProvider, cancellationToken);
 
 		if (buildFrom == null)
 			return null;
@@ -549,7 +549,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 	private async ValueTask<MarketDataMessage> TrySubscribeBuildAsync(MarketDataMessage original, CancellationToken cancellationToken)
 	{
-		var current = TryCreateBuildSubscription(original, original.From);
+		var current = await TryCreateBuildSubscription(original, original.From, cancellationToken);
 
 		if (current == null)
 			return null;
@@ -748,8 +748,9 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 						return;
 					}
 
-					var smaller = InnerAdapter
-						.GetTimeFrames(original.SecurityId, series.LastTime, original.To)
+					var smaller = (await InnerAdapter
+						.GetTimeFramesAsync(original.SecurityId, series.LastTime, original.To)
+						.ToArrayAsync(cancellationToken))
 						.FilterSmallerTimeFrames(original.GetTimeFrame())
 						.OrderByDescending()
 						.FirstOr()?
@@ -810,7 +811,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 		series.NonFinishedCandle = null;
 
-		var current = TryCreateBuildSubscription(original, series.LastTime);
+		var current = await TryCreateBuildSubscription(original, series.LastTime, cancellationToken);
 
 		if (current == null)
 		{

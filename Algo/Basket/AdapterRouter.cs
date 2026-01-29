@@ -113,9 +113,19 @@ public class AdapterRouter : IAdapterRouter
 	}
 
 	/// <inheritdoc />
-	public IMessageAdapter[] GetSubscriptionAdapters(MarketDataMessage mdMsg, IMessageAdapter[] adapters, bool skipSupportedMessages)
+	public async ValueTask<IMessageAdapter[]> GetSubscriptionAdaptersAsync(MarketDataMessage mdMsg, IMessageAdapter[] adapters, bool skipSupportedMessages, CancellationToken cancellationToken)
 	{
-		return adapters.Where(a =>
+		var retVal = new List<IMessageAdapter>();
+
+		foreach (var adapter in adapters)
+		{
+			if (await isMatch(adapter))
+				retVal.Add(adapter);
+		}
+
+		return [.. retVal];
+
+		async ValueTask<bool> isMatch(IMessageAdapter a)
 		{
 			if (skipSupportedMessages)
 				return true;
@@ -124,7 +134,7 @@ public class AdapterRouter : IAdapterRouter
 			{
 				var isCandles = mdMsg.DataType2.IsCandles;
 
-				if (a.IsMarketDataTypeSupported(mdMsg.DataType2) && (!isCandles || a.IsCandlesSupported(mdMsg)))
+				if (await a.IsMarketDataTypeSupportedAsync(mdMsg.DataType2, cancellationToken) && (!isCandles || await a.IsCandlesSupportedAsync(mdMsg, cancellationToken)))
 					return true;
 				else
 				{
@@ -134,12 +144,12 @@ public class AdapterRouter : IAdapterRouter
 							return false;
 
 						if (mdMsg.BuildFrom == DataType.Level1 || mdMsg.BuildFrom == DataType.OrderLog)
-							return a.IsMarketDataTypeSupported(mdMsg.BuildFrom);
+							return await a.IsMarketDataTypeSupportedAsync(mdMsg.BuildFrom, cancellationToken);
 						else if (mdMsg.BuildFrom == null)
 						{
-							if (a.IsMarketDataTypeSupported(DataType.OrderLog))
+							if (await a.IsMarketDataTypeSupportedAsync(DataType.OrderLog, cancellationToken))
 								mdMsg.BuildFrom = DataType.OrderLog;
-							else if (a.IsMarketDataTypeSupported(DataType.Level1))
+							else if (await a.IsMarketDataTypeSupportedAsync(DataType.Level1, cancellationToken))
 								mdMsg.BuildFrom = DataType.Level1;
 							else
 								return false;
@@ -150,12 +160,12 @@ public class AdapterRouter : IAdapterRouter
 						return false;
 					}
 					else if (mdMsg.DataType2 == DataType.Level1)
-						return _levelExtend() && a.IsMarketDataTypeSupported(mdMsg.BuildFrom ?? DataType.MarketDepth);
+						return _levelExtend() && await a.IsMarketDataTypeSupportedAsync(mdMsg.BuildFrom ?? DataType.MarketDepth, cancellationToken);
 					else if (mdMsg.DataType2 == DataType.Ticks)
-						return a.IsMarketDataTypeSupported(DataType.OrderLog);
+						return await a.IsMarketDataTypeSupportedAsync(DataType.OrderLog, cancellationToken);
 					else
 					{
-						if (isCandles && a.TryGetCandlesBuildFrom(mdMsg, _candleBuilderProvider) != null)
+						if (isCandles && await a.TryGetCandlesBuildFromAsync(mdMsg, _candleBuilderProvider, cancellationToken) != null)
 							return true;
 
 						return false;
@@ -164,7 +174,7 @@ public class AdapterRouter : IAdapterRouter
 			}
 
 			var original = mdMsg.GetTimeFrame();
-			var timeFrames = a.GetTimeFrames(mdMsg.SecurityId, mdMsg.From, mdMsg.To).ToArray();
+			var timeFrames = await a.GetTimeFramesAsync(mdMsg.SecurityId, mdMsg.From, mdMsg.To).ToArrayAsync(cancellationToken);
 
 			if (timeFrames.Contains(original) || a.CheckTimeFrameByRequest)
 				return true;
@@ -180,8 +190,8 @@ public class AdapterRouter : IAdapterRouter
 					return true;
 			}
 
-			return a.TryGetCandlesBuildFrom(mdMsg, _candleBuilderProvider) != null;
-		}).ToArray();
+			return await a.TryGetCandlesBuildFromAsync(mdMsg, _candleBuilderProvider, cancellationToken) != null;
+		}
 	}
 
 	/// <inheritdoc />

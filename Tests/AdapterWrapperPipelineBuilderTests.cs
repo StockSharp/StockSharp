@@ -96,7 +96,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	#region Basic Pipeline Building
 
 	[TestMethod]
-	public void Build_WithIgnoreExtraAdapters_ReturnsOnlyHeartbeatAndOffline()
+	public async Task Build_WithIgnoreExtraAdapters_ReturnsOnlyHeartbeatAndOffline()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -106,7 +106,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			SupportOffline = true,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<HeartbeatMessageAdapter>(result));
@@ -116,7 +116,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Build_WithIgnoreExtraAdapters_NoOffline_ReturnsOnlyHeartbeat()
+	public async Task Build_WithIgnoreExtraAdapters_NoOffline_ReturnsOnlyHeartbeat()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -126,7 +126,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			SupportOffline = false,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<HeartbeatMessageAdapter>(result));
@@ -135,7 +135,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Build_WithSupportOffline_IncludesOfflineAdapter()
+	public async Task Build_WithSupportOffline_IncludesOfflineAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -144,14 +144,14 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			SupportOffline = true,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<OfflineMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithoutSupportOffline_NoOfflineAdapter()
+	public async Task Build_WithoutSupportOffline_NoOfflineAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -160,7 +160,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			SupportOffline = false,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsFalse(HasWrapper<OfflineMessageAdapter>(result));
@@ -171,7 +171,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	#region Manager Adapters
 
 	[TestMethod]
-	public void Build_WithLatencyManager_IncludesLatencyAdapter()
+	public async Task Build_WithLatencyManager_IncludesLatencyAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -180,14 +180,14 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			LatencyManager = new LatencyManager(new LatencyManagerState()),
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<LatencyMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithoutLatencyManager_NoLatencyAdapter()
+	public async Task Build_WithoutLatencyManager_NoLatencyAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -196,14 +196,14 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			LatencyManager = null,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsFalse(HasWrapper<LatencyMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithSlippageManager_IncludesSlippageAdapter()
+	public async Task Build_WithSlippageManager_IncludesSlippageAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -212,14 +212,14 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			SlippageManager = new SlippageManager(new SlippageManagerState()),
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<SlippageMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithPnLManager_IncludesPnLAdapter()
+	public async Task Build_WithPnLManager_IncludesPnLAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter { SupportExecutionsPnL = false };
@@ -228,14 +228,14 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			PnLManager = new PnLManager(),
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<PnLMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithPnLManager_AdapterSupportsPnL_NoPnLAdapter()
+	public async Task Build_WithPnLManager_AdapterSupportsPnL_NoPnLAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter { SupportExecutionsPnL = true };
@@ -244,14 +244,14 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			PnLManager = new PnLManager(),
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsFalse(HasWrapper<PnLMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithCommissionManager_IncludesCommissionAdapter()
+	public async Task Build_WithCommissionManager_IncludesCommissionAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -260,7 +260,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			CommissionManager = new CommissionManager(),
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<CommissionMessageAdapter>(result));
@@ -271,7 +271,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	#region Native/Mapping Adapters
 
 	[TestMethod]
-	public void Build_WithNativeIdentifiers_IncludesSecurityNativeIdAdapter()
+	public async Task Build_WithNativeIdentifiers_IncludesSecurityNativeIdAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter { NativeIdentifiers = true };
@@ -280,14 +280,14 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			NativeIdStorage = new InMemoryNativeIdStorageProvider(),
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<SecurityNativeIdMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithoutNativeIdentifiers_NoSecurityNativeIdAdapter()
+	public async Task Build_WithoutNativeIdentifiers_NoSecurityNativeIdAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter { NativeIdentifiers = false };
@@ -296,14 +296,14 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			NativeIdStorage = new InMemoryNativeIdStorageProvider(),
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsFalse(HasWrapper<SecurityNativeIdMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithMappingProvider_IncludesSecurityMappingAdapter()
+	public async Task Build_WithMappingProvider_IncludesSecurityMappingAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -313,7 +313,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			MappingProvider = mapping.Object,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<SecurityMappingMessageAdapter>(result));
@@ -324,13 +324,13 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	#region Subscription Adapters
 
 	[TestMethod]
-	public void Build_WithSubscriptionSupport_IncludesSubscriptionAdapters()
+	public async Task Build_WithSubscriptionSupport_IncludesSubscriptionAdapters()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter { SupportSubscriptions = true };
 		var config = CreateDefaultConfig();
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<SubscriptionOnlineMessageAdapter>(result));
@@ -338,13 +338,13 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Build_WithoutSubscriptionSupport_NoSubscriptionAdapters()
+	public async Task Build_WithoutSubscriptionSupport_NoSubscriptionAdapters()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter { SupportSubscriptions = false };
 		var config = CreateDefaultConfig();
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsFalse(HasWrapper<SubscriptionOnlineMessageAdapter>(result));
@@ -352,7 +352,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Build_WithSupportSecurityAll_IncludesSubscriptionSecurityAllAdapter()
+	public async Task Build_WithSupportSecurityAll_IncludesSubscriptionSecurityAllAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -361,7 +361,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			SupportSecurityAll = true,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<SubscriptionSecurityAllMessageAdapter>(result));
@@ -372,7 +372,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	#region Candle Adapters
 
 	[TestMethod]
-	public void Build_WithCandlesCompression_IncludesCandleBuilderAdapter()
+	public async Task Build_WithCandlesCompression_IncludesCandleBuilderAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -383,20 +383,20 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			StorageProcessor = storageProcessor,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<CandleBuilderMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithFullCandlesOnly_IncludesCandleHolderAdapter()
+	public async Task Build_WithFullCandlesOnly_IncludesCandleHolderAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter { FullCandlesOnly = true };
 		var config = CreateDefaultConfig();
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<CandleHolderMessageAdapter>(result));
@@ -407,7 +407,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	#region Order Book Adapters
 
 	[TestMethod]
-	public void Build_WithSupportBuildingFromOrderLog_IncludesOrderLogAdapter()
+	public async Task Build_WithSupportBuildingFromOrderLog_IncludesOrderLogAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -416,7 +416,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			SupportBuildingFromOrderLog = true,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<OrderLogMessageAdapter>(result));
@@ -424,7 +424,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Build_WithSupportOrderBookIncrements_IncludesOrderBookIncrementAdapter()
+	public async Task Build_WithSupportOrderBookIncrements_IncludesOrderBookIncrementAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter { SupportOrderBookIncrements = true };
@@ -433,14 +433,14 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			SupportBuildingFromOrderLog = false,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<OrderBookIncrementMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithSupportOrderBookTruncate_IncludesOrderBookTruncateAdapter()
+	public async Task Build_WithSupportOrderBookTruncate_IncludesOrderBookTruncateAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -449,7 +449,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			SupportOrderBookTruncate = true,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<OrderBookTruncateMessageAdapter>(result));
@@ -460,7 +460,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	#region Other Adapters
 
 	[TestMethod]
-	public void Build_WithSupportLookupTracking_IncludesLookupTrackingAdapter()
+	public async Task Build_WithSupportLookupTracking_IncludesLookupTrackingAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -469,14 +469,14 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			SupportLookupTracking = true,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<LookupTrackingMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithIsSupportTransactionLog_IncludesTransactionOrderingAdapter()
+	public async Task Build_WithIsSupportTransactionLog_IncludesTransactionOrderingAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -485,27 +485,27 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			IsSupportTransactionLog = true,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<TransactionOrderingMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithPositionsEmulationRequired_IncludesPositionAdapter()
+	public async Task Build_WithPositionsEmulationRequired_IncludesPositionAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter { PositionsEmulation = true };
 		var config = CreateDefaultConfig();
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<PositionMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithFillGapsBehaviour_IncludesFillGapsAdapter()
+	public async Task Build_WithFillGapsBehaviour_IncludesFillGapsAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -515,14 +515,14 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			FillGapsBehaviour = fillGaps.Object,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<FillGapsMessageAdapter>(result));
 	}
 
 	[TestMethod]
-	public void Build_WithExtendedInfoStorage_IncludesExtendedInfoStorageAdapter()
+	public async Task Build_WithExtendedInfoStorage_IncludesExtendedInfoStorageAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter { ExtendedFields = [("Field1", typeof(string))] };
@@ -532,7 +532,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			ExtendedInfoStorage = extStorage.Object,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<ExtendedInfoStorageMessageAdapter>(result));
@@ -543,7 +543,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	#region OwnInnerAdapter Flag
 
 	[TestMethod]
-	public void Build_OwnInnerAdapterFlagSetCorrectly()
+	public async Task Build_OwnInnerAdapterFlagSetCorrectly()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -553,7 +553,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			LatencyManager = new LatencyManager(new LatencyManagerState()),
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		// The outermost wrapper should have OwnInnerAdapter = true (it owns the next wrapper)
 		// The first wrapper (directly wrapping the inner) should have OwnInnerAdapter = false
@@ -585,7 +585,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	#region Wrapper Order
 
 	[TestMethod]
-	public void Build_CorrectWrapperOrder_HeartbeatFirst()
+	public async Task Build_CorrectWrapperOrder_HeartbeatFirst()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -594,7 +594,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			SupportOffline = true,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		// First wrapper from outside should be FillGaps (if enabled), then other wrappers,
 		// and Heartbeat should be closest to the inner adapter (first added)
@@ -605,7 +605,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Build_CorrectWrapperOrder_OfflineAfterHeartbeat()
+	public async Task Build_CorrectWrapperOrder_OfflineAfterHeartbeat()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -615,7 +615,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			IgnoreExtraAdapters = true,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		var wrapperTypes = GetWrapperTypes(result).ToList();
 
@@ -632,25 +632,25 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	#region Null/Empty Configuration
 
 	[TestMethod]
-	public void Build_NullAdapter_ThrowsArgumentNullException()
+	public async Task Build_NullAdapter_ThrowsArgumentNullException()
 	{
 		var builder = CreateBuilder();
 		var config = CreateDefaultConfig();
 
-		Throws<ArgumentNullException>(() => builder.Build(null, config));
+		await ThrowsExactlyAsync<ArgumentNullException>(async () => await builder.BuildAsync(null, config, CancellationToken));
 	}
 
 	[TestMethod]
-	public void Build_NullConfig_ThrowsArgumentNullException()
+	public async Task Build_NullConfig_ThrowsArgumentNullException()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
 
-		Throws<ArgumentNullException>(() => builder.Build(inner, null));
+		await ThrowsExactlyAsync<ArgumentNullException>(async () => await builder.BuildAsync(inner, null, CancellationToken));
 	}
 
 	[TestMethod]
-	public void Build_HeartbeatOff_NoHeartbeatAdapter()
+	public async Task Build_HeartbeatOff_NoHeartbeatAdapter()
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
@@ -659,7 +659,7 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 			IsHeartbeatOn = _ => false,
 		};
 
-		var result = builder.Build(inner, config);
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
 		IsNotNull(result);
 		IsFalse(HasWrapper<HeartbeatMessageAdapter>(result));

@@ -497,7 +497,7 @@ public class BasketRoutingManager : IBasketRoutingManager
 	{
 		var (adapters, isPended, skipSupportedMessages) = await GetAdaptersAsync(mdMsg, adapterLookup, cancellationToken);
 
-		adapters = _router.GetSubscriptionAdapters(mdMsg, adapters, skipSupportedMessages);
+		adapters = await _router.GetSubscriptionAdaptersAsync(mdMsg, adapters, skipSupportedMessages, cancellationToken);
 
 		return (adapters, isPended);
 	}

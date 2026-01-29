@@ -13,8 +13,10 @@ public class CacheableMarketDataStorageTests : BaseTestClass
 		public int LoadCalls { get; private set; }
 		public int SaveCalls { get; private set; }
 
-		ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken)
-			=> new([DateTime.UtcNow.Date]);
+		async IAsyncEnumerable<DateTime> IMarketDataStorage.GetDatesAsync()
+		{
+			yield return DateTime.UtcNow.Date;
+		}
 
 		DataType IMarketDataStorage.DataType => dataType;
 		SecurityId IMarketDataStorage.SecurityId => securityId;

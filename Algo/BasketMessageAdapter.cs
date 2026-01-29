@@ -268,10 +268,21 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 	IEnumerable<MessageTypes> IMessageAdapter.NotSupportedResultMessages => GetSortedAdapters().SelectMany(a => a.NotSupportedResultMessages).Distinct();
 
-	IEnumerable<DataType> IMessageAdapter.GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)
-		=> GetSortedAdapters().SelectMany(a => a.GetSupportedMarketDataTypes(securityId, from, to)).Distinct();
+    IAsyncEnumerable<DataType> IMessageAdapter.GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to)
+    {
+		return Impl().Distinct();
 
-	IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => GetSortedAdapters().SelectMany(a => a.CandlesBuildFrom).Distinct();
+		async IAsyncEnumerable<DataType> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
+		{
+			foreach (var adapter in GetSortedAdapters())
+			{
+				await foreach (var date in adapter.GetSupportedMarketDataTypesAsync(securityId, from, to).WithEnforcedCancellation(cancellationToken))
+					yield return date;
+			}
+		}
+    }
+
+    IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => GetSortedAdapters().SelectMany(a => a.CandlesBuildFrom).Distinct();
 
 	bool IMessageAdapter.CheckTimeFrameByRequest => false;
 
@@ -456,7 +467,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			_routingManager.Reset(!isConnect);
 	}
 
-	private IMessageAdapter CreateWrappers(IMessageAdapter adapter)
+	private ValueTask<IMessageAdapter> CreateWrappers(IMessageAdapter adapter, CancellationToken cancellationToken)
 	{
 		var config = new AdapterWrapperConfiguration
 		{
@@ -490,7 +501,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			Parent = this,
 		};
 
-		return _pipelineBuilder.Build(adapter, config);
+		return _pipelineBuilder.BuildAsync(adapter, config, cancellationToken);
 	}
 
 	private readonly Dictionary<IMessageAdapter, bool> _heartbeatFlags = [];
@@ -620,7 +631,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			using (await _connectedResponseLock.LockAsync(cancellationToken))
 				_routingManager.InitializeAdapter(adapter);
 
-			var wrapper = CreateWrappers(adapter);
+			var wrapper = await CreateWrappers(adapter, cancellationToken);
 
 			wrapper.NewOutMessageAsync += (m, ct) => OnInnerAdapterNewOutMessage(adapter, m, ct);
 

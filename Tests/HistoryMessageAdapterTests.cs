@@ -107,8 +107,8 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		public bool HasGenerator(SecurityId securityId, DataType dataType)
 			=> _generators.ContainsKey((securityId, dataType));
 
-		public IEnumerable<DataType> GetSupportedDataTypes(SecurityId securityId)
-			=> _generators.Where(g => g.Key.Item1 == securityId).Select(g => g.Key.Item2);
+		public IAsyncEnumerable<DataType> GetSupportedDataTypesAsync(SecurityId securityId)
+			=> _generators.Where(g => g.Key.Item1 == securityId).Select(g => g.Key.Item2).ToAsyncEnumerable();
 
 		public IAsyncEnumerable<Message> StartAsync(IEnumerable<BoardMessage> boards)
 		{
@@ -497,7 +497,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	#region GetSupportedMarketDataTypes Tests
 
 	[TestMethod]
-	public void GetSupportedMarketDataTypes_DelegatesToManager()
+	public async Task GetSupportedMarketDataTypes_DelegatesToManager()
 	{
 		var secProvider = CreateSecurityProvider();
 		var manager = new TestHistoryMarketDataManager();
@@ -511,7 +511,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			secProvider,
 			manager);
 
-		var result = adapter.GetSupportedMarketDataTypes(secId, null, null).ToList();
+		var result = await adapter.GetSupportedMarketDataTypesAsync(secId, null, null).ToListAsync(CancellationToken);
 
 		result.Count.AssertEqual(2);
 		result.Contains(DataType.Ticks).AssertTrue();
@@ -747,7 +747,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void GetSupportedMarketDataTypes_WithGeneratorOnly_ReturnsGeneratorTypes()
+	public async Task GetSupportedMarketDataTypes_WithGeneratorOnly_ReturnsGeneratorTypes()
 	{
 		var secProvider = CreateSecurityProvider();
 		var manager = new TestHistoryMarketDataManager();
@@ -761,7 +761,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			secProvider,
 			manager);
 
-		var dataTypes = adapter.GetSupportedMarketDataTypes(secId, null, null).ToList();
+		var dataTypes = await adapter.GetSupportedMarketDataTypesAsync(secId, null, null).ToListAsync(CancellationToken);
 
 		dataTypes.Count.AssertEqual(1);
 		dataTypes.Contains(DataType.Ticks).AssertTrue();
@@ -858,7 +858,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		manager.HasGenerator(secId, DataType.Ticks).AssertTrue();
 
 		// Verify GetSupportedMarketDataTypes includes the generator
-		var dataTypes = adapter.GetSupportedMarketDataTypes(secId, null, null).ToList();
+		var dataTypes = await adapter.GetSupportedMarketDataTypesAsync(secId, null, null).ToListAsync(CancellationToken);
 		dataTypes.Contains(DataType.Ticks).AssertTrue();
 	}
 

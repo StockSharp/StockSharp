@@ -90,7 +90,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		private readonly LocalMarketDataDrive _drive;
 		IMarketDataDrive IMarketDataStorageDrive.Drive => _drive;
 
-		ValueTask<IEnumerable<DateTime>> IMarketDataStorageDrive.GetDatesAsync(CancellationToken cancellationToken) => new(DatesDict.CachedValues);
+		IAsyncEnumerable<DateTime> IMarketDataStorageDrive.GetDatesAsync() => DatesDict.CachedValues.ToAsyncEnumerable();
 
 		private readonly ResettableLazy<CachedSynchronizedOrderedDictionary<DateTime, DateTime>> _datesDict;
 		private CachedSynchronizedOrderedDictionary<DateTime, DateTime> DatesDict => _datesDict.Value;
@@ -829,10 +829,10 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 	private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <inheritdoc />
-	public override ValueTask<IEnumerable<DataType>> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format, CancellationToken cancellationToken)
+	public override IAsyncEnumerable<DataType> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format)
 	{
 		if (TryGetIndex(out var index))
-			return new(index.GetAvailableDataTypes(securityId, format));
+			return index.GetAvailableDataTypes(securityId, format).ToAsyncEnumerable();
 
 		var ext = GetExtension(format);
 
@@ -874,13 +874,13 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 					tuple.Second = true;
 				}
 
-				return new([.. tuple.First]);
+				return tuple.First.ToAsyncEnumerable();
 			}
 		}
 
 		var s = GetSecurityPath(securityId);
 
-		return new(_fileSystem.DirectoryExists(s) ? GetDataTypes(s) : []);
+		return _fileSystem.DirectoryExists(s) ? GetDataTypes(s).ToAsyncEnumerable() : AsyncEnumerable.Empty<DataType>();
 	}
 
 	/// <inheritdoc />

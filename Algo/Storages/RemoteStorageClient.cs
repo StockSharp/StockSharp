@@ -169,15 +169,18 @@ public class RemoteStorageClient : Disposable
 		if (criteria is null)
 			throw new ArgumentNullException(nameof(criteria));
 
+		return Impl();
+
 		async IAsyncEnumerable<BoardMessage> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			var (boards, _) = await DoAsync<BoardMessage>(criteria, cancellationToken);
 
 			foreach (var board in boards)
+			{
+				cancellationToken.ThrowIfCancellationRequested();
 				yield return board;
+			}
 		}
-
-		return Impl();
 	}
 
 	/// <summary>
@@ -185,17 +188,25 @@ public class RemoteStorageClient : Disposable
 	/// </summary>
 	/// <param name="securityId">Instrument identifier.</param>
 	/// <param name="format">Format type.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Data types.</returns>
-	public async ValueTask<IEnumerable<DataType>> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format, CancellationToken cancellationToken)
+	public IAsyncEnumerable<DataType> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format)
 	{
-		var (msgs, _) = await DoAsync<DataTypeInfoMessage>(new DataTypeLookupMessage
-		{
-			SecurityId = securityId,
-			Format = (int)format,
-		}, cancellationToken);
+		return Impl();
 
-		return [.. msgs.Select(m => m.FileDataType).Distinct()];
+		async IAsyncEnumerable<DataType> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
+		{
+			var (msgs, _) = await DoAsync<DataTypeInfoMessage>(new DataTypeLookupMessage
+			{
+				SecurityId = securityId,
+				Format = (int)format,
+			}, cancellationToken);
+
+			foreach (var m in msgs.Select(m => m.FileDataType).Distinct())
+			{
+				cancellationToken.ThrowIfCancellationRequested();
+				yield return m;
+			}
+		}
 	}
 
 	/// <summary>

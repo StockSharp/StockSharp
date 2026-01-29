@@ -14,8 +14,10 @@ public class StorageMessageAdapterTests : BaseTestClass
 		{
 		}
 
-		public override IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)
-			=> [DataType.Level1];
+		public override async IAsyncEnumerable<DataType> GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to)
+		{
+			yield return DataType.Level1;
+		}
 	}
 
 	private sealed class TestStorageProcessor(StorageCoreSettings settings) : IStorageProcessor
@@ -181,9 +183,9 @@ public class StorageMessageAdapterTests : BaseTestClass
 		var inner = new TestInnerAdapter();
 		var adapter = new StorageMessageAdapter(inner, processor);
 
-		var supported = adapter.GetSupportedMarketDataTypes(default, null, null).ToArray();
+		var supported = adapter.GetSupportedMarketDataTypesAsync(default, null, null);
 
-		supported.Contains(DataType.Level1).AssertTrue();
-		supported.Contains(DataType.Ticks).AssertTrue();
+		(await supported.ContainsAsync(DataType.Level1, cancellationToken: CancellationToken)).AssertTrue();
+		(await supported.ContainsAsync(DataType.Ticks, cancellationToken: CancellationToken)).AssertTrue();
 	}
 }

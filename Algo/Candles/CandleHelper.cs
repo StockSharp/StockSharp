@@ -15,8 +15,9 @@ public static partial class CandleHelper
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="subscription">Subscription.</param>
 	/// <param name="provider">Candle builders provider.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Which market-data type is used as a source value. <see langword="null"/> if compression is impossible.</returns>
-	public static DataType TryGetCandlesBuildFrom(this IMessageAdapter adapter, MarketDataMessage subscription, CandleBuilderProvider provider)
+	public static async ValueTask<DataType> TryGetCandlesBuildFromAsync(this IMessageAdapter adapter, MarketDataMessage subscription, CandleBuilderProvider provider, CancellationToken cancellationToken)
 	{
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
@@ -38,7 +39,7 @@ public static partial class CandleHelper
 		if (buildFrom is not null && !DataType.CandleSources.Contains(buildFrom))
 			buildFrom = null;
 
-		buildFrom ??= adapter.GetSupportedMarketDataTypes(subscription.SecurityId, subscription.From, subscription.To).Intersect(DataType.CandleSources).OrderBy(t =>
+		buildFrom ??= (await adapter.GetSupportedMarketDataTypesAsync(subscription.SecurityId, subscription.From, subscription.To).ToArrayAsync(cancellationToken)).Intersect(DataType.CandleSources).OrderBy(t =>
 		{
 			// by priority
 			if (t == DataType.Ticks)
@@ -53,7 +54,7 @@ public static partial class CandleHelper
 				return 4;
 		}).FirstOrDefault();
 
-		if (buildFrom == null || !adapter.GetSupportedMarketDataTypes(subscription.SecurityId, subscription.From, subscription.To).Contains(buildFrom))
+		if (buildFrom == null || !await adapter.GetSupportedMarketDataTypesAsync(subscription.SecurityId, subscription.From, subscription.To).ContainsAsync(buildFrom, cancellationToken: cancellationToken))
 			return null;
 
 		return buildFrom;

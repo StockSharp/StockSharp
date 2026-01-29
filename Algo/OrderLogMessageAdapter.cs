@@ -30,7 +30,7 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionIds = [];
 
 	/// <inheritdoc />
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		switch (message.Type)
 		{
@@ -39,25 +39,25 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 				break;
 
 			case MessageTypes.MarketData:
-				message = ProcessMarketDataRequest((MarketDataMessage)message);
+				message = await ProcessMarketDataRequest((MarketDataMessage)message, cancellationToken);
 				break;
 		}
 
-		return base.OnSendInMessageAsync(message, cancellationToken);
+		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
-	private MarketDataMessage ProcessMarketDataRequest(MarketDataMessage message)
+	private async ValueTask<MarketDataMessage> ProcessMarketDataRequest(MarketDataMessage message, CancellationToken cancellationToken)
 	{
 		if (message.IsSubscribe)
 		{
-			if (message.SecurityId == default || !InnerAdapter.IsMarketDataTypeSupported(DataType.OrderLog))
+			if (message.SecurityId == default || !await InnerAdapter.IsMarketDataTypeSupportedAsync(DataType.OrderLog, cancellationToken))
 				return message;
 
 			var isBuild = message.BuildMode == MarketDataBuildModes.Build && message.BuildFrom == DataType.OrderLog;
 
 			if (message.DataType2 == DataType.MarketDepth)
 			{
-				if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.DataType2))
+				if (isBuild || !await InnerAdapter.IsMarketDataTypeSupportedAsync(message.DataType2, cancellationToken))
 				{
 					var builder = message.DepthBuilder ?? InnerAdapter.CreateOrderLogMarketDepthBuilder(message.SecurityId);
 
@@ -71,7 +71,7 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 			}
 			else if (message.DataType2 == DataType.Ticks)
 			{
-				if (isBuild || !InnerAdapter.IsMarketDataTypeSupported(message.DataType2))
+				if (isBuild || !await InnerAdapter.IsMarketDataTypeSupportedAsync(message.DataType2, cancellationToken))
 				{
 					_subscriptionIds.Add(message.TransactionId, new SubscriptionInfo(message.TypedClone()));
 

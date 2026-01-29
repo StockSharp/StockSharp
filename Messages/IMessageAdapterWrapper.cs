@@ -239,8 +239,8 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	public virtual IEnumerable<MessageTypes> NotSupportedResultMessages => InnerAdapter.NotSupportedResultMessages;
 
 	/// <inheritdoc />
-	public virtual IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)
-		=> InnerAdapter.GetSupportedMarketDataTypes(securityId, from, to);
+	public virtual IAsyncEnumerable<DataType> GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to)
+		=> InnerAdapter.GetSupportedMarketDataTypesAsync(securityId, from, to);
 
 	/// <inheritdoc />
 	public TimeSpan HeartbeatInterval

@@ -27,10 +27,10 @@ public class StorageNotParallelizeTests : BaseTestClass
 		var eiProv = ServicesRegistry.EnsureGetExchangeInfoProvider();
 		var cbProv = new CandleBuilderProvider(eiProv);
 
-		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
+		var buildableStorage = await cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
 		var expectedDates = _sourceArray.Select(d => new DateTime(2021, 12, d)).ToHashSet();
-		var dates = (await buildableStorage.GetDatesAsync(CancellationToken)).ToHashSet();
+		var dates = (await buildableStorage.GetDatesAsync().ToArrayAsync(token)).ToHashSet();
 
 		expectedDates.SetEquals(dates).AssertTrue();
 
@@ -55,7 +55,7 @@ public class StorageNotParallelizeTests : BaseTestClass
 		var eiProv = ServicesRegistry.EnsureGetExchangeInfoProvider();
 		var cbProv = new CandleBuilderProvider(eiProv);
 
-		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
+		var buildableStorage = await cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
 		var candles = await buildableStorage.LoadAsync(_regressionFrom, _regressionTo).ToArrayAsync(token);
 
@@ -92,7 +92,7 @@ public class StorageNotParallelizeTests : BaseTestClass
 		var eiProv = ServicesRegistry.EnsureGetExchangeInfoProvider();
 		var cbProv = new CandleBuilderProvider(eiProv);
 
-		var buildableStorage = cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
+		var buildableStorage = await cbProv.GetCandleMessageBuildableStorage(reg, secId, tf, null, format);
 
 		var range = await buildableStorage.GetRangeAsync(_regressionFrom, _regressionTo, token);
 

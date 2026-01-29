@@ -343,9 +343,8 @@ public class RemoteStorageClientTests : BaseTestClass
 
 		using var client = new RemoteStorageClient(adapter, 100);
 
-		var result = await client.GetAvailableDataTypesAsync(secId, StorageFormats.Binary, CancellationToken);
+		var dataTypes = await client.GetAvailableDataTypesAsync(secId, StorageFormats.Binary).ToListAsync(CancellationToken);
 
-		var dataTypes = result.ToList();
 		HasCount(3, dataTypes);
 		dataTypes.AssertContains(DataType.Ticks);
 		dataTypes.AssertContains(DataType.Level1);
@@ -369,9 +368,8 @@ public class RemoteStorageClientTests : BaseTestClass
 
 		using var client = new RemoteStorageClient(adapter, 100);
 
-		var result = await client.GetAvailableDataTypesAsync(secId, StorageFormats.Binary, CancellationToken);
+		var dataTypes = await client.GetAvailableDataTypesAsync(secId, StorageFormats.Binary).ToListAsync(CancellationToken);
 
-		var dataTypes = result.ToList();
 		HasCount(2, dataTypes); // should be deduplicated
 	}
 
@@ -1138,9 +1136,8 @@ public class RemoteStorageClientTests : BaseTestClass
 
 		using var drive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter);
 
-		var result = await drive.GetAvailableDataTypesAsync(secId, StorageFormats.Binary, CancellationToken);
+		var dataTypes = await drive.GetAvailableDataTypesAsync(secId, StorageFormats.Binary).ToListAsync(CancellationToken);
 
-		var dataTypes = result.ToList();
 		HasCount(2, dataTypes);
 		dataTypes.AssertContains(DataType.Ticks);
 		dataTypes.AssertContains(DataType.Level1);
@@ -1250,8 +1247,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		using var drive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter);
 		var storageDrive = drive.GetStorageDrive(secId, DataType.Ticks, StorageFormats.Binary);
 
-		var dates = await storageDrive.GetDatesAsync(CancellationToken);
-		var datesList = dates.ToList();
+		var datesList = await storageDrive.GetDatesAsync().ToListAsync(CancellationToken);
 
 		HasCount(2, datesList);
 		AreEqual(date1, datesList[0]);
@@ -1277,10 +1273,10 @@ public class RemoteStorageClientTests : BaseTestClass
 		var storageDrive = drive.GetStorageDrive(secId, DataType.Ticks, StorageFormats.Binary);
 
 		// First call
-		await storageDrive.GetDatesAsync(CancellationToken);
+		await storageDrive.GetDatesAsync().ToListAsync(CancellationToken);
 
 		// Second call within cache time (3 seconds)
-		await storageDrive.GetDatesAsync(CancellationToken);
+		await storageDrive.GetDatesAsync().ToListAsync(CancellationToken);
 
 		// Should only call adapter once due to caching
 		AreEqual(1, callCount);

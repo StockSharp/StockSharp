@@ -30,8 +30,8 @@ public class CandleBuilderManagerTests : BaseTestClass
 				this.AddSupportedMarketDataType(type);
 		}
 
-		public override IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)
-			=> _supported;
+		public override IAsyncEnumerable<DataType> GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to)
+			=> _supported.ToAsyncEnumerable();
 	}
 
 	private sealed class TestReceiver : TestLogReceiver

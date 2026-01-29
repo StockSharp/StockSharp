@@ -73,8 +73,8 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 			{
 				if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null)
 				{
-					var dates = await s.GetDatesAsync(_cancellationToken);
-					if (!dates.Contains(_date))
+					var dates = s.GetDatesAsync();
+					if (!await dates.ContainsAsync(_date, cancellationToken: _cancellationToken))
 						continue;
 				}
 
@@ -241,8 +241,8 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 			{
 				if (s.GetType().GetGenericType(typeof(InMemoryMarketDataStorage<>)) == null)
 				{
-					var dates = await s.GetDatesAsync(cancellationToken);
-					if (!dates.Contains(_date))
+					var dates = s.GetDatesAsync();
+					if (!await dates.ContainsAsync(_date, cancellationToken: cancellationToken))
 						continue;
 				}
 
@@ -369,19 +369,25 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 	private void AddAction(ActionTypes type, IMarketDataStorage storage, long transactionId)
 		=> _enumerators.Cache.ForEach(e => e.AddAction(type, storage, transactionId));
 
-	async ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken)
+	IAsyncEnumerable<DateTime> IMarketDataStorage.GetDatesAsync()
 	{
-		var dates = new HashSet<DateTime>();
+		return Impl();
 
-		foreach (var storage in _innerStorages.Cache)
+		async IAsyncEnumerable<DateTime> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
 		{
-			var storageDates = await storage.GetDatesAsync(cancellationToken);
+			var dates = new HashSet<DateTime>();
 
-			foreach (var date in storageDates)
-				dates.Add(date);
+			foreach (var storage in _innerStorages.Cache)
+			{
+				var storageDates = storage.GetDatesAsync();
+
+				await foreach (var date in storageDates.WithEnforcedCancellation(cancellationToken))
+					dates.Add(date);
+			}
+
+			foreach (var date in dates.OrderBy())
+				yield return date;
 		}
-
-		return dates.OrderBy();
 	}
 
 	/// <inheritdoc />
@@ -415,9 +421,9 @@ public class BasketMarketDataStorage<TMessage> : Disposable, IMarketDataStorage<
 
 		foreach (var inner in _innerStorages.Cache)
 		{
-			var dates = await inner.GetDatesAsync(cancellationToken);
+			var dates = inner.GetDatesAsync();
 
-			if (dates.Contains(date))
+			if (await dates.ContainsAsync(date, cancellationToken: cancellationToken))
 				return await inner.GetMetaInfoAsync(date, cancellationToken);
 		}
 

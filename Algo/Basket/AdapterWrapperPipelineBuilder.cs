@@ -13,7 +13,7 @@ using StockSharp.Algo.Slippage;
 public class AdapterWrapperPipelineBuilder : IAdapterWrapperPipelineBuilder
 {
 	/// <inheritdoc />
-	public IMessageAdapter Build(IMessageAdapter adapter, AdapterWrapperConfiguration config)
+	public async ValueTask<IMessageAdapter> BuildAsync(IMessageAdapter adapter, AdapterWrapperConfiguration config, CancellationToken cancellationToken)
 	{
 		if (adapter is null)
 			throw new ArgumentNullException(nameof(adapter));
@@ -96,12 +96,12 @@ public class AdapterWrapperPipelineBuilder : IAdapterWrapperPipelineBuilder
 			adapter = ApplyOwnInner(new SubscriptionSecurityAllMessageAdapter(adapter));
 		}
 
-		if (config.GenerateOrderBookFromLevel1 && adapter.GetSupportedMarketDataTypes().Contains(DataType.Level1) && !adapter.GetSupportedMarketDataTypes().Contains(DataType.MarketDepth))
+		if (config.GenerateOrderBookFromLevel1 && await adapter.GetSupportedMarketDataTypesAsync().ContainsAsync(DataType.Level1, cancellationToken: cancellationToken) && !await adapter.GetSupportedMarketDataTypesAsync().ContainsAsync(DataType.MarketDepth, cancellationToken: cancellationToken))
 		{
 			adapter = ApplyOwnInner(new Level1DepthBuilderAdapter(adapter));
 		}
 
-		if (config.Level1Extend && !adapter.GetSupportedMarketDataTypes().Contains(DataType.Level1))
+		if (config.Level1Extend && !await adapter.GetSupportedMarketDataTypesAsync().ContainsAsync(DataType.Level1, cancellationToken: cancellationToken))
 		{
 			adapter = ApplyOwnInner(new Level1ExtendBuilderAdapter(adapter));
 		}

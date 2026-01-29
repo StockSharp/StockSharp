@@ -10,6 +10,7 @@ public interface IAdapterWrapperPipelineBuilder
 	/// </summary>
 	/// <param name="adapter">The inner adapter to wrap.</param>
 	/// <param name="config">Configuration for building the pipeline.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The outermost adapter in the pipeline (may be the original adapter if no wrappers applied).</returns>
-	IMessageAdapter Build(IMessageAdapter adapter, AdapterWrapperConfiguration config);
+	ValueTask<IMessageAdapter> BuildAsync(IMessageAdapter adapter, AdapterWrapperConfiguration config, CancellationToken cancellationToken);
 }

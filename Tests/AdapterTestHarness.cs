@@ -29,8 +29,8 @@ class RecordingPassThroughMessageAdapter : PassThroughMessageAdapter
 
 	public List<Message> InMessages { get; } = [];
 
-	public override IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)
-		=> _supportedMarketDataTypes;
+	public override IAsyncEnumerable<DataType> GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to)
+		=> _supportedMarketDataTypes.ToAsyncEnumerable();
 
 	public override IEnumerable<int> SupportedOrderBookDepths
 		=> _supportedOrderBookDepths;

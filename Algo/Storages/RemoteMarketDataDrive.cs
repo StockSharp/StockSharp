@@ -33,16 +33,25 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		private IEnumerable<DateTime> _dates;
 		private DateTime _prevDatesSync;
 
-		async ValueTask<IEnumerable<DateTime>> IMarketDataStorageDrive.GetDatesAsync(CancellationToken cancellationToken)
+		IAsyncEnumerable<DateTime> IMarketDataStorageDrive.GetDatesAsync()
 		{
-			if (_prevDatesSync == default || (DateTime.UtcNow - _prevDatesSync).TotalSeconds > 3)
+			return Impl();
+
+			async IAsyncEnumerable<DateTime> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 			{
-				_dates = await _parent.Client.GetDatesAsync(_securityId, _dataType, _format, cancellationToken);
+				if (_prevDatesSync == default || (DateTime.UtcNow - _prevDatesSync).TotalSeconds > 3)
+				{
+					_dates = await _parent.Client.GetDatesAsync(_securityId, _dataType, _format, cancellationToken);
 
-				_prevDatesSync = DateTime.UtcNow;
+					_prevDatesSync = DateTime.UtcNow;
+				}
+
+				foreach (var date in _dates)
+				{
+					cancellationToken.ThrowIfCancellationRequested();
+					yield return date;
+				}
 			}
-
-			return _dates;
 		}
 
 		ValueTask IMarketDataStorageDrive.ClearDatesCacheAsync(CancellationToken cancellationToken)
@@ -240,8 +249,8 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		=> Client.GetAvailableSecuritiesAsync();
 
 	/// <inheritdoc />
-	public override ValueTask<IEnumerable<DataType>> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format, CancellationToken cancellationToken)
-		=> Client.GetAvailableDataTypesAsync(securityId, format, cancellationToken);
+	public override IAsyncEnumerable<DataType> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format)
+		=> Client.GetAvailableDataTypesAsync(securityId, format);
 
 	/// <inheritdoc />
 	public override IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format)

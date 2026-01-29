@@ -73,9 +73,9 @@ public partial class SecuritiesWindow
 
 		public MarketDataBuildModes BuildMode { get; set; } = MarketDataBuildModes.LoadAndBuild;
 
-            public bool IsFinishedOnly { get; set; }
+		public bool IsFinishedOnly { get; set; }
 
-            void IPersistable.Load(SettingsStorage storage)
+		void IPersistable.Load(SettingsStorage storage)
 		{
 			throw new NotSupportedException();
 		}
@@ -147,7 +147,9 @@ public partial class SecuritiesWindow
 			TimeSpan.FromMinutes(30),
 			TimeSpan.FromHours(1),
 			TimeSpan.FromDays(1),
+#pragma warning disable CS0618 // Type or member is obsolete
 		}.Concat(Connector.Adapter.GetTimeFrames()).OrderBy().Distinct());
+#pragma warning restore CS0618 // Type or member is obsolete
 	}
 
 	public void UpdateTimeFrames(IEnumerable<TimeSpan> timeFrames)

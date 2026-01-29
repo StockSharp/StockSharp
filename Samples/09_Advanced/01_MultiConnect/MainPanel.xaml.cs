@@ -151,11 +151,11 @@ public partial class MainPanel
 	private void InitConnector()
 	{
 		// subscribe on connection successfully event
-		Connector.Connected += () =>
+		Connector.Connected += async () =>
 		{
 			this.GuiAsync(() => ChangeConnectStatus(true));
 
-			if (Connector.Adapter.IsMarketDataTypeSupported(DataType.News) && !Connector.Adapter.IsSecurityNewsOnly)
+			if (await Connector.Adapter.IsMarketDataTypeSupportedAsync(DataType.News, default) && !Connector.Adapter.IsSecurityNewsOnly)
 			{
 				if (Connector.Subscriptions.All(s => s.DataType != DataType.News))
 					Connector.Subscribe(new(DataType.News));

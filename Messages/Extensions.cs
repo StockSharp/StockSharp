@@ -432,7 +432,7 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Add time-frames into <see cref="IMessageAdapter.GetSupportedMarketDataTypes"/>.
+	/// Add time-frames into <see cref="IMessageAdapter.GetSupportedMarketDataTypesAsync"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="timeFrames">Time-frames.</param>
@@ -449,7 +449,7 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Add market data type into <see cref="IMessageAdapter.GetSupportedMarketDataTypes"/>.
+	/// Add market data type into <see cref="IMessageAdapter.GetSupportedMarketDataTypesAsync"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="dataType">Data type info.</param>
@@ -462,7 +462,7 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Remove market data type from <see cref="IMessageAdapter.GetSupportedMarketDataTypes"/>.
+	/// Remove market data type from <see cref="IMessageAdapter.GetSupportedMarketDataTypesAsync"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="type">Market data type.</param>
@@ -819,8 +819,9 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="subscription">Subscription.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see langword="true"/> if the specified subscription request is supported, otherwise, <see langword="false"/>.</returns>
-	public static bool IsCandlesSupported(this IMessageAdapter adapter, MarketDataMessage subscription)
+	public static ValueTask<bool> IsCandlesSupportedAsync(this IMessageAdapter adapter, MarketDataMessage subscription, CancellationToken cancellationToken)
 	{
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
@@ -828,7 +829,7 @@ public static partial class Extensions
 		if (subscription == null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		return adapter.GetSupportedMarketDataTypes(subscription.SecurityId, subscription.From, subscription.To).Contains(subscription.DataType2);
+		return adapter.GetSupportedMarketDataTypesAsync(subscription.SecurityId, subscription.From, subscription.To).ContainsAsync(subscription.DataType2, cancellationToken: cancellationToken);
 	}
 
 	/// <summary>
@@ -839,12 +840,24 @@ public static partial class Extensions
 	/// <param name="from">The initial date from which you need to get data.</param>
 	/// <param name="to">The final date by which you need to get data.</param>
 	/// <returns>Possible time-frames.</returns>
+	[Obsolete("Use GetTimeFramesAsync instead.")]
 	public static IEnumerable<TimeSpan> GetTimeFrames(this IMessageAdapter adapter, SecurityId securityId = default, DateTime? from = null, DateTime? to = null)
+		=> adapter.GetTimeFramesAsync(securityId, from, to).ToBlockingEnumerable();
+
+	/// <summary>
+	/// Get possible time-frames for the specified instrument.
+	/// </summary>
+	/// <param name="adapter">Trading system adapter.</param>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="from">The initial date from which you need to get data.</param>
+	/// <param name="to">The final date by which you need to get data.</param>
+	/// <returns>Possible time-frames.</returns>
+	public static IAsyncEnumerable<TimeSpan> GetTimeFramesAsync(this IMessageAdapter adapter, SecurityId securityId = default, DateTime? from = null, DateTime? to = null)
 	{
 		if (adapter is null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		return adapter.GetSupportedMarketDataTypes(securityId, from, to).Where(dt => dt.IsTFCandles).Select(dt => dt.Arg).OfType<TimeSpan>();
+		return adapter.GetSupportedMarketDataTypesAsync(securityId, from, to).Where(dt => dt.IsTFCandles).Select(dt => dt.Arg).OfType<TimeSpan>();
 	}
 
 	/// <summary>
@@ -917,17 +930,18 @@ public static partial class Extensions
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	/// <param name="type">Message type.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see langword="true"/> if the specified message type is supported, otherwise, <see langword="false"/>.</returns>
-	public static bool IsMarketDataTypeSupported(this IMessageAdapter adapter, DataType type)
+	public static ValueTask<bool> IsMarketDataTypeSupportedAsync(this IMessageAdapter adapter, DataType type, CancellationToken cancellationToken)
 	{
 		if (adapter == null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		return adapter.GetSupportedMarketDataTypes().Contains(type);
+		return adapter.GetSupportedMarketDataTypesAsync().ContainsAsync(type, cancellationToken: cancellationToken);
 	}
 
 	/// <summary>
-	/// Remove all market data types from <see cref="IMessageAdapter.GetSupportedMarketDataTypes"/>.
+	/// Remove all market data types from <see cref="IMessageAdapter.GetSupportedMarketDataTypesAsync"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
 	public static void RemoveSupportedAllMarketDataTypes(this MessageAdapter adapter)
@@ -2176,7 +2190,7 @@ public static partial class Extensions
 
 		if (dataType.IsTFCandles)
 		{
-			if (!adapter.CheckTimeFrameByRequest && !adapter.GetSupportedMarketDataTypes(securityId).Contains(dataType))
+			if (!adapter.CheckTimeFrameByRequest && !AsyncHelper.Run(() => adapter.GetSupportedMarketDataTypesAsync(securityId).ContainsAsync(dataType)))
 				return TimeSpan.Zero;
 
 			var tf = dataType.GetTimeFrame();

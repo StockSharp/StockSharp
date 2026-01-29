@@ -93,14 +93,14 @@ static class Program
 
 		const StorageFormats format = StorageFormats.Binary;
 
-		foreach (var dataType in await remoteDrive.GetAvailableDataTypesAsync(secId, format, token))
+		await foreach (var dataType in remoteDrive.GetAvailableDataTypesAsync(secId, format))
 		{
 			var localStorage = storageRegistry.GetStorage(secId, dataType, localDrive, format);
 			var remoteStorage = remoteDrive.GetStorageDrive(secId, dataType, format);
 
-			Console.WriteLine($"Remote {dataType}: {(await remoteStorage.GetDatesAsync(token)).FirstOrDefault()}-{(await remoteStorage.GetDatesAsync(token)).LastOrDefault()}");
+			Console.WriteLine($"Remote {dataType}: {await remoteStorage.GetDatesAsync().FirstOrDefaultAsync(token)}-{await remoteStorage.GetDatesAsync().LastOrDefaultAsync(token)}");
 
-			var dates = (await remoteStorage.GetDatesAsync(token)).Where(date => date >= startDate && date <= endDate).ToList();
+			var dates = await remoteStorage.GetDatesAsync().Where(date => date >= startDate && date <= endDate).ToListAsync(token);
 
 			foreach (var dateTime in dates)
 			{

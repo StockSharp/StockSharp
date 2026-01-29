@@ -530,7 +530,7 @@ public class AdapterRouterTests : BaseTestClass
 	#region GetSubscriptionAdapters — Market Data Type Filtering
 
 	[TestMethod]
-	public void GetSubscriptionAdapters_SupportedType_Returns()
+	public async Task GetSubscriptionAdapters_SupportedType_Returns()
 	{
 		var router = CreateRouter();
 		var adapter = CreateAdapter();
@@ -543,13 +543,13 @@ public class AdapterRouterTests : BaseTestClass
 			TransactionId = 100,
 		};
 
-		var result = router.GetSubscriptionAdapters(mdMsg, [adapter], false);
+		var result = await router.GetSubscriptionAdaptersAsync(mdMsg, [adapter], false, CancellationToken);
 
 		AreEqual(1, result.Length);
 	}
 
 	[TestMethod]
-	public void GetSubscriptionAdapters_UnsupportedType_FiltersOut()
+	public async Task GetSubscriptionAdapters_UnsupportedType_FiltersOut()
 	{
 		var router = CreateRouter();
 		var adapter = CreateAdapter();
@@ -562,13 +562,13 @@ public class AdapterRouterTests : BaseTestClass
 			TransactionId = 100,
 		};
 
-		var result = router.GetSubscriptionAdapters(mdMsg, [adapter], false);
+		var result = await router.GetSubscriptionAdaptersAsync(mdMsg, [adapter], false, CancellationToken);
 
 		AreEqual(0, result.Length);
 	}
 
 	[TestMethod]
-	public void GetSubscriptionAdapters_SkipSupportedMessages_ReturnsAll()
+	public async Task GetSubscriptionAdapters_SkipSupportedMessages_ReturnsAll()
 	{
 		var router = CreateRouter();
 		var adapter = CreateAdapter();
@@ -582,13 +582,13 @@ public class AdapterRouterTests : BaseTestClass
 		};
 
 		// when skipSupportedMessages=true, all adapters pass
-		var result = router.GetSubscriptionAdapters(mdMsg, [adapter], true);
+		var result = await router.GetSubscriptionAdaptersAsync(mdMsg, [adapter], true, CancellationToken);
 
 		AreEqual(1, result.Length);
 	}
 
 	[TestMethod]
-	public void GetSubscriptionAdapters_MarketDepth_BuildFromOrderLog()
+	public async Task GetSubscriptionAdapters_MarketDepth_BuildFromOrderLog()
 	{
 		var router = CreateRouter();
 
@@ -596,7 +596,7 @@ public class AdapterRouterTests : BaseTestClass
 		var limitedAdapter = new TestRouterAdapter(idGen);
 		// This adapter supports only OrderLog, not MarketDepth directly.
 		// Need to clear default supported data types and add only OrderLog.
-		foreach (var dt in limitedAdapter.GetSupportedMarketDataTypes(default, null, null).ToArray())
+		foreach (var dt in await limitedAdapter.GetSupportedMarketDataTypesAsync(default, null, null).ToArrayAsync(CancellationToken))
 			limitedAdapter.RemoveSupportedMarketDataType(dt);
 		limitedAdapter.AddSupportedMarketDataType(DataType.OrderLog);
 
@@ -608,7 +608,7 @@ public class AdapterRouterTests : BaseTestClass
 			TransactionId = 100,
 		};
 
-		var result = router.GetSubscriptionAdapters(mdMsg, [limitedAdapter], false);
+		var result = await router.GetSubscriptionAdaptersAsync(mdMsg, [limitedAdapter], false, CancellationToken);
 
 		AreEqual(1, result.Length);
 		AreEqual(DataType.OrderLog, mdMsg.BuildFrom);

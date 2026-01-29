@@ -14,7 +14,7 @@ public class CacheableMarketDataStorage(IMarketDataStorage underlying, MarketDat
 	private readonly MarketDataStorageCache _cache = cache ?? throw new ArgumentNullException(nameof(cache));
 
 	IMarketDataSerializer IMarketDataStorage.Serializer => _underlying.Serializer;
-	ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken) => _underlying.GetDatesAsync(cancellationToken);
+	IAsyncEnumerable<DateTime> IMarketDataStorage.GetDatesAsync() => _underlying.GetDatesAsync();
 	DataType IMarketDataStorage.DataType => _underlying.DataType;
 	SecurityId IMarketDataStorage.SecurityId => _underlying.SecurityId;
 	IMarketDataStorageDrive IMarketDataStorage.Drive => _underlying.Drive;

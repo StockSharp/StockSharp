@@ -13,9 +13,8 @@ public interface IMarketDataStorageDrive
 	/// <summary>
 	/// To get all the dates for which market data are recorded.
 	/// </summary>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Available dates.</returns>
-	ValueTask<IEnumerable<DateTime>> GetDatesAsync(CancellationToken cancellationToken);
+	IAsyncEnumerable<DateTime> GetDatesAsync();
 
 	/// <summary>
 	/// To delete cache-files, containing information on available time ranges.
@@ -72,9 +71,8 @@ public interface IMarketDataDrive : IPersistable, IDisposable
 	/// </summary>
 	/// <param name="securityId">Instrument identifier.</param>
 	/// <param name="format">Format type.</param>
-	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Data types.</returns>
-	ValueTask<IEnumerable<DataType>> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format, CancellationToken cancellationToken);
+	IAsyncEnumerable<DataType> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format);
 
 	/// <summary>
 	/// To get the storage for <see cref="IMarketDataStorage"/>.
@@ -120,7 +118,7 @@ public abstract class BaseMarketDataDrive : Disposable, IMarketDataDrive
 	public abstract IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync();
 
 	/// <inheritdoc />
-	public abstract ValueTask<IEnumerable<DataType>> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format, CancellationToken cancellationToken);
+	public abstract IAsyncEnumerable<DataType> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format);
 
 	/// <inheritdoc />
 	public abstract IMarketDataStorageDrive GetStorageDrive(SecurityId securityId, DataType dataType, StorageFormats format);

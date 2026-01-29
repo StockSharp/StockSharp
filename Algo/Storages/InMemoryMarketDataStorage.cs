@@ -15,7 +15,7 @@ public sealed class InMemoryMarketDataStorage<T>(SecurityId securityId, DataType
 {
 	private readonly Func<DateTime, IAsyncEnumerable<T>> _getData = getData ?? throw new ArgumentNullException(nameof(getData));
 
-	ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken) => throw new NotSupportedException();
+	IAsyncEnumerable<DateTime> IMarketDataStorage.GetDatesAsync() => throw new NotSupportedException();
 
 	private readonly SecurityId _securityId = securityId;
 	SecurityId IMarketDataStorage.SecurityId => _securityId;

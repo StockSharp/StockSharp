@@ -49,9 +49,9 @@ type PriceVolumeScript() =
                     let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
 
                     // Get available dates within the specified period
-                    let! datesSeq = candleStorage.GetDatesAsync(fromDate, toDate, cancellationToken)
-                    let dates = datesSeq.ToArray()
-
+                    let datesSeq = candleStorage.GetDatesAsync(fromDate, toDate)
+                    let! dates = datesSeq.ToArrayAsync(cancellationToken)
+                            
                     if dates.Length = 0 then
                         logs.LogWarning("no data")
                     else

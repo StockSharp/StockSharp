@@ -162,9 +162,9 @@ public class BasketMarketDataStorageTests : BaseTestClass
 	{
 		using var storage = new BasketMarketDataStorage<ExecutionMessage>();
 
-		var dates = await ((IMarketDataStorage)storage).GetDatesAsync(CancellationToken);
+		var dates = await ((IMarketDataStorage)storage).GetDatesAsync().ToArrayAsync(CancellationToken);
 
-		AreEqual(0, dates.Count());
+		AreEqual(0, dates.Length);
 	}
 
 	[TestMethod]
@@ -241,7 +241,7 @@ public class BasketMarketDataStorageTests : BaseTestClass
 		// InMemoryMarketDataStorage.GetDatesAsync throws NotSupportedException,
 		// and BasketMarketDataStorage.GetDatesAsync propagates it
 		await ThrowsExactlyAsync<NotSupportedException>(async () =>
-			await ((IMarketDataStorage)basket).GetDatesAsync(CancellationToken));
+			await ((IMarketDataStorage)basket).GetDatesAsync().ToArrayAsync(CancellationToken));
 	}
 
 	#endregion

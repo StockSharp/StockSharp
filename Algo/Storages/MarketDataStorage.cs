@@ -28,7 +28,7 @@ abstract class MarketDataStorage<TMessage, TId> : IMarketDataStorage<TMessage>
 		_isValid = isValid ?? throw new ArgumentNullException(nameof(isValid));
 	}
 
-	ValueTask<IEnumerable<DateTime>> IMarketDataStorage.GetDatesAsync(CancellationToken cancellationToken) => Drive.GetDatesAsync(cancellationToken);
+	IAsyncEnumerable<DateTime> IMarketDataStorage.GetDatesAsync() => Drive.GetDatesAsync();
 
 	private readonly DataType _dataType;
 	DataType IMarketDataStorage.DataType => _dataType;

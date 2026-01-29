@@ -239,18 +239,18 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	#region GetSupportedDataTypes Tests
 
 	[TestMethod]
-	public void GetSupportedDataTypes_ReturnsEmptyWithoutDriveAndGenerators()
+	public async Task GetSupportedDataTypes_ReturnsEmptyWithoutDriveAndGenerators()
 	{
 		using var manager = CreateManager();
 		var secId = CreateSecurityId();
 
-		var dataTypes = manager.GetSupportedDataTypes(secId);
+		var dataTypes = await manager.GetSupportedDataTypesAsync(secId).ToArrayAsync(CancellationToken);
 
-		dataTypes.Count().AssertEqual(0);
+		dataTypes.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
-	public void GetSupportedDataTypes_IncludesGeneratorDataTypes()
+	public async Task GetSupportedDataTypes_IncludesGeneratorDataTypes()
 	{
 		using var manager = CreateManager();
 		var secId = CreateSecurityId();
@@ -258,13 +258,13 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		manager.RegisterGenerator(secId, DataType.Ticks, generator, 1);
 
-		var dataTypes = manager.GetSupportedDataTypes(secId).ToList();
+		var dataTypes = await manager.GetSupportedDataTypesAsync(secId).ToListAsync(CancellationToken);
 
 		dataTypes.Contains(DataType.Ticks).AssertTrue();
 	}
 
 	[TestMethod]
-	public void GetSupportedDataTypes_WithoutDrive_ReturnsOnlyGenerators()
+	public async Task GetSupportedDataTypes_WithoutDrive_ReturnsOnlyGenerators()
 	{
 		using var manager = CreateManager();
 		var secId = CreateSecurityId();
@@ -272,7 +272,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		manager.RegisterGenerator(secId, DataType.Ticks, new RandomWalkTradeGenerator(secId), 1);
 		manager.RegisterGenerator(secId, DataType.Level1, new RandomWalkTradeGenerator(secId), 2);
 
-		var dataTypes = manager.GetSupportedDataTypes(secId).ToList();
+		var dataTypes = await manager.GetSupportedDataTypesAsync(secId).ToListAsync(CancellationToken);
 
 		dataTypes.Count.AssertEqual(2);
 		dataTypes.Contains(DataType.Ticks).AssertTrue();
@@ -280,7 +280,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void GetSupportedDataTypes_FiltersGeneratorsBySecurityId()
+	public async Task GetSupportedDataTypes_FiltersGeneratorsBySecurityId()
 	{
 		using var manager = CreateManager();
 		var secId1 = CreateSecurityId();
@@ -289,8 +289,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		manager.RegisterGenerator(secId1, DataType.Ticks, new RandomWalkTradeGenerator(secId1), 1);
 		manager.RegisterGenerator(secId2, DataType.Level1, new RandomWalkTradeGenerator(secId2), 2);
 
-		var dataTypes1 = manager.GetSupportedDataTypes(secId1).ToList();
-		var dataTypes2 = manager.GetSupportedDataTypes(secId2).ToList();
+		var dataTypes1 = await manager.GetSupportedDataTypesAsync(secId1).ToListAsync(CancellationToken);
+		var dataTypes2 = await manager.GetSupportedDataTypesAsync(secId2).ToListAsync(CancellationToken);
 
 		dataTypes1.Count.AssertEqual(1);
 		dataTypes1.Contains(DataType.Ticks).AssertTrue();
@@ -523,7 +523,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void GetSupportedDataTypes_WithRealStorage_ReturnsAvailableTypes()
+	public async Task GetSupportedDataTypes_WithRealStorage_ReturnsAvailableTypes()
 	{
 		var storageRegistry = GetHistoryStorage();
 		if (storageRegistry == null)
@@ -535,7 +535,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		using var manager = CreateManager(storageRegistry);
 
-		var dataTypes = manager.GetSupportedDataTypes(secId).ToList();
+		var dataTypes = await manager.GetSupportedDataTypesAsync(secId).ToListAsync(CancellationToken);
 
 		// Should have at least ticks and candles in sample data
 		(dataTypes.Count > 0).AssertTrue();
@@ -837,7 +837,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Generator_Registration_IsTrackedCorrectly()
+	public async Task Generator_Registration_IsTrackedCorrectly()
 	{
 		// Note: HistoryMarketDataManager tracks generator registration for HasGenerator() and
 		// GetSupportedDataTypes() checks, but actual message generation happens in MarketEmulator.
@@ -855,7 +855,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		// Verify registration is tracked
 		manager.HasGenerator(secId, DataType.Ticks).AssertTrue("Generator should be registered");
-		manager.GetSupportedDataTypes(secId).Contains(DataType.Ticks).AssertTrue("Data type should be supported");
+		(await manager.GetSupportedDataTypesAsync(secId).ToListAsync(CancellationToken)).Contains(DataType.Ticks).AssertTrue("Data type should be supported");
 
 		// Unregister
 		var result = manager.UnregisterGenerator(1);
@@ -864,7 +864,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Generator_MultipleDataTypes_TrackedSeparately()
+	public async Task Generator_MultipleDataTypes_TrackedSeparately()
 	{
 		// Verify that different data type generators are tracked separately
 		using var manager = CreateManager();
@@ -883,7 +883,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		manager.HasGenerator(secId, DataType.Ticks).AssertTrue();
 		manager.HasGenerator(secId, DataType.MarketDepth).AssertTrue();
 
-		var dataTypes = manager.GetSupportedDataTypes(secId).ToList();
+		var dataTypes = await manager.GetSupportedDataTypesAsync(secId).ToListAsync(CancellationToken);
 		dataTypes.Contains(DataType.Ticks).AssertTrue();
 		dataTypes.Contains(DataType.MarketDepth).AssertTrue();
 
@@ -994,7 +994,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Generator_MultipleSecurities_TrackedSeparately()
+	public async Task Generator_MultipleSecurities_TrackedSeparately()
 	{
 		// Verify that generators for different securities are tracked separately
 		using var manager = CreateManager();
@@ -1015,8 +1015,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		manager.HasGenerator(secId2, DataType.Ticks).AssertTrue();
 		manager.HasGenerator(secId1, DataType.MarketDepth).AssertFalse();
 
-		manager.GetSupportedDataTypes(secId1).Contains(DataType.Ticks).AssertTrue();
-		manager.GetSupportedDataTypes(secId2).Contains(DataType.Ticks).AssertTrue();
+		(await manager.GetSupportedDataTypesAsync(secId1).ToListAsync(CancellationToken)).Contains(DataType.Ticks).AssertTrue();
+		(await manager.GetSupportedDataTypesAsync(secId2).ToListAsync(CancellationToken)).Contains(DataType.Ticks).AssertTrue();
 
 		// Unregister one security's generator
 		manager.UnregisterGenerator(1);

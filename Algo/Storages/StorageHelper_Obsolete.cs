@@ -5,6 +5,17 @@ using StockSharp.Algo.Candles.Compression;
 static partial class StorageHelper
 {
 	/// <summary>
+	/// Get all available data types.
+	/// </summary>
+	/// <param name="drive"><see cref="IMarketDataDrive"/></param>
+	/// <param name="securityId">Instrument identifier.</param>
+	/// <param name="format">Format type.</param>
+	/// <returns>Data types.</returns>
+	[Obsolete("Use GetAvailableDataTypesAsync method instead.")]
+	public static IEnumerable<DataType> GetAvailableDataTypes(this IMarketDataDrive drive, SecurityId securityId, StorageFormats format)
+		=> drive.GetAvailableDataTypesAsync(securityId, format).ToBlockingEnumerable();
+
+	/// <summary>
 	/// To create an iterative loader of market data for the time range.
 	/// </summary>
 	/// <typeparam name="TMessage">Data type.</typeparam>
@@ -66,7 +77,7 @@ static partial class StorageHelper
 	/// <returns>All available data within the range.</returns>
 	[Obsolete("Use GetDatesAsync method instead.")]
 	public static IEnumerable<DateTime> GetDates(this IMarketDataStorage storage, DateTime? from, DateTime? to)
-		=> AsyncHelper.Run(() => GetDatesAsync(storage, from, to, default));
+		=> GetDatesAsync(storage, from, to).ToBlockingEnumerable();
 
 	/// <summary>
 	/// Load messages.
@@ -259,7 +270,7 @@ static partial class StorageHelper
 	}
 
 	/// <summary>
-	/// Synchronous wrapper for <see cref="IMarketDataStorageDrive.GetDatesAsync(CancellationToken)"/>.
+	/// Synchronous wrapper for <see cref="IMarketDataStorageDrive.GetDatesAsync"/>.
 	/// </summary>
 	/// <param name="drive">Market data storage drive.</param>
 	/// <returns>Available dates.</returns>
@@ -270,7 +281,7 @@ static partial class StorageHelper
 		if (drive is null)
 			throw new ArgumentNullException(nameof(drive));
 
-		return AsyncHelper.Run(() => drive.GetDatesAsync(default));
+		return drive.GetDatesAsync().ToBlockingEnumerable();
 	}
 
 	/// <summary>
@@ -336,7 +347,7 @@ static partial class StorageHelper
 	}
 
 	/// <summary>
-	/// Synchronous wrapper for <see cref="IMarketDataStorage.GetDatesAsync(CancellationToken)"/>.
+	/// Synchronous wrapper for <see cref="IMarketDataStorage.GetDatesAsync"/>.
 	/// </summary>
 	/// <param name="storage">Market data storage.</param>
 	/// <returns>Available dates.</returns>
@@ -347,7 +358,7 @@ static partial class StorageHelper
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
 
-		return AsyncHelper.Run(() => storage.GetDatesAsync(default));
+		return storage.GetDatesAsync().ToBlockingEnumerable();
 	}
 
 	/// <summary>
