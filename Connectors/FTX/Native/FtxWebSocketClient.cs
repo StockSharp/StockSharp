@@ -23,13 +23,13 @@ class FtxWebSocketClient : BaseLogReceiver
 	private readonly SecureString _key;
 	private readonly HMACSHA256 _hasher;
 
-	public event Action<string, List<Trade>> NewTrade;
-	public event Action<string, OrderBook, QuoteChangeStates> NewOrderBook;
-	public event Action<string, Level1> NewLevel1;
-	public event Action<Order> NewOrder;
-	public event Action<Fill> NewFill;
-	public event Action<ConnectionStates> StateChanged;
-	public event Action<Exception> Error;
+	public event Func<string, List<Trade>, CancellationToken, ValueTask> NewTrade;
+	public event Func<string, OrderBook, QuoteChangeStates, CancellationToken, ValueTask> NewOrderBook;
+	public event Func<string, Level1, CancellationToken, ValueTask> NewLevel1;
+	public event Func<Order, CancellationToken, ValueTask> NewOrder;
+	public event Func<Fill, CancellationToken, ValueTask> NewFill;
+	public event Func<ConnectionStates, CancellationToken, ValueTask> StateChanged;
+	public event Func<Exception, CancellationToken, ValueTask> Error;
 
 	private DateTime? _nextPing;
 
@@ -42,11 +42,18 @@ class FtxWebSocketClient : BaseLogReceiver
 
 		_client = new(
 			"wss://ftx.com/ws",
-			state => StateChanged?.Invoke(state),
-			error =>
+			(state, token) =>
+			{
+				if (StateChanged is { } handler)
+					return handler(state, token);
+				return default;
+			},
+			(error, token) =>
 			{
 				this.AddErrorLog(error);
-				Error?.Invoke(error);
+				if (Error is { } handler)
+					return handler(error, token);
+				return default;
 			},
 			OnProcess,
 			(s, a) => this.AddInfoLog(s, a),
@@ -234,7 +241,7 @@ class FtxWebSocketClient : BaseLogReceiver
 	}
 
 
-	private ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
+	private async ValueTask OnProcess(WebSocketMessage msg, CancellationToken cancellationToken)
 	{
 		var obj = msg.AsObject();
 		var channel = (string)obj.channel;
@@ -242,57 +249,60 @@ class FtxWebSocketClient : BaseLogReceiver
 
 		if (channel == "ticker")
 		{
-			if (type != "update") return default;
+			if (type != "update") return;
 
 			WebSocketResponse<Level1> level1 = Parse<WebSocketResponse<Level1>>(obj);
 			if (level1 != null && level1.Data != null)
 			{
-				NewLevel1?.Invoke(level1.Market, level1.Data);
+				if (NewLevel1 is { } handler)
+					await handler(level1.Market, level1.Data, cancellationToken);
 			}
 		}
 		else if (channel == "trades")
 		{
-			if (type != "update") return default;
+			if (type != "update") return;
 
 			WebSocketResponse<List<Trade>> trade = Parse<WebSocketResponse<List<Trade>>>(obj);
 
 			if (trade != null && trade.Data != null)
 			{
-				NewTrade?.Invoke(trade.Market, trade.Data);
+				if (NewTrade is { } handler)
+					await handler(trade.Market, trade.Data, cancellationToken);
 			}
 		}
 		else if (channel == "orderbook")
 		{
-			if (type != "update" && type != "partial") return default;
+			if (type != "update" && type != "partial") return;
 
 			WebSocketResponse<OrderBook> ob = Parse<WebSocketResponse<OrderBook>>(obj);
 			if (ob != null && ob.Data != null)
 			{
-				NewOrderBook?.Invoke(ob.Market, ob.Data, type == "partial" ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment);
+				if (NewOrderBook is { } handler)
+					await handler(ob.Market, ob.Data, type == "partial" ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment, cancellationToken);
 			}
 		}
 		else if (channel == "orders")
 		{
-			if (type != "update") return default;
+			if (type != "update") return;
 
 			WebSocketResponse<Order> order = Parse<WebSocketResponse<Order>>(obj);
 			if (order != null && order.Data != null)
 			{
-				NewOrder?.Invoke(order.Data);
+				if (NewOrder is { } handler)
+					await handler(order.Data, cancellationToken);
 			}
 		}
 		else if (channel == "fills")
 		{
-			if (type != "update") return default;
+			if (type != "update") return;
 
 			WebSocketResponse<Fill> fill = Parse<WebSocketResponse<Fill>>(obj);
 			if (fill != null && fill.Data != null)
 			{
-				NewFill?.Invoke(fill.Data);
+				if (NewFill is { } handler)
+					await handler(fill.Data, cancellationToken);
 			}
 		}
-
-		return default;
 	}
 
 	#region Utils

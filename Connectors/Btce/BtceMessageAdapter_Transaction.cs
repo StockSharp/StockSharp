@@ -30,7 +30,7 @@ partial class BtceMessageAdapter
 
 				var withdrawId = await _httpClient.Withdraw(regMsg.SecurityId.SecurityCode, regMsg.Volume, condition.WithdrawInfo, cancellationToken);
 
-				SendOutMessage(new ExecutionMessage
+				await SendOutMessageAsync(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					OrderId = withdrawId,
@@ -38,7 +38,7 @@ partial class BtceMessageAdapter
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
-				});
+				}, cancellationToken);
 
 				await PortfolioLookupAsync(null, cancellationToken);
 				return;
@@ -86,22 +86,22 @@ partial class BtceMessageAdapter
 					msg.OrderId = trade.OrderId;
 
 					_orderInfo.Add(trade.OrderId, RefTuple.Create(regMsg.TransactionId, regMsg.Volume));
-					
+
 					// send only 1 time
-					SendOutMessage(msg);
+					await SendOutMessageAsync(msg, cancellationToken);
 					msg = null;
 				}
 
-				ProcessTrade(trade);
+				await ProcessTrade(trade, cancellationToken);
 			}
 		}
 		else
 		{
 			_orderInfo.Add(reply.Command.OrderId, RefTuple.Create(regMsg.TransactionId, regMsg.Volume));
-			SendOutMessage(msg);
+			await SendOutMessageAsync(msg, cancellationToken);
 		}
 
-		ProcessFunds(reply.Command.Funds);
+		await ProcessFunds(reply.Command.Funds, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -123,7 +123,7 @@ partial class BtceMessageAdapter
 		//});
 
 		await OrderStatusAsync(null, cancellationToken);
-		ProcessFunds(reply.Command.Funds);
+		await ProcessFunds(reply.Command.Funds, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -214,20 +214,20 @@ partial class BtceMessageAdapter
 		// Send result with errors if any
 		if (errors.Count > 0)
 		{
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
 				ServerTime = CurrentTimeUtc,
 				HasOrderInfo = true,
 				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
-			});
+			}, cancellationToken);
 		}
 	}
 
-	private void ProcessOrder(Order order, decimal balance, long transId, long origTransId)
+	private ValueTask ProcessOrder(Order order, decimal balance, long transId, long origTransId, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			OrderId = order.Id,
@@ -244,12 +244,12 @@ partial class BtceMessageAdapter
 			OrderState = OrderStates.Active,
 			HasOrderInfo = true,
 			OrderType = OrderTypes.Limit
-		});
+		}, cancellationToken);
 	}
 
 	//private const decimal _epsilon = 0.000000001m;
 
-	private void ProcessTrade(Trade trade)
+	private async ValueTask ProcessTrade(Trade trade, CancellationToken cancellationToken)
 	{
 		var serverTime = trade.Timestamp;
 		var secId = trade.Instrument.ToStockSharp();
@@ -292,7 +292,7 @@ partial class BtceMessageAdapter
 			//}
 		}
 
-		SendOutMessage(new ExecutionMessage
+		await SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			OrderId = trade.OrderId,
@@ -305,7 +305,7 @@ partial class BtceMessageAdapter
 			ServerTime = serverTime,
 			PortfolioName = PortfolioName,
 			OriginSide = trade.IsMyOrder ? side.Invert() : side,
-		});
+		}, cancellationToken);
 
 		//if (info == null || info.Second <= 0)
 		//	return;
@@ -315,7 +315,7 @@ partial class BtceMessageAdapter
 		if (info.Second < 0)
 			throw new InvalidOperationException(LocalizedStrings.OrderBalanceNotEnough.Put(trade.OrderId, info.Second));
 
-		SendOutMessage(new ExecutionMessage
+		await SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			OrderId = trade.OrderId,
@@ -324,13 +324,13 @@ partial class BtceMessageAdapter
 			OrderState = info.Second > 0 ? OrderStates.Active : OrderStates.Done,
 			HasOrderInfo = true,
 			ServerTime = serverTime,
-		});
+		}, cancellationToken);
 
 		if (info.Second == 0)
 			_orderInfo.Remove(trade.OrderId);
 	}
 
-	private void ProcessFunds(IEnumerable<KeyValuePair<string, double>> funds, bool init = false)
+	private async ValueTask ProcessFunds(IEnumerable<KeyValuePair<string, double>> funds, CancellationToken cancellationToken, bool init = false)
 	{
 		foreach (var fund in funds)
 		{
@@ -367,12 +367,12 @@ partial class BtceMessageAdapter
 				{
 					if (_positions[secId] == pos.Value)
 						continue;
-				}	
+				}
 			}
-			
-			SendOutMessage(this
+
+			await SendOutMessageAsync(this
 				.CreatePositionChangeMessage(PortfolioName, secId)
-				.Add(PositionChangeTypes.CurrentValue, pos.Value));
+				.Add(PositionChangeTypes.CurrentValue, pos.Value), cancellationToken);
 		}
 	}
 
@@ -386,7 +386,7 @@ partial class BtceMessageAdapter
 			var orders = (await _httpClient.GetActiveOrders(cancellationToken)).Items.Values;
 
 			var ids = _orderInfo.Keys.ToHashSet();
-			
+
 			foreach (var order in orders)
 			{
 				ids.Remove(order.Id);
@@ -399,7 +399,7 @@ partial class BtceMessageAdapter
 
 					_orderInfo.Add(order.Id, info);
 
-					ProcessOrder(order, (decimal)order.Volume, info.First, 0);
+					await ProcessOrder(order, (decimal)order.Volume, info.First, 0, cancellationToken);
 
 					portfolioRefresh = true;
 				}
@@ -413,7 +413,7 @@ partial class BtceMessageAdapter
 
 			await foreach(var trade in trades)
 			{
-				ProcessTrade(trade);
+				await ProcessTrade(trade, cancellationToken);
 			}
 
 			foreach (var id in ids)
@@ -424,7 +424,7 @@ partial class BtceMessageAdapter
 				if (!_orderInfo.TryGetAndRemove(id, out var info))
 					return;
 
-				SendOutMessage(new ExecutionMessage
+				await SendOutMessageAsync(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					HasOrderInfo = true,
@@ -432,7 +432,7 @@ partial class BtceMessageAdapter
 					OriginalTransactionId = info.First,
 					ServerTime = CurrentTimeUtc,
 					OrderState = OrderStates.Done,
-				});
+				}, cancellationToken);
 			}
 
 			if (portfolioRefresh)
@@ -440,7 +440,7 @@ partial class BtceMessageAdapter
 		}
 		else
 		{
-			SendSubscriptionReply(statusMsg.TransactionId);
+			await SendSubscriptionReplyAsync(statusMsg.TransactionId, cancellationToken);
 
 			if (!statusMsg.IsSubscribe)
 				return;
@@ -453,17 +453,17 @@ partial class BtceMessageAdapter
 
 				_orderInfo.Add(order.Id, info);
 
-				ProcessOrder(order, (decimal)order.Volume, info.First, statusMsg.TransactionId);
+				await ProcessOrder(order, (decimal)order.Volume, info.First, statusMsg.TransactionId, cancellationToken);
 			}
 
 			var trades = GetTrades(cancellationToken);
 
 			await foreach(var trade in trades)
 			{
-				ProcessTrade(trade);
+				await ProcessTrade(trade, cancellationToken);
 			}
-		
-			SendSubscriptionResult(statusMsg);
+
+			await SendSubscriptionResultAsync(statusMsg, cancellationToken);
 		}
 	}
 
@@ -504,7 +504,7 @@ partial class BtceMessageAdapter
 	{
 		if (lookupMsg != null)
 		{
-			SendSubscriptionReply(lookupMsg.TransactionId);
+			await SendSubscriptionReplyAsync(lookupMsg.TransactionId, cancellationToken);
 
 			if (!lookupMsg.IsSubscribe)
 				return;
@@ -512,25 +512,25 @@ partial class BtceMessageAdapter
 
 		var transId = lookupMsg?.TransactionId ?? 0;
 
-		SendOutMessage(new PortfolioMessage
+		await SendOutMessageAsync(new PortfolioMessage
 		{
 			PortfolioName = PortfolioName,
 			BoardCode = BoardCodes.Btce,
 			OriginalTransactionId = transId
-		});
+		}, cancellationToken);
 
 		var reply = await _httpClient.GetInfo(cancellationToken);
-		ProcessFunds(reply.State.Funds, true);
+		await ProcessFunds(reply.State.Funds, cancellationToken, init: true);
 
 		if (!reply.State.Rights.CanTrade)
 		{
-			SendOutMessage(this
+			await SendOutMessageAsync(this
 				.CreatePortfolioChangeMessage(PortfolioName)
-				.Add(PositionChangeTypes.State, PortfolioStates.Blocked));
+				.Add(PositionChangeTypes.State, PortfolioStates.Blocked), cancellationToken);
 		}
 
 		if (lookupMsg != null)
-			SendSubscriptionResult(lookupMsg);
+			await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 
 		_lastTimeBalanceCheck = CurrentTimeUtc;
 	}

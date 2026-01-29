@@ -22,7 +22,7 @@ public partial class CoinbaseMessageAdapter
 
 				var withdrawId = await _restClient.Withdraw(regMsg.SecurityId.SecurityCode, regMsg.Volume, condition.WithdrawInfo, cancellationToken);
 
-				SendOutMessage(new ExecutionMessage
+				await SendOutMessageAsync(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					OrderStringId = withdrawId,
@@ -30,7 +30,7 @@ public partial class CoinbaseMessageAdapter
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
-				});
+				}, cancellationToken);
 
 				await PortfolioLookupAsync(null, cancellationToken);
 				return;
@@ -41,7 +41,7 @@ public partial class CoinbaseMessageAdapter
 
 		var isMarket = regMsg.OrderType == OrderTypes.Market;
 		var price = isMarket ? (decimal?)null : regMsg.Price;
-		
+
 		var result = await _restClient.RegisterOrder(
 			regMsg.TransactionId.To<string>(), regMsg.SecurityId.ToSymbol(),
 			regMsg.OrderType.ToNative(), regMsg.Side.ToNative(), price,
@@ -52,7 +52,7 @@ public partial class CoinbaseMessageAdapter
 
 		if (orderState == OrderStates.Failed)
 		{
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				ServerTime = result.CreationTime,
@@ -60,7 +60,7 @@ public partial class CoinbaseMessageAdapter
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException(),
 				HasOrderInfo = true,
-			});
+			}, cancellationToken);
 		}
 	}
 
@@ -177,14 +177,14 @@ public partial class CoinbaseMessageAdapter
 		// Send result with errors if any
 		if (errors.Count > 0)
 		{
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
 				ServerTime = CurrentTimeUtc,
 				HasOrderInfo = true,
 				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
-			});
+			}, cancellationToken);
 		}
 	}
 
@@ -193,33 +193,24 @@ public partial class CoinbaseMessageAdapter
 	{
 		var transId = lookupMsg.TransactionId;
 
-		SendSubscriptionReply(transId);
+		await SendSubscriptionReplyAsync(transId, cancellationToken);
 
 		if (!lookupMsg.IsSubscribe)
 			return;
 
-		SendOutMessage(new PortfolioMessage
+		await SendOutMessageAsync(new PortfolioMessage
 		{
 			PortfolioName = PortfolioName,
 			BoardCode = BoardCodes.Coinbase,
 			OriginalTransactionId = transId,
-		});
+		}, cancellationToken);
 
 		var accounts = await _restClient.GetAccounts(cancellationToken);
 
 		foreach (var account in accounts)
 		{
-			//var currency = account.Currency;
-
-			//if (!currency.StartsWithIgnoreCase("USD") &&
-			//    !currency.StartsWithIgnoreCase("EUR"))
-			//{
-			//	currency += "-USD";
-			//}
-
-			SendOutMessage(new PositionChangeMessage
+			await SendOutMessageAsync(new PositionChangeMessage
 			{
-				//PortfolioName = account.Id.To<string>(),
 				PortfolioName = PortfolioName,
 				SecurityId = new SecurityId
 				{
@@ -229,16 +220,16 @@ public partial class CoinbaseMessageAdapter
 				ServerTime = CurrentTimeUtc,
 			}
 			.TryAdd(PositionChangeTypes.CurrentValue, (decimal)account.Available, true)
-			.TryAdd(PositionChangeTypes.BlockedValue, (decimal)account.Hold, true));
+			.TryAdd(PositionChangeTypes.BlockedValue, (decimal)account.Hold, true), cancellationToken);
 		}
 
-		SendSubscriptionResult(lookupMsg);
+		await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(statusMsg.TransactionId);
+		await SendSubscriptionReplyAsync(statusMsg.TransactionId, cancellationToken);
 
 		if (!statusMsg.IsSubscribe)
 			return;
@@ -246,22 +237,22 @@ public partial class CoinbaseMessageAdapter
 		var orders = await _restClient.GetOrders(cancellationToken);
 
 		foreach (var order in orders)
-			ProcessOrder(order, statusMsg.TransactionId);
+			await ProcessOrder(order, statusMsg.TransactionId, cancellationToken);
 
 		if (!statusMsg.IsHistoryOnly())
 			await _socketClient.SubscribeOrders(statusMsg.TransactionId, cancellationToken);
 
-		SendSubscriptionResult(statusMsg);
+		await SendSubscriptionResultAsync(statusMsg, cancellationToken);
 	}
 
-	private void ProcessOrder(Order order, long originTransId)
+	private ValueTask ProcessOrder(Order order, long originTransId, CancellationToken cancellationToken)
 	{
 		if (!long.TryParse(order.ClientOrderId, out var transId))
-			return;
+			return default;
 
 		var state = order.Status.ToOrderState();
 
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			ServerTime = originTransId == 0 ? CurrentTimeUtc : order.CreationTime,
 			DataTypeEx = DataType.Transactions,
@@ -278,9 +269,9 @@ public partial class CoinbaseMessageAdapter
 			TimeInForce = order.TimeInForce.ToTimeInForce(),
 			Balance = (decimal?)order.LeavesQuantity,
 			HasOrderInfo = true,
-		});
+		}, cancellationToken);
 	}
 
-	private void SessionOnOrderReceived(Order order)
-		=> ProcessOrder(order, 0);
+	private ValueTask SessionOnOrderReceived(Order order, CancellationToken cancellationToken)
+		=> ProcessOrder(order, 0, cancellationToken);
 }

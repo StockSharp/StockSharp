@@ -657,20 +657,36 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	/// </summary>
 	/// <param name="expected">Is disconnect expected.</param>
 	protected void SendOutDisconnectMessage(bool expected)
-	{
-		SendOutDisconnectMessage(expected ? null : new InvalidOperationException(LocalizedStrings.UnexpectedDisconnection));
-	}
+		=> SendOutDisconnectMessageAsync(expected, default);
 
 	/// <summary>
 	/// Send to <see cref="SendOutMessage"/> disconnect message.
 	/// </summary>
 	/// <param name="error">Error info. Can be <see langword="null"/>.</param>
 	protected void SendOutDisconnectMessage(Exception error)
+		=> SendOutDisconnectMessageAsync(error, default);
+
+	/// <summary>
+	/// Send to <see cref="SendOutMessage"/> disconnect message.
+	/// </summary>
+	/// <param name="expected">Is disconnect expected.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected ValueTask SendOutDisconnectMessageAsync(bool expected, CancellationToken cancellationToken)
 	{
-		SendOutMessage(error == null ? new DisconnectMessage() : new ConnectMessage
+		return SendOutDisconnectMessageAsync(expected ? null : new InvalidOperationException(LocalizedStrings.UnexpectedDisconnection), cancellationToken);
+	}
+
+	/// <summary>
+	/// Send to <see cref="SendOutMessage"/> disconnect message.
+	/// </summary>
+	/// <param name="error">Error info. Can be <see langword="null"/>.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected ValueTask SendOutDisconnectMessageAsync(Exception error, CancellationToken cancellationToken)
+	{
+		return SendOutMessageAsync(error == null ? new DisconnectMessage() : new ConnectMessage
 		{
 			Error = error
-		});
+		}, cancellationToken);
 	}
 
 	/// <summary>
@@ -678,28 +694,21 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	/// </summary>
 	/// <param name="state"><see cref="ConnectionStates"/></param>
 	protected void SendOutConnectionState(ConnectionStates state)
-	{
-		if (state.ToMessage() is Message msg)
-			SendOutMessage(msg);
-	}
+		=> SendOutConnectionStateAsync(state, default);
 
 	/// <summary>
 	/// Initialize a new message <see cref="ErrorMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 	/// </summary>
 	/// <param name="description">Error details.</param>
 	protected void SendOutError(string description)
-	{
-		SendOutError(new InvalidOperationException(description));
-	}
+		=> SendOutErrorAsync(description, default);
 
 	/// <summary>
 	/// Initialize a new message <see cref="ErrorMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 	/// </summary>
 	/// <param name="error">Error details.</param>
 	protected void SendOutError(Exception error)
-	{
-		SendOutMessage(error.ToErrorMessage());
-	}
+		=> SendOutErrorAsync(error, default);
 
 	/// <summary>
 	/// Initialize a new message <see cref="SubscriptionResponseMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
@@ -707,18 +716,14 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
 	/// <param name="error">Subscribe or unsubscribe error info. To be set if the answer.</param>
 	protected void SendSubscriptionReply(long originalTransactionId, Exception error = null)
-	{
-		SendOutMessage(originalTransactionId.CreateSubscriptionResponse(error));
-	}
+		=> SendSubscriptionReplyAsync(originalTransactionId, default, error);
 
 	/// <summary>
 	/// Initialize a new message <see cref="SubscriptionResponseMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 	/// </summary>
 	/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
 	protected void SendSubscriptionNotSupported(long originalTransactionId)
-	{
-		SendOutMessage(originalTransactionId.CreateNotSupported());
-	}
+		=> SendSubscriptionNotSupportedAsync(originalTransactionId, default);
 
 	/// <summary>
 	/// Initialize a new message <see cref="SubscriptionFinishedMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
@@ -726,26 +731,105 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
 	/// <param name="nextFrom"><see cref="SubscriptionFinishedMessage.NextFrom"/>.</param>
 	protected void SendSubscriptionFinished(long originalTransactionId, DateTime? nextFrom = null)
-	{
-		SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = originalTransactionId, NextFrom = nextFrom });
-	}
+		=> SendSubscriptionFinishedAsync(originalTransactionId, default, nextFrom);
 
 	/// <summary>
 	/// Initialize a new message <see cref="SubscriptionOnlineMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 	/// </summary>
 	/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
 	protected void SendSubscriptionOnline(long originalTransactionId)
-	{
-		SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = originalTransactionId });
-	}
+		=> SendSubscriptionOnlineAsync(originalTransactionId, default);
 
 	/// <summary>
 	/// Initialize a new message <see cref="SubscriptionOnlineMessage"/> or <see cref="SubscriptionFinishedMessage"/> and pass it to the method <see cref="SendOutMessage"/>.
 	/// </summary>
 	/// <param name="message">Subscription.</param>
 	protected void SendSubscriptionResult(ISubscriptionMessage message)
+		=> SendSubscriptionResultAsync(message, default);
+
+	/// <summary>
+	/// Send to <see cref="SendOutMessageAsync"/> connection state message.
+	/// </summary>
+	/// <param name="state"><see cref="ConnectionStates"/></param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected ValueTask SendOutConnectionStateAsync(ConnectionStates state, CancellationToken cancellationToken)
 	{
-		SendOutMessage(message.CreateResult());
+		if (state.ToMessage() is Message msg)
+			return SendOutMessageAsync(msg, cancellationToken);
+
+		return default;
+	}
+
+	/// <summary>
+	/// Initialize a new message <see cref="ErrorMessage"/> and pass it to the method <see cref="SendOutMessageAsync"/>.
+	/// </summary>
+	/// <param name="description">Error details.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected ValueTask SendOutErrorAsync(string description, CancellationToken cancellationToken)
+	{
+		return SendOutErrorAsync(new InvalidOperationException(description), cancellationToken);
+	}
+
+	/// <summary>
+	/// Initialize a new message <see cref="ErrorMessage"/> and pass it to the method <see cref="SendOutMessageAsync"/>.
+	/// </summary>
+	/// <param name="error">Error details.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected ValueTask SendOutErrorAsync(Exception error, CancellationToken cancellationToken)
+	{
+		return SendOutMessageAsync(error.ToErrorMessage(), cancellationToken);
+	}
+
+	/// <summary>
+	/// Initialize a new message <see cref="SubscriptionResponseMessage"/> and pass it to the method <see cref="SendOutMessageAsync"/>.
+	/// </summary>
+	/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <param name="error">Subscribe or unsubscribe error info. To be set if the answer.</param>
+	protected ValueTask SendSubscriptionReplyAsync(long originalTransactionId, CancellationToken cancellationToken, Exception error = null)
+	{
+		return SendOutMessageAsync(originalTransactionId.CreateSubscriptionResponse(error), cancellationToken);
+	}
+
+	/// <summary>
+	/// Initialize a new message <see cref="SubscriptionResponseMessage"/> and pass it to the method <see cref="SendOutMessageAsync"/>.
+	/// </summary>
+	/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected ValueTask SendSubscriptionNotSupportedAsync(long originalTransactionId, CancellationToken cancellationToken)
+	{
+		return SendOutMessageAsync(originalTransactionId.CreateNotSupported(), cancellationToken);
+	}
+
+	/// <summary>
+	/// Initialize a new message <see cref="SubscriptionFinishedMessage"/> and pass it to the method <see cref="SendOutMessageAsync"/>.
+	/// </summary>
+	/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <param name="nextFrom"><see cref="SubscriptionFinishedMessage.NextFrom"/>.</param>
+	protected ValueTask SendSubscriptionFinishedAsync(long originalTransactionId, CancellationToken cancellationToken, DateTime? nextFrom = null)
+	{
+		return SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = originalTransactionId, NextFrom = nextFrom }, cancellationToken);
+	}
+
+	/// <summary>
+	/// Initialize a new message <see cref="SubscriptionOnlineMessage"/> and pass it to the method <see cref="SendOutMessageAsync"/>.
+	/// </summary>
+	/// <param name="originalTransactionId">ID of the original message for which this message is a response.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected ValueTask SendSubscriptionOnlineAsync(long originalTransactionId, CancellationToken cancellationToken)
+	{
+		return SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = originalTransactionId }, cancellationToken);
+	}
+
+	/// <summary>
+	/// Initialize a new message <see cref="SubscriptionOnlineMessage"/> or <see cref="SubscriptionFinishedMessage"/> and pass it to the method <see cref="SendOutMessageAsync"/>.
+	/// </summary>
+	/// <param name="message">Subscription.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected ValueTask SendSubscriptionResultAsync(ISubscriptionMessage message, CancellationToken cancellationToken)
+	{
+		return SendOutMessageAsync(message.CreateResult(), cancellationToken);
 	}
 
 	/// <inheritdoc />

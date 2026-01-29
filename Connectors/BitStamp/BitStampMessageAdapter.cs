@@ -5,11 +5,11 @@ public partial class BitStampMessageAdapter : MessageAdapter
 {
 	private long _lastMyTradeId;
 	private readonly Dictionary<long, RefPair<long, decimal>> _orderInfo = new();
-	
+
 	private HttpClient _httpClient;
 	private PusherClient _pusherClient;
 	private DateTime? _lastTimeBalanceCheck;
-	
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BitStampMessageAdapter"/>.
 	/// </summary>
@@ -58,8 +58,8 @@ public partial class BitStampMessageAdapter : MessageAdapter
 
 	private void SubscribePusherClient()
 	{
-		_pusherClient.StateChanged += SendOutConnectionState;
-		_pusherClient.Error += SendOutError;
+		_pusherClient.StateChanged += SendOutConnectionStateAsync;
+		_pusherClient.Error += SendOutErrorAsync;
 		_pusherClient.NewOrderBook += SessionOnNewOrderBook;
 		_pusherClient.NewOrderLog += SessionOnNewOrderLog;
 		_pusherClient.NewTrade += SessionOnNewTrade;
@@ -67,8 +67,8 @@ public partial class BitStampMessageAdapter : MessageAdapter
 
 	private void UnsubscribePusherClient()
 	{
-		_pusherClient.StateChanged -= SendOutConnectionState;
-		_pusherClient.Error -= SendOutError;
+		_pusherClient.StateChanged -= SendOutConnectionStateAsync;
+		_pusherClient.Error -= SendOutErrorAsync;
 		_pusherClient.NewOrderBook -= SessionOnNewOrderBook;
 		_pusherClient.NewOrderLog -= SessionOnNewOrderLog;
 		_pusherClient.NewTrade -= SessionOnNewTrade;
@@ -152,9 +152,7 @@ public partial class BitStampMessageAdapter : MessageAdapter
 			_pusherClient = null;
 		}
 
-		SendOutMessage(new ResetMessage());
-
-		return default;
+		return SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />

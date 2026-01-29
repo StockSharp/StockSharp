@@ -32,7 +32,7 @@ public partial class BitalongMessageAdapter
 	public override string[] AssociatedBoards { get; } = new[] { BoardCodes.Bitalong };
 
 	/// <inheritdoc />
-	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient != null)
 		{
@@ -42,7 +42,7 @@ public partial class BitalongMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_httpClient = null;
@@ -55,9 +55,7 @@ public partial class BitalongMessageAdapter
 		_tradesSubscriptions.Clear();
 		_level1Subscriptions.Clear();
 
-		SendOutMessage(new ResetMessage());
-
-		return default;
+		await SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -77,8 +75,7 @@ public partial class BitalongMessageAdapter
 
 		_httpClient = new HttpClient(Address, Key, Secret) { Parent = this };
 
-		SendOutMessage(new ConnectMessage());
-		return default;
+		return SendOutMessageAsync(new ConnectMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -90,8 +87,7 @@ public partial class BitalongMessageAdapter
 		_httpClient.Dispose();
 		_httpClient = null;
 
-		SendOutMessage(new DisconnectMessage());
-		return default;
+		return SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />

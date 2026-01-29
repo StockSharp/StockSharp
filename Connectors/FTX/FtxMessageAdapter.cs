@@ -51,8 +51,8 @@ public partial class FtxMessageAdapter
 
 	private void SubscribeWsClient()
 	{
-		_wsClient.StateChanged += SendOutConnectionState;
-		_wsClient.Error += SessionOnWsError;
+		_wsClient.StateChanged += SendOutConnectionStateAsync;
+		_wsClient.Error += SendOutErrorAsync;
 		_wsClient.NewLevel1 += SessionOnNewLevel1;
 		_wsClient.NewOrderBook += SessionOnNewOrderBook;
 		_wsClient.NewTrade += SessionOnNewTrade;
@@ -62,8 +62,8 @@ public partial class FtxMessageAdapter
 
 	private void UnsubscribeWsClient()
 	{
-		_wsClient.StateChanged -= SendOutConnectionState;
-		_wsClient.Error -= SessionOnWsError;
+		_wsClient.StateChanged -= SendOutConnectionStateAsync;
+		_wsClient.Error -= SendOutErrorAsync;
 		_wsClient.NewLevel1 -= SessionOnNewLevel1;
 		_wsClient.NewOrderBook -= SessionOnNewOrderBook;
 		_wsClient.NewTrade -= SessionOnNewTrade;
@@ -90,8 +90,7 @@ public partial class FtxMessageAdapter
 		_portfolioLookupSubMessageTransactionID = default;
 		_isOrderSubscribed = default;
 
-		SendOutMessage(new ResetMessage());
-		return default;
+		return SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -146,8 +145,4 @@ public partial class FtxMessageAdapter
 			await sc.ProcessPing(cancellationToken);
 	}
 
-	private void SessionOnWsError(Exception exception)
-	{
-		SendOutError(exception);
-	}
 }

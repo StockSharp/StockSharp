@@ -56,8 +56,8 @@ public partial class CoinbaseMessageAdapter
 
 	private void SubscribePusherClient()
 	{
-		_socketClient.StateChanged += SendOutConnectionState;
-		_socketClient.Error += SendOutError;
+		_socketClient.StateChanged += SendOutConnectionStateAsync;
+		_socketClient.Error += SendOutErrorAsync;
 		_socketClient.HeartbeatReceived += SessionOnHeartbeatReceived;
 		_socketClient.TickerReceived += SessionOnTickerChanged;
 		_socketClient.OrderBookReceived += SessionOnOrderBookReceived;
@@ -68,8 +68,8 @@ public partial class CoinbaseMessageAdapter
 
 	private void UnsubscribePusherClient()
 	{
-		_socketClient.StateChanged -= SendOutConnectionState;
-		_socketClient.Error -= SendOutError;
+		_socketClient.StateChanged -= SendOutConnectionStateAsync;
+		_socketClient.Error -= SendOutErrorAsync;
 		_socketClient.HeartbeatReceived -= SessionOnHeartbeatReceived;
 		_socketClient.TickerReceived -= SessionOnTickerChanged;
 		_socketClient.OrderBookReceived -= SessionOnOrderBookReceived;
@@ -79,7 +79,7 @@ public partial class CoinbaseMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		if (_restClient != null)
 		{
@@ -89,7 +89,7 @@ public partial class CoinbaseMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_restClient = null;
@@ -104,7 +104,7 @@ public partial class CoinbaseMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_socketClient = null;
@@ -118,7 +118,7 @@ public partial class CoinbaseMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_authenticator = null;
@@ -126,8 +126,7 @@ public partial class CoinbaseMessageAdapter
 
 		_candlesTransIds.Clear();
 
-		SendOutMessage(new ResetMessage());
-		return default;
+		await SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -183,8 +182,8 @@ public partial class CoinbaseMessageAdapter
 		return default;
 	}
 
-	private void SessionOnHeartbeatReceived(Heartbeat heartbeat)
+	private ValueTask SessionOnHeartbeatReceived(Heartbeat heartbeat, CancellationToken cancellationToken)
 	{
-
+		return default;
 	}
 }

@@ -4,9 +4,9 @@ partial class BitStampMessageAdapter
 {
 	private const string _eurusd = "eurusd";
 
-	private void SessionOnNewTrade(string pair, Trade trade)
+	private ValueTask SessionOnNewTrade(string pair, Trade trade, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			SecurityId = pair.ToStockSharp(),
@@ -15,23 +15,23 @@ partial class BitStampMessageAdapter
 			TradeVolume = (decimal)trade.Amount,
 			ServerTime = trade.Time,
 			OriginSide = trade.Type.ToSide(),
-		});
+		}, cancellationToken);
 	}
 
-	private void SessionOnNewOrderBook(string pair, OrderBook book)
+	private ValueTask SessionOnNewOrderBook(string pair, OrderBook book, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new QuoteChangeMessage
+		return SendOutMessageAsync(new QuoteChangeMessage
 		{
 			SecurityId = pair.ToStockSharp(),
 			Bids = book.Bids.Select(e => new QuoteChange(e.Price, e.Size)).ToArray(),
 			Asks = book.Asks.Select(e => new QuoteChange(e.Price, e.Size)).ToArray(),
 			ServerTime = book.Time,
-		});
+		}, cancellationToken);
 	}
 
-	private void SessionOnNewOrderLog(string pair, OrderStates state, Order order)
+	private ValueTask SessionOnNewOrderLog(string pair, OrderStates state, Order order, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.OrderLog,
 			SecurityId = pair.ToStockSharp(),
@@ -41,13 +41,13 @@ partial class BitStampMessageAdapter
 			OrderId = order.Id,
 			Side = order.Type.ToSide(),
 			OrderState = state,
-		});
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
@@ -80,7 +80,7 @@ partial class BitStampMessageAdapter
 							break;
 						}
 
-						SendOutMessage(new TimeFrameCandleMessage
+						await SendOutMessageAsync(new TimeFrameCandleMessage
 						{
 							OriginalTransactionId = mdMsg.TransactionId,
 
@@ -93,7 +93,7 @@ partial class BitStampMessageAdapter
 							TotalVolume = (decimal)c.Volume,
 
 							State = CandleStates.Finished,
-						});
+						}, cancellationToken);
 
 						if (--left <= 0)
 							break;
@@ -111,7 +111,7 @@ partial class BitStampMessageAdapter
 			}
 
 			// bitstamp does not support web sockets for candles
-			SendSubscriptionFinished(mdMsg.TransactionId);
+			await SendSubscriptionFinishedAsync(mdMsg.TransactionId, cancellationToken);
 		}
 		else
 		{
@@ -122,7 +122,7 @@ partial class BitStampMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
@@ -131,7 +131,7 @@ partial class BitStampMessageAdapter
 			if (!mdMsg.IsHistoryOnly())
 				await _pusherClient.SubscribeOrderBook(mdMsg.TransactionId, currency, cancellationToken);
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 			await _pusherClient.UnSubscribeOrderBook(mdMsg.OriginalTransactionId, currency, cancellationToken);
@@ -140,7 +140,7 @@ partial class BitStampMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
@@ -149,7 +149,7 @@ partial class BitStampMessageAdapter
 			if (!mdMsg.IsHistoryOnly())
 				await _pusherClient.SubscribeOrderLog(mdMsg.TransactionId, currency, cancellationToken);
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 			await _pusherClient.UnSubscribeOrderLog(mdMsg.OriginalTransactionId, currency, cancellationToken);
@@ -158,7 +158,7 @@ partial class BitStampMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var currency = mdMsg.SecurityId.ToCurrency();
 
@@ -181,7 +181,7 @@ partial class BitStampMessageAdapter
 					if (trade.Time > to)
 						break;
 
-					SendOutMessage(new ExecutionMessage
+					await SendOutMessageAsync(new ExecutionMessage
 					{
 						DataTypeEx = DataType.Ticks,
 						SecurityId = mdMsg.SecurityId,
@@ -191,14 +191,14 @@ partial class BitStampMessageAdapter
 						ServerTime = trade.Time,
 						OriginSide = trade.Type.ToSide(),
 						OriginalTransactionId = mdMsg.TransactionId
-					});
+					}, cancellationToken);
 				}
 			}
 
 			if (!mdMsg.IsHistoryOnly())
 				await _pusherClient.SubscribeTrades(mdMsg.TransactionId, currency, cancellationToken);
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 		{
@@ -230,12 +230,12 @@ partial class BitStampMessageAdapter
 			if (!secMsg.IsMatch(lookupMsg, secTypes))
 				continue;
 
-			SendOutMessage(secMsg);
+			await SendOutMessageAsync(secMsg, cancellationToken);
 
 			if (--left <= 0)
 				break;
 		}
 
-		SendSubscriptionFinished(lookupMsg.TransactionId);
+		await SendSubscriptionFinishedAsync(lookupMsg.TransactionId, cancellationToken);
 	}
 }

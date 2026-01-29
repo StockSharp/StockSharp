@@ -10,9 +10,9 @@ partial class FtxMessageAdapter
 
 	private string PortfolioName => nameof(FTX) + "_" + Key.ToId().To<string>();
 
-	private void SessionOnNewFill(Fill fill)
+	private ValueTask SessionOnNewFill(Fill fill, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			PortfolioName = GetPortfolioName(),
@@ -23,15 +23,15 @@ partial class FtxMessageAdapter
 			OrderId = fill.OrderId,
 			Side = fill.Side.ToSide(),
 			ServerTime = fill.Time
-		});
+		}, cancellationToken);
 	}
 
-	private void SendProcessOrderStatusResult(Order order, OrderMessage message)
+	private ValueTask SendProcessOrderStatusResult(Order order, OrderMessage message, CancellationToken cancellationToken)
 	{
 		if (!long.TryParse(order.ClientId, out var transId))
-			return;
+			return default;
 
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			OriginalTransactionId = message.TransactionId,
 			TransactionId = transId,
@@ -49,14 +49,14 @@ partial class FtxMessageAdapter
 			OrderVolume = order.Size,
 			Balance = order.Size - order.FilledSize,
 
-		});
+		}, cancellationToken);
 	}
-	private void SessionOnNewOrder(Order order)
+	private ValueTask SessionOnNewOrder(Order order, CancellationToken cancellationToken)
 	{
 		if (!long.TryParse(order.ClientId, out var transId))
-			return;
+			return default;
 
-		var message = new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			OriginalTransactionId = transId,
 			TransactionId = transId,
@@ -73,9 +73,7 @@ partial class FtxMessageAdapter
 			Side = order.Side.ToSide(),
 			OrderVolume = order.Size,
 			Balance = order.Size - order.FilledSize,
-		};
-
-		SendOutMessage(message);
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -95,7 +93,7 @@ partial class FtxMessageAdapter
 		var order = await _restClient.RegisterOrder(regMsg.SecurityId.ToCurrency(), regMsg.Side, price, regMsg.OrderType.Value, regMsg.Volume, regMsg.TransactionId.To<string>(), SubaccountName, cancellationToken)
 			?? throw new InvalidOperationException(LocalizedStrings.OrderNoExchangeId.Put(regMsg.TransactionId));
 
-		SendProcessOrderStatusResult(order, regMsg);
+		await SendProcessOrderStatusResult(order, regMsg, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -223,14 +221,14 @@ partial class FtxMessageAdapter
 			// Send result with errors if any
 			if (errors.Count > 0)
 			{
-				SendOutMessage(new ExecutionMessage
+				await SendOutMessageAsync(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					OriginalTransactionId = cancelMsg.TransactionId,
 					ServerTime = CurrentTimeUtc,
 					HasOrderInfo = true,
 					Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
-				});
+				}, cancellationToken);
 			}
 		}
 	}
@@ -240,7 +238,7 @@ partial class FtxMessageAdapter
 	{
 		if (statusMsg != null)
 		{
-			SendSubscriptionReply(statusMsg.TransactionId);
+			await SendSubscriptionReplyAsync(statusMsg.TransactionId, cancellationToken);
 			_isOrderSubscribed = statusMsg.IsSubscribe;
 		}
 
@@ -256,13 +254,13 @@ partial class FtxMessageAdapter
 			if (orders != null && orders.Count > 0)
 			{
 				foreach (var order in orders)
-					SessionOnNewOrder(order);
+					await SessionOnNewOrder(order, cancellationToken);
 
 				var start = orders.Where(x => x.CreatedAt != null).Min(x => x.CreatedAt.Value);
 				var fills = await _restClient.GetFills(start, DateTime.UtcNow, SubaccountName, cancellationToken);
 
 				foreach (var fill in fills)
-					SessionOnNewFill(fill);
+					await SessionOnNewFill(fill, cancellationToken);
 			}
 		}
 		else
@@ -289,7 +287,7 @@ partial class FtxMessageAdapter
 						fromTime = order.CreatedAt.Value;
 
 					if (order.ClientId != null)
-					SendProcessOrderStatusResult(order, statusMsg);
+						await SendProcessOrderStatusResult(order, statusMsg, cancellationToken);
 				}
 
 				if (!hasMoreData || fromTime <= prevFromTime)
@@ -316,7 +314,7 @@ partial class FtxMessageAdapter
 					if (fill.Time > endTime)
 						break;
 
-					SessionOnNewFill(fill);
+					await SessionOnNewFill(fill, cancellationToken);
 
 					lastTime = fill.Time;
 				}
@@ -327,7 +325,7 @@ partial class FtxMessageAdapter
 				startTime = lastTime;
 			}
 
-			SendSubscriptionResult(statusMsg);
+			await SendSubscriptionResultAsync(statusMsg, cancellationToken);
 		}
 	}
 
@@ -336,7 +334,7 @@ partial class FtxMessageAdapter
 	{
 		if (lookupMsg != null)
 		{
-			SendSubscriptionReply(lookupMsg.TransactionId);
+			await SendSubscriptionReplyAsync(lookupMsg.TransactionId, cancellationToken);
 
 			_portfolioLookupSubMessageTransactionID = lookupMsg.IsSubscribe ? lookupMsg.TransactionId : null;
 
@@ -351,16 +349,16 @@ partial class FtxMessageAdapter
 			return;
 		}
 
-		SendOutMessage(new PortfolioMessage
+		await SendOutMessageAsync(new PortfolioMessage
 		{
 			PortfolioName = GetPortfolioName(),
 			BoardCode = BoardCodes.FTX,
 			OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID,
-		});
+		}, cancellationToken);
 
 		if (lookupMsg != null)
 		{
-			SendSubscriptionResult(lookupMsg);
+			await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 		}
 
 		var balances = await _restClient.GetBalances(SubaccountName, cancellationToken);
@@ -372,7 +370,7 @@ partial class FtxMessageAdapter
 				msg.TryAdd(PositionChangeTypes.CurrentValue, balance.Total, true);
 				msg.TryAdd(PositionChangeTypes.BlockedValue, balance.Total - balance.Free, true);
 				if (_portfolioLookupSubMessageTransactionID != null) msg.OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID;
-				SendOutMessage(msg);
+				await SendOutMessageAsync(msg, cancellationToken);
 			}
 		}
 
@@ -385,7 +383,7 @@ partial class FtxMessageAdapter
 			msg.TryAdd(PositionChangeTypes.UnrealizedPnL, fut.UnrealizedPnl, true);
 			msg.TryAdd(PositionChangeTypes.AveragePrice, fut.EntryPrice, true);
 			if (_portfolioLookupSubMessageTransactionID != null) msg.OriginalTransactionId = (long)_portfolioLookupSubMessageTransactionID;
-			SendOutMessage(msg);
+			await SendOutMessageAsync(msg, cancellationToken);
 		}
 	}
 

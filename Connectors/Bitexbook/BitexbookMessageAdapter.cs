@@ -33,8 +33,8 @@ public partial class BitexbookMessageAdapter
 
 	private void SubscribePusherClient()
 	{
-		_pusherClient.StateChanged += SendOutConnectionState;
-		_pusherClient.Error += SessionOnPusherError;
+		_pusherClient.StateChanged += SendOutConnectionStateAsync;
+		_pusherClient.Error += SendOutErrorAsync;
 		_pusherClient.NewSymbols += SessionOnNewSymbols;
 		_pusherClient.TickerChanged += SessionOnTickerChanged;
 		_pusherClient.NewTickerChange += SessionOnNewTickerChange;
@@ -46,8 +46,8 @@ public partial class BitexbookMessageAdapter
 
 	private void UnsubscribePusherClient()
 	{
-		_pusherClient.StateChanged -= SendOutConnectionState;
-		_pusherClient.Error -= SessionOnPusherError;
+		_pusherClient.StateChanged -= SendOutConnectionStateAsync;
+		_pusherClient.Error -= SendOutErrorAsync;
 		_pusherClient.NewSymbols -= SessionOnNewSymbols;
 		_pusherClient.TickerChanged -= SessionOnTickerChanged;
 		_pusherClient.NewTickerChange -= SessionOnNewTickerChange;
@@ -94,9 +94,7 @@ public partial class BitexbookMessageAdapter
 		_orderInfo.Clear();
 		_lastTimeBalanceCheck = null;
 
-		SendOutMessage(new ResetMessage());
-
-		return default;
+		return SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -157,8 +155,4 @@ public partial class BitexbookMessageAdapter
 		}
 	}
 
-	private void SessionOnPusherError(Exception exception)
-	{
-		SendOutError(exception);
-	}
 }

@@ -22,7 +22,7 @@ partial class BitStampMessageAdapter
 
 				var withdrawId = await _httpClient.Withdraw(regMsg.SecurityId.SecurityCode, regMsg.Volume, condition.WithdrawInfo, cancellationToken);
 
-				SendOutMessage(new ExecutionMessage
+				await SendOutMessageAsync(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					OrderId = withdrawId,
@@ -30,7 +30,7 @@ partial class BitStampMessageAdapter
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
-				});
+				}, cancellationToken);
 
 				await PortfolioLookupAsync(null, cancellationToken);
 				return;
@@ -45,7 +45,7 @@ partial class BitStampMessageAdapter
 
 		_orderInfo.Add(result.Id, RefTuple.Create(regMsg.TransactionId, regMsg.Volume));
 
-		SendOutMessage(new ExecutionMessage
+		await SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			OrderId = result.Id,
@@ -53,7 +53,7 @@ partial class BitStampMessageAdapter
 			OriginalTransactionId = regMsg.TransactionId,
 			OrderState = OrderStates.Active,
 			HasOrderInfo = true,
-		});
+		}, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -76,13 +76,13 @@ partial class BitStampMessageAdapter
 		{
 			await _httpClient.CancelAllOrders(cancellationToken);
 
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				ServerTime = CurrentTimeUtc,
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
 				HasOrderInfo = true,
-			});
+			}, cancellationToken);
 
 			await OrderStatusAsync(null, cancellationToken);
 			await PortfolioLookupAsync(null, cancellationToken);
@@ -96,9 +96,9 @@ partial class BitStampMessageAdapter
 		}
 	}
 
-	private void ProcessOrder(UserOrder order, decimal balance, long transId, long origTransId)
+	private ValueTask ProcessOrder(UserOrder order, decimal balance, long transId, long origTransId, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			OrderId = order.Id,
@@ -113,10 +113,10 @@ partial class BitStampMessageAdapter
 			PortfolioName = PortfolioName,
 			OrderState = OrderStates.Active,
 			HasOrderInfo = true,
-		});
+		}, cancellationToken);
 	}
 
-	private void ProcessTrade(UserTransaction transaction)
+	private async ValueTask ProcessTrade(UserTransaction transaction, CancellationToken cancellationToken)
 	{
 		// not trade
 		if (transaction.Type != 2)
@@ -220,7 +220,7 @@ partial class BitStampMessageAdapter
 
 		volume = volume.Abs();
 
-		SendOutMessage(new ExecutionMessage
+		await SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			OrderId = transaction.OrderId,
@@ -232,14 +232,14 @@ partial class BitStampMessageAdapter
 			PortfolioName = PortfolioName,
 			Commission = (decimal)transaction.Fee,
 			OriginalTransactionId = info.First,
-		});
+		}, cancellationToken);
 
 		info.Second -= volume;
 
 		if (info.Second < 0)
 			throw new InvalidOperationException(LocalizedStrings.OrderBalanceNotEnough.Put(transaction.OrderId, info.Second));
 
-		SendOutMessage(new ExecutionMessage
+		await SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			OrderId = transaction.OrderId,
@@ -250,7 +250,7 @@ partial class BitStampMessageAdapter
 			ServerTime = transaction.Time.ToDto(),
 			PortfolioName = PortfolioName,
 			OriginalTransactionId = info.First,
-		});
+		}, cancellationToken);
 
 		if (info.Second == 0)
 			_orderInfo.Remove(transaction.OrderId);
@@ -279,7 +279,7 @@ partial class BitStampMessageAdapter
 
 					_orderInfo.Add(order.Id, info);
 
-					ProcessOrder(order, (decimal)order.Amount, info.First, 0);
+					await ProcessOrder(order, (decimal)order.Amount, info.First, 0, cancellationToken);
 
 					portfolioRefresh = true;
 				}
@@ -293,7 +293,7 @@ partial class BitStampMessageAdapter
 
 			foreach (var trade in trades)
 			{
-				ProcessTrade(trade);
+				await ProcessTrade(trade, cancellationToken);
 			}
 
 			foreach (var id in ids)
@@ -302,7 +302,7 @@ partial class BitStampMessageAdapter
 				if (!_orderInfo.TryGetAndRemove(id, out var info))
 					return;
 
-				SendOutMessage(new ExecutionMessage
+				await SendOutMessageAsync(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					HasOrderInfo = true,
@@ -310,7 +310,7 @@ partial class BitStampMessageAdapter
 					OriginalTransactionId = info.First,
 					ServerTime = CurrentTimeUtc,
 					OrderState = OrderStates.Done,
-				});
+				}, cancellationToken);
 
 				portfolioRefresh = true;
 			}
@@ -320,7 +320,7 @@ partial class BitStampMessageAdapter
 		}
 		else
 		{
-			SendSubscriptionReply(statusMsg.TransactionId);
+			await SendSubscriptionReplyAsync(statusMsg.TransactionId, cancellationToken);
 
 			if (!statusMsg.IsSubscribe)
 				return;
@@ -333,17 +333,17 @@ partial class BitStampMessageAdapter
 
 				_orderInfo.Add(order.Id, info);
 
-				ProcessOrder(order, (decimal)order.Amount, info.First, statusMsg.TransactionId);
+				await ProcessOrder(order, (decimal)order.Amount, info.First, statusMsg.TransactionId, cancellationToken);
 			}
 
 			var trades = await GetTrades(cancellationToken);
 
 			foreach (var trade in trades)
 			{
-				ProcessTrade(trade);
+				await ProcessTrade(trade, cancellationToken);
 			}
 
-			SendSubscriptionResult(statusMsg);
+			await SendSubscriptionResultAsync(statusMsg, cancellationToken);
 		}
 	}
 
@@ -395,7 +395,7 @@ partial class BitStampMessageAdapter
 	{
 		if (lookupMsg != null)
 		{
-			SendSubscriptionReply(lookupMsg.TransactionId);
+			await SendSubscriptionReplyAsync(lookupMsg.TransactionId, cancellationToken);
 
 			if (!lookupMsg.IsSubscribe)
 				return;
@@ -405,12 +405,12 @@ partial class BitStampMessageAdapter
 
 		var pfName = PortfolioName;
 
-		SendOutMessage(new PortfolioMessage
+		await SendOutMessageAsync(new PortfolioMessage
 		{
 			PortfolioName = pfName,
 			BoardCode = BoardCodes.BitStamp,
 			OriginalTransactionId = transactionId,
-		});
+		}, cancellationToken);
 
 		var tuple = await _httpClient.GetBalances(null, cancellationToken);
 
@@ -429,21 +429,21 @@ partial class BitStampMessageAdapter
 			msg.TryAdd(PositionChangeTypes.CurrentPrice, currPrice, true);
 			msg.TryAdd(PositionChangeTypes.BlockedValue, blockValue, true);
 
-			SendOutMessage(msg);
+			await SendOutMessageAsync(msg, cancellationToken);
 		}
 
 		foreach (var pair in tuple.Item2)
 		{
-			SendOutMessage(new Level1ChangeMessage
+			await SendOutMessageAsync(new Level1ChangeMessage
 			{
 				SecurityId = pair.Key.ToStockSharp(),
 				ServerTime = CurrentTimeUtc
-			}.TryAdd(Level1Fields.CommissionTaker, pair.Value));
+			}.TryAdd(Level1Fields.CommissionTaker, pair.Value), cancellationToken);
 		}
 
 		_lastTimeBalanceCheck = CurrentTimeUtc;
 
 		if (lookupMsg != null)
-			SendSubscriptionResult(lookupMsg);
+			await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 	}
 }

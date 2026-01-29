@@ -26,14 +26,14 @@ public partial class BitalongMessageAdapter
 
 				await _httpClient.Withdraw(symbol, regMsg.Volume, condition.WithdrawInfo, cancellationToken);
 
-				SendOutMessage(new ExecutionMessage
+				await SendOutMessageAsync(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					ServerTime = CurrentTimeUtc,
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
-				});
+				}, cancellationToken);
 
 				await PortfolioLookupAsync(null, cancellationToken);
 				return;
@@ -46,7 +46,7 @@ public partial class BitalongMessageAdapter
 
 		var orderId = await _httpClient.RegisterOrder(symbol, regMsg.Side.ToNative(), regMsg.Price, regMsg.Volume, cancellationToken);
 
-		SendOutMessage(new ExecutionMessage
+		await SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			OrderId = orderId,
@@ -55,7 +55,7 @@ public partial class BitalongMessageAdapter
 			OrderState = isMarket ? OrderStates.Done : OrderStates.Active,
 			Balance = isMarket ? 0 : null,
 			HasOrderInfo = true,
-		});
+		}, cancellationToken);
 
 		if (isMarket)
 		{
@@ -156,14 +156,14 @@ public partial class BitalongMessageAdapter
 			// Send result with errors if any
 			if (errors.Count > 0)
 			{
-				SendOutMessage(new ExecutionMessage
+				await SendOutMessageAsync(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					OriginalTransactionId = cancelMsg.TransactionId,
 					ServerTime = CurrentTimeUtc,
 					HasOrderInfo = true,
 					Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
-				});
+				}, cancellationToken);
 			}
 		}
 	}
@@ -173,19 +173,19 @@ public partial class BitalongMessageAdapter
 	{
 		if (lookupMsg != null)
 		{
-			SendSubscriptionReply(lookupMsg.TransactionId);
+			await SendSubscriptionReplyAsync(lookupMsg.TransactionId, cancellationToken);
 
 			if (!lookupMsg.IsSubscribe)
 				return;
 
-			SendOutMessage(new PortfolioMessage
+			await SendOutMessageAsync(new PortfolioMessage
 			{
 				PortfolioName = PortfolioName,
 				BoardCode = BoardCodes.Bitalong,
 				OriginalTransactionId = lookupMsg.TransactionId
-			});
+			}, cancellationToken);
 
-			SendSubscriptionResult(lookupMsg);
+			await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 		}
 
 		var tuple = await _httpClient.GetBalances(cancellationToken);
@@ -214,7 +214,7 @@ public partial class BitalongMessageAdapter
 
 		foreach (var msg in dict.Values)
 		{
-			SendOutMessage(msg);
+			await SendOutMessageAsync(msg, cancellationToken);
 		}
 
 		_lastTimeBalanceCheck = CurrentTimeUtc;
@@ -248,7 +248,7 @@ public partial class BitalongMessageAdapter
 					//var set = CreateTradesSet();
 					_orderInfo.Add(order.Id, RefTuple.Create(transId, balance, order.CurrencyPair));
 
-					ProcessOrder(order, transId, 0);
+					await ProcessOrder(order, transId, 0, cancellationToken);
 					//ProcessTrades(order.Trades, set, transId);
 
 					portfolioRefresh = true;
@@ -262,7 +262,7 @@ public partial class BitalongMessageAdapter
 
 					info.Second = balance;
 
-					SendOutMessage(new ExecutionMessage
+					await SendOutMessageAsync(new ExecutionMessage
 					{
 						HasOrderInfo = true,
 						DataTypeEx = DataType.Transactions,
@@ -270,7 +270,7 @@ public partial class BitalongMessageAdapter
 						OriginalTransactionId = info.First,
 						ServerTime = CurrentTimeUtc,
 						Balance = balance,
-					});
+					}, cancellationToken);
 
 					//ProcessTrades(order.Trades, info.Third, info.Second);
 
@@ -284,7 +284,7 @@ public partial class BitalongMessageAdapter
 
 				var order = await _httpClient.GetOrderInfo(info.Third, orderId, cancellationToken);
 
-				ProcessOrder(order, 0, info.First);
+				await ProcessOrder(order, 0, info.First, cancellationToken);
 				//ProcessTrades(order.Trades, info.Third, transId);
 
 				portfolioRefresh = true;
@@ -295,7 +295,7 @@ public partial class BitalongMessageAdapter
 		}
 		else
 		{
-			SendSubscriptionReply(statusMsg.TransactionId);
+			await SendSubscriptionReplyAsync(statusMsg.TransactionId, cancellationToken);
 
 			if (!statusMsg.IsSubscribe)
 				return;
@@ -304,16 +304,16 @@ public partial class BitalongMessageAdapter
 			{
 				var transId = TransactionIdGenerator.GetNextId();
 				_orderInfo.Add(transId, RefTuple.Create(order.Id, (decimal)order.Amount, order.CurrencyPair));
-				ProcessOrder(order, transId, statusMsg.TransactionId);
+				await ProcessOrder(order, transId, statusMsg.TransactionId, cancellationToken);
 			}
-		
-			SendSubscriptionResult(statusMsg);
+
+			await SendSubscriptionResultAsync(statusMsg, cancellationToken);
 		}
 	}
 
-	private void ProcessOrder(Order order, long transId, long origTransId)
+	private ValueTask ProcessOrder(Order order, long transId, long origTransId, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ExecutionMessage
+		return SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -328,6 +328,6 @@ public partial class BitalongMessageAdapter
 			OrderPrice = (decimal)order.InitialRate,
 			PortfolioName = PortfolioName,
 			OrderState = order.Status.ToOrderState(),
-		});
+		}, cancellationToken);
 	}
 }
