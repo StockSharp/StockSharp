@@ -166,7 +166,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		};
 		level1Msg.Add(Level1Fields.LastTradePrice, 150m);
 
-		inner.SendOutMessage(level1Msg);
+		await inner.SendOutMessageAsync(level1Msg, CancellationToken);
 
 		// The message should be translated and forwarded
 		var level1s = output.OfType<Level1ChangeMessage>().ToArray();
@@ -193,7 +193,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
 
-		inner.SendOutMessage(new SecurityMessage { SecurityId = secId });
+		await inner.SendOutMessageAsync(new SecurityMessage { SecurityId = secId }, CancellationToken);
 
 		var secMsgs = output.OfType<SecurityMessage>().ToArray();
 		secMsgs.Length.AssertEqual(1);
@@ -264,7 +264,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 			ServerTime = DateTime.UtcNow
 		};
 
-		inner.SendOutMessage(execMsg);
+		await inner.SendOutMessageAsync(execMsg, CancellationToken);
 
 		var execs = output.OfType<ExecutionMessage>().ToArray();
 		execs.Length.AssertEqual(1);
@@ -298,16 +298,16 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		};
 		level1Msg.Add(Level1Fields.LastTradePrice, 100m);
 
-		inner.SendOutMessage(level1Msg);
+		await inner.SendOutMessageAsync(level1Msg, CancellationToken);
 
 		// Should be suspended since native id is not yet known
 		output.OfType<Level1ChangeMessage>().Count().AssertEqual(0);
 
 		// Now send security message that maps the native id
-		inner.SendOutMessage(new SecurityMessage
+		await inner.SendOutMessageAsync(new SecurityMessage
 		{
 			SecurityId = new SecurityId { SecurityCode = "TSLA", BoardCode = "NASDAQ", Native = nativeId }
-		});
+		}, CancellationToken);
 
 		// Suspended message should now be released
 		var level1s = output.OfType<Level1ChangeMessage>().ToArray();
@@ -375,10 +375,10 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
 
 		// Send security with same native id but different security code
-		inner.SendOutMessage(new SecurityMessage
+		await inner.SendOutMessageAsync(new SecurityMessage
 		{
 			SecurityId = new SecurityId { SecurityCode = "SYM2", BoardCode = "BOARD", Native = nativeId }
-		});
+		}, CancellationToken);
 
 		// Verify the new mapping is stored
 		var storedSecId = await storage.TryGetByNativeIdAsync(nativeId, token);
@@ -417,7 +417,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 			OrderState = OrderStates.Active
 		};
 
-		inner.SendOutMessage(execMsg);
+		await inner.SendOutMessageAsync(execMsg, CancellationToken);
 
 		var execs = output.OfType<ExecutionMessage>().ToArray();
 		execs.Length.AssertEqual(1);
@@ -452,7 +452,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 			Asks = [new QuoteChange(101, 10)]
 		};
 
-		inner.SendOutMessage(quotesMsg);
+		await inner.SendOutMessageAsync(quotesMsg, CancellationToken);
 
 		var quotes = output.OfType<QuoteChangeMessage>().ToArray();
 		quotes.Length.AssertEqual(1);
@@ -488,7 +488,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		};
 		posMsg.Add(PositionChangeTypes.CurrentValue, 100m);
 
-		inner.SendOutMessage(posMsg);
+		await inner.SendOutMessageAsync(posMsg, CancellationToken);
 
 		var positions = output.OfType<PositionChangeMessage>().ToArray();
 		positions.Length.AssertEqual(1);
@@ -568,7 +568,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new ConnectMessage());
+		await inner.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Should have forwarded + extra
 		output.Count.AssertEqual(2);

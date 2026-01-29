@@ -53,36 +53,36 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		public override bool IsAllDownloadingSupported(DataType dataType)
 			=> _allDownloadingTypes.Contains(dataType);
 
-		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken ct)
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken ct)
 		{
 			_inMessages.Enqueue(message.TypedClone());
 
 			if (!AutoRespond)
-				return default;
+				return;
 
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					SendOutMessage(new ResetMessage());
+					await SendOutMessageAsync(new ResetMessage(), ct);
 					break;
 				case MessageTypes.Connect:
-					SendOutMessage(new ConnectMessage());
+					await SendOutMessageAsync(new ConnectMessage(), ct);
 					break;
 				case MessageTypes.Disconnect:
-					SendOutMessage(new DisconnectMessage());
+					await SendOutMessageAsync(new DisconnectMessage(), ct);
 					break;
 				case MessageTypes.MarketData:
 				{
 					var md = (MarketDataMessage)message;
 					if (RespondNotSupported)
 					{
-						SendOutMessage(md.TransactionId.CreateNotSupported());
+						await SendOutMessageAsync(md.TransactionId.CreateNotSupported(), ct);
 					}
 					else
 					{
-						SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = md.TransactionId });
+						await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = md.TransactionId }, ct);
 						if (md.IsSubscribe)
-							SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = md.TransactionId });
+							await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = md.TransactionId }, ct);
 					}
 					break;
 				}
@@ -91,12 +91,12 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 					var sl = (SecurityLookupMessage)message;
 					if (RespondNotSupported)
 					{
-						SendOutMessage(sl.TransactionId.CreateNotSupported());
+						await SendOutMessageAsync(sl.TransactionId.CreateNotSupported(), ct);
 					}
 					else
 					{
-						SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = sl.TransactionId });
-						SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = sl.TransactionId });
+						await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = sl.TransactionId }, ct);
+						await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = sl.TransactionId }, ct);
 					}
 					break;
 				}
@@ -105,12 +105,12 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 					var pl = (PortfolioLookupMessage)message;
 					if (RespondNotSupported)
 					{
-						SendOutMessage(pl.TransactionId.CreateNotSupported());
+						await SendOutMessageAsync(pl.TransactionId.CreateNotSupported(), ct);
 					}
 					else
 					{
-						SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = pl.TransactionId });
-						SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = pl.TransactionId });
+						await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = pl.TransactionId }, ct);
+						await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = pl.TransactionId }, ct);
 					}
 					break;
 				}
@@ -119,21 +119,17 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 					var os = (OrderStatusMessage)message;
 					if (RespondNotSupported)
 					{
-						SendOutMessage(os.TransactionId.CreateNotSupported());
+						await SendOutMessageAsync(os.TransactionId.CreateNotSupported(), ct);
 					}
 					else
 					{
-						SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = os.TransactionId });
-						SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = os.TransactionId });
+						await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = os.TransactionId }, ct);
+						await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = os.TransactionId }, ct);
 					}
 					break;
 				}
 			}
-
-			return default;
 		}
-
-		public void EmitOut(Message msg) => SendOutMessage(msg);
 
 		public override IMessageAdapter Clone() => new TestRoutingInnerAdapter(TransactionIdGenerator);
 	}

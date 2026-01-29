@@ -49,24 +49,24 @@ public class ConnectorBasketTests : BaseTestClass
 		public override bool IsAllDownloadingSupported(DataType dataType)
 			=> dataType == DataType.Securities || dataType == DataType.Transactions;
 
-		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
 			SentMessages.Enqueue(message);
 
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
-					SendOutMessage(new ConnectMessage());
+					await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
 					break;
 				case MessageTypes.Disconnect:
-					SendOutMessage(new DisconnectMessage());
+					await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
 					break;
 				case MessageTypes.MarketData:
 				{
 					var mdMsg = (MarketDataMessage)message;
 					if (mdMsg.IsSubscribe)
 					{
-						SendOutMessage(mdMsg.CreateResponse());
+						await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
 						ActiveSubscriptions[mdMsg.TransactionId] = mdMsg;
 						LastSubscribedId = mdMsg.TransactionId;
 						if (mdMsg.To == null)
@@ -75,7 +75,7 @@ public class ConnectorBasketTests : BaseTestClass
 					else
 					{
 						ActiveSubscriptions.Remove(mdMsg.OriginalTransactionId);
-						SendOutMessage(mdMsg.CreateResponse());
+						await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
 					}
 					break;
 				}
@@ -96,8 +96,8 @@ public class ConnectorBasketTests : BaseTestClass
 					var osm = (OrderStatusMessage)message;
 					if (osm.IsSubscribe)
 					{
-						SendOutMessage(osm.CreateResponse());
-						SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = osm.TransactionId });
+						await SendOutMessageAsync(osm.CreateResponse(), cancellationToken);
+						await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = osm.TransactionId }, cancellationToken);
 					}
 					break;
 				}
@@ -108,24 +108,22 @@ public class ConnectorBasketTests : BaseTestClass
 					break;
 				}
 			}
-
-			return default;
 		}
 
-		public void SimulateData(long subscriptionId, Message data)
+		public async ValueTask SimulateData(long subscriptionId, Message data, CancellationToken cancellationToken)
 		{
 			if (data is ISubscriptionIdMessage sid)
 				sid.SetSubscriptionIds([subscriptionId]);
-			SendOutMessage(data);
+			await SendOutMessageAsync(data, cancellationToken);
 		}
 
-		public void FinishHistoricalSubscription(long subscriptionId)
+		public async ValueTask FinishHistoricalSubscription(long subscriptionId, CancellationToken cancellationToken)
 		{
 			if (ActiveSubscriptions.TryGetValue(subscriptionId, out var mdMsg))
-				SendSubscriptionResult(mdMsg);
+				await SendOutMessageAsync(mdMsg.CreateResult(), cancellationToken);
 		}
 
-		public void SimulateOrderExecution(long origTransId, OrderStates? state = null, long? orderId = null,
+		public async ValueTask SimulateOrderExecution(long origTransId, CancellationToken cancellationToken, OrderStates? state = null, long? orderId = null,
 			decimal? tradePrice = null, decimal? tradeVolume = null, long? tradeId = null, Exception error = null)
 		{
 			var exec = new ExecutionMessage
@@ -145,7 +143,7 @@ public class ConnectorBasketTests : BaseTestClass
 			if (ActiveOrders.TryGetValue(origTransId, out var regMsg))
 				exec.SecurityId = regMsg.SecurityId;
 
-			SendOutMessage(exec);
+			await SendOutMessageAsync(exec, cancellationToken);
 		}
 	}
 
@@ -292,7 +290,7 @@ public class ConnectorBasketTests : BaseTestClass
 			.AssertTrue("OrderRouting should have transId→adapter mapping");
 
 		// --- Simulate acceptance ---
-		adapter.SimulateOrderExecution(order.TransactionId, OrderStates.Active, orderId: 123);
+		await adapter.SimulateOrderExecution(order.TransactionId, CancellationToken, OrderStates.Active, orderId: 123);
 
 		await Task.Run(async () =>
 		{
@@ -364,7 +362,7 @@ public class ConnectorBasketTests : BaseTestClass
 		for (var i = 0; i < 3; i++)
 		{
 			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
-			adapter.SimulateData(id, l1);
+			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
 		await enumerating.WithCancellation(CancellationToken);
@@ -427,10 +425,10 @@ public class ConnectorBasketTests : BaseTestClass
 		for (var i = 0; i < 2; i++)
 		{
 			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
-			adapter.SimulateData(id, l1);
+			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
-		adapter.FinishHistoricalSubscription(id);
+		await adapter.FinishHistoricalSubscription(id, CancellationToken);
 
 		await enumerating.WithCancellation(CancellationToken);
 		HasCount(2, got);
@@ -532,7 +530,7 @@ public class ConnectorBasketTests : BaseTestClass
 			.AssertTrue("OrderRouting should have mapping after registration");
 
 		// Simulate acceptance
-		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
 
 		await Task.Run(async () =>
 		{
@@ -549,7 +547,7 @@ public class ConnectorBasketTests : BaseTestClass
 		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("Mapping preserved after active");
 
 		// Simulate done
-		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -603,10 +601,10 @@ public class ConnectorBasketTests : BaseTestClass
 		state.OrderRouting.TryGetOrderAdapter(transId, out _)
 			.AssertTrue("OrderRouting should have mapping");
 
-		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
-		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 1001);
-		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.6m, tradeVolume: 5, tradeId: 1002);
-		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 1001);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 123, tradePrice: 100.6m, tradeVolume: 5, tradeId: 1002);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -672,7 +670,7 @@ public class ConnectorBasketTests : BaseTestClass
 		// Validate order routing
 		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("OrderRouting mapping exists");
 
-		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 456);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 456);
 
 		await Task.Run(async () =>
 		{
@@ -680,7 +678,7 @@ public class ConnectorBasketTests : BaseTestClass
 				await Task.Delay(10, CancellationToken);
 		}, CancellationToken);
 
-		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 456);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 456);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -735,14 +733,14 @@ public class ConnectorBasketTests : BaseTestClass
 		var otherTransId1 = transId + 100;
 		var otherTransId2 = transId + 200;
 
-		adapter.SimulateOrderExecution(otherTransId1, OrderStates.Active, orderId: 999);
-		adapter.SimulateOrderExecution(otherTransId2, OrderStates.Active, orderId: 888);
-		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
-		adapter.SimulateOrderExecution(otherTransId1, orderId: 999, tradePrice: 50m, tradeVolume: 5, tradeId: 5001);
-		adapter.SimulateOrderExecution(otherTransId2, OrderStates.Done, orderId: 888);
-		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 2001);
-		adapter.SimulateOrderExecution(otherTransId1, OrderStates.Done, orderId: 999);
-		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+		await adapter.SimulateOrderExecution(otherTransId1, CancellationToken, OrderStates.Active, orderId: 999);
+		await adapter.SimulateOrderExecution(otherTransId2, CancellationToken, OrderStates.Active, orderId: 888);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
+		await adapter.SimulateOrderExecution(otherTransId1, CancellationToken, orderId: 999, tradePrice: 50m, tradeVolume: 5, tradeId: 5001);
+		await adapter.SimulateOrderExecution(otherTransId2, CancellationToken, OrderStates.Done, orderId: 888);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 2001);
+		await adapter.SimulateOrderExecution(otherTransId1, CancellationToken, OrderStates.Done, orderId: 999);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -804,12 +802,12 @@ public class ConnectorBasketTests : BaseTestClass
 		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("OrderRouting has mapping");
 
 		// Full lifecycle
-		adapter.SimulateOrderExecution(transId, OrderStates.Pending);
-		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 12345);
-		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 249.5m, tradeVolume: 30, tradeId: 3001);
-		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 249.8m, tradeVolume: 50, tradeId: 3002);
-		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 250.0m, tradeVolume: 20, tradeId: 3003);
-		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 12345);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Pending);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 12345);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 12345, tradePrice: 249.5m, tradeVolume: 30, tradeId: 3001);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 12345, tradePrice: 249.8m, tradeVolume: 50, tradeId: 3002);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 12345, tradePrice: 250.0m, tradeVolume: 20, tradeId: 3003);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 12345);
 
 		await enumTask.WithCancellation(CancellationToken);
 

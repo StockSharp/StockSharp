@@ -35,59 +35,59 @@ public abstract class BasketTestBase : BaseTestClass
 		public bool AutoRespond { get; set; } = true;
 		public Exception ConnectError { get; set; }
 
-		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken ct)
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken ct)
 		{
 			_inMessages.Enqueue(message.TypedClone());
 
 			if (!AutoRespond)
-				return default;
+				return;
 
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					SendOutMessage(new ResetMessage());
+					await SendOutMessageAsync(new ResetMessage(), ct);
 					break;
 				case MessageTypes.Connect:
-					SendOutMessage(ConnectError != null
+					await SendOutMessageAsync(ConnectError != null
 						? new ConnectMessage { Error = ConnectError }
-						: new ConnectMessage());
+						: new ConnectMessage(), ct);
 					break;
 				case MessageTypes.Disconnect:
-					SendOutMessage(new DisconnectMessage());
+					await SendOutMessageAsync(new DisconnectMessage(), ct);
 					break;
 				case MessageTypes.MarketData:
 				{
 					var md = (MarketDataMessage)message;
-					SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = md.TransactionId });
+					await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = md.TransactionId }, ct);
 					if (md.IsSubscribe)
-						SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = md.TransactionId });
+						await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = md.TransactionId }, ct);
 					break;
 				}
 				case MessageTypes.SecurityLookup:
 				{
 					var sl = (SecurityLookupMessage)message;
-					SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = sl.TransactionId });
-					SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = sl.TransactionId });
+					await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = sl.TransactionId }, ct);
+					await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = sl.TransactionId }, ct);
 					break;
 				}
 				case MessageTypes.PortfolioLookup:
 				{
 					var pl = (PortfolioLookupMessage)message;
-					SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = pl.TransactionId });
-					SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = pl.TransactionId });
+					await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = pl.TransactionId }, ct);
+					await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = pl.TransactionId }, ct);
 					break;
 				}
 				case MessageTypes.OrderStatus:
 				{
 					var os = (OrderStatusMessage)message;
-					SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = os.TransactionId });
-					SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = os.TransactionId });
+					await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = os.TransactionId }, ct);
+					await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = os.TransactionId }, ct);
 					break;
 				}
 				case MessageTypes.OrderRegister:
 				{
 					var reg = (OrderRegisterMessage)message;
-					SendOutMessage(new ExecutionMessage
+					await SendOutMessageAsync(new ExecutionMessage
 					{
 						DataTypeEx = DataType.Transactions,
 						SecurityId = reg.SecurityId,
@@ -96,13 +96,13 @@ public abstract class BasketTestBase : BaseTestClass
 						HasOrderInfo = true,
 						ServerTime = DateTime.UtcNow,
 						LocalTime = DateTime.UtcNow,
-					});
+					}, ct);
 					break;
 				}
 				case MessageTypes.OrderCancel:
 				{
 					var cancel = (OrderCancelMessage)message;
-					SendOutMessage(new ExecutionMessage
+					await SendOutMessageAsync(new ExecutionMessage
 					{
 						DataTypeEx = DataType.Transactions,
 						SecurityId = cancel.SecurityId,
@@ -111,15 +111,11 @@ public abstract class BasketTestBase : BaseTestClass
 						HasOrderInfo = true,
 						ServerTime = DateTime.UtcNow,
 						LocalTime = DateTime.UtcNow,
-					});
+					}, ct);
 					break;
 				}
 			}
-
-			return default;
 		}
-
-		public void EmitOut(Message msg) => SendOutMessage(msg);
 
 		public override IMessageAdapter Clone() => new TestBasketInnerAdapter(TransactionIdGenerator);
 	}

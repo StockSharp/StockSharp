@@ -33,7 +33,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_DelegatesToManager_AndRoutesMessages()
+	public async Task InnerMessage_DelegatesToManager_AndRoutesMessages()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<ISubscriptionOnlineManager>();
@@ -50,7 +50,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new DisconnectMessage());
+		await inner.SendOutMessageAsync(new DisconnectMessage(), CancellationToken);
 
 		output.Count.AssertEqual(2);
 		output[0].AssertSame(extra);
@@ -84,11 +84,11 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 		inner.InMessages.OfType<MarketDataMessage>().Any(m => m.TransactionId == 100 && m.IsSubscribe).AssertTrue("Subscribe should reach inner");
 
 		// Inner sends back SubscriptionResponse OK
-		inner.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
 		output.OfType<SubscriptionResponseMessage>().Any(m => m.OriginalTransactionId == 100 && m.IsOk()).AssertTrue("Response should flow out");
 
 		// Inner sends back SubscriptionOnline
-		inner.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
 		output.OfType<SubscriptionOnlineMessage>().Any(m => m.OriginalTransactionId == 100).AssertTrue("Online should flow out");
 
 		output.Clear();
@@ -103,7 +103,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 			ServerTime = DateTime.UtcNow,
 		};
 		tick.SetSubscriptionIds(subscriptionId: 100);
-		inner.EmitOut(tick);
+		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		output.Count.AssertEqual(1, $"Tick should flow through, got {output.Count} messages");
 		var receivedTick = (ExecutionMessage)output[0];
@@ -131,8 +131,8 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 			DataType2 = DataType.Ticks,
 		}, CancellationToken);
 
-		inner.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
-		inner.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
+		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
 		output.Clear();
 
 		// Inner emits tick data WITHOUT subscription IDs set (OriginalTransactionId = 0)
@@ -145,7 +145,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 			ServerTime = DateTime.UtcNow,
 		};
 		// No SetSubscriptionIds call — manager must find by (DataType, SecurityId) key
-		inner.EmitOut(tick);
+		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		output.Count.AssertEqual(1, $"Tick should flow through by key lookup, got {output.Count}");
 		var receivedTick = (ExecutionMessage)output[0];
@@ -173,7 +173,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 			DataType2 = DataType.Ticks,
 		}, CancellationToken);
 
-		inner.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
 		output.Clear();
 
 		// Emit tick data before Online — subscription is Active but not Online
@@ -188,7 +188,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 			ServerTime = DateTime.UtcNow,
 		};
 		// No subscription IDs — lookup by key finds the subscription but OnlineSubscribers is empty
-		inner.EmitOut(tick);
+		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		output.OfType<ExecutionMessage>().Any().AssertFalse("Data before Online should be dropped (OnlineSubscribers is empty)");
 	}

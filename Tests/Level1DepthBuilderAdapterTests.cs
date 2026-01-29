@@ -77,7 +77,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 
 		var now = DateTime.UtcNow;
 
-		inner.SendOutMessage(CreateBestBidAsk(secId, now, [1, 99], bidPrice: 100, askPrice: 101, bidVolume: 10, askVolume: 20));
+		await inner.SendOutMessageAsync(CreateBestBidAsk(secId, now, [1, 99], bidPrice: 100, askPrice: 101, bidVolume: 10, askVolume: 20), CancellationToken);
 
 		var l1 = output.OfType<Level1ChangeMessage>().Single();
 		l1.GetSubscriptionIds().SequenceEqual([99L]).AssertTrue();
@@ -127,12 +127,12 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 			DataType2 = DataType.MarketDepth,
 		}, token);
 
-		inner.SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 1 });
-		inner.SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 2 });
+		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 1 }, CancellationToken);
+		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 2 }, CancellationToken);
 
 		output.Clear();
 
-		inner.SendOutMessage(CreateBestBidAsk(secId, DateTime.UtcNow, [1, 2], bidPrice: 100, askPrice: 101, bidVolume: 10, askVolume: 20));
+		await inner.SendOutMessageAsync(CreateBestBidAsk(secId, DateTime.UtcNow, [1, 2], bidPrice: 100, askPrice: 101, bidVolume: 10, askVolume: 20), CancellationToken);
 
 		output.OfType<Level1ChangeMessage>().Any().AssertFalse();
 
@@ -149,7 +149,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 
 		output.Clear();
 
-		inner.SendOutMessage(CreateBestBidAsk(secId, DateTime.UtcNow.AddSeconds(1), [2], bidPrice: 101, askPrice: 102, bidVolume: 11, askVolume: 21));
+		await inner.SendOutMessageAsync(CreateBestBidAsk(secId, DateTime.UtcNow.AddSeconds(1), [2], bidPrice: 101, askPrice: 102, bidVolume: 11, askVolume: 21), CancellationToken);
 
 		output.OfType<Level1ChangeMessage>().Any().AssertFalse();
 
@@ -196,7 +196,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OutMessage_DelegatesToManager_AndRoutesMessages()
+	public async Task OutMessage_DelegatesToManager_AndRoutesMessages()
 	{
 		var inner = new RecordingPassThroughMessageAdapter();
 		var manager = new Mock<ILevel1DepthBuilderManager>();
@@ -225,7 +225,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.SendOutMessage(new DisconnectMessage());
+		await inner.SendOutMessageAsync(new DisconnectMessage(), CancellationToken);
 
 		output.Count.AssertEqual(2);
 		output[0].AssertSame(forward);
@@ -235,7 +235,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OutMessage_WhenForwardIsNull_OnlyRoutesExtraMessages()
+	public async Task OutMessage_WhenForwardIsNull_OnlyRoutesExtraMessages()
 	{
 		var inner = new RecordingPassThroughMessageAdapter();
 		var manager = new Mock<ILevel1DepthBuilderManager>();
@@ -259,18 +259,18 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.SendOutMessage(new Level1ChangeMessage
+		await inner.SendOutMessageAsync(new Level1ChangeMessage
 		{
 			SecurityId = Helper.CreateSecurityId(),
 			ServerTime = DateTime.UtcNow,
-		});
+		}, CancellationToken);
 
 		output.Count.AssertEqual(1);
 		output[0].AssertSame(extra);
 	}
 
 	[TestMethod]
-	public void OutMessage_WhenNoExtraOut_OnlyRoutesForward()
+	public async Task OutMessage_WhenNoExtraOut_OnlyRoutesForward()
 	{
 		var inner = new RecordingPassThroughMessageAdapter();
 		var manager = new Mock<ILevel1DepthBuilderManager>();
@@ -294,7 +294,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 1 });
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, CancellationToken);
 
 		output.Count.AssertEqual(1);
 		output[0].AssertSame(forward);

@@ -143,7 +143,7 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 	#region OutMessage Tests
 
 	[TestMethod]
-	public void OutMessage_DelegatesToManager_AndRoutesMessage()
+	public async Task OutMessage_DelegatesToManager_AndRoutesMessage()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<ISecurityMappingManager>();
@@ -163,7 +163,7 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(message);
+		await inner.SendOutMessageAsync(message, CancellationToken);
 
 		output.Count.AssertEqual(1);
 		output[0].AssertSame(message);
@@ -172,7 +172,7 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OutMessage_WhenForwardFalse_DoesNotRouteOut()
+	public async Task OutMessage_WhenForwardFalse_DoesNotRouteOut()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<ISecurityMappingManager>();
@@ -197,13 +197,13 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(message);
+		await inner.SendOutMessageAsync(message, CancellationToken);
 
 		output.Count.AssertEqual(0);
 	}
 
 	[TestMethod]
-	public void OutMessage_WhenMessageNull_DoesNotRouteOut()
+	public async Task OutMessage_WhenMessageNull_DoesNotRouteOut()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<ISecurityMappingManager>();
@@ -223,7 +223,7 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(message);
+		await inner.SendOutMessageAsync(message, CancellationToken);
 
 		output.Count.AssertEqual(0);
 	}

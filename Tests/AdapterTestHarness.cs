@@ -5,8 +5,7 @@ class PassThroughMessageAdapter(IdGenerator transactionIdGenerator) : MessageAda
 	/// <inheritdoc />
 	public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		SendOutMessage(message);
-		return default;
+		return SendOutMessageAsync(message, cancellationToken);
 	}
 }
 

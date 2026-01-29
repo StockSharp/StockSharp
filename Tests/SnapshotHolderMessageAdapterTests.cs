@@ -49,7 +49,7 @@ public class SnapshotHolderMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_DelegatesToManager_AndRoutesMessages()
+	public async Task InnerMessage_DelegatesToManager_AndRoutesMessages()
 	{
 		var inner = new RecordingMessageAdapter();
 		var holder = new TestSnapshotHolder();
@@ -67,7 +67,7 @@ public class SnapshotHolderMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new DisconnectMessage());
+		await inner.SendOutMessageAsync(new DisconnectMessage(), CancellationToken);
 
 		output.Count.AssertEqual(2);
 		output[0].AssertSame(forward);
@@ -100,7 +100,7 @@ public class SnapshotHolderMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OutMessage_ForwardNull_DoesNotForward()
+	public async Task OutMessage_ForwardNull_DoesNotForward()
 	{
 		var inner = new RecordingMessageAdapter();
 		var holder = new TestSnapshotHolder();
@@ -117,7 +117,7 @@ public class SnapshotHolderMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new DisconnectMessage());
+		await inner.SendOutMessageAsync(new DisconnectMessage(), CancellationToken);
 
 		output.Count.AssertEqual(1);
 		output[0].AssertSame(extra);

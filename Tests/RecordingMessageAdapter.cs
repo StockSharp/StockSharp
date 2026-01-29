@@ -15,9 +15,6 @@ sealed class RecordingMessageAdapter : MessageAdapter
 		return default;
 	}
 
-	public void EmitOut(Message message)
-		=> SendOutMessage(message);
-
 	public override IMessageAdapter Clone()
 		=> new RecordingMessageAdapter(TransactionIdGenerator);
 }

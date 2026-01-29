@@ -98,7 +98,7 @@ public class OfflineMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_DelegatesToManager_AndRoutesMessages()
+	public async Task InnerMessage_DelegatesToManager_AndRoutesMessages()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<IOfflineManager>();
@@ -117,7 +117,7 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var connectMsg = new ConnectMessage();
-		inner.EmitOut(connectMsg);
+		await inner.SendOutMessageAsync(connectMsg, CancellationToken);
 
 		// Original message + extra message
 		output.Count.AssertEqual(2);
@@ -128,7 +128,7 @@ public class OfflineMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_SuppressOriginal_DoesNotForwardOriginal()
+	public async Task InnerMessage_SuppressOriginal_DoesNotForwardOriginal()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<IOfflineManager>();
@@ -144,7 +144,7 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new ConnectionLostMessage { IsResetState = true });
+		await inner.SendOutMessageAsync(new ConnectionLostMessage { IsResetState = true }, CancellationToken);
 
 		output.Count.AssertEqual(0);
 	}
@@ -193,7 +193,7 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		inner.InMessages.Count.AssertEqual(0);
 
 		// Simulate connection success
-		inner.EmitOut(new ConnectMessage());
+		await inner.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Should receive connect message and ProcessSuspended
 		output.Any(m => m.Type == MessageTypes.Connect).AssertTrue();

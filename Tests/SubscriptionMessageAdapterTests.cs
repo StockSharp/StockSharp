@@ -40,7 +40,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_DelegatesToManager_AndRoutesMessages()
+	public async Task InnerMessage_DelegatesToManager_AndRoutesMessages()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<ISubscriptionManager>();
@@ -57,7 +57,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new DisconnectMessage());
+		await inner.SendOutMessageAsync(new DisconnectMessage(), CancellationToken);
 
 		output.Count.AssertEqual(2);
 		output[0].AssertSame(forward);
@@ -87,8 +87,8 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 			DataType2 = DataType.Ticks,
 		}, CancellationToken);
 
-		inner.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
-		inner.EmitOut(new ConnectionRestoredMessage { IsResetState = true });
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
+		await inner.SendOutMessageAsync(new ConnectionRestoredMessage { IsResetState = true }, CancellationToken);
 
 		output.OfType<ProcessSuspendedMessage>().Any().AssertFalse();
 	}
@@ -118,11 +118,11 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		inner.InMessages.OfType<MarketDataMessage>().Any(m => m.TransactionId == 100 && m.IsSubscribe).AssertTrue("Subscribe should reach inner");
 
 		// Inner sends back SubscriptionResponse OK
-		inner.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
 		output.OfType<SubscriptionResponseMessage>().Any(m => m.OriginalTransactionId == 100 && m.IsOk()).AssertTrue("Response should flow out");
 
 		// Inner sends back SubscriptionOnline
-		inner.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
 		output.OfType<SubscriptionOnlineMessage>().Any(m => m.OriginalTransactionId == 100).AssertTrue("Online should flow out");
 
 		output.Clear();
@@ -137,7 +137,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 			ServerTime = DateTime.UtcNow,
 		};
 		tick.SetSubscriptionIds(subscriptionId: 100);
-		inner.EmitOut(tick);
+		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		output.OfType<ExecutionMessage>().Any(m => m.TradePrice == 50000m).AssertTrue(
 			$"Tick should flow through SubscriptionMessageAdapter, got {output.Count} messages: {string.Join(", ", output.Select(m => m.Type))}");
@@ -162,7 +162,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 			ServerTime = DateTime.UtcNow,
 		};
 		tick.SetSubscriptionIds(subscriptionId: 999);
-		inner.EmitOut(tick);
+		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		output.OfType<ExecutionMessage>().Any().AssertFalse("Tick with unknown subscription should be dropped");
 	}
@@ -196,8 +196,8 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		inner.InMessages.OfType<MarketDataMessage>().Any(m => m.TransactionId == 100 && m.IsSubscribe).AssertTrue("Subscribe should reach inner adapter");
 
 		// Inner sends Response + Online
-		inner.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
-		inner.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
+		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
 
 		output.OfType<SubscriptionResponseMessage>().Any(m => m.OriginalTransactionId == 100 && m.IsOk()).AssertTrue("Response should flow out");
 		output.OfType<SubscriptionOnlineMessage>().Any(m => m.OriginalTransactionId == 100).AssertTrue("Online should flow out");
@@ -214,7 +214,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 			ServerTime = DateTime.UtcNow,
 		};
 		tick.SetSubscriptionIds(subscriptionId: 100);
-		inner.EmitOut(tick);
+		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		output.OfType<ExecutionMessage>().Any(m => m.TradePrice == 50000m).AssertTrue(
 			$"Tick should flow through combined chain, got {output.Count} messages: {string.Join(", ", output.Select(m => m.Type))}");
@@ -242,8 +242,8 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 			DataType2 = DataType.Ticks,
 		}, CancellationToken);
 
-		inner.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
-		inner.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
+		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
 		output.Clear();
 
 		// Emit tick WITHOUT subscription IDs
@@ -255,7 +255,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 			TradeVolume = 2m,
 			ServerTime = DateTime.UtcNow,
 		};
-		inner.EmitOut(tick);
+		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		output.OfType<ExecutionMessage>().Any(m => m.TradePrice == 42000m).AssertTrue(
 			$"Tick without ID should be resolved by key, got {output.Count} messages: {string.Join(", ", output.Select(m => m.Type))}");

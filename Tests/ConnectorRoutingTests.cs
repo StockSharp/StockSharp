@@ -1,4 +1,4 @@
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 
 namespace StockSharp.Tests;
 
@@ -68,7 +68,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		public int ActiveSubscriptionCount => _activeSubscriptions.Count;
 
 		/// <inheritdoc />
-		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
 			_inMessages.Enqueue(message.TypedClone());
 
@@ -78,39 +78,39 @@ public class ConnectorRoutingTests : BaseTestClass
 				{
 					case MessageTypes.Reset:
 						Reset();
-						SendOutMessage(new ResetMessage());
+						await SendOutMessageAsync(new ResetMessage(), cancellationToken);
 						break;
 
 					case MessageTypes.Connect:
-						ProcessConnect();
+						await ProcessConnect(cancellationToken);
 						break;
 
 					case MessageTypes.Disconnect:
-						ProcessDisconnect();
+						await ProcessDisconnect(cancellationToken);
 						break;
 
 					case MessageTypes.SecurityLookup:
-						ProcessSecurityLookup((SecurityLookupMessage)message);
+						await ProcessSecurityLookup((SecurityLookupMessage)message, cancellationToken);
 						break;
 
 					case MessageTypes.PortfolioLookup:
-						ProcessPortfolioLookup((PortfolioLookupMessage)message);
+						await ProcessPortfolioLookup((PortfolioLookupMessage)message, cancellationToken);
 						break;
 
 					case MessageTypes.OrderStatus:
-						ProcessOrderStatus((OrderStatusMessage)message);
+						await ProcessOrderStatus((OrderStatusMessage)message, cancellationToken);
 						break;
 
 					case MessageTypes.MarketData:
-						ProcessMarketData((MarketDataMessage)message);
+						await ProcessMarketData((MarketDataMessage)message, cancellationToken);
 						break;
 
 					case MessageTypes.OrderRegister:
-						ProcessOrderRegister((OrderRegisterMessage)message);
+						await ProcessOrderRegister((OrderRegisterMessage)message, cancellationToken);
 						break;
 
 					case MessageTypes.OrderCancel:
-						ProcessOrderCancel((OrderCancelMessage)message);
+						await ProcessOrderCancel((OrderCancelMessage)message, cancellationToken);
 						break;
 				}
 			}
@@ -119,11 +119,9 @@ public class ConnectorRoutingTests : BaseTestClass
 				Errors.Add(ex);
 				throw;
 			}
-
-			return default;
 		}
 
-		private void ProcessConnect()
+		private async ValueTask ProcessConnect(CancellationToken cancellationToken)
 		{
 			lock (_lock)
 			{
@@ -131,10 +129,10 @@ public class ConnectorRoutingTests : BaseTestClass
 				ConnectionCount++;
 				_feedCts = new CancellationTokenSource();
 			}
-			SendOutMessage(new ConnectMessage());
+			await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
 		}
 
-		private void ProcessDisconnect()
+		private async ValueTask ProcessDisconnect(CancellationToken cancellationToken)
 		{
 			lock (_lock)
 			{
@@ -142,7 +140,7 @@ public class ConnectorRoutingTests : BaseTestClass
 				DisconnectionCount++;
 				_feedCts?.Cancel();
 			}
-			SendOutMessage(new DisconnectMessage());
+			await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
 		}
 
 		private void Reset()
@@ -155,49 +153,49 @@ public class ConnectorRoutingTests : BaseTestClass
 			}
 		}
 
-		private void ProcessSecurityLookup(SecurityLookupMessage msg)
+		private async ValueTask ProcessSecurityLookup(SecurityLookupMessage msg, CancellationToken cancellationToken)
 		{
 			foreach (var secId in _supportedSecurities)
 			{
-				SendOutMessage(new SecurityMessage
+				await SendOutMessageAsync(new SecurityMessage
 				{
 					SecurityId = secId,
 					Name = $"{secId.SecurityCode}",
 					SecurityType = SecurityTypes.CryptoCurrency,
 					OriginalTransactionId = msg.TransactionId,
-				});
+				}, cancellationToken);
 			}
-			SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = msg.TransactionId });
+			await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = msg.TransactionId }, cancellationToken);
 		}
 
-		private void ProcessPortfolioLookup(PortfolioLookupMessage msg)
+		private async ValueTask ProcessPortfolioLookup(PortfolioLookupMessage msg, CancellationToken cancellationToken)
 		{
-			SendOutMessage(new PortfolioMessage
+			await SendOutMessageAsync(new PortfolioMessage
 			{
 				PortfolioName = $"{_exchangeName}_Portfolio",
 				OriginalTransactionId = msg.TransactionId,
-			});
-			SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = msg.TransactionId });
+			}, cancellationToken);
+			await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = msg.TransactionId }, cancellationToken);
 		}
 
-		private void ProcessOrderStatus(OrderStatusMessage msg)
+		private async ValueTask ProcessOrderStatus(OrderStatusMessage msg, CancellationToken cancellationToken)
 		{
 			if (msg.IsSubscribe)
 			{
-				SendOutMessage(msg.CreateResponse());
-				SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = msg.TransactionId });
+				await SendOutMessageAsync(msg.CreateResponse(), cancellationToken);
+				await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = msg.TransactionId }, cancellationToken);
 			}
 		}
 
-		private void ProcessMarketData(MarketDataMessage msg)
+		private async ValueTask ProcessMarketData(MarketDataMessage msg, CancellationToken cancellationToken)
 		{
-			SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = msg.TransactionId });
+			await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = msg.TransactionId }, cancellationToken);
 
 			if (msg.IsSubscribe)
 			{
 				Interlocked.Increment(ref TotalSubscribeReceived);
 				_activeSubscriptions[msg.TransactionId] = msg;
-				SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = msg.TransactionId });
+				await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = msg.TransactionId }, cancellationToken);
 			}
 			else
 			{
@@ -206,7 +204,7 @@ public class ConnectorRoutingTests : BaseTestClass
 			}
 		}
 
-		private void ProcessOrderRegister(OrderRegisterMessage msg)
+		private async ValueTask ProcessOrderRegister(OrderRegisterMessage msg, CancellationToken cancellationToken)
 		{
 			Interlocked.Increment(ref TotalOrdersProcessed);
 			var orderId = Interlocked.Increment(ref _orderId);
@@ -214,7 +212,7 @@ public class ConnectorRoutingTests : BaseTestClass
 			_activeOrders[msg.TransactionId] = msg;
 
 			// Simulate slight processing delay
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				SecurityId = msg.SecurityId,
@@ -228,13 +226,13 @@ public class ConnectorRoutingTests : BaseTestClass
 				ServerTime = DateTime.UtcNow,
 				LocalTime = DateTime.UtcNow,
 				HasOrderInfo = true,
-			});
+			}, cancellationToken);
 
 			// For market orders - immediate fill
 			if (msg.OrderType == OrderTypes.Market)
 			{
 				var tradeId = Interlocked.Increment(ref _tradeId);
-				SendOutMessage(new ExecutionMessage
+				await SendOutMessageAsync(new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
 					SecurityId = msg.SecurityId,
@@ -248,16 +246,16 @@ public class ConnectorRoutingTests : BaseTestClass
 					ServerTime = DateTime.UtcNow,
 					LocalTime = DateTime.UtcNow,
 					HasOrderInfo = true,
-				});
+				}, cancellationToken);
 				_activeOrders.TryRemove(msg.TransactionId, out _);
 			}
 		}
 
-		private void ProcessOrderCancel(OrderCancelMessage msg)
+		private async ValueTask ProcessOrderCancel(OrderCancelMessage msg, CancellationToken cancellationToken)
 		{
 			Interlocked.Increment(ref TotalCancelsProcessed);
 
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				SecurityId = msg.SecurityId,
@@ -267,7 +265,7 @@ public class ConnectorRoutingTests : BaseTestClass
 				ServerTime = DateTime.UtcNow,
 				LocalTime = DateTime.UtcNow,
 				HasOrderInfo = true,
-			});
+			}, cancellationToken);
 		}
 
 		/// <summary>
@@ -298,15 +296,15 @@ public class ConnectorRoutingTests : BaseTestClass
 						{
 							if (sub.DataType2 == DataType.Ticks)
 							{
-								EmitTick(sub.SecurityId, price, (decimal)(random.NextDouble() * 10), sub.TransactionId);
+								await EmitTick(sub.SecurityId, price, (decimal)(random.NextDouble() * 10), sub.TransactionId, cts.Token);
 							}
 							else if (sub.DataType2 == DataType.MarketDepth)
 							{
-								EmitQuotes(sub.SecurityId, price - 1, price + 1, sub.TransactionId);
+								await EmitQuotes(sub.SecurityId, price - 1, price + 1, sub.TransactionId, cts.Token);
 							}
 							else if (sub.DataType2 == DataType.Level1)
 							{
-								EmitLevel1(sub.SecurityId, price, sub.TransactionId);
+								await EmitLevel1(sub.SecurityId, price, sub.TransactionId, cts.Token);
 							}
 						}
 					}
@@ -328,7 +326,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		/// <summary>
 		/// Emit a single tick.
 		/// </summary>
-		public void EmitTick(SecurityId secId, decimal price, decimal volume, long subscriptionId)
+		public async ValueTask EmitTick(SecurityId secId, decimal price, decimal volume, long subscriptionId, CancellationToken cancellationToken)
 		{
 			Interlocked.Increment(ref TotalTicksEmitted);
 			var msg = new ExecutionMessage
@@ -342,13 +340,13 @@ public class ConnectorRoutingTests : BaseTestClass
 				LocalTime = DateTime.UtcNow,
 			};
 			msg.SetSubscriptionIds(subscriptionId: subscriptionId);
-			SendOutMessage(msg);
+			await SendOutMessageAsync(msg, cancellationToken);
 		}
 
 		/// <summary>
 		/// Emit quotes.
 		/// </summary>
-		public void EmitQuotes(SecurityId secId, decimal bid, decimal ask, long subscriptionId)
+		public async ValueTask EmitQuotes(SecurityId secId, decimal bid, decimal ask, long subscriptionId, CancellationToken cancellationToken)
 		{
 			Interlocked.Increment(ref TotalQuotesEmitted);
 			var msg = new QuoteChangeMessage
@@ -360,13 +358,13 @@ public class ConnectorRoutingTests : BaseTestClass
 				LocalTime = DateTime.UtcNow,
 			};
 			msg.SetSubscriptionIds(subscriptionId: subscriptionId);
-			SendOutMessage(msg);
+			await SendOutMessageAsync(msg, cancellationToken);
 		}
 
 		/// <summary>
 		/// Emit Level1.
 		/// </summary>
-		public void EmitLevel1(SecurityId secId, decimal lastPrice, long subscriptionId)
+		public async ValueTask EmitLevel1(SecurityId secId, decimal lastPrice, long subscriptionId, CancellationToken cancellationToken)
 		{
 			var msg = new Level1ChangeMessage
 			{
@@ -376,28 +374,28 @@ public class ConnectorRoutingTests : BaseTestClass
 			};
 			msg.Add(Level1Fields.LastTradePrice, lastPrice);
 			msg.SetSubscriptionIds(subscriptionId: subscriptionId);
-			SendOutMessage(msg);
+			await SendOutMessageAsync(msg, cancellationToken);
 		}
 
 		/// <summary>
 		/// Simulate connection drop and reconnect.
 		/// </summary>
-		public void SimulateConnectionDrop()
+		public async ValueTask SimulateConnectionDrop(CancellationToken cancellationToken)
 		{
 			lock (_lock)
 			{
 				_feedCts?.Cancel();
 				_isConnected = false;
 			}
-			SendOutMessage(new DisconnectMessage { Error = new IOException("Connection lost") });
+			await SendOutMessageAsync(new DisconnectMessage { Error = new IOException("Connection lost") }, cancellationToken);
 		}
 
 		/// <summary>
 		/// Simulate order rejection.
 		/// </summary>
-		public void SimulateOrderReject(long transactionId, string reason)
+		public async ValueTask SimulateOrderReject(long transactionId, string reason, CancellationToken cancellationToken)
 		{
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = transactionId,
@@ -406,7 +404,7 @@ public class ConnectorRoutingTests : BaseTestClass
 				ServerTime = DateTime.UtcNow,
 				LocalTime = DateTime.UtcNow,
 				HasOrderInfo = true,
-			});
+			}, cancellationToken);
 		}
 
 		public override IMessageAdapter Clone()
@@ -454,8 +452,8 @@ public class ConnectorRoutingTests : BaseTestClass
 		connector.Subscribe(ethSubscription);
 		await Task.Delay(200, CancellationToken);
 
-		binanceAdapter.EmitTick(binanceSecId, 50000, 1, btcSubscription.TransactionId);
-		kucoinAdapter.EmitTick(kucoinSecId, 3000, 2, ethSubscription.TransactionId);
+		await binanceAdapter.EmitTick(binanceSecId, 50000, 1, btcSubscription.TransactionId, CancellationToken);
+		await kucoinAdapter.EmitTick(kucoinSecId, 3000, 2, ethSubscription.TransactionId, CancellationToken);
 		await Task.Delay(500, CancellationToken);
 
 		var binanceMarketData = binanceAdapter.GetMessages<MarketDataMessage>().ToList();
@@ -1010,8 +1008,8 @@ public class ConnectorRoutingTests : BaseTestClass
 		await Task.Delay(300, CancellationToken);
 
 		// Emit one tick
-		adapter.EmitTick(binanceSecId, 50000, 1, sub1.TransactionId);
-		adapter.EmitTick(binanceSecId, 50001, 1, sub2.TransactionId);
+		await adapter.EmitTick(binanceSecId, 50000, 1, sub1.TransactionId, CancellationToken);
+		await adapter.EmitTick(binanceSecId, 50001, 1, sub2.TransactionId, CancellationToken);
 
 		await Task.Delay(500, CancellationToken);
 
@@ -1138,7 +1136,7 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		foreach (var (price, volume) in expectedTicks)
 		{
-			adapter.EmitTick(binanceSecId, price, volume, sub.TransactionId);
+			await adapter.EmitTick(binanceSecId, price, volume, sub.TransactionId, CancellationToken);
 		}
 
 		await Task.Delay(500, CancellationToken);

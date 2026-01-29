@@ -104,17 +104,17 @@ public class FillGapsMessageAdapterTests : BaseTestClass
 		((MarketDataMessage)inner.InMessages[0]).From.AssertEqual(gap1Start);
 		((MarketDataMessage)inner.InMessages[0]).To.AssertEqual(gap1End);
 
-		inner.SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 1 });
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, CancellationToken);
 		output.OfType<SubscriptionResponseMessage>().Count().AssertEqual(1);
 
-		inner.SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = 1 });
+		await inner.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 1 }, CancellationToken);
 		await DrainLoopbacksAsync(adapter, loopbacks, token);
 
 		inner.InMessages.Count.AssertEqual(2);
 		((MarketDataMessage)inner.InMessages[1]).From.AssertEqual(gap2Start);
 		((MarketDataMessage)inner.InMessages[1]).To.AssertEqual(gap2End);
 
-		inner.SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 1 });
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, CancellationToken);
 		output.OfType<SubscriptionResponseMessage>().Count().AssertEqual(1);
 	}
 
@@ -156,11 +156,11 @@ public class FillGapsMessageAdapterTests : BaseTestClass
 
 		inner.InMessages.Count.AssertEqual(1);
 
-		inner.SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = 1 });
+		await inner.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 1 }, CancellationToken);
 		await DrainLoopbacksAsync(adapter, loopbacks, token);
 		inner.InMessages.Count.AssertEqual(2);
 
-		inner.SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = 1 });
+		await inner.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 1 }, CancellationToken);
 		await DrainLoopbacksAsync(adapter, loopbacks, token);
 		inner.InMessages.Count.AssertEqual(3);
 

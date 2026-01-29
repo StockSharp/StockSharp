@@ -77,8 +77,8 @@ public class BasketMarketDataTests : BasketTestBase
 		parentId.AssertEqual(transId, "Parent should match original transId");
 
 		// --- Adapter1 responds ---
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childId });
-		adapter1.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = childId });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childId }, TestContext.CancellationToken);
+		await adapter1.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = childId }, TestContext.CancellationToken);
 
 		// --- After adapter responds: validate output ---
 		GetOut<SubscriptionResponseMessage>()
@@ -139,11 +139,11 @@ public class BasketMarketDataTests : BasketTestBase
 		pid.AssertEqual(transId);
 		pendingState.Count.AssertEqual(0);
 
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childId });
-		adapter1.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = childId });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childId }, TestContext.CancellationToken);
+		await adapter1.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = childId }, TestContext.CancellationToken);
 
 		// --- Send data message from adapter ---
-		adapter1.EmitOut(new ExecutionMessage
+		await adapter1.SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			SecurityId = SecId1,
@@ -151,7 +151,7 @@ public class BasketMarketDataTests : BasketTestBase
 			TradeVolume = 10,
 			ServerTime = DateTime.UtcNow,
 			LocalTime = DateTime.UtcNow,
-		}.SetSubscriptionIds(subscriptionId: childId));
+		}.SetSubscriptionIds(subscriptionId: childId), TestContext.CancellationToken);
 
 		// --- Validate data has parent ID ---
 		var ticks = GetOut<ExecutionMessage>()
@@ -230,10 +230,10 @@ public class BasketMarketDataTests : BasketTestBase
 		p2.AssertEqual(transId);
 
 		// --- Both adapters respond ---
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c1 });
-		adapter2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
-		adapter1.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = c1 });
-		adapter2.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = c2 });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await adapter2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
+		await adapter1.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await adapter2.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
 		// --- Validate broadcast output ---
 		AssertBroadcastOutput(transId, [c1, c2],
@@ -284,13 +284,13 @@ public class BasketMarketDataTests : BasketTestBase
 		parentChildMap.TryGetParent(c2, out var p2).AssertTrue();
 		p2.AssertEqual(transId);
 
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c1 });
-		adapter2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
-		adapter1.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = c1 });
-		adapter2.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = c2 });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await adapter2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
+		await adapter1.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await adapter2.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
 		// --- Send data from both ---
-		adapter1.EmitOut(new ExecutionMessage
+		await adapter1.SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			SecurityId = SecId1,
@@ -298,9 +298,9 @@ public class BasketMarketDataTests : BasketTestBase
 			TradeVolume = 5,
 			ServerTime = DateTime.UtcNow,
 			LocalTime = DateTime.UtcNow,
-		}.SetSubscriptionIds(subscriptionId: c1));
+		}.SetSubscriptionIds(subscriptionId: c1), TestContext.CancellationToken);
 
-		adapter2.EmitOut(new ExecutionMessage
+		await adapter2.SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			SecurityId = SecId2,
@@ -308,7 +308,7 @@ public class BasketMarketDataTests : BasketTestBase
 			TradeVolume = 10,
 			ServerTime = DateTime.UtcNow,
 			LocalTime = DateTime.UtcNow,
-		}.SetSubscriptionIds(subscriptionId: c2));
+		}.SetSubscriptionIds(subscriptionId: c2), TestContext.CancellationToken);
 
 		// --- Validate data remapping ---
 		var ticks = GetOut<ExecutionMessage>().Where(e => e.DataType == DataType.Ticks).ToArray();
@@ -375,11 +375,11 @@ public class BasketMarketDataTests : BasketTestBase
 		p2.AssertEqual(transId);
 
 		// --- Adapter1 fails ---
-		adapter1.EmitOut(new SubscriptionResponseMessage
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c1,
 			Error = new InvalidOperationException("Not supported"),
-		});
+		}, TestContext.CancellationToken);
 
 		// Parent must wait for all children
 		GetOut<SubscriptionResponseMessage>()
@@ -387,8 +387,8 @@ public class BasketMarketDataTests : BasketTestBase
 			.AssertFalse("Parent must wait for all children");
 
 		// --- Adapter2 succeeds ---
-		adapter2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
-		adapter2.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = c2 });
+		await adapter2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
+		await adapter2.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
 		// --- Validate broadcast output ---
 		AssertBroadcastOutput(transId, [c1, c2],
@@ -444,16 +444,16 @@ public class BasketMarketDataTests : BasketTestBase
 		p2.AssertEqual(transId);
 
 		// --- Both fail ---
-		adapter1.EmitOut(new SubscriptionResponseMessage
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c1,
 			Error = new InvalidOperationException("Adapter1 error"),
-		});
-		adapter2.EmitOut(new SubscriptionResponseMessage
+		}, TestContext.CancellationToken);
+		await adapter2.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c2,
 			Error = new InvalidOperationException("Adapter2 error"),
-		});
+		}, TestContext.CancellationToken);
 
 		// --- Validate ---
 		AssertBroadcastOutput(transId, [c1, c2],
@@ -541,10 +541,10 @@ public class BasketMarketDataTests : BasketTestBase
 		var (_, a1, a2, parentId, c1, c2,
 			connectionState, subscriptionRouting, parentChildMap, pendingState, _) = await SetupBroadcastLookup();
 
-		a1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c1 });
-		a2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
-		a1.EmitOut(new SubscriptionFinishedMessage { OriginalTransactionId = c1 });
-		a2.EmitOut(new SubscriptionFinishedMessage { OriginalTransactionId = c2 });
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
+		await a1.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
 		AssertBroadcastOutput(parentId, [c1, c2],
 			expectedResponse: 1, expectError: false,
@@ -562,10 +562,10 @@ public class BasketMarketDataTests : BasketTestBase
 		var (_, a1, a2, parentId, c1, c2,
 			connectionState, subscriptionRouting, parentChildMap, pendingState, _) = await SetupBroadcastLookup();
 
-		a1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c1 });
-		a2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
-		a1.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = c1 });
-		a2.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = c2 });
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
+		await a1.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
 		AssertBroadcastOutput(parentId, [c1, c2],
 			expectedResponse: 1, expectError: false,
@@ -582,19 +582,19 @@ public class BasketMarketDataTests : BasketTestBase
 		var (_, a1, a2, parentId, c1, c2,
 			connectionState, subscriptionRouting, parentChildMap, pendingState, _) = await SetupBroadcastLookup();
 
-		a1.EmitOut(new SubscriptionResponseMessage
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c1,
 			Error = new InvalidOperationException("Securities not available"),
-		});
+		}, TestContext.CancellationToken);
 
 		// Parent must wait
 		GetOut<SubscriptionResponseMessage>()
 			.Any(r => r.OriginalTransactionId == parentId)
 			.AssertFalse("Parent should wait for all children");
 
-		a2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
-		a2.EmitOut(new SubscriptionFinishedMessage { OriginalTransactionId = c2 });
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
 		AssertBroadcastOutput(parentId, [c1, c2],
 			expectedResponse: 1, expectError: false,
@@ -611,14 +611,14 @@ public class BasketMarketDataTests : BasketTestBase
 		var (_, a1, a2, parentId, c1, c2,
 			connectionState, subscriptionRouting, parentChildMap, pendingState, _) = await SetupBroadcastLookup();
 
-		a1.EmitOut(new SubscriptionResponseMessage
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c1,
 			Error = new InvalidOperationException("Adapter1 failed"),
-		});
+		}, TestContext.CancellationToken);
 
-		a2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
-		a2.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = c2 });
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
 		AssertBroadcastOutput(parentId, [c1, c2],
 			expectedResponse: 1, expectError: false,
@@ -635,22 +635,22 @@ public class BasketMarketDataTests : BasketTestBase
 		var (_, a1, a2, parentId, c1, c2,
 			connectionState, subscriptionRouting, parentChildMap, pendingState, _) = await SetupBroadcastLookup();
 
-		a1.EmitOut(new SubscriptionResponseMessage
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c1,
 			Error = new InvalidOperationException("Adapter1 failed"),
-		});
+		}, TestContext.CancellationToken);
 
 		// Parent waits
 		GetOut<SubscriptionResponseMessage>()
 			.Any(r => r.OriginalTransactionId == parentId)
 			.AssertFalse("Parent should wait for all children");
 
-		a2.EmitOut(new SubscriptionResponseMessage
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c2,
 			Error = new InvalidOperationException("Adapter2 failed"),
-		});
+		}, TestContext.CancellationToken);
 
 		AssertBroadcastOutput(parentId, [c1, c2],
 			expectedResponse: 1, expectError: true,
@@ -693,8 +693,8 @@ public class BasketMarketDataTests : BasketTestBase
 		connectionState.HasPendingAdapters.AssertTrue();
 		connectionState.ConnectedCount.AssertEqual(0);
 
-		adapter1.EmitOut(new ConnectMessage());
-		adapter2.EmitOut(new ConnectMessage { Error = new Exception("Connection refused") });
+		await adapter1.SendOutMessageAsync(new ConnectMessage(), TestContext.CancellationToken);
+		await adapter2.SendOutMessageAsync(new ConnectMessage { Error = new Exception("Connection refused") }, TestContext.CancellationToken);
 
 		// After connection: adapter1 connected, adapter2 failed
 		connectionState.ConnectedCount.AssertEqual(1);
@@ -741,7 +741,7 @@ public class BasketMarketDataTests : BasketTestBase
 			connectionState, subscriptionRouting, parentChildMap, pendingState, _) = await SetupBroadcastLookup();
 
 		// --- First child responds ---
-		a1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c1 });
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
 
 		GetOut<SubscriptionResponseMessage>()
 			.Count(r => r.OriginalTransactionId == parentId)
@@ -752,7 +752,7 @@ public class BasketMarketDataTests : BasketTestBase
 		parentChildMap.TryGetParent(c2, out _).AssertTrue();
 
 		// --- Second child responds ---
-		a2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
 		GetOut<SubscriptionResponseMessage>()
 			.Count(r => r.OriginalTransactionId == parentId)
@@ -854,24 +854,24 @@ public class BasketMarketDataTests : BasketTestBase
 		pendingState.Count.AssertEqual(0);
 
 		// --- Adapter1 and 2 fail ---
-		a1.EmitOut(new SubscriptionResponseMessage
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c1,
 			Error = new InvalidOperationException("Adapter1 failed"),
-		});
-		a2.EmitOut(new SubscriptionResponseMessage
+		}, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c2,
 			Error = new InvalidOperationException("Adapter2 failed"),
-		});
+		}, TestContext.CancellationToken);
 
 		GetOut<SubscriptionResponseMessage>()
 			.Any(r => r.OriginalTransactionId == transId)
 			.AssertFalse("Parent should wait for adapter3");
 
 		// --- Adapter3 succeeds ---
-		a3.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c3 });
-		a3.EmitOut(new SubscriptionFinishedMessage { OriginalTransactionId = c3 });
+		await a3.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c3 }, TestContext.CancellationToken);
+		await a3.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = c3 }, TestContext.CancellationToken);
 
 		AssertBroadcastOutput(transId, [c1, c2, c3],
 			expectedResponse: 1, expectError: false,
@@ -959,21 +959,21 @@ public class BasketMarketDataTests : BasketTestBase
 		parentChildMap.TryGetParent(c3, out var p3).AssertTrue();
 		p3.AssertEqual(transId);
 
-		a1.EmitOut(new SubscriptionResponseMessage
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c1,
 			Error = new InvalidOperationException("Adapter1 failed"),
-		});
-		a2.EmitOut(new SubscriptionResponseMessage
+		}, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c2,
 			Error = new InvalidOperationException("Adapter2 failed"),
-		});
-		a3.EmitOut(new SubscriptionResponseMessage
+		}, TestContext.CancellationToken);
+		await a3.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = c3,
 			Error = new InvalidOperationException("Adapter3 failed"),
-		});
+		}, TestContext.CancellationToken);
 
 		AssertBroadcastOutput(transId, [c1, c2, c3],
 			expectedResponse: 1, expectError: true,
@@ -998,20 +998,20 @@ public class BasketMarketDataTests : BasketTestBase
 		var (_, a1, a2, parentId, c1, c2,
 			connectionState, subscriptionRouting, parentChildMap, pendingState, _) = await SetupBroadcastLookup();
 
-		a1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c1 });
-		a2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
-		a1.EmitOut(new SecurityMessage
+		await a1.SendOutMessageAsync(new SecurityMessage
 		{
 			SecurityId = SecId1,
 			OriginalTransactionId = c1,
-		}.SetSubscriptionIds(subscriptionId: c1));
+		}.SetSubscriptionIds(subscriptionId: c1), TestContext.CancellationToken);
 
-		a2.EmitOut(new SecurityMessage
+		await a2.SendOutMessageAsync(new SecurityMessage
 		{
 			SecurityId = SecId2,
 			OriginalTransactionId = c2,
-		}.SetSubscriptionIds(subscriptionId: c2));
+		}.SetSubscriptionIds(subscriptionId: c2), TestContext.CancellationToken);
 
 		var securities = GetOut<SecurityMessage>().ToArray();
 		securities.Length.AssertEqual(2);
@@ -1040,10 +1040,10 @@ public class BasketMarketDataTests : BasketTestBase
 		var (basket, a1, a2, parentId, c1, c2,
 			connectionState, subscriptionRouting, parentChildMap, pendingState, _) = await SetupBroadcastLookup();
 
-		a1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c1 });
-		a2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
-		a1.EmitOut(new ExecutionMessage
+		await a1.SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			SecurityId = SecId1,
@@ -1053,7 +1053,7 @@ public class BasketMarketDataTests : BasketTestBase
 			TransactionId = basket.TransactionIdGenerator.GetNextId(),
 			ServerTime = DateTime.UtcNow,
 			LocalTime = DateTime.UtcNow,
-		}.SetSubscriptionIds(subscriptionId: c1));
+		}.SetSubscriptionIds(subscriptionId: c1), TestContext.CancellationToken);
 
 		var execs = GetOut<ExecutionMessage>()
 			.Where(e => e.DataType == DataType.Transactions).ToArray();
@@ -1075,14 +1075,14 @@ public class BasketMarketDataTests : BasketTestBase
 		var (_, a1, a2, parentId, c1, c2,
 			connectionState, subscriptionRouting, parentChildMap, pendingState, _) = await SetupBroadcastLookup();
 
-		a1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c1 });
-		a2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
-		a1.EmitOut(new PortfolioMessage
+		await a1.SendOutMessageAsync(new PortfolioMessage
 		{
 			PortfolioName = Portfolio1,
 			OriginalTransactionId = c1,
-		}.SetSubscriptionIds(subscriptionId: c1));
+		}.SetSubscriptionIds(subscriptionId: c1), TestContext.CancellationToken);
 
 		var portfolios = GetOut<PortfolioMessage>().ToArray();
 		portfolios.Length.AssertEqual(1);
@@ -1103,15 +1103,15 @@ public class BasketMarketDataTests : BasketTestBase
 		var (_, a1, a2, parentId, c1, c2,
 			connectionState, subscriptionRouting, parentChildMap, pendingState, _) = await SetupBroadcastLookup();
 
-		a1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c1 });
-		a2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
-		a1.EmitOut(new SecurityMessage
+		await a1.SendOutMessageAsync(new SecurityMessage
 		{
 			SecurityId = SecId1,
 			OriginalTransactionId = c1,
 			SubscriptionIds = [c1, c2],
-		});
+		}, TestContext.CancellationToken);
 
 		var securities = GetOut<SecurityMessage>().ToArray();
 		securities.Length.AssertEqual(1);
@@ -1131,17 +1131,17 @@ public class BasketMarketDataTests : BasketTestBase
 		var (_, a1, a2, parentId, c1, c2,
 			connectionState, subscriptionRouting, parentChildMap, pendingState, _) = await SetupBroadcastLookup();
 
-		a1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c1 });
-		a2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = c2 });
+		await a1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
-		a1.EmitOut(new SecurityMessage
+		await a1.SendOutMessageAsync(new SecurityMessage
 		{
 			SecurityId = SecId1,
 			OriginalTransactionId = c1,
-		}.SetSubscriptionIds(subscriptionId: c1));
+		}.SetSubscriptionIds(subscriptionId: c1), TestContext.CancellationToken);
 
-		a1.EmitOut(new SubscriptionFinishedMessage { OriginalTransactionId = c1 });
-		a2.EmitOut(new SubscriptionFinishedMessage { OriginalTransactionId = c2 });
+		await a1.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = c1 }, TestContext.CancellationToken);
+		await a2.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 
 		var sec = GetOut<SecurityMessage>().Single();
 		sec.GetSubscriptionIds()[0].AssertEqual(parentId);
@@ -1207,8 +1207,8 @@ public class BasketMarketDataTests : BasketTestBase
 		pSub.AssertEqual(subId);
 		pendingState.Count.AssertEqual(0);
 
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childSubId });
-		adapter1.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = childSubId });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childSubId }, TestContext.CancellationToken);
+		await adapter1.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = childSubId }, TestContext.CancellationToken);
 		ClearOut();
 
 		// --- Unsubscribe ---
@@ -1225,7 +1225,7 @@ public class BasketMarketDataTests : BasketTestBase
 		var childUnsubId = adapter1.GetMessages<MarketDataMessage>()
 			.Last(m => !m.IsSubscribe).TransactionId;
 
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childUnsubId });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childUnsubId }, TestContext.CancellationToken);
 
 		// --- Validate output ---
 		var responses = GetOut<SubscriptionResponseMessage>().ToArray();
@@ -1284,8 +1284,8 @@ public class BasketMarketDataTests : BasketTestBase
 		parentChildMap.TryGetParent(childSub1, out var p1).AssertTrue();
 		p1.AssertEqual(sub1Id);
 
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childSub1 });
-		adapter1.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = childSub1 });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childSub1 }, TestContext.CancellationToken);
+		await adapter1.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = childSub1 }, TestContext.CancellationToken);
 
 		GetOut<SubscriptionResponseMessage>()
 			.Count(r => r.OriginalTransactionId == sub1Id).AssertEqual(1);
@@ -1306,7 +1306,7 @@ public class BasketMarketDataTests : BasketTestBase
 
 		var childUnsub1 = adapter1.GetMessages<MarketDataMessage>()
 			.Last(m => !m.IsSubscribe).TransactionId;
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childUnsub1 });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childUnsub1 }, TestContext.CancellationToken);
 
 		GetOut<SubscriptionResponseMessage>()
 			.Count(r => r.OriginalTransactionId == unsub1Id).AssertEqual(1,
@@ -1339,8 +1339,8 @@ public class BasketMarketDataTests : BasketTestBase
 		parentChildMap.TryGetParent(childSub2, out var p2).AssertTrue();
 		p2.AssertEqual(sub2Id);
 
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childSub2 });
-		adapter1.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = childSub2 });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childSub2 }, TestContext.CancellationToken);
+		await adapter1.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = childSub2 }, TestContext.CancellationToken);
 
 		GetOut<SubscriptionResponseMessage>()
 			.Count(r => r.OriginalTransactionId == sub2Id).AssertEqual(1,
@@ -1402,8 +1402,8 @@ public class BasketMarketDataTests : BasketTestBase
 		parentChildMap.TryGetParent(childSub1, out var ps1).AssertTrue();
 		ps1.AssertEqual(sub1Id);
 
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childSub1 });
-		adapter1.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = childSub1 });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childSub1 }, TestContext.CancellationToken);
+		await adapter1.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = childSub1 }, TestContext.CancellationToken);
 
 		// --- Subscribe #2 (Level1) ---
 		var sub2Id = basket.TransactionIdGenerator.GetNextId();
@@ -1423,8 +1423,8 @@ public class BasketMarketDataTests : BasketTestBase
 		parentChildMap.TryGetParent(childSub2, out var ps2).AssertTrue();
 		ps2.AssertEqual(sub2Id);
 
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childSub2 });
-		adapter1.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = childSub2 });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childSub2 }, TestContext.CancellationToken);
+		await adapter1.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = childSub2 }, TestContext.CancellationToken);
 		ClearOut();
 
 		// --- Unsubscribe #1 (Ticks) ---
@@ -1440,7 +1440,7 @@ public class BasketMarketDataTests : BasketTestBase
 
 		var childUnsub1 = adapter1.GetMessages<MarketDataMessage>()
 			.Last(m => !m.IsSubscribe).TransactionId;
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childUnsub1 });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childUnsub1 }, TestContext.CancellationToken);
 
 		GetOut<SubscriptionResponseMessage>()
 			.Count(r => r.OriginalTransactionId == unsub1Id).AssertEqual(1,
@@ -1462,7 +1462,7 @@ public class BasketMarketDataTests : BasketTestBase
 
 		var childUnsub2 = adapter1.GetMessages<MarketDataMessage>()
 			.Last(m => !m.IsSubscribe).TransactionId;
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childUnsub2 });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childUnsub2 }, TestContext.CancellationToken);
 
 		GetOut<SubscriptionResponseMessage>()
 			.Count(r => r.OriginalTransactionId == unsub2Id).AssertEqual(1,
@@ -1526,10 +1526,10 @@ public class BasketMarketDataTests : BasketTestBase
 		parentChildMap.TryGetParent(childSub2, out var ps2).AssertTrue();
 		ps2.AssertEqual(subId);
 
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childSub1 });
-		adapter2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = childSub2 });
-		adapter1.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = childSub1 });
-		adapter2.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = childSub2 });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childSub1 }, TestContext.CancellationToken);
+		await adapter2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childSub2 }, TestContext.CancellationToken);
+		await adapter1.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = childSub1 }, TestContext.CancellationToken);
+		await adapter2.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = childSub2 }, TestContext.CancellationToken);
 		ClearOut();
 
 		// --- Unsubscribe (broadcast) ---
@@ -1546,8 +1546,8 @@ public class BasketMarketDataTests : BasketTestBase
 		var unsub1 = adapter1.GetMessages<MarketDataMessage>().Last(m => !m.IsSubscribe);
 		var unsub2 = adapter2.GetMessages<MarketDataMessage>().Last(m => !m.IsSubscribe);
 
-		adapter1.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = unsub1.TransactionId });
-		adapter2.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = unsub2.TransactionId });
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = unsub1.TransactionId }, TestContext.CancellationToken);
+		await adapter2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = unsub2.TransactionId }, TestContext.CancellationToken);
 
 		// exactly 1 parent unsub response
 		GetOut<SubscriptionResponseMessage>()

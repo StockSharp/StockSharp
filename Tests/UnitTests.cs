@@ -67,10 +67,10 @@ public class UnitTests : BaseTestClass
 		for (var i = 0; i < 1000; i++)
 		{
 			var v = RandomGen.GetInt(-1000, 1000);
-#pragma warning disable CS0612 // Type or member is obsolete
+#pragma warning disable CS0612, CS0618 // Type or member is obsolete
 			var u = v.Points(security);
 			u.AssertEqual(new Unit(v * security.StepPrice.Value, UnitTypes.Absolute));
-#pragma warning restore CS0612 // Type or member is obsolete
+#pragma warning restore CS0612, CS0618 // Type or member is obsolete
 			((double)u).AssertEqual(v * 2);
 
 			u = v.Pips(security);
@@ -267,9 +267,9 @@ public class UnitTests : BaseTestClass
 			var pointAbs = points.Convert(UnitTypes.Absolute);
 			//pointAbs.Security.AssertSame(security);
 			pointAbs.Type.AssertEqual(UnitTypes.Absolute);
-#pragma warning disable CS0612 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
 			pointAbs.Value.AssertEqual(v * security.StepPrice ?? 1m);
-#pragma warning restore CS0612 // Type or member is obsolete
+#pragma warning restore CS0618// Type or member is obsolete
 			(pointAbs == points).AssertTrue();
 			pointAbs.Equals(points).AssertTrue();
 

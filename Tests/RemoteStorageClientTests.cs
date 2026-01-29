@@ -1419,7 +1419,7 @@ class MockRemoteAdapter : MessageAdapter,
 		this.AddSupportedMarketDataType(DataType.Level1);
 	}
 
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		SentMessages.Enqueue(message);
 
@@ -1427,11 +1427,11 @@ class MockRemoteAdapter : MessageAdapter,
 		{
 			case MessageTypes.Connect:
 				if (!SimulateTimeout)
-					SendOutMessage(new ConnectMessage());
+					await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
 				break;
 
 			case MessageTypes.Disconnect:
-				SendOutMessage(new DisconnectMessage());
+				await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
 				break;
 
 			case MessageTypes.SecurityLookup:
@@ -1444,7 +1444,7 @@ class MockRemoteAdapter : MessageAdapter,
 					ActiveSubscriptions[lookup.TransactionId] = lookup;
 
 					// Send subscription response
-					SendOutMessage(lookup.CreateResponse());
+					await SendOutMessageAsync(lookup.CreateResponse(), cancellationToken);
 
 					if (SecurityLookupHandler != null && !SimulateTimeout)
 					{
@@ -1454,7 +1454,7 @@ class MockRemoteAdapter : MessageAdapter,
 						{
 							sec.OriginalTransactionId = lookup.TransactionId;
 							sec.SetSubscriptionIds([lookup.TransactionId]);
-							SendOutMessage(sec);
+							await SendOutMessageAsync(sec, cancellationToken);
 						}
 
 						// Send finished message with optional archive
@@ -1463,13 +1463,13 @@ class MockRemoteAdapter : MessageAdapter,
 						if (archive != null && archive.Length > 0)
 							finished.Body = archive;
 
-						SendOutMessage(finished);
+						await SendOutMessageAsync(finished, cancellationToken);
 					}
 				}
 				else
 				{
 					ActiveSubscriptions.Remove(lookup.OriginalTransactionId);
-					SendOutMessage(lookup.CreateResponse());
+					await SendOutMessageAsync(lookup.CreateResponse(), cancellationToken);
 				}
 				break;
 			}
@@ -1484,7 +1484,7 @@ class MockRemoteAdapter : MessageAdapter,
 					ActiveSubscriptions[lookup.TransactionId] = lookup;
 
 					// Send subscription response
-					SendOutMessage(lookup.CreateResponse());
+					await SendOutMessageAsync(lookup.CreateResponse(), cancellationToken);
 
 					if (DataTypeLookupHandler != null && !SimulateTimeout)
 					{
@@ -1494,10 +1494,10 @@ class MockRemoteAdapter : MessageAdapter,
 						{
 							info.OriginalTransactionId = lookup.TransactionId;
 							info.SetSubscriptionIds([lookup.TransactionId]);
-							SendOutMessage(info);
+							await SendOutMessageAsync(info, cancellationToken);
 						}
 
-						SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = lookup.TransactionId });
+						await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = lookup.TransactionId }, cancellationToken);
 					}
 				}
 				break;
@@ -1510,7 +1510,7 @@ class MockRemoteAdapter : MessageAdapter,
 				if (cmd.Command == CommandTypes.Get)
 				{
 					ActiveSubscriptions[cmd.TransactionId] = cmd;
-					SendOutMessage(cmd.CreateResponse());
+					await SendOutMessageAsync(cmd.CreateResponse(), cancellationToken);
 
 					if (FileCommandHandler != null && !SimulateTimeout)
 					{
@@ -1520,10 +1520,10 @@ class MockRemoteAdapter : MessageAdapter,
 						{
 							result.OriginalTransactionId = cmd.TransactionId;
 							result.SetSubscriptionIds([cmd.TransactionId]);
-							SendOutMessage(result);
+							await SendOutMessageAsync(result, cancellationToken);
 						}
 
-						SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = cmd.TransactionId });
+						await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = cmd.TransactionId }, cancellationToken);
 					}
 				}
 				break;
@@ -1538,7 +1538,7 @@ class MockRemoteAdapter : MessageAdapter,
 				{
 					ActiveSubscriptions[lookup.TransactionId] = lookup;
 
-					SendOutMessage(lookup.CreateResponse());
+					await SendOutMessageAsync(lookup.CreateResponse(), cancellationToken);
 
 					if (BoardLookupHandler != null && !SimulateTimeout)
 					{
@@ -1548,7 +1548,7 @@ class MockRemoteAdapter : MessageAdapter,
 						{
 							board.OriginalTransactionId = lookup.TransactionId;
 							board.SetSubscriptionIds([lookup.TransactionId]);
-							SendOutMessage(board);
+							await SendOutMessageAsync(board, cancellationToken);
 						}
 
 						var finished = new SubscriptionFinishedMessage { OriginalTransactionId = lookup.TransactionId };
@@ -1556,18 +1556,16 @@ class MockRemoteAdapter : MessageAdapter,
 						if (archive != null && archive.Length > 0)
 							finished.Body = archive;
 
-						SendOutMessage(finished);
+						await SendOutMessageAsync(finished, cancellationToken);
 					}
 				}
 				else
 				{
 					ActiveSubscriptions.Remove(lookup.OriginalTransactionId);
-					SendOutMessage(lookup.CreateResponse());
+					await SendOutMessageAsync(lookup.CreateResponse(), cancellationToken);
 				}
 				break;
 			}
 		}
-
-		return default;
 	}
 }

@@ -294,7 +294,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 
 		// --- Now adapter connects ---
 		adapter1.AutoRespond = true;
-		adapter1.EmitOut(new ConnectMessage());
+		await adapter1.SendOutMessageAsync(new ConnectMessage(), TestContext.CancellationToken);
 
 		// --- After adapter connected: pending should be drained ---
 		connectionState.ConnectedCount.AssertEqual(1, "Adapter now connected");
@@ -362,7 +362,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 
 		// --- Adapter1 connects ---
 		adapter1.AutoRespond = true;
-		adapter1.EmitOut(new ConnectMessage());
+		await adapter1.SendOutMessageAsync(new ConnectMessage(), TestContext.CancellationToken);
 
 		connectionState.ConnectedCount.AssertEqual(1, "Adapter1 connected");
 		connectionState.HasPendingAdapters.AssertTrue("Adapter2 still connecting");
@@ -376,7 +376,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 			.AssertFalse("Adapter1 should not receive MarketData yet");
 
 		// --- Adapter2 fails ---
-		adapter2.EmitOut(new ConnectMessage { Error = new Exception("Connection refused") });
+		await adapter2.SendOutMessageAsync(new ConnectMessage { Error = new Exception("Connection refused") }, TestContext.CancellationToken);
 
 		connectionState.HasPendingAdapters.AssertFalse("No more pending");
 		connectionState.ConnectedCount.AssertEqual(1);

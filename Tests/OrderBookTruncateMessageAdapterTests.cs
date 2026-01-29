@@ -89,7 +89,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		output.Clear();
 
 		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1], depth: 10);
-		inner.SendOutMessage(snapshot);
+		await inner.SendOutMessageAsync(snapshot, CancellationToken);
 
 		var outMsg = output.OfType<QuoteChangeMessage>().Single();
 		ReferenceEquals(outMsg, snapshot).AssertTrue();
@@ -124,7 +124,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		output.Clear();
 
 		var snapshot = CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1], depth: 10);
-		inner.SendOutMessage(snapshot);
+		await inner.SendOutMessageAsync(snapshot, CancellationToken);
 
 		var outMsg = output.OfType<QuoteChangeMessage>().Single();
 		ReferenceEquals(outMsg, snapshot).AssertTrue();
@@ -161,7 +161,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		output.Clear();
 
 		// Inner adapter might still return more than requested
-		inner.SendOutMessage(CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1], depth: 10));
+		await inner.SendOutMessageAsync(CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1], depth: 10), CancellationToken);
 
 		// But we still truncate to the originally requested depth
 		var truncated = output.OfType<QuoteChangeMessage>().Single();
@@ -194,7 +194,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 
 		output.Clear();
 
-		inner.SendOutMessage(CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1], depth: 10));
+		await inner.SendOutMessageAsync(CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1], depth: 10), CancellationToken);
 
 		var truncated = output.OfType<QuoteChangeMessage>().Single();
 		truncated.Bids.Length.AssertEqual(5);
@@ -250,7 +250,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		output.Clear();
 
 		var original = CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1, 2, 3], depth: 10);
-		inner.SendOutMessage(original);
+		await inner.SendOutMessageAsync(original, CancellationToken);
 
 		var quotes = output.OfType<QuoteChangeMessage>().ToArray();
 		quotes.Length.AssertEqual(3);
@@ -296,7 +296,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		var inc = CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1], depth: 10);
 		inc.State = QuoteChangeStates.Increment;
 
-		inner.SendOutMessage(inc);
+		await inner.SendOutMessageAsync(inc, CancellationToken);
 
 		var outMsg = output.OfType<QuoteChangeMessage>().Single();
 		ReferenceEquals(outMsg, inc).AssertTrue();
@@ -328,13 +328,13 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 
 		output.Clear();
 
-		inner.SendOutMessage(new SubscriptionResponseMessage
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = 1,
 			Error = new InvalidOperationException("error"),
-		});
+		}, CancellationToken);
 
-		inner.SendOutMessage(CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1], depth: 10));
+		await inner.SendOutMessageAsync(CreateSnapshot(secId, DateTime.UtcNow, subscriptionIds: [1], depth: 10), CancellationToken);
 
 		var quote = output.OfType<QuoteChangeMessage>().Single();
 		quote.Bids.Length.AssertEqual(10);
@@ -372,7 +372,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_DelegatesToManager_AndRoutesMessages()
+	public async Task InnerMessage_DelegatesToManager_AndRoutesMessages()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<IOrderBookTruncateManager>();
@@ -394,7 +394,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new DisconnectMessage());
+		await inner.SendOutMessageAsync(new DisconnectMessage(), CancellationToken);
 
 		output.Count.AssertEqual(2);
 		output[0].AssertSame(forward);
@@ -404,7 +404,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_WhenForwardIsNull_DoesNotForwardOriginal()
+	public async Task InnerMessage_WhenForwardIsNull_DoesNotForwardOriginal()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<IOrderBookTruncateManager>();
@@ -425,14 +425,14 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new QuoteChangeMessage { SecurityId = Helper.CreateSecurityId(), Bids = [], Asks = [] });
+		await inner.SendOutMessageAsync(new QuoteChangeMessage { SecurityId = Helper.CreateSecurityId(), Bids = [], Asks = [] }, CancellationToken);
 
 		output.Count.AssertEqual(1);
 		output[0].AssertSame(extra);
 	}
 
 	[TestMethod]
-	public void InnerMessage_WhenNoExtraOut_OnlyForwardsOriginal()
+	public async Task InnerMessage_WhenNoExtraOut_OnlyForwardsOriginal()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<IOrderBookTruncateManager>();
@@ -448,7 +448,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new DisconnectMessage());
+		await inner.SendOutMessageAsync(new DisconnectMessage(), CancellationToken);
 
 		output.Count.AssertEqual(1);
 		output[0].AssertSame(forward);

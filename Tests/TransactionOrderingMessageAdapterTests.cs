@@ -61,7 +61,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_DelegatesToManager_AndForwardsMessage()
+	public async Task InnerMessage_DelegatesToManager_AndForwardsMessage()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<ITransactionOrderingManager>();
@@ -77,7 +77,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new ResetMessage());
+		await inner.SendOutMessageAsync(new ResetMessage(), CancellationToken);
 
 		output.Count.AssertEqual(1);
 		output[0].AssertSame(forward);
@@ -86,7 +86,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_WithExtraOut_ForwardsAllMessages()
+	public async Task InnerMessage_WithExtraOut_ForwardsAllMessages()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<ITransactionOrderingManager>();
@@ -120,7 +120,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
 
 		output.Count.AssertEqual(3);
 		output[0].AssertSame(forward);
@@ -129,7 +129,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_WhenProcessSuspended_CallsGetSuspendedTrades()
+	public async Task InnerMessage_WhenProcessSuspended_CallsGetSuspendedTrades()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<ITransactionOrderingManager>();
@@ -163,7 +163,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(orderMsg);
+		await inner.SendOutMessageAsync(orderMsg, CancellationToken);
 
 		manager.Verify(m => m.GetSuspendedTrades(It.IsAny<ExecutionMessage>()), Times.Once);
 		output.Count.AssertEqual(2);
@@ -172,7 +172,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_WhenForwardIsNull_DoesNotForward()
+	public async Task InnerMessage_WhenForwardIsNull_DoesNotForward()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<ITransactionOrderingManager>();
@@ -186,17 +186,17 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new ExecutionMessage
+		await inner.SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			TradeId = 1,
-		});
+		}, CancellationToken);
 
 		output.Count.AssertEqual(0);
 	}
 
 	[TestMethod]
-	public void InnerMessage_ExtraOut_WithOrderInfo_ProcessesSuspended()
+	public async Task InnerMessage_ExtraOut_WithOrderInfo_ProcessesSuspended()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<ITransactionOrderingManager>();
@@ -231,7 +231,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
 
 		output.Count.AssertEqual(3);
 		output[0].AssertSame(forward);

@@ -48,9 +48,9 @@ public class OrderBookIncrementMessageAdapterTests : BaseTestClass
 
 		var time = DateTime.UtcNow;
 
-		inner.SendOutMessage(CreateIncrement(secId, time, QuoteChangeStates.SnapshotComplete, subscriptionIds: [1],
+		await inner.SendOutMessageAsync(CreateIncrement(secId, time, QuoteChangeStates.SnapshotComplete, subscriptionIds: [1],
 			bids: [new QuoteChange(100m, 10m), new QuoteChange(99m, 5m)],
-			asks: [new QuoteChange(101m, 20m)]));
+			asks: [new QuoteChange(101m, 20m)]), CancellationToken);
 
 		var built = output.OfType<QuoteChangeMessage>().Single();
 		built.State.AssertNull();
@@ -61,9 +61,9 @@ public class OrderBookIncrementMessageAdapterTests : BaseTestClass
 
 		output.Clear();
 
-		inner.SendOutMessage(CreateIncrement(secId, time.AddSeconds(1), QuoteChangeStates.Increment, subscriptionIds: [1],
+		await inner.SendOutMessageAsync(CreateIncrement(secId, time.AddSeconds(1), QuoteChangeStates.Increment, subscriptionIds: [1],
 			bids: [new QuoteChange(100m, 15m)],
-			asks: []));
+			asks: []), CancellationToken);
 
 		built = output.OfType<QuoteChangeMessage>().Single();
 		built.State.AssertNull();
@@ -100,7 +100,7 @@ public class OrderBookIncrementMessageAdapterTests : BaseTestClass
 			bids: [new QuoteChange(100m, 10m)],
 			asks: []);
 
-		inner.SendOutMessage(original);
+		await inner.SendOutMessageAsync(original, CancellationToken);
 
 		var passThrough = output.OfType<QuoteChangeMessage>().Single();
 		ReferenceEquals(passThrough, original).AssertTrue();
@@ -139,9 +139,9 @@ public class OrderBookIncrementMessageAdapterTests : BaseTestClass
 
 		output.Clear();
 
-		inner.SendOutMessage(CreateIncrement(secId, DateTime.UtcNow, QuoteChangeStates.SnapshotComplete, subscriptionIds: [1],
+		await inner.SendOutMessageAsync(CreateIncrement(secId, DateTime.UtcNow, QuoteChangeStates.SnapshotComplete, subscriptionIds: [1],
 			bids: [new QuoteChange(100m, 10m)],
-			asks: [new QuoteChange(101m, 20m)]));
+			asks: [new QuoteChange(101m, 20m)]), CancellationToken);
 
 		var book = output.OfType<QuoteChangeMessage>().Single();
 		book.State.AssertNull();
@@ -189,7 +189,7 @@ public class OrderBookIncrementMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_DelegatesToManager_AndRoutesMessages()
+	public async Task InnerMessage_DelegatesToManager_AndRoutesMessages()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<IOrderBookIncrementManager>();
@@ -211,7 +211,7 @@ public class OrderBookIncrementMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new DisconnectMessage());
+		await inner.SendOutMessageAsync(new DisconnectMessage(), CancellationToken);
 
 		output.Count.AssertEqual(2);
 		output[0].AssertSame(forward);
@@ -221,7 +221,7 @@ public class OrderBookIncrementMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InnerMessage_WhenForwardNull_DoesNotForward()
+	public async Task InnerMessage_WhenForwardNull_DoesNotForward()
 	{
 		var inner = new RecordingMessageAdapter();
 		var manager = new Mock<IOrderBookIncrementManager>();
@@ -242,7 +242,7 @@ public class OrderBookIncrementMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		inner.EmitOut(new DisconnectMessage());
+		await inner.SendOutMessageAsync(new DisconnectMessage(), CancellationToken);
 
 		// Only the extra message, not the original
 		output.Count.AssertEqual(1);

@@ -39,40 +39,36 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 		public bool AutoRespond { get; set; } = true;
 		public Exception ConnectError { get; set; }
 
-		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken ct)
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken ct)
 		{
 			_inMessages.Enqueue(message.TypedClone());
 
 			if (!AutoRespond)
-				return default;
+				return;
 
 			switch (message.Type)
 			{
 				case MessageTypes.Reset:
-					SendOutMessage(new ResetMessage());
+					await SendOutMessageAsync(new ResetMessage(), ct);
 					break;
 				case MessageTypes.Connect:
-					SendOutMessage(ConnectError != null
+					await SendOutMessageAsync(ConnectError != null
 						? new ConnectMessage { Error = ConnectError }
-						: new ConnectMessage());
+						: new ConnectMessage(), ct);
 					break;
 				case MessageTypes.Disconnect:
-					SendOutMessage(new DisconnectMessage());
+					await SendOutMessageAsync(new DisconnectMessage(), ct);
 					break;
 				case MessageTypes.MarketData:
 				{
 					var md = (MarketDataMessage)message;
-					SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = md.TransactionId });
+					await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = md.TransactionId }, ct);
 					if (md.IsSubscribe)
-						SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = md.TransactionId });
+						await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = md.TransactionId }, ct);
 					break;
 				}
 			}
-
-			return default;
 		}
-
-		public void EmitOut(Message msg) => SendOutMessage(msg);
 
 		public override IMessageAdapter Clone() => new TestMockInnerAdapter(TransactionIdGenerator);
 	}

@@ -35,7 +35,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 			_failOnSubscribe.Add(transactionId);
 		}
 
-		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
 			SentMessages.Add(message);
 
@@ -52,21 +52,21 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 						// Check if we should fail this subscription
 						if (_failOnSubscribe.Contains(mdMsg.TransactionId))
 						{
-							SendOutMessage(new SubscriptionResponseMessage
+							await SendOutMessageAsync(new SubscriptionResponseMessage
 							{
 								OriginalTransactionId = mdMsg.TransactionId,
 								Error = new NotSupportedException("TimeFrame not supported"),
-							});
+							}, cancellationToken);
 						}
 						else
 						{
-							SendOutMessage(mdMsg.CreateResponse());
+							await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
 						}
 					}
 					else
 					{
 						_activeSubscriptions.Remove(mdMsg.OriginalTransactionId);
-						SendOutMessage(mdMsg.CreateResponse());
+						await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
 					}
 
 					break;
@@ -77,34 +77,32 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 					_failOnSubscribe.Clear();
 					break;
 			}
-
-			return default;
 		}
 
-		public void SimulateCandle(long subscriptionId, CandleMessage candle)
+		public async ValueTask SimulateCandle(long subscriptionId, CandleMessage candle, CancellationToken cancellationToken)
 		{
 			if (_activeSubscriptions.ContainsKey(subscriptionId))
 			{
 				candle.SetSubscriptionIds([subscriptionId]);
-				SendOutMessage(candle);
+				await SendOutMessageAsync(candle, cancellationToken);
 			}
 		}
 
-		public void SimulateTick(long subscriptionId, ExecutionMessage tick)
+		public async ValueTask SimulateTick(long subscriptionId, ExecutionMessage tick, CancellationToken cancellationToken)
 		{
 			if (_activeSubscriptions.ContainsKey(subscriptionId))
 			{
 				tick.SetSubscriptionIds([subscriptionId]);
-				SendOutMessage(tick);
+				await SendOutMessageAsync(tick, cancellationToken);
 			}
 		}
 
-		public void SimulateLevel1(long subscriptionId, Level1ChangeMessage level1)
+		public async ValueTask SimulateLevel1(long subscriptionId, Level1ChangeMessage level1, CancellationToken cancellationToken)
 		{
 			if (_activeSubscriptions.ContainsKey(subscriptionId))
 			{
 				level1.SetSubscriptionIds([subscriptionId]);
-				SendOutMessage(level1);
+				await SendOutMessageAsync(level1, cancellationToken);
 			}
 		}
 
@@ -123,49 +121,49 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 			this.AddSupportedMarketDataType(DataType.OrderLog);
 		}
 
-		public void SimulateMarketDepth(long subscriptionId, QuoteChangeMessage depth)
+		public async ValueTask SimulateMarketDepth(long subscriptionId, QuoteChangeMessage depth, CancellationToken cancellationToken)
 		{
 			if (_activeSubscriptions.ContainsKey(subscriptionId))
 			{
 				depth.SetSubscriptionIds([subscriptionId]);
-				SendOutMessage(depth);
+				await SendOutMessageAsync(depth, cancellationToken);
 			}
 		}
 
-		public void SimulateOrderLog(long subscriptionId, ExecutionMessage orderLog)
+		public async ValueTask SimulateOrderLog(long subscriptionId, ExecutionMessage orderLog, CancellationToken cancellationToken)
 		{
 			if (_activeSubscriptions.ContainsKey(subscriptionId))
 			{
 				orderLog.SetSubscriptionIds([subscriptionId]);
-				SendOutMessage(orderLog);
+				await SendOutMessageAsync(orderLog, cancellationToken);
 			}
 		}
 
-		public void SimulateFinished(long subscriptionId)
+		public async ValueTask SimulateFinished(long subscriptionId, CancellationToken cancellationToken)
 		{
 			if (_activeSubscriptions.TryGetAndRemove(subscriptionId, out _))
 			{
-				SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = subscriptionId });
+				await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = subscriptionId }, cancellationToken);
 			}
 		}
 
-		public void SimulateOnline(long subscriptionId)
+		public async ValueTask SimulateOnline(long subscriptionId, CancellationToken cancellationToken)
 		{
 			if (_activeSubscriptions.ContainsKey(subscriptionId))
 			{
-				SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = subscriptionId });
+				await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = subscriptionId }, cancellationToken);
 			}
 		}
 
-		public void SimulateError(long subscriptionId, Exception error)
+		public async ValueTask SimulateError(long subscriptionId, Exception error, CancellationToken cancellationToken)
 		{
 			if (_activeSubscriptions.TryGetAndRemove(subscriptionId, out _))
 			{
-				SendOutMessage(new SubscriptionResponseMessage
+				await SendOutMessageAsync(new SubscriptionResponseMessage
 				{
 					OriginalTransactionId = subscriptionId,
 					Error = error,
-				});
+				}, cancellationToken);
 			}
 		}
 
@@ -412,7 +410,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		// Simulate 1 candle with specific OHLCV values
 		var candle = CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 100, 110, 95, 105, 5000);
-		inner.SimulateCandle(1, candle);
+		await inner.SimulateCandle(1, candle, CancellationToken);
 
 		// Sent 1 candle, should receive exactly 1 candle
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -455,7 +453,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		// Simulate 1 finished candle (should be converted to Active)
 		var candle = CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 100, 105, 95, 102, 1000, CandleStates.Finished);
-		inner.SimulateCandle(1, candle);
+		await inner.SimulateCandle(1, candle, CancellationToken);
 
 		// Sent 1 candle, should receive exactly 1 candle
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -497,7 +495,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		// Simulate 1 finished candle
 		var candle = CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 100, 105, 95, 102, 1000, CandleStates.Finished);
-		inner.SimulateCandle(1, candle);
+		await inner.SimulateCandle(1, candle, CancellationToken);
 
 		// Sent 1 candle, should receive exactly 1 candle
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -631,10 +629,10 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
 		// Simulate 4 ticks within same 1-min candle: O=100, H=105, L=98, C=102, V=60
-		inner.SimulateTick(1, CreateTick(secId, baseTime, 100, 10));                 // Open
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(10), 105, 20));  // High
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(20), 98, 15));   // Low
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(30), 102, 15));  // Close
+		await inner.SimulateTick(1, CreateTick(secId, baseTime, 100, 10), CancellationToken);                 // Open
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(10), 105, 20), CancellationToken);  // High
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(20), 98, 15), CancellationToken);   // Low
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(30), 102, 15), CancellationToken);  // Close
 
 		// 4 ticks in same minute = 1 candle (may have multiple updates)
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -712,11 +710,11 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		// Simulate 5 one-minute candles with specific values
 		// Compressed 5-min should be: O=100, H=120, L=90, C=108, V=5500
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(0), TimeSpan.FromMinutes(1), 100, 105, 98, 104, 1000));
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 104, 110, 100, 108, 1200));
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(2), TimeSpan.FromMinutes(1), 108, 120, 105, 115, 1500));
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(3), TimeSpan.FromMinutes(1), 115, 118, 90, 95, 900));
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(4), TimeSpan.FromMinutes(1), 95, 110, 92, 108, 900));
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(0), TimeSpan.FromMinutes(1), 100, 105, 98, 104, 1000), CancellationToken);
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 104, 110, 100, 108, 1200), CancellationToken);
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(2), TimeSpan.FromMinutes(1), 108, 120, 105, 115, 1500), CancellationToken);
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(3), TimeSpan.FromMinutes(1), 115, 118, 90, 95, 900), CancellationToken);
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(4), TimeSpan.FromMinutes(1), 95, 110, 92, 108, 900), CancellationToken);
 
 		// 5 one-minute candles = multiple updates to 1 compressed 5-min candle
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -845,11 +843,11 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		// Send 5 one-minute candles to form one 5-min candle
 		// Expected: O=100, H=115, L=95, C=110, V=5500
-		inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(0), TimeSpan.FromMinutes(1), 100, 108, 98, 105, 1000));
-		inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 105, 115, 102, 112, 1200)); // H=115
-		inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(2), TimeSpan.FromMinutes(1), 112, 114, 95, 100, 1100));  // L=95
-		inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(3), TimeSpan.FromMinutes(1), 100, 108, 98, 106, 1000));
-		inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(4), TimeSpan.FromMinutes(1), 106, 112, 104, 110, 1200));  // C=110
+		await inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(0), TimeSpan.FromMinutes(1), 100, 108, 98, 105, 1000), CancellationToken);
+		await inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 105, 115, 102, 112, 1200), CancellationToken); // H=115
+		await inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(2), TimeSpan.FromMinutes(1), 112, 114, 95, 100, 1100), CancellationToken);  // L=95
+		await inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(3), TimeSpan.FromMinutes(1), 100, 108, 98, 106, 1000), CancellationToken);
+		await inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(4), TimeSpan.FromMinutes(1), 106, 112, 104, 110, 1200), CancellationToken);  // C=110
 
 		// Verify compressed candle
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -899,11 +897,11 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		// Send 5 historical 1-min candles with specific OHLCV
 		// Expected compressed: O=100, H=130, L=85, C=115, V=7500
-		inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(0), TimeSpan.FromMinutes(1), 100, 110, 95, 108, 1500));
-		inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 108, 130, 105, 125, 2000)); // H=130
-		inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(2), TimeSpan.FromMinutes(1), 125, 128, 85, 90, 1500));  // L=85
-		inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(3), TimeSpan.FromMinutes(1), 90, 105, 88, 102, 1200));
-		inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(4), TimeSpan.FromMinutes(1), 102, 118, 100, 115, 1300));  // C=115
+		await inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(0), TimeSpan.FromMinutes(1), 100, 110, 95, 108, 1500), CancellationToken);
+		await inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 108, 130, 105, 125, 2000), CancellationToken); // H=130
+		await inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(2), TimeSpan.FromMinutes(1), 125, 128, 85, 90, 1500), CancellationToken);  // L=85
+		await inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(3), TimeSpan.FromMinutes(1), 90, 105, 88, 102, 1200), CancellationToken);
+		await inner.SimulateCandle(firstSub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(4), TimeSpan.FromMinutes(1), 102, 118, 100, 115, 1300), CancellationToken);  // C=115
 
 		// Check compressed 5-min candle
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -956,7 +954,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		AreEqual(TimeSpan.FromMinutes(1).TimeFrame(), internalSub.DataType2, "Internal subscription should be 1-min");
 
 		// Send candle
-		inner.SimulateCandle(internalSub.TransactionId, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 100, 105, 98, 102, 1000));
+		await inner.SimulateCandle(internalSub.TransactionId, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 100, 105, 98, 102, 1000), CancellationToken);
 
 		// Verify candles have CLIENT's subscription ID
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -1035,7 +1033,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		AreEqual(secId, tickSub.SecurityId, "Tick subscription SecurityId should match");
 
 		// Simulate error on tick subscription
-		inner.SimulateError(tickSub.TransactionId, new NotSupportedException("Ticks not available"));
+		await inner.SimulateError(tickSub.TransactionId, new NotSupportedException("Ticks not available"), CancellationToken);
 
 		// Client should receive error
 		var errorResponse = outMessages.OfType<SubscriptionResponseMessage>()
@@ -1080,12 +1078,12 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		// Send only 3 one-minute candles (partial 5-min)
 		// O=100, H=115, L=95, C=102
-		inner.SimulateCandle(sub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(0), TimeSpan.FromMinutes(1), 100, 108, 95, 105, 1000)); // L=95
-		inner.SimulateCandle(sub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 105, 115, 102, 110, 1200)); // H=115
-		inner.SimulateCandle(sub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(2), TimeSpan.FromMinutes(1), 110, 112, 98, 102, 1100));  // C=102
+		await inner.SimulateCandle(sub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(0), TimeSpan.FromMinutes(1), 100, 108, 95, 105, 1000), CancellationToken); // L=95
+		await inner.SimulateCandle(sub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 105, 115, 102, 110, 1200), CancellationToken); // H=115
+		await inner.SimulateCandle(sub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(2), TimeSpan.FromMinutes(1), 110, 112, 98, 102, 1100), CancellationToken);  // C=102
 
 		// Finish should flush partial candle
-		inner.SimulateFinished(sub.TransactionId);
+		await inner.SimulateFinished(sub.TransactionId, CancellationToken);
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
 		(candles.Count > 0).AssertTrue("Should receive candles");
@@ -1131,8 +1129,8 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		// Send 10 one-minute candles to form 2 complete 5-min candles
 		for (int i = 0; i < 10; i++)
 		{
-			inner.SimulateCandle(sub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(i), TimeSpan.FromMinutes(1),
-				100 + i, 105 + i, 95 + i, 102 + i, 1000 + i * 100));
+			await inner.SimulateCandle(sub.TransactionId, CreateTimeFrameCandle(secId, baseTime.AddMinutes(i), TimeSpan.FromMinutes(1),
+				100 + i, 105 + i, 95 + i, 102 + i, 1000 + i * 100), CancellationToken);
 		}
 
 		// Verify candles received
@@ -1210,14 +1208,14 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		AreEqual(1, responses[0].OriginalTransactionId, "Response OriginalTransactionId should be 1");
 
 		// Send 1 candle
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 100, 105, 95, 102, 1000));
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 100, 105, 95, 102, 1000), CancellationToken);
 
 		// Verify exactly 1 candle received
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
 		AreEqual(1, candles.Count, "Sent 1 candle, should receive exactly 1 candle");
 
 		// Simulate finished
-		inner.SimulateFinished(1);
+		await inner.SimulateFinished(1, CancellationToken);
 
 		// Verify exactly 1 subscription was sent
 		var sentSubs = inner.SentMessages.OfType<MarketDataMessage>().Where(m => m.IsSubscribe).ToList();
@@ -1251,7 +1249,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		AreEqual(1, responses[0].OriginalTransactionId, "Response OriginalTransactionId should be 1");
 
 		// Simulate online
-		inner.SimulateOnline(1);
+		await inner.SimulateOnline(1, CancellationToken);
 
 		// Verify exactly 1 online message
 		var onlines = outMessages.OfType<SubscriptionOnlineMessage>().ToList();
@@ -1295,7 +1293,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		{
 			var candle = CreateTimeFrameCandle(secId, baseTime.AddMinutes(i), TimeSpan.FromMinutes(1),
 				100 + i * 10, 105 + i * 10, 95 + i * 10, 102 + i * 10, 1000 + i * 100);
-			inner.SimulateCandle(1, candle);
+			await inner.SimulateCandle(1, candle, CancellationToken);
 		}
 
 		// Verify candles received (count limit is advisory, may receive up to requested)
@@ -1342,10 +1340,10 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
 		// Simulate 2 finished candles
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1),
-			100, 110, 95, 105, 1000, CandleStates.Finished));
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1),
-			110, 120, 105, 115, 1200, CandleStates.Finished));
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1),
+			100, 110, 95, 105, 1000, CandleStates.Finished), CancellationToken);
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1),
+			110, 120, 105, 115, 1200, CandleStates.Finished), CancellationToken);
 
 		// Sent 2 finished candles, should receive exactly 2
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -1405,8 +1403,8 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		}, CancellationToken);
 
 		// Simulate 1 candle within range
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(30), TimeSpan.FromMinutes(1),
-			100, 105, 95, 102, 1000));
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(30), TimeSpan.FromMinutes(1),
+			100, 105, 95, 102, 1000), CancellationToken);
 
 		// Sent 1 candle, should receive exactly 1
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -1454,7 +1452,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		{
 			var candle = CreateTimeFrameCandle(secId, baseTime.AddMinutes(i), TimeSpan.FromMinutes(1),
 				100 + i * 5, 105 + i * 5, 95 + i * 5, 102 + i * 5, 1000 + i * 100);
-			inner.SimulateCandle(1, candle);
+			await inner.SimulateCandle(1, candle, CancellationToken);
 		}
 
 		// Verify candles received
@@ -1497,12 +1495,12 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		}, CancellationToken);
 
 		// Send 3 candles in order: 10:00, 10:01, 10:02
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 100, 105, 95, 102, 1000));
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 110, 115, 105, 112, 1100));
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(2), TimeSpan.FromMinutes(1), 120, 125, 115, 122, 1200));
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 100, 105, 95, 102, 1000), CancellationToken);
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(1), TimeSpan.FromMinutes(1), 110, 115, 105, 112, 1100), CancellationToken);
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime.AddMinutes(2), TimeSpan.FromMinutes(1), 120, 125, 115, 122, 1200), CancellationToken);
 
 		// Now send 1 old candle (out of order) - 10:00 again
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 99, 104, 94, 101, 999));
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId, baseTime, TimeSpan.FromMinutes(1), 99, 104, 94, 101, 999), CancellationToken);
 
 		// Sent 4 candles, but 1 out-of-order should be filtered = exactly 3
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -1580,8 +1578,8 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
 		// Send 1 candle for each subscription
-		inner.SimulateCandle(1, CreateTimeFrameCandle(secId1, baseTime, TimeSpan.FromMinutes(1), 100, 105, 95, 102, 1000));
-		inner.SimulateCandle(2, CreateTimeFrameCandle(secId2, baseTime, TimeSpan.FromMinutes(1), 200, 210, 190, 205, 2000));
+		await inner.SimulateCandle(1, CreateTimeFrameCandle(secId1, baseTime, TimeSpan.FromMinutes(1), 100, 105, 95, 102, 1000), CancellationToken);
+		await inner.SimulateCandle(2, CreateTimeFrameCandle(secId2, baseTime, TimeSpan.FromMinutes(1), 200, 210, 190, 205, 2000), CancellationToken);
 
 		// Sent 2 candles (1 per subscription), should receive exactly 2
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -1668,10 +1666,10 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
 		// Simulate Level1 messages: O=100, H=108, L=95, C=102, V=75
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime, lastTradePrice: 100, lastTradeVolume: 10));
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(10), lastTradePrice: 108, lastTradeVolume: 25));
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), lastTradePrice: 95, lastTradeVolume: 20));
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(30), lastTradePrice: 102, lastTradeVolume: 20));
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime, lastTradePrice: 100, lastTradeVolume: 10), CancellationToken);
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(10), lastTradePrice: 108, lastTradeVolume: 25), CancellationToken);
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), lastTradePrice: 95, lastTradeVolume: 20), CancellationToken);
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(30), lastTradePrice: 102, lastTradeVolume: 20), CancellationToken);
 
 		// Verify candles built from Level1
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -1721,10 +1719,10 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
 		// Simulate Level1: O=99, H=105, L=96, C=100
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime, bestBidPrice: 99));
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(10), bestBidPrice: 105));
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), bestBidPrice: 96));
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(30), bestBidPrice: 100));
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime, bestBidPrice: 99), CancellationToken);
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(10), bestBidPrice: 105), CancellationToken);
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), bestBidPrice: 96), CancellationToken);
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(30), bestBidPrice: 100), CancellationToken);
 
 		// Verify candles built
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -1772,10 +1770,10 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
 		// Simulate Level1: O=101, H=110, L=98, C=105
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime, bestAskPrice: 101));
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(10), bestAskPrice: 110));
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), bestAskPrice: 98));
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(30), bestAskPrice: 105));
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime, bestAskPrice: 101), CancellationToken);
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(10), bestAskPrice: 110), CancellationToken);
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), bestAskPrice: 98), CancellationToken);
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(30), bestAskPrice: 105), CancellationToken);
 
 		// Verify candles built
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -1823,15 +1821,15 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
 		// Send Level1 WITHOUT LastTradePrice (only BestBid)
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime, bestBidPrice: 99));
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(10), bestBidPrice: 100));
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime, bestBidPrice: 99), CancellationToken);
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(10), bestBidPrice: 100), CancellationToken);
 
 		// No candles should be built (required field missing)
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
 		AreEqual(0, candles.Count, "Should not build candles when required field is missing");
 
 		// Now send with LastTradePrice
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), lastTradePrice: 101, lastTradeVolume: 10));
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), lastTradePrice: 101, lastTradeVolume: 10), CancellationToken);
 
 		// Verify candle is now built
 		candles = [.. outMessages.OfType<TimeFrameCandleMessage>()];
@@ -1876,10 +1874,10 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
 		// Simulate Level1 (SpreadMiddle = (Bid+Ask)/2): O=100, H=105, L=97, C=102
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime, bestBidPrice: 99, bestAskPrice: 101));             // middle = 100
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(10), bestBidPrice: 103, bestAskPrice: 107)); // middle = 105
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), bestBidPrice: 95, bestAskPrice: 99));   // middle = 97
-		inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(30), bestBidPrice: 100, bestAskPrice: 104)); // middle = 102
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime, bestBidPrice: 99, bestAskPrice: 101), CancellationToken);             // middle = 100
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(10), bestBidPrice: 103, bestAskPrice: 107), CancellationToken); // middle = 105
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), bestBidPrice: 95, bestAskPrice: 99), CancellationToken);   // middle = 97
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(30), bestBidPrice: 100, bestAskPrice: 104), CancellationToken); // middle = 102
 
 		// Verify candles built
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
@@ -1997,14 +1995,14 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		// Simulate ticks that will create candles with known OHLCV
 		// First candle: vol 30+40+20+10=100, O=100, H=102, L=98, C=101
-		inner.SimulateTick(1, CreateTick(secId, baseTime, 100, 30));
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(1), 102, 40));
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(2), 98, 20));
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(3), 101, 10));
+		await inner.SimulateTick(1, CreateTick(secId, baseTime, 100, 30), CancellationToken);
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(1), 102, 40), CancellationToken);
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(2), 98, 20), CancellationToken);
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(3), 101, 10), CancellationToken);
 
 		// Second candle starts: vol 50+60=110, O=103, H=105, L=103, C=105
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(4), 103, 50));
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(5), 105, 60));
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(4), 103, 50), CancellationToken);
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(5), 105, 60), CancellationToken);
 
 		// Verify volume candles built
 		var candles = outMessages.OfType<VolumeCandleMessage>().ToList();
@@ -2054,15 +2052,15 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
 		// First candle (5 ticks): O=100, H=108, L=96, C=104, V=150
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(0), 100, 20));
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(1), 108, 30)); // High
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(2), 102, 25));
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(3), 96, 35));  // Low
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(4), 104, 40)); // Close
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(0), 100, 20), CancellationToken);
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(1), 108, 30), CancellationToken); // High
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(2), 102, 25), CancellationToken);
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(3), 96, 35), CancellationToken);  // Low
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(4), 104, 40), CancellationToken); // Close
 
 		// Second candle starts
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(5), 105, 10));
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(6), 107, 15));
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(5), 105, 10), CancellationToken);
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(6), 107, 15), CancellationToken);
 
 		// Verify tick candles built
 		var candles = outMessages.OfType<TickCandleMessage>().ToList();
@@ -2114,14 +2112,14 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
 		// Ticks within 10 point range: O=100, H=108, L=100, C=105, then exceeds range
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(0), 100, 20)); // Open
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(1), 105, 30));
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(2), 108, 25)); // High (range = 8)
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(3), 102, 35));
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(4), 105, 40)); // Close before range exceeded
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(0), 100, 20), CancellationToken); // Open
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(1), 105, 30), CancellationToken);
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(2), 108, 25), CancellationToken); // High (range = 8)
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(3), 102, 35), CancellationToken);
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(4), 105, 40), CancellationToken); // Close before range exceeded
 
 		// This tick exceeds range (100 to 112 = 12 > 10) - should start new candle
-		inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(5), 112, 15));
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(5), 112, 15), CancellationToken);
 
 		// Verify range candles built
 		var candles = outMessages.OfType<RangeCandleMessage>().ToList();
@@ -2173,7 +2171,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		};
 		exec.SetSubscriptionIds([parentTransId]);
 
-		inner.SendOutMessage(exec);
+		await inner.SendOutMessageAsync(exec, CancellationToken);
 		await Task.Delay(50, token);
 
 		var child = output.OfType<SubscriptionSecurityAllMessage>().FirstOrDefault();

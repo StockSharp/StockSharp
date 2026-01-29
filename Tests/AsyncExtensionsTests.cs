@@ -25,7 +25,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		public override bool IsAllDownloadingSupported(DataType dataType)
 			=> dataType == DataType.Securities || dataType == DataType.Transactions;
 
-		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
 			SentMessages.Enqueue(message);
 
@@ -33,13 +33,13 @@ public class AsyncExtensionsTests : BaseTestClass
 			{
 				case MessageTypes.Connect:
 				{
-					SendOutMessage(new ConnectMessage());
+					await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
 					break;
 				}
 
 				case MessageTypes.Disconnect:
 				{
-					SendOutMessage(new DisconnectMessage());
+					await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
 					break;
 				}
 
@@ -50,7 +50,7 @@ public class AsyncExtensionsTests : BaseTestClass
 					if (mdMsg.IsSubscribe)
 					{
 						// ack subscribe
-						SendOutMessage(mdMsg.CreateResponse());
+						await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
 
 						ActiveSubscriptions[mdMsg.TransactionId] = mdMsg;
 						LastSubscribedId = mdMsg.TransactionId;
@@ -64,7 +64,7 @@ public class AsyncExtensionsTests : BaseTestClass
 					{
 						ActiveSubscriptions.Remove(mdMsg.OriginalTransactionId);
 						// ack unsubscribe
-						SendOutMessage(mdMsg.CreateResponse());
+						await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
 					}
 
 					break;
@@ -91,8 +91,8 @@ public class AsyncExtensionsTests : BaseTestClass
 					var osm = (OrderStatusMessage)message;
 					if (osm.IsSubscribe)
 					{
-						SendOutMessage(osm.CreateResponse());
-						SendOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = osm.TransactionId });
+						await SendOutMessageAsync(osm.CreateResponse(), cancellationToken);
+						await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = osm.TransactionId }, cancellationToken);
 					}
 					break;
 				}
@@ -104,25 +104,23 @@ public class AsyncExtensionsTests : BaseTestClass
 					break;
 				}
 			}
-
-			return default;
 		}
 
-		public void SimulateData(long subscriptionId, Message data)
+		public async ValueTask SimulateData(long subscriptionId, Message data, CancellationToken cancellationToken)
 		{
 			if (data is ISubscriptionIdMessage sid)
 				sid.SetSubscriptionIds([subscriptionId]);
 
-			SendOutMessage(data);
+			await SendOutMessageAsync(data, cancellationToken);
 		}
 
-		public void FinishHistoricalSubscription(long subscriptionId)
+		public async ValueTask FinishHistoricalSubscription(long subscriptionId, CancellationToken cancellationToken)
 		{
 			if (ActiveSubscriptions.TryGetValue(subscriptionId, out var mdMsg))
-				SendSubscriptionResult(mdMsg);
+				await SendOutMessageAsync(mdMsg.CreateResult(), cancellationToken);
 		}
 
-		public void SimulateOrderExecution(long origTransId, OrderStates? state = null, long? orderId = null,
+		public async ValueTask SimulateOrderExecution(long origTransId, CancellationToken cancellationToken, OrderStates? state = null, long? orderId = null,
 			decimal? tradePrice = null, decimal? tradeVolume = null, long? tradeId = null, Exception error = null)
 		{
 			var exec = new ExecutionMessage
@@ -142,7 +140,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			if (ActiveOrders.TryGetValue(origTransId, out var regMsg))
 				exec.SecurityId = regMsg.SecurityId;
 
-			SendOutMessage(exec);
+			await SendOutMessageAsync(exec, cancellationToken);
 		}
 	}
 
@@ -160,16 +158,14 @@ public class AsyncExtensionsTests : BaseTestClass
 			this.AddSupportedMarketDataType(DataType.Level1);
 		}
 
-		protected override ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
+		protected override async ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 		{
-			SendOutMessage(new ConnectMessage());
-			return default;
+			await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
 		}
 
-		protected override ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
+		protected override async ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 		{
-			SendOutMessage(new DisconnectMessage());
-			return default;
+			await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
 		}
 
 		protected override ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
@@ -197,17 +193,17 @@ public class AsyncExtensionsTests : BaseTestClass
 			return default;
 		}
 
-		public void SimulateData(long subscriptionId, Message data)
+		public async ValueTask SimulateData(long subscriptionId, Message data, CancellationToken cancellationToken)
 		{
 			if (data is ISubscriptionIdMessage sid)
 				sid.SetSubscriptionIds([subscriptionId]);
-			SendOutMessage(data);
+			await SendOutMessageAsync(data, cancellationToken);
 		}
 
-		public void FinishHistoricalSubscription(long subscriptionId)
+		public async ValueTask FinishHistoricalSubscription(long subscriptionId, CancellationToken cancellationToken)
 		{
 			if (ActiveSubscriptions.TryGetValue(subscriptionId, out var mdMsg))
-				SendSubscriptionResult(mdMsg);
+				await SendOutMessageAsync(mdMsg.CreateResult(), cancellationToken);
 		}
 
 		public override IMessageAdapter Clone() => new MockAsyncAdapter(TransactionIdGenerator);
@@ -277,7 +273,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		AreNotEqual(0L, order.TransactionId);
 
 		// Simulate acceptance
-		adapter.SimulateOrderExecution(order.TransactionId, OrderStates.Active, orderId: 123);
+		await adapter.SimulateOrderExecution(order.TransactionId, CancellationToken, OrderStates.Active, orderId: 123);
 
 		// Wait for Active state
 		await Task.Run(async () =>
@@ -336,7 +332,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		for (var i = 0; i < 3; i++)
 		{
 			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
-			adapter.SimulateData(id, l1);
+			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
 		await enumerating.WithCancellation(CancellationToken);
@@ -384,10 +380,10 @@ public class AsyncExtensionsTests : BaseTestClass
 		for (var i = 0; i < 2; i++)
 		{
 			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
-			adapter.SimulateData(id, l1);
+			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
-		adapter.FinishHistoricalSubscription(id);
+		await adapter.FinishHistoricalSubscription(id, CancellationToken);
 		await run.WithCancellation(CancellationToken);
 
 		HasCount(2, got);
@@ -435,7 +431,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		for (var i = 0; i < 3; i++)
 		{
 			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
-			adapter.SimulateData(id, l1);
+			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
 		await enumerating.WithCancellation(CancellationToken);
@@ -487,11 +483,11 @@ public class AsyncExtensionsTests : BaseTestClass
 		for (var i = 0; i < 2; i++)
 		{
 			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
-			adapter.SimulateData(id, l1);
+			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
 		// Finish historical subscription after sending all data
-		adapter.FinishHistoricalSubscription(id);
+		await adapter.FinishHistoricalSubscription(id, CancellationToken);
 
 		await enumerating.WithCancellation(CancellationToken);
 
@@ -540,7 +536,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		for (var i = 0; i < 3; i++)
 		{
 			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
-			adapter.SimulateData(id, l1);
+			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
 		await enumerating.WithCancellation(CancellationToken);
@@ -595,11 +591,11 @@ public class AsyncExtensionsTests : BaseTestClass
 		for (var i = 0; i < 2; i++)
 		{
 			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
-			adapter.SimulateData(id, l1);
+			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
 		// Finish historical subscription after sending all data
-		adapter.FinishHistoricalSubscription(id);
+		await adapter.FinishHistoricalSubscription(id, CancellationToken);
 
 		await enumerating.WithCancellation(CancellationToken);
 
@@ -709,7 +705,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.WaitForSubscriptionStarted(CancellationToken);
 
 		// Send finished message
-		adapter.SendSubscriptionFinished(subscription.TransactionId);
+		await adapter.SendSubscriptionFinished(subscription.TransactionId, CancellationToken);
 
 		// Assert: should complete within 2 seconds
 		var (cts, token) = CancellationToken.CreateChildToken(TimeSpan.FromSeconds(2));
@@ -744,7 +740,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.WaitForSubscriptionStarted(CancellationToken);
 
 		// Send error response (instead of success)
-		adapter.SendSubscriptionError(subscription.TransactionId, new InvalidOperationException("Test error"));
+		await adapter.SendSubscriptionError(subscription.TransactionId, new InvalidOperationException("Test error"), CancellationToken);
 
 		// Assert: should throw
 		await ThrowsExactlyAsync<InvalidOperationException>(async () => await subscribeTask);
@@ -782,7 +778,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.WaitForSubscriptionStarted(CancellationToken);
 
 		// Send some data
-		adapter.SendLevel1Data(subscription.TransactionId);
+		await adapter.SendLevel1Data(subscription.TransactionId, CancellationToken);
 
 		await Task.Delay(100, CancellationToken);
 
@@ -835,11 +831,11 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Send data
 		for (int i = 0; i < 5; i++)
 		{
-			adapter.SendLevel1Data(subscription.TransactionId, 100 + i);
+			await adapter.SendLevel1Data(subscription.TransactionId, CancellationToken, 100 + i);
 		}
 
 		// Finish
-		adapter.SendSubscriptionFinished(subscription.TransactionId);
+		await adapter.SendSubscriptionFinished(subscription.TransactionId, CancellationToken);
 
 		await enumerateTask.WithCancellation(CancellationToken);
 
@@ -864,7 +860,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		public Task WaitForSubscriptionStarted(CancellationToken cancellationToken)
 			=> _subscriptionStarted.Task.WithCancellation(cancellationToken);
 
-		public void SendLevel1Data(long subscriptionId, decimal price = 100m)
+		public async ValueTask SendLevel1Data(long subscriptionId, CancellationToken cancellationToken, decimal price = 100m)
 		{
 			var msg = new Level1ChangeMessage
 			{
@@ -873,16 +869,16 @@ public class AsyncExtensionsTests : BaseTestClass
 				SubscriptionId = subscriptionId,
 			}.TryAdd(Level1Fields.LastTradePrice, price);
 
-			SendOutMessage(msg);
+			await SendOutMessageAsync(msg, cancellationToken);
 		}
 
-		public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+		public override async ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
 			switch (message)
 			{
 				case MarketDataMessage mdm when mdm.IsSubscribe:
 					// Send response (subscription started)
-					SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId });
+					await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId }, cancellationToken);
 					_subscriptionStarted.TrySetResult(true);
 					break;
 
@@ -891,8 +887,6 @@ public class AsyncExtensionsTests : BaseTestClass
 					// This is the bug scenario - adapter doesn't confirm unsubscribe
 					break;
 			}
-
-			return default;
 		}
 	}
 
@@ -914,26 +908,26 @@ public class AsyncExtensionsTests : BaseTestClass
 		public Task WaitForSubscriptionStarted(CancellationToken cancellationToken)
 			=> _subscriptionStarted.Task.WithCancellation(cancellationToken);
 
-		public void SendSubscriptionResponse(long subscriptionId)
+		public async ValueTask SendSubscriptionResponse(long subscriptionId, CancellationToken cancellationToken)
 		{
-			SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = subscriptionId });
+			await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = subscriptionId }, cancellationToken);
 		}
 
-		public void SendSubscriptionFinished(long subscriptionId)
+		public async ValueTask SendSubscriptionFinished(long subscriptionId, CancellationToken cancellationToken)
 		{
-			SendOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = subscriptionId });
+			await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = subscriptionId }, cancellationToken);
 		}
 
-		public void SendSubscriptionError(long subscriptionId, Exception error)
+		public async ValueTask SendSubscriptionError(long subscriptionId, Exception error, CancellationToken cancellationToken)
 		{
-			SendOutMessage(new SubscriptionResponseMessage
+			await SendOutMessageAsync(new SubscriptionResponseMessage
 			{
 				OriginalTransactionId = subscriptionId,
 				Error = error,
-			});
+			}, cancellationToken);
 		}
 
-		public void SendLevel1Data(long subscriptionId, decimal price = 100m)
+		public async ValueTask SendLevel1Data(long subscriptionId, CancellationToken cancellationToken, decimal price = 100m)
 		{
 			var msg = new Level1ChangeMessage
 			{
@@ -942,26 +936,24 @@ public class AsyncExtensionsTests : BaseTestClass
 				SubscriptionId = subscriptionId,
 			}.TryAdd(Level1Fields.LastTradePrice, price);
 
-			SendOutMessage(msg);
+			await SendOutMessageAsync(msg, cancellationToken);
 		}
 
-		public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+		public override async ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
 			switch (message)
 			{
 				case MarketDataMessage mdm when mdm.IsSubscribe:
 					_subscriptionStarted.TrySetResult(true);
 					if (AutoSendSubscriptionResponse)
-						SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId });
+						await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId }, cancellationToken);
 					break;
 
 				case MarketDataMessage mdm when !mdm.IsSubscribe:
 					// Unsubscribe - send response (not finished - finished is for subscription completion)
-					SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId });
+					await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = mdm.TransactionId }, cancellationToken);
 					break;
 			}
-
-			return default;
 		}
 	}
 
@@ -986,10 +978,10 @@ public class AsyncExtensionsTests : BaseTestClass
 		public Task WaitForOrderReceived(CancellationToken cancellationToken)
 			=> _orderReceived.Task.WithCancellation(cancellationToken);
 
-		public void SendOrderExecution(long origTransId, OrderStates? state = null, long? orderId = null,
+		public async ValueTask SendOrderExecution(long origTransId, CancellationToken cancellationToken, OrderStates? state = null, long? orderId = null,
 			decimal? tradePrice = null, decimal? tradeVolume = null, Exception error = null)
 		{
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = origTransId,
@@ -1000,7 +992,7 @@ public class AsyncExtensionsTests : BaseTestClass
 				Error = error,
 				HasOrderInfo = state != null || orderId != null,
 				ServerTime = DateTime.UtcNow,
-			});
+			}, cancellationToken);
 		}
 
 		public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
@@ -1063,8 +1055,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.WaitForOrderReceived(CancellationToken);
 
 		var transId = order.TransactionId;
-		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 123);
-		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 123);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1099,10 +1091,10 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.WaitForOrderReceived(CancellationToken);
 
 		var transId = order.TransactionId;
-		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 123);
-		adapter.SendOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5);
-		adapter.SendOrderExecution(transId, orderId: 123, tradePrice: 100.6m, tradeVolume: 5);
-		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 123);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
+		await adapter.SendOrderExecution(transId, CancellationToken, orderId: 123, tradePrice: 100.5m, tradeVolume: 5);
+		await adapter.SendOrderExecution(transId, CancellationToken, orderId: 123, tradePrice: 100.6m, tradeVolume: 5);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1144,7 +1136,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.WaitForOrderReceived(CancellationToken);
 
 		var transId = order.TransactionId;
-		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 456);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 456);
 
 		// Wait for cancel to be sent
 		await Task.Run(async () =>
@@ -1154,7 +1146,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Send done after cancel
-		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 456);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 456);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1190,7 +1182,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		AreNotEqual(0L, order.TransactionId);
 
-		adapter.SendOrderExecution(order.TransactionId, OrderStates.Done, orderId: 123);
+		await adapter.SendOrderExecution(order.TransactionId, CancellationToken, OrderStates.Done, orderId: 123);
 
 		await enumTask.WithCancellation(CancellationToken);
 	}
@@ -1251,7 +1243,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		await adapter.WaitForOrderReceived(CancellationToken);
 
-		adapter.SendOrderExecution(order.TransactionId, OrderStates.Failed, error: new InvalidOperationException("Order rejected"));
+		await adapter.SendOrderExecution(order.TransactionId, CancellationToken, OrderStates.Failed, error: new InvalidOperationException("Order rejected"));
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1290,24 +1282,24 @@ public class AsyncExtensionsTests : BaseTestClass
 		var otherTransId2 = transId + 200;
 
 		// Send updates for OTHER transactions - should be filtered out
-		adapter.SendOrderExecution(otherTransId1, OrderStates.Active, orderId: 999);
-		adapter.SendOrderExecution(otherTransId2, OrderStates.Active, orderId: 888);
+		await adapter.SendOrderExecution(otherTransId1, CancellationToken, OrderStates.Active, orderId: 999);
+		await adapter.SendOrderExecution(otherTransId2, CancellationToken, OrderStates.Active, orderId: 888);
 
 		// Send updates for OUR transaction
-		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 123);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
 
 		// More updates for other transactions
-		adapter.SendOrderExecution(otherTransId1, orderId: 999, tradePrice: 50m, tradeVolume: 5);
-		adapter.SendOrderExecution(otherTransId2, OrderStates.Done, orderId: 888);
+		await adapter.SendOrderExecution(otherTransId1, CancellationToken, orderId: 999, tradePrice: 50m, tradeVolume: 5);
+		await adapter.SendOrderExecution(otherTransId2, CancellationToken, OrderStates.Done, orderId: 888);
 
 		// Trade for our order
-		adapter.SendOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5);
+		await adapter.SendOrderExecution(transId, CancellationToken, orderId: 123, tradePrice: 100.5m, tradeVolume: 5);
 
 		// More noise
-		adapter.SendOrderExecution(otherTransId1, OrderStates.Done, orderId: 999);
+		await adapter.SendOrderExecution(otherTransId1, CancellationToken, OrderStates.Done, orderId: 999);
 
 		// Complete our order
-		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 123);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1347,7 +1339,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		var transId = order.TransactionId;
 
 		// First message assigns OrderId
-		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 555);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 555);
 
 		// Subsequent messages come with OrderId but different OriginalTransactionId (some exchanges do this)
 		// Should still match because we track OrderId after it's assigned
@@ -1361,10 +1353,10 @@ public class AsyncExtensionsTests : BaseTestClass
 			HasOrderInfo = true,
 			ServerTime = DateTime.UtcNow,
 		};
-		adapter.SendOutMessage(exec2);
+		await adapter.SendOutMessageAsync(exec2, CancellationToken);
 
 		// Complete
-		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 555);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 555);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1403,20 +1395,20 @@ public class AsyncExtensionsTests : BaseTestClass
 		var transId = order.TransactionId;
 
 		// 1. Order pending (some exchanges send this)
-		adapter.SendOrderExecution(transId, OrderStates.Pending);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Pending);
 
 		// 2. Order accepted and active
-		adapter.SendOrderExecution(transId, OrderStates.Active, orderId: 12345);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 12345);
 
 		// 3. First partial fill - 30 units
-		adapter.SendOrderExecution(transId, orderId: 12345, tradePrice: 249.5m, tradeVolume: 30);
+		await adapter.SendOrderExecution(transId, CancellationToken, orderId: 12345, tradePrice: 249.5m, tradeVolume: 30);
 
 		// 4. Second partial fill - 50 units
-		adapter.SendOrderExecution(transId, orderId: 12345, tradePrice: 249.8m, tradeVolume: 50);
+		await adapter.SendOrderExecution(transId, CancellationToken, orderId: 12345, tradePrice: 249.8m, tradeVolume: 50);
 
 		// 5. Final fill - 20 units, order complete
-		adapter.SendOrderExecution(transId, orderId: 12345, tradePrice: 250.0m, tradeVolume: 20);
-		adapter.SendOrderExecution(transId, OrderStates.Done, orderId: 12345);
+		await adapter.SendOrderExecution(transId, CancellationToken, orderId: 12345, tradePrice: 250.0m, tradeVolume: 20);
+		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 12345);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1530,7 +1522,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		var transId = order.TransactionId;
 
 		// Simulate order accepted
-		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
 
 		// Wait for state change via order object
 		await Task.Run(async () =>
@@ -1546,7 +1538,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		allOrderReceived.Count.AssertGreater(0, $"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
 
 		// Simulate order filled
-		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1596,13 +1588,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		var transId = adapter.LastOrderTransactionId;
 
 		// Simulate order accepted
-		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
 		// Simulate partial fill (trade)
-		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 1001);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 1001);
 		// Simulate second fill (trade)
-		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.6m, tradeVolume: 5, tradeId: 1002);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 123, tradePrice: 100.6m, tradeVolume: 5, tradeId: 1002);
 		// Simulate order done
-		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1669,7 +1661,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		var transId = adapter.LastOrderTransactionId;
 
 		// Simulate order accepted
-		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 456);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 456);
 
 		// Wait for cancel message to be sent
 		await Task.Run(async () =>
@@ -1679,7 +1671,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Simulate order cancelled
-		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 456);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 456);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1727,24 +1719,24 @@ public class AsyncExtensionsTests : BaseTestClass
 		var otherTransId2 = transId + 200;
 
 		// Send updates for OTHER orders - should be filtered out
-		adapter.SimulateOrderExecution(otherTransId1, OrderStates.Active, orderId: 999);
-		adapter.SimulateOrderExecution(otherTransId2, OrderStates.Active, orderId: 888);
+		await adapter.SimulateOrderExecution(otherTransId1, CancellationToken, OrderStates.Active, orderId: 999);
+		await adapter.SimulateOrderExecution(otherTransId2, CancellationToken, OrderStates.Active, orderId: 888);
 
 		// Send update for OUR order
-		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 123);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
 
 		// More updates for other orders
-		adapter.SimulateOrderExecution(otherTransId1, orderId: 999, tradePrice: 50m, tradeVolume: 5, tradeId: 5001);
-		adapter.SimulateOrderExecution(otherTransId2, OrderStates.Done, orderId: 888);
+		await adapter.SimulateOrderExecution(otherTransId1, CancellationToken, orderId: 999, tradePrice: 50m, tradeVolume: 5, tradeId: 5001);
+		await adapter.SimulateOrderExecution(otherTransId2, CancellationToken, OrderStates.Done, orderId: 888);
 
 		// Trade for our order
-		adapter.SimulateOrderExecution(transId, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 2001);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 123, tradePrice: 100.5m, tradeVolume: 5, tradeId: 2001);
 
 		// More noise
-		adapter.SimulateOrderExecution(otherTransId1, OrderStates.Done, orderId: 999);
+		await adapter.SimulateOrderExecution(otherTransId1, CancellationToken, OrderStates.Done, orderId: 999);
 
 		// Complete our order
-		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 123);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1803,22 +1795,22 @@ public class AsyncExtensionsTests : BaseTestClass
 		var transId = adapter.LastOrderTransactionId;
 
 		// 1. Order pending
-		adapter.SimulateOrderExecution(transId, OrderStates.Pending);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Pending);
 
 		// 2. Order accepted and active
-		adapter.SimulateOrderExecution(transId, OrderStates.Active, orderId: 12345);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 12345);
 
 		// 3. First partial fill - 30 units
-		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 249.5m, tradeVolume: 30, tradeId: 3001);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 12345, tradePrice: 249.5m, tradeVolume: 30, tradeId: 3001);
 
 		// 4. Second partial fill - 50 units
-		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 249.8m, tradeVolume: 50, tradeId: 3002);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 12345, tradePrice: 249.8m, tradeVolume: 50, tradeId: 3002);
 
 		// 5. Final fill - 20 units
-		adapter.SimulateOrderExecution(transId, orderId: 12345, tradePrice: 250.0m, tradeVolume: 20, tradeId: 3003);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, orderId: 12345, tradePrice: 250.0m, tradeVolume: 20, tradeId: 3003);
 
 		// 6. Order complete
-		adapter.SimulateOrderExecution(transId, OrderStates.Done, orderId: 12345);
+		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 12345);
 
 		await enumTask.WithCancellation(CancellationToken);
 
@@ -1891,7 +1883,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
 
 		// Emit connect response
-		adapter.EmitOut(new ConnectMessage());
+		await adapter.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Wait for subscription message
 		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
@@ -1900,7 +1892,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		var subId = subMsg.TransactionId;
 
 		// Emit subscription response
-		adapter.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = subId });
+		await adapter.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = subId }, CancellationToken);
 
 		// Emit data messages
 		var tick1 = new ExecutionMessage
@@ -1918,11 +1910,11 @@ public class AsyncExtensionsTests : BaseTestClass
 			SubscriptionId = subId,
 		};
 
-		adapter.EmitOut(tick1);
-		adapter.EmitOut(tick2);
+		await adapter.SendOutMessageAsync(tick1, CancellationToken);
+		await adapter.SendOutMessageAsync(tick2, CancellationToken);
 
 		// Emit subscription finished
-		adapter.EmitOut(new SubscriptionFinishedMessage { OriginalTransactionId = subId });
+		await adapter.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = subId }, CancellationToken);
 
 		// Wait for enumeration to complete
 		await enumerationTask.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken);
@@ -1962,7 +1954,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
 
 		// Emit connect response
-		adapter.EmitOut(new ConnectMessage());
+		await adapter.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Wait for subscription message
 		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
@@ -1971,16 +1963,16 @@ public class AsyncExtensionsTests : BaseTestClass
 		var subId = subMsg.TransactionId;
 
 		// Emit subscription response
-		adapter.EmitOut(new SubscriptionResponseMessage { OriginalTransactionId = subId });
+		await adapter.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = subId }, CancellationToken);
 
 		// Emit one data message
-		adapter.EmitOut(new ExecutionMessage
+		await adapter.SendOutMessageAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			SecurityId = secId,
 			TradePrice = 100,
 			SubscriptionId = subId,
-		});
+		}, CancellationToken);
 
 		// Wait for message to be received
 		await WaitForConditionAsync(() => messages.Count > 0, TimeSpan.FromSeconds(5));
@@ -2026,7 +2018,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
 
 		// Emit connect error
-		adapter.EmitOut(new ConnectMessage { Error = new InvalidOperationException("Connection failed") });
+		await adapter.SendOutMessageAsync(new ConnectMessage { Error = new InvalidOperationException("Connection failed") }, CancellationToken);
 
 		// Verify exception is thrown
 		await ThrowsAsync<InvalidOperationException>(async () => await enumerationTask.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken));
@@ -2055,7 +2047,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
 
 		// Emit connect response
-		adapter.EmitOut(new ConnectMessage());
+		await adapter.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Wait for subscription message
 		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
@@ -2064,11 +2056,11 @@ public class AsyncExtensionsTests : BaseTestClass
 		var subId = subMsg.TransactionId;
 
 		// Emit subscription error
-		adapter.EmitOut(new SubscriptionResponseMessage
+		await adapter.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
 			OriginalTransactionId = subId,
 			Error = new InvalidOperationException("Subscription failed")
-		});
+		}, CancellationToken);
 
 		// Verify exception is thrown
 		await ThrowsAsync<InvalidOperationException>(async () => await enumerationTask.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken));

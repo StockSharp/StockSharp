@@ -92,7 +92,7 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 		output.Clear();
 
 		var time = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-		inner.SendOutMessage(OkResponse(1, time));
+		await inner.SendOutMessageAsync(OkResponse(1, time), CancellationToken);
 
 		builder.SnapshotCalls.AssertEqual(1);
 		builder.LastSnapshotTime.AssertEqual(time);
@@ -147,11 +147,11 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 			DepthBuilder = builder,
 		}, token);
 
-		inner.SendOutMessage(OkResponse(1, DateTime.UtcNow));
+		await inner.SendOutMessageAsync(OkResponse(1, DateTime.UtcNow), CancellationToken);
 
 		output.Clear();
 
-		inner.SendOutMessage(CreateOrderLog(secId, DateTime.UtcNow.AddSeconds(1), subscriptionIds: [1]));
+		await inner.SendOutMessageAsync(CreateOrderLog(secId, DateTime.UtcNow.AddSeconds(1), subscriptionIds: [1]), CancellationToken);
 
 		output.OfType<ExecutionMessage>().Any().AssertFalse();
 
@@ -205,11 +205,11 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 			DepthBuilder = builder,
 		}, token);
 
-		inner.SendOutMessage(OkResponse(1, DateTime.UtcNow));
+		await inner.SendOutMessageAsync(OkResponse(1, DateTime.UtcNow), CancellationToken);
 
 		output.Clear();
 
-		inner.SendOutMessage(CreateOrderLog(secId, DateTime.UtcNow.AddSeconds(1), subscriptionIds: [1, 99]));
+		await inner.SendOutMessageAsync(CreateOrderLog(secId, DateTime.UtcNow.AddSeconds(1), subscriptionIds: [1, 99]), CancellationToken);
 
 		output.OfType<QuoteChangeMessage>().Single().GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();
 
@@ -240,11 +240,11 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 		inner.InMessages.Count.AssertEqual(1);
 		((MarketDataMessage)inner.InMessages[0]).DataType2.AssertEqual(DataType.OrderLog);
 
-		inner.SendOutMessage(OkResponse(2, DateTime.UtcNow));
+		await inner.SendOutMessageAsync(OkResponse(2, DateTime.UtcNow), CancellationToken);
 
 		output.Clear();
 
-		inner.SendOutMessage(CreateOrderLog(secId, DateTime.UtcNow.AddSeconds(1), subscriptionIds: [2], orderVolume: 7m));
+		await inner.SendOutMessageAsync(CreateOrderLog(secId, DateTime.UtcNow.AddSeconds(1), subscriptionIds: [2], orderVolume: 7m), CancellationToken);
 
 		output.OfType<ExecutionMessage>().Count().AssertEqual(1);
 
@@ -290,11 +290,11 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 			DepthBuilder = builder,
 		}, token);
 
-		inner.SendOutMessage(OkResponse(1, DateTime.UtcNow));
+		await inner.SendOutMessageAsync(OkResponse(1, DateTime.UtcNow), CancellationToken);
 
 		output.Clear();
 
-		inner.SendOutMessage(CreateOrderLog(secId, DateTime.UtcNow.AddSeconds(1), subscriptionIds: [1]));
+		await inner.SendOutMessageAsync(CreateOrderLog(secId, DateTime.UtcNow.AddSeconds(1), subscriptionIds: [1]), CancellationToken);
 
 		output.OfType<ErrorMessage>().Single().Error.Message.AssertEqual("broken order log");
 	}
