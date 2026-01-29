@@ -45,14 +45,14 @@ public partial class TinkoffMessageAdapter
 
 			var response = await _service.StopOrders.PostStopOrderAsync(stopOrder, cancellationToken: cancellationToken);
 
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				HasOrderInfo = true,
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = transId,
 				OrderStringId = response.StopOrderId,
 				OrderState = OrderStates.Active,
-			});
+			}, cancellationToken);
 		}
 		else
 		{
@@ -87,7 +87,7 @@ public partial class TinkoffMessageAdapter
 				}, cancellationToken: cancellationToken);
 			}
 
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				HasOrderInfo = true,
 				DataTypeEx = DataType.Transactions,
@@ -96,12 +96,12 @@ public partial class TinkoffMessageAdapter
 				OrderState = response.ExecutionReportStatus.ToOrderState(),
 				Error = response.ExecutionReportStatus == OrderExecutionReportStatus.ExecutionReportStatusRejected ? new InvalidOperationException(response.Message) : null,
 				Commission = response.ExecutedCommission?.ToDecimal(),
-				
+
 				// balance updates in stream
 				//Balance = response.LotsRequested - response.LotsExecuted,
 
 				AveragePrice = response.ExecutedOrderPrice?.ToDecimal(),
-			});
+			}, cancellationToken);
 		}
 	}
 
@@ -118,12 +118,12 @@ public partial class TinkoffMessageAdapter
 				StopOrderId = cancelMsg.OrderStringId,
 			}, cancellationToken: cancellationToken);
 
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				OriginalTransactionId = cancelMsg.TransactionId,
 				ServerTime = response.Time.ToDateTime(),
 				OrderState = OrderStates.Done,
-			});
+			}, cancellationToken);
 		}
 		else
 		{
@@ -341,14 +341,14 @@ public partial class TinkoffMessageAdapter
 		// Send result with errors if any
 		if (errors.Count > 0)
 		{
-			SendOutMessage(new ExecutionMessage
+			await SendOutMessageAsync(new ExecutionMessage
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
 				ServerTime = CurrentTimeUtc,
 				HasOrderInfo = true,
 				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
-			});
+			}, cancellationToken);
 		}
 	}
 
@@ -370,7 +370,7 @@ public partial class TinkoffMessageAdapter
 	/// <inheritdoc/>
 	protected override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(statusMsg.TransactionId);
+		await SendSubscriptionReplyAsync(statusMsg.TransactionId, cancellationToken);
 
 		if (!statusMsg.IsSubscribe)
 		{
@@ -413,7 +413,7 @@ public partial class TinkoffMessageAdapter
 					_orderUids.Add(transId, requestId);
 				}
 
-				SendOutMessage(new ExecutionMessage
+				await SendOutMessageAsync(new ExecutionMessage
 				{
 					HasOrderInfo = true,
 					DataTypeEx = DataType.Transactions,
@@ -432,11 +432,11 @@ public partial class TinkoffMessageAdapter
 					Balance = order.LotsRequested - order.LotsExecuted,
 					AveragePrice = order.ExecutedOrderPrice?.ToDecimal(),
 					OrderState = order.ExecutionReportStatus.ToOrderState(),
-				});
+				}, cancellationToken);
 
 				foreach (var trade in order.Stages)
 				{
-					SendOutMessage(new ExecutionMessage
+					await SendOutMessageAsync(new ExecutionMessage
 					{
 						DataTypeEx = DataType.Transactions,
 						OriginalTransactionId = transId,
@@ -444,7 +444,7 @@ public partial class TinkoffMessageAdapter
 						TradePrice = trade.Price?.ToDecimal(),
 						TradeVolume = trade.Quantity,
 						ServerTime = trade.ExecutionTime.ToDateTime(),
-					});
+					}, cancellationToken);
 				}
 			}
 
@@ -456,7 +456,7 @@ public partial class TinkoffMessageAdapter
 			{
 				foreach (var order in (await _service.StopOrders.GetStopOrdersAsync(new() { AccountId = accountId }, cancellationToken: cancellationToken)).StopOrders)
 				{
-					SendOutMessage(new ExecutionMessage
+					await SendOutMessageAsync(new ExecutionMessage
 					{
 						HasOrderInfo = true,
 						DataTypeEx = DataType.Transactions,
@@ -475,7 +475,7 @@ public partial class TinkoffMessageAdapter
 						{
 							TriggerPrice = order.StopPrice?.ToDecimal(),
 						},
-					});
+					}, cancellationToken);
 				}
 			}
 
@@ -493,7 +493,7 @@ public partial class TinkoffMessageAdapter
 
 				foreach (var trade in op.Trades)
 				{
-					SendOutMessage(new ExecutionMessage
+					await SendOutMessageAsync(new ExecutionMessage
 					{
 						SecurityId = secId,
 						DataTypeEx = DataType.Transactions,
@@ -502,7 +502,7 @@ public partial class TinkoffMessageAdapter
 						TradePrice = trade.Price?.ToDecimal(),
 						TradeVolume = trade.Quantity,
 						ServerTime = trade.DateTime.ToDateTime(),
-					});
+					}, cancellationToken);
 				}
 			}
 		}
@@ -535,7 +535,7 @@ public partial class TinkoffMessageAdapter
 							if (!tryGetTransId(orderState.OrderRequestId, out var transId))
 								continue;
 
-							SendOutMessage(new ExecutionMessage
+							await SendOutMessageAsync(new ExecutionMessage
 							{
 								DataTypeEx = DataType.Transactions,
 								HasOrderInfo = true,
@@ -545,7 +545,7 @@ public partial class TinkoffMessageAdapter
 								OrderState = orderState.ExecutionReportStatus.ToOrderState(),
 								Balance = orderState.LotsRequested - orderState.LotsExecuted,
 								AveragePrice = orderState.ExecutedOrderPrice?.ToDecimal(),
-							});
+							}, cancellationToken);
 
 							var secId = orderState.InstrumentUid.FromInstrumentIdToSecId();
 
@@ -553,7 +553,7 @@ public partial class TinkoffMessageAdapter
 							{
 								foreach (var trade in orderState.Trades)
 								{
-									SendOutMessage(new ExecutionMessage
+									await SendOutMessageAsync(new ExecutionMessage
 									{
 										DataTypeEx = DataType.Transactions,
 										SecurityId = secId,
@@ -563,7 +563,7 @@ public partial class TinkoffMessageAdapter
 										TradeStringId = trade.TradeId,
 										TradePrice = trade.Price?.ToDecimal(),
 										TradeVolume = trade.Quantity,
-									});
+									}, cancellationToken);
 								}
 							}
 						}
@@ -582,7 +582,7 @@ public partial class TinkoffMessageAdapter
 			}, statesToken);
 		}
 
-		SendSubscriptionResult(statusMsg);
+		await SendSubscriptionResultAsync(statusMsg, cancellationToken);
 	}
 
 	/// <inheritdoc/>
@@ -590,7 +590,7 @@ public partial class TinkoffMessageAdapter
 	{
 		var transId = lookupMsg.TransactionId;
 
-		SendSubscriptionReply(transId);
+		await SendSubscriptionReplyAsync(transId, cancellationToken);
 
 		if (!lookupMsg.IsSubscribe)
 		{
@@ -600,9 +600,9 @@ public partial class TinkoffMessageAdapter
 			return;
 		}
 
-		void processResponse(PortfolioResponse portfolio)
+		async ValueTask processResponse(PortfolioResponse portfolio)
 		{
-			SendOutMessage(new PositionChangeMessage
+			await SendOutMessageAsync(new PositionChangeMessage
 			{
 				SecurityId = SecurityId.Money,
 				PortfolioName = portfolio.AccountId,
@@ -611,11 +611,11 @@ public partial class TinkoffMessageAdapter
 			}
 			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.TotalAmountPortfolio?.ToDecimal(), true)
 			.TryAdd(PositionChangeTypes.RealizedPnL, portfolio.ExpectedYield?.ToDecimal(), true)
-			);
+			, cancellationToken);
 
 			foreach (var position in portfolio.Positions)
 			{
-				SendOutMessage(new PositionChangeMessage
+				await SendOutMessageAsync(new PositionChangeMessage
 				{
 					SecurityId = position.InstrumentUid.FromInstrumentIdToSecId(),
 					PortfolioName = portfolio.AccountId,
@@ -627,7 +627,7 @@ public partial class TinkoffMessageAdapter
 				.TryAdd(PositionChangeTypes.RealizedPnL, position.ExpectedYield?.ToDecimal() ?? position.CurrentNkd?.ToDecimal(), true)
 				.TryAdd(PositionChangeTypes.CurrentPrice, position.CurrentPrice?.ToDecimal(), true)
 				.TryAdd(PositionChangeTypes.VariationMargin, position.VarMargin?.ToDecimal(), true)
-				);
+				, cancellationToken);
 			}
 		}
 
@@ -640,24 +640,24 @@ public partial class TinkoffMessageAdapter
 		{
 			_accountIds.Add(account.Id);
 
-			SendOutMessage(new PortfolioMessage
+			await SendOutMessageAsync(new PortfolioMessage
 			{
 				PortfolioName = account.Id,
 				OriginalTransactionId = transId
-			});
+			}, cancellationToken);
 
 			var pfResponse = await (IsDemo
 				? _service.Sandbox.GetSandboxPortfolioAsync(new() { AccountId = account.Id }, cancellationToken: cancellationToken)
 				: _service.Operations.GetPortfolioAsync(new() { AccountId = account.Id }, cancellationToken: cancellationToken)
 			);
 
-			SendOutMessage(new PortfolioMessage
+			await SendOutMessageAsync(new PortfolioMessage
 			{
 				PortfolioName = pfResponse.AccountId,
 				OriginalTransactionId = transId
-			});
+			}, cancellationToken);
 
-			processResponse(pfResponse);
+			await processResponse(pfResponse);
 		}
 
 		if (!lookupMsg.IsHistoryOnly() && !IsDemo)
@@ -681,7 +681,7 @@ public partial class TinkoffMessageAdapter
 							currentDelay = _baseDelay;
 
 							if (response.Portfolio is PortfolioResponse portfolio)
-								processResponse(portfolio);
+								await processResponse(portfolio);
 						}
 					}
 					catch (Exception ex)
@@ -737,7 +737,7 @@ public partial class TinkoffMessageAdapter
 								{
 									foreach (var sec in position.Securities)
 									{
-										SendOutMessage(new PositionChangeMessage
+										await SendOutMessageAsync(new PositionChangeMessage
 										{
 											SecurityId = sec.InstrumentUid.FromInstrumentIdToSecId(),
 											PortfolioName = account,
@@ -746,7 +746,7 @@ public partial class TinkoffMessageAdapter
 										}
 										.TryAdd(PositionChangeTypes.CurrentValue, (decimal)sec.Balance, true)
 										.TryAdd(PositionChangeTypes.BlockedValue, (decimal)sec.Blocked, true)
-										);
+										, cancellationToken);
 									}
 								}
 
@@ -754,7 +754,7 @@ public partial class TinkoffMessageAdapter
 								{
 									foreach (var fut in position.Futures)
 									{
-										SendOutMessage(new PositionChangeMessage
+										await SendOutMessageAsync(new PositionChangeMessage
 										{
 											SecurityId = fut.InstrumentUid.FromInstrumentIdToSecId(),
 											PortfolioName = account,
@@ -763,7 +763,7 @@ public partial class TinkoffMessageAdapter
 										}
 										.TryAdd(PositionChangeTypes.CurrentValue, (decimal)fut.Balance, true)
 										.TryAdd(PositionChangeTypes.BlockedValue, (decimal)fut.Blocked, true)
-										);
+										, cancellationToken);
 									}
 								}
 
@@ -771,7 +771,7 @@ public partial class TinkoffMessageAdapter
 								{
 									foreach (var opt in position.Options)
 									{
-										SendOutMessage(new PositionChangeMessage
+										await SendOutMessageAsync(new PositionChangeMessage
 										{
 											SecurityId = opt.InstrumentUid.FromInstrumentIdToSecId(),
 											PortfolioName = account,
@@ -780,7 +780,7 @@ public partial class TinkoffMessageAdapter
 										}
 										.TryAdd(PositionChangeTypes.CurrentValue, (decimal)opt.Balance, true)
 										.TryAdd(PositionChangeTypes.BlockedValue, (decimal)opt.Blocked, true)
-										);
+										, cancellationToken);
 									}
 								}
 							}
@@ -800,6 +800,6 @@ public partial class TinkoffMessageAdapter
 			}, pfToken);
 		}
 
-		SendSubscriptionResult(lookupMsg);
+		await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 	}
 }

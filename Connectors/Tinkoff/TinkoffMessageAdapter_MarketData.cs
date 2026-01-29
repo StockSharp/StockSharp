@@ -58,7 +58,7 @@ public partial class TinkoffMessageAdapter
 
 							if (TryGetTransId(dt, c.InstrumentUid, out var transId))
 							{
-								SendOutMessage(new TimeFrameCandleMessage
+								await SendOutMessageAsync(new TimeFrameCandleMessage
 								{
 									OriginalTransactionId = transId,
 									OpenTime = c.Time.ToDateTime(),
@@ -69,7 +69,7 @@ public partial class TinkoffMessageAdapter
 									ClosePrice = c.Close?.ToDecimal() ?? default,
 									TotalVolume = c.Volume,
 									State = CandleStates.Active,
-								});
+								}, cancellationToken);
 							}
 						}
 
@@ -77,7 +77,7 @@ public partial class TinkoffMessageAdapter
 						{
 							if (TryGetTransId(DataType.Ticks, t.InstrumentUid, out var transId))
 							{
-								SendOutMessage(new ExecutionMessage
+								await SendOutMessageAsync(new ExecutionMessage
 								{
 									DataTypeEx = DataType.Ticks,
 									OriginalTransactionId = transId,
@@ -86,7 +86,7 @@ public partial class TinkoffMessageAdapter
 									TradeVolume = t.Quantity,
 									OriginSide = t.Direction.ToSide(),
 									IsSystem = t.TradeSource == TradeSourceType.TradeSourceDealer ? true : null,
-								});
+								}, cancellationToken);
 							}
 						}
 
@@ -94,11 +94,11 @@ public partial class TinkoffMessageAdapter
 						{
 							if (TryGetTransId(DataType.Level1, p.InstrumentUid, out var transId))
 							{
-								SendOutMessage(new Level1ChangeMessage
+								await SendOutMessageAsync(new Level1ChangeMessage
 								{
 									OriginalTransactionId = transId,
 									ServerTime = p.Time.ToDateTime(),
-								}.TryAdd(Level1Fields.LastTradePrice, p.Price?.ToDecimal()));
+								}.TryAdd(Level1Fields.LastTradePrice, p.Price?.ToDecimal()), cancellationToken);
 							}
 						}
 
@@ -106,11 +106,11 @@ public partial class TinkoffMessageAdapter
 						{
 							if (TryGetTransId(DataType.Level1, s.InstrumentUid, out var transId))
 							{
-								SendOutMessage(new Level1ChangeMessage
+								await SendOutMessageAsync(new Level1ChangeMessage
 								{
 									OriginalTransactionId = transId,
 									ServerTime = s.Time.ToDateTime(),
-								}.TryAdd(Level1Fields.State, s.TradingStatus_.ToState()));
+								}.TryAdd(Level1Fields.State, s.TradingStatus_.ToState()), cancellationToken);
 							}
 						}
 
@@ -121,22 +121,22 @@ public partial class TinkoffMessageAdapter
 								static QuoteChange[] convert(RepeatedField<Order> quotes)
 									=> [.. quotes.Select(p => new QuoteChange(p.Price?.ToDecimal() ?? default, p.Quantity))];
 
-								SendOutMessage(new QuoteChangeMessage
+								await SendOutMessageAsync(new QuoteChangeMessage
 								{
 									OriginalTransactionId = transId,
 									ServerTime = b.Time.ToDateTime(),
 
 									Bids = convert(b.Bids),
 									Asks = convert(b.Asks),
-								});
+								}, cancellationToken);
 							}
 						}
 
-						void sendFailed(long transId, SubscriptionStatus status)
+						async ValueTask sendFailed(long transId, SubscriptionStatus status)
 						{
 							_mdTransIds.Remove(transId);
 							_mdSubs.Remove(transId);
-							SendSubscriptionReply(transId, new InvalidOperationException(status.ToString()));
+							await SendSubscriptionReplyAsync(transId, cancellationToken, new InvalidOperationException(status.ToString()));
 						}
 
 						if (response.SubscribeCandlesResponse is SubscribeCandlesResponse rc)
@@ -146,7 +146,7 @@ public partial class TinkoffMessageAdapter
 								if (sub.SubscriptionStatus == SubscriptionStatus.Success || !TryGetTransId(sub.Interval.ToTimeFrame().TimeFrame(), sub.InstrumentUid, out var transId))
 									continue;
 
-								sendFailed(transId, sub.SubscriptionStatus);
+								await sendFailed(transId, sub.SubscriptionStatus);
 							}
 						}
 
@@ -157,7 +157,7 @@ public partial class TinkoffMessageAdapter
 								if (sub.SubscriptionStatus == SubscriptionStatus.Success || !TryGetTransId(DataType.Ticks, sub.InstrumentUid, out var transId))
 									continue;
 
-								sendFailed(transId, sub.SubscriptionStatus);
+								await sendFailed(transId, sub.SubscriptionStatus);
 							}
 						}
 
@@ -168,7 +168,7 @@ public partial class TinkoffMessageAdapter
 								if (sub.SubscriptionStatus == SubscriptionStatus.Success || !TryGetTransId(DataType.Level1, sub.InstrumentUid, out var transId))
 									continue;
 
-								sendFailed(transId, sub.SubscriptionStatus);
+								await sendFailed(transId, sub.SubscriptionStatus);
 							}
 						}
 
@@ -179,7 +179,7 @@ public partial class TinkoffMessageAdapter
 								if (sub.SubscriptionStatus == SubscriptionStatus.Success || !TryGetTransId(DataType.MarketDepth, sub.InstrumentUid, out var transId))
 									continue;
 
-								sendFailed(transId, sub.SubscriptionStatus);
+								await sendFailed(transId, sub.SubscriptionStatus);
 							}
 						}
 					}
@@ -246,14 +246,14 @@ public partial class TinkoffMessageAdapter
 
 		var left = lookupMsg.Count ?? long.MaxValue;
 
-		bool TrySendOut(SecurityMessage secMsg)
+		async ValueTask<bool> TrySendOut(SecurityMessage secMsg)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
 			if (!secMsg.IsMatch(lookupMsg, secTypes))
 				return true;
 
-			SendOutMessage(secMsg);
+			await SendOutMessageAsync(secMsg, cancellationToken);
 			return --left > 0;
 		}
 
@@ -265,7 +265,7 @@ public partial class TinkoffMessageAdapter
 				{
 					foreach (var instr in (await instrSvc.SharesAsync(new() { InstrumentStatus = InstrumentStatus.Base }, cancellationToken: cancellationToken)).Instruments)
 					{
-						if (!TrySendOut(new()
+						if (!await TrySendOut(new()
 						{
 							SecurityId = new()
 							{
@@ -295,7 +295,7 @@ public partial class TinkoffMessageAdapter
 				{
 					foreach (var instr in (await instrSvc.FuturesAsync(new() { InstrumentStatus = InstrumentStatus.Base }, cancellationToken: cancellationToken)).Instruments)
 					{
-						if (!TrySendOut(new SecurityMessage
+						if (!await TrySendOut(new SecurityMessage
 						{
 							SecurityId = new()
 							{
@@ -332,7 +332,7 @@ public partial class TinkoffMessageAdapter
 
 					foreach (var instr in (await instrSvc.OptionsByAsync(new() { BasicAssetUid = (string)underlying.Native }, cancellationToken: cancellationToken)).Instruments)
 					{
-						if (!TrySendOut(new SecurityMessage
+						if (!await TrySendOut(new SecurityMessage
 						{
 							SecurityId = new()
 							{
@@ -366,7 +366,7 @@ public partial class TinkoffMessageAdapter
 				{
 					foreach (var instr in (await instrSvc.CurrenciesAsync(new(), cancellationToken: cancellationToken)).Instruments)
 					{
-						if (!TrySendOut(new()
+						if (!await TrySendOut(new()
 						{
 							SecurityId = new()
 							{
@@ -393,7 +393,7 @@ public partial class TinkoffMessageAdapter
 				{
 					foreach (var instr in (await instrSvc.BondsAsync(new() { InstrumentStatus = InstrumentStatus.Base }, cancellationToken: cancellationToken)).Instruments)
 					{
-						if (!TrySendOut(new()
+						if (!await TrySendOut(new()
 						{
 							SecurityId = new()
 							{
@@ -425,7 +425,7 @@ public partial class TinkoffMessageAdapter
 				{
 					foreach (var instr in (await instrSvc.EtfsAsync(new() { InstrumentStatus = InstrumentStatus.Base }, cancellationToken: cancellationToken)).Instruments)
 					{
-						if (!TrySendOut(new()
+						if (!await TrySendOut(new()
 						{
 							SecurityId = new()
 							{
@@ -457,7 +457,7 @@ public partial class TinkoffMessageAdapter
 				break;
 		}
 
-		SendSubscriptionFinished(lookupMsg.TransactionId);
+		await SendSubscriptionFinishedAsync(lookupMsg.TransactionId, cancellationToken);
 	}
 
 	/// <inheritdoc/>
@@ -465,7 +465,7 @@ public partial class TinkoffMessageAdapter
 	{
 		var tf = mdMsg.GetTimeFrame();
 
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		if (mdMsg.IsSubscribe)
 		{
@@ -509,7 +509,7 @@ public partial class TinkoffMessageAdapter
 					if (mdMsg.IsFinishedOnly && !c.IsComplete)
 						continue;
 
-					SendOutMessage(new TimeFrameCandleMessage
+					await SendOutMessageAsync(new TimeFrameCandleMessage
 					{
 						OriginalTransactionId = mdMsg.TransactionId,
 
@@ -521,7 +521,7 @@ public partial class TinkoffMessageAdapter
 						TotalVolume = c.Volume,
 
 						State = c.IsComplete ? CandleStates.Finished : CandleStates.Active,
-					});
+					}, cancellationToken);
 				}
 			}
 
@@ -532,7 +532,7 @@ public partial class TinkoffMessageAdapter
 				await SubscribeCandles(mdMsg, cancellationToken);
 			}
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 		{
@@ -626,7 +626,7 @@ public partial class TinkoffMessageAdapter
 						break;
 					}
 
-					SendOutMessage(new TimeFrameCandleMessage
+					await SendOutMessageAsync(new TimeFrameCandleMessage
 					{
 						OpenTime = timestamp,
 						OpenPrice = open,
@@ -636,7 +636,7 @@ public partial class TinkoffMessageAdapter
 						TotalVolume = volume,
 						OriginalTransactionId = transId,
 						State = CandleStates.Finished,
-					});
+					}, cancellationToken);
 
 					last = last.Max(timestamp);
 				}
@@ -656,7 +656,7 @@ public partial class TinkoffMessageAdapter
 	/// <inheritdoc/>
 	protected override async ValueTask OnMarketDepthSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		if (mdMsg.IsSubscribe)
 		{
@@ -667,7 +667,7 @@ public partial class TinkoffMessageAdapter
 				await SubscribeMarketDepth(mdMsg, cancellationToken);
 			}
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 		{
@@ -724,7 +724,7 @@ public partial class TinkoffMessageAdapter
 	/// <inheritdoc/>
 	protected override async ValueTask OnTicksSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		if (mdMsg.IsSubscribe)
 		{
@@ -748,7 +748,7 @@ public partial class TinkoffMessageAdapter
 				await SubscribeTicks(mdMsg, cancellationToken);
 			}
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 		{
@@ -871,7 +871,7 @@ public partial class TinkoffMessageAdapter
 						}
 					}
 
-					SendOutMessage(new ExecutionMessage
+					await SendOutMessageAsync(new ExecutionMessage
 					{
 						DataTypeEx = DataType.Ticks,
 						OriginalTransactionId = transId,
@@ -879,7 +879,7 @@ public partial class TinkoffMessageAdapter
 						TradePrice = price,
 						TradeVolume = quantity,
 						OriginSide = parseSide(side),
-					});
+					}, cancellationToken);
 				}
 			}
 			catch (Exception ex)
@@ -919,7 +919,7 @@ public partial class TinkoffMessageAdapter
 	/// <inheritdoc/>
 	protected override async ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		if (mdMsg.IsSubscribe)
 		{
@@ -930,7 +930,7 @@ public partial class TinkoffMessageAdapter
 				await SubscribeLevel1(mdMsg, cancellationToken);
 			}
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 		{
