@@ -28,9 +28,17 @@ def get_dates(storage, from_date, to_date, cancellation_token=None):
     """
     if cancellation_token is None:
         cancellation_token = CancellationToken()
-    # Call async method and block waiting for result
-    all_dates = storage.GetDatesAsync(cancellation_token).GetAwaiter().GetResult()
-    return [d for d in all_dates if d >= from_date and d <= to_date]
+    async_enumerable = storage.GetDatesAsync()
+    enumerator = async_enumerable.GetAsyncEnumerator(cancellation_token)
+    result = []
+    try:
+        while enumerator.MoveNextAsync().GetAwaiter().GetResult():
+            d = enumerator.Current
+            if d >= from_date and d <= to_date:
+                result.append(d)
+    finally:
+        enumerator.DisposeAsync().GetAwaiter().GetResult()
+    return result
 
 def load_tf_candles(storage, from_date, to_date, cancellation_token=None):
     """
