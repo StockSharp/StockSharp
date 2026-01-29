@@ -40,8 +40,6 @@ public class RealTimeEmulationTrader<TUnderlyingMarketDataAdapter> : BaseEmulati
 	public RealTimeEmulationTrader(TUnderlyingMarketDataAdapter underlyngMarketDataAdapter, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider, bool ownAdapter = true)
 		: base(new EmulationMessageAdapter(underlyngMarketDataAdapter, new InMemoryMessageChannel(new MessageByOrderQueue(), "Emulator in", err => err.LogError()), false, securityProvider, portfolioProvider, exchangeInfoProvider) { OwnInnerAdapter = ownAdapter }, ownAdapter, true)
 	{
-		UpdateSecurityByLevel1 = false;
-		UpdateSecurityLastQuotes = false;
 		UpdatePortfolioByChange = false;
 
 		Adapter.IgnoreExtraAdapters = true;
