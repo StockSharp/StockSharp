@@ -956,12 +956,14 @@ partial class Connector
 				return;
 		}
 
+#pragma warning disable CS0618 // Type or member is obsolete
 		if (UpdateSecurityByLevel1)
 		{
 			security ??= EnsureGetSecurity(message);
 
 			security.ApplyChanges(message);
 		}
+#pragma warning restore CS0618 // Type or member is obsolete
 
 		if (ValuesChanged is not null)
 		{
@@ -1171,6 +1173,7 @@ partial class Connector
 			RaiseValuesChanged(security, changes, message.ServerTime, message.LocalTime);
 		}
 
+#pragma warning disable CS0618 // Type or member is obsolete
 		if (UpdateSecurityLastQuotes)
 		{
 			security ??= EnsureGetSecurity(message);
@@ -1247,6 +1250,7 @@ partial class Connector
 				}
 			}
 		}
+#pragma warning restore CS0618 // Type or member is obsolete
 	}
 
 	private void ProcessOrderLogMessage(ExecutionMessage message)
@@ -1321,12 +1325,14 @@ partial class Connector
 			RaiseValuesChanged(security, changes, message.ServerTime, message.LocalTime);
 		}
 
+#pragma warning disable CS0618 // Type or member is obsolete
 		if (UpdateSecurityLastQuotes)
 		{
 			security ??= EnsureGetSecurity(message);
 
 			security.LastTick = message;
 		}
+#pragma warning restore CS0618 // Type or member is obsolete
 	}
 
 	private void ProcessOrderMessage(Order o, Security security, ExecutionMessage message, long transactionId/*, bool isStatusRequest*/)

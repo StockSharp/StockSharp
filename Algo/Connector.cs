@@ -290,12 +290,14 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <summary>
 	/// To update <see cref="Security.LastTick"/>, <see cref="Security.BestBid"/>, <see cref="Security.BestAsk"/> at each update of order book and/or trades. By default is enabled.
 	/// </summary>
-	public bool UpdateSecurityLastQuotes { get; set; } = true;
+	[Obsolete("Use Level1ChangeMessage.")]
+	public bool UpdateSecurityLastQuotes { get; set; }
 
 	/// <summary>
 	/// To update <see cref="Security"/> fields when the <see cref="Level1ChangeMessage"/> message appears. By default is enabled.
 	/// </summary>
-	public bool UpdateSecurityByLevel1 { get; set; } = true;
+	[Obsolete("Use Level1ChangeMessage.")]
+	public bool UpdateSecurityByLevel1 { get; set; }
 
 	/// <summary>
 	/// To update <see cref="Security"/> fields when the <see cref="SecurityMessage"/> message appears. By default is enabled.
@@ -1052,8 +1054,10 @@ public partial class Connector : BaseLogReceiver, IConnector
 			throw new ArgumentNullException(nameof(storage));
 
 		OrdersKeepCount = storage.GetValue(nameof(OrdersKeepCount), OrdersKeepCount);
+#pragma warning disable CS0618 // Type or member is obsolete
 		UpdateSecurityLastQuotes = storage.GetValue(nameof(UpdateSecurityLastQuotes), UpdateSecurityLastQuotes);
 		UpdateSecurityByLevel1 = storage.GetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
+#pragma warning restore CS0618 // Type or member is obsolete
 		UpdateSecurityByDefinition = storage.GetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 		UpdatePortfolioByChange = storage.GetValue(nameof(UpdatePortfolioByChange), UpdatePortfolioByChange);
 		//ReConnectionSettings.Load(storage.GetValue<SettingsStorage>(nameof(ReConnectionSettings)));
@@ -1100,8 +1104,10 @@ public partial class Connector : BaseLogReceiver, IConnector
 			throw new ArgumentNullException(nameof(storage));
 
 		storage.SetValue(nameof(OrdersKeepCount), OrdersKeepCount);
+#pragma warning disable CS0618 // Type or member is obsolete
 		storage.SetValue(nameof(UpdateSecurityLastQuotes), UpdateSecurityLastQuotes);
 		storage.SetValue(nameof(UpdateSecurityByLevel1), UpdateSecurityByLevel1);
+#pragma warning restore CS0618 // Type or member is obsolete
 		storage.SetValue(nameof(UpdateSecurityByDefinition), UpdateSecurityByDefinition);
 		storage.SetValue(nameof(UpdatePortfolioByChange), UpdatePortfolioByChange);
 		//storage.SetValue(nameof(ReConnectionSettings), ReConnectionSettings.Save());
