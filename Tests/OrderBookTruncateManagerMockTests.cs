@@ -201,8 +201,8 @@ public class OrderBookTruncateManagerMockTests : BaseTestClass
 		var quote = new QuoteChangeMessage
 		{
 			SecurityId = _secId,
-			Bids = Enumerable.Range(0, 20).Select(i => new QuoteChange(100m - i, 10)).ToArray(),
-			Asks = Enumerable.Range(0, 20).Select(i => new QuoteChange(101m + i, 10)).ToArray(),
+			Bids = [.. Enumerable.Range(0, 20).Select(i => new QuoteChange(100m - i, 10))],
+			Asks = [.. Enumerable.Range(0, 20).Select(i => new QuoteChange(101m + i, 10))],
 			ServerTime = DateTime.UtcNow,
 		};
 
@@ -225,8 +225,8 @@ public class OrderBookTruncateManagerMockTests : BaseTestClass
 		var quote = new QuoteChangeMessage
 		{
 			SecurityId = _secId,
-			Bids = Enumerable.Range(0, 20).Select(i => new QuoteChange(100m - i, 10)).ToArray(),
-			Asks = Enumerable.Range(0, 20).Select(i => new QuoteChange(101m + i, 10)).ToArray(),
+			Bids = [.. Enumerable.Range(0, 20).Select(i => new QuoteChange(100m - i, 10))],
+			Asks = [.. Enumerable.Range(0, 20).Select(i => new QuoteChange(101m + i, 10))],
 			ServerTime = DateTime.UtcNow,
 		};
 		quote.SetSubscriptionIds([1]);

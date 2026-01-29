@@ -209,7 +209,7 @@ public class OrderLifecycleManagerTests : BaseTestClass
 		AreEqual(0, expired.Count);
 
 		// After expiry
-		expired = manager.GetExpiredOrders(now.AddHours(2)).ToList();
+		expired = [.. manager.GetExpiredOrders(now.AddHours(2))];
 		AreEqual(1, expired.Count);
 		AreEqual(1, expired[0].TransactionId);
 	}

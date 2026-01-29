@@ -1,9 +1,5 @@
 namespace StockSharp.BusinessEntities;
 
-/// <summary>
-/// Security (shares, futures, options etc.).
-/// Obsolete properties.
-/// </summary>
 public partial class Security
 {
 	private DateTime _localTime;

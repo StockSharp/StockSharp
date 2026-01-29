@@ -696,10 +696,10 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		var result = await ticks.ToAsyncEnumerable()
 			.ToBasket(basket, processorProvider)
-			.ToArrayAsync();
+			.ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(1);
-		((ExecutionMessage)result[0]).TradePrice.AssertEqual(250m); // 100*2 + 50*1
+		result[0].TradePrice.AssertEqual(250m); // 100*2 + 50*1
 	}
 
 	[TestMethod]
@@ -998,7 +998,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		provider.Register("CUSTOM", typeof(CustomBasketProcessor), typeof(CustomBasketSecurity));
 
-		Assert.Contains("CUSTOM", provider.AllCodes.ToArray());
+		Assert.Contains("CUSTOM", [.. provider.AllCodes]);
 
 		provider.TryGetProcessorType("CUSTOM", out var processorType).AssertTrue();
 		processorType.AssertEqual(typeof(CustomBasketProcessor));
@@ -1031,7 +1031,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
 
 		provider.Register("CUSTOM", typeof(CustomBasketProcessor), typeof(CustomBasketSecurity));
-		Assert.Contains("CUSTOM", provider.AllCodes.ToArray());
+		Assert.Contains("CUSTOM", [.. provider.AllCodes]);
 
 		var result = provider.UnRegister("CUSTOM");
 
