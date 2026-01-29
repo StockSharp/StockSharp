@@ -248,7 +248,8 @@ public interface IMessageAdapter : IMessageTransport, IPersistable, ILogReceiver
 	/// Send outgoing message and raise <see cref="IMessageTransport.NewOutMessageAsync"/> event.
 	/// </summary>
 	/// <param name="message">Message.</param>
-	void SendOutMessage(Message message);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken);
 }
 
 /// <summary>

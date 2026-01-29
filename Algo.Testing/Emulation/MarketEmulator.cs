@@ -1189,8 +1189,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	object ICloneable.Clone() => ((ICloneable<IMessageAdapter>)this).Clone();
 
-	void IMessageAdapter.SendOutMessage(Message message)
-		=> NewOutMessageAsync?.Invoke(message, default);
+	ValueTask IMessageAdapter.SendOutMessageAsync(Message message, CancellationToken cancellationToken)
+		=> NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 
 	#endregion
 }

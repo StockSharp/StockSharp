@@ -3553,7 +3553,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 			if (!allowStore)
 				msg.OfflineMode = MessageOfflineModes.Ignore;
 
-			RaiseNewOutMessage(msg);
+			RaiseNewOutMessageAsync(msg, default);
 		}
 
 		return default;
@@ -3562,10 +3562,10 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	/// <inheritdoc />
 	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 
-	private void RaiseNewOutMessage(Message message)
+	private ValueTask RaiseNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		_currentTime = message.LocalTime;
-		NewOutMessageAsync?.Invoke(message, default);
+		return NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 	}
 
 	private SecurityMarketEmulator GetEmulator(SecurityId securityId)
@@ -3823,6 +3823,6 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 
 	object ICloneable.Clone() => ((ICloneable<IMessageChannel>)this).Clone();
 
-	void IMessageAdapter.SendOutMessage(Message message)
-		=> RaiseNewOutMessage(message);
+	ValueTask IMessageAdapter.SendOutMessageAsync(Message message, CancellationToken cancellationToken)
+		=> RaiseNewOutMessageAsync(message, cancellationToken);
 }

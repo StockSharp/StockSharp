@@ -922,9 +922,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	private ValueTask SendOutErrorAsync(Exception error, CancellationToken cancellationToken)
 		=> SendOutMessageAsync(error.ToErrorMessage(), cancellationToken);
 
-	void IMessageAdapter.SendOutMessage(Message message)
-		=> AsyncHelper.Run(() => SendOutMessageAsync(message, default));
-
 	/// <inheritdoc />
 	public ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)
 		=> OnSendOutMessageAsync(message, cancellationToken);

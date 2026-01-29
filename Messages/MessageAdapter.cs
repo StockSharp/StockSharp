@@ -612,6 +612,10 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 
 	/// <inheritdoc />
 	public virtual void SendOutMessage(Message message)
+		=> SendOutMessageAsync(message, default);
+
+	/// <inheritdoc />
+	public virtual ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		//// do not process empty change msgs
 		//if (!message.IsBack)
@@ -629,7 +633,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 		if (message is DataTypeInfoMessage dtim && dtim.FileDataType is DataType dt && dt.IsMarketData)
 			this.AddSupportedMarketDataType(dt);
 
-		_newOutMessageAsync?.Invoke(message, default);
+		return _newOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 	}
 
 	/// <summary>

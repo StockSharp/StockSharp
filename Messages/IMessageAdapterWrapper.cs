@@ -341,8 +341,8 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	public virtual bool IsSecurityRequired(DataType dataType)
 		=> InnerAdapter.IsSecurityRequired(dataType);
 
-	void IMessageAdapter.SendOutMessage(Message message)
-		=> InnerAdapter.SendOutMessage(message);
+	ValueTask IMessageAdapter.SendOutMessageAsync(Message message, CancellationToken cancellationToken)
+		=> InnerAdapter.SendOutMessageAsync(message, cancellationToken);
 
 	/// <inheritdoc />
 	public virtual void Dispose()
