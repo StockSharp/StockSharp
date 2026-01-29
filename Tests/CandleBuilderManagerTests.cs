@@ -93,7 +93,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 		using var adapter = new CandleBuilderMessageAdapter(inner, provider, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
@@ -123,7 +123,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 		using var adapter = new CandleBuilderMessageAdapter(inner, provider, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new DisconnectMessage());
 

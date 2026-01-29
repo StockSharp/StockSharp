@@ -71,7 +71,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderBookTruncateMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -108,7 +108,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderBookTruncateMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -143,7 +143,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderBookTruncateMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -181,7 +181,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderBookTruncateMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -218,7 +218,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderBookTruncateMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -280,7 +280,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderBookTruncateMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -315,7 +315,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderBookTruncateMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -392,7 +392,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderBookTruncateMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new DisconnectMessage());
 
@@ -423,7 +423,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderBookTruncateMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new QuoteChangeMessage { SecurityId = Helper.CreateSecurityId(), Bids = [], Asks = [] });
 
@@ -446,7 +446,7 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderBookTruncateMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new DisconnectMessage());
 

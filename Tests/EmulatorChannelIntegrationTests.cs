@@ -43,7 +43,7 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 		DateTime lastOutputTime = DateTime.MinValue;
 		var outputLock = new object();
 
-		emulator.NewOutMessage += msg =>
+		emulator.NewOutMessageAsync += (msg, ct) =>
 		{
 			lock (outputLock)
 			{
@@ -55,6 +55,7 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 				lastOutputTime = time > lastOutputTime ? time : lastOutputTime;
 				outputTimes.Add((time, msg.GetType().Name));
 			}
+			return default;
 		};
 
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
@@ -167,12 +168,13 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 		var outputTimes = new List<DateTime>();
 		var outputLock = new object();
 
-		emulator.NewOutMessage += msg =>
+		emulator.NewOutMessageAsync += (msg, ct) =>
 		{
 			lock (outputLock)
 			{
 				outputTimes.Add(msg.LocalTime);
 			}
+			return default;
 		};
 
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
@@ -504,9 +506,10 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 
 		var outputTimes = new List<DateTime>();
 
-		emulator.NewOutMessage += msg =>
+		emulator.NewOutMessageAsync += (msg, ct) =>
 		{
 			outputTimes.Add(msg.LocalTime);
+			return default;
 		};
 
 		// Reset
@@ -572,9 +575,10 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 
 		var outputMessages = new List<(DateTime time, string type)>();
 
-		emulator.NewOutMessage += msg =>
+		emulator.NewOutMessageAsync += (msg, ct) =>
 		{
 			outputMessages.Add((msg.LocalTime, msg.GetType().Name));
+			return default;
 		};
 
 		// Reset

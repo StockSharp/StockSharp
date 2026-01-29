@@ -67,7 +67,7 @@ public class StorageMessageAdapterTests : BaseTestClass
 		var adapter = new StorageMessageAdapter(inner, processor);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ResetMessage(), token);
 
@@ -103,7 +103,7 @@ public class StorageMessageAdapterTests : BaseTestClass
 		var adapter = new StorageMessageAdapter(inner, processor);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var mdMsg = new MarketDataMessage
 		{
@@ -143,7 +143,7 @@ public class StorageMessageAdapterTests : BaseTestClass
 		var adapter = new StorageMessageAdapter(inner, processor);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var mdMsg = new MarketDataMessage
 		{

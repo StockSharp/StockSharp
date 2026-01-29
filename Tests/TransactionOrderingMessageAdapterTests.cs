@@ -24,7 +24,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		using var adapter = new TransactionOrderingMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
@@ -51,7 +51,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		using var adapter = new TransactionOrderingMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
@@ -75,7 +75,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		using var adapter = new TransactionOrderingMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new ResetMessage());
 
@@ -118,7 +118,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		using var adapter = new TransactionOrderingMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
 
@@ -161,7 +161,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		using var adapter = new TransactionOrderingMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(orderMsg);
 
@@ -184,7 +184,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		using var adapter = new TransactionOrderingMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new ExecutionMessage
 		{
@@ -229,7 +229,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		using var adapter = new TransactionOrderingMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
 

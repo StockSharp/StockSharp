@@ -30,7 +30,7 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 		emuV1.Settings.Latency = TimeSpan.Zero;
 		emuV1.RandomProvider = mockRandom;
 		var resV1 = new List<Message>();
-		emuV1.NewOutMessage += resV1.Add;
+		emuV1.NewOutMessageAsync += (m, ct) => { resV1.Add(m); return default; };
 
 		// V2
 		var emuV2 = new MarketEmulator(secProvider, pfProvider, exchProvider, new IncrementalIdGenerator()) { VerifyMode = false };
@@ -38,7 +38,7 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 		emuV2.TradeIdGenerator = new IncrementalIdGenerator();
 		emuV2.RandomProvider = mockRandom;
 		var resV2 = new List<Message>();
-		emuV2.NewOutMessage += resV2.Add;
+		emuV2.NewOutMessageAsync += (m, ct) => { resV2.Add(m); return default; };
 
 		return (emuV1, resV1, emuV2, resV2);
 	}

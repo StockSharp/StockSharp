@@ -152,7 +152,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
 
@@ -189,7 +189,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
 
@@ -251,7 +251,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
 
@@ -287,7 +287,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
 
@@ -370,7 +370,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
 
@@ -402,7 +402,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
 
@@ -440,7 +440,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
 
@@ -476,7 +476,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
 
@@ -525,7 +525,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
@@ -566,7 +566,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new ConnectMessage());
 

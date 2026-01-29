@@ -622,10 +622,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 			var wrapper = CreateWrappers(adapter);
 
-			if (wrapper is IMessageAdapterWrapper adapterWrapper)
-				adapterWrapper.NewOutMessageAsync += (m, ct) => OnInnerAdapterNewOutMessage(adapter, m, ct);
-			else
-				wrapper.NewOutMessage += m => AsyncHelper.Run(() => OnInnerAdapterNewOutMessage(adapter, m, default));
+			wrapper.NewOutMessageAsync += (m, ct) => OnInnerAdapterNewOutMessage(adapter, m, ct);
 
 			_adapterWrappers.Add(adapter, wrapper);
 		}
@@ -786,10 +783,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	[Obsolete]
-	public event Action<Message> NewOutMessage;
-
-	/// <inheritdoc />
 	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 
 	/// <summary>
@@ -942,7 +935,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	protected virtual ValueTask OnSendOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		message.Adapter ??= this;
-		NewOutMessage?.Invoke(message);
 		return NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 	}
 

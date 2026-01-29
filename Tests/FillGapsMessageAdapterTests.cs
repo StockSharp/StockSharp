@@ -81,11 +81,12 @@ public class FillGapsMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		var loopbacks = new Queue<Message>();
 
-		adapter.NewOutMessage += msg =>
+		adapter.NewOutMessageAsync += (msg, ct) =>
 		{
 			output.Add(msg);
 			if (msg.IsBack())
 				loopbacks.Enqueue(msg);
+			return default;
 		};
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -135,10 +136,11 @@ public class FillGapsMessageAdapterTests : BaseTestClass
 
 		var loopbacks = new Queue<Message>();
 
-		adapter.NewOutMessage += msg =>
+		adapter.NewOutMessageAsync += (msg, ct) =>
 		{
 			if (msg.IsBack())
 				loopbacks.Enqueue(msg);
+			return default;
 		};
 
 		await adapter.SendInMessageAsync(new MarketDataMessage

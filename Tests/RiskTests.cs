@@ -1222,7 +1222,7 @@ public class RiskTests : BaseTestClass
 		var adapter = new RiskMessageAdapter(emu, riskManager);
 
 		var messages = new List<Message>();
-		adapter.NewOutMessage += messages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
 
 		var rule = new RiskPositionSizeRule
 		{
@@ -1258,7 +1258,7 @@ public class RiskTests : BaseTestClass
 		var adapter = new RiskMessageAdapter(new TestInnerAdapter(), riskManager);
 
 		var messages = new List<Message>();
-		adapter.NewOutMessage += messages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
 
 		var rule = new RiskCommissionRule
 		{
@@ -1308,7 +1308,7 @@ public class RiskTests : BaseTestClass
 		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
 
 		var messages = new List<Message>();
-		adapter.NewOutMessage += messages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
 
 		var rule = new RiskPnLRule
 		{

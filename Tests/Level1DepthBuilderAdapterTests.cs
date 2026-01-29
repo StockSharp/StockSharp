@@ -73,7 +73,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 		}, CancellationToken);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var now = DateTime.UtcNow;
 
@@ -109,7 +109,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 		using var adapter = new Level1DepthBuilderAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -182,7 +182,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 		using var adapter = new Level1DepthBuilderAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
@@ -223,7 +223,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 		using var adapter = new Level1DepthBuilderAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.SendOutMessage(new DisconnectMessage());
 
@@ -257,7 +257,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 		using var adapter = new Level1DepthBuilderAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.SendOutMessage(new Level1ChangeMessage
 		{
@@ -292,7 +292,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 		using var adapter = new Level1DepthBuilderAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 1 });
 

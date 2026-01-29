@@ -26,7 +26,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		using var adapter = new SubscriptionMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
@@ -55,7 +55,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		using var adapter = new SubscriptionMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new DisconnectMessage());
 
@@ -77,7 +77,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		};
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -102,7 +102,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		using var adapter = new SubscriptionMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var secId = Helper.CreateSecurityId();
 
@@ -150,7 +150,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		using var adapter = new SubscriptionMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		// Emit tick data WITHOUT any subscription registered
 		var tick = new ExecutionMessage
@@ -180,7 +180,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		using var subscrAdapter = new SubscriptionMessageAdapter(onlineAdapter);
 
 		var output = new List<Message>();
-		subscrAdapter.NewOutMessage += output.Add;
+		subscrAdapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var secId = Helper.CreateSecurityId();
 
@@ -229,7 +229,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		using var subscrAdapter = new SubscriptionMessageAdapter(onlineAdapter);
 
 		var output = new List<Message>();
-		subscrAdapter.NewOutMessage += output.Add;
+		subscrAdapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var secId = Helper.CreateSecurityId();
 

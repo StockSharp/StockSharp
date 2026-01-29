@@ -161,7 +161,7 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(message);
 
@@ -195,7 +195,7 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(message);
 
@@ -221,7 +221,7 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(message);
 

@@ -9,11 +9,6 @@ public interface IConnector : IMessageTransport, IPersistable, ILogReceiver,
 	IPortfolioProvider, IPositionProvider
 {
 	/// <summary>
-	/// Message processed <see cref="Message"/>.
-	/// </summary>
-	event Action<Message> NewMessage;
-
-	/// <summary>
 	/// Connected.
 	/// </summary>
 	event Action Connected;

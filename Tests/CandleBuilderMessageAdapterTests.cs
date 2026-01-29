@@ -328,7 +328,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 
@@ -362,7 +362,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var subMsg = new MarketDataMessage
@@ -397,7 +397,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
@@ -440,7 +440,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = false;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
@@ -482,7 +482,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
@@ -527,7 +527,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 
@@ -584,7 +584,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -615,7 +615,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -664,7 +664,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -696,7 +696,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -746,7 +746,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 
@@ -785,7 +785,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 
@@ -822,7 +822,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
@@ -876,7 +876,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
@@ -934,7 +934,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		const long clientTransactionId = 100;
@@ -982,7 +982,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 
@@ -1013,7 +1013,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 
@@ -1060,7 +1060,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
@@ -1110,7 +1110,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
@@ -1160,7 +1160,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -1191,7 +1191,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
@@ -1234,7 +1234,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -1274,7 +1274,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		const int requestedCount = 3;
@@ -1327,7 +1327,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -1388,7 +1388,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
@@ -1433,7 +1433,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
@@ -1483,7 +1483,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
@@ -1546,7 +1546,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		adapter.SendFinishedCandlesImmediatelly = true;
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId1 = new SecurityId { SecurityCode = "SBER", BoardCode = "TQBR" };
 		var secId2 = new SecurityId { SecurityCode = "GAZP", BoardCode = "TQBR" };
@@ -1644,7 +1644,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -1698,7 +1698,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -1749,7 +1749,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -1800,7 +1800,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -1853,7 +1853,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -1908,7 +1908,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -1937,7 +1937,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -1974,7 +1974,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -2032,7 +2032,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -2092,7 +2092,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var outMessages = new List<Message>();
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var secId = CreateSecurityId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
@@ -2147,7 +2147,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		using var adapter = new CandleBuilderMessageAdapter(inner, provider);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		// Use a high TransactionId to avoid collision with IdGenerator.GetNextId() which starts at 1
 		var parentTransId = inner.TransactionIdGenerator.GetNextId();

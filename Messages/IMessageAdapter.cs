@@ -220,12 +220,12 @@ public interface IMessageAdapter : IMessageTransport, IPersistable, ILogReceiver
 	bool IsSecurityRequired(DataType dataType);
 
 	/// <summary>
-	/// Use channels for in and out messages.
+	/// Use channels for in messages.
 	/// </summary>
 	bool UseInChannel { get; }
 
 	/// <summary>
-	/// Use channels for in and out messages.
+	/// Use channels for out messages.
 	/// </summary>
 	bool UseOutChannel { get; }
 
@@ -245,12 +245,7 @@ public interface IMessageAdapter : IMessageTransport, IPersistable, ILogReceiver
 	TimeSpan? LookupTimeout { get; }
 
 	/// <summary>
-	/// New message event.
-	/// </summary>
-	event Action<Message> NewOutMessage;
-
-	/// <summary>
-	/// Send outgoing message and raise <see cref="NewOutMessage"/> event.
+	/// Send outgoing message and raise <see cref="IMessageTransport.NewOutMessageAsync"/> event.
 	/// </summary>
 	/// <param name="message">Message.</param>
 	void SendOutMessage(Message message);

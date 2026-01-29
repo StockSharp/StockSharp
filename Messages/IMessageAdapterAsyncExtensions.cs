@@ -23,7 +23,7 @@ public static class IMessageAdapterAsyncExtensions
 		var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 		using var ctr = cancellationToken.Register(() => tcs.TrySetCanceled(cancellationToken));
 
-		void OnOut(Message msg)
+		ValueTask OnOut(Message msg, CancellationToken ct)
 		{
 			if (msg is ConnectMessage cm)
 			{
@@ -32,9 +32,11 @@ public static class IMessageAdapterAsyncExtensions
 				else
 					tcs.TrySetResult(true);
 			}
+
+			return default;
 		}
 
-		adapter.NewOutMessage += OnOut;
+		adapter.NewOutMessageAsync += OnOut;
 		try
 		{
 			await adapter.SendInMessageAsync(new ConnectMessage(), cancellationToken);
@@ -42,7 +44,7 @@ public static class IMessageAdapterAsyncExtensions
 		}
 		finally
 		{
-			adapter.NewOutMessage -= OnOut;
+			adapter.NewOutMessageAsync -= OnOut;
 		}
 	}
 
@@ -61,7 +63,7 @@ public static class IMessageAdapterAsyncExtensions
 		var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 		using var ctr = cancellationToken.Register(() => tcs.TrySetCanceled(cancellationToken));
 
-		void OnOut(Message msg)
+		ValueTask OnOut(Message msg, CancellationToken ct)
 		{
 			if (msg is DisconnectMessage dm)
 			{
@@ -70,9 +72,11 @@ public static class IMessageAdapterAsyncExtensions
 				else
 					tcs.TrySetResult(true);
 			}
+
+			return default;
 		}
 
-		adapter.NewOutMessage += OnOut;
+		adapter.NewOutMessageAsync += OnOut;
 		try
 		{
 			await adapter.SendInMessageAsync(new DisconnectMessage(), cancellationToken);
@@ -80,7 +84,7 @@ public static class IMessageAdapterAsyncExtensions
 		}
 		finally
 		{
-			adapter.NewOutMessage -= OnOut;
+			adapter.NewOutMessageAsync -= OnOut;
 		}
 	}
 
@@ -124,7 +128,7 @@ public static class IMessageAdapterAsyncExtensions
 			AllowSynchronousContinuations = true,
 		});
 
-		void OnOut(Message msg)
+		ValueTask OnOut(Message msg, CancellationToken ct)
 		{
 			if (msg is SubscriptionResponseMessage resp && resp.OriginalTransactionId == subId && resp.Error != null)
 				channel.Writer.TryComplete(resp.Error);
@@ -143,9 +147,11 @@ public static class IMessageAdapterAsyncExtensions
 					channel.Writer.TryWrite(t);
 				}
 			}
+
+			return default;
 		}
 
-		adapter.NewOutMessage += OnOut;
+		adapter.NewOutMessageAsync += OnOut;
 
 		using var ctr = cancellationToken.Register(() =>
 		{
@@ -203,7 +209,7 @@ public static class IMessageAdapterAsyncExtensions
 		}
 		finally
 		{
-			adapter.NewOutMessage -= OnOut;
+			adapter.NewOutMessageAsync -= OnOut;
 		}
 	}
 
@@ -236,7 +242,7 @@ public static class IMessageAdapterAsyncExtensions
 		var unsubTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 		long unsubTransId = 0;
 
-		void OnOut(Message msg)
+		ValueTask OnOut(Message msg, CancellationToken ct)
 		{
 			if (msg is SubscriptionResponseMessage resp)
 			{
@@ -258,9 +264,11 @@ public static class IMessageAdapterAsyncExtensions
 
 			if (msg is SubscriptionFinishedMessage fin && fin.OriginalTransactionId == subId)
 				finishedTcs.TrySetResult(true);
+
+			return default;
 		}
 
-		adapter.NewOutMessage += OnOut;
+		adapter.NewOutMessageAsync += OnOut;
 
 		using var ctr = cancellationToken.Register(() =>
 		{
@@ -311,7 +319,7 @@ public static class IMessageAdapterAsyncExtensions
 		}
 		finally
 		{
-			adapter.NewOutMessage -= OnOut;
+			adapter.NewOutMessageAsync -= OnOut;
 		}
 	}
 
@@ -400,10 +408,10 @@ public static class IMessageAdapterAsyncExtensions
 			AllowSynchronousContinuations = true,
 		});
 
-		void OnOut(Message msg)
+		ValueTask OnOut(Message msg, CancellationToken ct)
 		{
 			if (msg is not ExecutionMessage exec || exec.DataType != DataType.Transactions)
-				return;
+				return default;
 
 			// Match by OriginalTransactionId or by OrderId/OrderStringId
 			var isMatch =
@@ -412,7 +420,7 @@ public static class IMessageAdapterAsyncExtensions
 				(!orderStringId.IsEmpty() && exec.OrderStringId == orderStringId);
 
 			if (!isMatch)
-				return;
+				return default;
 
 			// Track order ID for subsequent matching
 			if (exec.OrderId != null)
@@ -425,7 +433,7 @@ public static class IMessageAdapterAsyncExtensions
 			{
 				channel.Writer.TryWrite(exec);
 				channel.Writer.TryComplete(exec.Error);
-				return;
+				return default;
 			}
 
 			channel.Writer.TryWrite(exec);
@@ -433,9 +441,11 @@ public static class IMessageAdapterAsyncExtensions
 			// Complete on final state
 			if (exec.OrderState is OrderStates.Done or OrderStates.Failed)
 				channel.Writer.TryComplete();
+
+			return default;
 		}
 
-		adapter.NewOutMessage += OnOut;
+		adapter.NewOutMessageAsync += OnOut;
 
 		using var ctr = cancellationToken.Register(() =>
 		{
@@ -499,7 +509,7 @@ public static class IMessageAdapterAsyncExtensions
 		}
 		finally
 		{
-			adapter.NewOutMessage -= OnOut;
+			adapter.NewOutMessageAsync -= OnOut;
 		}
 	}
 }

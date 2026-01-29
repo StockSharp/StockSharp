@@ -19,7 +19,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 		using var adapter = new SubscriptionOnlineMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
@@ -48,7 +48,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 		using var adapter = new SubscriptionOnlineMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new DisconnectMessage());
 
@@ -68,7 +68,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 		using var adapter = new SubscriptionOnlineMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var secId = Helper.CreateSecurityId();
 
@@ -118,7 +118,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 		using var adapter = new SubscriptionOnlineMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var secId = Helper.CreateSecurityId();
 
@@ -160,7 +160,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 		using var adapter = new SubscriptionOnlineMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var secId = Helper.CreateSecurityId();
 

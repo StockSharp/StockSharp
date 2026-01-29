@@ -652,10 +652,11 @@ public class AsyncMessageChannelTests : BaseTestClass
 			}
 		};
 
-		adapter.NewOutMessage += message =>
+		adapter.NewOutMessageAsync += (message, ct) =>
 		{
 			if (message is SubscriptionResponseMessage resp && resp.OriginalTransactionId == unsubscribeId)
 				unsubscribeResponse.TrySetResult(true);
+			return default;
 		};
 
 		channel.Open();
@@ -781,10 +782,11 @@ public class AsyncMessageChannelTests : BaseTestClass
 			return default;
 		};
 
-		adapter.NewOutMessage += message =>
+		adapter.NewOutMessageAsync += (message, ct) =>
 		{
 			if (message is SubscriptionResponseMessage resp && resp.OriginalTransactionId == transactionId)
 				errorResponse.TrySetResult(message);
+			return default;
 		};
 
 		channel.Open();
@@ -831,10 +833,11 @@ public class AsyncMessageChannelTests : BaseTestClass
 			return default;
 		};
 
-		adapter.NewOutMessage += message =>
+		adapter.NewOutMessageAsync += (message, ct) =>
 		{
 			if (message is ExecutionMessage exec && exec.OriginalTransactionId == transactionId && exec.Error != null)
 				errorResponse.TrySetResult(message);
+			return default;
 		};
 
 		channel.Open();

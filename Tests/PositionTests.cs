@@ -218,7 +218,7 @@ public class PositionTests : BaseTestClass
 		var adapter = new PositionMessageAdapter(inner, manager);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var lookup = new PortfolioLookupMessage
 		{

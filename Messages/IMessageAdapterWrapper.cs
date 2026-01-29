@@ -42,10 +42,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 
 	private void Unsub()
 	{
-		if (_innerAdapter is IMessageAdapterWrapper w)
-			w.NewOutMessageAsync -= InnerAdapterNewOutMessageAsync;
-		else
-			_innerAdapter.NewOutMessage -= InnerAdapterNewOutMessage;
+		_innerAdapter.NewOutMessageAsync -= InnerAdapterNewOutMessageAsync;
 	}
 
 	/// <inheritdoc />
@@ -64,10 +61,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 
 			if (_innerAdapter != null)
 			{
-				if (_innerAdapter is IMessageAdapterWrapper w)
-					w.NewOutMessageAsync += InnerAdapterNewOutMessageAsync;
-				else
-					_innerAdapter.NewOutMessage += InnerAdapterNewOutMessage;
+				_innerAdapter.NewOutMessageAsync += InnerAdapterNewOutMessageAsync;
 			}
 		}
 	}
@@ -76,11 +70,6 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	/// Control <see cref="InnerAdapter"/> lifetime.
 	/// </summary>
 	public bool OwnInnerAdapter { get; set; }
-
-	private void InnerAdapterNewOutMessage(Message message)
-	{
-		InnerAdapterNewOutMessageAsync(message, default);
-	}
 
 	/// <summary>
 	/// Process <see cref="InnerAdapter"/> output message.
@@ -110,16 +99,8 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	/// </summary>
 	/// <param name="message">The message.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
-	protected async ValueTask RaiseNewOutMessageAsync(Message message, CancellationToken cancellationToken)
-	{
-		var ah = NewOutMessageAsync;
-		if (ah is not null)
-			await ah(message, cancellationToken);
-
-		var sh = NewOutMessage;
-		if (sh is not null)
-			sh(message);
-	}
+	protected ValueTask RaiseNewOutMessageAsync(Message message, CancellationToken cancellationToken)
+		=> NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 
 	/// <summary>
 	/// Auto send <see cref="Message.BackMode"/> messages to <see cref="InnerAdapter"/>.
@@ -165,9 +146,6 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	{
 		return InnerAdapter.SendInMessageAsync(message, cancellationToken);
 	}
-
-	/// <inheritdoc />
-	public event Action<Message> NewOutMessage;
 
 	/// <inheritdoc />
 	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
@@ -386,7 +364,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	/// <inheritdoc />
 	public void LogVerbose(string message, params object[] args)
 		=> this.AddVerboseLog(message, args);
-	
+
 	/// <inheritdoc />
 	public void LogDebug(string message, params object[] args)
 		=> this.AddDebugLog(message, args);
@@ -394,11 +372,11 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	/// <inheritdoc />
 	public void LogInfo(string message, params object[] args)
 		=> this.AddInfoLog(message, args);
-	
+
 	/// <inheritdoc />
 	public void LogWarning(string message, params object[] args)
 		=> this.AddWarningLog(message, args);
-	
+
 	/// <inheritdoc />
 	public void LogError(string message, params object[] args)
 		=> this.AddErrorLog(message, args);

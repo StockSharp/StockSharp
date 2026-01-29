@@ -14,7 +14,7 @@ public class MarketEmulatorTests : BaseTestClass
 		var emu = new MarketEmulator(new CollectionSecurityProvider(secIds.Select(id => new Security { Id = id.ToStringId() })), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()) { VerifyMode = true };
 		emu.RandomProvider = new MockRandomProvider();
 		var result2 = new List<Message>();
-		emu.NewOutMessage += result2.Add;
+		emu.NewOutMessageAsync += (m, ct) => { result2.Add(m); return default; };
 		result = result2;
 		return emu;
 	}

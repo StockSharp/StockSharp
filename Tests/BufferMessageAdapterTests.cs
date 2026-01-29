@@ -157,7 +157,7 @@ public class BufferMessageAdapterTests : BaseTestClass
 		using var adapter = new BufferMessageAdapter(inner, settings, buffer, snapshotRegistry);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -216,7 +216,7 @@ public class BufferMessageAdapterTests : BaseTestClass
 		using var adapter = new BufferMessageAdapter(inner, settings, buffer, snapshotRegistry);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{

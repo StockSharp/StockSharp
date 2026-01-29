@@ -408,7 +408,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			secProvider,
 			manager);
 
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), CancellationToken);
 
@@ -587,7 +587,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			secProvider,
 			manager);
 
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var stateMsg = new EmulationStateMessage
 		{
@@ -622,7 +622,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			secProvider,
 			manager);
 
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var stateMsg = new EmulationStateMessage
 		{
@@ -672,7 +672,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			secProvider,
 			manager);
 
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var stateMsg = new EmulationStateMessage
 		{
@@ -725,7 +725,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			secProvider,
 			manager);
 
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		var stateMsg = new EmulationStateMessage
 		{
@@ -806,7 +806,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			secProvider,
 			manager);
 
-		adapter.NewOutMessage += outMessages.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new EmulationStateMessage { State = ChannelStates.Starting }, CancellationToken);
 

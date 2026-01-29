@@ -85,13 +85,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	public override DateTime CurrentTimeUtc => _currentTime;
 
 	/// <inheritdoc />
-	public event Action<Message> NewOutMessage;
-
-	event Func<Message, CancellationToken, ValueTask> IMessageTransport.NewOutMessageAsync
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
+	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 
 	/// <summary>
 	/// Extended verification mode.
@@ -157,7 +151,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				msg.OfflineMode = MessageOfflineModes.Ignore;
 
 			_currentTime = msg.LocalTime;
-			NewOutMessage?.Invoke(msg);
+			NewOutMessageAsync?.Invoke(msg, default);
 		}
 
 		return default;
@@ -1196,7 +1190,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	object ICloneable.Clone() => ((ICloneable<IMessageAdapter>)this).Clone();
 
 	void IMessageAdapter.SendOutMessage(Message message)
-		=> NewOutMessage?.Invoke(message);
+		=> NewOutMessageAsync?.Invoke(message, default);
 
 	#endregion
 }

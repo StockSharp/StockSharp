@@ -2675,8 +2675,8 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 
 			// best opposite-side price at the moment of trade
 			var marketPrice = order.Side == Sides.Buy
-				? _asks.Count > 0 ? _asks.First().Key : null
-				: _bids.Count > 0 ? _bids.First().Key : null;
+				? _asks.Count > 0 ? _asks.First().Key : (decimal?)null
+				: _bids.Count > 0 ? _bids.First().Key : (decimal?)null;
 
 			var tradeMsg = new ExecutionMessage
 			{
@@ -3560,18 +3560,12 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	}
 
 	/// <inheritdoc />
-	public event Action<Message> NewOutMessage;
-
-	event Func<Message, CancellationToken, ValueTask> IMessageTransport.NewOutMessageAsync
-	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
-	}
+	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
 
 	private void RaiseNewOutMessage(Message message)
 	{
 		_currentTime = message.LocalTime;
-		NewOutMessage?.Invoke(message);
+		NewOutMessageAsync?.Invoke(message, default);
 	}
 
 	private SecurityMarketEmulator GetEmulator(SecurityId securityId)

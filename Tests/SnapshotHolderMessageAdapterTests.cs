@@ -35,7 +35,7 @@ public class SnapshotHolderMessageAdapterTests : BaseTestClass
 		using var adapter = new SnapshotHolderMessageAdapter(inner, holder, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
@@ -65,7 +65,7 @@ public class SnapshotHolderMessageAdapterTests : BaseTestClass
 		using var adapter = new SnapshotHolderMessageAdapter(inner, holder, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new DisconnectMessage());
 
@@ -115,7 +115,7 @@ public class SnapshotHolderMessageAdapterTests : BaseTestClass
 		using var adapter = new SnapshotHolderMessageAdapter(inner, holder, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new DisconnectMessage());
 

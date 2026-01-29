@@ -1043,13 +1043,14 @@ public class BacktestingTests : BaseTestClass
 			emulator.RandomProvider = new DefaultRandomProvider(randomSeed);
 
 			// Capture emulator output messages
-			emulator.NewOutMessage += msg =>
+			emulator.NewOutMessageAsync += (msg, ct) =>
 			{
 				// Skip non-deterministic messages
 				if (msg is TimeMessage or ResetMessage)
-					return;
+					return default;
 
 				messages.Add(msg.TypedClone());
+				return default;
 			};
 
 			var strategy = new SmaStrategy
@@ -1131,13 +1132,14 @@ public class BacktestingTests : BaseTestClass
 			emulator.VerifyMode = verifyMode;
 			emulator.RandomProvider = new DefaultRandomProvider(randomSeed);
 
-			emulator.NewOutMessage += msg =>
+			emulator.NewOutMessageAsync += (msg, ct) =>
 			{
 				// Skip non-deterministic messages
 				if (msg is TimeMessage or ResetMessage)
-					return;
+					return default;
 
 				messages.Add(msg.TypedClone());
+				return default;
 			};
 
 			var strategy = new SmaStrategy

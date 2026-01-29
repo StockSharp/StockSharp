@@ -1687,7 +1687,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var historyMessages = new List<Message>();
 		var emulatorOutputs = new List<Message>();
 
-		emu.NewOutMessage += msg => emulatorOutputs.Add(msg);
+		emu.NewOutMessageAsync += (msg, ct) => { emulatorOutputs.Add(msg); return default; };
 
 		var lastInputTime = DateTime.MinValue;
 		var outputIndex = 0;
@@ -1749,7 +1749,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		}, CancellationToken);
 
 		var emulatorOutputs = new List<Message>();
-		emu.NewOutMessage += msg => emulatorOutputs.Add(msg);
+		emu.NewOutMessageAsync += (msg, ct) => { emulatorOutputs.Add(msg); return default; };
 
 		var orderSent = false;
 		var orderId = 0L;
@@ -1833,7 +1833,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		}, CancellationToken);
 
 		var emulatorOutputs = new List<Message>();
-		emu.NewOutMessage += msg => emulatorOutputs.Add(msg);
+		emu.NewOutMessageAsync += (msg, ct) => { emulatorOutputs.Add(msg); return default; };
 
 		var tickCount = 0;
 
@@ -1892,7 +1892,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var violations = new List<string>();
 		var lastInputTime = DateTime.MinValue;
 
-		emu.NewOutMessage += msg =>
+		emu.NewOutMessageAsync += (msg, ct) =>
 		{
 			if (msg is IServerTimeMessage timeMsg && timeMsg.ServerTime != default)
 			{
@@ -1902,6 +1902,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 						$"Output {msg.GetType().Name} time {timeMsg.ServerTime:O} < last input time {lastInputTime:O}");
 				}
 			}
+			return default;
 		};
 
 		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
@@ -1953,7 +1954,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var emulatorOutputs = new List<Message>();
 		var inputTimes = new List<DateTime>();
 
-		emu.NewOutMessage += msg => emulatorOutputs.Add(msg);
+		emu.NewOutMessageAsync += (msg, ct) => { emulatorOutputs.Add(msg); return default; };
 
 		await foreach (var msg in manager.StartAsync([]).WithCancellation(CancellationToken))
 		{

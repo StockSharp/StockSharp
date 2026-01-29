@@ -75,7 +75,7 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderLogMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -136,7 +136,7 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderLogMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -194,7 +194,7 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderLogMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -227,7 +227,7 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderLogMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -279,7 +279,7 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 		using var adapter = new OrderLogMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{

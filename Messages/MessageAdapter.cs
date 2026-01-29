@@ -261,12 +261,20 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	public virtual bool ExtraSetup => false;
 
 	/// <inheritdoc />
-	public event Action<Message> NewOutMessage;
+	[Browsable(false)]
+	public virtual bool UseInChannel => true;
 
-	event Func<Message, CancellationToken, ValueTask> IMessageTransport.NewOutMessageAsync
+	/// <inheritdoc />
+	[Browsable(false)]
+	public virtual bool UseOutChannel => true;
+
+	private Func<Message, CancellationToken, ValueTask> _newOutMessageAsync;
+
+	/// <inheritdoc />
+	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync
 	{
-		add => throw new NotSupportedException();
-		remove => throw new NotSupportedException();
+		add => _newOutMessageAsync += value;
+		remove => _newOutMessageAsync -= value;
 	}
 
 	/// <inheritdoc />
@@ -621,10 +629,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 		if (message is DataTypeInfoMessage dtim && dtim.FileDataType is DataType dt && dt.IsMarketData)
 			this.AddSupportedMarketDataType(dt);
 
-		NewOutMessage?.Invoke(message);
-
-		// TODO
-		//NewOutMessageAsync?.Invoke(message, CancellationToken.None).GetAwaiter().GetResult();
+		_newOutMessageAsync?.Invoke(message, default);
 	}
 
 	/// <summary>
@@ -751,14 +756,6 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 
 	/// <inheritdoc />
 	public virtual bool IsSecurityRequired(DataType dataType) => dataType.IsSecurityRequired;
-
-	/// <inheritdoc />
-	[Browsable(false)]
-	public virtual bool UseInChannel => true;
-
-	/// <inheritdoc />
-	[Browsable(false)]
-	public virtual bool UseOutChannel => true;
 
 	/// <inheritdoc />
 	[Display(

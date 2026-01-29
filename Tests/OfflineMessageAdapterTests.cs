@@ -28,7 +28,7 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		using var adapter = new OfflineMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
@@ -114,7 +114,7 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		using var adapter = new OfflineMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var connectMsg = new ConnectMessage();
 		inner.EmitOut(connectMsg);
@@ -142,7 +142,7 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		using var adapter = new OfflineMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		inner.EmitOut(new ConnectionLostMessage { IsResetState = true });
 
@@ -174,7 +174,7 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		using var adapter = new OfflineMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		var secId = Helper.CreateSecurityId();
 
@@ -221,7 +221,7 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		using var adapter = new OfflineMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		// Register order while offline
 		var orderMsg = new OrderRegisterMessage
@@ -260,7 +260,7 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		using var adapter = new OfflineMessageAdapter(inner);
 
 		var output = new List<Message>();
-		adapter.NewOutMessage += output.Add;
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
 		// Register order while offline
 		var orderMsg = new OrderRegisterMessage
