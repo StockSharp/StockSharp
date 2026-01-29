@@ -21,7 +21,7 @@ public class ConnectorBasketTests : BaseTestClass
 	private sealed class TestConnector : Connector
 	{
 		public TestConnector(BasketMessageAdapter adapter)
-			: base(initAdapter: false)
+			: base(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider(), initAdapter: false)
 		{
 			Adapter = adapter;
 		}

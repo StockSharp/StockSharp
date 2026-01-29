@@ -32,9 +32,9 @@ public class BasketTransactionTests : BasketTestBase
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 
 		connectionState.ConnectedCount.AssertEqual(2);
-		connectionState.TryGetAdapterState(adapter1, out var cs1).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var cs1, out _).AssertTrue();
 		cs1.AssertEqual(ConnectionStates.Connected);
-		connectionState.TryGetAdapterState(adapter2, out var cs2).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var cs2, out _).AssertTrue();
 		cs2.AssertEqual(ConnectionStates.Connected);
 		pendingState.Count.AssertEqual(0);
 
@@ -100,9 +100,9 @@ public class BasketTransactionTests : BasketTestBase
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 
 		connectionState.ConnectedCount.AssertEqual(2);
-		connectionState.TryGetAdapterState(adapter1, out var cs1).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var cs1, out _).AssertTrue();
 		cs1.AssertEqual(ConnectionStates.Connected);
-		connectionState.TryGetAdapterState(adapter2, out var cs2).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var cs2, out _).AssertTrue();
 		cs2.AssertEqual(ConnectionStates.Connected);
 
 		ClearOut();

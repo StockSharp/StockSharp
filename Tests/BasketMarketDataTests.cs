@@ -1,5 +1,7 @@
 namespace StockSharp.Tests;
 
+using System.Collections.Concurrent;
+
 using StockSharp.Algo.Basket;
 using StockSharp.Algo.Candles.Compression;
 
@@ -34,9 +36,9 @@ public class BasketMarketDataTests : BasketTestBase
 		// --- Connect ---
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 		connectionState.ConnectedCount.AssertEqual(2);
-		connectionState.TryGetAdapterState(adapter1, out var cs1).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var cs1, out _).AssertTrue();
 		cs1.AssertEqual(ConnectionStates.Connected);
-		connectionState.TryGetAdapterState(adapter2, out var cs2).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var cs2, out _).AssertTrue();
 		cs2.AssertEqual(ConnectionStates.Connected);
 		pendingState.Count.AssertEqual(0);
 
@@ -494,9 +496,9 @@ public class BasketMarketDataTests : BasketTestBase
 
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 		connectionState.ConnectedCount.AssertEqual(2);
-		connectionState.TryGetAdapterState(a1, out var cs1).AssertTrue();
+		connectionState.TryGetAdapterState(a1, out var cs1, out _).AssertTrue();
 		cs1.AssertEqual(ConnectionStates.Connected);
-		connectionState.TryGetAdapterState(a2, out var cs2).AssertTrue();
+		connectionState.TryGetAdapterState(a2, out var cs2, out _).AssertTrue();
 		cs2.AssertEqual(ConnectionStates.Connected);
 
 		a1.AutoRespond = false;
@@ -696,9 +698,9 @@ public class BasketMarketDataTests : BasketTestBase
 
 		// After connection: adapter1 connected, adapter2 failed
 		connectionState.ConnectedCount.AssertEqual(1);
-		connectionState.TryGetAdapterState(adapter1, out var s1).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var s1, out _).AssertTrue();
 		s1.AssertEqual(ConnectionStates.Connected);
-		connectionState.TryGetAdapterState(adapter2, out var s2).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var s2, out _).AssertTrue();
 		s2.AssertEqual(ConnectionStates.Failed);
 		connectionState.HasPendingAdapters.AssertFalse();
 
@@ -817,11 +819,11 @@ public class BasketMarketDataTests : BasketTestBase
 
 		// Validate all 3 connected
 		connectionState.ConnectedCount.AssertEqual(3);
-		connectionState.TryGetAdapterState(a1, out var s1).AssertTrue();
+		connectionState.TryGetAdapterState(a1, out var s1, out _).AssertTrue();
 		s1.AssertEqual(ConnectionStates.Connected);
-		connectionState.TryGetAdapterState(a2, out var s2).AssertTrue();
+		connectionState.TryGetAdapterState(a2, out var s2, out _).AssertTrue();
 		s2.AssertEqual(ConnectionStates.Connected);
-		connectionState.TryGetAdapterState(a3, out var s3).AssertTrue();
+		connectionState.TryGetAdapterState(a3, out var s3, out _).AssertTrue();
 		s3.AssertEqual(ConnectionStates.Connected);
 
 		a1.AutoRespond = false;
@@ -1181,7 +1183,7 @@ public class BasketMarketDataTests : BasketTestBase
 
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 		connectionState.ConnectedCount.AssertEqual(1);
-		connectionState.TryGetAdapterState(adapter1, out var cs).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var cs, out _).AssertTrue();
 		cs.AssertEqual(ConnectionStates.Connected);
 
 		adapter1.AutoRespond = false;

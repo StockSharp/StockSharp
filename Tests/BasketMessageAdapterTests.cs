@@ -46,7 +46,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 		connectionState.HasPendingAdapters.AssertFalse("HasPendingAdapters after connect");
 		connectionState.AllFailed.AssertFalse("AllFailed after connect");
 		connectionState.AllDisconnectedOrFailed.AssertFalse("AllDisconnectedOrFailed after connect");
-		connectionState.TryGetAdapterState(adapter1, out var state1).AssertTrue("Adapter1 should have state");
+		connectionState.TryGetAdapterState(adapter1, out var state1, out _).AssertTrue("Adapter1 should have state");
 		state1.AssertEqual(ConnectionStates.Connected, "Adapter1 should be Connected");
 		pendingState.Count.AssertEqual(0, "PendingState.Count after connect");
 
@@ -90,9 +90,9 @@ public class BasketMessageAdapterTests : BasketTestBase
 		connectionState.ConnectedCount.AssertEqual(2, "Both adapters should be connected");
 		connectionState.HasPendingAdapters.AssertFalse();
 		connectionState.AllFailed.AssertFalse();
-		connectionState.TryGetAdapterState(adapter1, out var s1).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var s1, out _).AssertTrue();
 		s1.AssertEqual(ConnectionStates.Connected);
-		connectionState.TryGetAdapterState(adapter2, out var s2).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var s2, out _).AssertTrue();
 		s2.AssertEqual(ConnectionStates.Connected);
 		pendingState.Count.AssertEqual(0);
 
@@ -128,9 +128,9 @@ public class BasketMessageAdapterTests : BasketTestBase
 		connectionState.HasPendingAdapters.AssertFalse();
 		connectionState.AllFailed.AssertFalse();
 		connectionState.AllDisconnectedOrFailed.AssertFalse();
-		connectionState.TryGetAdapterState(adapter1, out var s1).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var s1, out _).AssertTrue();
 		s1.AssertEqual(ConnectionStates.Connected);
-		connectionState.TryGetAdapterState(adapter2, out var s2).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var s2, out _).AssertTrue();
 		s2.AssertEqual(ConnectionStates.Connected);
 		pendingState.Count.AssertEqual(0);
 
@@ -167,9 +167,9 @@ public class BasketMessageAdapterTests : BasketTestBase
 		connectionState.ConnectedCount.AssertEqual(0, "No adapters connected");
 		connectionState.HasPendingAdapters.AssertFalse("No pending adapters");
 		connectionState.AllDisconnectedOrFailed.AssertTrue("AllDisconnectedOrFailed should be true");
-		connectionState.TryGetAdapterState(adapter1, out var s1).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var s1, out _).AssertTrue();
 		s1.AssertEqual(ConnectionStates.Failed, "Adapter1 should be Failed");
-		connectionState.TryGetAdapterState(adapter2, out var s2).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var s2, out _).AssertTrue();
 		s2.AssertEqual(ConnectionStates.Failed, "Adapter2 should be Failed");
 		pendingState.Count.AssertEqual(0);
 
@@ -206,7 +206,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 		// --- Connect ---
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 		connectionState.ConnectedCount.AssertEqual(1);
-		connectionState.TryGetAdapterState(adapter1, out var cs1).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var cs1, out _).AssertTrue();
 		cs1.AssertEqual(ConnectionStates.Connected);
 
 		// --- Subscribe to create routing state ---
@@ -269,7 +269,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 		// --- After connect sent but no response: adapter is pending ---
 		connectionState.HasPendingAdapters.AssertTrue("Adapter should be pending (connecting)");
 		connectionState.ConnectedCount.AssertEqual(0, "No adapters connected yet");
-		connectionState.TryGetAdapterState(adapter1, out var state).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var state, out _).AssertTrue();
 		state.AssertEqual(ConnectionStates.Connecting, "Adapter1 should be Connecting");
 		pendingState.Count.AssertEqual(0, "No pending messages yet");
 
@@ -299,7 +299,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 		// --- After adapter connected: pending should be drained ---
 		connectionState.ConnectedCount.AssertEqual(1, "Adapter now connected");
 		connectionState.HasPendingAdapters.AssertFalse("No more pending adapters");
-		connectionState.TryGetAdapterState(adapter1, out var state2).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var state2, out _).AssertTrue();
 		state2.AssertEqual(ConnectionStates.Connected, "Adapter1 should be Connected");
 		pendingState.Count.AssertEqual(0, "Pending state should be empty after connect");
 	}
@@ -333,9 +333,9 @@ public class BasketMessageAdapterTests : BasketTestBase
 		// --- Both adapters pending ---
 		connectionState.HasPendingAdapters.AssertTrue("Both adapters should be pending");
 		connectionState.ConnectedCount.AssertEqual(0);
-		connectionState.TryGetAdapterState(adapter1, out var sa1).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var sa1, out _).AssertTrue();
 		sa1.AssertEqual(ConnectionStates.Connecting);
-		connectionState.TryGetAdapterState(adapter2, out var sa2).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var sa2, out _).AssertTrue();
 		sa2.AssertEqual(ConnectionStates.Connecting);
 		pendingState.Count.AssertEqual(0);
 
@@ -366,9 +366,9 @@ public class BasketMessageAdapterTests : BasketTestBase
 
 		connectionState.ConnectedCount.AssertEqual(1, "Adapter1 connected");
 		connectionState.HasPendingAdapters.AssertTrue("Adapter2 still connecting");
-		connectionState.TryGetAdapterState(adapter1, out var sa1b).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var sa1b, out _).AssertTrue();
 		sa1b.AssertEqual(ConnectionStates.Connected);
-		connectionState.TryGetAdapterState(adapter2, out var sa2b).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var sa2b, out _).AssertTrue();
 		sa2b.AssertEqual(ConnectionStates.Connecting);
 		pendingState.Count.AssertGreater(0, "Message should still be pended");
 
@@ -380,7 +380,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 
 		connectionState.HasPendingAdapters.AssertFalse("No more pending");
 		connectionState.ConnectedCount.AssertEqual(1);
-		connectionState.TryGetAdapterState(adapter2, out var sa2c).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var sa2c, out _).AssertTrue();
 		sa2c.AssertEqual(ConnectionStates.Failed, "Adapter2 should be Failed");
 		pendingState.Count.AssertEqual(0, "Pending should be drained");
 
@@ -432,9 +432,9 @@ public class BasketMessageAdapterTests : BasketTestBase
 		// --- Connect ---
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 		connectionState.ConnectedCount.AssertEqual(2);
-		connectionState.TryGetAdapterState(adapter1, out var cs1).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var cs1, out _).AssertTrue();
 		cs1.AssertEqual(ConnectionStates.Connected);
-		connectionState.TryGetAdapterState(adapter2, out var cs2).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var cs2, out _).AssertTrue();
 		cs2.AssertEqual(ConnectionStates.Connected);
 		ClearOut();
 
@@ -445,9 +445,9 @@ public class BasketMessageAdapterTests : BasketTestBase
 		connectionState.AllDisconnectedOrFailed.AssertTrue("All should be disconnected");
 		connectionState.ConnectedCount.AssertEqual(0, "No connected adapters");
 		connectionState.HasPendingAdapters.AssertFalse();
-		connectionState.TryGetAdapterState(adapter1, out var ds1).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var ds1, out _).AssertTrue();
 		ds1.AssertEqual(ConnectionStates.Disconnected, "Adapter1 should be Disconnected");
-		connectionState.TryGetAdapterState(adapter2, out var ds2).AssertTrue();
+		connectionState.TryGetAdapterState(adapter2, out var ds2, out _).AssertTrue();
 		ds2.AssertEqual(ConnectionStates.Disconnected, "Adapter2 should be Disconnected");
 		pendingState.Count.AssertEqual(0);
 
@@ -480,7 +480,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 		// --- Connect ---
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 		connectionState.ConnectedCount.AssertEqual(1);
-		connectionState.TryGetAdapterState(adapter1, out var cs).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var cs, out _).AssertTrue();
 		cs.AssertEqual(ConnectionStates.Connected);
 
 		// --- Subscribe ---
@@ -504,7 +504,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 		// --- After disconnect ---
 		connectionState.AllDisconnectedOrFailed.AssertTrue();
 		connectionState.ConnectedCount.AssertEqual(0);
-		connectionState.TryGetAdapterState(adapter1, out var ds).AssertTrue();
+		connectionState.TryGetAdapterState(adapter1, out var ds, out _).AssertTrue();
 		ds.AssertEqual(ConnectionStates.Disconnected);
 		pendingState.Count.AssertEqual(0);
 	}
