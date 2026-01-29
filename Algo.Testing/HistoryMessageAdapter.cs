@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Testing;
 
+using System.Runtime.CompilerServices;
+
 using StockSharp.Algo.Testing.Generation;
 
 /// <summary>
@@ -153,12 +155,24 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 		this.AddSupportedMessage(HistoryMessageTypes.Generator, true);
 	}
 
-	private readonly Dictionary<SecurityId, HashSet<DataType>> _supportedMarketDataTypes = [];
+	private readonly Dictionary<SecurityId, DataType[]> _supportedMarketDataTypes = [];
 
 	/// <inheritdoc />
-	public override IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)
+	public override IAsyncEnumerable<DataType> GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to)
 	{
-		return _supportedMarketDataTypes.SafeAdd(securityId, key => [.. _marketDataManager.GetSupportedDataTypes(key)]);
+		return Impl();
+
+		async IAsyncEnumerable<DataType> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
+		{
+			if (!_supportedMarketDataTypes.TryGetValue(securityId, out var dataTypes))
+			{
+				dataTypes = await _marketDataManager.GetSupportedDataTypesAsync(securityId).ToArrayAsync(cancellationToken);
+				_supportedMarketDataTypes.Add(securityId, dataTypes);
+			}
+
+			foreach (var dataType in dataTypes)
+				yield return dataType;
+		}
 	}
 
 	/// <inheritdoc />
@@ -172,7 +186,7 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 				_supportedMarketDataTypes.Clear();
 
 				if (!_marketDataManager.IsStarted)
-					SendOutMessage(new ResetMessage());
+					await SendOutMessageAsync(new ResetMessage(), cancellationToken);
 
 				break;
 			}
@@ -182,14 +196,14 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 				if (_marketDataManager.IsStarted)
 					throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
 
-				SendOutMessage(new ConnectMessage { LocalTime = StartDate });
+				await SendOutMessageAsync(new ConnectMessage { LocalTime = StartDate }, cancellationToken);
 				break;
 			}
 
 			case MessageTypes.Disconnect:
 			{
 				_marketDataManager.Stop();
-				SendOutMessage(new DisconnectMessage { LocalTime = StopDate });
+				await SendOutMessageAsync(new DisconnectMessage { LocalTime = StopDate }, cancellationToken);
 				break;
 			}
 
@@ -206,9 +220,9 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 				foreach (var security in securities)
 				{
 					if (security.Board != null && processedBoards.Add(security.Board))
-						SendOutMessage(security.Board.ToMessage());
+						await SendOutMessageAsync(security.Board.ToMessage(), cancellationToken);
 
-					SendOutMessage(security.ToMessage(originalTransactionId: lookupMsg.TransactionId));
+					await SendOutMessageAsync(security.ToMessage(originalTransactionId: lookupMsg.TransactionId), cancellationToken);
 				}
 
 				SendSubscriptionResult(lookupMsg);
@@ -228,9 +242,13 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 					case ChannelStates.Starting:
 					{
 						if (!_marketDataManager.IsStarted)
-							StartProcessing(
+						{
+							_ = StartProcessing(
 								stateMsg.StartDate == default ? StartDate : stateMsg.StartDate,
-								stateMsg.StopDate == default ? StopDate : stateMsg.StopDate);
+								stateMsg.StopDate == default ? StopDate : stateMsg.StopDate,
+								cancellationToken);
+						}
+
 						break;
 					}
 
@@ -241,7 +259,7 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 					}
 				}
 
-				SendOutMessage(stateMsg);
+				await SendOutMessageAsync(stateMsg, cancellationToken);
 				break;
 			}
 
@@ -297,17 +315,18 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 			.Distinct()
 			.Select(b => b.ToMessage())];
 
-	private void StartProcessing(DateTime startDate, DateTime stopDate)
+	private Task StartProcessing(DateTime startDate, DateTime stopDate, CancellationToken cancellationToken)
 	{
 		_marketDataManager.StartDate = startDate;
 		_marketDataManager.StopDate = stopDate;
 
-		_cancellationTokenSource = new CancellationTokenSource();
-		var token = _cancellationTokenSource.Token;
+		var (cts, t) = cancellationToken.CreateChildToken();
+		_cancellationTokenSource = cts;
+		var token = t;
 
 		var boards = CheckTradableDates ? GetBoards() : [];
 
-		_ = Task.Run(async () =>
+		return Task.Run(async () =>
 		{
 			await Task.Yield();
 
@@ -315,20 +334,20 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 			{
 				await foreach (var message in _marketDataManager.StartAsync(boards).WithCancellation(token))
 				{
-					SendOutMessage(message);
+					await SendOutMessageAsync(message, token);
 				}
 			}
 			catch (Exception ex)
 			{
 				if (!token.IsCancellationRequested)
-					SendOutMessage(ex.ToErrorMessage());
+					await SendOutMessageAsync(ex.ToErrorMessage(), token);
 
-				SendOutMessage(new EmulationStateMessage
+				await SendOutMessageAsync(new EmulationStateMessage
 				{
 					LocalTime = stopDate,
 					State = ChannelStates.Stopping,
 					Error = ex,
-				});
+				}, token);
 			}
 		}, token);
 	}

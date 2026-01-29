@@ -3145,7 +3145,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	public override DateTime CurrentTimeUtc => _currentTime;
 
 	/// <inheritdoc />
-	ValueTask IMessageTransport.SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	async ValueTask IMessageTransport.SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
@@ -3553,20 +3553,13 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 			if (!allowStore)
 				msg.OfflineMode = MessageOfflineModes.Ignore;
 
-			RaiseNewOutMessageAsync(msg, default);
+			_currentTime = message.LocalTime;
+			await SendOutMessageAsync(msg, cancellationToken);
 		}
-
-		return default;
 	}
 
 	/// <inheritdoc />
 	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
-
-	private ValueTask RaiseNewOutMessageAsync(Message message, CancellationToken cancellationToken)
-	{
-		_currentTime = message.LocalTime;
-		return NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
-	}
 
 	private SecurityMarketEmulator GetEmulator(SecurityId securityId)
 	{
@@ -3754,13 +3747,14 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	];
 	IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages { get; set; }
 	IEnumerable<MessageTypes> IMessageAdapter.NotSupportedResultMessages { get; } = [];
-	IEnumerable<DataType> IMessageAdapter.GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to) =>
-	[
+	IAsyncEnumerable<DataType> IMessageAdapter.GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to) =>
+	new DataType[]
+	{
 		DataType.OrderLog,
 		DataType.Ticks,
 		DataType.CandleTimeFrame,
 		DataType.MarketDepth,
-	];
+	}.ToAsyncEnumerable();
 
 	IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => [];
 
@@ -3823,6 +3817,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 
 	object ICloneable.Clone() => ((ICloneable<IMessageChannel>)this).Clone();
 
-	ValueTask IMessageAdapter.SendOutMessageAsync(Message message, CancellationToken cancellationToken)
-		=> RaiseNewOutMessageAsync(message, cancellationToken);
+	/// <inheritdoc/>
+	public ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)
+		=> NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 }

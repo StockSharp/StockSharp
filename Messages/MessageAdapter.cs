@@ -109,8 +109,8 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	}
 
 	/// <inheritdoc />
-	public virtual IEnumerable<DataType> GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to)
-		=> SupportedMarketDataTypes;
+	public virtual IAsyncEnumerable<DataType> GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to)
+		=> SupportedMarketDataTypes.ToAsyncEnumerable();
 
 	/// <inheritdoc />
 	[Browsable(false)]
@@ -362,10 +362,10 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	{
 		if (message.Type == MessageTypes.Connect && !Platform.IsCompatible())
 		{
-			SendOutMessage(new ConnectMessage
+			await SendOutMessageAsync(new ConnectMessage
 			{
 				Error = new InvalidOperationException(LocalizedStrings.BitSystemIncompatible.Put(GetType().Name, Platform))
-			});
+			}, cancellationToken);
 
 			return;
 		}
@@ -382,7 +382,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 				if (!ValidateSecurityId(secId))
 				{
 					var boardCode = AssociatedBoards.First();
-					SendOutMessage(mdMsg.TransactionId.CreateSubscriptionResponse(new NotSupportedException(LocalizedStrings.WrongSecurityBoard.Put(secId, boardCode, $"{secId.SecurityCode}@{boardCode}"))));
+					await SendOutMessageAsync(mdMsg.TransactionId.CreateSubscriptionResponse(new NotSupportedException(LocalizedStrings.WrongSecurityBoard.Put(secId, boardCode, $"{secId.SecurityCode}@{boardCode}"))), cancellationToken);
 					return;
 				}
 			}
@@ -399,7 +399,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 						var subscrMsg = (ISubscriptionMessage)message;
 
 						if (!subscrMsg.IsSubscribe)
-							SendOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = subscrMsg.TransactionId });
+							await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = subscrMsg.TransactionId }, cancellationToken);
 
 						break;
 					}
@@ -408,7 +408,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 		}
 		catch (Exception ex)
 		{
-			SendOutMessage(message.CreateErrorResponse(ex, this));
+			await SendOutMessageAsync(message.CreateErrorResponse(ex, this), cancellationToken);
 		}
 	}
 
@@ -443,22 +443,19 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	/// <inheritdoc />
 	protected virtual ValueTask ConnectAsync(ConnectMessage connectMsg, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ConnectMessage());
-		return default;
+		return SendOutMessageAsync(new ConnectMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
 	protected virtual ValueTask DisconnectAsync(DisconnectMessage disconnectMsg, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new DisconnectMessage());
-		return default;
+		return SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
 	protected virtual ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
-		SendOutMessage(new ResetMessage());
-		return default;
+		return SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />

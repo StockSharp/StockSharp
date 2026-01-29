@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Testing.Emulation;
 
 using StockSharp.Algo.Commissions;
-using StockSharp.Algo.Testing;
 
 /// <summary>
 /// Market emulator v2 with modular architecture.
@@ -124,7 +123,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	}
 
 	/// <inheritdoc />
-	ValueTask IMessageTransport.SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	async ValueTask IMessageTransport.SendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
@@ -151,10 +150,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				msg.OfflineMode = MessageOfflineModes.Ignore;
 
 			_currentTime = msg.LocalTime;
-			NewOutMessageAsync?.Invoke(msg, default);
+			await SendOutMessageAsync(msg, cancellationToken);
 		}
-
-		return default;
 	}
 
 	private void ProcessMessage(Message message, List<Message> results)
@@ -1133,13 +1130,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages { get; set; }
 	IEnumerable<MessageTypes> IMessageAdapter.NotSupportedResultMessages { get; } = [];
 
-	IEnumerable<DataType> IMessageAdapter.GetSupportedMarketDataTypes(SecurityId securityId, DateTime? from, DateTime? to) =>
-	[
+	IAsyncEnumerable<DataType> IMessageAdapter.GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to) =>
+	new DataType[]
+	{
 		DataType.OrderLog,
 		DataType.Ticks,
 		DataType.CandleTimeFrame,
 		DataType.MarketDepth,
-	];
+	}.ToAsyncEnumerable();
 
 	IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => [];
 	bool IMessageAdapter.CheckTimeFrameByRequest => true;
@@ -1189,7 +1187,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	object ICloneable.Clone() => ((ICloneable<IMessageAdapter>)this).Clone();
 
-	ValueTask IMessageAdapter.SendOutMessageAsync(Message message, CancellationToken cancellationToken)
+	/// <inheritdoc/>
+	public ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)
 		=> NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
 
 	#endregion
