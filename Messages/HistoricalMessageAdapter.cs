@@ -13,10 +13,7 @@ public abstract class HistoricalMessageAdapter(IdGenerator transactionIdGenerato
 	protected override ValueTask MarketDataAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
 		if (!mdMsg.IsSubscribe)
-		{
-			SendSubscriptionReply(mdMsg.TransactionId);
-			return default;
-		}
+			return SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var from = mdMsg.From;
 		var to = mdMsg.To;
