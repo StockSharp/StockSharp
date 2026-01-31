@@ -118,7 +118,7 @@ public partial class BitStampMessageAdapter : MessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		_lastMyTradeId = 0;
 		_lastTimeBalanceCheck = null;
@@ -131,7 +131,7 @@ public partial class BitStampMessageAdapter : MessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_httpClient = null;
@@ -146,13 +146,13 @@ public partial class BitStampMessageAdapter : MessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_pusherClient = null;
 		}
 
-		return SendOutMessageAsync(new ResetMessage(), cancellationToken);
+		await SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />

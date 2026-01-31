@@ -174,7 +174,7 @@ public partial class BitexbookMessageAdapter
 	{
 		if (lookupMsg != null)
 		{
-			SendSubscriptionReply(lookupMsg.TransactionId);
+			await SendSubscriptionReplyAsync(lookupMsg.TransactionId, cancellationToken);
 
 			if (!lookupMsg.IsSubscribe)
 				return;
@@ -186,7 +186,7 @@ public partial class BitexbookMessageAdapter
 				OriginalTransactionId = lookupMsg.TransactionId
 			}, cancellationToken);
 
-			SendSubscriptionResult(lookupMsg);
+			await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 			return;
 		}
 
@@ -201,7 +201,7 @@ public partial class BitexbookMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
+	protected override async ValueTask OrderStatusAsync(OrderStatusMessage statusMsg, CancellationToken cancellationToken)
 	{
 		if (statusMsg == null)
 		{
@@ -209,11 +209,9 @@ public partial class BitexbookMessageAdapter
 		}
 		else
 		{
-			SendSubscriptionReply(statusMsg.TransactionId);
-			SendSubscriptionResult(statusMsg);
+			await SendSubscriptionReplyAsync(statusMsg.TransactionId, cancellationToken);
+			await SendSubscriptionResultAsync(statusMsg, cancellationToken);
 		}
-
-		return default;
 	}
 
 	private ValueTask ProcessOrder(SecurityId secId, Order order, long transId, long origTransId, OrderStates state, CancellationToken cancellationToken)

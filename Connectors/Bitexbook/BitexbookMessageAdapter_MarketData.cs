@@ -25,13 +25,13 @@ public partial class BitexbookMessageAdapter
 				break;
 		}
 
-		SendSubscriptionResult(lookupMsg);
+		await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OnOrderLogSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var secId = mdMsg.SecurityId;
 		var symbol = secId.ToNative();
@@ -39,7 +39,7 @@ public partial class BitexbookMessageAdapter
 		if (mdMsg.IsSubscribe)
 		{
 			await _pusherClient.SubscribeTicker(mdMsg.TransactionId, symbol, cancellationToken);
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 			await _pusherClient.UnSubscribeTicker(mdMsg.OriginalTransactionId, symbol, cancellationToken);
@@ -48,7 +48,7 @@ public partial class BitexbookMessageAdapter
 	/// <inheritdoc />
 	protected override async ValueTask OnTFCandlesSubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 	{
-		SendSubscriptionReply(mdMsg.TransactionId);
+		await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 		var secId = mdMsg.SecurityId;
 		var symbol = secId.ToNative();
@@ -75,7 +75,7 @@ public partial class BitexbookMessageAdapter
 			if (!mdMsg.IsHistoryOnly())
 				_pusherClient.SubscribeCandles(symbol, tfName, cancellationToken);
 
-			SendSubscriptionResult(mdMsg);
+			await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 		}
 		else
 			_pusherClient.UnSubscribeCandles(symbol, tfName, cancellationToken);

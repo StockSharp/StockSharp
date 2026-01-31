@@ -58,7 +58,7 @@ public partial class BitexbookMessageAdapter
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
+	protected override async ValueTask ResetAsync(ResetMessage resetMsg, CancellationToken cancellationToken)
 	{
 		if (_httpClient != null)
 		{
@@ -68,7 +68,7 @@ public partial class BitexbookMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_httpClient = null;
@@ -83,7 +83,7 @@ public partial class BitexbookMessageAdapter
 			}
 			catch (Exception ex)
 			{
-				SendOutError(ex);
+				await SendOutErrorAsync(ex, cancellationToken);
 			}
 
 			_pusherClient = null;
@@ -94,7 +94,7 @@ public partial class BitexbookMessageAdapter
 		_orderInfo.Clear();
 		_lastTimeBalanceCheck = null;
 
-		return SendOutMessageAsync(new ResetMessage(), cancellationToken);
+		await SendOutMessageAsync(new ResetMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
