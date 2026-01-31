@@ -2302,21 +2302,38 @@ public static partial class Extensions
 	/// <returns>Currency type. If the value is empty, <see langword="null" /> will be returned.</returns>
 	public static CurrencyTypes? FromMicexCurrencyName(this string name, Action<Exception> errorHandler)
 	{
-		if (name.IsEmpty() || _ignoreCurrs.Contains(name))
-			return null;
+        if (errorHandler is null)
+            throw new ArgumentNullException(nameof(errorHandler));
 
-		if (errorHandler is null)
-			throw new ArgumentNullException(nameof(errorHandler));
+        var (currency, error) = FromMicexCurrencyName(name);
+
+		if (currency is not null)
+			return currency;
+
+		if (error is not null)
+			errorHandler(error);
+
+		return null;
+	}
+
+	/// <summary>
+	/// To convert the currency name in the MICEX format into <see cref="CurrencyTypes"/>.
+	/// </summary>
+	/// <param name="name">The currency name in the MICEX format.</param>
+	/// <returns>Currency type. If the value is empty, <see langword="null" /> will be returned.</returns>
+	public static (CurrencyTypes? currency, Exception error) FromMicexCurrencyName(this string name)
+	{
+		if (name.IsEmpty() || _ignoreCurrs.Contains(name))
+			return default;
 
 		try
 		{
-			return name.To<CurrencyTypes>();
+			return (name.To<CurrencyTypes>(), null);
 		}
 		catch (Exception ex)
 		{
 			_ignoreCurrs.Add(name);
-			errorHandler(ex);
-			return null;
+			return (null, ex);
 		}
 	}
 
