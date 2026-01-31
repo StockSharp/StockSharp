@@ -58,7 +58,7 @@ public class AsyncExtensionsTests : BaseTestClass
 						// For historical subscriptions, send result AFTER data is sent
 						// For live subscriptions, send result now to start receiving
 						if (mdMsg.To == null)
-							SendSubscriptionResult(mdMsg);
+							await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 					}
 					else
 					{
@@ -168,13 +168,13 @@ public class AsyncExtensionsTests : BaseTestClass
 			await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
 		}
 
-		protected override ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
+		protected override async ValueTask OnLevel1SubscriptionAsync(MarketDataMessage mdMsg, CancellationToken cancellationToken)
 		{
 			SentMessages.Enqueue(mdMsg);
 
 			if (mdMsg.IsSubscribe)
 			{
-				SendSubscriptionReply(mdMsg.TransactionId);
+				await SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 
 				ActiveSubscriptions[mdMsg.TransactionId] = mdMsg;
 				LastSubscribedId = mdMsg.TransactionId;
@@ -182,15 +182,13 @@ public class AsyncExtensionsTests : BaseTestClass
 				// For historical subscriptions, send result AFTER data is sent
 				// For live subscriptions, send result now to start receiving
 				if (mdMsg.To == null)
-					SendSubscriptionResult(mdMsg);
+					await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 			}
 			else
 			{
 				ActiveSubscriptions.Remove(mdMsg.OriginalTransactionId);
-				SendSubscriptionReply(mdMsg.OriginalTransactionId);
+				await SendSubscriptionReplyAsync(mdMsg.OriginalTransactionId, cancellationToken);
 			}
-
-			return default;
 		}
 
 		public async ValueTask SimulateData(long subscriptionId, Message data, CancellationToken cancellationToken)
