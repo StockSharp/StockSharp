@@ -225,7 +225,7 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 					await SendOutMessageAsync(security.ToMessage(originalTransactionId: lookupMsg.TransactionId), cancellationToken);
 				}
 
-				SendSubscriptionResult(lookupMsg);
+				await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 				break;
 			}
 
@@ -302,10 +302,10 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 			_marketDataManager.Unsubscribe(originId);
 		}
 
-		SendSubscriptionReply(transId, error);
+		await SendSubscriptionReplyAsync(transId, cancellationToken, error);
 
 		if (isSubscribe && error == null)
-			SendSubscriptionResult(message);
+			await SendSubscriptionResultAsync(message, cancellationToken);
 	}
 
 	private BoardMessage[] GetBoards()
