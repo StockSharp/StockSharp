@@ -36,6 +36,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 	private readonly string _equitySheet = LocalizedStrings.Equity;
 	private readonly string _tradesSheet = LocalizedStrings.Trades;
 	private readonly string _ordersSheet = LocalizedStrings.Orders;
+	private readonly string _positionsSheet = LocalizedStrings.Positions;
 	private readonly string _statsSheet = LocalizedStrings.Statistics;
 
 	// English fallback names for template (template uses English sheet names)
@@ -44,6 +45,7 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 	private const string _equitySheetEn = "Equity";
 	private const string _tradesSheetEn = "Trades";
 	private const string _ordersSheetEn = "Orders";
+	private const string _positionsSheetEn = "Positions";
 	private const string _statsSheetEn = "Stats";
 
 	private const string _templateResourceName = "StockSharp.Reporting.Resources.StrategyReportTemplate.xlsx";
@@ -103,6 +105,9 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		if (IncludeOrders)
 			FillOrders(worker, source, cancellationToken);
 
+		if (IncludePositions)
+			FillPositions(worker, source, cancellationToken);
+
 		// Equity/Stats depend on Trades (PnL).
 		FillEquity(worker, source, cancellationToken);
 
@@ -146,6 +151,13 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		{
 			worker.AddSheet().RenameSheet(_ordersSheet);
 			CreateOrdersSheet(worker, source, cancellationToken);
+		}
+
+		// 7. Positions sheet
+		if (IncludePositions)
+		{
+			worker.AddSheet().RenameSheet(_positionsSheet);
+			CreatePositionsSheet(worker, source, cancellationToken);
 		}
 
 		// Add charts to Dashboard (after all data sheets are populated)
@@ -548,8 +560,8 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		const string headerBg = "4472C4";
 		const string headerFg = "FFFFFF";
 
-		// Header row matching template: EntryTime, ExitTime, Security, Side, Qty, EntryPrice, ExitPrice, PnL, PnL%, TotalPnL, Position
-		var headers = new[] { LocalizedStrings.EntryTime, LocalizedStrings.ExitTime, LocalizedStrings.Security, LocalizedStrings.Side, LocalizedStrings.Volume, LocalizedStrings.Enter, LocalizedStrings.Exit, LocalizedStrings.PnL, LocalizedStrings.PnLChange, LocalizedStrings.TotalPnL, LocalizedStrings.Position };
+		// Header row: TradeId, Time, Security, Side, Volume, Price, PnL, Slippage, TotalPnL
+		var headers = new[] { LocalizedStrings.TradeId, LocalizedStrings.Time, LocalizedStrings.Security, LocalizedStrings.Side, LocalizedStrings.Volume, LocalizedStrings.Price, LocalizedStrings.PnL, LocalizedStrings.Slippage, LocalizedStrings.TotalPnL };
 		for (var i = 0; i < headers.Length; i++)
 		{
 			worker
@@ -560,34 +572,29 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		var decimalFormat = GetDecimalFormat();
 
 		worker
-			.SetColumnWidth(0, 18)  // Entry Time
-			.SetColumnWidth(1, 18)  // Exit Time
+			.SetColumnWidth(0, 12)  // TradeId
+			.SetColumnWidth(1, 18)  // Time
 			.SetColumnWidth(2, 16)  // Security
 			.SetColumnWidth(3, 8)   // Side
-			.SetColumnWidth(4, 10)  // Qty
-			.SetColumnWidth(5, 12)  // Entry Price
-			.SetColumnWidth(6, 12)  // Exit Price
-			.SetColumnWidth(7, 12)  // PnL
-			.SetColumnWidth(8, 10)  // PnL%
-			.SetColumnWidth(9, 12)  // Total PnL
-			.SetColumnWidth(10, 10) // Position
-			.SetStyle(0, typeof(DateTime))
+			.SetColumnWidth(4, 10)  // Volume
+			.SetColumnWidth(5, 12)  // Price
+			.SetColumnWidth(6, 12)  // PnL
+			.SetColumnWidth(7, 12)  // Slippage
+			.SetColumnWidth(8, 12)  // TotalPnL
+			.SetStyle(0, "0")
 			.SetStyle(1, typeof(DateTime))
 			.SetStyle(4, decimalFormat)
 			.SetStyle(5, decimalFormat)
 			.SetStyle(6, decimalFormat)
 			.SetStyle(7, decimalFormat)
-			.SetStyle(8, "0.00%")
-			.SetStyle(9, decimalFormat)
-			.SetStyle(10, decimalFormat)
+			.SetStyle(8, decimalFormat)
 			.FreezeRows(1)
-			// ColorScale for PnL (col 7) and TotalPnL (col 9) - matching template
-			.SetColorScale(7, 1, "F8696B", "FFEB84", "63BE7B")
-			.SetColorScale(9, 1, "F8696B", "FFEB84", "63BE7B");
+			// ColorScale for PnL (col 6) and TotalPnL (col 8)
+			.SetColorScale(6, 1, "F8696B", "FFEB84", "63BE7B")
+			.SetColorScale(8, 1, "F8696B", "FFEB84", "63BE7B");
 
 		var row = 1;
 		decimal totalPnL = 0m;
-		decimal position = 0m;
 
 		foreach (var trade in source.OwnTrades.ToArray())
 		{
@@ -595,29 +602,17 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 
 			var pnl = trade.PnL ?? 0m;
 			totalPnL += pnl;
-			position += trade.Position ?? 0m;
-
-			var qty = trade.Volume;
-			var entryPrice = trade.OrderPrice;
-			var exitPrice = trade.TradePrice;
-
-			decimal pnlPct = 0m;
-			var denom = Math.Abs(entryPrice) * qty;
-			if (denom != 0)
-				pnlPct = pnl / denom;
 
 			worker
-				.SetCell(0, row, trade.Time)           // Entry Time
-				.SetCell(1, row, trade.Time)           // Exit Time
+				.SetCell(0, row, trade.TradeId)        // TradeId
+				.SetCell(1, row, trade.Time)            // Time
 				.SetCell(2, row, trade.SecurityId.ToStringId()) // Security
 				.SetCell(3, row, trade.Side.GetDisplayName())
-				.SetCell(4, row, qty)                  // Qty
-				.SetCell(5, row, entryPrice)           // Entry Price
-				.SetCell(6, row, exitPrice)            // Exit Price
-				.SetCell(7, row, pnl)                  // PnL
-				.SetCell(8, row, pnlPct)               // PnL%
-				.SetCell(9, row, totalPnL)             // Total PnL
-				.SetCell(10, row, position);           // Position
+				.SetCell(4, row, trade.Volume)          // Volume
+				.SetCell(5, row, trade.TradePrice)      // Price
+				.SetCell(6, row, pnl)                   // PnL
+				.SetCell(7, row, trade.Slippage ?? 0m)  // Slippage
+				.SetCell(8, row, totalPnL);             // TotalPnL
 
 			// Color Side column: Buy = green, Sell = red
 			var (sideBg, sideFg) = trade.Side == Sides.Buy
@@ -702,6 +697,57 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			};
 			if (stateBg != null)
 				worker.SetCellColor(6, row, stateBg, stateFg);
+
+			row++;
+		}
+	}
+
+	private void CreatePositionsSheet(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		const string headerBg = "4472C4";
+		const string headerFg = "FFFFFF";
+
+		var headers = new[] { LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.EntryTime, LocalizedStrings.OpenPrice, LocalizedStrings.ExitTime, LocalizedStrings.ClosingPrice, LocalizedStrings.MaxVolume };
+		for (var i = 0; i < headers.Length; i++)
+		{
+			worker
+				.SetCell(i, 0, headers[i])
+				.SetCellColor(i, 0, headerBg, headerFg);
+		}
+
+		var decimalFormat = GetDecimalFormat();
+
+		worker
+			.SetColumnWidth(0, 16)  // Security
+			.SetColumnWidth(1, 14)  // Portfolio
+			.SetColumnWidth(2, 18)  // Open Time
+			.SetColumnWidth(3, 12)  // Open Price
+			.SetColumnWidth(4, 18)  // Close Time
+			.SetColumnWidth(5, 12)  // Close Price
+			.SetColumnWidth(6, 12)  // Max Position
+			.SetStyle(2, typeof(DateTime))
+			.SetStyle(3, decimalFormat)
+			.SetStyle(4, typeof(DateTime))
+			.SetStyle(5, decimalFormat)
+			.SetStyle(6, decimalFormat)
+			.FreezeRows(1);
+
+		var row = 1;
+
+		foreach (var pos in source.Positions.ToArray())
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			worker
+				.SetCell(0, row, pos.SecurityId.ToStringId())
+				.SetCell(1, row, pos.PortfolioName)
+				.SetCell(2, row, pos.OpenTime)
+				.SetCell(3, row, pos.OpenPrice)
+				.SetCell(4, row, pos.CloseTime)
+				.SetCell(5, row, pos.ClosePrice)
+				.SetCell(6, row, pos.MaxPosition);
 
 			row++;
 		}
@@ -838,11 +884,10 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 		SwitchSheet(worker, _tradesSheet, _tradesSheetEn);
 
 		// Trades template columns:
-		// A EntryTime, B ExitTime, C Security, D Side, E Qty, F EntryPrice, G ExitPrice,
-		// H PnL, I PnL%, J TotalPnL, K Position
+		// A TradeId, B Time, C Security, D Side, E Volume, F Price,
+		// G PnL, H Slippage, I TotalPnL
 		var row = 1; // data starts from Excel row 2
 		decimal totalPnL = 0m;
-		decimal position = 0m;
 
 		foreach (var trade in source.OwnTrades.ToArray())
 		{
@@ -850,29 +895,17 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 
 			var pnl = trade.PnL ?? 0m;
 			totalPnL += pnl;
-			position += trade.Position ?? 0m;
-
-			var qty = trade.Volume;
-			var entryPrice = trade.OrderPrice;
-			var exitPrice = trade.TradePrice;
-
-			decimal pnlPct = 0m;
-			var denom = Math.Abs(entryPrice) * qty;
-			if (denom != 0)
-				pnlPct = pnl / denom;
 
 			worker
-				.SetCell(0, row, trade.Time)           // EntryTime
-				.SetCell(1, row, trade.Time)           // ExitTime
+				.SetCell(0, row, trade.TradeId)        // TradeId
+				.SetCell(1, row, trade.Time)            // Time
 				.SetCell(2, row, trade.SecurityId.ToStringId()) // Security
 				.SetCell(3, row, trade.Side.GetDisplayName())
-				.SetCell(4, row, qty)                  // Qty
-				.SetCell(5, row, entryPrice)           // EntryPrice
-				.SetCell(6, row, exitPrice)            // ExitPrice
-				.SetCell(7, row, pnl)                  // PnL
-				.SetCell(8, row, pnlPct)               // PnL%
-				.SetCell(9, row, totalPnL)             // TotalPnL
-				.SetCell(10, row, position);           // Position
+				.SetCell(4, row, trade.Volume)          // Volume
+				.SetCell(5, row, trade.TradePrice)      // Price
+				.SetCell(6, row, pnl)                   // PnL
+				.SetCell(7, row, trade.Slippage ?? 0m)  // Slippage
+				.SetCell(8, row, totalPnL);             // TotalPnL
 
 			row++;
 		}
@@ -908,6 +941,33 @@ public class ExcelReportGenerator(IExcelWorkerProvider provider, ReadOnlyMemory<
 			worker
 				.SetCellFormat(0, row, "0")
 				.SetCellFormat(1, row, "0");
+
+			row++;
+		}
+	}
+
+	private void FillPositions(IExcelWorker worker, IReportSource source, CancellationToken cancellationToken)
+	{
+		cancellationToken.ThrowIfCancellationRequested();
+
+		SwitchSheet(worker, _positionsSheet, _positionsSheetEn);
+
+		// Positions template columns:
+		// A Security, B Portfolio, C Open Time, D Open Price, E Close Time, F Close Price, G Max Position
+		var row = 1; // data starts from Excel row 2
+
+		foreach (var pos in source.Positions.ToArray())
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			worker
+				.SetCell(0, row, pos.SecurityId.ToStringId())
+				.SetCell(1, row, pos.PortfolioName)
+				.SetCell(2, row, pos.OpenTime)
+				.SetCell(3, row, pos.OpenPrice)
+				.SetCell(4, row, pos.CloseTime)
+				.SetCell(5, row, pos.ClosePrice)
+				.SetCell(6, row, pos.MaxPosition);
 
 			row++;
 		}
