@@ -851,12 +851,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 				case MessageTypes.Execution:
 				{
 					var execMsg = (ExecutionMessage)message;
-					if (execMsg.DataType != DataType.Transactions)
-						break;
 
 					_routingManager.ApplyParentLookupId(execMsg);
 
-					if (execMsg.TransactionId != default && execMsg.HasOrderInfo)
+					if (execMsg.DataType == DataType.Transactions && execMsg.TransactionId != default && execMsg.HasOrderInfo)
 						_routingManager.AddOrderAdapter(execMsg.TransactionId, innerAdapter);
 
 					break;
