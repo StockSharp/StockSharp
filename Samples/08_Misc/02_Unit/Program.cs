@@ -13,19 +13,16 @@ class Program
 		var security = new Security
 		{
 			Id = "AAPL@NASDAQ",
-			StepPrice = 10,
 			PriceStep = 0.01m,
 		};
 
 		var absolute = new Unit(30);
 		var percent = 30.0.Percents();
 		var pips = 30.0.Pips(security);
-		var point = 30.0.Points(security);
 
 		Console.WriteLine("absolute = " + absolute);
 		Console.WriteLine("percent = " + percent);
 		Console.WriteLine("pips = " + pips);
-		Console.WriteLine("point = " + point);
 		Console.WriteLine();
 
 		// test values as a $90
@@ -40,37 +37,24 @@ class Program
 		Console.WriteLine("testValue + absolute = " + (testValue + absolute));
 		Console.WriteLine("testValue + percent = " + (testValue + percent));
 		Console.WriteLine("testValue + pips = " + (testValue + pips));
-		Console.WriteLine("testValue + point = " + (testValue + point));
 		Console.WriteLine();
 
 		// multiplication of all values
 		Console.WriteLine("testValue * absolute = " + (testValue * absolute));
 		Console.WriteLine("testValue * percent = " + (testValue * percent));
 		Console.WriteLine("testValue * pips = " + (testValue * pips));
-		Console.WriteLine("testValue * point = " + (testValue * point));
 		Console.WriteLine();
 
 		// subtraction of values
 		Console.WriteLine("testValue - absolute = " + (testValue - absolute));
 		Console.WriteLine("testValue - percent = " + (testValue - percent));
 		Console.WriteLine("testValue - pips = " + (testValue - pips));
-		Console.WriteLine("testValue - point = " + (testValue - point));
 		Console.WriteLine();
 
 		// division of all values
 		Console.WriteLine("testValue / absolute = " + (testValue / absolute));
 		Console.WriteLine("testValue / percent = " + (testValue / percent));
 		Console.WriteLine("testValue / pips = " + (testValue / pips));
-		Console.WriteLine("testValue / point = " + (testValue / point));
-		Console.WriteLine();
-
-		// addition of pips and points
-		var resultPipsPoint = pips + point;
-		// and casting to decimal
-		var resultPipsPointDecimal = (decimal)resultPipsPoint;
-
-		Console.WriteLine("pips + point = " + resultPipsPoint);
-		Console.WriteLine("(decimal)(pips + point) = " + resultPipsPointDecimal);
 		Console.WriteLine();
 
 		// addition of pips and percents

@@ -662,7 +662,7 @@ public class ExtensionsMethodsTests : BaseTestClass
 		var result = quotes.Group(Sides.Sell, 1m);
 
 		// 100 and 100.5 in first group, 101 starts new group (crosses nextPrice=101), 102 in third
-		IsTrue(result.Length > 0);
+		result.Length.AssertEqual(3);
 		result[0].Price.AssertEqual(100m);
 	}
 
@@ -841,7 +841,8 @@ public class ExtensionsMethodsTests : BaseTestClass
 		};
 
 		var encoded = periods.EncodeToString();
-		IsTrue(encoded.Length > 0);
+		IsNotNull(encoded);
+		IsFalse(encoded.IsEmpty());
 
 		var decoded = encoded.DecodeToPeriods().ToArray();
 		decoded.Length.AssertEqual(1);
@@ -1086,7 +1087,7 @@ public class ExtensionsMethodsTests : BaseTestClass
 	{
 		var logger = new TestReceiver();
 		((decimal?)10m).ApplyNewBalance(-1m, 1, logger);
-		IsTrue(logger.Logs.Count > 0);
+		IsTrue(logger.Logs.Count >= 1);
 	}
 
 	[TestMethod]
@@ -1094,7 +1095,7 @@ public class ExtensionsMethodsTests : BaseTestClass
 	{
 		var logger = new TestReceiver();
 		((decimal?)5m).ApplyNewBalance(10m, 1, logger);
-		IsTrue(logger.Logs.Count > 0);
+		IsTrue(logger.Logs.Count >= 1);
 	}
 
 	#endregion
@@ -1313,7 +1314,8 @@ public class ExtensionsMethodsTests : BaseTestClass
 	{
 		var dt = Extensions.TimeFrame(TimeSpan.FromDays(1));
 		var str = dt.ToReadableString();
-		IsTrue(str.Length > 0);
+		IsTrue(str.ContainsIgnoreCase("1"));
+		IsTrue(str.ContainsIgnoreCase("day"));
 	}
 
 	[TestMethod]
@@ -1321,7 +1323,8 @@ public class ExtensionsMethodsTests : BaseTestClass
 	{
 		var dt = Extensions.TimeFrame(TimeSpan.FromMinutes(5));
 		var str = dt.ToReadableString();
-		IsTrue(str.Length > 0);
+		IsTrue(str.ContainsIgnoreCase("5"));
+		IsTrue(str.ContainsIgnoreCase("min"));
 	}
 
 	#endregion
@@ -2667,7 +2670,7 @@ public class ExtensionsMethodsTests : BaseTestClass
 		var msg = new SecurityLookupMessage();
 		msg.SetSecurityTypes(null, new[] { SecurityTypes.Stock, SecurityTypes.Bond });
 		msg.SecurityTypes.AssertNotNull();
-		IsTrue(msg.SecurityTypes.Length == 2);
+		msg.SecurityTypes.Length.AssertEqual(2);
 	}
 
 	[TestMethod]
@@ -2965,7 +2968,10 @@ public class ExtensionsMethodsTests : BaseTestClass
 	{
 		var dt = TimeSpan.FromMinutes(5).TimeFrame();
 		var str = dt.DataTypeArgToString();
-		IsTrue(str.Length > 0);
+		IsFalse(str.IsEmpty());
+		// roundtrip: parsing back should give the same DataType
+		var restored = dt.MessageType.ToDataTypeArg(str);
+		AreEqual(dt.Arg, restored);
 	}
 
 	[TestMethod]
@@ -3346,7 +3352,8 @@ public class ExtensionsMethodsTests : BaseTestClass
 		};
 
 		var encoded = specialDays.EncodeToString();
-		IsTrue(encoded.Length > 0);
+		IsNotNull(encoded);
+		IsFalse(encoded.IsEmpty());
 
 		var decoded = encoded.DecodeToSpecialDays();
 		decoded.Count.AssertEqual(1);
@@ -3545,8 +3552,8 @@ public class ExtensionsMethodsTests : BaseTestClass
 	{
 		var dt = TimeSpan.FromMinutes(5).TimeFrame();
 		var (type, arg) = dt.FormatToString();
-		IsTrue(type.Length > 0);
-		IsTrue(arg.Length > 0);
+		AreEqual(typeof(TimeFrameCandleMessage).GetTypeName(false), type);
+		AreEqual(dt.DataTypeArgToString(), arg);
 	}
 
 	#endregion
