@@ -704,7 +704,6 @@ public class BasketMarketDataTests : BasketTestBase
 		s2.AssertEqual(ConnectionStates.Failed);
 		connectionState.HasPendingAdapters.AssertFalse();
 
-		adapter1.AutoRespond = true;
 		ClearOut();
 
 		var transId = basket.TransactionIdGenerator.GetNextId();
@@ -720,10 +719,14 @@ public class BasketMarketDataTests : BasketTestBase
 
 		var childId = adapter1.GetMessages<SecurityLookupMessage>().Last().TransactionId;
 
-		// subscriptionRouting and parentChildMap
+		// subscriptionRouting and parentChildMap (checked before response cleans them up)
 		subscriptionRouting.TryGetSubscription(transId, out _, out _, out _).AssertTrue();
 		parentChildMap.TryGetParent(childId, out var pid).AssertTrue();
 		pid.AssertEqual(transId);
+
+		// --- Now send responses from adapter1 ---
+		await adapter1.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = childId }, TestContext.CancellationToken);
+		await adapter1.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = childId }, TestContext.CancellationToken);
 
 		AssertBroadcastOutput(transId, [childId],
 			expectedResponse: 1, expectError: false,
