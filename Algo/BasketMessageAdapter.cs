@@ -746,7 +746,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		}
 
 		if (message is OrderRegisterMessage regMsg)
-			_routingManager.AddOrderAdapter(regMsg.TransactionId, adapter);
+			_routingManager.AddOrderAdapter(regMsg.TransactionId, GetUnderlyingAdapter(adapter));
 
 		await adapter.SendInMessageAsync(message, cancellationToken);
 	}

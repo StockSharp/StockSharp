@@ -329,9 +329,7 @@ public class BasketRoutingManager : IBasketRoutingManager
 			case MessageTypes.OrderReplace:
 			case MessageTypes.OrderCancel:
 			case MessageTypes.OrderGroupCancel:
-				// Order messages are handled directly by BasketMessageAdapter
-				// as they require portfolio lookup which depends on adapter wrappers
-				return RoutingInResult.Empty;
+				return await ProcessOtherMessageAsync(message, adapterLookup, cancellationToken);
 
 			default:
 				if (message is ISubscriptionMessage subscrMsg)
