@@ -245,40 +245,63 @@ public class PositionLifecycleTrackerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ReversalWithoutZero_NoRoundTripClosed()
+	public void Reversal_ClosesFirstRoundTrip()
 	{
-		// when position flips sign without going through 0,
-		// current implementation does NOT close a round-trip
+		// reversal +5 -> -3 should close the long round-trip immediately
 		var tracker = CreateTracker();
 		var sec = CreateSecurity();
 
 		SendPosition(tracker, sec, "pf", 5m, 100m, new DateTime(2024, 1, 1, 10, 0, 0));
-		// direct reversal: +5 -> -3 (no zero in between)
 		SendPosition(tracker, sec, "pf", -3m, 108m, new DateTime(2024, 1, 1, 11, 0, 0));
-
-		// no round-trip closed because position never hit 0
-		tracker.History.Count.AssertEqual(0);
-	}
-
-	[TestMethod]
-	public void ReversalWithoutZero_ClosesOnlyWhenZero()
-	{
-		var tracker = CreateTracker();
-		var sec = CreateSecurity();
-
-		SendPosition(tracker, sec, "pf", 5m, 100m, new DateTime(2024, 1, 1, 10, 0, 0));
-		// direct reversal without 0
-		SendPosition(tracker, sec, "pf", -3m, 108m, new DateTime(2024, 1, 1, 11, 0, 0));
-		// eventually close at 0
-		SendPosition(tracker, sec, "pf", 0m, 105m, new DateTime(2024, 1, 1, 12, 0, 0));
 
 		tracker.History.Count.AssertEqual(1);
 
 		var rt = tracker.History[0];
 		rt.OpenPrice.AssertEqual(100m);
-		rt.ClosePrice.AssertEqual(105m);
-		// max position should include the reversed side
+		rt.ClosePrice.AssertEqual(108m);
 		rt.MaxPosition.AssertEqual(5m);
+	}
+
+	[TestMethod]
+	public void Reversal_OpensNewRoundTrip()
+	{
+		// after reversal +5 -> -3, closing at 0 should produce second round-trip
+		var tracker = CreateTracker();
+		var sec = CreateSecurity();
+
+		SendPosition(tracker, sec, "pf", 5m, 100m, new DateTime(2024, 1, 1, 10, 0, 0));
+		SendPosition(tracker, sec, "pf", -3m, 108m, new DateTime(2024, 1, 1, 11, 0, 0));
+		SendPosition(tracker, sec, "pf", 0m, 105m, new DateTime(2024, 1, 1, 12, 0, 0));
+
+		tracker.History.Count.AssertEqual(2);
+
+		var rt1 = tracker.History[0];
+		rt1.OpenPrice.AssertEqual(100m);
+		rt1.ClosePrice.AssertEqual(108m);
+		rt1.MaxPosition.AssertEqual(5m);
+
+		var rt2 = tracker.History[1];
+		rt2.OpenPrice.AssertEqual(108m);
+		rt2.ClosePrice.AssertEqual(105m);
+		rt2.MaxPosition.AssertEqual(3m);
+	}
+
+	[TestMethod]
+	public void Reversal_EventFiredForBothRoundTrips()
+	{
+		var tracker = CreateTracker();
+		var sec = CreateSecurity();
+		var fired = new List<ReportPosition>();
+
+		tracker.RoundTripClosed += rt => fired.Add(rt);
+
+		SendPosition(tracker, sec, "pf", 5m, 100m, new DateTime(2024, 1, 1, 10, 0, 0));
+		SendPosition(tracker, sec, "pf", -3m, 108m, new DateTime(2024, 1, 1, 11, 0, 0));
+		SendPosition(tracker, sec, "pf", 0m, 105m, new DateTime(2024, 1, 1, 12, 0, 0));
+
+		fired.Count.AssertEqual(2);
+		fired[0].ClosePrice.AssertEqual(108m);
+		fired[1].ClosePrice.AssertEqual(105m);
 	}
 
 	private static PositionLifecycleTracker CreateTracker()

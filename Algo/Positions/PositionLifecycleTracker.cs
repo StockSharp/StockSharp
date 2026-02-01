@@ -16,9 +16,10 @@ public class PositionLifecycleTracker : Disposable
 		public DateTime OpenTime;
 		public decimal? OpenPrice;
 		public decimal MaxPosition;
+		public decimal LastValue;
 	}
 
-	private readonly SynchronizedDictionary<(SecurityId, string), OpenState> _openPositions = new();
+	private readonly Dictionary<(SecurityId, string), OpenState> _openPositions = new();
 	private readonly CachedSynchronizedList<ReportPosition> _history = new();
 	private readonly ISubscriptionProvider _provider;
 
@@ -49,39 +50,62 @@ public class PositionLifecycleTracker : Disposable
 		base.DisposeManaged();
 	}
 
+	private void CloseRoundTrip((SecurityId secId, string pfName) key, OpenState state, DateTime closeTime, decimal? closePrice)
+	{
+		var rt = new ReportPosition(
+			key.secId, key.pfName,
+			state.OpenTime, state.OpenPrice,
+			closeTime, closePrice,
+			state.MaxPosition
+		);
+		_history.Add(rt);
+		_openPositions.Remove(key);
+		RoundTripClosed?.Invoke(rt);
+	}
+
 	private void OnPositionReceived(Subscription sub, Position position)
 	{
 		var currentValue = position.CurrentValue ?? 0;
 		var key = (secId: position.Security.ToSecurityId(), pfName: position.PortfolioName);
 
-		using (_openPositions.EnterScope())
+		using (_history.EnterScope())
 		{
 			if (_openPositions.TryGetValue(key, out var state))
 			{
-				state.MaxPosition = state.MaxPosition.Max(currentValue.Abs());
-
 				if (currentValue == 0)
 				{
-					// position closed
-					var rt = new ReportPosition(
-						key.secId, key.pfName,
-						state.OpenTime, state.OpenPrice,
-						position.ServerTime, position.CurrentPrice,
-						state.MaxPosition
-					);
-					_history.Add(rt);
-					_openPositions.Remove(key);
-					RoundTripClosed?.Invoke(rt);
+					// position fully closed
+					CloseRoundTrip(key, state, position.ServerTime, position.CurrentPrice);
+				}
+				else if (currentValue.Sign() != state.LastValue.Sign())
+				{
+					// sign changed — reversal: close current, open new
+					CloseRoundTrip(key, state, position.ServerTime, position.CurrentPrice);
+
+					_openPositions[key] = new()
+					{
+						OpenTime = position.ServerTime,
+						OpenPrice = position.CurrentPrice,
+						MaxPosition = currentValue.Abs(),
+						LastValue = currentValue,
+					};
+				}
+				else
+				{
+					// same direction, update max
+					state.MaxPosition = state.MaxPosition.Max(currentValue.Abs());
+					state.LastValue = currentValue;
 				}
 			}
 			else if (currentValue != 0)
 			{
 				// new position opened
-				_openPositions[key] = new OpenState
+				_openPositions[key] = new()
 				{
 					OpenTime = position.ServerTime,
 					OpenPrice = position.CurrentPrice,
 					MaxPosition = currentValue.Abs(),
+					LastValue = currentValue,
 				};
 			}
 		}
