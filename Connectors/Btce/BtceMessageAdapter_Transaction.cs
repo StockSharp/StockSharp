@@ -34,7 +34,7 @@ partial class BtceMessageAdapter
 				{
 					DataTypeEx = DataType.Transactions,
 					OrderId = withdrawId,
-					ServerTime = CurrentTimeUtc,
+					ServerTime = CurrentTime,
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
@@ -119,7 +119,7 @@ partial class BtceMessageAdapter
 		//	OrderState = OrderStates.Done,
 		//	DataTypeEx = DataType.Transactions,
 		//	HasOrderInfo = true,
-		//	ServerTime = CurrentTimeUtc,
+		//	ServerTime = CurrentTime,
 		//});
 
 		await OrderStatusAsync(null, cancellationToken);
@@ -218,7 +218,7 @@ partial class BtceMessageAdapter
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
-				ServerTime = CurrentTimeUtc,
+				ServerTime = CurrentTime,
 				HasOrderInfo = true,
 				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
 			}, cancellationToken);
@@ -238,7 +238,7 @@ partial class BtceMessageAdapter
 			OrderVolume = (decimal)order.Volume,
 			Side = order.Side.ToSide(),
 			SecurityId = order.Instrument.ToStockSharp(),
-			ServerTime = transId != 0 ? order.Timestamp : CurrentTimeUtc,
+			ServerTime = transId != 0 ? order.Timestamp : CurrentTime,
 			PortfolioName = PortfolioName,
 			//OrderState = order.Status.ToOrderState(),
 			OrderState = OrderStates.Active,
@@ -430,7 +430,7 @@ partial class BtceMessageAdapter
 					HasOrderInfo = true,
 					OrderId = id,
 					OriginalTransactionId = info.First,
-					ServerTime = CurrentTimeUtc,
+					ServerTime = CurrentTime,
 					OrderState = OrderStates.Done,
 				}, cancellationToken);
 			}
@@ -532,6 +532,6 @@ partial class BtceMessageAdapter
 		if (lookupMsg != null)
 			await SendSubscriptionResultAsync(lookupMsg, cancellationToken);
 
-		_lastTimeBalanceCheck = CurrentTimeUtc;
+		_lastTimeBalanceCheck = CurrentTime;
 	}
 }

@@ -129,7 +129,7 @@ public partial class BitexbookMessageAdapter
 		return SendOutMessageAsync(new Level1ChangeMessage
 		{
 			SecurityId = _secIdMapping[ticker.Symbol],
-			ServerTime = CurrentTimeUtc,
+			ServerTime = CurrentTime,
 		}
 		.TryAdd(Level1Fields.BestBidPrice, ticker.Bid?.ToDecimal())
 		.TryAdd(Level1Fields.BestAskPrice, ticker.Ask?.ToDecimal()), cancellationToken);
@@ -143,7 +143,7 @@ public partial class BitexbookMessageAdapter
 			{
 				DataTypeEx = DataType.OrderLog,
 				SecurityId = _secIdMapping[ticket.Symbol],
-				ServerTime = ticket.ModifyTimestamp ?? ticket.CreatedTimestamp ?? CurrentTimeUtc,
+				ServerTime = ticket.ModifyTimestamp ?? ticket.CreatedTimestamp ?? CurrentTime,
 				OrderId = ticket.Id,
 				OrderPrice = ticket.Price?.ToDecimal() ?? 0,
 				OrderVolume = ticket.StartVolume?.ToDecimal(),
@@ -160,7 +160,7 @@ public partial class BitexbookMessageAdapter
 		{
 			DataTypeEx = DataType.OrderLog,
 			SecurityId = _secIdMapping[ticket.Symbol],
-			ServerTime = ticket.CreatedTimestamp ?? CurrentTimeUtc,
+			ServerTime = ticket.CreatedTimestamp ?? CurrentTime,
 			OrderId = ticket.Id,
 			OrderPrice = ticket.Price?.ToDecimal() ?? 0,
 			OrderVolume = ticket.StartVolume?.ToDecimal(),
@@ -176,7 +176,7 @@ public partial class BitexbookMessageAdapter
 		{
 			DataTypeEx = DataType.OrderLog,
 			SecurityId = _secIdMapping[ticket.Symbol],
-			ServerTime = CurrentTimeUtc,
+			ServerTime = CurrentTime,
 			OrderId = ticket.Id,
 			OrderPrice = ticket.Price?.ToDecimal() ?? 0,
 			Balance = ticket.Volume?.ToDecimal(),
@@ -191,7 +191,7 @@ public partial class BitexbookMessageAdapter
 		{
 			DataTypeEx = DataType.OrderLog,
 			SecurityId = _secIdMapping[ticket.Symbol],
-			ServerTime = CurrentTimeUtc,
+			ServerTime = CurrentTime,
 			OrderId = ticket.Id,
 			Balance = ticket.OrderVolume?.ToDecimal(),
 			TradePrice = ticket.Price?.ToDecimal() ?? 0,

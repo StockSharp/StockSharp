@@ -472,7 +472,7 @@ public partial class TinkoffMessageAdapter
 			if (mdMsg.From is not null)
 			{
 				var from = mdMsg.From.Value;
-				var to = mdMsg.To ?? CurrentTimeUtc;
+				var to = mdMsg.To ?? CurrentTime;
 
 				if (tf.ToNative() == SubscriptionInterval.OneMinute && (to - from).TotalDays > 1)
 				{
@@ -731,7 +731,7 @@ public partial class TinkoffMessageAdapter
 			if (mdMsg.From is not null)
 			{
 				var from = mdMsg.From.Value;
-				var to = mdMsg.To ?? CurrentTimeUtc;
+				var to = mdMsg.To ?? CurrentTime;
 
 				var secId = mdMsg.SecurityId;
 				var instrumentId = secId.IsAllSecurity()

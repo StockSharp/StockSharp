@@ -640,16 +640,16 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 		switch (message)
 		{
 			case PositionChangeMessage posMsg when posMsg.ServerTime == default:
-				posMsg.ServerTime = CurrentTimeUtc;
+				posMsg.ServerTime = CurrentTime;
 				break;
 			case ExecutionMessage execMsg when execMsg.DataType == DataType.Transactions && execMsg.ServerTime == default:
-				execMsg.ServerTime = CurrentTimeUtc;
+				execMsg.ServerTime = CurrentTime;
 				break;
 		}
 	}
 
 	/// <summary>
-	/// Send to <see cref="SendOutMessage"/> disconnect message.
+	/// Send to <see cref="SendOutMessageAsync"/> disconnect message.
 	/// </summary>
 	/// <param name="expected">Is disconnect expected.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
@@ -657,7 +657,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 		=> SendOutDisconnectMessageAsync(expected ? null : new InvalidOperationException(LocalizedStrings.UnexpectedDisconnection), cancellationToken);
 
 	/// <summary>
-	/// Send to <see cref="SendOutMessage"/> disconnect message.
+	/// Send to <see cref="SendOutMessageAsync"/> disconnect message.
 	/// </summary>
 	/// <param name="error">Error info. Can be <see langword="null"/>.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>

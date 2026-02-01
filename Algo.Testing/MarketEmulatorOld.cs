@@ -3142,7 +3142,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	private DateTime _currentTime;
 
 	/// <inheritdoc />
-	public override DateTime CurrentTimeUtc => _currentTime;
+	public override DateTime CurrentTime => _currentTime;
 
 	/// <inheritdoc />
 	async ValueTask IMessageTransport.SendInMessageAsync(Message message, CancellationToken cancellationToken)

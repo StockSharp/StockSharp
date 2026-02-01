@@ -227,7 +227,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 			return;
 		}
 
-		var now = CurrentTimeUtc;
+		var now = CurrentTime;
 		var transId = msg.TransactionId;
 
 		async ValueTask SendOutAsync<TMessage>(TMessage outMsg)

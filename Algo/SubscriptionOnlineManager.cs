@@ -348,7 +348,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 						{
 							// history+live must be processed anyway but without live part
 							var clone = message.TypedClone();
-							clone.To = _logReceiver.CurrentTimeUtc;
+							clone.To = _logReceiver.CurrentTime;
 							info.HistLive.Add(transId);
 							sendInMsg = clone;
 						}

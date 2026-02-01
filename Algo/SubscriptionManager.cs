@@ -296,7 +296,7 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 			}
 			else
 			{
-				var now = _logReceiver.CurrentTimeUtc;
+				var now = _logReceiver.CurrentTime;
 
 				if (message.From > now)
 				{

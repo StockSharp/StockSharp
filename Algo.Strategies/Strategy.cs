@@ -918,7 +918,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				{
 					case ProcessStates.Started:
 					{
-						StartedTime = base.CurrentTimeUtc;
+						StartedTime = base.CurrentTime;
 						TotalWorkingTime = default;
 						LogProcessState(value);
 						OnStarted2(StartedTime);
@@ -933,7 +933,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 					case ProcessStates.Stopped:
 					{
 						if (StartedTime != default)
-							TotalWorkingTime += base.CurrentTimeUtc - StartedTime;
+							TotalWorkingTime += base.CurrentTime - StartedTime;
 
 						StartedTime = default;
 						LogProcessState(value);
@@ -1742,7 +1742,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		{
 			Order = order,
 			Error = error,
-			ServerTime = CurrentTimeUtc,
+			ServerTime = CurrentTime,
 			TransactionId = order.TransactionId,
 		};
 
@@ -1908,7 +1908,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	}
 
 	/// <inheritdoc />
-	public override DateTime CurrentTimeUtc => Connector?.CurrentTimeUtc ?? base.CurrentTimeUtc;
+	public override DateTime CurrentTime => Connector?.CurrentTime ?? base.CurrentTime;
 
 	/// <inheritdoc />
 	protected override void RaiseLog(LogMessage message)
@@ -2034,7 +2034,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		if (!KeepStatistics)
 		{
-			var time = CurrentTimeUtc;
+			var time = CurrentTime;
 
 			// события вызываем только после вызова Reseted
 			// чтобы сбросить состояние у подписчиков стратегии.
@@ -2293,7 +2293,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				if (timeMsg.IsBack())
 					return default;
 
-				msgTime = CurrentTimeUtc;
+				msgTime = CurrentTime;
 				break;
 			}
 
@@ -2537,7 +2537,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		PnLManager.UpdateSecurity(new Level1ChangeMessage
 		{
 			SecurityId = tradeSec.ToSecurityId(),
-			ServerTime = CurrentTimeUtc
+			ServerTime = CurrentTime
 		}
 		.TryAdd(Level1Fields.PriceStep, tradeSec.PriceStep)
 		.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(tradeSec, Level1Fields.StepPrice) /*?? tradeSec.StepPrice*/)

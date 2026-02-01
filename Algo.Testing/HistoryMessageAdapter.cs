@@ -123,7 +123,7 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 		=> OrderLogMarketDepthBuilders[securityId];
 
 	/// <inheritdoc />
-	public override DateTime CurrentTimeUtc => _marketDataManager.CurrentTime;
+	public override DateTime CurrentTime => _marketDataManager.CurrentTime;
 
 	/// <inheritdoc />
 	public override bool UseOutChannel => false;

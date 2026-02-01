@@ -20,7 +20,7 @@ public class SubscriptionManagerTests : BaseTestClass
 			TransactionId = 100,
 			SecurityId = Helper.CreateSecurityId(),
 			DataType2 = DataType.Ticks,
-			From = logReceiver.CurrentTimeUtc.AddHours(1),
+			From = logReceiver.CurrentTime.AddHours(1),
 		};
 
 		var (toInner, toOut) = manager.ProcessInMessage(message);
@@ -29,8 +29,8 @@ public class SubscriptionManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 
 		var sent = (MarketDataMessage)toInner[0];
-		sent.From.AssertEqual(logReceiver.CurrentTimeUtc);
-		message.From.AssertEqual(logReceiver.CurrentTimeUtc.AddHours(1));
+		sent.From.AssertEqual(logReceiver.CurrentTime);
+		message.From.AssertEqual(logReceiver.CurrentTime.AddHours(1));
 	}
 
 	[TestMethod]
@@ -269,7 +269,7 @@ public class SubscriptionManagerTests : BaseTestClass
 		var dataMessage = new Level1ChangeMessage
 		{
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = logReceiver.CurrentTimeUtc,
+			ServerTime = logReceiver.CurrentTime,
 		};
 		dataMessage.TryAdd(Level1Fields.LastTradePrice, 100m);
 		dataMessage.SetSubscriptionIds([999]); // Unknown subscription ID
@@ -292,7 +292,7 @@ public class SubscriptionManagerTests : BaseTestClass
 		var dataMessage = new Level1ChangeMessage
 		{
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = logReceiver.CurrentTimeUtc,
+			ServerTime = logReceiver.CurrentTime,
 		};
 		dataMessage.TryAdd(Level1Fields.LastTradePrice, 100m);
 		// No subscription IDs set
@@ -338,7 +338,7 @@ public class SubscriptionManagerTests : BaseTestClass
 		var dataMessage = new ExecutionMessage
 		{
 			SecurityId = secId,
-			ServerTime = logReceiver.CurrentTimeUtc,
+			ServerTime = logReceiver.CurrentTime,
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 100m,
 			TradeVolume = 10m,

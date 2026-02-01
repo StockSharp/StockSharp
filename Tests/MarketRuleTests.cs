@@ -221,7 +221,7 @@ public class MarketRuleTests : BaseTestClass
 		var container = CreateContainer();
 		var start = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 		var mock = new Mock<ITimeProvider>(MockBehavior.Loose);
-		mock.SetupGet(p => p.CurrentTimeUtc).Returns(start);
+		mock.SetupGet(p => p.CurrentTime).Returns(start);
 
 		var intervalFired = 0;
 		mock.Object.WhenIntervalElapsed(TimeSpan.FromSeconds(5)).Apply(container).Do(_ => intervalFired++);

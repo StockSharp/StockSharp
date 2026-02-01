@@ -36,7 +36,7 @@ public abstract class BaseEmulationConnector : Connector
 	private DateTime _currentTime;
 
 	/// <inheritdoc />
-	public override DateTime CurrentTimeUtc => _currentTime;
+	public override DateTime CurrentTime => _currentTime;
 
 	/// <summary>
 	/// The adapter, executing messages in <see cref="IMarketEmulator"/>.

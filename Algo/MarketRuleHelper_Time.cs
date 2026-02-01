@@ -39,7 +39,7 @@ partial class MarketRuleHelper
 			if (times == null)
 				throw new ArgumentNullException(nameof(times));
 
-			var currentTime = provider.CurrentTimeUtc;
+			var currentTime = provider.CurrentTime;
 
 			var intervals = new SynchronizedQueue<TimeSpan>();
 			var timesList = new SynchronizedList<DateTime>();

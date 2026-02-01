@@ -463,7 +463,7 @@ public static partial class TraderHelper
 		var orderDescription = order.ToString();
 		var additionalInfo = getAdditionalInfo == null ? string.Empty : getAdditionalInfo();
 
-		receiver.AddLog(new LogMessage(receiver, receiver.CurrentTimeUtc, type, () => "{0}: {1} {2}".Put(operation, orderDescription, additionalInfo)));
+		receiver.AddLog(new LogMessage(receiver, receiver.CurrentTime, type, () => "{0}: {1} {2}".Put(operation, orderDescription, additionalInfo)));
 	}
 
 	/// <summary>

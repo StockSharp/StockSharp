@@ -46,7 +46,7 @@ public static partial class Extensions
 		if (pfName.IsEmpty())
 			throw new ArgumentNullException(nameof(pfName));
 
-		var time = adapter.CurrentTimeUtc;
+		var time = adapter.CurrentTime;
 
 		return new PositionChangeMessage
 		{
@@ -72,7 +72,7 @@ public static partial class Extensions
 		if (pfName.IsEmpty())
 			throw new ArgumentNullException(nameof(pfName));
 
-		var time = adapter.CurrentTimeUtc;
+		var time = adapter.CurrentTime;
 
 		return new PositionChangeMessage
 		{
@@ -1033,7 +1033,7 @@ public static partial class Extensions
 	public static bool IsObsolete(this Level1Fields field) => field.GetAttributeOfType<ObsoleteAttribute>() != null;
 
 	/// <summary>
-	/// Try to initialize <see cref="Message.LocalTime"/> by <see cref="ILogSource.CurrentTimeUtc"/>.
+	/// Try to initialize <see cref="Message.LocalTime"/> by <see cref="ILogSource.CurrentTime"/>.
 	/// </summary>
 	/// <param name="message">Message.</param>
 	/// <param name="source">Source.</param>
@@ -1046,7 +1046,7 @@ public static partial class Extensions
 			throw new ArgumentNullException(nameof(source));
 
 		if (message.LocalTime == default)
-			message.LocalTime = source.CurrentTimeUtc;
+			message.LocalTime = source.CurrentTime;
 	}
 
 	/// <summary>

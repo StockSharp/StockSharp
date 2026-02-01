@@ -345,7 +345,7 @@ public partial class TinkoffMessageAdapter
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
-				ServerTime = CurrentTimeUtc,
+				ServerTime = CurrentTime,
 				HasOrderInfo = true,
 				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
 			}, cancellationToken);
@@ -540,7 +540,7 @@ public partial class TinkoffMessageAdapter
 								DataTypeEx = DataType.Transactions,
 								HasOrderInfo = true,
 								OriginalTransactionId = transId,
-								ServerTime = CurrentTimeUtc,
+								ServerTime = CurrentTime,
 								OrderStringId = orderState.OrderId,
 								OrderState = orderState.ExecutionReportStatus.ToOrderState(),
 								Balance = orderState.LotsRequested - orderState.LotsExecuted,
@@ -606,7 +606,7 @@ public partial class TinkoffMessageAdapter
 			{
 				SecurityId = SecurityId.Money,
 				PortfolioName = portfolio.AccountId,
-				ServerTime = CurrentTimeUtc,
+				ServerTime = CurrentTime,
 				OriginalTransactionId = transId,
 			}
 			.TryAdd(PositionChangeTypes.CurrentValue, portfolio.TotalAmountPortfolio?.ToDecimal(), true)
@@ -619,7 +619,7 @@ public partial class TinkoffMessageAdapter
 				{
 					SecurityId = position.InstrumentUid.FromInstrumentIdToSecId(),
 					PortfolioName = portfolio.AccountId,
-					ServerTime = CurrentTimeUtc,
+					ServerTime = CurrentTime,
 					OriginalTransactionId = transId,
 				}
 				.TryAdd(PositionChangeTypes.CurrentValue, position.Quantity?.ToDecimal(), true)

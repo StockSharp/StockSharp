@@ -132,7 +132,7 @@ public class QuotingProcessor : BaseLogReceiver
 		_pending = default;
 		_finished = default;
 
-		_startedTime = _timeProvider.CurrentTimeUtc;
+		_startedTime = _timeProvider.CurrentTime;
 
 		_engine = new QuotingEngine(
 			_behavior, _security, _portfolio, _quotingSide, _quotingVolume,
@@ -407,7 +407,7 @@ public class QuotingProcessor : BaseLogReceiver
 	{
 		return new()
 		{
-			CurrentTime = _timeProvider.CurrentTimeUtc,
+			CurrentTime = _timeProvider.CurrentTime,
 			Position = _position,
 			BestBidPrice = _filteredBook?.Bids?.FirstOr()?.Price,
 			BestAskPrice = _filteredBook?.Asks?.FirstOr()?.Price,

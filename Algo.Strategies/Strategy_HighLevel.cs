@@ -602,7 +602,7 @@ public partial class Strategy
 						if (_strategy.ProcessState != ProcessStates.Started)
 							return;
 
-						tryActivateProtection(v.ClosePrice, _strategy.CurrentTimeUtc);
+						tryActivateProtection(v.ClosePrice, _strategy.CurrentTime);
 
 						handle(v, v.ServerTime, () => v);
 					})
@@ -619,7 +619,7 @@ public partial class Strategy
 						if (_strategy.ProcessState != ProcessStates.Started)
 							return;
 
-						tryActivateProtection(v.Price, _strategy.CurrentTimeUtc);
+						tryActivateProtection(v.Price, _strategy.CurrentTime);
 
 						handle(v, v.ServerTime, () => new TickCandleMessage
 						{
@@ -659,7 +659,7 @@ public partial class Strategy
 						if (value is not decimal price)
 							return;
 
-						tryActivateProtection(price, _strategy.CurrentTimeUtc);
+						tryActivateProtection(price, _strategy.CurrentTime);
 
 						handle(v, v.ServerTime, () => new TickCandleMessage
 						{
@@ -690,7 +690,7 @@ public partial class Strategy
 						if (v.TryGet(field) is not decimal price)
 							return;
 
-						tryActivateProtection(price, _strategy.CurrentTimeUtc);
+						tryActivateProtection(price, _strategy.CurrentTime);
 
 						handle(v, v.ServerTime, () => new TickCandleMessage
 						{

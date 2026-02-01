@@ -26,7 +26,7 @@ partial class BitStampMessageAdapter
 				{
 					DataTypeEx = DataType.Transactions,
 					OrderId = withdrawId,
-					ServerTime = CurrentTimeUtc,
+					ServerTime = CurrentTime,
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
@@ -78,7 +78,7 @@ partial class BitStampMessageAdapter
 
 			await SendOutMessageAsync(new ExecutionMessage
 			{
-				ServerTime = CurrentTimeUtc,
+				ServerTime = CurrentTime,
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
 				HasOrderInfo = true,
@@ -109,7 +109,7 @@ partial class BitStampMessageAdapter
 			OrderVolume = (decimal)order.Amount,
 			Side = order.Type.ToSide(),
 			SecurityId = order.CurrencyPair.ToStockSharp(),
-			ServerTime = transId != 0 ? order.Time : CurrentTimeUtc,
+			ServerTime = transId != 0 ? order.Time : CurrentTime,
 			PortfolioName = PortfolioName,
 			OrderState = OrderStates.Active,
 			HasOrderInfo = true,
@@ -308,7 +308,7 @@ partial class BitStampMessageAdapter
 					HasOrderInfo = true,
 					OrderId = id,
 					OriginalTransactionId = info.First,
-					ServerTime = CurrentTimeUtc,
+					ServerTime = CurrentTime,
 					OrderState = OrderStates.Done,
 				}, cancellationToken);
 
@@ -437,11 +437,11 @@ partial class BitStampMessageAdapter
 			await SendOutMessageAsync(new Level1ChangeMessage
 			{
 				SecurityId = pair.Key.ToStockSharp(),
-				ServerTime = CurrentTimeUtc
+				ServerTime = CurrentTime
 			}.TryAdd(Level1Fields.CommissionTaker, pair.Value), cancellationToken);
 		}
 
-		_lastTimeBalanceCheck = CurrentTimeUtc;
+		_lastTimeBalanceCheck = CurrentTime;
 
 		if (lookupMsg != null)
 			await SendSubscriptionResultAsync(lookupMsg, cancellationToken);

@@ -332,7 +332,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 	}
 
 	/// <summary>
-	/// Increment periodically <see cref="MarketTimeChangedInterval"/> value of <see cref="ILogSource.CurrentTimeUtc"/>.
+	/// Increment periodically <see cref="MarketTimeChangedInterval"/> value of <see cref="ILogSource.CurrentTime"/>.
 	/// </summary>
 	public bool TimeChange { get; set; } = true;
 
@@ -671,7 +671,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		{
 			Order = order,
 			Error = error,
-			ServerTime = CurrentTimeUtc,
+			ServerTime = CurrentTime,
 			TransactionId = originalTransactionId,
 		};
 
@@ -753,9 +753,9 @@ public partial class Connector : BaseLogReceiver, IConnector
 		//order.Connector = this;
 
 		//if (order.Security is ContinuousSecurity)
-		//	order.Security = ((ContinuousSecurity)order.Security).GetSecurity(CurrentTimeUtc);
+		//	order.Security = ((ContinuousSecurity)order.Security).GetSecurity(CurrentTime);
 
-		order.LocalTime = CurrentTimeUtc;
+		order.LocalTime = CurrentTime;
 		order.ApplyNewState(OrderStates.Pending, this);
 
 		_entityCache.AddOrderByRegistrationId(order);

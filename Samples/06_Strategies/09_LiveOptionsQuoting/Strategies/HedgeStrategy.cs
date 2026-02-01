@@ -153,7 +153,7 @@ public abstract class HedgeStrategy : Strategy
 					if (IsFormedAndOnlineAndAllowTrading())
 					{
 						LogInfo("Periodic rebalancing triggered");
-						RehedgePositions(CurrentTimeUtc);
+						RehedgePositions(CurrentTime);
 					}
 				})
 				.Apply(this);
@@ -166,7 +166,7 @@ public abstract class HedgeStrategy : Strategy
 				if (IsFormedAndOnlineAndAllowTrading() && !_isRebalancing)
 				{
 					LogInfo("Position change detected - checking if rehedging is needed");
-					RehedgePositions(CurrentTimeUtc);
+					RehedgePositions(CurrentTime);
 				}
 			})
 			.Apply(this);

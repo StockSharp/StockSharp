@@ -8,10 +8,10 @@ public interface ITimeProvider
 	/// <summary>
 	/// Current time.
 	/// </summary>
-	DateTime CurrentTimeUtc { get; }
+	DateTime CurrentTime { get; }
 
 	/// <summary>
-	/// Server time changed <see cref="CurrentTimeUtc"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
+	/// Server time changed <see cref="CurrentTime"/>. It passed the time difference since the last call of the event. The first time the event passes the value <see cref="TimeSpan.Zero"/>.
 	/// </summary>
 	event Action<TimeSpan> CurrentTimeChanged;
 }

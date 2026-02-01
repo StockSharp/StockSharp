@@ -286,7 +286,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		if (_stepTicks == default)
 			return;
 
-		if (CurrentTimeUtc < _nextTime && CurrentTimeUtc < _stopTime)
+		if (CurrentTime < _nextTime && CurrentTime < _stopTime)
 			return;
 
 		_nextTime = _nextTime.AddTicks(_stepTicks);

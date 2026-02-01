@@ -256,7 +256,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			secProvider,
 			manager);
 
-		adapter.CurrentTimeUtc.AssertEqual(expectedTime);
+		adapter.CurrentTime.AssertEqual(expectedTime);
 	}
 
 	#endregion

@@ -17,5 +17,5 @@ internal abstract class TestLogReceiver : BaseLogReceiver
 		set => _timeUtc = value;
 	}
 
-	public override DateTime CurrentTimeUtc => _timeUtc;
+	public override DateTime CurrentTime => _timeUtc;
 }

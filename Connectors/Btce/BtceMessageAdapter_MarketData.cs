@@ -147,7 +147,7 @@ partial class BtceMessageAdapter
 			Bids = book.Bids?.Select(ToChange).ToArray() ?? Array.Empty<QuoteChange>(),
 			Asks = book.Asks?.Select(ToChange).ToArray() ?? Array.Empty<QuoteChange>(),
 			State = state,
-			ServerTime = CurrentTimeUtc,
+			ServerTime = CurrentTime,
 		}, cancellationToken);
 	}
 
@@ -161,7 +161,7 @@ partial class BtceMessageAdapter
 				DataTypeEx = DataType.Ticks,
 				TradePrice = trade.Price,
 				TradeVolume = trade.Size,
-				ServerTime = CurrentTimeUtc,
+				ServerTime = CurrentTime,
 				OriginSide = trade.Side.ToSide()
 			}, cancellationToken);
 		}

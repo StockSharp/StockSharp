@@ -30,7 +30,7 @@ public partial class BitexbookMessageAdapter
 				{
 					DataTypeEx = DataType.Transactions,
 					OrderId = withdrawId,
-					ServerTime = CurrentTimeUtc,
+					ServerTime = CurrentTime,
 					OriginalTransactionId = regMsg.TransactionId,
 					OrderState = OrderStates.Done,
 					HasOrderInfo = true,
@@ -52,7 +52,7 @@ public partial class BitexbookMessageAdapter
 		{
 			DataTypeEx = DataType.Transactions,
 			OrderId = orderId,
-			ServerTime = CurrentTimeUtc,
+			ServerTime = CurrentTime,
 			OriginalTransactionId = regMsg.TransactionId,
 			OrderState = isMarket ? OrderStates.Done : OrderStates.Active,
 			Balance = isMarket ? 0 : null,
@@ -79,7 +79,7 @@ public partial class BitexbookMessageAdapter
 
 		//SendOutMessage(new ExecutionMessage
 		//{
-		//	ServerTime = CurrentTimeUtc,
+		//	ServerTime = CurrentTime,
 		//	DataTypeEx = DataType.Transactions,
 		//	OriginalTransactionId = cancelMsg.TransactionId,
 		//	OrderState = OrderStates.Done,
@@ -162,7 +162,7 @@ public partial class BitexbookMessageAdapter
 			{
 				DataTypeEx = DataType.Transactions,
 				OriginalTransactionId = cancelMsg.TransactionId,
-				ServerTime = CurrentTimeUtc,
+				ServerTime = CurrentTime,
 				HasOrderInfo = true,
 				Error = errors.Count == 1 ? errors[0] : new AggregateException(errors),
 			}, cancellationToken);
@@ -197,7 +197,7 @@ public partial class BitexbookMessageAdapter
 		//ProcessPosition("LTC", balance.Free?.Ltc, balance.Freezed?.Ltc);
 		//ProcessPosition("USD", balance.Free?.Usd, balance.Freezed?.Usd);
 
-		_lastTimeBalanceCheck = CurrentTimeUtc;
+		_lastTimeBalanceCheck = CurrentTime;
 	}
 
 	/// <inheritdoc />
@@ -220,7 +220,7 @@ public partial class BitexbookMessageAdapter
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
-			ServerTime = (transId != 0 ? order.CreatedTimestamp : order.ClosedTimestamp) ?? CurrentTimeUtc,
+			ServerTime = (transId != 0 ? order.CreatedTimestamp : order.ClosedTimestamp) ?? CurrentTime,
 			SecurityId = secId,
 			TransactionId = transId,
 			OriginalTransactionId = origTransId,
@@ -243,7 +243,7 @@ public partial class BitexbookMessageAdapter
 		{
 			PortfolioName = PortfolioName,
 			SecurityId = currency.ToStockSharp(),
-			ServerTime = CurrentTimeUtc,
+			ServerTime = CurrentTime,
 		}
 		.TryAdd(PositionChangeTypes.CurrentValue, free, true)
 		.TryAdd(PositionChangeTypes.BlockedValue, freezed, true), cancellationToken);

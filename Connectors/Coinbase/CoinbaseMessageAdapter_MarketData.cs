@@ -193,7 +193,7 @@ public partial class CoinbaseMessageAdapter
 		return SendOutMessageAsync(new Level1ChangeMessage
 		{
 			SecurityId = ticker.Product.ToStockSharp(),
-			ServerTime = CurrentTimeUtc,
+			ServerTime = CurrentTime,
 		}
 		.TryAdd(Level1Fields.LastTradeId, ticker.LastTradeId)
 		.TryAdd(Level1Fields.LastTradePrice, ticker.LastTradePrice?.ToDecimal())
@@ -243,7 +243,7 @@ public partial class CoinbaseMessageAdapter
 			SecurityId = symbol.ToStockSharp(),
 			Bids = bids.ToArray(),
 			Asks = asks.ToArray(),
-			ServerTime = CurrentTimeUtc,
+			ServerTime = CurrentTime,
 			State = type == "snapshot" ? QuoteChangeStates.SnapshotComplete : QuoteChangeStates.Increment,
 		}, cancellationToken);
 	}

@@ -51,6 +51,6 @@ partial class Strategy
 	[Obsolete("Use overload with time param.")]
 	protected virtual void OnStarted()
 	{
-		OnStarted2(CurrentTimeUtc);
+		OnStarted2(CurrentTime);
 	}
 }

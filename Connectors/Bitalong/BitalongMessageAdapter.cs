@@ -100,7 +100,7 @@ public partial class BitalongMessageAdapter
 		}
 
 		if (BalanceCheckInterval > TimeSpan.Zero &&
-			(_lastTimeBalanceCheck == null || (CurrentTimeUtc - _lastTimeBalanceCheck) > BalanceCheckInterval))
+			(_lastTimeBalanceCheck == null || (CurrentTime - _lastTimeBalanceCheck) > BalanceCheckInterval))
 		{
 			await PortfolioLookupAsync(null, cancellationToken);
 		}

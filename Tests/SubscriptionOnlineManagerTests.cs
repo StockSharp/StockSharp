@@ -284,7 +284,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var dataMessage = new Level1ChangeMessage
 		{
 			SecurityId = Helper.CreateSecurityId(),
-			ServerTime = logReceiver.CurrentTimeUtc,
+			ServerTime = logReceiver.CurrentTime,
 		};
 		dataMessage.TryAdd(Level1Fields.LastTradePrice, 100m);
 		dataMessage.SetSubscriptionIds([999]); // Unknown subscription ID
@@ -321,7 +321,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var dataMessage1 = new ExecutionMessage
 		{
 			SecurityId = secId,
-			ServerTime = logReceiver.CurrentTimeUtc,
+			ServerTime = logReceiver.CurrentTime,
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 100m,
 			TradeVolume = 10m,
@@ -347,7 +347,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var dataMessage2 = new ExecutionMessage
 		{
 			SecurityId = secId,
-			ServerTime = logReceiver.CurrentTimeUtc,
+			ServerTime = logReceiver.CurrentTime,
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 101m,
 			TradeVolume = 10m,
@@ -384,7 +384,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var dataMessage = new ExecutionMessage
 		{
 			SecurityId = secId,
-			ServerTime = logReceiver.CurrentTimeUtc,
+			ServerTime = logReceiver.CurrentTime,
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 100m,
 			TradeVolume = 10m,
@@ -433,7 +433,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var dataMessage = new ExecutionMessage
 		{
 			SecurityId = secId,
-			ServerTime = logReceiver.CurrentTimeUtc,
+			ServerTime = logReceiver.CurrentTime,
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 100m,
 			TradeVolume = 10m,
@@ -480,7 +480,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var dataMessage1 = new ExecutionMessage
 		{
 			SecurityId = secId,
-			ServerTime = logReceiver.CurrentTimeUtc,
+			ServerTime = logReceiver.CurrentTime,
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 100m,
 			TradeVolume = 10m,
@@ -505,7 +505,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var dataMessage2 = new ExecutionMessage
 		{
 			SecurityId = secId,
-			ServerTime = logReceiver.CurrentTimeUtc,
+			ServerTime = logReceiver.CurrentTime,
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 101m,
 			TradeVolume = 10m,
@@ -571,7 +571,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var ticksMessage = new ExecutionMessage
 		{
 			SecurityId = secId,
-			ServerTime = logReceiver.CurrentTimeUtc,
+			ServerTime = logReceiver.CurrentTime,
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 100m,
 			TradeVolume = 10m,

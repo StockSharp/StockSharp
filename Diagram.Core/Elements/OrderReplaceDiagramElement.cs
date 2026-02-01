@@ -207,7 +207,7 @@ public class OrderReplaceDiagramElement : OrderBaseDiagramElement
 				.WhenCanceled(Strategy)
 				.Do(o =>
 				{
-					var time = o.CancelledTime ?? Strategy.CurrentTimeUtc;
+					var time = o.CancelledTime ?? Strategy.CurrentTime;
 
 					if (_isCancelledSocket)
 					{

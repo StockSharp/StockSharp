@@ -54,7 +54,7 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 		}
 	}
 
-	private DateTime CurrentTimeUtc => _logReceiver.CurrentTimeUtc;
+	private DateTime CurrentTime => _logReceiver.CurrentTime;
 
 	/// <inheritdoc />
 	public (Message[] toInner, Message[] toOut, bool shouldForward) ProcessInMessage(Message message)
@@ -120,7 +120,7 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 							DataTypeEx = DataType.Transactions,
 							HasOrderInfo = true,
 							OriginalTransactionId = cancelMsg.TransactionId,
-							ServerTime = CurrentTimeUtc,
+							ServerTime = CurrentTime,
 							OrderState = OrderStates.Done,
 							OrderType = originOrderMsg.OrderType,
 						};
@@ -269,7 +269,7 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
 			OriginalTransactionId = replaceMsg.TransactionId,
-			ServerTime = CurrentTimeUtc,
+			ServerTime = CurrentTime,
 			OrderState = OrderStates.Done,
 			OrderType = originOrderMsg.OrderType,
 		};

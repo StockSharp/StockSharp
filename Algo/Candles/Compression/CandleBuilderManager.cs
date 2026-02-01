@@ -366,7 +366,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 							!InnerAdapter.IsSupportCandlesUpdates(mdMsg) &&
 							await InnerAdapter.TryGetCandlesBuildFromAsync(original, _candleBuilderProvider, cancellationToken) != null)
 						{
-							mdMsg.To = _logReceiver.CurrentTimeUtc;
+							mdMsg.To = _logReceiver.CurrentTime;
 						}
 
 						using (await _sync.LockAsync(cancellationToken))
