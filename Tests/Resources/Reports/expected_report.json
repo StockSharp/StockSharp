@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "TestStrategy",
   "Symbol": "BTCUSD",
   "TimeFrame": "00:05:00",
@@ -68,6 +68,17 @@
       "order": 2,
       "PnL": 500.0,
       "slippage": 0.0
+    }
+  ],
+  "positions": [
+    {
+      "securityId": "BTCUSD@CRYPTO",
+      "portfolio": "TestPortfolio",
+      "openTime": "2024-01-15T10:00:00Z",
+      "openPrice": 50000.0,
+      "closeTime": "2024-01-15T11:00:00Z",
+      "closePrice": 50500.0,
+      "maxPosition": 1.0
     }
   ]
 }

@@ -140,6 +140,11 @@ public class ReportTests : BaseTestClass
 			TradePrice: 50500m, OrderPrice: 50500m, Volume: 1m, Side: Sides.Sell,
 			OrderId: 2, Slippage: 0m, PnL: 500m, Position: 0m));
 
+		source.AddPosition(new ReportPosition(
+			SecurityId: securityId, PortfolioName: "TestPortfolio",
+			OpenTime: baseTime, OpenPrice: 50000m,
+			CloseTime: baseTime.AddHours(1), ClosePrice: 50500m, MaxPosition: 1m));
+
 		return source;
 	}
 
@@ -1276,6 +1281,11 @@ public class ReportTests : BaseTestClass
 			Volume: 0.1m,
 			Type: OrderTypes.Limit
 		));
+
+		source.AddPosition(new ReportPosition(
+			SecurityId: securityId, PortfolioName: "TestPortfolio",
+			OpenTime: baseTime, OpenPrice: 50000m,
+			CloseTime: baseTime.AddHours(1), ClosePrice: 50500m, MaxPosition: 0.1m));
 
 		return source;
 	}

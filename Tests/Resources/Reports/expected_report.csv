@@ -1,4 +1,4 @@
-﻿Strategy,Working time,Position,P&L,Commission,Slippage,Latency
+Strategy,Working time,Position,P&L,Commission,Slippage,Latency
 TestStrategy,08:00:00,100,5000,25,1.5,00:00:00
 Parameters
 Symbol,TimeFrame,StartDate,Volume,IsLong,MaxPositions
@@ -14,3 +14,6 @@ Trades
 Identifier,Transaction,Security,Time,Price,Volume,Direction,Order ID,P&L,Slippage
 1001,100,BTCUSD@CRYPTO,1/15/2024 10:00:00 AM,50000,1,Buy,1,0,0
 1002,101,BTCUSD@CRYPTO,1/15/2024 11:00:00 AM,50500,1,Sell,2,500,0
+Positions
+Security,Portfolio,Entry Time,Opening Price,Exit Time,Closing Price,Max volume
+BTCUSD@CRYPTO,TestPortfolio,1/15/2024 10:00:00 AM,50000,1/15/2024 11:00:00 AM,50500,1

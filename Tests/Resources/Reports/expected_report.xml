@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <strategy name="TestStrategy" totalWorkingTime="08:00:00" commission="25" position="100" PnL="5000" slippage="1.5" latency="00:00:00">
   <parameters>
     <parameter name="Symbol" value="BTCUSD" />
@@ -24,4 +24,7 @@
     <trade id="1001" transactionId="100" securityId="BTCUSD@CRYPTO" time="1/15/2024 10:00:00 AM" price="50000" volume="1" order="1" PnL="0" slippage="0" />
     <trade id="1002" transactionId="101" securityId="BTCUSD@CRYPTO" time="1/15/2024 11:00:00 AM" price="50500" volume="1" order="2" PnL="500" slippage="0" />
   </trades>
+  <positions>
+    <position securityId="BTCUSD@CRYPTO" portfolio="TestPortfolio" openTime="1/15/2024 10:00:00 AM" openPrice="50000" closeTime="1/15/2024 11:00:00 AM" closePrice="50500" maxPosition="1" />
+  </positions>
 </strategy>
