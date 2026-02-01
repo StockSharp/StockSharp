@@ -127,6 +127,28 @@ public class XmlReportGenerator : BaseReportGenerator
 			await WriteEndElement();
 		}
 
+		if (IncludePositions)
+		{
+			await WriteStartElement("positions");
+
+			foreach (var p in source.Positions)
+			{
+				await WriteStartElement("position");
+
+				await WriteAttributeString("securityId", p.SecurityId.ToStringId());
+				await WriteAttributeString("portfolio", p.PortfolioName);
+				await WriteAttributeString("openTime", p.OpenTime);
+				await WriteAttributeString("openPrice", p.OpenPrice);
+				await WriteAttributeString("closeTime", p.CloseTime);
+				await WriteAttributeString("closePrice", p.ClosePrice);
+				await WriteAttributeString("maxPosition", p.MaxPosition);
+
+				await WriteEndElement();
+			}
+
+			await WriteEndElement();
+		}
+
 		await WriteEndElement();
 	}
 }

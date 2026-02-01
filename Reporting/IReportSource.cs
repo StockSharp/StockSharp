@@ -1,6 +1,26 @@
 namespace StockSharp.Reporting;
 
 /// <summary>
+/// Position round-trip data for reports.
+/// </summary>
+/// <param name="SecurityId">Security id.</param>
+/// <param name="PortfolioName">Portfolio name.</param>
+/// <param name="OpenTime">Position open time.</param>
+/// <param name="OpenPrice">Position open price.</param>
+/// <param name="CloseTime">Position close time.</param>
+/// <param name="ClosePrice">Position close price.</param>
+/// <param name="MaxPosition">Maximum absolute position size during the round-trip.</param>
+public record ReportPosition(
+	SecurityId SecurityId,
+	string PortfolioName,
+	DateTime OpenTime,
+	decimal? OpenPrice,
+	DateTime CloseTime,
+	decimal? ClosePrice,
+	decimal MaxPosition
+);
+
+/// <summary>
 /// Order data for reports.
 /// </summary>
 /// <param name="Id">Order id.</param>
@@ -122,4 +142,9 @@ public interface IReportSource
 	/// Own trades collection.
 	/// </summary>
 	IEnumerable<ReportTrade> OwnTrades { get; }
+
+	/// <summary>
+	/// Position round-trips collection.
+	/// </summary>
+	IEnumerable<ReportPosition> Positions { get; }
 }

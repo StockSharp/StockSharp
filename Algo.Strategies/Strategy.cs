@@ -5,6 +5,7 @@ using StockSharp.Algo.Risk;
 using StockSharp.Algo.Statistics;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Testing;
+using StockSharp.Algo.Positions;
 using StockSharp.Algo.Strategies.Protective;
 using StockSharp.Reporting;
 
@@ -350,6 +351,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			if (Connector == value)
 				return;
 
+			_positionTracker?.Dispose();
+			_positionTracker = null;
+
 			if (_connector != null)
 			{
 				ISubscriptionProvider isp = _connector;
@@ -424,6 +428,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				isp.SubscriptionStarted       += OnConnectorSubscriptionStarted;
 				isp.SubscriptionStopped       += OnConnectorSubscriptionStopped;
 				isp.SubscriptionFailed        += OnConnectorSubscriptionFailed;
+
+				_positionTracker = new PositionLifecycleTracker(this);
+				_positionTracker.RoundTripClosed += rt => _reportSource.AddPosition(rt);
 			}
 
 			ConnectorChanged?.Invoke();
@@ -604,6 +611,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	#region IReportSource implementation
 
 	private readonly ReportSource _reportSource;
+	private PositionLifecycleTracker _positionTracker;
 
 	/// <summary>
 	/// Report data source with aggregation support.
@@ -726,6 +734,10 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	/// <inheritdoc />
 	[Browsable(false)]
 	IEnumerable<ReportTrade> IReportSource.OwnTrades => _reportSource.OwnTrades;
+
+	/// <inheritdoc />
+	[Browsable(false)]
+	IEnumerable<ReportPosition> IReportSource.Positions => _reportSource.Positions;
 
 	private void AddOrderToReport(Order order)
 	{
@@ -3125,6 +3137,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	protected override void DisposeManaged()
 	{
 		Connector = null;
+
+		_positionTracker?.Dispose();
+		_positionTracker = null;
 
 		Parameters.Dispose();
 

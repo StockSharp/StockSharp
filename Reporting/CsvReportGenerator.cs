@@ -83,5 +83,16 @@ public class CsvReportGenerator : BaseReportGenerator
 					trade.Side.GetDisplayName(), trade.OrderId, trade.PnL, trade.Slippage);
 			}
 		}
+
+		if (IncludePositions)
+		{
+			await WriteValuesAsync(LocalizedStrings.Positions);
+			await WriteValuesAsync(LocalizedStrings.Security, LocalizedStrings.Portfolio, LocalizedStrings.EntryTime, LocalizedStrings.OpenPrice, LocalizedStrings.ExitTime, LocalizedStrings.ClosingPrice, LocalizedStrings.MaxVolume);
+
+			foreach (var pos in source.Positions)
+			{
+				await WriteValuesAsync(pos.SecurityId.ToStringId(), pos.PortfolioName, pos.OpenTime.Format(), pos.OpenPrice, pos.CloseTime.Format(), pos.ClosePrice, pos.MaxPosition);
+			}
+		}
 	}
 }

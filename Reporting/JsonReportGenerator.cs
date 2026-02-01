@@ -118,6 +118,29 @@ public class JsonReportGenerator : BaseReportGenerator
 			await WriteEndArray();
 		}
 
+		if (IncludePositions)
+		{
+			await WritePropertyName("positions");
+			await WriteStartArray();
+
+			foreach (var p in source.Positions)
+			{
+				await WriteStartElement();
+
+				await WriteElementAsync("securityId", p.SecurityId.ToStringId());
+				await WriteElementAsync("portfolio", p.PortfolioName);
+				await WriteElementAsync("openTime", p.OpenTime);
+				await WriteElementAsync("openPrice", p.OpenPrice);
+				await WriteElementAsync("closeTime", p.CloseTime);
+				await WriteElementAsync("closePrice", p.ClosePrice);
+				await WriteElementAsync("maxPosition", p.MaxPosition);
+
+				await WriteEndElement();
+			}
+
+			await WriteEndArray();
+		}
+
 		await WriteEndElement();
 	}
 }

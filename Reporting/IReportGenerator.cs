@@ -26,6 +26,11 @@ public interface IReportGenerator
 	bool IncludeTrades { get; set; }
 
 	/// <summary>
+	/// To add positions to the report. Positions are added by default.
+	/// </summary>
+	bool IncludePositions { get; set; }
+
+	/// <summary>
 	/// Encoding.
 	/// </summary>
 	Encoding Encoding { get; set; }
@@ -56,6 +61,9 @@ public abstract class BaseReportGenerator : IReportGenerator
 
 	/// <inheritdoc />
 	public bool IncludeTrades { get; set; } = true;
+
+	/// <inheritdoc />
+	public bool IncludePositions { get; set; } = true;
 
 	private Encoding _encoding = Encoding.UTF8;
 

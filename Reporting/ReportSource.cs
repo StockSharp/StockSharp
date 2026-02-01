@@ -7,6 +7,7 @@ public class ReportSource : IReportSource
 {
 	private readonly CachedSynchronizedList<ReportOrder> _orders = [];
 	private readonly CachedSynchronizedList<ReportTrade> _trades = [];
+	private readonly CachedSynchronizedList<ReportPosition> _positions = [];
 	private readonly CachedSynchronizedList<(string Name, object Value)> _parameters = [];
 	private readonly CachedSynchronizedList<(string Name, object Value)> _statisticParameters = [];
 
@@ -112,6 +113,9 @@ public class ReportSource : IReportSource
 
 	/// <inheritdoc />
 	public IEnumerable<ReportTrade> OwnTrades => _trades.Cache;
+
+	/// <inheritdoc />
+	public IEnumerable<ReportPosition> Positions => _positions.Cache;
 
 	/// <summary>
 	/// Current orders count.
@@ -302,6 +306,47 @@ public class ReportSource : IReportSource
 	}
 
 	/// <summary>
+	/// Add a position round-trip.
+	/// </summary>
+	/// <param name="position">Position round-trip to add.</param>
+	/// <returns>This instance for chaining.</returns>
+	public ReportSource AddPosition(ReportPosition position)
+	{
+		if (position is null)
+			throw new ArgumentNullException(nameof(position));
+
+		_positions.Add(position);
+
+		return this;
+	}
+
+	/// <summary>
+	/// Add multiple position round-trips.
+	/// </summary>
+	/// <param name="positions">Positions to add.</param>
+	/// <returns>This instance for chaining.</returns>
+	public ReportSource AddPositions(IEnumerable<ReportPosition> positions)
+	{
+		if (positions is null)
+			throw new ArgumentNullException(nameof(positions));
+
+		_positions.AddRange(positions);
+
+		return this;
+	}
+
+	/// <summary>
+	/// Clear all positions.
+	/// </summary>
+	/// <returns>This instance for chaining.</returns>
+	public ReportSource ClearPositions()
+	{
+		_positions.Clear();
+
+		return this;
+	}
+
+	/// <summary>
 	/// Manually trigger orders aggregation.
 	/// </summary>
 	/// <param name="interval">Time interval for grouping. Use <see cref="TimeSpan.Zero"/> for no time grouping.</param>
@@ -395,6 +440,7 @@ public class ReportSource : IReportSource
 	{
 		_orders.Clear();
 		_trades.Clear();
+		_positions.Clear();
 		_parameters.Clear();
 		_statisticParameters.Clear();
 		_ordersAggregationTriggered = false;
