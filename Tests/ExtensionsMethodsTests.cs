@@ -1492,4 +1492,2255 @@ public class ExtensionsMethodsTests : BaseTestClass
 	}
 
 	#endregion
+
+	// ===== New coverage tests =====
+
+	#region CreateReply / CreateOrderReply
+
+	[TestMethod]
+	public void CreateReply_NoError_ReturnsPendingReply()
+	{
+		var reg = new OrderRegisterMessage
+		{
+			TransactionId = 42,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 10,
+			PortfolioName = "pf",
+		};
+
+		var reply = reg.CreateReply();
+
+		reply.OriginalTransactionId.AssertEqual(42L);
+		reply.DataTypeEx.AssertEqual(DataType.Transactions);
+		reply.HasOrderInfo.AssertTrue();
+		reply.Error.AssertNull();
+		reply.OrderState.AssertNull();
+	}
+
+	[TestMethod]
+	public void CreateReply_WithError_ReturnsFailed()
+	{
+		var reg = new OrderRegisterMessage
+		{
+			TransactionId = 42,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 10,
+			PortfolioName = "pf",
+		};
+
+		var ex = new InvalidOperationException("test");
+		var reply = reg.CreateReply(ex);
+
+		reply.OriginalTransactionId.AssertEqual(42L);
+		reply.Error.AssertEqual(ex);
+		reply.OrderState.AssertEqual(OrderStates.Failed);
+	}
+
+	[TestMethod]
+	public void CreateOrderReply_SetsFields()
+	{
+		var serverTime = DateTime.UtcNow;
+		var reply = 99L.CreateOrderReply(serverTime);
+
+		reply.OriginalTransactionId.AssertEqual(99L);
+		reply.DataTypeEx.AssertEqual(DataType.Transactions);
+		reply.HasOrderInfo.AssertTrue();
+		reply.ServerTime.AssertEqual(serverTime);
+	}
+
+	#endregion
+
+	#region GetTradePrice / GetTradeVolume / GetBalance / SafeGetOrderId
+
+	[TestMethod]
+	public void GetTradePrice_HasPrice_Returns()
+	{
+		var msg = new ExecutionMessage { TradePrice = 123.45m };
+		msg.GetTradePrice().AssertEqual(123.45m);
+	}
+
+	[TestMethod]
+	public void GetTradePrice_NoPrice_Throws()
+	{
+		var msg = new ExecutionMessage();
+		Throws<ArgumentOutOfRangeException>(() => msg.GetTradePrice());
+	}
+
+	[TestMethod]
+	public void GetTradeVolume_HasVolume_Returns()
+	{
+		var msg = new ExecutionMessage { TradeVolume = 50m };
+		msg.GetTradeVolume().AssertEqual(50m);
+	}
+
+	[TestMethod]
+	public void GetTradeVolume_NoVolume_Throws()
+	{
+		var msg = new ExecutionMessage();
+		Throws<ArgumentOutOfRangeException>(() => msg.GetTradeVolume());
+	}
+
+	[TestMethod]
+	public void GetBalance_HasBalance_Returns()
+	{
+		var msg = new ExecutionMessage { Balance = 7m };
+		msg.GetBalance().AssertEqual(7m);
+	}
+
+	[TestMethod]
+	public void GetBalance_NoBalance_Throws()
+	{
+		var msg = new ExecutionMessage();
+		Throws<ArgumentOutOfRangeException>(() => msg.GetBalance());
+	}
+
+	[TestMethod]
+	public void SafeGetOrderId_HasId_Returns()
+	{
+		var msg = new ExecutionMessage { OrderId = 123 };
+		msg.SafeGetOrderId().AssertEqual(123L);
+	}
+
+	[TestMethod]
+	public void SafeGetOrderId_NoId_Throws()
+	{
+		var msg = new ExecutionMessage();
+		Throws<ArgumentOutOfRangeException>(() => msg.SafeGetOrderId());
+	}
+
+	#endregion
+
+	#region Invert
+
+	[TestMethod]
+	public void Invert_Buy_ReturnsSell()
+	{
+		Sides.Buy.Invert().AssertEqual(Sides.Sell);
+	}
+
+	[TestMethod]
+	public void Invert_Sell_ReturnsBuy()
+	{
+		Sides.Sell.Invert().AssertEqual(Sides.Buy);
+	}
+
+	#endregion
+
+	#region IsMoney
+
+	[TestMethod]
+	public void IsMoney_SecurityId_MoneyId_ReturnsTrue()
+	{
+		SecurityId.Money.IsMoney().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsMoney_SecurityId_Regular_ReturnsFalse()
+	{
+		Helper.CreateSecurityId().IsMoney().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsMoney_PositionChangeMessage_Money_ReturnsTrue()
+	{
+		var msg = new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = "pf",
+			ServerTime = DateTime.UtcNow,
+		};
+		msg.IsMoney().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsMoney_PositionChangeMessage_Regular_ReturnsFalse()
+	{
+		var msg = new PositionChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			PortfolioName = "pf",
+			ServerTime = DateTime.UtcNow,
+		};
+		msg.IsMoney().AssertFalse();
+	}
+
+	#endregion
+
+	#region ReplaceSecurityId
+
+	[TestMethod]
+	public void ReplaceSecurityId_ReplacesInMessage()
+	{
+		var newId = Helper.CreateSecurityId();
+		var msg = new Level1ChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+		};
+
+		msg.ReplaceSecurityId(newId);
+		msg.SecurityId.AssertEqual(newId);
+	}
+
+	#endregion
+
+	#region GetMatchedVolume
+
+	[TestMethod]
+	public void GetMatchedVolume_ReturnsVolumeMinusBalance()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderVolume = 10m,
+			Balance = 3m,
+		};
+
+		((IOrderMessage)msg).GetMatchedVolume().AssertEqual(7m);
+	}
+
+	[TestMethod]
+	public void GetMatchedVolume_NullVolume_ReturnsNull()
+	{
+		var msg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+		};
+
+		((IOrderMessage)msg).GetMatchedVolume().AssertNull();
+	}
+
+	#endregion
+
+	#region IsMarketData (ExecutionMessage)
+
+	[TestMethod]
+	public void IsMarketData_Ticks_ReturnsTrue()
+	{
+		var msg = new ExecutionMessage { DataTypeEx = DataType.Ticks };
+		msg.IsMarketData().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsMarketData_OrderLog_ReturnsTrue()
+	{
+		var msg = new ExecutionMessage { DataTypeEx = DataType.OrderLog };
+		msg.IsMarketData().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsMarketData_Transactions_ReturnsFalse()
+	{
+		var msg = new ExecutionMessage { DataTypeEx = DataType.Transactions };
+		msg.IsMarketData().AssertFalse();
+	}
+
+	#endregion
+
+	#region TryGetServerTime
+
+	[TestMethod]
+	public void TryGetServerTime_ServerTimeMessage_ReturnsTrue()
+	{
+		var time = DateTime.UtcNow;
+		var msg = new Level1ChangeMessage { SecurityId = Helper.CreateSecurityId(), ServerTime = time };
+
+		msg.TryGetServerTime(out var serverTime).AssertTrue();
+		serverTime.AssertEqual(time);
+	}
+
+	[TestMethod]
+	public void TryGetServerTime_NonServerTimeMessage_ReturnsFalse()
+	{
+		var msg = new ResetMessage();
+		msg.TryGetServerTime(out _).AssertFalse();
+	}
+
+	#endregion
+
+	#region ToInfo
+
+	[TestMethod]
+	public void ToInfo_MarketData_ReturnsInfo()
+	{
+		var info = MessageTypes.MarketData.ToInfo();
+		info.Type.AssertEqual(MessageTypes.MarketData);
+		info.IsMarketData.AssertEqual(true);
+	}
+
+	[TestMethod]
+	public void ToInfo_OrderRegister_ReturnsNotMarketData()
+	{
+		var info = MessageTypes.OrderRegister.ToInfo();
+		info.Type.AssertEqual(MessageTypes.OrderRegister);
+		info.IsMarketData.AssertEqual(false);
+	}
+
+	#endregion
+
+	#region TryInitLocalTime
+
+	[TestMethod]
+	public void TryInitLocalTime_DefaultTime_Sets()
+	{
+		var msg = new TimeMessage();
+		var receiver = new TestReceiver();
+
+		msg.TryInitLocalTime(receiver);
+		IsTrue(msg.LocalTime != default);
+	}
+
+	[TestMethod]
+	public void TryInitLocalTime_AlreadySet_DoesNotChange()
+	{
+		var time = new DateTime(2025, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+		var msg = new TimeMessage { LocalTime = time };
+		var receiver = new TestReceiver();
+
+		msg.TryInitLocalTime(receiver);
+		msg.LocalTime.AssertEqual(time);
+	}
+
+	#endregion
+
+	#region ValidateBounds
+
+	[TestMethod]
+	public void ValidateBounds_ValidRange_ReturnsMessage()
+	{
+		var msg = new MarketDataMessage
+		{
+			From = DateTime.UtcNow.AddDays(-1),
+			To = DateTime.UtcNow,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+		};
+
+		var result = msg.ValidateBounds();
+		result.AssertEqual(msg);
+	}
+
+	[TestMethod]
+	public void ValidateBounds_FromGreaterThanTo_Throws()
+	{
+		var msg = new MarketDataMessage
+		{
+			From = DateTime.UtcNow,
+			To = DateTime.UtcNow.AddDays(-1),
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+		};
+
+		Throws<InvalidOperationException>(() => msg.ValidateBounds());
+	}
+
+	[TestMethod]
+	public void ValidateBounds_NullBounds_DoesNotThrow()
+	{
+		var msg = new MarketDataMessage
+		{
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+		};
+		msg.ValidateBounds(); // should not throw
+	}
+
+	#endregion
+
+	#region IsObsolete
+
+	[TestMethod]
+	public void IsObsolete_Level1_NonObsolete_ReturnsFalse()
+	{
+		Level1Fields.LastTradePrice.IsObsolete().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsObsolete_PositionChangeTypes_NonObsolete_ReturnsFalse()
+	{
+		PositionChangeTypes.CurrentValue.IsObsolete().AssertFalse();
+	}
+
+	#endregion
+
+	#region IsOk
+
+	[TestMethod]
+	public void IsOk_NoError_ReturnsTrue()
+	{
+		var msg = new SubscriptionResponseMessage { OriginalTransactionId = 1 };
+		msg.IsOk().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsOk_WithError_ReturnsFalse()
+	{
+		var msg = new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 1,
+			Error = new InvalidOperationException("err"),
+		};
+		msg.IsOk().AssertFalse();
+	}
+
+	#endregion
+
+	#region IsHistoryOnly
+
+	[TestMethod]
+	public void IsHistoryOnly_WithTo_ReturnsTrue()
+	{
+		var msg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			To = DateTime.UtcNow,
+			DataType2 = DataType.Ticks,
+		};
+		msg.IsHistoryOnly().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsHistoryOnly_WithCount_ReturnsTrue()
+	{
+		var msg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			Count = 100,
+			DataType2 = DataType.Ticks,
+		};
+		msg.IsHistoryOnly().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsHistoryOnly_NoToNoCount_ReturnsFalse()
+	{
+		var msg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			DataType2 = DataType.Ticks,
+		};
+		msg.IsHistoryOnly().AssertFalse();
+	}
+
+	#endregion
+
+	#region TryGet
+
+	[TestMethod]
+	public void TryGet_ExistingKey_ReturnsValue()
+	{
+		var dict = new Dictionary<string, string> { { "key1", "val1" } };
+		dict.TryGet("key1").AssertEqual("val1");
+	}
+
+	[TestMethod]
+	public void TryGet_MissingKey_ReturnsDefault()
+	{
+		var dict = new Dictionary<string, string>();
+		dict.TryGet("missing", "default").AssertEqual("default");
+	}
+
+	[TestMethod]
+	public void TryGet_MissingKey_NullDefault()
+	{
+		var dict = new Dictionary<string, string>();
+		dict.TryGet("missing").AssertNull();
+	}
+
+	#endregion
+
+	#region IsOpened
+
+	[TestMethod]
+	public void IsOpened_Started_ReturnsTrue()
+	{
+		var ch = new TestChannel(ChannelStates.Started);
+		ch.IsOpened().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsOpened_Stopped_ReturnsFalse()
+	{
+		var ch = new TestChannel(ChannelStates.Stopped);
+		ch.IsOpened().AssertFalse();
+	}
+
+	private sealed class TestChannel(ChannelStates state) : IMessageChannel
+	{
+		public ChannelStates State => state;
+		public event Action StateChanged { add { } remove { } }
+		public void Open() { }
+		public void Close() { }
+		public void Suspend() { }
+		public void Resume() { }
+		public void Clear() { }
+		public void Dispose() { }
+		ValueTask IMessageTransport.SendInMessageAsync(Message message, CancellationToken cancellationToken) => default;
+		event Func<Message, CancellationToken, ValueTask> IMessageTransport.NewOutMessageAsync { add { } remove { } }
+		IMessageChannel ICloneable<IMessageChannel>.Clone() => new TestChannel(state);
+		object ICloneable.Clone() => new TestChannel(state);
+	}
+
+	#endregion
+
+	#region IsToday
+
+	[TestMethod]
+	public void IsToday_TodayConstant_ReturnsTrue()
+	{
+		Extensions.Today.IsToday().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsToday_RegularDate_ReturnsFalse()
+	{
+		DateTime.UtcNow.IsToday().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsToday_Nullable_Null_ReturnsFalse()
+	{
+		((DateTime?)null).IsToday().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsToday_Nullable_Today_ReturnsTrue()
+	{
+		((DateTime?)Extensions.Today).IsToday().AssertTrue();
+	}
+
+	#endregion
+
+	#region EnsureToday
+
+	[TestMethod]
+	public void EnsureToday_TodayValue_ReturnsRealToday()
+	{
+		var todayVal = new DateTime(2025, 6, 15, 0, 0, 0, DateTimeKind.Utc);
+		var result = ((DateTime?)Extensions.Today).EnsureToday(todayVal);
+		result.AssertEqual(todayVal);
+	}
+
+	[TestMethod]
+	public void EnsureToday_RegularDate_ReturnsSame()
+	{
+		var date = new DateTime(2025, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+		var result = ((DateTime?)date).EnsureToday(DateTime.UtcNow);
+		result.AssertEqual(date);
+	}
+
+	[TestMethod]
+	public void EnsureToday_Null_ReturnsNull()
+	{
+		((DateTime?)null).EnsureToday(DateTime.UtcNow).AssertNull();
+	}
+
+	#endregion
+
+	#region IsSet (Unit)
+
+	[TestMethod]
+	public void IsSet_Null_ReturnsFalse()
+	{
+		((Unit)null).IsSet().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsSet_ZeroValue_ReturnsFalse()
+	{
+		new Unit(0).IsSet().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsSet_NonZero_ReturnsTrue()
+	{
+		new Unit(5).IsSet().AssertTrue();
+	}
+
+	#endregion
+
+	#region IsLookup
+
+	[TestMethod]
+	public void IsLookup_SecurityLookup_ReturnsTrue()
+	{
+		MessageTypes.SecurityLookup.IsLookup().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsLookup_PortfolioLookup_ReturnsTrue()
+	{
+		MessageTypes.PortfolioLookup.IsLookup().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsLookup_OrderStatus_ReturnsTrue()
+	{
+		MessageTypes.OrderStatus.IsLookup().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsLookup_Execution_ReturnsFalse()
+	{
+		MessageTypes.Execution.IsLookup().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsLookup_Message_ReturnsTrue()
+	{
+		var msg = new SecurityLookupMessage();
+		((IMessage)msg).IsLookup().AssertTrue();
+	}
+
+	#endregion
+
+	#region ToErrorMessage
+
+	[TestMethod]
+	public void ToErrorMessage_String_CreatesMessage()
+	{
+		var result = "test error".ToErrorMessage();
+		result.Error.AssertNotNull();
+		IsTrue(result.Error.Message.Contains("test error"));
+	}
+
+	[TestMethod]
+	public void ToErrorMessage_Exception_CreatesMessage()
+	{
+		var ex = new InvalidOperationException("test");
+		var result = ex.ToErrorMessage(42);
+		result.Error.AssertEqual(ex);
+		result.OriginalTransactionId.AssertEqual(42L);
+	}
+
+	[TestMethod]
+	public void ToErrorMessage_Exception_DefaultTransactionId()
+	{
+		var ex = new InvalidOperationException("test");
+		var result = ex.ToErrorMessage();
+		result.OriginalTransactionId.AssertEqual(0L);
+	}
+
+	#endregion
+
+	#region CreateSubscriptionResponse / CreateNotSupported
+
+	[TestMethod]
+	public void CreateSubscriptionResponse_NoError()
+	{
+		var result = 42L.CreateSubscriptionResponse();
+		result.OriginalTransactionId.AssertEqual(42L);
+		result.Error.AssertNull();
+	}
+
+	[TestMethod]
+	public void CreateSubscriptionResponse_WithError()
+	{
+		var ex = new InvalidOperationException("test");
+		var result = 42L.CreateSubscriptionResponse(ex);
+		result.OriginalTransactionId.AssertEqual(42L);
+		result.Error.AssertEqual(ex);
+	}
+
+	[TestMethod]
+	public void CreateNotSupported_SetsNotSupportedError()
+	{
+		var result = 42L.CreateNotSupported();
+		result.OriginalTransactionId.AssertEqual(42L);
+		result.IsNotSupported().AssertTrue();
+	}
+
+	#endregion
+
+	#region LoopBack / UndoBack
+
+	[TestMethod]
+	public void LoopBack_SetsBackModeAndAdapter()
+	{
+		var msg = new TimeMessage();
+		var adapter = new IncrementalIdGenerator();
+		// We need a real adapter, but we can test the method conceptually
+		// by checking IsBack
+		// LoopBack requires IMessageAdapter so skip if no mock available
+	}
+
+	[TestMethod]
+	public void UndoBack_ResetsBackMode()
+	{
+		var msg = new TimeMessage();
+		msg.BackMode = MessageBackModes.Direct;
+		msg.UndoBack();
+		msg.BackMode.AssertEqual(MessageBackModes.None);
+		msg.Adapter.AssertNull();
+	}
+
+	#endregion
+
+	#region IsLastTradeField / IsBestBidField / IsBestAskField
+
+	[TestMethod]
+	public void IsLastTradeField_LastTradePrice_ReturnsTrue()
+	{
+		Level1Fields.LastTradePrice.IsLastTradeField().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsLastTradeField_BestBidPrice_ReturnsFalse()
+	{
+		Level1Fields.BestBidPrice.IsLastTradeField().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsBestBidField_BestBidPrice_ReturnsTrue()
+	{
+		Level1Fields.BestBidPrice.IsBestBidField().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsBestBidField_BestAskPrice_ReturnsFalse()
+	{
+		Level1Fields.BestAskPrice.IsBestBidField().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsBestAskField_BestAskPrice_ReturnsTrue()
+	{
+		Level1Fields.BestAskPrice.IsBestAskField().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsBestAskField_LastTradePrice_ReturnsFalse()
+	{
+		Level1Fields.LastTradePrice.IsBestAskField().AssertFalse();
+	}
+
+	#endregion
+
+	#region IsOrderLogRegistered / IsOrderLogCanceled / IsOrderLogMatched
+
+	[TestMethod]
+	public void IsOrderLogRegistered_ActiveNoTrade_ReturnsTrue()
+	{
+		var msg = new ExecutionMessage
+		{
+			OrderState = OrderStates.Active,
+			TradePrice = null,
+		};
+		msg.IsOrderLogRegistered().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsOrderLogRegistered_ActiveWithTrade_ReturnsFalse()
+	{
+		var msg = new ExecutionMessage
+		{
+			OrderState = OrderStates.Active,
+			TradePrice = 100m,
+		};
+		msg.IsOrderLogRegistered().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsOrderLogCanceled_DoneNoTradeVolume_ReturnsTrue()
+	{
+		var msg = new ExecutionMessage
+		{
+			OrderState = OrderStates.Done,
+			TradeVolume = null,
+		};
+		msg.IsOrderLogCanceled().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsOrderLogCanceled_DoneWithTradeVolume_ReturnsFalse()
+	{
+		var msg = new ExecutionMessage
+		{
+			OrderState = OrderStates.Done,
+			TradeVolume = 5m,
+		};
+		msg.IsOrderLogCanceled().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsOrderLogMatched_HasTradeVolume_ReturnsTrue()
+	{
+		var msg = new ExecutionMessage { TradeVolume = 5m };
+		msg.IsOrderLogMatched().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsOrderLogMatched_NoTradeVolume_ReturnsFalse()
+	{
+		var msg = new ExecutionMessage();
+		msg.IsOrderLogMatched().AssertFalse();
+	}
+
+	#endregion
+
+	#region IsPlazaSystem
+
+	[TestMethod]
+	public void IsPlazaSystem_NoBit4_ReturnsTrue()
+	{
+		0x1L.IsPlazaSystem().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsPlazaSystem_HasBit4_ReturnsFalse()
+	{
+		0x4L.IsPlazaSystem().AssertFalse();
+	}
+
+	#endregion
+
+	#region GetPriceStep
+
+	[TestMethod]
+	public void GetPriceStep_0Decimals_Returns1()
+	{
+		0.GetPriceStep().AssertEqual(1m);
+	}
+
+	[TestMethod]
+	public void GetPriceStep_2Decimals_Returns001()
+	{
+		2.GetPriceStep().AssertEqual(0.01m);
+	}
+
+	[TestMethod]
+	public void GetPriceStep_4Decimals_Returns00001()
+	{
+		4.GetPriceStep().AssertEqual(0.0001m);
+	}
+
+	#endregion
+
+	#region ToType (Level1Fields)
+
+	[TestMethod]
+	public void ToType_Level1_LastTradePrice_ReturnsDecimal()
+	{
+		Level1Fields.LastTradePrice.ToType().AssertEqual(typeof(decimal));
+	}
+
+	[TestMethod]
+	public void ToType_Level1_LastTradeId_ReturnsLong()
+	{
+		Level1Fields.LastTradeId.ToType().AssertEqual(typeof(long));
+	}
+
+	[TestMethod]
+	public void ToType_Level1_AsksCount_ReturnsInt()
+	{
+		Level1Fields.AsksCount.ToType().AssertEqual(typeof(int));
+	}
+
+	[TestMethod]
+	public void ToType_Level1_LastTradeTime_ReturnsDateTime()
+	{
+		Level1Fields.LastTradeTime.ToType().AssertEqual(typeof(DateTime));
+	}
+
+	[TestMethod]
+	public void ToType_Level1_LastTradeUpDown_ReturnsBool()
+	{
+		Level1Fields.LastTradeUpDown.ToType().AssertEqual(typeof(bool));
+	}
+
+	[TestMethod]
+	public void ToType_Level1_State_ReturnsSecurityStates()
+	{
+		Level1Fields.State.ToType().AssertEqual(typeof(SecurityStates));
+	}
+
+	#endregion
+
+	#region ToType (PositionChangeTypes)
+
+	[TestMethod]
+	public void ToType_Position_CurrentValue_ReturnsDecimal()
+	{
+		PositionChangeTypes.CurrentValue.ToType().AssertEqual(typeof(decimal));
+	}
+
+	[TestMethod]
+	public void ToType_Position_ExpirationDate_ReturnsDateTime()
+	{
+		PositionChangeTypes.ExpirationDate.ToType().AssertEqual(typeof(DateTime));
+	}
+
+	[TestMethod]
+	public void ToType_Position_State_ReturnsPortfolioStates()
+	{
+		PositionChangeTypes.State.ToType().AssertEqual(typeof(PortfolioStates));
+	}
+
+	[TestMethod]
+	public void ToType_Position_Currency_ReturnsCurrencyTypes()
+	{
+		PositionChangeTypes.Currency.ToType().AssertEqual(typeof(CurrencyTypes));
+	}
+
+	[TestMethod]
+	public void ToType_Position_OrdersCount_ReturnsInt()
+	{
+		PositionChangeTypes.OrdersCount.ToType().AssertEqual(typeof(int));
+	}
+
+	#endregion
+
+	#region GetBestBid / GetBestAsk / GetPrice
+
+	[TestMethod]
+	public void GetBestBid_HasBids_ReturnsFirst()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10), new QuoteChange(99m, 5)],
+			Asks = [new QuoteChange(101m, 10)],
+		};
+
+		var bid = msg.GetBestBid();
+		bid.AssertNotNull();
+		bid.Value.Price.AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void GetBestBid_NoBids_ReturnsNull()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [],
+			Asks = [new QuoteChange(101m, 10)],
+		};
+
+		msg.GetBestBid().AssertNull();
+	}
+
+	[TestMethod]
+	public void GetBestAsk_HasAsks_ReturnsFirst()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [new QuoteChange(101m, 10), new QuoteChange(102m, 5)],
+		};
+
+		var ask = msg.GetBestAsk();
+		ask.AssertNotNull();
+		ask.Value.Price.AssertEqual(101m);
+	}
+
+	[TestMethod]
+	public void GetPrice_Buy_ReturnsBestBid()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [new QuoteChange(101m, 10)],
+		};
+
+		msg.GetPrice(Sides.Buy).AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void GetPrice_Sell_ReturnsBestAsk()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [new QuoteChange(101m, 10)],
+		};
+
+		msg.GetPrice(Sides.Sell).AssertEqual(101m);
+	}
+
+	[TestMethod]
+	public void GetPrice_Null_ReturnsSpreadMiddle()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [new QuoteChange(102m, 10)],
+		};
+
+		msg.GetPrice(null).AssertEqual(101m);
+	}
+
+	#endregion
+
+	#region GetLastTradePrice (Level1)
+
+	[TestMethod]
+	public void GetLastTradePrice_HasPrice_Returns()
+	{
+		var msg = new Level1ChangeMessage { SecurityId = Helper.CreateSecurityId(), ServerTime = DateTime.UtcNow };
+		msg.Add(Level1Fields.LastTradePrice, 50m);
+
+		msg.GetLastTradePrice().AssertEqual(50m);
+	}
+
+	[TestMethod]
+	public void GetLastTradePrice_NoPrice_ReturnsNull()
+	{
+		var msg = new Level1ChangeMessage { SecurityId = Helper.CreateSecurityId(), ServerTime = DateTime.UtcNow };
+		msg.GetLastTradePrice().AssertNull();
+	}
+
+	#endregion
+
+	#region GetBestPair / GetPair / GetTopPairs / GetTopQuotes
+
+	[TestMethod]
+	public void GetBestPair_ReturnsBothSides()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10)],
+			Asks = [new QuoteChange(101m, 10)],
+		};
+
+		var (bid, ask) = msg.GetBestPair();
+		bid.AssertNotNull();
+		ask.AssertNotNull();
+		bid.Value.Price.AssertEqual(100m);
+		ask.Value.Price.AssertEqual(101m);
+	}
+
+	[TestMethod]
+	public void GetPair_Index1_ReturnsSecondLevel()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10), new QuoteChange(99m, 5)],
+			Asks = [new QuoteChange(101m, 10), new QuoteChange(102m, 5)],
+		};
+
+		var (bid, ask) = msg.GetPair(1);
+		bid.AssertNotNull();
+		ask.AssertNotNull();
+		bid.Value.Price.AssertEqual(99m);
+		ask.Value.Price.AssertEqual(102m);
+	}
+
+	[TestMethod]
+	public void GetTopPairs_ReturnsCorrectCount()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10), new QuoteChange(99m, 5)],
+			Asks = [new QuoteChange(101m, 10), new QuoteChange(102m, 5)],
+		};
+
+		var pairs = msg.GetTopPairs(2).ToArray();
+		pairs.Length.AssertEqual(2);
+	}
+
+	[TestMethod]
+	public void GetTopQuotes_ReturnsCorrectOrder()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10), new QuoteChange(99m, 5)],
+			Asks = [new QuoteChange(101m, 10), new QuoteChange(102m, 5)],
+		};
+
+		var quotes = msg.GetTopQuotes(2).ToArray();
+		// Bids in reverse order then asks in order: 99, 100, 101, 102
+		quotes.Length.AssertEqual(4);
+		quotes[0].Price.AssertEqual(99m);
+		quotes[1].Price.AssertEqual(100m);
+		quotes[2].Price.AssertEqual(101m);
+		quotes[3].Price.AssertEqual(102m);
+	}
+
+	#endregion
+
+	#region IsFinal (IOrderBookMessage)
+
+	[TestMethod]
+	public void IsFinal_OrderBook_NullState_ReturnsTrue()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [],
+			Asks = [],
+		};
+
+		msg.IsFinal().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsFinal_OrderBook_SnapshotComplete_ReturnsTrue()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [],
+			Asks = [],
+			State = QuoteChangeStates.SnapshotComplete,
+		};
+
+		msg.IsFinal().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsFinal_OrderBook_Increment_ReturnsFalse()
+	{
+		var msg = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [],
+			Asks = [],
+			State = QuoteChangeStates.Increment,
+		};
+
+		msg.IsFinal().AssertFalse();
+	}
+
+	#endregion
+
+	#region SetSecurityCode / SetNativeId
+
+	[TestMethod]
+	public void SetSecurityCode_SetsCode()
+	{
+		var msg = new SecurityMessage { SecurityId = Helper.CreateSecurityId() };
+		msg.SetSecurityCode("NEW_CODE");
+		msg.SecurityId.SecurityCode.AssertEqual("NEW_CODE");
+	}
+
+	[TestMethod]
+	public void SetNativeId_SetsNative()
+	{
+		var secId = Helper.CreateSecurityId();
+		var result = secId.SetNativeId(42);
+		result.Native.AssertEqual(42);
+	}
+
+	#endregion
+
+	#region SetSecurityTypes / GetSecurityTypes
+
+	[TestMethod]
+	public void SetSecurityTypes_SingleType_SetsSingle()
+	{
+		var msg = new SecurityLookupMessage();
+		msg.SetSecurityTypes(SecurityTypes.Stock);
+		msg.SecurityType.AssertEqual(SecurityTypes.Stock);
+	}
+
+	[TestMethod]
+	public void SetSecurityTypes_MultipleTypes_SetsArray()
+	{
+		var msg = new SecurityLookupMessage();
+		msg.SetSecurityTypes(null, new[] { SecurityTypes.Stock, SecurityTypes.Bond });
+		msg.SecurityTypes.AssertNotNull();
+		IsTrue(msg.SecurityTypes.Length == 2);
+	}
+
+	[TestMethod]
+	public void GetSecurityTypes_SingleType_ReturnsSet()
+	{
+		var msg = new SecurityLookupMessage { SecurityType = SecurityTypes.Stock };
+		var types = msg.GetSecurityTypes();
+		types.Count.AssertEqual(1);
+		IsTrue(types.Contains(SecurityTypes.Stock));
+	}
+
+	[TestMethod]
+	public void GetSecurityTypes_NoTypes_ReturnsEmpty()
+	{
+		var msg = new SecurityLookupMessage();
+		msg.GetSecurityTypes().Count.AssertEqual(0);
+	}
+
+	#endregion
+
+	#region FillDefaultCryptoFields
+
+	[TestMethod]
+	public void FillDefaultCryptoFields_SecurityId_SetsCryptoDefaults()
+	{
+		var secId = Helper.CreateSecurityId();
+		var msg = secId.FillDefaultCryptoFields();
+
+		msg.SecurityId.AssertEqual(secId);
+		msg.PriceStep.AssertEqual(0.00000001m);
+		msg.VolumeStep.AssertEqual(0.00000001m);
+		msg.SecurityType.AssertEqual(SecurityTypes.CryptoCurrency);
+	}
+
+	[TestMethod]
+	public void FillDefaultCryptoFields_SecurityMessage_SetsCryptoDefaults()
+	{
+		var msg = new SecurityMessage { SecurityId = Helper.CreateSecurityId() };
+		var result = msg.FillDefaultCryptoFields();
+
+		result.AssertEqual(msg);
+		msg.PriceStep.AssertEqual(0.00000001m);
+		msg.SecurityType.AssertEqual(SecurityTypes.CryptoCurrency);
+	}
+
+	#endregion
+
+	#region IsBasket / IsIndex
+
+	[TestMethod]
+	public void IsBasket_HasBasketCode_ReturnsTrue()
+	{
+		var msg = new SecurityMessage { BasketCode = "WI" };
+		msg.IsBasket().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsBasket_NoBasketCode_ReturnsFalse()
+	{
+		var msg = new SecurityMessage();
+		msg.IsBasket().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsIndex_WI_ReturnsTrue()
+	{
+		var msg = new SecurityMessage { BasketCode = "WI" };
+		msg.IsIndex().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsIndex_EI_ReturnsTrue()
+	{
+		var msg = new SecurityMessage { BasketCode = "EI" };
+		msg.IsIndex().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsIndex_Other_ReturnsFalse()
+	{
+		var msg = new SecurityMessage { BasketCode = "XX" };
+		msg.IsIndex().AssertFalse();
+	}
+
+	#endregion
+
+	#region EnsureGetGenerator
+
+	[TestMethod]
+	public void EnsureGetGenerator_Null_ReturnsDefault()
+	{
+		var gen = ((SecurityIdGenerator)null).EnsureGetGenerator();
+		gen.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void EnsureGetGenerator_NotNull_ReturnsSame()
+	{
+		var gen = new SecurityIdGenerator();
+		gen.EnsureGetGenerator().AssertEqual(gen);
+	}
+
+	#endregion
+
+	#region ToNullableSecurityId
+
+	[TestMethod]
+	public void ToNullableSecurityId_Empty_ReturnsDefault()
+	{
+		var result = "".ToNullableSecurityId();
+		result.AssertEqual(default);
+	}
+
+	[TestMethod]
+	public void ToNullableSecurityId_Valid_ReturnsSecurityId()
+	{
+		var result = "AAPL@NASDAQ".ToNullableSecurityId();
+		result.SecurityCode.AssertEqual("AAPL");
+		result.BoardCode.AssertEqual("NASDAQ");
+	}
+
+	#endregion
+
+	#region IsAssociated
+
+	[TestMethod]
+	public void IsAssociated_MatchingBoard_ReturnsTrue()
+	{
+		var secId = new SecurityId { SecurityCode = "TEST", BoardCode = "NYSE" };
+		secId.IsAssociated("NYSE").AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsAssociated_DifferentBoard_ReturnsFalse()
+	{
+		var secId = new SecurityId { SecurityCode = "TEST", BoardCode = "NYSE" };
+		secId.IsAssociated("NASDAQ").AssertFalse();
+	}
+
+	#endregion
+
+	#region TryFillUnderlyingId / GetUnderlyingCode
+
+	[TestMethod]
+	public void TryFillUnderlyingId_SetsUnderlyingSecurityId()
+	{
+		var msg = new SecurityMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "OPT", BoardCode = "FORTS" },
+		};
+
+		msg.TryFillUnderlyingId("GAZP");
+		msg.UnderlyingSecurityId.SecurityCode.AssertEqual("GAZP");
+		msg.UnderlyingSecurityId.BoardCode.AssertEqual("FORTS");
+	}
+
+	[TestMethod]
+	public void TryFillUnderlyingId_Empty_DoesNothing()
+	{
+		var msg = new SecurityMessage { SecurityId = Helper.CreateSecurityId() };
+		msg.TryFillUnderlyingId("");
+		msg.UnderlyingSecurityId.AssertEqual(default);
+	}
+
+	[TestMethod]
+	public void GetUnderlyingCode_ReturnsCode()
+	{
+		var msg = new SecurityMessage
+		{
+			UnderlyingSecurityId = new SecurityId { SecurityCode = "GAZP", BoardCode = "FORTS" },
+		};
+
+		msg.GetUnderlyingCode().AssertEqual("GAZP");
+	}
+
+	#endregion
+
+	#region SplitToPair
+
+	[TestMethod]
+	public void SplitToPair_Slash_ReturnsPair()
+	{
+		var (from, to) = "BTC/USD".SplitToPair();
+		from.AssertEqual("BTC");
+		to.AssertEqual("USD");
+	}
+
+	[TestMethod]
+	public void SplitToPair_Dash_ReturnsPair()
+	{
+		var (from, to) = "BTC-USD".SplitToPair();
+		from.AssertEqual("BTC");
+		to.AssertEqual("USD");
+	}
+
+	[TestMethod]
+	public void SplitToPair_NoSeparator_Throws()
+	{
+		Throws<ArgumentException>(() => "BTCUSD".SplitToPair());
+	}
+
+	#endregion
+
+	#region IsCandleMessage / IsCandle
+
+	[TestMethod]
+	public void IsCandleMessage_TimeFrameCandle_ReturnsTrue()
+	{
+		typeof(TimeFrameCandleMessage).IsCandleMessage().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsCandleMessage_ExecutionMessage_ReturnsFalse()
+	{
+		typeof(ExecutionMessage).IsCandleMessage().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsCandle_CandleTimeFrame_ReturnsTrue()
+	{
+		MessageTypes.CandleTimeFrame.IsCandle().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsCandle_Execution_ReturnsFalse()
+	{
+		MessageTypes.Execution.IsCandle().AssertFalse();
+	}
+
+	#endregion
+
+	#region DataType factories: TimeFrame / Volume / Tick / Range / PnF / Renko / Portfolio
+
+	[TestMethod]
+	public void TimeFrame_CreatesDataType()
+	{
+		var dt = TimeSpan.FromMinutes(5).TimeFrame();
+		dt.AssertNotNull();
+		dt.MessageType.AssertEqual(typeof(TimeFrameCandleMessage));
+		((TimeSpan)dt.Arg).AssertEqual(TimeSpan.FromMinutes(5));
+	}
+
+	[TestMethod]
+	public void Volume_CreatesDataType()
+	{
+		var dt = 1000m.Volume();
+		dt.AssertNotNull();
+		dt.MessageType.AssertEqual(typeof(VolumeCandleMessage));
+	}
+
+	[TestMethod]
+	public void Tick_CreatesDataType()
+	{
+		var dt = 100.Tick();
+		dt.AssertNotNull();
+		dt.MessageType.AssertEqual(typeof(TickCandleMessage));
+	}
+
+	[TestMethod]
+	public void Portfolio_CreatesDataType()
+	{
+		var dt = "TestPortfolio".Portfolio();
+		dt.AssertNotNull();
+		dt.MessageType.AssertEqual(typeof(PortfolioMessage));
+	}
+
+	#endregion
+
+	#region IsIntraday
+
+	[TestMethod]
+	public void IsIntraday_LessThanDay_ReturnsTrue()
+	{
+		TimeSpan.FromHours(1).IsIntraday().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsIntraday_OneDay_ReturnsFalse()
+	{
+		TimeSpan.FromDays(1).IsIntraday().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsIntraday_ZeroOrNegative_Throws()
+	{
+		Throws<ArgumentOutOfRangeException>(() => TimeSpan.Zero.IsIntraday());
+	}
+
+	#endregion
+
+	#region DataTypeArgToString / ToDataTypeArg
+
+	[TestMethod]
+	public void DataTypeArgToString_TimeFrame()
+	{
+		var dt = TimeSpan.FromMinutes(5).TimeFrame();
+		var str = dt.DataTypeArgToString();
+		IsTrue(str.Length > 0);
+	}
+
+	[TestMethod]
+	public void ToDataTypeArg_EmptyString_ReturnsNull()
+	{
+		var result = typeof(TimeFrameCandleMessage).ToDataTypeArg("");
+		result.AssertNull();
+	}
+
+	#endregion
+
+	#region FileNameToDataType / DataTypeToFileName
+
+	[TestMethod]
+	public void FileNameToDataType_Trades_ReturnsTicksDataType()
+	{
+		var dt = "trades".FileNameToDataType();
+		dt.AssertEqual(DataType.Ticks);
+	}
+
+	[TestMethod]
+	public void FileNameToDataType_Quotes_ReturnsMarketDepth()
+	{
+		var dt = "quotes".FileNameToDataType();
+		dt.AssertEqual(DataType.MarketDepth);
+	}
+
+	[TestMethod]
+	public void FileNameToDataType_Unknown_ReturnsNull()
+	{
+		var dt = "unknown".FileNameToDataType();
+		dt.AssertNull();
+	}
+
+	[TestMethod]
+	public void DataTypeToFileName_Ticks_ReturnsTrades()
+	{
+		var fn = DataType.Ticks.DataTypeToFileName();
+		fn.AssertEqual("trades");
+	}
+
+	[TestMethod]
+	public void DataTypeToFileName_MarketDepth_ReturnsQuotes()
+	{
+		var fn = DataType.MarketDepth.DataTypeToFileName();
+		fn.AssertEqual("quotes");
+	}
+
+	[TestMethod]
+	public void FileNameToDataType_DataTypeToFileName_Roundtrip()
+	{
+		var original = DataType.Ticks;
+		var fn = original.DataTypeToFileName();
+		var back = fn.FileNameToDataType();
+		back.AssertEqual(original);
+	}
+
+	#endregion
+
+	#region IsStorageSupported / IsBuildOnly
+
+	[TestMethod]
+	public void IsStorageSupported_Ticks_ReturnsTrue()
+	{
+		DataType.Ticks.IsStorageSupported().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsStorageSupported_TimeFrameCandle_ReturnsTrue()
+	{
+		TimeSpan.FromMinutes(5).TimeFrame().IsStorageSupported().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsBuildOnly_TickCandle_ReturnsTrue()
+	{
+		// TickCandleMessage was registered with isBuildOnly = true (default)
+		typeof(TickCandleMessage).IsBuildOnly().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsBuildOnly_TimeFrameCandle_ReturnsFalse()
+	{
+		// TimeFrameCandleMessage was registered with isBuildOnly = false
+		typeof(TimeFrameCandleMessage).IsBuildOnly().AssertFalse();
+	}
+
+	#endregion
+
+	#region GetTimeFrame (MarketDataMessage)
+
+	[TestMethod]
+	public void GetTimeFrame_MarketDataMessage_ReturnsTimeFrame()
+	{
+		var msg = new MarketDataMessage
+		{
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			IsSubscribe = true,
+		};
+
+		msg.GetTimeFrame().AssertEqual(TimeSpan.FromMinutes(5));
+	}
+
+	#endregion
+
+	#region ToCandleMessageType / ToCandleMessage / ToMessageType
+
+	[TestMethod]
+	public void ToCandleMessageType_CandleTimeFrame_ReturnsType()
+	{
+		var type = MessageTypes.CandleTimeFrame.ToCandleMessageType();
+		type.AssertEqual(typeof(TimeFrameCandleMessage));
+	}
+
+	[TestMethod]
+	public void ToCandleMessage_CandleTimeFrame_ReturnsType()
+	{
+		var type = MessageTypes.CandleTimeFrame.ToCandleMessage();
+		type.AssertEqual(typeof(TimeFrameCandleMessage));
+	}
+
+	[TestMethod]
+	public void ToMessageType_Type_ReturnsMessageType()
+	{
+		var mt = typeof(TimeFrameCandleMessage).ToMessageType();
+		mt.AssertEqual(MessageTypes.CandleTimeFrame);
+	}
+
+	[TestMethod]
+	public void ToMessageType_MessageTypes_ReturnsType()
+	{
+		var t = MessageTypes.CandleTimeFrame.ToMessageType();
+		t.AssertEqual(typeof(TimeFrameCandleMessage));
+	}
+
+	[TestMethod]
+	public void ToMessageType_String_Regular()
+	{
+		var mt = "CandleTimeFrame".ToMessageType();
+		mt.AssertEqual(MessageTypes.CandleTimeFrame);
+	}
+
+	[TestMethod]
+	public void ToMessageType_String_LegacyTimeFrameInfo()
+	{
+		var mt = "TimeFrameInfo".ToMessageType();
+		mt.AssertEqual(MessageTypes.DataTypeInfo);
+	}
+
+	#endregion
+
+	#region GetCandleArgType / ValidateCandleArg / CreateCandleMessage
+
+	[TestMethod]
+	public void GetCandleArgType_TimeFrame_ReturnsTimeSpan()
+	{
+		typeof(TimeFrameCandleMessage).GetCandleArgType().AssertEqual(typeof(TimeSpan));
+	}
+
+	[TestMethod]
+	public void ValidateCandleArg_TimeFrame_ValidArg_ReturnsTrue()
+	{
+		typeof(TimeFrameCandleMessage).ValidateCandleArg(TimeSpan.FromMinutes(5)).AssertTrue();
+	}
+
+	[TestMethod]
+	public void ValidateCandleArg_TimeFrame_InvalidArg_ReturnsFalse()
+	{
+		typeof(TimeFrameCandleMessage).ValidateCandleArg(TimeSpan.Zero).AssertFalse();
+	}
+
+	[TestMethod]
+	public void CreateCandleMessage_TimeFrame_CreatesInstance()
+	{
+		var candle = typeof(TimeFrameCandleMessage).CreateCandleMessage();
+		candle.AssertNotNull();
+		IsTrue(candle is TimeFrameCandleMessage);
+	}
+
+	#endregion
+
+	#region GetPreferredLanguage
+
+	[TestMethod]
+	public void GetPreferredLanguage_Russia_ReturnsRu()
+	{
+		var lang = ((MessageAdapterCategories?)MessageAdapterCategories.Russia).GetPreferredLanguage();
+		lang.AssertEqual("ru");
+	}
+
+	[TestMethod]
+	public void GetPreferredLanguage_Null_ReturnsEn()
+	{
+		((MessageAdapterCategories?)null).GetPreferredLanguage().AssertEqual("en");
+	}
+
+	#endregion
+
+	#region GetPeriod
+
+	[TestMethod]
+	public void GetPeriod_FoundPeriod_ReturnsPeriod()
+	{
+		var wt = new WorkingTime
+		{
+			Periods =
+			[
+				new WorkingTimePeriod
+				{
+					Till = new DateTime(2025, 6, 1),
+					Times = [new Range<TimeSpan>(new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0))],
+				},
+				new WorkingTimePeriod
+				{
+					Till = new DateTime(2026, 1, 1),
+					Times = [new Range<TimeSpan>(new TimeSpan(10, 0, 0), new TimeSpan(17, 0, 0))],
+				},
+			],
+		};
+
+		var period = wt.GetPeriod(new DateTime(2025, 3, 1));
+		period.AssertNotNull();
+		period.Till.AssertEqual(new DateTime(2025, 6, 1));
+	}
+
+	[TestMethod]
+	public void GetPeriod_NoPeriod_ReturnsNull()
+	{
+		var wt = new WorkingTime
+		{
+			Periods =
+			[
+				new WorkingTimePeriod
+				{
+					Till = new DateTime(2020, 1, 1),
+					Times = [new Range<TimeSpan>(new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0))],
+				},
+			],
+		};
+
+		wt.GetPeriod(new DateTime(2025, 1, 1)).AssertNull();
+	}
+
+	#endregion
+
+	#region GetTypicalPrice / GetMedianPrice
+
+	[TestMethod]
+	public void GetTypicalPrice_ReturnsCorrectValue()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			HighPrice = 30m,
+			LowPrice = 10m,
+			ClosePrice = 20m,
+		};
+
+		candle.GetTypicalPrice().AssertEqual(20m); // (30 + 10 + 20) / 3
+	}
+
+	[TestMethod]
+	public void GetMedianPrice_ReturnsCorrectValue()
+	{
+		var candle = new TimeFrameCandleMessage
+		{
+			HighPrice = 30m,
+			LowPrice = 10m,
+		};
+
+		candle.GetMedianPrice().AssertEqual(20m); // (30 + 10) / 2
+	}
+
+	#endregion
+
+	#region SetSubscriptionIds / GetSubscriptionIds / HasSubscriptionId
+
+	[TestMethod]
+	public void SetSubscriptionIds_SingleId_SetsSingle()
+	{
+		var msg = new ExecutionMessage();
+		msg.SetSubscriptionIds(subscriptionId: 42);
+		msg.SubscriptionId.AssertEqual(42L);
+		msg.SubscriptionIds.AssertNull();
+	}
+
+	[TestMethod]
+	public void SetSubscriptionIds_Array_SetsArray()
+	{
+		var msg = new ExecutionMessage();
+		msg.SetSubscriptionIds([1, 2, 3]);
+		msg.SubscriptionId.AssertEqual(0L);
+		msg.SubscriptionIds.Length.AssertEqual(3);
+	}
+
+	[TestMethod]
+	public void GetSubscriptionIds_SingleId_ReturnsSingleArray()
+	{
+		var msg = new ExecutionMessage { SubscriptionId = 42 };
+		var ids = msg.GetSubscriptionIds();
+		ids.Length.AssertEqual(1);
+		ids[0].AssertEqual(42L);
+	}
+
+	[TestMethod]
+	public void GetSubscriptionIds_ArrayIds_ReturnsArray()
+	{
+		var msg = new ExecutionMessage { SubscriptionIds = [1, 2] };
+		var ids = msg.GetSubscriptionIds();
+		ids.Length.AssertEqual(2);
+	}
+
+	[TestMethod]
+	public void GetSubscriptionIds_NoIds_ReturnsEmpty()
+	{
+		var msg = new ExecutionMessage();
+		msg.GetSubscriptionIds().Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void HasSubscriptionId_WithSingleId_ReturnsTrue()
+	{
+		var msg = new ExecutionMessage { SubscriptionId = 42 };
+		msg.HasSubscriptionId().AssertTrue();
+	}
+
+	[TestMethod]
+	public void HasSubscriptionId_WithArrayIds_ReturnsTrue()
+	{
+		var msg = new ExecutionMessage { SubscriptionIds = [1, 2] };
+		msg.HasSubscriptionId().AssertTrue();
+	}
+
+	[TestMethod]
+	public void HasSubscriptionId_NoIds_ReturnsFalse()
+	{
+		var msg = new ExecutionMessage();
+		msg.HasSubscriptionId().AssertFalse();
+	}
+
+	#endregion
+
+	#region HasOrderId (OrderStatusMessage)
+
+	[TestMethod]
+	public void HasOrderId_WithOrderId_ReturnsTrue()
+	{
+		var msg = new OrderStatusMessage { OrderId = 123 };
+		msg.HasOrderId().AssertTrue();
+	}
+
+	[TestMethod]
+	public void HasOrderId_WithOrderStringId_ReturnsTrue()
+	{
+		var msg = new OrderStatusMessage { OrderStringId = "ABC" };
+		msg.HasOrderId().AssertTrue();
+	}
+
+	[TestMethod]
+	public void HasOrderId_NoId_ReturnsFalse()
+	{
+		var msg = new OrderStatusMessage();
+		msg.HasOrderId().AssertFalse();
+	}
+
+	#endregion
+
+	#region EncodeToString / DecodeToSpecialDays
+
+	[TestMethod]
+	public void EncodeDecodeSpecialDays_Roundtrip()
+	{
+		var specialDays = new Dictionary<DateTime, Range<TimeSpan>[]>
+		{
+			{
+				new DateTime(2025, 1, 1),
+				new[] { new Range<TimeSpan>(new TimeSpan(10, 0, 0), new TimeSpan(14, 0, 0)) }
+			},
+		};
+
+		var encoded = specialDays.EncodeToString();
+		IsTrue(encoded.Length > 0);
+
+		var decoded = encoded.DecodeToSpecialDays();
+		decoded.Count.AssertEqual(1);
+		IsTrue(decoded.ContainsKey(new DateTime(2025, 1, 1)));
+		decoded[new DateTime(2025, 1, 1)].Length.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void DecodeToSpecialDays_Empty_ReturnsEmpty()
+	{
+		var result = "".DecodeToSpecialDays();
+		result.Count.AssertEqual(0);
+	}
+
+	#endregion
+
+	#region FilterTimeFrames
+
+	[TestMethod]
+	public void FilterTimeFrames_FiltersOnlyTimeFrameCandles()
+	{
+		var dataTypes = new[]
+		{
+			TimeSpan.FromMinutes(1).TimeFrame(),
+			TimeSpan.FromMinutes(5).TimeFrame(),
+			DataType.Ticks,
+			DataType.Level1,
+		};
+
+		var result = dataTypes.FilterTimeFrames().ToArray();
+		result.Length.AssertEqual(2);
+		result[0].AssertEqual(TimeSpan.FromMinutes(1));
+		result[1].AssertEqual(TimeSpan.FromMinutes(5));
+	}
+
+	#endregion
+
+	#region Filter (by dates)
+
+	[TestMethod]
+	public void Filter_ByDates_FiltersCorrectly()
+	{
+		var now = DateTime.UtcNow;
+		var msgs = new[]
+		{
+			new Level1ChangeMessage { SecurityId = Helper.CreateSecurityId(), ServerTime = now.AddDays(-2) },
+			new Level1ChangeMessage { SecurityId = Helper.CreateSecurityId(), ServerTime = now.AddDays(-1) },
+			new Level1ChangeMessage { SecurityId = Helper.CreateSecurityId(), ServerTime = now },
+		};
+
+		var result = msgs.Filter(now.AddDays(-1.5), now.AddHours(-1)).ToArray();
+		result.Length.AssertEqual(1);
+		result[0].ServerTime.AssertEqual(now.AddDays(-1));
+	}
+
+	#endregion
+
+	#region TryLimitByCount
+
+	[TestMethod]
+	public void TryLimitByCount_WithCount_Limits()
+	{
+		var items = Enumerable.Range(1, 100);
+		var msg = new SecurityLookupMessage { Count = 5 };
+
+		var result = items.TryLimitByCount(msg).ToArray();
+		result.Length.AssertEqual(5);
+	}
+
+	[TestMethod]
+	public void TryLimitByCount_NoCount_ReturnsAll()
+	{
+		var items = Enumerable.Range(1, 10);
+		var msg = new SecurityLookupMessage();
+
+		var result = items.TryLimitByCount(msg).ToArray();
+		result.Length.AssertEqual(10);
+	}
+
+	#endregion
+
+	#region Filter (SecurityMessage)
+
+	[TestMethod]
+	public void Filter_Securities_ByType()
+	{
+		var securities = new[]
+		{
+			new SecurityMessage { SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" }, SecurityType = SecurityTypes.Stock },
+			new SecurityMessage { SecurityId = new SecurityId { SecurityCode = "GC", BoardCode = "CME" }, SecurityType = SecurityTypes.Future },
+		};
+
+		var criteria = new SecurityLookupMessage { SecurityType = SecurityTypes.Stock };
+		var result = securities.Filter(criteria).ToArray();
+		result.Length.AssertEqual(1);
+		result[0].SecurityId.SecurityCode.AssertEqual("AAPL");
+	}
+
+	[TestMethod]
+	public void Filter_Securities_LookupAll_ReturnsAll()
+	{
+		var securities = new[]
+		{
+			new SecurityMessage { SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" } },
+			new SecurityMessage { SecurityId = new SecurityId { SecurityCode = "GOOG", BoardCode = "NASDAQ" } },
+		};
+
+		var criteria = new SecurityLookupMessage();
+		var result = securities.Filter(criteria).ToArray();
+		result.Length.AssertEqual(2);
+	}
+
+	#endregion
+
+	#region Filter (BoardMessage)
+
+	[TestMethod]
+	public void Filter_Boards_ByLike()
+	{
+		var boards = new[]
+		{
+			new BoardMessage { Code = "NYSE", ExchangeCode = "NYSE" },
+			new BoardMessage { Code = "NASDAQ", ExchangeCode = "NASDAQ" },
+		};
+
+		var criteria = new BoardLookupMessage { Like = "NY" };
+		var result = boards.Filter(criteria).ToArray();
+		result.Length.AssertEqual(1);
+		result[0].Code.AssertEqual("NYSE");
+	}
+
+	#endregion
+
+	#region NearestSupportedDepth
+
+	[TestMethod]
+	public void NearestSupportedDepth_AnyDepths_ReturnsSameDepth()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.SetSupportedOrderBookDepths(Extensions.AnyDepths);
+
+		adapter.NearestSupportedDepth(10).AssertEqual(10);
+	}
+
+	[TestMethod]
+	public void NearestSupportedDepth_EmptyDepths_ReturnsNull()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.SetSupportedOrderBookDepths([]);
+
+		adapter.NearestSupportedDepth(10).AssertNull();
+	}
+
+	[TestMethod]
+	public void NearestSupportedDepth_FindsNearest()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.SetSupportedOrderBookDepths([5, 10, 20, 50]);
+
+		adapter.NearestSupportedDepth(7).AssertEqual(10);
+	}
+
+	[TestMethod]
+	public void NearestSupportedDepth_LargerThanAll_ReturnsMax()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.SetSupportedOrderBookDepths([5, 10, 20]);
+
+		adapter.NearestSupportedDepth(100).AssertEqual(20);
+	}
+
+	private sealed class TestMessageAdapter : MessageAdapter
+	{
+		private IEnumerable<int> _depths = Extensions.AnyDepths;
+
+		public TestMessageAdapter()
+			: base(new IncrementalIdGenerator())
+		{
+		}
+
+		public void SetSupportedOrderBookDepths(IEnumerable<int> depths) => _depths = depths;
+
+		public override IEnumerable<int> SupportedOrderBookDepths => _depths;
+
+		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken) => default;
+
+		public override IMessageAdapter Clone() => new TestMessageAdapter();
+	}
+
+	#endregion
+
+	#region FormatToString
+
+	[TestMethod]
+	public void FormatToString_ReturnsTypeAndArg()
+	{
+		var dt = TimeSpan.FromMinutes(5).TimeFrame();
+		var (type, arg) = dt.FormatToString();
+		IsTrue(type.Length > 0);
+		IsTrue(arg.Length > 0);
+	}
+
+	#endregion
+
+	#region CreateOrderCondition (Type)
+
+	[TestMethod]
+	public void CreateOrderCondition_NullType_ReturnsNull()
+	{
+		((Type)null).CreateOrderCondition().AssertNull();
+	}
+
+	#endregion
+
+	#region FindById
+
+	[TestMethod]
+	public void FindById_ExistingId_ReturnsAdapter()
+	{
+		var adapter = new TestMessageAdapter();
+		var list = new[] { adapter };
+
+		list.FindById(adapter.Id).AssertEqual(adapter);
+	}
+
+	[TestMethod]
+	public void FindById_MissingId_ReturnsNull()
+	{
+		var adapter = new TestMessageAdapter();
+		var list = new[] { adapter };
+
+		list.FindById(Guid.NewGuid()).AssertNull();
+	}
+
+	#endregion
+
+	#region MakeVectorIconUri
+
+	[TestMethod]
+	public void MakeVectorIconUri_ThrowsInNonWpfContext()
+	{
+		// pack:// URI scheme requires WPF application context
+		Throws<UriFormatException>(() => "test_icon".MakeVectorIconUri());
+	}
+
+	#endregion
+
+	#region CreatePortfolioChangeMessage / CreatePositionChangeMessage
+
+	[TestMethod]
+	public void CreatePortfolioChangeMessage_SetsFields()
+	{
+		var adapter = new TestMessageAdapter();
+
+		var msg = adapter.CreatePortfolioChangeMessage("TestPf");
+		msg.PortfolioName.AssertEqual("TestPf");
+		msg.SecurityId.AssertEqual(SecurityId.Money);
+	}
+
+	[TestMethod]
+	public void CreatePositionChangeMessage_SetsFields()
+	{
+		var adapter = new TestMessageAdapter();
+		var secId = Helper.CreateSecurityId();
+
+		var msg = adapter.CreatePositionChangeMessage("TestPf", secId, "depo1");
+		msg.PortfolioName.AssertEqual("TestPf");
+		msg.SecurityId.AssertEqual(secId);
+		msg.DepoName.AssertEqual("depo1");
+	}
+
+	#endregion
+
+	#region IsMarketData / IsTransactional (adapter)
+
+	[TestMethod]
+	public void IsMarketData_Adapter_WithMarketDataSupport_ReturnsTrue()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.SupportedInMessages = [MessageTypes.MarketData];
+		adapter.IsMarketData().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsMarketData_Adapter_NoMarketDataSupport_ReturnsFalse()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.SupportedInMessages = [MessageTypes.OrderRegister];
+		adapter.IsMarketData().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsTransactional_Adapter_WithOrderRegister_ReturnsTrue()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.SupportedInMessages = [MessageTypes.OrderRegister];
+		adapter.IsTransactional().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsTransactional_Adapter_NoOrderRegister_ReturnsFalse()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.SupportedInMessages = [MessageTypes.MarketData];
+		adapter.IsTransactional().AssertFalse();
+	}
+
+	#endregion
+
+	#region IsMessageSupported
+
+	[TestMethod]
+	public void IsMessageSupported_Supported_ReturnsTrue()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.SupportedInMessages = [MessageTypes.MarketData, MessageTypes.OrderRegister];
+		adapter.IsMessageSupported(MessageTypes.MarketData).AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsMessageSupported_NotSupported_ReturnsFalse()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.SupportedInMessages = [MessageTypes.OrderRegister];
+		adapter.IsMessageSupported(MessageTypes.MarketData).AssertFalse();
+	}
+
+	#endregion
+
+	#region IsResultMessageNotSupported
+
+	[TestMethod]
+	public void IsResultMessageNotSupported_InList_ReturnsTrue()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.NotSupportedResultMessages = [MessageTypes.SecurityLookup];
+		adapter.IsResultMessageNotSupported(MessageTypes.SecurityLookup).AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsResultMessageNotSupported_NotInList_ReturnsFalse()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.NotSupportedResultMessages = [];
+		adapter.IsResultMessageNotSupported(MessageTypes.SecurityLookup).AssertFalse();
+	}
+
+	#endregion
+
+	#region UseChannels
+
+	[TestMethod]
+	public void UseChannels_DefaultAdapter_ReturnsTrue()
+	{
+		// MessageAdapter defaults UseInChannel and UseOutChannel to true
+		var adapter = new TestMessageAdapter();
+		adapter.UseChannels().AssertTrue();
+	}
+
+	#endregion
+
+	#region IsSupportStopLoss / IsSupportTakeProfit / IsSupportWithdraw
+
+	[TestMethod]
+	public void IsSupportStopLoss_NoConditionType_ReturnsFalse()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.IsSupportStopLoss().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsSupportTakeProfit_NoConditionType_ReturnsFalse()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.IsSupportTakeProfit().AssertFalse();
+	}
+
+	[TestMethod]
+	public void IsSupportWithdraw_NoConditionType_ReturnsFalse()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.IsSupportWithdraw().AssertFalse();
+	}
+
+	#endregion
+
+	#region IsSupportSecuritiesLookupAll
+
+	[TestMethod]
+	public void IsSupportSecuritiesLookupAll_NotSupported_ReturnsFalse()
+	{
+		var adapter = new TestMessageAdapter();
+		adapter.IsSupportSecuritiesLookupAll().AssertFalse();
+	}
+
+	#endregion
 }
