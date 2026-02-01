@@ -24,5 +24,6 @@
     <ProjectReference Include="..\Algo.Strategies\Algo.Strategies.csproj" />
     <ProjectReference Include="..\Algo.Testing\Algo.Testing.csproj" />
     <ProjectReference Include="..\Diagram.Core\Diagram.Core.csproj" />
+    <ProjectReference Include="..\Alerts.Interfaces\Alerts.Interfaces.csproj" />
   </ItemGroup>
 </Project>
