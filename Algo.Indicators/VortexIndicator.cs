@@ -121,10 +121,6 @@ public class VortexPart : DecimalLengthIndicator
 	{
 		_trBuffer = new(Length) { Stats = CircularBufferStats.Sum };
 		_vmBuffer = new(Length) { Stats = CircularBufferStats.Sum };
-#if !NET7_0_OR_GREATER
-		_trBuffer.Operator = new DecimalOperator();
-		_vmBuffer.Operator = new DecimalOperator();
-#endif
 
 		IsPositive = isPositive;
 	}

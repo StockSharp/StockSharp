@@ -19,9 +19,6 @@ public class ZeroLagExponentialMovingAverage : DecimalLengthIndicator
 	/// </summary>
 	public ZeroLagExponentialMovingAverage()
 	{
-#if !NET7_0_OR_GREATER
-		Buffer.Operator = new DecimalOperator();
-#endif
 		Buffer.Stats = CircularBufferStats.Min;
 		Length = 14;
 	}

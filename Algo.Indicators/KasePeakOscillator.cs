@@ -27,11 +27,6 @@ public class KasePeakOscillator : BaseComplexIndicator<IKasePeakOscillatorValue>
 		AddInner(ShortTerm);
 		AddInner(LongTerm);
 
-#if !NET7_0_OR_GREATER
-		_peakBuffer.Operator = new DecimalOperator();
-		_valleyBuffer.Operator = new DecimalOperator();
-#endif
-
 		ShortPeriod = 9;
 		LongPeriod = 18;
 	}

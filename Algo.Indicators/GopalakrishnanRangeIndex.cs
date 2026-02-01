@@ -21,11 +21,6 @@ public class GopalakrishnanRangeIndex : DecimalLengthIndicator
 	/// </summary>
 	public GopalakrishnanRangeIndex()
 	{
-#if !NET7_0_OR_GREATER
-		_high.Operator = new DecimalOperator();
-		_low.Operator = new DecimalOperator();
-#endif
-
 		Length = 14;
 	}
 

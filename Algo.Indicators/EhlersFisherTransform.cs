@@ -37,11 +37,6 @@ public class EhlersFisherTransform : BaseComplexIndicator<IEhlersFisherTransform
 		_highBuffer = new(1) { Stats = CircularBufferStats.Max };
 		_lowBuffer = new(1) { Stats = CircularBufferStats.Min };
 
-#if !NET7_0_OR_GREATER
-		_highBuffer.Operator = new DecimalOperator();
-		_lowBuffer.Operator = new DecimalOperator();
-#endif
-
 		MainLine = new();
 		TriggerLine = new();
 

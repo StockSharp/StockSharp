@@ -19,9 +19,7 @@ public class Sum : DecimalLengthIndicator
 	public Sum()
 	{
 		Length = 15;
-#if !NET7_0_OR_GREATER
-		Buffer.Operator = new DecimalOperator();
-#endif
+
 		Buffer.Stats = CircularBufferStats.Sum;
 	}
 

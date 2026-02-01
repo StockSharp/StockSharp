@@ -20,9 +20,6 @@ public class Highest : DecimalLengthIndicator
 	{
 		Length = 5;
 
-#if !NET7_0_OR_GREATER
-		Buffer.Operator = new DecimalOperator();
-#endif
 		Buffer.Stats = CircularBufferStats.Max;
 	}
 

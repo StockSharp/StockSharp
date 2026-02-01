@@ -23,9 +23,6 @@ public class ExponentialMovingAverage : DecimalLengthIndicator
 	{
 		Length = 32;
 
-#if !NET7_0_OR_GREATER
-		Buffer.Operator = new DecimalOperator();
-#endif
 		Buffer.Stats = CircularBufferStats.Sum;
 	}
 

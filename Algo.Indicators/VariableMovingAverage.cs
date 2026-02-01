@@ -26,9 +26,6 @@ public class VariableMovingAverage : DecimalLengthIndicator
 		Length = 20;
 		VolatilityIndex = 0.2m;
 
-#if !NET7_0_OR_GREATER
-		Buffer.Operator = new DecimalOperator();
-#endif
 		Buffer.Stats = CircularBufferStats.Sum;
 	}
 

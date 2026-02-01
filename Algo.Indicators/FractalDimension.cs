@@ -20,9 +20,6 @@ public class FractalDimension : DecimalLengthIndicator
 	{
 		Length = 30;
 
-#if !NET7_0_OR_GREATER
-		Buffer.Operator = new DecimalOperator();
-#endif
 		Buffer.Stats = CircularBufferStats.Min | CircularBufferStats.Max;
 	}
 

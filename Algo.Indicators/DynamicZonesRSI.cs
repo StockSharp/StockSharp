@@ -19,9 +19,6 @@ public class DynamicZonesRSI : DecimalLengthIndicator
 	{
 		_rsi = new() { Length = 14 };
 		Length = _rsi.Length;
-#if !NET7_0_OR_GREATER
-		Buffer.Operator = new DecimalOperator();
-#endif
 		Buffer.Stats = CircularBufferStats.Min | CircularBufferStats.Max;
 	}
 

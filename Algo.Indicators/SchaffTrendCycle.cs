@@ -21,9 +21,6 @@ public class SchaffTrendCycle : ExponentialMovingAverage
 	/// </summary>
 	public SchaffTrendCycle()
 	{
-#if !NET7_0_OR_GREATER
-		_buffer.Operator = OperatorRegistry.GetOperator<decimal>();
-#endif
 		_buffer.Stats = CircularBufferStats.Min | CircularBufferStats.Max;
 
 		Macd = new()
