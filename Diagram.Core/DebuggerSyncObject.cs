@@ -10,7 +10,7 @@ public class DebuggerSyncObject : ViewModelBase
 	private readonly Func<DiagramSocket, bool> _isBreak;
 	private readonly Action<DebuggerSyncObject> _breakAction;
 	private readonly Action<DebuggerSyncObject> _errorAction;
-	private readonly SyncObject _inputSync = new();
+	private readonly ManualResetEventSlim _inputSync = new(false);
 	private readonly DiagramDebugger _debugger;
 	private readonly CompositionDiagramElement _rootElement;
 
@@ -78,6 +78,7 @@ public class DebuggerSyncObject : ViewModelBase
 	/// <inheritdoc />
 	protected override void DisposeManaged()
 	{
+		_inputSync.Dispose();
 		GuiWrapper.DoDispose();
 		base.DisposeManaged();
 	}
@@ -123,6 +124,7 @@ public class DebuggerSyncObject : ViewModelBase
 
 			_waitOnNext = false;
 			_inputSync.Wait();
+			_inputSync.Reset();
 		}
 		finally
 		{
@@ -165,6 +167,7 @@ public class DebuggerSyncObject : ViewModelBase
 
 		_waitOnNext = false;
 		_inputSync.Wait();
+		_inputSync.Reset();
 
 		CurrentError = null;
 		CurrentElement = null;
@@ -196,6 +199,6 @@ public class DebuggerSyncObject : ViewModelBase
 	public void Continue()
 	{
 		if (IsWaitingOnInput || IsWaitingOnOutput)
-			_inputSync.Pulse();
+			_inputSync.Set();
 	}
 }
