@@ -500,6 +500,10 @@ public static class IMessageAdapterAsyncExtensions
 				{
 					break;
 				}
+				catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+				{
+					break;
+				}
 
 				if (!hasNext)
 					break;

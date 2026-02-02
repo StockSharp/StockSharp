@@ -189,6 +189,10 @@ public static class IConnectorAsyncExtensions
 				{
 					break;
 				}
+				catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+				{
+					break;
+				}
 
 				if (!hasNext)
 					break;
