@@ -21,8 +21,10 @@ public class ConnectorBasketTests : BaseTestClass
 	private sealed class TestConnector : Connector
 	{
 		public TestConnector(BasketMessageAdapter adapter)
-			: base(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider(), initAdapter: false)
+			: base(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider(), initAdapter: false, initChannels: false)
 		{
+			InMessageChannel = new PassThroughMessageChannel();
+			OutMessageChannel = new PassThroughMessageChannel();
 			Adapter = adapter;
 		}
 	}
@@ -38,6 +40,7 @@ public class ConnectorBasketTests : BaseTestClass
 		public long LastSubscribedId { get; private set; }
 		public long LastOrderTransactionId { get; private set; }
 		public OrderCancelMessage LastCancelMessage { get; private set; }
+		public long OrderStatusSubscriptionId { get; private set; }
 
 		public MockAdapter(IdGenerator transactionIdGenerator) : base(transactionIdGenerator)
 		{
@@ -70,7 +73,7 @@ public class ConnectorBasketTests : BaseTestClass
 						ActiveSubscriptions[mdMsg.TransactionId] = mdMsg;
 						LastSubscribedId = mdMsg.TransactionId;
 						if (mdMsg.To == null)
-							SendSubscriptionResult(mdMsg);
+							await SendSubscriptionResultAsync(mdMsg, cancellationToken);
 					}
 					else
 					{
@@ -96,6 +99,7 @@ public class ConnectorBasketTests : BaseTestClass
 					var osm = (OrderStatusMessage)message;
 					if (osm.IsSubscribe)
 					{
+						OrderStatusSubscriptionId = osm.TransactionId;
 						await SendOutMessageAsync(osm.CreateResponse(), cancellationToken);
 						await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = osm.TransactionId }, cancellationToken);
 					}
@@ -142,6 +146,9 @@ public class ConnectorBasketTests : BaseTestClass
 
 			if (ActiveOrders.TryGetValue(origTransId, out var regMsg))
 				exec.SecurityId = regMsg.SecurityId;
+
+			if (OrderStatusSubscriptionId != 0)
+				exec.SetSubscriptionIds([OrderStatusSubscriptionId]);
 
 			await SendOutMessageAsync(exec, cancellationToken);
 		}
@@ -271,15 +278,10 @@ public class ConnectorBasketTests : BaseTestClass
 		// --- Register order ---
 		connector.RegisterOrder(order);
 
-		// Wait for Pending state
-		await Task.Run(async () =>
-		{
-			while (order.State == OrderStates.None)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
+		// With pass-through channels, processing is synchronous
 		AreEqual(OrderStates.Pending, order.State);
 		AreNotEqual(0L, order.TransactionId);
+		adapter.LastOrderTransactionId.AssertNotEqual(0L, "Adapter should have received the order");
 
 		// --- Validate state after registration ---
 		state.ConnectionState.ConnectedCount.AssertGreater(0, "Still connected");
@@ -292,16 +294,8 @@ public class ConnectorBasketTests : BaseTestClass
 		// --- Simulate acceptance ---
 		await adapter.SimulateOrderExecution(order.TransactionId, CancellationToken, OrderStates.Active, orderId: 123);
 
-		await Task.Run(async () =>
-		{
-			while (order.State != OrderStates.Active)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
 		AreEqual(OrderStates.Active, order.State);
 		AreEqual(123L, order.Id);
-
-		await Task.Delay(100, CancellationToken);
 
 		orderReceived.Count.AssertGreater(0);
 
@@ -515,13 +509,14 @@ public class ConnectorBasketTests : BaseTestClass
 				events.Add(evt);
 		}, CancellationToken);
 
+		// Wait for adapter to actually receive the order
 		await Task.Run(async () =>
 		{
-			while (order.State == OrderStates.None)
+			while (adapter.LastOrderTransactionId == 0)
 				await Task.Delay(10, CancellationToken);
 		}, CancellationToken);
 
-		var transId = order.TransactionId;
+		var transId = adapter.LastOrderTransactionId;
 
 		// --- Validate state after order sent ---
 		state.ConnectionState.ConnectedCount.AssertGreater(0);
@@ -651,11 +646,18 @@ public class ConnectorBasketTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(cts.Token))
+			try
 			{
-				events.Add(evt);
-				if (evt.order.State == OrderStates.Active)
-					cts.Cancel();
+				await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(cts.Token))
+				{
+					events.Add(evt);
+					if (evt.order.State == OrderStates.Active)
+						cts.Cancel();
+				}
+			}
+			catch (OperationCanceledException)
+			{
+				// expected when cts is cancelled
 			}
 		}, CancellationToken);
 
