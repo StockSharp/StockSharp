@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="$(TargetFramework.StartsWith('netstandard')) OR $(TargetFramework.StartsWith('net6'))">
-    <LangVersion>12.0</LangVersion>
+    <LangVersion>13.0</LangVersion>
     <MsExtensionsVer>8.*</MsExtensionsVer>
     <MsCodeAnalysisVer>4.12.0</MsCodeAnalysisVer>
     <MsCodeAnalysisAnalyzersVer>3.3.4</MsCodeAnalysisAnalyzersVer>
@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net10'))">
-    <LangVersion>14.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <MsExtensionsVer>10.*</MsExtensionsVer>
     <MsCodeAnalysisVer>4.*</MsCodeAnalysisVer>
     <MsCodeAnalysisAnalyzersVer>3.*</MsCodeAnalysisAnalyzersVer>
