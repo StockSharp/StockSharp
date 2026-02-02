@@ -7,7 +7,6 @@
     <MsTestVer>3.11.1</MsTestVer>
     <MsTestSdkVer>17.13.0</MsTestSdkVer>
     <GrpcVer>2.71.0</GrpcVer>
-    <Protobuf_ToolsCpu>x64</Protobuf_ToolsCpu>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(TargetFramework.StartsWith('net10'))">
