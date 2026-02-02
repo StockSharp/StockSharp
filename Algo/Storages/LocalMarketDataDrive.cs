@@ -793,12 +793,16 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 	{
 		async IAsyncEnumerable<SecurityId> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
+			var returned = new HashSet<SecurityId>();
+
 			if (TryGetIndex(out var index))
 			{
 				foreach (var secId in index.AvailableSecurities)
 				{
 					cancellationToken.ThrowIfCancellationRequested();
-					yield return secId;
+
+					if (returned.Add(secId))
+						yield return secId;
 				}
 			}
 
@@ -819,7 +823,9 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			foreach (var secId in secIds)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
-				yield return secId;
+
+				if (returned.Add(secId))
+					yield return secId;
 			}
 		}
 

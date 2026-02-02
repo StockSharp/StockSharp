@@ -108,6 +108,38 @@ public class StorageUniquenessTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task GetAvailableSecuritiesAsync_WithIndex_NewDataAfterIndex()
+	{
+		// Setup: build index, then add NEW security to filesystem without rebuilding index
+		var fs = Helper.MemorySystem;
+		var path = fs.GetSubTemp();
+		var drive = new LocalMarketDataDrive(fs, path);
+
+		var sec1 = new SecurityId { SecurityCode = "OLD1", BoardCode = BoardCodes.Test };
+		var dates = new[] { DateTime.UtcNow.Date };
+
+		await SetupTestDataAsync(drive, sec1, DataType.Ticks, StorageFormats.Binary, dates);
+		await drive.BuildIndexAsync(null, (_, _) => { }, CancellationToken);
+
+		// Add new security AFTER index was built
+		var sec2 = new SecurityId { SecurityCode = "NEW1", BoardCode = BoardCodes.Test };
+		var drive2 = new LocalMarketDataDrive(fs, path);
+		await SetupTestDataAsync(drive2, sec2, DataType.Ticks, StorageFormats.Binary, dates);
+
+		// Fresh drive — loads index from file, but sec2 only exists on filesystem
+		var drive3 = new LocalMarketDataDrive(fs, path);
+		var securities = await drive3.GetAvailableSecuritiesAsync().ToArrayAsync(CancellationToken);
+
+		// Both old (from index) and new (from filesystem) must be present
+		securities.Any(s => s.SecurityCode == "OLD1").AssertTrue("OLD1 (from index) should be present");
+		securities.Any(s => s.SecurityCode == "NEW1").AssertTrue("NEW1 (from filesystem) should be present");
+
+		// No duplicates
+		var distinct = securities.Distinct().ToArray();
+		distinct.Length.AssertEqual(securities.Length, "No duplicates expected");
+	}
+
+	[TestMethod]
 	public async Task GetAvailableSecuritiesAsync_WithoutIndex_NoDuplicates()
 	{
 		// Without index — only filesystem. Should still be unique.
