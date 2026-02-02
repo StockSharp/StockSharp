@@ -81,7 +81,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	public long ProcessedMessageCount { get; private set; }
 
 	/// <inheritdoc />
-	public override DateTime CurrentTimeUtc => _currentTime;
+	public override DateTime CurrentTime => _currentTime;
 
 	/// <inheritdoc />
 	public event Func<Message, CancellationToken, ValueTask> NewOutMessageAsync;
@@ -334,6 +334,50 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			return;
 		}
 
+		// Increase depth volume if needed (generate synthetic quotes when order volume > available)
+		if (Settings.IncreaseDepthVolume && !emulator.IsCandleMatchingMode)
+		{
+			var oppositeSide = regMsg.Side.Invert();
+			var oppositeBest = regMsg.Side == Sides.Buy
+				? emulator.OrderBook.BestAsk
+				: emulator.OrderBook.BestBid;
+
+			if (oppositeBest.HasValue)
+			{
+				var bestOppPrice = oppositeBest.Value.price;
+				var canMatch = regMsg.Side == Sides.Buy
+					? regMsg.Price >= bestOppPrice
+					: regMsg.Price <= bestOppPrice;
+
+				var quotesVolume = regMsg.Side == Sides.Buy
+					? emulator.OrderBook.TotalAskVolume
+					: emulator.OrderBook.TotalBidVolume;
+
+				if (canMatch && quotesVolume <= regMsg.Volume)
+				{
+					var worstLevel = regMsg.Side == Sides.Buy
+						? emulator.OrderBook.GetWorstAsk()
+						: emulator.OrderBook.GetWorstBid();
+
+					if (worstLevel.HasValue)
+					{
+						var leftVolume = (regMsg.Volume - quotesVolume) + 1;
+						var lastVolume = worstLevel.Value.volume;
+						var lastPrice = worstLevel.Value.price;
+						var priceStep = emulator.PriceStep;
+
+						while (leftVolume > 0 && lastPrice != 0)
+						{
+							lastVolume *= 2;
+							lastPrice += priceStep * (oppositeSide == Sides.Buy ? -1 : 1);
+							leftVolume -= lastVolume;
+							emulator.OrderBook.UpdateLevel(oppositeSide, lastPrice, lastVolume);
+						}
+					}
+				}
+			}
+		}
+
 		portfolio.ProcessOrderRegistration(regMsg.SecurityId, regMsg.Side, regMsg.Volume, marginPrice);
 
 		// [1] Portfolio change message after order registration
@@ -379,6 +423,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		var isFOK = regMsg.TimeInForce == TimeInForce.MatchOrCancel;
 		var hasTrades = matchResult.Trades.Count > 0;
 
+		// Best opposite-side price after matching (includes synthetic depth)
+		var marketPrice = regMsg.Side == Sides.Buy
+			? emulator.OrderBook.BestAsk?.price
+			: emulator.OrderBook.BestBid?.price;
+
 		// For IOC/FOK with trades, send Done message BEFORE trades
 		if ((isIOC || isFOK) && hasTrades)
 		{
@@ -397,11 +446,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				ServerTime = serverTime,
 			});
 		}
-
-		// Best opposite-side price at the moment of order registration
-		var marketPrice = regMsg.Side == Sides.Buy
-			? emulator.OrderBook.BestAsk?.price
-			: emulator.OrderBook.BestBid?.price;
 
 		// Generate trades - no order state message in trade loop for IOC/FOK
 		foreach (var trade in matchResult.Trades)
@@ -1332,17 +1376,22 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 
 		var bidPrice = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestBidPrice);
 		var askPrice = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestAskPrice);
-		var bidVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestBidVolume) ?? 10;
-		var askVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestAskVolume) ?? 10;
+		var bidVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestBidVolume);
+		if (bidVol == 0) bidVol = null;
+		bidVol ??= _parent.RandomProvider.NextVolume();
+
+		var askVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestAskVolume);
+		if (askVol == 0) askVol = null;
+		askVol ??= _parent.RandomProvider.NextVolume();
 
 		// Update steps from Level1 data
-		UpdateSteps(bidPrice ?? askPrice ?? 0, bidVol);
+		UpdateSteps(bidPrice ?? askPrice ?? 0, bidVol.Value);
 
 		if (bidPrice.HasValue)
-			OrderBook.UpdateLevel(Sides.Buy, bidPrice.Value, bidVol);
+			OrderBook.UpdateLevel(Sides.Buy, bidPrice.Value, bidVol.Value);
 
 		if (askPrice.HasValue)
-			OrderBook.UpdateLevel(Sides.Sell, askPrice.Value, askVol);
+			OrderBook.UpdateLevel(Sides.Sell, askPrice.Value, askVol.Value);
 
 		if (_depthSubscription.HasValue)
 		{
@@ -1356,7 +1405,9 @@ internal class SecurityEmulator(MarketEmulator parent, SecurityId securityId)
 		IsCandleMatchingMode = false;
 
 		var tradePrice = tick.TradePrice ?? 0;
-		var tradeVolume = tick.TradeVolume ?? 10m;
+		var tradeVolume = tick.TradeVolume ?? 0m;
+		if (tradeVolume == 0)
+			tradeVolume = _parent.RandomProvider.NextVolume();
 
 		// Update steps from tick data
 		UpdateSteps(tradePrice, tradeVolume);

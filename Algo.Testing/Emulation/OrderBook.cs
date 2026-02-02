@@ -86,6 +86,24 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 	/// <inheritdoc />
 	public int AskLevels => _asks.Count;
 
+	/// <summary>
+	/// Get worst (lowest) bid level.
+	/// </summary>
+	public (decimal price, decimal volume)? GetWorstBid()
+	{
+		var last = _bids.LastOrDefault();
+		return last.Value is null ? null : (last.Key, last.Value.TotalVolume);
+	}
+
+	/// <summary>
+	/// Get worst (highest) ask level.
+	/// </summary>
+	public (decimal price, decimal volume)? GetWorstAsk()
+	{
+		var last = _asks.LastOrDefault();
+		return last.Value is null ? null : (last.Key, last.Value.TotalVolume);
+	}
+
 	private SortedDictionary<decimal, OrderBookLevelImpl> GetQuotes(Sides side)
 		=> side == Sides.Buy ? _bids : _asks;
 
