@@ -102,7 +102,8 @@ public class QuotingEngine
 		// Calculate best price using behavior
 		var bestPrice = _behavior.CalculateBestPrice(
 			_security, _mdProvider, _quotingSide,
-			input.BestBidPrice, input.BestAskPrice, input.LastTradePrice,
+			input.BestBidPrice, input.BestAskPrice,
+			input.LastTradePrice, input.LastTradeVolume,
 			input.Bids, input.Asks);
 
 		if (bestPrice == null)

@@ -23,5 +23,6 @@ global using StockSharp.Messages;
 global using StockSharp.BusinessEntities;
 global using StockSharp.Algo.Compilation;
 global using StockSharp.Algo.Storages;
+global using StockSharp.Algo.Strategies.Quoting;
 global using DataType = StockSharp.Messages.DataType;
 global using Extensions = StockSharp.Messages.Extensions;

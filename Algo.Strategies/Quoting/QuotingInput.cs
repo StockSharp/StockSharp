@@ -62,6 +62,11 @@ public class QuotingInput
 	public decimal? LastTradePrice { get; set; }
 
 	/// <summary>
+	/// Last trade volume.
+	/// </summary>
+	public decimal? LastTradeVolume { get; set; }
+
+	/// <summary>
 	/// Bid quotes from order book.
 	/// </summary>
 	public QuoteChange[] Bids { get; set; } = [];

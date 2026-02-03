@@ -1,106 +1,7 @@
 ﻿namespace StockSharp.Diagram.Elements;
 
-/// <summary>
-/// Additional order condition based on current position.
-/// </summary>
-public enum PositionConditions
-{
-	/// <summary>
-	/// No additional condition.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.NoneKey,
-		Description = LocalizedStrings.PosConditionNoneKey)]
-	NoCondition,
-
-	/// <summary>
-	/// Open position only. Only send order if the current position is zero.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.PosConditionOpenKey,
-		Description = LocalizedStrings.PosConditionOpenDetailsKey)]
-	OpenPosition,
-
-	/// <summary>
-	/// Increase position only. Only send order if it is of the same direction as the current position or if the current position is zero.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.PosConditionIncreaseOnlyKey,
-		Description = LocalizedStrings.PosConditionIncreaseOnlyDetailsKey)]
-	IncreaseOnly,
-
-	/// <summary>
-	/// Reduce position only. Only send order if it is of the opposite direction of the current non-zero position.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.PosConditionReduceOnlyKey,
-		Description = LocalizedStrings.PosConditionReduceOnlyDetailsKey)]
-	ReduceOnly,
-
-	/// <summary>
-	/// Close position. Order volume is calculated automatically based on current position.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.PosConditionCloseKey,
-		Description = LocalizedStrings.PosConditionCloseDetailsKey)]
-	ClosePosition,
-
-	/// <summary>
-	/// Invert position to the opposite of the current one. Order volume is calculated automatically based on current position.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.PosConditionInvertKey,
-		Description = LocalizedStrings.PosConditionInvertDetailsKey)]
-	InvertPosition,
-}
-
-/// <summary>
-/// Position modification algorithms.
-/// </summary>
-public enum PositionModifyAlgorithms
-{
-	/// <summary>
-	/// Change position using market order.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.MarketOrdersKey,
-		Description = LocalizedStrings.PosModifyMarketOrdersKey)]
-	MarketOrder,
-
-	/// <summary>
-	/// Change position using the VWAP algorithm.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.VWAPKey,
-		Description = LocalizedStrings.PosModifyVWAPKey)]
-	VWAP,
-
-	/// <summary>
-	/// Change position using the TWAP algorithm.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.TWAPKey,
-		Description = LocalizedStrings.PosModifyTWAPKey)]
-	TWAP,
-
-	/// <summary>
-	/// Change position using the Iceberg algorithm.
-	/// </summary>
-	[Display(
-		ResourceType = typeof(LocalizedStrings),
-		Name = LocalizedStrings.IcebergKey,
-		Description = LocalizedStrings.PosModifyIcebergKey)]
-	Iceberg,
-}
+using StockSharp.Algo.PositionManagement;
+using StockSharp.Algo.Strategies.Quoting;
 
 /// <summary>
 /// Element that changes position (open, close, reduce, reverse).
@@ -114,75 +15,121 @@ public enum PositionModifyAlgorithms
 [Doc("topics/designer/strategies/using_visual_designer/elements/positions/modify.html")]
 public class PositionModifyElement : OrderRegisterBaseDiagramElement
 {
-	private interface IPositionAlgo
+	/// <summary>
+	/// Wrapper that adapts IPositionModifyAlgo to the diagram element's order lifecycle.
+	/// </summary>
+	private sealed class AlgoWrapper(PositionModifyElement parent, Security security, Portfolio portfolio, IPositionModifyAlgo algo)
 	{
-		void UpdateLast(DateTime time, decimal? price, decimal? volume);
-		void Cancel();
-	}
+		private readonly PositionModifyElement _parent = parent ?? throw new ArgumentNullException(nameof(parent));
+		private readonly Security _security = security ?? throw new ArgumentNullException(nameof(security));
+		private readonly Portfolio _portfolio = portfolio ?? throw new ArgumentNullException(nameof(portfolio));
+		private readonly IPositionModifyAlgo _algo = algo ?? throw new ArgumentNullException(nameof(algo));
 
-	private abstract class BasePositionAlgo(PositionModifyElement parent, Security security, Portfolio portfolio, Sides side, decimal volume) : IPositionAlgo
-	{
-		protected PositionModifyElement Parent { get; } = parent ?? throw new ArgumentNullException(nameof(parent));
-		protected Security Security { get; } = security ?? throw new ArgumentNullException(nameof(security));
-		protected Portfolio Portfolio { get; } = portfolio ?? throw new ArgumentNullException(nameof(portfolio));
-		protected Sides Side { get; } = side;
-		protected decimal Volume { get; } = volume;
+		private Order _currOrder;
 
-		protected DiagramStrategy Strategy => Parent.Strategy;
-		protected DiagramSocket OrderSocket => Parent._orderSocket;
-		protected DiagramSocket TradeSocket => Parent._tradeSocket;
-		protected bool IsTradeSocket => Parent._isTradeSocket;
+		public IPositionModifyAlgo Algo => _algo;
 
-		protected void ResetAlgo(DateTime time, decimal volume)
+		public void UpdateMarketData(DateTime time, decimal? price, decimal? volume)
 		{
-			Parent._currAlgo = null;
-			RaiseProcessOutput(Parent._remainVolumeSocket, time, volume);
+			_algo.UpdateMarketData(time, price, volume);
+			ProcessNextAction(time);
 		}
 
-		protected void RaiseProcessOutput(DiagramSocket socket, DateTime time, object value)
-			=> Parent.RaiseProcessOutput(socket, time, value);
+		public void UpdateOrderBook(DateTime time, IOrderBookMessage depth)
+		{
+			_algo.UpdateOrderBook(depth);
+			ProcessNextAction(time);
+		}
 
-		public abstract void UpdateLast(DateTime time, decimal? price, decimal? volume);
-		public abstract void Cancel();
-	}
+		public void Cancel()
+		{
+			_algo.Cancel();
 
-	private class MarketOrderAlgo(PositionModifyElement parent, Security security, Portfolio portfolio, Sides side, decimal volume)
-		: BasePositionAlgo(parent, security, portfolio, side, volume)
-	{
-		public override void UpdateLast(DateTime time, decimal? price, decimal? volume)
+			if (_currOrder is not null && !_currOrder.State.IsFinal())
+				_parent.Strategy.CancelOrder(_currOrder);
+		}
+
+		public void ProcessNextAction(DateTime time)
+		{
+			if (_algo.IsFinished)
+			{
+				ResetAlgo(time, _algo.RemainingVolume);
+				return;
+			}
+
+			if (_currOrder is not null)
+				return;
+
+			var action = _algo.GetNextAction();
+
+			switch (action.ActionType)
+			{
+				case PositionModifyAction.ActionTypes.None:
+					break;
+
+				case PositionModifyAction.ActionTypes.Register:
+					RegisterOrder(action);
+					break;
+
+				case PositionModifyAction.ActionTypes.Cancel:
+					if (_currOrder is not null && !_currOrder.State.IsFinal())
+						_parent.Strategy.CancelOrder(_currOrder);
+					break;
+
+				case PositionModifyAction.ActionTypes.Finished:
+					ResetAlgo(time, _algo.RemainingVolume);
+					break;
+			}
+		}
+
+		private void RegisterOrder(PositionModifyAction action)
 		{
 			var order = new Order
 			{
-				Portfolio = Portfolio,
-				Security = Security,
-				Side = Side,
-				Type = OrderTypes.Market,
-				Volume = Volume,
-				ClientCode = Parent.ClientCode,
-				BrokerCode = Parent.BrokerCode,
-				IsManual = Parent.IsManual,
-				MarginMode = Parent.MarginMode,
-				IsMarketMaker = Parent.IsMarketMaker,
-				TimeInForce = Parent.TimeInForce,
-				Comment = Parent.Comment,
+				Portfolio = _portfolio,
+				Security = _security,
+				Side = action.Side!.Value,
+				Type = action.OrderType ?? OrderTypes.Market,
+				Volume = action.Volume!.Value,
+				ClientCode = _parent.ClientCode,
+				BrokerCode = _parent.BrokerCode,
+				IsManual = _parent.IsManual,
+				MarginMode = _parent.MarginMode,
+				IsMarketMaker = _parent.IsMarketMaker,
+				TimeInForce = _parent.TimeInForce,
+				Comment = _parent.Comment,
 			};
 
-			var strategy = Strategy;
+			if (action.Price is decimal price)
+				order.Price = price;
+
+			var strategy = _parent.Strategy;
 
 			order
 				.WhenMatched(strategy)
 				.Do(ord =>
 				{
+					_currOrder = null;
+					var matchedVol = ord.Volume;
+					_algo.OnOrderMatched(matchedVol);
+
 					var time = ord.MatchedTime ?? ord.ServerTime;
 
-					if (OrderSocket is not null)
+					if (_parent._orderSocket is not null)
 					{
-						RaiseProcessOutput(OrderSocket, time, ord);
+						_parent.RaiseProcessOutput(_parent._orderSocket, time, ord);
 						strategy.Flush(ord);
 					}
 
-					ResetAlgo(time, 0);
-					strategy.Flush(ord);
+					if (_algo.IsFinished)
+					{
+						ResetAlgo(time, 0);
+						strategy.Flush(ord);
+					}
+					else
+					{
+						ProcessNextAction(time);
+					}
 				})
 				.Apply(strategy);
 
@@ -190,7 +137,10 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 				.WhenRegisterFailed(strategy)
 				.Do(fail =>
 				{
-					ResetAlgo(fail.ServerTime, fail.Order.Balance);
+					_currOrder = null;
+					_algo.OnOrderFailed();
+
+					ResetAlgo(fail.ServerTime, _algo.RemainingVolume);
 					strategy.Flush(fail);
 				})
 				.Apply(strategy);
@@ -199,231 +149,45 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 				.WhenCanceled(strategy)
 				.Do(ord =>
 				{
-					ResetAlgo(ord.CancelledTime ?? ord.ServerTime, ord.Balance);
-					strategy.Flush(ord);
-				})
-				.Apply(strategy);
+					_currOrder = null;
+					var matchedVol = ord.GetMatchedVolume() ?? 0;
+					_algo.OnOrderCanceled(matchedVol);
 
-			if (IsTradeSocket)
-			{
-				order
-					.WhenNewTrade(strategy)
-					.Do(trade =>
+					var time = ord.CancelledTime ?? ord.ServerTime;
+
+					if (_algo.IsFinished)
 					{
-						RaiseProcessOutput(TradeSocket, trade.Trade.ServerTime, trade);
-						strategy.Flush(trade.Trade);
-					})
-					.Apply(strategy);
-			}
-
-			strategy.RegisterOrder(order);
-		}
-
-		public override void Cancel() => throw new NotSupportedException(LocalizedStrings.MarketOrderCannotCancel);
-	}
-
-	private abstract class BaseSlicePositionAlgo(PositionModifyElement parent, Security security, Portfolio portfolio, Sides side, decimal volume, Unit volumePart)
-		: BasePositionAlgo(parent, security, portfolio, side, volume)
-	{
-		protected Unit VolumePart { get; } = volumePart ?? throw new ArgumentNullException(nameof(volumePart));
-		protected Order CurrOrder { get; private set; }
-		protected decimal RemainingVolume { get; private set; } = volume;
-
-		protected abstract decimal Price { get; }
-
-		protected void RegisterOrder()
-		{
-			var orderVolume = VolumePart.Type switch
-			{
-				UnitTypes.Absolute/* or UnitTypes.Point or UnitTypes.Step*/
-					=> RemainingVolume.Min((decimal)VolumePart),
-
-				UnitTypes.Percent => RemainingVolume.Min(RemainingVolume - (decimal)(RemainingVolume - VolumePart)),
-#pragma warning disable CS0618
-				UnitTypes.Limit => VolumePart.Value,
-#pragma warning restore CS0618
-
-				_ => throw new InvalidOperationException(VolumePart.Type.To<string>())
-			};
-
-			var order = new Order
-			{
-				Portfolio = Portfolio,
-				Security = Security,
-				Side = Side,
-				Type = OrderTypes.Limit,
-				Price = Price,
-				Volume = orderVolume,
-				ClientCode = Parent.ClientCode,
-				BrokerCode = Parent.BrokerCode,
-				IsManual = Parent.IsManual,
-				MarginMode = Parent.MarginMode,
-				IsMarketMaker = Parent.IsMarketMaker,
-				TimeInForce = Parent.TimeInForce,
-				Comment = Parent.Comment,
-			};
-
-			var strategy = Strategy;
-
-			order
-				.WhenMatched(strategy)
-				.Do(ord =>
-				{
-					CurrOrder = null;
-
-					var time = ord.MatchedTime ?? ord.ServerTime;
-
-					if (OrderSocket is not null)
-					{
-						RaiseProcessOutput(OrderSocket, time, ord);
+						ResetAlgo(time, _algo.RemainingVolume);
 						strategy.Flush(ord);
 					}
-
-					RemainingVolume -= order.Volume;
-
-					if (RemainingVolume > 0)
+					else
 					{
-						RegisterOrder();
-						return;
+						ProcessNextAction(time);
 					}
-
-					ResetAlgo(time, 0);
-					strategy.Flush(ord);
 				})
 				.Apply(strategy);
 
-			order
-				.WhenRegisterFailed(strategy)
-				.Do(fail =>
-				{
-					CurrOrder = null;
-
-					if (fail.Order.GetMatchedVolume() is decimal matchedVolume)
-						ResetAlgo(fail.ServerTime, RemainingVolume - matchedVolume);
-
-					strategy.Flush(fail);
-				})
-				.Apply(strategy);
-
-			order
-				.WhenCanceled(strategy)
-				.Do(ord =>
-				{
-					CurrOrder = null;
-
-					if (ord.GetMatchedVolume() is decimal matchedVolume)
-						ResetAlgo(ord.CancelledTime ?? ord.ServerTime, RemainingVolume - matchedVolume);
-
-					strategy.Flush(ord);
-				})
-				.Apply(strategy);
-
-			if (IsTradeSocket)
+			if (_parent._isTradeSocket)
 			{
 				order
 					.WhenNewTrade(strategy)
 					.Do(trade =>
 					{
-						RaiseProcessOutput(TradeSocket, trade.Trade.ServerTime, trade);
+						_parent.RaiseProcessOutput(_parent._tradeSocket, trade.Trade.ServerTime, trade);
 						strategy.Flush(trade.Trade);
 					})
 					.Apply(strategy);
 			}
 
-			CurrOrder = order;
+			_currOrder = order;
 			strategy.RegisterOrder(order);
 		}
 
-		public override void Cancel()
+		private void ResetAlgo(DateTime time, decimal remainingVolume)
 		{
-			if (CurrOrder is not null)
-				Strategy.CancelOrder(CurrOrder);
+			_parent._currAlgo = null;
+			_parent.RaiseProcessOutput(_parent._remainVolumeSocket, time, remainingVolume);
 		}
-	}
-
-	private class VWAPOrderAlgo(PositionModifyElement parent, Security security, Portfolio portfolio, Sides side, decimal volume, Unit volumePart)
-		: BaseSlicePositionAlgo(parent, security, portfolio, side, volume, volumePart)
-	{
-		private decimal _cumulativePriceVolume;
-		private decimal _cumulativeVolume;
-
-		private decimal _currentVwap;
-
-		public override void UpdateLast(DateTime time, decimal? price, decimal? volume)
-		{
-			if (price is not decimal decPrice || volume is not decimal decVol)
-				return;
-
-			_cumulativePriceVolume += decPrice * decVol;
-			_cumulativeVolume += decVol;
-
-			_currentVwap = _cumulativeVolume != 0 ? _cumulativePriceVolume / _cumulativeVolume : decPrice;
-
-			if (CurrOrder is null)
-				RegisterOrder();
-		}
-
-		protected override decimal Price => _currentVwap;
-	}
-
-	private class TWAPOrderAlgo : BaseSlicePositionAlgo
-	{
-		private readonly CircularBuffer<decimal> _prices = new(10);
-		private readonly TimeSpan _timeInterval;
-		private DateTime? _lastOrderTime;
-
-		public TWAPOrderAlgo(PositionModifyElement parent, Security security, Portfolio portfolio, Sides side, decimal volume, Unit volumePart, TimeSpan timeInterval)
-			: base(parent, security, portfolio, side, volume, volumePart)
-		{
-			if (timeInterval <= TimeSpan.Zero)
-				throw new ArgumentOutOfRangeException(nameof(timeInterval), timeInterval, LocalizedStrings.IntervalMustBePositive);
-
-			_timeInterval = timeInterval;
-		}
-
-		public override void UpdateLast(DateTime time, decimal? price, decimal? volume)
-		{
-			if (price is not decimal decPrice)
-				return;
-
-			_prices.PushBack(decPrice);
-
-			if (_lastOrderTime is null || (time - _lastOrderTime) >= _timeInterval)
-			{
-				_lastOrderTime = time;
-				RegisterOrder();
-			}
-		}
-
-		protected override decimal Price
-		{
-			get
-			{
-				if (_prices.Count == 0)
-					throw new InvalidOperationException("_prices.Count == 0");
-
-				return _prices.Sum() / _prices.Count;
-			}
-		}
-	}
-
-	private class IcebergOrderAlgo(PositionModifyElement parent, Security security, Portfolio portfolio, Sides side, decimal volume, Unit volumePart)
-		: BaseSlicePositionAlgo(parent, security, portfolio, side, volume, volumePart)
-	{
-		private decimal _lastPrice;
-
-		public override void UpdateLast(DateTime time, decimal? price, decimal? volume)
-		{
-			if (price is not decimal decPrice)
-				return;
-
-			_lastPrice = decPrice;
-
-			if (CurrOrder is null)
-				RegisterOrder();
-		}
-
-		protected override decimal Price => _lastPrice;
 	}
 
 	private readonly DiagramSocket _securitySocket;
@@ -433,6 +197,7 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 
 	private DiagramSocket _lastPriceSocket;
 	private DiagramSocket _lastVolumeSocket;
+	private DiagramSocket _orderBookSocket;
 
 	private readonly DiagramSocket _remainVolumeSocket;
 	private readonly DiagramSocket _orderSocket;
@@ -443,7 +208,7 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 	private decimal? _lastPrice;
 	private decimal? _lastVolume;
 
-	private IPositionAlgo _currAlgo;
+	private AlgoWrapper _currAlgo;
 
 	/// <inheritdoc />
 	public override Guid TypeId { get; } = "953961CD-A9BA-4AFE-AC38-E8B61F84B3BE".To<Guid>();
@@ -573,8 +338,9 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 	private bool NeedDirection => PosCondition is PositionConditions.NoCondition or PositionConditions.OpenPosition;
 	private bool NeedVolume => PosCondition is not (PositionConditions.ClosePosition or PositionConditions.InvertPosition);
 	
-	private bool NeedLastPrice => Algorithm != PositionModifyAlgorithms.MarketOrder;
+	private bool NeedLastPrice => Algorithm is not (PositionModifyAlgorithms.MarketOrder or PositionModifyAlgorithms.Quoting);
 	private bool NeedLastVolume => Algorithm is PositionModifyAlgorithms.VWAP;
+	private bool NeedOrderBook => Algorithm is PositionModifyAlgorithms.Quoting;
 
 	/// <inheritdoc />
 	protected override void OnPrepare()
@@ -587,6 +353,9 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 
 		if (NeedLastVolume && _lastVolumeSocket?.IsConnected != true)
 			throw new InvalidOperationException(LocalizedStrings.OrderVolumeNotSpecified);
+
+		if (NeedOrderBook && _orderBookSocket?.IsConnected != true)
+			throw new InvalidOperationException(LocalizedStrings.MarketDepthNotSpecified);
 
 		if (NeedVolume && _volumeSocket?.IsConnected != true)
 			throw new InvalidOperationException(LocalizedStrings.OrderVolumeNotSpecified);
@@ -630,8 +399,25 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 			}
 		}
 
+		void updateOrderBookSocket()
+		{
+			var needOrderBook = force || NeedOrderBook;
+
+			if (needOrderBook == (_orderBookSocket != null))
+				return;
+
+			if (needOrderBook)
+				_orderBookSocket = AddInput(GenerateSocketId("order_book"), LocalizedStrings.MarketDepth, DiagramSocketType.MarketDepth, OnProcessOrderBook, index: 12);
+			else
+			{
+				RemoveSocket(_orderBookSocket);
+				_orderBookSocket = null;
+			}
+		}
+
 		updateLastPriceSocket();
 		updateLastVolumeSocket();
+		updateOrderBookSocket();
 	}
 
 	private void UpdateVolumeSocket(bool force = false)
@@ -770,23 +556,29 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 
 		LogVerbose("Pos modify dir={0}, vol={1}, cond={2}", operationDir, operationVol, PosCondition);
 
-		_currAlgo = Algorithm switch
+		IPositionModifyAlgo algo = Algorithm switch
 		{
-			PositionModifyAlgorithms.MarketOrder => new MarketOrderAlgo(this, security, portfolio, operationDir, operationVol),
-			PositionModifyAlgorithms.VWAP => new VWAPOrderAlgo(this, security, portfolio, operationDir, operationVol, VolumePart),
-			PositionModifyAlgorithms.TWAP => new TWAPOrderAlgo(this, security, portfolio, operationDir, operationVol, VolumePart, TimeInterval),
-			PositionModifyAlgorithms.Iceberg => new IcebergOrderAlgo(this, security, portfolio, operationDir, operationVol, VolumePart),
+			PositionModifyAlgorithms.MarketOrder => new MarketOrderAlgo(operationDir, operationVol),
+			PositionModifyAlgorithms.VWAP => new QuotingBehaviorAlgo(
+				new VWAPQuotingBehavior(new Unit(0)), operationDir, operationVol, VolumePart),
+			PositionModifyAlgorithms.TWAP => new QuotingBehaviorAlgo(
+				new TWAPQuotingBehavior(TimeInterval), operationDir, operationVol, VolumePart),
+			PositionModifyAlgorithms.Iceberg => new QuotingBehaviorAlgo(
+				new LastTradeQuotingBehavior(new Unit(0)), operationDir, operationVol, VolumePart),
+			PositionModifyAlgorithms.Quoting => new QuotingBehaviorAlgo(
+				new BestByPriceQuotingBehavior(new Unit(0)), operationDir, operationVol, VolumePart),
 			_ => throw new InvalidOperationException(Algorithm.ToString())
 		};
 
-		_currAlgo.UpdateLast(time, _lastPrice, _lastVolume);
+		_currAlgo = new AlgoWrapper(this, security, portfolio, algo);
+		_currAlgo.UpdateMarketData(time, _lastPrice, _lastVolume);
 	}
 
 	private void OnProcessLastPrice(DiagramSocketValue value)
 	{
 		var lastPrice = value.GetValue<decimal>();
 
-		_currAlgo?.UpdateLast(value.Time, lastPrice, _lastVolume);
+		_currAlgo?.UpdateMarketData(value.Time, lastPrice, _lastVolume);
 		_lastPrice = lastPrice;
 	}
 
@@ -794,8 +586,14 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 	{
 		var lastVol = value.GetValue<decimal>();
 
-		_currAlgo?.UpdateLast(value.Time, _lastPrice, lastVol);
+		_currAlgo?.UpdateMarketData(value.Time, _lastPrice, lastVol);
 		_lastVolume = lastVol;
+	}
+
+	private void OnProcessOrderBook(DiagramSocketValue value)
+	{
+		var depth = value.GetValue<IOrderBookMessage>();
+		_currAlgo?.UpdateOrderBook(value.Time, depth);
 	}
 
 	private void OnProcessCancel(DiagramSocketValue value)

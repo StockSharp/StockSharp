@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Algo;
 
+using StockSharp.Algo.PositionManagement;
+
 partial class MarketRuleHelper
 {
 	#region Portfolio rules
@@ -190,6 +192,59 @@ partial class MarketRuleHelper
 	public static MarketRule<Position, Position> Changed(this Position position, IPositionProvider provider)
 	{
 		return new PositionRule(position, provider);
+	}
+
+	#endregion
+
+	#region PositionTargetManager rules
+
+	private sealed class TargetReachedRule : MarketRule<PositionTargetManager, (Security, Portfolio)>
+	{
+		private readonly PositionTargetManager _manager;
+		private readonly Security _security;
+		private readonly Portfolio _portfolio;
+
+		public TargetReachedRule(PositionTargetManager manager, Security security, Portfolio portfolio)
+			: base(manager)
+		{
+			_manager = manager ?? throw new ArgumentNullException(nameof(manager));
+			_security = security;
+			_portfolio = portfolio;
+			_manager.TargetReached += OnTargetReached;
+		}
+
+		private void OnTargetReached(Security security, Portfolio portfolio)
+		{
+			if ((_security is null || _security == security) && (_portfolio is null || _portfolio == portfolio))
+				Activate((security, portfolio));
+		}
+
+		protected override void DisposeManaged()
+		{
+			_manager.TargetReached -= OnTargetReached;
+			base.DisposeManaged();
+		}
+	}
+
+	/// <summary>
+	/// Create a rule that fires when target position is reached.
+	/// </summary>
+	/// <param name="manager">Position target manager.</param>
+	/// <param name="security">Security to filter (null for any).</param>
+	/// <param name="portfolio">Portfolio to filter (null for any).</param>
+	/// <returns>Rule.</returns>
+	public static MarketRule<PositionTargetManager, (Security, Portfolio)> WhenTargetReached(
+		this PositionTargetManager manager,
+		Security security = null,
+		Portfolio portfolio = null)
+	{
+		if (manager is null)
+			throw new ArgumentNullException(nameof(manager));
+
+		return new TargetReachedRule(manager, security, portfolio)
+		{
+			Name = "Target reached" + (security is not null ? $" {security}" : string.Empty)
+		};
 	}
 
 	#endregion
