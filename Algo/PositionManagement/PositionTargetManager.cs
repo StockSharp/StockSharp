@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.PositionManagement;
 
-using StockSharp.Algo.Strategies.Quoting;
-
 /// <summary>
 /// Standalone manager that drives position to a target value using configurable algorithms.
 /// </summary>
@@ -21,6 +19,7 @@ public class PositionTargetManager : BaseLogReceiver
 	private readonly Func<Security, Portfolio, decimal?> _getPosition;
 	private readonly Func<Order> _orderFactory;
 	private readonly Func<bool> _canTrade;
+	private readonly Func<Sides, decimal, IPositionModifyAlgo> _algoFactory;
 	private readonly IMarketRuleContainer _container;
 	private readonly SynchronizedDictionary<(Security, Portfolio), TargetState> _targets = [];
 	private readonly HashSet<IMarketRule> _rules = [];
@@ -34,20 +33,23 @@ public class PositionTargetManager : BaseLogReceiver
 	/// <param name="getPosition">Function to get current position for a security/portfolio pair.</param>
 	/// <param name="orderFactory">Factory to create new orders with desired properties.</param>
 	/// <param name="canTrade">Function that returns whether trading is allowed.</param>
+	/// <param name="algoFactory">Factory to create position modify algorithms. Parameters: side, volume.</param>
 	public PositionTargetManager(
 		ISubscriptionProvider subProvider,
 		ITransactionProvider transProvider,
 		IMarketRuleContainer container,
 		Func<Security, Portfolio, decimal?> getPosition,
-		Func<Order> orderFactory = null,
-		Func<bool> canTrade = null)
+		Func<Order> orderFactory,
+		Func<bool> canTrade,
+		Func<Sides, decimal, IPositionModifyAlgo> algoFactory)
 	{
 		_subProvider = subProvider ?? throw new ArgumentNullException(nameof(subProvider));
 		_transProvider = transProvider ?? throw new ArgumentNullException(nameof(transProvider));
 		_container = container ?? throw new ArgumentNullException(nameof(container));
 		_getPosition = getPosition ?? throw new ArgumentNullException(nameof(getPosition));
-		_orderFactory = orderFactory ?? (() => new Order());
-		_canTrade = canTrade ?? (() => true);
+		_orderFactory = orderFactory ?? throw new ArgumentNullException(nameof(orderFactory));
+		_canTrade = canTrade ?? throw new ArgumentNullException(nameof(canTrade));
+		_algoFactory = algoFactory ?? throw new ArgumentNullException(nameof(algoFactory));
 
 		_container.Rules.Removed += OnRulesRemoved;
 	}
@@ -69,26 +71,6 @@ public class PositionTargetManager : BaseLogReceiver
 	/// Tolerance for considering position target reached.
 	/// </summary>
 	public decimal PositionTolerance { get; set; }
-
-	/// <summary>
-	/// Algorithm to use for position modification.
-	/// </summary>
-	public PositionModifyAlgorithms Algorithm { get; set; } = PositionModifyAlgorithms.MarketOrder;
-
-	/// <summary>
-	/// Volume part for sliced algorithms.
-	/// </summary>
-	public Unit VolumePart { get; set; } = new(1, UnitTypes.Percent);
-
-	/// <summary>
-	/// Time interval for TWAP algorithm.
-	/// </summary>
-	public TimeSpan TWAPInterval { get; set; } = TimeSpan.FromMinutes(1);
-
-	/// <summary>
-	/// Best price offset for quoting-based algorithms.
-	/// </summary>
-	public Unit BestPriceOffset { get; set; } = new(0);
 
 	/// <summary>
 	/// Occurs when a target position is reached.
@@ -245,7 +227,7 @@ public class PositionTargetManager : BaseLogReceiver
 		var side = delta > 0 ? Sides.Buy : Sides.Sell;
 		var volume = Math.Abs(delta);
 
-		var algo = CreateAlgo(side, volume);
+		var algo = _algoFactory(side, volume);
 		state.ActiveAlgo = algo;
 		state.RetryCount = 0;
 
@@ -365,23 +347,6 @@ public class PositionTargetManager : BaseLogReceiver
 
 		matchedRule.Exclusive(regFailRule);
 		regFailRule.Exclusive(canceledRule);
-	}
-
-	private IPositionModifyAlgo CreateAlgo(Sides side, decimal volume)
-	{
-		return Algorithm switch
-		{
-			PositionModifyAlgorithms.MarketOrder => new MarketOrderAlgo(side, volume),
-			PositionModifyAlgorithms.VWAP => new QuotingBehaviorAlgo(
-				new VWAPQuotingBehavior(BestPriceOffset), side, volume, VolumePart),
-			PositionModifyAlgorithms.TWAP => new QuotingBehaviorAlgo(
-				new TWAPQuotingBehavior(TWAPInterval), side, volume, VolumePart),
-			PositionModifyAlgorithms.Iceberg => new QuotingBehaviorAlgo(
-				new LastTradeQuotingBehavior(BestPriceOffset), side, volume, VolumePart),
-			PositionModifyAlgorithms.Quoting => new QuotingBehaviorAlgo(
-				new BestByPriceQuotingBehavior(BestPriceOffset), side, volume, VolumePart),
-			_ => throw new InvalidOperationException(Algorithm.ToString())
-		};
 	}
 
 	private IMarketRule AddRule(IMarketRule rule)

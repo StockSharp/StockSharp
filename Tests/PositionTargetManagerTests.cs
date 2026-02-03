@@ -30,14 +30,18 @@ public class PositionTargetManagerTests : BaseTestClass
 		_currentPosition = 0;
 	}
 
-	private PositionTargetManager CreateManager(Func<bool> canTrade = null)
+	private PositionTargetManager CreateManager(
+		Func<bool> canTrade = null,
+		Func<Sides, decimal, IPositionModifyAlgo> algoFactory = null)
 	{
 		return new(
 			_subProvider.Object,
 			_transProvider.Object,
 			_container.Object,
 			getPosition: (s, p) => _currentPosition,
-			canTrade: canTrade ?? (() => true)
+			orderFactory: () => new Order(),
+			canTrade: canTrade ?? (() => true),
+			algoFactory: algoFactory ?? ((side, vol) => new MarketOrderAlgo(side, vol))
 		);
 	}
 
@@ -249,18 +253,122 @@ public class PositionTargetManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Algorithm_Default_IsMarketOrder()
-	{
-		using var manager = CreateManager();
-
-		manager.Algorithm.AreEqual(PositionModifyAlgorithms.MarketOrder);
-	}
-
-	[TestMethod]
 	public void OrderType_Default_IsMarket()
 	{
 		using var manager = CreateManager();
 
 		manager.OrderType.AreEqual(OrderTypes.Market);
+	}
+
+	[TestMethod]
+	public void AlgoFactory_Invoked_WithCorrectParameters()
+	{
+		Sides? passedSide = null;
+		decimal? passedVolume = null;
+
+		using var manager = CreateManager(algoFactory: (side, vol) =>
+		{
+			passedSide = side;
+			passedVolume = vol;
+			return new MarketOrderAlgo(side, vol);
+		});
+
+		_transProvider.Setup(t => t.RegisterOrder(It.IsAny<Order>()));
+
+		manager.SetTarget(_security, _portfolio, 100);
+
+		passedSide.AreEqual(Sides.Buy);
+		passedVolume.AreEqual(100m);
+	}
+
+	[TestMethod]
+	public void Constructor_NullSubProvider_Throws()
+	{
+		Throws<ArgumentNullException>(() => new PositionTargetManager(
+			null,
+			_transProvider.Object,
+			_container.Object,
+			(s, p) => 0m,
+			() => new Order(),
+			() => true,
+			(side, vol) => new MarketOrderAlgo(side, vol)));
+	}
+
+	[TestMethod]
+	public void Constructor_NullTransProvider_Throws()
+	{
+		Throws<ArgumentNullException>(() => new PositionTargetManager(
+			_subProvider.Object,
+			null,
+			_container.Object,
+			(s, p) => 0m,
+			() => new Order(),
+			() => true,
+			(side, vol) => new MarketOrderAlgo(side, vol)));
+	}
+
+	[TestMethod]
+	public void Constructor_NullContainer_Throws()
+	{
+		Throws<ArgumentNullException>(() => new PositionTargetManager(
+			_subProvider.Object,
+			_transProvider.Object,
+			null,
+			(s, p) => 0m,
+			() => new Order(),
+			() => true,
+			(side, vol) => new MarketOrderAlgo(side, vol)));
+	}
+
+	[TestMethod]
+	public void Constructor_NullGetPosition_Throws()
+	{
+		Throws<ArgumentNullException>(() => new PositionTargetManager(
+			_subProvider.Object,
+			_transProvider.Object,
+			_container.Object,
+			null,
+			() => new Order(),
+			() => true,
+			(side, vol) => new MarketOrderAlgo(side, vol)));
+	}
+
+	[TestMethod]
+	public void Constructor_NullOrderFactory_Throws()
+	{
+		Throws<ArgumentNullException>(() => new PositionTargetManager(
+			_subProvider.Object,
+			_transProvider.Object,
+			_container.Object,
+			(s, p) => 0m,
+			null,
+			() => true,
+			(side, vol) => new MarketOrderAlgo(side, vol)));
+	}
+
+	[TestMethod]
+	public void Constructor_NullCanTrade_Throws()
+	{
+		Throws<ArgumentNullException>(() => new PositionTargetManager(
+			_subProvider.Object,
+			_transProvider.Object,
+			_container.Object,
+			(s, p) => 0m,
+			() => new Order(),
+			null,
+			(side, vol) => new MarketOrderAlgo(side, vol)));
+	}
+
+	[TestMethod]
+	public void Constructor_NullAlgoFactory_Throws()
+	{
+		Throws<ArgumentNullException>(() => new PositionTargetManager(
+			_subProvider.Object,
+			_transProvider.Object,
+			_container.Object,
+			(s, p) => 0m,
+			() => new Order(),
+			() => true,
+			null));
 	}
 }

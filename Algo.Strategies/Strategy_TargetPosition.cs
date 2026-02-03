@@ -6,6 +6,19 @@ partial class Strategy
 {
 	private PositionTargetManager _targetManager;
 
+	private Func<Sides, decimal, IPositionModifyAlgo> _targetAlgoFactory = (side, vol) => new MarketOrderAlgo(side, vol);
+
+	/// <summary>
+	/// Factory to create position modify algorithms for <see cref="TargetPositionManager"/>.
+	/// Default creates <see cref="MarketOrderAlgo"/>.
+	/// </summary>
+	[Browsable(false)]
+	public Func<Sides, decimal, IPositionModifyAlgo> TargetAlgoFactory
+	{
+		get => _targetAlgoFactory;
+		set => _targetAlgoFactory = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
 	private PositionTargetManager GetOrCreateTargetManager()
 	{
 		if (_targetManager is not null)
@@ -15,7 +28,8 @@ partial class Strategy
 			this, this, this,
 			getPosition: (s, p) => GetPositionValue(s, p),
 			orderFactory: () => new Order(),
-			canTrade: () => IsFormedAndOnlineAndAllowTrading()
+			canTrade: () => IsFormedAndOnlineAndAllowTrading(),
+			algoFactory: _targetAlgoFactory
 		);
 
 		_targetManager.Parent = this;
