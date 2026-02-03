@@ -76,13 +76,8 @@ public class AdapterRouter : IAdapterRouter
 			if (message.Type == MessageTypes.MarketData)
 			{
 				var mdMsg1 = (MarketDataMessage)message;
-				var set = _nonSupportedAdapters.TryGetValue(mdMsg1.TransactionId);
 
-				if (set != null)
-				{
-					adapters = [.. adapters.Where(a => !set.Contains(_getUnderlyingAdapter(a)))];
-				}
-				else if (mdMsg1.DataType2 == DataType.News && (mdMsg1.SecurityId == default || mdMsg1.SecurityId == SecurityId.News))
+				if (mdMsg1.DataType2 == DataType.News && (mdMsg1.SecurityId == default || mdMsg1.SecurityId == SecurityId.News))
 				{
 					adapters = [.. adapters.Where(a => !a.IsSecurityNewsOnly)];
 				}
@@ -106,6 +101,19 @@ public class AdapterRouter : IAdapterRouter
 			{
 				if (!((ISubscriptionMessage)message).FilterEnabled)
 					adapters = [.. adapters.Where(a => a.IsAllDownloadingSupported(DataType.PositionChanges))];
+			}
+
+			if (adapters != null && message is ISubscriptionMessage subscrMsg)
+			{
+				var set = _nonSupportedAdapters.TryGetValue(subscrMsg.TransactionId);
+
+				if (set != null)
+				{
+					adapters = [.. adapters.Where(a => !set.Contains(_getUnderlyingAdapter(a)))];
+
+					if (adapters.Length == 0)
+						adapters = null;
+				}
 			}
 		}
 

@@ -614,7 +614,7 @@ public class BasketRoutingManager : IBasketRoutingManager
 				{
 					_router.AddNotSupported(originalTransactionId, adapter);
 
-					subscrMsg.LoopBack(null);
+					subscrMsg.LoopBack(adapter);
 				}
 			}
 

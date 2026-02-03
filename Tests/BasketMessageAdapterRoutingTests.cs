@@ -5,11 +5,6 @@ using System.Collections.Concurrent;
 using StockSharp.Algo.Basket;
 using StockSharp.Algo.Candles.Compression;
 
-/// <summary>
-/// Tests for correct routing behavior in BasketMessageAdapter (Замечания 1-3 из PLAN.md).
-/// These tests describe EXPECTED CORRECT behavior, not current behavior.
-/// Some may initially fail, proving bugs exist.
-/// </summary>
 [TestClass]
 public class BasketMessageAdapterRoutingTests : BaseTestClass
 {
@@ -223,12 +218,12 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 
 	#endregion
 
-	#region Замечание 1: Единый путь MarketData — ParentChildMap для всех типов данных
+	#region Remark 1: Unified MarketData path — ParentChildMap for all data types
 
 	/// <summary>
-	/// Замечание 1: Подписка на Ticks (не News/Board) должна использовать ToChild() и записывать маппинг в ParentChildMap.
-	/// Текущее поведение: Ticks идёт через Path B — без ToChild, без ParentChildMap.
-	/// Ожидаемое: ParentChildMap.AddMapping вызван для Ticks, как и для News.
+	/// Remark 1: Ticks subscription (not News/Board) should use ToChild() and record mapping in ParentChildMap.
+	/// Current behavior: Ticks goes through Path B — without ToChild, without ParentChildMap.
+	/// Expected: ParentChildMap.AddMapping called for Ticks, same as for News.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -254,22 +249,22 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		};
 		await SendToBasket(basket, mdMsg, TestContext.CancellationToken);
 
-		// Ожидание: ParentChildMap содержит маппинг для этой подписки
-		// Адаптер получил child-ID, отличный от parent transId
+		// Expected: ParentChildMap contains mapping for this subscription
+		// Adapter received child-ID different from parent transId
 		var received = adapter1.GetMessages<MarketDataMessage>().ToArray();
 		received.Length.AssertGreater(0, "Adapter should receive MarketDataMessage");
 
 		var childTransId = received.First().TransactionId;
 
-		// ParentChildMap должен знать о child → parent маппинге
+		// ParentChildMap should know about child → parent mapping
 		parentChildMap.TryGetParent(childTransId, out var parentId)
 			.AssertTrue("ParentChildMap should have child→parent mapping for Ticks subscription");
 		parentId.AssertEqual(transId, "Parent ID should match original transaction ID");
 	}
 
 	/// <summary>
-	/// Замечание 1: Подписка на News использует ToChild() и ParentChildMap — baseline тест.
-	/// Этот тест должен проходить и сейчас.
+	/// Remark 1: News subscription uses ToChild() and ParentChildMap — baseline test.
+	/// This test should pass now.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -294,7 +289,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		};
 		await SendToBasket(basket, mdMsg, TestContext.CancellationToken);
 
-		// News уже идёт через ToChild() — ParentChildMap должен иметь маппинг
+		// News already goes through ToChild() — ParentChildMap should have mapping
 		var received = adapter1.GetMessages<MarketDataMessage>().ToArray();
 		received.Length.AssertGreater(0, "Adapter should receive MarketDataMessage for News");
 
@@ -306,7 +301,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 1: Подписка на Level1 должна записывать маппинг в ParentChildMap.
+	/// Remark 1: Level1 subscription should record mapping in ParentChildMap.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -341,7 +336,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 1: Подписка на MarketDepth должна записывать маппинг в ParentChildMap.
+	/// Remark 1: MarketDepth subscription should record mapping in ParentChildMap.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -376,9 +371,9 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 1: Ответ SubscriptionResponse для Ticks должен ремапить childId → parentId.
-	/// При едином пути через ToChild, ответ от адаптера приходит с child transId,
-	/// а basket должен вернуть наружу parent transId.
+	/// Remark 1: SubscriptionResponse for Ticks should remap childId → parentId.
+	/// With unified path through ToChild, response from adapter comes with child transId,
+	/// and basket should return parent transId to the outside.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -414,11 +409,11 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 
 	#endregion
 
-	#region Замечание 2: Фильтрация IsAllDownloadingSupported для OrderStatus и PortfolioLookup
+	#region Remark 2: IsAllDownloadingSupported filtering for OrderStatus and PortfolioLookup
 
 	/// <summary>
-	/// Замечание 2: SecurityLookup с IsLookupAll=true, адаптер поддерживает IsAllDownloading → доставлено.
-	/// Baseline — уже работает.
+	/// Remark 2: SecurityLookup with IsLookupAll=true, adapter supports IsAllDownloading → delivered.
+	/// Baseline — already works.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -439,8 +434,8 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 2: SecurityLookup с IsLookupAll=true, адаптер НЕ поддерживает IsAllDownloading → отфильтровано.
-	/// Baseline — уже работает.
+	/// Remark 2: SecurityLookup with IsLookupAll=true, adapter does NOT support IsAllDownloading → filtered out.
+	/// Baseline — already works.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -460,8 +455,8 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 2: SecurityLookup с конкретным SecurityId, адаптер НЕ поддерживает IsAllDownloading → доставлено
-	/// (фильтр IsAllDownloading применяется только для "lookup all").
+	/// Remark 2: SecurityLookup with specific SecurityId, adapter does NOT support IsAllDownloading → delivered
+	/// (IsAllDownloading filter applies only for "lookup all").
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -485,7 +480,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 2: OrderStatus без критериев (все ордера), адаптер поддерживает IsAllDownloading → доставлено.
+	/// Remark 2: OrderStatus without criteria (all orders), adapter supports IsAllDownloading → delivered.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -510,8 +505,8 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 2: OrderStatus без критериев, адаптер НЕ поддерживает IsAllDownloading → отфильтровано.
-	/// BUG: В текущей реализации фильтр IsAllDownloading не проверяется для OrderStatus.
+	/// Remark 2: OrderStatus without criteria, adapter does NOT support IsAllDownloading → filtered out.
+	/// BUG: In current implementation IsAllDownloading filter is not checked for OrderStatus.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -536,7 +531,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 2: OrderStatus с конкретным SecurityId, адаптер НЕ поддерживает IsAllDownloading → доставлено.
+	/// Remark 2: OrderStatus with specific SecurityId, adapter does NOT support IsAllDownloading → delivered.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -561,7 +556,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 2: PortfolioLookup без критериев, адаптер поддерживает IsAllDownloading → доставлено.
+	/// Remark 2: PortfolioLookup without criteria, adapter supports IsAllDownloading → delivered.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -585,8 +580,8 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 2: PortfolioLookup без критериев, адаптер НЕ поддерживает IsAllDownloading → отфильтровано.
-	/// BUG: В текущей реализации фильтр IsAllDownloading не проверяется для PortfolioLookup.
+	/// Remark 2: PortfolioLookup without criteria, adapter does NOT support IsAllDownloading → filtered out.
+	/// BUG: In current implementation IsAllDownloading filter is not checked for PortfolioLookup.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -610,7 +605,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 2: PortfolioLookup с конкретным PortfolioName, адаптер НЕ поддерживает IsAllDownloading → доставлено.
+	/// Remark 2: PortfolioLookup with specific PortfolioName, adapter does NOT support IsAllDownloading → delivered.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -635,8 +630,8 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 2: Два адаптера, один поддерживает IsAllDownloading, другой нет.
-	/// OrderStatus без критериев → только к поддерживающему.
+	/// Remark 2: Two adapters, one supports IsAllDownloading, other does not.
+	/// OrderStatus without criteria → only to the supporting one.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -663,8 +658,8 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 2: Два адаптера, оба поддерживают IsAllDownloading.
-	/// OrderStatus без критериев → оба получают.
+	/// Remark 2: Two adapters, both support IsAllDownloading.
+	/// OrderStatus without criteria → both receive.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -691,8 +686,8 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 2: Два адаптера, один поддерживает IsAllDownloading, другой нет.
-	/// PortfolioLookup без критериев → только к поддерживающему.
+	/// Remark 2: Two adapters, one supports IsAllDownloading, other does not.
+	/// PortfolioLookup without criteria → only to the supporting one.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -720,12 +715,12 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 
 	#endregion
 
-	#region Замечание 3: NotSupported retry для не-MarketData подписок
+	#region Remark 3: NotSupported retry for non-MarketData subscriptions
 
 	/// <summary>
-	/// Замечание 3: SecurityLookup → NotSupported от одного адаптера → retry → второй адаптер получает запрос.
-	/// BUG: В текущей реализации _nonSupportedAdapters фильтруется только для MessageTypes.MarketData,
-	/// поэтому retry для SecurityLookup зацикливается или не работает.
+	/// Remark 3: SecurityLookup → NotSupported from one adapter → retry → second adapter receives request.
+	/// BUG: In current implementation _nonSupportedAdapters is filtered only for MessageTypes.MarketData,
+	/// so retry for SecurityLookup loops or doesn't work.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -773,9 +768,9 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 3: OrderStatus → NotSupported → не должен зацикливаться.
-	/// Если _nonSupportedAdapters не фильтруется для OrderStatus — loopback будет отправлять
-	/// на тот же адаптер снова и снова.
+	/// Remark 3: OrderStatus → NotSupported → should not loop.
+	/// If _nonSupportedAdapters is not filtered for OrderStatus — loopback will send
+	/// to the same adapter again and again.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -808,8 +803,8 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 3: MarketData → NotSupported → retry → фильтрация работает (baseline).
-	/// Этот тест подтверждает что для MarketData текущий механизм работает.
+	/// Remark 3: MarketData → NotSupported → retry → filtering works (baseline).
+	/// This test confirms that for MarketData the current mechanism works.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -847,7 +842,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Замечание 3: PortfolioLookup → NotSupported → не должен зацикливаться.
+	/// Remark 3: PortfolioLookup → NotSupported → should not loop.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
@@ -875,6 +870,451 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		var responses = GetOut<SubscriptionResponseMessage>();
 		responses.Any(r => r.OriginalTransactionId == transId)
 			.AssertTrue("Basket should emit response for failed PortfolioLookup subscription");
+	}
+
+	#endregion
+
+	#region Remark 4: LoopBack(null) — latent bug in BasketRoutingManager:617
+
+	/// <summary>
+	/// Remark 4a: Direct test — LoopBack(null) throws ArgumentNullException.
+	/// In BasketRoutingManager.cs:617 there is code: subscrMsg.LoopBack(null)
+	/// This call will ALWAYS throw ArgumentNullException, since LoopBack requires non-null adapter.
+	/// Currently this code is unreachable (all subscriptions go through ToChild→ParentChildMap),
+	/// but it's a latent bug — if code path changes, it will crash.
+	/// </summary>
+	[TestMethod]
+	public void Remark4_LoopBackNull_ThrowsArgumentNullException()
+	{
+		// Direct demonstration: LoopBack(null) always throws
+		var msg = new SecurityLookupMessage { TransactionId = 1 };
+
+		Throws<ArgumentNullException>(() => msg.LoopBack((IMessageAdapter)null));
+	}
+
+	/// <summary>
+	/// Remark 4b: LoopBack(null) code in ProcessSubscriptionResponseAsync is unreachable,
+	/// because all subscriptions (SecurityLookup, OrderStatus, PortfolioLookup) go through
+	/// ToChild → ParentChildMap. On NotSupported, ProcessChildResponse returns parentId != null,
+	/// and code on line 609 is not reached.
+	///
+	/// Test proves: with 2 adapters, one returns NotSupported — no exception,
+	/// because ParentChildMap intercepts the response earlier.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Remark4_LoopBackNull_Unreachable_DueToParentChildMap()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket(twoAdapters: true);
+		adapter1.SetAllDownloadingSupported(DataType.Securities);
+		adapter2.SetAllDownloadingSupported(DataType.Securities);
+
+		adapter1.RespondNotSupported = true;
+		adapter2.RespondNotSupported = false;
+
+		await ConnectBasket(basket, TestContext.CancellationToken);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var lookupMsg = new SecurityLookupMessage { TransactionId = transId };
+
+		// Doesn't throw — ParentChildMap intercepts NotSupported before line 617
+		Exception caught = null;
+		try
+		{
+			await SendToBasket(basket, lookupMsg, TestContext.CancellationToken);
+		}
+		catch (Exception ex)
+		{
+			caught = ex;
+		}
+
+		IsNull(caught, $"No exception because LoopBack(null) is unreachable via ParentChildMap path, but got: {caught}");
+
+		// adapter2 receives subscription directly through ToChild (not retry)
+		adapter2.GetMessages<SecurityLookupMessage>().Any()
+			.AssertTrue("Adapter2 receives SecurityLookup via ToChild (simultaneous send, not retry)");
+	}
+
+	/// <summary>
+	/// Remark 4c: When ALL adapters return NotSupported for SecurityLookup,
+	/// ParentChildMap aggregates errors and returns AggregateException.
+	/// No retry mechanism (unlike expected behavior).
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Remark4_AllNotSupported_SecurityLookup_ReturnsAggregatedError()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket(twoAdapters: true);
+		adapter1.SetAllDownloadingSupported(DataType.Securities);
+		adapter2.SetAllDownloadingSupported(DataType.Securities);
+
+		// BOTH adapters return NotSupported
+		adapter1.RespondNotSupported = true;
+		adapter2.RespondNotSupported = true;
+
+		await ConnectBasket(basket, TestContext.CancellationToken);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var lookupMsg = new SecurityLookupMessage { TransactionId = transId };
+		await SendToBasket(basket, lookupMsg, TestContext.CancellationToken);
+
+		// Expect SubscriptionResponse with error (aggregated from all children)
+		var responses = GetOut<SubscriptionResponseMessage>();
+		var errorResponse = responses.FirstOrDefault(r => r.OriginalTransactionId == transId);
+
+		IsNotNull(errorResponse, "Should receive SubscriptionResponse when all adapters return NotSupported");
+		IsNotNull(errorResponse.Error, "Response should contain error when all adapters return NotSupported");
+	}
+
+	/// <summary>
+	/// Remark 4d: Same for OrderStatus — all NotSupported → aggregated error.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Remark4_AllNotSupported_OrderStatus_ReturnsAggregatedError()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket(twoAdapters: true);
+		adapter1.SetAllDownloadingSupported(DataType.Transactions);
+		adapter2.SetAllDownloadingSupported(DataType.Transactions);
+
+		adapter1.RespondNotSupported = true;
+		adapter2.RespondNotSupported = true;
+
+		await ConnectBasket(basket, TestContext.CancellationToken);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var osMsg = new OrderStatusMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+		};
+		await SendToBasket(basket, osMsg, TestContext.CancellationToken);
+
+		var responses = GetOut<SubscriptionResponseMessage>();
+		var errorResponse = responses.FirstOrDefault(r => r.OriginalTransactionId == transId);
+
+		IsNotNull(errorResponse, "Should receive SubscriptionResponse when all adapters return NotSupported for OrderStatus");
+		IsNotNull(errorResponse.Error, "Response should contain error for OrderStatus when all adapters return NotSupported");
+	}
+
+	#endregion
+
+	#region Remark 5: _nonSupportedAdapters filters only MarketData
+
+	/// <summary>
+	/// Remark 5a: _nonSupportedAdapters filtering WORKS for MarketData (baseline).
+	/// AdapterRouter.GetAdapters() checks _nonSupportedAdapters only for
+	/// MessageTypes.MarketData (AdapterRouter.cs:76).
+	///
+	/// For MarketData after NotSupported from adapter1, on retry adapter1 is excluded.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Remark5_NonSupportedAdapters_Filtered_ForMarketData()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket(twoAdapters: true);
+		adapter1.RespondNotSupported = true;
+		adapter2.RespondNotSupported = false;
+
+		await ConnectBasket(basket, TestContext.CancellationToken);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var mdMsg = new MarketDataMessage
+		{
+			SecurityId = _secId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = transId,
+		};
+		await SendToBasket(basket, mdMsg, TestContext.CancellationToken);
+
+		// MarketData: both adapters receive through ToChild simultaneously.
+		// adapter1 returns NotSupported, adapter2 — success.
+		// ParentChildMap aggregates: allError=false → success.
+		var adapter1Count = adapter1.GetMessages<MarketDataMessage>().Count();
+		var adapter2Count = adapter2.GetMessages<MarketDataMessage>().Count();
+
+		adapter1Count.AssertEqual(1, "Adapter1 receives MarketData once via ToChild");
+		adapter2Count.AssertEqual(1, "Adapter2 receives MarketData once via ToChild");
+
+		// Successful response
+		GetOut<SubscriptionOnlineMessage>().Any(m => m.OriginalTransactionId == transId)
+			.AssertTrue("Should get SubscriptionOnline since adapter2 succeeded");
+	}
+
+	/// <summary>
+	/// Remark 5b: For non-MarketData subscriptions _nonSupportedAdapters is not checked
+	/// in AdapterRouter.GetAdapters(). But this doesn't lead to infinite loop,
+	/// since all subscriptions go through ToChild and are handled by ParentChildMap.
+	///
+	/// Test confirms: SecurityLookup with 2 adapters, one NotSupported →
+	/// second still successfully processes (through ToChild, not retry).
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Remark5_NonMarketData_NoRetry_BothAdaptersGetViaToChild()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket(twoAdapters: true);
+		adapter1.SetAllDownloadingSupported(DataType.Securities);
+		adapter2.SetAllDownloadingSupported(DataType.Securities);
+
+		adapter1.RespondNotSupported = true;
+		adapter2.RespondNotSupported = false;
+
+		await ConnectBasket(basket, TestContext.CancellationToken);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var lookupMsg = new SecurityLookupMessage { TransactionId = transId };
+		await SendToBasket(basket, lookupMsg, TestContext.CancellationToken);
+
+		// Both receive exactly 1 message through ToChild (not retry)
+		var adapter1Count = adapter1.GetMessages<SecurityLookupMessage>().Count();
+		var adapter2Count = adapter2.GetMessages<SecurityLookupMessage>().Count();
+
+		adapter1Count.AssertEqual(1, "Adapter1 receives SecurityLookup once via ToChild");
+		adapter2Count.AssertEqual(1, "Adapter2 receives SecurityLookup once via ToChild");
+
+		// Result: adapter2 responds successfully → subscription finished
+		var finished = GetOut<SubscriptionFinishedMessage>();
+		finished.Any(f => f.OriginalTransactionId == transId)
+			.AssertTrue("SecurityLookup should finish successfully via adapter2");
+	}
+
+	/// <summary>
+	/// Remark 5c: Key difference: for MarketData with 1 adapter, NotSupported
+	/// does NOT lead to retry (no second adapter). Error is returned.
+	/// Same for SecurityLookup — no difference in behavior.
+	///
+	/// Potential issue: _nonSupportedAdapters.AddNotSupported() is called
+	/// on line 615 for ALL subscription types, but filtering in GetAdapters()
+	/// only checks MarketData. This is dead code for non-MarketData.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Remark5_SingleAdapter_NotSupported_ReturnsError()
+	{
+		var (basket, adapter1, _) = CreateBasket(twoAdapters: false);
+		adapter1.SetAllDownloadingSupported(DataType.Securities);
+		adapter1.RespondNotSupported = true;
+
+		await ConnectBasket(basket, TestContext.CancellationToken);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var lookupMsg = new SecurityLookupMessage { TransactionId = transId };
+		await SendToBasket(basket, lookupMsg, TestContext.CancellationToken);
+
+		// 1 adapter, NotSupported → error
+		var responses = GetOut<SubscriptionResponseMessage>();
+		var errorResp = responses.FirstOrDefault(r => r.OriginalTransactionId == transId);
+		IsNotNull(errorResp, "Should return error when single adapter returns NotSupported");
+		IsNotNull(errorResp.Error, "Error should be set");
+
+		// Adapter received exactly 1 message (no retry)
+		adapter1.GetMessages<SecurityLookupMessage>().Count()
+			.AssertEqual(1, "Single adapter should receive SecurityLookup exactly once (no retry)");
+	}
+
+	#endregion
+
+	#region Remark 6: IgnoreExtraAdapters doesn't skip Heartbeat and Offline wrappers
+
+	/// <summary>
+	/// Remark 6: AdapterWrapperPipelineBuilder applies Heartbeat and Offline wrappers
+	/// BEFORE checking IgnoreExtraAdapters. So even with IgnoreExtraAdapters=true
+	/// HeartbeatMessageAdapter and OfflineMessageAdapter still wrap the adapter.
+	///
+	/// This is not quite a bug, but a misleading name: "IgnoreExtraAdapters" suggests
+	/// that NO wrappers are applied, but heartbeat/offline are still there.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Remark6_IgnoreExtraAdapters_StillWrapsWithHeartbeat()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+
+		var cs = new AdapterConnectionState();
+		var cm = new AdapterConnectionManager(cs);
+		var ps = new PendingMessageState();
+		var sr = new SubscriptionRoutingState();
+		var pcm = new ParentChildMap();
+		var or = new OrderRoutingState();
+
+		var routingManager = new BasketRoutingManager(
+			cs, cm, ps, sr, pcm, or,
+			a => a, candleBuilderProvider, () => false, idGen);
+
+		var basket = new BasketMessageAdapter(
+			idGen,
+			candleBuilderProvider,
+			new InMemorySecurityMessageAdapterProvider(),
+			new InMemoryPortfolioMessageAdapterProvider(),
+			null,
+			null,
+			routingManager);
+
+		basket.IgnoreExtraAdapters = true;
+
+		var adapter = new TestRoutingInnerAdapter(idGen);
+		basket.InnerAdapters.Add(adapter);
+
+		// Enable heartbeat explicitly
+		basket.ApplyHeartbeat(adapter, true);
+
+		_outMessages = new ConcurrentQueue<Message>();
+		basket.NewOutMessageAsync += async (msg, ct) =>
+		{
+			if (msg.IsBack())
+			{
+				await ((IMessageTransport)basket).SendInMessageAsync(msg, ct);
+				return;
+			}
+			_outMessages.Enqueue(msg);
+		};
+
+		await ConnectBasket(basket, TestContext.CancellationToken);
+
+		// Despite IgnoreExtraAdapters=true, adapter connects (heartbeat wrapped).
+		// IgnoreExtraAdapters skips only Channel/Latency/Slippage/Commission/PnL,
+		// but heartbeat and offline are applied BEFORE the check (AdapterWrapperPipelineBuilder:31-44).
+		(adapter.ReceivedMessages.Any(m => m is ConnectMessage))
+			.AssertTrue("Adapter should receive Connect through heartbeat wrapper despite IgnoreExtraAdapters=true");
+	}
+
+	#endregion
+
+	#region Remark 7: Tests demonstrating real bugs (were failing before fix)
+
+	/// <summary>
+	/// TEST: AdapterRouter._nonSupportedAdapters filters SecurityLookup.
+	///
+	/// AddNotSupported(transId, adapter) adds adapter to _nonSupportedAdapters,
+	/// and GetAdapters() now checks _nonSupportedAdapters for ALL subscription types
+	/// (not just MessageTypes.MarketData).
+	///
+	/// Test proves: after AddNotSupported, both MarketData and SecurityLookup are filtered.
+	/// </summary>
+	[TestMethod]
+	public void Remark7_AdapterRouter_NonSupportedAdapters_NotFiltered_ForSecurityLookup()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var or = new OrderRoutingState();
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+
+		var adapter1 = new TestRoutingInnerAdapter(idGen);
+		// So adapter passes IsLookupAll filter (IsSupportSecuritiesLookupAll)
+		adapter1.SetAllDownloadingSupported(DataType.Securities);
+
+		var router = new AdapterRouter(or, a => a, candleBuilderProvider, () => false);
+
+		// Register adapter for SecurityLookup and MarketData
+		router.AddMessageTypeAdapter(MessageTypes.SecurityLookup, adapter1);
+		router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter1);
+
+		var transId = idGen.GetNextId();
+
+		// Mark adapter as NotSupported for transId
+		router.AddNotSupported(transId, adapter1);
+
+		// Check MarketData: adapter is FILTERED OUT (works correctly)
+		var mdMsg = new MarketDataMessage
+		{
+			SecurityId = _secId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = transId,
+		};
+		var (mdAdapters, _) = router.GetAdapters(mdMsg, a => a);
+		IsTrue(mdAdapters == null || mdAdapters.Length == 0,
+			"MarketData: adapter should be filtered out after AddNotSupported");
+
+		// Check SecurityLookup: adapter is FILTERED OUT (fixed!)
+		// _nonSupportedAdapters is now checked for all subscription types
+		var lookupMsg = new SecurityLookupMessage { TransactionId = transId };
+		var (lookupAdapters, _) = router.GetAdapters(lookupMsg, a => a);
+
+		// After fix, adapter is filtered for SecurityLookup too
+		IsTrue(lookupAdapters == null || lookupAdapters.Length == 0,
+			"SecurityLookup should filter adapter after AddNotSupported");
+	}
+
+	/// <summary>
+	/// TEST: AdapterRouter._nonSupportedAdapters filters OrderStatus.
+	/// Same as SecurityLookup — AddNotSupported now affects OrderStatus routing.
+	/// </summary>
+	[TestMethod]
+	public void Remark7_AdapterRouter_NonSupportedAdapters_NotFiltered_ForOrderStatus()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var or = new OrderRoutingState();
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+
+		var adapter1 = new TestRoutingInnerAdapter(idGen);
+		adapter1.SetAllDownloadingSupported(DataType.Transactions);
+
+		var router = new AdapterRouter(or, a => a, candleBuilderProvider, () => false);
+		router.AddMessageTypeAdapter(MessageTypes.OrderStatus, adapter1);
+		router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter1);
+
+		var transId = idGen.GetNextId();
+		router.AddNotSupported(transId, adapter1);
+
+		// Check OrderStatus: adapter is FILTERED OUT (fixed!)
+		var osMsg = new OrderStatusMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+		};
+		var (osAdapters, _) = router.GetAdapters(osMsg, a => a);
+
+		// After fix, _nonSupportedAdapters is checked for OrderStatus
+		IsTrue(osAdapters == null || osAdapters.Length == 0,
+			"OrderStatus should filter adapter after AddNotSupported");
+	}
+
+	/// <summary>
+	/// TEST: AdapterRouter._nonSupportedAdapters filters PortfolioLookup.
+	/// </summary>
+	[TestMethod]
+	public void Remark7_AdapterRouter_NonSupportedAdapters_NotFiltered_ForPortfolioLookup()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var or = new OrderRoutingState();
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+
+		var adapter1 = new TestRoutingInnerAdapter(idGen);
+		adapter1.SetAllDownloadingSupported(DataType.PositionChanges);
+
+		var router = new AdapterRouter(or, a => a, candleBuilderProvider, () => false);
+		router.AddMessageTypeAdapter(MessageTypes.PortfolioLookup, adapter1);
+		router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter1);
+
+		var transId = idGen.GetNextId();
+		router.AddNotSupported(transId, adapter1);
+
+		// Control: MarketData is filtered
+		var mdMsg = new MarketDataMessage
+		{
+			SecurityId = _secId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = transId,
+		};
+		var (mdAdapters, _) = router.GetAdapters(mdMsg, a => a);
+		IsTrue(mdAdapters == null || mdAdapters.Length == 0,
+			"MarketData: adapter should be filtered out after AddNotSupported");
+
+		// PortfolioLookup: adapter is FILTERED OUT (fixed!)
+		var plMsg = new PortfolioLookupMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+		};
+		var (plAdapters, _) = router.GetAdapters(plMsg, a => a);
+
+		// After fix, adapter is filtered for PortfolioLookup
+		IsTrue(plAdapters == null || plAdapters.Length == 0,
+			"PortfolioLookup should filter adapter after AddNotSupported");
 	}
 
 	#endregion
