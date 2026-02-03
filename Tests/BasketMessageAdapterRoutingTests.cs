@@ -803,6 +803,35 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// Remark 3: OrderStatus → NotSupported from adapter1 → retry → adapter2 receives.
+	/// With two adapters: adapter1 returns NotSupported, adapter2 should get the retry.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Remark3_OrderStatus_NotSupported_TwoAdapters_RetriesToSecond()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket(twoAdapters: true);
+		adapter1.SetAllDownloadingSupported(DataType.Transactions);
+		adapter2.SetAllDownloadingSupported(DataType.Transactions);
+		adapter1.RespondNotSupported = true;
+		adapter2.RespondNotSupported = false;
+
+		await ConnectBasket(basket, TestContext.CancellationToken);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var osMsg = new OrderStatusMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+		};
+		await SendToBasket(basket, osMsg, TestContext.CancellationToken);
+
+		// adapter2 should receive the request after adapter1 returned NotSupported
+		adapter2.GetMessages<OrderStatusMessage>().Any()
+			.AssertTrue("Adapter2 should receive OrderStatus after adapter1 returned NotSupported");
+	}
+
+	/// <summary>
 	/// Remark 3: MarketData → NotSupported → retry → filtering works (baseline).
 	/// This test confirms that for MarketData the current mechanism works.
 	/// </summary>
