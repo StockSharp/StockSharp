@@ -1,6 +1,6 @@
-namespace StockSharp.Algo.PositionManagement;
+namespace StockSharp.Algo.Strategies.Quoting;
 
-using StockSharp.Algo.Strategies.Quoting;
+using StockSharp.Algo.PositionManagement;
 
 /// <summary>
 /// Position modify algorithm that delegates price calculation to <see cref="IQuotingBehavior"/>.
