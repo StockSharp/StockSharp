@@ -38,6 +38,9 @@ public abstract class BaseEmulationConnector : Connector
 	/// <inheritdoc />
 	public override DateTime CurrentTime => _currentTime;
 
+	/// <inheritdoc />
+	public override bool UnsubscribeOnDisconnect => false;
+
 	/// <summary>
 	/// The adapter, executing messages in <see cref="IMarketEmulator"/>.
 	/// </summary>

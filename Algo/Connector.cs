@@ -56,7 +56,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 		var transactionIdGenerator = new MillisecondIncrementalIdGenerator();
 
-		_subscriptionManager = new(transactionIdGenerator, this is not Algo.Testing.IEmulationConnector) { Parent = this };
+		_subscriptionManager = new(transactionIdGenerator, UnsubscribeOnDisconnect) { Parent = this };
 
 		//SupportLevel1DepthBuilder = true;
 		SupportFilteredMarketDepth = true;
@@ -139,6 +139,11 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// </summary>
 	/// <remarks>By default is <see langword="true"/>.</remarks>
 	public bool IsAutoUnSubscribeOnDisconnect { get; set; } = true;
+
+	/// <summary>
+	/// Send unsubscribe on disconnect.
+	/// </summary>
+	public virtual bool UnsubscribeOnDisconnect => true;
 
 	/// <summary>
 	/// The number of orders for storage. The default is 1000. If the value is set to <see cref="int.MaxValue"/>, then the orders will not be deleted. If the value is set to 0, then the orders will not be stored.
