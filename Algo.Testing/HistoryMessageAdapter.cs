@@ -136,7 +136,7 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 
 	/// <inheritdoc />
 	public override bool IsAllDownloadingSupported(DataType dataType)
-		=> dataType == DataType.Securities || base.IsAllDownloadingSupported(dataType);
+		=> dataType == DataType.Securities || dataType == DataType.Transactions || dataType == DataType.PositionChanges || base.IsAllDownloadingSupported(dataType);
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="HistoryMessageAdapter"/>.
