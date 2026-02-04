@@ -33,7 +33,7 @@ public class StrategyAlertTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Alert_WithService_SendsNotification()
+	public async Task Alert_WithService_SendsNotification()
 	{
 		var strategy = new TestStrategy { Name = "TestStrategy" };
 		var mockService = new MockAlertService();
@@ -42,7 +42,7 @@ public class StrategyAlertTests : BaseTestClass
 		strategy.TestAlert(AlertNotifications.Popup, "TestCaption", "TestMessage");
 
 		// Wait for async task to complete
-		Thread.Sleep(50);
+		await Task.Delay(50, CancellationToken);
 
 		AreEqual(1, mockService.Notifications.Count, "Should have one notification");
 		var (type, _, _, caption, message, _) = mockService.Notifications[0];
@@ -62,7 +62,7 @@ public class StrategyAlertTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void AlertPopup_SendsPopupNotification()
+	public async Task AlertPopup_SendsPopupNotification()
 	{
 		var strategy = new TestStrategy { Name = "TestStrategy" };
 		var mockService = new MockAlertService();
@@ -70,7 +70,7 @@ public class StrategyAlertTests : BaseTestClass
 
 		strategy.TestAlertPopup("PopupMessage");
 
-		Thread.Sleep(50);
+		await Task.Delay(50, CancellationToken);
 
 		AreEqual(1, mockService.Notifications.Count);
 		AreEqual(AlertNotifications.Popup, mockService.Notifications[0].type);
@@ -79,7 +79,7 @@ public class StrategyAlertTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void AlertSound_SendsSoundNotification()
+	public async Task AlertSound_SendsSoundNotification()
 	{
 		var strategy = new TestStrategy { Name = "TestStrategy" };
 		var mockService = new MockAlertService();
@@ -87,14 +87,14 @@ public class StrategyAlertTests : BaseTestClass
 
 		strategy.TestAlertSound("SoundMessage");
 
-		Thread.Sleep(50);
+		await Task.Delay(50, CancellationToken);
 
 		AreEqual(1, mockService.Notifications.Count);
 		AreEqual(AlertNotifications.Sound, mockService.Notifications[0].type);
 	}
 
 	[TestMethod]
-	public void AlertLog_SendsLogNotification()
+	public async Task AlertLog_SendsLogNotification()
 	{
 		var strategy = new TestStrategy { Name = "TestStrategy" };
 		var mockService = new MockAlertService();
@@ -102,7 +102,7 @@ public class StrategyAlertTests : BaseTestClass
 
 		strategy.TestAlertLog("LogMessage");
 
-		Thread.Sleep(50);
+		await Task.Delay(50, CancellationToken);
 
 		AreEqual(1, mockService.Notifications.Count);
 		AreEqual(AlertNotifications.Log, mockService.Notifications[0].type);

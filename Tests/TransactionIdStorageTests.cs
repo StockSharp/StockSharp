@@ -400,13 +400,13 @@ public class TransactionIdStorageTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void PlainSession_CreateRequestId_GeneratesTimestampBasedId()
+	public async Task PlainSession_CreateRequestId_GeneratesTimestampBasedId()
 	{
 		ITransactionIdStorage storage = new PlainTransactionIdStorage();
 		var session = storage.Get(_session1, persistable: false);
 
 		var requestId1 = session.CreateRequestId();
-		Thread.Sleep(1); // Ensure different timestamp
+		await Task.Delay(1, CancellationToken); // Ensure different timestamp
 		var requestId2 = session.CreateRequestId();
 
 		requestId1.AssertNotNull();

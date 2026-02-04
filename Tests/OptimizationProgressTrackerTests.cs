@@ -80,13 +80,13 @@ public class OptimizationProgressTrackerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Elapsed_IncreasesOverTime()
+	public async Task Elapsed_IncreasesOverTime()
 	{
 		var tracker = new OptimizationProgressTracker();
 		tracker.Reset(100);
 
 		var elapsed1 = tracker.Elapsed;
-		Thread.Sleep(50);
+		await Task.Delay(50, CancellationToken);
 		var elapsed2 = tracker.Elapsed;
 
 		IsTrue(elapsed2 > elapsed1);

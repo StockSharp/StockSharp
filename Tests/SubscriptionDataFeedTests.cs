@@ -30,7 +30,7 @@ public sealed class DataFeedEmulator : IDisposable
 		_subscriptionId = subscriptionId;
 	}
 
-	public void Start()
+	public async Task StartAsync()
 	{
 		if (_isGenerating)
 			return;
@@ -39,7 +39,7 @@ public sealed class DataFeedEmulator : IDisposable
 		_generatorTask = Task.Run(GenerateDataLoop);
 
 		// Wait for first message to be generated
-		Thread.Sleep(100);
+		await Task.Delay(100, CancellationToken);
 	}
 
 	public void Stop()
@@ -206,7 +206,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		// Start feed
 		feed.SetSubscriptionId(100);
-		feed.Start();
+		await feed.StartAsync();
 
 		// Collect messages
 		var receivedMessages = new List<ISubscriptionIdMessage>();
@@ -256,7 +256,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
 
 		feed.SetSubscriptionId(100);
-		feed.Start();
+		await feed.StartAsync();
 
 		// Receive some messages while subscribed
 		var messagesBeforeUnsubscribe = new List<ISubscriptionIdMessage>();
@@ -334,7 +334,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}, token);
 
 		feed.SetSubscriptionId(100);
-		feed.Start();
+		await feed.StartAsync();
 
 		// Collect messages
 		var receivedMessages = new List<ISubscriptionIdMessage>();
@@ -390,7 +390,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}, token);
 
 		feed.SetSubscriptionId(100);
-		feed.Start();
+		await feed.StartAsync();
 
 		// Verify both IDs present
 		var messagesBefore = new List<ISubscriptionIdMessage>();
@@ -462,7 +462,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
 
 		feed.SetSubscriptionId(100);
-		feed.Start();
+		await feed.StartAsync();
 
 		// Phase 1: Subscribed - should receive with ID 100
 		var phase1 = new List<long[]>();
@@ -540,7 +540,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	#region SubscriptionManager Tests
 
 	[TestMethod]
-	public void Manager_Subscribe_ReceivesDataWithCorrectId()
+	public async Task Manager_Subscribe_ReceivesDataWithCorrectId()
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
@@ -560,7 +560,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
 
 		feed.SetSubscriptionId(100);
-		feed.Start();
+		await feed.StartAsync();
 
 		// Collect messages
 		var receivedMessages = new List<ISubscriptionIdMessage>();
@@ -584,7 +584,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Manager_Unsubscribe_StopsReceivingData()
+	public async Task Manager_Unsubscribe_StopsReceivingData()
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
@@ -604,7 +604,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
 
 		feed.SetSubscriptionId(100);
-		feed.Start();
+		await feed.StartAsync();
 
 		// Receive some messages while subscribed
 		var messagesBeforeUnsubscribe = new List<ISubscriptionIdMessage>();
@@ -651,7 +651,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Manager_MultipleSecurities_IndependentSubscriptions()
+	public async Task Manager_MultipleSecurities_IndependentSubscriptions()
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
@@ -684,8 +684,8 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		feed1.SetSubscriptionId(100);
 		feed2.SetSubscriptionId(101);
-		feed1.Start();
-		feed2.Start();
+		await feed1.StartAsync();
+		await feed2.StartAsync();
 
 		// Collect messages from both feeds
 		var messages1 = new List<ISubscriptionIdMessage>();
@@ -782,8 +782,8 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		ticksFeed.SetSubscriptionId(100);
 		level1Feed.SetSubscriptionId(101);
-		ticksFeed.Start();
-		level1Feed.Start();
+		await ticksFeed.StartAsync();
+		await level1Feed.StartAsync();
 
 		// Collect messages
 		var ticksMessages = new List<ExecutionMessage>();

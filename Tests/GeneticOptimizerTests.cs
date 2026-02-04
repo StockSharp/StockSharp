@@ -69,7 +69,7 @@ public class GeneticOptimizerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Start_WithCustomCalcFitness_DoesNotCallProvider()
+	public async Task Start_WithCustomCalcFitness_DoesNotCallProvider()
 	{
 		var provider = new MockFitnessFormulaProvider();
 
@@ -94,7 +94,7 @@ public class GeneticOptimizerTests : BaseTestClass
 				calcFitness: customFitness);
 
 			// Give it a moment to start
-			Thread.Sleep(100);
+			await Task.Delay(100, CancellationToken);
 
 			// Stop immediately
 			optimizer.Stop();
