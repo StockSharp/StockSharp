@@ -23,7 +23,7 @@
     <EcngVer>1.0.*</EcngVer>
     <StockSharpVer>5.*</StockSharpVer>
 
-    <MathNumVer>5.0.0</MathNumVer>
+    <MathNumVer>6.0.0-beta2</MathNumVer>
     <HtmlAgilityPackVer>1.11.45</HtmlAgilityPackVer>
     <JwtVer>9.0.3</JwtVer>
     <FluentFtpVer>40.0.0</FluentFtpVer>

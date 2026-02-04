@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Derivatives;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-using Ecng.MathLight;
+using MathNet.Numerics.Distributions;
 
 /// <summary>
 /// Extension class for derivatives.
@@ -875,7 +875,7 @@ public static class DerivativesHelper
 	}
 
 	private static double NormalDistr(double x)
-		=> Normal.CumulativeDistribution(x);
+		=> Normal.CDF(0, 1, x);
 
 	internal static void CheckOption(this Security option)
 	{
