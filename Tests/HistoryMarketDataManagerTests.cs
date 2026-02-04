@@ -1987,4 +1987,58 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Cancellation Tests
+
+	/// <summary>
+	/// Tests that StartAsync responds to cancellation quickly, even without subscriptions.
+	/// This test will FAIL if the internal WaitOne timeout is removed (would hang forever).
+	/// </summary>
+	[TestMethod]
+	public async Task StartAsync_Cancellation_RespondsQuickly()
+	{
+		using var manager = CreateManager();
+		manager.StartDate = DateTime.Today;
+		manager.StopDate = DateTime.Today.AddDays(1);
+
+		using var cts = new CancellationTokenSource();
+
+		var sw = System.Diagnostics.Stopwatch.StartNew();
+
+		// Start enumeration in background (no subscriptions = no data = waits for signal)
+		var task = Task.Run(async () =>
+		{
+			await foreach (var _ in manager.StartAsync([]).WithCancellation(cts.Token))
+			{
+				// Should not receive any messages
+			}
+		});
+
+		// Give time for the loop to start waiting
+		await Task.Delay(50);
+
+		// Request cancellation
+		cts.Cancel();
+
+		// Wait for completion with timeout
+		var completed = await Task.WhenAny(task, Task.Delay(500));
+
+		sw.Stop();
+
+		// Should complete quickly after cancellation (< 500ms)
+		// If WaitOne has no timeout, this would hang forever
+		IsTrue(completed == task, $"Should respond to cancellation quickly, but took {sw.ElapsedMilliseconds}ms");
+
+		// Verify task completed (with OperationCanceledException is OK)
+		try
+		{
+			await task;
+		}
+		catch (OperationCanceledException)
+		{
+			// Expected
+		}
+	}
+
+	#endregion
 }

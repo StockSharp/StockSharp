@@ -228,7 +228,9 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 		{
 			while (!IsDisposed && !cancellationToken.IsCancellationRequested)
 			{
-				_syncRoot.WaitOne();
+				// Use timeout to allow cancellation check and prevent deadlock if no subscriptions arrive
+				if (!_syncRoot.WaitOne(TimeSpan.FromMilliseconds(100)))
+					continue;
 
 				_isChanged = false;
 
