@@ -1,5 +1,6 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
+using StockSharp.Alerts;
 using StockSharp.Charting;
 using StockSharp.Algo.Derivatives;
 
@@ -126,6 +127,26 @@ partial class Strategy
 	public void SetChart(IChart chart)
 	{
 		Environment.SetValue(_keyChart, chart);
+	}
+
+	private const string _keyAlertService = "AlertService";
+
+	/// <summary>
+	/// To get the <see cref="IAlertNotificationService"/> associated with the passed strategy.
+	/// </summary>
+	/// <returns>Alert notification service.</returns>
+	public IAlertNotificationService GetAlertService()
+	{
+		return Environment.GetValue<IAlertNotificationService>(_keyAlertService);
+	}
+
+	/// <summary>
+	/// To set a <see cref="IAlertNotificationService"/> for the strategy.
+	/// </summary>
+	/// <param name="service">Alert notification service.</param>
+	public void SetAlertService(IAlertNotificationService service)
+	{
+		Environment.SetValue(_keyAlertService, service);
 	}
 
 	private const string _keyOptionPositionChart = "OptionPositionChart";

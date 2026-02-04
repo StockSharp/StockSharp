@@ -122,7 +122,7 @@ public sealed class AlertDiagramElement : DiagramElement
 		if (message.IsEmpty())
 			return;
 
-		var svc = AlertServicesRegistry.TryNotificationService;
+		var svc = Strategy.GetAlertService();
 
 		if (svc is null)
 			return;
@@ -135,6 +135,10 @@ public sealed class AlertDiagramElement : DiagramElement
 
 		svc.NotifyAsync(type, channelId, lvl, caption, message, time, default)
 			.AsTask()
-			.ObserveErrorAndLog();
+			.ContinueWith(t =>
+			{
+				if (t.IsFaulted && t.Exception is not null)
+					Strategy.AddErrorLog(t.Exception);
+			});
 	}
 }

@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_target_net.props" />
   <ItemGroup>
+    <ProjectReference Include="..\Alerts.Interfaces\Alerts.Interfaces.csproj" />
     <ProjectReference Include="..\Algo.Testing\Algo.Testing.csproj" />
   </ItemGroup>
 </Project>

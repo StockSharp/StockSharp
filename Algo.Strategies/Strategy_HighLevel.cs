@@ -2,6 +2,7 @@
 
 using System.Drawing;
 
+using StockSharp.Alerts;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Strategies.Protective;
 using StockSharp.Charting;
@@ -456,6 +457,60 @@ public partial class Strategy
 
 		return position > 0 ? SellMarket(volume) : BuyMarket(volume);
 	}
+
+	/// <summary>
+	/// Send alert notification.
+	/// </summary>
+	/// <param name="type">Alert type.</param>
+	/// <param name="caption">Signal header.</param>
+	/// <param name="message">Alert text.</param>
+	protected void Alert(AlertNotifications type, string caption, string message)
+	{
+		// Skip non-log alerts during backtesting
+		if (IsBacktesting && type != AlertNotifications.Log)
+			return;
+
+		var svc = this.GetAlertService();
+		if (svc is null)
+			return;
+
+		svc.NotifyAsync(type, null, LogLevels.Info, caption, message, CurrentTime, default)
+			.AsTask()
+			.ContinueWith(t =>
+			{
+				if (t.IsFaulted && t.Exception is not null)
+					this.AddErrorLog(t.Exception);
+			});
+	}
+
+	/// <summary>
+	/// Send alert notification with strategy name as caption.
+	/// </summary>
+	/// <param name="type">Alert type.</param>
+	/// <param name="message">Alert text.</param>
+	protected void Alert(AlertNotifications type, string message)
+		=> Alert(type, Name, message);
+
+	/// <summary>
+	/// Send popup alert notification.
+	/// </summary>
+	/// <param name="message">Alert text.</param>
+	protected void AlertPopup(string message)
+		=> Alert(AlertNotifications.Popup, message);
+
+	/// <summary>
+	/// Send sound alert notification.
+	/// </summary>
+	/// <param name="message">Alert text.</param>
+	protected void AlertSound(string message)
+		=> Alert(AlertNotifications.Sound, message);
+
+	/// <summary>
+	/// Send log alert notification.
+	/// </summary>
+	/// <param name="message">Alert text.</param>
+	protected void AlertLog(string message)
+		=> Alert(AlertNotifications.Log, message);
 
 	/// <summary>
 	/// Subscription handler.
