@@ -146,6 +146,11 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 		public Subscription Subscription { get; }
 
 		/// <summary>
+		/// Indicates that an unsubscribe request has been sent but response not yet received.
+		/// </summary>
+		public bool IsUnsubscribing { get; set; }
+
+		/// <summary>
 		/// Indicates that lookup response has been received.
 		/// </summary>
 		public bool HasResult { get; set; }
@@ -381,7 +386,7 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 		{
 			var info = TryGetInfo(id, false, false, time, true);
 
-			if (info == null)
+			if (info == null || info.IsUnsubscribing)
 				continue;
 
 			if (!processed.Add(info))
@@ -522,11 +527,16 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 		if (actions == null)
 			throw new ArgumentNullException(nameof(actions));
 
-		if (subscription.TransactionId == 0)
-			subscription.TransactionId = TransactionIdGenerator.GetNextId();
-
 		using (_syncObject.EnterScope())
 		{
+			if (subscription.TransactionId != 0)
+			{
+				_subscriptions.Remove(subscription.TransactionId);
+				_requests.Remove(subscription.TransactionId);
+			}
+
+			subscription.TransactionId = TransactionIdGenerator.GetNextId();
+
 			var info = new SubscriptionInfo(subscription, _subscriptionAllMap.TryGetValue(subscription.TransactionId, out var parentId) ? _subscriptions.TryGetValue(parentId) : null);
 
 			if (subscription.SubscriptionMessage is OrderStatusMessage)
@@ -609,6 +619,12 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 		}
 		else
 		{
+			using (_syncObject.EnterScope())
+			{
+				if (_subscriptions.TryGetValue(subscription.TransactionId, out var info))
+					info.IsUnsubscribing = true;
+			}
+
 			unsubscribe.TransactionId = TransactionIdGenerator.GetNextId();
 			SendRequest(unsubscribe, subscription, false, actions);
 		}
