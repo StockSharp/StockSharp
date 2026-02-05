@@ -203,8 +203,14 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 							}
 							else if (info.State != SubscriptionStates.Online)
 							{
-								subscrMsg.SetSubscriptionIds([subscrMsg.OriginalTransactionId]);
-								break;
+								// For transactions, don't use OriginalTransactionId as subscription id
+								// because OriginalTransactionId is the order's transaction id, not the subscription id
+								// Let it fall through to use info.Subscribers.CachedKeys
+								if (info.Subscription.DataType != DataType.Transactions)
+								{
+									subscrMsg.SetSubscriptionIds([subscrMsg.OriginalTransactionId]);
+									break;
+								}
 							}
 						}
 						else
@@ -214,12 +220,25 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 							if (!_state.TryGetSubscriptionByKey((dataType, secId), out info) && (secId == default || !_state.TryGetSubscriptionByKey((dataType, default(SecurityId)), out info)))
 							{
+								// Transaction messages (order responses) should pass through even without subscription
+								// because they are handled dynamically and may come from nested adapters (e.g., EmulationMessageAdapter)
+								if (dataType == DataType.Transactions)
+									return (message, []);
+
+								// If the subscription was skipped (e.g., history-only lookup), pass through
+								// so that SubscriptionMessageAdapter can handle it
+								if (subscrMsg.OriginalTransactionId != 0 && _state.ContainsSkipSubscription(subscrMsg.OriginalTransactionId))
+									return (message, []);
+
 								// No subscription found - don't forward message
 								return (null, []);
 							}
 						}
 
-						var ids = info.IsMarketData ? info.OnlineSubscribers.Cache : info.Subscribers.CachedKeys;
+						// For market data in Online state, use OnlineSubscribers; for historical (Active state), use all Subscribers
+						var ids = info.IsMarketData && info.State == SubscriptionStates.Online
+							? info.OnlineSubscribers.Cache
+							: info.Subscribers.CachedKeys;
 
 						if (info.ExtraFilters.Count > 0)
 						{
@@ -302,7 +321,13 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 		{
 			if (isSubscribe)
 			{
-				if (message.SpecificItemRequest || message.IsHistoryOnly())
+				// Transaction subscriptions should NOT be skipped even when history-only
+				// because we need to track order IDs for linking ExecutionMessage responses
+				var shouldSkip = message.SpecificItemRequest || message.IsHistoryOnly();
+				if (shouldSkip && message.DataType == DataType.Transactions)
+					shouldSkip = false;
+
+				if (shouldSkip)
 				{
 					_state.AddSkipSubscription(message.TransactionId);
 					sendInMsg = message;
