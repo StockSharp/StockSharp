@@ -621,7 +621,7 @@ partial class Connector
 		foreach (var subscription in subscriptions)
 		{
 			anyOnline = anyOnline == true || subscription.State == SubscriptionStates.Online;
-			anyCanOnline = anyCanOnline == true || (subscription.State == SubscriptionStates.Active && subscription.To is null);
+			anyCanOnline = anyCanOnline == true || (subscription.State == SubscriptionStates.Active && !subscription.SubscriptionMessage.IsHistoryOnly());
 
 			evt?.Invoke(subscription, entity);
 			RaiseSubscriptionReceived(subscription, entity);

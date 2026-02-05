@@ -948,11 +948,14 @@ partial class Connector
 	{
 		Security security = null;
 
-		if (RaiseReceived(message, message, RaiseLevel1Received, out var anyCanOnline) == false)
+		if (RaiseReceived(message, message, RaiseLevel1Received, out var anyCanOnline) != true)
 		{
+			if (anyCanOnline != true)
+				return;
+
 			security = EnsureGetSecurity(message);
-			
-			if (anyCanOnline != true || _entityCache.HasLevel1Info(security))
+
+			if (_entityCache.HasLevel1Info(security))
 				return;
 		}
 
@@ -1119,7 +1122,7 @@ partial class Connector
 
 	private void ProcessQuotesMessage(QuoteChangeMessage message)
 	{
-		if (RaiseReceived(message, message, OrderBookReceived) == false)
+		if (RaiseReceived(message, message, OrderBookReceived) != true)
 			return;
 
 		if (message.IsFiltered || message.State != null)
@@ -1261,7 +1264,7 @@ partial class Connector
 
 	private void ProcessTradeMessage(ExecutionMessage message)
 	{
-		if (RaiseReceived(message, message, TickTradeReceived) == false)
+		if (RaiseReceived(message, message, TickTradeReceived) != true)
 			return;
 
 		Security security = null;
