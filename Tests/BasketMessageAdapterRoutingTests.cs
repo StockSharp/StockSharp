@@ -12,7 +12,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 
 	private sealed class TestRoutingInnerAdapter : MessageAdapter
 	{
-		private readonly ConcurrentQueue<Message> _inMessages = new();
+		private readonly ConcurrentQueue<Message> _inMessages = [];
 		private HashSet<DataType> _allDownloadingTypes = [];
 
 		public TestRoutingInnerAdapter(IdGenerator idGen)
@@ -184,7 +184,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 			basket.ApplyHeartbeat(adapter2, false);
 		}
 
-		_outMessages = new ConcurrentQueue<Message>();
+		_outMessages = [];
 		basket.NewOutMessageAsync += async (msg, ct) =>
 		{
 			// Re-process loopback messages (simulates Connector behavior)
@@ -208,7 +208,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	private T[] GetOut<T>() where T : Message
 		=> [.. _outMessages.OfType<T>()];
 
-	private void ClearOut() => _outMessages = new();
+	private void ClearOut() => _outMessages = [];
 
 	private async Task ConnectBasket(BasketMessageAdapter basket, CancellationToken ct)
 	{
@@ -1190,7 +1190,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		// Enable heartbeat explicitly
 		basket.ApplyHeartbeat(adapter, true);
 
-		_outMessages = new ConcurrentQueue<Message>();
+		_outMessages = [];
 		basket.NewOutMessageAsync += async (msg, ct) =>
 		{
 			if (msg.IsBack())

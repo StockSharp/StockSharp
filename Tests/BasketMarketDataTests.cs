@@ -811,7 +811,7 @@ public class BasketMarketDataTests : BasketTestBase
 		basket.ApplyHeartbeat(a2, false);
 		basket.ApplyHeartbeat(a3, false);
 
-		OutMessages = new ConcurrentQueue<Message>();
+		OutMessages = [];
 		basket.NewOutMessageAsync += (msg, ct) =>
 		{
 			OutMessages.Enqueue(msg);
@@ -927,7 +927,7 @@ public class BasketMarketDataTests : BasketTestBase
 		basket.ApplyHeartbeat(a2, false);
 		basket.ApplyHeartbeat(a3, false);
 
-		OutMessages = new ConcurrentQueue<Message>();
+		OutMessages = [];
 		basket.NewOutMessageAsync += (msg, ct) =>
 		{
 			OutMessages.Enqueue(msg);

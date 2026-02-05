@@ -19,9 +19,9 @@ public class ConnectorRoutingTests : BaseTestClass
 	{
 		private readonly string _exchangeName;
 		private readonly SecurityId[] _supportedSecurities;
-		private readonly ConcurrentQueue<Message> _inMessages = new();
-		private readonly ConcurrentDictionary<long, MarketDataMessage> _activeSubscriptions = new();
-		private readonly ConcurrentDictionary<long, OrderRegisterMessage> _activeOrders = new();
+		private readonly ConcurrentQueue<Message> _inMessages = [];
+		private readonly ConcurrentDictionary<long, MarketDataMessage> _activeSubscriptions = [];
+		private readonly ConcurrentDictionary<long, OrderRegisterMessage> _activeOrders = [];
 		private long _orderId;
 		private long _tradeId;
 		private CancellationTokenSource _feedCts;

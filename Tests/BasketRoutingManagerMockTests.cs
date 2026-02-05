@@ -16,7 +16,7 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 
 	private sealed class TestMockInnerAdapter : MessageAdapter
 	{
-		private readonly ConcurrentQueue<Message> _inMessages = new();
+		private readonly ConcurrentQueue<Message> _inMessages = [];
 
 		public TestMockInnerAdapter(IdGenerator idGen)
 			: base(idGen)
@@ -111,7 +111,7 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 		basket.InnerAdapters.Add(adapter1);
 		basket.ApplyHeartbeat(adapter1, false);
 
-		_outMessages = new ConcurrentQueue<Message>();
+		_outMessages = [];
 		basket.NewOutMessageAsync += (msg, ct) =>
 		{
 			_outMessages.Enqueue(msg);
@@ -129,7 +129,7 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 	private T[] GetOut<T>() where T : Message
 		=> [.. _outMessages.OfType<T>()];
 
-	private void ClearOut() => _outMessages = new();
+	private void ClearOut() => _outMessages = [];
 
 	#endregion
 

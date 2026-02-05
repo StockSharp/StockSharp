@@ -2,13 +2,10 @@ namespace StockSharp.Tests;
 
 using System.Collections.Concurrent;
 
-/// <summary>
-/// Simulates a live data feed that generates market data messages.
-/// </summary>
-public sealed class DataFeedEmulator : IDisposable
+class DataFeedEmulator : IDisposable
 {
 	private readonly CancellationTokenSource _cts = new();
-	private readonly BlockingCollection<Message> _outputQueue = new();
+	private readonly BlockingCollection<Message> _outputQueue = [];
 	private Task _generatorTask;
 
 	public SecurityId SecurityId { get; }
@@ -36,7 +33,7 @@ public sealed class DataFeedEmulator : IDisposable
 			return;
 
 		_isGenerating = true;
-		_generatorTask = Task.Run(GenerateDataLoop);
+		_generatorTask = Task.Run(GenerateDataLoop, cancellationToken);
 
 		// Wait for first message to be generated
 		await Task.Delay(100, cancellationToken);
@@ -137,7 +134,7 @@ public sealed class DataFeedEmulator : IDisposable
 		{
 			while (!cts.Token.IsCancellationRequested)
 			{
-				if (_outputQueue.TryTake(out var msg, 10))
+				if (_outputQueue.TryTake(out var msg, 10, token))
 					return msg;
 				await Task.Delay(5, cts.Token);
 			}
@@ -206,7 +203,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		// Start feed
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync();
+		await feed.StartAsync(CancellationToken);
 
 		// Collect messages
 		var receivedMessages = new List<ISubscriptionIdMessage>();
@@ -256,7 +253,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync();
+		await feed.StartAsync(CancellationToken);
 
 		// Receive some messages while subscribed
 		var messagesBeforeUnsubscribe = new List<ISubscriptionIdMessage>();
@@ -334,7 +331,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}, token);
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync();
+		await feed.StartAsync(CancellationToken);
 
 		// Collect messages
 		var receivedMessages = new List<ISubscriptionIdMessage>();
@@ -390,7 +387,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}, token);
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync();
+		await feed.StartAsync(CancellationToken);
 
 		// Verify both IDs present
 		var messagesBefore = new List<ISubscriptionIdMessage>();
@@ -462,7 +459,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync();
+		await feed.StartAsync(CancellationToken);
 
 		// Phase 1: Subscribed - should receive with ID 100
 		var phase1 = new List<long[]>();
@@ -560,7 +557,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync();
+		await feed.StartAsync(CancellationToken);
 
 		// Collect messages
 		var receivedMessages = new List<ISubscriptionIdMessage>();
@@ -604,7 +601,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync();
+		await feed.StartAsync(CancellationToken);
 
 		// Receive some messages while subscribed
 		var messagesBeforeUnsubscribe = new List<ISubscriptionIdMessage>();
@@ -684,8 +681,8 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		feed1.SetSubscriptionId(100);
 		feed2.SetSubscriptionId(101);
-		await feed1.StartAsync();
-		await feed2.StartAsync();
+		await feed1.StartAsync(CancellationToken);
+		await feed2.StartAsync(CancellationToken);
 
 		// Collect messages from both feeds
 		var messages1 = new List<ISubscriptionIdMessage>();
@@ -782,8 +779,8 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		ticksFeed.SetSubscriptionId(100);
 		level1Feed.SetSubscriptionId(101);
-		await ticksFeed.StartAsync();
-		await level1Feed.StartAsync();
+		await ticksFeed.StartAsync(CancellationToken);
+		await level1Feed.StartAsync(CancellationToken);
 
 		// Collect messages
 		var ticksMessages = new List<ExecutionMessage>();

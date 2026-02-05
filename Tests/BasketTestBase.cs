@@ -12,7 +12,7 @@ public abstract class BasketTestBase : BaseTestClass
 {
 	protected sealed class TestBasketInnerAdapter : MessageAdapter
 	{
-		private readonly ConcurrentQueue<Message> _inMessages = new();
+		private readonly ConcurrentQueue<Message> _inMessages = [];
 
 		public TestBasketInnerAdapter(IdGenerator idGen)
 			: base(idGen)
@@ -178,7 +178,7 @@ public abstract class BasketTestBase : BaseTestClass
 			basket.ApplyHeartbeat(adapter2, false);
 		}
 
-		OutMessages = new ConcurrentQueue<Message>();
+		OutMessages = [];
 		basket.NewOutMessageAsync += (msg, ct) =>
 		{
 			OutMessages.Enqueue(msg);
@@ -196,7 +196,7 @@ public abstract class BasketTestBase : BaseTestClass
 	protected T[] GetOut<T>() where T : Message
 		=> [.. OutMessages.OfType<T>()];
 
-	protected void ClearOut() => OutMessages = new();
+	protected void ClearOut() => OutMessages = [];
 
 	// Strict broadcast output verification
 	protected void AssertBroadcastOutput(

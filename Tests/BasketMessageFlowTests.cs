@@ -33,7 +33,7 @@ public class BasketMessageFlowTests : BaseTestClass
 
 	public sealed class MessageFlowLogger
 	{
-		private readonly ConcurrentQueue<MessageLog> _logs = new();
+		private readonly ConcurrentQueue<MessageLog> _logs = [];
 
 		public IReadOnlyCollection<MessageLog> Logs => [.. _logs];
 
@@ -78,7 +78,7 @@ public class BasketMessageFlowTests : BaseTestClass
 	{
 		private readonly MessageFlowLogger _logger;
 		private readonly string _name;
-		private readonly ConcurrentQueue<Message> _inMessages = new();
+		private readonly ConcurrentQueue<Message> _inMessages = [];
 		private readonly HashSet<DataType> _allDownloadingTypes = [];
 
 		public LoggingInnerAdapter(IdGenerator idGen, MessageFlowLogger logger, string name)
@@ -119,7 +119,7 @@ public class BasketMessageFlowTests : BaseTestClass
 		public bool RespondWithError { get; set; }
 		public bool EmitOrdersOnOrderStatus { get; set; } = true;
 
-		private readonly ConcurrentDictionary<long, MarketDataMessage> _activeMarketDataSubs = new();
+		private readonly ConcurrentDictionary<long, MarketDataMessage> _activeMarketDataSubs = [];
 
 		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken ct)
 		{
@@ -377,7 +377,7 @@ public class BasketMessageFlowTests : BaseTestClass
 		CreateLoggingBasket(bool twoAdapters = false)
 	{
 		_flowLogger = new MessageFlowLogger();
-		_basketOutput = new ConcurrentQueue<Message>();
+		_basketOutput = [];
 
 		var idGen = new IncrementalIdGenerator();
 		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
@@ -952,7 +952,7 @@ public class BasketMessageFlowTests : BaseTestClass
 		CreateBasketWithWrapper()
 	{
 		_flowLogger = new MessageFlowLogger();
-		_basketOutput = new ConcurrentQueue<Message>();
+		_basketOutput = [];
 
 		var idGen = new IncrementalIdGenerator();
 		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
