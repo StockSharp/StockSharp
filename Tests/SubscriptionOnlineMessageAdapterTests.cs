@@ -154,7 +154,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task RealManager_TickDataBeforeOnline_DroppedByDesign()
+	public async Task RealManager_TickDataBeforeOnline_ForwardedAsHistorical()
 	{
 		var inner = new RecordingMessageAdapter();
 		using var adapter = new SubscriptionOnlineMessageAdapter(inner);
@@ -177,8 +177,8 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 		output.Clear();
 
 		// Emit tick data before Online — subscription is Active but not Online
-		// SubscriptionOnlineManager only routes data to OnlineSubscribers, so
-		// data for Active-but-not-yet-Online subscriptions is dropped by design
+		// Active state = historical data phase, data is routed to all Subscribers (not OnlineSubscribers)
+		// OnlineSubscribers filter only applies after Online message is received
 		var tick = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
@@ -187,10 +187,13 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 			TradeVolume = 3m,
 			ServerTime = DateTime.UtcNow,
 		};
-		// No subscription IDs — lookup by key finds the subscription but OnlineSubscribers is empty
 		await inner.SendOutMessageAsync(tick, CancellationToken);
 
-		output.OfType<ExecutionMessage>().Any().AssertFalse("Data before Online should be dropped (OnlineSubscribers is empty)");
+		// Data in Active state IS forwarded (it's historical data before the live stream starts)
+		output.OfType<ExecutionMessage>().Any().AssertTrue("Historical data in Active state should be forwarded");
+		var receivedTick = output.OfType<ExecutionMessage>().First();
+		receivedTick.TradePrice.AssertEqual(30000m);
+		receivedTick.GetSubscriptionIds().Contains(100).AssertTrue("Should have subscription ID set");
 	}
 
 	#endregion
