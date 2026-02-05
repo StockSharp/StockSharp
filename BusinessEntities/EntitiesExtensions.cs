@@ -1365,6 +1365,8 @@ public static partial class EntitiesExtensions
 
 		var pf = position as Portfolio ?? position.Portfolio;
 
+		var oldCurrentValue = position.CurrentValue ?? 0;
+
 		foreach (var change in message.Changes)
 		{
 			try
@@ -1453,6 +1455,21 @@ public static partial class EntitiesExtensions
 			catch (Exception ex)
 			{
 				throw new InvalidOperationException(LocalizedStrings.CommandNotProcessedReason.Put(nameof(PositionChangeMessage), change.Key), ex);
+			}
+		}
+
+		var newCurrentValue = position.CurrentValue ?? 0;
+
+		if (oldCurrentValue.Sign() != newCurrentValue.Sign())
+		{
+			if (newCurrentValue == 0)
+			{
+				position.CloseTime = message.ServerTime;
+			}
+			else
+			{
+				position.OpenTime = message.ServerTime;
+				position.CloseTime = null;
 			}
 		}
 

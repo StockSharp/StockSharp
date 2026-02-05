@@ -403,6 +403,56 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 		}
 	}
 
+	private DateTime? _openTime;
+
+	/// <summary>
+	/// Position open time.
+	/// </summary>
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PosOpenTimeKey,
+		Description = LocalizedStrings.PosOpenTimeKey,
+		GroupName = LocalizedStrings.StatisticsKey)]
+	[Browsable(false)]
+	public DateTime? OpenTime
+	{
+		get => _openTime;
+		set
+		{
+			if (_openTime == value)
+				return;
+
+			_openTime = value;
+			NotifyChanged();
+		}
+	}
+
+	private DateTime? _closeTime;
+
+	/// <summary>
+	/// Position close time.
+	/// </summary>
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.PosCloseTimeKey,
+		Description = LocalizedStrings.PosCloseTimeKey,
+		GroupName = LocalizedStrings.StatisticsKey)]
+	[Browsable(false)]
+	public DateTime? CloseTime
+	{
+		get => _closeTime;
+		set
+		{
+			if (_closeTime == value)
+				return;
+
+			_closeTime = value;
+			NotifyChanged();
+		}
+	}
+
 	/// <summary>
 	/// Client code assigned by the broker.
 	/// </summary>
@@ -745,6 +795,9 @@ public class Position : NotifiableObject, ILocalTimeMessage, IServerTimeMessage
 		destination.TradesCount = TradesCount;
 
 		destination.LiquidationPrice = LiquidationPrice;
+
+		destination.OpenTime = OpenTime;
+		destination.CloseTime = CloseTime;
 	}
 
 	/// <inheritdoc />
