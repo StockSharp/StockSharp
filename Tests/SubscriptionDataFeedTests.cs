@@ -30,7 +30,7 @@ public sealed class DataFeedEmulator : IDisposable
 		_subscriptionId = subscriptionId;
 	}
 
-	public async Task StartAsync()
+	public async Task StartAsync(CancellationToken cancellationToken = default)
 	{
 		if (_isGenerating)
 			return;
@@ -39,7 +39,7 @@ public sealed class DataFeedEmulator : IDisposable
 		_generatorTask = Task.Run(GenerateDataLoop);
 
 		// Wait for first message to be generated
-		await Task.Delay(100, CancellationToken);
+		await Task.Delay(100, cancellationToken);
 	}
 
 	public void Stop()

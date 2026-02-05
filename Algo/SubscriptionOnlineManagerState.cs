@@ -145,6 +145,10 @@ public class SubscriptionOnlineManagerState : ISubscriptionOnlineManagerState
 		=> _skipSubscriptions.Remove(id);
 
 	/// <inheritdoc />
+	public bool ContainsSkipSubscription(long id)
+		=> _skipSubscriptions.Contains(id);
+
+	/// <inheritdoc />
 	public void AddUnsubscribeRequest(long id)
 		=> _unsubscribeRequests.Add(id);
 

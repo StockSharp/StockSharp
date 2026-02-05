@@ -66,6 +66,11 @@ public interface ISubscriptionOnlineManagerState
 	bool RemoveSkipSubscription(long id);
 
 	/// <summary>
+	/// Check if contains skip subscription.
+	/// </summary>
+	bool ContainsSkipSubscription(long id);
+
+	/// <summary>
 	/// Add unsubscribe request.
 	/// </summary>
 	void AddUnsubscribeRequest(long id);
