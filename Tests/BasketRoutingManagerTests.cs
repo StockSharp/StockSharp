@@ -445,6 +445,242 @@ public class BasketRoutingManagerTests : BaseTestClass
 		onlineMsg.OriginalTransactionId.AssertEqual(parentTransId, "Should have parent ID");
 	}
 
+	[TestMethod]
+	public async Task ProcessOutMessage_DataMessage_RemapsSubscriptionIds()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var ctx = CreateTestContext(idGen);
+
+		var adapter = CreateAdapter(idGen);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
+
+		// Subscribe
+		var parentTransId = idGen.GetNextId();
+		var subscribeMsg = new MarketDataMessage
+		{
+			SecurityId = _secId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = parentTransId,
+		};
+
+		var subscribeResult = await ctx.Manager.ProcessInMessageAsync(subscribeMsg, a => a, CancellationToken);
+		var childTransId = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[0].Message).TransactionId;
+
+		// Simulate response
+		await ctx.Manager.ProcessOutMessageAsync(adapter,
+			new SubscriptionResponseMessage { OriginalTransactionId = childTransId }, a => a, CancellationToken);
+
+		// Data message from adapter with child subscription ID
+		var dataMsg = new ExecutionMessage
+		{
+			SecurityId = _secId1,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		dataMsg.SetSubscriptionIds([childTransId]);
+
+		var dataResult = await ctx.Manager.ProcessOutMessageAsync(adapter, dataMsg, a => a, CancellationToken);
+
+		dataResult.TransformedMessage.AssertNotNull("Data should be forwarded");
+		var ids = ((ISubscriptionIdMessage)dataResult.TransformedMessage).GetSubscriptionIds();
+		ids.Contains(parentTransId).AssertTrue("Should contain parent ID");
+		ids.Contains(childTransId).AssertFalse("Should NOT contain child ID");
+	}
+
+	[TestMethod]
+	public async Task ProcessOutMessage_DataMessage_MultipleChildIds_AllRemapped()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var ctx = CreateTestContext(idGen);
+
+		var adapter1 = CreateAdapter(idGen);
+		var adapter2 = CreateAdapter(idGen);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter1);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter2);
+		ctx.ConnectionState.SetAdapterState(adapter1, ConnectionStates.Connected, null);
+		ctx.ConnectionState.SetAdapterState(adapter2, ConnectionStates.Connected, null);
+
+		// Subscribe (broadcast to both adapters)
+		var parentTransId = idGen.GetNextId();
+		var subscribeMsg = new MarketDataMessage
+		{
+			SecurityId = _secId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = parentTransId,
+		};
+
+		var subscribeResult = await ctx.Manager.ProcessInMessageAsync(subscribeMsg, a => a, CancellationToken);
+		subscribeResult.RoutingDecisions.Count.AssertEqual(2, "Should route to both adapters");
+
+		var childId1 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[0].Message).TransactionId;
+		var childId2 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[1].Message).TransactionId;
+
+		// Responses
+		await ctx.Manager.ProcessOutMessageAsync(adapter1,
+			new SubscriptionResponseMessage { OriginalTransactionId = childId1 }, a => a, CancellationToken);
+		await ctx.Manager.ProcessOutMessageAsync(adapter2,
+			new SubscriptionResponseMessage { OriginalTransactionId = childId2 }, a => a, CancellationToken);
+
+		// Data message from adapter1 with its child ID
+		var dataMsg = new ExecutionMessage
+		{
+			SecurityId = _secId1,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		dataMsg.SetSubscriptionIds([childId1]);
+
+		var dataResult = await ctx.Manager.ProcessOutMessageAsync(adapter1, dataMsg, a => a, CancellationToken);
+
+		dataResult.TransformedMessage.AssertNotNull("Data should be forwarded");
+		var ids = ((ISubscriptionIdMessage)dataResult.TransformedMessage).GetSubscriptionIds();
+		ids.Contains(parentTransId).AssertTrue("Should remap to parent ID");
+		ids.Contains(childId1).AssertFalse("Child1 ID should NOT leak");
+		ids.Contains(childId2).AssertFalse("Child2 ID should NOT leak");
+	}
+
+	[TestMethod]
+	public async Task ProcessOutMessage_SubscriptionFinished_OneOfTwo_DataStillRemapsOther()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var ctx = CreateTestContext(idGen);
+
+		var adapter1 = CreateAdapter(idGen);
+		var adapter2 = CreateAdapter(idGen);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter1);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter2);
+		ctx.ConnectionState.SetAdapterState(adapter1, ConnectionStates.Connected, null);
+		ctx.ConnectionState.SetAdapterState(adapter2, ConnectionStates.Connected, null);
+
+		// Subscribe (broadcast)
+		var parentTransId = idGen.GetNextId();
+		var subscribeResult = await ctx.Manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			SecurityId = _secId1, DataType2 = DataType.Ticks,
+			IsSubscribe = true, TransactionId = parentTransId,
+		}, a => a, CancellationToken);
+
+		var childId1 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[0].Message).TransactionId;
+		var childId2 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[1].Message).TransactionId;
+
+		// Responses for both
+		await ctx.Manager.ProcessOutMessageAsync(adapter1,
+			new SubscriptionResponseMessage { OriginalTransactionId = childId1 }, a => a, CancellationToken);
+		await ctx.Manager.ProcessOutMessageAsync(adapter2,
+			new SubscriptionResponseMessage { OriginalTransactionId = childId2 }, a => a, CancellationToken);
+
+		// Finished for child1
+		await ctx.Manager.ProcessOutMessageAsync(adapter1,
+			new SubscriptionFinishedMessage { OriginalTransactionId = childId1 }, a => a, CancellationToken);
+
+		// Data from adapter2 with child2 ID — should still remap to parent
+		var dataMsg = new ExecutionMessage
+		{
+			SecurityId = _secId1, DataTypeEx = DataType.Ticks,
+			ServerTime = DateTime.UtcNow, TradePrice = 100m, TradeVolume = 10m,
+		};
+		dataMsg.SetSubscriptionIds([childId2]);
+
+		var dataResult = await ctx.Manager.ProcessOutMessageAsync(adapter2, dataMsg, a => a, CancellationToken);
+
+		dataResult.TransformedMessage.AssertNotNull("Data should still be forwarded after one child finished");
+		var ids = ((ISubscriptionIdMessage)dataResult.TransformedMessage).GetSubscriptionIds();
+		ids.Contains(parentTransId).AssertTrue("Should remap to parent ID");
+		ids.Contains(childId2).AssertFalse("Child ID should not leak");
+	}
+
+	[TestMethod]
+	public async Task ProcessOutMessage_SubscriptionError_OneOfTwo_OtherStillWorks()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var ctx = CreateTestContext(idGen);
+
+		var adapter1 = CreateAdapter(idGen);
+		var adapter2 = CreateAdapter(idGen);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter1);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter2);
+		ctx.ConnectionState.SetAdapterState(adapter1, ConnectionStates.Connected, null);
+		ctx.ConnectionState.SetAdapterState(adapter2, ConnectionStates.Connected, null);
+
+		// Subscribe (broadcast)
+		var parentTransId = idGen.GetNextId();
+		var subscribeResult = await ctx.Manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			SecurityId = _secId1, DataType2 = DataType.Ticks,
+			IsSubscribe = true, TransactionId = parentTransId,
+		}, a => a, CancellationToken);
+
+		var childId1 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[0].Message).TransactionId;
+		var childId2 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[1].Message).TransactionId;
+
+		// Error for child1
+		await ctx.Manager.ProcessOutMessageAsync(adapter1,
+			new SubscriptionResponseMessage
+			{
+				OriginalTransactionId = childId1,
+				Error = new InvalidOperationException("fail"),
+			}, a => a, CancellationToken);
+
+		// Success for child2
+		await ctx.Manager.ProcessOutMessageAsync(adapter2,
+			new SubscriptionResponseMessage { OriginalTransactionId = childId2 }, a => a, CancellationToken);
+
+		// Online for child2
+		await ctx.Manager.ProcessOutMessageAsync(adapter2,
+			new SubscriptionOnlineMessage { OriginalTransactionId = childId2 }, a => a, CancellationToken);
+
+		// Data from adapter2
+		var dataMsg = new ExecutionMessage
+		{
+			SecurityId = _secId1, DataTypeEx = DataType.Ticks,
+			ServerTime = DateTime.UtcNow, TradePrice = 100m, TradeVolume = 10m,
+		};
+		dataMsg.SetSubscriptionIds([childId2]);
+
+		var dataResult = await ctx.Manager.ProcessOutMessageAsync(adapter2, dataMsg, a => a, CancellationToken);
+
+		dataResult.TransformedMessage.AssertNotNull("Data should still arrive from working adapter");
+		var ids = ((ISubscriptionIdMessage)dataResult.TransformedMessage).GetSubscriptionIds();
+		ids.Contains(parentTransId).AssertTrue("Should remap to parent ID");
+	}
+
+	[TestMethod]
+	public async Task ProcessOutMessage_DataMessage_UnknownSubscriptionId_PassesThrough()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var ctx = CreateTestContext(idGen);
+
+		var adapter = CreateAdapter(idGen);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
+
+		// Data message with unknown subscription ID (no mapping in ParentChildMap)
+		var dataMsg = new ExecutionMessage
+		{
+			SecurityId = _secId1,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		dataMsg.SetSubscriptionIds([9999]);
+
+		var dataResult = await ctx.Manager.ProcessOutMessageAsync(adapter, dataMsg, a => a, CancellationToken);
+
+		// Unknown IDs should pass through without remapping
+		if (dataResult.TransformedMessage != null)
+		{
+			var ids = ((ISubscriptionIdMessage)dataResult.TransformedMessage).GetSubscriptionIds();
+			ids.Contains(9999).AssertTrue("Unknown ID should pass through unchanged");
+		}
+	}
+
 	#endregion
 
 	#region Order Adapter Mapping

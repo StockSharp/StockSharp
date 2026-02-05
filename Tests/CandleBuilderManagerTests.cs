@@ -409,6 +409,230 @@ public class CandleBuilderManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task Tick_WithMultipleSubscriptionIds_CandleHasAllIds()
+	{
+		var manager = CreateManager(out _, out _);
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subscriptions to build candles from ticks
+		var sub1 = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build,
+			BuildFrom = DataType.Ticks,
+		};
+		var (sub1Inner, _) = await manager.ProcessInMessageAsync(sub1, CancellationToken);
+		sub1Inner.Length.AssertEqual(1);
+
+		var sub2 = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 2,
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build,
+			BuildFrom = DataType.Ticks,
+		};
+		var (sub2Inner, _) = await manager.ProcessInMessageAsync(sub2, CancellationToken);
+
+		// Send tick with both subscription IDs (as joined by SubscriptionOnlineManager)
+		var now = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+		var tick = new ExecutionMessage
+		{
+			SecurityId = secId,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = now,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		tick.SetSubscriptionIds([1, 2]);
+
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
+
+		forward.AssertNull("Tick consumed for building");
+
+		var candles = extraOut.OfType<CandleMessage>().ToArray();
+		candles.Length.AssertGreater(0, "Should produce candle(s)");
+
+		// At least one candle should have both subscription IDs
+		var allIds = candles.SelectMany(c => c.GetSubscriptionIds()).Distinct().ToArray();
+		allIds.Contains(1).AssertTrue("Candle should contain first subscription ID");
+		allIds.Contains(2).AssertTrue("Candle should contain second subscription ID");
+	}
+
+	[TestMethod]
+	public async Task Tick_WithMixedSubscriptionIds_OnlyRelevantIdsInCandle()
+	{
+		var manager = CreateManager(out _, out _);
+
+		var secId = Helper.CreateSecurityId();
+
+		// One subscription for candle building
+		var sub = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build,
+			BuildFrom = DataType.Ticks,
+		};
+		await manager.ProcessInMessageAsync(sub, CancellationToken);
+
+		// Tick with subscription ID 1 (known) + 999 (unknown to this manager)
+		var now = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+		var tick = new ExecutionMessage
+		{
+			SecurityId = secId,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = now,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		tick.SetSubscriptionIds([1, 999]);
+
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
+
+		var candles = extraOut.OfType<CandleMessage>().ToArray();
+		candles.Length.AssertGreater(0, "Should produce candle");
+
+		var ids = candles[0].GetSubscriptionIds();
+		ids.Contains(1).AssertTrue("Should contain known subscription ID");
+	}
+
+	[TestMethod]
+	public async Task SubscriptionFinished_OneOfTwo_OtherStillBuildsCandles()
+	{
+		var manager = CreateManager(out _, out _);
+
+		var secId = Helper.CreateSecurityId();
+		var now = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		// Two subscriptions for same candle type
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 1, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 2, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		// Finished for first subscription
+		await manager.ProcessOutMessageAsync(
+			new SubscriptionFinishedMessage { OriginalTransactionId = 1 }, CancellationToken);
+
+		// Tick with second subscription ID — should still build candle
+		var tick = new ExecutionMessage
+		{
+			SecurityId = secId, DataTypeEx = DataType.Ticks,
+			ServerTime = now, TradePrice = 100m, TradeVolume = 10m,
+		};
+		tick.SetSubscriptionIds([2]);
+
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
+
+		var candles = extraOut.OfType<CandleMessage>().ToArray();
+		candles.Length.AssertGreater(0, "Remaining subscription should still build candles");
+		candles[0].GetSubscriptionIds().Contains(2).AssertTrue("Candle should have remaining subscription ID");
+	}
+
+	[TestMethod]
+	public async Task SubscriptionError_OneOfTwo_OtherStillBuildsCandles()
+	{
+		var manager = CreateManager(out _, out _);
+
+		var secId = Helper.CreateSecurityId();
+		var now = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		// Two subscriptions
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 1, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 2, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		// Error for first subscription
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 1, Error = new InvalidOperationException("fail"),
+		}, CancellationToken);
+
+		// Tick with second subscription ID
+		var tick = new ExecutionMessage
+		{
+			SecurityId = secId, DataTypeEx = DataType.Ticks,
+			ServerTime = now, TradePrice = 100m, TradeVolume = 10m,
+		};
+		tick.SetSubscriptionIds([2]);
+
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
+
+		var candles = extraOut.OfType<CandleMessage>().ToArray();
+		candles.Length.AssertGreater(0, "Remaining subscription should still build candles after error on other");
+	}
+
+	[TestMethod]
+	public async Task SubscriptionFinished_Both_NoMoreCandles()
+	{
+		var manager = CreateManager(out _, out _);
+
+		var secId = Helper.CreateSecurityId();
+		var now = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		// Two subscriptions
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 1, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 2, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		// Finished for both
+		await manager.ProcessOutMessageAsync(
+			new SubscriptionFinishedMessage { OriginalTransactionId = 1 }, CancellationToken);
+		await manager.ProcessOutMessageAsync(
+			new SubscriptionFinishedMessage { OriginalTransactionId = 2 }, CancellationToken);
+
+		// Tick arrives — no subscriptions left
+		var tick = new ExecutionMessage
+		{
+			SecurityId = secId, DataTypeEx = DataType.Ticks,
+			ServerTime = now, TradePrice = 100m, TradeVolume = 10m,
+		};
+		tick.SetSubscriptionIds([1, 2]);
+
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
+
+		var candles = extraOut.OfType<CandleMessage>().ToArray();
+		candles.Length.AssertEqual(0, "No candles should be built after all subscriptions finished");
+	}
+
+	[TestMethod]
 	public async Task AllSecurity_Tick_CreatesChildSubscription()
 	{
 		var manager = CreateManager(out var wrapper, out var idGenerator);
@@ -618,6 +842,173 @@ public class CandleBuilderManagerTests : BaseTestClass
 		response.OriginalTransactionId.AssertEqual(1);
 		response.IsNotSupported().AssertTrue();
 	}
+
+	#region Status Message Handling — Multiple Series
+
+	[TestMethod]
+	public async Task StatusMessage_Response_TwoSeries_EachEmittedViaExtraOut()
+	{
+		var manager = CreateManager(out _, out _);
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subscriptions building from ticks
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 1, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 2, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		// Response OK for series1 → forward=null, extraOut has response
+		var resp1 = new SubscriptionResponseMessage { OriginalTransactionId = 1 };
+		var (forward1, extra1) = await manager.ProcessOutMessageAsync(resp1, CancellationToken);
+
+		forward1.AssertNull("CandleBuilderManager always suppresses forward for Response");
+		extra1.Length.AssertEqual(1);
+		extra1[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
+		((SubscriptionResponseMessage)extra1[0]).OriginalTransactionId.AssertEqual(1);
+
+		// Response OK for series2 → forward=null, extraOut has response
+		var resp2 = new SubscriptionResponseMessage { OriginalTransactionId = 2 };
+		var (forward2, extra2) = await manager.ProcessOutMessageAsync(resp2, CancellationToken);
+
+		forward2.AssertNull("CandleBuilderManager always suppresses forward for Response");
+		extra2.Length.AssertEqual(1);
+		((SubscriptionResponseMessage)extra2[0]).OriginalTransactionId.AssertEqual(2);
+	}
+
+	[TestMethod]
+	public async Task StatusMessage_Online_TwoSeries_EachForwardedWithCorrectId()
+	{
+		var manager = CreateManager(out _, out _);
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subscriptions building from ticks
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 1, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 2, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		// Online for series1 → forwarded
+		var online1 = new SubscriptionOnlineMessage { OriginalTransactionId = 1 };
+		var (forward1, extra1) = await manager.ProcessOutMessageAsync(online1, CancellationToken);
+
+		forward1.AssertNotNull("Online should be forwarded");
+		forward1.AssertSame(online1);
+		((SubscriptionOnlineMessage)forward1).OriginalTransactionId.AssertEqual(1);
+		extra1.Length.AssertEqual(0);
+
+		// Online for series2 → forwarded
+		var online2 = new SubscriptionOnlineMessage { OriginalTransactionId = 2 };
+		var (forward2, extra2) = await manager.ProcessOutMessageAsync(online2, CancellationToken);
+
+		forward2.AssertNotNull("Online for series2 should be forwarded");
+		((SubscriptionOnlineMessage)forward2).OriginalTransactionId.AssertEqual(2);
+		extra2.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task StatusMessage_Finished_OneOfTwo_OtherStillGetsOnline()
+	{
+		var manager = CreateManager(out _, out _);
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subscriptions
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 1, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 2, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		// Finished for series1 → forward=null, extraOut has finished
+		var finished1 = new SubscriptionFinishedMessage { OriginalTransactionId = 1 };
+		var (forward1, extra1) = await manager.ProcessOutMessageAsync(finished1, CancellationToken);
+
+		forward1.AssertNull("CandleBuilderManager suppresses forward for Finished");
+		var finishedOut = extra1.OfType<SubscriptionFinishedMessage>().ToArray();
+		finishedOut.Length.AssertGreater(0, "Should emit finished via extraOut");
+		finishedOut[0].OriginalTransactionId.AssertEqual(1);
+
+		// Series2 should still work — Online arrives and is forwarded
+		var online2 = new SubscriptionOnlineMessage { OriginalTransactionId = 2 };
+		var (forward2, extra2) = await manager.ProcessOutMessageAsync(online2, CancellationToken);
+
+		forward2.AssertNotNull("Online for series2 should still be forwarded after series1 finished");
+		((SubscriptionOnlineMessage)forward2).OriginalTransactionId.AssertEqual(2);
+		extra2.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task StatusMessage_Error_OneOfTwo_OtherStillGetsResponse()
+	{
+		var manager = CreateManager(out _, out _);
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subscriptions
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 1, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 2, SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build, BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		// Error for series1 → forward=null, extraOut has error
+		var errorResp = new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 1,
+			Error = new InvalidOperationException("fail"),
+		};
+		var (forward1, extra1) = await manager.ProcessOutMessageAsync(errorResp, CancellationToken);
+
+		forward1.AssertNull("CandleBuilderManager suppresses forward for Response");
+		extra1.Length.AssertGreater(0, "Should emit error via extraOut");
+
+		// Series2 should still work — Response OK
+		var resp2 = new SubscriptionResponseMessage { OriginalTransactionId = 2 };
+		var (forward2, extra2) = await manager.ProcessOutMessageAsync(resp2, CancellationToken);
+
+		forward2.AssertNull("Forward suppressed for Response");
+		extra2.Length.AssertEqual(1);
+		((SubscriptionResponseMessage)extra2[0]).OriginalTransactionId.AssertEqual(2);
+		((SubscriptionResponseMessage)extra2[0]).IsOk().AssertTrue("Series2 response should be OK");
+	}
+
+	#endregion
 
 	[TestMethod]
 	public async Task Tick_WithSubscription_BuildsCandle()

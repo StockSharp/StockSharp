@@ -461,6 +461,596 @@ public class SubscriptionManagerTests : BaseTestClass
 
 	#endregion
 
+	#region Multiple SubscriptionIds in Data Messages
+
+	[TestMethod]
+	public void OutMessage_MultipleKnownIds_ForwardsAll()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subscriptions
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 101,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 101 });
+
+		// Data with both IDs
+		var dataMessage = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		dataMessage.SetSubscriptionIds([100, 101]);
+
+		var (forward, extraOut) = manager.ProcessOutMessage(dataMessage);
+
+		forward.AssertNotNull("Data with multiple known IDs should be forwarded");
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Contains(100).AssertTrue("Should contain first ID");
+		ids.Contains(101).AssertTrue("Should contain second ID");
+	}
+
+	[TestMethod]
+	public void OutMessage_MixKnownAndUnknownIds_ForwardsOnlyKnown()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// One subscription
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		// Data with known + unknown IDs
+		var dataMessage = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		dataMessage.SetSubscriptionIds([100, 999]);
+
+		var (forward, extraOut) = manager.ProcessOutMessage(dataMessage);
+
+		forward.AssertNotNull("Data should be forwarded for known ID");
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Contains(100).AssertTrue("Should contain known ID");
+		ids.Contains(999).AssertFalse("Should NOT contain unknown ID");
+	}
+
+	[TestMethod]
+	public void OutMessage_MultipleIds_OneUnsubscribed_ForwardsOnlyActive()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subscriptions
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 101,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 101 });
+
+		// Unsubscribe first
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 102,
+			OriginalTransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+
+		// Data still arrives with both IDs
+		var dataMessage = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		dataMessage.SetSubscriptionIds([100, 101]);
+
+		var (forward, extraOut) = manager.ProcessOutMessage(dataMessage);
+
+		forward.AssertNotNull("Data should be forwarded for remaining active subscription");
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Contains(100).AssertFalse("Should NOT contain unsubscribed ID");
+		ids.Contains(101).AssertTrue("Should contain active ID");
+	}
+
+	[TestMethod]
+	public void OutMessage_AllIdsUnknown_NotForwarded()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var dataMessage = new ExecutionMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		dataMessage.SetSubscriptionIds([888, 999]);
+
+		var (forward, extraOut) = manager.ProcessOutMessage(dataMessage);
+
+		forward.AssertNull("Data with all unknown IDs should NOT be forwarded");
+	}
+
+	[TestMethod]
+	public void SubscriptionFinished_OneOfTwo_OtherStillReceivesData()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subscriptions
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 100, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 101, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 101 });
+
+		// Finished for first subscription
+		var (finForward, finExtra) = manager.ProcessOutMessage(
+			new SubscriptionFinishedMessage { OriginalTransactionId = 100 });
+
+		// Data with both IDs arrives after finished
+		var dataMessage = new ExecutionMessage
+		{
+			SecurityId = secId, ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks, TradePrice = 100m, TradeVolume = 10m,
+		};
+		dataMessage.SetSubscriptionIds([100, 101]);
+
+		var (forward, _) = manager.ProcessOutMessage(dataMessage);
+
+		forward.AssertNotNull("Data should still be forwarded for remaining subscription");
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Contains(100).AssertFalse("Finished subscription should be filtered out");
+		ids.Contains(101).AssertTrue("Active subscription should remain");
+	}
+
+	[TestMethod]
+	public void SubscriptionError_OneOfTwo_OtherStillReceivesData()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subscriptions
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 100, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 101, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 101 });
+
+		// Error for first subscription
+		manager.ProcessOutMessage(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 100,
+			Error = new InvalidOperationException("fail"),
+		});
+
+		// Data with both IDs arrives
+		var dataMessage = new ExecutionMessage
+		{
+			SecurityId = secId, ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks, TradePrice = 100m, TradeVolume = 10m,
+		};
+		dataMessage.SetSubscriptionIds([100, 101]);
+
+		var (forward, _) = manager.ProcessOutMessage(dataMessage);
+
+		forward.AssertNotNull("Data should still be forwarded for remaining subscription");
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Contains(100).AssertFalse("Errored subscription should be filtered out");
+		ids.Contains(101).AssertTrue("Active subscription should remain");
+	}
+
+	[TestMethod]
+	public void SubscriptionOnline_OneOfTwo_BothStillReceiveData()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subscriptions — both get response
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 100, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 101, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 101 });
+
+		// Online for first only
+		manager.ProcessOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+
+		// Data with both IDs
+		var dataMessage = new ExecutionMessage
+		{
+			SecurityId = secId, ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks, TradePrice = 100m, TradeVolume = 10m,
+		};
+		dataMessage.SetSubscriptionIds([100, 101]);
+
+		var (forward, _) = manager.ProcessOutMessage(dataMessage);
+
+		forward.AssertNotNull("Data should be forwarded");
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Contains(100).AssertTrue("Online subscription should be present");
+		ids.Contains(101).AssertTrue("Active (not yet online) subscription should also be present");
+	}
+
+	#endregion
+
+	#region Status Message Handling
+
+	[TestMethod]
+	public void StatusMessage_Response_TwoSubs_EachForwardedWithCorrectId()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Subscribe two
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 100, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 101, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+
+		// Response OK for sub1
+		var resp1 = new SubscriptionResponseMessage { OriginalTransactionId = 100 };
+		var (forward1, extra1) = manager.ProcessOutMessage(resp1);
+
+		forward1.AssertNotNull("Response OK for sub1 should be forwarded");
+		forward1.AssertSame(resp1);
+		((SubscriptionResponseMessage)forward1).OriginalTransactionId.AssertEqual(100);
+		extra1.Length.AssertEqual(0);
+
+		// Response OK for sub2
+		var resp2 = new SubscriptionResponseMessage { OriginalTransactionId = 101 };
+		var (forward2, extra2) = manager.ProcessOutMessage(resp2);
+
+		forward2.AssertNotNull("Response OK for sub2 should be forwarded");
+		((SubscriptionResponseMessage)forward2).OriginalTransactionId.AssertEqual(101);
+		extra2.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void StatusMessage_Response_Error_OneOfTwo_OtherStillActive()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subs, both confirmed
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 100, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 101, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 101 });
+
+		// Error for sub1
+		var errorResp = new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 100,
+			Error = new InvalidOperationException("fail"),
+		};
+		var (forward, extra) = manager.ProcessOutMessage(errorResp);
+
+		forward.AssertNotNull("Error response should be forwarded");
+		((SubscriptionResponseMessage)forward).OriginalTransactionId.AssertEqual(100);
+		((SubscriptionResponseMessage)forward).Error.AssertNotNull();
+		extra.Length.AssertEqual(0);
+
+		// Sub2 should still be active (can unsubscribe)
+		var (toInner, toOut) = manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = false, TransactionId = 102, OriginalTransactionId = 101,
+			SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		toInner.Length.AssertEqual(1, "Sub2 should still be active after sub1 error");
+		toOut.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void StatusMessage_Online_TwoSubs_EachForwardedWithCorrectId()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subs, both confirmed
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 100, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 101, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 101 });
+
+		// Online for sub1
+		var online1 = new SubscriptionOnlineMessage { OriginalTransactionId = 100 };
+		var (forward1, extra1) = manager.ProcessOutMessage(online1);
+
+		forward1.AssertNotNull("Online for sub1 should be forwarded");
+		((SubscriptionOnlineMessage)forward1).OriginalTransactionId.AssertEqual(100);
+		extra1.Length.AssertEqual(0);
+
+		// Online for sub2
+		var online2 = new SubscriptionOnlineMessage { OriginalTransactionId = 101 };
+		var (forward2, extra2) = manager.ProcessOutMessage(online2);
+
+		forward2.AssertNotNull("Online for sub2 should be forwarded");
+		((SubscriptionOnlineMessage)forward2).OriginalTransactionId.AssertEqual(101);
+		extra2.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void StatusMessage_Finished_OneOfTwo_OtherStillActive()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Two subs, both confirmed
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 100, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 101, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 101 });
+
+		// Finished for sub1
+		var finished = new SubscriptionFinishedMessage { OriginalTransactionId = 100 };
+		var (forward, extra) = manager.ProcessOutMessage(finished);
+
+		forward.AssertNotNull("Finished should be forwarded");
+		((SubscriptionFinishedMessage)forward).OriginalTransactionId.AssertEqual(100);
+		extra.Length.AssertEqual(0);
+
+		// Sub2 should still be active
+		var (toInner, toOut) = manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = false, TransactionId = 102, OriginalTransactionId = 101,
+			SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		toInner.Length.AssertEqual(1, "Sub2 should still be active after sub1 finished");
+		toOut.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void StatusMessage_ReSubscribe_ResponseSuppressed()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Subscribe and go Online
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 100, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+		manager.ProcessOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+
+		// Trigger re-subscribe
+		manager.ProcessOutMessage(new ConnectionRestoredMessage { IsResetState = true });
+		var (reSubMsgs, _) = manager.ProcessInMessage(new ProcessSuspendedMessage());
+		reSubMsgs.Length.AssertGreater(0, "Should have re-subscribe message");
+
+		var reSubMsg = (MarketDataMessage)reSubMsgs[0];
+		var reSubTransId = reSubMsg.TransactionId;
+		reSubTransId.AssertNotEqual(100, "Re-subscribe should have new TransactionId");
+
+		// Response OK for re-subscribe — should be suppressed
+		var resp = new SubscriptionResponseMessage { OriginalTransactionId = reSubTransId };
+		var (forward, extra) = manager.ProcessOutMessage(resp);
+
+		forward.AssertNull("Response for re-subscribe should be suppressed");
+		extra.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void StatusMessage_ReSubscribe_OnlineSuppressedWhenAlreadyOnline()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Subscribe and go Online
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 100, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+		manager.ProcessOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+
+		// Trigger re-subscribe
+		manager.ProcessOutMessage(new ConnectionRestoredMessage { IsResetState = true });
+		var (reSubMsgs, _) = manager.ProcessInMessage(new ProcessSuspendedMessage());
+		var reSubTransId = ((MarketDataMessage)reSubMsgs[0]).TransactionId;
+
+		// Response OK for re-subscribe (suppressed)
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = reSubTransId });
+
+		// Online for re-subscribe — already Online, should be suppressed
+		var online = new SubscriptionOnlineMessage { OriginalTransactionId = reSubTransId };
+		var (forward, extra) = manager.ProcessOutMessage(online);
+
+		forward.AssertNull("Online for re-subscribe should be suppressed when already online");
+		extra.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void StatusMessage_ReSubscribe_FinishedSuppressed()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Subscribe and go Online
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 100, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+		manager.ProcessOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+
+		// Trigger re-subscribe
+		manager.ProcessOutMessage(new ConnectionRestoredMessage { IsResetState = true });
+		var (reSubMsgs, _) = manager.ProcessInMessage(new ProcessSuspendedMessage());
+		var reSubTransId = ((MarketDataMessage)reSubMsgs[0]).TransactionId;
+
+		// Response OK for re-subscribe (suppressed)
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = reSubTransId });
+
+		// Finished for re-subscribe — should be suppressed
+		var finished = new SubscriptionFinishedMessage { OriginalTransactionId = reSubTransId };
+		var (forward, extra) = manager.ProcessOutMessage(finished);
+
+		forward.AssertNull("Finished for re-subscribe should be suppressed");
+		extra.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void StatusMessage_ReSubscribe_OriginalIdRestored()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var secId = Helper.CreateSecurityId();
+
+		// Subscribe and go Online
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true, TransactionId = 100, SecurityId = secId, DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		// Trigger re-subscribe
+		manager.ProcessOutMessage(new ConnectionRestoredMessage { IsResetState = true });
+		var (reSubMsgs, _) = manager.ProcessInMessage(new ProcessSuspendedMessage());
+		var reSubTransId = ((MarketDataMessage)reSubMsgs[0]).TransactionId;
+
+		// Response OK for re-subscribe (suppressed) — but check OriginalTransactionId was restored
+		var resp = new SubscriptionResponseMessage { OriginalTransactionId = reSubTransId };
+		manager.ProcessOutMessage(resp);
+
+		// The message's OriginalTransactionId should be replaced with original ID
+		resp.OriginalTransactionId.AssertEqual(100, "OriginalTransactionId should be restored to original");
+	}
+
+	#endregion
+
 	#region Multiple Data Types Tests
 
 	[TestMethod]

@@ -869,6 +869,98 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		subs[0].TransactionId.AssertEqual(transId1);
 	}
 
+	[TestMethod]
+	public void GetSubscriptions_MultipleIds_SameSecurity_ReturnsAll()
+	{
+		var manager = CreateManager();
+
+		// Two subscriptions to same security+datatype (simulates what happens after join)
+		var secId = Helper.CreateSecurityId();
+		var sub1 = new Subscription(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+		var sub2 = new Subscription(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+
+		var transId1 = SubscribeAndGoOnline(manager, sub1);
+		var transId2 = SubscribeAndGoOnline(manager, sub2);
+
+		// Data message with both IDs (as if SubscriptionOnlineManager joined them)
+		var subs = manager.GetSubscriptions(CreateDataMessage(transId1, transId2)).ToArray();
+
+		subs.Length.AssertEqual(2, "Should return both subscriptions for joined message");
+		subs.Any(s => s.TransactionId == transId1).AssertTrue("Should contain first subscription");
+		subs.Any(s => s.TransactionId == transId2).AssertTrue("Should contain second subscription");
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_MultipleIds_OneUnsubscribed_ReturnsOnlyActive()
+	{
+		var manager = CreateManager();
+
+		var secId = Helper.CreateSecurityId();
+		var sub1 = new Subscription(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+		var sub2 = new Subscription(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+
+		var transId1 = SubscribeAndGoOnline(manager, sub1);
+		var transId2 = SubscribeAndGoOnline(manager, sub2);
+
+		// Unsubscribe sub1
+		var unsubActions = manager.UnSubscribe(sub1);
+		var unsubMsg = (MarketDataMessage)unsubActions.Items[0].Message;
+		manager.ProcessResponse(
+			new SubscriptionResponseMessage { OriginalTransactionId = unsubMsg.TransactionId },
+			out _, out _, out _);
+
+		// Data still arrives with both IDs (adapter doesn't know about unsub yet)
+		var subs = manager.GetSubscriptions(CreateDataMessage(transId1, transId2)).ToArray();
+
+		subs.Length.AssertEqual(1, "Should return only the active subscription");
+		subs[0].TransactionId.AssertEqual(transId2);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_MultipleIds_SomeUnknown_ReturnsOnlyKnown()
+	{
+		var manager = CreateManager();
+
+		var sub = CreateTickSubscription();
+		var transId = SubscribeAndGoOnline(manager, sub);
+
+		// Data with known + unknown IDs
+		var subs = manager.GetSubscriptions(CreateDataMessage(transId, 9999, 8888)).ToArray();
+
+		subs.Length.AssertEqual(1, "Should return only the known subscription");
+		subs[0].TransactionId.AssertEqual(transId);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_MultipleIds_AllUnknown_ReturnsEmpty()
+	{
+		var manager = CreateManager();
+
+		var subs = manager.GetSubscriptions(CreateDataMessage(9999, 8888, 7777)).ToArray();
+
+		subs.Length.AssertEqual(0, "Should return empty for all unknown IDs");
+	}
+
 	#endregion
 
 	#region GetSubscribers

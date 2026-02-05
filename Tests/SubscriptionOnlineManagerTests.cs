@@ -81,6 +81,307 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		extraOut.OfType<SubscriptionResponseMessage>().Any(msg => msg.OriginalTransactionId == 2 && msg.Error != null).AssertTrue();
 	}
 
+	#region Subscription Joining — No Duplicate Inner Requests
+
+	[TestMethod]
+	public async Task SecondSubscribe_WhenFirstAlreadyOnline_DoesNotGoToInner()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — fully online
+		var first = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		};
+		var (toInner1, _) = await manager.ProcessInMessageAsync(first, token);
+		toInner1.Length.AssertEqual(1, "First subscribe should go to inner");
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 1 }, token);
+
+		// Second subscription — same DataType + SecurityId
+		var second = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 2,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		};
+		var (toInner2, toOut2) = await manager.ProcessInMessageAsync(second, token);
+
+		toInner2.Length.AssertEqual(0, "Second subscribe must NOT go to inner when first is already online");
+		toOut2.OfType<SubscriptionResponseMessage>().Single().OriginalTransactionId.AssertEqual(2);
+		toOut2.OfType<SubscriptionOnlineMessage>().Single().OriginalTransactionId.AssertEqual(2);
+	}
+
+	[TestMethod]
+	public async Task SecondSubscribe_WhenFirstActive_DoesNotGoToInner()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — active (response received, but no online yet)
+		var first = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		};
+		await manager.ProcessInMessageAsync(first, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, token);
+		// NOTE: no SubscriptionOnlineMessage yet — subscription is "active" but not "online"
+
+		// Second subscription — same DataType + SecurityId
+		var second = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 2,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		};
+		var (toInner2, toOut2) = await manager.ProcessInMessageAsync(second, token);
+
+		toInner2.Length.AssertEqual(0, "Second subscribe must NOT go to inner when first is active (waiting for online)");
+	}
+
+	[TestMethod]
+	public async Task SecondSubscribe_WhenFirstPending_DoesNotGoToInner()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — pending (no response at all)
+		var first = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		};
+		await manager.ProcessInMessageAsync(first, token);
+		// NOTE: no response, no online — subscription is "pending"
+
+		// Second subscription — same DataType + SecurityId
+		var second = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 2,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		};
+		var (toInner2, toOut2) = await manager.ProcessInMessageAsync(second, token);
+
+		toInner2.Length.AssertEqual(0, "Second subscribe must NOT go to inner when first is pending");
+	}
+
+	#endregion
+
+	#region Subscription Joining — Pending IDs in Data Messages
+
+	[TestMethod]
+	public async Task DataMessage_WhenFirstActive_SecondJoined_ContainsBothIds()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — active (response received, no online yet)
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+
+		// Second subscription joins
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 101,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		// Data arrives from inner adapter (before online!) with first subscription ID
+		var dataMessage = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		dataMessage.SetSubscriptionIds([100]);
+
+		var (forward, _) = await manager.ProcessOutMessageAsync(dataMessage, token);
+		forward.AssertNotNull("Data should be forwarded");
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Contains(100).AssertTrue("Should contain first (active) subscription ID");
+		ids.Contains(101).AssertTrue("Should contain second (joined/pending) subscription ID");
+	}
+
+	[TestMethod]
+	public async Task DataMessage_WhenFirstPending_SecondJoined_ContainsBothIds()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — pending (no response at all)
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		// Second subscription joins
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 101,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		// Data arrives from inner adapter (before any response!) with first subscription ID
+		var dataMessage = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+		};
+		dataMessage.SetSubscriptionIds([100]);
+
+		var (forward, _) = await manager.ProcessOutMessageAsync(dataMessage, token);
+		forward.AssertNotNull("Data should be forwarded");
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Contains(100).AssertTrue("Should contain first (pending) subscription ID");
+		ids.Contains(101).AssertTrue("Should contain second (joined/pending) subscription ID");
+	}
+
+	[TestMethod]
+	public async Task OnlineMessage_WhenSecondJoined_SecondGetsOnlineToo()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — pending
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		// Second subscription joins while first is pending
+		var (_, toOut2) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 101,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		// Response for first
+		var (_, extraOnResp) = await manager.ProcessOutMessageAsync(
+			new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+
+		// Online for first
+		var (_, extraOnOnline) = await manager.ProcessOutMessageAsync(
+			new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// Second subscription should have received response + online
+		// Either immediately on join (toOut2) or when first goes online (extraOnResp/extraOnOnline)
+		var allExtra = toOut2.Concat(extraOnResp).Concat(extraOnOnline).ToArray();
+
+		allExtra.OfType<SubscriptionResponseMessage>()
+			.Any(m => m.OriginalTransactionId == 101)
+			.AssertTrue("Second (joined) subscription should get SubscriptionResponseMessage");
+
+		allExtra.OfType<SubscriptionOnlineMessage>()
+			.Any(m => m.OriginalTransactionId == 101)
+			.AssertTrue("Second (joined) subscription should get SubscriptionOnlineMessage");
+	}
+
+	[TestMethod]
+	public async Task ErrorMessage_WhenSecondJoined_BothGetError()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — pending
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		// Second subscription joins while first is pending
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 101,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		// Error comes for first
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(
+			new SubscriptionResponseMessage
+			{
+				OriginalTransactionId = 100,
+				Error = new InvalidOperationException("test error"),
+			}, token);
+
+		// Both subscriptions should get error notification
+		var allMessages = new List<Message>();
+		if (forward != null) allMessages.Add(forward);
+		allMessages.AddRange(extraOut);
+
+		allMessages.OfType<SubscriptionResponseMessage>()
+			.Any(m => m.OriginalTransactionId == 100 && m.Error != null)
+			.AssertTrue("First subscription should get error");
+
+		allMessages.OfType<SubscriptionResponseMessage>()
+			.Any(m => m.OriginalTransactionId == 101 && m.Error != null)
+			.AssertTrue("Second (joined) subscription should also get error");
+	}
+
+	#endregion
+
 	#region Subscribe/Unsubscribe Multiple Cycles Tests
 
 	[TestMethod]
