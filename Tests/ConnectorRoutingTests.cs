@@ -339,7 +339,7 @@ public class ConnectorRoutingTests : BaseTestClass
 				ServerTime = DateTime.UtcNow,
 				LocalTime = DateTime.UtcNow,
 			};
-			msg.SetSubscriptionIds(subscriptionId: subscriptionId);
+			msg.OriginalTransactionId = subscriptionId;
 			await SendOutMessageAsync(msg, cancellationToken);
 		}
 
@@ -357,7 +357,7 @@ public class ConnectorRoutingTests : BaseTestClass
 				ServerTime = DateTime.UtcNow,
 				LocalTime = DateTime.UtcNow,
 			};
-			msg.SetSubscriptionIds(subscriptionId: subscriptionId);
+			msg.OriginalTransactionId = subscriptionId;
 			await SendOutMessageAsync(msg, cancellationToken);
 		}
 
@@ -373,7 +373,7 @@ public class ConnectorRoutingTests : BaseTestClass
 				LocalTime = DateTime.UtcNow,
 			};
 			msg.Add(Level1Fields.LastTradePrice, lastPrice);
-			msg.SetSubscriptionIds(subscriptionId: subscriptionId);
+			msg.OriginalTransactionId = subscriptionId;
 			await SendOutMessageAsync(msg, cancellationToken);
 		}
 

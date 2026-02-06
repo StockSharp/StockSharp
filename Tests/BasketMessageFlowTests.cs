@@ -164,7 +164,6 @@ public class BasketMessageFlowTests : BaseTestClass
 							Name = "Test Security",
 							OriginalTransactionId = sl.TransactionId,
 						};
-						secMsg.SetSubscriptionIds([sl.TransactionId]);
 						await SendOutWithLog(secMsg, ct);
 					}
 
@@ -190,7 +189,6 @@ public class BasketMessageFlowTests : BaseTestClass
 						PortfolioName = "TestPortfolio",
 						OriginalTransactionId = pl.TransactionId,
 					};
-					pfMsg.SetSubscriptionIds([pl.TransactionId]);
 					await SendOutWithLog(pfMsg, ct);
 
 					await SendOutWithLog(new SubscriptionFinishedMessage { OriginalTransactionId = pl.TransactionId }, ct);
@@ -224,7 +222,6 @@ public class BasketMessageFlowTests : BaseTestClass
 							ServerTime = DateTime.UtcNow,
 							LocalTime = DateTime.UtcNow,
 						};
-						orderMsg.SetSubscriptionIds([os.TransactionId]);
 						await SendOutWithLog(orderMsg, ct);
 					}
 
@@ -267,7 +264,6 @@ public class BasketMessageFlowTests : BaseTestClass
 									ServerTime = DateTime.UtcNow,
 									OriginalTransactionId = md.TransactionId,
 								};
-								tick.SetSubscriptionIds([md.TransactionId]);
 								await SendOutWithLog(tick, ct);
 							}
 						}
@@ -283,7 +279,6 @@ public class BasketMessageFlowTests : BaseTestClass
 							.TryAdd(Level1Fields.LastTradePrice, 100m)
 							.TryAdd(Level1Fields.BestBidPrice, 99m)
 							.TryAdd(Level1Fields.BestAskPrice, 101m);
-							l1.SetSubscriptionIds([md.TransactionId]);
 							await SendOutWithLog(l1, ct);
 						}
 
@@ -356,7 +351,6 @@ public class BasketMessageFlowTests : BaseTestClass
 				ServerTime = DateTime.UtcNow,
 				OriginalTransactionId = subscriptionId,
 			};
-			tick.SetSubscriptionIds([subscriptionId]);
 			await SendOutWithLog(tick, ct);
 		}
 
@@ -1733,7 +1727,6 @@ public class BasketMessageFlowTests : BaseTestClass
 			OriginalTransactionId = childSubId,
 		}
 		.TryAdd(Level1Fields.LastTradePrice, 999m);
-		l1Msg.SetSubscriptionIds([childSubId]);
 		// Send directly through adapter's outgoing channel
 		await adapter1.SendTickManual(childSubId, SecId1, CancellationToken);
 

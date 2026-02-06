@@ -80,7 +80,6 @@ public abstract class BasketTestBase : BaseTestClass
 						PortfolioName = "TestPortfolio",
 						OriginalTransactionId = pl.TransactionId,
 					};
-					pfMsg.SetSubscriptionIds([pl.TransactionId]);
 					await SendOutMessageAsync(pfMsg, ct);
 
 					await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = pl.TransactionId }, ct);
@@ -103,7 +102,6 @@ public abstract class BasketTestBase : BaseTestClass
 						ServerTime = DateTime.UtcNow,
 						LocalTime = DateTime.UtcNow,
 					};
-					orderMsg.SetSubscriptionIds([os.TransactionId]);
 					await SendOutMessageAsync(orderMsg, ct);
 
 					await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = os.TransactionId }, ct);

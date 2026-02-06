@@ -116,8 +116,8 @@ public class ConnectorBasketTests : BaseTestClass
 
 		public async ValueTask SimulateData(long subscriptionId, Message data, CancellationToken cancellationToken)
 		{
-			if (data is ISubscriptionIdMessage sid)
-				sid.SetSubscriptionIds([subscriptionId]);
+			if (data is IOriginalTransactionIdMessage origMsg)
+				origMsg.OriginalTransactionId = subscriptionId;
 			await SendOutMessageAsync(data, cancellationToken);
 		}
 
@@ -146,9 +146,6 @@ public class ConnectorBasketTests : BaseTestClass
 
 			if (ActiveOrders.TryGetValue(origTransId, out var regMsg))
 				exec.SecurityId = regMsg.SecurityId;
-
-			if (OrderStatusSubscriptionId != 0)
-				exec.SetSubscriptionIds([OrderStatusSubscriptionId]);
 
 			await SendOutMessageAsync(exec, cancellationToken);
 		}

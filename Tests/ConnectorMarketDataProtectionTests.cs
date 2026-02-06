@@ -83,7 +83,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 			msg.Add(Level1Fields.BestAskPrice, 43m);
 
 			if (subscriptionId != 0)
-				msg.SetSubscriptionIds([subscriptionId]);
+				msg.OriginalTransactionId = subscriptionId;
 
 			await SendOutMessageAsync(msg, cancellationToken);
 		}
@@ -102,7 +102,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 			};
 
 			if (subscriptionId != 0)
-				msg.SetSubscriptionIds([subscriptionId]);
+				msg.OriginalTransactionId = subscriptionId;
 
 			await SendOutMessageAsync(msg, cancellationToken);
 		}
@@ -119,7 +119,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 			};
 
 			if (subscriptionId != 0)
-				msg.SetSubscriptionIds([subscriptionId]);
+				msg.OriginalTransactionId = subscriptionId;
 
 			await SendOutMessageAsync(msg, cancellationToken);
 		}

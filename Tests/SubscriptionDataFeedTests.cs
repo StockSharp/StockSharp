@@ -58,7 +58,7 @@ class DataFeedEmulator : IDisposable
 				var msg = CreateMessage(price);
 				if (msg != null)
 				{
-					msg.SetSubscriptionIds([_subscriptionId]);
+					msg.OriginalTransactionId = _subscriptionId;
 					_outputQueue.Add((Message)msg);
 				}
 			}

@@ -1453,7 +1453,6 @@ class MockRemoteAdapter : MessageAdapter,
 						foreach (var sec in securities)
 						{
 							sec.OriginalTransactionId = lookup.TransactionId;
-							sec.SetSubscriptionIds([lookup.TransactionId]);
 							await SendOutMessageAsync(sec, cancellationToken);
 						}
 
@@ -1493,7 +1492,6 @@ class MockRemoteAdapter : MessageAdapter,
 						foreach (var info in results)
 						{
 							info.OriginalTransactionId = lookup.TransactionId;
-							info.SetSubscriptionIds([lookup.TransactionId]);
 							await SendOutMessageAsync(info, cancellationToken);
 						}
 
@@ -1519,7 +1517,6 @@ class MockRemoteAdapter : MessageAdapter,
 						if (result != null)
 						{
 							result.OriginalTransactionId = cmd.TransactionId;
-							result.SetSubscriptionIds([cmd.TransactionId]);
 							await SendOutMessageAsync(result, cancellationToken);
 						}
 
@@ -1547,7 +1544,6 @@ class MockRemoteAdapter : MessageAdapter,
 						foreach (var board in boards)
 						{
 							board.OriginalTransactionId = lookup.TransactionId;
-							board.SetSubscriptionIds([lookup.TransactionId]);
 							await SendOutMessageAsync(board, cancellationToken);
 						}
 

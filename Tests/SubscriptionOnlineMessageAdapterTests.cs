@@ -102,7 +102,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 			TradeVolume = 1m,
 			ServerTime = DateTime.UtcNow,
 		};
-		tick.SetSubscriptionIds(subscriptionId: 100);
+		tick.OriginalTransactionId = 100;
 		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		output.Count.AssertEqual(1, $"Tick should flow through, got {output.Count} messages");

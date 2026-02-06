@@ -108,8 +108,8 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		public async ValueTask SimulateData(long subscriptionId, Message data, CancellationToken cancellationToken)
 		{
-			if (data is ISubscriptionIdMessage sid)
-				sid.SetSubscriptionIds([subscriptionId]);
+			if (data is IOriginalTransactionIdMessage origMsg)
+				origMsg.OriginalTransactionId = subscriptionId;
 
 			await SendOutMessageAsync(data, cancellationToken);
 		}
@@ -193,8 +193,8 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		public async ValueTask SimulateData(long subscriptionId, Message data, CancellationToken cancellationToken)
 		{
-			if (data is ISubscriptionIdMessage sid)
-				sid.SetSubscriptionIds([subscriptionId]);
+			if (data is IOriginalTransactionIdMessage origMsg)
+				origMsg.OriginalTransactionId = subscriptionId;
 			await SendOutMessageAsync(data, cancellationToken);
 		}
 
