@@ -265,6 +265,7 @@ public class AdapterRouter : IAdapterRouter
 	{
 		_messageTypeAdapters.Clear();
 		_nonSupportedAdapters.Clear();
+		_orderRouting.Clear();
 	}
 
 	/// <summary>

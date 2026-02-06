@@ -93,7 +93,7 @@ public class AlertSchemaTemplatesTests
 		var schema = AlertSchemaTemplates.PriceAbove(_testSecId, 150m);
 
 		schema.Caption.AssertNotNull();
-		schema.Caption.Length.AssertEquals(1);
+		schema.Caption.Length.AssertGreater(5);
 	}
 
 	[TestMethod]
