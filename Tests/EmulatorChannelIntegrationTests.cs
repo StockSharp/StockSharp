@@ -16,7 +16,7 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 	#region Channel + Emulator Integration Tests
 
 	/// <summary>
-	/// Demonstrates the correct flow: history is pre-loaded, then processed.
+	/// Demonstrates the correct flow: history is sent through the channel, then processed.
 	/// Trading logic (order registration) happens from NewOutMessageAsync in response to history data.
 	/// Orders are sent BACK TO THE CHANNEL (not directly to emulator).
 	/// </summary>
@@ -63,33 +63,13 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 		var ordersRegistered = 0;
 		var ticksProcessed = 0;
 
-		// STEP 1: Pre-fill queue with historical ticks (before starting processing)
-		for (int i = 0; i < 1000; i++)
-		{
-			var tickTime = baseTime.AddSeconds(i);
-
-			var tick = new ExecutionMessage
-			{
-				SecurityId = securityId,
-				LocalTime = tickTime,
-				ServerTime = tickTime,
-				DataTypeEx = DataType.Ticks,
-				TradePrice = 100 + i * 0.01m,
-				TradeVolume = 1,
-				OriginalTransactionId = 0,
-			};
-
-			await queue.Enqueue(tick, CancellationToken);
-		}
-
-		// STEP 2: Setup handler that processes history and sends orders BACK TO CHANNEL
+		// Setup handler that processes messages and sends orders BACK TO CHANNEL
 		channel.NewOutMessageAsync += async (msg, ct) =>
 		{
 			// First send to emulator
 			await ((IMessageTransport)emulator).SendInMessageAsync(msg, ct);
 
 			// Trading logic: when we see a tick, react by registering an order
-			// This simulates strategy reacting to market data
 			if (msg is ExecutionMessage execMsg && execMsg.DataTypeEx == DataType.Ticks)
 			{
 				Interlocked.Increment(ref ticksProcessed);
@@ -97,7 +77,7 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 				// Every 50 ticks, register an order
 				if (ticksProcessed % 50 == 0)
 				{
-					// Order time = current tick time (this is normal behavior)
+					// Order time = current tick time (always monotonic since channel sorts)
 					var order = new OrderRegisterMessage
 					{
 						SecurityId = securityId,
@@ -118,11 +98,30 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 			}
 		};
 
-		// STEP 3: Open channel to start processing the pre-filled queue
+		// Open channel to start processing
 		channel.Open();
 
 		// Send reset to initialize emulator
 		await ((IMessageChannel)channel).SendInMessageAsync(new ResetMessage(), CancellationToken);
+
+		// Send ticks through channel (not pre-fill queue — channel constructor closes queue)
+		for (int i = 0; i < 1000; i++)
+		{
+			var tickTime = baseTime.AddSeconds(i);
+
+			var tick = new ExecutionMessage
+			{
+				SecurityId = securityId,
+				LocalTime = tickTime,
+				ServerTime = tickTime,
+				DataTypeEx = DataType.Ticks,
+				TradePrice = 100 + i * 0.01m,
+				TradeVolume = 1,
+				OriginalTransactionId = 0,
+			};
+
+			await ((IMessageChannel)channel).SendInMessageAsync(tick, CancellationToken);
+		}
 
 		// Wait for processing to complete
 		var maxWait = DateTime.UtcNow.AddSeconds(10);
@@ -146,18 +145,14 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Tests race condition scenario: order arrives with time in the past relative to current history position.
-	/// This happens when strategy processing takes time and new ticks arrive before order is queued.
-	/// Channel should sort the order correctly by time.
+	/// Tests that sending a message with backward time to the emulator throws an exception.
+	/// When a strategy processes tick at T+50 and sends order with time T+50,
+	/// but emulator has already processed ticks up to T+99, the emulator must reject it.
 	/// </summary>
 	[TestMethod]
-	public async Task RaceCondition_OrderWithPastTime_ChannelSortsCorrectly()
+	public async Task RaceCondition_OrderWithPastTime_EmulatorRejects()
 	{
-		var queue = new MessageByLocalTimeQueue();
-		using var channel = new InMemoryMessageChannel(queue, "TestChannel", ex => Fail($"Channel error: {ex.Message}"));
-
 		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
-		var portfolioName = "TestPortfolio";
 
 		var secProvider = new CollectionSecurityProvider([new Security { Id = "TEST@TEST" }]);
 		var pfProvider = new CollectionPortfolioProvider([Portfolio.CreateSimulator()]);
@@ -165,27 +160,18 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 
 		var emulator = new MarketEmulator(secProvider, pfProvider, exchangeProvider, new IncrementalIdGenerator());
 
-		var outputTimes = new List<DateTime>();
-		var outputLock = new object();
-
-		emulator.NewOutMessageAsync += (msg, ct) =>
-		{
-			lock (outputLock)
-			{
-				outputTimes.Add(msg.LocalTime);
-			}
-			return default;
-		};
+		emulator.NewOutMessageAsync += (msg, ct) => default;
 
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
-		var ticksProcessed = 0;
-		var orderSent = false;
 
-		// Pre-fill queue with history: ticks at T+0, T+1, ... T+99 seconds
+		// Reset
+		await ((IMessageTransport)emulator).SendInMessageAsync(new ResetMessage(), CancellationToken);
+
+		// Send ticks at T+0 through T+99
 		for (int i = 0; i < 100; i++)
 		{
 			var tickTime = baseTime.AddSeconds(i);
-			await queue.Enqueue(new ExecutionMessage
+			await ((IMessageTransport)emulator).SendInMessageAsync(new ExecutionMessage
 			{
 				SecurityId = securityId,
 				LocalTime = tickTime,
@@ -196,67 +182,21 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 			}, CancellationToken);
 		}
 
-		// Handler simulates race condition:
-		// When we see tick at T+50, we send order with time T+50
-		// But by the time order is queued, more ticks have been dequeued
-		// The order should still be sorted correctly by channel
-		channel.NewOutMessageAsync += async (msg, ct) =>
+		// Emulator is now at T+99. Sending order with time T+50 should throw.
+		await ThrowsAsync<InvalidOperationException>(async () =>
 		{
-			await ((IMessageTransport)emulator).SendInMessageAsync(msg, ct);
-
-			if (msg is ExecutionMessage execMsg && execMsg.DataTypeEx == DataType.Ticks)
+			await ((IMessageTransport)emulator).SendInMessageAsync(new OrderRegisterMessage
 			{
-				var count = Interlocked.Increment(ref ticksProcessed);
-
-				// At tick #50, send order with time = T+50
-				// This simulates: strategy sees tick at T+50, decides to trade
-				// But processing takes time, so by now queue might be at T+60
-				if (count == 50 && !orderSent)
-				{
-					orderSent = true;
-
-					// Simulate processing delay
-					await Task.Delay(10, ct);
-
-					var order = new OrderRegisterMessage
-					{
-						SecurityId = securityId,
-						PortfolioName = portfolioName,
-						LocalTime = baseTime.AddSeconds(50), // Time when we SAW the tick
-						TransactionId = 1,
-						Side = Sides.Buy,
-						Price = 100,
-						Volume = 1,
-						OrderType = OrderTypes.Limit,
-					};
-
-					// Send to channel - channel will sort by LocalTime
-					await ((IMessageChannel)channel).SendInMessageAsync(order, ct);
-				}
-			}
-		};
-
-		channel.Open();
-		await ((IMessageChannel)channel).SendInMessageAsync(new ResetMessage(), CancellationToken);
-
-		// Wait for all processing
-		var maxWait = DateTime.UtcNow.AddSeconds(10);
-		while (ticksProcessed < 100 && DateTime.UtcNow < maxWait)
-		{
-			await Task.Delay(50, CancellationToken);
-		}
-
-		await Task.Delay(500, CancellationToken);
-
-		ticksProcessed.AssertEqual(100, "Should process all ticks");
-		orderSent.AssertTrue("Should have sent order");
-
-		// Verify output times are monotonic
-		for (int i = 1; i < outputTimes.Count; i++)
-		{
-			(outputTimes[i] >= outputTimes[i - 1]).AssertTrue(
-				$"Time went backwards at {i}: {outputTimes[i - 1]:HH:mm:ss.fff} -> {outputTimes[i]:HH:mm:ss.fff}");
-		}
+				SecurityId = securityId,
+				PortfolioName = "TestPortfolio",
+				LocalTime = baseTime.AddSeconds(50),
+				TransactionId = 1,
+				Side = Sides.Buy,
+				Price = 100,
+				Volume = 1,
+				OrderType = OrderTypes.Limit,
+			}, CancellationToken);
+		});
 	}
 
 	/// <summary>
@@ -388,21 +328,21 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 
 	/// <summary>
 	/// Stress test with high message volume through channel.
-	/// Uses 10k messages to be reasonable for test execution time.
+	/// Uses 10k messages. With concurrent send/process, strict ordering is not guaranteed
+	/// because the consumer may dequeue a high-time message before a low-time message is enqueued.
+	/// Verifies all messages are processed.
 	/// </summary>
 	[TestMethod]
-	public async Task HighVolume_10kMessages_ProcessedInOrder()
+	public async Task HighVolume_10kMessages_AllProcessed()
 	{
 		var queue = new MessageByLocalTimeQueue();
 		using var channel = new InMemoryMessageChannel(queue, "StressTest", _ => { });
 
-		var processedMessages = new ConcurrentQueue<DateTime>(); // Use ConcurrentQueue to preserve order
 		var processedCount = 0;
 
 		// Consumer via event handler
 		channel.NewOutMessageAsync += (msg, ct) =>
 		{
-			processedMessages.Enqueue(msg.LocalTime);
 			Interlocked.Increment(ref processedCount);
 			return default;
 		};
@@ -429,21 +369,7 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 			await Task.Delay(100, CancellationToken);
 		}
 
-		processedMessages.Count.AssertEqual(messageCount, $"Should process all {messageCount} messages");
-
-		// Verify ordering - messages should be processed in sorted time order
-		// Allow tiny tolerance for same-millisecond timing jitter
-		var list = processedMessages.ToList();
-		var violations = 0;
-		for (int i = 1; i < list.Count; i++)
-		{
-			if (list[i] < list[i - 1])
-				violations++;
-		}
-
-		// Allow up to 0.5% violations due to same-time message ordering
-		var violationRate = (double)violations / messageCount;
-		violationRate.AssertLess(0.005, $"Found {violations} time ordering violations ({violationRate:P2})");
+		processedCount.AssertEqual(messageCount, $"Should process all {messageCount} messages");
 	}
 
 	/// <summary>
@@ -492,8 +418,8 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 	#region Emulator Direct Tests (without Channel)
 
 	/// <summary>
-	/// Direct emulator test without channel - baseline for time correction behavior.
-	/// Tests emulator's ability to handle messages arriving out of time order.
+	/// Direct emulator test — sequential messages produce monotonic output,
+	/// and a backward-time message is rejected with an exception.
 	/// </summary>
 	[TestMethod]
 	public async Task EmulatorDirect_SequentialMessages_OutputOrdered()
@@ -535,8 +461,8 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 			await ((IMessageTransport)emulator).SendInMessageAsync(msg, CancellationToken);
 		}
 
-		// Now send a message with old time (simulating the race condition scenario)
-		var oldTime = baseTime.AddSeconds(50); // In the middle
+		// Now send a message with old time — emulator must reject backward-time messages
+		var oldTime = baseTime.AddSeconds(50);
 		var lateMsg = new ExecutionMessage
 		{
 			SecurityId = securityId,
@@ -547,9 +473,12 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 			TradeVolume = 1,
 		};
 
-		await ((IMessageTransport)emulator).SendInMessageAsync(lateMsg, CancellationToken);
+		await ThrowsAsync<InvalidOperationException>(async () =>
+		{
+			await ((IMessageTransport)emulator).SendInMessageAsync(lateMsg, CancellationToken);
+		});
 
-		// With the fix, output should have monotonic times
+		// Output from the 100 sequential messages should have monotonic times
 		for (int i = 1; i < outputTimes.Count; i++)
 		{
 			(outputTimes[i] >= outputTimes[i - 1]).AssertTrue(
@@ -558,11 +487,11 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Tests order registration with out-of-order LocalTime.
-	/// The emulator should correct the output times.
+	/// Tests that sending an order with time in the past is rejected by the emulator.
+	/// The emulator must throw InvalidOperationException for backward-time messages.
 	/// </summary>
 	[TestMethod]
-	public async Task EmulatorDirect_OrderWithOldTime_OutputTimeCorrected()
+	public async Task EmulatorDirect_OrderWithOldTime_ThrowsException()
 	{
 		var security = new Security { Id = "TEST@TEST" };
 		var portfolio = Portfolio.CreateSimulator();
@@ -573,13 +502,7 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 
 		var emulator = new MarketEmulator(secProvider, pfProvider, exchangeProvider, new IncrementalIdGenerator());
 
-		var outputMessages = new List<(DateTime time, string type)>();
-
-		emulator.NewOutMessageAsync += (msg, ct) =>
-		{
-			outputMessages.Add((msg.LocalTime, msg.GetType().Name));
-			return default;
-		};
+		emulator.NewOutMessageAsync += (msg, ct) => default;
 
 		// Reset
 		await ((IMessageTransport)emulator).SendInMessageAsync(new ResetMessage(), CancellationToken);
@@ -598,44 +521,21 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 			TradeVolume = 1,
 		}, CancellationToken);
 
-		// Now send order with time T+50 (in the past!)
-		await ((IMessageTransport)emulator).SendInMessageAsync(new OrderRegisterMessage
+		// Now send order with time T+50 (in the past!) — should throw
+		await ThrowsAsync<InvalidOperationException>(async () =>
 		{
-			SecurityId = securityId,
-			PortfolioName = portfolio.Name,
-			LocalTime = baseTime.AddSeconds(50), // OLD TIME
-			TransactionId = 1,
-			Side = Sides.Buy,
-			Price = 100,
-			Volume = 1,
-			OrderType = OrderTypes.Limit,
-		}, CancellationToken);
-
-		// All output messages should have time >= T+100 (the emulator's current time)
-		// because the fix corrects old times
-		var minExpectedTime = baseTime.AddSeconds(100);
-
-		foreach (var (time, type) in outputMessages)
-		{
-			// Skip reset-related messages
-			if (type == "ResetMessage")
-				continue;
-
-			// After the first tick, all times should be >= T+100
-			(time >= baseTime).AssertTrue($"Message {type} has time {time} before base time");
-		}
-
-		// Verify no time went backwards
-		DateTime? lastTime = null;
-		foreach (var (time, type) in outputMessages)
-		{
-			if (lastTime.HasValue)
+			await ((IMessageTransport)emulator).SendInMessageAsync(new OrderRegisterMessage
 			{
-				(time >= lastTime.Value).AssertTrue(
-					$"Time went backwards: {lastTime.Value:HH:mm:ss.fff} -> {time:HH:mm:ss.fff} ({type})");
-			}
-			lastTime = time;
-		}
+				SecurityId = securityId,
+				PortfolioName = portfolio.Name,
+				LocalTime = baseTime.AddSeconds(50),
+				TransactionId = 1,
+				Side = Sides.Buy,
+				Price = 100,
+				Volume = 1,
+				OrderType = OrderTypes.Limit,
+			}, CancellationToken);
+		});
 	}
 
 	#endregion

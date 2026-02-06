@@ -11,6 +11,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	private IPortfolioManager _portfolioManager = new EmulatedPortfolioManager();
 	private readonly ICommissionManager _commissionManager = new CommissionManager();
 	private DateTime _currentTime;
+	private DateTime _lastInputTime;
 
 	private IRandomProvider _randomProvider = new DefaultRandomProvider();
 	private IncrementalIdGenerator _orderIdGenerator = new();
@@ -126,6 +127,15 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	{
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
+
+		if (message.Type != MessageTypes.Reset
+			&& message.LocalTime != default
+			&& _lastInputTime != default
+			&& message.LocalTime < _lastInputTime)
+			throw new InvalidOperationException($"Message {message.Type} time {message.LocalTime:O} is less than current emulator time {_lastInputTime:O}");
+
+		if (message.LocalTime != default && message.Type != MessageTypes.Reset)
+			_lastInputTime = message.LocalTime;
 
 		var results = new List<Message>();
 
@@ -1092,6 +1102,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		_securityEmulators.Clear();
 		_portfolioManager.Clear();
 		ProcessedMessageCount = 0;
+		_lastInputTime = default;
 	}
 
 	private InvalidOperationException ValidateRegistration(OrderRegisterMessage regMsg)
