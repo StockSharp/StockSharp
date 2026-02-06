@@ -309,4 +309,39 @@ public class AdapterConnectionManagerTests : BaseTestClass
 
 		IsFalse(manager.HasPendingAdapters);
 	}
+
+	/// <summary>
+	/// BUG: With ConnectDisconnectEventOnFirstAdapter=false, when one adapter connects successfully
+	/// and the other fails, no ConnectMessage is ever emitted. The basket stays in Connecting state.
+	/// </summary>
+	[TestMethod]
+	public void ProcessConnect_WaitAll_SuccessThenFail_ShouldEmitConnect()
+	{
+		var manager = CreateManager(out _);
+		manager.ConnectDisconnectEventOnFirstAdapter = false;
+
+		var adapter1 = CreateAdapter();
+		var adapter2 = CreateAdapter();
+
+		manager.InitializeAdapter(adapter1);
+		manager.InitializeAdapter(adapter2);
+		manager.BeginConnect();
+
+		// First adapter connects successfully
+		var result1 = manager.ProcessConnect(adapter1, null);
+		AreEqual(0, result1.Length, "Still waiting for adapter2");
+		AreEqual(ConnectionStates.Connecting, manager.CurrentState);
+
+		// Second adapter fails
+		var result2 = manager.ProcessConnect(adapter2, new Exception("Connection failed"));
+
+		// All adapters have responded. At least one succeeded.
+		// Expected: ConnectMessage should be emitted, basket should be Connected.
+		// BUG: result2 is empty, basket stays in Connecting state forever.
+		AreEqual(ConnectionStates.Connected, manager.CurrentState,
+			"Should transition to Connected since at least one adapter succeeded");
+		AreEqual(1, result2.Length,
+			"Should emit ConnectMessage when all adapters responded and at least one succeeded");
+		IsTrue(result2[0] is ConnectMessage);
+	}
 }

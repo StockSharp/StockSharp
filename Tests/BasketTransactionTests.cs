@@ -155,4 +155,69 @@ public class BasketTransactionTests : BasketTestBase
 		GetOut<ExecutionMessage>().Any(e => e.OriginalTransactionId == cancelTransId && e.OrderState == OrderStates.Done)
 			.AssertTrue("Basket should emit ExecutionMessage with Done state");
 	}
+
+	/// <summary>
+	/// BUG: OrderCancel portfolio fallback sets adapter to wrapper, then _adapterWrappers.TryGetValue(wrapper)
+	/// fails because _adapterWrappers maps underlying→wrapper, not wrapper→wrapper.
+	/// Result: UnknownTransactionId error even though the portfolio is correctly mapped.
+	/// NOTE: IgnoreExtraAdapters must be false so wrapper != underlying to trigger the bug.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task OrderCancel_PortfolioFallback_ShouldRouteCorrectly()
+	{
+		var connectionState = new AdapterConnectionState();
+		var connectionManager = new AdapterConnectionManager(connectionState);
+		var subscriptionRouting = new SubscriptionRoutingState();
+		var parentChildMap = new ParentChildMap();
+		var pendingState = new PendingMessageState();
+		var orderRouting = new OrderRoutingState();
+
+		var (basket, adapter1, adapter2) = CreateBasket(
+			connectionState: connectionState,
+			connectionManager: connectionManager,
+			subscriptionRouting: subscriptionRouting,
+			parentChildMap: parentChildMap,
+			pendingState: pendingState,
+			orderRouting: orderRouting);
+
+		// Enable heartbeat to ensure at least one wrapper is created (HeartbeatMessageAdapter).
+		// HeartbeatMessageAdapter is created BEFORE the IgnoreExtraAdapters check in the pipeline builder,
+		// so wrapper != underlying even with IgnoreExtraAdapters=true.
+		// Without this, wrapper == underlying and the bug is hidden.
+		basket.ApplyHeartbeat(adapter1, true);
+		basket.ApplyHeartbeat(adapter2, true);
+
+		// --- Connect ---
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+		connectionState.ConnectedCount.AssertEqual(2);
+		ClearOut();
+
+		// --- Set portfolio mapping (this populates _portfolioAdapters in AdapterRouter) ---
+		basket.PortfolioAdapterProvider.SetAdapter(Portfolio1, adapter1);
+
+		// --- Send OrderCancel with unknown OriginalTransactionId but valid PortfolioName ---
+		// This triggers the portfolio fallback path in ProcessOrderMessage.
+		// The routing manager does NOT have transId 999999 mapped (no order was registered),
+		// so it falls back to portfolio lookup.
+		var cancelTransId = basket.TransactionIdGenerator.GetNextId();
+		var cancelMsg = new OrderCancelMessage
+		{
+			SecurityId = SecId1,
+			PortfolioName = Portfolio1,
+			TransactionId = cancelTransId,
+			OriginalTransactionId = 999999, // Unknown — forces portfolio fallback
+		};
+		await SendToBasket(basket, cancelMsg, TestContext.CancellationToken);
+
+		// --- Expected: OrderCancel routed to adapter1 via portfolio fallback ---
+		// BUG: adapter1 does NOT receive the cancel because _adapterWrappers.TryGetValue(wrapper)
+		// fails (wrapper is not a key in _adapterWrappers). Instead, UnknownTransactionId error is emitted.
+		adapter1.GetMessages<OrderCancelMessage>().Any()
+			.AssertTrue("Adapter1 should receive OrderCancelMessage via portfolio fallback");
+
+		// Should NOT have error response
+		GetOut<ExecutionMessage>().Any(e => e.OriginalTransactionId == cancelTransId && e.Error != null)
+			.AssertFalse("Should not produce UnknownTransactionId error when portfolio fallback finds the adapter");
+	}
 }
