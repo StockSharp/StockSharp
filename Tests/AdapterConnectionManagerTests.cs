@@ -154,6 +154,32 @@ public class AdapterConnectionManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void ProcessDisconnect_MixedSuccessAndFail_ReturnsDisconnectMessage()
+	{
+		var manager = CreateManager(out _);
+		var adapter1 = CreateAdapter();
+		var adapter2 = CreateAdapter();
+
+		manager.BeginConnect();
+		manager.InitializeAdapter(adapter1);
+		manager.InitializeAdapter(adapter2);
+		manager.ProcessConnect(adapter1, null);
+		manager.ProcessConnect(adapter2, null);
+
+		// adapter1 disconnects normally
+		var r1 = manager.ProcessDisconnect(adapter1, null);
+		AreEqual(0, r1.Length);
+
+		// adapter2 disconnects with error
+		var r2 = manager.ProcessDisconnect(adapter2, new Exception("Connection lost"));
+
+		AreEqual(ConnectionStates.Disconnected, manager.CurrentState,
+			"Should transition to Disconnected when all adapters responded");
+		AreEqual(1, r2.Length);
+		IsTrue(r2[0] is DisconnectMessage);
+	}
+
+	[TestMethod]
 	public void ProcessDisconnect_AllDisconnected_ReturnsDisconnectMessage()
 	{
 		var manager = CreateManager(out _);
