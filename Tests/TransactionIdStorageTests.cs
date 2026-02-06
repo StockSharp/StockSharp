@@ -105,7 +105,7 @@ public class TransactionIdStorageTests : BaseTestClass
 		var found = session.TryGetTransactionId(requestId, out var transactionId);
 
 		found.AssertTrue();
-		transactionId.AssertGreater(0);
+		transactionId.AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -138,7 +138,7 @@ public class TransactionIdStorageTests : BaseTestClass
 		var requestId = "custom-request-123";
 		var transactionId = session.CreateTransactionId(requestId);
 
-		transactionId.AssertGreater(0);
+		transactionId.AssertEqual(1);
 
 		// Verify bidirectional association
 		var ok = session.TryGetTransactionId(requestId, out var t1);

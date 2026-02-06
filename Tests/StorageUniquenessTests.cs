@@ -49,8 +49,8 @@ public class StorageUniquenessTests : BaseTestClass
 		var securities = await drive2.GetAvailableSecuritiesAsync().ToArrayAsync(CancellationToken);
 
 		// Must contain both securities
-		securities.Any(s => s.SecurityCode == "AAPL").AssertTrue("AAPL should be present");
-		securities.Any(s => s.SecurityCode == "MSFT").AssertTrue("MSFT should be present");
+		securities.Count(s => s.SecurityCode == "AAPL").AssertEqual(1, "AAPL should be present exactly once");
+		securities.Count(s => s.SecurityCode == "MSFT").AssertEqual(1, "MSFT should be present exactly once");
 
 		// Must have NO duplicates — each security should appear exactly once
 		var distinct = securities.Distinct().ToArray();
@@ -131,8 +131,8 @@ public class StorageUniquenessTests : BaseTestClass
 		var securities = await drive3.GetAvailableSecuritiesAsync().ToArrayAsync(CancellationToken);
 
 		// Both old (from index) and new (from filesystem) must be present
-		securities.Any(s => s.SecurityCode == "OLD1").AssertTrue("OLD1 (from index) should be present");
-		securities.Any(s => s.SecurityCode == "NEW1").AssertTrue("NEW1 (from filesystem) should be present");
+		securities.Count(s => s.SecurityCode == "OLD1").AssertEqual(1, "OLD1 (from index) should be present exactly once");
+		securities.Count(s => s.SecurityCode == "NEW1").AssertEqual(1, "NEW1 (from filesystem) should be present exactly once");
 
 		// No duplicates
 		var distinct = securities.Distinct().ToArray();

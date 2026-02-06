@@ -196,8 +196,8 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		await inner.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Should receive connect message and ProcessSuspended
-		output.Any(m => m.Type == MessageTypes.Connect).AssertTrue();
-		output.Any(m => m.Type == MessageTypes.ProcessSuspended).AssertTrue();
+		output.Count(m => m.Type == MessageTypes.Connect).AssertEqual(1);
+		output.Count(m => m.Type == MessageTypes.ProcessSuspended).AssertEqual(1);
 
 		// Clear for next check
 		output.Clear();

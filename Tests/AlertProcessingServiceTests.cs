@@ -115,7 +115,7 @@ public class AlertProcessingServiceTests
 
 		await WaitForNotification();
 
-		_notificationService.NotifyCount.AssertGreater(0, "Should have triggered notification");
+		_notificationService.NotifyCount.AssertEqual(1, "Should have triggered notification");
 	}
 
 	[TestMethod]
@@ -188,7 +188,7 @@ public class AlertProcessingServiceTests
 
 		await WaitForNotification();
 
-		_notificationService.NotifyCount.AssertGreater(0);
+		_notificationService.NotifyCount.AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -204,7 +204,7 @@ public class AlertProcessingServiceTests
 
 		await WaitForNotification();
 
-		_notificationService.NotifyCount.AssertGreater(0);
+		_notificationService.NotifyCount.AssertEqual(1);
 	}
 
 	[TestMethod]

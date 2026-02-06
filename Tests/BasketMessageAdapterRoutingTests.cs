@@ -252,7 +252,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		// Expected: ParentChildMap contains mapping for this subscription
 		// Adapter received child-ID different from parent transId
 		var received = adapter1.GetMessages<MarketDataMessage>().ToArray();
-		received.Length.AssertGreater(0, "Adapter should receive MarketDataMessage");
+		received.Length.AssertEqual(1, "Adapter should receive MarketDataMessage");
 
 		var childTransId = received.First().TransactionId;
 
@@ -291,7 +291,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 
 		// News already goes through ToChild() — ParentChildMap should have mapping
 		var received = adapter1.GetMessages<MarketDataMessage>().ToArray();
-		received.Length.AssertGreater(0, "Adapter should receive MarketDataMessage for News");
+		received.Length.AssertEqual(1, "Adapter should receive MarketDataMessage for News");
 
 		var childTransId = received.First().TransactionId;
 
@@ -326,7 +326,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		await SendToBasket(basket, mdMsg, TestContext.CancellationToken);
 
 		var received = adapter1.GetMessages<MarketDataMessage>().ToArray();
-		received.Length.AssertGreater(0, "Adapter should receive MarketDataMessage for Level1");
+		received.Length.AssertEqual(1, "Adapter should receive MarketDataMessage for Level1");
 
 		var childTransId = received.First().TransactionId;
 
@@ -361,7 +361,7 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		await SendToBasket(basket, mdMsg, TestContext.CancellationToken);
 
 		var received = adapter1.GetMessages<MarketDataMessage>().ToArray();
-		received.Length.AssertGreater(0, "Adapter should receive MarketDataMessage for MarketDepth");
+		received.Length.AssertEqual(1, "Adapter should receive MarketDataMessage for MarketDepth");
 
 		var childTransId = received.First().TransactionId;
 
@@ -399,12 +399,12 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 
 		// Verify: SubscriptionResponse has parent transId (not child)
 		var responses = GetOut<SubscriptionResponseMessage>();
-		responses.Any(r => r.OriginalTransactionId == transId)
-			.AssertTrue("SubscriptionResponse should have parent transId after remapping");
+		responses.Count(r => r.OriginalTransactionId == transId)
+			.AssertEqual(1, "SubscriptionResponse should have parent transId after remapping");
 
 		var onlines = GetOut<SubscriptionOnlineMessage>();
-		onlines.Any(r => r.OriginalTransactionId == transId)
-			.AssertTrue("SubscriptionOnline should have parent transId after remapping");
+		onlines.Count(r => r.OriginalTransactionId == transId)
+			.AssertEqual(1, "SubscriptionOnline should have parent transId after remapping");
 	}
 
 	#endregion

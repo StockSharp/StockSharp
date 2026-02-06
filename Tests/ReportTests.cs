@@ -364,7 +364,7 @@ public class ReportTests : BaseTestClass
 		stream.Position = 0;
 		var json = new StreamReader(stream).ReadToEnd();
 
-		IsFalse(json.Contains("\"orders\""), "Orders section should not be present when IncludeOrders=false");
+		json.Contains("\"orders\"").AssertFalse("Orders section should not be present when IncludeOrders=false");
 	}
 
 	[TestMethod]
@@ -1178,8 +1178,8 @@ public class ReportTests : BaseTestClass
 		using var worker = provider.OpenExist(outputStream);
 
 		var sheetNames = worker.GetSheetNames().ToList();
-		IsFalse(sheetNames.Contains("Trades"), "Trades sheet should not exist when IncludeTrades=false");
-		IsFalse(sheetNames.Contains("Orders"), "Orders sheet should not exist when IncludeOrders=false");
+		sheetNames.Count(s => s == "Trades").AssertEqual(0, "Trades sheet should not exist when IncludeTrades=false");
+		sheetNames.Count(s => s == "Orders").AssertEqual(0, "Orders sheet should not exist when IncludeOrders=false");
 	}
 
 	[TestMethod]

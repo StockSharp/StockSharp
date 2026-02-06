@@ -506,8 +506,8 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		forward.AssertNotNull("Data with multiple known IDs should be forwarded");
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		ids.Contains(100).AssertTrue("Should contain first ID");
-		ids.Contains(101).AssertTrue("Should contain second ID");
+		ids.Count(id => id == 100).AssertEqual(1, "Should contain first ID");
+		ids.Count(id => id == 101).AssertEqual(1, "Should contain second ID");
 	}
 
 	[TestMethod]
@@ -544,8 +544,8 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		forward.AssertNotNull("Data should be forwarded for known ID");
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		ids.Contains(100).AssertTrue("Should contain known ID");
-		ids.Contains(999).AssertFalse("Should NOT contain unknown ID");
+		ids.Count(id => id == 100).AssertEqual(1, "Should contain known ID");
+		ids.Count(id => id == 999).AssertEqual(0, "Should NOT contain unknown ID");
 	}
 
 	[TestMethod]
@@ -601,8 +601,8 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		forward.AssertNotNull("Data should be forwarded for remaining active subscription");
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		ids.Contains(100).AssertFalse("Should NOT contain unsubscribed ID");
-		ids.Contains(101).AssertTrue("Should contain active ID");
+		ids.Count(id => id == 100).AssertEqual(0, "Should NOT contain unsubscribed ID");
+		ids.Count(id => id == 101).AssertEqual(1, "Should contain active ID");
 	}
 
 	[TestMethod]
@@ -665,8 +665,8 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		forward.AssertNotNull("Data should still be forwarded for remaining subscription");
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		ids.Contains(100).AssertFalse("Finished subscription should be filtered out");
-		ids.Contains(101).AssertTrue("Active subscription should remain");
+		ids.Count(id => id == 100).AssertEqual(0, "Finished subscription should be filtered out");
+		ids.Count(id => id == 101).AssertEqual(1, "Active subscription should remain");
 	}
 
 	[TestMethod]
@@ -710,8 +710,8 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		forward.AssertNotNull("Data should still be forwarded for remaining subscription");
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		ids.Contains(100).AssertFalse("Errored subscription should be filtered out");
-		ids.Contains(101).AssertTrue("Active subscription should remain");
+		ids.Count(id => id == 100).AssertEqual(0, "Errored subscription should be filtered out");
+		ids.Count(id => id == 101).AssertEqual(1, "Active subscription should remain");
 	}
 
 	[TestMethod]
@@ -751,8 +751,8 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		forward.AssertNotNull("Data should be forwarded");
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		ids.Contains(100).AssertTrue("Online subscription should be present");
-		ids.Contains(101).AssertTrue("Active (not yet online) subscription should also be present");
+		ids.Count(id => id == 100).AssertEqual(1, "Online subscription should be present");
+		ids.Count(id => id == 101).AssertEqual(1, "Active (not yet online) subscription should also be present");
 	}
 
 	#endregion
@@ -940,7 +940,7 @@ public class SubscriptionManagerTests : BaseTestClass
 		// Trigger re-subscribe
 		manager.ProcessOutMessage(new ConnectionRestoredMessage { IsResetState = true });
 		var (reSubMsgs, _) = manager.ProcessInMessage(new ProcessSuspendedMessage());
-		reSubMsgs.Length.AssertGreater(0, "Should have re-subscribe message");
+		reSubMsgs.Length.AssertEqual(1, "Should have re-subscribe message");
 
 		var reSubMsg = (MarketDataMessage)reSubMsgs[0];
 		var reSubTransId = reSubMsg.TransactionId;

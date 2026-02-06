@@ -42,7 +42,7 @@ public class CompilationTests : BaseTestClass
 
 		// Get all script files in the folder
 		var scriptFiles = Directory.GetFiles(folderPath, $"*{fileExtension}");
-		scriptFiles.Length.AssertGreater(0); // Ensure there are scripts to test
+		(scriptFiles.Length > 0).AssertTrue("Ensure there are scripts to test");
 
 		var securities = new[]
 		{
@@ -128,7 +128,7 @@ public class CompilationTests : BaseTestClass
 
 		// Get all script files in the folder
 		var scriptFiles = Directory.GetFiles(folderPath, $"*{fileExtension}");
-		scriptFiles.Length.AssertGreater(0); // Ensure there are scripts to test
+		(scriptFiles.Length > 0).AssertTrue("Ensure there are scripts to test");
 
 		var securities = new[]
 		{
@@ -238,7 +238,7 @@ public class CompilationTests : BaseTestClass
 		public IAnalyticsGrid CreateGrid(params string[] columns)
 		{
 			columns.AssertNotNull();
-			columns.Length.AssertGreater(0);
+			(columns.Length > 0).AssertTrue("columns must not be empty");
 
 			var grid = new TestAnalyticsGrid(columns);
 			_grids.Add(grid);
@@ -308,7 +308,7 @@ public class CompilationTests : BaseTestClass
 			public void SetSort(string column, bool asc)
 			{
 				column.IsEmpty().AssertFalse();
-				columns.Contains(column, StringComparer.OrdinalIgnoreCase).AssertTrue();
+				columns.Count(c => string.Equals(c, column, StringComparison.OrdinalIgnoreCase)).AssertEqual(1);
 			}
 
 			public void SetRow(params object[] row)
@@ -409,7 +409,7 @@ public class CompilationTests : BaseTestClass
 	private void InvokeDiagramElem(Type type, DiagramExternalElement instance)
 	{
 		var evts = type.GetEvents().ToArray();
-		evts.Any().AssertTrue();
+		evts.Count().AssertEqual(1);
 
 		var raisedCnt = 0;
 
@@ -422,7 +422,7 @@ public class CompilationTests : BaseTestClass
 				continue;
 
 			var evtAttrs = evt.GetAttributes().ToArray();
-			evtAttrs.Any(a => a is DiagramExternalAttribute).AssertTrue();
+			evtAttrs.Count(a => a is DiagramExternalAttribute).AssertEqual(1);
 
 			Delegate dlg;
 
@@ -445,7 +445,7 @@ public class CompilationTests : BaseTestClass
 		}
 
 		var methods = type.GetMethods().ToArray();
-		methods.Any().AssertTrue();
+		methods.Count(m => m.Name == "Process").AssertEqual(1);
 
 		foreach (var method in methods)
 		{

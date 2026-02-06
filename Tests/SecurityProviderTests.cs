@@ -632,9 +632,9 @@ public class SecurityProviderTests : BaseTestClass
 		await storage.DeleteRangeAsync([sec1, sec2, sec3], CancellationToken);
 
 		removedSecurities.Count.AssertEqual(2);
-		removedSecurities.Any(s => s.Id == sec1.Id).AssertTrue();
-		removedSecurities.Any(s => s.Id == sec2.Id).AssertTrue();
-		removedSecurities.Any(s => s.Id == sec3.Id).AssertFalse();
+		removedSecurities.Count(s => s.Id == sec1.Id).AssertEqual(1);
+		removedSecurities.Count(s => s.Id == sec2.Id).AssertEqual(1);
+		removedSecurities.Count(s => s.Id == sec3.Id).AssertEqual(0);
 	}
 
 	[TestMethod]

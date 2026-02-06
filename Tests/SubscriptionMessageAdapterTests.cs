@@ -90,7 +90,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
 		await inner.SendOutMessageAsync(new ConnectionRestoredMessage { IsResetState = true }, CancellationToken);
 
-		output.OfType<ProcessSuspendedMessage>().Any().AssertFalse();
+		output.OfType<ProcessSuspendedMessage>().Count().AssertEqual(0);
 	}
 
 	#region End-to-end with real manager
@@ -115,15 +115,15 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 			DataType2 = DataType.Ticks,
 		}, CancellationToken);
 
-		inner.InMessages.OfType<MarketDataMessage>().Any(m => m.TransactionId == 100 && m.IsSubscribe).AssertTrue("Subscribe should reach inner");
+		inner.InMessages.OfType<MarketDataMessage>().Count(m => m.TransactionId == 100 && m.IsSubscribe).AssertEqual(1, "Subscribe should reach inner");
 
 		// Inner sends back SubscriptionResponse OK
 		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
-		output.OfType<SubscriptionResponseMessage>().Any(m => m.OriginalTransactionId == 100 && m.IsOk()).AssertTrue("Response should flow out");
+		output.OfType<SubscriptionResponseMessage>().Count(m => m.OriginalTransactionId == 100 && m.IsOk()).AssertEqual(1, "Response should flow out");
 
 		// Inner sends back SubscriptionOnline
 		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
-		output.OfType<SubscriptionOnlineMessage>().Any(m => m.OriginalTransactionId == 100).AssertTrue("Online should flow out");
+		output.OfType<SubscriptionOnlineMessage>().Count(m => m.OriginalTransactionId == 100).AssertEqual(1, "Online should flow out");
 
 		output.Clear();
 
@@ -139,7 +139,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		tick.SetSubscriptionIds(subscriptionId: 100);
 		await inner.SendOutMessageAsync(tick, CancellationToken);
 
-		output.OfType<ExecutionMessage>().Any(m => m.TradePrice == 50000m).AssertTrue(
+		output.OfType<ExecutionMessage>().Count(m => m.TradePrice == 50000m).AssertEqual(1,
 			$"Tick should flow through SubscriptionMessageAdapter, got {output.Count} messages: {string.Join(", ", output.Select(m => m.Type))}");
 	}
 
@@ -164,7 +164,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		tick.SetSubscriptionIds(subscriptionId: 999);
 		await inner.SendOutMessageAsync(tick, CancellationToken);
 
-		output.OfType<ExecutionMessage>().Any().AssertFalse("Tick with unknown subscription should be dropped");
+		output.OfType<ExecutionMessage>().Count().AssertEqual(0, "Tick with unknown subscription should be dropped");
 	}
 
 	#endregion
@@ -193,14 +193,14 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 			DataType2 = DataType.Ticks,
 		}, CancellationToken);
 
-		inner.InMessages.OfType<MarketDataMessage>().Any(m => m.TransactionId == 100 && m.IsSubscribe).AssertTrue("Subscribe should reach inner adapter");
+		inner.InMessages.OfType<MarketDataMessage>().Count(m => m.TransactionId == 100 && m.IsSubscribe).AssertEqual(1, "Subscribe should reach inner adapter");
 
 		// Inner sends Response + Online
 		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
 		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
 
-		output.OfType<SubscriptionResponseMessage>().Any(m => m.OriginalTransactionId == 100 && m.IsOk()).AssertTrue("Response should flow out");
-		output.OfType<SubscriptionOnlineMessage>().Any(m => m.OriginalTransactionId == 100).AssertTrue("Online should flow out");
+		output.OfType<SubscriptionResponseMessage>().Count(m => m.OriginalTransactionId == 100 && m.IsOk()).AssertEqual(1, "Response should flow out");
+		output.OfType<SubscriptionOnlineMessage>().Count(m => m.OriginalTransactionId == 100).AssertEqual(1, "Online should flow out");
 
 		output.Clear();
 
@@ -216,7 +216,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		tick.SetSubscriptionIds(subscriptionId: 100);
 		await inner.SendOutMessageAsync(tick, CancellationToken);
 
-		output.OfType<ExecutionMessage>().Any(m => m.TradePrice == 50000m).AssertTrue(
+		output.OfType<ExecutionMessage>().Count(m => m.TradePrice == 50000m).AssertEqual(1,
 			$"Tick should flow through combined chain, got {output.Count} messages: {string.Join(", ", output.Select(m => m.Type))}");
 	}
 
@@ -257,7 +257,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		};
 		await inner.SendOutMessageAsync(tick, CancellationToken);
 
-		output.OfType<ExecutionMessage>().Any(m => m.TradePrice == 42000m).AssertTrue(
+		output.OfType<ExecutionMessage>().Count(m => m.TradePrice == 42000m).AssertEqual(1,
 			$"Tick without ID should be resolved by key, got {output.Count} messages: {string.Join(", ", output.Select(m => m.Type))}");
 	}
 

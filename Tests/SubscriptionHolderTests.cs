@@ -128,8 +128,8 @@ public class SubscriptionHolderTests : BaseTestClass
 
 		var session1Subs = holder.GetSubscriptions("session1").ToArray();
 		session1Subs.Length.AssertEqual(2);
-		session1Subs.Any(s => s.Id == 1).AssertTrue();
-		session1Subs.Any(s => s.Id == 2).AssertTrue();
+		session1Subs.Count(s => s.Id == 1).AssertEqual(1);
+		session1Subs.Count(s => s.Id == 2).AssertEqual(1);
 
 		var session2Subs = holder.GetSubscriptions("session2").ToArray();
 		session2Subs.Length.AssertEqual(1);
@@ -511,8 +511,8 @@ public class SubscriptionHolderTests : BaseTestClass
 		var removed = holder.Remove("session1").ToArray();
 
 		removed.Length.AssertEqual(2);
-		removed.Any(s => s.Id == 21).AssertTrue();
-		removed.Any(s => s.Id == 22).AssertTrue();
+		removed.Count(s => s.Id == 21).AssertEqual(1);
+		removed.Count(s => s.Id == 22).AssertEqual(1);
 		removed.All(s => s.State == SubscriptionStates.Stopped).AssertTrue();
 
 		// event raised for both removed items
@@ -568,8 +568,8 @@ public class SubscriptionHolderTests : BaseTestClass
 
 		var sessionSubs = holder.GetSubscriptions("session1").ToArray();
 		sessionSubs.Length.AssertEqual(2);
-		sessionSubs.Any(s => s.Id == 40).AssertTrue();
-		sessionSubs.Any(s => s.Id == 0 && s.SecurityId.SecurityCode == "MSFT").AssertTrue();
+		sessionSubs.Count(s => s.Id == 40).AssertEqual(1);
+		sessionSubs.Count(s => s.Id == 0 && s.SecurityId.SecurityCode == "MSFT").AssertEqual(1);
 	}
 
 	#endregion

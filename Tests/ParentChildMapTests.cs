@@ -175,7 +175,7 @@ public class ParentChildMapTests : BaseTestClass
 		parentId.AreEqual(100L);
 		needParent.AssertTrue();
 		allError.AssertFalse();
-		innerErrors.Any().AssertFalse();
+		innerErrors.Count().AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -245,7 +245,7 @@ public class ParentChildMapTests : BaseTestClass
 		parentId.AreEqual(100L);
 		needParent.AssertTrue();
 		allError.AssertFalse();
-		innerErrors.Any().AssertFalse();
+		innerErrors.Count().AssertEqual(0);
 	}
 
 	[TestMethod]

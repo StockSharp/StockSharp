@@ -710,12 +710,12 @@ public class StorageBufferTests : BaseTestClass
 	{
 		var buffer = new StorageBuffer();
 
-		buffer.IgnoreGenerated.Contains(DataType.Ticks).AssertTrue();
-		buffer.IgnoreGenerated.Contains(DataType.Level1).AssertTrue();
-		buffer.IgnoreGenerated.Contains(DataType.MarketDepth).AssertTrue();
-		buffer.IgnoreGenerated.Contains(DataType.OrderLog).AssertTrue();
-		buffer.IgnoreGenerated.Contains(DataType.Transactions).AssertTrue();
-		buffer.IgnoreGenerated.Contains(DataType.PositionChanges).AssertTrue();
+		buffer.IgnoreGenerated.Count(d => d == DataType.Ticks).AssertEqual(1);
+		buffer.IgnoreGenerated.Count(d => d == DataType.Level1).AssertEqual(1);
+		buffer.IgnoreGenerated.Count(d => d == DataType.MarketDepth).AssertEqual(1);
+		buffer.IgnoreGenerated.Count(d => d == DataType.OrderLog).AssertEqual(1);
+		buffer.IgnoreGenerated.Count(d => d == DataType.Transactions).AssertEqual(1);
+		buffer.IgnoreGenerated.Count(d => d == DataType.PositionChanges).AssertEqual(1);
 	}
 
 	[TestMethod]

@@ -663,7 +663,7 @@ public class CandleTests : BaseTestClass
 		(builder.Low.Price < builder.PoC.Price || builder.Low.Price == builder.PoC.Price).AssertTrue();
 
 		builder.Update(15m, 2m, Sides.Buy);
-		builder.PriceLevels.Any(l => l.Price == 15m).AssertTrue();
+		builder.PriceLevels.Count(l => l.Price == 15m).AssertEqual(1);
 		var lvl15 = builder.PriceLevels.First(l => l.Price == 15m);
 		lvl15.BuyVolume.AreEqual(2m);
 		lvl15.TotalVolume.AreEqual(2m);
@@ -2128,13 +2128,13 @@ public class CandleTests : BaseTestClass
 
 		// 30 is divisible by 1, 2, 3, 5, 6, 10, 15
 		// From our list: 1, 2, 3, 5, 10, 15
-		filtered.Contains(TimeSpan.FromMinutes(1)).AssertTrue();
-		filtered.Contains(TimeSpan.FromMinutes(2)).AssertTrue();
-		filtered.Contains(TimeSpan.FromMinutes(3)).AssertTrue();
-		filtered.Contains(TimeSpan.FromMinutes(5)).AssertTrue();
-		filtered.Contains(TimeSpan.FromMinutes(10)).AssertTrue();
-		filtered.Contains(TimeSpan.FromMinutes(15)).AssertTrue();
-		filtered.Contains(TimeSpan.FromMinutes(30)).AssertFalse(); // Not smaller
+		filtered.Length.AssertEqual(6);
+		filtered.Count(t => t == TimeSpan.FromMinutes(1)).AssertEqual(1);
+		filtered.Count(t => t == TimeSpan.FromMinutes(2)).AssertEqual(1);
+		filtered.Count(t => t == TimeSpan.FromMinutes(3)).AssertEqual(1);
+		filtered.Count(t => t == TimeSpan.FromMinutes(5)).AssertEqual(1);
+		filtered.Count(t => t == TimeSpan.FromMinutes(10)).AssertEqual(1);
+		filtered.Count(t => t == TimeSpan.FromMinutes(15)).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -2153,10 +2153,11 @@ public class CandleTests : BaseTestClass
 		var filtered = timeFrames.FilterSmallerTimeFrames(original).ToArray();
 
 		// Only 1 is a divisor of 30
-		filtered.Contains(TimeSpan.FromMinutes(1)).AssertTrue();
-		filtered.Contains(TimeSpan.FromMinutes(7)).AssertFalse();
-		filtered.Contains(TimeSpan.FromMinutes(11)).AssertFalse();
-		filtered.Contains(TimeSpan.FromMinutes(13)).AssertFalse();
+		filtered.Length.AssertEqual(1);
+		filtered.Count(t => t == TimeSpan.FromMinutes(1)).AssertEqual(1);
+		filtered.Count(t => t == TimeSpan.FromMinutes(7)).AssertEqual(0);
+		filtered.Count(t => t == TimeSpan.FromMinutes(11)).AssertEqual(0);
+		filtered.Count(t => t == TimeSpan.FromMinutes(13)).AssertEqual(0);
 	}
 
 	#endregion
@@ -2240,7 +2241,7 @@ public class CandleTests : BaseTestClass
 		var area = candles.GetValueArea();
 
 		area.AssertNotNull();
-		area.PriceLevels.Any().AssertTrue();
+		area.PriceLevels.Count().AssertEqual(3);
 
 		// Should have 3 unique price levels: 100, 101, 102
 		var prices = area.PriceLevels.Select(l => l.Price).OrderBy(p => p).ToArray();
@@ -2282,7 +2283,7 @@ public class CandleTests : BaseTestClass
 		var area = candles.GetValueArea();
 
 		area.AssertNotNull();
-		area.PriceLevels.Any().AssertFalse();
+		area.PriceLevels.Count().AssertEqual(0);
 	}
 
 	#endregion

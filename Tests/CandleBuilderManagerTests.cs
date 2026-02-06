@@ -456,12 +456,12 @@ public class CandleBuilderManagerTests : BaseTestClass
 		forward.AssertNull("Tick consumed for building");
 
 		var candles = extraOut.OfType<CandleMessage>().ToArray();
-		candles.Length.AssertGreater(0, "Should produce candle(s)");
+		candles.Length.AssertEqual(2, "Should produce 2 candles (one per subscription)");
 
-		// At least one candle should have both subscription IDs
 		var allIds = candles.SelectMany(c => c.GetSubscriptionIds()).Distinct().ToArray();
-		allIds.Contains(1).AssertTrue("Candle should contain first subscription ID");
-		allIds.Contains(2).AssertTrue("Candle should contain second subscription ID");
+		allIds.Length.AssertEqual(2, "Candles should contain both subscription IDs");
+		allIds.Count(id => id == 1).AssertEqual(1, "Candles should contain first subscription ID");
+		allIds.Count(id => id == 2).AssertEqual(1, "Candles should contain second subscription ID");
 	}
 
 	[TestMethod]
@@ -498,10 +498,10 @@ public class CandleBuilderManagerTests : BaseTestClass
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
 
 		var candles = extraOut.OfType<CandleMessage>().ToArray();
-		candles.Length.AssertGreater(0, "Should produce candle");
+		candles.Length.AssertEqual(1, "Should produce exactly 1 candle");
 
 		var ids = candles[0].GetSubscriptionIds();
-		ids.Contains(1).AssertTrue("Should contain known subscription ID");
+		ids.Count(id => id == 1).AssertEqual(1, "Should contain known subscription ID");
 	}
 
 	[TestMethod]
@@ -542,8 +542,8 @@ public class CandleBuilderManagerTests : BaseTestClass
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
 
 		var candles = extraOut.OfType<CandleMessage>().ToArray();
-		candles.Length.AssertGreater(0, "Remaining subscription should still build candles");
-		candles[0].GetSubscriptionIds().Contains(2).AssertTrue("Candle should have remaining subscription ID");
+		candles.Length.AssertEqual(1, "Remaining subscription should still build candles");
+		candles[0].GetSubscriptionIds().Count(id => id == 2).AssertEqual(1, "Candle should have remaining subscription ID");
 	}
 
 	[TestMethod]
@@ -586,7 +586,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
 
 		var candles = extraOut.OfType<CandleMessage>().ToArray();
-		candles.Length.AssertGreater(0, "Remaining subscription should still build candles after error on other");
+		candles.Length.AssertEqual(1, "Remaining subscription should still build candles after error on other");
 	}
 
 	[TestMethod]
@@ -953,7 +953,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 
 		forward1.AssertNull("CandleBuilderManager suppresses forward for Finished");
 		var finishedOut = extra1.OfType<SubscriptionFinishedMessage>().ToArray();
-		finishedOut.Length.AssertGreater(0, "Should emit finished via extraOut");
+		finishedOut.Length.AssertEqual(1, "Should emit finished via extraOut");
 		finishedOut[0].OriginalTransactionId.AssertEqual(1);
 
 		// Series2 should still work — Online arrives and is forwarded
@@ -996,7 +996,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 		var (forward1, extra1) = await manager.ProcessOutMessageAsync(errorResp, CancellationToken);
 
 		forward1.AssertNull("CandleBuilderManager suppresses forward for Response");
-		extra1.Length.AssertGreater(0, "Should emit error via extraOut");
+		extra1.Length.AssertEqual(1, "Should emit error via extraOut");
 
 		// Series2 should still work — Response OK
 		var resp2 = new SubscriptionResponseMessage { OriginalTransactionId = 2 };

@@ -459,10 +459,10 @@ public class ConnectorRoutingTests : BaseTestClass
 		var binanceMarketData = binanceAdapter.GetMessages<MarketDataMessage>().ToList();
 		var kucoinMarketData = kucoinAdapter.GetMessages<MarketDataMessage>().ToList();
 
-		binanceMarketData.Any(m => m.SecurityId == binanceSecId && m.IsSubscribe).AssertTrue("Binance should receive BTCUSDT subscription");
-		binanceMarketData.Any(m => m.SecurityId == kucoinSecId).AssertFalse("Binance should NOT receive ETHUSDT subscription");
-		kucoinMarketData.Any(m => m.SecurityId == kucoinSecId && m.IsSubscribe).AssertTrue("Kucoin should receive ETHUSDT subscription");
-		kucoinMarketData.Any(m => m.SecurityId == binanceSecId).AssertFalse("Kucoin should NOT receive BTCUSDT subscription");
+		binanceMarketData.Count(m => m.SecurityId == binanceSecId && m.IsSubscribe).AssertEqual(1, "Binance should receive BTCUSDT subscription");
+		binanceMarketData.Count(m => m.SecurityId == kucoinSecId).AssertEqual(0, "Binance should NOT receive ETHUSDT subscription");
+		kucoinMarketData.Count(m => m.SecurityId == kucoinSecId && m.IsSubscribe).AssertEqual(1, "Kucoin should receive ETHUSDT subscription");
+		kucoinMarketData.Count(m => m.SecurityId == binanceSecId).AssertEqual(0, "Kucoin should NOT receive BTCUSDT subscription");
 
 		(receivedTicks.Count >= 2).AssertTrue($"Should receive at least 2 ticks, got {receivedTicks.Count}");
 

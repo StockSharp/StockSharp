@@ -866,8 +866,8 @@ public class IndicatorTests : BaseTestClass
 		provider.Init();
 
 		// Must discover at least the built-in GPU calculators
-		provider.All.ContainsKey(typeof(SimpleMovingAverage)).AssertTrue("SMA calculator not discovered");
-		provider.All.ContainsKey(typeof(AverageDirectionalIndex)).AssertTrue("ADX calculator not discovered");
+		provider.All.Keys.Count(k => k == typeof(SimpleMovingAverage)).AssertEqual(1, "SMA calculator not discovered");
+		provider.All.Keys.Count(k => k == typeof(AverageDirectionalIndex)).AssertEqual(1, "ADX calculator not discovered");
 	}
 
 	[TestMethod]
@@ -1102,7 +1102,7 @@ public class IndicatorTests : BaseTestClass
 		}
 		catch (InvalidOperationException ex)
 		{
-			ex.Message.Contains("already preloaded").AssertTrue();
+			ex.Message.AssertEqual("Indicator is already preloaded.");
 		}
 	}
 

@@ -97,6 +97,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<int>().ToArray();
 
+		values.Length.AssertEqual(5);
 		values.SequenceEqual([1, 2, 3, 4, 5]).AssertTrue();
 	}
 
@@ -108,6 +109,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<int>().ToArray();
 
+		values.Length.AssertEqual(5);
 		values.SequenceEqual([10, 20, 30, 40, 50]).AssertTrue();
 	}
 
@@ -119,6 +121,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<decimal>().ToArray();
 
+		values.Length.AssertEqual(3);
 		values.SequenceEqual([1.0m, 1.5m, 2.0m]).AssertTrue();
 	}
 
@@ -130,6 +133,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<bool>().ToArray();
 
+		values.Length.AssertEqual(2);
 		values.SequenceEqual([false, true]).AssertTrue();
 	}
 
@@ -144,6 +148,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<TimeSpan>().ToArray();
 
+		values.Length.AssertEqual(3);
 		values.SequenceEqual([
 			TimeSpan.FromMinutes(5),
 			TimeSpan.FromMinutes(10),
@@ -158,6 +163,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<int>().ToArray();
 
+		values.Length.AssertEqual(1);
 		values.SequenceEqual([42]).AssertTrue();
 	}
 
@@ -169,6 +175,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<long>().ToArray();
 
+		values.Length.AssertEqual(5);
 		values.SequenceEqual([100L, 200L, 300L, 400L, 500L]).AssertTrue();
 	}
 
@@ -356,6 +363,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		var values = param.GetOptimizationValues().Cast<int>().ToArray();
 
+		values.Length.AssertEqual(1);
 		values.SequenceEqual([5]).AssertTrue();
 	}
 
@@ -382,6 +390,7 @@ public class StrategyParamHelperTests : BaseTestClass
 		// Take only first 5
 		var first5 = enumerable.Take(5).Cast<int>().ToArray();
 
+		first5.Length.AssertEqual(5);
 		first5.SequenceEqual([1, 2, 3, 4, 5]).AssertTrue();
 	}
 

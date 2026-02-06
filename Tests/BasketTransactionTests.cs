@@ -65,16 +65,15 @@ public class BasketTransactionTests : BasketTestBase
 			.AssertTrue("OrderRouting should have transId→adapter mapping");
 		routedAdapter.AssertEqual(adapter1, "Order should be routed to adapter1");
 
-		// subscriptionRouting should NOT have order transId (orders are not subscriptions)
-		// parentChildMap should be empty for orders
-
 		// --- Output ---
-		adapter1.GetMessages<OrderRegisterMessage>().Any().AssertTrue("Adapter1 should receive OrderRegisterMessage");
-		adapter2.GetMessages<OrderRegisterMessage>().Any().AssertFalse("Adapter2 should NOT receive OrderRegisterMessage");
+		adapter1.GetMessages<OrderRegisterMessage>().Count().AssertEqual(1, "Adapter1 should receive exactly 1 OrderRegisterMessage");
+		adapter2.GetMessages<OrderRegisterMessage>().Count().AssertEqual(0, "Adapter2 should NOT receive OrderRegisterMessage");
 
-		var execMsgs = GetOut<ExecutionMessage>();
-		execMsgs.Any(e => e.OriginalTransactionId == transId)
-			.AssertTrue("Basket should emit ExecutionMessage for the order");
+		var execMsgs = GetOut<ExecutionMessage>()
+			.Where(e => e.OriginalTransactionId == transId)
+			.ToArray();
+		execMsgs.Length.AssertEqual(1, "Basket should emit exactly 1 ExecutionMessage for the order");
+		execMsgs[0].OrderState.AssertEqual(OrderStates.Active);
 	}
 
 	[TestMethod]
@@ -149,11 +148,14 @@ public class BasketTransactionTests : BasketTestBase
 		stillRouted.AssertEqual(adapter1);
 
 		// --- Output ---
-		adapter1.GetMessages<OrderCancelMessage>().Any().AssertTrue("Adapter1 should receive OrderCancelMessage");
-		adapter2.GetMessages<OrderCancelMessage>().Any().AssertFalse("Adapter2 should NOT receive OrderCancelMessage");
+		adapter1.GetMessages<OrderCancelMessage>().Count().AssertEqual(1, "Adapter1 should receive exactly 1 OrderCancelMessage");
+		adapter2.GetMessages<OrderCancelMessage>().Count().AssertEqual(0, "Adapter2 should NOT receive OrderCancelMessage");
 
-		GetOut<ExecutionMessage>().Any(e => e.OriginalTransactionId == cancelTransId && e.OrderState == OrderStates.Done)
-			.AssertTrue("Basket should emit ExecutionMessage with Done state");
+		var cancelExecs = GetOut<ExecutionMessage>()
+			.Where(e => e.OriginalTransactionId == cancelTransId)
+			.ToArray();
+		cancelExecs.Length.AssertEqual(1, "Basket should emit exactly 1 ExecutionMessage for cancel");
+		cancelExecs[0].OrderState.AssertEqual(OrderStates.Done);
 	}
 
 	/// <summary>
@@ -211,14 +213,14 @@ public class BasketTransactionTests : BasketTestBase
 		await SendToBasket(basket, cancelMsg, TestContext.CancellationToken);
 
 		// --- Expected: OrderCancel routed to adapter1 via portfolio fallback ---
-		// BUG: adapter1 does NOT receive the cancel because _adapterWrappers.TryGetValue(wrapper)
-		// fails (wrapper is not a key in _adapterWrappers). Instead, UnknownTransactionId error is emitted.
-		adapter1.GetMessages<OrderCancelMessage>().Any()
-			.AssertTrue("Adapter1 should receive OrderCancelMessage via portfolio fallback");
+		adapter1.GetMessages<OrderCancelMessage>().Count().AssertEqual(1,
+			"Adapter1 should receive exactly 1 OrderCancelMessage via portfolio fallback");
 
 		// Should NOT have error response
-		GetOut<ExecutionMessage>().Any(e => e.OriginalTransactionId == cancelTransId && e.Error != null)
-			.AssertFalse("Should not produce UnknownTransactionId error when portfolio fallback finds the adapter");
+		var errors = GetOut<ExecutionMessage>()
+			.Where(e => e.OriginalTransactionId == cancelTransId && e.Error != null)
+			.ToArray();
+		errors.Length.AssertEqual(0, "Should not produce error when portfolio fallback finds the adapter");
 	}
 
 	[TestMethod]
@@ -245,19 +247,18 @@ public class BasketTransactionTests : BasketTestBase
 		await SendToBasket(basket, osMsg, TestContext.CancellationToken);
 
 		// With PortfolioName set, FilterEnabled=true → broadcast to all adapters
-		adapter1.GetMessages<OrderStatusMessage>().Any()
-			.AssertTrue("Adapter1 should receive OrderStatusMessage");
-		adapter2.GetMessages<OrderStatusMessage>().Any()
-			.AssertTrue("Adapter2 should receive OrderStatusMessage");
+		adapter1.GetMessages<OrderStatusMessage>().Count().AssertEqual(1, "Adapter1 should receive exactly 1 OrderStatusMessage");
+		adapter2.GetMessages<OrderStatusMessage>().Count().AssertEqual(1, "Adapter2 should receive exactly 1 OrderStatusMessage");
 
-		// Parent-child mapping should exist for both
+		// Parent-child mapping should exist for both adapters
 		var children = parentChildMap.GetChild(transId);
-		children.Count.AssertEqual(2, "Should have 2 child subscriptions");
+		children.Count.AssertEqual(2, "Should have exactly 2 child subscriptions");
 
-		// Responses should be remapped to parent transId
-		var onlines = GetOut<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertTrue("SubscriptionOnline should have parent transId");
+		// Exactly 1 SubscriptionOnline remapped to parent transId
+		var onlines = GetOut<SubscriptionOnlineMessage>()
+			.Where(o => o.OriginalTransactionId == transId)
+			.ToArray();
+		onlines.Length.AssertEqual(1, "Should emit exactly 1 SubscriptionOnline with parent transId");
 	}
 
 	[TestMethod]
@@ -280,19 +281,18 @@ public class BasketTransactionTests : BasketTestBase
 		};
 		await SendToBasket(basket, osMsg, TestContext.CancellationToken);
 
-		// Adapter auto-responds with ExecutionMessage (order data)
-		// Verify that order data reaches output with parent subscription ID
+		// 2 adapters × 1 ExecutionMessage each = 2 order data messages
 		var orders = GetOut<ExecutionMessage>()
 			.Where(e => e.DataTypeEx == DataType.Transactions && e.HasOrderInfo)
 			.ToArray();
-		orders.Length.AssertGreater(0, "Should receive order data from adapters");
+		orders.Length.AssertEqual(2, "Should receive exactly 2 order data messages (1 per adapter)");
 
+		// Each order should have exactly [transId] as subscription IDs (remapped from child)
 		foreach (var order in orders)
 		{
 			var subIds = order.GetSubscriptionIds();
-			subIds.Length.AssertGreater(0, "Order should have subscription IDs");
-			subIds.Contains(transId).AssertTrue(
-				$"Order subscription IDs should contain parent {transId}, got [{string.Join(",", subIds)}]");
+			subIds.Length.AssertEqual(1, "Order should have exactly 1 subscription ID");
+			subIds[0].AssertEqual(transId, "Subscription ID should be parent transId");
 		}
 	}
 
@@ -315,10 +315,8 @@ public class BasketTransactionTests : BasketTestBase
 		await SendToBasket(basket, osMsg, TestContext.CancellationToken);
 
 		// SecurityId set → FilterEnabled=true → broadcast to all
-		adapter1.GetMessages<OrderStatusMessage>().Any()
-			.AssertTrue("Adapter1 should receive OrderStatusMessage with SecurityId filter");
-		adapter2.GetMessages<OrderStatusMessage>().Any()
-			.AssertTrue("Adapter2 should receive OrderStatusMessage with SecurityId filter");
+		adapter1.GetMessages<OrderStatusMessage>().Count().AssertEqual(1, "Adapter1 should receive exactly 1 OrderStatusMessage");
+		adapter2.GetMessages<OrderStatusMessage>().Count().AssertEqual(1, "Adapter2 should receive exactly 1 OrderStatusMessage");
 	}
 
 	[TestMethod]
@@ -342,15 +340,14 @@ public class BasketTransactionTests : BasketTestBase
 		await SendToBasket(basket, plMsg, TestContext.CancellationToken);
 
 		// With PortfolioName set, FilterEnabled=true → broadcast to all adapters
-		adapter1.GetMessages<PortfolioLookupMessage>().Any()
-			.AssertTrue("Adapter1 should receive PortfolioLookupMessage");
-		adapter2.GetMessages<PortfolioLookupMessage>().Any()
-			.AssertTrue("Adapter2 should receive PortfolioLookupMessage");
+		adapter1.GetMessages<PortfolioLookupMessage>().Count().AssertEqual(1, "Adapter1 should receive exactly 1 PortfolioLookupMessage");
+		adapter2.GetMessages<PortfolioLookupMessage>().Count().AssertEqual(1, "Adapter2 should receive exactly 1 PortfolioLookupMessage");
 
-		// Finished should be remapped to parent
-		var finished = GetOut<SubscriptionFinishedMessage>();
-		finished.Any(f => f.OriginalTransactionId == transId)
-			.AssertTrue("SubscriptionFinished should have parent transId");
+		// Exactly 1 SubscriptionFinished remapped to parent
+		var finished = GetOut<SubscriptionFinishedMessage>()
+			.Where(f => f.OriginalTransactionId == transId)
+			.ToArray();
+		finished.Length.AssertEqual(1, "Should emit exactly 1 SubscriptionFinished with parent transId");
 	}
 
 	[TestMethod]
@@ -373,16 +370,16 @@ public class BasketTransactionTests : BasketTestBase
 		};
 		await SendToBasket(basket, plMsg, TestContext.CancellationToken);
 
-		// Verify that portfolio data has correct subscription IDs
+		// 2 adapters × 1 PortfolioMessage each = 2 portfolio data messages
 		var portfolios = GetOut<PortfolioMessage>();
-		portfolios.Length.AssertGreater(0, "Should receive portfolio data");
+		portfolios.Length.AssertEqual(2, "Should receive exactly 2 PortfolioMessages (1 per adapter)");
 
+		// Each should have exactly [transId] as subscription IDs
 		foreach (var pf in portfolios)
 		{
 			var subIds = pf.GetSubscriptionIds();
-			subIds.Length.AssertGreater(0, "PortfolioMessage should have subscription IDs");
-			subIds.Contains(transId).AssertTrue(
-				$"Portfolio subscription IDs should contain parent {transId}, got [{string.Join(",", subIds)}]");
+			subIds.Length.AssertEqual(1, "PortfolioMessage should have exactly 1 subscription ID");
+			subIds[0].AssertEqual(transId, "Subscription ID should be parent transId");
 		}
 	}
 
@@ -406,15 +403,20 @@ public class BasketTransactionTests : BasketTestBase
 		};
 		await SendToBasket(basket, osMsg, TestContext.CancellationToken);
 
-		adapter1.GetMessages<OrderStatusMessage>().Any()
-			.AssertFalse("Adapter1 should NOT receive unfiltered OrderStatus (IsAllDownloadingSupported=false)");
-		adapter2.GetMessages<OrderStatusMessage>().Any()
-			.AssertFalse("Adapter2 should NOT receive unfiltered OrderStatus (IsAllDownloadingSupported=false)");
+		adapter1.GetMessages<OrderStatusMessage>().Count().AssertEqual(0, "Adapter1 should NOT receive unfiltered OrderStatus");
+		adapter2.GetMessages<OrderStatusMessage>().Count().AssertEqual(0, "Adapter2 should NOT receive unfiltered OrderStatus");
 
-		// Basket should emit SubscriptionOnline as empty result
-		var onlines = GetOut<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertTrue("Should emit SubscriptionOnline for empty adapter list");
+		// Basket emits exactly 1 SubscriptionOnline as empty result (live subscription, no adapters)
+		var onlines = GetOut<SubscriptionOnlineMessage>()
+			.Where(o => o.OriginalTransactionId == transId)
+			.ToArray();
+		onlines.Length.AssertEqual(1, "Should emit exactly 1 SubscriptionOnline for empty adapter list");
+
+		// No order data should arrive
+		var orders = GetOut<ExecutionMessage>()
+			.Where(e => e.DataTypeEx == DataType.Transactions)
+			.ToArray();
+		orders.Length.AssertEqual(0, "No order data when no adapters received the request");
 	}
 
 	[TestMethod]
@@ -436,14 +438,17 @@ public class BasketTransactionTests : BasketTestBase
 		};
 		await SendToBasket(basket, plMsg, TestContext.CancellationToken);
 
-		adapter1.GetMessages<PortfolioLookupMessage>().Any()
-			.AssertFalse("Adapter1 should NOT receive unfiltered PortfolioLookup (IsAllDownloadingSupported=false)");
-		adapter2.GetMessages<PortfolioLookupMessage>().Any()
-			.AssertFalse("Adapter2 should NOT receive unfiltered PortfolioLookup (IsAllDownloadingSupported=false)");
+		adapter1.GetMessages<PortfolioLookupMessage>().Count().AssertEqual(0, "Adapter1 should NOT receive unfiltered PortfolioLookup");
+		adapter2.GetMessages<PortfolioLookupMessage>().Count().AssertEqual(0, "Adapter2 should NOT receive unfiltered PortfolioLookup");
 
-		// Basket should emit SubscriptionOnline (not history-only) as empty result
-		var onlines = GetOut<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertTrue("Should emit SubscriptionOnline for empty adapter list");
+		// Basket emits exactly 1 SubscriptionOnline as empty result (not history-only)
+		var onlines = GetOut<SubscriptionOnlineMessage>()
+			.Where(o => o.OriginalTransactionId == transId)
+			.ToArray();
+		onlines.Length.AssertEqual(1, "Should emit exactly 1 SubscriptionOnline for empty adapter list");
+
+		// No portfolio data should arrive
+		var portfolios = GetOut<PortfolioMessage>();
+		portfolios.Length.AssertEqual(0, "No portfolio data when no adapters received the request");
 	}
 }

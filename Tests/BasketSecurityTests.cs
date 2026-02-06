@@ -346,7 +346,7 @@ public class BasketSecurityTests : BaseTestClass
 
 		var result = ticks.ToBasket(basket, processorProvider).ToArray();
 
-		result.Length.AssertGreater(0);
+		result.Length.AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -387,7 +387,7 @@ public class BasketSecurityTests : BaseTestClass
 
 		var result = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync(CancellationToken);
 
-		result.Length.AssertGreater(0);
+		result.Length.AssertEqual(1);
 	}
 
 	[TestMethod]

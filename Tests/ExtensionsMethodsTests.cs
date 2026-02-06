@@ -2110,7 +2110,7 @@ public class ExtensionsMethodsTests : BaseTestClass
 	{
 		var result = "test error".ToErrorMessage();
 		result.Error.AssertNotNull();
-		IsTrue(result.Error.Message.Contains("test error"));
+		result.Error.Message.AssertEqual("test error");
 	}
 
 	[TestMethod]
@@ -2679,7 +2679,7 @@ public class ExtensionsMethodsTests : BaseTestClass
 		var msg = new SecurityLookupMessage { SecurityType = SecurityTypes.Stock };
 		var types = msg.GetSecurityTypes();
 		types.Count.AssertEqual(1);
-		IsTrue(types.Contains(SecurityTypes.Stock));
+		types.Count(t => t == SecurityTypes.Stock).AssertEqual(1);
 	}
 
 	[TestMethod]

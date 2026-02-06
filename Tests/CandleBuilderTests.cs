@@ -1149,7 +1149,7 @@ public class CandleBuilderTests : BaseTestClass
 			candles.Add(c);
 
 		var finishedBricks = candles.Where(c => c.State == CandleStates.Finished).ToList();
-		finishedBricks.Any().AssertTrue("Should have at least one finished brick");
+		finishedBricks.Count.AssertEqual(3, "Should have 3 finished bricks from 100->125 with box size 10");
 
 		var brick = finishedBricks.First() as RenkoCandleMessage;
 		IsNotNull(brick);
@@ -1204,7 +1204,7 @@ public class CandleBuilderTests : BaseTestClass
 
 		// Find the finished candle from the first minute
 		var finished = candles.Where(c => c.State == CandleStates.Finished).ToList();
-		finished.Any().AssertTrue("Should have at least one finished candle");
+		finished.Count.AssertEqual(5, "Should have 5 candle messages with Finished state (same candle updated in place)");
 
 		// The finished candle should be for the first minute (10:00)
 		var finishedCandle = finished.OfType<TimeFrameCandleMessage>()
@@ -1357,9 +1357,9 @@ public class CandleBuilderTests : BaseTestClass
 		var levels = profile.PriceLevels.ToList();
 		AreEqual(3, levels.Count, "Should have 3 price levels");
 
-		(levels.Any(l => l.Price == 100m)).AssertTrue("Should have level at 100");
-		(levels.Any(l => l.Price == 101m)).AssertTrue("Should have level at 101");
-		(levels.Any(l => l.Price == 102m)).AssertTrue("Should have level at 102");
+		levels.Count(l => l.Price == 100m).AssertEqual(1, "Should have level at 100");
+		levels.Count(l => l.Price == 101m).AssertEqual(1, "Should have level at 101");
+		levels.Count(l => l.Price == 102m).AssertEqual(1, "Should have level at 102");
 	}
 
 	/// <summary>

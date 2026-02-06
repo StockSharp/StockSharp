@@ -321,8 +321,8 @@ public class CsvStorageTests : BaseTestClass
 
 		var names = provider.StorageNames.ToArray();
 		AreEqual(2, names.Length);
-		IsTrue(names.Contains("Storage1"));
-		IsTrue(names.Contains("Storage2"));
+		names.Count(n => n == "Storage1").AssertEqual(1);
+		names.Count(n => n == "Storage2").AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -361,9 +361,9 @@ public class CsvStorageTests : BaseTestClass
 		var mappings = storage.Mappings.ToArray();
 
 		AreEqual(3, mappings.Length);
-		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "AAPL"));
-		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "MSFT"));
-		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "GOOG"));
+		mappings.Count(m => m.StockSharpId.SecurityCode == "AAPL").AssertEqual(1);
+		mappings.Count(m => m.StockSharpId.SecurityCode == "MSFT").AssertEqual(1);
+		mappings.Count(m => m.StockSharpId.SecurityCode == "GOOG").AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -450,8 +450,8 @@ public class CsvStorageTests : BaseTestClass
 
 		var mappings = provider2.GetStorage("TestStorage").Mappings.ToArray();
 		AreEqual(2, mappings.Length);
-		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "AAPL" && m.AdapterId.SecurityCode == "AAPL.US"));
-		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "MSFT" && m.AdapterId.SecurityCode == "MSFT.US"));
+		mappings.Count(m => m.StockSharpId.SecurityCode == "AAPL" && m.AdapterId.SecurityCode == "AAPL.US").AssertEqual(1);
+		mappings.Count(m => m.StockSharpId.SecurityCode == "MSFT" && m.AdapterId.SecurityCode == "MSFT.US").AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -628,8 +628,8 @@ public class CsvStorageTests : BaseTestClass
 
 		var names = provider2.StorageNames.ToArray();
 		AreEqual(2, names.Length);
-		IsTrue(names.Contains("Alpha"));
-		IsTrue(names.Contains("Beta"));
+		names.Count(n => n == "Alpha").AssertEqual(1);
+		names.Count(n => n == "Beta").AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -746,8 +746,8 @@ public class CsvStorageTests : BaseTestClass
 		var mappings = storage.Mappings.ToArray();
 
 		AreEqual(2, mappings.Length);
-		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "AAPL"));
-		IsTrue(mappings.Any(m => m.StockSharpId.SecurityCode == "MSFT"));
+		mappings.Count(m => m.StockSharpId.SecurityCode == "AAPL").AssertEqual(1);
+		mappings.Count(m => m.StockSharpId.SecurityCode == "MSFT").AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -867,8 +867,8 @@ public class CsvStorageTests : BaseTestClass
 
 		var names = provider.StorageNames.ToArray();
 		AreEqual(2, names.Length);
-		IsTrue(names.Contains("Storage1"));
-		IsTrue(names.Contains("Storage2"));
+		names.Count(n => n == "Storage1").AssertEqual(1);
+		names.Count(n => n == "Storage2").AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -1206,12 +1206,12 @@ public class CsvStorageTests : BaseTestClass
 		var contentB = ReadFileContent(fs, fileB);
 
 		// AdapterA.csv should contain AAPL, NOT MSFT
-		IsTrue(contentA.Contains("AAPL"), "AdapterA.csv should contain AAPL");
-		IsFalse(contentA.Contains("MSFT"), "AdapterA.csv should NOT contain MSFT");
+		Contains("AAPL", contentA);
+		DoesNotContain("MSFT", contentA);
 
 		// AdapterB.csv should contain MSFT, NOT AAPL
-		IsTrue(contentB.Contains("MSFT"), "AdapterB.csv should contain MSFT");
-		IsFalse(contentB.Contains("AAPL"), "AdapterB.csv should NOT contain AAPL");
+		Contains("MSFT", contentB);
+		DoesNotContain("AAPL", contentB);
 	}
 
 	[TestMethod]
@@ -1250,20 +1250,20 @@ public class CsvStorageTests : BaseTestClass
 		var content3 = ReadFileContent(fs, file3);
 
 		// Storage1 should have S1A and S1B only
-		IsTrue(content1.Contains("S1A"), "Storage1.csv should contain S1A");
-		IsTrue(content1.Contains("S1B"), "Storage1.csv should contain S1B");
-		IsFalse(content1.Contains("S2A"), "Storage1.csv should NOT contain S2A");
-		IsFalse(content1.Contains("S3A"), "Storage1.csv should NOT contain S3A");
+		Contains("S1A", content1);
+		Contains("S1B", content1);
+		DoesNotContain("S2A", content1);
+		DoesNotContain("S3A", content1);
 
 		// Storage2 should have S2A and S2B only
-		IsTrue(content2.Contains("S2A"), "Storage2.csv should contain S2A");
-		IsTrue(content2.Contains("S2B"), "Storage2.csv should contain S2B");
-		IsFalse(content2.Contains("S1A"), "Storage2.csv should NOT contain S1A");
+		Contains("S2A", content2);
+		Contains("S2B", content2);
+		DoesNotContain("S1A", content2);
 
 		// Storage3 should have S3A only
-		IsTrue(content3.Contains("S3A"), "Storage3.csv should contain S3A");
-		IsFalse(content3.Contains("S1A"), "Storage3.csv should NOT contain S1A");
-		IsFalse(content3.Contains("S2A"), "Storage3.csv should NOT contain S2A");
+		Contains("S3A", content3);
+		DoesNotContain("S1A", content3);
+		DoesNotContain("S2A", content3);
 	}
 
 	[TestMethod]
@@ -1368,10 +1368,10 @@ public class CsvStorageTests : BaseTestClass
 		using var reader = new StreamReader(stream);
 		var content = reader.ReadToEnd();
 
-		IsTrue(content.Contains("Portfolio"), "File should contain header 'Portfolio'");
-		IsTrue(content.Contains("Adapter"), "File should contain header 'Adapter'");
-		IsTrue(content.Contains("TestPortfolio"), "File should contain portfolio name");
-		IsTrue(content.Contains(adapterId.ToString()), "File should contain adapter ID");
+		Contains("Portfolio", content);
+		Contains("Adapter", content);
+		Contains("TestPortfolio", content);
+		Contains(adapterId.ToString(), content);
 	}
 
 	[TestMethod]

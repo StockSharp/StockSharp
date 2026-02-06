@@ -227,7 +227,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		receivedMessages.Count.AssertGreater(0, "Should receive messages");
 		foreach (var msg in receivedMessages)
 		{
-			msg.GetSubscriptionIds().Contains(100).AssertTrue("All messages should have subscription ID 100");
+			msg.GetSubscriptionIds().Count(id => id == 100).AssertEqual(1, "All messages should have subscription ID 100");
 		}
 	}
 
@@ -296,7 +296,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		// After unsubscribe, messages should NOT contain subscription ID 100
 		foreach (var msg in messagesAfterUnsubscribe)
 		{
-			msg.GetSubscriptionIds().Contains(100).AssertFalse("Messages after unsubscribe should NOT have ID 100");
+			msg.GetSubscriptionIds().Count(id => id == 100).AssertEqual(0, "Messages after unsubscribe should NOT have ID 100");
 		}
 	}
 
@@ -352,8 +352,8 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		foreach (var msg in receivedMessages)
 		{
 			var ids = msg.GetSubscriptionIds();
-			ids.Contains(100).AssertTrue("Should contain first subscription ID");
-			ids.Contains(101).AssertTrue("Should contain second subscription ID");
+			ids.Count(id => id == 100).AssertEqual(1, "Should contain first subscription ID");
+			ids.Count(id => id == 101).AssertEqual(1, "Should contain second subscription ID");
 		}
 	}
 
@@ -432,8 +432,8 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		foreach (var msg in messagesAfter)
 		{
 			var ids = msg.GetSubscriptionIds();
-			ids.Contains(100).AssertFalse("Should NOT contain unsubscribed ID 100");
-			ids.Contains(101).AssertTrue("Should contain remaining ID 101");
+			ids.Count(id => id == 100).AssertEqual(0, "Should NOT contain unsubscribed ID 100");
+			ids.Count(id => id == 101).AssertEqual(1, "Should contain remaining ID 101");
 		}
 	}
 
@@ -474,7 +474,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}
 
 		phase1.Count.AssertGreater(0);
-		phase1.All(ids => ids.Contains(100)).AssertTrue("Phase 1: all should have ID 100");
+		phase1.All(ids => ids.Count(id => id == 100) == 1).AssertTrue("Phase 1: all should have ID 100");
 
 		// Unsubscribe
 		await manager.ProcessInMessageAsync(new MarketDataMessage
@@ -529,7 +529,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		feed.Stop();
 
 		phase3.Count.AssertGreater(0);
-		phase3.All(ids => ids.Contains(200)).AssertTrue("Phase 3: all should have ID 200");
+		phase3.All(ids => ids.Count(id => id == 200) == 1).AssertTrue("Phase 3: all should have ID 200");
 	}
 
 	#endregion
@@ -576,7 +576,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		receivedMessages.Count.AssertGreater(0, "Should receive messages");
 		foreach (var msg in receivedMessages)
 		{
-			msg.GetSubscriptionIds().Contains(100).AssertTrue("All messages should have subscription ID 100");
+			msg.GetSubscriptionIds().Count(id => id == 100).AssertEqual(1, "All messages should have subscription ID 100");
 		}
 	}
 
@@ -643,7 +643,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		foreach (var msg in messagesAfterUnsubscribe)
 		{
-			msg.GetSubscriptionIds().Contains(100).AssertFalse("Messages after unsubscribe should NOT have ID 100");
+			msg.GetSubscriptionIds().Count(id => id == 100).AssertEqual(0, "Messages after unsubscribe should NOT have ID 100");
 		}
 	}
 
@@ -736,7 +736,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		foreach (var msg in messagesAfter)
 		{
-			msg.GetSubscriptionIds().Contains(101).AssertTrue("Second subscription should still receive");
+			msg.GetSubscriptionIds().Count(id => id == 101).AssertEqual(1, "Second subscription should still receive");
 		}
 	}
 
@@ -834,7 +834,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		foreach (var msg in level1After)
 		{
-			msg.GetSubscriptionIds().Contains(101).AssertTrue("Level1 should have ID 101");
+			msg.GetSubscriptionIds().Count(id => id == 101).AssertEqual(1, "Level1 should have ID 101");
 		}
 	}
 

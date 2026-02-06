@@ -8,7 +8,7 @@ public class ExchangeInfoProviderTests : BaseTestClass
 	{
 		var provider = new InMemoryExchangeInfoProvider();
 
-		provider.Boards.Any().AssertTrue();
+		provider.Boards.Count().AssertGreater(1);
 	}
 
 	[TestMethod]
@@ -16,7 +16,7 @@ public class ExchangeInfoProviderTests : BaseTestClass
 	{
 		var provider = new InMemoryExchangeInfoProvider();
 
-		provider.Exchanges.Any().AssertTrue();
+		provider.Exchanges.Count().AssertGreater(1);
 	}
 
 	[TestMethod]
@@ -280,7 +280,7 @@ public class ExchangeInfoProviderTests : BaseTestClass
 
 		var results = provider.Lookup(criteria).ToArray();
 
-		results.Any().AssertTrue();
+		results.Length.AssertGreater(1);
 	}
 
 	[TestMethod]

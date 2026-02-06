@@ -477,17 +477,17 @@ public class BasketMessageFlowTests : BaseTestClass
 		var adapterSecMsgs = _flowLogger.GetBySource("Adapter1")
 			.Where(l => l.Direction == "OUT" && l.Message.Type == MessageTypes.Security)
 			.ToArray();
-		adapterSecMsgs.Length.AssertGreater(0, "Adapter should emit SecurityMessage");
+		adapterSecMsgs.Length.AssertEqual(1, "Adapter should emit SecurityMessage");
 
 		// Verify SecurityMessage reached basket output
 		var outputSecMsgs = GetOutput<SecurityMessage>();
-		outputSecMsgs.Length.AssertGreater(0, "SecurityMessage should reach basket output");
+		outputSecMsgs.Length.AssertEqual(1, "SecurityMessage should reach basket output");
 
 		// Verify subscription IDs are correct
 		foreach (var secMsg in outputSecMsgs)
 		{
 			var subIds = secMsg.GetSubscriptionIds();
-			subIds.Length.AssertGreater(0, "SecurityMessage should have subscription IDs");
+			subIds.Length.AssertEqual(1, "SecurityMessage should have subscription IDs");
 
 			// The subscription ID should be the parent transId (not a child ID)
 			subIds.Contains(transId).AssertTrue($"SecurityMessage should have parent subscription ID {transId}, got [{string.Join(",", subIds)}]");
@@ -517,8 +517,8 @@ public class BasketMessageFlowTests : BaseTestClass
 
 		// Check SubscriptionFinished - this is required
 		var finished = GetOutput<SubscriptionFinishedMessage>();
-		finished.Any(f => f.OriginalTransactionId == transId)
-			.AssertTrue($"SubscriptionFinished should have OriginalTransactionId={transId}");
+		finished.Count(f => f.OriginalTransactionId == transId)
+			.AssertEqual(1, $"SubscriptionFinished should have OriginalTransactionId={transId}");
 	}
 
 	#endregion
@@ -550,19 +550,19 @@ public class BasketMessageFlowTests : BaseTestClass
 		var adapterTicks = _flowLogger.GetBySource("Adapter1")
 			.Where(l => l.Direction == "OUT" && l.Message is ExecutionMessage em && em.DataType == DataType.Ticks)
 			.ToArray();
-		adapterTicks.Length.AssertGreater(0, "Adapter should emit tick ExecutionMessages");
+		adapterTicks.Length.AssertEqual(3, "Adapter should emit tick ExecutionMessages");
 
 		// Verify ticks reached basket output
 		var outputTicks = GetOutput<ExecutionMessage>()
 			.Where(e => e.DataType == DataType.Ticks)
 			.ToArray();
-		outputTicks.Length.AssertGreater(0, "Tick messages should reach basket output");
+		outputTicks.Length.AssertEqual(3, "Tick messages should reach basket output");
 
 		// Verify subscription IDs are correct
 		foreach (var tick in outputTicks)
 		{
 			var subIds = tick.GetSubscriptionIds();
-			subIds.Length.AssertGreater(0, "Tick message should have subscription IDs");
+			subIds.Length.AssertEqual(1, "Tick message should have subscription IDs");
 			subIds.Contains(transId).AssertTrue($"Tick should have parent subscription ID {transId}, got [{string.Join(",", subIds)}]");
 		}
 	}
@@ -592,17 +592,17 @@ public class BasketMessageFlowTests : BaseTestClass
 		var adapterL1 = _flowLogger.GetBySource("Adapter1")
 			.Where(l => l.Direction == "OUT" && l.Message.Type == MessageTypes.Level1Change)
 			.ToArray();
-		adapterL1.Length.AssertGreater(0, "Adapter should emit Level1ChangeMessage");
+		adapterL1.Length.AssertEqual(1, "Adapter should emit Level1ChangeMessage");
 
 		// Verify Level1 reached basket output
 		var outputL1 = GetOutput<Level1ChangeMessage>();
-		outputL1.Length.AssertGreater(0, "Level1 messages should reach basket output");
+		outputL1.Length.AssertEqual(1, "Level1 messages should reach basket output");
 
 		// Verify subscription IDs are correct
 		foreach (var l1 in outputL1)
 		{
 			var subIds = l1.GetSubscriptionIds();
-			subIds.Length.AssertGreater(0, "Level1 message should have subscription IDs");
+			subIds.Length.AssertEqual(1, "Level1 message should have subscription IDs");
 			subIds.Contains(transId).AssertTrue($"Level1 should have parent subscription ID {transId}, got [{string.Join(",", subIds)}]");
 		}
 	}
@@ -654,17 +654,17 @@ public class BasketMessageFlowTests : BaseTestClass
 		var adapterExecs = _flowLogger.GetBySource("Adapter1")
 			.Where(l => l.Direction == "OUT" && l.Message is ExecutionMessage em && em.DataType == DataType.Transactions)
 			.ToArray();
-		adapterExecs.Length.AssertGreater(0, "Adapter should emit ExecutionMessage for order");
+		adapterExecs.Length.AssertEqual(2, "Adapter should emit ExecutionMessage for order");
 
 		// Verify ExecutionMessage reached basket output
 		var outputExecs = GetOutput<ExecutionMessage>()
 			.Where(e => e.DataType == DataType.Transactions && e.HasOrderInfo)
 			.ToArray();
-		outputExecs.Length.AssertGreater(0, "ExecutionMessage (order) should reach basket output");
+		outputExecs.Length.AssertEqual(2, "ExecutionMessage (order) should reach basket output");
 
 		// Verify OriginalTransactionId is correct
-		outputExecs.Any(e => e.OriginalTransactionId == orderTransId)
-			.AssertTrue($"ExecutionMessage should have OriginalTransactionId={orderTransId}");
+		outputExecs.Count(e => e.OriginalTransactionId == orderTransId)
+			.AssertEqual(2, $"ExecutionMessage should have OriginalTransactionId={orderTransId}");
 	}
 
 	#endregion
@@ -694,17 +694,17 @@ public class BasketMessageFlowTests : BaseTestClass
 		var adapterPf = _flowLogger.GetBySource("Adapter1")
 			.Where(l => l.Direction == "OUT" && l.Message.Type == MessageTypes.Portfolio)
 			.ToArray();
-		adapterPf.Length.AssertGreater(0, "Adapter should emit PortfolioMessage");
+		adapterPf.Length.AssertEqual(1, "Adapter should emit PortfolioMessage");
 
 		// Verify PortfolioMessage reached basket output
 		var outputPf = GetOutput<PortfolioMessage>();
-		outputPf.Length.AssertGreater(0, "PortfolioMessage should reach basket output");
+		outputPf.Length.AssertEqual(1, "PortfolioMessage should reach basket output");
 
 		// Verify subscription IDs are correct
 		foreach (var pf in outputPf)
 		{
 			var subIds = pf.GetSubscriptionIds();
-			subIds.Length.AssertGreater(0, "PortfolioMessage should have subscription IDs");
+			subIds.Length.AssertEqual(1, "PortfolioMessage should have subscription IDs");
 			subIds.Contains(transId).AssertTrue($"PortfolioMessage should have subscription ID {transId}, got [{string.Join(",", subIds)}]");
 		}
 	}
@@ -743,13 +743,13 @@ public class BasketMessageFlowTests : BaseTestClass
 
 		// SubscriptionResponse should have parent ID
 		var responses = GetOutput<SubscriptionResponseMessage>();
-		responses.Any(r => r.OriginalTransactionId == parentTransId)
-			.AssertTrue($"SubscriptionResponse should have parent ID {parentTransId}");
+		responses.Count(r => r.OriginalTransactionId == parentTransId)
+			.AssertEqual(1, $"SubscriptionResponse should have parent ID {parentTransId}");
 
 		// SubscriptionOnline should have parent ID
 		var onlines = GetOutput<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == parentTransId)
-			.AssertTrue($"SubscriptionOnline should have parent ID {parentTransId}");
+		onlines.Count(o => o.OriginalTransactionId == parentTransId)
+			.AssertEqual(1, $"SubscriptionOnline should have parent ID {parentTransId}");
 
 		// Tick messages should have parent ID in subscription IDs
 		var ticks = GetOutput<ExecutionMessage>().Where(e => e.DataType == DataType.Ticks).ToArray();
@@ -853,10 +853,10 @@ public class BasketMessageFlowTests : BaseTestClass
 		Console.WriteLine("\n=== ANALYSIS COMPLETE ===");
 
 		// Final assertion - all message types should pass through
-		secBasketOut.AssertGreater(0, "SecurityMessages should reach output");
-		ticksBasketOut.AssertGreater(0, "Tick messages should reach output");
-		l1BasketOut.AssertGreater(0, "Level1 messages should reach output");
-		pfBasketOut.AssertGreater(0, "Portfolio messages should reach output");
+		secBasketOut.AssertEqual(1, "SecurityMessages should reach output");
+		ticksBasketOut.AssertEqual(3, "Tick messages should reach output");
+		l1BasketOut.AssertEqual(1, "Level1 messages should reach output");
+		pfBasketOut.AssertEqual(1, "Portfolio messages should reach output");
 	}
 
 	#endregion
@@ -1028,23 +1028,23 @@ public class BasketMessageFlowTests : BaseTestClass
 		var innerSecMsgs = _flowLogger.GetBySource("InnerAdapter")
 			.Where(l => l.Direction == "OUT" && l.Message.Type == MessageTypes.Security)
 			.ToArray();
-		innerSecMsgs.Length.AssertGreater(0, "InnerAdapter should emit SecurityMessage");
+		innerSecMsgs.Length.AssertEqual(1, "InnerAdapter should emit SecurityMessage");
 
 		// Verify wrapper forwarded it
 		var wrapperForwarded = _flowLogger.GetBySource("EmulatorWrapper")
 			.Where(l => l.Direction == "FORWARD" && l.Message.Type == MessageTypes.Security)
 			.ToArray();
-		wrapperForwarded.Length.AssertGreater(0, "Wrapper should forward SecurityMessage");
+		wrapperForwarded.Length.AssertEqual(1, "Wrapper should forward SecurityMessage");
 
 		// Verify SecurityMessage reached basket output
 		var outputSecMsgs = GetOutput<SecurityMessage>();
-		outputSecMsgs.Length.AssertGreater(0, "SecurityMessage should reach basket output through wrapper");
+		outputSecMsgs.Length.AssertEqual(1, "SecurityMessage should reach basket output through wrapper");
 
 		// Verify subscription IDs are correct
 		foreach (var secMsg in outputSecMsgs)
 		{
 			var subIds = secMsg.GetSubscriptionIds();
-			subIds.Length.AssertGreater(0, "SecurityMessage should have subscription IDs");
+			subIds.Length.AssertEqual(1, "SecurityMessage should have subscription IDs");
 			subIds.Contains(transId).AssertTrue($"SecurityMessage should have parent subscription ID {transId}");
 		}
 	}
@@ -1075,13 +1075,13 @@ public class BasketMessageFlowTests : BaseTestClass
 		var outputTicks = GetOutput<ExecutionMessage>()
 			.Where(e => e.DataType == DataType.Ticks)
 			.ToArray();
-		outputTicks.Length.AssertGreater(0, "Tick messages should reach basket output through wrapper");
+		outputTicks.Length.AssertEqual(3, "Tick messages should reach basket output through wrapper");
 
 		// Verify subscription IDs are correct
 		foreach (var tick in outputTicks)
 		{
 			var subIds = tick.GetSubscriptionIds();
-			subIds.Length.AssertGreater(0, "Tick message should have subscription IDs");
+			subIds.Length.AssertEqual(1, "Tick message should have subscription IDs");
 			subIds.Contains(transId).AssertTrue($"Tick should have parent subscription ID {transId}");
 		}
 	}
@@ -1138,8 +1138,8 @@ public class BasketMessageFlowTests : BaseTestClass
 		Console.WriteLine("\n=== WRAPPER ANALYSIS COMPLETE ===");
 
 		// Final assertions
-		secBasketOut.AssertGreater(0, "SecurityMessages should reach output through wrapper");
-		ticksBasketOut.AssertGreater(0, "Tick messages should reach output through wrapper");
+		secBasketOut.AssertEqual(1, "SecurityMessages should reach output through wrapper");
+		ticksBasketOut.AssertEqual(3, "Tick messages should reach output through wrapper");
 	}
 
 	#endregion
@@ -1174,12 +1174,12 @@ public class BasketMessageFlowTests : BaseTestClass
 
 		// SubscriptionOnline should still arrive
 		var onlines = GetOutput<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertTrue("SubscriptionOnline should arrive even without SubscriptionResponse");
+		onlines.Count(o => o.OriginalTransactionId == transId)
+			.AssertEqual(1, "SubscriptionOnline should arrive even without SubscriptionResponse");
 
 		// Ticks should still arrive
 		var ticks = GetOutput<ExecutionMessage>().Where(e => e.DataType == DataType.Ticks).ToArray();
-		ticks.Length.AssertGreater(0, "Tick data should arrive even without SubscriptionResponse");
+		ticks.Length.AssertEqual(3, "Tick data should arrive even without SubscriptionResponse");
 	}
 
 	[TestMethod]
@@ -1208,11 +1208,11 @@ public class BasketMessageFlowTests : BaseTestClass
 		responses.Length.AssertEqual(0, "No SubscriptionResponseMessage expected");
 
 		var onlines = GetOutput<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertTrue("SubscriptionOnline should arrive even without SubscriptionResponse");
+		onlines.Count(o => o.OriginalTransactionId == transId)
+			.AssertEqual(1, "SubscriptionOnline should arrive even without SubscriptionResponse");
 
 		var l1 = GetOutput<Level1ChangeMessage>();
-		l1.Length.AssertGreater(0, "Level1 data should arrive even without SubscriptionResponse");
+		l1.Length.AssertEqual(1, "Level1 data should arrive even without SubscriptionResponse");
 	}
 
 	[TestMethod]
@@ -1234,11 +1234,11 @@ public class BasketMessageFlowTests : BaseTestClass
 		responses.Length.AssertEqual(0, "No SubscriptionResponseMessage expected");
 
 		var securities = GetOutput<SecurityMessage>();
-		securities.Length.AssertGreater(0, "SecurityMessage should arrive even without SubscriptionResponse");
+		securities.Length.AssertEqual(1, "SecurityMessage should arrive even without SubscriptionResponse");
 
 		var finished = GetOutput<SubscriptionFinishedMessage>();
-		finished.Any(f => f.OriginalTransactionId == transId)
-			.AssertTrue("SubscriptionFinished should arrive even without SubscriptionResponse");
+		finished.Count(f => f.OriginalTransactionId == transId)
+			.AssertEqual(1, "SubscriptionFinished should arrive even without SubscriptionResponse");
 	}
 
 	#endregion
@@ -1269,13 +1269,13 @@ public class BasketMessageFlowTests : BaseTestClass
 
 		// Error response should arrive
 		var responses = GetOutput<SubscriptionResponseMessage>();
-		responses.Any(r => r.OriginalTransactionId == transId && r.Error != null)
-			.AssertTrue("Error SubscriptionResponse should arrive");
+		responses.Count(r => r.OriginalTransactionId == transId && r.Error != null)
+			.AssertEqual(1, "Error SubscriptionResponse should arrive");
 
 		// No Online/Finished
 		var onlines = GetOutput<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertFalse("No SubscriptionOnline expected after error");
+		onlines.Count(o => o.OriginalTransactionId == transId)
+			.AssertEqual(0, "No SubscriptionOnline expected after error");
 
 		// No tick data
 		var ticks = GetOutput<ExecutionMessage>().Where(e => e.DataType == DataType.Ticks).ToArray();
@@ -1305,8 +1305,8 @@ public class BasketMessageFlowTests : BaseTestClass
 		PrintFlowLog();
 
 		var responses = GetOutput<SubscriptionResponseMessage>();
-		responses.Any(r => r.OriginalTransactionId == transId && r.Error != null)
-			.AssertTrue("Error SubscriptionResponse should arrive");
+		responses.Count(r => r.OriginalTransactionId == transId && r.Error != null)
+			.AssertEqual(1, "Error SubscriptionResponse should arrive");
 
 		var l1 = GetOutput<Level1ChangeMessage>();
 		l1.Length.AssertEqual(0, "No Level1 data should arrive after error response");
@@ -1331,8 +1331,8 @@ public class BasketMessageFlowTests : BaseTestClass
 		PrintFlowLog();
 
 		var responses = GetOutput<SubscriptionResponseMessage>();
-		responses.Any(r => r.OriginalTransactionId == transId && r.Error != null)
-			.AssertTrue("Error SubscriptionResponse should arrive");
+		responses.Count(r => r.OriginalTransactionId == transId && r.Error != null)
+			.AssertEqual(1, "Error SubscriptionResponse should arrive");
 
 		var orders = GetOutput<ExecutionMessage>().Where(e => e.DataType == DataType.Transactions).ToArray();
 		orders.Length.AssertEqual(0, "No order data should arrive after error response");
@@ -1363,21 +1363,21 @@ public class BasketMessageFlowTests : BaseTestClass
 		var orders = GetOutput<ExecutionMessage>()
 			.Where(e => e.DataType == DataType.Transactions && e.HasOrderInfo)
 			.ToArray();
-		orders.Length.AssertGreater(0, "OrderStatus should emit order data");
+		orders.Length.AssertEqual(1, "OrderStatus should emit order data");
 
 		// Verify subscription IDs
 		foreach (var order in orders)
 		{
 			var subIds = order.GetSubscriptionIds();
-			subIds.Length.AssertGreater(0, "Order ExecutionMessage should have subscription IDs");
+			subIds.Length.AssertEqual(1, "Order ExecutionMessage should have subscription IDs");
 			subIds.Contains(transId).AssertTrue(
 				$"Order should have parent subscription ID {transId}, got [{string.Join(",", subIds)}]");
 		}
 
 		// Verify Online arrived (OrderStatus without To/Count is live)
 		var onlines = GetOutput<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertTrue("OrderStatus online subscription should receive SubscriptionOnline");
+		onlines.Count(o => o.OriginalTransactionId == transId)
+			.AssertEqual(1, "OrderStatus online subscription should receive SubscriptionOnline");
 	}
 
 	[TestMethod]
@@ -1404,8 +1404,8 @@ public class BasketMessageFlowTests : BaseTestClass
 		orders.Length.AssertEqual(0, "No order data expected when EmitOrdersOnOrderStatus=false");
 
 		var onlines = GetOutput<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertTrue("SubscriptionOnline should still arrive");
+		onlines.Count(o => o.OriginalTransactionId == transId)
+			.AssertEqual(1, "SubscriptionOnline should still arrive");
 	}
 
 	#endregion
@@ -1435,16 +1435,16 @@ public class BasketMessageFlowTests : BaseTestClass
 		PrintFlowLog();
 
 		var onlines = GetOutput<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertTrue("Live tick subscription should get SubscriptionOnline");
+		onlines.Count(o => o.OriginalTransactionId == transId)
+			.AssertEqual(1, "Live tick subscription should get SubscriptionOnline");
 
 		var finished = GetOutput<SubscriptionFinishedMessage>();
-		finished.Any(f => f.OriginalTransactionId == transId)
-			.AssertFalse("Live tick subscription should NOT get SubscriptionFinished");
+		finished.Count(f => f.OriginalTransactionId == transId)
+			.AssertEqual(0, "Live tick subscription should NOT get SubscriptionFinished");
 
 		// Data should arrive after Online
 		var ticks = GetOutput<ExecutionMessage>().Where(e => e.DataType == DataType.Ticks).ToArray();
-		ticks.Length.AssertGreater(0, "Ticks should arrive for online subscription");
+		ticks.Length.AssertEqual(3, "Ticks should arrive for online subscription");
 	}
 
 	[TestMethod]
@@ -1470,16 +1470,16 @@ public class BasketMessageFlowTests : BaseTestClass
 		PrintFlowLog();
 
 		var finished = GetOutput<SubscriptionFinishedMessage>();
-		finished.Any(f => f.OriginalTransactionId == transId)
-			.AssertTrue("Historical tick subscription should get SubscriptionFinished");
+		finished.Count(f => f.OriginalTransactionId == transId)
+			.AssertEqual(1, "Historical tick subscription should get SubscriptionFinished");
 
 		var onlines = GetOutput<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertFalse("Historical tick subscription should NOT get SubscriptionOnline");
+		onlines.Count(o => o.OriginalTransactionId == transId)
+			.AssertEqual(0, "Historical tick subscription should NOT get SubscriptionOnline");
 
 		// Data should arrive before Finished
 		var ticks = GetOutput<ExecutionMessage>().Where(e => e.DataType == DataType.Ticks).ToArray();
-		ticks.Length.AssertGreater(0, "Ticks should arrive for historical subscription");
+		ticks.Length.AssertEqual(3, "Ticks should arrive for historical subscription");
 	}
 
 	[TestMethod]
@@ -1505,12 +1505,12 @@ public class BasketMessageFlowTests : BaseTestClass
 		PrintFlowLog();
 
 		var finished = GetOutput<SubscriptionFinishedMessage>();
-		finished.Any(f => f.OriginalTransactionId == transId)
-			.AssertTrue("Historical tick subscription (To) should get SubscriptionFinished");
+		finished.Count(f => f.OriginalTransactionId == transId)
+			.AssertEqual(1, "Historical tick subscription (To) should get SubscriptionFinished");
 
 		var onlines = GetOutput<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertFalse("Historical tick subscription (To) should NOT get SubscriptionOnline");
+		onlines.Count(o => o.OriginalTransactionId == transId)
+			.AssertEqual(0, "Historical tick subscription (To) should NOT get SubscriptionOnline");
 	}
 
 	[TestMethod]
@@ -1535,15 +1535,15 @@ public class BasketMessageFlowTests : BaseTestClass
 		PrintFlowLog();
 
 		var onlines = GetOutput<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertTrue("Live Level1 subscription should get SubscriptionOnline");
+		onlines.Count(o => o.OriginalTransactionId == transId)
+			.AssertEqual(1, "Live Level1 subscription should get SubscriptionOnline");
 
 		var finished = GetOutput<SubscriptionFinishedMessage>();
-		finished.Any(f => f.OriginalTransactionId == transId)
-			.AssertFalse("Live Level1 subscription should NOT get SubscriptionFinished");
+		finished.Count(f => f.OriginalTransactionId == transId)
+			.AssertEqual(0, "Live Level1 subscription should NOT get SubscriptionFinished");
 
 		var l1 = GetOutput<Level1ChangeMessage>();
-		l1.Length.AssertGreater(0, "Level1 data should arrive for online subscription");
+		l1.Length.AssertEqual(1, "Level1 data should arrive for online subscription");
 	}
 
 	[TestMethod]
@@ -1569,15 +1569,15 @@ public class BasketMessageFlowTests : BaseTestClass
 		PrintFlowLog();
 
 		var finished = GetOutput<SubscriptionFinishedMessage>();
-		finished.Any(f => f.OriginalTransactionId == transId)
-			.AssertTrue("Historical Level1 subscription should get SubscriptionFinished");
+		finished.Count(f => f.OriginalTransactionId == transId)
+			.AssertEqual(1, "Historical Level1 subscription should get SubscriptionFinished");
 
 		var onlines = GetOutput<SubscriptionOnlineMessage>();
-		onlines.Any(o => o.OriginalTransactionId == transId)
-			.AssertFalse("Historical Level1 subscription should NOT get SubscriptionOnline");
+		onlines.Count(o => o.OriginalTransactionId == transId)
+			.AssertEqual(0, "Historical Level1 subscription should NOT get SubscriptionOnline");
 
 		var l1 = GetOutput<Level1ChangeMessage>();
-		l1.Length.AssertGreater(0, "Level1 data should arrive for historical subscription");
+		l1.Length.AssertEqual(1, "Level1 data should arrive for historical subscription");
 	}
 
 	#endregion
@@ -1620,8 +1620,8 @@ public class BasketMessageFlowTests : BaseTestClass
 
 		// Unsubscribe response should arrive
 		var responses = GetOutput<SubscriptionResponseMessage>();
-		responses.Any(r => r.OriginalTransactionId == unsubTransId)
-			.AssertTrue("Unsubscribe should receive SubscriptionResponse");
+		responses.Count(r => r.OriginalTransactionId == unsubTransId)
+			.AssertEqual(1, "Unsubscribe should receive SubscriptionResponse");
 	}
 
 	[TestMethod]
@@ -1650,7 +1650,7 @@ public class BasketMessageFlowTests : BaseTestClass
 
 		// Verify initial ticks arrived
 		var initialTicks = GetOutput<ExecutionMessage>().Count(e => e.DataType == DataType.Ticks);
-		initialTicks.AssertGreater(0, "Initial ticks should arrive");
+		initialTicks.AssertEqual(3, "Initial ticks should arrive");
 
 		_flowLogger.Clear();
 		_basketOutput.Clear();
@@ -1705,7 +1705,7 @@ public class BasketMessageFlowTests : BaseTestClass
 
 		// Verify initial data arrived
 		var initialL1 = GetOutput<Level1ChangeMessage>().Length;
-		initialL1.AssertGreater(0, "Initial Level1 data should arrive");
+		initialL1.AssertEqual(1, "Initial Level1 data should arrive");
 
 		_flowLogger.Clear();
 		_basketOutput.Clear();

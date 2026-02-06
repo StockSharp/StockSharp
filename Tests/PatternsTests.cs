@@ -397,7 +397,7 @@ public class PatternsTests : BaseTestClass
 	{
 		var allPatterns = CandlePatternRegistry.All.ToArray();
 
-		allPatterns.Length.AssertGreater(0);
+		allPatterns.Length.AssertEqual(32);
 
 		foreach (var pattern in allPatterns)
 		{

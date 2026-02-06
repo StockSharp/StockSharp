@@ -670,8 +670,8 @@ public class StrategyPositionManagerTests : BaseTestClass
 
 		// Both positions should be updated
 		positions.Count.AssertEqual(2);
-		positions.Any(p => p.CurrentValue == 10m && p.CurrentPrice == 1050m).AssertTrue();
-		positions.Any(p => p.CurrentValue == -5m && p.CurrentPrice == 525m).AssertTrue();
+		positions.Count(p => p.CurrentValue == 10m && p.CurrentPrice == 1050m).AssertEqual(1);
+		positions.Count(p => p.CurrentValue == -5m && p.CurrentPrice == 525m).AssertEqual(1);
 		positions.All(p => p.ServerTime == now && p.LocalTime == now).AssertTrue();
 	}
 

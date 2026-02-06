@@ -343,7 +343,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
 		// Verify reset was forwarded
-		inner.SentMessages.Any(m => m.Type == MessageTypes.Reset).AssertTrue();
+		inner.SentMessages.Count(m => m.Type == MessageTypes.Reset).AssertEqual(1);
 	}
 
 	#endregion
@@ -851,7 +851,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		// Verify compressed candle
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
-		(candles.Count > 0).AssertTrue("Should receive compressed candles");
+		candles.Count.AssertEqual(5, "Should receive 5 compressed candle updates");
 
 		var compressed = candles.LastOrDefault(c => c.OpenTime == baseTime);
 		IsNotNull(compressed, "Should have compressed candle at baseTime");
@@ -905,7 +905,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		// Check compressed 5-min candle
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
-		(candles.Count > 0).AssertTrue("Should receive compressed candles");
+		candles.Count.AssertEqual(5, "Should receive 5 compressed candle updates");
 
 		var compressed = candles.LastOrDefault(c => c.OpenTime == baseTime);
 		IsNotNull(compressed, "Should have compressed candle at baseTime");
@@ -958,11 +958,11 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		// Verify candles have CLIENT's subscription ID
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
-		(candles.Count > 0).AssertTrue("Should receive candles");
+		candles.Count.AssertEqual(1, "Should receive exactly 1 candle");
 
 		var candle = candles.First();
 		IsNotNull(candle, "Candle should not be null");
-		candle.GetSubscriptionIds().Contains(clientTransactionId).AssertTrue("Candle should have client's original subscription ID");
+		candle.GetSubscriptionIds().Count(id => id == clientTransactionId).AssertEqual(1, "Candle should have client's original subscription ID");
 		AreEqual(secId, candle.SecurityId, "SecurityId should match");
 	}
 

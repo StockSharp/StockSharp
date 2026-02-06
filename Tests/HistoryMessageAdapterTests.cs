@@ -412,7 +412,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), CancellationToken);
 
-		outMessages.OfType<ConnectMessage>().Any().AssertTrue();
+		outMessages.OfType<ConnectMessage>().Count().AssertEqual(1);
 	}
 
 	#endregion
@@ -514,8 +514,8 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		var result = await adapter.GetSupportedMarketDataTypesAsync(secId, null, null).ToListAsync(CancellationToken);
 
 		result.Count.AssertEqual(2);
-		result.Contains(DataType.Ticks).AssertTrue();
-		result.Contains(DataType.Level1).AssertTrue();
+		result.Count(dt => dt == DataType.Ticks).AssertEqual(1);
+		result.Count(dt => dt == DataType.Level1).AssertEqual(1);
 	}
 
 	#endregion
@@ -764,7 +764,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		var dataTypes = await adapter.GetSupportedMarketDataTypesAsync(secId, null, null).ToListAsync(CancellationToken);
 
 		dataTypes.Count.AssertEqual(1);
-		dataTypes.Contains(DataType.Ticks).AssertTrue();
+		dataTypes.Count(dt => dt == DataType.Ticks).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -859,7 +859,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		// Verify GetSupportedMarketDataTypes includes the generator
 		var dataTypes = await adapter.GetSupportedMarketDataTypesAsync(secId, null, null).ToListAsync(CancellationToken);
-		dataTypes.Contains(DataType.Ticks).AssertTrue();
+		dataTypes.Count(dt => dt == DataType.Ticks).AssertEqual(1);
 	}
 
 	#endregion

@@ -95,11 +95,11 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basketDepth.SecurityId.AssertEqual(basket.ToSecurityId());
 
 		// Best bid: 100 + 50 = 150
-		basketDepth.Bids.Length.AssertGreater(0);
+		basketDepth.Bids.Length.AssertEqual(2);
 		basketDepth.Bids[0].Price.AssertEqual(150m);
 
 		// Best ask: 101 + 51 = 152
-		basketDepth.Asks.Length.AssertGreater(0);
+		basketDepth.Asks.Length.AssertEqual(2);
 		basketDepth.Asks[0].Price.AssertEqual(152m);
 	}
 
@@ -925,10 +925,10 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		var codes = provider.AllCodes.ToArray();
 
 		codes.Length.AssertEqual(4);
-		Assert.Contains(BasketCodes.ExpirationContinuous, codes);
-		Assert.Contains(BasketCodes.VolumeContinuous, codes);
-		Assert.Contains(BasketCodes.WeightedIndex, codes);
-		Assert.Contains(BasketCodes.ExpressionIndex, codes);
+		codes.Count(c => c == BasketCodes.ExpirationContinuous).AssertEqual(1);
+		codes.Count(c => c == BasketCodes.VolumeContinuous).AssertEqual(1);
+		codes.Count(c => c == BasketCodes.WeightedIndex).AssertEqual(1);
+		codes.Count(c => c == BasketCodes.ExpressionIndex).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -998,7 +998,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		provider.Register("CUSTOM", typeof(CustomBasketProcessor), typeof(CustomBasketSecurity));
 
-		Assert.Contains("CUSTOM", [.. provider.AllCodes]);
+		provider.AllCodes.Count(c => c == "CUSTOM").AssertEqual(1);
 
 		provider.TryGetProcessorType("CUSTOM", out var processorType).AssertTrue();
 		processorType.AssertEqual(typeof(CustomBasketProcessor));
@@ -1031,7 +1031,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
 
 		provider.Register("CUSTOM", typeof(CustomBasketProcessor), typeof(CustomBasketSecurity));
-		Assert.Contains("CUSTOM", [.. provider.AllCodes]);
+		provider.AllCodes.Count(c => c == "CUSTOM").AssertEqual(1);
 
 		var result = provider.UnRegister("CUSTOM");
 

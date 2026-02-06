@@ -359,7 +359,7 @@ public class DataTypeTests : BaseTestClass
 			s.AssertEqual(expected);
 
 			// ensure long name not used
-			(s.Contains("StockSharp.Messages.") == false).AssertTrue($"Long type name leakage detected in '{s}'");
+			s.Contains("StockSharp.Messages.").AssertFalse($"Long type name leakage detected in '{s}'");
 
 			// roundtrip as well
 			var back = DataType.FromSerializableString(s);

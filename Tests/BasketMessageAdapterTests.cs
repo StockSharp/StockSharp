@@ -51,11 +51,11 @@ public class BasketMessageAdapterTests : BasketTestBase
 		pendingState.Count.AssertEqual(0, "PendingState.Count after connect");
 
 		// --- Output validation ---
-		adapter1.GetMessages<ConnectMessage>().Any().AssertTrue("Adapter should receive ConnectMessage");
+		adapter1.GetMessages<ConnectMessage>().Count().AssertEqual(1, "Adapter should receive exactly 1 ConnectMessage");
 
 		var connectOuts = GetOut<ConnectMessage>();
-		connectOuts.Length.AssertGreater(0, "Basket should emit ConnectMessage");
-		connectOuts.First().Error.AssertNull();
+		connectOuts.Length.AssertEqual(2, "Basket should emit 2 ConnectMessages: 1 from routing manager + 1 passthrough from inner adapter");
+		connectOuts[0].Error.AssertNull();
 	}
 
 	[TestMethod]
@@ -98,7 +98,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 
 		// --- Output ---
 		var connectOuts = GetOut<ConnectMessage>();
-		connectOuts.Length.AssertGreater(0, "Basket should emit ConnectMessage");
+		connectOuts.Length.AssertEqual(3, "Basket should emit ConnectMessage (1 routing + 2 passthrough)");
 	}
 
 	[TestMethod]
@@ -135,7 +135,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 		pendingState.Count.AssertEqual(0);
 
 		var connectOuts = GetOut<ConnectMessage>();
-		connectOuts.Length.AssertGreater(0, "Basket should emit ConnectMessage after all connected");
+		connectOuts.Length.AssertEqual(3, "Basket should emit ConnectMessage after all connected (1 routing + 2 passthrough)");
 	}
 
 	[TestMethod]
@@ -175,8 +175,8 @@ public class BasketMessageAdapterTests : BasketTestBase
 
 		// --- Output ---
 		var connectOuts = GetOut<ConnectMessage>();
-		connectOuts.Length.AssertGreater(0);
-		connectOuts.Any(c => c.Error != null).AssertTrue("ConnectMessage should contain error");
+		connectOuts.Length.AssertEqual(3, "Basket should emit ConnectMessages (1 routing + 2 passthrough)");
+		connectOuts.Count(c => c.Error != null).AssertGreater(0, "ConnectMessage should contain error");
 	}
 
 	#endregion
@@ -281,12 +281,12 @@ public class BasketMessageAdapterTests : BasketTestBase
 		}, TestContext.CancellationToken);
 
 		// --- After sending message during connecting: message should be pended ---
-		pendingState.Count.AssertGreater(0, "Pending state should have messages");
+		pendingState.Count.AssertEqual(1, "Pending state should have messages");
 		connectionState.HasPendingAdapters.AssertTrue("Still pending");
 		connectionState.ConnectedCount.AssertEqual(0, "Still not connected");
 
-		adapter1.GetMessages<SecurityLookupMessage>().Any()
-			.AssertFalse("Adapter should NOT receive SecurityLookupMessage while connecting");
+		adapter1.GetMessages<SecurityLookupMessage>().Count()
+			.AssertEqual(0, "Adapter should NOT receive SecurityLookupMessage while connecting");
 
 		// subscriptionRouting should NOT have the subscription yet (it's pended)
 		subscriptionRouting.TryGetSubscription(transId, out _, out _, out _)
@@ -351,14 +351,14 @@ public class BasketMessageAdapterTests : BasketTestBase
 		await SendToBasket(basket, mdMsg, TestContext.CancellationToken);
 
 		// --- Message should be pended ---
-		pendingState.Count.AssertGreater(0, "Message should be pended while adapters connecting");
+		pendingState.Count.AssertEqual(1, "Message should be pended while adapters connecting");
 		connectionState.HasPendingAdapters.AssertTrue("Still pending");
 		connectionState.ConnectedCount.AssertEqual(0);
 
-		adapter1.GetMessages<MarketDataMessage>().Any()
-			.AssertFalse("Adapter1 should not receive MarketData while connecting");
-		adapter2.GetMessages<MarketDataMessage>().Any()
-			.AssertFalse("Adapter2 should not receive MarketData while connecting");
+		adapter1.GetMessages<MarketDataMessage>().Count()
+			.AssertEqual(0, "Adapter1 should not receive MarketData while connecting");
+		adapter2.GetMessages<MarketDataMessage>().Count()
+			.AssertEqual(0, "Adapter2 should not receive MarketData while connecting");
 
 		// --- Adapter1 connects ---
 		adapter1.AutoRespond = true;
@@ -370,10 +370,10 @@ public class BasketMessageAdapterTests : BasketTestBase
 		sa1b.AssertEqual(ConnectionStates.Connected);
 		connectionState.TryGetAdapterState(adapter2, out var sa2b, out _).AssertTrue();
 		sa2b.AssertEqual(ConnectionStates.Connecting);
-		pendingState.Count.AssertGreater(0, "Message should still be pended");
+		pendingState.Count.AssertEqual(1, "Message should still be pended");
 
-		adapter1.GetMessages<MarketDataMessage>().Any()
-			.AssertFalse("Adapter1 should not receive MarketData yet");
+		adapter1.GetMessages<MarketDataMessage>().Count()
+			.AssertEqual(0, "Adapter1 should not receive MarketData yet");
 
 		// --- Adapter2 fails ---
 		await adapter2.SendOutMessageAsync(new ConnectMessage { Error = new Exception("Connection refused") }, TestContext.CancellationToken);
@@ -386,7 +386,7 @@ public class BasketMessageAdapterTests : BasketTestBase
 
 		// --- Process loopback messages ---
 		var loopbacks = OutMessages.Where(m => m.IsBack()).ToArray();
-		loopbacks.Length.AssertGreater(0, "Should have loopback messages from released pending");
+		loopbacks.Length.AssertEqual(1, "Should have loopback messages from released pending");
 
 		foreach (var lb in loopbacks)
 		{
@@ -395,10 +395,10 @@ public class BasketMessageAdapterTests : BasketTestBase
 		}
 
 		// --- After loopback processed: adapter1 should receive MarketData ---
-		adapter1.GetMessages<MarketDataMessage>().Any()
-			.AssertTrue("Adapter1 should receive MarketData after pending released");
-		adapter2.GetMessages<MarketDataMessage>().Any()
-			.AssertFalse("Failed adapter2 should not receive MarketData");
+		adapter1.GetMessages<MarketDataMessage>().Count()
+			.AssertEqual(1, "Adapter1 should receive MarketData after pending released");
+		adapter2.GetMessages<MarketDataMessage>().Count()
+			.AssertEqual(0, "Failed adapter2 should not receive MarketData");
 
 		// --- Validate subscription routing after processing ---
 		// The subscription should now be routed through adapter1
@@ -452,9 +452,9 @@ public class BasketMessageAdapterTests : BasketTestBase
 		pendingState.Count.AssertEqual(0);
 
 		// --- Output ---
-		adapter1.GetMessages<DisconnectMessage>().Any().AssertTrue("Adapter1 should receive DisconnectMessage");
-		adapter2.GetMessages<DisconnectMessage>().Any().AssertTrue("Adapter2 should receive DisconnectMessage");
-		GetOut<DisconnectMessage>().Length.AssertGreater(0, "Basket should emit DisconnectMessage");
+		adapter1.GetMessages<DisconnectMessage>().Count().AssertEqual(1, "Adapter1 should receive DisconnectMessage");
+		adapter2.GetMessages<DisconnectMessage>().Count().AssertEqual(1, "Adapter2 should receive DisconnectMessage");
+		GetOut<DisconnectMessage>().Length.AssertEqual(3, "Basket should emit DisconnectMessages (1 routing + 2 passthrough)");
 	}
 
 	[TestMethod]

@@ -693,20 +693,20 @@ public class CommissionTests
 
 		// Assert
 		var rules = provider.All.ToList();
-		rules.Count.AssertGreater(0);
+		rules.Count.AssertEqual(11);
 
 		// Verify that common rule types are included
-		rules.Contains(typeof(CommissionOrderRule)).AssertTrue();
-		rules.Contains(typeof(CommissionTradeRule)).AssertTrue();
-		rules.Contains(typeof(CommissionOrderVolumeRule)).AssertTrue();
-		rules.Contains(typeof(CommissionTradeVolumeRule)).AssertTrue();
-		rules.Contains(typeof(CommissionOrderCountRule)).AssertTrue();
-		rules.Contains(typeof(CommissionTradeCountRule)).AssertTrue();
-		rules.Contains(typeof(CommissionTradePriceRule)).AssertTrue();
-		rules.Contains(typeof(CommissionSecurityIdRule)).AssertTrue();
-		rules.Contains(typeof(CommissionSecurityTypeRule)).AssertTrue();
-		rules.Contains(typeof(CommissionBoardCodeRule)).AssertTrue();
-		rules.Contains(typeof(CommissionTurnOverRule)).AssertTrue();
+		rules.Count(t => t == typeof(CommissionOrderRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(CommissionTradeRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(CommissionOrderVolumeRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(CommissionTradeVolumeRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(CommissionOrderCountRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(CommissionTradeCountRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(CommissionTradePriceRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(CommissionSecurityIdRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(CommissionSecurityTypeRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(CommissionBoardCodeRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(CommissionTurnOverRule)).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -722,7 +722,7 @@ public class CommissionTests
 
 		// Assert
 		var rules = provider.All.ToList();
-		rules.Contains(customRuleType).AssertTrue();
+		rules.Count(t => t == customRuleType).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -732,13 +732,13 @@ public class CommissionTests
 
 		// Arrange
 		var ruleType = typeof(CommissionOrderRule);
-		provider.All.Contains(ruleType).AssertTrue();
+		provider.All.Count(t => t == ruleType).AssertEqual(1);
 
 		// Act
 		provider.Remove(ruleType);
 
 		// Assert
-		provider.All.Contains(ruleType).AssertFalse();
+		provider.All.Count(t => t == ruleType).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -748,13 +748,13 @@ public class CommissionTests
 
 		// Arrange
 		var nonExistingRuleType = typeof(CustomCommissionRule);
-		provider.All.Contains(nonExistingRuleType).AssertFalse();
+		provider.All.Count(t => t == nonExistingRuleType).AssertEqual(0);
 
 		// Act
 		provider.Remove(nonExistingRuleType);
 
 		// Assert - should not throw exception
-		provider.All.Contains(nonExistingRuleType).AssertFalse();
+		provider.All.Count(t => t == nonExistingRuleType).AssertEqual(0);
 	}
 
 	[TestMethod]

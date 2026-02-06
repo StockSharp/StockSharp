@@ -269,7 +269,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var (forward, extraOut, processSuspended) = manager.ProcessOutMessage(execMsg);
 
 		forward.AssertNull();
-		logReceiver.Logs.Any(l => l.Message.Contains("Order doesn't have origin trans id")).AssertTrue();
+		logReceiver.Logs.Count(l => l.Message.Contains("Order doesn't have origin trans id")).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -294,7 +294,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 
 		forward.AssertNull();
 		processSuspended.AssertFalse();
-		logReceiver.Logs.Any(l => l.Message.Contains("suspended")).AssertTrue();
+		logReceiver.Logs.Count(l => l.Message.Contains("suspended")).AssertEqual(1);
 	}
 
 	[TestMethod]

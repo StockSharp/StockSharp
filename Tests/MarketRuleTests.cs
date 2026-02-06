@@ -79,10 +79,10 @@ public class MarketRuleTests : BaseTestClass
 		// Once should finish immediately on activation
 		bool fired = false;
 		var once = new TestRule().Once().Apply(container).Do(_ => fired = true);
-		container.Rules.Contains(once).AssertTrue();
+		container.Rules.Count(r => r == once).AssertEqual(1);
 		((TestRule)once).Trigger();
 		fired.AssertTrue();
-		container.Rules.Contains(once).AssertFalse();
+		container.Rules.Count(r => r == once).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -104,11 +104,11 @@ public class MarketRuleTests : BaseTestClass
 		f2.AssertFalse();
 
 		// r2 must be removed due to exclusivity after r1 fired
-		container.Rules.Contains(r2).AssertFalse();
+		container.Rules.Count(r => r == r2).AssertEqual(0);
 
 		// TryRemove API
 		container.TryRemoveRule(r1, false).AssertTrue();
-		container.Rules.Contains(r1).AssertFalse();
+		container.Rules.Count(r => r == r1).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -121,8 +121,8 @@ public class MarketRuleTests : BaseTestClass
 
 		// Remove r1 and its exclusive r2
 		container.TryRemoveWithExclusive(r1).AssertTrue();
-		container.Rules.Contains(r1).AssertFalse();
-		container.Rules.Contains(r2).AssertFalse();
+		container.Rules.Count(r => r == r1).AssertEqual(0);
+		container.Rules.Count(r => r == r2).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -212,7 +212,7 @@ public class MarketRuleTests : BaseTestClass
 		var inf = new TestRule().Apply(container);
 		inf.Until(() => false);
 		container.TryRemoveRule(inf, false).AssertTrue();
-		container.Rules.Contains(inf).AssertFalse();
+		container.Rules.Count(r => r == inf).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -749,8 +749,8 @@ public class MarketRuleTests : BaseTestClass
 		r1.Do(_ => fired = true);
 		((TestRule)r1).Trigger();
 		fired.AssertTrue();
-		container.Rules.Contains(r2).AssertFalse();
-		container.Rules.Contains(r3).AssertFalse();
+		container.Rules.Count(r => r == r2).AssertEqual(0);
+		container.Rules.Count(r => r == r3).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -760,7 +760,7 @@ public class MarketRuleTests : BaseTestClass
 		var r = new TestRule().Apply(container);
 		r.Until(() => false); // infinite
 		container.TryRemoveRule(r, true).AssertFalse();
-		container.Rules.Contains(r).AssertTrue();
+		container.Rules.Count(rule => rule == r).AssertEqual(1);
 		// cleanup
 		container.TryRemoveRule(r, false).AssertTrue();
 	}
@@ -839,7 +839,7 @@ public class MarketRuleTests : BaseTestClass
 
 		// remove and ensure no further activations
 		container.TryRemoveRule(r, false).AssertTrue();
-		container.Rules.Contains(r).AssertFalse();
+		container.Rules.Count(rule => rule == r).AssertEqual(0);
 		ThrowsExactly<ObjectDisposedException>(() => r.Trigger());
 		cnt.AssertEqual(1);
 	}
@@ -854,7 +854,7 @@ public class MarketRuleTests : BaseTestClass
 		((TestRule)r).Trigger();
 		cnt.AssertEqual(1);
 		// rule is finished after the first activation
-		container.Rules.Contains(r).AssertFalse();
+		container.Rules.Count(rule => rule == r).AssertEqual(0);
 		ThrowsExactly<ObjectDisposedException>(() => ((TestRule)r).Trigger());
 		cnt.AssertEqual(1);
 	}
@@ -870,12 +870,12 @@ public class MarketRuleTests : BaseTestClass
 
 		((TestRule)r).Trigger(); // first, not finished
 		cnt.AssertEqual(1);
-		container.Rules.Contains(r).AssertTrue();
+		container.Rules.Count(rule => rule == r).AssertEqual(1);
 
 		finish = true;
 		((TestRule)r).Trigger(); // second, finishes
 		cnt.AssertEqual(2);
-		container.Rules.Contains(r).AssertFalse();
+		container.Rules.Count(rule => rule == r).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -894,7 +894,7 @@ public class MarketRuleTests : BaseTestClass
 		});
 		((TestRule)r).Trigger();
 		cnt.AssertEqual(1);
-		container.Rules.Contains(r).AssertFalse();
+		container.Rules.Count(rule => rule == r).AssertEqual(0);
 
 		// already removed
 		container.TryRemoveRule(r).AssertFalse();
@@ -969,7 +969,7 @@ public class MarketRuleTests : BaseTestClass
 		var orRule = r1.Or(r2, r3, r4, r5).Once().Apply(container).Do(_ => cnt++);
 		r3.Trigger();
 		cnt.AssertEqual(1);
-		container.Rules.Contains(orRule).AssertFalse();
+		container.Rules.Count(r => r == orRule).AssertEqual(0);
 		ThrowsExactly<ObjectDisposedException>(() => r4.Trigger());
 		cnt.AssertEqual(1);
 	}
@@ -1015,7 +1015,7 @@ public class MarketRuleTests : BaseTestClass
 		cnt.AssertEqual(0);
 		c.Trigger(); // and(b,c) completes -> or fires
 		cnt.AssertEqual(1);
-		container.Rules.Contains(orRule).AssertFalse();
+		container.Rules.Count(r => r == orRule).AssertEqual(0);
 		ThrowsExactly<ObjectDisposedException>(() => a.Trigger());
 		cnt.AssertEqual(1);
 	}
@@ -1325,7 +1325,7 @@ public class MarketRuleTests : BaseTestClass
 		var first = r.Apply(container);
 		var second = first.Apply(container); // repeat Apply
 		(first == second).AssertTrue();
-		container.Rules.Contains(first).AssertTrue();
+		container.Rules.Count(r => r == first).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -1353,7 +1353,7 @@ public class MarketRuleTests : BaseTestClass
 		finish = true;
 		((TestRule)r).Trigger(); // final activation
 		cnt.AssertEqual(3);
-		container.Rules.Contains(r).AssertFalse();
+		container.Rules.Count(rule => rule == r).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1372,9 +1372,9 @@ public class MarketRuleTests : BaseTestClass
 		a.Do(_ => fired = true);
 		((TestRule)a).Trigger();
 		fired.AssertTrue();
-		container.Rules.Contains(b).AssertFalse();
-		container.Rules.Contains(c).AssertFalse();
-		container.Rules.Contains(d).AssertFalse();
+		container.Rules.Count(r => r == b).AssertEqual(0);
+		container.Rules.Count(r => r == c).AssertEqual(0);
+		container.Rules.Count(r => r == d).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1396,8 +1396,8 @@ public class MarketRuleTests : BaseTestClass
 		bf.AssertTrue();
 		af.AssertFalse();
 		cf.AssertFalse();
-		container.Rules.Contains(a).AssertFalse();
-		container.Rules.Contains(c).AssertFalse();
+		container.Rules.Count(r => r == a).AssertEqual(0);
+		container.Rules.Count(r => r == c).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1419,7 +1419,7 @@ public class MarketRuleTests : BaseTestClass
 		b.Trigger();
 		c.Trigger(); // and is ready -> or activates
 		cnt.AssertEqual(1);
-		container.Rules.Contains(combo).AssertFalse();
+		container.Rules.Count(r => r == combo).AssertEqual(0);
 	}
 
 	[TestMethod]

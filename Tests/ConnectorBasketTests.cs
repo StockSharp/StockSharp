@@ -228,7 +228,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		// --- After connect: validate state ---
 		AreEqual(ConnectionStates.Connected, connector.ConnectionState);
-		state.ConnectionState.ConnectedCount.AssertGreater(0, "At least one adapter connected");
+		state.ConnectionState.ConnectedCount.AssertEqual(1, "One adapter connected");
 		state.ConnectionState.HasPendingAdapters.AssertFalse("No pending adapters after connect");
 		state.ConnectionState.AllFailed.AssertFalse("No failures");
 		state.PendingState.Count.AssertEqual(0, "No pending messages");
@@ -256,7 +256,7 @@ public class ConnectorBasketTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		// --- After connect: validate state ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.ConnectionState.HasPendingAdapters.AssertFalse();
 		state.PendingState.Count.AssertEqual(0);
 
@@ -284,7 +284,7 @@ public class ConnectorBasketTests : BaseTestClass
 		adapter.LastOrderTransactionId.AssertNotEqual(0L, "Adapter should have received the order");
 
 		// --- Validate state after registration ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0, "Still connected");
+		state.ConnectionState.ConnectedCount.AssertEqual(1, "Still connected");
 		state.PendingState.Count.AssertEqual(0, "No pending messages");
 
 		// orderRouting should have the mapping
@@ -297,10 +297,10 @@ public class ConnectorBasketTests : BaseTestClass
 		AreEqual(OrderStates.Active, order.State);
 		AreEqual(123L, order.Id);
 
-		orderReceived.Count.AssertGreater(0);
+		orderReceived.Count.AssertEqual(1);
 
 		// --- State still consistent ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.OrderRouting.TryGetOrderAdapter(order.TransactionId, out _).AssertTrue("Order mapping preserved");
 	}
 
@@ -316,7 +316,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await connector.ConnectAsync(CancellationToken);
 
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.ConnectionState.HasPendingAdapters.AssertFalse();
 
 		var sub = new Subscription(DataType.Level1);
@@ -347,7 +347,7 @@ public class ConnectorBasketTests : BaseTestClass
 		AreNotEqual(0L, id);
 
 		// --- Validate state after subscription started ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0, "Still connected");
+		state.ConnectionState.ConnectedCount.AssertEqual(1, "Still connected");
 		state.PendingState.Count.AssertEqual(0, "No pending messages");
 		// subscriptionRouting should have an entry for the subscription
 		// (the connector generates its own transId, basket creates child)
@@ -367,7 +367,7 @@ public class ConnectorBasketTests : BaseTestClass
 			await Task.Delay(10, CancellationToken);
 
 		// --- State after unsubscribe ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0, "Still connected after unsub");
+		state.ConnectionState.ConnectedCount.AssertEqual(1, "Still connected after unsub");
 		state.PendingState.Count.AssertEqual(0);
 	}
 
@@ -383,7 +383,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await connector.ConnectAsync(CancellationToken);
 
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var sub = new Subscription(DataType.Level1)
 		{
@@ -412,7 +412,7 @@ public class ConnectorBasketTests : BaseTestClass
 		AreNotEqual(0L, id);
 
 		// --- Validate state after subscribe ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.PendingState.Count.AssertEqual(0);
 
 		// --- Send historical data ---
@@ -428,7 +428,7 @@ public class ConnectorBasketTests : BaseTestClass
 		HasCount(2, got);
 
 		// --- State after history completed ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.PendingState.Count.AssertEqual(0);
 	}
 
@@ -444,7 +444,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await connector.ConnectAsync(CancellationToken);
 
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var sub = new Subscription(DataType.Level1);
 
@@ -460,17 +460,17 @@ public class ConnectorBasketTests : BaseTestClass
 		AreNotEqual(0L, id);
 
 		// --- State after subscribe ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.PendingState.Count.AssertEqual(0);
 
 		// --- Cancel → triggers UnSubscribe ---
 		runCts.Cancel();
 		await run.WithCancellation(CancellationToken);
 
-		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
+		adapter.SentMessages.OfType<MarketDataMessage>().Count(m => !m.IsSubscribe && m.OriginalTransactionId == id).AssertEqual(1);
 
 		// --- State after unsubscribe ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0, "Still connected");
+		state.ConnectionState.ConnectedCount.AssertEqual(1, "Still connected");
 		state.PendingState.Count.AssertEqual(0);
 	}
 
@@ -485,7 +485,7 @@ public class ConnectorBasketTests : BaseTestClass
 		var (connector, adapter, state) = CreateConnectorWithBasketState();
 
 		await connector.ConnectAsync(CancellationToken);
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var security = new Security { Id = "AAPL@TEST" };
 		connector.SendOutMessage(security.ToMessage());
@@ -519,7 +519,7 @@ public class ConnectorBasketTests : BaseTestClass
 		var transId = adapter.LastOrderTransactionId;
 
 		// --- Validate state after order sent ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.PendingState.Count.AssertEqual(0);
 		state.OrderRouting.TryGetOrderAdapter(transId, out _)
 			.AssertTrue("OrderRouting should have mapping after registration");
@@ -535,7 +535,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await Task.Delay(100, CancellationToken);
 
-		allOrderReceived.Count.AssertGreater(0,
+		allOrderReceived.Count.AssertEqual(1,
 			$"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
 
 		// --- State after active ---
@@ -546,12 +546,12 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await enumTask.WithCancellation(CancellationToken);
 
-		events.Count.AssertGreater(0, "Should receive at least one event");
+		events.Count.AssertEqual(2, "Should receive Active and Done events");
 		AreEqual(OrderStates.Done, order.State);
 		AreEqual(123L, order.Id);
 
 		// --- Final state ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.PendingState.Count.AssertEqual(0);
 	}
 
@@ -562,7 +562,7 @@ public class ConnectorBasketTests : BaseTestClass
 		var (connector, adapter, state) = CreateConnectorWithBasketState();
 
 		await connector.ConnectAsync(CancellationToken);
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var security = new Security { Id = "AAPL@TEST" };
 		connector.SendOutMessage(security.ToMessage());
@@ -615,7 +615,7 @@ public class ConnectorBasketTests : BaseTestClass
 		tradePrices.AssertContains(100.6m);
 
 		// --- Final state ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.PendingState.Count.AssertEqual(0);
 		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("Mapping preserved");
 	}
@@ -627,7 +627,7 @@ public class ConnectorBasketTests : BaseTestClass
 		var (connector, adapter, state) = CreateConnectorWithBasketState();
 
 		await connector.ConnectAsync(CancellationToken);
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var security = new Security { Id = "AAPL@TEST" };
 		connector.SendOutMessage(security.ToMessage());
@@ -688,7 +688,7 @@ public class ConnectorBasketTests : BaseTestClass
 		AreEqual(456L, adapter.LastCancelMessage.OrderId);
 
 		// State after cancel
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.PendingState.Count.AssertEqual(0);
 	}
 
@@ -699,7 +699,7 @@ public class ConnectorBasketTests : BaseTestClass
 		var (connector, adapter, state) = CreateConnectorWithBasketState();
 
 		await connector.ConnectAsync(CancellationToken);
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var security = new Security { Id = "AAPL@TEST" };
 		connector.SendOutMessage(security.ToMessage());
@@ -746,17 +746,17 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await enumTask.WithCancellation(CancellationToken);
 
-		events.Count.AssertGreater(0, "Should receive events for our order");
+		events.Count.AssertEqual(4, "Should receive Active, Trade, order update and Done events for our order");
 		AreEqual(OrderStates.Done, order.State);
 		AreEqual(123L, order.Id);
 
 		var tradeEvents = events.Where(e => e.trade != null).ToList();
-		tradeEvents.Count.AssertGreater(0, "Should have received our trade");
-		tradeEvents.Any(e => e.trade.Trade.Price == 100.5m).AssertTrue("Should have our trade at 100.5");
-		tradeEvents.Any(e => e.trade.Trade.Price == 50m).AssertFalse("Should NOT have trade from other order");
+		tradeEvents.Count.AssertEqual(1, "Should have received our trade");
+		tradeEvents.Count(e => e.trade.Trade.Price == 100.5m).AssertEqual(1, "Should have our trade at 100.5");
+		tradeEvents.Count(e => e.trade.Trade.Price == 50m).AssertEqual(0, "Should NOT have trade from other order");
 
 		// State
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.PendingState.Count.AssertEqual(0);
 		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("Our order mapping preserved");
 	}
@@ -768,7 +768,7 @@ public class ConnectorBasketTests : BaseTestClass
 		var (connector, adapter, state) = CreateConnectorWithBasketState();
 
 		await connector.ConnectAsync(CancellationToken);
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var security = new Security { Id = "SBER@TQBR" };
 		connector.SendOutMessage(security.ToMessage());
@@ -799,7 +799,7 @@ public class ConnectorBasketTests : BaseTestClass
 		var transId = adapter.LastOrderTransactionId;
 
 		// --- State after registration ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.PendingState.Count.AssertEqual(0);
 		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("OrderRouting has mapping");
 
@@ -829,7 +829,7 @@ public class ConnectorBasketTests : BaseTestClass
 		AreEqual(100m, totalVolume);
 
 		// --- Final state ---
-		state.ConnectionState.ConnectedCount.AssertGreater(0);
+		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.PendingState.Count.AssertEqual(0);
 		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("Mapping preserved after full lifecycle");
 	}

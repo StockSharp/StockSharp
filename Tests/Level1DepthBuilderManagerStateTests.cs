@@ -85,7 +85,7 @@ public class Level1DepthBuilderManagerStateTests : BaseTestClass
 		AreEqual(101m, result.Asks[0].Price);
 		AreEqual(5m, result.Asks[0].Volume);
 		IsNotNull(subIds);
-		IsTrue(subIds.Contains(1));
+		subIds.Count(id => id == 1).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -140,8 +140,8 @@ public class Level1DepthBuilderManagerStateTests : BaseTestClass
 
 		IsNotNull(result);
 		IsNotNull(subIds);
-		IsTrue(subIds.Contains(1));
-		IsTrue(subIds.Contains(2));
+		subIds.Count(id => id == 1).AssertEqual(1);
+		subIds.Count(id => id == 2).AssertEqual(1);
 	}
 
 	[TestMethod]

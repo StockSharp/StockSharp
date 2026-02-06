@@ -122,8 +122,8 @@ public class FindAdaptersTests
 		var adapters = asm.GetAdapters().ToArray();
 
 		// Valid adapters should be found
-		adapters.Contains(typeof(FindAdaptersTestValidAdapter)).AssertTrue("ValidAdapter should be found");
-		adapters.Contains(typeof(FindAdaptersTestMultipleConstructorsAdapter)).AssertTrue("MultipleConstructorsAdapter should be found");
+		adapters.Count(a => a == typeof(FindAdaptersTestValidAdapter)).AssertEqual(1, "ValidAdapter should be found");
+		adapters.Count(a => a == typeof(FindAdaptersTestMultipleConstructorsAdapter)).AssertEqual(1, "MultipleConstructorsAdapter should be found");
 	}
 
 	[TestMethod]
@@ -132,7 +132,7 @@ public class FindAdaptersTests
 		var asm = typeof(FindAdaptersTestDialect).Assembly;
 		var adapters = asm.GetAdapters().ToArray();
 
-		adapters.Contains(typeof(FindAdaptersTestDialect)).AssertFalse("Dialect adapter should be filtered out");
+		adapters.Count(a => a == typeof(FindAdaptersTestDialect)).AssertEqual(0, "Dialect adapter should be filtered out");
 	}
 
 	[TestMethod]
@@ -141,7 +141,7 @@ public class FindAdaptersTests
 		var asm = typeof(FindAdaptersTestAbstractAdapter).Assembly;
 		var adapters = asm.GetAdapters().ToArray();
 
-		adapters.Contains(typeof(FindAdaptersTestAbstractAdapter)).AssertFalse("Abstract adapter should be filtered out");
+		adapters.Count(a => a == typeof(FindAdaptersTestAbstractAdapter)).AssertEqual(0, "Abstract adapter should be filtered out");
 	}
 
 	[TestMethod]
@@ -150,8 +150,8 @@ public class FindAdaptersTests
 		var asm = typeof(FindAdaptersTestNoIdGeneratorConstructorAdapter).Assembly;
 		var adapters = asm.GetAdapters().ToArray();
 
-		adapters.Contains(typeof(FindAdaptersTestNoIdGeneratorConstructorAdapter)).AssertFalse("No-IdGenerator adapter should be filtered out");
-		adapters.Contains(typeof(FindAdaptersTestPrivateConstructorAdapter)).AssertFalse("Private constructor adapter should be filtered out");
+		adapters.Count(a => a == typeof(FindAdaptersTestNoIdGeneratorConstructorAdapter)).AssertEqual(0, "No-IdGenerator adapter should be filtered out");
+		adapters.Count(a => a == typeof(FindAdaptersTestPrivateConstructorAdapter)).AssertEqual(0, "Private constructor adapter should be filtered out");
 	}
 
 	[TestMethod]

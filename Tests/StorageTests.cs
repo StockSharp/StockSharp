@@ -3151,8 +3151,8 @@ public class StorageTests : BaseTestClass
 
 		var securities = index.AvailableSecurities.ToArray();
 		securities.Length.AssertEqual(2);
-		securities.Contains(secId1).AssertTrue();
-		securities.Contains(secId2).AssertTrue();
+		securities.Count(s => s == secId1).AssertEqual(1);
+		securities.Count(s => s == secId2).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -3169,8 +3169,8 @@ public class StorageTests : BaseTestClass
 		// Get data types for Binary format
 		var dataTypes = index.GetAvailableDataTypes(secId, StorageFormats.Binary).ToArray();
 		dataTypes.Length.AssertEqual(2);
-		dataTypes.Contains(DataType.Ticks).AssertTrue();
-		dataTypes.Contains(DataType.MarketDepth).AssertTrue();
+		dataTypes.Count(d => d == DataType.Ticks).AssertEqual(1);
+		dataTypes.Count(d => d == DataType.MarketDepth).AssertEqual(1);
 
 		// Get data types for Csv format
 		var dataTypesCsv = index.GetAvailableDataTypes(secId, StorageFormats.Csv).ToArray();
@@ -3207,8 +3207,8 @@ public class StorageTests : BaseTestClass
 
 		var dataTypes = loadedIndex.GetAvailableDataTypes(secId, StorageFormats.Binary).ToArray();
 		dataTypes.Length.AssertEqual(2);
-		dataTypes.Contains(DataType.Ticks).AssertTrue();
-		dataTypes.Contains(DataType.MarketDepth).AssertTrue();
+		dataTypes.Count(d => d == DataType.Ticks).AssertEqual(1);
+		dataTypes.Count(d => d == DataType.MarketDepth).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -3268,8 +3268,8 @@ public class StorageTests : BaseTestClass
 
 		var dataTypes = index.GetAvailableDataTypes(secId, StorageFormats.Binary).ToArray();
 		dataTypes.Length.AssertEqual(2);
-		dataTypes.Contains(tf5min).AssertTrue();
-		dataTypes.Contains(tf1hour).AssertTrue();
+		dataTypes.Count(d => d == tf5min).AssertEqual(1);
+		dataTypes.Count(d => d == tf1hour).AssertEqual(1);
 
 		// Save and reload to test candle serialization
 		using var stream = new MemoryStream();
@@ -3329,9 +3329,9 @@ public class StorageTests : BaseTestClass
 
 		var securities = await drive.GetAvailableSecuritiesAsync().ToArrayAsync(token);
 
-		(securities.Length >= 2).AssertTrue();
-		securities.Any(s => s.SecurityCode == "TEST1" && s.BoardCode == BoardCodes.Test).AssertTrue();
-		securities.Any(s => s.SecurityCode == "TEST2" && s.BoardCode == BoardCodes.Test).AssertTrue();
+		securities.Length.AssertEqual(2);
+		securities.Count(s => s.SecurityCode == "TEST1" && s.BoardCode == BoardCodes.Test).AssertEqual(1);
+		securities.Count(s => s.SecurityCode == "TEST2" && s.BoardCode == BoardCodes.Test).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -3381,9 +3381,9 @@ public class StorageTests : BaseTestClass
 
 		var dataTypes = await drive.GetAvailableDataTypesAsync(securityId, format).ToArrayAsync(token);
 
-		(dataTypes.Length >= 2).AssertTrue();
-		dataTypes.Contains(DataType.Ticks).AssertTrue();
-		dataTypes.Contains(DataType.Level1).AssertTrue();
+		dataTypes.Length.AssertEqual(2);
+		dataTypes.Count(d => d == DataType.Ticks).AssertEqual(1);
+		dataTypes.Count(d => d == DataType.Level1).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -3403,10 +3403,10 @@ public class StorageTests : BaseTestClass
 
 		var dataTypes = await drive.GetAvailableDataTypesAsync(default, format).ToArrayAsync(token);
 
-		(dataTypes.Length >= 3).AssertTrue();
-		dataTypes.Contains(DataType.Ticks).AssertTrue();
-		dataTypes.Contains(DataType.Level1).AssertTrue();
-		dataTypes.Contains(DataType.MarketDepth).AssertTrue();
+		dataTypes.Length.AssertEqual(3);
+		dataTypes.Count(d => d == DataType.Ticks).AssertEqual(1);
+		dataTypes.Count(d => d == DataType.Level1).AssertEqual(1);
+		dataTypes.Count(d => d == DataType.MarketDepth).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -3513,8 +3513,8 @@ public class StorageTests : BaseTestClass
 
 		var dataTypes = await drive.GetAvailableDataTypesAsync(securityId, format).ToArrayAsync(token);
 
-		(dataTypes.Length >= 1).AssertTrue();
-		dataTypes.Contains(DataType.Ticks).AssertTrue();
+		dataTypes.Length.AssertEqual(1);
+		dataTypes.Count(d => d == DataType.Ticks).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -3537,10 +3537,10 @@ public class StorageTests : BaseTestClass
 
 		var result = await drive.GetAvailableSecuritiesAsync().ToArrayAsync(token);
 
-		(result.Length >= 3).AssertTrue();
+		result.Length.AssertEqual(3);
 		foreach (var secId in securities)
 		{
-			result.Any(s => s.SecurityCode == secId.SecurityCode && s.BoardCode == secId.BoardCode).AssertTrue();
+			result.Count(s => s.SecurityCode == secId.SecurityCode && s.BoardCode == secId.BoardCode).AssertEqual(1);
 		}
 	}
 

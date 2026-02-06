@@ -57,13 +57,13 @@ public class SnapshotRegistryTests : BaseTestClass
 		((decimal)snapDay1.Changes[Level1Fields.BestBidPrice]).AssertEqual(100m);
 
 		storage.Dates.Count().AssertEqual(1);
-		storage.Dates.Contains(t1.Date).AssertTrue();
+		storage.Dates.Count(d => d == t1.Date).AssertEqual(1);
 
 		storage.Update(CreateLevel1(secId, t3, seqNum: 3, (Level1Fields.LastTradePrice, 200m)));
 
 		storage.Dates.Count().AssertEqual(2);
-		storage.Dates.Contains(t1.Date).AssertTrue();
-		storage.Dates.Contains(t3.Date).AssertTrue();
+		storage.Dates.Count(d => d == t1.Date).AssertEqual(1);
+		storage.Dates.Count(d => d == t3.Date).AssertEqual(1);
 
 		var latest = storage.Get(secId);
 		latest.AssertNotNull();
@@ -73,8 +73,8 @@ public class SnapshotRegistryTests : BaseTestClass
 
 		var all = storage.GetAll().ToArray();
 		all.Length.AssertEqual(2);
-		all.Any(m => m.ServerTime == t2).AssertTrue();
-		all.Any(m => m.ServerTime == t3).AssertTrue();
+		all.Count(m => m.ServerTime == t2).AssertEqual(1);
+		all.Count(m => m.ServerTime == t3).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -105,10 +105,10 @@ public class SnapshotRegistryTests : BaseTestClass
 		storage.ClearAll();
 		storage.Get(secId1).AssertNull();
 		storage.Get(secId2).AssertNull();
-		storage.GetAll().Any().AssertFalse();
+		storage.GetAll().Count().AssertEqual(0);
 
 		// Dates are tracked separately and are not removed by Clear/ClearAll.
-		storage.Dates.Contains(t1.Date).AssertTrue();
+		storage.Dates.Count(d => d == t1.Date).AssertEqual(1);
 	}
 
 	[TestMethod]

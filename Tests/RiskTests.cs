@@ -23,8 +23,8 @@ public class RiskTests : BaseTestClass
 		manager.Rules.Add(rule2);
 
 		manager.Rules.Count.AssertEqual(2);
-		manager.Rules.Contains(rule1).AssertTrue();
-		manager.Rules.Contains(rule2).AssertTrue();
+		manager.Rules.Count(r => r == rule1).AssertEqual(1);
+		manager.Rules.Count(r => r == rule2).AssertEqual(1);
 
 		manager.Rules.Remove(rule1);
 		manager.Rules.Count.AssertEqual(1);
@@ -973,21 +973,23 @@ public class RiskTests : BaseTestClass
 		IRiskRuleProvider provider = new InMemoryRiskRuleProvider();
 
 		var rules = provider.All.ToList();
-		rules.Count.AssertGreater(0);
+		rules.Count.AssertEqual(15);
 
-		rules.Contains(typeof(RiskPnLRule)).AssertTrue();
-		rules.Contains(typeof(RiskPositionSizeRule)).AssertTrue();
-		rules.Contains(typeof(RiskPositionTimeRule)).AssertTrue();
-		rules.Contains(typeof(RiskCommissionRule)).AssertTrue();
-		rules.Contains(typeof(RiskSlippageRule)).AssertTrue();
-		rules.Contains(typeof(RiskOrderPriceRule)).AssertTrue();
-		rules.Contains(typeof(RiskOrderVolumeRule)).AssertTrue();
-		rules.Contains(typeof(RiskOrderFreqRule)).AssertTrue();
-		rules.Contains(typeof(RiskOrderErrorRule)).AssertTrue();
-		rules.Contains(typeof(RiskTradePriceRule)).AssertTrue();
-		rules.Contains(typeof(RiskTradeVolumeRule)).AssertTrue();
-		rules.Contains(typeof(RiskTradeFreqRule)).AssertTrue();
-		rules.Contains(typeof(RiskErrorRule)).AssertTrue();
+		rules.Count(t => t == typeof(RiskPnLRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskPositionSizeRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskPositionTimeRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskCommissionRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskSlippageRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskOrderPriceRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskOrderVolumeRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskOrderFreqRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskOrderErrorRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskOrderCommissionRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskTradePriceRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskTradeVolumeRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskTradeFreqRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskTradeCommissionRule)).AssertEqual(1);
+		rules.Count(t => t == typeof(RiskErrorRule)).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -998,10 +1000,10 @@ public class RiskTests : BaseTestClass
 		var customRuleType = typeof(TestRiskRule);
 
 		provider.Add(customRuleType);
-		provider.All.Contains(customRuleType).AssertTrue();
+		provider.All.Count(t => t == customRuleType).AssertEqual(1);
 
 		provider.Remove(customRuleType);
-		provider.All.Contains(customRuleType).AssertFalse();
+		provider.All.Count(t => t == customRuleType).AssertEqual(0);
 	}
 
 	[TestMethod]

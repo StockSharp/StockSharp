@@ -66,8 +66,8 @@ public class BasketMarketDataTests : BasketTestBase
 			.AssertTrue("Subscription should be recorded in routing state");
 
 		// adapter1 receives, adapter2 does not
-		adapter1.GetMessages<MarketDataMessage>().Any().AssertTrue("Adapter1 should receive MarketDataMessage");
-		adapter2.GetMessages<MarketDataMessage>().Any().AssertFalse("Adapter2 should NOT receive MarketDataMessage");
+		adapter1.GetMessages<MarketDataMessage>().Count().AssertEqual(1, "Adapter1 should receive exactly 1 MarketDataMessage");
+		adapter2.GetMessages<MarketDataMessage>().Count().AssertEqual(0, "Adapter2 should NOT receive MarketDataMessage");
 
 		var childId = adapter1.GetMessages<MarketDataMessage>().Last().TransactionId;
 		childId.AssertNotEqual(transId, "Child ID should differ from parent");
@@ -91,8 +91,8 @@ public class BasketMarketDataTests : BasketTestBase
 			.Count(m => m.OriginalTransactionId == transId).AssertEqual(0);
 
 		// No child IDs leak
-		GetOut<SubscriptionResponseMessage>().Any(r => r.OriginalTransactionId == childId).AssertFalse("Child Response leaked");
-		GetOut<SubscriptionOnlineMessage>().Any(m => m.OriginalTransactionId == childId).AssertFalse("Child Online leaked");
+		GetOut<SubscriptionResponseMessage>().Where(r => r.OriginalTransactionId == childId).Count().AssertEqual(0, "Child Response leaked");
+		GetOut<SubscriptionOnlineMessage>().Where(m => m.OriginalTransactionId == childId).Count().AssertEqual(0, "Child Online leaked");
 	}
 
 	[TestMethod]
@@ -158,7 +158,7 @@ public class BasketMarketDataTests : BasketTestBase
 			.Where(e => e.DataType == DataType.Ticks && e.SecurityId == SecId1).ToArray();
 		ticks.Length.AssertEqual(1);
 		ticks[0].GetSubscriptionIds()[0].AssertEqual(transId, "Tick should have parent subscription ID");
-		ticks[0].GetSubscriptionIds().Any(id => id == childId).AssertFalse("Child ID must not appear");
+		ticks[0].GetSubscriptionIds().Where(id => id == childId).Count().AssertEqual(0, "Child ID must not appear");
 
 		// State should still be consistent
 		subscriptionRouting.TryGetSubscription(transId, out _, out _, out _).AssertTrue("Subscription still active");
@@ -210,8 +210,8 @@ public class BasketMarketDataTests : BasketTestBase
 		connectionState.ConnectedCount.AssertEqual(2);
 
 		// Both adapters should receive
-		adapter1.GetMessages<MarketDataMessage>().Any().AssertTrue("Adapter1 should receive MarketData");
-		adapter2.GetMessages<MarketDataMessage>().Any().AssertTrue("Adapter2 should receive MarketData");
+		adapter1.GetMessages<MarketDataMessage>().Count().AssertEqual(1, "Adapter1 should receive exactly 1 MarketData");
+		adapter2.GetMessages<MarketDataMessage>().Count().AssertEqual(1, "Adapter2 should receive exactly 1 MarketData");
 
 		var c1 = adapter1.GetMessages<MarketDataMessage>().Last().TransactionId;
 		var c2 = adapter2.GetMessages<MarketDataMessage>().Last().TransactionId;
@@ -321,8 +321,8 @@ public class BasketMarketDataTests : BasketTestBase
 			ids[0].AssertEqual(transId, $"Tick {tick.SecurityId} should have parent subscription ID");
 		}
 
-		ticks.Any(t => t.GetSubscriptionIds().Contains(c1)).AssertFalse("Child1 ID must not appear");
-		ticks.Any(t => t.GetSubscriptionIds().Contains(c2)).AssertFalse("Child2 ID must not appear");
+		ticks.Where(t => t.GetSubscriptionIds().Contains(c1)).Count().AssertEqual(0, "Child1 ID must not appear");
+		ticks.Where(t => t.GetSubscriptionIds().Contains(c2)).Count().AssertEqual(0, "Child2 ID must not appear");
 
 		// State still consistent
 		subscriptionRouting.TryGetSubscription(transId, out _, out _, out _).AssertTrue();
@@ -383,8 +383,8 @@ public class BasketMarketDataTests : BasketTestBase
 
 		// Parent must wait for all children
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == transId)
-			.AssertFalse("Parent must wait for all children");
+			.Where(r => r.OriginalTransactionId == transId).Count()
+			.AssertEqual(0, "Parent must wait for all children");
 
 		// --- Adapter2 succeeds ---
 		await adapter2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
@@ -590,8 +590,8 @@ public class BasketMarketDataTests : BasketTestBase
 
 		// Parent must wait
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == parentId)
-			.AssertFalse("Parent should wait for all children");
+			.Count(r => r.OriginalTransactionId == parentId)
+			.AssertEqual(0, "Parent should wait for all children");
 
 		await a2.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
 		await a2.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = c2 }, TestContext.CancellationToken);
@@ -643,8 +643,8 @@ public class BasketMarketDataTests : BasketTestBase
 
 		// Parent waits
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == parentId)
-			.AssertFalse("Parent should wait for all children");
+			.Count(r => r.OriginalTransactionId == parentId)
+			.AssertEqual(0, "Parent should wait for all children");
 
 		await a2.SendOutMessageAsync(new SubscriptionResponseMessage
 		{
@@ -714,8 +714,8 @@ public class BasketMarketDataTests : BasketTestBase
 		}, TestContext.CancellationToken);
 
 		// --- Validate: only connected adapter receives ---
-		adapter1.GetMessages<SecurityLookupMessage>().Any().AssertTrue("Connected adapter should receive SecurityLookup");
-		adapter2.GetMessages<SecurityLookupMessage>().Any().AssertFalse("Failed adapter should NOT receive SecurityLookup");
+		adapter1.GetMessages<SecurityLookupMessage>().Count().AssertEqual(1, "Connected adapter should receive SecurityLookup");
+		adapter2.GetMessages<SecurityLookupMessage>().Count().AssertEqual(0, "Failed adapter should NOT receive SecurityLookup");
 
 		var childId = adapter1.GetMessages<SecurityLookupMessage>().Last().TransactionId;
 
@@ -761,8 +761,8 @@ public class BasketMarketDataTests : BasketTestBase
 			.Count(r => r.OriginalTransactionId == parentId)
 			.AssertEqual(1, "Exactly 1 parent response after all children responded");
 
-		GetOut<SubscriptionResponseMessage>().Any(r => r.OriginalTransactionId == c1).AssertFalse("Child1 leaked");
-		GetOut<SubscriptionResponseMessage>().Any(r => r.OriginalTransactionId == c2).AssertFalse("Child2 leaked");
+		GetOut<SubscriptionResponseMessage>().Count(r => r.OriginalTransactionId == c1).AssertEqual(0, "Child1 leaked");
+		GetOut<SubscriptionResponseMessage>().Count(r => r.OriginalTransactionId == c2).AssertEqual(0, "Child2 leaked");
 
 		connectionState.ConnectedCount.AssertEqual(2);
 		pendingState.Count.AssertEqual(0);
@@ -869,8 +869,8 @@ public class BasketMarketDataTests : BasketTestBase
 		}, TestContext.CancellationToken);
 
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == transId)
-			.AssertFalse("Parent should wait for adapter3");
+			.Count(r => r.OriginalTransactionId == transId)
+			.AssertEqual(0, "Parent should wait for adapter3");
 
 		// --- Adapter3 succeeds ---
 		await a3.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = c3 }, TestContext.CancellationToken);
@@ -1027,8 +1027,8 @@ public class BasketMarketDataTests : BasketTestBase
 			sec.OriginalTransactionId.AssertEqual(parentId, $"SecurityMessage {sec.SecurityId} OriginalTransactionId should be parent");
 		}
 
-		securities.Any(s => s.GetSubscriptionIds().Contains(c1)).AssertFalse("Child1 ID leaked");
-		securities.Any(s => s.GetSubscriptionIds().Contains(c2)).AssertFalse("Child2 ID leaked");
+		securities.Count(s => s.GetSubscriptionIds().Contains(c1)).AssertEqual(0, "Child1 ID leaked");
+		securities.Count(s => s.GetSubscriptionIds().Contains(c2)).AssertEqual(0, "Child2 ID leaked");
 
 		// State still valid
 		parentChildMap.TryGetParent(c1, out _).AssertTrue();
@@ -1120,8 +1120,8 @@ public class BasketMarketDataTests : BasketTestBase
 		securities.Length.AssertEqual(1);
 
 		var ids = securities[0].GetSubscriptionIds();
-		ids.Any(id => id == c1).AssertFalse("Child1 ID should be remapped");
-		ids.Any(id => id == c2).AssertFalse("Child2 ID should be remapped");
+		ids.Count(id => id == c1).AssertEqual(0, "Child1 ID should be remapped");
+		ids.Count(id => id == c2).AssertEqual(0, "Child2 ID should be remapped");
 		ids.All(id => id == parentId).AssertTrue("All IDs should be parent ID");
 
 		connectionState.ConnectedCount.AssertEqual(2);
@@ -1152,9 +1152,9 @@ public class BasketMarketDataTests : BasketTestBase
 		GetOut<SubscriptionFinishedMessage>()
 			.Count(m => m.OriginalTransactionId == parentId).AssertEqual(1);
 		GetOut<SubscriptionFinishedMessage>()
-			.Any(m => m.OriginalTransactionId == c1).AssertFalse("Child1 Finished leaked");
+			.Count(m => m.OriginalTransactionId == c1).AssertEqual(0, "Child1 Finished leaked");
 		GetOut<SubscriptionFinishedMessage>()
-			.Any(m => m.OriginalTransactionId == c2).AssertFalse("Child2 Finished leaked");
+			.Count(m => m.OriginalTransactionId == c2).AssertEqual(0, "Child2 Finished leaked");
 
 		connectionState.ConnectedCount.AssertEqual(2);
 		pendingState.Count.AssertEqual(0);
@@ -1234,10 +1234,10 @@ public class BasketMarketDataTests : BasketTestBase
 		var responses = GetOut<SubscriptionResponseMessage>().ToArray();
 		responses.Count(r => r.OriginalTransactionId == unsubId).AssertEqual(1,
 			"Exactly 1 response with unsubscribe transaction ID");
-		responses.Any(r => r.OriginalTransactionId == subId).AssertFalse(
+		responses.Count(r => r.OriginalTransactionId == subId).AssertEqual(0,
 			"No response with subscribe ID on unsubscribe");
-		responses.Any(r => r.OriginalTransactionId == childSubId).AssertFalse("Child subscribe ID leaked");
-		responses.Any(r => r.OriginalTransactionId == childUnsubId).AssertFalse("Child unsubscribe ID leaked");
+		responses.Count(r => r.OriginalTransactionId == childSubId).AssertEqual(0, "Child subscribe ID leaked");
+		responses.Count(r => r.OriginalTransactionId == childUnsubId).AssertEqual(0, "Child unsubscribe ID leaked");
 
 		// State after unsubscribe
 		connectionState.ConnectedCount.AssertEqual(1, "Connection unchanged");
@@ -1315,7 +1315,7 @@ public class BasketMarketDataTests : BasketTestBase
 			.Count(r => r.OriginalTransactionId == unsub1Id).AssertEqual(1,
 			"Exactly 1 response for unsubscribe #1");
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == sub1Id).AssertFalse(
+			.Count(r => r.OriginalTransactionId == sub1Id).AssertEqual(0,
 			"Subscribe #1 ID must not appear in unsubscribe response");
 
 		// State after unsub1
@@ -1354,9 +1354,9 @@ public class BasketMarketDataTests : BasketTestBase
 
 		// no old IDs leak
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == sub1Id).AssertFalse("Old subscribe #1 ID leaked");
+			.Count(r => r.OriginalTransactionId == sub1Id).AssertEqual(0, "Old subscribe #1 ID leaked");
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == unsub1Id).AssertFalse("Old unsubscribe #1 ID leaked");
+			.Count(r => r.OriginalTransactionId == unsub1Id).AssertEqual(0, "Old unsubscribe #1 ID leaked");
 
 		connectionState.ConnectedCount.AssertEqual(1);
 		pendingState.Count.AssertEqual(0);
@@ -1473,12 +1473,12 @@ public class BasketMarketDataTests : BasketTestBase
 
 		// no cross-contamination
 		var allResponses = GetOut<SubscriptionResponseMessage>();
-		allResponses.Any(r => r.OriginalTransactionId == sub1Id).AssertFalse("Sub1 ID leaked in unsub phase");
-		allResponses.Any(r => r.OriginalTransactionId == sub2Id).AssertFalse("Sub2 ID leaked in unsub phase");
-		allResponses.Any(r => r.OriginalTransactionId == childSub1).AssertFalse("Child sub1 leaked");
-		allResponses.Any(r => r.OriginalTransactionId == childSub2).AssertFalse("Child sub2 leaked");
-		allResponses.Any(r => r.OriginalTransactionId == childUnsub1).AssertFalse("Child unsub1 leaked");
-		allResponses.Any(r => r.OriginalTransactionId == childUnsub2).AssertFalse("Child unsub2 leaked");
+		allResponses.Count(r => r.OriginalTransactionId == sub1Id).AssertEqual(0, "Sub1 ID leaked in unsub phase");
+		allResponses.Count(r => r.OriginalTransactionId == sub2Id).AssertEqual(0, "Sub2 ID leaked in unsub phase");
+		allResponses.Count(r => r.OriginalTransactionId == childSub1).AssertEqual(0, "Child sub1 leaked");
+		allResponses.Count(r => r.OriginalTransactionId == childSub2).AssertEqual(0, "Child sub2 leaked");
+		allResponses.Count(r => r.OriginalTransactionId == childUnsub1).AssertEqual(0, "Child unsub1 leaked");
+		allResponses.Count(r => r.OriginalTransactionId == childUnsub2).AssertEqual(0, "Child unsub2 leaked");
 
 		connectionState.ConnectedCount.AssertEqual(1);
 		pendingState.Count.AssertEqual(0);
@@ -1559,15 +1559,15 @@ public class BasketMarketDataTests : BasketTestBase
 
 		// no sub ID, no child IDs
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == subId).AssertFalse("Subscribe ID leaked");
+			.Count(r => r.OriginalTransactionId == subId).AssertEqual(0, "Subscribe ID leaked");
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == childSub1).AssertFalse("Child sub1 leaked");
+			.Count(r => r.OriginalTransactionId == childSub1).AssertEqual(0, "Child sub1 leaked");
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == childSub2).AssertFalse("Child sub2 leaked");
+			.Count(r => r.OriginalTransactionId == childSub2).AssertEqual(0, "Child sub2 leaked");
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == unsub1.TransactionId).AssertFalse("Child unsub1 leaked");
+			.Count(r => r.OriginalTransactionId == unsub1.TransactionId).AssertEqual(0, "Child unsub1 leaked");
 		GetOut<SubscriptionResponseMessage>()
-			.Any(r => r.OriginalTransactionId == unsub2.TransactionId).AssertFalse("Child unsub2 leaked");
+			.Count(r => r.OriginalTransactionId == unsub2.TransactionId).AssertEqual(0, "Child unsub2 leaked");
 
 		connectionState.ConnectedCount.AssertEqual(2);
 		pendingState.Count.AssertEqual(0);

@@ -137,7 +137,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 		var result = await ctx.Manager.ProcessInMessageAsync(mdMsg, a => a, CancellationToken);
 
 		// Verify routing decisions exist
-		result.RoutingDecisions.Count.AssertGreater(0, "Should have routing decisions");
+		result.RoutingDecisions.Count.AssertEqual(1, "Should have routing decisions");
 		result.Handled.AssertTrue("Message should be handled");
 		result.IsPended.AssertFalse("Message should not be pended");
 		result.OutMessages.Count.AssertEqual(0, "Should not have out messages for successful routing");
@@ -216,7 +216,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 		};
 
 		var subscribeResult = await ctx.Manager.ProcessInMessageAsync(subscribeMsg, a => a, CancellationToken);
-		subscribeResult.RoutingDecisions.Count.AssertGreater(0);
+		subscribeResult.RoutingDecisions.Count.AssertEqual(1);
 
 		// Verify subscription exists
 		ctx.SubscriptionRouting.TryGetSubscription(subscribeTransId, out _, out _, out _).AssertTrue();
@@ -290,7 +290,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 		result.RoutingDecisions.Count.AssertEqual(0, "Should not have routing decisions when pended");
 		result.OutMessages.Count.AssertEqual(0, "Should not have out messages when pended");
 		result.LoopbackMessages.Count.AssertEqual(0, "Should not have loopback messages when pended");
-		ctx.PendingState.Count.AssertGreater(0, "Message should be in pending state");
+		ctx.PendingState.Count.AssertEqual(1, "Message should be in pending state");
 	}
 
 	#endregion
@@ -488,7 +488,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 		dataResult.TransformedMessage.AssertNotNull("Data should be forwarded");
 		var ids = ((ISubscriptionIdMessage)dataResult.TransformedMessage).GetSubscriptionIds();
 		ids.Contains(parentTransId).AssertTrue("Should contain parent ID");
-		ids.Contains(childTransId).AssertFalse("Should NOT contain child ID");
+		ids.Count(id => id == childTransId).AssertEqual(0, "Should NOT contain child ID");
 	}
 
 	[TestMethod]
@@ -542,8 +542,8 @@ public class BasketRoutingManagerTests : BaseTestClass
 		dataResult.TransformedMessage.AssertNotNull("Data should be forwarded");
 		var ids = ((ISubscriptionIdMessage)dataResult.TransformedMessage).GetSubscriptionIds();
 		ids.Contains(parentTransId).AssertTrue("Should remap to parent ID");
-		ids.Contains(childId1).AssertFalse("Child1 ID should NOT leak");
-		ids.Contains(childId2).AssertFalse("Child2 ID should NOT leak");
+		ids.Count(id => id == childId1).AssertEqual(0, "Child1 ID should NOT leak");
+		ids.Count(id => id == childId2).AssertEqual(0, "Child2 ID should NOT leak");
 	}
 
 	[TestMethod]
@@ -593,7 +593,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 		dataResult.TransformedMessage.AssertNotNull("Data should still be forwarded after one child finished");
 		var ids = ((ISubscriptionIdMessage)dataResult.TransformedMessage).GetSubscriptionIds();
 		ids.Contains(parentTransId).AssertTrue("Should remap to parent ID");
-		ids.Contains(childId2).AssertFalse("Child ID should not leak");
+		ids.Count(id => id == childId2).AssertEqual(0, "Child ID should not leak");
 	}
 
 	[TestMethod]
@@ -831,7 +831,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 
 		ctx.Manager.Reset(false);
 
-		ctx.PendingState.Count.AssertGreater(0, "Pending should be preserved when clearPending=false");
+		ctx.PendingState.Count.AssertEqual(1, "Pending should be preserved when clearPending=false");
 	}
 
 	#endregion
@@ -910,7 +910,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 
 		var result = await ctx.Manager.ProcessInMessageAsync(lookupMsg, a => a, CancellationToken);
 
-		result.RoutingDecisions.Count.AssertGreater(0, "Should have routing decisions");
+		result.RoutingDecisions.Count.AssertEqual(1, "Should have routing decisions");
 		result.Handled.AssertTrue("Should be handled");
 
 		// Verify child mapping

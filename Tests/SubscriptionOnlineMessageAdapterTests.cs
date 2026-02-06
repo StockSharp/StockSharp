@@ -81,15 +81,15 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 			DataType2 = DataType.Ticks,
 		}, CancellationToken);
 
-		inner.InMessages.OfType<MarketDataMessage>().Any(m => m.TransactionId == 100 && m.IsSubscribe).AssertTrue("Subscribe should reach inner");
+		inner.InMessages.OfType<MarketDataMessage>().Count(m => m.TransactionId == 100 && m.IsSubscribe).AssertEqual(1, "Subscribe should reach inner");
 
 		// Inner sends back SubscriptionResponse OK
 		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
-		output.OfType<SubscriptionResponseMessage>().Any(m => m.OriginalTransactionId == 100 && m.IsOk()).AssertTrue("Response should flow out");
+		output.OfType<SubscriptionResponseMessage>().Count(m => m.OriginalTransactionId == 100 && m.IsOk()).AssertEqual(1, "Response should flow out");
 
 		// Inner sends back SubscriptionOnline
 		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
-		output.OfType<SubscriptionOnlineMessage>().Any(m => m.OriginalTransactionId == 100).AssertTrue("Online should flow out");
+		output.OfType<SubscriptionOnlineMessage>().Count(m => m.OriginalTransactionId == 100).AssertEqual(1, "Online should flow out");
 
 		output.Clear();
 
@@ -108,7 +108,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 		output.Count.AssertEqual(1, $"Tick should flow through, got {output.Count} messages");
 		var receivedTick = (ExecutionMessage)output[0];
 		receivedTick.TradePrice.AssertEqual(50000m);
-		receivedTick.GetSubscriptionIds().Contains(100).AssertTrue("Subscription ID should be set");
+		receivedTick.GetSubscriptionIds().Count(id => id == 100).AssertEqual(1, "Subscription ID should be set");
 	}
 
 	[TestMethod]
@@ -150,7 +150,7 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 		output.Count.AssertEqual(1, $"Tick should flow through by key lookup, got {output.Count}");
 		var receivedTick = (ExecutionMessage)output[0];
 		receivedTick.TradePrice.AssertEqual(42000m);
-		receivedTick.GetSubscriptionIds().Contains(100).AssertTrue("Manager should assign subscription ID");
+		receivedTick.GetSubscriptionIds().Count(id => id == 100).AssertEqual(1, "Manager should assign subscription ID");
 	}
 
 	[TestMethod]
@@ -190,10 +190,10 @@ public class SubscriptionOnlineMessageAdapterTests : BaseTestClass
 		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		// Data in Active state IS forwarded (it's historical data before the live stream starts)
-		output.OfType<ExecutionMessage>().Any().AssertTrue("Historical data in Active state should be forwarded");
+		output.OfType<ExecutionMessage>().Count().AssertEqual(1, "Historical data in Active state should be forwarded");
 		var receivedTick = output.OfType<ExecutionMessage>().First();
 		receivedTick.TradePrice.AssertEqual(30000m);
-		receivedTick.GetSubscriptionIds().Contains(100).AssertTrue("Should have subscription ID set");
+		receivedTick.GetSubscriptionIds().Count(id => id == 100).AssertEqual(1, "Should have subscription ID set");
 	}
 
 	#endregion

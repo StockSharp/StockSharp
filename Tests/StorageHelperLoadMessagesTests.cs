@@ -260,10 +260,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			outMessages.Add(msg);
 
 		context.HasData.AssertTrue();
-		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
+		outMessages.OfType<SubscriptionResponseMessage>().Count().AssertEqual(1);
 
 		var level1 = outMessages.OfType<Level1ChangeMessage>().ToArray();
-		(level1.Length > 0).AssertTrue();
+		level1.Length.AssertEqual(2);
 
 		level1.All(m => m.SubscriptionId == 200 && m.OriginalTransactionId == 200 && m.OfflineMode == MessageOfflineModes.Ignore).AssertTrue();
 	}
@@ -300,10 +300,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			outMessages.Add(msg);
 
 		context.HasData.AssertTrue();
-		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
+		outMessages.OfType<SubscriptionResponseMessage>().Count().AssertEqual(1);
 
 		var depths = outMessages.OfType<QuoteChangeMessage>().ToArray();
-		(depths.Length > 0).AssertTrue();
+		depths.Length.AssertEqual(2);
 		depths.All(m => m.SubscriptionId == 300 && m.OriginalTransactionId == 300 && m.OfflineMode == MessageOfflineModes.Ignore).AssertTrue();
 	}
 
@@ -339,10 +339,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			outMessages.Add(msg);
 
 		context.HasData.AssertTrue();
-		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
+		outMessages.OfType<SubscriptionResponseMessage>().Count().AssertEqual(1);
 
 		var ticks = outMessages.OfType<ExecutionMessage>().ToArray();
-		(ticks.Length > 0).AssertTrue();
+		ticks.Length.AssertEqual(2);
 		ticks.All(m => m.SubscriptionId == 400 && m.OriginalTransactionId == 400 && m.OfflineMode == MessageOfflineModes.Ignore).AssertTrue();
 	}
 
@@ -382,7 +382,7 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			outMessages.Add(msg);
 
 		context.HasData.AssertTrue();
-		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
+		outMessages.OfType<SubscriptionResponseMessage>().Count().AssertEqual(1);
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
 		candles.Length.AssertEqual(2);
@@ -427,7 +427,7 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			outMessages.Add(msg);
 
 		context.HasData.AssertTrue();
-		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
+		outMessages.OfType<SubscriptionResponseMessage>().Count().AssertEqual(1);
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
 		candles.Length.AssertEqual(2);
@@ -471,7 +471,7 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			outMessages.Add(msg);
 
 		context.HasData.AssertTrue();
-		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
+		outMessages.OfType<SubscriptionResponseMessage>().Count().AssertEqual(1);
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
 		candles.Length.AssertEqual(2);
@@ -515,7 +515,7 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 			outMessages.Add(msg);
 
 		context.HasData.AssertTrue();
-		outMessages.OfType<SubscriptionResponseMessage>().Any().AssertTrue();
+		outMessages.OfType<SubscriptionResponseMessage>().Count().AssertEqual(1);
 
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
 		candles.Length.AssertEqual(2);

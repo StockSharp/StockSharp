@@ -75,7 +75,7 @@ public class EntityCacheTests : BaseTestClass
 
 		_cache.AddOrderByRegistrationId(order);
 
-		_cache.Orders.Contains(order).AssertTrue();
+		_cache.Orders.Count(o => o == order).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -328,7 +328,7 @@ public class EntityCacheTests : BaseTestClass
 
 		_cache.AddFail(OrderOperations.Register, fail);
 
-		_cache.OrderRegisterFails.Contains(fail).AssertTrue();
+		_cache.OrderRegisterFails.Count(f => f == fail).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -339,7 +339,7 @@ public class EntityCacheTests : BaseTestClass
 
 		_cache.AddFail(OrderOperations.Cancel, fail);
 
-		_cache.OrderCancelFails.Contains(fail).AssertTrue();
+		_cache.OrderCancelFails.Count(f => f == fail).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -350,7 +350,7 @@ public class EntityCacheTests : BaseTestClass
 
 		_cache.AddFail(OrderOperations.Edit, fail);
 
-		_cache.OrderEditFails.Contains(fail).AssertTrue();
+		_cache.OrderEditFails.Count(f => f == fail).AssertEqual(1);
 	}
 
 	private Order CreateOrder()

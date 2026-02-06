@@ -260,7 +260,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		var dataTypes = await manager.GetSupportedDataTypesAsync(secId).ToListAsync(CancellationToken);
 
-		dataTypes.Contains(DataType.Ticks).AssertTrue();
+		dataTypes.Count(dt => dt == DataType.Ticks).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -275,8 +275,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var dataTypes = await manager.GetSupportedDataTypesAsync(secId).ToListAsync(CancellationToken);
 
 		dataTypes.Count.AssertEqual(2);
-		dataTypes.Contains(DataType.Ticks).AssertTrue();
-		dataTypes.Contains(DataType.Level1).AssertTrue();
+		dataTypes.Count(dt => dt == DataType.Ticks).AssertEqual(1);
+		dataTypes.Count(dt => dt == DataType.Level1).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -293,10 +293,10 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var dataTypes2 = await manager.GetSupportedDataTypesAsync(secId2).ToListAsync(CancellationToken);
 
 		dataTypes1.Count.AssertEqual(1);
-		dataTypes1.Contains(DataType.Ticks).AssertTrue();
+		dataTypes1.Count(dt => dt == DataType.Ticks).AssertEqual(1);
 
 		dataTypes2.Count.AssertEqual(1);
-		dataTypes2.Contains(DataType.Level1).AssertTrue();
+		dataTypes2.Count(dt => dt == DataType.Level1).AssertEqual(1);
 	}
 
 	#endregion
@@ -855,7 +855,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		// Verify registration is tracked
 		manager.HasGenerator(secId, DataType.Ticks).AssertTrue("Generator should be registered");
-		(await manager.GetSupportedDataTypesAsync(secId).ToListAsync(CancellationToken)).Contains(DataType.Ticks).AssertTrue("Data type should be supported");
+		(await manager.GetSupportedDataTypesAsync(secId).ToListAsync(CancellationToken)).Count(dt => dt == DataType.Ticks).AssertEqual(1, "Data type should be supported");
 
 		// Unregister
 		var result = manager.UnregisterGenerator(1);
@@ -884,8 +884,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		manager.HasGenerator(secId, DataType.MarketDepth).AssertTrue();
 
 		var dataTypes = await manager.GetSupportedDataTypesAsync(secId).ToListAsync(CancellationToken);
-		dataTypes.Contains(DataType.Ticks).AssertTrue();
-		dataTypes.Contains(DataType.MarketDepth).AssertTrue();
+		dataTypes.Count(dt => dt == DataType.Ticks).AssertEqual(1);
+		dataTypes.Count(dt => dt == DataType.MarketDepth).AssertEqual(1);
 
 		// Unregister one
 		manager.UnregisterGenerator(1);
@@ -1015,8 +1015,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		manager.HasGenerator(secId2, DataType.Ticks).AssertTrue();
 		manager.HasGenerator(secId1, DataType.MarketDepth).AssertFalse();
 
-		(await manager.GetSupportedDataTypesAsync(secId1).ToListAsync(CancellationToken)).Contains(DataType.Ticks).AssertTrue();
-		(await manager.GetSupportedDataTypesAsync(secId2).ToListAsync(CancellationToken)).Contains(DataType.Ticks).AssertTrue();
+		(await manager.GetSupportedDataTypesAsync(secId1).ToListAsync(CancellationToken)).Count(dt => dt == DataType.Ticks).AssertEqual(1);
+		(await manager.GetSupportedDataTypesAsync(secId2).ToListAsync(CancellationToken)).Count(dt => dt == DataType.Ticks).AssertEqual(1);
 
 		// Unregister one security's generator
 		manager.UnregisterGenerator(1);

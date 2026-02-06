@@ -174,9 +174,9 @@ public class OrderBookTruncateManagerTests : BaseTestClass
 		if (forward is QuoteChangeMessage fwd)
 			totalBooks.Add(fwd);
 
-		totalBooks.Count.AssertGreater(0, "Remaining subscription should still get truncated book");
+		totalBooks.Count.AssertEqual(1, "Remaining subscription should still get truncated book");
 		var book = totalBooks[0];
-		book.GetSubscriptionIds().Contains(2L).AssertTrue("Should have remaining subscription ID");
+		book.GetSubscriptionIds().Count(id => id == 2L).AssertEqual(1, "Should have remaining subscription ID");
 		book.Bids.Length.AssertEqual(3, "Should truncate to depth 3");
 	}
 
@@ -226,7 +226,7 @@ public class OrderBookTruncateManagerTests : BaseTestClass
 		if (forward is QuoteChangeMessage fwd)
 			totalBooks.Add(fwd);
 
-		totalBooks.Count.AssertGreater(0, "Remaining subscription should still get truncated book");
+		totalBooks.Count.AssertEqual(1, "Remaining subscription should still get truncated book");
 		var book = totalBooks[0];
 		book.Bids.Length.AssertEqual(4, "Should truncate to depth 4");
 	}
@@ -304,12 +304,12 @@ public class OrderBookTruncateManagerTests : BaseTestClass
 		if (forward is QuoteChangeMessage fwd)
 			totalBooks = [.. totalBooks, fwd];
 
-		totalBooks.Length.AssertGreater(0, "Should produce truncated books");
+		totalBooks.Length.AssertEqual(2, "Should produce truncated books");
 
 		// Check that subscription IDs are distributed correctly
 		var allIds = totalBooks.SelectMany(b => b.GetSubscriptionIds()).Distinct().OrderBy(x => x).ToArray();
-		allIds.Contains(1L).AssertTrue("Should contain subscription 1");
-		allIds.Contains(2L).AssertTrue("Should contain subscription 2");
+		allIds.Count(id => id == 1L).AssertEqual(1, "Should contain subscription 1");
+		allIds.Count(id => id == 2L).AssertEqual(1, "Should contain subscription 2");
 	}
 
 	[TestMethod]
@@ -350,7 +350,7 @@ public class OrderBookTruncateManagerTests : BaseTestClass
 		if (forward is QuoteChangeMessage fwd)
 			totalBooks.Add(fwd);
 
-		totalBooks.Count.AssertGreater(0, "Should produce at least one book");
+		totalBooks.Count.AssertEqual(1, "Should produce at least one book");
 
 		// Find the book that contains both IDs
 		var bookWithBothIds = totalBooks.FirstOrDefault(b =>
@@ -396,10 +396,10 @@ public class OrderBookTruncateManagerTests : BaseTestClass
 		if (forward is QuoteChangeMessage fwd)
 			totalBooks.Add(fwd);
 
-		totalBooks.Count.AssertGreater(0, "Should produce at least one book");
+		totalBooks.Count.AssertEqual(2, "Should produce at least one book");
 
 		var allIds = totalBooks.SelectMany(b => b.GetSubscriptionIds()).Distinct().ToArray();
-		allIds.Contains(1L).AssertTrue("Known ID should be present");
+		allIds.Count(id => id == 1L).AssertEqual(1, "Known ID should be present");
 	}
 
 	#region Status Message Handling

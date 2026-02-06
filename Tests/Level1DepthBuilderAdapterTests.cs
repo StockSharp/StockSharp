@@ -134,7 +134,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 
 		await inner.SendOutMessageAsync(CreateBestBidAsk(secId, DateTime.UtcNow, [1, 2], bidPrice: 100, askPrice: 101, bidVolume: 10, askVolume: 20), CancellationToken);
 
-		output.OfType<Level1ChangeMessage>().Any().AssertFalse();
+		output.OfType<Level1ChangeMessage>().Count().AssertEqual(0);
 
 		var book = output.OfType<QuoteChangeMessage>().Single();
 		book.GetSubscriptionIds().OrderBy(i => i).SequenceEqual([1L, 2L]).AssertTrue();
@@ -151,7 +151,7 @@ public class Level1DepthBuilderAdapterTests : BaseTestClass
 
 		await inner.SendOutMessageAsync(CreateBestBidAsk(secId, DateTime.UtcNow.AddSeconds(1), [2], bidPrice: 101, askPrice: 102, bidVolume: 11, askVolume: 21), CancellationToken);
 
-		output.OfType<Level1ChangeMessage>().Any().AssertFalse();
+		output.OfType<Level1ChangeMessage>().Count().AssertEqual(0);
 
 		book = output.OfType<QuoteChangeMessage>().Single();
 		book.GetSubscriptionIds().SequenceEqual([2L]).AssertTrue();

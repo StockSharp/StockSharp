@@ -1448,8 +1448,8 @@ public class BacktestingTests : BaseTestClass
 		foreach (var e in execMsgs)
 			Console.WriteLine($"  ExecMsg: HasOrderInfo={e.HasOrderInfo}, HasTradeInfo={e.HasTradeInfo}, State={e.OrderState}, OrigTransId={e.OriginalTransactionId}");
 
-		IsTrue(execMsgs.Count > 0, "Expected at least one ExecutionMessage for the order");
-		IsTrue(execMsgs.Any(e => e.HasOrderInfo), "Expected ExecutionMessage with order info");
+		execMsgs.Count.AssertGreater(0, "Expected at least one ExecutionMessage for the order");
+		execMsgs.Count(e => e.HasOrderInfo).AssertEqual(1, "Expected ExecutionMessage with order info");
 	}
 
 	/// <summary>

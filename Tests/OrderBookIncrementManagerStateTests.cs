@@ -109,8 +109,8 @@ public class OrderBookIncrementManagerStateTests : BaseTestClass
 
 		result.AssertNotNull();
 		// Both subscription IDs should be returned since they share the builder
-		subscriptionIds.Contains(1L).AssertTrue();
-		subscriptionIds.Contains(2L).AssertTrue();
+		subscriptionIds.Count(id => id == 1L).AssertEqual(1);
+		subscriptionIds.Count(id => id == 2L).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -133,7 +133,7 @@ public class OrderBookIncrementManagerStateTests : BaseTestClass
 		result.Asks[0].Price.AssertEqual(101m);
 		result.Asks[0].Volume.AssertEqual(20m);
 		subscriptionIds.AssertNotNull();
-		subscriptionIds.Contains(1L).AssertTrue();
+		subscriptionIds.Count(id => id == 1L).AssertEqual(1);
 	}
 
 	[TestMethod]

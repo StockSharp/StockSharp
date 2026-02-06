@@ -72,9 +72,9 @@ public class SubscriptionRoutingStateTests : BaseTestClass
 		var subscribers = state.GetSubscribers(DataType.Ticks);
 
 		subscribers.Length.AreEqual(2);
-		subscribers.Contains(1L).AssertTrue();
-		subscribers.Contains(2L).AssertTrue();
-		subscribers.Contains(3L).AssertFalse();
+		subscribers.Count(id => id == 1L).AssertEqual(1);
+		subscribers.Count(id => id == 2L).AssertEqual(1);
+		subscribers.Count(id => id == 3L).AssertEqual(0);
 	}
 
 	[TestMethod]

@@ -116,8 +116,8 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		subscription.State.AssertEqual(SubscriptionStates.Finished);
 
 		// Subscription should be removed from manager
-		manager.Subscriptions.Any(s => s.TransactionId == transId)
-			.AssertFalse("Finished subscription should be removed");
+		manager.Subscriptions.Count(s => s.TransactionId == transId)
+			.AssertEqual(0, "Finished subscription should be removed");
 	}
 
 	[TestMethod]
@@ -128,7 +128,7 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		var transId = SubscribeAndActivate(manager, subscription);
 
 		var unsubActions = manager.UnSubscribe(subscription);
-		unsubActions.Items.Length.AssertGreater(0, "Unsubscribe should produce SendInMessage action");
+		unsubActions.Items.Length.AssertEqual(1, "Unsubscribe should produce SendInMessage action");
 
 		// Get the unsubscribe transaction ID
 		var unsubMsg = (MarketDataMessage)unsubActions.Items[0].Message;
@@ -143,8 +143,8 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		subscription.State.AssertEqual(SubscriptionStates.Stopped);
 
 		// Subscription should be removed
-		manager.Subscriptions.Any(s => s.TransactionId == transId)
-			.AssertFalse("Unsubscribed subscription should be removed");
+		manager.Subscriptions.Count(s => s.TransactionId == transId)
+			.AssertEqual(0, "Unsubscribed subscription should be removed");
 	}
 
 	#endregion
@@ -234,8 +234,8 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		unexpectedCancelled.AssertFalse("Not unexpected if never was active");
 
 		// Subscription should be removed
-		manager.Subscriptions.Any(s => s.TransactionId == transId)
-			.AssertFalse("Errored subscription should be removed");
+		manager.Subscriptions.Count(s => s.TransactionId == transId)
+			.AssertEqual(0, "Errored subscription should be removed");
 	}
 
 	[TestMethod]
@@ -496,12 +496,12 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		var actions = manager.UnSubscribe(subscription);
 
 		// Should NOT produce SendInMessage (removed locally without sending)
-		actions.Items.Any(i => i.Type == ConnectorSubscriptionManager.Actions.Item.Types.SendInMessage)
-			.AssertFalse("No message should be sent when disconnected with sendUnsubscribeWhenDisconnected=false");
+		actions.Items.Count(i => i.Type == ConnectorSubscriptionManager.Actions.Item.Types.SendInMessage)
+			.AssertEqual(0, "No message should be sent when disconnected with sendUnsubscribeWhenDisconnected=false");
 
 		// Subscription should be removed locally
-		manager.Subscriptions.Any(s => s.TransactionId == transId)
-			.AssertFalse("Subscription should be removed locally on disconnect");
+		manager.Subscriptions.Count(s => s.TransactionId == transId)
+			.AssertEqual(0, "Subscription should be removed locally on disconnect");
 	}
 
 	#endregion
@@ -611,8 +611,8 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		subscription.State.AssertEqual(SubscriptionStates.Online);
 
 		// Data should be found for this subscription
-		manager.GetSubscriptions(CreateDataMessage(transId1)).Any()
-			.AssertTrue("Subscription should be active in cycle 1");
+		manager.GetSubscriptions(CreateDataMessage(transId1)).Count()
+			.AssertEqual(1, "Subscription should be active in cycle 1");
 
 		// Unsubscribe
 		var unsub1 = manager.UnSubscribe(subscription);
@@ -624,8 +624,8 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		subscription.State.AssertEqual(SubscriptionStates.Stopped);
 
 		// Old TransactionId should no longer work
-		manager.GetSubscriptions(CreateDataMessage(transId1)).Any()
-			.AssertFalse("Old subscription ID should not work after unsubscribe");
+		manager.GetSubscriptions(CreateDataMessage(transId1)).Count()
+			.AssertEqual(0, "Old subscription ID should not work after unsubscribe");
 
 		// === Cycle 2: Re-subscribe → Online ===
 		manager.Subscribe(subscription);
@@ -643,12 +643,12 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		subscription.State.AssertEqual(SubscriptionStates.Online);
 
 		// Data should be found for new subscription ID
-		manager.GetSubscriptions(CreateDataMessage(transId2)).Any()
-			.AssertTrue("Subscription should be active in cycle 2");
+		manager.GetSubscriptions(CreateDataMessage(transId2)).Count()
+			.AssertEqual(1, "Subscription should be active in cycle 2");
 
 		// Old ID should still not work
-		manager.GetSubscriptions(CreateDataMessage(transId1)).Any()
-			.AssertFalse("Old ID from cycle 1 should still not work");
+		manager.GetSubscriptions(CreateDataMessage(transId1)).Count()
+			.AssertEqual(0, "Old ID from cycle 1 should still not work");
 	}
 
 	[TestMethod]
@@ -780,10 +780,10 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		var actions = manager.Subscribe(subscription);
 
 		// Should have both SendInMessage and AddOrderStatus actions
-		actions.Items.Any(i => i.Type == ConnectorSubscriptionManager.Actions.Item.Types.SendInMessage)
-			.AssertTrue("Should produce SendInMessage");
-		actions.Items.Any(i => i.Type == ConnectorSubscriptionManager.Actions.Item.Types.AddOrderStatus)
-			.AssertTrue("Should produce AddOrderStatus action");
+		actions.Items.Count(i => i.Type == ConnectorSubscriptionManager.Actions.Item.Types.SendInMessage)
+			.AssertEqual(1, "Should produce SendInMessage");
+		actions.Items.Count(i => i.Type == ConnectorSubscriptionManager.Actions.Item.Types.AddOrderStatus)
+			.AssertEqual(1, "Should produce AddOrderStatus action");
 	}
 
 	[TestMethod]
@@ -795,8 +795,8 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 
 		var actions = manager.UnSubscribe(subscription);
 
-		actions.Items.Any(i => i.Type == ConnectorSubscriptionManager.Actions.Item.Types.RemoveOrderStatus)
-			.AssertTrue("Should produce RemoveOrderStatus action");
+		actions.Items.Count(i => i.Type == ConnectorSubscriptionManager.Actions.Item.Types.RemoveOrderStatus)
+			.AssertEqual(1, "Should produce RemoveOrderStatus action");
 	}
 
 	#endregion
@@ -896,8 +896,8 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		var subs = manager.GetSubscriptions(CreateDataMessage(transId1, transId2)).ToArray();
 
 		subs.Length.AssertEqual(2, "Should return both subscriptions for joined message");
-		subs.Any(s => s.TransactionId == transId1).AssertTrue("Should contain first subscription");
-		subs.Any(s => s.TransactionId == transId2).AssertTrue("Should contain second subscription");
+		subs.Count(s => s.TransactionId == transId1).AssertEqual(1, "Should contain first subscription");
+		subs.Count(s => s.TransactionId == transId2).AssertEqual(1, "Should contain second subscription");
 	}
 
 	[TestMethod]
@@ -974,7 +974,7 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 		SubscribeAndActivate(manager, sub);
 
 		var secIds = manager.GetSubscribers(DataType.Ticks).ToArray();
-		secIds.Length.AssertGreater(0, "Should return security IDs for active tick subscriptions");
+		secIds.Length.AssertEqual(1, "Should return security IDs for active tick subscriptions");
 	}
 
 	[TestMethod]
@@ -1017,7 +1017,7 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 
 		manager.ClearCache();
 
-		manager.Subscriptions.Any().AssertFalse("ClearCache should remove all subscriptions");
+		manager.Subscriptions.Count().AssertEqual(0, "ClearCache should remove all subscriptions");
 	}
 
 	[TestMethod]

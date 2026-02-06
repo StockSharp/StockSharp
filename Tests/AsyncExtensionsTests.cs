@@ -287,7 +287,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await Task.Delay(100, CancellationToken);
 
 		// Check events were received
-		orderReceived.Count.AssertGreater(0);
+		orderReceived.Count.AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -627,7 +627,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		runCts.Cancel();
 		await run.WithCancellation(CancellationToken);
 
-		IsTrue(adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id));
+		adapter.SentMessages.OfType<MarketDataMessage>().Count(m => !m.IsSubscribe && m.OriginalTransactionId == id).AssertEqual(1);
 	}
 
 	#region SubscribeAsync Bug Tests
@@ -1533,7 +1533,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await Task.Delay(100, CancellationToken);
 
 		// Debug check: did OrderReceived fire?
-		allOrderReceived.Count.AssertGreater(0, $"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
+		allOrderReceived.Count.AssertEqual(1, $"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
 
 		// Simulate order filled
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
@@ -1542,7 +1542,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Connector fires OrderReceived for multiple state transitions (Pending, Active, Done)
 		// Since Order is mutable, all events reference the same object with final state
-		events.Count.AssertGreater(0, "Should receive at least one event");
+		events.Count.AssertEqual(2, "Should receive events for Active and Done states");
 		AreEqual(OrderStates.Done, order.State);
 		AreEqual(123L, order.Id);
 	}
@@ -1598,7 +1598,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Connector fires OrderReceived for state transitions AND OwnTradeReceived for trades
 		// Since Order is mutable, all order references show final state
-		events.Count.AssertGreater(3, "Should receive events for order states and trades");
+		events.Count.AssertEqual(4, "Should receive events for order states and trades");
 
 		// Verify final order state
 		AreEqual(OrderStates.Done, order.State);
@@ -1606,7 +1606,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Verify we received trade events
 		var tradeEvents = events.Where(e => e.trade != null).ToList();
-		tradeEvents.Count.AssertGreater(1, "Should have received trade events");
+		tradeEvents.Count.AssertEqual(2, "Should have received trade events");
 
 		// Verify trade prices are present in events
 		var tradePrices = tradeEvents.Select(e => e.trade.Trade.Price).ToList();
@@ -1739,7 +1739,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await enumTask.WithCancellation(CancellationToken);
 
 		// Verify we received events for our order only
-		events.Count.AssertGreater(0, "Should receive events for our order");
+		events.Count.AssertEqual(3, "Should receive events for our order (Active, Trade, Done)");
 
 		// Verify final order state - all events reference the same mutable Order
 		AreEqual(OrderStates.Done, order.State);
@@ -1747,11 +1747,11 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Verify we received the trade for our order
 		var tradeEvents = events.Where(e => e.trade != null).ToList();
-		tradeEvents.Count.AssertGreater(0, "Should have received our trade");
-		tradeEvents.Any(e => e.trade.Trade.Price == 100.5m).AssertTrue("Should have our trade at 100.5");
+		tradeEvents.Count.AssertEqual(1, "Should have received our trade");
+		tradeEvents.Count(e => e.trade.Trade.Price == 100.5m).AssertEqual(1, "Should have our trade at 100.5");
 
 		// Verify we did NOT receive trades from other orders
-		tradeEvents.Any(e => e.trade.Trade.Price == 50m).AssertFalse("Should NOT have trade from other order at 50");
+		tradeEvents.Count(e => e.trade.Trade.Price == 50m).AssertEqual(0, "Should NOT have trade from other order at 50");
 	}
 
 	[TestMethod]
@@ -1814,7 +1814,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Connector fires multiple events for order updates and trades
 		// Since Order is mutable, all order references show final state
-		events.Count.AssertGreater(5, "Should receive events for states and trades");
+		events.Count.AssertEqual(6, "Should receive events for states and trades");
 
 		// Verify final order state
 		AreEqual(OrderStates.Done, order.State);
@@ -1822,7 +1822,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Verify we received all 3 trades
 		var tradeEvents = events.Where(e => e.trade != null).ToList();
-		tradeEvents.Count.AssertGreater(2, "Should have received all 3 trades");
+		tradeEvents.Count.AssertEqual(3, "Should have received all 3 trades");
 
 		// Verify trade prices
 		var tradePrices = tradeEvents.Select(e => e.trade.Trade.Price).ToList();
@@ -1923,7 +1923,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		messages[1].TradePrice.AssertEqual(101);
 
 		// Verify disconnect was sent
-		adapter.InMessages.OfType<DisconnectMessage>().Any().AssertTrue();
+		adapter.InMessages.OfType<DisconnectMessage>().Count().AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -1990,7 +1990,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Verify disconnect was sent
 		await WaitForConditionAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5));
-		adapter.InMessages.OfType<DisconnectMessage>().Any().AssertTrue();
+		adapter.InMessages.OfType<DisconnectMessage>().Count().AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -2065,7 +2065,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Verify disconnect was sent (finally block should execute)
 		await WaitForConditionAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5));
-		adapter.InMessages.OfType<DisconnectMessage>().Any().AssertTrue();
+		adapter.InMessages.OfType<DisconnectMessage>().Count().AssertEqual(1);
 	}
 
 	private async Task WaitForConditionAsync(Func<bool> condition, TimeSpan timeout)

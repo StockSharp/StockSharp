@@ -153,7 +153,7 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 
 		await inner.SendOutMessageAsync(CreateOrderLog(secId, DateTime.UtcNow.AddSeconds(1), subscriptionIds: [1]), CancellationToken);
 
-		output.OfType<ExecutionMessage>().Any().AssertFalse();
+		output.OfType<ExecutionMessage>().Count().AssertEqual(0);
 
 		var depth = output.OfType<QuoteChangeMessage>().Single();
 		depth.GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();

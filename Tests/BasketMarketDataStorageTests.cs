@@ -561,7 +561,7 @@ public class BasketMarketDataStorageTests : BaseTestClass
 
 		// Should have data from both storages
 		IsTrue(loaded.Count >= 100, $"Expected at least 100 items, got {loaded.Count}");
-		IsTrue(loaded.Any(t => t.SecurityId == secId1), "Missing AAPL data");
+		AreEqual(100, loaded.Count(t => t.SecurityId == secId1), "Missing AAPL data");
 	}
 
 	[TestMethod]

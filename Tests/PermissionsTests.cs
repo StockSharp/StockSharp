@@ -43,8 +43,8 @@ public class PermissionsTests : BaseTestClass
 		};
 
 		creds.IpRestrictions.Count().AssertEqual(2);
-		creds.IpRestrictions.Contains(_ip1).AssertTrue();
-		creds.IpRestrictions.Contains(_ip2).AssertTrue();
+		creds.IpRestrictions.Count(ip => ip.Equals(_ip1)).AssertEqual(1);
+		creds.IpRestrictions.Count(ip => ip.Equals(_ip2)).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -68,7 +68,7 @@ public class PermissionsTests : BaseTestClass
 		creds.Permissions[UserPermissions.Trading] = dict;
 
 		creds.Permissions.Count.AssertEqual(1);
-		creds.Permissions.ContainsKey(UserPermissions.Trading).AssertTrue();
+		creds.Permissions.Count(p => p.Key == UserPermissions.Trading).AssertEqual(1);
 		creds.Permissions[UserPermissions.Trading].Count.AssertEqual(2);
 	}
 
@@ -98,11 +98,11 @@ public class PermissionsTests : BaseTestClass
 		loaded.Email.AssertEqual(original.Email);
 		loaded.Password.IsEqualTo(original.Password).AssertTrue();
 		loaded.IpRestrictions.Count().AssertEqual(2);
-		loaded.IpRestrictions.Contains(_ip1).AssertTrue();
-		loaded.IpRestrictions.Contains(_ip2).AssertTrue();
+		loaded.IpRestrictions.Count(ip => ip.Equals(_ip1)).AssertEqual(1);
+		loaded.IpRestrictions.Count(ip => ip.Equals(_ip2)).AssertEqual(1);
 
 		loaded.Permissions.Count.AssertEqual(1);
-		loaded.Permissions.ContainsKey(UserPermissions.Trading).AssertTrue();
+		loaded.Permissions.Count(p => p.Key == UserPermissions.Trading).AssertEqual(1);
 		loaded.Permissions[UserPermissions.Trading].Count.AssertEqual(2);
 	}
 
@@ -156,7 +156,7 @@ public class PermissionsTests : BaseTestClass
 		creds.Email.AssertEqual(message.Login);
 		creds.Password.IsEqualTo(message.Password).AssertTrue();
 		creds.IpRestrictions.Count().AssertEqual(2);
-		creds.IpRestrictions.Contains(_ip1).AssertTrue();
+		creds.IpRestrictions.Count(ip => ip.Equals(_ip1)).AssertEqual(1);
 		creds.Permissions.Count.AssertEqual(1);
 		creds.Permissions[UserPermissions.Trading].Count.AssertEqual(1);
 	}
@@ -188,7 +188,7 @@ public class PermissionsTests : BaseTestClass
 		message.Login.AssertEqual(creds.Email);
 		message.Password.IsEqualTo(creds.Password).AssertTrue();
 		message.IpRestrictions.Count().AssertEqual(1);
-		message.IpRestrictions.Contains(_ip1).AssertTrue();
+		message.IpRestrictions.Count(ip => ip.Equals(_ip1)).AssertEqual(1);
 		message.Permissions.Count.AssertEqual(1);
 	}
 
@@ -213,7 +213,7 @@ public class PermissionsTests : BaseTestClass
 		message.Login.AssertEqual(creds.Email);
 		message.Password.AssertNull();
 		message.IpRestrictions.Count().AssertEqual(1);
-		message.IpRestrictions.Contains(_ip2).AssertTrue();
+		message.IpRestrictions.Count(ip => ip.Equals(_ip2)).AssertEqual(1);
 		message.Permissions.Count.AssertEqual(1);
 	}
 
@@ -240,8 +240,8 @@ public class PermissionsTests : BaseTestClass
 		creds2.Email.AssertEqual(creds.Email);
 		creds2.Password.IsEqualTo(creds.Password).AssertTrue();
 		creds2.IpRestrictions.Count().AssertEqual(2);
-		creds2.IpRestrictions.Contains(_ip1).AssertTrue();
-		creds2.IpRestrictions.Contains(_ip2).AssertTrue();
+		creds2.IpRestrictions.Count(ip => ip.Equals(_ip1)).AssertEqual(1);
+		creds2.IpRestrictions.Count(ip => ip.Equals(_ip2)).AssertEqual(1);
 		creds2.Permissions.Count.AssertEqual(1);
 		creds2.Permissions[UserPermissions.Trading].Count.AssertEqual(2);
 	}
@@ -397,7 +397,7 @@ public class PermissionsTests : BaseTestClass
 		var results = await storage.SearchAsync("admin*").ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(1);
-		results.All(r => r.Email.StartsWithIgnoreCase("admin")).AssertTrue();
+		results.Count(r => r.Email.StartsWithIgnoreCase("admin")).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -681,7 +681,7 @@ public class PermissionsTests : BaseTestClass
 		var sessionId = await auth.ValidateCredentials(login, password, _ip1, CancellationToken);
 
 		sessionId.AssertNotNull();
-		(sessionId.Length > 0).AssertTrue();
+		sessionId.Length.AssertEqual(36);
 	}
 
 	[TestMethod]
@@ -705,7 +705,7 @@ public class PermissionsTests : BaseTestClass
 		var sessionId = await auth.ValidateCredentials(login, password, _ip1, CancellationToken);
 
 		sessionId.AssertNotNull();
-		(sessionId.Length > 0).AssertTrue();
+		sessionId.Length.AssertEqual(36);
 	}
 
 	[TestMethod]
