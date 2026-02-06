@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Testing;
 /// <summary>
 /// The interface, describing paper trading.
 /// </summary>
-public interface IMarketEmulator : IMessageAdapter, ILogSource
+public interface IMarketEmulator : IMessageTransport, ILogSource
 {
 	/// <summary>
 	/// Emulator settings.
@@ -29,4 +29,9 @@ public interface IMarketEmulator : IMessageAdapter, ILogSource
 	/// Exchanges and trading boards provider.
 	/// </summary>
 	IExchangeInfoProvider ExchangeInfoProvider { get; }
+
+	/// <summary>
+	/// Possible supported message types.
+	/// </summary>
+	IEnumerable<MessageTypeInfo> PossibleSupportedMessages { get; }
 }

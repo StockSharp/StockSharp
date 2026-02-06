@@ -12,6 +12,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	private readonly SynchronizedSet<long> _emuOrderIds = [];
 
 	private readonly IMessageAdapterWrapper _inAdapter;
+	private readonly MarketEmulatorAdapter _emulatorAdapter;
 	private readonly bool _isEmulationOnly;
 
 	/// <summary>
@@ -39,11 +40,13 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			}
 		};
 
+		_emulatorAdapter = new MarketEmulatorAdapter(Emulator, TransactionIdGenerator);
+
 		InChannel = inChannel;
 
-		_inAdapter = new SubscriptionOnlineMessageAdapter(Emulator);
-		
-		if (Emulator.IsPositionsEmulationRequired is bool isPosEmu)
+		_inAdapter = new SubscriptionOnlineMessageAdapter(_emulatorAdapter);
+
+		if (_emulatorAdapter.IsPositionsEmulationRequired is bool isPosEmu)
 			_inAdapter = new PositionMessageAdapter(_inAdapter, new PositionManager(isPosEmu, new PositionManagerState()));
 
 		_inAdapter = new ChannelMessageAdapter(_inAdapter, inChannel, new PassThroughMessageChannel());
@@ -75,13 +78,13 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	public IMessageChannel InChannel { get; }
 
 	/// <inheritdoc />
-	public override IEnumerable<MessageTypes> SupportedInMessages => [.. InnerAdapter.SupportedInMessages.Concat(Emulator.SupportedInMessages).Distinct()];
+	public override IEnumerable<MessageTypes> SupportedInMessages => [.. InnerAdapter.SupportedInMessages.Concat(_emulatorAdapter.SupportedInMessages).Distinct()];
 
 	/// <inheritdoc />
-	public override bool? IsPositionsEmulationRequired => Emulator.IsPositionsEmulationRequired;
+	public override bool? IsPositionsEmulationRequired => _emulatorAdapter.IsPositionsEmulationRequired;
 
 	/// <inheritdoc />
-	public override bool IsSupportTransactionLog => Emulator.IsSupportTransactionLog;
+	public override bool IsSupportTransactionLog => _emulatorAdapter.IsSupportTransactionLog;
 
 	private ValueTask SendToEmulator(Message message, CancellationToken cancellationToken)
 	{
@@ -136,6 +139,10 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			case MessageTypes.Portfolio:
 			case MessageTypes.OrderStatus:
 			{
+				// Track OrderStatus subscription so SubscriptionOnline is forwarded to emulator
+				if (message is ISubscriptionMessage subscrMsg && subscrMsg.IsSubscribe)
+					_subscriptionIds.Add(subscrMsg.TransactionId);
+
 				if (OwnInnerAdapter)
 					await base.OnSendInMessageAsync(message, cancellationToken);
 
@@ -214,6 +221,10 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				if (_subscriptionIds.Contains(((IOriginalTransactionIdMessage)message).OriginalTransactionId))
 					await SendToEmulator(message, cancellationToken);
 
+				// Must forward to parent adapter so BasketMessageAdapter/Connector receive the response
+				if (OwnInnerAdapter)
+					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+
 				break;
 			}
 			//case MessageTypes.BoardState:
@@ -278,11 +289,10 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			{
 				if (message is ISubscriptionIdMessage subscrMsg)
 					await TrySendToEmulator(subscrMsg, cancellationToken);
-				else
-				{
-					if (OwnInnerAdapter)
-						await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
-				}
+
+				// Must forward to parent adapter for Connector to receive candles and other market data
+				if (OwnInnerAdapter)
+					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 				break;
 			}

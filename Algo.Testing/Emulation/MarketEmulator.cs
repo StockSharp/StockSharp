@@ -30,7 +30,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		ExchangeInfoProvider = exchangeInfoProvider ?? throw new ArgumentNullException(nameof(exchangeInfoProvider));
 		TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 
-		((IMessageAdapter)this).SupportedInMessages = [.. ((IMessageAdapter)this).PossibleSupportedMessages.Select(i => i.Type)];
 	}
 
 	/// <inheritdoc />
@@ -1145,11 +1144,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		.Add(PositionChangeTypes.Commission, portfolio.Commission));
 	}
 
-	#region IMessageAdapter implementation
-
-	IdGenerator IMessageAdapter.TransactionIdGenerator => new IncrementalIdGenerator();
-
-	IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages { get; } =
+	/// <inheritdoc />
+	public IEnumerable<MessageTypeInfo> PossibleSupportedMessages { get; } =
 	[
 		MessageTypes.SecurityLookup.ToInfo(),
 		MessageTypes.DataTypeLookup.ToInfo(),
@@ -1171,71 +1167,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		MessageTypes.EmulationState.ToInfo(),
 	];
 
-	IEnumerable<MessageTypes> IMessageAdapter.SupportedInMessages { get; set; }
-	IEnumerable<MessageTypes> IMessageAdapter.NotSupportedResultMessages { get; } = [];
-
-	IAsyncEnumerable<DataType> IMessageAdapter.GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to) =>
-	new DataType[]
-	{
-		DataType.OrderLog,
-		DataType.Ticks,
-		DataType.CandleTimeFrame,
-		DataType.MarketDepth,
-	}.ToAsyncEnumerable();
-
-	IEnumerable<Level1Fields> IMessageAdapter.CandlesBuildFrom => [];
-	bool IMessageAdapter.CheckTimeFrameByRequest => true;
-	ReConnectionSettings IMessageAdapter.ReConnectionSettings { get; } = new();
-	TimeSpan IMessageAdapter.HeartbeatInterval { get => TimeSpan.Zero; set { } }
-	string IMessageAdapter.StorageName => null;
-	bool IMessageAdapter.IsNativeIdentifiersPersistable => false;
-	bool IMessageAdapter.IsNativeIdentifiers => false;
-	bool IMessageAdapter.IsFullCandlesOnly => false;
-	bool IMessageAdapter.IsSupportSubscriptions => true;
-	bool IMessageAdapter.IsSupportCandlesUpdates(MarketDataMessage subscription) => true;
-	bool IMessageAdapter.IsSupportCandlesPriceLevels(MarketDataMessage subscription) => false;
-	MessageAdapterCategories IMessageAdapter.Categories => default;
-	IEnumerable<(string, Type)> IMessageAdapter.SecurityExtendedFields { get; } = [];
-	IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => throw new NotSupportedException();
-	bool IMessageAdapter.IsSupportOrderBookIncrements => false;
-	bool IMessageAdapter.IsSupportExecutionsPnL => true;
-	bool IMessageAdapter.IsSecurityNewsOnly => false;
-	Type IMessageAdapter.OrderConditionType => null;
-	bool IMessageAdapter.HeartbeatBeforeConnect => false;
-	Uri IMessageAdapter.Icon => null;
-	bool IMessageAdapter.IsAutoReplyOnTransactonalUnsubscription => true;
-	bool IMessageAdapter.EnqueueSubscriptions { get; set; }
-	bool IMessageAdapter.IsSupportTransactionLog => false;
-	bool IMessageAdapter.UseInChannel => false;
-	bool IMessageAdapter.UseOutChannel => false;
-	TimeSpan IMessageAdapter.IterationInterval => default;
-	string IMessageAdapter.FeatureName => string.Empty;
-	string[] IMessageAdapter.AssociatedBoards => [];
-	bool? IMessageAdapter.IsPositionsEmulationRequired => true;
-	bool IMessageAdapter.IsReplaceCommandEditCurrent => false;
-	TimeSpan? IMessageAdapter.LookupTimeout => null;
-	bool IMessageAdapter.ExtraSetup => false;
-
-	IOrderLogMarketDepthBuilder IMessageAdapter.CreateOrderLogMarketDepthBuilder(SecurityId securityId)
-		=> new OrderLogMarketDepthBuilder(securityId);
-
-	bool IMessageAdapter.IsAllDownloadingSupported(DataType dataType) => false;
-	bool IMessageAdapter.IsSecurityRequired(DataType dataType) => dataType.IsSecurityRequired;
-
-	TimeSpan IMessageAdapter.DisconnectTimeout => default;
-	int IMessageAdapter.MaxParallelMessages { get => default; set => throw new NotSupportedException(); }
-	TimeSpan IMessageAdapter.FaultDelay { get => default; set => throw new NotSupportedException(); }
-
-	IMessageAdapter ICloneable<IMessageAdapter>.Clone()
-		=> new MarketEmulator(SecurityProvider, PortfolioProvider, ExchangeInfoProvider, TransactionIdGenerator) { VerifyMode = VerifyMode };
-
-	object ICloneable.Clone() => ((ICloneable<IMessageAdapter>)this).Clone();
-
-	/// <inheritdoc/>
+	/// <summary>
+	/// Send out message.
+	/// </summary>
 	public ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)
 		=> NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
-
-	#endregion
 }
 
 /// <summary>

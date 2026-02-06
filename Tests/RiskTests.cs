@@ -3,6 +3,7 @@
 using System.ComponentModel;
 
 using StockSharp.Algo.Risk;
+using StockSharp.Algo.Testing;
 using StockSharp.Algo.Testing.Emulation;
 
 [TestClass]
@@ -1218,8 +1219,9 @@ public class RiskTests : BaseTestClass
 		// Test that RiskMessageAdapter sends OrderGroupCancelMessage with CancelOrders mode
 		// when a risk rule with CancelOrders action is triggered
 		var emu = new MarketEmulator(new CollectionSecurityProvider([new() { Id = "TEST@TEST" }]), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator());
+		var emuAdapter = new MarketEmulatorAdapter(emu, new IncrementalIdGenerator());
 		var riskManager = new RiskManager();
-		var adapter = new RiskMessageAdapter(emu, riskManager);
+		var adapter = new RiskMessageAdapter(emuAdapter, riskManager);
 
 		var messages = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };

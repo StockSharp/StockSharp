@@ -1408,7 +1408,7 @@ public class BacktestingTests : BaseTestClass
 		};
 
 		// Cast to interface for SendInMessageAsync
-		var adapter = (IMessageAdapter)emulator;
+		var adapter = (IMarketEmulator)emulator;
 
 		// Connect
 		await adapter.SendInMessageAsync(new ConnectMessage(), CancellationToken);
@@ -1471,8 +1471,9 @@ public class BacktestingTests : BaseTestClass
 			Settings = { MatchOnTouch = true }
 		};
 
-		// Wrap emulator with SubscriptionOnlineMessageAdapter
-		var subscriptionAdapter = new SubscriptionOnlineMessageAdapter(emulator);
+		// Wrap emulator with adapter then SubscriptionOnlineMessageAdapter
+		var emulatorAdapter = new MarketEmulatorAdapter(emulator, new IncrementalIdGenerator());
+		var subscriptionAdapter = new SubscriptionOnlineMessageAdapter(emulatorAdapter);
 
 		var messages = new List<Message>();
 		subscriptionAdapter.NewOutMessageAsync += (msg, ct) =>
@@ -2052,9 +2053,10 @@ public class BacktestingTests : BaseTestClass
 		};
 
 		// Create simplified chain like EmulationMessageAdapter (without PositionMessageAdapter):
-		// ChannelMessageAdapter -> SubscriptionOnlineMessageAdapter -> MarketEmulator
+		// ChannelMessageAdapter -> SubscriptionOnlineMessageAdapter -> MarketEmulatorAdapter -> MarketEmulator
 
-		IMessageAdapterWrapper inAdapter = new SubscriptionOnlineMessageAdapter(emulator);
+		var emulatorAdapter = new MarketEmulatorAdapter(emulator, new IncrementalIdGenerator());
+		IMessageAdapterWrapper inAdapter = new SubscriptionOnlineMessageAdapter(emulatorAdapter);
 
 		// Use PassThroughMessageChannel for sync behavior
 		var channel = new PassThroughMessageChannel();
