@@ -56,7 +56,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 		var transactionIdGenerator = new MillisecondIncrementalIdGenerator();
 
-		_subscriptionManager = new(transactionIdGenerator, UnsubscribeOnDisconnect) { Parent = this };
+		_subscriptionManager = new(this, transactionIdGenerator, UnsubscribeOnDisconnect);
 
 		//SupportLevel1DepthBuilder = true;
 		SupportFilteredMarketDepth = true;

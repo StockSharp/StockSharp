@@ -6,9 +6,10 @@ namespace StockSharp.Algo;
 /// <remarks>
 /// Initializes a new instance of the <see cref="ConnectorSubscriptionManager"/>.
 /// </remarks>
+/// <param name="logReceiver">Log receiver.</param>
 /// <param name="transactionIdGenerator">Transaction id generator.</param>
 /// <param name="sendUnsubscribeWhenDisconnected">Indicates whether to send unsubscribe requests while disconnected.</param>
-public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bool sendUnsubscribeWhenDisconnected) : BaseLogReceiver
+public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator transactionIdGenerator, bool sendUnsubscribeWhenDisconnected)
 {
 	/// <summary>
 	/// Actions produced by <see cref="ConnectorSubscriptionManager"/>.
@@ -325,13 +326,13 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 	private void TryWriteLog(long id)
 	{
 		if (_notFound.Add(id))
-			this.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
+			logReceiver.AddWarningLog(LocalizedStrings.SubscriptionNonExist, id);
 	}
 
 	private void Remove(long id)
 	{
 		_subscriptions.Remove(id);
-		this.AddInfoLog(LocalizedStrings.SubscriptionRemoved, id);
+		logReceiver.AddInfoLog(LocalizedStrings.SubscriptionRemoved, id);
 	}
 
 	private SubscriptionInfo TryGetInfo(long id, bool ignoreAll, bool remove, DateTime? time, bool addLog)
@@ -422,7 +423,7 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 	private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
 	{
 		var subscription = info.Subscription;
-		subscription.State = subscription.State.ChangeSubscriptionState(state, subscription.TransactionId, this);
+		subscription.State = subscription.State.ChangeSubscriptionState(state, subscription.TransactionId, logReceiver);
 	}
 
 	/// <summary>
@@ -636,9 +637,9 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 			_requests.Add(request.TransactionId, (request, subscription));
 
 		if (isAllExtension)
-			this.AddVerboseLog("(ALL+) " + (request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent), subscription.SecurityId, request);
+			logReceiver.AddVerboseLog("(ALL+) " + (request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent), subscription.SecurityId, request);
 		else
-			this.AddDebugLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.SecurityId, request);
+			logReceiver.AddDebugLog(request.IsSubscribe ? LocalizedStrings.SubscriptionSent : LocalizedStrings.UnSubscriptionSent, subscription.SecurityId, request);
 
 		actions.Add(Actions.Item.SendInMessage((Message)request));
 	}
@@ -680,7 +681,7 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 
 			missingSubscriptions.ForEach(sub =>
 			{
-				this.AddVerboseLog($"adding default subscription {sub.DataType}");
+				logReceiver.AddVerboseLog($"adding default subscription {sub.DataType}");
 				AddSubscription(sub, actions);
 			});
 
@@ -692,7 +693,7 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 
 			missingSubscriptions.ForEach(sub =>
 			{
-				this.AddVerboseLog($"subscribing default subscription {sub.DataType}");
+				logReceiver.AddVerboseLog($"subscribing default subscription {sub.DataType}");
 				Subscribe(sub, false, actions);
 			});
 		}
@@ -705,7 +706,7 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 		if (actions == null)
 			throw new ArgumentNullException(nameof(actions));
 
-		this.AddInfoLog(nameof(ReSubscribeAll));
+		logReceiver.AddInfoLog(nameof(ReSubscribeAll));
 
 		var requests = new Dictionary<ISubscriptionMessage, SubscriptionInfo>();
 
@@ -747,7 +748,7 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 	/// <returns>Actions to apply.</returns>
 	public Actions UnSubscribeAll()
 	{
-		this.AddInfoLog(nameof(UnSubscribeAll));
+		logReceiver.AddInfoLog(nameof(UnSubscribeAll));
 
 		var actions = new ActionCollector();
 
@@ -789,7 +790,7 @@ public class ConnectorSubscriptionManager(IdGenerator transactionIdGenerator, bo
 
 			if (info.LookupItems == null)
 			{
-				this.AddWarningLog(LocalizedStrings.UnknownType, info.Subscription.SubscriptionMessage);
+				logReceiver.AddWarningLog(LocalizedStrings.UnknownType, info.Subscription.SubscriptionMessage);
 				continue;
 			}
 

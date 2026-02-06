@@ -3,10 +3,12 @@ namespace StockSharp.Tests;
 [TestClass]
 public class SubscriptionManagerConnectorTests : BaseTestClass
 {
+	private sealed class TestReceiver : TestLogReceiver { }
+
 	#region Helpers
 
 	private static ConnectorSubscriptionManager CreateManager(bool sendUnsubscribeWhenDisconnected = true)
-		=> new(new IncrementalIdGenerator(), sendUnsubscribeWhenDisconnected);
+		=> new(new TestReceiver(), new IncrementalIdGenerator(), sendUnsubscribeWhenDisconnected);
 
 	private static Subscription CreateTickSubscription()
 		=> new(new MarketDataMessage
