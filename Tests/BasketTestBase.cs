@@ -74,6 +74,15 @@ public abstract class BasketTestBase : BaseTestClass
 				{
 					var pl = (PortfolioLookupMessage)message;
 					await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = pl.TransactionId }, ct);
+
+					var pfMsg = new PortfolioMessage
+					{
+						PortfolioName = "TestPortfolio",
+						OriginalTransactionId = pl.TransactionId,
+					};
+					pfMsg.SetSubscriptionIds([pl.TransactionId]);
+					await SendOutMessageAsync(pfMsg, ct);
+
 					await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = pl.TransactionId }, ct);
 					break;
 				}
@@ -81,6 +90,22 @@ public abstract class BasketTestBase : BaseTestClass
 				{
 					var os = (OrderStatusMessage)message;
 					await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = os.TransactionId }, ct);
+
+					var orderMsg = new ExecutionMessage
+					{
+						DataTypeEx = DataType.Transactions,
+						SecurityId = Helper.CreateSecurityId(),
+						OriginalTransactionId = os.TransactionId,
+						HasOrderInfo = true,
+						OrderState = OrderStates.Active,
+						OrderPrice = 100,
+						OrderVolume = 10,
+						ServerTime = DateTime.UtcNow,
+						LocalTime = DateTime.UtcNow,
+					};
+					orderMsg.SetSubscriptionIds([os.TransactionId]);
+					await SendOutMessageAsync(orderMsg, ct);
+
 					await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = os.TransactionId }, ct);
 					break;
 				}

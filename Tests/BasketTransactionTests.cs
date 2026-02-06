@@ -220,4 +220,230 @@ public class BasketTransactionTests : BasketTestBase
 		GetOut<ExecutionMessage>().Any(e => e.OriginalTransactionId == cancelTransId && e.Error != null)
 			.AssertFalse("Should not produce UnknownTransactionId error when portfolio fallback finds the adapter");
 	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task OrderStatus_WithPortfolio_BroadcastToBothAdapters()
+	{
+		var parentChildMap = new ParentChildMap();
+
+		var (basket, adapter1, adapter2) = CreateBasket(
+			parentChildMap: parentChildMap);
+
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+		ClearOut();
+
+		basket.PortfolioAdapterProvider.SetAdapter(Portfolio1, adapter1);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var osMsg = new OrderStatusMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+			PortfolioName = Portfolio1,
+		};
+		await SendToBasket(basket, osMsg, TestContext.CancellationToken);
+
+		// With PortfolioName set, FilterEnabled=true → broadcast to all adapters
+		adapter1.GetMessages<OrderStatusMessage>().Any()
+			.AssertTrue("Adapter1 should receive OrderStatusMessage");
+		adapter2.GetMessages<OrderStatusMessage>().Any()
+			.AssertTrue("Adapter2 should receive OrderStatusMessage");
+
+		// Parent-child mapping should exist for both
+		var children = parentChildMap.GetChild(transId);
+		children.Count.AssertEqual(2, "Should have 2 child subscriptions");
+
+		// Responses should be remapped to parent transId
+		var onlines = GetOut<SubscriptionOnlineMessage>();
+		onlines.Any(o => o.OriginalTransactionId == transId)
+			.AssertTrue("SubscriptionOnline should have parent transId");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task OrderStatus_WithPortfolio_OrderData_RemappedToParent()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket();
+
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+		ClearOut();
+
+		basket.PortfolioAdapterProvider.SetAdapter(Portfolio1, adapter1);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var osMsg = new OrderStatusMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+			PortfolioName = Portfolio1,
+		};
+		await SendToBasket(basket, osMsg, TestContext.CancellationToken);
+
+		// Adapter auto-responds with ExecutionMessage (order data)
+		// Verify that order data reaches output with parent subscription ID
+		var orders = GetOut<ExecutionMessage>()
+			.Where(e => e.DataTypeEx == DataType.Transactions && e.HasOrderInfo)
+			.ToArray();
+		orders.Length.AssertGreater(0, "Should receive order data from adapters");
+
+		foreach (var order in orders)
+		{
+			var subIds = order.GetSubscriptionIds();
+			subIds.Length.AssertGreater(0, "Order should have subscription IDs");
+			subIds.Contains(transId).AssertTrue(
+				$"Order subscription IDs should contain parent {transId}, got [{string.Join(",", subIds)}]");
+		}
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task OrderStatus_WithSecurityFilter_BroadcastToBothAdapters()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket();
+
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+		ClearOut();
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var osMsg = new OrderStatusMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+			SecurityId = SecId1,
+		};
+		await SendToBasket(basket, osMsg, TestContext.CancellationToken);
+
+		// SecurityId set → FilterEnabled=true → broadcast to all
+		adapter1.GetMessages<OrderStatusMessage>().Any()
+			.AssertTrue("Adapter1 should receive OrderStatusMessage with SecurityId filter");
+		adapter2.GetMessages<OrderStatusMessage>().Any()
+			.AssertTrue("Adapter2 should receive OrderStatusMessage with SecurityId filter");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task PortfolioLookup_WithPortfolio_BroadcastToBothAdapters()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket();
+
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+		ClearOut();
+
+		basket.PortfolioAdapterProvider.SetAdapter(Portfolio1, adapter1);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var plMsg = new PortfolioLookupMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+			PortfolioName = Portfolio1,
+		};
+		await SendToBasket(basket, plMsg, TestContext.CancellationToken);
+
+		// With PortfolioName set, FilterEnabled=true → broadcast to all adapters
+		adapter1.GetMessages<PortfolioLookupMessage>().Any()
+			.AssertTrue("Adapter1 should receive PortfolioLookupMessage");
+		adapter2.GetMessages<PortfolioLookupMessage>().Any()
+			.AssertTrue("Adapter2 should receive PortfolioLookupMessage");
+
+		// Finished should be remapped to parent
+		var finished = GetOut<SubscriptionFinishedMessage>();
+		finished.Any(f => f.OriginalTransactionId == transId)
+			.AssertTrue("SubscriptionFinished should have parent transId");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task PortfolioLookup_WithPortfolio_PortfolioData_RemappedToParent()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket();
+
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+		ClearOut();
+
+		basket.PortfolioAdapterProvider.SetAdapter(Portfolio1, adapter1);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var plMsg = new PortfolioLookupMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+			PortfolioName = Portfolio1,
+		};
+		await SendToBasket(basket, plMsg, TestContext.CancellationToken);
+
+		// Verify that portfolio data has correct subscription IDs
+		var portfolios = GetOut<PortfolioMessage>();
+		portfolios.Length.AssertGreater(0, "Should receive portfolio data");
+
+		foreach (var pf in portfolios)
+		{
+			var subIds = pf.GetSubscriptionIds();
+			subIds.Length.AssertGreater(0, "PortfolioMessage should have subscription IDs");
+			subIds.Contains(transId).AssertTrue(
+				$"Portfolio subscription IDs should contain parent {transId}, got [{string.Join(",", subIds)}]");
+		}
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task OrderStatus_NoFilter_OnlyAllDownloadingAdapters()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket();
+
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+		ClearOut();
+
+		// No PortfolioName, no SecurityId → FilterEnabled=false
+		// → only adapters with IsAllDownloadingSupported(DataType.Transactions) receive it
+		// TestBasketInnerAdapter returns false by default → no adapters should receive it
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var osMsg = new OrderStatusMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+		};
+		await SendToBasket(basket, osMsg, TestContext.CancellationToken);
+
+		adapter1.GetMessages<OrderStatusMessage>().Any()
+			.AssertFalse("Adapter1 should NOT receive unfiltered OrderStatus (IsAllDownloadingSupported=false)");
+		adapter2.GetMessages<OrderStatusMessage>().Any()
+			.AssertFalse("Adapter2 should NOT receive unfiltered OrderStatus (IsAllDownloadingSupported=false)");
+
+		// Basket should emit SubscriptionOnline as empty result
+		var onlines = GetOut<SubscriptionOnlineMessage>();
+		onlines.Any(o => o.OriginalTransactionId == transId)
+			.AssertTrue("Should emit SubscriptionOnline for empty adapter list");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task PortfolioLookup_NoFilter_OnlyAllDownloadingAdapters()
+	{
+		var (basket, adapter1, adapter2) = CreateBasket();
+
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+		ClearOut();
+
+		// No PortfolioName → FilterEnabled=false
+		// → only adapters with IsAllDownloadingSupported(DataType.PositionChanges) receive it
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		var plMsg = new PortfolioLookupMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+		};
+		await SendToBasket(basket, plMsg, TestContext.CancellationToken);
+
+		adapter1.GetMessages<PortfolioLookupMessage>().Any()
+			.AssertFalse("Adapter1 should NOT receive unfiltered PortfolioLookup (IsAllDownloadingSupported=false)");
+		adapter2.GetMessages<PortfolioLookupMessage>().Any()
+			.AssertFalse("Adapter2 should NOT receive unfiltered PortfolioLookup (IsAllDownloadingSupported=false)");
+
+		// Basket should emit SubscriptionOnline (not history-only) as empty result
+		var onlines = GetOut<SubscriptionOnlineMessage>();
+		onlines.Any(o => o.OriginalTransactionId == transId)
+			.AssertTrue("Should emit SubscriptionOnline for empty adapter list");
+	}
 }
