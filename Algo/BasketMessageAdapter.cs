@@ -762,7 +762,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		{
 			var underlyingAdapter = _routingManager.GetPortfolioAdapter(ordMsg.PortfolioName, a => a);
 			if (underlyingAdapter != null)
-				adapter = _adapterWrappers.TryGetValue(underlyingAdapter);
+				adapter = underlyingAdapter;
 		}
 
 		if (adapter is null || !_adapterWrappers.TryGetValue(adapter, out var wrapper))
