@@ -3593,10 +3593,12 @@ public class ExtensionsMethodsTests : BaseTestClass
 	#region MakeVectorIconUri
 
 	[TestMethod]
-	public void MakeVectorIconUri_ThrowsInNonWpfContext()
+	public void MakeVectorIconUri()
 	{
-		// pack:// URI scheme requires WPF application context
-		Throws<UriFormatException>(() => "test_icon".MakeVectorIconUri());
+		// Register pack:// URI scheme (normally registered by WPF Application)
+		_ = System.IO.Packaging.PackUriHelper.UriSchemePack;
+
+		"test_icon".MakeVectorIconUri().ToString().AssertEqual($"pack://application:,,,/StockSharp.Xaml;component/IconsSvg/test_icon.svg");
 	}
 
 	#endregion
