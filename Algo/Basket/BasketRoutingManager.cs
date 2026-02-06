@@ -191,19 +191,26 @@ public class BasketRoutingManager : IBasketRoutingManager
 		=> _subscriptionRouting.GetSubscribers(dataType);
 
 	/// <inheritdoc />
-	public void ApplyParentLookupId(ISubscriptionIdMessage msg)
+	public bool ApplyParentLookupId(ISubscriptionIdMessage msg)
 	{
 		if (msg == null)
 			throw new ArgumentNullException(nameof(msg));
 
 		var originIds = msg.GetSubscriptionIds();
+
+		if (originIds.Length == 0)
+			return true;
+
 		var ids = originIds;
 		var changed = false;
+		var hasValidId = false;
 
 		for (var i = 0; i < ids.Length; i++)
 		{
 			if (!_parentChildMap.TryGetParent(ids[i], out var parentId))
 				continue;
+
+			hasValidId = true;
 
 			if (!changed)
 			{
@@ -219,6 +226,10 @@ public class BasketRoutingManager : IBasketRoutingManager
 
 		if (changed)
 			msg.SetSubscriptionIds(ids);
+
+		// If message had subscription IDs but none mapped to valid parents,
+		// the subscription was removed (unsubscribed) — drop the message
+		return hasValidId || originIds.Length == 0;
 	}
 
 	/// <inheritdoc />
@@ -531,6 +542,9 @@ public class BasketRoutingManager : IBasketRoutingManager
 				child.Add(clone, adapter);
 
 				_parentChildMap.AddMapping(clone.TransactionId, subscrMsg, adapter);
+
+				// Remove original child mapping so data is no longer forwarded
+				_parentChildMap.RemoveMapping(pair.Key);
 			}
 		}
 
@@ -557,7 +571,10 @@ public class BasketRoutingManager : IBasketRoutingManager
 
 			default:
 				if (message is ISubscriptionIdMessage subscrIdMsg)
-					ApplyParentLookupId(subscrIdMsg);
+				{
+					if (!ApplyParentLookupId(subscrIdMsg))
+						return RoutingOutResult.Empty;
+				}
 
 				return RoutingOutResult.PassThrough(message);
 		}

@@ -835,7 +835,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 				case MessageTypes.PositionChange:
 				{
 					var pfMsg = (IPortfolioNameMessage)message;
-					_routingManager.ApplyParentLookupId((ISubscriptionIdMessage)message);
+
+					if (!_routingManager.ApplyParentLookupId((ISubscriptionIdMessage)message))
+						return;
+
 					PortfolioAdapterProvider.SetAdapter(pfMsg.PortfolioName, GetUnderlyingAdapter(innerAdapter));
 					break;
 				}
@@ -843,7 +846,10 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 				case MessageTypes.Security:
 				{
 					var secMsg = (SecurityMessage)message;
-					_routingManager.ApplyParentLookupId(secMsg);
+
+					if (!_routingManager.ApplyParentLookupId(secMsg))
+						return;
+
 					SecurityAdapterProvider.SetAdapter(secMsg.SecurityId, null, GetUnderlyingAdapter(innerAdapter).Id);
 					break;
 				}
@@ -852,7 +858,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 				{
 					var execMsg = (ExecutionMessage)message;
 
-					_routingManager.ApplyParentLookupId(execMsg);
+					if (!_routingManager.ApplyParentLookupId(execMsg))
+						return;
 
 					if (execMsg.DataType == DataType.Transactions && execMsg.TransactionId != default && execMsg.HasOrderInfo)
 						_routingManager.AddOrderAdapter(execMsg.TransactionId, innerAdapter);

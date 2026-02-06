@@ -132,6 +132,13 @@ public class ParentChildMap : IParentChildMap
 	}
 
 	/// <inheritdoc />
+	public bool RemoveMapping(long childId)
+	{
+		using (_syncObject.EnterScope())
+			return _childToParentIds.Remove(childId);
+	}
+
+	/// <inheritdoc />
 	public void Clear()
 	{
 		using (_syncObject.EnterScope())

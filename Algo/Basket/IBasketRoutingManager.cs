@@ -144,7 +144,8 @@ public interface IBasketRoutingManager
 	/// <summary>
 	/// Apply parent lookup ID remapping to subscription message.
 	/// </summary>
-	void ApplyParentLookupId(ISubscriptionIdMessage msg);
+	/// <returns><see langword="false"/> if no valid parent found and message should be dropped.</returns>
+	bool ApplyParentLookupId(ISubscriptionIdMessage msg);
 
 	#endregion
 
