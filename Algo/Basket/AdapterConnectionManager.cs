@@ -83,6 +83,12 @@ public class AdapterConnectionManager(IAdapterConnectionState state) : IAdapterC
 					_state.CurrentState = ConnectionStates.Failed;
 					return [new ConnectMessage { Error = errors.SingleOrAggr() }];
 				}
+
+				if (!ConnectDisconnectEventOnFirstAdapter && !_state.HasPendingAdapters && _state.ConnectedCount > 0)
+				{
+					_state.CurrentState = ConnectionStates.Connected;
+					return [new ConnectMessage()];
+				}
 			}
 		}
 
