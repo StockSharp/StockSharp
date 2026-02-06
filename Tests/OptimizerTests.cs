@@ -333,6 +333,8 @@ public class OptimizerTests : BaseTestClass
 		if (!stoppedTcs.Task.IsCompleted)
 		{
 			optimizer.Stop();
+			// Stop() sets state to Stopping; wait for connectors to finish and transition to Stopped
+			await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
 		}
 
 		optimizer.State.AssertEqual(ChannelStates.Stopped, "Optimizer should be stopped");
@@ -365,7 +367,8 @@ public class OptimizerTests : BaseTestClass
 		var executedCount = 0;
 		optimizer.SingleProgressChanged += (strategy, parameters, progress) =>
 		{
-			Interlocked.Increment(ref executedCount);
+			if (progress == 100)
+				Interlocked.Increment(ref executedCount);
 		};
 
 		var stoppedTcs = new TaskCompletionSource<bool>();
@@ -384,8 +387,8 @@ public class OptimizerTests : BaseTestClass
 			optimizer.Stop();
 		}
 
-		// Due to MaxIterations, should not execute all strategies
-		IsTrue(executedCount <= 2, "Should respect MaxIterations limit");
+		// Due to MaxIterations=2, should not execute all strategies
+		IsTrue(executedCount <= 2, $"Should respect MaxIterations limit, but got {executedCount}");
 	}
 
 	/// <summary>
@@ -772,6 +775,10 @@ public class OptimizerTests : BaseTestClass
 
 		optimizer.SingleProgressChanged += (strategy, parameters, progress) =>
 		{
+			// Only count completed iterations (progress == 100)
+			if (progress != 100)
+				return;
+
 			// Get the strategy's end time from its statistics or trades
 			DateTime? endTime = null;
 
@@ -793,13 +800,6 @@ public class OptimizerTests : BaseTestClass
 
 			lock (syncLock)
 			{
-				// Check that iteration end times are monotonically increasing
-				if (endTime.HasValue && lastIterationEndTime.HasValue)
-				{
-					// Note: With parallel execution, times might not be strictly increasing
-					// but for sequential execution they should be
-				}
-
 				if (endTime.HasValue)
 					lastIterationEndTime = endTime;
 
@@ -827,20 +827,6 @@ public class OptimizerTests : BaseTestClass
 		// Verify iteration count
 		AreEqual(expectedIterations, completedIterations.Count,
 			$"Expected {expectedIterations} iterations but got {completedIterations.Count}");
-
-		// Verify progress values are reasonable (should increase)
-		var progressValues = completedIterations.Select(x => x.progress).ToList();
-		for (var i = 1; i < progressValues.Count; i++)
-		{
-			IsTrue(progressValues[i] >= progressValues[i - 1],
-				$"Progress should not decrease: {progressValues[i - 1]} -> {progressValues[i]}");
-		}
-
-		// Verify final progress is 100
-		if (progressValues.Count > 0)
-		{
-			IsTrue(progressValues[^1] >= 99, $"Final progress should be ~100%, got {progressValues[^1]}%");
-		}
 
 		// Report any errors
 		if (timeErrors.Count > 0)

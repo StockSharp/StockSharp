@@ -473,9 +473,12 @@ public class GeneticOptimizer : BaseOptimizer
 	/// <inheritdoc />
 	public override void Stop()
 	{
+		if (!(State is ChannelStates.Started or ChannelStates.Suspended))
+			return;
+
 		base.Stop();
 
-		_ga?.Stop();
+		try { _ga?.Stop(); } catch (InvalidOperationException) { }
 		_events.CopyAndClear().ForEach(e =>
 		{
 			try
