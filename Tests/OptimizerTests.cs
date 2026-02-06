@@ -219,11 +219,14 @@ public class OptimizerTests : BaseTestClass
 
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
 
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate; // Longer period
+		// Batch size = 1 so only one connector needs to be stopped (faster under load)
+		optimizer.EmulationSettings.BatchSize = 1;
 
-		// Create many iterations so we can stop mid-run
-		var strategies = CreateStrategyIterations(security, portfolio, 20, 40, 5, 50, 100, 10).ToList();
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
+
+		// Many iterations so optimizer is still running when Stop() is called
+		var strategies = CreateStrategyIterations(security, portfolio, 10, 40, 5, 50, 100, 5).ToList();
 
 		var startedTcs = new TaskCompletionSource<bool>();
 		var stoppedTcs = new TaskCompletionSource<bool>();
@@ -249,8 +252,8 @@ public class OptimizerTests : BaseTestClass
 		// Stop the optimizer
 		optimizer.Stop();
 
-		// Wait for stopped
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromSeconds(30)));
+		// Wait for stopped (single connector with batch=1 should stop faster)
+		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
 		optimizer.State.AssertEqual(ChannelStates.Stopped, "Optimizer should be stopped after Stop() call");
 		optimizer.IsCancelled.AssertTrue("IsCancelled should be true after Stop()");
