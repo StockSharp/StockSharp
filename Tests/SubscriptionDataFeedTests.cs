@@ -576,7 +576,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		receivedMessages.Count.AssertGreater(0, "Should receive messages");
 		foreach (var msg in receivedMessages)
 		{
-			msg.GetSubscriptionIds().Count(id => id == 100).AssertEqual(1, "All messages should have subscription ID 100");
+			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live subscriptions");
 		}
 	}
 
@@ -616,6 +616,10 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}
 
 		messagesBeforeUnsubscribe.Count.AssertGreater(0, "Should receive messages before unsubscribe");
+		foreach (var msg in messagesBeforeUnsubscribe)
+		{
+			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live subscriptions");
+		}
 
 		// Unsubscribe
 		manager.ProcessInMessage(new MarketDataMessage
@@ -643,7 +647,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		foreach (var msg in messagesAfterUnsubscribe)
 		{
-			msg.GetSubscriptionIds().Count(id => id == 100).AssertEqual(0, "Messages after unsubscribe should NOT have ID 100");
+			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live data");
 		}
 	}
 
@@ -734,10 +738,12 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		messages2.Count.AssertGreater(0);
 		messagesAfter.Count.AssertGreater(0);
 
+		foreach (var msg in messages1)
+			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live subscriptions");
+		foreach (var msg in messages2)
+			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live subscriptions");
 		foreach (var msg in messagesAfter)
-		{
-			msg.GetSubscriptionIds().Count(id => id == 101).AssertEqual(1, "Second subscription should still receive");
-		}
+			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live subscriptions");
 	}
 
 	#endregion

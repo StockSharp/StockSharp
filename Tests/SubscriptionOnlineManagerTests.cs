@@ -78,7 +78,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(error, token);
 
-		extraOut.OfType<SubscriptionResponseMessage>().Any(msg => msg.OriginalTransactionId == 2 && msg.Error != null).AssertTrue();
+		extraOut.OfType<SubscriptionResponseMessage>().Count(msg => msg.OriginalTransactionId == 2 && msg.Error != null).AssertEqual(1);
 	}
 
 	#region Subscription Joining — No Duplicate Inner Requests
@@ -229,13 +229,13 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 			TradePrice = 100m,
 			TradeVolume = 10m,
 		};
-		dataMessage.SetSubscriptionIds([100]);
+		dataMessage.OriginalTransactionId = 100;
 
 		var (forward, _) = await manager.ProcessOutMessageAsync(dataMessage, token);
 		forward.AssertNotNull("Data should be forwarded");
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		ids.Contains(100).AssertTrue("Should contain first (active) subscription ID");
-		ids.Contains(101).AssertTrue("Should contain second (joined/pending) subscription ID");
+		ids.Count(id => id == 100).AssertEqual(1, "Should contain first (active) subscription ID");
+		ids.Count(id => id == 101).AssertEqual(1, "Should contain second (joined/pending) subscription ID");
 	}
 
 	[TestMethod]
@@ -274,13 +274,13 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 			TradePrice = 100m,
 			TradeVolume = 10m,
 		};
-		dataMessage.SetSubscriptionIds([100]);
+		dataMessage.OriginalTransactionId = 100;
 
 		var (forward, _) = await manager.ProcessOutMessageAsync(dataMessage, token);
 		forward.AssertNotNull("Data should be forwarded");
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		ids.Contains(100).AssertTrue("Should contain first (pending) subscription ID");
-		ids.Contains(101).AssertTrue("Should contain second (joined/pending) subscription ID");
+		ids.Count(id => id == 100).AssertEqual(1, "Should contain first (pending) subscription ID");
+		ids.Count(id => id == 101).AssertEqual(1, "Should contain second (joined/pending) subscription ID");
 	}
 
 	[TestMethod]
@@ -323,12 +323,12 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var allExtra = toOut2.Concat(extraOnResp).Concat(extraOnOnline).ToArray();
 
 		allExtra.OfType<SubscriptionResponseMessage>()
-			.Any(m => m.OriginalTransactionId == 101)
-			.AssertTrue("Second (joined) subscription should get SubscriptionResponseMessage");
+			.Count(m => m.OriginalTransactionId == 101)
+			.AssertEqual(1, "Second (joined) subscription should get SubscriptionResponseMessage");
 
 		allExtra.OfType<SubscriptionOnlineMessage>()
-			.Any(m => m.OriginalTransactionId == 101)
-			.AssertTrue("Second (joined) subscription should get SubscriptionOnlineMessage");
+			.Count(m => m.OriginalTransactionId == 101)
+			.AssertEqual(1, "Second (joined) subscription should get SubscriptionOnlineMessage");
 	}
 
 	[TestMethod]
@@ -372,12 +372,12 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		allMessages.AddRange(extraOut);
 
 		allMessages.OfType<SubscriptionResponseMessage>()
-			.Any(m => m.OriginalTransactionId == 100 && m.Error != null)
-			.AssertTrue("First subscription should get error");
+			.Count(m => m.OriginalTransactionId == 100 && m.Error != null)
+			.AssertEqual(1, "First subscription should get error");
 
 		allMessages.OfType<SubscriptionResponseMessage>()
-			.Any(m => m.OriginalTransactionId == 101 && m.Error != null)
-			.AssertTrue("Second (joined) subscription should also get error");
+			.Count(m => m.OriginalTransactionId == 101 && m.Error != null)
+			.AssertEqual(1, "Second (joined) subscription should also get error");
 	}
 
 	#endregion
@@ -588,7 +588,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 			ServerTime = logReceiver.CurrentTime,
 		};
 		dataMessage.TryAdd(Level1Fields.LastTradePrice, 100m);
-		dataMessage.SetSubscriptionIds([999]); // Unknown subscription ID
+		dataMessage.OriginalTransactionId = 999; // Unknown subscription ID
 
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(dataMessage, token);
 
@@ -627,11 +627,11 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 			TradePrice = 100m,
 			TradeVolume = 10m,
 		};
-		dataMessage1.SetSubscriptionIds([100]);
+		dataMessage1.OriginalTransactionId = 100;
 
 		var (forward1, _) = await manager.ProcessOutMessageAsync(dataMessage1, token);
 		forward1.AssertNotNull();
-		((ISubscriptionIdMessage)forward1).GetSubscriptionIds().Contains(100).AssertTrue();
+		((ISubscriptionIdMessage)forward1).GetSubscriptionIds().Count(id => id == 100).AssertEqual(1);
 
 		// Unsubscribe
 		var unsubscribe = new MarketDataMessage
@@ -695,7 +695,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var (forward, _) = await manager.ProcessOutMessageAsync(dataMessage, token);
 		forward.AssertNotNull();
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		ids.Contains(100).AssertTrue();
+		ids.Count(id => id == 100).AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -739,13 +739,13 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 			TradePrice = 100m,
 			TradeVolume = 10m,
 		};
-		dataMessage.SetSubscriptionIds([100]); // Original from source
+		dataMessage.OriginalTransactionId = 100; // Original from source
 
 		var (forward, _) = await manager.ProcessOutMessageAsync(dataMessage, token);
 		forward.AssertNotNull();
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		ids.Contains(100).AssertTrue("Should contain first subscription ID");
-		ids.Contains(101).AssertTrue("Should contain second (joined) subscription ID");
+		ids.Count(id => id == 100).AssertEqual(1, "Should contain first subscription ID");
+		ids.Count(id => id == 101).AssertEqual(1, "Should contain second (joined) subscription ID");
 	}
 
 	[TestMethod]
@@ -786,7 +786,7 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 			TradePrice = 100m,
 			TradeVolume = 10m,
 		};
-		dataMessage1.SetSubscriptionIds([100]);
+		dataMessage1.OriginalTransactionId = 100;
 
 		var (forward1, _) = await manager.ProcessOutMessageAsync(dataMessage1, token);
 		var ids1 = ((ISubscriptionIdMessage)forward1).GetSubscriptionIds();
@@ -811,13 +811,13 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 			TradePrice = 101m,
 			TradeVolume = 10m,
 		};
-		dataMessage2.SetSubscriptionIds([100]); // Still from source with old ID
+		dataMessage2.OriginalTransactionId = 100; // Still from source with old ID
 
 		var (forward2, _) = await manager.ProcessOutMessageAsync(dataMessage2, token);
 		forward2.AssertNotNull();
 		var ids2 = ((ISubscriptionIdMessage)forward2).GetSubscriptionIds();
-		ids2.Contains(100).AssertFalse("Should NOT contain unsubscribed ID");
-		ids2.Contains(101).AssertTrue("Should contain remaining subscription ID");
+		ids2.Count(id => id == 100).AssertEqual(0, "Should NOT contain unsubscribed ID");
+		ids2.Count(id => id == 101).AssertEqual(1, "Should contain remaining subscription ID");
 	}
 
 	#endregion
@@ -881,7 +881,145 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var (forward, _) = await manager.ProcessOutMessageAsync(ticksMessage, token);
 		forward.AssertNotNull();
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		ids.Contains(101).AssertTrue();
+		ids.Count(id => id == 101).AssertEqual(1);
+	}
+
+	#endregion
+
+	#region Transaction Messages Tests
+
+	/// <summary>
+	/// Tests that transaction messages pass through even without explicit subscription.
+	/// This is important for emulation mode where order responses come from nested adapters.
+	/// </summary>
+	[TestMethod]
+	public async Task TransactionMessage_PassesThroughWithoutSubscription()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		// Create order execution message without any subscription
+		var execMsg = new ExecutionMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Transactions,
+			OrderId = 123,
+			TransactionId = 456,
+			OrderState = OrderStates.Active,
+		};
+
+		// Should pass through without throwing or returning null
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(execMsg, token);
+
+		// Message should be forwarded (not filtered out)
+		forward.AssertNotNull("Transaction message should pass through without subscription");
+	}
+
+	/// <summary>
+	/// Tests that transaction messages with OriginalTransactionId work correctly.
+	/// </summary>
+	[TestMethod]
+	public async Task TransactionMessage_WithOriginalTransactionId_PassesThrough()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		// Create order execution message with OriginalTransactionId (order response)
+		var execMsg = new ExecutionMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 789,  // This is the order's transaction id
+			OrderId = 123,
+			OrderState = OrderStates.Done,
+		};
+
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(execMsg, token);
+
+		forward.AssertNotNull("Transaction message with OriginalTransactionId should pass through");
+	}
+
+	/// <summary>
+	/// Tests that transaction messages get subscription IDs when OrderStatus subscription exists.
+	/// This is critical for OrderReceived events to fire in Connector.
+	/// </summary>
+	[TestMethod]
+	public async Task TransactionMessage_WithOrderStatusSubscription_GetsSubscriptionIds()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// Subscribe to OrderStatus (like Connector.OrderLookup)
+		var orderStatus = new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+		};
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(orderStatus, token);
+		toInner.Length.AssertEqual(1, "OrderStatus should be sent to inner adapter");
+
+		// Simulate SubscriptionOnline response
+		var onlineMsg = new SubscriptionOnlineMessage { OriginalTransactionId = 100 };
+		await manager.ProcessOutMessageAsync(onlineMsg, token);
+
+		// Now send ExecutionMessage with order (like from MarketEmulator)
+		// This simulates order response with DIFFERENT security ID than subscription
+		var execMsg = new ExecutionMessage
+		{
+			SecurityId = secId,  // Specific security ID
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 200,  // Order's transaction id (not subscription id!)
+			TransactionId = 200,
+			OrderId = 1,
+			OrderState = OrderStates.Active,
+			HasOrderInfo = true,
+		};
+
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(execMsg, token);
+
+		forward.AssertNotNull("Transaction message should pass through");
+
+		// Critical: subscription IDs should be set so OrderReceived fires
+		// The manager should find OrderStatus subscription by fallback to default secId
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		IsTrue(ids.Length > 0, $"Transaction should have subscription IDs, got: [{string.Join(", ", ids)}]");
+		IsTrue(ids.Contains(100), $"ID 100 should be in: [{string.Join(", ", ids)}]");
+	}
+
+	/// <summary>
+	/// Debug test to verify OrderStatus creates subscription with correct key.
+	/// </summary>
+	[TestMethod]
+	public async Task OrderStatus_CreatesSubscriptionWithDefaultSecurityId()
+	{
+		var logReceiver = new TestReceiver();
+		var state = new SubscriptionOnlineManagerState();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, state);
+		var token = CancellationToken;
+
+		// Subscribe to OrderStatus
+		var orderStatus = new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+		};
+
+		await manager.ProcessInMessageAsync(orderStatus, token);
+
+		// Verify subscription created with correct key
+		var found = state.TryGetSubscriptionByKey((DataType.Transactions, default(SecurityId)), out var info);
+		IsTrue(found, "OrderStatus subscription should be found by (Transactions, default) key");
+		IsNotNull(info, "Subscription info should not be null");
+		AreEqual(100, info.Subscription.TransactionId, "Subscription TransactionId should match");
 	}
 
 	#endregion
