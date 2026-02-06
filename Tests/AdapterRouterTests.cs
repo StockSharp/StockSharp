@@ -711,6 +711,25 @@ public class AdapterRouterTests : BaseTestClass
 		IsFalse(router.TryGetOrderAdapter(999, out _));
 	}
 
+	/// <summary>
+	/// BUG: AdapterRouter.Clear() does not call _orderRouting.Clear().
+	/// After reconnection, stale order→adapter mappings remain.
+	/// </summary>
+	[TestMethod]
+	public void Clear_ShouldResetOrderRouting()
+	{
+		var orderRouting = new OrderRoutingState();
+		var router = CreateRouter(orderRouting);
+		var adapter = CreateAdapter();
+
+		router.AddOrderAdapter(100, adapter);
+		IsTrue(router.TryGetOrderAdapter(100, out _));
+
+		router.Clear();
+
+		IsFalse(router.TryGetOrderAdapter(100, out _), "Order routing should be cleared after Reset");
+	}
+
 	#endregion
 
 	#region AddMessageTypeAdapter / RemoveMessageTypeAdapter
