@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Moq" Version="$(MoqVer)" />
     <PackageReference Include="Ecng.UnitTesting" Version="$(EcngVer)" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MsTestSdkVer)" />
     <PackageReference Include="MSTest.TestAdapter" Version="$(MsTestVer)" />

@@ -4,7 +4,6 @@
     <Compile Include="..\Designer.Templates\Backtest\SmaStrategy.cs" Link="SmaStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Moq" Version="$(MoqVer)" />
     <PackageReference Include="Ecng.Excel.OpenXml" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.Data.Ado" Version="$(EcngVer)" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="$(MsSqlClientVer)" />
