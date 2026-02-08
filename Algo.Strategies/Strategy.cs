@@ -1940,7 +1940,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	public virtual void Start()
 	{
 		_stopping = false;
-		SafeGetConnector().SendOutMessage(new StrategyChangeStateMessage(this, ProcessStates.Started));
+		AsyncHelper.Run(() => SafeGetConnector().SendOutMessageAsync(new StrategyChangeStateMessage(this, ProcessStates.Started), default));
 	}
 
 	/// <summary>
@@ -1952,7 +1952,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			return;
 
 		_stopping = true;
-		SafeGetConnector().SendOutMessage(new StrategyChangeStateMessage(this, ProcessStates.Stopping));
+		AsyncHelper.Run(() => SafeGetConnector().SendOutMessageAsync(new StrategyChangeStateMessage(this, ProcessStates.Stopping), default));
 	}
 
 	/// <summary>

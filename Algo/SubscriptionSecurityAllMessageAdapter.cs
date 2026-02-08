@@ -14,7 +14,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 		public MarketDataMessage Origin { get; } = origin ?? throw new ArgumentNullException(nameof(origin));
 	}
 
-	private class ChildSubscription(SubscriptionSecurityAllMessageAdapter.ParentSubscription parent, MarketDataMessage origin) : BaseSubscription(origin)
+	private class ChildSubscription(ParentSubscription parent, MarketDataMessage origin) : BaseSubscription(origin)
 	{
 		public ParentSubscription Parent { get; } = parent ?? throw new ArgumentNullException(nameof(parent));
 		public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;

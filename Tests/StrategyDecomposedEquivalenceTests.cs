@@ -18,7 +18,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	{
 		private long _nextId = 1000;
 
-		public DateTime CurrentTimeUtc { get; set; } = DateTime.UtcNow;
+		public DateTime CurrentTime { get; set; } = DateTime.UtcNow;
 		public List<Message> SentMessages { get; } = [];
 		public void SendOutMessage(Message message) => SentMessages.Add(message);
 		public ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)

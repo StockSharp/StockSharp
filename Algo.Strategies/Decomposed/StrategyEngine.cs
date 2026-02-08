@@ -61,21 +61,21 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 	/// <summary>
 	/// Request strategy start. Sends state change message through host.
 	/// </summary>
-	public void RequestStart()
+	public ValueTask RequestStartAsync(CancellationToken cancellationToken)
 	{
 		_processState = ProcessStates.Stopped; // ensure clean state
-		_host.SendOutMessage(new StrategyStateMessage(ProcessStates.Started));
+		return _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Started), cancellationToken);
 	}
 
 	/// <summary>
 	/// Request strategy stop. Sends state change message through host.
 	/// </summary>
-	public void RequestStop()
+	public ValueTask RequestStopAsync(CancellationToken cancellationToken)
 	{
 		if (ProcessState == ProcessStates.Stopped)
-			return;
+			return default;
 
-		_host.SendOutMessage(new StrategyStateMessage(ProcessStates.Stopping));
+		return _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Stopping), cancellationToken);
 	}
 
 	/// <summary>
@@ -149,7 +149,7 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 				if (timeMsg.IsBack())
 					return;
 
-				msgTime = _host.CurrentTimeUtc;
+				msgTime = _host.CurrentTime;
 				break;
 			}
 

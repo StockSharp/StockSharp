@@ -1,6 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_target_net.props" />
   <ItemGroup>
+    <PackageReference Include="Ecng.GeneticSharp" Version="$(EcngVer)" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Alerts.Interfaces\Alerts.Interfaces.csproj" />
     <ProjectReference Include="..\Algo.Testing\Algo.Testing.csproj" />
   </ItemGroup>
