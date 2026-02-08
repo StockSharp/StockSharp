@@ -6,6 +6,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Excel.OpenXml" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Interop" Version="$(EcngVer)" />
     <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>

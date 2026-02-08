@@ -3,6 +3,7 @@
   <ItemGroup>
     <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
     <PackageReference Include="Ecng.Excel.OpenXml" Version="$(EcngVer)" />
+    <PackageReference Include="Ecng.Interop" Version="$(EcngVer)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Algo.Indicators\Algo.Indicators.csproj" />
