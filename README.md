@@ -10,7 +10,7 @@
 
 **StockSharp** (shortly **S#**) – are **free** platform for trading at any markets of the world (crypto exchanges, American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
 
-**Available connections**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, BitMEX, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED and many other.
+**Available connections**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, BitMEX, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED, Aster, edgeX, Ligther, Paradex, Hyperliquid and many other.
 
 ## [Designer][8]
 <img src="./Media/Designer500.gif" align="left" />
@@ -154,6 +154,15 @@ connector.Connect();
 |<img src="./Media/logos/yobit_logo.svg" height="30" /> |YoBit | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/yobit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/zaif_logo.svg" height="30" /> |Zaif | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/zaif.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/zb_logo.svg" height="30" /> |ZB | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/zb.html" target="_blank">Docs</a> |
+
+## DEX exchanges
+|Logo | Name | Documentation |
+|:---:|:----:|:-------------:|
+|<img src="./Media/logos/Aster_logo.svg" height="30" /> |Aster | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/aster.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/edgeX_logo.svg" height="30" /> |edgeX | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/Ligther_logo.svg" height="30" /> |Ligther | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/Paradex_logo.svg" height="30" /> |Paradex | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/Hyperliquid_logo.svg" height="30" /> |Hyperliquid | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/hyperliquid.html" target="_blank">Docs</a> |
 
 ## Stock, Futures and Options
 |Logo | Name | Documentation |
