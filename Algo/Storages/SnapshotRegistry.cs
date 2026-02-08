@@ -2,8 +2,6 @@ namespace StockSharp.Algo.Storages;
 
 using System.Diagnostics;
 
-using Ecng.Interop;
-
 using StockSharp.Algo.Storages.Binary.Snapshot;
 
 /// <summary>
