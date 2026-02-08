@@ -195,10 +195,6 @@ public sealed class TransactionOrderingManager : ITransactionOrderingManager
 
 					extraOut.Add(order);
 
-					// Add a marker to indicate suspended trades should be processed for this order
-					var suspendedTrades = GetSuspendedTradesInternal(order);
-					extraOut.AddRange(suspendedTrades);
-
 					foreach (var trade in trades)
 						extraOut.Add(trade);
 				}

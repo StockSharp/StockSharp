@@ -51,9 +51,8 @@ public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 	{
 		var (forward, extraOut, processSuspended) = _manager.ProcessOutMessage(message);
 
-		if (forward != null)
-			await base.OnInnerAdapterNewOutMessageAsync(forward, cancellationToken);
-
+		// emit accumulated data before SubscriptionFinished/Online
+		// so consumers see all orders/trades before the subscription ends
 		if (extraOut.Length > 0)
 		{
 			foreach (var msg in extraOut)
@@ -65,6 +64,9 @@ public class TransactionOrderingMessageAdapter : MessageAdapterWrapper
 					await ProcessSuspendedAsync(execMsg, cancellationToken);
 			}
 		}
+
+		if (forward != null)
+			await base.OnInnerAdapterNewOutMessageAsync(forward, cancellationToken);
 
 		if (processSuspended && message is ExecutionMessage execMessage)
 			await ProcessSuspendedAsync(execMessage, cancellationToken);

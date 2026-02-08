@@ -123,9 +123,9 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
 
 		output.Count.AssertEqual(3);
-		output[0].AssertSame(forward);
-		output[1].AssertSame(extra1);
-		output[2].AssertSame(extra2);
+		output[0].AssertSame(extra1);
+		output[1].AssertSame(extra2);
+		output[2].AssertSame(forward);
 	}
 
 	[TestMethod]
@@ -234,9 +234,9 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
 
 		output.Count.AssertEqual(3);
-		output[0].AssertSame(forward);
-		output[1].AssertSame(orderFromTransactionLog);
-		output[2].AssertSame(suspendedTrade);
+		output[0].AssertSame(orderFromTransactionLog);
+		output[1].AssertSame(suspendedTrade);
+		output[2].AssertSame(forward);
 
 		manager.Verify(m => m.GetSuspendedTrades(It.IsAny<ExecutionMessage>()), Times.Once);
 	}

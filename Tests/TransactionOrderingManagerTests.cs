@@ -551,4 +551,230 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		forward.AssertNotNull();
 		((ExecutionMessage)forward).SecurityId.AssertEqual(secId);
 	}
+
+	[TestMethod]
+	public void ProcessOutMessage_SubscriptionOnline_EmitsDataBeforeOnline()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new TransactionOrderingManager(logReceiver, () => true);
+
+		var secId = CreateSecurityId();
+
+		// 1. Subscribe with transaction log
+		manager.ProcessInMessage(new OrderStatusMessage
+		{
+			TransactionId = 200,
+			IsSubscribe = true,
+		});
+
+		// 2. Register order (so secId is tracked)
+		manager.ProcessInMessage(new OrderRegisterMessage
+		{
+			TransactionId = 100,
+			SecurityId = secId,
+			Price = 10m,
+			Volume = 5m,
+		});
+
+		// 3. Execution with order info — gets accumulated
+		var orderExec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TransactionId = 100,
+			OriginalTransactionId = 200,
+			HasOrderInfo = true,
+			OrderId = 12345,
+			OrderState = OrderStates.Active,
+			OrderPrice = 10m,
+			OrderVolume = 5m,
+			Balance = 5m,
+		};
+
+		var (fwd1, _, _) = manager.ProcessOutMessage(orderExec);
+		fwd1.AssertNull(); // accumulated, not forwarded
+
+		// 4. Trade execution — also accumulated
+		var tradeExec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TransactionId = 100,
+			OriginalTransactionId = 200,
+			HasOrderInfo = true,
+			OrderId = 12345,
+			TradeId = 999,
+			TradePrice = 10m,
+			TradeVolume = 2m,
+		};
+
+		var (fwd2, _, _) = manager.ProcessOutMessage(tradeExec);
+		fwd2.AssertNull(); // accumulated, not forwarded
+
+		// 5. SubscriptionOnline arrives — should flush accumulated data
+		var onlineMsg = new SubscriptionOnlineMessage
+		{
+			OriginalTransactionId = 200,
+		};
+
+		var (forward, extraOut, processSuspended) = manager.ProcessOutMessage(onlineMsg);
+
+		// forward IS the SubscriptionOnline message
+		forward.AssertSame(onlineMsg);
+
+		// extraOut should contain: order snapshot + trade
+		(extraOut.Length >= 2).AssertTrue();
+
+		// first element is the order snapshot
+		var orderSnapshot = (ExecutionMessage)extraOut[0];
+		orderSnapshot.HasOrderInfo.AssertTrue();
+		orderSnapshot.OrderId.AssertEqual(12345L);
+
+		// last element is the trade
+		var trade = (ExecutionMessage)extraOut[^1];
+		trade.HasTradeInfo.AssertTrue();
+		trade.TradeId.AssertEqual(999L);
+
+		processSuspended.AssertFalse();
+	}
+
+	[TestMethod]
+	public void ProcessOutMessage_SubscriptionOnline_DoesNotIncludeSuspendedTrades()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new TransactionOrderingManager(logReceiver, () => true);
+
+		var secId = CreateSecurityId();
+
+		// 1. Subscribe with transaction log
+		manager.ProcessInMessage(new OrderStatusMessage
+		{
+			TransactionId = 200,
+			IsSubscribe = true,
+		});
+
+		// 2. Suspend a trade (order not yet known)
+		var suspendedTrade = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TransactionId = 0,
+			OriginalTransactionId = 0,
+			OrderId = 77777,
+			TradeId = 88888,
+			TradePrice = 50m,
+		};
+
+		manager.ProcessOutMessage(suspendedTrade);
+
+		// 3. Register order and accumulate execution
+		manager.ProcessInMessage(new OrderRegisterMessage
+		{
+			TransactionId = 100,
+			SecurityId = secId,
+			Price = 10m,
+			Volume = 5m,
+		});
+
+		var orderExec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TransactionId = 100,
+			OriginalTransactionId = 200,
+			HasOrderInfo = true,
+			OrderId = 77777,
+			OrderState = OrderStates.Active,
+			OrderPrice = 10m,
+			OrderVolume = 5m,
+			Balance = 5m,
+		};
+
+		manager.ProcessOutMessage(orderExec);
+
+		// 4. SubscriptionOnline flushes
+		var onlineMsg = new SubscriptionOnlineMessage
+		{
+			OriginalTransactionId = 200,
+		};
+
+		var (forward, extraOut, _) = manager.ProcessOutMessage(onlineMsg);
+
+		forward.AssertSame(onlineMsg);
+
+		// extraOut should NOT contain the suspended trade — adapter handles that
+		foreach (var msg in extraOut)
+		{
+			if (msg is ExecutionMessage exec && exec.TradeId == 88888)
+				Fail("Suspended trade should not be in extraOut — adapter handles it via GetSuspendedTrades");
+		}
+
+		// suspended trade should still be retrievable via GetSuspendedTrades
+		var orderForSuspended = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderId = 77777,
+		};
+
+		var suspended = manager.GetSuspendedTrades(orderForSuspended);
+		suspended.Length.AssertEqual(1);
+		((ExecutionMessage)suspended[0]).TradeId.AssertEqual(88888L);
+	}
+
+	[TestMethod]
+	public void ProcessOutMessage_SubscriptionFinished_EmitsDataToo()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new TransactionOrderingManager(logReceiver, () => true);
+
+		var secId = CreateSecurityId();
+
+		// 1. Subscribe with transaction log
+		manager.ProcessInMessage(new OrderStatusMessage
+		{
+			TransactionId = 300,
+			IsSubscribe = true,
+		});
+
+		// 2. Register + accumulate
+		manager.ProcessInMessage(new OrderRegisterMessage
+		{
+			TransactionId = 150,
+			SecurityId = secId,
+			Price = 20m,
+			Volume = 3m,
+		});
+
+		var orderExec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = secId,
+			TransactionId = 150,
+			OriginalTransactionId = 300,
+			HasOrderInfo = true,
+			OrderId = 55555,
+			OrderState = OrderStates.Done,
+			OrderPrice = 20m,
+			OrderVolume = 3m,
+			Balance = 0m,
+		};
+
+		manager.ProcessOutMessage(orderExec);
+
+		// 3. SubscriptionFinished
+		var finishedMsg = new SubscriptionFinishedMessage
+		{
+			OriginalTransactionId = 300,
+		};
+
+		var (forward, extraOut, _) = manager.ProcessOutMessage(finishedMsg);
+
+		forward.AssertSame(finishedMsg);
+
+		extraOut.Length.AssertEqual(1);
+		var snapshot = (ExecutionMessage)extraOut[0];
+		snapshot.HasOrderInfo.AssertTrue();
+		snapshot.OrderId.AssertEqual(55555L);
+	}
 }
