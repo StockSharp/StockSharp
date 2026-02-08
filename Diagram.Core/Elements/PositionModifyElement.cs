@@ -460,7 +460,7 @@ public class PositionModifyElement : OrderRegisterBaseDiagramElement
 			throw new InvalidOperationException(LocalizedStrings.OrderSideNotSpecified);
 
 		if (NeedLastPrice && _lastPriceSocket?.IsConnected != true)
-			throw new InvalidOperationException(LocalizedStrings.OrderVolumeNotSpecified);
+			throw new InvalidOperationException(LocalizedStrings.PriceNotSpecified);
 
 		if (NeedLastVolume && _lastVolumeSocket?.IsConnected != true)
 			throw new InvalidOperationException(LocalizedStrings.OrderVolumeNotSpecified);
