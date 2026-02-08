@@ -466,10 +466,13 @@ public static partial class StrategyHelper
 	/// <param name="extra">Extra action.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	public static async ValueTask<(bool completed, Exception error)> ExecAsync(this Strategy strategy, Action extra, CancellationToken cancellationToken)
+	public static async ValueTask<(bool completed, Exception error)> ExecAsync(this Strategy strategy, Func<CancellationToken, ValueTask> extra, CancellationToken cancellationToken)
 	{
 		if (strategy is null)
 			throw new ArgumentNullException(nameof(strategy));
+
+		if (extra is null)
+			throw new ArgumentNullException(nameof(extra));
 
 		if (strategy.ProcessState != ProcessStates.Stopped)
 			throw new ArgumentException($"State is {strategy.ProcessState}.", nameof(strategy));
@@ -521,7 +524,7 @@ public static partial class StrategyHelper
 
 			strategy.Start();
 
-			extra?.Invoke();
+			await extra(cancellationToken);
 
 			var res = await tcs.Task;
 
