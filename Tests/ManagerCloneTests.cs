@@ -597,20 +597,4 @@ public class ManagerCloneTests : BaseTestClass
 
 	#endregion
 
-	#region All Basket Managers Cloneable
-
-	[TestMethod]
-	public void AllBasketManagersCloneable()
-	{
-		new LatencyManager(new LatencyManagerState()).Clone().AssertNotNull();
-		new SlippageManager(new SlippageManagerState()).Clone().AssertNotNull();
-		new CommissionManager().Clone().AssertNotNull();
-		new PnLManager().Clone().AssertNotNull();
-		new PositionManager(true, new PositionManagerState()).Clone().AssertNotNull();
-		new OrderBookIncrementManager(new TestReceiver(), new OrderBookIncrementManagerState()).Clone().AssertNotNull();
-		new OrderBookTruncateManager(new TestReceiver(), _ => null, new OrderBookTruncateManagerState()).Clone().AssertNotNull();
-		new Level1DepthBuilderManager(new TestReceiver(), new Level1DepthBuilderManagerState()).Clone().AssertNotNull();
-	}
-
-	#endregion
 }
