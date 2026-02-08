@@ -45,6 +45,15 @@ public class EmulatedPortfolio : IPortfolio
 	public decimal Commission => _commission;
 
 	/// <inheritdoc />
+	public decimal MarginCallLevel { get; set; } = 0.5m;
+
+	/// <inheritdoc />
+	public decimal StopOutLevel { get; set; } = 0.2m;
+
+	/// <inheritdoc />
+	public bool EnableStopOut { get; set; }
+
+	/// <inheritdoc />
 	public void SetMoney(decimal money)
 	{
 		_beginMoney = money;
@@ -242,6 +251,29 @@ public class EmulatedPortfolio : IPortfolio
 	/// <inheritdoc />
 	public IEnumerable<PositionInfo> GetAllPositions() => _positions.Values;
 
+	/// <inheritdoc />
+	public decimal CalculateUnrealizedPnL(Func<SecurityId, decimal?> getCurrentPrice)
+	{
+		if (getCurrentPrice is null)
+			throw new ArgumentNullException(nameof(getCurrentPrice));
+
+		var total = 0m;
+
+		foreach (var pos in _positions.Values)
+		{
+			if (pos.CurrentValue == 0)
+				continue;
+
+			var price = getCurrentPrice(pos.SecurityId);
+			if (price is null)
+				continue;
+
+			total += (price.Value - pos.AveragePrice) * pos.CurrentValue;
+		}
+
+		return total;
+	}
+
 	/// <summary>
 	/// Clear all state (used by Reset).
 	/// </summary>
@@ -261,6 +293,11 @@ public class EmulatedPortfolio : IPortfolio
 public class EmulatedPortfolioManager : IPortfolioManager
 {
 	private readonly Dictionary<string, EmulatedPortfolio> _portfolios = [];
+
+	/// <summary>
+	/// Margin controller for order validation.
+	/// </summary>
+	public IMarginController MarginController { get; set; }
 
 	/// <inheritdoc />
 	public IPortfolio GetPortfolio(string name)
@@ -286,12 +323,17 @@ public class EmulatedPortfolioManager : IPortfolioManager
 	}
 
 	/// <inheritdoc />
-	public InvalidOperationException ValidateFunds(string portfolioName, decimal price, decimal volume)
+	public InvalidOperationException ValidateFunds(string portfolioName, SecurityId securityId, decimal price, decimal volume)
 	{
 		if (!HasPortfolio(portfolioName))
 			return null;
 
 		var portfolio = GetPortfolio(portfolioName);
+		var position = portfolio.GetPosition(securityId);
+
+		if (MarginController is not null)
+			return MarginController.ValidateOrder(portfolio, price, volume, position);
+
 		var needMoney = price * volume;
 
 		if (portfolio.AvailableMoney < needMoney)

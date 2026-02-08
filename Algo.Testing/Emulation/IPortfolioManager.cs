@@ -49,6 +49,11 @@ public class PositionInfo(SecurityId securityId)
 	/// Total value of active sell orders (volume * price).
 	/// </summary>
 	public decimal TotalAsksValue { get; set; }
+
+	/// <summary>
+	/// Margin leverage for this position. Null means default (1x).
+	/// </summary>
+	public decimal? Leverage { get; set; }
 }
 
 /// <summary>
@@ -103,6 +108,21 @@ public interface IPortfolio
 	/// Total commission paid.
 	/// </summary>
 	decimal Commission { get; }
+
+	/// <summary>
+	/// Margin call level threshold. When margin level falls to this value, a warning is triggered.
+	/// </summary>
+	decimal MarginCallLevel { get; set; }
+
+	/// <summary>
+	/// Stop-out level threshold. When margin level falls to this value, positions are liquidated.
+	/// </summary>
+	decimal StopOutLevel { get; set; }
+
+	/// <summary>
+	/// Enable automatic position liquidation on stop-out.
+	/// </summary>
+	bool EnableStopOut { get; set; }
 
 	/// <summary>
 	/// Set initial money.
@@ -164,6 +184,13 @@ public interface IPortfolio
 	/// Get all position info objects.
 	/// </summary>
 	IEnumerable<PositionInfo> GetAllPositions();
+
+	/// <summary>
+	/// Calculate unrealized PnL across all positions.
+	/// </summary>
+	/// <param name="getCurrentPrice">Function to get current market price for a security. Returns null if price unavailable.</param>
+	/// <returns>Total unrealized PnL.</returns>
+	decimal CalculateUnrealizedPnL(Func<SecurityId, decimal?> getCurrentPrice);
 }
 
 /// <summary>
@@ -195,10 +222,11 @@ public interface IPortfolioManager
 	/// Validate that portfolio has sufficient funds for order registration.
 	/// </summary>
 	/// <param name="portfolioName">Portfolio name.</param>
+	/// <param name="securityId">Security ID (for per-position leverage).</param>
 	/// <param name="price">Order price.</param>
 	/// <param name="volume">Order volume.</param>
 	/// <returns>Error if insufficient funds, null otherwise.</returns>
-	InvalidOperationException ValidateFunds(string portfolioName, decimal price, decimal volume);
+	InvalidOperationException ValidateFunds(string portfolioName, SecurityId securityId, decimal price, decimal volume);
 
 	/// <summary>
 	/// Clear all portfolio state.

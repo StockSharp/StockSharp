@@ -973,6 +973,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			var beginValue = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.BeginValue);
 			if (beginValue.HasValue)
 				portfolio.SetPosition(posMsg.SecurityId, beginValue.Value);
+
+			var leverage = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.Leverage);
+			if (leverage.HasValue)
+			{
+				var pos = portfolio.GetPosition(posMsg.SecurityId);
+				if (pos is not null)
+					pos.Leverage = leverage.Value;
+			}
 		}
 
 		results.Add(posMsg.Clone());
@@ -1109,9 +1117,18 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	{
 		// Check portfolio funds if needed
 		if (Settings.CheckMoney)
-			return _portfolioManager.ValidateFunds(regMsg.PortfolioName, regMsg.Price, regMsg.Volume);
+		{
+			EnsureMarginController();
+			return _portfolioManager.ValidateFunds(regMsg.PortfolioName, regMsg.SecurityId, regMsg.Price, regMsg.Volume);
+		}
 
 		return null;
+	}
+
+	private void EnsureMarginController()
+	{
+		if (_portfolioManager is EmulatedPortfolioManager epm && epm.MarginController is null)
+			epm.MarginController = new MarginController();
 	}
 
 	private static ExecutionMessage CreateOrderResponse(OrderRegisterMessage regMsg, OrderStates state,
@@ -1136,9 +1153,10 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		};
 	}
 
-	private static void AddPortfolioUpdate(IPortfolio portfolio, DateTime time, List<Message> results)
+	private void AddPortfolioUpdate(IPortfolio portfolio, DateTime time, List<Message> results)
 	{
-		var totalPnL = portfolio.RealizedPnL - portfolio.Commission;
+		var unrealizedPnL = portfolio.CalculateUnrealizedPnL(GetCurrentPrice);
+		var totalPnL = portfolio.RealizedPnL - portfolio.Commission + unrealizedPnL;
 
 		results.Add(new PositionChangeMessage
 		{
@@ -1148,11 +1166,25 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			PortfolioName = portfolio.Name,
 		}
 		.Add(PositionChangeTypes.RealizedPnL, portfolio.RealizedPnL)
-		.TryAdd(PositionChangeTypes.UnrealizedPnL, 0m, true)
+		.TryAdd(PositionChangeTypes.UnrealizedPnL, unrealizedPnL, true)
 		.Add(PositionChangeTypes.VariationMargin, totalPnL)
 		.Add(PositionChangeTypes.CurrentValue, portfolio.CurrentMoney)
 		.Add(PositionChangeTypes.BlockedValue, portfolio.BlockedMoney)
 		.Add(PositionChangeTypes.Commission, portfolio.Commission));
+	}
+
+	private decimal? GetCurrentPrice(SecurityId securityId)
+	{
+		if (!_securityEmulators.TryGetValue(securityId, out var emulator))
+			return null;
+
+		var bid = emulator.OrderBook.BestBid;
+		var ask = emulator.OrderBook.BestAsk;
+
+		if (bid.HasValue && ask.HasValue)
+			return (bid.Value.price + ask.Value.price) / 2;
+
+		return bid?.price ?? ask?.price;
 	}
 
 	/// <inheritdoc />
