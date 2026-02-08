@@ -90,7 +90,7 @@ public static class IConnectorAsyncExtensions
 	/// <param name="connector"><see cref="IConnector"/></param>
 	/// <param name="order"><see cref="Order"/> to register.</param>
 	/// <returns>Async stream of tuples (Order, Trade) where Trade is null for state-only updates.</returns>
-	public static IAsyncEnumerable<(Order order, MyTrade trade)> RegisterOrderAsync(
+	public static IAsyncEnumerable<(Order order, MyTrade trade)> RegisterOrderAndWaitAsync(
 		this IConnector connector,
 		Order order)
 	{
@@ -99,10 +99,10 @@ public static class IConnectorAsyncExtensions
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		return RegisterOrderAsyncImpl(connector, order);
+		return RegisterOrderAndWaitAsyncImpl(connector, order);
 	}
 
-	private static async IAsyncEnumerable<(Order order, MyTrade trade)> RegisterOrderAsyncImpl(
+	private static async IAsyncEnumerable<(Order order, MyTrade trade)> RegisterOrderAndWaitAsyncImpl(
 		IConnector connector,
 		Order order,
 		[EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -116,6 +116,8 @@ public static class IConnectorAsyncExtensions
 			SingleWriter = false,
 			AllowSynchronousContinuations = true,
 		});
+
+		var lastState = (OrderStates?)null;
 
 		void OnOrderReceived(Subscription _, Order o)
 		{

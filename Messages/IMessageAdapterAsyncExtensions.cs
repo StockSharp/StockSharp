@@ -374,7 +374,7 @@ public static class IMessageAdapterAsyncExtensions
 	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
 	/// <param name="order"><see cref="OrderRegisterMessage"/> to register.</param>
 	/// <returns>Async stream of <see cref="ExecutionMessage"/> with order info and trades.</returns>
-	public static IAsyncEnumerable<ExecutionMessage> RegisterOrderAsync(
+	public static IAsyncEnumerable<ExecutionMessage> RegisterOrderAndWaitAsync(
 		this IMessageAdapter adapter,
 		OrderRegisterMessage order)
 	{
@@ -383,10 +383,10 @@ public static class IMessageAdapterAsyncExtensions
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		return RegisterOrderAsyncImpl(adapter, order);
+		return RegisterOrderAndWaitAsyncImpl(adapter, order);
 	}
 
-	private static async IAsyncEnumerable<ExecutionMessage> RegisterOrderAsyncImpl(
+	private static async IAsyncEnumerable<ExecutionMessage> RegisterOrderAndWaitAsyncImpl(
 		IMessageAdapter adapter,
 		OrderRegisterMessage order,
 		[EnumeratorCancellation] CancellationToken cancellationToken = default)

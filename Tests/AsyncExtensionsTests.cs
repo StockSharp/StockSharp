@@ -957,7 +957,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 	#endregion
 
-	#region RegisterOrderAsync Tests
+	#region RegisterOrderAndWaitAsync Tests
 
 	/// <summary>
 	/// Adapter for order lifecycle tests.
@@ -1017,7 +1017,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		IMessageAdapter adapter = null;
 		var order = new OrderRegisterMessage();
 
-		ThrowsExactly<ArgumentNullException>(() => adapter.RegisterOrderAsync(order));
+		ThrowsExactly<ArgumentNullException>(() => adapter.RegisterOrderAndWaitAsync(order));
 	}
 
 	[TestMethod]
@@ -1025,7 +1025,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	{
 		var adapter = new OrderTestAdapter();
 
-		ThrowsExactly<ArgumentNullException>(() => adapter.RegisterOrderAsync(null));
+		ThrowsExactly<ArgumentNullException>(() => adapter.RegisterOrderAndWaitAsync(null));
 	}
 
 	[TestMethod]
@@ -1046,7 +1046,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var exec in adapter.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				executions.Add(exec);
 		}, CancellationToken);
 
@@ -1082,7 +1082,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var exec in adapter.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				executions.Add(exec);
 		}, CancellationToken);
 
@@ -1123,7 +1123,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(cts.Token))
+			await foreach (var exec in adapter.RegisterOrderAndWaitAsync(order).WithCancellation(cts.Token))
 			{
 				executions.Add(exec);
 				if (exec.OrderState == OrderStates.Active)
@@ -1172,7 +1172,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var _ in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var _ in adapter.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 			{ }
 		}, CancellationToken);
 
@@ -1203,7 +1203,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		cts.Cancel();
 
 		var count = 0;
-		await foreach (var _ in adapter.RegisterOrderAsync(order).WithCancellation(cts.Token))
+		await foreach (var _ in adapter.RegisterOrderAndWaitAsync(order).WithCancellation(cts.Token))
 			count++;
 
 		AreEqual(0, count);
@@ -1230,7 +1230,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		{
 			try
 			{
-				await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+				await foreach (var exec in adapter.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 					executions.Add(exec);
 			}
 			catch (InvalidOperationException ex)
@@ -1269,7 +1269,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var exec in adapter.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				executions.Add(exec);
 		}, CancellationToken);
 
@@ -1328,7 +1328,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var exec in adapter.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				executions.Add(exec);
 		}, CancellationToken);
 
@@ -1384,7 +1384,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var exec in adapter.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var exec in adapter.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				executions.Add(exec);
 		}, CancellationToken);
 
@@ -1434,7 +1434,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 	#endregion
 
-	#region IConnector.RegisterOrderAsync Tests
+	#region IConnector.RegisterOrderAndWaitAsync Tests
 
 	[TestMethod]
 	public void Connector_RegisterOrderAsync_NullConnector_Throws()
@@ -1442,7 +1442,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		IConnector connector = null;
 		var order = new Order();
 
-		ThrowsExactly<ArgumentNullException>(() => connector.RegisterOrderAsync(order));
+		ThrowsExactly<ArgumentNullException>(() => connector.RegisterOrderAndWaitAsync(order));
 	}
 
 	[TestMethod]
@@ -1450,7 +1450,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	{
 		var connector = new Connector();
 
-		ThrowsExactly<ArgumentNullException>(() => connector.RegisterOrderAsync(null));
+		ThrowsExactly<ArgumentNullException>(() => connector.RegisterOrderAndWaitAsync(null));
 	}
 
 	[TestMethod]
@@ -1470,7 +1470,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		cts.Cancel();
 
 		var count = 0;
-		await foreach (var _ in connector.RegisterOrderAsync(order).WithCancellation(cts.Token))
+		await foreach (var _ in connector.RegisterOrderAndWaitAsync(order).WithCancellation(cts.Token))
 			count++;
 
 		AreEqual(0, count);
@@ -1506,7 +1506,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var evt in connector.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				events.Add(evt);
 		}, CancellationToken);
 
@@ -1573,7 +1573,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var evt in connector.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				events.Add(evt);
 		}, CancellationToken);
 
@@ -1642,7 +1642,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(cts.Token))
+			await foreach (var evt in connector.RegisterOrderAndWaitAsync(order).WithCancellation(cts.Token))
 			{
 				events.Add(evt);
 				if (evt.order.State == OrderStates.Active)
@@ -1702,7 +1702,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var evt in connector.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				events.Add(evt);
 		}, CancellationToken);
 
@@ -1780,7 +1780,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var evt in connector.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				events.Add(evt);
 		}, CancellationToken);
 

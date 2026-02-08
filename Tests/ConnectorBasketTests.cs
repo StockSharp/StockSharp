@@ -502,7 +502,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var evt in connector.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				events.Add(evt);
 		}, CancellationToken);
 
@@ -577,7 +577,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var evt in connector.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				events.Add(evt);
 		}, CancellationToken);
 
@@ -645,7 +645,7 @@ public class ConnectorBasketTests : BaseTestClass
 		{
 			try
 			{
-				await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(cts.Token))
+				await foreach (var evt in connector.RegisterOrderAndWaitAsync(order).WithCancellation(cts.Token))
 				{
 					events.Add(evt);
 					if (evt.order.State == OrderStates.Active)
@@ -714,7 +714,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var evt in connector.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				events.Add(evt);
 		}, CancellationToken);
 
@@ -783,7 +783,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		var enumTask = Task.Run(async () =>
 		{
-			await foreach (var evt in connector.RegisterOrderAsync(order).WithCancellation(CancellationToken))
+			await foreach (var evt in connector.RegisterOrderAndWaitAsync(order).WithCancellation(CancellationToken))
 				events.Add(evt);
 		}, CancellationToken);
 
