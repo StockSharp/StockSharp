@@ -116,5 +116,13 @@ public interface IConnector : IMessageTransport, IPersistable, ILogReceiver,
 	/// Send outgoing message.
 	/// </summary>
 	/// <param name="message">Message.</param>
+	[Obsolete("Use SendOutMessageAsync instead.")]
 	void SendOutMessage(Message message);
+
+	/// <summary>
+	/// Send outgoing message.
+	/// </summary>
+	/// <param name="message">Message.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken);
 }

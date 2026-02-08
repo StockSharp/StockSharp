@@ -320,15 +320,15 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	public MarketEmulatorSettings EmulationSettings => EmulationAdapter.Settings;
 
 	/// <inheritdoc />
-	public override void ClearCache()
+	public override async ValueTask ClearCacheAsync(CancellationToken cancellationToken)
 	{
-		base.ClearCache();
+		await base.ClearCacheAsync(cancellationToken);
 
 		IsFinished = false;
 	}
 
 	/// <inheritdoc />
-	protected override void OnConnect()
+	protected override async ValueTask OnConnectAsync(CancellationToken cancellationToken)
 	{
 		_startTime = HistoryMessageAdapter.StartDate;
 		_stopTime = HistoryMessageAdapter.StopDate;
@@ -340,19 +340,20 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 
 		_stopPending = false;
 
-		base.OnConnect();
+		await base.OnConnectAsync(cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override void OnDisconnect()
+	protected override ValueTask OnDisconnectAsync(CancellationToken cancellationToken)
 	{
 		if (/*EmulationAdapter.OwnInnerAdapter && */State == ChannelStates.Suspended)
 			EmulationAdapter.InChannel.Resume();
 
 		if (State is not ChannelStates.Stopped and not ChannelStates.Stopping)
-			SendEmulationState(ChannelStates.Stopping);
-		else
-			_stopPending = true;
+			return SendEmulationStateAsync(ChannelStates.Stopping, cancellationToken);
+
+		_stopPending = true;
+		return default;
 	}
 
 	private void OnDisconnected()
@@ -374,38 +375,39 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	/// <summary>
 	/// To start the emulation.
 	/// </summary>
-	public void Start()
+	public async ValueTask StartAsync(CancellationToken cancellationToken = default)
 	{
 		var isResuming = /*EmulationAdapter.OwnInnerAdapter && */State == ChannelStates.Suspended;
 
 		if (isResuming)
 			EmulationAdapter.InChannel.Resume();
 
-		SendEmulationState(ChannelStates.Starting);
+		await SendEmulationStateAsync(ChannelStates.Starting, cancellationToken);
 
 		if (!isResuming)
 		{
 			foreach (var rule in EmulationSettings.CommissionRules)
-				SendInMessage(new CommissionRuleMessage { Rule = rule });
+				await SendInMessageAsync(new CommissionRuleMessage { Rule = rule }, cancellationToken);
 		}
 	}
 
 	/// <summary>
 	/// To suspend the emulation.
 	/// </summary>
-	public void Suspend()
+	public ValueTask SuspendAsync(CancellationToken cancellationToken = default)
 	{
-		SendEmulationState(ChannelStates.Suspending);
+		return SendEmulationStateAsync(ChannelStates.Suspending, cancellationToken);
 	}
 
-	private void SendEmulationState(ChannelStates state)
+	private ValueTask SendEmulationStateAsync(ChannelStates state, CancellationToken cancellationToken)
 	{
 		var message = new EmulationStateMessage { State = state };
 
 		if (EmulationAdapter.OwnInnerAdapter)
-			SendInMessage(message);
-		else
-			ProcessEmulationStateMessage(message);
+			return SendInMessageAsync(message, cancellationToken);
+
+		ProcessEmulationStateMessage(message);
+		return default;
 	}
 
 	/// <inheritdoc />
@@ -428,7 +430,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		}
 		catch (Exception ex)
 		{
-			SendOutError(ex);
+			await SendOutErrorAsync(ex, cancellationToken);
 			Disconnect();
 		}
 	}
@@ -442,13 +444,13 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 			case ChannelStates.Stopping:
 			{
 				IsFinished = message.IsOk();
-				
+
 				// change ConnectionState to Disconnecting
 				if (ConnectionState != ConnectionStates.Disconnecting)
 					Disconnect();
 
 				// base method cannot be invoked from OnDisconnect HistConnector.OnDisconnect
-				base.OnDisconnect();
+				AsyncHelper.Run(() => base.OnDisconnectAsync(default));
 
 				break;
 			}

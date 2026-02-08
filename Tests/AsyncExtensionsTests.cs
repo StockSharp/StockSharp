@@ -242,7 +242,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var security = new Security { Id = "AAPL@TEST" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{
@@ -1487,7 +1487,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var security = new Security { Id = "AAPL@TEST" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{
@@ -1558,7 +1558,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var security = new Security { Id = "AAPL@TEST" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{
@@ -1625,7 +1625,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var security = new Security { Id = "AAPL@TEST" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{
@@ -1687,7 +1687,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var security = new Security { Id = "AAPL@TEST" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{
@@ -1765,7 +1765,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var security = new Security { Id = "SBER@TQBR" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{

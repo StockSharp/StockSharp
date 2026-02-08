@@ -238,12 +238,12 @@ public partial class MainWindow
 		ThemeExtensions.ApplyDefaultTheme();
 	}
 
-	private void StartBtnClick(object sender, RoutedEventArgs e)
+	private async void StartBtnClick(object sender, RoutedEventArgs e)
 	{
 		if (_connectors.Count > 0)
 		{
 			foreach (var connector in _connectors.Cache)
-				connector.Start();
+				await connector.StartAsync();
 
 			return;
 		}
@@ -592,7 +592,7 @@ public partial class MainWindow
 			connector.Connect();
 
 			// start historical data loading when connection established successfully and all data subscribed
-			connector.Start();
+			await connector.StartAsync();
 		}
 
 		TabControl.Items.Cast<TabItem>().First(i => i.Visibility == Visibility.Visible).IsSelected = true;
@@ -614,11 +614,11 @@ public partial class MainWindow
 		}
 	}
 
-	private void PauseBtnClick(object sender, RoutedEventArgs e)
+	private async void PauseBtnClick(object sender, RoutedEventArgs e)
 	{
 		foreach (var connector in _connectors.Cache)
 		{
-			connector.Suspend();
+			await connector.SuspendAsync();
 		}
 	}
 

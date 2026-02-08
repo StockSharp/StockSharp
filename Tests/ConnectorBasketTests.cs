@@ -258,7 +258,7 @@ public class ConnectorBasketTests : BaseTestClass
 		state.PendingState.Count.AssertEqual(0);
 
 		var security = new Security { Id = "AAPL@TEST" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{
@@ -485,7 +485,7 @@ public class ConnectorBasketTests : BaseTestClass
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var security = new Security { Id = "AAPL@TEST" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{
@@ -562,7 +562,7 @@ public class ConnectorBasketTests : BaseTestClass
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var security = new Security { Id = "AAPL@TEST" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{
@@ -627,7 +627,7 @@ public class ConnectorBasketTests : BaseTestClass
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var security = new Security { Id = "AAPL@TEST" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{
@@ -699,7 +699,7 @@ public class ConnectorBasketTests : BaseTestClass
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var security = new Security { Id = "AAPL@TEST" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{
@@ -768,7 +768,7 @@ public class ConnectorBasketTests : BaseTestClass
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
 
 		var security = new Security { Id = "SBER@TQBR" };
-		connector.SendOutMessage(security.ToMessage());
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
 
 		var order = new Order
 		{

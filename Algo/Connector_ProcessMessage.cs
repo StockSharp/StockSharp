@@ -19,7 +19,7 @@ partial class Connector
 				return;
 
 			_marketTimer = AsyncHelper
-				.CreatePeriodicTimer(() =>
+				.CreatePeriodicTimer(async () =>
 				{
 					try
 					{
@@ -35,7 +35,7 @@ partial class Connector
 						}
 
 						_marketTimeMessage.LocalTime = CurrentTime;
-						SendOutMessage(_marketTimeMessage);
+						await SendOutMessageAsync(_marketTimeMessage, default);
 					}
 					catch (Exception ex)
 					{
@@ -50,11 +50,8 @@ partial class Connector
 	{
 		using (_marketTimerSync.EnterScope())
 		{
-			if (_marketTimer != null)
-			{
-				_marketTimer.Dispose();
-				_marketTimer = null;
-			}
+			_marketTimer?.Dispose();
+			_marketTimer = null;
 
 			_isMarketTimeHandled = false;
 		}
@@ -91,16 +88,13 @@ partial class Connector
 			}
 			else if (message.Type == ExtendedMessageTypes.SubscriptionSecurityAll)
 			{
-				ApplySubscriptionManagerActions(_subscriptionManager.SubscribeAll((SubscriptionSecurityAllMessage)message));
-				return default;
+				return ApplySubscriptionManagerActionsAsync(_subscriptionManager.SubscribeAll((SubscriptionSecurityAllMessage)message), cancellationToken);
 			}
 
-			SendInMessage(message);
+			return SendInMessageAsync(message, cancellationToken);
 		}
-		else
-			SendOutMessage(message);
 
-		return default;
+		return SendOutMessageAsync(message, cancellationToken);
 	}
 
 	private IMessageChannel _inMessageChannel;
@@ -564,21 +558,33 @@ partial class Connector
 		=> SendMessage(InMessageChannel, message, cancellationToken);
 
 	/// <inheritdoc />
-	public void SendInMessage(Message message)
-		=> SendInMessageAsync(message, default);
+	public ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)
+		=> SendMessage(OutMessageChannel, message, cancellationToken);
 
 	/// <inheritdoc />
+	[Obsolete("Use SendInMessageAsync instead.")]
+	public void SendInMessage(Message message)
+		=> _ = SendInMessageAsync(message, default);
+
+	/// <inheritdoc />
+	[Obsolete("Use SendOutMessageAsync instead.")]
 	public void SendOutMessage(Message message)
-		=> SendMessage(OutMessageChannel, message, default);
+		=> _ = SendOutMessageAsync(message, default);
 
 	/// <summary>
 	/// Send error message.
 	/// </summary>
 	/// <param name="error">Error details.</param>
 	public void SendOutError(Exception error)
-	{
-		SendOutMessage(error.ToErrorMessage());
-	}
+		=> AsyncHelper.Run(() => SendOutErrorAsync(error, default));
+
+	/// <summary>
+	/// Send error message.
+	/// </summary>
+	/// <param name="error">Error details.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	public ValueTask SendOutErrorAsync(Exception error, CancellationToken cancellationToken)
+		=> SendOutMessageAsync(error.ToErrorMessage(), cancellationToken);
 
 	/// <summary>
 	/// Process message.
@@ -599,7 +605,7 @@ partial class Connector
 			switch (message.Type)
 			{
 				case MessageTypes.Connect:
-					ProcessConnectMessage((ConnectMessage)message);
+					await ProcessConnectMessage((ConnectMessage)message, cancellationToken);
 					break;
 
 				case MessageTypes.Disconnect:
@@ -836,7 +842,7 @@ partial class Connector
 		}
 	}
 
-	private void ProcessConnectMessage(ConnectMessage message)
+	private async ValueTask ProcessConnectMessage(ConnectMessage message, CancellationToken cancellationToken)
 	{
 		var adapter = message.Adapter;
 		var error = message.Error;
@@ -845,7 +851,7 @@ partial class Connector
 		{
 			if (adapter == Adapter)
 			{
-				ApplySubscriptionManagerActions(_subscriptionManager.HandleConnected(subscription => Adapter.IsMessageSupported(subscription.SubscriptionMessage.Type)));
+				await ApplySubscriptionManagerActionsAsync(_subscriptionManager.HandleConnected(subscription => Adapter.IsMessageSupported(subscription.SubscriptionMessage.Type)), cancellationToken);
 
 				// raise event after re subscriptions cause handler on Connected event can send some subscriptions
 				RaiseConnected();

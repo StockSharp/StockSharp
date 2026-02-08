@@ -8,12 +8,14 @@ public interface IStrategyHost
 	/// <summary>
 	/// Current UTC time.
 	/// </summary>
-	DateTime CurrentTimeUtc { get; }
+	DateTime CurrentTime { get; }
 
 	/// <summary>
 	/// Send outgoing message (state change, order, etc.).
 	/// </summary>
-	void SendOutMessage(Message message);
+	/// <param name="message">Message.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Get next transaction ID for subscriptions.

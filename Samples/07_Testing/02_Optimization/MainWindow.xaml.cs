@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Collections.Generic;
+using System.Threading;
 
 using Ecng.Xaml;
 using Ecng.Common;
@@ -32,6 +33,7 @@ public partial class MainWindow
 {
 	private DateTime _startEmulationTime;
 
+	private CancellationTokenSource _cts;
 	private BaseOptimizer _optimizer;
 
 	public MainWindow()
@@ -48,13 +50,10 @@ public partial class MainWindow
 		ThemeExtensions.ApplyDefaultTheme();
 	}
 
-	private void StartBtnClick(object sender, RoutedEventArgs e)
+	private async void StartBtnClick(object sender, RoutedEventArgs e)
 	{
-		if (_optimizer != null)
-		{
-			_optimizer.Resume();
+		if (_cts != null)
 			return;
-		}
 
 		OptimizeTypeGrid.IsEnabled = false;
 
@@ -100,12 +99,15 @@ public partial class MainWindow
 		var secProvider = new CollectionSecurityProvider([security]);
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 
-		if (BruteForce.IsChecked == true)
-			_optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
-		else
-			_optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
+		BaseOptimizer optimizer;
 
-		var settings = _optimizer.EmulationSettings;
+		if (BruteForce.IsChecked == true)
+			optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
+		else
+			optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
+
+		_optimizer = optimizer;
+		var settings = optimizer.EmulationSettings;
 
 		// set max possible iteration to 100
 		settings.MaxIterations = 100;
@@ -118,69 +120,27 @@ public partial class MainWindow
 
 		// count of parallel testing strategies
 		// if not set, then CPU count * 2
-		//_optimizer.EmulationSettings.BatchSize = 1;
+		//optimizer.EmulationSettings.BatchSize = 1;
 
 		// settings caching mode non security optimized param
-		_optimizer.AdapterCache = new();
-
-		var ids = new SynchronizedSet<Guid>();
+		optimizer.AdapterCache = new();
 
 		// handle single iteration progress
-		_optimizer.SingleProgressChanged += (s, a, p) =>
-		{
-			if (ids.TryAdd(s.Id))
-				this.GuiAsync(() => Stat.AddStrategy(s));
-			else
-				this.GuiAsync(() => Stat.UpdateProgress(s, p));
-		};
-
-		// handle historical time for update ProgressBar
-		_optimizer.TotalProgressChanged += (progress, duration, remaining) => this.GuiAsync(() =>
-		{
-			TestingProcess.Value = progress;
-
-			var remainingSeconds = remaining == TimeSpan.MaxValue ? "unk" : ((int)remaining.TotalSeconds).To<string>();
-			TestingProcessText.Text = $"{progress}% | {(int)duration.TotalSeconds} sec left | {remainingSeconds} sec rem";
-		});
-
-		_optimizer.StateChanged += (oldState, newState) =>
+		optimizer.SingleProgressChanged += (s, a, p) =>
 		{
 			this.GuiAsync(() =>
 			{
-				switch (newState)
-				{
-					case ChannelStates.Stopping:
-					case ChannelStates.Starting:
-					case ChannelStates.Suspending:
-						SetIsEnabled(false, false, false, false);
-						break;
-					case ChannelStates.Stopped:
-						SetIsEnabled(true, false, false, true);
-
-						if (!_optimizer.IsCancelled)
-						{
-							TestingProcess.Value = TestingProcess.Maximum;
-							MessageBox.Show(this, LocalizedStrings.CompletedIn.Put(DateTime.UtcNow - _startEmulationTime));
-						}
-						else
-							MessageBox.Show(this, LocalizedStrings.Cancelled);
-
-						_optimizer = null;
-
-						break;
-					case ChannelStates.Started:
-						SetIsEnabled(false, true, true, false);
-						break;
-					case ChannelStates.Suspended:
-						SetIsEnabled(true, false, true, false);
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(newState.ToString());
-				}
+				if (p == 100)
+					Stat.AddStrategy(s);
+				else
+					Stat.UpdateProgress(s, p);
 			});
 		};
 
+		SetIsEnabled(false, false, true, false);
+
 		_startEmulationTime = DateTime.UtcNow;
+		_cts = new CancellationTokenSource();
 
 		// Create base strategy with optimization ranges configured
 		var strategy = new History.SmaStrategy
@@ -205,42 +165,76 @@ public partial class MainWindow
 
 		var optimizeParams = new IStrategyParam[] { longParam, shortParam, tfParam };
 
-		if (_optimizer is BruteForceOptimizer btOptimizer)
+		var cancelled = false;
+		var count = 0;
+
+		try
 		{
-			var isRandomMode = RandomMode.IsChecked == true;
-			var randomCount = isRandomMode ? int.Parse(RandomCount.Text) : 0;
-
-			IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies;
-			int totalCount;
-
-			if (isRandomMode)
+			if (optimizer is BruteForceOptimizer btOptimizer)
 			{
-				// Random mode
-				strategies = strategy.ToBruteForceRandom(optimizeParams, randomCount, out _, out totalCount);
+				var isRandomMode = RandomMode.IsChecked == true;
+				var randomCount = isRandomMode ? int.Parse(RandomCount.Text) : 0;
+
+				IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies;
+
+				if (isRandomMode)
+					strategies = strategy.ToBruteForceRandom(optimizeParams, randomCount, out _, out _);
+				else
+					strategies = strategy.ToBruteForce(optimizeParams, out _, out _);
+
+				await foreach (var (s, _) in btOptimizer.RunAsync(startTime, stopTime, strategies, _cts.Token))
+				{
+					count++;
+					this.GuiAsync(() =>
+					{
+						TestingProcess.Value = count;
+						TestingProcessText.Text = $"{count} iterations | {(int)(DateTime.UtcNow - _startEmulationTime).TotalSeconds} sec";
+					});
+				}
 			}
 			else
 			{
-				// Step-based mode
-				strategies = strategy.ToBruteForce(optimizeParams, out _, out totalCount);
-			}
+				var go = (GeneticOptimizer)optimizer;
+				go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
 
-			// start emulation
-			btOptimizer.Start(startTime, stopTime, strategies, totalCount);
+				var geneticParams = strategy.ToGeneticParameters([
+					(tfParam, new[] { TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15) }),
+					(longParam, null),
+					(shortParam, null),
+				]);
+
+				await foreach (var (s, _) in go.RunAsync(startTime, stopTime, strategy, geneticParams, cancellationToken: _cts.Token))
+				{
+					count++;
+					this.GuiAsync(() =>
+					{
+						TestingProcess.Value = count;
+						TestingProcessText.Text = $"{count} iterations | {(int)(DateTime.UtcNow - _startEmulationTime).TotalSeconds} sec";
+					});
+				}
+			}
+		}
+		catch (OperationCanceledException)
+		{
+			cancelled = true;
+		}
+		finally
+		{
+			_cts.Dispose();
+			_cts = null;
+			_optimizer = null;
+			optimizer.Dispose();
+		}
+
+		SetIsEnabled(true, false, false, true);
+
+		if (!cancelled)
+		{
+			TestingProcess.Value = TestingProcess.Maximum;
+			MessageBox.Show(this, LocalizedStrings.CompletedIn.Put(DateTime.UtcNow - _startEmulationTime));
 		}
 		else
-		{
-			var go = (GeneticOptimizer)_optimizer;
-			go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
-
-			// Convert parameters to genetic format
-			var geneticParams = strategy.ToGeneticParameters([
-				(tfParam, new[] { TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15) }), // explicit values for timeframe
-				(longParam, null), // use range from SetOptimize
-				(shortParam, null), // use range from SetOptimize
-			]);
-
-			go.Start(startTime, stopTime, strategy, geneticParams);
-		}
+			MessageBox.Show(this, LocalizedStrings.Cancelled);
 	}
 
 	private void SetIsEnabled(bool canStart, bool canSuspend, bool canStop, bool canType)
@@ -256,11 +250,18 @@ public partial class MainWindow
 
 	private void StopBtnClick(object sender, RoutedEventArgs e)
 	{
-		_optimizer.Stop();
+		_cts?.Cancel();
 	}
 
 	private void PauseBtnClick(object sender, RoutedEventArgs e)
 	{
-		_optimizer.Suspend();
+		var optimizer = _optimizer;
+		if (optimizer is null)
+			return;
+
+		if (optimizer.IsPaused)
+			optimizer.Resume();
+		else
+			optimizer.Pause();
 	}
 }

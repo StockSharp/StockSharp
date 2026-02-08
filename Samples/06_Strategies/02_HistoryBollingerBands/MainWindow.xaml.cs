@@ -54,7 +54,7 @@ public partial class MainWindow
 		ThemeExtensions.ApplyDefaultTheme();
 	}
 
-	private void Start_Click(object sender, RoutedEventArgs e)
+	private async void Start_Click(object sender, RoutedEventArgs e)
 	{
 		_security = new Security
 		{
@@ -115,12 +115,12 @@ public partial class MainWindow
 		_strategy.Start();
 
 		_connector.Connect();
-		_connector.SendInMessage(new CommissionRuleMessage
+		await _connector.SendInMessageAsync(new CommissionRuleMessage
 		{
 			Rule = new CommissionTradeRule {Value = 0.01m}
-		});
+		}, default);
 
-		_connector.Start();
+		await _connector.StartAsync();
 	}
 
 	private void InitPnLChart()

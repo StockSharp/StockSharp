@@ -185,7 +185,7 @@ class Program
 
 		// start connector
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync();
 
 		// wait for completion
 		finishedEvent.WaitOne();

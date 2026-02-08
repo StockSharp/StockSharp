@@ -443,8 +443,8 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
 		var ethSecurity = new Security { Id = kucoinSecId.ToStringId() };
-		connector.SendOutMessage(btcSecurity.ToMessage());
-		connector.SendOutMessage(ethSecurity.ToMessage());
+		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
+		await connector.SendOutMessageAsync(ethSecurity.ToMessage(), CancellationToken);
 
 		var btcSubscription = new Subscription(DataType.Ticks, btcSecurity);
 		var ethSubscription = new Subscription(DataType.Ticks, ethSecurity);
@@ -491,8 +491,8 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
 		var ethSecurity = new Security { Id = kucoinSecId.ToStringId() };
-		connector.SendOutMessage(btcSecurity.ToMessage());
-		connector.SendOutMessage(ethSecurity.ToMessage());
+		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
+		await connector.SendOutMessageAsync(ethSecurity.ToMessage(), CancellationToken);
 
 		connector.RegisterOrder(new Order
 		{
@@ -571,8 +571,8 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
 		var ethSecurity = new Security { Id = kucoinSecId.ToStringId() };
-		connector.SendOutMessage(btcSecurity.ToMessage());
-		connector.SendOutMessage(ethSecurity.ToMessage());
+		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
+		await connector.SendOutMessageAsync(ethSecurity.ToMessage(), CancellationToken);
 
 		var btcSub = new Subscription(DataType.Ticks, btcSecurity);
 		var ethSub = new Subscription(DataType.Ticks, ethSecurity);
@@ -632,7 +632,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
-		connector.SendOutMessage(btcSecurity.ToMessage());
+		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
 
 		const int orderCount = 100;
 		var tasks = new List<Task>();
@@ -697,12 +697,13 @@ public class ConnectorRoutingTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		// Register all securities
-		var securityObjects = securities.Select(s =>
+		var securityObjects = new List<Security>();
+		foreach (var s in securities)
 		{
 			var sec = new Security { Id = s.ToStringId() };
-			connector.SendOutMessage(sec.ToMessage());
-			return sec;
-		}).ToArray();
+			await connector.SendOutMessageAsync(sec.ToMessage(), CancellationToken);
+			securityObjects.Add(sec);
+		}
 
 		await Task.Delay(200, CancellationToken);
 
@@ -770,12 +771,13 @@ public class ConnectorRoutingTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		// Register all securities
-		var securityObjects = securities.Select(s =>
+		var securityObjects = new List<Security>();
+		foreach (var s in securities)
 		{
 			var sec = new Security { Id = s.ToStringId() };
-			connector.SendOutMessage(sec.ToMessage());
-			return sec;
-		}).ToArray();
+			await connector.SendOutMessageAsync(sec.ToMessage(), CancellationToken);
+			securityObjects.Add(sec);
+		}
 
 		await Task.Delay(200, CancellationToken);
 
@@ -853,7 +855,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		// Subscribe to security that doesn't exist in adapter
 		var unknownSecId = new SecurityId { SecurityCode = "UNKNOWN", BoardCode = "BINANCE" };
 		var unknownSec = new Security { Id = unknownSecId.ToStringId() };
-		connector.SendOutMessage(unknownSec.ToMessage());
+		await connector.SendOutMessageAsync(unknownSec.ToMessage(), CancellationToken);
 
 		var sub = new Subscription(DataType.Ticks, unknownSec);
 		connector.Subscribe(sub);
@@ -892,7 +894,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
-		connector.SendOutMessage(btcSecurity.ToMessage());
+		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
 
 		var btcSub = new Subscription(DataType.Ticks, btcSecurity);
 		connector.Subscribe(btcSub);
@@ -937,8 +939,8 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		var btcSecurity = new Security { Id = binanceSecId1.ToStringId() };
 		var ethSecurity = new Security { Id = binanceSecId2.ToStringId() };
-		connector.SendOutMessage(btcSecurity.ToMessage());
-		connector.SendOutMessage(ethSecurity.ToMessage());
+		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
+		await connector.SendOutMessageAsync(ethSecurity.ToMessage(), CancellationToken);
 
 		// Both orders use same portfolio
 		connector.RegisterOrder(new Order
@@ -996,7 +998,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
-		connector.SendOutMessage(btcSecurity.ToMessage());
+		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
 
 		// Subscribe twice to same security
 		var sub1 = new Subscription(DataType.Ticks, btcSecurity);
@@ -1074,7 +1076,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
-		connector.SendOutMessage(btcSecurity.ToMessage());
+		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
 
 		// Create several subscriptions
 		for (int i = 0; i < 5; i++)
@@ -1118,7 +1120,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
-		connector.SendOutMessage(btcSecurity.ToMessage());
+		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
 
 		var sub = new Subscription(DataType.Ticks, btcSecurity);
 		connector.Subscribe(sub);
@@ -1174,7 +1176,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		await connector.ConnectAsync(CancellationToken);
 
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
-		connector.SendOutMessage(btcSecurity.ToMessage());
+		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
 
 		// Create order with specific values
 		var originalOrder = new Order

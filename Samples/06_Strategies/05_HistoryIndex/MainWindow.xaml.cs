@@ -106,11 +106,11 @@ public partial class MainWindow
 		_connector.Connect();
 	}
 
-	private void Connector_Connected()
+	private async void Connector_Connected()
 	{
 		_connector.Subscribe(new(DataType.Ticks, _security));
 		_connector.Subscribe(_subscription);
-		_connector.Start();
+		await _connector.StartAsync();
 	}
 
 	private void Processing(Subscription subscription, ICandleMessage candle)

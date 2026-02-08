@@ -75,9 +75,9 @@ public abstract class BaseEmulationConnector : Connector
 	}
 
 	/// <inheritdoc />
-	public override void ClearCache()
+	public override async ValueTask ClearCacheAsync(CancellationToken cancellationToken)
 	{
-		base.ClearCache();
+		await base.ClearCacheAsync(cancellationToken);
 
 		_currentTime = default;
 	}

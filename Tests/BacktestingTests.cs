@@ -106,7 +106,7 @@ public class BacktestingTests : BaseTestClass
 		strategy.Start();
 
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		// Short timeout - should complete quickly with 2 days of data
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromSeconds(15), CancellationToken));
@@ -294,7 +294,7 @@ public class BacktestingTests : BaseTestClass
 		foreach (var sub in connector.Subscriptions)
 			Console.WriteLine($"  - {sub.SubscriptionMessage.Type}: {sub.DataType}, State: {sub.State}");
 
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		Console.WriteLine($"After connector.Start");
 
@@ -371,7 +371,7 @@ public class BacktestingTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -434,7 +434,7 @@ public class BacktestingTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -501,7 +501,7 @@ public class BacktestingTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -561,7 +561,7 @@ public class BacktestingTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -633,7 +633,7 @@ public class BacktestingTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -693,7 +693,7 @@ public class BacktestingTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
 
@@ -756,7 +756,7 @@ public class BacktestingTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -830,7 +830,7 @@ public class BacktestingTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		// Wait for started
 		await Task.WhenAny(startedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
@@ -842,7 +842,7 @@ public class BacktestingTests : BaseTestClass
 		}
 
 		// Suspend
-		connector.Suspend();
+		await connector.SuspendAsync(CancellationToken);
 
 		// Wait for suspended
 		await Task.WhenAny(suspendedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
@@ -856,7 +856,7 @@ public class BacktestingTests : BaseTestClass
 		AreEqual(ChannelStates.Suspended, connector.State, "State should be Suspended");
 
 		// Resume
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		// Wait for completion
 		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
@@ -933,7 +933,7 @@ public class BacktestingTests : BaseTestClass
 		strategy1.Start();
 		strategy2.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -1110,7 +1110,7 @@ public class BacktestingTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 
@@ -1187,7 +1187,7 @@ public class BacktestingTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
 
@@ -1274,7 +1274,7 @@ public class BacktestingTests : BaseTestClass
 			strategy.Reset();
 			strategy.Start();
 			connector.Connect();
-			connector.Start();
+			await connector.StartAsync(CancellationToken);
 
 			await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
 
@@ -1363,7 +1363,7 @@ public class BacktestingTests : BaseTestClass
 			strategy.Reset();
 			strategy.Start();
 			connector.Connect();
-			connector.Start();
+			await connector.StartAsync(CancellationToken);
 
 			await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
 

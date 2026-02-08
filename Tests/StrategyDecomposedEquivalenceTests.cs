@@ -21,6 +21,11 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		public DateTime CurrentTimeUtc { get; set; } = DateTime.UtcNow;
 		public List<Message> SentMessages { get; } = [];
 		public void SendOutMessage(Message message) => SentMessages.Add(message);
+		public ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			SentMessages.Add(message);
+			return default;
+		}
 		public long GetNextTransactionId() => Interlocked.Increment(ref _nextId);
 	}
 
@@ -166,7 +171,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), ct));
 
@@ -225,7 +230,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(5), ct));
 
@@ -417,7 +422,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
 
@@ -516,7 +521,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		strategy.Reset();
 		strategy.Start();
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(CancellationToken);
 
 		await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
 
@@ -604,7 +609,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		decomposed.Connector = connMock.Object;
 		decomposed.Init();
-		decomposed.Start();
+		await decomposed.StartAsync();
 		decomposed.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
 
 		// 3. Feed same candles to DecomposedSmaStrategy
@@ -643,7 +648,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	/// Stopped -> Started -> (trading) -> Stopping.
 	/// </summary>
 	[TestMethod]
-	public void SmaEquivalence_StateLifecycle()
+	public async Task SmaEquivalence_StateLifecycle()
 	{
 		var connMock = new Mock<IConnector>();
 		connMock.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
@@ -661,14 +666,14 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		decomposed.StateHistory.Count.AreEqual(0);
 
 		// start
-		decomposed.Start();
+		await decomposed.StartAsync();
 		decomposed.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
 		decomposed.ProcessState.AreEqual(ProcessStates.Started);
 		decomposed.StateHistory.Count.AreEqual(1);
 		decomposed.StateHistory[0].AreEqual(ProcessStates.Started);
 
 		// stop
-		decomposed.Stop();
+		await decomposed.StopAsync();
 		decomposed.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
 		decomposed.ProcessState.AreEqual(ProcessStates.Stopping);
 		decomposed.StateHistory.Count.AreEqual(2);

@@ -2,7 +2,7 @@ namespace StockSharp.Algo;
 
 partial class Connector
 {
-	private void ApplySubscriptionManagerActions(ConnectorSubscriptionManager.Actions actions)
+	private async ValueTask ApplySubscriptionManagerActionsAsync(ConnectorSubscriptionManager.Actions actions, CancellationToken cancellationToken)
 	{
 		if (actions == null)
 			throw new ArgumentNullException(nameof(actions));
@@ -12,7 +12,7 @@ partial class Connector
 			switch (action.Type)
 			{
 				case ConnectorSubscriptionManager.Actions.Item.Types.SendInMessage:
-					SendInMessage(action.Message);
+					await SendInMessageAsync(action.Message, cancellationToken);
 					break;
 				case ConnectorSubscriptionManager.Actions.Item.Types.AddOrderStatus:
 					_entityCache.AddOrderStatusTransactionId(action.TransactionId);
@@ -25,6 +25,9 @@ partial class Connector
 			}
 		}
 	}
+
+	private void ApplySubscriptionManagerActions(ConnectorSubscriptionManager.Actions actions)
+		=> AsyncHelper.Run(() => ApplySubscriptionManagerActionsAsync(actions, default));
 
 	/// <inheritdoc />
 	public IEnumerable<Subscription> Subscriptions => _subscriptionManager.Subscriptions;

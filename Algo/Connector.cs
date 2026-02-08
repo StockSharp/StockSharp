@@ -439,7 +439,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 			ConnectionState = ConnectionStates.Connecting;
 
-			OnConnect();
+			AsyncHelper.Run(() => OnConnectAsync(default));
 		}
 		catch (Exception ex)
 		{
@@ -450,7 +450,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <summary>
 	/// Connect to trading system.
 	/// </summary>
-	protected virtual void OnConnect()
+	protected virtual ValueTask OnConnectAsync(CancellationToken cancellationToken)
 	{
 		if (TimeChange)
 			CreateTimer();
@@ -458,7 +458,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		if (!IsRestoreSubscriptionOnNormalReconnect)
 			_subscriptionManager.ClearCache();
 
-		SendInMessage(new ConnectMessage());
+		return SendInMessageAsync(new ConnectMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -476,7 +476,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 		try
 		{
-			OnDisconnect();
+			AsyncHelper.Run(() => OnDisconnectAsync(default));
 		}
 		catch (Exception ex)
 		{
@@ -487,12 +487,12 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <summary>
 	/// Disconnect from trading system.
 	/// </summary>
-	protected virtual void OnDisconnect()
+	protected virtual async ValueTask OnDisconnectAsync(CancellationToken cancellationToken)
 	{
 		if (IsAutoUnSubscribeOnDisconnect)
-			ApplySubscriptionManagerActions(_subscriptionManager.UnSubscribeAll());
+			await ApplySubscriptionManagerActionsAsync(_subscriptionManager.UnSubscribeAll(), cancellationToken);
 
-		SendInMessage(new DisconnectMessage());
+		await SendInMessageAsync(new DisconnectMessage(), cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -537,6 +537,14 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 	/// <inheritdoc />
 	public void RegisterOrder(Order order)
+		=> AsyncHelper.Run(() => RegisterOrderAsync(order));
+
+	/// <summary>
+	/// Register new order asynchronously.
+	/// </summary>
+	/// <param name="order">Registration details.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	public async ValueTask RegisterOrderAsync(Order order, CancellationToken cancellationToken = default)
 	{
 		try
 		{
@@ -552,9 +560,8 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 			order.Type ??= order.Price > 0 ? OrderTypes.Limit : OrderTypes.Market;
 
-			InitNewOrder(order);
-
-			OnRegisterOrder(order);
+			await InitNewOrderAsync(order, cancellationToken);
+			await OnRegisterOrderAsync(order, cancellationToken);
 		}
 		catch (Exception ex)
 		{
@@ -563,7 +570,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 			if (transactionId == 0 || order.State != OrderStates.None)
 				transactionId = TransactionIdGenerator.GetNextId();
 
-			SendOrderFailed(order, OrderOperations.Register, ex, transactionId);
+			await SendOrderFailedAsync(order, OrderOperations.Register, ex, transactionId, cancellationToken);
 		}
 	}
 
@@ -577,6 +584,15 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 	/// <inheritdoc />
 	public void EditOrder(Order order, Order changes)
+		=> AsyncHelper.Run(() => EditOrderAsync(order, changes));
+
+	/// <summary>
+	/// Edit the order asynchronously.
+	/// </summary>
+	/// <param name="order">Order to edit.</param>
+	/// <param name="changes">Order to change with new values.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	public async ValueTask EditOrderAsync(Order order, Order changes, CancellationToken cancellationToken = default)
 	{
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
@@ -598,16 +614,25 @@ public partial class Connector : BaseLogReceiver, IConnector
 			_entityCache.AddOrderByEditionId(order, transactionId);
 
 			changes.TransactionId = transactionId;
-			OnEditOrder(order, changes);
+			await OnEditOrderAsync(order, changes, cancellationToken);
 		}
 		catch (Exception ex)
 		{
-			SendOrderFailed(order, OrderOperations.Edit, ex, changes.TransactionId);
+			await SendOrderFailedAsync(order, OrderOperations.Edit, ex, changes.TransactionId, cancellationToken);
 		}
 	}
 
 	/// <inheritdoc />
 	public void ReRegisterOrder(Order oldOrder, Order newOrder)
+		=> AsyncHelper.Run(() => ReRegisterOrderAsync(oldOrder, newOrder));
+
+	/// <summary>
+	/// Reregister the order asynchronously.
+	/// </summary>
+	/// <param name="oldOrder">Cancelling order.</param>
+	/// <param name="newOrder">New order to register.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	public async ValueTask ReRegisterOrderAsync(Order oldOrder, Order newOrder, CancellationToken cancellationToken = default)
 	{
 		if (oldOrder is null)
 			throw new ArgumentNullException(nameof(oldOrder));
@@ -628,10 +653,11 @@ public partial class Connector : BaseLogReceiver, IConnector
 			if (IsOrderReplaceable(oldOrder) != true)
 				LogWarning("Order {0} is not replaceable.", oldOrder.TransactionId);
 
-			InitNewOrder(newOrder);
+			await InitNewOrderAsync(newOrder, cancellationToken);
+
 			_entityCache.AddOrderByCancelationId(oldOrder, newOrder.TransactionId);
 
-			OnReRegisterOrder(oldOrder, newOrder);
+			await OnReRegisterOrderAsync(oldOrder, newOrder, cancellationToken);
 		}
 		catch (Exception ex)
 		{
@@ -640,13 +666,21 @@ public partial class Connector : BaseLogReceiver, IConnector
 			if (transactionId == 0 || newOrder.State != OrderStates.None)
 				transactionId = TransactionIdGenerator.GetNextId();
 
-			SendOrderFailed(oldOrder, OrderOperations.Cancel, ex, transactionId);
-			SendOrderFailed(newOrder, OrderOperations.Register, ex, transactionId);
+			await SendOrderFailedAsync(oldOrder, OrderOperations.Cancel, ex, transactionId, cancellationToken);
+			await SendOrderFailedAsync(newOrder, OrderOperations.Register, ex, transactionId, cancellationToken);
 		}
 	}
 
 	/// <inheritdoc />
 	public void CancelOrder(Order order)
+		=> AsyncHelper.Run(() => CancelOrderAsync(order));
+
+	/// <summary>
+	/// Cancel the order asynchronously.
+	/// </summary>
+	/// <param name="order">Order to cancel.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	public async ValueTask CancelOrderAsync(Order order, CancellationToken cancellationToken = default)
 	{
 		long transactionId = 0;
 
@@ -659,18 +693,18 @@ public partial class Connector : BaseLogReceiver, IConnector
 			transactionId = TransactionIdGenerator.GetNextId();
 			_entityCache.AddOrderByCancelationId(order, transactionId);
 
-			OnCancelOrder(order, transactionId);
+			await OnCancelOrderAsync(order, transactionId, cancellationToken);
 		}
 		catch (Exception ex)
 		{
 			if (transactionId == 0)
 				transactionId = TransactionIdGenerator.GetNextId();
 
-			SendOrderFailed(order, OrderOperations.Cancel, ex, transactionId);
+			await SendOrderFailedAsync(order, OrderOperations.Cancel, ex, transactionId, cancellationToken);
 		}
 	}
 
-	private void SendOrderFailed(Order order, OrderOperations operation, Exception error, long originalTransactionId)
+	private ValueTask SendOrderFailedAsync(Order order, OrderOperations operation, Exception error, long originalTransactionId, CancellationToken cancellationToken)
 	{
 		var fail = new OrderFail
 		{
@@ -682,7 +716,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 		_entityCache.AddOrderFailById(fail, operation, originalTransactionId);
 
-		SendOutMessage(fail.ToMessage(originalTransactionId));
+		return SendOutMessageAsync(fail.ToMessage(originalTransactionId), cancellationToken);
 	}
 
 	private void CheckOnNew(Order order)
@@ -748,85 +782,92 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// Initialize registering order (transaction id etc.).
 	/// </summary>
 	/// <param name="order">New order.</param>
-	private void InitNewOrder(Order order)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	private ValueTask InitNewOrderAsync(Order order, CancellationToken cancellationToken)
 	{
 		order.Balance = order.Volume;
 
 		if (order.TransactionId == 0)
 			order.TransactionId = TransactionIdGenerator.GetNextId();
 
-		//order.Connector = this;
-
-		//if (order.Security is ContinuousSecurity)
-		//	order.Security = ((ContinuousSecurity)order.Security).GetSecurity(CurrentTime);
-
 		order.LocalTime = CurrentTime;
 		order.ApplyNewState(OrderStates.Pending, this);
 
 		_entityCache.AddOrderByRegistrationId(order);
 
-		SendOutMessage(order.ToMessage());
+		return SendOutMessageAsync(order.ToMessage(), cancellationToken);
 	}
 
 	/// <summary>
 	/// Register new order.
 	/// </summary>
 	/// <param name="order">Registration details.</param>
-	protected void OnRegisterOrder(Order order)
-	{
-		SendInMessage(order.CreateRegisterMessage(GetSecurityId(order.Security)));
-	}
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	protected ValueTask OnRegisterOrderAsync(Order order, CancellationToken cancellationToken)
+		=> SendInMessageAsync(order.CreateRegisterMessage(GetSecurityId(order.Security)), cancellationToken);
 
 	/// <summary>
 	/// Edit the order.
 	/// </summary>
 	/// <param name="order">Order.</param>
 	/// <param name="changes">Order changes.</param>
-	protected void OnEditOrder(Order order, Order changes)
-	{
-		SendInMessage(order.CreateReplaceMessage(changes, GetSecurityId(order.Security)));
-	}
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	protected ValueTask OnEditOrderAsync(Order order, Order changes, CancellationToken cancellationToken)
+		=> SendInMessageAsync(order.CreateReplaceMessage(changes, GetSecurityId(order.Security)), cancellationToken);
 
 	/// <summary>
 	/// Reregister the order.
 	/// </summary>
 	/// <param name="oldOrder">Cancelling order.</param>
 	/// <param name="newOrder">New order to register.</param>
-	protected void OnReRegisterOrder(Order oldOrder, Order newOrder)
-	{
-		SendInMessage(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)));
-	}
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	protected ValueTask OnReRegisterOrderAsync(Order oldOrder, Order newOrder, CancellationToken cancellationToken)
+		=> SendInMessageAsync(oldOrder.CreateReplaceMessage(newOrder, GetSecurityId(newOrder.Security)), cancellationToken);
 
 	/// <summary>
 	/// Cancel the order.
 	/// </summary>
 	/// <param name="order">Order to cancel.</param>
 	/// <param name="transactionId">Order cancellation transaction id.</param>
-	protected void OnCancelOrder(Order order, long transactionId)
-	{
-		SendInMessage(order.CreateCancelMessage(GetSecurityId(order.Security), transactionId));
-	}
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	protected ValueTask OnCancelOrderAsync(Order order, long transactionId, CancellationToken cancellationToken)
+		=> SendInMessageAsync(order.CreateCancelMessage(GetSecurityId(order.Security), transactionId), cancellationToken);
 
 	/// <inheritdoc />
 	public void CancelOrders(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null, long? transactionId = null)
-	{
-		transactionId ??= TransactionIdGenerator.GetNextId();
-
-		_entityCache.TryAddMassCancelationId(transactionId.Value);
-		OnCancelOrders(transactionId.Value, isStopOrder, portfolio, direction, board, security, securityType);
-	}
+		=> AsyncHelper.Run(() => CancelOrdersAsync(isStopOrder, portfolio, direction, board, security, securityType, transactionId));
 
 	/// <summary>
-	/// Cancel orders by filter.
+	/// Cancel orders by filter asynchronously.
 	/// </summary>
-	/// <param name="transactionId">Order cancellation transaction id.</param>
 	/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
 	/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
 	/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
 	/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
 	/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
 	/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
-	protected void OnCancelOrders(long transactionId, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
+	/// <param name="transactionId">Order cancellation transaction id.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	public ValueTask CancelOrdersAsync(bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null, long? transactionId = null, CancellationToken cancellationToken = default)
+	{
+		transactionId ??= TransactionIdGenerator.GetNextId();
+
+		_entityCache.TryAddMassCancelationId(transactionId.Value);
+		return OnCancelOrdersAsync(transactionId.Value, cancellationToken, isStopOrder, portfolio, direction, board, security, securityType);
+	}
+
+	/// <summary>
+	/// Cancel orders by filter.
+	/// </summary>
+	/// <param name="transactionId">Order cancellation transaction id.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <param name="isStopOrder"><see langword="true" />, if cancel only a stop orders, <see langword="false" /> - if regular orders, <see langword="null" /> - both.</param>
+	/// <param name="portfolio">Portfolio. If the value is equal to <see langword="null" />, then the portfolio does not match the orders cancel filter.</param>
+	/// <param name="direction">Order side. If the value is <see langword="null" />, the direction does not use.</param>
+	/// <param name="board">Trading board. If the value is equal to <see langword="null" />, then the board does not match the orders cancel filter.</param>
+	/// <param name="security">Instrument. If the value is equal to <see langword="null" />, then the instrument does not match the orders cancel filter.</param>
+	/// <param name="securityType">Security type. If the value is <see langword="null" />, the type does not use.</param>
+	protected ValueTask OnCancelOrdersAsync(long transactionId, CancellationToken cancellationToken, bool? isStopOrder = null, Portfolio portfolio = null, Sides? direction = null, ExchangeBoard board = null, Security security = null, SecurityTypes? securityType = null)
 	{
 		var cancelMsg = new OrderGroupCancelMessage
 		{
@@ -852,20 +893,18 @@ public partial class Connector : BaseLogReceiver, IConnector
 		if (direction != null)
 			cancelMsg.Side = direction.Value;
 
-		//if (security != null)
-		//	security.ToMessage(securityId).CopyTo(cancelMsg);
-
 		if (securityType != null)
 			cancelMsg.SecurityType = securityType;
 
-		SendInMessage(cancelMsg);
+		return SendInMessageAsync(cancelMsg, cancellationToken);
 	}
 
 	/// <summary>
 	/// Change password.
 	/// </summary>
 	/// <param name="newPassword">New password.</param>
-	public void ChangePassword(SecureString newPassword)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	public ValueTask ChangePasswordAsync(SecureString newPassword, CancellationToken cancellationToken)
 	{
 		var msg = new ChangePasswordMessage
 		{
@@ -873,7 +912,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 			TransactionId = TransactionIdGenerator.GetNextId()
 		};
 
-		SendInMessage(msg);
+		return SendInMessageAsync(msg, cancellationToken);
 	}
 
 	private DateTime _prevTime;
@@ -999,7 +1038,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <summary>
 	/// Clear cache.
 	/// </summary>
-	public virtual void ClearCache()
+	public virtual async ValueTask ClearCacheAsync(CancellationToken cancellationToken)
 	{
 		_entityCache.Clear();
 
@@ -1013,7 +1052,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 		_subscriptionManager.ClearCache();
 
-		SendInMessage(new ResetMessage());
+		await SendInMessageAsync(new ResetMessage(), cancellationToken);
 
 		CloseTimer();
 
@@ -1047,7 +1086,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		//if (ExportState == ConnectionStates.Disconnected || ExportState == ConnectionStates.Failed)
 		//	MarketDataAdapter = null;
 
-		SendInMessage(_disposeMessage);
+		AsyncHelper.Run(() => SendInMessageAsync(_disposeMessage, CancellationToken.None));
 
 		CloseTimer();
 	}

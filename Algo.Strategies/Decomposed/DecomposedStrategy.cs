@@ -127,12 +127,24 @@ public class DecomposedStrategy : IStrategyHost
 	/// <summary>
 	/// Start the strategy.
 	/// </summary>
-	public void Start() => Engine.RequestStart();
+	public ValueTask StartAsync(CancellationToken cancellationToken = default) => Engine.RequestStartAsync(cancellationToken);
+
+	/// <summary>
+	/// Start the strategy.
+	/// </summary>
+	[Obsolete("Use StartAsync instead.")]
+	public void Start() => AsyncHelper.Run(() => StartAsync());
 
 	/// <summary>
 	/// Stop the strategy.
 	/// </summary>
-	public void Stop() => Engine.RequestStop();
+	public ValueTask StopAsync(CancellationToken cancellationToken = default) => Engine.RequestStopAsync(cancellationToken);
+
+	/// <summary>
+	/// Stop the strategy.
+	/// </summary>
+	[Obsolete("Use StopAsync instead.")]
+	public void Stop() => AsyncHelper.Run(() => StopAsync());
 
 	/// <summary>
 	/// Register an order via the connector.
@@ -256,11 +268,11 @@ public class DecomposedStrategy : IStrategyHost
 
 	#region IStrategyHost
 
-	DateTime IStrategyHost.CurrentTimeUtc
+	DateTime IStrategyHost.CurrentTime
 		=> _connector is ITimeProvider tp ? tp.CurrentTime : DateTime.UtcNow;
 
-	void IStrategyHost.SendOutMessage(Message message)
-		=> _connector?.SendOutMessage(message);
+	ValueTask IStrategyHost.SendOutMessageAsync(Message message, CancellationToken cancellationToken)
+		=> _connector?.SendOutMessageAsync(message, cancellationToken) ?? default;
 
 	long IStrategyHost.GetNextTransactionId()
 		=> _connector?.TransactionIdGenerator?.GetNextId() ?? 0;

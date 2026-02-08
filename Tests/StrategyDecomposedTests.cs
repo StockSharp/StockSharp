@@ -13,11 +13,17 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		private long _nextId = 1000;
 
-		public DateTime CurrentTimeUtc { get; set; } = DateTime.UtcNow;
+		public DateTime CurrentTime { get; set; } = DateTime.UtcNow;
 
 		public List<Message> SentMessages { get; } = [];
 
 		public void SendOutMessage(Message message) => SentMessages.Add(message);
+
+		public ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			SentMessages.Add(message);
+			return default;
+		}
 
 		public long GetNextTransactionId() => Interlocked.Increment(ref _nextId);
 	}
@@ -27,13 +33,13 @@ public class StrategyDecomposedTests : BaseTestClass
 	#region StrategyEngine tests
 
 	[TestMethod]
-	public void StrategyEngine_RequestStart_SendsStartedMessage()
+	public async Task StrategyEngine_RequestStart_SendsStartedMessage()
 	{
 		var host = new FakeHost();
 		var pnl = new PnLManager();
 		var engine = new StrategyEngine(host, pnl);
 
-		engine.RequestStart();
+		await engine.RequestStartAsync(default);
 
 		host.SentMessages.Count.AreEqual(1);
 		var msg = host.SentMessages[0] as StrategyEngine.StrategyStateMessage;
@@ -42,18 +48,18 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void StrategyEngine_RequestStop_SendsStoppingMessage()
+	public async Task StrategyEngine_RequestStop_SendsStoppingMessage()
 	{
 		var host = new FakeHost();
 		var pnl = new PnLManager();
 		var engine = new StrategyEngine(host, pnl);
 
-		engine.RequestStart();
+		await engine.RequestStartAsync(default);
 		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
 		engine.ProcessState.AreEqual(ProcessStates.Started);
 
 		host.SentMessages.Clear();
-		engine.RequestStop();
+		await engine.RequestStopAsync(default);
 
 		host.SentMessages.Count.AreEqual(1);
 		var msg = host.SentMessages[0] as StrategyEngine.StrategyStateMessage;
@@ -162,13 +168,13 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void StrategyEngine_RequestStop_WhenAlreadyStopped_NoMessage()
+	public async Task StrategyEngine_RequestStop_WhenAlreadyStopped_NoMessage()
 	{
 		var host = new FakeHost();
 		var pnl = new PnLManager();
 		var engine = new StrategyEngine(host, pnl);
 
-		engine.RequestStop();
+		await engine.RequestStopAsync(default);
 
 		host.SentMessages.Count.AreEqual(0);
 	}
@@ -761,7 +767,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Composite_StateTransitions_AllHooksCalled()
+	public async Task Composite_StateTransitions_AllHooksCalled()
 	{
 		var connMock = CreateMockConnector();
 		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
@@ -771,7 +777,7 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.StateChanges.Count.AreEqual(0);
 
 		// start
-		strategy.Start();
+		await strategy.StartAsync();
 		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
 
 		strategy.ProcessState.AreEqual(ProcessStates.Started);
@@ -779,7 +785,7 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.StateChanges[0].AreEqual(ProcessStates.Started);
 
 		// stop
-		strategy.Stop();
+		await strategy.StopAsync();
 		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
 
 		strategy.ProcessState.AreEqual(ProcessStates.Stopping);
@@ -900,7 +906,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Composite_FullOrderLifecycle_AllValuesVerified()
+	public async Task Composite_FullOrderLifecycle_AllValuesVerified()
 	{
 		var connMock = CreateMockConnector();
 		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
@@ -1112,7 +1118,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Composite_BuyOnSignal_EndToEnd()
+	public async Task Composite_BuyOnSignal_EndToEnd()
 	{
 		var connMock = CreateMockConnector();
 		var security = CreateSecurity();
@@ -1127,7 +1133,7 @@ public class StrategyDecomposedTests : BaseTestClass
 		};
 
 		// start strategy
-		strategy.Start();
+		await strategy.StartAsync();
 		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
 		strategy.ProcessState.AreEqual(ProcessStates.Started);
 		strategy.StateChanges.Count.AreEqual(1);
@@ -1226,7 +1232,7 @@ public class StrategyDecomposedTests : BaseTestClass
 		firstTrade.Order.Side.AreEqual(Sides.Buy);
 
 		// stop strategy
-		strategy.Stop();
+		await strategy.StopAsync();
 		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
 		strategy.ProcessState.AreEqual(ProcessStates.Stopping);
 		strategy.StateChanges.Count.AreEqual(2);
