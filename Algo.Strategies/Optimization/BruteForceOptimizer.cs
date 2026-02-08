@@ -42,17 +42,21 @@ public class BruteForceOptimizer : BaseOptimizer
 	}
 
 	/// <summary>
-	/// Start optimization.
+	/// Run optimization and yield completed iterations as they finish.
 	/// </summary>
 	/// <param name="startTime">Date in history for starting the paper trading.</param>
 	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
 	/// <param name="strategies">The strategies and parameters used for optimization.</param>
-	/// <param name="iterationCount">Iteration count.</param>
-	public void Start(DateTime startTime, DateTime stopTime, IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies, int iterationCount)
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Async enumerable of completed (strategy, parameters) pairs.</returns>
+	public IAsyncEnumerable<(Strategy Strategy, IStrategyParam[] Parameters)> RunAsync(
+		DateTime startTime, DateTime stopTime,
+		IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies,
+		CancellationToken cancellationToken = default)
 	{
-		var enumerator = strategies.GetEnumerator();
+		var enumerator = strategies.CheckOnNull(nameof(strategies)).GetEnumerator();
 
-		Start(startTime, stopTime, pfProvider =>
+		return RunAsync(startTime, stopTime, pfProvider =>
 		{
 			if (!enumerator.MoveNext())
 				return null;
@@ -60,44 +64,75 @@ public class BruteForceOptimizer : BaseOptimizer
 			var strategy = enumerator.Current.strategy;
 			strategy.Portfolio = pfProvider.LookupByPortfolioName((strategy.Portfolio?.Name).IsEmpty(Messages.Extensions.SimulatorPortfolioName));
 			return enumerator.Current;
-		}, iterationCount);
+		}, cancellationToken);
 	}
 
 	/// <summary>
-	/// Start optimization.
+	/// Run optimization and yield completed iterations as they finish.
 	/// </summary>
 	/// <param name="startTime">Date in history for starting the paper trading.</param>
 	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
 	/// <param name="tryGetNext">Handler to try to get next strategy object.</param>
-	/// <param name="iterationCount">Iteration count.</param>
-	public void Start(DateTime startTime, DateTime stopTime, Func<IPortfolioProvider, (Strategy strategy, IStrategyParam[] parameters)?> tryGetNext, int iterationCount)
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Async enumerable of completed (strategy, parameters) pairs.</returns>
+	public async IAsyncEnumerable<(Strategy Strategy, IStrategyParam[] Parameters)> RunAsync(
+		DateTime startTime, DateTime stopTime,
+		Func<IPortfolioProvider, (Strategy strategy, IStrategyParam[] parameters)?> tryGetNext,
+		[EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		if (tryGetNext is null)
 			throw new ArgumentNullException(nameof(tryGetNext));
 
-		if (iterationCount <= 0)
-			throw new ArgumentOutOfRangeException(nameof(iterationCount), iterationCount, LocalizedStrings.InvalidValue);
+		var maxIters = EmulationSettings.MaxIterations;
+		var totalIterations = maxIters > 0 ? maxIters : int.MaxValue;
 
-		OnStart(iterationCount);
+		InitializeRunAsync(totalIterations, cancellationToken);
 
-		StartInitialBatch(startTime, stopTime, tryGetNext);
-	}
-
-	private void StartInitialBatch(DateTime startTime, DateTime stopTime, Func<IPortfolioProvider, (Strategy strategy, IStrategyParam[] parameters)?> tryGetNext)
-	{
 		var batchSize = EmulationSettings.BatchSize;
+
+		var workers = new Task[batchSize];
 
 		for (var i = 0; i < batchSize; i++)
 		{
 			var adapterCache = AllocateAdapterCache();
 			var storageCache = AllocateStorageCache();
 
-			void runNext()
+			workers[i] = Task.Run(async () =>
 			{
-				TryNextRun(startTime, stopTime, tryGetNext, adapterCache, storageCache, runNext);
-			}
+				try
+				{
+					while (await TryNextRunAsync(startTime, stopTime, tryGetNext, adapterCache, storageCache, cancellationToken))
+					{
+					}
+				}
+				finally
+				{
+					FreeAdapterCache(adapterCache);
+					FreeStorageCache(storageCache);
+				}
+			}, cancellationToken);
+		}
 
-			runNext();
+		// When all workers complete, complete the channel
+		_ = Task.Run(async () =>
+		{
+			try
+			{
+				await Task.WhenAll(workers);
+			}
+			catch
+			{
+				// workers may throw on cancellation
+			}
+			finally
+			{
+				CompleteChannel();
+			}
+		}, CancellationToken.None);
+
+		await foreach (var result in ReadResultsAsync(cancellationToken))
+		{
+			yield return result;
 		}
 	}
 }

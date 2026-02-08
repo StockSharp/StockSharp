@@ -7,7 +7,7 @@ using GeneticSharp;
 /// </summary>
 public class GeneticOptimizer : BaseOptimizer
 {
-	private class StrategyFitness : IFitness
+	private class StrategyFitness : IAsyncFitness, IFitness
 	{
 		private readonly GeneticOptimizer _optimizer;
 		private readonly Strategy _strategy;
@@ -32,6 +32,9 @@ public class GeneticOptimizer : BaseOptimizer
 		}
 
 		double IFitness.Evaluate(IChromosome chromosome)
+			=> throw new NotSupportedException();
+
+		async Task<double> IAsyncFitness.EvaluateAsync(IChromosome chromosome, CancellationToken cancellationToken)
 		{
 			var spc = (StrategyParametersChromosome)chromosome;
 
@@ -63,16 +66,12 @@ public class GeneticOptimizer : BaseOptimizer
 			if (!_optimizer.TryConsumeIteration())
 				return double.MinValue;
 
-			using var wait = new ManualResetEvent(false);
-
-			_optimizer._events.Add(wait);
+			var adapterCache = _optimizer.AllocateAdapterCache();
+			var storageCache = _optimizer.AllocateStorageCache();
 
 			try
 			{
-				var adapterCache = _optimizer.AllocateAdapterCache();
-				var storageCache = _optimizer.AllocateStorageCache();
-
-				_optimizer.TryNextRun(_startTime, _stopTime,
+				await _optimizer.TryNextRunAsync(_startTime, _stopTime,
 					pfProvider =>
 					{
 						strategy.Portfolio = pfProvider.LookupByPortfolioName((_strategy.Portfolio?.Name).IsEmpty(Extensions.SimulatorPortfolioName));
@@ -81,24 +80,7 @@ public class GeneticOptimizer : BaseOptimizer
 					},
 					adapterCache,
 					storageCache,
-					() =>
-					{
-						_optimizer.FreeAdapterCache(adapterCache);
-						_optimizer.FreeStorageCache(storageCache);
-
-						if (!_optimizer._events.Contains(wait))
-							return;
-
-						try
-						{
-							wait.Set();
-						}
-						catch (ObjectDisposedException)
-						{
-						}
-					});
-
-				wait.WaitOne();
+					cancellationToken);
 
 				fitVal = _calcFitness(strategy);
 
@@ -108,7 +90,8 @@ public class GeneticOptimizer : BaseOptimizer
 			}
 			finally
 			{
-				_optimizer._events.Remove(wait);
+				_optimizer.FreeAdapterCache(adapterCache);
+				_optimizer.FreeStorageCache(storageCache);
 			}
 		}
 	}
@@ -147,7 +130,6 @@ public class GeneticOptimizer : BaseOptimizer
 			=> !_optimizer.HasRemainingIterations();
 	}
 
-	private readonly SynchronizedSet<ManualResetEvent> _events = [];
 	private GeneticAlgorithm _ga;
 
 	private readonly Lock _iterLock = new();
@@ -237,28 +219,14 @@ public class GeneticOptimizer : BaseOptimizer
 		}
 	}
 
-	/// <summary>
-	/// Start optimization.
-	/// </summary>
-	/// <param name="startTime">Date in history for starting the paper trading.</param>
-	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
-	/// <param name="strategy">Strategy.</param>
-	/// <param name="parameters">Parameters used to generate chromosomes.</param>
-	/// <param name="calcFitness">Calc fitness value function. If <see langword="null"/> the value from <see cref="GeneticSettings.Fitness"/> will be used.</param>
-	/// <param name="selection"><see cref="ISelection"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Selection"/> will be used.</param>
-	/// <param name="crossover"><see cref="ICrossover"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Crossover"/> will be used.</param>
-	/// <param name="mutation"><see cref="IMutation"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Mutation"/> will be used.</param>
-	[CLSCompliant(false)]
-	public void Start(
-		DateTime startTime,
-		DateTime stopTime,
+	private GeneticAlgorithm SetupGA(
+		DateTime startTime, DateTime stopTime,
 		Strategy strategy,
 		IEnumerable<(IStrategyParam param, object from, object to, object step, IEnumerable values)> parameters,
-		Func<Strategy, decimal> calcFitness = default,
-		ISelection selection = default,
-		ICrossover crossover = default,
-		IMutation mutation = default
-	)
+		Func<Strategy, decimal> calcFitness,
+		ISelection selection,
+		ICrossover crossover,
+		IMutation mutation)
 	{
 		if (parameters is null)
 			throw new ArgumentNullException(nameof(parameters));
@@ -392,8 +360,8 @@ public class GeneticOptimizer : BaseOptimizer
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();
 
-		if (mutation is SequenceMutationBase && paramArr.Length < 3)
-			throw new InvalidOperationException($"Optimization parameters for '{mutation.GetType()}' mutation must be at least 3.");
+		if (mutation is SequenceMutationBase && paramArr.Length < mutation.MinChromosomeLength)
+			throw new InvalidOperationException($"Optimization parameters for '{mutation.GetType()}' mutation must be at least {mutation.MinChromosomeLength}.");
 
 		// Setup iteration limit
 		using (_iterLock.EnterScope())
@@ -436,61 +404,69 @@ public class GeneticOptimizer : BaseOptimizer
 			Reinsertion = Settings.Reinsertion.CreateInstance<IReinsertion>(),
 		};
 
-		_ga.TerminationReached += OnTerminationReached;
+		return _ga;
+	}
 
-		// Use estimated iteration count for genetic (population * max generations)
+	/// <summary>
+	/// Run optimization and yield completed iterations as they finish.
+	/// </summary>
+	/// <param name="startTime">Date in history for starting the paper trading.</param>
+	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
+	/// <param name="strategy">Strategy.</param>
+	/// <param name="parameters">Parameters used to generate chromosomes.</param>
+	/// <param name="calcFitness">Calc fitness value function. If <see langword="null"/> the value from <see cref="GeneticSettings.Fitness"/> will be used.</param>
+	/// <param name="selection"><see cref="ISelection"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Selection"/> will be used.</param>
+	/// <param name="crossover"><see cref="ICrossover"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Crossover"/> will be used.</param>
+	/// <param name="mutation"><see cref="IMutation"/>. If <see langword="null"/> the value from <see cref="GeneticSettings.Mutation"/> will be used.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Async enumerable of completed (strategy, parameters) pairs.</returns>
+	[CLSCompliant(false)]
+	public async IAsyncEnumerable<(Strategy Strategy, IStrategyParam[] Parameters)> RunAsync(
+		DateTime startTime,
+		DateTime stopTime,
+		Strategy strategy,
+		IEnumerable<(IStrategyParam param, object from, object to, object step, IEnumerable values)> parameters,
+		Func<Strategy, decimal> calcFitness = default,
+		ISelection selection = default,
+		ICrossover crossover = default,
+		IMutation mutation = default,
+		[EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		var ga = SetupGA(startTime, stopTime, strategy, parameters, calcFitness, selection, crossover, mutation);
+
 		var estimatedIterations = Settings.Population * Math.Max(1, Settings.GenerationsMax);
-		OnStart(estimatedIterations);
+		var maxIters = EmulationSettings.MaxIterations;
+		if (maxIters > 0 && estimatedIterations > maxIters)
+			estimatedIterations = maxIters;
 
-		Task.Run(_ga.Start);
-	}
+		InitializeRunAsync(estimatedIterations, cancellationToken);
 
-	private void OnTerminationReached(object sender, EventArgs e)
-	{
-		RaiseStopped();
-	}
-
-	/// <inheritdoc />
-	public override void Suspend()
-	{
-		base.Suspend();
-
-		_ga.Stop();
-	}
-
-	/// <inheritdoc />
-	public override void Resume()
-	{
-		base.Resume();
-
-		Task.Run(async () =>
+		// Stop GA when cancelled
+		cancellationToken.Register(() =>
 		{
-			await Task.Yield();
-			_ga.Resume();
+			try { ga.Stop(); } catch (InvalidOperationException) { }
 		});
-	}
 
-	/// <inheritdoc />
-	public override void Stop()
-	{
-		if (!(State is ChannelStates.Started or ChannelStates.Suspended))
-			return;
-
-		base.Stop();
-
-		try { _ga?.Stop(); } catch (InvalidOperationException) { }
-		_events.CopyAndClear().ForEach(e =>
+		_ = Task.Run(() =>
 		{
 			try
 			{
-				e.Set();
+				ga.Start();
 			}
-			catch
+			catch (Exception ex) when (cancellationToken.IsCancellationRequested)
 			{
-				// handle can be already disposed
+				this.AddWarningLog("GA cancelled: {0}", ex.Message);
 			}
-		});
+			finally
+			{
+				CompleteChannel();
+				_ga = null;
+			}
+		}, CancellationToken.None);
 
-		RaiseStopped();
+		await foreach (var result in ReadResultsAsync(cancellationToken))
+		{
+			yield return result;
+		}
 	}
 }

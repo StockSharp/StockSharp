@@ -57,10 +57,10 @@ public class OptimizerTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Tests that BruteForceOptimizer starts and stops properly.
+	/// Tests that BruteForceOptimizer.RunAsync completes all iterations.
 	/// </summary>
 	[TestMethod]
-	public async Task BruteForceOptimizerStartsAndStops()
+	public async Task BruteForceRunAsyncCompletesAllIterations()
 	{
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
@@ -72,36 +72,26 @@ public class OptimizerTests : BaseTestClass
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
 
 		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryBeginDate.AddDays(6); // Short period for faster test
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		var strategies = CreateStrategyIterations(security, portfolio, 20, 30, 10, 60, 80, 20).ToList();
+		var expectedCount = strategies.Count;
 
-		var stoppedTcs = new TaskCompletionSource<bool>();
-		optimizer.StateChanged += (oldState, newState) =>
+		var results = new List<Strategy>();
+
+		await foreach (var (strategy, _) in optimizer.RunAsync(startTime, stopTime, strategies, CancellationToken))
 		{
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
-
-		// Wait for completion
-		var completed = await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (completed != stoppedTcs.Task)
-		{
-			optimizer.Stop();
-			Fail("Optimizer did not complete in time");
+			results.Add(strategy);
 		}
 
-		optimizer.State.AssertEqual(ChannelStates.Stopped, "Optimizer should be stopped");
+		AreEqual(expectedCount, results.Count, $"Expected {expectedCount} results but got {results.Count}");
 	}
 
 	/// <summary>
-	/// Tests that BruteForceOptimizer raises progress events.
+	/// Tests that BruteForceOptimizer.RunAsync raises SingleProgressChanged events.
 	/// </summary>
 	[TestMethod]
-	public async Task BruteForceOptimizerRaisesProgressEvents()
+	public async Task BruteForceRunAsyncRaisesProgressEvents()
 	{
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
@@ -118,47 +108,24 @@ public class OptimizerTests : BaseTestClass
 		var strategies = CreateStrategyIterations(security, portfolio, 20, 30, 10, 60, 80, 20).ToList();
 
 		var singleProgressCount = 0;
-		var totalProgressValues = new List<int>();
 
 		optimizer.SingleProgressChanged += (strategy, parameters, progress) =>
 		{
 			Interlocked.Increment(ref singleProgressCount);
 		};
 
-		optimizer.TotalProgressChanged += (progress, duration, remaining) =>
+		await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategies, CancellationToken))
 		{
-			lock (totalProgressValues)
-			{
-				totalProgressValues.Add(progress);
-			}
-		};
-
-		var stoppedTcs = new TaskCompletionSource<bool>();
-		optimizer.StateChanged += (oldState, newState) =>
-		{
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
-
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (!stoppedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
 		}
 
-		// Verify that progress events were raised
 		IsTrue(singleProgressCount > 0, "Expected single progress events to be raised");
-		IsTrue(totalProgressValues.Count > 0, "Expected total progress events to be raised");
 	}
 
 	/// <summary>
-	/// Tests that BruteForceOptimizer raises StrategyInitialized event.
+	/// Tests that BruteForceOptimizer.RunAsync raises StrategyInitialized event.
 	/// </summary>
 	[TestMethod]
-	public async Task BruteForceOptimizerRaisesStrategyInitializedEvent()
+	public async Task BruteForceRunAsyncRaisesStrategyInitializedEvent()
 	{
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
@@ -184,31 +151,18 @@ public class OptimizerTests : BaseTestClass
 			}
 		};
 
-		var stoppedTcs = new TaskCompletionSource<bool>();
-		optimizer.StateChanged += (oldState, newState) =>
+		await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategies, CancellationToken))
 		{
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
-
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (!stoppedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
 		}
 
-		// Verify that strategies were initialized
 		IsTrue(initializedStrategies.Count > 0, "Expected strategies to be initialized");
 	}
 
 	/// <summary>
-	/// Tests that BruteForceOptimizer can be stopped mid-run.
+	/// Tests that BruteForceOptimizer.RunAsync can be cancelled mid-run.
 	/// </summary>
 	[TestMethod]
-	public async Task BruteForceOptimizerCanBeStopped()
+	public async Task BruteForceRunAsyncCancellation()
 	{
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
@@ -218,136 +172,40 @@ public class OptimizerTests : BaseTestClass
 		var storageRegistry = GetHistoryStorage();
 
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
-
-		// Batch size = 1 so only one connector needs to be stopped (faster under load)
 		optimizer.EmulationSettings.BatchSize = 1;
 
 		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
-		// Many iterations so optimizer is still running when Stop() is called
 		var strategies = CreateStrategyIterations(security, portfolio, 10, 40, 5, 50, 100, 5).ToList();
+		var totalCount = strategies.Count;
 
-		var startedTcs = new TaskCompletionSource<bool>();
-		var stoppedTcs = new TaskCompletionSource<bool>();
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		var count = 0;
 
-		optimizer.StateChanged += (oldState, newState) =>
+		try
 		{
-			if (newState == ChannelStates.Started)
-				startedTcs.TrySetResult(true);
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
-
-		// Wait for start
-		await Task.WhenAny(startedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
-
-		if (!startedTcs.Task.IsCompleted)
-		{
-			Fail("Optimizer did not start in time");
-		}
-
-		// Stop the optimizer
-		optimizer.Stop();
-
-		// Wait for stopped (single connector with batch=1 should stop faster)
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		optimizer.State.AssertEqual(ChannelStates.Stopped, "Optimizer should be stopped after Stop() call");
-		optimizer.IsCancelled.AssertTrue("IsCancelled should be true after Stop()");
-	}
-
-	/// <summary>
-	/// Tests that BruteForceOptimizer can be suspended and resumed.
-	/// </summary>
-	[TestMethod]
-	public async Task BruteForceOptimizerCanBeSuspendedAndResumed()
-	{
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
-
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
-		var storageRegistry = GetHistoryStorage();
-
-		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
-
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
-
-		var strategies = CreateStrategyIterations(security, portfolio, 20, 35, 5, 60, 90, 10).ToList();
-
-		var startedTcs = new TaskCompletionSource<bool>();
-		var suspendedTcs = new TaskCompletionSource<bool>();
-		var stoppedTcs = new TaskCompletionSource<bool>();
-
-		optimizer.StateChanged += (oldState, newState) =>
-		{
-			switch (newState)
+			await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategies, cts.Token))
 			{
-				case ChannelStates.Started:
-					startedTcs.TrySetResult(true);
-					break;
-				case ChannelStates.Suspended:
-					suspendedTcs.TrySetResult(true);
-					break;
-				case ChannelStates.Stopped:
-					stoppedTcs.TrySetResult(true);
-					break;
+				count++;
+				if (count >= 2)
+					cts.Cancel();
 			}
-		};
-
-		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
-
-		// Wait for start
-		await Task.WhenAny(startedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
-
-		if (!startedTcs.Task.IsCompleted)
+		}
+		catch (OperationCanceledException)
 		{
-			optimizer.Stop();
-			Fail("Optimizer did not start in time");
+			// expected
 		}
 
-		// Suspend
-		optimizer.Suspend();
-
-		// Wait for suspended
-		await Task.WhenAny(suspendedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
-
-		if (!suspendedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
-			Fail("Optimizer did not suspend in time");
-		}
-
-		optimizer.State.AssertEqual(ChannelStates.Suspended, "State should be Suspended");
-
-		// Resume and wait for completion
-		startedTcs = new TaskCompletionSource<bool>();
-		optimizer.Resume();
-
-		await Task.WhenAny(startedTcs.Task, Task.Delay(TimeSpan.FromSeconds(5), CancellationToken));
-
-		// Wait for completion or timeout
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (!stoppedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
-			// Stop() sets state to Stopping; wait for connectors to finish and transition to Stopped
-			await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
-		}
-
-		optimizer.State.AssertEqual(ChannelStates.Stopped, "Optimizer should be stopped");
+		IsTrue(count >= 2, $"Should have received at least 2 results, got {count}");
+		IsTrue(count < totalCount, $"Should have been cancelled before all {totalCount} iterations, got {count}");
 	}
 
 	/// <summary>
-	/// Tests that BruteForceOptimizer respects MaxIterations setting.
+	/// Tests that BruteForceOptimizer.RunAsync respects MaxIterations.
 	/// </summary>
 	[TestMethod]
-	public async Task BruteForceOptimizerRespectsMaxIterations()
+	public async Task BruteForceRunAsyncRespectsMaxIterations()
 	{
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
@@ -357,48 +215,29 @@ public class OptimizerTests : BaseTestClass
 		var storageRegistry = GetHistoryStorage();
 
 		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
-
-		// Limit iterations
 		optimizer.EmulationSettings.MaxIterations = 2;
 
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
-		// Create more iterations than MaxIterations
 		var strategies = CreateStrategyIterations(security, portfolio, 20, 40, 5, 60, 100, 10).ToList();
 
-		var executedCount = 0;
-		optimizer.SingleProgressChanged += (strategy, parameters, progress) =>
+		var count = 0;
+
+		await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategies, CancellationToken))
 		{
-			if (progress == 100)
-				Interlocked.Increment(ref executedCount);
-		};
-
-		var stoppedTcs = new TaskCompletionSource<bool>();
-		optimizer.StateChanged += (oldState, newState) =>
-		{
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
-
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (!stoppedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
+			count++;
 		}
 
-		// Due to MaxIterations=2, should not execute all strategies
-		IsTrue(executedCount <= 2, $"Should respect MaxIterations limit, but got {executedCount}");
+		IsTrue(count <= 2, $"Should respect MaxIterations=2 limit, but got {count}");
+		IsTrue(count > 0, "Should have at least 1 result");
 	}
 
 	/// <summary>
-	/// Tests that GeneticOptimizer starts and stops properly.
+	/// Tests that BruteForce optimizer with batch size=2 works correctly.
 	/// </summary>
 	[TestMethod]
-	public async Task GeneticOptimizerStartsAndStops()
+	public async Task BruteForceRunAsyncWithBatchSize()
 	{
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
@@ -407,188 +246,23 @@ public class OptimizerTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		using var optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
+		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
+		optimizer.EmulationSettings.BatchSize = 2;
 
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
-		var strategy = new SmaStrategy
+		var strategies = CreateStrategyIterations(security, portfolio, 20, 30, 10, 60, 80, 20).ToList();
+		var expectedCount = strategies.Count;
+
+		var count = 0;
+
+		await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategies, CancellationToken))
 		{
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 30,
-		};
-
-		// Get optimizable parameters (those with CanOptimize = true)
-		var shortParam = strategy.Parameters[nameof(SmaStrategy.Short)];
-		var longParam = strategy.Parameters[nameof(SmaStrategy.Long)];
-
-		var stoppedTcs = new TaskCompletionSource<bool>();
-		optimizer.StateChanged += (oldState, newState) =>
-		{
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		// Limit iterations for faster test
-		optimizer.EmulationSettings.MaxIterations = 5;
-
-		// Use fitness function based on PnL
-		// Parameters format: (param, from, to, step, values)
-		var geneticParams = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
-		{
-			(shortParam, 20, 40, 5, null),
-			(longParam, 60, 100, 10, null),
-		};
-		optimizer.Start(startTime, stopTime, strategy, geneticParams, s => s.PnL);
-
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(3), CancellationToken));
-
-		if (!stoppedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
-			await Task.Delay(TimeSpan.FromSeconds(5), CancellationToken);
+			count++;
 		}
 
-		optimizer.State.AssertEqual(ChannelStates.Stopped, "Optimizer should be stopped");
-	}
-
-	/// <summary>
-	/// Tests that GeneticOptimizer raises progress events.
-	/// </summary>
-	[TestMethod]
-	public async Task GeneticOptimizerRaisesProgressEvents()
-	{
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
-
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
-		var storageRegistry = GetHistoryStorage();
-
-		using var optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
-
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryBeginDate.AddDays(6);
-
-		var strategy = new SmaStrategy
-		{
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 30,
-		};
-
-		var shortParam = strategy.Parameters[nameof(SmaStrategy.Short)];
-		var longParam = strategy.Parameters[nameof(SmaStrategy.Long)];
-
-		var singleProgressCount = 0;
-		optimizer.SingleProgressChanged += (s, parameters, progress) =>
-		{
-			Interlocked.Increment(ref singleProgressCount);
-		};
-
-		var stoppedTcs = new TaskCompletionSource<bool>();
-		optimizer.StateChanged += (oldState, newState) =>
-		{
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		optimizer.EmulationSettings.MaxIterations = 5;
-
-		var geneticParams = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
-		{
-			(shortParam, 20, 40, 5, null),
-			(longParam, 60, 100, 10, null),
-		};
-		optimizer.Start(startTime, stopTime, strategy, geneticParams, s => s.PnL);
-
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(3), CancellationToken));
-
-		if (!stoppedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
-			await Task.Delay(TimeSpan.FromSeconds(5), CancellationToken);
-		}
-
-		// Verify that progress events were raised
-		IsTrue(singleProgressCount > 0, "Expected single progress events to be raised");
-	}
-
-	/// <summary>
-	/// Tests that GeneticOptimizer can be stopped mid-run.
-	/// </summary>
-	[TestMethod]
-	public async Task GeneticOptimizerCanBeStopped()
-	{
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
-
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
-		var storageRegistry = GetHistoryStorage();
-
-		using var optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
-
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
-
-		var strategy = new SmaStrategy
-		{
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1,
-			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 30,
-		};
-
-		var shortParam = strategy.Parameters[nameof(SmaStrategy.Short)];
-		var longParam = strategy.Parameters[nameof(SmaStrategy.Long)];
-
-		var startedTcs = new TaskCompletionSource<bool>();
-		var stoppedTcs = new TaskCompletionSource<bool>();
-
-		optimizer.StateChanged += (oldState, newState) =>
-		{
-			if (newState == ChannelStates.Started)
-				startedTcs.TrySetResult(true);
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		// Many iterations so we can stop mid-run
-		optimizer.EmulationSettings.MaxIterations = 100;
-
-		var geneticParams = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
-		{
-			(shortParam, 20, 40, 5, null),
-			(longParam, 60, 100, 10, null),
-		};
-		optimizer.Start(startTime, stopTime, strategy, geneticParams, s => s.PnL);
-
-		// Wait for start
-		await Task.WhenAny(startedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
-
-		if (!startedTcs.Task.IsCompleted)
-		{
-			Fail("Optimizer did not start in time");
-		}
-
-		// Stop the optimizer
-		optimizer.Stop();
-
-		// Wait for stopped
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
-
-		optimizer.State.AssertEqual(ChannelStates.Stopped, "Optimizer should be stopped after Stop() call");
-		optimizer.IsCancelled.AssertTrue("IsCancelled should be true after Stop()");
+		AreEqual(expectedCount, count, $"Expected {expectedCount} results but got {count}");
 	}
 
 	/// <summary>
@@ -632,30 +306,21 @@ public class OptimizerTests : BaseTestClass
 			strategies.Add((strategy, [shortParam, longParam]));
 		}
 
-		var stoppedTcs = new TaskCompletionSource<bool>();
-		optimizer.StateChanged += (oldState, newState) =>
+		var count = 0;
+
+		await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategies, CancellationToken))
 		{
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
-
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (!stoppedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
+			count++;
 		}
 
-		optimizer.State.AssertEqual(ChannelStates.Stopped, "Optimizer should be stopped");
+		AreEqual(strategies.Count, count, $"Expected {strategies.Count} results but got {count}");
 	}
 
 	/// <summary>
-	/// Tests that optimizer raises events with strategy statistics after completion.
+	/// Tests that optimizer yields strategy statistics after completion.
 	/// </summary>
 	[TestMethod]
-	public async Task OptimizerRaisesEventsWithStrategyStatistics()
+	public async Task OptimizerYieldsStrategyStatistics()
 	{
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
@@ -671,90 +336,29 @@ public class OptimizerTests : BaseTestClass
 
 		var strategies = CreateStrategyIterations(security, portfolio, 25, 35, 10, 70, 90, 20).ToList();
 
-		var completedStrategies = new List<(Strategy strategy, IStrategyParam[] parameters)>();
+		var results = new List<(Strategy strategy, IStrategyParam[] parameters)>();
 
-		optimizer.SingleProgressChanged += (strategy, parameters, progress) =>
+		await foreach (var result in optimizer.RunAsync(startTime, stopTime, strategies, CancellationToken))
 		{
-			lock (completedStrategies)
-			{
-				completedStrategies.Add((strategy, parameters));
-			}
-		};
-
-		var stoppedTcs = new TaskCompletionSource<bool>();
-		optimizer.StateChanged += (oldState, newState) =>
-		{
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
-
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (!stoppedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
+			results.Add(result);
 		}
 
-		// Verify that completed strategies have statistics
-		foreach (var (strategy, parameters) in completedStrategies)
+		foreach (var (strategy, parameters) in results)
 		{
 			IsNotNull(strategy, "Strategy should not be null");
 			IsNotNull(parameters, "Parameters should not be null");
 			IsTrue(parameters.Length > 0, "Parameters should not be empty");
 
-			// Strategy should have run and have some data
 			var statisticManager = strategy.StatisticManager;
 			statisticManager.AssertNotNull("StatisticManager should not be null");
 		}
 	}
 
 	/// <summary>
-	/// Tests that BruteForce optimizer with batch size works correctly.
+	/// Tests that iteration count matches expected.
 	/// </summary>
 	[TestMethod]
-	public async Task BruteForceOptimizerWithBatchSize()
-	{
-		var security = CreateTestSecurity();
-		var portfolio = CreateTestPortfolio();
-
-		var secProvider = new CollectionSecurityProvider([security]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
-		var storageRegistry = GetHistoryStorage();
-
-		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
-
-		// Set batch size for parallel execution
-		optimizer.EmulationSettings.BatchSize = 2;
-
-		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryBeginDate.AddDays(6);
-
-		var strategies = CreateStrategyIterations(security, portfolio, 20, 30, 10, 60, 80, 20).ToList();
-
-		var stoppedTcs = new TaskCompletionSource<bool>();
-		optimizer.StateChanged += (oldState, newState) =>
-		{
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
-
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (!stoppedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
-			Fail("Optimizer did not complete in time");
-		}
-
-		optimizer.State.AssertEqual(ChannelStates.Stopped, "Optimizer should be stopped");
-	}
-
-	[TestMethod]
-	public async Task OptimizerIterationTimesAreIncreasing()
+	public async Task OptimizerIterationCountMatchesExpected()
 	{
 		var security = CreateTestSecurity();
 		var portfolio = CreateTestPortfolio();
@@ -771,71 +375,15 @@ public class OptimizerTests : BaseTestClass
 		var strategies = CreateStrategyIterations(security, portfolio, 20, 30, 10, 60, 80, 20).ToList();
 		var expectedIterations = strategies.Count;
 
-		var completedIterations = new List<(Strategy strategy, DateTime? endTime, int progress)>();
-		var timeErrors = new List<string>();
-		var syncLock = new object();
-		DateTime? lastIterationEndTime = null;
+		var count = 0;
 
-		optimizer.SingleProgressChanged += (strategy, parameters, progress) =>
+		await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategies, CancellationToken))
 		{
-			// Only count completed iterations (progress == 100)
-			if (progress != 100)
-				return;
-
-			// Get the strategy's end time from its statistics or trades
-			DateTime? endTime = null;
-
-			// Try to get the last trade time as the end time of the strategy run
-			var lastTrade = strategy.MyTrades.OrderByDescending(t => t.Trade.ServerTime).FirstOrDefault();
-			if (lastTrade != null)
-			{
-				endTime = lastTrade.Trade.ServerTime;
-			}
-			else
-			{
-				// If no trades, use last order time
-				var lastOrder = strategy.Orders.OrderByDescending(o => o.Time).FirstOrDefault();
-				if (lastOrder != null)
-				{
-					endTime = lastOrder.Time;
-				}
-			}
-
-			lock (syncLock)
-			{
-				if (endTime.HasValue)
-					lastIterationEndTime = endTime;
-
-				completedIterations.Add((strategy, endTime, progress));
-			}
-		};
-
-		var stoppedTcs = new TaskCompletionSource<bool>();
-		optimizer.StateChanged += (oldState, newState) =>
-		{
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
-
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (!stoppedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
-			Fail("Optimizer did not complete in time");
+			count++;
 		}
 
-		// Verify iteration count
-		AreEqual(expectedIterations, completedIterations.Count,
-			$"Expected {expectedIterations} iterations but got {completedIterations.Count}");
-
-		// Report any errors
-		if (timeErrors.Count > 0)
-		{
-			Fail($"Time ordering violations:\n{string.Join("\n", timeErrors)}");
-		}
+		AreEqual(expectedIterations, count,
+			$"Expected {expectedIterations} iterations but got {count}");
 	}
 
 	/// <summary>
@@ -913,21 +461,8 @@ public class OptimizerTests : BaseTestClass
 			};
 		};
 
-		var stoppedTcs = new TaskCompletionSource<bool>();
-		optimizer.StateChanged += (oldState, newState) =>
+		await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategies, CancellationToken))
 		{
-			if (newState == ChannelStates.Stopped)
-				stoppedTcs.TrySetResult(true);
-		};
-
-		optimizer.Start(startTime, stopTime, strategies, strategies.Count);
-
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
-
-		if (!stoppedTcs.Task.IsCompleted)
-		{
-			optimizer.Stop();
-			Fail("Optimizer did not complete in time");
 		}
 
 		// Report any time errors
@@ -935,5 +470,249 @@ public class OptimizerTests : BaseTestClass
 		{
 			Fail($"Time ordering violations within strategy iterations:\n{string.Join("\n", iterationTimeErrors.Take(20))}");
 		}
+	}
+
+	/// <summary>
+	/// Tests that GeneticOptimizer.RunAsync yields results.
+	/// </summary>
+	[TestMethod]
+	public async Task GeneticRunAsyncYieldsResults()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		using var optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
+
+		var strategy = new SmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		var shortParam = strategy.Parameters[nameof(SmaStrategy.Short)];
+		var longParam = strategy.Parameters[nameof(SmaStrategy.Long)];
+
+		optimizer.EmulationSettings.MaxIterations = 5;
+
+		var geneticParams = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
+		{
+			(shortParam, 20, 40, 5, null),
+			(longParam, 60, 100, 10, null),
+		};
+
+		var results = new List<Strategy>();
+
+		await foreach (var (s, _) in optimizer.RunAsync(startTime, stopTime, strategy, geneticParams, s => s.PnL, cancellationToken: CancellationToken))
+		{
+			results.Add(s);
+		}
+
+		IsTrue(results.Count > 0, "Expected at least one result from genetic optimizer");
+	}
+
+	/// <summary>
+	/// Tests that GeneticOptimizer.RunAsync raises SingleProgressChanged events.
+	/// </summary>
+	[TestMethod]
+	public async Task GeneticRunAsyncRaisesProgressEvents()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		using var optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
+
+		var strategy = new SmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		var shortParam = strategy.Parameters[nameof(SmaStrategy.Short)];
+		var longParam = strategy.Parameters[nameof(SmaStrategy.Long)];
+
+		var singleProgressCount = 0;
+		optimizer.SingleProgressChanged += (s, parameters, progress) =>
+		{
+			Interlocked.Increment(ref singleProgressCount);
+		};
+
+		optimizer.EmulationSettings.MaxIterations = 5;
+
+		var geneticParams = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
+		{
+			(shortParam, 20, 40, 5, null),
+			(longParam, 60, 100, 10, null),
+		};
+
+		await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategy, geneticParams, s => s.PnL, cancellationToken: CancellationToken))
+		{
+		}
+
+		IsTrue(singleProgressCount > 0, "Expected single progress events to be raised");
+	}
+
+	/// <summary>
+	/// Tests that GeneticOptimizer.RunAsync can be cancelled.
+	/// </summary>
+	[TestMethod]
+	public async Task GeneticRunAsyncCancellation()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		using var optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
+
+		var strategy = new SmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		var shortParam = strategy.Parameters[nameof(SmaStrategy.Short)];
+		var longParam = strategy.Parameters[nameof(SmaStrategy.Long)];
+
+		// Many iterations so we can stop mid-run
+		optimizer.EmulationSettings.MaxIterations = 100;
+
+		var geneticParams = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
+		{
+			(shortParam, 20, 40, 5, null),
+			(longParam, 60, 100, 10, null),
+		};
+
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		var count = 0;
+
+		try
+		{
+			await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategy, geneticParams, s => s.PnL, cancellationToken: cts.Token))
+			{
+				count++;
+				if (count >= 2)
+					cts.Cancel();
+			}
+		}
+		catch (OperationCanceledException)
+		{
+			// expected
+		}
+
+		IsTrue(count >= 2, $"Should have received at least 2 results before cancellation, got {count}");
+	}
+
+	/// <summary>
+	/// Tests cancellation by iteration count inside the loop (consumer-side limit).
+	/// </summary>
+	[TestMethod]
+	public async Task BruteForceRunAsyncCancelByIterationCount()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
+
+		var strategies = CreateStrategyIterations(security, portfolio, 10, 40, 5, 50, 100, 5).ToList();
+
+		const int maxResults = 3;
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		var results = new List<(Strategy strategy, IStrategyParam[] parameters)>();
+
+		try
+		{
+			await foreach (var result in optimizer.RunAsync(startTime, stopTime, strategies, cts.Token))
+			{
+				results.Add(result);
+
+				if (results.Count >= maxResults)
+					cts.Cancel();
+			}
+		}
+		catch (OperationCanceledException)
+		{
+			// expected
+		}
+
+		IsTrue(results.Count >= maxResults, $"Should have at least {maxResults} results, got {results.Count}");
+		IsTrue(results.Count < strategies.Count, $"Should have been cancelled before all {strategies.Count} iterations");
+	}
+
+	/// <summary>
+	/// Tests cancellation by timeout (CancelAfter).
+	/// </summary>
+	[TestMethod]
+	public async Task BruteForceRunAsyncCancelByTimeout()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		using var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate; // long period so it won't finish naturally
+
+		var strategies = CreateStrategyIterations(security, portfolio, 10, 40, 5, 50, 100, 5).ToList();
+
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		cts.CancelAfter(TimeSpan.FromSeconds(30)); // cancel after 30 sec
+
+		var count = 0;
+
+		try
+		{
+			await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategies, cts.Token))
+			{
+				count++;
+			}
+		}
+		catch (OperationCanceledException)
+		{
+			// expected
+		}
+
+		IsTrue(count < strategies.Count, $"Should have been cancelled by timeout before all {strategies.Count} iterations, got {count}");
 	}
 }

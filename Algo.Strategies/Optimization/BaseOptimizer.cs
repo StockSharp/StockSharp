@@ -56,30 +56,15 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	private CacheAllocator _storageCacheAllocator;
 
 	private readonly Lock _sync = new();
-	private ChannelStates _state = ChannelStates.Stopped;
 	private bool _cancelEmulation;
 	private bool _allIterationsStarted;
 
-	private IOptimizationBatchManager _batchManager = new OptimizationBatchManager();
-	private IOptimizationProgressTracker _progressTracker = new OptimizationProgressTracker();
+	private volatile TaskCompletionSource _pauseTcs;
 
-	/// <summary>
-	/// Batch manager for concurrent iteration control.
-	/// </summary>
-	public IOptimizationBatchManager BatchManager
-	{
-		get => _batchManager;
-		set => _batchManager = value ?? throw new ArgumentNullException(nameof(value));
-	}
+	private readonly OptimizationBatchManager _batchManager = new();
 
-	/// <summary>
-	/// Progress tracker.
-	/// </summary>
-	public IOptimizationProgressTracker ProgressTracker
-	{
-		get => _progressTracker;
-		set => _progressTracker = value ?? throw new ArgumentNullException(nameof(value));
-	}
+	private Channel<(Strategy strategy, IStrategyParam[] parameters)> _resultsChannel;
+	private CancellationTokenSource _linkedCts;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BaseOptimizer"/>.
@@ -186,44 +171,31 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	public IExchangeInfoProvider ExchangeInfoProvider { get; }
 
 	/// <summary>
-	/// Has the emulator ended its operation due to end of data, or it was interrupted through the <see cref="Stop"/> method.
-	/// </summary>
-	public bool IsCancelled { get; private set; }
-
-	/// <summary>
-	/// The emulator state.
-	/// </summary>
-	public ChannelStates State
-	{
-		get => _state;
-		private set
-		{
-			if (_state == value)
-				return;
-
-			if (!_state.ValidateChannelState(value))
-				return;
-
-			var oldState = _state;
-			_state = value;
-			StateChanged?.Invoke(oldState, _state);
-		}
-	}
-
-	/// <summary>
 	/// <see cref="HistoryEmulationConnector.StopOnSubscriptionError"/>
 	/// </summary>
 	public bool StopOnSubscriptionError { get; set; }
 
 	/// <summary>
-	/// The event on change of paper trade state.
+	/// Whether optimization is currently paused.
 	/// </summary>
-	public event Action<ChannelStates, ChannelStates> StateChanged;
+	public bool IsPaused => _pauseTcs is not null;
 
 	/// <summary>
-	/// The event of total progress change.
+	/// Pause optimization. New iterations won't start until <see cref="Resume"/> is called.
+	/// Currently running iterations will complete.
 	/// </summary>
-	public event Action<int, TimeSpan, TimeSpan> TotalProgressChanged;
+	public void Pause()
+	{
+		Interlocked.CompareExchange(ref _pauseTcs, new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously), null);
+	}
+
+	/// <summary>
+	/// Resume paused optimization.
+	/// </summary>
+	public void Resume()
+	{
+		Interlocked.Exchange(ref _pauseTcs, null)?.TrySetResult();
+	}
 
 	/// <summary>
 	/// The event of single progress change.
@@ -241,142 +213,99 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	public event Action<Connector> ConnectorInitialized;
 
 	/// <summary>
-	/// Start optimization.
+	/// Initialize channel, batch manager, and linked CTS for RunAsync.
 	/// </summary>
-	/// <param name="totalIterations">Total number of iterations.</param>
-	protected void OnStart(int totalIterations)
+	/// <param name="totalIterations">Total number of iterations (or int.MaxValue if unknown).</param>
+	/// <param name="cancellationToken">External cancellation token.</param>
+	protected void InitializeRunAsync(int totalIterations, CancellationToken cancellationToken)
 	{
-		var maxIters = EmulationSettings.MaxIterations;
-		if (maxIters > 0 && totalIterations > maxIters)
-			totalIterations = maxIters;
-
 		_cancelEmulation = false;
 		_allIterationsStarted = false;
-		IsCancelled = false;
 
-		ProgressTracker.Reset(totalIterations);
-		BatchManager.Reset(EmulationSettings.BatchSize, totalIterations);
+		// Reset pause state
+		Resume();
 
-		State = ChannelStates.Starting;
-		State = ChannelStates.Started;
-	}
+		_batchManager.Reset(EmulationSettings.BatchSize, totalIterations);
 
-	/// <summary>
-	/// To suspend the optimization.
-	/// </summary>
-	public virtual void Suspend()
-	{
-		using (_sync.EnterScope())
+		_resultsChannel = Channel.CreateUnbounded<(Strategy, IStrategyParam[])>(new UnboundedChannelOptions
 		{
-			if (State != ChannelStates.Started)
-				return;
+			SingleReader = true,
+		});
 
-			State = ChannelStates.Suspending;
+		_linkedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
-			foreach (var connector in _startedConnectors)
-			{
-				if (connector.State == ChannelStates.Started)
-					connector.Suspend();
-			}
-
-			State = ChannelStates.Suspended;
-		}
-	}
-
-	/// <summary>
-	/// To resume the optimization.
-	/// </summary>
-	public virtual void Resume()
-	{
-		using (_sync.EnterScope())
+		_linkedCts.Token.Register(() =>
 		{
-			if (State != ChannelStates.Suspended)
-				return;
-
-			State = ChannelStates.Starting;
-
-			foreach (var connector in _startedConnectors)
-			{
-				if (connector.State == ChannelStates.Suspended)
-					connector.Start();
-			}
-
-			State = ChannelStates.Started;
-		}
-	}
-
-	/// <summary>
-	/// To stop optimization.
-	/// </summary>
-	public virtual void Stop()
-	{
-		using (_sync.EnterScope())
-		{
-			if (!(State is ChannelStates.Started or ChannelStates.Suspended))
-				return;
-
-			State = ChannelStates.Stopping;
 			_cancelEmulation = true;
 
-			foreach (var connector in _startedConnectors)
-			{
-				if (connector.State is
-					ChannelStates.Started or
-					ChannelStates.Starting or
-					ChannelStates.Suspended or
-					ChannelStates.Suspending)
-					connector.Disconnect();
-			}
+			// Unblock paused waiters so they can see cancellation
+			Resume();
 
-			if (BatchManager.RunningCount == 0)
-				RaiseStopped();
+			using (_sync.EnterScope())
+			{
+				foreach (var connector in _startedConnectors)
+				{
+					if (connector.State is
+						ChannelStates.Started or
+						ChannelStates.Starting or
+						ChannelStates.Suspended or
+						ChannelStates.Suspending)
+						connector.Disconnect();
+				}
+			}
+		});
+	}
+
+	/// <summary>
+	/// Yield results from channel reader.
+	/// </summary>
+	protected async IAsyncEnumerable<(Strategy Strategy, IStrategyParam[] Parameters)> ReadResultsAsync(
+		[EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		await foreach (var result in _resultsChannel.Reader.ReadAllAsync(cancellationToken))
+		{
+			yield return result;
 		}
 	}
 
 	/// <inheritdoc />
 	protected override void DisposeManaged()
 	{
-		Stop();
+		Resume();
+		_linkedCts?.Cancel();
 		base.DisposeManaged();
 	}
 
 	/// <summary>
-	/// Set <see cref="State"/> to <see cref="ChannelStates.Stopped"/>.
+	/// Complete the channel so RunAsync enumeration ends.
 	/// </summary>
-	protected void RaiseStopped()
+	protected void CompleteChannel()
 	{
-		if (State == ChannelStates.Stopped)
-			return;
-
-		if (State != ChannelStates.Stopping)
-			State = ChannelStates.Stopping;
-
-		if (ProgressTracker.TotalProgress < 100 && !_cancelEmulation)
-			TotalProgressChanged?.Invoke(100, ProgressTracker.Elapsed, default);
-
-		IsCancelled = _cancelEmulation;
-		State = ChannelStates.Stopped;
+		_resultsChannel?.Writer.TryComplete();
 	}
 
 	/// <summary>
-	/// Try start next iteration.
+	/// Try start next iteration. Returns <see langword="true"/> if iteration was started and completed,
+	/// <see langword="false"/> if no more iterations available.
 	/// </summary>
 	/// <param name="startTime">Date in history for starting the paper trading.</param>
 	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
 	/// <param name="tryGetNext">Handler to try to get next strategy object.</param>
 	/// <param name="adapterCache"><see cref="HistoryMessageAdapter.AdapterCache"/></param>
 	/// <param name="storageCache"><see cref="HistoryMessageAdapter.StorageCache"/></param>
-	/// <param name="iterationFinished">Callback to notify the iteration was finished.</param>
-	protected internal void TryNextRun(DateTime startTime, DateTime stopTime,
+	/// <param name="cancellationToken">Cancellation token.</param>
+	protected internal async ValueTask<bool> TryNextRunAsync(DateTime startTime, DateTime stopTime,
 		Func<IPortfolioProvider, (Strategy strategy, IStrategyParam[] parameters)?> tryGetNext,
 		MarketDataStorageCache adapterCache, MarketDataStorageCache storageCache,
-		Action iterationFinished)
+		CancellationToken cancellationToken = default)
 	{
 		if (tryGetNext is null)
 			throw new ArgumentNullException(nameof(tryGetNext));
 
-		if (iterationFinished is null)
-			throw new ArgumentNullException(nameof(iterationFinished));
+		// Wait if paused
+		var pauseTcs = _pauseTcs;
+		if (pauseTcs is not null)
+			await pauseTcs.Task.WaitAsync(cancellationToken);
 
 		Strategy strategy;
 		IStrategyParam[] parameters;
@@ -385,21 +314,17 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 		using (_sync.EnterScope())
 		{
-			// Check if we can start a new iteration
-			if (State is ChannelStates.Suspended or ChannelStates.Suspending or ChannelStates.Stopping or ChannelStates.Stopped)
-				return;
-
 			if (_cancelEmulation || _allIterationsStarted)
 			{
 				CheckFinished();
-				return;
+				return false;
 			}
 
-			if (!BatchManager.CanStartNext)
+			if (!_batchManager.CanStartNext)
 			{
 				_allIterationsStarted = true;
 				CheckFinished();
-				return;
+				return false;
 			}
 
 			// Try to get next strategy
@@ -410,16 +335,14 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			{
 				_allIterationsStarted = true;
 				CheckFinished();
-				return;
+				return false;
 			}
 
 			(strategy, parameters) = next.Value;
 
 			// Reserve slot in batch
-			if (!BatchManager.TryReserveSlot(out iterationId))
-				return;
-
-			ProgressTracker.IterationStarted();
+			if (!_batchManager.TryReserveSlot(out iterationId))
+				return false;
 
 			strategy.Parent ??= this;
 
@@ -427,14 +350,16 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			_startedConnectors.Add(connector);
 		}
 
-		SetupIteration(connector, strategy, parameters, iterationId, iterationFinished);
-		StartIteration(connector, strategy, parameters);
+		var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		SetupIteration(connector, strategy, parameters, iterationId, tcs);
+		await StartIterationAsync(connector, strategy, parameters, cancellationToken);
+		return await tcs.Task;
 	}
 
 	private void CheckFinished()
 	{
-		if (BatchManager.IsFinished)
-			RaiseStopped();
+		if (_batchManager.IsFinished)
+			CompleteChannel();
 	}
 
 	private HistoryEmulationConnector CreateConnector(
@@ -474,7 +399,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		Strategy strategy,
 		IStrategyParam[] parameters,
 		Guid iterationId,
-		Action iterationFinished)
+		TaskCompletionSource<bool> tcs)
 	{
 		var lastStep = 0;
 
@@ -485,7 +410,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			if (state != ChannelStates.Stopped)
 				return;
 
-			OnIterationCompleted(connector, strategy, parameters, iterationId, lastStep, iterationFinished);
+			OnIterationCompleted(connector, strategy, parameters, iterationId, lastStep, tcs);
 		};
 	}
 
@@ -495,7 +420,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		IStrategyParam[] parameters,
 		Guid iterationId,
 		int lastStep,
-		Action iterationFinished)
+		TaskCompletionSource<bool> tcs)
 	{
 		if (lastStep < 100)
 		{
@@ -508,25 +433,22 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		using (_sync.EnterScope())
 		{
 			_startedConnectors.Remove(connector);
-			BatchManager.CompleteIteration(iterationId);
-			isFinished = _allIterationsStarted && BatchManager.IsFinished;
+			_batchManager.CompleteIteration(iterationId);
+			isFinished = _allIterationsStarted && _batchManager.IsFinished;
 		}
 
-		ProgressTracker.IterationCompleted();
+		// Write result to channel (for RunAsync consumers)
+		_resultsChannel?.Writer.TryWrite((strategy, parameters));
 
-		// Report total progress
-		var progress = ProgressTracker.TotalProgress;
-		TotalProgressChanged?.Invoke(progress, ProgressTracker.Elapsed, ProgressTracker.Remaining);
+		// Signal iteration completed
+		tcs.TrySetResult(true);
 
-		// Trigger next iteration
-		iterationFinished();
-
-		// Check if we should stop
-		if (isFinished || (_cancelEmulation && BatchManager.RunningCount == 0))
-			RaiseStopped();
+		// Check if we should complete
+		if (isFinished || (_cancelEmulation && _batchManager.RunningCount == 0))
+			CompleteChannel();
 	}
 
-	private void StartIteration(HistoryEmulationConnector connector, Strategy strategy, IStrategyParam[] parameters)
+	private async ValueTask StartIterationAsync(HistoryEmulationConnector connector, Strategy strategy, IStrategyParam[] parameters, CancellationToken cancellationToken)
 	{
 		strategy.Connector = connector;
 		strategy.WaitRulesOnStop = false;
@@ -550,6 +472,6 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		strategy.Start();
 
 		connector.Connect();
-		connector.Start();
+		await connector.StartAsync(cancellationToken);
 	}
 }

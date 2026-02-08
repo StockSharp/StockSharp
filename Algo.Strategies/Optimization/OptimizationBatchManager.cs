@@ -51,6 +51,7 @@ public interface IOptimizationBatchManager
 	/// <param name="iterationId">Output: new iteration ID if reserved.</param>
 	/// <returns>True if slot was reserved.</returns>
 	bool TryReserveSlot(out Guid iterationId);
+
 }
 
 /// <summary>

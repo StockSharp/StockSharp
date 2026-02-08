@@ -734,7 +734,7 @@ public static class StrategyParamHelper
 	/// </summary>
 	/// <param name="strategy">The strategy with parameters.</param>
 	/// <param name="parameters">The parameters to optimize.</param>
-	/// <returns>Array of tuples suitable for <see cref="Optimization.GeneticOptimizer.Start"/>.</returns>
+	/// <returns>Array of tuples suitable for <see cref="Optimization.GeneticOptimizer.RunAsync"/>.</returns>
 	public static (IStrategyParam param, object from, object to, object step, IEnumerable values)[] ToGeneticParameters(
 		this Strategy strategy,
 		IStrategyParam[] parameters)
@@ -781,7 +781,7 @@ public static class StrategyParamHelper
 	/// </summary>
 	/// <param name="strategy">The strategy with parameters.</param>
 	/// <param name="parameters">The parameters with optional explicit values to use instead of range.</param>
-	/// <returns>Array of tuples suitable for <see cref="Optimization.GeneticOptimizer.Start"/>.</returns>
+	/// <returns>Array of tuples suitable for <see cref="Optimization.GeneticOptimizer.RunAsync"/>.</returns>
 	public static (IStrategyParam param, object from, object to, object step, IEnumerable values)[] ToGeneticParameters(
 		this Strategy strategy,
 		IEnumerable<(IStrategyParam param, IEnumerable values)> parameters)

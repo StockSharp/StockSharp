@@ -69,45 +69,6 @@ public class GeneticOptimizerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task Start_WithCustomCalcFitness_DoesNotCallProvider()
-	{
-		var provider = new MockFitnessFormulaProvider();
-
-		using var optimizer = CreateOptimizer(provider);
-		optimizer.Settings.GenerationsMax = 10;
-
-		var strategy = CreateTestStrategy();
-		var parameters = CreateTestParameters(strategy);
-
-		Func<Strategy, decimal> customFitness = s => s.PnL * 2;
-
-		// Start should not throw and should not call provider
-		// Note: We can't easily test that the optimization runs correctly without
-		// a full integration test, but we can verify the provider wasn't called
-		try
-		{
-			optimizer.Start(
-				DateTime.Today.AddDays(-10),
-				DateTime.Today,
-				strategy,
-				parameters,
-				calcFitness: customFitness);
-
-			// Give it a moment to start
-			await Task.Delay(100, CancellationToken);
-
-			// Stop immediately
-			optimizer.Stop();
-		}
-		catch
-		{
-			// Ignore errors from the actual optimization process
-		}
-
-		provider.CompileCallCount.AssertEqual(0);
-	}
-
-	[TestMethod]
 	public void MockProvider_Compile_TracksCallsAndFormula()
 	{
 		// Test that the MockFitnessFormulaProvider tracks compile calls
@@ -144,26 +105,5 @@ public class GeneticOptimizerTests : BaseTestClass
 			StorageFormats.Binary,
 			storageRegistry.DefaultDrive,
 			provider);
-	}
-
-	private static Strategy CreateTestStrategy()
-	{
-		var strategy = new Strategy
-		{
-			Security = Helper.CreateStorageSecurity(),
-			Portfolio = new Portfolio { Name = "Test" }
-		};
-
-		// Add a test parameter using Strategy.Param method
-		strategy.Param("TestParam", 10);
-
-		return strategy;
-	}
-
-	private static IEnumerable<(IStrategyParam param, object from, object to, object step, System.Collections.IEnumerable values)> CreateTestParameters(Strategy strategy)
-	{
-		var param = strategy.Parameters["TestParam"];
-
-		yield return (param, 1, 100, 10, null);
 	}
 }
