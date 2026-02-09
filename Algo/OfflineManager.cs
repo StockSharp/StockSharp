@@ -140,12 +140,21 @@ public sealed class OfflineManager(ILogReceiver logReceiver, Func<Message> creat
 			case MessageTypes.OrderReplace:
 			{
 				Message outMsg = null;
+				var handled = false;
 
 				if (!_state.IsConnected)
+				{
+					handled = true;
 					outMsg = ProcessOrderReplaceMessage((OrderReplaceMessage)message.Clone());
+				}
 
-				if (outMsg != null)
-					return ([], [outMsg], false);
+				if (handled)
+				{
+					if (outMsg != null)
+						return ([], [outMsg], false);
+
+					return ([], [], false);
+				}
 
 				return ([], [], true);
 			}

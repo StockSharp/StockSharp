@@ -251,6 +251,29 @@ public class OfflineManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void OrderReplace_NotConnected_NoPendingOrder_ShouldNotForward()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new OfflineManager(logReceiver, () => new ProcessSuspendedMessage(), new OfflineManagerState());
+
+		// Replace without prior registration — no pending order exists
+		var replaceMsg = new OrderReplaceMessage
+		{
+			TransactionId = 101,
+			OriginalTransactionId = 100,
+			Price = 105m,
+			Volume = 15,
+		};
+
+		var (toInner, toOut, shouldForward) = manager.ProcessInMessage(replaceMsg);
+
+		// Must NOT forward when offline — message is already in suspended queue
+		shouldForward.AssertFalse();
+		toInner.Length.AssertEqual(0);
+		toOut.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
 	public void Subscription_NotConnected_StoresMessage()
 	{
 		var logReceiver = new TestReceiver();
