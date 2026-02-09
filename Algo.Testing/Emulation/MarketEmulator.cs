@@ -128,14 +128,16 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
 
-		if (message.Type != MessageTypes.Reset
-			&& message.LocalTime != default
-			&& _lastInputTime != default
-			&& message.LocalTime < _lastInputTime)
-			throw new InvalidOperationException($"Message {message.Type} time {message.LocalTime:O} is less than current emulator time {_lastInputTime:O}");
+		var isSystem = message.Type == MessageTypes.Reset || message is BaseConnectionMessage;
+		var hasTime = message.LocalTime != default;
 
-		if (message.LocalTime != default && message.Type != MessageTypes.Reset)
+		if (!isSystem && hasTime)
+		{
+			if (_lastInputTime != default && message.LocalTime < _lastInputTime)
+				throw new InvalidOperationException($"Message {message.Type} time {message.LocalTime:O} is less than current emulator time {_lastInputTime:O}");
+
 			_lastInputTime = message.LocalTime;
+		}
 
 		var results = new List<Message>();
 

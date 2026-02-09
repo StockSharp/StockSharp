@@ -37,6 +37,9 @@ public class MarketEmulatorAdapter : MessageAdapter
 	public override bool IsAutoReplyOnTransactonalUnsubscription => true;
 
 	/// <inheritdoc />
+	public override DateTime CurrentTime => Emulator.CurrentTime;
+
+	/// <inheritdoc />
 	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		=> Emulator.SendInMessageAsync(message, cancellationToken);
 
