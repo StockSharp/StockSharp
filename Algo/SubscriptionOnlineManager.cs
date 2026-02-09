@@ -201,17 +201,6 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 									false // lookup history can request order changes (registered, filled, cancelled)
 								);
 							}
-							else if (info.State != SubscriptionStates.Online)
-							{
-								// For transactions, don't use OriginalTransactionId as subscription id
-								// because OriginalTransactionId is the order's transaction id, not the subscription id
-								// Let it fall through to use info.Subscribers.CachedKeys
-								if (info.Subscription.DataType != DataType.Transactions)
-								{
-									subscrMsg.SetSubscriptionIds([subscrMsg.OriginalTransactionId]);
-									break;
-								}
-							}
 						}
 						else
 						{
