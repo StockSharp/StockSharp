@@ -100,7 +100,7 @@ public class PositionTargetManager : BaseLogReceiver
 
 		var key = (security, portfolio);
 
-		lock (_targets.SyncRoot)
+		using (_targets.EnterScope())
 		{
 			if (_targets.TryGetValue(key, out var existing))
 			{
@@ -143,7 +143,7 @@ public class PositionTargetManager : BaseLogReceiver
 
 		var key = (security, portfolio);
 
-		lock (_targets.SyncRoot)
+		using (_targets.EnterScope())
 		{
 			if (_targets.TryGetValue(key, out var state))
 			{
@@ -191,7 +191,7 @@ public class PositionTargetManager : BaseLogReceiver
 		var key = (security, portfolio);
 
 		TargetState state;
-		lock (_targets.SyncRoot)
+		using (_targets.EnterScope())
 		{
 			if (!_targets.TryGetValue(key, out state))
 				return;
@@ -206,7 +206,7 @@ public class PositionTargetManager : BaseLogReceiver
 		if (Math.Abs(delta) <= PositionTolerance)
 		{
 			// target reached
-			lock (_targets.SyncRoot)
+			using (_targets.EnterScope())
 			{
 				state.ActiveAlgo?.Dispose();
 				state.ActiveAlgo = null;

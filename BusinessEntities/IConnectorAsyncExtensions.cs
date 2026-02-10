@@ -117,8 +117,6 @@ public static class IConnectorAsyncExtensions
 			AllowSynchronousContinuations = true,
 		});
 
-		var lastState = (OrderStates?)null;
-
 		void OnOrderReceived(Subscription _, Order o)
 		{
 			if (o != order)
