@@ -323,7 +323,7 @@ public class TrendMarketDepthGenerator(SecurityId securityId) : MarketDepthGener
 		if (_currGenerations == 0 || _bestBidPrice == null || _bestAskPrice == null)
 			return null;
 
-		var isTradeTime = _boardDefinition.IsTradeTime(time);
+		var isTradeTime = _boardDefinition.IsWorkingTime(time);
 
 		var canProcess = GenerateDepthOnEachTrade && _newTrades
 			? isTradeTime

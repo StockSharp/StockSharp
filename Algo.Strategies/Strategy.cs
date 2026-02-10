@@ -2357,7 +2357,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			if (date != _prevTradeDate)
 			{
 				_prevTradeDate = date;
-				_isPrevDateTradable = _boardMsg.IsTradeDate(_prevTradeDate);
+				_isPrevDateTradable = _boardMsg.IsWorkingDate(_prevTradeDate);
 			}
 
 			if (!_isPrevDateTradable)

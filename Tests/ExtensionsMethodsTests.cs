@@ -676,19 +676,19 @@ public class ExtensionsMethodsTests : BaseTestClass
 
 	#endregion
 
-	#region IsTradeTime
+	#region IsWorkingTime
 
 	[TestMethod]
-	public void IsTradeTime_NotEnabled_ReturnsTrue()
+	public void IsWorkingTime_NotEnabled_ReturnsTrue()
 	{
 		var wt = new WorkingTime { IsEnabled = false };
 		var board = new BoardMessage { WorkingTime = wt };
 
-		board.IsTradeTime(DateTime.UtcNow).AssertTrue();
+		board.IsWorkingTime(DateTime.UtcNow).AssertTrue();
 	}
 
 	[TestMethod]
-	public void IsTradeTime_Enabled_WithinPeriod_ReturnsTrue()
+	public void IsWorkingTime_Enabled_WithinPeriod_ReturnsTrue()
 	{
 		var now = new DateTime(2025, 1, 6, 12, 0, 0); // Monday
 		var wt = new WorkingTime
@@ -705,11 +705,11 @@ public class ExtensionsMethodsTests : BaseTestClass
 		};
 		var board = new BoardMessage { WorkingTime = wt };
 
-		board.IsTradeTime(now).AssertTrue();
+		board.IsWorkingTime(now).AssertTrue();
 	}
 
 	[TestMethod]
-	public void IsTradeTime_Enabled_OutsidePeriod_ReturnsFalse()
+	public void IsWorkingTime_Enabled_OutsidePeriod_ReturnsFalse()
 	{
 		var now = new DateTime(2025, 1, 6, 20, 0, 0); // Monday 20:00
 		var wt = new WorkingTime
@@ -726,11 +726,11 @@ public class ExtensionsMethodsTests : BaseTestClass
 		};
 		var board = new BoardMessage { WorkingTime = wt };
 
-		board.IsTradeTime(now).AssertFalse();
+		board.IsWorkingTime(now).AssertFalse();
 	}
 
 	[TestMethod]
-	public void IsTradeTime_Holiday_ReturnsFalse()
+	public void IsWorkingTime_Holiday_ReturnsFalse()
 	{
 		var holiday = new DateTime(2025, 1, 6); // Monday
 		var wt = new WorkingTime
@@ -748,7 +748,7 @@ public class ExtensionsMethodsTests : BaseTestClass
 		};
 		var board = new BoardMessage { WorkingTime = wt };
 
-		board.IsTradeTime(holiday.AddHours(12)).AssertFalse();
+		board.IsWorkingTime(holiday.AddHours(12)).AssertFalse();
 	}
 
 	#endregion
@@ -1495,8 +1495,6 @@ public class ExtensionsMethodsTests : BaseTestClass
 	}
 
 	#endregion
-
-	// ===== New coverage tests =====
 
 	#region CreateReply / CreateOrderReply
 
@@ -3170,53 +3168,6 @@ public class ExtensionsMethodsTests : BaseTestClass
 
 	#endregion
 
-	#region GetPeriod
-
-	[TestMethod]
-	public void GetPeriod_FoundPeriod_ReturnsPeriod()
-	{
-		var wt = new WorkingTime
-		{
-			Periods =
-			[
-				new WorkingTimePeriod
-				{
-					Till = new DateTime(2025, 6, 1),
-					Times = [new Range<TimeSpan>(new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0))],
-				},
-				new WorkingTimePeriod
-				{
-					Till = new DateTime(2026, 1, 1),
-					Times = [new Range<TimeSpan>(new TimeSpan(10, 0, 0), new TimeSpan(17, 0, 0))],
-				},
-			],
-		};
-
-		var period = wt.GetPeriod(new DateTime(2025, 3, 1));
-		period.AssertNotNull();
-		period.Till.AssertEqual(new DateTime(2025, 6, 1));
-	}
-
-	[TestMethod]
-	public void GetPeriod_NoPeriod_ReturnsNull()
-	{
-		var wt = new WorkingTime
-		{
-			Periods =
-			[
-				new WorkingTimePeriod
-				{
-					Till = new DateTime(2020, 1, 1),
-					Times = [new Range<TimeSpan>(new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0))],
-				},
-			],
-		};
-
-		wt.GetPeriod(new DateTime(2025, 1, 1)).AssertNull();
-	}
-
-	#endregion
-
 	#region GetTypicalPrice / GetMedianPrice
 
 	[TestMethod]
@@ -3334,38 +3285,6 @@ public class ExtensionsMethodsTests : BaseTestClass
 	{
 		var msg = new OrderStatusMessage();
 		msg.HasOrderId().AssertFalse();
-	}
-
-	#endregion
-
-	#region EncodeToString / DecodeToSpecialDays
-
-	[TestMethod]
-	public void EncodeDecodeSpecialDays_Roundtrip()
-	{
-		var specialDays = new Dictionary<DateTime, Range<TimeSpan>[]>
-		{
-			{
-				new DateTime(2025, 1, 1),
-				new[] { new Range<TimeSpan>(new TimeSpan(10, 0, 0), new TimeSpan(14, 0, 0)) }
-			},
-		};
-
-		var encoded = specialDays.EncodeToString();
-		IsNotNull(encoded);
-		IsFalse(encoded.IsEmpty());
-
-		var decoded = encoded.DecodeToSpecialDays();
-		decoded.Count.AssertEqual(1);
-		IsTrue(decoded.ContainsKey(new DateTime(2025, 1, 1)));
-		decoded[new DateTime(2025, 1, 1)].Length.AssertEqual(1);
-	}
-
-	[TestMethod]
-	public void DecodeToSpecialDays_Empty_ReturnsEmpty()
-	{
-		var result = "".DecodeToSpecialDays();
-		result.Count.AssertEqual(0);
 	}
 
 	#endregion

@@ -53,7 +53,7 @@ public class TradingTimeLineGenerator : ITradingTimeLineGenerator
 			throw new ArgumentNullException(nameof(boards));
 
 		var orderedRanges = boards
-			.Where(b => b.IsTradeDate(date, true))
+			.Where(b => b.IsWorkingDate(date, true))
 			.SelectMany(board =>
 			{
 				var period = board.WorkingTime.GetPeriod(date);
@@ -104,7 +104,7 @@ public class TradingTimeLineGenerator : ITradingTimeLineGenerator
 		if (boards == null)
 			throw new ArgumentNullException(nameof(boards));
 
-		return boards.Any(b => b.IsTradeDate(date, true));
+		return boards.Any(b => b.IsWorkingDate(date, true));
 	}
 
 	private static DateTime GetTime(DateTime date, TimeSpan timeOfDay)

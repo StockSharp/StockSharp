@@ -3646,7 +3646,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 
 			if (board != null)
 			{
-				if (!board.IsTradeTime(execMsg.ServerTime))
+				if (!board.IsWorkingTime(execMsg.ServerTime))
 					return new(LocalizedStrings.SessionNotActive);
 			}
 		}

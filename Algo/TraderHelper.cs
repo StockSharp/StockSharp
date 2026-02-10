@@ -121,7 +121,7 @@ public static partial class TraderHelper
 	/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 	public static bool IsTradeTime(this ExchangeBoard board, DateTime time)
 	{
-		return board.ToMessage().IsTradeTime(time, out _, out _);
+		return board.ToMessage().IsWorkingTime(time, out _, out _);
 	}
 
 	/// <summary>
@@ -134,7 +134,7 @@ public static partial class TraderHelper
 	/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
 	public static bool IsTradeTime(this ExchangeBoard board, DateTime time, out bool? isWorkingDay, out WorkingTimePeriod period)
 	{
-		return board.ToMessage().IsTradeTime(time, out isWorkingDay, out period);
+		return board.ToMessage().IsWorkingTime(time, out isWorkingDay, out period);
 	}
 
 	/// <summary>

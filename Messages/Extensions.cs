@@ -1205,120 +1205,6 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Get period for schedule.
-	/// </summary>
-	/// <param name="time">Trading schedule.</param>
-	/// <param name="date">The date in time for search of appropriate period.</param>
-	/// <returns>The schedule period. If no period is appropriate, <see langword="null" /> is returned.</returns>
-	public static WorkingTimePeriod GetPeriod(this WorkingTime time, DateTime date)
-	{
-		if (time == null)
-			throw new ArgumentNullException(nameof(time));
-
-		return time.Periods.FirstOrDefault(p => p.Till >= date);
-	}
-
-	private const string _dateFormat = "yyyyMMdd";
-	private const string _timeFormat = "hh\\:mm";
-
-	/// <summary>
-	/// Encode <see cref="WorkingTime.Periods"/> to string.
-	/// </summary>
-	/// <param name="periods">Schedule validity periods.</param>
-	/// <returns>Encoded string.</returns>
-	public static string EncodeToString(this IEnumerable<WorkingTimePeriod> periods)
-	{
-		return periods.Select(p => $"{p.Till:yyyyMMdd}=" + p.Times.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--") + "=" + p.SpecialDays.Select(p2 => $"{p2.Key}:" + p2.Value.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--")).Join("//")).Join(",");
-	}
-
-	/// <summary>
-	/// Decode from string to <see cref="WorkingTime.Periods"/>.
-	/// </summary>
-	/// <param name="input">Encoded string.</param>
-	/// <returns>Schedule validity periods.</returns>
-	public static IEnumerable<WorkingTimePeriod> DecodeToPeriods(this string input)
-	{
-		var periods = new List<WorkingTimePeriod>();
-
-		if (input.IsEmpty())
-			return periods;
-
-		try
-		{
-			foreach (var str in input.SplitByComma())
-			{
-				var parts = str.Split('=');
-				periods.Add(new WorkingTimePeriod
-				{
-					Till = parts[0].ToDateTime(_dateFormat).UtcKind(),
-					Times = [.. parts[1].SplitBySep("--").Select(s =>
-					{
-						var parts2 = s.Split('-');
-						return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
-					})],
-					SpecialDays = parts[2].SplitBySep("//").Select(s =>
-					{
-						var idx = s.IndexOf(':');
-						return new KeyValuePair<DayOfWeek, Range<TimeSpan>[]>(s.Substring(0, idx).To<DayOfWeek>(), [.. s.Substring(idx + 1).SplitBySep("--").Select(s2 =>
-						{
-							var parts3 = s2.Split('-');
-							return new Range<TimeSpan>(parts3[0].ToTimeSpan(_timeFormat), parts3[1].ToTimeSpan(_timeFormat));
-						})]);
-					}).ToDictionary()
-				});
-			}
-		}
-		catch (Exception ex)
-		{
-			throw new InvalidOperationException(LocalizedStrings.ErrorParsing.Put(input), ex);
-		}
-
-		return periods;
-	}
-
-	/// <summary>
-	/// Encode <see cref="WorkingTime.SpecialDays"/> to string.
-	/// </summary>
-	/// <param name="specialDays">Special working days and holidays.</param>
-	/// <returns>Encoded string.</returns>
-	public static string EncodeToString(this IDictionary<DateTime, Range<TimeSpan>[]> specialDays)
-	{
-		return specialDays.Select(p => $"{p.Key:yyyyMMdd}=" + p.Value.Select(r => $"{r.Min:hh\\:mm}-{r.Max:hh\\:mm}").Join("--")).JoinComma();
-	}
-
-	/// <summary>
-	/// Decode from string to <see cref="WorkingTime.SpecialDays"/>.
-	/// </summary>
-	/// <param name="input">Encoded string.</param>
-	/// <returns>Special working days and holidays.</returns>
-	public static IDictionary<DateTime, Range<TimeSpan>[]> DecodeToSpecialDays(this string input)
-	{
-		var specialDays = new Dictionary<DateTime, Range<TimeSpan>[]>();
-
-		if (input.IsEmpty())
-			return specialDays;
-
-		try
-		{
-			foreach (var str in input.SplitByComma())
-			{
-				var parts = str.Split('=');
-				specialDays[parts[0].ToDateTime(_dateFormat)] = [.. parts[1].SplitBySep("--").Select(s =>
-				{
-					var parts2 = s.Split('-');
-					return new Range<TimeSpan>(parts2[0].ToTimeSpan(_timeFormat), parts2[1].ToTimeSpan(_timeFormat));
-				})];
-			}
-		}
-		catch (Exception ex)
-		{
-			throw new InvalidOperationException(LocalizedStrings.ErrorParsing.Put(input), ex);
-		}
-
-		return specialDays;
-	}
-
-	/// <summary>
 	/// Is the specified adapter support market-data.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
@@ -4641,10 +4527,8 @@ public static partial class Extensions
 	/// <param name="board">Board info.</param>
 	/// <param name="time">The passed time to be checked.</param>
 	/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-	public static bool IsTradeTime(this BoardMessage board, DateTime time)
-	{
-		return board.IsTradeTime(time, out _, out _);
-	}
+	public static bool IsWorkingTime(this BoardMessage board, DateTime time)
+		=> board.IsWorkingTime(time, out _, out _);
 
 	/// <summary>
 	/// To check, whether the time is traded (has the session started, ended, is there a clearing).
@@ -4654,43 +4538,8 @@ public static partial class Extensions
 	/// <param name="isWorkingDay"><see langword="true" />, if the date is traded, otherwise, is not traded.</param>
 	/// <param name="period">Current working time period.</param>
 	/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-	public static bool IsTradeTime(this BoardMessage board, DateTime time, out bool? isWorkingDay, out WorkingTimePeriod period)
-	{
-		if (board is null)
-			throw new ArgumentNullException(nameof(board));
-
-		return board.WorkingTime.IsTradeTime(time, out isWorkingDay, out period);
-	}
-
-	/// <summary>
-	/// To check, whether the time is traded (has the session started, ended, is there a clearing).
-	/// </summary>
-	/// <param name="workingTime">Board working hours.</param>
-	/// <param name="time">The passed time to be checked.</param>
-	/// <param name="isWorkingDay"><see langword="true" />, if the date is traded, otherwise, is not traded.</param>
-	/// <param name="period">Current working time period.</param>
-	/// <returns><see langword="true" />, if time is traded, otherwise, not traded.</returns>
-	public static bool IsTradeTime(this WorkingTime workingTime, DateTime time, out bool? isWorkingDay, out WorkingTimePeriod period)
-	{
-		if (workingTime is null)
-			throw new ArgumentNullException(nameof(workingTime));
-
-		period = null;
-		isWorkingDay = null;
-
-		if (!workingTime.IsEnabled)
-			return true;
-
-		isWorkingDay = workingTime.IsTradeDate(time);
-
-		if (isWorkingDay == false)
-			return false;
-
-		period = workingTime.GetPeriod(time);
-
-		var tod = time.TimeOfDay;
-		return period == null || period.Times.IsEmpty() || period.Times.Any(r => r.Contains(tod));
-	}
+	public static bool IsWorkingTime(this BoardMessage board, DateTime time, out bool? isWorkingDay, out WorkingTimePeriod period)
+		=> board.CheckOnNull(nameof(board)).WorkingTime.IsWorkingTime(time, out isWorkingDay, out period);
 
 	/// <summary>
 	/// To check, whether date is traded.
@@ -4699,32 +4548,8 @@ public static partial class Extensions
 	/// <param name="date">The passed date to be checked.</param>
 	/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
 	/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
-	public static bool IsTradeDate(this BoardMessage board, DateTime date, bool checkHolidays = false)
-		=> IsTradeDate(board.WorkingTime, date, checkHolidays);
-
-	/// <summary>
-	/// To check, whether date is traded.
-	/// </summary>
-	/// <param name="workingTime">Board working hours.</param>
-	/// <param name="date">The passed date to be checked.</param>
-	/// <param name="checkHolidays">Whether to check the passed date for a weekday (Saturday and Sunday are days off, returned value for them is <see langword="false" />).</param>
-	/// <returns><see langword="true" />, if the date is traded, otherwise, is not traded.</returns>
-	public static bool IsTradeDate(this WorkingTime workingTime, DateTime date, bool checkHolidays = false)
-	{
-		var period = workingTime.GetPeriod(date);
-
-		if ((period == null || period.Times.Count == 0) && workingTime.SpecialWorkingDays.Length == 0 && workingTime.SpecialHolidays.Length == 0)
-			return true;
-
-		bool isWorkingDay;
-
-		if (checkHolidays && (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday))
-			isWorkingDay = workingTime.SpecialWorkingDays.Contains(date.Date);
-		else
-			isWorkingDay = !workingTime.SpecialHolidays.Contains(date.Date);
-
-		return isWorkingDay;
-	}
+	public static bool IsWorkingDate(this BoardMessage board, DateTime date, bool checkHolidays = false)
+		=> board.CheckOnNull(nameof(board)).WorkingTime.IsWorkingDate(date, checkHolidays);
 
 	/// <summary>
 	/// Get last trade date.
@@ -4738,7 +4563,7 @@ public static partial class Extensions
 		if (board == null)
 			throw new ArgumentNullException(nameof(board));
 
-		while (!board.IsTradeDate(date, checkHolidays))
+		while (!board.IsWorkingDate(date, checkHolidays))
 			date = date.AddDays(-1);
 
 		return date;
@@ -4763,13 +4588,13 @@ public static partial class Extensions
 			if (n > 0)
 			{
 				date = date.AddDays(1);
-				if (board.IsTradeDate(date, checkHolidays)) n--;
+				if (board.IsWorkingDate(date, checkHolidays)) n--;
 			}
 			//if need to Subtract
 			if (n < 0)
 			{
 				date = date.AddDays(-1);
-				if (board.IsTradeDate(date, checkHolidays)) n++;
+				if (board.IsWorkingDate(date, checkHolidays)) n++;
 			}
 		}
 

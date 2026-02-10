@@ -1136,22 +1136,26 @@ static class Helper
 			//a.IsSupportMarketOrders.AssertEqual(e.IsSupportMarketOrders);
 			a.TimeZone.AssertEqual(e.TimeZone);
 
-			a.WorkingTime.SpecialHolidays.Length.AssertEqual(e.WorkingTime.SpecialHolidays.Length);
+			var eh = e.WorkingTime.SpecialHolidays.ToArray();
+			var ah = a.WorkingTime.SpecialHolidays.ToArray();
+			ah.Length.AssertEqual(eh.Length);
 
-			for (var i = 0; i < e.WorkingTime.SpecialHolidays.Length; i++)
+			for (var i = 0; i < eh.Length; i++)
 			{
-				var p1 = e.WorkingTime.SpecialHolidays.ElementAt(i);
-				var p2 = a.WorkingTime.SpecialHolidays.ElementAt(i);
+				var p1 = eh.ElementAt(i);
+				var p2 = ah.ElementAt(i);
 
 				p2.AssertEqual(p1);
 			}
 
-			a.WorkingTime.SpecialWorkingDays.Length.AssertEqual(e.WorkingTime.SpecialWorkingDays.Length);
+			var ew = e.WorkingTime.SpecialWorkingDays.ToArray();
+			var aw = a.WorkingTime.SpecialWorkingDays.ToArray();
+			aw.Length.AssertEqual(ew.Length);
 
-			for (var i = 0; i < e.WorkingTime.SpecialWorkingDays.Length; i++)
+			for (var i = 0; i < ew.Length; i++)
 			{
-				var p1 = e.WorkingTime.SpecialWorkingDays.ElementAt(i);
-				var p2 = a.WorkingTime.SpecialWorkingDays.ElementAt(i);
+				var p1 = ew.ElementAt(i);
+				var p2 = aw.ElementAt(i);
 
 				p2.AssertEqual(p1);
 			}

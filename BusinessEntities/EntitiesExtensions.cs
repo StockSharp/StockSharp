@@ -2163,7 +2163,7 @@ public static partial class EntitiesExtensions
 					{
 						var dt = new DateTime(year, month, 15).UtcKind();
 
-						while (!board.IsTradeDate(dt))
+						while (!board.IsWorkingDate(dt))
 						{
 							dt = dt.AddDays(1);
 						}

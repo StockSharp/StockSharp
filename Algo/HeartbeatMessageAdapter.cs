@@ -417,7 +417,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 				if (_state.ConnectionTimeOut > TimeSpan.Zero)
 					break;
 
-				if (_reConnectionSettings.WorkingTime.IsTradeTime(CurrentTime, out _, out _))
+				if (_reConnectionSettings.WorkingTime.IsWorkingTime(CurrentTime, out _, out _))
 				{
 					LogInfo("RCM: To Connecting. CurrState {0} PrevState {1} Attempts {2}.", FormatState(_state.CurrentState), FormatState(_state.PreviousState), _state.ConnectingAttemptCount);
 
