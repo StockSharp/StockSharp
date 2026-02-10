@@ -43,5 +43,6 @@
     <FSharpControlTaskSeqVer>0.*</FSharpControlTaskSeqVer>
     <FSharpPlusVer>1.*</FSharpPlusVer>
     <MsSqlClientVer>6.*</MsSqlClientVer>
+    <NethereumSignerVer>5.*</NethereumSignerVer>
   </PropertyGroup>
 </Project>
