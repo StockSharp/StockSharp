@@ -1279,4 +1279,54 @@ public static class BoardCodes
 	/// <see cref="BingXFut"/>
 	/// </summary>
 	public const string BingXFut = "BNGXF";
+
+	/// <summary>
+	/// <see cref="AsterSpot"/>
+	/// </summary>
+	public const string AsterSpot = "ASTSP";
+
+	/// <summary>
+	/// <see cref="AsterDerivatives"/>
+	/// </summary>
+	public const string AsterDerivatives = "ASTDR";
+
+	/// <summary>
+	/// <see cref="EdgeXSpot"/>
+	/// </summary>
+	public const string EdgeXSpot = "EDXSP";
+
+	/// <summary>
+	/// <see cref="EdgeXDerivatives"/>
+	/// </summary>
+	public const string EdgeXDerivatives = "EDXDR";
+
+	/// <summary>
+	/// <see cref="LigtherSpot"/>
+	/// </summary>
+	public const string LigtherSpot = "LGTSP";
+
+	/// <summary>
+	/// <see cref="LigtherDerivatives"/>
+	/// </summary>
+	public const string LigtherDerivatives = "LGTDR";
+
+	/// <summary>
+	/// <see cref="ParadexSpot"/>
+	/// </summary>
+	public const string ParadexSpot = "PRDSP";
+
+	/// <summary>
+	/// <see cref="ParadexDerivatives"/>
+	/// </summary>
+	public const string ParadexDerivatives = "PRDDR";
+
+	/// <summary>
+	/// <see cref="HyperliquidSpot"/>
+	/// </summary>
+	public const string HyperliquidSpot = "HYLSP";
+
+	/// <summary>
+	/// <see cref="HyperliquidDerivatives"/>
+	/// </summary>
+	public const string HyperliquidDerivatives = "HYLDR";
 }
