@@ -14,7 +14,7 @@ class PusherClient : BaseLogReceiver
 
 	private readonly WebSocketClient _client;
 
-	public PusherClient(int attemptsCount)
+	public PusherClient(int attemptsCount, WorkingTime workingTime)
 	{
 		_client = new(
 			"wss://ws-eu.pusher.com/app/ee987526a24ba107824c?client=stocksharp&version=1.0&protocol=7",
@@ -37,6 +37,7 @@ class PusherClient : BaseLogReceiver
 			(s, a) => this.AddVerboseLog(s, a))
 		{
 			ReconnectAttempts = attemptsCount,
+			WorkingTime = workingTime ?? throw new ArgumentNullException(nameof(workingTime)),
 		};
 	}
 

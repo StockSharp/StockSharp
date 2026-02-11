@@ -151,7 +151,7 @@ public partial class CoinbaseMessageAdapter
 
 		_restClient = new(_authenticator) { Parent = this };
 
-		_socketClient = new(_authenticator, ReConnectionSettings.ReAttemptCount) { Parent = this };
+		_socketClient = new(_authenticator, ReConnectionSettings.ReAttemptCount, ReConnectionSettings.WorkingTime) { Parent = this };
 		SubscribePusherClient();
 
 		await _socketClient.Connect(cancellationToken);

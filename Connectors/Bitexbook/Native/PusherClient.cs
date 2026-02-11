@@ -24,7 +24,7 @@ class PusherClient : BaseLogReceiver
 
 	private readonly WebSocketClient _client;
 
-	public PusherClient(int attemptsCount)
+	public PusherClient(int attemptsCount, WorkingTime workingTime)
 	{
 		_client = new(
 			"wss://api.bitexbook.com/api/v2/ws",
@@ -50,6 +50,7 @@ class PusherClient : BaseLogReceiver
 			(s, a) => this.AddVerboseLog(s, a))
 		{
 			ReconnectAttempts = attemptsCount,
+			WorkingTime = workingTime ?? throw new ArgumentNullException(nameof(workingTime)),
 		};
 	}
 

@@ -19,7 +19,7 @@ class SocketClient : BaseLogReceiver
 	private readonly WebSocketClient _client;
 	private readonly Authenticator _authenticator;
 
-	public SocketClient(Authenticator authenticator, int reconnectAttempts)
+	public SocketClient(Authenticator authenticator, int reconnectAttempts, WorkingTime workingTime)
 	{
 		_authenticator = authenticator ?? throw new ArgumentNullException(nameof(authenticator));
 
@@ -43,7 +43,8 @@ class SocketClient : BaseLogReceiver
 			(s, a) => this.AddErrorLog(s, a),
 			(s, a) => this.AddVerboseLog(s, a))
 		{
-			ReconnectAttempts = reconnectAttempts
+			ReconnectAttempts = reconnectAttempts,
+			WorkingTime = workingTime ?? throw new ArgumentNullException(nameof(workingTime)),
 		};
 	}
 

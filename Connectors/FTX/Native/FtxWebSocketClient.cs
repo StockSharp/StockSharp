@@ -1,4 +1,4 @@
-﻿namespace StockSharp.FTX.Native;
+namespace StockSharp.FTX.Native;
 
 using System.Security;
 using System.Security.Cryptography;
@@ -35,7 +35,7 @@ class FtxWebSocketClient : BaseLogReceiver
 
 	private readonly WebSocketClient _client;
 
-	public FtxWebSocketClient(SecureString key, SecureString secret, string subaccountName, int attemptsCount)
+	public FtxWebSocketClient(SecureString key, SecureString secret, string subaccountName, int attemptsCount, WorkingTime workingTime)
 	{
 		_key = key;
 		_hasher = secret.IsEmpty() ? null : new(secret.UnSecure().UTF8());
@@ -61,6 +61,7 @@ class FtxWebSocketClient : BaseLogReceiver
 			(s, a) => this.AddVerboseLog(s, a))
 		{
 			ReconnectAttempts = attemptsCount,
+			WorkingTime = workingTime ?? throw new ArgumentNullException(nameof(workingTime)),
 		};
 	}
 
