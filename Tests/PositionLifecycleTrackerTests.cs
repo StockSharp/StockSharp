@@ -29,30 +29,10 @@ public class PositionLifecycleTrackerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ConstructorNullProviderThrows()
+	public void ProcessPositionNullThrows()
 	{
-		Throws<ArgumentNullException>(() => new PositionLifecycleTracker(null));
-	}
-
-	[TestMethod]
-	public void ConstructorSubscribes()
-	{
-		var provider = new Mock<ISubscriptionProvider>();
-
-		using var tracker = new PositionLifecycleTracker(provider.Object);
-
-		provider.VerifyAdd(p => p.PositionReceived += It.IsAny<Action<Subscription, Position>>(), Times.Once());
-	}
-
-	[TestMethod]
-	public void DisposeUnsubscribes()
-	{
-		var provider = new Mock<ISubscriptionProvider>();
-
-		var tracker = new PositionLifecycleTracker(provider.Object);
-		tracker.Dispose();
-
-		provider.VerifyRemove(p => p.PositionReceived -= It.IsAny<Action<Subscription, Position>>(), Times.Once());
+		var tracker = CreateTracker();
+		Throws<ArgumentNullException>(() => tracker.ProcessPosition(null));
 	}
 
 	[TestMethod]
@@ -304,20 +284,12 @@ public class PositionLifecycleTrackerTests : BaseTestClass
 		fired[1].ClosePrice.AssertEqual(105m);
 	}
 
-	private static PositionLifecycleTracker CreateTracker()
-	{
-		var provider = new Mock<ISubscriptionProvider>();
-		return new PositionLifecycleTracker(provider.Object);
-	}
+	private static PositionLifecycleTracker CreateTracker() => new();
 
 	private static void SendPosition(PositionLifecycleTracker tracker, Security security, string portfolio, decimal? currentValue, decimal? currentPrice, DateTime serverTime)
 	{
 		var position = CreatePosition(security, portfolio, currentValue, currentPrice, serverTime);
-
-		// use reflection to call the private OnPositionReceived method
-		var method = typeof(PositionLifecycleTracker).GetMethod("OnPositionReceived", BindingFlags.NonPublic | BindingFlags.Instance);
-		method.AssertNotNull();
-		method.Invoke(tracker, new object[] { null, position });
+		tracker.ProcessPosition(position);
 	}
 
 	private static void RoundTripClosed(PositionLifecycleTracker tracker, Security security, string portfolio, params (decimal? value, decimal? price, DateTime time)[] steps)

@@ -280,6 +280,9 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		_posManager = new(EnsureGetId);
 		_posManager.PositionProcessed += OnManagerPositionProcessed;
+
+		_positionTracker = new();
+		_positionTracker.RoundTripClosed += rt => _reportSource.AddPosition(rt);
 	}
 
 	private readonly StrategyParam<Guid> _id;
@@ -350,9 +353,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		{
 			if (Connector == value)
 				return;
-
-			_positionTracker?.Dispose();
-			_positionTracker = null;
 
 			if (_connector != null)
 			{
@@ -428,9 +428,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 				isp.SubscriptionStarted       += OnConnectorSubscriptionStarted;
 				isp.SubscriptionStopped       += OnConnectorSubscriptionStopped;
 				isp.SubscriptionFailed        += OnConnectorSubscriptionFailed;
-
-				_positionTracker = new PositionLifecycleTracker(this);
-				_positionTracker.RoundTripClosed += rt => _reportSource.AddPosition(rt);
 			}
 
 			ConnectorChanged?.Invoke();
@@ -611,7 +608,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	#region IReportSource implementation
 
 	private readonly ReportSource _reportSource;
-	private PositionLifecycleTracker _positionTracker;
+	private readonly PositionLifecycleTracker _positionTracker;
 
 	/// <summary>
 	/// Report data source with aggregation support.
@@ -3137,9 +3134,6 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	protected override void DisposeManaged()
 	{
 		Connector = null;
-
-		_positionTracker?.Dispose();
-		_positionTracker = null;
 
 		Parameters.Dispose();
 

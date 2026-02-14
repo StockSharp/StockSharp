@@ -13,6 +13,8 @@ partial class Strategy
 	{
 		ArgumentNullException.ThrowIfNull(position);
 
+		_positionTracker.ProcessPosition(position);
+
 		ProcessRisk(() => position.ToChangeMessage());
 
 		LogInfo(LocalizedStrings.NewPosition, $"{position.Security}/{position.Portfolio}={position.CurrentValue}");

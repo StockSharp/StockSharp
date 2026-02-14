@@ -7,9 +7,9 @@ using StockSharp.BusinessEntities;
 using StockSharp.Reporting;
 
 /// <summary>
-/// Tracks position lifecycle (open/close) via <see cref="ISubscriptionProvider.PositionReceived"/> and stores round-trip history.
+/// Tracks position lifecycle (open/close) and stores round-trip history.
 /// </summary>
-public class PositionLifecycleTracker : Disposable
+public class PositionLifecycleTracker
 {
 	private class OpenState
 	{
@@ -21,17 +21,6 @@ public class PositionLifecycleTracker : Disposable
 
 	private readonly Dictionary<(SecurityId, string), OpenState> _openPositions = new();
 	private readonly CachedSynchronizedList<ReportPosition> _history = new();
-	private readonly ISubscriptionProvider _provider;
-
-	/// <summary>
-	/// Initializes a new instance of the <see cref="PositionLifecycleTracker"/>.
-	/// </summary>
-	/// <param name="provider">Subscription provider.</param>
-	public PositionLifecycleTracker(ISubscriptionProvider provider)
-	{
-		_provider = provider ?? throw new ArgumentNullException(nameof(provider));
-		_provider.PositionReceived += OnPositionReceived;
-	}
 
 	/// <summary>
 	/// Raised when a round-trip is closed.
@@ -42,13 +31,6 @@ public class PositionLifecycleTracker : Disposable
 	/// Completed round-trips history.
 	/// </summary>
 	public IReadOnlyList<ReportPosition> History => _history.Cache;
-
-	/// <inheritdoc />
-	protected override void DisposeManaged()
-	{
-		_provider.PositionReceived -= OnPositionReceived;
-		base.DisposeManaged();
-	}
 
 	private void CloseRoundTrip((SecurityId secId, string pfName) key, OpenState state, DateTime closeTime, decimal? closePrice)
 	{
@@ -63,8 +45,15 @@ public class PositionLifecycleTracker : Disposable
 		RoundTripClosed?.Invoke(rt);
 	}
 
-	private void OnPositionReceived(Subscription sub, Position position)
+	/// <summary>
+	/// Process a position update.
+	/// </summary>
+	/// <param name="position">Position.</param>
+	public void ProcessPosition(Position position)
 	{
+		if (position is null)
+			throw new ArgumentNullException(nameof(position));
+
 		var currentValue = position.CurrentValue ?? 0;
 		var key = (secId: position.Security.ToSecurityId(), pfName: position.PortfolioName);
 
