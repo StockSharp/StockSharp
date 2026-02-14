@@ -350,7 +350,13 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		_timer = null;
 	}
 
-	private async ValueTask ProcessReconnection(TimeSpan diff, CancellationToken cancellationToken)
+	/// <summary>
+	/// Process reconnection logic.
+	/// </summary>
+	/// <param name="diff">Time elapsed since last check.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Task.</returns>
+	public async ValueTask ProcessReconnection(TimeSpan diff, CancellationToken cancellationToken)
 	{
 		switch (_state.CurrentState)
 		{
