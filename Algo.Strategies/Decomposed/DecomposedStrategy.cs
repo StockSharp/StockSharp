@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Strategies.Decomposed;
 
 using StockSharp.Algo.PnL;
+using StockSharp.Algo.Risk;
 using StockSharp.Algo.Statistics;
 
 /// <summary>
@@ -9,6 +10,10 @@ using StockSharp.Algo.Statistics;
 public class DecomposedStrategy : IStrategyHost
 {
 	private IConnector _connector;
+	private readonly HashSet<long> _ownTransactionIds = [];
+	private readonly Dictionary<(SecurityId secId, string pfName), decimal> _positions = [];
+	private bool _isTradingBlocked;
+	private decimal _position;
 
 	/// <summary>
 	/// Initializes a new instance <see cref="DecomposedStrategy"/>.
@@ -33,6 +38,7 @@ public class DecomposedStrategy : IStrategyHost
 		Trades = new(PnLManager, StatisticManager);
 		Positions = new(StatisticManager);
 		Subscriptions = new(this);
+		RiskManager = new RiskManager();
 
 		Subscriptions.SubscriptionRequested += s => _connector?.Subscribe(s);
 		Subscriptions.UnsubscriptionRequested += s => _connector?.UnSubscribe(s);
@@ -42,6 +48,20 @@ public class DecomposedStrategy : IStrategyHost
 		Orders.Registered += OnOrderRegistered;
 		Orders.Changed += OnOrderChanged;
 		Trades.TradeAdded += OnNewMyTrade;
+		Trades.TradeAdded += trade =>
+		{
+			var vol = trade.Trade.Volume;
+			var delta = trade.Order.Side == Sides.Buy ? vol : -vol;
+			var key = (trade.Order.Security.ToSecurityId(), trade.Order.Portfolio?.Name ?? string.Empty);
+			_positions.TryGetValue(key, out var current);
+			var newPos = current + delta;
+			_positions[key] = newPos;
+
+			if (Security != null && key == (Security.ToSecurityId(), Portfolio?.Name ?? string.Empty))
+				_position = newPos;
+
+			trade.Position = newPos;
+		};
 		Positions.NewPosition += OnNewPosition;
 		Positions.PositionChanged += OnPositionChanged;
 	}
@@ -82,6 +102,11 @@ public class DecomposedStrategy : IStrategyHost
 	public IStatisticManager StatisticManager { get; }
 
 	/// <summary>
+	/// Risk manager.
+	/// </summary>
+	public IRiskManager RiskManager { get; set; }
+
+	/// <summary>
 	/// Connector (via interface for testability).
 	/// </summary>
 	public IConnector Connector
@@ -115,9 +140,71 @@ public class DecomposedStrategy : IStrategyHost
 	public decimal Volume { get; set; } = 1;
 
 	/// <summary>
-	/// Current position.
+	/// Current position (primary security).
 	/// </summary>
-	public decimal Position { get; set; }
+	public decimal Position
+	{
+		get => _position;
+		set
+		{
+			_position = value;
+
+			if (Security != null)
+			{
+				var key = (Security.ToSecurityId(), Portfolio?.Name ?? string.Empty);
+				_positions[key] = value;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Get position value for specific security and portfolio.
+	/// </summary>
+	public decimal GetPositionValue(Security sec, Portfolio pf)
+	{
+		var key = (sec.ToSecurityId(), pf?.Name ?? string.Empty);
+		return _positions.TryGetValue(key, out var val) ? val : 0;
+	}
+
+	/// <summary>
+	/// All tracked positions.
+	/// </summary>
+	public IReadOnlyDictionary<(SecurityId secId, string pfName), decimal> PositionsList => _positions;
+
+	/// <summary>
+	/// Comment mode.
+	/// </summary>
+	public StrategyCommentModes CommentMode { get; set; }
+
+	/// <summary>
+	/// Trading mode.
+	/// </summary>
+	public StrategyTradingModes TradingMode { get; set; }
+
+	/// <summary>
+	/// Latency.
+	/// </summary>
+	public TimeSpan? Latency { get; set; }
+
+	/// <summary>
+	/// Error state.
+	/// </summary>
+	public LogLevels ErrorState { get; set; }
+
+	/// <summary>
+	/// Wait for all trades.
+	/// </summary>
+	public bool WaitAllTrades { get; set; }
+
+	/// <summary>
+	/// Is online.
+	/// </summary>
+	public bool IsOnline { get; set; }
+
+	/// <summary>
+	/// Error event.
+	/// </summary>
+	public event Action<Exception> Error;
 
 	/// <summary>
 	/// Current process state.
@@ -149,7 +236,26 @@ public class DecomposedStrategy : IStrategyHost
 	/// <summary>
 	/// Register an order via the connector.
 	/// </summary>
-	public void RegisterOrder(Order order) => _connector.RegisterOrder(order);
+	public void RegisterOrder(Order order)
+	{
+		if (_isTradingBlocked)
+			return;
+
+		if (order.TransactionId == 0 && _connector?.TransactionIdGenerator != null)
+			order.TransactionId = _connector.TransactionIdGenerator.GetNextId();
+
+		_ownTransactionIds.Add(order.TransactionId);
+
+		if (RiskManager.Rules.Count > 0)
+		{
+			ProcessRisk(order.CreateRegisterMessage());
+
+			if (_isTradingBlocked)
+				return;
+		}
+
+		_connector.RegisterOrder(order);
+	}
 
 	/// <summary>
 	/// Cancel an order via the connector.
@@ -221,6 +327,29 @@ public class DecomposedStrategy : IStrategyHost
 		return order;
 	}
 
+	/// <summary>
+	/// Close current position.
+	/// </summary>
+	public Order ClosePosition()
+	{
+		var position = Position;
+
+		if (position == 0)
+			return null;
+
+		var volume = Math.Abs(position);
+		return position > 0 ? SellMarket(volume) : BuyMarket(volume);
+	}
+
+	/// <summary>
+	/// Cancel all active orders.
+	/// </summary>
+	public void CancelActiveOrders()
+	{
+		foreach (var order in Orders.Orders.Where(o => o.State == OrderStates.Active))
+			CancelOrder(order);
+	}
+
 	#region Virtual hooks
 
 	/// <summary>
@@ -264,6 +393,25 @@ public class DecomposedStrategy : IStrategyHost
 	/// <param name="position">Changed position.</param>
 	protected virtual void OnPositionChanged(Position position) { }
 
+	/// <summary>
+	/// Called when order registration fails.
+	/// </summary>
+	/// <param name="fail">Order failure info.</param>
+	protected virtual void OnOrderRegisterFailed(OrderFail fail) { }
+
+	/// <summary>
+	/// Whether the order can be attached (tracked) by this strategy.
+	/// </summary>
+	/// <param name="order">Order to check.</param>
+	/// <returns><see langword="true"/> if the order belongs to this strategy.</returns>
+	protected virtual bool CanAttach(Order order)
+	{
+		if (_ownTransactionIds.Count == 0)
+			return true;
+
+		return _ownTransactionIds.Contains(order.TransactionId);
+	}
+
 	#endregion
 
 	#region IStrategyHost
@@ -281,11 +429,31 @@ public class DecomposedStrategy : IStrategyHost
 
 	#region Connector wiring
 
+	private void ProcessRisk(Message msg)
+	{
+		foreach (var rule in RiskManager.ProcessRules(msg))
+		{
+			switch (rule.Action)
+			{
+				case RiskActions.StopTrading:
+					_isTradingBlocked = true;
+					break;
+				case RiskActions.ClosePositions:
+					ClosePosition();
+					break;
+				case RiskActions.CancelOrders:
+					CancelActiveOrders();
+					break;
+			}
+		}
+	}
+
 	private void SubscribeConnector()
 	{
 		_connector.OrderReceived += OnOrderReceived;
 		_connector.OwnTradeReceived += OnTradeReceived;
 		_connector.PositionReceived += OnPositionReceived;
+		_connector.OrderRegisterFailReceived += OnOrderRegisterFailReceived;
 		_connector.NewOutMessageAsync += OnNewMessage;
 		_connector.CurrentTimeChanged += OnTimeChanged;
 	}
@@ -295,6 +463,7 @@ public class DecomposedStrategy : IStrategyHost
 		_connector.OrderReceived -= OnOrderReceived;
 		_connector.OwnTradeReceived -= OnTradeReceived;
 		_connector.PositionReceived -= OnPositionReceived;
+		_connector.OrderRegisterFailReceived -= OnOrderRegisterFailReceived;
 		_connector.NewOutMessageAsync -= OnNewMessage;
 		_connector.CurrentTimeChanged -= OnTimeChanged;
 	}
@@ -305,6 +474,9 @@ public class DecomposedStrategy : IStrategyHost
 	public void OnOrderReceived(Subscription sub, Order order)
 	{
 		if (!Subscriptions.CanProcess(sub))
+			return;
+
+		if (!Orders.IsTracked(order) && !CanAttach(order))
 			return;
 
 		Orders.TryAttach(order);
@@ -322,7 +494,22 @@ public class DecomposedStrategy : IStrategyHost
 		if (!Orders.IsTracked(trade.Order))
 			return;
 
+		var sec = trade.Order.Security;
+
+		if (sec != null)
+		{
+			PnLManager.UpdateSecurity(new Level1ChangeMessage
+			{
+				SecurityId = sec.ToSecurityId(),
+				ServerTime = trade.Trade.ServerTime,
+			}
+			.TryAdd(Level1Fields.PriceStep, sec.PriceStep)
+			.TryAdd(Level1Fields.Multiplier, sec.Multiplier));
+		}
+
 		Trades.TryAdd(trade);
+
+		ProcessRisk(trade.ToMessage());
 	}
 
 	/// <summary>
@@ -333,7 +520,20 @@ public class DecomposedStrategy : IStrategyHost
 		if (!Subscriptions.CanProcess(sub))
 			return;
 
-		Positions.Process(pos, isNew: true);
+		Positions.Process(pos);
+
+		ProcessRisk(pos.ToChangeMessage());
+	}
+
+	/// <summary>
+	/// Handle order registration failure from connector.
+	/// </summary>
+	public void OnOrderRegisterFailReceived(Subscription sub, OrderFail fail)
+	{
+		if (!Subscriptions.CanProcess(sub))
+			return;
+
+		OnOrderRegisterFailed(fail);
 	}
 
 	/// <summary>

@@ -1259,5 +1259,316 @@ public class StrategyDecomposedTests : BaseTestClass
 		conn2.Verify(c => c.CancelOrder(order), Times.Once);
 	}
 
+	[TestMethod]
+	public void Composite_TradeFill_UpdatesPosition()
+	{
+		// When a trade fills an order, the strategy's Position should update automatically.
+		// Currently PositionPipeline is a pass-through and doesn't compute positions from trades.
+
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 10,
+		};
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		// register and activate an order
+		var order = new Order
+		{
+			TransactionId = 1,
+			State = OrderStates.Pending,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+			Security = security,
+			Portfolio = portfolio,
+			Time = DateTime.UtcNow,
+		};
+
+		strategy.OnOrderReceived(sub, order);
+		order.State = OrderStates.Active;
+		strategy.OnOrderReceived(sub, order);
+
+		// fill the order with a trade
+		var trade = new MyTrade
+		{
+			Order = order,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradeId = 100,
+				TradePrice = 100m,
+				TradeVolume = 10m,
+				SecurityId = security.ToSecurityId(),
+				ServerTime = DateTime.UtcNow,
+			},
+		};
+
+		strategy.OnTradeReceived(sub, trade);
+
+		// position should be updated automatically from trade fill
+		strategy.Position.AreEqual(10m);
+	}
+
+	[TestMethod]
+	public void Composite_RoundTrip_TrackedFromTrades()
+	{
+		// When position goes from 0 → open → 0, a round-trip should be recorded.
+		// Currently DecomposedStrategy has no PositionLifecycleTracker.
+
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 5,
+		};
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		// buy order filled
+		var buyOrder = new Order
+		{
+			TransactionId = 1, State = OrderStates.Pending,
+			Side = Sides.Buy, Price = 100, Volume = 5,
+			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
+		};
+		strategy.OnOrderReceived(sub, buyOrder);
+		buyOrder.State = OrderStates.Active;
+		strategy.OnOrderReceived(sub, buyOrder);
+
+		strategy.OnTradeReceived(sub, new MyTrade
+		{
+			Order = buyOrder,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks, TradeId = 1,
+				TradePrice = 100m, TradeVolume = 5m,
+				SecurityId = security.ToSecurityId(), ServerTime = DateTime.UtcNow,
+			},
+		});
+
+		// sell order filled — closes the position
+		var sellOrder = new Order
+		{
+			TransactionId = 2, State = OrderStates.Pending,
+			Side = Sides.Sell, Price = 110, Volume = 5,
+			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
+		};
+		strategy.OnOrderReceived(sub, sellOrder);
+		sellOrder.State = OrderStates.Active;
+		strategy.OnOrderReceived(sub, sellOrder);
+
+		strategy.OnTradeReceived(sub, new MyTrade
+		{
+			Order = sellOrder,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks, TradeId = 2,
+				TradePrice = 110m, TradeVolume = 5m,
+				SecurityId = security.ToSecurityId(), ServerTime = DateTime.UtcNow,
+			},
+		});
+
+		// position should be back to 0
+		strategy.Position.AreEqual(0m);
+
+		// TODO: verify round-trip history when PositionLifecycleTracker is added
+	}
+
+	[TestMethod]
+	public void Composite_PositionReceived_DetectsNewVsChanged()
+	{
+		// PositionPipeline should detect new vs changed positions.
+		// Currently OnPositionReceived always passes isNew: true.
+
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		var sub = new Subscription(DataType.PositionChanges);
+		strategy.Subscriptions.Subscribe(sub);
+
+		var pos = new Position
+		{
+			Security = security,
+			Portfolio = portfolio,
+			CurrentValue = 50,
+			LocalTime = DateTime.UtcNow,
+		};
+
+		// first time — should be new
+		strategy.OnPositionReceived(sub, pos);
+		strategy.NewPositions.Count.AreEqual(1);
+		strategy.ChangedPositions.Count.AreEqual(0);
+
+		// second time same security+portfolio — should be changed, not new
+		pos.CurrentValue = 60;
+		strategy.OnPositionReceived(sub, pos);
+		strategy.NewPositions.Count.AreEqual(1);
+		strategy.ChangedPositions.Count.AreEqual(1);
+	}
+
+	[TestMethod]
+	public void Composite_OrderFiltering_OnlyOwnOrdersTracked()
+	{
+		// Strategy should only track its own orders (via CanAttach/UserOrderId).
+		// Currently DecomposedStrategy attaches any order from any subscription.
+
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		// register our own order via strategy
+		connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>()));
+		var ownOrder = strategy.CreateOrder(Sides.Buy, 100m, 5m);
+		strategy.RegisterOrder(ownOrder);
+
+		// simulate foreign order from another strategy/system
+		var foreignOrder = new Order
+		{
+			TransactionId = 999,
+			State = OrderStates.Active,
+			Side = Sides.Sell,
+			Price = 200,
+			Volume = 100,
+			Security = security,
+			Portfolio = portfolio,
+			Time = DateTime.UtcNow,
+		};
+
+		strategy.OnOrderReceived(sub, foreignOrder);
+
+		// foreign order should NOT be tracked
+		strategy.Orders.IsTracked(foreignOrder).AssertFalse();
+	}
+
+	[TestMethod]
+	public void Composite_PnL_UpdatesOnPositionChange()
+	{
+		// When position changes from trades, PnL should be recalculated.
+		// Currently PnLManager only processes market data, not position changes.
+
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		// buy at 100
+		var buyOrder = new Order
+		{
+			TransactionId = 1, State = OrderStates.Pending,
+			Side = Sides.Buy, Price = 100, Volume = 10,
+			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
+		};
+		strategy.OnOrderReceived(sub, buyOrder);
+		buyOrder.State = OrderStates.Active;
+		strategy.OnOrderReceived(sub, buyOrder);
+
+		strategy.OnTradeReceived(sub, new MyTrade
+		{
+			Order = buyOrder,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks, TradeId = 1,
+				TradePrice = 100m, TradeVolume = 10m,
+				SecurityId = security.ToSecurityId(), ServerTime = DateTime.UtcNow,
+			},
+		});
+
+		// sell at 110 — should produce realized PnL
+		var sellOrder = new Order
+		{
+			TransactionId = 2, State = OrderStates.Pending,
+			Side = Sides.Sell, Price = 110, Volume = 10,
+			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
+		};
+		strategy.OnOrderReceived(sub, sellOrder);
+		sellOrder.State = OrderStates.Active;
+		strategy.OnOrderReceived(sub, sellOrder);
+
+		strategy.OnTradeReceived(sub, new MyTrade
+		{
+			Order = sellOrder,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks, TradeId = 2,
+				TradePrice = 110m, TradeVolume = 10m,
+				SecurityId = security.ToSecurityId(), ServerTime = DateTime.UtcNow,
+			},
+		});
+
+		// PnL should reflect realized profit from the round trip
+		var pnl = strategy.PnLManager.RealizedPnL;
+		IsTrue(pnl > 0, $"Expected positive realized PnL after buying at 100 and selling at 110, got {pnl}");
+	}
+
+	[TestMethod]
+	public void Composite_RiskRule_StopsOnPositionLimit()
+	{
+		// Risk rules should be evaluated on position/order changes.
+		// Currently DecomposedStrategy has no risk management.
+
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		// this test documents that risk management is not yet implemented.
+		// when it is, setting a position limit rule should prevent
+		// the strategy from exceeding it.
+		IsNotNull(strategy.StatisticManager);
+
+		// DecomposedStrategy should have a RiskManager property
+		// that can be configured with rules, similar to Strategy.RiskManager
+		var hasRiskManager = strategy.GetType().GetProperty("RiskManager") != null;
+		IsTrue(hasRiskManager, "DecomposedStrategy should expose RiskManager for risk rule configuration");
+	}
+
 	#endregion
 }

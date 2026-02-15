@@ -12,6 +12,7 @@ using StockSharp.Algo.Statistics;
 public class PositionPipeline(IStatisticManager stats)
 {
 	private readonly IStatisticManager _stats = stats ?? throw new ArgumentNullException(nameof(stats));
+	private readonly HashSet<(SecurityId secId, string pfName)> _seenPositions = [];
 
 	/// <summary>
 	/// Fires when a completely new position appears.
@@ -22,6 +23,20 @@ public class PositionPipeline(IStatisticManager stats)
 	/// Fires when an existing position changes.
 	/// </summary>
 	public event Action<Position> PositionChanged;
+
+	/// <summary>
+	/// Process a position update, auto-detecting new vs changed.
+	/// </summary>
+	/// <param name="position">The position.</param>
+	public void Process(Position position)
+	{
+		ArgumentNullException.ThrowIfNull(position);
+
+		var key = (position.Security.ToSecurityId(), position.PortfolioName);
+		var isNew = _seenPositions.Add(key);
+
+		Process(position, isNew);
+	}
 
 	/// <summary>
 	/// Process a position update.

@@ -1763,9 +1763,6 @@ public class BacktestingTests : BaseTestClass
 		var atBasket = new List<(string type, long[] ids)>();
 		var intoEmulation = new List<string>();
 
-		// Intercept messages going INTO EmulationAdapter
-		var origSendIn = emulationAdapter.GetType().GetMethod("SendInMessageAsync", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-
 		emulationAdapter.NewOutMessageAsync += (msg, ct) =>
 		{
 			var ids = (msg as ISubscriptionIdMessage)?.GetSubscriptionIds() ?? [];
