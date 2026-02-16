@@ -117,11 +117,9 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 		/// Initializes a new instance of the <see cref="SubscriptionInfo"/>.
 		/// </summary>
 		/// <param name="subscription">Subscription.</param>
-		/// <param name="parent">Parent subscription info, if any.</param>
-		public SubscriptionInfo(Subscription subscription, SubscriptionInfo parent)
+		public SubscriptionInfo(Subscription subscription)
 		{
 			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
-			Parent = parent;
 
 			_last = subscription.From;
 
@@ -135,11 +133,6 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 				LookupItems = [];
 			}
 		}
-
-		/// <summary>
-		/// Parent subscription info, if any.
-		/// </summary>
-		public SubscriptionInfo Parent { get; }
 
 		/// <summary>
 		/// Subscription instance.
@@ -242,7 +235,6 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 	private readonly Dictionary<long, (ISubscriptionMessage request, Subscription subscription)> _requests = [];
 	private readonly List<SubscriptionInfo> _keeped = [];
 	private readonly HashSet<long> _notFound = [];
-	private readonly Dictionary<long, long> _subscriptionAllMap = [];
 	private readonly CachedSynchronizedSet<Subscription> _subscriptionsOnConnect = [];
 	private IdGenerator _transactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 
@@ -306,7 +298,6 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 			_requests.Clear();
 			_keeped.Clear();
 			_notFound.Clear();
-			_subscriptionAllMap.Clear();
 		}
 	}
 
@@ -335,21 +326,10 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 		logReceiver.AddInfoLog(LocalizedStrings.SubscriptionRemoved, id);
 	}
 
-	private SubscriptionInfo TryGetInfo(long id, bool ignoreAll, bool remove, DateTime? time, bool addLog)
+	private SubscriptionInfo TryGetInfo(long id, bool remove, DateTime? time, bool addLog)
 	{
 		using (_syncObject.EnterScope())
 		{
-			if (_subscriptionAllMap.ContainsKey(id))
-			{
-				if (ignoreAll)
-					return null;
-
-				if (remove)
-					_subscriptionAllMap.Remove(id);
-
-				//id = parentId;
-			}
-
 			if (_subscriptions.TryGetValue(id, out var info))
 			{
 				if (remove)
@@ -385,7 +365,7 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 
 		foreach (var id in message.GetSubscriptionIds())
 		{
-			var info = TryGetInfo(id, false, false, time, true);
+			var info = TryGetInfo(id, false, time, true);
 
 			if (info == null || info.IsUnsubscribing)
 				continue;
@@ -393,17 +373,7 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 			if (!processed.Add(info))
 				continue;
 
-			if (info.Parent == null)
-			{
-				yield return info.Subscription;
-			}
-			else
-			{
-				if (!processed.Add(info.Parent))
-					continue;
-
-				yield return info.Parent.Subscription;
-			}
+			yield return info.Subscription;
 		}
 	}
 
@@ -417,7 +387,7 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 	/// <returns>Subscription or <see langword="null"/>.</returns>
 	public Subscription TryGetSubscription(long id, bool ignoreAll, bool remove, DateTime? time)
 	{
-		return TryGetInfo(id, ignoreAll, remove, time, true)?.Subscription;
+		return TryGetInfo(id, remove, time, true)?.Subscription;
 	}
 
 	private void ChangeState(SubscriptionInfo info, SubscriptionStates state)
@@ -460,8 +430,8 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 				originalMsg = tuple.request;
 
 				info = originalMsg.IsSubscribe
-					? TryGetInfo(originalMsg.TransactionId, false, false, null, false)
-					: TryGetInfo(originalMsg.OriginalTransactionId, false, true, null, false);
+					? TryGetInfo(originalMsg.TransactionId, false, null, false)
+					: TryGetInfo(originalMsg.OriginalTransactionId, true, null, false);
 
 				if (info == null)
 				{
@@ -489,8 +459,7 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 
 						_requests.Remove(response.OriginalTransactionId);
 
-						if (info.Parent == null)
-							items = info.LookupItems?.CopyAndClear() ?? [];
+						items = info.LookupItems?.CopyAndClear() ?? [];
 					}
 				}
 				else
@@ -502,12 +471,6 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 					// remove subscribe and unsubscribe requests
 					_requests.Remove(subscription.TransactionId);
 					_requests.Remove(response.OriginalTransactionId);
-				}
-
-				if (info.Parent != null)
-				{
-					originalMsg = null;
-					return null;
 				}
 
 				return subscription;
@@ -538,7 +501,7 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 
 			subscription.TransactionId = TransactionIdGenerator.GetNextId();
 
-			var info = new SubscriptionInfo(subscription, _subscriptionAllMap.TryGetValue(subscription.TransactionId, out var parentId) ? _subscriptions.TryGetValue(parentId) : null);
+			var info = new SubscriptionInfo(subscription);
 
 			if (subscription.SubscriptionMessage is OrderStatusMessage)
 				actions.Add(Actions.Item.AddOrderStatusTransactionId(subscription.TransactionId));
@@ -783,7 +746,7 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 
 		foreach (var id in message.GetSubscriptionIds())
 		{
-			var info = TryGetInfo(id, true, false, null, true);
+			var info = TryGetInfo(id, false, null, true);
 
 			if (info == null || info.HasResult)
 				continue;
@@ -811,7 +774,7 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 	{
 		using (_syncObject.EnterScope())
 		{
-			var info = TryGetInfo(message.OriginalTransactionId, false, true, null, true);
+			var info = TryGetInfo(message.OriginalTransactionId, true, null, true);
 
 			if (info == null)
 			{
@@ -819,16 +782,10 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 				return null;
 			}
 
-			if (info.Parent == null)
-				items = info.LookupItems?.CopyAndClear() ?? [];
-			else
-				items = [];
+			items = info.LookupItems?.CopyAndClear() ?? [];
 
 			ChangeState(info, SubscriptionStates.Finished);
 			_requests.Remove(message.OriginalTransactionId);
-
-			if (info.Parent != null)
-				return null;
 
 			return info.Subscription;
 		}
@@ -844,7 +801,7 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 	{
 		using (_syncObject.EnterScope())
 		{
-			var info = TryGetInfo(message.OriginalTransactionId, false, false, null, true);
+			var info = TryGetInfo(message.OriginalTransactionId, false, null, true);
 
 			if (info == null)
 			{
@@ -852,15 +809,9 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 				return null;
 			}
 
-			if (info.Parent == null)
-				items = info.LookupItems?.CopyAndClear() ?? [];
-			else
-				items = [];
+			items = info.LookupItems?.CopyAndClear() ?? [];
 
 			ChangeState(info, SubscriptionStates.Online);
-
-			if (info.Parent != null)
-				return null;
 
 			return info.Subscription;
 		}
@@ -885,14 +836,6 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 					continue;
 				}
 
-				var secId = info.Subscription.SecurityId;
-
-				if (secId?.IsAllSecurity() == true)
-				{
-					results.Add((info.Subscription, message));
-					continue;
-				}
-
 				if (!info.UpdateLastTime(message.OpenTime))
 					continue;
 
@@ -906,26 +849,4 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 		return results;
 	}
 
-	/// <summary>
-	/// Subscribe using an "all securities" message.
-	/// </summary>
-	/// <param name="allMsg">All securities message.</param>
-	/// <returns>Actions to apply.</returns>
-	public Actions SubscribeAll(SubscriptionSecurityAllMessage allMsg)
-	{
-		if (allMsg == null)
-			throw new ArgumentNullException(nameof(allMsg));
-
-		using (_syncObject.EnterScope())
-			_subscriptionAllMap.Add(allMsg.TransactionId, allMsg.ParentTransactionId);
-
-		var mdMsg = new MarketDataMessage
-		{
-			Adapter = allMsg.Adapter,
-			BackMode = allMsg.BackMode,
-		};
-		allMsg.CopyTo(mdMsg);
-
-		return Subscribe(new Subscription(mdMsg), true);
-	}
 }

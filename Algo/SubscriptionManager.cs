@@ -1,4 +1,4 @@
-namespace StockSharp.Algo;
+﻿namespace StockSharp.Algo;
 
 /// <summary>
 /// Subscription message processing logic.
@@ -19,11 +19,6 @@ public interface ISubscriptionManager
 	/// <returns>Processing result.</returns>
 	(Message forward, Message[] extraOut) ProcessOutMessage(Message message);
 
-	/// <summary>
-	/// Notify about a message emitted by the inner adapter before normal processing.
-	/// </summary>
-	/// <param name="message">Inner adapter message.</param>
-	void OnInnerAdapterMessage(Message message);
 }
 
 /// <summary>
@@ -47,16 +42,6 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 	/// State storage.
 	/// </summary>
 	public ISubscriptionManagerState State => _state;
-
-	/// <inheritdoc />
-	public void OnInnerAdapterMessage(Message message)
-	{
-		if (message.Type != ExtendedMessageTypes.SubscriptionSecurityAll)
-			return;
-
-		var allMsg = (SubscriptionSecurityAllMessage)message;
-		_state.AddAllSecIdChild(allMsg.TransactionId);
-	}
 
 	/// <inheritdoc />
 	public (Message[] toInner, Message[] toOut) ProcessInMessage(Message message)
@@ -194,8 +179,8 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 							var id = ids[i];
 							var origId = _state.TryGetOriginalId(id, out var oid) ? oid : id;
 
-							// Check if subscription exists and is active
-							if (_state.TryGetSubscription(origId, out _, out var subState) && subState.IsActive())
+							// Check if subscription exists (any state including Stopped/pending)
+							if (_state.TryGetSubscription(origId, out _, out _))
 								validIds.Add(origId);
 							else if (_state.ContainsHistoricalRequest(origId))
 								validIds.Add(origId);

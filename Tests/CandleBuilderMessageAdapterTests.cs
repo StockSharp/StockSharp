@@ -2135,7 +2135,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 	#endregion
 
 	[TestMethod]
-	public async Task Unsubscribe_AllSecurityChild_ShouldNotForwardToInner()
+	public async Task AllSecurity_InlineChild_ProducesCandles()
 	{
 		var token = CancellationToken;
 
@@ -2147,7 +2147,6 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		// Use a high TransactionId to avoid collision with IdGenerator.GetNextId() which starts at 1
 		var parentTransId = inner.TransactionIdGenerator.GetNextId();
 		await adapter.SendInMessageAsync(new MarketDataMessage
 		{
@@ -2161,34 +2160,38 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		inner.InMessages.Clear();
 
-		var exec = new ExecutionMessage
+		var secId = Helper.CreateSecurityId();
+		var baseTime = new DateTime(2025, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		// First tick — creates inline child
+		var exec1 = new ExecutionMessage
 		{
-			SecurityId = Helper.CreateSecurityId(),
+			SecurityId = secId,
 			DataTypeEx = DataType.Ticks,
-			ServerTime = DateTime.UtcNow,
-			TradePrice = 1m,
+			ServerTime = baseTime,
+			TradePrice = 100m,
 			TradeVolume = 1m,
 		};
-		exec.SetSubscriptionIds([parentTransId]);
-
-		await inner.SendOutMessageAsync(exec, CancellationToken);
+		exec1.SetSubscriptionIds([parentTransId]);
+		await inner.SendOutMessageAsync(exec1, token);
 		await Task.Delay(50, token);
 
-		var child = output.OfType<SubscriptionSecurityAllMessage>().FirstOrDefault();
-		IsNotNull(child);
-
-		await adapter.SendInMessageAsync(child, token);
-		await Task.Delay(10, token);
-
-		inner.InMessages.Clear();
-
-		await adapter.SendInMessageAsync(new MarketDataMessage
+		// Second tick in next minute to close candle
+		var exec2 = new ExecutionMessage
 		{
-			IsSubscribe = false,
-			TransactionId = 100,
-			OriginalTransactionId = child.TransactionId,
-		}, token);
+			SecurityId = secId,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = baseTime.AddMinutes(1).AddSeconds(1),
+			TradePrice = 110m,
+			TradeVolume = 1m,
+		};
+		exec2.SetSubscriptionIds([parentTransId]);
+		await inner.SendOutMessageAsync(exec2, token);
+		await Task.Delay(50, token);
 
-		inner.InMessages.Count.AssertEqual(0);
+		// Should have produced a candle
+		var candles = output.OfType<CandleMessage>().ToArray();
+		IsTrue(candles.Length >= 1, $"Expected at least 1 candle, got {candles.Length}");
+		candles[0].SecurityId.AssertEqual(secId);
 	}
 }

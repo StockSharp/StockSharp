@@ -15,7 +15,6 @@ public class SubscriptionManagerState : ISubscriptionManagerState
 	private readonly Dictionary<long, ISubscriptionMessage> _historicalRequests = [];
 	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = [];
 	private readonly PairSet<long, long> _replaceId = [];
-	private readonly HashSet<long> _allSecIdChilds = [];
 	private readonly List<Message> _reMapSubscriptions = [];
 
 	/// <inheritdoc />
@@ -170,13 +169,6 @@ public class SubscriptionManagerState : ISubscriptionManagerState
 	}
 
 	/// <inheritdoc />
-	public void AddAllSecIdChild(long transactionId)
-	{
-		using (_sync.EnterScope())
-			_allSecIdChilds.Add(transactionId);
-	}
-
-	/// <inheritdoc />
 	public void AddReMapSubscription(Message message)
 	{
 		using (_sync.EnterScope())
@@ -205,7 +197,6 @@ public class SubscriptionManagerState : ISubscriptionManagerState
 			_historicalRequests.Clear();
 			_subscriptionsById.Clear();
 			_replaceId.Clear();
-			_allSecIdChilds.Clear();
 			_reMapSubscriptions.Clear();
 		}
 	}

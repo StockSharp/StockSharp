@@ -281,25 +281,4 @@ public class SubscriptionManagerMockTests : BaseTestClass
 		toOut.Length.AssertEqual(0);
 	}
 
-	[TestMethod]
-	public void OnInnerAdapterMessage_SubscriptionSecurityAll_AddsAllSecIdChild()
-	{
-		var stateMock = new Mock<ISubscriptionManagerState>();
-		var mgr = CreateManager(stateMock);
-
-		mgr.OnInnerAdapterMessage(new SubscriptionSecurityAllMessage { TransactionId = 5 });
-
-		stateMock.Verify(s => s.AddAllSecIdChild(5), Times.Once);
-	}
-
-	[TestMethod]
-	public void OnInnerAdapterMessage_OtherMessage_DoesNothing()
-	{
-		var stateMock = new Mock<ISubscriptionManagerState>();
-		var mgr = CreateManager(stateMock);
-
-		mgr.OnInnerAdapterMessage(new TimeMessage());
-
-		stateMock.Verify(s => s.AddAllSecIdChild(It.IsAny<long>()), Times.Never);
-	}
 }

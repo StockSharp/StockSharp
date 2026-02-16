@@ -188,7 +188,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task Subscribe_SubscriptionSecurityAll_RoutesToProcessMarketData()
+	public async Task Subscribe_AllSecurity_InlineChildCreation()
 	{
 		var manager = CreateManager(out var wrapper, out var idGenerator);
 
@@ -210,13 +210,14 @@ public class CandleBuilderManagerTests : BaseTestClass
 		parentSent.DataType2.AssertEqual(DataType.Ticks);
 		parentToOut.Length.AssertEqual(0);
 
-		// Now simulate a tick coming in which creates a child
+		// Now simulate a tick coming in — inline child SeriesInfo should be created
 		var secId = Helper.CreateSecurityId();
+		var baseTime = new DateTime(2025, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 		var tick = new ExecutionMessage
 		{
 			SecurityId = secId,
 			DataTypeEx = DataType.Ticks,
-			ServerTime = DateTime.UtcNow,
+			ServerTime = baseTime,
 			TradePrice = 100m,
 			TradeVolume = 10m,
 		};
@@ -224,22 +225,27 @@ public class CandleBuilderManagerTests : BaseTestClass
 
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
 
-		// Should have created a child SubscriptionSecurityAllMessage
-		var childMsg = extraOut.OfType<SubscriptionSecurityAllMessage>().FirstOrDefault();
-		IsNotNull(childMsg);
-		childMsg.SecurityId.AssertEqual(secId);
-		childMsg.ParentTransactionId.AssertEqual(parentTransId);
+		// No loopback subscribe message — child is created inline
+		extraOut.OfType<MarketDataMessage>().Any(m => m.IsSubscribe).AssertFalse();
+		forward.AssertNull();
 
-		// Now send the child back (simulating loopback)
-		var (toInner2, toOut2) = await manager.ProcessInMessageAsync(childMsg, CancellationToken);
+		// The first tick may already produce a candle (started state).
+		// Close candle by sending tick in next minute
+		var tick2 = new ExecutionMessage
+		{
+			SecurityId = secId,
+			DataTypeEx = DataType.Ticks,
+			ServerTime = baseTime.AddMinutes(1).AddSeconds(1),
+			TradePrice = 120m,
+			TradeVolume = 1m,
+		};
+		tick2.SetSubscriptionIds([parentTransId]);
+		var (fwd2, extra2) = await manager.ProcessOutMessageAsync(tick2, CancellationToken);
 
-		// Should return response, not forward to inner
-		toInner2.Length.AssertEqual(0);
-		toOut2.Length.AssertEqual(1);
-		toOut2[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
-		var response = (SubscriptionResponseMessage)toOut2[0];
-		response.OriginalTransactionId.AssertEqual(childMsg.TransactionId);
-		response.Error.AssertNull();
+		// Should produce a finished candle
+		var candles = extra2.OfType<CandleMessage>().ToArray();
+		IsTrue(candles.Length >= 1, $"Expected at least 1 candle, got {candles.Length}");
+		candles[0].SecurityId.AssertEqual(secId);
 	}
 
 	[TestMethod]
@@ -633,7 +639,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task AllSecurity_Tick_CreatesChildSubscription()
+	public async Task AllSecurity_Tick_CreatesInlineChild()
 	{
 		var manager = CreateManager(out var wrapper, out var idGenerator);
 
@@ -658,13 +664,13 @@ public class CandleBuilderManagerTests : BaseTestClass
 		subSent.TransactionId.AssertEqual(parentTransId);
 		subToOut.Length.AssertEqual(0);
 
-		// Send a tick for a specific security
+		// Send a tick for a specific security — inline child should be created (no loopback)
 		var secId = Helper.CreateSecurityId();
 		var tick = new ExecutionMessage
 		{
 			SecurityId = secId,
 			DataTypeEx = DataType.Ticks,
-			ServerTime = DateTime.UtcNow,
+			ServerTime = new DateTime(2025, 1, 1, 12, 0, 0, DateTimeKind.Utc),
 			TradePrice = 100m,
 			TradeVolume = 10m,
 		};
@@ -672,16 +678,12 @@ public class CandleBuilderManagerTests : BaseTestClass
 
 		var (forward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
 
-		// Should create a child SubscriptionSecurityAllMessage
-		var childMsg = extraOut.OfType<SubscriptionSecurityAllMessage>().FirstOrDefault();
-		IsNotNull(childMsg);
-		childMsg.SecurityId.AssertEqual(secId);
-		childMsg.ParentTransactionId.AssertEqual(parentTransId);
-		childMsg.IsSubscribe.AssertTrue();
+		// No loopback message — child is created inline
+		extraOut.OfType<MarketDataMessage>().Any().AssertFalse();
 	}
 
 	[TestMethod]
-	public async Task AllSecurity_ChildUnsubscribe_RemovesFromAllChilds()
+	public async Task AllSecurity_Unsubscribe_ForwardsToInner()
 	{
 		var manager = CreateManager(out var wrapper, out var idGenerator);
 
@@ -699,59 +701,38 @@ public class CandleBuilderManagerTests : BaseTestClass
 
 		var (subToInner, subToOut) = await manager.ProcessInMessageAsync(subscribeMsg, CancellationToken);
 		subToInner.Length.AssertEqual(1);
-		var subSent = (MarketDataMessage)subToInner[0];
-		subSent.DataType2.AssertEqual(DataType.Ticks);
-		subSent.SecurityId.AssertEqual(default(SecurityId)); // all securities
-		subSent.IsSubscribe.AssertTrue();
-		subSent.TransactionId.AssertEqual(parentTransId);
-		subToOut.Length.AssertEqual(0);
 
-		// Send a tick to create child
+		// Send a tick to create inline child
 		var secId = Helper.CreateSecurityId();
 		var tick = new ExecutionMessage
 		{
 			SecurityId = secId,
 			DataTypeEx = DataType.Ticks,
-			ServerTime = DateTime.UtcNow,
+			ServerTime = new DateTime(2025, 1, 1, 12, 0, 0, DateTimeKind.Utc),
 			TradePrice = 100m,
 			TradeVolume = 10m,
 		};
 		tick.SetSubscriptionIds([parentTransId]);
 
-		var (tickForward, extraOut) = await manager.ProcessOutMessageAsync(tick, CancellationToken);
-		tickForward.AssertNull(); // tick is consumed, not forwarded
-		var childMsg = extraOut.OfType<SubscriptionSecurityAllMessage>().First();
-		IsNotNull(childMsg);
-		childMsg.SecurityId.AssertEqual(secId);
-		childMsg.ParentTransactionId.AssertEqual(parentTransId);
-		childMsg.IsSubscribe.AssertTrue();
+		await manager.ProcessOutMessageAsync(tick, CancellationToken);
 
-		// Send child back (loopback)
-		var (childToInner, childToOut) = await manager.ProcessInMessageAsync(childMsg, CancellationToken);
-		childToInner.Length.AssertEqual(0);
-		childToOut.Length.AssertEqual(1);
-		childToOut[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
-		var childResponse = (SubscriptionResponseMessage)childToOut[0];
-		childResponse.OriginalTransactionId.AssertEqual(childMsg.TransactionId);
-		childResponse.Error.AssertNull();
-
-		// Now unsubscribe the child
+		// Now unsubscribe the parent
 		var unsubscribeMsg = new MarketDataMessage
 		{
 			IsSubscribe = false,
 			TransactionId = 200,
-			OriginalTransactionId = childMsg.TransactionId,
+			OriginalTransactionId = parentTransId,
 		};
 
 		var (toInner, toOut) = await manager.ProcessInMessageAsync(unsubscribeMsg, CancellationToken);
 
-		// Should return response and not forward to inner
-		toInner.Length.AssertEqual(0);
-		toOut.Length.AssertEqual(1);
-		toOut[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
-		var unsubResponse = (SubscriptionResponseMessage)toOut[0];
-		unsubResponse.OriginalTransactionId.AssertEqual(200);
-		unsubResponse.Error.AssertNull();
+		// Should forward to inner (unsubscribe from tick source)
+		toInner.Length.AssertEqual(1);
+		var sent = (MarketDataMessage)toInner[0];
+		sent.IsSubscribe.AssertFalse();
+		sent.OriginalTransactionId.AssertEqual(parentTransId);
+		sent.TransactionId.AssertEqual(200);
+		toOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]

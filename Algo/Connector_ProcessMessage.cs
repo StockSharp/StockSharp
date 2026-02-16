@@ -1,4 +1,4 @@
-namespace StockSharp.Algo;
+﻿namespace StockSharp.Algo;
 
 using StockSharp.Algo.Risk;
 
@@ -86,11 +86,7 @@ partial class Connector
 				// offline (back) and risk managers can generate the message
 				_entityCache.TryAddMassCancelationId(cancelMsg.TransactionId);
 			}
-			else if (message.Type == ExtendedMessageTypes.SubscriptionSecurityAll)
-			{
-				return ApplySubscriptionManagerActionsAsync(_subscriptionManager.SubscribeAll((SubscriptionSecurityAllMessage)message), cancellationToken);
-			}
-
+			
 			return SendInMessageAsync(message, cancellationToken);
 		}
 

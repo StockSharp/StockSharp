@@ -93,12 +93,6 @@ public interface ISubscriptionManagerState
 	/// </summary>
 	void ClearReplaceIds();
 
-	// All security ID children
-	/// <summary>
-	/// Add all security ID child.
-	/// </summary>
-	void AddAllSecIdChild(long transactionId);
-
 	// ReMap subscriptions
 	/// <summary>
 	/// Add message to remap queue.

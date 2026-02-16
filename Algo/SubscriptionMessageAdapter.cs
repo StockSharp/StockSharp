@@ -84,10 +84,7 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 
 	/// <inheritdoc />
 	protected override ValueTask InnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
-	{
-		_manager.OnInnerAdapterMessage(message);
-		return base.InnerAdapterNewOutMessageAsync(message, cancellationToken);
-	}
+		=> base.InnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 	/// <summary>
 	/// Create a copy of <see cref="SubscriptionMessageAdapter"/>.

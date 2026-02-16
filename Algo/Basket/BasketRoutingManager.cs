@@ -207,28 +207,28 @@ public class BasketRoutingManager : IBasketRoutingManager
 
 		for (var i = 0; i < ids.Length; i++)
 		{
-			if (!_parentChildMap.TryGetParent(ids[i], out var parentId))
-				continue;
-
-			hasValidId = true;
-
-			if (!changed)
+			if (_parentChildMap.TryGetParent(ids[i], out var parentId))
 			{
-				ids = [.. originIds];
-				changed = true;
+				hasValidId = true;
+
+				if (!changed)
+				{
+					ids = [.. originIds];
+					changed = true;
+				}
+
+				if (msg.OriginalTransactionId == ids[i])
+					msg.OriginalTransactionId = parentId;
+
+				ids[i] = parentId;
 			}
-
-			if (msg.OriginalTransactionId == ids[i])
-				msg.OriginalTransactionId = parentId;
-
-			ids[i] = parentId;
 		}
 
 		if (changed)
 			msg.SetSubscriptionIds(ids);
 
 		// If message had subscription IDs but none mapped to valid parents,
-		// the subscription was removed (unsubscribed) â€” drop the message
+		// the subscription was removed (unsubscribed) — drop the message
 		return hasValidId || originIds.Length == 0;
 	}
 

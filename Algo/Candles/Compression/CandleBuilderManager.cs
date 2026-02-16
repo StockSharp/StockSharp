@@ -84,8 +84,6 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 		public VolumeProfileBuilder VolumeProfile { get; set; }
 
-		public bool Stopped { get; set; }
-
 		public bool IsCountExhausted => Count <= 0;
 	}
 
@@ -94,8 +92,6 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 	private readonly Dictionary<long, SeriesInfo> _series = [];
 	private readonly Dictionary<long, long> _replaceId = [];
 	private readonly CandleBuilderProvider _candleBuilderProvider;
-	private readonly Dictionary<long, SeriesInfo> _allChilds = [];
-	private readonly Dictionary<long, RefPair<long, SubscriptionStates>> _pendingLoopbacks = [];
 	private readonly bool _cloneOutCandles;
 
 	private readonly ILogReceiver _logReceiver;
@@ -142,15 +138,12 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 				{
 					_series.Clear();
 					_replaceId.Clear();
-					_allChilds.Clear();
-					_pendingLoopbacks.Clear();
 				}
 
 				return ([message], []);
 			}
 
 			case MessageTypes.MarketData:
-			case ExtendedMessageTypes.SubscriptionSecurityAll:
 				return await ProcessMarketDataAsync((MarketDataMessage)message, cancellationToken);
 
 			default:
@@ -277,45 +270,11 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			if (!_candleBuilderProvider.IsRegistered(mdMsg.DataType2.MessageType))
 				return ([mdMsg], []);
 
-			Message outMsg = null;
-
 			using (await _sync.LockAsync(cancellationToken))
 			{
 				if (_replaceId.ContainsKey(transactionId))
 					return ([mdMsg], []);
-
-				if (_pendingLoopbacks.TryGetAndRemove(transactionId, out var tuple))
-				{
-					if (tuple.Second != SubscriptionStates.Stopped)
-					{
-						if (tuple.Second == SubscriptionStates.Finished)
-						{
-							outMsg = new SubscriptionFinishedMessage
-							{
-								OriginalTransactionId = transactionId,
-							};
-						}
-						else
-						{
-							outMsg = new SubscriptionResponseMessage
-							{
-								OriginalTransactionId = transactionId,
-								Error = new InvalidOperationException(LocalizedStrings.SubscriptionInvalidState.Put(transactionId, tuple.Second)),
-							};
-						}
-					}
-					else
-					{
-						tuple.Second = SubscriptionStates.Active;
-						_logReceiver.AddDebugLog("New ALL candle-map (active): {0}/{1} TrId={2}", mdMsg.SecurityId, tuple.Second, mdMsg.TransactionId);
-
-						outMsg = mdMsg.CreateResponse();
-					}
-				}
 			}
-
-			if (outMsg != null)
-				return ([], [outMsg]);
 
 			var isLoadOnly = mdMsg.BuildMode == MarketDataBuildModes.Load;
 
@@ -461,27 +420,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		{
 			var series = await TryRemoveSeries(mdMsg.OriginalTransactionId, cancellationToken);
 			if (series is null)
-			{
-				var sentResponse = false;
-
-				using (await _sync.LockAsync(cancellationToken))
-				{
-					if (_allChilds.TryGetAndRemove(mdMsg.OriginalTransactionId, out var child))
-					{
-						child.Stopped = true;
-						sentResponse = true;
-					}
-				}
-
-				if (sentResponse)
-					return ([], [mdMsg.CreateResponse()]);
-
 				return ([mdMsg], []);
-			}
-			else
-			{
-				// TODO sub childs
-			}
 
 			var unsubscribe = series.Current.TypedClone();
 
@@ -898,45 +837,24 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 			if (isAll)
 			{
-				SubscriptionSecurityAllMessage allMsg = null;
-
 				using (await _sync.LockAsync(cancellationToken))
 				{
 					series = series.Child.SafeAdd(((ISecurityIdMessage)message).SecurityId, key =>
 					{
-						allMsg = new SubscriptionSecurityAllMessage();
+						_logReceiver.AddDebugLog("New ALL candle-map: {0}/{1} TrId={2}", key, series.Original.DataType2, series.Original.TransactionId);
 
-						series.Original.CopyTo(allMsg);
+						var childOriginal = series.Original.TypedClone();
+						childOriginal.SecurityId = key;
 
-						allMsg.ParentTransactionId = series.Original.TransactionId;
-						var childTransactionId = _idGenerator.GetNextId();
-
-						allMsg.TransactionId = childTransactionId;
-						allMsg.SecurityId = key;
-
-						allMsg.LoopBack(_adapter, MessageBackModes.Chain);
-						_pendingLoopbacks.Add(allMsg.TransactionId, RefTuple.Create(allMsg.ParentTransactionId, SubscriptionStates.Stopped));
-
-						_logReceiver.AddDebugLog("New ALL candle-map: {0}/{1} TrId={2}-{3}", key, series.Original.DataType2, allMsg.ParentTransactionId, allMsg.TransactionId);
-
-						var childSeries = new SeriesInfo(allMsg, allMsg)
+						return new SeriesInfo(childOriginal, series.Current)
 						{
-							LastTime = allMsg.From,
-							Count = allMsg.Count,
+							LastTime = series.Original.From,
+							Count = series.Original.Count,
 							Transform = CreateTransform(series.Current),
 							State = SeriesStates.Compress,
 						};
-
-						_allChilds[allMsg.TransactionId] = childSeries;
-						return childSeries;
 					});
-
-					if (series.Stopped)
-						continue;
 				}
-
-				if (allMsg != null)
-					extraOut.Add(allMsg);
 			}
 
 			var transform = series.Transform;
