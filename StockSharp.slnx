@@ -1,12 +1,16 @@
 <Solution>
   <Folder Name="/Connectors/">
+    <Project Path="Connectors/Bibox/Bibox.csproj" />
     <Project Path="Connectors/Bitalong/Bitalong.csproj" />
     <Project Path="Connectors/Bitexbook/Bitexbook.csproj" />
     <Project Path="Connectors/BitStamp/BitStamp.csproj" />
+    <Project Path="Connectors/Bittrex/Bittrex.csproj" />
     <Project Path="Connectors/Btce/Btce.csproj" />
     <Project Path="Connectors/Coinbase/Coinbase.csproj" />
     <Project Path="Connectors/FTX/FTX.csproj" />
+    <Project Path="Connectors/PrizmBit/PrizmBit.csproj" />
     <Project Path="Connectors/Tinkoff/Tinkoff.csproj" />
+    <Project Path="Connectors/ZB/ZB.csproj" />
   </Folder>
   <Folder Name="/Samples/" />
   <Folder Name="/Samples/01_Basic/">
