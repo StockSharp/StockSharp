@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_connectors_websocket.props" />
+  <PropertyGroup>
+    <ProjectGuid>{FC30E17C-70F7-423C-AC16-6628B5F1E76C}</ProjectGuid>
+  </PropertyGroup>
+</Project>

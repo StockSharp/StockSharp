@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_connectors_websocket.props" />
+  <PropertyGroup>
+    <ProjectGuid>{302F3C2A-EB95-4AF7-BE22-E7BE567B2DAB}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="$(SignalRVer)" />
+    <PackageReference Include="Ecng.IO.Compression" Version="$(EcngVer)" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_connectors_websocket.props" />
+  <PropertyGroup>
+    <ProjectGuid>{CA38A429-99DF-44CB-9C5A-44276B6CB724}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Ecng.IO.Compression" Version="$(EcngVer)" />
+  </ItemGroup>
+</Project>
