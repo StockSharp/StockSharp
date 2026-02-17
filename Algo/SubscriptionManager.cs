@@ -179,8 +179,7 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 							var id = ids[i];
 							var origId = _state.TryGetOriginalId(id, out var oid) ? oid : id;
 
-							// Check if subscription exists (any state including Stopped/pending)
-							if (_state.TryGetSubscription(origId, out _, out _))
+							if (_state.TryGetSubscription(origId, out _, out var subState) && subState.IsActive())
 								validIds.Add(origId);
 							else if (_state.ContainsHistoricalRequest(origId))
 								validIds.Add(origId);
