@@ -231,6 +231,10 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					GetEmulator(mdMsg.SecurityId).ProcessMarketData(mdMsg);
 				break;
 
+			case HistoryMessageTypes.CommissionRule:
+				_commissionManager.Rules.Add(((CommissionRuleMessage)message).Rule);
+				break;
+
 			default:
 				if (message is CandleMessage candleMsg)
 					GetEmulator(candleMsg.SecurityId).ProcessCandle(candleMsg, results);
@@ -463,17 +467,27 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		{
 			var tradeId = TradeIdGenerator.GetNextId();
 
-			// Calculate commission for trade
-			var commission = _commissionManager.Process(new ExecutionMessage
+			// Trade message
+			var tradeMsg = new ExecutionMessage
 			{
+				DataTypeEx = DataType.Transactions,
+				SecurityId = regMsg.SecurityId,
+				LocalTime = regMsg.LocalTime,
+				ServerTime = serverTime,
+				OriginalTransactionId = regMsg.TransactionId,
+				OrderId = orderId,
+				TradeId = tradeId,
 				TradePrice = trade.Price,
 				TradeVolume = trade.Volume,
 				Side = regMsg.Side,
-			});
+				MarketPrice = marketPrice,
+			};
+
+			tradeMsg.Commission = _commissionManager.Process(tradeMsg);
 
 			// Update portfolio and get position info
 			var (realizedPnL, positionChange, position) = portfolio.ProcessTrade(
-				regMsg.SecurityId, regMsg.Side, trade.Price, trade.Volume, commission);
+				regMsg.SecurityId, regMsg.Side, trade.Price, trade.Volume, tradeMsg.Commission);
 
 			// For non-IOC/FOK orders: send order state update in trade loop
 			if (!isIOC && !isFOK)
@@ -494,22 +508,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				});
 			}
 
-			// Trade message
-			results.Add(new ExecutionMessage
-			{
-				DataTypeEx = DataType.Transactions,
-				SecurityId = regMsg.SecurityId,
-				LocalTime = regMsg.LocalTime,
-				ServerTime = serverTime,
-				OriginalTransactionId = regMsg.TransactionId,
-				OrderId = orderId,
-				TradeId = tradeId,
-				TradePrice = trade.Price,
-				TradeVolume = trade.Volume,
-				Side = regMsg.Side,
-				Commission = commission,
-				MarketPrice = marketPrice,
-			});
+			results.Add(tradeMsg);
 
 			// Position change
 			results.Add(new PositionChangeMessage
@@ -533,22 +532,12 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					var counterPortfolio = GetPortfolio(counterOrder.PortfolioName);
 					var counterVolume = Math.Min(trade.Volume, counterOrder.Balance);
 
-					var counterCommission = _commissionManager.Process(new ExecutionMessage
-					{
-						TradePrice = trade.Price,
-						TradeVolume = counterVolume,
-						Side = counterOrder.Side,
-					});
-
-					var (_, _, counterPosition) = counterPortfolio.ProcessTrade(
-						regMsg.SecurityId, counterOrder.Side, trade.Price, counterVolume, counterCommission);
-
 					// Counter-order's market price is opposite side
 					var counterMarketPrice = counterOrder.Side == Sides.Buy
 						? emulator.OrderBook.BestAsk?.price
 						: emulator.OrderBook.BestBid?.price;
 
-					results.Add(new ExecutionMessage
+					var counterTradeMsg = new ExecutionMessage
 					{
 						DataTypeEx = DataType.Transactions,
 						SecurityId = regMsg.SecurityId,
@@ -559,9 +548,15 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 						TradePrice = trade.Price,
 						TradeVolume = counterVolume,
 						Side = counterOrder.Side,
-						Commission = counterCommission,
 						MarketPrice = counterMarketPrice,
-					});
+					};
+
+					counterTradeMsg.Commission = _commissionManager.Process(counterTradeMsg);
+
+					var (_, _, counterPosition) = counterPortfolio.ProcessTrade(
+						regMsg.SecurityId, counterOrder.Side, trade.Price, counterVolume, counterTradeMsg.Commission);
+
+					results.Add(counterTradeMsg);
 
 					results.Add(new PositionChangeMessage
 					{
@@ -1157,7 +1152,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	private void AddPortfolioUpdate(IPortfolio portfolio, DateTime time, List<Message> results)
 	{
-		var unrealizedPnL = portfolio.CalculateUnrealizedPnL(GetCurrentPrice);
+		var unrealizedPnL = 0m;
 		var totalPnL = portfolio.RealizedPnL - portfolio.Commission + unrealizedPnL;
 
 		results.Add(new PositionChangeMessage
@@ -1210,6 +1205,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		MessageTypes.QuoteChange.ToInfo(),
 		MessageTypes.Level1Change.ToInfo(),
 		MessageTypes.EmulationState.ToInfo(),
+		HistoryMessageTypes.CommissionRule.ToInfo(),
 	];
 
 	/// <summary>

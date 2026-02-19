@@ -382,13 +382,13 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		if (isResuming)
 			EmulationAdapter.InChannel.Resume();
 
-		await SendEmulationStateAsync(ChannelStates.Starting, cancellationToken);
-
 		if (!isResuming)
 		{
 			foreach (var rule in EmulationSettings.CommissionRules)
 				await SendInMessageAsync(new CommissionRuleMessage { Rule = rule }, cancellationToken);
 		}
+
+		await SendEmulationStateAsync(ChannelStates.Starting, cancellationToken);
 	}
 
 	/// <summary>
