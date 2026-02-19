@@ -92,12 +92,13 @@ static class Helper
 
 		dt = dt.AddTicks(RandomGen.GetInt((int)tradeGenerator.Interval.Ticks));
 
-		var totalIterations = count * 100;
+		var maxIterations = count * 1000;
+		var totalIterations = 0;
 		var i = 0;
 		while (trades.Count < count)
 		{
-			if (totalIterations-- < 0)
-				throw new InvalidOperationException();
+			if (++totalIterations > maxIterations)
+				throw new InvalidOperationException($"RandomTicks: generated only {trades.Count} of {count} after {totalIterations} iterations");
 
 			dt = dt.AddTicks(RandomGen.GetInt((int)tradeGenerator.Interval.Ticks));
 
@@ -180,12 +181,13 @@ static class Helper
 
 		dt = dt.AddTicks(RandomGen.GetInt((int)generator.Interval.Ticks));
 
-		var totalIterations = count * 100;
+		var maxIterations = count * 1000;
+		var totalIterations = 0;
 		var i = 0;
 		while (items.Count < count)
 		{
-			if (totalIterations-- < 0)
-				throw new InvalidOperationException();
+			if (++totalIterations > maxIterations)
+				throw new InvalidOperationException($"RandomOrderLog: generated only {items.Count} of {count} after {totalIterations} iterations");
 
 			dt = dt.AddTicks((int)generator.Interval.Ticks);
 
@@ -252,7 +254,8 @@ static class Helper
 	{
 		var generator = new TrendMarketDepthGenerator(security.ToSecurityId())
 		{
-			GenerateOrdersCount = ordersCount
+			GenerateOrdersCount = ordersCount,
+			GenerateDepthOnEachTrade = true,
 		};
 
 		if (interval != null)
@@ -268,18 +271,22 @@ static class Helper
 		var secMsg = security.ToMessage();
 
 		depthGenerator.Process(secMsg);
-		depthGenerator.Process(security.Board.ToMessage());
+
+		var boardMsg = security.Board.ToMessage();
+		boardMsg.WorkingTime = new() { IsEnabled = false };
+		depthGenerator.Process(boardMsg);
 
 		var depths = new List<QuoteChangeMessage>();
 
 		var dt = start ?? DateTime.UtcNow;
 
-		var totalIterations = count * 100;
+		var maxIterations = count * 1000;
+		var totalIterations = 0;
 		var i = 0;
 		while (depths.Count < count)
 		{
-			if (totalIterations-- < 0)
-				throw new InvalidOperationException();
+			if (++totalIterations > maxIterations)
+				throw new InvalidOperationException($"RandomDepths: generated only {depths.Count} of {count} after {totalIterations} iterations");
 
 			dt = dt.AddTicks(RandomGen.GetInt((int)depthGenerator.Interval.Ticks));
 
