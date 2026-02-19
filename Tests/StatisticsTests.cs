@@ -1590,6 +1590,155 @@ public class StatisticsTests : BaseTestClass
 		Math.Abs(r1.Value - r2.Value).AssertEqual(0m);
 	}
 
+	[TestMethod]
+	public void GrossLoss()
+	{
+		// Arrange
+		var parameter = new GrossLossParameter();
+		var serverTime = DateTime.UtcNow;
+
+		// Act & Assert
+		// Losing trade
+		parameter.Add(new(serverTime, 10, -50m));
+		parameter.Value.AssertEqual(-50m);
+
+		// Another losing trade - should accumulate
+		parameter.Add(new(serverTime, 5, -30m));
+		parameter.Value.AssertEqual(-80m);
+
+		// Winning trade - should not affect gross loss
+		parameter.Add(new(serverTime, 15, 100m));
+		parameter.Value.AssertEqual(-80m);
+
+		// Break-even trade - should not affect
+		parameter.Add(new(serverTime, 8, 0m));
+		parameter.Value.AssertEqual(-80m);
+
+		// No closed volume - should not affect
+		parameter.Add(new(serverTime, 0, -200m));
+		parameter.Value.AssertEqual(-80m);
+	}
+
+	[TestMethod]
+	public void GrossLossReset()
+	{
+		// Arrange
+		var parameter = new GrossLossParameter();
+		var serverTime = DateTime.UtcNow;
+
+		parameter.Add(new(serverTime, 10, -50m));
+		parameter.Add(new(serverTime, 5, -30m));
+
+		// Act
+		parameter.Reset();
+
+		// Assert
+		parameter.Value.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void GrossProfit()
+	{
+		// Arrange
+		var parameter = new GrossProfitParameter();
+		var serverTime = DateTime.UtcNow;
+
+		// Act & Assert
+		// Winning trade
+		parameter.Add(new(serverTime, 10, 100m));
+		parameter.Value.AssertEqual(100m);
+
+		// Another winning trade - should accumulate
+		parameter.Add(new(serverTime, 5, 50m));
+		parameter.Value.AssertEqual(150m);
+
+		// Losing trade - should not affect gross profit
+		parameter.Add(new(serverTime, 15, -30m));
+		parameter.Value.AssertEqual(150m);
+
+		// Break-even trade - should not affect
+		parameter.Add(new(serverTime, 8, 0m));
+		parameter.Value.AssertEqual(150m);
+
+		// No closed volume - should not affect
+		parameter.Add(new(serverTime, 0, 500m));
+		parameter.Value.AssertEqual(150m);
+	}
+
+	[TestMethod]
+	public void GrossProfitReset()
+	{
+		// Arrange
+		var parameter = new GrossProfitParameter();
+		var serverTime = DateTime.UtcNow;
+
+		parameter.Add(new(serverTime, 10, 100m));
+		parameter.Add(new(serverTime, 5, 50m));
+
+		// Act
+		parameter.Reset();
+
+		// Assert
+		parameter.Value.AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void GrossLossNullArgument()
+	{
+		var parameter = new GrossLossParameter();
+		ThrowsExactly<ArgumentNullException>(() => parameter.Add(null));
+	}
+
+	[TestMethod]
+	public void GrossProfitNullArgument()
+	{
+		var parameter = new GrossProfitParameter();
+		ThrowsExactly<ArgumentNullException>(() => parameter.Add(null));
+	}
+
+	[TestMethod]
+	public void MaxProfitPercent()
+	{
+		// Arrange
+		var maxProfitParam = new MaxProfitParameter();
+		var parameter = new MaxProfitPercentParameter(maxProfitParam);
+		parameter.BeginValue = 1000m;
+		var marketTime = DateTime.UtcNow;
+
+		// Act & Assert
+		// Profit of 500 (50% of initial capital)
+		maxProfitParam.Add(marketTime, 500m, null);
+		parameter.Add(marketTime, 500m, null);
+		parameter.Value.AssertEqual(50m);
+
+		// Higher profit of 800 (80%)
+		maxProfitParam.Add(marketTime, 800m, null);
+		parameter.Add(marketTime, 800m, null);
+		parameter.Value.AssertEqual(80m);
+
+		// Lower profit doesn't change max
+		maxProfitParam.Add(marketTime, 300m, null);
+		parameter.Add(marketTime, 300m, null);
+		parameter.Value.AssertEqual(80m);
+	}
+
+	[TestMethod]
+	public void MaxProfitPercentZeroBeginValue()
+	{
+		// Arrange
+		var maxProfitParam = new MaxProfitParameter();
+		var parameter = new MaxProfitPercentParameter(maxProfitParam);
+		parameter.BeginValue = 0m;
+		var marketTime = DateTime.UtcNow;
+
+		// Act
+		maxProfitParam.Add(marketTime, 500m, null);
+		parameter.Add(marketTime, 500m, null);
+
+		// Assert - should remain 0 when BeginValue is 0
+		parameter.Value.AssertEqual(0m);
+	}
+
 	#region Zero Denominator Tests (decimal.MaxValue)
 
 	/// <summary>
