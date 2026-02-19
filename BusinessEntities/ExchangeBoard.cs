@@ -93,7 +93,7 @@ public partial class ExchangeBoard : Equatable<ExchangeBoard>, IPersistable, INo
 	)]
 	public Exchange Exchange { get; set; }
 
-	private WorkingTime _workingTime = new() { IsEnabled = true };
+	private WorkingTime _workingTime = new();
 
 	/// <summary>
 	/// Board working hours.

@@ -272,9 +272,7 @@ static class Helper
 
 		depthGenerator.Process(secMsg);
 
-		var boardMsg = security.Board.ToMessage();
-		boardMsg.WorkingTime = new() { IsEnabled = false };
-		depthGenerator.Process(boardMsg);
+		depthGenerator.Process(security.Board.ToMessage());
 
 		var depths = new List<QuoteChangeMessage>();
 

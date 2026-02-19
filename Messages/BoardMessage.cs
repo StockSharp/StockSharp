@@ -40,7 +40,7 @@ public class BoardMessage : BaseSubscriptionIdMessage<BoardMessage>
 		GroupName = LocalizedStrings.GeneralKey)]
 	public TimeSpan ExpiryTime { get; set; }
 
-	private WorkingTime _workingTime = new() { IsEnabled = true };
+	private WorkingTime _workingTime = new();
 
 	/// <summary>
 	/// Board working hours.
