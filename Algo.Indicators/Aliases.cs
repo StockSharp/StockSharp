@@ -961,6 +961,18 @@ public class WAD : WilliamsAccumulationDistribution
 }
 
 /// <summary>
+/// <see cref="WilliamsVariableAccumulationDistribution"/> alias.
+/// </summary>
+[Browsable(false)]
+public class WVAD : WilliamsVariableAccumulationDistribution
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="WVAD"/>.
+	/// </summary>
+	public WVAD() { }
+}
+
+/// <summary>
 /// <see cref="AdaptivePriceZone"/> alias.
 /// </summary>
 [Browsable(false)]

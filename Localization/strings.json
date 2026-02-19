@@ -4282,6 +4282,8 @@
   "WilderMovingAverage": "Welles Wilder Moving Average.",
   "WilliamsAccumulationDistribution": "Williams Accumulation/Distribution.",
   "WilliamsR": "Williams Percent Range.",
+  "WilliamsVariableAccumulationDistribution": "Williams Variable Accumulation Distribution (WVAD).",
+  "WVAD": "WVAD",
   "Window": "Window",
   "Windows": "Windows",
   "WinRate": "Win Rate",
