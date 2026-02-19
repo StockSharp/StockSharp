@@ -1,0 +1,15 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="common_target_common.props" />
+  <PropertyGroup>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <StockSharpTargets Condition="'$(StockSharpTargets)' == ''">net10.0-android;net10.0-ios</StockSharpTargets>
+    <StockSharpTargets Condition="'$(StockSharpTargets)' == 'net10.0-android;net10.0-ios' and $([MSBuild]::IsOSPlatform('windows'))">$(StockSharpTargets);net10.0-windows10.0.19041.0</StockSharpTargets>
+    <TargetFrameworks>$(StockSharpTargets)</TargetFrameworks>
+
+    <SupportedOSPlatformVersion Condition="'$(SupportedOSPlatformVersion)' == '' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="'$(SupportedOSPlatformVersion)' == '' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">24.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="'$(SupportedOSPlatformVersion)' == '' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
+    <TargetPlatformMinVersion Condition="'$(TargetPlatformMinVersion)' == '' and $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
+  </PropertyGroup>
+</Project>
