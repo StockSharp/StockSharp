@@ -5,6 +5,16 @@ using System.Collections.Concurrent;
 [TestClass]
 public class AsyncExtensionsTests : BaseTestClass
 {
+	private sealed class TestConnector : Connector
+	{
+		public TestConnector()
+			: base(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider(), initChannels: false)
+		{
+			InMessageChannel = new PassThroughMessageChannel();
+			OutMessageChannel = new PassThroughMessageChannel();
+		}
+	}
+
 	private class MockAdapter : MessageAdapter
 	{
 		public ConcurrentQueue<Message> SentMessages { get; } = [];
@@ -13,6 +23,9 @@ public class AsyncExtensionsTests : BaseTestClass
 		public long LastSubscribedId { get; private set; }
 		public long LastOrderTransactionId { get; private set; }
 		public OrderCancelMessage LastCancelMessage { get; private set; }
+
+		public override bool UseInChannel => false;
+		public override bool UseOutChannel => false;
 
 		public MockAdapter(IdGenerator transactionIdGenerator) : base(transactionIdGenerator)
 		{
@@ -110,6 +123,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		{
 			if (data is IOriginalTransactionIdMessage origMsg)
 				origMsg.OriginalTransactionId = subscriptionId;
+			if (data is ISubscriptionIdMessage subIdMsg)
+				subIdMsg.SubscriptionId = subscriptionId;
 
 			await SendOutMessageAsync(data, cancellationToken);
 		}
@@ -149,6 +164,9 @@ public class AsyncExtensionsTests : BaseTestClass
 		public ConcurrentQueue<Message> SentMessages { get; } = [];
 		public Dictionary<long, MarketDataMessage> ActiveSubscriptions { get; } = [];
 		public long LastSubscribedId { get; private set; }
+
+		public override bool UseInChannel => false;
+		public override bool UseOutChannel => false;
 
 		public MockAsyncAdapter(IdGenerator transactionIdGenerator) : base(transactionIdGenerator)
 		{
@@ -195,6 +213,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		{
 			if (data is IOriginalTransactionIdMessage origMsg)
 				origMsg.OriginalTransactionId = subscriptionId;
+			if (data is ISubscriptionIdMessage subIdMsg)
+				subIdMsg.SubscriptionId = subscriptionId;
 			await SendOutMessageAsync(data, cancellationToken);
 		}
 
@@ -211,7 +231,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_ConnectAsync()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -235,7 +255,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrder_Basic()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -391,7 +411,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Live_SyncAdapter()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -444,7 +464,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_History_SyncAdapter()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -496,7 +516,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Live_AsyncAdapter()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAsyncAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -546,7 +566,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_History_AsyncAdapter()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAsyncAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -604,7 +624,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Subscription_Lifecycle()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -1448,7 +1468,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[TestMethod]
 	public void Connector_RegisterOrderAsync_NullOrder_Throws()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 
 		ThrowsExactly<ArgumentNullException>(() => connector.RegisterOrderAndWaitAsync(null));
 	}
@@ -1457,7 +1477,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_CancelledToken_YieldsNothing()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var order = new Order
 		{
 			Security = new Security { Id = "AAPL@TEST" },
@@ -1480,7 +1500,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_OrderAccepted_ReturnsEvents()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -1551,7 +1571,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_WithTrades_ReturnsTradeEvents()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -1596,9 +1616,10 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		await enumTask.WithCancellation(CancellationToken);
 
-		// Connector fires OrderReceived for state transitions AND OwnTradeReceived for trades
-		// Since Order is mutable, all order references show final state
-		events.Count.AssertEqual(4, "Should receive events for order states and trades");
+		// Connector fires OrderReceived for state transitions AND OwnTradeReceived for trades.
+		// Trade fills with HasOrderInfo=true trigger both OrderReceived and OwnTradeReceived:
+		// Active(1) + Trade1(2: order+trade) + Trade2(2: order+trade) + Done(1) = 6
+		events.Count.AssertEqual(6, "Should receive events for order states and trades");
 
 		// Verify final order state
 		AreEqual(OrderStates.Done, order.State);
@@ -1618,7 +1639,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_CancellationSendsCancelOrder()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -1680,7 +1701,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_FiltersOtherOrders()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -1739,7 +1760,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		await enumTask.WithCancellation(CancellationToken);
 
 		// Verify we received events for our order only
-		events.Count.AssertEqual(3, "Should receive events for our order (Active, Trade, Done)");
+		// Active(1) + Trade(2: order+trade) + Done(1) = 4
+		events.Count.AssertEqual(4, "Should receive events for our order (Active, Trade, Done)");
 
 		// Verify final order state - all events reference the same mutable Order
 		AreEqual(OrderStates.Done, order.State);
@@ -1758,7 +1780,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	[Timeout(6000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_FullLifecycle_AllStatesAndTrades()
 	{
-		var connector = new Connector();
+		var connector = new TestConnector();
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
@@ -1812,9 +1834,10 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		await enumTask.WithCancellation(CancellationToken);
 
-		// Connector fires multiple events for order updates and trades
-		// Since Order is mutable, all order references show final state
-		events.Count.AssertEqual(6, "Should receive events for states and trades");
+		// Connector fires multiple events for order updates and trades.
+		// Trade fills with HasOrderInfo=true trigger both OrderReceived and OwnTradeReceived:
+		// Pending(1) + Active(1) + Trade1(2) + Trade2(2) + Trade3(2) + Done(1) = 9
+		events.Count.AssertEqual(9, "Should receive events for states and trades");
 
 		// Verify final order state
 		AreEqual(OrderStates.Done, order.State);

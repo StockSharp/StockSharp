@@ -42,6 +42,9 @@ public class ConnectorBasketTests : BaseTestClass
 		public OrderCancelMessage LastCancelMessage { get; private set; }
 		public long OrderStatusSubscriptionId { get; private set; }
 
+		public override bool UseInChannel => false;
+		public override bool UseOutChannel => false;
+
 		public MockAdapter(IdGenerator transactionIdGenerator) : base(transactionIdGenerator)
 		{
 			this.AddMarketDataSupport();
@@ -192,7 +195,6 @@ public class ConnectorBasketTests : BaseTestClass
 			new InMemoryPortfolioMessageAdapterProvider(),
 			null, null, routingManager);
 
-		basket.IgnoreExtraAdapters = true;
 		basket.LatencyManager = null;
 		basket.SlippageManager = null;
 		basket.CommissionManager = null;

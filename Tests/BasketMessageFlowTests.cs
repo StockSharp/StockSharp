@@ -81,6 +81,10 @@ public class BasketMessageFlowTests : BaseTestClass
 		private readonly ConcurrentQueue<Message> _inMessages = [];
 		private readonly HashSet<DataType> _allDownloadingTypes = [];
 
+		// Disable channels for synchronous test execution
+		public override bool UseInChannel => false;
+		public override bool UseOutChannel => false;
+
 		public LoggingInnerAdapter(IdGenerator idGen, MessageFlowLogger logger, string name)
 			: base(idGen)
 		{
@@ -396,9 +400,6 @@ public class BasketMessageFlowTests : BaseTestClass
 			null,
 			routingManager);
 
-		// Use IgnoreExtraAdapters=true for isolated testing of BasketMessageAdapter routing
-		// LoggingInnerAdapter will set SubscriptionIds to simulate what wrapper chain normally does
-		basket.IgnoreExtraAdapters = true;
 		basket.LatencyManager = null;
 		basket.SlippageManager = null;
 		basket.CommissionManager = null;
@@ -973,8 +974,6 @@ public class BasketMessageFlowTests : BaseTestClass
 			null,
 			routingManager);
 
-		// Use IgnoreExtraAdapters=true for isolated testing
-		basket.IgnoreExtraAdapters = true;
 		basket.LatencyManager = null;
 		basket.SlippageManager = null;
 		basket.CommissionManager = null;
@@ -1134,6 +1133,322 @@ public class BasketMessageFlowTests : BaseTestClass
 		// Final assertions
 		secBasketOut.AssertEqual(1, "SecurityMessages should reach output through wrapper");
 		ticksBasketOut.AssertEqual(3, "Tick messages should reach output through wrapper");
+	}
+
+	#endregion
+
+	#region Full Pipeline Tests
+
+	/// <summary>
+	/// Creates basket with full wrapper pipeline (IgnoreExtraAdapters=false).
+	/// Wrappers like SubscriptionOnlineMessageAdapter and SubscriptionMessageAdapter
+	/// convert OriginalTransactionId → SubscriptionIds automatically.
+	/// </summary>
+	private (BasketMessageAdapter basket, LoggingInnerAdapter adapter1, LoggingInnerAdapter adapter2)
+		CreateFullPipelineBasket(bool twoAdapters = false)
+	{
+		var result = CreateLoggingBasket(twoAdapters);
+
+		// Explicitly ensure full pipeline is active
+		result.basket.IgnoreExtraAdapters.AssertFalse("Full pipeline requires IgnoreExtraAdapters=false");
+
+		return result;
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task FullPipeline_Ticks_SubscriptionIdsSetByWrappers()
+	{
+		var (basket, adapter1, _) = CreateFullPipelineBasket();
+
+		await ConnectAndClear(basket);
+
+		var parentTransId = basket.TransactionIdGenerator.GetNextId();
+		var mdMsg = new MarketDataMessage
+		{
+			SecurityId = SecId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = parentTransId,
+		};
+
+		await ((IMessageTransport)basket).SendInMessageAsync(mdMsg, CancellationToken);
+
+		PrintFlowLog();
+
+		// Inner adapter receives a child ID, not the parent ID
+		var adapterMd = adapter1.GetMessages<MarketDataMessage>()
+			.FirstOrDefault(m => m.IsSubscribe && m.DataType2 == DataType.Ticks);
+		IsNotNull(adapterMd, "Adapter should receive MarketDataMessage");
+		var childTransId = adapterMd.TransactionId;
+		Console.WriteLine($"Parent={parentTransId}, Child={childTransId}");
+
+		// Ticks should arrive with SubscriptionIds set by wrappers (not by inner adapter)
+		var outputTicks = GetOutput<ExecutionMessage>()
+			.Where(e => e.DataType == DataType.Ticks)
+			.ToArray();
+		outputTicks.Length.AssertEqual(3, "All ticks should reach output");
+
+		foreach (var tick in outputTicks)
+		{
+			var subIds = tick.GetSubscriptionIds();
+			(subIds.Length > 0).AssertTrue("Wrappers should set SubscriptionIds");
+			subIds.Contains(parentTransId).AssertTrue(
+				$"SubscriptionIds should contain parent {parentTransId}, got [{string.Join(",", subIds)}]");
+		}
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task FullPipeline_Level1_SubscriptionIdsSetByWrappers()
+	{
+		var (basket, adapter1, _) = CreateFullPipelineBasket();
+
+		await ConnectAndClear(basket);
+
+		var parentTransId = basket.TransactionIdGenerator.GetNextId();
+		var mdMsg = new MarketDataMessage
+		{
+			SecurityId = SecId1,
+			DataType2 = DataType.Level1,
+			IsSubscribe = true,
+			TransactionId = parentTransId,
+		};
+
+		await ((IMessageTransport)basket).SendInMessageAsync(mdMsg, CancellationToken);
+
+		PrintFlowLog();
+
+		// Inner adapter receives a child ID
+		var adapterMd = adapter1.GetMessages<MarketDataMessage>()
+			.FirstOrDefault(m => m.IsSubscribe && m.DataType2 == DataType.Level1);
+		IsNotNull(adapterMd, "Adapter should receive Level1 MarketDataMessage");
+		Console.WriteLine($"Parent={parentTransId}, Child={adapterMd.TransactionId}");
+
+		// Level1 should arrive with SubscriptionIds set by wrappers
+		var outputL1 = GetOutput<Level1ChangeMessage>();
+		outputL1.Length.AssertEqual(1, "Level1 should reach output");
+
+		foreach (var l1 in outputL1)
+		{
+			var subIds = l1.GetSubscriptionIds();
+			(subIds.Length > 0).AssertTrue("Wrappers should set SubscriptionIds on Level1");
+			subIds.Contains(parentTransId).AssertTrue(
+				$"SubscriptionIds should contain parent {parentTransId}, got [{string.Join(",", subIds)}]");
+		}
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task FullPipeline_SecurityLookup_ReachesOutput()
+	{
+		var (basket, _, _) = CreateFullPipelineBasket();
+
+		await ConnectAndClear(basket);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		await ((IMessageTransport)basket).SendInMessageAsync(
+			new SecurityLookupMessage { TransactionId = transId }, CancellationToken);
+
+		PrintFlowLog();
+
+		// SecurityMessage should pass through full wrapper chain
+		var securities = GetOutput<SecurityMessage>();
+		securities.Length.AssertEqual(1, "SecurityMessage should reach output through full pipeline");
+
+		var subIds = securities[0].GetSubscriptionIds();
+		(subIds.Length > 0).AssertTrue("SecurityMessage should have SubscriptionIds");
+		subIds.Contains(transId).AssertTrue(
+			$"SecurityMessage should have subscription ID {transId}, got [{string.Join(",", subIds)}]");
+
+		// SubscriptionFinished should also arrive with correct ID
+		var finished = GetOutput<SubscriptionFinishedMessage>();
+		finished.Count(f => f.OriginalTransactionId == transId)
+			.AssertEqual(1, "SubscriptionFinished should have correct OriginalTransactionId");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task FullPipeline_Ticks_AfterUnsubscribe_NotForwarded()
+	{
+		var (basket, adapter1, _) = CreateFullPipelineBasket();
+
+		await ConnectAndClear(basket);
+
+		// Subscribe
+		var subTransId = basket.TransactionIdGenerator.GetNextId();
+		await ((IMessageTransport)basket).SendInMessageAsync(new MarketDataMessage
+		{
+			SecurityId = SecId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = subTransId,
+		}, CancellationToken);
+
+		// Get child subscription ID from adapter
+		var adapterMd = adapter1.GetMessages<MarketDataMessage>()
+			.FirstOrDefault(m => m.IsSubscribe && m.DataType2 == DataType.Ticks);
+		IsNotNull(adapterMd, "Adapter should receive MarketDataMessage");
+		var childSubId = adapterMd.TransactionId;
+
+		// Verify initial ticks arrived
+		var initialTicks = GetOutput<ExecutionMessage>().Count(e => e.DataType == DataType.Ticks);
+		initialTicks.AssertEqual(3, "Initial ticks should arrive");
+
+		_flowLogger.Clear();
+		_basketOutput.Clear();
+
+		// Unsubscribe
+		var unsubTransId = basket.TransactionIdGenerator.GetNextId();
+		await ((IMessageTransport)basket).SendInMessageAsync(new MarketDataMessage
+		{
+			SecurityId = SecId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = false,
+			TransactionId = unsubTransId,
+			OriginalTransactionId = subTransId,
+		}, CancellationToken);
+
+		_flowLogger.Clear();
+		_basketOutput.Clear();
+
+		// Send data using child subscription ID after unsubscribe
+		await adapter1.SendTickManual(childSubId, SecId1, CancellationToken);
+
+		PrintFlowLog();
+
+		// Wrappers should filter out data for unsubscribed subscription
+		var postUnsubTicks = GetOutput<ExecutionMessage>()
+			.Where(e => e.DataType == DataType.Ticks)
+			.ToArray();
+		postUnsubTicks.Length.AssertEqual(0, "Ticks after unsubscribe should not reach output");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task FullPipeline_TwoSubscriptions_OneUnsubscribed_OtherReceives()
+	{
+		var (basket, adapter1, _) = CreateFullPipelineBasket();
+		adapter1.EmitTicksAfterOnline = false; // control tick emission manually
+
+		await ConnectAndClear(basket);
+
+		// Subscribe #1
+		var sub1TransId = basket.TransactionIdGenerator.GetNextId();
+		await ((IMessageTransport)basket).SendInMessageAsync(new MarketDataMessage
+		{
+			SecurityId = SecId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = sub1TransId,
+		}, CancellationToken);
+
+		var adapterMd1 = adapter1.GetMessages<MarketDataMessage>()
+			.FirstOrDefault(m => m.IsSubscribe && m.DataType2 == DataType.Ticks);
+		IsNotNull(adapterMd1, "Adapter should receive first MarketDataMessage");
+		var child1Id = adapterMd1.TransactionId;
+
+		_flowLogger.Clear();
+		_basketOutput.Clear();
+
+		// Subscribe #2 (same security, same data type)
+		var sub2TransId = basket.TransactionIdGenerator.GetNextId();
+		await ((IMessageTransport)basket).SendInMessageAsync(new MarketDataMessage
+		{
+			SecurityId = SecId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = sub2TransId,
+		}, CancellationToken);
+
+		_flowLogger.Clear();
+		_basketOutput.Clear();
+
+		// Send tick — both subscriptions should receive it
+		await adapter1.SendTickManual(child1Id, SecId1, CancellationToken);
+
+		var ticksBefore = GetOutput<ExecutionMessage>()
+			.Where(e => e.DataType == DataType.Ticks)
+			.ToArray();
+		(ticksBefore.Length > 0).AssertTrue("At least one tick should arrive for active subscriptions");
+
+		// Check that tick has both subscription IDs
+		var subIds = ticksBefore[0].GetSubscriptionIds();
+		subIds.Contains(sub1TransId).AssertTrue(
+			$"Tick should contain sub1 ID {sub1TransId}, got [{string.Join(",", subIds)}]");
+		subIds.Contains(sub2TransId).AssertTrue(
+			$"Tick should contain sub2 ID {sub2TransId}, got [{string.Join(",", subIds)}]");
+
+		_flowLogger.Clear();
+		_basketOutput.Clear();
+
+		// Unsubscribe #1
+		var unsubTransId = basket.TransactionIdGenerator.GetNextId();
+		await ((IMessageTransport)basket).SendInMessageAsync(new MarketDataMessage
+		{
+			SecurityId = SecId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = false,
+			TransactionId = unsubTransId,
+			OriginalTransactionId = sub1TransId,
+		}, CancellationToken);
+
+		_flowLogger.Clear();
+		_basketOutput.Clear();
+
+		// Send tick again — only subscription #2 should receive it
+		await adapter1.SendTickManual(child1Id, SecId1, CancellationToken);
+
+		PrintFlowLog();
+
+		var ticksAfter = GetOutput<ExecutionMessage>()
+			.Where(e => e.DataType == DataType.Ticks)
+			.ToArray();
+		(ticksAfter.Length > 0).AssertTrue("Tick should still arrive for remaining subscription");
+
+		var subIdsAfter = ticksAfter[0].GetSubscriptionIds();
+		subIdsAfter.Contains(sub1TransId).AssertFalse(
+			$"Tick should NOT contain unsubscribed sub1 ID {sub1TransId}");
+		subIdsAfter.Contains(sub2TransId).AssertTrue(
+			$"Tick should contain remaining sub2 ID {sub2TransId}, got [{string.Join(",", subIdsAfter)}]");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task FullPipeline_OrderStatus_DataReachesOutput()
+	{
+		var (basket, _, _) = CreateFullPipelineBasket();
+
+		await ConnectAndClear(basket);
+
+		var transId = basket.TransactionIdGenerator.GetNextId();
+		await ((IMessageTransport)basket).SendInMessageAsync(new OrderStatusMessage
+		{
+			TransactionId = transId,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		PrintFlowLog();
+
+		// Order data should pass through full wrapper chain
+		var orders = GetOutput<ExecutionMessage>()
+			.Where(e => e.DataType == DataType.Transactions && e.HasOrderInfo)
+			.ToArray();
+		orders.Length.AssertEqual(1, "Order data should reach output through full pipeline");
+
+		// Verify subscription IDs set by wrappers
+		foreach (var order in orders)
+		{
+			var subIds = order.GetSubscriptionIds();
+			(subIds.Length > 0).AssertTrue("Wrappers should set SubscriptionIds on order data");
+			subIds.Contains(transId).AssertTrue(
+				$"Order should have subscription ID {transId}, got [{string.Join(",", subIds)}]");
+		}
+
+		// Online message should arrive
+		var onlines = GetOutput<SubscriptionOnlineMessage>();
+		onlines.Count(o => o.OriginalTransactionId == transId)
+			.AssertEqual(1, "OrderStatus should receive SubscriptionOnline through full pipeline");
 	}
 
 	#endregion
