@@ -203,6 +203,56 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 
 	#endregion
 
+	#region Test 1b: Subscribe all ticks, adapter can't filter, receives all securities
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task SecurityAll_SubscribeAllTicks_AdapterCantFilter_ReceivesAll()
+	{
+		var (connector, adapter) = CreateConnector(canFilterBySecurity: false);
+		await connector.ConnectAsync(CancellationToken);
+
+		var sub = new Subscription(DataType.Ticks);
+		var receivedTicks = new List<(Subscription sub, ITickTradeMessage tick)>();
+		connector.TickTradeReceived += (s, t) => receivedTicks.Add((s, t));
+
+		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
+		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
+
+		using var runCts = new CancellationTokenSource();
+		var run = connector.SubscribeAsync(sub, runCts.Token).AsTask();
+		await started.Task.WithCancellation(CancellationToken);
+
+		var subId = await WaitForSubscription(adapter, CancellationToken);
+		var now = DateTime.UtcNow;
+
+		// warm up children for all 3 securities
+		await WarmUpSecurity(adapter, subId, AaplId, DataType.Ticks, now, CancellationToken);
+		await WarmUpSecurity(adapter, subId, GoogId, DataType.Ticks, now.AddMilliseconds(1), CancellationToken);
+		await WarmUpSecurity(adapter, subId, MsftId, DataType.Ticks, now.AddMilliseconds(2), CancellationToken);
+
+		receivedTicks.Clear();
+
+		// emit ticks for all 3 — all should pass through
+		await adapter.EmitTick(subId, AaplId, 150m, 10, now.AddSeconds(1), CancellationToken);
+		await adapter.EmitTick(subId, GoogId, 2800m, 5, now.AddSeconds(2), CancellationToken);
+		await adapter.EmitTick(subId, MsftId, 300m, 7, now.AddSeconds(3), CancellationToken);
+		await Task.Delay(200, CancellationToken);
+
+		var aaplCount = receivedTicks.Count(t => ((ISecurityIdMessage)t.tick).SecurityId == AaplId);
+		var googCount = receivedTicks.Count(t => ((ISecurityIdMessage)t.tick).SecurityId == GoogId);
+		var msftCount = receivedTicks.Count(t => ((ISecurityIdMessage)t.tick).SecurityId == MsftId);
+
+		IsTrue(aaplCount >= 1, $"Expected AAPL tick, got {aaplCount}");
+		IsTrue(googCount >= 1, $"Expected GOOG tick, got {googCount}");
+		IsTrue(msftCount >= 1, $"Expected MSFT tick, got {msftCount}");
+
+		runCts.Cancel();
+		await run.WithCancellation(CancellationToken);
+	}
+
+	#endregion
+
 	#region Test 2: Specific security, adapter can't filter, receives only requested
 
 	[TestMethod]
