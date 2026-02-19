@@ -20,6 +20,7 @@ public static class StatisticParameterRegistry
 		[
 			maxPf,
 			new MaxProfitDateParameter(maxPf),
+			new MaxProfitPercentParameter(maxPf),
 			maxDd,
 			new MaxDrawdownDateParameter(maxDd),
 			new MaxRelativeDrawdownParameter(),
@@ -46,6 +47,8 @@ public static class StatisticParameterRegistry
 			new TradeCountParameter(),
 			new ProfitFactorParameter(),
 			new ExpectancyParameter(),
+			new GrossLossParameter(),
+			new GrossProfitParameter(),
 
 			new MaxLongPositionParameter(),
 			new MaxShortPositionParameter(),

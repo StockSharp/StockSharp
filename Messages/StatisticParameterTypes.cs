@@ -189,4 +189,19 @@ public enum StatisticParameterTypes
 	/// Total number of errors during order cancellation.
 	/// </summary>
 	OrderCancelErrorCount,
+
+	/// <summary>
+	/// Total currency amount of all completed losing trades.
+	/// </summary>
+	GrossLoss,
+
+	/// <summary>
+	/// Total currency amount of all completed winning trades.
+	/// </summary>
+	GrossProfit,
+
+	/// <summary>
+	/// Maximum profit value for the period, expressed as a percentage.
+	/// </summary>
+	MaxProfitPercent,
 }
