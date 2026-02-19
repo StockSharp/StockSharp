@@ -14,6 +14,9 @@ public abstract class BasketTestBase : BaseTestClass
 	{
 		private readonly ConcurrentQueue<Message> _inMessages = [];
 
+		public override bool UseInChannel => false;
+		public override bool UseOutChannel => false;
+
 		public TestBasketInnerAdapter(IdGenerator idGen)
 			: base(idGen)
 		{
@@ -79,6 +82,7 @@ public abstract class BasketTestBase : BaseTestClass
 					{
 						PortfolioName = "TestPortfolio",
 						OriginalTransactionId = pl.TransactionId,
+						SubscriptionId = pl.TransactionId,
 					};
 					await SendOutMessageAsync(pfMsg, ct);
 
@@ -95,6 +99,7 @@ public abstract class BasketTestBase : BaseTestClass
 						DataTypeEx = DataType.Transactions,
 						SecurityId = Helper.CreateSecurityId(),
 						OriginalTransactionId = os.TransactionId,
+						SubscriptionId = os.TransactionId,
 						HasOrderInfo = true,
 						OrderState = OrderStates.Active,
 						OrderPrice = 100,
