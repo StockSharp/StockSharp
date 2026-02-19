@@ -608,6 +608,21 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		protected set => _statisticManager = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
+	/// <summary>
+	/// Get the value of a statistic parameter by its type.
+	/// </summary>
+	/// <typeparam name="TParam">The statistic parameter type.</typeparam>
+	/// <typeparam name="TValue">The value type.</typeparam>
+	/// <param name="fallback">Fallback value if the parameter is not found.</param>
+	/// <returns>The parameter value or <paramref name="fallback"/>.</returns>
+	protected TValue GetStatValue<TParam, TValue>(TValue fallback = default)
+		where TParam : class, IStatisticParameter<TValue>
+		where TValue : IComparable<TValue>
+	{
+		var p = StatisticManager?.Parameters.OfType<TParam>().FirstOrDefault();
+		return p != null ? p.Value : fallback;
+	}
+
 	#region IReportSource implementation
 
 	private readonly ReportSource _reportSource;
