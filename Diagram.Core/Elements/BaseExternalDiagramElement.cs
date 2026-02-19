@@ -221,7 +221,7 @@ public abstract class BaseExternalDiagramElement : DiagramElement
 	{
 		var methods = type
 			.GetMethods(_flags)
-			.Where(m => m.GetAttribute<DiagramExternalAttribute>() != null)
+			.Where(DiagramExternalAttribute.IsExternal)
 			.Where(m => !m.IsGenericMethodDefinition);
 
 		var inputMethods = _inputMethods.CopyAndClear();
@@ -266,7 +266,7 @@ public abstract class BaseExternalDiagramElement : DiagramElement
 		var eventInfos = type.GetEvents(_flags);
 		var outputEvents = _outputEvents.CopyAndClear();
 
-		foreach (var eventInfo in eventInfos.Where(e => e.GetAttribute<DiagramExternalAttribute>() is not null))
+		foreach (var eventInfo in eventInfos.Where(DiagramExternalAttribute.IsExternal))
 		{
 			var handlerType = eventInfo.EventHandlerType;
 			var methodInfo = handlerType.GetMethod(_invokeMethodName);

@@ -408,8 +408,10 @@ public class CompilationTests : BaseTestClass
 
 	private void InvokeDiagramElem(Type type, DiagramExternalElement instance)
 	{
-		var evts = type.GetEvents().ToArray();
-		evts.Count().AssertEqual(1);
+		var evts = type.GetEvents()
+			.Where(DiagramExternalAttribute.IsExternal)
+			.ToArray();
+		evts.Length.AssertEqual(2);
 
 		var raisedCnt = 0;
 
