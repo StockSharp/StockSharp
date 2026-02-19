@@ -53,6 +53,7 @@ class PusherClient : BaseLogReceiver
 		{
 			WorkingTime = workingTime ?? throw new ArgumentNullException(nameof(workingTime)),
 		};
+	}
 
 	protected override void DisposeManaged()
 	{
