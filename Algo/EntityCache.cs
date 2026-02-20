@@ -366,6 +366,7 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 		_orderEditFails.Clear();
 
 		_securityValues.Clear();
+		_orderBookSnapshots.Clear();
 	}
 
 	/// <summary>
@@ -1264,6 +1265,7 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 	}
 
 	private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = [];
+	private readonly SynchronizedDictionary<SecurityId, QuoteChangeMessage> _orderBookSnapshots = [];
 
 	/// <summary>
 	/// Get security Level1 field value.
@@ -1312,12 +1314,25 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 	public Level1Info GetSecurityValues(Security security, DateTime serverTime)
 		=> _securityValues.SafeAdd(security, key => new Level1Info(security.ToSecurityId(), serverTime));
 
+	/// <summary>
+	/// Update cached order book snapshot for a security.
+	/// </summary>
+	/// <param name="message">Order book message.</param>
+	public void UpdateOrderBookSnapshot(QuoteChangeMessage message)
+	{
+		if (message is null)
+			throw new ArgumentNullException(nameof(message));
+
+		_orderBookSnapshots[message.SecurityId] = message.TypedClone();
+	}
+
 	IEnumerable<Message> ISnapshotHolder.GetSnapshot(ISubscriptionMessage subscription)
 	{
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
 		var security = subscription is ISecurityIdMessage secIdMsg ? _tryGetSecurity(secIdMsg.SecurityId) : null;
+		var securityId = subscription is ISecurityIdMessage secIdMsg2 ? secIdMsg2.SecurityId : default;
 		var dataType = subscription.DataType;
 
 		if (dataType == DataType.Level1)
@@ -1327,6 +1342,11 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 
 			if (_securityValues.TryGetValue(security, out var info))
 				return [info.GetCopy()];
+		}
+		else if (dataType == DataType.MarketDepth)
+		{
+			if (securityId != default && _orderBookSnapshots.TryGetValue(securityId, out var snapshot))
+				return [snapshot.TypedClone()];
 		}
 		else if (dataType == DataType.Transactions)
 		{

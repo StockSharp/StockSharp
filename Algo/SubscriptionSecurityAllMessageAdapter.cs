@@ -14,6 +14,7 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 		public MarketDataMessage Origin { get; } = origin ?? throw new ArgumentNullException(nameof(origin));
 		public CachedSynchronizedPairSet<long, MarketDataMessage> Alls = [];
 		public SynchronizedDictionary<SecurityId, CachedSynchronizedSet<long>> NonAlls = [];
+		public SynchronizedDictionary<SecurityId, Message> Snapshots = [];
 	}
 
 	private readonly AsyncLock _sync = new();
@@ -102,7 +103,33 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 
 					if (outMsg != null)
 					{
+						Message snapshot = null;
+
+						using (await _sync.LockAsync(cancellationToken))
+						{
+							if (mdMsg.SecurityId != default)
+							{
+								var parent2 = _parents.FirstOrDefault(p => p.Value.Origin.DataType2 == mdMsg.DataType2).Value;
+								parent2?.Snapshots.TryGetValue(mdMsg.SecurityId, out snapshot);
+							}
+						}
+
 						await RaiseNewOutMessageAsync(outMsg, cancellationToken);
+						await RaiseNewOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = mdMsg.TransactionId }, cancellationToken);
+
+						if (snapshot != null)
+						{
+							snapshot = snapshot.TypedClone();
+
+							if (snapshot is ISubscriptionIdMessage subscrIdMsg)
+							{
+								subscrIdMsg.OriginalTransactionId = mdMsg.TransactionId;
+								subscrIdMsg.SetSubscriptionIds(subscriptionId: mdMsg.TransactionId);
+							}
+
+							await RaiseNewOutMessageAsync(snapshot, cancellationToken);
+						}
+
 						return;
 					}
 				}
@@ -231,6 +258,10 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 						{
 							if (_parents.TryGetValue(parentId, out var parent))
 							{
+								// cache latest snapshot per security for late subscribers
+								if (secIdMsg.SecurityId != default && message is IServerTimeMessage)
+									parent.Snapshots[secIdMsg.SecurityId] = message.TypedClone();
+
 								if (!ApplySubscriptionIds(subscrMsg, parent, secIdMsg.SecurityId))
 									drop = true;
 

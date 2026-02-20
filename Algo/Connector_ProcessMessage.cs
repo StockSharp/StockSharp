@@ -1130,6 +1130,8 @@ partial class Connector
 		if (message.IsFiltered || message.State != null)
 			return;
 
+		_entityCache.UpdateOrderBookSnapshot(message);
+
 		var bestBid = message.GetBestBid();
 		var bestAsk = message.GetBestAsk();
 		var fromLevel1 = message.BuildFrom == DataType.Level1;
