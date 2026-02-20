@@ -28,7 +28,7 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		private readonly bool _canFilterBySecurity;
 		private readonly Dictionary<long, MarketDataMessage> _activeSubscriptions = [];
 
-		public SecurityAllTestAdapter(IdGenerator transactionIdGenerator, bool canFilterBySecurity = true, bool supportCandles = false)
+		public SecurityAllTestAdapter(IdGenerator transactionIdGenerator, bool canFilterBySecurity = true, bool supportCandles = false, bool supportDepth = false)
 			: base(transactionIdGenerator)
 		{
 			_canFilterBySecurity = canFilterBySecurity;
@@ -39,6 +39,9 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 
 			if (supportCandles)
 				this.AddSupportedMarketDataType(TimeSpan.FromMinutes(1).TimeFrame());
+
+			if (supportDepth)
+				this.AddSupportedMarketDataType(DataType.MarketDepth);
 		}
 
 		public Dictionary<long, MarketDataMessage> ActiveSubscriptions => _activeSubscriptions;
@@ -112,9 +115,22 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 			}
 			.TryAdd(Level1Fields.LastTradePrice, lastPrice), cancellationToken);
 		}
+
+		public async ValueTask EmitOrderBook(long subscriptionId, SecurityId secId, DateTime serverTime,
+			QuoteChange[] bids, QuoteChange[] asks, CancellationToken cancellationToken)
+		{
+			await SendOutMessageAsync(new QuoteChangeMessage
+			{
+				SecurityId = secId,
+				ServerTime = serverTime,
+				Bids = bids ?? [],
+				Asks = asks ?? [],
+				OriginalTransactionId = subscriptionId,
+			}, cancellationToken);
+		}
 	}
 
-	private static (TestConnector connector, SecurityAllTestAdapter adapter) CreateConnector(bool canFilterBySecurity = true, bool supportCandles = false)
+	private static (TestConnector connector, SecurityAllTestAdapter adapter) CreateConnector(bool canFilterBySecurity = true, bool supportCandles = false, bool supportDepth = false)
 	{
 		var connector = new TestConnector();
 
@@ -123,7 +139,7 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		connector.Adapter.CommissionManager = null;
 		connector.Adapter.SendFinishedCandlesImmediatelly = true;
 
-		var adapter = new SecurityAllTestAdapter(connector.TransactionIdGenerator, canFilterBySecurity, supportCandles);
+		var adapter = new SecurityAllTestAdapter(connector.TransactionIdGenerator, canFilterBySecurity, supportCandles, supportDepth);
 		connector.Adapter.InnerAdapters.Add(adapter);
 
 		return (connector, adapter);
@@ -152,6 +168,8 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 			await adapter.EmitTick(subId, secId, 1m, 1, serverTime, ct);
 		else if (dataType == DataType.Level1)
 			await adapter.EmitLevel1(subId, secId, 1m, serverTime, ct);
+		else if (dataType == DataType.MarketDepth)
+			await adapter.EmitOrderBook(subId, secId, serverTime, [new(1m, 1)], [new(2m, 1)], ct);
 
 		// wait for loopback child subscription to complete
 		await Task.Delay(200, ct);
@@ -196,6 +214,56 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		IsTrue(receivedTicks.Count >= 2, $"Expected at least 2 ticks, got {receivedTicks.Count}");
 		IsTrue(receivedTicks.Any(t => ((ISecurityIdMessage)t.tick).SecurityId == AaplId), "Expected AAPL tick");
 		IsTrue(receivedTicks.Any(t => ((ISecurityIdMessage)t.tick).SecurityId == GoogId), "Expected GOOG tick");
+
+		runCts.Cancel();
+		await run.WithCancellation(CancellationToken);
+	}
+
+	#endregion
+
+	#region Test 1b: Subscribe all ticks, adapter can't filter, receives all securities
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task SecurityAll_SubscribeAllTicks_AdapterCantFilter_ReceivesAll()
+	{
+		var (connector, adapter) = CreateConnector(canFilterBySecurity: false);
+		await connector.ConnectAsync(CancellationToken);
+
+		var sub = new Subscription(DataType.Ticks);
+		var receivedTicks = new List<(Subscription sub, ITickTradeMessage tick)>();
+		connector.TickTradeReceived += (s, t) => receivedTicks.Add((s, t));
+
+		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
+		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
+
+		using var runCts = new CancellationTokenSource();
+		var run = connector.SubscribeAsync(sub, runCts.Token).AsTask();
+		await started.Task.WithCancellation(CancellationToken);
+
+		var subId = await WaitForSubscription(adapter, CancellationToken);
+		var now = DateTime.UtcNow;
+
+		// warm up children for all 3 securities
+		await WarmUpSecurity(adapter, subId, AaplId, DataType.Ticks, now, CancellationToken);
+		await WarmUpSecurity(adapter, subId, GoogId, DataType.Ticks, now.AddMilliseconds(1), CancellationToken);
+		await WarmUpSecurity(adapter, subId, MsftId, DataType.Ticks, now.AddMilliseconds(2), CancellationToken);
+
+		receivedTicks.Clear();
+
+		// emit ticks for all 3 — all should pass through
+		await adapter.EmitTick(subId, AaplId, 150m, 10, now.AddSeconds(1), CancellationToken);
+		await adapter.EmitTick(subId, GoogId, 2800m, 5, now.AddSeconds(2), CancellationToken);
+		await adapter.EmitTick(subId, MsftId, 300m, 7, now.AddSeconds(3), CancellationToken);
+		await Task.Delay(200, CancellationToken);
+
+		var aaplCount = receivedTicks.Count(t => ((ISecurityIdMessage)t.tick).SecurityId == AaplId);
+		var googCount = receivedTicks.Count(t => ((ISecurityIdMessage)t.tick).SecurityId == GoogId);
+		var msftCount = receivedTicks.Count(t => ((ISecurityIdMessage)t.tick).SecurityId == MsftId);
+
+		IsTrue(aaplCount >= 1, $"Expected AAPL tick, got {aaplCount}");
+		IsTrue(googCount >= 1, $"Expected GOOG tick, got {googCount}");
+		IsTrue(msftCount >= 1, $"Expected MSFT tick, got {msftCount}");
 
 		runCts.Cancel();
 		await run.WithCancellation(CancellationToken);
@@ -357,6 +425,81 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 
 		runCts.Cancel();
 		await run.WithCancellation(CancellationToken);
+	}
+
+	#endregion
+
+	#region Test 5: Late subscriber gets cached order book after snapshot already passed
+
+	[TestMethod]
+	[Timeout(15_000, CooperativeCancellation = true)]
+	public async Task SecurityAll_LateDepthSubscription_ReceivesCachedOrderBook()
+	{
+		var (connector, adapter) = CreateConnector(canFilterBySecurity: false, supportDepth: true);
+		await connector.ConnectAsync(CancellationToken);
+
+		// 1. Subscribe to AAPL MarketDepth — adapter can't filter, so system uses SecurityAll internally
+		var aaplSub = new Subscription(DataType.MarketDepth, new Security { Id = AaplId.ToStringId() });
+		var receivedBooks = new List<(Subscription sub, IOrderBookMessage book)>();
+		connector.OrderBookReceived += (s, b) => receivedBooks.Add((s, b));
+
+		var aaplStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, aaplSub)) aaplStarted.TrySetResult(true); };
+
+		using var aaplCts = new CancellationTokenSource();
+		var aaplRun = connector.SubscribeAsync(aaplSub, aaplCts.Token).AsTask();
+		await aaplStarted.Task.WithCancellation(CancellationToken);
+
+		var subId = await WaitForSubscription(adapter, CancellationToken);
+		var now = DateTime.UtcNow;
+
+		// 2. Adapter sends full order books for ALL instruments (it can't filter)
+		await adapter.EmitOrderBook(subId, AaplId, now,
+			bids: [new(150m, 10), new(149m, 20)],
+			asks: [new(151m, 15), new(152m, 25)], CancellationToken);
+
+		await adapter.EmitOrderBook(subId, GoogId, now.AddMilliseconds(1),
+			bids: [new(2800m, 5), new(2799m, 8)],
+			asks: [new(2801m, 3), new(2802m, 7)], CancellationToken);
+
+		await Task.Delay(300, CancellationToken);
+
+		// Verify AAPL books received
+		IsTrue(receivedBooks.Any(b => ((ISecurityIdMessage)b.book).SecurityId == AaplId), "AAPL book should arrive");
+
+		receivedBooks.Clear();
+
+		// 3. Now subscribe to GOOG MarketDepth — snapshot already passed, no new data from adapter
+		var googSub = new Subscription(DataType.MarketDepth, new Security { Id = GoogId.ToStringId() });
+
+		var googStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
+		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, googSub)) googStarted.TrySetResult(true); };
+
+		using var googCts = new CancellationTokenSource();
+		var googRun = connector.SubscribeAsync(googSub, googCts.Token).AsTask();
+
+		// Wait — no new data emitted by adapter after this point
+		await Task.Delay(500, CancellationToken);
+
+		// 4. Late subscriber should receive GOOG's cached order book
+		var googBooks = receivedBooks
+			.Where(b => ((ISecurityIdMessage)b.book).SecurityId == GoogId)
+			.ToList();
+
+		IsTrue(googBooks.Count >= 1, $"Late GOOG subscriber should receive cached order book, got {googBooks.Count}");
+
+		// Verify the cached book has correct data
+		var book = googBooks[0].book;
+		var bids = book.Bids.ToArray();
+		var asks = book.Asks.ToArray();
+
+		IsTrue(bids.Length >= 1, "GOOG book should have bids");
+		IsTrue(asks.Length >= 1, "GOOG book should have asks");
+
+		aaplCts.Cancel();
+		googCts.Cancel();
+		await aaplRun.WithCancellation(CancellationToken);
+		await googRun.WithCancellation(CancellationToken);
 	}
 
 	#endregion
