@@ -166,7 +166,9 @@ public class GpuZlemaCalculator : GpuIndicatorCalculatorBase<ZeroLagExponentialM
 			if (i < length - 1)
 				continue;
 
-			var lagIdx = i - lag;
+			// CPU accesses buffer[lag] where buffer contains [i-length+1 .. i].
+			// buffer[lag] = bar (i - length + 1 + lag) = bar (i - (length - 1 - lag)).
+			var lagIdx = i - (length - 1 - lag);
 			var lagPrice = lagIdx >= 0 ? ExtractPrice(flatCandles[offset + lagIdx], priceType) : price;
 			var zlema = alpha * (2f * price - lagPrice) + oneMinusAlpha * prevZlema;
 			prevZlema = zlema;

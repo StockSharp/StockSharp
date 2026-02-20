@@ -45,7 +45,7 @@ public struct GpuHullMovingAverageParams(int length, int sqrtPeriod, byte priceT
 /// </summary>
 public class GpuHullMovingAverageCalculator : GpuIndicatorCalculatorBase<HullMovingAverage, GpuHullMovingAverageParams, GpuIndicatorResult>
 {
-	private readonly Action<Index3D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<float>, ArrayView<int>, ArrayView<int>, ArrayView<GpuHullMovingAverageParams>> _paramsSeriesKernel;
+	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<float>, ArrayView<int>, ArrayView<int>, ArrayView<GpuHullMovingAverageParams>> _paramsSeriesKernel;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GpuHullMovingAverageCalculator"/> class.
@@ -56,7 +56,7 @@ public class GpuHullMovingAverageCalculator : GpuIndicatorCalculatorBase<HullMov
 		: base(context, accelerator)
 	{
 		_paramsSeriesKernel = Accelerator.LoadAutoGroupedStreamKernel
-			<Index3D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<float>, ArrayView<int>, ArrayView<int>, ArrayView<GpuHullMovingAverageParams>>(HmaParamsSeriesKernel);
+			<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<float>, ArrayView<int>, ArrayView<int>, ArrayView<GpuHullMovingAverageParams>>(HmaParamsSeriesKernel);
 	}
 
 	/// <inheritdoc />
@@ -87,7 +87,6 @@ public class GpuHullMovingAverageCalculator : GpuIndicatorCalculatorBase<HullMov
 		}
 
 		var flatCandles = new GpuCandle[totalSize];
-		var maxLen = 0;
 		var offset = 0;
 
 		for (var s = 0; s < seriesCount; s++)
@@ -98,9 +97,6 @@ public class GpuHullMovingAverageCalculator : GpuIndicatorCalculatorBase<HullMov
 			{
 				Array.Copy(candlesSeries[s], 0, flatCandles, offset, len);
 				offset += len;
-
-				if (len > maxLen)
-					maxLen = len;
 			}
 		}
 
@@ -111,7 +107,7 @@ public class GpuHullMovingAverageCalculator : GpuIndicatorCalculatorBase<HullMov
 		using var diffBuffer = Accelerator.Allocate1D<float>(totalSize * parameters.Length);
 		using var outputBuffer = Accelerator.Allocate1D<GpuIndicatorResult>(totalSize * parameters.Length);
 
-		var extent = new Index3D(parameters.Length, seriesCount, maxLen);
+		var extent = new Index2D(parameters.Length, seriesCount);
 		_paramsSeriesKernel(extent, inputBuffer.View, outputBuffer.View, diffBuffer.View, offsetsBuffer.View, lengthsBuffer.View, paramsBuffer.View);
 		Accelerator.Synchronize();
 
@@ -145,9 +141,10 @@ public class GpuHullMovingAverageCalculator : GpuIndicatorCalculatorBase<HullMov
 
 	/// <summary>
 	/// ILGPU kernel: HMA computation for multiple series and parameter sets. Results stored as [param][globalIdx].
+	/// Sequential loop over candles to ensure diff values are available before being read.
 	/// </summary>
 	private static void HmaParamsSeriesKernel(
-		Index3D index,
+		Index2D index,
 		ArrayView<GpuCandle> flatCandles,
 		ArrayView<GpuIndicatorResult> flatResults,
 		ArrayView<float> diffBuffer,
@@ -157,21 +154,13 @@ public class GpuHullMovingAverageCalculator : GpuIndicatorCalculatorBase<HullMov
 	{
 		var paramIdx = index.X;
 		var seriesIdx = index.Y;
-		var candleIdx = index.Z;
 
 		var len = lengths[seriesIdx];
-
-		if (candleIdx >= len)
+		if (len <= 0)
 			return;
 
 		var offset = offsets[seriesIdx];
-		var globalIdx = offset + candleIdx;
 		var resIndexBase = paramIdx * flatCandles.Length;
-		var resIndex = resIndexBase + globalIdx;
-		var candle = flatCandles[globalIdx];
-
-		flatResults[resIndex] = new() { Time = candle.Time, Value = float.NaN, IsFormed = 0 };
-		diffBuffer[resIndex] = float.NaN;
 
 		var prm = parameters[paramIdx];
 		var length = prm.Length;
@@ -196,41 +185,58 @@ public class GpuHullMovingAverageCalculator : GpuIndicatorCalculatorBase<HullMov
 
 		var priceType = (Level1Fields)prm.PriceType;
 
-		if (candleIdx < length - 1)
-			return;
-
-		var slow = CalculateWeightedAverage(flatCandles, globalIdx, length, priceType);
-
-		if (candleIdx < fastLength - 1)
-			return;
-
-		var fast = CalculateWeightedAverage(flatCandles, globalIdx, fastLength, priceType);
-		var diff = 2f * fast - slow;
-
-		diffBuffer[resIndex] = diff;
-
-		var diffStartIdx = globalIdx - (sqrtLength - 1);
-		var earliestDiffIdx = offset + length - 1;
-
-		if (diffStartIdx < earliestDiffIdx)
-			return;
-
-		var weightSum = sqrtLength * (sqrtLength + 1) * 0.5f;
-		var diffSum = 0f;
-
-		for (var j = 0; j < sqrtLength; j++)
+		for (var candleIdx = 0; candleIdx < len; candleIdx++)
 		{
-			var diffIdx = resIndexBase + diffStartIdx + j;
-			var diffVal = diffBuffer[diffIdx];
+			var globalIdx = offset + candleIdx;
+			var resIndex = resIndexBase + globalIdx;
+			var candle = flatCandles[globalIdx];
 
-			if (float.IsNaN(diffVal))
-				return;
+			flatResults[resIndex] = new() { Time = candle.Time, Value = float.NaN, IsFormed = 0 };
+			diffBuffer[resIndex] = float.NaN;
 
-			var weight = j + 1;
-			diffSum += diffVal * weight;
+			if (candleIdx < length - 1)
+				continue;
+
+			var slow = CalculateWeightedAverage(flatCandles, globalIdx, length, priceType);
+
+			if (candleIdx < fastLength - 1)
+				continue;
+
+			var fast = CalculateWeightedAverage(flatCandles, globalIdx, fastLength, priceType);
+			var diff = 2f * fast - slow;
+
+			diffBuffer[resIndex] = diff;
+
+			var diffStartIdx = globalIdx - (sqrtLength - 1);
+			var earliestDiffIdx = offset + length - 1;
+
+			if (diffStartIdx < earliestDiffIdx)
+				continue;
+
+			var weightSum = sqrtLength * (sqrtLength + 1) * 0.5f;
+			var diffSum = 0f;
+			var allValid = true;
+
+			for (var j = 0; j < sqrtLength; j++)
+			{
+				var diffIdx = resIndexBase + diffStartIdx + j;
+				var diffVal = diffBuffer[diffIdx];
+
+				if (float.IsNaN(diffVal))
+				{
+					allValid = false;
+					break;
+				}
+
+				var weight = j + 1;
+				diffSum += diffVal * weight;
+			}
+
+			if (allValid)
+				flatResults[resIndex] = new() { Time = candle.Time, Value = diffSum / weightSum, IsFormed = 1 };
+			else
+				flatResults[resIndex] = new() { Time = candle.Time, Value = float.NaN, IsFormed = 1 };
 		}
-
-		flatResults[resIndex] = new() { Time = candle.Time, Value = diffSum / weightSum, IsFormed = 1 };
 	}
 
 	private static float CalculateWeightedAverage(ArrayView<GpuCandle> candles, int endIndex, int length, Level1Fields priceType)

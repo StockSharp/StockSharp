@@ -243,6 +243,8 @@ public class GpuKlingerVolumeOscillatorCalculator : GpuIndicatorCalculatorBase<K
 		var longPrev = 0f;
 		var prevHlc = 0f;
 
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var candle = flatCandles[offset + i];
@@ -281,8 +283,8 @@ public class GpuKlingerVolumeOscillatorCalculator : GpuIndicatorCalculatorBase<K
 			}
 
 			var resIndex = paramIdx * flatCandles.Length + (offset + i);
-			var formed = (byte)((shortCount >= shortLen && longCount >= longLen) ? 1 : 0);
-			var oscValue = formed == 1 ? shortValue - longValue : float.NaN;
+			var curFormed = (byte)((shortCount >= shortLen && longCount >= longLen) ? 1 : 0);
+			var oscValue = curFormed == 1 ? shortValue - longValue : float.NaN;
 
 			flatResults[resIndex] = new GpuKlingerVolumeOscillatorResult
 			{
@@ -290,9 +292,10 @@ public class GpuKlingerVolumeOscillatorCalculator : GpuIndicatorCalculatorBase<K
 				Short = shortValue,
 				Long = longValue,
 				Oscillator = oscValue,
-				IsFormed = formed,
+				IsFormed = prevFormed,
 			};
 
+			prevFormed = curFormed;
 			prevHlc = hlc;
 		}
 	}

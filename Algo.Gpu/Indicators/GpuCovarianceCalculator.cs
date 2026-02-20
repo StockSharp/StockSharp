@@ -30,9 +30,10 @@ public struct GpuCovarianceParams(int length, byte firstPriceType, byte secondPr
 	/// <inheritdoc />
 	public readonly void FromIndicator(IIndicator indicator)
 	{
-		var source = indicator.Source ?? Level1Fields.ClosePrice;
-		Unsafe.AsRef(in this).FirstPriceType = (byte)source;
-		Unsafe.AsRef(in this).SecondPriceType = (byte)source;
+		// CPU Covariance receives PairIndicatorValue<decimal> where
+		// CandleIndicatorValue.GetValue<(decimal,decimal)>() returns (LowPrice, HighPrice).
+		Unsafe.AsRef(in this).FirstPriceType = (byte)Level1Fields.LowPrice;
+		Unsafe.AsRef(in this).SecondPriceType = (byte)Level1Fields.HighPrice;
 
 		if (indicator is Covariance covariance)
 		{

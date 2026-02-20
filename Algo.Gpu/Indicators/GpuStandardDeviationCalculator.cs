@@ -149,35 +149,34 @@ public class GpuStandardDeviationCalculator : GpuIndicatorCalculatorBase<Standar
 
 		var priceType = (Level1Fields)prm.PriceType;
 
-		float sum = 0f;
-		float sumSq = 0f;
-
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
 			var candle = flatCandles[globalIdx];
-			var price = ExtractPrice(candle, priceType);
 
 			var resIndex = paramIdx * flatCandles.Length + globalIdx;
 			flatResults[resIndex] = new() { Time = candle.Time, Value = float.NaN, IsFormed = 0 };
 
-			sum += price;
-			sumSq += price * price;
-
-			if (i >= length)
-			{
-				var prevPrice = ExtractPrice(flatCandles[globalIdx - length], priceType);
-				sum -= prevPrice;
-				sumSq -= prevPrice * prevPrice;
-			}
-
 			if (i >= length - 1)
 			{
-				var mean = sum / length;
-				var variance = (sumSq / length) - (mean * mean);
-				variance = MathF.Max(variance, 0f);
+				// Two-pass approach for numerical stability (matches CPU)
+				// Pass 1: compute mean (SMA)
+				var sum = 0f;
+				var start = i - length + 1;
+				for (var j = start; j <= i; j++)
+					sum += ExtractPrice(flatCandles[offset + j], priceType);
 
-				flatResults[resIndex] = new() { Time = candle.Time, Value = MathF.Sqrt(variance), IsFormed = 1 };
+				var mean = sum / length;
+
+				// Pass 2: compute sum of squared deviations from mean
+				var sqSum = 0f;
+				for (var j = start; j <= i; j++)
+				{
+					var diff = ExtractPrice(flatCandles[offset + j], priceType) - mean;
+					sqSum += diff * diff;
+				}
+
+				flatResults[resIndex] = new() { Time = candle.Time, Value = MathF.Sqrt(sqSum / length), IsFormed = 1 };
 			}
 		}
 	}

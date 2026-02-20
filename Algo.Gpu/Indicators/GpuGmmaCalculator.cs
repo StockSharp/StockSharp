@@ -18,11 +18,6 @@ public struct GpuGmmaParams(byte priceType) : IGpuIndicatorParams
 	public const int AveragesCount = GpuGmmaResult.AveragesCount;
 
 	/// <summary>
-	/// Price type to extract from candles.
-	/// </summary>
-	public byte PriceType = priceType;
-
-	/// <summary>
 	/// Length of the first exponential moving average.
 	/// </summary>
 	public int Length0 = 3;
@@ -83,6 +78,11 @@ public struct GpuGmmaParams(byte priceType) : IGpuIndicatorParams
 	public int Length11 = 60;
 
 	/// <summary>
+	/// Price type to extract from candles.
+	/// </summary>
+	public byte PriceType = priceType;
+
+	/// <summary>
 	/// Get GMMA default lengths.
 	/// </summary>
 	public static ReadOnlySpan<int> DefaultLengths => _defaultLengths;
@@ -90,10 +90,9 @@ public struct GpuGmmaParams(byte priceType) : IGpuIndicatorParams
 	/// <inheritdoc />
 	public readonly void FromIndicator(IIndicator indicator)
 	{
-		var self = Unsafe.AsRef(in this);
-		self.PriceType = (byte)(indicator.Source ?? Level1Fields.ClosePrice);
+		Unsafe.AsRef(in this).PriceType = (byte)(indicator.Source ?? Level1Fields.ClosePrice);
 
-		var dest = MemoryMarshal.CreateSpan(ref self.Length0, AveragesCount);
+		var dest = MemoryMarshal.CreateSpan(ref Unsafe.AsRef(in this).Length0, AveragesCount);
 		var defaults = DefaultLengths;
 		defaults.CopyTo(dest);
 
@@ -215,12 +214,12 @@ public struct GpuGmmaResult : IGpuIndicatorResult
 	public float Average11;
 
 	/// <summary>
-	/// Is indicator formed (byte to be GPU-friendly).
+	/// Is indicator formed (int for GPU alignment safety).
 	/// </summary>
-	public byte IsFormed;
+	public int IsFormed;
 
 	readonly long IGpuIndicatorResult.Time => Time;
-	readonly byte IGpuIndicatorResult.IsFormed => IsFormed;
+	readonly byte IGpuIndicatorResult.IsFormed => (byte)IsFormed;
 
 	/// <summary>
 	/// Get average value by index.
@@ -418,12 +417,29 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 			result[s] = new GpuGmmaResult[parameters.Length][];
 			for (var p = 0; p < parameters.Length; p++)
 			{
+				// Compute maxLen from parameters for CPU-side IsFormed
+				var prm = parameters[p];
+				var maxLen = prm.Length0;
+				if (prm.Length1 > maxLen) maxLen = prm.Length1;
+				if (prm.Length2 > maxLen) maxLen = prm.Length2;
+				if (prm.Length3 > maxLen) maxLen = prm.Length3;
+				if (prm.Length4 > maxLen) maxLen = prm.Length4;
+				if (prm.Length5 > maxLen) maxLen = prm.Length5;
+				if (prm.Length6 > maxLen) maxLen = prm.Length6;
+				if (prm.Length7 > maxLen) maxLen = prm.Length7;
+				if (prm.Length8 > maxLen) maxLen = prm.Length8;
+				if (prm.Length9 > maxLen) maxLen = prm.Length9;
+				if (prm.Length10 > maxLen) maxLen = prm.Length10;
+				if (prm.Length11 > maxLen) maxLen = prm.Length11;
+
 				var arr = new GpuGmmaResult[len];
 				for (var i = 0; i < len; i++)
 				{
 					var globalIdx = seriesOffsets[s] + i;
 					var resIdx = p * totalSize + globalIdx;
 					arr[i] = flatResults[resIdx];
+					// CPU-side IsFormed: one-bar delayed formed (BaseComplexIndicator pattern)
+					arr[i].IsFormed = i >= maxLen ? 1 : 0;
 				}
 				result[s][p] = arr;
 			}
@@ -454,42 +470,18 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 		var prm = parameters[paramIdx];
 		var priceType = (Level1Fields)prm.PriceType;
 
-		var len0 = prm.GetLength(0);
-		if (len0 <= 0)
-			len0 = 1;
-		var len1 = prm.GetLength(1);
-		if (len1 <= 0)
-			len1 = 1;
-		var len2 = prm.GetLength(2);
-		if (len2 <= 0)
-			len2 = 1;
-		var len3 = prm.GetLength(3);
-		if (len3 <= 0)
-			len3 = 1;
-		var len4 = prm.GetLength(4);
-		if (len4 <= 0)
-			len4 = 1;
-		var len5 = prm.GetLength(5);
-		if (len5 <= 0)
-			len5 = 1;
-		var len6 = prm.GetLength(6);
-		if (len6 <= 0)
-			len6 = 1;
-		var len7 = prm.GetLength(7);
-		if (len7 <= 0)
-			len7 = 1;
-		var len8 = prm.GetLength(8);
-		if (len8 <= 0)
-			len8 = 1;
-		var len9 = prm.GetLength(9);
-		if (len9 <= 0)
-			len9 = 1;
-		var len10 = prm.GetLength(10);
-		if (len10 <= 0)
-			len10 = 1;
-		var len11 = prm.GetLength(11);
-		if (len11 <= 0)
-			len11 = 1;
+		var len0 = prm.Length0 > 0 ? prm.Length0 : 1;
+		var len1 = prm.Length1 > 0 ? prm.Length1 : 1;
+		var len2 = prm.Length2 > 0 ? prm.Length2 : 1;
+		var len3 = prm.Length3 > 0 ? prm.Length3 : 1;
+		var len4 = prm.Length4 > 0 ? prm.Length4 : 1;
+		var len5 = prm.Length5 > 0 ? prm.Length5 : 1;
+		var len6 = prm.Length6 > 0 ? prm.Length6 : 1;
+		var len7 = prm.Length7 > 0 ? prm.Length7 : 1;
+		var len8 = prm.Length8 > 0 ? prm.Length8 : 1;
+		var len9 = prm.Length9 > 0 ? prm.Length9 : 1;
+		var len10 = prm.Length10 > 0 ? prm.Length10 : 1;
+		var len11 = prm.Length11 > 0 ? prm.Length11 : 1;
 
 		var maxLen = len0;
 		if (len1 > maxLen)
@@ -561,27 +553,12 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 			var price = ExtractPrice(candle, priceType);
 			var resIndex = paramIdx * flatCandles.Length + globalIdx;
 
-			var result = new GpuGmmaResult
-			{
-				Time = candle.Time,
-				IsFormed = 0,
-			};
-
-			var formedAll = true;
-
 			if (i < len0)
 				sum0 += price;
 			if (i == len0 - 1)
 				ema0 = sum0 / len0;
 			else if (i >= len0)
 				ema0 = (price - ema0) * mul0 + ema0;
-			if (i >= len0 - 1)
-				result.Average0 = ema0;
-			else
-			{
-				result.Average0 = float.NaN;
-				formedAll = false;
-			}
 
 			if (i < len1)
 				sum1 += price;
@@ -589,13 +566,6 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 				ema1 = sum1 / len1;
 			else if (i >= len1)
 				ema1 = (price - ema1) * mul1 + ema1;
-			if (i >= len1 - 1)
-				result.Average1 = ema1;
-			else
-			{
-				result.Average1 = float.NaN;
-				formedAll = false;
-			}
 
 			if (i < len2)
 				sum2 += price;
@@ -603,13 +573,6 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 				ema2 = sum2 / len2;
 			else if (i >= len2)
 				ema2 = (price - ema2) * mul2 + ema2;
-			if (i >= len2 - 1)
-				result.Average2 = ema2;
-			else
-			{
-				result.Average2 = float.NaN;
-				formedAll = false;
-			}
 
 			if (i < len3)
 				sum3 += price;
@@ -617,13 +580,6 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 				ema3 = sum3 / len3;
 			else if (i >= len3)
 				ema3 = (price - ema3) * mul3 + ema3;
-			if (i >= len3 - 1)
-				result.Average3 = ema3;
-			else
-			{
-				result.Average3 = float.NaN;
-				formedAll = false;
-			}
 
 			if (i < len4)
 				sum4 += price;
@@ -631,13 +587,6 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 				ema4 = sum4 / len4;
 			else if (i >= len4)
 				ema4 = (price - ema4) * mul4 + ema4;
-			if (i >= len4 - 1)
-				result.Average4 = ema4;
-			else
-			{
-				result.Average4 = float.NaN;
-				formedAll = false;
-			}
 
 			if (i < len5)
 				sum5 += price;
@@ -645,13 +594,6 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 				ema5 = sum5 / len5;
 			else if (i >= len5)
 				ema5 = (price - ema5) * mul5 + ema5;
-			if (i >= len5 - 1)
-				result.Average5 = ema5;
-			else
-			{
-				result.Average5 = float.NaN;
-				formedAll = false;
-			}
 
 			if (i < len6)
 				sum6 += price;
@@ -659,13 +601,6 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 				ema6 = sum6 / len6;
 			else if (i >= len6)
 				ema6 = (price - ema6) * mul6 + ema6;
-			if (i >= len6 - 1)
-				result.Average6 = ema6;
-			else
-			{
-				result.Average6 = float.NaN;
-				formedAll = false;
-			}
 
 			if (i < len7)
 				sum7 += price;
@@ -673,13 +608,6 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 				ema7 = sum7 / len7;
 			else if (i >= len7)
 				ema7 = (price - ema7) * mul7 + ema7;
-			if (i >= len7 - 1)
-				result.Average7 = ema7;
-			else
-			{
-				result.Average7 = float.NaN;
-				formedAll = false;
-			}
 
 			if (i < len8)
 				sum8 += price;
@@ -687,13 +615,6 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 				ema8 = sum8 / len8;
 			else if (i >= len8)
 				ema8 = (price - ema8) * mul8 + ema8;
-			if (i >= len8 - 1)
-				result.Average8 = ema8;
-			else
-			{
-				result.Average8 = float.NaN;
-				formedAll = false;
-			}
 
 			if (i < len9)
 				sum9 += price;
@@ -701,13 +622,6 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 				ema9 = sum9 / len9;
 			else if (i >= len9)
 				ema9 = (price - ema9) * mul9 + ema9;
-			if (i >= len9 - 1)
-				result.Average9 = ema9;
-			else
-			{
-				result.Average9 = float.NaN;
-				formedAll = false;
-			}
 
 			if (i < len10)
 				sum10 += price;
@@ -715,13 +629,6 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 				ema10 = sum10 / len10;
 			else if (i >= len10)
 				ema10 = (price - ema10) * mul10 + ema10;
-			if (i >= len10 - 1)
-				result.Average10 = ema10;
-			else
-			{
-				result.Average10 = float.NaN;
-				formedAll = false;
-			}
 
 			if (i < len11)
 				sum11 += price;
@@ -729,16 +636,21 @@ public class GpuGmmaCalculator : GpuIndicatorCalculatorBase<GuppyMultipleMovingA
 				ema11 = sum11 / len11;
 			else if (i >= len11)
 				ema11 = (price - ema11) * mul11 + ema11;
-			if (i >= len11 - 1)
-				result.Average11 = ema11;
-			else
-			{
-				result.Average11 = float.NaN;
-				formedAll = false;
-			}
 
-			if (formedAll && i >= maxLen - 1)
-				result.IsFormed = 1;
+			var result = default(GpuGmmaResult);
+			result.Time = candle.Time;
+			result.Average0 = i >= len0 - 1 ? ema0 : float.NaN;
+			result.Average1 = i >= len1 - 1 ? ema1 : float.NaN;
+			result.Average2 = i >= len2 - 1 ? ema2 : float.NaN;
+			result.Average3 = i >= len3 - 1 ? ema3 : float.NaN;
+			result.Average4 = i >= len4 - 1 ? ema4 : float.NaN;
+			result.Average5 = i >= len5 - 1 ? ema5 : float.NaN;
+			result.Average6 = i >= len6 - 1 ? ema6 : float.NaN;
+			result.Average7 = i >= len7 - 1 ? ema7 : float.NaN;
+			result.Average8 = i >= len8 - 1 ? ema8 : float.NaN;
+			result.Average9 = i >= len9 - 1 ? ema9 : float.NaN;
+			result.Average10 = i >= len10 - 1 ? ema10 : float.NaN;
+			result.Average11 = i >= len11 - 1 ? ema11 : float.NaN;
 
 			flatResults[resIndex] = result;
 		}

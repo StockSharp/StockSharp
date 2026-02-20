@@ -30,7 +30,7 @@ public struct GpuAroonOscillatorParams(int length) : IGpuIndicatorParams
 /// </summary>
 public class GpuAroonOscillatorCalculator : GpuIndicatorCalculatorBase<AroonOscillator, GpuAroonOscillatorParams, GpuIndicatorResult>
 {
-	private readonly Action<Index3D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuAroonOscillatorParams>> _kernel;
+	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuAroonOscillatorParams>> _kernel;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GpuAroonOscillatorCalculator"/> class.
@@ -41,7 +41,7 @@ public class GpuAroonOscillatorCalculator : GpuIndicatorCalculatorBase<AroonOsci
 		: base(context, accelerator)
 	{
 		_kernel = Accelerator.LoadAutoGroupedStreamKernel
-			<Index3D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuAroonOscillatorParams>>(AroonOscillatorParamsSeriesKernel);
+			<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuAroonOscillatorParams>>(AroonOscillatorParamsSeriesKernel);
 	}
 
 	/// <inheritdoc />
@@ -58,7 +58,6 @@ public class GpuAroonOscillatorCalculator : GpuIndicatorCalculatorBase<AroonOsci
 
 		var seriesCount = candlesSeries.Length;
 
-		// Flatten input
 		var totalSize = 0;
 		var seriesOffsets = new int[seriesCount];
 		var seriesLengths = new int[seriesCount];
@@ -72,7 +71,6 @@ public class GpuAroonOscillatorCalculator : GpuIndicatorCalculatorBase<AroonOsci
 		}
 
 		var flatCandles = new GpuCandle[totalSize];
-		var maxLen = 0;
 		var offset = 0;
 		for (var s = 0; s < seriesCount; s++)
 		{
@@ -81,8 +79,6 @@ public class GpuAroonOscillatorCalculator : GpuIndicatorCalculatorBase<AroonOsci
 			{
 				Array.Copy(candlesSeries[s], 0, flatCandles, offset, len);
 				offset += len;
-				if (len > maxLen)
-					maxLen = len;
 			}
 		}
 
@@ -92,13 +88,12 @@ public class GpuAroonOscillatorCalculator : GpuIndicatorCalculatorBase<AroonOsci
 		using var paramsBuffer = Accelerator.Allocate1D(parameters);
 		using var outputBuffer = Accelerator.Allocate1D<GpuIndicatorResult>(totalSize * parameters.Length);
 
-		var extent = new Index3D(parameters.Length, seriesCount, maxLen);
+		var extent = new Index2D(parameters.Length, seriesCount);
 		_kernel(extent, inputBuffer.View, outputBuffer.View, offsetsBuffer.View, lengthsBuffer.View, paramsBuffer.View);
 		Accelerator.Synchronize();
 
 		var flatResults = outputBuffer.GetAsArray1D();
 
-		// Re-split [series][param][bar]
 		var result = new GpuIndicatorResult[seriesCount][][];
 		for (var s = 0; s < seriesCount; s++)
 		{
@@ -121,11 +116,10 @@ public class GpuAroonOscillatorCalculator : GpuIndicatorCalculatorBase<AroonOsci
 	}
 
 	/// <summary>
-	/// ILGPU kernel: Aroon Oscillator computation for multiple series and parameter sets.
-	/// Results are stored as [param][globalIdx].
+	/// ILGPU kernel: Aroon Oscillator using incremental state machine matching CPU AroonUp/AroonDown.
 	/// </summary>
 	private static void AroonOscillatorParamsSeriesKernel(
-		Index3D index,
+		Index2D index,
 		ArrayView<GpuCandle> flatCandles,
 		ArrayView<GpuIndicatorResult> flatResults,
 		ArrayView<int> offsets,
@@ -134,55 +128,104 @@ public class GpuAroonOscillatorCalculator : GpuIndicatorCalculatorBase<AroonOsci
 	{
 		var paramIdx = index.X;
 		var seriesIdx = index.Y;
-		var candleIdx = index.Z;
-
-		var len = lengths[seriesIdx];
-		if (candleIdx >= len)
-			return;
 
 		var offset = offsets[seriesIdx];
-		var globalIdx = offset + candleIdx;
-
-		var candle = flatCandles[globalIdx];
-		var resIndex = paramIdx * flatCandles.Length + globalIdx;
-		flatResults[resIndex] = new() { Time = candle.Time, Value = float.NaN, IsFormed = 0 };
-
-		var prm = parameters[paramIdx];
-		var period = prm.Length;
-		if (period <= 0)
+		var len = lengths[seriesIdx];
+		if (len <= 0)
 			return;
 
-		if (candleIdx + 1 < period)
-			return;
+		var L = parameters[paramIdx].Length;
+		if (L <= 0)
+			L = 1;
 
-		var highest = float.NegativeInfinity;
-		var highestAge = 0;
-		var lowest = float.PositiveInfinity;
-		var lowestAge = 0;
+		var maxHigh = float.MinValue;
+		var maxAge = 0;
+		var minLow = float.MaxValue;
+		var minAge = 0;
+		var bufCount = 0;
 
-		for (var j = 0; j < period; j++)
+		for (var i = 0; i < len; i++)
 		{
-			var idx = globalIdx - j;
-			if (idx < offset)
-				break;
+			var globalIdx = offset + i;
+			var candle = flatCandles[globalIdx];
+			var resIndex = paramIdx * flatCandles.Length + globalIdx;
+			var high = candle.High;
+			var low = candle.Low;
 
-			var c = flatCandles[idx];
-
-			if (c.High >= highest)
+			// AroonUp: track max high (matches CPU >= tie-breaking)
+			if (high >= maxHigh)
 			{
-				highest = c.High;
-				highestAge = j;
+				maxHigh = high;
+				maxAge = 0;
+			}
+			else
+			{
+				maxAge++;
 			}
 
-			if (c.Low <= lowest)
+			// AroonDown: track min low (matches CPU <= tie-breaking)
+			if (low <= minLow)
 			{
-				lowest = c.Low;
-				lowestAge = j;
+				minLow = low;
+				minAge = 0;
+			}
+			else
+			{
+				minAge++;
+			}
+
+			// Buffer overflow handling (rescan when oldest value leaves window)
+			if (bufCount == L)
+			{
+				// AroonUp rescan
+				var removedHigh = flatCandles[globalIdx - L].High;
+				if (removedHigh == maxHigh)
+				{
+					maxHigh = high;
+					maxAge = 0;
+					for (var j = 1; j < L; j++)
+					{
+						var bHigh = flatCandles[globalIdx - L + j].High;
+						if (bHigh > maxHigh)
+						{
+							maxHigh = bHigh;
+							maxAge = j;
+						}
+					}
+				}
+
+				// AroonDown rescan
+				var removedLow = flatCandles[globalIdx - L].Low;
+				if (removedLow == minLow)
+				{
+					minLow = low;
+					minAge = 0;
+					for (var j = 1; j < L; j++)
+					{
+						var bLow = flatCandles[globalIdx - L + j].Low;
+						if (bLow < minLow)
+						{
+							minLow = bLow;
+							minAge = j;
+						}
+					}
+				}
+			}
+			else
+			{
+				bufCount++;
+			}
+
+			if (bufCount >= L)
+			{
+				var up = 100f * (L - maxAge) / L;
+				var down = 100f * (L - minAge) / L;
+				flatResults[resIndex] = new() { Time = candle.Time, Value = up - down, IsFormed = 1 };
+			}
+			else
+			{
+				flatResults[resIndex] = new() { Time = candle.Time, Value = float.NaN, IsFormed = 0 };
 			}
 		}
-
-		var up = 100f * (period - highestAge) / period;
-		var down = 100f * (period - lowestAge) / period;
-		flatResults[resIndex] = new() { Time = candle.Time, Value = up - down, IsFormed = 1 };
 	}
 }

@@ -241,6 +241,7 @@ public class GpuAdaptivePriceZoneCalculator : GpuIndicatorCalculatorBase<Adaptiv
 
 		float ema = 0f;
 		var emaInitialized = false;
+		byte prevFormed = 0;
 
 		for (var i = 0; i < len; i++)
 		{
@@ -292,10 +293,11 @@ public class GpuAdaptivePriceZoneCalculator : GpuIndicatorCalculatorBase<Adaptiv
 				result.MovingAverage = ema;
 				result.UpperBand = upper;
 				result.LowerBand = lower;
-				result.IsFormed = 1;
 			}
 
+			result.IsFormed = prevFormed;
 			flatResults[resIndex] = result;
+			prevFormed = (byte)(i >= period - 1 ? 1 : 0);
 		}
 	}
 }

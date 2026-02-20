@@ -315,6 +315,8 @@ public class GpuKnowSureThingCalculator : GpuIndicatorCalculatorBase<KnowSureThi
 		var kstStartIndex = roc4Len + sma4Len - 1;
 		var formedIndex = kstStartIndex + signalLen - 1;
 
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var candle = flatCandles[offset + i];
@@ -325,7 +327,7 @@ public class GpuKnowSureThingCalculator : GpuIndicatorCalculatorBase<KnowSureThi
 				Time = candle.Time,
 				Kst = float.NaN,
 				Signal = float.NaN,
-				IsFormed = 0,
+				IsFormed = prevFormed,
 			};
 
 			if (i < kstStartIndex)
@@ -351,12 +353,11 @@ public class GpuKnowSureThingCalculator : GpuIndicatorCalculatorBase<KnowSureThi
 			var signal = ComputeSignal(flatResults, baseIndex, offset, i, signalLen, kstStartIndex, kst);
 			result.Signal = signal;
 
-			if (!float.IsNaN(signal) && i >= formedIndex)
-			{
-				result.IsFormed = 1;
-			}
+			byte curFormed = (byte)((!float.IsNaN(signal) && i >= formedIndex) ? 1 : 0);
+			result.IsFormed = prevFormed;
 
 			flatResults[resIndex] = result;
+			prevFormed = curFormed;
 		}
 	}
 

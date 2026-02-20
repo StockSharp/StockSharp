@@ -272,6 +272,7 @@ public class GpuAlligatorCalculator : GpuIndicatorCalculatorBase<Alligator, GpuA
 		float jawSum = 0f, teethSum = 0f, lipsSum = 0f;
 		float jawSmma = 0f, teethSmma = 0f, lipsSmma = 0f;
 		bool jawHasSmma = false, teethHasSmma = false, lipsHasSmma = false;
+		byte prevFormed = 0;
 
 		for (var i = 0; i < len; i++)
 		{
@@ -349,8 +350,9 @@ public class GpuAlligatorCalculator : GpuIndicatorCalculatorBase<Alligator, GpuA
 
 			var currentIdx = baseIndex + i;
 			var current = flatResults[currentIdx];
-			current.IsFormed = (byte)(i >= jawLength - 1 + jawShift ? 1 : 0);
+			current.IsFormed = prevFormed;
 			flatResults[currentIdx] = current;
+			prevFormed = (byte)(i >= jawLength - 1 + jawShift ? 1 : 0);
 		}
 	}
 }

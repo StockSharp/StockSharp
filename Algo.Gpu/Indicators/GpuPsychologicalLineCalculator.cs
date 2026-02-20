@@ -130,6 +130,7 @@ public class GpuPsychologicalLineCalculator : GpuIndicatorCalculatorBase<Psychol
 
 	/// <summary>
 	/// ILGPU kernel: Psychological Line computation for multiple series and parameter sets. Results are stored as [param][globalIdx].
+	/// Uses the same incremental logic as the CPU indicator to match its behavior exactly.
 	/// </summary>
 	private static void PsychologicalLineParamsSeriesKernel(
 		Index3D index,
@@ -163,30 +164,73 @@ public class GpuPsychologicalLineCalculator : GpuIndicatorCalculatorBase<Psychol
 			return;
 		}
 
+		// Not enough bars to be formed (need L bars in buffer = L bars total)
 		if (candleIdx < L - 1)
 		{
 			flatResults[resIndex] = result;
 			return;
 		}
 
-		var upCount = 0f;
+		// Replicate CPU incremental logic by simulating the buffer state.
+		// The CPU tracks _upCount incrementally:
+		// - When buffer full and pushing new price: if Buffer[0] < Buffer[^1], _upCount--
+		// - If price > Buffer[^1], _upCount++
+		// We simulate this by iterating from the start of the window.
 		var priceType = (Level1Fields)prm.PriceType;
+		var upCount = 0;
 
-		for (var j = 0; j < L - 1; j++)
+		// Simulate the CPU's incremental processing for bars in the window.
+		// The window at candleIdx contains bars [candleIdx-L+1 .. candleIdx].
+		// We need to replay the CPU's incremental logic for the last L bars.
+		// The CPU buffer fills up over the first L bars, then slides.
+
+		// We need to simulate how the CPU processes bars from the beginning up to candleIdx.
+		// Start from bar max(0, candleIdx - L + 1) and process L bars to build the state.
+		// Actually, we need to replay from the very first bar to get the correct _upCount
+		// due to the CPU's specific removal logic (Buffer[0] < Buffer[^1]).
+
+		// The CPU's removal checks Buffer[0] (oldest) < Buffer[^1] (newest before push).
+		// We need to track a circular buffer of L prices.
+
+		// Since ILGPU doesn't support arrays, simulate using lookback into flatCandles.
+		// Process bars from the first bar up to candleIdx, maintaining upCount.
+
+		// Replay the CPU's incremental logic from the start of the series.
+		// Track buffer via indices into flatCandles.
+		var bufferCount = 0;
+		var bufferFirstIdx = offset; // global index of oldest in buffer
+		var bufferLastIdx = offset;  // global index of newest in buffer
+
+		for (var i = offset; i <= globalIdx; i++)
 		{
-			var idx1 = globalIdx - j;
-			var idx0 = idx1 - 1;
-			if (idx0 < offset)
-				break;
+			var price = ExtractPrice(flatCandles[i], priceType);
 
-			var price1 = ExtractPrice(flatCandles[idx1], priceType);
-			var price0 = ExtractPrice(flatCandles[idx0], priceType);
+			if (bufferCount == L)
+			{
+				// Buffer is full, about to push out oldest.
+				// CPU checks: if (Buffer[0] < Buffer[^1]) _upCount--
+				var oldestPrice = ExtractPrice(flatCandles[bufferFirstIdx], priceType);
+				var newestPrice = ExtractPrice(flatCandles[bufferLastIdx], priceType);
+				if (oldestPrice < newestPrice)
+					upCount--;
+				bufferFirstIdx++;
+			}
 
-			if (price1 > price0)
-				upCount++;
+			// CPU checks: if (Buffer.Count > 0 && price > Buffer[^1]) _upCount++
+			if (bufferCount > 0)
+			{
+				var lastPrice = ExtractPrice(flatCandles[bufferLastIdx], priceType);
+				if (price > lastPrice)
+					upCount++;
+			}
+
+			// Buffer.PushBack(price)
+			bufferLastIdx = i;
+			if (bufferCount < L)
+				bufferCount++;
 		}
 
-		result.Value = upCount / L;
+		result.Value = (float)upCount / L;
 		result.IsFormed = 1;
 
 		flatResults[resIndex] = result;

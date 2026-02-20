@@ -277,15 +277,17 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 		int slowLen = prm.SlowSmaLength <= 0 ? 1 : prm.SlowSmaLength;
 		var priceType = (Level1Fields)prm.PriceType;
 
-		// RSI state (Wilder)
+		// RSI state (SMMA)
 		float prevPrice = ExtractPrice(flatCandles[offset], priceType);
 		float gainSum = 0f, lossSum = 0f;
 		float avgGain = 0f, avgLoss = 0f;
+		float prevRsi = float.NaN;
 
 		// Short RSI state
 		float prevPriceShort = prevPrice;
 		float gainSumS = 0f, lossSumS = 0f;
 		float avgGainS = 0f, avgLossS = 0f;
+		float prevShortRsi = float.NaN;
 
 		// ROC window over RSI
 		var rocBase = (paramIdx * lengths.Length + seriesIdx) * maxRoc;
@@ -309,6 +311,8 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 		int slowCount = 0, slowHead = 0;
 		float slowSum = 0f;
 
+		byte prevFormed = 0;
+
 		for (int i = 0; i < len; i++)
 		{
 			var c = flatCandles[offset + i];
@@ -325,7 +329,8 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 
 			var price = ExtractPrice(c, priceType);
 
-			// RSI
+			// RSI - produce from bar 1 (matching CPU SMMA: Buffer.Sum/Length from start)
+			// CPU formula: rsi = 100 * avgGain / (avgGain + avgLoss); when sum==0 returns prevResult ?? 50
 			float rsi = float.NaN;
 			if (i > 0)
 			{
@@ -337,11 +342,8 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 				{
 					gainSum += gain;
 					lossSum += loss;
-					if (i == rsiLen)
-					{
-						avgGain = gainSum / rsiLen;
-						avgLoss = lossSum / rsiLen;
-					}
+					avgGain = gainSum / rsiLen;
+					avgLoss = lossSum / rsiLen;
 				}
 				else
 				{
@@ -349,11 +351,17 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 					avgLoss = (avgLoss * (rsiLen - 1) + loss) / rsiLen;
 				}
 
-				if (i >= rsiLen)
-					rsi = avgLoss == 0f ? 100f : (100f - 100f / (1f + (avgGain / avgLoss)));
+				var sum = avgGain + avgLoss;
+				if (sum == 0f)
+					rsi = float.IsNaN(prevRsi) ? 50f : prevRsi;
+				else
+					rsi = 100f * avgGain / sum;
+
+				prevRsi = rsi;
 			}
 
-			// Short RSI
+			// Short RSI - produce from bar 1
+			// CPU formula: rsi = 100 * avgGain / (avgGain + avgLoss); when sum==0 returns prevResult ?? 50
 			float shortRsi = float.NaN;
 			if (i > 0)
 			{
@@ -365,11 +373,8 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 				{
 					gainSumS += gainS;
 					lossSumS += lossS;
-					if (i == shortLen)
-					{
-						avgGainS = gainSumS / shortLen;
-						avgLossS = lossSumS / shortLen;
-					}
+					avgGainS = gainSumS / shortLen;
+					avgLossS = lossSumS / shortLen;
 				}
 				else
 				{
@@ -377,27 +382,28 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 					avgLossS = (avgLossS * (shortLen - 1) + lossS) / shortLen;
 				}
 
-				if (i >= shortLen)
-					shortRsi = avgLossS == 0f ? 100f : (100f - 100f / (1f + (avgGainS / avgLossS)));
+				var sumS = avgGainS + avgLossS;
+				if (sumS == 0f)
+					shortRsi = float.IsNaN(prevShortRsi) ? 50f : prevShortRsi;
+				else
+					shortRsi = 100f * avgGainS / sumS;
+
+				prevShortRsi = shortRsi;
 			}
 
-			// ROC over RSI
+			// ROC over RSI: CPU ROC = (current - oldest) / oldest * 100
 			float rsiRoc = float.NaN;
 			if (!float.IsNaN(rsi))
 			{
 				if (rocCount < rocLen)
 				{
-					if (rocCount == rocLen - 1)
-					{
-						// can compute on next iteration when buffer is full
-					}
 					rocWindow[rocCount] = rsi;
 					rocCount++;
 				}
 				else
 				{
 					var old = rocWindow[rocHead];
-					rsiRoc = rsi - old;
+					rsiRoc = old == 0f ? 0f : (rsi - old) / old * 100f;
 					rocWindow[rocHead] = rsi;
 					rocHead++;
 					if (rocHead == rocLen) rocHead = 0;
@@ -427,9 +433,11 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 					rsiMom = momSum / momLen;
 			}
 
-			// Composite
+			// Composite: CPU only computes when all 4 sub-indicators are formed
+			// _rsi.IsFormed at bar rsiLen, _shortRsi.IsFormed at bar shortLen,
+			// _rsiRoc.IsFormed when ROC buffer full, _rsiMomentum.IsFormed when SMA buffer full
 			float composite = float.NaN;
-			if (!float.IsNaN(rsiRoc) && !float.IsNaN(rsiMom))
+			if (i >= rsiLen && i >= shortLen && !float.IsNaN(rsiRoc) && !float.IsNaN(rsiMom))
 				composite = rsiRoc + rsiMom;
 
 			// Fast SMA over composite
@@ -481,8 +489,16 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 			outVal.Composite = composite;
 			outVal.Fast = fast;
 			outVal.Slow = slow;
-			outVal.IsFormed = (!float.IsNaN(fast) && !float.IsNaN(slow)) ? (byte)1 : (byte)0;
+
+			// CPU: IsFormed is captured BEFORE OnProcess sets it (one-bar delay pattern).
+			// The result's IsFormed = indicator.IsFormed at construction time,
+			// then OnProcess sets indicator.IsFormed = true when FastSma && SlowSma are formed.
+			// So the result at the transition bar has IsFormed=false, next bar has IsFormed=true.
+			outVal.IsFormed = prevFormed;
 			flatResults[resIndex] = outVal;
+
+			if (prevFormed == 0 && !float.IsNaN(fast) && !float.IsNaN(slow))
+				prevFormed = 1;
 
 			prevPrice = price;
 			prevPriceShort = price;

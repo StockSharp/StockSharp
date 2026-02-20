@@ -219,53 +219,79 @@ public class GpuRelativeVigorIndexCalculator : GpuIndicatorCalculatorBase<Relati
 		if (signalLength < 4)
 			signalLength = 4;
 
-		float rvi0 = 0f, rvi1 = 0f, rvi2 = 0f, rvi3 = 0f;
-		var rviCount = 0;
+		var avgValidCount = 0;
+
+		byte prevFormed = 0;
 
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
 			var candle = flatCandles[globalIdx];
 
+			var resIndex = paramIdx * flatCandles.Length + globalIdx;
+
 			var averageValue = float.NaN;
 			var signalValue = float.NaN;
-			byte isFormed = 0;
+			byte curFormed = 0;
 
-			if (i >= avgLength - 1 && i >= 3)
+			// CPU RelativeVigorIndexAverage has a candle buffer of capacity avgLength.
+			// It becomes formed when _buffer.Count >= avgLength (i.e., at bar avgLength-1).
+			// When formed, it uses _buffer[0..3]: the 4 OLDEST candles in the circular buffer.
+			// _buffer[0] = candle at (i - avgLength + 1), etc.
+			if (i >= avgLength - 1)
 			{
-				var c0 = flatCandles[globalIdx - 3];
-				var c1 = flatCandles[globalIdx - 2];
-				var c2 = flatCandles[globalIdx - 1];
-				var c3 = candle;
+				var j = offset + i - avgLength + 1; // oldest candle in buffer
+				var c0 = flatCandles[j];
+				var c1 = flatCandles[j + 1];
+				var c2 = flatCandles[j + 2];
+				var c3 = flatCandles[j + 3];
 
 				var valueUp = ((c0.Close - c0.Open) + 2f * (c1.Close - c1.Open) + 2f * (c2.Close - c2.Open) + (c3.Close - c3.Open)) / 6f;
 				var valueDn = ((c0.High - c0.Low) + 2f * (c1.High - c1.Low) + 2f * (c2.High - c2.Low) + (c3.High - c3.Low)) / 6f;
 
 				averageValue = valueDn == 0f ? valueUp : valueUp / valueDn;
 
-				rvi0 = rvi1;
-				rvi1 = rvi2;
-				rvi2 = rvi3;
-				rvi3 = averageValue;
-
-				if (rviCount < signalLength)
-					rviCount++;
-
-				if (rviCount >= signalLength)
+				// Store average in result for signal lookback
+				flatResults[resIndex] = new GpuRelativeVigorIndexResult
 				{
-					signalValue = (rvi0 + 2f * rvi1 + 2f * rvi2 + rvi3) / 6f;
-					isFormed = 1;
+					Time = candle.Time,
+					Average = averageValue,
+					Signal = float.NaN,
+					IsFormed = 0,
+				};
+
+				avgValidCount++;
+
+				// CPU RelativeVigorIndexSignal has Buffer of capacity signalLength.
+				// Formed when Buffer.Count >= signalLength. Uses Buffer[0..3] (oldest 4 values).
+				if (avgValidCount >= signalLength)
+				{
+					// Look back to find the 4 oldest Average values in the signal window
+					var signalStart = i - signalLength + 1; // oldest bar in signal window (relative)
+					// That bar's Average is at avgLength-1 offset from series start
+					var idx0 = paramIdx * flatCandles.Length + (offset + signalStart);
+					var idx1 = paramIdx * flatCandles.Length + (offset + signalStart + 1);
+					var idx2 = paramIdx * flatCandles.Length + (offset + signalStart + 2);
+					var idx3 = paramIdx * flatCandles.Length + (offset + signalStart + 3);
+
+					var v0 = flatResults[idx0].Average;
+					var v1 = flatResults[idx1].Average;
+					var v2 = flatResults[idx2].Average;
+					var v3 = flatResults[idx3].Average;
+
+					signalValue = (v0 + 2f * v1 + 2f * v2 + v3) / 6f;
+					curFormed = 1;
 				}
 			}
 
-			var resIndex = paramIdx * flatCandles.Length + globalIdx;
 			flatResults[resIndex] = new GpuRelativeVigorIndexResult
 			{
 				Time = candle.Time,
-				Average = isFormed == 1 ? averageValue : float.NaN,
-				Signal = isFormed == 1 ? signalValue : float.NaN,
-				IsFormed = isFormed,
+				Average = averageValue,
+				Signal = curFormed == 1 ? signalValue : float.NaN,
+				IsFormed = prevFormed,
 			};
+			prevFormed = curFormed;
 		}
 	}
 }

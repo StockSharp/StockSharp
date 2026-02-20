@@ -260,8 +260,16 @@ public class GpuWoodiesCciCalculator : GpuIndicatorCalculatorBase<WoodiesCCI, Gp
 		var cciLength = prm.CciLength;
 		var smaLength = prm.SmaLength;
 
-		var cciValue = ComputeCci(flatCandles, globalIdx, cciLength, out var cciIsFormed);
-		var smaValue = ComputeSmaOfCci(flatCandles, globalIdx, cciLength, smaLength, cciValue, cciIsFormed, out var smaIsFormed);
+		var cciValue = ComputeCci(flatCandles, globalIdx, offset, cciLength, out var cciIsFormed);
+		var smaValue = ComputeSmaOfCci(flatCandles, globalIdx, offset, cciLength, smaLength, cciValue, cciIsFormed, out var smaIsFormed);
+
+		byte prevFormed = 0;
+		if (candleIdx > 0)
+		{
+			var prevGlobalIdx = globalIdx - 1;
+			var prevCci = ComputeCci(flatCandles, prevGlobalIdx, offset, cciLength, out var prevCciIsFormed);
+			ComputeSmaOfCci(flatCandles, prevGlobalIdx, offset, cciLength, smaLength, prevCci, prevCciIsFormed, out prevFormed);
+		}
 
 		flatResults[resIndex] = new()
 		{
@@ -270,18 +278,19 @@ public class GpuWoodiesCciCalculator : GpuIndicatorCalculatorBase<WoodiesCCI, Gp
 			Sma = smaValue,
 			CciIsFormed = cciIsFormed,
 			SmaIsFormed = smaIsFormed,
-			IsFormed = smaIsFormed,
+			IsFormed = prevFormed,
 		};
 	}
 
-	private static float ComputeCci(ArrayView<GpuCandle> candles, int globalIdx, int cciLength, out byte isFormed)
+	private static float ComputeCci(ArrayView<GpuCandle> candles, int globalIdx, int offset, int cciLength, out byte isFormed)
 	{
 		isFormed = 0;
 
-		if (cciLength <= 0 || globalIdx < 0)
+		var candleIdx = globalIdx - offset;
+		if (cciLength <= 0 || candleIdx < 0)
 			return float.NaN;
 
-		if (globalIdx < cciLength - 1)
+		if (candleIdx < cciLength - 1)
 			return float.NaN;
 
 		var sum = 0f;
@@ -308,6 +317,7 @@ public class GpuWoodiesCciCalculator : GpuIndicatorCalculatorBase<WoodiesCCI, Gp
 	private static float ComputeSmaOfCci(
 		ArrayView<GpuCandle> candles,
 		int globalIdx,
+		int offset,
 		int cciLength,
 		int smaLength,
 		float currentCci,
@@ -328,15 +338,16 @@ public class GpuWoodiesCciCalculator : GpuIndicatorCalculatorBase<WoodiesCCI, Gp
 		if (currentCciIsFormed == 0)
 			return float.NaN;
 
+		var candleIdx = globalIdx - offset;
 		var minIndex = cciLength - 1 + (smaLength - 1);
-		if (globalIdx < minIndex)
+		if (candleIdx < minIndex)
 			return float.NaN;
 
 		var sum = currentCci;
 		for (var i = 1; i < smaLength; i++)
 		{
 			var idx = globalIdx - i;
-			var cciValue = ComputeCci(candles, idx, cciLength, out var cciIsFormed);
+			var cciValue = ComputeCci(candles, idx, offset, cciLength, out var cciIsFormed);
 			if (cciIsFormed == 0 || float.IsNaN(cciValue))
 				return float.NaN;
 

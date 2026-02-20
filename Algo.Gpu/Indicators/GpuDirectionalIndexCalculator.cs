@@ -204,6 +204,7 @@ public class GpuDirectionalIndexCalculator : GpuIndicatorCalculatorBase<Directio
 	/// <summary>
 	/// ILGPU kernel: Directional Index computation for multiple series and parameter sets.
 	/// One thread handles one (parameter, series) pair and iterates bars sequentially.
+	/// Matches CPU algorithm: ATR = WilderMA(TrueRange), DI = 100 * WilderMA(DM) / ATR.
 	/// </summary>
 	private static void DirectionalIndexParamsSeriesKernel(
 		Index2D index,
@@ -229,11 +230,23 @@ public class GpuDirectionalIndexCalculator : GpuIndicatorCalculatorBase<Directio
 			length = 1;
 		}
 
-		float trSum = 0f, dmPlusSum = 0f, dmMinusSum = 0f;
-		float trSmooth = 0f, dmPlusSmooth = 0f, dmMinusSmooth = 0f;
+		// WilderMA state for ATR (starts from bar 0)
+		float atrValue = 0f;
+		int atrCount = 0;
+
+		// WilderMA state for +DM and -DM (starts from bar 1, when prevCandle is available)
+		float dmPlusMa = 0f;
+		float dmMinusMa = 0f;
+		int dmCount = 0;
+
 		float prevClose = flatCandles[offset].Close;
 		float prevHigh = flatCandles[offset].High;
 		float prevLow = flatCandles[offset].Low;
+
+		// Track whether ATR and DM MAs were formed BEFORE current bar processing (1-bar delay)
+		byte atrWasFormed = 0;
+		byte dmWasFormed = 0;
+		byte prevFormed = 0;
 
 		for (var i = 0; i < len; i++)
 		{
@@ -242,50 +255,60 @@ public class GpuDirectionalIndexCalculator : GpuIndicatorCalculatorBase<Directio
 			var low = candle.Low;
 			var close = candle.Close;
 
-			var upMove = high - prevHigh;
-			var downMove = prevLow - low;
-			var plusDm = (upMove > downMove && upMove > 0f) ? upMove : 0f;
-			var minusDm = (downMove > upMove && downMove > 0f) ? downMove : 0f;
+			// Check formed state from PREVIOUS bar (before processing current bar)
+			byte curFormed = (byte)(atrWasFormed == 1 && dmWasFormed == 1 ? 1 : 0);
 
-			var tr1 = high - low;
-			var tr2 = MathF.Abs(high - prevClose);
-			var tr3 = MathF.Abs(low - prevClose);
-			var tr = MathF.Max(tr1, MathF.Max(tr2, tr3));
+			// Compute TrueRange (matches CPU TrueRange)
+			float tr;
+			if (i == 0)
+			{
+				tr = high - low;
+			}
+			else
+			{
+				var tr1 = high - low;
+				var tr2 = MathF.Abs(high - prevClose);
+				var tr3 = MathF.Abs(low - prevClose);
+				tr = MathF.Max(tr1, MathF.Max(tr2, tr3));
+			}
+
+			// WilderMA for ATR: (prevValue * (count-1) + newValue) / count
+			atrCount++;
+			var atrN = atrCount < length ? atrCount : length;
+			atrValue = (atrValue * (atrN - 1) + tr) / atrN;
 
 			var resIndex = paramIdx * flatCandles.Length + (offset + i);
-			flatResults[resIndex] = new()
-			{
-				Time = candle.Time,
-				Dx = float.NaN,
-				PlusDi = float.NaN,
-				MinusDi = float.NaN,
-				IsFormed = 0,
-			};
 
-			if (i < length)
+			if (i == 0)
 			{
-				trSum += tr;
-				dmPlusSum += plusDm;
-				dmMinusSum += minusDm;
+				// Bar 0: no previous candle, DI not computed yet
+				flatResults[resIndex] = new()
+				{
+					Time = candle.Time,
+					Dx = float.NaN,
+					PlusDi = float.NaN,
+					MinusDi = float.NaN,
+					IsFormed = prevFormed,
+				};
 			}
+			else
+			{
+				// Compute DM+ and DM- (matches CPU DiPlus/DiMinus)
+				var upMove = high - prevHigh;
+				var downMove = prevLow - low;
+				var plusDm = (upMove > downMove && upMove > 0f) ? upMove : 0f;
+				var minusDm = (downMove > upMove && downMove > 0f) ? downMove : 0f;
 
-			if (i == length - 1)
-			{
-				trSmooth = trSum;
-				dmPlusSmooth = dmPlusSum;
-				dmMinusSmooth = dmMinusSum;
-			}
-			else if (i >= length)
-			{
-				trSmooth = trSmooth - (trSmooth / length) + tr;
-				dmPlusSmooth = dmPlusSmooth - (dmPlusSmooth / length) + plusDm;
-				dmMinusSmooth = dmMinusSmooth - (dmMinusSmooth / length) + minusDm;
-			}
+				// WilderMA for DM+ and DM-
+				dmCount++;
+				var dmN = dmCount < length ? dmCount : length;
+				dmPlusMa = (dmPlusMa * (dmN - 1) + plusDm) / dmN;
+				dmMinusMa = (dmMinusMa * (dmN - 1) + minusDm) / dmN;
 
-			if (i >= length - 1)
-			{
-				var plusDi = trSmooth > 0f ? 100f * (dmPlusSmooth / trSmooth) : 0f;
-				var minusDi = trSmooth > 0f ? 100f * (dmMinusSmooth / trSmooth) : 0f;
+				// Compute DI values
+				var plusDi = atrValue > 0f ? 100f * dmPlusMa / atrValue : 0f;
+				var minusDi = atrValue > 0f ? 100f * dmMinusMa / atrValue : 0f;
+
 				var diSum = plusDi + minusDi;
 				var diDiff = MathF.Abs(plusDi - minusDi);
 				var dx = diSum > 0f ? 100f * diDiff / diSum : 0f;
@@ -296,10 +319,15 @@ public class GpuDirectionalIndexCalculator : GpuIndicatorCalculatorBase<Directio
 					Dx = dx,
 					PlusDi = plusDi,
 					MinusDi = minusDi,
-					IsFormed = 1,
+					IsFormed = prevFormed,
 				};
 			}
 
+			// Update formed tracking AFTER processing (for next bar's prevFormed)
+			atrWasFormed = (byte)(atrCount >= length ? 1 : 0);
+			dmWasFormed = (byte)(dmCount >= length ? 1 : 0);
+
+			prevFormed = curFormed;
 			prevClose = close;
 			prevHigh = high;
 			prevLow = low;

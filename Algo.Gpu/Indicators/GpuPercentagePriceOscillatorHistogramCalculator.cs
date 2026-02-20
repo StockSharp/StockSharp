@@ -309,7 +309,7 @@ public class GpuPercentagePriceOscillatorHistogramCalculator : GpuIndicatorCalcu
 				SignalIsFormed = 0,
 			};
 
-			if (longCount >= longLen)
+			if (shortCount >= shortLen && longCount >= longLen)
 			{
 				result.PpoIsFormed = 1;
 				var denominator = longEma;

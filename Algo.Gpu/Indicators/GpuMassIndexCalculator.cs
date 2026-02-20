@@ -210,7 +210,9 @@ public class GpuMassIndexCalculator : GpuIndicatorCalculatorBase<MassIndex, GpuM
 				}
 				else
 				{
-					singleValue = singleInitSum / singleInitCount;
+					// CPU EMA returns Buffer.Sum / Length during initialization,
+					// always dividing by Length (not by current count).
+					singleValue = singleInitSum / emaLength;
 				}
 			}
 			else

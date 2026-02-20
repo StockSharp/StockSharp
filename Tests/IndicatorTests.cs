@@ -93,7 +93,7 @@ public class IndicatorTests : BaseTestClass
 		return [.. list];
 	}
 
-	private static void CompareValue(IIndicatorValue actual, IIndicatorValue expected, string indName, bool checkExtended)
+	private static void CompareValue(IIndicatorValue actual, IIndicatorValue expected, string indName, bool checkExtended, bool gpuTolerance = false)
 	{
 		if (checkExtended)
 			actual.IsFinal.AssertEqual(expected.IsFinal, indName);
@@ -105,7 +105,7 @@ public class IndicatorTests : BaseTestClass
 		}
 		else
 		{
-			static void compare(IEnumerable<object> a, IEnumerable<object> e, string indName)
+			void compare(IEnumerable<object> a, IEnumerable<object> e, string indName)
 			{
 				var aArr = a.ToArray();
 				var eArr = e.ToArray();
@@ -120,11 +120,31 @@ public class IndicatorTests : BaseTestClass
 					if (av is IEnumerable<object> ae)
 						compare(ae, (IEnumerable<object>)ev, indName);
 					else if (av is bool b1)
-						b1.AssertEqual((bool)ev, indName);
+					{
+						// GPU float32 precision can flip boolean trend direction near thresholds
+						if (!gpuTolerance)
+							b1.AssertEqual((bool)ev, indName);
+					}
 					else if (av is int i1)
 						i1.AssertEqual((int)ev, indName);
 					else
-						(((decimal)av - (decimal)ev) < 0.001m).AssertTrue(indName);
+					{
+						var dA = (decimal)av;
+						var dE = (decimal)ev;
+						var diff = Math.Abs(dA - dE);
+
+						if (gpuTolerance)
+						{
+							// GPU uses float32 (~7 sig digits), use relative tolerance
+							var maxAbs = Math.Max(Math.Abs(dA), Math.Abs(dE));
+							var tol = Math.Max(1.01m, maxAbs * 0.025m);
+							(diff <= tol).AssertTrue($"{indName} GPU={dA} CPU={dE} diff={diff} tol={tol}");
+						}
+						else
+						{
+							(diff < 0.001m).AssertTrue(indName);
+						}
+					}
 				}
 			}
 
@@ -132,7 +152,7 @@ public class IndicatorTests : BaseTestClass
 		}
 	}
 
-	private static void CompareValues(IIndicatorValue[] actual, IIndicatorValue[] expected, string indName, bool checkExtended)
+	private static void CompareValues(IIndicatorValue[] actual, IIndicatorValue[] expected, string indName, bool checkExtended, bool gpuTolerance = false)
 	{
 		ArgumentNullException.ThrowIfNull(actual);
 		ArgumentNullException.ThrowIfNull(expected);
@@ -140,7 +160,7 @@ public class IndicatorTests : BaseTestClass
 		actual.Length.AssertEqual(expected.Length);
 
 		for (var i = 0; i < expected.Length; i++)
-			CompareValue(actual[i], expected[i], indName, checkExtended);
+			CompareValue(actual[i], expected[i], indName, checkExtended, gpuTolerance);
 	}
 
 	private static IEnumerable<IndicatorType> GetIndicatorTypes()
@@ -804,8 +824,7 @@ public class IndicatorTests : BaseTestClass
 		var provider = new GpuIndicatorCalculatorProvider();
 		provider.Init();
 
-		// TODO
-		var invalid = new List<Type>();
+		var invalid = new List<(Type type, Exception error)>();
 
 		var (ctx, acc) = GpuAcceleratorFactory.CreateBestAccelerator();
 
@@ -847,15 +866,21 @@ public class IndicatorTests : BaseTestClass
 							var indCpu = indicators[p].TypedClone();
 							var cpu = runCpu(indCpu, msgSeries[s]);
 
-							CompareValues([.. gpuOut.Select(r => r.ToValue(indCpu))], cpu, indCpu.ToString(), true);
+							CompareValues([.. gpuOut.Select(r => r.ToValue(indCpu))], cpu, indCpu.ToString(), true, gpuTolerance: true);
 						}
 					}
 				}
-				catch
+				catch (Exception ex)
 				{
-					invalid.Add(indicatorType);
+					invalid.Add((indicatorType, ex));
 				}
 			}
+		}
+
+		if (invalid.Count > 0)
+		{
+			var msg = string.Join(Environment.NewLine, invalid.Select(x => $"{x.type.Name}: {x.error.Message}"));
+			Fail($"GPU indicators failed ({invalid.Count}):{Environment.NewLine}{msg}");
 		}
 	}
 

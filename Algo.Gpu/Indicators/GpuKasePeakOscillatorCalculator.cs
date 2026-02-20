@@ -247,6 +247,8 @@ public class GpuKasePeakOscillatorCalculator : GpuIndicatorCalculatorBase<KasePe
 
 		var totalCandles = flatCandles.Length;
 
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
@@ -336,13 +338,15 @@ public class GpuKasePeakOscillatorCalculator : GpuIndicatorCalculatorBase<KasePe
 
 				var shortFormed = (byte)(shortCount >= shortPeriod ? 1 : 0);
 				var longFormed = (byte)(longCount >= longPeriod ? 1 : 0);
-				var isFormed = (byte)((shortFormed != 0 && longFormed != 0) ? 1 : 0);
+				var curFormed = (byte)((shortFormed != 0 && longFormed != 0) ? 1 : 0);
 
 				result.ShortTerm = shortOsc;
 				result.LongTerm = longOsc;
 				result.ShortIsFormed = shortFormed;
 				result.LongIsFormed = longFormed;
-				result.IsFormed = isFormed;
+				result.IsFormed = prevFormed;
+
+				prevFormed = curFormed;
 			}
 
 			flatResults[resIndex] = result;

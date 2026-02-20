@@ -244,11 +244,15 @@ public class GpuFractalsCalculator : GpuIndicatorCalculatorBase<Fractals, GpuFra
 		var counterUp = 0;
 		var counterDown = 0;
 
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
 			var candle = flatCandles[globalIdx];
 			var resIndex = paramIdx * flatCandles.Length + globalIdx;
+
+			byte curFormed = (byte)(validWindow && (i + 1) >= window ? 1 : 0);
 
 			var result = new GpuFractalsResult
 			{
@@ -257,12 +261,13 @@ public class GpuFractalsCalculator : GpuIndicatorCalculatorBase<Fractals, GpuFra
 				Down = float.NaN,
 				UpShift = half,
 				DownShift = half,
-				IsFormed = (byte)(validWindow && (i + 1) >= window ? 1 : 0),
+				IsFormed = prevFormed,
 			};
 
 			if (!validWindow)
 			{
 				flatResults[resIndex] = result;
+				prevFormed = curFormed;
 				continue;
 			}
 
@@ -336,6 +341,7 @@ public class GpuFractalsCalculator : GpuIndicatorCalculatorBase<Fractals, GpuFra
 			}
 
 			flatResults[resIndex] = result;
+			prevFormed = curFormed;
 		}
 	}
 }

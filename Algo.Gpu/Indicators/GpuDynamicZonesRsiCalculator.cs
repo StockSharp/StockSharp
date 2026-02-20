@@ -168,6 +168,9 @@ public class GpuDynamicZonesRsiCalculator : GpuIndicatorCalculatorBase<DynamicZo
 		float sumGain = 0f, sumLoss = 0f;
 		float avgGain = 0f, avgLoss = 0f;
 		float prevValue = ExtractPrice(flatCandles[offset], priceType);
+		float prevRsi = 50f;
+
+		byte prevFormed = 0;
 
 		for (var i = 0; i < len; i++)
 		{
@@ -175,11 +178,14 @@ public class GpuDynamicZonesRsiCalculator : GpuIndicatorCalculatorBase<DynamicZo
 			var value = ExtractPrice(candle, priceType);
 
 			var resIndex = paramIdx * flatCandles.Length + (offset + i);
-			flatResults[resIndex] = new() { Time = candle.Time, Value = float.NaN, IsFormed = 0 };
+			flatResults[resIndex] = new() { Time = candle.Time, Value = float.NaN, IsFormed = prevFormed };
 			rsiBuffer[resIndex] = float.NaN;
+
+			byte curFormed = (byte)(i >= 2 * L - 2 ? 1 : 0);
 
 			if (i == 0)
 			{
+				prevFormed = curFormed;
 				prevValue = value;
 				continue;
 			}
@@ -207,19 +213,16 @@ public class GpuDynamicZonesRsiCalculator : GpuIndicatorCalculatorBase<DynamicZo
 
 			if (i >= L)
 			{
+				// CPU formula: rsi = 100 * avgGain / (avgGain + avgLoss)
+				// When sum == 0 (no movement): return prevResult ?? 50
+				var rsiSum = avgGain + avgLoss;
 				float rsi;
-				if (avgLoss == 0f)
-				{
-					rsi = 100f;
-				}
+				if (rsiSum == 0f)
+					rsi = prevRsi;
 				else
-				{
-					var ratio = avgGain / avgLoss;
-					if (ratio == 1f)
-						rsi = 0f;
-					else
-						rsi = 100f - 100f / (1f + ratio);
-				}
+					rsi = 100f * avgGain / rsiSum;
+
+				prevRsi = rsi;
 
 				rsiBuffer[resIndex] = rsi;
 
@@ -243,14 +246,9 @@ public class GpuDynamicZonesRsiCalculator : GpuIndicatorCalculatorBase<DynamicZo
 
 				var dynamicOversold = min + (max - min) * (prm.OversoldLevel / 100f);
 				var dynamicOverbought = min + (max - min) * (prm.OverboughtLevel / 100f);
-				var range = dynamicOverbought - dynamicOversold;
 
 				float dynamicRsi;
-				if (range <= 0f)
-				{
-					dynamicRsi = rsi >= dynamicOverbought ? 100f : 0f;
-				}
-				else if (rsi <= dynamicOversold)
+				if (rsi <= dynamicOversold)
 				{
 					dynamicRsi = 0f;
 				}
@@ -260,12 +258,13 @@ public class GpuDynamicZonesRsiCalculator : GpuIndicatorCalculatorBase<DynamicZo
 				}
 				else
 				{
-					dynamicRsi = (rsi - dynamicOversold) / range * 100f;
+					dynamicRsi = (rsi - dynamicOversold) / (dynamicOverbought - dynamicOversold) * 100f;
 				}
 
-				flatResults[resIndex] = new() { Time = candle.Time, Value = dynamicRsi, IsFormed = 1 };
+				flatResults[resIndex] = new() { Time = candle.Time, Value = dynamicRsi, IsFormed = prevFormed };
 			}
 
+			prevFormed = curFormed;
 			prevValue = value;
 		}
 	}

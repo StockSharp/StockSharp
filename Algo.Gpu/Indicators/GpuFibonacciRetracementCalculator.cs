@@ -231,7 +231,9 @@ public class GpuFibonacciRetracementCalculator : GpuIndicatorCalculatorBase<Fibo
 				lowest = c.Low;
 		}
 
-		var formed = candleIdx >= lookback - 1 ? (byte)1 : (byte)0;
+		// Complex indicator delay: FibonacciLevel inner indicators become formed at bar 0,
+		// but value captures IsFormed before inner processing, so formed at bar 1.
+		var formed = candleIdx >= 1 ? (byte)1 : (byte)0;
 
 		flatResults[resIndex] = new GpuFibonacciRetracementResult
 		{

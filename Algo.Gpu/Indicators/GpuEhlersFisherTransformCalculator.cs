@@ -212,6 +212,7 @@ public class GpuEhlersFisherTransformCalculator : GpuIndicatorCalculatorBase<Ehl
 		var prevValue = 0f;
 		var currValue = 0f;
 		var totalCandles = flatCandles.Length;
+		byte prevFormed = 0;
 
 		for (var i = 0; i < len; i++)
 		{
@@ -263,13 +264,14 @@ public class GpuEhlersFisherTransformCalculator : GpuIndicatorCalculatorBase<Ehl
 
 				result.MainLine = fisher;
 				result.TriggerLine = currValue;
-				result.IsFormed = 1;
 
 				prevValue = value;
 				currValue = fisher;
 			}
 
+			result.IsFormed = prevFormed;
 			flatResults[resIndex] = result;
+			prevFormed = (byte)(i >= L - 1 ? 1 : 0);
 		}
 	}
 }

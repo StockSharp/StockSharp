@@ -148,31 +148,24 @@ public class GpuRelativeVigorIndexAverageCalculator : GpuIndicatorCalculatorBase
 
 		var prm = parameters[paramIdx];
 		var L = prm.Length;
-		if (L <= 0)
-			return;
+		if (L < 4)
+			L = 4;
 
 		if (candleIdx < L - 1)
 			return;
 
-		var start = globalIdx - (L - 1);
-		var weightSum = 0f;
-		var sumUp = 0f;
-		var sumDn = 0f;
-		for (var j = 0; j < L; j++)
-		{
-			var weight = (j == 0 || j == L - 1) ? 1f : 2f;
-			var c = flatCandles[start + j];
-			sumUp += weight * (c.Close - c.Open);
-			sumDn += weight * (c.High - c.Low);
-			weightSum += weight;
-		}
+		// CPU uses circular buffer of capacity L. buffer[0..3] = 4 oldest candles.
+		// Weighted average: (c0 + 2*c1 + 2*c2 + c3) / 6
+		var j = offset + candleIdx - L + 1; // oldest candle in buffer window
+		var c0 = flatCandles[j];
+		var c1 = flatCandles[j + 1];
+		var c2 = flatCandles[j + 2];
+		var c3 = flatCandles[j + 3];
 
-		if (weightSum <= 0f)
-			return;
+		var valueUp = ((c0.Close - c0.Open) + 2f * (c1.Close - c1.Open) + 2f * (c2.Close - c2.Open) + (c3.Close - c3.Open)) / 6f;
+		var valueDn = ((c0.High - c0.Low) + 2f * (c1.High - c1.Low) + 2f * (c2.High - c2.Low) + (c3.High - c3.Low)) / 6f;
 
-		var avgUp = sumUp / weightSum;
-		var avgDn = sumDn / weightSum;
-		var value = avgDn == 0f ? avgUp : avgUp / avgDn;
+		var value = valueDn == 0f ? valueUp : valueUp / valueDn;
 
 		flatResults[resIndex] = new() { Time = candle.Time, Value = value, IsFormed = 1 };
 	}

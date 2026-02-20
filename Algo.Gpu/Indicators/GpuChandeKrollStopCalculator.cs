@@ -221,6 +221,11 @@ public class GpuChandeKrollStopCalculator : GpuIndicatorCalculatorBase<ChandeKro
 		var stopPeriod = param.StopPeriod;
 		var multiplier = param.Multiplier;
 
+		// Running SMA state for stop levels
+		float smaHighSum = 0f;
+		float smaLowSum = 0f;
+		var smaCount = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
@@ -235,45 +240,83 @@ public class GpuChandeKrollStopCalculator : GpuIndicatorCalculatorBase<ChandeKro
 				IsFormed = 0
 			};
 
-			if (period > 0 && stopPeriod > 0 && i >= period + stopPeriod - 2)
+			if (period > 0 && i >= period - 1)
 			{
-				float sumHighStops = 0f;
-				float sumLowStops = 0f;
+				result.IsFormed = 1;
 
-				for (var j = 0; j < stopPeriod; j++)
+				// Compute highest/lowest over the current window of 'period' bars
+				float highest = float.MinValue;
+				float lowest = float.MaxValue;
+
+				var window = period;
+				var available = i + 1;
+				if (window > available)
+					window = available;
+
+				for (var k = 0; k < window; k++)
 				{
-					var barIdx = i - j;
-					var barGlobalIdx = offset + barIdx;
+					var c = flatCandles[offset + i - k];
+					var high = c.High;
+					var low = c.Low;
 
-					float highest = float.MinValue;
-					float lowest = float.MaxValue;
+					if (high > highest)
+						highest = high;
+					if (low < lowest)
+						lowest = low;
+				}
 
-					var window = period;
-					var available = barIdx + 1;
-					if (window > available)
-						window = available;
+				var diff = highest - lowest;
+				var stopHigh = highest - diff * multiplier;
+				var stopLow = lowest + diff * multiplier;
 
-					for (var k = 0; k < window; k++)
+				// Running SMA: CPU SMA pushes value and returns Sum / Length
+				// When buffer is full (count >= stopPeriod), oldest value must be dropped.
+				// We look back to find the oldest value to subtract.
+				if (smaCount < stopPeriod)
+				{
+					smaHighSum += stopHigh;
+					smaLowSum += stopLow;
+					smaCount++;
+				}
+				else
+				{
+					// Subtract the oldest stop value (from stopPeriod bars ago in the stop sequence)
+					// The oldest bar in the SMA window is at i - stopPeriod (in terms of bars with stops)
+					// Since stops are computed every bar from period-1 onwards, the oldest bar is i - stopPeriod
+					var oldBarIdx = i - stopPeriod;
+					var oldGlobalIdx = offset + oldBarIdx;
+
+					float oldHighest = float.MinValue;
+					float oldLowest = float.MaxValue;
+
+					var oldWindow = period;
+					var oldAvailable = oldBarIdx + 1;
+					if (oldWindow > oldAvailable)
+						oldWindow = oldAvailable;
+
+					for (var k = 0; k < oldWindow; k++)
 					{
-						var c = flatCandles[barGlobalIdx - k];
+						var c = flatCandles[oldGlobalIdx - k];
 						var high = c.High;
 						var low = c.Low;
 
-						if (high > highest)
-							highest = high;
-
-						if (low < lowest)
-							lowest = low;
+						if (high > oldHighest)
+							oldHighest = high;
+						if (low < oldLowest)
+							oldLowest = low;
 					}
 
-					var diff = highest - lowest;
-					sumHighStops += highest - diff * multiplier;
-					sumLowStops += lowest + diff * multiplier;
+					var oldDiff = oldHighest - oldLowest;
+					var oldStopHigh = oldHighest - oldDiff * multiplier;
+					var oldStopLow = oldLowest + oldDiff * multiplier;
+
+					smaHighSum = smaHighSum - oldStopHigh + stopHigh;
+					smaLowSum = smaLowSum - oldStopLow + stopLow;
 				}
 
-				result.HighestStop = sumHighStops / stopPeriod;
-				result.LowestStop = sumLowStops / stopPeriod;
-				result.IsFormed = 1;
+				// CPU SMA always divides by Length (stopPeriod), even when buffer not full
+				result.HighestStop = smaHighSum / stopPeriod;
+				result.LowestStop = smaLowSum / stopPeriod;
 			}
 
 			flatResults[resIndex] = result;

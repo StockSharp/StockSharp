@@ -244,6 +244,8 @@ public class GpuWaveTrendOscillatorCalculator : GpuIndicatorCalculatorBase<WaveT
 		float wt2Sum = 0f;
 		var validWtCount = 0;
 
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
@@ -259,6 +261,8 @@ public class GpuWaveTrendOscillatorCalculator : GpuIndicatorCalculatorBase<WaveT
 			};
 
 			var capo = (candle.High + candle.Low + candle.Close) / 3f;
+
+			byte curFormed = 0;
 
 			if (!esaFormed)
 			{
@@ -313,11 +317,13 @@ public class GpuWaveTrendOscillatorCalculator : GpuIndicatorCalculatorBase<WaveT
 					}
 
 					result.Wt2 = wt2Sum / avgPeriod;
-					result.IsFormed = 1;
+					curFormed = 1;
 				}
 			}
 
+			result.IsFormed = prevFormed;
 			flatResults[resIndex] = result;
+			prevFormed = curFormed;
 		}
 	}
 }

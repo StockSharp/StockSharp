@@ -238,6 +238,8 @@ public class GpuPivotPointsCalculator : GpuIndicatorCalculatorBase<PivotPoints, 
 		var range = high - low;
 		var pivot = (high + low + close) / 3f;
 
+		byte prevFormed = (byte)(candleIdx > 0 ? 1 : 0);
+
 		flatResults[resIndex] = new GpuPivotPointsResult
 		{
 			Time = candle.Time,
@@ -246,7 +248,7 @@ public class GpuPivotPointsCalculator : GpuIndicatorCalculatorBase<PivotPoints, 
 			R2 = pivot + range,
 			S1 = 2f * pivot - high,
 			S2 = pivot - range,
-			IsFormed = 1,
+			IsFormed = prevFormed,
 		};
 	}
 }

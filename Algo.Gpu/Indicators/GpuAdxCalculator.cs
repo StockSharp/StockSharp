@@ -217,6 +217,7 @@ public class GpuAdxCalculator : GpuIndicatorCalculatorBase<AverageDirectionalInd
 	/// <summary>
 	/// ILGPU kernel: ADX computation for multiple series and multiple parameter sets.
 	/// One thread handles one (parameter, series) pair and iterates bars sequentially.
+	/// Matches CPU algorithm: DI via WilderMA, then ADX = WilderMA(DX) only after DX is formed.
 	/// </summary>
 	private static void AdxParamsSeriesKernel(
 		Index2D index,
@@ -238,16 +239,29 @@ public class GpuAdxCalculator : GpuIndicatorCalculatorBase<AverageDirectionalInd
 		if (L <= 0)
 			L = 1;
 
-		// Wilder smoothing accumulators
-		float trSum = 0f, dmPlusSum = 0f, dmMinusSum = 0f;
-		float trSmooth = 0f, dmPlusSmooth = 0f, dmMinusSmooth = 0f;
+		// WilderMA state for ATR (starts from bar 0)
+		float atrValue = 0f;
+		int atrCount = 0;
+
+		// WilderMA state for +DM and -DM (starts from bar 1)
+		float dmPlusMa = 0f;
+		float dmMinusMa = 0f;
+		int dmCount = 0;
+
+		// WilderMA state for ADX (only starts when DX is formed, matching CPU sequence mode)
+		float adxValue = 0f;
+		int adxCount = 0;
+
 		float prevClose = flatCandles[offset].Close;
 		float prevHigh = flatCandles[offset].High;
 		float prevLow = flatCandles[offset].Low;
 
-		// ADX accumulators
-		float dxSum = 0f;
-		float adxPrev = 0f;
+		// DX formed state: DX is formed when DiPart.IsFormed = true for both Plus and Minus.
+		// DiPart.IsFormed becomes true on bar L+1 (0-indexed): when ATR formed (bar>=L) AND DM formed (bar-1>=L).
+		// DX.IsFormed is sticky once true.
+		byte dxFormed = 0;
+
+		byte prevFormed = 0;
 
 		for (int i = 0; i < len; i++)
 		{
@@ -256,71 +270,104 @@ public class GpuAdxCalculator : GpuIndicatorCalculatorBase<AverageDirectionalInd
 			var low = c.Low;
 			var close = c.Close;
 
-			float upMove = high - prevHigh;
-			float downMove = prevLow - low;
-			float plusDM = (upMove > downMove && upMove > 0f) ? upMove : 0f;
-			float minusDM = (downMove > upMove && downMove > 0f) ? downMove : 0f;
+			// Compute TrueRange
+			float tr;
+			if (i == 0)
+			{
+				tr = high - low;
+			}
+			else
+			{
+				var tr1 = high - low;
+				var tr2 = MathF.Abs(high - prevClose);
+				var tr3 = MathF.Abs(low - prevClose);
+				tr = MathF.Max(tr1, MathF.Max(tr2, tr3));
+			}
 
-			float tr1 = high - low;
-			float tr2 = MathF.Abs(high - prevClose);
-			float tr3 = MathF.Abs(low - prevClose);
-			float tr = MathF.Max(tr1, MathF.Max(tr2, tr3));
+			// WilderMA for ATR
+			atrCount++;
+			var atrN = atrCount < L ? atrCount : L;
+			atrValue = (atrValue * (atrN - 1) + tr) / atrN;
 
-			// Default result: not formed
 			var resIndex = paramIdx * flatCandles.Length + (offset + i);
-			flatResults[resIndex] = new GpuAdxResult
-			{
-				Time = c.Time,
-				Adx = float.NaN,
-				PlusDi = float.NaN,
-				MinusDi = float.NaN,
-				IsFormed = 0
-			};
 
-			if (i < L)
+			if (i == 0)
 			{
-				trSum += tr;
-				dmPlusSum += plusDM;
-				dmMinusSum += minusDM;
+				// Bar 0: no previous candle for DM computation
+				flatResults[resIndex] = new GpuAdxResult
+				{
+					Time = c.Time,
+					Adx = float.NaN,
+					PlusDi = float.NaN,
+					MinusDi = float.NaN,
+					IsFormed = prevFormed
+				};
 			}
+			else
+			{
+				// Compute DM+ and DM-
+				float upMove = high - prevHigh;
+				float downMove = prevLow - low;
+				float plusDM = (upMove > downMove && upMove > 0f) ? upMove : 0f;
+				float minusDM = (downMove > upMove && downMove > 0f) ? downMove : 0f;
 
-			if (i == L - 1)
-			{
-				trSmooth = trSum;
-				dmPlusSmooth = dmPlusSum;
-				dmMinusSmooth = dmMinusSum;
-			}
-			else if (i >= L)
-			{
-				trSmooth = trSmooth - (trSmooth / L) + tr;
-				dmPlusSmooth = dmPlusSmooth - (dmPlusSmooth / L) + plusDM;
-				dmMinusSmooth = dmMinusSmooth - (dmMinusSmooth / L) + minusDM;
-			}
+				// WilderMA for DM+ and DM-
+				dmCount++;
+				var dmN = dmCount < L ? dmCount : L;
+				dmPlusMa = (dmPlusMa * (dmN - 1) + plusDM) / dmN;
+				dmMinusMa = (dmMinusMa * (dmN - 1) + minusDM) / dmN;
 
-			if (i >= L - 1)
-			{
-				var plusDi = trSmooth > 0f ? 100f * (dmPlusSmooth / trSmooth) : 0f;
-				var minusDi = trSmooth > 0f ? 100f * (dmMinusSmooth / trSmooth) : 0f;
+				// Compute DI values
+				var plusDi = atrValue > 0f ? 100f * dmPlusMa / atrValue : 0f;
+				var minusDi = atrValue > 0f ? 100f * dmMinusMa / atrValue : 0f;
+
 				var diSum = plusDi + minusDi;
 				var diDiff = MathF.Abs(plusDi - minusDi);
 				var dx = diSum > 0f ? (100f * diDiff / diSum) : 0f;
 
-				if (i < (2 * L - 1))
+				// Check if DX becomes formed after processing this bar.
+				// DiPart.IsFormed at bar k: ATR formed after bar k-1 (atrCount-1 >= L) AND DM formed after bar k-1 (dmCount-1 >= L)
+				// Since atrCount = i+1 at this point, and dmCount = i at this point (for i>=1):
+				// ATR formed after bar k-1: (i+1)-1 >= L, i.e., i >= L
+				// DM formed after bar k-1: i-1 >= L, i.e., i >= L+1
+				// Combined: i >= L+1
+				if (dxFormed == 0 && atrCount >= L + 1 && dmCount >= L + 1)
+					dxFormed = 1;
+
+				// Only feed DX to ADX WilderMA when DX is formed (matching CPU sequence mode)
+				if (dxFormed == 1)
 				{
-					dxSum += dx;
-					if (i == (2 * L - 2))
+					adxCount++;
+					var adxN = adxCount < L ? adxCount : L;
+					adxValue = (adxValue * (adxN - 1) + dx) / adxN;
+
+					flatResults[resIndex] = new GpuAdxResult
 					{
-						adxPrev = dxSum / L;
-						flatResults[resIndex] = new GpuAdxResult { Time = c.Time, Adx = adxPrev, PlusDi = plusDi, MinusDi = minusDi, IsFormed = 1 };
-					}
+						Time = c.Time,
+						Adx = adxValue,
+						PlusDi = plusDi,
+						MinusDi = minusDi,
+						IsFormed = prevFormed
+					};
 				}
 				else
 				{
-					adxPrev = (adxPrev * (L - 1) + dx) / L;
-					flatResults[resIndex] = new GpuAdxResult { Time = c.Time, Adx = adxPrev, PlusDi = plusDi, MinusDi = minusDi, IsFormed = 1 };
+					flatResults[resIndex] = new GpuAdxResult
+					{
+						Time = c.Time,
+						Adx = float.NaN,
+						PlusDi = plusDi,
+						MinusDi = minusDi,
+						IsFormed = prevFormed
+					};
 				}
 			}
 
+			// ADX overall formed: DX must be formed AND ADX MA must be formed
+			// This matches CPU: CalcIsFormed = InnerIndicators.All(i => i.IsFormed)
+			byte curFormed = (byte)(dxFormed == 1 && adxCount >= L ? 1 : 0);
+
+			prevFormed = curFormed;
 			prevClose = close;
 			prevHigh = high;
 			prevLow = low;

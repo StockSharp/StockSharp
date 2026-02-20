@@ -153,19 +153,20 @@ public class GpuVidyaCalculator : GpuIndicatorCalculatorBase<Vidya, GpuVidyaPara
 		var priceType = (Level1Fields)prm.PriceType;
 		var multiplier = 2f / (L + 1f);
 		var prevVidya = 0f;
-		var sum = 0f;
+
+		// CPU VIDYA has 3 phases:
+		// Phase 1 (bars 0 to L-1): CMO not available (needs L+1 bars: 1 init + L deltas) → NaN
+		// Phase 2 (bars L to 2L-2): Buffer filling, output running SMA (bufferSum/L)
+		// Phase 3 (bars 2L-1+): VIDYA formula with CMO
+		var bufferSum = 0f;
+		var bufferCount = 0;
 
 		for (var i = 0; i < len; i++)
 		{
 			var candle = flatCandles[offset + i];
 			var price = ExtractPrice(candle, priceType);
-
-			if (i < L)
-			{
-				sum += price;
-			}
-
 			var resIndex = paramIdx * flatCandles.Length + (offset + i);
+
 			flatResults[resIndex] = new GpuIndicatorResult
 			{
 				Time = candle.Time,
@@ -173,22 +174,27 @@ public class GpuVidyaCalculator : GpuIndicatorCalculatorBase<Vidya, GpuVidyaPara
 				IsFormed = 0,
 			};
 
-			if (i < L - 1)
+			// Phase 1: CMO not available yet (needs bar 0 as init + L deltas)
+			if (i < L)
 				continue;
 
-			if (i == L - 1)
+			// Phase 2: Buffer filling (matching CPU's Buffer.PushBack + Sum/Length)
+			if (bufferCount < L)
 			{
-				var initial = sum / L;
-				prevVidya = initial;
+				bufferCount++;
+				bufferSum += price;
+				prevVidya = bufferSum / L;
+
 				flatResults[resIndex] = new GpuIndicatorResult
 				{
 					Time = candle.Time,
-					Value = initial,
-					IsFormed = 1,
+					Value = prevVidya,
+					IsFormed = (byte)(bufferCount >= L ? 1 : 0),
 				};
 				continue;
 			}
 
+			// Phase 3: VIDYA formula with CMO
 			var start = i - L + 1;
 			var upSum = 0f;
 			var downSum = 0f;
@@ -199,13 +205,9 @@ public class GpuVidyaCalculator : GpuIndicatorCalculatorBase<Vidya, GpuVidyaPara
 				var delta = curr - prev;
 
 				if (delta > 0f)
-				{
 					upSum += delta;
-				}
 				else if (delta < 0f)
-				{
 					downSum += -delta;
-				}
 			}
 
 			var denom = upSum + downSum;

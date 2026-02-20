@@ -221,6 +221,7 @@ public class GpuElderRayCalculator : GpuIndicatorCalculatorBase<ElderRay, GpuEld
 		var sum = 0f;
 		var formed = false;
 		var emaPrev = 0f;
+		byte prevFormed = 0;
 
 		for (var i = 0; i < len; i++)
 		{
@@ -255,10 +256,11 @@ public class GpuElderRayCalculator : GpuIndicatorCalculatorBase<ElderRay, GpuEld
 			{
 				result.BullPower = candle.High - emaPrev;
 				result.BearPower = candle.Low - emaPrev;
-				result.IsFormed = 1;
 			}
 
+			result.IsFormed = prevFormed;
 			flatResults[resIndex] = result;
+			prevFormed = (byte)(formed ? 1 : 0);
 		}
 	}
 }

@@ -30,8 +30,10 @@ public struct GpuCorrelationParams(int length, byte sourcePriceType, byte otherP
 	/// <inheritdoc />
 	public readonly void FromIndicator(IIndicator indicator)
 	{
-		Unsafe.AsRef(in this).SourcePriceType = (byte)(indicator.Source ?? Level1Fields.ClosePrice);
-		Unsafe.AsRef(in this).OtherPriceType = (byte)(indicator.Source ?? Level1Fields.ClosePrice);
+		// CPU Correlation receives PairIndicatorValue<decimal> where
+		// CandleIndicatorValue.GetValue<(decimal,decimal)>() returns (LowPrice, HighPrice).
+		Unsafe.AsRef(in this).SourcePriceType = (byte)Level1Fields.LowPrice;
+		Unsafe.AsRef(in this).OtherPriceType = (byte)Level1Fields.HighPrice;
 
 		if (indicator is Correlation correlation)
 		{

@@ -128,6 +128,7 @@ public class GpuMarketMeannessIndexCalculator : GpuIndicatorCalculatorBase<Marke
 	/// <summary>
 	/// ILGPU kernel: Market Meanness Index computation for multiple series and multiple parameter sets.
 	/// One thread handles one (parameter, series) pair and iterates bars sequentially.
+	/// Uses the same incremental logic as the CPU indicator.
 	/// </summary>
 	private static void MarketMeannessIndexParamsSeriesKernel(
 		Index2D index,
@@ -153,6 +154,17 @@ public class GpuMarketMeannessIndexCalculator : GpuIndicatorCalculatorBase<Marke
 		var priceType = (Level1Fields)prm.PriceType;
 		var totalCandles = flatCandles.Length;
 
+		// Replicate CPU's incremental approach with rolling buffer.
+		// CPU tracks: _priceChanges, _directionChanges, _prevDirection
+		// Buffer stores prices. When full and pushing new price:
+		//   - Remove oldest transition: UpdateChanges(Buffer[0], Buffer[1], isRemoving=true)
+		//   - Add new transition: UpdateChanges(Buffer[^2], price, isRemoving=false)
+		//   - Push price into buffer
+		var priceChanges = 0;
+		var directionChanges = 0;
+		var prevDirection = 0;
+		var bufferCount = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
@@ -166,36 +178,55 @@ public class GpuMarketMeannessIndexCalculator : GpuIndicatorCalculatorBase<Marke
 				IsFormed = 0
 			};
 
-			if (L <= 1)
+			var price = ExtractPrice(candle, priceType);
+
+			if (bufferCount == L)
 			{
-				result.Value = 0f;
-				result.IsFormed = 1;
+				// Buffer is full. Remove the oldest transition.
+				// CPU: UpdateChanges(Buffer[0], Buffer[1], isRemoving=true)
+				// Buffer[0] is at globalIdx - L, Buffer[1] is at globalIdx - L + 1
+				var oldPrice = ExtractPrice(flatCandles[globalIdx - L], priceType);
+				var nextOldPrice = ExtractPrice(flatCandles[globalIdx - L + 1], priceType);
+
+				var oldDiff = nextOldPrice - oldPrice;
+				var oldDirection = oldDiff > 0f ? 1 : oldDiff < 0f ? -1 : 0;
+
+				if (oldDirection != 0)
+					priceChanges--;
+
+				// CPU checks: if (currentDirection != _prevDirection && _prevDirection != 0)
+				// Here _prevDirection is the CURRENT prevDirection state (not the one at removal time)
+				if (oldDirection != prevDirection && prevDirection != 0)
+					directionChanges--;
+
+				// CPU does NOT update _prevDirection when isRemoving
 			}
-			else if (i + 1 >= L)
+
+			// CPU: Buffer.PushBack(price), then if (Buffer.Count > 1) UpdateChanges(Buffer[^2], price, false)
+			// After push, Buffer.Count is at least bufferCount + 1 (or L if full).
+			// Buffer[^2] after push is the bar before the newly pushed price = bar i-1.
+			// The condition Buffer.Count > 1 after push is true when bufferCount >= 1.
+			if (bufferCount >= 1)
 			{
-				var priceChanges = 0;
-				var directionChanges = 0;
-				var prevDirection = 0;
+				var prevPrice = ExtractPrice(flatCandles[globalIdx - 1], priceType);
+				var diff = price - prevPrice;
+				var direction = diff > 0f ? 1 : diff < 0f ? -1 : 0;
 
-				var start = i - L + 1;
-				var prevPrice = ExtractPrice(flatCandles[offset + start], priceType);
+				if (direction != 0)
+					priceChanges++;
 
-				for (var j = start + 1; j <= i; j++)
-				{
-					var currentPrice = ExtractPrice(flatCandles[offset + j], priceType);
-					var diff = currentPrice - prevPrice;
-					var direction = diff > 0f ? 1 : diff < 0f ? -1 : 0;
+				if (direction != prevDirection && prevDirection != 0)
+					directionChanges++;
 
-					if (direction != 0)
-						priceChanges++;
+				prevDirection = direction;
+			}
 
-					if (direction != prevDirection && prevDirection != 0)
-						directionChanges++;
+			if (bufferCount < L)
+				bufferCount++;
 
-					prevDirection = direction;
-					prevPrice = currentPrice;
-				}
-
+			// CPU: IsFormed when Buffer.Count >= Length
+			if (bufferCount >= L)
+			{
 				result.Value = priceChanges > 0 ? 100f * directionChanges / priceChanges : 0f;
 				result.IsFormed = 1;
 			}

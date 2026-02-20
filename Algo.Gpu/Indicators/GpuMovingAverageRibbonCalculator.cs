@@ -167,7 +167,7 @@ public unsafe struct GpuMovingAverageRibbonResult : IGpuIndicatorResult
 /// </summary>
 public class GpuMovingAverageRibbonCalculator : GpuIndicatorCalculatorBase<MovingAverageRibbon, GpuMovingAverageRibbonParams, GpuMovingAverageRibbonResult>
 {
-	private readonly Action<Index3D, ArrayView<GpuCandle>, ArrayView<GpuMovingAverageRibbonResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuMovingAverageRibbonParams>> _kernel;
+	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuMovingAverageRibbonResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuMovingAverageRibbonParams>, ArrayView<float>> _kernel;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GpuMovingAverageRibbonCalculator"/> class.
@@ -177,7 +177,7 @@ public class GpuMovingAverageRibbonCalculator : GpuIndicatorCalculatorBase<Movin
 	public GpuMovingAverageRibbonCalculator(Context context, Accelerator accelerator)
 	: base(context, accelerator)
 	{
-		_kernel = Accelerator.LoadAutoGroupedStreamKernel<Index3D, ArrayView<GpuCandle>, ArrayView<GpuMovingAverageRibbonResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuMovingAverageRibbonParams>>(MovingAverageRibbonParamsSeriesKernel);
+		_kernel = Accelerator.LoadAutoGroupedStreamKernel<Index2D, ArrayView<GpuCandle>, ArrayView<GpuMovingAverageRibbonResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuMovingAverageRibbonParams>, ArrayView<float>>(MovingAverageRibbonParamsSeriesKernel);
 	}
 
 	/// <inheritdoc />
@@ -255,8 +255,12 @@ public class GpuMovingAverageRibbonCalculator : GpuIndicatorCalculatorBase<Movin
 		using var paramsBuffer = Accelerator.Allocate1D(parameters);
 		using var outputBuffer = Accelerator.Allocate1D<GpuMovingAverageRibbonResult>(totalSize * parameters.Length);
 
-		var extent = new Index3D(parameters.Length, seriesCount, maxLen);
-		_kernel(extent, inputBuffer.View, outputBuffer.View, offsetsBuffer.View, lengthsBuffer.View, paramsBuffer.View);
+		// Scratch buffer for intermediate SMA values per bar (used for sequence chaining)
+		// Size: totalSize * parameters.Length (one float per bar per param set)
+		using var scratchBuffer = Accelerator.Allocate1D<float>(totalSize * parameters.Length);
+
+		var extent = new Index2D(parameters.Length, seriesCount);
+		_kernel(extent, inputBuffer.View, outputBuffer.View, offsetsBuffer.View, lengthsBuffer.View, paramsBuffer.View, scratchBuffer.View);
 		Accelerator.Synchronize();
 
 		var flatResults = outputBuffer.GetAsArray1D();
@@ -288,72 +292,152 @@ public class GpuMovingAverageRibbonCalculator : GpuIndicatorCalculatorBase<Movin
 
 	/// <summary>
 	/// ILGPU kernel: Moving Average Ribbon computation for multiple series and parameter sets.
+	/// Uses sequential bar processing to match CPU Sequence mode (each SMA output feeds the next SMA).
 	/// </summary>
 	private static void MovingAverageRibbonParamsSeriesKernel(
-	Index3D index,
+	Index2D index,
 	ArrayView<GpuCandle> flatCandles,
 	ArrayView<GpuMovingAverageRibbonResult> flatResults,
 	ArrayView<int> offsets,
 	ArrayView<int> lengths,
-	ArrayView<GpuMovingAverageRibbonParams> parameters)
+	ArrayView<GpuMovingAverageRibbonParams> parameters,
+	ArrayView<float> scratch)
 	{
 		var paramIdx = index.X;
 		var seriesIdx = index.Y;
-		var candleIdx = index.Z;
 
 		var len = lengths[seriesIdx];
-		if (candleIdx >= len)
-		{
+		if (len <= 0)
 			return;
-		}
 
 		var offset = offsets[seriesIdx];
-		var globalIdx = offset + candleIdx;
-		var resIndex = paramIdx * flatCandles.Length + globalIdx;
-
-		var candle = flatCandles[globalIdx];
 		var prm = parameters[paramIdx];
-		var result = new GpuMovingAverageRibbonResult
-		{
-			Time = candle.Time,
-			RibbonCount = prm.RibbonCount,
-			IsFormed = 0,
-		};
-
-		for (var i = 0; i < GpuMovingAverageRibbonResult.MaxRibbonCount; i++)
-		{
-			result.SetAverage(i, float.NaN);
-		}
-
 		var count = prm.RibbonCount;
 		var priceType = (Level1Fields)prm.PriceType;
-		var allFormed = true;
 		var step = count > 1 ? (prm.LongPeriod - prm.ShortPeriod) / (count - 1) : 0;
 
+		var scratchOffset = paramIdx * flatCandles.Length + offset;
+
+		// Initialize scratch to NaN
+		for (var i = 0; i < len; i++)
+			scratch[scratchOffset + i] = float.NaN;
+
+		// Process each ribbon SMA in sequence (matching CPU Sequence mode).
+		// SMA[0] reads from candle prices. SMA[i] reads from SMA[i-1] output stored in scratch.
 		for (var ribbonIdx = 0; ribbonIdx < count && ribbonIdx < GpuMovingAverageRibbonResult.MaxRibbonCount; ribbonIdx++)
 		{
-			var length = prm.ShortPeriod + ribbonIdx * step;
-			if (length < 1)
+			var smaLength = prm.ShortPeriod + ribbonIdx * step;
+			if (smaLength < 1)
+				smaLength = 1;
+
+			// Track how many valid inputs received for this SMA
+			var validCount = 0;
+
+			for (var i = 0; i < len; i++)
 			{
-				length = 1;
+				var globalIdx = offset + i;
+				var resIndex = paramIdx * flatCandles.Length + globalIdx;
+
+				// Initialize result on first ribbon pass
+				if (ribbonIdx == 0)
+				{
+					var candle = flatCandles[globalIdx];
+					var result = new GpuMovingAverageRibbonResult
+					{
+						Time = candle.Time,
+						RibbonCount = count,
+						IsFormed = 0,
+					};
+
+					for (var k = 0; k < GpuMovingAverageRibbonResult.MaxRibbonCount; k++)
+						result.SetAverage(k, float.NaN);
+
+					flatResults[resIndex] = result;
+				}
+
+				// Get input value: candle price for first SMA, previous SMA output for subsequent
+				if (ribbonIdx == 0)
+				{
+					// Always have candle data
+					validCount++;
+				}
+				else
+				{
+					var inputValue = scratch[scratchOffset + i];
+					// If previous SMA hadn't produced a value, skip this bar
+					if (float.IsNaN(inputValue))
+						continue;
+					validCount++;
+				}
+
+				if (validCount >= smaLength)
+				{
+					// Compute SMA over last smaLength input values
+					var sum = 0f;
+					if (ribbonIdx == 0)
+					{
+						// Read directly from candle data
+						for (var j = 0; j < smaLength; j++)
+							sum += ExtractPrice(flatCandles[globalIdx - j], priceType);
+					}
+					else
+					{
+						// Read from scratch (previous SMA outputs)
+						// Find last smaLength valid entries going backwards
+						var found = 0;
+						for (var j = i; j >= 0 && found < smaLength; j--)
+						{
+							var val = scratch[scratchOffset + j];
+							if (!float.IsNaN(val))
+							{
+								sum += val;
+								found++;
+							}
+						}
+					}
+
+					var smaValue = sum / smaLength;
+
+					// Store in result
+					var res = flatResults[resIndex];
+					res.SetAverage(ribbonIdx, smaValue);
+					flatResults[resIndex] = res;
+				}
 			}
 
-			if (candleIdx + 1 < length)
+			// After processing this ribbon, copy outputs from flatResults to scratch
+			// for the next ribbon to use as input. NaN for bars where this SMA wasn't formed.
+			for (var i = 0; i < len; i++)
 			{
-				allFormed = false;
-				continue;
+				var resIndex = paramIdx * flatCandles.Length + (offset + i);
+				var res = flatResults[resIndex];
+				scratch[scratchOffset + i] = res.GetAverage(ribbonIdx);
 			}
-
-			var sum = 0f;
-			for (var j = 0; j < length; j++)
-			{
-				sum += ExtractPrice(flatCandles[globalIdx - j], priceType);
-			}
-
-			result.SetAverage(ribbonIdx, sum / length);
 		}
 
-		result.IsFormed = (byte)(allFormed ? 1 : 0);
-		flatResults[resIndex] = result;
+		// Set IsFormed: CPU uses prevFormed pattern for complex indicators
+		byte prevFormed = 0;
+		for (var i = 0; i < len; i++)
+		{
+			var globalIdx = offset + i;
+			var resIndex = paramIdx * flatCandles.Length + globalIdx;
+
+			var res = flatResults[resIndex];
+
+			// Check if all ribbon SMAs have values for this bar
+			byte allFormed = 1;
+			for (var r = 0; r < count && r < GpuMovingAverageRibbonResult.MaxRibbonCount; r++)
+			{
+				if (float.IsNaN(res.GetAverage(r)))
+				{
+					allFormed = 0;
+					break;
+				}
+			}
+
+			res.IsFormed = prevFormed;
+			flatResults[resIndex] = res;
+			prevFormed = allFormed;
+		}
 	}
 }

@@ -173,7 +173,7 @@ public class GpuT3Calculator : GpuIndicatorCalculatorBase<T3MovingAverage, GpuT3
 		int count1 = 0, count2 = 0, count3 = 0, count4 = 0, count5 = 0, count6 = 0;
 		float e1 = 0f, e2 = 0f, e3 = 0f, e4 = 0f, e5 = 0f, e6 = 0f;
 		int formed1 = 0, formed2 = 0, formed3 = 0, formed4 = 0, formed5 = 0, formed6 = 0;
-		var warmUp = 10;
+		var warmUp = 9;
 
 		for (var i = 0; i < len; i++)
 		{

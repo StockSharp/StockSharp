@@ -134,6 +134,7 @@ public class GpuVmaCalculator : GpuIndicatorCalculatorBase<VariableMovingAverage
 	/// <summary>
 	/// ILGPU kernel: Variable Moving Average computation for multiple series and parameter sets.
 	/// One thread handles one (parameter, series) pair and iterates bars sequentially.
+	/// Matches CPU algorithm: StdDev starts from bar 1, VMA buffer tracks pushed prices.
 	/// </summary>
 	private static void VmaParamsSeriesKernel(
 		Index2D index,
@@ -160,7 +161,14 @@ public class GpuVmaCalculator : GpuIndicatorCalculatorBase<VariableMovingAverage
 		var totalCandles = flatCandles.Length;
 
 		float prevVma = 0f;
-		var initialized = false;
+
+		// VMA buffer tracking (sum and count for avgPrice computation)
+		float bufSum = 0f;
+		int bufCount = 0;
+		int pushCount = 0; // total number of pushes to buffer
+
+		// StdDev processing count (starts from bar 1)
+		int stdDevCount = 0;
 
 		for (var i = 0; i < len; i++)
 		{
@@ -169,54 +177,111 @@ public class GpuVmaCalculator : GpuIndicatorCalculatorBase<VariableMovingAverage
 			var price = ExtractPrice(candle, priceType);
 			var resIndex = paramIdx * totalCandles + globalIdx;
 
-			var result = new GpuIndicatorResult
+			if (i == 0)
 			{
-				Time = candle.Time,
-				Value = price,
-				IsFormed = 0,
-			};
-
-			if (i + 1 < L)
-			{
+				// Bar 0: initialization (matches CPU !_isInitialized path)
 				prevVma = price;
-				flatResults[resIndex] = result;
+				bufSum = price;
+				bufCount = 1;
+				pushCount = 1;
+
+				flatResults[resIndex] = new GpuIndicatorResult
+				{
+					Time = candle.Time,
+					Value = price,
+					IsFormed = 0,
+				};
 				continue;
 			}
 
-			float sum = 0f;
-			float sumSquares = 0f;
-			for (var j = 0; j < L; j++)
+			// Bars 1+: process StdDev (count values for SMA/StdDev formation)
+			stdDevCount++;
+
+			if (stdDevCount < L)
 			{
-				var c = flatCandles[globalIdx - j];
-				var p = ExtractPrice(c, priceType);
-				sum += p;
-				sumSquares += p * p;
+				// StdDev not yet formed, return previous VMA value
+				flatResults[resIndex] = new GpuIndicatorResult
+				{
+					Time = candle.Time,
+					Value = prevVma,
+					IsFormed = 0,
+				};
+				continue;
 			}
 
-			var avg = sum / L;
-			var variance = MathF.Max(0f, sumSquares / L - avg * avg);
-			var stdDev = MathF.Sqrt(variance);
-
-			var vi = avg != 0f ? MathF.Abs(stdDev / avg) : 0f;
-			var smoothingDenom = L * (1f + prm.VolatilityIndex * vi) + 1f;
-			var smoothingConstant = smoothingDenom != 0f ? 2f / smoothingDenom : 0f;
-
-			if (!initialized)
+			// StdDev is formed (stdDevCount >= L)
+			// Compute StdDev over the last L values that StdDev has seen (bars i-L+1 to i)
+			// StdDev processes bars 1..i, so last L values are bars i-L+1..i
+			float smaSum = 0f;
+			for (var j = 0; j < L; j++)
 			{
-				prevVma = avg;
-				result.Value = avg;
-				result.IsFormed = 1;
-				initialized = true;
+				var p = ExtractPrice(flatCandles[offset + i - j], priceType);
+				smaSum += p;
+			}
+			var sma = smaSum / L;
+
+			float sqSum = 0f;
+			for (var j = 0; j < L; j++)
+			{
+				var p = ExtractPrice(flatCandles[offset + i - j], priceType);
+				var diff = p - sma;
+				sqSum += diff * diff;
+			}
+			var stdDev = MathF.Sqrt(sqSum / L);
+
+			// avgPrice from VMA's buffer (not from StdDev's window)
+			var avgPrice = bufSum / bufCount;
+
+			// Volatility index
+			var vi = avgPrice != 0f ? MathF.Abs(stdDev / avgPrice) : 0f;
+
+			// Smoothing constant
+			var smoothingConstant = 2f / (L * (1f + prm.VolatilityIndex * vi) + 1f);
+
+			// VMA EMA-like step
+			var curValue = (price - prevVma) * smoothingConstant + prevVma;
+
+			// Push price to VMA buffer (circular with capacity L)
+			pushCount++;
+			if (bufCount < L)
+			{
+				bufSum += price;
+				bufCount++;
 			}
 			else
 			{
-				var curValue = (price - prevVma) * smoothingConstant + prevVma;
-				prevVma = curValue;
-				result.Value = curValue;
-				result.IsFormed = 1;
+				// Evict oldest value from buffer
+				// pushCount-1 is current push index (0-based)
+				// Evicted push index = pushCount - 1 - L
+				var evictedPushIdx = pushCount - 1 - L;
+				float evictedPrice;
+				if (evictedPushIdx == 0)
+				{
+					// First push was bar 0
+					evictedPrice = ExtractPrice(flatCandles[offset], priceType);
+				}
+				else
+				{
+					// Push k (k>=1) was at bar L + k - 1
+					var evictedBar = L + evictedPushIdx - 1;
+					evictedPrice = ExtractPrice(flatCandles[offset + evictedBar], priceType);
+				}
+				bufSum = bufSum - evictedPrice + price;
 			}
 
-			flatResults[resIndex] = result;
+			prevVma = curValue;
+
+			// IsFormed: VMA is formed when StdDev is formed.
+			// StdDev is formed when its SMA has Length values.
+			// StdDev starts receiving from bar 1, so at bar L (stdDevCount == L), StdDev is formed.
+			byte isFormed = (byte)(stdDevCount >= L ? 1 : 0);
+
+			flatResults[resIndex] = new GpuIndicatorResult
+			{
+				Time = candle.Time,
+				Value = curValue,
+				IsFormed = isFormed,
+			};
 		}
 	}
 }

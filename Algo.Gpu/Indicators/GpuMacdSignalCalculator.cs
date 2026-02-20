@@ -245,6 +245,8 @@ public class GpuMacdSignalCalculator : GpuIndicatorCalculatorBase<MovingAverageC
 		float shortEma = 0f, longEma = 0f, signalEma = 0f;
 		var macdCount = 0;
 
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var c = flatCandles[offset + i];
@@ -284,6 +286,8 @@ public class GpuMacdSignalCalculator : GpuIndicatorCalculatorBase<MovingAverageC
 			var shortReady = i >= shortLength - 1;
 			var longReady = i >= longLength - 1;
 
+			byte curFormed = 0;
+
 			if (shortReady && longReady)
 			{
 				var macd = shortEma - longEma;
@@ -298,21 +302,23 @@ public class GpuMacdSignalCalculator : GpuIndicatorCalculatorBase<MovingAverageC
 					{
 						signalEma = signalSum / signalLength;
 						result.Signal = signalEma;
-						result.IsFormed = 1;
+						curFormed = 1;
 					}
 				}
 				else
 				{
 					signalEma = (macd - signalEma) * signalMultiplier + signalEma;
 					result.Signal = signalEma;
-					result.IsFormed = 1;
+					curFormed = 1;
 				}
 
-				if (result.IsFormed == 0)
+				if (curFormed == 0)
 					result.Signal = float.NaN;
 			}
 
+			result.IsFormed = prevFormed;
 			flatResults[resIndex] = result;
+			prevFormed = curFormed;
 		}
 	}
 }

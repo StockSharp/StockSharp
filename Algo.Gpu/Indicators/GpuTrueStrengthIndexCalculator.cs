@@ -279,6 +279,8 @@ public class GpuTrueStrengthIndexCalculator : GpuIndicatorCalculatorBase<TrueStr
 		var alphaSecond = 2f / (secondLength + 1f);
 		var alphaSignal = 2f / (signalLength + 1f);
 
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
@@ -339,6 +341,8 @@ public class GpuTrueStrengthIndexCalculator : GpuIndicatorCalculatorBase<TrueStr
 			output.Tsi = tsi;
 			output.TsiIsFormed = (byte)(tsiFormed ? 1 : 0);
 
+			byte curFormed = 0;
+
 			if (tsiFormed)
 			{
 				if (signalCount < signalLength)
@@ -355,10 +359,12 @@ public class GpuTrueStrengthIndexCalculator : GpuIndicatorCalculatorBase<TrueStr
 				output.Signal = signalEma;
 				var signalFormed = signalCount >= signalLength;
 				output.SignalIsFormed = (byte)(signalFormed ? 1 : 0);
-				output.IsFormed = (byte)(signalFormed ? 1 : 0);
+				curFormed = (byte)(signalFormed ? 1 : 0);
 			}
 
+			output.IsFormed = prevFormed;
 			flatResults[resultIndex] = output;
+			prevFormed = curFormed;
 			prevPrice = price;
 		}
 	}

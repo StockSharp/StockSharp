@@ -248,6 +248,8 @@ public class GpuStochasticOscillatorCalculator : GpuIndicatorCalculatorBase<Stoc
 
 		float dSum = 0f;
 
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
@@ -260,6 +262,8 @@ public class GpuStochasticOscillatorCalculator : GpuIndicatorCalculatorBase<Stoc
 				D = float.NaN,
 				IsFormed = 0,
 			};
+
+			byte curFormed = 0;
 
 			if (i >= kWindow)
 			{
@@ -293,11 +297,13 @@ public class GpuStochasticOscillatorCalculator : GpuIndicatorCalculatorBase<Stoc
 					}
 
 					result.D = dSum / dLength;
-					result.IsFormed = 1;
+					curFormed = 1;
 				}
 			}
 
+			result.IsFormed = prevFormed;
 			flatResults[resBase + globalIdx] = result;
+			prevFormed = curFormed;
 		}
 	}
 }

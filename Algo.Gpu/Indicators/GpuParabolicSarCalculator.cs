@@ -169,11 +169,11 @@ public class GpuParabolicSarCalculator : GpuIndicatorCalculatorBase<ParabolicSar
 			{
 				Time = candle.Time,
 				Value = float.NaN,
-				IsFormed = 0
+				IsFormed = 1
 			};
 
 			var count = i + 1;
-			if (count < 3)
+			if (count < 2)
 			{
 				flatResults[resIndex] = result;
 				continue;
@@ -181,10 +181,12 @@ public class GpuParabolicSarCalculator : GpuIndicatorCalculatorBase<ParabolicSar
 
 			float value;
 
-			if (count == 3)
+			if (count == 2)
 			{
+				// CPU adds first candle twice, so at bar 1 the CPU list is [c0, c0, c1].
+				// Emulate by using the previous candle for both prev1 and prev2.
 				var prev1 = flatCandles[globalIdx - 1];
-				var prev2 = flatCandles[globalIdx - 2];
+				var prev2 = prev1;
 
 				longPosition = candle.High > prev1.High;
 				var maxHigh = MathF.Max(candle.High, MathF.Max(prev1.High, prev2.High));

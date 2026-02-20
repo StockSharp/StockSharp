@@ -240,19 +240,24 @@ public class GpuRainbowChartsCalculator : GpuIndicatorCalculatorBase<RainbowChar
 
 				if (lineCount == 0)
 				{
+					byte prevFormed0 = 0;
+
 					for (var bar = 0; bar < len; bar++)
 					{
 						ref var rcRes = ref arr[bar];
 						rcRes.Time = seriesCandles[bar].Time;
 						rcRes.LineCount = 0;
 						rcRes.FormedMask = 0;
-						rcRes.IsFormed = 1;
+						rcRes.IsFormed = prevFormed0;
+						prevFormed0 = 1;
 					}
 
 					continue;
 				}
 
 				var offset = paramOffsets[p];
+
+				byte prevFormed = 0;
 
 				for (var bar = 0; bar < len; bar++)
 				{
@@ -283,9 +288,11 @@ public class GpuRainbowChartsCalculator : GpuIndicatorCalculatorBase<RainbowChar
 						}
 					}
 
+					byte curFormed = (byte)(allFormed ? 1 : 0);
 					rcRes.Time = time;
 					rcRes.FormedMask = formedMask;
-					rcRes.IsFormed = (byte)(allFormed ? 1 : 0);
+					rcRes.IsFormed = prevFormed;
+					prevFormed = curFormed;
 				}
 			}
 		}

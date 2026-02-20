@@ -160,6 +160,7 @@ public class GpuRelativeStrengthIndexCalculator : GpuIndicatorCalculatorBase<Rel
 
 		float gainSum = 0f, lossSum = 0f;
 		float avgGain = 0f, avgLoss = 0f;
+		float prevRsi = 50f;
 
 		for (var i = 1; i < len; i++)
 		{
@@ -192,24 +193,16 @@ public class GpuRelativeStrengthIndexCalculator : GpuIndicatorCalculatorBase<Rel
 
 			if (i >= L)
 			{
+				// CPU formula: rsi = 100 * avgGain / (avgGain + avgLoss)
+				// When sum == 0 (no movement): return prevResult ?? 50
+				var sum = avgGain + avgLoss;
 				float value;
-				if (avgLoss == 0f)
-				{
-					value = 100f;
-				}
+				if (sum == 0f)
+					value = prevRsi;
 				else
-				{
-					var ratio = avgGain / avgLoss;
-					if (ratio == 1f)
-					{
-						value = 0f;
-					}
-					else
-					{
-						value = 100f - 100f / (1f + ratio);
-					}
-				}
+					value = 100f * avgGain / sum;
 
+				prevRsi = value;
 				result.Value = value;
 				result.IsFormed = 1;
 			}

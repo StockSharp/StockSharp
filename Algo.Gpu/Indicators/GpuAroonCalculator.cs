@@ -185,6 +185,7 @@ public class GpuAroonCalculator : GpuIndicatorCalculatorBase<Aroon, GpuAroonPara
 
 	/// <summary>
 	/// ILGPU kernel computing Aroon for multiple series and parameter sets.
+	/// Replicates the CPU AroonUp/AroonDown incremental state machine exactly.
 	/// </summary>
 	private static void AroonParamsSeriesKernel(
 		Index2D index,
@@ -206,52 +207,109 @@ public class GpuAroonCalculator : GpuIndicatorCalculatorBase<Aroon, GpuAroonPara
 		if (L <= 0)
 			L = 1;
 
+		var maxHigh = float.MinValue;
+		var maxAge = 0;
+		var minLow = float.MaxValue;
+		var minAge = 0;
+		var bufCount = 0;
+		// Complex indicator delay: value.IsFormed is captured BEFORE inner processing
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
 			var candle = flatCandles[globalIdx];
 			var resIndex = paramIdx * flatCandles.Length + globalIdx;
-			flatResults[resIndex] = new GpuAroonResult
+			var high = candle.High;
+			var low = candle.Low;
+
+			// AroonUp: track max high (matches CPU >= tie-breaking)
+			if (high >= maxHigh)
 			{
-				Time = candle.Time,
-				Up = float.NaN,
-				Down = float.NaN,
-				IsFormed = 0,
-			};
-
-			if (i < L - 1)
-				continue;
-
-			var maxHigh = float.MinValue;
-			var maxAge = 0;
-			var minLow = float.MaxValue;
-			var minAge = 0;
-
-			for (var j = 0; j < L; j++)
+				maxHigh = high;
+				maxAge = 0;
+			}
+			else
 			{
-				var c = flatCandles[globalIdx - j];
-				var high = c.High;
-				if (high >= maxHigh)
-				{
-					maxHigh = high;
-					maxAge = j;
-				}
-
-				var low = c.Low;
-				if (low <= minLow)
-				{
-					minLow = low;
-					minAge = j;
-				}
+				maxAge++;
 			}
 
-			flatResults[resIndex] = new GpuAroonResult
+			// AroonDown: track min low (matches CPU <= tie-breaking)
+			if (low <= minLow)
 			{
-				Time = candle.Time,
-				Up = 100f * (L - maxAge) / L,
-				Down = 100f * (L - minAge) / L,
-				IsFormed = 1,
-			};
+				minLow = low;
+				minAge = 0;
+			}
+			else
+			{
+				minAge++;
+			}
+
+			// Buffer overflow handling (rescan when oldest value leaves window)
+			if (bufCount == L)
+			{
+				// AroonUp rescan
+				var removedHigh = flatCandles[globalIdx - L].High;
+				if (removedHigh == maxHigh)
+				{
+					maxHigh = high;
+					maxAge = 0;
+					for (var j = 1; j < L; j++)
+					{
+						var bHigh = flatCandles[globalIdx - L + j].High;
+						if (bHigh > maxHigh)
+						{
+							maxHigh = bHigh;
+							maxAge = j;
+						}
+					}
+				}
+
+				// AroonDown rescan
+				var removedLow = flatCandles[globalIdx - L].Low;
+				if (removedLow == minLow)
+				{
+					minLow = low;
+					minAge = 0;
+					for (var j = 1; j < L; j++)
+					{
+						var bLow = flatCandles[globalIdx - L + j].Low;
+						if (bLow < minLow)
+						{
+							minLow = bLow;
+							minAge = j;
+						}
+					}
+				}
+			}
+			else
+			{
+				bufCount++;
+			}
+
+			if (prevFormed != 0)
+			{
+				flatResults[resIndex] = new GpuAroonResult
+				{
+					Time = candle.Time,
+					Up = 100f * (L - maxAge) / L,
+					Down = 100f * (L - minAge) / L,
+					IsFormed = 1,
+				};
+			}
+			else
+			{
+				flatResults[resIndex] = new GpuAroonResult
+				{
+					Time = candle.Time,
+					Up = float.NaN,
+					Down = float.NaN,
+					IsFormed = 0,
+				};
+			}
+
+			if (bufCount >= L)
+				prevFormed = 1;
 		}
 	}
 }

@@ -188,6 +188,10 @@ public class GpuApprovalFlowIndexCalculator : GpuIndicatorCalculatorBase<Approva
 				if (totalVolume != 0f)
 				{
 					result.Value = 100f * (totalUpVolume - totalDownVolume) / totalVolume;
+					flatResults[resIndex] = result;
+					// CPU skips prevClose update when formed and totalVolume != 0
+					// because it returns before the prevClose assignment
+					continue;
 				}
 			}
 

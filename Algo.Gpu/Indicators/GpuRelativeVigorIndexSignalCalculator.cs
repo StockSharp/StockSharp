@@ -7,17 +7,25 @@
 /// Initializes a new instance of the <see cref="GpuRelativeVigorIndexSignalParams"/> struct.
 /// </remarks>
 /// <param name="length">Signal smoothing length.</param>
+/// <param name="priceType">Price type.</param>
 [StructLayout(LayoutKind.Sequential)]
-public struct GpuRelativeVigorIndexSignalParams(int length) : IGpuIndicatorParams
+public struct GpuRelativeVigorIndexSignalParams(int length, byte priceType) : IGpuIndicatorParams
 {
 	/// <summary>
 	/// Signal smoothing length.
 	/// </summary>
 	public int Length = length;
 
+	/// <summary>
+	/// Price type to extract from candles.
+	/// </summary>
+	public byte PriceType = priceType;
+
 	/// <inheritdoc />
 	public readonly void FromIndicator(IIndicator indicator)
 	{
+		Unsafe.AsRef(in this).PriceType = (byte)(indicator.Source ?? Level1Fields.ClosePrice);
+
 		if (indicator is RelativeVigorIndexSignal signal)
 		{
 			Unsafe.AsRef(in this).Length = signal.Length;
@@ -120,6 +128,8 @@ public class GpuRelativeVigorIndexSignalCalculator : GpuIndicatorCalculatorBase<
 
 	/// <summary>
 	/// ILGPU kernel calculating Relative Vigor Index signal for multiple series and parameter sets.
+	/// The CPU implementation buffers input values (extracted price) and computes a weighted average
+	/// of the last Length values: (buf[0] + 2*buf[1] + 2*buf[2] + buf[3]) / 6.
 	/// </summary>
 	private static void RelativeVigorIndexSignalKernel(
 		Index3D index,
@@ -145,34 +155,26 @@ public class GpuRelativeVigorIndexSignalCalculator : GpuIndicatorCalculatorBase<
 		flatResults[resIndex] = new() { Time = candle.Time, Value = float.NaN, IsFormed = 0 };
 
 		var prm = parameters[paramIdx];
-		if (prm.Length != 4)
+		var signalLength = prm.Length;
+
+		if (signalLength <= 0)
 			return;
 
-		const int averageLength = 4;
-		var minIndex = (averageLength - 1) + (prm.Length - 1);
-		if (candleIdx < minIndex)
+		// CPU IsFormed at Buffer.Count >= Length, i.e., bar signalLength-1
+		if (candleIdx < signalLength - 1)
 			return;
 
-		var avg0 = ComputeAverage(flatCandles, globalIdx - 3);
-		var avg1 = ComputeAverage(flatCandles, globalIdx - 2);
-		var avg2 = ComputeAverage(flatCandles, globalIdx - 1);
-		var avg3 = ComputeAverage(flatCandles, globalIdx);
+		var priceType = (Level1Fields)prm.PriceType;
 
-		var signal = (avg0 + 2f * avg1 + 2f * avg2 + avg3) / 6f;
+		// CPU always uses Buffer[0..3] (the 4 oldest values in the buffer) with weights [1, 2, 2, 1] / 6,
+		// regardless of buffer Length. The oldest value is at (globalIdx - signalLength + 1).
+		var oldest = globalIdx - signalLength + 1;
+		var v0 = ExtractPrice(flatCandles[oldest], priceType);
+		var v1 = ExtractPrice(flatCandles[oldest + 1], priceType);
+		var v2 = ExtractPrice(flatCandles[oldest + 2], priceType);
+		var v3 = ExtractPrice(flatCandles[oldest + 3], priceType);
 
+		var signal = (v0 + 2f * v1 + 2f * v2 + v3) / 6f;
 		flatResults[resIndex] = new() { Time = candle.Time, Value = signal, IsFormed = 1 };
-	}
-
-	private static float ComputeAverage(ArrayView<GpuCandle> candles, int index)
-	{
-		var c0 = candles[index - 3];
-		var c1 = candles[index - 2];
-		var c2 = candles[index - 1];
-		var c3 = candles[index];
-
-		var valueUp = ((c0.Close - c0.Open) + 2f * (c1.Close - c1.Open) + 2f * (c2.Close - c2.Open) + (c3.Close - c3.Open)) / 6f;
-		var valueDn = ((c0.High - c0.Low) + 2f * (c1.High - c1.Low) + 2f * (c2.High - c2.Low) + (c3.High - c3.Low)) / 6f;
-
-		return valueDn == 0f ? valueUp : valueUp / valueDn;
 	}
 }

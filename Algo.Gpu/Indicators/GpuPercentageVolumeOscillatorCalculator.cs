@@ -262,6 +262,8 @@ public class GpuPercentageVolumeOscillatorCalculator : GpuIndicatorCalculatorBas
 		float prevShort = 0f;
 		float prevLong = 0f;
 
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var candle = flatCandles[offset + i];
@@ -325,6 +327,8 @@ public class GpuPercentageVolumeOscillatorCalculator : GpuIndicatorCalculatorBas
 				pvo = longValue == 0f ? 0f : ((shortValue - longValue) / longValue) * 100f;
 			}
 
+			byte curFormed = (byte)((shortIsFormed != 0 && longIsFormed != 0) ? 1 : 0);
+
 			var resIndex = paramIdx * flatCandles.Length + (offset + i);
 			flatResults[resIndex] = new()
 			{
@@ -334,8 +338,9 @@ public class GpuPercentageVolumeOscillatorCalculator : GpuIndicatorCalculatorBas
 				Pvo = pvo,
 				ShortIsFormed = shortIsFormed,
 				LongIsFormed = longIsFormed,
-				IsFormed = (byte)((shortIsFormed != 0 && longIsFormed != 0) ? 1 : 0),
+				IsFormed = prevFormed,
 			};
+			prevFormed = curFormed;
 		}
 	}
 }

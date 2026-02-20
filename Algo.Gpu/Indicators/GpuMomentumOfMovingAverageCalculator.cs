@@ -45,7 +45,7 @@ public struct GpuMomentumOfMovingAverageParams(int length, int momentumPeriod, b
 /// </summary>
 public class GpuMomentumOfMovingAverageCalculator : GpuIndicatorCalculatorBase<MomentumOfMovingAverage, GpuMomentumOfMovingAverageParams, GpuIndicatorResult>
 {
-	private readonly Action<Index3D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuMomentumOfMovingAverageParams>> _paramsSeriesKernel;
+	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<float>, ArrayView<int>, ArrayView<int>, ArrayView<GpuMomentumOfMovingAverageParams>, ArrayView<int>> _paramsSeriesKernel;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GpuMomentumOfMovingAverageCalculator"/> class.
@@ -56,7 +56,7 @@ public class GpuMomentumOfMovingAverageCalculator : GpuIndicatorCalculatorBase<M
 		: base(context, accelerator)
 	{
 		_paramsSeriesKernel = Accelerator.LoadAutoGroupedStreamKernel
-			<Index3D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuMomentumOfMovingAverageParams>>(MomentumParamsSeriesKernel);
+			<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<float>, ArrayView<int>, ArrayView<int>, ArrayView<GpuMomentumOfMovingAverageParams>, ArrayView<int>>(MomentumParamsSeriesKernel);
 	}
 
 	/// <inheritdoc />
@@ -87,7 +87,6 @@ public class GpuMomentumOfMovingAverageCalculator : GpuIndicatorCalculatorBase<M
 		}
 
 		var flatCandles = new GpuCandle[totalSize];
-		var maxLen = 0;
 		var offset = 0;
 
 		for (var s = 0; s < seriesCount; s++)
@@ -98,20 +97,30 @@ public class GpuMomentumOfMovingAverageCalculator : GpuIndicatorCalculatorBase<M
 			{
 				Array.Copy(candlesSeries[s], 0, flatCandles, offset, len);
 				offset += len;
-
-				if (len > maxLen)
-					maxLen = len;
 			}
+		}
+
+		// Compute max length for circular buffer allocation
+		var maxLength = 1;
+		for (var p = 0; p < parameters.Length; p++)
+		{
+			if (parameters[p].Length > maxLength)
+				maxLength = parameters[p].Length;
 		}
 
 		using var inputBuffer = Accelerator.Allocate1D(flatCandles);
 		using var offsetsBuffer = Accelerator.Allocate1D(seriesOffsets);
 		using var lengthsBuffer = Accelerator.Allocate1D(seriesLengths);
 		using var paramsBuffer = Accelerator.Allocate1D(parameters);
+		// Circular buffer: one buffer of size maxLength per (param, series) combination
+		using var circBuf = Accelerator.Allocate1D<float>(maxLength * parameters.Length * seriesCount);
 		using var outputBuffer = Accelerator.Allocate1D<GpuIndicatorResult>(totalSize * parameters.Length);
 
-		var extent = new Index3D(parameters.Length, seriesCount, maxLen);
-		_paramsSeriesKernel(extent, inputBuffer.View, outputBuffer.View, offsetsBuffer.View, lengthsBuffer.View, paramsBuffer.View);
+		var maxLengthArr = new int[] { maxLength };
+		using var maxLenBuffer = Accelerator.Allocate1D(maxLengthArr);
+
+		var extent = new Index2D(parameters.Length, seriesCount);
+		_paramsSeriesKernel(extent, inputBuffer.View, outputBuffer.View, circBuf.View, offsetsBuffer.View, lengthsBuffer.View, paramsBuffer.View, maxLenBuffer.View);
 		Accelerator.Synchronize();
 
 		var flatResults = outputBuffer.GetAsArray1D();
@@ -144,77 +153,112 @@ public class GpuMomentumOfMovingAverageCalculator : GpuIndicatorCalculatorBase<M
 
 	/// <summary>
 	/// ILGPU kernel: Momentum of Moving Average computation for multiple series and multiple parameter sets.
+	/// Sequential loop over candles to simulate the CPU circular buffer behavior exactly.
 	/// Results are stored as [param][globalIdx].
 	/// </summary>
 	private static void MomentumParamsSeriesKernel(
-		Index3D index,
+		Index2D index,
 		ArrayView<GpuCandle> flatCandles,
 		ArrayView<GpuIndicatorResult> flatResults,
+		ArrayView<float> circBuf,
 		ArrayView<int> offsets,
 		ArrayView<int> lengths,
-		ArrayView<GpuMomentumOfMovingAverageParams> parameters)
+		ArrayView<GpuMomentumOfMovingAverageParams> parameters,
+		ArrayView<int> maxLenArr)
 	{
 		var paramIdx = index.X;
 		var seriesIdx = index.Y;
-		var candleIdx = index.Z;
 
 		var len = lengths[seriesIdx];
-
-		if (candleIdx >= len)
+		if (len <= 0)
 			return;
 
 		var offset = offsets[seriesIdx];
-		var globalIdx = offset + candleIdx;
-		var candle = flatCandles[globalIdx];
-		var resIndex = paramIdx * flatCandles.Length + globalIdx;
-
-		flatResults[resIndex] = new()
-		{
-			Time = candle.Time,
-			Value = float.NaN,
-			IsFormed = 0,
-		};
+		var resIndexBase = paramIdx * flatCandles.Length;
 
 		var prm = parameters[paramIdx];
 		var maLength = prm.Length;
-		var momPeriod = prm.MomentumPeriod;
 
-		if (maLength <= 0 || momPeriod <= 0)
-			return;
-
-		if (candleIdx + 1 < maLength)
-			return;
+		if (maLength <= 0)
+			maLength = 1;
 
 		var priceType = (Level1Fields)prm.PriceType;
-		var sum = 0f;
 
-		for (var j = 0; j < maLength; j++)
-			sum += ExtractPrice(flatCandles[globalIdx - j], priceType);
+		// Circular buffer in global memory
+		var maxLen = maxLenArr[0];
+		var numSeries = lengths.Length;
+		var bufBase = (paramIdx * numSeries + seriesIdx) * maxLen;
+		var bufCount = 0;
+		var bufHead = 0; // index of oldest element in circular buffer
+		var bufSum = 0f;
 
-		var ma = sum / maLength;
-		var prevIdx = candleIdx - momPeriod;
-
-		if (prevIdx < maLength - 1)
-			return;
-
-		var prevGlobalIdx = offset + prevIdx;
-		sum = 0f;
-
-		for (var j = 0; j < maLength; j++)
-			sum += ExtractPrice(flatCandles[prevGlobalIdx - j], priceType);
-
-		var prevMa = sum / maLength;
-
-		if (prevMa == 0f)
-			return;
-
-		var momentum = (ma - prevMa) / prevMa * 100f;
-
-		flatResults[resIndex] = new()
+		for (var candleIdx = 0; candleIdx < len; candleIdx++)
 		{
-			Time = candle.Time,
-			Value = momentum,
-			IsFormed = 1,
-		};
+			var globalIdx = offset + candleIdx;
+			var candle = flatCandles[globalIdx];
+			var resIndex = resIndexBase + globalIdx;
+
+			flatResults[resIndex] = new()
+			{
+				Time = candle.Time,
+				Value = float.NaN,
+				IsFormed = 0,
+			};
+
+			var price = ExtractPrice(candle, priceType);
+
+			// SMA pushes raw price to circular buffer (same as CPU base.OnProcessDecimal)
+			if (bufCount >= maLength)
+			{
+				bufSum -= circBuf[bufBase + bufHead];
+				bufHead = (bufHead + 1) % maLength;
+			}
+			else
+			{
+				bufCount++;
+			}
+
+			var tail = (bufHead + bufCount - 1) % maLength;
+			circBuf[bufBase + tail] = price;
+			bufSum += price;
+
+			// SMA value = Buffer.Sum / Length
+			var ma = bufSum / maLength;
+
+			// IsFormed = Buffer.Count >= Length
+			if (bufCount < maLength)
+				continue;
+
+			// MOMA: push MA value to the same buffer, then compute momentum from Buffer[0]
+			// (CPU does Buffer.PushBack(ma) then reads Buffer[0])
+			bufSum -= circBuf[bufBase + bufHead];
+			bufHead = (bufHead + 1) % maLength;
+
+			tail = (bufHead + bufCount - 1) % maLength;
+			circBuf[bufBase + tail] = ma;
+			bufSum += ma;
+
+			var firstBuffer = circBuf[bufBase + bufHead];
+
+			if (firstBuffer == 0f)
+			{
+				flatResults[resIndex] = new()
+				{
+					Time = candle.Time,
+					Value = float.NaN,
+					IsFormed = 1,
+				};
+				continue;
+			}
+
+			var momentum = (ma - firstBuffer) / firstBuffer * 100f;
+
+			flatResults[resIndex] = new()
+			{
+				Time = candle.Time,
+				Value = momentum,
+				IsFormed = 1,
+			};
+		}
 	}
 }

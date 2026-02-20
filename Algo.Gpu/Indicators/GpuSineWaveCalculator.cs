@@ -220,12 +220,14 @@ public class GpuSineWaveCalculator : GpuIndicatorCalculatorBase<SineWave, GpuSin
 		var angleMain = 2.0 * XMath.PI * candleIdx / period;
 		var angleLead = 2.0 * XMath.PI * (candleIdx + 0.5) / period;
 
+		byte prevFormed = (byte)(candleIdx >= period ? 1 : 0);
+
 		flatResults[resIndex] = new GpuSineWaveResult
 		{
 			Time = candle.Time,
 			Main = (float)XMath.Sin(angleMain),
 			Lead = (float)XMath.Sin(angleLead),
-			IsFormed = (byte)((candleIdx + 1) >= period ? 1 : 0),
+			IsFormed = prevFormed,
 		};
 	}
 }

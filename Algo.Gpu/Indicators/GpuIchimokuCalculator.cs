@@ -238,6 +238,8 @@ public class GpuIchimokuCalculator : GpuIndicatorCalculatorBase<Ichimoku, GpuIch
 
 				var arr = new GpuIchimokuResult[len];
 
+				byte prevFormed = 0;
+
 				for (var i = 0; i < len; i++)
 				{
 					var globalIdx = offsetBase + i;
@@ -294,9 +296,11 @@ public class GpuIchimokuCalculator : GpuIndicatorCalculatorBase<Ichimoku, GpuIch
 					res.SenkouAIsFormed = (byte)(senkouAFormed ? 1 : 0);
 					res.SenkouBIsFormed = (byte)(senkouBFormed ? 1 : 0);
 					res.ChinkouIsFormed = (byte)(chinkouFormed ? 1 : 0);
-					res.IsFormed = (byte)((tenkanFormed && kijunFormed && senkouAFormed && senkouBFormed && chinkouFormed) ? 1 : 0);
+					byte curFormed = (byte)((tenkanFormed && kijunFormed && senkouAFormed && senkouBFormed && chinkouFormed) ? 1 : 0);
+					res.IsFormed = prevFormed;
 
 					arr[i] = res;
+					prevFormed = curFormed;
 				}
 
 				result[s][p] = arr;

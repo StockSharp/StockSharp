@@ -145,6 +145,7 @@ public class GpuEaseOfMovementCalculator : GpuIndicatorCalculatorBase<EaseOfMove
 		var prevHigh = 0f;
 		var prevLow = 0f;
 		var hasPrev = false;
+		byte isFormed = 0;
 
 		for (var i = 0; i < len; i++)
 		{
@@ -157,7 +158,7 @@ public class GpuEaseOfMovementCalculator : GpuIndicatorCalculatorBase<EaseOfMove
 			{
 				Time = candle.Time,
 				Value = float.NaN,
-				IsFormed = 0,
+				IsFormed = isFormed,
 			};
 
 			if (!hasPrev)
@@ -199,6 +200,7 @@ public class GpuEaseOfMovementCalculator : GpuIndicatorCalculatorBase<EaseOfMove
 
 			if (count == L)
 			{
+				isFormed = 1;
 				flatResults[resIndex] = new GpuIndicatorResult
 				{
 					Time = candle.Time,

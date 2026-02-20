@@ -275,6 +275,10 @@ public class GpuDonchianChannelsCalculator : GpuIndicatorCalculatorBase<Donchian
 			result.Upper = highest;
 			result.Lower = lowest;
 			result.Middle = (highest + lowest) / 2f;
+		}
+
+		if (candleIdx >= length)
+		{
 			result.IsFormed = 1;
 		}
 

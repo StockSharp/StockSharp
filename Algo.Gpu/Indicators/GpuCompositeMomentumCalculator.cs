@@ -263,6 +263,8 @@ public class GpuCompositeMomentumCalculator : GpuIndicatorCalculatorBase<Composi
 		float smaSum = 0f;
 		var smaCount = 0;
 
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var candleIndex = offset + i;
@@ -378,7 +380,7 @@ public class GpuCompositeMomentumCalculator : GpuIndicatorCalculatorBase<Composi
 
 			var compositeLine = float.NaN;
 			var smaValue = float.NaN;
-			byte formed = 0;
+			byte curFormed = 0;
 
 			if (roc1Ready && roc2Ready && rsiFormed && emaFastFormed && emaSlowFormed && !shortRoc.IsNaN() && !longRoc.IsNaN() && !rsiValue.IsNaN())
 			{
@@ -411,7 +413,7 @@ public class GpuCompositeMomentumCalculator : GpuIndicatorCalculatorBase<Composi
 					smaValue = smaSum / smaLen;
 
 					if (smaCount >= smaLen)
-						formed = 1;
+						curFormed = 1;
 				}
 			}
 
@@ -420,8 +422,10 @@ public class GpuCompositeMomentumCalculator : GpuIndicatorCalculatorBase<Composi
 				Time = candle.Time,
 				CompositeLine = compositeLine,
 				Sma = smaValue,
-				IsFormed = formed,
+				IsFormed = prevFormed,
 			};
+
+			prevFormed = curFormed;
 		}
 	}
 }

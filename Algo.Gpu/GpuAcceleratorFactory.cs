@@ -13,7 +13,7 @@ public static class GpuAcceleratorFactory
 	/// <returns><see langword="true"/> if an accelerator was created; otherwise, <see langword="false"/>.</returns>
 	public static bool TryCreateBestAccelerator(out Context context, out Accelerator accelerator)
 	{
-		context = Context.CreateDefault();
+		context = Context.Create(b => b.Default().EnableAlgorithms());
 
 		Device best = null;
 		var bestScore = long.MinValue;

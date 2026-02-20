@@ -194,24 +194,24 @@ public class GpuSchaffTrendCycleCalculator : GpuIndicatorCalculatorBase<SchaffTr
 		var signalMultiplier = 2f / (macdSignalLength + 1f);
 		var emaMultiplier = 2f / (length + 1f);
 
+		// CPU EMAs use Buffer.Sum / Length initialization (always divide by Length, not count)
 		float shortSum = 0f;
 		float longSum = 0f;
 		float signalSum = 0f;
-		float emaSum = 0f;
 
 		float shortEma = 0f;
 		float longEma = 0f;
 		float signalEma = 0f;
 		float emaValue = 0f;
+		float emaSum = 0f;
 
 		int shortCount = 0;
 		int longCount = 0;
 		int signalCount = 0;
-		int stochCount = 0;
+		int stochValidCount = 0;
 		int emaCount = 0;
 
 		float prevStoch = 0f;
-		var hasPrevStoch = false;
 
 		for (var i = 0; i < len; i++)
 		{
@@ -229,62 +229,45 @@ public class GpuSchaffTrendCycleCalculator : GpuIndicatorCalculatorBase<SchaffTr
 
 			var price = ExtractPrice(candle, priceType);
 
+			// Short EMA: produce values from bar 0 using CPU-matching initialization
 			shortCount++;
-			var shortReady = false;
+			shortSum += price;
 			if (shortCount <= macdShortLength)
-			{
-				shortSum += price;
-				if (shortCount == macdShortLength)
-				{
-					shortEma = shortSum / macdShortLength;
-					shortReady = true;
-				}
-			}
+				shortEma = shortSum / macdShortLength;
 			else
-			{
 				shortEma = (price - shortEma) * shortMultiplier + shortEma;
-				shortReady = true;
-			}
 
+			// Long EMA: produce values from bar 0
 			longCount++;
-			var longReady = false;
+			longSum += price;
 			if (longCount <= macdLongLength)
-			{
-				longSum += price;
-				if (longCount == macdLongLength)
-				{
-					longEma = longSum / macdLongLength;
-					longReady = true;
-				}
-			}
+				longEma = longSum / macdLongLength;
 			else
-			{
 				longEma = (price - longEma) * longMultiplier + longEma;
-				longReady = true;
-			}
 
-			if (!shortReady || !longReady)
-				continue;
-
+			// MACD available from bar 0
 			var macd = shortEma - longEma;
 
-			signalCount++;
-			if (signalCount <= macdSignalLength)
+			// CPU: In Sequence mode, SignalMa only starts receiving MACD values
+			// AFTER the inner MACD is formed (LongMa.IsFormed at bar macdLongLength-1).
+			if (i >= macdLongLength - 1)
 			{
+				signalCount++;
 				signalSum += macd;
-				if (signalCount < macdSignalLength)
+				if (signalCount <= macdSignalLength)
+					signalEma = signalSum / macdSignalLength;
+				else
+					signalEma = (macd - signalEma) * signalMultiplier + signalEma;
+			}
+
+			// CPU: MACD Signal formed when both MACD and SignalMa are formed.
+			// SignalMa gets first value at bar macdLongLength-1, formed after macdSignalLength values.
+			if (signalCount < macdSignalLength)
 				continue;
-				signalEma = signalSum / macdSignalLength;
-			}
-			else
-			{
-				signalEma = (macd - signalEma) * signalMultiplier + signalEma;
-			}
 
 			var macdHist = macd - signalEma;
 
-			float stoch;
-
+			// Price buffer min/max over last `length` bars
 			var priceMin = price;
 			var priceMax = price;
 			var start = i + 1 < length ? 0 : i + 1 - length;
@@ -292,25 +275,32 @@ public class GpuSchaffTrendCycleCalculator : GpuIndicatorCalculatorBase<SchaffTr
 			{
 				var pr = ExtractPrice(flatCandles[offset + j], priceType);
 				if (pr < priceMin)
-				{
 					priceMin = pr;
-				}
 				if (pr > priceMax)
-				{
 					priceMax = pr;
-				}
 			}
 
+			// First stochastic: normalize macdHist using price range
 			var denom = priceMax - priceMin;
+			float norm;
 			if (denom == 0f)
 			{
-				stoch = hasPrevStoch ? prevStoch : 0f;
+				norm = float.NaN;
 			}
 			else
 			{
-				var norm = (macdHist - priceMin) / denom;
+				norm = (macdHist - priceMin) / denom;
 				normHistory[resIndex] = norm;
+			}
 
+			// Second stochastic via StochasticK(stochasticLength): min/max of norm values
+			float stoch;
+			if (float.IsNaN(norm))
+			{
+				stoch = prevStoch;
+			}
+			else
+			{
 				var needed = stochasticLength;
 				var considered = 0;
 				var hasNorm = false;
@@ -322,9 +312,7 @@ public class GpuSchaffTrendCycleCalculator : GpuIndicatorCalculatorBase<SchaffTr
 					var idx = baseResultIndex + offset + j;
 					var value = normHistory[idx];
 					if (float.IsNaN(value))
-					{
 						continue;
-					}
 
 					if (!hasNorm)
 					{
@@ -335,13 +323,9 @@ public class GpuSchaffTrendCycleCalculator : GpuIndicatorCalculatorBase<SchaffTr
 					else
 					{
 						if (value < minNorm)
-						{
 							minNorm = value;
-						}
 						if (value > maxNorm)
-						{
 							maxNorm = value;
-						}
 					}
 
 					considered++;
@@ -349,19 +333,24 @@ public class GpuSchaffTrendCycleCalculator : GpuIndicatorCalculatorBase<SchaffTr
 
 				if (!hasNorm)
 				{
-					stoch = hasPrevStoch ? prevStoch : 0f;
+					stoch = prevStoch;
 				}
 				else
 				{
 					var stochDen = maxNorm - minNorm;
 					stoch = stochDen == 0f ? 0f : 100f * (norm - minNorm) / stochDen;
-					stochCount++;
+					stochValidCount++;
 				}
 			}
 
 			prevStoch = stoch;
-			hasPrevStoch = true;
 
+			// CPU: if (!StochasticK.IsFormed) return null
+			// StochasticK formed after stochasticLength values
+			if (stochValidCount < stochasticLength)
+				continue;
+
+			// Final EMA smoothing (CPU EMA uses Buffer.Sum/Length initialization)
 			emaCount++;
 			if (emaCount <= length)
 			{
@@ -373,13 +362,16 @@ public class GpuSchaffTrendCycleCalculator : GpuIndicatorCalculatorBase<SchaffTr
 				emaValue = (stoch - emaValue) * emaMultiplier + emaValue;
 			}
 
-			var formed = signalCount >= macdSignalLength && stochCount >= stochasticLength && emaCount >= length;
+			// CPU STC formed: Macd.IsFormed && StochasticK.IsFormed && base(EMA).CalcIsFormed
+			// No one-bar delay: DecimalLengthIndicator creates DecimalIndicatorValue AFTER
+			// OnProcessDecimal, so IsFormed captures post-processing state.
+			var isFormed = (byte)(emaCount >= length ? 1 : 0);
 
 			flatResults[resIndex] = new GpuIndicatorResult
 			{
 				Time = candle.Time,
 				Value = emaValue,
-				IsFormed = (byte)(formed ? 1 : 0),
+				IsFormed = isFormed,
 			};
 		}
 	}

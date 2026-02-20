@@ -257,7 +257,7 @@ public class GpuEnvelopeCalculator : GpuIndicatorCalculatorBase<Envelope, GpuEnv
 			Middle = middle,
 			Upper = upper,
 			Lower = lower,
-			IsFormed = 1
+			IsFormed = (byte)(candleIdx >= length ? 1 : 0)
 		};
 	}
 }

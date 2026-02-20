@@ -128,6 +128,8 @@ public class GpuBalanceOfPowerCalculator : GpuIndicatorCalculatorBase<BalanceOfP
 
 		_ = parameters[paramIdx];
 
+		byte isFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var globalIdx = offset + i;
@@ -139,11 +141,12 @@ public class GpuBalanceOfPowerCalculator : GpuIndicatorCalculatorBase<BalanceOfP
 			{
 				Time = candle.Time,
 				Value = float.NaN,
-				IsFormed = 0
+				IsFormed = isFormed
 			};
 
 			if (length != 0f)
 			{
+				isFormed = 1;
 				result.Value = (candle.Close - candle.Open) / length;
 				result.IsFormed = 1;
 			}

@@ -207,6 +207,8 @@ public class GpuVortexCalculator : GpuIndicatorCalculatorBase<VortexIndicator, G
 		if (L <= 0)
 			L = 1;
 
+		byte prevFormed = 0;
+
 		for (var i = 0; i < len; i++)
 		{
 			var candle = flatCandles[offset + i];
@@ -248,19 +250,25 @@ public class GpuVortexCalculator : GpuIndicatorCalculatorBase<VortexIndicator, G
 				count++;
 			}
 
+			byte curFormed = 0;
+
 			if (count >= L)
 			{
 				var plusVi = sumTr > 0f ? sumVmPlus / sumTr : 0f;
 				var minusVi = sumTr > 0f ? sumVmMinus / sumTr : 0f;
+
+				curFormed = 1;
 
 				flatResults[resIndex] = new GpuVortexResult
 				{
 					Time = candle.Time,
 					PlusVi = plusVi,
 					MinusVi = minusVi,
-					IsFormed = 1,
+					IsFormed = prevFormed,
 				};
 			}
+
+			prevFormed = curFormed;
 		}
 	}
 }

@@ -277,6 +277,10 @@ public class GpuConnorsRsiCalculator : GpuIndicatorCalculatorBase<ConnorsRSI, Gp
 		var rocWarmup = 0;
 		var rocFormed = false;
 
+		// CPU uses one-bar delay: the output value captures IsFormed BEFORE it is set.
+		// So we track whether the indicator was formed on the previous bar.
+		var wasFormed = false;
+
 		for (var i = 0; i < len; i++)
 		{
 			var candleIndex = offset + i;
@@ -308,14 +312,17 @@ public class GpuConnorsRsiCalculator : GpuIndicatorCalculatorBase<ConnorsRSI, Gp
 
 			var updownValue = UpdateRsi(streak, streakLen, ref hasPrevStreakValue, ref prevStreakValue, ref streakAvgGain, ref streakAvgLoss, ref streakWarmup, ref streakFormed);
 
+			// CPU Momentum produces values from bar 0 using oldest available price.
+			// Buffer[0] = price at bar max(0, i - rocLength).
 			var rocValue = float.NaN;
-			if (i >= rocLength)
 			{
-				var pastPrice = ExtractPrice(flatCandles[candleIndex - rocLength], priceType);
+				var pastIdx = i >= rocLength ? (candleIndex - rocLength) : offset;
+				var pastPrice = ExtractPrice(flatCandles[pastIdx], priceType);
 				if (pastPrice != 0f)
 					rocValue = (price - pastPrice) / pastPrice * 100f;
 			}
 
+			// RocRsi is always fed from bar 0 (matching CPU behavior).
 			var rocRsiValue = float.NaN;
 			if (!float.IsNaN(rocValue))
 			{
@@ -331,10 +338,20 @@ public class GpuConnorsRsiCalculator : GpuIndicatorCalculatorBase<ConnorsRSI, Gp
 			if (!float.IsNaN(rocRsiValue))
 				result.RocRsi = rocRsiValue;
 
+			// CPU IsFormed uses one-bar delay: the output value captures the
+			// indicator's IsFormed from BEFORE the current bar's processing sets it.
+			// Track with wasFormed to replicate this behavior.
+			if (wasFormed)
+				result.IsFormed = 1;
+
+			// CPU condition: !rocValue.IsEmpty && Rsi.IsFormed && UpDownRsi.IsFormed && RocRsi.IsFormed && _roc.IsFormed
+			// _roc.IsFormed = Momentum.Buffer.Count > Length, true when i >= rocLength.
+			if (!wasFormed && rsiFormed && streakFormed && rocFormed && i >= rocLength && !float.IsNaN(rocValue))
+				wasFormed = true;
+
 			if (!float.IsNaN(result.Rsi) && !float.IsNaN(result.UpDownRsi) && !float.IsNaN(result.RocRsi))
 			{
 				result.Crsi = (result.Rsi + result.UpDownRsi + result.RocRsi) / 3f;
-				result.IsFormed = 1;
 			}
 
 			flatResults[paramIdx * totalCandles + candleIndex] = result;
