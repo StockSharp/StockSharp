@@ -4,14 +4,14 @@ namespace StockSharp.Algo.Indicators;
 /// Price Volume Trend (PVT).
 /// </summary>
 /// <remarks>
-/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/pvt.html
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/price_volume_trend.html
 /// </remarks>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.PVTKey,
 	Description = LocalizedStrings.PriceVolumeTrendKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/api/indicators/list_of_indicators/pvt.html")]
+[Doc("topics/api/indicators/list_of_indicators/price_volume_trend.html")]
 public class PriceVolumeTrend : BaseIndicator
 {
 	private decimal _pvt;

@@ -4,13 +4,13 @@ namespace StockSharp.Algo.Indicators;
 /// Variable Moving Average (VMA).
 /// </summary>
 /// <remarks>
-/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/vma.html
+/// https://doc.stocksharp.com/topics/api/indicators/list_of_indicators/variable_moving_average.html
 /// </remarks>
 [Display(
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.VMAKey,
 	Description = LocalizedStrings.VariableMovingAverageKey)]
-[Doc("topics/api/indicators/list_of_indicators/vma.html")]
+[Doc("topics/api/indicators/list_of_indicators/variable_moving_average.html")]
 public class VariableMovingAverage : DecimalLengthIndicator
 {
 	private readonly StandardDeviation _stdDev;

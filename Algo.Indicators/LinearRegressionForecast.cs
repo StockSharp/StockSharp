@@ -7,7 +7,7 @@ namespace StockSharp.Algo.Indicators;
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.LinearRegressionForecastKey,
 	Description = LocalizedStrings.LinearRegressionForecastDescriptionKey)]
-[Doc("topics/indicators/linear_regression_forecast.html")]
+[Doc("topics/api/indicators/list_of_indicators/linear_regression_forecast.html")]
 public class LinearRegressionForecast : DecimalLengthIndicator
 {
 	/// <summary>

@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.TypicalPriceKey,
 	Description = LocalizedStrings.TypicalPriceDescriptionKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/typical_price.html")]
+[Doc("topics/api/indicators/list_of_indicators/typical_price.html")]
 public class TypicalPrice : BaseIndicator
 {
 	/// <summary>

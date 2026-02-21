@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.VWAPKey,
 	Description = LocalizedStrings.VolumeWeightedAveragePriceKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/volume_weighted_average_price.html")]
+[Doc("topics/api/indicators/list_of_indicators/volume_weighted_average_price.html")]
 public class VolumeWeightedAveragePrice : BaseIndicator
 {
 	private decimal _cumulativePriceVolume;

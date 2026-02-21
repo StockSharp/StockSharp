@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.PriceChannelsKey,
 	Description = LocalizedStrings.PriceChannelsDescriptionKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/price_channels.html")]
+[Doc("topics/api/indicators/list_of_indicators/price_channels.html")]
 [IndicatorOut(typeof(IPriceChannelsValue))]
 public class PriceChannels : BaseComplexIndicator<IPriceChannelsValue>
 {

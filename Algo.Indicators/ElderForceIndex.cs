@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.ElderForceIndexKey,
 	Description = LocalizedStrings.ElderForceIndexDescriptionKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/elder_force_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/elder_force_index.html")]
 public class ElderForceIndex : ExponentialMovingAverage
 {
 	private decimal _prevClose;

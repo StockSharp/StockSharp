@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.WeightedClosePriceKey,
 	Description = LocalizedStrings.WeightedClosePriceDescriptionKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/weighted_close_price.html")]
+[Doc("topics/api/indicators/list_of_indicators/weighted_close_price.html")]
 public class WeightedClosePrice : BaseIndicator
 {
 	/// <summary>

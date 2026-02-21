@@ -8,7 +8,7 @@ namespace StockSharp.Algo.Indicators;
 	Name = LocalizedStrings.PVIKey,
 	Description = LocalizedStrings.PositiveVolumeIndexKey)]
 [IndicatorIn(typeof(CandleIndicatorValue))]
-[Doc("topics/indicators/positive_volume_index.html")]
+[Doc("topics/api/indicators/list_of_indicators/positive_volume_index.html")]
 public class PositiveVolumeIndex : BaseIndicator
 {
 	private decimal _prevClose;
