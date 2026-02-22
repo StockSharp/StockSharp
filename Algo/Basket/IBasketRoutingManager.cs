@@ -194,4 +194,10 @@ public interface IBasketRoutingManager
 	void Reset(bool clearPending);
 
 	#endregion
+
+	/// <summary>
+	/// Transaction id generator used for internal child subscription routing.
+	/// Must be kept in sync with the parent adapter's generator.
+	/// </summary>
+	IdGenerator TransactionIdGenerator { get; set; }
 }

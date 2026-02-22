@@ -147,7 +147,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		IAdapterWrapperPipelineBuilder pipelineBuilder,
 		IBasketRoutingManager routingManager)
 	{
-		TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 		_innerAdapters = new InnerAdapterList(this);
 		SecurityAdapterProvider = securityAdapterProvider ?? throw new ArgumentNullException(nameof(securityAdapterProvider));
 		PortfolioAdapterProvider = portfolioAdapterProvider ?? throw new ArgumentNullException(nameof(portfolioAdapterProvider));
@@ -162,6 +161,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		_routingManager = routingManager ?? Basket.BasketRoutingManager.CreateDefault(
 			GetUnderlyingAdapter, StorageProcessor.CandleBuilderProvider,
 			() => Level1Extend, transactionIdGenerator, this);
+
+		TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 
 		SecurityAdapterProvider.Changed += SecurityAdapterProviderOnChanged;
 		PortfolioAdapterProvider.Changed += PortfolioAdapterProviderOnChanged;
@@ -249,13 +250,11 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	/// <inheritdoc />
 	public bool GenerateOrderBookFromLevel1 { get; set; } = true;
 
-	private IdGenerator _transactionIdGenerator;
-
 	/// <inheritdoc />
 	public IdGenerator TransactionIdGenerator
 	{
-		get => _transactionIdGenerator;
-		set => _transactionIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
+		get => _routingManager.TransactionIdGenerator;
+		set => _routingManager.TransactionIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
 	IEnumerable<MessageTypeInfo> IMessageAdapter.PossibleSupportedMessages => GetSortedAdapters().SelectMany(a => a.PossibleSupportedMessages).DistinctBy(i => i.Type);

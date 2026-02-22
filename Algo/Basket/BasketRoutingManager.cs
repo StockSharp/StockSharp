@@ -11,7 +11,7 @@ public class BasketRoutingManager : IBasketRoutingManager
 {
 	private readonly AsyncLock _lock = new();
 	private readonly Func<IMessageAdapter, IMessageAdapter> _getUnderlyingAdapter;
-	private readonly IdGenerator _transactionIdGenerator;
+	private IdGenerator _transactionIdGenerator;
 	private readonly ILogReceiver _logReceiver;
 
 	private readonly IAdapterConnectionState _connectionState;
@@ -69,6 +69,13 @@ public class BasketRoutingManager : IBasketRoutingManager
 		_logReceiver = logReceiver;
 
 		_router = router ?? new AdapterRouter(orderRouting, getUnderlyingAdapter, candleBuilderProvider, levelExtend);
+	}
+
+	/// <inheritdoc />
+	public IdGenerator TransactionIdGenerator
+	{
+		get => _transactionIdGenerator;
+		set => _transactionIdGenerator = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
 	#region Connection Management
@@ -228,7 +235,7 @@ public class BasketRoutingManager : IBasketRoutingManager
 			msg.SetSubscriptionIds(ids);
 
 		// If message had subscription IDs but none mapped to valid parents,
-		// the subscription was removed (unsubscribed) — drop the message
+		// the subscription was removed (unsubscribed) ï¿½ drop the message
 		return hasValidId || originIds.Length == 0;
 	}
 
