@@ -1108,6 +1108,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		_portfolioManager.Clear();
 		ProcessedMessageCount = 0;
 		_lastInputTime = default;
+
+		OrderIdGenerator.Current = Settings.InitialOrderId;
+		TradeIdGenerator.Current = Settings.InitialTradeId;
 	}
 
 	private InvalidOperationException ValidateRegistration(OrderRegisterMessage regMsg)
