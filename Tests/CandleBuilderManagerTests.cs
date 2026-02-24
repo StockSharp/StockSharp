@@ -1064,10 +1064,16 @@ public class CandleBuilderManagerTests : BaseTestClass
 		fwd.AssertNull();
 
 		// Should emit a loopback MarketDataMessage for ticks subscription
-		var tickSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		var tickSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe && m.DataType2 == DataType.Ticks);
 		IsNotNull(tickSub, "Should create a build-from-ticks subscription after history finishes");
 		tickSub.DataType2.AssertEqual(DataType.Ticks);
 		tickSub.IsSubscribe.AssertTrue();
+
+		// Should also emit a live candle subscription with IsFinishedOnly
+		var liveSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe && m.DataType2.IsTFCandles);
+		IsNotNull(liveSub, "Should create a live candle subscription after history finishes");
+		liveSub.IsFinishedOnly.AssertTrue();
+		liveSub.To.AssertNull();
 	}
 
 	[TestMethod]
@@ -1210,7 +1216,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 		var (fwd, extraOut) = await manager.ProcessOutMessageAsync(finished, CancellationToken);
 
 		fwd.AssertNull();
-		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe && m.DataType2 == DataType.Level1);
 		IsNotNull(buildSub, "Should create a build-from-level1 subscription");
 		buildSub.DataType2.AssertEqual(DataType.Level1);
 	}
@@ -1246,7 +1252,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 		var (fwd, extraOut) = await manager.ProcessOutMessageAsync(finished, CancellationToken);
 
 		fwd.AssertNull();
-		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe && m.DataType2 == DataType.MarketDepth);
 		IsNotNull(buildSub, "Should create a build-from-depth subscription");
 		buildSub.DataType2.AssertEqual(DataType.MarketDepth);
 	}
@@ -1282,7 +1288,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 		var (fwd, extraOut) = await manager.ProcessOutMessageAsync(finished, CancellationToken);
 
 		fwd.AssertNull();
-		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe && m.DataType2 == DataType.OrderLog);
 		IsNotNull(buildSub, "Should create a build-from-orderlog subscription");
 		buildSub.DataType2.AssertEqual(DataType.OrderLog);
 	}
@@ -1314,7 +1320,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 		var finished = new SubscriptionFinishedMessage { OriginalTransactionId = 1 };
 		var (_, extraOut) = await manager.ProcessOutMessageAsync(finished, CancellationToken);
 
-		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe && m.DataType2 == DataType.Ticks);
 		IsNotNull(buildSub);
 		buildSub.DataType2.AssertEqual(DataType.Ticks); // ticks has priority over level1
 	}
@@ -1347,7 +1353,7 @@ public class CandleBuilderManagerTests : BaseTestClass
 		var finished = new SubscriptionFinishedMessage { OriginalTransactionId = 1 };
 		var (_, extraOut) = await manager.ProcessOutMessageAsync(finished, CancellationToken);
 
-		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe && m.DataType2 == DataType.Level1);
 		IsNotNull(buildSub);
 		buildSub.DataType2.AssertEqual(DataType.Level1); // user's explicit choice
 	}

@@ -771,6 +771,21 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		// loopback
 		current.LoopBack(_adapter);
 		extraOut.Add(current);
+
+		// also send a live candle subscription so the adapter can provide live finished candles
+		if (!original.IsHistoryOnly())
+		{
+			var liveCandleSub = original.TypedClone();
+			liveCandleSub.TransactionId = _idGenerator.GetNextId();
+			liveCandleSub.From = series.LastTime;
+			liveCandleSub.IsFinishedOnly = true;
+
+			using (await _sync.LockAsync(cancellationToken))
+				_replaceId.Add(liveCandleSub.TransactionId, series.Id);
+
+			liveCandleSub.LoopBack(_adapter);
+			extraOut.Add(liveCandleSub);
+		}
 	}
 
 	private async ValueTask ProcessCandleAsync(SeriesInfo info, CandleMessage candleMsg, List<Message> extraOut, CancellationToken cancellationToken)

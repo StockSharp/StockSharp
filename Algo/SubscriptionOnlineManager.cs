@@ -159,6 +159,19 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 						if (!ChangeState(info, originTransId, SubscriptionStates.Online))
 								return (null, []);
+
+						// promote hist+live subscribers whose history already finished
+						foreach (var subId in info.Subscribers.CachedKeys)
+						{
+							if (subId != originTransId &&
+								!info.OnlineSubscribers.Contains(subId) &&
+								!info.HistLive.Contains(subId))
+							{
+								info.OnlineSubscribers.Add(subId);
+								extraOut ??= [];
+								extraOut.Add(new SubscriptionOnlineMessage { OriginalTransactionId = subId });
+							}
+						}
 					}
 				}
 
@@ -175,8 +188,18 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 					{
 						if (!ChangeState(info, originTransId, SubscriptionStates.Finished))
 						{
-							info.OnlineSubscribers.Remove(originTransId);
-								return (null, []);
+							// hist+live subscription's history finished
+							info.HistLive.Remove(originTransId);
+
+							if (info.State == SubscriptionStates.Online)
+							{
+								// main already online — promote this subscriber
+								info.OnlineSubscribers.Add(originTransId);
+								extraOut ??= [];
+								extraOut.Add(new SubscriptionOnlineMessage { OriginalTransactionId = originTransId });
+							}
+
+							return (null, extraOut?.ToArray() ?? []);
 						}
 					}
 				}
