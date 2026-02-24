@@ -20,6 +20,8 @@ public class CandleBuilderManagerTests : BaseTestClass
 	{
 		private readonly DataType[] _supported;
 
+		public Func<MarketDataMessage, bool> SupportCandlesUpdates { get; set; }
+
 		public TestInnerAdapter(IEnumerable<DataType> supported)
 			: base(new IncrementalIdGenerator())
 		{
@@ -29,6 +31,9 @@ public class CandleBuilderManagerTests : BaseTestClass
 			foreach (var type in _supported)
 				this.AddSupportedMarketDataType(type);
 		}
+
+		public override bool IsSupportCandlesUpdates(MarketDataMessage subscription)
+			=> SupportCandlesUpdates?.Invoke(subscription) ?? false;
 
 		public override IAsyncEnumerable<DataType> GetSupportedMarketDataTypesAsync(SecurityId securityId, DateTime? from, DateTime? to)
 			=> _supported.ToAsyncEnumerable();
@@ -987,6 +992,430 @@ public class CandleBuilderManagerTests : BaseTestClass
 		extra2.Length.AssertEqual(1);
 		((SubscriptionResponseMessage)extra2[0]).OriginalTransactionId.AssertEqual(2);
 		((SubscriptionResponseMessage)extra2[0]).IsOk().AssertTrue("Series2 response should be OK");
+	}
+
+	#endregion
+
+	private static CandleBuilderManager CreateManagerWith(
+		DataType[] supported,
+		Func<MarketDataMessage, bool> supportCandlesUpdates,
+		out TestWrapper wrapper,
+		out IncrementalIdGenerator idGenerator,
+		out TestReceiver logReceiver)
+	{
+		var inner = new TestInnerAdapter(supported) { SupportCandlesUpdates = supportCandlesUpdates };
+		logReceiver = new TestReceiver();
+		idGenerator = new IncrementalIdGenerator();
+		var provider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+		wrapper = new TestWrapper(inner);
+
+		return new CandleBuilderManager(
+			logReceiver,
+			idGenerator,
+			wrapper,
+			sendFinishedCandlesImmediatelly: false,
+			buffer: null,
+			cloneOutCandles: true,
+			provider);
+	}
+
+	#region IsSupportCandlesUpdates / IsFinishedOnly / BuildFrom Tests
+
+	[TestMethod]
+	public async Task LiveCandle_NoUpdatesSupport_WithTicks_CapsToAndTransitionsToCompress()
+	{
+		// Adapter supports TF candles AND ticks, but NOT IsSupportCandlesUpdates
+		// Subscription: To=null, BuildMode=LoadAndBuild, IsFinishedOnly=false
+		// Expected: To gets capped to CurrentTime, then after history finishes, transitions to build from ticks
+		var tf = TimeSpan.FromMinutes(5).TimeFrame();
+		var manager = CreateManagerWith(
+			[tf, DataType.Ticks],
+			supportCandlesUpdates: _ => false,
+			out _, out _, out var logReceiver);
+
+		logReceiver.Time = new DateTime(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		var secId = Helper.CreateSecurityId();
+		var mdMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = tf,
+			From = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Utc),
+			// To = null => hist+live
+		};
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(mdMsg, CancellationToken);
+
+		toOut.Length.AssertEqual(0);
+		toInner.Length.AssertEqual(1);
+
+		var sent = (MarketDataMessage)toInner[0];
+		sent.DataType2.AssertEqual(tf); // still candle subscription
+		sent.To.AssertNotNull(); // To was capped
+		sent.To.AssertEqual(logReceiver.Time);
+		sent.TransactionId.AssertEqual(1);
+
+		// Now simulate history finishes — should transition to Compress (build from ticks)
+		var finished = new SubscriptionFinishedMessage { OriginalTransactionId = 1 };
+		var (fwd, extraOut) = await manager.ProcessOutMessageAsync(finished, CancellationToken);
+
+		fwd.AssertNull();
+
+		// Should emit a loopback MarketDataMessage for ticks subscription
+		var tickSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		IsNotNull(tickSub, "Should create a build-from-ticks subscription after history finishes");
+		tickSub.DataType2.AssertEqual(DataType.Ticks);
+		tickSub.IsSubscribe.AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task LiveCandle_WithUpdatesSupport_DoesNotCapTo()
+	{
+		// Adapter supports TF candles AND IsSupportCandlesUpdates
+		// Expected: To stays null, subscription passes through as-is
+		var tf = TimeSpan.FromMinutes(5).TimeFrame();
+		var manager = CreateManagerWith(
+			[tf, DataType.Ticks],
+			supportCandlesUpdates: _ => true,
+			out _, out _, out var logReceiver);
+
+		logReceiver.Time = new DateTime(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		var secId = Helper.CreateSecurityId();
+		var mdMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = tf,
+			From = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Utc),
+			// To = null => hist+live
+		};
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(mdMsg, CancellationToken);
+
+		toOut.Length.AssertEqual(0);
+		toInner.Length.AssertEqual(1);
+
+		var sent = (MarketDataMessage)toInner[0];
+		sent.DataType2.AssertEqual(tf);
+		sent.To.AssertNull(); // NOT capped — adapter supports live candle updates
+	}
+
+	[TestMethod]
+	public async Task LiveCandle_IsFinishedOnly_DoesNotCapTo()
+	{
+		// Adapter does NOT support IsSupportCandlesUpdates, but IsFinishedOnly=true
+		// Expected: To stays null, subscription passes through
+		var tf = TimeSpan.FromMinutes(5).TimeFrame();
+		var manager = CreateManagerWith(
+			[tf, DataType.Ticks],
+			supportCandlesUpdates: _ => false,
+			out _, out _, out var logReceiver);
+
+		logReceiver.Time = new DateTime(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		var secId = Helper.CreateSecurityId();
+		var mdMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = tf,
+			From = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Utc),
+			IsFinishedOnly = true,
+			// To = null => hist+live
+		};
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(mdMsg, CancellationToken);
+
+		toOut.Length.AssertEqual(0);
+		toInner.Length.AssertEqual(1);
+
+		var sent = (MarketDataMessage)toInner[0];
+		sent.DataType2.AssertEqual(tf);
+		sent.To.AssertNull(); // NOT capped — IsFinishedOnly skips the redirect logic
+	}
+
+	[TestMethod]
+	public async Task LiveCandle_NoBuildSource_DoesNotCapTo()
+	{
+		// Adapter supports TF candles but does NOT support ticks/level1/orderbook/depth
+		// Expected: To stays null, no build source available
+		var tf = TimeSpan.FromMinutes(5).TimeFrame();
+		var manager = CreateManagerWith(
+			[tf], // only candles, no build source
+			supportCandlesUpdates: _ => false,
+			out _, out _, out var logReceiver);
+
+		logReceiver.Time = new DateTime(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		var secId = Helper.CreateSecurityId();
+		var mdMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = tf,
+			From = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Utc),
+			// To = null => hist+live
+		};
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(mdMsg, CancellationToken);
+
+		toOut.Length.AssertEqual(0);
+		toInner.Length.AssertEqual(1);
+
+		var sent = (MarketDataMessage)toInner[0];
+		sent.DataType2.AssertEqual(tf);
+		sent.To.AssertNull(); // NOT capped — no build source available
+	}
+
+	[TestMethod]
+	public async Task LiveCandle_BuildFromLevel1_CapsToAndTransitions()
+	{
+		// Adapter supports TF candles AND Level1, but NOT ticks and NOT IsSupportCandlesUpdates
+		// Expected: To capped, then after history finishes, builds from Level1
+		var tf = TimeSpan.FromMinutes(5).TimeFrame();
+		var manager = CreateManagerWith(
+			[tf, DataType.Level1],
+			supportCandlesUpdates: _ => false,
+			out _, out _, out var logReceiver);
+
+		logReceiver.Time = new DateTime(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		var secId = Helper.CreateSecurityId();
+		var mdMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = tf,
+			From = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Utc),
+		};
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(mdMsg, CancellationToken);
+
+		toOut.Length.AssertEqual(0);
+		toInner.Length.AssertEqual(1);
+
+		var sent = (MarketDataMessage)toInner[0];
+		sent.To.AssertNotNull();
+		sent.To.AssertEqual(logReceiver.Time);
+
+		// History finishes — should transition to build from Level1
+		var finished = new SubscriptionFinishedMessage { OriginalTransactionId = 1 };
+		var (fwd, extraOut) = await manager.ProcessOutMessageAsync(finished, CancellationToken);
+
+		fwd.AssertNull();
+		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		IsNotNull(buildSub, "Should create a build-from-level1 subscription");
+		buildSub.DataType2.AssertEqual(DataType.Level1);
+	}
+
+	[TestMethod]
+	public async Task LiveCandle_BuildFromDepth_CapsToAndTransitions()
+	{
+		// Adapter supports TF candles AND MarketDepth only
+		var tf = TimeSpan.FromMinutes(5).TimeFrame();
+		var manager = CreateManagerWith(
+			[tf, DataType.MarketDepth],
+			supportCandlesUpdates: _ => false,
+			out _, out _, out var logReceiver);
+
+		logReceiver.Time = new DateTime(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		var secId = Helper.CreateSecurityId();
+		var mdMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = tf,
+			From = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Utc),
+		};
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(mdMsg, CancellationToken);
+
+		toInner.Length.AssertEqual(1);
+		((MarketDataMessage)toInner[0]).To.AssertEqual(logReceiver.Time);
+
+		var finished = new SubscriptionFinishedMessage { OriginalTransactionId = 1 };
+		var (fwd, extraOut) = await manager.ProcessOutMessageAsync(finished, CancellationToken);
+
+		fwd.AssertNull();
+		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		IsNotNull(buildSub, "Should create a build-from-depth subscription");
+		buildSub.DataType2.AssertEqual(DataType.MarketDepth);
+	}
+
+	[TestMethod]
+	public async Task LiveCandle_BuildFromOrderLog_CapsToAndTransitions()
+	{
+		// Adapter supports TF candles AND OrderLog only
+		var tf = TimeSpan.FromMinutes(5).TimeFrame();
+		var manager = CreateManagerWith(
+			[tf, DataType.OrderLog],
+			supportCandlesUpdates: _ => false,
+			out _, out _, out var logReceiver);
+
+		logReceiver.Time = new DateTime(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		var secId = Helper.CreateSecurityId();
+		var mdMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = tf,
+			From = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Utc),
+		};
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(mdMsg, CancellationToken);
+
+		toInner.Length.AssertEqual(1);
+		((MarketDataMessage)toInner[0]).To.AssertEqual(logReceiver.Time);
+
+		var finished = new SubscriptionFinishedMessage { OriginalTransactionId = 1 };
+		var (fwd, extraOut) = await manager.ProcessOutMessageAsync(finished, CancellationToken);
+
+		fwd.AssertNull();
+		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		IsNotNull(buildSub, "Should create a build-from-orderlog subscription");
+		buildSub.DataType2.AssertEqual(DataType.OrderLog);
+	}
+
+	[TestMethod]
+	public async Task LiveCandle_BuildSourcePriority_TicksOverLevel1()
+	{
+		// Adapter supports ticks AND level1 — ticks should be chosen (higher priority)
+		var tf = TimeSpan.FromMinutes(5).TimeFrame();
+		var manager = CreateManagerWith(
+			[tf, DataType.Ticks, DataType.Level1],
+			supportCandlesUpdates: _ => false,
+			out _, out _, out var logReceiver);
+
+		logReceiver.Time = new DateTime(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		var secId = Helper.CreateSecurityId();
+		var mdMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = tf,
+			From = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Utc),
+		};
+
+		await manager.ProcessInMessageAsync(mdMsg, CancellationToken);
+
+		var finished = new SubscriptionFinishedMessage { OriginalTransactionId = 1 };
+		var (_, extraOut) = await manager.ProcessOutMessageAsync(finished, CancellationToken);
+
+		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		IsNotNull(buildSub);
+		buildSub.DataType2.AssertEqual(DataType.Ticks); // ticks has priority over level1
+	}
+
+	[TestMethod]
+	public async Task LiveCandle_ExplicitBuildFrom_UsedInsteadOfAutoDetect()
+	{
+		// Adapter supports ticks AND level1, but user explicitly requests BuildFrom=Level1
+		var tf = TimeSpan.FromMinutes(5).TimeFrame();
+		var manager = CreateManagerWith(
+			[tf, DataType.Ticks, DataType.Level1],
+			supportCandlesUpdates: _ => false,
+			out _, out _, out var logReceiver);
+
+		logReceiver.Time = new DateTime(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		var secId = Helper.CreateSecurityId();
+		var mdMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = tf,
+			From = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Utc),
+			BuildFrom = DataType.Level1,
+		};
+
+		await manager.ProcessInMessageAsync(mdMsg, CancellationToken);
+
+		var finished = new SubscriptionFinishedMessage { OriginalTransactionId = 1 };
+		var (_, extraOut) = await manager.ProcessOutMessageAsync(finished, CancellationToken);
+
+		var buildSub = extraOut.OfType<MarketDataMessage>().SingleOrDefault(m => m.IsSubscribe);
+		IsNotNull(buildSub);
+		buildSub.DataType2.AssertEqual(DataType.Level1); // user's explicit choice
+	}
+
+	[TestMethod]
+	public async Task LiveCandle_WithUpdatesSupport_OnlineForwardedDirectly()
+	{
+		// When adapter supports candle updates, subscription stays live (no To capping)
+		// Online message should be forwarded directly to caller
+		var tf = TimeSpan.FromMinutes(5).TimeFrame();
+		var manager = CreateManagerWith(
+			[tf, DataType.Ticks],
+			supportCandlesUpdates: _ => true,
+			out _, out _, out var logReceiver);
+
+		logReceiver.Time = new DateTime(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		var secId = Helper.CreateSecurityId();
+		var mdMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = tf,
+			From = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Utc),
+		};
+
+		var (toInner, _) = await manager.ProcessInMessageAsync(mdMsg, CancellationToken);
+		toInner.Length.AssertEqual(1);
+		((MarketDataMessage)toInner[0]).To.AssertNull();
+
+		// Online arrives — should pass through (no upgrade needed)
+		var online = new SubscriptionOnlineMessage { OriginalTransactionId = 1 };
+		var (fwd, extraOut) = await manager.ProcessOutMessageAsync(online, CancellationToken);
+
+		fwd.AssertSame(online);
+		extraOut.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task LiveCandle_ToAlreadySet_DoesNotOverwrite()
+	{
+		// If To is already set by caller (history-only), it should NOT be changed
+		var tf = TimeSpan.FromMinutes(5).TimeFrame();
+		var manager = CreateManagerWith(
+			[tf, DataType.Ticks],
+			supportCandlesUpdates: _ => false,
+			out _, out _, out var logReceiver);
+
+		logReceiver.Time = new DateTime(2025, 6, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		var originalTo = new DateTime(2025, 6, 1, 11, 0, 0, DateTimeKind.Utc);
+		var secId = Helper.CreateSecurityId();
+		var mdMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = tf,
+			From = new DateTime(2025, 6, 1, 10, 0, 0, DateTimeKind.Utc),
+			To = originalTo,
+		};
+
+		var (toInner, _) = await manager.ProcessInMessageAsync(mdMsg, CancellationToken);
+		toInner.Length.AssertEqual(1);
+
+		var sent = (MarketDataMessage)toInner[0];
+		sent.To.AssertEqual(originalTo); // original To preserved, not overwritten
 	}
 
 	#endregion

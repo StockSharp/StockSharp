@@ -834,4 +834,182 @@ public class ConnectorBasketTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Candle Pipeline — Live Subscription Bug
+
+	/// <summary>
+	/// Mock adapter supporting TF candles + ticks. Records all MarketData subscriptions.
+	/// Auto-responds: Response OK → Online (if live) or Finished (if history-only).
+	/// </summary>
+	private sealed class CandleMockAdapter : MessageAdapter
+	{
+		public ConcurrentQueue<MarketDataMessage> RecordedSubscriptions { get; } = [];
+
+		public CandleMockAdapter(IdGenerator transactionIdGenerator) : base(transactionIdGenerator)
+		{
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
+			this.AddSupportedMarketDataType(TimeSpan.FromMinutes(5).TimeFrame());
+			this.AddSupportedMarketDataType(DataType.Ticks);
+		}
+
+		public override bool IsAllDownloadingSupported(DataType dataType)
+			=> dataType == DataType.Securities || dataType == DataType.Transactions;
+
+		public override bool UseInChannel => false;
+		public override bool UseOutChannel => false;
+
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			switch (message.Type)
+			{
+				case MessageTypes.Connect:
+					await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
+					break;
+				case MessageTypes.Disconnect:
+					await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
+					break;
+				case MessageTypes.MarketData:
+				{
+					var mdMsg = (MarketDataMessage)message;
+					if (mdMsg.IsSubscribe)
+					{
+						RecordedSubscriptions.Enqueue(mdMsg.TypedClone());
+						await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
+						// Online if live (To==null), Finished if history (To!=null)
+						await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+					}
+					else
+					{
+						await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
+					}
+					break;
+				}
+				case MessageTypes.OrderStatus:
+				{
+					var osm = (OrderStatusMessage)message;
+					if (osm.IsSubscribe)
+					{
+						await SendOutMessageAsync(osm.CreateResponse(), cancellationToken);
+						await SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = osm.TransactionId }, cancellationToken);
+					}
+					break;
+				}
+				case MessageTypes.Reset:
+					break;
+			}
+		}
+	}
+
+	private static (TestConnector connector, CandleMockAdapter adapter, BasketState state) CreateConnectorForCandleTest()
+	{
+		var state = new BasketState();
+
+		var idGen = new MillisecondIncrementalIdGenerator();
+		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+
+		var routingManager = new BasketRoutingManager(
+			state.ConnectionState,
+			state.ConnectionManager,
+			state.PendingState,
+			state.SubscriptionRouting,
+			state.ParentChildMap,
+			state.OrderRouting,
+			a => a, candleBuilderProvider, () => false, idGen);
+
+		var basket = new BasketMessageAdapter(
+			idGen,
+			candleBuilderProvider,
+			new InMemorySecurityMessageAdapterProvider(),
+			new InMemoryPortfolioMessageAdapterProvider(),
+			null, null, routingManager);
+
+		basket.LatencyManager = null;
+		basket.SlippageManager = null;
+		basket.CommissionManager = null;
+
+		var connector = new TestConnector(basket);
+
+		var adapter = new CandleMockAdapter(connector.TransactionIdGenerator);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
+		return (connector, adapter, state);
+	}
+
+	[TestMethod]
+	[Timeout(15_000, CooperativeCancellation = true)]
+	public async Task CandleHistLive_LiveSubscriptionShouldReachAdapter()
+	{
+		// Bug repro: user subscribes to candles with From + To=null (hist+live).
+		// CandleBuilderManager always caps To=CurrentTime when IsSupportCandlesUpdates=false,
+		// so the actual adapter ONLY ever sees history-only candle subscriptions.
+		// After history finishes, it transitions to build from ticks —
+		// a live TICKS subscription arrives, but a live CANDLE subscription never does.
+		//
+		// The pipeline is allowed to split hist+live into two phases:
+		//   Phase 1: candle subscription with To set (history-only)
+		//   Phase 2: candle subscription with To=null (live)
+		// We wait for the FULL cycle to complete before checking.
+
+		var (connector, adapter, _) = CreateConnectorForCandleTest();
+
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
+
+		var sub = new Subscription(TimeSpan.FromMinutes(5).TimeFrame(), security)
+		{
+			From = DateTime.UtcNow.AddDays(-1),
+			// To = null → hist+live
+		};
+
+		using var runCts = new CancellationTokenSource();
+
+		_ = Task.Run(async () =>
+		{
+			try
+			{
+				await foreach (var _ in connector.SubscribeAsync<CandleMessage>(sub).WithCancellation(runCts.Token))
+				{ }
+			}
+			catch (OperationCanceledException) { }
+		}, CancellationToken);
+
+		// Wait for the full pipeline cycle to complete:
+		// 1) candle subscription (history-only, To capped) arrives at adapter
+		// 2) adapter responds Finished → CandleBuilderManager transitions to Compress
+		// 3) ticks subscription (live) arrives at adapter
+		// Ticks subscription = proof the full cycle completed.
+		// After that we also check if a live candle subscription arrived (as 2nd phase).
+		await Task.Run(async () =>
+		{
+			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks && !m.IsHistoryOnly()))
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		// Small extra delay: if pipeline sends a 2nd candle sub (live) it would arrive around the same time
+		await Task.Delay(500, CancellationToken);
+
+		var allSubs = adapter.RecordedSubscriptions.ToList();
+
+		// The pipeline COULD legitimately split into:
+		//   1st: candle TF 5min (To=CurrentTime, history-only)
+		//   2nd: candle TF 5min (To=null, live)              ← this is what we expect but never arrives
+		// Instead what actually happens:
+		//   1st: candle TF 5min (To=CurrentTime, history-only)
+		//   2nd: Ticks (To=null, live)                        ← redirect to ticks, not candles
+
+		var liveCandleSub = allSubs.FirstOrDefault(m => m.DataType2.IsTFCandles && !m.IsHistoryOnly());
+
+		// Fails — proving the bug: adapter never receives a live candle subscription
+		IsNotNull(liveCandleSub,
+			$"Expected a live candle subscription (To=null) at the adapter, but none arrived. " +
+			$"Subscriptions: [{string.Join("; ", allSubs.Select(m =>
+				$"{m.DataType2}(histOnly={m.IsHistoryOnly()}, To={m.To?.ToString("HH:mm:ss") ?? "null"})"))}]");
+
+		runCts.Cancel();
+	}
+
+	#endregion
 }

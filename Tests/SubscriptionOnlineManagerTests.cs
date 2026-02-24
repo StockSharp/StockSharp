@@ -1023,4 +1023,325 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region History+Live Subscription Tests
+
+	/// <summary>
+	/// When a second hist+live subscription (From set, To null) arrives for an already-online key,
+	/// the subscriber should transition to online after its history finishes.
+	/// Currently the subscriber is never added to OnlineSubscribers — this is the bug.
+	/// </summary>
+	[TestMethod]
+	public async Task SecondHistLiveSubscription_ShouldReceiveLiveData_AfterHistoryFinishes()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — pure live (no From/To), goes online
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// Second subscription — hist+live (From set, To null)
+		var histLiveMsg = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+			// To is null — this means "history then live"
+		};
+
+		var (toInner2, toOut2) = await manager.ProcessInMessageAsync(histLiveMsg, token);
+
+		// The subscription should be sent to inner with To set (history-only clone)
+		toInner2.Length.AssertEqual(1, "Hist+live second subscription should be sent to inner");
+		var innerMsg = (MarketDataMessage)toInner2[0];
+		innerMsg.To.AssertNotNull("Clone should have To set to make it history-only");
+
+		// Inner adapter responds OK for the hist+live clone
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 200 }, token);
+
+		// Inner adapter sends historical data
+		var histData = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc),
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+			OriginalTransactionId = 200,
+		};
+
+		var (histForward, _) = await manager.ProcessOutMessageAsync(histData, token);
+		histForward.AssertNotNull("Historical data for second subscription should be forwarded");
+
+		// Inner adapter finishes history
+		var (finishForward, finishExtra) = await manager.ProcessOutMessageAsync(
+			new SubscriptionFinishedMessage { OriginalTransactionId = 200 }, token);
+
+		// After history finishes, the subscriber should receive SubscriptionOnlineMessage
+		// (either as forward or extraOut) so it transitions to live
+		var allFinishMessages = new List<Message>();
+		if (finishForward != null) allFinishMessages.Add(finishForward);
+		allFinishMessages.AddRange(finishExtra);
+
+		allFinishMessages.OfType<SubscriptionOnlineMessage>()
+			.Count(m => m.OriginalTransactionId == 200)
+			.AssertEqual(1, "Second hist+live subscriber should receive SubscriptionOnlineMessage after history finishes");
+
+		// Now verify that live data reaches BOTH subscribers
+		var liveData = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 200m,
+			TradeVolume = 2m,
+		};
+
+		var (liveForward, _) = await manager.ProcessOutMessageAsync(liveData, token);
+		liveForward.AssertNotNull("Live data should be forwarded");
+		var liveIds = ((ISubscriptionIdMessage)liveForward).GetSubscriptionIds();
+		liveIds.Count(id => id == 100).AssertEqual(1, "First subscriber should receive live data");
+		liveIds.Count(id => id == 200).AssertEqual(1, "Second (hist+live) subscriber should receive live data after history finished");
+	}
+
+	/// <summary>
+	/// Same as above but for candle subscriptions — verifies the issue is not candle-specific.
+	/// </summary>
+	[TestMethod]
+	public async Task SecondHistLiveCandleSubscription_ShouldReceiveLiveData()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+		var candleDataType = TimeSpan.FromMinutes(5).TimeFrame();
+
+		// First subscription — pure live, goes online
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = candleDataType,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// Second subscription — hist+live
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = candleDataType,
+			From = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+		}, token);
+
+		// History OK + finish
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 200 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 200 }, token);
+
+		// Live candle data should reach BOTH subscribers
+		var liveCandle = new TimeFrameCandleMessage
+		{
+			SecurityId = secId,
+			TypedArg = TimeSpan.FromMinutes(5),
+			OpenTime = logReceiver.CurrentTime,
+			OpenPrice = 100m,
+			HighPrice = 105m,
+			LowPrice = 99m,
+			ClosePrice = 102m,
+			TotalVolume = 1000m,
+			State = CandleStates.Active,
+		};
+
+		var (forward, _) = await manager.ProcessOutMessageAsync(liveCandle, token);
+		forward.AssertNotNull("Live candle should be forwarded");
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Count(id => id == 100).AssertEqual(1, "First subscriber should receive live candle");
+		ids.Count(id => id == 200).AssertEqual(1, "Second hist+live subscriber should receive live candle");
+	}
+
+	/// <summary>
+	/// Verifies that when a hist+live subscription arrives for a key that is still in Active state
+	/// (first subscription responded OK but not yet Online), the same bug manifests.
+	/// </summary>
+	[TestMethod]
+	public async Task SecondHistLiveSubscription_WhenFirstActive_ShouldTransitionToOnline()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — active (response received, but no online yet)
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Level1,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+
+		// Second subscription — hist+live
+		var (toInner, _) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Level1,
+			From = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+		}, token);
+
+		toInner.Length.AssertEqual(1, "Hist+live should be sent to inner");
+
+		// History finishes for second subscription
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 200 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 200 }, token);
+
+		// First goes online
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// Live data should reach BOTH subscribers
+		var liveMsg = new Level1ChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+		};
+		liveMsg.TryAdd(Level1Fields.LastTradePrice, 50000m);
+
+		var (forward, _) = await manager.ProcessOutMessageAsync(liveMsg, token);
+		forward.AssertNotNull("Live data should be forwarded");
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Count(id => id == 100).AssertEqual(1, "First subscriber should receive live data");
+		ids.Count(id => id == 200).AssertEqual(1, "Second hist+live subscriber should receive live data");
+	}
+
+	/// <summary>
+	/// Verifies that MarketDepth hist+live second subscription also gets live data.
+	/// </summary>
+	[TestMethod]
+	public async Task SecondHistLiveDepthSubscription_ShouldReceiveLiveData()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — pure live, goes online
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.MarketDepth,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// Second subscription — hist+live
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.MarketDepth,
+			From = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+		}, token);
+
+		// History finishes
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 200 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 200 }, token);
+
+		// Live depth data
+		var liveDepth = new QuoteChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			Bids = [new QuoteChange(100, 10)],
+			Asks = [new QuoteChange(101, 10)],
+		};
+
+		var (forward, _) = await manager.ProcessOutMessageAsync(liveDepth, token);
+		forward.AssertNotNull("Live depth should be forwarded");
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+		ids.Count(id => id == 100).AssertEqual(1, "First subscriber should receive live depth");
+		ids.Count(id => id == 200).AssertEqual(1, "Second hist+live subscriber should receive live depth");
+	}
+
+	/// <summary>
+	/// Verifies that SubscriptionFinished for a hist+live (HistLive) subscription
+	/// is not silently swallowed — the subscriber should be notified.
+	/// </summary>
+	[TestMethod]
+	public async Task HistLiveSubscriptionFinished_ShouldNotBeSwallowed()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — online
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// Second subscription — hist+live
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 200 }, token);
+
+		// When history finishes, the subscriber should get SOME notification
+		// (either SubscriptionOnline or SubscriptionFinished-then-Online)
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(
+			new SubscriptionFinishedMessage { OriginalTransactionId = 200 }, token);
+
+		var allMessages = new List<Message>();
+		if (forward != null) allMessages.Add(forward);
+		allMessages.AddRange(extraOut);
+
+		// The subscriber should get either SubscriptionOnlineMessage (promoted to live)
+		// or at minimum not have the message completely swallowed
+		IsTrue(allMessages.Count > 0,
+			"SubscriptionFinished for hist+live subscription should not be silently swallowed — " +
+			"subscriber needs notification to transition to live");
+	}
+
+	#endregion
 }
