@@ -84,6 +84,8 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 		public VolumeProfileBuilder VolumeProfile { get; set; }
 
+		public long? LiveCandleTransactionId { get; set; }
+
 		public bool IsCountExhausted => Count <= 0;
 	}
 
@@ -422,13 +424,26 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			if (series is null)
 				return ([mdMsg], []);
 
+			var extraOut = new List<Message>();
+
 			var unsubscribe = series.Current.TypedClone();
 
 			unsubscribe.OriginalTransactionId = unsubscribe.TransactionId;
 			unsubscribe.TransactionId = transactionId;
 			unsubscribe.IsSubscribe = false;
 
-			return ([unsubscribe], []);
+			if (series.LiveCandleTransactionId is long liveTxId)
+			{
+				var liveUnsub = series.Original.TypedClone();
+				liveUnsub.OriginalTransactionId = liveTxId;
+				liveUnsub.TransactionId = _idGenerator.GetNextId();
+				liveUnsub.IsSubscribe = false;
+
+				liveUnsub.LoopBack(_adapter);
+				extraOut.Add(liveUnsub);
+			}
+
+			return ([unsubscribe], extraOut.ToArray());
 		}
 	}
 
@@ -781,7 +796,10 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			liveCandleSub.IsFinishedOnly = true;
 
 			using (await _sync.LockAsync(cancellationToken))
+			{
 				_replaceId.Add(liveCandleSub.TransactionId, series.Id);
+				series.LiveCandleTransactionId = liveCandleSub.TransactionId;
+			}
 
 			liveCandleSub.LoopBack(_adapter);
 			extraOut.Add(liveCandleSub);

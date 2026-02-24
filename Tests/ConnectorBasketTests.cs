@@ -844,6 +844,7 @@ public class ConnectorBasketTests : BaseTestClass
 	private sealed class CandleMockAdapter : MessageAdapter
 	{
 		public ConcurrentQueue<MarketDataMessage> RecordedSubscriptions { get; } = [];
+		public ConcurrentQueue<MarketDataMessage> RecordedUnsubscriptions { get; } = [];
 
 		public CandleMockAdapter(IdGenerator transactionIdGenerator) : base(transactionIdGenerator)
 		{
@@ -851,6 +852,7 @@ public class ConnectorBasketTests : BaseTestClass
 			this.AddTransactionalSupport();
 			this.AddSupportedMarketDataType(TimeSpan.FromMinutes(5).TimeFrame());
 			this.AddSupportedMarketDataType(DataType.Ticks);
+			this.AddSupportedMarketDataType(DataType.Level1);
 		}
 
 		public override bool IsAllDownloadingSupported(DataType dataType)
@@ -881,6 +883,7 @@ public class ConnectorBasketTests : BaseTestClass
 					}
 					else
 					{
+						RecordedUnsubscriptions.Enqueue(mdMsg.TypedClone());
 						await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
 					}
 					break;
@@ -1009,6 +1012,265 @@ public class ConnectorBasketTests : BaseTestClass
 				$"{m.DataType2}(histOnly={m.IsHistoryOnly()}, To={m.To?.ToString("HH:mm:ss") ?? "null"})"))}]");
 
 		runCts.Cancel();
+	}
+
+	[TestMethod]
+	[Timeout(15_000, CooperativeCancellation = true)]
+	public async Task CandleHistLive_UnsubscribeShouldReachAdapter()
+	{
+		// After hist+live candle subscription is fully established (history→ticks+live candle),
+		// calling UnSubscribe should send unsubscribe messages to the adapter
+		// for ALL active subscriptions (ticks build + live candle).
+
+		var (connector, adapter, _) = CreateConnectorForCandleTest();
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
+
+		var sub = new Subscription(TimeSpan.FromMinutes(5).TimeFrame(), security)
+		{
+			From = DateTime.UtcNow.AddDays(-1),
+		};
+
+		connector.Subscribe(sub);
+
+		// Wait for full pipeline cycle (ticks subscription = proof history finished and compress started)
+		await Task.Run(async () =>
+		{
+			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks && !m.IsHistoryOnly()))
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		await Task.Delay(500, CancellationToken);
+
+		// Now unsubscribe via sync API
+		connector.UnSubscribe(sub);
+
+		// Wait for unsubscribe messages to arrive
+		await Task.Run(async () =>
+		{
+			while (adapter.RecordedUnsubscriptions.Count < 2)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		await Task.Delay(200, CancellationToken);
+
+		var unsubs = adapter.RecordedUnsubscriptions.ToList();
+
+		// Should have unsubscribed the ticks build subscription
+		var tickUnsub = unsubs.FirstOrDefault(m => m.DataType2 == DataType.Ticks);
+		IsNotNull(tickUnsub,
+			$"Expected ticks unsubscribe at adapter. Unsubs: [{string.Join("; ", unsubs.Select(m => m.DataType2.ToString()))}]");
+
+		// Should have unsubscribed the live candle subscription
+		var candleUnsub = unsubs.FirstOrDefault(m => m.DataType2.IsTFCandles);
+		IsNotNull(candleUnsub,
+			$"Expected candle unsubscribe at adapter. Unsubs: [{string.Join("; ", unsubs.Select(m => m.DataType2.ToString()))}]");
+	}
+
+	[TestMethod]
+	[Timeout(15_000, CooperativeCancellation = true)]
+	public async Task TicksLive_UnsubscribeShouldReachAdapter()
+	{
+		// Subscribe to live ticks via sync API → UnSubscribe → adapter should receive unsubscribe.
+
+		var (connector, adapter, _) = CreateConnectorForCandleTest();
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
+
+		var sub = new Subscription(DataType.Ticks, security);
+
+		connector.Subscribe(sub);
+
+		// Wait for subscription to reach adapter
+		await Task.Run(async () =>
+		{
+			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks))
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		await Task.Delay(200, CancellationToken);
+
+		// Now unsubscribe via sync API
+		connector.UnSubscribe(sub);
+
+		// Wait for unsubscribe
+		await Task.Run(async () =>
+		{
+			while (!adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Ticks))
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var unsub = adapter.RecordedUnsubscriptions.First(m => m.DataType2 == DataType.Ticks);
+		unsub.IsSubscribe.AssertFalse();
+	}
+
+	[TestMethod]
+	[Timeout(15_000, CooperativeCancellation = true)]
+	public async Task Level1Live_UnsubscribeShouldReachAdapter()
+	{
+		// Subscribe to live Level1 via sync API → UnSubscribe → adapter should receive unsubscribe.
+
+		var (connector, adapter, _) = CreateConnectorForCandleTest();
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
+
+		var sub = new Subscription(DataType.Level1, security);
+
+		connector.Subscribe(sub);
+
+		// Wait for subscription to reach adapter
+		await Task.Run(async () =>
+		{
+			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Level1))
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		await Task.Delay(200, CancellationToken);
+
+		// Now unsubscribe via sync API
+		connector.UnSubscribe(sub);
+
+		// Wait for unsubscribe
+		await Task.Run(async () =>
+		{
+			while (!adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Level1))
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var unsub = adapter.RecordedUnsubscriptions.First(m => m.DataType2 == DataType.Level1);
+		unsub.IsSubscribe.AssertFalse();
+	}
+
+	[TestMethod]
+	[Timeout(15_000, CooperativeCancellation = true)]
+	public async Task CandleHistLive_UnsubscribeAsync_ShouldReachAdapter()
+	{
+		// Same scenario as sync version but using SubscribeAsync + CancellationToken.
+
+		var (connector, adapter, _) = CreateConnectorForCandleTest();
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
+
+		var sub = new Subscription(TimeSpan.FromMinutes(5).TimeFrame(), security)
+		{
+			From = DateTime.UtcNow.AddDays(-1),
+		};
+
+		using var runCts = new CancellationTokenSource();
+		var run = connector.SubscribeAsync(sub, runCts.Token);
+
+		await Task.Run(async () =>
+		{
+			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks && !m.IsHistoryOnly()))
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		await Task.Delay(500, CancellationToken);
+
+		runCts.Cancel();
+		try { await run; } catch (OperationCanceledException) { }
+
+		await Task.Run(async () =>
+		{
+			while (adapter.RecordedUnsubscriptions.Count < 2)
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		await Task.Delay(200, CancellationToken);
+
+		var unsubs = adapter.RecordedUnsubscriptions.ToList();
+
+		var tickUnsub = unsubs.FirstOrDefault(m => m.DataType2 == DataType.Ticks);
+		IsNotNull(tickUnsub,
+			$"Expected ticks unsubscribe. Unsubs: [{string.Join("; ", unsubs.Select(m => m.DataType2.ToString()))}]");
+
+		var candleUnsub = unsubs.FirstOrDefault(m => m.DataType2.IsTFCandles);
+		IsNotNull(candleUnsub,
+			$"Expected candle unsubscribe. Unsubs: [{string.Join("; ", unsubs.Select(m => m.DataType2.ToString()))}]");
+	}
+
+	[TestMethod]
+	[Timeout(15_000, CooperativeCancellation = true)]
+	public async Task TicksLive_UnsubscribeAsync_ShouldReachAdapter()
+	{
+		// SubscribeAsync + CancellationToken cancel for ticks.
+
+		var (connector, adapter, _) = CreateConnectorForCandleTest();
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
+
+		var sub = new Subscription(DataType.Ticks, security);
+
+		using var runCts = new CancellationTokenSource();
+		var run = connector.SubscribeAsync(sub, runCts.Token);
+
+		await Task.Run(async () =>
+		{
+			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Ticks))
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		await Task.Delay(200, CancellationToken);
+
+		runCts.Cancel();
+		try { await run; } catch (OperationCanceledException) { }
+
+		await Task.Run(async () =>
+		{
+			while (!adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Ticks))
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var unsub = adapter.RecordedUnsubscriptions.First(m => m.DataType2 == DataType.Ticks);
+		unsub.IsSubscribe.AssertFalse();
+	}
+
+	[TestMethod]
+	[Timeout(15_000, CooperativeCancellation = true)]
+	public async Task Level1Live_UnsubscribeAsync_ShouldReachAdapter()
+	{
+		// SubscribeAsync + CancellationToken cancel for Level1.
+
+		var (connector, adapter, _) = CreateConnectorForCandleTest();
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = "AAPL@TEST" };
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
+
+		var sub = new Subscription(DataType.Level1, security);
+
+		using var runCts = new CancellationTokenSource();
+		var run = connector.SubscribeAsync(sub, runCts.Token);
+
+		await Task.Run(async () =>
+		{
+			while (!adapter.RecordedSubscriptions.Any(m => m.DataType2 == DataType.Level1))
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		await Task.Delay(200, CancellationToken);
+
+		runCts.Cancel();
+		try { await run; } catch (OperationCanceledException) { }
+
+		await Task.Run(async () =>
+		{
+			while (!adapter.RecordedUnsubscriptions.Any(m => m.DataType2 == DataType.Level1))
+				await Task.Delay(10, CancellationToken);
+		}, CancellationToken);
+
+		var unsub = adapter.RecordedUnsubscriptions.First(m => m.DataType2 == DataType.Level1);
+		unsub.IsSubscribe.AssertFalse();
 	}
 
 	#endregion
