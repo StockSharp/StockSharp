@@ -28,7 +28,6 @@
     <JwtVer>9.0.3</JwtVer>
     <FluentFtpVer>40.0.0</FluentFtpVer>
     <SignalRVer>2.4.3</SignalRVer>
-    <MsExtensionsVer>8.*</MsExtensionsVer>
     <NuGetApiVer>7.0.1</NuGetApiVer>
     <SpectreVer>0.48.0</SpectreVer>
     <AWSSDKVer>4.*</AWSSDKVer>
@@ -45,5 +44,8 @@
     <MsSqlClientVer>6.*</MsSqlClientVer>
     <NethereumSignerVer>5.*</NethereumSignerVer>
     <AvaloniaVer>11.*</AvaloniaVer>
+    <NewtonsoftVer>13.*</NewtonsoftVer>
+    <ActiproVer>25.*</ActiproVer>
+    <CommunityToolkitVer>8.*</CommunityToolkitVer>
   </PropertyGroup>
 </Project>
