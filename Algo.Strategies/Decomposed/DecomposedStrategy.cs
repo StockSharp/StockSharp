@@ -44,10 +44,35 @@ public class DecomposedStrategy : IStrategyHost
 		Subscriptions.UnsubscriptionRequested += s => _connector?.UnSubscribe(s);
 
 		Engine.StateChanged += OnStateChanged;
+		Engine.StateChanged += state =>
+		{
+			if (state == ProcessStates.Stopping)
+			{
+				if (CancelOrdersWhenStopping)
+					CancelActiveOrders();
+
+				if (UnsubscribeOnStop)
+					foreach (var sub in Subscriptions.Subscriptions.ToArray())
+						Subscriptions.UnSubscribe(sub);
+			}
+		};
 		Engine.CurrentPriceUpdated += (secId, price, serverTime, localTime) => OnCurrentPriceUpdated(secId, price, serverTime, localTime);
 		Orders.Registered += OnOrderRegistered;
+		Orders.Registered += order =>
+		{
+			if (order.Commission is not null)
+				CommissionChanged?.Invoke();
+
+			if (order.LatencyRegistration is TimeSpan lat && lat != TimeSpan.Zero)
+			{
+				Latency = (Latency ?? TimeSpan.Zero) + lat;
+				LatencyChanged?.Invoke();
+			}
+		};
 		Orders.Changed += OnOrderChanged;
 		Trades.TradeAdded += OnNewMyTrade;
+		Trades.CommissionChanged += () => CommissionChanged?.Invoke();
+		Trades.SlippageChanged += () => SlippageChanged?.Invoke();
 		Trades.TradeAdded += trade =>
 		{
 			var vol = trade.Trade.Volume;
@@ -202,9 +227,46 @@ public class DecomposedStrategy : IStrategyHost
 	public bool IsOnline { get; set; }
 
 	/// <summary>
+	/// Cancel active orders when strategy is stopping.
+	/// </summary>
+	public bool CancelOrdersWhenStopping { get; set; } = true;
+
+	/// <summary>
+	/// Unsubscribe from market data when strategy is stopping.
+	/// </summary>
+	public bool UnsubscribeOnStop { get; set; } = true;
+
+	/// <summary>
+	/// Total accumulated commission (from orders + trades).
+	/// </summary>
+	public decimal? Commission =>
+		Orders.Commission is null && Trades.Commission is null
+			? null : (Orders.Commission ?? 0m) + (Trades.Commission ?? 0m);
+
+	/// <summary>
+	/// Total accumulated slippage.
+	/// </summary>
+	public decimal? Slippage => Trades.Slippage;
+
+	/// <summary>
 	/// Error event.
 	/// </summary>
 	public event Action<Exception> Error;
+
+	/// <summary>
+	/// Commission changed event.
+	/// </summary>
+	public event Action CommissionChanged;
+
+	/// <summary>
+	/// Slippage changed event.
+	/// </summary>
+	public event Action SlippageChanged;
+
+	/// <summary>
+	/// Latency changed event.
+	/// </summary>
+	public event Action LatencyChanged;
 
 	/// <summary>
 	/// Current process state.
@@ -226,6 +288,17 @@ public class DecomposedStrategy : IStrategyHost
 	/// Stop the strategy.
 	/// </summary>
 	public ValueTask StopAsync(CancellationToken cancellationToken = default) => Engine.RequestStopAsync(cancellationToken);
+
+	/// <summary>
+	/// Stop the strategy with error.
+	/// </summary>
+	/// <param name="error">The error that caused the stop.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	public ValueTask StopAsync(Exception error, CancellationToken cancellationToken = default)
+	{
+		OnError(error);
+		return StopAsync(cancellationToken);
+	}
 
 	/// <summary>
 	/// Stop the strategy.
@@ -261,6 +334,53 @@ public class DecomposedStrategy : IStrategyHost
 	/// Cancel an order via the connector.
 	/// </summary>
 	public void CancelOrder(Order order) => _connector.CancelOrder(order);
+
+	/// <summary>
+	/// Edit an order via the connector.
+	/// </summary>
+	/// <param name="order">Original order.</param>
+	/// <param name="changes">Order changes.</param>
+	public void EditOrder(Order order, Order changes)
+	{
+		if (_isTradingBlocked)
+			return;
+
+		if (RiskManager.Rules.Count > 0)
+		{
+			ProcessRisk(changes.CreateRegisterMessage());
+
+			if (_isTradingBlocked)
+				return;
+		}
+
+		_connector.EditOrder(order, changes);
+	}
+
+	/// <summary>
+	/// Re-register (cancel + register new) an order via the connector.
+	/// </summary>
+	/// <param name="oldOrder">Order to cancel.</param>
+	/// <param name="newOrder">New order to register.</param>
+	public void ReRegisterOrder(Order oldOrder, Order newOrder)
+	{
+		if (_isTradingBlocked)
+			return;
+
+		if (newOrder.TransactionId == 0 && _connector?.TransactionIdGenerator != null)
+			newOrder.TransactionId = _connector.TransactionIdGenerator.GetNextId();
+
+		_ownTransactionIds.Add(newOrder.TransactionId);
+
+		if (RiskManager.Rules.Count > 0)
+		{
+			ProcessRisk(newOrder.CreateRegisterMessage());
+
+			if (_isTradingBlocked)
+				return;
+		}
+
+		_connector.ReRegisterOrder(oldOrder, newOrder);
+	}
 
 	/// <summary>
 	/// Create an initialized order object.
@@ -350,6 +470,25 @@ public class DecomposedStrategy : IStrategyHost
 			CancelOrder(order);
 	}
 
+	/// <summary>
+	/// Reset all state (orders, trades, positions, PnL, subscriptions).
+	/// </summary>
+	public void Reset()
+	{
+		Orders.Reset();
+		Trades.Reset();
+		Subscriptions.Reset();
+		Engine.ForceStop();
+
+		_ownTransactionIds.Clear();
+		_positions.Clear();
+		_position = 0;
+		_isTradingBlocked = false;
+
+		Latency = null;
+		ErrorState = default;
+	}
+
 	#region Virtual hooks
 
 	/// <summary>
@@ -397,7 +536,20 @@ public class DecomposedStrategy : IStrategyHost
 	/// Called when order registration fails.
 	/// </summary>
 	/// <param name="fail">Order failure info.</param>
-	protected virtual void OnOrderRegisterFailed(OrderFail fail) { }
+	protected virtual void OnOrderRegisterFailed(OrderFail fail)
+	{
+		if (fail.Error != null)
+			OnError(fail.Error);
+	}
+
+	/// <summary>
+	/// Processing of error, occurred as result of strategy operation.
+	/// </summary>
+	/// <param name="error">Error.</param>
+	protected virtual void OnError(Exception error)
+	{
+		Error?.Invoke(error);
+	}
 
 	/// <summary>
 	/// Whether the order can be attached (tracked) by this strategy.
