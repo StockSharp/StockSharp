@@ -807,7 +807,7 @@ public static class Paths
 	/// <param name="fileSystem">File system.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Value.</returns>
-	public static ValueTask<T> DeserializeOrThrowAsync<T>(this string filePath, IFileSystem fileSystem, CancellationToken cancellationToken)
+	public static async ValueTask<T> DeserializeOrThrowAsync<T>(this string filePath, IFileSystem fileSystem, CancellationToken cancellationToken)
 	{
 		if (filePath.IsEmpty())
 			throw new ArgumentNullException(nameof(filePath));
@@ -821,7 +821,7 @@ public static class Paths
 			throw new FileNotFoundException($"file not found: '{defFile}'");
 
 		using var stream = fileSystem.OpenRead(defFile);
-		return CreateSerializer<T>().DeserializeAsync(stream, cancellationToken);
+		return await CreateSerializer<T>().DeserializeAsync(stream, cancellationToken);
 	}
 
 	/// <summary>
