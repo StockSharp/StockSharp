@@ -149,6 +149,31 @@ public class OrderBookIncrementManagerStateTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void TryApply_AllSecSubscription_OnlyBuildsBookDynamically()
+	{
+		// Reproduces the bug: ALL@ALL subscription for MarketDepth
+		// registers in _allSecSubscriptions but TryApply only looks in _byId,
+		// so QuoteChange messages are dropped (TryApply returns null).
+		var state = new OrderBookIncrementManagerState();
+
+		// Subscribe ALL@ALL (no per-security subscription)
+		state.AddAllSecSubscription(42);
+
+		state.HasAnySubscriptions.AssertTrue();
+
+		var snapshot = CreateSnapshot(_secId, [42]);
+		var result = state.TryApply(42, snapshot, out var subscriptionIds);
+
+		// BUG: result is null because _byId doesn't contain subscription 42
+		// FIX: should dynamically create BookInfo for the security
+		result.AssertNotNull();
+		result.Bids.Length.AssertEqual(1);
+		result.Asks.Length.AssertEqual(1);
+		subscriptionIds.AssertNotNull();
+		subscriptionIds.Any(id => id == 42L).AssertTrue();
+	}
+
+	[TestMethod]
 	public void Clear_RemovesAll()
 	{
 		var state = new OrderBookIncrementManagerState();

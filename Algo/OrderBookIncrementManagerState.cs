@@ -17,12 +17,15 @@ public class OrderBookIncrementManagerState : IOrderBookIncrementManagerState
 	private readonly HashSet<long> _passThrough = [];
 	private readonly CachedSynchronizedSet<long> _allSecSubscriptions = [];
 	private readonly CachedSynchronizedSet<long> _allSecSubscriptionsPassThrough = [];
+	private ILogReceiver _builderParent;
 
 	/// <inheritdoc />
 	public void AddSubscription(long transactionId, SecurityId securityId, ILogReceiver builderParent)
 	{
 		using (_sync.EnterScope())
 		{
+			_builderParent ??= builderParent;
+
 			var info = new BookInfo(securityId, builderParent);
 			info.SubscriptionIds.Add(transactionId);
 			_byId.Add(transactionId, info);
@@ -79,7 +82,24 @@ public class OrderBookIncrementManagerState : IOrderBookIncrementManagerState
 		using (_sync.EnterScope())
 		{
 			if (!_byId.TryGetValue(subscriptionId, out var info))
-				return null;
+			{
+				// For ALL@ALL subscriptions: dynamically create per-security builder
+				if (_allSecSubscriptions.Count > 0 && _allSecSubscriptions.Contains(subscriptionId))
+				{
+					var secId = quoteMsg.SecurityId;
+
+					if (!_online.TryGetValue(secId, out info))
+					{
+						info = new(secId, _builderParent);
+						info.SubscriptionIds.Add(subscriptionId);
+						_online.Add(secId, info);
+					}
+
+					_byId.Add(subscriptionId, info);
+				}
+				else
+					return null;
+			}
 
 			newQuoteMsg = info.Builder.TryApply(quoteMsg, subscriptionId);
 
