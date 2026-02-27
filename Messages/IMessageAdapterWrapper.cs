@@ -130,6 +130,14 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 		{
 			await OnSendInMessageAsync(message, cancellationToken);
 		}
+		catch (OperationCanceledException)
+		{
+			// operation was cancelled by caller
+		}
+		catch (Exception ex) when (message.Type == MessageTypes.Disconnect && ex is ObjectDisposedException)
+		{
+			// adapter may have already cleaned up during disconnect
+		}
 		catch (Exception ex)
 		{
 			await RaiseNewOutMessageAsync(message.CreateErrorResponse(ex, this), cancellationToken);
