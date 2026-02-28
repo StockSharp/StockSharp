@@ -1,5 +1,12 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('netstandard')) OR $(TargetFramework.StartsWith('net6'))">
+  <PropertyGroup>
+    <NetVer>10</NetVer>
+    <NetTfm>net$(NetVer).0</NetTfm>
+    <NetOldVer>6</NetOldVer>
+    <NetOldTfm>net$(NetOldVer).0</NetOldTfm>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('netstandard')) OR $(TargetFramework.StartsWith('$(NetOldTfm)'))">
     <LangVersion>13.0</LangVersion>
     <MsExtensionsVer>8.*</MsExtensionsVer>
     <MsCodeAnalysisVer>4.12.0</MsCodeAnalysisVer>
@@ -9,9 +16,9 @@
     <GrpcVer>2.71.0</GrpcVer>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(TargetFramework.StartsWith('net10'))">
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('$(NetTfm)'))">
     <LangVersion>latest</LangVersion>
-    <MsExtensionsVer>10.*</MsExtensionsVer>
+    <MsExtensionsVer>$(NetVer).*</MsExtensionsVer>
     <MsCodeAnalysisVer>4.*</MsCodeAnalysisVer>
     <MsCodeAnalysisAnalyzersVer>3.*</MsCodeAnalysisAnalyzersVer>
     <MsTestVer>4.*</MsTestVer>

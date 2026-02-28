@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Ecng.Configuration" Version="$(EcngVer)" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+  <ItemGroup Condition="'$(TargetFramework)' == '$(NetTfm)'">
     <PackageReference Include="NuGet.Configuration" Version="$(NuGetApiVer)" />
   </ItemGroup>
 </Project>
