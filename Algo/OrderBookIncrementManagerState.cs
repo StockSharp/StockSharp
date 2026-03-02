@@ -94,8 +94,6 @@ public class OrderBookIncrementManagerState : IOrderBookIncrementManagerState
 						info.SubscriptionIds.Add(subscriptionId);
 						_online.Add(secId, info);
 					}
-
-					_byId.Add(subscriptionId, info);
 				}
 				else
 					return null;

@@ -438,6 +438,58 @@ public class OrderBookIncrementManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void AllSecSubscription_MultipleSecurities_EachGetsCorrectSecurityId()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new OrderBookIncrementManager(logReceiver, new OrderBookIncrementManagerState());
+
+		var secId1 = new SecurityId { SecurityCode = "MULTI1", BoardCode = "TEST" };
+		var secId2 = new SecurityId { SecurityCode = "MULTI2", BoardCode = "TEST" };
+		var secId3 = new SecurityId { SecurityCode = "MULTI3", BoardCode = "TEST" };
+
+		// Subscribe to ALL securities
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = default,
+			DataType2 = DataType.MarketDepth,
+		});
+
+		// Snapshot for MULTI1
+		var snap1 = CreateIncrement(secId1, DateTime.UtcNow, QuoteChangeStates.SnapshotComplete, [100],
+			bids: [new QuoteChange(100m, 10m)],
+			asks: [new QuoteChange(101m, 20m)]);
+		var (forward1, extra1) = manager.ProcessOutMessage(snap1);
+		forward1.AssertNull();
+		extra1.Length.AssertEqual(1);
+		((QuoteChangeMessage)extra1[0]).SecurityId.AssertEqual(secId1);
+
+		// Snapshot for MULTI2 — must NOT get MULTI1's SecurityId
+		var snap2 = CreateIncrement(secId2, DateTime.UtcNow, QuoteChangeStates.SnapshotComplete, [100],
+			bids: [new QuoteChange(200m, 30m)],
+			asks: [new QuoteChange(201m, 40m)]);
+		var (forward2, extra2) = manager.ProcessOutMessage(snap2);
+		forward2.AssertNull();
+		extra2.Length.AssertEqual(1);
+		((QuoteChangeMessage)extra2[0]).SecurityId.AssertEqual(secId2);
+
+		// Snapshot for MULTI3
+		var snap3 = CreateIncrement(secId3, DateTime.UtcNow, QuoteChangeStates.SnapshotComplete, [100],
+			bids: [new QuoteChange(300m, 50m)],
+			asks: [new QuoteChange(301m, 60m)]);
+		var (forward3, extra3) = manager.ProcessOutMessage(snap3);
+		forward3.AssertNull();
+		extra3.Length.AssertEqual(1);
+		((QuoteChangeMessage)extra3[0]).SecurityId.AssertEqual(secId3);
+
+		// Verify bids/asks are correct per security (not mixed)
+		((QuoteChangeMessage)extra1[0]).Bids[0].Price.AssertEqual(100m);
+		((QuoteChangeMessage)extra2[0]).Bids[0].Price.AssertEqual(200m);
+		((QuoteChangeMessage)extra3[0]).Bids[0].Price.AssertEqual(300m);
+	}
+
+	[TestMethod]
 	public void NonMarketDataMessage_PassesThrough()
 	{
 		var logReceiver = new TestReceiver();

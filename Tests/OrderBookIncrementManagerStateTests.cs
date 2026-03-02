@@ -174,6 +174,45 @@ public class OrderBookIncrementManagerStateTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void TryApply_AllSecSubscription_MultipleSecurities_EachGetsOwnBuilder()
+	{
+		// Reproduces the bug: ALL subscription shares one subscriptionId for all securities.
+		// The old code cached _byId[subscriptionId] = first security's BookInfo,
+		// so all subsequent securities incorrectly got the first security's SecurityId.
+		var state = new OrderBookIncrementManagerState();
+
+		state.AddAllSecSubscription(42);
+
+		var secId1 = new SecurityId { SecurityCode = "SEC1", BoardCode = "TEST" };
+		var secId2 = new SecurityId { SecurityCode = "SEC2", BoardCode = "TEST" };
+		var secId3 = new SecurityId { SecurityCode = "SEC3", BoardCode = "TEST" };
+
+		// First security
+		var snap1 = CreateSnapshot(secId1, [42]);
+		var result1 = state.TryApply(42, snap1, out _);
+		result1.AssertNotNull();
+		result1.SecurityId.AssertEqual(secId1);
+
+		// Second security — must get its OWN builder, not SEC1's
+		var snap2 = CreateSnapshot(secId2, [42]);
+		var result2 = state.TryApply(42, snap2, out _);
+		result2.AssertNotNull();
+		result2.SecurityId.AssertEqual(secId2);
+
+		// Third security
+		var snap3 = CreateSnapshot(secId3, [42]);
+		var result3 = state.TryApply(42, snap3, out _);
+		result3.AssertNotNull();
+		result3.SecurityId.AssertEqual(secId3);
+
+		// Re-verify first security still works correctly
+		var snap1b = CreateSnapshot(secId1, [42]);
+		var result1b = state.TryApply(42, snap1b, out _);
+		result1b.AssertNotNull();
+		result1b.SecurityId.AssertEqual(secId1);
+	}
+
+	[TestMethod]
 	public void Clear_RemovesAll()
 	{
 		var state = new OrderBookIncrementManagerState();
