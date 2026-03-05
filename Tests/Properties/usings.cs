@@ -30,3 +30,5 @@ global using global::StockSharp.Algo.Indicators;
 global using global::StockSharp.Algo.Candles;
 global using global::StockSharp.Algo.Expressions;
 global using global::StockSharp.Algo.Testing;
+global using global::StockSharp.Algo.Testing.Emulation;
+global using global::StockSharp.MatchingEngine;

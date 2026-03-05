@@ -1,7 +1,6 @@
 namespace StockSharp.Tests;
 
 using StockSharp.Algo.Testing;
-using StockSharp.Algo.Testing.Emulation;
 
 /// <summary>
 /// Comparison tests between MarketEmulatorOld (V1) and MarketEmulator (V2).

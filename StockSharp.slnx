@@ -79,6 +79,7 @@
   <Project Path="Algo.Indicators/Algo.Indicators.csproj" />
   <Project Path="Algo.Strategies/Algo.Strategies.csproj" />
   <Project Path="Algo.Testing/Algo.Testing.csproj" />
+  <Project Path="MatchingEngine/MatchingEngine.csproj" />
   <Project Path="Algo/Algo.csproj" />
   <Project Path="BusinessEntities/BusinessEntities.csproj" />
   <Project Path="Charting.Interfaces/Charting.Interfaces.csproj" />

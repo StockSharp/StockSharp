@@ -1,6 +1,5 @@
 namespace StockSharp.Tests;
 
-using StockSharp.Algo.Testing.Emulation;
 
 [TestClass]
 public class OrderBookTests : BaseTestClass

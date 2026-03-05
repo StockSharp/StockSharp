@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Testing.Emulation;
+namespace StockSharp.MatchingEngine;
 
 /// <summary>
 /// Order matcher implementation.

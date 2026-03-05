@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Testing.Emulation;
+namespace StockSharp.MatchingEngine;
 
 /// <summary>
 /// Emulated portfolio implementation that tracks positions and money in-memory.

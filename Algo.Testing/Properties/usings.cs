@@ -20,5 +20,6 @@ global using StockSharp.Localization;
 global using StockSharp.Messages;
 global using StockSharp.BusinessEntities;
 global using StockSharp.Algo.Storages;
+global using StockSharp.MatchingEngine;
 global using DataType = StockSharp.Messages.DataType;
 global using Extensions = StockSharp.Messages.Extensions;

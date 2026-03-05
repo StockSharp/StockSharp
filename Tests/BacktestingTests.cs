@@ -4,7 +4,6 @@ using StockSharp.Algo.Basket;
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.Testing;
-using StockSharp.Algo.Testing.Emulation;
 using StockSharp.Designer;
 
 /// <summary>

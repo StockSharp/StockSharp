@@ -4,7 +4,6 @@ using System.Collections.Concurrent;
 
 using Ecng.Collections;
 
-using StockSharp.Algo.Testing.Emulation;
 
 /// <summary>
 /// Low-level integration tests for Emulator + Channel without Connector/Strategy.

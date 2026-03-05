@@ -4,7 +4,6 @@ using StockSharp.Algo.PnL;
 using StockSharp.Algo.Risk;
 using StockSharp.Algo.Statistics;
 using StockSharp.Algo.Testing;
-using StockSharp.Algo.Testing.Emulation;
 using StockSharp.Algo.Strategies.Decomposed;
 using StockSharp.Designer;
 
