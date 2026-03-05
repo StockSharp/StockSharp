@@ -1070,8 +1070,15 @@ public partial class Strategy
 
 	private void ActiveProtection((bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition) info)
 	{
-		// sending protection (=closing position) order as regular order
-		RegisterOrder(CreateOrder(info.side, info.price, info.volume));
+		var order = CreateOrder(info.side, info.price, info.volume);
+
+		if (info.condition != null)
+		{
+			order.Type = OrderTypes.Conditional;
+			order.Condition = info.condition;
+		}
+
+		RegisterOrder(order);
 	}
 
 	/// <summary>
@@ -1290,6 +1297,7 @@ public partial class Strategy
 	private bool _isStopTrailing;
 	private TimeSpan _takeTimeout, _stopTimeout;
 	private bool _protectiveUseMarketOrders;
+	private bool _isLocalStop;
 	private ProtectiveController _protectiveController;
 	private IProtectivePositionController _posController;
 
@@ -1302,12 +1310,14 @@ public partial class Strategy
 	/// <param name="takeTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
 	/// <param name="stopTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
 	/// <param name="useMarketOrders">Whether to use market orders.</param>
+	/// <param name="isLocalStop">Force local stop processing regardless of adapter capabilities.</param>
 	protected void StartProtection(
 		Unit takeProfit, Unit stopLoss,
 		bool isStopTrailing = default,
 		TimeSpan? takeTimeout = default,
 		TimeSpan? stopTimeout = default,
-		bool useMarketOrders = default)
+		bool useMarketOrders = default,
+		bool isLocalStop = default)
 	{
 		if (!takeProfit.IsSet() && !stopLoss.IsSet())
 			return;
@@ -1325,6 +1335,7 @@ public partial class Strategy
 		_takeTimeout = takeTimeout ?? default;
 		_stopTimeout = stopTimeout ?? default;
 		_protectiveUseMarketOrders = useMarketOrders;
+		_isLocalStop = isLocalStop;
 	}
 
 	/// <summary>

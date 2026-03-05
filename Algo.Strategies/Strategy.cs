@@ -2080,6 +2080,7 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_takeTimeout = default;
 		_stopTimeout = default;
 		_protectiveUseMarketOrders = default;
+		_isLocalStop = default;
 
 		_chart = default;
 		_drawingOrders = default;
@@ -2411,13 +2412,24 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		_posController ??= _protectiveController.GetController(
 			security.ToSecurityId(),
 			portfolio.Name,
-			new LocalProtectiveBehaviourFactory(security.PriceStep, security.Decimals),
+			GetProtectiveBehaviourFactory(security, portfolio),
 			_takeProfit ?? new(), _stopLoss ?? new(), _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
 
 		var info = _posController?.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
 
 		if (info is not null)
 			ActiveProtection(info.Value);
+	}
+
+	private IProtectiveBehaviourFactory GetProtectiveBehaviourFactory(Security security, Portfolio portfolio)
+	{
+		if (!_isLocalStop && Connector?.Adapter is { } basket && basket.TryGetAdapter(portfolio.Name, out var adapter)
+			&& (adapter.IsSupportStopLoss() || adapter.IsSupportTakeProfit()))
+		{
+			return new ServerProtectiveBehaviourFactory(adapter);
+		}
+
+		return new LocalProtectiveBehaviourFactory(security.PriceStep, security.Decimals);
 	}
 
 	/// <summary>
