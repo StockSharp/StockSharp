@@ -3,17 +3,26 @@ namespace StockSharp.Algo.Strategies.Decomposed;
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Risk;
 using StockSharp.Algo.Statistics;
+using StockSharp.Algo.Strategies.Protective;
 
 /// <summary>
 /// The base class for all trade strategies.
 /// </summary>
-public class DecomposedStrategy : IStrategyHost
+public class DecomposedStrategy : BaseLogReceiver, IStrategyHost
 {
 	private IConnector _connector;
 	private readonly HashSet<long> _ownTransactionIds = [];
 	private readonly Dictionary<(SecurityId secId, string pfName), decimal> _positions = [];
 	private bool _isTradingBlocked;
 	private decimal _position;
+
+	private Unit _takeProfit, _stopLoss;
+	private bool _isStopTrailing;
+	private TimeSpan _takeTimeout, _stopTimeout;
+	private bool _protectiveUseMarketOrders;
+	private bool _isLocalStop;
+	private ProtectiveController _protectiveController;
+	private IProtectivePositionController _posController;
 
 	/// <summary>
 	/// Initializes a new instance <see cref="DecomposedStrategy"/>.
@@ -56,7 +65,16 @@ public class DecomposedStrategy : IStrategyHost
 						Subscriptions.UnSubscribe(sub);
 			}
 		};
-		Engine.CurrentPriceUpdated += (secId, price, serverTime, localTime) => OnCurrentPriceUpdated(secId, price, serverTime, localTime);
+		Engine.CurrentPriceUpdated += (secId, price, serverTime, localTime) =>
+		{
+			OnCurrentPriceUpdated(secId, price, serverTime, localTime);
+
+			if (_protectiveController is not null)
+			{
+				foreach (var info in _protectiveController.TryActivate(secId, price, serverTime))
+					ActiveProtection(info);
+			}
+		};
 		Orders.Registered += OnOrderRegistered;
 		Orders.Registered += order =>
 		{
@@ -86,6 +104,23 @@ public class DecomposedStrategy : IStrategyHost
 				_position = newPos;
 
 			trade.Position = newPos;
+
+			if (_protectiveController is not null)
+			{
+				var security = trade.Order.Security;
+				var portfolio = trade.Order.Portfolio;
+
+				_posController ??= _protectiveController.GetController(
+					security.ToSecurityId(),
+					portfolio.Name,
+					GetProtectiveBehaviourFactory(security, portfolio),
+					_takeProfit ?? new(), _stopLoss ?? new(), _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
+
+				var info = _posController?.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
+
+				if (info is not null)
+					ActiveProtection(info.Value);
+			}
 		};
 		Positions.NewPosition += OnNewPosition;
 		Positions.PositionChanged += OnPositionChanged;
@@ -487,7 +522,82 @@ public class DecomposedStrategy : IStrategyHost
 
 		Latency = null;
 		ErrorState = default;
+
+		_protectiveController = default;
+		_posController = default;
+		_takeProfit = default;
+		_stopLoss = default;
+		_isStopTrailing = default;
+		_takeTimeout = default;
+		_stopTimeout = default;
+		_protectiveUseMarketOrders = default;
+		_isLocalStop = default;
 	}
+
+	#region Protection
+
+	/// <summary>
+	/// Start position protection.
+	/// </summary>
+	/// <param name="takeProfit">Take offset.</param>
+	/// <param name="stopLoss">Stop offset.</param>
+	/// <param name="isStopTrailing">Whether to use a trailing technique.</param>
+	/// <param name="takeTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
+	/// <param name="stopTimeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
+	/// <param name="useMarketOrders">Whether to use market orders.</param>
+	/// <param name="isLocalStop">Force local stop processing regardless of adapter capabilities.</param>
+	public void StartProtection(
+		Unit takeProfit, Unit stopLoss,
+		bool isStopTrailing = default,
+		TimeSpan? takeTimeout = default,
+		TimeSpan? stopTimeout = default,
+		bool useMarketOrders = default,
+		bool isLocalStop = default)
+	{
+		if (!takeProfit.IsSet() && !stopLoss.IsSet())
+			return;
+
+		if (takeTimeout < TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(takeTimeout), takeTimeout, LocalizedStrings.InvalidValue);
+
+		if (stopTimeout < TimeSpan.Zero)
+			throw new ArgumentOutOfRangeException(nameof(stopTimeout), stopTimeout, LocalizedStrings.InvalidValue);
+
+		_protectiveController = new() { Parent = this };
+		_takeProfit = takeProfit;
+		_stopLoss = stopLoss;
+		_isStopTrailing = isStopTrailing;
+		_takeTimeout = takeTimeout ?? default;
+		_stopTimeout = stopTimeout ?? default;
+		_protectiveUseMarketOrders = useMarketOrders;
+		_isLocalStop = isLocalStop;
+	}
+
+	private void ActiveProtection((bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition) info)
+	{
+		var order = CreateOrder(info.side, info.price, info.volume);
+
+		if (info.condition != null)
+		{
+			order.Type = OrderTypes.Conditional;
+			order.Condition = info.condition;
+		}
+
+		RegisterOrder(order);
+	}
+
+	private IProtectiveBehaviourFactory GetProtectiveBehaviourFactory(Security security, Portfolio portfolio)
+	{
+		if (!_isLocalStop && (Connector as Connector)?.Adapter is { } basket && basket.TryGetAdapter(portfolio.Name, out var adapter)
+			&& (adapter.IsSupportStopLoss() || adapter.IsSupportTakeProfit()))
+		{
+			return new ServerProtectiveBehaviourFactory(adapter);
+		}
+
+		return new LocalProtectiveBehaviourFactory(security.PriceStep, security.Decimals);
+	}
+
+	#endregion
 
 	#region Virtual hooks
 

@@ -1571,4 +1571,323 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region StartProtection tests
+
+	[TestMethod]
+	public void StartProtection_LocalStop_ActivatesOnPriceChange()
+	{
+		var connMock = CreateMockConnector();
+		var registeredOrders = new List<Order>();
+		connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>()))
+			.Callback<Order>(o => registeredOrders.Add(o));
+
+		var security = CreateSecurity();
+		security.PriceStep = 0.01m;
+		var portfolio = CreatePortfolio();
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		// Configure local stop protection: 5% stop loss
+		strategy.StartProtection(
+			new Unit(), new Unit(5, UnitTypes.Percent),
+			isLocalStop: true);
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		// Create and fill a buy order at price 100
+		var order = new Order
+		{
+			TransactionId = 1,
+			State = OrderStates.Pending,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+			Security = security,
+			Portfolio = portfolio,
+			Time = DateTime.UtcNow,
+		};
+
+		strategy.OnOrderReceived(sub, order);
+		order.State = OrderStates.Active;
+		strategy.OnOrderReceived(sub, order);
+
+		var trade = new MyTrade
+		{
+			Order = order,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradeId = 1,
+				TradePrice = 100m,
+				TradeVolume = 10m,
+				SecurityId = security.ToSecurityId(),
+				ServerTime = DateTime.UtcNow,
+			},
+		};
+
+		strategy.OnTradeReceived(sub, trade);
+
+		// Position should be 10
+		strategy.Position.AreEqual(10m);
+
+		// Now simulate price drop to 94 (6% drop, below 5% stop)
+		var secId = security.ToSecurityId();
+		var l1 = new Level1ChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			LocalTime = DateTime.UtcNow,
+		}.TryAdd(Level1Fields.LastTradePrice, 94m);
+
+		strategy.Engine.OnMessage(l1);
+
+		// The stop should have activated — a sell protective order should be registered
+		IsTrue(registeredOrders.Count > 0,
+			"Stop loss should generate a protective order when price drops below threshold");
+
+		// The last registered order should be a sell to close position
+		var protectiveOrder = registeredOrders.Last();
+		protectiveOrder.Side.AreEqual(Sides.Sell);
+	}
+
+	[TestMethod]
+	public void StartProtection_NoEffect_WhenNotConfigured()
+	{
+		var connMock = CreateMockConnector();
+		var registeredOrders = new List<Order>();
+		connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>()))
+			.Callback<Order>(o => registeredOrders.Add(o));
+
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		// Do NOT call StartProtection
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		var order = new Order
+		{
+			TransactionId = 1,
+			State = OrderStates.Pending,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+			Security = security,
+			Portfolio = portfolio,
+			Time = DateTime.UtcNow,
+		};
+
+		strategy.OnOrderReceived(sub, order);
+		order.State = OrderStates.Active;
+		strategy.OnOrderReceived(sub, order);
+
+		strategy.OnTradeReceived(sub, new MyTrade
+		{
+			Order = order,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradeId = 1,
+				TradePrice = 100m,
+				TradeVolume = 10m,
+				SecurityId = security.ToSecurityId(),
+				ServerTime = DateTime.UtcNow,
+			},
+		});
+
+		// Simulate price drop — should NOT generate any protective orders
+		var secId = security.ToSecurityId();
+		var l1 = new Level1ChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			LocalTime = DateTime.UtcNow,
+		}.TryAdd(Level1Fields.LastTradePrice, 50m);
+
+		strategy.Engine.OnMessage(l1);
+
+		// No protective orders should have been registered
+		AreEqual(0, registeredOrders.Count,
+			"Without StartProtection, no protective orders should be generated");
+	}
+
+	[TestMethod]
+	public void StartProtection_Reset_ClearsProtection()
+	{
+		var connMock = CreateMockConnector();
+		var registeredOrders = new List<Order>();
+		connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>()))
+			.Callback<Order>(o => registeredOrders.Add(o));
+
+		var security = CreateSecurity();
+		security.PriceStep = 0.01m;
+		var portfolio = CreatePortfolio();
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		// Configure protection
+		strategy.StartProtection(
+			new Unit(), new Unit(5, UnitTypes.Percent),
+			isLocalStop: true);
+
+		// Reset should clear protection state
+		strategy.Reset();
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		// After reset, new trades should NOT trigger protection
+		var order = new Order
+		{
+			TransactionId = 1,
+			State = OrderStates.Pending,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+			Security = security,
+			Portfolio = portfolio,
+			Time = DateTime.UtcNow,
+		};
+
+		strategy.OnOrderReceived(sub, order);
+		order.State = OrderStates.Active;
+		strategy.OnOrderReceived(sub, order);
+
+		strategy.OnTradeReceived(sub, new MyTrade
+		{
+			Order = order,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradeId = 1,
+				TradePrice = 100m,
+				TradeVolume = 10m,
+				SecurityId = security.ToSecurityId(),
+				ServerTime = DateTime.UtcNow,
+			},
+		});
+
+		var secId = security.ToSecurityId();
+		var l1 = new Level1ChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			LocalTime = DateTime.UtcNow,
+		}.TryAdd(Level1Fields.LastTradePrice, 80m);
+
+		strategy.Engine.OnMessage(l1);
+
+		AreEqual(0, registeredOrders.Count,
+			"After Reset(), protection should be cleared and no protective orders generated");
+	}
+
+	[TestMethod]
+	public void StartProtection_TrailingStop_AdjustsPrice()
+	{
+		var connMock = CreateMockConnector();
+		var registeredOrders = new List<Order>();
+		connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>()))
+			.Callback<Order>(o => registeredOrders.Add(o));
+
+		var security = CreateSecurity();
+		security.PriceStep = 0.01m;
+		var portfolio = CreatePortfolio();
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		// Configure trailing stop: 5% trailing stop loss
+		strategy.StartProtection(
+			new Unit(), new Unit(5, UnitTypes.Percent),
+			isStopTrailing: true,
+			isLocalStop: true);
+
+		var sub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(sub);
+
+		// Buy at 100
+		var order = new Order
+		{
+			TransactionId = 1,
+			State = OrderStates.Pending,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 10,
+			Security = security,
+			Portfolio = portfolio,
+			Time = DateTime.UtcNow,
+		};
+
+		strategy.OnOrderReceived(sub, order);
+		order.State = OrderStates.Active;
+		strategy.OnOrderReceived(sub, order);
+
+		strategy.OnTradeReceived(sub, new MyTrade
+		{
+			Order = order,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradeId = 1,
+				TradePrice = 100m,
+				TradeVolume = 10m,
+				SecurityId = security.ToSecurityId(),
+				ServerTime = DateTime.UtcNow,
+			},
+		});
+
+		var secId = security.ToSecurityId();
+
+		// Price goes up to 110 — trailing stop should trail up
+		strategy.Engine.OnMessage(new Level1ChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			LocalTime = DateTime.UtcNow,
+		}.TryAdd(Level1Fields.LastTradePrice, 110m));
+
+		// No stop triggered yet
+		AreEqual(0, registeredOrders.Count,
+			"Price moving up should not trigger stop");
+
+		// Price drops to 104 (5.5% from high of 110) — below 5% trailing
+		strategy.Engine.OnMessage(new Level1ChangeMessage
+		{
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			LocalTime = DateTime.UtcNow,
+		}.TryAdd(Level1Fields.LastTradePrice, 104m));
+
+		IsTrue(registeredOrders.Count > 0,
+			"Trailing stop should activate when price drops 5% from high");
+
+		var protectiveOrder = registeredOrders.Last();
+		protectiveOrder.Side.AreEqual(Sides.Sell);
+	}
+
+	#endregion
 }

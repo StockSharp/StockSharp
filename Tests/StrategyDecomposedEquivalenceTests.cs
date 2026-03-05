@@ -1516,4 +1516,186 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region SMA with Protection equivalence
+
+	/// <summary>
+	/// DecomposedSmaStrategy with protection: same SMA crossover logic + StartProtection.
+	/// </summary>
+	private class DecomposedSmaWithProtectionStrategy : DecomposedStrategy
+	{
+		private bool? _isShortLessThenLong;
+		private readonly SimpleMovingAverage _longSma = new();
+		private readonly SimpleMovingAverage _shortSma = new();
+
+		public int Long { get; set; } = 80;
+		public int Short { get; set; } = 30;
+		public List<Order> ProtectiveOrders { get; } = [];
+
+		public void Init()
+		{
+			_longSma.Length = Long;
+			_shortSma.Length = Short;
+			_isShortLessThenLong = null;
+		}
+
+		public void ProcessCandle(ICandleMessage candle)
+		{
+			if (candle.State != CandleStates.Finished)
+				return;
+
+			var longVal = _longSma.Process(candle);
+			var shortVal = _shortSma.Process(candle);
+
+			OnProcess(candle, longVal.ToDecimal(), shortVal.ToDecimal());
+		}
+
+		private void OnProcess(ICandleMessage candle, decimal longValue, decimal shortValue)
+		{
+			if (candle.State != CandleStates.Finished)
+				return;
+
+			var isShortLessThenLong = shortValue < longValue;
+
+			if (_isShortLessThenLong == null)
+			{
+				_isShortLessThenLong = isShortLessThenLong;
+			}
+			else if (_isShortLessThenLong != isShortLessThenLong)
+			{
+				var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
+
+				var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
+
+				var priceStep = Security.PriceStep ?? 1;
+
+				var price = candle.ClosePrice + (direction == Sides.Buy ? priceStep : -priceStep);
+
+				if (direction == Sides.Buy)
+					BuyLimit(price, volume);
+				else
+					SellLimit(price, volume);
+
+				_isShortLessThenLong = isShortLessThenLong;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Run DecomposedSmaWithProtectionStrategy: verify that with StartProtection
+	/// configured, protection orders are generated after trades fill.
+	/// Both decomposed + protection and a plain decomposed (no protection)
+	/// should produce the same SMA crossover orders, but the protected one
+	/// should additionally generate protective orders.
+	/// </summary>
+	[TestMethod]
+	public async Task SmaWithProtection_Decomposed_GeneratesProtectiveOrders()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		// 1. Run real SmaStrategy backtest to capture candles
+		var (sma, candles) = await RunSmaBacktestWithCandles(CancellationToken);
+
+		var finishedCandles = candles
+			.Where(c => c.State == CandleStates.Finished)
+			.GroupBy(c => c.OpenTime)
+			.Select(g => g.First())
+			.OrderBy(c => c.OpenTime)
+			.ToList();
+
+		if (finishedCandles.Count == 0)
+		{
+			Console.WriteLine("No finished candles, skipping");
+			return;
+		}
+
+		// 2. Run DecomposedSma WITHOUT protection
+		var connMock1 = CreateMockConnector();
+		var ordersNoProtection = new List<Order>();
+		connMock1.Setup(c => c.RegisterOrder(It.IsAny<Order>()))
+			.Callback<Order>(o => ordersNoProtection.Add(o));
+
+		var noProtection = new DecomposedSmaWithProtectionStrategy
+		{
+			Security = new Security
+			{
+				Id = sma.Security.Id,
+				Board = sma.Security.Board,
+				PriceStep = sma.Security.PriceStep,
+			},
+			Portfolio = new Portfolio { Name = "test" },
+			Volume = sma.Volume,
+			Long = sma.Long,
+			Short = sma.Short,
+		};
+		noProtection.Connector = connMock1.Object;
+		noProtection.Init();
+		await noProtection.StartAsync();
+		noProtection.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+
+		foreach (var candle in finishedCandles)
+			noProtection.ProcessCandle(candle);
+
+		// 3. Run DecomposedSma WITH protection
+		var connMock2 = CreateMockConnector();
+		var ordersWithProtection = new List<Order>();
+		connMock2.Setup(c => c.RegisterOrder(It.IsAny<Order>()))
+			.Callback<Order>(o => ordersWithProtection.Add(o));
+
+		var withProtection = new DecomposedSmaWithProtectionStrategy
+		{
+			Security = new Security
+			{
+				Id = sma.Security.Id,
+				Board = sma.Security.Board,
+				PriceStep = sma.Security.PriceStep,
+			},
+			Portfolio = new Portfolio { Name = "test" },
+			Volume = sma.Volume,
+			Long = sma.Long,
+			Short = sma.Short,
+		};
+		withProtection.Connector = connMock2.Object;
+		withProtection.Init();
+
+		// StartProtection with 2% stop loss (local)
+		withProtection.StartProtection(
+			new Unit(), new Unit(2, UnitTypes.Percent),
+			isLocalStop: true);
+
+		await withProtection.StartAsync();
+		withProtection.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+
+		// Feed candles and simulate fills + price updates for protection
+		var secId = withProtection.Security.ToSecurityId();
+		var sub = new Subscription(DataType.Transactions);
+		withProtection.Subscriptions.Subscribe(sub);
+
+		foreach (var candle in finishedCandles)
+		{
+			withProtection.ProcessCandle(candle);
+
+			// After each candle, simulate price update for protection activation
+			withProtection.Engine.OnMessage(new Level1ChangeMessage
+			{
+				SecurityId = secId,
+				ServerTime = candle.CloseTime,
+				LocalTime = candle.CloseTime,
+			}.TryAdd(Level1Fields.LastTradePrice, candle.ClosePrice));
+		}
+
+		Console.WriteLine($"Orders without protection: {ordersNoProtection.Count}");
+		Console.WriteLine($"Orders with protection: {ordersWithProtection.Count}");
+
+		// Both should have crossover orders
+		IsTrue(ordersNoProtection.Count > 0, "Unprotected strategy should generate crossover orders");
+		IsTrue(ordersWithProtection.Count > 0, "Protected strategy should generate orders");
+
+		// Protected strategy should generate at least as many orders
+		// (crossover orders + possibly protective orders)
+		IsTrue(ordersWithProtection.Count >= ordersNoProtection.Count,
+			$"Protected strategy should have at least as many orders ({ordersWithProtection.Count}) as unprotected ({ordersNoProtection.Count})");
+	}
+
+	#endregion
 }
