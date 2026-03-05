@@ -10,6 +10,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	private readonly Dictionary<SecurityId, SecurityEmulator> _securityEmulators = [];
 	private IPortfolioManager _portfolioManager = new EmulatedPortfolioManager();
 	private readonly ICommissionManager _commissionManager = new CommissionManager();
+	private readonly IStopOrderManager _stopOrderManager = new StopOrderManager();
 	private DateTime _currentTime;
 	private DateTime _lastInputTime;
 
@@ -186,10 +187,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			case MessageTypes.Level1Change:
 				var l1Msg = (Level1ChangeMessage)message;
 				GetEmulator(l1Msg.SecurityId).ProcessLevel1(l1Msg, results);
+				if (l1Msg.TryGetDecimal(Level1Fields.LastTradePrice) is { } l1LastPrice)
+					CheckStopOrders(l1Msg.SecurityId, l1LastPrice, l1Msg.LocalTime, results);
 				break;
 
 			case MessageTypes.Execution:
 				ProcessExecution((ExecutionMessage)message, results);
+				if (message is ExecutionMessage tickMsg && tickMsg.DataType == DataType.Ticks && tickMsg.TradePrice is { } tickPrice)
+					CheckStopOrders(tickMsg.SecurityId, tickPrice, tickMsg.LocalTime, results);
 				break;
 
 			case MessageTypes.OrderRegister:
@@ -283,6 +288,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	private void ProcessOrderRegister(OrderRegisterMessage regMsg, List<Message> results)
 	{
+		// Intercept conditional (stop) orders
+		if (regMsg.OrderType == OrderTypes.Conditional && regMsg.Condition is IStopLossOrderCondition stopCond)
+		{
+			RegisterStopOrder(regMsg, stopCond, results);
+			return;
+		}
+
 		var emulator = GetEmulator(regMsg.SecurityId);
 		var portfolio = GetPortfolio(regMsg.PortfolioName);
 		var serverTime = regMsg.LocalTime;
@@ -648,6 +660,21 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	{
 		var emulator = GetEmulator(cancelMsg.SecurityId);
 		var serverTime = cancelMsg.LocalTime;
+
+		// Try cancelling stop order first
+		if (_stopOrderManager.Cancel(cancelMsg.OriginalTransactionId, out _))
+		{
+			results.Add(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				LocalTime = cancelMsg.LocalTime,
+				ServerTime = serverTime,
+				OriginalTransactionId = cancelMsg.OriginalTransactionId,
+				OrderState = OrderStates.Done,
+				HasOrderInfo = true,
+			});
+			return;
+		}
 
 		if (!emulator.OrderManager.TryRemoveOrder(cancelMsg.OriginalTransactionId, out var order))
 		{
@@ -1102,10 +1129,71 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		};
 	}
 
+	private void RegisterStopOrder(OrderRegisterMessage regMsg, IStopLossOrderCondition stopCond, List<Message> results)
+	{
+		var info = new StopOrderInfo
+		{
+			TransactionId = regMsg.TransactionId,
+			SecurityId = regMsg.SecurityId,
+			Side = regMsg.Side,
+			Volume = regMsg.Volume,
+			PortfolioName = regMsg.PortfolioName,
+			StopPrice = stopCond.ActivationPrice ?? 0,
+			LimitPrice = stopCond.ClosePositionPrice,
+			IsTrailing = stopCond.IsTrailing,
+			TrailingOffset = stopCond is StopOrderCondition soc ? soc.TrailingOffset : null,
+		};
+
+		_stopOrderManager.Register(info);
+
+		results.Add(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			SecurityId = regMsg.SecurityId,
+			LocalTime = regMsg.LocalTime,
+			ServerTime = regMsg.LocalTime,
+			OriginalTransactionId = regMsg.TransactionId,
+			OrderId = OrderIdGenerator.GetNextId(),
+			OrderState = OrderStates.Active,
+			OrderType = OrderTypes.Conditional,
+			PortfolioName = regMsg.PortfolioName,
+			Side = regMsg.Side,
+			OrderVolume = regMsg.Volume,
+			Balance = regMsg.Volume,
+		});
+	}
+
+	private void CheckStopOrders(SecurityId securityId, decimal price, DateTime time, List<Message> results)
+	{
+		var triggers = _stopOrderManager.CheckPrice(securityId, price, time);
+
+		foreach (var trigger in triggers)
+		{
+			// Send Done for the stop order
+			results.Add(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				HasOrderInfo = true,
+				SecurityId = securityId,
+				LocalTime = time,
+				ServerTime = time,
+				OriginalTransactionId = trigger.Info.TransactionId,
+				OrderState = OrderStates.Done,
+				Balance = 0,
+				OrderVolume = trigger.Info.Volume,
+			});
+
+			// Process the resulting market/limit order
+			ProcessOrderRegister(trigger.ResultingOrder, results);
+		}
+	}
+
 	private void Reset()
 	{
 		_securityEmulators.Clear();
 		_portfolioManager.Clear();
+		_stopOrderManager.Clear();
 		ProcessedMessageCount = 0;
 		_lastInputTime = default;
 
