@@ -83,6 +83,14 @@ public interface IStopOrderManager
 	bool Cancel(long transactionId, out StopOrderInfo info);
 
 	/// <summary>
+	/// Atomically replace an existing stop order with a new one.
+	/// </summary>
+	/// <param name="origTransactionId">Transaction ID of the stop order to replace.</param>
+	/// <param name="newInfo">New stop order info.</param>
+	/// <returns><see langword="true"/> if the old stop order was found and replaced.</returns>
+	bool Replace(long origTransactionId, StopOrderInfo newInfo);
+
+	/// <summary>
 	/// Check price against all registered stop orders for the given security.
 	/// </summary>
 	/// <param name="securityId">Security ID.</param>

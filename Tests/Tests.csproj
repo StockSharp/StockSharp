@@ -2,6 +2,7 @@
   <Import Project="..\common_target_tests.props" />
   <ItemGroup>
     <Compile Include="..\Designer.Templates\Backtest\SmaStrategy.cs" Link="SmaStrategy.cs" />
+    <Compile Include="..\Designer.Templates\Backtest\SmaServerStopStrategy.cs" Link="SmaServerStopStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Excel.OpenXml" Version="$(EcngVer)" />

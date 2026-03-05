@@ -2083,4 +2083,70 @@ public class BacktestingTests : BaseTestClass
 		var execWithIds = execMsgs.Count(e => e.GetSubscriptionIds().Length > 0);
 		IsTrue(execWithIds > 0, "Expected ExecutionMessage to have subscription IDs");
 	}
+
+	/// <summary>
+	/// Tests that <see cref="SmaServerStopStrategy"/> completes backtesting
+	/// and generates both regular and conditional (stop) orders.
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestServerStopStrategy_GeneratesStopOrders()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
+
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		var strategy = new SmaServerStopStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		var tcs = new TaskCompletionSource<bool>();
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				tcs.TrySetResult(true);
+		};
+
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
+
+		if (completed != tcs.Task)
+		{
+			connector.Disconnect();
+			Fail("Backtest did not complete in time");
+		}
+
+		IsTrue(connector.IsFinished, "Backtest should finish");
+
+		var allOrders = strategy.Orders.ToList();
+		var limitOrders = allOrders.Where(o => o.Type == OrderTypes.Limit).ToList();
+		var conditionalOrders = allOrders.Where(o => o.Type == OrderTypes.Conditional).ToList();
+
+		Console.WriteLine($"Total orders: {allOrders.Count}, Limit: {limitOrders.Count}, Conditional (stop): {conditionalOrders.Count}");
+		Console.WriteLine($"MyTrades: {strategy.MyTrades.Count()}");
+
+		IsTrue(limitOrders.Count > 0, "Expected limit orders from SMA crossover");
+		IsTrue(conditionalOrders.Count > 0, "Expected conditional (stop) orders");
+	}
 }

@@ -723,6 +723,61 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	private void ProcessOrderReplace(OrderReplaceMessage replaceMsg, List<Message> results)
 	{
+		// Try stop order replace first
+		if (_stopOrderManager.Cancel(replaceMsg.OriginalTransactionId, out var oldStopInfo))
+		{
+			// Done for old stop order
+			results.Add(new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				HasOrderInfo = true,
+				LocalTime = replaceMsg.LocalTime,
+				ServerTime = replaceMsg.LocalTime,
+				OriginalTransactionId = replaceMsg.OriginalTransactionId,
+				OrderState = OrderStates.Done,
+				Balance = oldStopInfo.Volume,
+				OrderVolume = oldStopInfo.Volume,
+			});
+
+			// Register new order
+			if (replaceMsg.Condition is IStopLossOrderCondition stopCond)
+			{
+				var stopRegMsg = new OrderRegisterMessage
+				{
+					SecurityId = replaceMsg.SecurityId,
+					LocalTime = replaceMsg.LocalTime,
+					TransactionId = replaceMsg.TransactionId,
+					Side = replaceMsg.Side,
+					Volume = replaceMsg.Volume > 0 ? replaceMsg.Volume : oldStopInfo.Volume,
+					OrderType = OrderTypes.Conditional,
+					Condition = replaceMsg.Condition,
+					PortfolioName = replaceMsg.PortfolioName ?? oldStopInfo.PortfolioName,
+				};
+
+				RegisterStopOrder(stopRegMsg, stopCond, results);
+			}
+			else
+			{
+				var regMsg = new OrderRegisterMessage
+				{
+					SecurityId = replaceMsg.SecurityId,
+					LocalTime = replaceMsg.LocalTime,
+					TransactionId = replaceMsg.TransactionId,
+					Side = replaceMsg.Side,
+					Price = replaceMsg.Price,
+					Volume = replaceMsg.Volume > 0 ? replaceMsg.Volume : oldStopInfo.Volume,
+					OrderType = replaceMsg.OrderType ?? OrderTypes.Limit,
+					PortfolioName = replaceMsg.PortfolioName ?? oldStopInfo.PortfolioName,
+					TimeInForce = replaceMsg.TimeInForce,
+					PostOnly = replaceMsg.PostOnly,
+					TillDate = replaceMsg.TillDate,
+				};
+
+				ProcessOrderRegister(regMsg, results);
+			}
+			return;
+		}
+
 		var emulator = GetEmulator(replaceMsg.SecurityId);
 		var serverTime = replaceMsg.LocalTime;
 

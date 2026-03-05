@@ -268,6 +268,58 @@ public class StopOrderManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void Replace_UpdatesStopPrice()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		mgr.Register(CreateStopInfo(secId, Sides.Sell, stopPrice: 95, transactionId: 1));
+
+		// Replace with new stop price
+		var replaced = mgr.Replace(1, CreateStopInfo(secId, Sides.Sell, stopPrice: 90, transactionId: 2));
+		Assert.IsTrue(replaced);
+
+		// Old price should not trigger
+		var triggers = mgr.CheckPrice(secId, 95, DateTime.UtcNow);
+		Assert.AreEqual(0, triggers.Count);
+
+		// New price should trigger
+		triggers = mgr.CheckPrice(secId, 90, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+		Assert.AreEqual(2L, triggers[0].Info.TransactionId);
+	}
+
+	[TestMethod]
+	public void Replace_NonExistent_ReturnsFalse()
+	{
+		var mgr = new StopOrderManager();
+
+		var replaced = mgr.Replace(999, CreateStopInfo(CreateSecId(), Sides.Buy, stopPrice: 100, transactionId: 2));
+		Assert.IsFalse(replaced);
+	}
+
+	[TestMethod]
+	public void Replace_ChangesFromBuyToSell()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		mgr.Register(CreateStopInfo(secId, Sides.Buy, stopPrice: 105, volume: 10, transactionId: 1));
+
+		// Replace buy stop with sell stop
+		var replaced = mgr.Replace(1, CreateStopInfo(secId, Sides.Sell, stopPrice: 90, volume: 20, transactionId: 2));
+		Assert.IsTrue(replaced);
+
+		// Buy trigger should not work
+		var triggers = mgr.CheckPrice(secId, 110, DateTime.UtcNow);
+		Assert.AreEqual(0, triggers.Count);
+
+		// Sell trigger at new price
+		triggers = mgr.CheckPrice(secId, 89, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+		Assert.AreEqual(Sides.Sell, triggers[0].ResultingOrder.Side);
+		Assert.AreEqual(20m, triggers[0].ResultingOrder.Volume);
+	}
+
+	[TestMethod]
 	public void StopOrderCondition_PropertiesRoundTrip()
 	{
 		var cond = new StopOrderCondition

@@ -42,6 +42,16 @@ public class StopOrderManager : IStopOrderManager
 	}
 
 	/// <inheritdoc />
+	public bool Replace(long origTransactionId, StopOrderInfo newInfo)
+	{
+		if (!Cancel(origTransactionId, out _))
+			return false;
+
+		Register(newInfo);
+		return true;
+	}
+
+	/// <inheritdoc />
 	public IReadOnlyList<StopOrderTrigger> CheckPrice(SecurityId securityId, decimal price, DateTime time)
 	{
 		if (!_bySecurityId.TryGetValue(securityId, out var list) || list.Count == 0)
