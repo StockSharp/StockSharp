@@ -36,13 +36,14 @@ message PostStopOrderRequest {
   StopOrderExpirationType expiration_type = 7 [(google.api.field_behavior) = REQUIRED]; //Тип экспирации заявки.
   StopOrderType stop_order_type = 8 [(google.api.field_behavior) = REQUIRED]; //Тип заявки.
   optional google.protobuf.Timestamp expire_date = 9; //Дата и время окончания действия стоп-заявки по UTC. Для `ExpirationType = GoodTillDate` заполнение обязательно, для `GoodTillCancel` игнорируется.
-  string instrument_id = 10 [(google.api.field_behavior) = REQUIRED]; //Идентификатор инструмента. Принимает значение `figi` или `instrument_uid`.
+  string instrument_id = 10 [(google.api.field_behavior) = REQUIRED]; //Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
   ExchangeOrderType exchange_order_type = 11; //Тип дочерней биржевой заявки.
   TakeProfitType take_profit_type = 12; //Подтип стоп-заявки — `TakeProfit`.
   TrailingData trailing_data = 13; //Массив с параметрами трейлинг-стопа.
   PriceType price_type = 14; //Тип цены.
   string order_id = 15 [(google.api.field_behavior) = REQUIRED]; //Идентификатор запроса выставления поручения для целей идемпотентности в формате `UID`. Максимальная длина — 36 символов.
   bool confirm_margin_trade = 16; //Согласие на выставление заявки, которая может привести к непокрытой позиции, по умолчанию false.
+  optional bool instant_execution = 17; //Признак необходимости моментальной активации, используется только для трейлинг-стопа.
   message TrailingData {
       Quotation indent = 1; //Отступ.
       TrailingValueType indent_type = 2; //Тип величины отступа.
@@ -103,6 +104,7 @@ message StopOrder {
   optional string exchange_order_id = 17; //Идентификатор биржевой заявки.
   string ticker = 18; //Тикер инструмента.
   string class_code = 19; //Класс-код (секция торгов).
+  bool instant_execution = 20; //Признак необходимости моментальной активации, используется только для трейлинг-стопа.
   message TrailingData {
     Quotation indent = 1; //Отступ.
     TrailingValueType indent_type = 2; //Тип величины отступа.

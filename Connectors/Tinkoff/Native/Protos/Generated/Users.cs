@@ -40,7 +40,7 @@ namespace StockSharp.Tinkoff.Native {
             "b3RvYnVmLlRpbWVzdGFtcBJICgxhY2Nlc3NfbGV2ZWwYByABKA4yMi50aW5r",
             "b2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkFjY2Vzc0xldmVs",
             "IjYKGkdldE1hcmdpbkF0dHJpYnV0ZXNSZXF1ZXN0EhgKCmFjY291bnRfaWQY",
-            "ASABKAlCBOJBAQIi9QMKG0dldE1hcmdpbkF0dHJpYnV0ZXNSZXNwb25zZRJL",
+            "ASABKAlCBOJBAQIixwQKG0dldE1hcmdpbkF0dHJpYnV0ZXNSZXNwb25zZRJL",
             "ChBsaXF1aWRfcG9ydGZvbGlvGAEgASgLMjEudGlua29mZi5wdWJsaWMuaW52",
             "ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZhbHVlEkoKD3N0YXJ0aW5nX21h",
             "cmdpbhgCIAEoCzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJh",
@@ -51,79 +51,99 @@ namespace StockSharp.Tinkoff.Native {
             "b3VudF9vZl9taXNzaW5nX2Z1bmRzGAUgASgLMjEudGlua29mZi5wdWJsaWMu",
             "aW52ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZhbHVlEksKEGNvcnJlY3Rl",
             "ZF9tYXJnaW4YBiABKAsyMS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNv",
-            "bnRyYWN0LnYxLk1vbmV5VmFsdWUiFgoUR2V0VXNlclRhcmlmZlJlcXVlc3Qi",
-            "qwEKFUdldFVzZXJUYXJpZmZSZXNwb25zZRJHCgx1bmFyeV9saW1pdHMYASAD",
-            "KAsyMS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlVu",
-            "YXJ5TGltaXQSSQoNc3RyZWFtX2xpbWl0cxgCIAMoCzIyLnRpbmtvZmYucHVi",
-            "bGljLmludmVzdC5hcGkuY29udHJhY3QudjEuU3RyZWFtTGltaXQiawoKVW5h",
-            "cnlMaW1pdBIYChBsaW1pdF9wZXJfbWludXRlGAEgASgFEg8KB21ldGhvZHMY",
-            "AiADKAkSHQoQbGltaXRfcGVyX3NlY29uZBgDIAEoBUgAiAEBQhMKEV9saW1p",
-            "dF9wZXJfc2Vjb25kIjsKC1N0cmVhbUxpbWl0Eg0KBWxpbWl0GAEgASgFEg8K",
-            "B3N0cmVhbXMYAiADKAkSDAoEb3BlbhgDIAEoBSIQCg5HZXRJbmZvUmVxdWVz",
-            "dCKWAQoPR2V0SW5mb1Jlc3BvbnNlEhMKC3ByZW1fc3RhdHVzGAEgASgIEhMK",
-            "C3F1YWxfc3RhdHVzGAIgASgIEh8KF3F1YWxpZmllZF9mb3Jfd29ya193aXRo",
-            "GAMgAygJEg4KBnRhcmlmZhgEIAEoCRIPCgd1c2VyX2lkGAkgASgJEhcKD3Jp",
-            "c2tfbGV2ZWxfY29kZRgMIAEoCSIYChZHZXRCYW5rQWNjb3VudHNSZXF1ZXN0",
-            "ImQKF0dldEJhbmtBY2NvdW50c1Jlc3BvbnNlEkkKDWJhbmtfYWNjb3VudHMY",
-            "ASADKAsyMi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
-            "LkJhbmtBY2NvdW50ItwBCgtCYW5rQWNjb3VudBIKCgJpZBgBIAEoCRIMCgRu",
-            "YW1lGAIgASgJEkAKBW1vbmV5GAMgAygLMjEudGlua29mZi5wdWJsaWMuaW52",
-            "ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZhbHVlEi8KC29wZW5lZF9kYXRl",
-            "GAQgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBJACgR0eXBlGAUg",
-            "ASgOMjIudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5B",
-            "Y2NvdW50VHlwZSK2AQoXQ3VycmVuY3lUcmFuc2ZlclJlcXVlc3QSHQoPZnJv",
-            "bV9hY2NvdW50X2lkGAEgASgJQgTiQQECEhsKDXRvX2FjY291bnRfaWQYAiAB",
-            "KAlCBOJBAQISRwoGYW1vdW50GAMgASgLMjEudGlua29mZi5wdWJsaWMuaW52",
-            "ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZhbHVlQgTiQQECEhYKDnRyYW5z",
-            "YWN0aW9uX2lkGAQgASgJIhoKGEN1cnJlbmN5VHJhbnNmZXJSZXNwb25zZSKT",
-            "AQoMUGF5SW5SZXF1ZXN0Eh0KD2Zyb21fYWNjb3VudF9pZBgBIAEoCUIE4kEB",
-            "AhIbCg10b19hY2NvdW50X2lkGAIgASgJQgTiQQECEkcKBmFtb3VudBgDIAEo",
-            "CzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuTW9u",
-            "ZXlWYWx1ZUIE4kEBAiIPCg1QYXlJblJlc3BvbnNlKs8BCgtBY2NvdW50VHlw",
-            "ZRIcChhBQ0NPVU5UX1RZUEVfVU5TUEVDSUZJRUQQABIYChRBQ0NPVU5UX1RZ",
-            "UEVfVElOS09GRhABEhwKGEFDQ09VTlRfVFlQRV9USU5LT0ZGX0lJUxACEhsK",
-            "F0FDQ09VTlRfVFlQRV9JTlZFU1RfQk9YEAMSHAoYQUNDT1VOVF9UWVBFX0lO",
-            "VkVTVF9GVU5EEAQSFgoSQUNDT1VOVF9UWVBFX0RFQklUEAUSFwoTQUNDT1VO",
-            "VF9UWVBFX1NBVklORxAGKpMBCg1BY2NvdW50U3RhdHVzEh4KGkFDQ09VTlRf",
-            "U1RBVFVTX1VOU1BFQ0lGSUVEEAASFgoSQUNDT1VOVF9TVEFUVVNfTkVXEAES",
-            "FwoTQUNDT1VOVF9TVEFUVVNfT1BFThACEhkKFUFDQ09VTlRfU1RBVFVTX0NM",
-            "T1NFRBADEhYKEkFDQ09VTlRfU1RBVFVTX0FMTBAEKqEBCgtBY2Nlc3NMZXZl",
-            "bBIkCiBBQ0NPVU5UX0FDQ0VTU19MRVZFTF9VTlNQRUNJRklFRBAAEiQKIEFD",
-            "Q09VTlRfQUNDRVNTX0xFVkVMX0ZVTExfQUNDRVNTEAESIgoeQUNDT1VOVF9B",
-            "Q0NFU1NfTEVWRUxfUkVBRF9PTkxZEAISIgoeQUNDT1VOVF9BQ0NFU1NfTEVW",
-            "RUxfTk9fQUNDRVNTEAMy2AcKDFVzZXJzU2VydmljZRKEAQoLR2V0QWNjb3Vu",
-            "dHMSOS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdl",
-            "dEFjY291bnRzUmVxdWVzdBo6LnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
-            "Y29udHJhY3QudjEuR2V0QWNjb3VudHNSZXNwb25zZRKcAQoTR2V0TWFyZ2lu",
-            "QXR0cmlidXRlcxJBLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJh",
-            "Y3QudjEuR2V0TWFyZ2luQXR0cmlidXRlc1JlcXVlc3QaQi50aW5rb2ZmLnB1",
-            "YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldE1hcmdpbkF0dHJpYnV0",
-            "ZXNSZXNwb25zZRKKAQoNR2V0VXNlclRhcmlmZhI7LnRpbmtvZmYucHVibGlj",
-            "LmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0VXNlclRhcmlmZlJlcXVlc3Qa",
-            "PC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldFVz",
-            "ZXJUYXJpZmZSZXNwb25zZRJ4CgdHZXRJbmZvEjUudGlua29mZi5wdWJsaWMu",
-            "aW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRJbmZvUmVxdWVzdBo2LnRpbmtv",
-            "ZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0SW5mb1Jlc3Bv",
-            "bnNlEpABCg9HZXRCYW5rQWNjb3VudHMSPS50aW5rb2ZmLnB1YmxpYy5pbnZl",
-            "c3QuYXBpLmNvbnRyYWN0LnYxLkdldEJhbmtBY2NvdW50c1JlcXVlc3QaPi50",
-            "aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldEJhbmtB",
-            "Y2NvdW50c1Jlc3BvbnNlEpMBChBDdXJyZW5jeVRyYW5zZmVyEj4udGlua29m",
-            "Zi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5DdXJyZW5jeVRyYW5z",
-            "ZmVyUmVxdWVzdBo/LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJh",
-            "Y3QudjEuQ3VycmVuY3lUcmFuc2ZlclJlc3BvbnNlEnIKBVBheUluEjMudGlu",
-            "a29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5QYXlJblJlcXVl",
-            "c3QaNC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlBh",
-            "eUluUmVzcG9uc2VCZgoccnUudGlua29mZi5waWFwaS5jb250cmFjdC52MVAB",
-            "WgwuLztpbnZlc3RhcGmiAgVUSUFQSaoCGVN0b2NrU2hhcnAuVGlua29mZi5O",
-            "YXRpdmXKAhFUaW5rb2ZmXEludmVzdFxWMWIGcHJvdG8z"));
+            "bnRyYWN0LnYxLk1vbmV5VmFsdWUSUAoVZ3VhcmFudGVlX2Zvcl9mdXR1cmVz",
+            "GAcgASgLMjEudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52",
+            "MS5Nb25leVZhbHVlIhYKFEdldFVzZXJUYXJpZmZSZXF1ZXN0IqsBChVHZXRV",
+            "c2VyVGFyaWZmUmVzcG9uc2USRwoMdW5hcnlfbGltaXRzGAEgAygLMjEudGlu",
+            "a29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5VbmFyeUxpbWl0",
+            "EkkKDXN0cmVhbV9saW1pdHMYAiADKAsyMi50aW5rb2ZmLnB1YmxpYy5pbnZl",
+            "c3QuYXBpLmNvbnRyYWN0LnYxLlN0cmVhbUxpbWl0ImsKClVuYXJ5TGltaXQS",
+            "GAoQbGltaXRfcGVyX21pbnV0ZRgBIAEoBRIPCgdtZXRob2RzGAIgAygJEh0K",
+            "EGxpbWl0X3Blcl9zZWNvbmQYAyABKAVIAIgBAUITChFfbGltaXRfcGVyX3Nl",
+            "Y29uZCI7CgtTdHJlYW1MaW1pdBINCgVsaW1pdBgBIAEoBRIPCgdzdHJlYW1z",
+            "GAIgAygJEgwKBG9wZW4YAyABKAUiEAoOR2V0SW5mb1JlcXVlc3QilgEKD0dl",
+            "dEluZm9SZXNwb25zZRITCgtwcmVtX3N0YXR1cxgBIAEoCBITCgtxdWFsX3N0",
+            "YXR1cxgCIAEoCBIfChdxdWFsaWZpZWRfZm9yX3dvcmtfd2l0aBgDIAMoCRIO",
+            "CgZ0YXJpZmYYBCABKAkSDwoHdXNlcl9pZBgJIAEoCRIXCg9yaXNrX2xldmVs",
+            "X2NvZGUYDCABKAkiGAoWR2V0QmFua0FjY291bnRzUmVxdWVzdCJkChdHZXRC",
+            "YW5rQWNjb3VudHNSZXNwb25zZRJJCg1iYW5rX2FjY291bnRzGAEgAygLMjIu",
+            "dGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5CYW5rQWNj",
+            "b3VudCLcAQoLQmFua0FjY291bnQSCgoCaWQYASABKAkSDAoEbmFtZRgCIAEo",
+            "CRJACgVtb25leRgDIAMoCzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
+            "Y29udHJhY3QudjEuTW9uZXlWYWx1ZRIvCgtvcGVuZWRfZGF0ZRgEIAEoCzIa",
+            "Lmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASQAoEdHlwZRgFIAEoDjIyLnRp",
+            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuQWNjb3VudFR5",
+            "cGUitgEKF0N1cnJlbmN5VHJhbnNmZXJSZXF1ZXN0Eh0KD2Zyb21fYWNjb3Vu",
+            "dF9pZBgBIAEoCUIE4kEBAhIbCg10b19hY2NvdW50X2lkGAIgASgJQgTiQQEC",
+            "EkcKBmFtb3VudBgDIAEoCzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
+            "Y29udHJhY3QudjEuTW9uZXlWYWx1ZUIE4kEBAhIWCg50cmFuc2FjdGlvbl9p",
+            "ZBgEIAEoCSIaChhDdXJyZW5jeVRyYW5zZmVyUmVzcG9uc2UikwEKDFBheUlu",
+            "UmVxdWVzdBIdCg9mcm9tX2FjY291bnRfaWQYASABKAlCBOJBAQISGwoNdG9f",
+            "YWNjb3VudF9pZBgCIAEoCUIE4kEBAhJHCgZhbW91bnQYAyABKAsyMS50aW5r",
+            "b2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk1vbmV5VmFsdWVC",
+            "BOJBAQIiDwoNUGF5SW5SZXNwb25zZSJwChdHZXRBY2NvdW50VmFsdWVzUmVx",
+            "dWVzdBIQCghhY2NvdW50cxgBIAMoCRJDCgZ2YWx1ZXMYAiADKA4yMy50aW5r",
+            "b2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkFjY291bnRWYWx1",
+            "ZSJwChhHZXRBY2NvdW50VmFsdWVzUmVzcG9uc2USVAoIYWNjb3VudHMYASAD",
+            "KAsyQi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkFj",
+            "Y291bnRWYWx1ZXNXaXRoUGFyYW1ldGVycyJ9ChtBY2NvdW50VmFsdWVzV2l0",
+            "aFBhcmFtZXRlcnMSEgoKYWNjb3VudF9pZBgBIAEoCRJKCgZ2YWx1ZXMYAiAD",
+            "KAsyOi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLklu",
+            "c3RydW1lbnRQYXJhbWV0ZXIimgEKE0luc3RydW1lbnRQYXJhbWV0ZXISQQoE",
+            "bmFtZRgBIAEoDjIzLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJh",
+            "Y3QudjEuQWNjb3VudFZhbHVlEkAKBXZhbHVlGAIgASgLMjEudGlua29mZi5w",
+            "dWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZhbHVlKuUBCgtB",
+            "Y2NvdW50VHlwZRIcChhBQ0NPVU5UX1RZUEVfVU5TUEVDSUZJRUQQABIYChRB",
+            "Q0NPVU5UX1RZUEVfVElOS09GRhABEhwKGEFDQ09VTlRfVFlQRV9USU5LT0ZG",
+            "X0lJUxACEhsKF0FDQ09VTlRfVFlQRV9JTlZFU1RfQk9YEAMSHAoYQUNDT1VO",
+            "VF9UWVBFX0lOVkVTVF9GVU5EEAQSFgoSQUNDT1VOVF9UWVBFX0RFQklUEAUS",
+            "FwoTQUNDT1VOVF9UWVBFX1NBVklORxAGEhQKEEFDQ09VTlRfVFlQRV9ERkEQ",
+            "ByqTAQoNQWNjb3VudFN0YXR1cxIeChpBQ0NPVU5UX1NUQVRVU19VTlNQRUNJ",
+            "RklFRBAAEhYKEkFDQ09VTlRfU1RBVFVTX05FVxABEhcKE0FDQ09VTlRfU1RB",
+            "VFVTX09QRU4QAhIZChVBQ0NPVU5UX1NUQVRVU19DTE9TRUQQAxIWChJBQ0NP",
+            "VU5UX1NUQVRVU19BTEwQBCqhAQoLQWNjZXNzTGV2ZWwSJAogQUNDT1VOVF9B",
+            "Q0NFU1NfTEVWRUxfVU5TUEVDSUZJRUQQABIkCiBBQ0NPVU5UX0FDQ0VTU19M",
+            "RVZFTF9GVUxMX0FDQ0VTUxABEiIKHkFDQ09VTlRfQUNDRVNTX0xFVkVMX1JF",
+            "QURfT05MWRACEiIKHkFDQ09VTlRfQUNDRVNTX0xFVkVMX05PX0FDQ0VTUxAD",
+            "KncKDEFjY291bnRWYWx1ZRIdChlBQ0NPVU5UX1ZBTFVFX1VOU1BFQ0lGSUVE",
+            "EAASHAoYQUNDT1VOVF9WQUxVRV9NQVJHSU5fRkVFEAESKgomQUNDT1VOVF9W",
+            "QUxVRV9BTU9VTlRfV0lUSE9VVF9FWFRSQV9GRUUQAjLuCAoMVXNlcnNTZXJ2",
+            "aWNlEoQBCgtHZXRBY2NvdW50cxI5LnRpbmtvZmYucHVibGljLmludmVzdC5h",
+            "cGkuY29udHJhY3QudjEuR2V0QWNjb3VudHNSZXF1ZXN0GjoudGlua29mZi5w",
+            "dWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRBY2NvdW50c1Jlc3Bv",
+            "bnNlEpwBChNHZXRNYXJnaW5BdHRyaWJ1dGVzEkEudGlua29mZi5wdWJsaWMu",
+            "aW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRNYXJnaW5BdHRyaWJ1dGVzUmVx",
+            "dWVzdBpCLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEu",
+            "R2V0TWFyZ2luQXR0cmlidXRlc1Jlc3BvbnNlEooBCg1HZXRVc2VyVGFyaWZm",
+            "EjsudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRV",
+            "c2VyVGFyaWZmUmVxdWVzdBo8LnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
+            "Y29udHJhY3QudjEuR2V0VXNlclRhcmlmZlJlc3BvbnNlEngKB0dldEluZm8S",
+            "NS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldElu",
+            "Zm9SZXF1ZXN0GjYudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
+            "dC52MS5HZXRJbmZvUmVzcG9uc2USkAEKD0dldEJhbmtBY2NvdW50cxI9LnRp",
+            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0QmFua0Fj",
+            "Y291bnRzUmVxdWVzdBo+LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29u",
+            "dHJhY3QudjEuR2V0QmFua0FjY291bnRzUmVzcG9uc2USkwEKEEN1cnJlbmN5",
+            "VHJhbnNmZXISPi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0",
+            "LnYxLkN1cnJlbmN5VHJhbnNmZXJSZXF1ZXN0Gj8udGlua29mZi5wdWJsaWMu",
+            "aW52ZXN0LmFwaS5jb250cmFjdC52MS5DdXJyZW5jeVRyYW5zZmVyUmVzcG9u",
+            "c2UScgoFUGF5SW4SMy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRy",
+            "YWN0LnYxLlBheUluUmVxdWVzdBo0LnRpbmtvZmYucHVibGljLmludmVzdC5h",
+            "cGkuY29udHJhY3QudjEuUGF5SW5SZXNwb25zZRKTAQoQR2V0QWNjb3VudFZh",
+            "bHVlcxI+LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEu",
+            "R2V0QWNjb3VudFZhbHVlc1JlcXVlc3QaPy50aW5rb2ZmLnB1YmxpYy5pbnZl",
+            "c3QuYXBpLmNvbnRyYWN0LnYxLkdldEFjY291bnRWYWx1ZXNSZXNwb25zZUJm",
+            "ChxydS50aW5rb2ZmLnBpYXBpLmNvbnRyYWN0LnYxUAFaDC4vO2ludmVzdGFw",
+            "aaICBVRJQVBJqgIZU3RvY2tTaGFycC5UaW5rb2ZmLk5hdGl2ZcoCEVRpbmtv",
+            "ZmZcSW52ZXN0XFYxYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Google.Api.FieldBehaviorReflection.Descriptor, global::StockSharp.Tinkoff.Native.CommonReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::StockSharp.Tinkoff.Native.AccountType), typeof(global::StockSharp.Tinkoff.Native.AccountStatus), typeof(global::StockSharp.Tinkoff.Native.AccessLevel), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::StockSharp.Tinkoff.Native.AccountType), typeof(global::StockSharp.Tinkoff.Native.AccountStatus), typeof(global::StockSharp.Tinkoff.Native.AccessLevel), typeof(global::StockSharp.Tinkoff.Native.AccountValue), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetAccountsRequest), global::StockSharp.Tinkoff.Native.GetAccountsRequest.Parser, new[]{ "Status" }, new[]{ "Status" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetAccountsResponse), global::StockSharp.Tinkoff.Native.GetAccountsResponse.Parser, new[]{ "Accounts" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.Account), global::StockSharp.Tinkoff.Native.Account.Parser, new[]{ "Id", "Type", "Name", "Status", "OpenedDate", "ClosedDate", "AccessLevel" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetMarginAttributesRequest), global::StockSharp.Tinkoff.Native.GetMarginAttributesRequest.Parser, new[]{ "AccountId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetMarginAttributesResponse), global::StockSharp.Tinkoff.Native.GetMarginAttributesResponse.Parser, new[]{ "LiquidPortfolio", "StartingMargin", "MinimalMargin", "FundsSufficiencyLevel", "AmountOfMissingFunds", "CorrectedMargin" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetMarginAttributesResponse), global::StockSharp.Tinkoff.Native.GetMarginAttributesResponse.Parser, new[]{ "LiquidPortfolio", "StartingMargin", "MinimalMargin", "FundsSufficiencyLevel", "AmountOfMissingFunds", "CorrectedMargin", "GuaranteeForFutures" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetUserTariffRequest), global::StockSharp.Tinkoff.Native.GetUserTariffRequest.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetUserTariffResponse), global::StockSharp.Tinkoff.Native.GetUserTariffResponse.Parser, new[]{ "UnaryLimits", "StreamLimits" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.UnaryLimit), global::StockSharp.Tinkoff.Native.UnaryLimit.Parser, new[]{ "LimitPerMinute", "Methods", "LimitPerSecond" }, new[]{ "LimitPerSecond" }, null, null, null),
@@ -136,7 +156,11 @@ namespace StockSharp.Tinkoff.Native {
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.CurrencyTransferRequest), global::StockSharp.Tinkoff.Native.CurrencyTransferRequest.Parser, new[]{ "FromAccountId", "ToAccountId", "Amount", "TransactionId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.CurrencyTransferResponse), global::StockSharp.Tinkoff.Native.CurrencyTransferResponse.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.PayInRequest), global::StockSharp.Tinkoff.Native.PayInRequest.Parser, new[]{ "FromAccountId", "ToAccountId", "Amount" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.PayInResponse), global::StockSharp.Tinkoff.Native.PayInResponse.Parser, null, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.PayInResponse), global::StockSharp.Tinkoff.Native.PayInResponse.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetAccountValuesRequest), global::StockSharp.Tinkoff.Native.GetAccountValuesRequest.Parser, new[]{ "Accounts", "Values" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetAccountValuesResponse), global::StockSharp.Tinkoff.Native.GetAccountValuesResponse.Parser, new[]{ "Accounts" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.AccountValuesWithParameters), global::StockSharp.Tinkoff.Native.AccountValuesWithParameters.Parser, new[]{ "AccountId", "Values" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.InstrumentParameter), global::StockSharp.Tinkoff.Native.InstrumentParameter.Parser, new[]{ "Name", "Value" }, null, null, null, null)
           }));
     }
     #endregion
@@ -175,6 +199,10 @@ namespace StockSharp.Tinkoff.Native {
     ///Накопительный счeт.
     /// </summary>
     [pbr::OriginalName("ACCOUNT_TYPE_SAVING")] Saving = 6,
+    /// <summary>
+    ///Смарт-счет.
+    /// </summary>
+    [pbr::OriginalName("ACCOUNT_TYPE_DFA")] Dfa = 7,
   }
 
   /// <summary>
@@ -223,6 +251,21 @@ namespace StockSharp.Tinkoff.Native {
     ///Доступа нет.
     /// </summary>
     [pbr::OriginalName("ACCOUNT_ACCESS_LEVEL_NO_ACCESS")] AccountAccessLevelNoAccess = 3,
+  }
+
+  internal enum AccountValue {
+    /// <summary>
+    /// Не определён.
+    /// </summary>
+    [pbr::OriginalName("ACCOUNT_VALUE_UNSPECIFIED")] Unspecified = 0,
+    /// <summary>
+    /// Размер комиссии за маржинальное кредитование.
+    /// </summary>
+    [pbr::OriginalName("ACCOUNT_VALUE_MARGIN_FEE")] MarginFee = 1,
+    /// <summary>
+    /// Остаток доступного лимита с текущей комиссией.
+    /// </summary>
+    [pbr::OriginalName("ACCOUNT_VALUE_AMOUNT_WITHOUT_EXTRA_FEE")] AmountWithoutExtraFee = 2,
   }
 
   #endregion
@@ -407,11 +450,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -430,11 +469,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -600,11 +635,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -623,11 +654,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -1002,11 +1029,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -1055,11 +1078,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -1266,11 +1285,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -1289,11 +1304,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -1352,6 +1363,7 @@ namespace StockSharp.Tinkoff.Native {
       fundsSufficiencyLevel_ = other.fundsSufficiencyLevel_ != null ? other.fundsSufficiencyLevel_.Clone() : null;
       amountOfMissingFunds_ = other.amountOfMissingFunds_ != null ? other.amountOfMissingFunds_.Clone() : null;
       correctedMargin_ = other.correctedMargin_ != null ? other.correctedMargin_.Clone() : null;
+      guaranteeForFutures_ = other.guaranteeForFutures_ != null ? other.guaranteeForFutures_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1451,6 +1463,21 @@ namespace StockSharp.Tinkoff.Native {
       }
     }
 
+    /// <summary>Field number for the "guarantee_for_futures" field.</summary>
+    public const int GuaranteeForFuturesFieldNumber = 7;
+    private global::StockSharp.Tinkoff.Native.MoneyValue guaranteeForFutures_;
+    /// <summary>
+    /// Размер гарантийного обеспечения, заблокированного под фьючерсы.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::StockSharp.Tinkoff.Native.MoneyValue GuaranteeForFutures {
+      get { return guaranteeForFutures_; }
+      set {
+        guaranteeForFutures_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -1472,6 +1499,7 @@ namespace StockSharp.Tinkoff.Native {
       if (!object.Equals(FundsSufficiencyLevel, other.FundsSufficiencyLevel)) return false;
       if (!object.Equals(AmountOfMissingFunds, other.AmountOfMissingFunds)) return false;
       if (!object.Equals(CorrectedMargin, other.CorrectedMargin)) return false;
+      if (!object.Equals(GuaranteeForFutures, other.GuaranteeForFutures)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1485,6 +1513,7 @@ namespace StockSharp.Tinkoff.Native {
       if (fundsSufficiencyLevel_ != null) hash ^= FundsSufficiencyLevel.GetHashCode();
       if (amountOfMissingFunds_ != null) hash ^= AmountOfMissingFunds.GetHashCode();
       if (correctedMargin_ != null) hash ^= CorrectedMargin.GetHashCode();
+      if (guaranteeForFutures_ != null) hash ^= GuaranteeForFutures.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1527,6 +1556,10 @@ namespace StockSharp.Tinkoff.Native {
         output.WriteRawTag(50);
         output.WriteMessage(CorrectedMargin);
       }
+      if (guaranteeForFutures_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(GuaranteeForFutures);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1561,6 +1594,10 @@ namespace StockSharp.Tinkoff.Native {
         output.WriteRawTag(50);
         output.WriteMessage(CorrectedMargin);
       }
+      if (guaranteeForFutures_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(GuaranteeForFutures);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1588,6 +1625,9 @@ namespace StockSharp.Tinkoff.Native {
       }
       if (correctedMargin_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(CorrectedMargin);
+      }
+      if (guaranteeForFutures_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(GuaranteeForFutures);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1637,6 +1677,12 @@ namespace StockSharp.Tinkoff.Native {
         }
         CorrectedMargin.MergeFrom(other.CorrectedMargin);
       }
+      if (other.guaranteeForFutures_ != null) {
+        if (guaranteeForFutures_ == null) {
+          GuaranteeForFutures = new global::StockSharp.Tinkoff.Native.MoneyValue();
+        }
+        GuaranteeForFutures.MergeFrom(other.GuaranteeForFutures);
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1648,11 +1694,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -1698,6 +1740,13 @@ namespace StockSharp.Tinkoff.Native {
             input.ReadMessage(CorrectedMargin);
             break;
           }
+          case 58: {
+            if (guaranteeForFutures_ == null) {
+              GuaranteeForFutures = new global::StockSharp.Tinkoff.Native.MoneyValue();
+            }
+            input.ReadMessage(GuaranteeForFutures);
+            break;
+          }
         }
       }
     #endif
@@ -1709,11 +1758,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -1757,6 +1802,13 @@ namespace StockSharp.Tinkoff.Native {
               CorrectedMargin = new global::StockSharp.Tinkoff.Native.MoneyValue();
             }
             input.ReadMessage(CorrectedMargin);
+            break;
+          }
+          case 58: {
+            if (guaranteeForFutures_ == null) {
+              GuaranteeForFutures = new global::StockSharp.Tinkoff.Native.MoneyValue();
+            }
+            input.ReadMessage(GuaranteeForFutures);
             break;
           }
         }
@@ -1896,11 +1948,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -1915,11 +1963,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2102,11 +2146,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -2129,11 +2169,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2384,11 +2420,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -2415,11 +2447,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2657,11 +2685,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -2688,11 +2712,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2845,11 +2865,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -2864,11 +2880,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3190,11 +3202,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3233,11 +3241,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3402,11 +3406,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3421,11 +3421,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3587,11 +3583,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3610,11 +3602,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3911,11 +3899,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3953,11 +3937,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4249,11 +4229,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4287,11 +4263,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4448,11 +4420,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4467,11 +4435,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4708,11 +4672,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4742,11 +4702,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4899,11 +4855,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4918,14 +4870,869 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  internal sealed partial class GetAccountValuesRequest : pb::IMessage<GetAccountValuesRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetAccountValuesRequest> _parser = new pb::MessageParser<GetAccountValuesRequest>(() => new GetAccountValuesRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GetAccountValuesRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::StockSharp.Tinkoff.Native.UsersReflection.Descriptor.MessageTypes[18]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetAccountValuesRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetAccountValuesRequest(GetAccountValuesRequest other) : this() {
+      accounts_ = other.accounts_.Clone();
+      values_ = other.values_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetAccountValuesRequest Clone() {
+      return new GetAccountValuesRequest(this);
+    }
+
+    /// <summary>Field number for the "accounts" field.</summary>
+    public const int AccountsFieldNumber = 1;
+    private static readonly pb::FieldCodec<string> _repeated_accounts_codec
+        = pb::FieldCodec.ForString(10);
+    private readonly pbc::RepeatedField<string> accounts_ = new pbc::RepeatedField<string>();
+    /// <summary>
+    /// Массив счетов пользователя.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> Accounts {
+      get { return accounts_; }
+    }
+
+    /// <summary>Field number for the "values" field.</summary>
+    public const int ValuesFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::StockSharp.Tinkoff.Native.AccountValue> _repeated_values_codec
+        = pb::FieldCodec.ForEnum(18, x => (int) x, x => (global::StockSharp.Tinkoff.Native.AccountValue) x);
+    private readonly pbc::RepeatedField<global::StockSharp.Tinkoff.Native.AccountValue> values_ = new pbc::RepeatedField<global::StockSharp.Tinkoff.Native.AccountValue>();
+    /// <summary>
+    /// Массив запрашиваемых параметров.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::StockSharp.Tinkoff.Native.AccountValue> Values {
+      get { return values_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GetAccountValuesRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GetAccountValuesRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!accounts_.Equals(other.accounts_)) return false;
+      if(!values_.Equals(other.values_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= accounts_.GetHashCode();
+      hash ^= values_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      accounts_.WriteTo(output, _repeated_accounts_codec);
+      values_.WriteTo(output, _repeated_values_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      accounts_.WriteTo(ref output, _repeated_accounts_codec);
+      values_.WriteTo(ref output, _repeated_values_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      size += accounts_.CalculateSize(_repeated_accounts_codec);
+      size += values_.CalculateSize(_repeated_values_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GetAccountValuesRequest other) {
+      if (other == null) {
+        return;
+      }
+      accounts_.Add(other.accounts_);
+      values_.Add(other.values_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            accounts_.AddEntriesFrom(input, _repeated_accounts_codec);
+            break;
+          }
+          case 18:
+          case 16: {
+            values_.AddEntriesFrom(input, _repeated_values_codec);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            accounts_.AddEntriesFrom(ref input, _repeated_accounts_codec);
+            break;
+          }
+          case 18:
+          case 16: {
+            values_.AddEntriesFrom(ref input, _repeated_values_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  internal sealed partial class GetAccountValuesResponse : pb::IMessage<GetAccountValuesResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetAccountValuesResponse> _parser = new pb::MessageParser<GetAccountValuesResponse>(() => new GetAccountValuesResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GetAccountValuesResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::StockSharp.Tinkoff.Native.UsersReflection.Descriptor.MessageTypes[19]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetAccountValuesResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetAccountValuesResponse(GetAccountValuesResponse other) : this() {
+      accounts_ = other.accounts_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetAccountValuesResponse Clone() {
+      return new GetAccountValuesResponse(this);
+    }
+
+    /// <summary>Field number for the "accounts" field.</summary>
+    public const int AccountsFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::StockSharp.Tinkoff.Native.AccountValuesWithParameters> _repeated_accounts_codec
+        = pb::FieldCodec.ForMessage(10, global::StockSharp.Tinkoff.Native.AccountValuesWithParameters.Parser);
+    private readonly pbc::RepeatedField<global::StockSharp.Tinkoff.Native.AccountValuesWithParameters> accounts_ = new pbc::RepeatedField<global::StockSharp.Tinkoff.Native.AccountValuesWithParameters>();
+    /// <summary>
+    /// Массив счетов с параметрами.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::StockSharp.Tinkoff.Native.AccountValuesWithParameters> Accounts {
+      get { return accounts_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GetAccountValuesResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GetAccountValuesResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!accounts_.Equals(other.accounts_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= accounts_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      accounts_.WriteTo(output, _repeated_accounts_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      accounts_.WriteTo(ref output, _repeated_accounts_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      size += accounts_.CalculateSize(_repeated_accounts_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GetAccountValuesResponse other) {
+      if (other == null) {
+        return;
+      }
+      accounts_.Add(other.accounts_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            accounts_.AddEntriesFrom(input, _repeated_accounts_codec);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            accounts_.AddEntriesFrom(ref input, _repeated_accounts_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  internal sealed partial class AccountValuesWithParameters : pb::IMessage<AccountValuesWithParameters>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<AccountValuesWithParameters> _parser = new pb::MessageParser<AccountValuesWithParameters>(() => new AccountValuesWithParameters());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<AccountValuesWithParameters> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::StockSharp.Tinkoff.Native.UsersReflection.Descriptor.MessageTypes[20]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public AccountValuesWithParameters() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public AccountValuesWithParameters(AccountValuesWithParameters other) : this() {
+      accountId_ = other.accountId_;
+      values_ = other.values_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public AccountValuesWithParameters Clone() {
+      return new AccountValuesWithParameters(this);
+    }
+
+    /// <summary>Field number for the "account_id" field.</summary>
+    public const int AccountIdFieldNumber = 1;
+    private string accountId_ = "";
+    /// <summary>
+    /// Номер счета.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string AccountId {
+      get { return accountId_; }
+      set {
+        accountId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "values" field.</summary>
+    public const int ValuesFieldNumber = 2;
+    private static readonly pb::FieldCodec<global::StockSharp.Tinkoff.Native.InstrumentParameter> _repeated_values_codec
+        = pb::FieldCodec.ForMessage(18, global::StockSharp.Tinkoff.Native.InstrumentParameter.Parser);
+    private readonly pbc::RepeatedField<global::StockSharp.Tinkoff.Native.InstrumentParameter> values_ = new pbc::RepeatedField<global::StockSharp.Tinkoff.Native.InstrumentParameter>();
+    /// <summary>
+    /// Массив параметров инструмента.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::StockSharp.Tinkoff.Native.InstrumentParameter> Values {
+      get { return values_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as AccountValuesWithParameters);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(AccountValuesWithParameters other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (AccountId != other.AccountId) return false;
+      if(!values_.Equals(other.values_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (AccountId.Length != 0) hash ^= AccountId.GetHashCode();
+      hash ^= values_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (AccountId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(AccountId);
+      }
+      values_.WriteTo(output, _repeated_values_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (AccountId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(AccountId);
+      }
+      values_.WriteTo(ref output, _repeated_values_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (AccountId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(AccountId);
+      }
+      size += values_.CalculateSize(_repeated_values_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(AccountValuesWithParameters other) {
+      if (other == null) {
+        return;
+      }
+      if (other.AccountId.Length != 0) {
+        AccountId = other.AccountId;
+      }
+      values_.Add(other.values_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            AccountId = input.ReadString();
+            break;
+          }
+          case 18: {
+            values_.AddEntriesFrom(input, _repeated_values_codec);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            AccountId = input.ReadString();
+            break;
+          }
+          case 18: {
+            values_.AddEntriesFrom(ref input, _repeated_values_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  internal sealed partial class InstrumentParameter : pb::IMessage<InstrumentParameter>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<InstrumentParameter> _parser = new pb::MessageParser<InstrumentParameter>(() => new InstrumentParameter());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<InstrumentParameter> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::StockSharp.Tinkoff.Native.UsersReflection.Descriptor.MessageTypes[21]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public InstrumentParameter() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public InstrumentParameter(InstrumentParameter other) : this() {
+      name_ = other.name_;
+      value_ = other.value_ != null ? other.value_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public InstrumentParameter Clone() {
+      return new InstrumentParameter(this);
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 1;
+    private global::StockSharp.Tinkoff.Native.AccountValue name_ = global::StockSharp.Tinkoff.Native.AccountValue.Unspecified;
+    /// <summary>
+    /// Тип запрашиваемого параметра.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::StockSharp.Tinkoff.Native.AccountValue Name {
+      get { return name_; }
+      set {
+        name_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "value" field.</summary>
+    public const int ValueFieldNumber = 2;
+    private global::StockSharp.Tinkoff.Native.MoneyValue value_;
+    /// <summary>
+    /// Значение запрашиваемого параметра.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::StockSharp.Tinkoff.Native.MoneyValue Value {
+      get { return value_; }
+      set {
+        value_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as InstrumentParameter);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(InstrumentParameter other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Name != other.Name) return false;
+      if (!object.Equals(Value, other.Value)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Name != global::StockSharp.Tinkoff.Native.AccountValue.Unspecified) hash ^= Name.GetHashCode();
+      if (value_ != null) hash ^= Value.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Name != global::StockSharp.Tinkoff.Native.AccountValue.Unspecified) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) Name);
+      }
+      if (value_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Value);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Name != global::StockSharp.Tinkoff.Native.AccountValue.Unspecified) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) Name);
+      }
+      if (value_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Value);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Name != global::StockSharp.Tinkoff.Native.AccountValue.Unspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Name);
+      }
+      if (value_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Value);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(InstrumentParameter other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Name != global::StockSharp.Tinkoff.Native.AccountValue.Unspecified) {
+        Name = other.Name;
+      }
+      if (other.value_ != null) {
+        if (value_ == null) {
+          Value = new global::StockSharp.Tinkoff.Native.MoneyValue();
+        }
+        Value.MergeFrom(other.Value);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Name = (global::StockSharp.Tinkoff.Native.AccountValue) input.ReadEnum();
+            break;
+          }
+          case 18: {
+            if (value_ == null) {
+              Value = new global::StockSharp.Tinkoff.Native.MoneyValue();
+            }
+            input.ReadMessage(Value);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            Name = (global::StockSharp.Tinkoff.Native.AccountValue) input.ReadEnum();
+            break;
+          }
+          case 18: {
+            if (value_ == null) {
+              Value = new global::StockSharp.Tinkoff.Native.MoneyValue();
+            }
+            input.ReadMessage(Value);
+            break;
+          }
         }
       }
     }

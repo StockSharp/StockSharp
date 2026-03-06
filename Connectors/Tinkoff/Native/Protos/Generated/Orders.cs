@@ -154,164 +154,166 @@ namespace StockSharp.Tinkoff.Native {
             "IAEoCSKmAQoKT3JkZXJTdGFnZRJACgVwcmljZRgBIAEoCzIxLnRpbmtvZmYu",
             "cHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuTW9uZXlWYWx1ZRIQCghx",
             "dWFudGl0eRgCIAEoAxIQCgh0cmFkZV9pZBgDIAEoCRIyCg5leGVjdXRpb25f",
-            "dGltZRgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAixgIKE1Jl",
-            "cGxhY2VPcmRlclJlcXVlc3QSGAoKYWNjb3VudF9pZBgBIAEoCUIE4kEBAhIW",
-            "CghvcmRlcl9pZBgGIAEoCUIE4kEBAhIdCg9pZGVtcG90ZW5jeV9rZXkYByAB",
-            "KAlCBOJBAQISFgoIcXVhbnRpdHkYCyABKANCBOJBAQISRAoFcHJpY2UYDCAB",
-            "KAsyMC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlF1",
-            "b3RhdGlvbkgAiAEBEkkKCnByaWNlX3R5cGUYDSABKA4yMC50aW5rb2ZmLnB1",
-            "YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlByaWNlVHlwZUgBiAEBEhwK",
-            "FGNvbmZpcm1fbWFyZ2luX3RyYWRlGA4gASgIQggKBl9wcmljZUINCgtfcHJp",
-            "Y2VfdHlwZSKaAQoRR2V0TWF4TG90c1JlcXVlc3QSGAoKYWNjb3VudF9pZBgB",
-            "IAEoCUIE4kEBAhIbCg1pbnN0cnVtZW50X2lkGAIgASgJQgTiQQECEkQKBXBy",
-            "aWNlGAMgASgLMjAudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
-            "dC52MS5RdW90YXRpb25IAIgBAUIICgZfcHJpY2Ui5gQKEkdldE1heExvdHNS",
-            "ZXNwb25zZRIQCghjdXJyZW5jeRgBIAEoCRJbCgpidXlfbGltaXRzGAIgASgL",
-            "MkcudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRN",
-            "YXhMb3RzUmVzcG9uc2UuQnV5TGltaXRzVmlldxJiChFidXlfbWFyZ2luX2xp",
-            "bWl0cxgDIAEoCzJHLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJh",
-            "Y3QudjEuR2V0TWF4TG90c1Jlc3BvbnNlLkJ1eUxpbWl0c1ZpZXcSXQoLc2Vs",
-            "bF9saW1pdHMYBCABKAsySC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNv",
-            "bnRyYWN0LnYxLkdldE1heExvdHNSZXNwb25zZS5TZWxsTGltaXRzVmlldxJk",
-            "ChJzZWxsX21hcmdpbl9saW1pdHMYBSABKAsySC50aW5rb2ZmLnB1YmxpYy5p",
-            "bnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldE1heExvdHNSZXNwb25zZS5TZWxs",
-            "TGltaXRzVmlldxqOAQoNQnV5TGltaXRzVmlldxJKChBidXlfbW9uZXlfYW1v",
-            "dW50GAEgASgLMjAudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
-            "dC52MS5RdW90YXRpb24SFAoMYnV5X21heF9sb3RzGAIgASgDEhsKE2J1eV9t",
-            "YXhfbWFya2V0X2xvdHMYAyABKAMaJwoOU2VsbExpbWl0c1ZpZXcSFQoNc2Vs",
-            "bF9tYXhfbG90cxgBIAEoAyLeAQoUR2V0T3JkZXJQcmljZVJlcXVlc3QSEgoK",
-            "YWNjb3VudF9pZBgBIAEoCRIVCg1pbnN0cnVtZW50X2lkGAIgASgJEj8KBXBy",
-            "aWNlGAMgASgLMjAudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
-            "dC52MS5RdW90YXRpb24SSAoJZGlyZWN0aW9uGAwgASgOMjUudGlua29mZi5w",
-            "dWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5PcmRlckRpcmVjdGlvbhIQ",
-            "CghxdWFudGl0eRgNIAEoAyLjBwoVR2V0T3JkZXJQcmljZVJlc3BvbnNlEk0K",
-            "EnRvdGFsX29yZGVyX2Ftb3VudBgBIAEoCzIxLnRpbmtvZmYucHVibGljLmlu",
-            "dmVzdC5hcGkuY29udHJhY3QudjEuTW9uZXlWYWx1ZRJPChRpbml0aWFsX29y",
-            "ZGVyX2Ftb3VudBgFIAEoCzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
-            "Y29udHJhY3QudjEuTW9uZXlWYWx1ZRIWCg5sb3RzX3JlcXVlc3RlZBgDIAEo",
-            "AxJOChNleGVjdXRlZF9jb21taXNzaW9uGAcgASgLMjEudGlua29mZi5wdWJs",
-            "aWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZhbHVlElIKF2V4ZWN1",
-            "dGVkX2NvbW1pc3Npb25fcnViGAggASgLMjEudGlua29mZi5wdWJsaWMuaW52",
-            "ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZhbHVlEk0KEnNlcnZpY2VfY29t",
-            "bWlzc2lvbhgJIAEoCzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29u",
-            "dHJhY3QudjEuTW9uZXlWYWx1ZRJKCg9kZWFsX2NvbW1pc3Npb24YCiABKAsy",
-            "MS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk1vbmV5",
-            "VmFsdWUSXAoKZXh0cmFfYm9uZBgMIAEoCzJGLnRpbmtvZmYucHVibGljLmlu",
-            "dmVzdC5hcGkuY29udHJhY3QudjEuR2V0T3JkZXJQcmljZVJlc3BvbnNlLkV4",
-            "dHJhQm9uZEgAEmAKDGV4dHJhX2Z1dHVyZRgNIAEoCzJILnRpbmtvZmYucHVi",
-            "bGljLmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0T3JkZXJQcmljZVJlc3Bv",
-            "bnNlLkV4dHJhRnV0dXJlSAAapAEKCUV4dHJhQm9uZBJECglhY2lfdmFsdWUY",
-            "AiABKAsyMS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
-            "Lk1vbmV5VmFsdWUSUQoXbm9taW5hbF9jb252ZXJzaW9uX3JhdGUYAyABKAsy",
-            "MC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlF1b3Rh",
-            "dGlvbhpYCgtFeHRyYUZ1dHVyZRJJCg5pbml0aWFsX21hcmdpbhgCIAEoCzIx",
-            "LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuTW9uZXlW",
-            "YWx1ZUISChBpbnN0cnVtZW50X2V4dHJhImEKF09yZGVyU3RhdGVTdHJlYW1S",
-            "ZXF1ZXN0EhAKCGFjY291bnRzGAEgAygJEh4KEXBpbmdfZGVsYXlfbWlsbGlz",
-            "GA8gASgFSACIAQFCFAoSX3BpbmdfZGVsYXlfbWlsbGlzIvMBChRTdWJzY3Jp",
-            "cHRpb25SZXNwb25zZRITCgt0cmFja2luZ19pZBgBIAEoCRJPCgZzdGF0dXMY",
-            "AiABKA4yPy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
-            "LlJlc3VsdFN1YnNjcmlwdGlvblN0YXR1cxIRCglzdHJlYW1faWQYBCABKAkS",
-            "EAoIYWNjb3VudHMYBSADKAkSRgoFZXJyb3IYByABKAsyMi50aW5rb2ZmLnB1",
-            "YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkVycm9yRGV0YWlsSACIAQFC",
-            "CAoGX2Vycm9yItgQChhPcmRlclN0YXRlU3RyZWFtUmVzcG9uc2USYQoLb3Jk",
-            "ZXJfc3RhdGUYASABKAsySi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNv",
-            "bnRyYWN0LnYxLk9yZGVyU3RhdGVTdHJlYW1SZXNwb25zZS5PcmRlclN0YXRl",
-            "SAASOwoEcGluZxgCIAEoCzIrLnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
-            "Y29udHJhY3QudjEuUGluZ0gAElMKDHN1YnNjcmlwdGlvbhgDIAEoCzI7LnRp",
-            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuU3Vic2NyaXB0",
-            "aW9uUmVzcG9uc2VIABrzCgoKT3JkZXJTdGF0ZRIQCghvcmRlcl9pZBgBIAEo",
-            "CRIdChBvcmRlcl9yZXF1ZXN0X2lkGAIgASgJSACIAQESEwoLY2xpZW50X2Nv",
-            "ZGUYAyABKAkSLgoKY3JlYXRlZF9hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1",
-            "Zi5UaW1lc3RhbXASYgoXZXhlY3V0aW9uX3JlcG9ydF9zdGF0dXMYBSABKA4y",
-            "QS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk9yZGVy",
-            "RXhlY3V0aW9uUmVwb3J0U3RhdHVzEmkKC3N0YXR1c19pbmZvGAYgASgOMk8u",
-            "dGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5PcmRlclN0",
-            "YXRlU3RyZWFtUmVzcG9uc2UuU3RhdHVzQ2F1c2VJbmZvSAGIAQESDgoGdGlj",
-            "a2VyGAcgASgJEhIKCmNsYXNzX2NvZGUYCCABKAkSEAoIbG90X3NpemUYCSAB",
-            "KAUSSAoJZGlyZWN0aW9uGAogASgOMjUudGlua29mZi5wdWJsaWMuaW52ZXN0",
-            "LmFwaS5jb250cmFjdC52MS5PcmRlckRpcmVjdGlvbhJNCg10aW1lX2luX2Zv",
-            "cmNlGAsgASgOMjYudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
-            "dC52MS5UaW1lSW5Gb3JjZVR5cGUSRAoKb3JkZXJfdHlwZRgMIAEoDjIwLnRp",
-            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuT3JkZXJUeXBl",
-            "EhIKCmFjY291bnRfaWQYDSABKAkSHAoOdHJhZGVfb3JkZXJfaWQYDiABKAlC",
-            "BOJBAQISTgoTaW5pdGlhbF9vcmRlcl9wcmljZRgWIAEoCzIxLnRpbmtvZmYu",
-            "cHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuTW9uZXlWYWx1ZRJGCgtv",
-            "cmRlcl9wcmljZRgXIAEoCzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
-            "Y29udHJhY3QudjEuTW9uZXlWYWx1ZRJGCgZhbW91bnQYGCABKAsyMS50aW5r",
-            "b2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk1vbmV5VmFsdWVI",
-            "AogBARJPChRleGVjdXRlZF9vcmRlcl9wcmljZRgZIAEoCzIxLnRpbmtvZmYu",
-            "cHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuTW9uZXlWYWx1ZRIQCghj",
-            "dXJyZW5jeRgaIAEoCRIWCg5sb3RzX3JlcXVlc3RlZBgbIAEoAxIVCg1sb3Rz",
-            "X2V4ZWN1dGVkGBwgASgDEhEKCWxvdHNfbGVmdBgdIAEoAxIWCg5sb3RzX2Nh",
-            "bmNlbGxlZBgeIAEoAxJfCgZtYXJrZXIYHyABKA4ySi50aW5rb2ZmLnB1Ymxp",
-            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk9yZGVyU3RhdGVTdHJlYW1SZXNw",
-            "b25zZS5NYXJrZXJUeXBlSAOIAQESQQoGdHJhZGVzGCEgAygLMjEudGlua29m",
-            "Zi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5PcmRlclRyYWRlEjMK",
-            "D2NvbXBsZXRpb25fdGltZRgjIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1l",
-            "c3RhbXASEAoIZXhjaGFuZ2UYJCABKAkSFgoOaW5zdHJ1bWVudF91aWQYKSAB",
-            "KAlCEwoRX29yZGVyX3JlcXVlc3RfaWRCDgoMX3N0YXR1c19pbmZvQgkKB19h",
-            "bW91bnRCCQoHX21hcmtlciKvAQoKTWFya2VyVHlwZRISCg5NQVJLRVJfVU5L",
-            "Tk9XThAAEhEKDU1BUktFUl9CUk9LRVIQARIPCgtNQVJLRVJfQ0hBVBACEhAK",
-            "DE1BUktFUl9QQVBFUhADEhEKDU1BUktFUl9NQVJHSU4QBBIQCgxNQVJLRVJf",
-            "VEtCTk0QBRIQCgxNQVJLRVJfU0hPUlQQBhIRCg1NQVJLRVJfU1BFQ01NEAcS",
-            "DQoJTUFSS0VSX1BPEAgikwIKD1N0YXR1c0NhdXNlSW5mbxIVChFDQVVTRV9V",
-            "TlNQRUNJRklFRBAAEh0KGUNBVVNFX0NBTkNFTExFRF9CWV9DTElFTlQQDxIf",
-            "ChtDQVVTRV9DQU5DRUxMRURfQllfRVhDSEFOR0UQARInCiNDQVVTRV9DQU5D",
-            "RUxMRURfTk9UX0VOT1VHSF9QT1NJVElPThACEiMKH0NBVVNFX0NBTkNFTExF",
-            "RF9CWV9DTElFTlRfQkxPQ0sQAxIcChhDQVVTRV9SRUpFQ1RFRF9CWV9CUk9L",
-            "RVIQBBIeChpDQVVTRV9SRUpFQ1RFRF9CWV9FWENIQU5HRRAFEh0KGUNBVVNF",
-            "X0NBTkNFTExFRF9CWV9CUk9LRVIQBkIJCgdwYXlsb2FkKmQKDk9yZGVyRGly",
-            "ZWN0aW9uEh8KG09SREVSX0RJUkVDVElPTl9VTlNQRUNJRklFRBAAEhcKE09S",
-            "REVSX0RJUkVDVElPTl9CVVkQARIYChRPUkRFUl9ESVJFQ1RJT05fU0VMTBAC",
-            "Km4KCU9yZGVyVHlwZRIaChZPUkRFUl9UWVBFX1VOU1BFQ0lGSUVEEAASFAoQ",
-            "T1JERVJfVFlQRV9MSU1JVBABEhUKEU9SREVSX1RZUEVfTUFSS0VUEAISGAoU",
-            "T1JERVJfVFlQRV9CRVNUUFJJQ0UQAyqAAgoaT3JkZXJFeGVjdXRpb25SZXBv",
-            "cnRTdGF0dXMSJwojRVhFQ1VUSU9OX1JFUE9SVF9TVEFUVVNfVU5TUEVDSUZJ",
-            "RUQQABIgChxFWEVDVVRJT05fUkVQT1JUX1NUQVRVU19GSUxMEAESJAogRVhF",
-            "Q1VUSU9OX1JFUE9SVF9TVEFUVVNfUkVKRUNURUQQAhIlCiFFWEVDVVRJT05f",
-            "UkVQT1JUX1NUQVRVU19DQU5DRUxMRUQQAxIfChtFWEVDVVRJT05fUkVQT1JU",
-            "X1NUQVRVU19ORVcQBBIpCiVFWEVDVVRJT05fUkVQT1JUX1NUQVRVU19QQVJU",
-            "SUFMTFlGSUxMEAUqiAEKD1RpbWVJbkZvcmNlVHlwZRIdChlUSU1FX0lOX0ZP",
-            "UkNFX1VOU1BFQ0lGSUVEEAASFQoRVElNRV9JTl9GT1JDRV9EQVkQARIfChtU",
-            "SU1FX0lOX0ZPUkNFX0ZJTExfQU5EX0tJTEwQAhIeChpUSU1FX0lOX0ZPUkNF",
-            "X0ZJTExfT1JfS0lMTBADKmMKC09yZGVySWRUeXBlEh0KGU9SREVSX0lEX1RZ",
-            "UEVfVU5TUEVDSUZJRUQQABIaChZPUkRFUl9JRF9UWVBFX0VYQ0hBTkdFEAES",
-            "GQoVT1JERVJfSURfVFlQRV9SRVFVRVNUEAIyuQIKE09yZGVyc1N0cmVhbVNl",
-            "cnZpY2USiQEKDFRyYWRlc1N0cmVhbRI6LnRpbmtvZmYucHVibGljLmludmVz",
-            "dC5hcGkuY29udHJhY3QudjEuVHJhZGVzU3RyZWFtUmVxdWVzdBo7LnRpbmtv",
-            "ZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuVHJhZGVzU3RyZWFt",
-            "UmVzcG9uc2UwARKVAQoQT3JkZXJTdGF0ZVN0cmVhbRI+LnRpbmtvZmYucHVi",
-            "bGljLmludmVzdC5hcGkuY29udHJhY3QudjEuT3JkZXJTdGF0ZVN0cmVhbVJl",
-            "cXVlc3QaPy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
-            "Lk9yZGVyU3RhdGVTdHJlYW1SZXNwb25zZTABMr8ICg1PcmRlcnNTZXJ2aWNl",
-            "En4KCVBvc3RPcmRlchI3LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29u",
-            "dHJhY3QudjEuUG9zdE9yZGVyUmVxdWVzdBo4LnRpbmtvZmYucHVibGljLmlu",
-            "dmVzdC5hcGkuY29udHJhY3QudjEuUG9zdE9yZGVyUmVzcG9uc2USjQEKDlBv",
-            "c3RPcmRlckFzeW5jEjwudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250",
-            "cmFjdC52MS5Qb3N0T3JkZXJBc3luY1JlcXVlc3QaPS50aW5rb2ZmLnB1Ymxp",
-            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlBvc3RPcmRlckFzeW5jUmVzcG9u",
-            "c2UShAEKC0NhbmNlbE9yZGVyEjkudGlua29mZi5wdWJsaWMuaW52ZXN0LmFw",
-            "aS5jb250cmFjdC52MS5DYW5jZWxPcmRlclJlcXVlc3QaOi50aW5rb2ZmLnB1",
-            "YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkNhbmNlbE9yZGVyUmVzcG9u",
-            "c2USfwoNR2V0T3JkZXJTdGF0ZRI7LnRpbmtvZmYucHVibGljLmludmVzdC5h",
-            "cGkuY29udHJhY3QudjEuR2V0T3JkZXJTdGF0ZVJlcXVlc3QaMS50aW5rb2Zm",
-            "LnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk9yZGVyU3RhdGUSfgoJ",
-            "R2V0T3JkZXJzEjcudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
-            "dC52MS5HZXRPcmRlcnNSZXF1ZXN0GjgudGlua29mZi5wdWJsaWMuaW52ZXN0",
-            "LmFwaS5jb250cmFjdC52MS5HZXRPcmRlcnNSZXNwb25zZRKEAQoMUmVwbGFj",
-            "ZU9yZGVyEjoudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52",
-            "MS5SZXBsYWNlT3JkZXJSZXF1ZXN0GjgudGlua29mZi5wdWJsaWMuaW52ZXN0",
-            "LmFwaS5jb250cmFjdC52MS5Qb3N0T3JkZXJSZXNwb25zZRKBAQoKR2V0TWF4",
-            "TG90cxI4LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEu",
-            "R2V0TWF4TG90c1JlcXVlc3QaOS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
-            "LmNvbnRyYWN0LnYxLkdldE1heExvdHNSZXNwb25zZRKKAQoNR2V0T3JkZXJQ",
-            "cmljZRI7LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEu",
-            "R2V0T3JkZXJQcmljZVJlcXVlc3QaPC50aW5rb2ZmLnB1YmxpYy5pbnZlc3Qu",
-            "YXBpLmNvbnRyYWN0LnYxLkdldE9yZGVyUHJpY2VSZXNwb25zZUJmChxydS50",
-            "aW5rb2ZmLnBpYXBpLmNvbnRyYWN0LnYxUAFaDC4vO2ludmVzdGFwaaICBVRJ",
-            "QVBJqgIZU3RvY2tTaGFycC5UaW5rb2ZmLk5hdGl2ZcoCEVRpbmtvZmZcSW52",
-            "ZXN0XFYxYgZwcm90bzM="));
+            "dGltZRgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAiqAMKE1Jl",
+            "cGxhY2VPcmRlclJlcXVlc3QSGAoKYWNjb3VudF9pZBgBIAEoCUIE4kEBAhJO",
+            "Cg1vcmRlcl9pZF90eXBlGAUgASgOMjIudGlua29mZi5wdWJsaWMuaW52ZXN0",
+            "LmFwaS5jb250cmFjdC52MS5PcmRlcklkVHlwZUgAiAEBEhYKCG9yZGVyX2lk",
+            "GAYgASgJQgTiQQECEh0KD2lkZW1wb3RlbmN5X2tleRgHIAEoCUIE4kEBAhIW",
+            "CghxdWFudGl0eRgLIAEoA0IE4kEBAhJECgVwcmljZRgMIAEoCzIwLnRpbmtv",
+            "ZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuUXVvdGF0aW9uSAGI",
+            "AQESSQoKcHJpY2VfdHlwZRgNIAEoDjIwLnRpbmtvZmYucHVibGljLmludmVz",
+            "dC5hcGkuY29udHJhY3QudjEuUHJpY2VUeXBlSAKIAQESHAoUY29uZmlybV9t",
+            "YXJnaW5fdHJhZGUYDiABKAhCEAoOX29yZGVyX2lkX3R5cGVCCAoGX3ByaWNl",
+            "Qg0KC19wcmljZV90eXBlIpoBChFHZXRNYXhMb3RzUmVxdWVzdBIYCgphY2Nv",
+            "dW50X2lkGAEgASgJQgTiQQECEhsKDWluc3RydW1lbnRfaWQYAiABKAlCBOJB",
+            "AQISRAoFcHJpY2UYAyABKAsyMC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
+            "LmNvbnRyYWN0LnYxLlF1b3RhdGlvbkgAiAEBQggKBl9wcmljZSLmBAoSR2V0",
+            "TWF4TG90c1Jlc3BvbnNlEhAKCGN1cnJlbmN5GAEgASgJElsKCmJ1eV9saW1p",
+            "dHMYAiABKAsyRy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0",
+            "LnYxLkdldE1heExvdHNSZXNwb25zZS5CdXlMaW1pdHNWaWV3EmIKEWJ1eV9t",
+            "YXJnaW5fbGltaXRzGAMgASgLMkcudGlua29mZi5wdWJsaWMuaW52ZXN0LmFw",
+            "aS5jb250cmFjdC52MS5HZXRNYXhMb3RzUmVzcG9uc2UuQnV5TGltaXRzVmll",
+            "dxJdCgtzZWxsX2xpbWl0cxgEIAEoCzJILnRpbmtvZmYucHVibGljLmludmVz",
+            "dC5hcGkuY29udHJhY3QudjEuR2V0TWF4TG90c1Jlc3BvbnNlLlNlbGxMaW1p",
+            "dHNWaWV3EmQKEnNlbGxfbWFyZ2luX2xpbWl0cxgFIAEoCzJILnRpbmtvZmYu",
+            "cHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0TWF4TG90c1Jlc3Bv",
+            "bnNlLlNlbGxMaW1pdHNWaWV3Go4BCg1CdXlMaW1pdHNWaWV3EkoKEGJ1eV9t",
+            "b25leV9hbW91bnQYASABKAsyMC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
+            "LmNvbnRyYWN0LnYxLlF1b3RhdGlvbhIUCgxidXlfbWF4X2xvdHMYAiABKAMS",
+            "GwoTYnV5X21heF9tYXJrZXRfbG90cxgDIAEoAxonCg5TZWxsTGltaXRzVmll",
+            "dxIVCg1zZWxsX21heF9sb3RzGAEgASgDIt4BChRHZXRPcmRlclByaWNlUmVx",
+            "dWVzdBISCgphY2NvdW50X2lkGAEgASgJEhUKDWluc3RydW1lbnRfaWQYAiAB",
+            "KAkSPwoFcHJpY2UYAyABKAsyMC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
+            "LmNvbnRyYWN0LnYxLlF1b3RhdGlvbhJICglkaXJlY3Rpb24YDCABKA4yNS50",
+            "aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk9yZGVyRGly",
+            "ZWN0aW9uEhAKCHF1YW50aXR5GA0gASgDIuMHChVHZXRPcmRlclByaWNlUmVz",
+            "cG9uc2USTQoSdG90YWxfb3JkZXJfYW1vdW50GAEgASgLMjEudGlua29mZi5w",
+            "dWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZhbHVlEk8KFGlu",
+            "aXRpYWxfb3JkZXJfYW1vdW50GAUgASgLMjEudGlua29mZi5wdWJsaWMuaW52",
+            "ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZhbHVlEhYKDmxvdHNfcmVxdWVz",
+            "dGVkGAMgASgDEk4KE2V4ZWN1dGVkX2NvbW1pc3Npb24YByABKAsyMS50aW5r",
+            "b2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk1vbmV5VmFsdWUS",
+            "UgoXZXhlY3V0ZWRfY29tbWlzc2lvbl9ydWIYCCABKAsyMS50aW5rb2ZmLnB1",
+            "YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk1vbmV5VmFsdWUSTQoSc2Vy",
+            "dmljZV9jb21taXNzaW9uGAkgASgLMjEudGlua29mZi5wdWJsaWMuaW52ZXN0",
+            "LmFwaS5jb250cmFjdC52MS5Nb25leVZhbHVlEkoKD2RlYWxfY29tbWlzc2lv",
+            "bhgKIAEoCzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3Qu",
+            "djEuTW9uZXlWYWx1ZRJcCgpleHRyYV9ib25kGAwgASgLMkYudGlua29mZi5w",
+            "dWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRPcmRlclByaWNlUmVz",
+            "cG9uc2UuRXh0cmFCb25kSAASYAoMZXh0cmFfZnV0dXJlGA0gASgLMkgudGlu",
+            "a29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRPcmRlclBy",
+            "aWNlUmVzcG9uc2UuRXh0cmFGdXR1cmVIABqkAQoJRXh0cmFCb25kEkQKCWFj",
+            "aV92YWx1ZRgCIAEoCzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29u",
+            "dHJhY3QudjEuTW9uZXlWYWx1ZRJRChdub21pbmFsX2NvbnZlcnNpb25fcmF0",
+            "ZRgDIAEoCzIwLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3Qu",
+            "djEuUXVvdGF0aW9uGlgKC0V4dHJhRnV0dXJlEkkKDmluaXRpYWxfbWFyZ2lu",
+            "GAIgASgLMjEudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52",
+            "MS5Nb25leVZhbHVlQhIKEGluc3RydW1lbnRfZXh0cmEiYQoXT3JkZXJTdGF0",
+            "ZVN0cmVhbVJlcXVlc3QSEAoIYWNjb3VudHMYASADKAkSHgoRcGluZ19kZWxh",
+            "eV9taWxsaXMYDyABKAVIAIgBAUIUChJfcGluZ19kZWxheV9taWxsaXMi8wEK",
+            "FFN1YnNjcmlwdGlvblJlc3BvbnNlEhMKC3RyYWNraW5nX2lkGAEgASgJEk8K",
+            "BnN0YXR1cxgCIAEoDjI/LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29u",
+            "dHJhY3QudjEuUmVzdWx0U3Vic2NyaXB0aW9uU3RhdHVzEhEKCXN0cmVhbV9p",
+            "ZBgEIAEoCRIQCghhY2NvdW50cxgFIAMoCRJGCgVlcnJvchgHIAEoCzIyLnRp",
+            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuRXJyb3JEZXRh",
+            "aWxIAIgBAUIICgZfZXJyb3Ii2BAKGE9yZGVyU3RhdGVTdHJlYW1SZXNwb25z",
+            "ZRJhCgtvcmRlcl9zdGF0ZRgBIAEoCzJKLnRpbmtvZmYucHVibGljLmludmVz",
+            "dC5hcGkuY29udHJhY3QudjEuT3JkZXJTdGF0ZVN0cmVhbVJlc3BvbnNlLk9y",
+            "ZGVyU3RhdGVIABI7CgRwaW5nGAIgASgLMisudGlua29mZi5wdWJsaWMuaW52",
+            "ZXN0LmFwaS5jb250cmFjdC52MS5QaW5nSAASUwoMc3Vic2NyaXB0aW9uGAMg",
+            "ASgLMjsudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5T",
+            "dWJzY3JpcHRpb25SZXNwb25zZUgAGvMKCgpPcmRlclN0YXRlEhAKCG9yZGVy",
+            "X2lkGAEgASgJEh0KEG9yZGVyX3JlcXVlc3RfaWQYAiABKAlIAIgBARITCgtj",
+            "bGllbnRfY29kZRgDIAEoCRIuCgpjcmVhdGVkX2F0GAQgASgLMhouZ29vZ2xl",
+            "LnByb3RvYnVmLlRpbWVzdGFtcBJiChdleGVjdXRpb25fcmVwb3J0X3N0YXR1",
+            "cxgFIAEoDjJBLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3Qu",
+            "djEuT3JkZXJFeGVjdXRpb25SZXBvcnRTdGF0dXMSaQoLc3RhdHVzX2luZm8Y",
+            "BiABKA4yTy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
+            "Lk9yZGVyU3RhdGVTdHJlYW1SZXNwb25zZS5TdGF0dXNDYXVzZUluZm9IAYgB",
+            "ARIOCgZ0aWNrZXIYByABKAkSEgoKY2xhc3NfY29kZRgIIAEoCRIQCghsb3Rf",
+            "c2l6ZRgJIAEoBRJICglkaXJlY3Rpb24YCiABKA4yNS50aW5rb2ZmLnB1Ymxp",
+            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk9yZGVyRGlyZWN0aW9uEk0KDXRp",
+            "bWVfaW5fZm9yY2UYCyABKA4yNi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
+            "LmNvbnRyYWN0LnYxLlRpbWVJbkZvcmNlVHlwZRJECgpvcmRlcl90eXBlGAwg",
+            "ASgOMjAudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5P",
+            "cmRlclR5cGUSEgoKYWNjb3VudF9pZBgNIAEoCRIcCg50cmFkZV9vcmRlcl9p",
+            "ZBgOIAEoCUIE4kEBAhJOChNpbml0aWFsX29yZGVyX3ByaWNlGBYgASgLMjEu",
+            "dGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZh",
+            "bHVlEkYKC29yZGVyX3ByaWNlGBcgASgLMjEudGlua29mZi5wdWJsaWMuaW52",
+            "ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZhbHVlEkYKBmFtb3VudBgYIAEo",
+            "CzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuTW9u",
+            "ZXlWYWx1ZUgCiAEBEk8KFGV4ZWN1dGVkX29yZGVyX3ByaWNlGBkgASgLMjEu",
+            "dGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5Nb25leVZh",
+            "bHVlEhAKCGN1cnJlbmN5GBogASgJEhYKDmxvdHNfcmVxdWVzdGVkGBsgASgD",
+            "EhUKDWxvdHNfZXhlY3V0ZWQYHCABKAMSEQoJbG90c19sZWZ0GB0gASgDEhYK",
+            "DmxvdHNfY2FuY2VsbGVkGB4gASgDEl8KBm1hcmtlchgfIAEoDjJKLnRpbmtv",
+            "ZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuT3JkZXJTdGF0ZVN0",
+            "cmVhbVJlc3BvbnNlLk1hcmtlclR5cGVIA4gBARJBCgZ0cmFkZXMYISADKAsy",
+            "MS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk9yZGVy",
+            "VHJhZGUSMwoPY29tcGxldGlvbl90aW1lGCMgASgLMhouZ29vZ2xlLnByb3Rv",
+            "YnVmLlRpbWVzdGFtcBIQCghleGNoYW5nZRgkIAEoCRIWCg5pbnN0cnVtZW50",
+            "X3VpZBgpIAEoCUITChFfb3JkZXJfcmVxdWVzdF9pZEIOCgxfc3RhdHVzX2lu",
+            "Zm9CCQoHX2Ftb3VudEIJCgdfbWFya2VyIq8BCgpNYXJrZXJUeXBlEhIKDk1B",
+            "UktFUl9VTktOT1dOEAASEQoNTUFSS0VSX0JST0tFUhABEg8KC01BUktFUl9D",
+            "SEFUEAISEAoMTUFSS0VSX1BBUEVSEAMSEQoNTUFSS0VSX01BUkdJThAEEhAK",
+            "DE1BUktFUl9US0JOTRAFEhAKDE1BUktFUl9TSE9SVBAGEhEKDU1BUktFUl9T",
+            "UEVDTU0QBxINCglNQVJLRVJfUE8QCCKTAgoPU3RhdHVzQ2F1c2VJbmZvEhUK",
+            "EUNBVVNFX1VOU1BFQ0lGSUVEEAASHQoZQ0FVU0VfQ0FOQ0VMTEVEX0JZX0NM",
+            "SUVOVBAPEh8KG0NBVVNFX0NBTkNFTExFRF9CWV9FWENIQU5HRRABEicKI0NB",
+            "VVNFX0NBTkNFTExFRF9OT1RfRU5PVUdIX1BPU0lUSU9OEAISIwofQ0FVU0Vf",
+            "Q0FOQ0VMTEVEX0JZX0NMSUVOVF9CTE9DSxADEhwKGENBVVNFX1JFSkVDVEVE",
+            "X0JZX0JST0tFUhAEEh4KGkNBVVNFX1JFSkVDVEVEX0JZX0VYQ0hBTkdFEAUS",
+            "HQoZQ0FVU0VfQ0FOQ0VMTEVEX0JZX0JST0tFUhAGQgkKB3BheWxvYWQqZAoO",
+            "T3JkZXJEaXJlY3Rpb24SHwobT1JERVJfRElSRUNUSU9OX1VOU1BFQ0lGSUVE",
+            "EAASFwoTT1JERVJfRElSRUNUSU9OX0JVWRABEhgKFE9SREVSX0RJUkVDVElP",
+            "Tl9TRUxMEAIqbgoJT3JkZXJUeXBlEhoKFk9SREVSX1RZUEVfVU5TUEVDSUZJ",
+            "RUQQABIUChBPUkRFUl9UWVBFX0xJTUlUEAESFQoRT1JERVJfVFlQRV9NQVJL",
+            "RVQQAhIYChRPUkRFUl9UWVBFX0JFU1RQUklDRRADKoACChpPcmRlckV4ZWN1",
+            "dGlvblJlcG9ydFN0YXR1cxInCiNFWEVDVVRJT05fUkVQT1JUX1NUQVRVU19V",
+            "TlNQRUNJRklFRBAAEiAKHEVYRUNVVElPTl9SRVBPUlRfU1RBVFVTX0ZJTEwQ",
+            "ARIkCiBFWEVDVVRJT05fUkVQT1JUX1NUQVRVU19SRUpFQ1RFRBACEiUKIUVY",
+            "RUNVVElPTl9SRVBPUlRfU1RBVFVTX0NBTkNFTExFRBADEh8KG0VYRUNVVElP",
+            "Tl9SRVBPUlRfU1RBVFVTX05FVxAEEikKJUVYRUNVVElPTl9SRVBPUlRfU1RB",
+            "VFVTX1BBUlRJQUxMWUZJTEwQBSqIAQoPVGltZUluRm9yY2VUeXBlEh0KGVRJ",
+            "TUVfSU5fRk9SQ0VfVU5TUEVDSUZJRUQQABIVChFUSU1FX0lOX0ZPUkNFX0RB",
+            "WRABEh8KG1RJTUVfSU5fRk9SQ0VfRklMTF9BTkRfS0lMTBACEh4KGlRJTUVf",
+            "SU5fRk9SQ0VfRklMTF9PUl9LSUxMEAMqYwoLT3JkZXJJZFR5cGUSHQoZT1JE",
+            "RVJfSURfVFlQRV9VTlNQRUNJRklFRBAAEhoKFk9SREVSX0lEX1RZUEVfRVhD",
+            "SEFOR0UQARIZChVPUkRFUl9JRF9UWVBFX1JFUVVFU1QQAjK5AgoTT3JkZXJz",
+            "U3RyZWFtU2VydmljZRKJAQoMVHJhZGVzU3RyZWFtEjoudGlua29mZi5wdWJs",
+            "aWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5UcmFkZXNTdHJlYW1SZXF1ZXN0",
+            "GjsudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5UcmFk",
+            "ZXNTdHJlYW1SZXNwb25zZTABEpUBChBPcmRlclN0YXRlU3RyZWFtEj4udGlu",
+            "a29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5PcmRlclN0YXRl",
+            "U3RyZWFtUmVxdWVzdBo/LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29u",
+            "dHJhY3QudjEuT3JkZXJTdGF0ZVN0cmVhbVJlc3BvbnNlMAEyvwgKDU9yZGVy",
+            "c1NlcnZpY2USfgoJUG9zdE9yZGVyEjcudGlua29mZi5wdWJsaWMuaW52ZXN0",
+            "LmFwaS5jb250cmFjdC52MS5Qb3N0T3JkZXJSZXF1ZXN0GjgudGlua29mZi5w",
+            "dWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5Qb3N0T3JkZXJSZXNwb25z",
+            "ZRKNAQoOUG9zdE9yZGVyQXN5bmMSPC50aW5rb2ZmLnB1YmxpYy5pbnZlc3Qu",
+            "YXBpLmNvbnRyYWN0LnYxLlBvc3RPcmRlckFzeW5jUmVxdWVzdBo9LnRpbmtv",
+            "ZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuUG9zdE9yZGVyQXN5",
+            "bmNSZXNwb25zZRKEAQoLQ2FuY2VsT3JkZXISOS50aW5rb2ZmLnB1YmxpYy5p",
+            "bnZlc3QuYXBpLmNvbnRyYWN0LnYxLkNhbmNlbE9yZGVyUmVxdWVzdBo6LnRp",
+            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuQ2FuY2VsT3Jk",
+            "ZXJSZXNwb25zZRJ/Cg1HZXRPcmRlclN0YXRlEjsudGlua29mZi5wdWJsaWMu",
+            "aW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRPcmRlclN0YXRlUmVxdWVzdBox",
+            "LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuT3JkZXJT",
+            "dGF0ZRJ+CglHZXRPcmRlcnMSNy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
+            "LmNvbnRyYWN0LnYxLkdldE9yZGVyc1JlcXVlc3QaOC50aW5rb2ZmLnB1Ymxp",
+            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldE9yZGVyc1Jlc3BvbnNlEoQB",
+            "CgxSZXBsYWNlT3JkZXISOi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNv",
+            "bnRyYWN0LnYxLlJlcGxhY2VPcmRlclJlcXVlc3QaOC50aW5rb2ZmLnB1Ymxp",
+            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlBvc3RPcmRlclJlc3BvbnNlEoEB",
+            "CgpHZXRNYXhMb3RzEjgudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250",
+            "cmFjdC52MS5HZXRNYXhMb3RzUmVxdWVzdBo5LnRpbmtvZmYucHVibGljLmlu",
+            "dmVzdC5hcGkuY29udHJhY3QudjEuR2V0TWF4TG90c1Jlc3BvbnNlEooBCg1H",
+            "ZXRPcmRlclByaWNlEjsudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250",
+            "cmFjdC52MS5HZXRPcmRlclByaWNlUmVxdWVzdBo8LnRpbmtvZmYucHVibGlj",
+            "LmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0T3JkZXJQcmljZVJlc3BvbnNl",
+            "QmYKHHJ1LnRpbmtvZmYucGlhcGkuY29udHJhY3QudjFQAVoMLi87aW52ZXN0",
+            "YXBpogIFVElBUEmqAhlTdG9ja1NoYXJwLlRpbmtvZmYuTmF0aXZlygIRVGlu",
+            "a29mZlxJbnZlc3RcVjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::StockSharp.Tinkoff.Native.CommonReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Google.Api.FieldBehaviorReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::StockSharp.Tinkoff.Native.OrderDirection), typeof(global::StockSharp.Tinkoff.Native.OrderType), typeof(global::StockSharp.Tinkoff.Native.OrderExecutionReportStatus), typeof(global::StockSharp.Tinkoff.Native.TimeInForceType), typeof(global::StockSharp.Tinkoff.Native.OrderIdType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -330,7 +332,7 @@ namespace StockSharp.Tinkoff.Native {
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetOrdersResponse), global::StockSharp.Tinkoff.Native.GetOrdersResponse.Parser, new[]{ "Orders" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.OrderState), global::StockSharp.Tinkoff.Native.OrderState.Parser, new[]{ "OrderId", "ExecutionReportStatus", "LotsRequested", "LotsExecuted", "InitialOrderPrice", "ExecutedOrderPrice", "TotalOrderAmount", "AveragePositionPrice", "InitialCommission", "ExecutedCommission", "Figi", "Direction", "InitialSecurityPrice", "Stages", "ServiceCommission", "Currency", "OrderType", "OrderDate", "InstrumentUid", "OrderRequestId", "Ticker", "ClassCode" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.OrderStage), global::StockSharp.Tinkoff.Native.OrderStage.Parser, new[]{ "Price", "Quantity", "TradeId", "ExecutionTime" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.ReplaceOrderRequest), global::StockSharp.Tinkoff.Native.ReplaceOrderRequest.Parser, new[]{ "AccountId", "OrderId", "IdempotencyKey", "Quantity", "Price", "PriceType", "ConfirmMarginTrade" }, new[]{ "Price", "PriceType" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.ReplaceOrderRequest), global::StockSharp.Tinkoff.Native.ReplaceOrderRequest.Parser, new[]{ "AccountId", "OrderIdType", "OrderId", "IdempotencyKey", "Quantity", "Price", "PriceType", "ConfirmMarginTrade" }, new[]{ "OrderIdType", "Price", "PriceType" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetMaxLotsRequest), global::StockSharp.Tinkoff.Native.GetMaxLotsRequest.Parser, new[]{ "AccountId", "InstrumentId", "Price" }, new[]{ "Price" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetMaxLotsResponse), global::StockSharp.Tinkoff.Native.GetMaxLotsResponse.Parser, new[]{ "Currency", "BuyLimits", "BuyMarginLimits", "SellLimits", "SellMarginLimits" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetMaxLotsResponse.Types.BuyLimitsView), global::StockSharp.Tinkoff.Native.GetMaxLotsResponse.Types.BuyLimitsView.Parser, new[]{ "BuyMoneyAmount", "BuyMaxLots", "BuyMaxMarketLots" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetMaxLotsResponse.Types.SellLimitsView), global::StockSharp.Tinkoff.Native.GetMaxLotsResponse.Types.SellLimitsView.Parser, new[]{ "SellMaxLots" }, null, null, null, null)}),
@@ -656,11 +658,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -683,11 +681,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -812,7 +806,7 @@ namespace StockSharp.Tinkoff.Native {
 
     private object payload_;
     /// <summary>Enum of possible cases for the "payload" oneof.</summary>
-    public enum PayloadOneofCase {
+    internal enum PayloadOneofCase {
       None = 0,
       OrderTrades = 1,
       Ping = 2,
@@ -977,11 +971,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -1023,11 +1013,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -1411,11 +1397,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -1461,11 +1443,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -1771,11 +1749,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -1812,11 +1786,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2033,7 +2003,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int InstrumentIdFieldNumber = 8;
     private string instrumentId_ = "";
     /// <summary>
-    ///Идентификатор инструмента, принимает значения Figi или Instrument_uid.
+    ///Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2351,11 +2321,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -2417,11 +2383,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3308,11 +3270,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3438,11 +3396,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3627,7 +3581,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int InstrumentIdFieldNumber = 1;
     private string instrumentId_ = "";
     /// <summary>
-    ///Идентификатор инструмента, принимает значения Figi или Instrument_uid.
+    ///Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -4049,11 +4003,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4111,11 +4061,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4409,11 +4355,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4440,11 +4382,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4710,11 +4648,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4741,11 +4675,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4968,11 +4898,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -5001,11 +4927,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -5305,11 +5227,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -5340,11 +5258,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -5568,11 +5482,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -5598,11 +5508,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -5626,7 +5532,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the GetOrdersRequest message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       internal sealed partial class GetOrdersRequestFilters : pb::IMessage<GetOrdersRequestFilters>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -5845,11 +5751,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -5883,11 +5785,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -6073,11 +5971,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -6096,11 +5990,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -6965,11 +6855,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -7099,11 +6985,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -7493,11 +7375,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -7534,11 +7412,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -7612,6 +7486,7 @@ namespace StockSharp.Tinkoff.Native {
     public ReplaceOrderRequest(ReplaceOrderRequest other) : this() {
       _hasBits0 = other._hasBits0;
       accountId_ = other.accountId_;
+      orderIdType_ = other.orderIdType_;
       orderId_ = other.orderId_;
       idempotencyKey_ = other.idempotencyKey_;
       quantity_ = other.quantity_;
@@ -7640,6 +7515,36 @@ namespace StockSharp.Tinkoff.Native {
       set {
         accountId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
+    }
+
+    /// <summary>Field number for the "order_id_type" field.</summary>
+    public const int OrderIdTypeFieldNumber = 5;
+    private readonly static global::StockSharp.Tinkoff.Native.OrderIdType OrderIdTypeDefaultValue = global::StockSharp.Tinkoff.Native.OrderIdType.Unspecified;
+
+    private global::StockSharp.Tinkoff.Native.OrderIdType orderIdType_;
+    /// <summary>
+    ///Тип идентификатора заявки.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::StockSharp.Tinkoff.Native.OrderIdType OrderIdType {
+      get { if ((_hasBits0 & 1) != 0) { return orderIdType_; } else { return OrderIdTypeDefaultValue; } }
+      set {
+        _hasBits0 |= 1;
+        orderIdType_ = value;
+      }
+    }
+    /// <summary>Gets whether the "order_id_type" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasOrderIdType {
+      get { return (_hasBits0 & 1) != 0; }
+    }
+    /// <summary>Clears the value of the "order_id_type" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearOrderIdType() {
+      _hasBits0 &= ~1;
     }
 
     /// <summary>Field number for the "order_id" field.</summary>
@@ -7713,9 +7618,9 @@ namespace StockSharp.Tinkoff.Native {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::StockSharp.Tinkoff.Native.PriceType PriceType {
-      get { if ((_hasBits0 & 1) != 0) { return priceType_; } else { return PriceTypeDefaultValue; } }
+      get { if ((_hasBits0 & 2) != 0) { return priceType_; } else { return PriceTypeDefaultValue; } }
       set {
-        _hasBits0 |= 1;
+        _hasBits0 |= 2;
         priceType_ = value;
       }
     }
@@ -7723,13 +7628,13 @@ namespace StockSharp.Tinkoff.Native {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public bool HasPriceType {
-      get { return (_hasBits0 & 1) != 0; }
+      get { return (_hasBits0 & 2) != 0; }
     }
     /// <summary>Clears the value of the "price_type" field</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public void ClearPriceType() {
-      _hasBits0 &= ~1;
+      _hasBits0 &= ~2;
     }
 
     /// <summary>Field number for the "confirm_margin_trade" field.</summary>
@@ -7763,6 +7668,7 @@ namespace StockSharp.Tinkoff.Native {
         return true;
       }
       if (AccountId != other.AccountId) return false;
+      if (OrderIdType != other.OrderIdType) return false;
       if (OrderId != other.OrderId) return false;
       if (IdempotencyKey != other.IdempotencyKey) return false;
       if (Quantity != other.Quantity) return false;
@@ -7777,6 +7683,7 @@ namespace StockSharp.Tinkoff.Native {
     public override int GetHashCode() {
       int hash = 1;
       if (AccountId.Length != 0) hash ^= AccountId.GetHashCode();
+      if (HasOrderIdType) hash ^= OrderIdType.GetHashCode();
       if (OrderId.Length != 0) hash ^= OrderId.GetHashCode();
       if (IdempotencyKey.Length != 0) hash ^= IdempotencyKey.GetHashCode();
       if (Quantity != 0L) hash ^= Quantity.GetHashCode();
@@ -7804,6 +7711,10 @@ namespace StockSharp.Tinkoff.Native {
       if (AccountId.Length != 0) {
         output.WriteRawTag(10);
         output.WriteString(AccountId);
+      }
+      if (HasOrderIdType) {
+        output.WriteRawTag(40);
+        output.WriteEnum((int) OrderIdType);
       }
       if (OrderId.Length != 0) {
         output.WriteRawTag(50);
@@ -7843,6 +7754,10 @@ namespace StockSharp.Tinkoff.Native {
         output.WriteRawTag(10);
         output.WriteString(AccountId);
       }
+      if (HasOrderIdType) {
+        output.WriteRawTag(40);
+        output.WriteEnum((int) OrderIdType);
+      }
       if (OrderId.Length != 0) {
         output.WriteRawTag(50);
         output.WriteString(OrderId);
@@ -7880,6 +7795,9 @@ namespace StockSharp.Tinkoff.Native {
       if (AccountId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(AccountId);
       }
+      if (HasOrderIdType) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) OrderIdType);
+      }
       if (OrderId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(OrderId);
       }
@@ -7913,6 +7831,9 @@ namespace StockSharp.Tinkoff.Native {
       if (other.AccountId.Length != 0) {
         AccountId = other.AccountId;
       }
+      if (other.HasOrderIdType) {
+        OrderIdType = other.OrderIdType;
+      }
       if (other.OrderId.Length != 0) {
         OrderId = other.OrderId;
       }
@@ -7945,16 +7866,16 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
             AccountId = input.ReadString();
+            break;
+          }
+          case 40: {
+            OrderIdType = (global::StockSharp.Tinkoff.Native.OrderIdType) input.ReadEnum();
             break;
           }
           case 50: {
@@ -7995,16 +7916,16 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
             AccountId = input.ReadString();
+            break;
+          }
+          case 40: {
+            OrderIdType = (global::StockSharp.Tinkoff.Native.OrderIdType) input.ReadEnum();
             break;
           }
           case 50: {
@@ -8110,7 +8031,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int InstrumentIdFieldNumber = 2;
     private string instrumentId_ = "";
     /// <summary>
-    ///Идентификатор инструмента, принимает значения Figi или instrument_uid
+    ///Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -8270,11 +8191,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -8304,11 +8221,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -8636,11 +8549,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -8687,11 +8596,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -8736,7 +8641,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the GetMaxLotsResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       internal sealed partial class BuyLimitsView : pb::IMessage<BuyLimitsView>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -8963,11 +8868,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -8997,11 +8898,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -9186,11 +9083,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -9209,11 +9102,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -9304,7 +9193,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int InstrumentIdFieldNumber = 2;
     private string instrumentId_ = "";
     /// <summary>
-    ///Идентификатор инструмента, принимает значения Figi или instrument_uid
+    ///Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -9526,11 +9415,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -9568,11 +9453,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -9806,7 +9687,7 @@ namespace StockSharp.Tinkoff.Native {
 
     private object instrumentExtra_;
     /// <summary>Enum of possible cases for the "instrument_extra" oneof.</summary>
-    public enum InstrumentExtraOneofCase {
+    internal enum InstrumentExtraOneofCase {
       None = 0,
       ExtraBond = 12,
       ExtraFuture = 13,
@@ -10081,11 +9962,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -10164,11 +10041,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -10245,7 +10118,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the GetOrderPriceResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       internal sealed partial class ExtraBond : pb::IMessage<ExtraBond>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -10443,11 +10316,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -10476,11 +10345,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -10667,11 +10532,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -10693,11 +10554,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -10920,11 +10777,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -10947,11 +10800,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -11249,11 +11098,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -11291,11 +11136,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -11435,7 +11276,7 @@ namespace StockSharp.Tinkoff.Native {
 
     private object payload_;
     /// <summary>Enum of possible cases for the "payload" oneof.</summary>
-    public enum PayloadOneofCase {
+    internal enum PayloadOneofCase {
       None = 0,
       OrderState = 1,
       Ping = 2,
@@ -11600,11 +11441,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -11646,11 +11483,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -11690,7 +11523,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the OrderStateStreamResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       /// <summary>
       ///Маркер
       /// </summary>
@@ -12847,11 +12680,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -12996,11 +12825,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;

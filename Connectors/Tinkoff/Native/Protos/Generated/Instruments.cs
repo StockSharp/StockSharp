@@ -914,174 +914,210 @@ namespace StockSharp.Tinkoff.Native {
             "b24SHwobVFJBREVfRElSRUNUSU9OX1VOU1BFQ0lGSUVEEAASFwoTVFJBREVf",
             "RElSRUNUSU9OX0JVWRABEhgKFFRSQURFX0RJUkVDVElPTl9TRUxMEAISHAoY",
             "VFJBREVfRElSRUNUSU9OX0lOQ1JFQVNFEAMSHAoYVFJBREVfRElSRUNUSU9O",
-            "X0RFQ1JFQVNFEARCDgoMX25leHRfY3Vyc29yKtcBCgpDb3Vwb25UeXBlEhsK",
-            "F0NPVVBPTl9UWVBFX1VOU1BFQ0lGSUVEEAASGAoUQ09VUE9OX1RZUEVfQ09O",
-            "U1RBTlQQARIYChRDT1VQT05fVFlQRV9GTE9BVElORxACEhgKFENPVVBPTl9U",
-            "WVBFX0RJU0NPVU5UEAMSGAoUQ09VUE9OX1RZUEVfTU9SVEdBR0UQBBITCg9D",
-            "T1VQT05fVFlQRV9GSVgQBRIYChRDT1VQT05fVFlQRV9WQVJJQUJMRRAGEhUK",
-            "EUNPVVBPTl9UWVBFX09USEVSEAcqaAoPT3B0aW9uRGlyZWN0aW9uEiAKHE9Q",
-            "VElPTl9ESVJFQ1RJT05fVU5TUEVDSUZJRUQQABIYChRPUFRJT05fRElSRUNU",
-            "SU9OX1BVVBABEhkKFU9QVElPTl9ESVJFQ1RJT05fQ0FMTBACKnsKEU9wdGlv",
-            "blBheW1lbnRUeXBlEiMKH09QVElPTl9QQVlNRU5UX1RZUEVfVU5TUEVDSUZJ",
-            "RUQQABIfChtPUFRJT05fUEFZTUVOVF9UWVBFX1BSRU1JVU0QARIgChxPUFRJ",
-            "T05fUEFZTUVOVF9UWVBFX01BUkdJTkFMEAIqYQoLT3B0aW9uU3R5bGUSHAoY",
-            "T1BUSU9OX1NUWUxFX1VOU1BFQ0lGSUVEEAASGQoVT1BUSU9OX1NUWUxFX0FN",
-            "RVJJQ0FOEAESGQoVT1BUSU9OX1NUWUxFX0VVUk9QRUFOEAIqlQEKFE9wdGlv",
-            "blNldHRsZW1lbnRUeXBlEiUKIU9QVElPTl9FWEVDVVRJT05fVFlQRV9VTlNQ",
-            "RUNJRklFRBAAEisKJ09QVElPTl9FWEVDVVRJT05fVFlQRV9QSFlTSUNBTF9E",
-            "RUxJVkVSWRABEikKJU9QVElPTl9FWEVDVVRJT05fVFlQRV9DQVNIX1NFVFRM",
-            "RU1FTlQQAiquAQoQSW5zdHJ1bWVudElkVHlwZRIdChlJTlNUUlVNRU5UX0lE",
-            "X1VOU1BFQ0lGSUVEEAASGwoXSU5TVFJVTUVOVF9JRF9UWVBFX0ZJR0kQARId",
-            "ChlJTlNUUlVNRU5UX0lEX1RZUEVfVElDS0VSEAISGgoWSU5TVFJVTUVOVF9J",
-            "RF9UWVBFX1VJRBADEiMKH0lOU1RSVU1FTlRfSURfVFlQRV9QT1NJVElPTl9V",
-            "SUQQBCrlAQoJU2hhcmVUeXBlEhoKFlNIQVJFX1RZUEVfVU5TUEVDSUZJRUQQ",
-            "ABIVChFTSEFSRV9UWVBFX0NPTU1PThABEhgKFFNIQVJFX1RZUEVfUFJFRkVS",
-            "UkVEEAISEgoOU0hBUkVfVFlQRV9BRFIQAxISCg5TSEFSRV9UWVBFX0dEUhAE",
-            "EhIKDlNIQVJFX1RZUEVfTUxQEAUSGgoWU0hBUkVfVFlQRV9OWV9SRUdfU0hS",
-            "UxAGEh4KGlNIQVJFX1RZUEVfQ0xPU0VEX0VORF9GVU5EEAcSEwoPU0hBUkVf",
-            "VFlQRV9SRUlUEAgqiQEKCUFzc2V0VHlwZRIaChZBU1NFVF9UWVBFX1VOU1BF",
-            "Q0lGSUVEEAASFwoTQVNTRVRfVFlQRV9DVVJSRU5DWRABEhgKFEFTU0VUX1RZ",
-            "UEVfQ09NTU9ESVRZEAISFAoQQVNTRVRfVFlQRV9JTkRFWBADEhcKE0FTU0VU",
-            "X1RZUEVfU0VDVVJJVFkQBCpmChVTdHJ1Y3R1cmVkUHJvZHVjdFR5cGUSFwoT",
-            "U1BfVFlQRV9VTlNQRUNJRklFRBAAEhcKE1NQX1RZUEVfREVMSVZFUkFCTEUQ",
-            "ARIbChdTUF9UWVBFX05PTl9ERUxJVkVSQUJMRRACKo0BChdFZGl0RmF2b3Jp",
-            "dGVzQWN0aW9uVHlwZRIqCiZFRElUX0ZBVk9SSVRFU19BQ1RJT05fVFlQRV9V",
-            "TlNQRUNJRklFRBAAEiIKHkVESVRfRkFWT1JJVEVTX0FDVElPTl9UWVBFX0FE",
-            "RBABEiIKHkVESVRfRkFWT1JJVEVTX0FDVElPTl9UWVBFX0RFTBACKnoKDlJl",
-            "Y29tbWVuZGF0aW9uEh4KGlJFQ09NTUVOREFUSU9OX1VOU1BFQ0lGSUVEEAAS",
-            "FgoSUkVDT01NRU5EQVRJT05fQlVZEAESFwoTUkVDT01NRU5EQVRJT05fSE9M",
-            "RBACEhcKE1JFQ09NTUVOREFUSU9OX1NFTEwQAyppCglSaXNrTGV2ZWwSGgoW",
-            "UklTS19MRVZFTF9VTlNQRUNJRklFRBAAEhIKDlJJU0tfTEVWRUxfTE9XEAES",
-            "FwoTUklTS19MRVZFTF9NT0RFUkFURRACEhMKD1JJU0tfTEVWRUxfSElHSBAD",
-            "Kj0KCEJvbmRUeXBlEhkKFUJPTkRfVFlQRV9VTlNQRUNJRklFRBAAEhYKEkJP",
-            "TkRfVFlQRV9SRVBMQUNFRBABKl0KFkluc3RydW1lbnRFeGNoYW5nZVR5cGUS",
-            "IwofSU5TVFJVTUVOVF9FWENIQU5HRV9VTlNQRUNJRklFRBAAEh4KGklOU1RS",
-            "VU1FTlRfRVhDSEFOR0VfREVBTEVSEAEy+ioKEkluc3RydW1lbnRzU2Vydmlj",
-            "ZRKTAQoQVHJhZGluZ1NjaGVkdWxlcxI+LnRpbmtvZmYucHVibGljLmludmVz",
-            "dC5hcGkuY29udHJhY3QudjEuVHJhZGluZ1NjaGVkdWxlc1JlcXVlc3QaPy50",
-            "aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlRyYWRpbmdT",
-            "Y2hlZHVsZXNSZXNwb25zZRJ3CgZCb25kQnkSOC50aW5rb2ZmLnB1YmxpYy5p",
-            "bnZlc3QuYXBpLmNvbnRyYWN0LnYxLkluc3RydW1lbnRSZXF1ZXN0GjMudGlu",
-            "a29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5Cb25kUmVzcG9u",
-            "c2USeAoFQm9uZHMSOS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRy",
-            "YWN0LnYxLkluc3RydW1lbnRzUmVxdWVzdBo0LnRpbmtvZmYucHVibGljLmlu",
-            "dmVzdC5hcGkuY29udHJhY3QudjEuQm9uZHNSZXNwb25zZRKNAQoOR2V0Qm9u",
-            "ZENvdXBvbnMSPC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0",
-            "LnYxLkdldEJvbmRDb3Vwb25zUmVxdWVzdBo9LnRpbmtvZmYucHVibGljLmlu",
-            "dmVzdC5hcGkuY29udHJhY3QudjEuR2V0Qm9uZENvdXBvbnNSZXNwb25zZRKK",
-            "AQoNR2V0Qm9uZEV2ZW50cxI7LnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
-            "Y29udHJhY3QudjEuR2V0Qm9uZEV2ZW50c1JlcXVlc3QaPC50aW5rb2ZmLnB1",
-            "YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldEJvbmRFdmVudHNSZXNw",
-            "b25zZRJ/CgpDdXJyZW5jeUJ5EjgudGlua29mZi5wdWJsaWMuaW52ZXN0LmFw",
-            "aS5jb250cmFjdC52MS5JbnN0cnVtZW50UmVxdWVzdBo3LnRpbmtvZmYucHVi",
-            "bGljLmludmVzdC5hcGkuY29udHJhY3QudjEuQ3VycmVuY3lSZXNwb25zZRKC",
-            "AQoKQ3VycmVuY2llcxI5LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29u",
-            "dHJhY3QudjEuSW5zdHJ1bWVudHNSZXF1ZXN0GjkudGlua29mZi5wdWJsaWMu",
-            "aW52ZXN0LmFwaS5jb250cmFjdC52MS5DdXJyZW5jaWVzUmVzcG9uc2USdQoF",
-            "RXRmQnkSOC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
-            "Lkluc3RydW1lbnRSZXF1ZXN0GjIudGlua29mZi5wdWJsaWMuaW52ZXN0LmFw",
-            "aS5jb250cmFjdC52MS5FdGZSZXNwb25zZRJ2CgRFdGZzEjkudGlua29mZi5w",
-            "dWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5JbnN0cnVtZW50c1JlcXVl",
-            "c3QaMy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkV0",
-            "ZnNSZXNwb25zZRJ7CghGdXR1cmVCeRI4LnRpbmtvZmYucHVibGljLmludmVz",
-            "dC5hcGkuY29udHJhY3QudjEuSW5zdHJ1bWVudFJlcXVlc3QaNS50aW5rb2Zm",
-            "LnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkZ1dHVyZVJlc3BvbnNl",
-            "EnwKB0Z1dHVyZXMSOS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRy",
-            "YWN0LnYxLkluc3RydW1lbnRzUmVxdWVzdBo2LnRpbmtvZmYucHVibGljLmlu",
-            "dmVzdC5hcGkuY29udHJhY3QudjEuRnV0dXJlc1Jlc3BvbnNlEnsKCE9wdGlv",
-            "bkJ5EjgudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5J",
-            "bnN0cnVtZW50UmVxdWVzdBo1LnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
-            "Y29udHJhY3QudjEuT3B0aW9uUmVzcG9uc2USgQEKB09wdGlvbnMSOS50aW5r",
-            "b2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkluc3RydW1lbnRz",
-            "UmVxdWVzdBo2LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3Qu",
-            "djEuT3B0aW9uc1Jlc3BvbnNlIgOIAgESgAEKCU9wdGlvbnNCeRI7LnRpbmtv",
-            "ZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuRmlsdGVyT3B0aW9u",
-            "c1JlcXVlc3QaNi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0",
-            "LnYxLk9wdGlvbnNSZXNwb25zZRJ5CgdTaGFyZUJ5EjgudGlua29mZi5wdWJs",
-            "aWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5JbnN0cnVtZW50UmVxdWVzdBo0",
-            "LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuU2hhcmVS",
-            "ZXNwb25zZRJ6CgZTaGFyZXMSOS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
-            "LmNvbnRyYWN0LnYxLkluc3RydW1lbnRzUmVxdWVzdBo1LnRpbmtvZmYucHVi",
-            "bGljLmludmVzdC5hcGkuY29udHJhY3QudjEuU2hhcmVzUmVzcG9uc2UShAEK",
-            "C0luZGljYXRpdmVzEjkudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250",
-            "cmFjdC52MS5JbmRpY2F0aXZlc1JlcXVlc3QaOi50aW5rb2ZmLnB1YmxpYy5p",
-            "bnZlc3QuYXBpLmNvbnRyYWN0LnYxLkluZGljYXRpdmVzUmVzcG9uc2USnAEK",
-            "E0dldEFjY3J1ZWRJbnRlcmVzdHMSQS50aW5rb2ZmLnB1YmxpYy5pbnZlc3Qu",
-            "YXBpLmNvbnRyYWN0LnYxLkdldEFjY3J1ZWRJbnRlcmVzdHNSZXF1ZXN0GkIu",
-            "dGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRBY2Ny",
-            "dWVkSW50ZXJlc3RzUmVzcG9uc2USkwEKEEdldEZ1dHVyZXNNYXJnaW4SPi50",
-            "aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldEZ1dHVy",
-            "ZXNNYXJnaW5SZXF1ZXN0Gj8udGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5j",
-            "b250cmFjdC52MS5HZXRGdXR1cmVzTWFyZ2luUmVzcG9uc2UShgEKD0dldElu",
-            "c3RydW1lbnRCeRI4LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJh",
-            "Y3QudjEuSW5zdHJ1bWVudFJlcXVlc3QaOS50aW5rb2ZmLnB1YmxpYy5pbnZl",
-            "c3QuYXBpLmNvbnRyYWN0LnYxLkluc3RydW1lbnRSZXNwb25zZRKHAQoMR2V0",
-            "RGl2aWRlbmRzEjoudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
-            "dC52MS5HZXREaXZpZGVuZHNSZXF1ZXN0GjsudGlua29mZi5wdWJsaWMuaW52",
-            "ZXN0LmFwaS5jb250cmFjdC52MS5HZXREaXZpZGVuZHNSZXNwb25zZRJ3CgpH",
-            "ZXRBc3NldEJ5EjMudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
-            "dC52MS5Bc3NldFJlcXVlc3QaNC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
-            "LmNvbnRyYWN0LnYxLkFzc2V0UmVzcG9uc2USeAoJR2V0QXNzZXRzEjQudGlu",
-            "a29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5Bc3NldHNSZXF1",
-            "ZXN0GjUudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5B",
-            "c3NldHNSZXNwb25zZRKHAQoMR2V0RmF2b3JpdGVzEjoudGlua29mZi5wdWJs",
-            "aWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRGYXZvcml0ZXNSZXF1ZXN0",
-            "GjsudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRG",
-            "YXZvcml0ZXNSZXNwb25zZRKKAQoNRWRpdEZhdm9yaXRlcxI7LnRpbmtvZmYu",
-            "cHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuRWRpdEZhdm9yaXRlc1Jl",
-            "cXVlc3QaPC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
-            "LkVkaXRGYXZvcml0ZXNSZXNwb25zZRKcAQoTQ3JlYXRlRmF2b3JpdGVHcm91",
-            "cBJBLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuQ3Jl",
-            "YXRlRmF2b3JpdGVHcm91cFJlcXVlc3QaQi50aW5rb2ZmLnB1YmxpYy5pbnZl",
-            "c3QuYXBpLmNvbnRyYWN0LnYxLkNyZWF0ZUZhdm9yaXRlR3JvdXBSZXNwb25z",
-            "ZRKcAQoTRGVsZXRlRmF2b3JpdGVHcm91cBJBLnRpbmtvZmYucHVibGljLmlu",
-            "dmVzdC5hcGkuY29udHJhY3QudjEuRGVsZXRlRmF2b3JpdGVHcm91cFJlcXVl",
-            "c3QaQi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkRl",
-            "bGV0ZUZhdm9yaXRlR3JvdXBSZXNwb25zZRKWAQoRR2V0RmF2b3JpdGVHcm91",
-            "cHMSPy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdl",
-            "dEZhdm9yaXRlR3JvdXBzUmVxdWVzdBpALnRpbmtvZmYucHVibGljLmludmVz",
-            "dC5hcGkuY29udHJhY3QudjEuR2V0RmF2b3JpdGVHcm91cHNSZXNwb25zZRKH",
-            "AQoMR2V0Q291bnRyaWVzEjoudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5j",
-            "b250cmFjdC52MS5HZXRDb3VudHJpZXNSZXF1ZXN0GjsudGlua29mZi5wdWJs",
-            "aWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRDb3VudHJpZXNSZXNwb25z",
-            "ZRKNAQoORmluZEluc3RydW1lbnQSPC50aW5rb2ZmLnB1YmxpYy5pbnZlc3Qu",
-            "YXBpLmNvbnRyYWN0LnYxLkZpbmRJbnN0cnVtZW50UmVxdWVzdBo9LnRpbmtv",
-            "ZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuRmluZEluc3RydW1l",
-            "bnRSZXNwb25zZRJ+CglHZXRCcmFuZHMSNy50aW5rb2ZmLnB1YmxpYy5pbnZl",
-            "c3QuYXBpLmNvbnRyYWN0LnYxLkdldEJyYW5kc1JlcXVlc3QaOC50aW5rb2Zm",
-            "LnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldEJyYW5kc1Jlc3Bv",
-            "bnNlEnIKCkdldEJyYW5kQnkSNi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
-            "LmNvbnRyYWN0LnYxLkdldEJyYW5kUmVxdWVzdBosLnRpbmtvZmYucHVibGlj",
-            "LmludmVzdC5hcGkuY29udHJhY3QudjEuQnJhbmQSnwEKFEdldEFzc2V0RnVu",
-            "ZGFtZW50YWxzEkIudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
-            "dC52MS5HZXRBc3NldEZ1bmRhbWVudGFsc1JlcXVlc3QaQy50aW5rb2ZmLnB1",
-            "YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldEFzc2V0RnVuZGFtZW50",
-            "YWxzUmVzcG9uc2USkAEKD0dldEFzc2V0UmVwb3J0cxI9LnRpbmtvZmYucHVi",
-            "bGljLmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0QXNzZXRSZXBvcnRzUmVx",
-            "dWVzdBo+LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEu",
-            "R2V0QXNzZXRSZXBvcnRzUmVzcG9uc2USogEKFUdldENvbnNlbnN1c0ZvcmVj",
-            "YXN0cxJDLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEu",
-            "R2V0Q29uc2Vuc3VzRm9yZWNhc3RzUmVxdWVzdBpELnRpbmtvZmYucHVibGlj",
-            "LmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0Q29uc2Vuc3VzRm9yZWNhc3Rz",
-            "UmVzcG9uc2UShgEKDUdldEZvcmVjYXN0QnkSOS50aW5rb2ZmLnB1YmxpYy5p",
-            "bnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldEZvcmVjYXN0UmVxdWVzdBo6LnRp",
-            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0Rm9yZWNh",
-            "c3RSZXNwb25zZRKBAQoMR2V0Umlza1JhdGVzEjcudGlua29mZi5wdWJsaWMu",
-            "aW52ZXN0LmFwaS5jb250cmFjdC52MS5SaXNrUmF0ZXNSZXF1ZXN0GjgudGlu",
-            "a29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5SaXNrUmF0ZXNS",
-            "ZXNwb25zZRKQAQoPR2V0SW5zaWRlckRlYWxzEj0udGlua29mZi5wdWJsaWMu",
-            "aW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRJbnNpZGVyRGVhbHNSZXF1ZXN0",
-            "Gj4udGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRJ",
-            "bnNpZGVyRGVhbHNSZXNwb25zZRKLAQoQU3RydWN0dXJlZE5vdGVCeRI4LnRp",
-            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuSW5zdHJ1bWVu",
-            "dFJlcXVlc3QaPS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0",
-            "LnYxLlN0cnVjdHVyZWROb3RlUmVzcG9uc2USjAEKD1N0cnVjdHVyZWROb3Rl",
+            "X0RFQ1JFQVNFEARCDgoMX25leHRfY3Vyc29yIg0KC0RmYXNSZXF1ZXN0IvoJ",
+            "CgtEZmFSZXNwb25zZRILCgN1aWQYASABKAkSDgoGdGlja2VyGAIgASgJEgwK",
+            "BG5hbWUYAyABKAkSFAoMcG9zaXRpb25fdWlkGAQgASgJEk0KE21pbl9wcmlj",
+            "ZV9pbmNyZW1lbnQYBSABKAsyMC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
+            "LmNvbnRyYWN0LnYxLlF1b3RhdGlvbhILCgNsb3QYBiABKAUSQgoHbm9taW5h",
+            "bBgHIAEoCzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3Qu",
+            "djEuTW9uZXlWYWx1ZRIQCghjdXJyZW5jeRgIIAEoCRIxCg1tYXR1cml0eV9k",
+            "YXRlGAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBIaChJzaG9y",
+            "dF9lbmFibGVkX2ZsYWcYCiABKAgSIAoYYXBpX3RyYWRlX2F2YWlsYWJsZV9m",
+            "bGFnGAsgASgIEhoKEmJ1eV9hdmFpbGFibGVfZmxhZxgMIAEoCBIbChNzZWxs",
+            "X2F2YWlsYWJsZV9mbGFnGA0gASgIEiIKGmxpbWl0X29yZGVyX2F2YWlsYWJs",
+            "ZV9mbGFnGA4gASgIEiMKG21hcmtldF9vcmRlcl9hdmFpbGFibGVfZmxhZxgP",
+            "IAEoCBImCh5iZXN0cHJpY2Vfb3JkZXJfYXZhaWxhYmxlX2ZsYWcYECABKAgS",
+            "FAoMZm9yX2lpc19mbGFnGBEgASgIEh4KFmZvcl9xdWFsX2ludmVzdG9yX2Zs",
+            "YWcYEiABKAgSDAoEdHlwZRgTIAEoCRJTCgxiYXNpY19hc3NldHMYFCADKAsy",
+            "PS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkRmYVJl",
+            "c3BvbnNlLkJhc2ljQXNzZXQSWAoOZm9yZWNhc3RfeWllbGQYFSABKAsyQC50",
+            "aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkRmYVJlc3Bv",
+            "bnNlLkZvcmVjYXN0WWllbGQSSwoReWllbGRfdG9fbWF0dXJpdHkYFiABKAsy",
+            "MC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlF1b3Rh",
+            "dGlvbhJGCgxjb3Vwb25fdmFsdWUYFyABKAsyMC50aW5rb2ZmLnB1YmxpYy5p",
+            "bnZlc3QuYXBpLmNvbnRyYWN0LnYxLlF1b3RhdGlvbhIgChhjb3Vwb25fcGF5",
+            "bWVudF9mcmVxdWVuY3kYGCABKAUSNwoTY291cG9uX3BheW1lbnRfZGF0ZRgZ",
+            "IAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASQwoJYWNpX3ZhbHVl",
+            "GBogASgLMjAudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52",
+            "MS5RdW90YXRpb24aGQoKQmFzaWNBc3NldBILCgN1aWQYASABKAkamQEKDUZv",
+            "cmVjYXN0WWllbGQSQwoJbWluX3ZhbHVlGAEgASgLMjAudGlua29mZi5wdWJs",
+            "aWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5RdW90YXRpb24SQwoJbWF4X3Zh",
+            "bHVlGAIgASgLMjAudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
+            "dC52MS5RdW90YXRpb24iVwoMRGZhc1Jlc3BvbnNlEkcKC2luc3RydW1lbnRz",
+            "GAEgAygLMjIudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52",
+            "MS5EZmFSZXNwb25zZSrXAQoKQ291cG9uVHlwZRIbChdDT1VQT05fVFlQRV9V",
+            "TlNQRUNJRklFRBAAEhgKFENPVVBPTl9UWVBFX0NPTlNUQU5UEAESGAoUQ09V",
+            "UE9OX1RZUEVfRkxPQVRJTkcQAhIYChRDT1VQT05fVFlQRV9ESVNDT1VOVBAD",
+            "EhgKFENPVVBPTl9UWVBFX01PUlRHQUdFEAQSEwoPQ09VUE9OX1RZUEVfRklY",
+            "EAUSGAoUQ09VUE9OX1RZUEVfVkFSSUFCTEUQBhIVChFDT1VQT05fVFlQRV9P",
+            "VEhFUhAHKmgKD09wdGlvbkRpcmVjdGlvbhIgChxPUFRJT05fRElSRUNUSU9O",
+            "X1VOU1BFQ0lGSUVEEAASGAoUT1BUSU9OX0RJUkVDVElPTl9QVVQQARIZChVP",
+            "UFRJT05fRElSRUNUSU9OX0NBTEwQAip7ChFPcHRpb25QYXltZW50VHlwZRIj",
+            "Ch9PUFRJT05fUEFZTUVOVF9UWVBFX1VOU1BFQ0lGSUVEEAASHwobT1BUSU9O",
+            "X1BBWU1FTlRfVFlQRV9QUkVNSVVNEAESIAocT1BUSU9OX1BBWU1FTlRfVFlQ",
+            "RV9NQVJHSU5BTBACKmEKC09wdGlvblN0eWxlEhwKGE9QVElPTl9TVFlMRV9V",
+            "TlNQRUNJRklFRBAAEhkKFU9QVElPTl9TVFlMRV9BTUVSSUNBThABEhkKFU9Q",
+            "VElPTl9TVFlMRV9FVVJPUEVBThACKpUBChRPcHRpb25TZXR0bGVtZW50VHlw",
+            "ZRIlCiFPUFRJT05fRVhFQ1VUSU9OX1RZUEVfVU5TUEVDSUZJRUQQABIrCidP",
+            "UFRJT05fRVhFQ1VUSU9OX1RZUEVfUEhZU0lDQUxfREVMSVZFUlkQARIpCiVP",
+            "UFRJT05fRVhFQ1VUSU9OX1RZUEVfQ0FTSF9TRVRUTEVNRU5UEAIqyQEKEElu",
+            "c3RydW1lbnRJZFR5cGUSHQoZSU5TVFJVTUVOVF9JRF9VTlNQRUNJRklFRBAA",
+            "EhsKF0lOU1RSVU1FTlRfSURfVFlQRV9GSUdJEAESHQoZSU5TVFJVTUVOVF9J",
+            "RF9UWVBFX1RJQ0tFUhACEhoKFklOU1RSVU1FTlRfSURfVFlQRV9VSUQQAxIj",
+            "Ch9JTlNUUlVNRU5UX0lEX1RZUEVfUE9TSVRJT05fVUlEEAQSGQoVSU5TVFJV",
+            "TUVOVF9JRF9UWVBFX0lEEAUq5QEKCVNoYXJlVHlwZRIaChZTSEFSRV9UWVBF",
+            "X1VOU1BFQ0lGSUVEEAASFQoRU0hBUkVfVFlQRV9DT01NT04QARIYChRTSEFS",
+            "RV9UWVBFX1BSRUZFUlJFRBACEhIKDlNIQVJFX1RZUEVfQURSEAMSEgoOU0hB",
+            "UkVfVFlQRV9HRFIQBBISCg5TSEFSRV9UWVBFX01MUBAFEhoKFlNIQVJFX1RZ",
+            "UEVfTllfUkVHX1NIUlMQBhIeChpTSEFSRV9UWVBFX0NMT1NFRF9FTkRfRlVO",
+            "RBAHEhMKD1NIQVJFX1RZUEVfUkVJVBAIKokBCglBc3NldFR5cGUSGgoWQVNT",
+            "RVRfVFlQRV9VTlNQRUNJRklFRBAAEhcKE0FTU0VUX1RZUEVfQ1VSUkVOQ1kQ",
+            "ARIYChRBU1NFVF9UWVBFX0NPTU1PRElUWRACEhQKEEFTU0VUX1RZUEVfSU5E",
+            "RVgQAxIXChNBU1NFVF9UWVBFX1NFQ1VSSVRZEAQqZgoVU3RydWN0dXJlZFBy",
+            "b2R1Y3RUeXBlEhcKE1NQX1RZUEVfVU5TUEVDSUZJRUQQABIXChNTUF9UWVBF",
+            "X0RFTElWRVJBQkxFEAESGwoXU1BfVFlQRV9OT05fREVMSVZFUkFCTEUQAiqN",
+            "AQoXRWRpdEZhdm9yaXRlc0FjdGlvblR5cGUSKgomRURJVF9GQVZPUklURVNf",
+            "QUNUSU9OX1RZUEVfVU5TUEVDSUZJRUQQABIiCh5FRElUX0ZBVk9SSVRFU19B",
+            "Q1RJT05fVFlQRV9BREQQARIiCh5FRElUX0ZBVk9SSVRFU19BQ1RJT05fVFlQ",
+            "RV9ERUwQAip6Cg5SZWNvbW1lbmRhdGlvbhIeChpSRUNPTU1FTkRBVElPTl9V",
+            "TlNQRUNJRklFRBAAEhYKElJFQ09NTUVOREFUSU9OX0JVWRABEhcKE1JFQ09N",
+            "TUVOREFUSU9OX0hPTEQQAhIXChNSRUNPTU1FTkRBVElPTl9TRUxMEAMqaQoJ",
+            "Umlza0xldmVsEhoKFlJJU0tfTEVWRUxfVU5TUEVDSUZJRUQQABISCg5SSVNL",
+            "X0xFVkVMX0xPVxABEhcKE1JJU0tfTEVWRUxfTU9ERVJBVEUQAhITCg9SSVNL",
+            "X0xFVkVMX0hJR0gQAyo9CghCb25kVHlwZRIZChVCT05EX1RZUEVfVU5TUEVD",
+            "SUZJRUQQABIWChJCT05EX1RZUEVfUkVQTEFDRUQQASpdChZJbnN0cnVtZW50",
+            "RXhjaGFuZ2VUeXBlEiMKH0lOU1RSVU1FTlRfRVhDSEFOR0VfVU5TUEVDSUZJ",
+            "RUQQABIeChpJTlNUUlVNRU5UX0VYQ0hBTkdFX0RFQUxFUhABMuIsChJJbnN0",
+            "cnVtZW50c1NlcnZpY2USkwEKEFRyYWRpbmdTY2hlZHVsZXMSPi50aW5rb2Zm",
+            "LnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlRyYWRpbmdTY2hlZHVs",
+            "ZXNSZXF1ZXN0Gj8udGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
+            "dC52MS5UcmFkaW5nU2NoZWR1bGVzUmVzcG9uc2USdwoGQm9uZEJ5EjgudGlu",
+            "a29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5JbnN0cnVtZW50",
+            "UmVxdWVzdBozLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3Qu",
+            "djEuQm9uZFJlc3BvbnNlEngKBUJvbmRzEjkudGlua29mZi5wdWJsaWMuaW52",
+            "ZXN0LmFwaS5jb250cmFjdC52MS5JbnN0cnVtZW50c1JlcXVlc3QaNC50aW5r",
+            "b2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkJvbmRzUmVzcG9u",
+            "c2USjQEKDkdldEJvbmRDb3Vwb25zEjwudGlua29mZi5wdWJsaWMuaW52ZXN0",
+            "LmFwaS5jb250cmFjdC52MS5HZXRCb25kQ291cG9uc1JlcXVlc3QaPS50aW5r",
+            "b2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldEJvbmRDb3Vw",
+            "b25zUmVzcG9uc2USigEKDUdldEJvbmRFdmVudHMSOy50aW5rb2ZmLnB1Ymxp",
+            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldEJvbmRFdmVudHNSZXF1ZXN0",
+            "GjwudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRC",
+            "b25kRXZlbnRzUmVzcG9uc2USfwoKQ3VycmVuY3lCeRI4LnRpbmtvZmYucHVi",
+            "bGljLmludmVzdC5hcGkuY29udHJhY3QudjEuSW5zdHJ1bWVudFJlcXVlc3Qa",
+            "Ny50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkN1cnJl",
+            "bmN5UmVzcG9uc2USggEKCkN1cnJlbmNpZXMSOS50aW5rb2ZmLnB1YmxpYy5p",
+            "bnZlc3QuYXBpLmNvbnRyYWN0LnYxLkluc3RydW1lbnRzUmVxdWVzdBo5LnRp",
+            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuQ3VycmVuY2ll",
+            "c1Jlc3BvbnNlEnUKBUV0ZkJ5EjgudGlua29mZi5wdWJsaWMuaW52ZXN0LmFw",
+            "aS5jb250cmFjdC52MS5JbnN0cnVtZW50UmVxdWVzdBoyLnRpbmtvZmYucHVi",
+            "bGljLmludmVzdC5hcGkuY29udHJhY3QudjEuRXRmUmVzcG9uc2USdgoERXRm",
             "cxI5LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuSW5z",
-            "dHJ1bWVudHNSZXF1ZXN0Gj4udGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5j",
-            "b250cmFjdC52MS5TdHJ1Y3R1cmVkTm90ZXNSZXNwb25zZUJmChxydS50aW5r",
-            "b2ZmLnBpYXBpLmNvbnRyYWN0LnYxUAFaDC4vO2ludmVzdGFwaaICBVRJQVBJ",
-            "qgIZU3RvY2tTaGFycC5UaW5rb2ZmLk5hdGl2ZcoCEVRpbmtvZmZcSW52ZXN0",
-            "XFYxYgZwcm90bzM="));
+            "dHJ1bWVudHNSZXF1ZXN0GjMudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5j",
+            "b250cmFjdC52MS5FdGZzUmVzcG9uc2USewoIRnV0dXJlQnkSOC50aW5rb2Zm",
+            "LnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkluc3RydW1lbnRSZXF1",
+            "ZXN0GjUudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5G",
+            "dXR1cmVSZXNwb25zZRJ8CgdGdXR1cmVzEjkudGlua29mZi5wdWJsaWMuaW52",
+            "ZXN0LmFwaS5jb250cmFjdC52MS5JbnN0cnVtZW50c1JlcXVlc3QaNi50aW5r",
+            "b2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkZ1dHVyZXNSZXNw",
+            "b25zZRJ7CghPcHRpb25CeRI4LnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
+            "Y29udHJhY3QudjEuSW5zdHJ1bWVudFJlcXVlc3QaNS50aW5rb2ZmLnB1Ymxp",
+            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk9wdGlvblJlc3BvbnNlEoEBCgdP",
+            "cHRpb25zEjkudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52",
+            "MS5JbnN0cnVtZW50c1JlcXVlc3QaNi50aW5rb2ZmLnB1YmxpYy5pbnZlc3Qu",
+            "YXBpLmNvbnRyYWN0LnYxLk9wdGlvbnNSZXNwb25zZSIDiAIBEoABCglPcHRp",
+            "b25zQnkSOy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
+            "LkZpbHRlck9wdGlvbnNSZXF1ZXN0GjYudGlua29mZi5wdWJsaWMuaW52ZXN0",
+            "LmFwaS5jb250cmFjdC52MS5PcHRpb25zUmVzcG9uc2USeQoHU2hhcmVCeRI4",
+            "LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuSW5zdHJ1",
+            "bWVudFJlcXVlc3QaNC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRy",
+            "YWN0LnYxLlNoYXJlUmVzcG9uc2USegoGU2hhcmVzEjkudGlua29mZi5wdWJs",
+            "aWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5JbnN0cnVtZW50c1JlcXVlc3Qa",
+            "NS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlNoYXJl",
+            "c1Jlc3BvbnNlEnUKBURmYUJ5EjgudGlua29mZi5wdWJsaWMuaW52ZXN0LmFw",
+            "aS5jb250cmFjdC52MS5JbnN0cnVtZW50UmVxdWVzdBoyLnRpbmtvZmYucHVi",
+            "bGljLmludmVzdC5hcGkuY29udHJhY3QudjEuRGZhUmVzcG9uc2USbwoERGZh",
+            "cxIyLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuRGZh",
+            "c1JlcXVlc3QaMy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0",
+            "LnYxLkRmYXNSZXNwb25zZRKEAQoLSW5kaWNhdGl2ZXMSOS50aW5rb2ZmLnB1",
+            "YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkluZGljYXRpdmVzUmVxdWVz",
+            "dBo6LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuSW5k",
+            "aWNhdGl2ZXNSZXNwb25zZRKcAQoTR2V0QWNjcnVlZEludGVyZXN0cxJBLnRp",
+            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0QWNjcnVl",
+            "ZEludGVyZXN0c1JlcXVlc3QaQi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
+            "LmNvbnRyYWN0LnYxLkdldEFjY3J1ZWRJbnRlcmVzdHNSZXNwb25zZRKTAQoQ",
+            "R2V0RnV0dXJlc01hcmdpbhI+LnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
+            "Y29udHJhY3QudjEuR2V0RnV0dXJlc01hcmdpblJlcXVlc3QaPy50aW5rb2Zm",
+            "LnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldEZ1dHVyZXNNYXJn",
+            "aW5SZXNwb25zZRKGAQoPR2V0SW5zdHJ1bWVudEJ5EjgudGlua29mZi5wdWJs",
+            "aWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5JbnN0cnVtZW50UmVxdWVzdBo5",
+            "LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuSW5zdHJ1",
+            "bWVudFJlc3BvbnNlEocBCgxHZXREaXZpZGVuZHMSOi50aW5rb2ZmLnB1Ymxp",
+            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldERpdmlkZW5kc1JlcXVlc3Qa",
+            "Oy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldERp",
+            "dmlkZW5kc1Jlc3BvbnNlEncKCkdldEFzc2V0QnkSMy50aW5rb2ZmLnB1Ymxp",
+            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkFzc2V0UmVxdWVzdBo0LnRpbmtv",
+            "ZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuQXNzZXRSZXNwb25z",
+            "ZRJ4CglHZXRBc3NldHMSNC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNv",
+            "bnRyYWN0LnYxLkFzc2V0c1JlcXVlc3QaNS50aW5rb2ZmLnB1YmxpYy5pbnZl",
+            "c3QuYXBpLmNvbnRyYWN0LnYxLkFzc2V0c1Jlc3BvbnNlEocBCgxHZXRGYXZv",
+            "cml0ZXMSOi50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
+            "LkdldEZhdm9yaXRlc1JlcXVlc3QaOy50aW5rb2ZmLnB1YmxpYy5pbnZlc3Qu",
+            "YXBpLmNvbnRyYWN0LnYxLkdldEZhdm9yaXRlc1Jlc3BvbnNlEooBCg1FZGl0",
+            "RmF2b3JpdGVzEjsudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
+            "dC52MS5FZGl0RmF2b3JpdGVzUmVxdWVzdBo8LnRpbmtvZmYucHVibGljLmlu",
+            "dmVzdC5hcGkuY29udHJhY3QudjEuRWRpdEZhdm9yaXRlc1Jlc3BvbnNlEpwB",
+            "ChNDcmVhdGVGYXZvcml0ZUdyb3VwEkEudGlua29mZi5wdWJsaWMuaW52ZXN0",
+            "LmFwaS5jb250cmFjdC52MS5DcmVhdGVGYXZvcml0ZUdyb3VwUmVxdWVzdBpC",
+            "LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuQ3JlYXRl",
+            "RmF2b3JpdGVHcm91cFJlc3BvbnNlEpwBChNEZWxldGVGYXZvcml0ZUdyb3Vw",
+            "EkEudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5EZWxl",
+            "dGVGYXZvcml0ZUdyb3VwUmVxdWVzdBpCLnRpbmtvZmYucHVibGljLmludmVz",
+            "dC5hcGkuY29udHJhY3QudjEuRGVsZXRlRmF2b3JpdGVHcm91cFJlc3BvbnNl",
+            "EpYBChFHZXRGYXZvcml0ZUdyb3VwcxI/LnRpbmtvZmYucHVibGljLmludmVz",
+            "dC5hcGkuY29udHJhY3QudjEuR2V0RmF2b3JpdGVHcm91cHNSZXF1ZXN0GkAu",
+            "dGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5HZXRGYXZv",
+            "cml0ZUdyb3Vwc1Jlc3BvbnNlEocBCgxHZXRDb3VudHJpZXMSOi50aW5rb2Zm",
+            "LnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldENvdW50cmllc1Jl",
+            "cXVlc3QaOy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
+            "LkdldENvdW50cmllc1Jlc3BvbnNlEo0BCg5GaW5kSW5zdHJ1bWVudBI8LnRp",
+            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuRmluZEluc3Ry",
+            "dW1lbnRSZXF1ZXN0Gj0udGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250",
+            "cmFjdC52MS5GaW5kSW5zdHJ1bWVudFJlc3BvbnNlEn4KCUdldEJyYW5kcxI3",
+            "LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0QnJh",
+            "bmRzUmVxdWVzdBo4LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJh",
+            "Y3QudjEuR2V0QnJhbmRzUmVzcG9uc2UScgoKR2V0QnJhbmRCeRI2LnRpbmtv",
+            "ZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0QnJhbmRSZXF1",
+            "ZXN0GiwudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5C",
+            "cmFuZBKfAQoUR2V0QXNzZXRGdW5kYW1lbnRhbHMSQi50aW5rb2ZmLnB1Ymxp",
+            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdldEFzc2V0RnVuZGFtZW50YWxz",
+            "UmVxdWVzdBpDLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3Qu",
+            "djEuR2V0QXNzZXRGdW5kYW1lbnRhbHNSZXNwb25zZRKQAQoPR2V0QXNzZXRS",
+            "ZXBvcnRzEj0udGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52",
+            "MS5HZXRBc3NldFJlcG9ydHNSZXF1ZXN0Gj4udGlua29mZi5wdWJsaWMuaW52",
+            "ZXN0LmFwaS5jb250cmFjdC52MS5HZXRBc3NldFJlcG9ydHNSZXNwb25zZRKi",
+            "AQoVR2V0Q29uc2Vuc3VzRm9yZWNhc3RzEkMudGlua29mZi5wdWJsaWMuaW52",
+            "ZXN0LmFwaS5jb250cmFjdC52MS5HZXRDb25zZW5zdXNGb3JlY2FzdHNSZXF1",
+            "ZXN0GkQudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5H",
+            "ZXRDb25zZW5zdXNGb3JlY2FzdHNSZXNwb25zZRKGAQoNR2V0Rm9yZWNhc3RC",
+            "eRI5LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0",
+            "Rm9yZWNhc3RSZXF1ZXN0GjoudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5j",
+            "b250cmFjdC52MS5HZXRGb3JlY2FzdFJlc3BvbnNlEoEBCgxHZXRSaXNrUmF0",
+            "ZXMSNy50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlJp",
+            "c2tSYXRlc1JlcXVlc3QaOC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNv",
+            "bnRyYWN0LnYxLlJpc2tSYXRlc1Jlc3BvbnNlEpABCg9HZXRJbnNpZGVyRGVh",
+            "bHMSPS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkdl",
+            "dEluc2lkZXJEZWFsc1JlcXVlc3QaPi50aW5rb2ZmLnB1YmxpYy5pbnZlc3Qu",
+            "YXBpLmNvbnRyYWN0LnYxLkdldEluc2lkZXJEZWFsc1Jlc3BvbnNlEosBChBT",
+            "dHJ1Y3R1cmVkTm90ZUJ5EjgudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5j",
+            "b250cmFjdC52MS5JbnN0cnVtZW50UmVxdWVzdBo9LnRpbmtvZmYucHVibGlj",
+            "LmludmVzdC5hcGkuY29udHJhY3QudjEuU3RydWN0dXJlZE5vdGVSZXNwb25z",
+            "ZRKMAQoPU3RydWN0dXJlZE5vdGVzEjkudGlua29mZi5wdWJsaWMuaW52ZXN0",
+            "LmFwaS5jb250cmFjdC52MS5JbnN0cnVtZW50c1JlcXVlc3QaPi50aW5rb2Zm",
+            "LnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlN0cnVjdHVyZWROb3Rl",
+            "c1Jlc3BvbnNlQmYKHHJ1LnRpbmtvZmYucGlhcGkuY29udHJhY3QudjFQAVoM",
+            "Li87aW52ZXN0YXBpogIFVElBUEmqAhlTdG9ja1NoYXJwLlRpbmtvZmYuTmF0",
+            "aXZlygIRVGlua29mZlxJbnZlc3RcVjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::StockSharp.Tinkoff.Native.CommonReflection.Descriptor, global::Google.Api.FieldBehaviorReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::StockSharp.Tinkoff.Native.CouponType), typeof(global::StockSharp.Tinkoff.Native.OptionDirection), typeof(global::StockSharp.Tinkoff.Native.OptionPaymentType), typeof(global::StockSharp.Tinkoff.Native.OptionStyle), typeof(global::StockSharp.Tinkoff.Native.OptionSettlementType), typeof(global::StockSharp.Tinkoff.Native.InstrumentIdType), typeof(global::StockSharp.Tinkoff.Native.ShareType), typeof(global::StockSharp.Tinkoff.Native.AssetType), typeof(global::StockSharp.Tinkoff.Native.StructuredProductType), typeof(global::StockSharp.Tinkoff.Native.EditFavoritesActionType), typeof(global::StockSharp.Tinkoff.Native.Recommendation), typeof(global::StockSharp.Tinkoff.Native.RiskLevel), typeof(global::StockSharp.Tinkoff.Native.BondType), typeof(global::StockSharp.Tinkoff.Native.InstrumentExchangeType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -1183,7 +1219,11 @@ namespace StockSharp.Tinkoff.Native {
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.RiskRatesResponse.Types.RiskRate), global::StockSharp.Tinkoff.Native.RiskRatesResponse.Types.RiskRate.Parser, new[]{ "RiskLevelCode", "Value" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.TradingInterval), global::StockSharp.Tinkoff.Native.TradingInterval.Parser, new[]{ "Type", "Interval" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.TradingInterval.Types.TimeInterval), global::StockSharp.Tinkoff.Native.TradingInterval.Types.TimeInterval.Parser, new[]{ "StartTs", "EndTs" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetInsiderDealsRequest), global::StockSharp.Tinkoff.Native.GetInsiderDealsRequest.Parser, new[]{ "InstrumentId", "Limit", "NextCursor" }, new[]{ "NextCursor" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetInsiderDealsResponse), global::StockSharp.Tinkoff.Native.GetInsiderDealsResponse.Parser, new[]{ "InsiderDeals", "NextCursor" }, new[]{ "NextCursor" }, new[]{ typeof(global::StockSharp.Tinkoff.Native.GetInsiderDealsResponse.Types.TradeDirection) }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetInsiderDealsResponse.Types.InsiderDeal), global::StockSharp.Tinkoff.Native.GetInsiderDealsResponse.Types.InsiderDeal.Parser, new[]{ "TradeId", "Direction", "Currency", "Date", "Quantity", "Price", "InstrumentUid", "Ticker", "InvestorName", "InvestorPosition", "Percentage", "IsOptionExecution", "DisclosureDate" }, null, null, null, null)})
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetInsiderDealsResponse), global::StockSharp.Tinkoff.Native.GetInsiderDealsResponse.Parser, new[]{ "InsiderDeals", "NextCursor" }, new[]{ "NextCursor" }, new[]{ typeof(global::StockSharp.Tinkoff.Native.GetInsiderDealsResponse.Types.TradeDirection) }, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetInsiderDealsResponse.Types.InsiderDeal), global::StockSharp.Tinkoff.Native.GetInsiderDealsResponse.Types.InsiderDeal.Parser, new[]{ "TradeId", "Direction", "Currency", "Date", "Quantity", "Price", "InstrumentUid", "Ticker", "InvestorName", "InvestorPosition", "Percentage", "IsOptionExecution", "DisclosureDate" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.DfasRequest), global::StockSharp.Tinkoff.Native.DfasRequest.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.DfaResponse), global::StockSharp.Tinkoff.Native.DfaResponse.Parser, new[]{ "Uid", "Ticker", "Name", "PositionUid", "MinPriceIncrement", "Lot", "Nominal", "Currency", "MaturityDate", "ShortEnabledFlag", "ApiTradeAvailableFlag", "BuyAvailableFlag", "SellAvailableFlag", "LimitOrderAvailableFlag", "MarketOrderAvailableFlag", "BestpriceOrderAvailableFlag", "ForIisFlag", "ForQualInvestorFlag", "Type", "BasicAssets", "ForecastYield", "YieldToMaturity", "CouponValue", "CouponPaymentFrequency", "CouponPaymentDate", "AciValue" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.DfaResponse.Types.BasicAsset), global::StockSharp.Tinkoff.Native.DfaResponse.Types.BasicAsset.Parser, new[]{ "Uid" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.DfaResponse.Types.ForecastYield), global::StockSharp.Tinkoff.Native.DfaResponse.Types.ForecastYield.Parser, new[]{ "MinValue", "MaxValue" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.DfasResponse), global::StockSharp.Tinkoff.Native.DfasResponse.Parser, new[]{ "Instruments" }, null, null, null, null)
           }));
     }
     #endregion
@@ -1301,7 +1341,7 @@ namespace StockSharp.Tinkoff.Native {
   }
 
   /// <summary>
-  ///Тип идентификатора инструмента. [Подробнее об идентификации инструментов](./faq_identification/).
+  ///Тип идентификатора инструмента. [Подробнее об идентификации инструментов](/invest/intro/intro/faq_identification).
   /// </summary>
   internal enum InstrumentIdType {
     /// <summary>
@@ -1324,6 +1364,10 @@ namespace StockSharp.Tinkoff.Native {
     ///Идентификатор позиции.
     /// </summary>
     [pbr::OriginalName("INSTRUMENT_ID_TYPE_POSITION_UID")] PositionUid = 4,
+    /// <summary>
+    ///Универсальный тип идентификатора инструмента.
+    /// </summary>
+    [pbr::OriginalName("INSTRUMENT_ID_TYPE_ID")] Id = 5,
   }
 
   /// <summary>
@@ -1745,11 +1789,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -1782,11 +1822,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -1966,11 +2002,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -1989,11 +2021,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2191,11 +2219,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -2218,11 +2242,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2914,11 +2934,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3039,11 +3055,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3214,7 +3226,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int IdTypeFieldNumber = 1;
     private global::StockSharp.Tinkoff.Native.InstrumentIdType idType_ = global::StockSharp.Tinkoff.Native.InstrumentIdType.InstrumentIdUnspecified;
     /// <summary>
-    /// Тип идентификатора инструмента. Возможные значения — `figi`, `ticker`. [Подробнее об идентификации инструментов](./faq_identification/).
+    /// Тип идентификатора инструмента. Возможные значения — `figi`, `ticker`. [Подробнее об идентификации инструментов](/invest/intro/intro/faq_identification).
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3400,11 +3412,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3431,11 +3439,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3684,11 +3688,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3711,11 +3711,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4002,11 +3998,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4033,11 +4025,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4225,11 +4213,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4251,11 +4235,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4424,11 +4404,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4447,11 +4423,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4567,7 +4539,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int InstrumentIdFieldNumber = 4;
     private string instrumentId_ = "";
     /// <summary>
-    ///Идентификатор инструмента — `figi` или `instrument_uid`.
+    ///Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -4731,11 +4703,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4772,11 +4740,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -4957,11 +4921,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -4980,11 +4940,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -5263,11 +5219,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -5304,11 +5256,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -5343,7 +5291,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the GetBondEventsRequest message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       internal enum EventType {
         /// <summary>
         ///Неопределенное значение.
@@ -5520,11 +5468,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -5543,11 +5487,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -5564,7 +5504,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the GetBondEventsResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       internal sealed partial class BondEvent : pb::IMessage<BondEvent>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -5634,7 +5574,7 @@ namespace StockSharp.Tinkoff.Native {
         public const int InstrumentIdFieldNumber = 2;
         private string instrumentId_ = "";
         /// <summary>
-        /// Идентификатор инструмента.
+        /// Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
         /// </summary>
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6403,11 +6343,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -6545,11 +6481,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -7121,11 +7053,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -7191,11 +7119,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -7422,11 +7346,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -7448,11 +7368,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -7621,11 +7537,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -7644,11 +7556,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -7828,11 +7736,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -7854,11 +7758,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -8027,11 +7927,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -8050,11 +7946,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -8234,11 +8126,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -8260,11 +8148,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -8433,11 +8317,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -8456,11 +8336,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -8640,11 +8516,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -8666,11 +8538,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -8839,11 +8707,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -8862,11 +8726,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -10589,11 +10449,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -10851,11 +10707,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -11274,11 +11126,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -11300,11 +11148,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -11473,11 +11317,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -11496,11 +11336,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -11680,11 +11516,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -11706,11 +11538,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -11879,11 +11707,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -11902,11 +11726,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -13926,11 +13746,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -14233,11 +14049,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -15944,11 +15756,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -16158,11 +15966,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -17974,11 +17778,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -18218,11 +18018,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -20140,11 +19936,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -20404,11 +20196,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -22299,11 +22087,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -22544,11 +22328,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -24608,11 +24388,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -24869,11 +24645,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -25128,7 +24900,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the StructuredNote message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       /// <summary>
       ///Стратегия портфеля.
       /// </summary>
@@ -25424,11 +25196,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -25458,11 +25226,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -25685,11 +25449,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -25715,11 +25475,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -25847,7 +25603,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int InstrumentIdFieldNumber = 4;
     private string instrumentId_ = "";
     /// <summary>
-    ///Идентификатор инструмента — `figi` или `instrument_uid`.
+    ///Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -26011,11 +25767,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -26052,11 +25804,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -26240,11 +25988,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -26263,11 +26007,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -26552,11 +26292,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -26599,11 +26335,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -26711,7 +26443,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int InstrumentIdFieldNumber = 4;
     private string instrumentId_ = "";
     /// <summary>
-    ///Идентификатор инструмента — `figi` или `instrument_uid`.
+    ///Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -26837,11 +26569,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -26864,11 +26592,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -27157,11 +26881,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -27204,11 +26924,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -27412,11 +27128,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -27438,11 +27150,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -28865,11 +28573,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -29076,11 +28780,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -29384,7 +29084,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int InstrumentIdFieldNumber = 4;
     private string instrumentId_ = "";
     /// <summary>
-    ///Идентификатор инструмента — `figi` или `instrument_uid`.
+    ///Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -29548,11 +29248,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -29589,11 +29285,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -29774,11 +29466,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -29797,11 +29485,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -30290,11 +29974,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -30373,11 +30053,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -30614,11 +30290,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -30637,11 +30309,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -30821,11 +30489,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -30847,11 +30511,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -31092,11 +30752,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -31119,11 +30775,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -31293,11 +30945,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -31316,11 +30964,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -31674,7 +31318,7 @@ namespace StockSharp.Tinkoff.Native {
 
     private object ext_;
     /// <summary>Enum of possible cases for the "ext" oneof.</summary>
-    public enum ExtOneofCase {
+    internal enum ExtOneofCase {
       None = 0,
       Currency = 8,
       Security = 9,
@@ -32064,11 +31708,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -32174,11 +31814,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -32527,11 +32163,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -32562,11 +32194,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -32755,11 +32383,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -32778,11 +32402,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -32987,7 +32607,7 @@ namespace StockSharp.Tinkoff.Native {
 
     private object ext_;
     /// <summary>Enum of possible cases for the "ext" oneof.</summary>
-    public enum ExtOneofCase {
+    internal enum ExtOneofCase {
       None = 0,
       Share = 3,
       Bond = 4,
@@ -33240,11 +32860,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -33316,11 +32932,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -34022,11 +33634,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -34125,11 +33733,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -35050,11 +34654,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -35177,11 +34777,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -35864,11 +35460,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -35953,11 +35545,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -37185,11 +36773,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -37364,11 +36948,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -37736,11 +37316,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -37766,11 +37342,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -38178,11 +37750,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -38229,11 +37797,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -38651,11 +38215,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -38702,11 +38262,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -38943,11 +38499,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -38970,11 +38522,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -39169,11 +38717,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -39192,11 +38736,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -39408,11 +38948,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -39435,11 +38971,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -39908,11 +39440,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -39967,11 +39495,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -40251,11 +39775,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -40282,11 +39802,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -40520,11 +40036,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -40547,11 +40059,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -40767,11 +40275,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -40794,11 +40298,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -41057,11 +40557,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -41088,11 +40584,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -41306,11 +40798,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -41333,11 +40821,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -41518,11 +41002,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -41541,11 +41021,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -41687,11 +41163,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -41706,11 +41178,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -41893,11 +41361,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -41920,11 +41384,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -42094,11 +41554,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -42117,11 +41573,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -42138,7 +41590,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the GetFavoriteGroupsResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       /// <summary>
       ///Избранная группа
       /// </summary>
@@ -42446,11 +41898,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -42485,11 +41933,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -42655,11 +42099,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -42674,11 +42114,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -42840,11 +42276,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -42863,11 +42295,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -43012,11 +42440,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -43031,11 +42455,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -43197,11 +42617,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -43220,11 +42636,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -43689,11 +43101,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -43748,11 +43156,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -44061,11 +43465,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -44096,11 +43496,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -44385,11 +43781,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -44416,11 +43808,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -44594,11 +43982,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -44617,11 +44001,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -45316,11 +44696,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -45409,11 +44785,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -45663,11 +45035,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -45689,11 +45057,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -45873,11 +45237,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -45896,11 +45256,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -46101,11 +45457,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -46131,11 +45483,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -46308,11 +45656,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -46331,11 +45675,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -46498,11 +45838,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -46521,11 +45857,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -46542,7 +45874,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the GetAssetFundamentalsResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       /// <summary>
       ///Фундаментальные показатели по активу
       /// </summary>
@@ -48468,11 +47800,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -48720,11 +48048,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -49027,7 +48351,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int InstrumentIdFieldNumber = 1;
     private string instrumentId_ = "";
     /// <summary>
-    ///Идентификатор инструмента в формате UID.
+    ///Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -49205,11 +48529,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -49242,11 +48562,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -49426,11 +48742,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -49449,11 +48761,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -49470,7 +48778,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the GetAssetReportsResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       internal enum AssetReportPeriodType {
         /// <summary>
         /// Не указан.
@@ -49818,11 +49126,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -49867,11 +49171,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -50082,11 +49382,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -50108,11 +49404,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -50316,11 +49608,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -50346,11 +49634,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -50374,7 +49658,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the GetConsensusForecastsResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       /// <summary>
       ///Прогноз
       /// </summary>
@@ -50904,11 +50188,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -50986,11 +50266,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -51121,7 +50397,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int InstrumentIdFieldNumber = 1;
     private string instrumentId_ = "";
     /// <summary>
-    /// Идентификатор инструмента.
+    /// Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -51231,11 +50507,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -51254,11 +50526,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -51459,11 +50727,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -51489,11 +50753,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -51517,7 +50777,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the GetForecastResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       /// <summary>
       ///Прогноз
       /// </summary>
@@ -52015,11 +51275,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -52093,11 +51349,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -52635,11 +51887,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -52712,11 +51960,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -52844,7 +52088,7 @@ namespace StockSharp.Tinkoff.Native {
         = pb::FieldCodec.ForString(10);
     private readonly pbc::RepeatedField<string> instrumentId_ = new pbc::RepeatedField<string>();
     /// <summary>
-    /// Идентификаторы инструментов.
+    /// Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -52941,11 +52185,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -52964,11 +52204,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -53131,11 +52367,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -53154,11 +52386,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -53175,7 +52403,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the RiskRatesResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       internal sealed partial class RiskRateResult : pb::IMessage<RiskRateResult>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -53490,11 +52718,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -53539,11 +52763,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -53778,11 +52998,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -53808,11 +53024,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -54033,11 +53245,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -54063,11 +53271,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -54091,7 +53295,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the TradingInterval message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       internal sealed partial class TimeInterval : pb::IMessage<TimeInterval>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -54289,11 +53493,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -54322,11 +53522,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -54409,6 +53605,9 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Field number for the "instrument_id" field.</summary>
     public const int InstrumentIdFieldNumber = 1;
     private string instrumentId_ = "";
+    /// <summary>
+    /// Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string InstrumentId {
@@ -54421,6 +53620,9 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Field number for the "limit" field.</summary>
     public const int LimitFieldNumber = 2;
     private int limit_;
+    /// <summary>
+    /// Количество выводимых записей в ответе, не больше 100.
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int Limit {
@@ -54435,6 +53637,9 @@ namespace StockSharp.Tinkoff.Native {
     private readonly static string NextCursorDefaultValue = "";
 
     private string nextCursor_;
+    /// <summary>
+    /// Курсор.
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string NextCursor {
@@ -54587,11 +53792,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -54618,11 +53819,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -54842,11 +54039,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -54869,11 +54062,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -54894,7 +54083,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the GetInsiderDealsResponse message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       internal enum TradeDirection {
         /// <summary>
         /// Не определено.
@@ -55470,11 +54659,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -55550,11 +54735,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -55628,6 +54809,2062 @@ namespace StockSharp.Tinkoff.Native {
 
     }
     #endregion
+
+  }
+
+  /// <summary>
+  ///Запрос цифровых активов
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  internal sealed partial class DfasRequest : pb::IMessage<DfasRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<DfasRequest> _parser = new pb::MessageParser<DfasRequest>(() => new DfasRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<DfasRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::StockSharp.Tinkoff.Native.InstrumentsReflection.Descriptor.MessageTypes[96]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public DfasRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public DfasRequest(DfasRequest other) : this() {
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public DfasRequest Clone() {
+      return new DfasRequest(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as DfasRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(DfasRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(DfasRequest other) {
+      if (other == null) {
+        return;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+        }
+      }
+    }
+    #endif
+
+  }
+
+  /// <summary>
+  ///Цифровой актив
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  internal sealed partial class DfaResponse : pb::IMessage<DfaResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<DfaResponse> _parser = new pb::MessageParser<DfaResponse>(() => new DfaResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<DfaResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::StockSharp.Tinkoff.Native.InstrumentsReflection.Descriptor.MessageTypes[97]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public DfaResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public DfaResponse(DfaResponse other) : this() {
+      uid_ = other.uid_;
+      ticker_ = other.ticker_;
+      name_ = other.name_;
+      positionUid_ = other.positionUid_;
+      minPriceIncrement_ = other.minPriceIncrement_ != null ? other.minPriceIncrement_.Clone() : null;
+      lot_ = other.lot_;
+      nominal_ = other.nominal_ != null ? other.nominal_.Clone() : null;
+      currency_ = other.currency_;
+      maturityDate_ = other.maturityDate_ != null ? other.maturityDate_.Clone() : null;
+      shortEnabledFlag_ = other.shortEnabledFlag_;
+      apiTradeAvailableFlag_ = other.apiTradeAvailableFlag_;
+      buyAvailableFlag_ = other.buyAvailableFlag_;
+      sellAvailableFlag_ = other.sellAvailableFlag_;
+      limitOrderAvailableFlag_ = other.limitOrderAvailableFlag_;
+      marketOrderAvailableFlag_ = other.marketOrderAvailableFlag_;
+      bestpriceOrderAvailableFlag_ = other.bestpriceOrderAvailableFlag_;
+      forIisFlag_ = other.forIisFlag_;
+      forQualInvestorFlag_ = other.forQualInvestorFlag_;
+      type_ = other.type_;
+      basicAssets_ = other.basicAssets_.Clone();
+      forecastYield_ = other.forecastYield_ != null ? other.forecastYield_.Clone() : null;
+      yieldToMaturity_ = other.yieldToMaturity_ != null ? other.yieldToMaturity_.Clone() : null;
+      couponValue_ = other.couponValue_ != null ? other.couponValue_.Clone() : null;
+      couponPaymentFrequency_ = other.couponPaymentFrequency_;
+      couponPaymentDate_ = other.couponPaymentDate_ != null ? other.couponPaymentDate_.Clone() : null;
+      aciValue_ = other.aciValue_ != null ? other.aciValue_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public DfaResponse Clone() {
+      return new DfaResponse(this);
+    }
+
+    /// <summary>Field number for the "uid" field.</summary>
+    public const int UidFieldNumber = 1;
+    private string uid_ = "";
+    /// <summary>
+    /// Уникальный идентификатор инструмента.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Uid {
+      get { return uid_; }
+      set {
+        uid_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "ticker" field.</summary>
+    public const int TickerFieldNumber = 2;
+    private string ticker_ = "";
+    /// <summary>
+    /// Тикер инструмента.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Ticker {
+      get { return ticker_; }
+      set {
+        ticker_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 3;
+    private string name_ = "";
+    /// <summary>
+    /// Название инструмента.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "position_uid" field.</summary>
+    public const int PositionUidFieldNumber = 4;
+    private string positionUid_ = "";
+    /// <summary>
+    /// Уникальный идентификатор позиции.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string PositionUid {
+      get { return positionUid_; }
+      set {
+        positionUid_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "min_price_increment" field.</summary>
+    public const int MinPriceIncrementFieldNumber = 5;
+    private global::StockSharp.Tinkoff.Native.Quotation minPriceIncrement_;
+    /// <summary>
+    /// Шаг цены.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::StockSharp.Tinkoff.Native.Quotation MinPriceIncrement {
+      get { return minPriceIncrement_; }
+      set {
+        minPriceIncrement_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "lot" field.</summary>
+    public const int LotFieldNumber = 6;
+    private int lot_;
+    /// <summary>
+    /// Количество лотов.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Lot {
+      get { return lot_; }
+      set {
+        lot_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "nominal" field.</summary>
+    public const int NominalFieldNumber = 7;
+    private global::StockSharp.Tinkoff.Native.MoneyValue nominal_;
+    /// <summary>
+    /// Номинал.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::StockSharp.Tinkoff.Native.MoneyValue Nominal {
+      get { return nominal_; }
+      set {
+        nominal_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "currency" field.</summary>
+    public const int CurrencyFieldNumber = 8;
+    private string currency_ = "";
+    /// <summary>
+    /// Валюта.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Currency {
+      get { return currency_; }
+      set {
+        currency_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "maturity_date" field.</summary>
+    public const int MaturityDateFieldNumber = 9;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp maturityDate_;
+    /// <summary>
+    /// Дата погашения ЦФА в формате UTC.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp MaturityDate {
+      get { return maturityDate_; }
+      set {
+        maturityDate_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "short_enabled_flag" field.</summary>
+    public const int ShortEnabledFlagFieldNumber = 10;
+    private bool shortEnabledFlag_;
+    /// <summary>
+    /// Признак доступности для операций шорт.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool ShortEnabledFlag {
+      get { return shortEnabledFlag_; }
+      set {
+        shortEnabledFlag_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "api_trade_available_flag" field.</summary>
+    public const int ApiTradeAvailableFlagFieldNumber = 11;
+    private bool apiTradeAvailableFlag_;
+    /// <summary>
+    /// Признак доступности торгов по бумаге через API.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool ApiTradeAvailableFlag {
+      get { return apiTradeAvailableFlag_; }
+      set {
+        apiTradeAvailableFlag_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "buy_available_flag" field.</summary>
+    public const int BuyAvailableFlagFieldNumber = 12;
+    private bool buyAvailableFlag_;
+    /// <summary>
+    /// Признак доступности для покупки.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool BuyAvailableFlag {
+      get { return buyAvailableFlag_; }
+      set {
+        buyAvailableFlag_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "sell_available_flag" field.</summary>
+    public const int SellAvailableFlagFieldNumber = 13;
+    private bool sellAvailableFlag_;
+    /// <summary>
+    /// Признак доступности для продажи.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool SellAvailableFlag {
+      get { return sellAvailableFlag_; }
+      set {
+        sellAvailableFlag_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "limit_order_available_flag" field.</summary>
+    public const int LimitOrderAvailableFlagFieldNumber = 14;
+    private bool limitOrderAvailableFlag_;
+    /// <summary>
+    /// Признак доступности выставления лимитной заявки по инструменту.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool LimitOrderAvailableFlag {
+      get { return limitOrderAvailableFlag_; }
+      set {
+        limitOrderAvailableFlag_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "market_order_available_flag" field.</summary>
+    public const int MarketOrderAvailableFlagFieldNumber = 15;
+    private bool marketOrderAvailableFlag_;
+    /// <summary>
+    /// Признак доступности выставления рыночной заявки по инструменту.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool MarketOrderAvailableFlag {
+      get { return marketOrderAvailableFlag_; }
+      set {
+        marketOrderAvailableFlag_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "bestprice_order_available_flag" field.</summary>
+    public const int BestpriceOrderAvailableFlagFieldNumber = 16;
+    private bool bestpriceOrderAvailableFlag_;
+    /// <summary>
+    /// Признак доступности выставления bestprice заявки по инструменту.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool BestpriceOrderAvailableFlag {
+      get { return bestpriceOrderAvailableFlag_; }
+      set {
+        bestpriceOrderAvailableFlag_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "for_iis_flag" field.</summary>
+    public const int ForIisFlagFieldNumber = 17;
+    private bool forIisFlag_;
+    /// <summary>
+    /// Возможность покупки/продажи на ИИС.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool ForIisFlag {
+      get { return forIisFlag_; }
+      set {
+        forIisFlag_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "for_qual_investor_flag" field.</summary>
+    public const int ForQualInvestorFlagFieldNumber = 18;
+    private bool forQualInvestorFlag_;
+    /// <summary>
+    /// Флаг отображающий доступность торговли инструментом только для квалифицированных инвесторов.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool ForQualInvestorFlag {
+      get { return forQualInvestorFlag_; }
+      set {
+        forQualInvestorFlag_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "type" field.</summary>
+    public const int TypeFieldNumber = 19;
+    private string type_ = "";
+    /// <summary>
+    /// Тип актива. Возможные значения: credit_portfolio_dfa, debt_dfa.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Type {
+      get { return type_; }
+      set {
+        type_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "basic_assets" field.</summary>
+    public const int BasicAssetsFieldNumber = 20;
+    private static readonly pb::FieldCodec<global::StockSharp.Tinkoff.Native.DfaResponse.Types.BasicAsset> _repeated_basicAssets_codec
+        = pb::FieldCodec.ForMessage(162, global::StockSharp.Tinkoff.Native.DfaResponse.Types.BasicAsset.Parser);
+    private readonly pbc::RepeatedField<global::StockSharp.Tinkoff.Native.DfaResponse.Types.BasicAsset> basicAssets_ = new pbc::RepeatedField<global::StockSharp.Tinkoff.Native.DfaResponse.Types.BasicAsset>();
+    /// <summary>
+    /// Базовые активы, входящие в ЦФА.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::StockSharp.Tinkoff.Native.DfaResponse.Types.BasicAsset> BasicAssets {
+      get { return basicAssets_; }
+    }
+
+    /// <summary>Field number for the "forecast_yield" field.</summary>
+    public const int ForecastYieldFieldNumber = 21;
+    private global::StockSharp.Tinkoff.Native.DfaResponse.Types.ForecastYield forecastYield_;
+    /// <summary>
+    /// Прогнозная доходность смарт-портфелей, в виде интервала в %.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::StockSharp.Tinkoff.Native.DfaResponse.Types.ForecastYield ForecastYield {
+      get { return forecastYield_; }
+      set {
+        forecastYield_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "yield_to_maturity" field.</summary>
+    public const int YieldToMaturityFieldNumber = 22;
+    private global::StockSharp.Tinkoff.Native.Quotation yieldToMaturity_;
+    /// <summary>
+    /// Доходность к погашению в %.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::StockSharp.Tinkoff.Native.Quotation YieldToMaturity {
+      get { return yieldToMaturity_; }
+      set {
+        yieldToMaturity_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "coupon_value" field.</summary>
+    public const int CouponValueFieldNumber = 23;
+    private global::StockSharp.Tinkoff.Native.Quotation couponValue_;
+    /// <summary>
+    /// Величина купона.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::StockSharp.Tinkoff.Native.Quotation CouponValue {
+      get { return couponValue_; }
+      set {
+        couponValue_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "coupon_payment_frequency" field.</summary>
+    public const int CouponPaymentFrequencyFieldNumber = 24;
+    private int couponPaymentFrequency_;
+    /// <summary>
+    /// Количество выплат в год.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CouponPaymentFrequency {
+      get { return couponPaymentFrequency_; }
+      set {
+        couponPaymentFrequency_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "coupon_payment_date" field.</summary>
+    public const int CouponPaymentDateFieldNumber = 25;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp couponPaymentDate_;
+    /// <summary>
+    /// Дата выплаты купона.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp CouponPaymentDate {
+      get { return couponPaymentDate_; }
+      set {
+        couponPaymentDate_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "aci_value" field.</summary>
+    public const int AciValueFieldNumber = 26;
+    private global::StockSharp.Tinkoff.Native.Quotation aciValue_;
+    /// <summary>
+    /// Значение НКД (накопленного купонного дохода) на дату.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::StockSharp.Tinkoff.Native.Quotation AciValue {
+      get { return aciValue_; }
+      set {
+        aciValue_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as DfaResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(DfaResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Uid != other.Uid) return false;
+      if (Ticker != other.Ticker) return false;
+      if (Name != other.Name) return false;
+      if (PositionUid != other.PositionUid) return false;
+      if (!object.Equals(MinPriceIncrement, other.MinPriceIncrement)) return false;
+      if (Lot != other.Lot) return false;
+      if (!object.Equals(Nominal, other.Nominal)) return false;
+      if (Currency != other.Currency) return false;
+      if (!object.Equals(MaturityDate, other.MaturityDate)) return false;
+      if (ShortEnabledFlag != other.ShortEnabledFlag) return false;
+      if (ApiTradeAvailableFlag != other.ApiTradeAvailableFlag) return false;
+      if (BuyAvailableFlag != other.BuyAvailableFlag) return false;
+      if (SellAvailableFlag != other.SellAvailableFlag) return false;
+      if (LimitOrderAvailableFlag != other.LimitOrderAvailableFlag) return false;
+      if (MarketOrderAvailableFlag != other.MarketOrderAvailableFlag) return false;
+      if (BestpriceOrderAvailableFlag != other.BestpriceOrderAvailableFlag) return false;
+      if (ForIisFlag != other.ForIisFlag) return false;
+      if (ForQualInvestorFlag != other.ForQualInvestorFlag) return false;
+      if (Type != other.Type) return false;
+      if(!basicAssets_.Equals(other.basicAssets_)) return false;
+      if (!object.Equals(ForecastYield, other.ForecastYield)) return false;
+      if (!object.Equals(YieldToMaturity, other.YieldToMaturity)) return false;
+      if (!object.Equals(CouponValue, other.CouponValue)) return false;
+      if (CouponPaymentFrequency != other.CouponPaymentFrequency) return false;
+      if (!object.Equals(CouponPaymentDate, other.CouponPaymentDate)) return false;
+      if (!object.Equals(AciValue, other.AciValue)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Uid.Length != 0) hash ^= Uid.GetHashCode();
+      if (Ticker.Length != 0) hash ^= Ticker.GetHashCode();
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (PositionUid.Length != 0) hash ^= PositionUid.GetHashCode();
+      if (minPriceIncrement_ != null) hash ^= MinPriceIncrement.GetHashCode();
+      if (Lot != 0) hash ^= Lot.GetHashCode();
+      if (nominal_ != null) hash ^= Nominal.GetHashCode();
+      if (Currency.Length != 0) hash ^= Currency.GetHashCode();
+      if (maturityDate_ != null) hash ^= MaturityDate.GetHashCode();
+      if (ShortEnabledFlag != false) hash ^= ShortEnabledFlag.GetHashCode();
+      if (ApiTradeAvailableFlag != false) hash ^= ApiTradeAvailableFlag.GetHashCode();
+      if (BuyAvailableFlag != false) hash ^= BuyAvailableFlag.GetHashCode();
+      if (SellAvailableFlag != false) hash ^= SellAvailableFlag.GetHashCode();
+      if (LimitOrderAvailableFlag != false) hash ^= LimitOrderAvailableFlag.GetHashCode();
+      if (MarketOrderAvailableFlag != false) hash ^= MarketOrderAvailableFlag.GetHashCode();
+      if (BestpriceOrderAvailableFlag != false) hash ^= BestpriceOrderAvailableFlag.GetHashCode();
+      if (ForIisFlag != false) hash ^= ForIisFlag.GetHashCode();
+      if (ForQualInvestorFlag != false) hash ^= ForQualInvestorFlag.GetHashCode();
+      if (Type.Length != 0) hash ^= Type.GetHashCode();
+      hash ^= basicAssets_.GetHashCode();
+      if (forecastYield_ != null) hash ^= ForecastYield.GetHashCode();
+      if (yieldToMaturity_ != null) hash ^= YieldToMaturity.GetHashCode();
+      if (couponValue_ != null) hash ^= CouponValue.GetHashCode();
+      if (CouponPaymentFrequency != 0) hash ^= CouponPaymentFrequency.GetHashCode();
+      if (couponPaymentDate_ != null) hash ^= CouponPaymentDate.GetHashCode();
+      if (aciValue_ != null) hash ^= AciValue.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Uid.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Uid);
+      }
+      if (Ticker.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Ticker);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Name);
+      }
+      if (PositionUid.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(PositionUid);
+      }
+      if (minPriceIncrement_ != null) {
+        output.WriteRawTag(42);
+        output.WriteMessage(MinPriceIncrement);
+      }
+      if (Lot != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(Lot);
+      }
+      if (nominal_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(Nominal);
+      }
+      if (Currency.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(Currency);
+      }
+      if (maturityDate_ != null) {
+        output.WriteRawTag(74);
+        output.WriteMessage(MaturityDate);
+      }
+      if (ShortEnabledFlag != false) {
+        output.WriteRawTag(80);
+        output.WriteBool(ShortEnabledFlag);
+      }
+      if (ApiTradeAvailableFlag != false) {
+        output.WriteRawTag(88);
+        output.WriteBool(ApiTradeAvailableFlag);
+      }
+      if (BuyAvailableFlag != false) {
+        output.WriteRawTag(96);
+        output.WriteBool(BuyAvailableFlag);
+      }
+      if (SellAvailableFlag != false) {
+        output.WriteRawTag(104);
+        output.WriteBool(SellAvailableFlag);
+      }
+      if (LimitOrderAvailableFlag != false) {
+        output.WriteRawTag(112);
+        output.WriteBool(LimitOrderAvailableFlag);
+      }
+      if (MarketOrderAvailableFlag != false) {
+        output.WriteRawTag(120);
+        output.WriteBool(MarketOrderAvailableFlag);
+      }
+      if (BestpriceOrderAvailableFlag != false) {
+        output.WriteRawTag(128, 1);
+        output.WriteBool(BestpriceOrderAvailableFlag);
+      }
+      if (ForIisFlag != false) {
+        output.WriteRawTag(136, 1);
+        output.WriteBool(ForIisFlag);
+      }
+      if (ForQualInvestorFlag != false) {
+        output.WriteRawTag(144, 1);
+        output.WriteBool(ForQualInvestorFlag);
+      }
+      if (Type.Length != 0) {
+        output.WriteRawTag(154, 1);
+        output.WriteString(Type);
+      }
+      basicAssets_.WriteTo(output, _repeated_basicAssets_codec);
+      if (forecastYield_ != null) {
+        output.WriteRawTag(170, 1);
+        output.WriteMessage(ForecastYield);
+      }
+      if (yieldToMaturity_ != null) {
+        output.WriteRawTag(178, 1);
+        output.WriteMessage(YieldToMaturity);
+      }
+      if (couponValue_ != null) {
+        output.WriteRawTag(186, 1);
+        output.WriteMessage(CouponValue);
+      }
+      if (CouponPaymentFrequency != 0) {
+        output.WriteRawTag(192, 1);
+        output.WriteInt32(CouponPaymentFrequency);
+      }
+      if (couponPaymentDate_ != null) {
+        output.WriteRawTag(202, 1);
+        output.WriteMessage(CouponPaymentDate);
+      }
+      if (aciValue_ != null) {
+        output.WriteRawTag(210, 1);
+        output.WriteMessage(AciValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Uid.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Uid);
+      }
+      if (Ticker.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Ticker);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Name);
+      }
+      if (PositionUid.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(PositionUid);
+      }
+      if (minPriceIncrement_ != null) {
+        output.WriteRawTag(42);
+        output.WriteMessage(MinPriceIncrement);
+      }
+      if (Lot != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(Lot);
+      }
+      if (nominal_ != null) {
+        output.WriteRawTag(58);
+        output.WriteMessage(Nominal);
+      }
+      if (Currency.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(Currency);
+      }
+      if (maturityDate_ != null) {
+        output.WriteRawTag(74);
+        output.WriteMessage(MaturityDate);
+      }
+      if (ShortEnabledFlag != false) {
+        output.WriteRawTag(80);
+        output.WriteBool(ShortEnabledFlag);
+      }
+      if (ApiTradeAvailableFlag != false) {
+        output.WriteRawTag(88);
+        output.WriteBool(ApiTradeAvailableFlag);
+      }
+      if (BuyAvailableFlag != false) {
+        output.WriteRawTag(96);
+        output.WriteBool(BuyAvailableFlag);
+      }
+      if (SellAvailableFlag != false) {
+        output.WriteRawTag(104);
+        output.WriteBool(SellAvailableFlag);
+      }
+      if (LimitOrderAvailableFlag != false) {
+        output.WriteRawTag(112);
+        output.WriteBool(LimitOrderAvailableFlag);
+      }
+      if (MarketOrderAvailableFlag != false) {
+        output.WriteRawTag(120);
+        output.WriteBool(MarketOrderAvailableFlag);
+      }
+      if (BestpriceOrderAvailableFlag != false) {
+        output.WriteRawTag(128, 1);
+        output.WriteBool(BestpriceOrderAvailableFlag);
+      }
+      if (ForIisFlag != false) {
+        output.WriteRawTag(136, 1);
+        output.WriteBool(ForIisFlag);
+      }
+      if (ForQualInvestorFlag != false) {
+        output.WriteRawTag(144, 1);
+        output.WriteBool(ForQualInvestorFlag);
+      }
+      if (Type.Length != 0) {
+        output.WriteRawTag(154, 1);
+        output.WriteString(Type);
+      }
+      basicAssets_.WriteTo(ref output, _repeated_basicAssets_codec);
+      if (forecastYield_ != null) {
+        output.WriteRawTag(170, 1);
+        output.WriteMessage(ForecastYield);
+      }
+      if (yieldToMaturity_ != null) {
+        output.WriteRawTag(178, 1);
+        output.WriteMessage(YieldToMaturity);
+      }
+      if (couponValue_ != null) {
+        output.WriteRawTag(186, 1);
+        output.WriteMessage(CouponValue);
+      }
+      if (CouponPaymentFrequency != 0) {
+        output.WriteRawTag(192, 1);
+        output.WriteInt32(CouponPaymentFrequency);
+      }
+      if (couponPaymentDate_ != null) {
+        output.WriteRawTag(202, 1);
+        output.WriteMessage(CouponPaymentDate);
+      }
+      if (aciValue_ != null) {
+        output.WriteRawTag(210, 1);
+        output.WriteMessage(AciValue);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Uid.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Uid);
+      }
+      if (Ticker.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Ticker);
+      }
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (PositionUid.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(PositionUid);
+      }
+      if (minPriceIncrement_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(MinPriceIncrement);
+      }
+      if (Lot != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Lot);
+      }
+      if (nominal_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Nominal);
+      }
+      if (Currency.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Currency);
+      }
+      if (maturityDate_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(MaturityDate);
+      }
+      if (ShortEnabledFlag != false) {
+        size += 1 + 1;
+      }
+      if (ApiTradeAvailableFlag != false) {
+        size += 1 + 1;
+      }
+      if (BuyAvailableFlag != false) {
+        size += 1 + 1;
+      }
+      if (SellAvailableFlag != false) {
+        size += 1 + 1;
+      }
+      if (LimitOrderAvailableFlag != false) {
+        size += 1 + 1;
+      }
+      if (MarketOrderAvailableFlag != false) {
+        size += 1 + 1;
+      }
+      if (BestpriceOrderAvailableFlag != false) {
+        size += 2 + 1;
+      }
+      if (ForIisFlag != false) {
+        size += 2 + 1;
+      }
+      if (ForQualInvestorFlag != false) {
+        size += 2 + 1;
+      }
+      if (Type.Length != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeStringSize(Type);
+      }
+      size += basicAssets_.CalculateSize(_repeated_basicAssets_codec);
+      if (forecastYield_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(ForecastYield);
+      }
+      if (yieldToMaturity_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(YieldToMaturity);
+      }
+      if (couponValue_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(CouponValue);
+      }
+      if (CouponPaymentFrequency != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(CouponPaymentFrequency);
+      }
+      if (couponPaymentDate_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(CouponPaymentDate);
+      }
+      if (aciValue_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(AciValue);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(DfaResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Uid.Length != 0) {
+        Uid = other.Uid;
+      }
+      if (other.Ticker.Length != 0) {
+        Ticker = other.Ticker;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.PositionUid.Length != 0) {
+        PositionUid = other.PositionUid;
+      }
+      if (other.minPriceIncrement_ != null) {
+        if (minPriceIncrement_ == null) {
+          MinPriceIncrement = new global::StockSharp.Tinkoff.Native.Quotation();
+        }
+        MinPriceIncrement.MergeFrom(other.MinPriceIncrement);
+      }
+      if (other.Lot != 0) {
+        Lot = other.Lot;
+      }
+      if (other.nominal_ != null) {
+        if (nominal_ == null) {
+          Nominal = new global::StockSharp.Tinkoff.Native.MoneyValue();
+        }
+        Nominal.MergeFrom(other.Nominal);
+      }
+      if (other.Currency.Length != 0) {
+        Currency = other.Currency;
+      }
+      if (other.maturityDate_ != null) {
+        if (maturityDate_ == null) {
+          MaturityDate = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        MaturityDate.MergeFrom(other.MaturityDate);
+      }
+      if (other.ShortEnabledFlag != false) {
+        ShortEnabledFlag = other.ShortEnabledFlag;
+      }
+      if (other.ApiTradeAvailableFlag != false) {
+        ApiTradeAvailableFlag = other.ApiTradeAvailableFlag;
+      }
+      if (other.BuyAvailableFlag != false) {
+        BuyAvailableFlag = other.BuyAvailableFlag;
+      }
+      if (other.SellAvailableFlag != false) {
+        SellAvailableFlag = other.SellAvailableFlag;
+      }
+      if (other.LimitOrderAvailableFlag != false) {
+        LimitOrderAvailableFlag = other.LimitOrderAvailableFlag;
+      }
+      if (other.MarketOrderAvailableFlag != false) {
+        MarketOrderAvailableFlag = other.MarketOrderAvailableFlag;
+      }
+      if (other.BestpriceOrderAvailableFlag != false) {
+        BestpriceOrderAvailableFlag = other.BestpriceOrderAvailableFlag;
+      }
+      if (other.ForIisFlag != false) {
+        ForIisFlag = other.ForIisFlag;
+      }
+      if (other.ForQualInvestorFlag != false) {
+        ForQualInvestorFlag = other.ForQualInvestorFlag;
+      }
+      if (other.Type.Length != 0) {
+        Type = other.Type;
+      }
+      basicAssets_.Add(other.basicAssets_);
+      if (other.forecastYield_ != null) {
+        if (forecastYield_ == null) {
+          ForecastYield = new global::StockSharp.Tinkoff.Native.DfaResponse.Types.ForecastYield();
+        }
+        ForecastYield.MergeFrom(other.ForecastYield);
+      }
+      if (other.yieldToMaturity_ != null) {
+        if (yieldToMaturity_ == null) {
+          YieldToMaturity = new global::StockSharp.Tinkoff.Native.Quotation();
+        }
+        YieldToMaturity.MergeFrom(other.YieldToMaturity);
+      }
+      if (other.couponValue_ != null) {
+        if (couponValue_ == null) {
+          CouponValue = new global::StockSharp.Tinkoff.Native.Quotation();
+        }
+        CouponValue.MergeFrom(other.CouponValue);
+      }
+      if (other.CouponPaymentFrequency != 0) {
+        CouponPaymentFrequency = other.CouponPaymentFrequency;
+      }
+      if (other.couponPaymentDate_ != null) {
+        if (couponPaymentDate_ == null) {
+          CouponPaymentDate = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        CouponPaymentDate.MergeFrom(other.CouponPaymentDate);
+      }
+      if (other.aciValue_ != null) {
+        if (aciValue_ == null) {
+          AciValue = new global::StockSharp.Tinkoff.Native.Quotation();
+        }
+        AciValue.MergeFrom(other.AciValue);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Uid = input.ReadString();
+            break;
+          }
+          case 18: {
+            Ticker = input.ReadString();
+            break;
+          }
+          case 26: {
+            Name = input.ReadString();
+            break;
+          }
+          case 34: {
+            PositionUid = input.ReadString();
+            break;
+          }
+          case 42: {
+            if (minPriceIncrement_ == null) {
+              MinPriceIncrement = new global::StockSharp.Tinkoff.Native.Quotation();
+            }
+            input.ReadMessage(MinPriceIncrement);
+            break;
+          }
+          case 48: {
+            Lot = input.ReadInt32();
+            break;
+          }
+          case 58: {
+            if (nominal_ == null) {
+              Nominal = new global::StockSharp.Tinkoff.Native.MoneyValue();
+            }
+            input.ReadMessage(Nominal);
+            break;
+          }
+          case 66: {
+            Currency = input.ReadString();
+            break;
+          }
+          case 74: {
+            if (maturityDate_ == null) {
+              MaturityDate = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(MaturityDate);
+            break;
+          }
+          case 80: {
+            ShortEnabledFlag = input.ReadBool();
+            break;
+          }
+          case 88: {
+            ApiTradeAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 96: {
+            BuyAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 104: {
+            SellAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 112: {
+            LimitOrderAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 120: {
+            MarketOrderAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 128: {
+            BestpriceOrderAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 136: {
+            ForIisFlag = input.ReadBool();
+            break;
+          }
+          case 144: {
+            ForQualInvestorFlag = input.ReadBool();
+            break;
+          }
+          case 154: {
+            Type = input.ReadString();
+            break;
+          }
+          case 162: {
+            basicAssets_.AddEntriesFrom(input, _repeated_basicAssets_codec);
+            break;
+          }
+          case 170: {
+            if (forecastYield_ == null) {
+              ForecastYield = new global::StockSharp.Tinkoff.Native.DfaResponse.Types.ForecastYield();
+            }
+            input.ReadMessage(ForecastYield);
+            break;
+          }
+          case 178: {
+            if (yieldToMaturity_ == null) {
+              YieldToMaturity = new global::StockSharp.Tinkoff.Native.Quotation();
+            }
+            input.ReadMessage(YieldToMaturity);
+            break;
+          }
+          case 186: {
+            if (couponValue_ == null) {
+              CouponValue = new global::StockSharp.Tinkoff.Native.Quotation();
+            }
+            input.ReadMessage(CouponValue);
+            break;
+          }
+          case 192: {
+            CouponPaymentFrequency = input.ReadInt32();
+            break;
+          }
+          case 202: {
+            if (couponPaymentDate_ == null) {
+              CouponPaymentDate = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(CouponPaymentDate);
+            break;
+          }
+          case 210: {
+            if (aciValue_ == null) {
+              AciValue = new global::StockSharp.Tinkoff.Native.Quotation();
+            }
+            input.ReadMessage(AciValue);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Uid = input.ReadString();
+            break;
+          }
+          case 18: {
+            Ticker = input.ReadString();
+            break;
+          }
+          case 26: {
+            Name = input.ReadString();
+            break;
+          }
+          case 34: {
+            PositionUid = input.ReadString();
+            break;
+          }
+          case 42: {
+            if (minPriceIncrement_ == null) {
+              MinPriceIncrement = new global::StockSharp.Tinkoff.Native.Quotation();
+            }
+            input.ReadMessage(MinPriceIncrement);
+            break;
+          }
+          case 48: {
+            Lot = input.ReadInt32();
+            break;
+          }
+          case 58: {
+            if (nominal_ == null) {
+              Nominal = new global::StockSharp.Tinkoff.Native.MoneyValue();
+            }
+            input.ReadMessage(Nominal);
+            break;
+          }
+          case 66: {
+            Currency = input.ReadString();
+            break;
+          }
+          case 74: {
+            if (maturityDate_ == null) {
+              MaturityDate = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(MaturityDate);
+            break;
+          }
+          case 80: {
+            ShortEnabledFlag = input.ReadBool();
+            break;
+          }
+          case 88: {
+            ApiTradeAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 96: {
+            BuyAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 104: {
+            SellAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 112: {
+            LimitOrderAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 120: {
+            MarketOrderAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 128: {
+            BestpriceOrderAvailableFlag = input.ReadBool();
+            break;
+          }
+          case 136: {
+            ForIisFlag = input.ReadBool();
+            break;
+          }
+          case 144: {
+            ForQualInvestorFlag = input.ReadBool();
+            break;
+          }
+          case 154: {
+            Type = input.ReadString();
+            break;
+          }
+          case 162: {
+            basicAssets_.AddEntriesFrom(ref input, _repeated_basicAssets_codec);
+            break;
+          }
+          case 170: {
+            if (forecastYield_ == null) {
+              ForecastYield = new global::StockSharp.Tinkoff.Native.DfaResponse.Types.ForecastYield();
+            }
+            input.ReadMessage(ForecastYield);
+            break;
+          }
+          case 178: {
+            if (yieldToMaturity_ == null) {
+              YieldToMaturity = new global::StockSharp.Tinkoff.Native.Quotation();
+            }
+            input.ReadMessage(YieldToMaturity);
+            break;
+          }
+          case 186: {
+            if (couponValue_ == null) {
+              CouponValue = new global::StockSharp.Tinkoff.Native.Quotation();
+            }
+            input.ReadMessage(CouponValue);
+            break;
+          }
+          case 192: {
+            CouponPaymentFrequency = input.ReadInt32();
+            break;
+          }
+          case 202: {
+            if (couponPaymentDate_ == null) {
+              CouponPaymentDate = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(CouponPaymentDate);
+            break;
+          }
+          case 210: {
+            if (aciValue_ == null) {
+              AciValue = new global::StockSharp.Tinkoff.Native.Quotation();
+            }
+            input.ReadMessage(AciValue);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+    #region Nested types
+    /// <summary>Container for nested types declared in the DfaResponse message type.</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    internal static partial class Types {
+      /// <summary>
+      /// Базовый актив.
+      /// </summary>
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      internal sealed partial class BasicAsset : pb::IMessage<BasicAsset>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<BasicAsset> _parser = new pb::MessageParser<BasicAsset>(() => new BasicAsset());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<BasicAsset> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::StockSharp.Tinkoff.Native.DfaResponse.Descriptor.NestedTypes[0]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public BasicAsset() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public BasicAsset(BasicAsset other) : this() {
+          uid_ = other.uid_;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public BasicAsset Clone() {
+          return new BasicAsset(this);
+        }
+
+        /// <summary>Field number for the "uid" field.</summary>
+        public const int UidFieldNumber = 1;
+        private string uid_ = "";
+        /// <summary>
+        /// UID базового актива
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public string Uid {
+          get { return uid_; }
+          set {
+            uid_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as BasicAsset);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(BasicAsset other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (Uid != other.Uid) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (Uid.Length != 0) hash ^= Uid.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (Uid.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(Uid);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (Uid.Length != 0) {
+            output.WriteRawTag(10);
+            output.WriteString(Uid);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (Uid.Length != 0) {
+            size += 1 + pb::CodedOutputStream.ComputeStringSize(Uid);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(BasicAsset other) {
+          if (other == null) {
+            return;
+          }
+          if (other.Uid.Length != 0) {
+            Uid = other.Uid;
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                Uid = input.ReadString();
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 10: {
+                Uid = input.ReadString();
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+      /// <summary>
+      /// Прогнозная доходность смарт-портфелей.
+      /// </summary>
+      [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+      internal sealed partial class ForecastYield : pb::IMessage<ForecastYield>
+      #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          , pb::IBufferMessage
+      #endif
+      {
+        private static readonly pb::MessageParser<ForecastYield> _parser = new pb::MessageParser<ForecastYield>(() => new ForecastYield());
+        private pb::UnknownFieldSet _unknownFields;
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pb::MessageParser<ForecastYield> Parser { get { return _parser; } }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public static pbr::MessageDescriptor Descriptor {
+          get { return global::StockSharp.Tinkoff.Native.DfaResponse.Descriptor.NestedTypes[1]; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        pbr::MessageDescriptor pb::IMessage.Descriptor {
+          get { return Descriptor; }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public ForecastYield() {
+          OnConstruction();
+        }
+
+        partial void OnConstruction();
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public ForecastYield(ForecastYield other) : this() {
+          minValue_ = other.minValue_ != null ? other.minValue_.Clone() : null;
+          maxValue_ = other.maxValue_ != null ? other.maxValue_.Clone() : null;
+          _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public ForecastYield Clone() {
+          return new ForecastYield(this);
+        }
+
+        /// <summary>Field number for the "min_value" field.</summary>
+        public const int MinValueFieldNumber = 1;
+        private global::StockSharp.Tinkoff.Native.Quotation minValue_;
+        /// <summary>
+        /// Минимальное значение прогнозной доходности в %
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::StockSharp.Tinkoff.Native.Quotation MinValue {
+          get { return minValue_; }
+          set {
+            minValue_ = value;
+          }
+        }
+
+        /// <summary>Field number for the "max_value" field.</summary>
+        public const int MaxValueFieldNumber = 2;
+        private global::StockSharp.Tinkoff.Native.Quotation maxValue_;
+        /// <summary>
+        /// Максимальное значение прогнозной доходности в %
+        /// </summary>
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public global::StockSharp.Tinkoff.Native.Quotation MaxValue {
+          get { return maxValue_; }
+          set {
+            maxValue_ = value;
+          }
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override bool Equals(object other) {
+          return Equals(other as ForecastYield);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public bool Equals(ForecastYield other) {
+          if (ReferenceEquals(other, null)) {
+            return false;
+          }
+          if (ReferenceEquals(other, this)) {
+            return true;
+          }
+          if (!object.Equals(MinValue, other.MinValue)) return false;
+          if (!object.Equals(MaxValue, other.MaxValue)) return false;
+          return Equals(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override int GetHashCode() {
+          int hash = 1;
+          if (minValue_ != null) hash ^= MinValue.GetHashCode();
+          if (maxValue_ != null) hash ^= MaxValue.GetHashCode();
+          if (_unknownFields != null) {
+            hash ^= _unknownFields.GetHashCode();
+          }
+          return hash;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public override string ToString() {
+          return pb::JsonFormatter.ToDiagnosticString(this);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void WriteTo(pb::CodedOutputStream output) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          output.WriteRawMessage(this);
+        #else
+          if (minValue_ != null) {
+            output.WriteRawTag(10);
+            output.WriteMessage(MinValue);
+          }
+          if (maxValue_ != null) {
+            output.WriteRawTag(18);
+            output.WriteMessage(MaxValue);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(output);
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+          if (minValue_ != null) {
+            output.WriteRawTag(10);
+            output.WriteMessage(MinValue);
+          }
+          if (maxValue_ != null) {
+            output.WriteRawTag(18);
+            output.WriteMessage(MaxValue);
+          }
+          if (_unknownFields != null) {
+            _unknownFields.WriteTo(ref output);
+          }
+        }
+        #endif
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public int CalculateSize() {
+          int size = 0;
+          if (minValue_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(MinValue);
+          }
+          if (maxValue_ != null) {
+            size += 1 + pb::CodedOutputStream.ComputeMessageSize(MaxValue);
+          }
+          if (_unknownFields != null) {
+            size += _unknownFields.CalculateSize();
+          }
+          return size;
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(ForecastYield other) {
+          if (other == null) {
+            return;
+          }
+          if (other.minValue_ != null) {
+            if (minValue_ == null) {
+              MinValue = new global::StockSharp.Tinkoff.Native.Quotation();
+            }
+            MinValue.MergeFrom(other.MinValue);
+          }
+          if (other.maxValue_ != null) {
+            if (maxValue_ == null) {
+              MaxValue = new global::StockSharp.Tinkoff.Native.Quotation();
+            }
+            MaxValue.MergeFrom(other.MaxValue);
+          }
+          _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+        }
+
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        public void MergeFrom(pb::CodedInputStream input) {
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+          input.ReadRawMessage(this);
+        #else
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                break;
+              case 10: {
+                if (minValue_ == null) {
+                  MinValue = new global::StockSharp.Tinkoff.Native.Quotation();
+                }
+                input.ReadMessage(MinValue);
+                break;
+              }
+              case 18: {
+                if (maxValue_ == null) {
+                  MaxValue = new global::StockSharp.Tinkoff.Native.Quotation();
+                }
+                input.ReadMessage(MaxValue);
+                break;
+              }
+            }
+          }
+        #endif
+        }
+
+        #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+          uint tag;
+          while ((tag = input.ReadTag()) != 0) {
+            switch(tag) {
+              default:
+                _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+                break;
+              case 10: {
+                if (minValue_ == null) {
+                  MinValue = new global::StockSharp.Tinkoff.Native.Quotation();
+                }
+                input.ReadMessage(MinValue);
+                break;
+              }
+              case 18: {
+                if (maxValue_ == null) {
+                  MaxValue = new global::StockSharp.Tinkoff.Native.Quotation();
+                }
+                input.ReadMessage(MaxValue);
+                break;
+              }
+            }
+          }
+        }
+        #endif
+
+      }
+
+    }
+    #endregion
+
+  }
+
+  /// <summary>
+  /// Цифровые активы
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  internal sealed partial class DfasResponse : pb::IMessage<DfasResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<DfasResponse> _parser = new pb::MessageParser<DfasResponse>(() => new DfasResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<DfasResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::StockSharp.Tinkoff.Native.InstrumentsReflection.Descriptor.MessageTypes[98]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public DfasResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public DfasResponse(DfasResponse other) : this() {
+      instruments_ = other.instruments_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public DfasResponse Clone() {
+      return new DfasResponse(this);
+    }
+
+    /// <summary>Field number for the "instruments" field.</summary>
+    public const int InstrumentsFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::StockSharp.Tinkoff.Native.DfaResponse> _repeated_instruments_codec
+        = pb::FieldCodec.ForMessage(10, global::StockSharp.Tinkoff.Native.DfaResponse.Parser);
+    private readonly pbc::RepeatedField<global::StockSharp.Tinkoff.Native.DfaResponse> instruments_ = new pbc::RepeatedField<global::StockSharp.Tinkoff.Native.DfaResponse>();
+    /// <summary>
+    /// Массив инструментов.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::StockSharp.Tinkoff.Native.DfaResponse> Instruments {
+      get { return instruments_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as DfasResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(DfasResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!instruments_.Equals(other.instruments_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= instruments_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      instruments_.WriteTo(output, _repeated_instruments_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      instruments_.WriteTo(ref output, _repeated_instruments_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      size += instruments_.CalculateSize(_repeated_instruments_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(DfasResponse other) {
+      if (other == null) {
+        return;
+      }
+      instruments_.Add(other.instruments_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            instruments_.AddEntriesFrom(input, _repeated_instruments_codec);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            instruments_.AddEntriesFrom(ref input, _repeated_instruments_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
 
   }
 

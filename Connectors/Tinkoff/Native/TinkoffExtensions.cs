@@ -235,7 +235,8 @@ static class TinkoffExtensions
 			SecurityTradingStatus.NormalTrading or SecurityTradingStatus.DarkPoolAuction or
 			SecurityTradingStatus.DiscreteAuction or SecurityTradingStatus.OpeningAuctionPeriod or
 			SecurityTradingStatus.TradingAtClosingAuctionPrice or SecurityTradingStatus.SessionAssigned or
-			SecurityTradingStatus.SessionOpen or SecurityTradingStatus.DealerNormalTrading
+			SecurityTradingStatus.SessionOpen or SecurityTradingStatus.DealerNormalTrading or
+			SecurityTradingStatus.StabilizationAuction
 				=> SecurityStates.Trading,
 
 			_ => throw new ArgumentOutOfRangeException(nameof(status), status, LocalizedStrings.InvalidValue),

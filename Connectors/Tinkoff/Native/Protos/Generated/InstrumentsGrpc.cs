@@ -93,6 +93,12 @@ namespace StockSharp.Tinkoff.Native {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::StockSharp.Tinkoff.Native.SharesResponse> __Marshaller_tinkoff_public_invest_api_contract_v1_SharesResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::StockSharp.Tinkoff.Native.SharesResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::StockSharp.Tinkoff.Native.DfaResponse> __Marshaller_tinkoff_public_invest_api_contract_v1_DfaResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::StockSharp.Tinkoff.Native.DfaResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::StockSharp.Tinkoff.Native.DfasRequest> __Marshaller_tinkoff_public_invest_api_contract_v1_DfasRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::StockSharp.Tinkoff.Native.DfasRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::StockSharp.Tinkoff.Native.DfasResponse> __Marshaller_tinkoff_public_invest_api_contract_v1_DfasResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::StockSharp.Tinkoff.Native.DfasResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::StockSharp.Tinkoff.Native.IndicativesRequest> __Marshaller_tinkoff_public_invest_api_contract_v1_IndicativesRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::StockSharp.Tinkoff.Native.IndicativesRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::StockSharp.Tinkoff.Native.IndicativesResponse> __Marshaller_tinkoff_public_invest_api_contract_v1_IndicativesResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::StockSharp.Tinkoff.Native.IndicativesResponse.Parser));
@@ -310,6 +316,22 @@ namespace StockSharp.Tinkoff.Native {
         "Shares",
         __Marshaller_tinkoff_public_invest_api_contract_v1_InstrumentsRequest,
         __Marshaller_tinkoff_public_invest_api_contract_v1_SharesResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::StockSharp.Tinkoff.Native.InstrumentRequest, global::StockSharp.Tinkoff.Native.DfaResponse> __Method_DfaBy = new grpc::Method<global::StockSharp.Tinkoff.Native.InstrumentRequest, global::StockSharp.Tinkoff.Native.DfaResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "DfaBy",
+        __Marshaller_tinkoff_public_invest_api_contract_v1_InstrumentRequest,
+        __Marshaller_tinkoff_public_invest_api_contract_v1_DfaResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::StockSharp.Tinkoff.Native.DfasRequest, global::StockSharp.Tinkoff.Native.DfasResponse> __Method_Dfas = new grpc::Method<global::StockSharp.Tinkoff.Native.DfasRequest, global::StockSharp.Tinkoff.Native.DfasResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "Dfas",
+        __Marshaller_tinkoff_public_invest_api_contract_v1_DfasRequest,
+        __Marshaller_tinkoff_public_invest_api_contract_v1_DfasResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::StockSharp.Tinkoff.Native.IndicativesRequest, global::StockSharp.Tinkoff.Native.IndicativesResponse> __Method_Indicatives = new grpc::Method<global::StockSharp.Tinkoff.Native.IndicativesRequest, global::StockSharp.Tinkoff.Native.IndicativesResponse>(
@@ -702,6 +724,30 @@ namespace StockSharp.Tinkoff.Native {
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::StockSharp.Tinkoff.Native.SharesResponse> Shares(global::StockSharp.Tinkoff.Native.InstrumentsRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///DfaBy — получить цифровой актив по ее идентификатору
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::StockSharp.Tinkoff.Native.DfaResponse> DfaBy(global::StockSharp.Tinkoff.Native.InstrumentRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///Dfas — список цифровых активов
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::StockSharp.Tinkoff.Native.DfasResponse> Dfas(global::StockSharp.Tinkoff.Native.DfasRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -1795,6 +1841,102 @@ namespace StockSharp.Tinkoff.Native {
       public virtual grpc::AsyncUnaryCall<global::StockSharp.Tinkoff.Native.SharesResponse> SharesAsync(global::StockSharp.Tinkoff.Native.InstrumentsRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_Shares, null, options, request);
+      }
+      /// <summary>
+      ///DfaBy — получить цифровой актив по ее идентификатору
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::StockSharp.Tinkoff.Native.DfaResponse DfaBy(global::StockSharp.Tinkoff.Native.InstrumentRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return DfaBy(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///DfaBy — получить цифровой актив по ее идентификатору
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::StockSharp.Tinkoff.Native.DfaResponse DfaBy(global::StockSharp.Tinkoff.Native.InstrumentRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_DfaBy, null, options, request);
+      }
+      /// <summary>
+      ///DfaBy — получить цифровой актив по ее идентификатору
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::StockSharp.Tinkoff.Native.DfaResponse> DfaByAsync(global::StockSharp.Tinkoff.Native.InstrumentRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return DfaByAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///DfaBy — получить цифровой актив по ее идентификатору
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::StockSharp.Tinkoff.Native.DfaResponse> DfaByAsync(global::StockSharp.Tinkoff.Native.InstrumentRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_DfaBy, null, options, request);
+      }
+      /// <summary>
+      ///Dfas — список цифровых активов
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::StockSharp.Tinkoff.Native.DfasResponse Dfas(global::StockSharp.Tinkoff.Native.DfasRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return Dfas(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///Dfas — список цифровых активов
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::StockSharp.Tinkoff.Native.DfasResponse Dfas(global::StockSharp.Tinkoff.Native.DfasRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_Dfas, null, options, request);
+      }
+      /// <summary>
+      ///Dfas — список цифровых активов
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::StockSharp.Tinkoff.Native.DfasResponse> DfasAsync(global::StockSharp.Tinkoff.Native.DfasRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return DfasAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///Dfas — список цифровых активов
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::StockSharp.Tinkoff.Native.DfasResponse> DfasAsync(global::StockSharp.Tinkoff.Native.DfasRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_Dfas, null, options, request);
       }
       /// <summary>
       ///Indicatives — индикативные инструменты — индексы, товары и другие
@@ -2982,6 +3124,8 @@ namespace StockSharp.Tinkoff.Native {
           .AddMethod(__Method_OptionsBy, serviceImpl.OptionsBy)
           .AddMethod(__Method_ShareBy, serviceImpl.ShareBy)
           .AddMethod(__Method_Shares, serviceImpl.Shares)
+          .AddMethod(__Method_DfaBy, serviceImpl.DfaBy)
+          .AddMethod(__Method_Dfas, serviceImpl.Dfas)
           .AddMethod(__Method_Indicatives, serviceImpl.Indicatives)
           .AddMethod(__Method_GetAccruedInterests, serviceImpl.GetAccruedInterests)
           .AddMethod(__Method_GetFuturesMargin, serviceImpl.GetFuturesMargin)
@@ -3031,6 +3175,8 @@ namespace StockSharp.Tinkoff.Native {
       serviceBinder.AddMethod(__Method_OptionsBy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.FilterOptionsRequest, global::StockSharp.Tinkoff.Native.OptionsResponse>(serviceImpl.OptionsBy));
       serviceBinder.AddMethod(__Method_ShareBy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.InstrumentRequest, global::StockSharp.Tinkoff.Native.ShareResponse>(serviceImpl.ShareBy));
       serviceBinder.AddMethod(__Method_Shares, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.InstrumentsRequest, global::StockSharp.Tinkoff.Native.SharesResponse>(serviceImpl.Shares));
+      serviceBinder.AddMethod(__Method_DfaBy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.InstrumentRequest, global::StockSharp.Tinkoff.Native.DfaResponse>(serviceImpl.DfaBy));
+      serviceBinder.AddMethod(__Method_Dfas, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.DfasRequest, global::StockSharp.Tinkoff.Native.DfasResponse>(serviceImpl.Dfas));
       serviceBinder.AddMethod(__Method_Indicatives, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.IndicativesRequest, global::StockSharp.Tinkoff.Native.IndicativesResponse>(serviceImpl.Indicatives));
       serviceBinder.AddMethod(__Method_GetAccruedInterests, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.GetAccruedInterestsRequest, global::StockSharp.Tinkoff.Native.GetAccruedInterestsResponse>(serviceImpl.GetAccruedInterests));
       serviceBinder.AddMethod(__Method_GetFuturesMargin, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.GetFuturesMarginRequest, global::StockSharp.Tinkoff.Native.GetFuturesMarginResponse>(serviceImpl.GetFuturesMargin));

@@ -27,7 +27,7 @@ namespace StockSharp.Tinkoff.Native {
             "ChBzdG9wb3JkZXJzLnByb3RvEiV0aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBp",
             "LmNvbnRyYWN0LnYxGh9nb29nbGUvcHJvdG9idWYvdGltZXN0YW1wLnByb3Rv",
             "Gh9nb29nbGUvYXBpL2ZpZWxkX2JlaGF2aW9yLnByb3RvGgxjb21tb24ucHJv",
-            "dG8itQoKFFBvc3RTdG9wT3JkZXJSZXF1ZXN0EhUKBGZpZ2kYASABKAlCAhgB",
+            "dG8i6woKFFBvc3RTdG9wT3JkZXJSZXF1ZXN0EhUKBGZpZ2kYASABKAlCAhgB",
             "SACIAQESFgoIcXVhbnRpdHkYAiABKANCBOJBAQISRAoFcHJpY2UYAyABKAsy",
             "MC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlF1b3Rh",
             "dGlvbkgBiAEBEkkKCnN0b3BfcHJpY2UYBCABKAsyMC50aW5rb2ZmLnB1Ymxp",
@@ -48,109 +48,111 @@ namespace StockSharp.Tinkoff.Native {
             "aS5jb250cmFjdC52MS5Qb3N0U3RvcE9yZGVyUmVxdWVzdC5UcmFpbGluZ0Rh",
             "dGESRAoKcHJpY2VfdHlwZRgOIAEoDjIwLnRpbmtvZmYucHVibGljLmludmVz",
             "dC5hcGkuY29udHJhY3QudjEuUHJpY2VUeXBlEhYKCG9yZGVyX2lkGA8gASgJ",
-            "QgTiQQECEhwKFGNvbmZpcm1fbWFyZ2luX3RyYWRlGBAgASgIGrACCgxUcmFp",
-            "bGluZ0RhdGESQAoGaW5kZW50GAEgASgLMjAudGlua29mZi5wdWJsaWMuaW52",
-            "ZXN0LmFwaS5jb250cmFjdC52MS5RdW90YXRpb24STQoLaW5kZW50X3R5cGUY",
-            "AiABKA4yOC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
-            "LlRyYWlsaW5nVmFsdWVUeXBlEkAKBnNwcmVhZBgDIAEoCzIwLnRpbmtvZmYu",
-            "cHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuUXVvdGF0aW9uEk0KC3Nw",
-            "cmVhZF90eXBlGAQgASgOMjgudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5j",
-            "b250cmFjdC52MS5UcmFpbGluZ1ZhbHVlVHlwZUIHCgVfZmlnaUIICgZfcHJp",
-            "Y2VCDQoLX3N0b3BfcHJpY2VCDgoMX2V4cGlyZV9kYXRlIp0BChVQb3N0U3Rv",
-            "cE9yZGVyUmVzcG9uc2USFQoNc3RvcF9vcmRlcl9pZBgBIAEoCRIYChBvcmRl",
-            "cl9yZXF1ZXN0X2lkGAIgASgJElMKEXJlc3BvbnNlX21ldGFkYXRhGP4BIAEo",
-            "CzI3LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuUmVz",
-            "cG9uc2VNZXRhZGF0YSLQAQoUR2V0U3RvcE9yZGVyc1JlcXVlc3QSGAoKYWNj",
-            "b3VudF9pZBgBIAEoCUIE4kEBAhJMCgZzdGF0dXMYAiABKA4yPC50aW5rb2Zm",
-            "LnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlN0b3BPcmRlclN0YXR1",
-            "c09wdGlvbhIoCgRmcm9tGAMgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVz",
-            "dGFtcBImCgJ0bxgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAi",
-            "XgoVR2V0U3RvcE9yZGVyc1Jlc3BvbnNlEkUKC3N0b3Bfb3JkZXJzGAEgAygL",
-            "MjAudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5TdG9w",
-            "T3JkZXIiTwoWQ2FuY2VsU3RvcE9yZGVyUmVxdWVzdBIYCgphY2NvdW50X2lk",
-            "GAEgASgJQgTiQQECEhsKDXN0b3Bfb3JkZXJfaWQYAiABKAlCBOJBAQIiQwoX",
-            "Q2FuY2VsU3RvcE9yZGVyUmVzcG9uc2USKAoEdGltZRgBIAEoCzIaLmdvb2ds",
-            "ZS5wcm90b2J1Zi5UaW1lc3RhbXAi2AsKCVN0b3BPcmRlchIVCg1zdG9wX29y",
-            "ZGVyX2lkGAEgASgJEhYKDmxvdHNfcmVxdWVzdGVkGAIgASgDEgwKBGZpZ2kY",
-            "AyABKAkSTAoJZGlyZWN0aW9uGAQgASgOMjkudGlua29mZi5wdWJsaWMuaW52",
-            "ZXN0LmFwaS5jb250cmFjdC52MS5TdG9wT3JkZXJEaXJlY3Rpb24SEAoIY3Vy",
-            "cmVuY3kYBSABKAkSSAoKb3JkZXJfdHlwZRgGIAEoDjI0LnRpbmtvZmYucHVi",
-            "bGljLmludmVzdC5hcGkuY29udHJhY3QudjEuU3RvcE9yZGVyVHlwZRIvCgtj",
-            "cmVhdGVfZGF0ZRgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAS",
-            "OAoUYWN0aXZhdGlvbl9kYXRlX3RpbWUYCCABKAsyGi5nb29nbGUucHJvdG9i",
-            "dWYuVGltZXN0YW1wEjMKD2V4cGlyYXRpb25fdGltZRgJIAEoCzIaLmdvb2ds",
-            "ZS5wcm90b2J1Zi5UaW1lc3RhbXASQAoFcHJpY2UYCiABKAsyMS50aW5rb2Zm",
-            "LnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk1vbmV5VmFsdWUSRQoK",
-            "c3RvcF9wcmljZRgLIAEoCzIxLnRpbmtvZmYucHVibGljLmludmVzdC5hcGku",
-            "Y29udHJhY3QudjEuTW9uZXlWYWx1ZRIWCg5pbnN0cnVtZW50X3VpZBgMIAEo",
-            "CRJPChB0YWtlX3Byb2ZpdF90eXBlGA0gASgOMjUudGlua29mZi5wdWJsaWMu",
-            "aW52ZXN0LmFwaS5jb250cmFjdC52MS5UYWtlUHJvZml0VHlwZRJUCg10cmFp",
-            "bGluZ19kYXRhGA4gASgLMj0udGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5j",
-            "b250cmFjdC52MS5TdG9wT3JkZXIuVHJhaWxpbmdEYXRhEkwKBnN0YXR1cxgP",
-            "IAEoDjI8LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEu",
-            "U3RvcE9yZGVyU3RhdHVzT3B0aW9uElUKE2V4Y2hhbmdlX29yZGVyX3R5cGUY",
-            "ECABKA4yOC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYx",
-            "LkV4Y2hhbmdlT3JkZXJUeXBlEh4KEWV4Y2hhbmdlX29yZGVyX2lkGBEgASgJ",
-            "SACIAQESDgoGdGlja2VyGBIgASgJEhIKCmNsYXNzX2NvZGUYEyABKAka/AMK",
-            "DFRyYWlsaW5nRGF0YRJACgZpbmRlbnQYASABKAsyMC50aW5rb2ZmLnB1Ymxp",
-            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlF1b3RhdGlvbhJNCgtpbmRlbnRf",
-            "dHlwZRgCIAEoDjI4LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJh",
-            "Y3QudjEuVHJhaWxpbmdWYWx1ZVR5cGUSQAoGc3ByZWFkGAMgASgLMjAudGlu",
-            "a29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5RdW90YXRpb24S",
-            "TQoLc3ByZWFkX3R5cGUYBCABKA4yOC50aW5rb2ZmLnB1YmxpYy5pbnZlc3Qu",
-            "YXBpLmNvbnRyYWN0LnYxLlRyYWlsaW5nVmFsdWVUeXBlEkkKBnN0YXR1cxgF",
-            "IAEoDjI5LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEu",
-            "VHJhaWxpbmdTdG9wU3RhdHVzEj8KBXByaWNlGAcgASgLMjAudGlua29mZi5w",
-            "dWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5RdW90YXRpb24SPgoEZXh0",
-            "chgIIAEoCzIwLnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3Qu",
-            "djEuUXVvdGF0aW9uQhQKEl9leGNoYW5nZV9vcmRlcl9pZCp3ChJTdG9wT3Jk",
-            "ZXJEaXJlY3Rpb24SJAogU1RPUF9PUkRFUl9ESVJFQ1RJT05fVU5TUEVDSUZJ",
-            "RUQQABIcChhTVE9QX09SREVSX0RJUkVDVElPTl9CVVkQARIdChlTVE9QX09S",
-            "REVSX0RJUkVDVElPTl9TRUxMEAIqpQEKF1N0b3BPcmRlckV4cGlyYXRpb25U",
-            "eXBlEioKJlNUT1BfT1JERVJfRVhQSVJBVElPTl9UWVBFX1VOU1BFQ0lGSUVE",
-            "EAASLworU1RPUF9PUkRFUl9FWFBJUkFUSU9OX1RZUEVfR09PRF9USUxMX0NB",
-            "TkNFTBABEi0KKVNUT1BfT1JERVJfRVhQSVJBVElPTl9UWVBFX0dPT0RfVElM",
-            "TF9EQVRFEAIqkAEKDVN0b3BPcmRlclR5cGUSHwobU1RPUF9PUkRFUl9UWVBF",
-            "X1VOU1BFQ0lGSUVEEAASHwobU1RPUF9PUkRFUl9UWVBFX1RBS0VfUFJPRklU",
-            "EAESHQoZU1RPUF9PUkRFUl9UWVBFX1NUT1BfTE9TUxACEh4KGlNUT1BfT1JE",
-            "RVJfVFlQRV9TVE9QX0xJTUlUEAMq0gEKFVN0b3BPcmRlclN0YXR1c09wdGlv",
-            "bhIhCh1TVE9QX09SREVSX1NUQVRVU19VTlNQRUNJRklFRBAAEhkKFVNUT1Bf",
-            "T1JERVJfU1RBVFVTX0FMTBABEhwKGFNUT1BfT1JERVJfU1RBVFVTX0FDVElW",
-            "RRACEh4KGlNUT1BfT1JERVJfU1RBVFVTX0VYRUNVVEVEEAMSHgoaU1RPUF9P",
-            "UkRFUl9TVEFUVVNfQ0FOQ0VMRUQQBBIdChlTVE9QX09SREVSX1NUQVRVU19F",
-            "WFBJUkVEEAUqdwoRRXhjaGFuZ2VPcmRlclR5cGUSIwofRVhDSEFOR0VfT1JE",
-            "RVJfVFlQRV9VTlNQRUNJRklFRBAAEh4KGkVYQ0hBTkdFX09SREVSX1RZUEVf",
-            "TUFSS0VUEAESHQoZRVhDSEFOR0VfT1JERVJfVFlQRV9MSU1JVBACKm8KDlRh",
-            "a2VQcm9maXRUeXBlEiAKHFRBS0VfUFJPRklUX1RZUEVfVU5TUEVDSUZJRUQQ",
-            "ABIcChhUQUtFX1BST0ZJVF9UWVBFX1JFR1VMQVIQARIdChlUQUtFX1BST0ZJ",
-            "VF9UWVBFX1RSQUlMSU5HEAIqbQoRVHJhaWxpbmdWYWx1ZVR5cGUSHgoaVFJB",
-            "SUxJTkdfVkFMVUVfVU5TUEVDSUZJRUQQABIbChdUUkFJTElOR19WQUxVRV9B",
-            "QlNPTFVURRABEhsKF1RSQUlMSU5HX1ZBTFVFX1JFTEFUSVZFEAIqagoSVHJh",
-            "aWxpbmdTdG9wU3RhdHVzEh0KGVRSQUlMSU5HX1NUT1BfVU5TUEVDSUZJRUQQ",
-            "ABIYChRUUkFJTElOR19TVE9QX0FDVElWRRABEhsKF1RSQUlMSU5HX1NUT1Bf",
-            "QUNUSVZBVEVEEAIywAMKEVN0b3BPcmRlcnNTZXJ2aWNlEooBCg1Qb3N0U3Rv",
-            "cE9yZGVyEjsudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52",
-            "MS5Qb3N0U3RvcE9yZGVyUmVxdWVzdBo8LnRpbmtvZmYucHVibGljLmludmVz",
-            "dC5hcGkuY29udHJhY3QudjEuUG9zdFN0b3BPcmRlclJlc3BvbnNlEooBCg1H",
-            "ZXRTdG9wT3JkZXJzEjsudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250",
-            "cmFjdC52MS5HZXRTdG9wT3JkZXJzUmVxdWVzdBo8LnRpbmtvZmYucHVibGlj",
-            "LmludmVzdC5hcGkuY29udHJhY3QudjEuR2V0U3RvcE9yZGVyc1Jlc3BvbnNl",
-            "EpABCg9DYW5jZWxTdG9wT3JkZXISPS50aW5rb2ZmLnB1YmxpYy5pbnZlc3Qu",
-            "YXBpLmNvbnRyYWN0LnYxLkNhbmNlbFN0b3BPcmRlclJlcXVlc3QaPi50aW5r",
-            "b2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkNhbmNlbFN0b3BP",
-            "cmRlclJlc3BvbnNlQmYKHHJ1LnRpbmtvZmYucGlhcGkuY29udHJhY3QudjFQ",
-            "AVoMLi87aW52ZXN0YXBpogIFVElBUEmqAhlTdG9ja1NoYXJwLlRpbmtvZmYu",
-            "TmF0aXZlygIRVGlua29mZlxJbnZlc3RcVjFiBnByb3RvMw=="));
+            "QgTiQQECEhwKFGNvbmZpcm1fbWFyZ2luX3RyYWRlGBAgASgIEh4KEWluc3Rh",
+            "bnRfZXhlY3V0aW9uGBEgASgISASIAQEasAIKDFRyYWlsaW5nRGF0YRJACgZp",
+            "bmRlbnQYASABKAsyMC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRy",
+            "YWN0LnYxLlF1b3RhdGlvbhJNCgtpbmRlbnRfdHlwZRgCIAEoDjI4LnRpbmtv",
+            "ZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuVHJhaWxpbmdWYWx1",
+            "ZVR5cGUSQAoGc3ByZWFkGAMgASgLMjAudGlua29mZi5wdWJsaWMuaW52ZXN0",
+            "LmFwaS5jb250cmFjdC52MS5RdW90YXRpb24STQoLc3ByZWFkX3R5cGUYBCAB",
+            "KA4yOC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlRy",
+            "YWlsaW5nVmFsdWVUeXBlQgcKBV9maWdpQggKBl9wcmljZUINCgtfc3RvcF9w",
+            "cmljZUIOCgxfZXhwaXJlX2RhdGVCFAoSX2luc3RhbnRfZXhlY3V0aW9uIp0B",
+            "ChVQb3N0U3RvcE9yZGVyUmVzcG9uc2USFQoNc3RvcF9vcmRlcl9pZBgBIAEo",
+            "CRIYChBvcmRlcl9yZXF1ZXN0X2lkGAIgASgJElMKEXJlc3BvbnNlX21ldGFk",
+            "YXRhGP4BIAEoCzI3LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJh",
+            "Y3QudjEuUmVzcG9uc2VNZXRhZGF0YSLQAQoUR2V0U3RvcE9yZGVyc1JlcXVl",
+            "c3QSGAoKYWNjb3VudF9pZBgBIAEoCUIE4kEBAhJMCgZzdGF0dXMYAiABKA4y",
+            "PC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLlN0b3BP",
+            "cmRlclN0YXR1c09wdGlvbhIoCgRmcm9tGAMgASgLMhouZ29vZ2xlLnByb3Rv",
+            "YnVmLlRpbWVzdGFtcBImCgJ0bxgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5U",
+            "aW1lc3RhbXAiXgoVR2V0U3RvcE9yZGVyc1Jlc3BvbnNlEkUKC3N0b3Bfb3Jk",
+            "ZXJzGAEgAygLMjAudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFj",
+            "dC52MS5TdG9wT3JkZXIiTwoWQ2FuY2VsU3RvcE9yZGVyUmVxdWVzdBIYCgph",
+            "Y2NvdW50X2lkGAEgASgJQgTiQQECEhsKDXN0b3Bfb3JkZXJfaWQYAiABKAlC",
+            "BOJBAQIiQwoXQ2FuY2VsU3RvcE9yZGVyUmVzcG9uc2USKAoEdGltZRgBIAEo",
+            "CzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXAi8wsKCVN0b3BPcmRlchIV",
+            "Cg1zdG9wX29yZGVyX2lkGAEgASgJEhYKDmxvdHNfcmVxdWVzdGVkGAIgASgD",
+            "EgwKBGZpZ2kYAyABKAkSTAoJZGlyZWN0aW9uGAQgASgOMjkudGlua29mZi5w",
+            "dWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5TdG9wT3JkZXJEaXJlY3Rp",
+            "b24SEAoIY3VycmVuY3kYBSABKAkSSAoKb3JkZXJfdHlwZRgGIAEoDjI0LnRp",
+            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuU3RvcE9yZGVy",
+            "VHlwZRIvCgtjcmVhdGVfZGF0ZRgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5U",
+            "aW1lc3RhbXASOAoUYWN0aXZhdGlvbl9kYXRlX3RpbWUYCCABKAsyGi5nb29n",
+            "bGUucHJvdG9idWYuVGltZXN0YW1wEjMKD2V4cGlyYXRpb25fdGltZRgJIAEo",
+            "CzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASQAoFcHJpY2UYCiABKAsy",
+            "MS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLk1vbmV5",
+            "VmFsdWUSRQoKc3RvcF9wcmljZRgLIAEoCzIxLnRpbmtvZmYucHVibGljLmlu",
+            "dmVzdC5hcGkuY29udHJhY3QudjEuTW9uZXlWYWx1ZRIWCg5pbnN0cnVtZW50",
+            "X3VpZBgMIAEoCRJPChB0YWtlX3Byb2ZpdF90eXBlGA0gASgOMjUudGlua29m",
+            "Zi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5UYWtlUHJvZml0VHlw",
+            "ZRJUCg10cmFpbGluZ19kYXRhGA4gASgLMj0udGlua29mZi5wdWJsaWMuaW52",
+            "ZXN0LmFwaS5jb250cmFjdC52MS5TdG9wT3JkZXIuVHJhaWxpbmdEYXRhEkwK",
+            "BnN0YXR1cxgPIAEoDjI8LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29u",
+            "dHJhY3QudjEuU3RvcE9yZGVyU3RhdHVzT3B0aW9uElUKE2V4Y2hhbmdlX29y",
+            "ZGVyX3R5cGUYECABKA4yOC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNv",
+            "bnRyYWN0LnYxLkV4Y2hhbmdlT3JkZXJUeXBlEh4KEWV4Y2hhbmdlX29yZGVy",
+            "X2lkGBEgASgJSACIAQESDgoGdGlja2VyGBIgASgJEhIKCmNsYXNzX2NvZGUY",
+            "EyABKAkSGQoRaW5zdGFudF9leGVjdXRpb24YFCABKAga/AMKDFRyYWlsaW5n",
+            "RGF0YRJACgZpbmRlbnQYASABKAsyMC50aW5rb2ZmLnB1YmxpYy5pbnZlc3Qu",
+            "YXBpLmNvbnRyYWN0LnYxLlF1b3RhdGlvbhJNCgtpbmRlbnRfdHlwZRgCIAEo",
+            "DjI4LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuVHJh",
+            "aWxpbmdWYWx1ZVR5cGUSQAoGc3ByZWFkGAMgASgLMjAudGlua29mZi5wdWJs",
+            "aWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5RdW90YXRpb24STQoLc3ByZWFk",
+            "X3R5cGUYBCABKA4yOC50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRy",
+            "YWN0LnYxLlRyYWlsaW5nVmFsdWVUeXBlEkkKBnN0YXR1cxgFIAEoDjI5LnRp",
+            "bmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuVHJhaWxpbmdT",
+            "dG9wU3RhdHVzEj8KBXByaWNlGAcgASgLMjAudGlua29mZi5wdWJsaWMuaW52",
+            "ZXN0LmFwaS5jb250cmFjdC52MS5RdW90YXRpb24SPgoEZXh0chgIIAEoCzIw",
+            "LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29udHJhY3QudjEuUXVvdGF0",
+            "aW9uQhQKEl9leGNoYW5nZV9vcmRlcl9pZCp3ChJTdG9wT3JkZXJEaXJlY3Rp",
+            "b24SJAogU1RPUF9PUkRFUl9ESVJFQ1RJT05fVU5TUEVDSUZJRUQQABIcChhT",
+            "VE9QX09SREVSX0RJUkVDVElPTl9CVVkQARIdChlTVE9QX09SREVSX0RJUkVD",
+            "VElPTl9TRUxMEAIqpQEKF1N0b3BPcmRlckV4cGlyYXRpb25UeXBlEioKJlNU",
+            "T1BfT1JERVJfRVhQSVJBVElPTl9UWVBFX1VOU1BFQ0lGSUVEEAASLworU1RP",
+            "UF9PUkRFUl9FWFBJUkFUSU9OX1RZUEVfR09PRF9USUxMX0NBTkNFTBABEi0K",
+            "KVNUT1BfT1JERVJfRVhQSVJBVElPTl9UWVBFX0dPT0RfVElMTF9EQVRFEAIq",
+            "kAEKDVN0b3BPcmRlclR5cGUSHwobU1RPUF9PUkRFUl9UWVBFX1VOU1BFQ0lG",
+            "SUVEEAASHwobU1RPUF9PUkRFUl9UWVBFX1RBS0VfUFJPRklUEAESHQoZU1RP",
+            "UF9PUkRFUl9UWVBFX1NUT1BfTE9TUxACEh4KGlNUT1BfT1JERVJfVFlQRV9T",
+            "VE9QX0xJTUlUEAMq0gEKFVN0b3BPcmRlclN0YXR1c09wdGlvbhIhCh1TVE9Q",
+            "X09SREVSX1NUQVRVU19VTlNQRUNJRklFRBAAEhkKFVNUT1BfT1JERVJfU1RB",
+            "VFVTX0FMTBABEhwKGFNUT1BfT1JERVJfU1RBVFVTX0FDVElWRRACEh4KGlNU",
+            "T1BfT1JERVJfU1RBVFVTX0VYRUNVVEVEEAMSHgoaU1RPUF9PUkRFUl9TVEFU",
+            "VVNfQ0FOQ0VMRUQQBBIdChlTVE9QX09SREVSX1NUQVRVU19FWFBJUkVEEAUq",
+            "dwoRRXhjaGFuZ2VPcmRlclR5cGUSIwofRVhDSEFOR0VfT1JERVJfVFlQRV9V",
+            "TlNQRUNJRklFRBAAEh4KGkVYQ0hBTkdFX09SREVSX1RZUEVfTUFSS0VUEAES",
+            "HQoZRVhDSEFOR0VfT1JERVJfVFlQRV9MSU1JVBACKm8KDlRha2VQcm9maXRU",
+            "eXBlEiAKHFRBS0VfUFJPRklUX1RZUEVfVU5TUEVDSUZJRUQQABIcChhUQUtF",
+            "X1BST0ZJVF9UWVBFX1JFR1VMQVIQARIdChlUQUtFX1BST0ZJVF9UWVBFX1RS",
+            "QUlMSU5HEAIqbQoRVHJhaWxpbmdWYWx1ZVR5cGUSHgoaVFJBSUxJTkdfVkFM",
+            "VUVfVU5TUEVDSUZJRUQQABIbChdUUkFJTElOR19WQUxVRV9BQlNPTFVURRAB",
+            "EhsKF1RSQUlMSU5HX1ZBTFVFX1JFTEFUSVZFEAIqagoSVHJhaWxpbmdTdG9w",
+            "U3RhdHVzEh0KGVRSQUlMSU5HX1NUT1BfVU5TUEVDSUZJRUQQABIYChRUUkFJ",
+            "TElOR19TVE9QX0FDVElWRRABEhsKF1RSQUlMSU5HX1NUT1BfQUNUSVZBVEVE",
+            "EAIywAMKEVN0b3BPcmRlcnNTZXJ2aWNlEooBCg1Qb3N0U3RvcE9yZGVyEjsu",
+            "dGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5Qb3N0U3Rv",
+            "cE9yZGVyUmVxdWVzdBo8LnRpbmtvZmYucHVibGljLmludmVzdC5hcGkuY29u",
+            "dHJhY3QudjEuUG9zdFN0b3BPcmRlclJlc3BvbnNlEooBCg1HZXRTdG9wT3Jk",
+            "ZXJzEjsudGlua29mZi5wdWJsaWMuaW52ZXN0LmFwaS5jb250cmFjdC52MS5H",
+            "ZXRTdG9wT3JkZXJzUmVxdWVzdBo8LnRpbmtvZmYucHVibGljLmludmVzdC5h",
+            "cGkuY29udHJhY3QudjEuR2V0U3RvcE9yZGVyc1Jlc3BvbnNlEpABCg9DYW5j",
+            "ZWxTdG9wT3JkZXISPS50aW5rb2ZmLnB1YmxpYy5pbnZlc3QuYXBpLmNvbnRy",
+            "YWN0LnYxLkNhbmNlbFN0b3BPcmRlclJlcXVlc3QaPi50aW5rb2ZmLnB1Ymxp",
+            "Yy5pbnZlc3QuYXBpLmNvbnRyYWN0LnYxLkNhbmNlbFN0b3BPcmRlclJlc3Bv",
+            "bnNlQmYKHHJ1LnRpbmtvZmYucGlhcGkuY29udHJhY3QudjFQAVoMLi87aW52",
+            "ZXN0YXBpogIFVElBUEmqAhlTdG9ja1NoYXJwLlRpbmtvZmYuTmF0aXZlygIR",
+            "VGlua29mZlxJbnZlc3RcVjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Google.Api.FieldBehaviorReflection.Descriptor, global::StockSharp.Tinkoff.Native.CommonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::StockSharp.Tinkoff.Native.StopOrderDirection), typeof(global::StockSharp.Tinkoff.Native.StopOrderExpirationType), typeof(global::StockSharp.Tinkoff.Native.StopOrderType), typeof(global::StockSharp.Tinkoff.Native.StopOrderStatusOption), typeof(global::StockSharp.Tinkoff.Native.ExchangeOrderType), typeof(global::StockSharp.Tinkoff.Native.TakeProfitType), typeof(global::StockSharp.Tinkoff.Native.TrailingValueType), typeof(global::StockSharp.Tinkoff.Native.TrailingStopStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.PostStopOrderRequest), global::StockSharp.Tinkoff.Native.PostStopOrderRequest.Parser, new[]{ "Figi", "Quantity", "Price", "StopPrice", "Direction", "AccountId", "ExpirationType", "StopOrderType", "ExpireDate", "InstrumentId", "ExchangeOrderType", "TakeProfitType", "TrailingData", "PriceType", "OrderId", "ConfirmMarginTrade" }, new[]{ "Figi", "Price", "StopPrice", "ExpireDate" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.PostStopOrderRequest.Types.TrailingData), global::StockSharp.Tinkoff.Native.PostStopOrderRequest.Types.TrailingData.Parser, new[]{ "Indent", "IndentType", "Spread", "SpreadType" }, null, null, null, null)}),
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.PostStopOrderRequest), global::StockSharp.Tinkoff.Native.PostStopOrderRequest.Parser, new[]{ "Figi", "Quantity", "Price", "StopPrice", "Direction", "AccountId", "ExpirationType", "StopOrderType", "ExpireDate", "InstrumentId", "ExchangeOrderType", "TakeProfitType", "TrailingData", "PriceType", "OrderId", "ConfirmMarginTrade", "InstantExecution" }, new[]{ "Figi", "Price", "StopPrice", "ExpireDate", "InstantExecution" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.PostStopOrderRequest.Types.TrailingData), global::StockSharp.Tinkoff.Native.PostStopOrderRequest.Types.TrailingData.Parser, new[]{ "Indent", "IndentType", "Spread", "SpreadType" }, null, null, null, null)}),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.PostStopOrderResponse), global::StockSharp.Tinkoff.Native.PostStopOrderResponse.Parser, new[]{ "StopOrderId", "OrderRequestId", "ResponseMetadata" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetStopOrdersRequest), global::StockSharp.Tinkoff.Native.GetStopOrdersRequest.Parser, new[]{ "AccountId", "Status", "From", "To" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.GetStopOrdersResponse), global::StockSharp.Tinkoff.Native.GetStopOrdersResponse.Parser, new[]{ "StopOrders" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.CancelStopOrderRequest), global::StockSharp.Tinkoff.Native.CancelStopOrderRequest.Parser, new[]{ "AccountId", "StopOrderId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.CancelStopOrderResponse), global::StockSharp.Tinkoff.Native.CancelStopOrderResponse.Parser, new[]{ "Time" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.StopOrder), global::StockSharp.Tinkoff.Native.StopOrder.Parser, new[]{ "StopOrderId", "LotsRequested", "Figi", "Direction", "Currency", "OrderType", "CreateDate", "ActivationDateTime", "ExpirationTime", "Price", "StopPrice", "InstrumentUid", "TakeProfitType", "TrailingData", "Status", "ExchangeOrderType", "ExchangeOrderId", "Ticker", "ClassCode" }, new[]{ "ExchangeOrderId" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.StopOrder.Types.TrailingData), global::StockSharp.Tinkoff.Native.StopOrder.Types.TrailingData.Parser, new[]{ "Indent", "IndentType", "Spread", "SpreadType", "Status", "Price", "Extr" }, null, null, null, null)})
+            new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.StopOrder), global::StockSharp.Tinkoff.Native.StopOrder.Parser, new[]{ "StopOrderId", "LotsRequested", "Figi", "Direction", "Currency", "OrderType", "CreateDate", "ActivationDateTime", "ExpirationTime", "Price", "StopPrice", "InstrumentUid", "TakeProfitType", "TrailingData", "Status", "ExchangeOrderType", "ExchangeOrderId", "Ticker", "ClassCode", "InstantExecution" }, new[]{ "ExchangeOrderId" }, null, null, new pbr::GeneratedClrTypeInfo[] { new pbr::GeneratedClrTypeInfo(typeof(global::StockSharp.Tinkoff.Native.StopOrder.Types.TrailingData), global::StockSharp.Tinkoff.Native.StopOrder.Types.TrailingData.Parser, new[]{ "Indent", "IndentType", "Spread", "SpreadType", "Status", "Price", "Extr" }, null, null, null, null)})
           }));
     }
     #endregion
@@ -331,6 +333,7 @@ namespace StockSharp.Tinkoff.Native {
   {
     private static readonly pb::MessageParser<PostStopOrderRequest> _parser = new pb::MessageParser<PostStopOrderRequest>(() => new PostStopOrderRequest());
     private pb::UnknownFieldSet _unknownFields;
+    private int _hasBits0;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pb::MessageParser<PostStopOrderRequest> Parser { get { return _parser; } }
@@ -358,6 +361,7 @@ namespace StockSharp.Tinkoff.Native {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public PostStopOrderRequest(PostStopOrderRequest other) : this() {
+      _hasBits0 = other._hasBits0;
       figi_ = other.figi_;
       quantity_ = other.quantity_;
       price_ = other.price_ != null ? other.price_.Clone() : null;
@@ -374,6 +378,7 @@ namespace StockSharp.Tinkoff.Native {
       priceType_ = other.priceType_;
       orderId_ = other.orderId_;
       confirmMarginTrade_ = other.confirmMarginTrade_;
+      instantExecution_ = other.instantExecution_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -539,7 +544,7 @@ namespace StockSharp.Tinkoff.Native {
     public const int InstrumentIdFieldNumber = 10;
     private string instrumentId_ = "";
     /// <summary>
-    ///Идентификатор инструмента. Принимает значение `figi` или `instrument_uid`.
+    ///Идентификатор инструмента. Принимает значение `figi`, `instrument_uid` или `ticker + '_' + class_code`.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -640,6 +645,36 @@ namespace StockSharp.Tinkoff.Native {
       }
     }
 
+    /// <summary>Field number for the "instant_execution" field.</summary>
+    public const int InstantExecutionFieldNumber = 17;
+    private readonly static bool InstantExecutionDefaultValue = false;
+
+    private bool instantExecution_;
+    /// <summary>
+    ///Признак необходимости моментальной активации, используется только для трейлинг-стопа.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool InstantExecution {
+      get { if ((_hasBits0 & 1) != 0) { return instantExecution_; } else { return InstantExecutionDefaultValue; } }
+      set {
+        _hasBits0 |= 1;
+        instantExecution_ = value;
+      }
+    }
+    /// <summary>Gets whether the "instant_execution" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasInstantExecution {
+      get { return (_hasBits0 & 1) != 0; }
+    }
+    /// <summary>Clears the value of the "instant_execution" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearInstantExecution() {
+      _hasBits0 &= ~1;
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -671,6 +706,7 @@ namespace StockSharp.Tinkoff.Native {
       if (PriceType != other.PriceType) return false;
       if (OrderId != other.OrderId) return false;
       if (ConfirmMarginTrade != other.ConfirmMarginTrade) return false;
+      if (InstantExecution != other.InstantExecution) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -694,6 +730,7 @@ namespace StockSharp.Tinkoff.Native {
       if (PriceType != global::StockSharp.Tinkoff.Native.PriceType.Unspecified) hash ^= PriceType.GetHashCode();
       if (OrderId.Length != 0) hash ^= OrderId.GetHashCode();
       if (ConfirmMarginTrade != false) hash ^= ConfirmMarginTrade.GetHashCode();
+      if (HasInstantExecution) hash ^= InstantExecution.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -776,6 +813,10 @@ namespace StockSharp.Tinkoff.Native {
         output.WriteRawTag(128, 1);
         output.WriteBool(ConfirmMarginTrade);
       }
+      if (HasInstantExecution) {
+        output.WriteRawTag(136, 1);
+        output.WriteBool(InstantExecution);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -850,6 +891,10 @@ namespace StockSharp.Tinkoff.Native {
         output.WriteRawTag(128, 1);
         output.WriteBool(ConfirmMarginTrade);
       }
+      if (HasInstantExecution) {
+        output.WriteRawTag(136, 1);
+        output.WriteBool(InstantExecution);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -906,6 +951,9 @@ namespace StockSharp.Tinkoff.Native {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(OrderId);
       }
       if (ConfirmMarginTrade != false) {
+        size += 2 + 1;
+      }
+      if (HasInstantExecution) {
         size += 2 + 1;
       }
       if (_unknownFields != null) {
@@ -980,6 +1028,9 @@ namespace StockSharp.Tinkoff.Native {
       if (other.ConfirmMarginTrade != false) {
         ConfirmMarginTrade = other.ConfirmMarginTrade;
       }
+      if (other.HasInstantExecution) {
+        InstantExecution = other.InstantExecution;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -991,11 +1042,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -1075,6 +1122,10 @@ namespace StockSharp.Tinkoff.Native {
             ConfirmMarginTrade = input.ReadBool();
             break;
           }
+          case 136: {
+            InstantExecution = input.ReadBool();
+            break;
+          }
         }
       }
     #endif
@@ -1086,11 +1137,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -1170,6 +1217,10 @@ namespace StockSharp.Tinkoff.Native {
             ConfirmMarginTrade = input.ReadBool();
             break;
           }
+          case 136: {
+            InstantExecution = input.ReadBool();
+            break;
+          }
         }
       }
     }
@@ -1179,7 +1230,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the PostStopOrderRequest message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       internal sealed partial class TrailingData : pb::IMessage<TrailingData>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -1441,11 +1492,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -1482,11 +1529,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;
@@ -1753,11 +1796,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -1787,11 +1826,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2081,11 +2116,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -2122,11 +2153,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2310,11 +2337,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -2333,11 +2356,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2546,11 +2565,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -2573,11 +2588,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2761,11 +2772,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -2787,11 +2794,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -2866,6 +2869,7 @@ namespace StockSharp.Tinkoff.Native {
       exchangeOrderId_ = other.exchangeOrderId_;
       ticker_ = other.ticker_;
       classCode_ = other.classCode_;
+      instantExecution_ = other.instantExecution_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3174,6 +3178,21 @@ namespace StockSharp.Tinkoff.Native {
       }
     }
 
+    /// <summary>Field number for the "instant_execution" field.</summary>
+    public const int InstantExecutionFieldNumber = 20;
+    private bool instantExecution_;
+    /// <summary>
+    ///Признак необходимости моментальной активации, используется только для трейлинг-стопа.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool InstantExecution {
+      get { return instantExecution_; }
+      set {
+        instantExecution_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -3208,6 +3227,7 @@ namespace StockSharp.Tinkoff.Native {
       if (ExchangeOrderId != other.ExchangeOrderId) return false;
       if (Ticker != other.Ticker) return false;
       if (ClassCode != other.ClassCode) return false;
+      if (InstantExecution != other.InstantExecution) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3234,6 +3254,7 @@ namespace StockSharp.Tinkoff.Native {
       if (HasExchangeOrderId) hash ^= ExchangeOrderId.GetHashCode();
       if (Ticker.Length != 0) hash ^= Ticker.GetHashCode();
       if (ClassCode.Length != 0) hash ^= ClassCode.GetHashCode();
+      if (InstantExecution != false) hash ^= InstantExecution.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3328,6 +3349,10 @@ namespace StockSharp.Tinkoff.Native {
         output.WriteRawTag(154, 1);
         output.WriteString(ClassCode);
       }
+      if (InstantExecution != false) {
+        output.WriteRawTag(160, 1);
+        output.WriteBool(InstantExecution);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -3414,6 +3439,10 @@ namespace StockSharp.Tinkoff.Native {
         output.WriteRawTag(154, 1);
         output.WriteString(ClassCode);
       }
+      if (InstantExecution != false) {
+        output.WriteRawTag(160, 1);
+        output.WriteBool(InstantExecution);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -3480,6 +3509,9 @@ namespace StockSharp.Tinkoff.Native {
       }
       if (ClassCode.Length != 0) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(ClassCode);
+      }
+      if (InstantExecution != false) {
+        size += 2 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3568,6 +3600,9 @@ namespace StockSharp.Tinkoff.Native {
       if (other.ClassCode.Length != 0) {
         ClassCode = other.ClassCode;
       }
+      if (other.InstantExecution != false) {
+        InstantExecution = other.InstantExecution;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -3579,11 +3614,7 @@ namespace StockSharp.Tinkoff.Native {
     #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
@@ -3681,6 +3712,10 @@ namespace StockSharp.Tinkoff.Native {
             ClassCode = input.ReadString();
             break;
           }
+          case 160: {
+            InstantExecution = input.ReadBool();
+            break;
+          }
         }
       }
     #endif
@@ -3692,11 +3727,7 @@ namespace StockSharp.Tinkoff.Native {
     void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
+        switch(tag) {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
@@ -3794,6 +3825,10 @@ namespace StockSharp.Tinkoff.Native {
             ClassCode = input.ReadString();
             break;
           }
+          case 160: {
+            InstantExecution = input.ReadBool();
+            break;
+          }
         }
       }
     }
@@ -3803,7 +3838,7 @@ namespace StockSharp.Tinkoff.Native {
     /// <summary>Container for nested types declared in the StopOrder message type.</summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static partial class Types {
+    internal static partial class Types {
       [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
       internal sealed partial class TrailingData : pb::IMessage<TrailingData>
       #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -4167,11 +4202,7 @@ namespace StockSharp.Tinkoff.Native {
         #else
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
                 break;
@@ -4226,11 +4257,7 @@ namespace StockSharp.Tinkoff.Native {
         void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
           uint tag;
           while ((tag = input.ReadTag()) != 0) {
-          if ((tag & 7) == 4) {
-            // Abort on any end group tag.
-            return;
-          }
-          switch(tag) {
+            switch(tag) {
               default:
                 _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                 break;

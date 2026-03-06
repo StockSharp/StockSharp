@@ -41,7 +41,10 @@ public partial class TinkoffMessageAdapter
 			};
 
 			if (stopOrder.StopOrderType == StopOrderType.TakeProfit && condition.IsTrailing)
+			{
 				stopOrder.TakeProfitType = TakeProfitType.Trailing;
+				stopOrder.InstantExecution = condition.InstantExecution;
+			}
 
 			var response = await _service.StopOrders.PostStopOrderAsync(stopOrder, cancellationToken: cancellationToken);
 

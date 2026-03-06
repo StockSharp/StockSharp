@@ -24,6 +24,7 @@ enum InstrumentType {
   INSTRUMENT_TYPE_CLEARING_CERTIFICATE = 8; //Clearing certificate.
   INSTRUMENT_TYPE_INDEX = 9; //Индекс.
   INSTRUMENT_TYPE_COMMODITY = 10; //Товар.
+  INSTRUMENT_TYPE_DFA = 11; //Цифровой актив.
 }
 
 //Статус запрашиваемых инструментов.
@@ -75,6 +76,7 @@ enum SecurityTradingStatus {
   SECURITY_TRADING_STATUS_DEALER_NORMAL_TRADING = 14; //Доступна торговля в режиме внутренней ликвидности брокера.
   SECURITY_TRADING_STATUS_DEALER_BREAK_IN_TRADING = 15; //Перерыв торговли в режиме внутренней ликвидности брокера.
   SECURITY_TRADING_STATUS_DEALER_NOT_AVAILABLE_FOR_TRADING = 16; //Недоступна торговля в режиме внутренней ликвидности брокера.
+  SECURITY_TRADING_STATUS_STABILIZATION_AUCTION = 17; //Аукцион обновления цен.
 }
 
 message PingRequest {

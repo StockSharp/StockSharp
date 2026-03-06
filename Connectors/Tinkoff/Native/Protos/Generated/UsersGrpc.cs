@@ -77,6 +77,10 @@ namespace StockSharp.Tinkoff.Native {
     static readonly grpc::Marshaller<global::StockSharp.Tinkoff.Native.PayInRequest> __Marshaller_tinkoff_public_invest_api_contract_v1_PayInRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::StockSharp.Tinkoff.Native.PayInRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::StockSharp.Tinkoff.Native.PayInResponse> __Marshaller_tinkoff_public_invest_api_contract_v1_PayInResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::StockSharp.Tinkoff.Native.PayInResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::StockSharp.Tinkoff.Native.GetAccountValuesRequest> __Marshaller_tinkoff_public_invest_api_contract_v1_GetAccountValuesRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::StockSharp.Tinkoff.Native.GetAccountValuesRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::StockSharp.Tinkoff.Native.GetAccountValuesResponse> __Marshaller_tinkoff_public_invest_api_contract_v1_GetAccountValuesResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::StockSharp.Tinkoff.Native.GetAccountValuesResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::StockSharp.Tinkoff.Native.GetAccountsRequest, global::StockSharp.Tinkoff.Native.GetAccountsResponse> __Method_GetAccounts = new grpc::Method<global::StockSharp.Tinkoff.Native.GetAccountsRequest, global::StockSharp.Tinkoff.Native.GetAccountsResponse>(
@@ -133,6 +137,14 @@ namespace StockSharp.Tinkoff.Native {
         "PayIn",
         __Marshaller_tinkoff_public_invest_api_contract_v1_PayInRequest,
         __Marshaller_tinkoff_public_invest_api_contract_v1_PayInResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::StockSharp.Tinkoff.Native.GetAccountValuesRequest, global::StockSharp.Tinkoff.Native.GetAccountValuesResponse> __Method_GetAccountValues = new grpc::Method<global::StockSharp.Tinkoff.Native.GetAccountValuesRequest, global::StockSharp.Tinkoff.Native.GetAccountValuesResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetAccountValues",
+        __Marshaller_tinkoff_public_invest_api_contract_v1_GetAccountValuesRequest,
+        __Marshaller_tinkoff_public_invest_api_contract_v1_GetAccountValuesResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -231,6 +243,19 @@ namespace StockSharp.Tinkoff.Native {
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::StockSharp.Tinkoff.Native.PayInResponse> PayIn(global::StockSharp.Tinkoff.Native.PayInRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      ///GetAccountValues — дополнительные показатели счетов
+      ///Метод предназначен для получения дополнительных показателей счетов
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::StockSharp.Tinkoff.Native.GetAccountValuesResponse> GetAccountValues(global::StockSharp.Tinkoff.Native.GetAccountValuesRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -628,6 +653,58 @@ namespace StockSharp.Tinkoff.Native {
       {
         return CallInvoker.AsyncUnaryCall(__Method_PayIn, null, options, request);
       }
+      /// <summary>
+      ///GetAccountValues — дополнительные показатели счетов
+      ///Метод предназначен для получения дополнительных показателей счетов
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::StockSharp.Tinkoff.Native.GetAccountValuesResponse GetAccountValues(global::StockSharp.Tinkoff.Native.GetAccountValuesRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetAccountValues(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///GetAccountValues — дополнительные показатели счетов
+      ///Метод предназначен для получения дополнительных показателей счетов
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::StockSharp.Tinkoff.Native.GetAccountValuesResponse GetAccountValues(global::StockSharp.Tinkoff.Native.GetAccountValuesRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetAccountValues, null, options, request);
+      }
+      /// <summary>
+      ///GetAccountValues — дополнительные показатели счетов
+      ///Метод предназначен для получения дополнительных показателей счетов
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::StockSharp.Tinkoff.Native.GetAccountValuesResponse> GetAccountValuesAsync(global::StockSharp.Tinkoff.Native.GetAccountValuesRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetAccountValuesAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      ///GetAccountValues — дополнительные показатели счетов
+      ///Метод предназначен для получения дополнительных показателей счетов
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::StockSharp.Tinkoff.Native.GetAccountValuesResponse> GetAccountValuesAsync(global::StockSharp.Tinkoff.Native.GetAccountValuesRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetAccountValues, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected override UsersServiceClient NewInstance(ClientBaseConfiguration configuration)
@@ -648,7 +725,8 @@ namespace StockSharp.Tinkoff.Native {
           .AddMethod(__Method_GetInfo, serviceImpl.GetInfo)
           .AddMethod(__Method_GetBankAccounts, serviceImpl.GetBankAccounts)
           .AddMethod(__Method_CurrencyTransfer, serviceImpl.CurrencyTransfer)
-          .AddMethod(__Method_PayIn, serviceImpl.PayIn).Build();
+          .AddMethod(__Method_PayIn, serviceImpl.PayIn)
+          .AddMethod(__Method_GetAccountValues, serviceImpl.GetAccountValues).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the service binding logic.
@@ -665,6 +743,7 @@ namespace StockSharp.Tinkoff.Native {
       serviceBinder.AddMethod(__Method_GetBankAccounts, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.GetBankAccountsRequest, global::StockSharp.Tinkoff.Native.GetBankAccountsResponse>(serviceImpl.GetBankAccounts));
       serviceBinder.AddMethod(__Method_CurrencyTransfer, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.CurrencyTransferRequest, global::StockSharp.Tinkoff.Native.CurrencyTransferResponse>(serviceImpl.CurrencyTransfer));
       serviceBinder.AddMethod(__Method_PayIn, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.PayInRequest, global::StockSharp.Tinkoff.Native.PayInResponse>(serviceImpl.PayIn));
+      serviceBinder.AddMethod(__Method_GetAccountValues, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::StockSharp.Tinkoff.Native.GetAccountValuesRequest, global::StockSharp.Tinkoff.Native.GetAccountValuesResponse>(serviceImpl.GetAccountValues));
     }
 
   }

@@ -51,4 +51,14 @@ public class TinkoffOrderCondition : OrderCondition, IStopLossOrderCondition, IT
 		get => (bool?)Parameters.TryGetValue(nameof(IsTrailing)) ?? false;
 		set => Parameters[nameof(IsTrailing)] = value;
 	}
+
+	/// <summary>
+	/// Instant execution flag (for trailing stop orders).
+	/// </summary>
+	[DataMember]
+	public bool InstantExecution
+	{
+		get => (bool?)Parameters.TryGetValue(nameof(InstantExecution)) ?? false;
+		set => Parameters[nameof(InstantExecution)] = value;
+	}
 }
