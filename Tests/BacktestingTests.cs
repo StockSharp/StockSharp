@@ -2149,4 +2149,82 @@ public class BacktestingTests : BaseTestClass
 		IsTrue(limitOrders.Count > 0, "Expected limit orders from SMA crossover");
 		IsTrue(conditionalOrders.Count > 0, "Expected conditional (stop) orders");
 	}
+
+	/// <summary>
+	/// Verifies that all candles from storage reach the connector during backtesting.
+	/// If this test fails, it means some candle messages are being lost in the adapter pipeline.
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestAllCandlesDelivered()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
+
+		// Count candles in storage
+		var candleType = TimeSpan.FromMinutes(1).TimeFrame();
+		var storageCandles = storageRegistry
+			.GetTimeFrameCandleMessageStorage(security.Id.ToSecurityId(), TimeSpan.FromMinutes(1))
+			.Load(startTime, stopTime)
+			.Count();
+
+		IsTrue(storageCandles > 0, "No candles in storage");
+
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		var finishedCandlesReceived = 0;
+
+		connector.CandleReceived += (sub, candle) =>
+		{
+			if (candle.State == CandleStates.Finished)
+				Interlocked.Increment(ref finishedCandlesReceived);
+		};
+
+		var strategy = new SmaStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = candleType,
+			Long = 80,
+			Short = 30,
+		};
+
+		var tcs = new TaskCompletionSource<bool>();
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				tcs.TrySetResult(true);
+		};
+
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		strategy.Start();
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
+
+		if (completed != tcs.Task)
+		{
+			connector.Disconnect();
+			Fail("Backtest did not complete in time");
+		}
+
+		Console.WriteLine($"Storage candles: {storageCandles}, Received finished candles: {finishedCandlesReceived}");
+
+		// Last candle may not be delivered because ProcessStoredCandles
+		// only emits candles with OpenTime < currentTime (the very last has no "next" time event).
+		IsTrue(finishedCandlesReceived >= storageCandles - 1,
+			$"Too many candles lost. Storage: {storageCandles}, Received: {finishedCandlesReceived}");
+	}
 }

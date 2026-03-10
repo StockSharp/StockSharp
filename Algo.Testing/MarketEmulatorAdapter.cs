@@ -41,7 +41,17 @@ public class MarketEmulatorAdapter : MessageAdapter
 
 	/// <inheritdoc />
 	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
-		=> Emulator.SendInMessageAsync(message, cancellationToken);
+	{
+		// EmulationState(Stopping) is sent through the channel queue as a drain marker.
+		// By the time it arrives here, all prior queued messages (candles etc.) have been processed.
+		// Echo it back as output without sending to the emulator, so it doesn't pollute
+		// emulator.NewOutMessageAsync and break comparison tests.
+		if (message.Type == MessageTypes.EmulationState
+			&& ((EmulationStateMessage)message).State == ChannelStates.Stopping)
+			return SendOutMessageAsync(message, cancellationToken);
+
+		return Emulator.SendInMessageAsync(message, cancellationToken);
+	}
 
 	private ValueTask OnEmulatorNewOutMessage(Message message, CancellationToken cancellationToken)
 		=> SendOutMessageAsync(message, cancellationToken);

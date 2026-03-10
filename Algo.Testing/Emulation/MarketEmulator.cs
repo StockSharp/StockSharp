@@ -187,6 +187,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				results.Add(new ResetMessage());
 				break;
 
+			case MessageTypes.EmulationState:
+				// Handled by MarketEmulatorAdapter before reaching the emulator.
+				// Should not arrive here in normal operation.
+				break;
+
 			case MessageTypes.Time:
 				// handled below in ProcessTime call
 				break;

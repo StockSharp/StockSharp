@@ -15,6 +15,9 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	private readonly MarketEmulatorAdapter _emulatorAdapter;
 	private readonly bool _isEmulationOnly;
 
+	// Pending EmulationState(Stopping) message to forward after emulator drains its queue.
+	private volatile Message _pendingStopping;
+
 	/// <summary>
 	/// Initialize <see cref="EmulationMessageAdapter"/>.
 	/// </summary>
@@ -50,7 +53,19 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			_inAdapter = new PositionMessageAdapter(_inAdapter, new PositionManager(isPosEmu, new PositionManagerState()));
 
 		_inAdapter = new ChannelMessageAdapter(_inAdapter, inChannel, new PassThroughMessageChannel());
-		_inAdapter.NewOutMessageAsync += RaiseNewOutMessageAsync;
+		_inAdapter.NewOutMessageAsync += (message, cancellationToken) =>
+		{
+			// When a EmulationState message comes back from the emulator queue,
+			// it means all preceding messages (candles etc.) have been processed.
+			// Now forward the pending Stopping to the connector.
+			if (message is EmulationStateMessage && _pendingStopping is { } stopping)
+			{
+				_pendingStopping = null;
+				return RaiseNewOutMessageAsync(stopping, cancellationToken);
+			}
+
+			return RaiseNewOutMessageAsync(message, cancellationToken);
+		};
 
 		_isEmulationOnly = isEmulationOnly;
 	}
@@ -265,10 +280,26 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 
 			case MessageTypes.EmulationState:
 			{
-				if (OwnInnerAdapter)
-					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+				var emuState = ((EmulationStateMessage)message).State;
 
-				await SendToEmulator(message, cancellationToken);
+				if (emuState == ChannelStates.Stopping)
+				{
+					// Soft stop: save the Stopping message and send it through the
+					// emulator channel queue as a marker. When it comes back through
+					// _inAdapter.NewOutMessageAsync (after all queued candles/data),
+					// we forward the saved Stopping to the connector.
+					_pendingStopping = message;
+					await SendToEmulator(message, cancellationToken);
+				}
+				else
+				{
+					// All other states: forward immediately + send to emulator as before
+					if (OwnInnerAdapter)
+						await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+
+					await SendToEmulator(message, cancellationToken);
+				}
+
 				break;
 			}
 
@@ -290,8 +321,9 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				if (message is ISubscriptionIdMessage subscrMsg)
 					await TrySendToEmulator(subscrMsg, cancellationToken);
 
-				// Must forward to parent adapter for Connector to receive candles and other market data
-				if (OwnInnerAdapter)
+				// Candle messages must go only through the emulator path to avoid
+				// duplicate delivery from two threads (causing indicator corruption).
+				if (OwnInnerAdapter && message is not CandleMessage)
 					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 				break;
