@@ -1032,14 +1032,17 @@ public class BacktestingTests : BaseTestClass
 		DateTime? lastOrderTime = null;
 		DateTime? lastTradeTime = null;
 		DateTime? lastPnLTime = null;
+		DateTimeOffset? lastCandleTime = null;
 
 		var tradeTimeErrors = new List<string>();
 		var pnlTimeErrors = new List<string>();
 		var orderTimeErrors = new List<string>();
+		var candleTimeErrors = new List<string>();
 
 		var orderCount = 0;
 		var tradeCount = 0;
 		var pnlCount = 0;
+		var candleCount = 0;
 
 		strategy.OrderReceived += (sub, order) =>
 		{
@@ -1066,6 +1069,21 @@ public class BacktestingTests : BaseTestClass
 				tradeTimeErrors.Add($"Trade[{tradeCount}] time decreased: {lastTradeTime.Value:O} -> {time:O}");
 			}
 			lastTradeTime = time;
+		};
+
+		connector.CandleReceived += (sub, candle) =>
+		{
+			if (candle.State != CandleStates.Finished)
+				return;
+
+			var time = candle.OpenTime;
+			candleCount++;
+
+			if (lastCandleTime.HasValue && time < lastCandleTime.Value)
+			{
+				candleTimeErrors.Add($"Candle[{candleCount}] OpenTime decreased: {lastCandleTime.Value:O} -> {time:O}");
+			}
+			lastCandleTime = time;
 		};
 
 		strategy.PnLReceived2 += (s, pf, time, realized, unrealized, commission) =>
@@ -1100,16 +1118,17 @@ public class BacktestingTests : BaseTestClass
 			Fail("Backtest did not complete in time");
 		}
 
-		var totalEvents = orderCount + tradeCount + pnlCount;
+		var totalEvents = orderCount + tradeCount + pnlCount + candleCount;
 		IsTrue(totalEvents > 0, "Expected to receive some events");
 
-		Console.WriteLine($"Events: Orders={orderCount}, Trades={tradeCount}, PnL={pnlCount}");
+		Console.WriteLine($"Events: Orders={orderCount}, Trades={tradeCount}, PnL={pnlCount}, Candles={candleCount}");
 
-		// Check within-type monotonicity for orders, trades, and PnL
+		// Check within-type monotonicity for orders, trades, PnL, and candles
 		var allErrors = new List<string>();
 		allErrors.AddRange(orderTimeErrors);
 		allErrors.AddRange(tradeTimeErrors);
 		allErrors.AddRange(pnlTimeErrors);
+		allErrors.AddRange(candleTimeErrors);
 
 		if (allErrors.Count > 0)
 		{
