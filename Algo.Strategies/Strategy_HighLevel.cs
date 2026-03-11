@@ -607,7 +607,7 @@ public partial class Strategy
 		private readonly CachedSynchronizedList<SubscriptionHandlerBinder0> _binders = [];
 
 		internal SubscriptionHandler(Strategy strategy, Subscription subscription)
-        {
+		{
 			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
 		}

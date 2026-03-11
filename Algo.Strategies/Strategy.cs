@@ -1549,8 +1549,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 			return;
 		}
 
-		LogInfo("Registration {0} (0x{5:X}) order for {1} with price {2} and volume {3}. {4}",
-			order.Type, order.Side, order.Price, order.Volume, order.Comment, order.GetHashCode());
+		LogInfo("Registration {0} (0x{5:X}) order for {1} with price {2} and volume {3}. pos={6} {4}",
+			order.Type, order.Side, order.Price, order.Volume, order.Comment, order.GetHashCode(), Position);
 
 		order.Security ??= Security;
 		order.Portfolio ??= Portfolio;
