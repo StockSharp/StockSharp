@@ -5,6 +5,7 @@ using Ecng.Data;
 using StockSharp.Algo.Export;
 
 [TestClass]
+[DoNotParallelize]
 public class ExportTests : BaseTestClass
 {
 	private static readonly TemplateTxtRegistry _txtReg = new();
@@ -48,7 +49,7 @@ public class ExportTests : BaseTestClass
 		var dbExporter = new DatabaseExporter(DatabaseRegistry.Provider, dataType, new DatabaseConnectionPair
 		{
 			Provider = DatabaseProviderRegistry.AllProviders.First(),
-			ConnectionString = GetSecret("DB_CONNECTION_STRING"),
+			ConnectionString = GetSecret("SQLSERVER_CONNECTION_STRING"),
 		})
 		{
 			DropExisting = true,
