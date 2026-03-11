@@ -19,8 +19,8 @@
   <PropertyGroup Condition="$(TargetFramework.StartsWith('$(NetTfm)'))">
     <LangVersion>latest</LangVersion>
     <MsExtensionsVer>$(NetVer).*</MsExtensionsVer>
-    <MsCodeAnalysisVer>4.*</MsCodeAnalysisVer>
-    <MsCodeAnalysisAnalyzersVer>3.*</MsCodeAnalysisAnalyzersVer>
+    <MsCodeAnalysisVer>5.*</MsCodeAnalysisVer>
+    <MsCodeAnalysisAnalyzersVer>5.*</MsCodeAnalysisAnalyzersVer>
     <MsTestVer>4.*</MsTestVer>
     <MsTestSdkVer>18.*</MsTestSdkVer>
     <GrpcVer>2.*</GrpcVer>
