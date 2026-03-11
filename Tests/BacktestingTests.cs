@@ -2190,10 +2190,10 @@ public class BacktestingTests : BaseTestClass
 
 		// Count candles in storage
 		var candleType = TimeSpan.FromMinutes(1).TimeFrame();
-		var storageCandles = storageRegistry
+		var storageCandles = await storageRegistry
 			.GetTimeFrameCandleMessageStorage(security.Id.ToSecurityId(), TimeSpan.FromMinutes(1))
-			.Load(startTime, stopTime)
-			.Count();
+			.LoadAsync(startTime, stopTime)
+			.CountAsync(CancellationToken);
 
 		IsTrue(storageCandles > 0, "No candles in storage");
 
