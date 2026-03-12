@@ -66,6 +66,11 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 	/// </summary>
 	public bool DropExisting { get; set; }
 
+	/// <summary>
+	/// Optional prefix for table names (e.g. "SS_").
+	/// </summary>
+	public string TableNamePrefix { get; set; }
+
 	/// <inheritdoc />
 	protected override Task<(int, DateTime?)> ExportOrderLogAsync(IAsyncEnumerable<ExecutionMessage> messages, CancellationToken cancellationToken)
 		=> DoAsync(messages, nameof(ExecutionMessage).Remove(nameof(Message)), GetExecutionColumns, ToExecutionDict, cancellationToken);
@@ -128,7 +133,7 @@ public class DatabaseExporter(IDatabaseProvider dbProvider, DataType dataType, D
 		var lastTime = default(DateTime?);
 
 		using var db = _dbProvider.CreateConnection(_connection);
-		var table = _dbProvider.GetTable(db, tableName);
+		var table = _dbProvider.GetTable(db, TableNamePrefix + tableName);
 
 		if (DropExisting)
 			await table.DropAsync(cancellationToken);

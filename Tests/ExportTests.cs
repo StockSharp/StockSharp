@@ -53,6 +53,7 @@ public class ExportTests : BaseTestClass
 		})
 		{
 			DropExisting = true,
+			TableNamePrefix = "SS_",
 		};
 		var (dbCount, dbLastTime) = await dbExporter.Export(arr.ToAsyncEnumerable(), token);
 		validateResult(dbCount, dbLastTime, "DB");
