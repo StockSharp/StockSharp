@@ -9,6 +9,7 @@
     <PackageReference Include="Ecng.Data.Ado" Version="$(EcngVer)" />
     <PackageReference Include="Ecng.Data.SqlServer" Version="$(EcngVer)" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="$(MsSqlClientVer)" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Reports\*.*">

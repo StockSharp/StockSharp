@@ -12,6 +12,5 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MsTestSdkVer)" />
     <PackageReference Include="MSTest.TestAdapter" Version="$(MsTestVer)" />
     <PackageReference Include="MSTest.TestFramework" Version="$(MsTestVer)" />
-    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
   </ItemGroup>
 </Project>
