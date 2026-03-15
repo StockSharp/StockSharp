@@ -82,7 +82,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	/// </summary>
 	public static readonly string DefaultTargetCompId = "StockSharpHydraMD";
 
-	private readonly IMessageAdapter _adapter;
+	private readonly Lazy<IMessageAdapter> _adapter;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RemoteMarketDataDrive"/>.
@@ -97,7 +97,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	/// </summary>
 	/// <param name="address">Server address.</param>
 	public RemoteMarketDataDrive(EndPoint address)
-		: this(address, ServicesRegistry.AdapterProvider.CreateTransportAdapter(new IncrementalIdGenerator()))
+		: this(address, () => ServicesRegistry.AdapterProvider.CreateTransportAdapter(new IncrementalIdGenerator()))
 	{
 	}
 
@@ -107,8 +107,13 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	/// <param name="address">Server address.</param>
 	/// <param name="adapter">Message adapter.</param>
 	public RemoteMarketDataDrive(EndPoint address, IMessageAdapter adapter)
+		: this(address, adapter is null ? throw new ArgumentNullException(nameof(adapter)) : () => adapter)
 	{
-		_adapter = adapter ?? throw new ArgumentNullException(nameof(adapter));
+	}
+
+	private RemoteMarketDataDrive(EndPoint address, Func<IMessageAdapter> adapterFactory)
+	{
+		_adapter = new(adapterFactory ?? throw new ArgumentNullException(nameof(adapterFactory)));
 		Address = address ?? throw new ArgumentNullException(nameof(address));
 	}
 
@@ -215,7 +220,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 
 	private RemoteStorageClient CreateClient()
 	{
-		var adapter = _adapter;
+		var adapter = _adapter.Value;
 
 		if (adapter is IAddressAdapter<EndPoint> addressAdapter)
 			addressAdapter.Address = Address;
