@@ -313,6 +313,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			emulator.ProcessTick(execMsg, results);
 			if (execMsg.TradePrice is { } tickPrice)
 				_engine.CheckStopOrders(execMsg.SecurityId, tickPrice, execMsg.LocalTime, results);
+			results.Add(execMsg);
 		}
 		else if (execMsg.DataType == DataType.OrderLog)
 		{

@@ -133,6 +133,135 @@ public class BacktestingTests : BaseTestClass
 			Console.WriteLine($"Done order: {o.TransactionId} Status={o.Status} Balance={o.Balance} Volume={o.Volume}");
 	}
 
+	/// <summary>
+	/// Verify that candles are built from ticks during backtest (BuildFrom = Ticks).
+	/// Reproduces the WPF sample scenario where ticks are the data source.
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestBuildCandlesFromTicks()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(2);
+
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		var candleCount = 0;
+
+		var tcs = new TaskCompletionSource<bool>();
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				tcs.TrySetResult(true);
+		};
+
+		connector.Connect();
+
+		// subscribe to candles built from ticks
+		var subscription = new Subscription(
+			TimeSpan.FromMinutes(1).TimeFrame(),
+			security)
+		{
+			MarketData =
+			{
+				BuildFrom = DataType.Ticks,
+				BuildMode = MarketDataBuildModes.Build,
+				IsFinishedOnly = true,
+			}
+		};
+
+		connector.CandleReceived += (sub, candle) =>
+		{
+			Interlocked.Increment(ref candleCount);
+		};
+
+		connector.Subscribe(subscription);
+
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
+
+		if (completed != tcs.Task)
+		{
+			connector.Disconnect();
+			Fail("Backtest did not complete in 30 seconds");
+		}
+
+		IsTrue(candleCount > 0, $"Should build candles from ticks, got {candleCount}");
+	}
+
+	/// <summary>
+	/// Verify that candles are built from Level1 during backtest (BuildFrom = Level1).
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestBuildCandlesFromLevel1()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(2);
+
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		var candleCount = 0;
+
+		var tcs = new TaskCompletionSource<bool>();
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				tcs.TrySetResult(true);
+		};
+
+		connector.Connect();
+
+		var subscription = new Subscription(
+			TimeSpan.FromMinutes(1).TimeFrame(),
+			security)
+		{
+			MarketData =
+			{
+				BuildFrom = DataType.Level1,
+				BuildMode = MarketDataBuildModes.Build,
+				BuildField = Level1Fields.BestBidPrice,
+				IsFinishedOnly = true,
+			}
+		};
+
+		connector.CandleReceived += (sub, candle) =>
+		{
+			Interlocked.Increment(ref candleCount);
+		};
+
+		connector.Subscribe(subscription);
+
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
+
+		if (completed != tcs.Task)
+		{
+			connector.Disconnect();
+			Fail("Backtest did not complete in 30 seconds");
+		}
+
+		IsTrue(candleCount > 0, $"Should build candles from Level1, got {candleCount}");
+	}
+
 	private static Security CreateTestSecurity()
 	{
 		return new() { Id = Paths.HistoryDefaultSecurity };

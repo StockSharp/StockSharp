@@ -321,9 +321,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				if (message is ISubscriptionIdMessage subscrMsg)
 					await TrySendToEmulator(subscrMsg, cancellationToken);
 
-				// Candle messages must go only through the emulator path to avoid
-				// duplicate delivery from two threads (causing indicator corruption).
-				if (OwnInnerAdapter && message is not CandleMessage)
+				if (OwnInnerAdapter)
 					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 				break;
