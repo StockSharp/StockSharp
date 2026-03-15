@@ -2862,14 +2862,15 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (copy is null)
 			throw new ArgumentNullException(nameof(copy));
 
+		var id = copy.Id;
+		copy.Load(this.Save());
+		copy.Id = id;
+
+		// set after Load to avoid being overwritten by deserialization
 		//copy.Connector = Connector;
 		copy.Security = Security;
 		copy.Portfolio = Portfolio;
 		copy.PortfolioProvider = PortfolioProvider;
-
-		var id = copy.Id;
-		copy.Load(this.Save());
-		copy.Id = id;
 
 		copy.Environment.AddRange(Environment);
 	}

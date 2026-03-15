@@ -1,5 +1,7 @@
 namespace StockSharp.Tests;
 
+using StockSharp.Designer;
+
 [TestClass]
 public class StrategyParamTests : BaseTestClass
 {
@@ -797,6 +799,30 @@ public class StrategyParamTests : BaseTestClass
 			CultureInfo.CurrentCulture = prev;
 			CultureInfo.CurrentUICulture = prevUi;
 		}
+	}
+
+	[TestMethod]
+	public void Clone_PreservesSecurityAndPortfolio()
+	{
+		var security = new Security { Id = "AAPL@NASDAQ", PriceStep = 0.01m };
+		var portfolio = Portfolio.CreateSimulator();
+
+		var original = new SmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		var clone = (SmaStrategy)original.Clone();
+
+		AreEqual(security.Id, clone.Security?.Id, "Security must survive Clone");
+		AreEqual(portfolio.Name, clone.Portfolio?.Name, "Portfolio must survive Clone");
+		AreEqual(80, clone.Long, "Long param must survive Clone");
+		AreEqual(30, clone.Short, "Short param must survive Clone");
 	}
 
 	private class TestStrategy : Strategy
