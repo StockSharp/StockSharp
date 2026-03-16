@@ -126,6 +126,7 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 			if (currentCandle != null)
 			{
 				currentCandle.State = CandleStates.Finished;
+				currentCandle.LocalTime = transform.Time;
 				yield return currentCandle;
 			}
 
