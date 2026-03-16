@@ -544,7 +544,8 @@ public partial class MainWindow
 						if (connector.IsFinished)
 						{
 							progressBar.Value = progressBar.Maximum;
-							MessageBox.Show(this, LocalizedStrings.CompletedIn.Put(DateTime.UtcNow - _startEmulationTime), title);
+							var msg = LocalizedStrings.CompletedIn.Put(DateTime.UtcNow - _startEmulationTime);
+							MessageBox.Show(this, msg, title);
 						}
 						else
 							MessageBox.Show(this, LocalizedStrings.Cancelled, title);
