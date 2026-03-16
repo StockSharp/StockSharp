@@ -313,7 +313,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			emulator.ProcessTick(execMsg, results);
 			if (execMsg.TradePrice is { } tickPrice)
 				_engine.CheckStopOrders(execMsg.SecurityId, tickPrice, execMsg.LocalTime, results);
-			results.Add(execMsg);
+
+			if (emulator.HasTicksSubscription)
+				results.Add(execMsg);
 		}
 		else if (execMsg.DataType == DataType.OrderLog)
 		{
@@ -793,6 +795,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	private readonly MatchingEngineAdapter _engine = engine;
 	private SecurityMessage _securityDefinition;
 	private long? _depthSubscription;
+	private long? _ticksSubscription;
 	private long? _candlesSubscription;
 	private bool _candlesNonFinished;
 	private readonly SortedDictionary<DateTime, List<CandleMessage>> _storedCandles = [];
@@ -808,6 +811,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	public decimal PriceStep => _securityDefinition?.PriceStep ?? 0.01m;
 	public decimal VolumeStep => _securityDefinition?.VolumeStep ?? 1m;
 	public bool HasDepthSubscription => _depthSubscription.HasValue;
+	public bool HasTicksSubscription => _ticksSubscription.HasValue;
 
 	/// <summary>
 	/// True when order book was populated from candle data.
@@ -871,6 +875,8 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		{
 			if (msg.DataType2 == DataType.MarketDepth)
 				_depthSubscription = msg.TransactionId;
+			else if (msg.DataType2 == DataType.Ticks)
+				_ticksSubscription = msg.TransactionId;
 			else if (msg.DataType2.IsCandles)
 			{
 				_candlesSubscription = msg.TransactionId;
@@ -881,6 +887,8 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		{
 			if (_depthSubscription == msg.OriginalTransactionId)
 				_depthSubscription = null;
+			else if (_ticksSubscription == msg.OriginalTransactionId)
+				_ticksSubscription = null;
 			else if (_candlesSubscription == msg.OriginalTransactionId)
 			{
 				_candlesSubscription = null;
