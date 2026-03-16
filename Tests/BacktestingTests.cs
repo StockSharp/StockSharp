@@ -262,6 +262,249 @@ public class BacktestingTests : BaseTestClass
 		IsTrue(candleCount > 0, $"Should build candles from Level1, got {candleCount}");
 	}
 
+	/// <summary>
+	/// Full month backtest with BuildFrom=Ticks — reproduces WPF sample scenario.
+	/// Tests that backtest completes without hanging for the full date range.
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestFullMonth_BuildFromTicks()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
+
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		var candleCount = 0;
+		var lastProgress = 0;
+
+		connector.ProgressChanged += step =>
+		{
+			if (step % 10 == 0 && step > lastProgress)
+				Console.WriteLine($"Progress: {step}%, candles: {candleCount}");
+			lastProgress = step;
+		};
+
+		var tcs = new TaskCompletionSource<bool>();
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				tcs.TrySetResult(true);
+		};
+
+		connector.Connect();
+
+		// Subscribe to candles built from ticks (same as WPF Ticks mode)
+		var subscription = new Subscription(
+			TimeSpan.FromMinutes(1).TimeFrame(),
+			security)
+		{
+			MarketData =
+			{
+				BuildFrom = DataType.Ticks,
+				BuildMode = MarketDataBuildModes.Build,
+				IsFinishedOnly = true,
+			}
+		};
+
+		connector.CandleReceived += (sub, candle) =>
+		{
+			Interlocked.Increment(ref candleCount);
+		};
+
+		connector.Subscribe(subscription);
+
+		await connector.StartAsync(CancellationToken);
+
+		// 5 minutes timeout for full month of tick data
+		using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(5));
+		cts.Token.Register(() => tcs.TrySetResult(false));
+		var ok = await tcs.Task;
+
+		Console.WriteLine($"Final: progress={lastProgress}%, candles={candleCount}");
+
+		IsTrue(ok, $"Backtest should complete without timeout (progress reached {lastProgress}%)");
+		IsTrue(lastProgress >= 100, $"Progress should reach 100%, got {lastProgress}%");
+		IsTrue(candleCount > 0, $"Should have candles, got {candleCount}");
+	}
+
+	/// <summary>
+	/// Full month backtest with strategy + BuildFrom=Ticks.
+	/// Verifies no OrderRegisterFailed due to emulator time race condition.
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestFullMonth_BuildFromTicks_WithStrategy()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		security.PriceStep = 0.01m;
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryEndDate;
+
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		var lastProgress = 0;
+		var orderErrors = 0;
+
+		connector.ProgressChanged += step => lastProgress = step;
+		connector.OrderRegisterFailed += fail =>
+		{
+			Interlocked.Increment(ref orderErrors);
+			Console.WriteLine($"OrderRegisterFailed: {fail.Error.Message}");
+		};
+
+		var tcs = new TaskCompletionSource<bool>();
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				tcs.TrySetResult(true);
+		};
+
+		var strategy = new SmaStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 10,
+		};
+
+		// Simulate WPF sample: strategy uses BuildFrom=Ticks internally
+		// by subscribing to candles built from ticks in OnStarted2
+
+		connector.Connect();
+		strategy.Start();
+		await connector.StartAsync(CancellationToken);
+
+		using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(5));
+		cts.Token.Register(() => tcs.TrySetResult(false));
+		var ok = await tcs.Task;
+
+		strategy.Stop();
+
+		Console.WriteLine($"Progress: {lastProgress}%");
+		Console.WriteLine($"Strategy trades: {strategy.MyTrades.Count()}");
+		Console.WriteLine($"Strategy orders: {strategy.Orders.Count()}");
+		Console.WriteLine($"Order errors (time race): {orderErrors}");
+		Console.WriteLine($"Strategy PnL: {strategy.PnL}");
+
+		IsTrue(ok, $"Backtest should complete without timeout (progress reached {lastProgress}%)");
+		AreEqual(0, orderErrors, "No OrderRegisterFailed errors should occur");
+	}
+
+	/// <summary>
+	/// Backtest with BuildFrom=Ticks subscription and order registration.
+	/// Reproduces time race: CandleBuilderMessageAdapter absorbs ticks,
+	/// Connector._currentTime lags behind emulator._lastInputTime.
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestBuildFromTicks_OrderTimeMismatch()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		security.PriceStep = 0.01m;
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = startTime.AddDays(3);
+
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		var orderErrors = 0;
+		var orderCount = 0;
+		var candleCount = 0;
+
+		connector.OrderRegisterFailed += fail =>
+		{
+			Interlocked.Increment(ref orderErrors);
+			Console.WriteLine($"OrderRegisterFailed: {fail.Error.Message}");
+		};
+
+		var tcs = new TaskCompletionSource<bool>();
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				tcs.TrySetResult(true);
+		};
+
+		connector.Connect();
+
+		// Subscribe to candles with BuildFrom=Ticks (like the console/WPF sample)
+		var subscription = new Subscription(
+			TimeSpan.FromMinutes(1).TimeFrame(),
+			security)
+		{
+			MarketData =
+			{
+				BuildFrom = DataType.Ticks,
+				BuildMode = MarketDataBuildModes.Build,
+				IsFinishedOnly = true,
+			}
+		};
+
+		var side = Sides.Buy;
+		connector.CandleReceived += (sub, candle) =>
+		{
+			if (candle.State != CandleStates.Finished)
+				return;
+
+			Interlocked.Increment(ref candleCount);
+
+			// register order on every 50th candle
+			if (candleCount % 50 != 0)
+				return;
+
+			side = side == Sides.Buy ? Sides.Sell : Sides.Buy;
+			var order = new Order
+			{
+				Security = security,
+				Portfolio = portfolio,
+				Side = side,
+				Price = candle.ClosePrice,
+				Volume = 1,
+				Type = OrderTypes.Limit,
+			};
+			connector.RegisterOrder(order);
+			Interlocked.Increment(ref orderCount);
+		};
+
+		connector.Subscribe(subscription);
+
+		await connector.StartAsync(CancellationToken);
+
+		using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(2));
+		cts.Token.Register(() => tcs.TrySetResult(false));
+		var ok = await tcs.Task;
+
+		Console.WriteLine($"Candles: {candleCount}, Orders: {orderCount}, Errors: {orderErrors}");
+
+		IsTrue(ok, "Backtest should complete without timeout");
+		IsTrue(orderCount > 0, $"Should have placed orders, got {orderCount}");
+		AreEqual(0, orderErrors, $"No OrderRegisterFailed errors should occur (got {orderErrors} out of {orderCount} orders)");
+	}
+
 	private static Security CreateTestSecurity()
 	{
 		return new() { Id = Paths.HistoryDefaultSecurity };
