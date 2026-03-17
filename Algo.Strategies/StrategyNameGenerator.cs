@@ -13,17 +13,10 @@ public sealed class StrategyNameGenerator : Disposable
 	{
 		private readonly Dictionary<string, string> _values;
 
-		public Source(SmartFormatter formatter, Dictionary<string, string> values)
+		public Source(Dictionary<string, string> values)
 		{
-			if (formatter == null)
-				throw new ArgumentNullException(nameof(formatter));
-
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
-
-			formatter.Parser.AddAlphanumericSelectors();
-			formatter.Parser.AddAdditionalSelectorChars("_");
-			formatter.Parser.AddOperators(".");
 
 			_values = values;
 		}
@@ -58,7 +51,9 @@ public sealed class StrategyNameGenerator : Disposable
 		ShortName = new string([.. _strategy.GetType().Name.Where(char.IsUpper)]);
 
 		_formatter = Smart.CreateDefaultSmartFormat();
-		_formatter.SourceExtensions.Add(new Source(_formatter, new Dictionary<string, string>
+		_formatter.Settings.Parser.AddCustomSelectorChars(['_']);
+		_formatter.Settings.Parser.AddCustomOperatorChars(['.']);
+		_formatter.AddExtensions(new Source(new Dictionary<string, string>
 		{
 			{ "FullName", _strategy.GetType().Name },
 			{ nameof(ShortName), ShortName },
@@ -104,11 +99,11 @@ public sealed class StrategyNameGenerator : Disposable
 
 			_pattern = value;
 
-			var format = _formatter.Parser.ParseFormat(value, []);
+			var format = _formatter.Parser.ParseFormat(value);
 			var selectors = format
 				.Items
 				.OfType<Placeholder>()
-				.SelectMany(ph => ph.Selectors)
+				.SelectMany(ph => ph.GetSelectors())
 				.Select(s => s.RawText)
 				.Distinct();
 
