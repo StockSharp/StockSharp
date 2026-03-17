@@ -26,6 +26,8 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		private readonly Lock _cacheSync = new();
 		private readonly IFileSystem _fileSystem;
 
+		private readonly string _legacyFileNameWithExtension;
+
 		public LocalMarketDataStorageDrive(DataType dataType, SecurityId secId, StorageFormats format, LocalMarketDataDrive drive)
 		{
 			_dataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
@@ -43,6 +45,10 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			_datesPath = $"{datesPath}2.bin";
 			_datesPathObsoleteBin = $"{datesPath}.bin";
 			_datesPathObsoleteTxt = $"{datesPath}.txt";
+
+			// backward compat: Level1 was previously stored as "security.bin"
+			if (dataType == DataType.Level1)
+				_legacyFileNameWithExtension = "security" + GetExtension(_format);
 
 			_datesDict = new(() =>
 			{
@@ -71,7 +77,8 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 				{
 					dates = _fileSystem
 						.GetDirectories(_path)
-						.Where(dir => _fileSystem.FileExists(IOPath.Combine(dir, _fileNameWithExtension)))
+						.Where(dir => _fileSystem.FileExists(IOPath.Combine(dir, _fileNameWithExtension))
+							|| (_legacyFileNameWithExtension != null && _fileSystem.FileExists(IOPath.Combine(dir, _legacyFileNameWithExtension))))
 						.Select(dir => GetDate(IOPath.GetFileName(dir)));
 
 					save = true;
@@ -288,6 +295,15 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		private string GetPath(DateTime date, bool isLoad)
 		{
 			var result = IOPath.Combine(GetDataPath(date), _fileNameWithExtension);
+
+			// backward compat: if loading and new file doesn't exist, try legacy name
+			if (isLoad && _legacyFileNameWithExtension != null && !_fileSystem.FileExists(result))
+			{
+				var legacyPath = IOPath.Combine(GetDataPath(date), _legacyFileNameWithExtension);
+
+				if (_fileSystem.FileExists(legacyPath))
+					result = legacyPath;
+			}
 
 			System.Diagnostics.Debug.WriteLine($"FileAccess ({(isLoad ? "Load" : "Save")}): {result}");
 			return result;

@@ -672,7 +672,7 @@ public static partial class Extensions
 		{ DataType.OrderLog, "orderLog" },
 		{ DataType.Transactions, "transactions" },
 		{ DataType.MarketDepth, "quotes" },
-		{ DataType.Level1, "security" },
+		{ DataType.Level1, "level1" },
 		{ DataType.PositionChanges, "position" },
 		{ DataType.News, "news" },
 		{ DataType.Board, "board" },
@@ -690,6 +690,10 @@ public static partial class Extensions
 
 		if (info != null)
 			return info;
+
+		// backward compatibility: old Level1 files were named "security"
+		if (fileName.EqualsIgnoreCase("security"))
+			return DataType.Level1;
 
 		if (!fileName.StartsWithIgnoreCase("candles_"))
 			return null;
