@@ -256,7 +256,7 @@ public class Level1ExtendBuilderAdapter(IMessageAdapter innerAdapter) : MessageA
 			{
 				var candleMsg = (TimeFrameCandleMessage)message;
 
-				message = await TryConvertAsync(candleMsg, DataType.CandleTimeFrame, Extensions.ToLevel1, cancellationToken);
+				message = await TryConvertAsync(candleMsg, candleMsg.DataType, Extensions.ToLevel1, cancellationToken);
 				break;
 			}
 		}
