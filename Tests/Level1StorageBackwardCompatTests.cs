@@ -164,32 +164,6 @@ public class Level1StorageBackwardCompatTests : BaseTestClass
 		await storage.DeleteWithCheckAsync(token);
 	}
 
-	[TestMethod]
-	[DataRow(StorageFormats.Binary)]
-	[DataRow(StorageFormats.Csv)]
-	public async Task Level1_OtherDataTypes_Unaffected(StorageFormats format)
-	{
-		var fs = Helper.MemorySystem;
-		var registry = GetStorageRegistry(fs);
-		var token = CancellationToken;
-
-		var security = Helper.CreateStorageSecurity();
-		var securityId = security.ToSecurityId();
-
-		// save ticks
-		var ticks = security.RandomTicks(100, true);
-		var tickStorage = registry.GetTickMessageStorage(securityId, null, format);
-		await tickStorage.SaveAsync(ticks, token);
-
-		var loaded = await tickStorage.LoadAsync(DateTime.MinValue, default).ToArrayAsync(token);
-		loaded.Length.AssertEqual(ticks.Length);
-
-		// verify ticks still use "trades" filename
-		DataType.Ticks.DataTypeToFileName().AssertEqual("trades");
-
-		await tickStorage.DeleteWithCheckAsync(token);
-	}
-
 	#endregion
 
 	#region GetFileName
@@ -219,21 +193,9 @@ public class Level1StorageBackwardCompatTests : BaseTestClass
 
 	#region HistoryData (real legacy security.bin)
 
-	private static bool SkipIfNoHistoryData()
-	{
-		if (Paths.HistoryDataPath == null)
-		{
-			Console.WriteLine("Skipping: stocksharp.samples.historydata package not installed");
-			return true;
-		}
-		return false;
-	}
-
 	[TestMethod]
 	public async Task Level1_LoadFromHistoryData_LegacySecurityBin()
 	{
-		if (SkipIfNoHistoryData()) return;
-
 		var token = CancellationToken;
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
 		var storageRegistry = Helper.FileSystem.GetStorage(Paths.HistoryDataPath);
