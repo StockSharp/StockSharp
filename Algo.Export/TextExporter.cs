@@ -1,7 +1,6 @@
 namespace StockSharp.Algo.Export;
 
 using SmartFormat;
-using SmartFormat.Core.Formatting;
 
 /// <summary>
 /// The export into text file.
@@ -15,6 +14,8 @@ using SmartFormat.Core.Formatting;
 /// <param name="header">Header at the first line. Do not add header while empty string.</param>
 public class TextExporter(DataType dataType, Stream stream, string template, string header) : BaseExporter(dataType)
 {
+	private static readonly SmartFormatter _formatter = StringHelper.CreateSmartFormatterEx();
+
 	private readonly string _template = template.ThrowIfEmpty(nameof(template));
 	private readonly string _header = header;
 
@@ -76,12 +77,11 @@ public class TextExporter(DataType dataType, Stream stream, string template, str
 			if (!_header.IsEmpty())
 				await writer.WriteLineAsync(_header.AsMemory(), cancellationToken);
 
-			FormatCache templateCache = null;
-			var formater = Smart.Default;
+			var parsedFormat = _formatter.Parser.ParseFormat(_template);
 
 			await foreach (var value in values.WithCancellation(cancellationToken))
 			{
-				await writer.WriteLineAsync(formater.FormatWithCache(ref templateCache, _template, value).AsMemory(), cancellationToken);
+				await writer.WriteLineAsync(_formatter.Format(parsedFormat, value).AsMemory(), cancellationToken);
 
 				count++;
 

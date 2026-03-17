@@ -1,7 +1,7 @@
 namespace StockSharp.Diagram.Elements;
 
 using SmartFormat;
-using SmartFormat.Core.Formatting;
+using SmartFormat.Core.Parsing;
 
 /// <summary>
 /// String formatting element for single value using templates.
@@ -15,13 +15,15 @@ using SmartFormat.Core.Formatting;
 [Doc("topics/designer/strategies/using_visual_designer/elements/notifying/string_format.html")]
 public sealed class StringFormatDiagramElement : DiagramElement
 {
+	private static readonly SmartFormatter _formatter = StringHelper.CreateSmartFormatterEx();
+
 	/// <inheritdoc />
 	public override Guid TypeId { get; } = "96387CFD-3180-4575-9C00-DF214B503D41".To<Guid>();
 
 	/// <inheritdoc />
 	public override string IconName { get; } = "CurlyBrackets";
 
-	private FormatCache _templateCache;
+	private Format _parsedFormat;
 
 	private readonly DiagramSocket _outputSocket;
 	private readonly DiagramElementParam<string> _template;
@@ -48,7 +50,7 @@ public sealed class StringFormatDiagramElement : DiagramElement
 			.SetDisplay(LocalizedStrings.Common, LocalizedStrings.Template, LocalizedStrings.StringFormatTemplate, 10)
 			.SetOnValueChangedHandler(value =>
 			{
-				_templateCache = null;
+				_parsedFormat = null;
 				SetElementName(value.Truncate(20).IsEmpty(GetDisplayName()));
 			});
 
@@ -68,7 +70,7 @@ public sealed class StringFormatDiagramElement : DiagramElement
 	protected override void OnReseted()
 	{
 		base.OnReseted();
-		_templateCache = null;
+		_parsedFormat = null;
 	}
 
 	private void OnProcess(DiagramSocketValue value)
@@ -76,7 +78,8 @@ public sealed class StringFormatDiagramElement : DiagramElement
 		var template = Template;
 		var inputValue = value.Value;
 
-		var formattedText = Smart.Default.FormatWithCache(ref _templateCache, template, inputValue);
+		_parsedFormat ??= _formatter.Parser.ParseFormat(template);
+		var formattedText = _formatter.Format(_parsedFormat, inputValue);
 		RaiseProcessOutput(_outputSocket, value.Time, formattedText, value);
 	}
 }

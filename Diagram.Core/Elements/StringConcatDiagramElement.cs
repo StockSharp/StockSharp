@@ -3,7 +3,7 @@ namespace StockSharp.Diagram.Elements;
 using System.Text.RegularExpressions;
 
 using SmartFormat;
-using SmartFormat.Core.Formatting;
+using SmartFormat.Core.Parsing;
 
 /// <summary>
 /// String concatenation and formatting element.
@@ -17,6 +17,8 @@ using SmartFormat.Core.Formatting;
 [Doc("topics/designer/strategies/using_visual_designer/elements/notifying/string_concat.html")]
 public sealed class StringConcatDiagramElement : DiagramElement
 {
+	private static readonly SmartFormatter _formatter = StringHelper.CreateSmartFormatterEx();
+
 	/// <inheritdoc />
 	public override Guid TypeId { get; } = "A1B2C3D4-E5F6-7890-ABCD-EF1234567890".To<Guid>();
 
@@ -26,7 +28,7 @@ public sealed class StringConcatDiagramElement : DiagramElement
 	private readonly DiagramSocket _outputSocket;
 	private readonly DiagramElementParam<string> _template;
 
-	private FormatCache _templateCache;
+	private Format _parsedFormat;
 	private readonly HashSet<string> _templateVariables = [];
 
 	/// <summary>
@@ -50,7 +52,7 @@ public sealed class StringConcatDiagramElement : DiagramElement
 			.SetDisplay(LocalizedStrings.Common, LocalizedStrings.Template, LocalizedStrings.StringConcatFormatTemplate, 10)
 			.SetOnValueChangedHandler(value =>
 			{
-				_templateCache = null;
+				_parsedFormat = null;
 				SetElementName(value.Truncate(20).IsEmpty(GetDisplayName()));
 
 				UpdateSocketsFromTemplate(value);
@@ -73,7 +75,7 @@ public sealed class StringConcatDiagramElement : DiagramElement
 	{
 		base.OnReseted();
 
-		_templateCache = null;
+		_parsedFormat = null;
 	}
 
 	/// <inheritdoc />
@@ -92,7 +94,8 @@ public sealed class StringConcatDiagramElement : DiagramElement
 			data[socketName] = socketValue;
 		}
 
-		var formattedText = Smart.Default.FormatWithCache(ref _templateCache, template, data);
+		_parsedFormat ??= _formatter.Parser.ParseFormat(template);
+		var formattedText = _formatter.Format(_parsedFormat, data);
 
 		RaiseProcessOutput(_outputSocket, time, formattedText, source);
 	}
