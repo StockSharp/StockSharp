@@ -1063,11 +1063,11 @@ public static partial class TraderHelper
 	{
 		var cache = CacheHolder<TResult>.Cache;
 
-		if (!cache.TryGetValue(expression, out var formula))
-		{
-			formula = await CodeExtensions.GetCSharpCompiler().Compile<TResult>(tracker, fileSystem, expression, ServicesRegistry.TryCompilerCache, cancellationToken);
-			cache.TryAdd(expression, formula);
-		}
+		if (cache.TryGetValue(expression, out var formula))
+			return formula;
+
+		formula = await CodeExtensions.GetCSharpCompiler().Compile<TResult>(tracker, fileSystem, expression, ServicesRegistry.TryCompilerCache, cancellationToken);
+		cache[expression] = formula;
 
 		return formula;
 	}
