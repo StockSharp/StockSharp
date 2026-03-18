@@ -1080,32 +1080,21 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 		await InitMoney(emuV1, now);
 		await InitMoney(emuV2, now);
 
-		// Send tick to create synthetic book
-		var tick = new ExecutionMessage
-		{
-			SecurityId = secId,
-			LocalTime = now,
-			ServerTime = now,
-			DataTypeEx = DataType.Ticks,
-			TradePrice = 100,
-			TradeVolume = 10,
-			TradeId = 1,
-		};
-
-		await emuV1.SendInMessageAsync(tick.TypedClone(), CancellationToken);
-		await emuV2.SendInMessageAsync(tick.TypedClone(), CancellationToken);
+		// Send real order book (not synthetic from tick) so both emulators match identically
+		await SendBook(emuV1, secId, now, bid: 99, ask: 100);
+		await SendBook(emuV2, secId, now, bid: 99, ask: 100);
 
 		resV1.Clear();
 		resV2.Clear();
 
-		// Now try to place an order - the synthetic book should allow execution
+		// Now try to place an order - should cross the ask at 100
 		var order = new OrderRegisterMessage
 		{
 			SecurityId = secId,
 			LocalTime = now.AddMilliseconds(1),
 			TransactionId = 1,
 			Side = Sides.Buy,
-			Price = 101, // Above tick price, should cross spread
+			Price = 101, // Above ask price, should cross spread
 			Volume = 5,
 			OrderType = OrderTypes.Limit,
 			TimeInForce = TimeInForce.PutInQueue,

@@ -595,10 +595,10 @@ public class MessageChannelTests : BaseTestClass
 		var baseTime = DateTime.UtcNow;
 		var messages = new List<TimeMessage>();
 
-		// Create messages with shuffled times
+		// Create messages with shuffled times (use seconds to avoid race between enqueue and dequeue)
 		for (int i = 0; i < messageCount; i++)
 		{
-			messages.Add(CreateTimeMessage(baseTime.AddMilliseconds(i * 100)));
+			messages.Add(CreateTimeMessage(baseTime.AddSeconds(i)));
 		}
 
 		// Shuffle and send
