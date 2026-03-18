@@ -2196,7 +2196,7 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Position_Process_ReturnsSameReference()
+	public void Position_Process_ReturnsCopy()
 	{
 		var holder = new PositionSnapshotHolder();
 		var msg1 = new PositionChangeMessage
@@ -2219,8 +2219,13 @@ public class SnapshotHolderTests : BaseTestClass
 
 		var result2 = holder.Process(msg2);
 
-		// Must return same reference
-		result1.AssertSame(result2);
+		// Must return different references (copies)
+		result1.AssertNotSame(result2);
+
+		// result1 has state from first Process call
+		result1.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
+		// result2 has updated state
+		result2.Changes[PositionChangeTypes.CurrentValue].AssertEqual(150m);
 	}
 
 	[TestMethod]
@@ -2237,9 +2242,7 @@ public class SnapshotHolderTests : BaseTestClass
 		.TryAdd(PositionChangeTypes.CurrentValue, 100m)
 		.TryAdd(PositionChangeTypes.AveragePrice, 50m);
 
-		var snapshot = holder.Process(msg1);
-		snapshot.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
-		snapshot.Changes[PositionChangeTypes.AveragePrice].AssertEqual(50m);
+		holder.Process(msg1);
 
 		var msg2 = new PositionChangeMessage
 		{
@@ -2250,9 +2253,9 @@ public class SnapshotHolderTests : BaseTestClass
 		.TryAdd(PositionChangeTypes.CurrentValue, 150m)
 		.TryAdd(PositionChangeTypes.UnrealizedPnL, 25m);
 
-		holder.Process(msg2);
+		var snapshot = holder.Process(msg2);
 
-		// Same snapshot should be updated
+		// Returned copy should have merged state
 		snapshot.Changes[PositionChangeTypes.CurrentValue].AssertEqual(150m);
 		snapshot.Changes[PositionChangeTypes.AveragePrice].AssertEqual(50m); // unchanged
 		snapshot.Changes[PositionChangeTypes.UnrealizedPnL].AssertEqual(25m); // new field
@@ -2472,7 +2475,7 @@ public class SnapshotHolderTests : BaseTestClass
 		}
 		.TryAdd(PositionChangeTypes.CurrentValue, 100m);
 
-		var snap1 = holder.Process(msg1);
+		holder.Process(msg1);
 
 		var msg2 = new PositionChangeMessage
 		{
@@ -2486,9 +2489,12 @@ public class SnapshotHolderTests : BaseTestClass
 
 		var snap2 = holder.Process(msg2);
 
-		// Should be same reference due to case-insensitive key
-		snap1.AssertSame(snap2);
-		snap1.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
+		// Case-insensitive key — same internal snapshot updated, returned as copy
+		snap2.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
+
+		// Verify via TryGetSnapshot — should also return 200
+		holder.TryGetSnapshot(msg1, out var retrieved);
+		retrieved.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
 	}
 
 	#endregion
@@ -2774,10 +2780,40 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// BUG #3: Position holder also returns live reference.
+	/// Position TryGetSnapshot must return a copy, not the internal reference.
 	/// </summary>
 	[TestMethod]
-	public void Position_LiveReference_CanBeMutatedExternally_Bug()
+	public void Position_TryGetSnapshot_ReturnsCopy()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		var msg1 = new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}
+		.TryAdd(PositionChangeTypes.CurrentValue, 100m);
+
+		holder.Process(msg1);
+
+		// Get snapshot twice
+		holder.TryGetSnapshot(msg1, out var snap1);
+		holder.TryGetSnapshot(msg1, out var snap2);
+
+		// Should be different references (copies)
+		snap1.AssertNotSame(snap2);
+
+		// But with same data
+		snap1.Changes[PositionChangeTypes.CurrentValue].AssertEqual(snap2.Changes[PositionChangeTypes.CurrentValue]);
+	}
+
+	/// <summary>
+	/// Position Process must return a copy, not the internal reference.
+	/// External mutation must not affect internal state.
+	/// </summary>
+	[TestMethod]
+	public void Position_Process_ReturnsCopy_IsolatedFromInternal()
 	{
 		var holder = new PositionSnapshotHolder();
 
@@ -2791,21 +2827,12 @@ public class SnapshotHolderTests : BaseTestClass
 
 		var snapshot = holder.Process(msg1);
 
-		// Get snapshot via TryGetSnapshot
-		holder.TryGetSnapshot(msg1, out var retrieved);
+		// Mutate the returned copy
+		snapshot.Changes[PositionChangeTypes.CurrentValue] = 999m;
 
-		// BUG: Same reference returned
-		snapshot.AssertSame(retrieved);
-
-		// External code can mutate the internal state!
-		retrieved.Changes[PositionChangeTypes.CurrentValue] = 999m;
-
-		// This affects the internal snapshot
+		// Internal state must NOT be affected
 		holder.TryGetSnapshot(msg1, out var afterMutation);
-		afterMutation.Changes[PositionChangeTypes.CurrentValue].AssertEqual(999m);
-
-		// Original 'snapshot' variable is also affected (same reference)
-		snapshot.Changes[PositionChangeTypes.CurrentValue].AssertEqual(999m);
+		afterMutation.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
 	}
 
 	/// <summary>

@@ -4,7 +4,7 @@ namespace StockSharp.Messages;
 /// <see cref="PositionChangeMessage"/> snapshots holder.
 /// </summary>
 /// <remarks>
-/// Returns the same reference for the same position key (PortfolioName + SecurityId + StrategyId + Side + ClientCode + DepoName + LimitType).
+/// Returns a copy of the snapshot for the same position key (PortfolioName + SecurityId + StrategyId + Side + ClientCode + DepoName + LimitType).
 /// </remarks>
 public class PositionSnapshotHolder : BaseLogReceiver
 {
@@ -32,7 +32,15 @@ public class PositionSnapshotHolder : BaseLogReceiver
 	public bool TryGetSnapshot(string portfolioName, SecurityId securityId, string strategyId, Sides? side, string clientCode, string depoName, TPlusLimits? limitType, out PositionChangeMessage snapshot)
 	{
 		var key = CreateKey(portfolioName, securityId, strategyId, side, clientCode, depoName, limitType);
-		return _snapshots.TryGetValue(key, out snapshot);
+
+		if (_snapshots.TryGetValue(key, out var stored))
+		{
+			snapshot = stored.TypedClone();
+			return true;
+		}
+
+		snapshot = null;
+		return false;
 	}
 
 	/// <summary>
@@ -46,7 +54,14 @@ public class PositionSnapshotHolder : BaseLogReceiver
 		if (posMsg is null)
 			throw new ArgumentNullException(nameof(posMsg));
 
-		return _snapshots.TryGetValue(CreateKey(posMsg), out snapshot);
+		if (_snapshots.TryGetValue(CreateKey(posMsg), out var stored))
+		{
+			snapshot = stored.TypedClone();
+			return true;
+		}
+
+		snapshot = null;
+		return false;
 	}
 
 	/// <summary>
@@ -54,7 +69,7 @@ public class PositionSnapshotHolder : BaseLogReceiver
 	/// </summary>
 	/// <param name="posMsg"><see cref="PositionChangeMessage"/> change.</param>
 	/// <returns>
-	/// Position snapshot. Returns the same reference for the same position key.
+	/// Position snapshot copy.
 	/// </returns>
 	public PositionChangeMessage Process(PositionChangeMessage posMsg)
 	{
@@ -68,13 +83,13 @@ public class PositionSnapshotHolder : BaseLogReceiver
 			if (_snapshots.TryGetValue(key, out var snapshot))
 			{
 				ApplyChanges(snapshot, posMsg);
-				return snapshot;
+				return snapshot.TypedClone();
 			}
 			else
 			{
-				snapshot = (PositionChangeMessage)posMsg.Clone();
+				snapshot = posMsg.TypedClone();
 				_snapshots.Add(key, snapshot);
-				return snapshot;
+				return snapshot.TypedClone();
 			}
 		}
 	}
