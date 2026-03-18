@@ -64,7 +64,7 @@ public class ExportTests : BaseTestClass
 	public async Task Cancellation()
 	{
 		var security = Helper.CreateStorageSecurity();
-		var ticks = security.RandomTicks(20000, true).ToArray();
+		var ticks = security.RandomTicks(500000, true).ToArray();
 
 		using var stream = new MemoryStream();
 		var exporter = new TextExporter(DataType.Ticks, stream, _txtReg.TemplateTxtTick, null);
