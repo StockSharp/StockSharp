@@ -113,6 +113,15 @@ public class PositionSnapshotHolder : BaseLogReceiver
 	}
 
 	/// <summary>
+	/// Get cloned copies of all current position snapshots.
+	/// </summary>
+	public IEnumerable<PositionChangeMessage> GetAllSnapshots()
+	{
+		using (_snapshots.EnterScope())
+			return _snapshots.Values.Select(s => s.TypedClone()).ToList();
+	}
+
+	/// <summary>
 	/// Reset snapshot for the specified position key.
 	/// </summary>
 	/// <param name="portfolioName">Portfolio name. Use <see langword="null"/> to clear all snapshots.</param>

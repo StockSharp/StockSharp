@@ -2497,6 +2497,208 @@ public class SnapshotHolderTests : BaseTestClass
 		retrieved.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
 	}
 
+	[TestMethod]
+	public void Position_GetAllSnapshots_Empty_ReturnsEmpty()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		var snapshots = holder.GetAllSnapshots().ToList();
+
+		snapshots.Count.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void Position_GetAllSnapshots_ReturnsAllPositions()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		holder.Process(new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}.TryAdd(PositionChangeTypes.CurrentValue, 100m));
+
+		holder.Process(new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio2",
+			SecurityId = _secId2,
+			ServerTime = _now,
+		}.TryAdd(PositionChangeTypes.CurrentValue, 200m));
+
+		var snapshots = holder.GetAllSnapshots().ToList();
+
+		snapshots.Count.AssertEqual(2);
+
+		var snap1 = snapshots.First(s => s.PortfolioName == "Portfolio1");
+		var snap2 = snapshots.First(s => s.PortfolioName == "Portfolio2");
+
+		snap1.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
+		snap2.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
+	}
+
+	[TestMethod]
+	public void Position_GetAllSnapshots_ReturnsCopies()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		holder.Process(new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}.TryAdd(PositionChangeTypes.CurrentValue, 100m));
+
+		var snapshots = holder.GetAllSnapshots().ToList();
+		snapshots[0].Changes[PositionChangeTypes.CurrentValue] = 999m;
+
+		// Internal state should not be affected
+		holder.TryGetSnapshot("Portfolio1", _secId1, null, null, null, null, null, out var internal1).AssertTrue();
+		internal1.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void Position_GetAllSnapshots_ReflectsUpdates()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		holder.Process(new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}.TryAdd(PositionChangeTypes.CurrentValue, 100m));
+
+		// Update same position
+		holder.Process(new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+		}.TryAdd(PositionChangeTypes.CurrentValue, 150m)
+		 .TryAdd(PositionChangeTypes.BlockedValue, 10m));
+
+		var snapshots = holder.GetAllSnapshots().ToList();
+
+		snapshots.Count.AssertEqual(1);
+		snapshots[0].Changes[PositionChangeTypes.CurrentValue].AssertEqual(150m);
+		snapshots[0].Changes[PositionChangeTypes.BlockedValue].AssertEqual(10m);
+	}
+
+	[TestMethod]
+	public void Position_GetAllSnapshots_AfterReset_ReturnsEmpty()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		holder.Process(new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}.TryAdd(PositionChangeTypes.CurrentValue, 100m));
+
+		holder.Process(new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio2",
+			SecurityId = _secId2,
+			ServerTime = _now,
+		}.TryAdd(PositionChangeTypes.CurrentValue, 200m));
+
+		holder.ResetSnapshot(null);
+
+		holder.GetAllSnapshots().ToList().Count.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void Position_GetAllSnapshots_AfterPartialReset()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		holder.Process(new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}.TryAdd(PositionChangeTypes.CurrentValue, 100m));
+
+		holder.Process(new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio2",
+			SecurityId = _secId2,
+			ServerTime = _now,
+		}.TryAdd(PositionChangeTypes.CurrentValue, 200m));
+
+		holder.ResetSnapshot("Portfolio1", _secId1);
+
+		var snapshots = holder.GetAllSnapshots().ToList();
+		snapshots.Count.AssertEqual(1);
+		snapshots[0].PortfolioName.AssertEqual("Portfolio2");
+	}
+
+	[TestMethod]
+	public void Position_GetAllSnapshots_MultipleSecuritiesPerPortfolio()
+	{
+		var holder = new PositionSnapshotHolder();
+
+		holder.Process(new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId1,
+			ServerTime = _now,
+		}.TryAdd(PositionChangeTypes.CurrentValue, 100m));
+
+		holder.Process(new PositionChangeMessage
+		{
+			PortfolioName = "Portfolio1",
+			SecurityId = _secId2,
+			ServerTime = _now,
+		}.TryAdd(PositionChangeTypes.CurrentValue, 200m));
+
+		var snapshots = holder.GetAllSnapshots().ToList();
+		snapshots.Count.AssertEqual(2);
+
+		var byAapl = snapshots.First(s => s.SecurityId == _secId1);
+		var byMsft = snapshots.First(s => s.SecurityId == _secId2);
+
+		byAapl.Changes[PositionChangeTypes.CurrentValue].AssertEqual(100m);
+		byMsft.Changes[PositionChangeTypes.CurrentValue].AssertEqual(200m);
+	}
+
+	[TestMethod]
+	public Task Position_GetAllSnapshots_ConcurrentAccess_ThreadSafe()
+	{
+		var holder = new PositionSnapshotHolder();
+		var token = CancellationToken;
+
+		// Pre-populate
+		for (var i = 0; i < 10; i++)
+		{
+			holder.Process(new PositionChangeMessage
+			{
+				PortfolioName = $"Portfolio{i}",
+				SecurityId = _secId1,
+				ServerTime = _now,
+			}.TryAdd(PositionChangeTypes.CurrentValue, i));
+		}
+
+		var tasks = Enumerable.Range(0, 100).Select(i => Task.Run(() =>
+		{
+			// Concurrent reads via GetAllSnapshots
+			var all = holder.GetAllSnapshots().ToList();
+			(all.Count >= 10).AssertTrue();
+
+			// Concurrent writes
+			holder.Process(new PositionChangeMessage
+			{
+				PortfolioName = $"Portfolio{i % 10}",
+				SecurityId = _secId1,
+				ServerTime = _now.AddMilliseconds(i),
+			}.TryAdd(PositionChangeTypes.CurrentValue, i * 10m));
+		}, token)).ToArray();
+
+		return Task.WhenAll(tasks);
+	}
+
 	#endregion
 
 	#region Order Immutability and Behavior Tests
