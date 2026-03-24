@@ -52,11 +52,6 @@ public partial class MainWindow
 				// required for non anonymous access
 				//
 				//Password = "hydra_user".To<SecureString>()
-
-				//
-				// uncomment to enable binary mode
-				//
-				//IsBinaryEnabled = true,
 			};
 
 			// turning off the support of the transactional messages

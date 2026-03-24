@@ -1002,17 +1002,6 @@ public class RemoteStorageClientTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Drive_IsBinaryEnabled_GetSet_Works()
-	{
-		using var drive = CreateDrive();
-
-		IsFalse(drive.IsBinaryEnabled); // default
-
-		drive.IsBinaryEnabled = true;
-		IsTrue(drive.IsBinaryEnabled);
-	}
-
-	[TestMethod]
 	public void Drive_Credentials_NotNull()
 	{
 		using var drive = CreateDrive();
@@ -1204,7 +1193,6 @@ public class RemoteStorageClientTests : BaseTestClass
 		drive.TargetCompId = "CustomTarget";
 		drive.SecurityBatchSize = 500;
 		drive.Timeout = TimeSpan.FromSeconds(45);
-		drive.IsBinaryEnabled = true;
 		drive.Credentials.Email = "test@example.com";
 		drive.Credentials.Password = "secret".To<SecureString>();
 
@@ -1221,7 +1209,6 @@ public class RemoteStorageClientTests : BaseTestClass
 		AreEqual("CustomTarget", drive2.TargetCompId);
 		AreEqual(500, drive2.SecurityBatchSize);
 		AreEqual(TimeSpan.FromSeconds(45), drive2.Timeout);
-		IsTrue(drive2.IsBinaryEnabled);
 		AreEqual("test@example.com", drive2.Credentials.Email);
 	}
 

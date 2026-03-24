@@ -196,11 +196,6 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	}
 
 	/// <summary>
-	/// Enable binary mode.
-	/// </summary>
-	public bool IsBinaryEnabled { get; set; }
-
-	/// <summary>
 	/// Logs.
 	/// </summary>
 	public ILogSource Logs { get; set; }
@@ -237,11 +232,6 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		{
 			la.Login = login;
 			la.Password = Credentials.Password;
-		}
-
-		if (adapter is IBinaryAdapter ba)
-		{
-			ba.IsBinaryEnabled = IsBinaryEnabled;
 		}
 
 		adapter.Parent ??= Logs ?? ServicesRegistry.LogManager?.Application;
@@ -285,7 +275,6 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 		TargetCompId = storage.GetValue(nameof(TargetCompId), TargetCompId);
 		SecurityBatchSize = storage.GetValue(nameof(SecurityBatchSize), SecurityBatchSize);
 		Timeout = storage.GetValue(nameof(Timeout), Timeout);
-		IsBinaryEnabled = storage.GetValue(nameof(IsBinaryEnabled), IsBinaryEnabled);
 	}
 
 	/// <inheritdoc />
@@ -297,8 +286,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 			.Set(nameof(Credentials), Credentials.Save())
 			.Set(nameof(TargetCompId), TargetCompId)
 			.Set(nameof(SecurityBatchSize), SecurityBatchSize)
-			.Set(nameof(Timeout), Timeout)
-			.Set(nameof(IsBinaryEnabled), IsBinaryEnabled);
+			.Set(nameof(Timeout), Timeout);
 		;
 	}
 }

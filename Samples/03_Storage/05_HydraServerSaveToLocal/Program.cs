@@ -55,11 +55,6 @@ static class Program
 				//
 				//Password = "hydra_user".To<SecureString>()
 			},
-
-			//
-			// uncomment to enable binary mode
-			//
-			//IsBinaryEnabled = true,
 		};
 
 		var secId = new SecurityId
