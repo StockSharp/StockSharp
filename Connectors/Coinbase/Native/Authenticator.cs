@@ -93,7 +93,7 @@ class Authenticator : Disposable
 			return null;
 
 		var keyName = Key.UnSecure();
-		var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+		var now = (long)DateTime.UtcNow.ToUnix();
 		var nonce = GenerateNonce();
 
 		var header = new
@@ -125,7 +125,7 @@ class Authenticator : Disposable
 			return null;
 
 		var keyName = Key.UnSecure();
-		var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+		var now = (long)DateTime.UtcNow.ToUnix();
 		var nonce = GenerateNonce();
 
 		var header = new
