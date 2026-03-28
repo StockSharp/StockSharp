@@ -89,6 +89,16 @@ class PusherClient : BaseLogReceiver
 			if (NewTrades is { } handler)
 				await handler(channel.Remove(Channels.Trades, true), ((JToken)obj.data).DeserializeObject<IEnumerable<Trade>>(), cancellationToken);
 		}
+		else if (channel.EndsWithIgnoreCase(Channels.CancelOrder))
+		{
+			if (OrderChanged is { } handler)
+				await handler((long)obj.no, ((JToken)obj.data).DeserializeObject<Order>(), cancellationToken);
+		}
+		else if (channel.EndsWithIgnoreCase(Channels.Order))
+		{
+			if (OrderChanged is { } handler)
+				await handler((long)obj.no, ((JToken)obj.data).DeserializeObject<Order>(), cancellationToken);
+		}
 		else if (channel.EqualsIgnoreCase(Channels.GetOrders))
 		{
 			if (NewOrders is { } handler)
