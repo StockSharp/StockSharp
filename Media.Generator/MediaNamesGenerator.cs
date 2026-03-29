@@ -47,7 +47,7 @@ public class MediaNamesGenerator : IIncrementalGenerator
 	private void Execute(SourceProductionContext context, ImmutableArray<string> iconFiles)
 	{
 #if DEBUG
-		context.ReportDiagnostic(Diagnostic.Create(_debugInfo, Location.None, iconFiles.JoinDotComma()));
+		context.ReportDiagnostic(Diagnostic.Create(_debugInfo, Location.None, string.Join(", ", iconFiles)));
 #endif
 
 		if (iconFiles.IsEmpty)
