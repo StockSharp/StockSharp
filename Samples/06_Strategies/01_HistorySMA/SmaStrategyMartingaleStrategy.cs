@@ -128,7 +128,7 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 			var direction = isShortLessThenLongCurrent ? Sides.Sell : Sides.Buy;
 
 			// Calculate position size (increase position with each trade - martingale approach)
-			var volume = Volume + Math.Abs(Position);
+			var volume = Volume + Position.Abs();
 
 			// Create and register the order with appropriate price
 			var price = Security.ShrinkPrice(shortValue);

@@ -87,7 +87,7 @@ public struct GpuRainbowChartsResult : IGpuIndicatorResult
 		};
 
 		var innerCount = rainbow.InnerIndicators.Count;
-		var available = Math.Min(LineCount, (byte)innerCount);
+		var available = LineCount.Min((byte)innerCount);
 		var formedMask = FormedMask;
 		var hasValue = false;
 		var index = 0;

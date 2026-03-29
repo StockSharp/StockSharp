@@ -805,7 +805,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		// In single-threaded mode (UseInChannel/UseOutChannel=false) order fills are
 		// synchronous, so state diverges almost immediately — prefix may be very short.
 		var matchingPrefix = 0;
-		var minLen = Math.Min(origOrders.Length, decomposedOrders.Count);
+		var minLen = origOrders.Length.Min(decomposedOrders.Count);
 		for (var i = 0; i < minLen; i++)
 		{
 			if (origOrders[i].Side == decomposedOrders[i].Side && origOrders[i].Price == decomposedOrders[i].Price)

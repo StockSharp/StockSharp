@@ -630,7 +630,7 @@ public class ReportTests : BaseTestClass
 		order.Volume.AssertEqual(30m);
 		// Weighted average: (100*10 + 200*20) / 30 = 5000/30 = 166.666...
 		var expectedPrice = (100m * 10m + 200m * 20m) / 30m;
-		IsTrue(Math.Abs(order.Price - expectedPrice) < 0.0001m, $"Expected weighted average {expectedPrice}, got {order.Price}");
+		IsTrue((order.Price - expectedPrice).Abs() < 0.0001m, $"Expected weighted average {expectedPrice}, got {order.Price}");
 	}
 
 	[TestMethod]
@@ -655,11 +655,11 @@ public class ReportTests : BaseTestClass
 		trade.Volume.AssertEqual(5m);
 
 		var expectedTradePrice = (100m * 2m + 110m * 3m) / 5m;
-		IsTrue(Math.Abs(trade.TradePrice - expectedTradePrice) < 0.0001m,
+		IsTrue((trade.TradePrice - expectedTradePrice).Abs() < 0.0001m,
 			$"Expected weighted TradePrice {expectedTradePrice}, got {trade.TradePrice}");
 
 		var expectedOrderPrice = (99m * 2m + 108m * 3m) / 5m;
-		IsTrue(Math.Abs(trade.OrderPrice - expectedOrderPrice) < 0.0001m,
+		IsTrue((trade.OrderPrice - expectedOrderPrice).Abs() < 0.0001m,
 			$"Expected weighted OrderPrice {expectedOrderPrice}, got {trade.OrderPrice}");
 
 		trade.PnL.AssertEqual(30m); // 10 + 20

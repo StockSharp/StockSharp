@@ -307,7 +307,7 @@ public struct GpuGmmaResult : IGpuIndicatorResult
 		};
 
 		var hasValue = false;
-		var innerCount = Math.Min(gmma.InnerIndicators.Count, AveragesCount);
+		var innerCount = gmma.InnerIndicators.Count.Min(AveragesCount);
 		for (var i = 0; i < innerCount; i++)
 		{
 			var avg = GetAverage(i);

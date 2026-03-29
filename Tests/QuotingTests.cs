@@ -327,7 +327,7 @@ public class QuotingTests : BaseTestClass
 		
 		// Assert
 		var expectedToPrice = 100.49m + (-1) * 4 * 0.01m; // fromPrice + direction * length * pip
-		var expectedResult = Math.Round((100.49m + expectedToPrice) / 2, 2); // ���������� �� 2 ������
+		var expectedResult = ((100.49m + expectedToPrice) / 2).Round(2); // ���������� �� 2 ������
 		result.AssertEqual(expectedResult);
 	}
 
@@ -343,7 +343,7 @@ public class QuotingTests : BaseTestClass
 		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy, 100.50m, 100.51m, _lastTradePrice, _lastTradeVolume, bids, asks);
 		
 		// Assert
-		var expectedResult = Math.Round((100.49m + 100.48m) / 2, 2); // (fromPrice + lastPrice) / 2, ���������� �� 2 ������
+		var expectedResult = ((100.49m + 100.48m) / 2).Round(2); // (fromPrice + lastPrice) / 2, ���������� �� 2 ������
 		result.AssertEqual(expectedResult);
 	}
 

@@ -6,8 +6,8 @@ using StockSharp.Algo.Candles.Compression;
 [DoNotParallelize]
 public class StorageNotParallelizeTests : BaseTestClass
 {
-	private static readonly DateTime _regressionFrom = DateTime.ParseExact("01/12/2021 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture).ApplyMoscow().UtcDateTime;
-	private static readonly DateTime _regressionTo = DateTime.ParseExact("01/01/2022 +03:00", "dd/MM/yyyy zzz", CultureInfo.InvariantCulture).ApplyMoscow().UtcDateTime;
+	private static readonly DateTime _regressionFrom = "01/12/2021 +03:00".ToDateTime("dd/MM/yyyy zzz").ApplyMoscow().UtcDateTime;
+	private static readonly DateTime _regressionTo = "01/01/2022 +03:00".ToDateTime("dd/MM/yyyy zzz").ApplyMoscow().UtcDateTime;
 	private static readonly int[] _sourceArray = [01, 02, 03, 06, 07, 08, 09, 10, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24, 27, 28, 29, 30];
 
 	[TestMethod]

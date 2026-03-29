@@ -332,7 +332,7 @@ public class MarketEmulatorFeatureTests : BaseTestClass
 		if (v1Messages.Count != v2Messages.Count)
 			diffs.Add($"Message count: V1={v1Messages.Count}, V2={v2Messages.Count}");
 
-		var maxCount = Math.Max(v1Messages.Count, v2Messages.Count);
+		var maxCount = v1Messages.Count.Max(v2Messages.Count);
 		for (int i = 0; i < maxCount; i++)
 		{
 			if (i >= v1Messages.Count)

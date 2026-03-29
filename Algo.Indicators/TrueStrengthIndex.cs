@@ -105,7 +105,7 @@ public class TrueStrengthIndex : BaseComplexIndicator<ITrueStrengthIndexValue>
 			}
 
 			var momentum = currentPrice - _lastPrice;
-			var absMomentum = Math.Abs(momentum);
+			var absMomentum = momentum.Abs();
 
 			var firstSmoothedMomentum = _firstSmoothedMomentum.Process(input, momentum).ToDecimal(Source);
 			var firstSmoothedAbsMomentum = _firstSmoothedAbsMomentum.Process(input, absMomentum).ToDecimal(Source);

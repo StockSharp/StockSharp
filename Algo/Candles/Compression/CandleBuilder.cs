@@ -357,7 +357,7 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 			throw new ArgumentNullException(nameof(step));
 
 		static decimal roundToAbs(decimal price, decimal step)
-			=> Math.Round(price / step) * step;
+			=> (price / step).Round() * step;
 
 		return step.Type switch
 		{
@@ -824,7 +824,7 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 
 		var priceChange = price - currentCandle.OpenPrice;
 		var boxSizeAbs = (decimal)((price + boxSize) - price);
-		var boxesMoved = Math.Abs((int)(priceChange / boxSizeAbs));
+		var boxesMoved = ((int)(priceChange / boxSizeAbs)).Abs();
 
 		if (boxesMoved >= 1)
 		{

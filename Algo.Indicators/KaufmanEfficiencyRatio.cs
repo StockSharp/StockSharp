@@ -38,7 +38,7 @@ public class KaufmanEfficiencyRatio : DecimalLengthIndicator
 
 			if (!input.IsFinal)
 			{
-				volatility += Math.Abs(price - Buffer[^1]);
+				volatility += (price - Buffer[^1]).Abs();
 			}
 
 			var result = volatility != 0 ? change / volatility : 0;

@@ -96,12 +96,12 @@ namespace StockSharp.Samples.Strategies.HistoryTrend
 			// Sell after Length consecutive bullish candles
 			if (_bullLength >= Length && Position >= 0)
 			{
-				SellMarket(Volume + Math.Abs(Position));
+				SellMarket(Volume + Position.Abs());
 			}
 			// Buy after Length consecutive bearish candles
 			else if (_bearLength >= Length && Position <= 0)
 			{
-				BuyMarket(Volume + Math.Abs(Position));
+				BuyMarket(Volume + Position.Abs());
 			}
 		}
 	}

@@ -9,7 +9,7 @@ using StockSharp.Algo.Risk;
 public class MultithreadedStressTests : BaseTestClass
 {
 	private const int _durationSeconds = 5;
-	private static readonly int _workerCount = Math.Max(4, Environment.ProcessorCount * 2);
+	private static readonly int _workerCount = 4.Max(Environment.ProcessorCount * 2);
 
 	[Timeout(60000, CooperativeCancellation = true)]
 	[TestMethod]

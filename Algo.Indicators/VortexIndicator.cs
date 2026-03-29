@@ -163,8 +163,8 @@ public class VortexPart : DecimalLengthIndicator
 			return null;
 		}
 
-		var tr = Math.Max(Math.Max(candle.HighPrice - candle.LowPrice, Math.Abs(candle.HighPrice - _prevClose)), Math.Abs(candle.LowPrice - _prevClose));
-		var vm = IsPositive ? Math.Abs(candle.HighPrice - _prevLow) : Math.Abs(candle.LowPrice - _prevHigh);
+		var tr = (candle.HighPrice - candle.LowPrice).Max((candle.HighPrice - _prevClose).Abs()).Max((candle.LowPrice - _prevClose).Abs());
+		var vm = IsPositive ? (candle.HighPrice - _prevLow).Abs() : (candle.LowPrice - _prevHigh).Abs();
 
 		decimal result;
 

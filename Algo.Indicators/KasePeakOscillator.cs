@@ -96,13 +96,13 @@ public class KasePeakOscillator : BaseComplexIndicator<IKasePeakOscillatorValue>
 			{
 				if (candle.ClosePrice > _prevClose)
 				{
-					peak = Math.Max(candle.HighPrice, _prevClose + atr);
-					valley = Math.Max(candle.LowPrice, _prevClose - 0.5m * atr);
+					peak = candle.HighPrice.Max(_prevClose + atr);
+					valley = candle.LowPrice.Max(_prevClose - 0.5m * atr);
 				}
 				else if (candle.ClosePrice < _prevClose)
 				{
-					peak = Math.Min(candle.HighPrice, _prevClose + 0.5m * atr);
-					valley = Math.Min(candle.LowPrice, _prevClose - atr);
+					peak = candle.HighPrice.Min(_prevClose + 0.5m * atr);
+					valley = candle.LowPrice.Min(_prevClose - atr);
 				}
 			}
 

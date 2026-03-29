@@ -41,7 +41,7 @@ public class FractalAdaptiveMovingAverage : DecimalLengthIndicator
 			var n3 = calculateDimension(Buffer.Skip(period * 2));
 
 			var d = (Math.Log((double)(n1 + n2)) - Math.Log((double)n3)) / Math.Log(2);
-			d = Math.Max(Math.Min(d, 2), 1);
+			d = d.Min(2).Max(1);
 
 			var alpha = Math.Exp(-4.6 * (d - 1));
 			var newFrama = (decimal)alpha * price + (1 - (decimal)alpha) * _prevFrama;

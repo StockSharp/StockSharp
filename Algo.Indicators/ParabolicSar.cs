@@ -126,8 +126,8 @@ public class ParabolicSar : BaseIndicator
 
 				value = _prevSar;
 
-				_todaySar = TodaySar(candles, _longPosition ? Math.Min(_reverseValue, candles[^1].LowPrice) :
-					Math.Max(_reverseValue, candles[^1].HighPrice), acceleration);
+				_todaySar = TodaySar(candles, _longPosition ? _reverseValue.Min(candles[^1].LowPrice) :
+					_reverseValue.Max(candles[^1].HighPrice), acceleration);
 			}
 
 			_prevBar = candles.Count;
@@ -139,12 +139,12 @@ public class ParabolicSar : BaseIndicator
 		{
 			if (_longPosition)
 			{
-				var lowestSar = Math.Min(Math.Min(todaySar, candles[^1].LowPrice), candles[^2].LowPrice);
+				var lowestSar = todaySar.Min(candles[^1].LowPrice).Min(candles[^2].LowPrice);
 				todaySar = candles[^1].LowPrice > lowestSar ? lowestSar : Reverse(candles, acceleration);
 			}
 			else
 			{
-				var highestSar = Math.Max(Math.Max(todaySar, candles[^1].HighPrice), candles[^2].HighPrice);
+				var highestSar = todaySar.Max(candles[^1].HighPrice).Max(candles[^2].HighPrice);
 				todaySar = candles[^1].HighPrice < highestSar ? highestSar : Reverse(candles, acceleration);
 			}
 
@@ -176,7 +176,7 @@ public class ParabolicSar : BaseIndicator
 			if (_afIncreased)
 				return;
 
-			_af = Math.Min(accelerationMax, _af + accelerationStep);
+			_af = accelerationMax.Min(_af + accelerationStep);
 			_afIncreased = true;
 		}
 

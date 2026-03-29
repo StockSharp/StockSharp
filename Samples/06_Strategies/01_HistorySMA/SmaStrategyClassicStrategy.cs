@@ -121,7 +121,7 @@ namespace StockSharp.Samples.Strategies.HistorySMA
 				return;
 
 			// Calculate position size (increase position with each trade)
-			var volume = Volume + Math.Abs(Position);
+			var volume = Volume + Position.Abs();
 
 			// Execute trades based on signal
 			if (isShortLessCurrent)

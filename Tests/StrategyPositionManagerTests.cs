@@ -111,8 +111,8 @@ public class StrategyPositionManagerTests : BaseTestClass
 		// Realized PnL for closed 5: (120 - 106.25)*5 = 68.75
 		lastPos.CurrentValue.AssertEqual(3m); // 8 - 5
 		lastPos.AveragePrice.AssertEqual(106.25m); // unchanged after partial close
-		Math.Round(lastPos.RealizedPnL ?? 0, 5).AssertEqual(68.75m);
-		Math.Round(lastPos.Commission ?? 0, 5).AssertEqual(2.3m);
+		(lastPos.RealizedPnL ?? 0).Round(5).AssertEqual(68.75m);
+		(lastPos.Commission ?? 0).Round(5).AssertEqual(2.3m);
 		AssertCalcFieldsNonNull(lastPos);
 
 		// 3) Reversal: SELL 10 @105 commission 1.2 -> delta commission 1.2 (Done)
@@ -136,8 +136,8 @@ public class StrategyPositionManagerTests : BaseTestClass
 		// Total realized = 68.75 - 3.75 = 65.0
 		lastPos.CurrentValue.AssertEqual(-7m); // reversed to short 7
 		lastPos.AveragePrice.AssertEqual(105m); // new basis
-		Math.Round(lastPos.RealizedPnL ?? 0, 5).AssertEqual(65m);
-		Math.Round(lastPos.Commission ?? 0, 5).AssertEqual(3.5m); // 2.3 + 1.2
+		(lastPos.RealizedPnL ?? 0).Round(5).AssertEqual(65m);
+		(lastPos.Commission ?? 0).Round(5).AssertEqual(3.5m); // 2.3 + 1.2
 		AssertCalcFieldsNonNull(lastPos);
 
 		// 4) Full close of short: BUY 7 @100 (Done)
@@ -167,8 +167,8 @@ public class StrategyPositionManagerTests : BaseTestClass
 		// Set last market price to compute position market value (qty=0 -> value=0)
 		var secId = sec.ToSecurityId();
 		mgr.UpdateCurrentPrice(secId, 100m, buyClose.ServerTime, buyClose.LocalTime);
-		Math.Round(lastPos.CurrentPrice ?? 0m, 5).AssertEqual(0m);
-		Math.Round(lastPos.RealizedPnL ?? 0m, 5).AssertEqual(100m); // 65 + 35
+		(lastPos.CurrentPrice ?? 0m).Round(5).AssertEqual(0m);
+		(lastPos.RealizedPnL ?? 0m).Round(5).AssertEqual(100m); // 65 + 35
 		AssertCalcFieldsNonNull(lastPos);
 	}
 
@@ -214,8 +214,8 @@ public class StrategyPositionManagerTests : BaseTestClass
 		// Realized PnL: (100 - 95) * 4 = 20
 		lastPos.CurrentValue.AssertEqual(-6m);
 		lastPos.AveragePrice.AssertEqual(100m);
-		Math.Round(lastPos.RealizedPnL ?? 0, 5).AssertEqual(20m);
-		Math.Round(lastPos.Commission ?? 0, 5).AssertEqual(0.7m);
+		(lastPos.RealizedPnL ?? 0).Round(5).AssertEqual(20m);
+		(lastPos.Commission ?? 0).Round(5).AssertEqual(0.7m);
 		AssertCalcFieldsNonNull(lastPos);
 	}
 
@@ -798,7 +798,7 @@ public class StrategyPositionManagerTests : BaseTestClass
 		order.AveragePrice = 105m;
 		order.Commission = 0.8m; // cumulative decreased => delta -0.2
 		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
-		Math.Round(last.Commission ?? 0m, 5).AssertEqual(0.8m);
+		(last.Commission ?? 0m).Round(5).AssertEqual(0.8m);
 		AssertCalcFieldsNonNull(last);
 	}
 

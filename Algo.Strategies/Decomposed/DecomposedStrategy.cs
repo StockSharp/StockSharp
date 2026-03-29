@@ -492,7 +492,7 @@ public class DecomposedStrategy : BaseLogReceiver, IStrategyHost
 		if (position == 0)
 			return null;
 
-		var volume = Math.Abs(position);
+		var volume = position.Abs();
 		return position > 0 ? SellMarket(volume) : BuyMarket(volume);
 	}
 

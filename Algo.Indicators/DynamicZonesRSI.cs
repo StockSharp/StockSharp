@@ -105,8 +105,8 @@ public class DynamicZonesRSI : DecimalLengthIndicator
 			}
 			else
 			{
-				min = Buffer.Count > 0 ? Math.Min(Buffer.Min.Value, rsi) : rsi;
-				max = Buffer.Count > 0 ? Math.Max(Buffer.Max.Value, rsi) : rsi;
+				min = Buffer.Count > 0 ? Buffer.Min.Value.Min(rsi) : rsi;
+				max = Buffer.Count > 0 ? Buffer.Max.Value.Max(rsi) : rsi;
 			}
 
 			if (IsFormed)

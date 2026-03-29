@@ -304,7 +304,7 @@ public partial class TinkoffMessageAdapter
 
 					try
 					{
-						var volume = Math.Abs(quantity.Value);
+						var volume = quantity.Value.Abs();
 
 						// Create market order to close position
 						if (IsDemo)

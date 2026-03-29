@@ -128,7 +128,7 @@ public unsafe struct GpuMovingAverageRibbonResult : IGpuIndicatorResult
 		};
 
 		var innerIndicators = ribbon.InnerIndicators;
-		var available = Math.Min(RibbonCount, MaxRibbonCount);
+		var available = RibbonCount.Min(MaxRibbonCount);
 		var hasValue = false;
 
 		for (var i = 0; i < innerIndicators.Count; i++)

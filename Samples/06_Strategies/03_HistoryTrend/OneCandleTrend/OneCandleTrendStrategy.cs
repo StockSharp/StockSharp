@@ -62,12 +62,12 @@ namespace StockSharp.Samples.Strategies.HistoryTrend
 			if (candle.OpenPrice < candle.ClosePrice && Position <= 0)
 			{
 				// Bullish candle - buy
-				BuyMarket(Volume + Math.Abs(Position));
+				BuyMarket(Volume + Position.Abs());
 			}
 			else if (candle.OpenPrice > candle.ClosePrice && Position >= 0)
 			{
 				// Bearish candle - sell
-				SellMarket(Volume + Math.Abs(Position));
+				SellMarket(Volume + Position.Abs());
 			}
 		}
 	}

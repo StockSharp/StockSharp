@@ -92,7 +92,7 @@ public class OptimizationProgressTracker : IOptimizationProgressTracker
 				if (_totalIterations <= 0)
 					return 0;
 
-				return Math.Min(100, (int)(_completedIterations * 100.0 / _totalIterations));
+				return 100.Min((int)(_completedIterations * 100.0 / _totalIterations));
 			}
 		}
 	}

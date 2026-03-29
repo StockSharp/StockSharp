@@ -245,7 +245,7 @@ public class QuotingProcessor : BaseLogReceiver
 		switch (action.ActionType)
 		{
 			case QuotingActionType.None:
-				if (!string.IsNullOrEmpty(action.Reason))
+				if (!action.Reason.IsEmpty())
 					LogDebug($"No action: {action.Reason}");
 				break;
 

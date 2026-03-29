@@ -141,7 +141,7 @@ public class BlackScholes : IBlackScholes
 	protected decimal? TryRound(decimal? value)
 	{
 		if (value != null && RoundDecimals >= 0)
-			value = Math.Round(value.Value, RoundDecimals);
+			value = value.Value.Round(RoundDecimals);
 
 		return value;
 	}

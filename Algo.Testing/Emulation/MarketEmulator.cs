@@ -623,7 +623,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		var leftBalance = candle.TotalVolume == 0
 			? 0
-			: Math.Max(0, balance - candle.TotalVolume);
+			: 0m.Max(balance - candle.TotalVolume);
 
 		if (leftBalance > 0 && order.TimeInForce == TimeInForce.MatchOrCancel)
 		{
@@ -866,7 +866,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	{
 		if (step == 0)
 			return price;
-		return Math.Round(price / step) * step;
+		return (price / step).Round() * step;
 	}
 
 	public void ProcessMarketData(MarketDataMessage msg)

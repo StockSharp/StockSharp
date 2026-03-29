@@ -52,8 +52,8 @@ public class GopalakrishnanRangeIndex : DecimalLengthIndicator
 		{
 			var currentRange = candle.GetLength();
 
-			var highestHigh = input.IsFinal ? _high.Max.Value : Math.Max(_high.Max.Value, candle.HighPrice);
-			var lowestLow = input.IsFinal ? _low.Min.Value : Math.Min(_low.Min.Value, candle.LowPrice);
+			var highestHigh = input.IsFinal ? _high.Max.Value : _high.Max.Value.Max(candle.HighPrice);
+			var lowestLow = input.IsFinal ? _low.Min.Value : _low.Min.Value.Min(candle.LowPrice);
 
 			var gapo = currentRange > 0
 				? (decimal)Math.Log((double)((highestHigh - lowestLow) / currentRange)) / (decimal)Math.Log(Length)

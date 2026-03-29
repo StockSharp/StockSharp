@@ -313,7 +313,7 @@ public class RemoteStorageClientTests : BaseTestClass
 
 	private static byte[] CreateGZipArchive(string content)
 	{
-		var bytes = Encoding.UTF8.GetBytes(content);
+		var bytes = content.UTF8();
 		using var outputStream = new MemoryStream();
 		using (var gzipStream = new GZipStream(outputStream, CompressionMode.Compress, leaveOpen: true))
 		{

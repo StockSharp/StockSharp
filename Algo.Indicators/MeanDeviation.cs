@@ -56,8 +56,8 @@ public class MeanDeviation : DecimalLengthIndicator
 
 		// считаем значение отклонения
 		var md = input.IsFinal
-			? Buffer.Sum(t => Math.Abs(t - smaValue))
-			: Buffer.Skip(IsFormed ? 1 : 0).Sum(t => Math.Abs(t - smaValue)) + Math.Abs(val - smaValue);
+			? Buffer.Sum(t => (t - smaValue).Abs())
+			: Buffer.Skip(IsFormed ? 1 : 0).Sum(t => (t - smaValue).Abs()) + (val - smaValue).Abs();
 
 		return md / Length;
 	}

@@ -42,7 +42,7 @@ public class ChoppinessIndex : DecimalLengthIndicator
 		var candle = input.ToCandle();
 
 		var highLowRange = candle.GetLength();
-		var trueRange = Math.Max(highLowRange, Math.Max(Math.Abs(candle.HighPrice - _prevClose), Math.Abs(candle.LowPrice - _prevClose)));
+		var trueRange = highLowRange.Max((candle.HighPrice - _prevClose).Abs().Max((candle.LowPrice - _prevClose).Abs()));
 
 		decimal sumTrueRange;
 		decimal sumHighLowRange;

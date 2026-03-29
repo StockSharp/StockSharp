@@ -114,7 +114,7 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 			if (currDrawdown > 0)
 			{
 				tempSum += currDrawdown;
-				tempCount = Math.Max(1, tempCount + 1);
+				tempCount = 1.Max(tempCount + 1);
 			}
 		}
 

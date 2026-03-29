@@ -266,18 +266,18 @@ public abstract class FieldMapping : NotifiableObject, IPersistable, ICloneable
 		{
 			case "timestamp":
 			case "unix":
-				_dateConverter = str => toObj(long.Parse(str).FromUnix());
+				_dateConverter = str => toObj(str.To<long>().FromUnix());
 				break;
 			case "timestamp_milli":
 			case "unixmls":
 			case "unix_mls":
-				_dateConverter = str => toObj(long.Parse(str).FromUnix(false));
+				_dateConverter = str => toObj(str.To<long>().FromUnix(false));
 				break;
 			case "timestamp_micro":
-				_dateConverter = str => toObj(long.Parse(str).FromUnixMcs());
+				_dateConverter = str => toObj(str.To<long>().FromUnixMcs());
 				break;
 			case "timestamp_nano":
-				_dateConverter = str => toObj(new DateTime(long.Parse(str).NanosecondsToTicks(), DateTimeKind.Utc));
+				_dateConverter = str => toObj(new DateTime(str.To<long>().NanosecondsToTicks(), DateTimeKind.Utc));
 				break;
 			default:
 				_dateParser = new FastDateTimeParser(Format);

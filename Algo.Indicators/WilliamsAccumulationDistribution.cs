@@ -43,9 +43,9 @@ public class WilliamsAccumulationDistribution : BaseIndicator
 		decimal todayAD;
 
 		if (candle.ClosePrice > _prevClose)
-			todayAD = candle.ClosePrice - Math.Min(candle.LowPrice, _prevClose);
+			todayAD = candle.ClosePrice - candle.LowPrice.Min(_prevClose);
 		else if (candle.ClosePrice < _prevClose)
-			todayAD = candle.ClosePrice - Math.Max(candle.HighPrice, _prevClose);
+			todayAD = candle.ClosePrice - candle.HighPrice.Max(_prevClose);
 		else
 			todayAD = 0;
 

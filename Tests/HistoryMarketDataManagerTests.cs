@@ -1916,7 +1916,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		// Assert no violations
 		(violations.Count == 0).AssertTrue(
-			$"Found {violations.Count} time ordering violations:\n" + string.Join("\n", violations.Take(10)));
+			$"Found {violations.Count} time ordering violations:\n" + violations.Take(10).JoinN());
 	}
 
 	[TestMethod]

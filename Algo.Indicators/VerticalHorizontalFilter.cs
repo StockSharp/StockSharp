@@ -64,7 +64,7 @@ public class VerticalHorizontalFilter : DecimalLengthIndicator
 
 		// Вычисляем сумму модулей разности цен закрытия текущего и предыдущего дня для заданного периода
 		if (_previousClosePrice != null)
-			sumValue = _sum.Process(input, Math.Abs(_previousClosePrice.Value - candle.ClosePrice)).ToDecimal(Source);
+			sumValue = _sum.Process(input, (_previousClosePrice.Value - candle.ClosePrice).Abs()).ToDecimal(Source);
 
 		if (input.IsFinal)
 			_previousClosePrice = candle.ClosePrice;

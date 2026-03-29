@@ -99,12 +99,12 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 			// Sell when price is at or above the upper band
 			if (candle.ClosePrice >= typed.UpBand && Position >= 0)
 			{
-				SellMarket(Volume + Math.Abs(Position));
+				SellMarket(Volume + Position.Abs());
 			}
 			// Buy when price is at or below the lower band
 			else if (candle.ClosePrice <= typed.LowBand && Position <= 0)
 			{
-				BuyMarket(Volume + Math.Abs(Position));
+				BuyMarket(Volume + Position.Abs());
 			}
 		}
 	}

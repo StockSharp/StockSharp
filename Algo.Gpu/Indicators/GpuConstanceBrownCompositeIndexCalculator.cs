@@ -197,10 +197,10 @@ public class GpuConstanceBrownCompositeIndexCalculator : GpuIndicatorCalculatorB
 		int maxRoc = 1, maxMom = 1, maxFast = 1, maxSlow = 1;
 		for (var i = 0; i < parameters.Length; i++)
 		{
-			maxRoc = Math.Max(maxRoc, Math.Max(1, parameters[i].RocLength));
-			maxMom = Math.Max(maxMom, Math.Max(1, parameters[i].MomentumLength));
-			maxFast = Math.Max(maxFast, Math.Max(1, parameters[i].FastSmaLength));
-			maxSlow = Math.Max(maxSlow, Math.Max(1, parameters[i].SlowSmaLength));
+			maxRoc = maxRoc.Max(1.Max(parameters[i].RocLength));
+			maxMom = maxMom.Max(1.Max(parameters[i].MomentumLength));
+			maxFast = maxFast.Max(1.Max(parameters[i].FastSmaLength));
+			maxSlow = maxSlow.Max(1.Max(parameters[i].SlowSmaLength));
 		}
 
 		using var inputBuffer = Accelerator.Allocate1D(flatCandles);

@@ -41,7 +41,7 @@ public class GatorHistogram : BaseIndicator
 		if (line1Curr == null || line2Curr == null)
 			return new DecimalIndicatorValue(this, input.Time);
 
-		return new DecimalIndicatorValue(this, (_isNegative ? -1 : 1) * Math.Abs(line1Curr.Value - line2Curr.Value), input.Time);
+		return new DecimalIndicatorValue(this, (_isNegative ? -1 : 1) * (line1Curr.Value - line2Curr.Value).Abs(), input.Time);
 	}
 
 	/// <summary>

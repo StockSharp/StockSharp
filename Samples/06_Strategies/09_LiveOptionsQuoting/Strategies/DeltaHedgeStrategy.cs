@@ -86,7 +86,7 @@ public class DeltaHedgeStrategy : HedgeStrategy
 		_lastDelta = portfolioDelta.Value;
 
 		// Check if rehedging is necessary based on the threshold
-		if (Math.Abs(positionDiff) < HedgingThreshold)
+		if (positionDiff.Abs() < HedgingThreshold)
 		{
 			LogInfo("Position difference {0} is below threshold {1}, no rehedging needed", positionDiff, HedgingThreshold);
 			return [];
@@ -94,7 +94,7 @@ public class DeltaHedgeStrategy : HedgeStrategy
 
 		// Determine trade direction
 		var side = positionDiff > 0 ? Sides.Buy : Sides.Sell;
-		var volume = Math.Abs(positionDiff);
+		var volume = positionDiff.Abs();
 
 		// Get current market price
 		if (underlyingAsset.GetCurrentPrice(this, side) is not decimal price)

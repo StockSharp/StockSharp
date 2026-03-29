@@ -1352,7 +1352,7 @@ public class StatisticsTests : BaseTestClass
 		// total win = 100 + 200 + 50 = 350
 		// total loss = 50 + 100 = 150
 		// The ratio should be win/loss
-		((Math.Abs(parameter.Value - (350m / 150m)) < 1e-10m)).AssertTrue();
+		(((parameter.Value - (350m / 150m)).Abs() < 1e-10m)).AssertTrue();
 	}
 
 	[TestMethod]
@@ -1565,7 +1565,7 @@ public class StatisticsTests : BaseTestClass
 		foreach (var v in b)
 			s2.Add(t, v, null);
 
-		Math.Abs(s1.Value - s2.Value).AssertEqual(0m);
+		(s1.Value - s2.Value).Abs().AssertEqual(0m);
 	}
 
 	[TestMethod]
@@ -1587,7 +1587,7 @@ public class StatisticsTests : BaseTestClass
 		foreach (var v in b)
 			r2.Add(t, v, null);
 
-		Math.Abs(r1.Value - r2.Value).AssertEqual(0m);
+		(r1.Value - r2.Value).Abs().AssertEqual(0m);
 	}
 
 	[TestMethod]

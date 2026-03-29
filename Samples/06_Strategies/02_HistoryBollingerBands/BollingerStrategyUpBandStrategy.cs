@@ -104,7 +104,7 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 			// Sell to close position when price reaches the middle band (only when long)
 			else if (candle.ClosePrice <= typed.MovingAverage && Position > 0)
 			{
-				SellMarket(Math.Abs(Position));
+				SellMarket(Position.Abs());
 			}
 		}
 	}

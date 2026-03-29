@@ -77,7 +77,7 @@ public class DirectionalIndex : BaseComplexIndicator<IDirectionalIndexValue>
 		var minus = minusValue.ToDecimal(Source);
 
 		var diSum = plus + minus;
-		var diDiff = Math.Abs(plus - minus);
+		var diDiff = (plus - minus).Abs();
 
 		value.Add(this, value.SetValue(this, diSum != 0m ? (100 * diDiff / diSum) : 0m));
 

@@ -32,11 +32,11 @@ public class ReturnParameter : BasePnLStatisticParameter<decimal>
 	/// <inheritdoc />
 	public override void Add(DateTime marketTime, decimal pnl, decimal? commission)
 	{
-		_minEquity = Math.Min(_minEquity, pnl);
+		_minEquity = _minEquity.Min(pnl);
 
 		var profit = pnl - _minEquity;
-		var denom = Math.Abs(_minEquity);
-		Value = Math.Max(Value, denom != 0 ? profit / denom : 0);
+		var denom = _minEquity.Abs();
+		Value = Value.Max(denom != 0 ? profit / denom : 0);
 	}
 
 	/// <inheritdoc />

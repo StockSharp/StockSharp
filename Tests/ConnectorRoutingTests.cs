@@ -602,7 +602,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		(ethTicks.Count >= 30).AssertTrue($"Should receive many ETH ticks, got {ethTicks.Count}");
 
 		// No errors
-		errors.Count.AssertEqual(0, $"Should have no errors, got: {string.Join(", ", errors.Select(e => e.Message))}");
+		errors.Count.AssertEqual(0, $"Should have no errors, got: {errors.Select(e => e.Message).JoinCommaSpace()}");
 
 		// Verify data integrity - all BTC ticks should have BTC security
 		btcTicks.All(t => t.SecurityId == binanceSecId).AssertTrue("All BTC ticks should have BTC SecurityId");

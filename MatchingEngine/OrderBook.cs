@@ -395,14 +395,14 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 
 			var level = kvp.Value;
 			var available = level.TotalVolume;
-			var consumed = Math.Min(remaining, available);
+			var consumed = remaining.Min(available);
 
 			if (consumed > 0)
 			{
 				var affectedOrders = level.Orders.ToList();
 
 				// Reduce market volume first
-				var marketConsumed = Math.Min(consumed, level.MarketVolume);
+				var marketConsumed = consumed.Min(level.MarketVolume);
 				level.MarketVolume -= marketConsumed;
 				var orderConsumed = consumed - marketConsumed;
 
@@ -412,7 +412,7 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 					if (orderConsumed <= 0)
 						break;
 
-					var orderConsume = Math.Min(orderConsumed, order.Balance);
+					var orderConsume = orderConsumed.Min(order.Balance);
 					order.Balance -= orderConsume;
 					orderConsumed -= orderConsume;
 				}

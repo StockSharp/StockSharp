@@ -292,7 +292,7 @@ public static class DerivativesHelper
 	{
 		return allStrikes
 				.Where(s => s.Strike != null)
-				.OrderBy(s => Math.Abs(s.Strike.Value - assetPrice))
+				.OrderBy(s => (s.Strike.Value - assetPrice).Abs())
 				.FirstOrDefault();
 	}
 

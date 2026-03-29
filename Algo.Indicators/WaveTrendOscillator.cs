@@ -111,7 +111,7 @@ public class WaveTrendOscillator : BaseComplexIndicator<IWaveTrendOscillatorValu
 			var capo = capoValue.ToDecimal(Source);
 			var esa = esaValue.ToDecimal(Source);
 
-			var d = _d.Process(input, Math.Abs(capo - esa));
+			var d = _d.Process(input, (capo - esa).Abs());
 
 			if (_d.IsFormed)
 			{

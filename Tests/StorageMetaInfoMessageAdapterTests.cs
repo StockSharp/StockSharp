@@ -25,7 +25,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 			Name = $"Security {index}",
 			Type = types[_random.Next(types.Length)],
 			Currency = currencies[_random.Next(currencies.Length)],
-			PriceStep = (decimal)Math.Round(_random.NextDouble() * 0.1 + 0.01, 2),
+			PriceStep = (decimal)(_random.NextDouble() * 0.1 + 0.01).Round(2),
 			VolumeStep = _random.Next(1, 10),
 			Multiplier = _random.Next(1, 100),
 			Decimals = _random.Next(0, 5),

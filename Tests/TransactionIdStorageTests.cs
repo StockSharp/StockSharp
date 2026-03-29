@@ -416,8 +416,8 @@ public class TransactionIdStorageTests : BaseTestClass
 		requestId1.AssertNotEqual(requestId2);
 
 		// Should be parseable as long (ticks)
-		long.Parse(requestId1);
-		long.Parse(requestId2);
+		requestId1.To<long>();
+		requestId2.To<long>();
 	}
 
 	[TestMethod]

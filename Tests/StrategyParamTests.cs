@@ -663,7 +663,7 @@ public class StrategyParamTests : BaseTestClass
 			var v = (double)p.GetRandom();
 			(v >= 0.5 && v <= 3.0).AssertEqual(true);
 			var steps = (v - 0.5) / 0.25;
-			(Math.Abs(steps - Math.Round(steps)) <= 1e-6).AssertTrue();
+			((steps - steps.Round()).Abs() <= 1e-6).AssertTrue();
 		}
 	}
 
@@ -679,7 +679,7 @@ public class StrategyParamTests : BaseTestClass
 			var v = (float)p.GetRandom();
 			(v >= 1.0f && v <= 2.0f).AssertEqual(true);
 			var steps = (v - 1.0f) / 0.5f;
-			(Math.Abs(steps - MathF.Round(steps)) <= 1e-5f).AssertTrue();
+			((steps - MathF.Round(steps)).Abs() <= 1e-5f).AssertTrue();
 		}
 	}
 

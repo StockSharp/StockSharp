@@ -37,11 +37,11 @@ public class MaxRelativeDrawdownParameter : BasePnLStatisticParameter<decimal>
 		if (pnl >= 0)
 		{
 			// positive domain, use standard relative drawdown from positive peak
-			_posPeak = Math.Max(_posPeak, pnl);
+			_posPeak = _posPeak.Max(pnl);
 			if (_posPeak > 0)
 			{
 				var rel = (_posPeak - pnl) / _posPeak;
-				Value = Math.Max(Value, rel);
+				Value = Value.Max(rel);
 			}
 			// reset negative peak as we moved to non-negative range (optional)
 		}
@@ -52,7 +52,7 @@ public class MaxRelativeDrawdownParameter : BasePnLStatisticParameter<decimal>
 			{
 				// if there was a positive peak before, relate to it
 				var rel = (_posPeak - pnl) / _posPeak;
-				Value = Math.Max(Value, rel);
+				Value = Value.Max(rel);
 			}
 			else
 			{
@@ -64,12 +64,12 @@ public class MaxRelativeDrawdownParameter : BasePnLStatisticParameter<decimal>
 				else
 				{
 					// peak is the least negative equity encountered so far
-					_negPeak = Math.Max(_negPeak.Value, pnl);
+					_negPeak = _negPeak.Value.Max(pnl);
 					var drop = _negPeak.Value - pnl; // (-1000) - (-1500) = 500
 					if (_negPeak.Value != 0)
 					{
-						var rel = drop / Math.Abs(_negPeak.Value);
-						Value = Math.Max(Value, rel);
+						var rel = drop / _negPeak.Value.Abs();
+						Value = Value.Max(rel);
 					}
 				}
 			}

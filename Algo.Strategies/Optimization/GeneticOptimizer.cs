@@ -434,7 +434,7 @@ public class GeneticOptimizer : BaseOptimizer
 	{
 		var ga = SetupGA(startTime, stopTime, strategy, parameters, calcFitness, selection, crossover, mutation);
 
-		var estimatedIterations = Settings.Population * Math.Max(1, Settings.GenerationsMax);
+		var estimatedIterations = Settings.Population * 1.Max(Settings.GenerationsMax);
 		var maxIters = EmulationSettings.MaxIterations;
 		if (maxIters > 0 && estimatedIterations > maxIters)
 			estimatedIterations = maxIters;

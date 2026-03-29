@@ -262,7 +262,7 @@ public class StorageTests : BaseTestClass
 				if (i > 0 && RandomGen.GetInt(1000) % 10 == 0)
 				{
 					trades[i].IsSystem = false;
-					trades[i].TradePrice = Math.Round(trades[i].TradePrice.Value / i, 10);
+					trades[i].TradePrice = (trades[i].TradePrice.Value / i).Round(10);
 				}
 			}
 		});
@@ -1742,8 +1742,8 @@ public class StorageTests : BaseTestClass
 
 		foreach (var t in trades)
 		{
-			minPrice = Math.Min(minPrice, t.TradePrice.Value);
-			maxPrice = Math.Max(maxPrice, t.TradePrice.Value);
+			minPrice = minPrice.Min(t.TradePrice.Value);
+			maxPrice = maxPrice.Max(t.TradePrice.Value);
 		}
 
 		decimal numSteps;
@@ -2332,14 +2332,14 @@ public class StorageTests : BaseTestClass
 				var item = quotes[i];
 
 				item.IsSystem = false;
-				item.OrderPrice = Math.Round(item.OrderPrice / i, 10);
+				item.OrderPrice = (item.OrderPrice / i).Round(10);
 
 				if (item.TradePrice is not null)
 				{
 					item.IsSystem = false;
 
 					if (RandomGen.GetInt(1000) % 20 == 0)
-						item.TradePrice = Math.Round(item.TradePrice.Value / i, 10);
+						item.TradePrice = (item.TradePrice.Value / i).Round(10);
 				}
 			}
 		}

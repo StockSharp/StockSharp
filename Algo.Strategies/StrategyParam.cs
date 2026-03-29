@@ -54,7 +54,7 @@ public class StrategyParam<T> : NotifiableObject, IStrategyParam
 {
 	private readonly EqualityComparer<T> _comparer;
 	private static readonly Type _valueType = typeof(T).GetUnderlyingType() ?? typeof(T);
-	private static readonly bool _isNullable = Nullable.GetUnderlyingType(typeof(T)) != null;
+	private static readonly bool _isNullable = typeof(T).IsNullable();
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StrategyParam{T}"/>.

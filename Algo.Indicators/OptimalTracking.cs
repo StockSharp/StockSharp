@@ -41,7 +41,7 @@ public sealed class OptimalTracking : DecimalLengthIndicator
 
 				//Tracking index ***********************************************************************************
 				if (smoothRng != 0)
-					_lambda = Math.Abs(smoothDiff / smoothRng);
+					_lambda = (smoothDiff / smoothRng).Abs();
 
 				//Alfa для альфа фильтра ***************************************************************************
 				_alpha = (-_lambda * _lambda + (decimal)Math.Sqrt((double)(_lambda * _lambda * _lambda * _lambda + 16 * _lambda * _lambda))) / 8;

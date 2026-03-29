@@ -125,7 +125,7 @@ public class BacktestingTests : BaseTestClass
 
 		// Check order states
 		var states = strategy.Orders.GroupBy(o => o.State).Select(g => $"{g.Key}:{g.Count()}");
-		Console.WriteLine($"Order states: {string.Join(", ", states)}");
+		Console.WriteLine($"Order states: {states.JoinCommaSpace()}");
 
 		// Check done orders details
 		var doneOrders = strategy.Orders.Where(o => o.State == OrderStates.Done).Take(3);
@@ -719,7 +719,7 @@ public class BacktestingTests : BaseTestClass
 		}
 
 		// Debug output
-		Console.WriteLine($"Connection states: {string.Join(" -> ", connectionStates)}");
+		Console.WriteLine($"Connection states: {connectionStates.Join(" -> ")}");
 		Console.WriteLine($"Candles received (connector): {candlesReceived}");
 		Console.WriteLine($"Candles received (strategy): {strategyCandlesCount}");
 		Console.WriteLine($"Finished candles (strategy): {finishedCandlesCount}");
@@ -727,11 +727,11 @@ public class BacktestingTests : BaseTestClass
 		Console.WriteLine($"Orders received: {ordersReceived.Count}");
 		Console.WriteLine($"Final subscriptions: {connector.Subscriptions.Count()}");
 		Console.WriteLine($"Final strategy state: {strategy.ProcessState}");
-		Console.WriteLine($"Strategy errors: {string.Join("; ", strategyErrors)}");
+		Console.WriteLine($"Strategy errors: {strategyErrors.Join("; ")}");
 		Console.WriteLine($"Strategy position: {strategy.Position}");
 
 		// Verify that orders were generated
-		IsTrue(ordersReceived.Count > 0, $"Expected at least one order. Candles: {candlesReceived}, Subscriptions: {string.Join("; ", subscriptionResponses)}, Connection: {string.Join(" -> ", connectionStates)}");
+		IsTrue(ordersReceived.Count > 0, $"Expected at least one order. Candles: {candlesReceived}, Subscriptions: {subscriptionResponses.Join("; ")}, Connection: {connectionStates.Join(" -> ")}");
 	}
 
 	/// <summary>
@@ -1504,7 +1504,7 @@ public class BacktestingTests : BaseTestClass
 
 		if (allErrors.Count > 0)
 		{
-			Fail($"Time ordering violations detected:\n{string.Join("\n", allErrors.Take(20))}");
+			Fail($"Time ordering violations detected:\n{allErrors.Take(20).JoinN()}");
 		}
 	}
 

@@ -110,7 +110,7 @@ public class MqStrategy : Strategy
 		);
 
 		// Calculate quoting volume
-		var quotingVolume = Volume + Math.Abs(Position);
+		var quotingVolume = Volume + Position.Abs();
 
 		// Create and initialize the processor
 		_quotingProcessor = new QuotingProcessor(

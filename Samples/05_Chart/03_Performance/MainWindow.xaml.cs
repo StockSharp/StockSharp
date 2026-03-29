@@ -212,7 +212,7 @@ public partial class MainWindow
 
 					var data = new ChartDrawData();
 
-					var candles = _candles.GetRange(i, Math.Min(_candlesPacketSize, _candles.Count - i));
+					var candles = _candles.GetRange(i, _candlesPacketSize.Min(_candles.Count - i));
 
 					foreach (var candle in candles)
 					{
@@ -251,7 +251,7 @@ public partial class MainWindow
 
 	public static decimal Round(decimal value, decimal nearest)
 	{
-		return Math.Round(value / nearest) * nearest;
+		return (value / nearest).Round() * nearest;
 	}
 
 	private void ChartUpdateTimerOnTick(object sender, EventArgs eventArgs)

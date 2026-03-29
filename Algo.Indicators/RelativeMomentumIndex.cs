@@ -68,8 +68,8 @@ public class RelativeMomentumIndex : DecimalLengthIndicator
 		if (_prices.Count > MomentumPeriod)
 		{
 			var previousPrice = _prices[_prices.Count - 1 - MomentumPeriod];
-			var upMoment = Math.Max(price - previousPrice, 0);
-			var downMoment = Math.Max(previousPrice - price, 0);
+			var upMoment = (price - previousPrice).Max(0);
+			var downMoment = (previousPrice - price).Max(0);
 
 			var upValue = _upMomentumSma.Process(input, upMoment);
 			var downValue = _downMomentumSma.Process(input, downMoment);

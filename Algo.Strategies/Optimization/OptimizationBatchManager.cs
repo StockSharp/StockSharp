@@ -106,7 +106,7 @@ public class OptimizationBatchManager : IOptimizationBatchManager
 		get
 		{
 			using (_sync.EnterScope())
-				return Math.Max(0, _totalIterations - _startedCount);
+				return 0.Max(_totalIterations - _startedCount);
 		}
 	}
 

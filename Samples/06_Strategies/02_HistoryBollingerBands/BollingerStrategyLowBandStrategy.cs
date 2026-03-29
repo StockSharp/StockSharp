@@ -104,7 +104,7 @@ namespace StockSharp.Samples.Strategies.HistoryBollingerBands
 			// Buy to close position when price reaches the middle band (only when short)
 			else if (candle.ClosePrice >= typed.MovingAverage && Position < 0)
 			{
-				BuyMarket(Math.Abs(Position));
+				BuyMarket(Position.Abs());
 			}
 		}
 	}

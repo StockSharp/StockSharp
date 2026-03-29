@@ -131,13 +131,13 @@ public class IndicatorTests : BaseTestClass
 					{
 						var dA = (decimal)av;
 						var dE = (decimal)ev;
-						var diff = Math.Abs(dA - dE);
+						var diff = (dA - dE).Abs();
 
 						if (gpuTolerance)
 						{
 							// GPU uses float32 (~7 sig digits), use relative tolerance
-							var maxAbs = Math.Max(Math.Abs(dA), Math.Abs(dE));
-							var tol = Math.Max(1.01m, maxAbs * 0.025m);
+							var maxAbs = dA.Abs().Max(dE.Abs());
+							var tol = 1.01m.Max(maxAbs * 0.025m);
 							(diff <= tol).AssertTrue($"{indName} GPU={dA} CPU={dE} diff={diff} tol={tol}");
 						}
 						else
@@ -528,7 +528,7 @@ public class IndicatorTests : BaseTestClass
 							var minL = min.To<long>();
 							var maxL = max.To<long>();
 							var rnd = RandomGen.GetDouble();
-							var v = minL + (long)Math.Round((maxL - minL) * rnd);
+							var v = minL + (long)((maxL - minL) * rnd).Round();
 							value = v;
 						}
 						else if (propType == typeof(double))
@@ -1413,7 +1413,7 @@ static class IndicatorDataRunner
 			var numNonFinals = RandomGen.GetInt(10);
 			for (var j = 0; j < numNonFinals; ++j)
 			{
-				var i2 = Math.Max(0, Math.Min(data.Length - 1, i + RandomGen.GetInt(-5, 5)));
+				var i2 = 0.Max((data.Length - 1).Min(i + RandomGen.GetInt(-5, 5)));
 				inputValues.Add(new(indicator, data[i2].Candle.OpenTime, getValue(data[i2].Candle), i < data.Length - 1 ? getValue(data[i+1].Candle) : default) { IsFinal = false });
 			}
 

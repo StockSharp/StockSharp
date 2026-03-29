@@ -189,7 +189,7 @@ public class OrderLifecycleManager : IOrderLifecycleManager
 	{
 		var query = _activeOrders.Values.AsEnumerable();
 
-		if (!string.IsNullOrEmpty(portfolioName))
+		if (!portfolioName.IsEmpty())
 			query = query.Where(o => string.Equals(o.PortfolioName, portfolioName, StringComparison.OrdinalIgnoreCase));
 
 		if (side.HasValue)

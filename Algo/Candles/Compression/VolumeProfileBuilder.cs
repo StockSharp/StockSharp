@@ -121,7 +121,7 @@ public class VolumeProfileBuilder
 		High = default;
 		Low = default;
 
-		var maxVolume = Math.Round(_levels.Sum(p => p.BuyVolume + p.SellVolume) * VolumePercent / 100, 0);
+		var maxVolume = (_levels.Sum(p => p.BuyVolume + p.SellVolume) * VolumePercent / 100).Round(0);
 		var currVolume = _levels.Select(p => p.BuyVolume + p.SellVolume).Max();
 
 		PoC = _levels.FirstOrDefault(p => p.BuyVolume + p.SellVolume == currVolume);
@@ -238,8 +238,8 @@ public class VolumeProfileBuilder
 			var level = new CandlePriceLevel
 			{
 				Price = isAbovePoC
-					? Math.Max(curr.Price, pl.Price)
-					: Math.Min(curr.Price, pl.Price),
+					? curr.Price.Max(pl.Price)
+					: curr.Price.Min(pl.Price),
 				BuyVolumes = combined.BuyVolumes?.ToArray(),
 				SellVolumes = combined.SellVolumes?.ToArray(),
 				BuyVolume = combined.BuyVolume,

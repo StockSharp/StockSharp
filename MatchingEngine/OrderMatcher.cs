@@ -55,7 +55,7 @@ public class OrderMatcher : IOrderMatcher
 		// Consume from opposite side at any price
 		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, null, remaining))
 		{
-			var consumed = Math.Min(volume, remaining);
+			var consumed = volume.Min(remaining);
 			trades.Add(new MatchTrade(price, consumed, order.Side, orders));
 			matchedOrders.AddRange(orders.Where(o => o.IsUserOrder));
 			remaining -= consumed;
@@ -91,7 +91,7 @@ public class OrderMatcher : IOrderMatcher
 		// Get matchable volume
 		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
 		{
-			var consumed = Math.Min(volume, remaining);
+			var consumed = volume.Min(remaining);
 			// Use order price for candle-based matching
 			var tradePrice = settings.UseOrderPriceForLimitTrades ? limitPrice : price;
 			trades.Add(new MatchTrade(tradePrice, consumed, order.Side, orders));
@@ -186,7 +186,7 @@ public class OrderMatcher : IOrderMatcher
 
 		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
 		{
-			var consumed = Math.Min(volume, remaining);
+			var consumed = volume.Min(remaining);
 			trades.Add(new MatchTrade(price, consumed, order.Side, orders));
 			matchedOrders.AddRange(orders.Where(o => o.IsUserOrder));
 			remaining -= consumed;

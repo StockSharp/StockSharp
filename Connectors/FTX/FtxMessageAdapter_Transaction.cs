@@ -148,7 +148,7 @@ partial class FtxMessageAdapter
 
 				try
 				{
-					var size = Math.Abs(fut.Cost.Value);
+					var size = fut.Cost.Value.Abs();
 
 					// Create market order to close the position
 					await _restClient.RegisterOrder(

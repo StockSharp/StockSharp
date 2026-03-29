@@ -98,7 +98,7 @@ public class EhlersFisherTransform : BaseComplexIndicator<IEhlersFisherTransform
 			var value = range == 0 ? 0m : 0.5m * ((candle.GetMedianPrice() - minLow) / range - 0.5m);
 
 			value = 0.66m * value + 0.67m * _prevValue;
-			value = Math.Max(Math.Min(value, 0.999m), -0.999m);
+			value = value.Min(0.999m).Max(-0.999m);
 
 			var fisherTransform = 0.5m * (decimal)Math.Log((double)((1 + value) / (1 - value)));
 

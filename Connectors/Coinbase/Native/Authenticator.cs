@@ -152,11 +152,11 @@ class Authenticator : Disposable
 		var headerJson = JsonConvert.SerializeObject(header);
 		var payloadJson = JsonConvert.SerializeObject(payload);
 
-		var headerBase64 = Base64UrlEncode(Encoding.UTF8.GetBytes(headerJson));
-		var payloadBase64 = Base64UrlEncode(Encoding.UTF8.GetBytes(payloadJson));
+		var headerBase64 = Base64UrlEncode(headerJson.UTF8());
+		var payloadBase64 = Base64UrlEncode(payloadJson.UTF8());
 
 		var dataToSign = $"{headerBase64}.{payloadBase64}";
-		var signature = _ecdsa.SignData(Encoding.UTF8.GetBytes(dataToSign), HashAlgorithmName.SHA256);
+		var signature = _ecdsa.SignData(dataToSign.UTF8(), HashAlgorithmName.SHA256);
 		var signatureBase64 = Base64UrlEncode(signature);
 
 		return $"{headerBase64}.{payloadBase64}.{signatureBase64}";

@@ -112,7 +112,7 @@ public class CsvImporter(DataType dataType, IEnumerable<FieldMapping> fields, IS
 			if (!canProgress)
 				continue;
 
-			var percent = (int)Math.Round(((double)stream.Position / len) * 100);
+			var percent = (int)(((double)stream.Position / len) * 100).Round();
 
 			if (percent <= prevPercent)
 				continue;

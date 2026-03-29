@@ -1149,7 +1149,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		protected override string ToSerializedString()
 		{
-			return $"{Multiplier},{string.Join(",", SecurityIds.Select(s => s.ToStringId()))}";
+			return $"{Multiplier},{SecurityIds.Select(s => s.ToStringId()).JoinComma()}";
 		}
 
 		protected override void FromSerializedString(string text)

@@ -120,14 +120,14 @@ public class StairsCountertrendStrategy : Strategy
 		if (_bullLength >= Length && Position >= 0)
 		{
 			// Bearish trend detected - go short
-			decimal volume = Volume + Math.Abs(Position);
+			decimal volume = Volume + Position.Abs();
 			this.AddInfoLog($"Selling {volume} after {_bullLength} bullish candles");
 			SellMarket(volume);
 		}
 		else if (_bearLength >= Length && Position <= 0)
 		{
 			// Bullish trend detected - go long
-			decimal volume = Volume + Math.Abs(Position);
+			decimal volume = Volume + Position.Abs();
 			this.AddInfoLog($"Buying {volume} after {_bearLength} bearish candles");
 			BuyMarket(volume);
 		}

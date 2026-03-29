@@ -183,7 +183,7 @@ public class PositionTargetManager : BaseLogReceiver
 			return false;
 
 		var currentPos = _getPosition(security, portfolio) ?? 0;
-		return Math.Abs(currentPos - state.Target) <= PositionTolerance;
+		return (currentPos - state.Target).Abs() <= PositionTolerance;
 	}
 
 	private void ProcessTarget(Security security, Portfolio portfolio)
@@ -203,7 +203,7 @@ public class PositionTargetManager : BaseLogReceiver
 		var currentPos = _getPosition(security, portfolio) ?? 0;
 		var delta = state.Target - currentPos;
 
-		if (Math.Abs(delta) <= PositionTolerance)
+		if (delta.Abs() <= PositionTolerance)
 		{
 			// target reached
 			using (_targets.EnterScope())
@@ -225,7 +225,7 @@ public class PositionTargetManager : BaseLogReceiver
 			return;
 
 		var side = delta > 0 ? Sides.Buy : Sides.Sell;
-		var volume = Math.Abs(delta);
+		var volume = delta.Abs();
 
 		var algo = _algoFactory(side, volume);
 		state.ActiveAlgo = algo;

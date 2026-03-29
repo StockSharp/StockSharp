@@ -229,9 +229,9 @@ public class GpuIchimokuCalculator : GpuIndicatorCalculatorBase<Ichimoku, GpuIch
 			for (var p = 0; p < parameters.Length; p++)
 			{
 				var prm = parameters[p];
-				var tenkanLength = Math.Max(prm.TenkanLength, 1);
-				var kijunLength = Math.Max(prm.KijunLength, 1);
-				var senkouBLength = Math.Max(prm.SenkouBLength, 1);
+				var tenkanLength = prm.TenkanLength.Max(1);
+				var kijunLength = prm.KijunLength.Max(1);
+				var senkouBLength = prm.SenkouBLength.Max(1);
 
 				var senkouAQueue = new Queue<float>(kijunLength);
 				var senkouBQueue = new Queue<float>(kijunLength);

@@ -272,7 +272,7 @@ public partial class MainWindow
 
 		Log($"Fill order: {order}");
 
-		order.Balance -= RandomGen.GetInt(1, Math.Min((int)order.Balance, 5));
+		order.Balance -= RandomGen.GetInt(1, ((int)order.Balance).Min(5));
 
 		if (order.Balance == 0)
 		{
@@ -331,7 +331,7 @@ public partial class MainWindow
 			Side = orderDraft.Side,
 			Security = orderDraft.Security,
 			Portfolio = orderDraft.Portfolio,
-			Price = Math.Round(orderDraft.Price / _priceStep) * _priceStep,
+			Price = (orderDraft.Price / _priceStep).Round() * _priceStep,
 		};
 
 		Log($"RegisterOrder: {order}");

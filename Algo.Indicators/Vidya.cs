@@ -67,7 +67,7 @@ public class Vidya : DecimalLengthIndicator
 			return _prevFinalValue;
 		}
 
-		var curValue = (newValue - _prevFinalValue) * _multiplier * Math.Abs(cmoValue.ToDecimal(Source) / 100m) + _prevFinalValue;
+		var curValue = (newValue - _prevFinalValue) * _multiplier * (cmoValue.ToDecimal(Source) / 100m).Abs() + _prevFinalValue;
 			
 		if (input.IsFinal)
 			_prevFinalValue = curValue;

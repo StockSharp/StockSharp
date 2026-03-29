@@ -506,7 +506,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				if (counterOrder.IsUserOrder)
 				{
 					var counterPortfolio = GetPortfolio(counterOrder.PortfolioName);
-					var counterVolume = Math.Min(trade.Volume, counterOrder.Balance);
+					var counterVolume = trade.Volume.Min(counterOrder.Balance);
 
 					var counterMarketPrice = counterOrder.Side == Sides.Buy
 						? state.OrderBook.BestAsk?.price
@@ -800,7 +800,7 @@ public class MatchingEngineAdapter : IMessageTransport
 	{
 		var mode = groupMsg.Mode;
 
-		if (mode.HasFlag(OrderGroupCancelModes.ClosePositions) && string.IsNullOrEmpty(groupMsg.PortfolioName))
+		if (mode.HasFlag(OrderGroupCancelModes.ClosePositions) && groupMsg.PortfolioName.IsEmpty())
 		{
 			results.Add(new ExecutionMessage
 			{
@@ -846,7 +846,7 @@ public class MatchingEngineAdapter : IMessageTransport
 		{
 			foreach (var portfolio in _portfolioManager.GetAllPortfolios())
 			{
-				if (!string.IsNullOrEmpty(groupMsg.PortfolioName) &&
+				if (!groupMsg.PortfolioName.IsEmpty() &&
 					!groupMsg.PortfolioName.Equals(portfolio.Name, StringComparison.OrdinalIgnoreCase))
 					continue;
 
@@ -866,7 +866,7 @@ public class MatchingEngineAdapter : IMessageTransport
 					}
 
 					var closeSide = volume > 0 ? Sides.Sell : Sides.Buy;
-					var closeVolume = Math.Abs(volume);
+					var closeVolume = volume.Abs();
 
 					var state = GetSecurityState(securityId);
 					var bestPrice = closeSide == Sides.Buy
@@ -903,7 +903,7 @@ public class MatchingEngineAdapter : IMessageTransport
 
 		foreach (var state in _securityStates.Values)
 		{
-			var orders = string.IsNullOrEmpty(statusMsg.PortfolioName)
+			var orders = statusMsg.PortfolioName.IsEmpty()
 				? state.OrderManager.GetActiveOrders()
 				: state.OrderManager.GetActiveOrders(statusMsg.PortfolioName);
 
@@ -945,7 +945,7 @@ public class MatchingEngineAdapter : IMessageTransport
 
 		foreach (var portfolio in _portfolioManager.GetAllPortfolios())
 		{
-			if (!string.IsNullOrEmpty(lookupMsg.PortfolioName) &&
+			if (!lookupMsg.PortfolioName.IsEmpty() &&
 				!lookupMsg.PortfolioName.Equals(portfolio.Name, StringComparison.OrdinalIgnoreCase))
 				continue;
 

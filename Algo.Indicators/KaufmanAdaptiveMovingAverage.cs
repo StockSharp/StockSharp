@@ -117,12 +117,12 @@ public class KaufmanAdaptiveMovingAverage : DecimalLengthIndicator
 
 		for (var i = 1; i < buff.Count; i++)
 		{
-			volatility += Math.Abs(buff[i] - buff[i - 1]);
+			volatility += (buff[i] - buff[i - 1]).Abs();
 		}
 
 		volatility = volatility > 0 ? volatility : 0.00001m;
 
-		var er = Math.Abs(direction / volatility);
+		var er = (direction / volatility).Abs();
 
 		var fastSC = 2m / (FastSCPeriod + 1m);
 		var slowSC = 2m / (SlowSCPeriod + 1m);

@@ -226,7 +226,7 @@ class HttpClient : BaseLogReceiver
 			if (depth <= 0)
 				throw new ArgumentOutOfRangeException(nameof(depth), depth, LocalizedStrings.InvalidValue);
 
-			depth = Math.Min(depth.Value, 5000);
+			depth = depth.Value.Min(5000);
 		}
 
 		var instrs = instruments.Join("-");
@@ -247,7 +247,7 @@ class HttpClient : BaseLogReceiver
 		if (count <= 0)
 			throw new ArgumentOutOfRangeException(nameof(count), count, LocalizedStrings.InvalidValue);
 
-		count = Math.Min(count, 2000);
+		count = count.Min(2000);
 
 		var instrs = instruments.Join("-");
 		var args = $"trades/{instrs}?limit={count}&ignore_invalid=1";

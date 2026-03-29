@@ -468,7 +468,7 @@ public class OptimizerTests : BaseTestClass
 		// Report any time errors
 		if (iterationTimeErrors.Count > 0)
 		{
-			Fail($"Time ordering violations within strategy iterations:\n{string.Join("\n", iterationTimeErrors.Take(20))}");
+			Fail($"Time ordering violations within strategy iterations:\n{iterationTimeErrors.Take(20).JoinN()}");
 		}
 	}
 

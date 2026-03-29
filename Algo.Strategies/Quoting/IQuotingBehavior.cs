@@ -108,7 +108,7 @@ public class MarketQuotingBehavior(Unit priceOffset, Unit bestPriceOffset, Marke
 		if (currentPrice == null)
 			return bestPrice;
 
-		var diff = Math.Abs(currentPrice.Value - bestPrice.Value);
+		var diff = (currentPrice.Value - bestPrice.Value).Abs();
 		if (diff >= _bestPriceOffset || currentVolume != newVolume)
 			return bestPrice;
 
@@ -140,7 +140,7 @@ public class BestByPriceQuotingBehavior(Unit bestPriceOffset) : IQuotingBehavior
 		if (currentPrice == null)
 			return bestPrice;
 
-		var diff = Math.Abs(currentPrice.Value - bestPrice.Value);
+		var diff = (currentPrice.Value - bestPrice.Value).Abs();
 		if (diff >= bestPriceOffset || currentVolume != newVolume)
 			return bestPrice;
 
@@ -312,7 +312,7 @@ public class LastTradeQuotingBehavior(Unit bestPriceOffset) : IQuotingBehavior
 		if (currentPrice == null)
 			return bestPrice;
 
-		var diff = Math.Abs(currentPrice.Value - bestPrice.Value);
+		var diff = (currentPrice.Value - bestPrice.Value).Abs();
 		if (diff >= _bestPriceOffset || currentVolume != newVolume)
 			return bestPrice;
 
@@ -430,7 +430,7 @@ public class VWAPQuotingBehavior(Unit bestPriceOffset) : IQuotingBehavior
 		if (currentPrice == null)
 			return bestPrice;
 
-		var diff = Math.Abs(currentPrice.Value - bestPrice.Value);
+		var diff = (currentPrice.Value - bestPrice.Value).Abs();
 		if (diff >= _bestPriceOffset || currentVolume != newVolume)
 			return bestPrice;
 

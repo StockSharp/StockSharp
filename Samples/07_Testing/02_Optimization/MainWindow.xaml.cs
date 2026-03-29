@@ -173,7 +173,7 @@ public partial class MainWindow
 			if (optimizer is BruteForceOptimizer btOptimizer)
 			{
 				var isRandomMode = RandomMode.IsChecked == true;
-				var randomCount = isRandomMode ? int.Parse(RandomCount.Text) : 0;
+				var randomCount = isRandomMode ? RandomCount.Text.To<int>() : 0;
 
 				IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies;
 

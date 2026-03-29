@@ -96,7 +96,7 @@ public class VariableMovingAverage : DecimalLengthIndicator
 		var volatility = stdDevValue.ToDecimal(Source);
 
 		// Avoid division by zero
-		var vi = avgPrice != 0 ? Math.Abs(volatility / avgPrice) : 0;
+		var vi = avgPrice != 0 ? (volatility / avgPrice).Abs() : 0;
 
 		// Calculate smoothing constant based on volatility
 		var smoothingConstant = 2m / (Length * (1 + VolatilityIndex * vi) + 1);

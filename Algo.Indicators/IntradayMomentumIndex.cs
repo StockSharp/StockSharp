@@ -31,8 +31,8 @@ public class IntradayMomentumIndex : LengthIndicator<(decimal o, decimal c), Cir
 	{
 		var candle = input.ToCandle();
 
-		var upMove = Math.Max(candle.ClosePrice - candle.OpenPrice, 0);
-		var downMove = Math.Max(candle.OpenPrice - candle.ClosePrice, 0);
+		var upMove = (candle.ClosePrice - candle.OpenPrice).Max(0);
+		var downMove = (candle.OpenPrice - candle.ClosePrice).Max(0);
 
 		decimal sumUp, sumDown;
 
@@ -45,8 +45,8 @@ public class IntradayMomentumIndex : LengthIndicator<(decimal o, decimal c), Cir
 			{
 				var (o, c) = Buffer.First();
 
-				_upSum -= Math.Max(c - o, 0);
-				_downSum -= Math.Max(o - c, 0);
+				_upSum -= (c - o).Max(0);
+				_downSum -= (o - c).Max(0);
 			}
 
 			Buffer.PushBack((candle.OpenPrice, candle.ClosePrice));
@@ -63,8 +63,8 @@ public class IntradayMomentumIndex : LengthIndicator<(decimal o, decimal c), Cir
 			{
 				var (o, c) = Buffer.First();
 
-				sumUp -= Math.Max(c - o, 0);
-				sumDown -= Math.Max(o - c, 0);
+				sumUp -= (c - o).Max(0);
+				sumDown -= (o - c).Max(0);
 			}
 
 			sumUp += upMove;

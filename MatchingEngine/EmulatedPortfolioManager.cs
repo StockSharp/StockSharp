@@ -110,7 +110,7 @@ public class EmulatedPortfolio : IPortfolio
 			if (prevPos != 0)
 			{
 				// Realized PnL = (exit price - entry price) * volume * direction
-				tradeRealizedPnL = (price - prevAvgPrice) * Math.Abs(prevPos) * Math.Sign(prevPos);
+				tradeRealizedPnL = (price - prevAvgPrice) * prevPos.Abs() * Math.Sign(prevPos);
 				_realizedPnL += tradeRealizedPnL;
 			}
 			pos.AveragePrice = 0;
@@ -123,15 +123,15 @@ public class EmulatedPortfolio : IPortfolio
 		else if (Math.Sign(prevPos) == Math.Sign(currPos))
 		{
 			// Position increased or partially closed
-			if (Math.Abs(currPos) > Math.Abs(prevPos))
+			if (currPos.Abs() > prevPos.Abs())
 			{
 				// Position increased - recalculate average price
-				pos.AveragePrice = (prevAvgPrice * Math.Abs(prevPos) + price * volume) / Math.Abs(currPos);
+				pos.AveragePrice = (prevAvgPrice * prevPos.Abs() + price * volume) / currPos.Abs();
 			}
 			else
 			{
 				// Position partially closed - realize PnL for closed portion
-				var closedVolume = Math.Abs(prevPos) - Math.Abs(currPos);
+				var closedVolume = prevPos.Abs() - currPos.Abs();
 				tradeRealizedPnL = (price - prevAvgPrice) * closedVolume * Math.Sign(prevPos);
 				_realizedPnL += tradeRealizedPnL;
 				// Average price remains the same for remaining position
@@ -141,7 +141,7 @@ public class EmulatedPortfolio : IPortfolio
 		{
 			// Position flipped (was long, now short or vice versa)
 			// First close old position completely
-			tradeRealizedPnL = (price - prevAvgPrice) * Math.Abs(prevPos) * Math.Sign(prevPos);
+			tradeRealizedPnL = (price - prevAvgPrice) * prevPos.Abs() * Math.Sign(prevPos);
 			_realizedPnL += tradeRealizedPnL;
 			// Then open new position at current price
 			pos.AveragePrice = price;
@@ -218,7 +218,7 @@ public class EmulatedPortfolio : IPortfolio
 			// - If no position: blocked = buys + sells
 			// - If long position: blocked = max(position + buys, sells)
 			// - If short position: blocked = max(position + sells, buys)
-			var positionValue = Math.Abs(pos.CurrentValue) * pos.AveragePrice;
+			var positionValue = pos.CurrentValue.Abs() * pos.AveragePrice;
 			var buyOrderValue = pos.TotalBidsValue;
 			var sellOrderValue = pos.TotalAsksValue;
 
@@ -230,12 +230,12 @@ public class EmulatedPortfolio : IPortfolio
 			else if (pos.CurrentValue > 0)
 			{
 				// Long position: max(position + buys, sells)
-				blocked = Math.Max(positionValue + buyOrderValue, sellOrderValue);
+				blocked = (positionValue + buyOrderValue).Max(sellOrderValue);
 			}
 			else
 			{
 				// Short position: max(position + sells, buys)
-				blocked = Math.Max(positionValue + sellOrderValue, buyOrderValue);
+				blocked = (positionValue + sellOrderValue).Max(buyOrderValue);
 			}
 
 			_totalBlockedMoney += blocked;

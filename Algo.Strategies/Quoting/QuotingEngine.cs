@@ -61,7 +61,7 @@ public class QuotingEngine
 	public decimal GetLeftVolume(decimal position)
 	{
 		var sign = _quotingSide == Sides.Buy ? 1 : -1;
-		return Math.Max(0, _quotingVolume - position * sign);
+		return 0m.Max(_quotingVolume - position * sign);
 	}
 
 	/// <summary>
@@ -97,7 +97,7 @@ public class QuotingEngine
 		}
 
 		// Calculate desired volume for new order
-		var newVolume = Math.Min(_maxOrderVolume, leftVolume);
+		var newVolume = _maxOrderVolume.Min(leftVolume);
 
 		// Calculate best price using behavior
 		var bestPrice = _behavior.CalculateBestPrice(

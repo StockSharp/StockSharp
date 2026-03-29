@@ -225,10 +225,10 @@ static class Program
 			});
 
 			if (renamedLangs.Count > 0)
-				AnsiConsole.MarkupLine($"[green]Renamed in: {string.Join(", ", renamedLangs)}[/]");
+				AnsiConsole.MarkupLine($"[green]Renamed in: {renamedLangs.JoinCommaSpace()}[/]");
 
 			if (missingLangs.Count > 0)
-				AnsiConsole.MarkupLine($"[yellow]Old key not found in: {string.Join(", ", missingLangs)}[/]");
+				AnsiConsole.MarkupLine($"[yellow]Old key not found in: {missingLangs.JoinCommaSpace()}[/]");
 
 			if (conflict)
 			{

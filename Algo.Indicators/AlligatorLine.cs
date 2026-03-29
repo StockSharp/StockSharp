@@ -74,7 +74,7 @@ public class AlligatorLine : DecimalLengthIndicator
 		}
 
 		return Buffer.Count > Shift
-			? Buffer[input.IsFinal ? 0 : Math.Min(1, Buffer.Count - 1)]
+			? Buffer[input.IsFinal ? 0 : 1.Min(Buffer.Count - 1)]
 			: null;
 	}
 

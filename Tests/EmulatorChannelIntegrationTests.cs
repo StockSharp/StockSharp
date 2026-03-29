@@ -139,7 +139,7 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 		// With proper flow through channel, there should be no time violations
 		if (timeViolations.Count > 0)
 		{
-			Fail($"Time ordering violations detected ({timeViolations.Count}):\n{string.Join("\n", timeViolations.Take(10))}");
+			Fail($"Time ordering violations detected ({timeViolations.Count}):\n{timeViolations.Take(10).JoinN()}");
 		}
 	}
 

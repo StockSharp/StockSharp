@@ -65,7 +65,7 @@ public class RangeActionVerificationIndex : BaseIndicator
 		if (longValue == 0)
 			return new DecimalIndicatorValue(this, input.Time);
 
-		return new DecimalIndicatorValue(this, Math.Abs(100m * (shortValue - longValue) / longValue), input.Time);
+		return new DecimalIndicatorValue(this, (100m * (shortValue - longValue) / longValue).Abs(), input.Time);
 	}
 
 	/// <inheritdoc />

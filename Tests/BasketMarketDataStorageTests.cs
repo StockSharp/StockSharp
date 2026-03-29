@@ -39,8 +39,8 @@ public class BasketMarketDataStorageTests : BaseTestClass
 		{
 			var open = basePrice + (decimal)((RandomGen.GetDouble() - 0.5) * 10);
 			var close = open + (decimal)((RandomGen.GetDouble() - 0.5) * 5);
-			var high = Math.Max(open, close) + (decimal)(RandomGen.GetDouble() * 3);
-			var low = Math.Min(open, close) - (decimal)(RandomGen.GetDouble() * 3);
+			var high = open.Max(close) + (decimal)(RandomGen.GetDouble() * 3);
+			var low = open.Min(close) - (decimal)(RandomGen.GetDouble() * 3);
 
 			var candle = new TimeFrameCandleMessage
 			{

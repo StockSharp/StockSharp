@@ -46,9 +46,9 @@ public class TrueRange : BaseIndicator
 	{
 		return
 		[
-			Math.Abs(currentCandle.HighPrice - currentCandle.LowPrice),
-			Math.Abs(prevCandle.ClosePrice - currentCandle.HighPrice),
-			Math.Abs(prevCandle.ClosePrice - currentCandle.LowPrice)
+			(currentCandle.HighPrice - currentCandle.LowPrice).Abs(),
+			(prevCandle.ClosePrice - currentCandle.HighPrice).Abs(),
+			(prevCandle.ClosePrice - currentCandle.LowPrice).Abs()
 		];
 	}
 
