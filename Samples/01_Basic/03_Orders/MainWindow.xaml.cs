@@ -64,7 +64,7 @@ public partial class MainWindow
 		{
 			Security = SecurityEditor.SelectedSecurity,
 			Portfolio = PortfolioEditor.SelectedPortfolio,
-			Price = decimal.Parse(TextBoxPrice.Text),
+			Price = TextBoxPrice.Text.To<decimal>(),
 			Volume = 1,
 			Side = Sides.Buy,
 		};
@@ -79,7 +79,7 @@ public partial class MainWindow
 		{
 			Security = SecurityEditor.SelectedSecurity,
 			Portfolio = PortfolioEditor.SelectedPortfolio,
-			Price = decimal.Parse(TextBoxPrice.Text),
+			Price = TextBoxPrice.Text.To<decimal>(),
 			Volume = 1,
 			Side = Sides.Sell,
 		};

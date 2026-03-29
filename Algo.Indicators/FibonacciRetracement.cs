@@ -171,5 +171,5 @@ public class FibonacciRetracementValue(FibonacciRetracement indicator, DateTime 
 	public decimal?[] Levels => [.. LevelsValues.Select(v => v.ToNullableDecimal(TypedIndicator.Source))];
 
 	/// <inheritdoc />
-	public override string ToString() => $"Levels=[{string.Join(", ", Levels)}]";
+	public override string ToString() => $"Levels=[{Levels.Select(x => $"{x}").JoinCommaSpace()}]";
 }

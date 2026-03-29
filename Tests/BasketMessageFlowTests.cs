@@ -26,7 +26,7 @@ public class BasketMessageFlowTests : BaseTestClass
 
 		public override string ToString()
 			=> $"[{Timestamp:HH:mm:ss.fff}] {Source} {Direction}: {Message.Type}" +
-			   (SubscriptionIds?.Length > 0 ? $" SubIds=[{string.Join(",", SubscriptionIds)}]" : "") +
+			   (SubscriptionIds?.Length > 0 ? $" SubIds=[{SubscriptionIds.Select(x => $"{x}").JoinComma()}]" : "") +
 			   (Message is IOriginalTransactionIdMessage otm ? $" OrigTransId={otm.OriginalTransactionId}" : "") +
 			   (Message is ITransactionIdMessage tm ? $" TransId={tm.TransactionId}" : "");
 	}
@@ -485,7 +485,7 @@ public class BasketMessageFlowTests : BaseTestClass
 			subIds.Length.AssertEqual(1, "SecurityMessage should have subscription IDs");
 
 			// The subscription ID should be the parent transId (not a child ID)
-			subIds.Contains(transId).AssertTrue($"SecurityMessage should have parent subscription ID {transId}, got [{string.Join(",", subIds)}]");
+			subIds.Contains(transId).AssertTrue($"SecurityMessage should have parent subscription ID {transId}, got [{subIds.Select(x => $"{x}").JoinComma()}]");
 		}
 	}
 
@@ -558,7 +558,7 @@ public class BasketMessageFlowTests : BaseTestClass
 		{
 			var subIds = tick.GetSubscriptionIds();
 			subIds.Length.AssertEqual(1, "Tick message should have subscription IDs");
-			subIds.Contains(transId).AssertTrue($"Tick should have parent subscription ID {transId}, got [{string.Join(",", subIds)}]");
+			subIds.Contains(transId).AssertTrue($"Tick should have parent subscription ID {transId}, got [{subIds.Select(x => $"{x}").JoinComma()}]");
 		}
 	}
 
@@ -598,7 +598,7 @@ public class BasketMessageFlowTests : BaseTestClass
 		{
 			var subIds = l1.GetSubscriptionIds();
 			subIds.Length.AssertEqual(1, "Level1 message should have subscription IDs");
-			subIds.Contains(transId).AssertTrue($"Level1 should have parent subscription ID {transId}, got [{string.Join(",", subIds)}]");
+			subIds.Contains(transId).AssertTrue($"Level1 should have parent subscription ID {transId}, got [{subIds.Select(x => $"{x}").JoinComma()}]");
 		}
 	}
 
@@ -700,7 +700,7 @@ public class BasketMessageFlowTests : BaseTestClass
 		{
 			var subIds = pf.GetSubscriptionIds();
 			subIds.Length.AssertEqual(1, "PortfolioMessage should have subscription IDs");
-			subIds.Contains(transId).AssertTrue($"PortfolioMessage should have subscription ID {transId}, got [{string.Join(",", subIds)}]");
+			subIds.Contains(transId).AssertTrue($"PortfolioMessage should have subscription ID {transId}, got [{subIds.Select(x => $"{x}").JoinComma()}]");
 		}
 	}
 
@@ -1194,7 +1194,7 @@ public class BasketMessageFlowTests : BaseTestClass
 			var subIds = tick.GetSubscriptionIds();
 			(subIds.Length > 0).AssertTrue("Wrappers should set SubscriptionIds");
 			subIds.Contains(parentTransId).AssertTrue(
-				$"SubscriptionIds should contain parent {parentTransId}, got [{string.Join(",", subIds)}]");
+				$"SubscriptionIds should contain parent {parentTransId}, got [{subIds.Select(x => $"{x}").JoinComma()}]");
 		}
 	}
 
@@ -1234,7 +1234,7 @@ public class BasketMessageFlowTests : BaseTestClass
 			var subIds = l1.GetSubscriptionIds();
 			(subIds.Length > 0).AssertTrue("Wrappers should set SubscriptionIds on Level1");
 			subIds.Contains(parentTransId).AssertTrue(
-				$"SubscriptionIds should contain parent {parentTransId}, got [{string.Join(",", subIds)}]");
+				$"SubscriptionIds should contain parent {parentTransId}, got [{subIds.Select(x => $"{x}").JoinComma()}]");
 		}
 	}
 
@@ -1259,7 +1259,7 @@ public class BasketMessageFlowTests : BaseTestClass
 		var subIds = securities[0].GetSubscriptionIds();
 		(subIds.Length > 0).AssertTrue("SecurityMessage should have SubscriptionIds");
 		subIds.Contains(transId).AssertTrue(
-			$"SecurityMessage should have subscription ID {transId}, got [{string.Join(",", subIds)}]");
+			$"SecurityMessage should have subscription ID {transId}, got [{subIds.Select(x => $"{x}").JoinComma()}]");
 
 		// SubscriptionFinished should also arrive with correct ID
 		var finished = GetOutput<SubscriptionFinishedMessage>();
@@ -1375,9 +1375,9 @@ public class BasketMessageFlowTests : BaseTestClass
 		// Check that tick has both subscription IDs
 		var subIds = ticksBefore[0].GetSubscriptionIds();
 		subIds.Contains(sub1TransId).AssertTrue(
-			$"Tick should contain sub1 ID {sub1TransId}, got [{string.Join(",", subIds)}]");
+			$"Tick should contain sub1 ID {sub1TransId}, got [{subIds.Select(x => $"{x}").JoinComma()}]");
 		subIds.Contains(sub2TransId).AssertTrue(
-			$"Tick should contain sub2 ID {sub2TransId}, got [{string.Join(",", subIds)}]");
+			$"Tick should contain sub2 ID {sub2TransId}, got [{subIds.Select(x => $"{x}").JoinComma()}]");
 
 		_flowLogger.Clear();
 		_basketOutput.Clear();
@@ -1410,7 +1410,7 @@ public class BasketMessageFlowTests : BaseTestClass
 		subIdsAfter.Contains(sub1TransId).AssertFalse(
 			$"Tick should NOT contain unsubscribed sub1 ID {sub1TransId}");
 		subIdsAfter.Contains(sub2TransId).AssertTrue(
-			$"Tick should contain remaining sub2 ID {sub2TransId}, got [{string.Join(",", subIdsAfter)}]");
+			$"Tick should contain remaining sub2 ID {sub2TransId}, got [{subIdsAfter.Select(x => $"{x}").JoinComma()}]");
 	}
 
 	[TestMethod]
@@ -1442,7 +1442,7 @@ public class BasketMessageFlowTests : BaseTestClass
 			var subIds = order.GetSubscriptionIds();
 			(subIds.Length > 0).AssertTrue("Wrappers should set SubscriptionIds on order data");
 			subIds.Contains(transId).AssertTrue(
-				$"Order should have subscription ID {transId}, got [{string.Join(",", subIds)}]");
+				$"Order should have subscription ID {transId}, got [{subIds.Select(x => $"{x}").JoinComma()}]");
 		}
 
 		// Online message should arrive
@@ -1680,7 +1680,7 @@ public class BasketMessageFlowTests : BaseTestClass
 			var subIds = order.GetSubscriptionIds();
 			subIds.Length.AssertEqual(1, "Order ExecutionMessage should have subscription IDs");
 			subIds.Contains(transId).AssertTrue(
-				$"Order should have parent subscription ID {transId}, got [{string.Join(",", subIds)}]");
+				$"Order should have parent subscription ID {transId}, got [{subIds.Select(x => $"{x}").JoinComma()}]");
 		}
 
 		// Verify Online arrived (OrderStatus without To/Count is live)

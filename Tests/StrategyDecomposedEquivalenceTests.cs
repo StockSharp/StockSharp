@@ -590,8 +590,8 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		if (strategyStates.Contains(ProcessStates.Stopping))
 			engineStates.Contains(ProcessStates.Stopping).AssertTrue();
 
-		Console.WriteLine($"Strategy states: {string.Join(" -> ", strategyStates)}");
-		Console.WriteLine($"Engine states:   {string.Join(" -> ", engineStates)}");
+		Console.WriteLine($"Strategy states: {strategyStates.Select(x => $"{x}").Join(" -> ")}");
+		Console.WriteLine($"Engine states:   {engineStates.Select(x => $"{x}").Join(" -> ")}");
 	}
 
 	/// <summary>

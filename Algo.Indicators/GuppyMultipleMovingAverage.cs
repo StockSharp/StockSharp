@@ -60,5 +60,5 @@ public class GuppyMultipleMovingAverageValue(GuppyMultipleMovingAverage indicato
 	public decimal?[] Averages => [.. AveragesValues.Select(v => v.ToNullableDecimal(TypedIndicator.Source))];
 
 	/// <inheritdoc />
-	public override string ToString() => $"Averages=[{string.Join(", ", Averages)}]";
+	public override string ToString() => $"Averages=[{Averages.Select(x => $"{x}").JoinCommaSpace()}]";
 }

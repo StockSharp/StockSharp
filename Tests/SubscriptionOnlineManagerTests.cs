@@ -991,8 +991,8 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		// Critical: subscription IDs should be set so OrderReceived fires
 		// The manager should find OrderStatus subscription by fallback to default secId
 		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
-		IsTrue(ids.Length > 0, $"Transaction should have subscription IDs, got: [{string.Join(", ", ids)}]");
-		IsTrue(ids.Contains(100), $"ID 100 should be in: [{string.Join(", ", ids)}]");
+		IsTrue(ids.Length > 0, $"Transaction should have subscription IDs, got: [{ids.Select(x => $"{x}").JoinCommaSpace()}]");
+		IsTrue(ids.Contains(100), $"ID 100 should be in: [{ids.Select(x => $"{x}").JoinCommaSpace()}]");
 	}
 
 	/// <summary>

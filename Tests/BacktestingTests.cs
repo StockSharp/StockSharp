@@ -1894,7 +1894,7 @@ public class BacktestingTests : BaseTestClass
 		foreach (var e in execMsgs)
 		{
 			var ids = e.GetSubscriptionIds();
-			Console.WriteLine($"  ExecMsg: HasOrderInfo={e.HasOrderInfo}, State={e.OrderState}, SubscriptionIds=[{string.Join(",", ids)}]");
+			Console.WriteLine($"  ExecMsg: HasOrderInfo={e.HasOrderInfo}, State={e.OrderState}, SubscriptionIds=[{ids.Select(x => $"{x}").JoinComma()}]");
 		}
 
 		IsTrue(execMsgs.Count > 0, "Expected at least one ExecutionMessage for the order");
@@ -1999,7 +1999,7 @@ public class BacktestingTests : BaseTestClass
 		foreach (var e in execMsgs)
 		{
 			var ids = e.GetSubscriptionIds();
-			Console.WriteLine($"  ExecMsg: HasOrderInfo={e.HasOrderInfo}, State={e.OrderState}, SubscriptionIds=[{string.Join(",", ids)}]");
+			Console.WriteLine($"  ExecMsg: HasOrderInfo={e.HasOrderInfo}, State={e.OrderState}, SubscriptionIds=[{ids.Select(x => $"{x}").JoinComma()}]");
 		}
 
 		IsTrue(execMsgs.Count > 0, "Expected at least one ExecutionMessage for the order");
@@ -2129,7 +2129,7 @@ public class BacktestingTests : BaseTestClass
 		emulationAdapter.NewOutMessageAsync += (msg, ct) =>
 		{
 			var ids = (msg as ISubscriptionIdMessage)?.GetSubscriptionIds() ?? [];
-			Console.WriteLine($"[EmulationAdapter OUT] {msg.Type} SubIds=[{string.Join(",", ids)}]");
+			Console.WriteLine($"[EmulationAdapter OUT] {msg.Type} SubIds=[{ids.Select(x => $"{x}").JoinComma()}]");
 
 			if (msg is ExecutionMessage exec && exec.HasOrderInfo)
 			{
@@ -2160,7 +2160,7 @@ public class BacktestingTests : BaseTestClass
 			{
 				var ids = exec.GetSubscriptionIds();
 				atBasket.Add(($"Exec OrigTransId={exec.OriginalTransactionId}", ids));
-				Console.WriteLine($"[BasketAdapter] Execution: OrigTransId={exec.OriginalTransactionId} SubIds=[{string.Join(",", ids)}]");
+				Console.WriteLine($"[BasketAdapter] Execution: OrigTransId={exec.OriginalTransactionId} SubIds=[{ids.Select(x => $"{x}").JoinComma()}]");
 			}
 		};
 
@@ -2197,11 +2197,11 @@ public class BacktestingTests : BaseTestClass
 		Console.WriteLine("\n=== Summary ===");
 		Console.WriteLine($"At EmulationAdapter: {atEmulation.Count} executions");
 		foreach (var (type, ids) in atEmulation)
-			Console.WriteLine($"  {type} SubIds=[{string.Join(",", ids)}]");
+			Console.WriteLine($"  {type} SubIds=[{ids.Select(x => $"{x}").JoinComma()}]");
 
 		Console.WriteLine($"At BasketAdapter: {atBasket.Count} executions");
 		foreach (var (type, ids) in atBasket)
-			Console.WriteLine($"  {type} SubIds=[{string.Join(",", ids)}]");
+			Console.WriteLine($"  {type} SubIds=[{ids.Select(x => $"{x}").JoinComma()}]");
 
 		var emulationWithIds = atEmulation.Count(x => x.ids.Length > 0);
 		var basketWithIds = atBasket.Count(x => x.ids.Length > 0);
@@ -2311,14 +2311,14 @@ public class BacktestingTests : BaseTestClass
 		AssertReceived(receivedFromBasket, MessageTypes.Connect, "Connect response must come back");
 		AssertReceived(receivedFromBasket, MessageTypes.SubscriptionResponse, "SubscriptionResponse must come back");
 
-		Console.WriteLine($"Emulator received: {string.Join(", ", receivedByEmulator.Distinct())}");
-		Console.WriteLine($"Basket returned: {string.Join(", ", receivedFromBasket.Distinct())}");
+		Console.WriteLine($"Emulator received: {receivedByEmulator.Distinct().Select(x => $"{x}").JoinCommaSpace()}");
+		Console.WriteLine($"Basket returned: {receivedFromBasket.Distinct().Select(x => $"{x}").JoinCommaSpace()}");
 	}
 
 	private static void AssertReceived(List<MessageTypes> list, MessageTypes expected, string message)
 	{
 		if (!list.Contains(expected))
-			throw new AssertFailedException($"{message}. Received: [{string.Join(", ", list)}]");
+			throw new AssertFailedException($"{message}. Received: [{list.Select(x => $"{x}").JoinCommaSpace()}]");
 	}
 
 	/// <summary>
@@ -2428,7 +2428,7 @@ public class BacktestingTests : BaseTestClass
 		{
 			outputMessages.Add(msg);
 			var ids = (msg as ISubscriptionIdMessage)?.GetSubscriptionIds() ?? [];
-			Console.WriteLine($"[OUT] {msg.Type} SubIds=[{string.Join(",", ids)}]");
+			Console.WriteLine($"[OUT] {msg.Type} SubIds=[{ids.Select(x => $"{x}").JoinComma()}]");
 			return default;
 		};
 
@@ -2468,7 +2468,7 @@ public class BacktestingTests : BaseTestClass
 		foreach (var e in execMsgs)
 		{
 			var ids = e.GetSubscriptionIds();
-			Console.WriteLine($"  OrigTransId={e.OriginalTransactionId} State={e.OrderState} SubIds=[{string.Join(",", ids)}]");
+			Console.WriteLine($"  OrigTransId={e.OriginalTransactionId} State={e.OrderState} SubIds=[{ids.Select(x => $"{x}").JoinComma()}]");
 		}
 
 		var execWithIds = execMsgs.Count(e => e.GetSubscriptionIds().Length > 0);

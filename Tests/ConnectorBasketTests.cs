@@ -1008,8 +1008,8 @@ public class ConnectorBasketTests : BaseTestClass
 		// Fails — proving the bug: adapter never receives a live candle subscription
 		IsNotNull(liveCandleSub,
 			$"Expected a live candle subscription (To=null) at the adapter, but none arrived. " +
-			$"Subscriptions: [{string.Join("; ", allSubs.Select(m =>
-				$"{m.DataType2}(histOnly={m.IsHistoryOnly()}, To={m.To?.ToString("HH:mm:ss") ?? "null"})"))}]");
+			$"Subscriptions: [{allSubs.Select(m =>
+				$"{m.DataType2}(histOnly={m.IsHistoryOnly()}, To={m.To?.ToString("HH:mm:ss") ?? "null"})").Join("; ")}]");
 
 		runCts.Cancel();
 	}
@@ -1061,12 +1061,12 @@ public class ConnectorBasketTests : BaseTestClass
 		// Should have unsubscribed the ticks build subscription
 		var tickUnsub = unsubs.FirstOrDefault(m => m.DataType2 == DataType.Ticks);
 		IsNotNull(tickUnsub,
-			$"Expected ticks unsubscribe at adapter. Unsubs: [{string.Join("; ", unsubs.Select(m => m.DataType2.ToString()))}]");
+			$"Expected ticks unsubscribe at adapter. Unsubs: [{unsubs.Select(m => m.DataType2.ToString()).Join("; ")}]");
 
 		// Should have unsubscribed the live candle subscription
 		var candleUnsub = unsubs.FirstOrDefault(m => m.DataType2.IsTFCandles);
 		IsNotNull(candleUnsub,
-			$"Expected candle unsubscribe at adapter. Unsubs: [{string.Join("; ", unsubs.Select(m => m.DataType2.ToString()))}]");
+			$"Expected candle unsubscribe at adapter. Unsubs: [{unsubs.Select(m => m.DataType2.ToString()).Join("; ")}]");
 	}
 
 	[TestMethod]
@@ -1190,11 +1190,11 @@ public class ConnectorBasketTests : BaseTestClass
 
 		var tickUnsub = unsubs.FirstOrDefault(m => m.DataType2 == DataType.Ticks);
 		IsNotNull(tickUnsub,
-			$"Expected ticks unsubscribe. Unsubs: [{string.Join("; ", unsubs.Select(m => m.DataType2.ToString()))}]");
+			$"Expected ticks unsubscribe. Unsubs: [{unsubs.Select(m => m.DataType2.ToString()).Join("; ")}]");
 
 		var candleUnsub = unsubs.FirstOrDefault(m => m.DataType2.IsTFCandles);
 		IsNotNull(candleUnsub,
-			$"Expected candle unsubscribe. Unsubs: [{string.Join("; ", unsubs.Select(m => m.DataType2.ToString()))}]");
+			$"Expected candle unsubscribe. Unsubs: [{unsubs.Select(m => m.DataType2.ToString()).Join("; ")}]");
 	}
 
 	[TestMethod]

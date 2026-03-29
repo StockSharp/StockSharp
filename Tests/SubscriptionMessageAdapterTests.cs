@@ -140,7 +140,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		output.OfType<ExecutionMessage>().Count(m => m.TradePrice == 50000m).AssertEqual(1,
-			$"Tick should flow through SubscriptionMessageAdapter, got {output.Count} messages: {string.Join(", ", output.Select(m => m.Type))}");
+			$"Tick should flow through SubscriptionMessageAdapter, got {output.Count} messages: {output.Select(m => $"{m.Type}").JoinCommaSpace()}");
 	}
 
 	[TestMethod]
@@ -217,7 +217,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		output.OfType<ExecutionMessage>().Count(m => m.TradePrice == 50000m).AssertEqual(1,
-			$"Tick should flow through combined chain, got {output.Count} messages: {string.Join(", ", output.Select(m => m.Type))}");
+			$"Tick should flow through combined chain, got {output.Count} messages: {output.Select(m => $"{m.Type}").JoinCommaSpace()}");
 	}
 
 	[TestMethod]
@@ -258,7 +258,7 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 		await inner.SendOutMessageAsync(tick, CancellationToken);
 
 		output.OfType<ExecutionMessage>().Count(m => m.TradePrice == 42000m).AssertEqual(1,
-			$"Tick without ID should be resolved by key, got {output.Count} messages: {string.Join(", ", output.Select(m => m.Type))}");
+			$"Tick without ID should be resolved by key, got {output.Count} messages: {output.Select(m => $"{m.Type}").JoinCommaSpace()}");
 	}
 
 	#endregion

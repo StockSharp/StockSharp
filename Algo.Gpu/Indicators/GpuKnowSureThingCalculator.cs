@@ -300,17 +300,17 @@ public class GpuKnowSureThingCalculator : GpuIndicatorCalculatorBase<KnowSureThi
 		var prm = parameters[paramIdx];
 		var priceType = (Level1Fields)prm.PriceType;
 
-		var roc1Len = Math.Max(prm.Roc1Length, 1);
-		var roc2Len = Math.Max(prm.Roc2Length, 1);
-		var roc3Len = Math.Max(prm.Roc3Length, 1);
-		var roc4Len = Math.Max(prm.Roc4Length, 1);
+		var roc1Len = prm.Roc1Length.Max(1);
+		var roc2Len = prm.Roc2Length.Max(1);
+		var roc3Len = prm.Roc3Length.Max(1);
+		var roc4Len = prm.Roc4Length.Max(1);
 
-		var sma1Len = Math.Max(prm.Sma1Length, 1);
-		var sma2Len = Math.Max(prm.Sma2Length, 1);
-		var sma3Len = Math.Max(prm.Sma3Length, 1);
-		var sma4Len = Math.Max(prm.Sma4Length, 1);
+		var sma1Len = prm.Sma1Length.Max(1);
+		var sma2Len = prm.Sma2Length.Max(1);
+		var sma3Len = prm.Sma3Length.Max(1);
+		var sma4Len = prm.Sma4Length.Max(1);
 
-		var signalLen = Math.Max(prm.SignalLength, 1);
+		var signalLen = prm.SignalLength.Max(1);
 
 		var kstStartIndex = roc4Len + sma4Len - 1;
 		var formedIndex = kstStartIndex + signalLen - 1;

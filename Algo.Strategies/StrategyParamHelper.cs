@@ -211,7 +211,7 @@ public static class StrategyParamHelper
 			return 1;
 
 		static int getIterCountDec(decimal fromVal, decimal toVal, decimal stepVal)
-			=> (int)Math.Ceiling((toVal - fromVal + stepVal) / stepVal);
+			=> (int)((toVal - fromVal + stepVal) / stepVal).Ceiling();
 
 		static int getIterCountLong(long fromVal, long toVal, long stepVal)
 			=> (int)((toVal - fromVal + stepVal) / stepVal);

@@ -879,7 +879,7 @@ public class IndicatorTests : BaseTestClass
 
 		if (invalid.Count > 0)
 		{
-			var msg = string.Join(Environment.NewLine, invalid.Select(x => $"{x.type.Name}: {x.error.Message}"));
+			var msg = invalid.Select(x => $"{x.type.Name}: {x.error.Message}").JoinN();
 			Fail($"GPU indicators failed ({invalid.Count}):{Environment.NewLine}{msg}");
 		}
 	}
