@@ -142,7 +142,14 @@ public class InMemoryTransactionIdStorage(IdGenerator idGenerator) : ITransactio
 	private readonly SynchronizedDictionary<string, ISessionTransactionIdStorage> _item = [];
 
 	ISessionTransactionIdStorage ITransactionIdStorage.Get(string sessionId, bool persistable)
-		=> persistable ? _item.SafeAdd(sessionId, key => new InMemorySessionTransactionIdStorage(_idGenerator)) : new InMemorySessionTransactionIdStorage(_idGenerator);
+	{
+		if (!persistable)
+			return new InMemorySessionTransactionIdStorage(_idGenerator);
+
+		var session = new InMemorySessionTransactionIdStorage(_idGenerator);
+		_item[sessionId] = session;
+		return session;
+	}
 }
 
 /// <summary>
