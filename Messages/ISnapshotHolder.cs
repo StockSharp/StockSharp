@@ -54,6 +54,9 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 				return false;
 
 			snapshot = s.TypedClone();
+			snapshot.OriginalTransactionId = 0;
+			snapshot.SubscriptionId = 0;
+			snapshot.SubscriptionIds = [];
 			return true;
 		}
 	}
@@ -167,6 +170,9 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 				return false;
 
 			snapshot = s.Snapshot.TypedClone();
+			snapshot.OriginalTransactionId = 0;
+			snapshot.SubscriptionId = 0;
+			snapshot.SubscriptionIds = [];
 			return true;
 		}
 	}
