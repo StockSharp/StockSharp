@@ -162,8 +162,8 @@ public sealed class OrderBookIncrementManager(ILogReceiver logReceiver, IOrderBo
 
 	private void RemoveSubscription(long id)
 	{
-		_state.RemoveSubscription(id);
-		_logReceiver.AddInfoLog("Unsubscribed {0}.", id);
+		if (_state.RemoveSubscription(id))
+			_logReceiver.AddInfoLog("Unsubscribed {0}.", id);
 	}
 
 	/// <inheritdoc/>

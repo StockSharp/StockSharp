@@ -68,7 +68,8 @@ public interface IOrderBookIncrementManagerState
 	/// <summary>
 	/// Remove subscription.
 	/// </summary>
-	void RemoveSubscription(long id);
+	/// <returns><see langword="true"/> if subscription was found and removed.</returns>
+	bool RemoveSubscription(long id);
 
 	/// <summary>
 	/// Clear all state.

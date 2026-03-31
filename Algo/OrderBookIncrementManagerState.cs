@@ -154,7 +154,7 @@ public class OrderBookIncrementManagerState : IOrderBookIncrementManagerState
 	}
 
 	/// <inheritdoc />
-	public void RemoveSubscription(long id)
+	public bool RemoveSubscription(long id)
 	{
 		using (_sync.EnterScope())
 		{
@@ -168,17 +168,16 @@ public class OrderBookIncrementManagerState : IOrderBookIncrementManagerState
 
 				if (info == null)
 				{
-					_passThrough.Remove(id);
-					_allSecSubscriptions.Remove(id);
-					_allSecSubscriptionsPassThrough.Remove(id);
-					return;
+					return _passThrough.Remove(id) |
+					       _allSecSubscriptions.Remove(id) |
+					       _allSecSubscriptionsPassThrough.Remove(id);
 				}
 			}
 
 			var secId = info.Builder.SecurityId;
 
 			if (info != _online.TryGetValue(secId))
-				return;
+				return false;
 
 			info.SubscriptionIds.Remove(id);
 
@@ -188,6 +187,8 @@ public class OrderBookIncrementManagerState : IOrderBookIncrementManagerState
 				_online.Remove(secId);
 			else if (changeId && !_byId.ContainsKey(ids[0]))
 				_byId.Add(ids[0], info);
+
+			return true;
 		}
 	}
 
