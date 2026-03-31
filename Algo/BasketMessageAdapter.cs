@@ -378,6 +378,12 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	public bool SupportOrderBookTruncate { get; set; } = true;
 
 	/// <summary>
+	/// When <see langword="true"/>, the <see cref="OrderBookIncrementMessageAdapter"/> is never added
+	/// to the pipeline — even when the inner adapter reports <see cref="IMessageAdapter.IsSupportOrderBookIncrements"/>.
+	/// </summary>
+	public bool SuppressOrderBookIncrements { get; set; }
+
+	/// <summary>
 	/// Use <see cref="LookupTrackingMessageAdapter"/>.
 	/// </summary>
 	public bool SupportLookupTracking { get; set; } = true;
@@ -475,6 +481,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			SupportCandlesCompression = SupportCandlesCompression,
 			SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
 			SupportOrderBookTruncate = SupportOrderBookTruncate,
+			SuppressOrderBookIncrements = SuppressOrderBookIncrements,
 			SupportLookupTracking = SupportLookupTracking,
 			IsSupportTransactionLog = IsSupportTransactionLog,
 			SupportSecurityAll = SupportSecurityAll,
@@ -1040,6 +1047,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			SupportStorage = SupportStorage,
 			SupportBuildingFromOrderLog = SupportBuildingFromOrderLog,
 			SupportOrderBookTruncate = SupportOrderBookTruncate,
+			SuppressOrderBookIncrements = SuppressOrderBookIncrements,
 			SupportOffline = SupportOffline,
 			IgnoreExtraAdapters = IgnoreExtraAdapters,
 			NativeIdStorage = NativeIdStorage,

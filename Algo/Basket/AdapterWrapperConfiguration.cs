@@ -37,6 +37,12 @@ public record AdapterWrapperConfiguration
 	public bool SupportOrderBookTruncate { get; init; }
 
 	/// <summary>
+	/// When <see langword="true"/>, the <see cref="OrderBookIncrementMessageAdapter"/> is never added
+	/// to the pipeline — even when the inner adapter reports <see cref="IMessageAdapter.IsSupportOrderBookIncrements"/>.
+	/// </summary>
+	public bool SuppressOrderBookIncrements { get; init; }
+
+	/// <summary>
 	/// Use <see cref="LookupTrackingMessageAdapter"/>.
 	/// </summary>
 	public bool SupportLookupTracking { get; init; }

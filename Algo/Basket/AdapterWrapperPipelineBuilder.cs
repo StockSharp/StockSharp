@@ -139,7 +139,7 @@ public class AdapterWrapperPipelineBuilder : IAdapterWrapperPipelineBuilder
 			adapter = ApplyOwnInner(new OrderLogMessageAdapter(adapter));
 		}
 
-		if (config.SupportBuildingFromOrderLog || adapter.IsSupportOrderBookIncrements)
+		if (!config.SuppressOrderBookIncrements && (config.SupportBuildingFromOrderLog || adapter.IsSupportOrderBookIncrements))
 		{
 			adapter = ApplyOwnInner(new OrderBookIncrementMessageAdapter(adapter));
 		}
