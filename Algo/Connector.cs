@@ -716,7 +716,17 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 		_entityCache.AddOrderFailById(fail, operation, originalTransactionId);
 
-		return SendOutMessageAsync(fail.ToMessage(originalTransactionId), cancellationToken);
+		var msg = fail.ToMessage(originalTransactionId);
+		TrySetOrderSubscriptionId(msg);
+		return SendOutMessageAsync(msg, cancellationToken);
+	}
+
+	private void TrySetOrderSubscriptionId(ExecutionMessage msg)
+	{
+		var orderSubId = OrderLookup.TransactionId;
+
+		if (orderSubId > 0)
+			msg.SetSubscriptionIds(subscriptionId: orderSubId);
 	}
 
 	private void CheckOnNew(Order order)
@@ -795,7 +805,9 @@ public partial class Connector : BaseLogReceiver, IConnector
 
 		_entityCache.AddOrderByRegistrationId(order);
 
-		return SendOutMessageAsync(order.ToMessage(), cancellationToken);
+		var msg = order.ToMessage();
+		TrySetOrderSubscriptionId(msg);
+		return SendOutMessageAsync(msg, cancellationToken);
 	}
 
 	/// <summary>
