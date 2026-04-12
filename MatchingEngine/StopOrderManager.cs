@@ -119,10 +119,18 @@ public class StopOrderManager : IStopOrderManager
 
 	private static bool IsTriggered(StopOrderInfo info, decimal price)
 	{
-		if (info.Side == Sides.Buy)
-			return price >= info.StopPrice;
+		if (info.InvertTrigger)
+		{
+			// TakeProfit: sell triggers when price rises, buy triggers when price falls
+			return info.Side == Sides.Sell
+				? price >= info.StopPrice
+				: price <= info.StopPrice;
+		}
 
-		return price <= info.StopPrice;
+		// StopLoss: buy stop triggers when price rises, sell stop triggers when price falls
+		return info.Side == Sides.Buy
+			? price >= info.StopPrice
+			: price <= info.StopPrice;
 	}
 
 	private static OrderRegisterMessage CreateResultingOrder(StopOrderInfo info, DateTime time)

@@ -335,4 +335,74 @@ public class StopOrderManagerTests : BaseTestClass
 		Assert.IsTrue(cond.IsTrailing);
 		Assert.AreEqual(3.5m, cond.TrailingOffset);
 	}
+
+	[TestMethod]
+	public void TakeProfitSell_TriggeredWhenPriceRises()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Sell, stopPrice: 110);
+		info.InvertTrigger = true;
+		mgr.Register(info);
+
+		// Price below target — should NOT trigger (TakeProfit sell waits for price to rise)
+		var triggers = mgr.CheckPrice(secId, 105, DateTime.UtcNow);
+		Assert.AreEqual(0, triggers.Count);
+
+		// Price at target — trigger
+		triggers = mgr.CheckPrice(secId, 110, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+		Assert.AreEqual(Sides.Sell, triggers[0].ResultingOrder.Side);
+	}
+
+	[TestMethod]
+	public void TakeProfitBuy_TriggeredWhenPriceDrops()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Buy, stopPrice: 90);
+		info.InvertTrigger = true;
+		mgr.Register(info);
+
+		// Price above target — should NOT trigger (TakeProfit buy waits for price to drop)
+		var triggers = mgr.CheckPrice(secId, 95, DateTime.UtcNow);
+		Assert.AreEqual(0, triggers.Count);
+
+		// Price at target — trigger
+		triggers = mgr.CheckPrice(secId, 90, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+		Assert.AreEqual(Sides.Buy, triggers[0].ResultingOrder.Side);
+	}
+
+	[TestMethod]
+	public void TakeProfitSell_NotTriggeredByPriceDrop()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Sell, stopPrice: 110);
+		info.InvertTrigger = true;
+		mgr.Register(info);
+
+		// Without InvertTrigger, Sell would trigger when price <= 110.
+		// With InvertTrigger, Sell should only trigger when price >= 110.
+		// Price drops well below — must NOT trigger.
+		var triggers = mgr.CheckPrice(secId, 80, DateTime.UtcNow);
+		Assert.AreEqual(0, triggers.Count, "TakeProfit Sell must NOT trigger on price drop");
+	}
+
+	[TestMethod]
+	public void TakeProfitBuy_NotTriggeredByPriceRise()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Buy, stopPrice: 90);
+		info.InvertTrigger = true;
+		mgr.Register(info);
+
+		// Without InvertTrigger, Buy would trigger when price >= 90.
+		// With InvertTrigger, Buy should only trigger when price <= 90.
+		// Price rises well above — must NOT trigger.
+		var triggers = mgr.CheckPrice(secId, 120, DateTime.UtcNow);
+		Assert.AreEqual(0, triggers.Count, "TakeProfit Buy must NOT trigger on price rise");
+	}
 }

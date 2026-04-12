@@ -54,6 +54,12 @@ public class StopOrderInfo
 	/// Best seen price for trailing stop (max for sell, min for buy).
 	/// </summary>
 	public decimal? BestSeenPrice { get; set; }
+
+	/// <summary>
+	/// When <see langword="true"/>, trigger logic is inverted (TakeProfit mode):
+	/// Buy triggers when price &lt;= StopPrice, Sell triggers when price &gt;= StopPrice.
+	/// </summary>
+	public bool InvertTrigger { get; set; }
 }
 
 /// <summary>
