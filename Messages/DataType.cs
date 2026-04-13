@@ -308,7 +308,7 @@ public class DataType : Equatable<DataType>, IPersistable
 
 			if (name.IsEmpty())
 			{
-				name = $"{MessageType.GetDisplayName()}";
+				name = $"{MessageType?.GetDisplayName()}";
 
 				if (Arg is not null)
 					name += $": {Arg}";

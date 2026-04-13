@@ -366,4 +366,29 @@ public class DataTypeTests : BaseTestClass
 			back.AreEqual(dt);
 		}
 	}
+
+	[TestMethod]
+	public void ToString_NullMessageType_DoesNotThrow()
+	{
+		var dt = new DataType();
+		var s = dt.ToString();
+		s.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void ToStringConversion_NullMessageType_DoesNotThrow()
+	{
+		var dt = new DataType();
+		var s = dt.To<string>();
+		s.AssertNotNull();
+	}
+
+	[TestMethod]
+	public void ToString_NullMessageType_WithArg_DoesNotThrow()
+	{
+		var dt = new DataType();
+		dt.SetName("custom-name");
+		var s = dt.ToString();
+		s.AssertEqual("custom-name");
+	}
 }
