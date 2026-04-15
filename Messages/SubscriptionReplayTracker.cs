@@ -7,20 +7,19 @@ namespace StockSharp.Messages;
 /// </summary>
 /// <remarks>
 /// Designed for connectors like FIX and IMEX that reconnect TCP internally
-/// without going through the pipeline's OfflineMessageAdapter.
-/// Supports optional channel tags so multi-channel adapters (e.g. IMEX Trade/Risk)
-/// can replay only the subscriptions for the reconnected channel.
+/// without going through the pipeline's OfflineMessageAdapter. Multi-channel
+/// adapters (e.g. IMEX Trade/Risk) use one tracker per logical channel so each
+/// reconnect replays only the subscriptions for that channel.
 /// </remarks>
 public class SubscriptionReplayTracker
 {
-	private readonly SynchronizedDictionary<long, (ISubscriptionMessage subscription, string channel)> _subscriptions = [];
+	private readonly SynchronizedDictionary<long, ISubscriptionMessage> _subscriptions = [];
 
 	/// <summary>
 	/// Track a subscription. Call when the adapter receives a subscribe message.
 	/// </summary>
 	/// <param name="message">Subscription message (<see cref="ISubscriptionMessage.IsSubscribe"/> must be true).</param>
-	/// <param name="channel">Optional channel tag (e.g. "Trade", "Risk") for multi-channel adapters.</param>
-	public void Track(ISubscriptionMessage message, string channel = null)
+	public void Track(ISubscriptionMessage message)
 	{
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
@@ -32,21 +31,20 @@ public class SubscriptionReplayTracker
 		if (message.IsHistoryOnly())
 			return;
 
-		_subscriptions[message.TransactionId] = (message.TypedClone(), channel);
+		_subscriptions[message.TransactionId] = message.TypedClone();
 	}
 
 	/// <summary>
 	/// Track or untrack a subscription based on <see cref="ISubscriptionMessage.IsSubscribe"/>.
 	/// </summary>
 	/// <param name="message">Subscription message.</param>
-	/// <param name="channel">Optional channel tag (e.g. "Trade", "Risk") for multi-channel adapters.</param>
-	public void Process(ISubscriptionMessage message, string channel = null)
+	public void Process(ISubscriptionMessage message)
 	{
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
 
 		if (message.IsSubscribe)
-			Track(message, channel);
+			Track(message);
 		else
 			Untrack(message.OriginalTransactionId);
 	}
@@ -61,21 +59,30 @@ public class SubscriptionReplayTracker
 
 	/// <summary>
 	/// Get all active subscriptions for replay after reconnection.
-	/// Returns clones with <see cref="ISubscriptionMessage.From"/> = null and new transaction IDs.
+	/// Returns clones with <see cref="ISubscriptionMessage.From"/> = null and new transaction IDs,
+	/// and drains the returned entries from the tracker. The caller is expected to re-feed
+	/// the cloned messages through the adapter pipeline, which re-populates the tracker via
+	/// <see cref="Track"/> under the new transaction IDs.
 	/// </summary>
 	/// <param name="idGenerator">Transaction ID generator for assigning new IDs to replayed subscriptions.</param>
-	/// <param name="channel">Optional channel filter. If null, returns all subscriptions.</param>
 	/// <returns>Cloned subscription messages ready to be re-sent.</returns>
-	public IEnumerable<ISubscriptionMessage> GetSubscriptionsForReplay(IdGenerator idGenerator, string channel = null)
+	public IEnumerable<ISubscriptionMessage> GetSubscriptionsForReplay(IdGenerator idGenerator)
 	{
 		if (idGenerator is null)
 			throw new ArgumentNullException(nameof(idGenerator));
 
-		foreach (var (_, (subscription, ch)) in _subscriptions.SyncGet(d => d.ToArray()))
+		// Drain as we snapshot: the pipeline will re-Track each clone under a fresh
+		// transaction ID, so stale entries must go or the tracker grows linearly
+		// across reconnects.
+		var snapshot = _subscriptions.SyncGet(d =>
 		{
-			if (channel is not null && !StringComparer.OrdinalIgnoreCase.Equals(ch, channel))
-				continue;
+			var all = d.Values.ToArray();
+			d.Clear();
+			return all;
+		});
 
+		foreach (var subscription in snapshot)
+		{
 			var clone = subscription.TypedClone();
 
 			clone.From = null;

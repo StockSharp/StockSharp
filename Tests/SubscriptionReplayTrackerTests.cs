@@ -190,7 +190,7 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Replay_DoesNotModifyOriginal()
+	public void Replay_DrainsTracker()
 	{
 		var tracker = new SubscriptionReplayTracker();
 		var secId = Helper.CreateSecurityId();
@@ -198,15 +198,45 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 
 		tracker.Track(CreateMdSubscription(1, secId, DataType.Ticks, from: from));
 
-		// Replay
-		_ = tracker.GetSubscriptionsForReplay(_idGen).ToList();
+		// First replay yields the subscription...
+		var replayed1 = tracker.GetSubscriptionsForReplay(_idGen).ToList();
+		replayed1.Count.AssertEqual(1);
+		((MarketDataMessage)replayed1[0]).From.AssertEqual(null);
 
-		// Replay again — original should still have From set
+		// ...and drains it. Without draining, _subscriptions would grow linearly
+		// across reconnects because the caller re-feeds the clones through the
+		// pipeline, which re-tracks them under new transaction IDs.
+		tracker.Count.AssertEqual(0);
+
 		var replayed2 = tracker.GetSubscriptionsForReplay(_idGen).ToList();
-		replayed2.Count.AssertEqual(1);
-		// The stored subscription was cloned on Track, so the original From should still be there
-		// and replay should still return From=null
-		((MarketDataMessage)replayed2[0]).From.AssertEqual(null);
+		replayed2.Count.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void Replay_NoLinearGrowthAcrossReconnects()
+	{
+		var tracker = new SubscriptionReplayTracker();
+		var secId = Helper.CreateSecurityId();
+
+		// Initial subscribe: two entries tracked under original txIds.
+		tracker.Track(CreateMdSubscription(1, secId, DataType.Ticks));
+		tracker.Track(CreateMdSubscription(2, secId, DataType.MarketDepth));
+		tracker.Count.AssertEqual(2);
+
+		// Simulate three reconnect cycles: replay drains, caller re-tracks the
+		// clones under new txIds (as the real adapter pipeline does via Process).
+		for (var i = 0; i < 3; i++)
+		{
+			var replayed = tracker.GetSubscriptionsForReplay(_idGen).ToList();
+			replayed.Count.AssertEqual(2);
+
+			foreach (var sub in replayed)
+				tracker.Track(sub);
+		}
+
+		// After many reconnects the tracker must still hold exactly 2 entries,
+		// not 2 * N — otherwise every connector using it leaks memory.
+		tracker.Count.AssertEqual(2);
 	}
 
 	[TestMethod]
@@ -242,71 +272,6 @@ public class SubscriptionReplayTrackerTests : BaseTestClass
 
 		replayed.Count.AssertEqual(1);
 		((MarketDataMessage)replayed[0]).DataType2.AssertEqual(DataType.MarketDepth);
-	}
-
-	#endregion
-
-	#region Channel filtering
-
-	[TestMethod]
-	public void Replay_WithChannel_FiltersCorrectly()
-	{
-		var tracker = new SubscriptionReplayTracker();
-		var secId = Helper.CreateSecurityId();
-
-		tracker.Track(CreateMdSubscription(1, secId, DataType.Ticks), channel: "MarketData");
-		tracker.Track(CreateOrderStatusSubscription(2), channel: "Trade");
-		tracker.Track(CreatePortfolioSubscription(3), channel: "Risk");
-
-		var tradeOnly = tracker.GetSubscriptionsForReplay(_idGen, channel: "Trade").ToList();
-		tradeOnly.Count.AssertEqual(1);
-		(tradeOnly[0] is OrderStatusMessage).AssertTrue();
-
-		var riskOnly = tracker.GetSubscriptionsForReplay(_idGen, channel: "Risk").ToList();
-		riskOnly.Count.AssertEqual(1);
-		(riskOnly[0] is PortfolioLookupMessage).AssertTrue();
-
-		var mdOnly = tracker.GetSubscriptionsForReplay(_idGen, channel: "MarketData").ToList();
-		mdOnly.Count.AssertEqual(1);
-		(mdOnly[0] is MarketDataMessage).AssertTrue();
-	}
-
-	[TestMethod]
-	public void Replay_NullChannel_ReturnsAll()
-	{
-		var tracker = new SubscriptionReplayTracker();
-		var secId = Helper.CreateSecurityId();
-
-		tracker.Track(CreateMdSubscription(1, secId, DataType.Ticks), channel: "Trade");
-		tracker.Track(CreateOrderStatusSubscription(2), channel: "Risk");
-		tracker.Track(CreatePortfolioSubscription(3)); // no channel
-
-		var all = tracker.GetSubscriptionsForReplay(_idGen).ToList();
-		all.Count.AssertEqual(3);
-	}
-
-	[TestMethod]
-	public void Replay_ChannelIsCaseInsensitive()
-	{
-		var tracker = new SubscriptionReplayTracker();
-		var secId = Helper.CreateSecurityId();
-
-		tracker.Track(CreateMdSubscription(1, secId, DataType.Ticks), channel: "Trade");
-
-		var result = tracker.GetSubscriptionsForReplay(_idGen, channel: "trade").ToList();
-		result.Count.AssertEqual(1);
-	}
-
-	[TestMethod]
-	public void Replay_UnknownChannel_ReturnsEmpty()
-	{
-		var tracker = new SubscriptionReplayTracker();
-		var secId = Helper.CreateSecurityId();
-
-		tracker.Track(CreateMdSubscription(1, secId, DataType.Ticks), channel: "Trade");
-
-		var result = tracker.GetSubscriptionsForReplay(_idGen, channel: "Unknown").ToList();
-		result.Count.AssertEqual(0);
 	}
 
 	#endregion
