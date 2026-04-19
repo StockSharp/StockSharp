@@ -5,7 +5,7 @@ namespace StockSharp.MatchingEngine;
 /// </summary>
 [System.Runtime.Serialization.DataContract]
 [Serializable]
-public class StopOrderCondition : OrderCondition, IStopLossOrderCondition
+public class StopOrderCondition : OrderCondition, IStopLossOrderCondition, IPercentStopOrderCondition
 {
 	/// <summary>
 	/// Stop activation price.
@@ -41,5 +41,26 @@ public class StopOrderCondition : OrderCondition, IStopLossOrderCondition
 	{
 		get => (decimal?)Parameters.TryGetValue(nameof(TrailingOffset));
 		set => Parameters[nameof(TrailingOffset)] = value;
+	}
+
+	/// <inheritdoc />
+	public bool IsActivationPricePercent
+	{
+		get => Parameters.TryGetValue(nameof(IsActivationPricePercent)) is true;
+		set => Parameters[nameof(IsActivationPricePercent)] = value;
+	}
+
+	/// <inheritdoc />
+	public bool IsClosePositionPricePercent
+	{
+		get => Parameters.TryGetValue(nameof(IsClosePositionPricePercent)) is true;
+		set => Parameters[nameof(IsClosePositionPricePercent)] = value;
+	}
+
+	/// <inheritdoc />
+	public bool IsTrailingOffsetPercent
+	{
+		get => Parameters.TryGetValue(nameof(IsTrailingOffsetPercent)) is true;
+		set => Parameters[nameof(IsTrailingOffsetPercent)] = value;
 	}
 }

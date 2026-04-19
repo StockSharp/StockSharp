@@ -405,4 +405,77 @@ public class StopOrderManagerTests : BaseTestClass
 		var triggers = mgr.CheckPrice(secId, 120, DateTime.UtcNow);
 		Assert.AreEqual(0, triggers.Count, "TakeProfit Buy must NOT trigger on price rise");
 	}
+
+	[TestMethod]
+	public void StopLimitBuy_PercentLimit_ResolvedAtTrigger()
+	{
+		// IsLimitPricePercent=true: LimitPrice (2) is 2% slippage above the absolute stop price.
+		// For Buy stop at 100: resulting limit order price = 100 * (1 + 2/100) = 102.
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Buy, stopPrice: 100, limitPrice: 2);
+		info.IsLimitPricePercent = true;
+		mgr.Register(info);
+
+		var triggers = mgr.CheckPrice(secId, 100, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+		Assert.AreEqual(OrderTypes.Limit, triggers[0].ResultingOrder.OrderType);
+		Assert.AreEqual(102m, triggers[0].ResultingOrder.Price, "Buy stop percent limit must resolve to stop*(1+pct/100)");
+	}
+
+	[TestMethod]
+	public void StopLimitSell_PercentLimit_ResolvedAtTrigger()
+	{
+		// For Sell stop at 100 with 2% slippage tolerance: limit = 100 * (1 - 2/100) = 98.
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Sell, stopPrice: 100, limitPrice: 2);
+		info.IsLimitPricePercent = true;
+		mgr.Register(info);
+
+		var triggers = mgr.CheckPrice(secId, 100, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+		Assert.AreEqual(OrderTypes.Limit, triggers[0].ResultingOrder.OrderType);
+		Assert.AreEqual(98m, triggers[0].ResultingOrder.Price, "Sell stop percent limit must resolve to stop*(1-pct/100)");
+	}
+
+	[TestMethod]
+	public void TrailingSell_PercentOffset_StopFollowsWatermark()
+	{
+		// Sell trailing with 5% offset: as market rises, stop = high*(1-5/100).
+		// BestSeen=120 → StopPrice=120*0.95=114. Price falls to 114 → trigger.
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Sell, stopPrice: 100, isTrailing: true, trailingOffset: 5);
+		info.IsTrailingOffsetPercent = true;
+		mgr.Register(info);
+
+		// Price rises — no trigger, stop recomputed from high watermark
+		var triggers = mgr.CheckPrice(secId, 120, DateTime.UtcNow);
+		Assert.AreEqual(0, triggers.Count);
+		Assert.AreEqual(114m, info.StopPrice, "Trailing sell percent: stop must track high*(1-pct/100)");
+
+		// Price falls to the new stop — trigger
+		triggers = mgr.CheckPrice(secId, 114, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+	}
+
+	[TestMethod]
+	public void TrailingBuy_PercentOffset_StopFollowsWatermark()
+	{
+		// Buy trailing with 5% offset: as market falls, stop = low*(1+5/100).
+		// BestSeen=80 → StopPrice=80*1.05=84. Price rises to 84 → trigger.
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Buy, stopPrice: 100, isTrailing: true, trailingOffset: 5);
+		info.IsTrailingOffsetPercent = true;
+		mgr.Register(info);
+
+		var triggers = mgr.CheckPrice(secId, 80, DateTime.UtcNow);
+		Assert.AreEqual(0, triggers.Count);
+		Assert.AreEqual(84m, info.StopPrice, "Trailing buy percent: stop must track low*(1+pct/100)");
+
+		triggers = mgr.CheckPrice(secId, 84, DateTime.UtcNow);
+		Assert.AreEqual(1, triggers.Count);
+	}
 }

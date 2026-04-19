@@ -97,13 +97,17 @@ public class StopOrderManager : IStopOrderManager
 
 	private static void UpdateTrailing(StopOrderInfo info, decimal price)
 	{
+		var offset = info.TrailingOffset ?? 0;
+
 		if (info.Side == Sides.Sell)
 		{
 			// Trailing sell: track max price
 			if (info.BestSeenPrice is null || price > info.BestSeenPrice)
 			{
 				info.BestSeenPrice = price;
-				info.StopPrice = price - (info.TrailingOffset ?? 0);
+				info.StopPrice = info.IsTrailingOffsetPercent
+					? price * (1 - offset / 100m)
+					: price - offset;
 			}
 		}
 		else
@@ -112,7 +116,9 @@ public class StopOrderManager : IStopOrderManager
 			if (info.BestSeenPrice is null || price < info.BestSeenPrice)
 			{
 				info.BestSeenPrice = price;
-				info.StopPrice = price + (info.TrailingOffset ?? 0);
+				info.StopPrice = info.IsTrailingOffsetPercent
+					? price * (1 + offset / 100m)
+					: price + offset;
 			}
 		}
 	}
@@ -135,6 +141,15 @@ public class StopOrderManager : IStopOrderManager
 
 	private static OrderRegisterMessage CreateResultingOrder(StopOrderInfo info, DateTime time)
 	{
+		decimal limit = 0;
+
+		if (info.LimitPrice is decimal lp)
+		{
+			limit = info.IsLimitPricePercent
+				? info.StopPrice * (info.Side == Sides.Buy ? 1 + lp / 100m : 1 - lp / 100m)
+				: lp;
+		}
+
 		return new()
 		{
 			SecurityId = info.SecurityId,
@@ -142,7 +157,7 @@ public class StopOrderManager : IStopOrderManager
 			Volume = info.Volume,
 			PortfolioName = info.PortfolioName,
 			OrderType = info.LimitPrice is not null ? OrderTypes.Limit : OrderTypes.Market,
-			Price = info.LimitPrice ?? 0,
+			Price = limit,
 			LocalTime = time,
 		};
 	}

@@ -123,6 +123,36 @@ public interface IStopLossOrderCondition
 }
 
 /// <summary>
+/// Optional mixin for stop-order conditions that allow expressing
+/// activation/limit/trailing values as percentages instead of absolutes.
+/// Server resolves percents to absolute prices at register/trigger time
+/// using the last known market price.
+/// </summary>
+public interface IPercentStopOrderCondition
+{
+	/// <summary>
+	/// When <see langword="true"/>, <see cref="IStopLossOrderCondition.ActivationPrice"/>
+	/// (or <see cref="ITakeProfitOrderCondition.ActivationPrice"/>) is a percent of the
+	/// market price at registration time. The server snapshots the price and stores
+	/// the resulting absolute trigger.
+	/// </summary>
+	bool IsActivationPricePercent { get; set; }
+
+	/// <summary>
+	/// When <see langword="true"/>, <see cref="IStopLossOrderCondition.ClosePositionPrice"/>
+	/// (or <see cref="ITakeProfitOrderCondition.ClosePositionPrice"/>) is a percent of
+	/// the activation price; the limit price is computed at trigger time.
+	/// </summary>
+	bool IsClosePositionPricePercent { get; set; }
+
+	/// <summary>
+	/// When <see langword="true"/>, the trailing offset is a percent of the high/low
+	/// watermark; the stop price is recomputed on each tick.
+	/// </summary>
+	bool IsTrailingOffsetPercent { get; set; }
+}
+
+/// <summary>
 /// The interface describing withdraw funds condition.
 /// </summary>
 public interface IWithdrawOrderCondition
