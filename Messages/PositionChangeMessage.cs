@@ -209,7 +209,7 @@ public enum PositionChangeTypes
 	Name = LocalizedStrings.PositionKey,
 	Description = LocalizedStrings.PositionDescKey)]
 public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage,
-	PositionChangeTypes>, IPortfolioNameMessage, ISecurityIdMessage, IStrategyIdMessage
+	PositionChangeTypes>, IPortfolioNameMessage, IClientCodeMessage, ISecurityIdMessage, IStrategyIdMessage
 {
 	/// <inheritdoc />
 	[DataMember]

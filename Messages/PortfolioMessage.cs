@@ -27,7 +27,7 @@ public enum PortfolioStates
 /// </summary>
 [DataContract]
 [Serializable]
-public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>, IPortfolioNameMessage
+public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>, IPortfolioNameMessage, IClientCodeMessage
 {
 	/// <inheritdoc />
 	[DataMember]

@@ -10,7 +10,7 @@ namespace StockSharp.Messages;
 [DataContract]
 [Serializable]
 public abstract class OrderMessage(MessageTypes type) : SecurityMessage(type),
-	ITransactionIdMessage, IPortfolioNameMessage, IStrategyIdMessage
+	ITransactionIdMessage, IPortfolioNameMessage, IClientCodeMessage, IBrokerCodeMessage, IStrategyIdMessage
 {
 	/// <inheritdoc />
 	[DataMember]

@@ -41,7 +41,7 @@ public enum ExecutionTypes
 [DataContract]
 public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 	ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage, ISeqNumMessage,
-	IPortfolioNameMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage,
+	IPortfolioNameMessage, IClientCodeMessage, IBrokerCodeMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage,
 	IOrderMessage, ITickTradeMessage, IOrderLogMessage, ISystemMessage
 {
 	OrderStates? IOrderMessage.State => OrderState;
