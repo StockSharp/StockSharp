@@ -52,6 +52,7 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 	private readonly Dictionary<DataType, HashSet<TSubscription>> _subscriptionsByAllSec = [];
 	private readonly Dictionary<(DataType dt, SecurityId secId), HashSet<TSubscription>> _subscriptionsBySec = [];
 	private readonly Dictionary<long, TSubscription> _subscriptionsById = [];
+	private readonly Dictionary<long, HashSet<TSubscription>> _subscriptionsByOrderId = [];
 	private readonly Dictionary<MessageTypes, HashSet<TSubscription>> _subscriptionsByType = [];
 	private readonly Dictionary<TSession, HashSet<TSubscription>> _subscriptionsBySession = [];
 	private readonly Dictionary<long, long> _unsubscribeRequests = [];
@@ -243,6 +244,7 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 			tryRemove(_subscriptionsByAllSec);
 			tryRemove(_subscriptionsBySec);
 			tryRemove(_subscriptionsByType);
+			tryRemove(_subscriptionsByOrderId);
 
 			if (_subscriptionsBySession.TryGetAndRemove(session, out var sessionSubs))
 				subscriptions.AddRange(sessionSubs);
@@ -298,6 +300,7 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 			tryRemove(_subscriptionsBySec);
 			tryRemove(_subscriptionsByType);
 			tryRemove(_subscriptionsBySession);
+			tryRemove(_subscriptionsByOrderId);
 
 			_subscriptionsById.Remove(info.Id);
 		}
@@ -338,6 +341,7 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 		{
 			_subscriptionsByType.Clear();
 			_subscriptionsById.Clear();
+			_subscriptionsByOrderId.Clear();
 			_subscriptionsBySec.Clear();
 			_subscriptionsByAllSec.Clear();
 			_subscriptionsBySession.Clear();
@@ -546,25 +550,58 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 					return GetSubscriptions(execMsg.DataType, execMsg.SecurityId, originTransId);
 				else if (execMsg.DataType == DataType.Transactions)
 				{
-					if (!TryGetById(originTransId, out var subscription))
-						return [];
-
-					if (execMsg.TransactionId != 0)
+					if (originTransId != 0
+						&& TryGetById(originTransId, out var subscription)
+						&& subscription.State == SubscriptionStates.Online
+						&& !subscription.Suspend)
 					{
-						// TODO Many clients can subscribe on the same order id
-						_rw.EnterWriteLock();
+						if (execMsg.TransactionId != 0)
+						{
+							_rw.EnterWriteLock();
 
+							try
+							{
+								_subscriptionsByOrderId.SafeAdd(execMsg.TransactionId).Add(subscription);
+							}
+							finally
+							{
+								_rw.ExitWriteLock();
+							}
+						}
+
+						return ToSet(subscription, checkSuspend: false);
+					}
+
+					if (originTransId != 0)
+					{
+						HashSet<TSubscription> orderOwners;
+						_rw.EnterReadLock();
 						try
 						{
-							_subscriptionsById[execMsg.TransactionId] = subscription;
+							orderOwners = _subscriptionsByOrderId.TryGetValue(originTransId, out var set)
+								? [.. set]
+								: null;
 						}
 						finally
 						{
-							_rw.ExitWriteLock();
+							_rw.ExitReadLock();
+						}
+
+						if (orderOwners is { Count: > 0 })
+						{
+							var owners = orderOwners
+								.Where(s => s.State == SubscriptionStates.Online && !s.Suspend)
+								.ToArray();
+							if (owners.Length > 0)
+								return owners;
 						}
 					}
 
-					return ToSet(subscription);
+					return GetSubscriptions(MessageTypes.Execution, 0)
+						.Where(s => s.DataType == DataType.Transactions
+							&& s.State == SubscriptionStates.Online
+							&& !s.Suspend)
+						.ToArray();
 				}
 				else
 					throw new ArgumentOutOfRangeException(execMsg.DataType.To<string>());

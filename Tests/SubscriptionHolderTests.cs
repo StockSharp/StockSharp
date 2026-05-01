@@ -573,4 +573,181 @@ public class SubscriptionHolderTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region GetSubscriptions(Message) — Transactions Execution targeting
+
+	private static TestSubscription CreateOrderStatusSub(long id, string session, SubscriptionStates state)
+		=> new()
+		{
+			Id = id,
+			Session = session,
+			DataType = DataType.Transactions,
+			State = state,
+			Responses = [MessageTypes.Execution],
+		};
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdNonZero_OnlineSub_ReturnsOne()
+	{
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(100, "sessionA", SubscriptionStates.Online));
+		holder.Add(CreateOrderStatusSub(101, "sessionB", SubscriptionStates.Online));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 100,
+			OrderState = OrderStates.Active,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(1);
+		matched[0].Id.AssertEqual(100);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdNonZero_StoppedSub_FansOutToOnlineSiblings()
+	{
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(200, "sessionA", SubscriptionStates.Stopped));
+		holder.Add(CreateOrderStatusSub(201, "sessionB", SubscriptionStates.Online));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 200,
+			OrderState = OrderStates.Done,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(1);
+		matched[0].Id.AssertEqual(201);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdNonZero_Unknown_FansOutToAllOnline()
+	{
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(300, "sessionA", SubscriptionStates.Online));
+		holder.Add(CreateOrderStatusSub(301, "sessionB", SubscriptionStates.Online));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 99999,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(2);
+		matched.Select(s => s.Id).OrderBy(i => i).SequenceEqual([300L, 301L]).AssertTrue();
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdZero_FansOutToAllOnline()
+	{
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(400, "sessionA", SubscriptionStates.Online));
+		holder.Add(CreateOrderStatusSub(401, "sessionB", SubscriptionStates.Online));
+		holder.Add(CreateOrderStatusSub(402, "sessionC", SubscriptionStates.Stopped));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 0,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(2);
+		matched.Select(s => s.Id).OrderBy(i => i).SequenceEqual([400L, 401L]).AssertTrue();
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdZero_SkipsSuspended()
+	{
+		using var holder = CreateHolder();
+		var suspended = CreateOrderStatusSub(500, "sessionA", SubscriptionStates.Online);
+		suspended.Suspend = true;
+		holder.Add(suspended);
+		holder.Add(CreateOrderStatusSub(501, "sessionB", SubscriptionStates.Online));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 0,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(1);
+		matched[0].Id.AssertEqual(501);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_FollowUpByExecutionTxId_ReachesAllOwners()
+	{
+		using var holder = CreateHolder();
+		var subA = CreateOrderStatusSub(700, "sessionA", SubscriptionStates.Online);
+		var subB = CreateOrderStatusSub(701, "sessionB", SubscriptionStates.Online);
+		holder.Add(subA);
+		holder.Add(subB);
+
+		const long orderTxId = 12345L;
+
+		holder.GetSubscriptions(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 700,
+			TransactionId = orderTxId,
+		}).Count().AssertEqual(1);
+
+		holder.GetSubscriptions(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 701,
+			TransactionId = orderTxId,
+		}).Count().AssertEqual(1);
+
+		var matched = holder.GetSubscriptions(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = orderTxId,
+			TradeId = 99,
+		}).ToArray();
+
+		matched.Length.AssertEqual(2);
+		matched.Select(s => s.Id).OrderBy(i => i).SequenceEqual([700L, 701L]).AssertTrue();
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_OrigTxIdZero_FiltersByDataType()
+	{
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(600, "sessionA", SubscriptionStates.Online));
+		var ticks = new TestSubscription
+		{
+			Id = 601,
+			Session = "sessionB",
+			DataType = DataType.Ticks,
+			State = SubscriptionStates.Online,
+			Responses = [MessageTypes.Execution],
+		};
+		holder.Add(ticks);
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 0,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(1);
+		matched[0].Id.AssertEqual(600);
+	}
+
+	#endregion
 }
