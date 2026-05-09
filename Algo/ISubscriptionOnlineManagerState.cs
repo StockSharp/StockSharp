@@ -130,4 +130,14 @@ public interface ISubscriptionOnlineInfo
 	/// Linked subscription IDs.
 	/// </summary>
 	List<long> Linked { get; }
+
+	/// <summary>
+	/// True when this info is a linked view onto a main subscription
+	/// (created via <see cref="ISubscriptionOnlineManagerState.CreateLinkedSubscriptionInfo"/>),
+	/// not the main subscription itself. Mutating <see cref="State"/> or
+	/// reading <see cref="Linked"/> on a linked view throws — callers that
+	/// reach an info through a per-order TxId lookup must check this flag
+	/// before treating the info as a main subscription.
+	/// </summary>
+	bool IsLinked { get; }
 }

@@ -1022,6 +1022,77 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		AreEqual(100, info.Subscription.TransactionId, "Subscription TransactionId should match");
 	}
 
+	/// <summary>
+	/// Reproducer for the linkage break observed in MultiConnect/client1 logs:
+	///   Subscribe OrderStatus(Tx=N) → RegisterOrder(Tx=R) → broker sends Active
+	///   ExecutionMessage{ OrigTxId=R, TxId!=0, DataType=Transactions }.
+	///
+	/// On the outgoing OrderRegister, ProcessInMessageAsync calls
+	/// TryAddOrderSubscription → TryAddOrderTransaction(MAIN, R), which adds a
+	/// LINKED copy at <c>_subscriptionsById[R]</c>.
+	///
+	/// Then the incoming Active is looked up by OrigTxId=R and returns the
+	/// LINKED copy (not MAIN). Inside the existing TryAddOrderTransaction call
+	/// at ProcessOutMessageAsync (line 223), <c>statusInfo.Linked.Add</c> is
+	/// called — and SubscriptionInfo.CheckOnLinked() throws because info has
+	/// _main != null.
+	///
+	/// Symptom in MultiConnect log: Order stays Pending despite broker
+	/// confirming Active. After cancel, Order shows as new Done — the user
+	/// reads it as "filled".
+	/// </summary>
+	[TestMethod]
+	public async Task OrderRegister_FollowedByActive_OrigTxIdEqualsRegisterTxId_DoesNotThrow()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		// 1. Subscribe to OrderStatus.
+		await manager.ProcessInMessageAsync(new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+		}, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// 2. Send OrderRegister with TxId=R. ProcessInMessageAsync's switch on
+		// MessageTypes.OrderRegister calls TryAddOrderSubscription → adds a
+		// LINKED entry at _subscriptionsById[R].
+		const long R = 27738195;
+		await manager.ProcessInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = R,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Volume = 200m,
+			Price = 0.4m,
+			OrderType = OrderTypes.Limit,
+		}, token);
+
+		// 3. Broker responds Active. With OrigTxId=R the lookup at line 216 in
+		// ProcessOutMessageAsync returns the LINKED copy. With TxId!=0, the
+		// branch at line 223 calls TryAddOrderTransaction(LINKED, X), which
+		// then hits statusInfo.Linked.Add → CheckOnLinked → throws.
+		var active = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+			OrderId = 4991775493L,
+			OriginalTransactionId = R,
+			TransactionId = R + 1, // upstream-translated id, anything non-zero
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = logReceiver.CurrentTime,
+		};
+
+		// Currently throws InvalidOperationException via CheckOnLinked.
+		// After the fix it must pass through and forward the message.
+		var (forward, _) = await manager.ProcessOutMessageAsync(active, token);
+		forward.AssertNotNull("Active execution must pass through, not be dropped or throw.");
+	}
+
 	#endregion
 
 	#region History+Live Subscription Tests

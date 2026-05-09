@@ -60,6 +60,8 @@ public class SubscriptionOnlineManagerState : ISubscriptionOnlineManagerState
 			}
 		}
 
+		public bool IsLinked => _main != null;
+
 		public override string ToString() => (_main != null ? "Linked: " : string.Empty) + Subscription.ToString();
 	}
 

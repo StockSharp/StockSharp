@@ -300,6 +300,15 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 	private void TryAddOrderTransaction(ISubscriptionOnlineInfo statusInfo, long transactionId, bool warnOnDuplicate = true)
 	{
+		// statusInfo can arrive as a linked view (looked up via an existing
+		// per-order TxId entry in _subscriptionsById). The order is then
+		// already tracked through the main OrderStatus subscription — adding
+		// another linked alias keyed by another TxId duplicates state, and
+		// statusInfo.Linked.Add below would throw CheckOnLinked anyway. Bail
+		// silently — the message will still be forwarded by the caller.
+		if (statusInfo.IsLinked)
+			return;
+
 		if (!_state.ContainsSubscriptionById(transactionId))
 		{
 			var orderSubscription = _state.CreateLinkedSubscriptionInfo(statusInfo);
