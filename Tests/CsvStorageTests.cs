@@ -1064,6 +1064,48 @@ public class CsvStorageTests : BaseTestClass
 		AreEqual(0, items.Length);
 	}
 
+	/// <summary>
+	/// Init-then-append on the same on-disk CSV must not leak the file handle
+	/// from InitAsync's reader, otherwise TryAddAsync's MoveFile fails on
+	/// LocalFileSystem. MemoryFileSystem has no real handles, so this one
+	/// runs against LocalFileSystem.
+	/// </summary>
+	[TestMethod]
+	public async Task CsvNativeId_Reload_ThenAppend_LocalFs_NoHandleLeak()
+	{
+		var token = CancellationToken;
+		var fs = new LocalFileSystem();
+		var path = fs.GetSubTemp("nativeids");
+
+		var executor1 = CreateExecutor(token);
+		var provider1 = new CsvNativeIdStorageProvider(fs, path, executor1);
+		await provider1.InitAsync(token);
+		var storage1 = provider1.GetStorage("MarketData");
+		await storage1.TryAddAsync(new SecurityId { SecurityCode = "AAA", BoardCode = "T" }, 1L, true, token);
+		await FlushAsync(executor1, token);
+		await provider1.DisposeAsync();
+
+		// Second provider over the same on-disk file. InitAsync reads the
+		// existing CSV — that's the path that used to leak a file handle.
+		var executor2 = CreateExecutor(token);
+		var provider2 = new CsvNativeIdStorageProvider(fs, path, executor2);
+		await provider2.InitAsync(token);
+		var storage2 = provider2.GetStorage("MarketData");
+
+		// Appending an item must trigger WriteItemsToFile → CommitAsync →
+		// MoveFile, which on LocalFileSystem requires the existing CSV to be
+		// unlocked. With the leaked reader handle this throws IOException
+		// "process cannot access the file because it is being used by another
+		// process".
+		await storage2.TryAddAsync(new SecurityId { SecurityCode = "BBB", BoardCode = "T" }, 2L, true, token);
+		await FlushAsync(executor2, token);
+
+		// Cleanly close — also exercises the dispose chain that surfaced the
+		// secondary ObjectDisposedException once the half-broken commit left
+		// TransactionFileStream._temp in a bad state.
+		await provider2.DisposeAsync();
+	}
+
 	[TestMethod]
 	public async Task CsvNativeId_RemoveBySecurityId()
 	{
