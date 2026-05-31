@@ -26,6 +26,10 @@ public sealed class OrderBookSpreadWidener
 		public readonly Dictionary<decimal, QuoteChange> Asks = [];
 	}
 
+	/// <summary>
+	/// Initializes a new instance of the <see cref="OrderBookSpreadWidener"/> class.
+	/// </summary>
+	/// <param name="percent">Half-spread widening, in percent. Non-positive disables widening.</param>
 	public OrderBookSpreadWidener(decimal percent)
 	{
 		Percent = percent;
@@ -43,10 +47,21 @@ public sealed class OrderBookSpreadWidener
 		}
 	}
 
+	/// <summary>
+	/// Half-spread widening, in percent.
+	/// </summary>
 	public decimal Percent { get; }
 
+	/// <summary>
+	/// <see langword="true"/> if <see cref="Percent"/> is positive and widening is applied.
+	/// </summary>
 	public bool IsEnabled => Percent > 0m;
 
+	/// <summary>
+	/// Drops the diff-state used to emit increments, forcing the next <see cref="Apply"/>
+	/// to emit a fresh <see cref="QuoteChangeStates.SnapshotComplete"/>.
+	/// </summary>
+	/// <param name="securityId">Security to reset, or <see langword="default"/> to reset all securities.</param>
 	public void ResetSnapshot(SecurityId securityId)
 	{
 		using (_stateLock.EnterScope())
@@ -59,18 +74,17 @@ public sealed class OrderBookSpreadWidener
 	}
 
 	/// <summary>
-	/// Reads the current raw book from <paramref name="holder"/> (caller must
-	/// have applied <paramref name="msg"/> to the holder first) and rewrites
-	/// <paramref name="msg"/> as either a full <c>SnapshotComplete</c> (first
-	/// call for this security) or an <c>Increment</c> with only the changes
-	/// against the previously-emitted collapsed view.
-	/// </summary>
-	/// <summary>
 	/// Returns the current collapsed view of <paramref name="securityId"/> as a
 	/// fresh <c>SnapshotComplete</c>. Pure read — does not touch the diff-state
 	/// used by <see cref="Apply"/>. Useful for replying to a new subscriber
 	/// without re-emitting deltas from before their subscription.
 	/// </summary>
+	/// <param name="securityId">Security to build the collapsed snapshot for.</param>
+	/// <param name="holder">Holder of the current raw order book state.</param>
+	/// <returns>
+	/// Collapsed snapshot, or <see langword="null"/> when widening is disabled or no
+	/// raw snapshot is available for <paramref name="securityId"/>.
+	/// </returns>
 	public QuoteChangeMessage Collapse(SecurityId securityId, OrderBookSnapshotHolder holder)
 	{
 		if (!IsEnabled || holder is null)
@@ -86,6 +100,20 @@ public sealed class OrderBookSpreadWidener
 		return copy;
 	}
 
+	/// <summary>
+	/// Reads the current raw book from <paramref name="holder"/> (the caller must have
+	/// applied <paramref name="msg"/> to the holder first) and rewrites it as either a
+	/// full <see cref="QuoteChangeStates.SnapshotComplete"/> (first call for this
+	/// security) or an <see cref="QuoteChangeStates.Increment"/> carrying only the
+	/// changes against the previously-emitted collapsed view.
+	/// </summary>
+	/// <param name="msg">Incoming order book change message.</param>
+	/// <param name="holder">Holder of the current raw order book state.</param>
+	/// <returns>
+	/// Collapsed message; the original message when widening is disabled or no raw
+	/// snapshot is available; or <see langword="null"/> if <paramref name="msg"/> is
+	/// <see langword="null"/>.
+	/// </returns>
 	public QuoteChangeMessage Apply(QuoteChangeMessage msg, OrderBookSnapshotHolder holder)
 	{
 		if (msg is null)
