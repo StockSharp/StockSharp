@@ -296,7 +296,8 @@ public class ConnectorBasketTests : BaseTestClass
 		AreEqual(OrderStates.Active, order.State);
 		AreEqual(123L, order.Id);
 
-		orderReceived.Count.AssertEqual(1);
+		// None->Pending (registration) + Pending->Active = 2 OrderReceived.
+		orderReceived.Count.AssertEqual(2);
 
 		// --- State still consistent ---
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -534,7 +535,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await Task.Delay(100, CancellationToken);
 
-		allOrderReceived.Count.AssertEqual(1,
+		allOrderReceived.Count.AssertEqual(2,
 			$"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
 
 		// --- State after active ---
@@ -545,7 +546,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await enumTask.WithCancellation(CancellationToken);
 
-		events.Count.AssertEqual(2, "Should receive Active and Done events");
+		events.Count.AssertEqual(3, "Should receive Pending, Active and Done events");
 		AreEqual(OrderStates.Done, order.State);
 		AreEqual(123L, order.Id);
 
@@ -745,7 +746,7 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await enumTask.WithCancellation(CancellationToken);
 
-		events.Count.AssertEqual(4, "Should receive Active, Trade, order update and Done events for our order");
+		events.Count.AssertEqual(5, "Should receive Pending, Active, Trade, order update and Done events for our order");
 		AreEqual(OrderStates.Done, order.State);
 		AreEqual(123L, order.Id);
 

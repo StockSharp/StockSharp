@@ -306,8 +306,9 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Give event handlers time to process
 		await Task.Delay(100, CancellationToken);
 
-		// Check events were received
-		orderReceived.Count.AssertEqual(1);
+		// OrderReceived fires once per real order update:
+		// None->Pending (registration) + Pending->Active = 2.
+		orderReceived.Count.AssertEqual(2);
 	}
 
 	[TestMethod]
@@ -1553,7 +1554,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await Task.Delay(100, CancellationToken);
 
 		// Debug check: did OrderReceived fire?
-		allOrderReceived.Count.AssertEqual(1, $"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
+		allOrderReceived.Count.AssertEqual(2, $"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
 
 		// Simulate order filled
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 123);
@@ -1562,7 +1563,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Connector fires OrderReceived for multiple state transitions (Pending, Active, Done)
 		// Since Order is mutable, all events reference the same object with final state
-		events.Count.AssertEqual(2, "Should receive events for Active and Done states");
+		events.Count.AssertEqual(3, "Should receive events for Pending, Active and Done states");
 		AreEqual(OrderStates.Done, order.State);
 		AreEqual(123L, order.Id);
 	}
@@ -1618,8 +1619,8 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Connector fires OrderReceived for state transitions AND OwnTradeReceived for trades.
 		// Trade fills with HasOrderInfo=true trigger both OrderReceived and OwnTradeReceived:
-		// Active(1) + Trade1(2: order+trade) + Trade2(2: order+trade) + Done(1) = 6
-		events.Count.AssertEqual(6, "Should receive events for order states and trades");
+		// Pending(1) + Active(1) + Trade1(2: order+trade) + Trade2(2: order+trade) + Done(1) = 7
+		events.Count.AssertEqual(7, "Should receive events for order states and trades");
 
 		// Verify final order state
 		AreEqual(OrderStates.Done, order.State);
@@ -1760,8 +1761,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		await enumTask.WithCancellation(CancellationToken);
 
 		// Verify we received events for our order only
-		// Active(1) + Trade(2: order+trade) + Done(1) = 4
-		events.Count.AssertEqual(4, "Should receive events for our order (Active, Trade, Done)");
+		// Pending(1) + Active(1) + Trade(2: order+trade) + Done(1) = 5
+		events.Count.AssertEqual(5, "Should receive events for our order (Pending, Active, Trade, Done)");
 
 		// Verify final order state - all events reference the same mutable Order
 		AreEqual(OrderStates.Done, order.State);
@@ -1835,9 +1836,11 @@ public class AsyncExtensionsTests : BaseTestClass
 		await enumTask.WithCancellation(CancellationToken);
 
 		// Connector fires multiple events for order updates and trades.
-		// Trade fills with HasOrderInfo=true trigger both OrderReceived and OwnTradeReceived:
-		// Pending(1) + Active(1) + Trade1(2) + Trade2(2) + Trade3(2) + Done(1) = 9
-		events.Count.AssertEqual(9, "Should receive events for states and trades");
+		// Trade fills with HasOrderInfo=true trigger both OrderReceived and OwnTradeReceived.
+		// Two distinct Pending OrderReceived fire: the None->Pending registration and the
+		// explicit Pending execution simulated at step 1.
+		// regPending(1) + Pending(1) + Active(1) + Trade1(2) + Trade2(2) + Trade3(2) + Done(1) = 10
+		events.Count.AssertEqual(10, "Should receive events for states and trades");
 
 		// Verify final order state
 		AreEqual(OrderStates.Done, order.State);
