@@ -13,6 +13,10 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 
 	private CancellationTokenSource _cancellationTokenSource;
 
+	// Gate that pauses the historical replay loop while the emulation is suspended.
+	// Open by default; closed on Suspending and reopened on Starting (resume).
+	private readonly ManualResetEventSlim _processingGate = new(true);
+
 	/// <summary>
 	/// The provider of information about instruments.
 	/// </summary>
@@ -241,6 +245,10 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 				{
 					case ChannelStates.Starting:
 					{
+						// Resume the replay loop. No-op on the initial start (the gate is already open),
+						// reopens it when resuming from a suspended state.
+						_processingGate.Set();
+
 						if (!_marketDataManager.IsStarted)
 						{
 							_ = StartProcessing(
@@ -249,6 +257,13 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 								cancellationToken);
 						}
 
+						break;
+					}
+
+					case ChannelStates.Suspending:
+					{
+						// Pause the replay loop so no further historical data is fed out while suspended.
+						_processingGate.Reset();
 						break;
 					}
 
@@ -334,6 +349,10 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 			{
 				await foreach (var message in _marketDataManager.StartAsync(boards).WithCancellation(token))
 				{
+					// Block here while the emulation is suspended; the replay is lazy, so not pulling
+					// the next message also halts data generation - no backlog builds up.
+					_processingGate.Wait(token);
+
 					await SendOutMessageAsync(message, token);
 				}
 			}
@@ -355,6 +374,10 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 	private void StopProcessing()
 	{
 		_marketDataManager.Stop();
+
+		// Release the replay loop in case it is parked on the suspend gate, so it can observe the stop.
+		_processingGate.Set();
+
 		_cancellationTokenSource?.Cancel();
 	}
 
@@ -362,6 +385,7 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 	protected override void DisposeManaged()
 	{
 		StopProcessing();
+		_processingGate.Dispose();
 		base.DisposeManaged();
 	}
 

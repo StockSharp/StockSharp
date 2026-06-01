@@ -1283,6 +1283,95 @@ public class BacktestingTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// Suspending a backtest must actually halt the historical replay: while suspended no
+	/// new data may be delivered. Reproduces the bug where Pause only flips the connector
+	/// state to Suspended but the replay keeps feeding candles/ticks.
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestSuspendHaltsReplay()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, Paths.HistoryBeginDate, Paths.HistoryEndDate);
+
+		var dataCount = 0;
+
+		// every candle built from the replayed ticks bumps the counter
+		connector.CandleReceived += (sub, candle) => Interlocked.Increment(ref dataCount);
+
+		connector.Subscribe(new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), security)
+		{
+			MarketData =
+			{
+				BuildFrom = DataType.Ticks,
+				BuildMode = MarketDataBuildModes.Build,
+			}
+		});
+
+		var startedTcs = new TaskCompletionSource<bool>();
+		var suspendedTcs = new TaskCompletionSource<bool>();
+		var stoppedTcs = new TaskCompletionSource<bool>();
+
+		connector.StateChanged2 += state =>
+		{
+			switch (state)
+			{
+				case ChannelStates.Started:
+					startedTcs.TrySetResult(true);
+					break;
+				case ChannelStates.Suspended:
+					suspendedTcs.TrySetResult(true);
+					break;
+				case ChannelStates.Stopped:
+					stoppedTcs.TrySetResult(true);
+					break;
+			}
+		};
+
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		await Task.WhenAny(startedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
+		IsTrue(startedTcs.Task.IsCompleted, "Backtest did not start in time");
+
+		// run until some data is produced so we suspend in the middle of the replay
+		for (var i = 0; i < 200 && Volatile.Read(ref dataCount) == 0; i++)
+			await Task.Delay(50, CancellationToken);
+
+		IsTrue(Volatile.Read(ref dataCount) > 0, "No data received before suspend");
+
+		await connector.SuspendAsync(CancellationToken);
+
+		await Task.WhenAny(suspendedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
+		IsTrue(suspendedTcs.Task.IsCompleted, "Backtest did not suspend in time");
+		AreEqual(ChannelStates.Suspended, connector.State, "State should be Suspended");
+
+		// let any in-flight dispatch settle, then snapshot
+		await Task.Delay(TimeSpan.FromMilliseconds(500), CancellationToken);
+		var countAtSuspend = Volatile.Read(ref dataCount);
+
+		// stay suspended for a real-time window: nothing must change
+		await Task.Delay(TimeSpan.FromSeconds(2), CancellationToken);
+		var countAfter = Volatile.Read(ref dataCount);
+
+		AreEqual(countAtSuspend, countAfter, $"No data must be delivered while suspended (before={countAtSuspend}, after={countAfter})");
+
+		// resume and run to completion
+		await connector.StartAsync(CancellationToken);
+
+		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
+		IsTrue(stoppedTcs.Task.IsCompleted, "Backtest did not complete after resume");
+		connector.IsFinished.AssertTrue("IsFinished should be true after completion");
+	}
+
+	/// <summary>
 	/// Tests that multiple securities can be backtested.
 	/// </summary>
 	[TestMethod]
