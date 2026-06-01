@@ -36,6 +36,10 @@ public partial class MainWindow
 	private CancellationTokenSource _cts;
 	private BaseOptimizer _optimizer;
 
+	// strategies already shown in the stat panel (keyed by Strategy.Id);
+	// the first progress event adds the strategy, the rest only update progress
+	private readonly HashSet<Guid> _shownStrategies = [];
+
 	public MainWindow()
 	{
 		InitializeComponent();
@@ -67,6 +71,8 @@ public partial class MainWindow
 
 		TestingProcess.Value = 0;
 		TestingProcessText.Text = string.Empty;
+
+		_shownStrategies.Clear();
 
 		Stat.Clear();
 		Stat.ClearColumns();
@@ -130,7 +136,10 @@ public partial class MainWindow
 		{
 			this.GuiAsync(() =>
 			{
-				if (p == 100)
+				// add the strategy on its first progress event: AddStrategy registers
+				// it in the panel and subscribes to PnL (so the equity chart gets filled
+				// while the backtest runs); only then does UpdateProgress have a target.
+				if (_shownStrategies.Add(s.Id))
 					Stat.AddStrategy(s);
 				else
 					Stat.UpdateProgress(s, p);
