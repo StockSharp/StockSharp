@@ -1101,6 +1101,11 @@ public class MatchingEngineAdapter : IMessageTransport
 	{
 		var state = GetSecurityState(securityId);
 
+		// Runs on every tick/quote. With no resting order there is nothing to sweep, so skip the
+		// BestBid/BestAsk reads and the scan entirely - the overwhelmingly common case.
+		if (state.OrderManager.Count == 0)
+			return;
+
 		// When triggered by a tick, fill at the traded price (always inside the candle). When
 		// triggered by a quote, fill at the opposite best (the current market).
 		var bestAsk = state.OrderBook.BestAsk?.price;
