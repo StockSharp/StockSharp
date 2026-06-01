@@ -51,16 +51,21 @@ public class TransactionIdStorageTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InMemory_Get_Persistable_ReturnsSameInstance()
+	public void InMemory_Get_Persistable_SecondCall_ReturnsCleanInstance()
 	{
 		var idGen = new IncrementalIdGenerator();
 		ITransactionIdStorage storage = new InMemoryTransactionIdStorage(idGen);
 
 		var session1 = storage.Get(_session1, persistable: true);
+		session1.CreateTransactionId("req1");
+
+		// A second Get for the same session id replaces the session with a clean
+		// one, so a client reconnecting under the same id starts without stale
+		// requestId mappings (which would otherwise make CreateTransactionId throw
+		// "duplicated" on re-registration). Matches the server-side reconnect tests.
 		var session2 = storage.Get(_session1, persistable: true);
 
-		// Persistable should return same instance for same session ID
-		session1.AssertSame(session2);
+		IsFalse(session2.TryGetTransactionId("req1", out _));
 	}
 
 	[TestMethod]
