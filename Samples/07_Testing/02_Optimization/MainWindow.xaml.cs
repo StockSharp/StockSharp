@@ -146,7 +146,7 @@ public partial class MainWindow
 			});
 		};
 
-		SetIsEnabled(false, false, true, false);
+		SetIsEnabled(false, true, true, false);
 
 		_startEmulationTime = DateTime.UtcNow;
 		_cts = new CancellationTokenSource();
