@@ -104,6 +104,203 @@ public class MarketEmulatorTests : BaseTestClass
 		res.Count.AssertEqual(9);
 	}
 
+	/// <summary>
+	/// When the emulator only gets tick (trade) data it synthesizes the order book from ticks.
+	/// A market order must fill near the current price, not at a stale early-tick level. Reproduces
+	/// the bug where the synthesized book accumulates levels and never clears them, so the best
+	/// bid/ask drift to historical extremes and fills happen far from the market.
+	/// </summary>
+	[TestMethod]
+	public async Task TickMarketOrderFillsAtCurrentPriceNotStaleExtreme()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		// fund the simulated portfolio
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 100000000m)
+		.Add(PositionChangeTypes.CurrentValue, 100000000m), CancellationToken);
+
+		// feed a rising tick sequence; with no order book data the emulator builds the book from ticks
+		decimal[] prices = [1000, 1100, 1200, 1300, 1400, 1500];
+
+		foreach (var p in prices)
+		{
+			now = now.AddSeconds(1);
+
+			await emu.SendInMessageAsync(new ExecutionMessage
+			{
+				SecurityId = id,
+				LocalTime = now,
+				ServerTime = now,
+				DataTypeEx = DataType.Ticks,
+				TradePrice = p,
+				TradeVolume = 10,
+			}, CancellationToken);
+		}
+
+		now = now.AddSeconds(1);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		};
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		var fill = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		fill.AssertNotNull("market order did not fill");
+
+		Console.WriteLine($"last tick={prices[^1]} fillPrice={fill.TradePrice}");
+
+		// fill must be near the current price (~1500), not the stale first-tick level (~1000)
+		IsTrue(fill.TradePrice >= 1400m, $"market buy filled at stale price {fill.TradePrice}, expected near {prices[^1]}");
+	}
+
+	/// <summary>
+	/// Same problem for the Level1-synthesized order book: a rising best bid/ask must move the
+	/// book, not accumulate stale levels, so a market order fills near the current price instead
+	/// of an early-quote extreme.
+	/// </summary>
+	[TestMethod]
+	public async Task Level1MarketOrderFillsAtCurrentPriceNotStaleExtreme()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 100000000m)
+		.Add(PositionChangeTypes.CurrentValue, 100000000m), CancellationToken);
+
+		// feed a rising best bid/ask via Level1
+		decimal[] mids = [1000, 1100, 1200, 1300, 1400, 1500];
+
+		foreach (var m in mids)
+		{
+			now = now.AddSeconds(1);
+
+			await emu.SendInMessageAsync(new Level1ChangeMessage
+			{
+				SecurityId = id,
+				LocalTime = now,
+				ServerTime = now,
+			}
+			.Add(Level1Fields.BestBidPrice, m - 1)
+			.Add(Level1Fields.BestAskPrice, m + 1)
+			.Add(Level1Fields.BestBidVolume, 10m)
+			.Add(Level1Fields.BestAskVolume, 10m), CancellationToken);
+		}
+
+		now = now.AddSeconds(1);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		};
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		var fill = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		fill.AssertNotNull("market order did not fill");
+
+		Console.WriteLine($"last mid={mids[^1]} fillPrice={fill.TradePrice}");
+
+		// fill must be near the current ask (~1501), not the stale first-quote ask (~1001)
+		IsTrue(fill.TradePrice >= 1400m, $"market buy filled at stale price {fill.TradePrice}, expected near {mids[^1]}");
+	}
+
+	/// <summary>
+	/// A resting limit order must be swept by ticks that trade through its price. Reproduces the
+	/// residual bug where a buy limit left below the market is not executed as the price falls
+	/// through it, so it lingers in the book and later fills at a price the market has left behind.
+	/// </summary>
+	[TestMethod]
+	public async Task FallingTickSweepsRestingBuyLimit()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 100000000m)
+		.Add(PositionChangeTypes.CurrentValue, 100000000m), CancellationToken);
+
+		async Task Tick(decimal price)
+		{
+			now = now.AddSeconds(1);
+			await emu.SendInMessageAsync(new ExecutionMessage
+			{
+				SecurityId = id,
+				LocalTime = now,
+				ServerTime = now,
+				DataTypeEx = DataType.Ticks,
+				TradePrice = price,
+				TradeVolume = 10,
+			}, CancellationToken);
+		}
+
+		// establish the market around 1100
+		await Tick(1100);
+
+		// rest a buy limit well below the market
+		now = now.AddSeconds(1);
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 1050,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		// price falls and trades through 1050
+		foreach (var p in new[] { 1090m, 1070m, 1050m, 1030m, 1000m })
+			await Tick(p);
+
+		var fill = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+
+		fill.AssertNotNull("resting buy limit was not swept by ticks trading through its price");
+
+		Console.WriteLine($"buy limit fill={fill.TradePrice}");
+
+		// it should fill at or below its limit, in the range that actually traded
+		IsTrue(fill.TradePrice <= 1050m && fill.TradePrice >= 1000m, $"buy limit filled at off-market price {fill.TradePrice}");
+	}
+
 	[TestMethod]
 	public async Task LimitBuyPutInQueueOrderBook()
 	{

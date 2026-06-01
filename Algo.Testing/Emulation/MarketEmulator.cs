@@ -209,10 +209,15 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			{
 				var l1Msg = (Level1ChangeMessage)message;
 				var emulator = GetEmulator(l1Msg.SecurityId);
-				// Emulation: L1 → update order book with random volumes
-				emulator.ProcessLevel1(l1Msg, results);
-				// Check stop orders
-				if (l1Msg.TryGetDecimal(Level1Fields.LastTradePrice) is { } l1LastPrice)
+				// Emulation: L1 → update order book; the returned quote mid is the current market.
+				var l1Mid = emulator.ProcessLevel1(l1Msg, results);
+				var l1Last = l1Msg.TryGetDecimal(Level1Fields.LastTradePrice);
+
+				// Sweep resting limit orders the quote has moved through, filling at the current
+				// market rather than the book best, which may hold stale own orders.
+				_engine.CheckLimitOrders(l1Msg.SecurityId, l1Mid ?? l1Last, l1Msg.LocalTime, results);
+
+				if (l1Last is { } l1LastPrice)
 					_engine.CheckStopOrders(l1Msg.SecurityId, l1LastPrice, l1Msg.LocalTime, results);
 				break;
 			}
@@ -312,7 +317,10 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		{
 			emulator.ProcessTick(execMsg, results);
 			if (execMsg.TradePrice is { } tickPrice)
+			{
 				_engine.CheckStopOrders(execMsg.SecurityId, tickPrice, execMsg.LocalTime, results);
+				_engine.CheckLimitOrders(execMsg.SecurityId, tickPrice, execMsg.LocalTime, results);
+			}
 
 			if (emulator.HasTicksSubscription)
 				results.Add(execMsg);
@@ -808,6 +816,16 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	private bool _volumeStepUpdated;
 	private DateTime _lastPriceLimitDate;
 
+	// Prices of the order book levels last synthesized from a tick, so they can be
+	// replaced (not accumulated) when the next tick arrives.
+	private decimal? _synthBidPrice;
+	private decimal? _synthAskPrice;
+
+	// Ample liquidity for the synthesized tick/level1 book so a marketable order fills fully in one
+	// trade rather than partially against the fractional data volume, which would leave a crossed
+	// remainder resting at a stale price and later fill counter orders off the candle.
+	private const decimal _emulatedLevelVolume = 1_000_000_000m;
+
 	public decimal PriceStep => _securityDefinition?.PriceStep ?? 0.01m;
 	public decimal VolumeStep => _securityDefinition?.VolumeStep ?? 1m;
 	public bool HasDepthSubscription => _depthSubscription.HasValue;
@@ -905,7 +923,9 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		IsCandleMatchingMode = false;
 	}
 
-	public void ProcessLevel1(Level1ChangeMessage msg, List<Message> results)
+	// Returns the quote mid (current market) so the caller can match resting limit orders without
+	// re-reading the best bid/ask out of the message.
+	public decimal? ProcessLevel1(Level1ChangeMessage msg, List<Message> results)
 	{
 		IsCandleMatchingMode = false;
 
@@ -923,16 +943,34 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 
 		var engineState = GetEngineState();
 
+		// Move the synthesized best bid/ask to the new quote instead of accumulating levels.
+		// Without removing the previous synthetic level the best bid/ask drift to historical
+		// extremes (same bug as ticks), making orders fill far from the market. Clearing only
+		// the synthetic market volume leaves any real resting orders intact.
 		if (bidPrice.HasValue)
-			engineState.OrderBook.UpdateLevel(Sides.Buy, bidPrice.Value, bidVol.Value);
+		{
+			if (_synthBidPrice is decimal prevBid && prevBid != bidPrice.Value)
+				engineState.OrderBook.UpdateLevel(Sides.Buy, prevBid, 0);
+
+			engineState.OrderBook.UpdateLevel(Sides.Buy, bidPrice.Value, _emulatedLevelVolume);
+			_synthBidPrice = bidPrice.Value;
+		}
 
 		if (askPrice.HasValue)
-			engineState.OrderBook.UpdateLevel(Sides.Sell, askPrice.Value, askVol.Value);
+		{
+			if (_synthAskPrice is decimal prevAsk && prevAsk != askPrice.Value)
+				engineState.OrderBook.UpdateLevel(Sides.Sell, prevAsk, 0);
+
+			engineState.OrderBook.UpdateLevel(Sides.Sell, askPrice.Value, _emulatedLevelVolume);
+			_synthAskPrice = askPrice.Value;
+		}
 
 		if (_depthSubscription.HasValue)
 		{
 			results.Add(engineState.OrderBook.ToMessage(msg.LocalTime, msg.ServerTime));
 		}
+
+		return bidPrice is decimal b && askPrice is decimal a ? (b + a) / 2 : bidPrice ?? askPrice;
 	}
 
 	public void ProcessTick(ExecutionMessage tick, List<Message> results)
@@ -961,41 +999,45 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 			return;
 		}
 
-		var bestBid = engineState.OrderBook.BestBid;
-		var bestAsk = engineState.OrderBook.BestAsk;
+		// Remove the levels synthesized from the previous tick so the book tracks the current
+		// price instead of accumulating stale ones. Accumulation made the best bid/ask drift to
+		// historical extremes, so market orders filled far from the market (buys far below, sells
+		// far above). Clearing only the synthetic market volume (UpdateLevel with zero) leaves any
+		// real resting orders at those prices untouched.
+		if (_synthBidPrice is decimal prevBid)
+			engineState.OrderBook.UpdateLevel(Sides.Buy, prevBid, 0);
 
-		Sides originSide;
-		if (tick.OriginSide.HasValue)
-			originSide = tick.OriginSide.Value.Invert();
-		else if (bestBid.HasValue && !bestAsk.HasValue)
-			originSide = Sides.Sell;
-		else if (bestAsk.HasValue && !bestBid.HasValue)
-			originSide = Sides.Buy;
-		else
-			originSide = Sides.Sell;
+		if (_synthAskPrice is decimal prevAsk)
+			engineState.OrderBook.UpdateLevel(Sides.Sell, prevAsk, 0);
 
-		if (engineState.OrderBook.BidLevels == 0 && engineState.OrderBook.AskLevels == 0)
+		// Place the traded side at the trade price and the opposite side a spread away, so the
+		// synthesized bid/ask bracket the current trade price.
+		var originSide = tick.OriginSide?.Invert() ?? Sides.Sell;
+
+		decimal bidPrice, askPrice;
+
+		if (originSide == Sides.Buy)
 		{
-			engineState.OrderBook.UpdateLevel(originSide, tradePrice, tradeVolume);
-			var oppositePrice = tradePrice + spread * (originSide == Sides.Buy ? 1 : -1);
-			if (oppositePrice > 0)
-				engineState.OrderBook.UpdateLevel(originSide.Invert(), oppositePrice, tradeVolume);
+			bidPrice = tradePrice;
+			askPrice = tradePrice + spread;
 		}
 		else
 		{
-			if (bestBid.HasValue && tradePrice <= bestBid.Value.price)
-			{
-				engineState.OrderBook.UpdateLevel(Sides.Sell, tradePrice, tradeVolume);
-			}
-			else if (bestAsk.HasValue && tradePrice >= bestAsk.Value.price)
-			{
-				engineState.OrderBook.UpdateLevel(Sides.Buy, tradePrice, tradeVolume);
-			}
-			else
-			{
-				engineState.OrderBook.UpdateLevel(originSide, tradePrice, tradeVolume);
-			}
+			askPrice = tradePrice;
+			bidPrice = tradePrice - spread;
 		}
+
+		if (bidPrice <= 0)
+			bidPrice = tradePrice;
+
+		if (askPrice <= 0)
+			askPrice = tradePrice + (priceStep > 0 ? priceStep : tradePrice);
+
+		engineState.OrderBook.UpdateLevel(Sides.Buy, bidPrice, _emulatedLevelVolume);
+		engineState.OrderBook.UpdateLevel(Sides.Sell, askPrice, _emulatedLevelVolume);
+
+		_synthBidPrice = bidPrice;
+		_synthAskPrice = askPrice;
 
 		if (_depthSubscription.HasValue)
 		{

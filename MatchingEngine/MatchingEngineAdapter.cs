@@ -1091,6 +1091,122 @@ public class MatchingEngineAdapter : IMessageTransport
 		}
 	}
 
+	/// <summary>
+	/// Re-evaluate resting limit orders against the current order book and execute the ones the
+	/// market has moved through. Unlike stop orders, limit orders are otherwise matched only at
+	/// registration time, so a tick/quote trading through a resting limit would leave it sitting
+	/// in the book and later fill at a price the market has left behind.
+	/// </summary>
+	public void CheckLimitOrders(SecurityId securityId, decimal? tradePrice, DateTime time, List<Message> results)
+	{
+		var state = GetSecurityState(securityId);
+
+		// When triggered by a tick, fill at the traded price (always inside the candle). When
+		// triggered by a quote, fill at the opposite best (the current market).
+		var bestAsk = state.OrderBook.BestAsk?.price;
+		var bestBid = state.OrderBook.BestBid?.price;
+
+		// The active orders are scanned without copying. Crossed ones are collected into a lazily
+		// allocated list and filled after the scan, because filling removes them from the live
+		// collection - the common tick crosses nothing, so no list is allocated at all.
+		List<(EmulatorOrder order, decimal price)> toFill = null;
+
+		foreach (var order in state.OrderManager.GetActiveOrders(securityId))
+		{
+			if (order.OrderType != OrderTypes.Limit)
+				continue;
+
+			decimal fillPrice;
+
+			if (tradePrice is decimal tp)
+			{
+				if (order.Side == Sides.Buy ? tp > order.Price : tp < order.Price)
+					continue;
+
+				fillPrice = tp;
+			}
+			else
+			{
+				var opposite = order.Side == Sides.Buy ? bestAsk : bestBid;
+
+				if (opposite is not decimal opp || (order.Side == Sides.Buy ? opp > order.Price : opp < order.Price))
+					continue;
+
+				fillPrice = opp;
+			}
+
+			(toFill ??= []).Add((order, fillPrice));
+		}
+
+		if (toFill is null)
+			return;
+
+		foreach (var (order, fillPrice) in toFill)
+			FillRestingOrder(order, state, fillPrice, time, results);
+
+		if (state.HasDepthSubscription)
+			results.Add(state.OrderBook.ToMessage(time, time));
+	}
+
+	private void FillRestingOrder(EmulatorOrder order, SecurityState state, decimal fillPrice, DateTime time, List<Message> results)
+	{
+		// The market has traded through this resting limit. In a backtest the order is assumed to
+		// fill fully (not limited by the synthesized tick volume, which on fractional data would
+		// split one order into many micro-fills) at the passed price - the traded price for a tick
+		// or the current opposite best for a quote, both of which sit inside the current candle.
+		var volume = order.Balance;
+
+		state.OrderBook.RemoveQuote(order.TransactionId, order.Side, order.Price);
+		state.OrderManager.TryRemoveOrder(order.TransactionId, out _);
+
+		results.Add(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			LocalTime = time,
+			ServerTime = time,
+			SecurityId = state.SecurityId,
+			OrderId = order.OrderId,
+			OriginalTransactionId = order.TransactionId,
+			Balance = 0,
+			OrderVolume = order.Volume,
+			OrderState = OrderStates.Done,
+			PortfolioName = order.PortfolioName,
+			HasOrderInfo = true,
+		});
+
+		var tradeMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = state.SecurityId,
+			LocalTime = time,
+			ServerTime = time,
+			OriginalTransactionId = order.TransactionId,
+			OrderId = order.OrderId,
+			TradeId = TradeIdGenerator.GetNextId(),
+			TradePrice = fillPrice,
+			TradeVolume = volume,
+			Side = order.Side,
+			MarketPrice = fillPrice,
+		};
+
+		var portfolio = GetPortfolio(order.PortfolioName);
+		var (_, _, position) = portfolio.ProcessTrade(state.SecurityId, order.Side, fillPrice, volume, tradeMsg.Commission);
+
+		results.Add(tradeMsg);
+
+		results.Add(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			ServerTime = time,
+			LocalTime = time,
+			PortfolioName = order.PortfolioName,
+		}
+		.Add(PositionChangeTypes.CurrentValue, position.CurrentValue)
+		.TryAdd(PositionChangeTypes.AveragePrice, position.AveragePrice));
+
+		AddPortfolioUpdate(portfolio, time, results);
+	}
+
 	private void Reset(List<Message> results)
 	{
 		_securityStates.Clear();

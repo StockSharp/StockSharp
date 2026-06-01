@@ -3,6 +3,8 @@ namespace StockSharp.Tests;
 using StockSharp.Algo.Basket;
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Commissions;
+using StockSharp.Algo.Indicators;
+using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Testing;
 using StockSharp.Designer;
 
@@ -1369,6 +1371,200 @@ public class BacktestingTests : BaseTestClass
 		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
 		IsTrue(stoppedTcs.Task.IsCompleted, "Backtest did not complete after resume");
 		connector.IsFinished.AssertTrue("IsFinished should be true after completion");
+	}
+
+	// Same SMA crossover logic as the WPF history-testing sample: subscribe candles built from the
+	// chosen source (storage candles / ticks / level1), and on a crossover place a limit order at
+	// the candle close.
+	private class WpfSmaStrategy : Strategy
+	{
+		private bool? _isShortLessThenLong;
+
+		public int LongSma { get; set; } = 80;
+		public int ShortSma { get; set; } = 10;
+		public DataType CandleType { get; set; } = TimeSpan.FromMinutes(1).TimeFrame();
+		public DataType BuildFrom { get; set; }
+		public Level1Fields? BuildField { get; set; }
+
+		protected override void OnReseted()
+		{
+			base.OnReseted();
+			_isShortLessThenLong = null;
+		}
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			var subscription = new Subscription(CandleType, Security)
+			{
+				MarketData =
+				{
+					IsFinishedOnly = true,
+					BuildFrom = BuildFrom,
+					BuildMode = BuildFrom is null ? MarketDataBuildModes.LoadAndBuild : MarketDataBuildModes.Build,
+					BuildField = BuildField,
+				}
+			};
+
+			var longSma = new SMA { Length = LongSma };
+			var shortSma = new SMA { Length = ShortSma };
+
+			SubscribeCandles(subscription)
+				.Bind(longSma, shortSma, OnProcess)
+				.Start();
+		}
+
+		private void OnProcess(ICandleMessage candle, decimal longValue, decimal shortValue)
+		{
+			if (candle.State != CandleStates.Finished)
+				return;
+
+			var isShortLessThenLong = shortValue < longValue;
+
+			if (_isShortLessThenLong == null)
+			{
+				_isShortLessThenLong = isShortLessThenLong;
+			}
+			else if (_isShortLessThenLong != isShortLessThenLong)
+			{
+				var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
+				var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
+				var price = candle.ClosePrice;
+
+				if (direction == Sides.Buy)
+					BuyLimit(price, volume);
+				else
+					SellLimit(price, volume);
+
+				_isShortLessThenLong = isShortLessThenLong;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Runs the WPF-sample SMA strategy over the first 7 days of real history in three modes
+	/// (candles, ticks, level1/spread) and verifies no own trade fills outside the candle it
+	/// belongs to - i.e. no trade gets drawn off the candles, which is what the stale synthesized
+	/// order book used to cause.
+	/// </summary>
+	[TestMethod]
+	public async Task BacktestTradesStayWithinCandlesAllModes()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(7);
+		var tf = TimeSpan.FromMinutes(1);
+
+		var modes = new (string name, DataType buildFrom, Level1Fields? buildField)[]
+		{
+			("Candles", null, null),
+			("Ticks", DataType.Ticks, null),
+			("Spread", DataType.Level1, Level1Fields.SpreadMiddle),
+		};
+
+		var outside = new Dictionary<string, int>();
+
+		foreach (var (name, buildFrom, buildField) in modes)
+		{
+			var security = CreateTestSecurity();
+			security.PriceStep = 0.01m;
+			var portfolio = CreateTestPortfolio();
+
+			var secProvider = new CollectionSecurityProvider([security]);
+			var pfProvider = new CollectionPortfolioProvider([portfolio]);
+			var storageRegistry = GetHistoryStorage();
+
+			using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+			var candles = new List<(DateTimeOffset open, decimal low, decimal high)>();
+			var trades = new List<(DateTimeOffset time, decimal price, decimal limit, Sides side)>();
+
+			connector.CandleReceived += (s, c) =>
+			{
+				if (c.State == CandleStates.Finished)
+					candles.Add((c.OpenTime, c.LowPrice, c.HighPrice));
+			};
+			connector.OwnTradeReceived += (s, t) => trades.Add((t.Trade.ServerTime, t.Trade.Price, t.Order.Price, t.Order.Side));
+
+			var strategy = new WpfSmaStrategy
+			{
+				Connector = connector,
+				Security = security,
+				Portfolio = portfolio,
+				Volume = 1,
+				CandleType = tf.TimeFrame(),
+				LongSma = 80,
+				ShortSma = 10,
+				BuildFrom = buildFrom,
+				BuildField = buildField,
+			};
+
+			var stoppedTcs = new TaskCompletionSource<bool>();
+			connector.StateChanged2 += state =>
+			{
+				if (state == ChannelStates.Stopped)
+					stoppedTcs.TrySetResult(true);
+			};
+
+			strategy.Start();
+			connector.Connect();
+			await connector.StartAsync(CancellationToken);
+
+			await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(5), CancellationToken));
+			IsTrue(stoppedTcs.Task.IsCompleted, $"[{name}] backtest did not complete in time");
+
+			strategy.Stop();
+
+			var outOfCandle = 0;
+			var maxDev = 0m;
+			var examples = new List<string>();
+
+			var window = TimeSpan.FromMinutes(2);
+
+			foreach (var (time, price, limit, side) in trades)
+			{
+				// Use the price range over a small window around the trade time. A limit order acts
+				// on the finished candle M but the own trade is stamped at the M+1 boundary, so a
+				// strict single-candle match would flag a normal fill across that boundary; the
+				// window only catches fills that are genuinely off the market.
+				var lo = decimal.MaxValue;
+				var hi = decimal.MinValue;
+
+				foreach (var c in candles)
+				{
+					if (c.open + tf <= time - window || c.open >= time + window)
+						continue;
+
+					if (c.low < lo) lo = c.low;
+					if (c.high > hi) hi = c.high;
+				}
+
+				if (hi < lo)
+					continue;
+
+				var dev = price < lo ? lo - price : price > hi ? price - hi : 0m;
+
+				// a fill more than 0.5% of price outside the windowed range is clearly off the market
+				if (dev > price * 0.005m)
+				{
+					outOfCandle++;
+					if (dev > maxDev) maxDev = dev;
+					if (examples.Count < 5)
+						examples.Add($"{side} fill={price} limit={limit} range=[{lo};{hi}] dev={dev}");
+				}
+			}
+
+			outside[name] = outOfCandle;
+
+			Console.WriteLine($"[{name}] candles={candles.Count} trades={trades.Count} outOfCandle={outOfCandle} maxDev={maxDev}");
+			foreach (var e in examples)
+				Console.WriteLine($"    [{name}] {e}");
+		}
+
+		foreach (var kv in outside)
+			AreEqual(0, kv.Value, $"[{kv.Key}] {kv.Value} trade(s) filled outside their candle range");
 	}
 
 	/// <summary>
