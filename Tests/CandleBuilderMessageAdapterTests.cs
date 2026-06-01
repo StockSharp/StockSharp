@@ -234,7 +234,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		};
 	}
 
-	private static Level1ChangeMessage CreateLevel1(SecurityId securityId, DateTime serverTime, decimal? lastTradePrice = null, decimal? lastTradeVolume = null, decimal? bestBidPrice = null, decimal? bestAskPrice = null)
+	private static Level1ChangeMessage CreateLevel1(SecurityId securityId, DateTime serverTime, decimal? lastTradePrice = null, decimal? lastTradeVolume = null, decimal? bestBidPrice = null, decimal? bestAskPrice = null, decimal? bestBidVolume = null, decimal? bestAskVolume = null)
 	{
 		var msg = new Level1ChangeMessage
 		{
@@ -250,6 +250,10 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 			msg.Add(Level1Fields.BestBidPrice, bestBidPrice.Value);
 		if (bestAskPrice != null)
 			msg.Add(Level1Fields.BestAskPrice, bestAskPrice.Value);
+		if (bestBidVolume != null)
+			msg.Add(Level1Fields.BestBidVolume, bestBidVolume.Value);
+		if (bestAskVolume != null)
+			msg.Add(Level1Fields.BestAskVolume, bestAskVolume.Value);
 
 		return msg;
 	}
@@ -1890,6 +1894,110 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		AreEqual(105m, candle.HighPrice, "High should be max SpreadMiddle (105)");
 		AreEqual(97m, candle.LowPrice, "Low should be min SpreadMiddle (97)");
 		AreEqual(102m, candle.ClosePrice, "Close should be last SpreadMiddle (102)");
+	}
+
+	[TestMethod]
+	public void Level1SpreadMiddleTransform_EmulatesSideFromSpreadDirection()
+	{
+		var secId = CreateSecurityId();
+		var time = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		static Level1ChangeMessage L1(SecurityId s, DateTime t, decimal bid, decimal ask, decimal bidVol, decimal askVol)
+			=> CreateLevel1(s, t, bestBidPrice: bid, bestAskPrice: ask, bestBidVolume: bidVol, bestAskVolume: askVol);
+
+		var transform = new Level1CandleBuilderValueTransform(0.01m, 0.01m)
+		{
+			Type = Level1Fields.SpreadMiddle,
+			EmulateSideFromSpread = true,
+		};
+
+		// Side/Price/Volume are explicit interface members on the transform.
+		var view = (ICandleBuilderValueTransform)transform;
+
+		var profile = new VolumeProfileBuilder();
+
+		void Feed(Level1ChangeMessage l1)
+		{
+			transform.Process(l1).AssertTrue();
+			profile.Update(transform);
+		}
+
+		Feed(L1(secId, time, 99, 101, 10, 10));                 // middle 100, first -> no previous -> no side
+		IsNull(view.Side, "first spread point has no previous to compare -> side null");
+
+		Feed(L1(secId, time.AddSeconds(1), 103, 107, 20, 20));  // middle 105 > 100 -> Buy
+		AreEqual(Sides.Buy, view.Side, "rising spread middle -> Buy");
+
+		Feed(L1(secId, time.AddSeconds(2), 95, 99, 30, 10));    // middle 97 < 105 -> Sell
+		AreEqual(Sides.Sell, view.Side, "falling spread middle -> Sell");
+
+		Feed(L1(secId, time.AddSeconds(3), 95, 99, 30, 10));    // middle 97 == 97 -> carry previous side
+		AreEqual(Sides.Sell, view.Side, "unchanged spread middle -> carries previous side");
+
+		// The emulated side must flow into the profile's buy/sell split.
+		var levels = profile.PriceLevels.ToList();
+		var buy = levels.FirstOrDefault(l => l.Price == 105m);
+		var sell = levels.FirstOrDefault(l => l.Price == 97m);
+		(buy.Price > 0).AssertTrue("level at the rising middle (105) must exist");
+		AreEqual(20m, buy.BuyVolume, "rising middle -> BuyVolume = spread volume (20)");
+		(sell.Price > 0).AssertTrue("level at the falling middle (97) must exist");
+		AreEqual(40m, sell.SellVolume, "two falling/flat points at 97 -> SellVolume = 20 + 20");
+
+		// With the flag off the legacy behaviour holds: side stays null.
+		var off = new Level1CandleBuilderValueTransform(0.01m, 0.01m) { Type = Level1Fields.SpreadMiddle };
+		off.Process(L1(secId, time, 99, 101, 10, 10));
+		off.Process(L1(secId, time.AddSeconds(1), 103, 107, 20, 20));
+		IsNull(((ICandleBuilderValueTransform)off).Side, "without EmulateSideFromSpread the side stays null");
+	}
+
+	[TestMethod]
+	public async Task Subscribe_BuildFromLevel1_SpreadMiddle_WithVolumeProfile_EmulatesSides()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var inner = new MockCandleAdapter(idGen);
+		inner.AddSupportedLevel1();
+		var provider = CreateCandleBuilderProvider();
+		var adapter = new CandleBuilderMessageAdapter(inner, provider);
+
+		var outMessages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
+
+		var secId = CreateSecurityId();
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = 1,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			IsSubscribe = true,
+			SecurityId = secId,
+			BuildMode = MarketDataBuildModes.Build,
+			BuildFrom = DataType.Level1,
+			BuildField = Level1Fields.SpreadMiddle,
+			IsCalcVolumeProfile = true,
+		}, CancellationToken);
+
+		var level1Sub = inner.SentMessages.OfType<MarketDataMessage>()
+			.FirstOrDefault(m => m.DataType2 == DataType.Level1);
+		IsNotNull(level1Sub, "Should subscribe to Level1");
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime, bestBidPrice: 99, bestAskPrice: 101, bestBidVolume: 10, bestAskVolume: 10), CancellationToken);                 // middle 100
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(10), bestBidPrice: 103, bestAskPrice: 107, bestBidVolume: 20, bestAskVolume: 20), CancellationToken); // middle 105 -> Buy
+		await inner.SimulateLevel1(level1Sub.TransactionId, CreateLevel1(secId, baseTime.AddSeconds(20), bestBidPrice: 95, bestAskPrice: 99, bestBidVolume: 30, bestAskVolume: 10), CancellationToken);   // middle 97 -> Sell
+
+		var candle = outMessages.OfType<TimeFrameCandleMessage>().LastOrDefault();
+		IsNotNull(candle, "Should build a candle");
+		IsNotNull(candle.PriceLevels, "PriceLevels must be populated when IsCalcVolumeProfile is on");
+
+		var levels = candle.PriceLevels.ToList();
+		(levels.Count > 0).AssertTrue("Volume profile should have price levels");
+
+		// IsCalcVolumeProfile must reach the transform as EmulateSideFromSpread: the
+		// rising-middle level (105) records a Buy, the falling-middle level (97) a Sell.
+		var buy = levels.FirstOrDefault(l => l.Price == 105m);
+		var sell = levels.FirstOrDefault(l => l.Price == 97m);
+		(buy.BuyVolume > 0).AssertTrue("rising spread middle (105) must record Buy volume");
+		(sell.SellVolume > 0).AssertTrue("falling spread middle (97) must record Sell volume");
 	}
 
 	#endregion

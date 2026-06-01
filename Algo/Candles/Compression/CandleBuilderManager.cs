@@ -491,6 +491,9 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			To = original.To,
 			MaxDepth = original.MaxDepth,
 			BuildField = original.BuildField,
+			// Carry the volume-profile request onto the build subscription so the value
+			// transform can emulate the trade side (the two-arg CopyTo below does not copy it).
+			IsCalcVolumeProfile = original.IsCalcVolumeProfile,
 			IsSubscribe = true,
 		};
 
@@ -527,10 +530,10 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 	private static ICandleBuilderValueTransform CreateTransform(MarketDataMessage current)
 	{
-		return CreateTransform(current.DataType2, current.BuildField, current.PriceStep, current.VolumeStep);
+		return CreateTransform(current.DataType2, current.BuildField, current.PriceStep, current.VolumeStep, current.IsCalcVolumeProfile);
 	}
 
-	private static ICandleBuilderValueTransform CreateTransform(DataType dataType, Level1Fields? field, decimal? priceStep, decimal? volStep)
+	private static ICandleBuilderValueTransform CreateTransform(DataType dataType, Level1Fields? field, decimal? priceStep, decimal? volStep, bool emulateSideFromSpread = false)
 	{
 		if (dataType == DataType.Ticks)
 		{
@@ -551,6 +554,11 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 			if (field != null)
 				t.Type = field.Value;
+
+			// A SpreadMiddle build carries no real trade side; when a volume profile is
+			// requested, derive it from the spread-middle direction so the profile is not
+			// side-less. No-op for the other Level1 build fields (they set side already).
+			t.EmulateSideFromSpread = emulateSideFromSpread;
 
 			return t;
 		}

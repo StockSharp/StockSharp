@@ -245,11 +245,24 @@ public class Level1CandleBuilderValueTransform(decimal? priceStep, decimal? volS
 	private decimal? _prevAskPrice;
 	private decimal? _prevBidVol;
 	private decimal? _prevAskVol;
+	private decimal? _prevSpreadMiddle;
+	private Sides? _prevSide;
 
 	/// <summary>
 	/// Type of candle based data.
 	/// </summary>
 	public Level1Fields Type { get; set; } = Level1Fields.LastTradePrice;
+
+	/// <summary>
+	/// Emulate the trade side for the <see cref="Level1Fields.SpreadMiddle"/> source from the
+	/// direction the spread middle moves: an uptick is treated as <see cref="Sides.Buy"/>, a
+	/// downtick as <see cref="Sides.Sell"/>, and an unchanged middle carries the previous side.
+	/// A spread-built candle has no real trade side, so this is the only side signal available
+	/// for a volume profile. Off by default, which keeps the legacy behaviour (side stays
+	/// <see langword="null"/>); <see cref="CandleBuilderManager"/> turns it on automatically when
+	/// <see cref="MarketDataMessage.IsCalcVolumeProfile"/> is requested for a SpreadMiddle build.
+	/// </summary>
+	public bool EmulateSideFromSpread { get; set; }
 
 	/// <inheritdoc />
 	public override bool Process(Message message)
@@ -260,6 +273,8 @@ public class Level1CandleBuilderValueTransform(decimal? priceStep, decimal? volS
 			{
 				_prevBidPrice = _prevAskPrice = null;
 				_prevBidVol = _prevAskVol = null;
+				_prevSpreadMiddle = null;
+				_prevSide = null;
 			}
 
 			return base.Process(message);
@@ -337,7 +352,25 @@ public class Level1CandleBuilderValueTransform(decimal? priceStep, decimal? volS
 					spreadVol = _prevBidVol.Value.GetSpreadMiddle(_prevAskVol.Value, volStep);
 				}
 
-				Update(time, spreadMiddle.Value, spreadVol, null, null, null);
+				Sides? side = null;
+
+				if (EmulateSideFromSpread)
+				{
+					if (_prevSpreadMiddle is decimal prevMiddle)
+					{
+						if (spreadMiddle.Value > prevMiddle)
+							side = Sides.Buy;
+						else if (spreadMiddle.Value < prevMiddle)
+							side = Sides.Sell;
+						else
+							side = _prevSide;
+					}
+
+					_prevSpreadMiddle = spreadMiddle.Value;
+					_prevSide = side ?? _prevSide;
+				}
+
+				Update(time, spreadMiddle.Value, spreadVol, side, null, null);
 				return true;
 			}
 
