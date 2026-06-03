@@ -718,6 +718,11 @@ public static class Paths
 
 		var bytes = value.Serialize(bom);
 
+		// OpenWrite (like File.Open) does not create missing parent folders, so create the directory.
+		var dir = Path.GetDirectoryName(filePath);
+		if (!dir.IsEmpty() && !fileSystem.DirectoryExists(dir))
+			fileSystem.CreateDirectory(dir);
+
 		using var stream = fileSystem.OpenWrite(filePath);
 		stream.Write(bytes, 0, bytes.Length);
 	}

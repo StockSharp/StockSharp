@@ -68,6 +68,36 @@ public class PathsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void Serialize_CreatesMissingDirectory()
+	{
+		// Real LocalFileSystem so the missing-parent behaviour is actually exercised; all filesystem
+		// access goes through IFileSystem.
+		var fileSystem = LocalFileSystem.Instance;
+
+		var dir = Path.Combine(Path.GetTempPath(), "ss_paths_" + Guid.NewGuid().ToString("N"));
+		var path = Path.Combine(dir, "sub", "cache.bin");
+
+		try
+		{
+			var settings = new SettingsStorage();
+			settings.Set("x", 42);
+
+			// The regression is HERE: without the fix this throws DirectoryNotFoundException because the
+			// parent folder does not exist and OpenWrite does not create it. The fix creates it first.
+			settings.Serialize(fileSystem, path);
+
+			// The fix created the missing folder and the file was written into it.
+			fileSystem.DirectoryExists(dir).AssertTrue();
+			fileSystem.FileExists(path).AssertTrue();
+		}
+		finally
+		{
+			if (fileSystem.DirectoryExists(dir))
+				fileSystem.DeleteDirectory(dir, true);
+		}
+	}
+
+	[TestMethod]
 	public void CompanyPath_IsValid()
 	{
 		Paths.CompanyPath.AssertNotNull();
