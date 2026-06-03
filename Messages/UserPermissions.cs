@@ -5,7 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [Flags]
 [DataContract]
-public enum UserPermissions
+public enum UserPermissions : long
 {
 	/// <summary>
 	/// Market-data downloading.
