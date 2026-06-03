@@ -146,6 +146,7 @@ public partial class MainWindow
 			});
 		};
 
+		PauseBtn.Content = LocalizedStrings.Pause;
 		SetIsEnabled(false, true, true, false);
 
 		_startEmulationTime = DateTime.UtcNow;
@@ -194,11 +195,7 @@ public partial class MainWindow
 				await foreach (var (s, _) in btOptimizer.RunAsync(startTime, stopTime, strategies, _cts.Token))
 				{
 					count++;
-					this.GuiAsync(() =>
-					{
-						TestingProcess.Value = count;
-						TestingProcessText.Text = $"{count} iterations | {(int)(DateTime.UtcNow - _startEmulationTime).TotalSeconds} sec";
-					});
+					this.GuiAsync(() => UpdateProgressText(count));
 				}
 			}
 			else
@@ -215,11 +212,7 @@ public partial class MainWindow
 				await foreach (var (s, _) in go.RunAsync(startTime, stopTime, strategy, geneticParams, cancellationToken: _cts.Token))
 				{
 					count++;
-					this.GuiAsync(() =>
-					{
-						TestingProcess.Value = count;
-						TestingProcessText.Text = $"{count} iterations | {(int)(DateTime.UtcNow - _startEmulationTime).TotalSeconds} sec";
-					});
+					this.GuiAsync(() => UpdateProgressText(count));
 				}
 			}
 		}
@@ -246,6 +239,16 @@ public partial class MainWindow
 			MessageBox.Show(this, LocalizedStrings.Cancelled);
 	}
 
+	private void UpdateProgressText(int count)
+	{
+		TestingProcess.Value = count;
+
+		// Pausing now halts the in-flight backtests immediately (the optimizer suspends their replay),
+		// so reflect the suspended state in the text - otherwise a paused run just looks frozen.
+		var suffix = _optimizer?.IsPaused == true ? $" ({LocalizedStrings.Suspended})" : string.Empty;
+		TestingProcessText.Text = $"{count} iterations | {(int)(DateTime.UtcNow - _startEmulationTime).TotalSeconds} sec{suffix}";
+	}
+
 	private void SetIsEnabled(bool canStart, bool canSuspend, bool canStop, bool canType)
 	{
 		this.GuiAsync(() =>
@@ -262,15 +265,21 @@ public partial class MainWindow
 		_cts?.Cancel();
 	}
 
-	private void PauseBtnClick(object sender, RoutedEventArgs e)
+	private async void PauseBtnClick(object sender, RoutedEventArgs e)
 	{
 		var optimizer = _optimizer;
 		if (optimizer is null)
 			return;
 
 		if (optimizer.IsPaused)
-			optimizer.Resume();
+			await optimizer.Resume();
 		else
-			optimizer.Pause();
+			await optimizer.Pause();
+
+		// The button is a toggle. Without updating its caption it always reads "Pause", so pressing
+		// it repeatedly silently flips pause/resume and looks like nothing happens. Show what the
+		// next click will do (Pause <-> Continue) and refresh the suspended marker in the text.
+		PauseBtn.Content = optimizer.IsPaused ? LocalizedStrings.Continue : LocalizedStrings.Pause;
+		UpdateProgressText((int)TestingProcess.Value);
 	}
 }

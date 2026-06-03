@@ -181,20 +181,78 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	public bool IsPaused => _pauseTcs is not null;
 
 	/// <summary>
-	/// Pause optimization. New iterations won't start until <see cref="Resume"/> is called.
-	/// Currently running iterations will complete.
+	/// Pause optimization. New iterations won't start until <see cref="Resume"/> is called, and the
+	/// backtests that are already running are suspended so progress halts promptly.
 	/// </summary>
-	public void Pause()
+	/// <returns><see cref="Task"/></returns>
+	public async Task Pause()
 	{
-		Interlocked.CompareExchange(ref _pauseTcs, new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously), null);
+		// CompareExchange returns the previous value; if it was already set we are already paused.
+		// Setting the gate is synchronous, so new iteration starts are blocked immediately; the running
+		// backtests are then suspended below.
+		if (Interlocked.CompareExchange(ref _pauseTcs, new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously), null) is not null)
+			return;
+
+		// A "soft" pause that only blocks new starts would still let the whole in-flight batch run
+		// to completion - and each iteration can take seconds - so suspend the running connectors too.
+		await SetConnectorsSuspendedAsync(true);
 	}
 
 	/// <summary>
 	/// Resume paused optimization.
 	/// </summary>
-	public void Resume()
+	/// <returns><see cref="Task"/></returns>
+	public async Task Resume()
 	{
-		Interlocked.Exchange(ref _pauseTcs, null)?.TrySetResult();
+		// Resume the suspended backtests, then release the gate that blocks new iteration starts.
+		await SetConnectorsSuspendedAsync(false);
+		UnblockPauseWaiters();
+	}
+
+	// Releases the gate that parks new iteration starts in TryNextRunAsync without touching the running
+	// connectors. Used by the teardown paths (cancellation/dispose), which run synchronously and only
+	// need the paused waiters to wake up so they can observe cancellation.
+	private void UnblockPauseWaiters()
+		=> Interlocked.Exchange(ref _pauseTcs, null)?.TrySetResult();
+
+	private async Task SetConnectorsSuspendedAsync(bool suspend)
+	{
+		HistoryEmulationConnector[] connectors;
+
+		using (_sync.EnterScope())
+			connectors = [.. _startedConnectors];
+
+		if (connectors.Length == 0)
+			return;
+
+		// Suspend/resume the running backtests by awaiting each connector's own SuspendAsync/StartAsync -
+		// the same mechanism a single backtest uses. It is driven through the async call chain (the UI
+		// button handler is async too) instead of a fire-and-forget Task.Run: that previous approach put
+		// the suspend on the thread pool which - already saturated by the BatchSize (CPU*2) in-flight
+		// backtests - queued it behind them, so the whole batch ran to completion before the pause took
+		// effect. All connectors are handled concurrently so the batch halts at once.
+		async Task ApplyAsync(HistoryEmulationConnector connector)
+		{
+			try
+			{
+				if (suspend)
+				{
+					if (connector.State == ChannelStates.Started)
+						await connector.SuspendAsync();
+				}
+				else
+				{
+					if (connector.State is ChannelStates.Suspended or ChannelStates.Suspending)
+						await connector.StartAsync();
+				}
+			}
+			catch (Exception ex)
+			{
+				this.AddErrorLog(ex);
+			}
+		}
+
+		await Task.WhenAll(connectors.Select(ApplyAsync));
 	}
 
 	/// <summary>
@@ -222,8 +280,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		_cancelEmulation = false;
 		_allIterationsStarted = false;
 
-		// Reset pause state
-		Resume();
+		// Reset pause state (no running connectors yet at init, so just clear the start gate).
+		UnblockPauseWaiters();
 
 		_batchManager.Reset(EmulationSettings.BatchSize, totalIterations);
 
@@ -238,8 +296,9 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		{
 			_cancelEmulation = true;
 
-			// Unblock paused waiters so they can see cancellation
-			Resume();
+			// Unblock paused waiters so they can see cancellation (the connectors are disconnected just
+			// below, so there is no need to resume their replay).
+			UnblockPauseWaiters();
 
 			using (_sync.EnterScope())
 			{
@@ -271,7 +330,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <inheritdoc />
 	protected override void DisposeManaged()
 	{
-		Resume();
+		UnblockPauseWaiters();
 		_linkedCts?.Cancel();
 		base.DisposeManaged();
 	}

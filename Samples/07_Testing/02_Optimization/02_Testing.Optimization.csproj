@@ -1,5 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_netwindows.props" />
+  <PropertyGroup>
+    <!-- The optimizer runs many parallel, month-long backtests that allocate heavily; Server GC
+         roughly halves the run time versus the default Workstation GC on multi-core machines. -->
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\01_History\SmaStrategy.cs" Link="SmaStrategy.cs" />
   </ItemGroup>
