@@ -604,6 +604,10 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			.FirstOrDefault(m => m.State == ChannelStates.Stopping);
 
 		stoppingState.AssertNotNull();
+
+		// The thrown manager exception should surface as an ErrorMessage (the test name promises an error).
+		var errorMsg = outMessages.OfType<ErrorMessage>().FirstOrDefault();
+		errorMsg.AssertNotNull("Should have sent an ErrorMessage for the manager failure");
 	}
 
 	[TestMethod]

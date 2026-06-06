@@ -593,8 +593,9 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var ticks = messages.OfType<ExecutionMessage>().Where(m => m.DataTypeEx == DataType.Ticks).ToList();
 		var candles = messages.OfType<CandleMessage>().ToList();
 
-		// At least one type should have data
-		(ticks.Count > 0 || candles.Count > 0).AssertTrue();
+		// Both subscribed types should have produced data
+		ticks.Count.AssertGreater(0, "Should have tick messages from the subscription");
+		candles.Count.AssertGreater(0, "Should have candle messages from the subscription");
 	}
 
 	[TestMethod]
@@ -624,14 +625,21 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var messageCountBeforeUnsubscribe = 0;
 		var boards = Array.Empty<BoardMessage>();
 
+		var unsubscribed = false;
+		var dataAfterUnsubscribe = 0;
+
 		await foreach (var msg in manager.StartAsync(boards).WithCancellation(CancellationToken))
 		{
 			messageCountBeforeUnsubscribe++;
+
+			if (unsubscribed && msg is ExecutionMessage exec && exec.DataTypeEx == DataType.Ticks)
+				dataAfterUnsubscribe++;
 
 			if (messageCountBeforeUnsubscribe == 50)
 			{
 				// Unsubscribe mid-stream
 				manager.Unsubscribe(1);
+				unsubscribed = true;
 			}
 
 			if (messageCountBeforeUnsubscribe > 100)
@@ -641,8 +649,9 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 			}
 		}
 
-		// Test passed if we didn't hang
-		(messageCountBeforeUnsubscribe > 0).AssertTrue();
+		messageCountBeforeUnsubscribe.AssertGreater(0, "Should have received data before unsubscribe");
+		// After unsubscribing the only subscription, no further tick data should be delivered.
+		dataAfterUnsubscribe.AssertEqual(0, "Unsubscribe should stop further tick data delivery");
 	}
 
 	[TestMethod]
@@ -1069,7 +1078,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var ticks = messages.OfType<ExecutionMessage>().Where(m => m.DataTypeEx == DataType.Ticks).ToList();
 		var candles = messages.OfType<CandleMessage>().ToList();
 
-		(ticks.Count > 0 || candles.Count > 0).AssertTrue("Should have ticks or candles");
+		ticks.Count.AssertGreater(0, "Should have tick messages");
+		candles.Count.AssertGreater(0, "Should have candle messages");
 	}
 
 	[TestMethod]
@@ -1137,8 +1147,12 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var genTicks = messages.OfType<ExecutionMessage>().Where(m => m.SecurityId == genSecId && m.DataTypeEx == DataType.Ticks).Count();
 		var genDepths = messages.OfType<QuoteChangeMessage>().Where(m => m.SecurityId == genSecId).Count();
 
-		// At least some data from various sources
-		(histTicks + histCandles + genTicks + genDepths > 0).AssertTrue("Should have data from at least one source");
+		// FullMix sets up four sources (history ticks/candles + generated ticks/depths); each must yield data,
+		// otherwise the "full mix" the test name promises is not actually exercised.
+		histTicks.AssertGreater(0, "Should have historical ticks");
+		histCandles.AssertGreater(0, "Should have historical candles");
+		genTicks.AssertGreater(0, "Should have generated ticks");
+		genDepths.AssertGreater(0, "Should have generated market depths");
 	}
 
 	[TestMethod]
@@ -1538,8 +1552,9 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 			ValidateCandleMessage(candles[i], secId, startDate, stopDate, i);
 		}
 
-		// At least one type should have data
-		(ticks.Count > 0 || candles.Count > 0).AssertTrue("Should have ticks or candles");
+		// Both subscribed types should have produced data
+		ticks.Count.AssertGreater(0, "Should have tick messages");
+		candles.Count.AssertGreater(0, "Should have candle messages");
 	}
 
 	[TestMethod]
@@ -1588,7 +1603,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(30000, CooperativeCancellation = true)]
-	public async Task PropertyValidation_FinishedMessage_HasCorrectTransactionId()
+	public async Task PropertyValidation_EmulationCompletion_SendsStoppingState()
 	{
 		var storageRegistry = GetHistoryStorage();
 		if (storageRegistry == null)
@@ -1864,6 +1879,12 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		{
 			output.AssertNotNull("Emulator output should not be null");
 		}
+
+		// Feeding ticks into the emulator must produce a Level1ChangeMessage (price limits) per tick,
+		// not merely "some" output — that is what "all expected types" means here.
+		var emulatorOutTypes = emulatorOutputs.GroupBy(m => m.GetType().Name).Select(g => g.Key).ToList();
+		emulatorOutputs.OfType<Level1ChangeMessage>().Any().AssertTrue(
+			$"Emulator should emit Level1ChangeMessage. Got types: {string.Join(", ", emulatorOutTypes)}");
 	}
 
 	[TestMethod]

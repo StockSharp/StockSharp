@@ -229,8 +229,7 @@ public class OptimizerTests : BaseTestClass
 			count++;
 		}
 
-		IsTrue(count <= 2, $"Should respect MaxIterations=2 limit, but got {count}");
-		IsTrue(count > 0, "Should have at least 1 result");
+		AreEqual(2, count, $"MaxIterations=2 should yield exactly 2 results, but got {count}");
 	}
 
 	/// <summary>
@@ -351,6 +350,11 @@ public class OptimizerTests : BaseTestClass
 
 			var statisticManager = strategy.StatisticManager;
 			statisticManager.AssertNotNull("StatisticManager should not be null");
+
+			// The SMA strategy trades over the history, so statistics must reflect real activity, not just exist.
+			IsTrue(strategy.Orders.Any(), "Strategy should have placed orders during the backtest");
+			IsTrue(strategy.MyTrades.Any() || strategy.PnL != 0, "Strategy should have trades or non-zero PnL");
+			IsTrue(statisticManager.Parameters.Length > 0, "StatisticManager should have populated parameters");
 		}
 	}
 

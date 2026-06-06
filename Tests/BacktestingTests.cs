@@ -1928,7 +1928,10 @@ public class BacktestingTests : BaseTestClass
 			connector.Connect();
 			await connector.StartAsync(CancellationToken);
 
-			await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+			var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+
+			if (completed != tcs.Task)
+				Fail("Emulation did not complete in time");
 
 			return messages;
 		}
@@ -2013,7 +2016,10 @@ public class BacktestingTests : BaseTestClass
 			connector.Connect();
 			await connector.StartAsync(CancellationToken);
 
-			await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+			var completed = await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+
+			if (completed != tcs.Task)
+				Fail("Emulation did not complete in time");
 
 			return messages;
 		}
