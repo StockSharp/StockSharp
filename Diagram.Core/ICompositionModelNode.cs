@@ -39,9 +39,9 @@ public interface ICompositionModelNode : ICloneable
 }
 
 /// <summary>
-/// Dummy implementation of <see cref="ICompositionModelNode"/>.
+/// In-memory implementation of <see cref="ICompositionModelNode"/>.
 /// </summary>
-public class DummyCompositionModelNode : ICompositionModelNode
+public class InMemoryCompositionModelNode : ICompositionModelNode
 {
 	/// <inheritdoc/>
 	public string Key { get; set; }
@@ -62,7 +62,7 @@ public class DummyCompositionModelNode : ICompositionModelNode
 		if (Element is null)
 			throw new InvalidOperationException(LocalizedStrings.ElementNotLoaded.Put(Text));
 
-		return new DummyCompositionModelNode
+		return new InMemoryCompositionModelNode
 		{
 			Key = Key,
 			Element = Element.Clone(),
