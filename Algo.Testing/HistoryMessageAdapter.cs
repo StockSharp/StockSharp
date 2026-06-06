@@ -295,6 +295,10 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 					_marketDataManager.UnregisterGenerator(generatorMsg.OriginalTransactionId);
 				}
 
+				// Registering/unregistering a generator changes a security's supported data types, so drop the
+				// cached query results — otherwise GetSupportedMarketDataTypesAsync keeps returning the stale set.
+				_supportedMarketDataTypes.Clear();
+
 				break;
 			}
 		}

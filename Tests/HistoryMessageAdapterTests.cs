@@ -846,7 +846,16 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			secProvider,
 			manager);
 
-		// Register generator through adapter
+		// Start the adapter first, so the generator is registered AFTER start (as the test name states).
+		adapter.NewOutMessageAsync += (m, ct) => default;
+		await adapter.SendInMessageAsync(new EmulationStateMessage { State = ChannelStates.Starting }, CancellationToken);
+		await Task.Delay(50, CancellationToken);
+
+		// Query supported types BEFORE the generator is registered (populates the adapter's per-security cache).
+		var before = await adapter.GetSupportedMarketDataTypesAsync(secId, null, null).ToListAsync(CancellationToken);
+		before.Count(dt => dt == DataType.Ticks).AssertEqual(0, "No tick generator registered yet");
+
+		// Register generator through adapter, after start
 		var generatorMsg = new GeneratorMessage
 		{
 			SecurityId = secId,
@@ -861,9 +870,9 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		// Verify generator is tracked
 		manager.HasGenerator(secId, DataType.Ticks).AssertTrue();
 
-		// Verify GetSupportedMarketDataTypes includes the generator
-		var dataTypes = await adapter.GetSupportedMarketDataTypesAsync(secId, null, null).ToListAsync(CancellationToken);
-		dataTypes.Count(dt => dt == DataType.Ticks).AssertEqual(1);
+		// After registering the generator, the adapter must report its data type (querying again).
+		var after = await adapter.GetSupportedMarketDataTypesAsync(secId, null, null).ToListAsync(CancellationToken);
+		after.Count(dt => dt == DataType.Ticks).AssertEqual(1, "Supported types should include the newly registered generator");
 	}
 
 	#endregion
