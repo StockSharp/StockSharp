@@ -8,6 +8,8 @@ using System.Runtime.CompilerServices;
 /// </summary>
 public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 {
+	private const int _maxGeneratedPerStep = 1000;
+
 	private readonly Dictionary<(SecurityId secId, DataType dataType), (MarketDataGenerator generator, long transId)> _generators = [];
 	private readonly List<(IMarketDataStorage storage, long subscriptionId)> _actions = [];
 	private readonly AutoResetEvent _syncRoot = new(false);
@@ -274,10 +276,23 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 
 						await foreach (var msg in FilterMessages(source, startDateTime, stopDateTime, currentTime).WithCancellation(cancellationToken))
 						{
-							LoadedMessageCount++;
-
 							if (msg.TryGetServerTime(out var serverTime))
+							{
 								_currentTime = serverTime;
+
+								// Drive the registered generators up to the current replay time and
+								// interleave their output ahead of the triggering message (same time).
+								if (_generators.Count > 0)
+								{
+									foreach (var generated in DriveGenerators(msg, serverTime))
+									{
+										LoadedMessageCount++;
+										yield return generated;
+									}
+								}
+							}
+
+							LoadedMessageCount++;
 
 							yield return msg;
 
@@ -360,6 +375,62 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 				break;
 
 			yield return msg;
+		}
+	}
+
+	/// <summary>
+	/// Drives the registered generators with the replay clock and same-security data, returning any
+	/// generated messages (interleaved by the caller at the same server time). A time signal advances
+	/// time-based generation for every generator; the triggering message feeds the generators of its own
+	/// security, and each generated message is chained into the other same-security generators, so a
+	/// generated tick drives that security's order-book generator. Generators ignore their own output
+	/// type, so the chain terminates.
+	/// </summary>
+	/// <param name="trigger">The replayed message that advanced the clock.</param>
+	/// <param name="time">The current replay server time.</param>
+	/// <returns>The generated messages, if any.</returns>
+	private IEnumerable<Message> DriveGenerators(Message trigger, DateTime time)
+	{
+		if (_generators.Count == 0)
+			yield break;
+
+		var generators = _generators.Values.Select(v => v.generator).ToArray();
+
+		var feeds = new Queue<Message>();
+		feeds.Enqueue(new TimeMessage { ServerTime = time, LocalTime = time });
+
+		if (trigger.Type != MessageTypes.Time && trigger is ISecurityIdMessage)
+			feeds.Enqueue(trigger);
+
+		var produced = 0;
+
+		while (feeds.Count > 0)
+		{
+			var feed = feeds.Dequeue();
+			var isTime = feed.Type == MessageTypes.Time;
+			var feedSecId = (feed as ISecurityIdMessage)?.SecurityId;
+
+			foreach (var generator in generators)
+			{
+				// A security-bearing feed only drives generators of the same security; a time signal
+				// drives all of them.
+				if (!isTime && feedSecId != generator.SecurityId)
+					continue;
+
+				var output = generator.Process(feed);
+
+				if (output is null)
+					continue;
+
+				output.LocalTime = time;
+				yield return output;
+
+				// Chain the generated message into the other same-security generators.
+				feeds.Enqueue(output);
+
+				if (++produced > _maxGeneratedPerStep)
+					yield break;
+			}
 		}
 	}
 
