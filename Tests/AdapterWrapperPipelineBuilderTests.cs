@@ -440,6 +440,26 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task Build_WithSuppressOrderBookIncrements_NoOrderBookIncrementAdapter()
+	{
+		var builder = CreateBuilder();
+		// Even though the inner adapter reports IsSupportOrderBookIncrements, SuppressOrderBookIncrements
+		// must veto the OrderBookIncrementMessageAdapter (builder line:
+		// "!config.SuppressOrderBookIncrements && (SupportBuildingFromOrderLog || IsSupportOrderBookIncrements)").
+		var inner = new TestPipelineAdapter { SupportOrderBookIncrements = true };
+		var config = CreateDefaultConfig() with
+		{
+			SuppressOrderBookIncrements = true,
+			SupportBuildingFromOrderLog = false,
+		};
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		IsNotNull(result);
+		IsFalse(HasWrapper<OrderBookIncrementMessageAdapter>(result));
+	}
+
+	[TestMethod]
 	public async Task Build_WithSupportOrderBookTruncate_IncludesOrderBookTruncateAdapter()
 	{
 		var builder = CreateBuilder();
@@ -505,6 +525,36 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task Build_WithPositionsEmulationFalse_IncludesPositionAdapter()
+	{
+		var builder = CreateBuilder();
+		// The builder branch is "IsPositionsEmulationRequired is bool isPosEmu": a non-null
+		// false value still matches, so the PositionMessageAdapter must be added (it is then
+		// configured with emulation disabled). This distinguishes false (add) from null (skip).
+		var inner = new TestPipelineAdapter { PositionsEmulation = false };
+		var config = CreateDefaultConfig();
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		IsNotNull(result);
+		IsTrue(HasWrapper<PositionMessageAdapter>(result));
+	}
+
+	[TestMethod]
+	public async Task Build_WithPositionsEmulationNull_NoPositionAdapter()
+	{
+		var builder = CreateBuilder();
+		// null means "not applicable": the pattern "is bool" fails, so no PositionMessageAdapter.
+		var inner = new TestPipelineAdapter { PositionsEmulation = null };
+		var config = CreateDefaultConfig();
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		IsNotNull(result);
+		IsFalse(HasWrapper<PositionMessageAdapter>(result));
+	}
+
+	[TestMethod]
 	public async Task Build_WithFillGapsBehaviour_IncludesFillGapsAdapter()
 	{
 		var builder = CreateBuilder();
@@ -519,6 +569,17 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 
 		IsNotNull(result);
 		IsTrue(HasWrapper<FillGapsMessageAdapter>(result));
+
+		// FillGaps is added last, so it is the outermost wrapper of the whole pipeline.
+		// Here it wraps the Heartbeat wrapper (IsHeartbeatOn => true), i.e. it owns another
+		// MessageAdapterWrapper. Per the OwnInnerAdapter contract (IMessageAdapterWrapper:
+		// "if (OwnInnerAdapter) InnerAdapter.Dispose()"), the consumer disposes only the
+		// outermost wrapper and relies on the cascade. Therefore the FillGaps wrapper MUST
+		// own its inner wrapper, otherwise the inner pipeline (Heartbeat timers, channels, ...)
+		// leaks on Dispose. Assert the correct/contracted behavior.
+		var fillGapsWrapper = (FillGapsMessageAdapter)result;
+		IsTrue(fillGapsWrapper.InnerAdapter is MessageAdapterWrapper, "FillGaps should wrap another wrapper in this configuration");
+		IsTrue(fillGapsWrapper.OwnInnerAdapter, "FillGaps wrapper must own its inner wrapper so Dispose cascades through the pipeline");
 	}
 
 	[TestMethod]
@@ -540,6 +601,158 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 
 	#endregion
 
+	#region Previously Uncovered Branches
+
+	[TestMethod]
+	public async Task Build_WithUseChannels_IncludesChannelAdapter()
+	{
+		var builder = CreateBuilder();
+		// TestPipelineAdapter (MessageAdapter) reports UseInChannel/UseOutChannel == true by default,
+		// so adapter.UseChannels() is true; together with config.UseChannels the ChannelMessageAdapter
+		// must be added. Construction only wires channel event handlers, it does not start any loop.
+		var inner = new TestPipelineAdapter();
+		var config = CreateDefaultConfig() with
+		{
+			UseChannels = true,
+		};
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		IsNotNull(result);
+		IsTrue(HasWrapper<ChannelMessageAdapter>(result));
+	}
+
+	[TestMethod]
+	public async Task Build_WithoutUseChannels_NoChannelAdapter()
+	{
+		var builder = CreateBuilder();
+		var inner = new TestPipelineAdapter();
+		var config = CreateDefaultConfig() with
+		{
+			UseChannels = false,
+		};
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		IsNotNull(result);
+		IsFalse(HasWrapper<ChannelMessageAdapter>(result));
+	}
+
+	[TestMethod]
+	public async Task Build_WithGenerateOrderBookFromLevel1_IncludesLevel1DepthBuilderAdapter()
+	{
+		var builder = CreateBuilder();
+		// Branch requires Level1 supported AND MarketDepth NOT supported. The default test adapter
+		// supports both, so remove MarketDepth to satisfy the condition.
+		var inner = new TestPipelineAdapter();
+		inner.RemoveSupportedMarketDataType(DataType.MarketDepth);
+		var config = CreateDefaultConfig() with
+		{
+			GenerateOrderBookFromLevel1 = true,
+		};
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		IsNotNull(result);
+		IsTrue(HasWrapper<Level1DepthBuilderAdapter>(result));
+	}
+
+	[TestMethod]
+	public async Task Build_WithGenerateOrderBookFromLevel1_MarketDepthSupported_NoLevel1DepthBuilderAdapter()
+	{
+		var builder = CreateBuilder();
+		// MarketDepth is supported (default), so the builder must NOT add Level1DepthBuilderAdapter
+		// even though GenerateOrderBookFromLevel1 is requested.
+		var inner = new TestPipelineAdapter();
+		var config = CreateDefaultConfig() with
+		{
+			GenerateOrderBookFromLevel1 = true,
+		};
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		IsNotNull(result);
+		IsFalse(HasWrapper<Level1DepthBuilderAdapter>(result));
+	}
+
+	[TestMethod]
+	public async Task Build_WithLevel1Extend_IncludesLevel1ExtendBuilderAdapter()
+	{
+		var builder = CreateBuilder();
+		// Branch requires Level1 NOT supported. The default test adapter supports Level1, so remove it.
+		var inner = new TestPipelineAdapter();
+		inner.RemoveSupportedMarketDataType(DataType.Level1);
+		var config = CreateDefaultConfig() with
+		{
+			Level1Extend = true,
+		};
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		IsNotNull(result);
+		IsTrue(HasWrapper<Level1ExtendBuilderAdapter>(result));
+	}
+
+	[TestMethod]
+	public async Task Build_WithLevel1Extend_Level1Supported_NoLevel1ExtendBuilderAdapter()
+	{
+		var builder = CreateBuilder();
+		// Level1 is supported (default), so Level1ExtendBuilderAdapter must NOT be added.
+		var inner = new TestPipelineAdapter();
+		var config = CreateDefaultConfig() with
+		{
+			Level1Extend = true,
+		};
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		IsNotNull(result);
+		IsFalse(HasWrapper<Level1ExtendBuilderAdapter>(result));
+	}
+
+	[TestMethod]
+	public async Task Build_WithSupportStorage_IncludesStorageAdapter()
+	{
+		var builder = CreateBuilder();
+		// StorageMessageAdapter is added only when SupportStorage is set AND the processor has a
+		// non-null StorageRegistry. Provide a real in-memory registry to satisfy both.
+		var inner = new TestPipelineAdapter();
+		var registry = new StorageRegistry();
+		var storageProcessor = new StorageProcessor(new StorageCoreSettings { StorageRegistry = registry }, new CandleBuilderProvider(new InMemoryExchangeInfoProvider()));
+		var config = CreateDefaultConfig() with
+		{
+			SupportStorage = true,
+			StorageProcessor = storageProcessor,
+		};
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		IsNotNull(result);
+		IsTrue(HasWrapper<StorageMessageAdapter>(result));
+	}
+
+	[TestMethod]
+	public async Task Build_WithSupportStorage_NoStorageRegistry_NoStorageAdapter()
+	{
+		var builder = CreateBuilder();
+		// SupportStorage requested but the processor reports no StorageRegistry: the adapter must
+		// NOT be added (guards against a NullReferenceException-prone configuration).
+		var inner = new TestPipelineAdapter();
+		var storageProcessor = new StorageProcessor(new StorageCoreSettings(), new CandleBuilderProvider(new InMemoryExchangeInfoProvider()));
+		var config = CreateDefaultConfig() with
+		{
+			SupportStorage = true,
+			StorageProcessor = storageProcessor,
+		};
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		IsNotNull(result);
+		IsFalse(HasWrapper<StorageMessageAdapter>(result));
+	}
+
+	#endregion
+
 	#region OwnInnerAdapter Flag
 
 	[TestMethod]
@@ -547,10 +760,16 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 	{
 		var builder = CreateBuilder();
 		var inner = new TestPipelineAdapter();
+		var fillGaps = new Mock<IFillGapsBehaviour>();
 		var config = CreateDefaultConfig() with
 		{
 			SupportOffline = true,
 			LatencyManager = new LatencyManager(new LatencyManagerState()),
+			// FillGaps is the only builder branch that does NOT call ApplyOwnInner, so it
+			// exercises the outermost wrapper whose OwnInnerAdapter flag must be set. Including
+			// it here ensures the contract is verified for every branch, not just the ones that
+			// already call ApplyOwnInner.
+			FillGapsBehaviour = fillGaps.Object,
 		};
 
 		var result = await builder.BuildAsync(inner, config, CancellationToken);
@@ -596,11 +815,49 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 
 		var result = await builder.BuildAsync(inner, config, CancellationToken);
 
-		// First wrapper from outside should be FillGaps (if enabled), then other wrappers,
-		// and Heartbeat should be closest to the inner adapter (first added)
+		// Heartbeat is added first by the builder, so it must be closest to the inner adapter
+		// (last in the outer->inner list returned by GetWrapperTypes). No FillGaps in this config.
 		var wrapperTypes = GetWrapperTypes(result).ToList();
 
 		// The HeartbeatMessageAdapter should be at the end of the list (closest to inner adapter)
+		AreEqual(typeof(HeartbeatMessageAdapter), wrapperTypes.Last());
+	}
+
+	[TestMethod]
+	public async Task Build_RelativeWrapperOrder_IsStable()
+	{
+		var builder = CreateBuilder();
+		var inner = new TestPipelineAdapter { SupportSubscriptions = true, SupportExecutionsPnL = false };
+		var config = CreateDefaultConfig() with
+		{
+			PnLManager = new PnLManager(),
+			CommissionManager = new CommissionManager(),
+		};
+
+		var result = await builder.BuildAsync(inner, config, CancellationToken);
+
+		// GetWrapperTypes returns the chain from the outermost wrapper to the innermost.
+		// Wrappers are added inner-to-outer in builder source order, so a wrapper added later
+		// sits more to the outside (smaller index in this list).
+		var wrapperTypes = GetWrapperTypes(result).ToList();
+
+		int IndexOf<T>()
+		{
+			var idx = wrapperTypes.IndexOf(typeof(T));
+			IsTrue(idx >= 0, $"{typeof(T).Name} expected in the pipeline");
+			return idx;
+		}
+
+		// SubscriptionMessageAdapter is added after SubscriptionOnlineMessageAdapter, so it must be
+		// the more outer (closer to the consumer) of the two subscription wrappers.
+		IsTrue(IndexOf<SubscriptionMessageAdapter>() < IndexOf<SubscriptionOnlineMessageAdapter>(),
+			"SubscriptionMessageAdapter must wrap (be outside) SubscriptionOnlineMessageAdapter");
+
+		// CommissionMessageAdapter is added after PnLMessageAdapter, so Commission is more outer than PnL.
+		IsTrue(IndexOf<CommissionMessageAdapter>() < IndexOf<PnLMessageAdapter>(),
+			"CommissionMessageAdapter must wrap (be outside) PnLMessageAdapter");
+
+		// Heartbeat is added first, so it stays innermost (last in the outer->inner list).
 		AreEqual(typeof(HeartbeatMessageAdapter), wrapperTypes.Last());
 	}
 

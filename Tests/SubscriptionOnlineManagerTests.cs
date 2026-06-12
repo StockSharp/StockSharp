@@ -567,7 +567,11 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(0);
 		toOut.Length.AssertEqual(1);
 		toOut[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
-		((SubscriptionResponseMessage)toOut[0]).Error.AssertNotNull();
+		var response = (SubscriptionResponseMessage)toOut[0];
+		response.Error.AssertNotNull();
+		// The error must answer the unsubscribe request itself (TransactionId = 100),
+		// not the non-existent subscription id (999) — otherwise the Connector cannot match it.
+		response.OriginalTransactionId.AssertEqual(100);
 	}
 
 	#endregion
@@ -1157,6 +1161,10 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 
 		var (histForward, _) = await manager.ProcessOutMessageAsync(histData, token);
 		histForward.AssertNotNull("Historical data for second subscription should be forwarded");
+		// History-phase data of the hist+live child (origId = 200) is this subscriber's
+		// private backfill and must carry its own id, not the already-online subscriber's.
+		var histIds = ((ISubscriptionIdMessage)histForward).GetSubscriptionIds();
+		histIds.Count(id => id == 200).AssertEqual(1, "Historical data must be routed to the hist+live subscriber (200), not the online subscriber (100)");
 
 		// Inner adapter finishes history
 		var (finishForward, finishExtra) = await manager.ProcessOutMessageAsync(
@@ -1412,6 +1420,141 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		IsTrue(allMessages.Count > 0,
 			"SubscriptionFinished for hist+live subscription should not be silently swallowed — " +
 			"subscriber needs notification to transition to live");
+	}
+
+	#endregion
+
+	#region Subscription Error Routing Tests
+
+	/// <summary>
+	/// When a hist+live child subscription (From set, To null) joined onto an already-online key
+	/// receives a SubscriptionResponse carrying an Error for its own id, that error must be
+	/// forwarded to the hist+live subscriber itself — it explicitly requested the data, so it
+	/// has to learn that its history failed.
+	///
+	/// In the error branch (SubscriptionOnlineManager.cs ~121-133) the child's id is in
+	/// info.HistLive, so ChangeState returns false and the method exits via the early
+	/// "return (null, [])" — discarding any collected notification. As a result the hist+live
+	/// subscriber (200) never receives a SubscriptionResponse with the error. This test asserts
+	/// the correct behavior and therefore goes RED on the current engine.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task HistLiveChildError_ShouldBeForwardedToHistLiveSubscriber()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// First subscription — pure live, goes online.
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// Second subscription — hist+live (From set, To null) joined onto the same key.
+		// It lands in HistLive and Subscribers, registered by its own id (200).
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+		}, token);
+
+		// Inner adapter reports an error for the hist+live child's history request.
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 200,
+			Error = new InvalidOperationException("history boom"),
+		}, token);
+
+		// The error must reach the hist+live subscriber itself (id 200), not be swallowed.
+		var allMessages = new List<Message>();
+		if (forward != null) allMessages.Add(forward);
+		allMessages.AddRange(extraOut);
+
+		allMessages.OfType<SubscriptionResponseMessage>()
+			.Count(m => m.OriginalTransactionId == 200 && m.Error != null)
+			.AssertEqual(1, "Hist+live subscriber (200) must be notified of its own subscription error");
+	}
+
+	/// <summary>
+	/// When a MAIN subscription that has joined subscribers fails, the joined subscribers' ids
+	/// must no longer be routable: the whole key dies and each joined subscriber is notified of
+	/// the error, so a later data message must not be stamped with a stale joined id.
+	///
+	/// In the error branch (SubscriptionOnlineManager.cs ~121) only the main's originTransId is
+	/// removed from _subscriptionsById; the joined subscribers' ids stay there pointing at the
+	/// info that was already removed by key. A subsequent data message carrying the joined id
+	/// (200) still resolves via _subscriptionsById and gets forwarded with that id. This test
+	/// asserts the correct behavior (no forward / no stale id) and therefore goes RED on the
+	/// current engine.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task MainSubscriptionError_JoinedSubscriberIds_NoLongerRoutable()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		// Main subscription — pure live, goes online.
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// Second subscription (same key, pure live) joins the main one and is registered by id 200.
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		// The MAIN subscription (100) fails. The key dies; the joined subscriber (200) is notified.
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 100,
+			Error = new InvalidOperationException("main boom"),
+		}, token);
+
+		// After the failure, a data message carrying the joined subscriber's stale id (200)
+		// must NOT be forwarded — the subscription is gone, so its id must not route anything.
+		var data = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 10m,
+			OriginalTransactionId = 200,
+		};
+
+		var (forward, _) = await manager.ProcessOutMessageAsync(data, token);
+
+		// Engine leaks _subscriptionsById[200] -> the message is still forwarded and stamped
+		// with the stale id. Correct behavior: nothing is routed for the dead joined id.
+		forward.AssertNull("Data for a stale joined id of a failed main subscription must not be routed");
 	}
 
 	#endregion

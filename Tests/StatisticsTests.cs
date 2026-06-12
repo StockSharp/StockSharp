@@ -195,8 +195,10 @@ public class StatisticsTests : BaseTestClass
 		// Act - update to new commission
 		parameter.Add(marketTime, 1200m, 30m);
 
-		// Assert - should track latest commission
-		parameter.Value.AssertEqual(55m);
+		// Assert - should track latest cumulative commission, not sum the inputs.
+		// Producers pass the strategy's running-total commission on every PnL change,
+		// so the parameter must keep the latest value (30m), not accumulate (25m + 30m).
+		parameter.Value.AssertEqual(30m);
 	}
 
 	[TestMethod]

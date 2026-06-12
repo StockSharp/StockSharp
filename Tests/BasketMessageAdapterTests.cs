@@ -408,6 +408,85 @@ public class BasketMessageAdapterTests : BasketTestBase
 
 	#endregion
 
+	#region Pinned adapter data forwarding
+
+	/// <summary>
+	/// Adapter-level analog of BasketRoutingManagerTests.ProcessOutMessage_DataMessage_PinnedAdapterSubscription_StillForwarded.
+	///
+	/// A subscription pinned to a specific adapter (Message.Adapter set) is sent in through
+	/// BasketMessageAdapter. For non-MarketData subscriptions (here SecurityLookupMessage) this hits
+	/// the ProcessOtherMessage short-circuit (BasketMessageAdapter.cs ~687-691): the message is handed
+	/// directly to message.Adapter.SendInMessageAsync and the routing manager is bypassed entirely, so
+	/// NO parent-child mapping is ever created for this known, active subscription.
+	///
+	/// When out-data for that subscription arrives (a SecurityMessage carrying the subscription's own
+	/// transaction id), OnInnerAdapterNewOutMessage routes it through the Security branch
+	/// (BasketMessageAdapter.cs ~852-861), which calls ApplyParentLookupId. That method consults only
+	/// the (empty) parent-child map, returns false, and the Security branch does an early `return`
+	/// (~856-857) -> the data is silently dropped instead of being forwarded out.
+	///
+	/// Canonical contract: data for a known pinned subscription MUST reach the outer subscriber.
+	/// This test asserts the message IS forwarded, so it is RED on the current engine (drop) and would
+	/// go GREEN once the pinned-subscription data path stops being dropped.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task PinnedAdapterSubscription_OutData_IsForwarded_NotDropped()
+	{
+		var connectionState = new AdapterConnectionState();
+		var connectionManager = new AdapterConnectionManager(connectionState);
+		var subscriptionRouting = new SubscriptionRoutingState();
+		var parentChildMap = new ParentChildMap();
+		var pendingState = new PendingMessageState();
+		var orderRouting = new OrderRoutingState();
+
+		var (basket, adapter1, _) = CreateBasket(
+			connectionState: connectionState,
+			connectionManager: connectionManager,
+			subscriptionRouting: subscriptionRouting,
+			parentChildMap: parentChildMap,
+			pendingState: pendingState,
+			orderRouting: orderRouting,
+			twoAdapters: false);
+
+		// --- Connect so adapter1 is registered in the basket wrappers ---
+		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
+		connectionState.ConnectedCount.AssertEqual(1, "Adapter1 should be connected");
+
+		ClearOut();
+
+		// --- Pin a subscription to adapter1 (Message.Adapter set) ---
+		// This exercises the ProcessOtherMessage short-circuit: the lookup is delivered straight to
+		// adapter1 without going through the routing manager.
+		var subTransId = basket.TransactionIdGenerator.GetNextId();
+		await SendToBasket(basket, new SecurityLookupMessage
+		{
+			TransactionId = subTransId,
+			Adapter = adapter1,
+		}, TestContext.CancellationToken);
+
+		// Sanity: the pinned lookup really reached adapter1 (the pinned route worked).
+		adapter1.GetMessages<SecurityLookupMessage>().Count()
+			.AssertEqual(1, "Pinned SecurityLookup should be delivered to the pinned adapter");
+
+		ClearOut();
+
+		// --- Out-data for the pinned subscription arrives from adapter1 ---
+		// It carries the subscription's own transaction id and belongs to a known, active subscription.
+		var dataMsg = new SecurityMessage { SecurityId = SecId1 };
+		dataMsg.SetSubscriptionIds([subTransId]);
+
+		await adapter1.SendOutMessageAsync(dataMsg, TestContext.CancellationToken);
+
+		// --- Canonical contract: the data must be forwarded out, not dropped ---
+		var outSecs = GetOut<SecurityMessage>();
+		outSecs.Length.AssertEqual(1, "Data for a known pinned subscription must be forwarded, not dropped");
+		((ISubscriptionIdMessage)outSecs[0]).GetSubscriptionIds()
+			.Contains(subTransId).AssertTrue("The pinned subscription id must be preserved on the forwarded data");
+	}
+
+	#endregion
+
 	#region Disconnect
 
 	[TestMethod]

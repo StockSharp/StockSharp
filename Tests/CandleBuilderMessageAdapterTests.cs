@@ -1300,9 +1300,22 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 			await inner.SimulateCandle(1, candle, CancellationToken);
 		}
 
-		// Verify candles received (count limit is advisory, may receive up to requested)
+		// Count limit must be honored exactly: requested 3, fed 5, must receive exactly 3.
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
-		(candles.Count >= 1 && candles.Count <= 5).AssertTrue($"Should receive 1-5 candles with Count limit, got {candles.Count}");
+		AreEqual(requestedCount, candles.Count, $"Should receive exactly {requestedCount} candles after Count limit is reached, got {candles.Count}");
+
+		// After the limit is reached the manager must emit SubscriptionFinishedMessage.
+		var finished = outMessages.OfType<SubscriptionFinishedMessage>().FirstOrDefault();
+		IsNotNull(finished, "Should receive SubscriptionFinishedMessage once Count is exhausted");
+		AreEqual(1, finished.OriginalTransactionId, "Finished message should reference the original subscription");
+
+		// No candle data may leak after the subscription was finished (order-sensitive check).
+		var finishedIndex = outMessages.IndexOf(finished);
+		var leakedAfterFinished = outMessages
+			.Skip(finishedIndex + 1)
+			.OfType<TimeFrameCandleMessage>()
+			.ToList();
+		AreEqual(0, leakedAfterFinished.Count, $"No candle must be delivered after SubscriptionFinishedMessage, got {leakedAfterFinished.Count}");
 
 		// Verify first candle has correct OHLCV
 		var firstCandle = candles[0];
@@ -1312,6 +1325,84 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		AreEqual(95m, firstCandle.LowPrice, "First candle Low should be 95");
 		AreEqual(102m, firstCandle.ClosePrice, "First candle Close should be 102");
 		AreEqual(1000m, firstCandle.TotalVolume, "First candle Volume should be 1000");
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task Subscribe_WithCount_BuildFromTicks_StopsAfterCountReached()
+	{
+		// Same Count/To leak as Subscribe_WithCount_StopsAfterCountReached but for the
+		// build-from-ticks path handled by CandleBuilderManager.ProcessValueAsync.
+		// When Count is exhausted the series is removed and SubscriptionFinishedMessage
+		// is emitted, but the inner tick subscription is NOT unsubscribed - so further
+		// ticks (with the now-finished subscription id) leak out of the adapter AFTER
+		// the SubscriptionFinishedMessage. The honest oracle below asserts the canonical
+		// behavior (no subscription data after Finished) and goes RED on that leak.
+
+		var idGen = new IncrementalIdGenerator();
+		var inner = new MockCandleAdapter(idGen);
+		// No supported timeframes - force build from ticks.
+		var provider = CreateCandleBuilderProvider();
+		var adapter = new CandleBuilderMessageAdapter(inner, provider);
+		adapter.SendFinishedCandlesImmediatelly = true;
+
+		var outMessages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
+
+		var secId = CreateSecurityId();
+		const int requestedCount = 3;
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = 1,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			IsSubscribe = true,
+			SecurityId = secId,
+			BuildMode = MarketDataBuildModes.Build,
+			BuildFrom = DataType.Ticks,
+			Count = requestedCount,
+		}, CancellationToken);
+
+		// Confirm the build path created a tick subscription on the inner adapter.
+		var tickSub = inner.SentMessages.OfType<MarketDataMessage>().FirstOrDefault(m => m.DataType2 == DataType.Ticks);
+		IsNotNull(tickSub, "Build-from-ticks should create a tick subscription on the inner adapter");
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		// Feed one tick per minute. A candle is finished when a tick of the next minute
+		// arrives. With 6 ticks (minutes 0..5) more than Count=3 candles would finish:
+		// min0..min2 close as Finished (3 candles), then Count is exhausted; the min4 tick
+		// is dropped together with a SubscriptionFinishedMessage, and the min5 tick must
+		// NOT be delivered to the client.
+		for (var i = 0; i < 6; i++)
+			await inner.SimulateTick(1, CreateTick(secId, baseTime.AddMinutes(i), 100 + i, 10), CancellationToken);
+
+		// Count limit must be honored exactly: only finished candles count toward Count.
+		var finishedCandles = outMessages
+			.OfType<TimeFrameCandleMessage>()
+			.Where(c => c.State == CandleStates.Finished)
+			.ToList();
+		AreEqual(requestedCount, finishedCandles.Count, $"Should receive exactly {requestedCount} finished candles built from ticks, got {finishedCandles.Count}");
+
+		// After the limit is reached the manager must emit SubscriptionFinishedMessage.
+		var finished = outMessages.OfType<SubscriptionFinishedMessage>().FirstOrDefault();
+		IsNotNull(finished, "Should receive SubscriptionFinishedMessage once Count is exhausted");
+		AreEqual(1, finished.OriginalTransactionId, "Finished message should reference the original subscription");
+
+		// No subscription data of any kind (built candle or raw tick) may leak after the
+		// subscription was finished (order-sensitive). The current engine leaks the raw
+		// min5 tick here because the inner tick subscription is never unsubscribed.
+		var finishedIndex = outMessages.IndexOf(finished);
+		var leakedAfterFinished = outMessages
+			.Skip(finishedIndex + 1)
+			.Where(m => m is TimeFrameCandleMessage || m is ExecutionMessage)
+			.ToList();
+		AreEqual(0, leakedAfterFinished.Count, $"No candle or tick data must be delivered after SubscriptionFinishedMessage, got {leakedAfterFinished.Count}");
+
+		// Sanity check the OHLCV of the first finished built candle.
+		var firstCandle = finishedCandles[0];
+		AreEqual(secId, firstCandle.SecurityId, "First built candle SecurityId should match");
+		AreEqual(100m, firstCandle.OpenPrice, "First built candle Open should be 100 (first tick price)");
 	}
 
 	#endregion

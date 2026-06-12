@@ -104,12 +104,13 @@ public class AlertProcessingServiceTests
 	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task Process_TriggersAlert_WhenConditionMet()
 	{
-		// Greater means Compare(rule.Value, actual) == 1, i.e. rule.Value > actual
-		var schema = CreatePriceSchema(ComparisonOperator.Greater, 200m);
+		// Domain semantics: the field (actual value) is the left operand, so
+		// "Greater 100" must trigger when actual > 100.
+		var schema = CreatePriceSchema(ComparisonOperator.Greater, 100m);
 		schema.AlertType = AlertNotifications.Log;
 		_service.Register(schema);
 
-		// actual=150 < rule.Value=200 → Greater triggers
+		// actual=150 > rule.Value=100 → "price Greater 100" is met → must trigger
 		var msg = CreateLevel1Message("AAPL@NASDAQ", Level1Fields.LastTradePrice, 150m);
 		((IAlertProcessingService)_service).Process(msg);
 
@@ -122,8 +123,9 @@ public class AlertProcessingServiceTests
 	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task Process_DoesNotTrigger_WhenConditionNotMet()
 	{
-		// Greater means rule.Value > actual. Here rule.Value=100 < actual=150, so no trigger
-		var schema = CreatePriceSchema(ComparisonOperator.Greater, 100m);
+		// Domain semantics: "Greater 200" must trigger only when actual > 200.
+		// Here actual=150 is not above 200, so the condition is not met.
+		var schema = CreatePriceSchema(ComparisonOperator.Greater, 200m);
 		schema.AlertType = AlertNotifications.Log;
 		_service.Register(schema);
 
@@ -177,18 +179,43 @@ public class AlertProcessingServiceTests
 	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task Process_LessOperator_Works()
 	{
-		// Less means Compare(rule.Value, actual) == -1, i.e. rule.Value < actual
-		var schema = CreatePriceSchema(ComparisonOperator.Less, 100m);
+		// Domain semantics: the field (actual value) is the left operand, so
+		// "Less 200" must trigger when actual < 200.
+		var schema = CreatePriceSchema(ComparisonOperator.Less, 200m);
 		schema.AlertType = AlertNotifications.Log;
 		_service.Register(schema);
 
-		// actual=150 > rule.Value=100 → Less triggers
+		// actual=150 < rule.Value=200 → "price Less 200" is met → must trigger
 		var msg = CreateLevel1Message("AAPL@NASDAQ", Level1Fields.LastTradePrice, 150m);
 		((IAlertProcessingService)_service).Process(msg);
 
 		await WaitForNotification();
 
 		_notificationService.NotifyCount.AssertEqual(1);
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task Process_GreaterAndGreaterOrEqual_ConsistentAtThreshold()
+	{
+		// For a value strictly above the threshold both Greater and
+		// GreaterOrEqual must trigger: x > t implies x >= t, so their trigger
+		// sets cannot be disjoint. With actual=150 and threshold=100 both rules
+		// are satisfied, so two notifications are expected.
+		var greater = CreatePriceSchema(ComparisonOperator.Greater, 100m);
+		greater.AlertType = AlertNotifications.Log;
+		_service.Register(greater);
+
+		var greaterOrEqual = CreatePriceSchema(ComparisonOperator.GreaterOrEqual, 100m);
+		greaterOrEqual.AlertType = AlertNotifications.Log;
+		_service.Register(greaterOrEqual);
+
+		var msg = CreateLevel1Message("AAPL@NASDAQ", Level1Fields.LastTradePrice, 150m);
+		((IAlertProcessingService)_service).Process(msg);
+
+		await WaitForNotification(2);
+
+		_notificationService.NotifyCount.AssertEqual(2, "Greater and GreaterOrEqual must both trigger above the threshold");
 	}
 
 	[TestMethod]
@@ -267,10 +294,10 @@ public class AlertProcessingServiceTests
 		return msg;
 	}
 
-	private async Task WaitForNotification(int maxWaitMs = 3000)
+	private async Task WaitForNotification(int targetCount = 1, int maxWaitMs = 3000)
 	{
 		var waited = 0;
-		while (_notificationService.NotifyCount == 0 && waited < maxWaitMs)
+		while (_notificationService.NotifyCount < targetCount && waited < maxWaitMs)
 		{
 			await Task.Delay(50);
 			waited += 50;

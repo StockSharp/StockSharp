@@ -253,7 +253,10 @@ public class OrderLogMessageAdapterTests : BaseTestClass
 		tick.BuildFrom.AssertEqual(DataType.OrderLog);
 		tick.TradePrice.AssertEqual(100m);
 		tick.TradeVolume.AssertEqual(7m);
-		tick.GetSubscriptionIds().Length.AssertEqual(0);
+		// The tick built from order log must carry the originating subscription id,
+		// mirroring the depth branch (depth.SetSubscriptionIds), otherwise it is
+		// never routed to the subscriber downstream.
+		tick.GetSubscriptionIds().SequenceEqual([2L]).AssertTrue();
 	}
 
 	[TestMethod]

@@ -291,7 +291,8 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		var execMsg = (ExecutionMessage)output[0];
 		execMsg.OrderState.AssertEqual(OrderStates.Done);
 
-		execMsg.OriginalTransactionId.AssertEqual(replaceMsg.TransactionId);
+		// old order is Done -> addressed to the original registration id
+		execMsg.OriginalTransactionId.AssertEqual(orderMsg.TransactionId);
 	}
 
 	[TestMethod]

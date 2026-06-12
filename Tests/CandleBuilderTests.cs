@@ -450,17 +450,33 @@ public class CandleBuilderTests : BaseTestClass
 		foreach (var c in builder.Process(subscription, transform2))
 			candles.Add(c);
 
-		var finishedCandles = candles.Where(c => c.State == CandleStates.Finished).ToList();
-		(finishedCandles.Count >= 3).AssertTrue("Should generate multiple finished bricks");
+		// Deduplicate by reference identity: the first brick is yielded as Active then mutated to
+		// Finished, so it appears twice. Large move 100 -> 145 = floor(45/10) = 4 finished bricks
+		// (100->110, 110->120, 120->130, 130->140) plus the still-active partial 140->145.
+		var finishedCandles = candles
+			.Where(c => c.State == CandleStates.Finished)
+			.Distinct()
+			.Cast<RenkoCandleMessage>()
+			.OrderBy(c => c.OpenPrice)
+			.ToList();
 
-		// Verify OHLCV on finished bricks - each brick should be valid
-		foreach (var brick in finishedCandles)
+		finishedCandles.Count.AssertEqual(4, "Should generate exactly 4 finished bricks from 100->145 with box size 10");
+
+		// Each finished brick spans exactly one box with exact, contiguous prices.
+		var expectedOpens = new[] { 100m, 110m, 120m, 130m };
+		for (var i = 0; i < finishedCandles.Count; i++)
 		{
+			var brick = finishedCandles[i];
+
 			// Renko: High >= max(Open, Close), Low <= min(Open, Close)
 			(brick.HighPrice >= brick.OpenPrice).AssertTrue("High should be >= Open");
 			(brick.HighPrice >= brick.ClosePrice).AssertTrue("High should be >= Close");
 			(brick.LowPrice <= brick.OpenPrice).AssertTrue("Low should be <= Open");
 			(brick.LowPrice <= brick.ClosePrice).AssertTrue("Low should be <= Close");
+
+			// Exact brick prices: Open at the box boundary, Close one box higher.
+			brick.OpenPrice.AssertEqual(expectedOpens[i], "Brick Open should be at the box boundary");
+			brick.ClosePrice.AssertEqual(expectedOpens[i] + 10m, "Upward brick Close should be one box above Open");
 		}
 	}
 
@@ -536,15 +552,31 @@ public class CandleBuilderTests : BaseTestClass
 		foreach (var c in builder.Process(subscription, new MockTransform { Price = 55m, Volume = 20, Time = baseTime.AddSeconds(1) }))
 			candles.Add(c);
 
-		var finishedCandles = candles.Where(c => c.State == CandleStates.Finished).ToList();
-		(finishedCandles.Count >= 3).AssertTrue("Downward movement should create bricks");
+		// Deduplicate by reference identity (first brick is yielded as Active then mutated to
+		// Finished). Large downward move 100 -> 55 = floor(45/10) = 4 finished bricks
+		// (100->90, 90->80, 80->70, 70->60) plus the still-active partial 60->55.
+		var finishedCandles = candles
+			.Where(c => c.State == CandleStates.Finished)
+			.Distinct()
+			.Cast<RenkoCandleMessage>()
+			.OrderByDescending(c => c.OpenPrice)
+			.ToList();
 
-		// Verify OHLCV on finished bricks - downward bricks should have Open > Close
-		foreach (var brick in finishedCandles)
+		finishedCandles.Count.AssertEqual(4, "Downward movement 100->55 should create exactly 4 bricks");
+
+		// Each downward brick must span exactly one box down: Open - Close == box size.
+		var expectedOpens = new[] { 100m, 90m, 80m, 70m };
+		for (var i = 0; i < finishedCandles.Count; i++)
 		{
-			(brick.OpenPrice >= brick.ClosePrice).AssertTrue("Downward brick: Open should be >= Close");
+			var brick = finishedCandles[i];
+
+			(brick.OpenPrice - brick.ClosePrice).AssertEqual(10m, "Downward brick: Open - Close should equal box size");
 			(brick.HighPrice >= brick.OpenPrice).AssertTrue("High should be >= Open");
 			(brick.LowPrice <= brick.ClosePrice).AssertTrue("Low should be <= Close");
+
+			// Exact contiguous brick prices.
+			brick.OpenPrice.AssertEqual(expectedOpens[i], "Brick Open should be at the box boundary");
+			brick.ClosePrice.AssertEqual(expectedOpens[i] - 10m, "Downward brick Close should be one box below Open");
 		}
 	}
 
@@ -699,11 +731,26 @@ public class CandleBuilderTests : BaseTestClass
 		var secondCandle = subscription.CurrentCandle as HeikinAshiCandleMessage;
 		IsNotNull(secondCandle);
 
-		// HA Open = (prevOpen + prevClose) / 2
+		// HA Open = (prevOpen + prevClose) / 2 = (100 + 105) / 2 = 102.5
 		var expectedOpen = (firstOpen + firstClose) / 2;
 		AreEqual(expectedOpen, secondCandle.OpenPrice, "HA Open should be average of prev Open and Close");
 		AreEqual(15m, secondCandle.TotalVolume, "Second candle TotalVolume should be 15");
 		AreEqual(1, secondCandle.TotalTicks, "Second candle TotalTicks should be 1");
+
+		// The smoothed HA Open must stay inside the candle's range. The single raw tick is 115,
+		// so HA Close and the raw High/Low are all 115. The canonical Heikin-Ashi contract is
+		// HA-High = max(rawHigh, HA-Open, HA-Close) and HA-Low = min(rawLow, HA-Open, HA-Close),
+		// which pulls Low down to 102.5 so that Low <= Open <= High holds. The engine sets HA-Open
+		// without correcting High/Low, leaving High = Low = 115 and Open = 102.5 outside [Low, High],
+		// so the assertions below fail today.
+		(secondCandle.LowPrice <= secondCandle.OpenPrice).AssertTrue("HA Low should be <= HA Open");
+		(secondCandle.OpenPrice <= secondCandle.HighPrice).AssertTrue("HA Open should be <= HA High");
+
+		var haClose = secondCandle.ClosePrice;
+		var expectedHigh = 115m.Max(expectedOpen).Max(haClose);
+		var expectedLow = 115m.Min(expectedOpen).Min(haClose);
+		secondCandle.HighPrice.AssertEqual(expectedHigh, "HA High should be max(rawHigh, HA Open, HA Close)");
+		secondCandle.LowPrice.AssertEqual(expectedLow, "HA Low should be min(rawLow, HA Open, HA Close)");
 	}
 
 	/// <summary>
@@ -740,10 +787,10 @@ public class CandleBuilderTests : BaseTestClass
 		var candle = subscription.CurrentCandle as HeikinAshiCandleMessage;
 		IsNotNull(candle);
 
-		// HA Close = (O + H + L + C) / 4
-		// Note: after each update, close is recalculated, so we verify it's different from last price
-		// The exact calculation depends on intermediate values
-		(candle.ClosePrice != prices.Last()).AssertTrue("HA Close should be smoothed, not raw last price");
+		// HA Close = (O + H + L + C) / 4. This is the first candle, so HA Open equals the raw
+		// Open (100) and the running OHLC is O=100, H=110, L=95, C=105, giving exactly
+		// (100 + 110 + 95 + 105) / 4 = 102.5 - a smoothed value, not the raw last price 105.
+		candle.ClosePrice.AssertEqual(102.5m, "HA Close should be (O + H + L + C) / 4 = 102.5");
 		AreEqual(70m, candle.TotalVolume, "TotalVolume should be 70");
 		AreEqual(4, candle.TotalTicks, "TotalTicks should be 4");
 		// HeikinAshi High = max(High, Open, Close), Low = min(Low, Open, Close)
@@ -1148,22 +1195,46 @@ public class CandleBuilderTests : BaseTestClass
 		foreach (var c in builder.Process(subscription, new MockTransform { Price = 125m, Volume = 60m, Time = baseTime.AddSeconds(1) }))
 			candles.Add(c);
 
-		var finishedBricks = candles.Where(c => c.State == CandleStates.Finished).ToList();
-		finishedBricks.Count.AssertEqual(3, "Should have 3 finished bricks from 100->125 with box size 10");
+		var boxSize = 10m;
 
-		var brick = finishedBricks.First() as RenkoCandleMessage;
-		IsNotNull(brick);
+		// The same candle object is yielded first as Active and later mutated to Finished,
+		// so it appears multiple times in the list by reference. Deduplicate by reference
+		// identity (CandleMessage does not override Equals, so Distinct uses reference equality)
+		// before counting. The move 100->125 with box size 10 is floor(25/10) = 2 completed
+		// bricks (100->110, 110->120) plus the still-active partial brick 120->125.
+		var finishedBricks = candles
+			.Where(c => c.State == CandleStates.Finished)
+			.Distinct()
+			.Cast<RenkoCandleMessage>()
+			.ToList();
 
-		// Verify Renko brick has valid OHLCV structure
-		// High should be >= max(Open, Close), Low should be <= min(Open, Close)
-		(brick.HighPrice >= brick.OpenPrice).AssertTrue("High should be >= Open");
-		(brick.HighPrice >= brick.ClosePrice).AssertTrue("High should be >= Close");
-		(brick.LowPrice <= brick.OpenPrice).AssertTrue("Low should be <= Open");
-		(brick.LowPrice <= brick.ClosePrice).AssertTrue("Low should be <= Close");
+		finishedBricks.Count.AssertEqual(2, "Should have 2 finished bricks from 100->125 with box size 10");
 
-		// Volume should be positive
-		(brick.TotalVolume >= 0).AssertTrue("TotalVolume should be >= 0");
-		(brick.TotalTicks >= 1).AssertTrue("TotalTicks should be >= 1");
+		// Canonical Renko contract: every finished brick spans exactly one box, carries at
+		// least one tick and a positive volume, and is contiguous with the next brick
+		// (next.Open == prev.Close). Intermediate bricks produced by the engine are degenerate
+		// (O=H=L=C=openPrice, TotalTicks=null, TotalVolume=0), so these assertions fail today.
+		for (var i = 0; i < finishedBricks.Count; i++)
+		{
+			var brick = finishedBricks[i];
+
+			// High should be >= max(Open, Close), Low should be <= min(Open, Close).
+			(brick.HighPrice >= brick.OpenPrice).AssertTrue("High should be >= Open");
+			(brick.HighPrice >= brick.ClosePrice).AssertTrue("High should be >= Close");
+			(brick.LowPrice <= brick.OpenPrice).AssertTrue("Low should be <= Open");
+			(brick.LowPrice <= brick.ClosePrice).AssertTrue("Low should be <= Close");
+
+			// Each finished brick must span exactly one box.
+			((brick.ClosePrice - brick.OpenPrice).Abs()).AssertEqual(boxSize, "Finished brick height should equal box size");
+
+			// Every finished brick must carry the tick(s) and volume that drove the move.
+			(brick.TotalTicks >= 1).AssertTrue("Each finished brick should have at least 1 tick");
+			(brick.TotalVolume > 0).AssertTrue("Each finished brick should have positive volume");
+
+			// Bricks must be contiguous: the next brick opens where the previous one closed.
+			if (i > 0)
+				brick.OpenPrice.AssertEqual(finishedBricks[i - 1].ClosePrice, "Brick Open should equal previous brick Close");
+		}
 	}
 
 	/// <summary>
@@ -1467,6 +1538,59 @@ public class CandleBuilderTests : BaseTestClass
 
 		var level51 = levels.First(l => l.Price == 51m);
 		AreEqual(150m, level51.SellVolume, "Level 51 SellVolume should be 150");
+	}
+
+	/// <summary>
+	/// VolumeProfile + Renko: a tick's volume must be counted exactly once across the
+	/// produced volume profiles, even when a single tick triggers a multi-box move.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void RenkoCandleBuilder_VolumeProfile_MultiBoxMove_CountsVolumeOnce()
+	{
+		var provider = new MockExchangeInfoProvider();
+		var builder = new RenkoCandleBuilder(provider);
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(10m)), // 10 point brick size
+				IsCalcVolumeProfile = true, // Enable volume profile
+			}
+		};
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		var candles = new List<CandleMessage>();
+
+		// First tick establishes the baseline at 100.
+		foreach (var c in builder.Process(subscription, new MockTransform { Price = 100m, Volume = 50m, Side = Sides.Buy, Time = baseTime }))
+			candles.Add(c);
+
+		// Single tick triggers a multi-box move: 100 -> 125 with box size 10 is floor(25/10) = 2
+		// finished bricks (100->110, 110->120) plus the still-active partial 120->125.
+		foreach (var c in builder.Process(subscription, new MockTransform { Price = 125m, Volume = 60m, Side = Sides.Buy, Time = baseTime.AddSeconds(1) }))
+			candles.Add(c);
+
+		// Total volume actually fed across both ticks.
+		var fedVolume = 50m + 60m;
+
+		// Each yielded candle carries its own VolumeProfile via PriceLevels (a fresh profile is
+		// created per brick). The same candle object is yielded multiple times by reference, so
+		// deduplicate by reference identity before summing to avoid double-reading one profile.
+		var profileVolume = candles
+			.Distinct()
+			.Where(c => c.PriceLevels != null)
+			.SelectMany(c => c.PriceLevels)
+			.Sum(l => l.BuyVolume + l.SellVolume);
+
+		// Canonical contract: a tick's volume is counted exactly once in the profile, so the sum
+		// over every produced profile level must equal the total fed tick volume. The engine calls
+		// VolumeProfile.Update once per finished brick (CandleBuilder.cs:836) and once more at the
+		// end (CandleBuilder.cs:859), so the second tick's volume is multi-counted and this assert
+		// goes red until the over-counting is fixed.
+		profileVolume.AssertEqual(fedVolume, "Volume profile total must equal the fed tick volume (counted once)");
 	}
 
 	#endregion

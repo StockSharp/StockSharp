@@ -615,7 +615,13 @@ public class IndicatorTests : BaseTestClass
 					var nested1 = (IIndicator)prop.GetValue(obj1);
 					var nested2 = (IIndicator)prop.GetValue(obj2);
 
-					if (obj1 is not null && obj2 is not null)
+					// Guard on the nested values actually being compared (obj1/obj2 were a
+					// copy-paste and are already non-null via ThrowIfNull above, so that check
+					// was always true). Both nested indicators must be present or both absent;
+					// a one-sided null means save/load dropped a nested indicator.
+					(nested1 is null).AssertEqual(nested2 is null, prop.Name);
+
+					if (nested1 is not null && nested2 is not null)
 						ComparePropsRecursive(nested1, nested2);
 				}
 				else
@@ -952,6 +958,7 @@ public class IndicatorTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(120_000, CooperativeCancellation = true)]
 	public async Task IndicatorValues_Roundtrip()
 	{
 		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
@@ -979,10 +986,18 @@ public class IndicatorTests : BaseTestClass
 			for (var i = 0; i < outputs.Count; i++)
 			{
 				var original = outputs[i];
-				
+
 				var factory = type.CreateIndicator();
 
 				var restored = factory.CreateValue(original.Time, [.. original.ToValues()]);
+
+				// The restored value is produced by a freshly created (never formed) indicator,
+				// so it inherits IsFormed == false (see BaseIndicatorValue.IsFormed = indicator.IsFormed).
+				// CompareValue with checkExtended:false skips ALL asserts while !actual.IsFormed,
+				// which turned the whole round-trip comparison into a no-op. Mirror the original
+				// formed state onto the restored value so the numeric comparison actually runs and
+				// the round-trip (ToValues -> CreateValue) is verified for formed values.
+				restored.IsFormed = original.IsFormed;
 
 				CompareValue(restored, original, factory.ToString(), false);
 			}
@@ -1205,8 +1220,15 @@ public class IndicatorTests : BaseTestClass
 			var v2 = new MarketDepthIndicatorValue(ind, t);
 			v2.FromValues(arr);
 			v2.IsEmpty.AssertFalse();
-			v2.Value.GetBestBid()?.Price.AssertEqual(100m);
-			v2.Value.GetBestAsk()?.Price.AssertEqual(101m);
+
+			// Use explicit presence checks before comparing: a conditional `?.AssertEqual`
+			// would silently pass if the round-trip dropped the bids/asks (GetBestXxx() => null).
+			var bestBid = v2.Value.GetBestBid();
+			var bestAsk = v2.Value.GetBestAsk();
+			bestBid.HasValue.AssertTrue();
+			bestAsk.HasValue.AssertTrue();
+			bestBid.Value.Price.AssertEqual(100m);
+			bestAsk.Value.Price.AssertEqual(101m);
 
 			// empty
 			var vEmpty = new MarketDepthIndicatorValue(ind, t);
@@ -1417,7 +1439,7 @@ static class IndicatorDataRunner
 				inputValues.Add(new(indicator, data[i2].Candle.OpenTime, getValue(data[i2].Candle), i < data.Length - 1 ? getValue(data[i+1].Candle) : default) { IsFinal = false });
 			}
 
-			void CheckValue(IIndicatorValue value, int column)
+			void CheckValue(IIndicatorValue value, int column, bool rowHasValue)
 			{
 				if (!indicator.IsFormed)
 					return;
@@ -1426,7 +1448,17 @@ static class IndicatorDataRunner
 
 				if (value.IsEmpty)
 				{
-					//testValue.AssertNull();
+					// Sound interior-empty contract: only when this final value is PARTIALLY
+					// formed (rowHasValue: at least one of its plain components is non-empty) does
+					// the reference row definitely span the non-empty columns, so an empty
+					// component at a lower column must map to a null reference cell (a value->Empty
+					// regression of one inner output would be caught here). For a fully empty
+					// (warm-up) value we skip the check: the reference row may be a blank line, and
+					// a few reference files (e.g. Shift.txt) carry a stale value on the warm-up bar
+					// - a reference-data quirk, not an engine regression. The column<Length guard
+					// also covers trailing-trimmed empties.
+					if (rowHasValue && column < data.Values.Length)
+						data.Values[column].AssertNull();
 				}
 				else
 				{
@@ -1449,10 +1481,12 @@ static class IndicatorDataRunner
 				if (!inputValue.IsFinal)
 					continue;
 
-				value
-					.Plain()
+				var plain = value.Plain().ToArray();
+				var rowHasValue = plain.Any(sv => !sv.IsEmpty);
+
+				plain
 					.Select((sv, idx) => (v: sv, column: idx))
-					.ForEach(p => CheckValue(p.v, p.column));
+					.ForEach(p => CheckValue(p.v, p.column, rowHasValue));
 			}
 		}
 

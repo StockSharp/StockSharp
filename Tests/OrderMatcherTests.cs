@@ -270,6 +270,13 @@ public class OrderMatcherTests : BaseTestClass
 		AreEqual(10m, result.RemainingVolume); // Full volume rejected
 		AreEqual(OrderStates.Done, result.FinalState);
 		IsFalse(result.ShouldPlaceInBook);
+
+		// FOK contract: an order that cannot be filled completely must be cancelled
+		// without any market impact. The ask@101 liquidity must be left untouched.
+		AreEqual(3m, book.GetVolumeAtPrice(Sides.Sell, 101));
+		IsNotNull(book.BestAsk);
+		AreEqual(101m, book.BestAsk.Value.price);
+		AreEqual(3m, book.BestAsk.Value.volume);
 	}
 
 	[TestMethod]
@@ -405,6 +412,14 @@ public class OrderMatcherTests : BaseTestClass
 		AreEqual(5m, result.Trades[0].Volume);
 		AreEqual(102m, result.Trades[1].Price);
 		AreEqual(7m, result.Trades[1].Volume);
+
+		// Level 101 is fully consumed and must be removed from the book.
+		// No ghost empty level should remain: best ask is now 102 with the
+		// untouched remainder (10 - 7 = 3).
+		IsFalse(book.HasLevel(Sides.Sell, 101));
+		IsNotNull(book.BestAsk);
+		AreEqual(102m, book.BestAsk.Value.price);
+		AreEqual(3m, book.BestAsk.Value.volume);
 	}
 
 	[TestMethod]

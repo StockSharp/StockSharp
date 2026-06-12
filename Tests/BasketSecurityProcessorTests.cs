@@ -188,6 +188,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region Parameterized Continuous Processor Tests
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
 	public void ContinuousProcessor_SwitchesToNextContract(string processorName)
@@ -197,6 +198,8 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
 		var processor = CreateProcessor(basket);
+
+		var basketId = basket.ToSecurityId();
 
 		if (processorName == nameof(ContinuousSecurityExpirationProcessor))
 		{
@@ -216,26 +219,33 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			result3.Length.AssertEqual(1);
 			((ExecutionMessage)result3[0]).TradePrice.AssertEqual(101000m);
 		}
-		else // Volume
+		else // Volume (VolumeLevel = 100, legs RIU8 -> RIZ8)
 		{
 			var time = new DateTime(2024, 9, 10);
 
-			// RIU8 starts as active (first in list)
-			// RIU8 with volume 1000
+			// RIU8 starts as active (first in list). Only _currVolume known, _nextVolume null.
 			var result1 = processor.Process(CreateTick(riu, time, price: 100000m, volume: 1000m)).ToArray();
-			result1.Length.AssertEqual(0); // Waiting for both legs
+			result1.Length.AssertEqual(0); // _nextVolume still null -> CanProcess false
 
-			// RIZ8 with volume 500 (less than RIU8, so RIU8 stays active)
+			// RIZ8 with volume 500. Both volumes known now: 1000 + 100 >= 500 -> no switch.
+			// The tick belongs to the (still inactive) next leg, so nothing is emitted.
 			var result2 = processor.Process(CreateTick(riz, time, price: 100500m, volume: 500m)).ToArray();
-			result2.Length.AssertEqual(0); // Still no output, volumes not compared yet
+			result2.Length.AssertEqual(0);
 
-			// Update RIU8 - should output as it's still active
+			// Update RIU8 (volume 900): 900 + 100 >= 500 -> RIU8 still active -> emits.
 			var result3 = processor.Process(CreateTick(riu, time.AddSeconds(1), price: 100100m, volume: 900m)).ToArray();
-			// Volume logic: RIU8 active until next contract volume exceeds current + level
+			result3.Length.AssertEqual(1);
+			var active3 = (ExecutionMessage)result3[0];
+			active3.SecurityId.AssertEqual(basketId);
+			active3.TradePrice.AssertEqual(100100m); // RIU8 is still the active leg
 
-			// RIZ8 volume exceeds RIU8 - switch happens
+			// RIZ8 volume 2000 exceeds RIU8 (900) + level (100) -> switch to RIZ8.
+			// After the switch RIZ8 is the active (and last) leg, so its own tick is emitted.
 			var result4 = processor.Process(CreateTick(riz, time.AddSeconds(2), price: 101000m, volume: 2000m)).ToArray();
-			// After switch, RIZ8 is now active
+			result4.Length.AssertEqual(1);
+			var active4 = (ExecutionMessage)result4[0];
+			active4.SecurityId.AssertEqual(basketId);
+			active4.TradePrice.AssertEqual(101000m); // switched: RIZ8 is now the active leg
 		}
 	}
 
@@ -259,6 +269,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
 	public void ContinuousProcessor_ProcessesCandles(string processorName)
@@ -284,10 +295,16 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			basketCandle.SecurityId.AssertEqual(basket.ToSecurityId());
 			basketCandle.OpenPrice.AssertEqual(100000m);
 		}
-		// Volume processor may not output immediately due to volume comparison logic
+		else // Volume
+		{
+			// Only the current leg (RIU8) sent data; _nextVolume is still null, so the
+			// switch decision cannot be made and CanProcess deterministically returns false.
+			result.Length.AssertEqual(0);
+		}
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
 	public void ContinuousProcessor_ProcessesOrderBook(string processorName)
@@ -313,14 +330,22 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			var basketDepth = (QuoteChangeMessage)result[0];
 			basketDepth.SecurityId.AssertEqual(basket.ToSecurityId());
 		}
+		else // Volume
+		{
+			// Only the current leg (RIU8) book arrived; _nextVolume is still null, so the
+			// switch decision cannot be made and CanProcess deterministically returns false.
+			result.Length.AssertEqual(0);
+		}
 	}
 
 	/// <summary>
-	/// Regression test for operator precedence bug in ContinuousSecurityBaseProcessor.
-	/// Bug was: volume = volume ?? 0 + bestAsk?.Volume (parsed as volume ?? (0 + bestAsk?.Volume))
-	/// Fixed:   volume = (volume ?? 0) + bestAsk?.Volume
+	/// Smoke test for the order-book path of the continuous processors.
+	/// The operator-precedence fix (volume = (volume ?? 0) + bestAsk?.Volume) is actually
+	/// exercised by <see cref="VolumeContinuous_OrderBook_BidPlusAskVolume_DrivesSwitch"/>,
+	/// which depends on the summed bid+ask volume to make a switching decision.
 	/// </summary>
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
 	public void ContinuousProcessor_OrderBook_SumsBidAndAskVolumes(string processorName)
@@ -333,9 +358,6 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		var time = new DateTime(2024, 9, 10);
 
-		// Send order book with BOTH bid and ask volumes
-		// This tests the bug fix: volume should be sum of bid + ask volumes
-		// Bid volume = 100, Ask volume = 50, total should be 150
 		var depth = CreateOrderBook(riu, time,
 			bids: [(100000m, 100m)],
 			asks: [(100100m, 50m)]);
@@ -344,12 +366,64 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		if (processorName == nameof(ContinuousSecurityExpirationProcessor))
 		{
-			// Before expiry - should pass through with correct volume calculation
+			// Before expiry the active leg's book passes through, re-keyed to the basket id.
 			result.Length.AssertEqual(1);
 			var basketDepth = (QuoteChangeMessage)result[0];
 			basketDepth.SecurityId.AssertEqual(basket.ToSecurityId());
 		}
-		// Volume processor needs both contracts' data first, so no output expected here
+		else // Volume
+		{
+			// Only the current leg book arrived; _nextVolume is still null, so CanProcess
+			// deterministically returns false and nothing is emitted.
+			result.Length.AssertEqual(0);
+		}
+	}
+
+	/// <summary>
+	/// Real regression guard for the operator-precedence fix in
+	/// <see cref="ContinuousSecurityBaseProcessor{T}"/>:
+	/// <code>if (bestAsk?.Volume != null) volume = (volume ?? 0) + bestAsk?.Volume;</code>
+	/// The volume processor's switch decision must use the summed bid+ask volume of the next
+	/// leg. The data is tuned so that bid+ask (640) crosses the switch threshold while the
+	/// bid-only value (590, the buggy parse) would not, making the two interpretations
+	/// observably different (switch vs no switch).
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void VolumeContinuous_OrderBook_BidPlusAskVolume_DrivesSwitch()
+	{
+		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
+		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
+
+		var basket = new VolumeContinuousSecurity
+		{
+			Id = "RI@FORTS",
+			Board = ExchangeBoard.Forts,
+			VolumeLevel = new Unit(100),
+		};
+		basket.InnerSecurities.Add(riu.ToSecurityId());
+		basket.InnerSecurities.Add(riz.ToSecurityId());
+
+		var processor = CreateProcessor(basket);
+
+		var time = new DateTime(2024, 9, 10);
+
+		// RIU8 (current leg): bid-only book -> _currVolume = 500 (unambiguous).
+		var riuBook = processor.Process(CreateOrderBook(riu, time,
+			bids: [(100000m, 500m)],
+			asks: [])).ToArray();
+		riuBook.Length.AssertEqual(0); // _nextVolume still null
+
+		// RIZ8 (next leg): bid 590 + ask 50 = 640 with the correct fix.
+		// Threshold check: _currVolume(500) + level(100) = 600.
+		//   Correct (sum 640): 600 >= 640 is false -> switch to RIZ8 -> book emitted.
+		//   Buggy (bid only 590): 600 >= 590 is true -> no switch -> nothing emitted.
+		var rizBook = processor.Process(CreateOrderBook(riz, time,
+			bids: [(100500m, 590m)],
+			asks: [(100600m, 50m)])).ToArray();
+
+		rizBook.Length.AssertEqual(1);
+		((QuoteChangeMessage)rizBook[0]).SecurityId.AssertEqual(basket.ToSecurityId());
 	}
 
 	#endregion
@@ -392,7 +466,14 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		result2.Length.AssertEqual(1);
 	}
 
+	/// <summary>
+	/// Verifies that with <see cref="VolumeContinuousSecurity.IsOpenInterest"/> = true the switch
+	/// decision is driven by open interest, not trade volume. The data is deliberately built so the
+	/// two metrics disagree: by OI the current leg (RIU8) stays active, but by trade volume RIZ8
+	/// would have already taken over. So the test passes only if the engine honors the OI flag.
+	/// </summary>
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public void VolumeContinuous_UsesOpenInterest_WhenConfigured()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
@@ -403,7 +484,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			Id = "RI@FORTS",
 			Board = ExchangeBoard.Forts,
 			VolumeLevel = new Unit(100),
-			IsOpenInterest = true, // Use OI instead of volume
+			IsOpenInterest = true, // Use OI instead of trade volume
 		};
 		basket.InnerSecurities.Add(riu.ToSecurityId());
 		basket.InnerSecurities.Add(riz.ToSecurityId());
@@ -412,7 +493,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		var time = new DateTime(2024, 9, 10);
 
-		// Create ticks with OI
+		// RIU8: high OI (50000) but low trade volume (100).
 		var tick1 = new ExecutionMessage
 		{
 			SecurityId = riu.ToSecurityId(),
@@ -423,20 +504,25 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			OpenInterest = 50000m,
 		};
 
+		// RIZ8: low OI (40000) but high trade volume (5000).
+		// By OI:     50000 + 100 >= 40000 -> RIU8 stays active.
+		// By volume: 100   + 100 >= 5000  is false -> RIZ8 would have taken over.
 		var tick2 = new ExecutionMessage
 		{
 			SecurityId = riz.ToSecurityId(),
 			DataTypeEx = DataType.Ticks,
 			ServerTime = time,
 			TradePrice = 100500m,
-			TradeVolume = 50m,
+			TradeVolume = 5000m,
 			OpenInterest = 40000m,
 		};
 
 		processor.Process(tick1).ToArray();
 		processor.Process(tick2).ToArray();
 
-		// RIU8 should still be active (OI 50000 + 100 > 40000)
+		// RIU8 update: by OI it is still active (49000 + 100 >= 40000) and must emit.
+		// Had the engine wrongly used trade volume, RIZ8 would be active and this RIU8 tick
+		// would produce no output.
 		var tick3 = new ExecutionMessage
 		{
 			SecurityId = riu.ToSecurityId(),
@@ -449,10 +535,20 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		var result = processor.Process(tick3).ToArray();
 		result.Length.AssertEqual(1);
+		var active = (ExecutionMessage)result[0];
+		active.SecurityId.AssertEqual(basket.ToSecurityId());
+		active.TradePrice.AssertEqual(100100m); // RIU8 is the active leg
 	}
 
+	/// <summary>
+	/// Three-contract basket, first volume switch RIU8 -> RIZ8. Verifies the switch is taken
+	/// (RIZ8 starts being emitted) and that ticks of the now-inactive RIU8 and of the not-yet-active
+	/// RIH9 are dropped while RIZ8 is the active leg. A genuine second sequential switch
+	/// (RIZ8 -> RIH9) is covered separately because of the volume-reset behavior on rollover.
+	/// </summary>
 	[TestMethod]
-	public void VolumeContinuous_ThreeContracts_SwitchesSequentially()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void VolumeContinuous_ThreeContracts_SwitchesToSecond()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
@@ -469,26 +565,86 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basket.InnerSecurities.Add(rih.ToSecurityId());
 
 		var processor = CreateProcessor(basket);
+		var basketId = basket.ToSecurityId();
 
 		var time = new DateTime(2024, 9, 10);
 
-		// Initial state: RIU8 is active
+		// Initial state: RIU8 active. Then RIZ8 (vol 500) < RIU8 -> RIU8 stays active.
 		processor.Process(CreateTick(riu, time, 100000m, volume: 1000m)).ToArray();
 		processor.Process(CreateTick(riz, time, 100500m, volume: 500m)).ToArray();
 
-		// RIU8 still active
+		// RIU8 still active (900 >= 500) -> emits.
 		var result1 = processor.Process(CreateTick(riu, time.AddSeconds(1), 100100m, volume: 900m)).ToArray();
 		result1.Length.AssertEqual(1);
+		((ExecutionMessage)result1[0]).SecurityId.AssertEqual(basketId);
+		((ExecutionMessage)result1[0]).TradePrice.AssertEqual(100100m);
 
-		// RIZ8 exceeds, switch to RIZ8
-		processor.Process(CreateTick(riz, time.AddSeconds(2), 100600m, volume: 1100m)).ToArray();
+		// RIZ8 volume (1100) exceeds RIU8 (900) -> switch to RIZ8, which is now emitted.
+		var switchResult = processor.Process(CreateTick(riz, time.AddSeconds(2), 100600m, volume: 1100m)).ToArray();
+		switchResult.Length.AssertEqual(1);
+		((ExecutionMessage)switchResult[0]).SecurityId.AssertEqual(basketId);
+		((ExecutionMessage)switchResult[0]).TradePrice.AssertEqual(100600m);
 
-		// Now need to track RIZ8 vs RIH9
-		processor.Process(CreateTick(rih, time.AddSeconds(3), 101000m, volume: 200m)).ToArray();
+		// RIH9 is only the next (inactive) leg now -> its tick must not be emitted.
+		var rihResult = processor.Process(CreateTick(rih, time.AddSeconds(3), 101000m, volume: 200m)).ToArray();
+		rihResult.Length.AssertEqual(0);
 
-		// RIZ8 is active
+		// RIZ8 remains the active leg -> emits.
 		var result2 = processor.Process(CreateTick(riz, time.AddSeconds(4), 100700m, volume: 1000m)).ToArray();
 		result2.Length.AssertEqual(1);
+		((ExecutionMessage)result2[0]).SecurityId.AssertEqual(basketId);
+		((ExecutionMessage)result2[0]).TradePrice.AssertEqual(100700m);
+	}
+
+	/// <summary>
+	/// Rollover bug guard: when the volume processor switches to the next contract it must
+	/// re-base the running volumes onto the new (current, next) pair. After a switch RIU8 -> RIZ8
+	/// in a three-contract basket, the very first tick of the newly active RIZ8 (with no fresh
+	/// RIH9 volume seen yet) must keep RIZ8 active and emit. The contract: a leg cannot be
+	/// switched away from based on its own (or the previous leg's) stale volume.
+	///
+	/// With the current engine _currVolume/_nextVolume are not reset on switch, so RIZ8's own
+	/// tick is compared against the stale RIZ8 volume carried over as _nextVolume, triggering a
+	/// false immediate second switch to RIH9 (and _finished). This test asserts the correct
+	/// behavior and is therefore expected to fail until that reset is fixed.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void VolumeContinuous_TickOfNewActiveLeg_AfterSwitch_StaysActive()
+	{
+		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
+		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
+		var rih = CreateFuture("RIH9", new DateTime(2025, 3, 15));
+
+		var basket = new VolumeContinuousSecurity
+		{
+			Id = "RI@FORTS",
+			Board = ExchangeBoard.Forts,
+			VolumeLevel = new Unit(0), // Switch immediately when next exceeds current
+		};
+		basket.InnerSecurities.Add(riu.ToSecurityId());
+		basket.InnerSecurities.Add(riz.ToSecurityId());
+		basket.InnerSecurities.Add(rih.ToSecurityId());
+
+		var processor = CreateProcessor(basket);
+		var basketId = basket.ToSecurityId();
+
+		var time = new DateTime(2024, 9, 10);
+
+		// RIU8 active with volume 1000.
+		processor.Process(CreateTick(riu, time, 100000m, volume: 1000m)).ToArray();
+
+		// RIZ8 volume 1100 exceeds RIU8 (1000) -> switch to RIZ8 (now the active leg).
+		var switchResult = processor.Process(CreateTick(riz, time.AddSeconds(1), 100600m, volume: 1100m)).ToArray();
+		switchResult.Length.AssertEqual(1);
+		((ExecutionMessage)switchResult[0]).SecurityId.AssertEqual(basketId);
+
+		// First RIZ8 tick after the switch. No RIH9 volume has been observed since the switch,
+		// so there is no basis to switch away from RIZ8: it must stay active and emit.
+		var afterSwitch = processor.Process(CreateTick(riz, time.AddSeconds(2), 100700m, volume: 1000m)).ToArray();
+		afterSwitch.Length.AssertEqual(1);
+		((ExecutionMessage)afterSwitch[0]).SecurityId.AssertEqual(basketId);
+		((ExecutionMessage)afterSwitch[0]).TradePrice.AssertEqual(100700m);
 	}
 
 	#endregion
@@ -558,27 +714,44 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public void WeightedIndex_Candles_HighLowNormalization()
 	{
-		// When weighted calculation results in High < Low, they should be swapped
+		// When the weighted calculation produces High < Low (because a leg with a negative
+		// weight has a wider range than the positive leg), FillIndexCandle must swap them so
+		// the basket candle stays consistent (BasketSecurityBaseProcessor: HighPrice < LowPrice).
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
 		var processor = CreateProcessor(basket);
 
 		var openTime = new DateTime(2024, 1, 1, 10, 0, 0);
 
-		// With negative weight, high/low might get inverted
+		// lkoh (weight +1): narrow range around 10.
 		var lkohCandle = CreateCandle(lkoh, openTime,
-			open: 100m, high: 110m, low: 90m, close: 100m, volume: 1000m);
+			open: 10m, high: 10m, low: 9m, close: 10m, volume: 1000m);
 
+		// sber (weight -1): wide range. Subtracting its wide High/Low inverts the index range.
 		var sberCandle = CreateCandle(sber, openTime,
-			open: 50m, high: 55m, low: 45m, close: 50m, volume: 500m);
+			open: 12m, high: 20m, low: 5m, close: 12m, volume: 500m);
 
 		processor.Process(lkohCandle).ToArray();
 		var result = processor.Process(sberCandle).ToArray();
 
+		result.Length.AssertEqual(1);
 		var basketCandle = (CandleMessage)result[0];
 
-		// Verify High >= Low
+		// Raw weighted parts (before normalization):
+		//   Open  = 10*1 + 12*(-1) = -2
+		//   High  = 10*1 + 20*(-1) = -10
+		//   Low   =  9*1 +  5*(-1) =  4
+		//   Close = 10*1 + 12*(-1) = -2
+		// High (-10) < Low (4) -> swap fires -> High = 4, Low = -10.
+		// Open/Close (-2) lie inside [-10, 4], so no further clamping occurs.
+		basketCandle.OpenPrice.AssertEqual(-2m);
+		basketCandle.ClosePrice.AssertEqual(-2m);
+		basketCandle.HighPrice.AssertEqual(4m);
+		basketCandle.LowPrice.AssertEqual(-10m);
+
+		// Sanity: invariant restored by the swap.
 		(basketCandle.HighPrice >= basketCandle.LowPrice).AssertTrue();
 	}
 

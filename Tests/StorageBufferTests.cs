@@ -166,14 +166,45 @@ public class StorageBufferTests : BaseTestClass
 	{
 		var buffer = new StorageBuffer();
 		var secId = CreateSecurityId();
-		var tick = CreateTick(secId, DateTime.UtcNow, 100, 10);
+		var time = DateTime.UtcNow;
+		var tick = CreateTick(secId, time, 100, 10);
 
 		buffer.ProcessOutMessage(tick);
 
 		var ticks = buffer.GetTicks();
 		ticks.Count.AssertEqual(1);
 		ticks.ContainsKey(secId).AssertTrue();
-		ticks[secId].Count().AssertEqual(1);
+
+		// verify the buffered tick preserves its payload, not just that something was stored
+		var buffered = ticks[secId].ToArray();
+		buffered.Length.AssertEqual(1);
+		buffered[0].DataType.AssertEqual(DataType.Ticks);
+		buffered[0].SecurityId.AssertEqual(secId);
+		buffered[0].ServerTime.AssertEqual(time);
+		buffered[0].TradePrice.Value.AssertEqual(100m);
+		buffered[0].TradeVolume.Value.AssertEqual(10m);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void ProcessOutMessage_Tick_StoresClone()
+	{
+		// the buffer must store a clone (StorageBuffer.cs: TypedClone), so mutating the
+		// source message after ProcessOutMessage must not corrupt the buffered copy.
+		var buffer = new StorageBuffer();
+		var secId = CreateSecurityId();
+		var tick = CreateTick(secId, DateTime.UtcNow, 100, 10);
+
+		buffer.ProcessOutMessage(tick);
+
+		// mutate the original after it was handed to the buffer
+		tick.TradePrice = 999;
+		tick.TradeVolume = 888;
+
+		var buffered = buffer.GetTicks()[secId].ToArray();
+		buffered.Length.AssertEqual(1);
+		buffered[0].TradePrice.Value.AssertEqual(100m);
+		buffered[0].TradeVolume.Value.AssertEqual(10m);
 	}
 
 	[TestMethod]
@@ -391,14 +422,46 @@ public class StorageBufferTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOutMessage_PositionChange_Buffered()
 	{
-		var buffer = new StorageBuffer();
+		// position storage is opt-in (EnabledPositions defaults to false), so explicitly
+		// enable it here to exercise the genuine "buffered when enabled" path and verify
+		// the buffered payload (not just the count).
+		var buffer = new StorageBuffer { EnabledPositions = true };
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+		var position = CreatePositionChange(secId, time, 100);
+
+		buffer.ProcessOutMessage(position);
+
+		var result = buffer.GetPositionChanges();
+		result.Count.AssertEqual(1);
+		result.ContainsKey(secId).AssertTrue();
+
+		var buffered = result[secId].ToArray();
+		buffered.Length.AssertEqual(1);
+		buffered[0].SecurityId.AssertEqual(secId);
+		buffered[0].ServerTime.AssertEqual(time);
+		buffered[0].PortfolioName.AssertEqual("TestPortfolio");
+		((decimal)buffered[0].Changes[PositionChangeTypes.CurrentValue]).AssertEqual(100m);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void ProcessOutMessage_PositionChange_NotBufferedWhenDisabled()
+	{
+		// Contracted behavior: EnabledPositions is an opt-in flag (default false, doc:
+		// "Enable positions storage"). With it disabled, position changes must NOT be
+		// buffered - mirroring EnabledLevel1/EnabledOrderBook handling in ProcessOutMessage.
+		// On the current engine the PositionChange branch ignores EnabledPositions when
+		// FilterSubscription is false, so this guard is expected to fail until the
+		// inconsistency is fixed.
+		var buffer = new StorageBuffer { EnabledPositions = false };
 		var secId = CreateSecurityId();
 		var position = CreatePositionChange(secId, DateTime.UtcNow, 100);
 
 		buffer.ProcessOutMessage(position);
 
 		var result = buffer.GetPositionChanges();
-		result.Count.AssertEqual(1);
+		result.Count.AssertEqual(0);
 	}
 
 	#endregion
@@ -654,6 +717,29 @@ public class StorageBufferTests : BaseTestClass
 		buffer2.DisableStorageTimer.AssertEqual(buffer.DisableStorageTimer);
 	}
 
+	[TestMethod]
+	[Timeout(5_000)]
+	public void Save_Load_PreservesIgnoreGenerated()
+	{
+		// IgnoreGenerated is serialized/deserialized by Save/Load (StorageBuffer.cs),
+		// so a non-default set must round-trip exactly.
+		var buffer = new StorageBuffer();
+		buffer.IgnoreGenerated.Clear();
+		buffer.IgnoreGenerated.Add(DataType.Ticks);
+		buffer.IgnoreGenerated.Add(DataType.OrderLog);
+
+		var storage = new SettingsStorage();
+		((IPersistable)buffer).Save(storage);
+
+		var buffer2 = new StorageBuffer();
+		((IPersistable)buffer2).Load(storage);
+
+		buffer2.IgnoreGenerated.Count.AssertEqual(2);
+		buffer2.IgnoreGenerated.Contains(DataType.Ticks).AssertTrue();
+		buffer2.IgnoreGenerated.Contains(DataType.OrderLog).AssertTrue();
+		buffer2.IgnoreGenerated.Contains(DataType.Level1).AssertFalse();
+	}
+
 	#endregion
 
 	#region ProcessInMessage - OrderRegister Tests
@@ -678,6 +764,19 @@ public class StorageBufferTests : BaseTestClass
 		var transactions = buffer.GetTransactions();
 		transactions.Count.AssertEqual(1);
 		transactions.ContainsKey(secId).AssertTrue();
+
+		// verify the ToExec() conversion result, not just that a row was buffered
+		var buffered = transactions[secId].ToArray();
+		buffered.Length.AssertEqual(1);
+		var exec = buffered[0];
+		exec.DataType.AssertEqual(DataType.Transactions);
+		exec.SecurityId.AssertEqual(secId);
+		exec.TransactionId.AssertEqual(123L);
+		exec.HasOrderInfo.AssertTrue();
+		exec.Side.AssertEqual(Sides.Buy);
+		exec.OrderPrice.AssertEqual(100m);
+		exec.OrderVolume.Value.AssertEqual(10m);
+		exec.OrderState.Value.AssertEqual(OrderStates.Pending);
 	}
 
 	[TestMethod]
@@ -716,6 +815,10 @@ public class StorageBufferTests : BaseTestClass
 		buffer.IgnoreGenerated.Count(d => d == DataType.OrderLog).AssertEqual(1);
 		buffer.IgnoreGenerated.Count(d => d == DataType.Transactions).AssertEqual(1);
 		buffer.IgnoreGenerated.Count(d => d == DataType.PositionChanges).AssertEqual(1);
+		// previously missing from the oracle (StorageBuffer.cs default set)
+		buffer.IgnoreGenerated.Count(d => d == DataType.FilteredMarketDepth).AssertEqual(1);
+		// pin the exact default set size so an added/removed default entry is caught
+		buffer.IgnoreGenerated.Count.AssertEqual(7);
 	}
 
 	[TestMethod]

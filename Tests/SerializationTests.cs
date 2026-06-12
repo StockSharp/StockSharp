@@ -1,7 +1,5 @@
 ﻿namespace StockSharp.Tests;
 
-using System.Collections;
-
 using Ecng.Reflection;
 
 using StockSharp.Algo.Storages.Binary.Snapshot;
@@ -75,77 +73,127 @@ public class SerializationTests
 		Helper.CheckEqual(entity.Save(), ser.Deserialize(ser.Serialize(entity)).Save());
 	}
 
-	[TestMethod]
-	public void TransactionsSnapshot()
+	private static ExecutionMessage CreateTransaction(OrderCondition condition)
+	{
+		return new ExecutionMessage
+		{
+			SecurityId = new SecurityId
+			{
+				SecurityCode = "AAPL",
+				BoardCode = BoardCodes.Nasdaq
+			},
+			DataTypeEx = DataType.Transactions,
+			TransactionId = new IncrementalIdGenerator().GetNextId(),
+			Condition = condition
+		};
+	}
+
+	private static ExecutionMessage RoundTrip(ExecutionMessage origin)
 	{
 		ISnapshotSerializer<string, ExecutionMessage> serializer = new TransactionBinarySnapshotSerializer();
 
-		var idGen = new IncrementalIdGenerator();
+		var bytes = serializer.Serialize(serializer.Version, origin);
+		return serializer.Deserialize(serializer.Version, bytes);
+	}
 
-		foreach (var adapter in new InMemoryMessageAdapterProvider([]).PossibleAdapters)
+	// Verifies the previously completely unguarded condition-parameter serialization
+	// path of TransactionBinarySnapshotSerializer for the value types it explicitly
+	// supports (decimal and bool). The condition type and every parameter value must
+	// survive the binary round-trip. The whole-message Helper.CheckEqual cannot be used
+	// for the assertion because OrderCondition has no value equality, so the parameters
+	// are compared explicitly.
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void TransactionsSnapshotConditionSupportedTypes()
+	{
+		var condition = new StopOrderCondition
 		{
-			var condition = adapter.CreateOrderCondition();
+			ActivationPrice = 123.45m,
+			ClosePositionPrice = 67.89m,
+			TrailingOffset = 1.5m,
+			IsTrailing = true,
+			IsActivationPricePercent = true,
+		};
 
-			if (condition == null)
-				continue;
+		var expected = condition.Parameters.Where(p => p.Value != null).ToArray();
 
-			static void FillProps(object s)
-			{
-				var props = s.GetType().GetMembers<PropertyInfo>();
+		var loaded = RoundTrip(CreateTransaction(condition));
 
-				foreach (var prop in props)
-				{
-					if (prop.Name == "Parameters" || prop.ReflectedType != s.GetType())
-						continue;
+		loaded.Condition.AssertNotNull();
+		loaded.Condition.GetType().AssertEqual(typeof(StopOrderCondition));
 
-					if (prop.SetMethod == null)
-					{
-						FillProps(prop.GetValue(s));
-						continue;
-					}
+		// every supported parameter value must be preserved
+		loaded.Condition.Parameters.Count.AssertEqual(expected.Length);
 
-					object value;
-
-					if (prop.PropertyType == typeof(string))
-						value = Guid.NewGuid().ToString();
-					else if (prop.PropertyType.GetGenericType(typeof(IDictionary<,>)) != null)
-					{
-						var args = prop.PropertyType.GetGenericArguments();
-						var dict = (IDictionary)typeof(Dictionary<,>).Make(args).CreateInstance();
-						//list.Add(itemType.CreateInstance());
-						//dict.Add(args[0].CreateInstance(), args[1].CreateInstance());
-						value = dict;
-					}
-					else if (prop.PropertyType.GetGenericType(typeof(IEnumerable<>)) != null)
-					{
-						var itemType = prop.PropertyType.GetGenericTypeArg(typeof(IEnumerable<>), 0);
-						var list = (IList)typeof(List<>).Make(itemType).CreateInstance();
-						//list.Add(itemType.CreateInstance());
-						value = list;
-					}
-					else
-						value = prop.PropertyType.CreateInstance();
-
-					prop.SetValue(s, value);
-				}
-			}
-
-			FillProps(condition);
-
-			var origin = new ExecutionMessage
-			{
-				SecurityId = new SecurityId
-				{
-					SecurityCode = "AAPL",
-					BoardCode = BoardCodes.Nasdaq
-				},
-				DataTypeEx = DataType.Transactions,
-				TransactionId = idGen.GetNextId(),
-				Condition = condition
-			};
-
-			var bytes = serializer.Serialize(serializer.Version, origin);
-			var loaded = serializer.Deserialize(serializer.Version, bytes);
+		foreach (var p in expected)
+		{
+			loaded.Condition.Parameters.TryGetValue(p.Key, out var actual).AssertTrue($"missing param '{p.Key}'");
+			actual.AssertEqual(p.Value, $"param '{p.Key}'");
 		}
+
+		// typed accessors must reflect the same values
+		var loadedCond = (StopOrderCondition)loaded.Condition;
+		loadedCond.ActivationPrice.AssertEqual(123.45m);
+		loadedCond.ClosePositionPrice.AssertEqual(67.89m);
+		loadedCond.TrailingOffset.AssertEqual(1.5m);
+		loadedCond.IsTrailing.AssertEqual(true);
+		loadedCond.IsActivationPricePercent.AssertEqual(true);
+	}
+
+	// Guards the contract that a condition parameter survives the binary round-trip
+	// regardless of its CLR type. A raw string parameter falls into the serializer's
+	// "default: // Unknown type - skip" branch, which writes an empty payload and thus
+	// silently drops the value on deserialize. The correct behavior is full preservation,
+	// so this test asserts the string is restored (expected to fail until the engine no
+	// longer discards string-typed condition parameters).
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void TransactionsSnapshotConditionStringParamRoundTrip()
+	{
+		const string key = "RawStringParam";
+		const string value = "hello-world-42";
+
+		var condition = new StopOrderCondition();
+		// store a raw string value directly through the parameter bag
+		condition.Parameters[key] = value;
+
+		var loaded = RoundTrip(CreateTransaction(condition));
+
+		loaded.Condition.AssertNotNull();
+		loaded.Condition.Parameters.TryGetValue(key, out var actual)
+			.AssertTrue($"string param '{key}' was dropped during snapshot serialization");
+		actual.AssertEqual(value);
+	}
+
+	// Guards round-tripping of an integer-typed condition parameter (the serializer's
+	// TypeCode.Int64 branch). Long values are written as Int64 and must be restored
+	// with both value and CLR type preserved.
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void TransactionsSnapshotConditionLongParamRoundTrip()
+	{
+		const string key = "LongParam";
+		const long value = 9_876_543_210L;
+
+		var condition = new StopOrderCondition();
+		condition.Parameters[key] = value;
+
+		var loaded = RoundTrip(CreateTransaction(condition));
+
+		loaded.Condition.AssertNotNull();
+		loaded.Condition.Parameters.TryGetValue(key, out var actual)
+			.AssertTrue($"long param '{key}' was dropped during snapshot serialization");
+		actual.AssertEqual(value);
+	}
+
+	// A transaction without a condition must round-trip with a null condition (the
+	// conditionType string is empty, so no condition is reconstructed).
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void TransactionsSnapshotNoCondition()
+	{
+		var loaded = RoundTrip(CreateTransaction(null));
+
+		loaded.Condition.AssertNull();
 	}
 }

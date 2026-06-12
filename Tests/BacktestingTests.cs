@@ -19,6 +19,7 @@ public class BacktestingTests : BaseTestClass
 	/// Uses short time period to run fast.
 	/// </summary>
 	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
 	public async Task BacktestCompletesWithoutHanging()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -129,10 +130,21 @@ public class BacktestingTests : BaseTestClass
 		var states = strategy.Orders.GroupBy(o => o.State).Select(g => $"{g.Key}:{g.Count()}");
 		Console.WriteLine($"Order states: {states.JoinCommaSpace()}");
 
-		// Check done orders details
-		var doneOrders = strategy.Orders.Where(o => o.State == OrderStates.Done).Take(3);
-		foreach (var o in doneOrders)
-			Console.WriteLine($"Done order: {o.TransactionId} Status={o.Status} Balance={o.Balance} Volume={o.Volume}");
+		// The instrumentation above exists to catch the regression where order-info execution
+		// messages reach the basket output WITHOUT subscription IDs (they then cannot be routed to
+		// strategy/connector subscribers). Assert that integrity instead of merely printing it:
+		// every order-info execution that reaches the basket must carry subscription IDs.
+		AreEqual(0, execMessagesWithoutIds,
+			$"Order-info execution messages must carry subscription IDs at the basket output (without IDs={execMessagesWithoutIds}, with IDs={execMessagesWithIds})");
+
+		// When the strategy actually placed orders, those orders must produce order-info execution
+		// messages all the way through the emulator and basket layers (no exec loss).
+		if (newOrders > 0)
+		{
+			IsTrue(execAtEmulationTotal > 0, $"Orders were placed ({newOrders}) but no order execs reached the emulation adapter");
+			IsTrue(execAtBasket > 0, $"Orders were placed ({newOrders}) but no order execs reached the basket adapter");
+			IsTrue(execMessagesWithIds > 0, "Order-info execution messages at the basket must carry subscription IDs when orders were placed");
+		}
 	}
 
 	/// <summary>
@@ -339,10 +351,14 @@ public class BacktestingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Full month backtest with strategy + BuildFrom=Ticks.
-	/// Verifies no OrderRegisterFailed due to emulator time race condition.
+	/// Full month backtest with a strategy that really builds its candles from ticks
+	/// (<see cref="WpfSmaStrategy"/> with <see cref="DataType.Ticks"/> as the build source,
+	/// <see cref="MarketDataBuildModes.Build"/>). Verifies the tick-driven candle path is
+	/// actually exercised end-to-end: the strategy places orders, those orders fill into
+	/// trades, and no OrderRegisterFailed occurs due to the emulator time-race condition.
 	/// </summary>
 	[TestMethod]
+	[Timeout(360_000, CooperativeCancellation = true)]
 	public async Task BacktestFullMonth_BuildFromTicks_WithStrategy()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -363,6 +379,16 @@ public class BacktestingTests : BaseTestClass
 		var lastProgress = 0;
 		var orderErrors = 0;
 
+		// Verify the candles the strategy trades on are genuinely built from ticks
+		// (BuildMode=Build), not loaded from the candle storage.
+		var tickBuiltCandles = 0;
+		connector.CandleReceived += (sub, candle) =>
+		{
+			// Candle subscriptions always carry a MarketDataMessage, so MarketData is safe here.
+			if (candle.State == CandleStates.Finished && sub.MarketData.BuildFrom == DataType.Ticks)
+				Interlocked.Increment(ref tickBuiltCandles);
+		};
+
 		connector.ProgressChanged += step => lastProgress = step;
 		connector.OrderRegisterFailed += fail =>
 		{
@@ -377,19 +403,19 @@ public class BacktestingTests : BaseTestClass
 				tcs.TrySetResult(true);
 		};
 
-		var strategy = new SmaStrategy
+		// Real BuildFrom=Ticks strategy: its candle subscription uses
+		// BuildFrom=Ticks + BuildMode=Build (see WpfSmaStrategy.OnStarted2).
+		var strategy = new WpfSmaStrategy
 		{
 			Connector = connector,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1,
 			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
-			Long = 80,
-			Short = 10,
+			LongSma = 80,
+			ShortSma = 10,
+			BuildFrom = DataType.Ticks,
 		};
-
-		// Simulate WPF sample: strategy uses BuildFrom=Ticks internally
-		// by subscribing to candles built from ticks in OnStarted2
 
 		connector.Connect();
 		strategy.Start();
@@ -401,14 +427,21 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.Stop();
 
+		var orders = strategy.Orders.Count();
+		var trades = strategy.MyTrades.Count();
+
 		Console.WriteLine($"Progress: {lastProgress}%");
-		Console.WriteLine($"Strategy trades: {strategy.MyTrades.Count()}");
-		Console.WriteLine($"Strategy orders: {strategy.Orders.Count()}");
+		Console.WriteLine($"Tick-built candles: {tickBuiltCandles}");
+		Console.WriteLine($"Strategy trades: {trades}");
+		Console.WriteLine($"Strategy orders: {orders}");
 		Console.WriteLine($"Order errors (time race): {orderErrors}");
 		Console.WriteLine($"Strategy PnL: {strategy.PnL}");
 
 		IsTrue(ok, $"Backtest should complete without timeout (progress reached {lastProgress}%)");
-		AreEqual(0, orderErrors, "No OrderRegisterFailed errors should occur");
+		IsTrue(tickBuiltCandles > 0, $"Strategy must trade on candles built from ticks, got {tickBuiltCandles}");
+		IsTrue(orders > 0, $"Tick-built SMA strategy should place orders over a full month, got {orders}");
+		IsTrue(trades > 0, $"Tick-built SMA strategy orders should produce fills over a full month, got {trades}");
+		AreEqual(0, orderErrors, $"No OrderRegisterFailed (time race) errors should occur, got {orderErrors}");
 	}
 
 	/// <summary>
@@ -803,6 +836,7 @@ public class BacktestingTests : BaseTestClass
 	/// Tests that PnL changes occur during backtesting.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestGeneratesPnLChanges()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -830,10 +864,23 @@ public class BacktestingTests : BaseTestClass
 			Short = 30,
 		};
 
+		// PnLReceived2 reports (realized, unrealized) snapshots; strategy.PnL == realized + unrealized
+		// (see TraderHelper.GetPnL). The realized component changes only on fills, and every fill with
+		// non-zero PnL raises PnLReceived2 (Strategy.OnConnectorOwnTradeReceived), so the realized value
+		// of the LAST event is the final realized PnL and is event-synced (deterministic). The
+		// unrealized component, however, is marked-to-market on every incoming market message
+		// (PnLManager.ProcessMessage on each tick/candle/quote) while PnLReceived2 is throttled by
+		// UnrealizedPnLInterval (1 min) and only fires when Positions.Any(); so the unrealized value of
+		// the last event is frozen at that event's price and keeps drifting afterwards. Track both
+		// components separately rather than only the combined total.
 		var pnlChanges = new List<decimal>();
+		var lastReportedRealized = 0m;
+		var lastReportedTotal = 0m;
 		strategy.PnLReceived2 += (s, pf, time, realized, unrealized, commission) =>
 		{
-			pnlChanges.Add(realized + (unrealized ?? 0));
+			lastReportedRealized = realized;
+			lastReportedTotal = realized + (unrealized ?? 0);
+			pnlChanges.Add(lastReportedTotal);
 		};
 
 		var tcs = new TaskCompletionSource<bool>();
@@ -858,18 +905,45 @@ public class BacktestingTests : BaseTestClass
 			Fail("Backtest did not complete in time");
 		}
 
-		// After trades, PnL should have been tracked
-		// Note: PnL might be 0 if no trades, but if trades occurred, we expect PnL events
-		if (strategy.MyTrades.Any())
-		{
-			IsTrue(pnlChanges.Count > 0, "Expected PnL changes when trades occurred");
-		}
+		var tradeCount = strategy.MyTrades.Count();
+		Console.WriteLine($"Trades: {tradeCount}, PnL events: {pnlChanges.Count}, Final PnL: {strategy.PnL}");
+
+		// The full-month SMA strategy is expected to trade; guard so the oracle is not vacuous.
+		IsTrue(tradeCount > 0, "Expected trades so PnL movement can be verified");
+
+		// Once trades occur there MUST be at least one PnL event - the previous code skipped this
+		// check entirely when no trades happened, masking a regression that drops PnL events.
+		IsTrue(pnlChanges.Count > 0, "Expected PnL changes when trades occurred");
+
+		var manager = strategy.PnLManager;
+
+		// strategy.PnL must be exactly its definition: realized + unrealized straight from the PnL
+		// manager (TraderHelper.GetPnL). This pins the property to the manager and catches a sign
+		// flip or magnitude error in either component, without depending on event timing.
+		AreEqual(manager.RealizedPnL + manager.UnrealizedPnL, strategy.PnL,
+			"Strategy PnL must equal realized + unrealized from the PnL manager");
+
+		// The realized PnL reported by the LAST PnLReceived2 event must equal the final realized PnL:
+		// realized only moves on fills, and every realized-moving fill raises the event, so no realized
+		// change can occur after the last event. This is a deterministic, event-synced oracle for the
+		// traded result. NOTE: comparing the last event's *total* (realized + unrealized) to the final
+		// strategy.PnL would be wrong - the strategy ends with an open position, and its unrealized PnL
+		// is re-marked on every later market message while the event is throttled by UnrealizedPnLInterval,
+		// so the two legitimately diverge (that is engine-correct behavior, not a bug).
+		AreEqual(manager.RealizedPnL, lastReportedRealized,
+			"Last reported realized PnL must equal the final realized PnL (realized only changes on fills, each of which raises PnLReceived2)");
+
+		// The combined total of the last event likewise reflects realized + unrealized at that event's
+		// time; assert that reconstruction is internally consistent (guards the event payload wiring).
+		AreEqual(pnlChanges[^1], lastReportedTotal,
+			"Last collected total must match the last event's (realized + unrealized)");
 	}
 
 	/// <summary>
 	/// Tests that position changes occur during backtesting.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestGeneratesPositionChanges()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -925,17 +999,26 @@ public class BacktestingTests : BaseTestClass
 			Fail("Backtest did not complete in time");
 		}
 
-		// If trades occurred, position should have changed
-		if (strategy.MyTrades.Any())
-		{
-			IsTrue(positionChanges.Count > 0, "Expected position changes when trades occurred");
-		}
+		var tradeCount = strategy.MyTrades.Count();
+		Console.WriteLine($"Trades: {tradeCount}, Position events: {positionChanges.Count}, Final position: {strategy.Position}");
+
+		// The full-month SMA strategy is expected to trade; guard so the oracle is not vacuous.
+		IsTrue(tradeCount > 0, "Expected trades so position movement can be verified");
+
+		// Once trades occur there MUST be position events - the previous code skipped this check
+		// entirely when no trades happened, masking a regression that drops position events.
+		IsTrue(positionChanges.Count > 0, "Expected position changes when trades occurred");
+
+		// The position must have actually moved away from flat at some point; a stream of only
+		// zero values would mean fills never updated the position.
+		IsTrue(positionChanges.Any(v => v != 0), "Expected a non-zero position after fills occurred");
 	}
 
 	/// <summary>
 	/// Tests that statistics are tracked during backtesting.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestTracksStatistics()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -961,6 +1044,29 @@ public class BacktestingTests : BaseTestClass
 			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
+		};
+
+		// Independently count order *registrations* exactly as the OrderCount statistic does:
+		// OrderCountParameter.New(order) is invoked once per order when it transitions
+		// Pending -> Active/Done (Strategy.ProcessOrder => StatisticManager.AddNewOrder), and the
+		// statistic is monotonic (never decremented). Replicate that precise condition here: track,
+		// per order, that it was first seen Pending and then count it once when it later reaches
+		// Active or Done. This is the true contract of the OrderCount statistic and is deterministic
+		// for the fixed sample history.
+		var pendingSeen = new HashSet<long>();
+		var counted = new HashSet<long>();
+		var registeredOrderCount = 0;
+		strategy.OrderReceived += (sub, order) =>
+		{
+			var id = order.TransactionId;
+
+			if (order.State == OrderStates.Pending)
+				pendingSeen.Add(id);
+			else if ((order.State == OrderStates.Active || order.State == OrderStates.Done) &&
+				pendingSeen.Contains(id) && counted.Add(id))
+			{
+				registeredOrderCount++;
+			}
 		};
 
 		var tcs = new TaskCompletionSource<bool>();
@@ -989,15 +1095,53 @@ public class BacktestingTests : BaseTestClass
 		var statisticManager = strategy.StatisticManager;
 		IsNotNull(statisticManager, "StatisticManager should not be null");
 
-		// Check that some statistics are available
-		var parameters = statisticManager.Parameters.ToList();
-		IsTrue(parameters.Count > 0, "Expected statistics parameters to be tracked");
+		// Note: Parameters is populated by the StatisticManager constructor
+		// (StatisticParameterRegistry.CreateAll), so "Parameters.Count > 0" is always true and
+		// proves nothing about the run. Instead assert the parameters were actually *updated*
+		// by the backtest by cross-checking their values against the strategy's own state.
+
+		var orders = strategy.Orders.ToList();
+		var trades = strategy.MyTrades.ToList();
+
+		// The full-month SMA strategy is expected to trade; if it did not, the assertions below
+		// would be vacuous, so guard the data first.
+		IsTrue(orders.Count > 0, $"Expected orders during backtest, got {orders.Count}");
+
+		object StatValue(StatisticParameterTypes type)
+			=> statisticManager.Parameters.First(p => p.Type == type).Value;
+
+		// OrderCount statistic must equal the number of order *registrations* observed over the whole
+		// run, NOT strategy.Orders.Count. The statistic is a monotonic cumulative counter incremented
+		// once per registration (OrderCountParameter.New), while strategy.Orders is a recycled live
+		// window: with the default OrdersKeepTime (1 day) Strategy.RecycleOrders evicts Done orders
+		// older than ~1.5 days from the live collection, so over a full month strategy.Orders.Count is
+		// far smaller than the all-time registration count. Comparing them is comparing two different
+		// quantities. registeredOrderCount counts the same registrations the statistic does.
+		var orderCountStat = (int)StatValue(StatisticParameterTypes.OrderCount);
+		AreEqual(registeredOrderCount, orderCountStat,
+			"OrderCount statistic must equal the number of order registrations observed");
+
+		// Sanity: every order still present in the recycled live collection must have been registered,
+		// so the live count can never exceed the cumulative registration count.
+		IsTrue(orders.Count <= orderCountStat,
+			$"Live order count {orders.Count} cannot exceed cumulative registrations {orderCountStat}");
+
+		// TradeCount statistic counts closing trades (ClosedVolume > 0); it can never exceed the
+		// total own trades and must be positive once trades have occurred.
+		var tradeCountStat = (int)StatValue(StatisticParameterTypes.TradeCount);
+		IsTrue(tradeCountStat >= 0 && tradeCountStat <= trades.Count,
+			$"TradeCount statistic {tradeCountStat} must be within [0; own trades {trades.Count}]");
+
+		// Commission statistic must equal the strategy's accumulated commission (0 here - no rules).
+		var commissionStat = (decimal)StatValue(StatisticParameterTypes.Commission);
+		AreEqual(strategy.Commission ?? 0m, commissionStat, "Commission statistic must match strategy commission");
 	}
 
 	/// <summary>
 	/// Tests that commission rules are applied during backtesting.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestAppliesCommission()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -1014,8 +1158,12 @@ public class BacktestingTests : BaseTestClass
 
 		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
-		// Add commission rule - 0.1% per trade
-		connector.EmulationAdapter.Settings.CommissionRules = [new CommissionTradeRule { Value = 0.001m }];
+		// Add commission rule: a flat ABSOLUTE 0.001 currency units per trade.
+		// CommissionTradeRule.Value is a Unit; with the default Absolute type it is NOT a percent -
+		// ICommissionRule.GetValue returns the value as-is (see ICommissionRule.GetValue), so each
+		// own trade is charged exactly 0.001, independent of price/volume.
+		const decimal perTradeCommission = 0.001m;
+		connector.EmulationAdapter.Settings.CommissionRules = [new CommissionTradeRule { Value = perTradeCommission }];
 
 		var strategy = new SmaStrategy
 		{
@@ -1026,13 +1174,6 @@ public class BacktestingTests : BaseTestClass
 			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
 			Long = 80,
 			Short = 30,
-		};
-
-		var totalCommission = 0m;
-		strategy.PnLReceived2 += (s, pf, time, realized, unrealized, commission) =>
-		{
-			if (commission.HasValue)
-				totalCommission = commission.Value;
 		};
 
 		var tcs = new TaskCompletionSource<bool>();
@@ -1057,11 +1198,19 @@ public class BacktestingTests : BaseTestClass
 			Fail("Backtest did not complete in time");
 		}
 
-		// If trades occurred, commission should be tracked
-		if (strategy.MyTrades.Any())
-		{
-			IsNotNull(strategy.Commission, "Commission should be tracked when trades occurred");
-		}
+		var tradeCount = strategy.MyTrades.Count();
+		Console.WriteLine($"Trades: {tradeCount}, Commission: {strategy.Commission}");
+
+		// The full-month SMA strategy is expected to trade; without trades the commission oracle
+		// would be vacuous, so require fills first.
+		IsTrue(tradeCount > 0, "Expected trades to occur so commission can be verified");
+
+		// Each own trade is charged a flat absolute commission, so the strategy's accumulated
+		// commission must be exactly perTradeCommission * tradeCount. This catches a wrong sign or
+		// magnitude in the emulator's commission handling (MarketEmulator -> CommissionManager).
+		IsNotNull(strategy.Commission, "Commission should be tracked when trades occurred");
+		AreEqual(perTradeCommission * tradeCount, strategy.Commission.Value,
+			$"Commission must equal {perTradeCommission} * {tradeCount} trades");
 	}
 
 	/// <summary>
@@ -1125,6 +1274,7 @@ public class BacktestingTests : BaseTestClass
 	/// Tests that progress events are raised during backtesting.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestRaisesProgressEvents()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -1183,9 +1333,11 @@ public class BacktestingTests : BaseTestClass
 		// Verify that progress events were raised
 		IsTrue(progressValues.Count > 0, "Expected progress events to be raised");
 
-		// Progress should eventually reach or approach 100
+		// The run reached ChannelStates.Stopped (full completion), so progress MUST reach 100%.
+		// A softer threshold (e.g. 50%) would silently pass a regression where ProgressChanged
+		// stops short of 100% (e.g. a broken final calculation in HistoryMessageAdapter).
 		var maxProgress = progressValues.Max();
-		IsTrue(maxProgress >= 50, "Expected progress to reach at least 50%");
+		IsTrue(maxProgress >= 100, $"Completed backtest must report 100% progress, got {maxProgress}%");
 	}
 
 	/// <summary>
@@ -1571,6 +1723,7 @@ public class BacktestingTests : BaseTestClass
 	/// Tests that multiple securities can be backtested.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestWithMultipleSecurities()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -1588,6 +1741,24 @@ public class BacktestingTests : BaseTestClass
 		var stopTime = Paths.HistoryBeginDate.AddDays(14);
 
 		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		// Track finished candles per security so we can prove BOTH instruments were actually
+		// replayed - not just that the strategies were stopped (which the handler does itself).
+		var secId1 = security1.Id.ToSecurityId();
+		var secId2 = security2.Id.ToSecurityId();
+		var candles1 = 0;
+		var candles2 = 0;
+
+		connector.CandleReceived += (sub, candle) =>
+		{
+			if (candle.State != CandleStates.Finished)
+				return;
+
+			if (candle.SecurityId == secId1)
+				Interlocked.Increment(ref candles1);
+			else if (candle.SecurityId == secId2)
+				Interlocked.Increment(ref candles2);
+		};
 
 		var strategy1 = new SmaStrategy
 		{
@@ -1640,9 +1811,17 @@ public class BacktestingTests : BaseTestClass
 			Fail("Backtest did not complete in time");
 		}
 
+		Console.WriteLine($"Candles: {security1.Id}={candles1}, {security2.Id}={candles2}");
+
 		// Both strategies should have completed
 		strategy1.ProcessState.AssertEqual(ProcessStates.Stopped, "Strategy 1 should be stopped");
 		strategy2.ProcessState.AssertEqual(ProcessStates.Stopped, "Strategy 2 should be stopped");
+
+		// The real point of a multi-security backtest: data for BOTH securities must be replayed.
+		// The previous test would pass even if security2 stayed completely silent (no subscription,
+		// no data) because the stop handler stops the strategies itself.
+		IsTrue(candles1 > 0, $"Expected finished candles for {security1.Id}, got {candles1}");
+		IsTrue(candles2 > 0, $"Expected finished candles for {security2.Id}, got {candles2}");
 	}
 
 	/// <summary>
@@ -2837,6 +3016,7 @@ public class BacktestingTests : BaseTestClass
 	/// If this test fails, it means some candle messages are being lost in the adapter pipeline.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task BacktestAllCandlesDelivered()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -2904,9 +3084,12 @@ public class BacktestingTests : BaseTestClass
 
 		Console.WriteLine($"Storage candles: {storageCandles}, Received finished candles: {finishedCandlesReceived}");
 
-		// Last candle may not be delivered because ProcessStoredCandles
-		// only emits candles with OpenTime < currentTime (the very last has no "next" time event).
-		IsTrue(finishedCandlesReceived >= storageCandles - 1,
-			$"Too many candles lost. Storage: {storageCandles}, Received: {finishedCandlesReceived}");
+		// Every stored candle must be delivered exactly once: no candle lost in the adapter
+		// pipeline and no duplicates. The previous tolerance ("&gt;= storageCandles - 1", with no
+		// upper bound) accepted both a dropped last candle and arbitrary duplicates; the engine
+		// actually delivers an exact 1:1 mapping (subscribers also receive a direct forward of the
+		// final candle), so assert exact equality.
+		AreEqual(storageCandles, finishedCandlesReceived,
+			$"All stored candles must be delivered exactly once. Storage: {storageCandles}, Received: {finishedCandlesReceived}");
 	}
 }

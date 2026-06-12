@@ -37,10 +37,31 @@ public class MarketDepthTests
 				});
 
 				var sparseDepth = depth.Sparse(step, null, _maxDepth);
-				sparseDepth.Verify();
+
+				// The sparse book must remain a valid order book.
+				// Bids must be strictly descending by price (Bids[0] is the best/highest).
+				for (var i = 1; i < sparseDepth.Bids.Length; i++)
+					(sparseDepth.Bids[i - 1].Price > sparseDepth.Bids[i].Price).AssertTrue();
+
+				// Asks must be strictly ascending by price (Asks[0] is the best/lowest).
+				for (var i = 1; i < sparseDepth.Asks.Length; i++)
+					(sparseDepth.Asks[i - 1].Price < sparseDepth.Asks[i].Price).AssertTrue();
+
+				// The book must not be crossed: the highest bid price is strictly below the lowest ask price.
+				if (sparseDepth.Bids.Length > 0 && sparseDepth.Asks.Length > 0)
+				{
+					var maxBidPrice = sparseDepth.Bids.Max(q => q.Price);
+					var minAskPrice = sparseDepth.Asks.Min(q => q.Price);
+
+					(maxBidPrice < minAskPrice).AssertTrue();
+				}
 
 				var sparseBids = sparseDepth.Bids.ToDictionary(p => p.Price);
 				var sparseAsks = sparseDepth.Asks.ToDictionary(p => p.Price);
+
+				// No price may appear on both the bid and the ask side.
+				foreach (var price in sparseBids.Keys)
+					sparseAsks.ContainsKey(price).AssertFalse();
 
 				foreach (var bid in depth.Bids)
 					sparseBids.ContainsKey(bid.Price).AssertTrue();

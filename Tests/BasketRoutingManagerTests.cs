@@ -187,8 +187,12 @@ public class BasketRoutingManagerTests : BaseTestClass
 		// Should return not supported message
 		result.OutMessages.Count.AssertEqual(1, "Should have one out message");
 		result.OutMessages[0].Type.AssertEqual(MessageTypes.SubscriptionResponse, "Should be response message");
-		((SubscriptionResponseMessage)result.OutMessages[0]).IsNotSupported()
-			.AssertTrue("Should be NotSupported");
+		var response = (SubscriptionResponseMessage)result.OutMessages[0];
+		response.IsNotSupported().AssertTrue("Should be NotSupported");
+
+		// The response must be addressed back to the original request (CreateNotSupported sets
+		// OriginalTransactionId = transId), otherwise the outer subscriber cannot correlate it.
+		response.OriginalTransactionId.AssertEqual(transId, "Response should reference the original transaction id");
 	}
 
 	#endregion
@@ -196,6 +200,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 	#region ProcessInMessage — MarketData Unsubscribe
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task ProcessInMessage_MarketData_Unsubscribe_RemovesMapping()
 	{
 		var idGen = new IncrementalIdGenerator();
@@ -221,6 +226,17 @@ public class BasketRoutingManagerTests : BaseTestClass
 		// Verify subscription exists
 		ctx.SubscriptionRouting.TryGetSubscription(subscribeTransId, out _, out _, out _).AssertTrue();
 
+		// The child id created for the subscribe must be mapped to the parent.
+		var childTransId = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[0].Message).TransactionId;
+		ctx.ParentChildMap.TryGetParent(childTransId, out _)
+			.AssertTrue("Original child mapping should exist before unsubscribe");
+
+		// The adapter confirms the child subscription. This moves the child to the Active state
+		// in ParentChildMap, which is required for ToChild's GetChild (it only enumerates active
+		// children) to route the subsequent unsubscribe down to that child.
+		await ctx.Manager.ProcessOutMessageAsync(adapter,
+			new SubscriptionResponseMessage { OriginalTransactionId = childTransId }, a => a, CancellationToken);
+
 		// Now unsubscribe
 		var unsubscribeTransId = idGen.GetNextId();
 		var unsubscribeMsg = new MarketDataMessage
@@ -234,9 +250,16 @@ public class BasketRoutingManagerTests : BaseTestClass
 
 		var unsubscribeResult = await ctx.Manager.ProcessInMessageAsync(unsubscribeMsg, a => a, CancellationToken);
 
-		// Should have routing decisions for unsubscribe
-		// (actual removal happens in ProcessOutMessage when response comes)
+		// Unsubscribe is routed to the child adapter (one decision per active child).
 		unsubscribeResult.Handled.AssertTrue("Unsubscribe should be handled");
+		unsubscribeResult.RoutingDecisions.Count.AssertEqual(1, "Unsubscribe should be routed to the single child");
+
+		// The fix cb2caf56c8 removes the original child mapping SYNCHRONOUSLY in ToChild
+		// (ParentChildMap.RemoveMapping) so that subsequent data with the original child id
+		// is no longer forwarded — this must hold immediately after ProcessInMessageAsync,
+		// not only after an out-message response arrives.
+		ctx.ParentChildMap.TryGetParent(childTransId, out _)
+			.AssertFalse("Original child mapping must be removed synchronously on unsubscribe");
 	}
 
 	[TestMethod]
@@ -492,6 +515,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task ProcessOutMessage_DataMessage_MultipleChildIds_AllRemapped()
 	{
 		var idGen = new IncrementalIdGenerator();
@@ -519,6 +543,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 
 		var childId1 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[0].Message).TransactionId;
 		var childId2 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[1].Message).TransactionId;
+		childId1.AssertNotEqual(childId2, "Child ids must be distinct");
 
 		// Responses
 		await ctx.Manager.ProcessOutMessageAsync(adapter1,
@@ -526,7 +551,9 @@ public class BasketRoutingManagerTests : BaseTestClass
 		await ctx.Manager.ProcessOutMessageAsync(adapter2,
 			new SubscriptionResponseMessage { OriginalTransactionId = childId2 }, a => a, CancellationToken);
 
-		// Data message from adapter1 with its child ID
+		// A single out message carrying BOTH child ids (both children belong to the same
+		// parent subscription). This is what the test name promises: multiple child ids on
+		// one data message, all of which must be remapped to the parent.
 		var dataMsg = new ExecutionMessage
 		{
 			SecurityId = _secId1,
@@ -535,15 +562,24 @@ public class BasketRoutingManagerTests : BaseTestClass
 			TradePrice = 100m,
 			TradeVolume = 10m,
 		};
-		dataMsg.SetSubscriptionIds([childId1]);
+		dataMsg.SetSubscriptionIds([childId1, childId2]);
 
 		var dataResult = await ctx.Manager.ProcessOutMessageAsync(adapter1, dataMsg, a => a, CancellationToken);
 
 		dataResult.TransformedMessage.AssertNotNull("Data should be forwarded");
 		var ids = ((ISubscriptionIdMessage)dataResult.TransformedMessage).GetSubscriptionIds();
-		ids.Contains(parentTransId).AssertTrue("Should remap to parent ID");
+
+		// No raw child id may leak to the outer subscriber.
 		ids.Count(id => id == childId1).AssertEqual(0, "Child1 ID should NOT leak");
 		ids.Count(id => id == childId2).AssertEqual(0, "Child2 ID should NOT leak");
+
+		// Canonical contract: both children map to the SAME parent, so the parent must be
+		// referenced exactly once. ApplyParentLookupId currently does not deduplicate, so
+		// [child1, child2] -> [parent, parent], which would deliver the same tick twice to
+		// the parent subscriber. Asserting the correct (deduplicated) behavior; if the engine
+		// emits a duplicate parent id this test goes red and pins that bug.
+		ids.Contains(parentTransId).AssertTrue("Should remap to parent ID");
+		ids.Count(id => id == parentTransId).AssertEqual(1, "Parent ID must not be duplicated");
 	}
 
 	[TestMethod]
@@ -597,6 +633,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task ProcessOutMessage_SubscriptionError_OneOfTwo_OtherStillWorks()
 	{
 		var idGen = new IncrementalIdGenerator();
@@ -620,17 +657,28 @@ public class BasketRoutingManagerTests : BaseTestClass
 		var childId1 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[0].Message).TransactionId;
 		var childId2 = ((ISubscriptionMessage)subscribeResult.RoutingDecisions[1].Message).TransactionId;
 
-		// Error for child1
-		await ctx.Manager.ProcessOutMessageAsync(adapter1,
+		// Error for child1. The other child has not responded yet (Stopped), so the parent
+		// response must be withheld: ProcessChildResponse returns needParentResponse == false.
+		var errorResult = await ctx.Manager.ProcessOutMessageAsync(adapter1,
 			new SubscriptionResponseMessage
 			{
 				OriginalTransactionId = childId1,
 				Error = new InvalidOperationException("fail"),
 			}, a => a, CancellationToken);
 
-		// Success for child2
-		await ctx.Manager.ProcessOutMessageAsync(adapter2,
+		errorResult.TransformedMessage.AssertNull("Parent response must wait until all children responded");
+
+		// Success for child2. Now every child has responded and at least one succeeded
+		// (allError == false), so the aggregated parent SubscriptionResponse is emitted with
+		// NO error — the partial failure of child1 must not surface as a parent-level error.
+		var successResult = await ctx.Manager.ProcessOutMessageAsync(adapter2,
 			new SubscriptionResponseMessage { OriginalTransactionId = childId2 }, a => a, CancellationToken);
+
+		successResult.TransformedMessage.AssertNotNull("Parent response should be emitted after the last child");
+		var parentResponse = (SubscriptionResponseMessage)successResult.TransformedMessage;
+		parentResponse.OriginalTransactionId.AssertEqual(parentTransId, "Parent response should carry parent id");
+		parentResponse.Error.AssertNull("Parent response must be successful when at least one child succeeded");
+		parentResponse.IsOk().AssertTrue("Parent response must be Ok when at least one child succeeded");
 
 		// Online for child2
 		await ctx.Manager.ProcessOutMessageAsync(adapter2,
@@ -652,7 +700,8 @@ public class BasketRoutingManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task ProcessOutMessage_DataMessage_UnknownSubscriptionId_PassesThrough()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task ProcessOutMessage_DataMessage_UnmappedSubscriptionId_IsDropped()
 	{
 		var idGen = new IncrementalIdGenerator();
 		var ctx = CreateTestContext(idGen);
@@ -660,7 +709,12 @@ public class BasketRoutingManagerTests : BaseTestClass
 		var adapter = CreateAdapter(idGen);
 		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
 
-		// Data message with unknown subscription ID (no mapping in ParentChildMap)
+		// Data message with a subscription ID that has no parent-child mapping
+		// (e.g. the subscription was already unsubscribed). The current contract
+		// (BasketRoutingManager.ApplyParentLookupId / cb2caf56c8 "Fix data forwarding
+		// after unsubscribe") is to DROP such data: ApplyParentLookupId returns false
+		// when no id maps to a valid parent, so ProcessOutMessageAsync yields
+		// RoutingOutResult.Empty and TransformedMessage stays null.
 		var dataMsg = new ExecutionMessage
 		{
 			SecurityId = _secId1,
@@ -673,12 +727,53 @@ public class BasketRoutingManagerTests : BaseTestClass
 
 		var dataResult = await ctx.Manager.ProcessOutMessageAsync(adapter, dataMsg, a => a, CancellationToken);
 
-		// Unknown IDs should pass through without remapping
-		if (dataResult.TransformedMessage != null)
+		// Data for an unmapped id must be dropped (not forwarded) — unconditional assert,
+		// no hidden `if` that could make it vacuous.
+		dataResult.TransformedMessage.AssertNull("Data for an unmapped subscription id must be dropped");
+		dataResult.LoopbackMessages.Count.AssertEqual(0, "No loopback for dropped data");
+		dataResult.ExtraMessages.Count.AssertEqual(0, "No extra messages for dropped data");
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task ProcessOutMessage_DataMessage_PinnedAdapterSubscription_StillForwarded()
+	{
+		var idGen = new IncrementalIdGenerator();
+		var ctx = CreateTestContext(idGen);
+
+		var adapter = CreateAdapter(idGen);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
+
+		// A subscription routed DIRECTLY to a pinned adapter (Message.Adapter set) takes the
+		// short-circuit in ProcessSubscriptionMessageAsync: it is registered in the routing
+		// state with its OWN transaction id and is NOT split into child subscriptions, so no
+		// parent-child mapping is ever created for it.
+		var subTransId = idGen.GetNextId();
+		var lookupMsg = new SecurityLookupMessage
 		{
-			var ids = ((ISubscriptionIdMessage)dataResult.TransformedMessage).GetSubscriptionIds();
-			ids.Contains(9999).AssertTrue("Unknown ID should pass through unchanged");
-		}
+			TransactionId = subTransId,
+			Adapter = adapter,
+		};
+
+		var inResult = await ctx.Manager.ProcessInMessageAsync(lookupMsg, a => a, CancellationToken);
+
+		inResult.RoutingDecisions.Count.AssertEqual(1, "Pinned subscription should route to the pinned adapter");
+		inResult.RoutingDecisions[0].Adapter.AssertEqual(adapter, "Should route to the pinned adapter");
+		ctx.SubscriptionRouting.TryGetSubscription(subTransId, out _, out _, out _)
+			.AssertTrue("Pinned subscription must be recorded in the routing state");
+
+		// Data emitted upstream carries this subscription's own transaction id (as set by
+		// SubscriptionOnlineMessageAdapter). It belongs to a KNOWN, active subscription and must
+		// reach the outer subscriber unchanged. ApplyParentLookupId only consults the parent-child
+		// map (empty for pinned subscriptions), so dropping this data would be silent data loss.
+		var dataMsg = new SecurityMessage { SecurityId = _secId1 };
+		dataMsg.SetSubscriptionIds([subTransId]);
+
+		var dataResult = await ctx.Manager.ProcessOutMessageAsync(adapter, dataMsg, a => a, CancellationToken);
+
+		dataResult.TransformedMessage.AssertNotNull("Data for a known pinned subscription must be forwarded, not dropped");
+		var ids = ((ISubscriptionIdMessage)dataResult.TransformedMessage).GetSubscriptionIds();
+		ids.Contains(subTransId).AssertTrue("The pinned subscription id must be preserved");
 	}
 
 	#endregion
@@ -722,6 +817,16 @@ public class BasketRoutingManagerTests : BaseTestClass
 		var (outMsgs, pending, notSupported) = ctx.Manager.ProcessConnect(
 			adapter, adapter, adapter.SupportedInMessages, null);
 
+		// The first adapter going Connected must produce exactly one successful ConnectMessage
+		// (ConnectDisconnectEventOnFirstAdapter is true by default) and no pending/not-supported.
+		var outList = outMsgs.ToArray();
+		outList.Length.AssertEqual(1, "Should emit a single ConnectMessage");
+		var connectMsg = outList[0] as ConnectMessage;
+		connectMsg.AssertNotNull("Out message should be a ConnectMessage");
+		connectMsg.Error.AssertNull("Successful connect must have no error");
+		pending.Length.AssertEqual(0, "No pending loopback expected");
+		notSupported.Length.AssertEqual(0, "No not-supported messages expected");
+
 		// After connect, adapter should be registered for its supported message types
 		var mdMsg = new MarketDataMessage
 		{
@@ -733,6 +838,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 
 		var (adapters, _) = ctx.Router.GetAdapters(mdMsg, a => a);
 		adapters.AssertNotNull("Should find adapter after ProcessConnect");
+		adapters.Contains(adapter).AssertTrue("Returned adapters must include the connected adapter");
 	}
 
 	[TestMethod]

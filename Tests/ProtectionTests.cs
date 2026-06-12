@@ -170,9 +170,9 @@ public class ProtectionTests : BaseTestClass
 		// Open new position at price 100
 		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
-		// Price moves up more, no activation
+		// Price reaches the take-profit level (2% above 100 = 102) again, take profit activates
 		activationResult = behaviour.TryActivate(102m, DateTime.UtcNow);
-		activationResult.AssertNotNull(); // take profit снова
+		activationResult.AssertNotNull(); // take profit again
 		{
 			var (isTake, side, price, volume, condition) = activationResult.Value;
 			isTake.AssertTrue();
@@ -193,7 +193,7 @@ public class ProtectionTests : BaseTestClass
 
 		behaviourTrailingOnly.Update(100m, 10m, DateTime.UtcNow);
 
-		// Price moves up, trailing stop подтягивается, но не срабатывает
+		// Price moves up, the trailing stop is pulled up but does not trigger
 		activationResult = behaviourTrailingOnly.TryActivate(101m, DateTime.UtcNow);
 		activationResult.AssertNull();
 		activationResult = behaviourTrailingOnly.TryActivate(102m, DateTime.UtcNow);
@@ -520,11 +520,16 @@ public class ProtectionTests : BaseTestClass
 	[TestMethod]
 	public void UnitsAbsolute()
 	{
-		// Arrange
+		// Canonical (unified) semantics: an Absolute protective level is an OFFSET from the
+		// protected entry price, exactly like Percent. Entry = 100, so a take Absolute(1) means
+		// activation at 100 + 1 = 101 and a stop Absolute(20) means activation at 100 - 20 = 80.
+		// TDD red until the engine unifies Absolute with Percent: the current engine treats an
+		// Absolute level as a raw price LEVEL, so Absolute(1)/Absolute(20) would (wrongly) fire
+		// almost immediately and the "100.5 => no take" assertion below fails until that is fixed.
 		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.01m, 2);
 		var behaviour = factory.Create(
-			new Unit(101m, UnitTypes.Absolute),  // Take profit at absolute price 101
-			new Unit(80m, UnitTypes.Absolute),   // Stop loss at absolute price 80
+			new Unit(1m, UnitTypes.Absolute),    // Take profit: Absolute offset 1 above entry => 100 + 1 = 101
+			new Unit(20m, UnitTypes.Absolute),   // Stop loss: Absolute offset 20 below entry => 100 - 20 = 80
 			false,                             // No trailing stop
 			TimeSpan.Zero,                     // No take timeout
 			TimeSpan.Zero,                     // No stop timeout
@@ -533,11 +538,11 @@ public class ProtectionTests : BaseTestClass
 		// Initial position
 		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
-		// Should not activate at 100.5 (take at 101 absolute)
+		// Should not activate at 100.5 (take offset => activation at 101)
 		var activationResult = behaviour.TryActivate(100.5m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
-		// Should activate take at 101 (absolute price)
+		// Should activate take at 101 (entry + Absolute offset 1)
 		activationResult = behaviour.TryActivate(101m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		{
@@ -554,11 +559,11 @@ public class ProtectionTests : BaseTestClass
 		// New position
 		behaviour.Update(100m, 10m, DateTime.UtcNow);
 
-		// Should not activate at 85 (stop at 80 absolute)
+		// Should not activate at 85 (stop offset => activation at 80)
 		activationResult = behaviour.TryActivate(85m, DateTime.UtcNow);
 		activationResult.AssertNull();
 
-		// Should activate stop at 80 (absolute price)
+		// Should activate stop at 80 (entry - Absolute offset 20)
 		activationResult = behaviour.TryActivate(80m, DateTime.UtcNow);
 		activationResult.AssertNotNull();
 		{
@@ -667,13 +672,29 @@ public class ProtectionTests : BaseTestClass
 		activationLimit.AssertNotNull();
 		activationMarket.AssertNotNull();
 
-		// Check the price - for limit orders, it should be equal to trigger price
-		// For market orders, price might be 0 or special flag might be set
-		var orderTypeLimit = activationLimit.Value.condition == null ? "Limit" : "Special";
-		var orderTypeMarket = activationMarket.Value.condition == null ? "Market" : "Special";
+		// The observable effect of the market-orders flag is the activation price
+		// (ProtectiveProcessor.GetActivationPrice -> getClosePosPrice):
+		//   limit  => close price = trigger price (priceOffset is zero here);
+		//   market => close price = 0 (close by market).
+		// LocalProtectiveBehaviour always reports a null condition regardless of the flag,
+		// so the price is the only thing that actually distinguishes the two modes.
+		var limitInfo = activationLimit.Value;
+		var marketInfo = activationMarket.Value;
 
-		orderTypeLimit.AssertEqual("Limit");
-		orderTypeMarket.AssertEqual("Market");
+		// Both are take-profit activations of the full long position closing via Sell.
+		limitInfo.isTake.AssertTrue();
+		limitInfo.side.AssertEqual(Sides.Sell);
+		limitInfo.volume.AssertEqual(10m);
+		limitInfo.condition.AssertNull();
+
+		marketInfo.isTake.AssertTrue();
+		marketInfo.side.AssertEqual(Sides.Sell);
+		marketInfo.volume.AssertEqual(10m);
+		marketInfo.condition.AssertNull();
+
+		// The flag must change the close price: limit closes at the trigger, market closes at 0.
+		limitInfo.price.AssertEqual(101m);
+		marketInfo.price.AssertEqual(0m);
 	}
 
 	[TestMethod]
@@ -829,21 +850,25 @@ public class ProtectionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void TrailingStop_LimitUnitType()
+	public void AbsoluteUnitType_TrailingGuardAndActivation()
 	{
-		// Test for ProtectiveProcessor class which is used internally by the behaviour
+		// Test for ProtectiveProcessor class which is used internally by the behaviour.
+		// This verifies two things about the Absolute unit type:
+		//  1) trailing is incompatible with an Absolute stop level (the guard throws);
+		//  2) for a non-trailing Absolute level the activation direction follows isUpTrend.
 		var logReceiver = new LogReceiver();
 
 		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.1m, 2);
 
-		// Trailing stop with UnitTypes.Absolute for take profit
+		// An Absolute take with trailing stop is allowed: the trailing guard only
+		// constrains the stop level, not the take level.
 		factory.Create(
 			new Unit(1m, UnitTypes.Absolute),
 			new Unit(1m, UnitTypes.Percent),
 			true, // Trailing stop enabled
 			TimeSpan.Zero, TimeSpan.Zero, false);
 
-		// Trailing stop with UnitTypes.Absolute for stop loss
+		// An Absolute stop level combined with trailing is rejected by the factory.
 		ThrowsExactly<ArgumentException>(() =>
 			factory.Create(
 				new Unit(1m, UnitTypes.Percent),
@@ -851,17 +876,227 @@ public class ProtectionTests : BaseTestClass
 				true, // Trailing stop enabled
 				TimeSpan.Zero, TimeSpan.Zero, false));
 
-		// Regular stop with UnitTypes.Absolute for take profit
+		// Non-trailing processor with an Absolute protective level is allowed
+		// (the Absolute-with-trailing guard only applies when isTrailing is true).
+		// Canonical (unified) semantics: an Absolute protective level is an OFFSET from the
+		// protected entry price, exactly like Percent (which the engine already treats as an
+		// offset). Here entry = 100, isUpTrend = false (downward/stop-like) and Absolute(10),
+		// so the activation price must be entry - 10 = 90: the stop fires when the price falls
+		// to/below 90 and stays inactive while it is still above 90. Because useMarketOrders = true,
+		// the reported close price is 0.
+		// TDD red until the engine unifies Absolute with Percent: the current engine treats
+		// Absolute as a raw price LEVEL (ProtectiveProcessor.cs:109-110), i.e. it would only fire
+		// below 10, so the "85 => 0" assertion below fails until that is fixed.
 		var p = new ProtectiveProcessor(
 			Sides.Buy, 100m, false, false, new(10, UnitTypes.Absolute),
 			true, new Unit(), TimeSpan.Zero, DateTime.UtcNow, logReceiver);
 
-		p.AssertNotNull();
+		// Below the offset activation price (entry - 10 = 90) the downward stop fires;
+		// the market-order close price is 0.
+		p.GetActivationPrice(85m, DateTime.UtcNow).AssertEqual(0m);
+		// Above the offset activation price there is no activation yet.
+		p.GetActivationPrice(95m, DateTime.UtcNow).AssertNull();
 
-		// Trailing stop with UnitTypes.Absolute for stop loss
+		// Constructing a trailing processor with an Absolute level throws directly too.
 		ThrowsExactly<ArgumentException>(() =>
 			new ProtectiveProcessor(
 				Sides.Buy, 100m, false, true, new(10, UnitTypes.Absolute),
 				true, new Unit(), TimeSpan.Zero, DateTime.UtcNow, logReceiver));
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void TimeoutLimitCloseWithPriceOffset()
+	{
+		// Covers the limit close-by-timeout branch of ProtectiveProcessor.GetActivationPrice:
+		// when the timeout elapses and useMarketOrders is false, the close price is the
+		// current price shifted by priceOffset (subtracted for a Buy protective side,
+		// added for a Sell protective side). This branch (limit close + non-zero offset)
+		// is otherwise not exercised, since the behaviour-level timeout tests all use market orders.
+		var logReceiver = new LogReceiver();
+
+		var started = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		var timeout = TimeSpan.FromSeconds(30);
+		var priceOffset = new Unit(0.5m, UnitTypes.Absolute);
+
+		// Buy protective side (e.g. take for a long): close price = current - offset.
+		var procBuy = new ProtectiveProcessor(
+			Sides.Buy, 100m, true, false,
+			new Unit(5m, UnitTypes.Percent), false,
+			priceOffset, timeout, started, logReceiver);
+
+		// Before the timeout there is no activation when the price did not move.
+		procBuy.GetActivationPrice(100m, started.AddSeconds(10)).AssertNull();
+
+		// After the timeout the position is closed by a limit at current - offset.
+		procBuy.GetActivationPrice(100m, started.AddSeconds(31)).AssertEqual(99.5m);
+
+		// Sell protective side (e.g. take for a short): close price = current + offset.
+		var procSell = new ProtectiveProcessor(
+			Sides.Sell, 100m, false, false,
+			new Unit(5m, UnitTypes.Percent), false,
+			priceOffset, timeout, started, logReceiver);
+
+		procSell.GetActivationPrice(100m, started.AddSeconds(10)).AssertNull();
+		procSell.GetActivationPrice(100m, started.AddSeconds(31)).AssertEqual(100.5m);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void ControllerNonPositivePriceNoActivation()
+	{
+		// Covers the early "price <= 0" guard in ProtectiveController.TryActivate
+		// (yield break before any controller is consulted).
+		var controller = new ProtectiveController();
+		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.1m, 2);
+
+		var securityId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
+
+		var posController = controller.GetController(
+			securityId, "Portfolio1", factory,
+			new Unit(1m, UnitTypes.Percent),
+			new Unit(1m, UnitTypes.Percent),
+			false, TimeSpan.Zero, TimeSpan.Zero, false);
+
+		// Open a long position that would normally activate take profit at 101.
+		posController.Update(100m, 10m, DateTime.UtcNow);
+
+		// A non-positive price must short-circuit to an empty result, even though
+		// a position exists that could otherwise activate.
+		controller.TryActivate(securityId, 0m, DateTime.UtcNow).ToArray().Length.AssertEqual(0);
+		controller.TryActivate(securityId, -5m, DateTime.UtcNow).ToArray().Length.AssertEqual(0);
+
+		// Sanity check: a valid positive price still activates the existing position,
+		// proving the empty result above was due to the price guard and not a missing controller.
+		var activations = controller.TryActivate(securityId, 101m, DateTime.UtcNow).ToArray();
+		activations.Length.AssertEqual(1);
+		activations[0].isTake.AssertTrue();
+		activations[0].side.AssertEqual(Sides.Sell);
+		activations[0].price.AssertEqual(101m);
+		activations[0].volume.AssertEqual(10m);
+	}
+
+	// Minimal combined order condition used as a test double for the server protective path.
+	// It derives from OrderCondition (so Type.CreateOrderCondition can instantiate it via the
+	// parameterless constructor) and implements BOTH protective interfaces, which is exactly
+	// what ServerProtectiveBehaviourFactory requires from the adapter's OrderConditionType.
+	public class ServerTestOrderCondition : OrderCondition, IStopLossOrderCondition, ITakeProfitOrderCondition
+	{
+		// Shared by both interfaces (identical signatures), so a single property satisfies both.
+		public decimal? ClosePositionPrice { get; set; }
+		public decimal? ActivationPrice { get; set; }
+		public bool IsTrailing { get; set; }
+	}
+
+	// Builds a fake IMessageAdapter whose OrderConditionType is ServerTestOrderCondition.
+	// That single type implements both IStopLossOrderCondition and ITakeProfitOrderCondition,
+	// so IsSupportStopLoss()/IsSupportTakeProfit() (which test the OrderConditionType) both return
+	// true and CreateOrderCondition() yields a fresh ServerTestOrderCondition instance.
+	private static IMessageAdapter CreateServerStopAdapter()
+	{
+		var mock = new Mock<IMessageAdapter>();
+		mock.Setup(a => a.OrderConditionType).Returns(typeof(ServerTestOrderCondition));
+		return mock.Object;
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void ServerAbsoluteOffsetSemantics()
+	{
+		// First coverage for the otherwise-untested ServerProtectiveBehaviour.
+		// Canonical (unified) semantics: an Absolute protective level is an OFFSET from the
+		// protected entry price. The server path implements exactly this in Update():
+		//   take.ActivationPrice = entry +/- TakeValue, stop.ActivationPrice = entry -/+ StopValue.
+		// Each side is asserted on its OWN registration: the dual-interface server condition stores
+		// a single ActivationPrice, so configuring take and stop together would make the two writes
+		// collide; testing one side at a time verifies the offset arithmetic cleanly. Expected GREEN.
+		IProtectiveBehaviourFactory factory = new ServerProtectiveBehaviourFactory(CreateServerStopAdapter());
+
+		// Take-only: long entry at 100, take Absolute(1) => activation at 100 + 1 = 101.
+		var takeOnly = factory.Create(
+			new Unit(1m, UnitTypes.Absolute),
+			new Unit(),                         // stop not set
+			false, TimeSpan.Zero, TimeSpan.Zero,
+			false);                             // Limit close (ClosePositionPrice = ActivationPrice)
+
+		var takeReg = takeOnly.Update(100m, 10m, DateTime.UtcNow);
+		takeReg.AssertNotNull();
+		{
+			var (isTake, side, price, volume, condition) = takeReg.Value;
+			side.AssertEqual(Sides.Sell);
+			price.AssertEqual(100m);
+			volume.AssertEqual(10m);
+			condition.AssertNotNull();
+
+			var take = (ITakeProfitOrderCondition)condition;
+			take.ActivationPrice.AssertEqual(101m);    // entry + Absolute offset 1
+			take.ClosePositionPrice.AssertEqual(101m); // limit close at the activation price
+			isTake.AssertTrue();                       // a take-only registration is correctly a take
+		}
+
+		// Stop-only: long entry at 100, stop Absolute(20) => activation at 100 - 20 = 80.
+		var stopOnly = factory.Create(
+			new Unit(),                         // take not set
+			new Unit(20m, UnitTypes.Absolute),
+			false, TimeSpan.Zero, TimeSpan.Zero,
+			false);
+
+		var stopReg = stopOnly.Update(100m, 10m, DateTime.UtcNow);
+		stopReg.AssertNotNull();
+		{
+			var (_, side, price, volume, condition) = stopReg.Value;
+			side.AssertEqual(Sides.Sell);
+			price.AssertEqual(100m);
+			volume.AssertEqual(10m);
+
+			var stop = (IStopLossOrderCondition)condition;
+			stop.ActivationPrice.AssertEqual(80m);     // entry - Absolute offset 20
+			stop.ClosePositionPrice.AssertEqual(80m);
+			stop.IsTrailing.AssertFalse();
+		}
+
+		// ServerProtectiveBehaviour does not track position locally and never activates on price.
+		stopOnly.Position.AssertEqual(0m);
+		stopOnly.TryActivate(80m, DateTime.UtcNow).AssertNull();
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void ServerUpdateStopOnlyIsMislabeledAsTake()
+	{
+		// Proves the "// TODO" mislabeling in ServerProtectiveBehaviour.Update: the returned
+		// isTake flag is hard-coded to (condition is ITakeProfitOrderCondition) regardless of
+		// which protective side is actually configured. The shared server condition type always
+		// implements ITakeProfitOrderCondition, so a STOP-ONLY registration (no take configured)
+		// is still reported as isTake = true.
+		//
+		// Here only the stop is set (take Unit is unset => IsSet() == false), so the engine
+		// produces a pure stop order: only stop.ActivationPrice is populated and take.ActivationPrice
+		// stays null. The correct label for that registration is isTake = false. The assertion below
+		// asserts the CORRECT label and therefore goes RED on the current engine (which returns true).
+		IProtectiveBehaviourFactory factory = new ServerProtectiveBehaviourFactory(CreateServerStopAdapter());
+
+		var behaviour = factory.Create(
+			new Unit(),                       // Take NOT set => take block is skipped in Update
+			new Unit(5m, UnitTypes.Absolute), // Stop: offset -5 from entry => 100 - 5 = 95
+			false,
+			TimeSpan.Zero, TimeSpan.Zero,
+			false);
+
+		var reg = behaviour.Update(100m, 10m, DateTime.UtcNow);
+		reg.AssertNotNull();
+
+		var (isTake, side, _, _, condition) = reg.Value;
+
+		// Sanity: this is genuinely a stop-only registration - the take Unit is unset, so the take
+		// block is skipped and only the stop level is written. (The dual-interface server condition
+		// stores a single ActivationPrice, which therefore carries the stop offset 95.)
+		var stop = (IStopLossOrderCondition)condition;
+		stop.ActivationPrice.AssertEqual(95m);
+
+		side.AssertEqual(Sides.Sell);
+
+		// Correct label for a stop-only registration is false; the engine wrongly reports true.
+		isTake.AssertFalse();
 	}
 }

@@ -147,7 +147,12 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Side"),
 		};
 		var depths = security.RandomDepths(100, ordersCount: true);
-		return Import(DataType.MarketDepth, true, depths, fields, _1mcs, depths.Sum(q => q.ToTimeQuotes().Count()));
+
+		// Compute the expected exported row count independently of the engine's own
+		// ToTimeQuotes() (which TextExporter also uses) so the oracle does not become a
+		// tautology: one CSV row is written per quote, i.e. Bids.Length + Asks.Length.
+		var expectedRows = depths.Sum(q => q.Bids.Length + q.Asks.Length);
+		return Import(DataType.MarketDepth, true, depths, fields, _1mcs, expectedRows);
 	}
 
 	[TestMethod]
@@ -175,6 +180,7 @@ public class ImportTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public Task Positions()
 	{
 		var security = Helper.CreateStorageSecurity();
@@ -192,7 +198,14 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Changes[AveragePrice]"),
 			allFields.First(f => f.Name == "Changes[Commission]"),
 		};
-		return Import(DataType.PositionChanges, false, security.RandomPositionChanges(100), fields, TimeSpan.FromSeconds(1));
+
+		// The default PositionChange export template writes sub-second precision
+		// ({ServerTime:default:HH:mm:ss.ffffff}), so a roundtrip through the default
+		// import mapping must preserve time down to a microsecond, exactly like Ticks/
+		// OrderLog/Transactions/MarketDepth do. Asserting only 1-second precision would
+		// merely pin the silent sub-second loss caused by the import TimeOfDay mapping
+		// lacking { Format = "hh:mm:ss.ffffff" } (FieldMappingRegistry.cs:250).
+		return Import(DataType.PositionChanges, false, security.RandomPositionChanges(100), fields, _1mcs);
 	}
 
 	[TestMethod]
@@ -211,6 +224,7 @@ public class ImportTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public Task Level1()
 	{
 		var security = Helper.CreateStorageSecurity();
@@ -228,7 +242,16 @@ public class ImportTests : BaseTestClass
 			allFields.First(f => f.Name == "Changes[LastTradePrice]"),
 			allFields.First(f => f.Name == "Changes[LastTradeVolume]"),
 		};
-		return Import(DataType.Level1, true, security.RandomLevel1(count: 100), fields, TimeSpan.FromSeconds(1));
+
+		// The default Level1 export template writes sub-second precision
+		// ({ServerTime:default:HH:mm:ss.ffffff}), so a roundtrip through the default
+		// import mapping must preserve time down to a microsecond, exactly like Ticks/
+		// OrderLog/Transactions/MarketDepth do. Level1 updates many times per second, so
+		// truncating to 1 second would collapse distinct updates onto the same timestamp.
+		// Asserting only 1-second precision would merely pin the silent sub-second loss
+		// caused by the import TimeOfDay mapping lacking { Format = "hh:mm:ss.ffffff" }
+		// (FieldMappingRegistry.cs:227).
+		return Import(DataType.Level1, true, security.RandomLevel1(count: 100), fields, _1mcs);
 	}
 
 	[TestMethod]
@@ -324,10 +347,29 @@ public class ImportTests : BaseTestClass
 		{
 			allFields.First(f => f.Name == "ExchangeCode"),
 			allFields.First(f => f.Name == "Code"),
-			//allFields.First(f => f.Name == "ExpiryTime"),
-			//allFields.First(f => f.Name == "TimeZone"),
+			// ExpiryTime/TimeZone are intentionally absent here because the import field
+			// registry does not create mappings for them (see Boards_ImportMappingsCoverExportTemplate).
 		};
 		return Import(DataType.Board, false, Helper.RandomBoards(10), fields, TimeSpan.FromSeconds(1));
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void Boards_ImportMappingsCoverExportTemplate()
+	{
+		// The default Board export template writes four fields:
+		//   "{ExchangeCode};{Code};{ExpiryTime};{TimeZone}" (TemplateTxtRegistry.cs:130),
+		// but the import field registry only creates mappings for Code and ExchangeCode
+		// (FieldMappingRegistry.cs:284-285). As a result ExpiryTime and TimeZone are lost on
+		// any roundtrip of the engine's own Board export. A correct registry must expose an
+		// import mapping for every field the matching export template emits, otherwise the
+		// roundtrip silently drops data. This asserts that contract; it is expected to fail
+		// until ExpiryTime/TimeZone import mappings are added.
+		var fields = FieldMappingRegistry.CreateFields(DataType.Board).ToArray();
+		var names = fields.Select(f => f.Name).ToArray();
+
+		names.Contains("ExpiryTime").AssertTrue("Board import is missing an ExpiryTime mapping while the export template writes it.");
+		names.Contains("TimeZone").AssertTrue("Board import is missing a TimeZone mapping while the export template writes it.");
 	}
 
 	[TestMethod]
@@ -472,6 +514,82 @@ public class ImportTests : BaseTestClass
 
 		var withQuotes = mixed.Where(q => q.ToTimeQuotes().Any()).ToArray();
 		return Import(DataType.MarketDepth, true, mixed.ToArray(), fields, _1mcs, mixed.Sum(q => q.ToTimeQuotes().Count()), withQuotes.Length, withQuotes.Last().ServerTime);
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Ticks_ContentRoundtrip()
+	{
+		// The other tests in this class only verify counts and the last timestamp. This test
+		// closes the main coverage gap noted in the audit: it compares the actual content of
+		// every imported tick against its source element-by-element. If the importer swapped
+		// price/volume columns, mangled a value, or reordered rows, the count-only oracles
+		// would not notice - this one would.
+		var security = Helper.CreateStorageSecurity();
+		var allFields = FieldMappingRegistry.CreateFields(DataType.Ticks).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "SecurityId.SecurityCode"),
+			allFields.First(f => f.Name == "SecurityId.BoardCode"),
+			allFields.First(f => f.Name == "ServerTime.Date"),
+			allFields.First(f => f.Name == "ServerTime.TimeOfDay"),
+			allFields.First(f => f.Name == "TradeId"),
+			allFields.First(f => f.Name == "TradePrice"),
+			allFields.First(f => f.Name == "TradeVolume"),
+			allFields.First(f => f.Name == "OriginSide"),
+		};
+
+		for (var i = 0; i < fields.Length; i++)
+			fields[i].Order = i;
+
+		var token = CancellationToken;
+
+		var arr = security.RandomTicks(100, true);
+
+		var template = "{SecurityId.SecurityCode};{SecurityId.BoardCode};" + GetTemplate(DataType.Ticks);
+
+		var fs = Helper.MemorySystem;
+		var filePath = fs.GetSubTemp("ticks_content_import.csv");
+
+		using (var stream = fs.OpenWrite(filePath))
+		{
+			var (count, _) = await new TextExporter(DataType.Ticks, stream, template, null).Export(arr.ToAsyncEnumerable(), token);
+			count.AssertEqual(arr.Length);
+		}
+
+		ExecutionMessage[] imported;
+
+		using (var stream = fs.OpenRead(filePath))
+		{
+			var parser = new CsvParser(DataType.Ticks, fields)
+			{
+				ColumnSeparator = ";"
+			};
+
+			var msgs = await parser.Parse(stream).ToArrayAsync(token);
+			imported = [.. msgs.Cast<ExecutionMessage>()];
+		}
+
+		imported.Length.AssertEqual(arr.Length);
+
+		for (var i = 0; i < arr.Length; i++)
+		{
+			var expected = arr[i];
+			var actual = imported[i];
+
+			// The default tick export writes microsecond precision, so the roundtrip must
+			// preserve ServerTime down to a microsecond.
+			actual.ServerTime.AssertEqual(expected.ServerTime.Truncate(_1mcs));
+
+			// Compare exactly the columns the export template emits. A column swap or a
+			// mangled value (the classic importer bug) would surface here.
+			actual.SecurityId.SecurityCode.AssertEqual(expected.SecurityId.SecurityCode);
+			actual.SecurityId.BoardCode.AssertEqual(expected.SecurityId.BoardCode);
+			actual.TradePrice.AssertEqual(expected.TradePrice);
+			actual.TradeVolume.AssertEqual(expected.TradeVolume);
+			actual.TradeId.AssertEqual(expected.TradeId);
+			actual.OriginSide.AssertEqual(expected.OriginSide);
+		}
 	}
 
 	private const string _tickFullTemplate = "{SecurityId.SecurityCode};{SecurityId.BoardCode};{ServerTime:default:yyyyMMdd};{ServerTime:default:HH:mm:ss.ffffff};{TradeId};{TradePrice};{TradeVolume}";

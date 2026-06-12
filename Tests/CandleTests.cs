@@ -620,7 +620,9 @@ public class CandleTests : BaseTestClass
 
 		builder.PoC.Price.AreEqual(100m);
 		builder.High.Price.AreEqual(101m);
-		builder.Low.Price.AreEqual(99m);
+		// Canonical Value Area lower bound is the PoC (100) itself: the below side (99) was
+		// never absorbed into the accumulated volume, so it must not become the VA boundary.
+		builder.Low.Price.AreEqual(100m);
 	}
 
 	[TestMethod]
@@ -681,8 +683,13 @@ public class CandleTests : BaseTestClass
 
 		builder.VolumePercent = 90;
 		builder.Calculate();
-		builder.High.AssertEqual(default);
-		builder.Low.AssertEqual(default);
+		// Total Buy+Sell volume = 24, threshold = round(24 * 0.9) = 22, currVolume starts at PoC(12)=11.
+		// Below side has one combined node (10, vol 7): 11+7=18 <= 22. After the below side is
+		// exhausted the accumulation must continue on the above side: (14, vol 4) -> 18+4=22 (<= 22,
+		// absorbed), then (15, vol 2) -> 22+2=24 > 22 triggers. The Value Area therefore exists with
+		// High at price 15 and Low at the lowest absorbed below node, price 10.
+		builder.High.Price.AreEqual(15m);
+		builder.Low.Price.AreEqual(10m);
 	}
 
 	[TestMethod]
@@ -709,8 +716,10 @@ public class CandleTests : BaseTestClass
 		builder.VolumePercent = 100m;
 		builder.Calculate();
 
-		builder.High.AssertEqual(default);
-		builder.Low.AssertEqual(default);
+		// A 100% Value Area covers the whole profile range: every level is absorbed, so the
+		// bounds must be the extreme prices (High = max level price 14, Low = min level price 10).
+		builder.High.Price.AreEqual(14m);
+		builder.Low.Price.AreEqual(10m);
 	}
 
 	[TestMethod]

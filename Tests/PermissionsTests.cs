@@ -82,10 +82,17 @@ public class PermissionsTests : BaseTestClass
 			IpRestrictions = [_ip1, _ip2]
 		};
 
+		// Use a fixed, UTC, whole-second Till so the round-trip comparison is deterministic
+		// and not affected by any sub-second handling.
+		var till = new DateTime(2030, 1, 2, 3, 4, 5, DateTimeKind.Utc);
+
+		var enabledKey = ("trading", "AAPL", "limit", (DateTime?)null);
+		var disabledKey = ("data", "*", "", (DateTime?)till);
+
 		var dict = new SynchronizedDictionary<(string, string, string, DateTime?), bool>
 		{
-			[("trading", "AAPL", "limit", null)] = true,
-			[("data", "*", "", DateTime.UtcNow.AddDays(30))] = false
+			[enabledKey] = true,
+			[disabledKey] = false
 		};
 		original.Permissions[UserPermissions.Trading] = dict;
 
@@ -103,7 +110,17 @@ public class PermissionsTests : BaseTestClass
 
 		loaded.Permissions.Count.AssertEqual(1);
 		loaded.Permissions.Count(p => p.Key == UserPermissions.Trading).AssertEqual(1);
-		loaded.Permissions[UserPermissions.Trading].Count.AssertEqual(2);
+
+		var loadedSettings = loaded.Permissions[UserPermissions.Trading];
+		loadedSettings.Count.AssertEqual(2);
+
+		// Verify the actual entries survive the round-trip: the tuple keys (including
+		// the nullable Till) AND the IsEnabled bool values. The original assertion only
+		// checked Count, so corruption of the bool flag or Till would have gone unnoticed.
+		loadedSettings.ContainsKey(enabledKey).AssertTrue();
+		loadedSettings.ContainsKey(disabledKey).AssertTrue();
+		loadedSettings[enabledKey].AssertTrue();
+		loadedSettings[disabledKey].AssertFalse();
 	}
 
 	[TestMethod]
@@ -146,9 +163,11 @@ public class PermissionsTests : BaseTestClass
 			IpRestrictions = [_ip1, _ip2]
 		};
 
+		var key = ("stock", "AAPL", "", (DateTime?)null);
+
 		message.Permissions[UserPermissions.Trading] = new Dictionary<(string, string, string, DateTime?), bool>
 		{
-			[("stock", "AAPL", "", null)] = true
+			[key] = true
 		};
 
 		var creds = message.ToCredentials();
@@ -158,7 +177,13 @@ public class PermissionsTests : BaseTestClass
 		creds.IpRestrictions.Count().AssertEqual(2);
 		creds.IpRestrictions.Count(ip => ip.Equals(_ip1)).AssertEqual(1);
 		creds.Permissions.Count.AssertEqual(1);
-		creds.Permissions[UserPermissions.Trading].Count.AssertEqual(1);
+
+		// Verify the actual permission entry (key + bool), not just the count, so a
+		// corrupted key or flipped flag during conversion would be caught.
+		var converted = creds.Permissions[UserPermissions.Trading];
+		converted.Count.AssertEqual(1);
+		converted.ContainsKey(key).AssertTrue();
+		converted[key].AssertTrue();
 	}
 
 	[TestMethod]
@@ -227,10 +252,13 @@ public class PermissionsTests : BaseTestClass
 			IpRestrictions = [_ip1, _ip2]
 		};
 
+		var enabledKey = ("trading", "AAPL", "", (DateTime?)null);
+		var disabledKey = ("trading", "MSFT", "", (DateTime?)null);
+
 		var dict = new SynchronizedDictionary<(string, string, string, DateTime?), bool>
 		{
-			[("trading", "AAPL", "", null)] = true,
-			[("trading", "MSFT", "", null)] = false,
+			[enabledKey] = true,
+			[disabledKey] = false,
 		};
 		creds.Permissions[UserPermissions.Trading] = dict;
 
@@ -243,22 +271,33 @@ public class PermissionsTests : BaseTestClass
 		creds2.IpRestrictions.Count(ip => ip.Equals(_ip1)).AssertEqual(1);
 		creds2.IpRestrictions.Count(ip => ip.Equals(_ip2)).AssertEqual(1);
 		creds2.Permissions.Count.AssertEqual(1);
-		creds2.Permissions[UserPermissions.Trading].Count.AssertEqual(2);
+
+		// Verify the contract preserves entry content (distinct bool values per key),
+		// not merely the entry count. A swapped/dropped flag would otherwise pass.
+		var roundTripped = creds2.Permissions[UserPermissions.Trading];
+		roundTripped.Count.AssertEqual(2);
+		roundTripped.ContainsKey(enabledKey).AssertTrue();
+		roundTripped.ContainsKey(disabledKey).AssertTrue();
+		roundTripped[enabledKey].AssertTrue();
+		roundTripped[disabledKey].AssertFalse();
 	}
 
 	[TestMethod]
-	public void Extensions_TryGetByLoginAsync_NullStorageThrows()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public Task Extensions_TryGetByLoginAsync_NullStorageThrows()
 	{
-		ThrowsExactlyAsync<ArgumentNullException>(async () => await ((IPermissionCredentialsStorage)null).TryGetByLoginAsync("test", CancellationToken));
+		// Return the assertion Task so the negative-contract failure is actually observed.
+		return ThrowsExactlyAsync<ArgumentNullException>(() => ((IPermissionCredentialsStorage)null).TryGetByLoginAsync("test", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Extensions_TryGetByLoginAsync_EmptyLoginThrows()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public Task Extensions_TryGetByLoginAsync_EmptyLoginThrows()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
-		ThrowsExactlyAsync<ArgumentNullException>(async () => await storage.TryGetByLoginAsync("", CancellationToken));
+		return ThrowsExactlyAsync<ArgumentNullException>(() => storage.TryGetByLoginAsync("", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
@@ -292,20 +331,23 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task Extensions_TryGetByLoginAsync_EscapesWildcards()
 	{
-		// Check that '*' is not treated as wildcard in exact match
+		// A login query containing '*' must NOT be treated as a wildcard pattern:
+		// TryGetByLoginAsync escapes '*' so it only matches a stored login that
+		// literally equals "user*". Since the stored login is "user123" (no asterisk),
+		// the exact-match lookup must return null. If '*' were treated as a wildcard,
+		// "user*" would match "user123" and the result would be non-null.
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		await storage.SaveAsync(new PermissionCredentials { Email = "user-star", Password = ToSecureString("pass1") }, CancellationToken);
 		await storage.SaveAsync(new PermissionCredentials { Email = "user123", Password = ToSecureString("pass2") }, CancellationToken);
 
-		var result = await storage.TryGetByLoginAsync("user-star", CancellationToken);
+		var result = await storage.TryGetByLoginAsync("user*", CancellationToken);
 
-		result.AssertNotNull();
-		result.Email.AssertEqual("user-star");
+		result.AssertNull();
 	}
 
 	[TestMethod]
@@ -342,15 +384,28 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task FileStorage_Constructor_NonExistentDirectory()
 	{
 		var fs = Helper.MemorySystem;
-		var invalidPath = Path.Combine(fs.GetSubTemp(), "file.txt");
-		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, invalidPath);
 
+		// Point the storage at a file inside a directory that does NOT exist yet.
+		var missingDir = Path.Combine(fs.GetSubTemp(), "subdir-does-not-exist");
+		var filePath = Path.Combine(missingDir, "file.txt");
+
+		// Precondition: the directory truly does not exist before the storage runs.
+		fs.DirectoryExists(missingDir).AssertFalse();
+
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath);
+
+		// First access triggers EnsureInitialized, which must create the missing directory
+		// and load from a (still absent) file without throwing -> empty result set.
 		var results = await storage.SearchAsync("*").ToArrayAsync(CancellationToken);
 
 		results.Length.AssertEqual(0);
+
+		// The engine is contracted to create the missing parent directory.
+		fs.DirectoryExists(missingDir).AssertTrue();
 	}
 
 	[TestMethod]
@@ -384,20 +439,49 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task FileStorage_SearchAsync_WildcardPattern_MatchesCorrectly()
 	{
+		// Pure wildcard-prefix behavior: distinct, non-case-colliding logins.
+		// "admin*" must match the two logins starting with "admin" (case-insensitively)
+		// and must NOT match the unrelated "user".
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		await storage.SaveAsync(new PermissionCredentials { Email = "admin", Password = ToSecureString("pass") }, CancellationToken);
+		await storage.SaveAsync(new PermissionCredentials { Email = "admin1", Password = ToSecureString("pass") }, CancellationToken);
+		await storage.SaveAsync(new PermissionCredentials { Email = "Admin2", Password = ToSecureString("pass") }, CancellationToken);
 		await storage.SaveAsync(new PermissionCredentials { Email = "user", Password = ToSecureString("pass") }, CancellationToken);
-		await storage.SaveAsync(new PermissionCredentials { Email = "Admin", Password = ToSecureString("pass") }, CancellationToken);
 
 		var results = await storage.SearchAsync("admin*").ToArrayAsync(CancellationToken);
 
-		results.Length.AssertEqual(1);
-		results.Count(r => r.Email.StartsWithIgnoreCase("admin")).AssertEqual(1);
+		results.Length.AssertEqual(2);
+		results.All(r => r.Email.StartsWithIgnoreCase("admin")).AssertTrue();
+		results.Any(r => r.Email == "user").AssertFalse();
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task FileStorage_SaveAsync_LoginKeyIsCaseInsensitive()
+	{
+		// The storage keys credentials with a case-insensitive comparer, so saving
+		// "admin" and then "Admin" must collapse to a single entry (last write wins).
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
+
+		await storage.SaveAsync(new PermissionCredentials { Email = "admin", Password = ToSecureString("p1"), IpRestrictions = [_ip1] }, CancellationToken);
+		await storage.SaveAsync(new PermissionCredentials { Email = "Admin", Password = ToSecureString("p2") }, CancellationToken);
+
+		var all = await storage.SearchAsync("*").ToArrayAsync(CancellationToken);
+		all.Length.AssertEqual(1);
+
+		// Last write wins: the stored email and password/IP set come from the second save.
+		var found = await storage.TryGetByLoginAsync("ADMIN", CancellationToken);
+		found.AssertNotNull();
+		found.Email.AssertEqual("Admin");
+		found.Password.IsEqualTo(ToSecureString("p2")).AssertTrue();
+		found.IpRestrictions.Count().AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -431,12 +515,13 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void FileStorage_SaveAsync_NullThrows()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public Task FileStorage_SaveAsync_NullThrows()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
-		ThrowsExactlyAsync<ArgumentNullException>(async () => await storage.SaveAsync(null, CancellationToken));
+		return ThrowsExactlyAsync<ArgumentNullException>(() => storage.SaveAsync(null, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
@@ -477,53 +562,58 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void FileStorage_SaveAsync_InvalidLoginWithAsterisk_Throws()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public Task FileStorage_SaveAsync_InvalidLoginWithAsterisk_Throws()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(new PermissionCredentials { Email = "user*", Password = ToSecureString("pass") }, CancellationToken));
+		return ThrowsExactlyAsync<ArgumentException>(() => storage.SaveAsync(new PermissionCredentials { Email = "user*", Password = ToSecureString("pass") }, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void FileStorage_SaveAsync_Null_Throws()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public Task FileStorage_SaveAsync_Null_Throws()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(new PermissionCredentials { Email = null, Password = ToSecureString("pass") }, CancellationToken));
+		return ThrowsExactlyAsync<ArgumentException>(() => storage.SaveAsync(new PermissionCredentials { Email = null, Password = ToSecureString("pass") }, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void FileStorage_SaveAsync_Whitespace_Throws()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public Task FileStorage_SaveAsync_Whitespace_Throws()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(new PermissionCredentials { Email = " ", Password = ToSecureString("pass") }, CancellationToken));
+		return ThrowsExactlyAsync<ArgumentException>(() => storage.SaveAsync(new PermissionCredentials { Email = " ", Password = ToSecureString("pass") }, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void FileStorage_SaveAsync_WithInnerSpaces_Throws()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public Task FileStorage_SaveAsync_WithInnerSpaces_Throws()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(new PermissionCredentials { Email = "user test@example.com", Password = ToSecureString("pass") }, CancellationToken));
+		return ThrowsExactlyAsync<ArgumentException>(() => storage.SaveAsync(new PermissionCredentials { Email = "user test@example.com", Password = ToSecureString("pass") }, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void FileStorage_SaveAsync_InvalidPlus()
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public Task FileStorage_SaveAsync_InvalidPlus()
 	{
 		var fs = Helper.MemorySystem;
 		var tempFile = fs.GetSubTemp("creds.json");
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
 
-		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(new PermissionCredentials { Email = "user+tag", Password = ToSecureString("pass") }, CancellationToken));
+		return ThrowsExactlyAsync<ArgumentException>(() => storage.SaveAsync(new PermissionCredentials { Email = "user+tag", Password = ToSecureString("pass") }, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
@@ -579,6 +669,62 @@ public class PermissionsTests : BaseTestClass
 			result.AssertNotNull();
 			result.Email.AssertEqual(login);
 			result.IpRestrictions.Count().AssertEqual(2);
+		}
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task FileStorage_PersistenceAcrossInstances_PreservesPermissions()
+	{
+		// Exercises the full file (de)serialization round-trip of the permission set,
+		// including the nullable Till. The existing persistence test saves no permissions,
+		// so this closes that coverage gap.
+		var fs = Helper.MemorySystem;
+		var tempFile = fs.GetSubTemp("creds.json");
+		var login = "permholder";
+
+		// Fixed, UTC, whole-second Till for a deterministic comparison.
+		var till = new DateTime(2031, 6, 7, 8, 9, 10, DateTimeKind.Utc);
+
+		var enabledKey = ("trading", "AAPL", "limit", (DateTime?)till);
+		var disabledKey = ("data", "MSFT", "", (DateTime?)null);
+
+		// First instance: save credentials carrying a permission set.
+		{
+			var dict = new SynchronizedDictionary<(string, string, string, DateTime?), bool>
+			{
+				[enabledKey] = true,
+				[disabledKey] = false,
+			};
+
+			var creds = new PermissionCredentials
+			{
+				Email = login,
+				Password = ToSecureString("password"),
+			};
+			creds.Permissions[UserPermissions.Trading] = dict;
+
+			IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
+			await storage.SaveAsync(creds, CancellationToken);
+		}
+
+		// Second instance: load from the persisted file and verify the permission entries.
+		{
+			IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, tempFile);
+			var result = await storage.TryGetByLoginAsync(login, CancellationToken);
+
+			result.AssertNotNull();
+			result.Permissions.Count.AssertEqual(1);
+
+			var settings = result.Permissions[UserPermissions.Trading];
+			settings.Count.AssertEqual(2);
+
+			// Keys (including the nullable Till) and the IsEnabled flags must survive
+			// the JSON serialization round-trip.
+			settings.ContainsKey(enabledKey).AssertTrue();
+			settings.ContainsKey(disabledKey).AssertTrue();
+			settings[enabledKey].AssertTrue();
+			settings[disabledKey].AssertFalse();
 		}
 	}
 
@@ -680,8 +826,11 @@ public class PermissionsTests : BaseTestClass
 
 		var sessionId = await auth.ValidateCredentials(login, password, _ip1, CancellationToken);
 
-		sessionId.AssertNotNull();
-		sessionId.Length.AssertEqual(36);
+		// Contract: a successful validation returns a non-empty session id (a fresh Guid).
+		// Assert the meaningful contract (non-empty, parseable id) rather than pinning the
+		// brittle "D"-format length of 36.
+		sessionId.IsEmpty().AssertFalse();
+		Guid.TryParse(sessionId, out _).AssertTrue();
 	}
 
 	[TestMethod]
@@ -704,8 +853,9 @@ public class PermissionsTests : BaseTestClass
 
 		var sessionId = await auth.ValidateCredentials(login, password, _ip1, CancellationToken);
 
-		sessionId.AssertNotNull();
-		sessionId.Length.AssertEqual(36);
+		// Contract: a successful validation returns a non-empty, parseable session id.
+		sessionId.IsEmpty().AssertFalse();
+		Guid.TryParse(sessionId, out _).AssertTrue();
 	}
 
 	[TestMethod]

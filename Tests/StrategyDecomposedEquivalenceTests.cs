@@ -465,9 +465,20 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 	/// <summary>
 	/// Run a real backtest, then replay the same orders through OrderPipeline.
-	/// Verify order tracking and registration detection match.
+	/// Verify registration detection matches Strategy.ProcessOrder: an order is
+	/// reported as "registered" only when it is observed transitioning from
+	/// <see cref="OrderStates.Pending"/> to <see cref="OrderStates.Active"/>/<see cref="OrderStates.Done"/>
+	/// (OrderPipeline.cs:71-73 mirrors Strategy.cs:1828).
+	///
+	/// The previous version of this test only asserted IsTracked (tautological:
+	/// TryAttach unconditionally adds) and processed each order a single time
+	/// while PrevState was still <see cref="OrderStates.None"/>, so the
+	/// registration branch was never reached and the Registered event was dead.
+	/// Here we drive the real Pending -> final transition explicitly so the
+	/// detection logic is actually exercised.
 	/// </summary>
 	[TestMethod]
+	[Timeout(180_000, CooperativeCancellation = true)]
 	public async Task OrderPipeline_MatchesStrategy_OrderTracking()
 	{
 		if (SkipIfNoHistoryData()) return;
@@ -488,24 +499,52 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		var registeredOrders = new List<Order>();
 		pipeline.Registered += o => registeredOrders.Add(o);
 
+		// After a completed backtest every generated order has reached a final
+		// non-Pending state (Active/Done, or Failed if it was rejected). Capture
+		// the true final state, then replay the canonical lifecycle the engine
+		// would observe live: first a Pending snapshot (records PrevState=Pending),
+		// then the final state (which is what triggers registration detection).
+		var expectedRegistered = new List<Order>();
+
 		foreach (var order in orders)
 		{
-			pipeline.TryAttach(order);
+			var finalState = order.State;
 
-			// Simulate state progression: initial Pending -> current state
-			// First process with None->Pending transition
-			pipeline.ProcessOrder(order, false);
+			pipeline.TryAttach(order).AssertTrue();
 
-			// If order is Active or Done, simulate the registration transition
-			if (order.State is OrderStates.Active or OrderStates.Done)
-			{
-				// ProcessOrder already saw the final state, so registration was detected
-			}
+			// Re-attaching the same order must be rejected (dedup).
+			pipeline.TryAttach(order).AssertFalse();
+
+			// Observe Pending first so PrevState becomes Pending.
+			order.State = OrderStates.Pending;
+			pipeline.ProcessOrder(order, isChanging: true);
+
+			// Now observe the real final state — registration is detected here
+			// for orders that became Active/Done, but NOT for Failed orders.
+			order.State = finalState;
+			pipeline.ProcessOrder(order, isChanging: true);
+
+			if (finalState is OrderStates.Active or OrderStates.Done)
+				expectedRegistered.Add(order);
 		}
 
-		// All orders should be tracked
+		// All orders must be tracked.
 		foreach (var order in orders)
 			pipeline.IsTracked(order).AssertTrue();
+
+		// Registration detection must fire exactly for the orders that reached
+		// Active/Done — not zero (the old test's silent failure mode) and not
+		// for Failed orders.
+		AreEqual(expectedRegistered.Count, registeredOrders.Count,
+			$"Registered event must fire for every Pending->Active/Done order. " +
+			$"Expected {expectedRegistered.Count}, got {registeredOrders.Count}.");
+
+		IsTrue(registeredOrders.Count > 0,
+			"At least one backtest order must be detected as registered (Pending->Active/Done).");
+
+		foreach (var order in expectedRegistered)
+			IsTrue(registeredOrders.Contains(order),
+				"Every Active/Done order must be reported via the Registered event.");
 
 		Console.WriteLine($"Order tracking OK: {orders.Length} orders tracked, {registeredOrders.Count} registered");
 	}
@@ -570,28 +609,108 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		var engineStates = new List<ProcessStates>();
 		engine.StateChanged += s => engineStates.Add(s);
 
-		// Strategy went: Stopped -> Started -> (maybe Stopping -> Stopped)
-		// Replay the same transitions via messages
+		// Replay each raw strategy transition into the engine WITHOUT pre-guarding
+		// on engine.ProcessState (the old test duplicated the engine's own guard,
+		// making the assertions self-fulfilling). The engine must apply its own
+		// guards internally and end up with exactly the canonical sequence.
 		foreach (var state in strategyStates)
-		{
-			if (state == ProcessStates.Started && engine.ProcessState == ProcessStates.Stopped)
-				engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
-			else if (state == ProcessStates.Stopping && engine.ProcessState == ProcessStates.Started)
-				engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
-		}
+			engine.OnMessage(new StrategyEngine.StrategyStateMessage(state));
 
-		// Compare transition sequences
 		IsTrue(strategyStates.Count > 0, "Strategy should have had state transitions");
 
-		// The engine should have matched the key transitions
-		if (strategyStates.Contains(ProcessStates.Started))
-			engineStates.Contains(ProcessStates.Started).AssertTrue();
+		// Build the canonical engine sequence the StrategyEngine state machine
+		// (StrategyEngine.cs:158-177) must produce from those requests: it only
+		// accepts Stopped->Started and Started->Stopping, ignores everything else,
+		// and never emits StateChanged for a no-op transition. So the expected
+		// engine sequence is the strategy's request stream with duplicates and
+		// illegal requests collapsed.
+		var expectedEngineStates = new List<ProcessStates>();
+		var simState = ProcessStates.Stopped;
 
-		if (strategyStates.Contains(ProcessStates.Stopping))
-			engineStates.Contains(ProcessStates.Stopping).AssertTrue();
+		foreach (var state in strategyStates)
+		{
+			if (state == ProcessStates.Started && simState == ProcessStates.Stopped)
+			{
+				simState = ProcessStates.Started;
+				expectedEngineStates.Add(simState);
+			}
+			else if (state == ProcessStates.Stopping && simState == ProcessStates.Started)
+			{
+				simState = ProcessStates.Stopping;
+				expectedEngineStates.Add(simState);
+			}
+		}
 
 		Console.WriteLine($"Strategy states: {strategyStates.Select(x => $"{x}").Join(" -> ")}");
 		Console.WriteLine($"Engine states:   {engineStates.Select(x => $"{x}").Join(" -> ")}");
+
+		// Exact ordered-sequence comparison (not Contains): the engine must
+		// reproduce the canonical state sequence step for step.
+		AreEqual(expectedEngineStates.Count, engineStates.Count,
+			$"Engine emitted {engineStates.Count} transitions, expected {expectedEngineStates.Count}");
+
+		for (var i = 0; i < expectedEngineStates.Count; i++)
+			AreEqual(expectedEngineStates[i], engineStates[i],
+				$"Engine transition #{i} mismatch");
+
+		// A real backtest always at least starts, so Started must be present.
+		IsTrue(engineStates.Contains(ProcessStates.Started),
+			"Engine must have transitioned to Started for a started strategy");
+	}
+
+	/// <summary>
+	/// Deterministic contract test for the <see cref="StrategyEngine"/> state machine
+	/// (no history/backtest). Verifies the exact accepted transitions, idempotency
+	/// (no duplicate StateChanged), the ignored requests, and the illegal
+	/// Stopped-&gt;Stopping guard described in StrategyEngine.cs:33-39 / :158-177.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void StrategyEngine_StateMachine_ExactTransitions()
+	{
+		var host = new FakeHost();
+		var pnl = new PnLManager();
+		var engine = new StrategyEngine(host, pnl);
+
+		var states = new List<ProcessStates>();
+		engine.StateChanged += s => states.Add(s);
+
+		// Fresh engine is Stopped.
+		AreEqual(ProcessStates.Stopped, engine.ProcessState);
+
+		// Stopping request on a Stopped engine is a no-op (guarded), not a throw.
+		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		AreEqual(ProcessStates.Stopped, engine.ProcessState);
+		AreEqual(0, states.Count, "Ignored request must not raise StateChanged");
+
+		// Stopped -> Started.
+		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		AreEqual(ProcessStates.Started, engine.ProcessState);
+
+		// Repeated Started is idempotent: no second event.
+		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		AreEqual(ProcessStates.Started, engine.ProcessState);
+
+		// Started -> Stopping.
+		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		AreEqual(ProcessStates.Stopping, engine.ProcessState);
+
+		// Repeated Stopping is idempotent.
+		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		AreEqual(ProcessStates.Stopping, engine.ProcessState);
+
+		// Started request while Stopping is ignored (only Stopped->Started accepted).
+		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		AreEqual(ProcessStates.Stopping, engine.ProcessState);
+
+		// Exactly two transitions were emitted, in order.
+		AreEqual(2, states.Count);
+		AreEqual(ProcessStates.Started, states[0]);
+		AreEqual(ProcessStates.Stopping, states[1]);
+
+		// ForceStop is the only path back to Stopped (no message routes to Stopped).
+		engine.ForceStop();
+		AreEqual(ProcessStates.Stopped, engine.ProcessState);
 	}
 
 	/// <summary>
@@ -686,10 +805,79 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		Console.WriteLine($"Replayed {capturedMessages.Count} messages through StrategyEngine");
 		Console.WriteLine($"Price updates: {priceUpdates}, PnL refreshes: {pnlRefreshes}");
 
-		// Verify the engine processed messages and generated events
+		// Verify the engine processed messages and generated events.
 		IsTrue(priceUpdates > 0, $"Expected price updates from {capturedMessages.Count} messages");
 
+		// The doc claim is that PnL-refresh events actually fire. With the default
+		// 1s UnrealizedPnLInterval and a multi-day backtest, the very first message
+		// carrying a server time is >= 1s past the initial (default) refresh time,
+		// so at least one refresh MUST fire. The exact throttling semantics are
+		// pinned deterministically in StrategyEngine_PnLRefresh_ThrottledByInterval.
+		IsTrue(pnlRefreshes > 0,
+			$"PnL refresh events must fire while replaying {capturedMessages.Count} timestamped messages");
+
 		Console.WriteLine("Message processing equivalence OK");
+	}
+
+	/// <summary>
+	/// Deterministic contract test (no history) for the PnL-refresh throttling that
+	/// <see cref="StrategyEngine"/> performs (StrategyEngine.cs:189-194): a refresh
+	/// fires only when the incoming message time advances by at least
+	/// <see cref="StrategyEngine.UnrealizedPnLInterval"/> past the previous refresh.
+	/// This is the "PnL refresh fires at the same times" behaviour that the replay
+	/// test above can only assert weakly because real message timings vary per run.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void StrategyEngine_PnLRefresh_ThrottledByInterval()
+	{
+		var host = new FakeHost();
+		var pnl = new PnLManager();
+		var engine = new StrategyEngine(host, pnl)
+		{
+			UnrealizedPnLInterval = TimeSpan.FromSeconds(1),
+		};
+
+		var secId = new SecurityId { SecurityCode = "TST", BoardCode = "BRD" };
+
+		var refreshTimes = new List<DateTime>();
+		engine.PnLRefreshRequired += t => refreshTimes.Add(t);
+
+		Message L1(DateTime time, decimal price)
+			=> new Level1ChangeMessage
+			{
+				SecurityId = secId,
+				ServerTime = time,
+				LocalTime = time,
+			}.TryAdd(Level1Fields.LastTradePrice, price);
+
+		var t0 = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		// First timestamped message: gap from default refresh time (MinValue) is
+		// huge, so it must trigger exactly one refresh at t0.
+		engine.OnMessage(L1(t0, 100m));
+		AreEqual(1, refreshTimes.Count);
+		AreEqual(t0, refreshTimes[0]);
+
+		// +0.5s: within the interval -> NO refresh.
+		engine.OnMessage(L1(t0.AddMilliseconds(500), 101m));
+		AreEqual(1, refreshTimes.Count, "Sub-interval message must not refresh PnL");
+
+		// +0.9s (=1.4s from last refresh): now >= 1s past last refresh -> refresh.
+		var t1 = t0.AddMilliseconds(1400);
+		engine.OnMessage(L1(t1, 102m));
+		AreEqual(2, refreshTimes.Count, "Message past the interval must refresh PnL");
+		AreEqual(t1, refreshTimes[1]);
+
+		// Exactly at the boundary (+1s from last refresh) -> refresh ( >= test).
+		var t2 = t1.AddSeconds(1);
+		engine.OnMessage(L1(t2, 103m));
+		AreEqual(3, refreshTimes.Count, "Message exactly one interval later must refresh PnL");
+		AreEqual(t2, refreshTimes[2]);
+
+		// Just before the next boundary -> NO refresh.
+		engine.OnMessage(L1(t2.AddMilliseconds(999), 104m));
+		AreEqual(3, refreshTimes.Count, "Message just under the interval must not refresh PnL");
 	}
 
 	#endregion
@@ -707,8 +895,13 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	/// - _isShortLessThenLong is updated regardless of order fill result
 	/// </summary>
 	[TestMethod]
+	[Timeout(360_000, CooperativeCancellation = true)]
 	public async Task SmaEquivalence_OrdersAndPositionMatch()
 	{
+		// This is a backtest-based test: skip cleanly when no history data is
+		// available instead of throwing inside RunSmaBacktestWithCandles.
+		if (SkipIfNoHistoryData()) return;
+
 		// 1. Run real SmaStrategy backtest and capture candles
 		var (sma, candles) = await RunSmaBacktestWithCandles(CancellationToken);
 
@@ -800,10 +993,25 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		// the candle range, causing the strategy's position to not flip,
 		// which can lead to two consecutive orders in the same direction.
 
-		// Count matching initial orders — both strategies use same SMA logic,
-		// so early crossovers (before emulator feedback diverges state) should match.
-		// In single-threaded mode (UseInChannel/UseOutChannel=false) order fills are
-		// synchronous, so state diverges almost immediately — prefix may be very short.
+		// The FIRST crossover is the one point where the two strategies are
+		// guaranteed to agree exactly: both start flat (Position==0 => volume==Volume)
+		// and receive the identical finished-candle stream into identical SMA seeds,
+		// before any emulator feedback can diverge their state. So the first emitted
+		// order must match on side, price AND volume — not merely "at least one of
+		// ~600 matched" (the previous, near-vacuous oracle). Later orders may
+		// legitimately diverge as the real strategy's Position flips on fills, so we
+		// deliberately do not pin the full sequence.
+		var firstReal = origOrders[0];
+		var firstDecomposed = decomposedOrders[0];
+
+		AreEqual(firstReal.Side, firstDecomposed.Side,
+			$"First crossover side must match: real={firstReal.Side}, decomposed={firstDecomposed.Side}");
+		AreEqual(firstReal.Price, firstDecomposed.Price,
+			$"First crossover price must match: real={firstReal.Price}, decomposed={firstDecomposed.Price}");
+		AreEqual(firstReal.Volume, firstDecomposed.Volume,
+			$"First crossover volume must match: real={firstReal.Volume}, decomposed={firstDecomposed.Volume}");
+
+		// Report how long the prefix stays identical for diagnostics only.
 		var matchingPrefix = 0;
 		var minLen = origOrders.Length.Min(decomposedOrders.Count);
 		for (var i = 0; i < minLen; i++)
@@ -813,10 +1021,6 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 			else
 				break;
 		}
-
-		// First order must match (same initial conditions, no feedback yet)
-		IsTrue(matchingPrefix >= 1,
-			$"Expected at least first crossover to match: only {matchingPrefix}/{origOrders.Length} matched");
 
 		Console.WriteLine($"Equivalence OK: {decomposedOrders.Count} decomposed crossovers, {origOrders.Length} real, {matchingPrefix} matching prefix");
 	}
@@ -1012,9 +1216,15 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		var pnl = strategy.PnLManager.RealizedPnL;
 
-		IsTrue(pnl > 100m,
-			$"PnL should reflect security Multiplier={security.Multiplier} " +
-			$"(expected >100 with multiplier, got {pnl}).");
+		// Exact expected value (PnLQueue.cs:201,319-323): the security context
+		// (Multiplier=10) is applied via UpdateSecurity BEFORE the trade is
+		// processed, so LotMultiplier=10 and, with StepPrice unset, the queue
+		// multiplier = 1 * Leverage(1) * LotMultiplier(10) = 10. Realized PnL on
+		// the round trip = (110-100) price diff * 10 vol * 10 multiplier = 1000.
+		// The previous ">100" oracle also passed for a wrong multiplier
+		// (e.g. 2 -> 200) or a double-applied one (10000).
+		AreEqual(1000m, pnl,
+			$"Realized PnL must be (110-100)*10*Multiplier(10)=1000, got {pnl}.");
 	}
 
 	[TestMethod]
@@ -1124,6 +1334,60 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		var hasMethod = typeof(DecomposedStrategy).GetMethod("OnOrderRegisterFailed",
 			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 		IsNotNull(hasMethod, "DecomposedStrategy should handle order registration failures");
+	}
+
+	/// <summary>
+	/// A fresh strategy that has not registered any order of its own must NOT
+	/// claim a foreign order. Real <see cref="Strategy"/> enforces this through
+	/// <c>CanAttach</c> by matching the order's <see cref="Order.UserOrderId"/>
+	/// against the strategy id (Strategy.cs:2440-2446), so before the first own
+	/// registration a foreign order is rejected.
+	///
+	/// <see cref="DecomposedStrategy"/>'s CanAttach
+	/// (DecomposedStrategy.cs:669-675) instead returns <see langword="true"/> for
+	/// ANY order while its <c>_ownTransactionIds</c> set is still empty — i.e. a
+	/// brand-new decomposed strategy would attach a foreign order, diverging from
+	/// real Strategy. This test asserts the canonical contract (CanAttach == false
+	/// for a foreign order on a fresh strategy); it is expected to FAIL on the
+	/// current engine, pinning the divergence.
+	///
+	/// CanAttach is <c>protected virtual</c>, so it is invoked through reflection
+	/// (matching the reflection idiom already used by the parity tests in this file).
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void Parity_Order_CanAttach_RejectsForeignOrderBeforeOwnRegistration()
+	{
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		// Fresh strategy: no order has been registered yet, so _ownTransactionIds
+		// is empty.
+		var strategy = new TestStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+		};
+
+		// A clearly FOREIGN order: a transaction id this strategy never produced
+		// and a UserOrderId that does not match the strategy id. Real Strategy
+		// keys CanAttach off UserOrderId, so this order does not belong here.
+		var foreignOrder = CreateOrder(security, portfolio, Sides.Buy, 100m, 10m, txId: 999_999);
+		foreignOrder.UserOrderId = "some_other_strategy_id";
+
+		var canAttach = typeof(DecomposedStrategy).GetMethod("CanAttach",
+			BindingFlags.Instance | BindingFlags.NonPublic);
+		IsNotNull(canAttach, "DecomposedStrategy should expose CanAttach(Order)");
+
+		var result = (bool)canAttach.Invoke(strategy, [foreignOrder]);
+
+		// Canonical contract (parity with Strategy.CanAttach): a foreign order must
+		// be rejected even before the strategy registers its first own order.
+		IsFalse(result,
+			"A fresh strategy with no own registrations must NOT claim a foreign order " +
+			"(real Strategy.CanAttach matches by UserOrderId and rejects it).");
 	}
 
 	#endregion
@@ -1522,181 +1786,103 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	#region SMA with Protection equivalence
 
 	/// <summary>
-	/// DecomposedSmaStrategy with protection: same SMA crossover logic + StartProtection.
-	/// </summary>
-	private class DecomposedSmaWithProtectionStrategy : DecomposedStrategy
-	{
-		private bool? _isShortLessThenLong;
-		private readonly SimpleMovingAverage _longSma = new();
-		private readonly SimpleMovingAverage _shortSma = new();
-
-		public int Long { get; set; } = 80;
-		public int Short { get; set; } = 30;
-		public List<Order> ProtectiveOrders { get; } = [];
-
-		public void Init()
-		{
-			_longSma.Length = Long;
-			_shortSma.Length = Short;
-			_isShortLessThenLong = null;
-		}
-
-		public void ProcessCandle(ICandleMessage candle)
-		{
-			if (candle.State != CandleStates.Finished)
-				return;
-
-			var longVal = _longSma.Process(candle);
-			var shortVal = _shortSma.Process(candle);
-
-			OnProcess(candle, longVal.ToDecimal(), shortVal.ToDecimal());
-		}
-
-		private void OnProcess(ICandleMessage candle, decimal longValue, decimal shortValue)
-		{
-			if (candle.State != CandleStates.Finished)
-				return;
-
-			var isShortLessThenLong = shortValue < longValue;
-
-			if (_isShortLessThenLong == null)
-			{
-				_isShortLessThenLong = isShortLessThenLong;
-			}
-			else if (_isShortLessThenLong != isShortLessThenLong)
-			{
-				var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
-
-				var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
-
-				var priceStep = Security.PriceStep ?? 1;
-
-				var price = candle.ClosePrice + (direction == Sides.Buy ? priceStep : -priceStep);
-
-				if (direction == Sides.Buy)
-					BuyLimit(price, volume);
-				else
-					SellLimit(price, volume);
-
-				_isShortLessThenLong = isShortLessThenLong;
-			}
-		}
-	}
-
-	/// <summary>
-	/// Run DecomposedSmaWithProtectionStrategy: verify that with StartProtection
-	/// configured, protection orders are generated after trades fill.
-	/// Both decomposed + protection and a plain decomposed (no protection)
-	/// should produce the same SMA crossover orders, but the protected one
-	/// should additionally generate protective orders.
+	/// Deterministic test (no history) that the decomposed protective contour is
+	/// actually wired and FIRES: StartProtection -> a real fill (OnTradeReceived,
+	/// which creates the position controller, DecomposedStrategy.cs:108-123) ->
+	/// an adverse market price (Level1) -> a protective closing order reaches the
+	/// connector via RegisterOrder.
+	///
+	/// The previous backtest-driven version of this test never simulated any fill,
+	/// so the position controller was never created and the whole protective path
+	/// (TryActivate -> ActiveProtection) was structurally dead — yet its
+	/// "withProtection >= noProtection" oracle still passed with ZERO protective
+	/// orders. Here we drive a fill explicitly and require that protection emits a
+	/// strictly larger order count than an identical strategy run without
+	/// protection, and that the extra order is a closing order for the position.
 	/// </summary>
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task SmaWithProtection_Decomposed_GeneratesProtectiveOrders()
 	{
-		if (SkipIfNoHistoryData()) return;
-
-		// 1. Run real SmaStrategy backtest to capture candles
-		var (sma, candles) = await RunSmaBacktestWithCandles(CancellationToken);
-
-		var finishedCandles = candles
-			.Where(c => c.State == CandleStates.Finished)
-			.GroupBy(c => c.OpenTime)
-			.Select(g => g.First())
-			.OrderBy(c => c.OpenTime)
-			.ToList();
-
-		if (finishedCandles.Count == 0)
+		// --- Helper: build a strategy, optionally with protection, drive one
+		// buy fill at 100 and then an adverse price drop to 94, capturing every
+		// order that reaches the connector. ---
+		async Task<List<Order>> Run(bool withProtection)
 		{
-			Console.WriteLine("No finished candles, skipping");
-			return;
+			var connMock = CreateMockConnector();
+			var registered = new List<Order>();
+			connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>()))
+				.Callback<Order>(registered.Add);
+
+			var security = CreateSecurity();
+			security.PriceStep = 0.01m;
+			var portfolio = CreatePortfolio();
+
+			var strategy = new TestStrategy
+			{
+				Connector = connMock.Object,
+				Security = security,
+				Portfolio = portfolio,
+				Volume = 10,
+			};
+
+			if (withProtection)
+			{
+				// Proven-firing configuration (mirrors the dedicated protection
+				// tests): a 5% local stop on a long bought at 100 activates when
+				// the price falls to 94.
+				strategy.StartProtection(
+					new Unit(), new Unit(5, UnitTypes.Percent),
+					isLocalStop: true);
+			}
+
+			await strategy.StartAsync();
+			strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+
+			var sub = new Subscription(DataType.Transactions);
+			strategy.Subscriptions.Subscribe(sub);
+
+			// Open a long: register + activate the order, then fill it at 100.
+			var order = CreateOrder(security, portfolio, Sides.Buy, 100m, 10m);
+			strategy.RegisterOrder(order);
+			AttachAndActivate(strategy, sub, order);
+			strategy.OnTradeReceived(sub, CreateTrade(order, 1, 100m, 10m));
+
+			strategy.Position.AreEqual(10m);
+
+			// Adverse price move (stop territory): drives CurrentPriceUpdated ->
+			// ProtectiveController.TryActivate for the protected strategy.
+			strategy.Engine.OnMessage(new Level1ChangeMessage
+			{
+				SecurityId = security.ToSecurityId(),
+				ServerTime = DateTime.UtcNow,
+				LocalTime = DateTime.UtcNow,
+			}.TryAdd(Level1Fields.LastTradePrice, 94m));
+
+			return registered;
 		}
 
-		// 2. Run DecomposedSma WITHOUT protection
-		var connMock1 = CreateMockConnector();
-		var ordersNoProtection = new List<Order>();
-		connMock1.Setup(c => c.RegisterOrder(It.IsAny<Order>()))
-			.Callback<Order>(o => ordersNoProtection.Add(o));
-
-		var noProtection = new DecomposedSmaWithProtectionStrategy
-		{
-			Security = new Security
-			{
-				Id = sma.Security.Id,
-				Board = sma.Security.Board,
-				PriceStep = sma.Security.PriceStep,
-			},
-			Portfolio = new Portfolio { Name = "test" },
-			Volume = sma.Volume,
-			Long = sma.Long,
-			Short = sma.Short,
-		};
-		noProtection.Connector = connMock1.Object;
-		noProtection.Init();
-		await noProtection.StartAsync();
-		noProtection.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
-
-		foreach (var candle in finishedCandles)
-			noProtection.ProcessCandle(candle);
-
-		// 3. Run DecomposedSma WITH protection
-		var connMock2 = CreateMockConnector();
-		var ordersWithProtection = new List<Order>();
-		connMock2.Setup(c => c.RegisterOrder(It.IsAny<Order>()))
-			.Callback<Order>(o => ordersWithProtection.Add(o));
-
-		var withProtection = new DecomposedSmaWithProtectionStrategy
-		{
-			Security = new Security
-			{
-				Id = sma.Security.Id,
-				Board = sma.Security.Board,
-				PriceStep = sma.Security.PriceStep,
-			},
-			Portfolio = new Portfolio { Name = "test" },
-			Volume = sma.Volume,
-			Long = sma.Long,
-			Short = sma.Short,
-		};
-		withProtection.Connector = connMock2.Object;
-		withProtection.Init();
-
-		// StartProtection with 2% stop loss (local)
-		withProtection.StartProtection(
-			new Unit(), new Unit(2, UnitTypes.Percent),
-			isLocalStop: true);
-
-		await withProtection.StartAsync();
-		withProtection.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
-
-		// Feed candles and simulate fills + price updates for protection
-		var secId = withProtection.Security.ToSecurityId();
-		var sub = new Subscription(DataType.Transactions);
-		withProtection.Subscriptions.Subscribe(sub);
-
-		foreach (var candle in finishedCandles)
-		{
-			withProtection.ProcessCandle(candle);
-
-			// After each candle, simulate price update for protection activation
-			withProtection.Engine.OnMessage(new Level1ChangeMessage
-			{
-				SecurityId = secId,
-				ServerTime = candle.CloseTime,
-				LocalTime = candle.CloseTime,
-			}.TryAdd(Level1Fields.LastTradePrice, candle.ClosePrice));
-		}
+		var ordersNoProtection = await Run(withProtection: false);
+		var ordersWithProtection = await Run(withProtection: true);
 
 		Console.WriteLine($"Orders without protection: {ordersNoProtection.Count}");
 		Console.WriteLine($"Orders with protection: {ordersWithProtection.Count}");
 
-		// Both should have crossover orders
-		IsTrue(ordersNoProtection.Count > 0, "Unprotected strategy should generate crossover orders");
-		IsTrue(ordersWithProtection.Count > 0, "Protected strategy should generate orders");
+		// Without protection only the single opening order is registered.
+		AreEqual(1, ordersNoProtection.Count,
+			"Unprotected strategy should register only the opening order");
 
-		// Protected strategy should generate at least as many orders
-		// (crossover orders + possibly protective orders)
-		IsTrue(ordersWithProtection.Count >= ordersNoProtection.Count,
-			$"Protected strategy should have at least as many orders ({ordersWithProtection.Count}) as unprotected ({ordersNoProtection.Count})");
+		// With protection, the adverse price must additionally generate a
+		// protective order — strictly more than the unprotected run. A vacuous
+		// ">=" oracle would also pass at zero protective orders (the old bug).
+		IsTrue(ordersWithProtection.Count > ordersNoProtection.Count,
+			$"Protected strategy must register MORE orders ({ordersWithProtection.Count}) " +
+			$"than unprotected ({ordersNoProtection.Count}) — i.e. an actual protective order fired");
+
+		// The protective order closes the long, so it is a Sell.
+		var protectiveOrder = ordersWithProtection.Last();
+		protectiveOrder.Side.AreEqual(Sides.Sell,
+			"Protective order for a long position must be a Sell to close it");
 	}
 
 	#endregion

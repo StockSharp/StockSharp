@@ -516,6 +516,10 @@ public class SecurityProviderTests : BaseTestClass
 			.ToArray();
 		var provider = new CollectionSecurityProvider(securities);
 
+		// Reference ordering: unpaged lookup-all over the same provider yields the
+		// full sequence in the provider's iteration order.
+		var reference = await provider.LookupAsync(Helper.LookupAll).ToArrayAsync(CancellationToken);
+
 		var criteria = new SecurityLookupMessage
 		{
 			Skip = 3,
@@ -524,7 +528,12 @@ public class SecurityProviderTests : BaseTestClass
 
 		var results = await provider.LookupAsync(criteria).ToArrayAsync(CancellationToken);
 
+		// Skip=3, Count=4 must return items 4..7 of the reference ordering.
+		var expectedIds = reference.Skip(3).Take(4).Select(s => s.Id).ToArray();
+		var actualIds = results.Select(s => s.Id).ToArray();
+
 		results.Length.AssertEqual(4);
+		actualIds.AssertEqual(expectedIds);
 	}
 
 	#endregion
@@ -755,29 +764,29 @@ public class SecurityProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InMemorySecurityStorage_SaveAsync_ThrowsOnNull()
+	public async Task InMemorySecurityStorage_SaveAsync_ThrowsOnNull()
 	{
 		var storage = new InMemorySecurityStorage();
 
-		ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		await ThrowsExactlyAsync<ArgumentNullException>(async () =>
 			await storage.SaveAsync(null, false, CancellationToken));
 	}
 
 	[TestMethod]
-	public void InMemorySecurityStorage_DeleteAsync_ThrowsOnNull()
+	public async Task InMemorySecurityStorage_DeleteAsync_ThrowsOnNull()
 	{
 		var storage = new InMemorySecurityStorage();
 
-		ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		await ThrowsExactlyAsync<ArgumentNullException>(async () =>
 			await storage.DeleteAsync(null, CancellationToken));
 	}
 
 	[TestMethod]
-	public void InMemorySecurityStorage_DeleteByAsync_ThrowsOnNull()
+	public async Task InMemorySecurityStorage_DeleteByAsync_ThrowsOnNull()
 	{
 		var storage = new InMemorySecurityStorage();
 
-		ThrowsExactlyAsync<ArgumentNullException>(async () =>
+		await ThrowsExactlyAsync<ArgumentNullException>(async () =>
 			await storage.DeleteByAsync(null, CancellationToken));
 	}
 
@@ -928,5 +937,50 @@ public class SecurityProviderTests : BaseTestClass
 
 		// Cleared should not be called because nothing was deleted
 		clearedCalled.AssertFalse();
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task InMemorySecurityStorage_SaveAsync_ForcedUpdatesExistingInstance()
+	{
+		var storage = new InMemorySecurityStorage();
+
+		// Two instances sharing the same identity (Id/SecurityId) but differing payload.
+		var original = CreateSecurityWithCode("AAPL", "NASDAQ");
+		original.Name = "Apple original";
+
+		var updated = CreateSecurityWithCode("AAPL", "NASDAQ");
+		updated.Name = "Apple updated";
+
+		await storage.SaveAsync(original, false, CancellationToken);
+
+		// forced:true is documented as "Forced update": re-saving the same identity
+		// with forced must overwrite the stored security with the new payload.
+		await storage.SaveAsync(updated, true, CancellationToken);
+
+		var stored = await storage.LookupByIdAsync(updated.ToSecurityId(), CancellationToken);
+
+		stored.AssertNotNull();
+		// Correct/canonical behavior: the stored security reflects the forced update.
+		stored.Name.AssertEqual("Apple updated");
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void IsMatch_SecurityIds_CodeOnlyPartialId_Matches()
+	{
+		var security = new SecurityMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" },
+		};
+
+		// A partial id (code only, no board) in SecurityIds should match any security
+		// whose code contains it, mirroring the single SecurityId "contains by code" rule.
+		var criteria = new SecurityLookupMessage
+		{
+			SecurityIds = [new SecurityId { SecurityCode = "AAPL" }]
+		};
+
+		security.IsMatch(criteria).AssertTrue();
 	}
 }
