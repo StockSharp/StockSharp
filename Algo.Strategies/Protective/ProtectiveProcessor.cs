@@ -25,7 +25,7 @@ public class ProtectiveProcessor
 	/// <param name="protectivePrice">Protected position price.</param>
 	/// <param name="isUpTrend">To track price increase or falling.</param>
 	/// <param name="isTrailing">Trailing mode.</param>
-	/// <param name="protectiveLevel">The protective level. If the <see cref="Unit.Type"/> type is equal to <see cref="UnitTypes.Absolute"/>, then the given price is specified. Otherwise, the shift value from the protected trade <see cref="DataType.Ticks"/> is specified.</param>
+	/// <param name="protectiveLevel">The protective level offset from the protected trade <see cref="DataType.Ticks"/>.</param>
 	/// <param name="useMarketOrders">Whether to use <see cref="OrderTypes.Market"/> for protection.</param>
 	/// <param name="priceOffset">The price shift for the registering order. It determines the amount of shift from the best quote (for the buy it is added to the price, for the sell it is subtracted).</param>
 	/// <param name="timeout">Time limit. If protection has not worked by this time, the position will be closed on the market.</param>
@@ -106,9 +106,7 @@ public class ProtectiveProcessor
 
 		decimal? tryActivate()
 		{
-			var activationPrice = _protectiveLevel.Type == UnitTypes.Absolute
-				? _protectiveLevel.Value
-				: (_isUpTrend ? _prevBestPrice + _protectiveLevel : _prevBestPrice - _protectiveLevel);
+			var activationPrice = (decimal)(_isUpTrend ? _prevBestPrice + _protectiveLevel : _prevBestPrice - _protectiveLevel);
 
 			// protectiveLevel may has extra big value.
 			// In that case activationPrice may less that zero.

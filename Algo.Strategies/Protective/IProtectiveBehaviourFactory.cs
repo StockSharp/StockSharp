@@ -65,11 +65,13 @@ public class ServerProtectiveBehaviourFactory(IMessageAdapter adapter) : IProtec
 
 			var protectiveSide = value > 0 ? Sides.Buy : Sides.Sell;
 			var protectivePrice = price;
+			var isTake = false;
 
 			if (TakeValue.IsSet() && condition is ITakeProfitOrderCondition take)
 			{
 				take.ActivationPrice = (decimal)(protectiveSide == Sides.Buy ? protectivePrice + TakeValue : protectivePrice - TakeValue);
 				take.ClosePositionPrice = UseMarketOrders ? null : take.ActivationPrice;
+				isTake = true;
 			}
 
 			if (StopValue.IsSet() && condition is IStopLossOrderCondition stop)
@@ -81,7 +83,7 @@ public class ServerProtectiveBehaviourFactory(IMessageAdapter adapter) : IProtec
 
 			return
 			(
-				condition is ITakeProfitOrderCondition, // TODO
+				isTake,
 
 				protectiveSide.Invert(),
 				protectivePrice,
