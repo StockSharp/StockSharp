@@ -388,7 +388,9 @@ public class StorageBuffer : IStorageBuffer
 			}
 			case MessageTypes.PositionChange:
 			{
-				TryStore(_positionChangesBuffer, (PositionChangeMessage)message);
+				if (EnabledPositions)
+					TryStore(_positionChangesBuffer, (PositionChangeMessage)message);
+
 				break;
 			}
 			case MessageTypes.SubscriptionResponse:
