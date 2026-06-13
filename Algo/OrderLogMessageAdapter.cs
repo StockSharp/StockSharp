@@ -220,7 +220,9 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 			else
 			{
 				LogDebug("OL->TICK processing {0}.", execMsg.SecurityId);
-				await base.OnInnerAdapterNewOutMessageAsync(execMsg.ToTick(), cancellationToken);
+				var tick = execMsg.ToTick();
+				tick.SetSubscriptionIds(subscriptionId: subscriptionId);
+				await base.OnInnerAdapterNewOutMessageAsync(tick, cancellationToken);
 			}
 		}
 
