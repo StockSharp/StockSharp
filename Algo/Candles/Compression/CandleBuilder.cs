@@ -818,6 +818,26 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 			return candle;
 		}
 
+		void UpdateRenkoCandle(RenkoCandleMessage candle, decimal closePrice, decimal? updateVolume)
+		{
+			IncrementTicks(candle);
+
+			candle.ClosePrice = closePrice;
+			candle.CloseVolume = updateVolume;
+			candle.CloseTime = time;
+			candle.OpenInterest = oi;
+			candle.HighPrice = candle.HighPrice.Max(closePrice);
+			candle.LowPrice = candle.LowPrice.Min(closePrice);
+
+			if (updateVolume is decimal v)
+			{
+				candle.TotalPrice += v * closePrice;
+				AddVolume(candle, v, side);
+			}
+
+			subscription.VolumeProfile?.Update(closePrice, updateVolume, side);
+		}
+
 		var currentCandle = (RenkoCandleMessage)subscription.CurrentCandle;
 
 		currentCandle ??= GenerateNewCandle(price, price);
@@ -829,34 +849,23 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 		if (boxesMoved >= 1)
 		{
 			var sign = priceChange.Sign();
+			var volumePart = volume / (boxesMoved + 1);
 
 			for (var i = 0; i < boxesMoved; i++)
 			{
+				var closePrice = ShrinkPrice(currentCandle.OpenPrice + (boxSize * sign), subscription);
+
+				UpdateRenkoCandle(currentCandle, closePrice, volumePart);
 				currentCandle.State = CandleStates.Finished;
-				subscription.VolumeProfile?.Update(price, volume, side);
 				yield return currentCandle;
 
-				var openPrice = ShrinkPrice(currentCandle.OpenPrice + (boxSize * sign), subscription);
-				currentCandle = GenerateNewCandle(openPrice, openPrice);
+				currentCandle = GenerateNewCandle(closePrice, closePrice);
 			}
+
+			volume = volumePart;
 		}
 
-		IncrementTicks(currentCandle);
-
-		currentCandle.ClosePrice = price;
-		currentCandle.CloseVolume = volume;
-		currentCandle.CloseTime = time;
-		currentCandle.OpenInterest = oi;
-		currentCandle.HighPrice = currentCandle.HighPrice.Max(price);
-		currentCandle.LowPrice = currentCandle.LowPrice.Min(price);
-
-		if (volume is decimal v)
-		{
-			currentCandle.TotalPrice += v * price;
-			AddVolume(currentCandle, v, side);
-		}
-
-		subscription.VolumeProfile?.Update(price, volume, side);
+		UpdateRenkoCandle(currentCandle, price, volume);
 		yield return currentCandle;
 	}
 }
@@ -894,7 +903,11 @@ public class HeikinAshiCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
 
 		var currentCandle = subscription.CurrentCandle;
 		if (currentCandle != null)
+		{
 			candle.OpenPrice = (currentCandle.OpenPrice + currentCandle.ClosePrice) / 2M;
+			candle.HighPrice = candle.HighPrice.Max(candle.OpenPrice).Max(candle.ClosePrice);
+			candle.LowPrice = candle.LowPrice.Min(candle.OpenPrice).Min(candle.ClosePrice);
+		}
 
 		return candle;
 	}
@@ -911,5 +924,7 @@ public class HeikinAshiCandleBuilder(IExchangeInfoProvider exchangeInfoProvider)
 		base.UpdateCandle(subscription, candle, transform);
 
 		candle.ClosePrice = (candle.OpenPrice + candle.HighPrice + candle.LowPrice + candle.ClosePrice) / 4M;
+		candle.HighPrice = candle.HighPrice.Max(candle.OpenPrice).Max(candle.ClosePrice);
+		candle.LowPrice = candle.LowPrice.Min(candle.OpenPrice).Min(candle.ClosePrice);
 	}
 }
