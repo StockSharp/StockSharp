@@ -375,9 +375,8 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 	{
 		var quotes = GetQuotes(side);
 		var remaining = volume;
-		var toRemove = new List<decimal>();
 
-		foreach (var kvp in quotes)
+		foreach (var kvp in quotes.ToArray())
 		{
 			if (remaining <= 0)
 				break;
@@ -415,19 +414,19 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 					var orderConsume = orderConsumed.Min(order.Balance);
 					order.Balance -= orderConsume;
 					orderConsumed -= orderConsume;
+
+					if (order.Balance <= 0)
+						level.RemoveOrder(order.TransactionId, out _);
 				}
 
 				AddTotalVolume(side, -consumed);
 				remaining -= consumed;
 
-				yield return (price, consumed, affectedOrders);
-
 				if (level.IsEmpty)
-					toRemove.Add(price);
+					quotes.Remove(price);
+
+				yield return (price, consumed, affectedOrders);
 			}
 		}
-
-		foreach (var price in toRemove)
-			quotes.Remove(price);
 	}
 }

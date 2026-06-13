@@ -88,6 +88,9 @@ public class OrderMatcher : IOrderMatcher
 		var remaining = order.Balance;
 		var limitPrice = order.Price;
 
+		if (order.TimeInForce == TimeInForce.MatchOrCancel)
+			return MatchFOK(order, book, settings);
+
 		// Get matchable volume
 		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
 		{
@@ -119,12 +122,6 @@ public class OrderMatcher : IOrderMatcher
 				break;
 
 			case TimeInForce.MatchOrCancel: // FOK
-				if (!isFullyMatched)
-				{
-					// Rollback - don't execute any trades
-					// Actually we need to not consume at all, so let's rebuild
-					return MatchFOK(order, book, settings);
-				}
 				finalState = OrderStates.Done;
 				break;
 
@@ -187,7 +184,8 @@ public class OrderMatcher : IOrderMatcher
 		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
 		{
 			var consumed = volume.Min(remaining);
-			trades.Add(new MatchTrade(price, consumed, order.Side, orders));
+			var tradePrice = settings.UseOrderPriceForLimitTrades ? limitPrice : price;
+			trades.Add(new MatchTrade(tradePrice, consumed, order.Side, orders));
 			matchedOrders.AddRange(orders.Where(o => o.IsUserOrder));
 			remaining -= consumed;
 
