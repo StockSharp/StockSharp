@@ -98,7 +98,8 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 			1 + 16 + // MarketPrice (nullable)
 			4 + conditionTypeBytes.Length +
 			4 + // ConditionParamsCount
-			conParams.Length * 200; // approximate per condition parameter
+			conParams.Length * 200 + // approximate per condition parameter
+			conParams.Sum(p => p.Value is string str ? str.UTF8().Length : 0);
 
 		var buffer = new byte[estimatedSize];
 		var writer = new SpanWriter(buffer);
@@ -284,6 +285,13 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 				case bool bln:
 					writer.WriteByte((byte)TypeCode.Boolean);
 					writer.WriteBoolean(bln);
+					break;
+
+				case string str:
+					stringValue = str.UTF8();
+					writer.WriteByte((byte)TypeCode.String);
+					writer.WriteInt32(stringValue.Length);
+					writer.WriteSpan(stringValue);
 					break;
 
 				case IRange r:
@@ -585,19 +593,26 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 
 					case TypeCode.String:
 						var strLen = reader.ReadInt32();
-						if (strLen > 0)
-						{
-							var strBytes = reader.ReadSpan(strLen);
+						byte[] strBytes = null;
 
+						if (strLen > 0)
+							strBytes = reader.ReadSpan(strLen).ToArray();
+
+						if (paramType == typeof(string))
+						{
+							value = strBytes is null ? string.Empty : strBytes.UTF8();
+						}
+						else if (strBytes is not null)
+						{
 							if (paramType.IsPersistable())
 							{
-								value = strBytes.ToArray().Deserialize<SettingsStorage>()?.Load(paramType) ?? throw new InvalidOperationException("unable to deserialize param value");
+								value = strBytes.Deserialize<SettingsStorage>()?.Load(paramType) ?? throw new InvalidOperationException("unable to deserialize param value");
 							}
 							else if (paramType.Is<IRange>())
 							{
 								var range = paramType.CreateInstance<IRange>();
 
-								var storage = strBytes.ToArray().Deserialize<SettingsStorage>() ?? throw new InvalidOperationException("unable to deserialize IRange param value");
+								var storage = strBytes.Deserialize<SettingsStorage>() ?? throw new InvalidOperationException("unable to deserialize IRange param value");
 
 								if (storage.ContainsKey("Min"))
 									range.MinObj = storage.GetValue<SettingsStorage>("Min").FromStorage();
