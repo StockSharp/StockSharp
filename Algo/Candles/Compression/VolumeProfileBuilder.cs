@@ -121,92 +121,55 @@ public class VolumeProfileBuilder
 		High = default;
 		Low = default;
 
-		var maxVolume = (_levels.Sum(p => p.BuyVolume + p.SellVolume) * VolumePercent / 100).Round(0);
-		var currVolume = _levels.Select(p => p.BuyVolume + p.SellVolume).Max();
+		static decimal GetVolume(CandlePriceLevel level)
+			=> level.TotalVolume != 0 ? level.TotalVolume : level.BuyVolume + level.SellVolume;
 
-		PoC = _levels.FirstOrDefault(p => p.BuyVolume + p.SellVolume == currVolume);
+		var maxVolume = (_levels.Sum(GetVolume) * VolumePercent / 100).Round(0);
+		var currVolume = _levels.Select(GetVolume).Max();
+
+		PoC = _levels.FirstOrDefault(p => GetVolume(p) == currVolume);
 
 		if (PoC.Price == 0)
 			return;
 
+		High = PoC;
+		Low = PoC;
+
 		var abovePoc = Combine(_levels.Where(p => p.Price > PoC.Price).OrderBy(p => p.Price), true);
 		var belowePoc = Combine(_levels.Where(p => p.Price < PoC.Price).OrderByDescending(p => p.Price), false);
 
-		if (abovePoc.Count == 0)
+		var abovePocNode = abovePoc.First;
+		var belowPocNode = belowePoc.First;
+
+		while (abovePocNode != null || belowPocNode != null)
 		{
-			LinkedListNode<CandlePriceLevel> node;
+			var useAbove = belowPocNode == null;
 
-			for (node = belowePoc.First; node != null; node = node.Next)
+			if (abovePocNode != null && belowPocNode != null)
 			{
-				var vol = node.Value.BuyVolume + node.Value.SellVolume;
+				var aboveVol = GetVolume(abovePocNode.Value);
+				var belowVol = GetVolume(belowPocNode.Value);
 
-				if (currVolume + vol > maxVolume)
-				{
-					High = PoC;
-					Low = node.Value;
-					break;
-				}
-				else
-				{
-					currVolume += vol;
-				}
+				useAbove = aboveVol > belowVol;
 			}
-		}
-		else if (belowePoc.Count == 0)
-		{
-			LinkedListNode<CandlePriceLevel> node;
 
-			for (node = abovePoc.First; node != null; node = node.Next)
-			{
-				var vol = node.Value.BuyVolume + node.Value.SellVolume;
+			var node = useAbove ? abovePocNode : belowPocNode;
+			var vol = GetVolume(node.Value);
 
-				if (currVolume + vol > maxVolume)
-				{
-					High = node.Value;
-					Low = PoC;
-					break;
-				}
-				else
-				{
-					currVolume += vol;
-				}
-			}
-		}
-		else
-		{
-			var abovePocNode = abovePoc.First;
-			var belowPocNode = belowePoc.First;
+			if (useAbove)
+				High = node.Value;
+			else
+				Low = node.Value;
 
-			while (abovePocNode != null && belowPocNode != null)
-			{
-				var aboveVol = abovePocNode.Value.BuyVolume + abovePocNode.Value.SellVolume;
-				var belowVol = belowPocNode.Value.BuyVolume + belowPocNode.Value.SellVolume;
+			if (currVolume + vol > maxVolume)
+				break;
 
-				if (aboveVol > belowVol)
-				{
-					if (currVolume + aboveVol > maxVolume)
-					{
-						High = abovePocNode.Value;
-						Low = belowPocNode.Value;
-						break;
-					}
+			currVolume += vol;
 
-					currVolume += aboveVol;
-					abovePocNode = abovePocNode.Next;
-				}
-				else
-				{
-					if (currVolume + belowVol > maxVolume)
-					{
-						High = abovePocNode.Value;
-						Low = belowPocNode.Value;
-						break;
-					}
-
-					currVolume += belowVol;
-					belowPocNode = belowPocNode.Next;
-				}
-			}
+			if (useAbove)
+				abovePocNode = abovePocNode.Next;
+			else
+				belowPocNode = belowPocNode.Next;
 		}
 	}
 

@@ -68,6 +68,8 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 	/// <param name="volSide">The side of the volume to be added to the candle.</param>
 	protected static void AddVolume(TCandleMessage candle, decimal volume, Sides? volSide)
 	{
+		var hadOnlyKnownSideVolume = candle.TotalVolume == (candle.BuyVolume ?? 0) + (candle.SellVolume ?? 0);
+
 		candle.TotalVolume += volume;
 
 		switch (volSide)
@@ -81,6 +83,9 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 				candle.RelativeVolume  = (candle.RelativeVolume ?? 0) - volume;
 				break;
 		}
+
+		if (hadOnlyKnownSideVolume && volSide != null)
+			candle.TotalVolume = (candle.BuyVolume ?? 0) + (candle.SellVolume ?? 0);
 	}
 
 	/// <summary>
