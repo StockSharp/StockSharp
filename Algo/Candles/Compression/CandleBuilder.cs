@@ -787,6 +787,8 @@ public class PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Cand
 /// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<RenkoCandleMessage>(exchangeInfoProvider)
 {
+	private const int VolumeScale = 8;
+
 	/// <inheritdoc />
 	protected override IEnumerable<RenkoCandleMessage> OnProcess(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)
 	{
@@ -854,20 +856,36 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 		if (boxesMoved >= 1)
 		{
 			var sign = priceChange.Sign();
-			var volumePart = volume / (boxesMoved + 1);
+			var remainingParts = boxesMoved + 1;
+			var remainingVolume = volume;
+
+			decimal? TakeVolumePart()
+			{
+				if (remainingVolume is not decimal v)
+					return null;
+
+				if (remainingParts == 1)
+					return v;
+
+				var part = (v / remainingParts).Round(VolumeScale);
+				remainingVolume = v - part;
+				remainingParts--;
+
+				return part;
+			}
 
 			for (var i = 0; i < boxesMoved; i++)
 			{
 				var closePrice = ShrinkPrice(currentCandle.OpenPrice + (boxSize * sign), subscription);
 
-				UpdateRenkoCandle(currentCandle, closePrice, volumePart);
+				UpdateRenkoCandle(currentCandle, closePrice, TakeVolumePart());
 				currentCandle.State = CandleStates.Finished;
 				yield return currentCandle;
 
 				currentCandle = GenerateNewCandle(closePrice, closePrice);
 			}
 
-			volume = volumePart;
+			volume = TakeVolumePart();
 		}
 
 		UpdateRenkoCandle(currentCandle, price, volume);

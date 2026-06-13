@@ -224,7 +224,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<Level1ChangeMessage, string>(GetBoardCodeField(nameof(Level1ChangeMessage.SecurityId)), () => LocalizedStrings.Board, boardCodeDescr, SetBoardCode) { IsRequired = true });
 
 			fields.Add(new FieldMapping<Level1ChangeMessage, DateTime>(GetDateField(nameof(Level1ChangeMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-			fields.Add(new FieldMapping<Level1ChangeMessage, TimeSpan>(GetTimeOfDayField(nameof(Level1ChangeMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
+			fields.Add(new FieldMapping<Level1ChangeMessage, TimeSpan>(GetTimeOfDayField(nameof(Level1ChangeMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v) { Format = "hh:mm:ss.ffffff" });
 
 			foreach (var f in Enumerator.GetValues<Level1Fields>().ExcludeObsolete())
 			{
@@ -247,7 +247,7 @@ public static class FieldMappingRegistry
 			fields.Add(new FieldMapping<PositionChangeMessage, string>(nameof(PositionChangeMessage.PortfolioName), () => LocalizedStrings.Portfolio, () => LocalizedStrings.PortfolioName, (i, v) => i.PortfolioName = v) { IsRequired = true });
 
 			fields.Add(new FieldMapping<PositionChangeMessage, DateTime>(GetDateField(nameof(PositionChangeMessage.ServerTime)), () => LocalizedStrings.Date, dateDescr, (i, v) => i.ServerTime = v + i.ServerTime.TimeOfDay) { IsRequired = true });
-			fields.Add(new FieldMapping<PositionChangeMessage, TimeSpan>(GetTimeOfDayField(nameof(PositionChangeMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v));
+			fields.Add(new FieldMapping<PositionChangeMessage, TimeSpan>(GetTimeOfDayField(nameof(PositionChangeMessage.ServerTime)), () => LocalizedStrings.Time, timeDescr, (i, v) => i.ServerTime += v) { Format = "hh:mm:ss.ffffff" });
 
 			fields.Add(new FieldMapping<PositionChangeMessage, string>(nameof(PositionChangeMessage.StrategyId), () => LocalizedStrings.Strategy, () => LocalizedStrings.Strategy, (i, v) => i.StrategyId = v) { IsRequired = false });
 			fields.Add(new FieldMapping<PositionChangeMessage, Sides>(nameof(PositionChangeMessage.Side), () => LocalizedStrings.Side, () => LocalizedStrings.Side, (i, v) => i.Side = v) { IsRequired = false });
@@ -283,6 +283,8 @@ public static class FieldMappingRegistry
 		{
 			fields.Add(new FieldMapping<BoardMessage, string>(nameof(BoardMessage.Code), () => LocalizedStrings.Board, () => LocalizedStrings.BoardCode, (i, v) => i.Code = v) { IsRequired = true });
 			fields.Add(new FieldMapping<BoardMessage, string>(nameof(BoardMessage.ExchangeCode), () => LocalizedStrings.Exchange, () => LocalizedStrings.ExchangeBoardDesc, (i, v) => i.ExchangeCode = v) { IsRequired = true });
+			fields.Add(new FieldMapping<BoardMessage, TimeSpan>(nameof(BoardMessage.ExpiryTime), () => LocalizedStrings.ExpiryDate, () => LocalizedStrings.SecExpirationTime, (i, v) => i.ExpiryTime = v));
+			fields.Add(new FieldMapping<BoardMessage, TimeZoneInfo>(nameof(BoardMessage.TimeZone), () => LocalizedStrings.TimeZone, () => LocalizedStrings.BoardTimeZone, (i, v) => i.TimeZone = v));
 		}
 		else if (dataType == DataType.BoardState)
 		{
