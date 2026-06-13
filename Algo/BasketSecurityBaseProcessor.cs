@@ -203,6 +203,7 @@ public class ContinuousSecurityVolumeProcessor : ContinuousSecurityBaseProcessor
 	private SecurityId _nextId;
 	private decimal? _currVolume;
 	private decimal? _nextVolume;
+	private bool _isCurrentActive;
 	private bool _finished;
 
 	/// <summary>
@@ -244,19 +245,31 @@ public class ContinuousSecurityVolumeProcessor : ContinuousSecurityBaseProcessor
 		else if (securityId == _nextId)
 			_nextVolume = vol;
 
-		if (_currVolume == null || _nextVolume == null)
+		if (_currVolume == null)
 			return false;
 
+		if (_nextVolume == null)
+			return _isCurrentActive && securityId == _currId;
+
 		if ((_currVolume.Value + BasketSecurity.VolumeLevel) >= _nextVolume.Value)
+		{
+			_isCurrentActive = true;
 			return securityId == _currId;
+		}
 
 		// Volume switched - next security is now active
+		var currVolume = _nextVolume;
+
 		if (!NextId())
 		{
 			// No more legs after _nextId, switch to _nextId as final active leg
 			_currId = _nextId;
 			_finished = true;
 		}
+
+		_currVolume = currVolume;
+		_nextVolume = null;
+		_isCurrentActive = true;
 
 		return _currId == securityId;
 	}
