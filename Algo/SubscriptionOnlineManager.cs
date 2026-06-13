@@ -120,15 +120,21 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 					{
 						if (_state.TryGetAndRemoveSubscriptionById(originTransId, out var info))
 						{
+							var isHistLive = info.HistLive.Contains(originTransId);
+
 							info.OnlineSubscribers.Remove(originTransId);
 							info.Subscribers.Remove(originTransId);
+							info.ExtraFilters.Remove(originTransId);
+							info.HistLive.Remove(originTransId);
+
+							if (isHistLive)
+								break;
+
 							notifySubscribers = info.Subscribers.CachedKeys;
+							RemoveSubscriptionIds(info);
 
 							if (!ChangeState(info, originTransId, SubscriptionStates.Error))
-							{
-								info.HistLive.Remove(originTransId);
 								return (null, []);
-							}
 						}
 					}
 				}
@@ -247,8 +253,13 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 							}
 						}
 
-						// For market data in Online state, use OnlineSubscribers; for historical (Active state), use all Subscribers
-						var ids = info.IsMarketData && info.State == SubscriptionStates.Online
+						var explicitSubId = subscrMsg.OriginalTransactionId;
+
+						// Hist+live child history is private backfill and must not be broadcast to already-online subscribers.
+						var ids = explicitSubId != 0 && info.HistLive.Contains(explicitSubId)
+							? [explicitSubId]
+							// For market data in Online state, use OnlineSubscribers; for historical (Active state), use all Subscribers.
+							: info.IsMarketData && info.State == SubscriptionStates.Online
 							? info.OnlineSubscribers.Cache
 							: info.Subscribers.CachedKeys;
 
@@ -296,6 +307,18 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 		}
 
 		return true;
+	}
+
+	private void RemoveSubscriptionIds(ISubscriptionOnlineInfo info)
+	{
+		foreach (var subscriber in info.Subscribers.CachedKeys)
+			_state.RemoveSubscriptionById(subscriber);
+
+		if (info.IsLinked)
+			return;
+
+		foreach (var linked in info.Linked)
+			_state.RemoveSubscriptionById(linked);
 	}
 
 	private void TryAddOrderTransaction(ISubscriptionOnlineInfo statusInfo, long transactionId, bool warnOnDuplicate = true)
@@ -441,7 +464,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 					{
 						sendOutMsgs =
 						[
-							originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
+							transId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
 						];
 					}
 					else
@@ -485,7 +508,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 				{
 					sendOutMsgs =
 					[
-						originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
+						transId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId)))
 					];
 				}
 			}
