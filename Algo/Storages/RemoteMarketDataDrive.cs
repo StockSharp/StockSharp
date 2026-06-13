@@ -56,7 +56,9 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 
 		ValueTask IMarketDataStorageDrive.ClearDatesCacheAsync(CancellationToken cancellationToken)
 		{
-			//_parent.Invoke(f => f.ClearDatesCache(_parent.SessionId, _security.Id, _dataType, _arg));
+			_dates = null;
+			_prevDatesSync = default;
+
 			return default;
 		}
 
@@ -83,6 +85,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	public static readonly string DefaultTargetCompId = "StockSharpHydraMD";
 
 	private readonly Lazy<IMessageAdapter> _adapter;
+	private readonly bool _ownAdapter;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RemoteMarketDataDrive"/>.
@@ -97,7 +100,7 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	/// </summary>
 	/// <param name="address">Server address.</param>
 	public RemoteMarketDataDrive(EndPoint address)
-		: this(address, () => ServicesRegistry.AdapterProvider.CreateTransportAdapter(new IncrementalIdGenerator()))
+		: this(address, () => ServicesRegistry.AdapterProvider.CreateTransportAdapter(new IncrementalIdGenerator()), true)
 	{
 	}
 
@@ -107,13 +110,14 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	/// <param name="address">Server address.</param>
 	/// <param name="adapter">Message adapter.</param>
 	public RemoteMarketDataDrive(EndPoint address, IMessageAdapter adapter)
-		: this(address, adapter is null ? throw new ArgumentNullException(nameof(adapter)) : () => adapter)
+		: this(address, adapter is null ? throw new ArgumentNullException(nameof(adapter)) : () => adapter, false)
 	{
 	}
 
-	private RemoteMarketDataDrive(EndPoint address, Func<IMessageAdapter> adapterFactory)
+	private RemoteMarketDataDrive(EndPoint address, Func<IMessageAdapter> adapterFactory, bool ownAdapter)
 	{
 		_adapter = new(adapterFactory ?? throw new ArgumentNullException(nameof(adapterFactory)));
+		_ownAdapter = ownAdapter;
 		Address = address ?? throw new ArgumentNullException(nameof(address));
 	}
 
@@ -121,6 +125,9 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 	protected override void DisposeManaged()
 	{
 		Client?.Dispose();
+
+		if (_ownAdapter && _adapter.IsValueCreated)
+			_adapter.Value.Dispose();
 
 		base.DisposeManaged();
 	}
