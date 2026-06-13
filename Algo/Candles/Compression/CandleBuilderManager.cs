@@ -93,6 +93,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 	private readonly Dictionary<long, SeriesInfo> _series = [];
 	private readonly Dictionary<long, long> _replaceId = [];
+	private readonly HashSet<long> _finishedSubscriptions = [];
 	private readonly CandleBuilderProvider _candleBuilderProvider;
 	private readonly bool _cloneOutCandles;
 
@@ -140,6 +141,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 				{
 					_series.Clear();
 					_replaceId.Clear();
+					_finishedSubscriptions.Clear();
 				}
 
 				return ([message], []);
@@ -338,6 +340,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 								LastTime = original.From,
 								Count = original.Count,
 							});
+							_finishedSubscriptions.Remove(transactionId);
 						}
 					}
 
@@ -373,6 +376,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 								LastTime = original.From,
 								Count = original.Count,
 							});
+							_finishedSubscriptions.Remove(transactionId);
 						}
 
 						return ([current], []);
@@ -401,6 +405,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 							LastTime = original.From,
 							Count = original.Count,
 						});
+						_finishedSubscriptions.Remove(transactionId);
 					}
 
 					return ([mdMsg], []);
@@ -470,8 +475,20 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 				return null;
 
 			_replaceId.RemoveWhere(p => p.Value == id);
+			_finishedSubscriptions.Add(series.Id);
+			_finishedSubscriptions.Add(series.Current.TransactionId);
+
+			if (series.LiveCandleTransactionId is long liveCandleTransactionId)
+				_finishedSubscriptions.Add(liveCandleTransactionId);
+
 			return series;
 		}
+	}
+
+	private async ValueTask<bool> IsFinishedSubscriptionAsync(long id, CancellationToken cancellationToken)
+	{
+		using (await _sync.LockAsync(cancellationToken))
+			return _finishedSubscriptions.Contains(id);
 	}
 
 	private async ValueTask<MarketDataMessage> TryCreateBuildSubscription(MarketDataMessage original, DateTime? lastTime, CancellationToken cancellationToken)
@@ -516,13 +533,17 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		var series = new SeriesInfo(original.TypedClone(), current)
 		{
 			LastTime = current.From,
-			Count = current.Count,
+			Count = original.Count,
 			Transform = CreateTransform(current),
 			State = SeriesStates.Compress,
 		};
 
 		using (await _sync.LockAsync(cancellationToken))
+		{
 			_series.Add(original.TransactionId, series);
+			_finishedSubscriptions.Remove(original.TransactionId);
+			_finishedSubscriptions.Remove(current.TransactionId);
+		}
 
 		Buffer?.ProcessInMessage(current);
 		return current;
@@ -585,7 +606,15 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			var (series, _) = await TryGetSeries(subscriptionId, cancellationToken);
 
 			if (series == null)
+			{
+				if (await IsFinishedSubscriptionAsync(subscriptionId, cancellationToken))
+				{
+					newSubscriptionIds ??= [.. subscriptionIds];
+					newSubscriptionIds.Remove(subscriptionId);
+				}
+
 				continue;
+			}
 
 			newSubscriptionIds ??= [.. subscriptionIds];
 
@@ -649,6 +678,9 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 					}
 
 					extraOut.Add(bigCandle.TypedClone());
+
+					if (isFinished && await FinishIfCountExhaustedAsync(series, extraOut, cancellationToken))
+						break;
 				}
 
 				break;
@@ -837,6 +869,9 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 				nonFinished.LocalTime = candleMsg.LocalTime;
 				await RaiseNewOutCandleAsync(info, nonFinished, extraOut, cancellationToken);
 				info.NonFinishedCandle = null;
+
+				if (await FinishIfCountExhaustedAsync(info, extraOut, cancellationToken))
+					return;
 			}
 			else if (candleMsg.State == CandleStates.Finished)
 				info.NonFinishedCandle = null;
@@ -851,7 +886,12 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		}
 
 		if (!info.Current.IsFinishedOnly || candleMsg.State == CandleStates.Finished)
+		{
 			await RaiseNewOutCandleAsync(info, candleMsg, extraOut, cancellationToken);
+
+			if (await FinishIfCountExhaustedAsync(info, extraOut, cancellationToken))
+				return;
+		}
 
 		if (candleMsg.State != CandleStates.Finished)
 			info.NonFinishedCandle = candleMsg.TypedClone();
@@ -868,7 +908,15 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			var (series, subscriptionId) = await TryGetSeries(id, cancellationToken);
 
 			if (series == null)
+			{
+				if (await IsFinishedSubscriptionAsync(id, cancellationToken))
+				{
+					newSubscriptionIds ??= [.. subscriptionIds];
+					newSubscriptionIds.Remove(id);
+				}
+
 				continue;
+			}
 
 			newSubscriptionIds ??= [.. subscriptionIds];
 
@@ -937,6 +985,9 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 					continue;
 
 				await RaiseNewOutCandleAsync(series, candleMessage.TypedClone(), extraOut, cancellationToken);
+
+				if (await FinishIfCountExhaustedAsync(series, extraOut, cancellationToken))
+					break;
 			}
 		}
 
@@ -949,6 +1000,17 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		}
 
 		return false;
+	}
+
+	private async ValueTask<bool> FinishIfCountExhaustedAsync(SeriesInfo info, List<Message> extraOut, CancellationToken cancellationToken)
+	{
+		if (!info.IsCountExhausted)
+			return false;
+
+		if (await TryRemoveSeries(info.Id, cancellationToken) is not null)
+			extraOut.Add(new SubscriptionFinishedMessage { OriginalTransactionId = info.Original.TransactionId });
+
+		return true;
 	}
 
 	private static ValueTask RaiseNewOutCandleAsync(SeriesInfo info, CandleMessage candleMsg, List<Message> extraOut, CancellationToken cancellationToken)
