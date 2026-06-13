@@ -106,6 +106,11 @@ public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats)
 	}
 
 	/// <summary>
+	/// Check whether the trade is already tracked.
+	/// </summary>
+	public bool Contains(MyTrade trade) => _myTrades.Contains(trade);
+
+	/// <summary>
 	/// All tracked trades.
 	/// </summary>
 	public IEnumerable<MyTrade> MyTrades => _myTrades.Cache;

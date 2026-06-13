@@ -338,9 +338,11 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		private int _candleCount;
 		private bool _invalidOrderSent;
 		private bool _stopRequested;
+		private bool _isFormed;
 
 		public EquivalenceScenario Scenario { get; set; }
 		public decimal MaxAbsPosition { get; private set; }
+		public override bool IsFormed => _isFormed;
 
 		public event Action<ICandleMessage> CandleProcessed;
 		public event Action<Sides, decimal, decimal> SignalProduced;
@@ -411,17 +413,21 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 			if (sub != _candleSub)
 				return;
 
+			var longValue = _longSma.Process(candle);
+			var shortValue = _shortSma.Process(candle);
+
+			if (!_isFormed && _longSma.IsFormed && _shortSma.IsFormed)
+			{
+				_isFormed = true;
+				this.Notify(nameof(IsFormed));
+			}
+
 			CandleProcessed?.Invoke(candle);
 			_candleCount++;
 			MaxAbsPosition = MaxAbsPosition.Max(Position.Abs());
 
 			_editFlow?.OnCandle(_candleCount, candle);
 
-			var longValue = _longSma.Process(candle);
-			var shortValue = _shortSma.Process(candle);
-
-			// Mirror the Bind pipeline's allowEmpty=false suppression so the harness
-			// stays symmetric for any indicator that can return empty values.
 			if (longValue.IsEmpty || shortValue.IsEmpty)
 				return;
 
@@ -507,7 +513,17 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 	/// side- and run-independent while the message shape is still compared.
 	/// </summary>
 	private static string NormalizeError(Exception error)
-		=> error is null ? "null" : Regex.Replace(error.Message, "[0-9]+", "#");
+	{
+		if (error is null)
+			return "null";
+
+		var message = Regex.Replace(
+			error.Message,
+			@"\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b",
+			"#");
+
+		return Regex.Replace(message, "[0-9]+", "#");
+	}
 
 	private static string FormatOrderCore(Order order, string ordinal)
 		=> $"{ordinal} side={order.Side} type={(order.Type is null ? "null" : order.Type.ToString())} price={Fmt(order.Price)} vol={Fmt(order.Volume)} tif={(order.TimeInForce is null ? "null" : order.TimeInForce.ToString())} expiry={(order.ExpiryDate is null ? "null" : "set")} cond={(order.Condition is null ? "null" : order.Condition.GetType().Name)} uid={SetFlag(order.UserOrderId)} sid={SetFlag(order.StrategyId)} comment={SetFlag(order.Comment)}";
@@ -637,41 +653,59 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		strategy.CandleProcessed += candle => rec.Add("Candle", FormatCandle(candle));
 		strategy.SignalProduced += (side, price, volume) => rec.Add("Signal", $"side={side} price={Fmt(price)} vol={Fmt(volume)}");
 
+		strategy.ConnectorChanged += () => rec.Add("ConnectorChanged");
+		strategy.PropertyChanged += (_, e) => rec.Add("PropertyChanged", e.PropertyName);
+		strategy.Reseted += () => rec.Add("Reseted");
+		((ITimeProvider)strategy).CurrentTimeChanged += _ => rec.Add("CurrentTimeChanged");
+
+		strategy.OrderRegistering += order => rec.Add("OrderRegistering", FormatOrderCore(order, rec.Ord(order)));
+		strategy.OrderReRegistering += (oldOrder, newOrder) => rec.Add("OrderReRegistering", $"old={rec.Ord(oldOrder)} new={rec.Ord(newOrder)} price={Fmt(newOrder.Price)}");
+		strategy.OrderCanceling += order => rec.Add("OrderCancel", $"{rec.Ord(order)} state={order.State}");
+
 		strategy.Orders.NewOrder += order => rec.Add("NewOrder", FormatOrderCore(order, rec.Ord(order)));
 		strategy.Orders.Registered += order => rec.Add("OrderReg", FormatOrderState(order, rec.Ord(order)));
 		strategy.Orders.Changed += order => rec.Add("OrderChg", FormatOrderState(order, rec.Ord(order)));
 		strategy.Trades.TradeAdded += trade => rec.Add("Trade", FormatTrade(trade, rec.Ord(trade.Order)));
 
-		strategy.OrderRegisterFailedHook += fail => rec.Add("OrderFail", $"{rec.Ord(fail.Order)} error={NormalizeError(fail.Error)}");
-		// No decomposed equivalents exist for: pre-action events (OrderRegistering/
-		// OrderReRegistering/OrderCanceling), edit and cancel-fail surfaces
-		// (OrderEdit/OrderEditFail/OrderCancelFail), strategy-level subscription
-		// lifecycle (StratSub*/SubscriptionReceived), market-data relays (Relay*),
-		// PnLReceived/PnLReceived2, mass-cancel and lookup-result relays, infra
-		// notifications (ConnectorChanged/ParametersChanged/PropertyChanged/Reseted/
-		// CurrentTimeChanged) and the drawing surface; those families stay red
-		// whenever the scenario drives them on the monolith.
+		strategy.OrderEdited += (transId, order) => rec.Add("OrderEdit", $"{rec.Ord(order)} price={Fmt(order.Price)} vol={Fmt(order.Volume)}");
+		strategy.OrderEditFailed += (transId, fail) => rec.Add("OrderEditFail", $"{rec.Ord(fail.Order)} error={NormalizeError(fail.Error)}");
+		strategy.OrderRegisterFailReceived += (sub, fail) => rec.Add("OrderFail", $"{rec.Ord(fail.Order)} error={NormalizeError(fail.Error)}");
+		strategy.OrderCancelFailed += fail => rec.Add("OrderCancelFail", $"{rec.Ord(fail.Order)} error={NormalizeError(fail.Error)}");
 
-		// The decomposed strategy exposes only the Positions pipeline (relayed from
-		// connector PositionReceived, i.e. ACCOUNT positions incl. Money), while the
-		// monolith PosEvt carries internally computed strategy positions - the payload
-		// difference is genuine. There is no strategy-position notification
-		// ("StratPos") and no subscription-scoped position event ("AccPos"), so those
-		// comparisons stay red until the decomposed side gains the events.
-		strategy.Positions.NewPosition += pos => rec.Add("PosEvt", $"new {FormatPosition(pos)}");
-		strategy.Positions.PositionChanged += pos => rec.Add("PosEvt", $"chg {FormatPosition(pos)}");
+		strategy.SubscriptionStarted += sub => rec.Add("StratSubStarted", FormatSubscription(sub));
+		strategy.SubscriptionOnline += sub => rec.Add("StratSubOnline", sub.DataType.ToString());
+		strategy.SubscriptionStopped += (sub, err) => rec.Add("StratSubStopped", $"{sub.DataType} error={(err is null ? "null" : NormalizeError(err))}");
+		strategy.SubscriptionFailed += (sub, err, isSubscribe) => rec.Add("StratSubFailed", $"{sub.DataType} subscribe={isSubscribe} error={NormalizeError(err)}");
+		strategy.SubscriptionReceived += (sub, arg) => rec.Add("SubscriptionReceived", $"{sub.DataType} arg={arg?.GetType().Name ?? "null"}");
 
-		// Trades.PnLChanged covers realized PnL; Engine.PnLRefreshRequired is the
-		// counterpart of the monolith's unrealized-refresh PnLChanged raises (nothing
-		// inside DecomposedStrategy subscribes it - the remaining divergence in
-		// cadence/gating is genuine product behavior).
-		strategy.Trades.PnLChanged += _ => rec.Add("PnL", FormatPnL(strategy.PnLManager));
-		strategy.Engine.PnLRefreshRequired += _ => rec.Add("PnL", FormatPnL(strategy.PnLManager));
+		strategy.TickTradeReceived += (sub, tick) => rec.Add("RelayTick", $"price={Fmt(tick.Price)} vol={Fmt(tick.Volume)} time={FmtTime(tick.ServerTime)}");
+		strategy.Level1Received += (sub, l1) => rec.Add("RelayL1", $"last={Fmt(l1.TryGetDecimal(Level1Fields.LastTradePrice))} bid={Fmt(l1.TryGetDecimal(Level1Fields.BestBidPrice))} ask={Fmt(l1.TryGetDecimal(Level1Fields.BestAskPrice))} time={FmtTime(l1.ServerTime)}");
+		strategy.OrderBookReceived += (sub, book) => rec.Add("RelayDepth", $"bid={Fmt(book.GetBestBid()?.Price)} ask={Fmt(book.GetBestAsk()?.Price)} time={FmtTime(book.ServerTime)}");
+		strategy.OrderLogReceived += (sub, _) => rec.Add("RelayOrderLog", sub.DataType.ToString());
+		strategy.SecurityReceived += (sub, sec) => rec.Add("RelaySecurity", sec.Id);
+		strategy.BoardReceived += (sub, board) => rec.Add("RelayBoard", board.Code);
+		strategy.NewsReceived += (sub, _) => rec.Add("RelayNews", sub.DataType.ToString());
+		strategy.DataTypeReceived += (sub, dt) => rec.Add("RelayDataType", dt.ToString());
+
+		// No decomposed equivalents exist for: mass-cancel and lookup-result relays,
+		// ParametersChanged, and the drawing surface; those families stay red whenever
+		// the scenario drives them on the monolith.
+
+		var positions = (IPositionProvider)strategy;
+		positions.NewPosition += pos => rec.Add("PosEvt", $"new {FormatPosition(pos)}");
+		positions.PositionChanged += pos => rec.Add("PosEvt", $"chg {FormatPosition(pos)}");
+		strategy.PositionChanged += () => rec.Add("StratPos", Fmt(strategy.Position));
+		strategy.PositionReceived += (sub, pos) => rec.Add("AccPos", FormatPosition(pos));
+
+		strategy.PnLChanged += () => rec.Add("PnL", FormatPnL(strategy.PnLManager));
+		strategy.PnLReceived += sub => rec.Add("PnLReceived", sub.DataType.ToString());
+		strategy.PnLReceived2 += (sub, pf, time, realized, unrealized, commission) =>
+			rec.Add("PnLReceived2", $"real={Fmt(realized)} unreal={Fmt(unrealized)} commission={Fmt(commission)} time={FmtTime(time)}");
 		strategy.CommissionChanged += () => rec.Add("Commission", Fmt(strategy.Commission));
 		strategy.SlippageChanged += () => rec.Add("Slippage", Fmt(strategy.Slippage));
 		strategy.LatencyChanged += () => rec.Add("Latency");
 
-		// No IsOnlineChanged equivalent on the decomposed side ("Online" stays empty).
+		strategy.IsOnlineChanged += s => rec.Add("Online", s.IsOnline.ToString());
 		strategy.Error += error => rec.Add("Error", NormalizeError(error));
 	}
 

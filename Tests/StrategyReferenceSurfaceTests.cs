@@ -379,8 +379,10 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		private Order _resting;
 		private Order _canceledOnce;
 		private Subscription _candleSub;
+		private bool _isFormed;
 
 		public decimal MaxAbsPosition { get; private set; }
+		public override bool IsFormed => _isFormed;
 
 		public event Action OrderRegisterFailedHook;
 		public event Action CandleProcessed;
@@ -441,6 +443,12 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 
 			var longValue = _longSma.Process(candle);
 			var shortValue = _shortSma.Process(candle);
+
+			if (!_isFormed && _longSma.IsFormed && _shortSma.IsFormed)
+			{
+				_isFormed = true;
+				this.Notify(nameof(IsFormed));
+			}
 
 			if (longValue.IsEmpty || shortValue.IsEmpty)
 				return;
@@ -651,19 +659,55 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		var counter = new EventCounter();
 
 		strategy.Engine.StateChanged += _ => counter.Bump(Ev.ProcessStateChanged);
+		strategy.ConnectorChanged += () => counter.Bump(Ev.ConnectorChanged);
+		strategy.ParametersChanged += () => counter.Bump(Ev.ParametersChanged);
+		strategy.PropertyChanged += (_, _) => counter.Bump(Ev.PropertyChanged);
+		strategy.Reseted += () => counter.Bump(Ev.Reseted);
+		strategy.IsOnlineChanged += _ => counter.Bump(Ev.IsOnlineChanged);
 		strategy.Error += _ => counter.Bump(Ev.Error);
+		((ITimeProvider)strategy).CurrentTimeChanged += _ => counter.Bump(Ev.CurrentTimeChanged);
 
+		strategy.OrderRegistering += _ => counter.Bump(Ev.OrderRegistering);
+		strategy.OrderCanceling += _ => counter.Bump(Ev.OrderCanceling);
+		strategy.OrderReRegistering += (_, _) => counter.Bump(Ev.OrderReRegistering);
+		strategy.OrderCancelFailed += _ => counter.Bump(Ev.OrderCancelFailed);
+		strategy.OrderEdited += (_, _) => counter.Bump(Ev.OrderEdited);
+		strategy.OrderEditFailed += (_, _) => counter.Bump(Ev.OrderEditFailed);
 		strategy.Orders.NewOrder += _ => counter.Bump(Ev.NewOrder);
 		strategy.Orders.Registered += _ => counter.Bump(Ev.OrderRegistered);
 		strategy.Orders.Changed += _ => counter.Bump(Ev.OrderChanged);
 		strategy.Trades.TradeAdded += _ => counter.Bump(Ev.NewMyTrade);
-		strategy.Trades.PnLChanged += _ => counter.Bump(Ev.PnLChanged);
+		strategy.PnLChanged += () => counter.Bump(Ev.PnLChanged);
+		strategy.PnLReceived += _ => counter.Bump(Ev.PnLReceived);
+		strategy.PnLReceived2 += (_, _, _, _, _, _) => counter.Bump(Ev.PnLReceived2);
 		strategy.CommissionChanged += () => counter.Bump(Ev.CommissionChanged);
 		strategy.SlippageChanged += () => counter.Bump(Ev.SlippageChanged);
 		strategy.LatencyChanged += () => counter.Bump(Ev.LatencyChanged);
 
-		strategy.Positions.NewPosition += _ => counter.Bump(Ev.NewPosition);
-		strategy.Positions.PositionChanged += _ => counter.Bump(Ev.PositionChangedTyped);
+		var positions = (IPositionProvider)strategy;
+		positions.NewPosition += _ => counter.Bump(Ev.NewPosition);
+		positions.PositionChanged += _ => counter.Bump(Ev.PositionChangedTyped);
+		strategy.PositionChanged += () => counter.Bump(Ev.PositionChanged);
+		strategy.PositionReceived += (_, _) => counter.Bump(Ev.PositionReceived);
+		strategy.OwnTradeReceived += (_, _) => counter.Bump(Ev.OwnTradeReceived);
+		strategy.OrderReceived += (_, _) => counter.Bump(Ev.OrderReceived);
+		strategy.OrderCancelFailReceived += (_, _) => counter.Bump(Ev.OrderCancelFailReceived);
+		strategy.OrderEditFailReceived += (_, _) => counter.Bump(Ev.OrderEditFailReceived);
+		strategy.CandleReceived += (_, _) => counter.Bump(Ev.CandleReceived);
+		strategy.TickTradeReceived += (_, _) => counter.Bump(Ev.TickTradeReceived);
+		strategy.Level1Received += (_, _) => counter.Bump(Ev.Level1Received);
+		strategy.OrderBookReceived += (_, _) => counter.Bump(Ev.OrderBookReceived);
+		strategy.OrderLogReceived += (_, _) => counter.Bump(Ev.OrderLogReceived);
+		strategy.SecurityReceived += (_, _) => counter.Bump(Ev.SecurityReceived);
+		strategy.BoardReceived += (_, _) => counter.Bump(Ev.BoardReceived);
+		strategy.NewsReceived += (_, _) => counter.Bump(Ev.NewsReceived);
+		strategy.DataTypeReceived += (_, _) => counter.Bump(Ev.DataTypeReceived);
+		strategy.SubscriptionReceived += (_, _) => counter.Bump(Ev.SubscriptionReceived);
+		strategy.SubscriptionStarted += _ => counter.Bump(Ev.SubscriptionStarted);
+		strategy.SubscriptionOnline += _ => counter.Bump(Ev.SubscriptionOnline);
+		strategy.SubscriptionStopped += (_, _) => counter.Bump(Ev.SubscriptionStopped);
+		strategy.SubscriptionFailed += (_, _, _) => counter.Bump(Ev.SubscriptionFailed);
+		strategy.PortfolioReceived += (_, _) => counter.Bump(Ev.PortfolioReceived);
 
 		// The single register-fail hook is the decomposed side's entire
 		// register-fail surface: it stands in for both monolith relays.
@@ -673,13 +717,8 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 			counter.Bump(Ev.OrderRegisterFailReceived);
 		};
 
-		// The variant's own candle path stands in for the missing CandleReceived relay.
-		strategy.CandleProcessed += () => counter.Bump(Ev.CandleReceived);
-
-		// Everything else from the shared must-fire list (infra notifications,
-		// pre-action events, cancel/edit fail relays, subscription-scoped data and
-		// lifecycle events, PnLReceived/PnLReceived2, PositionChanged/PositionReceived,
-		// OwnTradeReceived/OrderReceived) has NO decomposed counterpart.
+		// Everything else from the shared must-fire list (presentation drawing)
+		// has no decomposed counterpart.
 		return counter;
 	}
 

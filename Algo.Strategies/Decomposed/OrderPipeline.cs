@@ -138,6 +138,23 @@ public class OrderPipeline(IStatisticManager stats)
 	public IEnumerable<Order> Orders => _ordersInfo.CachedKeys;
 
 	/// <summary>
+	/// Remove old completed orders.
+	/// </summary>
+	/// <param name="time">Minimum order time to keep.</param>
+	public void RemoveDoneBefore(DateTime time)
+	{
+		_ordersInfo.SyncDo(orders => orders.RemoveWhere(pair => pair.Key.State == OrderStates.Done && pair.Key.Time < time));
+	}
+
+	/// <summary>
+	/// Remove completed orders with non-positive volume.
+	/// </summary>
+	public void RemoveDoneWithNonPositiveVolume()
+	{
+		_ordersInfo.SyncDo(orders => orders.RemoveWhere(pair => pair.Key.State == OrderStates.Done && pair.Key.Volume <= 0));
+	}
+
+	/// <summary>
 	/// Clear all tracked orders.
 	/// </summary>
 	public void Reset()

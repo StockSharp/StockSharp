@@ -1745,6 +1745,15 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if (order is null)	throw new ArgumentNullException(nameof(order));
 		if (error is null)	throw new ArgumentNullException(nameof(error));
 
+		if (order.TransactionId == 0 && Connector?.TransactionIdGenerator is { } idGenerator)
+			order.TransactionId = idGenerator.GetNextId();
+
+		if (order.Time == default)
+			order.Time = CurrentTime;
+
+		if (order.ServerTime == default)
+			order.ServerTime = order.Time;
+
 		order.ApplyNewState(OrderStates.Failed, this);
 
 		if (IsDisposeStarted)
@@ -1814,6 +1823,23 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	}
 
 	/// <summary>
+	/// Ensures the order has metadata required by strategy surfaces.
+	/// </summary>
+	/// <param name="order">Order.</param>
+	/// <param name="fallbackTime">Fallback time.</param>
+	private void EnsureOrderMetadata(Order order, DateTime fallbackTime)
+	{
+		order.Security ??= Security;
+		order.Portfolio ??= Portfolio;
+
+		if (order.Time == default)
+			order.Time = order.ServerTime == default ? fallbackTime : order.ServerTime;
+
+		if (order.ServerTime == default)
+			order.ServerTime = order.Time;
+	}
+
+	/// <summary>
 	/// To add the order to the strategy.
 	/// </summary>
 	/// <param name="order">Order.</param>
@@ -1822,6 +1848,8 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 	{
 		if (order == null)
 			throw new ArgumentNullException(nameof(order));
+
+		EnsureOrderMetadata(order, CurrentTime);
 
 		var info = _ordersInfo.TryGetValue(order);
 
@@ -2514,7 +2542,19 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 		if(IsDisposeStarted)
 			return;
 
-		if (_ordersInfo.ContainsKey(fail.Order))
+		if (fail?.Order is not Order order)
+			return;
+
+		if (order.TransactionId == 0)
+			order.TransactionId = fail.TransactionId;
+
+		if (order.Time == default)
+			order.Time = fail.ServerTime;
+
+		if (order.ServerTime == default)
+			order.ServerTime = fail.ServerTime;
+
+		if (_ordersInfo.ContainsKey(order))
 			OnOrderRegisterFailed(fail, true);
 	}
 

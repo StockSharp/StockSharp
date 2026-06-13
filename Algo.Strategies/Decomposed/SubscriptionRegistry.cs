@@ -46,6 +46,9 @@ public class SubscriptionRegistry(IStrategyHost host)
 
 		_subscriptions.Add(subscription, isGlobal);
 
+		if (subscription.SubscriptionMessage is IStrategyIdMessage { StrategyId: null or "" } strategyMsg)
+			strategyMsg.StrategyId = _host.StrategyId;
+
 		if (subscription.TransactionId == default)
 			subscription.TransactionId = _host.GetNextTransactionId();
 
@@ -78,6 +81,24 @@ public class SubscriptionRegistry(IStrategyHost host)
 		}
 
 		UnsubscriptionRequested?.Invoke(subscription);
+	}
+
+	/// <summary>
+	/// Unsubscribe tracked subscriptions and remove them from strategy processing.
+	/// </summary>
+	/// <param name="globalAndLocal"><see langword="true"/> to include global lookup subscriptions.</param>
+	public void UnSubscribeAll(bool globalAndLocal)
+	{
+		foreach (var pair in _subscriptions.CachedPairs)
+		{
+			if (!globalAndLocal && pair.Value)
+				continue;
+
+			var subscription = pair.Key;
+			_subscriptions.Remove(subscription);
+			_subscriptionsById.Remove(subscription.TransactionId);
+			UnsubscriptionRequested?.Invoke(subscription);
+		}
 	}
 
 	/// <summary>

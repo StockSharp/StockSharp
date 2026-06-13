@@ -70,12 +70,13 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 	/// <summary>
 	/// Request strategy stop. Sends state change message through host.
 	/// </summary>
-	public ValueTask RequestStopAsync(CancellationToken cancellationToken)
+	public async ValueTask RequestStopAsync(CancellationToken cancellationToken)
 	{
 		if (ProcessState == ProcessStates.Stopped)
-			return default;
+			return;
 
-		return _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Stopping), cancellationToken);
+		await _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Stopping), cancellationToken);
+		await _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Stopped), cancellationToken);
 	}
 
 	/// <summary>
@@ -171,6 +172,12 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 								ProcessState = ProcessStates.Started;
 							break;
 						}
+						case ProcessStates.Stopped:
+						{
+							if (ProcessState != ProcessStates.Stopped)
+								ProcessState = ProcessStates.Stopped;
+							break;
+						}
 					}
 
 					return;
@@ -191,7 +198,11 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 			return;
 
 		_lastPnlRefreshTime = msgTime.Value;
-		PnLRefreshRequired?.Invoke(msgTime.Value);
+
+		if (!_host.CanRefreshPnL(_lastPnlRefreshTime))
+			return;
+
+		PnLRefreshRequired?.Invoke(_lastPnlRefreshTime);
 	}
 
 	/// <summary>

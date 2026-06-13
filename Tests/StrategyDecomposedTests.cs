@@ -15,6 +15,12 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		public DateTime CurrentTime { get; set; } = DateTime.UtcNow;
 
+		public string StrategyId { get; set; } = "test";
+
+		public bool HasPositions { get; set; }
+
+		public bool CanRefreshPnL(DateTime time) => true;
+
 		public List<Message> SentMessages { get; } = [];
 
 		public void SendOutMessage(Message message) => SentMessages.Add(message);
