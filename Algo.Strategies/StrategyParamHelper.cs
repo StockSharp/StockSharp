@@ -89,12 +89,15 @@ public static class StrategyParamHelper
 			_ when type == typeof(decimal) => GenerateRandomDecimal((decimal)param.OptimizeFrom, (decimal)param.OptimizeTo, (decimal?)param.OptimizeStep),
 			_ when type == typeof(double) => GenerateRandomDouble((double)param.OptimizeFrom, (double)param.OptimizeTo, (double?)param.OptimizeStep),
 			_ when type == typeof(float) => GenerateRandomFloat((float)param.OptimizeFrom, (float)param.OptimizeTo, (float?)param.OptimizeStep),
-			_ when type == typeof(bool) => RandomGen.GetBool(),
+			_ when type == typeof(bool) => GenerateRandomBool((bool)param.OptimizeFrom, (bool)param.OptimizeTo),
 			_ when type == typeof(TimeSpan) => GenerateRandomTimeSpan((TimeSpan)param.OptimizeFrom, (TimeSpan)param.OptimizeTo, (TimeSpan?)param.OptimizeStep),
 			_ when type == typeof(Unit) => GenerateRandomUnit((Unit)param.OptimizeFrom, (Unit)param.OptimizeTo, (Unit)param.OptimizeStep),
 			_ => param.Value
 		};
 	}
+
+	private static bool GenerateRandomBool(bool from, bool to)
+		=> from == to ? from : RandomGen.GetBool();
 
 	private static int GenerateRandomInt(int from, int to, int? step)
 	{
@@ -211,10 +214,10 @@ public static class StrategyParamHelper
 			return 1;
 
 		static int getIterCountDec(decimal fromVal, decimal toVal, decimal stepVal)
-			=> (int)((toVal - fromVal + stepVal) / stepVal).Ceiling();
+			=> (int)decimal.Floor(Math.Abs(toVal - fromVal) / Math.Abs(stepVal)) + 1;
 
 		static int getIterCountLong(long fromVal, long toVal, long stepVal)
-			=> (int)((toVal - fromVal + stepVal) / stepVal);
+			=> (int)(Math.Abs(toVal - fromVal) / Math.Abs(stepVal)) + 1;
 
 		if (type == typeof(bool))
 			return from.Equals(to) ? 1 : 2;
@@ -366,7 +369,53 @@ public static class StrategyParamHelper
 				}
 			}
 		}
-		else if (type.IsPrimitive())
+		else if (type == typeof(double))
+		{
+			var fromTyped = (double)from;
+			var toTyped = (double)to;
+			var stepTyped = (double)step;
+
+			if (fromTyped > toTyped)
+			{
+				while (fromTyped > toTyped)
+				{
+					yield return fromTyped;
+					fromTyped += stepTyped;
+				}
+			}
+			else
+			{
+				while (fromTyped <= toTyped)
+				{
+					yield return fromTyped;
+					fromTyped += stepTyped;
+				}
+			}
+		}
+		else if (type == typeof(float))
+		{
+			var fromTyped = (float)from;
+			var toTyped = (float)to;
+			var stepTyped = (float)step;
+
+			if (fromTyped > toTyped)
+			{
+				while (fromTyped > toTyped)
+				{
+					yield return fromTyped;
+					fromTyped += stepTyped;
+				}
+			}
+			else
+			{
+				while (fromTyped <= toTyped)
+				{
+					yield return fromTyped;
+					fromTyped += stepTyped;
+				}
+			}
+		}
+		else if (type.IsNumericInteger())
 		{
 			var fromTyped = from.To<long>();
 			var toTyped = to.To<long>();
