@@ -26,10 +26,10 @@ public class MarketOrderAlgo : IPositionModifyAlgo
 	}
 
 	/// <inheritdoc />
-	public decimal RemainingVolume => _finished ? 0 : _volume;
+	public decimal RemainingVolume => IsFinished ? 0 : _volume;
 
 	/// <inheritdoc />
-	public bool IsFinished => _finished;
+	public bool IsFinished => _finished || _canceled;
 
 	/// <inheritdoc />
 	public void UpdateMarketData(DateTime time, decimal? price, decimal? volume)
@@ -44,7 +44,7 @@ public class MarketOrderAlgo : IPositionModifyAlgo
 	/// <inheritdoc />
 	public PositionModifyAction GetNextAction()
 	{
-		if (_finished || _canceled)
+		if (IsFinished)
 			return PositionModifyAction.Finished();
 
 		if (_orderSent)
