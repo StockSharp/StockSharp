@@ -128,7 +128,14 @@ public sealed class Level1DepthBuilderManager(ILogReceiver logReceiver, ILevel1D
 					var quoteMsg = _state.TryBuildDepth(id, level1Msg, out var subscriptionIds);
 
 					if (quoteMsg == null)
+					{
+						if (!_state.ContainsSubscription(id))
+							continue;
+
+						leftIds ??= [.. ids];
+						leftIds.Remove(id);
 						continue;
+					}
 
 					quoteMsg.SetSubscriptionIds(subscriptionIds);
 
