@@ -684,7 +684,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 	private async ValueTask ProcessOtherMessage(Message message, CancellationToken cancellationToken)
 	{
-		if (message.Adapter != null)
+		if (message.Adapter != null && message is not ISubscriptionMessage)
 		{
 			await message.Adapter.SendInMessageAsync(message, cancellationToken);
 			return;

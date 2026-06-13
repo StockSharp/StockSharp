@@ -414,16 +414,14 @@ public class BasketMessageAdapterTests : BasketTestBase
 	/// Adapter-level analog of BasketRoutingManagerTests.ProcessOutMessage_DataMessage_PinnedAdapterSubscription_StillForwarded.
 	///
 	/// A subscription pinned to a specific adapter (Message.Adapter set) is sent in through
-	/// BasketMessageAdapter. For non-MarketData subscriptions (here SecurityLookupMessage) this hits
-	/// the ProcessOtherMessage short-circuit (BasketMessageAdapter.cs ~687-691): the message is handed
-	/// directly to message.Adapter.SendInMessageAsync and the routing manager is bypassed entirely, so
-	/// NO parent-child mapping is ever created for this known, active subscription.
+	/// BasketMessageAdapter. For non-MarketData subscriptions (here SecurityLookupMessage), the basket
+	/// must still register the direct subscription in routing state even though no parent-child mapping
+	/// is created for this known, active subscription.
 	///
 	/// When out-data for that subscription arrives (a SecurityMessage carrying the subscription's own
-	/// transaction id), OnInnerAdapterNewOutMessage routes it through the Security branch
-	/// (BasketMessageAdapter.cs ~852-861), which calls ApplyParentLookupId. That method consults only
-	/// the (empty) parent-child map, returns false, and the Security branch does an early `return`
-	/// (~856-857) -> the data is silently dropped instead of being forwarded out.
+	/// transaction id), OnInnerAdapterNewOutMessage routes it through the Security branch, which calls
+	/// ApplyParentLookupId. Direct subscription ids recorded in the routing state must be accepted
+	/// unchanged; otherwise the data is silently dropped instead of being forwarded out.
 	///
 	/// Canonical contract: data for a known pinned subscription MUST reach the outer subscriber.
 	/// This test asserts the message IS forwarded, so it is RED on the current engine (drop) and would
@@ -452,12 +450,12 @@ public class BasketMessageAdapterTests : BasketTestBase
 		// --- Connect so adapter1 is registered in the basket wrappers ---
 		await SendToBasket(basket, new ConnectMessage(), TestContext.CancellationToken);
 		connectionState.ConnectedCount.AssertEqual(1, "Adapter1 should be connected");
+		adapter1.AutoRespond = false;
 
 		ClearOut();
 
 		// --- Pin a subscription to adapter1 (Message.Adapter set) ---
-		// This exercises the ProcessOtherMessage short-circuit: the lookup is delivered straight to
-		// adapter1 without going through the routing manager.
+		// Keep the mock from auto-finishing the lookup before we emit data for the active subscription.
 		var subTransId = basket.TransactionIdGenerator.GetNextId();
 		await SendToBasket(basket, new SecurityLookupMessage
 		{

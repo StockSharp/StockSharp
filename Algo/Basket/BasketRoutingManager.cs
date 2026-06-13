@@ -208,35 +208,38 @@ public class BasketRoutingManager : IBasketRoutingManager
 		if (originIds.Length == 0)
 			return true;
 
-		var ids = originIds;
-		var changed = false;
+		var ids = new List<long>(originIds.Length);
 		var hasValidId = false;
 
-		for (var i = 0; i < ids.Length; i++)
+		for (var i = 0; i < originIds.Length; i++)
 		{
-			if (_parentChildMap.TryGetParent(ids[i], out var parentId))
+			var originId = originIds[i];
+			long id;
+
+			if (_parentChildMap.TryGetParent(originId, out var parentId))
 			{
-				hasValidId = true;
+				id = parentId;
 
-				if (!changed)
-				{
-					ids = [.. originIds];
-					changed = true;
-				}
-
-				if (msg.OriginalTransactionId == ids[i])
+				if (msg.OriginalTransactionId == originId)
 					msg.OriginalTransactionId = parentId;
-
-				ids[i] = parentId;
 			}
+			else if (_subscriptionRouting.TryGetSubscription(originId, out _, out _, out _))
+				id = originId;
+			else
+				continue;
+
+			hasValidId = true;
+
+			if (!ids.Contains(id))
+				ids.Add(id);
 		}
 
-		if (changed)
-			msg.SetSubscriptionIds(ids);
+		if (hasValidId && (ids.Count != originIds.Length || !ids.SequenceEqual(originIds)))
+			msg.SetSubscriptionIds([.. ids]);
 
-		// If message had subscription IDs but none mapped to valid parents,
-		// the subscription was removed (unsubscribed) � drop the message
-		return hasValidId || originIds.Length == 0;
+		// If message had subscription IDs but none matched valid parents or direct subscriptions,
+		// the subscription was removed (unsubscribed): drop the message.
+		return hasValidId;
 	}
 
 	/// <inheritdoc />
