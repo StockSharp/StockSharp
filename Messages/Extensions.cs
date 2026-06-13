@@ -3022,8 +3022,8 @@ public static partial class Extensions
 			SecurityId = depth.SecurityId,
 			ServerTime = depth.ServerTime,
 			BuildFrom = DataType.MarketDepth,
-			Bids = spreadQuotes.bids.Concat(bids),
-			Asks = spreadQuotes.asks.Concat(asks),
+			Bids = [.. spreadQuotes.bids.Concat(bids)],
+			Asks = [.. spreadQuotes.asks.Concat(asks)],
 		};
 	}
 
@@ -3072,38 +3072,25 @@ public static partial class Extensions
 		if (bidPrice == default || askPrice == default || bidPrice == askPrice)
 			return ([], []);
 
-		var bids = new List<QuoteChange>();
-		var asks = new List<QuoteChange>();
+		var prices = new List<decimal>();
 
-		var currentBidPrice = bidPrice.ShrinkPrice(priceStep, null, ShrinkRules.More);
-		var currentAskPrice = askPrice.ShrinkPrice(priceStep, null, ShrinkRules.Less);
-
-		while (currentBidPrice < currentAskPrice && (bids.Count + asks.Count) < maxDepth)
+		for (var price = bidPrice + priceRange; price < askPrice && prices.Count < maxDepth; price += priceRange)
 		{
-			var wasBid = currentBidPrice;
-			var wasAsk = currentAskPrice;
+			var p = price.ShrinkPrice(priceStep, null, ShrinkRules.Less);
 
-			currentBidPrice = (currentBidPrice + priceRange).ShrinkPrice(priceStep, null, ShrinkRules.Less);
+			if (p <= bidPrice || p >= askPrice)
+				continue;
 
-			if (wasBid > currentBidPrice)
-				break;
-
-			if (currentBidPrice > bidPrice && currentBidPrice < askPrice)
-				bids.Add(new() { Price = currentBidPrice });
-
-			currentAskPrice = (currentAskPrice - priceRange).ShrinkPrice(priceStep, null, ShrinkRules.More);
-
-			if (wasAsk < currentAskPrice)
-				break;
-
-			if (currentAskPrice > bidPrice && currentAskPrice < askPrice)
-				asks.Insert(0, new() { Price = currentAskPrice });
-
-			if (wasBid == currentBidPrice && wasAsk == currentAskPrice)
-				break;
+			if (prices.Count == 0 || prices[^1] != p)
+				prices.Add(p);
 		}
 
-		return (bids.ToArray(), asks.ToArray());
+		var bidCount = (prices.Count + 1) / 2;
+
+		return (
+			[.. prices.Take(bidCount).Reverse().Select(p => new QuoteChange { Price = p })],
+			[.. prices.Skip(bidCount).Select(p => new QuoteChange { Price = p })]
+		);
 	}
 
 	/// <summary>
