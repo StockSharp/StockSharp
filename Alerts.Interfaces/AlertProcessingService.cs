@@ -51,16 +51,17 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 								return false;
 
 							var valueType = field.ValueType;
+							int Compare() => valueType.GetOperator().Compare(value, rule.Value);
 
 							return rule.Operator switch
 							{
 								ComparisonOperator.Equal =>				rule.Value.Equals(value),
 								ComparisonOperator.NotEqual =>			!rule.Value.Equals(value),
 
-								ComparisonOperator.Greater =>			valueType.GetOperator().Compare(rule.Value, value) == 1,
-								ComparisonOperator.GreaterOrEqual =>	valueType.GetOperator().Compare(rule.Value, value) <= 0,
-								ComparisonOperator.Less =>				valueType.GetOperator().Compare(rule.Value, value) == -1,
-								ComparisonOperator.LessOrEqual =>		valueType.GetOperator().Compare(rule.Value, value) >= 0,
+								ComparisonOperator.Greater =>			Compare() > 0,
+								ComparisonOperator.GreaterOrEqual =>	Compare() >= 0,
+								ComparisonOperator.Less =>				Compare() < 0,
+								ComparisonOperator.LessOrEqual =>		Compare() <= 0,
 
 								ComparisonOperator.Any => true,
 								_ => throw new ArgumentOutOfRangeException(nameof(rule), rule.Operator.ToString()),

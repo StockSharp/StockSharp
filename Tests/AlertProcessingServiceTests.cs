@@ -141,7 +141,7 @@ public class AlertProcessingServiceTests
 	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task Process_DoesNotTriggerTwice_SameSchema()
 	{
-		var schema = CreatePriceSchema(ComparisonOperator.Greater, 200m);
+		var schema = CreatePriceSchema(ComparisonOperator.Greater, 100m);
 		schema.AlertType = AlertNotifications.Log;
 		_service.Register(schema);
 

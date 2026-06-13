@@ -22,8 +22,8 @@ public class AlertSchemaTemplatesTests
 		schema.Rules[0].Operator.AssertEqual(ComparisonOperator.Equal);
 		schema.Rules[0].Value.AssertEqual(_testSecId);
 
-		// rule 1: price above 150 → Less operator (Compare(rule.Value, actual) == -1 means rule.Value < actual)
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Less);
+		// rule 1: price above 150 means actual price is greater than the threshold.
+		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Greater);
 		schema.Rules[1].Value.AssertEqual(150m);
 		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.LastTradePrice);
 	}
@@ -34,7 +34,7 @@ public class AlertSchemaTemplatesTests
 		var schema = AlertSchemaTemplates.PriceBelow(_testSecId, 100m);
 
 		schema.Rules.Count.AssertEqual(2);
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Greater);
+		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Less);
 		schema.Rules[1].Value.AssertEqual(100m);
 		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.LastTradePrice);
 	}
@@ -45,7 +45,7 @@ public class AlertSchemaTemplatesTests
 		var schema = AlertSchemaTemplates.BidAbove(_testSecId, 99m);
 
 		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.BestBidPrice);
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Less);
+		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Greater);
 		schema.Rules[1].Value.AssertEqual(99m);
 	}
 
@@ -55,7 +55,7 @@ public class AlertSchemaTemplatesTests
 		var schema = AlertSchemaTemplates.AskBelow(_testSecId, 101m);
 
 		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.BestAskPrice);
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Greater);
+		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Less);
 		schema.Rules[1].Value.AssertEqual(101m);
 	}
 
@@ -65,7 +65,7 @@ public class AlertSchemaTemplatesTests
 		var schema = AlertSchemaTemplates.VolumeAbove(_testSecId, 1_000_000m);
 
 		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.LastTradeVolume);
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Less);
+		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Greater);
 		schema.Rules[1].Value.AssertEqual(1_000_000m);
 	}
 
