@@ -165,7 +165,7 @@ public class AdapterWrapperPipelineBuilder : IAdapterWrapperPipelineBuilder
 
 		if (config.FillGapsBehaviour is not null)
 		{
-			adapter = new FillGapsMessageAdapter(adapter, config.FillGapsBehaviour);
+			adapter = ApplyOwnInner(new FillGapsMessageAdapter(adapter, config.FillGapsBehaviour));
 		}
 
 		return adapter;
