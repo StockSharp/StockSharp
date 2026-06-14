@@ -4607,6 +4607,9 @@ public static partial class Extensions
 		if (msg is null)
 			throw new ArgumentNullException(nameof(msg));
 
+		if (msg.Skip is not null)
+			set = set.Skip((int)msg.Skip.Value);
+
 		if (msg.Count is not null)
 			set = set.Take((int)msg.Count.Value);
 
