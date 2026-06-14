@@ -1403,6 +1403,66 @@ public class DecomposedStrategy : BaseLogReceiver, IStrategyHost, IPositionProvi
 			order.Balance = order.Volume;
 	}
 
+	private Order TryGetTrackedOrder(Order order)
+	{
+		if (order is null)
+			throw new ArgumentNullException(nameof(order));
+
+		return Orders.TryGetTracked(order);
+	}
+
+	private static void CopyOrderState(Order source, Order destination)
+	{
+		if (ReferenceEquals(source, destination))
+			return;
+
+		destination.Id = source.Id;
+		destination.StringId = source.StringId;
+		destination.BoardId = source.BoardId;
+		destination.Time = source.Time;
+		destination.ServerTime = source.ServerTime;
+		destination.LocalTime = source.LocalTime;
+		destination.CancelledTime = source.CancelledTime;
+		destination.MatchedTime = source.MatchedTime;
+		destination.State = source.State;
+		destination.Security = source.Security ?? destination.Security;
+		destination.Portfolio = source.Portfolio ?? destination.Portfolio;
+		destination.Price = source.Price;
+		destination.Volume = source.Volume;
+		destination.VisibleVolume = source.VisibleVolume;
+		destination.Side = source.Side;
+		destination.Balance = source.Balance;
+		destination.Status = source.Status;
+		destination.IsSystem = source.IsSystem;
+		destination.Comment = source.Comment;
+		destination.Type = source.Type;
+		destination.ExpiryDate = source.ExpiryDate;
+		destination.Condition = source.Condition;
+		destination.TimeInForce = source.TimeInForce;
+		destination.Commission = source.Commission;
+		destination.CommissionCurrency = source.CommissionCurrency;
+		destination.UserOrderId = source.UserOrderId;
+		destination.StrategyId = source.StrategyId;
+		destination.BrokerCode = source.BrokerCode;
+		destination.ClientCode = source.ClientCode;
+		destination.Currency = source.Currency;
+		destination.IsMarketMaker = source.IsMarketMaker;
+		destination.MarginMode = source.MarginMode;
+		destination.Slippage = source.Slippage;
+		destination.IsManual = source.IsManual;
+		destination.AveragePrice = source.AveragePrice;
+		destination.MarketPrice = source.MarketPrice;
+		destination.Yield = source.Yield;
+		destination.MinVolume = source.MinVolume;
+		destination.PositionEffect = source.PositionEffect;
+		destination.PostOnly = source.PostOnly;
+		destination.SeqNum = source.SeqNum;
+		destination.Leverage = source.Leverage;
+		destination.LatencyRegistration = source.LatencyRegistration;
+		destination.LatencyCancellation = source.LatencyCancellation;
+		destination.LatencyEdition = source.LatencyEdition;
+	}
+
 	private void ApplyTradeToOrder(MyTrade trade)
 	{
 		var order = trade.Order;
@@ -1685,21 +1745,26 @@ public class DecomposedStrategy : BaseLogReceiver, IStrategyHost, IPositionProvi
 		if (!Subscriptions.CanProcess(sub))
 			return;
 
-		var isOwnOrder = Orders.IsTracked(order) || CanAttach(order) || CanAttachUnclaimedPendingOrder(order);
+		var trackedOrder = TryGetTrackedOrder(order);
+		var isOwnOrder = trackedOrder != null || CanAttach(order) || CanAttachUnclaimedPendingOrder(order);
 
 		if (isOwnOrder)
 		{
-			EnsureActiveOrderBalance(order);
-			Orders.TryAttach(order);
-			Orders.ProcessOrder(order, isChanging: true);
+			trackedOrder ??= order;
+			CopyOrderState(order, trackedOrder);
+			EnsureActiveOrderBalance(trackedOrder);
+			Orders.TryAttach(trackedOrder);
+			Orders.ProcessOrder(trackedOrder, isChanging: true);
 		}
 
 		OrderReceived?.Invoke(sub, order);
 
 		if (order.Volume > 0)
 		{
-			EnsureActiveOrderBalance(order);
-			var res = _posManager.ProcessOrder(order);
+			var positionOrder = trackedOrder ?? order;
+
+			EnsureActiveOrderBalance(positionOrder);
+			var res = _posManager.ProcessOrder(positionOrder);
 
 			if (res != StrategyPositionManager.OrderResults.OK && ErrorState == LogLevels.Info)
 				ErrorState = LogLevels.Warning;
@@ -1714,8 +1779,12 @@ public class DecomposedStrategy : BaseLogReceiver, IStrategyHost, IPositionProvi
 		if (!Subscriptions.CanProcess(sub))
 			return;
 
-		if (!Orders.IsTracked(trade.Order))
+		var trackedOrder = TryGetTrackedOrder(trade.Order);
+
+		if (trackedOrder is null)
 			return;
+
+		trade.Order = trackedOrder;
 
 		var sec = trade.Order.Security;
 

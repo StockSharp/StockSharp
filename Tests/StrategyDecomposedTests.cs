@@ -67,10 +67,14 @@ public class StrategyDecomposedTests : BaseTestClass
 		host.SentMessages.Clear();
 		await engine.RequestStopAsync(default);
 
-		host.SentMessages.Count.AreEqual(1);
+		host.SentMessages.Count.AreEqual(2);
 		var msg = host.SentMessages[0] as StrategyEngine.StrategyStateMessage;
 		IsNotNull(msg);
 		msg.RequestedState.AreEqual(ProcessStates.Stopping);
+
+		msg = host.SentMessages[1] as StrategyEngine.StrategyStateMessage;
+		IsNotNull(msg);
+		msg.RequestedState.AreEqual(ProcessStates.Stopped);
 	}
 
 	[TestMethod]
@@ -772,6 +776,9 @@ public class StrategyDecomposedTests : BaseTestClass
 		return mock;
 	}
 
+	private static void MarkStarted(DecomposedStrategy strategy)
+		=> strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+
 	[TestMethod]
 	public async Task Composite_StateTransitions_AllHooksCalled()
 	{
@@ -804,6 +811,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		var connMock = CreateMockConnector();
 		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		MarkStarted(strategy);
 
 		var order = new Order
 		{
@@ -877,6 +885,7 @@ public class StrategyDecomposedTests : BaseTestClass
 			Volume = 10,
 			Security = security,
 			Portfolio = CreatePortfolio(),
+			UserOrderId = strategy.Id.To<string>(),
 			Time = DateTime.UtcNow,
 		};
 
@@ -1598,6 +1607,7 @@ public class StrategyDecomposedTests : BaseTestClass
 			Security = security,
 			Portfolio = portfolio,
 		};
+		MarkStarted(strategy);
 
 		// Configure local stop protection: 5% stop loss
 		strategy.StartProtection(
@@ -1825,6 +1835,7 @@ public class StrategyDecomposedTests : BaseTestClass
 			Security = security,
 			Portfolio = portfolio,
 		};
+		MarkStarted(strategy);
 
 		// Configure trailing stop: 5% trailing stop loss
 		strategy.StartProtection(

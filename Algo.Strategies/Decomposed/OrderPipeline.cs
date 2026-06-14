@@ -49,7 +49,7 @@ public class OrderPipeline(IStatisticManager stats)
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		if (_ordersInfo.ContainsKey(order))
+		if (TryGetTracked(order) != null)
 			return false;
 
 		_ordersInfo.Add(order, new());
@@ -106,7 +106,26 @@ public class OrderPipeline(IStatisticManager stats)
 	/// <summary>
 	/// Check if an order is currently tracked.
 	/// </summary>
-	public bool IsTracked(Order order) => _ordersInfo.ContainsKey(order);
+	public bool IsTracked(Order order) => TryGetTracked(order) != null;
+
+	/// <summary>
+	/// Try to find the tracked order instance by reference or transaction id.
+	/// </summary>
+	public Order TryGetTracked(Order order)
+	{
+		if (order is null)
+			throw new ArgumentNullException(nameof(order));
+
+		if (_ordersInfo.ContainsKey(order))
+			return order;
+
+		var transactionId = order.TransactionId;
+
+		if (transactionId == 0)
+			return null;
+
+		return _ordersInfo.CachedKeys.FirstOrDefault(o => o.TransactionId == transactionId);
+	}
 
 	/// <summary>
 	/// Mark all active orders as canceled.
