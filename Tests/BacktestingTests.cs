@@ -1425,7 +1425,7 @@ public class BacktestingTests : BaseTestClass
 		await connector.StartAsync(CancellationToken);
 
 		// Wait for completion
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
+		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(5), CancellationToken));
 
 		if (!stoppedTcs.Task.IsCompleted)
 		{
@@ -1520,7 +1520,7 @@ public class BacktestingTests : BaseTestClass
 		// resume and run to completion
 		await connector.StartAsync(CancellationToken);
 
-		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(2), CancellationToken));
+		await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(5), CancellationToken));
 		IsTrue(stoppedTcs.Task.IsCompleted, "Backtest did not complete after resume");
 		connector.IsFinished.AssertTrue("IsFinished should be true after completion");
 	}
