@@ -967,20 +967,20 @@ public class SecurityProviderTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void IsMatch_SecurityIds_CodeOnlyPartialId_Matches()
+	public void IsMatch_SecurityIds_CodeOnlyPartialId_DoesNotMatch()
 	{
 		var security = new SecurityMessage
 		{
 			SecurityId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" },
 		};
 
-		// A partial id (code only, no board) in SecurityIds should match any security
-		// whose code contains it, mirroring the single SecurityId "contains by code" rule.
+		// SecurityIds is an exact id lookup. Partial code/board filters belong to
+		// SecurityId, not to the SecurityIds array.
 		var criteria = new SecurityLookupMessage
 		{
 			SecurityIds = [new SecurityId { SecurityCode = "AAPL" }]
 		};
 
-		security.IsMatch(criteria).AssertTrue();
+		security.IsMatch(criteria).AssertFalse();
 	}
 }
