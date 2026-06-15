@@ -90,7 +90,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 				else
 					security.ApplyChanges(secMsg, _exchangeInfoProvider, OverrideSecurityData);
 
-				_securityStorage.Save(security, OverrideSecurityData);
+				await _securityStorage.SaveAsync(security, OverrideSecurityData, cancellationToken);
 				break;
 			}
 			case MessageTypes.Board:
@@ -153,7 +153,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 				}
 				else
 				{
-					var position = GetPosition(positionMsg.SecurityId, positionMsg.PortfolioName, positionMsg.StrategyId, positionMsg.Side);
+					var position = await GetPositionAsync(positionMsg.SecurityId, positionMsg.PortfolioName, positionMsg.StrategyId, positionMsg.Side, cancellationToken);
 
 					if (position == null)
 						break;
@@ -264,12 +264,12 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 		await base.OnSendInMessageAsync(msg, cancellationToken);
 	}
 
-	private Position GetPosition(SecurityId securityId, string portfolioName, string strategyId, Sides? side)
+	private async ValueTask<Position> GetPositionAsync(SecurityId securityId, string portfolioName, string strategyId, Sides? side, CancellationToken cancellationToken)
 	{
 		var security = (!securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty() ? _securityStorage.LookupById(securityId) : _securityStorage.Lookup(new Security
 		{
 			Code = securityId.SecurityCode,
-		}).FirstOrDefault()) ?? TryCreateSecurity(securityId);
+		}).FirstOrDefault()) ?? await TryCreateSecurityAsync(securityId, cancellationToken);
 
 		if (security == null)
 			return null;
@@ -295,7 +295,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 		};
 	}
 
-	private Security TryCreateSecurity(SecurityId securityId)
+	private async ValueTask<Security> TryCreateSecurityAsync(SecurityId securityId, CancellationToken cancellationToken)
 	{
 		if (securityId.SecurityCode.IsEmpty() || securityId.BoardCode.IsEmpty())
 			return null;
@@ -307,7 +307,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 			Board = _exchangeInfoProvider.GetOrCreateBoard(securityId.BoardCode),
 		};
 
-		_securityStorage.Save(security, false);
+		await _securityStorage.SaveAsync(security, false, cancellationToken);
 
 		return security;
 	}

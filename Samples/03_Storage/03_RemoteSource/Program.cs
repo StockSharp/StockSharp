@@ -62,7 +62,7 @@ static class Program
 		};
 		connector.Subscribe(new(new SecurityLookupMessage() { SecurityId = new() { SecurityCode = "BTCUSD" } }));
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
-		var security = connector.GetSecurity(secId);
+		var security = await connector.GetSecurityAsync(secId, default);
 
 		Console.ReadLine();
 

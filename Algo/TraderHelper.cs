@@ -551,7 +551,23 @@ public static partial class TraderHelper
 	/// <param name="creator">Creator.</param>
 	/// <param name="isNew">Is newly created.</param>
 	/// <returns>Security.</returns>
+	[Obsolete("Use GetOrCreateAsync method instead.")]
 	public static Security GetOrCreate(this ISecurityStorage storage, SecurityId id, Func<string, Security> creator, out bool isNew)
+	{
+		var (security, created) = AsyncHelper.Run(() => storage.GetOrCreateAsync(id, creator, default));
+		isNew = created;
+		return security;
+	}
+
+	/// <summary>
+	/// Get or create (if not exist).
+	/// </summary>
+	/// <param name="storage">Securities meta info storage.</param>
+	/// <param name="id">Security ID.</param>
+	/// <param name="creator">Creator.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Security and the flag whether it was newly created.</returns>
+	public static async ValueTask<(Security security, bool isNew)> GetOrCreateAsync(this ISecurityStorage storage, SecurityId id, Func<string, Security> creator, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
@@ -562,21 +578,24 @@ public static partial class TraderHelper
 		if (creator is null)
 			throw new ArgumentNullException(nameof(creator));
 
-		using (storage.EnterScope())
-		{
-			var security = storage.LookupById(id);
+		var security = storage.LookupById(id);
 
-			if (security == null)
-			{
-				security = creator(id.ToStringId());
-				storage.Save(security, false);
-				isNew = true;
-			}
-			else
-				isNew = false;
+		if (security != null)
+			return (security, false);
 
-			return security;
-		}
+		security = creator(id.ToStringId());
+
+		// SaveAsync with forced: false performs an atomic add-if-absent, so a sync lock
+		// is not held across the await (Lock.Scope is monitor based and thread affine).
+		await storage.SaveAsync(security, false, cancellationToken);
+
+		// In case of a concurrent creation, return the canonical stored instance.
+		var stored = storage.LookupById(id);
+
+		if (stored != null && !ReferenceEquals(stored, security))
+			return (stored, false);
+
+		return (security, true);
 	}
 
 	/// <summary>

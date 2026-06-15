@@ -221,7 +221,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 		{
 			var sec = GenerateRandomSecurity(i);
 			securities.Add(sec);
-			secStorage.Save(sec, false);
+			await secStorage.SaveAsync(sec, false, CancellationToken);
 		}
 
 		AreEqual(100, ((ISecurityProvider)secStorage).Count);
@@ -251,7 +251,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 				Board = ExchangeBoard.Nasdaq,
 				Type = SecurityTypes.Stock,
 			};
-			secStorage.Save(sec, false);
+			await secStorage.SaveAsync(sec, false, CancellationToken);
 		}
 
 		for (int i = 0; i < 30; i++)
@@ -263,7 +263,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 				Board = ExchangeBoard.Nasdaq,
 				Type = SecurityTypes.Future,
 			};
-			secStorage.Save(sec, false);
+			await secStorage.SaveAsync(sec, false, CancellationToken);
 		}
 
 		AreEqual(80, ((ISecurityProvider)secStorage).Count);
@@ -297,7 +297,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 				Code = $"SEC{i:D2}",
 				Board = ExchangeBoard.Nasdaq,
 			};
-			secStorage.Save(sec, false);
+			await secStorage.SaveAsync(sec, false, CancellationToken);
 		}
 
 		for (int i = 0; i < 60; i++)
@@ -308,7 +308,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 				Code = $"SEC{i:D2}",
 				Board = ExchangeBoard.Nyse,
 			};
-			secStorage.Save(sec, false);
+			await secStorage.SaveAsync(sec, false, CancellationToken);
 		}
 
 		AreEqual(100, ((ISecurityProvider)secStorage).Count);
@@ -339,7 +339,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 				Board = ExchangeBoard.Nasdaq,
 				Currency = CurrencyTypes.USD,
 			};
-			secStorage.Save(sec, false);
+			await secStorage.SaveAsync(sec, false, CancellationToken);
 		}
 
 		for (int i = 0; i < 20; i++)
@@ -351,7 +351,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 				Board = ExchangeBoard.Nasdaq,
 				Currency = CurrencyTypes.EUR,
 			};
-			secStorage.Save(sec, false);
+			await secStorage.SaveAsync(sec, false, CancellationToken);
 		}
 
 		AreEqual(50, ((ISecurityProvider)secStorage).Count);
@@ -377,11 +377,11 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 			Name = "Apple Inc",
 		};
 
-		secStorage.Save(sec, false);
+		await secStorage.SaveAsync(sec, false, CancellationToken);
 		AreEqual(1, ((ISecurityProvider)secStorage).Count);
 
 		// Save again with same ID
-		secStorage.Save(sec, false);
+		await secStorage.SaveAsync(sec, false, CancellationToken);
 		AreEqual(1, ((ISecurityProvider)secStorage).Count);
 	}
 
@@ -467,7 +467,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 		{
 			var sec = GenerateRandomSecurity(i);
 			securities.Add(sec);
-			secStorage.Save(sec, false);
+			await secStorage.SaveAsync(sec, false, CancellationToken);
 		}
 
 		// Create positions
@@ -500,7 +500,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 		};
 
 		posStorage.Save(portfolio);
-		secStorage.Save(security, false);
+		await secStorage.SaveAsync(security, false, CancellationToken);
 
 		var position = new Position
 		{
@@ -672,7 +672,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 				PriceStep = 0.01m,
 			};
 			securities.Add(sec);
-			secStorage.Save(sec, false);
+			await secStorage.SaveAsync(sec, false, CancellationToken);
 		}
 
 		AreEqual(50, ((ISecurityProvider)secStorage).Count);

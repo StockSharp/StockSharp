@@ -110,7 +110,16 @@ public interface IConnector : IMessageTransport, IPersistable, ILogReceiver,
 	/// </summary>
 	/// <param name="securityId">Security ID.</param>
 	/// <returns>Security.</returns>
+	[Obsolete("Use GetSecurityAsync instead.")]
 	Security GetSecurity(SecurityId securityId);
+
+	/// <summary>
+	/// Get security by identifier.
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Security.</returns>
+	ValueTask<Security> GetSecurityAsync(SecurityId securityId, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Send outgoing message.

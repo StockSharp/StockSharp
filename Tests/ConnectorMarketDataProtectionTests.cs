@@ -194,7 +194,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 		var secId = Helper.CreateSecurityId();
 
 		await connector.ConnectAsync(CancellationToken);
-		connector.GetSecurity(secId);
+		await connector.GetSecurityAsync(secId, CancellationToken);
 
 		var valuesChangedCount = 0;
 		connector.ValuesChanged += (sec, changes, serverTime, localTime) =>
@@ -220,7 +220,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 		using var runCts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
 		var subscriptionId = await SubscribeAndWait(connector, adapter, DataType.Level1, secId, count: 10, cancellationToken: runCts.Token);
 
-		connector.GetSecurity(secId);
+		await connector.GetSecurityAsync(secId, CancellationToken);
 
 		var valuesChangedCount = 0;
 		connector.ValuesChanged += (sec, changes, serverTime, localTime) =>
@@ -252,7 +252,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 #pragma warning restore CS0618
 
 		await connector.ConnectAsync(CancellationToken);
-		var security = connector.GetSecurity(secId);
+		var security = await connector.GetSecurityAsync(secId, CancellationToken);
 
 		await adapter.SendLevel1(0, secId, DateTime.UtcNow, CancellationToken);
 		await Task.Delay(500, CancellationToken);
@@ -280,7 +280,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 		using var runCts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
 		var subscriptionId = await SubscribeAndWait(connector, adapter, DataType.Level1, secId, count: 10, cancellationToken: runCts.Token);
 
-		var security = connector.GetSecurity(secId);
+		var security = await connector.GetSecurityAsync(secId, CancellationToken);
 
 		await adapter.SendLevel1(subscriptionId, secId, DateTime.UtcNow.AddDays(-1), CancellationToken);
 		await Task.Delay(500, CancellationToken);
@@ -305,7 +305,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 		var secId = Helper.CreateSecurityId();
 
 		await connector.ConnectAsync(CancellationToken);
-		connector.GetSecurity(secId);
+		await connector.GetSecurityAsync(secId, CancellationToken);
 
 		var valuesChangedCount = 0;
 		connector.ValuesChanged += (sec, changes, serverTime, localTime) =>
@@ -335,7 +335,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 #pragma warning restore CS0618
 
 		await connector.ConnectAsync(CancellationToken);
-		var security = connector.GetSecurity(secId);
+		var security = await connector.GetSecurityAsync(secId, CancellationToken);
 
 		await adapter.SendTick(0, secId, DateTime.UtcNow, CancellationToken);
 		await Task.Delay(500, CancellationToken);
@@ -361,7 +361,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 		using var runCts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
 		var subscriptionId = await SubscribeAndWait(connector, adapter, DataType.Ticks, secId, count: 10, cancellationToken: runCts.Token);
 
-		var security = connector.GetSecurity(secId);
+		var security = await connector.GetSecurityAsync(secId, CancellationToken);
 
 		await adapter.SendTick(subscriptionId, secId, DateTime.UtcNow.AddDays(-1), CancellationToken);
 		await Task.Delay(500, CancellationToken);
@@ -385,7 +385,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 		var secId = Helper.CreateSecurityId();
 
 		await connector.ConnectAsync(CancellationToken);
-		connector.GetSecurity(secId);
+		await connector.GetSecurityAsync(secId, CancellationToken);
 
 		var valuesChangedCount = 0;
 		connector.ValuesChanged += (sec, changes, serverTime, localTime) =>
@@ -415,7 +415,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 #pragma warning restore CS0618
 
 		await connector.ConnectAsync(CancellationToken);
-		var security = connector.GetSecurity(secId);
+		var security = await connector.GetSecurityAsync(secId, CancellationToken);
 
 		await adapter.SendOrderBook(0, secId, DateTime.UtcNow, CancellationToken);
 		await Task.Delay(500, CancellationToken);
@@ -442,7 +442,7 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 		using var runCts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
 		var subscriptionId = await SubscribeAndWait(connector, adapter, DataType.MarketDepth, secId, count: 10, cancellationToken: runCts.Token);
 
-		var security = connector.GetSecurity(secId);
+		var security = await connector.GetSecurityAsync(secId, CancellationToken);
 
 		await adapter.SendOrderBook(subscriptionId, secId, DateTime.UtcNow.AddDays(-1), CancellationToken);
 		await Task.Delay(500, CancellationToken);

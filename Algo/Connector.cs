@@ -955,13 +955,16 @@ public partial class Connector : BaseLogReceiver, IConnector
 	}
 
 	/// <inheritdoc />
+	[Obsolete("Use GetSecurityAsync instead.")]
 	public Security GetSecurity(SecurityId securityId)
-		=> GetSecurity(securityId, s => false);
+		// Sync bridge over the async path kept only for the deprecated IConnector contract.
+		=> AsyncHelper.Run(() => GetSecurityAsync(securityId, default));
 
 	private Security TryGetSecurity(SecurityId? securityId)
-		=> securityId == null || securityId.Value == default ? null : GetSecurity(securityId.Value);
+		// Pure lookup used by the entity cache snapshots: it must not create/persist a security.
+		=> securityId == null || securityId.Value == default ? null : SecurityStorage.LookupById(securityId.Value);
 
-	private Security EnsureGetSecurity<TMessage>(TMessage message)
+	private async ValueTask<Security> EnsureGetSecurityAsync<TMessage>(TMessage message, CancellationToken cancellationToken)
 		where TMessage : ISecurityIdMessage, ISubscriptionIdMessage
 	{
 		var secId = message.SecurityId;
@@ -983,16 +986,21 @@ public partial class Connector : BaseLogReceiver, IConnector
 			secId = subscrSecId.Value;
 		}
 
-		return TryGetSecurity(secId) ?? throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.SecurityNoFound.Put(secId));
+		return await GetSecurityAsync(secId, cancellationToken) ?? throw new ArgumentOutOfRangeException(nameof(message), message, LocalizedStrings.SecurityNoFound.Put(secId));
 	}
+
+	/// <inheritdoc />
+	public ValueTask<Security> GetSecurityAsync(SecurityId securityId, CancellationToken cancellationToken)
+		=> GetSecurityAsync(securityId, s => false, cancellationToken);
 
 	/// <summary>
 	/// To get the instrument by the code.
 	/// </summary>
 	/// <param name="id">Security ID.</param>
 	/// <param name="changeSecurity">The handler changing the instrument. It returns <see langword="true" /> if the instrument has been changed and the <see cref="SecurityReceived"/> should be called.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Security.</returns>
-	private Security GetSecurity(SecurityId id, Func<Security, bool> changeSecurity)
+	private async ValueTask<Security> GetSecurityAsync(SecurityId id, Func<Security, bool> changeSecurity, CancellationToken cancellationToken)
 	{
 		if (id == default)
 			throw new ArgumentNullException(nameof(id));
@@ -1000,7 +1008,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		if (changeSecurity == null)
 			throw new ArgumentNullException(nameof(changeSecurity));
 
-		var security = SecurityStorage.GetOrCreate(id, key =>
+		var (security, isNew) = await SecurityStorage.GetOrCreateAsync(id, key =>
 		{
 			var idInfo = SecurityIdGenerator.Split(key);
 
@@ -1013,7 +1021,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 				Code = code,
 				Board = board,
 			};
-		}, out var isNew);
+		}, cancellationToken);
 
 		if (_existingSecurities.TryAdd(security))
 			_added?.Invoke([security]);
