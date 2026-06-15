@@ -376,28 +376,37 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 		var quotes = GetQuotes(side);
 		var remaining = volume;
 
-		foreach (var kvp in quotes.ToArray())
+		// Levels emptied while consuming are collected and removed in the finally below. Doing it there (instead of
+		// snapshotting the whole book with quotes.ToArray() on every match) keeps the dictionary unmodified during
+		// its own enumeration, yet the removal still runs when the caller abandons the enumerator early - it breaks
+		// out of the loop as soon as the order is filled, and disposing the iterator runs the finally.
+		List<decimal> toRemove = null;
+
+		try
 		{
-			if (remaining <= 0)
-				break;
-
-			var price = kvp.Key;
-
-			// Check price limit
-			if (maxPrice.HasValue)
+			foreach (var kvp in quotes)
 			{
-				if (side == Sides.Sell && price > maxPrice.Value)
+				if (remaining <= 0)
 					break;
-				if (side == Sides.Buy && price < maxPrice.Value)
-					break;
-			}
 
-			var level = kvp.Value;
-			var available = level.TotalVolume;
-			var consumed = remaining.Min(available);
+				var price = kvp.Key;
 
-			if (consumed > 0)
-			{
+				// Check price limit
+				if (maxPrice.HasValue)
+				{
+					if (side == Sides.Sell && price > maxPrice.Value)
+						break;
+					if (side == Sides.Buy && price < maxPrice.Value)
+						break;
+				}
+
+				var level = kvp.Value;
+				var available = level.TotalVolume;
+				var consumed = remaining.Min(available);
+
+				if (consumed <= 0)
+					continue;
+
 				var affectedOrders = level.Orders.ToList();
 
 				// Reduce market volume first
@@ -423,9 +432,17 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 				remaining -= consumed;
 
 				if (level.IsEmpty)
-					quotes.Remove(price);
+					(toRemove ??= []).Add(price);
 
 				yield return (price, consumed, affectedOrders);
+			}
+		}
+		finally
+		{
+			if (toRemove != null)
+			{
+				foreach (var price in toRemove)
+					quotes.Remove(price);
 			}
 		}
 	}
