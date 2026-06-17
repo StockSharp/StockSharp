@@ -7,6 +7,13 @@ public class VolumeProfileBuilder
 {
 	private readonly Dictionary<decimal, int> _volumeProfileInfo = [];
 
+	// Optional price-step bucketing for the level price. When set (> 0), every level price is
+	// snapped to the instrument price step before it keys a profile level. Without it a profile
+	// built from a near-continuous source (e.g. Level1 SpreadMiddle on a wide-range instrument
+	// such as a crypto/RUB pair) accumulates an unbounded number of distinct levels, bloating the
+	// candle so much that it can no longer be stored/transmitted as deep history.
+	private readonly decimal? _priceStep;
+
 	/// <summary>
 	/// The upper price level.
 	/// </summary>
@@ -44,6 +51,16 @@ public class VolumeProfileBuilder
 	/// </summary>
 	public VolumeProfileBuilder()
 	{
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="VolumeProfileBuilder"/> that snaps every level
+	/// price to <paramref name="priceStep"/> so the number of distinct levels stays bounded.
+	/// </summary>
+	/// <param name="priceStep">Instrument price step used to bucket level prices; <see langword="null"/> or non-positive disables bucketing.</param>
+	public VolumeProfileBuilder(decimal? priceStep)
+	{
+		_priceStep = priceStep;
 	}
 
 	private readonly List<CandlePriceLevel> _levels = [];
@@ -92,6 +109,15 @@ public class VolumeProfileBuilder
 
 		if (price == 0)
 			throw new ArgumentOutOfRangeException(nameof(level));
+
+		if (_priceStep is decimal step && step > 0m)
+		{
+			// Snap the level price to the instrument grid so a near-continuous source cannot
+			// spawn a new level per tick. Volumes for prices that fall into the same bucket are
+			// merged by the existing Join path below.
+			price = price.ShrinkPrice(step, step.GetCachedDecimals());
+			level.Price = price;
+		}
 
 		if (!_volumeProfileInfo.TryGetValue(price, out var idx))
 		{

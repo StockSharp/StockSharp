@@ -137,7 +137,7 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 
 			if (subscription.Message.IsCalcVolumeProfile)
 			{
-				subscription.VolumeProfile = volumeProfile = new();
+				subscription.VolumeProfile = volumeProfile = new(subscription.Message.PriceStep);
 				volumeProfile.Update(transform);
 
 				candle.PriceLevels = subscription.VolumeProfile.PriceLevels;
@@ -768,7 +768,7 @@ public class PnFCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Cand
 
 		if (subscription.Message.IsCalcVolumeProfile)
 		{
-			subscription.VolumeProfile = new();
+			subscription.VolumeProfile = new(subscription.Message.PriceStep);
 			candle.PriceLevels = subscription.VolumeProfile.PriceLevels;
 		}
 
@@ -818,7 +818,7 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 
 			if (subscription.Message.IsCalcVolumeProfile)
 			{
-				subscription.VolumeProfile = new();
+				subscription.VolumeProfile = new(subscription.Message.PriceStep);
 				candle.PriceLevels = subscription.VolumeProfile.PriceLevels;
 			}
 
