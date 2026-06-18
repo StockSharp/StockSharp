@@ -242,6 +242,10 @@ public class OrderBookIncrementManagerMockTests : BaseTestClass
 
 		stateMock.Verify(s => s.TryApply(1, It.IsAny<QuoteChangeMessage>(), out It.Ref<long[]>.IsAny), Times.Once);
 		extraOut.Length.AssertEqual(1);
+		extraOut[0].AssertSame(builtQuote);
+		builtQuote.GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();
+		builtQuote.Bids.Single().Price.AssertEqual(100m);
+		builtQuote.Asks.Single().Price.AssertEqual(101m);
 		// original should be null (no pass-through ids)
 		forward.AssertNull();
 	}
@@ -267,11 +271,12 @@ public class OrderBookIncrementManagerMockTests : BaseTestClass
 			Asks = [new QuoteChange(101m, 10)],
 			ServerTime = DateTime.UtcNow,
 		};
-		quote.SetSubscriptionIds([1]);
+		quote.SetSubscriptionIds([1, 2]);
 
 		var (forward, extraOut) = mgr.ProcessOutMessage(quote);
 
-		forward.AssertNotNull();
+		forward.AssertSame(quote);
+		forward.To<ISubscriptionIdMessage>().GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();
 		extraOut.Length.AssertEqual(0);
 	}
 }
