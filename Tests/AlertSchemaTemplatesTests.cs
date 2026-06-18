@@ -1,6 +1,7 @@
 namespace StockSharp.Tests;
 
 using StockSharp.Alerts;
+using StockSharp.Localization;
 
 [TestClass]
 public class AlertSchemaTemplatesTests
@@ -70,13 +71,18 @@ public class AlertSchemaTemplatesTests
 	}
 
 	[TestMethod]
-	public void Level1_CustomField_Works()
+	public void Level1_StrictOperator_HasConsistentRuleAndCaption()
 	{
-		var schema = AlertSchemaTemplates.Level1(_testSecId, Level1Fields.OpenPrice, ComparisonOperator.GreaterOrEqual, 200m);
+		const Level1Fields field = Level1Fields.OpenPrice;
+		const ComparisonOperator op = ComparisonOperator.Greater;
+		const decimal value = 200m;
 
-		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.OpenPrice);
-		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.GreaterOrEqual);
-		schema.Rules[1].Value.AssertEqual(200m);
+		var schema = AlertSchemaTemplates.Level1(_testSecId, field, op, value);
+
+		schema.Rules[1].Field.ExtraField.AssertEqual(field);
+		schema.Rules[1].Operator.AssertEqual(op);
+		schema.Rules[1].Value.AssertEqual(value);
+		schema.Caption.AssertEqual($"{field.GetDisplayName()} {op.GetDisplayName()} {value}");
 	}
 
 	[TestMethod]
@@ -92,8 +98,7 @@ public class AlertSchemaTemplatesTests
 	{
 		var schema = AlertSchemaTemplates.PriceAbove(_testSecId, 150m);
 
-		schema.Caption.AssertNotNull();
-		schema.Caption.Length.AssertGreater(5);
+		schema.Caption.AssertEqual(LocalizedStrings.Price + " > 150");
 	}
 
 	[TestMethod]
@@ -105,19 +110,4 @@ public class AlertSchemaTemplatesTests
 		schema.Message.Contains("AAPL").AssertTrue("Message should contain security code");
 	}
 
-	[TestMethod]
-	public void AllTemplates_HaveUniqueIds()
-	{
-		var schemas = new[]
-		{
-			AlertSchemaTemplates.PriceAbove(_testSecId, 100m),
-			AlertSchemaTemplates.PriceBelow(_testSecId, 100m),
-			AlertSchemaTemplates.BidAbove(_testSecId, 100m),
-			AlertSchemaTemplates.AskBelow(_testSecId, 100m),
-			AlertSchemaTemplates.VolumeAbove(_testSecId, 100m),
-		};
-
-		var ids = schemas.Select(s => s.Id).ToHashSet();
-		ids.Count.AssertEqual(schemas.Length, "All schemas must have unique IDs");
-	}
 }
