@@ -284,7 +284,7 @@ public class OrderLogTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void MatchOrderVolume()
+	public void MatchOrder_InTwoParts_ReducesRemainingVolume()
 	{
 		IOrderLogMarketDepthBuilder builder = new OrderLogMarketDepthBuilder(_secId);
 
@@ -298,7 +298,7 @@ public class OrderLogTests : BaseTestClass
 
 		builder.Update(registerMessage).AssertNotNull();
 
-		// Match using OrderVolume when TradeVolume is null
+		// First partial match.
 		var matchMessage = CreateOrderLogMessage(
 			orderId: 123,
 			side: Sides.Buy,
@@ -591,9 +591,19 @@ public class OrderLogTests : BaseTestClass
 			.ToArrayAsync(token))
 			.ToOrderBooks(builder);
 
+		var checkedCount = 0;
 		foreach (var d in depths.Skip(100).Take(100))
-			if (builder.GetSnapshot(d.ServerTime).IsFullEmpty())
-				throw new InvalidOperationException("snapshot is empty");
+		{
+			var snapshot = builder.GetSnapshot(d.ServerTime);
+			snapshot.IsFullEmpty().AssertFalse();
+			snapshot.Bids.All(q => q.Volume > 0).AssertTrue();
+			snapshot.Asks.All(q => q.Volume > 0).AssertTrue();
+			snapshot.Bids.Zip(snapshot.Bids.Skip(1), (left, right) => left.Price > right.Price).All(v => v).AssertTrue();
+			snapshot.Asks.Zip(snapshot.Asks.Skip(1), (left, right) => left.Price < right.Price).All(v => v).AssertTrue();
+			checkedCount++;
+		}
+
+		checkedCount.AssertEqual(100);
 	}
 
 	[TestMethod]
