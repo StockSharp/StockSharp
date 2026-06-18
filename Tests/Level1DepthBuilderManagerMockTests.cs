@@ -62,9 +62,13 @@ public class Level1DepthBuilderManagerMockTests : BaseTestClass
 			BuildMode = MarketDataBuildModes.Load,
 		};
 
-		mgr.ProcessInMessage(mdMsg);
+		var (toInner, toOut) = mgr.ProcessInMessage(mdMsg);
 
 		stateMock.Verify(s => s.AddSubscription(It.IsAny<long>(), It.IsAny<SecurityId>()), Times.Never);
+		toInner.Length.AssertEqual(1);
+		toInner[0].AssertSame(mdMsg);
+		toInner[0].To<MarketDataMessage>().DataType2.AssertEqual(DataType.MarketDepth);
+		toOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -82,9 +86,13 @@ public class Level1DepthBuilderManagerMockTests : BaseTestClass
 			BuildFrom = DataType.OrderLog,
 		};
 
-		mgr.ProcessInMessage(mdMsg);
+		var (toInner, toOut) = mgr.ProcessInMessage(mdMsg);
 
 		stateMock.Verify(s => s.AddSubscription(It.IsAny<long>(), It.IsAny<SecurityId>()), Times.Never);
+		toInner.Length.AssertEqual(1);
+		toInner[0].AssertSame(mdMsg);
+		toInner[0].To<MarketDataMessage>().DataType2.AssertEqual(DataType.MarketDepth);
+		toOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -100,9 +108,13 @@ public class Level1DepthBuilderManagerMockTests : BaseTestClass
 			TransactionId = 1,
 		};
 
-		mgr.ProcessInMessage(mdMsg);
+		var (toInner, toOut) = mgr.ProcessInMessage(mdMsg);
 
 		stateMock.Verify(s => s.AddSubscription(It.IsAny<long>(), It.IsAny<SecurityId>()), Times.Never);
+		toInner.Length.AssertEqual(1);
+		toInner[0].AssertSame(mdMsg);
+		toInner[0].To<MarketDataMessage>().DataType2.AssertEqual(DataType.MarketDepth);
+		toOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -119,9 +131,13 @@ public class Level1DepthBuilderManagerMockTests : BaseTestClass
 			TransactionId = 1,
 		};
 
-		mgr.ProcessInMessage(mdMsg);
+		var (toInner, toOut) = mgr.ProcessInMessage(mdMsg);
 
 		stateMock.Verify(s => s.AddSubscription(It.IsAny<long>(), It.IsAny<SecurityId>()), Times.Never);
+		toInner.Length.AssertEqual(1);
+		toInner[0].AssertSame(mdMsg);
+		toInner[0].To<MarketDataMessage>().DataType2.AssertEqual(DataType.Ticks);
+		toOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -130,13 +146,17 @@ public class Level1DepthBuilderManagerMockTests : BaseTestClass
 		var stateMock = new Mock<ILevel1DepthBuilderManagerState>();
 		var mgr = CreateManager(stateMock);
 
-		mgr.ProcessInMessage(new MarketDataMessage
+		var unsubscribe = new MarketDataMessage
 		{
 			IsSubscribe = false,
 			OriginalTransactionId = 5,
-		});
+		};
+		var (toInner, toOut) = mgr.ProcessInMessage(unsubscribe);
 
 		stateMock.Verify(s => s.RemoveSubscription(5), Times.Once);
+		toInner.Length.AssertEqual(1);
+		toInner[0].AssertSame(unsubscribe);
+		toOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -188,7 +208,7 @@ public class Level1DepthBuilderManagerMockTests : BaseTestClass
 
 		var (forward, extraOut) = mgr.ProcessOutMessage(l1);
 
-		forward.AssertNotNull();
+		forward.AssertSame(l1);
 		extraOut.Length.AssertEqual(0);
 		stateMock.Verify(s => s.TryBuildDepth(It.IsAny<long>(), It.IsAny<Level1ChangeMessage>(), out It.Ref<long[]>.IsAny), Times.Never);
 	}
@@ -220,7 +240,8 @@ public class Level1DepthBuilderManagerMockTests : BaseTestClass
 
 		stateMock.Verify(s => s.TryBuildDepth(1, It.IsAny<Level1ChangeMessage>(), out It.Ref<long[]>.IsAny), Times.Once);
 		extraOut.Length.AssertEqual(1);
-		((QuoteChangeMessage)extraOut[0]).SecurityId.AssertEqual(_secId);
+		extraOut[0].AssertSame(builtQuote);
+		builtQuote.GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();
 		// original L1 consumed when all ids are used
 		forward.AssertNull();
 	}
