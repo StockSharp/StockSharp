@@ -5,9 +5,13 @@ public class SnapshotHolderMessageAdapterTests : BaseTestClass
 {
 	private sealed class TestSnapshotHolder : ISnapshotHolder
 	{
+		public int Calls { get; private set; }
+		public Message Snapshot { get; set; }
+
 		public IEnumerable<Message> GetSnapshot(ISubscriptionMessage subscription)
 		{
-			return [];
+			Calls++;
+			return Snapshot is null ? [] : [Snapshot];
 		}
 	}
 
@@ -124,17 +128,42 @@ public class SnapshotHolderMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Clone_CreatesNewAdapter()
+	public async Task Clone_CreatesIndependentInnerAdapterAndRetainsHolder()
 	{
 		var inner = new RecordingMessageAdapter();
-		var holder = new TestSnapshotHolder();
+		var snapshot = new Level1ChangeMessage { SecurityId = Helper.CreateSecurityId() };
+		var holder = new TestSnapshotHolder { Snapshot = snapshot };
 
 		using var adapter = new SnapshotHolderMessageAdapter(inner, holder);
+		using var clone = adapter.Clone().To<SnapshotHolderMessageAdapter>();
 
-		var clone = adapter.Clone();
-
-		clone.AssertNotNull();
 		clone.AssertNotSame(adapter);
-		(clone is SnapshotHolderMessageAdapter).AssertTrue();
+		clone.InnerAdapter.AssertNotSame(adapter.InnerAdapter);
+		var cloneInner = clone.InnerAdapter.To<RecordingMessageAdapter>();
+
+		var output = new List<Message>();
+		clone.NewOutMessageAsync += (message, _) =>
+		{
+			output.Add(message);
+			return default;
+		};
+
+		await clone.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = snapshot.SecurityId,
+			DataType2 = DataType.Level1,
+		}, CancellationToken);
+
+		await cloneInner.SendOutMessageAsync(
+			new SubscriptionOnlineMessage { OriginalTransactionId = 1 },
+			CancellationToken);
+
+		holder.Calls.AssertEqual(1);
+		output.Count.AssertEqual(2);
+		output[0].To<SubscriptionOnlineMessage>().OriginalTransactionId.AssertEqual(1);
+		output[1].AssertSame(snapshot);
+		snapshot.GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();
 	}
 }
