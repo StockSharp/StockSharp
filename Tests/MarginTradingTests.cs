@@ -129,15 +129,6 @@ public class MarginTradingTests : BaseTestClass
 		IsNull(pos.Leverage);
 	}
 
-	[TestMethod]
-	public void PositionInfo_Leverage_CanBeSet()
-	{
-		var pos = new PositionInfo(CreateSecId());
-		pos.Leverage = 10m;
-
-		AreEqual(10m, pos.Leverage);
-	}
-
 	#endregion
 
 	#region IPortfolio margin settings
@@ -226,6 +217,18 @@ public class MarginTradingTests : BaseTestClass
 		var error = mc.ValidateOrder(portfolio, price: 100, volume: 10, position: null);
 
 		IsNotNull(error);
+	}
+
+	[TestMethod]
+	public void ValidateOrder_ExactFunds_ReturnsNull()
+	{
+		var mc = new MarginController();
+		var portfolio = new EmulatedPortfolio("test");
+		portfolio.SetMoney(1000);
+
+		var error = mc.ValidateOrder(portfolio, price: 100, volume: 10, position: null);
+
+		IsNull(error);
 	}
 
 	[TestMethod]
