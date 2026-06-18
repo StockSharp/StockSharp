@@ -551,6 +551,7 @@ public class BasketMarketDataStorageTests : BaseTestClass
 			loaded.Add(enumerator.Current);
 
 		// Add second storage dynamically
+		var lastTimeBeforeAdd = loaded[^1].ServerTime;
 		basket.InnerStorages.Add(storage2);
 
 		// Continue reading
@@ -559,9 +560,18 @@ public class BasketMarketDataStorageTests : BaseTestClass
 
 		await enumerator.DisposeAsync();
 
-		// Should have data from both storages
-		IsTrue(loaded.Count >= 100, $"Expected at least 100 items, got {loaded.Count}");
+		// Existing storage is fully read, while the dynamically added storage
+		// contributes only messages at or after the current merge position.
 		AreEqual(100, loaded.Count(t => t.SecurityId == secId1), "Missing AAPL data");
+		var addedStorageTicks = loaded.Where(t => t.SecurityId == secId2).ToArray();
+		(addedStorageTicks.Length > 0).AssertTrue("Dynamically added MSFT storage must contribute data");
+		addedStorageTicks.All(t => t.ServerTime >= lastTimeBeforeAdd)
+			.AssertTrue("Dynamically added storage must not rewind the merged stream");
+		AreEqual(100 + addedStorageTicks.Length, loaded.Count, "Only AAPL and MSFT data should be present");
+
+		for (var i = 1; i < loaded.Count; i++)
+			(loaded[i].ServerTime >= loaded[i - 1].ServerTime)
+				.AssertTrue($"Merged data is out of order at index {i}");
 	}
 
 	[TestMethod]
