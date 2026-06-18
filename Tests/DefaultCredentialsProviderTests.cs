@@ -65,8 +65,8 @@ public class DefaultCredentialsProviderTests : BaseTestClass
 		result.AssertTrue();
 		loaded.AssertNotNull();
 		loaded.Email.AssertEqual("test@example.com");
-		loaded.Password.IsEmpty().AssertFalse();
-		loaded.Token.IsEmpty().AssertFalse();
+		loaded.Password.IsEqualTo(original.Password).AssertTrue();
+		loaded.Token.IsEqualTo(original.Token).AssertTrue();
 	}
 
 	[TestMethod]
@@ -114,8 +114,14 @@ public class DefaultCredentialsProviderTests : BaseTestClass
 
 		provider.Save(original, keepSecret: true);
 
+		// Use a fresh provider so the first load must read the file.
+		provider = new DefaultCredentialsProvider(fs, credentialsFile, companyPath);
+
 		// First load
-		provider.TryLoad(out var first);
+		provider.TryLoad(out var first).AssertTrue();
+		first.AssertNotNull();
+		first.Email.AssertEqual(original.Email);
+		first.Password.IsEqualTo(original.Password).AssertTrue();
 
 		// Delete file to prove caching works
 		fs.DeleteFile(credentialsFile);
@@ -125,7 +131,8 @@ public class DefaultCredentialsProviderTests : BaseTestClass
 
 		result.AssertTrue();
 		second.AssertNotNull();
-		second.Email.AssertEqual("test@example.com");
+		second.Email.AssertEqual(original.Email);
+		second.Password.IsEqualTo(original.Password).AssertTrue();
 	}
 
 	[TestMethod]
