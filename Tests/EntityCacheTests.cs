@@ -61,6 +61,32 @@ public class EntityCacheTests : BaseTestClass
 	[TestMethod]
 	public void Clear_EmptiesAllCollections()
 	{
+		var order = CreateOrder();
+		_cache.AddOrderByRegistrationId(order);
+
+		var tradeMessage = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = _security.ToSecurityId(),
+			TradeId = 1,
+			TradePrice = order.Price,
+			TradeVolume = 1,
+			ServerTime = DateTime.UtcNow,
+			LocalTime = DateTime.UtcNow,
+		};
+		_cache.ProcessOwnTradeMessage(order, _security, tradeMessage, order.TransactionId);
+
+		_cache.ProcessNewsMessage(null, new NewsMessage
+		{
+			Id = "news-clear",
+			Headline = "Clear test",
+			ServerTime = DateTime.UtcNow,
+		});
+
+		_cache.Orders.Any().AssertTrue();
+		_cache.MyTrades.Any().AssertTrue();
+		_cache.News.Any().AssertTrue();
+
 		_cache.Clear();
 
 		_cache.Orders.Count().AssertEqual(0);
@@ -155,7 +181,6 @@ public class EntityCacheTests : BaseTestClass
 	public void GetOrders_BySecurityAndState_ReturnsMatchingOrders()
 	{
 		var order = CreateOrder();
-		order.State = OrderStates.Active;
 		_cache.AddOrderByRegistrationId(order);
 
 		// Process order to set state
@@ -175,6 +200,7 @@ public class EntityCacheTests : BaseTestClass
 
 		var orders = _cache.GetOrders(_security, OrderStates.Active).ToArray();
 		orders.Length.AssertEqual(1);
+		orders[0].AssertSame(order);
 	}
 
 	[TestMethod]
