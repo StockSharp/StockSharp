@@ -35,7 +35,7 @@ public class BasketSecurityTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ExpirationContinuous()
+	public void ExpirationContinuous_PreExpiryUsesFrontContract()
 	{
 		CreateFut(out var riu, out var riz);
 
@@ -48,6 +48,8 @@ public class BasketSecurityTests : BaseTestClass
 		basket.ExpirationJumps.Add(riu.ToSecurityId(), riu.ExpiryDate.Value);
 		basket.ExpirationJumps.Add(riz.ToSecurityId(), riz.ExpiryDate.Value);
 
+		// The generated window starts five hours before expiry and remains pre-expiry.
+		// Contract switching itself is covered by ContinuousProcessor_SwitchesToNextContract.
 		Do(basket, prices => prices[0], riu, riz);
 	}
 
@@ -306,6 +308,17 @@ public class BasketSecurityTests : BaseTestClass
 		var asyncResult = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync(CancellationToken);
 
 		syncResult.Length.AssertEqual(asyncResult.Length);
+		syncResult.Length.AssertEqual(1);
+
+		var syncTick = syncResult[0];
+		var asyncTick = asyncResult[0];
+		syncTick.SecurityId.AssertEqual(asyncTick.SecurityId);
+		syncTick.DataTypeEx.AssertEqual(asyncTick.DataTypeEx);
+		syncTick.ServerTime.AssertEqual(asyncTick.ServerTime);
+		syncTick.TradePrice.AssertEqual(asyncTick.TradePrice);
+		syncTick.TradeVolume.AssertEqual(asyncTick.TradeVolume);
+		syncTick.TradePrice.AssertEqual(50m);
+		syncTick.TradeVolume.AssertEqual(-10m);
 	}
 
 	[TestMethod]
@@ -347,6 +360,12 @@ public class BasketSecurityTests : BaseTestClass
 		var result = ticks.ToBasket(basket, processorProvider).ToArray();
 
 		result.Length.AssertEqual(1);
+		var basketTick = result[0];
+		basketTick.SecurityId.AssertEqual(basket.ToSecurityId());
+		basketTick.DataTypeEx.AssertEqual(DataType.Ticks);
+		basketTick.ServerTime.AssertEqual(serverTime);
+		basketTick.TradePrice.AssertEqual(50m);
+		basketTick.TradeVolume.AssertEqual(-10m);
 	}
 
 	[TestMethod]
@@ -388,6 +407,12 @@ public class BasketSecurityTests : BaseTestClass
 		var result = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(1);
+		var basketTick = result[0];
+		basketTick.SecurityId.AssertEqual(basket.ToSecurityId());
+		basketTick.DataTypeEx.AssertEqual(DataType.Ticks);
+		basketTick.ServerTime.AssertEqual(serverTime);
+		basketTick.TradePrice.AssertEqual(50m);
+		basketTick.TradeVolume.AssertEqual(-10m);
 	}
 
 	[TestMethod]
