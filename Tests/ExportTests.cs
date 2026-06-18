@@ -15,14 +15,16 @@ public class ExportTests : BaseTestClass
 	{
 		var token = CancellationToken;
 		var arr = values.ToArray();
-		var ignoreCount = typeof(TValue) == typeof(QuoteChangeMessage);
 		var hasTime = typeof(TValue).Is<IServerTimeMessage>();
 
 		void validateResult(int count, DateTime? lastTime, string name)
 		{
-			// Verify returned values: count equals number of elements; lastTime should be non-null for non-empty arrays
-			if (!ignoreCount)
-				count.AreEqual(arr.Length, $"ExportAsync returned unexpected count for {name}");
+			var expectedCount = typeof(TValue) == typeof(QuoteChangeMessage) &&
+				name is not ("xml" or "json")
+					? arr.Cast<QuoteChangeMessage>().Sum(depth => depth.ToTimeQuotes().Count())
+					: arr.Length;
+
+			count.AreEqual(expectedCount, $"ExportAsync returned unexpected count for {name}");
 
 			if (hasTime && arr.Length > 0)
 				lastTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime);
@@ -64,14 +66,25 @@ public class ExportTests : BaseTestClass
 	public async Task Cancellation()
 	{
 		var security = Helper.CreateStorageSecurity();
-		var ticks = security.RandomTicks(500000, true).ToArray();
+		var ticks = security.RandomTicks(1000, true).ToArray();
 
 		using var stream = new MemoryStream();
 		var exporter = new TextExporter(DataType.Ticks, stream, _txtReg.TemplateTxtTick, null);
+		using var cts = new CancellationTokenSource();
 
-		var (_, token) = CancellationToken.CreateChildToken(TimeSpan.FromSeconds(1));
+		async IAsyncEnumerable<ExecutionMessage> Enumerate()
+		{
+			for (var i = 0; i < ticks.Length; i++)
+			{
+				if (i == 100)
+					cts.Cancel();
 
-		await ThrowsAsync<OperationCanceledException>(() => exporter.Export(ticks.ToAsyncEnumerable(), token));
+				yield return ticks[i];
+				await Task.Yield();
+			}
+		}
+
+		await ThrowsAsync<OperationCanceledException>(() => exporter.Export(Enumerate(), cts.Token));
 
 		// partial data should be written
 		(stream.Length > 0).AssertTrue();
