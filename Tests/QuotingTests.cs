@@ -171,6 +171,18 @@ public class QuotingTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void Market_NeedQuoting_PriceDifferenceEqualsOffset_ReturnsBestPrice()
+	{
+		var (mdProvider, _, _, security, _, _, _, _) = CreateContext();
+		IQuotingBehavior behavior = new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m));
+
+		var result = behavior.NeedQuoting(
+			security, mdProvider.Object, DateTime.UtcNow, 100.50m, 1000, 1000, 100.51m);
+
+		result.AssertEqual(100.51m);
+	}
+
+	[TestMethod]
 	public void Market_NeedQuoting_VolumeChanged_ReturnsBestPrice()
 	{
 		// Arrange
@@ -431,7 +443,7 @@ public class QuotingTests : BaseTestClass
 		var result = behavior.CalculateBestPrice(security, mdProvider.Object, Sides.Buy,
 			100.50m, 100.51m, 100.50m, _lastTradeVolume, [], []);
 		
-		result.AssertEqual(100.50m); // ���������� 100.505 -> 100.50
+		result.AssertEqual(100.50m);
 	}
 
 	[TestMethod]
@@ -465,6 +477,7 @@ public class QuotingTests : BaseTestClass
 		
 		// Assert
 		result.AssertNull();
+		mdProvider.Verify(p => p.GetSecurityValue(security, Level1Fields.TheorPrice), Times.Once);
 	}
 
 	[TestMethod]
@@ -636,7 +649,7 @@ public class QuotingTests : BaseTestClass
 		{
 			new MarketQuotingBehavior(new Unit(0.01m), new Unit(0.01m)),
 			new BestByPriceQuotingBehavior(new Unit(0.01m)),
-			new LimitQuotingBehavior(100.50m),
+			new LimitQuotingBehavior(99.75m),
 			new BestByVolumeQuotingBehavior(new Unit(500m)),
 			new LevelQuotingBehavior(new Range<int>(0, 1), false),
 			new LastTradeQuotingBehavior(new Unit(0.01m))
@@ -652,7 +665,7 @@ public class QuotingTests : BaseTestClass
 			// Most should return lastTradePrice or null, LimitQuotingBehavior should return limit price
 			if (behavior is LimitQuotingBehavior)
 			{
-				result.AssertEqual(_lastTradePrice);
+				result.AssertEqual(99.75m);
 			}
 			else if (behavior is MarketQuotingBehavior)
 			{
@@ -1104,6 +1117,25 @@ public class QuotingTests : BaseTestClass
 
 		// Assert
 		isTimeout.AssertEqual(true);
+	}
+
+	[TestMethod]
+	public void IsTimeOut_AtTimeoutBoundary_ReturnsTrue()
+	{
+		var (mdProvider, _, behavior, security, portfolio, _, _, _) = CreateContext();
+		var startTime = DateTime.UtcNow;
+		var engine = new QuotingEngine(
+			behavior.Object,
+			security,
+			portfolio,
+			Sides.Buy,
+			100m,
+			50m,
+			TimeSpan.FromMinutes(5),
+			mdProvider.Object,
+			startTime);
+
+		engine.IsTimeOut(startTime.AddMinutes(5)).AssertTrue();
 	}
 
 	[TestMethod]
