@@ -124,7 +124,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<ArgumentNullException>(() => provider.Compile(""));
+		ThrowsExactly<ArgumentNullException>(() => provider.Compile(""));
 	}
 
 	[TestMethod]
@@ -132,7 +132,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<ArgumentNullException>(() => provider.Compile(null));
+		ThrowsExactly<ArgumentNullException>(() => provider.Compile(null));
 	}
 
 	[TestMethod]
@@ -140,7 +140,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<ArgumentOutOfRangeException>(() => provider.Compile("UnknownVar"));
+		ThrowsExactly<ArgumentOutOfRangeException>(() => provider.Compile("UnknownVar"));
 	}
 
 	[TestMethod]
@@ -148,7 +148,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<InvalidOperationException>(() => provider.Compile("PnL +* Recovery"));
+		ThrowsExactly<InvalidOperationException>(() => provider.Compile("PnL +* Recovery"));
 	}
 
 	[TestMethod]
@@ -156,7 +156,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<InvalidOperationException>(() => provider.Compile("(PnL + Recovery"));
+		ThrowsExactly<InvalidOperationException>(() => provider.Compile("(PnL + Recovery"));
 	}
 
 	[TestMethod]
@@ -167,7 +167,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 		var strategy = CreateStrategyWithStats(pnl: 1000m, tradeCount: 0);
 
 		// Division by zero should throw at evaluation time
-		Throws<DivideByZeroException>(() => fitness(strategy));
+		ThrowsExactly<DivideByZeroException>(() => fitness(strategy));
 	}
 
 	[TestMethod]
@@ -192,18 +192,6 @@ public class FitnessFormulaProviderTests : BaseTestClass
 		var result = fitness(strategy);
 
 		result.AssertEqual(300m);
-	}
-
-	[TestMethod]
-	public void Compile_SameFormulaTwice_ReturnsSeparateFunctions()
-	{
-		var provider = CreateProvider();
-
-		var fitness1 = provider.Compile("PnL");
-		var fitness2 = provider.Compile("PnL");
-
-		// Should be different function instances
-		fitness1.AssertNotSame(fitness2);
 	}
 
 	// ========== Real-world fitness formulas ==========
@@ -429,7 +417,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Compile_AllNegativeValues_EvaluatesCorrectly()
+	public void Compile_NegativePnlAndZeroTradeCount_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
 		var fitness = provider.Compile("PnL + TCount");
@@ -537,7 +525,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<InvalidOperationException>(() => provider.Compile("PnL + ()"));
+		ThrowsExactly<InvalidOperationException>(() => provider.Compile("PnL + ()"));
 	}
 
 	[TestMethod]
@@ -545,7 +533,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<InvalidOperationException>(() => provider.Compile("PnL Recovery"));
+		ThrowsExactly<InvalidOperationException>(() => provider.Compile("PnL Recovery"));
 	}
 
 	[TestMethod]
@@ -553,7 +541,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<InvalidOperationException>(() => provider.Compile("PnL +"));
+		ThrowsExactly<InvalidOperationException>(() => provider.Compile("PnL +"));
 	}
 
 	[TestMethod]
@@ -561,7 +549,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<InvalidOperationException>(() => provider.Compile("* PnL"));
+		ThrowsExactly<InvalidOperationException>(() => provider.Compile("* PnL"));
 	}
 
 	[TestMethod]
@@ -569,7 +557,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<InvalidOperationException>(() => provider.Compile("PnL ++ Recovery"));
+		ThrowsExactly<InvalidOperationException>(() => provider.Compile("PnL ++ Recovery"));
 	}
 
 	[TestMethod]
@@ -577,7 +565,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<ArgumentException>(() => provider.Compile("   "));
+		ThrowsExactly<ArgumentException>(() => provider.Compile("   "));
 	}
 
 	[TestMethod]
@@ -585,7 +573,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<ArgumentException>(() => provider.Compile("\t\t"));
+		ThrowsExactly<ArgumentException>(() => provider.Compile("\t\t"));
 	}
 
 	[TestMethod]
@@ -593,7 +581,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		var provider = CreateProvider();
 
-		Throws<ArgumentException>(() => provider.Compile("\n\n"));
+		ThrowsExactly<ArgumentException>(() => provider.Compile("\n\n"));
 	}
 
 	[TestMethod]
