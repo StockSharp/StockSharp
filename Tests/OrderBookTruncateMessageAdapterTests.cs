@@ -356,17 +356,26 @@ public class OrderBookTruncateMessageAdapterTests : BaseTestClass
 			DataType2 = DataType.MarketDepth,
 			MaxDepth = 10,
 		};
+		var toOut = new SubscriptionResponseMessage { OriginalTransactionId = 1 };
 
 		manager
 			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
-			.Returns((toInner: (Message)toInner, toOut: []));
+			.Returns((toInner: (Message)toInner, toOut: [toOut]));
 
 		using var adapter = new OrderBookTruncateMessageAdapter(inner, manager.Object);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (message, _) =>
+		{
+			output.Add(message);
+			return default;
+		};
 
 		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
 
 		inner.InMessages.Count.AssertEqual(1);
 		inner.InMessages[0].AssertSame(toInner);
+		output.Count.AssertEqual(1);
+		output[0].AssertSame(toOut);
 
 		manager.Verify(m => m.ProcessInMessage(It.IsAny<Message>()), Times.Once);
 	}

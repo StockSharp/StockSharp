@@ -29,11 +29,18 @@ public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		var (toInner, _) = _manager.ProcessInMessage(message);
+		var (toInner, toOut) = _manager.ProcessInMessage(message);
 
-		return base.OnSendInMessageAsync(toInner, cancellationToken);
+		if (toInner != null)
+			await base.OnSendInMessageAsync(toInner, cancellationToken);
+
+		if (toOut.Length > 0)
+		{
+			foreach (var outMessage in toOut)
+				await RaiseNewOutMessageAsync(outMessage, cancellationToken);
+		}
 	}
 
 	/// <inheritdoc />
