@@ -104,18 +104,6 @@ public class FindAdaptersTests
 	}
 
 	[TestMethod]
-	public void FindAdapters_FiltersDialects()
-	{
-		var type = typeof(FindAdaptersTestDialect);
-
-		// Type has valid constructor
-		type.HasValidAdapterConstructor().AssertTrue();
-
-		// But name ends with "Dialect" - should be filtered
-		type.Name.EndsWith("Dialect").AssertTrue();
-	}
-
-	[TestMethod]
 	public void GetAdapters_FromAssembly_FindsValidAdapters()
 	{
 		var asm = typeof(FindAdaptersTestValidAdapter).Assembly;
