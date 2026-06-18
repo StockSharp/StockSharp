@@ -95,6 +95,8 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		await adapter.SendInMessageAsync(new ProcessSuspendedMessage(), CancellationToken);
 
 		inner.InMessages.Count.AssertEqual(2);
+		inner.InMessages[0].AssertSame(msg1);
+		inner.InMessages[1].AssertSame(msg2);
 	}
 
 	[TestMethod]
@@ -290,9 +292,17 @@ public class OfflineMessageAdapterTests : BaseTestClass
 		output.Count.AssertEqual(1);
 		var execMsg = (ExecutionMessage)output[0];
 		execMsg.OrderState.AssertEqual(OrderStates.Done);
+		execMsg.OriginalTransactionId.AssertEqual(orderMsg.TransactionId);
+		inner.InMessages.Count.AssertEqual(0);
 
-		// old order is Done -> addressed to the replace transaction id
-		execMsg.OriginalTransactionId.AssertEqual(replaceMsg.TransactionId);
+		await inner.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
+		await adapter.SendInMessageAsync(new ProcessSuspendedMessage(adapter), CancellationToken);
+
+		inner.InMessages.Count.AssertEqual(1);
+		inner.InMessages[0].AssertOfType<OrderRegisterMessage>();
+		var replayed = (OrderRegisterMessage)inner.InMessages[0];
+		replayed.TransactionId.AssertEqual(replaceMsg.TransactionId);
+		replayed.Price.AssertEqual(replaceMsg.Price);
 	}
 
 	[TestMethod]
