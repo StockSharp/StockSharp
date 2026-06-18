@@ -139,14 +139,25 @@ public class StateValidatorTests : BaseTestClass
 	[TestMethod]
 	public void ChannelStates_InvalidTransitions()
 	{
-		// Stopped -> Started (must go through Starting)
-		StateValidator.IsValid(ChannelStates.Stopped, ChannelStates.Started).AssertFalse();
+		var valid = new HashSet<(ChannelStates from, ChannelStates to)>
+		{
+			(ChannelStates.Stopped, ChannelStates.Starting),
+			(ChannelStates.Starting, ChannelStates.Stopped),
+			(ChannelStates.Starting, ChannelStates.Started),
+			(ChannelStates.Started, ChannelStates.Stopping),
+			(ChannelStates.Started, ChannelStates.Suspending),
+			(ChannelStates.Suspending, ChannelStates.Suspended),
+			(ChannelStates.Suspended, ChannelStates.Starting),
+			(ChannelStates.Suspended, ChannelStates.Stopping),
+			(ChannelStates.Stopping, ChannelStates.Stopped),
+		};
 
-		// Started -> Stopped (must go through Stopping)
-		StateValidator.IsValid(ChannelStates.Started, ChannelStates.Stopped).AssertFalse();
-
-		// Started -> Suspended (must go through Suspending)
-		StateValidator.IsValid(ChannelStates.Started, ChannelStates.Suspended).AssertFalse();
+		foreach (var from in Enum.GetValues<ChannelStates>())
+		foreach (var to in Enum.GetValues<ChannelStates>())
+		{
+			if (from != to && !valid.Contains((from, to)))
+				StateValidator.IsValid(from, to).AssertFalse($"{from} -> {to} must be invalid.");
+		}
 	}
 
 	[TestMethod]
@@ -269,6 +280,9 @@ public class StateValidatorTests : BaseTestClass
 	[TestMethod]
 	public void SessionStates_InvalidTransitions()
 	{
+		StateValidator.IsValid(SessionStates.Active, SessionStates.Assigned).AssertFalse();
+		StateValidator.IsValid(SessionStates.Paused, SessionStates.Assigned).AssertFalse();
+
 		// ForceStopped is terminal
 		StateValidator.IsValid(SessionStates.ForceStopped, SessionStates.Assigned).AssertFalse();
 		StateValidator.IsValid(SessionStates.ForceStopped, SessionStates.Active).AssertFalse();
