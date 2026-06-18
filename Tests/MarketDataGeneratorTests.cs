@@ -471,7 +471,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 				generationCount++;
 		}
 
-		(generationCount <= 3).AssertTrue();
+		generationCount.AssertEqual(3);
 	}
 
 	[TestMethod]
@@ -569,6 +569,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	{
 		var secId = CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
+		generator.MaxPriceStepCount = 1;
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
 
@@ -580,20 +581,31 @@ public class MarketDataGeneratorTests : BaseTestClass
 
 		var time = DateTime.UtcNow;
 
-		var tickMsg = new ExecutionMessage
+		var firstTick = new ExecutionMessage
 		{
 			SecurityId = secId,
 			ServerTime = time,
 			DataTypeEx = DataType.Ticks,
 			TradePrice = 100m,
+		};
+
+		var firstDepth = (QuoteChangeMessage)generator.Process(firstTick);
+		firstDepth.AssertNotNull();
+
+		var secondTick = new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = time.AddSeconds(1),
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 101m,
 			OriginSide = Sides.Buy,
 		};
 
-		var result = generator.Process(tickMsg);
-		result.AssertNotNull();
+		var secondDepth = (QuoteChangeMessage)generator.Process(secondTick);
+		secondDepth.AssertNotNull();
 
-		var depth = (QuoteChangeMessage)result;
-		(depth.Asks.Length > 0).AssertTrue();
+		secondDepth.Asks[0].Price.AssertGreater(firstDepth.Asks[0].Price);
+		secondDepth.Bids[0].Price.AssertEqual(firstDepth.Bids[0].Price);
 	}
 
 	[TestMethod]
