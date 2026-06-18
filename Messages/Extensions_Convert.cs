@@ -76,6 +76,7 @@ static partial class Extensions
 			ServerTime = message.ServerTime,
 		}
 		.TryAdd(Level1Fields.LastTradeId, message.TradeId)
+		.TryAdd(Level1Fields.LastTradeStringId, message.TradeStringId)
 		.TryAdd(Level1Fields.LastTradePrice, message.TradePrice)
 		.TryAdd(Level1Fields.LastTradeVolume, message.TradeVolume)
 		.TryAdd(Level1Fields.LastTradeUpDown, message.IsUpTick)

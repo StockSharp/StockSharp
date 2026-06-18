@@ -490,6 +490,7 @@ public class ConvertTests : BaseTestClass
 		level1.ServerTime.AreEqual(tick.ServerTime);
 		level1.TryGetDecimal(Level1Fields.LastTradePrice).AreEqual(102.5m);
 		level1.TryGetDecimal(Level1Fields.LastTradeVolume).AreEqual(100m);
+		((string)level1.TryGet(Level1Fields.LastTradeStringId)).AreEqual("TRADE-12345");
 		((bool?)level1.TryGet(Level1Fields.LastTradeUpDown)).AreEqual(false);
 		level1.TryGetDecimal(Level1Fields.OpenInterest).AreEqual(500m);
 		((Sides?)level1.TryGet(Level1Fields.LastTradeOrigin)).AreEqual(Sides.Sell);
@@ -538,6 +539,16 @@ public class ConvertTests : BaseTestClass
 		level1.TryGetDecimal(Level1Fields.BestBidVolume).AreEqual(150m);
 		level1.TryGetDecimal(Level1Fields.BestAskPrice).AreEqual(101m);
 		level1.TryGetDecimal(Level1Fields.BestAskVolume).AreEqual(200m);
+
+		var roundTrip = new[] { level1 }.ToOrderBooks().Single();
+		roundTrip.SecurityId.AreEqual(originalQuote.SecurityId);
+		roundTrip.ServerTime.AreEqual(originalQuote.ServerTime);
+		roundTrip.Bids.Length.AreEqual(1);
+		roundTrip.Bids[0].Price.AreEqual(100m);
+		roundTrip.Bids[0].Volume.AreEqual(150m);
+		roundTrip.Asks.Length.AreEqual(1);
+		roundTrip.Asks[0].Price.AreEqual(101m);
+		roundTrip.Asks[0].Volume.AreEqual(200m);
 	}
 
 	[TestMethod]
@@ -678,9 +689,7 @@ public class ConvertTests : BaseTestClass
 		var level1 = candle.ToLevel1();
 
 		level1.TryGetDecimal(Level1Fields.OpenPrice).AreEqual(100m);
-
-		// Zero volume may or may not be included in Level1 message, depending on implementation
-		// Just verify the conversion doesn't crash
+		level1.Changes.ContainsKey(Level1Fields.Volume).AssertFalse();
 	}
 
 	[TestMethod]
