@@ -479,22 +479,31 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		var googRun = connector.SubscribeAsync(googSub, googCts.Token).AsTask();
 
 		// Wait — no new data emitted by adapter after this point
-		await Task.Delay(500, CancellationToken);
+		await googStarted.Task.WithCancellation(CancellationToken);
 
 		// 4. Late subscriber should receive GOOG's cached order book
 		var googBooks = receivedBooks
 			.Where(b => ((ISecurityIdMessage)b.book).SecurityId == GoogId)
 			.ToList();
 
-		IsTrue(googBooks.Count >= 1, $"Late GOOG subscriber should receive cached order book, got {googBooks.Count}");
+		googBooks.Count.AssertEqual(1);
+		googBooks[0].sub.AssertSame(googSub);
 
 		// Verify the cached book has correct data
 		var book = googBooks[0].book;
 		var bids = book.Bids.ToArray();
 		var asks = book.Asks.ToArray();
 
-		IsTrue(bids.Length >= 1, "GOOG book should have bids");
-		IsTrue(asks.Length >= 1, "GOOG book should have asks");
+		bids.Length.AssertEqual(2);
+		bids[0].Price.AssertEqual(2800m);
+		bids[0].Volume.AssertEqual(5m);
+		bids[1].Price.AssertEqual(2799m);
+		bids[1].Volume.AssertEqual(8m);
+		asks.Length.AssertEqual(2);
+		asks[0].Price.AssertEqual(2801m);
+		asks[0].Volume.AssertEqual(3m);
+		asks[1].Price.AssertEqual(2802m);
+		asks[1].Volume.AssertEqual(7m);
 
 		aaplCts.Cancel();
 		googCts.Cancel();
