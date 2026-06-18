@@ -998,6 +998,7 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 		// The old emulator should call RandomProvider for volume generation
 		// The new emulator should do the same
 		v1VolumeCalls.AssertEqual(v2VolumeCalls, "RandomProvider usage should be the same in both emulators");
+		v1VolumeCalls.AssertGreater(0);
 
 		AssertEqual(resV1, resV2, "Level1_QuotesWithoutVolume_UsesRandomProvider");
 	}
@@ -1063,15 +1064,16 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 		// Old emulator calls RandomProvider once for zero volume replacement
 		// New emulator should do the same
 		v1VolumeCalls.AssertEqual(v2VolumeCalls, "RandomProvider usage should be the same for zero volume ticks");
+		v1VolumeCalls.AssertGreater(0);
 
 		AssertEqual(resV1, resV2, "Tick_ZeroVolume_UsesRandomProvider");
 	}
 
 	/// <summary>
-	/// Tests order execution when order book is generated from ticks.
+	/// Tests order execution parity with an explicit order book.
 	/// </summary>
 	[TestMethod]
-	public async Task OrderExecution_WithSyntheticBook()
+	public async Task OrderExecution_WithExplicitBook()
 	{
 		var secId = Helper.CreateSecurityId();
 		var (emuV1, resV1, emuV2, resV2) = CreateBothEmulators(secId);
@@ -1104,7 +1106,7 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 		await emuV1.SendInMessageAsync(order.TypedClone(), CancellationToken);
 		await emuV2.SendInMessageAsync(order.TypedClone(), CancellationToken);
 
-		AssertEqual(resV1, resV2, "OrderExecution_WithSyntheticBook");
+		AssertEqual(resV1, resV2, "OrderExecution_WithExplicitBook");
 	}
 
 	#endregion
