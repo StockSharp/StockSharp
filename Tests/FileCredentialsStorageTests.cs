@@ -150,26 +150,27 @@ public class FileCredentialsStorageTests : BaseTestClass
 		var result = await storage.SearchAsync("test@example.com").ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(1);
+		result[0].Password.IsEqualTo(updated.Password).AssertTrue();
 	}
 
 	[TestMethod]
-	public void Save_NullCredentials_ThrowsArgumentNullException()
+	public async Task Save_NullCredentials_ThrowsArgumentNullException()
 	{
 		var fs = CreateFileSystem();
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, "/credentials.json");
 
-		ThrowsExactlyAsync<ArgumentNullException>(async () => await storage.SaveAsync(null, CancellationToken));
+		await ThrowsExactlyAsync<ArgumentNullException>(async () => await storage.SaveAsync(null, CancellationToken));
 	}
 
 	[TestMethod]
-	public void Save_InvalidEmail_ThrowsArgumentException()
+	public async Task Save_InvalidEmail_ThrowsArgumentException()
 	{
 		var fs = CreateFileSystem();
 		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, "/credentials.json", asEmail: true);
 
 		var credentials = CreateCredentials("invalid-email");
 
-		ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(credentials, CancellationToken));
+		await ThrowsExactlyAsync<ArgumentException>(async () => await storage.SaveAsync(credentials, CancellationToken));
 	}
 
 	[TestMethod]
