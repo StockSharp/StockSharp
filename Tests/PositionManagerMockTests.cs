@@ -59,7 +59,7 @@ public class PositionManagerMockTests : BaseTestClass
 			.Setup(s => s.AddOrGetOrder(1, _secId, Portfolio, Sides.Buy, 10m, 7m))
 			.Returns(10m);
 		stateMock
-			.Setup(s => s.UpdatePosition(_secId, Portfolio, It.IsAny<decimal>()))
+			.Setup(s => s.UpdatePosition(_secId, Portfolio, 3m))
 			.Returns(3m);
 
 		var manager = new PositionManager(true, stateMock.Object);
@@ -91,8 +91,13 @@ public class PositionManagerMockTests : BaseTestClass
 		var result = manager.ProcessMessage(execMsg);
 
 		stateMock.Verify(s => s.UpdateOrderBalance(1, 7m), Times.Once());
-		stateMock.Verify(s => s.UpdatePosition(_secId, Portfolio, It.IsAny<decimal>()), Times.Once());
+		stateMock.Verify(s => s.UpdatePosition(_secId, Portfolio, 3m), Times.Once());
 		result.AssertNotNull();
+		result.SecurityId.AssertEqual(_secId);
+		result.PortfolioName.AssertEqual(Portfolio);
+		result.BuildFrom.AssertEqual(DataType.Transactions);
+		result.ServerTime.AssertEqual(execMsg.ServerTime);
+		result.Changes[PositionChangeTypes.CurrentValue].To<decimal>().AssertEqual(3m);
 	}
 
 	[TestMethod]
@@ -113,7 +118,7 @@ public class PositionManagerMockTests : BaseTestClass
 			.Returns(false);
 
 		stateMock
-			.Setup(s => s.UpdatePosition(It.IsAny<SecurityId>(), It.IsAny<string>(), It.IsAny<decimal>()))
+			.Setup(s => s.UpdatePosition(_secId, Portfolio, 5m))
 			.Returns(5m);
 
 		var manager = new PositionManager(false, stateMock.Object);
@@ -143,8 +148,13 @@ public class PositionManagerMockTests : BaseTestClass
 
 		var result = manager.ProcessMessage(execMsg);
 
-		stateMock.Verify(s => s.UpdatePosition(It.IsAny<SecurityId>(), It.IsAny<string>(), It.IsAny<decimal>()), Times.Once());
+		stateMock.Verify(s => s.UpdatePosition(_secId, Portfolio, 5m), Times.Once());
 		result.AssertNotNull();
+		result.SecurityId.AssertEqual(_secId);
+		result.PortfolioName.AssertEqual(Portfolio);
+		result.BuildFrom.AssertEqual(DataType.Transactions);
+		result.ServerTime.AssertEqual(execMsg.ServerTime);
+		result.Changes[PositionChangeTypes.CurrentValue].To<decimal>().AssertEqual(5m);
 	}
 
 	[TestMethod]
