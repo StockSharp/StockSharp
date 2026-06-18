@@ -170,6 +170,8 @@ public class BufferMessageAdapterTests : BaseTestClass
 		var l1Out = output.OfType<Level1ChangeMessage>().ToArray();
 		l1Out.Length.AssertEqual(2);
 		l1Out.All(m => m.SubscriptionId == 10).AssertTrue();
+		l1Out.Single(m => m.SecurityId == sec1).TryGetDecimal(Level1Fields.LastTradePrice).AssertEqual(1m);
+		l1Out.Single(m => m.SecurityId == sec2).TryGetDecimal(Level1Fields.LastTradePrice).AssertEqual(2m);
 		output.OfType<MarketDataMessage>().Count().AssertEqual(1);
 	}
 
@@ -260,7 +262,8 @@ public class BufferMessageAdapterTests : BaseTestClass
 		};
 
 		var buffer = new StorageBuffer();
-		buffer.ProcessOutMessage(CreateTick(secId, DateTime.UtcNow));
+		var tick = CreateTick(secId, DateTime.UtcNow);
+		buffer.ProcessOutMessage(tick);
 
 		var snapshotRegistry = new InMemorySnapshotRegistry()
 			.Add(DataType.Level1, new InMemorySnapshotStorage<SecurityId, Level1ChangeMessage>(m => m.SecurityId))
@@ -278,5 +281,9 @@ public class BufferMessageAdapterTests : BaseTestClass
 		var saved = await execStorage.Saved.Task;
 		saved.Count.AssertEqual(1);
 		saved[0].SecurityId.AssertEqual(secId);
+		saved[0].DataTypeEx.AssertEqual(DataType.Ticks);
+		saved[0].ServerTime.AssertEqual(tick.ServerTime);
+		saved[0].TradePrice.AssertEqual(tick.TradePrice);
+		saved[0].TradeVolume.AssertEqual(tick.TradeVolume);
 	}
 }
