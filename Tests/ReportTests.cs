@@ -160,6 +160,7 @@ public class ReportTests : BaseTestClass
 	[DataRow(FileExts.Csv)]
 	public async Task ReportGenerator_MatchesExpectedOutput(string format)
 	{
+		using var culture = Do.WithInvariantCulture();
 		var source = CreateDeterministicSource();
 
 		IReportGenerator generator = format switch
@@ -189,6 +190,7 @@ public class ReportTests : BaseTestClass
 	[TestMethod]
 	public async Task CsvReportGenerator_ContainsAllRequiredSections()
 	{
+		using var culture = Do.WithInvariantCulture();
 		var source = CreateDeterministicSource();
 		var generator = new CsvReportGenerator { IncludeOrders = true, IncludeTrades = true };
 
@@ -198,47 +200,27 @@ public class ReportTests : BaseTestClass
 		stream.Position = 0;
 		var csv = new StreamReader(stream).ReadToEnd();
 
-		// Verify strategy info
-		csv.AssertContains("TestStrategy");
-		csv.AssertContains("5000"); // PnL
-		csv.AssertContains("100"); // Position
-		csv.AssertContains("25"); // Commission
+		csv.AssertContains("TestStrategy,08:00:00,100,5000,25,1.5,00:00:00.0500000");
 
 		// Verify parameters
 		csv.AssertContains("Symbol");
 		csv.AssertContains("BTCUSD");
 
 		// Verify statistics
-		csv.AssertContains("WinRate");
-		csv.AssertContains("0.65");
-		csv.AssertContains("MaxDrawdown");
-		csv.AssertContains("-500");
+		csv.AssertContains("WinRate,MaxDrawdown,TradesCount,AverageTradeTime,BestTradeDate,SharpeRatio");
+		csv.AssertContains("0.65,-500,42,00:15:00,2024-01-15T14:30:00Z,1.85");
 
 		// Verify orders
-		csv.AssertContains("50000"); // Order price
-		csv.AssertContains("50500"); // Order price
+		csv.AssertContains("1,100,BTCUSD@CRYPTO,Buy,2024-01-15T10:00:00Z,50000,Done,0,1,Limit");
+		csv.AssertContains("2,101,BTCUSD@CRYPTO,Sell,2024-01-15T11:00:00Z,50500,Done,0,1,Limit");
 
 		// Verify trades
-		csv.AssertContains("1001"); // Trade ID
-		csv.AssertContains("1002"); // Trade ID
-		csv.AssertContains("500"); // PnL
+		csv.AssertContains("1001,100,BTCUSD@CRYPTO,2024-01-15T10:00:00Z,50000,1,Buy,1,0,0");
+		csv.AssertContains("1002,101,BTCUSD@CRYPTO,2024-01-15T11:00:00Z,50500,1,Sell,2,500,0");
 
 		// Verify diverse parameter types
-		csv.AssertContains("TimeFrame");
-		csv.AssertContains("00:05:00"); // TimeSpan
-		csv.AssertContains("StartDate");
-		csv.AssertContains("IsLong");
-		csv.AssertContains("True");
-		csv.AssertContains("MaxPositions");
-		csv.AssertContains("5");
-
-		// Verify diverse statistic types
-		csv.AssertContains("TradesCount");
-		csv.AssertContains("42");
-		csv.AssertContains("AverageTradeTime");
-		csv.AssertContains("00:15:00");
-		csv.AssertContains("SharpeRatio");
-		csv.AssertContains("1.85");
+		csv.AssertContains("Symbol,TimeFrame,StartDate,Volume,IsLong,MaxPositions");
+		csv.AssertContains("BTCUSD,00:05:00,2024-01-01T00:00:00Z,100,True,5");
 	}
 
 	[TestMethod]
@@ -1185,6 +1167,7 @@ public class ReportTests : BaseTestClass
 	[TestMethod]
 	public async Task ExcelReportGenerator_WithTemplate_ContainsTradeData()
 	{
+		using var culture = Do.WithInvariantCulture();
 		var source = CreateMockSourceWithData();
 		var template = ExcelReportGenerator.GetTemplate();
 		template.AssertNotNull("Template must be available for this test");
@@ -1204,7 +1187,7 @@ public class ReportTests : BaseTestClass
 
 		worker.SwitchSheet("Trades");
 		var rowCount = worker.GetRowsCount();
-		IsTrue(rowCount > 0, "Trades sheet should have data");
+		rowCount.AssertEqual(3, "Trades sheet should contain one header and two data rows");
 	}
 
 	private static ReportSource CreateMockSourceWithData()

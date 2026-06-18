@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<strategy name="TestStrategy" totalWorkingTime="08:00:00" commission="25" position="100" PnL="5000" slippage="1.5" latency="00:00:00">
+<strategy name="TestStrategy" totalWorkingTime="08:00:00" commission="25" position="100" PnL="5000" slippage="1.5" latency="00:00:00.0500000">
   <parameters>
     <parameter name="Symbol" value="BTCUSD" />
     <parameter name="TimeFrame" value="00:05:00" />

@@ -21,7 +21,7 @@ static class FormatExtensions
 	/// <param name="time"><see cref="TimeSpan"/> value.</param>
 	/// <returns><see cref="string"/>.</returns>
 	public static string Format(this TimeSpan time)
-		=> time.ToString(@"hh\:mm\:ss");
+		=> time.ToString("c", CultureInfo.InvariantCulture);
 
 	/// <summary>
 	/// To format the <see cref="DateTime"/> in <see cref="string"/>.

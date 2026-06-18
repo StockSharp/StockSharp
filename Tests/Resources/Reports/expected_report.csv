@@ -1,5 +1,5 @@
 Strategy,Working time,Position,P&L,Commission,Slippage,Latency
-TestStrategy,08:00:00,100,5000,25,1.5,00:00:00
+TestStrategy,08:00:00,100,5000,25,1.5,00:00:00.0500000
 Parameters
 Symbol,TimeFrame,StartDate,Volume,IsLong,MaxPositions
 BTCUSD,00:05:00,2024-01-01T00:00:00Z,100,True,5
