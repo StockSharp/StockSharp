@@ -52,8 +52,8 @@ public class MarketDataStorageCacheTests : BaseTestClass
 		var second = await cache.GetMessagesAsync(secId, DataType.Ticks, date, Loader).ToArrayAsync(token);
 
 		loadCalls.AssertEqual(1);
-		first.Length.AssertEqual(messages.Length);
-		second.Length.AssertEqual(messages.Length);
+		first.SequenceEqual(messages).AssertTrue();
+		second.SequenceEqual(first).AssertTrue();
 	}
 
 	[TestMethod]
@@ -79,7 +79,7 @@ public class MarketDataStorageCacheTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task GetMessagesAsync_OverLimit_EvictsOldest()
+	public async Task GetMessagesAsync_OverLimit_EvictsCachedEntries()
 	{
 		var token = CancellationToken;
 
