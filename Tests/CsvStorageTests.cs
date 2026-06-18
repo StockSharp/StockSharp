@@ -1775,9 +1775,12 @@ public class CsvStorageTests : BaseTestClass
 		registry.Exchanges.Add(exchange1);
 		await FlushAsync(executor, token);
 
-		// Try to add duplicate - should fail
-		var added = registry.Exchanges.Contains(exchange2);
-		IsTrue(added, "Duplicate should be detected");
+		// Adding the same key again must not replace or duplicate the existing entity.
+		registry.Exchanges.Add(exchange2);
+		await FlushAsync(executor, token);
+
+		registry.Exchanges.Count.AssertEqual(1);
+		registry.Exchanges.ReadById("TEST").CountryCode.AssertEqual(CountryCodes.US);
 
 		await registry.DisposeAsync();
 	}
@@ -1816,7 +1819,6 @@ public class CsvStorageTests : BaseTestClass
 
 		var copy = exchanges.GetCopy();
 		IsNotNull(copy);
-		IsGreaterOrEqual(0, copy.Length);
 
 		// Decompress and verify - basic check
 		using var memStream = new MemoryStream(copy);
@@ -1825,7 +1827,7 @@ public class CsvStorageTests : BaseTestClass
 		gzipStream.CopyTo(resultStream);
 		var decompressed = resultStream.ToArray();
 
-		IsNotNull(decompressed);
+		decompressed.Length.AssertEqual(0);
 
 		await registry.DisposeAsync();
 	}
@@ -2214,12 +2216,9 @@ public class CsvStorageTests : BaseTestClass
 		// Measure time for first call (creates and caches)
 		var sw1 = Watch.Do(() => copy1 = exchanges.GetCopy());
 
-		// Measure time for second call (should use cache)
-		var sw2 = Watch.Do(() => exchanges.GetCopy());
-
-		// Cached call should be much faster
-		IsTrue(sw2 < sw1,
-			$"Cached call ({sw2.TotalMilliseconds}ms) should be faster than first call ({sw1.TotalMilliseconds}ms)");
+		// The cached call returns the cached byte array instance.
+		var copy2 = exchanges.GetCopy();
+		copy2.AssertSame(copy1);
 
 		// Verify data integrity
 		string content;
