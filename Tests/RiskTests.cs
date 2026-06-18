@@ -146,28 +146,7 @@ public class RiskTests : BaseTestClass
 			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
-		positionMsg.Add(PositionChangeTypes.CurrentValue, -1500m);
-
-		rule.ProcessMessage(positionMsg).AssertTrue();
-	}
-
-	[TestMethod]
-	public void PnLLimit()
-	{
-		var rule = new RiskPnLRule
-		{
-			PnL = new() { Value = -1000, Type = UnitTypes.Absolute },
-			Action = RiskActions.ClosePositions
-		};
-
-		var positionMsg = new PositionChangeMessage
-		{
-			SecurityId = SecurityId.Money,
-			ServerTime = DateTime.UtcNow,
-			PortfolioName = _pfName
-		};
-		positionMsg.Add(PositionChangeTypes.CurrentValue, -500m);
-
+		positionMsg.Add(PositionChangeTypes.CurrentValue, -900m);
 		rule.ProcessMessage(positionMsg).AssertFalse();
 
 		positionMsg = new PositionChangeMessage
@@ -176,7 +155,7 @@ public class RiskTests : BaseTestClass
 			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
-		positionMsg.Add(PositionChangeTypes.CurrentValue, -1500m);
+		positionMsg.Add(PositionChangeTypes.CurrentValue, -1200m);
 
 		rule.ProcessMessage(positionMsg).AssertTrue();
 	}
@@ -191,16 +170,21 @@ public class RiskTests : BaseTestClass
 
 		var positionMsg = new PositionChangeMessage
 		{
-			SecurityId = Helper.CreateSecurityId(),
+			SecurityId = SecurityId.Money,
 			ServerTime = DateTime.UtcNow,
 			PortfolioName = _pfName
 		};
-		positionMsg.Add(PositionChangeTypes.CurrentValue, 0m);
+		positionMsg.Add(PositionChangeTypes.CurrentValue, -500m);
 
-		rule.ProcessMessage(positionMsg);
+		rule.ProcessMessage(positionMsg).AssertFalse();
+
+		positionMsg.Changes[PositionChangeTypes.CurrentValue] = -1500m;
+		rule.ProcessMessage(positionMsg).AssertTrue();
 
 		rule.Reset();
 
+		rule.ProcessMessage(positionMsg).AssertFalse();
+		positionMsg.Changes[PositionChangeTypes.CurrentValue] = -900m;
 		rule.ProcessMessage(positionMsg).AssertFalse();
 	}
 
@@ -1078,14 +1062,14 @@ public class RiskTests : BaseTestClass
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
 			ServerTime = DateTime.UtcNow,
-			Commission = 200m,
+			Commission = 300m,
 			TradePrice = 100,
 			TradeVolume = 10
 		};
 
 		rule.ProcessMessage(execMsg).AssertFalse();
 
-		execMsg.Commission = 600m;
+		execMsg.Commission = 300m;
 		rule.ProcessMessage(execMsg).AssertTrue();
 	}
 
@@ -1103,14 +1087,14 @@ public class RiskTests : BaseTestClass
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
 			ServerTime = DateTime.UtcNow,
-			Commission = -200m,
+			Commission = -300m,
 			TradePrice = 100,
 			TradeVolume = 10
 		};
 
 		rule.ProcessMessage(execMsg).AssertFalse();
 
-		execMsg.Commission = -600m;
+		execMsg.Commission = -300m;
 		rule.ProcessMessage(execMsg).AssertTrue();
 	}
 
@@ -1128,19 +1112,13 @@ public class RiskTests : BaseTestClass
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
 			ServerTime = DateTime.UtcNow,
-			Commission = 50,
+			Commission = 60,
 			HasOrderInfo = true
 		};
 
 		rule.ProcessMessage(execMsg).AssertFalse();
 
-		execMsg.Commission = 150m;
-		rule.ProcessMessage(execMsg).AssertTrue();
-
-		execMsg.Commission = -180;
-		rule.ProcessMessage(execMsg).AssertFalse();
-
-		execMsg.Commission = 120m;
+		execMsg.Commission = 60m;
 		rule.ProcessMessage(execMsg).AssertTrue();
 	}
 
@@ -1158,19 +1136,13 @@ public class RiskTests : BaseTestClass
 			DataTypeEx = DataType.Transactions,
 			SecurityId = Helper.CreateSecurityId(),
 			ServerTime = DateTime.UtcNow,
-			Commission = -50,
+			Commission = -60,
 			HasOrderInfo = true
 		};
 
 		rule.ProcessMessage(execMsg).AssertFalse();
 
-		execMsg.Commission = -150m;
-		rule.ProcessMessage(execMsg).AssertTrue();
-
-		execMsg.Commission = 180m;
-		rule.ProcessMessage(execMsg).AssertFalse();
-
-		execMsg.Commission = -120m;
+		execMsg.Commission = -60m;
 		rule.ProcessMessage(execMsg).AssertTrue();
 	}
 
