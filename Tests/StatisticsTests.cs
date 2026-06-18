@@ -1151,22 +1151,6 @@ public class StatisticsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SortinoRatioPositive()
-	{
-		var parameter = new SortinoRatioParameter();
-		var t = DateTime.UtcNow;
-
-		// PnL: 0.0 → 0.1 → 0.2 → 0.4, returns: +0.1, +0.1, +0.2 (downside deviation = 0)
-		parameter.Add(t, 0.0m, null);
-		parameter.Add(t, 0.1m, null);
-		parameter.Add(t, 0.2m, null);
-		parameter.Add(t, 0.4m, null);
-
-		// Если нет отрицательных возвратов, downside deviation = 0, коэффициент не определён (Value = 0)
-		parameter.Value.AssertEqual(0);
-	}
-
-	[TestMethod]
 	public void SortinoRatioMixed()
 	{
 		var parameter = new SortinoRatioParameter();
@@ -1197,7 +1181,7 @@ public class StatisticsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SortinoRatioZero()
+	public void SortinoRatio_NoDownsideReturnsZero()
 	{
 		var parameter = new SortinoRatioParameter();
 		var t = DateTime.UtcNow;
@@ -1412,7 +1396,7 @@ public class StatisticsTests : BaseTestClass
 		parameter.Add(t, 1000m, null);
 		parameter.Add(t, 800m, null);   // drawdown to 800
 		parameter.Add(t, 900m, null);   // partial recovery
-		parameter.Add(t, 1100m, null);  // new peak, drawdown fixed (1100-800=300)
+		parameter.Add(t, 1100m, null);  // new peak fixes drawdown from the previous peak: 1000-800=200
 
 		// Start new drawdown but do not recover fully yet
 		parameter.Add(t, 900m, null);   // start new drawdown
