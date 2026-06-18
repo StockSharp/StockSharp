@@ -337,8 +337,8 @@ public class AdapterConnectionManagerTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// BUG: With ConnectDisconnectEventOnFirstAdapter=false, when one adapter connects successfully
-	/// and the other fails, no ConnectMessage is ever emitted. The basket stays in Connecting state.
+	/// Regression test: when waiting for every adapter response, one successful connection is enough
+	/// to connect the basket after all remaining adapters have reported failures.
 	/// </summary>
 	[TestMethod]
 	public void ProcessConnect_WaitAll_SuccessThenFail_ShouldEmitConnect()
@@ -363,7 +363,6 @@ public class AdapterConnectionManagerTests : BaseTestClass
 
 		// All adapters have responded. At least one succeeded.
 		// Expected: ConnectMessage should be emitted, basket should be Connected.
-		// BUG: result2 is empty, basket stays in Connecting state forever.
 		AreEqual(ConnectionStates.Connected, manager.CurrentState,
 			"Should transition to Connected since at least one adapter succeeded");
 		AreEqual(1, result2.Length,
