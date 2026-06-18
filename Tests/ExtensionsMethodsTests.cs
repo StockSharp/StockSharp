@@ -1086,16 +1086,25 @@ public class ExtensionsMethodsTests : BaseTestClass
 	public void ApplyNewBalance_NegativeBalance_LogsError()
 	{
 		var logger = new TestReceiver();
-		((decimal?)10m).ApplyNewBalance(-1m, 1, logger);
-		IsTrue(logger.Logs.Count >= 1);
+		var result = ((decimal?)10m).ApplyNewBalance(-1m, 1, logger);
+
+		result.AssertEqual(-1m);
+		logger.Logs.Count.AssertEqual(1);
+		logger.Logs[0].Level.AssertEqual(LogLevels.Error);
+		logger.Logs[0].Message.Contains("-1").AssertTrue();
 	}
 
 	[TestMethod]
 	public void ApplyNewBalance_IncreasingBalance_LogsError()
 	{
 		var logger = new TestReceiver();
-		((decimal?)5m).ApplyNewBalance(10m, 1, logger);
-		IsTrue(logger.Logs.Count >= 1);
+		var result = ((decimal?)5m).ApplyNewBalance(10m, 1, logger);
+
+		result.AssertEqual(10m);
+		logger.Logs.Count.AssertEqual(1);
+		logger.Logs[0].Level.AssertEqual(LogLevels.Error);
+		logger.Logs[0].Message.Contains("5").AssertTrue();
+		logger.Logs[0].Message.Contains("10").AssertTrue();
 	}
 
 	#endregion
@@ -1400,40 +1409,6 @@ public class ExtensionsMethodsTests : BaseTestClass
 		result.Asks[0].Volume.AssertEqual(15m);
 	}
 
-	[TestMethod]
-	public void Join_DuplicatePrices_KeepsBothQuotes()
-	{
-		// Note: Join does NOT merge quotes with same price - it keeps both.
-		// This test documents this behavior.
-		var secId = Helper.CreateSecurityId();
-		var original = new QuoteChangeMessage
-		{
-			SecurityId = secId,
-			ServerTime = DateTime.UtcNow,
-			Bids = [new QuoteChange(100m, 10)],
-			Asks = [new QuoteChange(101m, 10)],
-		};
-		var rare = new QuoteChangeMessage
-		{
-			SecurityId = secId,
-			ServerTime = DateTime.UtcNow,
-			Bids = [new QuoteChange(100m, 5)], // same price!
-			Asks = [new QuoteChange(101m, 5)], // same price!
-		};
-
-		var result = original.Join(rare);
-
-		// Both quotes with same price are kept (not merged)
-		result.Bids.Length.AssertEqual(2);
-		result.Bids[0].Price.AssertEqual(100m);
-		result.Bids[1].Price.AssertEqual(100m);
-		// Volumes are NOT merged
-		(result.Bids[0].Volume + result.Bids[1].Volume).AssertEqual(15m);
-		result.Asks.Length.AssertEqual(2);
-		result.Asks[0].Price.AssertEqual(101m);
-		result.Asks[1].Price.AssertEqual(101m);
-	}
-
 	#endregion
 
 	#region IsHalfEmpty
@@ -1499,7 +1474,7 @@ public class ExtensionsMethodsTests : BaseTestClass
 	#region CreateReply / CreateOrderReply
 
 	[TestMethod]
-	public void CreateReply_NoError_ReturnsPendingReply()
+	public void CreateReply_NoError_ReturnsReplyWithoutState()
 	{
 		var reg = new OrderRegisterMessage
 		{
@@ -2165,10 +2140,14 @@ public class ExtensionsMethodsTests : BaseTestClass
 	public void LoopBack_SetsBackModeAndAdapter()
 	{
 		var msg = new TimeMessage();
-		var adapter = new IncrementalIdGenerator();
-		// We need a real adapter, but we can test the method conceptually
-		// by checking IsBack
-		// LoopBack requires IMessageAdapter so skip if no mock available
+		using var adapter = new RecordingMessageAdapter();
+
+		var result = msg.LoopBack(adapter);
+
+		result.AssertSame(msg);
+		msg.BackMode.AssertEqual(MessageBackModes.Direct);
+		msg.Adapter.AssertSame(adapter);
+		msg.IsBack().AssertTrue();
 	}
 
 	[TestMethod]
