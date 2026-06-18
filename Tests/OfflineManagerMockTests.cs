@@ -35,7 +35,7 @@ public class OfflineManagerMockTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Connect_WhenDisconnected_StoresOrder()
+	public void OrderRegister_WhenDisconnected_StoresOrder()
 	{
 		var stateMock = CreateStateMock(isConnected: false);
 		var manager = CreateManager(stateMock);
@@ -58,7 +58,7 @@ public class OfflineManagerMockTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Connect_WhenConnected_ForwardsOrder()
+	public void OrderRegister_WhenConnected_ForwardsOrder()
 	{
 		var stateMock = CreateStateMock(isConnected: true);
 		var manager = CreateManager(stateMock);
