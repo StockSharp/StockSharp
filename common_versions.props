@@ -53,6 +53,5 @@
     <AvaloniaVer>11.*</AvaloniaVer>
     <NewtonsoftVer>13.*</NewtonsoftVer>
     <ActiproVer>25.*</ActiproVer>
-    <CommunityToolkitVer>8.*</CommunityToolkitVer>
   </PropertyGroup>
 </Project>
