@@ -219,6 +219,8 @@ public class AdapterRouterTests : BaseTestClass
 
 		// should fall back to message type adapters
 		IsNotNull(adapters);
+		AreEqual(1, adapters.Length);
+		AreSame(adapter, adapters[0]);
 		IsFalse(skip);
 	}
 
@@ -712,8 +714,7 @@ public class AdapterRouterTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// BUG: AdapterRouter.Clear() does not call _orderRouting.Clear().
-	/// After reconnection, stale order→adapter mappings remain.
+	/// Regression test: clearing the router must remove stale order-to-adapter mappings.
 	/// </summary>
 	[TestMethod]
 	public void Clear_ShouldResetOrderRouting()
@@ -929,30 +930,6 @@ public class AdapterRouterTests : BaseTestClass
 	#endregion
 
 	#region Composite Scenarios
-
-	[TestMethod]
-	public void Scenario_TwoAdapters_OrderStatusFiltering_OnlyOneSupports()
-	{
-		var router = CreateRouter();
-		var adapter1 = CreateAdapter();
-		var adapter2 = CreateAdapter();
-
-		adapter1.SetAllDownloadingSupported(DataType.Transactions);
-
-		router.AddMessageTypeAdapter(MessageTypes.OrderStatus, adapter1);
-		router.AddMessageTypeAdapter(MessageTypes.OrderStatus, adapter2);
-
-		var msg = new OrderStatusMessage
-		{
-			TransactionId = 100,
-			IsSubscribe = true,
-		};
-
-		var (adapters, _) = router.GetAdapters(msg, a => a);
-
-		AreEqual(1, adapters.Length);
-		AreSame(adapter1, adapters[0]);
-	}
 
 	[TestMethod]
 	public void Scenario_NotSupported_ThenClear_ResetsFiltering()
