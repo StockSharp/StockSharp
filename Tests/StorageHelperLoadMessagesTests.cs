@@ -266,6 +266,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		level1.Length.AssertEqual(2);
 
 		level1.All(m => m.SubscriptionId == 200 && m.OriginalTransactionId == 200 && m.OfflineMode == MessageOfflineModes.Ignore).AssertTrue();
+		level1[0].TryGetDecimal(Level1Fields.BestBidPrice).AssertEqual(99m);
+		level1[0].TryGetDecimal(Level1Fields.BestAskPrice).AssertEqual(101m);
+		level1[1].TryGetDecimal(Level1Fields.BestBidPrice).AssertEqual(100m);
+		level1[1].TryGetDecimal(Level1Fields.BestAskPrice).AssertEqual(102m);
 	}
 
 	[TestMethod]
@@ -305,6 +309,14 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		var depths = outMessages.OfType<QuoteChangeMessage>().ToArray();
 		depths.Length.AssertEqual(2);
 		depths.All(m => m.SubscriptionId == 300 && m.OriginalTransactionId == 300 && m.OfflineMode == MessageOfflineModes.Ignore).AssertTrue();
+		depths[0].Bids.Single().Price.AssertEqual(99m);
+		depths[0].Bids.Single().Volume.AssertEqual(1m);
+		depths[0].Asks.Single().Price.AssertEqual(101m);
+		depths[0].Asks.Single().Volume.AssertEqual(2m);
+		depths[1].Bids.Single().Price.AssertEqual(100m);
+		depths[1].Bids.Single().Volume.AssertEqual(1m);
+		depths[1].Asks.Single().Price.AssertEqual(102m);
+		depths[1].Asks.Single().Volume.AssertEqual(2m);
 	}
 
 	[TestMethod]
@@ -344,6 +356,10 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		var ticks = outMessages.OfType<ExecutionMessage>().ToArray();
 		ticks.Length.AssertEqual(2);
 		ticks.All(m => m.SubscriptionId == 400 && m.OriginalTransactionId == 400 && m.OfflineMode == MessageOfflineModes.Ignore).AssertTrue();
+		ticks[0].TradePrice.AssertEqual(100m);
+		ticks[0].TradeVolume.AssertEqual(1m);
+		ticks[1].TradePrice.AssertEqual(101m);
+		ticks[1].TradeVolume.AssertEqual(2m);
 	}
 
 	[TestMethod]
