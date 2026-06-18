@@ -400,6 +400,9 @@ public class BasketRoutingManager : IBasketRoutingManager
 				LogInfo("Unsubscribe not found: {0}/{1}", originTransId, mdMsg);
 				return RoutingInResult.CreateHandled();
 			}
+
+			// Keep the parent unsubscribe request until all child responses are aggregated.
+			_subscriptionRouting.AddRequest(mdMsg.TransactionId, mdMsg.TypedClone(), null);
 		}
 
 		var routing = ToChild(mdMsg, adapters);
@@ -619,6 +622,19 @@ public class BasketRoutingManager : IBasketRoutingManager
 
 		if (parentId != null)
 		{
+			if (!originMsg.IsSubscribe && needParentResponse)
+			{
+				if (_subscriptionRouting.TryGetRequest(parentId.Value, out var parentRequest, out _))
+				{
+					if (!allError)
+						_subscriptionRouting.RemoveSubscription(parentRequest.OriginalTransactionId);
+
+					_subscriptionRouting.RemoveRequest(parentId.Value);
+				}
+
+				_parentChildMap.RemoveMappings(parentId.Value);
+			}
+
 			if (allError)
 				_subscriptionRouting.RemoveSubscription(parentId.Value);
 

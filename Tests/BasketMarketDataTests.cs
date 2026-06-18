@@ -1240,6 +1240,12 @@ public class BasketMarketDataTests : BasketTestBase
 		responses.Count(r => r.OriginalTransactionId == childUnsubId).AssertEqual(0, "Child unsubscribe ID leaked");
 
 		// State after unsubscribe
+		subscriptionRouting.TryGetSubscription(subId, out _, out _, out _)
+			.AssertFalse("Successful unsubscribe must remove the parent subscription");
+		parentChildMap.TryGetParent(childUnsubId, out _)
+			.AssertFalse("Child unsubscribe mapping must be removed after aggregation");
+		subscriptionRouting.TryGetRequest(unsubId, out _, out _)
+			.AssertFalse("Parent unsubscribe request must be removed after aggregation");
 		connectionState.ConnectedCount.AssertEqual(1, "Connection unchanged");
 		pendingState.Count.AssertEqual(0);
 	}
@@ -1319,6 +1325,10 @@ public class BasketMarketDataTests : BasketTestBase
 			"Subscribe #1 ID must not appear in unsubscribe response");
 
 		// State after unsub1
+		subscriptionRouting.TryGetSubscription(sub1Id, out _, out _, out _)
+			.AssertFalse("Sub1 must be removed after successful unsubscribe");
+		parentChildMap.TryGetParent(childUnsub1, out _)
+			.AssertFalse("Unsubscribe child mapping must be removed");
 		pendingState.Count.AssertEqual(0);
 		connectionState.ConnectedCount.AssertEqual(1);
 
@@ -1449,6 +1459,11 @@ public class BasketMarketDataTests : BasketTestBase
 			.Count(r => r.OriginalTransactionId == unsub1Id).AssertEqual(1,
 			"Exactly 1 response for unsubscribe Ticks");
 
+		subscriptionRouting.TryGetSubscription(sub1Id, out _, out _, out _)
+			.AssertFalse("Sub1 must be removed after successful unsubscribe");
+		parentChildMap.TryGetParent(childUnsub1, out _)
+			.AssertFalse("Sub1 unsubscribe mapping must be removed");
+
 		// Sub2 should still be active
 		subscriptionRouting.TryGetSubscription(sub2Id, out _, out _, out _).AssertTrue("Sub2 still active");
 
@@ -1480,6 +1495,10 @@ public class BasketMarketDataTests : BasketTestBase
 		allResponses.Count(r => r.OriginalTransactionId == childUnsub1).AssertEqual(0, "Child unsub1 leaked");
 		allResponses.Count(r => r.OriginalTransactionId == childUnsub2).AssertEqual(0, "Child unsub2 leaked");
 
+		subscriptionRouting.TryGetSubscription(sub2Id, out _, out _, out _)
+			.AssertFalse("Sub2 must be removed after successful unsubscribe");
+		parentChildMap.TryGetParent(childUnsub2, out _)
+			.AssertFalse("Sub2 unsubscribe mapping must be removed");
 		connectionState.ConnectedCount.AssertEqual(1);
 		pendingState.Count.AssertEqual(0);
 	}
@@ -1569,6 +1588,14 @@ public class BasketMarketDataTests : BasketTestBase
 		GetOut<SubscriptionResponseMessage>()
 			.Count(r => r.OriginalTransactionId == unsub2.TransactionId).AssertEqual(0, "Child unsub2 leaked");
 
+		subscriptionRouting.TryGetSubscription(subId, out _, out _, out _)
+			.AssertFalse("Successful broadcast unsubscribe must remove the parent subscription");
+		parentChildMap.TryGetParent(unsub1.TransactionId, out _)
+			.AssertFalse("First unsubscribe child mapping must be removed");
+		parentChildMap.TryGetParent(unsub2.TransactionId, out _)
+			.AssertFalse("Second unsubscribe child mapping must be removed");
+		subscriptionRouting.TryGetRequest(unsubId, out _, out _)
+			.AssertFalse("Parent broadcast unsubscribe request must be removed");
 		connectionState.ConnectedCount.AssertEqual(2);
 		pendingState.Count.AssertEqual(0);
 	}
