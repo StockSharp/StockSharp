@@ -143,7 +143,7 @@ public class OrderBookIncrementManagerStateTests : BaseTestClass
 		var logReceiver = new TestReceiver();
 
 		state.AddSubscription(1, _secId, logReceiver);
-		state.RemoveSubscription(1);
+		state.RemoveSubscription(1).AssertTrue();
 
 		state.ContainsSubscription(1).AssertFalse();
 	}
@@ -170,7 +170,7 @@ public class OrderBookIncrementManagerStateTests : BaseTestClass
 		result.Bids.Length.AssertEqual(1);
 		result.Asks.Length.AssertEqual(1);
 		subscriptionIds.AssertNotNull();
-		subscriptionIds.Any(id => id == 42L).AssertTrue();
+		subscriptionIds.SequenceEqual([42L]).AssertTrue();
 	}
 
 	[TestMethod]
