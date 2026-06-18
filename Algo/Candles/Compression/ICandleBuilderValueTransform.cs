@@ -68,6 +68,8 @@ public abstract class BaseCandleBuilderValueTransform(DataType buildFrom) : ICan
 			_price = 0;
 			_volume = null;
 			_side = null;
+			_openInterest = null;
+			_priceLevels = null;
 		}
 
 		return false;
