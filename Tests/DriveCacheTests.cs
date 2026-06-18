@@ -56,15 +56,23 @@ public class DriveCacheTests : BaseTestClass
 		using var cache = new DriveCache(fs);
 
 		var drive1 = cache.GetDrive(fs.GetSubTemp());
-		cache.GetDrive(fs.GetSubTemp());
+		var drive2 = cache.GetDrive(fs.GetSubTemp());
 
 		var deleted = 0;
-		cache.DriveDeleted += _ => deleted++;
+		IMarketDataDrive deletedDrive = null;
+		cache.DriveDeleted += drive =>
+		{
+			deleted++;
+			deletedDrive = drive;
+		};
 
 		cache.DeleteDrive(drive1);
 
 		deleted.AssertEqual(1);
-		cache.Drives.OfType<LocalMarketDataDrive>().Count().AssertEqual(1);
+		deletedDrive.AssertSame(drive1);
+		cache.Drives.Contains(drive1).AssertFalse();
+		cache.Drives.Contains(drive2).AssertTrue();
+		cache.Drives.Single().AssertSame(drive2);
 	}
 
 	[TestMethod]
