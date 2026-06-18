@@ -78,6 +78,12 @@ public class MarketEmulatorTests : BaseTestClass
 		}, CancellationToken);
 
 		res.Count.AssertEqual(6);
+		var firstTrade = res.OfType<ExecutionMessage>().Single(m => m.HasTradeInfo());
+		firstTrade.TradePrice.AssertEqual(96m);
+		firstTrade.TradeVolume.AssertEqual(1m);
+		var firstOrder = res.OfType<ExecutionMessage>().Last(m => m.HasOrderInfo && !m.HasTradeInfo());
+		firstOrder.Balance.AssertEqual(1m);
+		firstOrder.OrderState.AssertEqual(OrderStates.Active);
 
 		await emu.SendInMessageAsync(new PositionChangeMessage
 		{
@@ -356,7 +362,7 @@ public class MarketEmulatorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task LimitBuyFOKFull()
+	public async Task LimitBuyFOKNone()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -381,11 +387,11 @@ public class MarketEmulatorTests : BaseTestClass
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertNotNull();
-		m.Balance.AssertEqual(m.OrderVolume);
+		m.Balance.AssertEqual(reg.Volume);
 	}
 
 	[TestMethod]
-	public async Task LimitBuyFOKNone()
+	public async Task LimitBuyFOKFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -414,10 +420,11 @@ public class MarketEmulatorTests : BaseTestClass
 		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
 		m.AssertNotNull();
 		m.TradeVolume.AssertEqual(reg.Volume);
+		m.TradePrice.AssertEqual(101m);
 	}
 
 	[TestMethod]
-	public async Task LimitSellFOKFull()
+	public async Task LimitSellFOKNone()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -442,11 +449,11 @@ public class MarketEmulatorTests : BaseTestClass
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertNotNull();
-		m.Balance.AssertEqual(m.OrderVolume);
+		m.Balance.AssertEqual(reg.Volume);
 	}
 
 	[TestMethod]
-	public async Task LimitSellFOKNone()
+	public async Task LimitSellFOKFull()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -470,6 +477,7 @@ public class MarketEmulatorTests : BaseTestClass
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
 		m.AssertNotNull();
 		m.TradeVolume.AssertEqual(reg.Volume);
+		m.TradePrice.AssertEqual(100m);
 	}
 
 	[TestMethod]
