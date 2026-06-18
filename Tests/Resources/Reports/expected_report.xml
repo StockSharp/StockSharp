@@ -3,7 +3,7 @@
   <parameters>
     <parameter name="Symbol" value="BTCUSD" />
     <parameter name="TimeFrame" value="00:05:00" />
-    <parameter name="StartDate" value="1/1/2024 12:00:00 AM" />
+    <parameter name="StartDate" value="2024-01-01T00:00:00Z" />
     <parameter name="Volume" value="100" />
     <parameter name="IsLong" value="True" />
     <parameter name="MaxPositions" value="5" />
@@ -13,18 +13,18 @@
     <parameter name="MaxDrawdown" value="-500" />
     <parameter name="TradesCount" value="42" />
     <parameter name="AverageTradeTime" value="00:15:00" />
-    <parameter name="BestTradeDate" value="1/15/2024 2:30:00 PM" />
+    <parameter name="BestTradeDate" value="2024-01-15T14:30:00Z" />
     <parameter name="SharpeRatio" value="1.85" />
   </statistics>
   <orders>
-    <order id="1" transactionId="100" securityId="BTCUSD@CRYPTO" direction="Buy" time="1/15/2024 10:00:00 AM" price="50000" state="Done" balance="0" volume="1" type="Limit" />
-    <order id="2" transactionId="101" securityId="BTCUSD@CRYPTO" direction="Sell" time="1/15/2024 11:00:00 AM" price="50500" state="Done" balance="0" volume="1" type="Limit" />
+    <order id="1" transactionId="100" securityId="BTCUSD@CRYPTO" direction="Buy" time="2024-01-15T10:00:00Z" price="50000" state="Done" balance="0" volume="1" type="Limit" />
+    <order id="2" transactionId="101" securityId="BTCUSD@CRYPTO" direction="Sell" time="2024-01-15T11:00:00Z" price="50500" state="Done" balance="0" volume="1" type="Limit" />
   </orders>
   <trades>
-    <trade id="1001" transactionId="100" securityId="BTCUSD@CRYPTO" time="1/15/2024 10:00:00 AM" price="50000" volume="1" order="1" PnL="0" slippage="0" />
-    <trade id="1002" transactionId="101" securityId="BTCUSD@CRYPTO" time="1/15/2024 11:00:00 AM" price="50500" volume="1" order="2" PnL="500" slippage="0" />
+    <trade id="1001" transactionId="100" securityId="BTCUSD@CRYPTO" time="2024-01-15T10:00:00Z" price="50000" volume="1" order="1" PnL="0" slippage="0" />
+    <trade id="1002" transactionId="101" securityId="BTCUSD@CRYPTO" time="2024-01-15T11:00:00Z" price="50500" volume="1" order="2" PnL="500" slippage="0" />
   </trades>
   <positions>
-    <position securityId="BTCUSD@CRYPTO" portfolio="TestPortfolio" openTime="1/15/2024 10:00:00 AM" openPrice="50000" closeTime="1/15/2024 11:00:00 AM" closePrice="50500" maxPosition="1" />
+    <position securityId="BTCUSD@CRYPTO" portfolio="TestPortfolio" openTime="2024-01-15T10:00:00Z" openPrice="50000" closeTime="2024-01-15T11:00:00Z" closePrice="50500" maxPosition="1" />
   </positions>
 </strategy>
