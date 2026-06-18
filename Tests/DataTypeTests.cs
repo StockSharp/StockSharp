@@ -53,10 +53,12 @@ public class DataTypeTests : BaseTestClass
 	[TestMethod]
 	public void CandleSources_Contains_Expected()
 	{
+		DataType.CandleSources.Count.AssertEqual(4);
 		Assert.Contains(DataType.Ticks, DataType.CandleSources);
 		Assert.Contains(DataType.Level1, DataType.CandleSources);
 		Assert.Contains(DataType.MarketDepth, DataType.CandleSources);
 		Assert.Contains(DataType.OrderLog, DataType.CandleSources);
+		DataType.Transactions.IsCandleSource.AssertFalse();
 	}
 
 	[TestMethod]
@@ -384,7 +386,7 @@ public class DataTypeTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ToString_NullMessageType_WithArg_DoesNotThrow()
+	public void ToString_NullMessageType_WithName_ReturnsName()
 	{
 		var dt = new DataType();
 		dt.SetName("custom-name");
