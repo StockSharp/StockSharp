@@ -387,7 +387,7 @@ public class CommissionTests
 	}
 
 	[TestMethod]
-	public void SecurityTypeRule()
+	public void SecurityTypeRule_UnknownSecurity_ReturnsNull()
 	{
 		var now = DateTime.UtcNow;
 
@@ -938,23 +938,15 @@ public class CommissionTests
 		// Act & Assert
 		var orderMsg = CreateOrderMessage(100m, 20m, Inc(ref now));
 		var result = rule.Process(orderMsg);
+		result.AssertEqual(100m);
 
-		// BUG: Expected behavior with percent-based commission:
-		// Should calculate: (price * volume * percent) / 100 = (100 * 20 * 5) / 100 = 100
-		// But current code does: volume * Value = 20 * 5 = 100 (accidentally correct for this case)
-
-		// Let's use a case where the bug is more obvious
 		rule.Value = new Unit { Value = 10m, Type = UnitTypes.Percent };
 		result = rule.Process(orderMsg);
+		result.AssertEqual(200m);
 
-		// Expected (with GetValue): (100 * 20 * 10) / 100 = 200
-		// Actual (current bug): 20 * 10 = 200 (still matches by coincidence)
-
-		// Use a case with different price to expose the bug
+		// A different price distinguishes turnover percentage from volume multiplied by the raw percent.
 		var orderMsg2 = CreateOrderMessage(50m, 10m, Inc(ref now));
 		result = rule.Process(orderMsg2);
-
-		// Expected (with GetValue): (50 * 10 * 10) / 100 = 50
 		result.AssertEqual(50m);
 	}
 
