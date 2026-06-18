@@ -452,6 +452,8 @@ public class EmulatedPortfolioTests : BaseTestClass
 		var pos = portfolio.GetPosition(secId);
 		IsNotNull(pos);
 		AreEqual(0m, pos.TotalBidsVolume);
+		AreEqual(1000m, portfolio.BlockedMoney);
+		AreEqual(9000m, portfolio.AvailableMoney);
 	}
 
 	#endregion
