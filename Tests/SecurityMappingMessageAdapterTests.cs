@@ -76,10 +76,14 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		{
 			SecurityId = Helper.CreateSecurityId()
 		};
+		var processed = new SecurityMessage
+		{
+			SecurityId = Helper.CreateSecurityId()
+		};
 
 		manager
-			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
-			.Returns((message: message, forward: true));
+			.Setup(m => m.ProcessInMessage(message))
+			.Returns((message: processed, forward: true));
 
 		var provider = CreateProvider();
 		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
@@ -87,9 +91,9 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		await adapter.SendInMessageAsync(message, CancellationToken);
 
 		inner.InMessages.Count.AssertEqual(1);
-		inner.InMessages[0].AssertSame(message);
+		inner.InMessages[0].AssertSame(processed);
 
-		manager.Verify(m => m.ProcessInMessage(It.IsAny<Message>()), Times.Once);
+		manager.Verify(m => m.ProcessInMessage(message), Times.Once);
 	}
 
 	[TestMethod]
@@ -104,8 +108,8 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		};
 
 		manager
-			.Setup(m => m.ProcessInMessage(It.IsAny<Message>()))
-			.Returns((message: (Message)null, forward: false));
+			.Setup(m => m.ProcessInMessage(message))
+			.Returns((message: (Message)new ResetMessage(), forward: false));
 
 		var provider = CreateProvider();
 		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
@@ -152,10 +156,14 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		{
 			SecurityId = Helper.CreateSecurityId()
 		};
+		var processed = new SecurityMessage
+		{
+			SecurityId = Helper.CreateSecurityId()
+		};
 
 		manager
-			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
-			.Returns((message: message, forward: true));
+			.Setup(m => m.ProcessOutMessage(message))
+			.Returns((message: processed, forward: true));
 
 		var provider = CreateProvider();
 		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
@@ -166,9 +174,9 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		await inner.SendOutMessageAsync(message, CancellationToken);
 
 		output.Count.AssertEqual(1);
-		output[0].AssertSame(message);
+		output[0].AssertSame(processed);
 
-		manager.Verify(m => m.ProcessOutMessage(It.IsAny<Message>()), Times.Once);
+		manager.Verify(m => m.ProcessOutMessage(message), Times.Once);
 	}
 
 	[TestMethod]
@@ -188,8 +196,8 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 		};
 
 		manager
-			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
-			.Returns((message: (Message)null, forward: false));
+			.Setup(m => m.ProcessOutMessage(message))
+			.Returns((message: (Message)new ResetMessage(), forward: false));
 
 		var provider = CreateProvider();
 		using var adapter = new SecurityMappingMessageAdapter(inner, provider, manager.Object);
