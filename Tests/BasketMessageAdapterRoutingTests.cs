@@ -718,13 +718,12 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	#region Remark 3: NotSupported retry for non-MarketData subscriptions
 
 	/// <summary>
-	/// Remark 3: SecurityLookup → NotSupported from one adapter → retry → second adapter receives request.
-	/// BUG: In current implementation _nonSupportedAdapters is filtered only for MessageTypes.MarketData,
-	/// so retry for SecurityLookup loops or doesn't work.
+	/// SecurityLookup is fanned out to both adapters; one NotSupported response must not
+	/// suppress the successful result from the other adapter.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
-	public async Task Remark3_SecurityLookup_NotSupported_RetriesToNextAdapter()
+	public async Task Remark3_SecurityLookup_NotSupported_PartialFanOutSucceeds()
 	{
 		var subscriptionRouting = new SubscriptionRoutingState();
 		var parentChildMap = new ParentChildMap();
@@ -752,9 +751,10 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		};
 		await SendToBasket(basket, lookupMsg, TestContext.CancellationToken);
 
-		// adapter2 should have received the SecurityLookup (after adapter1 returned NotSupported)
-		adapter2.GetMessages<SecurityLookupMessage>().Any()
-			.AssertTrue("Adapter2 should receive SecurityLookup after adapter1 returned NotSupported");
+		adapter1.GetMessages<SecurityLookupMessage>().Count()
+			.AssertEqual(1, "First adapter should receive one fan-out request");
+		adapter2.GetMessages<SecurityLookupMessage>().Count()
+			.AssertEqual(1, "Second adapter should receive one fan-out request");
 
 		// The response should eventually arrive at the output with parent transId
 		// Either SubscriptionFinishedMessage (success from adapter2) or aggregated error
@@ -794,21 +794,19 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		// The result should be a NotSupported or error response, NOT an infinite loop.
 		// Count how many times adapter1 received OrderStatusMessage — should be at most 2 (original + 1 retry)
 		var received = adapter1.GetMessages<OrderStatusMessage>().Count();
-		(received <= 2).AssertTrue("Adapter should receive OrderStatus at most twice (original + retry), not loop infinitely");
+		received.AssertEqual(1, "Single adapter should receive OrderStatus exactly once");
 
-		// Output should contain some response indicating failure
-		var responses = GetOut<SubscriptionResponseMessage>();
-		responses.Any(r => r.OriginalTransactionId == transId)
-			.AssertTrue("Basket should emit response for failed OrderStatus subscription");
+		var response = GetOut<SubscriptionResponseMessage>()
+			.Single(r => r.OriginalTransactionId == transId);
+		response.Error.AssertNotNull("Failed OrderStatus subscription should return an error");
 	}
 
 	/// <summary>
-	/// Remark 3: OrderStatus → NotSupported from adapter1 → retry → adapter2 receives.
-	/// With two adapters: adapter1 returns NotSupported, adapter2 should get the retry.
+	/// OrderStatus is fanned out to both adapters and succeeds when one adapter supports it.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
-	public async Task Remark3_OrderStatus_NotSupported_TwoAdapters_RetriesToSecond()
+	public async Task Remark3_OrderStatus_NotSupported_PartialFanOutSucceeds()
 	{
 		var (basket, adapter1, adapter2) = CreateBasket(twoAdapters: true);
 		adapter1.SetAllDownloadingSupported(DataType.Transactions);
@@ -826,18 +824,22 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		};
 		await SendToBasket(basket, osMsg, TestContext.CancellationToken);
 
-		// adapter2 should receive the request after adapter1 returned NotSupported
-		adapter2.GetMessages<OrderStatusMessage>().Any()
-			.AssertTrue("Adapter2 should receive OrderStatus after adapter1 returned NotSupported");
+		adapter1.GetMessages<OrderStatusMessage>().Count()
+			.AssertEqual(1, "First adapter should receive one fan-out request");
+		adapter2.GetMessages<OrderStatusMessage>().Count()
+			.AssertEqual(1, "Second adapter should receive one fan-out request");
+
+		GetOut<SubscriptionResponseMessage>()
+			.Single(r => r.OriginalTransactionId == transId)
+			.Error.AssertNull("Partial fan-out success should produce a successful parent response");
 	}
 
 	/// <summary>
-	/// Remark 3: MarketData → NotSupported → retry → filtering works (baseline).
-	/// This test confirms that for MarketData the current mechanism works.
+	/// MarketData is fanned out to both adapters and remains online when one leg succeeds.
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
-	public async Task Remark3_MarketData_NotSupported_RetryWorks()
+	public async Task Remark3_MarketData_NotSupported_PartialFanOutSucceeds()
 	{
 		var subscriptionRouting = new SubscriptionRoutingState();
 
@@ -861,13 +863,14 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 		};
 		await SendToBasket(basket, mdMsg, TestContext.CancellationToken);
 
-		// adapter2 should receive the MarketData request after adapter1 returned NotSupported
-		adapter2.GetMessages<MarketDataMessage>().Any()
-			.AssertTrue("Adapter2 should receive MarketData after adapter1 returned NotSupported");
+		adapter1.GetMessages<MarketDataMessage>().Count(m => m.IsSubscribe)
+			.AssertEqual(1, "First adapter should receive one fan-out subscription");
+		adapter2.GetMessages<MarketDataMessage>().Count(m => m.IsSubscribe)
+			.AssertEqual(1, "Second adapter should receive one fan-out subscription");
 
 		// Successful response should come through
 		GetOut<SubscriptionOnlineMessage>().Any(m => m.OriginalTransactionId == transId)
-			.AssertTrue("Basket should emit SubscriptionOnline with parent transId after successful retry");
+			.AssertTrue("Basket should emit SubscriptionOnline with parent transId after partial fan-out success");
 	}
 
 	/// <summary>
@@ -893,12 +896,11 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 
 		// Should not loop: adapter should receive at most 2 messages
 		var received = adapter1.GetMessages<PortfolioLookupMessage>().Count();
-		(received <= 2).AssertTrue("Adapter should receive PortfolioLookup at most twice, not loop");
+		received.AssertEqual(1, "Single adapter should receive PortfolioLookup exactly once");
 
-		// Output should contain some response
-		var responses = GetOut<SubscriptionResponseMessage>();
-		responses.Any(r => r.OriginalTransactionId == transId)
-			.AssertTrue("Basket should emit response for failed PortfolioLookup subscription");
+		var response = GetOut<SubscriptionResponseMessage>()
+			.Single(r => r.OriginalTransactionId == transId);
+		response.Error.AssertNotNull("Failed PortfolioLookup subscription should return an error");
 	}
 
 	#endregion
@@ -1161,6 +1163,19 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 	{
 		var idGen = new IncrementalIdGenerator();
 		var candleBuilderProvider = new CandleBuilderProvider(new InMemoryExchangeInfoProvider());
+		using var probeAdapter = new TestRoutingInnerAdapter(idGen);
+		using var wrappedProbe = await new AdapterWrapperPipelineBuilder().BuildAsync(
+			probeAdapter,
+			new AdapterWrapperConfiguration
+			{
+				IgnoreExtraAdapters = true,
+				IsHeartbeatOn = _ => true,
+			},
+			TestContext.CancellationToken);
+
+		(wrappedProbe is HeartbeatMessageAdapter)
+			.AssertTrue("IgnoreExtraAdapters must still retain the heartbeat wrapper");
+		AreSame(probeAdapter, ((IMessageAdapterWrapper)wrappedProbe).InnerAdapter);
 
 		var cs = new AdapterConnectionState();
 		var cm = new AdapterConnectionManager(cs);
