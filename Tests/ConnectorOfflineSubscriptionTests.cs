@@ -362,16 +362,12 @@ public class ConnectorOfflineSubscriptionTests : BaseTestClass
 		// When connection restores, the adapter should receive an unsubscribe request
 		await adapter.SimulateConnectionRestored(CancellationToken);
 
-		// After restore we expect the subscription NOT to be re-subscribed,
-		// or an explicit unsubscribe to be sent
 		var reSubscribed = adapter.RecordedSubscriptions.Count;
 		var unsubscribed = adapter.RecordedUnsubscriptions.Count;
 
-		// The subscription should effectively be gone:
-		// either no re-subscribe happened, or an unsubscribe was sent
-		IsTrue(reSubscribed == 0 || unsubscribed > 0,
-			$"After unsubscribe during offline + restore: reSubscribed={reSubscribed}, unsubscribed={unsubscribed}. " +
-			"Expected either no re-subscribe or an explicit unsubscribe.");
+		reSubscribed.AssertEqual(0);
+		unsubscribed.AssertEqual(1);
+		adapter.ActiveSubscriptions.Count.AssertEqual(0);
 	}
 
 	#endregion
