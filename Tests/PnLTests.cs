@@ -318,17 +318,17 @@ public class PnLTests
 			SecurityId = regB.SecurityId,
 			PortfolioName = regB.PortfolioName,
 			Side = Sides.Sell,
-			TradePrice = 180,
+			TradePrice = 194,
 			TradeId = 4,
 			TradeVolume = 5,
 			ServerTime = DateTime.UtcNow,
 		});
 
 		// Portfolio A: (110-100)*10 = 100
-		// Portfolio B: (180-200)*5 = -100
-		// Net: 0
-		manager.RealizedPnL.AssertEqual(0);
-		manager.GetPnL().AssertEqual(0);
+		// Portfolio B: (194-200)*5 = -30
+		// Net: 70
+		manager.RealizedPnL.AssertEqual(70m);
+		manager.GetPnL().AssertEqual(70m);
 	}
 
 	[TestMethod]
@@ -410,15 +410,25 @@ public class PnLTests
 	[TestMethod]
 	public void SaveLoad()
 	{
-		var manager = new PnLManager { UseLevel1 = true };
+		var manager = new PnLManager
+		{
+			UseCandles = true,
+			UseLevel1 = false,
+			UseOrderBook = true,
+			UseOrderLog = false,
+			UseTick = true,
+		};
 
 		var storage = manager.Save();
 
 		var manager2 = new PnLManager();
 
-		manager2.UseLevel1.AssertFalse();
 		manager2.Load(storage);
-		manager2.UseLevel1.AssertTrue();
+		manager2.UseCandles.AssertTrue();
+		manager2.UseLevel1.AssertFalse();
+		manager2.UseOrderBook.AssertTrue();
+		manager2.UseOrderLog.AssertFalse();
+		manager2.UseTick.AssertTrue();
 	}
 
 	[TestMethod]
@@ -465,8 +475,7 @@ public class PnLTests
 		manager.UnrealizedPnL.AssertEqual(30m); // (130-100)*1 = 30
 
 		// Newer market data: candle closes at 150
-		// BUG: ProcessCandle doesn't clear bid/ask prices, so UnrealizedPnL
-		// continues to use stale bid=130 instead of fresh close=150
+		// A candle is newer than the quote and must replace its prices.
 		var candle = new TimeFrameCandleMessage
 		{
 			SecurityId = secId,
@@ -481,7 +490,6 @@ public class PnLTests
 		manager.ProcessMessage(candle);
 
 		// Expected: (150-100)*1 = 50
-		// Actual: (130-100)*1 = 30 (uses stale bid instead of fresh close price)
 		manager.UnrealizedPnL.AssertEqual(50m);
 	}
 
@@ -534,8 +542,7 @@ public class PnLTests
 		manager.UnrealizedPnL.AssertEqual(10m); // (100-90)*1 = 10
 
 		// Newer market data: quote with ask=80
-		// BUG: ProcessQuotes doesn't clear lastPrice, so if ask is not available,
-		// UnrealizedPnL uses stale close=90 instead of fresh ask=80
+		// The newer quote must replace the candle price.
 		var quote = new QuoteChangeMessage
 		{
 			SecurityId = secId,
@@ -594,8 +601,7 @@ public class PnLTests
 		manager.UnrealizedPnL.AssertEqual(40m); // (140-100)*1 = 40
 
 		// Newer market data: quote with bid=130
-		// BUG: ProcessQuotes doesn't clear lastPrice, so UnrealizedPnL
-		// prefers bid=130 over stale lastPrice=140
+		// The newer quote must replace the tick price.
 		var quote = new QuoteChangeMessage
 		{
 			SecurityId = secId,
@@ -653,8 +659,7 @@ public class PnLTests
 		manager.UnrealizedPnL.AssertEqual(30m); // (130-100)*1 = 30
 
 		// Newer market data: tick at 150
-		// BUG: ProcessExecution doesn't clear bid/ask prices, so UnrealizedPnL
-		// continues to use stale bid=130 instead of fresh tick=150
+		// The newer tick must replace the quote prices.
 		var tick = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
@@ -665,7 +670,6 @@ public class PnLTests
 		manager.ProcessMessage(tick);
 
 		// Expected: (150-100)*1 = 50
-		// Actual: (130-100)*1 = 30 (uses stale bid instead of fresh tick)
 		manager.UnrealizedPnL.AssertEqual(50m);
 	}
 }
