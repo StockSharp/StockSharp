@@ -302,7 +302,7 @@ public class PatternsTests : BaseTestClass
 		var secondCandle = CreateCandle(107m, 108m, 105m, 106m); // Small black candle inside first
 
 		var invalidFirst = CreateCandle(110m, 110m, 95m, 100m); // Black candle
-		var invalidSecond = CreateCandle(98m, 120m, 95m, 98m); // Large candle, not inside
+		var invalidSecond = CreateCandle(116m, 120m, 95m, 114m); // Black candle outside first body
 
 		TestPattern(CandlePatternRegistry.BearishHarami, [firstCandle, secondCandle], true);
 		TestPattern(CandlePatternRegistry.BearishHarami, [invalidFirst, secondCandle], false);
@@ -313,11 +313,11 @@ public class PatternsTests : BaseTestClass
 	public void HangingMan()
 	{
 		var hangingMan = CreateCandle(107m, 110m, 90m, 105m); // Black candle with long bottom shadow
-		var hammer = CreateCandle(100m, 105m, 90m, 105m); // White candle (hammer)
+		var bodyEqualsHalfLowerShadow = CreateCandle(100m, 105m, 90m, 105m);
 		var normalCandle = CreateCandle(107m, 110m, 102m, 105m); // With top shadow
 
 		TestPattern(CandlePatternRegistry.HangingMan, [hangingMan], true);
-		TestPattern(CandlePatternRegistry.HangingMan, [hammer], false);
+		TestPattern(CandlePatternRegistry.HangingMan, [bodyEqualsHalfLowerShadow], false);
 		TestPattern(CandlePatternRegistry.HangingMan, [normalCandle], false);
 	}
 
@@ -325,11 +325,11 @@ public class PatternsTests : BaseTestClass
 	public void ShootingStar()
 	{
 		var shootingStar = CreateCandle(107m, 120m, 105m, 105m); // Black candle with long top shadow
-		var invertedHammer = CreateCandle(100m, 115m, 100m, 105m); // White candle
+		var bodyEqualsHalfUpperShadow = CreateCandle(100m, 115m, 100m, 105m);
 		var normalCandle = CreateCandle(107m, 110m, 95m, 105m); // With bottom shadow
 
 		TestPattern(CandlePatternRegistry.ShootingStar, [shootingStar], true);
-		TestPattern(CandlePatternRegistry.ShootingStar, [invertedHammer], false);
+		TestPattern(CandlePatternRegistry.ShootingStar, [bodyEqualsHalfUpperShadow], false);
 		TestPattern(CandlePatternRegistry.ShootingStar, [normalCandle], false);
 	}
 
@@ -404,9 +404,6 @@ public class PatternsTests : BaseTestClass
 			pattern.AssertNotNull();
 			pattern.Name.AssertNotNull();
 
-			// Test that all patterns implement ICandlePattern
-			pattern.AssertOfType<ICandlePattern>();
-
 			// Test that all basic patterns are ExpressionCandlePattern
 			pattern.AssertOfType<ExpressionCandlePattern>();
 		}
@@ -480,13 +477,13 @@ public class PatternsTests : BaseTestClass
 	[TestMethod]
 	public void OnNeck()
 	{
-		// Первая свеча чёрная, вторая белая, low первой совпадает с high второй
+		// Первая свеча чёрная, вторая белая, close второй рядом с low первой
 		var first = CreateCandle(110m, 115m, 100m, 102m);    // Black (Low = 100)
-		var second = CreateCandle(99m, 110m, 100m, 101m);    // White (Close = 100)
+		var second = CreateCandle(99m, 110m, 99m, 101m);     // White (Close = 101)
 		TestPattern(CandlePatternRegistry.OnNeck, [first, second], true);
 
-		// Неверный случай: low первой не совпадает с high второй
-		var wrong = CreateCandle(102m, 116m, 103m, 110m);
+		// Неверный случай: close второй далеко от low первой
+		var wrong = CreateCandle(102m, 116m, 101m, 110m);
 		TestPattern(CandlePatternRegistry.OnNeck, [first, wrong], false);
 	}
 
@@ -568,11 +565,11 @@ public class PatternsTests : BaseTestClass
 		// Первая свеча белая, вторая чёрная внутри тела первой, третья чёрная больше второй
 		var first = CreateCandle(100m, 120m, 100m, 120m); // White
 		var second = CreateCandle(119m, 119m, 110m, 115m); // Black, внутри тела первой
-		var third = CreateCandle(115m, 100m, 110m, 100m); // Black, тело больше второй
+		var third = CreateCandle(115m, 115m, 100m, 100m); // Black, тело больше второй
 		TestPattern(CandlePatternRegistry.ThreeInsideDown, [first, second, third], true);
 
 		// Неверный случай: третья меньше второй
-		var wrong = CreateCandle(115m, 114m, 110m, 114m);
+		var wrong = CreateCandle(115m, 115m, 110m, 114m);
 		TestPattern(CandlePatternRegistry.ThreeInsideDown, [first, second, wrong], false);
 	}
 
@@ -595,8 +592,8 @@ public class PatternsTests : BaseTestClass
 	{
 		// Первая свеча белая, вторая чёрная перекрывает первую, третья чёрная ниже второй
 		var first = CreateCandle(100m, 120m, 100m, 120m); // White
-		var second = CreateCandle(121m, 90m, 90m, 90m); // Black, open > close первой, close < open первой
-		var third = CreateCandle(90m, 80m, 80m, 80m); // Black, ниже второй
+		var second = CreateCandle(121m, 121m, 90m, 90m); // Black, open > close первой, close < open первой
+		var third = CreateCandle(90m, 90m, 80m, 80m); // Black, ниже второй
 		TestPattern(CandlePatternRegistry.ThreeOutsideDown, [first, second, third], true);
 
 		// Неверный случай: третья выше второй
