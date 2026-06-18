@@ -167,7 +167,7 @@ public class AlertProcessingServiceTests
 		schema.IsEnabled = false;
 		_service.Register(schema);
 
-		var msg = CreateLevel1Message("AAPL@NASDAQ", Level1Fields.LastTradePrice, 150m);
+		var msg = CreateLevel1Message("AAPL@NASDAQ", Level1Fields.LastTradePrice, 250m);
 		((IAlertProcessingService)_service).Process(msg);
 
 		await Task.Delay(500);
