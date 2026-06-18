@@ -47,8 +47,10 @@ public class SnapshotHolderTests : BaseTestClass
 		snapshot.AssertNotNull();
 		snapshot.Changes[Level1Fields.LastTradePrice].AssertEqual(100m);
 
-		// Verify it's a clone
-		snapshot.AssertNotSame(msg);
+		holder.TryGetSnapshot(_secId1, out var snapshot2).AssertTrue();
+		snapshot.AssertNotSame(snapshot2);
+		snapshot.Changes[Level1Fields.LastTradePrice] = 999m;
+		snapshot2.Changes[Level1Fields.LastTradePrice].AssertEqual(100m);
 	}
 
 	[TestMethod]
@@ -93,7 +95,7 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Level1_Process_NeedResponse_False_ReturnsNull_ForOptimization()
+	public void Level1_Process_ReturnsDiff()
 	{
 		// Now: always return diff (possibly empty), even when needResponse=false.
 		var holder = new Level1SnapshotHolder();
@@ -374,8 +376,12 @@ public class SnapshotHolderTests : BaseTestClass
 
 		var delta = holder.Process(snap2);
 		delta.AssertNotNull();
-		// GetDelta returns increment with changes
 		delta.State.AssertEqual(QuoteChangeStates.Increment);
+		delta.Bids.Length.AssertEqual(3);
+		delta.Bids.Single(q => q.Price == 100m).Volume.AssertEqual(15m);
+		delta.Bids.Single(q => q.Price == 99m).Volume.AssertEqual(0m);
+		delta.Bids.Single(q => q.Price == 98m).Volume.AssertEqual(3m);
+		delta.Asks.Length.AssertEqual(0);
 
 		// Ensure error counter reset to 0
 		var err = holder.GetErrorCount(_secId1);
@@ -396,16 +402,10 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		// First increment without prior snapshot - builder may build snapshot or return null
 		var res = holder.Process(inc);
-
-		// If result is not null, it must be a SnapshotComplete (builder constructed snapshot from increment)
-		if (res != null)
-		{
-			res.State.AssertEqual(QuoteChangeStates.SnapshotComplete);
-			holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
-			snap.AssertNotNull();
-		}
+		res.AssertNull();
+		holder.TryGetSnapshot(_secId1, out var snap).AssertFalse();
+		snap.AssertNull();
 	}
 
 	[TestMethod]
@@ -451,7 +451,7 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OrderBook_InvalidFullSnapshot_ThrowsOrCreatesSnapshot()
+	public void OrderBook_InvalidFullSnapshot_Throws()
 	{
 		var holder = new OrderBookSnapshotHolder();
 
@@ -466,31 +466,9 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		Exception caught = null;
-		QuoteChangeMessage result = null;
-
-		try
-		{
-			result = holder.Process(fullWithPositions);
-		}
-		catch (InvalidOperationException ex)
-		{
-			caught = ex;
-		}
-
-		// Either throws InvalidOperationException OR creates snapshot - but must be one of these
-		if (caught != null)
-		{
-			// If it throws, no snapshot should exist
-			holder.TryGetSnapshot(_secId1, out var snap).AssertFalse();
-		}
-		else
-		{
-			// If it doesn't throw, result must be valid and snapshot must exist
-			result.AssertNotNull();
-			holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
-			snap.AssertNotNull();
-		}
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(fullWithPositions));
+		holder.TryGetSnapshot(_secId1, out var snap).AssertFalse();
+		snap.AssertNull();
 	}
 
 	[TestMethod]
@@ -685,6 +663,10 @@ public class SnapshotHolderTests : BaseTestClass
 		holder.TryGetSnapshot(_secId1, out var obSnap1).AssertTrue();
 		obSnap1.AssertNotNull();
 		obSnap1.State.AssertEqual(QuoteChangeStates.SnapshotComplete);
+		holder.TryGetSnapshot(_secId1, out var obSnap2).AssertTrue();
+		obSnap1.AssertNotSame(obSnap2);
+		obSnap1.Bids = [new QuoteChange(999m, 1m)];
+		obSnap2.Bids.Single().Price.AssertEqual(100m);
 	}
 
 	[TestMethod]
@@ -1188,7 +1170,7 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OrderBook_SnapshotAndBuilderOutOfSync()
+	public void OrderBook_FailedFullSnapshot_DoesNotCorruptBuilderState()
 	{
 		var holder = new OrderBookSnapshotHolder();
 
@@ -1215,15 +1197,7 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		try
-		{
-			holder.Process(snap2);
-		}
-		catch (InvalidOperationException)
-		{
-			// Expected - builder.TryApply failed
-			// BUG: info.Snapshot now points to snap2, but builder still has snap1 state
-		}
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(snap2));
 
 		// Send simple update increment without positions
 		var inc = new QuoteChangeMessage
@@ -1235,20 +1209,12 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		var res = holder.Process(inc);
-
-		// After increment, check snapshot
+		holder.Process(inc).AssertNotNull();
 		holder.TryGetSnapshot(_secId1, out var snap).AssertTrue();
-
-		// EXPECTED: Should have bid at 101:25 (from snap2 base + increment)
-		// BUG: Will have wrong state because builder has snap1 state but snapshot has snap2
-		// The exact result depends on builder behavior, but state is corrupted
-
-		// At minimum, errorCount should be > 0 if subsequent processing fails
-		var errorCount = holder.GetErrorCount(_secId1);
-		errorCount.AssertNotNull();
-
-		// This test may be flaky depending on builder, but demonstrates the issue
+		snap.Bids.Length.AssertEqual(3);
+		snap.Bids.Single(q => q.Price == 101m).Volume.AssertEqual(25m);
+		snap.Bids.Single(q => q.Price == 100m).Volume.AssertEqual(10m);
+		snap.Bids.Single(q => q.Price == 99m).Volume.AssertEqual(5m);
 	}
 
 	[TestMethod]
@@ -1289,9 +1255,7 @@ public class SnapshotHolderTests : BaseTestClass
 		var errorCount = holder.GetErrorCount(_secId1);
 		errorCount.AssertNotNull();
 
-		// BUG: ErrorCount = 105 (continues to grow)
-		// EXPECTED: ErrorCount should be capped at 100
-		errorCount.Value.AssertEqual(100); // FAILS - will be 105
+		errorCount.Value.AssertEqual(100);
 	}
 
 	[TestMethod]
@@ -1337,9 +1301,7 @@ public class SnapshotHolderTests : BaseTestClass
 
 		var errorCount2 = holder.GetErrorCount(_secId1);
 
-		// BUG: ErrorCount = 101 (incremented again)
-		// EXPECTED: Should stay at 100
-		errorCount2.Value.AssertEqual(100); // FAILS - will be 101
+		errorCount2.Value.AssertEqual(100);
 	}
 
 	[TestMethod]
@@ -1392,26 +1354,17 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		try
-		{
-			holder.Process(snap2);
-		}
-		catch (InvalidOperationException)
-		{
-			// Expected - builder.TryApply failed
-		}
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(snap2));
 
 		// Check ErrorCount after failed full snapshot
 		var errorCountAfter = holder.GetErrorCount(_secId1);
 		errorCountAfter.AssertNotNull();
 
-		// BUG: ErrorCount = 1 (was reset to 0, then incremented)
-		// EXPECTED: ErrorCount = 6 (old value 5 + 1)
-		errorCountAfter.Value.AssertEqual(6); // FAILS - will be 1
+		errorCountAfter.Value.AssertEqual(6);
 	}
 
 	[TestMethod]
-	public void OrderBook_SnapshotUpdated_ButBuilderNotReinitialized()
+	public void OrderBook_FailedFullSnapshot_DoesNotReplaceSnapshot()
 	{
 		var holder = new OrderBookSnapshotHolder();
 
@@ -1441,24 +1394,12 @@ public class SnapshotHolderTests : BaseTestClass
 			Asks = [],
 		};
 
-		try
-		{
-			holder.Process(snap2);
-		}
-		catch (InvalidOperationException)
-		{
-			// Expected - builder.TryApply failed
-			// BUG: info.Snapshot was ALREADY set to snap2 (with bid at 200)
-			// but builder was NOT reinitialized, still thinks bid is at 100
-		}
+		ThrowsExactly<InvalidOperationException>(() => holder.Process(snap2));
 
 		// Now TryGetSnapshot should return what's in info.Snapshot
 		holder.TryGetSnapshot(_secId1, out var snapAfter).AssertTrue();
 
-		// BUG: snapAfter will have bid at 200 (from failed snap2)
-		// EXPECTED: Should still have bid at 100 (from snap1)
-		// Because snap2 processing failed, state should not have changed
-		snapAfter.Bids[0].Price.AssertEqual(100m); // FAILS - will be 200m
+		snapAfter.Bids[0].Price.AssertEqual(100m);
 	}
 
 	#region OrderSnapshotHolder Tests
@@ -1720,7 +1661,7 @@ public class SnapshotHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Order_Process_DoneState_StopsUpdating()
+	public void Order_Lifecycle_PendingActiveDone()
 	{
 		var holder = new OrderSnapshotHolder();
 

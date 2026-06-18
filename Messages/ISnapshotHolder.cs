@@ -206,11 +206,13 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 					{
 						var delta = info.Snapshot.GetDelta(quoteMsg);
 
-						// reinitialize builder state to the new full snapshot
-						var applied = info.Builder.TryApply(quoteMsg)
-							?? throw new InvalidOperationException();
+						// Validate a replacement full snapshot on a fresh builder so a failed
+						// positional update cannot corrupt the active builder state.
+						var builder = new OrderBookIncrementBuilder(secId) { Parent = this };
+						_ = builder.TryApply(quoteMsg) ?? throw new InvalidOperationException();
 
 						info.Snapshot = quoteMsg;
+						info.Builder = builder;
 						info.ErrorCount = 0;
 
 						result = delta;
