@@ -20,8 +20,6 @@ public class CompilationTests : BaseTestClass
 {
 	// Synchronization object for Python script execution
 	// IronPython's ScriptEngine is not thread-safe
-	private static readonly object _pythonSyncRoot = new();
-
 	private static readonly string _analyticsFolder = "../../../../Algo.Analytics.{0}";
 
 	[TestMethod]
@@ -65,9 +63,8 @@ public class CompilationTests : BaseTestClass
 
 		var refs = (await references.ToValidRefImages(token)).ToArray();
 
-		// Run all scripts in parallel
-		// Note: We wrap the entire compile + execute in a lock because IronPython's
-		// ScriptEngine is not thread-safe for compilation, module loading, or execution
+		// Run all compile-and-execute pipelines concurrently. The compiler owns any
+		// synchronization required by its underlying script engine.
 		var tasks = scriptFiles.Select(async scriptFile =>
 		{
 			var scriptName = Path.GetFileNameWithoutExtension(scriptFile);
@@ -82,32 +79,19 @@ public class CompilationTests : BaseTestClass
 				// Compile the script
 				var sources = new string[] { sourceCode };
 
-				// ScriptEngine is not thread-safe - synchronize all engine operations
-				lock (_pythonSyncRoot)
-				{
-					var context = compiler.CreateContext();
+				var context = compiler.CreateContext();
+				var res = await compiler.Compile(scriptName, sources, refs, token);
 
-					var res = compiler.Compile(
-						scriptName,
-						sources,
-						refs,
-						token).Result;
+				Validate(res);
 
-					Validate(res);
+				var assembly = res.GetAssembly(context);
+				assembly.AssertNotNull();
 
-					var assembly = res.GetAssembly(context);
-					assembly.AssertNotNull();
+				var analyticsScriptType = assembly.GetExportedTypes().First(t => t.IsRequiredType<IAnalyticsScript>());
+				var script = analyticsScriptType.CreateInstance<IAnalyticsScript>();
+				script.AssertNotNull();
 
-					var types = assembly.GetExportedTypes();
-					var analyticsScriptType = types.First(t => t.IsRequiredType<IAnalyticsScript>());
-
-					// Create an instance of the script and run
-					var script = analyticsScriptType.CreateInstance<IAnalyticsScript>();
-					script.AssertNotNull();
-
-					// Test script execution with mock data
-					RunAnalyticsScript(script, securities, from, to, storageRegistry, storageRegistry.DefaultDrive, format, timeFrame, token).Wait();
-				}
+				await RunAnalyticsScript(script, securities, from, to, storageRegistry, storageRegistry.DefaultDrive, format, timeFrame, token);
 			}
 			catch (Exception ex)
 			{
@@ -578,9 +562,7 @@ public class CompilationTests : BaseTestClass
 		Validate(res);
 
 		var asm = res.GetAssembly(context);
-
-		if (asm is null)
-			return;
+		asm.AssertNotNull();
 
 		var types = asm.GetExportedTypes();
 
