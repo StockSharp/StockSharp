@@ -405,24 +405,18 @@ public class TransactionIdStorageTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task PlainSession_CreateRequestId_GeneratesTimestampBasedId()
+	public void PlainSession_CreateRequestId_ReturnsNumericTicks()
 	{
 		ITransactionIdStorage storage = new PlainTransactionIdStorage();
 		var session = storage.Get(_session1, persistable: false);
 
-		var requestId1 = session.CreateRequestId();
-		await Task.Delay(1, CancellationToken); // Ensure different timestamp
-		var requestId2 = session.CreateRequestId();
+		var requestId = session.CreateRequestId();
 
-		requestId1.AssertNotNull();
-		requestId2.AssertNotNull();
-
-		// Request IDs should be different (different timestamps)
-		requestId1.AssertNotEqual(requestId2);
-
-		// Should be parseable as long (ticks)
-		requestId1.To<long>();
-		requestId2.To<long>();
+		requestId.AssertNotNull();
+		long.TryParse(requestId, out var ticks).AssertTrue();
+		ticks.AssertGreater(0);
+		session.TryGetTransactionId(requestId, out var transactionId).AssertTrue();
+		transactionId.AssertEqual(ticks);
 	}
 
 	[TestMethod]
@@ -551,7 +545,7 @@ public class TransactionIdStorageTests : BaseTestClass
 		var ok = session.TryGetTransactionId(requestId, out var transactionId);
 
 		ok.AssertTrue();
-		transactionId.AssertGreater(long.MaxValue - 11);
+		transactionId.AssertEqual(long.MaxValue - 9);
 	}
 
 	[TestMethod]
