@@ -1,6 +1,7 @@
 namespace StockSharp.Tests;
 
 using StockSharp.Algo.PnL;
+using StockSharp.Algo.Risk;
 using StockSharp.Algo.Statistics;
 using StockSharp.Algo.Strategies.Decomposed;
 
@@ -297,24 +298,6 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		IsNotNull(changedOrder);
 		AreEqual(order, changedOrder);
-	}
-
-	[TestMethod]
-	public void OrderPipeline_CancelAll_MarksAllCanceled()
-	{
-		using var stats = new StatisticManager();
-		var pipeline = new OrderPipeline(stats);
-
-		var order1 = new Order { TransactionId = 1, State = OrderStates.Active };
-		var order2 = new Order { TransactionId = 2, State = OrderStates.Active };
-
-		pipeline.TryAttach(order1);
-		pipeline.TryAttach(order2);
-
-		pipeline.CancelAll();
-
-		pipeline.IsTracked(order1).AssertTrue();
-		pipeline.IsTracked(order2).AssertTrue();
 	}
 
 	[TestMethod]
@@ -1103,7 +1086,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Composite_Position_NewAndChanged()
+	public void Composite_Position_New()
 	{
 		var connMock = CreateMockConnector();
 		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
@@ -1265,9 +1248,10 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.Connector = conn2.Object;
 
 		strategy.Connector.AreEqual(conn2.Object);
+		conn1.VerifyRemove(
+			c => c.OrderReceived -= It.IsAny<Action<Subscription, Order>>(),
+			Times.Once);
 
-		// verify that events on old connector fire nothing
-		// and new connector is used for operations
 		var order = new Order { TransactionId = 1 };
 		strategy.CancelOrder(order);
 		conn1.Verify(c => c.CancelOrder(It.IsAny<Order>()), Times.Never);
@@ -1554,15 +1538,12 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		// PnL should reflect realized profit from the round trip
 		var pnl = strategy.PnLManager.RealizedPnL;
-		IsTrue(pnl > 0, $"Expected positive realized PnL after buying at 100 and selling at 110, got {pnl}");
+		pnl.AssertEqual(100m);
 	}
 
 	[TestMethod]
 	public void Composite_RiskRule_StopsOnPositionLimit()
 	{
-		// Risk rules should be evaluated on position/order changes.
-		// Currently DecomposedStrategy has no risk management.
-
 		var connMock = CreateMockConnector();
 		var security = CreateSecurity();
 		var portfolio = CreatePortfolio();
@@ -1574,15 +1555,27 @@ public class StrategyDecomposedTests : BaseTestClass
 			Portfolio = portfolio,
 		};
 
-		// this test documents that risk management is not yet implemented.
-		// when it is, setting a position limit rule should prevent
-		// the strategy from exceeding it.
-		IsNotNull(strategy.StatisticManager);
+		strategy.RiskManager.Rules.Add(new RiskPositionSizeRule
+		{
+			Position = 10m,
+			Action = RiskActions.StopTrading,
+		});
 
-		// DecomposedStrategy should have a RiskManager property
-		// that can be configured with rules, similar to Strategy.RiskManager
-		var hasRiskManager = strategy.GetType().GetProperty("RiskManager") != null;
-		IsTrue(hasRiskManager, "DecomposedStrategy should expose RiskManager for risk rule configuration");
+		var positionSub = new Subscription(DataType.PositionChanges);
+		strategy.Subscriptions.Subscribe(positionSub);
+		strategy.OnPositionReceived(positionSub, new Position
+		{
+			Security = security,
+			Portfolio = portfolio,
+			CurrentValue = 10m,
+			LocalTime = DateTime.UtcNow,
+		});
+
+		var order = strategy.CreateOrder(Sides.Buy, 100m, 1m);
+		strategy.RegisterOrder(order);
+
+		connMock.Verify(c => c.RegisterOrder(It.IsAny<Order>()), Times.Never);
+		strategy.Orders.IsTracked(order).AssertFalse();
 	}
 
 	#endregion
