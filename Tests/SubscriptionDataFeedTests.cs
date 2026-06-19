@@ -11,6 +11,7 @@ class DataFeedEmulator : IDisposable
 	public SecurityId SecurityId { get; }
 	public DataType DataType { get; }
 	public TimeSpan Interval { get; }
+	public bool StampSubscriptionIds { get; set; }
 
 	private long _subscriptionId;
 	private volatile bool _isGenerating;
@@ -59,6 +60,8 @@ class DataFeedEmulator : IDisposable
 				if (msg != null)
 				{
 					msg.OriginalTransactionId = _subscriptionId;
+					if (StampSubscriptionIds)
+						msg.SetSubscriptionIds([_subscriptionId]);
 					_outputQueue.Add((Message)msg);
 				}
 			}
@@ -293,11 +296,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		feed.Stop();
 
-		// After unsubscribe, messages should NOT contain subscription ID 100
-		foreach (var msg in messagesAfterUnsubscribe)
-		{
-			msg.GetSubscriptionIds().Count(id => id == 100).AssertEqual(0, "Messages after unsubscribe should NOT have ID 100");
-		}
+		messagesAfterUnsubscribe.Count.AssertEqual(0, "Messages must not be forwarded after unsubscribe");
 	}
 
 	[TestMethod]
@@ -537,7 +536,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 	#region SubscriptionManager Tests
 
 	[TestMethod]
-	public async Task Manager_Subscribe_ReceivesDataWithCorrectId()
+	public async Task Manager_LiveData_PassesThroughUntagged()
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
@@ -588,7 +587,10 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
 
 		var secId = Helper.CreateSecurityId();
-		using var feed = new DataFeedEmulator(secId, DataType.Ticks, TimeSpan.FromMilliseconds(10));
+		using var feed = new DataFeedEmulator(secId, DataType.Ticks, TimeSpan.FromMilliseconds(10))
+		{
+			StampSubscriptionIds = true,
+		};
 
 		// Subscribe
 		manager.ProcessInMessage(new MarketDataMessage
@@ -617,9 +619,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		messagesBeforeUnsubscribe.Count.AssertGreater(0, "Should receive messages before unsubscribe");
 		foreach (var msg in messagesBeforeUnsubscribe)
-		{
-			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live subscriptions");
-		}
+			msg.GetSubscriptionIds().SequenceEqual([100L]).AssertTrue();
 
 		// Unsubscribe
 		manager.ProcessInMessage(new MarketDataMessage
@@ -645,10 +645,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		feed.Stop();
 
-		foreach (var msg in messagesAfterUnsubscribe)
-		{
-			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live data");
-		}
+		messagesAfterUnsubscribe.Count.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -661,8 +658,14 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		var secId1 = new SecurityId { SecurityCode = "SEC1", BoardCode = "BOARD" };
 		var secId2 = new SecurityId { SecurityCode = "SEC2", BoardCode = "BOARD" };
 
-		using var feed1 = new DataFeedEmulator(secId1, DataType.Ticks, TimeSpan.FromMilliseconds(10));
-		using var feed2 = new DataFeedEmulator(secId2, DataType.Ticks, TimeSpan.FromMilliseconds(10));
+		using var feed1 = new DataFeedEmulator(secId1, DataType.Ticks, TimeSpan.FromMilliseconds(10))
+		{
+			StampSubscriptionIds = true,
+		};
+		using var feed2 = new DataFeedEmulator(secId2, DataType.Ticks, TimeSpan.FromMilliseconds(10))
+		{
+			StampSubscriptionIds = true,
+		};
 
 		// Subscribe to both
 		manager.ProcessInMessage(new MarketDataMessage
@@ -719,15 +722,22 @@ public class SubscriptionDataFeedTests : BaseTestClass
 			DataType2 = DataType.Ticks,
 		});
 
-		// Second should still work
-		var messagesAfter = new List<ISubscriptionIdMessage>();
+		var firstAfter = new List<ISubscriptionIdMessage>();
+		var secondAfter = new List<ISubscriptionIdMessage>();
 		for (int i = 0; i < 5; i++)
 		{
-			if (feed2.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
+			if (feed1.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg1))
 			{
-				var (forward, _) = manager.ProcessOutMessage(msg);
+				var (forward, _) = manager.ProcessOutMessage(msg1);
 				if (forward is ISubscriptionIdMessage subMsg)
-					messagesAfter.Add(subMsg);
+					firstAfter.Add(subMsg);
+			}
+
+			if (feed2.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg2))
+			{
+				var (forward, _) = manager.ProcessOutMessage(msg2);
+				if (forward is ISubscriptionIdMessage subMsg)
+					secondAfter.Add(subMsg);
 			}
 		}
 
@@ -736,14 +746,15 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		messages1.Count.AssertGreater(0);
 		messages2.Count.AssertGreater(0);
-		messagesAfter.Count.AssertGreater(0);
+		firstAfter.Count.AssertEqual(0);
+		secondAfter.Count.AssertGreater(0);
 
 		foreach (var msg in messages1)
-			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live subscriptions");
+			msg.GetSubscriptionIds().SequenceEqual([100L]).AssertTrue();
 		foreach (var msg in messages2)
-			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live subscriptions");
-		foreach (var msg in messagesAfter)
-			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live subscriptions");
+			msg.GetSubscriptionIds().SequenceEqual([101L]).AssertTrue();
+		foreach (var msg in secondAfter)
+			msg.GetSubscriptionIds().SequenceEqual([101L]).AssertTrue();
 	}
 
 	#endregion
