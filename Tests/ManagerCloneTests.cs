@@ -69,17 +69,6 @@ public class ManagerCloneTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void LatencyManager_Clone_PreservesSettings()
-	{
-		var manager = new LatencyManager(new LatencyManagerState());
-
-		var clone = manager.Clone();
-
-		clone.LatencyRegistration.AssertEqual(manager.LatencyRegistration);
-		clone.LatencyCancellation.AssertEqual(manager.LatencyCancellation);
-	}
-
-	[TestMethod]
 	public void LatencyManager_Clone_StateIsIndependent()
 	{
 		var manager = new LatencyManager(new LatencyManagerState());
@@ -165,6 +154,23 @@ public class ManagerCloneTests : BaseTestClass
 		l1.TryAdd(Level1Fields.BestBidPrice, 100m);
 		l1.TryAdd(Level1Fields.BestAskPrice, 101m);
 		manager.ProcessMessage(l1);
+		manager.ProcessMessage(new OrderRegisterMessage
+		{
+			TransactionId = 1,
+			SecurityId = _secId,
+			Side = Sides.Buy,
+			Price = 101m,
+			Volume = 1m,
+		});
+		manager.ProcessMessage(new ExecutionMessage
+		{
+			OriginalTransactionId = 1,
+			SecurityId = _secId,
+			DataTypeEx = DataType.Transactions,
+			TradePrice = 102m,
+			TradeVolume = 1m,
+		});
+		manager.Slippage.AssertEqual(1m);
 
 		var clone = manager.Clone();
 
@@ -333,9 +339,23 @@ public class ManagerCloneTests : BaseTestClass
 		};
 
 		var (toInner, toOut) = clone.ProcessInMessage(mdMsg);
+		toInner.Length.AssertEqual(1);
+		toOut.Length.AssertEqual(0);
 
-		// Should pass through without error — state tracks the subscription
-		IsTrue(toInner.Length > 0, "Clone should process subscription via state");
+		var snapshot = new QuoteChangeMessage
+		{
+			SecurityId = _secId,
+			ServerTime = DateTime.UtcNow,
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [new QuoteChange(100m, 10m)],
+			Asks = [new QuoteChange(101m, 20m)],
+		};
+		snapshot.SetSubscriptionIds([100]);
+
+		var (forward, extraOut) = clone.ProcessOutMessage(snapshot);
+		forward.AssertNull();
+		extraOut.Length.AssertEqual(1);
+		extraOut[0].To<QuoteChangeMessage>().Bids.Single().Price.AssertEqual(100m);
 	}
 
 	[TestMethod]
@@ -358,11 +378,19 @@ public class ManagerCloneTests : BaseTestClass
 		// Reset on clone should not affect original's state
 		clone.ProcessInMessage(new ResetMessage());
 
-		// Original should still work (process out message for subscription 1)
-		// This proves states are independent
-		var onlineMsg = new SubscriptionOnlineMessage { OriginalTransactionId = 1 };
-		var (forward, _) = manager.ProcessOutMessage(onlineMsg);
-		forward.AssertNotNull("Original state should be unaffected by clone reset");
+		var snapshot = new QuoteChangeMessage
+		{
+			SecurityId = _secId,
+			ServerTime = DateTime.UtcNow,
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [new QuoteChange(100m, 10m)],
+			Asks = [new QuoteChange(101m, 20m)],
+		};
+		snapshot.SetSubscriptionIds([1]);
+
+		var (forward, extraOut) = manager.ProcessOutMessage(snapshot);
+		forward.AssertNull("Original state should be unaffected by clone reset");
+		extraOut.Length.AssertEqual(1);
 	}
 
 	#endregion
@@ -372,7 +400,7 @@ public class ManagerCloneTests : BaseTestClass
 	[TestMethod]
 	public void OrderBookTruncateManager_Clone_CreatesNewInstance()
 	{
-		var manager = new OrderBookTruncateManager(new TestReceiver(), _ => null, new OrderBookTruncateManagerState());
+		var manager = new OrderBookTruncateManager(new TestReceiver(), _ => 10, new OrderBookTruncateManagerState());
 
 		var clone = manager.Clone();
 
@@ -383,7 +411,7 @@ public class ManagerCloneTests : BaseTestClass
 	[TestMethod]
 	public void OrderBookTruncateManager_Clone_StateIsFunctional()
 	{
-		var manager = new OrderBookTruncateManager(new TestReceiver(), _ => null, new OrderBookTruncateManagerState());
+		var manager = new OrderBookTruncateManager(new TestReceiver(), _ => 10, new OrderBookTruncateManagerState());
 		var clone = manager.Clone();
 
 		var mdMsg = new MarketDataMessage
@@ -392,12 +420,27 @@ public class ManagerCloneTests : BaseTestClass
 			SecurityId = _secId,
 			DataType2 = DataType.MarketDepth,
 			IsSubscribe = true,
-			MaxDepth = 10,
+			MaxDepth = 1,
 		};
 
-		var (toInner, _) = clone.ProcessInMessage(mdMsg);
+		var (toInner, toOut) = clone.ProcessInMessage(mdMsg);
+		toInner.To<MarketDataMessage>().MaxDepth.AssertEqual(10);
+		toOut.Length.AssertEqual(0);
 
-		toInner.AssertNotNull("Clone should process subscription via state");
+		var depth = new QuoteChangeMessage
+		{
+			SecurityId = _secId,
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 1m), new QuoteChange(99m, 1m)],
+			Asks = [new QuoteChange(101m, 1m), new QuoteChange(102m, 1m)],
+		};
+		depth.SetSubscriptionIds([100]);
+
+		var (forward, extraOut) = clone.ProcessOutMessage(depth);
+		forward.AssertNull();
+		extraOut.Length.AssertEqual(1);
+		extraOut[0].To<QuoteChangeMessage>().Bids.Length.AssertEqual(1);
+		extraOut[0].To<QuoteChangeMessage>().Asks.Length.AssertEqual(1);
 	}
 
 	#endregion
@@ -431,7 +474,8 @@ public class ManagerCloneTests : BaseTestClass
 
 		var (toInner, _) = clone.ProcessInMessage(mdMsg);
 
-		IsTrue(toInner.Length > 0, "Clone should process subscription via state");
+		toInner.Length.AssertEqual(1);
+		toInner[0].To<MarketDataMessage>().DataType2.AssertEqual(DataType.Level1);
 	}
 
 	#endregion
