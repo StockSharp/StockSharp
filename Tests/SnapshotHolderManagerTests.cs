@@ -1,17 +1,20 @@
 namespace StockSharp.Tests;
 
+using System.Collections.Concurrent;
+
 [TestClass]
 public class SnapshotHolderManagerTests : BaseTestClass
 {
 	private sealed class TestSnapshotHolder : ISnapshotHolder
 	{
-		public List<ISubscriptionMessage> GetSnapshotCalls { get; } = [];
+		public ConcurrentBag<ISubscriptionMessage> GetSnapshotCalls { get; } = [];
 		public List<Message> SnapshotsToReturn { get; set; } = [];
+		public Func<IEnumerable<Message>> SnapshotsFactory { get; set; }
 
 		public IEnumerable<Message> GetSnapshot(ISubscriptionMessage subscription)
 		{
 			GetSnapshotCalls.Add(subscription);
-			return SnapshotsToReturn;
+			return SnapshotsFactory?.Invoke() ?? SnapshotsToReturn;
 		}
 	}
 
@@ -61,6 +64,15 @@ public class SnapshotHolderManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		toInner[0].AssertSame(subscribe);
 		toOut.Length.AssertEqual(0);
+
+		holder.SnapshotsToReturn = [new Level1ChangeMessage { SecurityId = subscribe.SecurityId }];
+		var (forward, extraOut) = manager.ProcessOutMessage(
+			new SubscriptionOnlineMessage { OriginalTransactionId = subscribe.TransactionId });
+
+		forward.To<SubscriptionOnlineMessage>().OriginalTransactionId.AssertEqual(subscribe.TransactionId);
+		extraOut.Length.AssertEqual(1);
+		holder.GetSnapshotCalls.Count.AssertEqual(1);
+		holder.GetSnapshotCalls.Single().TransactionId.AssertEqual(subscribe.TransactionId);
 	}
 
 	[TestMethod]
@@ -233,10 +245,10 @@ public class SnapshotHolderManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public Task ConcurrentAccess_ThreadSafe()
+	public async Task ConcurrentAccess_ThreadSafe()
 	{
 		var holder = new TestSnapshotHolder();
-		holder.SnapshotsToReturn = [new Level1ChangeMessage { SecurityId = Helper.CreateSecurityId() }];
+		holder.SnapshotsFactory = () => [new Level1ChangeMessage { SecurityId = Helper.CreateSecurityId() }];
 		var manager = new SnapshotHolderManager(holder);
 		var token = CancellationToken;
 
@@ -253,14 +265,18 @@ public class SnapshotHolderManagerTests : BaseTestClass
 			};
 			manager.ProcessInMessage(subscribe);
 
-			if (i % 10 == 0)
-				manager.ProcessInMessage(new ResetMessage());
-
 			var online = new SubscriptionOnlineMessage { OriginalTransactionId = i };
-			manager.ProcessOutMessage(online);
+			var (forward, extraOut) = manager.ProcessOutMessage(online);
 
+			forward.AssertSame(online);
+			extraOut.Length.AssertEqual(1);
+			extraOut[0].To<ISubscriptionIdMessage>().GetSubscriptionIds().SequenceEqual([(long)i]).AssertTrue();
 		}, token)).ToArray();
 
-		return Task.WhenAll(tasks);
+		await Task.WhenAll(tasks);
+		holder.GetSnapshotCalls.Count.AssertEqual(100);
+		holder.GetSnapshotCalls.Select(s => s.TransactionId).OrderBy(id => id)
+			.SequenceEqual(Enumerable.Range(0, 100).Select(i => (long)i))
+			.AssertTrue();
 	}
 }
