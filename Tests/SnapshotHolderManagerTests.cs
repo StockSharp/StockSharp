@@ -252,7 +252,7 @@ public class SnapshotHolderManagerTests : BaseTestClass
 		var manager = new SnapshotHolderManager(holder);
 		var token = CancellationToken;
 
-		var tasks = Enumerable.Range(0, 100).Select(i => Task.Run(() =>
+		var tasks = Enumerable.Range(1, 100).Select(i => Task.Run(() =>
 		{
 			var secId = Helper.CreateSecurityId();
 
@@ -276,7 +276,7 @@ public class SnapshotHolderManagerTests : BaseTestClass
 		await Task.WhenAll(tasks);
 		holder.GetSnapshotCalls.Count.AssertEqual(100);
 		holder.GetSnapshotCalls.Select(s => s.TransactionId).OrderBy(id => id)
-			.SequenceEqual(Enumerable.Range(0, 100).Select(i => (long)i))
+			.SequenceEqual(Enumerable.Range(1, 100).Select(i => (long)i))
 			.AssertTrue();
 	}
 }
