@@ -275,6 +275,12 @@ public static partial class StorageHelper
 			return null;
 
 		var timePrecision = storage.Serializer.TimePrecision;
+
+		// A non-append-only storage may record data out of chronological order, leaving the meta info
+		// first/last bounds reversed. Normalize them so the stored range is [min, max].
+		if (first > last)
+			(first, last) = (last, first);
+
 		return new Range<DateTime>(first, last).Intersect(new Range<DateTime>((from ?? first).StorageTruncate(timePrecision), (to ?? last).StorageTruncate(timePrecision)));
 	}
 
