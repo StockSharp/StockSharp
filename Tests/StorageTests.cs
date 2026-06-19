@@ -32,8 +32,9 @@ public class StorageTests : BaseTestClass
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 		var token = CancellationToken;
+		var storage = GetTradeStorage(secId, format);
 
-		await GetTradeStorage(secId, format).SaveAsync([new ExecutionMessage
+		var tick = new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			TradeId = 1,
@@ -41,26 +42,38 @@ public class StorageTests : BaseTestClass
 			SecurityId = secId,
 			TradeVolume = 10,
 			ServerTime = DateTime.UtcNow
-		}], token);
+		};
+
+		await storage.SaveAsync([tick], token);
+		await LoadTradesAndCompare(storage, [tick], format);
 	}
 
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
-	public async Task TickEmptySecurityBinary(StorageFormats format)
+	public async Task TickEmptySecurity_RoundTrips(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
 		var token = CancellationToken;
+		var storage = GetTradeStorage(secId, format);
+		var serverTime = DateTime.UtcNow;
 
-		await GetTradeStorage(secId, format).SaveAsync([new ExecutionMessage
+		await storage.SaveAsync([new ExecutionMessage
 		{
 			DataTypeEx = DataType.Ticks,
 			TradeId = 1,
 			TradePrice = 10,
 			TradeVolume = 10,
-			ServerTime = DateTime.UtcNow,
+			ServerTime = serverTime,
 		}], token);
+
+		var loaded = await storage.LoadAsync(serverTime, serverTime).ToArrayAsync(token);
+		loaded.Length.AssertEqual(1);
+		loaded[0].SecurityId.AssertEqual(secId);
+		loaded[0].TradeId.AssertEqual(1L);
+		loaded[0].TradePrice.AssertEqual(10m);
+		loaded[0].TradeVolume.AssertEqual(10m);
 	}
 
 	[TestMethod]
@@ -586,7 +599,7 @@ public class StorageTests : BaseTestClass
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
 	//[ExpectedException(typeof(ArgumentException), "Попытка записать неупорядоченные стаканы.")]
-	public async Task DepthInvalidOrder(StorageFormats format)
+	public async Task DepthOutOfOrder_AppendOnlyDisabled_RoundTrips(StorageFormats format)
 	{
 		var security = Helper.CreateSecurity();
 		var secId = security.ToSecurityId();
@@ -610,6 +623,10 @@ public class StorageTests : BaseTestClass
 		storage.AppendOnlyNew = false;
 		await storage.SaveAsync([depth2], token);
 		await storage.SaveAsync([depth1], token);
+
+		var loaded = await storage.LoadAsync(depth1.ServerTime, depth2.ServerTime).ToArrayAsync(token);
+		loaded.Length.AssertEqual(2);
+		loaded.Select(d => d.ServerTime).OrderBy(t => t).SequenceEqual([depth1.ServerTime, depth2.ServerTime]).AssertTrue();
 	}
 
 	[TestMethod]
@@ -674,15 +691,11 @@ public class StorageTests : BaseTestClass
 		await depthStorage.SaveAsync([depth2], token);
 		await LoadDepthsAndCompare(depthStorage, [depth2]);
 
-		try
-		{
-			await depthStorage.SaveAsync([depth1], token);
-		}
-		catch
-		{
-			await depthStorage.DeleteWithCheckAsync(token);
-			throw;
-		}
+		await depthStorage.SaveAsync([depth1], token);
+
+		var loaded = await depthStorage.LoadAsync(depth1.ServerTime, depth2.ServerTime).ToArrayAsync(token);
+		loaded.Length.AssertEqual(2);
+		loaded.Select(d => d.ServerTime).OrderBy(t => t).SequenceEqual([depth1.ServerTime, depth2.ServerTime]).AssertTrue();
 	}
 
 	[TestMethod]
@@ -895,7 +908,7 @@ public class StorageTests : BaseTestClass
 		await LoadDepthsAndCompare(depthStorage, [.. depths.Take(500)]);
 
 		await depthStorage.SaveAsync([.. depths.Skip(500)], token);
-		await LoadDepthsAndCompare(depthStorage, [.. depths.Skip(000)]);
+		await LoadDepthsAndCompare(depthStorage, [.. depths.Skip(500)]);
 
 		await LoadDepthsAndCompare(depthStorage, depths);
 
@@ -3545,7 +3558,7 @@ public class StorageTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public Task VerifyAsync_PathWithNoAccess_ThrowsInvalidOperationException()
+	public Task VerifyAsync_NestedNonExistingPath_ThrowsInvalidOperationException()
 	{
 		var invalidPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "nested", "path");
 		var drive = new LocalMarketDataDrive(Helper.MemorySystem, invalidPath);
