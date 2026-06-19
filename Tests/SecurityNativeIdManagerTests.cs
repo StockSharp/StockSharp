@@ -154,7 +154,7 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 
 		var releaseId = secId;
 		releaseId.Native = nativeId;
-		var (releasedIn, _) = await manager.ProcessInMessageAsync(new ProcessSuspendedMessage(null, releaseId), token);
+		var (releasedIn, _) = await manager.ProcessInMessageAsync(new ProcessSuspendedMessage(releaseId), token);
 		releasedIn.Length.AssertEqual(0);
 	}
 

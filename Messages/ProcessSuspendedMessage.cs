@@ -22,6 +22,17 @@ public class ProcessSuspendedMessage : Message
 	}
 
 	/// <summary>
+	/// Initializes a new instance of the <see cref="ProcessSuspendedMessage"/> carrying an argument for
+	/// direct processing, without a loopback adapter.
+	/// </summary>
+	/// <param name="arg">Additional argument.</param>
+	public ProcessSuspendedMessage(object arg)
+		: this()
+	{
+		Arg = arg;
+	}
+
+	/// <summary>
 	/// Initializes a new instance of the <see cref="ProcessSuspendedMessage"/>.
 	/// </summary>
 	/// <param name="adapter">Adapter.</param>
