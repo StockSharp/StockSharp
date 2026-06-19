@@ -716,8 +716,7 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 			new SubscriptionResponseMessage { OriginalTransactionId = transId },
 			out _, out _, out _);
 
-		// Should either return subscription (idempotent) or null (already processed)
-		// But should NOT crash or corrupt state
+		second.AssertSame(subscription);
 		subscription.State.AssertEqual(SubscriptionStates.Active,
 			"State should remain Active after duplicate response");
 	}
@@ -735,12 +734,9 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 			new SubscriptionOnlineMessage { OriginalTransactionId = transId },
 			out _);
 
-		// Stopped→Online is valid per StateValidator
-		if (result != null)
-		{
-			subscription.State.AssertEqual(SubscriptionStates.Online,
-				"Online before Response: state should be Online");
-		}
+		result.AssertSame(subscription);
+		subscription.State.AssertEqual(SubscriptionStates.Online,
+			"Online before Response: state should be Online");
 	}
 
 	[TestMethod]
@@ -756,17 +752,15 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 			new SubscriptionFinishedMessage { OriginalTransactionId = transId },
 			out _);
 
-		if (result != null)
-		{
-			subscription.State.AssertEqual(SubscriptionStates.Finished);
+		result.AssertSame(subscription);
+		subscription.State.AssertEqual(SubscriptionStates.Finished);
 
-			// Subscription removed — late response should return null
-			var lateResponse = manager.ProcessResponse(
-				new SubscriptionResponseMessage { OriginalTransactionId = transId },
-				out _, out _, out _);
+		// Subscription removed — late response should return null
+		var lateResponse = manager.ProcessResponse(
+			new SubscriptionResponseMessage { OriginalTransactionId = transId },
+			out _, out _, out _);
 
-			lateResponse.AssertNull("Late response after early Finished should return null");
-		}
+		lateResponse.AssertNull("Late response after early Finished should return null");
 	}
 
 	#endregion
