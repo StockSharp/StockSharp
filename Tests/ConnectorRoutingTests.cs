@@ -39,6 +39,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		public int TotalSubscribeReceived;
 		public int TotalUnsubscribeReceived;
 		public List<Exception> Errors { get; } = [];
+		public SecurityId? RejectSubscriptionFor { get; set; }
 
 		public LiveFeedCryptoAdapter(string exchangeName, SecurityId[] supportedSecurities, IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
@@ -189,6 +190,16 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		private async ValueTask ProcessMarketData(MarketDataMessage msg, CancellationToken cancellationToken)
 		{
+			if (msg.IsSubscribe && RejectSubscriptionFor == msg.SecurityId)
+			{
+				await SendOutMessageAsync(new SubscriptionResponseMessage
+				{
+					OriginalTransactionId = msg.TransactionId,
+					Error = new InvalidOperationException($"Subscription rejected for {msg.SecurityId}."),
+				}, cancellationToken);
+				return;
+			}
+
 			await SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = msg.TransactionId }, cancellationToken);
 
 			if (msg.IsSubscribe)
@@ -743,16 +754,11 @@ public class ConnectorRoutingTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Tests rapid subscribe/unsubscribe cycles.
-	/// NOTE: This test documents a race condition in BasketMessageAdapter.
-	/// When subscribe and unsubscribe messages are sent in rapid succession,
-	/// some messages may be lost due to async processing in _subscriptions dictionary.
-	/// The test uses sufficient delays to usually pass, but may occasionally fail
-	/// demonstrating the underlying timing issue.
+	/// Tests repeated subscribe/unsubscribe rounds with online confirmation.
 	/// </summary>
 	[TestMethod]
 	[Timeout(60000, CooperativeCancellation = true)]
-	public async Task StressTest_RapidSubscriptionCycles()
+	public async Task Subscriptions_RepeatedRounds_AllProcessed()
 	{
 		var securities = Enumerable.Range(0, 5)
 			.Select(i => new SecurityId { SecurityCode = $"TOKEN{i}USDT", BoardCode = "BINANCE" })
@@ -765,8 +771,25 @@ public class ConnectorRoutingTests : BaseTestClass
 		foreach (var secId in securities)
 			connector.Adapter.SecurityAdapterProvider.SetAdapter((secId, null), adapter);
 
-		var onlineSubscriptions = new ConcurrentDictionary<long, bool>();
-		connector.SubscriptionOnline += sub => onlineSubscriptions[sub.TransactionId] = true;
+		var expected = securities.Length;
+		var online = new ConcurrentDictionary<long, bool>();
+		var stopped = new ConcurrentDictionary<long, bool>();
+		TaskCompletionSource<bool> onlineAll = null;
+		TaskCompletionSource<bool> stoppedAll = null;
+
+		// Gate each round on actual subscription lifecycle events instead of timed delays.
+		connector.SubscriptionOnline += sub =>
+		{
+			online[sub.TransactionId] = true;
+			if (online.Count >= expected)
+				onlineAll?.TrySetResult(true);
+		};
+		connector.SubscriptionStopped += (sub, error) =>
+		{
+			stopped[sub.TransactionId] = true;
+			if (stopped.Count >= expected)
+				stoppedAll?.TrySetResult(true);
+		};
 
 		await connector.ConnectAsync(CancellationToken);
 
@@ -779,15 +802,17 @@ public class ConnectorRoutingTests : BaseTestClass
 			securityObjects.Add(sec);
 		}
 
-		await Task.Delay(200, CancellationToken);
-
 		const int rounds = 3;
 		var totalSubscribes = 0;
 		var totalUnsubscribes = 0;
 
-		for (int round = 0; round < rounds; round++)
+		for (var round = 0; round < rounds; round++)
 		{
-			onlineSubscriptions.Clear();
+			online.Clear();
+			stopped.Clear();
+			onlineAll = AsyncHelper.CreateTaskCompletionSource<bool>();
+			stoppedAll = AsyncHelper.CreateTaskCompletionSource<bool>();
+
 			var subscriptions = new List<Subscription>();
 
 			// Subscribe to all
@@ -799,9 +824,8 @@ public class ConnectorRoutingTests : BaseTestClass
 				totalSubscribes++;
 			}
 
-			// Wait for online confirmation before unsubscribing
-			for (int i = 0; i < 30 && onlineSubscriptions.Count < securities.Length; i++)
-				await Task.Delay(100, CancellationToken);
+			// Wait until every subscription is online before unsubscribing.
+			await onlineAll.Task.WithCancellation(CancellationToken);
 
 			// Unsubscribe from all
 			foreach (var sub in subscriptions)
@@ -810,16 +834,11 @@ public class ConnectorRoutingTests : BaseTestClass
 				totalUnsubscribes++;
 			}
 
-			await Task.Delay(500, CancellationToken);
+			// Wait until every subscription is stopped before the next round.
+			await stoppedAll.Task.WithCancellation(CancellationToken);
 		}
 
 		await connector.DisconnectAsync(CancellationToken);
-
-		Console.WriteLine($"Total subscribe attempts: {totalSubscribes}");
-		Console.WriteLine($"Subscribe requests received: {adapter.TotalSubscribeReceived}");
-		Console.WriteLine($"Total unsubscribe attempts: {totalUnsubscribes}");
-		Console.WriteLine($"Unsubscribe requests received: {adapter.TotalUnsubscribeReceived}");
-		Console.WriteLine($"Active subscriptions remaining: {adapter.ActiveSubscriptionCount}");
 
 		// Verify all messages were processed
 		adapter.TotalSubscribeReceived.AssertEqual(totalSubscribes,
@@ -844,16 +863,19 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		var connector = new Connector();
 		var adapter = new LiveFeedCryptoAdapter("Binance", [binanceSecId], connector.TransactionIdGenerator);
+		var unknownSecId = new SecurityId { SecurityCode = "UNKNOWN", BoardCode = "BINANCE" };
+		adapter.RejectSubscriptionFor = unknownSecId;
 		connector.Adapter.InnerAdapters.Add(adapter);
 		connector.Adapter.SecurityAdapterProvider.SetAdapter((binanceSecId, null), adapter);
+		connector.Adapter.SecurityAdapterProvider.SetAdapter((unknownSecId, null), adapter);
 
-		var subscriptionErrors = new ConcurrentBag<Exception>();
-		connector.Error += ex => subscriptionErrors.Add(ex);
+		var subscriptionErrors = new ConcurrentBag<(Subscription subscription, Exception error, bool isSubscribe)>();
+		connector.SubscriptionFailed += (subscription, error, isSubscribe) =>
+			subscriptionErrors.Add((subscription, error, isSubscribe));
 
 		await connector.ConnectAsync(CancellationToken);
 
 		// Subscribe to security that doesn't exist in adapter
-		var unknownSecId = new SecurityId { SecurityCode = "UNKNOWN", BoardCode = "BINANCE" };
 		var unknownSec = new Security { Id = unknownSecId.ToStringId() };
 		await connector.SendOutMessageAsync(unknownSec.ToMessage(), CancellationToken);
 
@@ -864,10 +886,11 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		await connector.DisconnectAsync(CancellationToken);
 
-		// Log what happened
-		Console.WriteLine($"Subscription errors: {subscriptionErrors.Count}");
-		foreach (var err in subscriptionErrors)
-			Console.WriteLine($"  - {err.Message}");
+		subscriptionErrors.Count.AssertEqual(1);
+		var failure = subscriptionErrors.Single();
+		failure.subscription.AssertSame(sub);
+		failure.isSubscribe.AssertTrue();
+		failure.error.AssertOfType<InvalidOperationException>();
 	}
 
 	/// <summary>
@@ -888,6 +911,7 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		connector.Adapter.InnerAdapters.Add(binanceAdapter);
 		connector.Adapter.InnerAdapters.Add(kucoinAdapter);
+		connector.SubscriptionsOnConnect.Clear();
 
 		// NOTE: Not setting SecurityAdapterProvider - testing fallback behavior
 
@@ -907,10 +931,8 @@ public class ConnectorRoutingTests : BaseTestClass
 		Console.WriteLine($"Binance received {binanceMarketData.Count} MarketData messages");
 		Console.WriteLine($"Kucoin received {kucoinMarketData.Count} MarketData messages");
 
-		// Without mapping, the subscription might go to one or both adapters
-		// This documents the actual behavior
-		var totalReceived = binanceMarketData.Count + kucoinMarketData.Count;
-		(totalReceived >= 1).AssertTrue($"At least one adapter should receive the subscription, total: {totalReceived}");
+		binanceMarketData.Count(m => m.IsSubscribe).AssertEqual(1);
+		kucoinMarketData.Count(m => m.IsSubscribe).AssertEqual(1);
 
 		await connector.DisconnectAsync(CancellationToken);
 	}
@@ -1092,8 +1114,8 @@ public class ConnectorRoutingTests : BaseTestClass
 		// Disconnect - subscriptions should be cleaned up
 		await connector.DisconnectAsync(CancellationToken);
 
-		// Note: Active subscriptions in adapter depend on whether unsubscribe messages are sent
-		Console.WriteLine($"Active subscriptions after disconnect: {adapter.ActiveSubscriptionCount}");
+		adapter.ActiveSubscriptionCount.AssertEqual(0);
+		adapter.TotalUnsubscribeReceived.AssertGreater(0);
 	}
 
 	#endregion
