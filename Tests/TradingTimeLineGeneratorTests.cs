@@ -128,7 +128,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 
 		ranges.Count.AssertEqual(1);
 		ranges[0].range.Min.AssertEqual(TimeSpan.Zero);
-		// LessOneDay is 23:59:59.9999999
+		ranges[0].range.Max.AssertEqual(TimeHelper.LessOneDay);
 	}
 
 	#endregion
@@ -189,8 +189,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 
 		var messages = generator.GetPostTradeTimeMessages(date, lastTime, interval, count).ToList();
 
-		// Should stop before exceeding day boundary
-		(messages.Count < count).AssertTrue();
+		messages.Count.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -235,8 +234,7 @@ public class TradingTimeLineGeneratorTests : BaseTestClass
 
 		var messages = generator.GetSimpleTimeLine(boards, TestDate, TimeSpan.FromSeconds(1)).ToList();
 
-		// Should have at least start and end times
-		(messages.Count >= 2).AssertTrue();
+		messages.Count.AssertEqual(2);
 		messages[0].ServerTime.TimeOfDay.AssertEqual(TimeSpan.FromHours(9));
 		messages[1].ServerTime.TimeOfDay.AssertEqual(TimeSpan.FromHours(18));
 	}
