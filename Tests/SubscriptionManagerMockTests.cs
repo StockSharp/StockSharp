@@ -119,8 +119,13 @@ public class SubscriptionManagerMockTests : BaseTestClass
 
 		var (toInner, toOut) = mgr.ProcessInMessage(unsubMsg);
 
-		stateMock.Verify(s => s.UpdateSubscriptionState(1, It.IsAny<SubscriptionStates>()), Times.Once);
+		stateMock.Verify(s => s.UpdateSubscriptionState(1, SubscriptionStates.Stopped), Times.Once);
 		toInner.Length.AssertEqual(1);
+		var sent = toInner[0].To<MarketDataMessage>();
+		sent.IsSubscribe.AssertFalse();
+		sent.OriginalTransactionId.AssertEqual(1);
+		sent.TransactionId.AssertEqual(100);
+		sent.DataType2.AssertEqual(DataType.Ticks);
 	}
 
 	[TestMethod]
@@ -145,7 +150,9 @@ public class SubscriptionManagerMockTests : BaseTestClass
 
 		toInner.Length.AssertEqual(0);
 		toOut.Length.AssertEqual(1);
-		toOut[0].Type.AssertEqual(MessageTypes.SubscriptionResponse);
+		var response = toOut[0].To<SubscriptionResponseMessage>();
+		response.OriginalTransactionId.AssertEqual(1);
+		response.Error.AssertNotNull();
 	}
 
 	[TestMethod]
