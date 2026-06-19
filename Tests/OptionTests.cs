@@ -59,10 +59,10 @@ public class OptionTests : BaseTestClass
 		const decimal strike = 100m;
 		const decimal riskFree = 0.05m;
 		const decimal dividend = 0m;
-		const decimal deviation = 0m; // Zero deviation causes division by zero
-		const double timeToExp = 0.5; // double, not decimal
+		const decimal deviation = 0m;
+		const double timeToExp = 0.5;
 
-		// Should return 0 instead of throwing DivideByZeroException
+		// Zero deviation makes the divisor zero, so D1 returns the degenerate default 0.
 		var d1 = DerivativesHelper.D1(assetPrice, strike, riskFree, dividend, deviation, timeToExp);
 		d1.AssertEqual(0);
 	}
@@ -75,11 +75,26 @@ public class OptionTests : BaseTestClass
 		const decimal riskFree = 0.05m;
 		const decimal dividend = 0m;
 		const decimal deviation = 0.2m;
-		const double timeToExp = 0; // Zero time causes Sqrt(0) = 0, division by zero
+		const double timeToExp = 0;
 
-		// Should return 0 instead of throwing DivideByZeroException
+		// Zero time to expiration makes the divisor zero, so D1 returns the degenerate default 0.
 		var d1 = DerivativesHelper.D1(assetPrice, strike, riskFree, dividend, deviation, timeToExp);
 		d1.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void D1_NegativeDeviation_Throws()
+	{
+		const decimal assetPrice = 100m;
+		const decimal strike = 100m;
+		const decimal riskFree = 0.05m;
+		const decimal dividend = 0m;
+		const decimal deviation = -0.2m;
+		const double timeToExp = 0.5;
+
+		// Negative deviation is an invalid input and must be rejected, not silently defaulted.
+		ThrowsExactly<ArgumentOutOfRangeException>(() =>
+			DerivativesHelper.D1(assetPrice, strike, riskFree, dividend, deviation, timeToExp));
 	}
 
 	[TestMethod]
