@@ -8,6 +8,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 	}
 
 	private static SecurityId CreateSecurityId() => Helper.CreateSecurityId();
+	private static int GetScale(decimal value) => (decimal.GetBits(value)[3] >> 16) & 0x7F;
 
 	[TestMethod]
 	public void ProcessInMessage_Reset_ClearsState()
@@ -32,6 +33,17 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		toInner[0].Type.AssertEqual(MessageTypes.Reset);
 		toOut.Length.AssertEqual(0);
+
+		var execution = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 100,
+			SecurityId = default,
+			HasOrderInfo = true,
+			OrderState = OrderStates.Active,
+		};
+		manager.ProcessOutMessage(execution);
+		execution.SecurityId.AssertEqual(default);
 	}
 
 	[TestMethod]
@@ -56,6 +68,9 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		processed.Price.AssertEqual(10.5m);
 		processed.Volume.AssertEqual(5m);
 		processed.VisibleVolume.AssertEqual(3m);
+		GetScale(processed.Price).AssertEqual(1);
+		GetScale(processed.Volume).AssertEqual(0);
+		GetScale(processed.VisibleVolume.Value).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -90,6 +105,8 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		var processed = (OrderReplaceMessage)toInner[0];
 		processed.Price.AssertEqual(11.5m);
 		processed.Volume.AssertEqual(6m);
+		GetScale(processed.Price).AssertEqual(1);
+		GetScale(processed.Volume).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -110,6 +127,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		var processed = (OrderCancelMessage)toInner[0];
 		processed.Volume.AssertEqual(3m);
+		GetScale(processed.Volume.Value).AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -129,6 +147,18 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		toInner[0].AssertSame(statusMsg);
 		toOut.Length.AssertEqual(0);
+
+		var execution = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 200,
+			TransactionId = 1,
+			HasOrderInfo = true,
+			SecurityId = CreateSecurityId(),
+			OrderState = OrderStates.Active,
+		};
+		var (forward, _, _) = manager.ProcessOutMessage(execution);
+		forward.AssertNull("Transaction-log subscriptions must accumulate executions until Online or Finished.");
 	}
 
 	[TestMethod]
@@ -148,6 +178,19 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		toInner.Length.AssertEqual(1);
 		toInner[0].AssertSame(statusMsg);
 		toOut.Length.AssertEqual(0);
+
+		var trade = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 200,
+			TradeId = 1,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+		};
+		var (forward, _, processSuspended) = manager.ProcessOutMessage(trade);
+		forward.AssertSame(trade);
+		trade.OriginalTransactionId.AssertEqual(0);
+		processSuspended.AssertTrue();
 	}
 
 	[TestMethod]
@@ -175,6 +218,20 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		forward.AssertSame(errorResponse);
 		extraOut.Length.AssertEqual(0);
 		processSuspended.AssertFalse();
+
+		var execution = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 200,
+			TransactionId = 1,
+			HasOrderInfo = true,
+			SecurityId = CreateSecurityId(),
+			OrderState = OrderStates.Active,
+		};
+		(forward, extraOut, processSuspended) = manager.ProcessOutMessage(execution);
+		forward.AssertSame(execution);
+		extraOut.Length.AssertEqual(0);
+		processSuspended.AssertTrue();
 	}
 
 	[TestMethod]
@@ -623,7 +680,7 @@ public class TransactionOrderingManagerTests : BaseTestClass
 		forward.AssertSame(onlineMsg);
 
 		// extraOut should contain: order snapshot + trade
-		(extraOut.Length >= 2).AssertTrue();
+		extraOut.Length.AssertEqual(2);
 
 		// first element is the order snapshot
 		var orderSnapshot = (ExecutionMessage)extraOut[0];
