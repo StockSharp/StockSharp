@@ -319,8 +319,19 @@ public class UnitTests : BaseTestClass
 	[TestMethod]
 	public void Arithmetic()
 	{
-		var security = Helper.CreateSecurity();
+		var absolute = new Unit(100m, UnitTypes.Absolute);
+		var tenPercent = new Unit(10m, UnitTypes.Percent);
 
+		(absolute + tenPercent).AssertEqual(new Unit(110m, UnitTypes.Absolute));
+		(absolute - tenPercent).AssertEqual(new Unit(90m, UnitTypes.Absolute));
+		(absolute * tenPercent).AssertEqual(new Unit(10m, UnitTypes.Absolute));
+		(absolute / tenPercent).AssertEqual(new Unit(10m, UnitTypes.Absolute));
+
+		var negative = new Unit(-100m, UnitTypes.Absolute);
+		(negative + tenPercent).AssertEqual(new Unit(-90m, UnitTypes.Absolute));
+		(negative - tenPercent).AssertEqual(new Unit(-110m, UnitTypes.Absolute));
+
+		// Randomized cross-check across all absolute/percent combinations.
 		for (var i = 0; i < 100000; i++)
 		{
 			var u1 = RandomUnit();
@@ -339,8 +350,6 @@ public class UnitTests : BaseTestClass
 
 	private static void ProcessArithmetic(Unit u1, Unit u2, Unit result, Func<decimal, decimal, decimal> opr, bool transAbs)
 	{
-		//result.Security.AssertSame(security);
-
 		// Check if operation is multiplication
 		var isMultiply = !transAbs && opr(10, 2) == 20;
 
@@ -442,9 +451,9 @@ public class UnitTests : BaseTestClass
 		negativePercent.Type.AssertEqual(UnitTypes.Percent);
 		negativePercent.Value.AssertEqual(-50m);
 
-		var limit = new Unit(30m, UnitTypes.Absolute);
+		var limit = new Unit(30m, UnitTypes.Limit);
 		var negativeLimit = -limit;
-		negativeLimit.Type.AssertEqual(UnitTypes.Absolute);
+		negativeLimit.Type.AssertEqual(UnitTypes.Limit);
 		negativeLimit.Value.AssertEqual(-30m);
 	}
 
@@ -501,7 +510,7 @@ public class UnitTests : BaseTestClass
 		var unit = new Unit(1234.5678m, UnitTypes.Percent);
 
 		// Стандартный вывод
-		unit.ToString().AssertEqual("1234.5678%");
+		unit.ToString(null, CultureInfo.InvariantCulture).AssertEqual("1234.5678%");
 
 		// Формат с двумя десятичными знаками
 		unit.ToString("F2", CultureInfo.InvariantCulture).AssertEqual("1234.57%");
