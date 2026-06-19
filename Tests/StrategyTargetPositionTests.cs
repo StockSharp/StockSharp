@@ -7,7 +7,7 @@ using StockSharp.Algo.Strategies;
 public class StrategyTargetPositionTests : BaseTestClass
 {
 	[TestMethod]
-	public void SetTargetPosition_CreatesManager()
+	public void SetTargetPosition_RoundTripsThroughStrategy()
 	{
 		var strategy = new Strategy
 		{
@@ -15,7 +15,8 @@ public class StrategyTargetPositionTests : BaseTestClass
 			Portfolio = new Portfolio { Name = "test" },
 		};
 
-		IsNotNull(strategy.TargetPositionManager);
+		strategy.SetTargetPosition(25m);
+		strategy.GetTargetPosition().AssertEqual(25m);
 	}
 
 	[TestMethod]
