@@ -167,8 +167,8 @@ public class FillGapsMessageAdapterTests : BaseTestClass
 		var online = (MarketDataMessage)inner.InMessages[2];
 		online.TransactionId.AssertEqual(1);
 		online.IsSubscribe.AssertTrue();
-		(online.From is null || online.From.Value == default).AssertTrue();
-		(online.To is null || online.To.Value == default).AssertTrue();
+		online.From.AssertNull();
+		online.To.AssertNull();
 		online.FillGaps.AssertNull();
 	}
 }
