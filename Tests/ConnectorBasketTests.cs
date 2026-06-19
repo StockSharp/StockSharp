@@ -323,21 +323,20 @@ public class ConnectorBasketTests : BaseTestClass
 
 		var got = new List<Level1ChangeMessage>();
 		using var enumCts = new CancellationTokenSource();
+		var baseTime = new DateTime(2025, 1, 1, 10, 0, 0).UtcKind();
+		var expectedTimes = Enumerable.Range(0, 3).Select(i => baseTime.AddMinutes(i)).ToArray();
 
 		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
 		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+			try
 			{
-				got.Add(l1);
-				if (got.Count >= 3)
-				{
-					enumCts.Cancel();
-					break;
-				}
+				await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+					got.Add(l1);
 			}
+			catch (OperationCanceledException) when (enumCts.IsCancellationRequested) { }
 		}, CancellationToken);
 
 		await started.Task.WithCancellation(CancellationToken);
@@ -355,12 +354,19 @@ public class ConnectorBasketTests : BaseTestClass
 		// --- Send data ---
 		for (var i = 0; i < 3; i++)
 		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
+			var l1 = new Level1ChangeMessage { ServerTime = expectedTimes[i] };
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
+		while (got.Count < expectedTimes.Length)
+			await Task.Delay(10, CancellationToken);
+
+		await Task.Delay(100, CancellationToken);
+		enumCts.Cancel();
 		await enumerating.WithCancellation(CancellationToken);
 		HasCount(3, got);
+		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Live basket subscription should preserve order without duplicates");
 
 		// Wait for unsubscribe
 		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
@@ -603,12 +609,12 @@ public class ConnectorBasketTests : BaseTestClass
 
 		await enumTask.WithCancellation(CancellationToken);
 
-		events.Count.AssertGreater(3, "Should receive events for order states and trades");
+		events.Count.AssertEqual(7, "Expected Pending, Active, two order+trade pairs, and Done");
 		AreEqual(OrderStates.Done, order.State);
 		AreEqual(123L, order.Id);
 
 		var tradeEvents = events.Where(e => e.trade != null).ToList();
-		tradeEvents.Count.AssertGreater(1, "Should have received trade events");
+		tradeEvents.Count.AssertEqual(2, "Should have received exactly two trade events");
 
 		var tradePrices = tradeEvents.Select(e => e.trade.Trade.Price).ToList();
 		tradePrices.AssertContains(100.5m);
@@ -944,16 +950,10 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(15_000, CooperativeCancellation = true)]
 	public async Task CandleHistLive_LiveSubscriptionShouldReachAdapter()
 	{
-		// Bug repro: user subscribes to candles with From + To=null (hist+live).
-		// CandleBuilderManager always caps To=CurrentTime when IsSupportCandlesUpdates=false,
-		// so the actual adapter ONLY ever sees history-only candle subscriptions.
-		// After history finishes, it transitions to build from ticks —
-		// a live TICKS subscription arrives, but a live CANDLE subscription never does.
-		//
-		// The pipeline is allowed to split hist+live into two phases:
+		// A hist+live candle subscription is split into two phases:
 		//   Phase 1: candle subscription with To set (history-only)
 		//   Phase 2: candle subscription with To=null (live)
-		// We wait for the FULL cycle to complete before checking.
+		// The test waits for the full transition before checking both live sources.
 
 		var (connector, adapter, _) = CreateConnectorForCandleTest();
 
@@ -997,16 +997,8 @@ public class ConnectorBasketTests : BaseTestClass
 
 		var allSubs = adapter.RecordedSubscriptions.ToList();
 
-		// The pipeline COULD legitimately split into:
-		//   1st: candle TF 5min (To=CurrentTime, history-only)
-		//   2nd: candle TF 5min (To=null, live)              ← this is what we expect but never arrives
-		// Instead what actually happens:
-		//   1st: candle TF 5min (To=CurrentTime, history-only)
-		//   2nd: Ticks (To=null, live)                        ← redirect to ticks, not candles
-
 		var liveCandleSub = allSubs.FirstOrDefault(m => m.DataType2.IsTFCandles && !m.IsHistoryOnly());
 
-		// Fails — proving the bug: adapter never receives a live candle subscription
 		IsNotNull(liveCandleSub,
 			$"Expected a live candle subscription (To=null) at the adapter, but none arrived. " +
 			$"Subscriptions: [{allSubs.Select(m =>
