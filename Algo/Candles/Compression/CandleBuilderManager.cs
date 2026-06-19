@@ -425,7 +425,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		}
 		else
 		{
-			var series = await TryRemoveSeries(mdMsg.OriginalTransactionId, cancellationToken);
+			var series = await TryRemoveSeries(mdMsg.OriginalTransactionId, cancellationToken, markFinished: false);
 			if (series is null)
 				return ([mdMsg], []);
 
@@ -465,7 +465,7 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		}
 	}
 
-	private async ValueTask<SeriesInfo> TryRemoveSeries(long id, CancellationToken cancellationToken)
+	private async ValueTask<SeriesInfo> TryRemoveSeries(long id, CancellationToken cancellationToken, bool markFinished = true)
 	{
 		_logReceiver.AddDebugLog("Series removing {0}.", id);
 
@@ -475,11 +475,17 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 				return null;
 
 			_replaceId.RemoveWhere(p => p.Value == id);
-			_finishedSubscriptions.Add(series.Id);
-			_finishedSubscriptions.Add(series.Current.TransactionId);
 
-			if (series.LiveCandleTransactionId is long liveCandleTransactionId)
-				_finishedSubscriptions.Add(liveCandleTransactionId);
+			// Trailing source messages of a series that finished on its own (count/To exhausted) must be
+			// dropped; a user unsubscribe instead leaves later messages to pass through untouched.
+			if (markFinished)
+			{
+				_finishedSubscriptions.Add(series.Id);
+				_finishedSubscriptions.Add(series.Current.TransactionId);
+
+				if (series.LiveCandleTransactionId is long liveCandleTransactionId)
+					_finishedSubscriptions.Add(liveCandleTransactionId);
+			}
 
 			return series;
 		}
