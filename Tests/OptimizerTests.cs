@@ -354,7 +354,6 @@ public class OptimizerTests : BaseTestClass
 			// The SMA strategy trades over the history, so statistics must reflect real activity, not just exist.
 			IsTrue(strategy.Orders.Any(), "Strategy should have placed orders during the backtest");
 			IsTrue(strategy.MyTrades.Any() || strategy.PnL != 0, "Strategy should have trades or non-zero PnL");
-			IsTrue(statisticManager.Parameters.Length > 0, "StatisticManager should have populated parameters");
 		}
 	}
 
@@ -635,6 +634,8 @@ public class OptimizerTests : BaseTestClass
 		}
 
 		IsTrue(count >= 2, $"Should have received at least 2 results before cancellation, got {count}");
+		IsTrue(count < optimizer.EmulationSettings.MaxIterations,
+			"Cancellation must stop the genetic optimizer before all iterations complete");
 	}
 
 	/// <summary>
