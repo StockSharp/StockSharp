@@ -1064,7 +1064,7 @@ public class StrategyPositionManagerTests : BaseTestClass
 		var events = 0;
 		mgr.PositionProcessed += (p, _) => { last = p; events++; };
 
-		var (order, _, _) = CreateOrder(Sides.Buy, 3m);
+		var (order, sec, pf) = CreateOrder(Sides.Buy, 3m);
 		order.State = OrderStates.Done;
 		order.Balance = 0m;
 		order.AveragePrice = null; // no avg
@@ -1075,6 +1075,9 @@ public class StrategyPositionManagerTests : BaseTestClass
 		// No position should be created since there is no way to determine exec price
 		events.AssertEqual(0);
 		last.AssertNull();
+		mgr.Positions.Length.AssertEqual(0);
+		mgr.TryGetPosition(sec, pf).AssertNull();
+		mgr.TrackedOrderExecInfosCount.AssertEqual(0);
 	}
 
 	[TestMethod]

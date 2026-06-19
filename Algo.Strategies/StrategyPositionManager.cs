@@ -322,20 +322,13 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 			if (matchedAbs == 0 && order.State != OrderStates.Active && !posExists)
 				return OrderResults.UnknownOrder;
 
-			position = GetOrCreate(order.Security, order.Portfolio, order.ServerTime, out isNew);
-
-			// ensure aggregates reflect current order state before fill handling (to close blocked on Done, etc.)
-			UpdateAggregates(order, position);
-
-			if (!_orderExecInfos.TryGetValue(txId, out var execInfo))
-				_orderExecInfos[txId] = execInfo = new();
-
-			var deltaMatchedAbs = matchedAbs - execInfo.MatchedVolume;
+			_orderExecInfos.TryGetValue(txId, out var execInfo);
+			var deltaMatchedAbs = matchedAbs - (execInfo?.MatchedVolume ?? 0m);
 			if (deltaMatchedAbs < 0)
 				return OrderResults.Inconsistent; // inconsistent snapshot delivered out-of-order
 
-			// compute commission delta against last seen cumulative commission for this order
-			var deltaCommission = (commission ?? 0m) - execInfo.Commission;
+			var effPrice = order.AveragePrice;
+			var cumulativeBased = true;
 
 			if (deltaMatchedAbs > 0)
 			{
@@ -344,9 +337,6 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 				// 2) Price (for non-market orders)
 				// 3) Last instrument price for market orders
 				// If still unknown -> ignore this execution and log a warning
-				var effPrice = order.AveragePrice;
-				var cumulativeBased = true; // when true, use cumulative cost; otherwise use incremental cost
-
 				if (effPrice == null)
 				{
 					if (order.Type == OrderTypes.Market)
@@ -363,6 +353,21 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 						cumulativeBased = true;
 					}
 				}
+			}
+
+			position = GetOrCreate(order.Security, order.Portfolio, order.ServerTime, out isNew);
+
+			// ensure aggregates reflect current order state before fill handling (to close blocked on Done, etc.)
+			UpdateAggregates(order, position);
+
+			if (execInfo == null)
+				_orderExecInfos[txId] = execInfo = new();
+
+			// compute commission delta against last seen cumulative commission for this order
+			var deltaCommission = (commission ?? 0m) - execInfo.Commission;
+
+			if (deltaMatchedAbs > 0)
+			{
 
 				// reconstruct slice
 				decimal deltaCost;
