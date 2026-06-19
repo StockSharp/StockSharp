@@ -1099,6 +1099,13 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		AreEqual(100m, partial.OpenPrice, "Partial Open should be 100");
 		AreEqual(115m, partial.HighPrice, "Partial High should be 115");
 		AreEqual(95m, partial.LowPrice, "Partial Low should be 95");
+		AreEqual(102m, partial.ClosePrice, "Partial Close should be the last source candle close");
+		AreEqual(3300m, partial.TotalVolume, "Partial Volume should aggregate all source candles");
+		AreEqual(CandleStates.Finished, partial.State, "Flushed partial candle should be Finished");
+
+		var tickBuild = outMessages.OfType<MarketDataMessage>()
+			.Single(m => m.IsBack() && m.DataType2 == DataType.Ticks);
+		AreEqual(baseTime.AddMinutes(5), tickBuild.From, "Continuation should start after the flushed 5-minute candle");
 	}
 
 	[TestMethod]
@@ -1124,6 +1131,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 			IsSubscribe = true,
 			SecurityId = secId,
 			AllowBuildFromSmallerTimeFrame = true,
+			Count = 1,
 		}, CancellationToken);
 
 		var sub = inner.SentMessages.OfType<MarketDataMessage>().FirstOrDefault(m => m.IsSubscribe);
@@ -1137,15 +1145,26 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 				100 + i, 105 + i, 95 + i, 102 + i, 1000 + i * 100), CancellationToken);
 		}
 
-		// Verify candles received
+		// Count applies to finished result candles, not to smaller source candles.
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
-		(candles.Count > 0).AssertTrue("Should receive candles");
+		var finishedCandles = candles.Where(c => c.State == CandleStates.Finished).ToList();
+		AreEqual(1, finishedCandles.Count, "Count=1 should emit exactly one finished compressed candle");
 
-		// Verify first compressed candle OHLCV (from first 5 one-minute candles)
-		var firstCompressed = candles.FirstOrDefault(c => c.OpenTime == baseTime);
-		IsNotNull(firstCompressed, "Should have compressed candle at baseTime");
+		// Verify the only compressed candle OHLCV (from first 5 one-minute candles).
+		var firstCompressed = finishedCandles[0];
+		AreEqual(baseTime, firstCompressed.OpenTime, "Compressed candle should start at baseTime");
 		AreEqual(secId, firstCompressed.SecurityId, "SecurityId should match");
 		AreEqual(100m, firstCompressed.OpenPrice, "First compressed Open should be 100");
+		AreEqual(109m, firstCompressed.HighPrice, "First compressed High should be 109");
+		AreEqual(95m, firstCompressed.LowPrice, "First compressed Low should be 95");
+		AreEqual(106m, firstCompressed.ClosePrice, "First compressed Close should be 106");
+		AreEqual(6000m, firstCompressed.TotalVolume, "First compressed Volume should aggregate five source candles");
+		candles.Any(c => c.OpenTime == baseTime.AddMinutes(5))
+			.AssertFalse("No second compressed candle should be emitted after Count is exhausted");
+
+		var finished = outMessages.OfType<SubscriptionFinishedMessage>().ToList();
+		AreEqual(1, finished.Count, "Count exhaustion should finish the original subscription once");
+		AreEqual(1, finished[0].OriginalTransactionId, "Finished message should reference the original subscription");
 	}
 
 	#endregion
@@ -1183,7 +1202,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task SubscriptionFinished_ForwardedToClient()
+	public async Task SubscriptionFinished_CascadesToBuildAndLiveSubscriptions()
 	{
 		var idGen = new IncrementalIdGenerator();
 		var inner = new MockCandleAdapter(idGen);
@@ -1221,9 +1240,24 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		// Simulate finished
 		await inner.SimulateFinished(1, CancellationToken);
 
-		// Verify exactly 1 subscription was sent
+		outMessages.OfType<SubscriptionFinishedMessage>().Any()
+			.AssertFalse("LoadAndBuild should cascade instead of finishing the client subscription");
+
+		var loopbackSubs = outMessages.OfType<MarketDataMessage>().Where(m => m.IsBack()).ToList();
+		AreEqual(2, loopbackSubs.Count, "Cascade should emit build and live-candle loopback subscriptions");
+
+		var buildSub = loopbackSubs.Single(m => m.DataType2 == DataType.Ticks);
+		buildSub.IsSubscribe.AssertTrue("Build loopback should subscribe to ticks");
+		AreEqual(secId, buildSub.SecurityId, "Build loopback SecurityId should match");
+
+		var liveSub = loopbackSubs.Single(m => m.DataType2 == TimeSpan.FromMinutes(1).TimeFrame());
+		liveSub.IsSubscribe.AssertTrue("Live loopback should be a subscription");
+		liveSub.IsFinishedOnly.AssertTrue("Live loopback should request finished candles only");
+		AreEqual(secId, liveSub.SecurityId, "Live loopback SecurityId should match");
+
+		// Loopback messages are intentionally not re-injected by this unit-test harness.
 		var sentSubs = inner.SentMessages.OfType<MarketDataMessage>().Where(m => m.IsSubscribe).ToList();
-		AreEqual(1, sentSubs.Count, "Should send exactly 1 subscription to inner adapter");
+		AreEqual(1, sentSubs.Count, "Only the initial subscription should reach the inner adapter directly");
 	}
 
 	[TestMethod]
@@ -1550,15 +1584,22 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 			await inner.SimulateCandle(1, candle, CancellationToken);
 		}
 
-		// Verify candles received
+		// To is inclusive: candles at minutes 0 through 5 are delivered,
+		// while the first candle after To finishes the subscription.
 		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToList();
-		(candles.Count >= 1).AssertTrue($"Should receive candles, got {candles.Count}");
+		AreEqual(6, candles.Count, $"Should receive exactly the 6 candles within To, got {candles.Count}");
+		candles.Select(c => c.OpenTime).SequenceEqual(Enumerable.Range(0, 6).Select(i => baseTime.AddMinutes(i)))
+			.AssertTrue("Only candles whose OpenTime is within the inclusive To boundary should be forwarded");
 
 		// First candle should have correct OHLCV
 		var first = candles[0];
 		AreEqual(secId, first.SecurityId, "First SecurityId should match");
 		AreEqual(baseTime, first.OpenTime, "First OpenTime should be baseTime");
 		AreEqual(100m, first.OpenPrice, "First Open should be 100");
+
+		var finished = outMessages.OfType<SubscriptionFinishedMessage>().ToList();
+		AreEqual(1, finished.Count, "The first candle after To should finish the subscription once");
+		AreEqual(1, finished[0].OriginalTransactionId, "Finished message should reference the original subscription");
 	}
 
 	#endregion
@@ -2310,25 +2351,35 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
 
-		// Ticks within 10 point range: O=100, H=108, L=100, C=105, then exceeds range
+		// A range candle includes the tick that first stretches it beyond the threshold.
 		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(0), 100, 20), CancellationToken); // Open
 		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(1), 105, 30), CancellationToken);
 		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(2), 108, 25), CancellationToken); // High (range = 8)
 		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(3), 102, 35), CancellationToken);
-		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(4), 105, 40), CancellationToken); // Close before range exceeded
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(4), 105, 40), CancellationToken);
 
-		// This tick exceeds range (100 to 112 = 12 > 10) - should start new candle
+		// This tick remains in the current candle and stretches its range to 12.
 		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(5), 112, 15), CancellationToken);
 
-		// Verify range candles built
-		var candles = outMessages.OfType<RangeCandleMessage>().ToList();
-		(candles.Count > 0).AssertTrue("Should build range candles");
+		// On the next tick the already reached range closes the prior candle,
+		// and the new tick becomes the open of the next candle.
+		await inner.SimulateTick(1, CreateTick(secId, baseTime.AddSeconds(6), 111, 10), CancellationToken);
 
-		// Verify first candle (active or finished)
-		var firstCandle = candles.First();
-		IsNotNull(firstCandle, "First candle should not be null");
+		var candles = outMessages.OfType<RangeCandleMessage>().ToList();
+		var finished = candles.Where(c => c.State == CandleStates.Finished).ToList();
+		AreEqual(1, finished.Count, "The next tick should finish exactly one range candle");
+
+		var firstCandle = finished[0];
 		AreEqual(secId, firstCandle.SecurityId, "First candle SecurityId should match");
 		AreEqual(100m, firstCandle.OpenPrice, "First candle Open should be 100");
+		AreEqual(112m, firstCandle.HighPrice, "The threshold-crossing tick should remain in the first candle");
+		AreEqual(100m, firstCandle.LowPrice, "First candle Low should be 100");
+		AreEqual(112m, firstCandle.ClosePrice, "First candle Close should be the threshold-crossing tick");
+		AreEqual(165m, firstCandle.TotalVolume, "First candle Volume should include the threshold-crossing tick");
+
+		var secondCandle = candles.Last(c => c.OpenTime == baseTime.AddSeconds(6));
+		AreEqual(CandleStates.Active, secondCandle.State, "Second range candle should remain active");
+		AreEqual(111m, secondCandle.OpenPrice, "The following tick should open the second candle");
 	}
 
 	#endregion
