@@ -597,18 +597,21 @@ public class MarketRuleTests : BaseTestClass
 
 		ICandleMessage changed = null;
 		provider.Object.WhenCandlesChanged<ICandleMessage>(sub).Apply(container).Do(c => changed = c);
-		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active });
-		(changed is not null).AssertTrue();
+		var changedMsg = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active };
+		provider.Raise(p => p.CandleReceived += null, sub, changedMsg);
+		changed.AssertSame(changedMsg);
 
 		ICandleMessage finished = null;
 		provider.Object.WhenCandlesFinished<ICandleMessage>(sub).Apply(container).Do(c => finished = c);
-		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished });
-		(finished is not null).AssertTrue();
+		var seriesFinishedMsg = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished };
+		provider.Raise(p => p.CandleReceived += null, sub, seriesFinishedMsg);
+		finished.AssertSame(seriesFinishedMsg);
 
 		ICandleMessage anyCandle = null;
 		provider.Object.WhenCandles<ICandleMessage>(sub).Apply(container).Do(c => anyCandle = c);
-		provider.Raise(p => p.CandleReceived += null, sub, new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active });
-		(anyCandle is not null).AssertTrue();
+		var anyMsg = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active };
+		provider.Raise(p => p.CandleReceived += null, sub, anyMsg);
+		anyCandle.AssertSame(anyMsg);
 
 		// Single candle rules
 		var sc = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 105m };
@@ -623,7 +626,7 @@ public class MarketRuleTests : BaseTestClass
 		var finishedMsg = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished };
 		provider.Object.WhenFinished(finishedMsg).Apply(container).Do(c => finCandle = c);
 		provider.Raise(p => p.CandleReceived += null, sub, finishedMsg);
-		(finCandle is not null).AssertTrue();
+		finCandle.AssertSame(finishedMsg);
 
 		// Price-based rules
 		TimeFrameCandleMessage more = null;
@@ -650,10 +653,11 @@ public class MarketRuleTests : BaseTestClass
 		(partSingle is not null).AssertTrue();
 
 		// Total volume more
-		var sc3 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TotalVolume = 10m };
+		var sc3 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TotalVolume = 4m };
 		TimeFrameCandleMessage volMore = null;
 		provider.Object.WhenTotalVolumeMore(sc3, 5m).Apply(container).Do(c => volMore = c);
-		// simulate update with higher total volume
+		provider.Raise(p => p.CandleReceived += null, sub, sc3);
+		volMore.AssertNull();
 		sc3.TotalVolume = 20m;
 		provider.Raise(p => p.CandleReceived += null, sub, sc3);
 		(volMore == sc3).AssertTrue();
@@ -665,7 +669,7 @@ public class MarketRuleTests : BaseTestClass
 		provider.Raise(p => p.CandleReceived += null, sub, sc4);
 		(eq is null).AssertTrue();
 
-		// Relative price: +5 and -5 from current
+		// Absolute close-price thresholds.
 		var sc5 = new TimeFrameCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, ClosePrice = 200m };
 		TimeFrameCandleMessage relMore = null;
 		provider.Object.WhenClosePriceMore(sc5, 205).Apply(container).Do(c => relMore = c);
@@ -1100,7 +1104,7 @@ public class MarketRuleTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void TryRemoveNullRuleReturnsFalse()
+	public void TryRemoveNullRuleThrows()
 	{
 		var container = CreateContainer();
 		ThrowsExactly<ArgumentNullException>(() => container.TryRemoveRule(null));
@@ -1162,7 +1166,7 @@ public class MarketRuleTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SubscriptionStartedNotDuplicated()
+	public void SubscriptionStartedOnceRuleRemovesAfterFirstEvent()
 	{
 		var container = CreateContainer();
 		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
@@ -1218,8 +1222,12 @@ public class MarketRuleTests : BaseTestClass
 
 		VolumeCandleMessage fired = null;
 		provider.Object.WhenPartiallyFinishedCandles<VolumeCandleMessage>(sub, 50m).Apply(container).Do(c => fired = c);
-		provider.Raise(p => p.CandleReceived += null, sub, new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished, TotalVolume = 60m });
-		(fired is not null).AssertTrue();
+		var below = new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TypedArg = 100m, TotalVolume = 49m };
+		provider.Raise(p => p.CandleReceived += null, sub, below);
+		fired.AssertNull();
+		var above = new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TypedArg = 100m, TotalVolume = 51m };
+		provider.Raise(p => p.CandleReceived += null, sub, above);
+		fired.AssertSame(above);
 	}
 
 	[TestMethod]
@@ -1228,10 +1236,13 @@ public class MarketRuleTests : BaseTestClass
 		var container = CreateContainer();
 		var provider = new Mock<ISubscriptionProvider>(MockBehavior.Loose);
 		var sec = Helper.CreateSecurity();
-		var msg = new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Finished, TotalVolume = 60m };
+		var msg = new VolumeCandleMessage { SecurityId = sec.ToSecurityId(), State = CandleStates.Active, TypedArg = 100m, TotalVolume = 49m };
 		VolumeCandleMessage fired = null;
 		provider.Object.WhenPartiallyFinished(msg, 50m).Apply(container).Do(c => fired = c);
 		var sub = new Subscription(TimeSpan.FromMinutes(1).TimeFrame(), sec);
+		provider.Raise(p => p.CandleReceived += null, sub, msg);
+		fired.AssertNull();
+		msg.TotalVolume = 51m;
 		provider.Raise(p => p.CandleReceived += null, sub, msg);
 		(fired == msg).AssertTrue();
 	}
