@@ -786,6 +786,24 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 			}
 			case SeriesStates.SmallTimeFrame:
 			{
+				var partial = series.BigTimeFrameCompressor?.CurrentCandle;
+
+				if (partial != null && partial.State != CandleStates.Finished)
+				{
+					partial = partial.TypedClone();
+					partial.State = CandleStates.Finished;
+					partial.Adapter = finish?.Adapter;
+					partial.LocalTime = finish?.LocalTime ?? partial.LocalTime;
+					// Resume after the full big-timeframe slot, not after the last data point of the
+					// partial candle, so the build continuation does not re-cover the flushed slot.
+					series.LastTime = partial.OpenTime + original.GetTimeFrame();
+
+					await RaiseNewOutCandleAsync(series, partial, extraOut, cancellationToken);
+
+					if (await FinishIfCountExhaustedAsync(series, extraOut, cancellationToken))
+						return;
+				}
+
 				series.BigTimeFrameCompressor = null;
 				series.State = SeriesStates.Compress;
 
@@ -848,6 +866,14 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 
 	private async ValueTask ProcessCandleAsync(SeriesInfo info, CandleMessage candleMsg, List<Message> extraOut, CancellationToken cancellationToken)
 	{
+		if (info.Original.To is DateTime to && to < candleMsg.OpenTime)
+		{
+			if (await TryRemoveSeries(info.Id, cancellationToken) is not null)
+				extraOut.Add(new SubscriptionFinishedMessage { OriginalTransactionId = info.Original.TransactionId });
+
+			return;
+		}
+
 		if (info.LastTime != null && info.LastTime > candleMsg.OpenTime)
 			return;
 
