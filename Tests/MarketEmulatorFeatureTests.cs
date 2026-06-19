@@ -1137,6 +1137,7 @@ public class MarketEmulatorFeatureTests : BaseTestClass
 			LocalTime = now,
 			TransactionId = 200,
 			Mode = OrderGroupCancelModes.ClosePositions,
+			PortfolioName = _pfName,
 		};
 
 		await emuV1.SendInMessageAsync(closePositions.TypedClone(), CancellationToken);
