@@ -191,15 +191,19 @@ public class SubscriptionHolderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void TryGetSubscription_MatchingState_ReturnsSubscription()
+	public void TryGetSubscription_NewState_UpdatesSubscriptionAndRaisesEvent()
 	{
 		using var holder = CreateHolder();
 		var subscription = CreateSubscription(1, "session1", new SecurityId { SecurityCode = "AAPL" }, DataType.Ticks, SubscriptionStates.Active);
 
 		holder.Add(subscription);
+		TestSubscription changed = null;
+		holder.SubscriptionChanged += s => changed = s;
 
-		holder.TryGetSubscription(1, SubscriptionStates.Active, out var result).AssertTrue();
-		result.AssertNotNull();
+		holder.TryGetSubscription(1, SubscriptionStates.Online, out var result).AssertTrue();
+		result.AssertSame(subscription);
+		result.State.AssertEqual(SubscriptionStates.Online);
+		changed.AssertSame(subscription);
 	}
 
 	#endregion
@@ -376,8 +380,22 @@ public class SubscriptionHolderTests : BaseTestClass
 	public void AddUnsubscribeRequest_StoresRequest()
 	{
 		using var holder = CreateHolder();
-		// Should not throw - just stores the unsubscribe request mapping
+		var subscription = CreateSubscription(
+			50,
+			"session1",
+			new SecurityId { SecurityCode = "AAPL" },
+			DataType.Ticks,
+			SubscriptionStates.Active);
+		holder.Add(subscription);
 		holder.AddUnsubscribeRequest(100, 50);
+
+		var matched = holder.GetSubscriptions(
+			new SubscriptionResponseMessage { OriginalTransactionId = 100 }).ToArray();
+
+		matched.Length.AssertEqual(1);
+		matched[0].AssertSame(subscription);
+		subscription.State.AssertEqual(SubscriptionStates.Stopped);
+		holder.TryGetById(50, out _).AssertFalse();
 	}
 
 	#endregion
