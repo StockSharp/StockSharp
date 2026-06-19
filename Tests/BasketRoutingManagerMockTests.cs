@@ -214,7 +214,11 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 
 		// Verify adapter received message
 		var adapterMsgs = adapter1.GetMessages<MarketDataMessage>().ToArray();
-		adapterMsgs.Length.AssertGreater(0, "Adapter should receive message");
+		adapterMsgs.Length.AssertEqual(1, "Adapter should receive exactly one market-data request");
+		var routed = adapterMsgs[0];
+		routed.SecurityId.AssertEqual(_secId1);
+		routed.DataType2.AssertEqual(DataType.Ticks);
+		routed.IsSubscribe.AssertTrue();
 	}
 
 	#endregion
@@ -248,6 +252,12 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 		// Verify order adapter recorded
 		routingManager.TryGetOrderAdapter(transId, out var routedAdapter)
 			.AssertTrue("Order should be recorded in routing");
+		AreSame(adapter1, routedAdapter, "Order routing should retain the selected underlying adapter");
+
+		var routedOrders = adapter1.GetMessages<OrderRegisterMessage>().ToArray();
+		routedOrders.Length.AssertEqual(1, "Selected adapter should receive exactly one order registration");
+		routedOrders[0].TransactionId.AssertEqual(transId);
+		routedOrders[0].PortfolioName.AssertEqual("Portfolio1");
 	}
 
 	#endregion
@@ -277,6 +287,16 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 		// Adapter should NOT have received the lookup (it should be pended)
 		adapter1.GetMessages<SecurityLookupMessage>().Any()
 			.AssertFalse("Adapter should not receive message while connecting");
+
+		await adapter1.SendOutMessageAsync(new ConnectMessage(), TestContext.CancellationToken);
+		routingManager.HasPendingAdapters.AssertFalse("Connection completion should release pending messages");
+
+		var released = GetOut<SecurityLookupMessage>().Single(m => m.IsBack());
+		released.TransactionId.AssertEqual(transId);
+		await SendToBasket(basket, released, TestContext.CancellationToken);
+
+		adapter1.GetMessages<SecurityLookupMessage>().Count()
+			.AssertEqual(1, "Released pending lookup should reach the connected adapter");
 	}
 
 	#endregion
@@ -301,6 +321,9 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 			TransactionId = transId,
 		};
 		await SendToBasket(basket, mdMsg, TestContext.CancellationToken);
+
+		var childRequest = adapter1.GetMessages<MarketDataMessage>().Single(m => m.IsSubscribe);
+		childRequest.TransactionId.AssertNotEqual(transId, "Adapter should receive a generated child transaction ID");
 
 		// Verify response was remapped to parent
 		var responses = GetOut<SubscriptionResponseMessage>();
@@ -336,6 +359,20 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 			TransactionId = transId,
 		}, TestContext.CancellationToken);
 
+		var orderTransId = basket.TransactionIdGenerator.GetNextId();
+		await SendToBasket(basket, new OrderRegisterMessage
+		{
+			SecurityId = _secId1,
+			PortfolioName = "Portfolio1",
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 1m,
+			TransactionId = orderTransId,
+		}, TestContext.CancellationToken);
+
+		routingManager.GetSubscribers(DataType.Ticks).AssertContains(transId);
+		routingManager.TryGetOrderAdapter(orderTransId, out _).AssertTrue();
+
 		ClearOut();
 
 		// Reset
@@ -343,6 +380,9 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 
 		// Verify state cleared (connection count should be 0)
 		routingManager.ConnectedCount.AssertEqual(0, "Connection count should be 0 after reset");
+		routingManager.GetSubscribers(DataType.Ticks).Length.AssertEqual(0, "Subscriptions should be cleared after reset");
+		routingManager.TryGetOrderAdapter(orderTransId, out _)
+			.AssertFalse("Order routing should be cleared after reset");
 	}
 
 	#endregion
