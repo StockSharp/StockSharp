@@ -640,7 +640,7 @@ public class BasketRoutingManager : IBasketRoutingManager
 
 			return needParentResponse
 				? RoutingOutResult.WithMessage(parentId.Value.CreateSubscriptionResponse(
-					allError ? new AggregateException(LocalizedStrings.NoAdapterFoundFor.Put(originMsg), innerErrors) : null))
+					allError ? innerErrors.ToArray().SingleOrAggr() : null))
 				: RoutingOutResult.Empty;
 		}
 		else
