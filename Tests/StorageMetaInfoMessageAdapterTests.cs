@@ -481,9 +481,7 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 			posStorage.Save(pos);
 		}
 
-		// Note: Positions with same portfolio+security will overwrite each other
-		// So we won't have exactly 200 unique positions
-		IsTrue(posStorage.Positions.Count() > 0);
+		posStorage.Positions.Count().AssertEqual(20);
 	}
 
 	[TestMethod]
@@ -588,7 +586,14 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 	[TestMethod]
 	public async Task MarketDataMessage_ProcessedByStorageProcessor()
 	{
-		var (adapter, _, _, _, storageProcessor) = CreateAdapter();
+		var inner = new RecordingMessageAdapter();
+		var storageProcessor = new TestStorageProcessor();
+		var adapter = new StorageMetaInfoMessageAdapter(
+			inner,
+			new InMemorySecurityStorage(),
+			new InMemoryPositionStorage(),
+			new InMemoryExchangeInfoProvider(),
+			storageProcessor);
 
 		var mdMessage = new MarketDataMessage
 		{
@@ -598,12 +603,11 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 			TransactionId = 1,
 		};
 
-		// Send message through adapter
 		await adapter.SendInMessageAsync(mdMessage, CancellationToken);
 
 		IsTrue(storageProcessor.ProcessMarketDataCalled);
-		storageProcessor.LastMessage.AssertNotNull();
-		AreEqual(mdMessage.SecurityId, storageProcessor.LastMessage.SecurityId);
+		storageProcessor.LastMessage.AssertSame(mdMessage);
+		inner.InMessages.Count.AssertEqual(0);
 	}
 
 	#endregion
