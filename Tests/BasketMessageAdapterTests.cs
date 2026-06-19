@@ -99,6 +99,10 @@ public class BasketMessageAdapterTests : BasketTestBase
 		// --- Output ---
 		var connectOuts = GetOut<ConnectMessage>();
 		connectOuts.Length.AssertEqual(3, "Basket should emit ConnectMessage (1 routing + 2 passthrough)");
+		AreSame(basket, connectOuts[1].Adapter,
+			"OnFirst mode should emit the aggregate ConnectMessage after the first adapter response");
+		AreNotSame(basket, connectOuts[0].Adapter);
+		AreNotSame(basket, connectOuts[2].Adapter);
 	}
 
 	[TestMethod]
@@ -136,6 +140,10 @@ public class BasketMessageAdapterTests : BasketTestBase
 
 		var connectOuts = GetOut<ConnectMessage>();
 		connectOuts.Length.AssertEqual(3, "Basket should emit ConnectMessage after all connected (1 routing + 2 passthrough)");
+		AreSame(basket, connectOuts[2].Adapter,
+			"WaitAll mode should emit the aggregate ConnectMessage after both adapter responses");
+		AreNotSame(basket, connectOuts[0].Adapter);
+		AreNotSame(basket, connectOuts[1].Adapter);
 	}
 
 	[TestMethod]
@@ -176,7 +184,16 @@ public class BasketMessageAdapterTests : BasketTestBase
 		// --- Output ---
 		var connectOuts = GetOut<ConnectMessage>();
 		connectOuts.Length.AssertEqual(3, "Basket should emit ConnectMessages (1 routing + 2 passthrough)");
-		connectOuts.Count(c => c.Error != null).AssertGreater(0, "ConnectMessage should contain error");
+		connectOuts.Count(c => c.Error != null).AssertEqual(3, "Every failed ConnectMessage should contain an error");
+
+		var aggregate = connectOuts.Single(c => ReferenceEquals(c.Adapter, basket));
+		var aggregateError = aggregate.Error as AggregateException;
+		aggregateError.AssertNotNull("Basket aggregate ConnectMessage should contain AggregateException");
+		aggregateError.InnerExceptions.Count.AssertEqual(2);
+		aggregateError.InnerExceptions.Select(e => e.Message)
+			.ToHashSet().SetEquals(["fail1", "fail2"])
+			.AssertTrue("Aggregate error should retain both adapter failures");
+		connectionManager.CurrentState.AssertEqual(ConnectionStates.Failed);
 	}
 
 	#endregion
@@ -302,6 +319,16 @@ public class BasketMessageAdapterTests : BasketTestBase
 		connectionState.TryGetAdapterState(adapter1, out var state2, out _).AssertTrue();
 		state2.AssertEqual(ConnectionStates.Connected, "Adapter1 should be Connected");
 		pendingState.Count.AssertEqual(0, "Pending state should be empty after connect");
+
+		var released = GetOut<SecurityLookupMessage>().Single(m => m.IsBack());
+		released.TransactionId.AssertEqual(transId);
+
+		await SendToBasket(basket, released, TestContext.CancellationToken);
+		adapter1.GetMessages<SecurityLookupMessage>().Count()
+			.AssertEqual(1, "Released pending lookup should reach the connected adapter");
+		GetOut<SubscriptionResponseMessage>()
+			.Any(r => r.OriginalTransactionId == transId && r.Error != null)
+			.AssertFalse("Released pending lookup must not be rejected as unsupported");
 	}
 
 	[TestMethod]
