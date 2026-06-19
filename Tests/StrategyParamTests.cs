@@ -21,6 +21,7 @@ public class StrategyParamTests : BaseTestClass
 		where T : struct
 	{
 		var p = new StrategyParam<T?>("p").SetNullOrMoreZero();
+		p.Value = positive;
 		p.Value = null;
 		p.Value = positive;
 		AssertInvalid(() => p.Value = zero);
@@ -31,8 +32,9 @@ public class StrategyParamTests : BaseTestClass
 		where T : struct
 	{
 		var p = new StrategyParam<T?>("p").SetNullOrNotNegative();
-		p.Value = null;
 		p.Value = zero;
+		p.Value = positive;
+		p.Value = null;
 		p.Value = positive;
 		AssertInvalid(() => p.Value = negative);
 	}
@@ -84,6 +86,7 @@ public class StrategyParamTests : BaseTestClass
 		var u_neg = new Unit(-1m, UnitTypes.Absolute);
 		var pUnit = new StrategyParam<Unit>("u_null_gt0");
 		pUnit.SetNullOrMoreZero(); // expected future support
+		pUnit.Value = u_pos;
 		pUnit.Value = null;
 		pUnit.Value = u_pos;
 		AssertInvalid(() => pUnit.Value = u_zero);
@@ -106,8 +109,9 @@ public class StrategyParamTests : BaseTestClass
 		var u_neg = new Unit(-2m, UnitTypes.Absolute);
 		var pUnit = new StrategyParam<Unit>("u_null_ge0");
 		pUnit.SetNullOrNotNegative();
-		pUnit.Value = null;
 		pUnit.Value = u_zero;
+		pUnit.Value = u_pos;
+		pUnit.Value = null;
 		pUnit.Value = u_pos;
 		AssertInvalid(() => pUnit.Value = u_neg);
 	}
@@ -173,7 +177,7 @@ public class StrategyParamTests : BaseTestClass
 		p2.Value = 10;
 		p2.Value = 15;
 		AssertInvalid(() => p2.Value = 11);
-		p.Value = -5;
+		p2.Value = -5;
 		AssertInvalid(() => p2.Value = -11);
 	}
 
@@ -324,6 +328,7 @@ public class StrategyParamTests : BaseTestClass
 
 		var p2 = new StrategyParam<int>("p");
 		p2.Load(storage);
+		p2.Value.AssertEqual(3);
 		p2.Value = 7; // any value accepted (no step restriction)
 	}
 
@@ -428,6 +433,7 @@ public class StrategyParamTests : BaseTestClass
 		p.Save(storage);
 		var p2 = new StrategyParam<decimal>("p").SetStep(0.25m, 0.5m);
 		p2.Load(storage);
+		p2.Value.AssertEqual(0.5m);
 		p2.Value = 1.0m;
 		AssertInvalid(() => p2.Value = 0.6m);
 	}
@@ -442,6 +448,7 @@ public class StrategyParamTests : BaseTestClass
 		p.Save(storage);
 		var p2 = new StrategyParam<TimeSpan>("p").SetStep(step, baseTs);
 		p2.Load(storage);
+		p2.Value.AssertEqual(baseTs);
 		p2.Value = TimeSpan.FromMinutes(20);
 		AssertInvalid(() => p2.Value = TimeSpan.FromMinutes(23));
 	}
@@ -614,6 +621,7 @@ public class StrategyParamTests : BaseTestClass
 		var p = new StrategyParam<int>("p", 0)
 			.SetCanOptimize(true)
 			.SetOptimize(5, 25, 1);
+		((IStrategyParam)p).OptimizeStep = null;
 
 		for (int i = 0; i < 100; i++)
 		{
@@ -643,6 +651,7 @@ public class StrategyParamTests : BaseTestClass
 		var p = new StrategyParam<decimal>("p", 0m)
 			.SetCanOptimize(true)
 			.SetOptimize(1.0m, 2.0m, 0.1m);
+		((IStrategyParam)p).OptimizeStep = null;
 
 		for (int i = 0; i < 100; i++)
 		{
@@ -689,6 +698,7 @@ public class StrategyParamTests : BaseTestClass
 		var p = new StrategyParam<TimeSpan>("p", TimeSpan.Zero)
 			.SetCanOptimize(true)
 			.SetOptimize(TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(1));
+		((IStrategyParam)p).OptimizeStep = null;
 
 		for (int i = 0; i < 50; i++)
 		{
