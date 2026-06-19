@@ -282,7 +282,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void OutMessage_WithNoSubscriptionId_PassesThrough()
+	public void OutMessage_UnsolicitedWithoutSubscriptionId_PassesThroughUnchanged()
 	{
 		var logReceiver = new TestReceiver();
 		var transactionIdGenerator = new IncrementalIdGenerator();
@@ -299,8 +299,8 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		var (forward, extraOut) = manager.ProcessOutMessage(dataMessage);
 
-		// Message should be forwarded (current behavior - not filtered)
-		forward.AssertNotNull();
+		forward.AssertSame(dataMessage);
+		extraOut.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1096,8 +1096,19 @@ public class SubscriptionManagerTests : BaseTestClass
 		var (toInner, toOut) = manager.ProcessInMessage(unsubscribeLevel1);
 		toInner.Length.AssertEqual(1);
 
-		// Ticks subscription should still work
-		// (No direct way to verify in manager, but unsubscribe should only affect Level1)
+		var tick = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+		};
+		tick.SetSubscriptionIds([101]);
+
+		var (forward, extraOut) = manager.ProcessOutMessage(tick);
+		forward.AssertSame(tick);
+		extraOut.Length.AssertEqual(0);
 	}
 
 	#endregion
