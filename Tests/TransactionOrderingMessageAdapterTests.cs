@@ -111,10 +111,6 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 			.Setup(m => m.ProcessOutMessage(It.IsAny<Message>()))
 			.Returns((forward: (Message)forward, extraOut: (Message[])[extra1, extra2], processSuspended: false));
 
-		manager
-			.Setup(m => m.GetSuspendedTrades(It.IsAny<ExecutionMessage>()))
-			.Returns((Message[])[]);
-
 		using var adapter = new TransactionOrderingMessageAdapter(inner, manager.Object);
 
 		var output = new List<Message>();
@@ -126,6 +122,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 		output[0].AssertSame(extra1);
 		output[1].AssertSame(extra2);
 		output[2].AssertSame(forward);
+		manager.Verify(m => m.GetSuspendedTrades(It.IsAny<ExecutionMessage>()), Times.Never);
 	}
 
 	[TestMethod]
@@ -262,8 +259,11 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 
 		using var adapter = new TransactionOrderingMessageAdapter(inner);
 
-		// Just verify it works without throwing
-		await adapter.SendInMessageAsync(new ResetMessage(), CancellationToken);
+		var reset = new ResetMessage();
+		await adapter.SendInMessageAsync(reset, CancellationToken);
+
+		inner.InMessages.Count.AssertEqual(1);
+		inner.InMessages[0].AssertSame(reset);
 	}
 
 	[TestMethod]
