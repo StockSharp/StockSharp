@@ -81,19 +81,30 @@ public class MessageChannelTests : BaseTestClass
 	public async Task SendInMessageAsync_WhenClosed_DropsMessage(ChannelType channelType)
 	{
 		using var channel = CreateChannel(channelType);
-		var processed = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var processed = new List<Message>();
+		var freshProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var oldMessage = CreateTimeMessage(DateTime.UtcNow);
+		var freshMessage = CreateTimeMessage(DateTime.UtcNow.AddSeconds(1));
 
 		channel.NewOutMessageAsync += (msg, ct) =>
 		{
-			processed.TrySetResult(true);
+			processed.Add(msg);
+			if (ReferenceEquals(msg, freshMessage))
+				freshProcessed.TrySetResult(true);
 			return default;
 		};
 
-		// Don't open the channel
-		await channel.SendInMessageAsync(CreateTimeMessage(DateTime.UtcNow), CancellationToken);
+		await channel.SendInMessageAsync(oldMessage, CancellationToken);
 
-		await Task.Delay(100, CancellationToken);
-		processed.Task.IsCompleted.AssertFalse();
+		channel.Open();
+		if (channelType == ChannelType.Async)
+			await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+
+		await channel.SendInMessageAsync(freshMessage, CancellationToken);
+		await freshProcessed.Task.WithCancellation(CancellationToken);
+
+		processed.Contains(oldMessage).AssertFalse();
+		processed.Contains(freshMessage).AssertTrue();
 	}
 
 	[TestMethod]
@@ -255,9 +266,7 @@ public class MessageChannelTests : BaseTestClass
 
 		await Task.Delay(200, CancellationToken);
 
-		// Only first message should have been processed (rest cleared)
-		// Note: The exact count may vary slightly due to timing, but should be much less than 10
-		(processedCount < 5).AssertTrue($"Expected less than 5 processed, got {processedCount}");
+		processedCount.AssertEqual(1);
 	}
 
 	#endregion
@@ -326,6 +335,10 @@ public class MessageChannelTests : BaseTestClass
 		await secondMessageProcessed.Task.WithCancellation(CancellationToken);
 
 		channel.State.AssertEqual(ChannelStates.Started);
+
+		if (channelType == ChannelType.InMemory)
+			((await errorCaught.Task.WithCancellation(CancellationToken)) is InvalidOperationException)
+				.AssertTrue();
 	}
 
 	#endregion
@@ -725,14 +738,14 @@ public class MessageChannelTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InMemoryChannel_MessageCount_ReturnsQueueCount()
+	public async Task InMemoryChannel_MessageCount_ReturnsQueueCount()
 	{
-		var channel = new InMemoryMessageChannel(new MessageByOrderQueue(), "TestChannel", _ => { });
+		var queue = new MessageByOrderQueue();
+		queue.Open();
+		await queue.Enqueue(CreateTimeMessage(DateTime.UtcNow), CancellationToken);
+		using var channel = new InMemoryMessageChannel(queue, "TestChannel", _ => { });
 
-		// When closed, messages are dropped
-		channel.MessageCount.AssertEqual(0);
-
-		channel.Dispose();
+		channel.MessageCount.AssertEqual(1);
 	}
 
 	#endregion
