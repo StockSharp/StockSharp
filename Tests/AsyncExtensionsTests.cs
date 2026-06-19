@@ -249,6 +249,9 @@ public class AsyncExtensionsTests : BaseTestClass
 		var adapter = new MockAdapter(new IncrementalIdGenerator());
 
 		await adapter.ConnectAsync(CancellationToken);
+
+		var connectMessages = adapter.SentMessages.OfType<ConnectMessage>().ToArray();
+		HasCount(1, connectMessages);
 	}
 
 	[TestMethod]
@@ -329,18 +332,17 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var got = new List<Level1ChangeMessage>();
 		using var enumCts = new CancellationTokenSource();
+		var baseTime = new DateTime(2025, 1, 1, 10, 0, 0).UtcKind();
+		var expectedTimes = Enumerable.Range(0, 3).Select(i => baseTime.AddMinutes(i)).ToArray();
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg).WithCancellation(enumCts.Token))
+			try
 			{
-				got.Add(l1);
-				if (got.Count >= 3)
-				{
-					enumCts.Cancel();
-					break;
-				}
+				await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg).WithCancellation(enumCts.Token))
+					got.Add(l1);
 			}
+			catch (OperationCanceledException) when (enumCts.IsCancellationRequested) { }
 		}, CancellationToken);
 
 		// Give time for enumeration to start
@@ -350,13 +352,20 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		for (var i = 0; i < 3; i++)
 		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
+			var l1 = new Level1ChangeMessage { ServerTime = expectedTimes[i] };
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
+		while (got.Count < expectedTimes.Length)
+			await Task.Delay(10, CancellationToken);
+
+		await Task.Delay(100, CancellationToken);
+		enumCts.Cancel();
 		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(3, got);
+		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Live adapter subscription should preserve message order without duplicates");
 
 		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
 			await Task.Delay(10, CancellationToken);
@@ -380,15 +389,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		};
 
 		var got = new List<Level1ChangeMessage>();
+		var baseTime = new DateTime(2025, 1, 2, 10, 0, 0).UtcKind();
+		var expectedTimes = Enumerable.Range(0, 2).Select(i => baseTime.AddMinutes(i)).ToArray();
 
 		var run = Task.Run(async () =>
 		{
 			await foreach (var l1 in adapter.SubscribeAsync<Level1ChangeMessage>(subMsg).WithCancellation(CancellationToken))
-			{
 				got.Add(l1);
-				if (got.Count >= 2)
-					break;
-			}
 		}, CancellationToken);
 
 		// wait activation
@@ -398,7 +405,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		for (var i = 0; i < 2; i++)
 		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
+			var l1 = new Level1ChangeMessage { ServerTime = expectedTimes[i] };
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
@@ -406,6 +413,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		await run.WithCancellation(CancellationToken);
 
 		HasCount(2, got);
+		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Historical adapter subscription should preserve message order without duplicates");
 	}
 
 	[TestMethod]
@@ -422,21 +431,20 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var got = new List<Level1ChangeMessage>();
 		using var enumCts = new CancellationTokenSource();
+		var baseTime = new DateTime(2025, 1, 3, 10, 0, 0).UtcKind();
+		var expectedTimes = Enumerable.Range(0, 3).Select(i => baseTime.AddMinutes(i)).ToArray();
 
 		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
 		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+			try
 			{
-				got.Add(l1);
-				if (got.Count >= 3)
-				{
-					enumCts.Cancel();
-					break;
-				}
+				await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+					got.Add(l1);
 			}
+			catch (OperationCanceledException) when (enumCts.IsCancellationRequested) { }
 		}, CancellationToken);
 
 		// Wait until subscription is started (online message received)
@@ -449,13 +457,20 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		for (var i = 0; i < 3; i++)
 		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
+			var l1 = new Level1ChangeMessage { ServerTime = expectedTimes[i] };
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
+		while (got.Count < expectedTimes.Length)
+			await Task.Delay(10, CancellationToken);
+
+		await Task.Delay(100, CancellationToken);
+		enumCts.Cancel();
 		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(3, got);
+		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Live connector subscription should preserve message order without duplicates");
 
 		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
 			await Task.Delay(10, CancellationToken);
@@ -527,21 +542,20 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		var got = new List<Level1ChangeMessage>();
 		using var enumCts = new CancellationTokenSource();
+		var baseTime = new DateTime(2025, 1, 4, 10, 0, 0).UtcKind();
+		var expectedTimes = Enumerable.Range(0, 3).Select(i => baseTime.AddMinutes(i)).ToArray();
 
 		var started = AsyncHelper.CreateTaskCompletionSource<bool>();
 		connector.SubscriptionStarted += s => { if (ReferenceEquals(s, sub)) started.TrySetResult(true); };
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+			try
 			{
-				got.Add(l1);
-				if (got.Count >= 3)
-				{
-					enumCts.Cancel();
-					break;
-				}
+				await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
+					got.Add(l1);
 			}
+			catch (OperationCanceledException) when (enumCts.IsCancellationRequested) { }
 		}, CancellationToken);
 
 		// Wait until subscription is started (online message received)
@@ -554,13 +568,20 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		for (var i = 0; i < 3; i++)
 		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow };
+			var l1 = new Level1ChangeMessage { ServerTime = expectedTimes[i] };
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
+		while (got.Count < expectedTimes.Length)
+			await Task.Delay(10, CancellationToken);
+
+		await Task.Delay(100, CancellationToken);
+		enumCts.Cancel();
 		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(3, got);
+		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Live async-adapter subscription should preserve message order without duplicates");
 	}
 
 	[TestMethod]
@@ -580,19 +601,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		};
 
 		var got = new List<Level1ChangeMessage>();
-		using var enumCts = new CancellationTokenSource();
+		var baseTime = new DateTime(2025, 1, 5, 10, 0, 0).UtcKind();
+		var expectedTimes = Enumerable.Range(0, 2).Select(i => baseTime.AddMinutes(i)).ToArray();
 
 		var enumerating = Task.Run(async () =>
 		{
-			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(enumCts.Token))
-			{
+			await foreach (var l1 in connector.SubscribeAsync<Level1ChangeMessage>(sub).WithCancellation(CancellationToken))
 				got.Add(l1);
-				if (got.Count >= 2)
-				{
-					enumCts.Cancel();
-					break;
-				}
-			}
 		}, CancellationToken);
 
 		// Wait for subscription to be processed
@@ -609,7 +624,7 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		for (var i = 0; i < 2; i++)
 		{
-			var l1 = new Level1ChangeMessage { ServerTime = DateTime.UtcNow.AddDays(-1).AddMinutes(i) };
+			var l1 = new Level1ChangeMessage { ServerTime = expectedTimes[i] };
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
@@ -619,6 +634,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		await enumerating.WithCancellation(CancellationToken);
 
 		HasCount(2, got);
+		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
+			.AssertTrue("Historical async-adapter subscription should preserve message order without duplicates");
 	}
 
 	[TestMethod]
@@ -860,6 +877,9 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// Assert
 		items.Count.AssertEqual(5);
+		items.Select(m => m.TryGetDecimal(Level1Fields.LastTradePrice))
+			.SequenceEqual(Enumerable.Range(100, 5).Select(price => (decimal?)price))
+			.AssertTrue("Generic subscription should preserve Level1 prices and order");
 	}
 
 	#endregion
@@ -1228,6 +1248,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			count++;
 
 		AreEqual(0, count);
+		adapter.LastOrder.AssertNull("Cancelled registration must not be sent to the adapter");
 	}
 
 	[TestMethod]
@@ -1479,6 +1500,9 @@ public class AsyncExtensionsTests : BaseTestClass
 	public async Task Connector_RegisterOrderAsync_CancelledToken_YieldsNothing()
 	{
 		var connector = new TestConnector();
+		var adapter = new MockAdapter(connector.TransactionIdGenerator);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
 		var order = new Order
 		{
 			Security = new Security { Id = "AAPL@TEST" },
@@ -1495,6 +1519,9 @@ public class AsyncExtensionsTests : BaseTestClass
 			count++;
 
 		AreEqual(0, count);
+		AreEqual(0L, adapter.LastOrderTransactionId, "Cancelled registration must not reach the connector adapter");
+		adapter.SentMessages.OfType<OrderRegisterMessage>().Any()
+			.AssertFalse("No OrderRegisterMessage should be sent for an already-cancelled token");
 	}
 
 	[TestMethod]
@@ -1696,6 +1723,10 @@ public class AsyncExtensionsTests : BaseTestClass
 		await enumTask.WithCancellation(CancellationToken);
 
 		adapter.LastCancelMessage.AssertNotNull();
+		AreEqual(456L, adapter.LastCancelMessage.OrderId);
+		AreEqual("AAPL", adapter.LastCancelMessage.SecurityId.SecurityCode);
+		AreEqual("Test", adapter.LastCancelMessage.PortfolioName);
+		AreEqual(Sides.Buy, adapter.LastCancelMessage.Side);
 	}
 
 	[TestMethod]
