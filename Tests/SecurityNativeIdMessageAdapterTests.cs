@@ -233,6 +233,19 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 
 		// Should NOT be forwarded since native id is unknown
 		inner.InMessages.OfType<OrderRegisterMessage>().Count().AssertEqual(0);
+
+		var nativeId = "native_unknown";
+		var storage = storageProvider.GetStorage("TestAdapter");
+		await storage.TryAddAsync(secId, nativeId, cancellationToken: token);
+
+		var releaseId = secId;
+		releaseId.Native = nativeId;
+		await adapter.SendInMessageAsync(new ProcessSuspendedMessage(adapter, releaseId), token);
+
+		var released = inner.InMessages.OfType<OrderRegisterMessage>().Single();
+		released.SecurityId.SecurityCode.AssertEqual(secId.SecurityCode);
+		released.SecurityId.BoardCode.AssertEqual(secId.BoardCode);
+		released.SecurityId.Native.AssertEqual(nativeId);
 	}
 
 	[TestMethod]
@@ -314,6 +327,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		level1s.Length.AssertEqual(1);
 		level1s[0].SecurityId.SecurityCode.AssertEqual("TSLA");
 		level1s[0].SecurityId.BoardCode.AssertEqual("NASDAQ");
+		level1s[0].SecurityId.Native.AssertNull();
 	}
 
 	[TestMethod]
@@ -325,36 +339,48 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		var nativeId = "native_fb";
 
 		var storageProvider = new MockNativeIdStorageProvider();
-		var storage = storageProvider.GetStorage("TestAdapter");
-		await storage.TryAddAsync(secId, nativeId, cancellationToken: token);
-
 		var inner = new TestPassThroughAdapter("TestAdapter");
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider);
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
-		await adapter.SendInMessageAsync(new ResetMessage(), token);
 
-		// After reset, native ids should be cleared from in-memory cache
-		// New order should be suspended
-		var orderMsg = new OrderRegisterMessage
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
 		{
 			SecurityId = secId,
 			TransactionId = 1,
 			Side = Sides.Buy,
 			Price = 100,
-			Volume = 10
-		};
+			Volume = 10,
+		}, token);
 
-		await adapter.SendInMessageAsync(orderMsg, token);
+		await inner.SendOutMessageAsync(new Level1ChangeMessage
+		{
+			SecurityId = new SecurityId { Native = nativeId },
+			ServerTime = DateTime.UtcNow,
+		}, token);
 
-		// Order should NOT have native id attached after reset
+		await adapter.SendInMessageAsync(new ResetMessage(), token);
+
+		await inner.SendOutMessageAsync(new SecurityMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = secId.SecurityCode, BoardCode = secId.BoardCode, Native = nativeId },
+		}, token);
+
+		var releaseId = secId;
+		releaseId.Native = nativeId;
+		await adapter.SendInMessageAsync(new ProcessSuspendedMessage(adapter, releaseId), token);
+
 		inner.InMessages.OfType<OrderRegisterMessage>().Count().AssertEqual(0);
+		output.OfType<Level1ChangeMessage>().Count().AssertEqual(0);
 	}
 
 	// Note: Clone test removed because nested test adapter classes don't work well with reflection-based cloning
 
 	[TestMethod]
-	public async Task DuplicateNativeId_LogsWarning_AndUpdatesMapping()
+	public async Task DuplicateNativeId_UpdatesMappingAndTranslationCache()
 	{
 		var token = CancellationToken;
 
@@ -384,6 +410,15 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		var storedSecId = await storage.TryGetByNativeIdAsync(nativeId, token);
 		storedSecId.AssertNotNull();
 		storedSecId.Value.SecurityCode.AssertEqual("SYM2");
+
+		await inner.SendOutMessageAsync(new Level1ChangeMessage
+		{
+			SecurityId = new SecurityId { Native = nativeId },
+			ServerTime = DateTime.UtcNow,
+		}, token);
+
+		var translated = output.OfType<Level1ChangeMessage>().Single();
+		translated.SecurityId.AssertEqual(secId2);
 	}
 
 	[TestMethod]
@@ -395,9 +430,6 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		var nativeId = "native_amzn";
 
 		var storageProvider = new MockNativeIdStorageProvider();
-		var storage = storageProvider.GetStorage("TestAdapter");
-		await storage.TryAddAsync(secId, nativeId, cancellationToken: token);
-
 		var inner = new TestPassThroughAdapter("TestAdapter");
 		using var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider);
 
@@ -406,8 +438,7 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(new ConnectMessage(), token);
 
-		// Execution with transaction id and native security id
-		var execMsg = new ExecutionMessage
+		var tracked = new ExecutionMessage
 		{
 			SecurityId = new SecurityId { Native = nativeId },
 			DataTypeEx = DataType.Transactions,
@@ -417,11 +448,28 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 			OrderState = OrderStates.Active
 		};
 
-		await inner.SendOutMessageAsync(execMsg, CancellationToken);
+		await inner.SendOutMessageAsync(tracked, CancellationToken);
+		output.OfType<ExecutionMessage>().Count().AssertEqual(0);
+
+		await inner.SendOutMessageAsync(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = tracked.TransactionId,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 101,
+			TradeVolume = 1,
+		}, CancellationToken);
+		output.OfType<ExecutionMessage>().Count().AssertEqual(0);
+
+		await inner.SendOutMessageAsync(new SecurityMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = secId.SecurityCode, BoardCode = secId.BoardCode, Native = nativeId },
+		}, CancellationToken);
 
 		var execs = output.OfType<ExecutionMessage>().ToArray();
-		execs.Length.AssertEqual(1);
-		execs[0].SecurityId.SecurityCode.AssertEqual("AMZN");
+		execs.Length.AssertEqual(2);
+		execs.All(m => m.SecurityId == secId).AssertTrue();
+		execs.Single(m => m.TradePrice != null).OriginalTransactionId.AssertEqual(tracked.TransactionId);
 	}
 
 	[TestMethod]
@@ -596,7 +644,9 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 		var adapter = new SecurityNativeIdMessageAdapter(inner, storageProvider, manager.Object);
 		adapter.Dispose();
 
-		// Verify Dispose was not called on the manager (since we don't own it)
+		manager.VerifyRemove(
+			m => m.ProcessSuspendedRequested -= It.IsAny<Func<SecurityId, CancellationToken, ValueTask>>(),
+			Times.Once);
 		manager.Verify(m => m.Dispose(), Times.Never);
 	}
 }
