@@ -26,7 +26,9 @@ public class SecurityNativeIdMessageAdapterTests : BaseTestClass
 
 		public override ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
-			InMessages.Add(message);
+			// Snapshot the message on receipt: the pass-through echo runs it back through the wrapping
+			// adapter's out-resolution, which mutates the same instance (native id -> friendly id).
+			InMessages.Add(message.Clone());
 			return base.SendInMessageAsync(message, cancellationToken);
 		}
 	}
