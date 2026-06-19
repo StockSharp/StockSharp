@@ -136,7 +136,7 @@ public class OrderBookIncrementBuilderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Update_NoBoundsCheck_ReturnsNull()
+	public void Update_OutOfBoundsPosition_ReturnsNull()
 	{
 		var builder = new OrderBookIncrementBuilder(
 			new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" });
