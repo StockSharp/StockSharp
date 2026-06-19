@@ -26,7 +26,7 @@ public class AsyncMessageChannelTests : BaseTestClass
 	{
 		var adapter = new PassThroughMessageAdapter(new IncrementalIdGenerator())
 		{
-			MaxParallelMessages = 2
+			MaxParallelMessages = 1
 		};
 
 		using var channel = new AsyncMessageChannel(adapter);
@@ -455,6 +455,7 @@ public class AsyncMessageChannelTests : BaseTestClass
 		var connected = AsyncHelper.CreateTaskCompletionSource<bool>();
 		var messageStarted = AsyncHelper.CreateTaskCompletionSource<bool>();
 		var messageRelease = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var processedCount = 0;
 
 		channel.NewOutMessageAsync += async (message, token) =>
 		{
@@ -464,6 +465,7 @@ public class AsyncMessageChannelTests : BaseTestClass
 					connected.TrySetResult(true);
 					return;
 				case ExecutionMessage:
+					Interlocked.Increment(ref processedCount);
 					messageStarted.TrySetResult(true);
 					await messageRelease.Task;
 					return;
@@ -477,10 +479,22 @@ public class AsyncMessageChannelTests : BaseTestClass
 		await channel.SendInMessageAsync(new ExecutionMessage(), CancellationToken);
 		await messageStarted.Task.WithCancellation(CancellationToken);
 
+		// Keep one message queued behind the in-flight handler.
+		await channel.SendInMessageAsync(new ExecutionMessage(), CancellationToken);
+
+		var closeTask = Task.Run(channel.Close, CancellationToken);
+		while (channel.State != ChannelStates.Stopping)
+			await Task.Delay(10, CancellationToken);
+
 		messageRelease.TrySetResult(true);
-		channel.Close();
+		await closeTask.WithCancellation(CancellationToken);
 
 		channel.State.AssertEqual(ChannelStates.Stopped);
+		processedCount.AssertEqual(1, "Queued message must not start after Close");
+
+		await channel.SendInMessageAsync(new ExecutionMessage(), CancellationToken);
+		await Task.Delay(100, CancellationToken);
+		processedCount.AssertEqual(1, "Messages sent after Close must be dropped");
 	}
 
 	[TestMethod]
