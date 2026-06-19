@@ -677,9 +677,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		};
 
 		var error = await manager.SubscribeAsync(subscribeMsg, CancellationToken);
-		// Level1 may not be available - that's ok
-		if (error != null)
-			return;
+		error.AssertNull();
 
 		var messages = new List<Message>();
 		var boards = Array.Empty<BoardMessage>();
@@ -697,7 +695,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		// If Level1 data exists, we should have received it
 		var level1Messages = messages.OfType<Level1ChangeMessage>().ToList();
-		// Just verify we didn't crash - Level1 may or may not be in sample data
+		level1Messages.Count.AssertGreater(0);
 	}
 
 	[TestMethod]
@@ -723,9 +721,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		};
 
 		var error = await manager.SubscribeAsync(subscribeMsg, CancellationToken);
-		// MarketDepth may not be available - that's ok
-		if (error != null)
-			return;
+		error.AssertNull();
 
 		var messages = new List<Message>();
 		var boards = Array.Empty<BoardMessage>();
@@ -741,8 +737,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 			}
 		}
 
-		// Just verify we didn't crash
 		var depthMessages = messages.OfType<QuoteChangeMessage>().ToList();
+		depthMessages.Count.AssertGreater(0);
 	}
 
 	#endregion
@@ -954,7 +950,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var generatorTicks = messages.OfType<ExecutionMessage>()
 			.Where(m => m.SecurityId == generatorSecId && m.DataTypeEx == DataType.Ticks).ToList();
 
-		(historyTicks.Count > 0 || generatorTicks.Count > 0).AssertTrue("Should have messages from history or generator");
+		historyTicks.Count.AssertGreater(0, "Should have messages from history");
+		generatorTicks.Count.AssertGreater(0, "Should have messages from generator");
 	}
 
 	[TestMethod]
@@ -1205,6 +1202,16 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		}
 
 		AssertStrictlyOrderedByTime(messages, "ThreeSecurities_DifferentDataTypes");
+
+		messages.OfType<ExecutionMessage>()
+			.Count(m => m.SecurityId == secId1 && m.DataTypeEx == DataType.Ticks)
+			.AssertGreater(0);
+		messages.OfType<CandleMessage>()
+			.Count(m => m.SecurityId == secId2)
+			.AssertGreater(0);
+		messages.OfType<ExecutionMessage>()
+			.Count(m => m.SecurityId == genSecId && m.DataTypeEx == DataType.Ticks)
+			.AssertGreater(0);
 	}
 
 	[TestMethod]
@@ -1420,7 +1427,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(30000, CooperativeCancellation = true)]
-	public async Task PropertyValidation_TimeChangedMessages_Valid()
+	public async Task PropertyValidation_CandleTimes_WithinReplayRange()
 	{
 		var storageRegistry = GetHistoryStorage();
 		if (storageRegistry == null)
@@ -1456,7 +1463,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		{
 			// OpenTime should be within range
 			(candle.OpenTime >= startDate).AssertTrue($"Candle.OpenTime {candle.OpenTime:O} before start date");
-			(candle.OpenTime <= stopDate.AddDays(1)).AssertTrue($"Candle.OpenTime {candle.OpenTime:O} after stop date");
+			(candle.OpenTime <= stopDate).AssertTrue($"Candle.OpenTime {candle.OpenTime:O} after stop date");
 		}
 	}
 
