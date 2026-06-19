@@ -27,11 +27,12 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 		using var channel = new InMemoryMessageChannel(queue, "TestChannel", ex => Fail($"Channel error: {ex.Message}"));
 
 		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
-		var portfolioName = "TestPortfolio";
+		var portfolio = Portfolio.CreateSimulator();
+		var portfolioName = portfolio.Name;
 
 		// Create emulator
 		var secProvider = new CollectionSecurityProvider([new Security { Id = "TEST@TEST" }]);
-		var pfProvider = new CollectionPortfolioProvider([Portfolio.CreateSimulator()]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var exchangeProvider = new InMemoryExchangeInfoProvider();
 
 		var emulator = new MarketEmulator(secProvider, pfProvider, exchangeProvider, new IncrementalIdGenerator());
@@ -39,6 +40,7 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 		// Track output message times
 		var outputTimes = new ConcurrentBag<(DateTime time, string msgType)>();
 		var timeViolations = new ConcurrentBag<string>();
+		var acceptedOrders = new ConcurrentDictionary<long, byte>();
 		DateTime lastOutputTime = DateTime.MinValue;
 		var outputLock = new object();
 
@@ -53,6 +55,13 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 				}
 				lastOutputTime = time > lastOutputTime ? time : lastOutputTime;
 				outputTimes.Add((time, msg.GetType().Name));
+
+				if (msg is ExecutionMessage execMsg &&
+					execMsg.HasOrderInfo &&
+					execMsg.OrderState == OrderStates.Active)
+				{
+					acceptedOrders.TryAdd(execMsg.OriginalTransactionId, 0);
+				}
 			}
 			return default;
 		};
@@ -134,7 +143,8 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 
 		// Verify results
 		ticksProcessed.AssertEqual(1000, "Should have processed all ticks");
-		ordersRegistered.AssertGreater(0, "Should have registered orders from handler");
+		ordersRegistered.AssertEqual(20, "Should register one order for every 50 ticks");
+		acceptedOrders.Count.AssertEqual(20, "Every submitted order should be accepted by the emulator");
 
 		// With proper flow through channel, there should be no time violations
 		if (timeViolations.Count > 0)
