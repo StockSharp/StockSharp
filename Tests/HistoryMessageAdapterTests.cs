@@ -601,9 +601,12 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		// Should have EmulationStateMessage with Stopping state
 		var stoppingState = outMessages.OfType<EmulationStateMessage>()
-			.FirstOrDefault(m => m.State == ChannelStates.Stopping);
+			.SingleOrDefault(m => m.State == ChannelStates.Stopping && m.Error != null);
 
 		stoppingState.AssertNotNull();
+		// The stopping state must carry the actual failure cause, not a generic cancellation.
+		(stoppingState.Error is InvalidOperationException).AssertTrue();
+		stoppingState.LocalTime.AssertEqual(manager.StopDate);
 
 		// The thrown manager exception should surface as an ErrorMessage (the test name promises an error).
 		var errorMsg = outMessages.OfType<ErrorMessage>().FirstOrDefault();
@@ -701,17 +704,13 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	#region Generator Data Tests (without history)
 
 	[TestMethod]
-	public async Task StartAsync_WithGenerator_NoHistory_YieldsGeneratorData()
+	public async Task StartAsync_ManagerYieldedTick_ForwardsData()
 	{
 		var secProvider = CreateSecurityProvider();
 		var secId = CreateSecurityId();
 
-		// Create manager that simulates generator-only data (no storage)
 		var manager = new TestHistoryMarketDataManager();
-		var generator = new RandomWalkTradeGenerator(secId);
-		manager.RegisterGenerator(secId, DataType.Ticks, generator, 1);
 
-		// Add simulated generator output
 		var generatedTick = new ExecutionMessage
 		{
 			SecurityId = secId,
