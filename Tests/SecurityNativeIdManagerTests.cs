@@ -122,11 +122,40 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 		using var manager = new SecurityNativeIdManager(logReceiver, storageProvider, false);
 		await manager.InitializeAsync("TestAdapter", token);
 
+		var secId = new SecurityId { SecurityCode = "RESET", BoardCode = "TEST" };
+		var nativeId = "native_reset";
+
+		await manager.ProcessInMessageAsync(new OrderRegisterMessage
+		{
+			SecurityId = secId,
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 1,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new Level1ChangeMessage
+		{
+			SecurityId = new SecurityId { Native = nativeId },
+			ServerTime = DateTime.UtcNow,
+		}, token);
+
 		var (toInner, toOut) = await manager.ProcessInMessageAsync(new ResetMessage(), token);
 
 		toInner.Length.AssertEqual(1);
 		toInner[0].Type.AssertEqual(MessageTypes.Reset);
 		toOut.Length.AssertEqual(0);
+
+		var (_, releasedOut, _) = await manager.ProcessOutMessageAsync(new SecurityMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = secId.SecurityCode, BoardCode = secId.BoardCode, Native = nativeId },
+		}, token);
+		releasedOut.Length.AssertEqual(0);
+
+		var releaseId = secId;
+		releaseId.Native = nativeId;
+		var (releasedIn, _) = await manager.ProcessInMessageAsync(new ProcessSuspendedMessage(null, releaseId), token);
+		releasedIn.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -207,24 +236,47 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public async Task ProcessOutMessage_Connect_LoadsNativeIds()
+	public async Task ProcessOutMessage_Connect_ReleasesResolvableSuspendedMessages()
 	{
 		var token = CancellationToken;
 		var logReceiver = new TestReceiver();
 		var storageProvider = new MockNativeIdStorageProvider();
 
+		using var manager = new SecurityNativeIdManager(logReceiver, storageProvider, false);
+		await manager.InitializeAsync("TestAdapter", token);
+
 		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = "NASDAQ" };
 		var nativeId = 12345L;
+
+		await manager.ProcessInMessageAsync(new OrderRegisterMessage
+		{
+			SecurityId = secId,
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 1,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new Level1ChangeMessage
+		{
+			SecurityId = new SecurityId { Native = nativeId },
+			ServerTime = DateTime.UtcNow,
+		}, token);
 
 		var storage = storageProvider.GetStorage("TestAdapter");
 		await storage.TryAddAsync(secId, nativeId, cancellationToken: token);
 
-		using var manager = new SecurityNativeIdManager(logReceiver, storageProvider, false);
-		await manager.InitializeAsync("TestAdapter", token);
+		var connect = new ConnectMessage();
+		var (forward, extraOut, loopbackIn) = await manager.ProcessOutMessageAsync(connect, token);
 
-		var (forward, extraOut, loopbackIn) = await manager.ProcessOutMessageAsync(new ConnectMessage(), token);
-
-		forward.Type.AssertEqual(MessageTypes.Connect);
+		forward.AssertSame(connect);
+		extraOut.Length.AssertEqual(1);
+		((Level1ChangeMessage)extraOut[0]).SecurityId.AssertEqual(secId);
+		loopbackIn.Length.AssertEqual(1);
+		var releasedOrder = (OrderRegisterMessage)loopbackIn[0];
+		releasedOrder.SecurityId.SecurityCode.AssertEqual(secId.SecurityCode);
+		releasedOrder.SecurityId.BoardCode.AssertEqual(secId.BoardCode);
+		releasedOrder.SecurityId.Native.AssertEqual(nativeId);
 	}
 
 	[TestMethod]
@@ -423,13 +475,10 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 		var secId = new SecurityId { SecurityCode = "AMZN", BoardCode = "NASDAQ" };
 		var nativeId = "native_amzn";
 
-		var storage = storageProvider.GetStorage("TestAdapter");
-		await storage.TryAddAsync(secId, nativeId, cancellationToken: token);
-
 		using var manager = new SecurityNativeIdManager(logReceiver, storageProvider, false);
 		await manager.InitializeAsync("TestAdapter", token);
 
-		var execMsg = new ExecutionMessage
+		var tracked = new ExecutionMessage
 		{
 			SecurityId = new SecurityId { Native = nativeId },
 			DataTypeEx = DataType.Transactions,
@@ -439,11 +488,30 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 			OrderState = OrderStates.Active
 		};
 
-		var (forward, extraOut, loopbackIn) = await manager.ProcessOutMessageAsync(execMsg, token);
+		var (forward1, _, _) = await manager.ProcessOutMessageAsync(tracked, token);
+		forward1.AssertNull();
 
-		forward.AssertNotNull();
-		var result = (ExecutionMessage)forward;
-		result.SecurityId.SecurityCode.AssertEqual("AMZN");
+		var followUp = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = tracked.TransactionId,
+			ServerTime = DateTime.UtcNow,
+			TradePrice = 101,
+			TradeVolume = 1,
+		};
+
+		var (forward2, _, _) = await manager.ProcessOutMessageAsync(followUp, token);
+		forward2.AssertNull();
+
+		var (_, extraOut, _) = await manager.ProcessOutMessageAsync(new SecurityMessage
+		{
+			SecurityId = new SecurityId { SecurityCode = secId.SecurityCode, BoardCode = secId.BoardCode, Native = nativeId },
+		}, token);
+
+		var released = extraOut.OfType<ExecutionMessage>().ToArray();
+		released.Length.AssertEqual(2);
+		released.All(m => m.SecurityId == secId).AssertTrue();
+		released.Single(m => m.TradePrice != null).OriginalTransactionId.AssertEqual(tracked.TransactionId);
 	}
 
 	[TestMethod]
@@ -490,6 +558,8 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 		toInner2.Length.AssertEqual(1);
 		var releasedOrder = (OrderRegisterMessage)toInner2[0];
 		releasedOrder.SecurityId.SecurityCode.AssertEqual("FB");
+		releasedOrder.SecurityId.BoardCode.AssertEqual("NASDAQ");
+		releasedOrder.SecurityId.Native.AssertEqual(nativeId);
 	}
 
 	[TestMethod]
