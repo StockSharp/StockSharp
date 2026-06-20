@@ -879,7 +879,9 @@ public class MatchingEngineAdapter : IMessageTransport
 						{
 							SecurityId = securityId,
 							LocalTime = groupMsg.LocalTime,
-							TransactionId = TransactionIdGenerator.GetNextId(),
+							// The position-closing order carries the group request's transaction id so its
+							// executions report back against the request the caller actually sent.
+							TransactionId = groupMsg.TransactionId,
 							Side = closeSide,
 							Price = bestPrice.Value,
 							Volume = closeVolume,
