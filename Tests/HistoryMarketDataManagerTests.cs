@@ -1164,7 +1164,9 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		var secId2 = Paths.HistoryDefaultSecurity2.ToSecurityId();
 		var genSecId = CreateSecurityId();
 
-		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddHours(2));
+		// Security 2 candle data in the sample set only starts intraday (around 12:31), so the replay window
+		// must extend past it; a 2-hour window from midnight would contain ticks but no candles at all.
+		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddHours(13));
 
 		// Security 1: Historical ticks
 		await manager.SubscribeAsync(new MarketDataMessage
