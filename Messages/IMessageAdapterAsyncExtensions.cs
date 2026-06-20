@@ -153,22 +153,7 @@ public static class IMessageAdapterAsyncExtensions
 
 		adapter.NewOutMessageAsync += OnOut;
 
-		using var ctr = cancellationToken.Register(() =>
-		{
-			try
-			{
-				var unsub = subscription.TypedClone();
-				unsub.IsSubscribe = false;
-				unsub.OriginalTransactionId = subId;
-				unsub.TransactionId = adapter.TransactionIdGenerator.GetNextId();
-				_ = adapter.SendInMessageAsync((Message)unsub, CancellationToken.None);
-			}
-			catch { /* ignore */ }
-			finally
-			{
-				channel.Writer.TryComplete();
-			}
-		});
+		using var ctr = cancellationToken.Register(() => channel.Writer.TryComplete());
 
 		try
 		{
@@ -210,6 +195,22 @@ public static class IMessageAdapterAsyncExtensions
 		finally
 		{
 			adapter.NewOutMessageAsync -= OnOut;
+
+			// Send the unsubscribe on cancellation so it reaches the adapter. The cancellation callback can
+			// miss it because the enumerator may unwind on the token before the registered callback runs, so
+			// issue it from the finally that always runs.
+			if (cancellationToken.IsCancellationRequested)
+			{
+				try
+				{
+					var unsub = subscription.TypedClone();
+					unsub.IsSubscribe = false;
+					unsub.OriginalTransactionId = subId;
+					unsub.TransactionId = adapter.TransactionIdGenerator.GetNextId();
+					_ = adapter.SendInMessageAsync((Message)unsub, CancellationToken.None);
+				}
+				catch { /* ignore */ }
+			}
 		}
 	}
 

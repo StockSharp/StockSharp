@@ -63,12 +63,7 @@ public static class ISubscriptionProviderAsyncExtensions
 		provider.SubscriptionFailed += OnFailed;
 		provider.SubscriptionStopped += OnStopped;
 
-		using var ctr = cancellationToken.Register(() =>
-		{
-			try { provider.UnSubscribe(subscription); }
-			catch { /* ignore */ }
-			finally { channel.Writer.TryComplete(); }
-		});
+		using var ctr = cancellationToken.Register(() => channel.Writer.TryComplete());
 
 		try
 		{
@@ -100,6 +95,15 @@ public static class ISubscriptionProviderAsyncExtensions
 			provider.SubscriptionReceived -= OnReceived;
 			provider.SubscriptionFailed -= OnFailed;
 			provider.SubscriptionStopped -= OnStopped;
+
+			// Stop the live subscription on cancellation so the unsubscribe reaches the adapter. The
+			// cancellation callback alone is not reliable: the enumerator can unwind on the token before
+			// the registered callback runs, so issue the unsubscribe from the finally that always runs.
+			if (cancellationToken.IsCancellationRequested)
+			{
+				try { provider.UnSubscribe(subscription); }
+				catch { /* ignore */ }
+			}
 		}
 	}
 
