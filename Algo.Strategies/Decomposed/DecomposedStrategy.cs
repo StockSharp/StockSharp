@@ -328,6 +328,28 @@ public class DecomposedStrategy : BaseLogReceiver, IStrategyHost, IPositionProvi
 		}
 	}
 
+	/// <inheritdoc />
+	protected override void RaiseLog(LogMessage message)
+	{
+		if (message is null)
+			throw new ArgumentNullException(nameof(message));
+
+		// Promote ErrorState from logging exactly as the monolith Strategy does, so the ErrorState change
+		// stream matches it: a warning raises Info -> Warning, an error escalates straight to Error.
+		switch (message.Level)
+		{
+			case LogLevels.Warning:
+				if (ErrorState == LogLevels.Info)
+					ErrorState = LogLevels.Warning;
+				break;
+			case LogLevels.Error:
+				ErrorState = LogLevels.Error;
+				break;
+		}
+
+		base.RaiseLog(message);
+	}
+
 	/// <summary>
 	/// Strategy start time.
 	/// </summary>
@@ -989,7 +1011,9 @@ public class DecomposedStrategy : BaseLogReceiver, IStrategyHost, IPositionProvi
 		_lastCantTradeReason = default;
 
 		Latency = null;
-		ErrorState = default;
+		// Reset to Info (not the default Inherit) to match the monolith Strategy.Reset, so the ErrorState
+		// change stream is identical at reset instead of emitting an extra Info -> Inherit transition.
+		ErrorState = LogLevels.Info;
 
 		var totalWorkingTime = TotalWorkingTime;
 		TotalWorkingTime = default;
