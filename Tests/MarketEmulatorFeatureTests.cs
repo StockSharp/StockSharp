@@ -2,6 +2,9 @@ namespace StockSharp.Tests;
 
 using StockSharp.Algo.Testing;
 
+// This suite deliberately exercises the obsolete MarketEmulatorOld to compare it against MarketEmulator.
+#pragma warning disable CS0618 // Type or member is obsolete
+
 /// <summary>
 /// Comprehensive feature comparison tests between MarketEmulatorOld (V1) and MarketEmulator (V2).
 /// All tests create BOTH emulators and compare results 1:1.

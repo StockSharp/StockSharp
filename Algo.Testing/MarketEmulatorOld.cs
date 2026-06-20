@@ -60,6 +60,7 @@ class LevelOrders : IEnumerable<ExecutionMessage>
 /// <summary>
 /// Emulator.
 /// </summary>
+[Obsolete("Use MarketEmulator instead.")]
 public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 {
 	private abstract class Pool<T>
