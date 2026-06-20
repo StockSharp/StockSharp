@@ -344,6 +344,9 @@ public class MatchingEngineAdapter : IMessageTransport
 			ServerTime = serverTime,
 			LocalTime = regMsg.LocalTime,
 			OriginalTransactionId = regMsg.TransactionId,
+			// Report acceptance as Active; a reject, expiry or full fill overwrites this below, but an
+			// order that fills immediately still passes through Active so every order reports acceptance.
+			OrderState = OrderStates.Active,
 		};
 		results.Add(replyMsg);
 

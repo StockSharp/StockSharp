@@ -406,6 +406,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			ServerTime = serverTime,
 			LocalTime = regMsg.LocalTime,
 			OriginalTransactionId = regMsg.TransactionId,
+			// Report acceptance as Active; expiry or a full fill overwrites this below, but an order that
+			// fills immediately against the candle still passes through Active so acceptance is reported.
+			OrderState = OrderStates.Active,
 		};
 		results.Add(replyMsg);
 

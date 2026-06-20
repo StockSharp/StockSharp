@@ -1810,6 +1810,10 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 
 				if (error is null)
 				{
+					// Acceptance is reported as Active; a PostOnly rejection, a full fill or expiry below
+					// overwrites it, but an order that fills immediately still passes through Active.
+					replyMsg.OrderState = OrderStates.Active;
+
 					if (execution.PostOnly == true)
 					{
 						var quotes = GetQuotes(execution.Side.Invert());
