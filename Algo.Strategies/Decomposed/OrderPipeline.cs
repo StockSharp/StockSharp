@@ -68,8 +68,11 @@ public class OrderPipeline(IStatisticManager stats)
 
 		var info = _ordersInfo.TryGetValue(order);
 
+		// Count the order as registered on its first transition into a confirmed state. The previous state is
+		// usually Pending, but an order can be confirmed without a separately observed Pending (e.g. an
+		// emulator that reports the acceptance directly as Active), so None counts as not-yet-confirmed too.
 		var isRegistered = info != null
-			&& info.PrevState == OrderStates.Pending
+			&& info.PrevState is (OrderStates.None or OrderStates.Pending)
 			&& (order.State == OrderStates.Active || order.State == OrderStates.Done);
 
 		if (info != null)

@@ -1853,7 +1853,10 @@ public partial class Strategy : BaseLogReceiver, INotifyPropertyChangedEx, IMark
 
 		var info = _ordersInfo.TryGetValue(order);
 
-		var isRegistered = info != null && info.PrevState == OrderStates.Pending && (order.State == OrderStates.Active || order.State == OrderStates.Done);
+		// An order counts as registered on its first transition into a confirmed state. The previous state is
+		// usually Pending, but an order can be confirmed without a separately observed Pending (e.g. an
+		// emulator that reports the acceptance directly as Active), so None counts as not-yet-confirmed too.
+		var isRegistered = info != null && info.PrevState is (OrderStates.None or OrderStates.Pending) && (order.State == OrderStates.Active || order.State == OrderStates.Done);
 
 		if (info != null)
 			info.PrevState = order.State;

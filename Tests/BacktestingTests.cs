@@ -1047,26 +1047,21 @@ public class BacktestingTests : BaseTestClass
 		};
 
 		// Independently count order *registrations* exactly as the OrderCount statistic does:
-		// OrderCountParameter.New(order) is invoked once per order when it transitions
-		// Pending -> Active/Done (Strategy.ProcessOrder => StatisticManager.AddNewOrder), and the
-		// statistic is monotonic (never decremented). Replicate that precise condition here: track,
-		// per order, that it was first seen Pending and then count it once when it later reaches
-		// Active or Done. This is the true contract of the OrderCount statistic and is deterministic
-		// for the fixed sample history.
-		var pendingSeen = new HashSet<long>();
+		// OrderCountParameter.New(order) is invoked once per order when it first reaches a confirmed state
+		// (Strategy.ProcessOrder => StatisticManager.AddNewOrder), and the statistic is monotonic (never
+		// decremented). An order reaches Active/Done from a not-yet-confirmed state (None or Pending), so
+		// count each order once the first time it is observed Active or Done. This is the true contract of
+		// the OrderCount statistic and is deterministic for the fixed sample history.
 		var counted = new HashSet<long>();
 		var registeredOrderCount = 0;
 		strategy.OrderReceived += (sub, order) =>
 		{
 			var id = order.TransactionId;
 
-			if (order.State == OrderStates.Pending)
-				pendingSeen.Add(id);
-			else if ((order.State == OrderStates.Active || order.State == OrderStates.Done) &&
-				pendingSeen.Contains(id) && counted.Add(id))
-			{
+			// An order reaches Active/Done from a not-yet-confirmed state (None or Pending); count each once
+			// the first time it is observed in a confirmed state, mirroring the OrderCount statistic.
+			if ((order.State == OrderStates.Active || order.State == OrderStates.Done) && counted.Add(id))
 				registeredOrderCount++;
-			}
 		};
 
 		var tcs = new TaskCompletionSource<bool>();
