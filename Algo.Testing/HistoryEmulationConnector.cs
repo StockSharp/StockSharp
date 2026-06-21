@@ -144,6 +144,13 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	/// </summary>
 	public HistoryMessageAdapter HistoryMessageAdapter => EmulationAdapter.FindAdapter<HistoryMessageAdapter>();
 
+	// Serializes the read-modify-write of the state machine. All channels are synchronous
+	// PassThroughMessageChannel, so the replay thread and the resume/test thread can both
+	// drive state transitions at the same time; without this lock a terminal Stopping and a
+	// resume Starting could interleave a half-applied transition, making the strict guard
+	// throw or land in a non-Stopped state so that Stopped/OnDisconnected never fires.
+	private readonly Lock _stateSync = new();
+
 	private ChannelStates _state = ChannelStates.Stopped;
 
 	/// <summary>
@@ -154,76 +161,83 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		get => _state;
 		private set
 		{
-			if (_state == value)
-				return;
+			using (_stateSync.EnterScope())
+				SetStateInternal(value);
+		}
+	}
 
-			if (!EmulationAdapter.OwnInnerAdapter && _state == ChannelStates.Stopped && value == ChannelStates.Stopping)
-				return;
+	// Applies a single state transition. Must be called while holding _stateSync.
+	private void SetStateInternal(ChannelStates value)
+	{
+		if (_state == value)
+			return;
 
-			bool throwError;
+		if (!EmulationAdapter.OwnInnerAdapter && _state == ChannelStates.Stopped && value == ChannelStates.Stopping)
+			return;
 
-			var channel = EmulationAdapter.InChannel;
+		bool throwError;
 
-			switch (value)
-			{
-				case ChannelStates.Stopped:
-					throwError = _state != ChannelStates.Stopping;
+		var channel = EmulationAdapter.InChannel;
 
-					//if (EmulationAdapter.OwnInnerAdapter)
-						if (!EmulationAdapter.OwnInnerAdapter && channel is InMemoryMessageChannel inMem)
-							inMem.Disabled = true;
+		switch (value)
+		{
+			case ChannelStates.Stopped:
+				throwError = _state != ChannelStates.Stopping;
 
-						channel.Close();
+				//if (EmulationAdapter.OwnInnerAdapter)
+					if (!EmulationAdapter.OwnInnerAdapter && channel is InMemoryMessageChannel inMem)
+						inMem.Disabled = true;
 
-					break;
-				case ChannelStates.Stopping:
-					throwError = _state is not ChannelStates.Started and not ChannelStates.Suspended
-						and not ChannelStates.Starting;  // при ошибках при запуске эмуляции состояние может быть Starting
+					channel.Close();
 
-					//if (EmulationAdapter.OwnInnerAdapter)
-					{
-						channel.Clear();
+				break;
+			case ChannelStates.Stopping:
+				throwError = _state is not ChannelStates.Started and not ChannelStates.Suspended
+					and not ChannelStates.Starting;  // on errors during emulation start the state can still be Starting
 
-						if (_state == ChannelStates.Suspended)
-							channel.Resume();
-					}
+				//if (EmulationAdapter.OwnInnerAdapter)
+				{
+					channel.Clear();
 
-					break;
-				case ChannelStates.Starting:
-					throwError = _state is not ChannelStates.Stopped and not ChannelStates.Suspended;
-					break;
-				case ChannelStates.Started:
-					throwError = _state != ChannelStates.Starting;
-					break;
-				case ChannelStates.Suspending:
-					throwError = _state != ChannelStates.Started;
-					break;
-				case ChannelStates.Suspended:
-					throwError = _state != ChannelStates.Suspending;
+					if (_state == ChannelStates.Suspended)
+						channel.Resume();
+				}
 
-					//if (EmulationAdapter.OwnInnerAdapter)
-						channel.Suspend();
+				break;
+			case ChannelStates.Starting:
+				throwError = _state is not ChannelStates.Stopped and not ChannelStates.Suspended;
+				break;
+			case ChannelStates.Started:
+				throwError = _state != ChannelStates.Starting;
+				break;
+			case ChannelStates.Suspending:
+				throwError = _state != ChannelStates.Started;
+				break;
+			case ChannelStates.Suspended:
+				throwError = _state != ChannelStates.Suspending;
 
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
-			}
+				//if (EmulationAdapter.OwnInnerAdapter)
+					channel.Suspend();
 
-			if (throwError)
-				throw new InvalidOperationException(LocalizedStrings.TaskCannotChangeState.Put(_state, value));
+				break;
+			default:
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+		}
 
-			LogInfo("State: {0}->{1}", _state, value);
-			_state = value;
+		if (throwError)
+			throw new InvalidOperationException(LocalizedStrings.TaskCannotChangeState.Put(_state, value));
 
-			try
-			{
-				StateChanged?.Invoke();
-				StateChanged2?.Invoke(value);
-			}
-			catch (Exception ex)
-			{
-				SendOutError(ex);
-			}
+		LogInfo("State: {0}->{1}", _state, value);
+		_state = value;
+
+		try
+		{
+			StateChanged?.Invoke();
+			StateChanged2?.Invoke(value);
+		}
+		catch (Exception ex)
+		{
+			SendOutError(ex);
 		}
 	}
 
@@ -439,7 +453,18 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 
 	private void ProcessEmulationStateMessage(EmulationStateMessage message)
 	{
-		State = message.State;
+		// Hold the state lock across the whole decision and the resulting side-effects so a
+		// terminal Stopping and a concurrent resume Starting cannot interleave a half-applied
+		// transition. State writes below go through SetStateInternal (not the locked setter),
+		// because Lock is non-reentrant and the lock is already held here.
+		using (_stateSync.EnterScope())
+			ProcessEmulationStateMessageNoLock(message);
+	}
+
+	// Core of the emulation-state handling. Must be called while holding _stateSync.
+	private void ProcessEmulationStateMessageNoLock(EmulationStateMessage message)
+	{
+		SetStateInternal(message.State);
 
 		switch (State)
 		{
@@ -459,18 +484,18 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 
 			case ChannelStates.Starting:
 			{
-				State = ChannelStates.Started;
+				SetStateInternal(ChannelStates.Started);
 				break;
 			}
 
 			case ChannelStates.Suspending:
 			{
-				State = ChannelStates.Suspended;
+				SetStateInternal(ChannelStates.Suspended);
 				break;
 			}
 		}
 
 		if (_stopPending && (State is ChannelStates.Started or ChannelStates.Suspended))
-			ProcessEmulationStateMessage(new() { State = ChannelStates.Stopping });
+			ProcessEmulationStateMessageNoLock(new() { State = ChannelStates.Stopping });
 	}
 }

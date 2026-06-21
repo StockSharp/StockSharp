@@ -13,12 +13,17 @@ using DataType = StockSharp.Messages.DataType;
 [TestClass]
 public class IndicatorTests : BaseTestClass
 {
-	private static IIndicatorValue CreateValue(IndicatorType type, IIndicator indicator, SecurityId secId, DateTime now, int idx, TimeSpan tf, bool isFinal, bool isEmpty, int diffLimit = 10)
+	private static IIndicatorValue CreateValue(IndicatorType type, IIndicator indicator, SecurityId secId, DateTime now, int idx, TimeSpan tf, bool isFinal, bool isEmpty, int diffLimit = 10, Random rnd = null)
 	{
 		var time = now + tf.Multiply(idx);
 
+		// When a seeded Random is supplied the value stream becomes reproducible; otherwise fall
+		// back to the global RandomGen. RandomGen.GetInt(min, max) has an inclusive upper bound,
+		// so the local path adds 1 to match it exactly.
 		int getRnd()
-			=> diffLimit > 0 ? RandomGen.GetInt(1, diffLimit) : RandomGen.GetInt(diffLimit, 0);
+			=> rnd is null
+				? (diffLimit > 0 ? RandomGen.GetInt(1, diffLimit) : RandomGen.GetInt(diffLimit, 0))
+				: (diffLimit > 0 ? rnd.Next(1, diffLimit + 1) : rnd.Next(diffLimit, 1));
 
 		ICandleMessage createCandle()
 		{
@@ -350,6 +355,10 @@ public class IndicatorTests : BaseTestClass
 			typeof(Fractals),
 		};
 
+		// Use a seeded RNG so the perturbation stream is reproducible and the test is deterministic
+		// across workers; an unseeded global RNG could, by chance, never break an extreme.
+		var rnd = new Random(12345);
+
 		foreach (var type in GetIndicatorTypes().Where(t => !skipTypes.Contains(t.Indicator)))
 		{
 			var indicator = type.CreateIndicator();
@@ -361,7 +370,7 @@ public class IndicatorTests : BaseTestClass
 
 			while (!indicator.IsFormed || extra > 0)
 			{
-				var value = CreateValue(type, indicator, secId, now, i++, tf, true, false);
+				var value = CreateValue(type, indicator, secId, now, i++, tf, true, false, rnd: rnd);
 				lastFinal = indicator.Process(value);
 				lastFinal.ValidateValue();
 
@@ -373,7 +382,7 @@ public class IndicatorTests : BaseTestClass
 
 			for (int k = 0; k < 200; k++)
 			{
-				var nonFinalValue = CreateValue(type, indicator, secId, now, i + k * 1000, tf, false, false, (RandomGen.GetBool() ? -1 : 1) * k * 10);
+				var nonFinalValue = CreateValue(type, indicator, secId, now, i + k * 1000, tf, false, false, (rnd.Next(2) == 0 ? -1 : 1) * k * 10, rnd);
 				var nonFinalResult = indicator.Process(nonFinalValue);
 				nonFinalResult.ValidateValue();
 

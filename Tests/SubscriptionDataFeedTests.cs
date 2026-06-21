@@ -6,6 +6,7 @@ class DataFeedEmulator : IDisposable
 {
 	private readonly CancellationTokenSource _cts = new();
 	private readonly BlockingCollection<Message> _outputQueue = [];
+	private readonly TaskCompletionSource<bool> _firstMessage = AsyncHelper.CreateTaskCompletionSource<bool>();
 	private Task _generatorTask;
 
 	public SecurityId SecurityId { get; }
@@ -36,8 +37,8 @@ class DataFeedEmulator : IDisposable
 		_isGenerating = true;
 		_generatorTask = Task.Run(GenerateDataLoop, cancellationToken);
 
-		// Wait for first message to be generated
-		await Task.Delay(100, cancellationToken);
+		// Wait until the first message is actually produced instead of guessing with a fixed delay.
+		await _firstMessage.Task.WaitAsync(TimeSpan.FromSeconds(5), cancellationToken);
 	}
 
 	public void Stop()
@@ -63,6 +64,9 @@ class DataFeedEmulator : IDisposable
 					if (StampSubscriptionIds)
 						msg.SetSubscriptionIds([_subscriptionId]);
 					_outputQueue.Add((Message)msg);
+
+					// Signal that the first message has been produced so StartAsync can return deterministically.
+					_firstMessage.TrySetResult(true);
 				}
 			}
 
@@ -697,14 +701,14 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		for (int i = 0; i < 10; i++)
 		{
-			if (feed1.TryGetMessage(TimeSpan.FromMilliseconds(50), out var msg1))
+			if (feed1.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg1))
 			{
 				var (forward, _) = manager.ProcessOutMessage(msg1);
 				if (forward is ISubscriptionIdMessage subMsg)
 					messages1.Add(subMsg);
 			}
 
-			if (feed2.TryGetMessage(TimeSpan.FromMilliseconds(50), out var msg2))
+			if (feed2.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg2))
 			{
 				var (forward, _) = manager.ProcessOutMessage(msg2);
 				if (forward is ISubscriptionIdMessage subMsg)

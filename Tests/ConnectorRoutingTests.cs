@@ -1100,15 +1100,34 @@ public class ConnectorRoutingTests : BaseTestClass
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
 		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
 
+		const int expected = 5;
+		var online = new ConcurrentDictionary<long, bool>();
+		var onlineAll = AsyncHelper.CreateTaskCompletionSource<bool>();
+
+		// Gate the disconnect on every subscription actually going online instead of a timed delay.
+		// UnSubscribeAll only cleans subscriptions whose state is active, so a subscription that has
+		// not yet reached Online would be skipped and left uncleaned.
+		connector.SubscriptionOnline += sub =>
+		{
+			online[sub.TransactionId] = true;
+			if (online.Count >= expected)
+				onlineAll.TrySetResult(true);
+		};
+
 		// Create several subscriptions
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < expected; i++)
 		{
 			var sub = new Subscription(DataType.Ticks, btcSecurity);
 			connector.Subscribe(sub);
 		}
 
-		await Task.Delay(300, CancellationToken);
-		Console.WriteLine($"Active subscriptions before disconnect: {adapter.ActiveSubscriptionCount}");
+		// Wait until every subscription is online before disconnecting. Identical (Ticks, BTCUSDT)
+		// subscriptions are deduplicated by the connector's online manager into a single underlying
+		// adapter subscription, so the adapter sees at least one active subscription, not all five.
+		// The lifecycle gate guarantees that underlying subscription has reached Online (an active
+		// state), so UnSubscribeAll - which only cleans active subscriptions - will not skip it.
+		await onlineAll.Task.WithCancellation(CancellationToken);
+
 		(adapter.ActiveSubscriptionCount >= 1).AssertTrue("Should have active subscriptions");
 
 		// Disconnect - subscriptions should be cleaned up
