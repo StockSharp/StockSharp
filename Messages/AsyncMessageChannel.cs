@@ -532,14 +532,19 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 
 	private void CancelAndReplaceGlobalCts()
 	{
+		// Atomically swap in a fresh source and cancel the old one. The old source is intentionally NOT
+		// disposed here: the processor task may still be reading its token (see ProcessMessagesAsync), and
+		// disposing it concurrently races into an ObjectDisposedException. A CancellationTokenSource without a
+		// timer holds no unmanaged resource, so letting the GC reclaim the abandoned one once the processor
+		// drains is safe and removes the use-after-dispose race.
+		var old = Interlocked.Exchange(ref _globalCts, new());
+
 		try
 		{
-			_globalCts?.Cancel();
+			old?.Cancel();
 		}
-		finally
+		catch
 		{
-			_globalCts?.Dispose();
-			_globalCts = new();
 		}
 	}
 
