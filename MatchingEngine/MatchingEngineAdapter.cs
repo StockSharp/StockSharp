@@ -216,10 +216,18 @@ public class MatchingEngineAdapter : IMessageTransport
 		state.UpdateSteps(bidPrice ?? askPrice ?? 0, bidVol.Value);
 
 		if (bidPrice.HasValue)
+		{
 			state.OrderBook.UpdateLevel(Sides.Buy, bidPrice.Value, bidVol.Value);
+			// Prune stale synthesized levels so the Level1-built book stays bounded (it would
+			// otherwise keep one level per distinct best price and grow without limit).
+			state.OrderBook.TrimSynthesizedDepth(Sides.Buy, Settings.MaxDepth);
+		}
 
 		if (askPrice.HasValue)
+		{
 			state.OrderBook.UpdateLevel(Sides.Sell, askPrice.Value, askVol.Value);
+			state.OrderBook.TrimSynthesizedDepth(Sides.Sell, Settings.MaxDepth);
+		}
 
 		if (state.HasDepthSubscription)
 		{
@@ -277,6 +285,12 @@ public class MatchingEngineAdapter : IMessageTransport
 				state.OrderBook.UpdateLevel(originSide, tradePrice, tradeVolume);
 			}
 		}
+
+		// Prune stale synthesized levels so the tick-built book stays bounded. A rising/varied tick
+		// stream adds a new level per distinct price, so without trimming the book grows without
+		// limit (the original source of the matching-engine memory leak).
+		state.OrderBook.TrimSynthesizedDepth(Sides.Buy, Settings.MaxDepth);
+		state.OrderBook.TrimSynthesizedDepth(Sides.Sell, Settings.MaxDepth);
 
 		if (state.HasDepthSubscription)
 		{

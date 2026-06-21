@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
 using StockSharp.Algo.Testing;
+using StockSharp.MatchingEngine;
 
 [TestClass]
 public class MarketEmulatorTests : BaseTestClass
@@ -1951,5 +1952,88 @@ public class MarketEmulatorTests : BaseTestClass
 		res.OfType<ExecutionMessage>()
 			.Count(x => x.OrderState == OrderStates.Active && x.Side == Sides.Sell)
 			.AssertEqual(1);
+	}
+
+	/// <summary>
+	/// When the matching engine synthesizes the order book from a long stream of distinct-price ticks
+	/// (no real order book history) it must stay bounded to <see cref="MatchingEngineSettings.MaxDepth"/>
+	/// levels per side. Reproduces the memory leak where <see cref="MatchingEngineAdapter.ProcessTick"/>
+	/// added a new level per distinct tick price and stale levels were never pruned, so the synthesized
+	/// book grew without limit (hundreds of thousands of levels in a backtest).
+	/// </summary>
+	[TestMethod]
+	public void SynthesizedTickBookStaysBounded()
+	{
+		var id = Helper.CreateSecurityId();
+		var engine = new MatchingEngineAdapter();
+		var now = DateTime.UtcNow;
+
+		var maxDepth = engine.Settings.MaxDepth;
+
+		// feed a long stream of distinct-price ticks; with no order book history the engine builds the book from ticks
+		var results = new List<Message>();
+
+		for (var i = 0; i < 2000; i++)
+		{
+			now = now.AddSeconds(1);
+
+			engine.ProcessMessage(new ExecutionMessage
+			{
+				SecurityId = id,
+				LocalTime = now,
+				ServerTime = now,
+				DataTypeEx = DataType.Ticks,
+				TradePrice = 1000 + i,
+				TradeVolume = 10,
+			}, results);
+		}
+
+		var book = engine.GetSecurityState(id).OrderBook;
+
+		Console.WriteLine($"tick book bids={book.BidLevels} asks={book.AskLevels} maxDepth={maxDepth}");
+
+		IsTrue(book.BidLevels <= maxDepth, $"bid depth {book.BidLevels} exceeds MaxDepth {maxDepth}");
+		IsTrue(book.AskLevels <= maxDepth, $"ask depth {book.AskLevels} exceeds MaxDepth {maxDepth}");
+	}
+
+	/// <summary>
+	/// Same bound for the Level1-synthesized book: a long stream of distinct best bid/ask updates fed
+	/// to <see cref="MatchingEngineAdapter.ProcessMessage"/> must not accumulate stale levels beyond
+	/// <see cref="MatchingEngineSettings.MaxDepth"/> per side.
+	/// </summary>
+	[TestMethod]
+	public void SynthesizedLevel1BookStaysBounded()
+	{
+		var id = Helper.CreateSecurityId();
+		var engine = new MatchingEngineAdapter();
+		var now = DateTime.UtcNow;
+
+		var maxDepth = engine.Settings.MaxDepth;
+
+		var results = new List<Message>();
+
+		// feed a long stream of distinct best bid/ask quotes via Level1
+		for (var i = 0; i < 2000; i++)
+		{
+			now = now.AddSeconds(1);
+
+			engine.ProcessMessage(new Level1ChangeMessage
+			{
+				SecurityId = id,
+				LocalTime = now,
+				ServerTime = now,
+			}
+			.Add(Level1Fields.BestBidPrice, 1000m + i)
+			.Add(Level1Fields.BestAskPrice, 1001m + i)
+			.Add(Level1Fields.BestBidVolume, 10m)
+			.Add(Level1Fields.BestAskVolume, 10m), results);
+		}
+
+		var book = engine.GetSecurityState(id).OrderBook;
+
+		Console.WriteLine($"level1 book bids={book.BidLevels} asks={book.AskLevels} maxDepth={maxDepth}");
+
+		IsTrue(book.BidLevels <= maxDepth, $"bid depth {book.BidLevels} exceeds MaxDepth {maxDepth}");
+		IsTrue(book.AskLevels <= maxDepth, $"ask depth {book.AskLevels} exceeds MaxDepth {maxDepth}");
 	}
 }

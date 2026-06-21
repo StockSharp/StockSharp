@@ -172,6 +172,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		_engine.Settings.CheckTradingState = Settings.CheckTradingState;
 		_engine.Settings.IncreaseDepthVolume = Settings.IncreaseDepthVolume;
 		_engine.Settings.SpreadSize = Settings.SpreadSize;
+		_engine.Settings.MaxDepth = Settings.MaxDepth;
 		_engine.Settings.InitialOrderId = Settings.InitialOrderId;
 		_engine.Settings.InitialTradeId = Settings.InitialTradeId;
 	}

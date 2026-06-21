@@ -329,6 +329,40 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 		return result;
 	}
 
+	/// <inheritdoc />
+	public void TrimSynthesizedDepth(Sides side, int maxDepth)
+	{
+		if (maxDepth < 1)
+			return;
+
+		var quotes = GetQuotes(side);
+
+		// Walk the worst (farthest from the market) levels and drop the synthetic part of the book
+		// that grew past maxDepth. Levels that hold real registered user orders are never removed:
+		// only their synthesized MarketVolume is cleared, and trimming stops at the first such level
+		// so it cannot loop forever and cannot reorder/lose user orders nearer the market.
+		while (quotes.Count > maxDepth)
+		{
+			var worst = quotes.Last();
+			var level = worst.Value;
+
+			if (level.OrderCount > 0)
+			{
+				// Strip the synthetic volume but keep the user orders; the level stays in the book.
+				if (level.MarketVolume > 0)
+				{
+					AddTotalVolume(side, -level.MarketVolume);
+					level.MarketVolume = 0;
+				}
+
+				break;
+			}
+
+			AddTotalVolume(side, -level.MarketVolume);
+			quotes.Remove(worst.Key);
+		}
+	}
+
 	private void AddTotalVolume(Sides side, decimal diff)
 	{
 		if (side == Sides.Buy)

@@ -34,4 +34,10 @@ public class MatchingEngineSettings
 	/// The size of spread in price increments for generation of order book from tick trades.
 	/// </summary>
 	public int SpreadSize { get; set; } = 2;
+
+	/// <summary>
+	/// The maximal depth of order book synthesized from ticks/Level1 when there is no order book history.
+	/// Stale synthesized levels beyond this depth are pruned so the book cannot grow unbounded. Default is 5.
+	/// </summary>
+	public int MaxDepth { get; set; } = 5;
 }

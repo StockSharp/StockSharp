@@ -225,4 +225,13 @@ public interface IOrderBook
 	/// <param name="maxDepth">Maximum allowed depth to keep.</param>
 	/// <returns>Removed orders from trimmed levels.</returns>
 	IEnumerable<EmulatorOrder> TrimToDepth(Sides side, int maxDepth);
+
+	/// <summary>
+	/// Trim the synthesized (market) part of the book to <paramref name="maxDepth"/> levels per side,
+	/// dropping the farthest stale levels that grew while building the book from ticks/Level1. Levels
+	/// holding real registered user orders are preserved (only their synthetic volume is cleared).
+	/// </summary>
+	/// <param name="side">Side to trim.</param>
+	/// <param name="maxDepth">Maximum number of levels to keep nearest the market.</param>
+	void TrimSynthesizedDepth(Sides side, int maxDepth);
 }
