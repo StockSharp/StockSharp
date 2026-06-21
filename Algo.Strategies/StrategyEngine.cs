@@ -1,9 +1,9 @@
-namespace StockSharp.Algo.Strategies.Decomposed;
+namespace StockSharp.Algo.Strategies;
 
 using StockSharp.Algo.PnL;
 
 /// <summary>
-/// State machine + message processing. Handles <see cref="DecomposedStrategy.ProcessState"/> transitions and market data routing to <see cref="DecomposedStrategy.PnLManager"/>.
+/// State machine + message processing. Handles <see cref="Strategy.ProcessState"/> transitions and market data routing to <see cref="Strategy.PnLManager"/>.
 /// </summary>
 /// <remarks>
 /// Initializes a new instance of the <see cref="StrategyEngine"/>.
@@ -15,9 +15,22 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 	private const MessageTypes _strategyChangeState = (MessageTypes)(-11);
 
 	private readonly IStrategyHost _host = host ?? throw new ArgumentNullException(nameof(host));
-	private readonly IPnLManager _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
+	private IPnLManager _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
 	private ProcessStates _processState;
 	private DateTime _lastPnlRefreshTime;
+	// Set once a stop is requested and kept until the final Stopped is emitted. Used (instead of the
+	// round-trip-updated ProcessState) to gate TryFinalStopAsync, so the Stopped message is emitted in the
+	// same request even before the Stopping message has been processed back, while the rule-completion
+	// re-drive stays a no-op during normal running.
+	private bool _stopRequested;
+
+	/// <summary>
+	/// Swap the PnL manager used for market-data routing. Used when <see cref="Strategy.PnLManager"/>
+	/// is reassigned so the engine routes quotes/ticks into the new manager.
+	/// </summary>
+	/// <param name="pnlManager">The new PnL manager.</param>
+	public void SetPnLManager(IPnLManager pnlManager)
+		=> _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
 
 	/// <summary>
 	/// Current process state.
@@ -39,14 +52,24 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 	}
 
 	/// <summary>
-	/// Interval for unrealized PnL refresh.
+	/// Interval for unrealized PnL refresh. The default value is 1 minute, matching the monolith
+	/// strategy, so the out-of-the-box refresh cadence is identical even before the public
+	/// <see cref="Strategy.UnrealizedPnLInterval"/> setter runs.
 	/// </summary>
-	public TimeSpan UnrealizedPnLInterval { get; set; } = TimeSpan.FromSeconds(1);
+	public TimeSpan UnrealizedPnLInterval { get; set; } = TimeSpan.FromMinutes(1);
 
 	/// <summary>
 	/// Fires when ProcessState changes.
 	/// </summary>
 	public event Action<ProcessStates> StateChanged;
+
+	/// <summary>
+	/// Gate for the final <see cref="ProcessStates.Stopping"/> -&gt; <see cref="ProcessStates.Stopped"/> transition.
+	/// Mirrors the monolith TryFinalStop: while it returns <see langword="false"/> the strategy stays in
+	/// <see cref="ProcessStates.Stopping"/> (e.g. outstanding rules under WaitRulesOnStop). When unset the
+	/// transition is never gated, preserving the previous immediate-stop behaviour.
+	/// </summary>
+	public Func<bool> CanFinalStop { get; set; }
 
 	/// <summary>
 	/// Fires when PnL should be recalculated.
@@ -64,6 +87,7 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 	public ValueTask RequestStartAsync(CancellationToken cancellationToken)
 	{
 		_processState = ProcessStates.Stopped; // ensure clean state
+		_stopRequested = false;
 		return _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Started), cancellationToken);
 	}
 
@@ -75,8 +99,27 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 		if (ProcessState == ProcessStates.Stopped)
 			return;
 
+		_stopRequested = true;
 		await _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Stopping), cancellationToken);
-		await _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Stopped), cancellationToken);
+		await TryFinalStopAsync(cancellationToken);
+	}
+
+	/// <summary>
+	/// Attempt the final <see cref="ProcessStates.Stopping"/> -&gt; <see cref="ProcessStates.Stopped"/> transition,
+	/// honouring <see cref="CanFinalStop"/>. While the gate denies it the strategy stays in
+	/// <see cref="ProcessStates.Stopping"/>; the method is re-driven once the gating condition clears
+	/// (mirroring the monolith TryFinalStop re-entry from rule completion).
+	/// </summary>
+	public ValueTask TryFinalStopAsync(CancellationToken cancellationToken)
+	{
+		if (!_stopRequested)
+			return default;
+
+		if (CanFinalStop is { } gate && !gate())
+			return default;
+
+		_stopRequested = false;
+		return _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Stopped), cancellationToken);
 	}
 
 	/// <summary>
@@ -212,6 +255,7 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 	{
 		_processState = ProcessStates.Stopped;
 		_lastPnlRefreshTime = default;
+		_stopRequested = false;
 	}
 
 	/// <summary>

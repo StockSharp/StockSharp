@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies.Decomposed;
+namespace StockSharp.Algo.Strategies;
 
 /// <summary>
 /// Infrastructure abstraction replacing direct <see cref="Connector"/> dependency.

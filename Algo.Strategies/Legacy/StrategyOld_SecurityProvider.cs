@@ -1,14 +1,7 @@
-namespace StockSharp.Algo.Strategies;
+﻿namespace StockSharp.Algo.Strategies;
 
-partial class Strategy
+partial class StrategyOld
 {
-	/// <summary>
-	/// To get the strategy getting <see cref="Connector"/>. If it is not initialized, the exception will be discarded.
-	/// </summary>
-	/// <returns>Connector.</returns>
-	public IConnector SafeGetConnector()
-		=> Connector ?? throw new InvalidOperationException(LocalizedStrings.ConnectionNotInit);
-
 	private ISecurityProvider SecurityProvider => SafeGetConnector();
 
 	int ISecurityProvider.Count => SecurityProvider.Count;

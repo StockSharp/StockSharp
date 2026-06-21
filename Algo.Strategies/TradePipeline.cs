@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies.Decomposed;
+namespace StockSharp.Algo.Strategies;
 
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Statistics;
@@ -14,8 +14,22 @@ using StockSharp.Algo.Statistics;
 public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats)
 {
 	private readonly CachedSynchronizedSet<MyTrade> _myTrades = [];
-	private readonly IPnLManager _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
-	private readonly IStatisticManager _stats = stats ?? throw new ArgumentNullException(nameof(stats));
+	private IPnLManager _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
+	private IStatisticManager _stats = stats ?? throw new ArgumentNullException(nameof(stats));
+
+	/// <summary>
+	/// Swap the PnL manager (used when <see cref="Strategy.PnLManager"/> is reassigned).
+	/// </summary>
+	/// <param name="pnlManager">The new PnL manager.</param>
+	public void SetPnLManager(IPnLManager pnlManager)
+		=> _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
+
+	/// <summary>
+	/// Swap the statistic manager (used when <see cref="Strategy.StatisticManager"/> is reassigned).
+	/// </summary>
+	/// <param name="stats">The new statistic manager.</param>
+	public void SetStatisticManager(IStatisticManager stats)
+		=> _stats = stats ?? throw new ArgumentNullException(nameof(stats));
 
 	/// <summary>
 	/// Total accumulated commission.

@@ -1,10 +1,10 @@
+#pragma warning disable CS0618 // equivalence tests deliberately exercise the obsolete StrategyOld engine
 namespace StockSharp.Tests;
 
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Risk;
 using StockSharp.Algo.Statistics;
 using StockSharp.Algo.Testing;
-using StockSharp.Algo.Strategies.Decomposed;
 using StockSharp.Designer;
 
 /// <summary>
@@ -48,14 +48,14 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		}
 	}
 
-	private class TestStrategy : DecomposedStrategy
+	private class TestStrategy : Strategy
 	{
 		public List<ProcessStates> StateHistory { get; } = [];
 		public List<MyTrade> ReceivedTrades { get; } = [];
 		public List<Order> RegisteredOrders { get; } = [];
 
 		protected override void OnStateChanged(ProcessStates state) => StateHistory.Add(state);
-		protected override void OnNewMyTrade(MyTrade trade) => ReceivedTrades.Add(trade);
+		protected override void OnOwnTradeReceived(MyTrade trade) => ReceivedTrades.Add(trade);
 		protected override void OnOrderRegistered(Order order) => RegisteredOrders.Add(order);
 	}
 
@@ -96,9 +96,9 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 	private static void AttachAndActivate(TestStrategy strategy, Subscription sub, Order order)
 	{
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 	}
 
 	private static MyTrade CreateTrade(Order order, long tradeId, decimal price, decimal volume)
@@ -123,10 +123,10 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	#region DecomposedSmaStrategy — same logic as SmaStrategy
 
 	/// <summary>
-	/// SMA crossover strategy built on DecomposedStrategy.
+	/// SMA crossover strategy built on Strategy.
 	/// Uses the exact same OnProcess logic as SmaStrategy.
 	/// </summary>
-	private class DecomposedSmaStrategy : DecomposedStrategy
+	private class DecomposedSmaStrategy : Strategy
 	{
 		private bool? _isShortLessThenLong;
 		private readonly SimpleMovingAverage _longSma = new();
@@ -1300,10 +1300,10 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	[TestMethod]
 	public void Parity_Position_PerSecurityLookupAvailable()
 	{
-		var hasMethod = typeof(DecomposedStrategy).GetMethod("GetPositionValue",
+		var hasMethod = typeof(Strategy).GetMethod("GetPositionValue",
 			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 		IsNotNull(hasMethod,
-			"DecomposedStrategy should expose GetPositionValue(Security, Portfolio)");
+			"Strategy should expose GetPositionValue(Security, Portfolio)");
 	}
 
 	#endregion
@@ -1313,41 +1313,41 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	[TestMethod]
 	public void Parity_Order_CommentModeAvailable()
 	{
-		var hasProperty = typeof(DecomposedStrategy).GetProperty("CommentMode");
-		IsNotNull(hasProperty, "DecomposedStrategy should expose CommentMode property");
+		var hasProperty = typeof(Strategy).GetProperty("CommentMode");
+		IsNotNull(hasProperty, "Strategy should expose CommentMode property");
 	}
 
 	[TestMethod]
 	public void Parity_Order_TradingModeAvailable()
 	{
-		var hasProperty = typeof(DecomposedStrategy).GetProperty("TradingMode");
-		IsNotNull(hasProperty, "DecomposedStrategy should expose TradingMode property");
+		var hasProperty = typeof(Strategy).GetProperty("TradingMode");
+		IsNotNull(hasProperty, "Strategy should expose TradingMode property");
 	}
 
 	[TestMethod]
 	public void Parity_Order_LatencyTracked()
 	{
-		var hasProperty = typeof(DecomposedStrategy).GetProperty("Latency");
-		IsNotNull(hasProperty, "DecomposedStrategy should expose Latency property");
+		var hasProperty = typeof(Strategy).GetProperty("Latency");
+		IsNotNull(hasProperty, "Strategy should expose Latency property");
 	}
 
 	[TestMethod]
 	public void Parity_Order_RegisterFailHandled()
 	{
-		var hasMethod = typeof(DecomposedStrategy).GetMethod("OnOrderRegisterFailed",
+		var hasMethod = typeof(Strategy).GetMethod("OnOrderRegisterFailed",
 			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-		IsNotNull(hasMethod, "DecomposedStrategy should handle order registration failures");
+		IsNotNull(hasMethod, "Strategy should handle order registration failures");
 	}
 
 	/// <summary>
 	/// A fresh strategy that has not registered any order of its own must NOT
-	/// claim a foreign order. Real <see cref="Strategy"/> enforces this through
+	/// claim a foreign order. Real <see cref="StrategyOld"/> enforces this through
 	/// <c>CanAttach</c> by matching the order's <see cref="Order.UserOrderId"/>
 	/// against the strategy id (Strategy.cs:2440-2446), so before the first own
 	/// registration a foreign order is rejected.
 	///
-	/// <see cref="DecomposedStrategy"/>'s CanAttach
-	/// (DecomposedStrategy.cs:669-675) instead returns <see langword="true"/> for
+	/// <see cref="Strategy"/>'s CanAttach
+	/// (Strategy.cs:669-675) instead returns <see langword="true"/> for
 	/// ANY order while its <c>_ownTransactionIds</c> set is still empty — i.e. a
 	/// brand-new decomposed strategy would attach a foreign order, diverging from
 	/// real Strategy. This test asserts the canonical contract (CanAttach == false
@@ -1380,9 +1380,9 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		var foreignOrder = CreateOrder(security, portfolio, Sides.Buy, 100m, 10m, txId: 999_999);
 		foreignOrder.UserOrderId = "some_other_strategy_id";
 
-		var canAttach = typeof(DecomposedStrategy).GetMethod("CanAttach",
+		var canAttach = typeof(Strategy).GetMethod("CanAttach",
 			BindingFlags.Instance | BindingFlags.NonPublic);
-		IsNotNull(canAttach, "DecomposedStrategy should expose CanAttach(Order)");
+		IsNotNull(canAttach, "Strategy should expose CanAttach(Order)");
 
 		var result = (bool)canAttach.Invoke(strategy, [foreignOrder]);
 
@@ -1400,15 +1400,15 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	[TestMethod]
 	public void Parity_Error_StateTracked()
 	{
-		var hasProperty = typeof(DecomposedStrategy).GetProperty("ErrorState");
-		IsNotNull(hasProperty, "DecomposedStrategy should expose ErrorState property");
+		var hasProperty = typeof(Strategy).GetProperty("ErrorState");
+		IsNotNull(hasProperty, "Strategy should expose ErrorState property");
 	}
 
 	[TestMethod]
 	public void Parity_Error_EventAvailable()
 	{
-		var hasEvent = typeof(DecomposedStrategy).GetEvent("Error");
-		IsNotNull(hasEvent, "DecomposedStrategy should expose Error event");
+		var hasEvent = typeof(Strategy).GetEvent("Error");
+		IsNotNull(hasEvent, "Strategy should expose Error event");
 	}
 
 	#endregion
@@ -1418,144 +1418,144 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	[TestMethod]
 	public void Parity_Feature_ClosePositionAvailable()
 	{
-		var hasMethod = typeof(DecomposedStrategy).GetMethod("ClosePosition",
+		var hasMethod = typeof(Strategy).GetMethod("ClosePosition",
 			BindingFlags.Instance | BindingFlags.Public);
-		IsNotNull(hasMethod, "DecomposedStrategy should expose ClosePosition() method");
+		IsNotNull(hasMethod, "Strategy should expose ClosePosition() method");
 	}
 
 	[TestMethod]
 	public void Parity_Feature_CancelActiveOrdersAvailable()
 	{
-		var hasMethod = typeof(DecomposedStrategy).GetMethod("CancelActiveOrders",
+		var hasMethod = typeof(Strategy).GetMethod("CancelActiveOrders",
 			BindingFlags.Instance | BindingFlags.Public);
-		IsNotNull(hasMethod, "DecomposedStrategy should expose CancelActiveOrders() method");
+		IsNotNull(hasMethod, "Strategy should expose CancelActiveOrders() method");
 	}
 
 	[TestMethod]
 	public void Parity_Feature_WaitAllTradesSupported()
 	{
-		var hasProperty = typeof(DecomposedStrategy).GetProperty("WaitAllTrades");
-		IsNotNull(hasProperty, "DecomposedStrategy should expose WaitAllTrades property");
+		var hasProperty = typeof(Strategy).GetProperty("WaitAllTrades");
+		IsNotNull(hasProperty, "Strategy should expose WaitAllTrades property");
 	}
 
 	[TestMethod]
 	public void Parity_Feature_IsOnlineTracked()
 	{
-		var hasProperty = typeof(DecomposedStrategy).GetProperty("IsOnline");
-		IsNotNull(hasProperty, "DecomposedStrategy should expose IsOnline property");
+		var hasProperty = typeof(Strategy).GetProperty("IsOnline");
+		IsNotNull(hasProperty, "Strategy should expose IsOnline property");
 	}
 
 	[TestMethod]
 	public void Parity_Feature_PositionCollectionAvailable()
 	{
-		var hasProperty = typeof(DecomposedStrategy).GetProperty("PositionsList");
-		IsNotNull(hasProperty, "DecomposedStrategy should expose PositionsList collection");
+		var hasProperty = typeof(Strategy).GetProperty("PositionsList");
+		IsNotNull(hasProperty, "Strategy should expose PositionsList collection");
 	}
 
 	#endregion
 
-	#region Feature Gap Tests — missing in DecomposedStrategy vs Strategy
+	#region Feature Gap Tests — missing in Strategy vs Strategy
 
 	// --- API existence tests ---
 
 	[TestMethod]
 	public void Gap_EditOrder_MethodExists()
 	{
-		var method = typeof(DecomposedStrategy).GetMethod("EditOrder",
+		var method = typeof(Strategy).GetMethod("EditOrder",
 			BindingFlags.Instance | BindingFlags.Public);
 		IsNotNull(method,
-			"DecomposedStrategy should expose EditOrder(Order, Order) like Strategy");
+			"Strategy should expose EditOrder(Order, Order) like Strategy");
 	}
 
 	[TestMethod]
 	public void Gap_ReRegisterOrder_MethodExists()
 	{
-		var method = typeof(DecomposedStrategy).GetMethod("ReRegisterOrder",
+		var method = typeof(Strategy).GetMethod("ReRegisterOrder",
 			BindingFlags.Instance | BindingFlags.Public);
 		IsNotNull(method,
-			"DecomposedStrategy should expose ReRegisterOrder(Order, Order) like Strategy");
+			"Strategy should expose ReRegisterOrder(Order, Order) like Strategy");
 	}
 
 	[TestMethod]
 	public void Gap_Commission_PropertyExists()
 	{
-		var prop = typeof(DecomposedStrategy).GetProperty("Commission",
+		var prop = typeof(Strategy).GetProperty("Commission",
 			BindingFlags.Instance | BindingFlags.Public);
 		IsNotNull(prop,
-			"DecomposedStrategy should expose Commission property (aggregated from orders+trades) like Strategy");
+			"Strategy should expose Commission property (aggregated from orders+trades) like Strategy");
 	}
 
 	[TestMethod]
 	public void Gap_Slippage_PropertyExists()
 	{
-		var prop = typeof(DecomposedStrategy).GetProperty("Slippage",
+		var prop = typeof(Strategy).GetProperty("Slippage",
 			BindingFlags.Instance | BindingFlags.Public);
 		IsNotNull(prop,
-			"DecomposedStrategy should expose Slippage property (aggregated from trades) like Strategy");
+			"Strategy should expose Slippage property (aggregated from trades) like Strategy");
 	}
 
 	[TestMethod]
 	public void Gap_Reset_MethodExists()
 	{
-		var method = typeof(DecomposedStrategy).GetMethod("Reset",
+		var method = typeof(Strategy).GetMethod("Reset",
 			BindingFlags.Instance | BindingFlags.Public);
 		IsNotNull(method,
-			"DecomposedStrategy should expose Reset() method like Strategy");
+			"Strategy should expose Reset() method like Strategy");
 	}
 
 	[TestMethod]
 	public void Gap_StopWithError_OverloadExists()
 	{
 		// Strategy has Stop(Exception) that logs error, stores it, then stops.
-		// DecomposedStrategy should have StopAsync(Exception, CancellationToken) or equivalent.
-		var methods = typeof(DecomposedStrategy).GetMethods(BindingFlags.Instance | BindingFlags.Public)
+		// Strategy should have StopAsync(Exception, CancellationToken) or equivalent.
+		var methods = typeof(Strategy).GetMethods(BindingFlags.Instance | BindingFlags.Public)
 			.Where(m => m.Name is "Stop" or "StopAsync")
 			.Where(m => m.GetParameters().Any(p => p.ParameterType == typeof(Exception)));
 
 		IsTrue(methods.Any(),
-			"DecomposedStrategy should expose Stop/StopAsync overload that accepts Exception like Strategy.Stop(Exception)");
+			"Strategy should expose Stop/StopAsync overload that accepts Exception like Strategy.Stop(Exception)");
 	}
 
 	[TestMethod]
 	public void Gap_CancelOrdersWhenStopping_PropertyExists()
 	{
-		var prop = typeof(DecomposedStrategy).GetProperty("CancelOrdersWhenStopping",
+		var prop = typeof(Strategy).GetProperty("CancelOrdersWhenStopping",
 			BindingFlags.Instance | BindingFlags.Public);
 		IsNotNull(prop,
-			"DecomposedStrategy should expose CancelOrdersWhenStopping property like Strategy");
+			"Strategy should expose CancelOrdersWhenStopping property like Strategy");
 	}
 
 	[TestMethod]
 	public void Gap_UnsubscribeOnStop_PropertyExists()
 	{
-		var prop = typeof(DecomposedStrategy).GetProperty("UnsubscribeOnStop",
+		var prop = typeof(Strategy).GetProperty("UnsubscribeOnStop",
 			BindingFlags.Instance | BindingFlags.Public);
 		IsNotNull(prop,
-			"DecomposedStrategy should expose UnsubscribeOnStop property like Strategy");
+			"Strategy should expose UnsubscribeOnStop property like Strategy");
 	}
 
 	[TestMethod]
 	public void Gap_CommissionChanged_EventExists()
 	{
-		var ev = typeof(DecomposedStrategy).GetEvent("CommissionChanged");
+		var ev = typeof(Strategy).GetEvent("CommissionChanged");
 		IsNotNull(ev,
-			"DecomposedStrategy should expose CommissionChanged event like Strategy");
+			"Strategy should expose CommissionChanged event like Strategy");
 	}
 
 	[TestMethod]
 	public void Gap_SlippageChanged_EventExists()
 	{
-		var ev = typeof(DecomposedStrategy).GetEvent("SlippageChanged");
+		var ev = typeof(Strategy).GetEvent("SlippageChanged");
 		IsNotNull(ev,
-			"DecomposedStrategy should expose SlippageChanged event like Strategy");
+			"Strategy should expose SlippageChanged event like Strategy");
 	}
 
 	[TestMethod]
 	public void Gap_LatencyChanged_EventExists()
 	{
-		var ev = typeof(DecomposedStrategy).GetEvent("LatencyChanged");
+		var ev = typeof(Strategy).GetEvent("LatencyChanged");
 		IsNotNull(ev,
-			"DecomposedStrategy should expose LatencyChanged event like Strategy");
+			"Strategy should expose LatencyChanged event like Strategy");
 	}
 
 	// --- Behavioral tests ---
@@ -1564,7 +1564,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	public async Task Gap_CancelOrdersWhenStopping_ActiveOrdersCancelled()
 	{
 		// Strategy cancels all active orders when stopping (CancelOrdersWhenStopping=true by default).
-		// DecomposedStrategy should do the same.
+		// Strategy should do the same.
 
 		var connMock = CreateMockConnector();
 		connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>()));
@@ -1604,7 +1604,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	public async Task Gap_UnsubscribeOnStop_SubscriptionsRemoved()
 	{
 		// Strategy unsubscribes all market data when stopping (UnsubscribeOnStop=true by default).
-		// DecomposedStrategy should do the same.
+		// Strategy should do the same.
 
 		var connMock = CreateMockConnector();
 		var unsubscribed = new List<Subscription>();
@@ -1641,7 +1641,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	public void Gap_Commission_AccumulatedFromTrades()
 	{
 		// Strategy exposes Commission property that accumulates from order.Commission values.
-		// DecomposedStrategy should expose the same at the strategy level.
+		// Strategy should expose the same at the strategy level.
 
 		var connMock = CreateMockConnector();
 		var security = CreateSecurity();
@@ -1661,7 +1661,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		AttachAndActivate(strategy, sub, order);
 
 		// Strategy.Commission should reflect the commission from registered orders
-		var commProp = typeof(DecomposedStrategy).GetProperty("Commission",
+		var commProp = typeof(Strategy).GetProperty("Commission",
 			BindingFlags.Instance | BindingFlags.Public);
 		IsNotNull(commProp, "Commission property must exist");
 
@@ -1675,7 +1675,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	public void Gap_Slippage_AccumulatedFromTrades()
 	{
 		// Strategy exposes Slippage property that accumulates from trade.Slippage values.
-		// DecomposedStrategy should expose the same at the strategy level.
+		// Strategy should expose the same at the strategy level.
 
 		var connMock = CreateMockConnector();
 		var security = CreateSecurity();
@@ -1698,7 +1698,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		strategy.OnTradeReceived(sub, trade);
 
 		// Strategy.Slippage should reflect the accumulated slippage
-		var slipProp = typeof(DecomposedStrategy).GetProperty("Slippage",
+		var slipProp = typeof(Strategy).GetProperty("Slippage",
 			BindingFlags.Instance | BindingFlags.Public);
 		IsNotNull(slipProp, "Slippage property must exist");
 
@@ -1712,7 +1712,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	public void Gap_Latency_AccumulatedFromOrderEvents()
 	{
 		// Strategy accumulates Latency from order.LatencyRegistration and order.LatencyCancellation.
-		// DecomposedStrategy has Latency (get/set) but doesn't accumulate automatically.
+		// Strategy has Latency (get/set) but doesn't accumulate automatically.
 
 		var connMock = CreateMockConnector();
 		var security = CreateSecurity();
@@ -1728,11 +1728,11 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		strategy.Subscriptions.Subscribe(sub);
 
 		var order = CreateOrder(security, portfolio, Sides.Buy, 100, 10);
-		strategy.OnOrderReceived(sub, order); // Pending
+		strategy.OnConnectorOrderReceived(sub, order); // Pending
 
 		order.State = OrderStates.Active;
 		order.LatencyRegistration = TimeSpan.FromMilliseconds(50);
-		strategy.OnOrderReceived(sub, order); // Active with latency
+		strategy.OnConnectorOrderReceived(sub, order); // Active with latency
 
 		// Latency should accumulate from registration latency
 		IsNotNull(strategy.Latency,
@@ -1745,7 +1745,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	public void Gap_Reset_ClearsAllState()
 	{
 		// Strategy.Reset() clears position, trades, orders, PnL, commission, etc.
-		// DecomposedStrategy should have the same.
+		// Strategy should have the same.
 
 		var connMock = CreateMockConnector();
 		connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>()));
@@ -1772,7 +1772,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		IsTrue(strategy.Trades.MyTrades.Any(), "Should have trades before reset");
 
 		// Reset — uses reflection because method may not exist yet
-		var resetMethod = typeof(DecomposedStrategy).GetMethod("Reset",
+		var resetMethod = typeof(Strategy).GetMethod("Reset",
 			BindingFlags.Instance | BindingFlags.Public);
 		IsNotNull(resetMethod, "Reset() method must exist");
 
@@ -1781,7 +1781,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		// All state should be cleared
 		AreEqual(0m, strategy.Position, "Position should be 0 after Reset()");
 		IsFalse(strategy.Trades.MyTrades.Any(), "Trades should be empty after Reset()");
-		IsFalse(strategy.Orders.Orders.Any(), "Orders should be empty after Reset()");
+		IsFalse(strategy.Orders.Any(), "Orders should be empty after Reset()");
 	}
 
 	#endregion
@@ -1791,7 +1791,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	/// <summary>
 	/// Deterministic test (no history) that the decomposed protective contour is
 	/// actually wired and FIRES: StartProtection -> a real fill (OnTradeReceived,
-	/// which creates the position controller, DecomposedStrategy.cs:108-123) ->
+	/// which creates the position controller, Strategy.cs:108-123) ->
 	/// an adverse market price (Level1) -> a protective closing order reaches the
 	/// connector via RegisterOrder.
 	///

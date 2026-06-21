@@ -3,7 +3,6 @@ namespace StockSharp.Tests;
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Risk;
 using StockSharp.Algo.Statistics;
-using StockSharp.Algo.Strategies.Decomposed;
 
 [TestClass]
 public class StrategyDecomposedTests : BaseTestClass
@@ -684,10 +683,10 @@ public class StrategyDecomposedTests : BaseTestClass
 
 	#endregion
 
-	#region DecomposedStrategy composite tests
+	#region Strategy composite tests
 
-	// Test strategy that inherits DecomposedStrategy and records all hook calls.
-	private class BuyOnSignalStrategy : DecomposedStrategy
+	// Test strategy that inherits Strategy and records all hook calls.
+	private class BuyOnSignalStrategy : Strategy
 	{
 		public List<ProcessStates> StateChanges { get; } = [];
 		public List<(SecurityId SecId, decimal Price)> PriceUpdates { get; } = [];
@@ -736,7 +735,7 @@ public class StrategyDecomposedTests : BaseTestClass
 			ChangedOrders.Add(order);
 		}
 
-		protected override void OnNewMyTrade(MyTrade trade)
+		protected override void OnOwnTradeReceived(MyTrade trade)
 		{
 			ReceivedTrades.Add(trade);
 		}
@@ -759,7 +758,7 @@ public class StrategyDecomposedTests : BaseTestClass
 		return mock;
 	}
 
-	private static void MarkStarted(DecomposedStrategy strategy)
+	private static void MarkStarted(Strategy strategy)
 		=> strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
 
 	[TestMethod]
@@ -873,15 +872,15 @@ public class StrategyDecomposedTests : BaseTestClass
 		};
 
 		// untracked subscription — order NOT attached
-		strategy.OnOrderReceived(untrackedSub, order);
-		strategy.Orders.IsTracked(order).AssertFalse();
-		strategy.Orders.Orders.Any().AssertFalse();
+		strategy.OnConnectorOrderReceived(untrackedSub, order);
+		strategy.OrderProcessor.IsTracked(order).AssertFalse();
+		strategy.OrderProcessor.Orders.Any().AssertFalse();
 
 		// tracked subscription — order attached
-		strategy.OnOrderReceived(trackedSub, order);
-		strategy.Orders.IsTracked(order).AssertTrue();
-		strategy.Orders.Orders.Count().AreEqual(1);
-		strategy.Orders.Orders.First().AreEqual(order);
+		strategy.OnConnectorOrderReceived(trackedSub, order);
+		strategy.OrderProcessor.IsTracked(order).AssertTrue();
+		strategy.OrderProcessor.Orders.Count().AreEqual(1);
+		strategy.OrderProcessor.Orders.First().AreEqual(order);
 	}
 
 	[TestMethod]
@@ -929,14 +928,14 @@ public class StrategyDecomposedTests : BaseTestClass
 		};
 
 		// 1. order received as Pending
-		strategy.OnOrderReceived(sub, order);
-		strategy.Orders.IsTracked(order).AssertTrue();
-		strategy.Orders.Orders.Count().AreEqual(1);
+		strategy.OnConnectorOrderReceived(sub, order);
+		strategy.OrderProcessor.IsTracked(order).AssertTrue();
+		strategy.OrderProcessor.Orders.Count().AreEqual(1);
 		strategy.RegisteredOrders.Count.AreEqual(0); // not registered yet
 
 		// 2. order becomes Active → fires OnOrderRegistered
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		strategy.RegisteredOrders.Count.AreEqual(1);
 		strategy.RegisteredOrders[0].AreEqual(order);
@@ -944,7 +943,7 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.RegisteredOrders[0].Price.AreEqual(100m);
 		strategy.RegisteredOrders[0].Volume.AreEqual(10m);
 		strategy.RegisteredOrders[0].Side.AreEqual(Sides.Buy);
-		strategy.Orders.Commission.AreEqual(3m);
+		strategy.OrderProcessor.Commission.AreEqual(3m);
 
 		// 3. first trade arrives
 		var trade1 = new MyTrade
@@ -1043,15 +1042,15 @@ public class StrategyDecomposedTests : BaseTestClass
 		};
 
 		// receive both as pending
-		strategy.OnOrderReceived(sub, order1);
-		strategy.OnOrderReceived(sub, order2);
-		strategy.Orders.Orders.Count().AreEqual(2);
+		strategy.OnConnectorOrderReceived(sub, order1);
+		strategy.OnConnectorOrderReceived(sub, order2);
+		strategy.OrderProcessor.Orders.Count().AreEqual(2);
 
 		// activate both
 		order1.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order1);
+		strategy.OnConnectorOrderReceived(sub, order1);
 		order2.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order2);
+		strategy.OnConnectorOrderReceived(sub, order2);
 
 		strategy.RegisteredOrders.Count.AreEqual(2);
 		strategy.RegisteredOrders[0].TransactionId.AreEqual(1L);
@@ -1060,7 +1059,7 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.RegisteredOrders[1].TransactionId.AreEqual(2L);
 		strategy.RegisteredOrders[1].Side.AreEqual(Sides.Sell);
 		strategy.RegisteredOrders[1].Price.AreEqual(110m);
-		strategy.Orders.Commission.AreEqual(3m); // 2 + 1
+		strategy.OrderProcessor.Commission.AreEqual(3m); // 2 + 1
 
 		// trade for order1 only
 		var trade = new MyTrade
@@ -1182,20 +1181,20 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, order);
-		strategy.Orders.IsTracked(order).AssertTrue();
-		strategy.Orders.Orders.Count().AreEqual(1);
+		strategy.OnConnectorOrderReceived(sub, order);
+		strategy.OrderProcessor.IsTracked(order).AssertTrue();
+		strategy.OrderProcessor.Orders.Count().AreEqual(1);
 
 		// order activated
 		order.State = OrderStates.Active;
 		order.Commission = 2m;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		strategy.RegisteredOrders.Count.AreEqual(1);
 		strategy.RegisteredOrders[0].Price.AreEqual(150m);
 		strategy.RegisteredOrders[0].Volume.AreEqual(5m);
 		strategy.RegisteredOrders[0].Side.AreEqual(Sides.Buy);
-		strategy.Orders.Commission.AreEqual(2m);
+		strategy.OrderProcessor.Commission.AreEqual(2m);
 
 		// trade fills the order
 		var trade = new MyTrade
@@ -1292,9 +1291,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		// fill the order with a trade
 		var trade = new MyTrade
@@ -1321,7 +1320,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	public void Composite_RoundTrip_TrackedFromTrades()
 	{
 		// When position goes from 0 → open → 0, a round-trip should be recorded.
-		// Currently DecomposedStrategy has no PositionLifecycleTracker.
+		// Currently Strategy has no PositionLifecycleTracker.
 
 		var connMock = CreateMockConnector();
 		var security = CreateSecurity();
@@ -1345,9 +1344,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Side = Sides.Buy, Price = 100, Volume = 5,
 			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
 		};
-		strategy.OnOrderReceived(sub, buyOrder);
+		strategy.OnConnectorOrderReceived(sub, buyOrder);
 		buyOrder.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, buyOrder);
+		strategy.OnConnectorOrderReceived(sub, buyOrder);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1367,9 +1366,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Side = Sides.Sell, Price = 110, Volume = 5,
 			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
 		};
-		strategy.OnOrderReceived(sub, sellOrder);
+		strategy.OnConnectorOrderReceived(sub, sellOrder);
 		sellOrder.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, sellOrder);
+		strategy.OnConnectorOrderReceived(sub, sellOrder);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1432,7 +1431,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	public void Composite_OrderFiltering_OnlyOwnOrdersTracked()
 	{
 		// Strategy should only track its own orders (via CanAttach/UserOrderId).
-		// Currently DecomposedStrategy attaches any order from any subscription.
+		// Currently Strategy attaches any order from any subscription.
 
 		var connMock = CreateMockConnector();
 		var security = CreateSecurity();
@@ -1466,10 +1465,10 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, foreignOrder);
+		strategy.OnConnectorOrderReceived(sub, foreignOrder);
 
 		// foreign order should NOT be tracked
-		strategy.Orders.IsTracked(foreignOrder).AssertFalse();
+		strategy.OrderProcessor.IsTracked(foreignOrder).AssertFalse();
 	}
 
 	[TestMethod]
@@ -1499,9 +1498,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Side = Sides.Buy, Price = 100, Volume = 10,
 			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
 		};
-		strategy.OnOrderReceived(sub, buyOrder);
+		strategy.OnConnectorOrderReceived(sub, buyOrder);
 		buyOrder.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, buyOrder);
+		strategy.OnConnectorOrderReceived(sub, buyOrder);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1521,9 +1520,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Side = Sides.Sell, Price = 110, Volume = 10,
 			Security = security, Portfolio = portfolio, Time = DateTime.UtcNow,
 		};
-		strategy.OnOrderReceived(sub, sellOrder);
+		strategy.OnConnectorOrderReceived(sub, sellOrder);
 		sellOrder.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, sellOrder);
+		strategy.OnConnectorOrderReceived(sub, sellOrder);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1575,7 +1574,7 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.RegisterOrder(order);
 
 		connMock.Verify(c => c.RegisterOrder(It.IsAny<Order>()), Times.Never);
-		strategy.Orders.IsTracked(order).AssertFalse();
+		strategy.OrderProcessor.IsTracked(order).AssertFalse();
 	}
 
 	#endregion
@@ -1623,9 +1622,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		var trade = new MyTrade
 		{
@@ -1701,9 +1700,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1778,9 +1777,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{
@@ -1852,9 +1851,9 @@ public class StrategyDecomposedTests : BaseTestClass
 			Time = DateTime.UtcNow,
 		};
 
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 		order.State = OrderStates.Active;
-		strategy.OnOrderReceived(sub, order);
+		strategy.OnConnectorOrderReceived(sub, order);
 
 		strategy.OnTradeReceived(sub, new MyTrade
 		{

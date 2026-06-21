@@ -7,22 +7,22 @@ public static partial class StrategyHelper
 {
 	#region Strategy rules
 
-	private abstract class StrategyRule<TArg>(Strategy strategy) : MarketRule<Strategy, TArg>(strategy)
+	private abstract class StrategyRule<TArg>(IStrategy strategy) : MarketRule<IStrategy, TArg>(strategy)
 	{
-		protected Strategy Strategy { get; } = strategy ?? throw new ArgumentNullException(nameof(strategy));
+		protected IStrategy Strategy { get; } = strategy ?? throw new ArgumentNullException(nameof(strategy));
 	}
 
 	private sealed class PnLManagerStrategyRule : StrategyRule<decimal>
 	{
 		private readonly Func<decimal, bool> _changed;
 
-		public PnLManagerStrategyRule(Strategy strategy)
+		public PnLManagerStrategyRule(IStrategy strategy)
 			: this(strategy, v => true)
 		{
 			Name = LocalizedStrings.PnLChange;
 		}
 
-		public PnLManagerStrategyRule(Strategy strategy, Func<decimal, bool> changed)
+		public PnLManagerStrategyRule(IStrategy strategy, Func<decimal, bool> changed)
 			: base(strategy)
 		{
 			_changed = changed ?? throw new ArgumentNullException(nameof(changed));
@@ -47,13 +47,13 @@ public static partial class StrategyHelper
 	{
 		private readonly Func<decimal, bool> _changed;
 
-		public PositionManagerStrategyRule(Strategy strategy)
+		public PositionManagerStrategyRule(IStrategy strategy)
 			: this(strategy, v => true)
 		{
 			Name = LocalizedStrings.Positions;
 		}
 
-		public PositionManagerStrategyRule(Strategy strategy, Func<decimal, bool> changed)
+		public PositionManagerStrategyRule(IStrategy strategy, Func<decimal, bool> changed)
 			: base(strategy)
 		{
 			_changed = changed ?? throw new ArgumentNullException(nameof(changed));
@@ -80,7 +80,7 @@ public static partial class StrategyHelper
 	[Obsolete]
 	private sealed class NewMyTradeStrategyRule : StrategyRule<MyTrade>
 	{
-		public NewMyTradeStrategyRule(Strategy strategy)
+		public NewMyTradeStrategyRule(IStrategy strategy)
 			: base(strategy)
 		{
 			Name = LocalizedStrings.NewTrades + " " + strategy;
@@ -102,7 +102,7 @@ public static partial class StrategyHelper
 	[Obsolete]
 	private sealed class OrderRegisteredStrategyRule : StrategyRule<Order>
 	{
-		public OrderRegisteredStrategyRule(Strategy strategy)
+		public OrderRegisteredStrategyRule(IStrategy strategy)
 			: base(strategy)
 		{
 			Name = LocalizedStrings.Orders + " " + strategy;
@@ -116,11 +116,11 @@ public static partial class StrategyHelper
 		}
 	}
 
-	private sealed class ProcessStateChangedStrategyRule : StrategyRule<Strategy>
+	private sealed class ProcessStateChangedStrategyRule : StrategyRule<IStrategy>
 	{
 		private readonly Func<ProcessStates, bool> _condition;
 
-		public ProcessStateChangedStrategyRule(Strategy strategy, Func<ProcessStates, bool> condition)
+		public ProcessStateChangedStrategyRule(IStrategy strategy, Func<ProcessStates, bool> condition)
 			: base(strategy)
 		{
 			_condition = condition ?? throw new ArgumentNullException(nameof(condition));
@@ -128,7 +128,7 @@ public static partial class StrategyHelper
 			Strategy.ProcessStateChanged += OnProcessStateChanged;
 		}
 
-		private void OnProcessStateChanged(Strategy strategy)
+		private void OnProcessStateChanged(IStrategy strategy)
 		{
 			if (_condition(Strategy.ProcessState))
 				Activate(Strategy);
@@ -141,11 +141,11 @@ public static partial class StrategyHelper
 		}
 	}
 
-	private sealed class PropertyChangedStrategyRule : StrategyRule<Strategy>
+	private sealed class PropertyChangedStrategyRule : StrategyRule<IStrategy>
 	{
-		private readonly Func<Strategy, bool> _condition;
+		private readonly Func<IStrategy, bool> _condition;
 
-		public PropertyChangedStrategyRule(Strategy strategy, Func<Strategy, bool> condition)
+		public PropertyChangedStrategyRule(IStrategy strategy, Func<IStrategy, bool> condition)
 			: base(strategy)
 		{
 			_condition = condition ?? throw new ArgumentNullException(nameof(condition));
@@ -170,7 +170,7 @@ public static partial class StrategyHelper
 	{
 		private readonly bool _processChildStrategyErrors;
 
-		public ErrorStrategyRule(Strategy strategy, bool processChildStrategyErrors)
+		public ErrorStrategyRule(IStrategy strategy, bool processChildStrategyErrors)
 			: base(strategy)
 		{
 			_processChildStrategyErrors = processChildStrategyErrors;
@@ -179,7 +179,7 @@ public static partial class StrategyHelper
 			Strategy.Error += OnError;
 		}
 
-		private void OnError(Strategy strategy, Exception error)
+		private void OnError(IStrategy strategy, Exception error)
 		{
 			if (!_processChildStrategyErrors && !Equals(Strategy, strategy))
 				return;
@@ -200,7 +200,7 @@ public static partial class StrategyHelper
 	/// <param name="strategy">The strategy, based on which trade occurrence will be traced.</param>
 	/// <returns>Rule.</returns>
 	[Obsolete("Use WhenOwnTradeReceived rule.")]
-	public static MarketRule<Strategy, MyTrade> WhenNewMyTrade(this Strategy strategy)
+	public static MarketRule<IStrategy, MyTrade> WhenNewMyTrade(this IStrategy strategy)
 	{
 		return new NewMyTradeStrategyRule(strategy);
 	}
@@ -211,7 +211,7 @@ public static partial class StrategyHelper
 	/// <param name="strategy">The strategy, based on which order occurrence will be traced.</param>
 	/// <returns>Rule.</returns>
 	[Obsolete("Use ISubscriptionProvider overload.")]
-	public static MarketRule<Strategy, Order> WhenOrderRegistered(this Strategy strategy)
+	public static MarketRule<IStrategy, Order> WhenOrderRegistered(this IStrategy strategy)
 	{
 		return new OrderRegisteredStrategyRule(strategy);
 	}
@@ -221,7 +221,7 @@ public static partial class StrategyHelper
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which position change will be traced.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Strategy, decimal> WhenPositionChanged(this Strategy strategy)
+	public static MarketRule<IStrategy, decimal> WhenPositionChanged(this IStrategy strategy)
 	{
 		return new PositionManagerStrategyRule(strategy);
 	}
@@ -232,7 +232,7 @@ public static partial class StrategyHelper
 	/// <param name="strategy">The strategy, based on which position change will be traced.</param>
 	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Strategy, decimal> WhenPositionLess(this Strategy strategy, Unit value)
+	public static MarketRule<IStrategy, decimal> WhenPositionLess(this IStrategy strategy, Unit value)
 	{
 		if (strategy == null)
 			throw new ArgumentNullException(nameof(strategy));
@@ -254,7 +254,7 @@ public static partial class StrategyHelper
 	/// <param name="strategy">The strategy, based on which position change will be traced.</param>
 	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Strategy, decimal> WhenPositionMore(this Strategy strategy, Unit value)
+	public static MarketRule<IStrategy, decimal> WhenPositionMore(this IStrategy strategy, Unit value)
 	{
 		if (strategy == null)
 			throw new ArgumentNullException(nameof(strategy));
@@ -276,7 +276,7 @@ public static partial class StrategyHelper
 	/// <param name="strategy">The strategy, based on which the profit change will be traced.</param>
 	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Strategy, decimal> WhenPnLLess(this Strategy strategy, Unit value)
+	public static MarketRule<IStrategy, decimal> WhenPnLLess(this IStrategy strategy, Unit value)
 	{
 		if (strategy == null)
 			throw new ArgumentNullException(nameof(strategy));
@@ -298,7 +298,7 @@ public static partial class StrategyHelper
 	/// <param name="strategy">The strategy, based on which the profit change will be traced.</param>
 	/// <param name="value">The level. If the <see cref="Unit.Type"/> type equals to <see cref="UnitTypes.Absolute"/>, specified price is set. Otherwise, shift value is specified.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Strategy, decimal> WhenPnLMore(this Strategy strategy, Unit value)
+	public static MarketRule<IStrategy, decimal> WhenPnLMore(this IStrategy strategy, Unit value)
 	{
 		if (strategy == null)
 			throw new ArgumentNullException(nameof(strategy));
@@ -319,7 +319,7 @@ public static partial class StrategyHelper
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which the profit change will be traced.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Strategy, decimal> WhenPnLChanged(this Strategy strategy)
+	public static MarketRule<IStrategy, decimal> WhenPnLChanged(this IStrategy strategy)
 	{
 		return new PnLManagerStrategyRule(strategy);
 	}
@@ -329,7 +329,7 @@ public static partial class StrategyHelper
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which the start of strategy operation will be expected.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Strategy, Strategy> WhenStarted(this Strategy strategy)
+	public static MarketRule<IStrategy, IStrategy> WhenStarted(this IStrategy strategy)
 	{
 		return new ProcessStateChangedStrategyRule(strategy, s => s == ProcessStates.Started)
 		{
@@ -342,7 +342,7 @@ public static partial class StrategyHelper
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which the beginning of stop will be determined.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Strategy, Strategy> WhenStopping(this Strategy strategy)
+	public static MarketRule<IStrategy, IStrategy> WhenStopping(this IStrategy strategy)
 	{
 		return new ProcessStateChangedStrategyRule(strategy, s => s == ProcessStates.Stopping)
 		{
@@ -355,7 +355,7 @@ public static partial class StrategyHelper
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which the full stop will be expected.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Strategy, Strategy> WhenStopped(this Strategy strategy)
+	public static MarketRule<IStrategy, IStrategy> WhenStopped(this IStrategy strategy)
 	{
 		return new ProcessStateChangedStrategyRule(strategy, s => s == ProcessStates.Stopped)
 		{
@@ -369,7 +369,7 @@ public static partial class StrategyHelper
 	/// <param name="strategy">The strategy, based on which error will be expected.</param>
 	/// <param name="processChildStrategyErrors">Process the child strategies errors.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Strategy, Exception> WhenError(this Strategy strategy, bool processChildStrategyErrors = false)
+	public static MarketRule<IStrategy, Exception> WhenError(this IStrategy strategy, bool processChildStrategyErrors = false)
 	{
 		return new ErrorStrategyRule(strategy, processChildStrategyErrors);
 	}
@@ -379,7 +379,7 @@ public static partial class StrategyHelper
 	/// </summary>
 	/// <param name="strategy">The strategy, based on which the warning will be expected.</param>
 	/// <returns>Rule.</returns>
-	public static MarketRule<Strategy, Strategy> WhenWarning(this Strategy strategy)
+	public static MarketRule<IStrategy, IStrategy> WhenWarning(this IStrategy strategy)
 	{
 		return new PropertyChangedStrategyRule(strategy, s => s.ErrorState == LogLevels.Warning)
 		{
@@ -466,7 +466,7 @@ public static partial class StrategyHelper
 	/// <param name="extra">Extra action.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/>.</param>
 	/// <returns><see cref="ValueTask"/>.</returns>
-	public static async ValueTask<(bool completed, Exception error)> ExecAsync(this Strategy strategy, Func<CancellationToken, ValueTask> extra, CancellationToken cancellationToken)
+	public static async ValueTask<(bool completed, Exception error)> ExecAsync(this IStrategy strategy, Func<CancellationToken, ValueTask> extra, CancellationToken cancellationToken)
 	{
 		if (strategy is null)
 			throw new ArgumentNullException(nameof(strategy));
@@ -491,7 +491,7 @@ public static partial class StrategyHelper
 				tcs.TrySetResult(canceled);
 		});
 
-		void OnProcessStateChanged(Strategy s)
+		void OnProcessStateChanged(IStrategy s)
 		{
 			if (s != strategy)
 				return;

@@ -2,14 +2,32 @@ namespace StockSharp.Algo.Strategies;
 
 partial class Strategy
 {
-	private ISubscriptionProvider SubscriptionProvider => SafeGetConnector();
+	// ISubscriptionProvider surface.
+	//
+	// Most of this subsystem is already satisfied by the decomposed Strategy:
+	//  - the value/lifecycle events (SubscriptionReceived, Level1Received, OrderBookReceived,
+	//    TickTradeReceived, OrderLogReceived, SecurityReceived, BoardReceived, NewsReceived,
+	//    CandleReceived, OwnTradeReceived, OrderReceived, OrderRegisterFailReceived,
+	//    OrderCancelFailReceived, OrderEditFailReceived, PortfolioReceived, PositionReceived,
+	//    DataTypeReceived, SubscriptionOnline, SubscriptionStarted, SubscriptionStopped,
+	//    SubscriptionFailed) are declared and fan-out from the connector handlers in Strategy.cs;
+	//  - PortfolioLookup is declared in the IPositionProvider region of Strategy.cs;
+	//  - subscription tracking (add / remove / suspend / resume / by-id) lives in SubscriptionRegistry,
+	//    exposed via the Subscriptions property and wired to the connector in the Strategy constructor.
+	//
+	// This file adds only the members that the decomposed Strategy does not yet expose:
+	//  - the public Subscribe/UnSubscribe entry points (with the monolith's live-trading history pre-roll),
+	//  - the SecurityLookup/BoardLookup/OrderLookup/DataTypeLookup global lookup accessors,
+	//  - the explicit ISubscriptionProvider.Subscriptions projection (the public Subscriptions property is
+	//    the SubscriptionRegistry, not the IEnumerable<Subscription> the interface declares).
 
-	IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => _subscriptions.CachedKeys;
+	private Subscription _orderLookup;
 
-	Subscription ISubscriptionProvider.SecurityLookup { get; }
-	Subscription ISubscriptionProvider.BoardLookup { get; }
-	Subscription ISubscriptionProvider.DataTypeLookup { get; }
-
+	/// <summary>
+	/// Build a global lookup subscription stamped with this strategy's identifier.
+	/// </summary>
+	/// <typeparam name="TLookupMessage">Lookup message type.</typeparam>
+	/// <returns><see cref="Subscription"/>.</returns>
 	private Subscription ToSubscription<TLookupMessage>()
 		where TLookupMessage : IStrategyIdMessage, ISubscriptionMessage, new()
 		=> new(new TLookupMessage
@@ -17,76 +35,58 @@ partial class Strategy
 			StrategyId = EnsureGetId(),
 		});
 
-	private Subscription _portfolioLookup;
-	/// <inheritdoc />
-	public Subscription PortfolioLookup => _portfolioLookup ??= ToSubscription<PortfolioLookupMessage>();
-
-	private Subscription _orderLookup;
 	/// <inheritdoc />
 	public Subscription OrderLookup => _orderLookup ??= ToSubscription<OrderStatusMessage>();
 
-	/// <inheritdoc />
-	public event Action<Subscription, Level1ChangeMessage> Level1Received;
+	// The monolith never assigns these — they are always null (the interface documents them as optional).
+	// Reproduced as explicit-interface auto-properties so consumers see the same (null) values.
+	Subscription ISubscriptionProvider.SecurityLookup { get; }
+	Subscription ISubscriptionProvider.BoardLookup { get; }
+	Subscription ISubscriptionProvider.DataTypeLookup { get; }
 
-	/// <inheritdoc />
-	public event Action<Subscription, IOrderBookMessage> OrderBookReceived;
+	// The public Subscriptions property is the SubscriptionRegistry; ISubscriptionProvider.Subscriptions
+	// is the flat enumerable of tracked subscriptions, served straight from the registry.
+	IEnumerable<Subscription> ISubscriptionProvider.Subscriptions => Subscriptions.Subscriptions;
 
-	/// <inheritdoc />
-	public event Action<Subscription, ITickTradeMessage> TickTradeReceived;
+	/// <summary>
+	/// Optional history pre-roll applied to market-data subscriptions during live trading, so the strategy
+	/// is warmed up with the configured amount of history before "now". Returns <see cref="TimeSpan.Zero"/>
+	/// by default; subsystems that own a history setting (e.g. HistorySize / HistoryCalculated) and a
+	/// backtesting flag override the wiring points below to feed the monolith's behaviour.
+	/// </summary>
+	/// <returns>History span to subtract from <see cref="IStrategyHost.CurrentTime"/>, or zero to disable.</returns>
+	private TimeSpan GetSubscribeHistoryPreroll()
+	{
+		// Skip the pre-roll while backtesting: the emulation connector already replays history.
+		if (IsBacktestingForSubscribe)
+			return TimeSpan.Zero;
 
-	/// <inheritdoc />
-	public event Action<Subscription, IOrderLogMessage> OrderLogReceived;
+		var history = HistorySizeForSubscribe ?? TimeSpan.Zero;
+		var calculated = HistoryCalculatedForSubscribe;
 
-	/// <inheritdoc />
-	public event Action<Subscription, Security> SecurityReceived;
+		if (calculated is TimeSpan calc && history < calc)
+			history = calc;
 
-	/// <inheritdoc />
-	public event Action<Subscription, ExchangeBoard> BoardReceived;
+		return history > TimeSpan.Zero ? history : TimeSpan.Zero;
+	}
 
-	/// <inheritdoc />
-	public event Action<Subscription, News> NewsReceived;
+	// Wiring points for the history pre-roll, fed from the ported settings (HistorySize / HistoryCalculated)
+	// and the backtesting flag, so Subscribe keeps the exact monolith warm-up shape.
 
-	/// <inheritdoc />
-	public event Action<Subscription, ICandleMessage> CandleReceived;
+	/// <summary>
+	/// Whether the strategy currently runs in backtesting (history emulation) mode.
+	/// </summary>
+	protected virtual bool IsBacktestingForSubscribe => IsBacktesting;
 
-	/// <inheritdoc />
-	public event Action<Subscription, MyTrade> OwnTradeReceived;
+	/// <summary>
+	/// Configured live-trading warm-up history span, if any.
+	/// </summary>
+	protected virtual TimeSpan? HistorySizeForSubscribe => HistorySize;
 
-	/// <inheritdoc />
-	public event Action<Subscription, Order> OrderReceived;
-
-	/// <inheritdoc />
-	public event Action<Subscription, OrderFail> OrderRegisterFailReceived;
-
-	/// <inheritdoc />
-	public event Action<Subscription, OrderFail> OrderCancelFailReceived;
-
-	/// <inheritdoc />
-	public event Action<Subscription, OrderFail> OrderEditFailReceived;
-
-	/// <inheritdoc />
-	public event Action<Subscription, Portfolio> PortfolioReceived;
-
-	/// <inheritdoc />
-	public event Action<Subscription, Position> PositionReceived;
-
-	/// <inheritdoc />
-	public event Action<Subscription, DataType> DataTypeReceived;
-
-	/// <inheritdoc />
-	public event Action<Subscription, object> SubscriptionReceived;
-
-	/// <inheritdoc />
-	public event Action<Subscription> SubscriptionOnline;
-
-	/// <inheritdoc />
-	public event Action<Subscription> SubscriptionStarted;
-
-	/// <inheritdoc />
-	public event Action<Subscription, Exception> SubscriptionStopped;
-
-	/// <inheritdoc />
-	public event Action<Subscription, Exception, bool> SubscriptionFailed;
+	/// <summary>
+	/// Code-calculated warm-up history span, if any.
+	/// </summary>
+	protected virtual TimeSpan? HistoryCalculatedForSubscribe => HistoryCalculated;
 
 	/// <inheritdoc />
 	public void Subscribe(Subscription subscription)
@@ -94,49 +94,17 @@ partial class Strategy
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		if (!IsBacktesting)
+		var history = GetSubscribeHistoryPreroll();
+
+		if (history > TimeSpan.Zero && subscription.From is null)
 		{
-			var history = HistorySize ?? TimeSpan.Zero;
+			var dataType = subscription.DataType;
 
-			if (history < HistoryCalculated)
-				history = HistoryCalculated.Value;
-
-			if (history > TimeSpan.Zero)
-			{
-				if (subscription.From is null)
-				{
-					var dataType = subscription.DataType;
-
-					if (dataType.IsMarketData && dataType.IsSecurityRequired)
-						subscription.From = CurrentTime - history;
-				}
-			}
+			if (dataType.IsMarketData && dataType.IsSecurityRequired)
+				subscription.From = ((IStrategyHost)this).CurrentTime - history;
 		}
 
-		Subscribe(subscription, false);
-	}
-
-	private void Subscribe(Subscription subscription, bool isGlobal)
-	{
-		var connector = Connector;
-
-		if (connector is null)
-			return;
-
-		_subscriptions.Add(subscription, isGlobal);
-
-		if (subscription.TransactionId == default)
-			subscription.TransactionId = connector.TransactionIdGenerator.GetNextId();
-
-		_subscriptionsById.Add(subscription.TransactionId, subscription);
-
-		if (_rulesSuspendCount > 0)
-		{
-			_suspendSubscriptions.Add(subscription);
-			return;
-		}
-
-		connector.Subscribe(subscription);
+		Subscriptions.Subscribe(subscription, isGlobal: false);
 	}
 
 	/// <inheritdoc />
@@ -144,128 +112,6 @@ partial class Strategy
 	{
 		ArgumentNullException.ThrowIfNull(subscription);
 
-		if (subscription.TransactionId == 0)
-			return;
-
-		var connector = Connector;
-
-		if (connector is null)
-			return;
-
-		if (ProcessState != ProcessStates.Started && IsBacktesting)
-		{
-			_subscriptions.Remove(subscription);
-			_subscriptionsById.Remove(subscription.TransactionId);
-
-			connector.UnSubscribe(subscription);
-			return;
-		}
-
-		if (_rulesSuspendCount > 0 && _suspendSubscriptions.Remove(subscription))
-		{
-			_subscriptions.Remove(subscription);
-			_subscriptionsById.Remove(subscription.TransactionId);
-			return;
-		}
-
-		connector.UnSubscribe(subscription);
+		Subscriptions.UnSubscribe(subscription);
 	}
-
-	private void OnConnectorSubscriptionFailed(Subscription subscription, Exception error, bool isSubscribe)
-	{
-		if (!CanProcess(subscription))
-			return;
-
-		SubscriptionFailed?.Invoke(subscription, error, isSubscribe);
-		CheckRefreshOnlineState();
-	}
-
-	private void OnConnectorSubscriptionStopped(Subscription subscription, Exception error)
-	{
-		if (!CanProcess(subscription))
-			return;
-
-		SubscriptionStopped?.Invoke(subscription, error);
-		CheckRefreshOnlineState();
-	}
-
-	private void OnConnectorSubscriptionStarted(Subscription subscription)
-	{
-		if (!CanProcess(subscription))
-			return;
-
-		SubscriptionStarted?.Invoke(subscription);
-	}
-
-	private void OnConnectorSubscriptionOnline(Subscription subscription)
-	{
-		if (!CanProcess(subscription))
-			return;
-
-		SubscriptionOnline?.Invoke(subscription);
-		CheckRefreshOnlineState();
-	}
-
-	private void OnConnectorSubscriptionReceived(Subscription subscription, object arg)
-	{
-		if (CanProcess(subscription))
-			SubscriptionReceived?.Invoke(subscription, arg);
-	}
-
-	private void OnConnectorDataTypeReceived(Subscription subscription, DataType dt)
-	{
-		if (CanProcess(subscription))
-			DataTypeReceived?.Invoke(subscription, dt);
-	}
-
-	private void OnConnectorCandleReceived(Subscription subscription, ICandleMessage candle)
-	{
-		if (CanProcess(subscription))
-			CandleReceived?.Invoke(subscription, candle);
-	}
-
-	private void OnConnectorNewsReceived(Subscription subscription, News news)
-	{
-		if (CanProcess(subscription))
-			NewsReceived?.Invoke(subscription, news);
-	}
-
-	private void OnConnectorBoardReceived(Subscription subscription, ExchangeBoard board)
-	{
-		if (CanProcess(subscription))
-			BoardReceived?.Invoke(subscription, board);
-	}
-
-	private void OnConnectorSecurityReceived(Subscription subscription, Security security)
-	{
-		if (CanProcess(subscription))
-			SecurityReceived?.Invoke(subscription, security);
-	}
-
-	private void OnConnectorTickTradeReceived(Subscription subscription, ITickTradeMessage trade)
-	{
-		if (CanProcess(subscription))
-			TickTradeReceived?.Invoke(subscription, trade);
-	}
-
-	private void OnConnectorOrderBookReceived(Subscription subscription, IOrderBookMessage message)
-	{
-		if (CanProcess(subscription))
-			OrderBookReceived?.Invoke(subscription, message);
-	}
-
-	private void OnConnectorOrderLogReceived(Subscription subscription, IOrderLogMessage message)
-	{
-		if (CanProcess(subscription))
-			OrderLogReceived?.Invoke(subscription, message);
-	}
-
-	private void OnConnectorLevel1Received(Subscription subscription, Level1ChangeMessage message)
-	{
-		if (CanProcess(subscription))
-			Level1Received?.Invoke(subscription, message);
-	}
-
-	private bool CanProcess(Subscription subscription)
-		=> !IsDisposeStarted && _subscriptions.ContainsKey(subscription);
 }

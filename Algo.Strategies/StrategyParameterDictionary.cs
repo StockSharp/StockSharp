@@ -7,9 +7,9 @@
 /// Initializes a new instance of the <see cref="StrategyParameterDictionary"/>.
 /// </remarks>
 /// <param name="strategy"><see cref="Strategy"/></param>
-public class StrategyParameterDictionary(Strategy strategy) : CachedSynchronizedDictionary<string, IStrategyParam>(StringComparer.InvariantCultureIgnoreCase), IDisposable
+public class StrategyParameterDictionary(IStrategy strategy) : CachedSynchronizedDictionary<string, IStrategyParam>(StringComparer.InvariantCultureIgnoreCase), IDisposable
 {
-	private readonly Strategy _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
+	private readonly IStrategy _strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 
 	/// <summary>
 	/// Try get parameter by the specified <see cref="IStrategyParam.Id"/>.

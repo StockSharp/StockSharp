@@ -587,7 +587,7 @@ public class CompilationTests : BaseTestClass
 		var instance = TypeHelper.CreateInstance<T>(type);
 
 		if (instance is Strategy s)
-			s.Connector = new();
+			s.Connector = new Connector();
 
 		var props = GetBrowsableProperties((ICustomTypeDescriptor)instance);
 

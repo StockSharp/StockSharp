@@ -1,13 +1,13 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
-partial class Strategy
+partial class StrategyOld
 {
 	/// <summary>
 	/// Subsidiary trade strategies.
 	/// </summary>
 	[Browsable(false)]
 	[Obsolete("Child strategies no longer supported.")]
-	public INotifyList<Strategy> ChildStrategies { get; } = new SynchronizedList<Strategy>();
+	public INotifyList<StrategyOld> ChildStrategies { get; } = new SynchronizedList<StrategyOld>();
 
 	/// <summary>
 	/// The event of order successful registration.

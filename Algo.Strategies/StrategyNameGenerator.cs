@@ -34,7 +34,7 @@ public sealed class StrategyNameGenerator : Disposable
 	}
 
 	private readonly SmartFormatter _formatter;
-	private readonly Strategy _strategy;
+	private readonly IStrategy _strategy;
 	private readonly SynchronizedSet<string> _selectors;
 	private string _value;
 	private string _pattern;
@@ -42,8 +42,8 @@ public sealed class StrategyNameGenerator : Disposable
 	/// <summary>
 	/// Initializes a new instance of the <see cref="StrategyNameGenerator"/>.
 	/// </summary>
-	/// <param name="strategy">Strategy.</param>
-	public StrategyNameGenerator(Strategy strategy)
+	/// <param name="strategy">IStrategy.</param>
+	public StrategyNameGenerator(IStrategy strategy)
 	{
 		_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 		_strategy.PropertyChanged += StrategyChanged;

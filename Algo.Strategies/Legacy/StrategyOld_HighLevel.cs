@@ -7,353 +7,7 @@ using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Strategies.Protective;
 using StockSharp.Charting;
 
-/// <summary>
-/// Subscription handler.
-/// </summary>
-public interface ISubscriptionHandler : IDisposable
-{
-	/// <summary>
-	/// <see cref="Subscription"/>.
-	/// </summary>
-	Subscription Subscription { get; }
-}
-
-/// <summary>
-/// Subscription handler.
-/// </summary>
-/// <typeparam name="T">Market-data type.</typeparam>
-public interface ISubscriptionHandler<T> : ISubscriptionHandler
-{
-	/// <summary>
-	/// Start subscription.
-	/// </summary>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Start();
-
-	/// <summary>
-	/// Start subscription.
-	/// </summary>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Stop();
-
-	/// <summary>
-	/// Bind the subscription.
-	/// </summary>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Bind(Action<T> callback);
-
-	/// <summary>
-	/// Bind indicator to the subscription with possible empty <see cref="IIndicatorValue.IsEmpty"/> values.
-	/// </summary>
-	/// <param name="indicator">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindWithEmpty(IIndicator indicator, Action<T, decimal?> callback);
-
-	/// <summary>
-	/// Bind indicator to the subscription.
-	/// </summary>
-	/// <param name="indicator">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Bind(IIndicator indicator, Action<T, decimal> callback);
-
-	/// <summary>
-	/// Bind indicator to the subscription.
-	/// </summary>
-	/// <param name="indicator">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <param name="allowEmpty">If <see langword="true"/>, then the callback will be called even if the indicator returns empty value.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindEx(IIndicator indicator, Action<T, IIndicatorValue> callback, bool allowEmpty = false);
-
-	/// <summary>
-	/// Bind indicators to the subscription with possible empty <see cref="IIndicatorValue.IsEmpty"/> values.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindWithEmpty(IIndicator indicator1, IIndicator indicator2, Action<T, decimal?, decimal?> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, Action<T, decimal, decimal> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <param name="allowEmpty">If <see langword="true"/>, then the callback will be called even if one of the indicators returns empty value.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, Action<T, IIndicatorValue, IIndicatorValue> callback, bool allowEmpty = false);
-
-	/// <summary>
-	/// Bind indicators to the subscription with possible empty <see cref="IIndicatorValue.IsEmpty"/> values.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindWithEmpty(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, decimal?, decimal?, decimal?> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, decimal, decimal, decimal> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <param name="allowEmpty">If <see langword="true"/>, then the callback will be called even if one of the indicators returns empty value.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback, bool allowEmpty = false);
-
-	/// <summary>
-	/// Bind indicators to the subscription with possible empty <see cref="IIndicatorValue.IsEmpty"/> values.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindWithEmpty(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, Action<T, decimal?, decimal?, decimal?, decimal?> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, Action<T, decimal, decimal, decimal, decimal> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <param name="allowEmpty">If <see langword="true"/>, then the callback will be called even if one of the indicators returns empty value.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback, bool allowEmpty = false);
-
-	/// <summary>
-	/// Bind indicators to the subscription with possible empty <see cref="IIndicatorValue.IsEmpty"/> values.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindWithEmpty(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, Action<T, decimal?, decimal?, decimal?, decimal?, decimal?> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, Action<T, decimal, decimal, decimal, decimal, decimal> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <param name="allowEmpty">If <see langword="true"/>, then the callback will be called even if one of the indicators returns empty value.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback, bool allowEmpty = false);
-
-	/// <summary>
-	/// Bind indicators to the subscription with possible empty <see cref="IIndicatorValue.IsEmpty"/> values.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="indicator6">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindWithEmpty(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, IIndicator indicator6, Action<T, decimal?, decimal?, decimal?, decimal?, decimal?, decimal?> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="indicator6">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, IIndicator indicator6, Action<T, decimal, decimal, decimal, decimal, decimal, decimal> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="indicator6">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <param name="allowEmpty">If <see langword="true"/>, then the callback will be called even if one of the indicators returns empty value.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, IIndicator indicator6, Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback, bool allowEmpty = false);
-
-	/// <summary>
-	/// Bind indicators to the subscription with possible empty <see cref="IIndicatorValue.IsEmpty"/> values.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="indicator6">Indicator.</param>
-	/// <param name="indicator7">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindWithEmpty(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, IIndicator indicator6, IIndicator indicator7, Action<T, decimal?, decimal?, decimal?, decimal?, decimal?, decimal?, decimal?> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="indicator6">Indicator.</param>
-	/// <param name="indicator7">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, IIndicator indicator6, IIndicator indicator7, Action<T, decimal, decimal, decimal, decimal, decimal, decimal, decimal> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="indicator6">Indicator.</param>
-	/// <param name="indicator7">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <param name="allowEmpty">If <see langword="true"/>, then the callback will be called even if one of the indicators returns empty value.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, IIndicator indicator6, IIndicator indicator7, Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback, bool allowEmpty = false);
-
-	/// <summary>
-	/// Bind indicators to the subscription with possible empty <see cref="IIndicatorValue.IsEmpty"/> values.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="indicator6">Indicator.</param>
-	/// <param name="indicator7">Indicator.</param>
-	/// <param name="indicator8">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindWithEmpty(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, IIndicator indicator6, IIndicator indicator7, IIndicator indicator8, Action<T, decimal?, decimal?, decimal?, decimal?, decimal?, decimal?, decimal?, decimal?> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="indicator6">Indicator.</param>
-	/// <param name="indicator7">Indicator.</param>
-	/// <param name="indicator8">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Bind(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, IIndicator indicator6, IIndicator indicator7, IIndicator indicator8, Action<T, decimal, decimal, decimal, decimal, decimal, decimal, decimal, decimal> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicator1">Indicator.</param>
-	/// <param name="indicator2">Indicator.</param>
-	/// <param name="indicator3">Indicator.</param>
-	/// <param name="indicator4">Indicator.</param>
-	/// <param name="indicator5">Indicator.</param>
-	/// <param name="indicator6">Indicator.</param>
-	/// <param name="indicator7">Indicator.</param>
-	/// <param name="indicator8">Indicator.</param>
-	/// <param name="callback">Callback.</param>
-	/// <param name="allowEmpty">If <see langword="true"/>, then the callback will be called even if one of the indicators returns empty value.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindEx(IIndicator indicator1, IIndicator indicator2, IIndicator indicator3, IIndicator indicator4, IIndicator indicator5, IIndicator indicator6, IIndicator indicator7, IIndicator indicator8, Action<T, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue, IIndicatorValue> callback, bool allowEmpty = false);
-
-	/// <summary>
-	/// Bind indicator to the subscription.
-	/// </summary>
-	/// <param name="indicators">Indicators.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> Bind(IIndicator[] indicators, Action<T, decimal[]> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription with possible empty <see cref="IIndicatorValue.IsEmpty"/> values.
-	/// </summary>
-	/// <param name="indicators">Indicators.</param>
-	/// <param name="callback">Callback.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindWithEmpty(IIndicator[] indicators, Action<T, decimal?[]> callback);
-
-	/// <summary>
-	/// Bind indicators to the subscription.
-	/// </summary>
-	/// <param name="indicators">Indicators.</param>
-	/// <param name="callback">Callback.</param>
-	/// <param name="allowEmpty">If <see langword="true"/>, then the callback will be called even if one of the indicators returns empty value.</param>
-	/// <returns><see cref="ISubscriptionHandler{T}"/></returns>
-	ISubscriptionHandler<T> BindEx(IIndicator[] indicators, Action<T, IIndicatorValue[]> callback, bool allowEmpty = false);
-}
-
-public partial class Strategy
+public partial class StrategyOld
 {
 	/// <summary>
 	/// To create initialized object of buy order at market price.
@@ -399,7 +53,7 @@ public partial class Strategy
 	/// To create the initialized order object for buy.
 	/// </summary>
 	/// <param name="price">Price.</param>
-	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="StrategyOld.Volume"/> value is used.</param>
 	/// <param name="security">The security. If <see langword="null" /> value is passed, then <see cref="Security"/> value is used.</param>
 	/// <returns>The initialized order object.</returns>
 	/// <remarks>
@@ -420,7 +74,7 @@ public partial class Strategy
 	/// To create the initialized order object for sell.
 	/// </summary>
 	/// <param name="price">Price.</param>
-	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="StrategyOld.Volume"/> value is used.</param>
 	/// <param name="security">The security. If <see langword="null" /> value is passed, then <see cref="Security"/> value is used.</param>
 	/// <returns>The initialized order object.</returns>
 	/// <remarks>
@@ -440,8 +94,8 @@ public partial class Strategy
 	/// <summary>
 	/// To close open position by market (to register the order of the type <see cref="OrderTypes.Market"/>).
 	/// </summary>
-	/// <param name="security"><see cref="BusinessEntities.Security"/>. If not passed the value from <see cref="Strategy.Security"/> will be obtain.</param>
-	/// <param name="portfolio"><see cref="BusinessEntities.Portfolio"/>. If not passed the value from <see cref="Strategy.Portfolio"/> will be obtain.</param>
+	/// <param name="security"><see cref="BusinessEntities.Security"/>. If not passed the value from <see cref="StrategyOld.Security"/> will be obtain.</param>
+	/// <param name="portfolio"><see cref="BusinessEntities.Portfolio"/>. If not passed the value from <see cref="StrategyOld.Portfolio"/> will be obtain.</param>
 	/// <returns>The initialized order object.</returns>
 	/// <remarks>
 	/// The market order is not operable on all exchanges.
@@ -603,10 +257,10 @@ public partial class Strategy
 			}
 		}
 
-		private readonly Strategy _strategy;
+		private readonly StrategyOld _strategy;
 		private readonly CachedSynchronizedList<SubscriptionHandlerBinder0> _binders = [];
 
-		internal SubscriptionHandler(Strategy strategy, Subscription subscription)
+		internal SubscriptionHandler(StrategyOld strategy, Subscription subscription)
 		{
 			_strategy = strategy ?? throw new ArgumentNullException(nameof(strategy));
 			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
@@ -1371,11 +1025,11 @@ public partial class Strategy
 	/// </summary>
 	private class TimerHandler : Disposable, ITimerHandler
 	{
-		private readonly Strategy _strategy;
+		private readonly StrategyOld _strategy;
 		private readonly Action _callback;
 		private IMarketRule _rule;
 
-		public TimerHandler(Strategy strategy, TimeSpan interval, Action callback)
+		public TimerHandler(StrategyOld strategy, TimeSpan interval, Action callback)
 		{
 			if (interval <= TimeSpan.Zero)
 				throw new ArgumentOutOfRangeException(nameof(interval), interval, LocalizedStrings.InvalidValue);

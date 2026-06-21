@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies.Decomposed;
+namespace StockSharp.Algo.Strategies;
 
 using StockSharp.Algo.Statistics;
 
@@ -9,8 +9,13 @@ using StockSharp.Algo.Statistics;
 /// Initializes a new instance of the <see cref="OrderPipeline"/>.
 /// </remarks>
 /// <param name="stats">Statistic manager.</param>
-public class OrderPipeline(IStatisticManager stats)
+public class OrderPipeline(IStatisticManager stats) : IEnumerable<Order>
 {
+	/// <inheritdoc />
+	public IEnumerator<Order> GetEnumerator() => Orders.GetEnumerator();
+
+	System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+
 	private class OrderInfo
 	{
 		public bool IsCanceled { get; set; }
@@ -19,7 +24,14 @@ public class OrderPipeline(IStatisticManager stats)
 	}
 
 	private readonly CachedSynchronizedDictionary<Order, OrderInfo> _ordersInfo = [];
-	private readonly IStatisticManager _stats = stats ?? throw new ArgumentNullException(nameof(stats));
+	private IStatisticManager _stats = stats ?? throw new ArgumentNullException(nameof(stats));
+
+	/// <summary>
+	/// Swap the statistic manager (used when <see cref="Strategy.StatisticManager"/> is reassigned).
+	/// </summary>
+	/// <param name="stats">The new statistic manager.</param>
+	public void SetStatisticManager(IStatisticManager stats)
+		=> _stats = stats ?? throw new ArgumentNullException(nameof(stats));
 
 	/// <summary>
 	/// Fires when an order transitions from Pending to Active/Done.
@@ -82,7 +94,10 @@ public class OrderPipeline(IStatisticManager stats)
 		{
 			_stats.AddNewOrder(order);
 
-			if (order.Commission != null)
+			// Fold the order commission into the running total only for non-conditional orders, matching
+			// the monolith ProcessOrder which counts conditional (stop/take) orders into statistics but
+			// never folds their commission.
+			if (order.Type != OrderTypes.Conditional && order.Commission != null)
 			{
 				Commission ??= 0;
 				Commission += order.Commission;
@@ -139,6 +154,28 @@ public class OrderPipeline(IStatisticManager stats)
 		{
 			if (!pair.Value.IsCanceled && !pair.Key.State.IsFinal())
 				pair.Value.IsCanceled = true;
+		}
+	}
+
+	/// <summary>
+	/// Mark a single tracked order as canceled. Returns <see langword="true"/> only on the transition
+	/// (i.e. the order was tracked and had not been marked canceled yet), so the caller can issue the
+	/// cancel exactly once - mirroring the monolith ProcessOrder stop-time re-cancel guard.
+	/// </summary>
+	/// <param name="order">The order to mark.</param>
+	/// <returns><see langword="true"/> if the order was newly marked canceled.</returns>
+	public bool TryMarkCanceled(Order order)
+	{
+		if (order is null)
+			throw new ArgumentNullException(nameof(order));
+
+		using (_ordersInfo.EnterScope())
+		{
+			if (!_ordersInfo.TryGetValue(order, out var info) || info.IsCanceled)
+				return false;
+
+			info.IsCanceled = true;
+			return true;
 		}
 	}
 

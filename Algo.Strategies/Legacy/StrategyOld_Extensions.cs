@@ -4,14 +4,14 @@ using StockSharp.Alerts;
 using StockSharp.Charting;
 using StockSharp.Algo.Derivatives;
 
-partial class Strategy
+partial class StrategyOld
 {
 	/// <summary>
 	/// To create the initialized order object.
 	/// </summary>
 	/// <param name="side">Order side.</param>
 	/// <param name="price">The price. If <see langword="null" /> value is passed, the order is registered at market price.</param>
-	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="Strategy.Volume"/> value is used.</param>
+	/// <param name="volume">The volume. If <see langword="null" /> value is passed, then <see cref="StrategyOld.Volume"/> value is used.</param>
 	/// <returns>The initialized order object.</returns>
 	/// <remarks>
 	/// The order is not registered, only the object is created.

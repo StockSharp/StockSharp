@@ -95,10 +95,10 @@ public class SmaServerStopStrategy : Strategy
 		}
 
 		// Track stop order state changes
-		OrderReceived += (_, order) => OnOrderChanged(order);
+		OrderReceived += (_, order) => OnStopOrderChanged(order);
 	}
 
-	private void OnOrderChanged(Order order)
+	private void OnStopOrderChanged(Order order)
 	{
 		if (_activeStopOrder != null && order.TransactionId == _activeStopOrder.TransactionId)
 		{

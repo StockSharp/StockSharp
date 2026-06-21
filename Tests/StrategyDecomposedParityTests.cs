@@ -1,26 +1,26 @@
+#pragma warning disable CS0618 // equivalence tests deliberately exercise the obsolete StrategyOld engine
 namespace StockSharp.Tests;
 
 using StockSharp.Algo.Strategies;
-using StockSharp.Algo.Strategies.Decomposed;
 
 /// <summary>
-/// Focused, component-level parity tests between the monolith <see cref="Strategy"/> and the
-/// <see cref="DecomposedStrategy"/>. Each test isolates one behaviour so a divergence is pinned to a single
+/// Focused, component-level parity tests between the monolith <see cref="StrategyOld"/> and the
+/// <see cref="Strategy"/>. Each test isolates one behaviour so a divergence is pinned to a single
 /// place instead of being buried inside the full-stream equivalence comparison.
 /// </summary>
 [TestClass]
 public class StrategyDecomposedParityTests : BaseTestClass
 {
 	/// <summary>
-	/// The monolith promotes <see cref="Strategy.ErrorState"/> from inside RaiseLog whenever a warning/error
+	/// The monolith promotes <see cref="StrategyOld.ErrorState"/> from inside RaiseLog whenever a warning/error
 	/// is logged. The decomposed strategy must behave identically; otherwise the ErrorState PropertyChanged
 	/// stream diverges from the monolith's (which is exactly what desynced the full-equivalence run).
 	/// </summary>
 	[TestMethod]
 	public void ErrorState_AfterWarningLog_MatchesBetweenImplementations()
 	{
-		var mono = new Strategy();
-		var deco = new DecomposedStrategy();
+		var mono = new StrategyOld();
+		var deco = new Strategy();
 
 		AreEqual(mono.ErrorState, deco.ErrorState, "initial ErrorState must match");
 
@@ -36,8 +36,8 @@ public class StrategyDecomposedParityTests : BaseTestClass
 	[TestMethod]
 	public void ErrorState_AfterErrorLog_MatchesBetweenImplementations()
 	{
-		var mono = new Strategy();
-		var deco = new DecomposedStrategy();
+		var mono = new StrategyOld();
+		var deco = new Strategy();
 
 		mono.LogError("boom");
 		deco.LogError("boom");

@@ -1,15 +1,15 @@
+#pragma warning disable CS0618 // equivalence tests deliberately exercise the obsolete StrategyOld engine
 namespace StockSharp.Tests;
 
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.Slippage;
-using StockSharp.Algo.Strategies.Decomposed;
 
 /// <summary>
 /// Surface-completeness tests shared by BOTH strategy implementations: the same
 /// combined deterministic backtest scenario, the same must-fire event list, the same
 /// silence expectations and the same property/entity completeness checks are applied
-/// first to the monolith <see cref="Strategy"/> (the reference - expected to pass) and
-/// then to <see cref="DecomposedStrategy"/> (expected red until the migration closes
+/// first to the monolith <see cref="StrategyOld"/> (the reference - expected to pass) and
+/// then to <see cref="Strategy"/> (expected red until the migration closes
 /// the gaps). A test fails whenever an expected event never fires or expected data
 /// stays zero/null - "the event did not fire" and "the property stayed null" are
 /// first-class failures here.
@@ -45,74 +45,74 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 	/// keys both counters bump and both expectation lists reference. The lone
 	/// synthetic key (<see cref="PositionChangedTyped"/>) has no own member: the
 	/// monolith exposes two position-changed events (the obsolete parameterless
-	/// <see cref="Strategy.PositionChanged"/> and <see cref="IPositionProvider.PositionChanged"/>),
+	/// <see cref="StrategyOld.PositionChanged"/> and <see cref="IPositionProvider.PositionChanged"/>),
 	/// and nameof on both would collide, so the typed one gets a distinct label.
 	/// </summary>
 	private static class Ev
 	{
-		public const string ProcessStateChanged = nameof(Strategy.ProcessStateChanged);
-		public const string ConnectorChanged = nameof(Strategy.ConnectorChanged);
-		public const string ParametersChanged = nameof(Strategy.ParametersChanged);
-		public const string PropertyChanged = nameof(Strategy.PropertyChanged);
-		public const string Reseted = nameof(Strategy.Reseted);
-		public const string IsOnlineChanged = nameof(Strategy.IsOnlineChanged);
+		public const string ProcessStateChanged = nameof(StrategyOld.ProcessStateChanged);
+		public const string ConnectorChanged = nameof(StrategyOld.ConnectorChanged);
+		public const string ParametersChanged = nameof(StrategyOld.ParametersChanged);
+		public const string PropertyChanged = nameof(StrategyOld.PropertyChanged);
+		public const string Reseted = nameof(StrategyOld.Reseted);
+		public const string IsOnlineChanged = nameof(StrategyOld.IsOnlineChanged);
 		public const string CurrentTimeChanged = nameof(ITimeProvider.CurrentTimeChanged);
-		public const string Error = nameof(Strategy.Error);
+		public const string Error = nameof(StrategyOld.Error);
 
 		public const string NewOrder = nameof(ITransactionProvider.NewOrder);
-		public const string OrderRegistering = nameof(Strategy.OrderRegistering);
-		public const string OrderRegistered = nameof(Strategy.OrderRegistered);
-		public const string OrderChanged = nameof(Strategy.OrderChanged);
-		public const string OrderCanceling = nameof(Strategy.OrderCanceling);
-		public const string OrderReRegistering = nameof(Strategy.OrderReRegistering);
-		public const string OrderRegisterFailed = nameof(Strategy.OrderRegisterFailed);
-		public const string OrderRegisterFailReceived = nameof(Strategy.OrderRegisterFailReceived);
-		public const string OrderCancelFailed = nameof(Strategy.OrderCancelFailed);
-		public const string OrderCancelFailReceived = nameof(Strategy.OrderCancelFailReceived);
-		public const string OrderEdited = nameof(Strategy.OrderEdited);
-		public const string OrderEditFailed = nameof(Strategy.OrderEditFailed);
-		public const string OrderEditFailReceived = nameof(Strategy.OrderEditFailReceived);
-		public const string OrderReceived = nameof(Strategy.OrderReceived);
+		public const string OrderRegistering = nameof(StrategyOld.OrderRegistering);
+		public const string OrderRegistered = nameof(StrategyOld.OrderRegistered);
+		public const string OrderChanged = nameof(StrategyOld.OrderChanged);
+		public const string OrderCanceling = nameof(StrategyOld.OrderCanceling);
+		public const string OrderReRegistering = nameof(StrategyOld.OrderReRegistering);
+		public const string OrderRegisterFailed = nameof(StrategyOld.OrderRegisterFailed);
+		public const string OrderRegisterFailReceived = nameof(StrategyOld.OrderRegisterFailReceived);
+		public const string OrderCancelFailed = nameof(StrategyOld.OrderCancelFailed);
+		public const string OrderCancelFailReceived = nameof(StrategyOld.OrderCancelFailReceived);
+		public const string OrderEdited = nameof(StrategyOld.OrderEdited);
+		public const string OrderEditFailed = nameof(StrategyOld.OrderEditFailed);
+		public const string OrderEditFailReceived = nameof(StrategyOld.OrderEditFailReceived);
+		public const string OrderReceived = nameof(StrategyOld.OrderReceived);
 
-		public const string NewMyTrade = nameof(Strategy.NewMyTrade);
-		public const string OwnTradeReceived = nameof(Strategy.OwnTradeReceived);
+		public const string NewMyTrade = nameof(StrategyOld.NewMyTrade);
+		public const string OwnTradeReceived = nameof(StrategyOld.OwnTradeReceived);
 
-		public const string PositionChanged = nameof(Strategy.PositionChanged);
+		public const string PositionChanged = nameof(StrategyOld.PositionChanged);
 		public const string PositionChangedTyped = "PositionChangedTyped";
 		public const string NewPosition = nameof(IPositionProvider.NewPosition);
-		public const string PositionReceived = nameof(Strategy.PositionReceived);
-		public const string PortfolioReceived = nameof(Strategy.PortfolioReceived);
+		public const string PositionReceived = nameof(StrategyOld.PositionReceived);
+		public const string PortfolioReceived = nameof(StrategyOld.PortfolioReceived);
 
-		public const string PnLChanged = nameof(Strategy.PnLChanged);
-		public const string PnLReceived = nameof(Strategy.PnLReceived);
-		public const string PnLReceived2 = nameof(Strategy.PnLReceived2);
-		public const string CommissionChanged = nameof(Strategy.CommissionChanged);
-		public const string SlippageChanged = nameof(Strategy.SlippageChanged);
-		public const string LatencyChanged = nameof(Strategy.LatencyChanged);
+		public const string PnLChanged = nameof(StrategyOld.PnLChanged);
+		public const string PnLReceived = nameof(StrategyOld.PnLReceived);
+		public const string PnLReceived2 = nameof(StrategyOld.PnLReceived2);
+		public const string CommissionChanged = nameof(StrategyOld.CommissionChanged);
+		public const string SlippageChanged = nameof(StrategyOld.SlippageChanged);
+		public const string LatencyChanged = nameof(StrategyOld.LatencyChanged);
 
 		public const string MassOrderCanceled = nameof(ITransactionProvider.MassOrderCanceled);
 		public const string MassOrderCanceled2 = nameof(ITransactionProvider.MassOrderCanceled2);
 		public const string MassOrderCancelFailed = nameof(ITransactionProvider.MassOrderCancelFailed);
 		public const string MassOrderCancelFailed2 = nameof(ITransactionProvider.MassOrderCancelFailed2);
 
-		public const string CandleReceived = nameof(Strategy.CandleReceived);
-		public const string TickTradeReceived = nameof(Strategy.TickTradeReceived);
-		public const string Level1Received = nameof(Strategy.Level1Received);
-		public const string OrderBookReceived = nameof(Strategy.OrderBookReceived);
-		public const string OrderLogReceived = nameof(Strategy.OrderLogReceived);
-		public const string SecurityReceived = nameof(Strategy.SecurityReceived);
-		public const string BoardReceived = nameof(Strategy.BoardReceived);
-		public const string NewsReceived = nameof(Strategy.NewsReceived);
-		public const string DataTypeReceived = nameof(Strategy.DataTypeReceived);
-		public const string SubscriptionReceived = nameof(Strategy.SubscriptionReceived);
-		public const string SubscriptionStarted = nameof(Strategy.SubscriptionStarted);
-		public const string SubscriptionOnline = nameof(Strategy.SubscriptionOnline);
-		public const string SubscriptionStopped = nameof(Strategy.SubscriptionStopped);
-		public const string SubscriptionFailed = nameof(Strategy.SubscriptionFailed);
+		public const string CandleReceived = nameof(StrategyOld.CandleReceived);
+		public const string TickTradeReceived = nameof(StrategyOld.TickTradeReceived);
+		public const string Level1Received = nameof(StrategyOld.Level1Received);
+		public const string OrderBookReceived = nameof(StrategyOld.OrderBookReceived);
+		public const string OrderLogReceived = nameof(StrategyOld.OrderLogReceived);
+		public const string SecurityReceived = nameof(StrategyOld.SecurityReceived);
+		public const string BoardReceived = nameof(StrategyOld.BoardReceived);
+		public const string NewsReceived = nameof(StrategyOld.NewsReceived);
+		public const string DataTypeReceived = nameof(StrategyOld.DataTypeReceived);
+		public const string SubscriptionReceived = nameof(StrategyOld.SubscriptionReceived);
+		public const string SubscriptionStarted = nameof(StrategyOld.SubscriptionStarted);
+		public const string SubscriptionOnline = nameof(StrategyOld.SubscriptionOnline);
+		public const string SubscriptionStopped = nameof(StrategyOld.SubscriptionStopped);
+		public const string SubscriptionFailed = nameof(StrategyOld.SubscriptionFailed);
 
-		public const string OrderBookDrawing = nameof(Strategy.OrderBookDrawing);
-		public const string OrderBookDrawingOrder = nameof(Strategy.OrderBookDrawingOrder);
-		public const string OrderBookDrawingOrderFail = nameof(Strategy.OrderBookDrawingOrderFail);
+		public const string OrderBookDrawing = nameof(StrategyOld.OrderBookDrawing);
+		public const string OrderBookDrawingOrder = nameof(StrategyOld.OrderBookDrawingOrder);
+		public const string OrderBookDrawingOrderFail = nameof(StrategyOld.OrderBookDrawingOrderFail);
 	}
 
 	/// <summary>
@@ -292,7 +292,7 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 
 	#region Scenario strategies
 
-	private sealed class ReferenceSmaStrategy : Strategy
+	private sealed class ReferenceSmaStrategy : StrategyOld
 	{
 		private readonly SimpleMovingAverage _longSma = new() { Length = _longLen };
 		private readonly SimpleMovingAverage _shortSma = new() { Length = _shortLen };
@@ -369,7 +369,7 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		}
 	}
 
-	private sealed class DecomposedReferenceSmaStrategy : DecomposedStrategy
+	private sealed class DecomposedReferenceSmaStrategy : Strategy
 	{
 		private readonly SimpleMovingAverage _longSma = new() { Length = _longLen };
 		private readonly SimpleMovingAverage _shortSma = new() { Length = _shortLen };
@@ -664,7 +664,7 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		strategy.PropertyChanged += (_, _) => counter.Bump(Ev.PropertyChanged);
 		strategy.Reseted += () => counter.Bump(Ev.Reseted);
 		strategy.IsOnlineChanged += _ => counter.Bump(Ev.IsOnlineChanged);
-		strategy.Error += _ => counter.Bump(Ev.Error);
+		strategy.Error += (_, _) => counter.Bump(Ev.Error);
 		((ITimeProvider)strategy).CurrentTimeChanged += _ => counter.Bump(Ev.CurrentTimeChanged);
 
 		strategy.OrderRegistering += _ => counter.Bump(Ev.OrderRegistering);
@@ -673,9 +673,9 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		strategy.OrderCancelFailed += _ => counter.Bump(Ev.OrderCancelFailed);
 		strategy.OrderEdited += (_, _) => counter.Bump(Ev.OrderEdited);
 		strategy.OrderEditFailed += (_, _) => counter.Bump(Ev.OrderEditFailed);
-		strategy.Orders.NewOrder += _ => counter.Bump(Ev.NewOrder);
-		strategy.Orders.Registered += _ => counter.Bump(Ev.OrderRegistered);
-		strategy.Orders.Changed += _ => counter.Bump(Ev.OrderChanged);
+		strategy.OrderProcessor.NewOrder += _ => counter.Bump(Ev.NewOrder);
+		strategy.OrderProcessor.Registered += _ => counter.Bump(Ev.OrderRegistered);
+		strategy.OrderProcessor.Changed += _ => counter.Bump(Ev.OrderChanged);
 		strategy.Trades.TradeAdded += _ => counter.Bump(Ev.NewMyTrade);
 		strategy.PnLChanged += () => counter.Bump(Ev.PnLChanged);
 		strategy.PnLReceived += _ => counter.Bump(Ev.PnLReceived);
@@ -931,7 +931,7 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 
 		AssertPropertiesCarryData(
 			"decomposed", strategy.ProcessState, strategy.MaxAbsPosition,
-			strategy.Orders.Orders.Any(), strategy.Trades.MyTrades.Any(),
+			strategy.Orders.Any(), strategy.Trades.MyTrades.Any(),
 			strategy.PnLManager.GetPnL(), strategy.Commission, strategy.Slippage, strategy.Latency,
 			strategy.PositionsList.Any(), strategy.StatisticManager.Parameters.Any(p => p.Value is not null));
 	}
@@ -942,7 +942,7 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 	{
 		var (strategy, _) = await RunDecomposed();
 
-		AssertEntitiesFullyPopulated("decomposed", [.. strategy.Orders.Orders], [.. strategy.Trades.MyTrades]);
+		AssertEntitiesFullyPopulated("decomposed", [.. strategy.Orders], [.. strategy.Trades.MyTrades]);
 	}
 
 	#endregion

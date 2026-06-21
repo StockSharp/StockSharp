@@ -1,10 +1,10 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
-partial class Strategy
+partial class StrategyOld
 {
 	private class StrategyParamPropDescriptor(IStrategyParam param) : NamedPropertyDescriptor(param.Id, [.. param.Attributes])
 	{
-		public override Type ComponentType => typeof(Strategy);
+		public override Type ComponentType => typeof(StrategyOld);
 		public override bool IsReadOnly => false;
 		public override Type PropertyType => param.Type;
 

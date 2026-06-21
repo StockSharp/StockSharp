@@ -2,7 +2,7 @@ namespace StockSharp.Algo.Strategies;
 
 using StockSharp.Algo.PositionManagement;
 
-partial class Strategy
+partial class StrategyOld
 {
 	private PositionTargetManager _targetManager;
 

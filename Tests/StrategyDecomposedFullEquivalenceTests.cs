@@ -1,3 +1,4 @@
+#pragma warning disable CS0618 // equivalence tests deliberately exercise the obsolete StrategyOld engine
 namespace StockSharp.Tests;
 
 using System.Text;
@@ -6,11 +7,10 @@ using System.Text.RegularExpressions;
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Slippage;
-using StockSharp.Algo.Strategies.Decomposed;
 
 /// <summary>
-/// Strict full-stream equivalence tests between the monolith <see cref="Strategy"/>
-/// and <see cref="DecomposedStrategy"/>.
+/// Strict full-stream equivalence tests between the monolith <see cref="StrategyOld"/>
+/// and <see cref="Strategy"/>.
 ///
 /// Both implementations run the SAME shared SMA-crossover logic (one class, not two
 /// hand-synchronized copies) inside a REAL deterministic <see cref="HistoryEmulationConnector"/>
@@ -233,7 +233,7 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 
 	#region Strategy variants
 
-	private sealed class MonolithSmaVariant : Strategy, ITradeOps
+	private sealed class MonolithSmaVariant : StrategyOld, ITradeOps
 	{
 		private readonly SmaCrossoverLogic _logic = new();
 		private EditFlowScript _editFlow;
@@ -328,7 +328,7 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		}
 	}
 
-	private sealed class DecomposedSmaVariant : DecomposedStrategy, ITradeOps
+	private sealed class DecomposedSmaVariant : Strategy, ITradeOps
 	{
 		private readonly SmaCrossoverLogic _logic = new();
 		private readonly SimpleMovingAverage _longSma = new() { Length = _longLen };
@@ -368,12 +368,8 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 					if (Scenario.UseEditFlow)
 						_editFlow = new(this);
 
-					// The decomposed design has no automatic lookup subscriptions
-					// (the monolith subscribes PortfolioLookup/OrderLookup in OnStarted2),
-					// so the variant subscribes the equivalents itself in the same order.
-					Subscriptions.Subscribe(new(DataType.PositionChanges), true);
-					Subscriptions.Subscribe(new(DataType.Transactions), true);
-
+					// The decomposed engine now subscribes PortfolioLookup/OrderLookup automatically on start
+					// (matching the monolith's OnStarted2), so the variant no longer subscribes them itself.
 					_candleSub = CreateCandleSubscription(Security, Scenario.BuildFrom, Scenario.BuildField);
 
 					Connector.CandleReceived += OnCandle;
@@ -662,9 +658,9 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		strategy.OrderReRegistering += (oldOrder, newOrder) => rec.Add("OrderReRegistering", $"old={rec.Ord(oldOrder)} new={rec.Ord(newOrder)} price={Fmt(newOrder.Price)}");
 		strategy.OrderCanceling += order => rec.Add("OrderCancel", $"{rec.Ord(order)} state={order.State}");
 
-		strategy.Orders.NewOrder += order => rec.Add("NewOrder", FormatOrderCore(order, rec.Ord(order)));
-		strategy.Orders.Registered += order => rec.Add("OrderReg", FormatOrderState(order, rec.Ord(order)));
-		strategy.Orders.Changed += order => rec.Add("OrderChg", FormatOrderState(order, rec.Ord(order)));
+		strategy.OrderProcessor.NewOrder += order => rec.Add("NewOrder", FormatOrderCore(order, rec.Ord(order)));
+		strategy.OrderProcessor.Registered += order => rec.Add("OrderReg", FormatOrderState(order, rec.Ord(order)));
+		strategy.OrderProcessor.Changed += order => rec.Add("OrderChg", FormatOrderState(order, rec.Ord(order)));
 		strategy.Trades.TradeAdded += trade => rec.Add("Trade", FormatTrade(trade, rec.Ord(trade.Order)));
 
 		strategy.OrderEdited += (transId, order) => rec.Add("OrderEdit", $"{rec.Ord(order)} price={Fmt(order.Price)} vol={Fmt(order.Volume)}");
@@ -706,7 +702,7 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		strategy.LatencyChanged += () => rec.Add("Latency");
 
 		strategy.IsOnlineChanged += s => rec.Add("Online", s.IsOnline.ToString());
-		strategy.Error += error => rec.Add("Error", NormalizeError(error));
+		strategy.Error += (_, error) => rec.Add("Error", NormalizeError(error));
 	}
 
 	#endregion
@@ -848,7 +844,7 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 			rec.Add("Final",
 				$"state={strategy.ProcessState} maxAbsPos={Fmt(strategy.MaxAbsPosition)} pos={Fmt(strategy.Position)} " +
 				$"pnl=[{FormatPnL(strategy.PnLManager)}] commission={Fmt(strategy.Commission)} slippage={Fmt(strategy.Slippage)} " +
-				$"latency={(strategy.Latency is null ? "null" : "set")} orders={strategy.Orders.Orders.Count()} trades={strategy.Trades.MyTrades.Count()}");
+				$"latency={(strategy.Latency is null ? "null" : "set")} orders={strategy.OrderProcessor.Orders.Count()} trades={strategy.Trades.MyTrades.Count()}");
 
 			// Drive the reset surface as the final lifecycle step (the monolith raises
 			// a notification storm on Reset, the decomposed side is silent).

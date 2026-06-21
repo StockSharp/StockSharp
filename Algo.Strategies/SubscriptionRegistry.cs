@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies.Decomposed;
+namespace StockSharp.Algo.Strategies;
 
 /// <summary>
 /// Subscription tracking. Manages subscribe/unsubscribe, suspend/resume for rules.
