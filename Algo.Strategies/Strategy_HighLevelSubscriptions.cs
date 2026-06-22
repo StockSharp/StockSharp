@@ -19,12 +19,20 @@ public partial class Strategy
 {
 	// The monolith exposed an IndicatorList that also drove IsFormed. Here we keep a minimal tracking
 	// collection used by the high-level Bind* helpers. IsFormed remains controlled by the engine and is
-	// intentionally not re-derived from this list.
+	// intentionally not re-derived from this list. The default-source wiring is attached in InitIndicators.
 	private readonly INotifyList<IIndicator> _indicators = new SynchronizedSet<IIndicator>();
+
+	// Mirror the monolith IndicatorList.OnAdded: any indicator added with no Source inherits IndicatorSource
+	// (??= at add-time, so its own Source is never overwritten). Added covers all mutation paths.
+	private void InitIndicators()
+	{
+		_indicators.Added += indicator => indicator.Source ??= IndicatorSource;
+	}
 
 	/// <summary>
 	/// All indicators registered via the high-level <see cref="ISubscriptionHandler{T}"/> binders.
 	/// </summary>
+	[Browsable(false)]
 	public INotifyList<IIndicator> Indicators => _indicators;
 
 	// The decomposed Strategy does not own a backtesting flag in this subsystem, so it is derived from

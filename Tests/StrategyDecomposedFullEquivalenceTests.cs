@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using StockSharp.Algo.Commissions;
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Slippage;
+using StockSharp.Algo.Statistics;
 
 /// <summary>
 /// Strict full-stream equivalence tests between the monolith <see cref="StrategyOld"/>
@@ -43,7 +44,12 @@ using StockSharp.Algo.Slippage;
 /// The compared window is configure..Reset: recorders attach before the connector is
 /// assigned, both sides are Reset after the stop, and a synthetic "Final" record pins
 /// the end-of-run property state (position, max position, PnL split, commission,
-/// slippage, latency, collection counts) of each side for 1:1 comparison. Infra
+/// slippage, latency, collection counts, StartedTime set/null flag, TotalWorkingTime
+/// zero/nonzero flag, ErrorState) of each side for 1:1 comparison. Two further families
+/// are recorded while both strategies are still alive (after stop, before Reset): "Stat"
+/// compares every StatisticManager parameter VALUE 1:1 (latency magnitudes normalized
+/// away), and "SubSnapshot" pins the ordered active Subscriptions as DataType +
+/// StrategyId-stamp pairs (a missing/mis-stamped auto PortfolioLookup/OrderLookup surfaces here). Infra
 /// streams (PropertyChanged, ParametersChanged, ConnectorChanged, Reseted,
 /// CurrentTimeChanged, drawing surface) are recorded and compared too - the
 /// decomposed side has no equivalents, so those families stay red until it does.
@@ -244,6 +250,20 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		public EquivalenceScenario Scenario { get; set; }
 		public decimal MaxAbsPosition { get; private set; }
 
+		// StartedTime is reset to default on stop, so capture whether it was ever set during the run.
+		public bool ObservedStartedTimeSet { get; private set; }
+
+		// Subscriptions are torn down on stop; refresh the snapshot every candle to capture the live set.
+		public List<string> LiveSubscriptionsSnapshot { get; } = [];
+
+		private void CaptureSubscriptions()
+		{
+			LiveSubscriptionsSnapshot.Clear();
+			LiveSubscriptionsSnapshot.AddRange(((ISubscriptionProvider)this).Subscriptions
+				.OrderBy(s => s.DataType.ToString())
+				.Select(FormatSubscriptionSnapshot));
+		}
+
 		public event Action<ICandleMessage> CandleProcessed;
 		public event Action<Sides, decimal, decimal> SignalProduced;
 
@@ -255,6 +275,8 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		protected override void OnStarted2(DateTime time)
 		{
 			base.OnStarted2(time);
+
+			ObservedStartedTimeSet |= StartedTime != default;
 
 			if (Scenario.UseProtection)
 				StartProtection(new Unit(), new Unit(0.2m, UnitTypes.Percent));
@@ -285,6 +307,7 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 			CandleProcessed?.Invoke(candle);
 			_candleCount++;
 			MaxAbsPosition = MaxAbsPosition.Max(Position.Abs());
+			CaptureSubscriptions();
 
 			_editFlow?.OnCandle(_candleCount, candle);
 
@@ -344,6 +367,20 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		public decimal MaxAbsPosition { get; private set; }
 		public override bool IsFormed => _isFormed;
 
+		// Mirror of MonolithSmaVariant: StartedTime is reset on stop, so capture whether it was ever set.
+		public bool ObservedStartedTimeSet { get; private set; }
+
+		// Mirror of MonolithSmaVariant: refresh the snapshot every candle (subscriptions torn down on stop).
+		public List<string> LiveSubscriptionsSnapshot { get; } = [];
+
+		private void CaptureSubscriptions()
+		{
+			LiveSubscriptionsSnapshot.Clear();
+			LiveSubscriptionsSnapshot.AddRange(Subscriptions.Subscriptions
+				.OrderBy(s => s.DataType.ToString())
+				.Select(FormatSubscriptionSnapshot));
+		}
+
 		public event Action<ICandleMessage> CandleProcessed;
 		public event Action<Sides, decimal, decimal> SignalProduced;
 		public event Action<ProcessStates> StateChangedHook;
@@ -362,6 +399,8 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 			{
 				case ProcessStates.Started:
 				{
+					ObservedStartedTimeSet |= StartedTime != default;
+
 					if (Scenario.UseProtection)
 						StartProtection(new Unit(), new Unit(0.2m, UnitTypes.Percent));
 
@@ -421,6 +460,7 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 			CandleProcessed?.Invoke(candle);
 			_candleCount++;
 			MaxAbsPosition = MaxAbsPosition.Max(Position.Abs());
+			CaptureSubscriptions();
 
 			_editFlow?.OnCandle(_candleCount, candle);
 
@@ -494,6 +534,40 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 			=> Master.GroupBy(r => r.kind).Select(g => $"{g.Key}={g.Count()}").JoinCommaSpace();
 	}
 
+	/// <summary>
+	/// <see cref="IPnLManager"/> decorator that forwards to a wrapped manager and records the raw
+	/// per-trade <see cref="IPnLManager.UpdateSecurity"/> feed: the PnL math can match on both sides
+	/// while the messages differ in field set or server time, so the feed is compared directly.
+	/// </summary>
+	private sealed class RecordingPnLManager(IPnLManager inner, SideRecorder rec) : IPnLManager
+	{
+		public decimal RealizedPnL => inner.RealizedPnL;
+		public decimal UnrealizedPnL => inner.UnrealizedPnL;
+
+		public void Reset() => inner.Reset();
+
+		public void UpdateSecurity(Level1ChangeMessage l1Msg)
+		{
+			// Record the feed as pushed, so a missing StepPrice / different Multiplier / different ServerTime surfaces.
+			rec.Add("SecFeed",
+				$"sec={l1Msg.SecurityId} " +
+				$"priceStep={Fmt(l1Msg.TryGetDecimal(Level1Fields.PriceStep))} " +
+				$"stepPrice={Fmt(l1Msg.TryGetDecimal(Level1Fields.StepPrice))} " +
+				$"multiplier={Fmt(l1Msg.TryGetDecimal(Level1Fields.Multiplier))} " +
+				$"time={FmtTime(l1Msg.ServerTime)}");
+
+			inner.UpdateSecurity(l1Msg);
+		}
+
+		public PnLInfo ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios = null)
+			=> inner.ProcessMessage(message, changedPortfolios);
+
+		void IPersistable.Load(SettingsStorage storage) => inner.Load(storage);
+		void IPersistable.Save(SettingsStorage storage) => inner.Save(storage);
+		IPnLManager ICloneable<IPnLManager>.Clone() => inner.Clone();
+		object ICloneable.Clone() => inner.Clone();
+	}
+
 	private static string Fmt(decimal? value)
 		=> value?.ToString(CultureInfo.InvariantCulture) ?? "null";
 
@@ -547,6 +621,54 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		return $"{sub.DataType} strategyId={strategyId}" + (md is null
 			? string.Empty
 			: $" finishedOnly={md.IsFinishedOnly} buildMode={md.BuildMode} buildFrom={md.BuildFrom?.ToString() ?? "null"} buildField={md.BuildField?.ToString() ?? "null"}");
+	}
+
+	/// <summary>
+	/// Snapshot of an active subscription: DataType plus whether it is StrategyId-stamped (set/null).
+	/// </summary>
+	private static string FormatSubscriptionSnapshot(Subscription sub)
+	{
+		var strategyId = sub.SubscriptionMessage is IStrategyIdMessage sid ? SetFlag(sid.StrategyId) : "n/a";
+		return $"{sub.DataType} strategyId={strategyId}";
+	}
+
+	/// <summary>
+	/// Latency-typed stats carry wall-clock VALUES (structurally zero in the synchronous emulation), so the
+	/// harness normalizes their magnitude to a token: the parameter is still asserted to exist on both sides.
+	/// </summary>
+	private static bool IsLatencyStat(IStatisticParameter p)
+		=> p.Type is StatisticParameterTypes.MaxLatencyRegistration
+			or StatisticParameterTypes.MaxLatencyCancellation
+			or StatisticParameterTypes.MinLatencyRegistration
+			or StatisticParameterTypes.MinLatencyCancellation;
+
+	private static string FormatStatValue(IStatisticParameter p)
+	{
+		if (IsLatencyStat(p))
+			return "<latency>";
+
+		return p.Value switch
+		{
+			null => "null",
+			decimal d => d.ToString(CultureInfo.InvariantCulture),
+			// Format DateTime directly (not via FmtTime): an unset stat is DateTime.MinValue, whose implicit
+			// DateTimeOffset conversion throws. "O" still matches FmtTime for the dates both engines set.
+			DateTime dt => dt.ToString("O", CultureInfo.InvariantCulture),
+			DateTimeOffset dto => FmtTime(dto),
+			TimeSpan ts => ts.ToString(),
+			IFormattable f => f.ToString(null, CultureInfo.InvariantCulture),
+			var v => v.ToString(),
+		};
+	}
+
+	/// <summary>
+	/// Records every statistic parameter as a <c>Stat</c> record in a stable order (by type) so the two
+	/// engines' streams line up; the VALUE is compared 1:1 (latency magnitudes normalized away).
+	/// </summary>
+	private static void RecordStats(IStatisticManager manager, SideRecorder rec)
+	{
+		foreach (var p in manager.Parameters.OrderBy(p => p.Type))
+			rec.Add("Stat", $"{p.Type}={FormatStatValue(p)}");
 	}
 
 	private static void RecordConnector(HistoryEmulationConnector connector, SideRecorder rec)
@@ -763,7 +885,9 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 
 	private async Task<SideRecorder> RunSide(bool decomposed, EquivalenceScenario scenario, DateTime startTime, DateTime stopTime)
 	{
-		var security = new Security { Id = Paths.HistoryDefaultSecurity, PriceStep = 0.01m };
+		// Futures-style instrument: StepPrice/Multiplier distinct from PriceStep so the per-trade
+		// UpdateSecurity feed carries them; a side omitting StepPrice or using a different Multiplier diverges.
+		var security = new Security { Id = Paths.HistoryDefaultSecurity, PriceStep = 0.01m, StepPrice = 0.5m, Multiplier = 10m };
 		var portfolio = Portfolio.CreateSimulator();
 
 		using var connector = CreateDeterministicConnector(security, portfolio, startTime, stopTime);
@@ -822,6 +946,9 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 			// notification-surface divergence these tests pin.
 			strategy.Engine.UnrealizedPnLInterval = TimeSpan.FromMinutes(1);
 
+			// Wrap the PnL manager so the per-trade UpdateSecurity feed is recorded (SecFeed).
+			strategy.PnLManager = new RecordingPnLManager(strategy.PnLManager, rec);
+
 			RecordDecomposed(strategy, rec);
 
 			strategy.Connector = connector;
@@ -841,10 +968,18 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 
 			await strategy.StopAsync(CancellationToken);
 
+			// Statistic VALUES, 1:1: a different realized-PnL attribution or fail/trade counting surfaces here.
+			RecordStats(strategy.StatisticManager, rec);
+
 			rec.Add("Final",
 				$"state={strategy.ProcessState} maxAbsPos={Fmt(strategy.MaxAbsPosition)} pos={Fmt(strategy.Position)} " +
 				$"pnl=[{FormatPnL(strategy.PnLManager)}] commission={Fmt(strategy.Commission)} slippage={Fmt(strategy.Slippage)} " +
-				$"latency={(strategy.Latency is null ? "null" : "set")} orders={strategy.OrderProcessor.Orders.Count()} trades={strategy.Trades.MyTrades.Count()}");
+				$"latency={(strategy.Latency is null ? "null" : "set")} orders={strategy.OrderProcessor.Orders.Count()} trades={strategy.Trades.MyTrades.Count()} " +
+				$"startedTimeSet={strategy.ObservedStartedTimeSet} totalWorkingTime={(strategy.TotalWorkingTime == default ? "zero" : "nonzero")} errorState={strategy.ErrorState}");
+
+			// Active-subscription snapshot (captured while alive): a missing/mis-stamped auto lookup surfaces here.
+			foreach (var snap in strategy.LiveSubscriptionsSnapshot)
+				rec.Add("SubSnapshot", snap);
 
 			// Drive the reset surface as the final lifecycle step (the monolith raises
 			// a notification storm on Reset, the decomposed side is silent).
@@ -866,6 +1001,9 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 				strategy.CommentMode = StrategyCommentModes.Id;
 			}
 
+			// Wrap the PnL manager so the per-trade UpdateSecurity feed is recorded (SecFeed).
+			strategy.PnLManager = new RecordingPnLManager(strategy.PnLManager, rec);
+
 			RecordMonolith(strategy, rec);
 
 			strategy.Connector = connector;
@@ -886,10 +1024,18 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 
 			strategy.Stop();
 
+			// Statistic VALUES, 1:1: a different realized-PnL attribution or fail/trade counting surfaces here.
+			RecordStats(strategy.StatisticManager, rec);
+
 			rec.Add("Final",
 				$"state={strategy.ProcessState} maxAbsPos={Fmt(strategy.MaxAbsPosition)} pos={Fmt(strategy.Position)} " +
 				$"pnl=[{FormatPnL(strategy.PnLManager)}] commission={Fmt(strategy.Commission)} slippage={Fmt(strategy.Slippage)} " +
-				$"latency={(strategy.Latency is null ? "null" : "set")} orders={strategy.Orders.Count()} trades={strategy.MyTrades.Count()}");
+				$"latency={(strategy.Latency is null ? "null" : "set")} orders={strategy.Orders.Count()} trades={strategy.MyTrades.Count()} " +
+				$"startedTimeSet={strategy.ObservedStartedTimeSet} totalWorkingTime={(strategy.TotalWorkingTime == default ? "zero" : "nonzero")} errorState={strategy.ErrorState}");
+
+			// Active-subscription snapshot (captured while alive): a missing/mis-stamped auto lookup surfaces here.
+			foreach (var snap in strategy.LiveSubscriptionsSnapshot)
+				rec.Add("SubSnapshot", snap);
 
 			// Drive the reset surface as the final lifecycle step (the monolith raises
 			// a notification storm on Reset, the decomposed side is silent).
@@ -987,6 +1133,12 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		Guard(refStates.Contains(ProcessStates.Started.ToString()), "Reference run never reached Started");
 		Guard(refStates.Contains(ProcessStates.Stopped.ToString()), $"Reference run never reached Stopped (states: {refStates.JoinCommaSpace()})");
 
+		// The statistic-values family must be non-vacuous: at least one Stat record on the reference side.
+		Guard(monolith.Family("Stat").Count >= 1, "Reference run recorded no statistic parameters - the Stat family is vacuous");
+
+		// The active-subscriptions snapshot must be non-vacuous (candle sub + auto PortfolioLookup/OrderLookup).
+		Guard(monolith.Family("SubSnapshot").Count >= 1, "Reference run captured no active subscriptions - the SubSnapshot family is vacuous");
+
 		if (scenario.UseProtection)
 		{
 			// Protection must actually fire in this scenario: protective orders are
@@ -1067,10 +1219,11 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 			"MassOrderCanceled", "MassOrderCanceled2", "MassOrderCancelFailed", "MassOrderCancelFailed2",
 			"LookupPortfoliosResult", "LookupPortfoliosResult2",
 			"Trade", "StratPos", "PosEvt", "AccPos",
+			"SecFeed",
 			"PnL", "PnLReceived", "PnLReceived2", "Commission", "Slippage", "Latency", "Error",
 			"ConnectorChanged", "ParametersChanged", "PropertyChanged", "Reseted", "CurrentTimeChanged",
 			"Drawing", "DrawingOrder", "DrawingOrderFail",
-			"Final",
+			"Stat", "SubSnapshot", "Final",
 		];
 
 		foreach (var family in families)

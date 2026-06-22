@@ -77,6 +77,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 		InitParameters();
 
+		// Wire the indicator collection's default-source inheritance (mirrors the monolith IndicatorList.OnAdded).
+		InitIndicators();
+
 		NameGenerator = new(this);
 		// Apply generated names through the base setter so auto-generation is not disabled by our own update.
 		NameGenerator.Changed += name => base.Name = name;
@@ -151,7 +154,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			if (ProcessState == ProcessStates.Stopping && CancelOrdersWhenStopping
 				&& !order.State.IsFinal() && OrderProcessor.TryMarkCanceled(order))
 			{
-				CancelOrder(order);
+				// Go straight to the connector: the public CancelOrder would be blocked by its Stopping-state guard.
+				CancelOrderHandler(order);
 			}
 		};
 		OrderProcessor.Changed += HandleOrderChanged;
@@ -195,11 +199,13 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// State machine + message routing.
 	/// </summary>
+	[Browsable(false)]
 	public StrategyEngine Engine { get; }
 
 	/// <summary>
 	/// Order tracking and processing pipeline.
 	/// </summary>
+	[Browsable(false)]
 	public OrderPipeline OrderProcessor { get; }
 
 	/// <summary>
@@ -211,16 +217,19 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Trade processing and PnL.
 	/// </summary>
+	[Browsable(false)]
 	public TradePipeline Trades { get; }
 
 	/// <summary>
 	/// Position event handling.
 	/// </summary>
+	[Browsable(false)]
 	public PositionPipeline Positions { get; }
 
 	/// <summary>
 	/// Subscription management.
 	/// </summary>
+	[Browsable(false)]
 	public SubscriptionRegistry Subscriptions { get; }
 
 	private IPnLManager _pnLManager;
@@ -229,6 +238,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// PnL manager.
 	/// </summary>
+	[Browsable(false)]
 	public IPnLManager PnLManager
 	{
 		get => _pnLManager;
@@ -248,6 +258,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Statistics manager.
 	/// </summary>
+	[Browsable(false)]
 	public IStatisticManager StatisticManager
 	{
 		get => _statisticManager;
@@ -268,6 +279,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Risk manager.
 	/// </summary>
+	[Browsable(false)]
 	public IRiskManager RiskManager
 	{
 		get => _riskManager;
@@ -283,6 +295,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Connector (via interface for testability).
 	/// </summary>
+	[Browsable(false)]
 	public virtual IConnector Connector
 	{
 		get => _connector;
@@ -313,6 +326,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Current position (primary security).
 	/// </summary>
+	[Browsable(false)]
 	public decimal Position
 	{
 		get => Security == null || Portfolio == null ? _position : GetPositionValue(Security, Portfolio) ?? _position;
@@ -342,16 +356,19 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// All tracked positions.
 	/// </summary>
+	[Browsable(false)]
 	public IReadOnlyDictionary<(SecurityId secId, string pfName), decimal> PositionsList => _positions;
 
 	/// <summary>
 	/// Latency.
 	/// </summary>
+	[Browsable(false)]
 	public TimeSpan? Latency { get; set; }
 
 	/// <summary>
 	/// Error state.
 	/// </summary>
+	[Browsable(false)]
 	public LogLevels ErrorState
 	{
 		get => _errorState;
@@ -390,6 +407,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Strategy start time.
 	/// </summary>
+	[Browsable(false)]
 	public DateTime StartedTime
 	{
 		get => _startedTime;
@@ -406,6 +424,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Total working time.
 	/// </summary>
+	[Browsable(false)]
 	public TimeSpan TotalWorkingTime
 	{
 		get => _totalWorkingTime;
@@ -427,11 +446,13 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// indicator is formed. An empty collection is considered formed, matching the monolith strategy's
 	/// <c>AllFormed</c> semantics.
 	/// </remarks>
+	[Browsable(false)]
 	public virtual bool IsFormed => _indicators.All(i => i.IsFormed);
 
 	/// <summary>
 	/// Is online.
 	/// </summary>
+	[Browsable(false)]
 	public bool IsOnline
 	{
 		get => _isOnline;
@@ -449,6 +470,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Total accumulated commission (from orders + trades).
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Commission =>
 		OrderProcessor.Commission is null && Trades.Commission is null
 			? null : (OrderProcessor.Commission ?? 0m) + (Trades.Commission ?? 0m);
@@ -456,6 +478,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Total accumulated slippage.
 	/// </summary>
+	[Browsable(false)]
 	public decimal? Slippage => Trades.Slippage;
 
 	/// <summary>
@@ -521,11 +544,13 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Current profit-loss.
 	/// </summary>
+	[Browsable(false)]
 	public decimal PnL => PnLManager.GetPnL();
 
 	/// <summary>
 	/// The last error that occurred in the strategy.
 	/// </summary>
+	[Browsable(false)]
 	public Exception LastError { get; private set; }
 
 	/// <summary>
@@ -728,6 +753,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Current process state.
 	/// </summary>
+	[Browsable(false)]
 	public ProcessStates ProcessState => Engine.ProcessState;
 
 	/// <summary>
@@ -814,6 +840,38 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// Cancel an order via the connector.
 	/// </summary>
 	public void CancelOrder(Order order)
+	{
+		if (ProcessState != ProcessStates.Started)
+		{
+			LogWarning(LocalizedStrings.StrategyInStateCannotCancelOrder, ProcessState);
+			return;
+		}
+
+		if (order is null)
+			throw new ArgumentNullException(nameof(order));
+
+		if (TradingMode == StrategyTradingModes.Disabled)
+		{
+			LogWarning(LocalizedStrings.TradingDisabled);
+			return;
+		}
+
+		if (!OrderProcessor.IsTracked(order))
+			throw new ArgumentException(LocalizedStrings.OrderNotFromStrategy.Put(order.TransactionId, Name));
+
+		if (!OrderProcessor.TryMarkCanceled(order))
+		{
+			LogWarning(LocalizedStrings.OrderAlreadySentCancel, order.TransactionId);
+			return;
+		}
+
+		CancelOrderHandler(order);
+	}
+
+	/// <summary>
+	/// Dispatch a cancel without the public guards (stop-time teardown); the caller handles the IsCanceled dedup.
+	/// </summary>
+	private void CancelOrderHandler(Order order)
 	{
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
@@ -989,8 +1047,13 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// </summary>
 	private void CancelAllActiveOrders()
 	{
+		// Bypass the public CancelOrder Started-state guard (runs at stop time / on risk actions); IsCanceled
+		// dedup still respected via TryMarkCanceled. Mirrors the monolith ProcessCancelActiveOrders.
 		foreach (var order in OrderProcessor.Orders.Where(o => o.State == OrderStates.Active))
-			CancelOrder(order);
+		{
+			if (OrderProcessor.TryMarkCanceled(order))
+				CancelOrderHandler(order);
+		}
 	}
 
 	private void TrackOrderLifetime(Order order)
@@ -1068,7 +1131,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		if (Portfolio is not null)
 			PnLReceived2?.Invoke(subscription, Portfolio, time, PnLManager.RealizedPnL, PnLManager.UnrealizedPnL, Commission);
 
-		StatisticManager.AddPnL(time, PnLManager.GetPnL(), Commission);
+		// Attribute stats to the engine's PnL-refresh time (not the notification time), as the monolith does,
+		// so time-typed stats (MaxProfitDate/MaxDrawdownDate) stay identical.
+		StatisticManager.AddPnL(Engine.LastPnLRefreshTime, PnLManager.GetPnL(), Commission);
 	}
 
 	private void RaiseCommissionChanged()
@@ -1291,7 +1356,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		{
 			case ProcessStates.Started:
 			{
-				var startedTime = ((IStrategyHost)this).CurrentTime;
+				// StartedTime / TotalWorkingTime measure wall-clock operating time, so use base.CurrentTime as
+				// the monolith does (host CurrentTime is market time, still default before replay begins).
+				var startedTime = base.CurrentTime;
 				var notifyStartedTime = StartedTime == startedTime;
 
 				StartedTime = startedTime;
@@ -1351,7 +1418,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 				var startedTime = StartedTime;
 
 				if (StartedTime != default)
-					TotalWorkingTime += ((IStrategyHost)this).CurrentTime - StartedTime;
+					TotalWorkingTime += base.CurrentTime - StartedTime;
 
 				if (TotalWorkingTime == totalWorkingTime)
 					this.Notify(nameof(TotalWorkingTime));
@@ -2146,13 +2213,16 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 		if (sec != null)
 		{
+			// Mirror the monolith's per-trade security feed: stamp with strategy CurrentTime and resolve
+			// StepPrice/Multiplier provider-first (falling back to the security's own Multiplier).
 			PnLManager.UpdateSecurity(new Level1ChangeMessage
 			{
 				SecurityId = sec.ToSecurityId(),
-				ServerTime = trade.Trade.ServerTime,
+				ServerTime = CurrentTime,
 			}
 			.TryAdd(Level1Fields.PriceStep, sec.PriceStep)
-			.TryAdd(Level1Fields.Multiplier, sec.Multiplier));
+			.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(sec, Level1Fields.StepPrice))
+			.TryAdd(Level1Fields.Multiplier, this.GetSecurityValue<decimal?>(sec, Level1Fields.Multiplier) ?? sec.Multiplier));
 		}
 
 		if (Trades.Contains(trade))

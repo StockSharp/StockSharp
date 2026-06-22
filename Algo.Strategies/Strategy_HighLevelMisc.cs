@@ -26,6 +26,7 @@ partial class Strategy
 	/// <summary>
 	/// The strategy is executed in the history (backtesting) mode.
 	/// </summary>
+	[Browsable(false)]
 	public bool IsBacktesting => Connector is HistoryEmulationConnector;
 
 	/// <summary>
@@ -46,6 +47,7 @@ partial class Strategy
 	/// Child strategies.
 	/// </summary>
 	[Browsable(false)]
+	[Obsolete("Child strategies no longer supported.")]
 	public INotifyList<Strategy> ChildStrategies { get; } = new SynchronizedList<Strategy>();
 
 	/// <summary>

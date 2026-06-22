@@ -274,15 +274,13 @@ partial class Strategy : IMarketRuleContainer, ICloneable<Strategy>, IScheduledT
 		if (copy is null)
 			throw new ArgumentNullException(nameof(copy));
 
-		// The decomposed Strategy does not expose the monolith's Save/Load pair, so parameters are
-		// copied directly by id - which yields the same observable result as Load(Save()).
-		foreach (var param in GetParameters())
-		{
-			if (copy.Parameters.TryGetValue(param.Id, out var target))
-				target.Value = param.Value;
-		}
+		// Round-trip full persisted state through Save/Load as the monolith CopyTo does (a parameter-by-id
+		// copy would drop the RiskManager). The clone keeps its OWN id, restored after Load.
+		var id = copy.Id;
+		copy.Load(this.Save());
+		copy.Id = id;
 
-		// set after the parameters are copied to avoid being overwritten by them
+		// set after Load to avoid being overwritten by the deserialized values
 		copy.Security = Security;
 		copy.Portfolio = Portfolio;
 		copy.PortfolioProvider = PortfolioProvider;

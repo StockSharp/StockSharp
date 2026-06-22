@@ -59,6 +59,11 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 	public TimeSpan UnrealizedPnLInterval { get; set; } = TimeSpan.FromMinutes(1);
 
 	/// <summary>
+	/// Market time of the last unrealized-PnL refresh; used for statistic attribution to match the monolith.
+	/// </summary>
+	public DateTime LastPnLRefreshTime => _lastPnlRefreshTime;
+
+	/// <summary>
 	/// Fires when ProcessState changes.
 	/// </summary>
 	public event Action<ProcessStates> StateChanged;

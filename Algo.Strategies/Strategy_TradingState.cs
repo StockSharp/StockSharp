@@ -42,5 +42,6 @@ partial class Strategy
 	/// <summary>
 	/// Order book sources used by the strategy.
 	/// </summary>
+	[Browsable(false)]
 	public virtual IEnumerable<IOrderBookSource> OrderBookSources => [];
 }
