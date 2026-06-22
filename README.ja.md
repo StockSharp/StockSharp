@@ -1,71 +1,71 @@
 <img src="./Media/SLogo.png" align="right" />
 
-# [StockSharp - trading platform][1]
+# [StockSharp - トレーディングプラットフォーム][1]
 
-## **English** | [Русский](README.ru.md) | [中文](README.zh.md) | [日本語](README.ja.md)
+## [English](README.md) | [Русский](README.ru.md) | [中文](README.zh.md) | **日本語**
 
-## <a href="https://doc.stocksharp.com" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4d6.svg" alt="Docs" height="40"/> Docs</a> <a href="https://stocksharp.com/products/download/" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4be.svg" alt="Download" height="40"/> Download</a> <a href="https://t.me/stocksharpchat/361" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4ac.svg" alt="Chat" height="40"/> Chat</a> <a href="https://www.youtube.com/@stocksharp"><img src="https://raw.githubusercontent.com/edent/SuperTinyIcons/master/images/svg/youtube.svg" alt="YouTube" height="40"/> YouTube</a>
+## <a href="https://doc.stocksharp.com" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4d6.svg" alt="Docs" height="40"/> ドキュメント</a> <a href="https://stocksharp.com/products/download/" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4be.svg" alt="Download" height="40"/> ダウンロード</a> <a href="https://t.me/stocksharpchat/361" style="margin-right:15px;"><img src="https://raw.githubusercontent.com/twitter/twemoji/master/assets/svg/1f4ac.svg" alt="Chat" height="40"/> チャット</a> <a href="https://www.youtube.com/@stocksharp"><img src="https://raw.githubusercontent.com/edent/SuperTinyIcons/master/images/svg/youtube.svg" alt="YouTube" height="40"/> YouTube</a>
 
-## Introduction ##
+## はじめに ##
 
-**StockSharp** (shortly **S#**) – are **free** platform for trading at any markets of the world (crypto exchanges, American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automated trading (algorithmic trading robots, conventional or HFT).
+**StockSharp**（略称 **S#**）は、世界中のあらゆる市場（暗号資産取引所、米国、欧州、アジア、ロシア、株式、先物、オプション、ビットコイン、外国為替など）でトレーディングを行うための**無料**プラットフォームです。手動取引はもちろん、自動取引（アルゴリズムトレーディングロボット、通常取引またはHFT）も可能です。
 
-**Available connections**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, BitMEX, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED, Aster, edgeX, Ligther, Paradex, Hyperliquid and many other.
+**利用可能な接続先**: Binance、MT4、MT5、FIX/FAST、PolygonIO、Trading Technologies、Alpaca Markets、BarChart、CQG、E*Trade、IQFeed、InteractiveBrokers、LMAX、MatLab、Oanda、FXCM、Rithmic、cTrader、DXtrade、BitStamp、Bitfinex、Coinbase、Kraken、Poloniex、GDAX、Bittrex、Bithumb、OKX、Coincheck、CEX.IO、BitMEX、YoBit、Livecoin、EXMO、Deribit、HTX、KuCoin、QuantFEED、Aster、edgeX、Ligther、Paradex、Hyperliquid、その他多数。
 
 ## [Designer][8]
 <img src="./Media/Designer500.gif" align="left" />
 
-**Designer** - **free** universal algorithmic strategies application for easy strategy creation:
-  - Visual designer to create strategies by mouse clicking
-  - Embedded C# editor
-  - Easy to create own indicators
-  - Build in debugger
-  - Connections to the multiple electronic boards and brokers
-  - All world platforms
-  - Schema sharing with own team
+**Designer** - 簡単に戦略を作成できる**無料**の汎用アルゴリズムトレーディング戦略アプリケーション:
+  - マウスクリックで戦略を作成できるビジュアルデザイナー
+  - 組み込みC#エディター
+  - 独自インジケーターを簡単に作成可能
+  - 組み込みデバッガー
+  - 複数の電子取引所およびブローカーへの接続
+  - 世界中のあらゆるプラットフォームに対応
+  - チームとのスキーマ共有
 
 ## [Hydra][9]
 <img src="./Media/Hydra500.gif" align="right" />
 
-**Hydra** - **free** software to automatically load and store market data:
-  - Supports many sources
-  - High compression ratio
-  - Any data type
-  - Program access to stored data via API
-  - Export to csv, excel, xml or database
-  - Import from csv
-  - Scheduled tasks
-  - Auto-sync over the Internet between several Hydra instances
+**Hydra** - マーケットデータを自動的に読み込み・保存する**無料**ソフトウェア:
+  - 多数のデータソースをサポート
+  - 高い圧縮率
+  - あらゆるデータ型に対応
+  - API経由で保存データにプログラムアクセス
+  - csv、excel、xml、データベースへのエクスポート
+  - csvからのインポート
+  - スケジュールタスク
+  - 複数のHydraインスタンス間でインターネット越しの自動同期
 
 ## [Terminal][10]
 <img src="./Media/Terminal500.gif" align="left" />
 
-**Terminal** - **free** trading charting application (trading terminal):
-  - Connections to the multiple electronic boards and brokers
-  - Trading from charts by clicking
-  - Arbitrary timeframes
-  - Volume, Tick, Range, P&F, Renko candles
-  - Cluster charts
-  - Box charts
-  - Volume Profile
+**Terminal** - **無料**のトレーディングチャートアプリケーション（トレーディングターミナル）:
+  - 複数の電子取引所およびブローカーへの接続
+  - チャート上のクリックによる取引
+  - 任意の時間足
+  - 出来高、ティック、レンジ、P&F、練行足ローソク
+  - クラスターチャート
+  - ボックスチャート
+  - ボリュームプロファイル
   
 ## [Shell][11]
 <img src="./Media/Shell500.gif" align="right" />
 
-**Shell** - the ready-made graphical framework with the ability to quickly change to your needs and with fully open source code in C#:
-  - Complete source code
-  - Support for all StockSharp platform connections
-  - Support for Designer schemas
-  - Flexible user interface
-  - Strategy testing (statistics, equity, reports)
-  - Save and load strategy settings
-  - Launch strategies in parallel
-  - Detailed information on strategy performance 
-  - Launch strategies on schedule
+**Shell** - ニーズに応じて素早くカスタマイズ可能で、C#で記述された完全オープンソースのグラフィカルフレームワーク:
+  - 完全なソースコード
+  - すべてのStockSharpプラットフォーム接続をサポート
+  - Designerスキーマをサポート
+  - 柔軟なユーザーインターフェース
+  - 戦略テスト（統計、エクイティ、レポート）
+  - 戦略設定の保存および読み込み
+  - 戦略の並列実行
+  - 戦略パフォーマンスの詳細情報
+  - スケジュールによる戦略の起動
 
 ## [API][12]
-API is a **free** C# library for programmers who use Visual Studio. The API lets you create any trading strategy, from long-timeframe positional strategies to high frequency strategies (HFT) with direct access to the exchange (DMA). [More info...][12]
-### Connector example
+APIはVisual Studioを使用するプログラマー向けの**無料**C#ライブラリです。APIを使用すれば、長期の時間足を使うポジション戦略から、取引所への直接アクセス（DMA）を伴う高頻度取引戦略（HFT）まで、あらゆるトレーディング戦略を作成できます。[詳細はこちら...][12]
+### Connector の例
 ```C#
 var connector = new Connector();
 var security = connector.LookupById("AAPL@NASDAQ");
@@ -77,10 +77,10 @@ connector.CandleReceived += (sub, candle) =>
         if (sub != subscription || candle.State != CandleStates.Finished)
                 return;
 
-        // determine candle color
+        // ローソク足の色を判定
         var isGreen = candle.ClosePrice > candle.OpenPrice;
 
-        // register market order depending on candle color
+        // ローソク足の色に応じて成行注文を発注
         var order = new Order
         {
                 Security = security,
@@ -96,8 +96,8 @@ connector.Subscribe(subscription);
 connector.Connect();
 ```
 
-## Crypto exchanges
-|Logo | Name | Documentation |
+## 暗号資産取引所
+|ロゴ | 名称 | ドキュメント |
 |:---:|:----:|:-------------:|
 |<img src="./Media/logos/bibox_logo.svg" height="30" /> |Bibox | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/bibox.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/Binance_logo.svg" height="30" /> |Binance | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/binance.html" target="_blank">Docs</a> |
@@ -155,8 +155,8 @@ connector.Connect();
 |<img src="./Media/logos/zaif_logo.svg" height="30" /> |Zaif | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/zaif.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/zb_logo.svg" height="30" /> |ZB | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/zb.html" target="_blank">Docs</a> |
 
-## DEX exchanges
-|Logo | Name | Documentation |
+## DEX取引所
+|ロゴ | 名称 | ドキュメント |
 |:---:|:----:|:-------------:|
 |<img src="./Media/logos/Aster_logo.svg" height="30" /> |Aster | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/aster.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/edgeX_logo.svg" height="30" /> |edgeX | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
@@ -164,14 +164,14 @@ connector.Connect();
 |<img src="./Media/logos/Paradex_logo.svg" height="30" /> |Paradex | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/Hyperliquid_logo.svg" height="30" /> |Hyperliquid | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/hyperliquid.html" target="_blank">Docs</a> |
 
-## Stock, Futures and Options
-|Logo | Name | Documentation |
+## 株式・先物・オプション
+|ロゴ | 名称 | ドキュメント |
 |:---:|:----:|:-------------:|
 |<img src="./Media/logos/polygonio_logo.svg" height="30" /> |Polygon.io | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/polygonio.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/alpaca_logo.svg" height="30" /> |Alpaca.Markets | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/alpaca.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/interactivebrokers_logo.svg" height="30" /> |Interactive Brokers | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/interactive_brokers.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="//doc.stocksharp.com/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/fix_logo.svg" height="30" /> |FIXプロトコル (4.2, 4.4. 5.0) | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/fix_logo.svg" height="30" /> |FASTプロトコル | <a href="//doc.stocksharp.com/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bvmt_logo.svg" height="30" /> |BVMT | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/bvmt.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/alphavantage_logo.svg" height="30" /> |AlphaVantage | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/alphavantage.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/barchart_logo.svg" height="30" /> |BarChart | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/barchart.html" target="_blank">Docs</a> |
@@ -192,8 +192,8 @@ connector.Connect();
 |<img src="./Media/logos/Blackwood_logo.png" height="30" /> |Blackwood (Fusion) | <a href="//doc.stocksharp.com/topics/api/connectors/stock_market/blackwood_fusion.html" target="_blank">Docs</a> |
 
 
-## Forex
-|Logo | Name | Documentation |
+## FX（外国為替）
+|ロゴ | 名称 | ドキュメント |
 |:---:|:----:|:-------------:|
 |<img src="./Media/logos/devexperts_logo.svg" height="30" /> |DXtrade | <a href="//doc.stocksharp.com/topics/api/connectors/forex/dxtrade.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ctrader_logo.svg" height="30" /> |cTrader | <a href="//doc.stocksharp.com/topics/api/connectors/forex/ctrader.html" target="_blank">Docs</a> |
@@ -213,4 +213,3 @@ connector.Connect();
   [10]: https://stocksharp.com/store/trading-terminal/
   [11]: https://stocksharp.com/store/trading-shell/
   [12]: https://stocksharp.com/store/api/
-
