@@ -209,7 +209,7 @@ public enum PositionChangeTypes
 	Name = LocalizedStrings.PositionKey,
 	Description = LocalizedStrings.PositionDescKey)]
 public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage,
-	PositionChangeTypes>, IPortfolioNameMessage, IClientCodeMessage, ISecurityIdMessage, IStrategyIdMessage
+	PositionChangeTypes>, IPortfolioNameMessage, IClientCodeMessage, ISecurityIdMessage, IStrategyIdMessage, IOwnerMessage
 {
 	/// <inheritdoc />
 	[DataMember]
@@ -327,6 +327,12 @@ public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage,
 	}
 
 	/// <inheritdoc />
+	public long OwnerUserId { get; set; }
+
+	/// <inheritdoc />
+	public long OwnerPortfolioId { get; set; }
+
+	/// <inheritdoc />
 	public override void CopyTo(PositionChangeMessage destination)
 	{
 		base.CopyTo(destination);
@@ -340,6 +346,8 @@ public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage,
 		destination.BoardCode = BoardCode;
 		destination.StrategyId = StrategyId;
 		destination.Side = Side;
+		destination.OwnerUserId = OwnerUserId;
+		destination.OwnerPortfolioId = OwnerPortfolioId;
 	}
 
 	/// <inheritdoc />

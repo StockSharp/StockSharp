@@ -10,7 +10,7 @@ namespace StockSharp.Messages;
 [DataContract]
 [Serializable]
 public abstract class OrderMessage(MessageTypes type) : SecurityMessage(type),
-	ITransactionIdMessage, IPortfolioNameMessage, IClientCodeMessage, IBrokerCodeMessage, IStrategyIdMessage
+	ITransactionIdMessage, IPortfolioNameMessage, IClientCodeMessage, IBrokerCodeMessage, IStrategyIdMessage, IOwnerMessage
 {
 	/// <inheritdoc />
 	[DataMember]
@@ -109,6 +109,12 @@ public abstract class OrderMessage(MessageTypes type) : SecurityMessage(type),
 		GroupName = LocalizedStrings.GeneralKey)]
 	public MarginModes? MarginMode { get; set; }
 
+	/// <inheritdoc />
+	public long OwnerUserId { get; set; }
+
+	/// <inheritdoc />
+	public long OwnerPortfolioId { get; set; }
+
 	/// <summary>
 	/// Copy the message into the <paramref name="destination" />.
 	/// </summary>
@@ -127,6 +133,8 @@ public abstract class OrderMessage(MessageTypes type) : SecurityMessage(type),
 		destination.Condition = Condition?.Clone();
 		destination.Comment = Comment;
 		destination.MarginMode = MarginMode;
+		destination.OwnerUserId = OwnerUserId;
+		destination.OwnerPortfolioId = OwnerPortfolioId;
 	}
 
 	/// <inheritdoc />

@@ -27,7 +27,7 @@ public enum PortfolioStates
 /// </summary>
 [DataContract]
 [Serializable]
-public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>, IPortfolioNameMessage, IClientCodeMessage
+public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>, IPortfolioNameMessage, IClientCodeMessage, IOwnerMessage
 {
 	/// <inheritdoc />
 	[DataMember]
@@ -106,6 +106,12 @@ public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>, IPo
 	}
 
 	/// <inheritdoc />
+	public long OwnerUserId { get; set; }
+
+	/// <inheritdoc />
+	public long OwnerPortfolioId { get; set; }
+
+	/// <inheritdoc />
 	public override void CopyTo(PortfolioMessage destination)
 	{
 		base.CopyTo(destination);
@@ -114,5 +120,7 @@ public class PortfolioMessage : BaseSubscriptionIdMessage<PortfolioMessage>, IPo
 		destination.Currency = Currency;
 		destination.BoardCode = BoardCode;
 		destination.ClientCode = ClientCode;
+		destination.OwnerUserId = OwnerUserId;
+		destination.OwnerPortfolioId = OwnerPortfolioId;
 	}
 }

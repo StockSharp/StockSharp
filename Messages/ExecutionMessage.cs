@@ -42,7 +42,7 @@ public enum ExecutionTypes
 public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 	ITransactionIdMessage, IServerTimeMessage, ISecurityIdMessage, ISeqNumMessage,
 	IPortfolioNameMessage, IClientCodeMessage, IBrokerCodeMessage, IErrorMessage, IStrategyIdMessage, IGeneratedMessage,
-	IOrderMessage, ITickTradeMessage, IOrderLogMessage, ISystemMessage
+	IOrderMessage, ITickTradeMessage, IOrderLogMessage, ISystemMessage, IOwnerMessage
 {
 	OrderStates? IOrderMessage.State => OrderState;
 	decimal? IOrderMessage.Balance => Balance;
@@ -679,6 +679,12 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 	}
 
 	/// <inheritdoc />
+	public long OwnerUserId { get; set; }
+
+	/// <inheritdoc />
+	public long OwnerPortfolioId { get; set; }
+
+	/// <inheritdoc />
 	public override void CopyTo(ExecutionMessage destination)
 	{
 		base.CopyTo(destination);
@@ -748,5 +754,7 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 		destination.OrderBuyId = OrderBuyId;
 		destination.OrderSellId = OrderSellId;
 		destination.MarketPrice = MarketPrice;
+		destination.OwnerUserId = OwnerUserId;
+		destination.OwnerPortfolioId = OwnerPortfolioId;
 	}
 }
