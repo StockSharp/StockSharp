@@ -21,6 +21,7 @@ Algo.Analytics.Python/
 ├── chart3d_script.py
 ├── chart_draw_script.py
 ├── empty_analytics_script.py
+├── fxmacrodata_forex_script.py
 ├── indicator_script.py
 ├── normalize_price_script.py
 ├── pearson_correlation_script.py
@@ -46,6 +47,9 @@ Below is a brief description of the provided scripts.
 
 ### `empty_analytics_script.py`
 Template demonstrating the minimal implementation of an analytics script. Use it as a starting point for your own logic.
+
+### `fxmacrodata_forex_script.py`
+Downloads daily FX spot history from FXMacroData and plots the selected currency pair as a line chart. The script reads an optional API key from `FXMACRODATA_API_KEY` or `FXMD_API_KEY`.
 
 ### `biggest_candle_script.py`
 Finds the candles with the largest volume and range for each selected security and displays them on separate 3D charts.
