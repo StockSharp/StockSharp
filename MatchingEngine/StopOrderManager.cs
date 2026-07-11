@@ -3,10 +3,17 @@ namespace StockSharp.MatchingEngine;
 /// <summary>
 /// Stop order manager implementation.
 /// </summary>
+/// <remarks>
+/// Thread-safe. The server drives a single instance concurrently — Register / Cancel / Replace run
+/// on the order-command path while CheckPrice runs on the feeder tick pump — so every operation is
+/// serialized under one lock. Without it a register racing a check corrupts the per-security index
+/// (lost stops / index-out-of-range) and two concurrent checks double-trigger the same stop.
+/// </remarks>
 public class StopOrderManager : IStopOrderManager
 {
 	private readonly Dictionary<long, StopOrderInfo> _stopOrders = [];
 	private readonly Dictionary<SecurityId, List<long>> _bySecurityId = [];
+	private readonly Lock _sync = new();
 
 	/// <inheritdoc />
 	public void Register(StopOrderInfo info)
@@ -14,85 +21,102 @@ public class StopOrderManager : IStopOrderManager
 		if (info is null)
 			throw new ArgumentNullException(nameof(info));
 
-		_stopOrders[info.TransactionId] = info;
+		using (_sync.EnterScope())
+		{
+			_stopOrders[info.TransactionId] = info;
 
-		if (!_bySecurityId.TryGetValue(info.SecurityId, out var list))
-			_bySecurityId[info.SecurityId] = list = [];
+			if (!_bySecurityId.TryGetValue(info.SecurityId, out var list))
+				_bySecurityId[info.SecurityId] = list = [];
 
-		list.Add(info.TransactionId);
+			list.Add(info.TransactionId);
+		}
 	}
 
 	/// <inheritdoc />
 	public bool Cancel(long transactionId, out StopOrderInfo info)
 	{
-		if (!_stopOrders.TryGetValue(transactionId, out info))
-			return false;
-
-		_stopOrders.Remove(transactionId);
-
-		if (_bySecurityId.TryGetValue(info.SecurityId, out var list))
+		using (_sync.EnterScope())
 		{
-			list.Remove(transactionId);
+			if (!_stopOrders.TryGetValue(transactionId, out info))
+				return false;
 
-			if (list.Count == 0)
-				_bySecurityId.Remove(info.SecurityId);
+			_stopOrders.Remove(transactionId);
+
+			if (_bySecurityId.TryGetValue(info.SecurityId, out var list))
+			{
+				list.Remove(transactionId);
+
+				if (list.Count == 0)
+					_bySecurityId.Remove(info.SecurityId);
+			}
+
+			return true;
 		}
-
-		return true;
 	}
 
 	/// <inheritdoc />
 	public bool Replace(long origTransactionId, StopOrderInfo newInfo)
 	{
-		if (!Cancel(origTransactionId, out _))
-			return false;
+		// The lock is reentrant: hold it across Cancel + Register so the replace is atomic against a
+		// concurrent CheckPrice (no window where the old stop is gone but the new one is not yet in).
+		using (_sync.EnterScope())
+		{
+			if (!Cancel(origTransactionId, out _))
+				return false;
 
-		Register(newInfo);
-		return true;
+			Register(newInfo);
+			return true;
+		}
 	}
 
 	/// <inheritdoc />
 	public IReadOnlyList<StopOrderTrigger> CheckPrice(SecurityId securityId, decimal price, DateTime time)
 	{
-		if (!_bySecurityId.TryGetValue(securityId, out var list) || list.Count == 0)
-			return [];
-
-		List<StopOrderTrigger> triggered = null;
-
-		for (var i = list.Count - 1; i >= 0; i--)
+		using (_sync.EnterScope())
 		{
-			var transId = list[i];
+			if (!_bySecurityId.TryGetValue(securityId, out var list) || list.Count == 0)
+				return [];
 
-			if (!_stopOrders.TryGetValue(transId, out var info))
+			List<StopOrderTrigger> triggered = null;
+
+			for (var i = list.Count - 1; i >= 0; i--)
 			{
+				var transId = list[i];
+
+				if (!_stopOrders.TryGetValue(transId, out var info))
+				{
+					list.RemoveAt(i);
+					continue;
+				}
+
+				if (info.IsTrailing)
+					UpdateTrailing(info, price);
+
+				if (!IsTriggered(info, price))
+					continue;
+
+				triggered ??= [];
+				triggered.Add(new(info, price, CreateResultingOrder(info, time)));
+
+				_stopOrders.Remove(transId);
 				list.RemoveAt(i);
-				continue;
 			}
 
-			if (info.IsTrailing)
-				UpdateTrailing(info, price);
+			if (list.Count == 0)
+				_bySecurityId.Remove(securityId);
 
-			if (!IsTriggered(info, price))
-				continue;
-
-			triggered ??= [];
-			triggered.Add(new(info, price, CreateResultingOrder(info, time)));
-
-			_stopOrders.Remove(transId);
-			list.RemoveAt(i);
+			return triggered ?? (IReadOnlyList<StopOrderTrigger>)[];
 		}
-
-		if (list.Count == 0)
-			_bySecurityId.Remove(securityId);
-
-		return triggered ?? (IReadOnlyList<StopOrderTrigger>)[];
 	}
 
 	/// <inheritdoc />
 	public void Clear()
 	{
-		_stopOrders.Clear();
-		_bySecurityId.Clear();
+		using (_sync.EnterScope())
+		{
+			_stopOrders.Clear();
+			_bySecurityId.Clear();
+		}
 	}
 
 	private static void UpdateTrailing(StopOrderInfo info, decimal price)
