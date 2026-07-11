@@ -826,4 +826,91 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		context.LastDate.AssertNotNull();
 		context.LastDate.Value.AssertEqual(lastReceivedTime.Value);
 	}
+
+	[TestMethod]
+	public async Task Candles_Load_CountWithoutFrom_ReturnsLastN()
+	{
+		var token = CancellationToken;
+		var (settings, provider, secId) = CreateEnv(StorageModes.Incremental);
+
+		var tf = TimeSpan.FromMinutes(5);
+		var d1 = new DateTime(2025, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var d2 = new DateTime(2025, 1, 10, 10, 0, 0, DateTimeKind.Utc);
+		var d3 = new DateTime(2025, 1, 20, 10, 0, 0, DateTimeKind.Utc);
+
+		CandleMessage[] Day(DateTime day, decimal basePrice) => [.. Enumerable.Range(0, 4)
+			.Select(i => CreateTfCandle(secId, day.AddMinutes(5 * i), tf, basePrice + i, basePrice + i + 1, basePrice + i - 1, basePrice + i, 10, totalTicks: 1))
+			.Cast<CandleMessage>()];
+
+		var storage = settings.GetStorage<CandleMessage>(secId, tf.TimeFrame());
+		await storage.SaveAsync(Day(d1, 100), token); // 100..103
+		await storage.SaveAsync(Day(d2, 200), token); // 200..203
+		await storage.SaveAsync(Day(d3, 300), token); // 300..303
+
+		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
+
+		// A count request with no start date must return the last Count candles,
+		// walking storage back across the empty gaps between the three days.
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
+		{
+			TransactionId = 1300,
+			IsSubscribe = true,
+			SecurityId = secId,
+			DataType2 = tf.TimeFrame(),
+			BuildMode = MarketDataBuildModes.Load,
+			From = null,
+			Count = 6,
+		}, context, token))
+			outMessages.Add(msg);
+
+		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
+
+		// Last 6 of [100..103, 200..203, 300..303] = 202, 203, 300, 301, 302, 303.
+		candles.Length.AssertEqual(6);
+
+		for (var i = 1; i < candles.Length; i++)
+			(candles[i].OpenTime > candles[i - 1].OpenTime).AssertTrue();
+
+		candles[0].OpenPrice.AssertEqual(202m);
+		candles[^1].OpenPrice.AssertEqual(303m);
+	}
+
+	[TestMethod]
+	public async Task Candles_Load_CountWithoutFrom_FewerThanCount_ReturnsAll()
+	{
+		var token = CancellationToken;
+		var (settings, provider, secId) = CreateEnv(StorageModes.Incremental);
+
+		var tf = TimeSpan.FromMinutes(5);
+		var date = new DateTime(2025, 3, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		var candlesToSave = Enumerable.Range(0, 3)
+			.Select(i => CreateTfCandle(secId, date.AddMinutes(5 * i), tf, 100 + i, 101 + i, 99 + i, 100 + i, 10, totalTicks: 1))
+			.Cast<CandleMessage>()
+			.ToArray();
+
+		await settings.GetStorage<CandleMessage>(secId, tf.TimeFrame()).SaveAsync(candlesToSave, token);
+
+		var outMessages = new List<Message>();
+		var context = new StorageLoadContext();
+
+		await foreach (var msg in settings.LoadMessagesAsync(provider, new MarketDataMessage
+		{
+			TransactionId = 1301,
+			IsSubscribe = true,
+			SecurityId = secId,
+			DataType2 = tf.TimeFrame(),
+			BuildMode = MarketDataBuildModes.Load,
+			From = null,
+			Count = 50, // more than exist
+		}, context, token))
+			outMessages.Add(msg);
+
+		var candles = outMessages.OfType<TimeFrameCandleMessage>().ToArray();
+
+		candles.Length.AssertEqual(3);
+		candles[0].OpenPrice.AssertEqual(100m);
+		candles[^1].OpenPrice.AssertEqual(102m);
+	}
 }

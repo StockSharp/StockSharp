@@ -30,7 +30,10 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
-		if (message.From == null /*&& Settings.DaysLoad == TimeSpan.Zero*/)
+		// No start date and no count — forward upstream, nothing to serve from storage.
+		// A count request without From is a "last Count records" query and is served
+		// from the tail of the storage (resolved in StorageHelper.GetRangeAsync).
+		if (message.From == null && !(message.Count > 0) /*&& Settings.DaysLoad == TimeSpan.Zero*/)
 		{
 			yield return message;
 			yield break;
