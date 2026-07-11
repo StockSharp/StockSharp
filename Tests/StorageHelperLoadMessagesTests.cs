@@ -913,4 +913,41 @@ public class StorageHelperLoadMessagesTests : BaseTestClass
 		candles[0].OpenPrice.AssertEqual(100m);
 		candles[^1].OpenPrice.AssertEqual(102m);
 	}
+
+	[TestMethod]
+	public async Task Candles_Load_CountWithDefaultTo_Throws()
+	{
+		var token = CancellationToken;
+		var (settings, provider, secId) = CreateEnv(StorageModes.Incremental);
+
+		var tf = TimeSpan.FromMinutes(5);
+		var date = new DateTime(2025, 1, 20, 10, 0, 0, DateTimeKind.Utc);
+
+		var candles = Enumerable.Range(0, 4)
+			.Select(i => CreateTfCandle(secId, date.AddMinutes(5 * i), tf, 300 + i, 301 + i, 299 + i, 300 + i, 10, totalTicks: 1))
+			.Cast<CandleMessage>()
+			.ToArray();
+
+		await settings.GetStorage<CandleMessage>(secId, tf.TimeFrame()).SaveAsync(candles, token);
+
+		// A set time bound must be valid. A To of default(DateTime) (0001-01-01) is a caller bug —
+		// an unset nullable To must be null, not the zero value — so the load fails loudly instead
+		// of silently clipping the count-from-end window to nothing.
+		await ThrowsAsync<ArgumentException>(async () =>
+		{
+			await foreach (var _ in settings.LoadMessagesAsync(provider, new MarketDataMessage
+			{
+				TransactionId = 1302,
+				IsSubscribe = true,
+				SecurityId = secId,
+				DataType2 = tf.TimeFrame(),
+				BuildMode = MarketDataBuildModes.Load,
+				From = null,
+				To = default(DateTime),
+				Count = 6,
+			}, new StorageLoadContext(), token))
+			{
+			}
+		});
+	}
 }

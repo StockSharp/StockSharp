@@ -1093,12 +1093,22 @@ public static partial class StorageHelper
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
+		// A time bound, once set, must be valid. A non-null From/To equal to default(DateTime)
+		// (0001-01-01) was assigned but never given a real value — a caller bug, not "no bound".
+		// Fail loudly rather than mask it (masking would silently clip a count-from-end window).
+		if (subscription.From == default(DateTime))
+			throw new ArgumentException("From is set to default(DateTime); a set time bound must be valid.", nameof(subscription));
+
+		if (subscription.To == default(DateTime))
+			throw new ArgumentException("To is set to default(DateTime); a set time bound must be valid.", nameof(subscription));
+
 		var dates = await storage.GetDatesAsync().ToArrayAsync(cancellationToken);
 		var last = dates.LastOr();
 
 		if (last == null)
 			return default;
 
+		// A null To means "no upper bound" — cap at the newest stored date.
 		var to = subscription.To ?? last.Value.EndOfDay();
 
 		var first = dates.First();
