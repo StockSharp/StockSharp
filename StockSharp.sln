@@ -155,8 +155,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo.Analytics", "Algo.Analytics\Algo.Analytics.csproj", "{5D10DF74-5E91-CCF8-9F7A-6862074F0A80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Localization.Extractor", "Localization.Extractor\Localization.Extractor.csproj", "{6DFC2285-317F-04D1-79D7-F7DF2CF0CEC7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Algo.Gpu", "Algo.Gpu\Algo.Gpu.csproj", "{79E2F1FD-C849-A0C3-537F-01D9F9BADCFB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reporting", "Reporting\Reporting.csproj", "{1895D6B3-5566-4CC8-BDB9-7A2CBF1DB1BA}"
@@ -431,10 +429,6 @@ Global
 		{5D10DF74-5E91-CCF8-9F7A-6862074F0A80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D10DF74-5E91-CCF8-9F7A-6862074F0A80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D10DF74-5E91-CCF8-9F7A-6862074F0A80}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6DFC2285-317F-04D1-79D7-F7DF2CF0CEC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DFC2285-317F-04D1-79D7-F7DF2CF0CEC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DFC2285-317F-04D1-79D7-F7DF2CF0CEC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DFC2285-317F-04D1-79D7-F7DF2CF0CEC7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{79E2F1FD-C849-A0C3-537F-01D9F9BADCFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{79E2F1FD-C849-A0C3-537F-01D9F9BADCFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79E2F1FD-C849-A0C3-537F-01D9F9BADCFB}.Release|Any CPU.ActiveCfg = Release|Any CPU

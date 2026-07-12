@@ -85,7 +85,6 @@
   <Project Path="Charting.Interfaces/Charting.Interfaces.csproj" />
   <Project Path="Configuration/Configuration.csproj" />
   <Project Path="Diagram.Core/Diagram.Core.csproj" />
-  <Project Path="Localization.Extractor/Localization.Extractor.csproj" />
   <Project Path="Localization.Generator/Localization.Generator.csproj" />
   <Project Path="Localization/Localization.csproj" />
   <Project Path="Media.Generator/Media.Generator.csproj" />
