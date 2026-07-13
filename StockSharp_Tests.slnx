@@ -13,6 +13,7 @@
   <Project Path="BusinessEntities/BusinessEntities.csproj" />
   <Project Path="Charting.Interfaces/Charting.Interfaces.csproj" />
   <Project Path="Configuration/Configuration.csproj" />
+  <Project Path="Connectors/CryptoHFTData.Tests/CryptoHFTData.Tests.csproj" />
   <Project Path="Diagram.Core/Diagram.Core.csproj" />
   <Project Path="Localization.Generator/Localization.Generator.csproj" />
   <Project Path="Localization/Localization.csproj" />

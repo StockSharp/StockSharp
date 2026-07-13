@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_target_tests.props" />
+  <PropertyGroup>
+    <AssemblyName>StockSharp.CryptoHFTData.Tests</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CryptoHFTData\CryptoHFTData.csproj" />
+  </ItemGroup>
+</Project>

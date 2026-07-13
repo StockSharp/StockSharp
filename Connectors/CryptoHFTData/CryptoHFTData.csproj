@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_connectors.props" />
+  <ItemGroup>
+    <PackageReference Include="Parquet.Net" Version="5.*" />
+    <PackageReference Include="ZstdSharp.Port" Version="0.*" />
+  </ItemGroup>
+</Project>

@@ -7,6 +7,8 @@
     <Project Path="Connectors/Bittrex/Bittrex.csproj" />
     <Project Path="Connectors/Btce/Btce.csproj" />
     <Project Path="Connectors/Coinbase/Coinbase.csproj" />
+    <Project Path="Connectors/CryptoHFTData/CryptoHFTData.csproj" />
+    <Project Path="Connectors/CryptoHFTData.Tests/CryptoHFTData.Tests.csproj" />
     <Project Path="Connectors/FTX/FTX.csproj" />
     <Project Path="Connectors/PrizmBit/PrizmBit.csproj" />
     <Project Path="Connectors/Tinkoff/Tinkoff.csproj" />
@@ -67,6 +69,7 @@
   </Folder>
   <Folder Name="/Samples/10_CrossPlatform/">
     <Project Path="Samples/10_CrossPlatform/01_ConsoleApp/01_CrossPlatform.ConsoleApp.csproj" />
+    <Project Path="Samples/10_CrossPlatform/02_CryptoHFTDataHistory/02_CrossPlatform.CryptoHFTDataHistory.csproj" />
   </Folder>
   <Project Path="Alerts.Interfaces/Alerts.Interfaces.csproj" />
   <Project Path="Algo.Analytics.CSharp/Algo.Analytics.CSharp.csproj" />

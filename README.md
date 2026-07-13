@@ -124,6 +124,7 @@ connector.Connect();
 |<img src="./Media/logos/CoinExchange_logo.png" height="30" /> |CoinExchange | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/coinexchange.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/coinigy_logo.svg" height="30" /> |Coinigy  | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/coinigy.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/coinhub_logo.svg" height="30" /> |CoinHub | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/coinhub.html" target="_blank">Docs</a> |
+| |CryptoHFTData | [Docs](./Connectors/CryptoHFTData/README.md) |
 |<img src="./Media/logos/cryptopia_logo.svg" height="30" /> |Cryptopia | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/cryptopia.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/deribit_logo.svg" height="30" /> |Deribit | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/deribit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/digifinex_logo.svg" height="30" /> |DigiFinex | <a href="//doc.stocksharp.com/topics/api/connectors/crypto_exchanges/digifinex.html" target="_blank">Docs</a> |
@@ -213,4 +214,3 @@ connector.Connect();
   [10]: https://stocksharp.com/store/trading-terminal/
   [11]: https://stocksharp.com/store/trading-shell/
   [12]: https://stocksharp.com/store/api/
-
