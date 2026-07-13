@@ -27,27 +27,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Algo.Export", "Algo.Export\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Connectors", "Connectors", "{7F7B05F0-13D7-4087-92FE-0E765581D850}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bibox", "Connectors\Bibox\Bibox.csproj", "{18C12010-917D-408C-94B5-829F376400C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bibox", "..\Connectors\Bibox\Bibox.csproj", "{18C12010-917D-408C-94B5-829F376400C7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitStamp", "Connectors\BitStamp\BitStamp.csproj", "{4EF5F8E1-90B1-4A45-81A3-35D5A4CBFD97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitStamp", "..\Connectors\BitStamp\BitStamp.csproj", "{4EF5F8E1-90B1-4A45-81A3-35D5A4CBFD97}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitalong", "Connectors\Bitalong\Bitalong.csproj", "{DF5322FD-2C5F-467B-A067-E51DA5419DF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitalong", "..\Connectors\Bitalong\Bitalong.csproj", "{DF5322FD-2C5F-467B-A067-E51DA5419DF6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Btce", "Connectors\Btce\Btce.csproj", "{34177DB4-CD5E-4349-ABAF-D698B84838A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Btce", "..\Connectors\Btce\Btce.csproj", "{34177DB4-CD5E-4349-ABAF-D698B84838A0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitexbook", "Connectors\Bitexbook\Bitexbook.csproj", "{48CE7CFF-19E5-4989-B4D6-00702500FE6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitexbook", "..\Connectors\Bitexbook\Bitexbook.csproj", "{48CE7CFF-19E5-4989-B4D6-00702500FE6A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bittrex", "Connectors\Bittrex\Bittrex.csproj", "{6E3793D4-5605-41CC-AEEC-22D415F66F67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bittrex", "..\Connectors\Bittrex\Bittrex.csproj", "{6E3793D4-5605-41CC-AEEC-22D415F66F67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coinbase", "Connectors\Coinbase\Coinbase.csproj", "{0E146A4B-5461-4B86-8D84-E100FA054C36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coinbase", "..\Connectors\Coinbase\Coinbase.csproj", "{0E146A4B-5461-4B86-8D84-E100FA054C36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FTX", "Connectors\FTX\FTX.csproj", "{B740C705-89D0-4FF7-8049-514883831EC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FTX", "..\Connectors\FTX\FTX.csproj", "{B740C705-89D0-4FF7-8049-514883831EC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrizmBit", "Connectors\PrizmBit\PrizmBit.csproj", "{8AF74716-C12A-4A4B-9808-A2C47F7ABC21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrizmBit", "..\Connectors\PrizmBit\PrizmBit.csproj", "{8AF74716-C12A-4A4B-9808-A2C47F7ABC21}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinkoff", "Connectors\Tinkoff\Tinkoff.csproj", "{580D7D59-F6D8-4D63-87A9-ECD6C86CCCE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinkoff", "..\Connectors\Tinkoff\Tinkoff.csproj", "{580D7D59-F6D8-4D63-87A9-ECD6C86CCCE4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZB", "Connectors\ZB\ZB.csproj", "{43712583-6394-4D01-8668-324001665CBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZB", "..\Connectors\ZB\ZB.csproj", "{43712583-6394-4D01-8668-324001665CBB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01_Basic", "01_Basic", "{06A00B4D-08DE-4B94-9F51-8F3CFF94BB63}"
 EndProject
