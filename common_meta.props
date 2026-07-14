@@ -10,7 +10,7 @@
     <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
     <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>
     <RepoWebPath>$(RepoGitHubPath)..\Web\</RepoWebPath>
-    <ConnectorsGitHubPath>$(RepoGitHubPath)Samples\Connectors\</ConnectorsGitHubPath>
+    <ConnectorsGitHubPath>$(RepoGitHubPath)..\Connectors\</ConnectorsGitHubPath>
     <ConnectorsAppsPath>$(RepoAppsPath)Connectors\</ConnectorsAppsPath>
 
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
