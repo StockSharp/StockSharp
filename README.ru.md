@@ -172,6 +172,8 @@ connector.Connect();
 |<img src="./Media/logos/polygonio_logo.svg" height="30" /> |Polygon.io | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/polygonio.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/alpaca_logo.svg" height="30" /> |Alpaca.Markets | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/alpaca.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/interactivebrokers_logo.svg" height="30" /> |Interactive Brokers | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/interactive_brokers.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/schwab_logo.svg" height="30" /> |Charles Schwab | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/schwab.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/webull_logo.svg" height="30" /> |Webull | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/webull.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bvmt_logo.svg" height="30" /> |BVMT | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/bvmt.html" target="_blank">Docs</a> |
