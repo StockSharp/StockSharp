@@ -2662,7 +2662,7 @@
   "PasswordChangedOk": "הסיסמה שונתה בהצלחה.",
   "PasswordDesc": "סיסמה. נדרשת כאשר ההרשאה מופעלת בשרת.",
   "PasswordDescription": "סיסמה לגישה למסד הנתונים. לא משמשת בגישה אנונימית.",
-  "PasswordNotCriteria": "הסיסמה שצוינה אינה עומדת בקריטריונים לבטיחות.",
+  "PasswordNotCriteria": "הסיסמה שצוינה אינה עומדת בקריטריוני האבטחה.",
 	"PasswordNotSpecified": "לא צוינה סיסמה.",
   "PasswordWasNotChangedCauseError": "הסיסמה לא שונתה בגלל נתונים שגויים.",
   "Paste": "הדבק",

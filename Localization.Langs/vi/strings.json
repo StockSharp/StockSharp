@@ -1706,7 +1706,7 @@
   "IsEncrypted": "Đã mã hóa",
   "Isin": "ISIN",
   "IsinDesc": "Định danh theo định dạng ISIN (International Securities Identification Number).",
-  "IsMargin": "Có bật lề không?",
+  "IsMargin": "Có bật ký quỹ không?",
   "IsMarketStopLimit": "Giới hạn dừng thị trường",
   "IsMarketTakeProfit": "Chốt lời theo giá thị trường",
   "IsOrderManual": "Lệnh có phải là thủ công không?",
