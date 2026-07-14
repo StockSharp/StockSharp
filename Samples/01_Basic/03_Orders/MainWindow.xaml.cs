@@ -8,6 +8,8 @@ using Ecng.Configuration;
 using Ecng.Collections;
 using Ecng.IO;
 
+using Ecng.Common;
+
 using StockSharp.Algo;
 using StockSharp.BusinessEntities;
 using StockSharp.Configuration;

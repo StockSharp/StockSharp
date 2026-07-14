@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 
+using Ecng.Common;
+
 using StockSharp.Algo.Strategies;
 using StockSharp.BusinessEntities;
 using StockSharp.Messages;
