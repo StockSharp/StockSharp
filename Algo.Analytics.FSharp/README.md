@@ -4,7 +4,7 @@
 
 `Algo.Analytics.FSharp` contains a collection of analytic scripts written in [F#](https://fsharp.org/) for the [StockSharp](https://github.com/StockSharp/StockSharp) trading platform. Each script implements the `IAnalyticsScript` interface and can be executed inside any environment that provides an `IAnalyticsPanel` such as the **S# Designer** application. The scripts demonstrate how to read historical market data from `IStorageRegistry`, perform calculations, and render results using charts, grids, heatmaps, or 3‑D surfaces.
 
-These scripts are examples for the Hydra analytics feature. Refer to the [documentation](https://doc.stocksharp.com/topics/hydra/analytics.html) for more information.
+These scripts are examples for the Hydra analytics feature. Refer to the [documentation](https://doc.stocksharp.com/en/topics/hydra/analytics.html) for more information.
 
 The project is distributed as a .NET 6 library and references the core `Algo.Analytics` project as well as `MathNet.Numerics.FSharp` for numerical calculations.
 

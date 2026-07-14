@@ -18,6 +18,6 @@ The library provides only interfaces and helper types, so it can be referenced f
 
 ## Documentation
 
-Detailed documentation for StockSharp, including charting APIs, is available at [https://doc.stocksharp.com](https://doc.stocksharp.com).
+Detailed documentation for StockSharp, including charting APIs, is available at [https://doc.stocksharp.com/en](https://doc.stocksharp.com/en).
 
 

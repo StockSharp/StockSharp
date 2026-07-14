@@ -30,4 +30,4 @@ Install-Package StockSharp.Localization.All
 
 `StockSharp.Localization.All` is an essential tool for developers working with the StockSharp framework who need to support multiple languages. By using this package, developers can significantly reduce the overhead associated with managing multiple language packs and ensure their applications are ready for a global audience.
 
-For more information about StockSharp and other related packages, please visit [StockSharp's official website](https://stocksharp.com).
+For more information about StockSharp and other related packages, please visit [StockSharp's official website](https://stocksharp.com/en).

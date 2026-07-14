@@ -6,9 +6,9 @@ This section of the documentation explains how to manage orders in a .NET applic
 
 ## Key Components
 
-1. **Order Handling**: Submitting buy and sell [orders](https://doc.stocksharp.com/topics/api/orders_management.html).
+1. **Order Handling**: Submitting buy and sell [orders](https://doc.stocksharp.com/en/topics/api/orders_management.html).
 2. **UI Components**: `SecurityEditor` and `PortfolioEditor` for selecting securities and portfolios.
-3. **Order Feedback**: Handling responses for [new orders and failed orders](https://doc.stocksharp.com/topics/api/orders_management/orders_states.html).
+3. **Order Feedback**: Handling responses for [new orders and failed orders](https://doc.stocksharp.com/en/topics/api/orders_management/orders_states.html).
 
 ## Code Explanation and Usage
 
@@ -16,12 +16,12 @@ This section of the documentation explains how to manage orders in a .NET applic
 
 1. Clone the repository.
 2. Open the solution in Visual Studio.
-3. Find and add required connector via [NuGet package](https://doc.stocksharp.com/topics/api/setup.html#private-nuget-server)
+3. Find and add required connector via [NuGet package](https://doc.stocksharp.com/en/topics/api/setup.html#private-nuget-server)
 4. Build and run the application.
 
 ### Initialization and Connection Setup
 
-The constructor initializes the application and [loads existing settings](https://doc.stocksharp.com/topics/api/connectors/save_and_load_settings.html). The `Connect_Click` method sets up necessary bindings and event handlers for order operations:
+The constructor initializes the application and [loads existing settings](https://doc.stocksharp.com/en/topics/api/connectors/save_and_load_settings.html). The `Connect_Click` method sets up necessary bindings and event handlers for order operations:
 
 ```csharp
 public MainWindow()
@@ -48,7 +48,7 @@ private void Connect_Click(object sender, RoutedEventArgs e)
 
 ### Submitting Orders
 
-The application provides methods to submit buy and sell [orders](https://doc.stocksharp.com/topics/api/orders_management.html). These methods are triggered by UI events (e.g., button clicks) and use the selected security and portfolio details to create and register orders with the trading service:
+The application provides methods to submit buy and sell [orders](https://doc.stocksharp.com/en/topics/api/orders_management.html). These methods are triggered by UI events (e.g., button clicks) and use the selected security and portfolio details to create and register orders with the trading service:
 
 ```csharp
 private void Buy_Click(object sender, RoutedEventArgs e)
@@ -82,7 +82,7 @@ private void Sell_Click(object sender, RoutedEventArgs e)
 
 ## Handling Order Responses
 
-The application listens for new orders and failed order registration events to update the [UI](https://doc.stocksharp.com/topics/api/graphical_user_interface/trading/orders.html) appropriately:
+The application listens for new orders and failed order registration events to update the [UI](https://doc.stocksharp.com/en/topics/api/graphical_user_interface/trading/orders.html) appropriately:
 
 ```csharp
 _connector.NewOrder += OrderGrid.Orders.Add;
@@ -91,6 +91,6 @@ _connector.OrderRegisterFailed += OrderGrid.AddRegistrationFail;
 
 ## Conclusion
 
-This setup allows users to interactively manage trading orders [through a UI](https://doc.stocksharp.com/topics/api/graphical_user_interface/trading/orders.html), offering capabilities to buy and sell securities using configured trading services. This guide should help users understand the order handling process within the application and provide clear instructions on how to extend or modify this functionality.
+This setup allows users to interactively manage trading orders [through a UI](https://doc.stocksharp.com/en/topics/api/graphical_user_interface/trading/orders.html), offering capabilities to buy and sell securities using configured trading services. This guide should help users understand the order handling process within the application and provide clear instructions on how to extend or modify this functionality.
 
 Feel free to adjust the snippets and explanations to better fit the actual implementation details or specific configurations in your project.

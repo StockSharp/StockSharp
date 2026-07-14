@@ -40,9 +40,9 @@ A full‑fledged application will include market data subscriptions, order regis
 
 ## Documentation
 
-Comprehensive documentation for the API and subsystems is available at the [StockSharp documentation website](https://doc.stocksharp.com/).
+Comprehensive documentation for the API and subsystems is available at the [StockSharp documentation website](https://doc.stocksharp.com/en/).
 
 
 ## Support
 
-Questions and discussions are welcome in the community [chat](https://t.me/stocksharpchat/361).
+Questions and discussions are welcome in the community [chat](https://stocksharp.com/en/chat/).
