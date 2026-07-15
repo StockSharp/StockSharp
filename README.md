@@ -171,6 +171,8 @@ connector.Connect();
 |<img src="./Media/logos/alpaca_logo.svg" height="30" /> |Alpaca.Markets | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/alpaca.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/interactivebrokers_logo.svg" height="30" /> |Interactive Brokers | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/interactive_brokers.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/schwab_logo.svg" height="30" /> |Charles Schwab | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/schwab.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/tradovate_logo.svg" height="30" /> |Tradovate | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/tradovate.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/tradezero_logo.svg" height="30" /> |TradeZero | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/tradezero.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/webull_logo.svg" height="30" /> |Webull | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/webull.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="https://doc.stocksharp.com/en/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
