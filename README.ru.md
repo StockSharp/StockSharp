@@ -206,7 +206,7 @@ connector.Connect();
 |<img src="./Media/logos/google_logo.svg" height="30" /> |Google | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/google.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/iex_logo.svg" height="30" /> |IEX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/iex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/iqfeed_logo.svg" height="30" /> |IQFeed | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/iqfeed.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/Lse_logo.svg" height="30" /> |ITCH | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/itch.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/lse_logo.svg" height="30" /> |ITCH | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/itch.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/OpenECry_logo.png" height="30" /> |OpenECry | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/openecry.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/quandl_logo.svg" height="30" /> |Quandl | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/quandl.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/quanthouse_logo.png" height="30" /> |QuantFEED | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/quantfeed.html" target="_blank">Docs</a> |
