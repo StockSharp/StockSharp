@@ -12,6 +12,8 @@
 
 **可用连接**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, BitMEX, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED, Aster, edgeX, Ligther, Paradex, Hyperliquid 等等。
 
+连接器源代码和完整连接器列表可在 [StockSharp Connectors 仓库](https://github.com/StockSharp/Connectors) 中找到。
+
 ## [Designer][8]
 <img src="./Media/Designer500.gif" align="left" />
 
