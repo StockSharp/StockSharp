@@ -170,12 +170,32 @@ connector.Connect();
 |Лого | Название | Документация |
 |:---:|:--------:|:------------:|
 |<img src="./Media/logos/polygonio_logo.svg" height="30" /> |Polygon.io | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/polygonio.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/publicdotcom_logo.svg" height="30" /> |Public.com | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/public.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/moomoo_logo.svg" height="30" /> |Moomoo | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/moomoo.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/ninjatrader_logo.svg" height="30" /> |NinjaTrader | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/ninjatrader.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/lime_logo.svg" height="30" /> |Lime Trader | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/lime.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/alpaca_logo.svg" height="30" /> |Alpaca.Markets | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/alpaca.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/interactivebrokers_logo.svg" height="30" /> |Interactive Brokers | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/interactive_brokers.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/schwab_logo.svg" height="30" /> |Charles Schwab | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/schwab.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/tradovate_logo.svg" height="30" /> |Tradovate | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tradovate.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/tradestation_logo.svg" height="30" /> |TradeStation | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tradestation.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/tastytrade_logo.svg" height="30" /> |tastytrade | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tastytrade.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/tradezero_logo.svg" height="30" /> |TradeZero | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tradezero.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/webull_logo.svg" height="30" /> |Webull | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/webull.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/angelone_logo.svg" height="30" /> |Angel One SmartAPI | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/angelone.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/dhan_logo.svg" height="30" /> |DhanHQ v2 | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/dhan.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/fyers_logo.svg" height="30" /> |FYERS API v3 | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/fyers.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/breeze_logo.svg" height="30" /> |ICICI Direct Breeze API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/breeze.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/upstox_logo.svg" height="30" /> |Upstox | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/upstox.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/xtp_logo.svg" height="30" /> |Zhongtai XTP | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/xtp.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/ctp_logo.svg" height="30" /> |CTP | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/ctp.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/kotakneo_logo.svg" height="30" /> |Kotak Neo Trade API v2 | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/kotak_neo.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/tigerbrokers_logo.png" height="30" /> |Tiger Brokers OpenAPI | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tiger_brokers.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/saxo_logo.svg" height="30" /> |Saxo OpenAPI | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/saxo.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/questrade_logo.svg" height="30" /> |Questrade API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/questrade.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/longbridge_logo.png" height="30" /> |Longbridge OpenAPI | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/longbridge.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/cqg_logo.svg" height="30" /> |CQG Web API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/cqg_web_api.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/ig_logo.png" height="30" /> |IG Markets API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/ig.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bvmt_logo.svg" height="30" /> |BVMT | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/bvmt.html" target="_blank">Docs</a> |
@@ -191,6 +211,7 @@ connector.Connect();
 |<img src="./Media/logos/quandl_logo.svg" height="30" /> |Quandl | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/quandl.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/quanthouse_logo.png" height="30" /> |QuantFEED | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/quantfeed.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/rithmic_logo.svg" height="30" /> |Rithmic | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/rithmic.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/robinhood_logo.svg" height="30" /> |Robinhood | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/robinhood.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/Sterling_logo.png" height="30" /> |Sterling | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/sterling.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/tradier_logo.svg" height="30" /> |Tradier | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tradier.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/Xignite_logo.png" height="30" /> |Xignite | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/xignite.html" target="_blank">Docs</a> |

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <title>CTP</title>
+  <path fill="#2d78a7" d="m50 5 40 23-14 8-26-15z"/>
+  <path fill="#176493" d="m90 28v44l-14-8V36z"/>
+  <path fill="#2d78a7" d="M90 72 50 95V79l26-15z"/>
+  <path fill="#176493" d="M50 95 10 72l14-8 26 15z"/>
+  <path fill="#2d78a7" d="M10 72V28l14 8v28z"/>
+  <path fill="#176493" d="M10 28 50 5v16L24 36z"/>
+</svg>
