@@ -198,6 +198,7 @@ connector.Connect();
 |<img src="./Media/logos/ig_logo.svg" height="30" /> |IG Markets API | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/ig.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/etoro_logo.svg" height="30" /> |eToro Public API | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/etoro.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/koreainvestment_logo.svg" height="30" /> |Korea Investment & Securities Open API | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/korea_investment.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/kiwoom_logo.svg" height="30" /> |Kiwoom REST API | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/kiwoom.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="https://doc.stocksharp.com/en/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bvmt_logo.svg" height="30" /> |BVMT | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/bvmt.html" target="_blank">Docs</a> |
