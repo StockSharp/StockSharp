@@ -182,6 +182,7 @@ connector.Connect();
 |<img src="./Media/logos/snaptrade_logo.svg" height="30" /> |SnapTrade | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/snaptrade.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/openmarkets_logo.svg" height="30" /> |OpenMarkets | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/openmarkets.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/phillip_poems_logo.png" height="30" /> |Phillip POEMS | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/phillip_poems.html" target="_blank">文档</a> |
+|<img src="./Media/logos/usmart_logo.png" height="30" /> |uSMART | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/usmart.html" target="_blank">文档</a> |
 |<img src="./Media/logos/alpaca_logo.svg" height="30" /> |Alpaca.Markets | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/alpaca.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/interactivebrokers_logo.svg" height="30" /> |Interactive Brokers | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/interactive_brokers.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/schwab_logo.svg" height="30" /> |Charles Schwab | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/schwab.html" target="_blank">Docs</a> |
