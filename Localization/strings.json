@@ -2396,6 +2396,8 @@
   "MassIndex": "Mass Index.",
   "MassOrderCancelNotProcessed": "Mass orders cancellation was not processed. Result '{0}'. Reason '{1}'.",
   "Match": "Match",
+  "MatchTrader": "Match-Trader",
+  "MatchTraderBrokerDesc": "Broker identifier supplied by the Match-Trader provider.",
   "MatchedTime": "Matched time.",
   "Matching": "Matching",
   "MatchOnTouch": "Match on touch",
