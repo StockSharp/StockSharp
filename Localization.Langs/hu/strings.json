@@ -5026,5 +5026,6 @@
   "UsmartSessionDesc": "Amerikai részvénymegbízásokhoz használt natív munkamenet: normál, nyitás előtti, zárás utáni vagy dark pool.",
   "UsmartTradePassword": "uSMART titkosított kereskedési jelszó",
   "UsmartTradePasswordDesc": "Opcionális, már titkosított kereskedési jelszó, amelyet a külön uSMART adattitkosítási nyilvános kulccsal állítottak elő.",
-  "Marquee": "Goldman Sachs Marquee"
+  "Marquee": "Goldman Sachs Marquee",
+  "JpmDataQuery": "J.P. Morgan DataQuery"
 }

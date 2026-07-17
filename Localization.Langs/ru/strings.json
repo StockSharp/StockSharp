@@ -5026,5 +5026,6 @@
   "UsmartSessionDesc": "Собственная сессия для заявок по акциям США: основная, до открытия рынка, после закрытия рынка или dark pool.",
   "UsmartTradePassword": "Зашифрованный торговый пароль uSMART",
   "UsmartTradePasswordDesc": "Необязательный уже зашифрованный торговый пароль, созданный с помощью отдельного открытого ключа шифрования данных uSMART.",
-  "Marquee": "Goldman Sachs Marquee"
+  "Marquee": "Goldman Sachs Marquee",
+  "JpmDataQuery": "J.P. Morgan DataQuery"
 }

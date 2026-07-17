@@ -5026,5 +5026,6 @@
   "UsmartSessionDesc": "الجلسة الأصلية المستخدَمة لأوامر الأسهم الأمريكية: العادية أو ما قبل السوق أو ما بعد السوق أو التجمّع المظلم (dark pool).",
   "UsmartTradePassword": "كلمة مرور التداول المشفّرة لـ uSMART",
   "UsmartTradePasswordDesc": "كلمة مرور تداول مشفّرة مسبقاً اختيارية يتم إنشاؤها باستخدام مفتاح تشفير البيانات العام المنفصل الخاص بـ uSMART.",
-  "Marquee": "Goldman Sachs Marquee"
+  "Marquee": "Goldman Sachs Marquee",
+  "JpmDataQuery": "J.P. Morgan DataQuery"
 }

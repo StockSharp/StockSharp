@@ -5026,5 +5026,6 @@
   "UsmartSessionDesc": "U.S. स्टॉक ऑर्डर के लिए उपयोग किया जाने वाला मूल सत्र: नियमित, प्री-मार्केट, पोस्ट-मार्केट, या डार्क पूल।",
   "UsmartTradePassword": "uSMART एन्क्रिप्टेड ट्रेडिंग पासवर्ड",
   "UsmartTradePasswordDesc": "वैकल्पिक पहले से एन्क्रिप्टेड ट्रेडिंग पासवर्ड, जो अलग uSMART डेटा-एन्क्रिप्शन सार्वजनिक कुंजी से उत्पन्न होता है।",
-  "Marquee": "Goldman Sachs Marquee"
+  "Marquee": "Goldman Sachs Marquee",
+  "JpmDataQuery": "J.P. Morgan DataQuery"
 }

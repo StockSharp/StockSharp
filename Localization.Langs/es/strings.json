@@ -5026,5 +5026,6 @@
   "UsmartSessionDesc": "Sesión nativa utilizada para órdenes de acciones estadounidenses: regular, pre-mercado, post-mercado o dark pool.",
   "UsmartTradePassword": "Contraseña de negociación cifrada uSMART",
   "UsmartTradePasswordDesc": "Contraseña de negociación opcional ya cifrada, producida con la clave pública de cifrado de datos independiente de uSMART.",
-  "Marquee": "Goldman Sachs Marquee"
+  "Marquee": "Goldman Sachs Marquee",
+  "JpmDataQuery": "J.P. Morgan DataQuery"
 }

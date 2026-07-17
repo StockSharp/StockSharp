@@ -5026,5 +5026,6 @@
   "UsmartSessionDesc": "Εγγενής συνεδρία που χρησιμοποιείται για εντολές αμερικανικών μετοχών: κανονική, προ-αγοράς, μετα-αγοράς ή dark pool.",
   "UsmartTradePassword": "Κρυπτογραφημένος κωδικός συναλλαγών uSMART",
   "UsmartTradePasswordDesc": "Προαιρετικός ήδη κρυπτογραφημένος κωδικός συναλλαγών που παράγεται με το ξεχωριστό δημόσιο κλειδί κρυπτογράφησης δεδομένων του uSMART.",
-  "Marquee": "Goldman Sachs Marquee"
+  "Marquee": "Goldman Sachs Marquee",
+  "JpmDataQuery": "J.P. Morgan DataQuery"
 }

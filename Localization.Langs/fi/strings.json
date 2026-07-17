@@ -5026,5 +5026,6 @@
   "UsmartSessionDesc": "Natiivi istunto, jota käytetään Yhdysvaltain osaketoimeksiannoille: tavallinen, pörssiä edeltävä, pörssin jälkeinen tai dark pool.",
   "UsmartTradePassword": "uSMART-salattu kaupankäyntisalasana",
   "UsmartTradePasswordDesc": "Valinnainen jo salattu kaupankäyntisalasana, joka on luotu erillisellä uSMART-datansalauksen julkisella avaimella.",
-  "Marquee": "Goldman Sachs Marquee"
+  "Marquee": "Goldman Sachs Marquee",
+  "JpmDataQuery": "J.P. Morgan DataQuery"
 }

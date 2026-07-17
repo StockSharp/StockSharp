@@ -5026,5 +5026,6 @@
   "UsmartSessionDesc": "মার্কিন স্টক অর্ডারের জন্য ব্যবহৃত নেটিভ সেশন: রেগুলার, প্রি-মার্কেট, পোস্ট-মার্কেট, বা ডার্ক পুল।",
   "UsmartTradePassword": "uSMART এনক্রিপ্টেড ট্রেডিং পাসওয়ার্ড",
   "UsmartTradePasswordDesc": "পৃথক uSMART ডেটা-এনক্রিপশন পাবলিক কী দিয়ে উৎপন্ন ঐচ্ছিক পূর্ব-এনক্রিপ্টেড ট্রেডিং পাসওয়ার্ড।",
-  "Marquee": "Goldman Sachs Marquee"
+  "Marquee": "Goldman Sachs Marquee",
+  "JpmDataQuery": "J.P. Morgan DataQuery"
 }
