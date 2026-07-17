@@ -5025,5 +5025,6 @@
   "UsmartSession": "הפעלת מסחר של uSMART",
   "UsmartSessionDesc": "הפעלה מקורית המשמשת עבור פקודות מניות בארצות הברית: רגילה, טרום-שוק, אחרי-שוק, או dark pool.",
   "UsmartTradePassword": "סיסמת מסחר מוצפנת של uSMART",
-  "UsmartTradePasswordDesc": "סיסמת מסחר מוצפנת מראש אופציונלית, שנוצרה עם המפתח הציבורי הנפרד להצפנת נתונים של uSMART."
+  "UsmartTradePasswordDesc": "סיסמת מסחר מוצפנת מראש אופציונלית, שנוצרה עם המפתח הציבורי הנפרד להצפנת נתונים של uSMART.",
+  "Marquee": "Goldman Sachs Marquee"
 }

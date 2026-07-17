@@ -5025,5 +5025,6 @@
   "UsmartSession": "Session de trading uSMART",
   "UsmartSessionDesc": "Session native utilisée pour les ordres sur actions américaines : normale, pré-marché, après-marché ou dark pool.",
   "UsmartTradePassword": "Mot de passe de trading chiffré uSMART",
-  "UsmartTradePasswordDesc": "Mot de passe de trading déjà chiffré facultatif, produit avec la clé publique de chiffrement des données uSMART distincte."
+  "UsmartTradePasswordDesc": "Mot de passe de trading déjà chiffré facultatif, produit avec la clé publique de chiffrement des données uSMART distincte.",
+  "Marquee": "Goldman Sachs Marquee"
 }

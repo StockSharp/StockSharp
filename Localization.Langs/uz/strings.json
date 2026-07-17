@@ -5025,5 +5025,6 @@
   "UsmartSession": "uSMART savdo sessiyasi",
   "UsmartSessionDesc": "AQSh aksiya buyurtmalari uchun ishlatiladigan tabiiy sessiya: oddiy, bozor oldi, bozordan keyin yoki dark pool.",
   "UsmartTradePassword": "uSMART shifrlangan savdo paroli",
-  "UsmartTradePasswordDesc": "Alohida uSMART ma'lumotlarni shifrlash ochiq kaliti bilan yaratilgan, oldindan shifrlangan ixtiyoriy savdo paroli."
+  "UsmartTradePasswordDesc": "Alohida uSMART ma'lumotlarni shifrlash ochiq kaliti bilan yaratilgan, oldindan shifrlangan ixtiyoriy savdo paroli.",
+  "Marquee": "Goldman Sachs Marquee"
 }

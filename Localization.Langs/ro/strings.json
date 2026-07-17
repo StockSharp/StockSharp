@@ -5025,5 +5025,6 @@
   "UsmartSession": "Sesiune de tranzacționare uSMART",
   "UsmartSessionDesc": "Sesiunea nativă utilizată pentru ordinele pe acțiuni din SUA: obișnuită, pre-market, post-market sau dark pool.",
   "UsmartTradePassword": "Parolă de tranzacționare criptată uSMART",
-  "UsmartTradePasswordDesc": "Parolă de tranzacționare opțională deja criptată, produsă cu cheia publică separată de criptare a datelor uSMART."
+  "UsmartTradePasswordDesc": "Parolă de tranzacționare opțională deja criptată, produsă cu cheia publică separată de criptare a datelor uSMART.",
+  "Marquee": "Goldman Sachs Marquee"
 }

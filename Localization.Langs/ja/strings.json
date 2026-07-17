@@ -5025,5 +5025,6 @@
   "UsmartSession": "uSMART 取引セッション",
   "UsmartSessionDesc": "米国株注文に使用されるネイティブセッション: 通常、プレマーケット、アフターマーケット、またはダークプール。",
   "UsmartTradePassword": "uSMART 暗号化取引パスワード",
-  "UsmartTradePasswordDesc": "別途 uSMART データ暗号化公開鍵で生成される、任意の暗号化済み取引パスワード。"
+  "UsmartTradePasswordDesc": "別途 uSMART データ暗号化公開鍵で生成される、任意の暗号化済み取引パスワード。",
+  "Marquee": "Goldman Sachs Marquee"
 }

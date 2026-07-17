@@ -232,6 +232,7 @@ connector.Connect();
 |<img src="./Media/logos/kabustation_logo.svg" height="30" /> |Mitsubishi UFJ eSmart kabu Station API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/kabu_station.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/rakuten_rss_logo.png" height="30" /> |Rakuten MARKETSPEED II RSS | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/rakuten_rss.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/groww_logo.svg" height="30" /> |Groww Trading API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/groww.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/goldmansachs_logo.png" height="30" /> |Goldman Sachs Marquee | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/marquee.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/sierrachartdtc_logo.svg" height="30" /> |Sierra Chart DTC | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/common/sierra_chart_dtc.html" target="_blank">Docs</a> |

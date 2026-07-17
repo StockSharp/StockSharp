@@ -5025,5 +5025,6 @@
   "UsmartSession": "uSMART trading session",
   "UsmartSessionDesc": "Native na session na ginagamit para sa mga U.S. stock order: regular, pre-market, post-market, o dark pool.",
   "UsmartTradePassword": "uSMART encrypted trading password",
-  "UsmartTradePasswordDesc": "Opsyonal na naka-encrypt na trading password na ginawa gamit ang hiwalay na uSMART data-encryption public key."
+  "UsmartTradePasswordDesc": "Opsyonal na naka-encrypt na trading password na ginawa gamit ang hiwalay na uSMART data-encryption public key.",
+  "Marquee": "Goldman Sachs Marquee"
 }

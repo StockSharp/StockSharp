@@ -5025,5 +5025,6 @@
   "UsmartSession": "Sesi dagangan uSMART",
   "UsmartSessionDesc": "Sesi asli yang digunakan untuk pesanan saham A.S.: biasa, pra-pasaran, pasca-pasaran, atau dark pool.",
   "UsmartTradePassword": "Kata laluan dagangan tersulit uSMART",
-  "UsmartTradePasswordDesc": "Kata laluan dagangan pilihan yang sudah tersulit dihasilkan dengan kunci awam penyulitan data uSMART yang berasingan."
+  "UsmartTradePasswordDesc": "Kata laluan dagangan pilihan yang sudah tersulit dihasilkan dengan kunci awam penyulitan data uSMART yang berasingan.",
+  "Marquee": "Goldman Sachs Marquee"
 }

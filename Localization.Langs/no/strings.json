@@ -5025,5 +5025,6 @@
   "UsmartSession": "uSMART-handelsøkt",
   "UsmartSessionDesc": "Innebygd økt brukt for amerikanske aksjeordrer: vanlig, pre-market, post-market eller dark pool.",
   "UsmartTradePassword": "uSMART-kryptert handelspassord",
-  "UsmartTradePasswordDesc": "Valgfritt allerede kryptert handelspassord generert med den separate uSMART-offentlige nøkkelen for datakryptering."
+  "UsmartTradePasswordDesc": "Valgfritt allerede kryptert handelspassord generert med den separate uSMART-offentlige nøkkelen for datakryptering.",
+  "Marquee": "Goldman Sachs Marquee"
 }

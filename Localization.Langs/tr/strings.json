@@ -5025,5 +5025,6 @@
   "UsmartSession": "uSMART işlem oturumu",
   "UsmartSessionDesc": "ABD hisse senedi emirleri için kullanılan yerel oturum: normal, piyasa öncesi, piyasa sonrası veya dark pool.",
   "UsmartTradePassword": "uSMART şifreli işlem parolası",
-  "UsmartTradePasswordDesc": "Ayrı uSMART veri şifreleme genel anahtarıyla üretilen isteğe bağlı önceden şifrelenmiş işlem parolası."
+  "UsmartTradePasswordDesc": "Ayrı uSMART veri şifreleme genel anahtarıyla üretilen isteğe bağlı önceden şifrelenmiş işlem parolası.",
+  "Marquee": "Goldman Sachs Marquee"
 }

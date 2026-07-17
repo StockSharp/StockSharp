@@ -5025,5 +5025,6 @@
   "UsmartSession": "Sessió de negociació de uSMART",
   "UsmartSessionDesc": "Sessió nativa utilitzada per a les ordres d'accions dels EUA: regular, premercat, postmercat o dark pool.",
   "UsmartTradePassword": "Contrasenya de negociació xifrada de uSMART",
-  "UsmartTradePasswordDesc": "Contrasenya de negociació opcional ja xifrada, generada amb la clau pública de xifratge de dades independent de uSMART."
+  "UsmartTradePasswordDesc": "Contrasenya de negociació opcional ja xifrada, generada amb la clau pública de xifratge de dades independent de uSMART.",
+  "Marquee": "Goldman Sachs Marquee"
 }

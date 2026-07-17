@@ -5025,5 +5025,6 @@
   "UsmartSession": "uSMART 交易时段",
   "UsmartSessionDesc": "用于美国股票订单的原生时段：常规、盘前、盘后或暗池。",
   "UsmartTradePassword": "uSMART 加密交易密码",
-  "UsmartTradePasswordDesc": "使用单独的 uSMART 数据加密公钥生成的可选的已加密交易密码。"
+  "UsmartTradePasswordDesc": "使用单独的 uSMART 数据加密公钥生成的可选的已加密交易密码。",
+  "Marquee": "Goldman Sachs Marquee"
 }

@@ -5025,5 +5025,6 @@
   "UsmartSession": "Sesi dagang uSMART",
   "UsmartSessionDesc": "Sesi asli sing digunakaké kanggo pesenan saham A.S.: reguler, pre-market, post-market, utawa dark pool.",
   "UsmartTradePassword": "Sandhi dagang terenkripsi uSMART",
-  "UsmartTradePasswordDesc": "Sandhi dagang opsional sing wis terenkripsi digawé nganggo kunci publik enkripsi-dhata uSMART sing kapisah."
+  "UsmartTradePasswordDesc": "Sandhi dagang opsional sing wis terenkripsi digawé nganggo kunci publik enkripsi-dhata uSMART sing kapisah.",
+  "Marquee": "Goldman Sachs Marquee"
 }

@@ -5025,5 +5025,6 @@
   "UsmartSession": "uSMART အရောင်းအဝယ် ဆက်ရှင်",
   "UsmartSessionDesc": "အမေရိကန် အစုရှယ်ယာ အော်ဒါများအတွက် အသုံးပြုသည့် မူရင်း ဆက်ရှင်- ပုံမှန်၊ pre-market၊ post-market သို့မဟုတ် dark pool။",
   "UsmartTradePassword": "uSMART ကုဒ်ဝှက် အရောင်းအဝယ် စကားဝှက်",
-  "UsmartTradePasswordDesc": "သီးခြား uSMART data-encryption public key ဖြင့် ထုတ်လုပ်ထားသည့် ရွေးချယ်နိုင်သော ကြိုတင်ကုဒ်ဝှက်ထားသော အရောင်းအဝယ် စကားဝှက်။"
+  "UsmartTradePasswordDesc": "သီးခြား uSMART data-encryption public key ဖြင့် ထုတ်လုပ်ထားသည့် ရွေးချယ်နိုင်သော ကြိုတင်ကုဒ်ဝှက်ထားသော အရောင်းအဝယ် စကားဝှက်။",
+  "Marquee": "Goldman Sachs Marquee"
 }

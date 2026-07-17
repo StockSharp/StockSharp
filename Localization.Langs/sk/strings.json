@@ -5025,5 +5025,6 @@
   "UsmartSession": "Obchodná relácia uSMART",
   "UsmartSessionDesc": "Natívna relácia používaná pre príkazy na akcie z USA: bežná, pre-market, post-market alebo dark pool.",
   "UsmartTradePassword": "Šifrované obchodné heslo uSMART",
-  "UsmartTradePasswordDesc": "Voliteľné, už zašifrované obchodné heslo vytvorené pomocou samostatného verejného kľúča na šifrovanie údajov uSMART."
+  "UsmartTradePasswordDesc": "Voliteľné, už zašifrované obchodné heslo vytvorené pomocou samostatného verejného kľúča na šifrovanie údajov uSMART.",
+  "Marquee": "Goldman Sachs Marquee"
 }

@@ -5025,5 +5025,6 @@
   "UsmartSession": "Sesja handlowa uSMART",
   "UsmartSessionDesc": "Natywna sesja używana dla zleceń akcji amerykańskich: zwykła, przedsesyjna, posesyjna lub dark pool.",
   "UsmartTradePassword": "Zaszyfrowane hasło handlowe uSMART",
-  "UsmartTradePasswordDesc": "Opcjonalne, już zaszyfrowane hasło handlowe utworzone za pomocą oddzielnego klucza publicznego szyfrowania danych uSMART."
+  "UsmartTradePasswordDesc": "Opcjonalne, już zaszyfrowane hasło handlowe utworzone za pomocą oddzielnego klucza publicznego szyfrowania danych uSMART.",
+  "Marquee": "Goldman Sachs Marquee"
 }

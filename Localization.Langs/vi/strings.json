@@ -5025,5 +5025,6 @@
   "UsmartSession": "Phiên giao dịch uSMART",
   "UsmartSessionDesc": "Phiên gốc được sử dụng cho lệnh cổ phiếu Hoa Kỳ: thường, trước giờ mở cửa, sau giờ đóng cửa hoặc dark pool.",
   "UsmartTradePassword": "Mật khẩu giao dịch mã hóa uSMART",
-  "UsmartTradePasswordDesc": "Mật khẩu giao dịch đã mã hóa tùy chọn được tạo bằng khóa công khai mã hóa dữ liệu uSMART riêng biệt."
+  "UsmartTradePasswordDesc": "Mật khẩu giao dịch đã mã hóa tùy chọn được tạo bằng khóa công khai mã hóa dữ liệu uSMART riêng biệt.",
+  "Marquee": "Goldman Sachs Marquee"
 }
