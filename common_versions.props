@@ -41,6 +41,11 @@
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
     <SharpPcapVer>6.3.0</SharpPcapVer>
     <GoogleProtobufVer>3.*</GoogleProtobufVer>
+    <NatsVer>3.0.0</NatsVer>
+    <LightstreamerVer>6.2.1</LightstreamerVer>
+    <MoomooApiVer>10.9.6908</MoomooApiVer>
+    <BouncyCastleVer>2.6.2</BouncyCastleVer>
+    <TigerBrokersOpenApiVer>1.2.2</TigerBrokersOpenApiVer>
     <PandasVer>0.6.*</PandasVer>
     <NumpyVer>0.9.*</NumpyVer>
     <IronPythonVer>3.4.2</IronPythonVer>
