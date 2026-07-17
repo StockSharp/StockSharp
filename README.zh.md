@@ -205,8 +205,34 @@ connector.Connect();
 |<img src="./Media/logos/ig_logo.svg" height="30" /> |IG Markets API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/ig.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/etoro_logo.svg" height="30" /> |eToro Public API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/etoro.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/koreainvestment_logo.svg" height="30" /> |Korea Investment & Securities Open API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/korea_investment.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/kiwoom_logo.svg" height="30" /> |Kiwoom REST API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/kiwoom.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/trading212_logo.svg" height="30" /> |Trading 212 | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/trading212.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/daishin_logo.svg" height="30" /> |Daishin CYBOS Plus | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/daishin.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/capital_futures_logo.svg" height="30" /> |Capital Futures API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/capital_futures.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/yuanta_logo.png" height="30" /> |Yuanta SPARK API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/yuanta.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/fubon_neo_logo.png" height="30" /> |Fubon Neo API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/fubon_neo.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/shioaji_logo.png" height="30" /> |SinoPac Shioaji | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/shioaji.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/fugle_logo.png" height="30" /> |Fugle Market Data API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/fugle.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/flattrade_logo.png" height="30" /> |Flattrade Pi API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/flattrade.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/alice_blue_logo.png" height="30" /> |Alice Blue ANT API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/alice_blue.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/shoonya_logo.png" height="30" /> |Shoonya API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/shoonya.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/motilal_oswal_logo.svg" height="30" /> |Motilal Oswal MO API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/motilal_oswal.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/fivepaisa_logo.svg" height="30" /> |5paisa Xstream | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/fivepaisa.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/qmt_logo.svg" height="30" /> |QMT / MiniQMT / XtQuant | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/qmt.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/lsegrealtime_logo.svg" height="30" /> |LSEG Real-Time | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/lseg_real_time.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/bloomberg_logo.svg" height="30" /> |Bloomberg | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/bloomberg.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/databento_logo.svg" height="30" /> |Databento | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/databento.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/dxfeed_logo.svg" height="30" /> |dxFeed | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/dxfeed.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/swissquote_logo.svg" height="30" /> |Swissquote | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/swissquote.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/sharekhan_logo.svg" height="30" /> |Mirae Asset Sharekhan | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/mirae_asset_sharekhan.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/lssecurities_logo.svg" height="30" /> |LS Securities Open API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/ls_securities.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/zerodha_logo.svg" height="30" /> |Zerodha Kite Connect | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/zerodha.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/capitalcom_logo.svg" height="30" /> |Capital.com API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/capitalcom.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/kabustation_logo.svg" height="30" /> |Mitsubishi UFJ eSmart kabu Station API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/kabu_station.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/groww_logo.svg" height="30" /> |Groww Trading API | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/groww.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/sierrachartdtc_logo.svg" height="30" /> |Sierra Chart DTC | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/common/sierra_chart_dtc.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bvmt_logo.svg" height="30" /> |BVMT | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/bvmt.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/alphavantage_logo.svg" height="30" /> |AlphaVantage | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/alphavantage.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/barchart_logo.svg" height="30" /> |BarChart | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/barchart.html" target="_blank">Docs</a> |
