@@ -265,6 +265,7 @@ connector.Connect();
 |<img src="./Media/logos/devexperts_logo.svg" height="30" /> |DXtrade | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/dxtrade.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ctrader_logo.svg" height="30" /> |cTrader | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/ctrader.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/matchtrader_logo.png" height="30" /> |Match-Trader | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/matchtrader.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/xopenhub_logo.png" height="30" /> |X Open Hub | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/xopenhub.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/mt4_logo.svg" height="30" /> |MT4 | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/metatrader.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/mt5_logo.svg" height="30" /> |MT5 | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/metatrader.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/dukascopy_logo.svg" height="30" /> |DukasCopy | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/dukascopy.html" target="_blank">Docs</a> |
