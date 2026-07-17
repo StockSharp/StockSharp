@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "Mật khẩu giao dịch mã hóa uSMART",
   "UsmartTradePasswordDesc": "Mật khẩu giao dịch đã mã hóa tùy chọn được tạo bằng khóa công khai mã hóa dữ liệu uSMART riêng biệt.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

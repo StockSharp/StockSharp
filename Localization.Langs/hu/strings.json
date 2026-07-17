@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "uSMART titkosított kereskedési jelszó",
   "UsmartTradePasswordDesc": "Opcionális, már titkosított kereskedési jelszó, amelyet a külön uSMART adattitkosítási nyilvános kulccsal állítottak elő.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

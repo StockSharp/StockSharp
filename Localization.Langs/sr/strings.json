@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "uSMART шифрована лозинка за трговање",
   "UsmartTradePasswordDesc": "Опциона већ шифрована лозинка за трговање креирана помоћу засебног uSMART јавног кључа за шифровање података.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

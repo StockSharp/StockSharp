@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "uSMART மறையாக்கப்பட்ட வர்த்தக கடவுச்சொல்",
   "UsmartTradePasswordDesc": "தனி uSMART தரவு-மறையாக்க பொது விசையுடன் உருவாக்கப்பட்ட விருப்ப ஏற்கனவே-மறையாக்கப்பட்ட வர்த்தக கடவுச்சொல்.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

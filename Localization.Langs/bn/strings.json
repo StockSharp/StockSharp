@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "uSMART এনক্রিপ্টেড ট্রেডিং পাসওয়ার্ড",
   "UsmartTradePasswordDesc": "পৃথক uSMART ডেটা-এনক্রিপশন পাবলিক কী দিয়ে উৎপন্ন ঐচ্ছিক পূর্ব-এনক্রিপ্টেড ট্রেডিং পাসওয়ার্ড।",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

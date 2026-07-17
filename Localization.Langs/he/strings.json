@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "סיסמת מסחר מוצפנת של uSMART",
   "UsmartTradePasswordDesc": "סיסמת מסחר מוצפנת מראש אופציונלית, שנוצרה עם המפתח הציבורי הנפרד להצפנת נתונים של uSMART.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

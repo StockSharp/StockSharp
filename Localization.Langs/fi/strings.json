@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "uSMART-salattu kaupankäyntisalasana",
   "UsmartTradePasswordDesc": "Valinnainen jo salattu kaupankäyntisalasana, joka on luotu erillisellä uSMART-datansalauksen julkisella avaimella.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

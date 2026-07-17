@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "uSMART-versleuteld handelswachtwoord",
   "UsmartTradePasswordDesc": "Optioneel reeds versleuteld handelswachtwoord dat is gegenereerd met de afzonderlijke uSMART-openbare sleutel voor gegevensversleuteling.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

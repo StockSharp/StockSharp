@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "Password di trading crittografata uSMART",
   "UsmartTradePasswordDesc": "Password di trading opzionale già crittografata, prodotta con la chiave pubblica di crittografia dei dati uSMART separata.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

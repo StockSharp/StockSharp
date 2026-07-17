@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "Šifrované obchodné heslo uSMART",
   "UsmartTradePasswordDesc": "Voliteľné, už zašifrované obchodné heslo vytvorené pomocou samostatného verejného kľúča na šifrovanie údajov uSMART.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

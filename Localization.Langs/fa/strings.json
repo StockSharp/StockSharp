@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "رمز عبور معاملاتی رمزگذاری‌شده uSMART",
   "UsmartTradePasswordDesc": "رمز عبور معاملاتی اختیاری از پیش رمزگذاری‌شده که با کلید عمومی جداگانه رمزگذاری داده uSMART تولید می‌شود.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

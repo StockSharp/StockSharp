@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "Зашифрований торговий пароль uSMART",
   "UsmartTradePasswordDesc": "Необов'язковий уже зашифрований торговий пароль, створений за допомогою окремого відкритого ключа шифрування даних uSMART.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "uSMART ကုဒ်ဝှက် အရောင်းအဝယ် စကားဝှက်",
   "UsmartTradePasswordDesc": "သီးခြား uSMART data-encryption public key ဖြင့် ထုတ်လုပ်ထားသည့် ရွေးချယ်နိုင်သော ကြိုတင်ကုဒ်ဝှက်ထားသော အရောင်းအဝယ် စကားဝှက်။",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

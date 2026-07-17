@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "Sandhi dagang terenkripsi uSMART",
   "UsmartTradePasswordDesc": "Sandhi dagang opsional sing wis terenkripsi digawé nganggo kunci publik enkripsi-dhata uSMART sing kapisah.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

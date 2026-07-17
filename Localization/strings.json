@@ -1390,6 +1390,7 @@
   "FailedCancelOrder": "Failed to cancel order {0}.",
   "FailedMoveOrder": "Error moving order {0}.",
   "FallingThreeMethods": "Falling Three Methods",
+  "FactSet": "FactSet Prices",
   "Fast": "FAST",
   "FastEMAPeriod": "Fast EMA period.",
   "FastLength": "Fast length",

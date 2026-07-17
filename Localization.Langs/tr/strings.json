@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "uSMART şifreli işlem parolası",
   "UsmartTradePasswordDesc": "Ayrı uSMART veri şifreleme genel anahtarıyla üretilen isteğe bağlı önceden şifrelenmiş işlem parolası.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }

@@ -5027,5 +5027,6 @@
   "UsmartTradePassword": "uSMART-kryptert handelspassord",
   "UsmartTradePasswordDesc": "Valgfritt allerede kryptert handelspassord generert med den separate uSMART-offentlige nøkkelen for datakryptering.",
   "Marquee": "Goldman Sachs Marquee",
-  "JpmDataQuery": "J.P. Morgan DataQuery"
+  "JpmDataQuery": "J.P. Morgan DataQuery",
+  "FactSet": "FactSet Prices"
 }
