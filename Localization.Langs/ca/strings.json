@@ -5028,5 +5028,6 @@
   "UsmartTradePasswordDesc": "Contrasenya de negociació opcional ja xifrada, generada amb la clau pública de xifratge de dades independent de uSMART.",
   "Marquee": "Goldman Sachs Marquee",
   "JpmDataQuery": "J.P. Morgan DataQuery",
-  "FactSet": "FactSet Prices"
+  "FactSet": "FactSet Prices",
+  "MorningstarDws": "Morningstar Direct Web Services"
 }

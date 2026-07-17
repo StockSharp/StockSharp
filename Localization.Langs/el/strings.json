@@ -5028,5 +5028,6 @@
   "UsmartTradePasswordDesc": "Προαιρετικός ήδη κρυπτογραφημένος κωδικός συναλλαγών που παράγεται με το ξεχωριστό δημόσιο κλειδί κρυπτογράφησης δεδομένων του uSMART.",
   "Marquee": "Goldman Sachs Marquee",
   "JpmDataQuery": "J.P. Morgan DataQuery",
-  "FactSet": "FactSet Prices"
+  "FactSet": "FactSet Prices",
+  "MorningstarDws": "Morningstar Direct Web Services"
 }

@@ -5028,5 +5028,6 @@
   "UsmartTradePasswordDesc": "Alohida uSMART ma'lumotlarni shifrlash ochiq kaliti bilan yaratilgan, oldindan shifrlangan ixtiyoriy savdo paroli.",
   "Marquee": "Goldman Sachs Marquee",
   "JpmDataQuery": "J.P. Morgan DataQuery",
-  "FactSet": "FactSet Prices"
+  "FactSet": "FactSet Prices",
+  "MorningstarDws": "Morningstar Direct Web Services"
 }

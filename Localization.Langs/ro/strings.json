@@ -5028,5 +5028,6 @@
   "UsmartTradePasswordDesc": "Parolă de tranzacționare opțională deja criptată, produsă cu cheia publică separată de criptare a datelor uSMART.",
   "Marquee": "Goldman Sachs Marquee",
   "JpmDataQuery": "J.P. Morgan DataQuery",
-  "FactSet": "FactSet Prices"
+  "FactSet": "FactSet Prices",
+  "MorningstarDws": "Morningstar Direct Web Services"
 }

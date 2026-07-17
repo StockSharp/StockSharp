@@ -5028,5 +5028,6 @@
   "UsmartTradePasswordDesc": "Volitelné již šifrované obchodní heslo vytvořené pomocí samostatného veřejného klíče pro šifrování dat uSMART.",
   "Marquee": "Goldman Sachs Marquee",
   "JpmDataQuery": "J.P. Morgan DataQuery",
-  "FactSet": "FactSet Prices"
+  "FactSet": "FactSet Prices",
+  "MorningstarDws": "Morningstar Direct Web Services"
 }

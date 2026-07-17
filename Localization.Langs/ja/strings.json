@@ -5028,5 +5028,6 @@
   "UsmartTradePasswordDesc": "別途 uSMART データ暗号化公開鍵で生成される、任意の暗号化済み取引パスワード。",
   "Marquee": "Goldman Sachs Marquee",
   "JpmDataQuery": "J.P. Morgan DataQuery",
-  "FactSet": "FactSet Prices"
+  "FactSet": "FactSet Prices",
+  "MorningstarDws": "Morningstar Direct Web Services"
 }

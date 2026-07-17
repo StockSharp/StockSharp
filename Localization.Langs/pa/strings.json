@@ -5028,5 +5028,6 @@
   "UsmartTradePasswordDesc": "ਵਿਕਲਪਿਕ ਪਹਿਲਾਂ ਤੋਂ ਇਨਕ੍ਰਿਪਟ ਕੀਤਾ ਟ੍ਰੇਡਿੰਗ ਪਾਸਵਰਡ ਜੋ ਵੱਖਰੀ uSMART ਡਾਟਾ-ਇਨਕ੍ਰਿਪਸ਼ਨ ਜਨਤਕ ਕੁੰਜੀ ਨਾਲ ਤਿਆਰ ਕੀਤਾ ਗਿਆ ਹੈ।",
   "Marquee": "Goldman Sachs Marquee",
   "JpmDataQuery": "J.P. Morgan DataQuery",
-  "FactSet": "FactSet Prices"
+  "FactSet": "FactSet Prices",
+  "MorningstarDws": "Morningstar Direct Web Services"
 }

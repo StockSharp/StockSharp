@@ -5028,5 +5028,6 @@
   "UsmartTradePasswordDesc": "كلمة مرور تداول مشفّرة مسبقاً اختيارية يتم إنشاؤها باستخدام مفتاح تشفير البيانات العام المنفصل الخاص بـ uSMART.",
   "Marquee": "Goldman Sachs Marquee",
   "JpmDataQuery": "J.P. Morgan DataQuery",
-  "FactSet": "FactSet Prices"
+  "FactSet": "FactSet Prices",
+  "MorningstarDws": "Morningstar Direct Web Services"
 }

@@ -5028,5 +5028,6 @@
   "UsmartTradePasswordDesc": "Opsyonal na naka-encrypt na trading password na ginawa gamit ang hiwalay na uSMART data-encryption public key.",
   "Marquee": "Goldman Sachs Marquee",
   "JpmDataQuery": "J.P. Morgan DataQuery",
-  "FactSet": "FactSet Prices"
+  "FactSet": "FactSet Prices",
+  "MorningstarDws": "Morningstar Direct Web Services"
 }
