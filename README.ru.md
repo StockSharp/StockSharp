@@ -186,6 +186,7 @@ connector.Connect();
 |<img src="./Media/logos/schwab_logo.svg" height="30" /> |Charles Schwab | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/schwab.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/tradovate_logo.svg" height="30" /> |Tradovate | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tradovate.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/tradestation_logo.svg" height="30" /> |TradeStation | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tradestation.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/tradelocker_logo.png" height="30" /> |TradeLocker | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tradelocker.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/tastytrade_logo.svg" height="30" /> |tastytrade | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tastytrade.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/tradezero_logo.svg" height="30" /> |TradeZero | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tradezero.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/webull_logo.svg" height="30" /> |Webull | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/webull.html" target="_blank">Docs</a> |
