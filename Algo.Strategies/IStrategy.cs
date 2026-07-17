@@ -37,7 +37,7 @@ public interface IStrategy :
 	void RaiseParametersChanged(string name);
 
 	/// <summary>
-	/// The <see cref="ProcessState"/> change event.
+	/// The <see cref="Strategy.ProcessState"/> change event.
 	/// </summary>
 	event Action<IStrategy> ProcessStateChanged;
 

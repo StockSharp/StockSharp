@@ -2156,7 +2156,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 	/// <summary>
 	/// Handle order received from the connector. This is the pipeline callback wired to
-	/// <see cref="IConnector.OrderReceived"/>; the user-overridable hook is <see cref="OnOrderReceived(Order)"/>.
+	/// <see cref="ISubscriptionProvider.OrderReceived"/>; the user-overridable hook is <see cref="OnOrderReceived(Order)"/>.
 	/// </summary>
 	public void OnConnectorOrderReceived(Subscription sub, Order order)
 	{
