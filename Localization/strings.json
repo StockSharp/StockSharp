@@ -1261,6 +1261,7 @@
   "EntryTime": "Entry Time",
   "Envelope": "Envelope",
   "EnvelopeDesc": "Creates upper and lower bands around a moving average to identify potential support and resistance levels",
+  "EodHistoricalData": "EOD Historical Data",
   "EPMA": "EPMA",
   "Equal": "Equal",
   "EqualityOperator": "Equality operator.",

@@ -244,6 +244,7 @@ connector.Connect();
 |<img src="./Media/logos/finnhub_logo.png" height="30" /> |Finnhub | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/finnhub.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/twelvedata_logo.png" height="30" /> |Twelve Data | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/twelvedata.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/tiingo_logo.svg" height="30" /> |Tiingo | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tiingo.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/eodhd_logo.svg" height="30" /> |EOD Historical Data | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/eodhd.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/sierrachartdtc_logo.svg" height="30" /> |Sierra Chart DTC | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/common/sierra_chart_dtc.html" target="_blank">Docs</a> |
