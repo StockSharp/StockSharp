@@ -5043,5 +5043,6 @@
   "Marketstack": "Marketstack",
   "ThetaData": "ThetaData",
   "Orats": "ORATS",
-  "OptionMetrics": "OptionMetrics IvyDB"
+  "OptionMetrics": "OptionMetrics IvyDB",
+  "AlgoSeek": "AlgoSeek"
 }

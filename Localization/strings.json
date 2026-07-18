@@ -93,6 +93,7 @@
   "AliceBlueSessionTokenDesc": "Current Alice Blue userSession bearer token returned by the official authorization flow.",
   "AliceBlueUserIdDesc": "Alice Blue user identifier used by REST and order-update services.",
   "Algo": "Algorithm",
+  "AlgoSeek": "AlgoSeek",
   "All": "All",
   "AllDays": "All days.",
   "AllDepths": "All depths",
