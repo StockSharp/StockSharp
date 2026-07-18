@@ -1890,6 +1890,7 @@
   "IntradayIntensityIndex": "Intraday Intensity Index.",
   "IntradayMomentumIndex": "Intraday Momentum Index.",
   "IntradayVolume": "Intraday volume",
+  "Intrinio": "Intrinio",
   "InvalidArgumentValue": "Invalid argument value.",
   "InvalidAxisType": "Invalid axis type.",
   "InvalidDataRangeParams": "The selected market data range is invalid. For the security {0}, the available data range is from {1} to {2}.",

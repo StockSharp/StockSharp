@@ -5033,5 +5033,6 @@
   "SpGlobalCommodityInsights": "S&P Global Commodity Insights",
   "CboeDataShop": "Cboe DataShop / LiveVol",
   "NasdaqDataLink": "Nasdaq Data Link",
-  "NasdaqCloudDataService": "Nasdaq Cloud Data Service"
+  "NasdaqCloudDataService": "Nasdaq Cloud Data Service",
+  "Intrinio": "Intrinio"
 }

@@ -46,6 +46,15 @@
     <MoomooApiVer>10.9.6908</MoomooApiVer>
     <BouncyCastleVer>2.6.2</BouncyCastleVer>
     <TigerBrokersOpenApiVer>1.2.2</TigerBrokersOpenApiVer>
+    <IntrinioRealtimeVer>18.12.0</IntrinioRealtimeVer>
+    <IntrinioSdkVer>7.21.0</IntrinioSdkVer>
+    <IntrinioCollectionsVer>6.4.0</IntrinioCollectionsVer>
+    <JsonSubTypesVer>2.0.1</JsonSubTypesVer>
+    <RestSharpVer>112.0.0</RestSharpVer>
+    <PollyVer>8.4.1</PollyVer>
+    <SerilogVer>4.3.0</SerilogVer>
+    <SerilogSettingsVer>10.0.0</SerilogSettingsVer>
+    <SerilogSinksVer>6.0.0</SerilogSinksVer>
     <PandasVer>0.6.*</PandasVer>
     <NumpyVer>0.9.*</NumpyVer>
     <IronPythonVer>3.4.2</IronPythonVer>
