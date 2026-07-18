@@ -1336,6 +1336,16 @@ public static class BoardCodes
 	public const string WeexFutures = "WEEXF";
 
 	/// <summary>
+	/// <see cref="CoinW"/> spot market.
+	/// </summary>
+	public const string CoinW = "COINW";
+
+	/// <summary>
+	/// <see cref="CoinWFutures"/> perpetual futures market.
+	/// </summary>
+	public const string CoinWFutures = "CNWF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

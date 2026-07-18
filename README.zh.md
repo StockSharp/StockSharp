@@ -166,6 +166,7 @@ connector.Connect();
 |<img src="./Media/logos/toobit_logo.svg" height="30" /> |Toobit | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/toobit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/whitebit_logo.svg" height="30" /> |WhiteBIT | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/whitebit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/weex_logo.svg" height="30" /> |WEEX | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/weex.html" target="_blank">文档</a> |
+|<img src="./Media/logos/coinw_logo.svg" height="30" /> |CoinW | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/coinw.html" target="_blank">文档</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |
