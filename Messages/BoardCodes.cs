@@ -1311,6 +1311,21 @@ public static class BoardCodes
 	public const string CryptoComDerivatives = "CRCOD";
 
 	/// <summary>
+	/// <see cref="WhiteBit"/> spot market.
+	/// </summary>
+	public const string WhiteBit = "WBIT";
+
+	/// <summary>
+	/// <see cref="WhiteBitMargin"/> collateral spot market.
+	/// </summary>
+	public const string WhiteBitMargin = "WBIM";
+
+	/// <summary>
+	/// <see cref="WhiteBitFutures"/> perpetual futures market.
+	/// </summary>
+	public const string WhiteBitFutures = "WBIF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
