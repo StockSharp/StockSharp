@@ -1326,6 +1326,16 @@ public static class BoardCodes
 	public const string WhiteBitFutures = "WBIF";
 
 	/// <summary>
+	/// <see cref="Weex"/> spot market.
+	/// </summary>
+	public const string Weex = "WEEX";
+
+	/// <summary>
+	/// <see cref="WeexFutures"/> perpetual futures market.
+	/// </summary>
+	public const string WeexFutures = "WEEXF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
