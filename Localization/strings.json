@@ -2400,6 +2400,7 @@
   "MarketPrice": "Market price",
   "MarketPriceToday": "Market price (today)",
   "MarketPriceYesterday": "Market price (yesterday)",
+  "Marketstack": "Marketstack",
   "MarketToLimit": "Market->Limit",
   "MassIndex": "Mass Index.",
   "MassOrderCancelNotProcessed": "Mass orders cancellation was not processed. Result '{0}'. Reason '{1}'.",
