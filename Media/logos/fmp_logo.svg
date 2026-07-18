@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2187 2187" fill="none">
+  <g fill="#5B87FD">
+    <g transform="translate(294 934) rotate(-45)"><rect x="-226" y="-44" width="452" height="88" rx="44"/></g>
+    <g transform="translate(614 934) rotate(45)"><rect x="-226" y="-44" width="452" height="88" rx="44"/></g>
+    <circle cx="454" cy="774" r="134.5"/>
+    <circle cx="134" cy="1094" r="134.5"/>
+    <circle cx="774" cy="1094" r="134.5"/>
+  </g>
+  <g fill="#4EAFFD" transform="translate(934 294) rotate(-45)">
+    <circle cx="-226" cy="0" r="134.5"/>
+    <circle cx="226" cy="0" r="134.5"/>
+    <rect x="-226" y="-44" width="452" height="88" rx="44"/>
+  </g>
+  <g fill="#549CFD" transform="translate(1253 614) rotate(-45)">
+    <rect x="-360.5" y="-134.5" width="721" height="269" rx="134.5"/>
+  </g>
+  <g fill="#5A89FD" transform="translate(1893 934) rotate(45)">
+    <circle cx="-226" cy="0" r="134.5"/>
+    <circle cx="226" cy="0" r="134.5"/>
+    <rect x="-226" y="-44" width="452" height="88" rx="44"/>
+  </g>
+  <g fill="#6176FE" transform="translate(1253 1253) rotate(-45)">
+    <rect x="-360.5" y="-134.5" width="721" height="269" rx="134.5"/>
+  </g>
+  <g fill="#6763FE" transform="translate(614 1573) rotate(45)">
+    <rect x="-360.5" y="-134.5" width="721" height="269" rx="134.5"/>
+  </g>
+  <g fill="#6763FE" transform="translate(1573 1573) rotate(-45)">
+    <circle cx="-226" cy="0" r="134.5"/>
+    <circle cx="226" cy="0" r="134.5"/>
+    <rect x="-226" y="-44" width="452" height="88" rx="44"/>
+  </g>
+  <circle cx="1093" cy="2052" r="134.5" fill="#7046FE"/>
+</svg>
