@@ -1366,6 +1366,16 @@ public static class BoardCodes
 	public const string XtFutures = "XTCMF";
 
 	/// <summary>
+	/// <see cref="Phemex"/> spot market.
+	/// </summary>
+	public const string Phemex = "PHMEX";
+
+	/// <summary>
+	/// <see cref="PhemexFutures"/> linear perpetual futures market.
+	/// </summary>
+	public const string PhemexFutures = "PHMXF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
