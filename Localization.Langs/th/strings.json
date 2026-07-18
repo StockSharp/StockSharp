@@ -395,6 +395,7 @@
   "BuildIndexError": "เกิดข้อผิดพลาดในการสร้างดัชนี {0} สำหรับ {1}",
   "BuildMode": "โหมดแท่งเทียน.",
   "BuildTransAuto": "สร้างการเปลี่ยนผ่านโดยอัตโนมัติ",
+  "Bullish": "Bullish",
   "BullishCandle": "เทียนขาขึ้น",
   "BullishEngulfing": "แท่งเทียนซื้อพร้อมกลืน",
   "BullishHarami": "ฮารามิแท่งขาขึ้น",

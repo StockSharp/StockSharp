@@ -395,6 +395,7 @@
   "BuildIndexError": "Erreur lors de la construction de l'index {0} pour {1}.",
   "BuildMode": "Mode bougies.",
   "BuildTransAuto": "Construire automatiquement des transitions",
+  "Bullish": "Bullish",
   "BullishCandle": "Bougie haussière",
   "BullishEngulfing": "Englobant haussier",
   "BullishHarami": "Harami haussier",

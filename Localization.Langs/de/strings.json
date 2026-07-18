@@ -395,6 +395,7 @@
   "BuildIndexError": "Fehler beim Erstellen des Index {0} für {1}.",
   "BuildMode": "Candle-Modus.",
   "BuildTransAuto": "Übergänge automatisch erstellen",
+  "Bullish": "Bullish",
   "BullishCandle": "Bullish",
   "BullishEngulfing": "Bullish Engulfing",
   "BullishHarami": "Bullish Harami",

@@ -395,6 +395,7 @@
   "BuildIndexError": "Ошибка построения индекса {0} для {1}.",
   "BuildMode": "Режим свечей.",
   "BuildTransAuto": "Автоматически построить переходы",
+  "Bullish": "Bullish",
   "BullishCandle": "Бычья",
   "BullishEngulfing": "Бычье поглощение",
   "BullishHarami": "Бычий харами",

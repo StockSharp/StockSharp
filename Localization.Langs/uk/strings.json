@@ -395,6 +395,7 @@
   "BuildIndexError": "Помилка побудови індексу {0} для {1}.",
   "BuildMode": "Режим будівництва: Режим свічок.",
   "BuildTransAuto": "Автоматично побудувати переходи",
+  "Bullish": "Bullish",
   "BullishCandle": "Бичача свічка",
   "BullishEngulfing": "Биче поглинання",
   "BullishHarami": "Бичий харамі",

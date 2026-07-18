@@ -395,6 +395,7 @@
   "BuildIndexError": "Error al construir el índice {0} para {1}.",
   "BuildMode": "Modo de velas.",
   "BuildTransAuto": "Construir transiciones automáticamente",
+  "Bullish": "Bullish",
   "BullishCandle": "Vela alcista",
   "BullishEngulfing": "Envoltura alcista",
   "BullishHarami": "Harami alcista",

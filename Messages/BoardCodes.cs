@@ -1376,6 +1376,16 @@ public static class BoardCodes
 	public const string PhemexFutures = "PHMXF";
 
 	/// <summary>
+	/// <see cref="Bullish"/> spot market.
+	/// </summary>
+	public const string Bullish = "BULL";
+
+	/// <summary>
+	/// <see cref="BullishDerivatives"/> derivatives market.
+	/// </summary>
+	public const string BullishDerivatives = "BULLD";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

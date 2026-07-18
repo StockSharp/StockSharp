@@ -395,6 +395,7 @@
   "BuildIndexError": "{1} のインデックス {0} の構築エラー。",
   "BuildMode": "ローソク足モード。",
   "BuildTransAuto": "自動的にトランジションを構築する",
+  "Bullish": "Bullish",
   "BullishCandle": "強気",
   "BullishEngulfing": "強気のエンガルフィング",
   "BullishHarami": "陽転はらみ",

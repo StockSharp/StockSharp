@@ -395,6 +395,7 @@
   "BuildIndexError": "Błąd podczas tworzenia indeksu {0} dla {1}.",
   "BuildMode": "Tryb świec.",
   "BuildTransAuto": "Automatycznie twórz przejścia",
+  "Bullish": "Bullish",
   "BullishCandle": "Świeca wzrostowa",
   "BullishEngulfing": "Bullish Engulfing",
   "BullishHarami": "Bullish Harami",

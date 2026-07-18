@@ -395,6 +395,7 @@
   "BuildIndexError": "为 {1} 构建索引 {0} 时出错。",
   "BuildMode": "K线图模式。",
   "BuildTransAuto": "自动构建过渡",
+  "Bullish": "Bullish",
   "BullishCandle": "多头K线",
   "BullishEngulfing": "看涨吞没",
   "BullishHarami": "看涨孕线",

@@ -395,6 +395,7 @@
   "BuildIndexError": "Errore nella costruzione dell'indice {0} per {1}.",
   "BuildMode": "Modalità candele.",
   "BuildTransAuto": "Costruisci transizioni automaticamente",
+  "Bullish": "Bullish",
   "BullishCandle": "Rialzista",
   "BullishEngulfing": "Engulfing rialzista",
   "BullishHarami": "Harami rialzista",

@@ -395,6 +395,7 @@
   "BuildIndexError": "{1} এর জন্য ইনডেক্স {0} বিল্ড করার সময় ত্রুটি।",
   "BuildMode": "ক্যান্ডেল মোড।",
   "BuildTransAuto": "স্বয়ংক্রিয়ভাবে ট্রানজিশন বিল্ড করুন",
+  "Bullish": "Bullish",
   "BullishCandle": "বুলিশ",
   "BullishEngulfing": "বুলিশ এনগালফিং",
   "BullishHarami": "বুলিশ হারামি",
