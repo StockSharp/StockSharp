@@ -1396,6 +1396,16 @@ public static class BoardCodes
 	public const string OurbitFutures = "OURBF";
 
 	/// <summary>
+	/// <see cref="Bitunix"/> spot market.
+	/// </summary>
+	public const string Bitunix = "BTUNX";
+
+	/// <summary>
+	/// <see cref="BitunixFutures"/> perpetual futures market.
+	/// </summary>
+	public const string BitunixFutures = "BTUXF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
