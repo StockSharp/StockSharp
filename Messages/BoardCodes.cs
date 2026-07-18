@@ -1356,6 +1356,16 @@ public static class BoardCodes
 	public const string PionexFutures = "PNXF";
 
 	/// <summary>
+	/// <see cref="Xt"/> spot market.
+	/// </summary>
+	public const string Xt = "XTCOM";
+
+	/// <summary>
+	/// <see cref="XtFutures"/> perpetual futures market.
+	/// </summary>
+	public const string XtFutures = "XTCMF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
