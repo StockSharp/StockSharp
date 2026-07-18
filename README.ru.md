@@ -254,6 +254,7 @@ connector.Connect();
 |<img src="./Media/logos/exegy_logo.svg" height="30" /> |Exegy | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/exegy.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/quodd_logo.svg" height="30" /> |QUODD | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/quodd.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/activfinancial_logo.svg" height="30" /> |ACTIV Financial | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/activ_financial.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/benzinga_logo.svg" height="30" /> |Benzinga | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/benzinga.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/sierrachartdtc_logo.svg" height="30" /> |Sierra Chart DTC | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/common/sierra_chart_dtc.html" target="_blank">Docs</a> |
