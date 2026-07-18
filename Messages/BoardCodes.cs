@@ -1406,6 +1406,11 @@ public static class BoardCodes
 	public const string BitunixFutures = "BTUXF";
 
 	/// <summary>
+	/// <see cref="BloFin"/> perpetual futures market.
+	/// </summary>
+	public const string BloFin = "BLOFN";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
