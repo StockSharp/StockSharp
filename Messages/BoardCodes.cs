@@ -1346,6 +1346,16 @@ public static class BoardCodes
 	public const string CoinWFutures = "CNWF";
 
 	/// <summary>
+	/// <see cref="Pionex"/> spot market.
+	/// </summary>
+	public const string Pionex = "PIONX";
+
+	/// <summary>
+	/// <see cref="PionexFutures"/> perpetual futures market.
+	/// </summary>
+	public const string PionexFutures = "PNXF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
