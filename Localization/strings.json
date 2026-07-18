@@ -1327,6 +1327,7 @@
   "ExecutionConditionDesc": "Execution Condition of a Limit Order",
   "ExecutionEnd": "Execution end time.",
   "ExecutionStart": "Execution start time.",
+  "Exegy": "Exegy",
   "Exit": "Exit",
   "ExitingAppForInstaller": "The application will be stopped in order to run the installer",
   "ExitingApplication": "Exiting the application",
