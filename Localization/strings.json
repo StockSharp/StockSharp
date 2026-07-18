@@ -2631,6 +2631,7 @@
   "NameFileNotContainFileName": "Name of file {0} does not contain a file name.",
   "NameIsNotSpecified": "To save data, enter the exchange name.",
   "NASDAQ": "NASDAQ",
+  "NasdaqDataLink": "Nasdaq Data Link",
   "NasdaqLiffeMarkets": "Nasdaq-Liffe Markets",
   "NationalStockExchangeofIndia": "National Stock Exchange of India",
   "NativeId": "Native ID",
