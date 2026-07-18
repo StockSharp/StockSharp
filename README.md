@@ -237,6 +237,7 @@ connector.Connect();
 |<img src="./Media/logos/spglobal_logo.png" height="30" /> |S&P Global Commodity Insights | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/sp_global_commodity_insights.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/cboedatashop_logo.png" height="30" /> |Cboe DataShop / LiveVol | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/cboe_datashop.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/nasdaq_logo.svg" height="30" /> |Nasdaq Data Link | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/nasdaq_data_link.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/nasdaq_logo.svg" height="30" /> |Nasdaq Cloud Data Service | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/nasdaq_cloud_data_service.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="https://doc.stocksharp.com/en/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/sierrachartdtc_logo.svg" height="30" /> |Sierra Chart DTC | <a href="https://doc.stocksharp.com/en/topics/api/connectors/common/sierra_chart_dtc.html" target="_blank">Docs</a> |
