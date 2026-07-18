@@ -1411,6 +1411,11 @@ public static class BoardCodes
 	public const string BloFin = "BLOFN";
 
 	/// <summary>
+	/// <see cref="Deepcoin"/> spot and perpetual markets.
+	/// </summary>
+	public const string Deepcoin = "DEEP";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
