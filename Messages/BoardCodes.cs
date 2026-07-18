@@ -1291,6 +1291,16 @@ public static class BoardCodes
 	public const string AsterDerivatives = "ASTDR";
 
 	/// <summary>
+	/// <see cref="Toobit"/> spot market.
+	/// </summary>
+	public const string Toobit = "TOOBT";
+
+	/// <summary>
+	/// <see cref="ToobitFutures"/> derivatives market.
+	/// </summary>
+	public const string ToobitFutures = "TOOBF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

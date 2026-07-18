@@ -162,6 +162,7 @@ connector.Connect();
 |Logo | Name | Documentation |
 |:---:|:----:|:-------------:|
 |<img src="./Media/logos/aster_logo.svg" height="30" /> |Aster | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/aster.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/toobit_logo.svg" height="30" /> |Toobit | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/toobit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |
