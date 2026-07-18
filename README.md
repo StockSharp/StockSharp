@@ -256,6 +256,7 @@ connector.Connect();
 |<img src="./Media/logos/ravenpack_logo.svg" height="30" /> |RavenPack | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/ravenpack.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/dowjones_logo.svg" height="30" /> |Dow Jones | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/dow_jones.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/mtnewswires_logo.svg" height="30" /> |MT Newswires | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/mt_newswires.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/bmll_logo.svg" height="30" /> |BMLL | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/bmll.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="https://doc.stocksharp.com/en/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="https://doc.stocksharp.com/en/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/sierrachartdtc_logo.svg" height="30" /> |Sierra Chart DTC | <a href="https://doc.stocksharp.com/en/topics/api/connectors/common/sierra_chart_dtc.html" target="_blank">Docs</a> |
