@@ -1426,6 +1426,16 @@ public static class BoardCodes
 	public const string BitrueFutures = "BTRUF";
 
 	/// <summary>
+	/// <see cref="WooX"/> spot market.
+	/// </summary>
+	public const string WooX = "WOOX";
+
+	/// <summary>
+	/// <see cref="WooXFutures"/> perpetual futures market.
+	/// </summary>
+	public const string WooXFutures = "WOOXF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
