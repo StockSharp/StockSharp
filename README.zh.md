@@ -127,6 +127,7 @@ connector.Connect();
 |<img src="./Media/logos/coinexchange_logo.svg" height="30" /> |CoinExchange | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/coinexchange.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/coinigy_logo.svg" height="30" /> |Coinigy  | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/coinigy.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/coinhub_logo.svg" height="30" /> |CoinHub | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/coinhub.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/cryptocom_logo.svg" height="30" /> |Crypto.com Exchange | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/crypto_com.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/cryptopia_logo.svg" height="30" /> |Cryptopia | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/cryptopia.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/deribit_logo.svg" height="30" /> |Deribit | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/deribit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/digifinex_logo.svg" height="30" /> |DigiFinex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/digifinex.html" target="_blank">Docs</a> |

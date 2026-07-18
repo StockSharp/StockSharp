@@ -1301,6 +1301,16 @@ public static class BoardCodes
 	public const string ToobitFutures = "TOOBF";
 
 	/// <summary>
+	/// <see cref="CryptoCom"/> spot market.
+	/// </summary>
+	public const string CryptoCom = "CRCOM";
+
+	/// <summary>
+	/// <see cref="CryptoComDerivatives"/> derivatives market.
+	/// </summary>
+	public const string CryptoComDerivatives = "CRCOD";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
