@@ -3403,6 +3403,7 @@
   "Quandl": "Quandl",
   "QuandlDatabase": "The database Quandl identifier.",
   "QuantFeed": "QuantFEED",
+  "Quodd": "QUODD",
   "Qmt": "QMT / MiniQMT / XtQuant",
   "QmtGatewayHost": "QMT gateway host",
   "QmtGatewayHostDesc": "Host of the separately started StockSharp XtQuant gateway. Keep the default loopback host unless the gateway transport is protected by a trusted network.",
