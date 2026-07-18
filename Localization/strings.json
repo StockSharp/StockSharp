@@ -2901,6 +2901,7 @@
   "OptionVega": "Option vega.",
   "OR": "OR",
   "Orats": "ORATS",
+  "OptionMetrics": "OptionMetrics IvyDB",
   "Order": "Order",
   "OrderAcceptedByExchange": "Order {0} accepted by the exchange.",
   "OrderActive": "Active",

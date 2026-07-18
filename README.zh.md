@@ -251,6 +251,7 @@ connector.Connect();
 |<img src="./Media/logos/marketstack_logo.svg" height="30" /> |Marketstack | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/marketstack.html" target="_blank">文档</a> |
 |<img src="./Media/logos/thetadata_logo.svg" height="30" /> |ThetaData | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/thetadata.html" target="_blank">文档</a> |
 |<img src="./Media/logos/orats_logo.svg" height="30" /> |ORATS | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/orats.html" target="_blank">文档</a> |
+|<img src="./Media/logos/optionmetrics_logo.svg" height="30" /> |OptionMetrics IvyDB | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/optionmetrics.html" target="_blank">文档</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FIX protocol (4.2, 4.4. 5.0) | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/stock_market/fix_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fix_logo.svg" height="30" /> |FAST protocol | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/common/fast_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/sierrachartdtc_logo.svg" height="30" /> |Sierra Chart DTC | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/common/sierra_chart_dtc.html" target="_blank">Docs</a> |

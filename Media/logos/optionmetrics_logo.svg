@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 44" role="img" aria-label="OptionMetrics">
+  <path fill="#F0CA3B" fill-rule="evenodd" d="M0 0h32v44H0V0zm2 2v40h28V2H2z"/>
+  <path fill="#38638C" d="M2 13.5 16 40l14-26.5V42H2V13.5z"/>
+  <path fill="#F0CA3B" d="M2 13.5C2 6.7 8.3 2 16 2s14 4.7 14 11.5L16 40 2 13.5z"/>
+</svg>
