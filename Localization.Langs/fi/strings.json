@@ -5036,5 +5036,6 @@
   "NasdaqCloudDataService": "Nasdaq Cloud Data Service",
   "Intrinio": "Intrinio",
   "Finnhub": "Finnhub",
-  "TwelveData": "Twelve Data"
+  "TwelveData": "Twelve Data",
+  "Tiingo": "Tiingo"
 }
