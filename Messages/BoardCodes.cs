@@ -1386,6 +1386,16 @@ public static class BoardCodes
 	public const string BullishDerivatives = "BULLD";
 
 	/// <summary>
+	/// <see cref="Ourbit"/> spot market.
+	/// </summary>
+	public const string Ourbit = "OURBT";
+
+	/// <summary>
+	/// <see cref="OurbitFutures"/> perpetual futures market.
+	/// </summary>
+	public const string OurbitFutures = "OURBF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

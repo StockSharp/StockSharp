@@ -171,6 +171,7 @@ connector.Connect();
 |<img src="./Media/logos/xtcom_logo.png" height="30" /> |XT.COM | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/xtcom.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/phemex_logo.png" height="30" /> |Phemex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/phemex.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/bullish_logo.png" height="30" /> |Bullish | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bullish.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/ourbit_logo.svg" height="30" /> |Ourbit | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/ourbit.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |
