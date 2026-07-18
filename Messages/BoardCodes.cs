@@ -1436,6 +1436,16 @@ public static class BoardCodes
 	public const string WooXFutures = "WOOXF";
 
 	/// <summary>
+	/// <see cref="Backpack"/> spot market.
+	/// </summary>
+	public const string Backpack = "BACKP";
+
+	/// <summary>
+	/// <see cref="BackpackFutures"/> perpetual futures market.
+	/// </summary>
+	public const string BackpackFutures = "BACKPF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
