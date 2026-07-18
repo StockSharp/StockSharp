@@ -5034,5 +5034,6 @@
   "CboeDataShop": "Cboe DataShop / LiveVol",
   "NasdaqDataLink": "Nasdaq Data Link",
   "NasdaqCloudDataService": "Nasdaq Cloud Data Service",
-  "Intrinio": "Intrinio"
+  "Intrinio": "Intrinio",
+  "Finnhub": "Finnhub"
 }
