@@ -5030,5 +5030,6 @@
   "JpmDataQuery": "J.P. Morgan DataQuery",
   "FactSet": "FactSet Prices",
   "MorningstarDws": "Morningstar Direct Web Services",
-  "SpGlobalCommodityInsights": "S&P Global Commodity Insights"
+  "SpGlobalCommodityInsights": "S&P Global Commodity Insights",
+  "CboeDataShop": "Cboe DataShop / LiveVol"
 }
