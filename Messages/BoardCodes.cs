@@ -1416,6 +1416,16 @@ public static class BoardCodes
 	public const string Deepcoin = "DEEP";
 
 	/// <summary>
+	/// <see cref="Bitrue"/> spot market.
+	/// </summary>
+	public const string Bitrue = "BTRUE";
+
+	/// <summary>
+	/// <see cref="BitrueFutures"/> USDT-margined perpetual futures market.
+	/// </summary>
+	public const string BitrueFutures = "BTRUF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

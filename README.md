@@ -174,6 +174,7 @@ connector.Connect();
 |<img src="./Media/logos/bitunix_logo.svg" height="30" /> |Bitunix | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/bitunix.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/blofin_logo.png" height="30" /> |BloFin | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/blofin.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/deepcoin_logo.png" height="30" /> |Deepcoin | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/deepcoin.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/bitrue_logo.png" height="30" /> |Bitrue | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/bitrue.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |
