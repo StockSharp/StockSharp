@@ -64,6 +64,7 @@
     <FSharpPlusVer>1.*</FSharpPlusVer>
     <MsSqlClientVer>6.*</MsSqlClientVer>
     <NethereumSignerVer>5.*</NethereumSignerVer>
+    <SolanaVer>8.*</SolanaVer>
     <AvaloniaVer>11.*</AvaloniaVer>
     <NewtonsoftVer>13.*</NewtonsoftVer>
     <ActiproVer>25.*</ActiproVer>
