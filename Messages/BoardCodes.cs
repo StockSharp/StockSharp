@@ -1566,6 +1566,11 @@ public static class BoardCodes
 	public const string Coinhako = "COINHAKO";
 
 	/// <summary>
+	/// Foxbit spot markets.
+	/// </summary>
+	public const string Foxbit = "FOXBIT";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
