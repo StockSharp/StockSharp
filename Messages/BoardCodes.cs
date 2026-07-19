@@ -1466,6 +1466,11 @@ public static class BoardCodes
 	public const string Gemini = "GEMINI";
 
 	/// <summary>
+	/// Bitpanda Fusion aggregated crypto market.
+	/// </summary>
+	public const string BitpandaFusion = "BPFUSION";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
