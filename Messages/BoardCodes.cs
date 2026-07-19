@@ -1636,6 +1636,11 @@ public static class BoardCodes
 	public const string Aerodrome = "AERODROME";
 
 	/// <summary>
+	/// Orca Whirlpools on Solana.
+	/// </summary>
+	public const string Orca = "ORCA";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
