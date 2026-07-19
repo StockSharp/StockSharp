@@ -1606,6 +1606,16 @@ public static class BoardCodes
 	public const string ZoomexInverse = "ZOOMEX_INV";
 
 	/// <summary>
+	/// Tapbit Spot markets.
+	/// </summary>
+	public const string Tapbit = "TAPBIT";
+
+	/// <summary>
+	/// Tapbit USDT perpetual futures markets.
+	/// </summary>
+	public const string TapbitFutures = "TAPBIT_FUT";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
