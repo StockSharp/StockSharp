@@ -1511,6 +1511,11 @@ public static class BoardCodes
 	public const string Coinone = "COINONE";
 
 	/// <summary>
+	/// GMO Coin spot and margin markets.
+	/// </summary>
+	public const string GmoCoin = "GMOCOIN";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
