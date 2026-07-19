@@ -1546,6 +1546,11 @@ public static class BoardCodes
 	public const string CoinJar = "COINJAR";
 
 	/// <summary>
+	/// Korbit spot markets.
+	/// </summary>
+	public const string Korbit = "KORBIT";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
