@@ -1631,6 +1631,11 @@ public static class BoardCodes
 	public const string PumpSwap = "PUMPSWAP";
 
 	/// <summary>
+	/// Aerodrome Finance pools on Base.
+	/// </summary>
+	public const string Aerodrome = "AERODROME";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
