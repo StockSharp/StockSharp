@@ -1536,6 +1536,11 @@ public static class BoardCodes
 	public const string IndependentReserve = "INDEPENDENTRESERVE";
 
 	/// <summary>
+	/// BTC Markets spot markets.
+	/// </summary>
+	public const string BTCMarkets = "BTCMARKETS";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
