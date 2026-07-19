@@ -1531,6 +1531,11 @@ public static class BoardCodes
 	public const string Luno = "LUNO";
 
 	/// <summary>
+	/// Independent Reserve spot markets.
+	/// </summary>
+	public const string IndependentReserve = "INDEPENDENTRESERVE";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
