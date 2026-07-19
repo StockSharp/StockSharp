@@ -1446,6 +1446,16 @@ public static class BoardCodes
 	public const string BackpackFutures = "BACKPF";
 
 	/// <summary>
+	/// <see cref="Btse"/> spot market.
+	/// </summary>
+	public const string Btse = "BTSE";
+
+	/// <summary>
+	/// <see cref="BtseFutures"/> futures and perpetual markets.
+	/// </summary>
+	public const string BtseFutures = "BTSEF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
