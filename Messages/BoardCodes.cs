@@ -1501,6 +1501,11 @@ public static class BoardCodes
 	public const string CoinsPh = "COINSPH";
 
 	/// <summary>
+	/// bitFlyer spot and Crypto CFD markets.
+	/// </summary>
+	public const string BitFlyer = "BITFLYER";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
