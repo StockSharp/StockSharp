@@ -1481,6 +1481,11 @@ public static class BoardCodes
 	public const string HashKeyFutures = "HASHKEYF";
 
 	/// <summary>
+	/// Bitso spot market.
+	/// </summary>
+	public const string Bitso = "BITSO";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
