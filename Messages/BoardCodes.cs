@@ -1621,6 +1621,11 @@ public static class BoardCodes
 	public const string Uniswap = "UNISWAP";
 
 	/// <summary>
+	/// PancakeSwap AMM markets.
+	/// </summary>
+	public const string PancakeSwap = "PANCAKE";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
