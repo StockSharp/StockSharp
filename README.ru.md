@@ -204,6 +204,7 @@ connector.Connect();
 |<img src="./Media/logos/rain_logo.svg" height="30" /> |Rain | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/rain.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/ndax_logo.svg" height="30" /> |NDAX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/ndax.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/osl_logo.svg" height="30" /> |OSL | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/osl.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/bydfi_logo.svg" height="30" /> |BYDFi | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bydfi.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |

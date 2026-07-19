@@ -1586,6 +1586,11 @@ public static class BoardCodes
 	public const string OSL = "OSL";
 
 	/// <summary>
+	/// BYDFi perpetual futures markets.
+	/// </summary>
+	public const string BYDFi = "BYDFI";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
