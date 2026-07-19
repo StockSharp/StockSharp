@@ -1471,6 +1471,16 @@ public static class BoardCodes
 	public const string BitpandaFusion = "BPFUSION";
 
 	/// <summary>
+	/// HashKey Global spot market.
+	/// </summary>
+	public const string HashKey = "HASHKEY";
+
+	/// <summary>
+	/// HashKey Global perpetual futures market.
+	/// </summary>
+	public const string HashKeyFutures = "HASHKEYF";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
