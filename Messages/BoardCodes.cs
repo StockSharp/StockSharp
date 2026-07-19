@@ -1526,6 +1526,11 @@ public static class BoardCodes
 	public const string Valr = "VALR";
 
 	/// <summary>
+	/// Luno Exchange spot markets.
+	/// </summary>
+	public const string Luno = "LUNO";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

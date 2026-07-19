@@ -192,6 +192,7 @@ connector.Connect();
 |<img src="./Media/logos/gmocoin_logo.svg" height="30" /> |GMO Coin | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/gmo_coin.html" target="_blank">文档</a> |
 |<img src="./Media/logos/mercadobitcoin_logo.svg" height="30" /> |Mercado Bitcoin | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/mercado_bitcoin.html" target="_blank">文档</a> |
 |<img src="./Media/logos/valr_logo.svg" height="30" /> |VALR | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/valr.html" target="_blank">文档</a> |
+|<img src="./Media/logos/luno_logo.svg" height="30" /> |Luno | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/luno.html" target="_blank">文档</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |
