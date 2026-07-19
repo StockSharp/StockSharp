@@ -1541,6 +1541,11 @@ public static class BoardCodes
 	public const string BTCMarkets = "BTCMARKETS";
 
 	/// <summary>
+	/// CoinJar Exchange spot markets.
+	/// </summary>
+	public const string CoinJar = "COINJAR";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
