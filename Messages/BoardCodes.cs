@@ -1461,6 +1461,11 @@ public static class BoardCodes
 	public const string Bitvavo = "BITVAVO";
 
 	/// <summary>
+	/// Gemini spot and perpetual markets.
+	/// </summary>
+	public const string Gemini = "GEMINI";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
