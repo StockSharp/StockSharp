@@ -179,6 +179,7 @@ connector.Connect();
 |<img src="./Media/logos/woox_logo.svg" height="30" /> |WOO X | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/woox.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/backpack_logo.png" height="30" /> |Backpack Exchange | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/backpack.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/btse_logo.png" height="30" /> |BTSE | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/btse.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/bitvavo_logo.png" height="30" /> |Bitvavo | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bitvavo.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |

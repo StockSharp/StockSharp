@@ -1456,6 +1456,11 @@ public static class BoardCodes
 	public const string BtseFutures = "BTSEF";
 
 	/// <summary>
+	/// Bitvavo spot market.
+	/// </summary>
+	public const string Bitvavo = "BITVAVO";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
