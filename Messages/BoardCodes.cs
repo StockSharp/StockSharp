@@ -1591,6 +1591,21 @@ public static class BoardCodes
 	public const string BYDFi = "BYDFI";
 
 	/// <summary>
+	/// Zoomex Spot markets.
+	/// </summary>
+	public const string Zoomex = "ZOOMEX";
+
+	/// <summary>
+	/// Zoomex USDT perpetual markets.
+	/// </summary>
+	public const string ZoomexLinear = "ZOOMEX_LIN";
+
+	/// <summary>
+	/// Zoomex inverse perpetual markets.
+	/// </summary>
+	public const string ZoomexInverse = "ZOOMEX_INV";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
