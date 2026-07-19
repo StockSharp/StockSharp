@@ -1616,6 +1616,11 @@ public static class BoardCodes
 	public const string TapbitFutures = "TAPBIT_FUT";
 
 	/// <summary>
+	/// Uniswap AMM markets.
+	/// </summary>
+	public const string Uniswap = "UNISWAP";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
