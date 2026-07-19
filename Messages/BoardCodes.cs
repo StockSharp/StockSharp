@@ -1521,6 +1521,11 @@ public static class BoardCodes
 	public const string MercadoBitcoin = "MERCADOBITCOIN";
 
 	/// <summary>
+	/// VALR spot, margin, and perpetual futures markets.
+	/// </summary>
+	public const string Valr = "VALR";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
