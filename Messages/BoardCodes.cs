@@ -1641,6 +1641,11 @@ public static class BoardCodes
 	public const string Orca = "ORCA";
 
 	/// <summary>
+	/// Manifest Trade order-book markets on Solana.
+	/// </summary>
+	public const string ManifestTrade = "MANIFEST";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
