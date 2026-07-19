@@ -1516,6 +1516,11 @@ public static class BoardCodes
 	public const string GmoCoin = "GMOCOIN";
 
 	/// <summary>
+	/// Mercado Bitcoin spot market.
+	/// </summary>
+	public const string MercadoBitcoin = "MERCADOBITCOIN";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
