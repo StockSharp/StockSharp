@@ -1491,6 +1491,11 @@ public static class BoardCodes
 	public const string Bitkub = "BITKUB";
 
 	/// <summary>
+	/// CoinDCX spot market.
+	/// </summary>
+	public const string CoinDCX = "COINDCX";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
