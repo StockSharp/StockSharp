@@ -1486,6 +1486,11 @@ public static class BoardCodes
 	public const string Bitso = "BITSO";
 
 	/// <summary>
+	/// Bitkub spot market.
+	/// </summary>
+	public const string Bitkub = "BITKUB";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
