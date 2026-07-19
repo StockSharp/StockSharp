@@ -1571,6 +1571,11 @@ public static class BoardCodes
 	public const string Foxbit = "FOXBIT";
 
 	/// <summary>
+	/// Rain spot markets.
+	/// </summary>
+	public const string Rain = "RAIN";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
