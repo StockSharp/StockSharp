@@ -1561,6 +1561,11 @@ public static class BoardCodes
 	public const string Indodax = "INDODAX";
 
 	/// <summary>
+	/// Coinhako spot markets.
+	/// </summary>
+	public const string Coinhako = "COINHAKO";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
