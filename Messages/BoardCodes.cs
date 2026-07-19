@@ -1581,6 +1581,11 @@ public static class BoardCodes
 	public const string NDAX = "NDAX";
 
 	/// <summary>
+	/// OSL Global spot markets.
+	/// </summary>
+	public const string OSL = "OSL";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
