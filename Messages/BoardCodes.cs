@@ -1556,6 +1556,11 @@ public static class BoardCodes
 	public const string PintuPro = "PINTUPRO";
 
 	/// <summary>
+	/// Indodax spot markets.
+	/// </summary>
+	public const string Indodax = "INDODAX";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

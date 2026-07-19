@@ -198,6 +198,7 @@ connector.Connect();
 |<img src="./Media/logos/coinjar_logo.svg" height="30" /> |CoinJar Exchange | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinjar.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/korbit_logo.svg" height="30" /> |Korbit | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/korbit.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/pintupro_logo.svg" height="30" /> |Pintu Pro | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/pintu_pro.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/indodax_logo.svg" height="30" /> |Indodax | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/indodax.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |
