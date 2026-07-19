@@ -1496,6 +1496,11 @@ public static class BoardCodes
 	public const string CoinDCX = "COINDCX";
 
 	/// <summary>
+	/// Coins.ph spot market.
+	/// </summary>
+	public const string CoinsPh = "COINSPH";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
