@@ -1576,6 +1576,11 @@ public static class BoardCodes
 	public const string Rain = "RAIN";
 
 	/// <summary>
+	/// NDAX spot markets.
+	/// </summary>
+	public const string NDAX = "NDAX";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
