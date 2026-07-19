@@ -1506,6 +1506,11 @@ public static class BoardCodes
 	public const string BitFlyer = "BITFLYER";
 
 	/// <summary>
+	/// Coinone spot market.
+	/// </summary>
+	public const string Coinone = "COINONE";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
