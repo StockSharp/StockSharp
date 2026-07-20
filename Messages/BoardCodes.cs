@@ -1736,6 +1736,11 @@ public static class BoardCodes
 	public const string GMTrade = "GMTRADE";
 
 	/// <summary>
+	/// QFEX perpetual futures.
+	/// </summary>
+	public const string QFEX = "QFEX";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
