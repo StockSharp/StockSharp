@@ -1706,6 +1706,11 @@ public static class BoardCodes
 	public const string CowProtocol = "COW";
 
 	/// <summary>
+	/// 1inch aggregated-liquidity markets.
+	/// </summary>
+	public const string OneInch = "1INCH";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
