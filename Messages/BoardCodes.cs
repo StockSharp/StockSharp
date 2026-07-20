@@ -1786,6 +1786,11 @@ public static class BoardCodes
 	public const string Drift = "DRIFT";
 
 	/// <summary>
+	/// Aevo decentralized derivatives exchange.
+	/// </summary>
+	public const string Aevo = "AEVO";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
