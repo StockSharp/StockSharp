@@ -1701,6 +1701,11 @@ public static class BoardCodes
 	public const string Lfj = "LFJ";
 
 	/// <summary>
+	/// CoW Protocol batch-auction markets.
+	/// </summary>
+	public const string CowProtocol = "COW";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
