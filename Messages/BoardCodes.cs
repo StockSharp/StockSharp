@@ -1666,6 +1666,11 @@ public static class BoardCodes
 	public const string Curve = "CURVE";
 
 	/// <summary>
+	/// Jupiter routed spot and perpetual markets on Solana.
+	/// </summary>
+	public const string Jupiter = "JUPITER";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

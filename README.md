@@ -215,6 +215,7 @@ connector.Connect();
 |<img src="./Media/logos/meteora_logo.svg" height="30" /> |Meteora DLMM | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/meteora.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fluid_dex_logo.svg" height="30" /> |Fluid DEX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/fluid_dex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/raydium_logo.svg" height="30" /> |Raydium | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/raydium.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/jupiter_logo.svg" height="30" /> |Jupiter | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/jupiter.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |
