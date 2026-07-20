@@ -1676,6 +1676,11 @@ public static class BoardCodes
 	public const string THORChain = "THORCHAIN";
 
 	/// <summary>
+	/// SUN.io liquidity markets on TRON.
+	/// </summary>
+	public const string SunIo = "SUNIO";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
