@@ -1661,6 +1661,11 @@ public static class BoardCodes
 	public const string Raydium = "RAYDIUM";
 
 	/// <summary>
+	/// Curve AMM pools on Ethereum.
+	/// </summary>
+	public const string Curve = "CURVE";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
