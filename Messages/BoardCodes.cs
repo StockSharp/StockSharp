@@ -1741,6 +1741,11 @@ public static class BoardCodes
 	public const string QFEX = "QFEX";
 
 	/// <summary>
+	/// Pacifica perpetual futures.
+	/// </summary>
+	public const string Pacifica = "PACIFICA";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
