@@ -241,6 +241,7 @@ connector.Connect();
 |<img src="./Media/logos/drift_logo.svg" height="30" /> |Drift Protocol | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/drift.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/aevo_logo.svg" height="30" /> |Aevo | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/aevo.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bluefin_logo.svg" height="30" /> |Bluefin | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/bluefin.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/injective_logo.svg" height="30" /> |Injective | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/injective.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |

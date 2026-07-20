@@ -1796,6 +1796,11 @@ public static class BoardCodes
 	public const string Bluefin = "BLFN";
 
 	/// <summary>
+	/// Injective spot and derivative markets.
+	/// </summary>
+	public const string Injective = "INJ";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
