@@ -3494,6 +3494,7 @@
   "DydxChain": "dYdX Chain",
   "OrderlyNetwork": "Orderly Network",
   "Reya": "Reya",
+  "Gmx": "GMX",
   "PacificaAgentWallet": "Agent wallet",
   "PacificaAgentWalletDesc": "Optional Pacifica API agent wallet derived from the configured signing key.",
   "PacificaExpiryWindow": "Signature expiry window",

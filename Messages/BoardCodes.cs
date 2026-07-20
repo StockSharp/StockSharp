@@ -1776,6 +1776,11 @@ public static class BoardCodes
 	public const string Reya = "REYA";
 
 	/// <summary>
+	/// GMX decentralized exchange.
+	/// </summary>
+	public const string Gmx = "GMX";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
