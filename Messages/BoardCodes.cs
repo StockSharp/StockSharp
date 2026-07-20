@@ -1731,6 +1731,11 @@ public static class BoardCodes
 	public const string StandX = "STANDX";
 
 	/// <summary>
+	/// GMTrade perpetual markets on Solana.
+	/// </summary>
+	public const string GMTrade = "GMTRADE";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
