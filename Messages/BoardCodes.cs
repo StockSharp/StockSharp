@@ -1646,6 +1646,11 @@ public static class BoardCodes
 	public const string ManifestTrade = "MANIFEST";
 
 	/// <summary>
+	/// Meteora DLMM pools on Solana.
+	/// </summary>
+	public const string Meteora = "METEORA";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

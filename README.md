@@ -212,6 +212,7 @@ connector.Connect();
 |<img src="./Media/logos/aerodrome_logo.svg" height="30" /> |Aerodrome Finance | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/aerodrome.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/orca_logo.svg" height="30" /> |Orca Whirlpools | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/orca.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/manifest_trade_logo.svg" height="30" /> |Manifest Trade | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/manifest_trade.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/meteora_logo.svg" height="30" /> |Meteora DLMM | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/meteora.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |
