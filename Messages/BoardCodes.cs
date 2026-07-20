@@ -1651,6 +1651,11 @@ public static class BoardCodes
 	public const string Meteora = "METEORA";
 
 	/// <summary>
+	/// Fluid DEX T1 pools on supported EVM chains.
+	/// </summary>
+	public const string FluidDex = "FLUIDDEX";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
