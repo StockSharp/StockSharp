@@ -1766,6 +1766,11 @@ public static class BoardCodes
 	public const string DydxChain = "DYDX";
 
 	/// <summary>
+	/// Orderly Network perpetual markets.
+	/// </summary>
+	public const string OrderlyNetwork = "ORDERLY";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
