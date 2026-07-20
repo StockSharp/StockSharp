@@ -1721,6 +1721,11 @@ public static class BoardCodes
 	public const string ApexOmni = "APEXOMNI";
 
 	/// <summary>
+	/// Variational Omni perpetual markets.
+	/// </summary>
+	public const string VariationalOmni = "VAROMNI";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
