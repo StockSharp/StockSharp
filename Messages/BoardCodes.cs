@@ -1656,6 +1656,11 @@ public static class BoardCodes
 	public const string FluidDex = "FLUIDDEX";
 
 	/// <summary>
+	/// Raydium routed liquidity markets on Solana.
+	/// </summary>
+	public const string Raydium = "RAYDIUM";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
