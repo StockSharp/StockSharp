@@ -1791,6 +1791,11 @@ public static class BoardCodes
 	public const string Aevo = "AEVO";
 
 	/// <summary>
+	/// Bluefin Pro perpetual markets.
+	/// </summary>
+	public const string Bluefin = "BLFN";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
