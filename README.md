@@ -231,6 +231,7 @@ connector.Connect();
 |<img src="./Media/logos/gmtrade_logo.svg" height="30" /> |GMTrade | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/gmtrade.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/qfex_logo.svg" height="30" /> |QFEX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/qfex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/pacifica_logo.svg" height="30" /> |Pacifica | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/pacifica.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/extended_logo.svg" height="30" /> |Extended | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/extended.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |

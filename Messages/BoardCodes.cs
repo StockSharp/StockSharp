@@ -1746,6 +1746,11 @@ public static class BoardCodes
 	public const string Pacifica = "PACIFICA";
 
 	/// <summary>
+	/// Extended spot and perpetual markets.
+	/// </summary>
+	public const string Extended = "EXTENDED";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
