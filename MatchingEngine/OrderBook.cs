@@ -5,36 +5,55 @@ namespace StockSharp.MatchingEngine;
 /// </summary>
 class OrderBookLevelImpl(decimal price)
 {
-	private readonly Dictionary<long, EmulatorOrder> _ordersByTransId = [];
+	private readonly LinkedList<EmulatorOrder> _orders = [];
+	private readonly Dictionary<long, LinkedListNode<EmulatorOrder>> _nodesByTransId = [];
 
 	public decimal Price { get; } = price;
 	public decimal MarketVolume { get; set; }
 
-	public decimal TotalVolume => MarketVolume + _ordersByTransId.Values.Sum(o => o.Balance);
-	public int OrderCount => _ordersByTransId.Count;
-	public IEnumerable<EmulatorOrder> Orders => _ordersByTransId.Values;
+	public decimal TotalVolume => MarketVolume + _orders.Sum(o => o.Balance);
+	public int OrderCount => _nodesByTransId.Count;
+	public IEnumerable<EmulatorOrder> Orders => _orders;
 
 	public void AddOrder(EmulatorOrder order)
 	{
 		if (order.TransactionId == default)
 			throw new ArgumentException("TransactionId cannot be default", nameof(order));
 
-		_ordersByTransId[order.TransactionId] = order;
+		if (_nodesByTransId.TryGetValue(order.TransactionId, out var existing))
+			existing.Value = order;
+		else
+			_nodesByTransId[order.TransactionId] = _orders.AddLast(order);
 	}
 
 	public bool RemoveOrder(long transactionId, out EmulatorOrder order)
 	{
-		return _ordersByTransId.TryGetValue(transactionId, out order) && _ordersByTransId.Remove(transactionId);
+		if (_nodesByTransId.Remove(transactionId, out var node))
+		{
+			order = node.Value;
+			_orders.Remove(node);
+			return true;
+		}
+
+		order = null;
+		return false;
 	}
 
 	public bool TryGetOrder(long transactionId, out EmulatorOrder order)
 	{
-		return _ordersByTransId.TryGetValue(transactionId, out order);
+		if (_nodesByTransId.TryGetValue(transactionId, out var node))
+		{
+			order = node.Value;
+			return true;
+		}
+
+		order = null;
+		return false;
 	}
 
-	public IEnumerable<EmulatorOrder> GetAllOrders() => [.. _ordersByTransId.Values];
+	public IEnumerable<EmulatorOrder> GetAllOrders() => [.. _orders];
 
-	public bool IsEmpty => MarketVolume <= 0 && _ordersByTransId.Count == 0;
+	public bool IsEmpty => MarketVolume <= 0 && _nodesByTransId.Count == 0;
 }
 
 /// <summary>

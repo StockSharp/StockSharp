@@ -23,6 +23,35 @@ public class OrderMatcherTests : BaseTestClass
 	};
 
 	[TestMethod]
+	public void Match_AfterInteriorCancellation_PreservesFifoPriority()
+	{
+		var book = new OrderBook(CreateSecId());
+		var matcher = new OrderMatcher();
+
+		book.AddQuote(new EmulatorOrder { TransactionId = 90, Side = Sides.Buy, Price = 100, Balance = 5, Volume = 5 });
+		book.AddQuote(new EmulatorOrder { TransactionId = 2, Side = Sides.Buy, Price = 100, Balance = 3, Volume = 3 });
+		IsTrue(book.RemoveQuote(90, Sides.Buy, 100));
+		book.AddQuote(new EmulatorOrder { TransactionId = 3, Side = Sides.Buy, Price = 100, Balance = 7, Volume = 7 });
+
+		var result = matcher.Match(new EmulatorOrder
+		{
+			TransactionId = 999,
+			Side = Sides.Sell,
+			Price = 100,
+			Balance = 7,
+			Volume = 7,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.CancelBalance,
+		}, book, DefaultSettings);
+
+		AreEqual(0m, result.RemainingVolume);
+		var resting = book.GetOrdersAtPrice(Sides.Buy, 100).ToArray();
+		AreEqual(1, resting.Length);
+		AreEqual(3L, resting[0].TransactionId);
+		AreEqual(3m, resting[0].Balance);
+	}
+
+	[TestMethod]
 	public void Match_LimitBuy_BelowBestAsk_NoMatch()
 	{
 		var book = CreateBookWithSpread();
