@@ -1751,6 +1751,11 @@ public static class BoardCodes
 	public const string Extended = "EXTENDED";
 
 	/// <summary>
+	/// Nado spot and perpetual markets.
+	/// </summary>
+	public const string Nado = "NADO";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
