@@ -1711,6 +1711,11 @@ public static class BoardCodes
 	public const string OneInch = "1INCH";
 
 	/// <summary>
+	/// GRVT markets.
+	/// </summary>
+	public const string Grvt = "GRVT";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
