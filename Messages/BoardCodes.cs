@@ -1726,6 +1726,11 @@ public static class BoardCodes
 	public const string VariationalOmni = "VAROMNI";
 
 	/// <summary>
+	/// StandX perpetual futures.
+	/// </summary>
+	public const string StandX = "STANDX";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
