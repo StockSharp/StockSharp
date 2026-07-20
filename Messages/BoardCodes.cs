@@ -1781,6 +1781,11 @@ public static class BoardCodes
 	public const string Gmx = "GMX";
 
 	/// <summary>
+	/// Drift Protocol decentralized exchange.
+	/// </summary>
+	public const string Drift = "DRIFT";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
