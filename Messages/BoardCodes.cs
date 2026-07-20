@@ -1756,6 +1756,11 @@ public static class BoardCodes
 	public const string Nado = "NADO";
 
 	/// <summary>
+	/// Avantis cross-asset perpetual markets.
+	/// </summary>
+	public const string Avantis = "AVANTIS";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
