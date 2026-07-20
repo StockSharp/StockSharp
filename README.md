@@ -220,6 +220,7 @@ connector.Connect();
 |<img src="./Media/logos/sunio_logo.svg" height="30" /> |SUN.io | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/sunio.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/quickswap_logo.svg" height="30" /> |QuickSwap | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/quickswap.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/osmosis_logo.svg" height="30" /> |Osmosis | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/osmosis.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/cetus_logo.svg" height="30" /> |Cetus | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/cetus.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |

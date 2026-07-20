@@ -1691,6 +1691,11 @@ public static class BoardCodes
 	public const string Osmosis = "OSMOSIS";
 
 	/// <summary>
+	/// Cetus concentrated-liquidity markets on Sui.
+	/// </summary>
+	public const string Cetus = "CETUS";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
