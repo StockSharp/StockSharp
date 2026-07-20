@@ -1716,6 +1716,11 @@ public static class BoardCodes
 	public const string Grvt = "GRVT";
 
 	/// <summary>
+	/// ApeX Omni markets.
+	/// </summary>
+	public const string ApexOmni = "APEXOMNI";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

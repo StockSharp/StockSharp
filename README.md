@@ -225,6 +225,7 @@ connector.Connect();
 |<img src="./Media/logos/cow_protocol_logo.svg" height="30" /> |CoW Protocol | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/cow_protocol.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/one_inch_logo.svg" height="30" /> |1inch | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/one_inch.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/grvt_logo.svg" height="30" /> |GRVT | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/grvt.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/apex_omni_logo.svg" height="30" /> |ApeX Omni | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/apex_omni.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/edgex_logo.svg" height="30" /> |edgeX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/edgex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Docs</a> |
