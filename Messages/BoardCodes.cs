@@ -1686,6 +1686,11 @@ public static class BoardCodes
 	public const string QuickSwap = "QUICKSWAP";
 
 	/// <summary>
+	/// Osmosis native liquidity markets.
+	/// </summary>
+	public const string Osmosis = "OSMOSIS";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
