@@ -1681,6 +1681,11 @@ public static class BoardCodes
 	public const string SunIo = "SUNIO";
 
 	/// <summary>
+	/// QuickSwap liquidity markets on Polygon PoS.
+	/// </summary>
+	public const string QuickSwap = "QUICKSWAP";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
