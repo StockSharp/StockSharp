@@ -1761,6 +1761,11 @@ public static class BoardCodes
 	public const string Avantis = "AVANTIS";
 
 	/// <summary>
+	/// dYdX Chain perpetual markets.
+	/// </summary>
+	public const string DydxChain = "DYDX";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
