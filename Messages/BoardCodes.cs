@@ -1771,6 +1771,11 @@ public static class BoardCodes
 	public const string OrderlyNetwork = "ORDERLY";
 
 	/// <summary>
+	/// Reya decentralized exchange.
+	/// </summary>
+	public const string Reya = "REYA";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
