@@ -1671,6 +1671,11 @@ public static class BoardCodes
 	public const string Jupiter = "JUPITER";
 
 	/// <summary>
+	/// THORChain native Layer-1 liquidity markets.
+	/// </summary>
+	public const string THORChain = "THORCHAIN";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
