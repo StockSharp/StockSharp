@@ -1696,6 +1696,11 @@ public static class BoardCodes
 	public const string Cetus = "CETUS";
 
 	/// <summary>
+	/// LFJ Liquidity Book markets on Avalanche C-Chain.
+	/// </summary>
+	public const string Lfj = "LFJ";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
