@@ -1871,6 +1871,11 @@ public static class BoardCodes
 	public const string Anchorage = "ANCHORAGE";
 
 	/// <summary>
+	/// Paxos crypto brokerage and custody assets.
+	/// </summary>
+	public const string Paxos = "PAXOS";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
