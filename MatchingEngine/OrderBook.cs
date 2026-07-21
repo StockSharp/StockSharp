@@ -15,15 +15,22 @@ class OrderBookLevelImpl(decimal price)
 	public int OrderCount => _nodesByTransId.Count;
 	public IEnumerable<EmulatorOrder> Orders => _orders;
 
-	public void AddOrder(EmulatorOrder order)
+	public decimal AddOrder(EmulatorOrder order)
 	{
 		if (order.TransactionId == default)
 			throw new ArgumentException("TransactionId cannot be default", nameof(order));
 
 		if (_nodesByTransId.TryGetValue(order.TransactionId, out var existing))
+		{
+			var volumeDelta = order.Balance - existing.Value.Balance;
 			existing.Value = order;
+			return volumeDelta;
+		}
 		else
+		{
 			_nodesByTransId[order.TransactionId] = _orders.AddLast(order);
+			return order.Balance;
+		}
 	}
 
 	public bool RemoveOrder(long transactionId, out EmulatorOrder order)
@@ -146,17 +153,19 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 			throw new ArgumentNullException(nameof(order));
 
 		var level = GetOrCreateLevel(order.Side, order.Price);
+		decimal volumeDelta;
 
 		if (order.TransactionId != default)
 		{
-			level.AddOrder(order);
+			volumeDelta = level.AddOrder(order);
 		}
 		else
 		{
 			level.MarketVolume += order.Balance;
+			volumeDelta = order.Balance;
 		}
 
-		AddTotalVolume(order.Side, order.Balance);
+		AddTotalVolume(order.Side, volumeDelta);
 	}
 
 	/// <inheritdoc />
@@ -302,15 +311,13 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 		foreach (var order in userBidOrders)
 		{
 			var level = GetOrCreateLevel(Sides.Buy, order.Price);
-			level.AddOrder(order);
-			_totalBidVolume += order.Balance;
+			_totalBidVolume += level.AddOrder(order);
 		}
 
 		foreach (var order in userAskOrders)
 		{
 			var level = GetOrCreateLevel(Sides.Sell, order.Price);
-			level.AddOrder(order);
-			_totalAskVolume += order.Balance;
+			_totalAskVolume += level.AddOrder(order);
 		}
 	}
 

@@ -47,6 +47,35 @@ public class OrderBookTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void AddQuote_SameTransactionId_ReplacesVolumeWithoutInflatingTotal()
+	{
+		var book = new OrderBook(CreateSecId());
+
+		book.AddQuote(new EmulatorOrder { TransactionId = 1, Side = Sides.Buy, Price = 100, Balance = 10, Volume = 10 });
+		book.AddQuote(new EmulatorOrder { TransactionId = 1, Side = Sides.Buy, Price = 100, Balance = 7, Volume = 7 });
+
+		AreEqual(7m, book.GetVolumeAtPrice(Sides.Buy, 100));
+		IsNotNull(book.BestBid);
+		AreEqual(100m, book.BestBid.Value.price);
+		AreEqual(7m, book.BestBid.Value.volume);
+		AreEqual(7m, book.TotalBidVolume);
+	}
+
+	[TestMethod]
+	public void RemoveQuote_AfterSameTransactionIdReplacement_ClearsTotalVolume()
+	{
+		var book = new OrderBook(CreateSecId());
+
+		book.AddQuote(new EmulatorOrder { TransactionId = 1, Side = Sides.Buy, Price = 100, Balance = 10, Volume = 10 });
+		book.AddQuote(new EmulatorOrder { TransactionId = 1, Side = Sides.Buy, Price = 100, Balance = 7, Volume = 7 });
+
+		IsTrue(book.RemoveQuote(1, Sides.Buy, 100));
+		AreEqual(0m, book.GetVolumeAtPrice(Sides.Buy, 100));
+		IsNull(book.BestBid);
+		AreEqual(0m, book.TotalBidVolume);
+	}
+
+	[TestMethod]
 	public void BestBid_ReturnsHighestBidPrice()
 	{
 		var book = new OrderBook(CreateSecId());
