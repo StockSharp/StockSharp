@@ -1816,6 +1816,11 @@ public static class BoardCodes
 	public const string Synthetix = "SYNTX";
 
 	/// <summary>
+	/// Gains Network gTrade perpetual markets.
+	/// </summary>
+	public const string GainsNetwork = "GAINS";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

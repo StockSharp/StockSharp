@@ -3502,6 +3502,7 @@
   "Ostium": "Ostium",
   "SynFutures": "SynFutures",
   "Synthetix": "Synthetix",
+  "GainsNetwork": "Gains Network gTrade",
   "PacificaAgentWallet": "Agent wallet",
   "PacificaAgentWalletDesc": "Optional Pacifica API agent wallet derived from the configured signing key.",
   "PacificaExpiryWindow": "Signature expiry window",
