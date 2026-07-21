@@ -23,7 +23,7 @@ public class OrderMatcherTests : BaseTestClass
 	};
 
 	[TestMethod]
-	public void Match_AfterInteriorCancellation_PreservesFifoPriority()
+	public void Match_AfterOldestCancellation_NewOrderStaysBehindRemainingOrder()
 	{
 		var book = new OrderBook(CreateSecId());
 		var matcher = new OrderMatcher();
@@ -38,8 +38,8 @@ public class OrderMatcherTests : BaseTestClass
 			TransactionId = 999,
 			Side = Sides.Sell,
 			Price = 100,
-			Balance = 7,
-			Volume = 7,
+			Balance = 3,
+			Volume = 3,
 			OrderType = OrderTypes.Limit,
 			TimeInForce = TimeInForce.CancelBalance,
 		}, book, DefaultSettings);
@@ -48,7 +48,37 @@ public class OrderMatcherTests : BaseTestClass
 		var resting = book.GetOrdersAtPrice(Sides.Buy, 100).ToArray();
 		AreEqual(1, resting.Length);
 		AreEqual(3L, resting[0].TransactionId);
-		AreEqual(3m, resting[0].Balance);
+		AreEqual(7m, resting[0].Balance);
+	}
+
+	[TestMethod]
+	public void Match_AfterMiddleCancellation_NewOrderStaysBehindOlderOrders()
+	{
+		var book = new OrderBook(CreateSecId());
+		var matcher = new OrderMatcher();
+
+		book.AddQuote(new EmulatorOrder { TransactionId = 90, Side = Sides.Buy, Price = 100, Balance = 1, Volume = 1 });
+		book.AddQuote(new EmulatorOrder { TransactionId = 2, Side = Sides.Buy, Price = 100, Balance = 1, Volume = 1 });
+		book.AddQuote(new EmulatorOrder { TransactionId = 4, Side = Sides.Buy, Price = 100, Balance = 1, Volume = 1 });
+		IsTrue(book.RemoveQuote(2, Sides.Buy, 100));
+		book.AddQuote(new EmulatorOrder { TransactionId = 3, Side = Sides.Buy, Price = 100, Balance = 1, Volume = 1 });
+
+		var result = matcher.Match(new EmulatorOrder
+		{
+			TransactionId = 999,
+			Side = Sides.Sell,
+			Price = 100,
+			Balance = 2,
+			Volume = 2,
+			OrderType = OrderTypes.Limit,
+			TimeInForce = TimeInForce.CancelBalance,
+		}, book, DefaultSettings);
+
+		AreEqual(0m, result.RemainingVolume);
+		var resting = book.GetOrdersAtPrice(Sides.Buy, 100).ToArray();
+		AreEqual(1, resting.Length);
+		AreEqual(3L, resting[0].TransactionId);
+		AreEqual(1m, resting[0].Balance);
 	}
 
 	[TestMethod]
