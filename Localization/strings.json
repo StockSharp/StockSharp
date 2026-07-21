@@ -3511,6 +3511,7 @@
   "FalconX": "FalconX",
   "ZeroHash": "Zero Hash",
   "BitGo": "BitGo",
+  "Copper": "Copper",
   "PacificaAgentWallet": "Agent wallet",
   "PacificaAgentWalletDesc": "Optional Pacifica API agent wallet derived from the configured signing key.",
   "PacificaExpiryWindow": "Signature expiry window",

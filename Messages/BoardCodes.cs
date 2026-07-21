@@ -1861,6 +1861,11 @@ public static class BoardCodes
 	public const string BitGo = "BITGO";
 
 	/// <summary>
+	/// Copper custody and ClearLoop assets.
+	/// </summary>
+	public const string Copper = "COPPER";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
