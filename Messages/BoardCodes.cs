@@ -1836,6 +1836,11 @@ public static class BoardCodes
 	public const string Balancer = "BALANCER";
 
 	/// <summary>
+	/// Fireblocks custody workspace assets.
+	/// </summary>
+	public const string Fireblocks = "FIREBLOCKS";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

@@ -3506,6 +3506,7 @@
   "Polymarket": "Polymarket",
   "Kalshi": "Kalshi",
   "Balancer": "Balancer",
+  "Fireblocks": "Fireblocks",
   "PacificaAgentWallet": "Agent wallet",
   "PacificaAgentWalletDesc": "Optional Pacifica API agent wallet derived from the configured signing key.",
   "PacificaExpiryWindow": "Signature expiry window",
