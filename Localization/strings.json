@@ -3501,6 +3501,7 @@
   "Injective": "Injective",
   "Ostium": "Ostium",
   "SynFutures": "SynFutures",
+  "Synthetix": "Synthetix",
   "PacificaAgentWallet": "Agent wallet",
   "PacificaAgentWalletDesc": "Optional Pacifica API agent wallet derived from the configured signing key.",
   "PacificaExpiryWindow": "Signature expiry window",

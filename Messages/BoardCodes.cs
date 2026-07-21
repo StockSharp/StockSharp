@@ -1811,6 +1811,11 @@ public static class BoardCodes
 	public const string SynFutures = "SYNFUT";
 
 	/// <summary>
+	/// Synthetix perpetual futures on Ethereum mainnet.
+	/// </summary>
+	public const string Synthetix = "SYNTX";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
