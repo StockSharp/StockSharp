@@ -1831,6 +1831,11 @@ public static class BoardCodes
 	public const string Kalshi = "KALSHI";
 
 	/// <summary>
+	/// Balancer decentralized liquidity pools.
+	/// </summary>
+	public const string Balancer = "BALANCER";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
