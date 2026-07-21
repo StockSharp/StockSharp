@@ -1806,6 +1806,11 @@ public static class BoardCodes
 	public const string Ostium = "OSTIUM";
 
 	/// <summary>
+	/// SynFutures V3 perpetual markets on Base.
+	/// </summary>
+	public const string SynFutures = "SYNFUT";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

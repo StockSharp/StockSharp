@@ -3500,6 +3500,7 @@
   "Bluefin": "Bluefin",
   "Injective": "Injective",
   "Ostium": "Ostium",
+  "SynFutures": "SynFutures",
   "PacificaAgentWallet": "Agent wallet",
   "PacificaAgentWalletDesc": "Optional Pacifica API agent wallet derived from the configured signing key.",
   "PacificaExpiryWindow": "Signature expiry window",
