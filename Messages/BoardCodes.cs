@@ -1851,6 +1851,11 @@ public static class BoardCodes
 	public const string FalconX = "FALCONX";
 
 	/// <summary>
+	/// Zero Hash central limit order book.
+	/// </summary>
+	public const string ZeroHash = "ZEROHASH";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
