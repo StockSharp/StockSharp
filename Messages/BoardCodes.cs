@@ -1876,6 +1876,16 @@ public static class BoardCodes
 	public const string Paxos = "PAXOS";
 
 	/// <summary>
+	/// CoinGecko aggregated crypto assets.
+	/// </summary>
+	public const string CoinGecko = "COINGECKO";
+
+	/// <summary>
+	/// CoinGecko and GeckoTerminal on-chain pools.
+	/// </summary>
+	public const string CoinGeckoOnChain = "CGONCHAIN";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
