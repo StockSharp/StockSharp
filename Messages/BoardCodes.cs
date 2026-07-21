@@ -1856,6 +1856,11 @@ public static class BoardCodes
 	public const string ZeroHash = "ZEROHASH";
 
 	/// <summary>
+	/// BitGo Prime institutional digital-asset trading.
+	/// </summary>
+	public const string BitGo = "BITGO";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

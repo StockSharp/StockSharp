@@ -3510,6 +3510,7 @@
   "Talos": "Talos",
   "FalconX": "FalconX",
   "ZeroHash": "Zero Hash",
+  "BitGo": "BitGo",
   "PacificaAgentWallet": "Agent wallet",
   "PacificaAgentWalletDesc": "Optional Pacifica API agent wallet derived from the configured signing key.",
   "PacificaExpiryWindow": "Signature expiry window",
