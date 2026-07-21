@@ -1891,6 +1891,11 @@ public static class BoardCodes
 	public const string CoinMarketCap = "CMC";
 
 	/// <summary>
+	/// Kaiko institutional cryptocurrency market data.
+	/// </summary>
+	public const string Kaiko = "KAIKO";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
