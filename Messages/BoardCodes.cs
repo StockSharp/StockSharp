@@ -1826,6 +1826,11 @@ public static class BoardCodes
 	public const string Polymarket = "POLYMARKET";
 
 	/// <summary>
+	/// Kalshi event contracts.
+	/// </summary>
+	public const string Kalshi = "KALSHI";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
