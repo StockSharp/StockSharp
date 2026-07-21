@@ -1821,6 +1821,11 @@ public static class BoardCodes
 	public const string GainsNetwork = "GAINS";
 
 	/// <summary>
+	/// Polymarket prediction-market outcome tokens.
+	/// </summary>
+	public const string Polymarket = "POLYMARKET";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
