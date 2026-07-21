@@ -3512,6 +3512,7 @@
   "ZeroHash": "Zero Hash",
   "BitGo": "BitGo",
   "Copper": "Copper",
+  "Anchorage": "Anchorage Digital",
   "PacificaAgentWallet": "Agent wallet",
   "PacificaAgentWalletDesc": "Optional Pacifica API agent wallet derived from the configured signing key.",
   "PacificaExpiryWindow": "Signature expiry window",

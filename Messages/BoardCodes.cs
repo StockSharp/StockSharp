@@ -1866,6 +1866,11 @@ public static class BoardCodes
 	public const string Copper = "COPPER";
 
 	/// <summary>
+	/// Anchorage Digital institutional trading and custody assets.
+	/// </summary>
+	public const string Anchorage = "ANCHORAGE";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
