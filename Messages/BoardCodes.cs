@@ -1841,6 +1841,11 @@ public static class BoardCodes
 	public const string Fireblocks = "FIREBLOCKS";
 
 	/// <summary>
+	/// Talos institutional digital-asset platform.
+	/// </summary>
+	public const string Talos = "TALOS";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
