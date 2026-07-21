@@ -1846,6 +1846,11 @@ public static class BoardCodes
 	public const string Talos = "TALOS";
 
 	/// <summary>
+	/// FalconX institutional digital-asset platform.
+	/// </summary>
+	public const string FalconX = "FALCONX";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
