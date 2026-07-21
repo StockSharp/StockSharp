@@ -803,6 +803,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 /// </summary>
 internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter engine, SecurityId securityId)
 {
+	private sealed class StoredCandle(CandleMessage candle)
+	{
+		public CandleMessage Candle { get; } = candle;
+		public bool IsOpenEmitted { get; set; }
+		public bool IsHighEmitted { get; set; }
+		public bool IsLowEmitted { get; set; }
+	}
+
 	private readonly MarketEmulator _parent = parent;
 	private readonly MatchingEngineAdapter _engine = engine;
 	private SecurityMessage _securityDefinition;
@@ -810,7 +818,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	private long? _ticksSubscription;
 	private long? _candlesSubscription;
 	private bool _candlesNonFinished;
-	private readonly SortedDictionary<DateTime, List<CandleMessage>> _storedCandles = [];
+	private readonly SortedDictionary<DateTime, List<StoredCandle>> _storedCandles = [];
 
 	public SecurityId SecurityId { get; } = securityId;
 
@@ -1084,7 +1092,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 			return null;
 
 		var lastPair = _storedCandles.Last();
-		return lastPair.Value.FirstOrDefault();
+		return lastPair.Value.FirstOrDefault()?.Candle;
 	}
 
 	public void ProcessCandle(CandleMessage candle, List<Message> results)
@@ -1092,7 +1100,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		UpdateSteps(candle.ClosePrice, candle.TotalVolume);
 
 		var candles = _storedCandles.SafeAdd(candle.OpenTime, key => []);
-		candles.Add(candle);
+		candles.Add(new(candle));
 	}
 
 	public void ProcessStoredCandles(DateTime currentTime, List<Message> results)
@@ -1100,50 +1108,52 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		if (_storedCandles.Count == 0)
 			return;
 
+		var candleResults = new List<Message>();
 		List<DateTime> toRemove = null;
 
 		foreach (var pair in _storedCandles)
 		{
-			if (pair.Key >= currentTime)
+			if (pair.Key > currentTime)
 				break;
 
-			toRemove ??= [];
-			toRemove.Add(pair.Key);
+			List<StoredCandle> completed = null;
 
-			if (_candlesNonFinished)
+			foreach (var stored in pair.Value)
 			{
-				foreach (var candle in pair.Value)
+				var candle = stored.Candle;
+				var isCompleted = IsCandleCompleted(candle, currentTime);
+
+				if (_candlesNonFinished)
+					AddDueActiveStates(stored, currentTime, isCompleted, candleResults);
+
+				if (isCompleted)
 				{
-					var openState = candle.TypedClone();
-					openState.State = CandleStates.Active;
-					openState.HighPrice = openState.LowPrice = openState.ClosePrice = openState.OpenPrice;
-					if (candle.OpenTime != default)
-						openState.LocalTime = candle.OpenTime;
-					results.Add(openState);
-
-					var highState = openState.TypedClone();
-					highState.HighPrice = candle.HighPrice;
-					if (candle.HighTime != default)
-						highState.LocalTime = candle.HighTime;
-					results.Add(highState);
-
-					var lowState = openState.TypedClone();
-					lowState.HighPrice = candle.HighPrice;
-					if (candle.LowTime != default)
-						lowState.LocalTime = candle.LowTime;
-					results.Add(lowState);
+					completed ??= [];
+					completed.Add(stored);
 				}
 			}
 
-			results.Add(new TimeMessage { LocalTime = currentTime });
+			if (completed is null)
+				continue;
 
-			foreach (var candle in pair.Value)
+			// Change current time before completed candles are processed.
+			candleResults.Add(new TimeMessage { LocalTime = currentTime });
+
+			foreach (var stored in completed)
 			{
+				var candle = stored.Candle;
 				var finalCandle = candle.TypedClone();
 				finalCandle.LocalTime = currentTime;
-				results.Add(finalCandle);
+				candleResults.Add(finalCandle);
 
-				ApplyCandleToOrderBook(candle, results);
+				ApplyCandleToOrderBook(candle, currentTime, candleResults);
+				pair.Value.Remove(stored);
+			}
+
+			if (pair.Value.Count == 0)
+			{
+				toRemove ??= [];
+				toRemove.Add(pair.Key);
 			}
 		}
 
@@ -1152,9 +1162,80 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 			foreach (var key in toRemove)
 				_storedCandles.Remove(key);
 		}
+
+		if (candleResults.Count == 0)
+			return;
+
+		// A single trigger can release phases from several candle series. Keep those phases
+		// chronological while preserving the legacy position of candle output after any
+		// order/execution results already produced by the triggering message.
+		var ordered = candleResults
+			.OrderBy(message => message.LocalTime == default ? currentTime : message.LocalTime)
+			.ToArray();
+
+		results.AddRange(ordered);
 	}
 
-	private void ApplyCandleToOrderBook(CandleMessage candle, List<Message> results)
+	private static bool IsCandleCompleted(CandleMessage candle, DateTime currentTime)
+	{
+		var openTime = candle.OpenTime != default ? candle.OpenTime : candle.LocalTime;
+		var closeTime = candle.CloseTime;
+
+		// Time-frame and other time-bounded candles must remain pending until their own
+		// close. Falling back to the legacy next-message rule keeps candles without a
+		// meaningful CloseTime (for example externally supplied non-time candles) working.
+		return closeTime != default && closeTime > openTime
+			? closeTime <= currentTime
+			: openTime < currentTime;
+	}
+
+	private static bool IsActiveStateDue(DateTime stateTime, DateTime currentTime, bool isCompleted)
+		=> stateTime < currentTime || (isCompleted && stateTime <= currentTime);
+
+	private static CandleMessage CreateOpenState(CandleMessage candle, DateTime openTime)
+	{
+		var openState = candle.TypedClone();
+		openState.State = CandleStates.Active;
+		openState.HighPrice = openState.LowPrice = openState.ClosePrice = openState.OpenPrice;
+		openState.LocalTime = openTime;
+		return openState;
+	}
+
+	private static void AddDueActiveStates(StoredCandle stored, DateTime currentTime, bool isCompleted, List<Message> results)
+	{
+		var candle = stored.Candle;
+		var openTime = candle.OpenTime != default ? candle.OpenTime : candle.LocalTime;
+		var highTime = candle.HighTime != default ? candle.HighTime : openTime;
+		var lowTime = candle.LowTime != default ? candle.LowTime : openTime;
+
+		if (!stored.IsOpenEmitted && IsActiveStateDue(openTime, currentTime, isCompleted))
+		{
+			stored.IsOpenEmitted = true;
+			results.Add(CreateOpenState(candle, openTime));
+		}
+
+		if (!stored.IsHighEmitted && IsActiveStateDue(highTime, currentTime, isCompleted))
+		{
+			stored.IsHighEmitted = true;
+
+			var highState = CreateOpenState(candle, openTime);
+			highState.HighPrice = candle.HighPrice;
+			highState.LocalTime = highTime;
+			results.Add(highState);
+		}
+
+		if (!stored.IsLowEmitted && IsActiveStateDue(lowTime, currentTime, isCompleted))
+		{
+			stored.IsLowEmitted = true;
+
+			var lowState = CreateOpenState(candle, openTime);
+			lowState.HighPrice = candle.HighPrice;
+			lowState.LocalTime = lowTime;
+			results.Add(lowState);
+		}
+	}
+
+	private void ApplyCandleToOrderBook(CandleMessage candle, DateTime currentTime, List<Message> results)
 	{
 		IsCandleMatchingMode = true;
 
@@ -1166,7 +1247,7 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 
 		if (_depthSubscription.HasValue)
 		{
-			results.Add(engineState.OrderBook.ToMessage(candle.OpenTime, candle.OpenTime));
+			results.Add(engineState.OrderBook.ToMessage(currentTime, currentTime));
 		}
 	}
 }

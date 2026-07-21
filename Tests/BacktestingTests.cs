@@ -630,6 +630,275 @@ public class BacktestingTests : BaseTestClass
 		return connector;
 	}
 
+	private sealed class MultiTimeFrameTradingStrategy : Strategy
+	{
+		private readonly Lock _sync = new();
+		private readonly List<(TimeSpan TimeFrame, DateTime CandleTime, CandleStates State, DateTime StrategyTime)> _observations = [];
+		private bool _isDailyBullish;
+		private bool _entrySubmitted;
+
+		public (TimeSpan TimeFrame, DateTime CandleTime, CandleStates State, DateTime StrategyTime)[] Observations
+		{
+			get
+			{
+				using (_sync.EnterScope())
+					return [.. _observations];
+			}
+		}
+
+		public DateTime? EntrySignalTime { get; private set; }
+		public DateTime? EntryStrategyTime { get; private set; }
+		public Order EntryOrder { get; private set; }
+		public DateTime EntryFrom { get; set; }
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			SubscribeCandles(TimeSpan.FromDays(1), isFinishedOnly: false)
+				.Bind(candle => ProcessCandle(TimeSpan.FromDays(1), candle))
+				.Start();
+
+			SubscribeCandles(TimeSpan.FromMinutes(5), isFinishedOnly: false)
+				.Bind(candle => ProcessCandle(TimeSpan.FromMinutes(5), candle))
+				.Start();
+		}
+
+		private void ProcessCandle(TimeSpan timeFrame, ICandleMessage candle)
+		{
+			var strategyTime = CurrentTime;
+
+			using (_sync.EnterScope())
+				_observations.Add((timeFrame, candle.LocalTime, candle.State, strategyTime));
+
+			if (timeFrame == TimeSpan.FromDays(1))
+			{
+				if (candle.State == CandleStates.Finished && candle.CloseTime <= EntryFrom)
+					_isDailyBullish = candle.ClosePrice > candle.OpenPrice;
+
+				return;
+			}
+
+			if (candle.State != CandleStates.Finished || candle.LocalTime < EntryFrom || !_isDailyBullish || _entrySubmitted)
+				return;
+
+			_entrySubmitted = true;
+			EntrySignalTime = candle.LocalTime;
+			EntryStrategyTime = strategyTime;
+			EntryOrder = BuyMarket(Volume);
+		}
+	}
+
+	/// <summary>
+	/// Regression test for GitHub issue #680. A real strategy consumes daily and five-minute
+	/// candles, uses the previous completed daily candle as a filter, and submits an order on
+	/// the first eligible intraday candle. Neither candle callbacks nor the order are allowed
+	/// to inherit a future time from the still-active daily candle.
+	/// </summary>
+	[TestMethod]
+	[Timeout(30_000, CooperativeCancellation = true)]
+	public async Task MultiTimeFrameStrategy_DoesNotLeakDailyFutureTimeIntoIntradayTrading()
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var dailyTimeFrame = TimeSpan.FromDays(1);
+		var intradayTimeFrame = TimeSpan.FromMinutes(5);
+		var previousDay = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		var tradingDay = previousDay.AddDays(1);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		static TimeFrameCandleMessage CreateCandle(
+			SecurityId securityId,
+			TimeSpan timeFrame,
+			DateTime openTime,
+			DateTime highTime,
+			DateTime lowTime,
+			decimal open,
+			decimal high,
+			decimal low,
+			decimal close,
+			decimal volume)
+			=> new()
+			{
+				SecurityId = securityId,
+				TypedArg = timeFrame,
+				DataType = timeFrame.TimeFrame(),
+				OpenTime = openTime,
+				HighTime = highTime,
+				LowTime = lowTime,
+				CloseTime = openTime + timeFrame,
+				OpenPrice = open,
+				HighPrice = high,
+				LowPrice = low,
+				ClosePrice = close,
+				TotalVolume = volume,
+				State = CandleStates.Finished,
+			};
+
+		var dailyCandles = new[]
+		{
+			// A legitimately completed candle provides the strategy's daily trend filter.
+			CreateCandle(secId, dailyTimeFrame, previousDay,
+				previousDay.AddHours(10), previousDay.AddHours(20),
+				100, 110, 90, 105, 1_000),
+
+			// Its High/Low are still in the future when the first five-minute candle completes.
+			CreateCandle(secId, dailyTimeFrame, tradingDay,
+				tradingDay.AddMinutes(10), tradingDay.AddMinutes(20),
+				105, 115, 95, 110, 1_000),
+		};
+
+		var intradayCandles = Enumerable.Range(0, 7)
+			.Select(i =>
+			{
+				var openTime = tradingDay.AddMinutes(i * 5);
+				var open = 100m + i;
+
+				return CreateCandle(secId, intradayTimeFrame, openTime,
+					openTime.AddMinutes(2), openTime.AddMinutes(4),
+					open, open + 2, open - 1, open + 1, 100);
+			})
+			.ToArray();
+
+		await storageRegistry
+			.GetTimeFrameCandleMessageStorage(secId, dailyTimeFrame)
+			.SaveAsync(dailyCandles, CancellationToken);
+
+		await storageRegistry
+			.GetTimeFrameCandleMessageStorage(secId, intradayTimeFrame)
+			.SaveAsync(intradayCandles, CancellationToken);
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+
+		using var connector = CreateDeterministicConnector(
+			secProvider,
+			pfProvider,
+			storageRegistry,
+			previousDay,
+			tradingDay.AddMinutes(31));
+
+		var strategy = new MultiTimeFrameTradingStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			EntryFrom = tradingDay.AddMinutes(5),
+			WaitRulesOnStop = false,
+		};
+
+		var errors = new List<string>();
+		var errorsSync = new Lock();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.Error += error =>
+		{
+			using (errorsSync.EnterScope())
+				errors.Add($"Connector: {error.Message}");
+		};
+
+		strategy.Error += (_, error) =>
+		{
+			using (errorsSync.EnterScope())
+				errors.Add($"Strategy: {error.Message}");
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		strategy.Reset();
+		strategy.Start();
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(
+			stopped.Task,
+			Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
+
+		if (completed != stopped.Task)
+		{
+			connector.Disconnect();
+			Fail("Multi-timeframe backtest did not complete in time.");
+		}
+
+		var observations = strategy.Observations;
+		var violations = new List<string>();
+
+		using (errorsSync.EnterScope())
+			violations.AddRange(errors);
+
+		if (!observations.Any(o => o.TimeFrame == dailyTimeFrame))
+			violations.Add("The strategy received no daily candles.");
+
+		if (!observations.Any(o => o.TimeFrame == intradayTimeFrame))
+			violations.Add("The strategy received no five-minute candles.");
+
+		for (var i = 1; i < observations.Length; i++)
+		{
+			var previous = observations[i - 1];
+			var current = observations[i];
+
+			if (current.CandleTime < previous.CandleTime)
+			{
+				violations.Add(
+					$"Candle callback time moved backwards: {previous.TimeFrame} at {previous.CandleTime:O} -> " +
+					$"{current.TimeFrame} at {current.CandleTime:O}.");
+			}
+		}
+
+		foreach (var observation in observations)
+		{
+			if (observation.StrategyTime != observation.CandleTime)
+			{
+				violations.Add(
+					$"Strategy time {observation.StrategyTime:O} does not match " +
+					$"{observation.TimeFrame} candle callback time {observation.CandleTime:O} ({observation.State}).");
+			}
+		}
+
+		var expectedSignalTime = tradingDay.AddMinutes(5);
+
+		if (strategy.EntrySignalTime is not DateTime signalTime)
+		{
+			violations.Add("The strategy did not produce an intraday entry signal.");
+		}
+		else
+		{
+			if (signalTime != expectedSignalTime)
+				violations.Add($"Entry signal time is {signalTime:O}; expected {expectedSignalTime:O}.");
+
+			if (strategy.EntryStrategyTime != signalTime)
+			{
+				violations.Add(
+					$"Entry saw strategy time {strategy.EntryStrategyTime:O} for a candle at {signalTime:O}.");
+			}
+
+			if (strategy.EntryOrder is null)
+			{
+				violations.Add("The strategy did not submit its entry order.");
+			}
+			else if (strategy.EntryOrder.Time != signalTime)
+			{
+				violations.Add(
+					$"Entry order time is {strategy.EntryOrder.Time:O}; signal candle time is {signalTime:O}.");
+			}
+		}
+
+		if (!strategy.MyTrades.Any())
+			violations.Add("The entry order produced no own trade.");
+
+		IsTrue(violations.Count == 0,
+			$"Multi-timeframe strategy exposed {violations.Count} time/order violation(s):\n" +
+			string.Join(Environment.NewLine, violations.Take(30)));
+	}
+
 	/// <summary>
 	/// Tests that orders are generated during backtesting when SMA crossover occurs.
 	/// </summary>

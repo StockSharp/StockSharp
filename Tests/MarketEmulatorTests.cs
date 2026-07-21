@@ -1061,6 +1061,110 @@ public class MarketEmulatorTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task CandleUpdates_MultipleTimeFrames_DoNotMoveTimeBackwards()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var dayStart = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		var dailySubscriptionId = _idGenerator.GetNextId();
+		var fiveMinuteSubscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = dailySubscriptionId,
+			DataType2 = TimeSpan.FromDays(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+			IsFinishedOnly = false,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = fiveMinuteSubscriptionId,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+			IsFinishedOnly = false,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OriginalTransactionId = dailySubscriptionId,
+			TypedArg = TimeSpan.FromDays(1),
+			LocalTime = dayStart,
+			OpenTime = dayStart,
+			HighTime = dayStart.AddHours(10),
+			LowTime = dayStart.AddHours(20),
+			CloseTime = dayStart.AddDays(1),
+			OpenPrice = 100,
+			HighPrice = 110,
+			LowPrice = 90,
+			ClosePrice = 105,
+			TotalVolume = 100,
+			State = CandleStates.Finished,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OriginalTransactionId = fiveMinuteSubscriptionId,
+			TypedArg = TimeSpan.FromMinutes(5),
+			LocalTime = dayStart,
+			OpenTime = dayStart,
+			HighTime = dayStart.AddMinutes(2),
+			LowTime = dayStart.AddMinutes(4),
+			CloseTime = dayStart.AddMinutes(5),
+			OpenPrice = 100,
+			HighPrice = 102,
+			LowPrice = 99,
+			ClosePrice = 101,
+			TotalVolume = 10,
+			State = CandleStates.Finished,
+		}, CancellationToken);
+
+		res.Clear();
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = dayStart.AddMinutes(5) }, CancellationToken);
+
+		var intradayUpdates = res
+			.OfType<TimeFrameCandleMessage>()
+			.Where(c => c.State == CandleStates.Active)
+			.ToArray();
+
+		AreEqual(4, intradayUpdates.Length);
+		IsTrue(intradayUpdates.All(c => c.LocalTime <= dayStart.AddMinutes(5)));
+		IsFalse(res
+			.OfType<TimeFrameCandleMessage>()
+			.Any(c => c.TypedArg == TimeSpan.FromDays(1) && c.State == CandleStates.Finished),
+			"The daily candle must remain pending while only five minutes of its interval have elapsed.");
+
+		res.Clear();
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = dayStart.AddDays(1) }, CancellationToken);
+
+		var updates = intradayUpdates
+			.Concat(res
+				.OfType<TimeFrameCandleMessage>()
+				.Where(c => c.State == CandleStates.Active))
+			.ToArray();
+
+		AreEqual(6, updates.Length);
+		IsTrue(res
+			.OfType<TimeFrameCandleMessage>()
+			.Any(c => c.TypedArg == TimeSpan.FromDays(1) && c.State == CandleStates.Finished),
+			"The daily candle must finish when its own interval closes.");
+
+		for (var i = 1; i < updates.Length; i++)
+		{
+			var previous = updates[i - 1];
+			var current = updates[i];
+
+			IsTrue(previous.LocalTime <= current.LocalTime,
+				$"Candle updates moved backwards from {previous.TypedArg} at {previous.LocalTime:O} " +
+				$"to {current.TypedArg} at {current.LocalTime:O}.");
+		}
+	}
+
+	[TestMethod]
 	public async Task CandleExecution()
 	{
 		var id = Helper.CreateSecurityId();
