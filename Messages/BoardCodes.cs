@@ -1896,6 +1896,11 @@ public static class BoardCodes
 	public const string Kaiko = "KAIKO";
 
 	/// <summary>
+	/// CoinAPI normalized cryptocurrency market data.
+	/// </summary>
+	public const string CoinApi = "COINAPI";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
