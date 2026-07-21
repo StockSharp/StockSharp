@@ -1886,6 +1886,11 @@ public static class BoardCodes
 	public const string CoinGeckoOnChain = "CGONCHAIN";
 
 	/// <summary>
+	/// CoinMarketCap aggregated cryptocurrency assets.
+	/// </summary>
+	public const string CoinMarketCap = "CMC";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
