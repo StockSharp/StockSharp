@@ -1936,6 +1936,11 @@ public static class BoardCodes
 	public const string Pyth = "PYTH";
 
 	/// <summary>
+	/// Chainlink Data Streams market data.
+	/// </summary>
+	public const string ChainlinkDataStreams = "CHAINLINKDS";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
