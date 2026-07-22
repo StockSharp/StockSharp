@@ -3417,6 +3417,7 @@
   "Private": "Private",
   "PrivateProduct": "Visible and available to selected users only",
   "PrizmBit": "PrizmBit",
+  "ProBit": "ProBit Global",
   "ProcessMustBeStopped": "Operation must be stopped. Would you like to do it now?",
   "ProcessNoise": "Process Noise",
   "ProcessNoiseDesc": "Process noise coefficient (Q) - controls the filter\u0027s adaptability to price changes",

@@ -300,6 +300,7 @@ connector.Connect();
 |<img src="./Media/logos/weex_logo.svg" height="30" /> |WEEX | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/weex.html" target="_blank">文档</a> |
 |<img src="./Media/logos/coinw_logo.svg" height="30" /> |CoinW | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/coinw.html" target="_blank">文档</a> |
 |<img src="./Media/logos/pionex_logo.svg" height="30" /> |Pionex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/pionex.html" target="_blank">文档</a> |
+|<img src="./Media/logos/probit_logo.svg" height="30" /> |ProBit Global | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/probit.html" target="_blank">文档</a> |
 |<img src="./Media/logos/xtcom_logo.svg" height="30" /> |XT.COM | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/xtcom.html" target="_blank">文档</a> |
 |<img src="./Media/logos/phemex_logo.svg" height="30" /> |Phemex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/phemex.html" target="_blank">文档</a> |
 |<img src="./Media/logos/bullish_logo.svg" height="30" /> |Bullish | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bullish.html" target="_blank">文档</a> |

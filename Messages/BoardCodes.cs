@@ -1356,6 +1356,11 @@ public static class BoardCodes
 	public const string PionexFutures = "PNXF";
 
 	/// <summary>
+	/// ProBit Global spot market.
+	/// </summary>
+	public const string ProBit = "PROBIT";
+
+	/// <summary>
 	/// <see cref="Xt"/> spot market.
 	/// </summary>
 	public const string Xt = "XTCOM";
