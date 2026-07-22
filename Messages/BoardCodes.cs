@@ -1901,6 +1901,11 @@ public static class BoardCodes
 	public const string CoinApi = "COINAPI";
 
 	/// <summary>
+	/// Amberdata normalized cryptocurrency market data.
+	/// </summary>
+	public const string Amberdata = "AMBERDATA";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
