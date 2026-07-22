@@ -1926,6 +1926,11 @@ public static class BoardCodes
 	public const string Tardis = "TARDIS";
 
 	/// <summary>
+	/// Velo Data market analytics.
+	/// </summary>
+	public const string VeloData = "VELODATA";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
