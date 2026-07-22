@@ -3519,6 +3519,7 @@
   "Kaiko": "Kaiko",
   "CoinApi": "CoinAPI",
   "Amberdata": "Amberdata",
+  "CoinMetrics": "Coin Metrics",
   "PacificaAgentWallet": "Agent wallet",
   "PacificaAgentWalletDesc": "Optional Pacifica API agent wallet derived from the configured signing key.",
   "PacificaExpiryWindow": "Signature expiry window",

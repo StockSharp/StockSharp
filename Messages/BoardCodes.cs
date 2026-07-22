@@ -1906,6 +1906,11 @@ public static class BoardCodes
 	public const string Amberdata = "AMBERDATA";
 
 	/// <summary>
+	/// Coin Metrics market and network data.
+	/// </summary>
+	public const string CoinMetrics = "COINMETRICS";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
