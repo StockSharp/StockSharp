@@ -1911,6 +1911,11 @@ public static class BoardCodes
 	public const string CoinMetrics = "COINMETRICS";
 
 	/// <summary>
+	/// Glassnode digital-asset data.
+	/// </summary>
+	public const string Glassnode = "GLASSNODE";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
