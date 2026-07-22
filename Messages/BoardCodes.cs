@@ -811,6 +811,11 @@ public static class BoardCodes
 	public const string FXOpen = "FXOPEN";
 
 	/// <summary>
+	/// StocksTrader markets.
+	/// </summary>
+	public const string StocksTrader = "STTR";
+
+	/// <summary>
 	/// <see cref="Poloniex"/>.
 	/// </summary>
 	public const string Poloniex = "PLNX";
