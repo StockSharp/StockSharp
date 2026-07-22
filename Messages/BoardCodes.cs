@@ -1916,6 +1916,11 @@ public static class BoardCodes
 	public const string Glassnode = "GLASSNODE";
 
 	/// <summary>
+	/// CryptoQuant digital-asset data.
+	/// </summary>
+	public const string CryptoQuant = "CRYPTOQUANT";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
