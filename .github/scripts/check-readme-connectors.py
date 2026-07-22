@@ -132,6 +132,55 @@ def parse_all_connector_names(lines_by_lang: dict[str, list[str]]) -> dict[str, 
     return names
 
 
+def validate_logo_assets(lines_by_lang: dict[str, list[str]]) -> bool:
+    rows: list[tuple[str, str, str | None]] = []
+
+    for titles in COMMON_SECTIONS.values():
+        for lang, title in titles.items():
+            rows.extend(
+                (lang, name, logo)
+                for name, logo in parse_connector_rows(lines_by_lang[lang], title)
+            )
+
+    for lang, titles in KNOWN_LOCAL_SECTIONS.items():
+        for title in titles:
+            rows.extend(
+                (lang, name, logo)
+                for name, logo in parse_connector_rows(lines_by_lang[lang], title)
+            )
+
+    ok = True
+    referenced: set[str] = set()
+
+    for lang, name, logo in rows:
+        if not logo:
+            ok = False
+            print(f"DIFF connector-logo {lang}/{name}: missing logo path")
+            continue
+
+        referenced.add(logo)
+        if Path(logo).suffix.lower() != ".svg":
+            ok = False
+            print(f"DIFF connector-logo {lang}/{name}: expected SVG, got {logo}")
+            continue
+
+        if not (ROOT / "Media" / "logos" / logo).is_file():
+            ok = False
+            print(f"DIFF connector-logo {lang}/{name}: file not found: {logo}")
+
+    png_assets = sorted((ROOT / "Media" / "logos").glob("*.png"))
+    if png_assets:
+        ok = False
+        print("DIFF connector-logo assets: PNG files remain")
+        for path in png_assets:
+            print(f"  {path.relative_to(ROOT)}")
+
+    if ok:
+        print(f"OK connector-logo-assets: rows={len(rows)}, unique={len(referenced)}, format=svg")
+
+    return ok
+
+
 def compare_ordered(label: str, values: dict[str, list[str]], *, allow_duplicates: bool = False) -> bool:
     base_lang = "en"
     base = values[base_lang]
@@ -207,6 +256,8 @@ def main() -> int:
         for title in titles:
             rows = parse_connector_rows(lines_by_lang[lang], title)
             print(f"INFO local-only {lang}/{title}: count={len(rows)}")
+
+    ok &= validate_logo_assets(lines_by_lang)
 
     if args.metadata_since:
         ok &= compare_recent_metadata(args.metadata_since, lines_by_lang)

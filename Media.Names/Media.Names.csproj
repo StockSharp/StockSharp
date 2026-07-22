@@ -4,7 +4,6 @@
     <RootNamespace>StockSharp.Media</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <AdditionalFiles Include="..\Media\logos\*.png" />
     <AdditionalFiles Include="..\Media\logos\*.svg" />
   </ItemGroup>
   <ItemGroup>
