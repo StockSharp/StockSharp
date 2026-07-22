@@ -931,6 +931,11 @@ public static class BoardCodes
 	public const string Exmo = "EXMO";
 
 	/// <summary>
+	/// Deriv Options markets.
+	/// </summary>
+	public const string Deriv = "DERIV";
+
+	/// <summary>
 	/// <see cref="Deribit"/>.
 	/// </summary>
 	public const string Deribit = "DRBT";
