@@ -1921,6 +1921,11 @@ public static class BoardCodes
 	public const string CryptoQuant = "CRYPTOQUANT";
 
 	/// <summary>
+	/// Tardis.dev normalized market data.
+	/// </summary>
+	public const string Tardis = "TARDIS";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";
