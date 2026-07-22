@@ -373,7 +373,7 @@ connector.Connect();
 |<img src="./Media/logos/xopenhub_logo.png" height="30" /> |X Open Hub | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/xopenhub.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/mt4_logo.svg" height="30" /> |MT4 | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/metatrader.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/mt5_logo.svg" height="30" /> |MT5 | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/metatrader.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/dukascopy_logo.svg" height="30" /> |DukasCopy | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/dukascopy.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/dukascopy_logo.svg" height="30" /> |DukasCopyLive | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/dukascopy.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fxcm_logo.svg" height="30" /> |FXCM | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/fxcm.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/lmax_logo.svg" height="30" /> |LMAX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/lmax.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/oanda_logo.svg" height="30" /> |Oanda | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/oanda.html" target="_blank">Docs</a> |

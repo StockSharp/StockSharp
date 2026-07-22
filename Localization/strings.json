@@ -1182,6 +1182,7 @@
   "DriveMustBeLocal": "Drive must be local.",
   "DSP": "DSP",
   "DukasCopy": "Dukascopy",
+  "DukasCopyLive": "Dukascopy Live",
   "DumpBooks": "Save order book log",
   "DumpOnError": "Dump on Error",
   "DumpOnErrorDesc": "Save system data when an error occurs for analysis",
