@@ -806,6 +806,11 @@ public static class BoardCodes
 	public const string Fxcm = "FXCM";
 
 	/// <summary>
+	/// FXOpen TickTrader markets.
+	/// </summary>
+	public const string FXOpen = "FXOPEN";
+
+	/// <summary>
 	/// <see cref="Poloniex"/>.
 	/// </summary>
 	public const string Poloniex = "PLNX";
