@@ -1931,6 +1931,11 @@ public static class BoardCodes
 	public const string VeloData = "VELODATA";
 
 	/// <summary>
+	/// Pyth Pro market data.
+	/// </summary>
+	public const string Pyth = "PYTH";
+
+	/// <summary>
 	/// <see cref="EdgeXSpot"/>
 	/// </summary>
 	public const string EdgeXSpot = "EDXSP";

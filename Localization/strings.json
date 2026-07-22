@@ -3524,6 +3524,7 @@
   "CryptoQuant": "CryptoQuant",
   "Tardis": "Tardis.dev",
   "VeloData": "Velo Data",
+  "Pyth": "Pyth",
   "PacificaAgentWallet": "Agent wallet",
   "PacificaAgentWalletDesc": "Optional Pacifica API agent wallet derived from the configured signing key.",
   "PacificaExpiryWindow": "Signature expiry window",
