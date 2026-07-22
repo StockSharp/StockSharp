@@ -11,6 +11,5 @@
   <ItemGroup>
     <None Remove="*.gif" />
     <None Remove="*.png" />
-    <None Remove="SLogo.svg" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-<img src="./Media/SLogo.svg" align="right" />
+<img src="./Media/SLogo.png" align="right" />
 
 # [StockSharp - торговая платформа][1]
 

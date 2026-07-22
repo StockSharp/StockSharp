@@ -6,7 +6,7 @@ Media is a library of images and icons used across the StockSharp platform. It p
 
 - **Logos** – located under the `logos` folder. Includes SVG files for dozens of trading venues.
 - **Product banners** – animated GIFs for applications such as Hydra, Terminal and Shell.
-- **Application logo** – `SLogo.svg` used in the main README and other places.
+- **Application logo** – `SLogo.png` used in the main README and other places.
 
 The `Media.csproj` project is a .NET `WindowsDesktop` class library that exposes these files as resources. It is referenced by other solutions inside StockSharp to show broker/exchange logos and product banners.
 
@@ -33,4 +33,3 @@ To use the icons in your own project:
 2. Add a reference to `Media.Names` to get the generated constants. The build will require the .NET SDK with WindowsDesktop workload because `Media.csproj` uses `Microsoft.NET.Sdk.WindowsDesktop`.
 
 After referencing you can load any image via `MediaNames` constants as shown above.
-
