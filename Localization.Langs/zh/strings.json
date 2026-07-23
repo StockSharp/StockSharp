@@ -2594,6 +2594,7 @@
   "MessageTextMax": "消息文本超出了最大允许长度。",
   "MessageWithError": "消息 \u0027{0}\u0027 引发了一个错误。",
   "Messages": "消息",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "方法必须在派生类中实现。",
   "Mexc": "MEXC",

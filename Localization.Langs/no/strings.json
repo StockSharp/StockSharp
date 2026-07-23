@@ -2594,6 +2594,7 @@
   "MessageTextMax": "Meldingsteksten har overskredet den maksimalt tillatte lengden.",
   "MessageWithError": "Meldingen \u0027{0}\u0027 forårsaket en feil.",
   "Messages": "Meldinger",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "Metoden må implementeres i den avledede klassen.",
   "Mexc": "MEXC",

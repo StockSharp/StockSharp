@@ -2594,6 +2594,7 @@
   "MessageTextMax": "Text správy prekročil maximálnu povolenú dĺžku.",
   "MessageWithError": "Správa \u0027{0}\u0027 spôsobila chybu.",
   "Messages": "Správy",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "Metóda musí byť implementovaná v odvodenej triede.",
   "Mexc": "MEXC",

@@ -2594,6 +2594,7 @@
   "MessageTextMax": "Textul mesajului a depășit lungimea maximă permisă.",
   "MessageWithError": "Mesajul \u0027{0}\u0027 a cauzat o eroare.",
   "Messages": "Mesaje",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "Metoda trebuie implementată în clasa derivată.",
   "Mexc": "MEXC",

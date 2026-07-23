@@ -2594,6 +2594,7 @@
   "MessageTextMax": "Текст сообщения превысил максимально допустимую длину.",
   "MessageWithError": "Сообщение \u0027{0}\u0027 вызвало ошибку.",
   "Messages": "Сообщения",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "Метод должен быть реализован в наследуемом классе.",
   "Mexc": "MEXC",

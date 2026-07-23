@@ -2594,6 +2594,7 @@
   "MessageTextMax": "メッセージのテキストが許可される最大長を超えました。",
   "MessageWithError": "メッセージ \u0027{0}\u0027 がエラーを引き起こしました。",
   "Messages": "メッセージ",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "メソッドは派生クラスで実装される必要があります。",
   "Mexc": "MEXC",

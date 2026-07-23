@@ -816,6 +816,11 @@ public static class BoardCodes
 	public const string StocksTrader = "STTR";
 
 	/// <summary>
+	/// MetaApi markets.
+	/// </summary>
+	public const string MetaApi = "METAAPI";
+
+	/// <summary>
 	/// <see cref="Poloniex"/>.
 	/// </summary>
 	public const string Poloniex = "PLNX";

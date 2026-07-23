@@ -2594,6 +2594,7 @@
   "MessageTextMax": "메시지 텍스트가 허용된 최대 길이를 초과하였습니다.",
   "MessageWithError": "메시지 \u0027{0}\u0027가 오류를 발생시켰습니다.",
   "Messages": "메시지",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "메소드는 파생 클래스에서 구현되어야 합니다.",
   "Mexc": "MEXC",

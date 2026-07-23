@@ -2594,6 +2594,7 @@
   "MessageTextMax": "Mesaj metni izin verilen maksimum uzunluğu aştı.",
   "MessageWithError": "Mesaj \u0027{0}\u0027 bir hataya neden oldu.",
   "Messages": "Mesajlar",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "Yöntem türetilmiş sınıfta gerçekleştirilmelidir.",
   "Mexc": "MEXC",

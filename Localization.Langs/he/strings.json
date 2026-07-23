@@ -2594,6 +2594,7 @@
   "MessageTextMax": "טקסט ההודעה חרג מהאורך המרבי המותר.",
   "MessageWithError": "ההודעה \u0027{0}\u0027 גרמה לשגיאה.",
   "Messages": "הודעות",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "השיטה חייבת להיות ממומשת במחלקה הנגזרת.",
   "Mexc": "MEXC",

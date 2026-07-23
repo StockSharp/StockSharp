@@ -2594,6 +2594,7 @@
   "MessageTextMax": "Το κείμενο του μηνύματος υπερέβη το μέγιστο επιτρεπτό μήκος.",
   "MessageWithError": "Το μήνυμα \u0027{0}\u0027 προκάλεσε σφάλμα.",
   "Messages": "Μηνύματα",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "Η μέθοδος πρέπει να υλοποιηθεί στην κληρονομούμενη κλάση.",
   "Mexc": "MEXC",

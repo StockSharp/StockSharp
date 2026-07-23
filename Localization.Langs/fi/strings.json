@@ -2594,6 +2594,7 @@
   "MessageTextMax": "Viestin teksti on ylittänyt sallitun enimmäispituuden.",
   "MessageWithError": "Viesti \u0027{0}\u0027 aiheutti virheen.",
   "Messages": "Viestit",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "Metodin on oltava toteutettu johdetussa luokassa.",
   "Mexc": "MEXC",

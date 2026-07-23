@@ -2594,6 +2594,7 @@
   "MessageTextMax": "Văn bản tin nhắn đã vượt quá độ dài tối đa cho phép.",
   "MessageWithError": "Tin nhắn \u0027{0}\u0027 đã gây ra lỗi.",
   "Messages": "Tin nhắn",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "Phương thức phải được triển khai trong lớp dẫn xuất.",
   "Mexc": "MEXC",

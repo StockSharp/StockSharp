@@ -2594,6 +2594,7 @@
   "MessageTextMax": "মেসেজ টেক্সট সর্বাধিক অনুমোদিত দৈর্ঘ্য অতিক্রম করেছে।",
   "MessageWithError": "মেসেজ \u0027{0}\u0027 একটি ত্রুটি ঘটিয়েছে।",
   "Messages": "মেসেজ",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "মেথডটি ইনহেরিটেড ক্লাসে ইমপ্লিমেন্ট করতে হবে।",
   "Mexc": "MEXC",

@@ -2594,6 +2594,7 @@
   "MessageTextMax": "Ang text ng mensahe ay lumampas sa pinapayagang haba.",
   "MessageWithError": "Ang mensahe \u0027{0}\u0027 ay nagdulot ng error.",
   "Messages": "Mga mensahe",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "Ang method ay dapat ipatupad sa inherited class.",
   "Mexc": "MEXC",

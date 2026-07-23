@@ -2594,6 +2594,7 @@
   "MessageTextMax": "متن پیام از طول حداکثر مجاز تجاوز کرده است.",
   "MessageWithError": "پیام \u0027{0}\u0027 باعث خطا شد.",
   "Messages": "پیام‌ها",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "متد باید در کلاس مشتق شده پیاده‌سازی شود.",
   "Mexc": "MEXC",

@@ -288,6 +288,7 @@ connector.Connect();
 |<img src="./Media/logos/fxopen_logo.svg" height="30" /> |FXOpen TickTrader | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/fxopen.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/deriv_logo.svg" height="30" /> |Deriv | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/deriv.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/stockstrader_logo.svg" height="30" /> |StocksTrader | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/stocks_trader.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/metaapi_logo.svg" height="30" /> |MetaApi | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/metaapi.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/lmax_logo.svg" height="30" /> |LMAX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/lmax.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/oanda_logo.svg" height="30" /> |Oanda | <a href="https://doc.stocksharp.com/en/topics/api/connectors/forex/oanda.html" target="_blank">Docs</a> |
 

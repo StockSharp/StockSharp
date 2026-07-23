@@ -2594,6 +2594,7 @@
   "MessageTextMax": "Текст поруке премашио је максимално дозвољену дужину.",
   "MessageWithError": "Порука \u0027{0}\u0027 је изазвала грешку.",
   "Messages": "Поруке",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "Метод треба да буде имплементиран у изведеној класи.",
   "Mexc": "MEXC",

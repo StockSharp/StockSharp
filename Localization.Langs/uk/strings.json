@@ -2594,6 +2594,7 @@
   "MessageTextMax": "Текст повідомлення перевищив максимально допустиму довжину.",
   "MessageWithError": "Повідомлення \u0027{0}\u0027 спричинило помилку.",
   "Messages": "Повідомлення",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "Метод має бути реалізований у похідному класі.",
   "Mexc": "MEXC",

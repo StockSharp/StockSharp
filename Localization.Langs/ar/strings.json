@@ -2594,6 +2594,7 @@
   "MessageTextMax": "تجاوز نص الرسالة الطول الأقصى المسموح به.",
   "MessageWithError": "الرسالة \u0027{0}\u0027 تسببت في خطأ.",
   "Messages": "الرسائل",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "يجب تطبيق الطريقة في الفئة المشتقة.",
   "Mexc": "MEXC",

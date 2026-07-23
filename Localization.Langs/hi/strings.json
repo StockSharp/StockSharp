@@ -2594,6 +2594,7 @@
   "MessageTextMax": "संदेश पाठ ने अनुमत अधिकतम लंबाई को पार कर लिया है।",
   "MessageWithError": "संदेश \u0027{0}\u0027 ने एक त्रुटि को प्रेरित किया है।",
   "Messages": "संदेश",
+  "MetaApi": "MetaApi",
   "Meteora": "Meteora DLMM",
   "MethodMustBeOverrided": "मेथड को व्युत्पन्न क्लास में लागू किया जाना चाहिए।",
   "Mexc": "MEXC",
