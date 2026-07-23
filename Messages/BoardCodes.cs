@@ -821,6 +821,11 @@ public static class BoardCodes
 	public const string MetaApi = "METAAPI";
 
 	/// <summary>
+	/// MetaTrader 5 terminal markets.
+	/// </summary>
+	public const string MetaTrader5 = "MT5";
+
+	/// <summary>
 	/// <see cref="Poloniex"/>.
 	/// </summary>
 	public const string Poloniex = "PLNX";
