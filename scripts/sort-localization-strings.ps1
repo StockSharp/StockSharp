@@ -9,13 +9,14 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repoRoot = Split-Path -Parent $scriptRoot
 
 if ([string]::IsNullOrWhiteSpace($BaseFile)) {
-	$BaseFile = Join-Path $scriptRoot 'strings.json'
+	$BaseFile = Join-Path $repoRoot 'Localization\strings.json'
 }
 
 if ([string]::IsNullOrWhiteSpace($LanguagesRoot)) {
-	$LanguagesRoot = Join-Path $scriptRoot '..\Localization.Langs'
+	$LanguagesRoot = Join-Path $repoRoot 'Localization.Langs'
 }
 
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
