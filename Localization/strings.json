@@ -4662,6 +4662,7 @@
   "TradePriceCommission": "Trade price commission",
   "TradePriceDesc": "Trade Price",
   "TradePriceNotMultiple": "Trade price is not a multiple of security price step. Price step is \u0027{0}\u0027, trade is \u0027{1}\u0027.",
+  "Tradernet": "Tradernet",
   "TradeStation": "TradeStation",
   "TradeTime": "Trade time.",
   "TradeVolCommission": "Trade volume commission",
