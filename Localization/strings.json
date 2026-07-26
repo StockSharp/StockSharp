@@ -3192,6 +3192,7 @@
   "PatternParameterIndexDescription": "Parameter indexes using closing price as an example:\\nC: current candle\\nC1: first candle after current\\nC2: second candle after current\\npC: previous candle\\npC1: first candle before previous candle\\nAll indexes must be within the range of the current pattern.",
   "Pause": "Pause",
   "Paxos": "Paxos",
+  "PaytmMoney": "Paytm Money Open API",
   "PaymentId": "Payment id",
   "Peak": "Peak",
   "PeakBar": "PeakBar",
