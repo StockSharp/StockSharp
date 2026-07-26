@@ -369,6 +369,7 @@
   "BidsVolumeDesc": "Total volume in all buy orders.",
   "BigRangeError": "The difference between {0} and {1} cannot be greater than 1 day.",
   "BiggestCandle": "Biggest candle",
+  "Bigul": "Bigul Connect",
   "Binance": "Binance",
   "BinanceHistory": "Binance-History",
   "Binary": "Binary",
