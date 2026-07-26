@@ -2493,6 +2493,7 @@
   "Marquee": "Goldman Sachs Marquee",
   "MassIndex": "Mass Index.",
   "MassOrderCancelNotProcessed": "Mass orders cancellation was not processed. Result \u0027{0}\u0027. Reason \u0027{1}\u0027.",
+  "Mastertrust": "Mastertrust Trade API",
   "Match": "Match",
   "MatchOnTouch": "Match on touch",
   "MatchOnTouchDesc": "When emulating trade matching, match orders when the trade price touches the order price (is equal to the order price).",
