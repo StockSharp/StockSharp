@@ -763,6 +763,7 @@
   "ColumnSeparatorDesc": "Column separator. Tabulation is denoted by TAB.",
   "Combination": "Combination",
   "CombinationElementDescription": "This element combines the same type of data from different cubes into one output parameter for further transmission to another element, or it divides the received data into several elements.",
+  "Comdirect": "comdirect",
   "CommandNotProcessedReason": "Command {0} not executed because \u0027{1}\u0027.",
   "Comment": "Comment",
   "Commission": "Commission",
