@@ -391,9 +391,9 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		void ITradeOps.ReRegisterOrder(Order oldOrder, Order newOrder) => ReRegisterOrder(oldOrder, newOrder);
 		void ITradeOps.CancelOrder(Order order) => CancelOrder(order);
 
-		protected override void OnStateChanged(ProcessStates state)
+		protected override async ValueTask OnStateChangedAsync(ProcessStates state, CancellationToken cancellationToken)
 		{
-			base.OnStateChanged(state);
+			await base.OnStateChangedAsync(state, cancellationToken);
 
 			switch (state)
 			{
@@ -727,8 +727,10 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		transactions.MassOrderCanceled2 += (_, _) => rec.Add("MassOrderCanceled2");
 		transactions.MassOrderCancelFailed += (_, _) => rec.Add("MassOrderCancelFailed");
 		transactions.MassOrderCancelFailed2 += (_, _, _) => rec.Add("MassOrderCancelFailed2");
+#pragma warning disable CS0618 // Legacy lookup events are part of the equivalence surface under test.
 		transactions.LookupPortfoliosResult += (_, _, _) => rec.Add("LookupPortfoliosResult");
 		transactions.LookupPortfoliosResult2 += (_, _, _, _) => rec.Add("LookupPortfoliosResult2");
+#pragma warning restore CS0618
 
 		strategy.OrderRegisterFailReceived += (sub, fail) => rec.Add("OrderFail", $"{rec.Ord(fail.Order)} error={NormalizeError(fail.Error)}");
 		strategy.OrderCanceling += order => rec.Add("OrderCancel", $"{rec.Ord(order)} state={order.State}");
@@ -785,6 +787,7 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		strategy.OrderProcessor.Changed += order => rec.Add("OrderChg", FormatOrderState(order, rec.Ord(order)));
 		strategy.Trades.TradeAdded += trade => rec.Add("Trade", FormatTrade(trade, rec.Ord(trade.Order)));
 
+#pragma warning disable CS0618 // Obsolete compatibility events are part of the compared strategy surface.
 		strategy.OrderEdited += (transId, order) => rec.Add("OrderEdit", $"{rec.Ord(order)} price={Fmt(order.Price)} vol={Fmt(order.Volume)}");
 		strategy.OrderEditFailed += (transId, fail) => rec.Add("OrderEditFail", $"{rec.Ord(fail.Order)} error={NormalizeError(fail.Error)}");
 		strategy.OrderRegisterFailReceived += (sub, fail) => rec.Add("OrderFail", $"{rec.Ord(fail.Order)} error={NormalizeError(fail.Error)}");
@@ -813,10 +816,13 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		positions.NewPosition += pos => rec.Add("PosEvt", $"new {FormatPosition(pos)}");
 		positions.PositionChanged += pos => rec.Add("PosEvt", $"chg {FormatPosition(pos)}");
 		strategy.PositionChanged += () => rec.Add("StratPos", Fmt(strategy.Position));
+#pragma warning restore CS0618
 		strategy.PositionReceived += (sub, pos) => rec.Add("AccPos", FormatPosition(pos));
 
 		strategy.PnLChanged += () => rec.Add("PnL", FormatPnL(strategy.PnLManager));
+#pragma warning disable CS0618 // The legacy PnL event is part of the equivalence surface under test.
 		strategy.PnLReceived += sub => rec.Add("PnLReceived", sub.DataType.ToString());
+#pragma warning restore CS0618
 		strategy.PnLReceived2 += (sub, pf, time, realized, unrealized, commission) =>
 			rec.Add("PnLReceived2", $"real={Fmt(realized)} unreal={Fmt(unrealized)} commission={Fmt(commission)} time={FmtTime(time)}");
 		strategy.CommissionChanged += () => rec.Add("Commission", Fmt(strategy.Commission));
@@ -887,7 +893,9 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 	{
 		// Futures-style instrument: StepPrice/Multiplier distinct from PriceStep so the per-trade
 		// UpdateSecurity feed carries them; a side omitting StepPrice or using a different Multiplier diverges.
+#pragma warning disable CS0618 // The equivalence scenario intentionally seeds the legacy security field.
 		var security = new Security { Id = Paths.HistoryDefaultSecurity, PriceStep = 0.01m, StepPrice = 0.5m, Multiplier = 10m };
+#pragma warning restore CS0618
 		var portfolio = Portfolio.CreateSimulator();
 
 		using var connector = CreateDeterministicConnector(security, portfolio, startTime, stopTime);

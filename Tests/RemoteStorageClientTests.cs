@@ -274,7 +274,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		});
 		await tcs.Task.WaitAsync(cancellationToken);
 
-		return securitiesList.GetCopy();
+		return await securitiesList.GetCopyAsync(cancellationToken);
 	}
 
 	[TestMethod]
@@ -823,7 +823,7 @@ public class RemoteStorageClientTests : BaseTestClass
 		});
 		await tcs.Task.WaitAsync(cancellationToken);
 
-		return boardsList.GetCopy();
+		return await boardsList.GetCopyAsync(cancellationToken);
 	}
 
 	#endregion

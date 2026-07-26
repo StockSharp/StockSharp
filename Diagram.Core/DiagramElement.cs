@@ -845,7 +845,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 		{
 			if (++ProcessingLevel > Strategy.OverflowLimit || !RuntimeHelpers.TryEnsureSufficientExecutionStack())
 			{
-				Strategy.Stop(new InvalidOperationException($"!!!{LocalizedStrings.Overflow}!!!"));
+				AsyncHelper.Run(() => Strategy.StopAsync(new InvalidOperationException($"!!!{LocalizedStrings.Overflow}!!!")));
 				return;
 			}
 

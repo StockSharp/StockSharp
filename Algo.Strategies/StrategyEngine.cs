@@ -5,17 +5,16 @@ using StockSharp.Algo.PnL;
 /// <summary>
 /// State machine + message processing. Handles <see cref="Strategy.ProcessState"/> transitions and market data routing to <see cref="Strategy.PnLManager"/>.
 /// </summary>
-/// <remarks>
-/// Initializes a new instance of the <see cref="StrategyEngine"/>.
-/// </remarks>
-/// <param name="host">Strategy host.</param>
-/// <param name="pnlManager">PnL manager.</param>
-public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
+public class StrategyEngine
 {
 	private const MessageTypes _strategyChangeState = (MessageTypes)(-11);
 
-	private readonly IStrategyHost _host = host ?? throw new ArgumentNullException(nameof(host));
-	private IPnLManager _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
+	private static readonly Func<ProcessStates, CancellationToken, ValueTask> _emptyStateChangedAsync
+		= static (_, _) => default;
+
+	private readonly IStrategyHost _host;
+	private readonly Func<ProcessStates, CancellationToken, ValueTask> _stateChangedAsync;
+	private IPnLManager _pnlManager;
 	private ProcessStates _processState;
 	private DateTime _lastPnlRefreshTime;
 	// Set once a stop is requested and kept until the final Stopped is emitted. Used (instead of the
@@ -23,6 +22,26 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 	// same request even before the Stopping message has been processed back, while the rule-completion
 	// re-drive stays a no-op during normal running.
 	private bool _stopRequested;
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="StrategyEngine"/>.
+	/// </summary>
+	/// <param name="host">Strategy host.</param>
+	/// <param name="pnlManager">PnL manager.</param>
+	public StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
+		: this(host, pnlManager, _emptyStateChangedAsync)
+	{
+	}
+
+	internal StrategyEngine(
+		IStrategyHost host,
+		IPnLManager pnlManager,
+		Func<ProcessStates, CancellationToken, ValueTask> stateChangedAsync)
+	{
+		_host = host ?? throw new ArgumentNullException(nameof(host));
+		_pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
+		_stateChangedAsync = stateChangedAsync ?? throw new ArgumentNullException(nameof(stateChangedAsync));
+	}
 
 	/// <summary>
 	/// Swap the PnL manager used for market-data routing. Used when <see cref="Strategy.PnLManager"/>
@@ -35,20 +54,19 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 	/// <summary>
 	/// Current process state.
 	/// </summary>
-	public ProcessStates ProcessState
+	public ProcessStates ProcessState => _processState;
+
+	private async ValueTask SetProcessStateAsync(ProcessStates value, CancellationToken cancellationToken)
 	{
-		get => _processState;
-		private set
-		{
-			if (_processState == value)
-				return;
+		if (_processState == value)
+			return;
 
-			if (_processState == ProcessStates.Stopped && value == ProcessStates.Stopping)
-				throw new InvalidOperationException($"Cannot transition from Stopped to Stopping.");
+		if (_processState == ProcessStates.Stopped && value == ProcessStates.Stopping)
+			throw new InvalidOperationException($"Cannot transition from Stopped to Stopping.");
 
-			_processState = value;
-			StateChanged?.Invoke(value);
-		}
+		_processState = value;
+		await _stateChangedAsync(value, cancellationToken).NoWait();
+		StateChanged?.Invoke(value);
 	}
 
 	/// <summary>
@@ -131,10 +149,52 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 	/// Process incoming message — state transitions + market data routing.
 	/// </summary>
 	public void OnMessage(Message message)
+		=> AsyncHelper.Run(() => OnMessageAsync(message, default));
+
+	/// <summary>
+	/// Process incoming message asynchronously.
+	/// </summary>
+	/// <param name="message">Incoming message.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>A task representing message processing.</returns>
+	public ValueTask OnMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
 
+		if (message is StrategyStateMessage stateMessage)
+			return OnStateMessageAsync(stateMessage, cancellationToken);
+
+		OnMessageCore(message);
+		return default;
+	}
+
+	private ValueTask OnStateMessageAsync(StrategyStateMessage message, CancellationToken cancellationToken)
+	{
+		switch (message.RequestedState)
+		{
+			case ProcessStates.Stopping:
+				return ProcessState == ProcessStates.Started
+					? SetProcessStateAsync(ProcessStates.Stopping, cancellationToken)
+					: default;
+
+			case ProcessStates.Started:
+				return ProcessState == ProcessStates.Stopped
+					? SetProcessStateAsync(ProcessStates.Started, cancellationToken)
+					: default;
+
+			case ProcessStates.Stopped:
+				return ProcessState != ProcessStates.Stopped
+					? SetProcessStateAsync(ProcessStates.Stopped, cancellationToken)
+					: default;
+
+			default:
+				return default;
+		}
+	}
+
+	private void OnMessageCore(Message message)
+	{
 		DateTime? msgTime = null;
 
 		switch (message.Type)
@@ -204,33 +264,6 @@ public class StrategyEngine(IStrategyHost host, IPnLManager pnlManager)
 
 			default:
 			{
-				if (message is StrategyStateMessage stateMsg)
-				{
-					switch (stateMsg.RequestedState)
-					{
-						case ProcessStates.Stopping:
-						{
-							if (ProcessState == ProcessStates.Started)
-								ProcessState = ProcessStates.Stopping;
-							break;
-						}
-						case ProcessStates.Started:
-						{
-							if (ProcessState == ProcessStates.Stopped)
-								ProcessState = ProcessStates.Started;
-							break;
-						}
-						case ProcessStates.Stopped:
-						{
-							if (ProcessState != ProcessStates.Stopped)
-								ProcessState = ProcessStates.Stopped;
-							break;
-						}
-					}
-
-					return;
-				}
-
 				if (message is CandleMessage candleMsg)
 				{
 					_pnlManager.ProcessMessage(message);

@@ -469,11 +469,17 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			if (state != ChannelStates.Stopped)
 				return;
 
-			OnIterationCompleted(connector, strategy, parameters, iterationId, lastStep, tcs);
+			OnIterationCompletedAsync(connector, strategy, parameters, iterationId, lastStep, tcs)
+				.AsTask()
+				.ContinueWith(task =>
+				{
+					if (task.IsFaulted && task.Exception is not null)
+						tcs.TrySetException(task.Exception.InnerExceptions);
+				}, TaskScheduler.Default);
 		};
 	}
 
-	private void OnIterationCompleted(
+	private async ValueTask OnIterationCompletedAsync(
 		HistoryEmulationConnector connector,
 		Strategy strategy,
 		IStrategyParam[] parameters,
@@ -484,7 +490,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		if (lastStep < 100)
 		{
 			SingleProgressChanged?.Invoke(strategy, parameters, 100);
-			strategy.Stop();
+			await strategy.StopAsync();
 		}
 
 		bool isFinished;
@@ -528,7 +534,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			};
 		}
 
-		strategy.Start();
+		await strategy.StartAsync(cancellationToken);
 
 		connector.Connect();
 		await connector.StartAsync(cancellationToken);

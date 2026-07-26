@@ -1797,10 +1797,8 @@ public class CsvStorageTests : BaseTestClass
 		// CreateArchivedCopy is false by default
 		IsFalse(exchanges.CreateArchivedCopy);
 
-		ThrowsExactly<NotSupportedException>(() =>
-		{
-			var copy = exchanges.GetCopy();
-		});
+		await ThrowsExactlyAsync<NotSupportedException>(async () =>
+			await exchanges.GetCopyAsync(token));
 
 		await registry.DisposeAsync();
 	}
@@ -1817,7 +1815,7 @@ public class CsvStorageTests : BaseTestClass
 		exchanges.CreateArchivedCopy = true;
 		await FlushAsync(executor, token);
 
-		var copy = exchanges.GetCopy();
+		var copy = await exchanges.GetCopyAsync(token);
 		IsNotNull(copy);
 
 		// Decompress and verify - basic check
@@ -1854,7 +1852,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get archived copy
-		var copy = exchanges.GetCopy();
+		var copy = await exchanges.GetCopyAsync(token);
 		IsNotNull(copy);
 		IsNotEmpty(copy);
 
@@ -1891,10 +1889,10 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get first copy
-		var copy1 = exchanges.GetCopy();
+		var copy1 = await exchanges.GetCopyAsync(token);
 
 		// Get second copy - should be cached
-		var copy2 = exchanges.GetCopy();
+		var copy2 = await exchanges.GetCopyAsync(token);
 
 		// Should be the same instance (cached)
 		AreSame(copy1, copy2);
@@ -1918,7 +1916,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get first copy
-		var copy1 = exchanges.GetCopy();
+		var copy1 = await exchanges.GetCopyAsync(token);
 		string content1;
 		using (var memStream = new MemoryStream(copy1))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -1933,7 +1931,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get second copy - should be regenerated
-		var copy2 = exchanges.GetCopy();
+		var copy2 = await exchanges.GetCopyAsync(token);
 		string content2;
 		using (var memStream = new MemoryStream(copy2))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -1970,7 +1968,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get first copy
-		var copy1 = exchanges.GetCopy();
+		var copy1 = await exchanges.GetCopyAsync(token);
 		string content1;
 		using (var memStream = new MemoryStream(copy1))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -1986,7 +1984,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get second copy - should be regenerated
-		var copy2 = exchanges.GetCopy();
+		var copy2 = await exchanges.GetCopyAsync(token);
 		string content2;
 		using (var memStream = new MemoryStream(copy2))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -2022,7 +2020,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get first copy
-		var copy1 = exchanges.GetCopy();
+		var copy1 = await exchanges.GetCopyAsync(token);
 		string content1;
 		using (var memStream = new MemoryStream(copy1))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -2039,7 +2037,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get second copy - should be regenerated
-		var copy2 = exchanges.GetCopy();
+		var copy2 = await exchanges.GetCopyAsync(token);
 		string content2;
 		using (var memStream = new MemoryStream(copy2))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -2072,7 +2070,7 @@ public class CsvStorageTests : BaseTestClass
 		registry.Exchanges.Add(new Exchange { Name = "NYSE", CountryCode = CountryCodes.US });
 		await FlushAsync(executor, token);
 
-		var exchangeCopy = exchangesList.GetCopy();
+		var exchangeCopy = await exchangesList.GetCopyAsync(token);
 		IsNotNull(exchangeCopy);
 		IsNotEmpty(exchangeCopy);
 
@@ -2082,7 +2080,7 @@ public class CsvStorageTests : BaseTestClass
 		registry.Portfolios.Add(new Portfolio { Name = "PORT1", Currency = CurrencyTypes.USD });
 		await FlushAsync(executor, token);
 
-		var portfolioCopy = portfoliosList.GetCopy();
+		var portfolioCopy = await portfoliosList.GetCopyAsync(token);
 		IsNotNull(portfolioCopy);
 		IsNotEmpty(portfolioCopy);
 
@@ -2135,7 +2133,7 @@ public class CsvStorageTests : BaseTestClass
 		await FlushAsync(executor, token);
 
 		// Get compressed copy
-		var compressed = exchanges.GetCopy();
+		var compressed = await exchanges.GetCopyAsync(token);
 		byte[] decompressed;
 		using (var memStream = new MemoryStream(compressed))
 		using (var gzipStream = new GZipStream(memStream, CompressionMode.Decompress))
@@ -2174,17 +2172,15 @@ public class CsvStorageTests : BaseTestClass
 		registry.Exchanges.Add(new Exchange { Name = "TEST", CountryCode = CountryCodes.US });
 		await FlushAsync(executor, token);
 
-		var copy = exchanges.GetCopy();
+		var copy = await exchanges.GetCopyAsync(token);
 		IsNotNull(copy);
 
 		// Disable
 		exchanges.CreateArchivedCopy = false;
 
 		// Should throw when disabled
-		ThrowsExactly<NotSupportedException>(() =>
-		{
-			var copy2 = exchanges.GetCopy();
-		});
+		await ThrowsExactlyAsync<NotSupportedException>(async () =>
+			await exchanges.GetCopyAsync(token));
 
 		await registry.DisposeAsync();
 	}
@@ -2212,12 +2208,11 @@ public class CsvStorageTests : BaseTestClass
 		}
 		await FlushAsync(executor, token);
 
-		byte[] copy1 = null;
 		// Measure time for first call (creates and caches)
-		var sw1 = Watch.Do(() => copy1 = exchanges.GetCopy());
+		var (copy1, sw1) = await Watch.DoAsync(() => exchanges.GetCopyAsync(token));
 
 		// The cached call returns the cached byte array instance.
-		var copy2 = exchanges.GetCopy();
+		var copy2 = await exchanges.GetCopyAsync(token);
 		copy2.AssertSame(copy1);
 
 		// Verify data integrity

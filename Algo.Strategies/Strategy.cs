@@ -66,7 +66,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		_posManager = new(EnsureGetId);
 		_posManager.PositionProcessed += ProcessStrategyPosition;
 
-		Engine = new(this, PnLManager);
+		Engine = new(this, PnLManager, OnEngineStateChangedAsync);
 		OrderProcessor = new(StatisticManager);
 		Trades = new(PnLManager, StatisticManager);
 		Positions = new(StatisticManager);
@@ -94,34 +94,6 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		// defer it only while WaitRulesOnStop is set and rules are still outstanding.
 		Engine.CanFinalStop = CanFinalStop;
 
-		// Stop-time subscription teardown. This is the SINGLE unsubscription path: it is wired on the engine
-		// event (not inside the overridable OnStateChanged) so it always runs, even for subclasses that
-		// override OnStateChanged without calling base - the teardown must not depend on a base call.
-		// OnStateChanged keeps only the overridable OnStopping() user hook, mirroring the monolith where the
-		// unsubscription lives in OnStopping and the cancellation is fixed.
-		Engine.StateChanged += state =>
-		{
-			if (state != ProcessStates.Stopping)
-				return;
-
-			if (UnsubscribeOnStop)
-				Subscriptions.UnSubscribeAll(globalAndLocal: false);
-
-			Subscriptions.UnSubscribeAll(globalAndLocal: true);
-			IsOnline = false;
-		};
-		Engine.StateChanged += OnStateChanged;
-		Engine.StateChanged += _ => this.Notify(nameof(ProcessState));
-		// Stop-time order cancellation, sequenced after the unsubscription above and the OnStopping() hook,
-		// matching the monolith which cancels active orders after OnStopping() has unsubscribed. Wired on the
-		// engine event (always runs) for the same robustness as the unsubscription path.
-		Engine.StateChanged += state =>
-		{
-			if (state == ProcessStates.Stopping && CancelOrdersWhenStopping)
-				CancelAllActiveOrders();
-		};
-		Engine.StateChanged += _ => RefreshOnlineState();
-		Engine.StateChanged += _ => ProcessStateChanged?.Invoke(this);
 		Engine.CurrentPriceUpdated += (secId, price, serverTime, localTime) =>
 		{
 			_posManager.UpdateCurrentPrice(secId, price, serverTime, localTime);
@@ -793,6 +765,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <param name="cancellationToken">Cancellation token.</param>
 	public ValueTask StopAsync(Exception error, CancellationToken cancellationToken = default)
 	{
+		ArgumentNullException.ThrowIfNull(error);
+
 		OnError(error);
 		return StopAsync(cancellationToken);
 	}
@@ -1344,13 +1318,41 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 	#endregion
 
+	private async ValueTask OnEngineStateChangedAsync(ProcessStates state, CancellationToken cancellationToken)
+	{
+		if (state == ProcessStates.Stopping)
+		{
+			if (UnsubscribeOnStop)
+				Subscriptions.UnSubscribeAll(globalAndLocal: false);
+
+			Subscriptions.UnSubscribeAll(globalAndLocal: true);
+			IsOnline = false;
+		}
+
+		await OnStateChangedAsync(state, cancellationToken).NoWait();
+
+#pragma warning disable CS0618 // Invoke overrides compiled against the synchronous compatibility hook.
+		OnStateChanged(state);
+#pragma warning restore CS0618
+
+		this.Notify(nameof(ProcessState));
+
+		if (state == ProcessStates.Stopping && CancelOrdersWhenStopping)
+			CancelAllActiveOrders();
+
+		RefreshOnlineState();
+		ProcessStateChanged?.Invoke(this);
+	}
+
 	#region Virtual hooks
 
 	/// <summary>
-	/// Called when process state changes.
+	/// Called asynchronously when process state changes.
 	/// </summary>
 	/// <param name="state">New state.</param>
-	protected virtual void OnStateChanged(ProcessStates state)
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>A task representing the state transition.</returns>
+	protected virtual async ValueTask OnStateChangedAsync(ProcessStates state, CancellationToken cancellationToken)
 	{
 		switch (state)
 		{
@@ -1389,18 +1391,14 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 				}
 				catch (Exception error)
 				{
-					OnError(error);
-					Stop(error);
+					await StopAsync(error, cancellationToken).NoWait();
 				}
 
 				break;
 			}
 			case ProcessStates.Stopping:
 			{
-				// The subscription unsubscription and IsOnline reset are performed by the always-run engine
-				// teardown lambda wired in the constructor (so they survive a subclass overriding this method
-				// without calling base); here only the overridable OnStopping() user hook is invoked, matching
-				// the monolith which calls OnStopping() at this point in the Stopping transition.
+				// Subscription teardown is performed by the non-virtual engine callback before this hook.
 				try
 				{
 					OnStopping();
@@ -1446,6 +1444,13 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			}
 		}
 	}
+
+	/// <summary>
+	/// Called when process state changes.
+	/// </summary>
+	/// <param name="state">New state.</param>
+	[Obsolete("Use OnStateChangedAsync instead.")]
+	protected virtual void OnStateChanged(ProcessStates state) { }
 
 	/// <summary>
 	/// The method is called when the strategy has entered the started state.
@@ -2400,20 +2405,18 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <summary>
 	/// Handle new outgoing message from connector.
 	/// </summary>
-	public ValueTask OnNewMessage(Message msg, CancellationToken ct)
+	public async ValueTask OnNewMessage(Message msg, CancellationToken ct)
 	{
 		_isProcessingConnectorMessage = true;
 
 		try
 		{
-			Engine.OnMessage(msg);
+			await Engine.OnMessageAsync(msg, ct).NoWait();
 		}
 		finally
 		{
 			_isProcessingConnectorMessage = false;
 		}
-
-		return default;
 	}
 
 	private void OnTimeChanged(TimeSpan diff)

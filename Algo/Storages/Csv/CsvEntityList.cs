@@ -1,7 +1,5 @@
 namespace StockSharp.Algo.Storages.Csv;
 
-using System.IO.Compression;
-
 using Ecng.IO;
 using Ecng.IO.Compression;
 
@@ -31,7 +29,15 @@ public interface ICsvEntityList : IAsyncDisposable
 	/// Get archived copy body.
 	/// </summary>
 	/// <returns>File body.</returns>
+	[Obsolete("Use GetCopyAsync instead.")]
 	byte[] GetCopy();
+
+	/// <summary>
+	/// Get archived copy body.
+	/// </summary>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>File body.</returns>
+	ValueTask<byte[]> GetCopyAsync(CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -135,7 +141,12 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	public bool CreateArchivedCopy { get; set; }
 
 	/// <inheritdoc />
+	[Obsolete("Use GetCopyAsync instead.")]
 	public byte[] GetCopy()
+		=> AsyncHelper.Run(() => GetCopyAsync());
+
+	/// <inheritdoc />
+	public async ValueTask<byte[]> GetCopyAsync(CancellationToken cancellationToken = default)
 	{
 		if (!CreateArchivedCopy)
 			throw new NotSupportedException();
@@ -147,14 +158,11 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 
 		if (body is null)
 		{
-			using (_copySync.EnterScope())
-			{
-				body = FileSystem.FileExists(FileName)
-					? FileSystem.ReadAllBytes(FileName)
-					: [];
-			}
+			body = FileSystem.FileExists(FileName)
+				? await FileSystem.ReadAllBytesAsync(FileName, cancellationToken).NoWait()
+				: [];
 
-			body = body.Compress<GZipStream>();
+			body = await body.GZipAsync(cancellationToken).NoWait();
 
 			using (_copySync.EnterScope())
 				_copy ??= body;

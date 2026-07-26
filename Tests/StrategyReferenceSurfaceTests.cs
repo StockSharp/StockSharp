@@ -387,9 +387,9 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		public event Action OrderRegisterFailedHook;
 		public event Action CandleProcessed;
 
-		protected override void OnStateChanged(ProcessStates state)
+		protected override async ValueTask OnStateChangedAsync(ProcessStates state, CancellationToken cancellationToken)
 		{
-			base.OnStateChanged(state);
+			await base.OnStateChangedAsync(state, cancellationToken);
 
 			switch (state)
 			{
@@ -600,7 +600,9 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 #pragma warning restore CS0618
 
 		var transactions = (ITransactionProvider)strategy;
+#pragma warning disable CS0618 // The legacy event is part of the reference surface under test.
 		transactions.NewOrder += _ => counter.Bump(Ev.NewOrder);
+#pragma warning restore CS0618
 		transactions.MassOrderCanceled += _ => counter.Bump(Ev.MassOrderCanceled);
 		transactions.MassOrderCanceled2 += (_, _) => counter.Bump(Ev.MassOrderCanceled2);
 		transactions.MassOrderCancelFailed += (_, _) => counter.Bump(Ev.MassOrderCancelFailed);
@@ -670,6 +672,7 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		strategy.OrderRegistering += _ => counter.Bump(Ev.OrderRegistering);
 		strategy.OrderCanceling += _ => counter.Bump(Ev.OrderCanceling);
 		strategy.OrderReRegistering += (_, _) => counter.Bump(Ev.OrderReRegistering);
+#pragma warning disable CS0618 // Obsolete compatibility events are part of the compared strategy surface.
 		strategy.OrderCancelFailed += _ => counter.Bump(Ev.OrderCancelFailed);
 		strategy.OrderEdited += (_, _) => counter.Bump(Ev.OrderEdited);
 		strategy.OrderEditFailed += (_, _) => counter.Bump(Ev.OrderEditFailed);
@@ -688,6 +691,7 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		positions.NewPosition += _ => counter.Bump(Ev.NewPosition);
 		positions.PositionChanged += _ => counter.Bump(Ev.PositionChangedTyped);
 		strategy.PositionChanged += () => counter.Bump(Ev.PositionChanged);
+#pragma warning restore CS0618
 		strategy.PositionReceived += (_, _) => counter.Bump(Ev.PositionReceived);
 		strategy.OwnTradeReceived += (_, _) => counter.Bump(Ev.OwnTradeReceived);
 		strategy.OrderReceived += (_, _) => counter.Bump(Ev.OrderReceived);

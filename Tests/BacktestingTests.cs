@@ -38,18 +38,12 @@ public class BacktestingTests : BaseTestClass
 		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var ordersReceived = 0;
-		var newOrders = 0;
 		var execMessagesWithIds = 0;
 		var execMessagesWithoutIds = 0;
 
 		connector.OrderReceived += (sub, order) =>
 		{
 			Interlocked.Increment(ref ordersReceived);
-		};
-
-		connector.NewOrder += order =>
-		{
-			Interlocked.Increment(ref newOrders);
 		};
 
 		// Track ExecutionMessages at different levels
@@ -105,7 +99,7 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
@@ -120,7 +114,7 @@ public class BacktestingTests : BaseTestClass
 		}
 
 		IsTrue(connector.IsFinished, "Backtest should finish");
-		Console.WriteLine($"NewOrders: {newOrders}, OrdersReceived: {ordersReceived}");
+		Console.WriteLine($"OrdersReceived: {ordersReceived}");
 		Console.WriteLine($"ExecMsgs at Emulation: {execAtEmulationTotal} total, {execAtEmulationWithIds} with IDs");
 		Console.WriteLine($"ExecMsgs at Basket: {execAtBasket} (with IDs: {execMessagesWithIds}, without IDs: {execMessagesWithoutIds})");
 		Console.WriteLine($"Strategy Orders: {strategy.Orders.Count()}");
@@ -139,10 +133,10 @@ public class BacktestingTests : BaseTestClass
 
 		// When the strategy actually placed orders, those orders must produce order-info execution
 		// messages all the way through the emulator and basket layers (no exec loss).
-		if (newOrders > 0)
+		if (ordersReceived > 0)
 		{
-			IsTrue(execAtEmulationTotal > 0, $"Orders were placed ({newOrders}) but no order execs reached the emulation adapter");
-			IsTrue(execAtBasket > 0, $"Orders were placed ({newOrders}) but no order execs reached the basket adapter");
+			IsTrue(execAtEmulationTotal > 0, $"Orders were placed ({ordersReceived}) but no order execs reached the emulation adapter");
+			IsTrue(execAtBasket > 0, $"Orders were placed ({ordersReceived}) but no order execs reached the basket adapter");
 			IsTrue(execMessagesWithIds > 0, "Order-info execution messages at the basket must carry subscription IDs when orders were placed");
 		}
 	}
@@ -390,7 +384,7 @@ public class BacktestingTests : BaseTestClass
 		};
 
 		connector.ProgressChanged += step => lastProgress = step;
-		connector.OrderRegisterFailed += fail =>
+		connector.OrderRegisterFailReceived += (_, fail) =>
 		{
 			Interlocked.Increment(ref orderErrors);
 			Console.WriteLine($"OrderRegisterFailed: {fail.Error.Message}");
@@ -418,14 +412,14 @@ public class BacktestingTests : BaseTestClass
 		};
 
 		connector.Connect();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		await connector.StartAsync(CancellationToken);
 
 		using var cts = new CancellationTokenSource(TimeSpan.FromMinutes(5));
 		cts.Token.Register(() => tcs.TrySetResult(false));
 		var ok = await tcs.Task;
 
-		strategy.Stop();
+		await strategy.StopAsync(CancellationToken);
 
 		var orders = strategy.Orders.Count();
 		var trades = strategy.MyTrades.Count();
@@ -471,7 +465,7 @@ public class BacktestingTests : BaseTestClass
 		var orderCount = 0;
 		var candleCount = 0;
 
-		connector.OrderRegisterFailed += fail =>
+		connector.OrderRegisterFailReceived += (_, fail) =>
 		{
 			Interlocked.Increment(ref orderErrors);
 			Console.WriteLine($"OrderRegisterFailed: {fail.Error.Message}");
@@ -814,7 +808,7 @@ public class BacktestingTests : BaseTestClass
 		};
 
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -994,7 +988,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 
 		Console.WriteLine($"After strategy.Start, subscriptions: {connector.Subscriptions.Count()}");
 		foreach (var sub in connector.Subscriptions)
@@ -1085,7 +1079,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1162,7 +1156,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1256,7 +1250,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1343,7 +1337,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1450,7 +1444,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1518,7 +1512,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1582,7 +1576,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1658,7 +1652,7 @@ public class BacktestingTests : BaseTestClass
 		// Start strategy before emulation (like BaseOptimizer.StartIteration)
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -1924,14 +1918,14 @@ public class BacktestingTests : BaseTestClass
 					stoppedTcs.TrySetResult(true);
 			};
 
-			strategy.Start();
+			await strategy.StartAsync(CancellationToken);
 			connector.Connect();
 			await connector.StartAsync(CancellationToken);
 
 			await Task.WhenAny(stoppedTcs.Task, Task.Delay(TimeSpan.FromMinutes(5), CancellationToken));
 			IsTrue(stoppedTcs.Task.IsCompleted, $"[{name}] backtest did not complete in time");
 
-			strategy.Stop();
+			await strategy.StopAsync(CancellationToken);
 
 			var outOfCandle = 0;
 			var maxDev = 0m;
@@ -2050,11 +2044,7 @@ public class BacktestingTests : BaseTestClass
 		connector.StateChanged2 += state =>
 		{
 			if (state == ChannelStates.Stopped)
-			{
-				strategy1.Stop();
-				strategy2.Stop();
 				tcs.TrySetResult(true);
-			}
 		};
 
 		// Start strategies before emulation (like BaseOptimizer.StartIteration)
@@ -2062,8 +2052,8 @@ public class BacktestingTests : BaseTestClass
 		strategy1.Reset();
 		strategy2.WaitRulesOnStop = false;
 		strategy2.Reset();
-		strategy1.Start();
-		strategy2.Start();
+		await strategy1.StartAsync(CancellationToken);
+		await strategy2.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -2074,6 +2064,9 @@ public class BacktestingTests : BaseTestClass
 			connector.Disconnect();
 			Fail("Backtest did not complete in time");
 		}
+
+		await strategy1.StopAsync(CancellationToken);
+		await strategy2.StopAsync(CancellationToken);
 
 		Console.WriteLine($"Candles: {security1.Id}={candles1}, {security2.Id}={candles2}");
 
@@ -2206,7 +2199,7 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -2284,7 +2277,7 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -3250,7 +3243,7 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 
@@ -3334,7 +3327,7 @@ public class BacktestingTests : BaseTestClass
 
 		strategy.WaitRulesOnStop = false;
 		strategy.Reset();
-		strategy.Start();
+		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
 		await connector.StartAsync(CancellationToken);
 

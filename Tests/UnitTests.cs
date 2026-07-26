@@ -451,9 +451,11 @@ public class UnitTests : BaseTestClass
 		negativePercent.Type.AssertEqual(UnitTypes.Percent);
 		negativePercent.Value.AssertEqual(-50m);
 
+#pragma warning disable CS0618 // Verify unary negation for the legacy enum alias.
 		var limit = new Unit(30m, UnitTypes.Limit);
 		var negativeLimit = -limit;
 		negativeLimit.Type.AssertEqual(UnitTypes.Limit);
+#pragma warning restore CS0618
 		negativeLimit.Value.AssertEqual(-30m);
 	}
 

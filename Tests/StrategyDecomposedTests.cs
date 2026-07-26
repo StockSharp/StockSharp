@@ -35,9 +35,109 @@ public class StrategyDecomposedTests : BaseTestClass
 		public long GetNextTransactionId() => Interlocked.Increment(ref _nextId);
 	}
 
+	private sealed class ThrowOnStartStrategy : Strategy
+	{
+		public Exception StartError { get; } = new InvalidOperationException("start failed");
+
+		protected override void OnStarted2(DateTime time)
+			=> throw StartError;
+	}
+
+	private sealed class AwaitableStateStrategy : Strategy
+	{
+		public TaskCompletionSource HookEntered { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+		public TaskCompletionSource HookRelease { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		protected override async ValueTask OnStateChangedAsync(ProcessStates state, CancellationToken cancellationToken)
+		{
+			await base.OnStateChangedAsync(state, cancellationToken);
+
+			if (state != ProcessStates.Started)
+				return;
+
+			HookEntered.TrySetResult();
+			await HookRelease.Task.WaitAsync(cancellationToken);
+		}
+	}
+
 	#endregion
 
 	#region StrategyEngine tests
+
+	[TestMethod]
+	public void Strategy_StopWithError_UsesCanonicalErrorPipeline()
+	{
+		var strategy = new Strategy();
+		var error = new InvalidOperationException("stop failed");
+		var reportedErrors = new List<Exception>();
+
+		strategy.Error += (_, reportedError) => reportedErrors.Add(reportedError);
+
+#pragma warning disable CS0618 // The synchronous compatibility overload is the subject of this test.
+		strategy.Stop(error);
+#pragma warning restore CS0618
+
+		reportedErrors.Count.AreEqual(1);
+		reportedErrors[0].AssertSame(error);
+		strategy.LastError.AssertSame(error);
+	}
+
+	[TestMethod]
+	public async Task Strategy_StopAsyncWithNullError_ThrowsArgumentNullException()
+	{
+		var strategy = new Strategy();
+
+		await ThrowsExactlyAsync<ArgumentNullException>(async () =>
+			await strategy.StopAsync(null));
+	}
+
+	[TestMethod]
+	public void Strategy_StartHookError_IsReportedOnce()
+	{
+		var strategy = new ThrowOnStartStrategy
+		{
+			Connector = CreateMockConnector().Object,
+		};
+		var reportedErrors = new List<Exception>();
+
+		strategy.Error += (_, reportedError) => reportedErrors.Add(reportedError);
+
+		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+
+		reportedErrors.Count.AreEqual(1);
+		reportedErrors[0].AssertSame(strategy.StartError);
+		strategy.LastError.AssertSame(strategy.StartError);
+	}
+
+	[TestMethod]
+	public async Task Strategy_OnNewMessage_AwaitsAsyncStateHook()
+	{
+		var strategy = new AwaitableStateStrategy
+		{
+			Connector = CreateMockConnector().Object,
+		};
+		var engineStateChanged = 0;
+		var strategyStateChanged = 0;
+
+		strategy.Engine.StateChanged += _ => engineStateChanged++;
+		strategy.ProcessStateChanged += _ => strategyStateChanged++;
+
+		var transition = strategy
+			.OnNewMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken)
+			.AsTask();
+
+		await strategy.HookEntered.Task.WaitAsync(CancellationToken);
+
+		IsFalse(transition.IsCompleted);
+		engineStateChanged.AreEqual(0);
+		strategyStateChanged.AreEqual(0);
+
+		strategy.HookRelease.TrySetResult();
+		await transition;
+
+		engineStateChanged.AreEqual(1);
+		strategyStateChanged.AreEqual(1);
+	}
 
 	[TestMethod]
 	public async Task StrategyEngine_RequestStart_SendsStartedMessage()
@@ -701,9 +801,10 @@ public class StrategyDecomposedTests : BaseTestClass
 		public Security TradeSecurity { get; set; }
 		public Portfolio TradePortfolio { get; set; }
 
-		protected override void OnStateChanged(ProcessStates state)
+		protected override ValueTask OnStateChangedAsync(ProcessStates state, CancellationToken cancellationToken)
 		{
 			StateChanges.Add(state);
+			return default;
 		}
 
 		protected override void OnCurrentPriceUpdated(SecurityId secId, decimal price, DateTime serverTime, DateTime localTime)

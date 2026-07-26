@@ -55,7 +55,11 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		public List<MyTrade> ReceivedTrades { get; } = [];
 		public List<Order> RegisteredOrders { get; } = [];
 
-		protected override void OnStateChanged(ProcessStates state) => StateHistory.Add(state);
+		protected override ValueTask OnStateChangedAsync(ProcessStates state, CancellationToken cancellationToken)
+		{
+			StateHistory.Add(state);
+			return default;
+		}
 		protected override void OnOwnTradeReceived(MyTrade trade) => ReceivedTrades.Add(trade);
 		protected override void OnOrderRegistered(Order order) => RegisteredOrders.Add(order);
 	}
@@ -211,8 +215,11 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 			}
 		}
 
-		protected override void OnStateChanged(ProcessStates state)
-			=> StateHistory.Add(state);
+		protected override ValueTask OnStateChangedAsync(ProcessStates state, CancellationToken cancellationToken)
+		{
+			StateHistory.Add(state);
+			return default;
+		}
 	}
 
 	#endregion
@@ -1521,14 +1528,20 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	[TestMethod]
 	public void Gap_StopWithError_OverloadExists()
 	{
-		// Strategy has Stop(Exception) that logs error, stores it, then stops.
-		// Strategy should have StopAsync(Exception, CancellationToken) or equivalent.
-		var methods = typeof(Strategy).GetMethods(BindingFlags.Instance | BindingFlags.Public)
-			.Where(m => m.Name is "Stop" or "StopAsync")
-			.Where(m => m.GetParameters().Any(p => p.ParameterType == typeof(Exception)));
+		var methods = typeof(Strategy).GetMethods(BindingFlags.Instance | BindingFlags.Public);
+		var syncMethod = methods.SingleOrDefault(m =>
+			m.Name == nameof(Strategy.Stop) &&
+			m.GetParameters().Select(p => p.ParameterType).SequenceEqual([typeof(Exception)]));
+		var asyncMethod = methods.SingleOrDefault(m =>
+			m.Name == nameof(Strategy.StopAsync) &&
+			m.GetParameters().Select(p => p.ParameterType).SequenceEqual([typeof(Exception), typeof(CancellationToken)]));
 
-		IsTrue(methods.Any(),
-			"Strategy should expose Stop/StopAsync overload that accepts Exception like Strategy.Stop(Exception)");
+		IsNotNull(syncMethod);
+		IsNotNull(asyncMethod);
+
+		var obsolete = syncMethod.GetAttribute<ObsoleteAttribute>(false);
+		IsNotNull(obsolete);
+		obsolete.Message.AreEqual("Use StopAsync instead.");
 	}
 
 	[TestMethod]

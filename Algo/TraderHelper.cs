@@ -1192,8 +1192,8 @@ public static partial class TraderHelper
 			_ => throw new ArgumentOutOfRangeException(nameof(state), state, LocalizedStrings.InvalidValue)
 		};
 
-	private static FastCsvReader CreateReader(this byte[] archive, Encoding encoding)
-		=> archive.Uncompress<GZipStream>().To<Stream>().CreateCsvReader(encoding, false);
+	private static async Task<FastCsvReader> CreateReaderAsync(this byte[] archive, Encoding encoding, CancellationToken cancellationToken)
+		=> (await archive.UncompressAsync<GZipStream>(cancellationToken: cancellationToken)).To<Stream>().CreateCsvReader(encoding, false);
 
 	/// <summary>
 	/// Extract securities from the archive.
@@ -1211,7 +1211,7 @@ public static partial class TraderHelper
 		{
 			var encoding = Encoding.UTF8;
 
-			using var reader = archive.CreateReader(encoding);
+			using var reader = await archive.CreateReaderAsync(encoding, cancellationToken);
 
 			while (await reader.NextLineAsync(cancellationToken))
 			{
@@ -1240,7 +1240,7 @@ public static partial class TraderHelper
 		static async IAsyncEnumerable<BoardMessage> Impl(byte[] archive, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			var encoding = Encoding.UTF8;
-			using var reader = archive.CreateReader(encoding);
+			using var reader = await archive.CreateReaderAsync(encoding, cancellationToken);
 
 			while (await reader.NextLineAsync(cancellationToken))
 				yield return reader.ReadBoard(encoding);

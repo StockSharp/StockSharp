@@ -146,11 +146,7 @@ partial class Strategy
 	/// Stop the strategy because of the specified error.
 	/// </summary>
 	/// <param name="error">Error.</param>
+	[Obsolete("Use StopAsync instead.")]
 	public void Stop(Exception error)
-	{
-		LogError(error);
-
-		LastError = error ?? throw new ArgumentNullException(nameof(error));
-		Stop();
-	}
+		=> AsyncHelper.Run(() => StopAsync(error));
 }
