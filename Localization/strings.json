@@ -292,6 +292,7 @@
   "Backpack": "Backpack",
   "Backtest": "Backtest",
   "BacktestExtra": "Backtesting (extra)",
+  "B3Up2Data": "B3 UP2DATA Cloud",
   "Backup": "Backup",
   "BackupDescription": "Backup market data to cloud storage.",
   "BackupPlugin": "Back up stored market data to the online service.",
