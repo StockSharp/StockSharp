@@ -2921,6 +2921,7 @@
   "OnlyTransactionsLog": "Write log messages only for transaction stream.",
   "Open": "Open",
   "OpenAccount": "Open account",
+  "OpenDart": "Open DART",
   "OpenECry": "OpenECry/GainFutures",
   "OpenFile": "Open file",
   "OpenFolder": "Open folder",
