@@ -4496,6 +4496,7 @@
   "TargetHost": "Server name",
   "TargetHostDesc": "The name of the server that shares SSL connection.",
   "TargetIdNotSet": "Target ID not set.",
+  "TaseDataHub": "TASE Data Hub API",
   "TaskCannotChangeState": "Task state cannot be changed from {0} to {1}.",
   "TaskDeleting": "Deleting task \u0027{0}\u0027.",
   "TaskDescription": "Source description:",
