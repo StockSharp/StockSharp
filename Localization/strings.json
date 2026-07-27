@@ -2495,6 +2495,7 @@
   "Marquee": "Goldman Sachs Marquee",
   "MassIndex": "Mass Index.",
   "MassOrderCancelNotProcessed": "Mass orders cancellation was not processed. Result \u0027{0}\u0027. Reason \u0027{1}\u0027.",
+  "MasterLink": "Taishin Nova API (formerly MasterLink)",
   "Mastertrust": "Mastertrust Trade API",
   "Match": "Match",
   "MatchOnTouch": "Match on touch",
