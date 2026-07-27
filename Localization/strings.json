@@ -4021,6 +4021,7 @@
   "SessionStopped": "Board \u0027{0}\u0027 has state \u0027{1}\u0027 and is unavailable for trading.",
   "SessionUploadingSecurities": "Sessions {0}. Uploading securities.",
   "Sessions": "Sessions",
+  "SetMarketData": "SET Market Data API",
   "SetNewLimit": "Set new limit",
   "Settings": "Settings",
   "SettingsDirectory": "Settings directory",
