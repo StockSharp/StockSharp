@@ -1363,6 +1363,7 @@
   "ErrorsCount": "Errors (quantity)",
   "ErrorsCountDesc": "Number of errors after which an email with an error message will be sent. A value of 0 means disabled.",
   "ErrorsDialogs": "Show error dialog windows.",
+  "EsmaFirds": "ESMA FIRDS",
   "Etf": "ETF",
   "Etoro": "eToro Public API",
   "EtoroApiKey": "Public API key",
