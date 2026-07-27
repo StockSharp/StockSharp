@@ -4661,6 +4661,7 @@
   "TradeId": "Trade ID",
   "TradeIdGeneration": "Number from which the emulator will generate trade identifiers.",
   "TradeIdString": "Trade ID (String).",
+  "Tradejini": "Tradejini API v2",
   "TradeLocalTime": "Trade received local time.",
   "TradeLocker": "TradeLocker",
   "TradeLockerDeveloperKey": "Developer API key",
