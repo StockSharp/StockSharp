@@ -2085,6 +2085,7 @@
   "KoreaInvestmentProductCode": "Product code",
   "KoreaInvestmentProductCodeDesc": "Two-digit account product code, such as 01 for securities or 03 for derivatives.",
   "KoreaInvestmentTimeInForceDesc": "KRX derivatives time-in-force condition.",
+  "KoreanFsc": "Korean FSC Stock Prices",
   "KotakNeo": "Kotak Neo Trade API v2",
   "KotakNeoConsumerKey": "Consumer token",
   "KotakNeoConsumerKeyDesc": "Consumer token generated for the application in Kotak Neo.",
