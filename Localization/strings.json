@@ -1718,6 +1718,7 @@
   "GrowwTotpSecret": "TOTP secret",
   "GrowwTotpSecretDesc": "Base32 Groww TOTP secret; the connector generates the current code locally.",
   "Grvt": "GRVT",
+  "GuruFocus": "GuruFocus Data API",
   "GuppyMultipleMovingAverage": "Guppy Multiple Moving Average.",
   "HFT": "HFT",
   "HFTFinamConnect": "Connect to HFT Finam server.",
