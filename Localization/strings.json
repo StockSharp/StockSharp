@@ -3879,6 +3879,7 @@
   "SearchForCloudSecurities": "Perform a search to view available securities in the cloud.",
   "SearchMaxResultsParams": "Search can return up to {0} results.",
   "SearchOnExchange": "Search on the exchange",
+  "SecApi": "SEC-API.io",
   "SecCode": "Security code",
   "SecCodeDescription": "Security code. Required if the data file does not contain a security code.",
   "SecCodeNotFilled": "Security code is not filled in.",
