@@ -4289,6 +4289,7 @@
   "StockConnector": "Stock broker connector",
   "StockData": "Data for the stock market",
   "StockDataDesc": "Transmit data for the stock market.",
+  "StockDataOrg": "StockData.org",
   "StockExchange": "Stock exchange",
   "StockExchangeofThailand": "Stock Exchange of Thailand",
   "StockSharp": "StockSharp",
