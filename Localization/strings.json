@@ -1370,6 +1370,7 @@
   "EtoroApiKeyDesc": "Public API key created in eToro Trading settings.",
   "EtoroUserKey": "User key",
   "EtoroUserKeyDesc": "User-specific key created in eToro Trading settings.",
+  "EuronextWebServices": "Euronext Web Services",
   "European": "European",
   "EvaluateGreeks": "Evaluate greeks",
   "EveningStar": "Evening Star",
