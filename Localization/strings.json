@@ -325,6 +325,7 @@
   "BasketCode": "Basket type code.",
   "BasketPortfolio": "Basket portfolio",
   "Batch": "Batch",
+  "Bavest": "Bavest Market Data API",
   "Bcs": "BCS",
   "BearPower": "Bear Power",
   "BearPowerDesc": "Technical indicator that measures the ability of sellers to drive prices below the exponential moving average",
