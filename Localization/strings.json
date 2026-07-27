@@ -1725,6 +1725,7 @@
   "HasDuplicates": "{0} duplicated.",
   "HashKeyGlobal": "HashKey Global",
   "HddId": "Hardware ID",
+  "HdfcSecurities": "HDFC Securities InvestRight",
   "Header": "Header",
   "HeartBeat": "Heartbeat",
   "HeartBeatDesc": "Server heartbeat interval to keep the connection alive.",
