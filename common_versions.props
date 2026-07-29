@@ -45,8 +45,6 @@
     <MoomooApiVer>10.*</MoomooApiVer>
     <BouncyCastleVer>2.*</BouncyCastleVer>
     <TigerBrokersOpenApiVer>1.*</TigerBrokersOpenApiVer>
-    <IntrinioRealtimeVer>18.*</IntrinioRealtimeVer>
-    <IntrinioSdkVer>8.*</IntrinioSdkVer>
     <PandasVer>0.6.*</PandasVer>
     <NumpyVer>0.9.*</NumpyVer>
     <IronPythonVer>3.4.2</IronPythonVer>
