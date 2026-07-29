@@ -10,6 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.ADKey,
 	Description = LocalizedStrings.AccDecIndicatorKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/a_d.html")]
 public class Acceleration : BaseIndicator
 {

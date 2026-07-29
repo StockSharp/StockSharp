@@ -3,6 +3,7 @@
 /// <summary>
 /// The realization of one of indicator lines Alligator (Jaw, Teeth, and Lips).
 /// </summary>
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [IndicatorHidden]
 public class AlligatorLine : DecimalLengthIndicator
 {

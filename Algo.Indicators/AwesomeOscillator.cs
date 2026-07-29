@@ -10,6 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.AOKey,
 	Description = LocalizedStrings.AwesomeOscillatorKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/ao.html")]
 public class AwesomeOscillator : BaseIndicator
 {

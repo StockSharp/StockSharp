@@ -10,6 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.DMIKey,
 	Description = LocalizedStrings.WellesWilderDirectionalMovementIndexKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/dmi.html")]
 [IndicatorOut(typeof(IDirectionalIndexValue))]
 public class DirectionalIndex : BaseComplexIndicator<IDirectionalIndexValue>

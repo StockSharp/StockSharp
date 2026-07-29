@@ -10,6 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.AdxKey,
 	Description = LocalizedStrings.AverageDirectionalIndexKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/adx.html")]
 [IndicatorOut(typeof(IAverageDirectionalIndexValue))]
 public class AverageDirectionalIndex : BaseComplexIndicator<IAverageDirectionalIndexValue>

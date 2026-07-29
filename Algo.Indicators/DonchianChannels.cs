@@ -7,6 +7,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.DCKey,
 	Description = LocalizedStrings.DonchianChannelsKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/donchian_channels.html")]
 [IndicatorOut(typeof(IDonchianChannelsValue))]
 public class DonchianChannels : BaseComplexIndicator<IDonchianChannelsValue>

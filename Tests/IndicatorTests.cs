@@ -690,6 +690,146 @@ public class IndicatorTests : BaseTestClass
 		}
 	}
 
+	// ---------------------------------------------------------------------------------------------------------
+	// Reference-vector generator for Resources/IndicatorsData/<Indicator>.txt.
+	//
+	// Those files are the pinned expected output of Process(), and are otherwise only ever read. This is the
+	// single place that knows how to write them, and it shares Render() with Process()'s own Check(), so the
+	// written format cannot drift away from the parsed one.
+	//
+	// A file is produced with the same feed Process() uses - the one the indicator declares through
+	// [IndicatorIn]. Changing that declaration therefore changes the reference data, and the file has to be
+	// regenerated in the same commit as the change.
+	//
+	// It never runs by accident: it is opt-in through the SS_INDICATORS_REGEN environment variable, and with the
+	// variable unset it does nothing at all.
+	//
+	//   SS_INDICATORS_REGEN=verify   Re-render every indicator and report how a fresh run compares to the
+	//                                committed data. Writes nothing. ALWAYS run this first. It must report no
+	//                                VALIDATED difference at all: that is the proof that the generator produces
+	//                                the same numbers Process() pins today, so a later rewrite only changes what
+	//                                was meant to change. If it does report one, the generator is wrong - fix
+	//                                the generator, never the data.
+	//   SS_INDICATORS_REGEN=A,B,C    Rewrite the files of these indicators only (by class name).
+	//   SS_INDICATORS_REGEN=*        Rewrite every file.
+	//
+	// The report separates two kinds of difference:
+	//
+	//   VALIDATED  a value Process() actually asserts on has changed. Never acceptable without an intended
+	//              change of behaviour, and the only thing that makes verify fail.
+	//   cosmetic   the bytes differ somewhere Check() never looks - a warm-up row before the indicator is
+	//              formed, or a reference row that stops short of today's column count. The committed files
+	//              carry a good deal of this: they are older than several engine changes (complex values now
+	//              back-fill an empty entry for every inner, some warm-up formulas were rewritten), and Check()
+	//              deliberately tolerates it. Regenerating a file also normalises its cosmetic drift, which is
+	//              why files are regenerated one by one rather than wholesale.
+	//
+	// Line ending is a hard-coded CRLF and the encoding is UTF-8 without BOM, matching the committed files, so
+	// the output is identical on every platform.
+	//
+	//   set SS_INDICATORS_REGEN=verify && dotnet test StockSharp_Tests.slnx --filter GenerateReferenceData
+	// ---------------------------------------------------------------------------------------------------------
+	[TestMethod]
+	public async Task GenerateReferenceData()
+	{
+		const string modeVar = "SS_INDICATORS_REGEN";
+		const string verifyMode = "verify";
+		const string allMode = "*";
+
+		var mode = Environment.GetEnvironmentVariable(modeVar);
+
+		// Inconclusive rather than a bare return: this is a maintenance tool, not a check, and a
+		// tool that reports Passed while doing nothing is indistinguishable from one that ran and
+		// found nothing wrong. Run it deliberately, and only when a new indicator is added or the
+		// logic of an existing one changes - it REWRITES committed reference data.
+		if (mode.IsEmpty())
+			Inconclusive($"Reference-data maintenance tool; not part of the regression suite. Set {modeVar}=verify to compare without writing, {modeVar}=<Name>[,<Name>...] to rewrite specific files, or {modeVar}=* to rewrite every out-of-date one. Only needed when adding an indicator or changing an existing one's logic.");
+
+		var verify = mode.EqualsIgnoreCase(verifyMode);
+		var requested = verify || mode == allMode
+			? null
+			: mode.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToHashSet(StringComparer.InvariantCultureIgnoreCase);
+
+		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
+		var tf = TimeSpan.FromDays(1);
+		var secId = Helper.CreateSecurity().ToSecurityId();
+		var candles = await LoadCandles(secId, time, tf);
+
+		var encoding = new UTF8Encoding(false);
+		var identical = new List<string>();
+		var cosmetic = new List<string>();
+		var validated = new List<string>();
+		var written = new List<string>();
+
+		foreach (var type in GetIndicatorTypes())
+		{
+			var name = type.Indicator.Name;
+
+			if (requested?.Remove(name) == false)
+				continue;
+
+			var indicator = type.CreateIndicator();
+			var inputType = type.InputValue;
+
+			IndicatorDataRunner.RenderedSeries rendered;
+
+			if (inputType == typeof(DecimalIndicatorValue))
+				rendered = indicator.Render(candles, data => data.ClosePrice);
+			else if (inputType == typeof(CandleIndicatorValue))
+				rendered = indicator.Render(candles, data => data);
+			else
+				throw new InvalidOperationException(inputType.To<string>());
+
+			var path = Path.Combine(Helper.ResFolder, "IndicatorsData", $"{name}.txt");
+			var content = encoding.GetBytes(string.Concat(rendered.Rows.Select(r => r + "\r\n")));
+			var current = File.Exists(path) ? File.ReadAllBytes(path) : null;
+
+			if (current is not null && current.SequenceEqual(content))
+			{
+				identical.Add(name);
+				continue;
+			}
+
+			if (current is null)
+			{
+				validated.Add($"{name}: no reference file yet");
+			}
+			else
+			{
+				var diffs = rendered.ValidatedDiffs(Do.Invariant(() => File.ReadAllLines(path)));
+
+				if (diffs.Length == 0)
+					cosmetic.Add($"{name} (formed from line {rendered.FormedFrom + 1})");
+				else
+					validated.Add($"{name}: {diffs.Length} validated difference(s), first {diffs.First()}");
+			}
+
+			if (verify)
+				continue;
+
+			File.WriteAllBytes(path, content);
+			written.Add(name);
+		}
+
+		if (requested?.Count > 0)
+			Fail($"Unknown indicator name(s) in {modeVar}: {requested.JoinCommaSpace()}");
+
+		if (verify)
+		{
+			var report = $"byte-identical: {identical.Count}, cosmetic drift only: {cosmetic.Count}, VALIDATED differences: {validated.Count}" +
+				$"{Environment.NewLine}cosmetic: {cosmetic.JoinCommaSpace()}" +
+				$"{Environment.NewLine}{validated.JoinN()}";
+
+			if (validated.Count > 0)
+				Fail(report);
+
+			Console.WriteLine(report);
+			return;
+		}
+
+		written.Count.AssertGreater(0, $"{modeVar}={mode} matched no out-of-date reference file.");
+	}
+
 	[TestMethod]
 	public void DocUrlUnique()
 	{
@@ -755,6 +895,201 @@ public class IndicatorTests : BaseTestClass
 			// Check [Doc]
 			var docAttr = indicatorType.GetAttribute<DocAttribute>();
 			docAttr.AssertNotNull($"Indicator {indicatorType.Name} missing [Doc] attribute.");
+		}
+	}
+
+	/// <summary>
+	/// Edges where the outer indicator holds another indicator but never hands it its own input, so that
+	/// inner's input requirement says nothing about what the outer must be fed. Every entry has to name the
+	/// exact reason, and <see cref="InputTypeCoversDelegation"/> fails on an entry that no longer matches a
+	/// real edge, so the list cannot quietly turn into a blanket suppression.
+	/// </summary>
+	private static readonly (Type outer, Type inner)[] _nonForwardingDelegations =
+	[
+		// Both combine two lines' already computed values and never process them - the lines are driven by the
+		// owning complex indicator instead: GatorHistogram.OnProcess reads Line1/Line2.GetNullableCurrentValue()
+		// and IchimokuSenkouALine.OnProcessDecimal reads Tenkan/Kijun.GetCurrentValue().
+		(typeof(GatorHistogram), typeof(AlligatorLine)),
+		(typeof(IchimokuSenkouALine), typeof(IchimokuLine)),
+
+		// Substitutes a derived scalar for the input, so StochasticK is used as a plain aggregator over the
+		// MACD histogram: SchaffTrendCycle.OnProcessDecimal calls
+		// StochasticK.Process(input, (macdHist - _buffer.Min.Value) / den), and that overload builds a brand
+		// new DecimalIndicatorValue instead of passing the outer input on.
+		(typeof(SchaffTrendCycle), typeof(StochasticK)),
+	];
+
+	/// <summary>
+	/// An indicator hands its own input straight to the indicators it delegates to:
+	/// <see cref="BaseComplexIndicator{TValue}.OnProcess"/> passes <c>input</c> to every inner, and the
+	/// hand-rolled delegations (an indicator kept in a field, e.g. <c>AverageTrueRange._trueRange</c>) do the
+	/// same. So the outer declaration has to satisfy every inner declaration. An outer that declares
+	/// <see cref="DecimalIndicatorValue"/> while an inner requires <see cref="CandleIndicatorValue"/> quietly
+	/// feeds that inner a degenerate candle whose open/high/low/close are all the same number - the inner keeps
+	/// computing, just over bars that never existed.
+	/// </summary>
+	[TestMethod]
+	public void InputTypeCoversDelegation()
+	{
+		var errors = new SortedSet<string>(StringComparer.Ordinal);
+		var usedExceptions = new HashSet<(Type, Type)>();
+
+		foreach (var indicator in ReachableIndicators())
+		{
+			var outerType = indicator.GetType();
+
+			if (outerType.GetValueType(true) != typeof(DecimalIndicatorValue))
+				continue;
+
+			foreach (var inner in Delegates(indicator))
+			{
+				var innerType = inner.GetType();
+
+				if (innerType.GetValueType(true) != typeof(CandleIndicatorValue))
+					continue;
+
+				if (_nonForwardingDelegations.Contains((outerType, innerType)))
+				{
+					usedExceptions.Add((outerType, innerType));
+					continue;
+				}
+
+				errors.Add($"{outerType.Name} declares {nameof(DecimalIndicatorValue)} but delegates to {innerType.Name}, which requires {nameof(CandleIndicatorValue)}.");
+			}
+		}
+
+		var stale = _nonForwardingDelegations.Where(e => !usedExceptions.Contains(e)).ToArray();
+
+		if (stale.Length > 0)
+			Fail($"Stale {nameof(_nonForwardingDelegations)} entries (no such delegation any more): {stale.Select(e => $"{e.outer.Name}->{e.inner.Name}").JoinCommaSpace()}");
+
+		if (errors.Count > 0)
+			Fail($"Indicators whose declared input does not cover what they delegate to:{Environment.NewLine}{errors.JoinN()}");
+	}
+
+	/// <summary>
+	/// Indicators whose entire contract is to aggregate whatever stream they are given, so being fed a decimal
+	/// instead of a candle is intended polymorphism rather than starvation: fed candles they aggregate the bar
+	/// extremes, fed plain numbers they aggregate the numbers. They read a candle field, but they do not require
+	/// one, so they stay on <see cref="DecimalIndicatorValue"/>.
+	/// </summary>
+	private static readonly Type[] _feedPolymorphic =
+	[
+		typeof(Highest),
+		typeof(Lowest),
+	];
+
+	/// <summary>
+	/// Declaring <see cref="DecimalIndicatorValue"/> is a promise that the close price is all the indicator
+	/// looks at. Running the same series twice - once as candles, once as bare close prices - has to produce the
+	/// same numbers for such an indicator. If it does not, the implementation reads open/high/low/volume and the
+	/// declaration is wrong. This catches what <see cref="InputTypeCoversDelegation"/> cannot: an indicator that
+	/// reads bar fields without going through an inner that declares candles (e.g. Donchian Channels, whose
+	/// inners are the deliberately feed-polymorphic <see cref="Highest"/>/<see cref="Lowest"/>).
+	/// </summary>
+	[TestMethod]
+	public async Task InputTypeCoversFeedSensitivity()
+	{
+		var time = new DateTime(2000, 1, 1, 0, 0, 0).UtcKind();
+		var tf = TimeSpan.FromDays(1);
+		var secId = Helper.CreateSecurity().ToSecurityId();
+		var candles = await LoadCandles(secId, time, tf);
+
+		var errors = new List<string>();
+		var usedExceptions = new HashSet<Type>();
+
+		foreach (var type in GetIndicatorTypes())
+		{
+			if (type.InputValue != typeof(DecimalIndicatorValue))
+				continue;
+
+			var byClose = type.CreateIndicator().Render(candles, c => c.ClosePrice).Rows;
+			var byCandle = type.CreateIndicator().Render(candles, c => c).Rows;
+
+			var diff = -1;
+
+			for (var i = 0; i < byClose.Length; i++)
+			{
+				if (byClose[i] != byCandle[i])
+				{
+					diff = i;
+					break;
+				}
+			}
+
+			// The exemption is applied AFTER measuring rather than as an early skip, so an entry
+			// that has stopped being feed-sensitive is reported as stale instead of silently
+			// exempting an indicator that no longer needs exempting.
+			if (_feedPolymorphic.Contains(type.Indicator))
+			{
+				if (diff >= 0)
+					usedExceptions.Add(type.Indicator);
+
+				continue;
+			}
+
+			if (diff < 0)
+				continue;
+
+			errors.Add($"{type.Indicator.Name} declares {nameof(DecimalIndicatorValue)} but reacts to the bar fields: line {diff + 1} is '{byClose[diff]}' fed the close and '{byCandle[diff]}' fed the candle.");
+		}
+
+		if (errors.Count > 0)
+			Fail($"Indicators whose declared input does not match what they read:{Environment.NewLine}{errors.JoinN()}");
+
+		var stale = _feedPolymorphic.Where(t => !usedExceptions.Contains(t)).ToArray();
+
+		if (stale.Length > 0)
+			Fail($"Stale {nameof(_feedPolymorphic)} entries (no longer feed-sensitive, or no longer registered as declaring {nameof(DecimalIndicatorValue)}): {stale.Select(t => t.Name).JoinCommaSpace()}");
+	}
+
+	/// <summary>
+	/// Every indicator instance reachable from the registered ones through delegation, including the
+	/// <see cref="IndicatorHiddenAttribute"/> building blocks that never appear in the provider on their own
+	/// (e.g. <see cref="AlligatorLine"/>) - the invariant applies to them just the same.
+	/// </summary>
+	private static IEnumerable<IIndicator> ReachableIndicators()
+	{
+		var visited = new HashSet<object>(ReferenceEqualityComparer.Instance);
+		var pending = new Queue<IIndicator>(GetIndicatorTypes().Select(t => t.CreateIndicator()));
+
+		while (pending.Count > 0)
+		{
+			var indicator = pending.Dequeue();
+
+			if (!visited.Add(indicator))
+				continue;
+
+			yield return indicator;
+
+			foreach (var inner in Delegates(indicator))
+				pending.Enqueue(inner);
+		}
+	}
+
+	/// <summary>
+	/// The indicators <paramref name="indicator"/> drives: the inner ones of a complex indicator plus anything
+	/// of an indicator type kept in an instance field, private and inherited ones included (auto-property
+	/// backing fields are covered by that, which is how the hand-rolled delegations are declared).
+	/// </summary>
+	private static IEnumerable<IIndicator> Delegates(IIndicator indicator)
+	{
+		if (indicator is IComplexIndicator complex)
+		{
+			foreach (var inner in complex.InnerIndicators)
+				yield return inner;
+		}
+
+		for (var type = indicator.GetType(); type is not null && type != typeof(object); type = type.BaseType)
+		{
+			foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
+			{
+				if (!field.FieldType.Is<IIndicator>())
+					continue;
+
+				if (field.GetValue(indicator) is IIndicator inner)
+					yield return inner;
+			}
 		}
 	}
 
@@ -1406,6 +1741,134 @@ static class IndicatorDataRunner
 		public decimal?[] Values { get; init; }
 	}
 
+	/// <summary>
+	/// An indicator run rendered in the on-disk shape of Resources/IndicatorsData/&lt;Indicator&gt;.txt.
+	/// </summary>
+	public class RenderedSeries
+	{
+		/// <summary>
+		/// One line per candle.
+		/// </summary>
+		public string[] Rows { get; init; }
+
+		/// <summary>
+		/// Index of the first row from which <see cref="IIndicator.IsFormed"/> held. Rows before it are the
+		/// warm-up: <see cref="Check{T}"/> returns before looking at them, so nothing there is validated.
+		/// </summary>
+		public int FormedFrom { get; init; }
+
+		/// <summary>
+		/// Comparison tolerance <see cref="Check{T}"/> applies, derived from <see cref="IIndicator.Measure"/>.
+		/// </summary>
+		public decimal Epsilon { get; init; }
+	}
+
+	/// <summary>
+	/// Runs <paramref name="indicator"/> over <paramref name="candles"/> with final values only and renders one
+	/// line per candle in the exact on-disk shape of Resources/IndicatorsData/&lt;Indicator&gt;.txt: every plain
+	/// (flattened) component of the produced value, rounded to two decimals and formatted with the invariant
+	/// culture, joined by comma; an empty component renders as an empty field. This is the single definition of
+	/// that format - the reference-data generator and the feed-comparison test both go through it, so neither
+	/// can drift away from what <see cref="Check{T}"/> parses.
+	/// </summary>
+	public static RenderedSeries Render<T>(this IIndicator indicator, CandleMessage[] candles, Func<ICandleMessage, T> getValue)
+	{
+		ArgumentNullException.ThrowIfNull(indicator);
+		ArgumentNullException.ThrowIfNull(candles);
+		ArgumentNullException.ThrowIfNull(getValue);
+
+		var rows = new string[candles.Length];
+		var formedFrom = candles.Length;
+
+		Do.Invariant(() =>
+		{
+			for (var i = 0; i < candles.Length; i++)
+			{
+				var candle = candles[i];
+				var value = indicator.Process(new TestIndicatorValue<T>(indicator, candle.OpenTime, getValue(candle)) { IsFinal = true });
+
+				rows[i] = value.Plain().Select(v => v.IsEmpty ? string.Empty : v.ToDecimal().Round(2).ToString()).JoinComma();
+
+				if (indicator.IsFormed && formedFrom > i)
+					formedFrom = i;
+			}
+		});
+
+		return new()
+		{
+			Rows = rows,
+			FormedFrom = formedFrom,
+			Epsilon = Epsilon(indicator),
+		};
+	}
+
+	private static decimal Epsilon(IIndicator indicator)
+		=> indicator.Measure switch
+		{
+			IndicatorMeasures.MinusOnePlusOne => 0.001m,
+			IndicatorMeasures.Percent or IndicatorMeasures.Price or IndicatorMeasures.Volume => 0.1m,
+			_ => throw new NotSupportedException(indicator.Measure.ToString()),
+		};
+
+	/// <summary>
+	/// Lists the differences between the committed reference lines and a fresh run that <see cref="Check{T}"/>
+	/// would actually trip over, applying its own reading rules: a row before the indicator is formed is never
+	/// looked at; a component that now comes out empty only has to face an empty or absent reference cell, and
+	/// only when the row is partially formed; a component that now has a value has to face a reference value
+	/// within the measure's epsilon; reference columns beyond the produced ones are never read.
+	/// Everything else - stale warm-up numbers, reference rows that stop short of today's column count - is
+	/// cosmetic drift that the pinned data is allowed to carry.
+	/// </summary>
+	public static string[] ValidatedDiffs(this RenderedSeries rendered, string[] committed)
+	{
+		ArgumentNullException.ThrowIfNull(rendered);
+		ArgumentNullException.ThrowIfNull(committed);
+
+		return [.. Do.Invariant(() =>
+		{
+			var diffs = new List<string>();
+
+			for (var i = rendered.FormedFrom; i < rendered.Rows.Length; i++)
+			{
+				var produced = rendered.Rows[i].SplitByComma();
+
+				if (i >= committed.Length)
+				{
+					diffs.Add($"line {i + 1}: reference data ends, indicator still produces '{rendered.Rows[i]}'");
+					continue;
+				}
+
+				var reference = committed[i].SplitByComma();
+				var rowHasValue = produced.Any(c => !c.IsEmpty());
+
+				for (var col = 0; col < produced.Length; col++)
+				{
+					var now = produced[col];
+					var was = col < reference.Length ? reference[col] : null;
+
+					if (now.IsEmpty())
+					{
+						if (rowHasValue && !was.IsEmpty())
+							diffs.Add($"line {i + 1} column {col}: reference '{was}', now empty");
+
+						continue;
+					}
+
+					if (was.IsEmpty())
+					{
+						diffs.Add($"line {i + 1} column {col}: reference {(was is null ? "has no such column" : "empty")}, now '{now}'");
+						continue;
+					}
+
+					if ((was.To<decimal>() - now.To<decimal>()).Abs() >= rendered.Epsilon)
+						diffs.Add($"line {i + 1} column {col}: reference '{was}', now '{now}'");
+				}
+			}
+
+			return diffs;
+		})];
+	}
+
 	public static void Check<T>(this IIndicator indicator, CandleMessage[] candles, Func<ICandleMessage, T> getValue)
 	{
 		ArgumentNullException.ThrowIfNull(indicator);
@@ -1413,12 +1876,7 @@ static class IndicatorDataRunner
 
 		var values = new List<IndicatorData>();
 
-		var epsilon = indicator.Measure switch
-		{
-			IndicatorMeasures.MinusOnePlusOne => 0.001m,
-			IndicatorMeasures.Percent or IndicatorMeasures.Price or IndicatorMeasures.Volume => 0.1m,
-			_ => throw new NotSupportedException(indicator.Measure.ToString()),
-		};
+		var epsilon = Epsilon(indicator);
 
 		var data = Do.Invariant(() => File.ReadAllLines(Path.Combine(Helper.ResFolder, "IndicatorsData", $"{indicator.GetType().Name}.txt")).Select((line, idx) =>
 		{

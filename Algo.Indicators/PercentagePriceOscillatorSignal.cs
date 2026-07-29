@@ -7,6 +7,7 @@ namespace StockSharp.Algo.Indicators;
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.PPOSKey,
 	Description = LocalizedStrings.PercentagePriceOscillatorSignalKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/percentage_price_oscillator_signal.html")]
 [IndicatorOut(typeof(IPercentagePriceOscillatorSignalValue))]
 public class PercentagePriceOscillatorSignal : BaseComplexIndicator<IPercentagePriceOscillatorSignalValue>

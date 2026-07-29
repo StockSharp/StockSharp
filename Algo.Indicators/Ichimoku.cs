@@ -10,6 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.IchimokuKey,
 	Description = LocalizedStrings.IchimokuKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/ichimoku.html")]
 [IndicatorOut(typeof(IIchimokuValue))]
 public class Ichimoku : BaseComplexIndicator<IIchimokuValue>

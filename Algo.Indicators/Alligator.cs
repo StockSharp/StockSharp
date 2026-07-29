@@ -10,6 +10,7 @@
 	ResourceType = typeof(LocalizedStrings),
 	Name = LocalizedStrings.AlligatorKey,
 	Description = LocalizedStrings.AlligatorKey)]
+[IndicatorIn(typeof(CandleIndicatorValue))]
 [Doc("topics/api/indicators/list_of_indicators/alligator.html")]
 [IndicatorOut(typeof(IAlligatorValue))]
 public class Alligator : BaseComplexIndicator<IAlligatorValue>
