@@ -287,7 +287,7 @@ connector.Connect();
 |<img src="./Media/logos/xopenhub_logo.svg" height="30" /> |X Open Hub | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/xopenhub.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/mt4_logo.svg" height="30" /> |MT4 | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/metatrader.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/mt5_logo.svg" height="30" /> |MT5 | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/metatrader.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/dukascopy_logo.svg" height="30" /> |DukasCopyLive | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/dukascopy_live.html" target="_blank">文档</a> |
+|<img src="./Media/logos/dukascopy_logo.svg" height="30" /> |DukasCopyJForex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/dukascopy_jforex.html" target="_blank">文档</a> |
 |<img src="./Media/logos/fxcm_logo.svg" height="30" /> |FXCM | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/fxcm.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/fxopen_logo.svg" height="30" /> |FXOpen TickTrader | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/fxopen.html" target="_blank">文档</a> |
 |<img src="./Media/logos/deriv_logo.svg" height="30" /> |Deriv | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/forex/deriv.html" target="_blank">文档</a> |
@@ -317,6 +317,7 @@ connector.Connect();
 |<img src="./Media/logos/woox_logo.svg" height="30" /> |WOO X | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/woox.html" target="_blank">文档</a> |
 |<img src="./Media/logos/backpack_logo.svg" height="30" /> |Backpack Exchange | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/backpack.html" target="_blank">文档</a> |
 |<img src="./Media/logos/btse_logo.svg" height="30" /> |BTSE | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/btse.html" target="_blank">文档</a> |
+|<img src="./Media/logos/bit2me_logo.svg" height="30" /> |Bit2Me | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bit2me.html" target="_blank">文档</a> |
 |<img src="./Media/logos/bitvavo_logo.svg" height="30" /> |Bitvavo | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitvavo.html" target="_blank">文档</a> |
 |<img src="./Media/logos/gemini_logo.svg" height="30" /> |Gemini | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/gemini.html" target="_blank">文档</a> |
 |<img src="./Media/logos/bitpandafusion_logo.svg" height="30" /> |Bitpanda Fusion | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitpanda_fusion.html" target="_blank">文档</a> |

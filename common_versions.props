@@ -31,7 +31,6 @@
     <StockSharpVer>5.*</StockSharpVer>
 
     <MathNumVer>6.0.0-beta2</MathNumVer>
-    <HtmlAgilityPackVer>1.11.45</HtmlAgilityPackVer>
     <JwtVer>9.0.3</JwtVer>
     <FluentFtpVer>40.0.0</FluentFtpVer>
     <SignalRVer>2.4.3</SignalRVer>
@@ -41,20 +40,13 @@
     <GeneticSharpVer>3.1.4</GeneticSharpVer>
     <SharpPcapVer>6.3.0</SharpPcapVer>
     <GoogleProtobufVer>3.*</GoogleProtobufVer>
-    <NatsVer>3.0.0</NatsVer>
-    <LightstreamerVer>6.2.1</LightstreamerVer>
-    <MoomooApiVer>10.9.6908</MoomooApiVer>
-    <BouncyCastleVer>2.6.2</BouncyCastleVer>
-    <TigerBrokersOpenApiVer>1.2.2</TigerBrokersOpenApiVer>
-    <IntrinioRealtimeVer>18.12.0</IntrinioRealtimeVer>
-    <IntrinioSdkVer>7.21.0</IntrinioSdkVer>
-    <IntrinioCollectionsVer>6.4.0</IntrinioCollectionsVer>
-    <JsonSubTypesVer>2.0.1</JsonSubTypesVer>
-    <RestSharpVer>112.0.0</RestSharpVer>
-    <PollyVer>8.4.1</PollyVer>
-    <SerilogVer>4.3.0</SerilogVer>
-    <SerilogSettingsVer>10.0.0</SerilogSettingsVer>
-    <SerilogSinksVer>6.0.0</SerilogSinksVer>
+    <NatsVer>3.*</NatsVer>
+    <LightstreamerVer>6.*</LightstreamerVer>
+    <MoomooApiVer>10.*</MoomooApiVer>
+    <BouncyCastleVer>2.*</BouncyCastleVer>
+    <TigerBrokersOpenApiVer>1.*</TigerBrokersOpenApiVer>
+    <IntrinioRealtimeVer>18.*</IntrinioRealtimeVer>
+    <IntrinioSdkVer>8.*</IntrinioSdkVer>
     <PandasVer>0.6.*</PandasVer>
     <NumpyVer>0.9.*</NumpyVer>
     <IronPythonVer>3.4.2</IronPythonVer>
@@ -64,6 +56,9 @@
     <FSharpPlusVer>1.*</FSharpPlusVer>
     <MsSqlClientVer>6.*</MsSqlClientVer>
     <NethereumSignerVer>5.*</NethereumSignerVer>
+    <TonSdkCoreVer>0.3.*</TonSdkCoreVer>
+    <TonSdkContractsVer>0.4.*</TonSdkContractsVer>
+    <XrplVer>10.*</XrplVer>
     <SolanaVer>8.*</SolanaVer>
     <AvaloniaVer>11.*</AvaloniaVer>
     <NewtonsoftVer>13.*</NewtonsoftVer>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+	<defs>
+		<linearGradient id="bitopro-gradient" x1="10" y1="54" x2="54" y2="10" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#1768E5"/>
+			<stop offset="1" stop-color="#32A8F4"/>
+		</linearGradient>
+	</defs>
+	<circle cx="32" cy="32" r="29" fill="url(#bitopro-gradient)"/>
+	<path fill="#fff" d="M20 15h13.5c8 0 13 4.1 13 10.5 0 3.6-1.8 6.5-4.9 8.1 4 1.5 6.4 4.9 6.4 9.3C48 50.1 42.3 54 33.5 54H20V15zm9 7v8.5h4.1c3.1 0 4.8-1.5 4.8-4.3 0-2.7-1.7-4.2-4.8-4.2H29zm0 15.2V47h4.6c3.6 0 5.5-1.7 5.5-4.9 0-3.3-1.9-4.9-5.5-4.9H29z"/>
+</svg>
