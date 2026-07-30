@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_target_net.props" />
+  <PropertyGroup>
+    <RootNamespace>StockSharp.Fix</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fix.Core\Fix.Core.csproj" />
+  </ItemGroup>
+</Project>

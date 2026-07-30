@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\common_target_net.props" />
+  <PropertyGroup>
+    <RootNamespace>StockSharp.Fix</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Messages\Messages.csproj" />
+    <ProjectReference Include="..\Media.Names\Media.Names.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Ecng.Net" Version="$(EcngVer)" />
+  </ItemGroup>
+</Project>
