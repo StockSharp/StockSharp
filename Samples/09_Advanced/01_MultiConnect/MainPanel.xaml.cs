@@ -5,6 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Collections.Generic;
+using System.Security;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Ecng.Common;
 using Ecng.Configuration;
@@ -25,9 +28,13 @@ using StockSharp.Localization;
 using StockSharp.Messages;
 using StockSharp.Xaml;
 using StockSharp.Xaml.GridControl;
+using StockSharp.Web.Common;
+
+// Aliased rather than imported wholesale: StockSharp.Web.DomainModel also defines
+// Subscription and DataType, which this file uses from BusinessEntities and Messages.
+using WebIds = StockSharp.Web.DomainModel.Ids;
 using StockSharp.Web.Api.Client;
 using StockSharp.Web.Api.Interfaces;
-using StockSharp.Studio.Controls;
 
 public partial class MainPanel
 {
@@ -127,7 +134,7 @@ public partial class MainPanel
 			if (!credProvider.TryLoad(out var credentials))
 			{
 				//var clientSvc = WebApiServicesRegistry.GetServiceAsAnonymous<IClientService>();
-				var (c, a) = this.GuiSync(() => AsyncContext.Run(() => CredentialsWindow.TryShow(this, credentials)));
+				var (c, a) = this.GuiSync(() => AsyncContext.Run(() => CredentialsWindow.TryShow(this, new CurrentClientFetcher(), credentials)));
 
 				if (c is null)
 					return null;
@@ -362,6 +369,21 @@ public partial class MainPanel
 	private void ShowLevel1Click(object sender, RoutedEventArgs e)
 	{
 		ShowOrHide(_level1Window);
+	}
+
+	/// <summary>
+	/// Reads who is signed in, for <see cref="CredentialsWindow"/>. The dialog lives in the UI
+	/// library and takes this narrow contract instead of the web API's own client service.
+	/// </summary>
+	private class CurrentClientFetcher : ICurrentClientFetcher
+	{
+		async Task<(string email, SecureString accessToken)> ICurrentClientFetcher.FetchAsync(string salt, CancellationToken cancellationToken)
+		{
+			var clientSvc = ConfigManager.GetService<IApiServiceProvider>().GetService<IClientService>(WebIds.Client.Anonymous.To<string>());
+			var client = await clientSvc.GetCurrentAsync(default, salt, cancellationToken);
+
+			return (client.Email, client.GetAccessToken().Secure());
+		}
 	}
 
 	private static void ShowOrHide(Window window)

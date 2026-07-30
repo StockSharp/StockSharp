@@ -1,10 +1,9 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <SampleProjectNameBase>$(MSBuildProjectName)</SampleProjectNameBase>
   </PropertyGroup>
   
-    <!-- workaround for https://github.com/dotnet/wpf/issues/5711 -->
   <PropertyGroup Condition="$(_TargetAssemblyProjectName) != ''">
     <SampleProjectNameBase>$(_TargetAssemblyProjectName)</SampleProjectNameBase>
   </PropertyGroup>
@@ -16,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Algo\Algo.csproj" />
+    <ProjectReference Include="..\..\..\Algo.Indicators\Algo.Indicators.csproj" />
+    <ProjectReference Include="..\..\..\Algo.Strategies\Algo.Strategies.csproj" />
   </ItemGroup>
 </Project>

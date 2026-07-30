@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_net.props" />
   <ItemGroup>
-    <PackageReference Include="StockSharp.Fix" Version="$(StockSharpVer)" />
+    <ProjectReference Include="$(ConnectorsGitHubPath)Fix\Fix.csproj" />
   </ItemGroup>
 </Project>
