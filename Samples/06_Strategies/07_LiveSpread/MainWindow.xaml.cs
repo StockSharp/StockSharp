@@ -68,7 +68,7 @@ public partial class MainWindow
 		_connector.Connect();
 	}
 
-	private void Start_Click(object sender, RoutedEventArgs e)
+	private async void Start_Click(object sender, RoutedEventArgs e)
 	{
 		if (PortfolioEditor.SelectedPortfolio == null) return;
 		if (SecurityEditor.SelectedSecurity == null) return;
@@ -88,11 +88,11 @@ public partial class MainWindow
 		_strategy.OwnTradeReceived += (s, t) => MyTradeGrid.Trades.TryAdd(t);
 		_strategy.OrderReceived += (s, o) => OrderGrid.Orders.TryAdd(o);
 
-		_strategy.Start();
+		await _strategy.StartAsync();
 	}
 
-	private void Stop_Click(object sender, RoutedEventArgs e)
+	private async void Stop_Click(object sender, RoutedEventArgs e)
 	{
-		_strategy.Stop();
+		await _strategy.StopAsync();
 	}
 }

@@ -152,11 +152,11 @@ class Program
 			}
 		};
 
-		connector.StateChanged2 += state =>
+		connector.StateChanged2 += async state =>
 		{
 			if (state == ChannelStates.Stopped)
 			{
-				strategy.Stop();
+				await strategy.StopAsync();
 
 				Console.WriteLine();
 				Console.WriteLine();
@@ -181,7 +181,7 @@ class Program
 		Console.WriteLine();
 
 		// start strategy before emulation started
-		strategy.Start();
+		await strategy.StartAsync();
 
 		// start connector
 		connector.Connect();

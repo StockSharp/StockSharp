@@ -80,7 +80,7 @@ public partial class MainWindow
 		_connector.Connect();
 	}
 
-	private void Start_Click(object sender, RoutedEventArgs e)
+	private async void Start_Click(object sender, RoutedEventArgs e)
 	{
 		if (PortfolioEditor1.SelectedPortfolio == null) return;
 		if (SecurityEditor1.SelectedSecurity == null) return;
@@ -113,11 +113,11 @@ public partial class MainWindow
 
 		_logManager.Sources.Add(_strategy);
 
-		_strategy.Start();
+		await _strategy.StartAsync();
 	}
 
-	private void Stop_Click(object sender, RoutedEventArgs e)
+	private async void Stop_Click(object sender, RoutedEventArgs e)
 	{
-		_strategy.Stop();
+		await _strategy.StopAsync();
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Samples.Strategies.LiveTerminal;
+namespace StockSharp.Samples.Strategies.LiveTerminal;
 
 using System;
 using System.IO;
@@ -13,7 +13,6 @@ using Ecng.ComponentModel;
 using StockSharp.Configuration;
 using StockSharp.Algo;
 using StockSharp.Algo.Strategies;
-using StockSharp.Algo.Strategies.Quoting;
 using StockSharp.Xaml;
 
 public partial class StrategiesWindow
@@ -57,7 +56,7 @@ public partial class StrategiesWindow
 
 	private void QuotingClick(object sender, RoutedEventArgs e)
 	{
-		var quoting = new MarketQuotingStrategy();
+		var quoting = new MarketQuotingProcessorStrategy();
 
 		var wnd = new StrategyEditWindow
 		{
