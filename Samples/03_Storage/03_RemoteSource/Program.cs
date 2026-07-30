@@ -6,18 +6,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Ecng.Common;
-using Ecng.Configuration;
 using Ecng.IO;
 
 using StockSharp.Algo;
 using StockSharp.Algo.Storages;
+using StockSharp.BinanceHistory;
 using StockSharp.BusinessEntities;
 using StockSharp.Configuration;
-using StockSharp.Finam;
 using StockSharp.Messages;
-using StockSharp.Web.Api.Client;
-using StockSharp.Web.Api.Interfaces;
 
 static class Program
 {
@@ -26,28 +22,12 @@ static class Program
 		var ct = CancellationToken.None;
 		var fs = Paths.FileSystem;
 
-		ICredentialsProvider credProvider = new DefaultCredentialsProvider();
-
-		string token;
-
-		if (!credProvider.TryLoad(out var credentials))
-		{
-			Console.WriteLine("Enter token (visit https://stocksharp.com/profile/ ):");
-			token = Console.ReadLine();
-		}
-		else
-			token = credentials.Token.UnSecure();
-
-		if (token.IsEmpty())
-			throw new InvalidOperationException("Token is empty.");
-
-		var webApiProvider = new ApiServiceProvider();
-		ConfigManager.RegisterService(webApiProvider.GetService<IInstrumentInfoService>(token));
+		// BinanceHistory is a free public source, no credentials are required.
 
 		var connector = new Connector();
 		connector.SubscriptionsOnConnect.Clear();
 
-		var messageAdapter = new FinamMessageAdapter(connector.TransactionIdGenerator);
+		var messageAdapter = new BinanceHistoryMessageAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(messageAdapter);
 		connector.Connect();
 
@@ -60,8 +40,8 @@ static class Program
 				Console.WriteLine(security1);
 			}
 		};
-		connector.Subscribe(new(new SecurityLookupMessage() { SecurityId = new() { SecurityCode = "BTCUSD" } }));
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
+		connector.Subscribe(new(new SecurityLookupMessage() { SecurityId = new() { SecurityCode = secId.SecurityCode } }));
 		var security = await connector.GetSecurityAsync(secId, default);
 
 		Console.ReadLine();
