@@ -380,7 +380,7 @@ public partial class MainPanel
 		async Task<(string email, SecureString accessToken)> ICurrentClientFetcher.FetchAsync(string salt, CancellationToken cancellationToken)
 		{
 			var clientSvc = ConfigManager.GetService<IApiServiceProvider>().GetService<IClientService>(WebIds.Client.Anonymous.To<string>());
-			var client = await clientSvc.GetCurrentAsync(default, salt, cancellationToken);
+			var client = await clientSvc.GetCurrentAsync(default, salt, cancellationToken: cancellationToken);
 
 			return (client.Email, client.GetAccessToken().Secure());
 		}
