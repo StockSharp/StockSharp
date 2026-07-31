@@ -16,7 +16,15 @@ public static class Paths
 	static Paths()
 	{
 		var companyPath = PathsHolder.CompanyPath ?? ConfigManager.TryGet<string>("companyPath");
-		CompanyPath = companyPath.IsEmpty() ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StockSharp") : companyPath.ToFullPathIfNeed();
+
+		// GetFolderPath answers with an empty string when the platform cannot name the folder - a
+		// container with no HOME, which is what a CI runner usually is. Path.Combine then yields a
+		// relative name, and every path built below inherits it: the data would land wherever the
+		// process happened to start, and a search path handed to another runtime would not resolve
+		// at all. Whatever we end up with, it is made absolute here.
+		CompanyPath = (companyPath.IsEmpty()
+			? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "StockSharp")
+			: companyPath).ToFullPathIfNeed();
 
 		CredentialsFile = Path.Combine(CompanyPath, $"credentials{DefaultSettingsExt}");
 
