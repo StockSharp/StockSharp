@@ -750,8 +750,14 @@ public static partial class Extensions
 		=> status.FromFixStatus2() ?? throw new ArgumentOutOfRangeException(nameof(status), status, LocalizedStrings.InvalidValue);
 
 	/// <summary>
-	///
+	/// Encode the order's lifetime policy as a FIX <see cref="FixTimeInForce"/> value.
 	/// </summary>
+	/// <remarks>
+	/// Always answers, because an absent tag 59 reads as Day, so order entry always states it.
+	/// No till-date gives GoodTillCancel; a till-date equal to the
+	/// <see cref="Messages.Extensions.Today"/> sentinel gives Day; any other date gives
+	/// GoodTillDate, which is also what makes a writer emit the expiry tag alongside.
+	/// </remarks>
 	/// <param name="message">The message containing the information for the order registration.</param>
 	/// <returns><see cref="FixTimeInForce"/> value.</returns>
 	public static char GetFixTimeInForce(this OrderRegisterMessage message)
@@ -759,14 +765,36 @@ public static partial class Extensions
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
-		switch (message.TimeInForce)
+		return message.TimeInForce.ToFix(message.TillDate);
+	}
+
+	/// <summary>
+	/// Encode a lifetime policy and its expiry as a FIX <see cref="FixTimeInForce"/> value.
+	/// </summary>
+	/// <remarks>
+	/// The enum on its own cannot say how long an order lives: GoodTillCancel, Day and
+	/// GoodTillDate are all <see cref="Messages.TimeInForce.PutInQueue"/>, and the expiry is what
+	/// tells them apart - no date gives GoodTillCancel, the
+	/// <see cref="Messages.Extensions.Today"/> sentinel gives Day, any other date gives
+	/// GoodTillDate (which is also what makes a writer emit the expiry tag alongside). Encoding
+	/// the enum alone collapses all three to GoodTillCancel.
+	///
+	/// A <see langword="null"/> policy is treated as PutInQueue: an absent tag 59 reads as Day, so
+	/// a writer has to state something, and "unspecified" is not a thing the wire can carry.
+	/// </remarks>
+	/// <param name="tif"><see cref="Messages.TimeInForce"/> value.</param>
+	/// <param name="tillDate">The order's expiry, when it has one.</param>
+	/// <returns><see cref="FixTimeInForce"/> value.</returns>
+	public static char ToFix(this Messages.TimeInForce? tif, DateTime? tillDate)
+	{
+		switch (tif)
 		{
 			case Messages.TimeInForce.PutInQueue:
 			case null:
 			{
-				if (message.TillDate == null)
+				if (tillDate == null)
 					return FixTimeInForce.GoodTillCancel;
-				else if (message.TillDate.Value.IsToday())
+				else if (tillDate.Value.IsToday())
 					return FixTimeInForce.Day;
 				else
 					return FixTimeInForce.GoodTillDate;
@@ -776,7 +804,7 @@ public static partial class Extensions
 			case Messages.TimeInForce.CancelBalance:
 				return FixTimeInForce.ImmediateOrCancel;
 			default:
-				throw new ArgumentOutOfRangeException(nameof(message), message.TimeInForce, LocalizedStrings.InvalidValue);
+				throw new ArgumentOutOfRangeException(nameof(tif), tif, LocalizedStrings.InvalidValue);
 		}
 	}
 

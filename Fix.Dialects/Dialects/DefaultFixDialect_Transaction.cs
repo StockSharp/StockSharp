@@ -1,6 +1,6 @@
-namespace StockSharp.Fix.Dialects;
+﻿namespace StockSharp.Fix.Dialects;
 
-using TimeInForce = StockSharp.Fix.Native.TimeInForce;
+using TimeInForce = StockSharp.Fix.Native.FixTimeInForce;
 
 partial class DefaultFixDialect
 {
@@ -70,6 +70,7 @@ partial class DefaultFixDialect
 
 		await writer.WriteHandlInstAsync(regMsg, HandlInst.AutomatedExecutionOrderPrivate, cancellationToken);
 
+		// An absent tag 59 reads as Day, so order entry always states it.
 		var tif = regMsg.GetFixTimeInForce();
 
 		var secType = regMsg.ToSecurityType();
@@ -345,6 +346,8 @@ partial class DefaultFixDialect
 			await writer.WriteAsync(tp, cancellationToken);
 		}
 
+		// An absent tag 59 reads as Day, so a replace states it rather than leave the lifetime to
+		// the counterparty's default.
 		var tif = replaceMsg.GetFixTimeInForce();
 
 		await writer.WriteAsync(FixTags.TimeInForce, cancellationToken);

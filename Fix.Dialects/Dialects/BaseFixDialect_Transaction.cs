@@ -1,6 +1,6 @@
-namespace StockSharp.Fix.Dialects;
+﻿namespace StockSharp.Fix.Dialects;
 
-using FixTimeInForce = Native.TimeInForce;
+using FixTimeInForce = Native.FixTimeInForce;
 
 partial class BaseFixDialect
 {
