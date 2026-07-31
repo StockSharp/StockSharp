@@ -481,6 +481,56 @@ public class CandleBuilderTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// RenkoCandleBuilder: a box finer than the price grid still advances the brick series.
+	/// </summary>
+	[TestMethod]
+	public void RenkoCandleBuilder_BoxFinerThanPriceStep_StaysBounded()
+	{
+		var provider = new MockExchangeInfoProvider();
+		var builder = new RenkoCandleBuilder(provider);
+
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				PriceStep = 0.1m,
+				// Below PriceStep / 2, so every brick price rounds back onto its own open.
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(0.02m)),
+			}
+		};
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		var candles = new List<CandleMessage>();
+
+		const int tickCount = 100;
+		var price = 100m;
+
+		// A monotone walk of one price step per tick.
+		for (var i = 0; i <= tickCount; i++)
+		{
+			var transform = new MockTransform { Price = price, Volume = 1m, Time = baseTime.AddSeconds(i) };
+
+			foreach (var c in builder.Process(subscription, transform))
+				candles.Add(c);
+
+			price += 0.1m;
+		}
+
+		var finishedCandles = candles
+			.Where(c => c.State == CandleStates.Finished)
+			.Distinct()
+			.ToList();
+
+		// Brick prices are snapped onto the security price grid, so one brick per price step is the
+		// most the walk can produce. If a brick cannot advance its own open, every following tick
+		// re-derives the box count from the same stale open and production becomes quadratic.
+		finishedCandles.Count.AssertEqual(tickCount, "Brick count must stay linear in the price path");
+
+		((RenkoCandleMessage)subscription.CurrentCandle).OpenPrice.AssertEqual(110m, "The brick series must advance with the price");
+	}
+
+	/// <summary>
 	/// RenkoCandleBuilder: small price movements don't create new bricks.
 	/// </summary>
 	[TestMethod]

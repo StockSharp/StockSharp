@@ -851,6 +851,15 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 
 		var priceChange = price - currentCandle.OpenPrice;
 		var boxSizeAbs = (decimal)((price + boxSize) - price);
+
+		// Brick prices are snapped onto the security price grid, so a box finer than that grid
+		// rounds every new brick back onto its own open and the series can never advance: each
+		// following tick then re-derives the same box count from the same stale open, which makes
+		// brick production quadratic in the number of ticks. Clamp the box to the finest movement
+		// the grid can express.
+		if (subscription.Message.PriceStep is decimal priceStep && priceStep > 0 && boxSizeAbs < priceStep)
+			boxSizeAbs = priceStep;
+
 		var boxesMoved = ((int)(priceChange / boxSizeAbs)).Abs();
 
 		if (boxesMoved >= 1)
@@ -877,6 +886,11 @@ public class RenkoCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : Ca
 			for (var i = 0; i < boxesMoved; i++)
 			{
 				var closePrice = ShrinkPrice(currentCandle.OpenPrice + (boxSize * sign), subscription);
+
+				// Snapping rounds the brick back onto its own open when the box is finer than the
+				// price grid - advance by the clamped box so the series always moves forward.
+				if (closePrice == currentCandle.OpenPrice)
+					closePrice = currentCandle.OpenPrice + boxSizeAbs * sign;
 
 				UpdateRenkoCandle(currentCandle, closePrice, TakeVolumePart());
 				currentCandle.State = CandleStates.Finished;
