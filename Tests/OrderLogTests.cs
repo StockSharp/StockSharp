@@ -585,14 +585,13 @@ public class OrderLogTests : BaseTestClass
 
 		var secId = sec.Id.ToSecurityId();
 		IOrderLogMarketDepthBuilder builder = typeof(OrderLogMarketDepthBuilder).CreateOrderLogMarketDepthBuilder(secId);
-		var depths = (await registry
+		var depths = registry
 			.GetOrderLogMessageStorage(secId, registry.DefaultDrive, StorageFormats.Binary)
 			.LoadAsync(date, date + TimeSpan.FromDays(1))
-			.ToArrayAsync(token))
 			.ToOrderBooks(builder);
 
 		var checkedCount = 0;
-		foreach (var d in depths.Skip(100).Take(100))
+		await foreach (var d in depths.Skip(100).Take(100).WithCancellation(token))
 		{
 			var snapshot = builder.GetSnapshot(d.ServerTime);
 			snapshot.IsFullEmpty().AssertFalse();
@@ -616,13 +615,12 @@ public class OrderLogTests : BaseTestClass
 
 		var secId = sec.Id.ToSecurityId();
 		IOrderLogMarketDepthBuilder builder = typeof(OrderLogMarketDepthBuilder).CreateOrderLogMarketDepthBuilder(secId);
-		var depths = (await registry
+		var depths = registry
 			.GetOrderLogMessageStorage(secId, registry.DefaultDrive, StorageFormats.Binary)
 			.LoadAsync(date, date + TimeSpan.FromDays(1))
-			.ToArrayAsync(token))
 			.ToOrderBooks(builder, TimeSpan.FromSeconds(1), 50);
 
-		var book = depths.Skip(300).First();
+		var book = await depths.Skip(300).FirstAsync(token);
 		var bookStr = book.Bids.Reverse().Concat(book.Asks).Select(q => q.ToString()).JoinPipe();
 
 		var expected = "171.76 9|171.80 1023|171.81 2|171.82 450|171.85 3|171.89 10|171.90 1|171.94 1|171.95 1|171.99 3|172.00 1149|172.05 1000|172.06 8|172.08 1|172.09 13|172.10 12|172.19 50|172.20 714|172.25 502|172.28 10|172.30 1867|172.31 2|172.35 101|172.38 3173|172.39 1019|172.40 453|172.42 30|172.50 690|172.57 100|172.60 7|172.61 21|172.67 1|172.70 11|172.72 660|172.82 321|172.90 64|173.00 289|173.08 40|173.12 320|173.21 7|173.32 100|173.39 50|173.70 260|173.80 1150|173.81 1|175.00 15|175.61 10|180.00 10|186.97 16|189.61 4|170.00 10|172.20 23|172.30 1000|172.38 5|172.40 52|172.47 30|172.48 20|172.50 2|172.60 5|172.69 19|172.70 100|172.72 10|172.85 820|172.89 21|172.90 160|172.94 11|172.98 19|172.99 210|173.00 861|173.08 11|173.10 181|173.13 1|173.31 11|173.33 10|173.36 500|173.37 1|173.40 120|173.42 500|173.44 4|173.45 215|173.48 3|173.49 1|173.50 711|173.53 60|173.54 5|173.58 3|173.59 86|173.62 58|173.64 3|173.68 20|173.70 13|173.73 50|173.76 500|173.78 3|173.79 521|173.80 700|173.87 10|173.90 796|173.92 500|173.94 201";
