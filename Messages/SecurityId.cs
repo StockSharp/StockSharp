@@ -231,7 +231,8 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 		if (_native != null)
 			return _native.Equals(other._native);
 
-		return _securityCode.EqualsIgnoreCase(other._securityCode) && _boardCode.EqualsIgnoreCase(other._boardCode);
+		return string.Equals(_securityCode, other._securityCode, StringComparison.OrdinalIgnoreCase)
+			&& string.Equals(_boardCode, other._boardCode, StringComparison.OrdinalIgnoreCase);
 	}
 
 	/// <summary>
