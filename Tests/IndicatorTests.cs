@@ -1,9 +1,13 @@
 ﻿namespace StockSharp.Tests;
 
+using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 using Ecng.Reflection;
+
+using ILGPU;
+using ILGPU.Runtime;
 
 using StockSharp.Algo.Candles.Compression;
 using StockSharp.Algo.Gpu;
@@ -13,6 +17,43 @@ using DataType = StockSharp.Messages.DataType;
 [TestClass]
 public class IndicatorTests : BaseTestClass
 {
+	// Creating an ILGPU context plus accelerator costs seconds (this box selects CUDA), and the object
+	// carries no per-test state: it is the device, not a fixture. One is created for the whole class and
+	// shared by every GPU test instead of one per test.
+	private static Context _gpuContext;
+	private static Accelerator _gpuAccelerator;
+
+	// The class runs its methods in parallel, and ILGPU drives buffer allocation, kernel launches and
+	// Synchronize() through the accelerator's default stream - which is not meant to be used from several
+	// threads at once. Every stretch of code that touches the shared accelerator takes this lock.
+	private static readonly Lock _gpuLock = new();
+
+	/// <summary>
+	/// Creates the shared device on first use. Doing it in <see cref="ClassInitializeAttribute"/> instead
+	/// would fail all tests in the class - including the majority that never touch the GPU - on a box
+	/// where no accelerator can be created.
+	/// </summary>
+	private static (Context, Accelerator) GetGpu()
+	{
+		using (_gpuLock.EnterScope())
+		{
+			if (_gpuAccelerator is null)
+				(_gpuContext, _gpuAccelerator) = GpuAcceleratorFactory.CreateBestAccelerator();
+
+			return (_gpuContext, _gpuAccelerator);
+		}
+	}
+
+	[ClassCleanup]
+	public static void ClassUnInit()
+	{
+		_gpuAccelerator?.Dispose();
+		_gpuContext?.Dispose();
+
+		_gpuAccelerator = null;
+		_gpuContext = null;
+	}
+
 	private static IIndicatorValue CreateValue(IndicatorType type, IIndicator indicator, SecurityId secId, DateTime now, int idx, TimeSpan tf, bool isFinal, bool isEmpty, int diffLimit = 10, Random rnd = null)
 	{
 		var time = now + tf.Multiply(idx);
@@ -60,15 +101,20 @@ public class IndicatorTests : BaseTestClass
 			throw new InvalidOperationException(input.ToString());
 	}
 
-	private async ValueTask<TimeFrameCandleMessage[]> LoadCandles(SecurityId secId, DateTime time, TimeSpan tf)
+	// Seven tests in this class run over the same Resources/ohlcv.txt, so the file is read and parsed once
+	// and the rows are then shared. Only the candle messages are rebuilt per call: they carry a per-test
+	// security id, start time and time frame, and every test keeps its own instances - nothing mutable is
+	// handed between tests.
+	private static Task<(decimal open, decimal high, decimal low, decimal close, decimal volume)[]> _ohlcvRows;
+	private static readonly Lock _ohlcvLock = new();
+
+	private static async Task<(decimal open, decimal high, decimal low, decimal close, decimal volume)[]> ReadOhlcvRows(CancellationToken cancellationToken)
 	{
 		var path = Path.Combine(Helper.ResFolder, "ohlcv.txt");
 		using var reader = new StreamReader(path, Encoding.UTF8);
 		var csv = new FastCsvReader(reader, Environment.NewLine) { ColumnSeparator = ',' };
 
-		var cancellationToken = CancellationToken;
-		var list = new List<TimeFrameCandleMessage>();
-		var t = time;
+		var list = new List<(decimal open, decimal high, decimal low, decimal close, decimal volume)>();
 
 		while (await csv.NextLineAsync(cancellationToken))
 		{
@@ -78,7 +124,32 @@ public class IndicatorTests : BaseTestClass
 			var close = csv.ReadDecimal();
 			var volume = csv.ReadDecimal();
 
-			list.Add(new()
+			list.Add((open, high, low, close, volume));
+		}
+
+		// Guard the shared parse: every test in this class depends on it, and an empty read would
+		// otherwise turn them into silent no-ops instead of failures.
+		list.Count.AssertGreater(0, path);
+
+		return [.. list];
+	}
+
+	private async ValueTask<TimeFrameCandleMessage[]> LoadCandles(SecurityId secId, DateTime time, TimeSpan tf)
+	{
+		Task<(decimal open, decimal high, decimal low, decimal close, decimal volume)[]> rowsTask;
+
+		using (_ohlcvLock.EnterScope())
+			rowsTask = _ohlcvRows ??= ReadOhlcvRows(CancellationToken);
+
+		var rows = await rowsTask;
+		var candles = new TimeFrameCandleMessage[rows.Length];
+		var t = time;
+
+		for (var i = 0; i < rows.Length; i++)
+		{
+			var (open, high, low, close, volume) = rows[i];
+
+			candles[i] = new()
 			{
 				TypedArg = tf,
 				SecurityId = secId,
@@ -90,12 +161,12 @@ public class IndicatorTests : BaseTestClass
 				ClosePrice = close,
 				TotalVolume = volume,
 				State = CandleStates.Finished,
-			});
+			};
 
 			t += tf;
 		}
 
-		return [.. list];
+		return candles;
 	}
 
 	private static void CompareValue(IIndicatorValue actual, IIndicatorValue expected, string indName, bool checkExtended, bool gpuTolerance = false)
@@ -676,17 +747,36 @@ public class IndicatorTests : BaseTestClass
 		var secId = Helper.CreateSecurity().ToSecurityId();
 		var candles = await LoadCandles(secId, time, tf);
 
-		foreach (var type in GetIndicatorTypes())
-		{
-			var indicator = type.CreateIndicator();
-			var inputType = type.InputValue;
+		// Every indicator is an independent run over the same read-only candle array (Check() clones the
+		// candles it feeds), so the sweep is parallelised. Failures are collected rather than thrown so
+		// that one broken indicator does not hide the others, and each entry names its indicator - the
+		// asserts inside Check() carry no name of their own.
+		var invalid = new ConcurrentBag<(Type type, Exception error)>();
 
-			if (inputType == typeof(DecimalIndicatorValue))
-				indicator.Check(candles, data => data.ClosePrice);
-			else if (inputType == typeof(CandleIndicatorValue))
-				indicator.Check(candles, data => data);
-			else
-				throw new InvalidOperationException(inputType.To<string>());
+		Parallel.ForEach(GetIndicatorTypes(), type =>
+		{
+			try
+			{
+				var indicator = type.CreateIndicator();
+				var inputType = type.InputValue;
+
+				if (inputType == typeof(DecimalIndicatorValue))
+					indicator.Check(candles, data => data.ClosePrice);
+				else if (inputType == typeof(CandleIndicatorValue))
+					indicator.Check(candles, data => data);
+				else
+					throw new InvalidOperationException(inputType.To<string>());
+			}
+			catch (Exception ex)
+			{
+				invalid.Add((type.Indicator, ex));
+			}
+		});
+
+		if (!invalid.IsEmpty)
+		{
+			var msg = invalid.OrderBy(x => x.type.Name).Select(x => $"{x.type.Name}: {x.error.Message}").JoinN();
+			Fail($"Indicators failed ({invalid.Count}):{Environment.NewLine}{msg}");
 		}
 	}
 
@@ -1174,62 +1264,83 @@ public class IndicatorTests : BaseTestClass
 		var provider = new GpuIndicatorCalculatorProvider();
 		provider.Init();
 
-		var invalid = new List<(Type type, Exception error)>();
+		var invalid = new ConcurrentBag<(Type type, Exception error)>();
 
-		var (ctx, acc) = GpuAcceleratorFactory.CreateBestAccelerator();
-
-		using (ctx)
-		using (acc)
+		// No context/accelerator is created or disposed here: both belong to the class (see ClassInit)
+		// and are shared with the provider tests.
+		foreach (var (indicatorType, calculatorType) in provider.All)
 		{
-			foreach (var (indicatorType, calculatorType) in provider.All)
+			// build N parameter variations from randomized indicators.
+			// Four instead of ten lowers the randomisation density only: every calculator, every time
+			// frame series and every bar is still compared GPU against CPU, just with fewer random
+			// parameter draws per run.
+			const int variations = 4;
+			var indicators = new IIndicator[variations];
+
+			for (var i = 0; i < indicators.Length; i++)
 			{
-				var calculator = provider.Create(ctx, acc, calculatorType);
+				var indicator = indicatorType.CreateInstance<IIndicator>();
+				// Randomize indicator settings using existing helper
+				SetRandom(indicator, () => { });
+
+				indicators[i] = indicator;
+			}
+
+			IGpuIndicatorResult[][][] gpuAll;
+
+			// Only the accelerator-bound part is serialised; the CPU reference matrix below runs outside
+			// the lock so the provider tests are not held up for the whole sweep. The kernels the
+			// calculator constructor JITs must be compiled one at a time on the shared accelerator.
+			var (gpuContext, gpuAccelerator) = GetGpu();
+
+			using (_gpuLock.EnterScope())
+			{
+				var calculator = provider.Create(gpuContext, gpuAccelerator, calculatorType);
 				calculator.AssertNotNull();
-
-				// build N parameter variations from randomized indicators
-				const int variations = 10;
-				var indicators = new IIndicator[variations];
-
-				for (var i = 0; i < indicators.Length; i++)
-				{
-					var indicator = indicatorType.CreateInstance<IIndicator>();
-					// Randomize indicator settings using existing helper
-					SetRandom(indicator, () => { });
-
-					indicators[i] = indicator;
-				}
 
 				var parameters = randomIndicators(indicators, calculator.ParameterType);
 
 				// calculate via interface for all TF series and all params
-				var gpuAll = calculator.Calculate(gpuSeries, parameters); // [series][param][bar]
+				gpuAll = calculator.Calculate(gpuSeries, parameters); // [series][param][bar]
+			}
 
-				try
+			// Every (series, parameter set) cell runs its own freshly cloned CPU indicator over a
+			// read-only candle array and touches no GPU state, so the whole matrix is compared in
+			// parallel - this is the bulk of the test's time.
+			var cells =
+				from s in Enumerable.Range(0, msgSeries.Length)
+				from p in Enumerable.Range(0, indicators.Length)
+				select (series: s, param: p);
+
+			try
+			{
+				Parallel.ForEach(cells, cell =>
 				{
-					for (var s = 0; s < msgSeries.Length; s++)
-					{
-						for (var p = 0; p < indicators.Length; p++)
-						{
-							var gpuOut = gpuAll[s][p];
+					var gpuOut = gpuAll[cell.series][cell.param];
 
-							// fresh indicator instance for CPU with same settings
-							var indCpu = indicators[p].TypedClone();
-							var cpu = runCpu(indCpu, msgSeries[s]);
+					// fresh indicator instance for CPU with same settings
+					var indCpu = indicators[cell.param].TypedClone();
+					var cpu = runCpu(indCpu, msgSeries[cell.series]);
 
-							CompareValues([.. gpuOut.Select(r => r.ToValue(indCpu))], cpu, indCpu.ToString(), true, gpuTolerance: true);
-						}
-					}
-				}
-				catch (Exception ex)
-				{
-					invalid.Add((indicatorType, ex));
-				}
+					CompareValues([.. gpuOut.Select(r => r.ToValue(indCpu))], cpu, indCpu.ToString(), true, gpuTolerance: true);
+				});
+			}
+			catch (AggregateException ex)
+			{
+				// Unwrap so each failing cell keeps its own message instead of hiding behind the
+				// aggregate, and every one of them still names the indicator it came from.
+				foreach (var inner in ex.Flatten().InnerExceptions)
+					invalid.Add((indicatorType, inner));
+			}
+			catch (Exception ex)
+			{
+				invalid.Add((indicatorType, ex));
 			}
 		}
 
-		if (invalid.Count > 0)
+		if (!invalid.IsEmpty)
 		{
-			var msg = invalid.Select(x => $"{x.type.Name}: {x.error.Message}").JoinN();
+			var msg = invalid.OrderBy(x => x.type.Name).Select(x => $"{x.type.Name}: {x.error.Message}").JoinN();
 			Fail($"GPU indicators failed ({invalid.Count}):{Environment.NewLine}{msg}");
 		}
 	}
@@ -1256,11 +1367,13 @@ public class IndicatorTests : BaseTestClass
 		provider.TryGetCalculatorType(indType, out var calcType).AssertTrue();
 		calcType.Is<IGpuIndicatorCalculator>().AssertTrue();
 
-		var (ctx, acc) = GpuAcceleratorFactory.CreateBestAccelerator();
-		using (ctx)
-		using (acc)
+		// What this test is about is the provider lookup and the calculator it builds, not the device:
+		// it uses the accelerator the class created once instead of paying seconds for its own.
+		var (gpuContext, gpuAccelerator) = GetGpu();
+
+		using (_gpuLock.EnterScope())
 		{
-			var calc = provider.Create(ctx, acc, calcType);
+			var calc = provider.Create(gpuContext, gpuAccelerator, calcType);
 			calc.AssertNotNull();
 			calc.IndicatorType.AssertEqual(indType);
 		}
@@ -1283,12 +1396,12 @@ public class IndicatorTests : BaseTestClass
 		provider.TryGetCalculatorType(unkIndicator, out var calcType).AssertTrue();
 		calcType.AssertEqual(unkCalcType);
 
-		// Create should return a calculator instance
-		var (ctx, acc) = GpuAcceleratorFactory.CreateBestAccelerator();
-		using (ctx)
-		using (acc)
+		// Create should return a calculator instance (on the accelerator the class created once)
+		var (gpuContext, gpuAccelerator) = GetGpu();
+
+		using (_gpuLock.EnterScope())
 		{
-			var calc = provider.Create(ctx, acc, unkCalcType);
+			var calc = provider.Create(gpuContext, gpuAccelerator, unkCalcType);
 			calc.AssertNotNull();
 		}
 
@@ -1326,12 +1439,16 @@ public class IndicatorTests : BaseTestClass
 				outputs.Add(outVal);
 			}
 
+			// One factory for the whole loop. CreateValue() only reads the indicator (it news up a value
+			// and fills it from the supplied objects) and never advances its state, so a per-bar instance
+			// bought nothing while costing an indicator construction per bar - display name lookup, a
+			// Guid and every inner indicator, for each of ~265k values.
+			var factory = type.CreateIndicator();
+
 			// roundtrip each produced value
 			for (var i = 0; i < outputs.Count; i++)
 			{
 				var original = outputs[i];
-
-				var factory = type.CreateIndicator();
 
 				var restored = factory.CreateValue(original.Time, [.. original.ToValues()]);
 
@@ -1878,6 +1995,11 @@ static class IndicatorDataRunner
 
 		var epsilon = Epsilon(indicator);
 
+		// Counts the non-final values actually injected below. They are what proves ValidateValue's
+		// complex-value contract on non-final input and that non-final input leaves no residue in the
+		// state the next final comparison reads, so the run must not silently end up feeding none.
+		var nonFinalCount = 0;
+
 		var data = Do.Invariant(() => File.ReadAllLines(Path.Combine(Helper.ResFolder, "IndicatorsData", $"{indicator.GetType().Name}.txt")).Select((line, idx) =>
 		{
 			var parts = line.SplitByComma();
@@ -1899,12 +2021,17 @@ static class IndicatorDataRunner
 				new(indicator, data[i].Candle.OpenTime, getValue(data[i].Candle)) { IsFinal = true }
 			};
 
-			var numNonFinals = RandomGen.GetInt(10);
+			// 0..3 rather than 0..10 non-final values per bar. The injections stay - they are the point,
+			// see nonFinalCount above - only their density drops, from ~5 extra values per bar to ~1.5,
+			// which is what made this a ~6x input multiplier over the 1658 reference bars.
+			var numNonFinals = RandomGen.GetInt(3);
 			for (var j = 0; j < numNonFinals; ++j)
 			{
 				var i2 = 0.Max((data.Length - 1).Min(i + RandomGen.GetInt(-5, 5)));
 				inputValues.Add(new(indicator, data[i2].Candle.OpenTime, getValue(data[i2].Candle), i < data.Length - 1 ? getValue(data[i+1].Candle) : default) { IsFinal = false });
 			}
+
+			nonFinalCount += numNonFinals;
 
 			void CheckValue(IIndicatorValue value, int column, bool rowHasValue)
 			{
@@ -1958,6 +2085,7 @@ static class IndicatorDataRunner
 		}
 
 		indicator.IsFormed.AssertTrue();
+		nonFinalCount.AssertGreater(0, indicator.ToString());
 	}
 
 	private static readonly SynchronizedDictionary<IndicatorMeasures, Range<decimal>> _validators = [];
