@@ -10,7 +10,16 @@ public class StorageTests : BaseTestClass
 	private const int _maxRenkoSteps = 100;
 	private const int _depthCount1 = 10;
 	private const int _depthCount2 = 1000;
-	private const int _depthCount3 = 10000;
+	// Depth round-trip fidelity (all serializer branches: prices, volumes, orders count,
+	// conditions, nanosec times) is fully exercised at this size.
+	private const int _depthCount3 = 2000;
+	// Level1 has its own size: every message carries ~115 fields, so what the serializer
+	// actually chews through is the field count, not the message count. 1000 messages still
+	// give each of the ~115 fields ~500 samples.
+	private const int _level1Count = 1000;
+	// Order log has its own size as well, so that tuning the depth count cannot silently
+	// change the order log scenarios along with it.
+	private const int _orderLogCount = 2000;
 
 	private static IStorageRegistry GetStorageRegistry()
 	{
@@ -1281,13 +1290,34 @@ public class StorageTests : BaseTestClass
 
 		await depthStorage.SaveAsync(depths, token);
 
-		var now = DateTime.UtcNow;
+		// The delete range must be derived from the generated books. RandomDepths advances time
+		// by less than the generator interval per book, so the whole set spans minutes, and any
+		// range built as an absolute offset from UtcNow lands entirely past the data - nothing
+		// would be deleted and the comparison below would trivially pass.
+		var minTime = DateTime.MaxValue;
+		var maxTime = DateTime.MinValue;
 
-		var from = now + TimeSpan.FromMinutes(_depthCount3 / 2);
-		var to = now + TimeSpan.FromMinutes(3 * _depthCount3 / 2);
+		foreach (var d in depths)
+		{
+			minTime = d.ServerTime < minTime ? d.ServerTime : minTime;
+			maxTime = d.ServerTime > maxTime ? d.ServerTime : maxTime;
+		}
+
+		var diff = maxTime - minTime;
+		var third = TimeSpan.FromTicks(diff.Ticks / 3);
+
+		var from = minTime + third;
+		var to = maxTime - third;
 		await depthStorage.DeleteAsync(from, to, token);
 
-		await LoadDepthsAndCompare(depthStorage, [.. depths.Where(d => d.ServerTime < from || d.ServerTime > to).OrderBy(d => d.ServerTime)]);
+		var survived = depths.Where(d => d.ServerTime < from || d.ServerTime > to).OrderBy(d => d.ServerTime).ToArray();
+
+		// The middle third must really have been removed while the outer thirds stay - otherwise
+		// the range did not intersect the data and the round-trip check means nothing.
+		(survived.Length > 0).AssertTrue();
+		(survived.Length < depths.Length).AssertTrue();
+
+		await LoadDepthsAndCompare(depthStorage, survived);
 
 		await depthStorage.DeleteWithCheckAsync(token);
 	}
@@ -1775,7 +1805,11 @@ public class StorageTests : BaseTestClass
 		var tfArg = CandleTests.TimeFrame;
 		var ticksArg = CandleTests.TotalTicks;
 		var rangeArg = CandleTests.PriceRange.Pips(security);
-		var renkoArg = boxSize.Pips(security);
+		// boxSize is already an absolute price delta (clamped to the (max - min) / _maxRenkoSteps
+		// span above), so it must be passed through as absolute. Pips() would reinterpret it as a
+		// count of price steps and multiply it by PriceStep, making the real brick 10x smaller
+		// than what the clamp computed - and 10x more bricks to build and store.
+		var renkoArg = new Unit(boxSize);
 		var pnfArg = CandleTests.PnF(security, boxSize);
 
 		var candles = CandleTests.GenerateCandles(trades, security, rangeArg, ticksArg, tfArg, volumeRange, renkoArg, pnfArg, isCalcVolumeProfile);
@@ -2265,7 +2299,7 @@ public class StorageTests : BaseTestClass
 	[DataRow(StorageFormats.Csv)]
 	public Task OrderLogRandom(StorageFormats format)
 	{
-		return OrderLogRandomSaveLoad(format, _depthCount3);
+		return OrderLogRandomSaveLoad(format, _orderLogCount);
 	}
 
 	[TestMethod]
@@ -2273,7 +2307,7 @@ public class StorageTests : BaseTestClass
 	[DataRow(StorageFormats.Csv)]
 	public Task OrderLogFractionalVolume(StorageFormats format)
 	{
-		return OrderLogRandomSaveLoad(format, _depthCount3, items =>
+		return OrderLogRandomSaveLoad(format, _orderLogCount, items =>
 		{
 			var volumeStep = /*items.First().Order.Security.VolumeStep = */0.00001m;
 
@@ -2292,7 +2326,7 @@ public class StorageTests : BaseTestClass
 	[DataRow(StorageFormats.Csv)]
 	public Task OrderLogFractionalVolume2(StorageFormats format)
 	{
-		return OrderLogRandomSaveLoad(format, _depthCount3, items =>
+		return OrderLogRandomSaveLoad(format, _orderLogCount, items =>
 		{
 			var volumeStep = /*items.First().Order.Security.VolumeStep = */0.00001m;
 
@@ -2311,7 +2345,7 @@ public class StorageTests : BaseTestClass
 	[DataRow(StorageFormats.Csv)]
 	public Task OrderLogExtreme(StorageFormats format)
 	{
-		return OrderLogRandomSaveLoad(format, _depthCount3, items =>
+		return OrderLogRandomSaveLoad(format, _orderLogCount, items =>
 		{
 			foreach (var item in items)
 			{
@@ -2336,7 +2370,7 @@ public class StorageTests : BaseTestClass
 		var secId = security.ToSecurityId();
 		var token = CancellationToken;
 
-		var quotes = security.RandomOrderLog(_depthCount3);
+		var quotes = security.RandomOrderLog(_orderLogCount);
 
 		for (var i = 0; i < quotes.Length; i++)
 		{
@@ -2484,7 +2518,7 @@ public class StorageTests : BaseTestClass
 		var securityId = security.ToSecurityId();
 		var token = CancellationToken;
 
-		var testValues = security.RandomLevel1(isFractional, diffDays, _depthCount3);
+		var testValues = security.RandomLevel1(isFractional, diffDays, _level1Count);
 
 		var l1Storage = GetStorageRegistry().GetLevel1MessageStorage(securityId, null, format);
 
@@ -2791,12 +2825,16 @@ public class StorageTests : BaseTestClass
 		const string namesFolder = "FolderNames";
 		var fs = Helper.FileSystem;
 
+		// GetSubTemp creates a brand new real directory on every call, so hoisting it out of the
+		// loop turns 27 throwaway temp roots into one shared root for all the names.
+		var root = fs.GetSubTemp(namesFolder);
+
 		foreach (var secId in secIds)
 		{
 			var folderName = secId.SecurityIdToFolderName();
 			folderName.FolderNameToSecurityId().AssertEqual(secId);
 
-			var di = Directory.CreateDirectory(Path.Combine(fs.GetSubTemp(namesFolder), folderName));
+			var di = Directory.CreateDirectory(Path.Combine(root, folderName));
 			di.Parent.Name.AssertEqual(namesFolder);
 		}
 	}
