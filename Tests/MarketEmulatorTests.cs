@@ -14,7 +14,7 @@ public class MarketEmulatorTests : BaseTestClass
 		var emu = new MarketEmulator(new CollectionSecurityProvider(secIds.Select(id => new Security { Id = id.ToStringId() })), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()) { VerifyMode = true };
 		emu.RandomProvider = new MockRandomProvider();
 		var result2 = new List<Message>();
-		emu.NewOutMessageAsync += (m, ct) => { result2.Add(m); return default; };
+		emu.NewOutMessageAsync += (m, ct) => { Helper.CheckPortfolioRowContract(m); result2.Add(m); return default; };
 		result = result2;
 		return emu;
 	}
@@ -2139,5 +2139,107 @@ public class MarketEmulatorTests : BaseTestClass
 
 		IsTrue(book.BidLevels <= maxDepth, $"bid depth {book.BidLevels} exceeds MaxDepth {maxDepth}");
 		IsTrue(book.AskLevels <= maxDepth, $"ask depth {book.AskLevels} exceeds MaxDepth {maxDepth}");
+	}
+
+	/// <summary>
+	/// A fill emits two portfolio rows: the instrument position (volume + average price) and the
+	/// account's cash. The position row must name the instrument that was traded. Emitting it under
+	/// <see cref="SecurityId.Money"/> makes a lot quantity indistinguishable from a cash balance, so
+	/// anyone persisting or displaying these rows reads a position as money — and the portfolio
+	/// lookup, which does name the instrument, then disagrees with the live stream about the same
+	/// account.
+	/// </summary>
+	[TestMethod]
+	public async Task FillEmitsPositionRowUnderTheTradedSecurity()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 100000000m)
+		.Add(PositionChangeTypes.CurrentValue, 100000000m), CancellationToken);
+
+		await AddBookAsync(emu, id, now);
+
+		res.Clear();
+
+		now = now.AddSeconds(1);
+
+		await emu.SendInMessageAsync(new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		}, CancellationToken);
+
+		// The two rows are told apart by what they carry: only the cash row reports realized PnL.
+		var rows = res.OfType<PositionChangeMessage>().ToArray();
+
+		var positionRow = rows.FirstOrDefault(m => !m.Changes.ContainsKey(PositionChangeTypes.RealizedPnL));
+		positionRow.AssertNotNull("the fill must emit a position row");
+		positionRow.SecurityId.AssertEqual(id, "the position row must name the traded instrument");
+		positionRow.Changes[PositionChangeTypes.CurrentValue].To<decimal>().AssertEqual(1m);
+
+		var cashRow = rows.FirstOrDefault(m => m.Changes.ContainsKey(PositionChangeTypes.RealizedPnL));
+		cashRow.AssertNotNull("the fill must emit a cash row");
+		cashRow.SecurityId.AssertEqual(SecurityId.Money, "the cash row stays money");
+	}
+
+	/// <summary>
+	/// A position fed in as an opening state must keep the average price it was given. Dropping it
+	/// leaves the position at average price 0, and the first close then realizes a profit equal to
+	/// the entire notional instead of the actual difference.
+	/// </summary>
+	[TestMethod]
+	public async Task SeededPositionKeepsItsAveragePrice()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 100000000m), CancellationToken);
+
+		await emu.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = id,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}
+		.Add(PositionChangeTypes.BeginValue, 2m)
+		.Add(PositionChangeTypes.AveragePrice, 100m), CancellationToken);
+
+		res.Clear();
+
+		await emu.SendInMessageAsync(new PortfolioLookupMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			PortfolioName = _pfName,
+			LocalTime = now,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		var reported = res.OfType<PositionChangeMessage>().FirstOrDefault(m => m.SecurityId == id);
+		reported.AssertNotNull("the seeded position must be reported back");
+		reported.Changes[PositionChangeTypes.CurrentValue].To<decimal>().AssertEqual(2m);
+		reported.Changes[PositionChangeTypes.AveragePrice].To<decimal>().AssertEqual(100m, "the seeded average price must survive");
 	}
 }

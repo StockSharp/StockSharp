@@ -2960,13 +2960,15 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 
 			_totalBlockedMoney = _totalBlockedMoney - prevPrice + pos.TotalPrice;
 
+			// Named after the traded instrument, not money: the value carried here is a lot
+			// quantity, and the account's cash follows on its own row from AddPortfolioChangeMessage.
 			result.Add(
 				new PositionChangeMessage
 				{
 					LocalTime = time,
 					ServerTime = time,
 					PortfolioName = portfolioName,
-					SecurityId = SecurityId.Money,
+					SecurityId = tradeMsg.SecurityId,
 				}
 				.Add(PositionChangeTypes.CurrentValue, pos.CurrentValue)
 				.TryAdd(PositionChangeTypes.AveragePrice, pos.AveragePrice)

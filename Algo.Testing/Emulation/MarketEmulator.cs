@@ -521,9 +521,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 			results.Add(tradeMsg);
 
+			// Named after the traded instrument, not money: the value carried here is a lot
+			// quantity, and the account's cash follows on its own row from AddPortfolioUpdate.
 			results.Add(new PositionChangeMessage
 			{
-				SecurityId = SecurityId.Money,
+				SecurityId = regMsg.SecurityId,
 				ServerTime = serverTime,
 				LocalTime = regMsg.LocalTime,
 				PortfolioName = regMsg.PortfolioName,

@@ -749,6 +749,44 @@ static class Helper
 		return Portfolio.CreateSimulator();
 	}
 
+	/// <summary>
+	/// Assert the invariants every portfolio row must satisfy, whichever emulator produced it.
+	/// </summary>
+	/// <remarks>
+	/// An account is reported on two kinds of row and they must not be confused: the account's cash,
+	/// named <see cref="SecurityId.Money"/>, and a holding of an instrument, named after that
+	/// instrument. Telling them apart is what every consumer does first - storage resolves the
+	/// instrument before it writes the row, and MONEY@ALL resolves to none - so a row that carries a
+	/// lot quantity under the money id is not merely mislabelled, it is discarded on the way out.
+	///
+	/// This is asserted on the emitting side rather than in any one test, because comparing two
+	/// implementations against each other cannot catch a mistake both of them make: the emulators
+	/// each emitted a fill's position row as money, agreed with one another perfectly, and the whole
+	/// comparison suite stayed green over it.
+	/// </remarks>
+	/// <param name="message">The message the emulator emitted.</param>
+	public static void CheckPortfolioRowContract(Message message)
+	{
+		if (message is not PositionChangeMessage posMsg)
+			return;
+
+		var isMoney = posMsg.SecurityId == SecurityId.Money;
+
+		// An average price belongs to a holding of something. Money has no average price, so a row
+		// carrying one is describing an instrument and must name it.
+		if (posMsg.Changes.ContainsKey(PositionChangeTypes.AveragePrice))
+			isMoney.AssertFalse($"a row carrying {nameof(PositionChangeTypes.AveragePrice)} describes an instrument and must name it, not {nameof(SecurityId.Money)}");
+
+		// Realized PnL is an account-wide total, not a per-instrument one, and it is what tells the
+		// cash row apart from the position row emitted beside it.
+		if (posMsg.Changes.ContainsKey(PositionChangeTypes.RealizedPnL))
+			isMoney.AssertTrue($"a row carrying {nameof(PositionChangeTypes.RealizedPnL)} is the account's cash row and must be named {nameof(SecurityId.Money)}, not {posMsg.SecurityId}");
+
+		// A row about an instrument has to say which one; default() names nothing at all.
+		if (!isMoney)
+			posMsg.SecurityId.AssertNotEqual(default, "a position row must name the instrument it describes");
+	}
+
 	public static void CheckEqual<T>(T expected, T actual, bool isMls = false, bool isSerializer = false, bool checkExtended = false, bool skipLocalTime = false, bool skipOriginalTransactionId = false)
 	{
 		if (expected.IsNull(true) && actual.IsNull(true))

@@ -504,10 +504,11 @@ public class MatchingEngineAdapter : IMessageTransport
 
 			results.Add(tradeMsg);
 
-			// Position change
+			// Position change. Named after the traded instrument, not money: the value carried
+			// here is a lot quantity, and the account's cash follows on its own row just below.
 			results.Add(new PositionChangeMessage
 			{
-				SecurityId = SecurityId.Money,
+				SecurityId = regMsg.SecurityId,
 				ServerTime = serverTime,
 				LocalTime = regMsg.LocalTime,
 				PortfolioName = regMsg.PortfolioName,
@@ -550,7 +551,7 @@ public class MatchingEngineAdapter : IMessageTransport
 
 					results.Add(new PositionChangeMessage
 					{
-						SecurityId = SecurityId.Money,
+						SecurityId = regMsg.SecurityId,
 						ServerTime = serverTime,
 						LocalTime = regMsg.LocalTime,
 						PortfolioName = counterOrder.PortfolioName,
@@ -1008,7 +1009,12 @@ public class MatchingEngineAdapter : IMessageTransport
 		{
 			var beginValue = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.BeginValue);
 			if (beginValue.HasValue)
-				portfolio.SetPosition(posMsg.SecurityId, beginValue.Value);
+			{
+				// Keep the average price the opening state was given. Without it the position
+				// starts at 0 and the first close realizes the whole notional as profit.
+				var avgPrice = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.AveragePrice);
+				portfolio.SetPosition(posMsg.SecurityId, beginValue.Value, avgPrice ?? 0m);
+			}
 
 			var leverage = (decimal?)posMsg.Changes.TryGetValue(PositionChangeTypes.Leverage);
 			if (leverage.HasValue)
@@ -1220,7 +1226,7 @@ public class MatchingEngineAdapter : IMessageTransport
 
 		results.Add(new PositionChangeMessage
 		{
-			SecurityId = SecurityId.Money,
+			SecurityId = state.SecurityId,
 			ServerTime = time,
 			LocalTime = time,
 			PortfolioName = order.PortfolioName,
