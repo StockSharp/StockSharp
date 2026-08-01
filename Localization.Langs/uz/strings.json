@@ -1317,7 +1317,7 @@
   "DataVersion": "Ma’lumotlar versiyasi",
   "DataWebSocket": "Ma’lumotlar WebSocket",
   "Database": "Ma\u0027lumotlar bazasi",
-  "DatabaseBatchSize": "Uzatilayotgan ma\u0027lumotlar paketining hajmi. Odatiy qiymat 50 element. SQL orqali eksport qilishda ishlatiladi.",
+  "DatabaseBatchSize": "Uzatilayotgan ma\u0027lumotlar paketining hajmi. Odatiy qiymat 10000 element. SQL orqali eksport qilishda ishlatiladi.",
   "DatabaseCorruptedResetConfig": "Ma\u0027lumotlar bazasi shikastlangan va davom ettirib bo\u0027lmaydi. Barcha sozlamalarni tiklashni xohlaysizmi?",
   "DatabaseDescription": "Ma\u0027lumotlar bazasining nomi. SQLite uchun ishlatilmaydi.",
   "Databento": "Databento",

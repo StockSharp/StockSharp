@@ -1317,7 +1317,7 @@
   "DataVersion": "Data version",
   "DataWebSocket": "Data WebSocket",
   "Database": "Database",
-  "DatabaseBatchSize": "Transmitted data batch size. The default is 50 elements. Used when exporting through SQL.",
+  "DatabaseBatchSize": "Transmitted data batch size. The default is 10000 elements. Used when exporting through SQL.",
   "DatabaseCorruptedResetConfig": "The database is corrupted and cannot continue. Do you want to reset all settings?",
   "DatabaseDescription": "Name of database. Not used in SQLite.",
   "Databento": "Databento",

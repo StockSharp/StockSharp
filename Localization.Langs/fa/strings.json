@@ -1317,7 +1317,7 @@
   "DataVersion": "نسخه داده",
   "DataWebSocket": "WebSocket داده",
   "Database": "پایگاه داده",
-  "DatabaseBatchSize": "اندازه دسته داده‌های ارسالی. به طور پیش فرض 50 مورد است. هنگام صادرات از طریق SQL استفاده می‌شود.",
+  "DatabaseBatchSize": "اندازه دسته داده‌های ارسالی. به طور پیش فرض 10000 مورد است. هنگام صادرات از طریق SQL استفاده می‌شود.",
   "DatabaseCorruptedResetConfig": "پایگاه داده آسیب دیده و ادامه کار ممکن نیست. آیا می‌خواهید تمام تنظیمات را ریست کنید؟",
   "DatabaseDescription": "نام پایگاه داده. برای SQLite استفاده نمی‌شود.",
   "Databento": "Databento",

@@ -1317,7 +1317,7 @@
   "DataVersion": "Versiune de date",
   "DataWebSocket": "WebSocket de date",
   "Database": "Bază de date",
-  "DatabaseBatchSize": "Dimensiunea lotului de date transmise. Implicit este 50 de elemente. Utilizat la exportul prin SQL.",
+  "DatabaseBatchSize": "Dimensiunea lotului de date transmise. Implicit este 10000 de elemente. Utilizat la exportul prin SQL.",
   "DatabaseCorruptedResetConfig": "Baza de date este coruptă și nu se poate continua. Doriți să resetați toate configurațiile?",
   "DatabaseDescription": "Numele bazei de date. Nu este utilizat pentru SQLite.",
   "Databento": "Databento",

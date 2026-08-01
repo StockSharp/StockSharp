@@ -1317,7 +1317,7 @@
   "DataVersion": "Wersja danych",
   "DataWebSocket": "WebSocket danych",
   "Database": "Baza danych",
-  "DatabaseBatchSize": "Rozmiar partii danych. Domyślnie wynosi 50 elementów. Używane w przypadku eksportu przez SQL.",
+  "DatabaseBatchSize": "Rozmiar partii danych. Domyślnie wynosi 10000 elementów. Używane w przypadku eksportu przez SQL.",
   "DatabaseCorruptedResetConfig": "Baza danych jest uszkodzona i nie można kontynuować. Czy chcesz zresetować wszystkie ustawienia?",
   "DatabaseDescription": "Nazwa bazy danych. Nie jest używane dla SQLite.",
   "Databento": "Databento",

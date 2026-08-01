@@ -1317,7 +1317,7 @@
   "DataVersion": "Versão dos dados",
   "DataWebSocket": "WebSocket de dados",
   "Database": "Banco de dados",
-  "DatabaseBatchSize": "Tamanho do lote de dados transmitidos. O padrão é 50 elementos. Usado ao exportar via SQL.",
+  "DatabaseBatchSize": "Tamanho do lote de dados transmitidos. O padrão é 10000 elementos. Usado ao exportar via SQL.",
   "DatabaseCorruptedResetConfig": "O banco de dados está corrompido e não é possível continuar. Você deseja redefinir todas as configurações?",
   "DatabaseDescription": "Nome do banco de dados. Não utilizado para SQLite.",
   "Databento": "Databento",

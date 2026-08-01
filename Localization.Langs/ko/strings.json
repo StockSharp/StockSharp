@@ -1317,7 +1317,7 @@
   "DataVersion": "데이터 버전",
   "DataWebSocket": "데이터 WebSocket",
   "Database": "데이터베이스",
-  "DatabaseBatchSize": "전송 데이터 배치 크기. 기본값은 50개 요소입니다. SQL을 통해 내보낼 때 사용됩니다.",
+  "DatabaseBatchSize": "전송 데이터 배치 크기. 기본값은 10000개 요소입니다. SQL을 통해 내보낼 때 사용됩니다.",
   "DatabaseCorruptedResetConfig": "데이터베이스가 손상되어 계속할 수 없습니다. 모든 설정을 재설정하시겠습니까?",
   "DatabaseDescription": "데이터베이스 이름입니다. SQLite에는 사용되지 않습니다.",
   "Databento": "Databento",

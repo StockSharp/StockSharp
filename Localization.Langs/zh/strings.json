@@ -1317,7 +1317,7 @@
   "DataVersion": "数据版本",
   "DataWebSocket": "数据 WebSocket",
   "Database": "数据库",
-  "DatabaseBatchSize": "传输数据批大小。默认为50个元素。用于通过SQL导出。",
+  "DatabaseBatchSize": "传输数据批大小。默认为10000个元素。用于通过SQL导出。",
   "DatabaseCorruptedResetConfig": "数据库已损坏，无法继续操作。您要重置所有设置吗？",
   "DatabaseDescription": "数据库名称。不适用于 SQLite。",
   "Databento": "Databento",

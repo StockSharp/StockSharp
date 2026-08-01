@@ -1317,7 +1317,7 @@
   "DataVersion": "ਡਾਟਾ ਵਰਜਨ",
   "DataWebSocket": "ਡਾਟਾ WebSocket",
   "Database": "ਡਾਟਾਬੇਸ",
-  "DatabaseBatchSize": "ਭੇਜੇ ਜਾ ਰਹੇ ਡਾਟਾ ਬੈਚ ਦਾ ਆਕਾਰ। ਡਿਫਾਲਟ 50 ਤੱਤ ਹੈ। SQL ਰਾਹੀਂ ਨਿਰਯਾਤ ਕਰਦੇ ਸਮੇਂ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ।",
+  "DatabaseBatchSize": "ਭੇਜੇ ਜਾ ਰਹੇ ਡਾਟਾ ਬੈਚ ਦਾ ਆਕਾਰ। ਡਿਫਾਲਟ 10000 ਤੱਤ ਹੈ। SQL ਰਾਹੀਂ ਨਿਰਯਾਤ ਕਰਦੇ ਸਮੇਂ ਵਰਤਿਆ ਜਾਂਦਾ ਹੈ।",
   "DatabaseCorruptedResetConfig": "ਡਾਟਾਬੇਸ ਖਰਾਬ ਹੋਇਆ ਹੈ ਅਤੇ ਜਾਰੀ ਰੱਖਣਾ ਸੰਭਵ ਨਹੀਂ ਹੈ। ਕੀ ਤੁਸੀਂ ਸਭ ਸੈਟਿੰਗਾਂ ਨੂੰ ਰੀਸੈਟ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?",
   "DatabaseDescription": "ਡਾਟਾਬੇਸ ਦਾ ਨਾਮ। SQLite ਲਈ ਵਰਤੋਂ ਵਿੱਚ ਨਹੀਂ ਆਉਂਦਾ।",
   "Databento": "Databento",

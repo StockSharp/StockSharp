@@ -1317,7 +1317,7 @@
   "DataVersion": "Gegevensversie",
   "DataWebSocket": "Gegevens-WebSocket",
   "Database": "Database",
-  "DatabaseBatchSize": "Batchgrootte van verzonden gegevens. Standaard 50 elementen. Gebruikt bij export via SQL.",
+  "DatabaseBatchSize": "Batchgrootte van verzonden gegevens. Standaard 10000 elementen. Gebruikt bij export via SQL.",
   "DatabaseCorruptedResetConfig": "De database is beschadigd en kan niet doorgaan. Wilt u alle instellingen resetten?",
   "DatabaseDescription": "Naam van de database. Wordt niet gebruikt voor SQLite.",
   "Databento": "Databento",

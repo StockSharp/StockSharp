@@ -1317,7 +1317,7 @@
   "DataVersion": "Adatverzió",
   "DataWebSocket": "Adat-WebSocket",
   "Database": "Adatbázis",
-  "DatabaseBatchSize": "Átvitt adatok kötegmérete. Az alapértelmezett 50 elem. SQL-en keresztüli exportnál használatos.",
+  "DatabaseBatchSize": "Átvitt adatok kötegmérete. Az alapértelmezett 10000 elem. SQL-en keresztüli exportnál használatos.",
   "DatabaseCorruptedResetConfig": "Az adatbázis sérült, és nem lehet folytatni. Szeretné visszaállítani az összes beállítást?",
   "DatabaseDescription": "Az adatbázis neve. SQLite esetén nincs használva.",
   "Databento": "Databento",

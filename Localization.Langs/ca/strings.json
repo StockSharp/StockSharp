@@ -1317,7 +1317,7 @@
   "DataVersion": "Versió de les dades",
   "DataWebSocket": "WebSocket de dades",
   "Database": "Base de dades",
-  "DatabaseBatchSize": "Mida del lot de dades transmeses. El valor predeterminat és de 50 elements. S\u0027utilitza en exportar mitjançant SQL.",
+  "DatabaseBatchSize": "Mida del lot de dades transmeses. El valor predeterminat és de 10000 elements. S\u0027utilitza en exportar mitjançant SQL.",
   "DatabaseCorruptedResetConfig": "La base de dades està danyada i no es pot continuar. Voleu restablir tota la configuració?",
   "DatabaseDescription": "Nom de la base de dades. No s\u0027utilitza per SQLite.",
   "Databento": "Databento",

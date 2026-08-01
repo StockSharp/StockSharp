@@ -1317,7 +1317,7 @@
   "DataVersion": "Versi data",
   "DataWebSocket": "WebSocket data",
   "Database": "Basis data",
-  "DatabaseBatchSize": "Ukuran batch data sing dikirim. Standar 50 item. Digunakaké nalika ngekspor liwat SQL.",
+  "DatabaseBatchSize": "Ukuran batch data sing dikirim. Standar 10000 item. Digunakaké nalika ngekspor liwat SQL.",
   "DatabaseCorruptedResetConfig": "Basis data rusak lan ora bisa terus. Sampeyan pengin reset kabeh setelan?",
   "DatabaseDescription": "Jeneng database. Ora digunakake kanggo SQLite.",
   "Databento": "Databento",

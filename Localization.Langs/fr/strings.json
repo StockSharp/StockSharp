@@ -1317,7 +1317,7 @@
   "DataVersion": "Version des données",
   "DataWebSocket": "WebSocket de données",
   "Database": "Base de données",
-  "DatabaseBatchSize": "Taille du lot de données transmises. Par défaut, 50 éléments. Utilisé lors de l\u0027exportation via SQL.",
+  "DatabaseBatchSize": "Taille du lot de données transmises. Par défaut, 10000 éléments. Utilisé lors de l\u0027exportation via SQL.",
   "DatabaseCorruptedResetConfig": "La base de données est corrompue et il est impossible de continuer. Voulez-vous réinitialiser tous les paramètres?",
   "DatabaseDescription": "Nom de la base de données. Non utilisé pour SQLite.",
   "Databento": "Databento",

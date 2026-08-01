@@ -1317,7 +1317,7 @@
   "DataVersion": "ডেটা সংস্করণ",
   "DataWebSocket": "ডেটা WebSocket",
   "Database": "ডাটাবেস",
-  "DatabaseBatchSize": "প্রেরিত ডেটা ব্যাচের আকার। ডিফল্ট 50 উপাদান। SQL এর মাধ্যমে রপ্তানি করার সময় ব্যবহৃত হয়।",
+  "DatabaseBatchSize": "প্রেরিত ডেটা ব্যাচের আকার। ডিফল্ট 10000 উপাদান। SQL এর মাধ্যমে রপ্তানি করার সময় ব্যবহৃত হয়।",
   "DatabaseCorruptedResetConfig": "ডাটাবেস ক্ষতিগ্রস্ত এবং কাজ চালিয়ে যাওয়া সম্ভব নয়। আপনি কি সমস্ত সেটিংস রিসেট করতে চান?",
   "DatabaseDescription": "ডাটাবেসের নাম। SQLite এর জন্য ব্যবহৃত হয় না।",
   "Databento": "Databento",

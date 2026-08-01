@@ -1317,7 +1317,7 @@
   "DataVersion": "Dataversio",
   "DataWebSocket": "Data-WebSocket",
   "Database": "Tietokanta",
-  "DatabaseBatchSize": "Lähetettävän dataerän koko. Oletusarvoisesti 50 elementtiä. Käytetään vietäessä SQL:n kautta.",
+  "DatabaseBatchSize": "Lähetettävän dataerän koko. Oletusarvoisesti 10000 elementtiä. Käytetään vietäessä SQL:n kautta.",
   "DatabaseCorruptedResetConfig": "Tietokanta on vioittunut, eikä toimintaa voida jatkaa. Haluatko nollata kaikki asetukset?",
   "DatabaseDescription": "Tietokannan nimi. Ei käytetä SQLitessa.",
   "Databento": "Databento",

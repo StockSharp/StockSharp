@@ -1317,7 +1317,7 @@
   "DataVersion": "Dataversion",
   "DataWebSocket": "Data-WebSocket",
   "Database": "Database",
-  "DatabaseBatchSize": "Batchstørrelse for overførte data. Standard er 50 elementer. Bruges ved eksport via SQL.",
+  "DatabaseBatchSize": "Batchstørrelse for overførte data. Standard er 10000 elementer. Bruges ved eksport via SQL.",
   "DatabaseCorruptedResetConfig": "Databasen er beskadiget, og det er ikke muligt at fortsætte. Ønsker du at nulstille alle indstillinger?",
   "DatabaseDescription": "Databasenavn. Anvendes ikke til SQLite.",
   "Databento": "Databento",

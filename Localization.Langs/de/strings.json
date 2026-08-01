@@ -1317,7 +1317,7 @@
   "DataVersion": "Datenversion",
   "DataWebSocket": "Daten-WebSocket",
   "Database": "Datenbank",
-  "DatabaseBatchSize": "Batchgröße der übertragenen Daten. Standardmäßig 50 Elemente. Wird beim Export über SQL verwendet.",
+  "DatabaseBatchSize": "Batchgröße der übertragenen Daten. Standardmäßig 10000 Elemente. Wird beim Export über SQL verwendet.",
   "DatabaseCorruptedResetConfig": "Die Datenbank ist beschädigt und ein Fortfahren ist nicht möglich. Möchten Sie alle Einstellungen zurücksetzen?",
   "DatabaseDescription": "Datenbankname. Wird nicht für SQLite verwendet.",
   "Databento": "Databento",

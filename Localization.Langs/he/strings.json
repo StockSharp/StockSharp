@@ -1317,7 +1317,7 @@
   "DataVersion": "גרסת נתונים",
   "DataWebSocket": "WebSocket לנתונים",
   "Database": "מסד נתונים",
-  "DatabaseBatchSize": "גודל אצווה של נתונים מועברים. ברירת המחדל היא 50 פריטים. משמש בעת ייצוא דרך SQL.",
+  "DatabaseBatchSize": "גודל אצווה של נתונים מועברים. ברירת המחדל היא 10000 פריטים. משמש בעת ייצוא דרך SQL.",
   "DatabaseCorruptedResetConfig": "מסד הנתונים פגום ולא ניתן להמשיך. האם ברצונך לאפס את כל ההגדרות?",
   "DatabaseDescription": "שם מסד הנתונים. אינו משמש ל SQLite.",
   "Databento": "Databento",

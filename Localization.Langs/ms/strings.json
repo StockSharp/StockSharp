@@ -1317,7 +1317,7 @@
   "DataVersion": "Versi data",
   "DataWebSocket": "WebSocket data",
   "Database": "Pangkalan data",
-  "DatabaseBatchSize": "Saiz kelompok data yang dihantar. Lalai ialah 50 elemen. Digunakan untuk eksport melalui SQL.",
+  "DatabaseBatchSize": "Saiz kelompok data yang dihantar. Lalai ialah 10000 elemen. Digunakan untuk eksport melalui SQL.",
   "DatabaseCorruptedResetConfig": "Pangkalan data telah rosak dan tidak boleh diteruskan. Adakah anda mahu menetapkan semula semua tetapan?",
   "DatabaseDescription": "Nama pangkalan data. Tidak digunakan untuk SQLite.",
   "Databento": "Databento",

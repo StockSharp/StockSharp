@@ -1317,7 +1317,7 @@
   "DataVersion": "เวอร์ชันข้อมูล",
   "DataWebSocket": "WebSocket ข้อมูล",
   "Database": "ฐานข้อมูล",
-  "DatabaseBatchSize": "ขนาดชุดข้อมูลที่ส่ง ค่าเริ่มต้นคือ 50 รายการ ใช้เมื่อส่งออกผ่าน SQL",
+  "DatabaseBatchSize": "ขนาดชุดข้อมูลที่ส่ง ค่าเริ่มต้นคือ 10000 รายการ ใช้เมื่อส่งออกผ่าน SQL",
   "DatabaseCorruptedResetConfig": "ฐานข้อมูลเสียหายและไม่สามารถดำเนินการต่อได้ คุณต้องการรีเซ็ตการตั้งค่าทั้งหมดหรือไม่?",
   "DatabaseDescription": "ชื่อฐานข้อมูล ไม่ใช้สำหรับ SQLite",
   "Databento": "Databento",

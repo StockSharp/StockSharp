@@ -1317,7 +1317,7 @@
   "DataVersion": "إصدار البيانات",
   "DataWebSocket": "WebSocket للبيانات",
   "Database": "قاعدة البيانات",
-  "DatabaseBatchSize": "حجم دفعة البيانات المرسلة. افتراضيًا يساوي 50 عنصرًا. يستخدم عند التصدير عبر SQL.",
+  "DatabaseBatchSize": "حجم دفعة البيانات المرسلة. افتراضيًا يساوي 10000 عنصرًا. يستخدم عند التصدير عبر SQL.",
   "DatabaseCorruptedResetConfig": "قاعدة البيانات تالفة ولا يمكن الاستمرار. هل تريد إعادة تعيين جميع الإعدادات؟",
   "DatabaseDescription": "اسم قاعدة البيانات. لا يستخدم لـ SQLite.",
   "Databento": "Databento",

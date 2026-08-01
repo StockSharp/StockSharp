@@ -1317,7 +1317,7 @@
   "DataVersion": "Versione dei dati",
   "DataWebSocket": "WebSocket dati",
   "Database": "Database",
-  "DatabaseBatchSize": "Dimensione del batch di dati trasmessi. Per impostazione predefinita è pari a 50 elementi. Usato durante l\u0027esportazione tramite SQL.",
+  "DatabaseBatchSize": "Dimensione del batch di dati trasmessi. Per impostazione predefinita è pari a 10000 elementi. Usato durante l\u0027esportazione tramite SQL.",
   "DatabaseCorruptedResetConfig": "Il database è corrotto e non è possibile continuare. Reimpostare tutte le impostazioni?",
   "DatabaseDescription": "Nome del database. Non utilizzato per SQLite.",
   "Databento": "Databento",

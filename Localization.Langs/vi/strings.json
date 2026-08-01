@@ -1317,7 +1317,7 @@
   "DataVersion": "Phiên bản dữ liệu",
   "DataWebSocket": "WebSocket dữ liệu",
   "Database": "Cơ sở dữ liệu",
-  "DatabaseBatchSize": "Kích thước lô dữ liệu truyền đi. Mặc định là 50 phần tử. Được sử dụng khi xuất qua SQL.",
+  "DatabaseBatchSize": "Kích thước lô dữ liệu truyền đi. Mặc định là 10000 phần tử. Được sử dụng khi xuất qua SQL.",
   "DatabaseCorruptedResetConfig": "Cơ sở dữ liệu bị hỏng và không thể tiếp tục. Bạn có muốn đặt lại tất cả cài đặt không?",
   "DatabaseDescription": "Tên cơ sở dữ liệu. Không dùng cho SQLite.",
   "Databento": "Databento",

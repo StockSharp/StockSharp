@@ -5,10 +5,19 @@ using Ecng.Data;
 using StockSharp.Algo.Export;
 
 [TestClass]
-[DoNotParallelize]
 public class ExportTests : BaseTestClass
 {
 	private static readonly TemplateTxtRegistry _txtReg = new();
+
+	// The DB leg covers table creation and CLR->SQL type mapping, not volume: every row
+	// of a given message type travels through the same mapping code, so only a bounded
+	// slice is sent to the (remote) server instead of the whole generated set.
+	private const int _dbMaxRows = 150;
+
+	// Resolved once: the test methods run in parallel and the secrets file cache behind
+	// GetSecret is built lazily without synchronization. A missing secret is reported
+	// exactly as before - the Inconclusive is raised (and replayed) on first access.
+	private static readonly Lazy<string> _dbConnStr = new(() => GetSecret("SQLSERVER_CONNECTION_STRING"), true);
 
 	private async Task ExportAsync<TValue>(DataType dataType, IEnumerable<TValue> values, string txtTemplate)
 		where TValue : class
@@ -17,17 +26,17 @@ public class ExportTests : BaseTestClass
 		var arr = values.ToArray();
 		var hasTime = typeof(TValue).Is<IServerTimeMessage>();
 
-		void validateResult(int count, DateTime? lastTime, string name)
+		void validateResult(TValue[] source, int count, DateTime? lastTime, string name)
 		{
 			var expectedCount = typeof(TValue) == typeof(QuoteChangeMessage) &&
 				name is not ("xml" or "json")
-					? arr.Cast<QuoteChangeMessage>().Sum(depth => depth.ToTimeQuotes().Count())
-					: arr.Length;
+					? source.Cast<QuoteChangeMessage>().Sum(depth => depth.ToTimeQuotes().Count())
+					: source.Length;
 
 			count.AreEqual(expectedCount, $"ExportAsync returned unexpected count for {name}");
 
-			if (hasTime && arr.Length > 0)
-				lastTime.AssertEqual(((IServerTimeMessage)arr.Last()).ServerTime);
+			if (hasTime && source.Length > 0)
+				lastTime.AssertEqual(((IServerTimeMessage)source.Last()).ServerTime);
 		}
 
 		async Task Do(string extension, Func<Stream, BaseExporter> create)
@@ -36,7 +45,7 @@ public class ExportTests : BaseTestClass
 			var export = create(stream);
 			var (count, lastTime) = await export.Export(arr.ToAsyncEnumerable(), token);
 
-			validateResult(count, lastTime, extension);
+			validateResult(arr, count, lastTime, extension);
 
 			// Verify something was written
 			(stream.Length > 0).AssertTrue($"ExportAsync {extension} should write data");
@@ -48,17 +57,44 @@ public class ExportTests : BaseTestClass
 		await Do("xlsx", f => new ExcelExporter(ServicesRegistry.ExcelProvider, dataType, f, () => { }));
 
 #if NET10_0_OR_GREATER
+		// A depth is written as one row per quote, every other message as a single row.
+		static int toDbRows(TValue value)
+			=> value is QuoteChangeMessage depth ? depth.ToTimeQuotes().Count() : 1;
+
+		var dbValues = new List<TValue>();
+		var dbRows = 0;
+
+		foreach (var value in arr)
+		{
+			if (dbRows >= _dbMaxRows)
+				break;
+
+			dbValues.Add(value);
+			dbRows += toDbRows(value);
+		}
+
+		// The slice must still carry rows, so an empty stream cannot pass the DB leg silently.
+		(dbRows > 0).AssertTrue($"DB export slice is empty for {typeof(TValue).Name}");
+
+		var dbArr = dbValues.ToArray();
+
 		var dbExporter = new DatabaseExporter(DatabaseRegistry.Provider, dataType, new DatabaseConnectionPair
 		{
 			Provider = DatabaseProviderRegistry.AllProviders.First(),
-			ConnectionString = GetSecret("SQLSERVER_CONNECTION_STRING"),
+			ConnectionString = _dbConnStr.Value,
 		})
 		{
 			DropExisting = true,
-			TableNamePrefix = "SS_",
+			// Tests share target tables (Ticks and OrderLog both export ExecutionMessage)
+			// and each of them drops and recreates its table, so the name has to be unique
+			// per test for the class to run in parallel.
+			TableNamePrefix = $"SS_{TestContext.TestName}_",
+			// Below the slice size on purpose: keeps the multi-batch path of the exporter
+			// covered, while the production default would send the slice as one batch.
+			BatchSize = 100,
 		};
-		var (dbCount, dbLastTime) = await dbExporter.Export(arr.ToAsyncEnumerable(), token);
-		validateResult(dbCount, dbLastTime, "DB");
+		var (dbCount, dbLastTime) = await dbExporter.Export(dbArr.ToAsyncEnumerable(), token);
+		validateResult(dbArr, dbCount, dbLastTime, "DB");
 #endif
 	}
 

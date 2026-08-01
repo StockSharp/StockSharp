@@ -1317,7 +1317,7 @@
   "DataVersion": "データバージョン",
   "DataWebSocket": "データWebSocket",
   "Database": "データベース",
-  "DatabaseBatchSize": "送信データのバッチサイズ。デフォルトは50項目です。SQL経由でエクスポートする場合に使用します。",
+  "DatabaseBatchSize": "送信データのバッチサイズ。デフォルトは10000項目です。SQL経由でエクスポートする場合に使用します。",
   "DatabaseCorruptedResetConfig": "データベースが破損していて作業を続けることができません。すべての設定をリセットしますか？",
   "DatabaseDescription": "データベースの名前です。SQLiteには使用されません。",
   "Databento": "Databento",

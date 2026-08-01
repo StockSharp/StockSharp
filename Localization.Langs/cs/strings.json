@@ -1317,7 +1317,7 @@
   "DataVersion": "Verze dat",
   "DataWebSocket": "Datový WebSocket",
   "Database": "Databáze",
-  "DatabaseBatchSize": "Velikost dávky přenášených dat. Výchozí hodnota je 50 položek. Používá se při exportu přes SQL.",
+  "DatabaseBatchSize": "Velikost dávky přenášených dat. Výchozí hodnota je 10000 položek. Používá se při exportu přes SQL.",
   "DatabaseCorruptedResetConfig": "Databáze je poškozena a nelze pokračovat. Chcete resetovat všechna nastavení?",
   "DatabaseDescription": "Název databáze. Nepoužívá se pro SQLite.",
   "Databento": "Databento",

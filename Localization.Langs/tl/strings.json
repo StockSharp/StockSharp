@@ -1317,7 +1317,7 @@
   "DataVersion": "Bersyon ng data",
   "DataWebSocket": "WebSocket ng data",
   "Database": "Database",
-  "DatabaseBatchSize": "Laki ng batch ng ipinapadalang data. Default ay 50 elemento. Ginagamit kapag nag-e-export sa SQL.",
+  "DatabaseBatchSize": "Laki ng batch ng ipinapadalang data. Default ay 10000 elemento. Ginagamit kapag nag-e-export sa SQL.",
   "DatabaseCorruptedResetConfig": "Ang database ay corrupted at hindi maaaring magpatuloy. Gusto mo bang i-reset ang lahat ng setting?",
   "DatabaseDescription": "Pangalan ng database. Hindi ginagamit sa SQLite.",
   "Databento": "Databento",

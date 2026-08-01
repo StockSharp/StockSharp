@@ -1317,7 +1317,7 @@
   "DataVersion": "Dataversion",
   "DataWebSocket": "WebSocket för data",
   "Database": "Databas",
-  "DatabaseBatchSize": "Batchstorlek för överförda data. Standard är 50 element. Används vid export via SQL.",
+  "DatabaseBatchSize": "Batchstorlek för överförda data. Standard är 10000 element. Används vid export via SQL.",
   "DatabaseCorruptedResetConfig": "Databasen är korrupt och det går inte att fortsätta. Vill du återställa alla inställningar?",
   "DatabaseDescription": "Databasnamn. Används inte för SQLite.",
   "Databento": "Databento",

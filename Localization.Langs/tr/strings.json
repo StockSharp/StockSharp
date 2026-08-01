@@ -1317,7 +1317,7 @@
   "DataVersion": "Veri sürümü",
   "DataWebSocket": "Veri WebSocket\u0027i",
   "Database": "Veri tabanı",
-  "DatabaseBatchSize": "Aktarılan veri toplu iş boyutu. Varsayılan 50 öğedir. SQL üzerinden dışa aktarırken kullanılır.",
+  "DatabaseBatchSize": "Aktarılan veri toplu iş boyutu. Varsayılan 10000 öğedir. SQL üzerinden dışa aktarırken kullanılır.",
   "DatabaseCorruptedResetConfig": "Veritabanı bozulmuş ve işlemeye devam edilemiyor. Tüm ayarları sıfırlamak istiyor musunuz?",
   "DatabaseDescription": "Veritabanı adı. SQLite için kullanılmaz.",
   "Databento": "Databento",
