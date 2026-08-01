@@ -3,6 +3,7 @@ import random
 
 clr.AddReference("StockSharp.BusinessEntities")
 clr.AddReference("StockSharp.Algo")
+clr.AddReference("StockSharp.Algo.Indicators")
 
 from StockSharp.Algo.Indicators import BaseIndicator, DecimalIndicatorValue
 from indicator_extensions import *
