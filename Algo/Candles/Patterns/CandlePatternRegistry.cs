@@ -5,7 +5,10 @@
 /// </summary>
 public static class CandlePatternRegistry
 {
-	private static ExpressionCandlePattern Create(string name, params string[] expressions) => new(name, expressions.Select(e => new CandleExpressionCondition(Paths.FileSystem, e)));
+	// The built-in formulas are compiled at the first evaluation of the pattern that owns them.
+	// Compiling all of them here instead made the type initializer - i.e. touching any single
+	// pattern, or merely listing the registry by name - pay for every pattern in the registry.
+	private static ExpressionCandlePattern Create(string name, params string[] expressions) => new(name, expressions.Select(e => new CandleExpressionCondition(Paths.FileSystem, e, compileOnDemand: true)));
 
 	/// <summary>
 	/// Flat candle pattern.

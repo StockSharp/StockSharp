@@ -354,7 +354,8 @@ public class PatternsTests : BaseTestClass
 	[TestMethod]
 	public void CustomMultiCandle()
 	{
-		var fs = Helper.MemorySystem;
+		// Compiling a formula reads the reference assemblies from this file system, so it has to be the real one.
+		var fs = Helper.FileSystem;
 		
 		// Test custom pattern: Two consecutive white candles
 		var customPattern = new ExpressionCandlePattern("TwoWhiteCandles",
@@ -456,7 +457,8 @@ public class PatternsTests : BaseTestClass
 	[TestMethod]
 	public void SaveLoadWithCustomName()
 	{
-		var fs = Helper.MemorySystem;
+		// Compiling a formula reads the reference assemblies from this file system, so it has to be the real one.
+		var fs = Helper.FileSystem;
 
 		var pattern = new ExpressionCandlePattern("CustomName",
 		[
@@ -599,5 +601,81 @@ public class PatternsTests : BaseTestClass
 		// Неверный случай: третья выше второй
 		var wrong = CreateCandle(90m, 100m, 90m, 100m);
 		TestPattern(CandlePatternRegistry.ThreeOutsideDown, [first, second, wrong], false);
+	}
+
+	[TestMethod]
+	public void CompileOnDemand()
+	{
+		// Compiling a formula reads the reference assemblies from this file system, so it has to be the real one.
+		var fs = Helper.FileSystem;
+
+		// An unknown variable can only be spotted once the formula has been compiled, so an
+		// eagerly compiled condition rejects it right in the constructor...
+		ThrowsExactly<InvalidOperationException>(() => new CandleExpressionCondition(fs, "ZZZ > 0"));
+
+		// ...while an on-demand one accepts it - which is exactly what proves that nothing
+		// has been compiled yet (the registry builds all its conditions this way).
+		var lazyCond = new CandleExpressionCondition(fs, "ZZZ > 0", compileOnDemand: true);
+
+		lazyCond.Expression.AssertEqual("ZZZ > 0");
+		lazyCond.ToString().AssertEqual("ZZZ > 0");
+
+		ICandlePattern broken = new ExpressionCandlePattern("BrokenOnDemand", [lazyCond]);
+		var candles = new CandleMessage[] { CreateCandle(100m, 110m, 100m, 108m) };
+
+		// the very same error still surfaces, just at the first evaluation - and keeps surfacing
+		ThrowsExactly<InvalidOperationException>(() => broken.Recognize(candles));
+		ThrowsExactly<InvalidOperationException>(() => broken.Recognize(candles));
+	}
+
+	[TestMethod]
+	public void CompileOnDemandRecognize()
+	{
+		// Compiling a formula reads the reference assemblies from this file system, so it has to be the real one.
+		var fs = Helper.FileSystem;
+
+		// Deferring the compilation must not change a single recognition result.
+		var pattern = new ExpressionCandlePattern("OnDemandHigherClose",
+		[
+			new CandleExpressionCondition(fs, "O < C", compileOnDemand: true),
+			new CandleExpressionCondition(fs, "(O < C) && (C > pC)", compileOnDemand: true)
+		]);
+
+		var firstCandle = CreateCandle(100m, 110m, 100m, 108m); // White candle
+		var higherClose = CreateCandle(106m, 115m, 105m, 113m); // Closes higher
+		var lowerClose = CreateCandle(106m, 110m, 105m, 107m); // Closes lower
+
+		TestPattern(pattern, [firstCandle, higherClose], true);
+
+		// the second call reuses the formulas compiled by the first one
+		TestPattern(pattern, [firstCandle, lowerClose], false);
+	}
+
+	[TestMethod]
+	public void LoadedConditionIsCompiled()
+	{
+		// Compiling a formula reads the reference assemblies from this file system, so it has to be the real one.
+		var fs = Helper.FileSystem;
+
+		// Saving needs the formula text only, so an on-demand condition is enough here.
+		var pattern = new ExpressionCandlePattern("SavedWhite",
+		[
+			new CandleExpressionCondition(fs, "O < C", compileOnDemand: true)
+		]);
+
+		var storage = new SettingsStorage();
+		((IPersistable)pattern).Save(storage);
+
+		var loaded = new ExpressionCandlePattern("Loaded", []);
+		((IPersistable)loaded).Load(storage);
+
+		loaded.Conditions.Length.AssertEqual(1);
+		loaded.Conditions[0].ToString().AssertEqual("O < C");
+
+		// A condition constructed empty and then loaded has to evaluate the loaded formula:
+		// a condition left uncompiled silently matches everything, which no assertion on the
+		// formula text would ever notice.
+		TestPattern(loaded, [CreateCandle(100m, 110m, 100m, 108m)], true);
+		TestPattern(loaded, [CreateCandle(108m, 110m, 100m, 100m)], false);
 	}
 }

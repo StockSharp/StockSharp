@@ -40,22 +40,49 @@ public class CandleExpressionCondition : IPersistable
 
 	private readonly AssemblyLoadContextTracker _context = new();
 	private readonly Dictionary<string, ValueGetterDelegate> _varGetters = new(StringComparer.InvariantCultureIgnoreCase);
+	private readonly Lock _compileLock = new();
+	private readonly bool _compileOnDemand;
+	private volatile bool _compiled;
 	private string[] _variables;
 	private decimal[] _varValues;
 	private ExpressionFormula<bool> _formula;
+	private int _minIndex;
+	private int _maxIndex;
 
 	/// <summary>
 	/// Formula is not present.
 	/// </summary>
-	public bool IsEmpty => _formula == null;
+	public bool IsEmpty
+	{
+		get
+		{
+			EnsureCompiled();
+			return _formula == null;
+		}
+	}
 
 	/// <summary>
 	/// Expression.
 	/// </summary>
 	public string Expression { get; private set; }
 
-	internal int MinIndex { get; private set; }
-	internal int MaxIndex { get; private set; }
+	internal int MinIndex
+	{
+		get
+		{
+			EnsureCompiled();
+			return _minIndex;
+		}
+	}
+
+	internal int MaxIndex
+	{
+		get
+		{
+			EnsureCompiled();
+			return _maxIndex;
+		}
+	}
 
 	private readonly IFileSystem _fileSystem;
 
@@ -65,21 +92,52 @@ public class CandleExpressionCondition : IPersistable
 	/// <param name="fileSystem">File system.</param>
 	/// <param name="expression"><see cref="Expression"/></param>
 	public CandleExpressionCondition(IFileSystem fileSystem, string expression)
+		: this(fileSystem, expression, false)
+	{
+	}
+
+	/// <summary>
+	/// Create instance.
+	/// </summary>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="expression"><see cref="Expression"/></param>
+	/// <param name="compileOnDemand">Compile <paramref name="expression"/> at the first evaluation instead of right away. Compilation goes through the C# compiler and costs orders of magnitude more than evaluating the condition, so a large set of conditions that is usually only listed (like <see cref="CandlePatternRegistry"/>) should not pay for it up front. An invalid expression is then reported at the first evaluation instead of by this constructor.</param>
+	public CandleExpressionCondition(IFileSystem fileSystem, string expression, bool compileOnDemand)
 	{
 		_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+		_compileOnDemand = compileOnDemand;
 		Expression = expression;
 
-		Init();
+		if (!compileOnDemand)
+			EnsureCompiled();
 	}
 
 	private static readonly Regex _varNamePattern = new(@"^(p+)?([a-zA-Z]+)(\d*)$", RegexOptions.Compiled);
+
+	private void EnsureCompiled()
+	{
+		if (_compiled)
+			return;
+
+		using (_compileLock.EnterScope())
+		{
+			if (_compiled)
+				return;
+
+			// Init resets its own state before compiling, so a failed attempt leaves the condition
+			// retryable and keeps reporting the very same error on every further evaluation.
+			Init();
+
+			_compiled = true;
+		}
+	}
 
 	private void Init()
 	{
 		_formula = null;
 		_varGetters.Clear();
 
-		MinIndex = MaxIndex = 0;
+		_minIndex = _maxIndex = 0;
 
 		if(Expression.IsEmptyOrWhiteSpace())
 			return;
@@ -120,8 +178,8 @@ public class CandleExpressionCondition : IPersistable
 					idx = -idx - 1;
 			}
 
-			MinIndex = MinIndex.Min(idx);
-			MaxIndex = MaxIndex.Max(idx);
+			_minIndex = _minIndex.Min(idx);
+			_maxIndex = _maxIndex.Max(idx);
 
 			var idxVar = Variables.IndexOf(v => v.VarName.EqualsIgnoreCase(name));
 			if(idxVar < 0)
@@ -147,6 +205,8 @@ public class CandleExpressionCondition : IPersistable
 	/// <returns>Check result.</returns>
 	public bool CheckCondition(ReadOnlySpan<ICandleMessage> candles, int candleIndex)
 	{
+		EnsureCompiled();
+
 		if(_formula == null)
 			return true;
 
@@ -185,7 +245,12 @@ public class CandleExpressionCondition : IPersistable
 		EnsureEmpty();
 
 		Expression = storage.GetValue<string>(nameof(Expression));
-		Init();
+
+		// the loaded formula replaces the one this instance was created with
+		_compiled = false;
+
+		if (!_compileOnDemand)
+			EnsureCompiled();
 	}
 
 	/// <inheritdoc />
