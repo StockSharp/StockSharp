@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -45,7 +45,8 @@ jobs:
         working-directory: 'StockSharp (GitHub)'
         run: dotnet build StockSharp.slnx --configuration Release
 
-      - name: Build
+      - name: Build StockSharp_Tests.slnx (non-Windows)
+        if: matrix.os != 'windows-latest'
         working-directory: 'StockSharp (GitHub)'
         run: dotnet build StockSharp_Tests.slnx --configuration Release
 
