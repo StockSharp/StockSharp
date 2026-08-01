@@ -11,7 +11,18 @@ class OrderBookLevelImpl(decimal price)
 	public decimal Price { get; } = price;
 	public decimal MarketVolume { get; set; }
 
-	public decimal TotalVolume => MarketVolume + _orders.Sum(o => o.Balance);
+	public decimal TotalVolume
+	{
+		get
+		{
+			var ordersVolume = 0m;
+
+			foreach (var order in _orders)
+				ordersVolume += order.Balance;
+
+			return MarketVolume + ordersVolume;
+		}
+	}
 	public int OrderCount => _nodesByTransId.Count;
 	public IEnumerable<EmulatorOrder> Orders => _orders;
 
@@ -82,23 +93,11 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 
 	/// <inheritdoc />
 	public (decimal price, decimal volume)? BestBid
-	{
-		get
-		{
-			var first = _bids.FirstOrDefault();
-			return first.Value is null ? null : (first.Key, first.Value.TotalVolume);
-		}
-	}
+		=> GetBestQuote(_bids);
 
 	/// <inheritdoc />
 	public (decimal price, decimal volume)? BestAsk
-	{
-		get
-		{
-			var first = _asks.FirstOrDefault();
-			return first.Value is null ? null : (first.Key, first.Value.TotalVolume);
-		}
-	}
+		=> GetBestQuote(_asks);
 
 	/// <inheritdoc />
 	public decimal TotalBidVolume => _totalBidVolume;
@@ -132,6 +131,32 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 
 	private SortedDictionary<decimal, OrderBookLevelImpl> GetQuotes(Sides side)
 		=> side == Sides.Buy ? _bids : _asks;
+
+	private static (decimal price, decimal volume)? GetBestQuote(SortedDictionary<decimal, OrderBookLevelImpl> quotes)
+	{
+		using var enumerator = quotes.GetEnumerator();
+
+		if (!enumerator.MoveNext())
+			return null;
+
+		var first = enumerator.Current;
+		return first.Value is null ? null : (first.Key, first.Value.TotalVolume);
+	}
+
+	private static QuoteChange[] ToQuoteChanges(SortedDictionary<decimal, OrderBookLevelImpl> quotes)
+	{
+		var result = new QuoteChange[quotes.Count];
+		var index = 0;
+		using var enumerator = quotes.GetEnumerator();
+
+		while (enumerator.MoveNext())
+		{
+			var quote = enumerator.Current;
+			result[index++] = new QuoteChange(quote.Key, quote.Value.TotalVolume);
+		}
+
+		return result;
+	}
 
 	private OrderBookLevelImpl GetOrCreateLevel(Sides side, decimal price)
 	{
@@ -329,8 +354,8 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 			SecurityId = SecurityId,
 			LocalTime = localTime,
 			ServerTime = serverTime,
-			Bids = [.. _bids.Select(kvp => new QuoteChange(kvp.Key, kvp.Value.TotalVolume))],
-			Asks = [.. _asks.Select(kvp => new QuoteChange(kvp.Key, kvp.Value.TotalVolume))],
+			Bids = ToQuoteChanges(_bids),
+			Asks = ToQuoteChanges(_asks),
 		};
 	}
 
