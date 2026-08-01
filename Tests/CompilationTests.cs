@@ -21,6 +21,88 @@ public class CompilationTests : BaseTestClass
 	// Synchronization object for Python script execution
 	// IronPython's ScriptEngine is not thread-safe
 	private static readonly string _analyticsFolder = "../../../../Algo.Analytics.{0}";
+	private static readonly (string name, byte[] body)[] _noReferenceImages = [];
+
+	private static readonly ReferenceImageCache _defaultReferenceImages = new(static () => CodeExtensions.DefaultReferences);
+	private static readonly ReferenceImageCache _analyticsReferenceImages = new(static () => CodeExtensions.CreateAssemblyReferences(
+	[
+		"StockSharp.Algo.Analytics",
+		"MathNet.Numerics"
+	]));
+	private static readonly ReferenceImageCache _fSharpReferenceImages = new(static () => CodeExtensions.FSharpReferences);
+
+	private sealed class ReferenceImageCache(Func<IEnumerable<AssemblyReference>> getReferences)
+	{
+		private static readonly Task<(string name, byte[] body)[]> _emptyImages = Task.FromResult(Array.Empty<(string name, byte[] body)>());
+
+		private readonly Lock _sync = new();
+		private Task<(string name, byte[] body)[]> _images = _emptyImages;
+		private bool _isInitialized;
+
+		public async Task<(string name, byte[] body)[]> GetImages(CancellationToken token)
+		{
+			Task<(string name, byte[] body)[]> images;
+			var observeFailure = false;
+
+			using (_sync.EnterScope())
+			{
+				if (!_isInitialized)
+				{
+					_images = LoadImages(getReferences(), token);
+					_isInitialized = true;
+					observeFailure = true;
+				}
+
+				images = _images;
+			}
+
+			if (observeFailure)
+				_ = ResetOnFailure(images);
+
+			return await images.WaitAsync(token);
+		}
+
+		private async Task ResetOnFailure(Task<(string name, byte[] body)[]> images)
+		{
+			try
+			{
+				await images;
+			}
+			catch
+			{
+				using (_sync.EnterScope())
+				{
+					if (!ReferenceEquals(_images, images))
+						return;
+
+					_images = _emptyImages;
+					_isInitialized = false;
+				}
+			}
+		}
+
+		private static async Task<(string name, byte[] body)[]> LoadImages(IEnumerable<AssemblyReference> references, CancellationToken token)
+			=> (await references.ToValidRefImages(token)).ToArray();
+	}
+
+	private static async Task<(string name, byte[] body)[]> GetReferenceImages(bool includeAnalytics, bool includeFSharp, CancellationToken token)
+	{
+		var defaultReferences = await _defaultReferenceImages.GetImages(token);
+
+		if (!includeAnalytics && !includeFSharp)
+			return defaultReferences;
+
+		var analyticsReferences = Array.Empty<(string name, byte[] body)>();
+		var fSharpReferences = Array.Empty<(string name, byte[] body)>();
+
+		if (includeAnalytics)
+			analyticsReferences = await _analyticsReferenceImages.GetImages(token);
+
+		if (includeFSharp)
+			fSharpReferences = await _fSharpReferenceImages.GetImages(token);
+
+		return [.. defaultReferences, .. analyticsReferences, .. fSharpReferences];
+	}
 
 	[TestMethod]
 	public Task CSharpAnalyticsScripts() => TestAnalyticsScripts(_analyticsFolder.Put("CSharp"), FileExts.CSharp, CancellationToken);
@@ -56,14 +138,9 @@ public class CompilationTests : BaseTestClass
 
 		await EnsureCandlesExist(securities, from, to, storageRegistry, storageRegistry.DefaultDrive, format, timeFrame, token);
 
-		var references = CodeExtensions.DefaultReferences
-			.Concat(CodeExtensions.CreateAssemblyReferences(
-			[
-				"StockSharp.Algo.Analytics",
-				"MathNet.Numerics"
-			]));
-
-		var refs = (await references.ToValidRefImages(token)).ToArray();
+		var refs = compiler.IsReferencesSupported
+			? await GetReferenceImages(true, fileExtension == FileExts.FSharp, token)
+			: _noReferenceImages;
 
 		// Run all compile-and-execute pipelines concurrently. The compiler owns any
 		// synchronization required by its underlying script engine.
@@ -81,11 +158,11 @@ public class CompilationTests : BaseTestClass
 				// Compile the script
 				var sources = new string[] { sourceCode };
 
-				var context = compiler.CreateContext();
 				var res = await compiler.Compile(scriptName, sources, refs, token);
 
 				Validate(res);
 
+				using var context = compiler.CreateContext();
 				var assembly = res.GetAssembly(context);
 				assembly.AssertNotNull();
 
@@ -130,17 +207,9 @@ public class CompilationTests : BaseTestClass
 
 		await EnsureCandlesExist(securities, from, to, storageRegistry, storageRegistry.DefaultDrive, format, timeFrame, token);
 
-		var references = CodeExtensions.DefaultReferences
-			.Concat(CodeExtensions.CreateAssemblyReferences(
-			[
-				"StockSharp.Algo.Analytics",
-				"MathNet.Numerics"
-			]));
-
-		if (fileExtension == FileExts.FSharp)
-			references = references.Concat(CodeExtensions.FSharpReferences);
-		
-		var refs = (await references.ToValidRefImages(token)).ToArray();
+		var refs = compiler.IsReferencesSupported
+			? await GetReferenceImages(true, fileExtension == FileExts.FSharp, token)
+			: _noReferenceImages;
 
 		foreach (var scriptFile in scriptFiles)
 		{
@@ -160,8 +229,6 @@ public class CompilationTests : BaseTestClass
 				if (usings is not null)
 					sources = sources.Concat([usings]);
 
-				var context = compiler.CreateContext();
-
 				var res = await compiler.Compile(
 					scriptName,
 					sources,
@@ -170,6 +237,7 @@ public class CompilationTests : BaseTestClass
 
 				Validate(res);
 
+				using var context = compiler.CreateContext();
 				var assembly = res.GetAssembly(context);
 				assembly.AssertNotNull();
 
@@ -498,10 +566,11 @@ public class CompilationTests : BaseTestClass
 
 		var sourceCode = File.ReadAllText(Path.Combine(_designerFolder, fileName));
 
-		var res = await compiler.Compile("test", [sourceCode], await CodeExtensions.DefaultReferences.ToValidRefImages(token), token);
+		var res = await compiler.Compile("test", [sourceCode], await GetReferenceImages(false, false, token), token);
 		Validate(res);
 
-		var type = res.GetAssembly(compiler.CreateContext()).GetExportedTypes().First();
+		using var context = compiler.CreateContext();
+		var type = res.GetAssembly(context).GetExportedTypes().First();
 		type.IsRequiredType<T>().AssertTrue();
 		
 		var s = type.CreateInstance<T>();
@@ -537,12 +606,11 @@ public class CompilationTests : BaseTestClass
 
 		var sourceCode = File.ReadAllText(Path.Combine(_designerFolder, fileName));
 
-		var fsharpRefs = CodeExtensions.FSharpReferences;
-
-		var res = await compiler.Compile("test", [sourceCode], await CodeExtensions.DefaultReferences.Concat(fsharpRefs).ToValidRefImages(token), token);
+		var res = await compiler.Compile("test", [sourceCode], await GetReferenceImages(false, true, token), token);
 		Validate(res);
 
-		var type = res.GetAssembly(compiler.CreateContext()).GetExportedTypes().First();
+		using var context = compiler.CreateContext();
+		var type = res.GetAssembly(context).GetExportedTypes().First();
 		type.IsRequiredType<T>().AssertTrue();
 		
 		var s = type.CreateInstance<T>();
@@ -578,11 +646,11 @@ public class CompilationTests : BaseTestClass
 
 		ICompiler compiler = ServicesRegistry.CompilerProvider[FileExts.Python];
 
-		var context = compiler.CreateContext();
+		using var context = compiler.CreateContext();
 		
 		var sourceCode = File.ReadAllText(Path.Combine(_designerFolder, fileName));
 		
-		var res = await compiler.Compile(typeof(T).Name, [sourceCode], await CodeExtensions.DefaultReferences.ToValidRefImages(token), token);
+		var res = await compiler.Compile(typeof(T).Name, [sourceCode], _noReferenceImages, token);
 
 		Validate(res);
 
@@ -595,7 +663,7 @@ public class CompilationTests : BaseTestClass
 		{
 			// Compiling the same module name into the same context again must succeed
 			// and expose the same type, not clash with the already loaded module.
-			var res2 = await compiler.Compile(typeof(T).Name, [sourceCode], await CodeExtensions.DefaultReferences.ToValidRefImages(token), token);
+			var res2 = await compiler.Compile(typeof(T).Name, [sourceCode], _noReferenceImages, token);
 
 			Validate(res2);
 
