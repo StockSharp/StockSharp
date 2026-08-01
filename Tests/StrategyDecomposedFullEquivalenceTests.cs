@@ -163,9 +163,17 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		public bool SubscribeRawData { get; init; }
 
 		/// <summary>
-		/// History window length; shorter for high-volume scenarios.
+		/// History window length; longer only for scenarios that need it (see
+		/// <see cref="StopAfterCandles"/>), shorter for high-volume ones.
+		///
+		/// The default is deliberately small: the security is a 24/7 crypto instrument, so
+		/// one day already yields ~1440 one-minute candles - an order of magnitude above the
+		/// <see cref="_minCandles"/> sufficiency guard - while every extra day multiplies the
+		/// cost of the TWO full backtests each scenario runs. All substance guards below
+		/// (candles, orders, trades, protection, fails, gating, relays) stay in force, so a
+		/// window that ever became too thin fails loudly instead of comparing empty streams.
 		/// </summary>
-		public int Days { get; init; } = 7;
+		public int Days { get; init; } = 2;
 
 		public int MinOrders { get; init; } = _minOrders;
 		public int MinTrades { get; init; } = _minTrades;
@@ -1282,7 +1290,10 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 	[TestMethod]
 	[Timeout(300_000, CooperativeCancellation = true)]
 	public Task FullEquivalence_MidRunStopCancelsActiveOrders()
-		=> RunFullEquivalence(new() { StopAfterCandles = 3000 });
+		// Explicit window: the stop is requested on candle 3000, so the run needs more than
+		// 3000 one-minute candles (~1440/day) AND some stream left afterwards for the
+		// cancel-on-stop / live-unsubscribe flows to execute against live data.
+		=> RunFullEquivalence(new() { StopAfterCandles = 3000, Days = 3 });
 
 	[TestMethod]
 	[Timeout(300_000, CooperativeCancellation = true)]
@@ -1302,5 +1313,9 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 	[TestMethod]
 	[Timeout(300_000, CooperativeCancellation = true)]
 	public Task FullEquivalence_RawMarketDataRelays()
-		=> RunFullEquivalence(new() { SubscribeRawData = true, Days = 2 });
+		// By far the heaviest scenario: every tick, level1 change and order book of the
+		// window is relayed and recorded twice (once per side), so it gets the shortest
+		// window. One day still drives the relay guards (RelayTick/RelayL1 >= 1) and the
+		// order/trade guards by a wide margin.
+		=> RunFullEquivalence(new() { SubscribeRawData = true, Days = 1 });
 }

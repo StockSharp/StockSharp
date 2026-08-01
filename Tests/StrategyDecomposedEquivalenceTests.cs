@@ -14,6 +14,9 @@ using StockSharp.Designer;
 /// Also tests DecomposedSmaStrategy vs original SmaStrategy with same candle data.
 /// </summary>
 [TestClass]
+// The order and trade tests share one backtested strategy and write to its entities
+// (order state, MyTrade.PnL, TryAddMyTrade), so they must not run against each other.
+[DoNotParallelize]
 public class StrategyDecomposedEquivalenceTests : BaseTestClass
 {
 	private class FakeHost : IStrategyHost
@@ -274,6 +277,25 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		return connector;
 	}
 
+	private static readonly Lock _sharedBacktestSync = new();
+	private static Task<SmaStrategy> _sharedBacktest;
+
+	/// <summary>
+	/// The three pipeline-replay tests below all need ONE completed backtest of the very
+	/// same deterministic scenario; each of them used to replay the history on its own.
+	/// The run is executed once and its result shared.
+	///
+	/// Sharing is safe because the consumers only READ the produced orders and trades:
+	/// the order-tracking test drives order states through the canonical Pending -&gt; final
+	/// transition but restores the real final state of every order it touches, and no other
+	/// test looks at order state.
+	/// </summary>
+	private Task<SmaStrategy> SharedBacktestAsync(CancellationToken ct)
+	{
+		using (_sharedBacktestSync.EnterScope())
+			return _sharedBacktest ??= RunBacktest(ct);
+	}
+
 	private async Task<SmaStrategy> RunBacktest(CancellationToken ct)
 	{
 		var security = new Security { Id = Paths.HistoryDefaultSecurity };
@@ -284,9 +306,24 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		var storageRegistry = Helper.FileSystem.GetStorage(Paths.HistoryDataPath);
 
 		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
+
+		// One week of 1-minute candles on a 24/7 instrument (~10k bars) produces hundreds of
+		// orders and trades - far more than the replay comparisons need, and each consumer
+		// asserts loudly that the list it got is non-empty. Replaying the full month bought
+		// no additional coverage.
+		var stopTime = Paths.HistoryBeginDate.AddDays(7);
 
 		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+
+		// Determinism: the result is shared by several tests, so nothing in the emulator may
+		// seed itself from the wall clock (random seed, initial order/trade ids, latency).
+		// The commission/slippage managers are deliberately left at their defaults - the
+		// replay comparison below asserts on the values they produce.
+		var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
+		emulator.RandomProvider = new DefaultRandomProvider(42);
+		connector.EmulationAdapter.Settings.InitialOrderId = 100;
+		connector.EmulationAdapter.Settings.InitialTradeId = 100;
+		connector.Adapter.LatencyManager = null;
 
 		var strategy = new SmaStrategy
 		{
@@ -419,9 +456,14 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	{
 		if (SkipIfNoHistoryData()) return;
 
-		var strategy = await RunBacktest(CancellationToken);
+		var strategy = await SharedBacktestAsync(CancellationToken);
 
 		var trades = strategy.MyTrades.ToArray();
+
+		// The early return below exists for a genuinely trade-less environment; assert first
+		// so a backtest window that stopped producing trades fails loudly instead of turning
+		// this test into a silent no-op.
+		IsTrue(trades.Length > 0, "Backtest produced no trades - there is nothing to compare");
 
 		if (trades.Length == 0)
 		{
@@ -459,9 +501,12 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	{
 		if (SkipIfNoHistoryData()) return;
 
-		var strategy = await RunBacktest(CancellationToken);
+		var strategy = await SharedBacktestAsync(CancellationToken);
 
 		var trades = strategy.MyTrades.ToArray();
+
+		// Same as above: an empty trade list must fail, not silently skip the dedup checks.
+		IsTrue(trades.Length > 0, "Backtest produced no trades - the dedup contract is not exercised");
 
 		if (trades.Length == 0)
 		{
@@ -508,9 +553,13 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	{
 		if (SkipIfNoHistoryData()) return;
 
-		var strategy = await RunBacktest(CancellationToken);
+		var strategy = await SharedBacktestAsync(CancellationToken);
 
 		var orders = strategy.Orders.ToArray();
+
+		// Same as the trade guards: an empty order list must fail, not silently skip the
+		// registration-detection checks below.
+		IsTrue(orders.Length > 0, "Backtest produced no orders - the tracking contract is not exercised");
 
 		if (orders.Length == 0)
 		{
@@ -594,7 +643,11 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		var storageRegistry = Helper.FileSystem.GetStorage(Paths.HistoryDataPath);
 
 		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryBeginDate.AddDays(2);
+
+		// This test compares LIFECYCLE transitions only (Started/Stopping), which a single
+		// replayed day drives exactly as a longer one; the strategyStates.Count > 0 guard
+		// below keeps an empty run loud.
+		var stopTime = Paths.HistoryBeginDate.AddDays(1);
 
 		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
@@ -755,7 +808,13 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		var storageRegistry = Helper.FileSystem.GetStorage(Paths.HistoryDataPath);
 
 		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryBeginDate.AddDays(2);
+
+		// Every level1/execution/quote/candle message of the window is CLONED into memory
+		// here, so the window is kept at one day: it still yields tens of thousands of
+		// timestamped messages, which is far more than the price-update and PnL-refresh
+		// assertions below need (the exact throttling semantics are pinned deterministically
+		// by StrategyEngine_PnLRefresh_ThrottledByInterval).
+		var stopTime = Paths.HistoryBeginDate.AddDays(1);
 
 		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
@@ -804,6 +863,10 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		await connector.StartAsync(CancellationToken);
 
 		await Task.WhenAny(tcs.Task, Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
+
+		// The early return below exists for a data-less environment; assert first so a
+		// window that captured nothing fails loudly instead of skipping the whole replay.
+		IsTrue(capturedMessages.Count > 0, "Backtest captured no messages - there is nothing to replay through the engine");
 
 		if (capturedMessages.Count == 0)
 		{
