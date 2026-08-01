@@ -49,10 +49,12 @@ public class CompilationTests : BaseTestClass
 			"GBP/AUD@DUKAS".ToSecurityId(),
 		};
 		var from = new DateTime(2025, 4, 1).UtcKind();
-		var to = new DateTime(2025, 4, 30).UtcKind();
+		var to = GetPeriodEnd(fileExtension);
 		var storageRegistry = Helper.GetResourceStorage();
 		var format = StorageFormats.Binary;
 		var timeFrame = TimeSpan.FromMinutes(1).TimeFrame();
+
+		await EnsureCandlesExist(securities, from, to, storageRegistry, storageRegistry.DefaultDrive, format, timeFrame, token);
 
 		var references = CodeExtensions.DefaultReferences
 			.Concat(CodeExtensions.CreateAssemblyReferences(
@@ -121,10 +123,12 @@ public class CompilationTests : BaseTestClass
 			"GBP/AUD@DUKAS".ToSecurityId(),
 		};
 		var from = new DateTime(2025, 4, 1).UtcKind();
-		var to = new DateTime(2025, 4, 30).UtcKind();
+		var to = GetPeriodEnd(fileExtension);
 		var storageRegistry = Helper.GetResourceStorage();
 		var format = StorageFormats.Binary;
 		var timeFrame = TimeSpan.FromMinutes(1).TimeFrame();
+
+		await EnsureCandlesExist(securities, from, to, storageRegistry, storageRegistry.DefaultDrive, format, timeFrame, token);
 
 		var references = CodeExtensions.DefaultReferences
 			.Concat(CodeExtensions.CreateAssemblyReferences(
@@ -183,6 +187,25 @@ public class CompilationTests : BaseTestClass
 			{
 				throw new InvalidOperationException($"Error running script '{scriptName}'.", ex);
 			}
+		}
+	}
+
+	// IronPython interprets every candle (~24 us against ~1.9 us for compiled C#/F#), so a whole
+	// month of 1-min candles costs seconds per script there while nothing the scripts are checked
+	// for (VerifyOutputProduced) depends on the data volume. Python scripts therefore get a few
+	// days only; compiled languages keep the original month.
+	private static DateTime GetPeriodEnd(string fileExtension)
+		=> (fileExtension == FileExts.Python ? new DateTime(2025, 4, 5) : new DateTime(2025, 4, 30)).UtcKind();
+
+	// Guard for the language dependent period (see GetPeriodEnd): if the storage has no candles
+	// inside the window, scripts produce no output at all and the failure would surface far away
+	// from its cause. Fail here instead, naming the security and the empty range.
+	private static async Task EnsureCandlesExist(SecurityId[] securities, DateTime from, DateTime to, IStorageRegistry storage, IMarketDataDrive drive, StorageFormats format, DataType dataType, CancellationToken token)
+	{
+		foreach (var security in securities)
+		{
+			var dates = await storage.GetCandleMessageStorage(security, dataType, drive, format).GetDatesAsync(from, to).ToArrayAsync(token);
+			(dates.Length > 0).AssertTrue($"No {dataType} data for {security} in {from:yyyy-MM-dd}..{to:yyyy-MM-dd}.");
 		}
 	}
 
@@ -530,23 +553,25 @@ public class CompilationTests : BaseTestClass
 		custom?.Invoke(type, s);
 	}
 
+	// Recompiling the same module into the same context is a compiler level check (see the
+	// recompile branch in PythonCompile), so it runs once here instead of in every template test.
 	[TestMethod]
 	public Task PythonEmptyStrategy()
-		=> PythonCompile<Strategy>("Backtest/empty_strategy.py");
+		=> PythonCompile<Strategy>("Backtest/empty_strategy.py", true);
 
 	[TestMethod]
 	public Task PythonSmaStrategy()
-		=> PythonCompile<Strategy>("Backtest/sma_strategy.py");
+		=> PythonCompile<Strategy>("Backtest/sma_strategy.py", false);
 
 	[TestMethod]
 	public Task PythonIndicator()
-		=> PythonCompile<IIndicator>("Indicator/empty_indicator.py");
+		=> PythonCompile<IIndicator>("Indicator/empty_indicator.py", false);
 
 	[TestMethod]
 	public Task PythonDiagramElem()
-		=> PythonCompile<DiagramExternalElement>("Custom/empty_diagram_element.py", InvokeDiagramElem);
+		=> PythonCompile<DiagramExternalElement>("Custom/empty_diagram_element.py", false, InvokeDiagramElem);
 
-	private async Task PythonCompile<T>(string fileName, Action<Type, T> custom = null)
+	private async Task PythonCompile<T>(string fileName, bool recompile, Action<Type, T> custom = null)
 		where T : IPersistable
 	{
 		var token = CancellationToken;
@@ -566,9 +591,19 @@ public class CompilationTests : BaseTestClass
 
 		var types = asm.GetExportedTypes();
 
-		res = await compiler.Compile(typeof(T).Name, [sourceCode], await CodeExtensions.DefaultReferences.ToValidRefImages(token), token);
-		asm = res.GetAssembly(context);
-		var types2 = asm.GetExportedTypes().First();
+		if (recompile)
+		{
+			// Compiling the same module name into the same context again must succeed
+			// and expose the same type, not clash with the already loaded module.
+			var res2 = await compiler.Compile(typeof(T).Name, [sourceCode], await CodeExtensions.DefaultReferences.ToValidRefImages(token), token);
+
+			Validate(res2);
+
+			var asm2 = res2.GetAssembly(context);
+			asm2.AssertNotNull();
+
+			asm2.GetExportedTypes().Any(t => t.IsRequiredType<T>()).AssertTrue("recompiled module must expose the same type");
+		}
 
 		var arrs = types.Where(t => t.IsRequiredType<T>());
 		var type = arrs.First();
