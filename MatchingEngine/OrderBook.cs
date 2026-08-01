@@ -7,22 +7,12 @@ class OrderBookLevelImpl(decimal price)
 {
 	private readonly LinkedList<EmulatorOrder> _orders = [];
 	private readonly Dictionary<long, LinkedListNode<EmulatorOrder>> _nodesByTransId = [];
+	private decimal _ordersVolume;
 
 	public decimal Price { get; } = price;
 	public decimal MarketVolume { get; set; }
 
-	public decimal TotalVolume
-	{
-		get
-		{
-			var ordersVolume = 0m;
-
-			foreach (var order in _orders)
-				ordersVolume += order.Balance;
-
-			return MarketVolume + ordersVolume;
-		}
-	}
+	public decimal TotalVolume => MarketVolume + _ordersVolume;
 	public int OrderCount => _nodesByTransId.Count;
 	public IEnumerable<EmulatorOrder> Orders => _orders;
 
@@ -35,11 +25,13 @@ class OrderBookLevelImpl(decimal price)
 		{
 			var volumeDelta = order.Balance - existing.Value.Balance;
 			existing.Value = order;
+			_ordersVolume += volumeDelta;
 			return volumeDelta;
 		}
 		else
 		{
 			_nodesByTransId[order.TransactionId] = _orders.AddLast(order);
+			_ordersVolume += order.Balance;
 			return order.Balance;
 		}
 	}
@@ -50,11 +42,24 @@ class OrderBookLevelImpl(decimal price)
 		{
 			order = node.Value;
 			_orders.Remove(node);
+			_ordersVolume -= order.Balance;
 			return true;
 		}
 
 		order = null;
 		return false;
+	}
+
+	public decimal ConsumeOrder(EmulatorOrder order, decimal volume)
+	{
+		var consumed = volume.Min(order.Balance);
+		order.Balance -= consumed;
+		_ordersVolume -= consumed;
+
+		if (order.Balance <= 0)
+			RemoveOrder(order.TransactionId, out _);
+
+		return consumed;
 	}
 
 	public bool TryGetOrder(long transactionId, out EmulatorOrder order)
@@ -505,12 +510,8 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 					if (orderConsumed <= 0)
 						break;
 
-					var orderConsume = orderConsumed.Min(order.Balance);
-					order.Balance -= orderConsume;
+					var orderConsume = level.ConsumeOrder(order, orderConsumed);
 					orderConsumed -= orderConsume;
-
-					if (order.Balance <= 0)
-						level.RemoveOrder(order.TransactionId, out _);
 				}
 
 				AddTotalVolume(side, -consumed);

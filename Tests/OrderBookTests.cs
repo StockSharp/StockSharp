@@ -385,6 +385,50 @@ public class OrderBookTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void ConsumeVolume_UpdatesCachedOrderVolume()
+	{
+		var book = new OrderBook(CreateSecId());
+		var firstOrder = new EmulatorOrder
+		{
+			TransactionId = 1,
+			Side = Sides.Sell,
+			Price = 101,
+			Balance = 5,
+			Volume = 5,
+		};
+		var secondOrder = new EmulatorOrder
+		{
+			TransactionId = 2,
+			Side = Sides.Sell,
+			Price = 101,
+			Balance = 7,
+			Volume = 7,
+		};
+
+		book.UpdateLevel(Sides.Sell, 101, 3);
+		book.AddQuote(firstOrder);
+		book.AddQuote(secondOrder);
+
+		var execution = book.ConsumeVolume(Sides.Sell, 101m, 6m).Single();
+
+		AreEqual(6m, execution.volume);
+		AreEqual(2m, firstOrder.Balance);
+		AreEqual(7m, secondOrder.Balance);
+		AreEqual(9m, book.TotalAskVolume);
+		AreEqual(9m, book.GetVolumeAtPrice(Sides.Sell, 101m));
+		AreEqual(9m, book.BestAsk.Value.volume);
+		AreEqual(9m, book.GetLevels(Sides.Sell).Single().Volume);
+		AreEqual(9m, book.ToMessage(default, default).Asks.Single().Volume);
+
+		IsTrue(book.RemoveQuote(firstOrder.TransactionId, firstOrder.Side, firstOrder.Price));
+		AreEqual(7m, book.TotalAskVolume);
+
+		AreEqual(7m, book.ConsumeVolume(Sides.Sell, 101m, 7m).Single().volume);
+		AreEqual(0m, book.TotalAskVolume);
+		IsFalse(book.HasLevel(Sides.Sell, secondOrder.Price));
+	}
+
+	[TestMethod]
 	public void ConsumeVolume_RespectsLimitPrice()
 	{
 		var book = new OrderBook(CreateSecId());
