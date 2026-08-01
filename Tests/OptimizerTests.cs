@@ -1,6 +1,7 @@
 namespace StockSharp.Tests;
 
 using System.Collections;
+using System.Diagnostics;
 
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Optimization;
@@ -592,7 +593,9 @@ public class OptimizerTests : BaseTestClass
 		using var optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
 
 		var startTime = Paths.HistoryBeginDate;
-		var stopTime = Paths.HistoryEndDate;
+		// Same slice as the other genetic tests: MaxIterations=100 already guarantees the run
+		// cannot finish by itself, so replaying the whole history adds time but no coverage.
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
 
 		var strategy = new SmaStrategy
 		{
@@ -701,10 +704,15 @@ public class OptimizerTests : BaseTestClass
 
 		var strategies = CreateStrategyIterations(security, portfolio, 10, 40, 5, 50, 100, 5).ToList();
 
+		// The full history over all combinations takes minutes, so any short timeout interrupts the run.
+		// The value only has to be shorter than the whole run, not long enough to complete iterations.
+		var timeout = TimeSpan.FromSeconds(3);
+
 		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
-		cts.CancelAfter(TimeSpan.FromSeconds(30)); // cancel after 30 sec
+		cts.CancelAfter(timeout);
 
 		var count = 0;
+		var watch = Stopwatch.StartNew();
 
 		try
 		{
@@ -718,6 +726,14 @@ public class OptimizerTests : BaseTestClass
 			// expected
 		}
 
+		watch.Stop();
+
 		IsTrue(count < strategies.Count, $"Should have been cancelled by timeout before all {strategies.Count} iterations, got {count}");
+
+		// The timeout must actually tear the run down, not just be observed at some later point:
+		// the enumeration has to end shortly after it fires. The margin covers connector shutdown
+		// of the in-flight backtests and scheduling noise on a loaded machine.
+		var maxDuration = timeout + TimeSpan.FromSeconds(20);
+		IsTrue(watch.Elapsed < maxDuration, $"Enumeration should have ended within {maxDuration} after a {timeout} timeout, but took {watch.Elapsed}");
 	}
 }
