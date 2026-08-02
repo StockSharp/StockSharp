@@ -209,7 +209,7 @@ public enum PositionChangeTypes
 	Name = LocalizedStrings.PositionKey,
 	Description = LocalizedStrings.PositionDescKey)]
 public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage,
-	PositionChangeTypes>, IPortfolioNameMessage, IClientCodeMessage, ISecurityIdMessage, IStrategyIdMessage, IOwnerMessage
+	PositionChangeTypes>, IPortfolioNameMessage, IClientCodeMessage, ISecurityIdMessage, IStrategyIdMessage, IOwnerMessage, ISeqNumMessage
 {
 	/// <inheritdoc />
 	[DataMember]
@@ -311,6 +311,10 @@ public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage,
 	}
 
 	/// <inheritdoc />
+	[DataMember]
+	public long SeqNum { get; set; }
+
+	/// <inheritdoc />
 	public override DataType DataType => DataType.PositionChanges;
 
 	/// <summary>
@@ -348,6 +352,7 @@ public class PositionChangeMessage : BaseChangeMessage<PositionChangeMessage,
 		destination.Side = Side;
 		destination.OwnerUserId = OwnerUserId;
 		destination.OwnerPortfolioId = OwnerPortfolioId;
+		destination.SeqNum = SeqNum;
 	}
 
 	/// <inheritdoc />
