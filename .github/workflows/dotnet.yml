@@ -52,4 +52,26 @@ jobs:
 
       - name: Run tests
         working-directory: 'StockSharp (GitHub)'
-        run: dotnet test StockSharp_Tests.slnx --no-build --configuration Release
+        # Seven minutes exceeds the longest per-test timeout (six minutes) while
+        # still leaving time to upload a dump before the 30-minute job timeout.
+        run: >
+          dotnet test StockSharp_Tests.slnx
+          --no-build
+          --configuration Release
+          --results-directory TestResults
+          --logger "trx;LogFileName=tests.trx"
+          --diag vstest-diagnostics.log
+          --blame-hang
+          --blame-hang-timeout 7m
+          --blame-hang-dump-type mini
+
+      - name: Upload test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-diagnostics-${{ matrix.os }}
+          path: |
+            StockSharp (GitHub)/TestResults
+            StockSharp (GitHub)/vstest-diagnostics*
+          if-no-files-found: warn
+          retention-days: 7
