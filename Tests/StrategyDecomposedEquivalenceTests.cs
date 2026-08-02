@@ -86,6 +86,16 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		return mock;
 	}
 
+	private sealed class SynchronousConnector : Connector
+	{
+		public SynchronousConnector()
+			: base(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider(), initChannels: false)
+		{
+			InMessageChannel = new PassThroughMessageChannel();
+			OutMessageChannel = new PassThroughMessageChannel();
+		}
+	}
+
 	private static Order CreateOrder(Security security, Portfolio portfolio,
 		Sides side, decimal price, decimal volume, long txId = 1, DateTime time = default)
 	{
@@ -2145,7 +2155,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	// Focused parity tests the equivalence audit flagged as missing: native IsFormed -> CanTrade gate
 	// (full-equivalence variants override IsFormed, so it is never compared), Save/Load/Clone round-trip,
 	// ApplyCommand, and order teardown (OrdersKeepTime/RecycleOrders, WaitAllTrades). The monolith's private
-	// intake handler and state machine are driven via reflection (decomposed exposes them publicly).
+	// intake handler is driven via reflection (decomposed exposes it publicly).
 
 	// --- Monolith reflection drivers ---
 
@@ -2157,32 +2167,11 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		method.Invoke(strategy, [sub, order]);
 	}
 
-	// Drive the monolith state machine as Start()/Stop() do: build the private StrategyChangeStateMessage and
-	// pump it into OnConnectorNewMessage directly (a bare Connector won't round-trip it). Real engine path.
-	private static void DriveMonolithState(StrategyOld strategy, ProcessStates state)
-	{
-		var msgType = typeof(StrategyOld).GetNestedType("StrategyChangeStateMessage",
-			BindingFlags.NonPublic);
-		IsNotNull(msgType, "StrategyOld must define StrategyChangeStateMessage");
-
-		var msg = (Message)msgType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-			.First()
-			.Invoke([strategy, state]);
-
-		var onMessage = typeof(StrategyOld).GetMethod("OnConnectorNewMessage",
-			BindingFlags.Instance | BindingFlags.NonPublic);
-		IsNotNull(onMessage, "StrategyOld must expose OnConnectorNewMessage(Message, CancellationToken)");
-
-		var task = (ValueTask)onMessage.Invoke(strategy, [msg, default(CancellationToken)]);
-		task.AsTask().GetAwaiter().GetResult();
-	}
-
 	private static void StartMonolith(StrategyOld strategy)
 	{
 		strategy.Start();
-		// Deliver the Started state message directly (the bare connector won't round-trip it).
-		if (strategy.ProcessState != ProcessStates.Started)
-			DriveMonolithState(strategy, ProcessStates.Started);
+		strategy.ProcessState.AreEqual(ProcessStates.Started,
+			"The synchronous monolith connector must complete the Started transition inline");
 	}
 
 	// 1. IsFormed engine transition + CanTrade gating. A real SMA is added to both engines WITHOUT
@@ -2194,7 +2183,8 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		protected override void OnOrderRegistered(Order order) => RegisteredOrders.Add(order);
 	}
 
-	private static bool MonolithCanTrade(StrategyOld strategy, Security security, Portfolio portfolio, Sides side, decimal volume)
+	private static bool MonolithCanTrade(StrategyOld strategy, Security security, Portfolio portfolio, Sides side, decimal volume,
+		out string noTradeReason)
 	{
 		var method = typeof(StrategyOld).GetMethod("CanTrade",
 			BindingFlags.Instance | BindingFlags.NonPublic,
@@ -2205,10 +2195,15 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		object[] args = [security, portfolio, side, volume, null];
 		var result = (bool)method.Invoke(strategy, args);
+		noTradeReason = (string)args[^1];
 		return result;
 	}
 
-	private static bool DecomposedCanTrade(Strategy strategy, Security security, Portfolio portfolio, Sides side, decimal volume)
+	private static bool MonolithCanTrade(StrategyOld strategy, Security security, Portfolio portfolio, Sides side, decimal volume)
+		=> MonolithCanTrade(strategy, security, portfolio, side, volume, out _);
+
+	private static bool DecomposedCanTrade(Strategy strategy, Security security, Portfolio portfolio, Sides side, decimal volume,
+		out string noTradeReason)
 	{
 		var method = typeof(Strategy).GetMethod("CanTrade",
 			BindingFlags.Instance | BindingFlags.NonPublic,
@@ -2219,8 +2214,12 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		object[] args = [security, portfolio, side, volume, null];
 		var result = (bool)method.Invoke(strategy, args);
+		noTradeReason = (string)args[^1];
 		return result;
 	}
+
+	private static bool DecomposedCanTrade(Strategy strategy, Security security, Portfolio portfolio, Sides side, decimal volume)
+		=> DecomposedCanTrade(strategy, security, portfolio, side, volume, out _);
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
@@ -2236,7 +2235,9 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		var monoSma = new SimpleMovingAverage { Length = smaLen };
 		var mono = new StrategyOld
 		{
-			Connector = new Connector(),
+			// The default Connector dispatches lifecycle messages on a background channel. Process them
+			// inline here so state assertions cannot race the Started transition.
+			Connector = new SynchronousConnector(),
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1m,
@@ -2278,6 +2279,8 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		int? decoFormedAt = null;
 		int? monoCanTradeAt = null;
 		int? decoCanTradeAt = null;
+		string monoNoTradeReason = null;
+		string decoNoTradeReason = null;
 
 		var t0 = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 
@@ -2296,10 +2299,17 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 				decoFormedAt = i;
 
 			// CanTrade (now started) returns true only once IsFormed is true.
-			if (monoCanTradeAt is null && MonolithCanTrade(mono, security, portfolio, Sides.Buy, 1m))
-				monoCanTradeAt = i;
-			if (decoCanTradeAt is null && DecomposedCanTrade(deco, security, portfolio, Sides.Buy, 1m))
-				decoCanTradeAt = i;
+			if (monoCanTradeAt is null)
+			{
+				if (MonolithCanTrade(mono, security, portfolio, Sides.Buy, 1m, out monoNoTradeReason))
+					monoCanTradeAt = i;
+			}
+
+			if (decoCanTradeAt is null)
+			{
+				if (DecomposedCanTrade(deco, security, portfolio, Sides.Buy, 1m, out decoNoTradeReason))
+					decoCanTradeAt = i;
+			}
 		}
 
 		// (a) IsFormed flips false -> true at the SAME input on both engines.
@@ -2313,8 +2323,12 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 			$"IsFormed must reflect all indicators formed (SMA len {smaLen} forms at input #{smaLen}, index {smaLen - 1})");
 
 		// (c) The CanTrade gate (started strategy) opens at the same input as IsFormed, identically.
-		IsNotNull(monoCanTradeAt, "Monolith CanTrade must eventually allow trading");
-		IsNotNull(decoCanTradeAt, "Decomposed CanTrade must eventually allow trading");
+		IsNotNull(monoCanTradeAt,
+			$"Monolith CanTrade must eventually allow trading. Last reason: {monoNoTradeReason ?? "<none>"}; " +
+			$"state: {mono.ProcessState}; formed: {mono.IsFormed}");
+		IsNotNull(decoCanTradeAt,
+			$"Decomposed CanTrade must eventually allow trading. Last reason: {decoNoTradeReason ?? "<none>"}; " +
+			$"state: {deco.ProcessState}; formed: {deco.IsFormed}");
 		AreEqual(monoCanTradeAt.Value, decoCanTradeAt.Value,
 			$"CanTrade must open at the same input on both engines: monolith@{monoCanTradeAt}, decomposed@{decoCanTradeAt}");
 		AreEqual(decoFormedAt.Value, decoCanTradeAt.Value,
@@ -2598,18 +2612,15 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		// --- Monolith: same command sequence, same resulting actions ---
 		var mono = new ConfigStrategyOld
 		{
-			Connector = new Connector(),
+			Connector = new SynchronousConnector(),
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1m,
 		};
 		mono.WaitRulesOnStop = false;
 
-		// ApplyCommand(Start) dispatches to Start(); deliver the Started state message directly because the
-		// bare connector does not round-trip it (same as StartMonolith).
+		// ApplyCommand(Start) dispatches synchronously through the connector's real output path.
 		mono.ApplyCommand(Cmd(CommandTypes.Start));
-		if (mono.ProcessState != ProcessStates.Started)
-			DriveMonolithState(mono, ProcessStates.Started);
 		mono.ProcessState.AreEqual(ProcessStates.Started, "Monolith Start command must reach Started");
 
 		var monoRegCmd = Cmd(CommandTypes.RegisterOrder);
@@ -2626,8 +2637,6 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		monoOrder.Price.AreEqual(100m);
 
 		mono.ApplyCommand(Cmd(CommandTypes.Stop));
-		if (mono.ProcessState == ProcessStates.Started)
-			DriveMonolithState(mono, ProcessStates.Stopping);
 		IsTrue(mono.ProcessState is ProcessStates.Stopping or ProcessStates.Stopped,
 			$"Monolith Stop command must leave Started; got {mono.ProcessState}");
 
@@ -2673,7 +2682,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	{
 		var mono = new ConfigStrategyOld
 		{
-			Connector = new Connector(),
+			Connector = new SynchronousConnector(),
 			Security = security,
 			Portfolio = portfolio,
 			OrdersKeepTime = keepTime,
@@ -2752,7 +2761,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		// cancel-on-stop rule (whose Until defers the final stop). ---
 		var mono = new ConfigStrategyOld
 		{
-			Connector = new Connector(),
+			Connector = new SynchronousConnector(),
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 10m,
