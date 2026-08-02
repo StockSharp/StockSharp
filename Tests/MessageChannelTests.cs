@@ -505,46 +505,74 @@ public class MessageChannelTests : BaseTestClass
 		return new InMemoryMessageChannel(queue, "TestChannel", _ => { });
 	}
 
+	private static async Task<Message[]> ProcessBufferedByLocalTime(IReadOnlyList<Message> messages, CancellationToken cancellationToken)
+	{
+		if (messages.Count == 0)
+			return [];
+
+		using var channel = CreateInMemoryChannel(new MessageByLocalTimeQueue());
+		var processedMessages = new List<Message>();
+		var blockerEntered = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var releaseBlocker = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var allProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var blocker = CreateTimeMessage(messages[0].LocalTime);
+
+		channel.NewOutMessageAsync += async (msg, ct) =>
+		{
+			if (ReferenceEquals(msg, blocker))
+			{
+				blockerEntered.TrySetResult(true);
+				await releaseBlocker.Task.WithCancellation(ct);
+				return;
+			}
+
+			lock (processedMessages)
+			{
+				processedMessages.Add(msg);
+				if (processedMessages.Count == messages.Count)
+					allProcessed.TrySetResult(true);
+			}
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(blocker, cancellationToken);
+		await blockerEntered.Task.WithCancellation(cancellationToken);
+
+		try
+		{
+			foreach (var message in messages)
+				await channel.SendInMessageAsync(message, cancellationToken);
+		}
+		finally
+		{
+			releaseBlocker.TrySetResult(true);
+		}
+
+		await allProcessed.Task.WithCancellation(cancellationToken);
+
+		lock (processedMessages)
+			return [.. processedMessages];
+	}
+
 	#endregion
 
 	#region InMemoryChannel Queue Ordering
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task InMemoryChannel_MessagesByLocalTimeQueue_ProcessedInTimeOrder()
 	{
-		using var channel = CreateInMemoryChannel(new MessageByLocalTimeQueue());
-		var processedMessages = new List<Message>();
-		var allProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
-
-		channel.NewOutMessageAsync += (msg, ct) =>
-		{
-			lock (processedMessages)
-			{
-				processedMessages.Add(msg);
-				if (processedMessages.Count == 3)
-					allProcessed.TrySetResult(true);
-			}
-			return default;
-		};
-
-		channel.Open();
-
-		var baseTime = DateTime.UtcNow;
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 		var msg1 = CreateTimeMessage(baseTime.AddSeconds(3)); // Latest
 		var msg2 = CreateTimeMessage(baseTime.AddSeconds(1)); // Earliest
 		var msg3 = CreateTimeMessage(baseTime.AddSeconds(2)); // Middle
 
-		// Send in non-sorted order
-		await channel.SendInMessageAsync(msg1, CancellationToken);
-		await channel.SendInMessageAsync(msg2, CancellationToken);
-		await channel.SendInMessageAsync(msg3, CancellationToken);
-
-		await allProcessed.Task.WithCancellation(CancellationToken);
+		var processedMessages = await ProcessBufferedByLocalTime([msg1, msg2, msg3], CancellationToken);
 
 		// Should be processed in LocalTime order
-		processedMessages[0].AssertEqual(msg2); // Earliest
-		processedMessages[1].AssertEqual(msg3); // Middle
-		processedMessages[2].AssertEqual(msg1); // Latest
+		processedMessages[0].AssertSame(msg2); // Earliest
+		processedMessages[1].AssertSame(msg3); // Middle
+		processedMessages[2].AssertSame(msg1); // Latest
 	}
 
 	[TestMethod]
@@ -585,116 +613,46 @@ public class MessageChannelTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task InMemoryChannel_MessageByLocalTimeQueue_OutOfOrderTimes_SortsCorrectly()
 	{
-		using var channel = CreateInMemoryChannel(new MessageByLocalTimeQueue());
-		var processedMessages = new List<Message>();
-		var allProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
 		const int messageCount = 50;
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+		var expected = Enumerable.Range(0, messageCount)
+			.Select(i => CreateTimeMessage(baseTime.AddSeconds(i)))
+			.ToArray();
 
-		channel.NewOutMessageAsync += (msg, ct) =>
-		{
-			lock (processedMessages)
-			{
-				processedMessages.Add(msg);
-				if (processedMessages.Count == messageCount)
-					allProcessed.TrySetResult(true);
-			}
-			return default;
-		};
+		var processedMessages = await ProcessBufferedByLocalTime([.. expected.Reverse()], CancellationToken);
 
-		channel.Open();
-
-		var baseTime = DateTime.UtcNow;
-		var messages = new List<TimeMessage>();
-
-		// Create messages with shuffled times (use seconds to avoid race between enqueue and dequeue)
-		for (int i = 0; i < messageCount; i++)
-		{
-			messages.Add(CreateTimeMessage(baseTime.AddSeconds(i)));
-		}
-
-		// Shuffle and send
-		var shuffled = messages.OrderBy(_ => Guid.NewGuid()).ToList();
-		foreach (var msg in shuffled)
-		{
-			await channel.SendInMessageAsync(msg, CancellationToken);
-		}
-
-		await allProcessed.Task.WithCancellation(CancellationToken);
-
-		// Verify messages are processed in LocalTime order
-		for (int i = 1; i < processedMessages.Count; i++)
-		{
-			(processedMessages[i].LocalTime >= processedMessages[i - 1].LocalTime)
-				.AssertTrue($"Time order violation at index {i}: {processedMessages[i - 1].LocalTime} > {processedMessages[i].LocalTime}");
-		}
+		for (var i = 0; i < expected.Length; i++)
+			processedMessages[i].AssertSame(expected[i]);
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task InMemoryChannel_MessageByLocalTimeQueue_FutureTimeMessage_ProcessedAfterCurrent()
 	{
-		using var channel = CreateInMemoryChannel(new MessageByLocalTimeQueue());
-		var processedMessages = new List<Message>();
-		var allProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
-
-		channel.NewOutMessageAsync += (msg, ct) =>
-		{
-			lock (processedMessages)
-			{
-				processedMessages.Add(msg);
-				if (processedMessages.Count == 3)
-					allProcessed.TrySetResult(true);
-			}
-			return default;
-		};
-
-		channel.Open();
-
-		var now = DateTime.UtcNow;
+		var now = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 		var pastMsg = CreateTimeMessage(now.AddSeconds(-10)); // Past
 		var currentMsg = CreateTimeMessage(now); // Current
 		var futureMsg = CreateTimeMessage(now.AddSeconds(10)); // Future
 
-		// Send in mixed order
-		await channel.SendInMessageAsync(futureMsg, CancellationToken);
-		await channel.SendInMessageAsync(pastMsg, CancellationToken);
-		await channel.SendInMessageAsync(currentMsg, CancellationToken);
-
-		await allProcessed.Task.WithCancellation(CancellationToken);
+		var processedMessages = await ProcessBufferedByLocalTime([futureMsg, pastMsg, currentMsg], CancellationToken);
 
 		// Should be in time order: past, current, future
-		processedMessages[0].AssertEqual(pastMsg);
-		processedMessages[1].AssertEqual(currentMsg);
-		processedMessages[2].AssertEqual(futureMsg);
+		processedMessages[0].AssertSame(pastMsg);
+		processedMessages[1].AssertSame(currentMsg);
+		processedMessages[2].AssertSame(futureMsg);
 	}
 
 	/// <summary>
-	/// Simulates a backtest scenario where historical data messages are sent
+	/// Verifies time ordering of a buffered backtest batch where historical data
 	/// and commands (like OrderRegister) are interleaved.
-	/// This is a key test for the time ordering in backtesting.
 	/// </summary>
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
 	public async Task InMemoryChannel_BacktestSimulation_CommandsAndDataMixedTiming()
 	{
-		using var channel = CreateInMemoryChannel(new MessageByLocalTimeQueue());
-		var processedMessages = new List<(Message Message, DateTime ProcessedAt)>();
-		var allProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
-		const int expectedCount = 6;
-
-		channel.NewOutMessageAsync += (msg, ct) =>
-		{
-			lock (processedMessages)
-			{
-				processedMessages.Add((msg, DateTime.UtcNow));
-				if (processedMessages.Count == expectedCount)
-					allProcessed.TrySetResult(true);
-			}
-			return default;
-		};
-
-		channel.Open();
-
 		// Simulate backtest: historical data at t=10, t=20, t=30 seconds
 		// And commands at "current" times (which may be different)
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
@@ -710,31 +668,24 @@ public class MessageChannelTests : BaseTestClass
 		var order2 = CreateOrderMessage(baseTime.AddSeconds(25)); // Should be between tick2 and tick3
 		var order3 = CreateOrderMessage(baseTime.AddSeconds(35)); // Should be after tick3
 
-		// Send in random order (simulating async processing)
-		await channel.SendInMessageAsync(order2, CancellationToken);
-		await channel.SendInMessageAsync(tick3, CancellationToken);
-		await channel.SendInMessageAsync(tick1, CancellationToken);
-		await channel.SendInMessageAsync(order1, CancellationToken);
-		await channel.SendInMessageAsync(tick2, CancellationToken);
-		await channel.SendInMessageAsync(order3, CancellationToken);
-
-		await allProcessed.Task.WithCancellation(CancellationToken);
+		var processedMessages = await ProcessBufferedByLocalTime(
+			[order2, tick3, tick1, order1, tick2, order3], CancellationToken);
 
 		// Verify strict time ordering
-		var orderedMessages = processedMessages.OrderBy(x => x.Message.LocalTime).ToList();
-		for (int i = 0; i < processedMessages.Count; i++)
+		var orderedMessages = processedMessages.OrderBy(m => m.LocalTime).ToList();
+		for (int i = 0; i < processedMessages.Length; i++)
 		{
-			processedMessages[i].Message.AssertEqual(orderedMessages[i].Message,
+			processedMessages[i].AssertEqual(orderedMessages[i],
 				$"Message at position {i} is out of order");
 		}
 
 		// Verify specific order: tick1, order1, tick2, order2, tick3, order3
-		processedMessages[0].Message.AssertEqual(tick1);
-		processedMessages[1].Message.AssertEqual(order1);
-		processedMessages[2].Message.AssertEqual(tick2);
-		processedMessages[3].Message.AssertEqual(order2);
-		processedMessages[4].Message.AssertEqual(tick3);
-		processedMessages[5].Message.AssertEqual(order3);
+		processedMessages[0].AssertSame(tick1);
+		processedMessages[1].AssertSame(order1);
+		processedMessages[2].AssertSame(tick2);
+		processedMessages[3].AssertSame(order2);
+		processedMessages[4].AssertSame(tick3);
+		processedMessages[5].AssertSame(order3);
 	}
 
 	[TestMethod]

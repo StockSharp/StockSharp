@@ -13,6 +13,10 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 {
 	private class MessageQueueItem
 	{
+		private TaskCompletionSource<bool> _completion;
+		private int _cleanupStarted;
+		private int _isCompleted;
+
 		public MessageQueueItem(Message message)
 		{
 			Message = message ?? throw new ArgumentNullException(nameof(message));
@@ -42,8 +46,35 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 		public bool IsLookup { get; }
 		public bool IsTransaction { get; }
 
+		public CancellationTokenSource ProcessSource { get; set; }
 		public CancellationTokenSource Cts { get; set; }
-		public long UnsubscribeRequest { get; set; }
+
+		public Task CompletionTask
+		{
+			get
+			{
+				if (Volatile.Read(ref _isCompleted) != 0)
+					return Task.CompletedTask;
+
+				var created = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+				var completion = Interlocked.CompareExchange(ref _completion, created, null) ?? created;
+
+				if (Volatile.Read(ref _isCompleted) != 0)
+					completion.TrySetResult(true);
+
+				return completion.Task;
+			}
+		}
+
+		public Task DisconnectPrerequisite { get; set; }
+
+		public bool TryBeginCleanup() => Interlocked.Exchange(ref _cleanupStarted, 1) == 0;
+
+		public void Complete()
+		{
+			if (Interlocked.Exchange(ref _isCompleted, 1) == 0)
+				Volatile.Read(ref _completion)?.TrySetResult(true);
+		}
 
 		public override string ToString() => Message.ToString();
 	}
@@ -53,6 +84,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 	private readonly SynchronizedDictionary<long, MessageQueueItem> _subscriptionItems = [];
 
 	private readonly AsyncManualResetEvent _processMessageEvt = new(false);
+	private readonly Lock _stateLock = new();
 	private CancellationTokenSource _globalCts = new();
 	private Task _processorTask;
 
@@ -86,7 +118,11 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 	{
 		State = ChannelStates.Starting;
 
-		var token = _globalCts.Token;
+		CancellationToken token;
+
+		lock (_stateLock)
+			token = _globalCts.Token;
+
 		_processorTask = Task.Run(() => ProcessMessagesAsync(token), token);
 
 		State = ChannelStates.Started;
@@ -130,8 +166,11 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 		_messages.Clear();
 		_childTasks.Clear();
 
-		_isConnectionStarted = false;
-		_isDisconnecting = false;
+		lock (_stateLock)
+		{
+			_isConnectionStarted = false;
+			_isDisconnecting = false;
+		}
 
 		State = ChannelStates.Stopped;
 	}
@@ -230,6 +269,39 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 
 				item = nonProcessing.FirstOrDefault(m => m.IsControl);
 
+				if (item?.Message is DisconnectMessage)
+				{
+					var disconnectItem = item;
+					List<Task> prerequisites = null;
+
+					foreach (var priorItem in _messages)
+					{
+						if (ReferenceEquals(priorItem, disconnectItem))
+							break;
+
+						if (priorItem.Message is not ISubscriptionMessage { IsSubscribe: false })
+							continue;
+
+						if (!priorItem.IsProcessing)
+						{
+							item = priorItem;
+							break;
+						}
+
+						(prerequisites ??= []).Add(priorItem.CompletionTask);
+					}
+
+					if (ReferenceEquals(item, disconnectItem))
+					{
+						disconnectItem.DisconnectPrerequisite = prerequisites?.Count switch
+						{
+							null or 0 => Task.CompletedTask,
+							1 => prerequisites[0],
+							_ => Task.WhenAll(prerequisites),
+						};
+					}
+				}
+
 				if (item is null)
 				{
 					if (isPingProcessing)
@@ -269,6 +341,9 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 				if (item.IsProcessing)
 					throw new InvalidOperationException($"processing is already started for {item.Message}");
 
+				lock (_stateLock)
+					item.ProcessSource = _globalCts;
+
 				item.IsProcessing = true;
 			}
 
@@ -276,116 +351,179 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 
 			async ValueTask wrapperInner()
 			{
-				var localToken = _globalCts.Token;
-
-				if (localToken.IsCancellationRequested)
-				{
-					if (item.IsTransaction)
-						await _adapter.SendOutMessageAsync(msg.CreateErrorResponse(new OperationCanceledException(), _adapter), localToken);
-
-					return;
-				}
-
-				if (msg.Type != MessageTypes.Time)
-					_adapter.AddVerboseLog("beginprocess: {0}", msg.Type);
-
-				if (!item.IsControl)
-				{
-					if (!_isConnectionStarted || _isDisconnecting)
-					{
-						_adapter.AddDebugLog($"unable to process {msg.Type} in this state. connStarted={_isConnectionStarted}, disconnecting={_isDisconnecting}");
-						return;
-					}
-
-					if (msg is ISubscriptionMessage subMsg)
-					{
-						if (subMsg.IsSubscribe)
-						{
-							var (cts, childToken) = localToken.CreateChildToken();
-							localToken = childToken;
-							item.Cts = cts;
-							_subscriptionItems.Add(subMsg.TransactionId, item);
-						}
-						else
-						{
-							// in case a subscription still in "subscribe" state
-							// (for example, for long historical data request)
-							if (_subscriptionItems.TryGetAndRemove(subMsg.OriginalTransactionId, out var subItem))
-							{
-								subItem.UnsubscribeRequest = subMsg.TransactionId;
-								subItem.Cts.Cancel();
-
-								done();
-								return;
-							}
-						}
-					}
-				}
-
-				ValueTask _()
-					=> msg switch
-					{
-						ConnectMessage m			=> ConnectAsync(m, localToken),
-						DisconnectMessage m			=> DisconnectAsync(m),
-						ResetMessage m				=> ResetAsync(m),
-
-						_ => RaiseNewOutMessage(msg, localToken)
-					};
+				var processSource = item.ProcessSource;
+				var localToken = processSource.Token;
+				long? registeredSubscriptionId = null;
 
 				void done()
 				{
-					if (!item.IsControl)
-						_childTasks.Remove(item);
+					if (!item.TryBeginCleanup())
+						return;
 
-					// dispose per-subscription CTS when message completes
-					item.Cts?.Dispose();
+					try
+					{
+						if (!item.IsControl)
+							_childTasks.Remove(item);
 
-					_messages.Remove(item);
-					_processMessageEvt.Set();
+						if (registeredSubscriptionId is long subscriptionId)
+							_subscriptionItems.Remove(subscriptionId);
+
+						item.Cts?.Dispose();
+					}
+					catch (Exception ex)
+					{
+						_adapter.AddErrorLog(ex);
+					}
+					finally
+					{
+						using (_messages.EnterScope())
+						{
+							try
+							{
+								_messages.Remove(item);
+							}
+							finally
+							{
+								if (msg is ISubscriptionMessage)
+									item.Complete();
+							}
+						}
+
+						_processMessageEvt.Set();
+					}
 				}
 
 				try
 				{
-					var vt = _();
-
-					if (!vt.IsCompleted)
+					if (localToken.IsCancellationRequested)
 					{
-						if (!item.IsControl)
-							_childTasks.Add(item, vt.AsTask());
+						if (item.IsTransaction)
+							await _adapter.SendOutMessageAsync(msg.CreateErrorResponse(new OperationCanceledException(), _adapter), localToken);
 
-						await vt;
-
-						if (!item.IsControl)
-							_childTasks.Remove(item);
+						return;
 					}
 
-					if (vt.IsFaulted)
-						throw vt.AsTask().Exception;
-					else if (vt.IsCanceled)
-						throw new OperationCanceledException();
-
 					if (msg.Type != MessageTypes.Time)
-						_adapter.AddVerboseLog("endprocess: {0}", msg.Type);
+						_adapter.AddVerboseLog("beginprocess: {0}", msg.Type);
 
-					if (msg is ISubscriptionMessage subMsg && subMsg.IsSubscribe)
-						_subscriptionItems.Remove(subMsg.TransactionId);
-				}
-				catch (Exception ex)
-				{
+					if (!item.IsControl)
+					{
+						bool isConnectionStarted;
+						bool isDisconnecting;
+
+						lock (_stateLock)
+						{
+							isConnectionStarted = _isConnectionStarted;
+							isDisconnecting = _isDisconnecting;
+						}
+
+						if (!isConnectionStarted || isDisconnecting)
+						{
+							_adapter.AddDebugLog($"unable to process {msg.Type} in this state. connStarted={isConnectionStarted}, disconnecting={isDisconnecting}");
+							return;
+						}
+
+						if (msg is ISubscriptionMessage subMsg)
+						{
+							if (subMsg.IsSubscribe)
+							{
+								var (cts, childToken) = localToken.CreateChildToken();
+								localToken = childToken;
+								item.Cts = cts;
+								_subscriptionItems.Add(subMsg.TransactionId, item);
+								registeredSubscriptionId = subMsg.TransactionId;
+							}
+							else
+							{
+								// The unsubscribe item owns the acknowledgement for a long-running subscribe.
+								// Wait for its full cleanup before acknowledging the queued unsubscribe.
+								if (_subscriptionItems.TryGetAndRemove(subMsg.OriginalTransactionId, out var subItem))
+								{
+									var subscriptionCompletion = subItem.CompletionTask;
+
+									try
+									{
+										subItem.Cts.Cancel();
+									}
+									catch (ObjectDisposedException)
+									{
+									}
+									catch (Exception ex)
+									{
+										_adapter.AddErrorLog(ex);
+									}
+
+									try
+									{
+										await subscriptionCompletion.WithCancellation(localToken);
+									}
+									catch (OperationCanceledException) when (localToken.IsCancellationRequested)
+									{
+										return;
+									}
+
+									await _adapter.SendOutMessageAsync(subMsg.TransactionId.CreateSubscriptionResponse(), localToken);
+									return;
+								}
+							}
+						}
+					}
+
+					ValueTask _()
+						=> msg switch
+						{
+							ConnectMessage m			=> ConnectAsync(m, localToken, processSource),
+							DisconnectMessage m			=> DisconnectAsync(m, item),
+							ResetMessage m				=> ResetAsync(m),
+
+							_ => RaiseNewOutMessage(msg, localToken)
+						};
+
 					try
 					{
-						if (item.UnsubscribeRequest != default)
+						// A source-backed ValueTask can only be consumed once. Track and await the same Task.
+						var task = _().AsTask();
+
+						if (!task.IsCompleted)
 						{
-							await _adapter.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = item.UnsubscribeRequest }, localToken);
+							if (!item.IsControl)
+								_childTasks.Add(item, task);
+
+							await task;
+
+							if (!item.IsControl)
+								_childTasks.Remove(item);
 						}
-						else
+
+						if (task.IsFaulted)
+							throw task.Exception;
+						else if (task.IsCanceled)
+							throw new OperationCanceledException();
+
+						if (msg.Type != MessageTypes.Time)
+							_adapter.AddVerboseLog("endprocess: {0}", msg.Type);
+					}
+					catch (Exception ex)
+					{
+						var responseToken = item.IsControl ? item.ProcessSource.Token : localToken;
+
+						try
 						{
+							if (item.IsControl)
+							{
+								lock (_stateLock)
+								{
+									if (responseToken.IsCancellationRequested || !ReferenceEquals(_globalCts, item.ProcessSource))
+										return;
+								}
+							}
+
 							if (msg is ISubscriptionMessage)
 							{
 								if (localToken.IsCancellationRequested)
 								{
-									// cancellation not an error for subscriptions as well as all responses
-									// must be reply for request only (see above item.UnsubscribeRequest logic)
+									// Cancellation is not an error for subscriptions. Fast-path unsubscribe
+									// acknowledgements are emitted by the unsubscribe queue item.
 									return;
 								}
 
@@ -394,13 +532,13 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 								await _adapter.FaultDelay.Delay(localToken);
 							}
 
-							await _adapter.SendOutMessageAsync(msg.CreateErrorResponse(ex, _adapter), localToken);
+							await _adapter.SendOutMessageAsync(msg.CreateErrorResponse(ex, _adapter), responseToken);
 						}
-					}
-					catch (Exception ex2)
-					{
-						if (!localToken.IsCancellationRequested)
-							_adapter.AddErrorLog(ex2);
+						catch (Exception ex2)
+						{
+							if (!responseToken.IsCancellationRequested)
+								_adapter.AddErrorLog(ex2);
+						}
 					}
 				}
 				finally
@@ -459,49 +597,125 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 		});
 	}
 
-	private async ValueTask ConnectAsync(ConnectMessage msg, CancellationToken token)
+	private async ValueTask ConnectAsync(ConnectMessage msg, CancellationToken token, CancellationTokenSource processSource)
 	{
-		if(_isConnectionStarted)
-			throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+		lock (_stateLock)
+		{
+			if (!ReferenceEquals(_globalCts, processSource) || processSource.IsCancellationRequested)
+				throw new OperationCanceledException(processSource.Token);
+
+			if (_isConnectionStarted)
+				throw new InvalidOperationException(LocalizedStrings.NotDisconnectPrevTime);
+		}
 
 		await RaiseNewOutMessage(msg, token);
 
-		_isConnectionStarted = true;
+		lock (_stateLock)
+		{
+			if (!ReferenceEquals(_globalCts, processSource) || processSource.IsCancellationRequested)
+				throw new OperationCanceledException(processSource.Token);
+
+			_isConnectionStarted = true;
+		}
 	}
 
-	private async ValueTask DisconnectAsync(DisconnectMessage msg)
+	private async ValueTask DisconnectAsync(DisconnectMessage msg, MessageQueueItem item)
 	{
-		if(!_isConnectionStarted)
-			throw new InvalidOperationException("not connected");
+		var processSource = item.ProcessSource;
 
-		if(_isDisconnecting)
-			throw new InvalidOperationException("already disconnecting");
+		lock (_stateLock)
+		{
+			if (!ReferenceEquals(_globalCts, processSource) || processSource.IsCancellationRequested)
+				throw new OperationCanceledException(processSource.Token);
 
-		_isDisconnecting = true;
+			if (!_isConnectionStarted)
+				throw new InvalidOperationException("not connected");
+
+			if (_isDisconnecting)
+				throw new InvalidOperationException("already disconnecting");
+
+			_isDisconnecting = true;
+		}
+
+		var prerequisite = item.DisconnectPrerequisite ?? Task.CompletedTask;
+		var operationSource = processSource;
 
 		try
 		{
-			CancelAndReplaceGlobalCts();
+			using var timeoutCts = _adapter.DisconnectTimeout.CreateTimeout();
+			using var prerequisiteCts = CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, processSource.Token);
+			CancellationTokenSource disconnectSource = null;
 
-			using (var cts = _adapter.DisconnectTimeout.CreateTimeout())
+			try
 			{
-				if (!await WhenChildrenComplete(cts.Token))
-					throw new InvalidOperationException("unable to complete disconnect. some tasks are still running.");
+				try
+				{
+					await prerequisite.WithCancellation(prerequisiteCts.Token);
+				}
+				catch (OperationCanceledException ex) when (timeoutCts.IsCancellationRequested && !processSource.IsCancellationRequested)
+				{
+					throw new TimeoutException("Unable to complete disconnect. Prior unsubscribe requests are still running.", ex);
+				}
+			}
+			finally
+			{
+				// Only the disconnect that still owns this cancellation generation may replace it.
+				// Close or Reset can already have installed a fresh source for subsequent processing.
+				disconnectSource = TryCancelAndReplaceGlobalCts(processSource);
+
+				if (disconnectSource is not null)
+				{
+					operationSource = disconnectSource;
+					item.ProcessSource = disconnectSource;
+				}
 			}
 
-			await RaiseNewOutMessage(msg, default);
+			if (disconnectSource is null)
+				throw new OperationCanceledException(processSource.Token);
 
-			_isConnectionStarted = false;
+			using var completionCts = CancellationTokenSource.CreateLinkedTokenSource(timeoutCts.Token, disconnectSource.Token);
+
+			if (!await WhenChildrenComplete(completionCts.Token))
+			{
+				lock (_stateLock)
+				{
+					if (disconnectSource.IsCancellationRequested || !ReferenceEquals(_globalCts, disconnectSource))
+						throw new OperationCanceledException(disconnectSource.Token);
+				}
+
+				throw new InvalidOperationException("unable to complete disconnect. some tasks are still running.");
+			}
+
+			lock (_stateLock)
+			{
+				if (disconnectSource.IsCancellationRequested || !ReferenceEquals(_globalCts, disconnectSource))
+					throw new OperationCanceledException(disconnectSource.Token);
+			}
+
+			await RaiseNewOutMessage(msg, disconnectSource.Token);
+
+			lock (_stateLock)
+			{
+				if (disconnectSource.IsCancellationRequested || !ReferenceEquals(_globalCts, disconnectSource))
+					throw new OperationCanceledException(disconnectSource.Token);
+
+				_isConnectionStarted = false;
+			}
 		}
 		finally
 		{
-			_isDisconnecting = false;
+			lock (_stateLock)
+			{
+				if (ReferenceEquals(_globalCts, operationSource))
+					_isDisconnecting = false;
+			}
 		}
 	}
 
 	private async ValueTask ResetAsync(ResetMessage msg)
 	{
-		_isDisconnecting = true;
+		lock (_stateLock)
+			_isDisconnecting = true;
 
 		// token is already canceled in SendInMessage
 		await AsyncHelper.CatchHandle((Func<Task>)(async () =>
@@ -527,7 +741,8 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 			_adapter.AddErrorLog(ex);
 		}
 
-		_isDisconnecting = _isConnectionStarted = false;
+		lock (_stateLock)
+			_isDisconnecting = _isConnectionStarted = false;
 	}
 
 	private void CancelAndReplaceGlobalCts()
@@ -537,15 +752,43 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 		// disposing it concurrently races into an ObjectDisposedException. A CancellationTokenSource without a
 		// timer holds no unmanaged resource, so letting the GC reclaim the abandoned one once the processor
 		// drains is safe and removes the use-after-dispose race.
-		var old = Interlocked.Exchange(ref _globalCts, new());
+		CancellationTokenSource old;
 
+		lock (_stateLock)
+		{
+			old = _globalCts;
+			_globalCts = new();
+		}
+
+		CancelGlobalCts(old);
+	}
+
+	private CancellationTokenSource TryCancelAndReplaceGlobalCts(CancellationTokenSource expected)
+	{
+		var replacement = new CancellationTokenSource();
+
+		lock (_stateLock)
+		{
+			if (!ReferenceEquals(_globalCts, expected))
+			{
+				replacement.Dispose();
+				return null;
+			}
+
+			_globalCts = replacement;
+		}
+
+		CancelGlobalCts(expected);
+		return replacement;
+	}
+
+	private static void CancelGlobalCts(CancellationTokenSource source)
+	{
 		try
 		{
-			old?.Cancel();
+			source?.Cancel();
 		}
-		catch
-		{
-		}
+		catch { }
 	}
 
 	private async Task<bool> WhenChildrenComplete(CancellationToken token)
