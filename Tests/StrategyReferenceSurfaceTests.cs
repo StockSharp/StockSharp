@@ -301,6 +301,14 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		private bool _invalidOrderSent;
 		private Order _resting;
 		private Order _canceledOnce;
+		private Subscription _depthSubscription;
+
+		public ReferenceSmaStrategy()
+		{
+			// The surface contract needs one delivered book, not a book materialized for every
+			// remaining tick and level1 update in the history replay.
+			OrderBookReceived += OnFirstOrderBookReceived;
+		}
 
 		public decimal MaxAbsPosition { get; private set; }
 
@@ -316,7 +324,20 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 
 			Subscribe(new(DataType.Ticks, Security));
 			Subscribe(new(DataType.Level1, Security));
-			Subscribe(new(DataType.MarketDepth, Security));
+
+			_depthSubscription = new(DataType.MarketDepth, Security);
+			Subscribe(_depthSubscription);
+		}
+
+		private void OnFirstOrderBookReceived(Subscription subscription, IOrderBookMessage _)
+		{
+			var depthSubscription = _depthSubscription;
+
+			if (depthSubscription is null || subscription.TransactionId != depthSubscription.TransactionId)
+				return;
+
+			_depthSubscription = null;
+			UnSubscribe(depthSubscription);
 		}
 
 		private void OnProcess(ICandleMessage candle, decimal longValue, decimal shortValue)
@@ -379,7 +400,15 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		private Order _resting;
 		private Order _canceledOnce;
 		private Subscription _candleSub;
+		private Subscription _depthSubscription;
 		private bool _isFormed;
+
+		public DecomposedReferenceSmaStrategy()
+		{
+			// Keep this side's scenario identical to the monolith: one book proves the relay,
+			// then the expensive derived-depth stream is no longer needed.
+			OrderBookReceived += OnFirstOrderBookReceived;
+		}
 
 		public decimal MaxAbsPosition { get; private set; }
 		public override bool IsFormed => _isFormed;
@@ -407,7 +436,9 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 					Subscriptions.Subscribe(_candleSub);
 					Subscriptions.Subscribe(new(DataType.Ticks, Security));
 					Subscriptions.Subscribe(new(DataType.Level1, Security));
-					Subscriptions.Subscribe(new(DataType.MarketDepth, Security));
+
+					_depthSubscription = new(DataType.MarketDepth, Security);
+					Subscriptions.Subscribe(_depthSubscription);
 					break;
 				}
 
@@ -418,6 +449,17 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 					break;
 				}
 			}
+		}
+
+		private void OnFirstOrderBookReceived(Subscription subscription, IOrderBookMessage _)
+		{
+			var depthSubscription = _depthSubscription;
+
+			if (depthSubscription is null || subscription.TransactionId != depthSubscription.TransactionId)
+				return;
+
+			_depthSubscription = null;
+			UnSubscribe(depthSubscription);
 		}
 
 		protected override void OnOrderRegisterFailed(OrderFail fail)
