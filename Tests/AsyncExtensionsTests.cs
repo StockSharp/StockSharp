@@ -17,6 +17,8 @@ public class AsyncExtensionsTests : BaseTestClass
 
 	private class MockAdapter : MessageAdapter
 	{
+		private readonly TaskCompletionSource<long> _subscriptionStarted = AsyncHelper.CreateTaskCompletionSource<long>();
+
 		public ConcurrentQueue<Message> SentMessages { get; } = [];
 		public Dictionary<long, MarketDataMessage> ActiveSubscriptions { get; } = [];
 		public Dictionary<long, OrderRegisterMessage> ActiveOrders { get; } = [];
@@ -37,6 +39,9 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		public override bool IsAllDownloadingSupported(DataType dataType)
 			=> dataType == DataType.Securities || dataType == DataType.Transactions;
+
+		public Task<long> WaitForSubscriptionStarted(CancellationToken cancellationToken)
+			=> _subscriptionStarted.Task.WithCancellation(cancellationToken);
 
 		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 		{
@@ -72,6 +77,8 @@ public class AsyncExtensionsTests : BaseTestClass
 						// For live subscriptions, send result now to start receiving
 						if (mdMsg.To == null)
 							await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+
+						_subscriptionStarted.TrySetResult(mdMsg.TransactionId);
 					}
 					else
 					{
@@ -398,10 +405,8 @@ public class AsyncExtensionsTests : BaseTestClass
 				got.Add(l1);
 		}, CancellationToken);
 
-		// wait activation
-		await Task.Delay(100, CancellationToken);
-
-		var id = subMsg.TransactionId;
+		var id = await adapter.WaitForSubscriptionStarted(CancellationToken);
+		id.AssertEqual(subMsg.TransactionId);
 
 		for (var i = 0; i < 2; i++)
 		{
