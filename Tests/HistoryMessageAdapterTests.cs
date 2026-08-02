@@ -1,5 +1,6 @@
 namespace StockSharp.Tests;
 
+using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 
 using StockSharp.Algo.Testing;
@@ -802,28 +803,27 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		manager.MessagesToYield.Add(tickMessage);
 		manager.MessagesToYield.Add(level1Message);
 
-		var outMessages = new List<Message>();
+		var outMessages = new ConcurrentQueue<Message>();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
 			secProvider,
 			manager);
 
-		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
+		var processingCompleted = AsyncHelper.CreateTaskCompletionSource<EmulationStateMessage>();
+		adapter.NewOutMessageAsync += (m, ct) =>
+		{
+			outMessages.Enqueue(m);
+
+			if (m is EmulationStateMessage { State: ChannelStates.Stopping } stopped)
+				processingCompleted.TrySetResult(stopped);
+
+			return default;
+		};
 
 		await adapter.SendInMessageAsync(new EmulationStateMessage { State = ChannelStates.Starting }, CancellationToken);
-
-		// Wait for messages with retry - more robust than fixed delay
-		const int maxRetries = 50;
-		const int delayMs = 50;
-		for (var i = 0; i < maxRetries; i++)
-		{
-			var hasTicks = outMessages.OfType<ExecutionMessage>().Any(m => m.DataTypeEx == DataType.Ticks);
-			var hasLevel1 = outMessages.OfType<Level1ChangeMessage>().Any();
-			if (hasTicks && hasLevel1)
-				break;
-			await Task.Delay(delayMs, CancellationToken);
-		}
+		var stopped = await processingCompleted.Task.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken);
+		stopped.Error.AssertNull();
 
 		// Should have received both types of messages
 		var ticks = outMessages.OfType<ExecutionMessage>().Where(m => m.DataTypeEx == DataType.Ticks).ToList();
