@@ -40,6 +40,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		public int TotalUnsubscribeReceived;
 		public List<Exception> Errors { get; } = [];
 		public SecurityId? RejectSubscriptionFor { get; set; }
+		public event Action<long> OrderProcessingCompleted;
 
 		public LiveFeedCryptoAdapter(string exchangeName, SecurityId[] supportedSecurities, IdGenerator transactionIdGenerator)
 			: base(transactionIdGenerator)
@@ -217,7 +218,6 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		private async ValueTask ProcessOrderRegister(OrderRegisterMessage msg, CancellationToken cancellationToken)
 		{
-			Interlocked.Increment(ref TotalOrdersProcessed);
 			var orderId = Interlocked.Increment(ref _orderId);
 
 			_activeOrders[msg.TransactionId] = msg;
@@ -260,6 +260,9 @@ public class ConnectorRoutingTests : BaseTestClass
 				}, cancellationToken);
 				_activeOrders.TryRemove(msg.TransactionId, out _);
 			}
+
+			Interlocked.Increment(ref TotalOrdersProcessed);
+			OrderProcessingCompleted?.Invoke(msg.TransactionId);
 		}
 
 		private async ValueTask ProcessOrderCancel(OrderCancelMessage msg, CancellationToken cancellationToken)
@@ -634,18 +637,34 @@ public class ConnectorRoutingTests : BaseTestClass
 		connector.Adapter.InnerAdapters.Add(adapter);
 		connector.Adapter.PortfolioAdapterProvider.SetAdapter("Binance_Portfolio", adapter);
 
+		const int orderCount = 100;
 		var ordersReceived = new ConcurrentBag<Order>();
 		var ordersFailed = new ConcurrentBag<OrderFail>();
+		var completedOrders = new ConcurrentDictionary<long, bool>();
+		var allOrdersCompleted = AsyncHelper.CreateTaskCompletionSource<bool>();
 
+		void MarkCompleted(long transactionId, bool succeeded)
+		{
+			if (transactionId == default)
+				return;
+
+			if (completedOrders.TryAdd(transactionId, succeeded) && completedOrders.Count >= orderCount)
+				allOrdersCompleted.TrySetResult(true);
+		}
+
+		adapter.OrderProcessingCompleted += transactionId => MarkCompleted(transactionId, true);
 		connector.OrderReceived += (sub, order) => ordersReceived.Add(order);
-		connector.OrderRegisterFailReceived += (sub, fail) => ordersFailed.Add(fail);
+		connector.OrderRegisterFailReceived += (sub, fail) =>
+		{
+			ordersFailed.Add(fail);
+			MarkCompleted(fail.Order.TransactionId, false);
+		};
 
 		await connector.ConnectAsync(CancellationToken);
 
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
 		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
 
-		const int orderCount = 100;
 		var tasks = new List<Task>();
 
 		// Submit 100 orders as fast as possible from multiple threads
@@ -667,20 +686,33 @@ public class ConnectorRoutingTests : BaseTestClass
 		}
 
 		await Task.WhenAll(tasks);
-		await Task.Delay(2000, CancellationToken);
+
+		await Task.WhenAny(
+			allOrdersCompleted.Task,
+			Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
+		CancellationToken.ThrowIfCancellationRequested();
+		var completedInTime = allOrdersCompleted.Task.IsCompletedSuccessfully;
 
 		await connector.DisconnectAsync(CancellationToken);
+
+		var processedOrderCount = completedOrders.Count(p => p.Value);
+		var failedOrderCount = completedOrders.Count - processedOrderCount;
 
 		Console.WriteLine($"Orders submitted: {orderCount}");
 		Console.WriteLine($"Orders received by adapter: {adapter.TotalOrdersProcessed}");
 		Console.WriteLine($"Order updates received: {ordersReceived.Count}");
 		Console.WriteLine($"Orders failed: {ordersFailed.Count}");
 
+		completedInTime.AssertTrue(
+			$"Timed out waiting for {orderCount} order results. Adapter processed: {adapter.TotalOrdersProcessed}; " +
+			$"distinct completed: {processedOrderCount}; distinct failed: {failedOrderCount}");
+
+		// No failures expected.
+		ordersFailed.Count.AssertEqual(0, "No orders should fail");
+
 		// All orders should be processed
 		adapter.TotalOrdersProcessed.AssertEqual(orderCount, $"Adapter should process {orderCount} orders");
-
-		// No failures expected
-		ordersFailed.Count.AssertEqual(0, "No orders should fail");
+		processedOrderCount.AssertEqual(orderCount, $"Adapter should complete {orderCount} distinct orders");
 	}
 
 	/// <summary>
