@@ -15,8 +15,8 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      # StockSharp.slnx references the connector projects at ../Connectors/, and the
-      # connectors in turn reference back at ../StockSharp (GitHub)/ — so both repos
+      # StockSharp_CI.slnx references the sample connector projects at ../Connectors/, and
+      # the connectors in turn reference back at ../StockSharp (GitHub)/ — so both repos
       # must sit side by side and this repo's folder must be named "StockSharp (GitHub)".
       # Reproduce that layout by checking each repo into its own sibling folder.
       - name: Checkout StockSharp
@@ -40,10 +40,10 @@ jobs:
             6.0.x
             10.0.x
 
-      - name: Build StockSharp.slnx (Windows only)
+      - name: Build StockSharp_CI.slnx (Windows only)
         if: matrix.os == 'windows-latest'
         working-directory: 'StockSharp (GitHub)'
-        run: dotnet build StockSharp.slnx --configuration Release
+        run: dotnet build StockSharp_CI.slnx --configuration Release
 
       - name: Build StockSharp_Tests.slnx (non-Windows)
         if: matrix.os != 'windows-latest'
