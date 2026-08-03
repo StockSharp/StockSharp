@@ -2379,4 +2379,34 @@ public class MarketEmulatorTests : BaseTestClass
 		resting.Contains(42L).AssertTrue("the registration shape must be taken on");
 		resting.Contains(43L).AssertTrue("and so must the state-report shape");
 	}
+
+	/// <summary>
+	/// A control message is not data and must not be held to the data clock.
+	/// </summary>
+	/// <remarks>
+	/// The emulator refuses data that moves time backwards, which is right: replaying an earlier
+	/// bar after a later one would matter. But the stop signal is deliberately pushed through the
+	/// same queue as a marker, so that it comes back only once everything ahead of it has been
+	/// processed - and it carries the time the run was told to stop at, which by then is behind
+	/// where the emulator has got to. Judging it as data turns an ordinary shutdown into an
+	/// exception, and the run ends by throwing instead of by finishing.
+	/// </remarks>
+	[TestMethod]
+	public async Task AStopSignalIsNotHeldToTheDataClock()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out _);
+
+		var start = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		var later = start.AddDays(1).AddMinutes(30);
+
+		await AddBookAsync(emu, id, later);
+
+		// The stop was scheduled for the start of the run; the emulator is already a day past it.
+		await emu.SendInMessageAsync(new EmulationStateMessage
+		{
+			LocalTime = start,
+			State = ChannelStates.Stopping,
+		}, CancellationToken);
+	}
 }

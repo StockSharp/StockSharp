@@ -129,7 +129,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
 
-		var isSystem = message.Type == MessageTypes.Reset || message is BaseConnectionMessage;
+		// Control messages are not data and are not held to the data clock. The stop signal in
+		// particular is pushed through this queue on purpose, as a marker that comes back only once
+		// everything ahead of it has been processed - and it carries the time the run was told to
+		// stop at, which by then is behind where the emulator has got to. Judging it as data ends
+		// an ordinary shutdown with an exception instead of a finish.
+		var isSystem = message.Type is MessageTypes.Reset or MessageTypes.EmulationState
+			|| message is BaseConnectionMessage;
 		var hasTime = message.LocalTime != default;
 
 		if (!isSystem && hasTime)
@@ -189,8 +195,10 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				break;
 
 			case MessageTypes.EmulationState:
-				// Handled by MarketEmulatorAdapter before reaching the emulator.
-				// Should not arrive here in normal operation.
+				// Arrives here on purpose, and there is nothing to do with it. The stop signal is
+				// put through this queue as a marker so that it comes back only once everything
+				// ahead of it has been processed - that round trip IS the soft stop. The emulator
+				// itself keeps no run state, so passing through is the whole of its part.
 				break;
 
 			case MessageTypes.Time:
