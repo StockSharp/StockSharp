@@ -410,7 +410,12 @@ public class CandleTests : BaseTestClass
 		var sub = new CandleBuilderSubscription(md);
 		var transform = new TickCandleBuilderValueTransform();
 
-		var now = DateTime.UtcNow;
+		// Anchored to the start of a minute rather than taken from the clock: the ticks below sit
+		// one second and one minute from it, and a start that happened to fall in the last second
+		// of a minute would put the second tick in the next candle - the builder then returns the
+		// finished one as well, and every assertion here expecting a single candle fails. Roughly
+		// one run in sixty.
+		var now = DateTime.UtcNow.Truncate(TimeSpan.FromMinutes(1));
 
 		var tick1 = new ExecutionMessage
 		{
