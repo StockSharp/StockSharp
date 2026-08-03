@@ -298,10 +298,83 @@ public class MatchingEngineAdapter : IMessageTransport
 		}
 	}
 
+	// Tells an order the engine is being told about from one it is being asked to place. Only the
+	// side that already holds it can say all three: that it is active, the identity it is known by,
+	// and how much of it is left.
+	private static bool IsAlreadyActive(ExecutionMessage execMsg)
+		=> execMsg.OrderState == OrderStates.Active
+			&& AdoptedTransactionId(execMsg) != 0
+			&& execMsg.Balance is > 0;
+
+	// Which field carries the registration id depends on what the report is. The row that
+	// registered the order carries it as its own transaction; a later state report carries it as
+	// the transaction it answers. Both describe the same order, and reading only one of them would
+	// leave the other quietly treated as a fresh request.
+	private static long AdoptedTransactionId(ExecutionMessage execMsg)
+		=> execMsg.OriginalTransactionId != 0 ? execMsg.OriginalTransactionId : execMsg.TransactionId;
+
+	/// <summary>
+	/// Takes an order that is already standing somewhere else into this book, exactly as it is.
+	/// </summary>
+	/// <remarks>
+	/// Nothing is reported back: the order was not registered here, so there is no request to
+	/// answer, and an owner that receives a registration report for an order it has held for hours
+	/// would reasonably treat it as a new one. Margin is reserved for what is left of it, because
+	/// the account is carrying that exposure whether or not this process was running when it was
+	/// placed. An identity already in the book is left alone rather than duplicated - being told
+	/// twice about the same order is ordinary, and the second telling must change nothing.
+	/// </remarks>
+	private void AdoptActiveOrder(ExecutionMessage execMsg, List<Message> results)
+	{
+		var state = GetSecurityState(execMsg.SecurityId);
+
+		var transactionId = AdoptedTransactionId(execMsg);
+
+		if (state.OrderManager.TryGetOrder(transactionId, out _))
+			return;
+
+		var order = new EmulatorOrder
+		{
+			TransactionId = transactionId,
+			OrderId = execMsg.OrderId,
+			Side = execMsg.Side,
+			Price = execMsg.OrderPrice,
+			Volume = execMsg.OrderVolume ?? execMsg.Balance.Value,
+			Balance = execMsg.Balance.Value,
+			PortfolioName = execMsg.PortfolioName,
+			TimeInForce = execMsg.TimeInForce,
+			OrderType = execMsg.OrderType ?? OrderTypes.Limit,
+			ExpiryDate = execMsg.ExpiryDate,
+		};
+
+		state.OrderBook.AddQuote(order);
+		state.OrderManager.RegisterOrder(order, execMsg.LocalTime);
+
+		if (!execMsg.PortfolioName.IsEmpty())
+		{
+			var portfolio = GetPortfolio(execMsg.PortfolioName);
+			portfolio.ProcessOrderRegistration(execMsg.SecurityId, execMsg.Side, order.Balance, order.Price);
+			AddPortfolioUpdate(portfolio, execMsg.LocalTime, results);
+		}
+
+		if (state.HasDepthSubscription)
+			results.Add(state.OrderBook.ToMessage(execMsg.LocalTime, execMsg.ServerTime));
+	}
+
 	private void ProcessExecution(ExecutionMessage execMsg, List<Message> results)
 	{
 		if (execMsg.DataType == DataType.Transactions && execMsg.HasOrderInfo())
 		{
+			// An order that is already live elsewhere arrives as state, not as a request. Putting
+			// it through registration would charge the account a second time for something it
+			// already owns, hand it a new identity, and cross it against the book on the way in -
+			// the engine would then be holding an order that does not exist anywhere else.
+			if (IsAlreadyActive(execMsg))
+			{
+				AdoptActiveOrder(execMsg, results);
+				return;
+			}
+
 			var regMsg = new OrderRegisterMessage
 			{
 				TransactionId = execMsg.TransactionId,

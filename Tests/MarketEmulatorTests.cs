@@ -2242,4 +2242,141 @@ public class MarketEmulatorTests : BaseTestClass
 		reported.Changes[PositionChangeTypes.CurrentValue].To<decimal>().AssertEqual(2m);
 		reported.Changes[PositionChangeTypes.AveragePrice].To<decimal>().AssertEqual(100m, "the seeded average price must survive");
 	}
+
+	/// <summary>
+	/// An order that is already live somewhere else must be able to enter the engine as state, not
+	/// as a request. The matcher is an internal venue: it is told what is outstanding when it comes
+	/// up, and the messages that carry that are the ordinary execution reports the rest of the
+	/// system already speaks. Feeding such a report through registration instead re-charges the
+	/// account for an order it already owns, gives it a new identity, and can cross it against the
+	/// book on the way in - so the order the engine ends up holding is not the order that exists.
+	/// </summary>
+	[TestMethod]
+	public void ActiveOrderArrivesAsStateNotAsARequest()
+	{
+		var id = Helper.CreateSecurityId();
+		var engine = new MatchingEngineAdapter();
+		var now = DateTime.UtcNow;
+		var results = new List<Message>();
+
+		engine.ProcessMessage(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}.Add(PositionChangeTypes.BeginValue, 1000000m), results);
+
+		results.Clear();
+
+		// What the router hands over: a buy for 10 that has already been half filled elsewhere,
+		// carrying the identity it is known by and the balance it actually has left.
+		engine.ProcessMessage(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			SecurityId = id,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+			TransactionId = 42,
+			OrderId = 555,
+			OrderState = OrderStates.Active,
+			OrderType = OrderTypes.Limit,
+			Side = Sides.Buy,
+			OrderPrice = 100,
+			OrderVolume = 10,
+			Balance = 5,
+		}, results);
+
+		// Taking it on is not an event anyone asked for: the order was not registered here, so no
+		// registration report may go out for it.
+		results.OfType<ExecutionMessage>().Any(m => m.HasOrderInfo && m.OriginalTransactionId == 42)
+			.AssertFalse("adopting an order is not the same as accepting one");
+
+		var book = engine.GetSecurityState(id).OrderBook;
+		var resting = book.GetLevels(Sides.Buy).SelectMany(l => l.Orders).FirstOrDefault(o => o.TransactionId == 42);
+
+		resting.AssertNotNull("the order must be standing in the book");
+		resting.OrderId.AssertEqual(555L, "under the identity it is already known by");
+		resting.Balance.AssertEqual(5m, "with what is left of it, not what it started as");
+		resting.Volume.AssertEqual(10m);
+
+		// And it must behave as a real resting order: an aggressor crosses it.
+		results.Clear();
+		now = now.AddSeconds(1);
+
+		engine.ProcessMessage(new OrderRegisterMessage
+		{
+			SecurityId = id,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			TransactionId = 77,
+			Side = Sides.Sell,
+			Price = 100,
+			Volume = 5,
+			OrderType = OrderTypes.Limit,
+		}, results);
+
+		var trade = results.OfType<ExecutionMessage>().FirstOrDefault(m => m.HasTradeInfo);
+
+		trade.AssertNotNull("an adopted order takes part in matching like any other");
+		trade.TradePrice.AssertEqual(100m);
+	}
+
+	/// <summary>
+	/// The same order can be described either way round. The report that registered it carries the
+	/// registration as its own transaction; a later state report carries it as the transaction it
+	/// answers. Reading only one of the two would let the other through as a fresh request - and a
+	/// fresh request charges the account again and can cross the book on the way in.
+	/// </summary>
+	[TestMethod]
+	public void AnAdoptedOrderIsRecognisedWhicheverFieldCarriesItsId()
+	{
+		var id = Helper.CreateSecurityId();
+		var engine = new MatchingEngineAdapter();
+		var now = DateTime.UtcNow;
+		var results = new List<Message>();
+
+		engine.ProcessMessage(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+		}.Add(PositionChangeTypes.BeginValue, 1000000m), results);
+
+		ExecutionMessage state(long transactionId, long originalTransactionId, long orderId) => new()
+		{
+			DataTypeEx = DataType.Transactions,
+			HasOrderInfo = true,
+			SecurityId = id,
+			PortfolioName = _pfName,
+			LocalTime = now,
+			ServerTime = now,
+			TransactionId = transactionId,
+			OriginalTransactionId = originalTransactionId,
+			OrderId = orderId,
+			OrderState = OrderStates.Active,
+			OrderType = OrderTypes.Limit,
+			Side = Sides.Buy,
+			OrderPrice = 100,
+			OrderVolume = 10,
+			Balance = 10,
+		};
+
+		results.Clear();
+
+		engine.ProcessMessage(state(transactionId: 42, originalTransactionId: 0, orderId: 555), results);
+		engine.ProcessMessage(state(transactionId: 0, originalTransactionId: 43, orderId: 556), results);
+
+		results.OfType<ExecutionMessage>().Any(m => m.HasOrderInfo)
+			.AssertFalse("neither shape is a request, so neither is answered");
+
+		var book = engine.GetSecurityState(id).OrderBook;
+		var resting = book.GetLevels(Sides.Buy).SelectMany(l => l.Orders).Select(o => o.TransactionId).ToArray();
+
+		resting.Contains(42L).AssertTrue("the registration shape must be taken on");
+		resting.Contains(43L).AssertTrue("and so must the state-report shape");
+	}
 }
