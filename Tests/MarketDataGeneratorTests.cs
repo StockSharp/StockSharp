@@ -1015,7 +1015,10 @@ public class MarketDataGeneratorTests : BaseTestClass
 		}.TryAdd(Level1Fields.LastTradePrice, 100m);
 		generator.Process(l1Msg);
 
-		var startMemory = GC.GetTotalMemory(true);
+		// Weighing the process would count what the tests running beside this one allocate. What
+		// survives a collection is about these objects only.
+		var produced = new List<WeakReference>();
+		var consumed = new List<WeakReference>();
 
 		for (var i = 0; i < 10000; i++)
 		{
@@ -1023,17 +1026,25 @@ public class MarketDataGeneratorTests : BaseTestClass
 			{
 				ServerTime = DateTime.UtcNow.AddMilliseconds(i),
 			};
-			generator.Process(timeMsg);
+
+			var result = generator.Process(timeMsg);
+
+			// Retention would hold all of them, so a sample is enough.
+			if (i % 1000 == 0)
+			{
+				consumed.Add(new(timeMsg));
+
+				if (result is not null)
+					produced.Add(new(result));
+			}
 		}
 
 		GC.Collect();
 		GC.WaitForPendingFinalizers();
 		GC.Collect();
 
-		var endMemory = GC.GetTotalMemory(true);
-		var memoryGrowth = endMemory - startMemory;
-
-		(memoryGrowth < 10 * 1024 * 1024).AssertTrue();
+		consumed.Any(r => r.IsAlive).AssertFalse("the generator is holding on to messages it was given");
+		produced.Any(r => r.IsAlive).AssertFalse("the generator is holding on to messages it produced");
 	}
 
 	[TestMethod]
