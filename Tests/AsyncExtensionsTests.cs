@@ -1744,10 +1744,12 @@ public class AsyncExtensionsTests : BaseTestClass
 				await Task.Delay(10, CancellationToken);
 		}, CancellationToken);
 
-		// Give connector time to process and fire events
-		await Task.Delay(100, CancellationToken);
+		// Wait for both notifications rather than guessing how long they take: the order reaching
+		// Active is raised before the notification for it has been delivered, so a fixed pause is
+		// a bet on the machine. Bounded, so a notification that never comes still fails.
+		for (var waited = 0; waited < 3000 && allOrderReceived.Count < 2; waited += 10)
+			await Task.Delay(10, CancellationToken);
 
-		// Debug check: did OrderReceived fire?
 		allOrderReceived.Count.AssertEqual(2, $"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
 
 		// Simulate order filled
