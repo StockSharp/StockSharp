@@ -76,7 +76,11 @@ public class IndicatorTests : BaseTestClass
 				ClosePrice = (100.5m + getRnd()).Max(1),
 				OpenTime = time,
 				CloseTime = time + tf,
-				TotalVolume = RandomGen.GetInt(1, 1000),
+				// From the seeded stream when one is given, so the whole series is reproducible.
+				// Volume was the one field still drawn from the global generator, which left the
+				// indicators that read it - NVI moves only when volume falls - deciding by chance
+				// whether a run had anything to react to.
+				TotalVolume = rnd is null ? RandomGen.GetInt(1, 1000) : rnd.Next(1, 1000),
 				SecurityId = secId,
 				TypedArg = tf,
 				State = CandleStates.Finished,

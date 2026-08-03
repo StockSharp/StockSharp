@@ -36,6 +36,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	private TimeSpan _totalWorkingTime;
 	private Action<TimeSpan> _currentTimeChanged;
 	private bool _isProcessingConnectorMessage;
+	private IRandomProvider _randomProvider = DefaultRandomProvider.Instance;
 
 	private Unit _takeProfit, _stopLoss;
 	private bool _isStopTrailing;
@@ -336,6 +337,22 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// </summary>
 	[Browsable(false)]
 	public TimeSpan? Latency { get; set; }
+
+	/// <summary>
+	/// Where anything in the strategy that draws at random takes its draws from.
+	/// </summary>
+	/// <remarks>
+	/// One source for the whole strategy, so a run that depends on a draw can be repeated:
+	/// set a seeded source and the same backtest produces the same result, set a stub and a
+	/// test states what the draws will be. Never null - left alone it is the shared unseeded
+	/// source, and the strategy varies from run to run as it always did.
+	/// </remarks>
+	[Browsable(false)]
+	public IRandomProvider RandomProvider
+	{
+		get => _randomProvider;
+		set => _randomProvider = value ?? throw new ArgumentNullException(nameof(value));
+	}
 
 	/// <summary>
 	/// Error state.

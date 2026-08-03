@@ -228,11 +228,19 @@ public class GeneticOptimizer : BaseOptimizer
 		ICrossover crossover,
 		IMutation mutation)
 	{
+		if (strategy is null)
+			throw new ArgumentNullException(nameof(strategy));
+
 		if (parameters is null)
 			throw new ArgumentNullException(nameof(parameters));
 
 		if (_ga is not null)
 			throw new InvalidOperationException("Not stopped.");
+
+		// A genetic search is worth re-running: it lands on a set of parameters, and the only
+		// way to arrive at that set again is to walk the same path. The source is the one the
+		// strategy under search carries, so a caller seeds one thing and the whole run repeats.
+		var random = strategy.RandomProvider;
 
 		var paramArr = parameters.Select(t =>
 		{
@@ -240,7 +248,7 @@ public class GeneticOptimizer : BaseOptimizer
 			var values = t.values?.Cast<object>().ToArray();
 
 			if (values?.Length > 0)
-				return (param, () => RandomGen.GetElement(values));
+				return (param, () => random.GetElement(values));
 
 			var from = t.from ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(param.Id, LocalizedStrings.From));
 			var to = t.to ?? throw new ArgumentException(LocalizedStrings.ParamDoesntContain.Put(param.Id, LocalizedStrings.Until));
@@ -270,7 +278,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 				var scale = su.Value.GetDecimalInfo().EffectiveScale;
 
-				getValue = () => new Unit(RandomGen.GetDecimal(fu.Value, tu.Value, scale).Round(su.Value, null), fu.Type);
+				getValue = () => new Unit(random.GetDecimal(fu.Value, tu.Value, scale).Round(su.Value, null), fu.Type);
 			}
 			else if (type == typeof(decimal))
 			{
@@ -288,11 +296,11 @@ public class GeneticOptimizer : BaseOptimizer
 
 				var scale = sd.GetDecimalInfo().EffectiveScale;
 
-				getValue = () => RandomGen.GetDecimal(fd, td, scale).Round(sd, null);
+				getValue = () => random.GetDecimal(fd, td, scale).Round(sd, null);
 			}
 			else if (type == typeof(bool))
 			{
-				getValue = () => RandomGen.GetBool();
+				getValue = () => random.GetBool();
 			}
 			else if (type.IsPrimitive() || type == typeof(TimeSpan))
 			{
@@ -314,7 +322,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 					getValue = () =>
 					{
-						var d = RandomGen.GetDecimal(fd, td, scale);
+						var d = random.GetDecimal(fd, td, scale);
 
 						if (sd != 1)
 							d = (d / sd) * sd;
@@ -338,7 +346,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 					getValue = () =>
 					{
-						var l = RandomGen.GetLong(fl, tl);
+						var l = random.GetLong(fl, tl);
 
 						if (sl != 1)
 							l = (l / sl) * sl;

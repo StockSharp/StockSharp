@@ -330,7 +330,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		// The commission/slippage managers are deliberately left at their defaults - the
 		// replay comparison below asserts on the values they produce.
 		var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
-		emulator.RandomProvider = new DefaultRandomProvider(42);
+		emulator.RandomProvider = new DefaultEmulationRandomizer(42);
 		connector.EmulationAdapter.Settings.InitialOrderId = 100;
 		connector.EmulationAdapter.Settings.InitialTradeId = 100;
 		connector.Adapter.LatencyManager = null;
@@ -396,7 +396,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		// 2. InitialOrderId/InitialTradeId — EmulationMessageAdapter sets from DateTime.UtcNow.Ticks
 		// 3. Latency/Slippage/Commission managers — may introduce non-determinism
 		var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
-		emulator.RandomProvider = new DefaultRandomProvider(42);
+		emulator.RandomProvider = new DefaultEmulationRandomizer(42);
 		connector.EmulationAdapter.Settings.InitialOrderId = 100;
 		connector.EmulationAdapter.Settings.InitialTradeId = 100;
 		connector.Adapter.LatencyManager = null;
@@ -2863,6 +2863,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		[nameof(Strategy.Trades)] = false,          // TradePipeline
 		[nameof(Strategy.Subscriptions)] = false,   // SubscriptionRegistry
 		[nameof(Strategy.PositionsList)] = false,   // new (securityId, portfolio) -> net position view
+		[nameof(Strategy.RandomProvider)] = false,  // where anything drawing at random draws from - set in code, not a grid row
 	};
 
 	// Monolith-only properties. The decomposed engine is a superset, so this is intentionally EMPTY;

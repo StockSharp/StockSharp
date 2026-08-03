@@ -16,7 +16,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	private DateTime _currentTime;
 	private DateTime _lastInputTime;
 
-	private IRandomProvider _randomProvider = new DefaultRandomProvider();
+	private IEmulationRandomizer _randomProvider = new DefaultEmulationRandomizer();
 
 	/// <summary>
 	/// Initializes a new instance.
@@ -53,7 +53,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	public MarketEmulatorSettings Settings { get; } = new();
 
 	/// <inheritdoc />
-	public IRandomProvider RandomProvider
+	public IEmulationRandomizer RandomProvider
 	{
 		get => _randomProvider;
 		set => _randomProvider = value ?? throw new ArgumentNullException(nameof(value));

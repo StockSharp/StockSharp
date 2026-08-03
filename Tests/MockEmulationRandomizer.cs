@@ -5,7 +5,7 @@ using StockSharp.Algo.Testing;
 /// <summary>
 /// Mock random provider for testing with configurable behavior.
 /// </summary>
-public class MockRandomProvider : IRandomProvider
+public class MockEmulationRandomizer : IEmulationRandomizer
 {
 	private Func<decimal> _nextVolume;
 	private Func<int, int> _nextSpreadStep;
@@ -51,7 +51,7 @@ public class MockRandomProvider : IRandomProvider
 	/// <summary>
 	/// Creates mock provider with default deterministic behavior.
 	/// </summary>
-	public MockRandomProvider()
+	public MockEmulationRandomizer()
 	{
 		_nextVolume = () => 50;
 		_nextSpreadStep = max => 1;

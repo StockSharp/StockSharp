@@ -12,7 +12,7 @@ public class MarketEmulatorTests : BaseTestClass
 	private static IMarketEmulator CreateEmuWithEvents(IEnumerable<SecurityId> secIds, out List<Message> result)
 	{
 		var emu = new MarketEmulator(new CollectionSecurityProvider(secIds.Select(id => new Security { Id = id.ToStringId() })), new CollectionPortfolioProvider([Portfolio.CreateSimulator()]), new InMemoryExchangeInfoProvider(), new IncrementalIdGenerator()) { VerifyMode = true };
-		emu.RandomProvider = new MockRandomProvider();
+		emu.RandomProvider = new MockEmulationRandomizer();
 		var result2 = new List<Message>();
 		emu.NewOutMessageAsync += (m, ct) => { Helper.CheckPortfolioRowContract(m); result2.Add(m); return default; };
 		result = result2;

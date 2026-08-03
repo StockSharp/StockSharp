@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Testing.Generation;
+﻿namespace StockSharp.Algo.Testing.Generation;
 
 /// <summary>
 /// Tick trades generator using random method.
@@ -116,14 +116,14 @@ public class RandomWalkTradeGenerator(SecurityId securityId) : TradeGenerator(se
 			TradeId = IdGenerator.GetNextId(),
 			ServerTime = time,
 			LocalTime = time,
-			OriginSide = GenerateOriginSide ? RandomGen.GetEnum<Sides>() : null,
+			OriginSide = GenerateOriginSide ? RandomProvider.GetEnum<Sides>() : null,
 			TradeVolume = v * (SecurityDefinition?.VolumeStep ?? 1m),
 			DataTypeEx = DataType.Ticks
 		};
 
 		var priceStep = SecurityDefinition?.PriceStep ?? 0.01m;
 
-		_lastTradePrice += RandomGen.GetInt(-MaxPriceStepCount, MaxPriceStepCount) * priceStep;
+		_lastTradePrice += RandomProvider.GetInt(-MaxPriceStepCount, MaxPriceStepCount) * priceStep;
 
 		if (_lastTradePrice <= 0)
 			_lastTradePrice = priceStep;

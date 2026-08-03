@@ -22,6 +22,9 @@ public static class AsmInit
 		ConfigManager.RegisterService<IExchangeInfoProvider>(new InMemoryExchangeInfoProvider());
 		ConfigManager.RegisterService<IExcelWorkerProvider>(new OpenXmlExcelWorkerProvider());
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider([], typeof(MockRemoteAdapter)));
+		// A diagram socket asks for a dispatcher as soon as an element is built; outside an
+		// app there is no UI thread to marshal to, and the dummy one runs callbacks inline.
+		ConfigManager.RegisterService<IDispatcher>(new DummyDispatcher());
 		await CompilationExtensions.Init(Paths.FileSystem, Helper.LogManager.Application, [("designer_extensions.py", File.ReadAllText("../../../../Diagram.Core/python/designer_extensions.py"))], default);
 
 		ConfigManager.RegisterService<IDatabaseProvider>(new AdoDatabaseProvider());

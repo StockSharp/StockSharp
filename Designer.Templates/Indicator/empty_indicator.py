@@ -21,6 +21,9 @@ class empty_indicator(BaseIndicator):
         self._change = 20
         self._counter = 0
         self._isFormed = False
+        # where the random decisions below come from - replace it with random.Random(seed)
+        # to repeat a run, or with a stub to state in a test what the values will be
+        self.random_source = random.Random()
 
     @property
     def Change(self) -> int:
@@ -49,7 +52,7 @@ class empty_indicator(BaseIndicator):
         :return: A new DecimalIndicatorValue after applying changes.
         """
         # Every 10th call, try to return an empty value
-        if random.randint(0, 10) == 0:
+        if self.random_source.randint(0, 10) == 0:
             return DecimalIndicatorValue(self, input.Time)
 
         if self._counter == 5:
@@ -60,11 +63,11 @@ class empty_indicator(BaseIndicator):
         value = to_decimal(input)
 
         # Apply random change of +/- _change percent to the current value
-        value += value * random.randint(-self._change, self._change) / 100.0
+        value += value * self.random_source.randint(-self._change, self._change) / 100.0
 
         result = DecimalIndicatorValue(self, value, input.Time)
         # Mark value as final based on a random decision
-        result.IsFinal = bool(random.getrandbits(1))
+        result.IsFinal = bool(self.random_source.getrandbits(1))
         return result
 
     def Load(self, storage):

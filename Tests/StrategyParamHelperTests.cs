@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 [TestClass]
 public class StrategyParamHelperTests : BaseTestClass
@@ -208,7 +208,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsInRange(value, 10, 100);
 			AreEqual(0, value % 10); // should be on step boundary
 		}
@@ -223,7 +223,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsInRange(value, 1.0m, 5.0m);
 			// The engine generates from + k*step, so the value must sit on a step boundary.
 			IsZero((value - 1.0m) % 0.5m, $"Value {value} is not aligned to step 0.5 from 1.0.");
@@ -241,7 +241,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			if (value) trueCount++;
 			else falseCount++;
 		}
@@ -264,7 +264,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsTrue(value, "Random value for a true..true range must always be true.");
 		}
 	}
@@ -274,7 +274,7 @@ public class StrategyParamHelperTests : BaseTestClass
 	{
 		var param = new StrategyParam<int>("test") { Value = 42, CanOptimize = false };
 
-		Throws<InvalidOperationException>(() => param.GetRandom());
+		Throws<InvalidOperationException>(() => param.GetRandom(DefaultRandomProvider.Instance));
 	}
 
 	[TestMethod]
@@ -285,7 +285,7 @@ public class StrategyParamHelperTests : BaseTestClass
             CanOptimize = true
         };
 
-        Throws<InvalidOperationException>(() => param.GetRandom());
+        Throws<InvalidOperationException>(() => param.GetRandom(DefaultRandomProvider.Instance));
 	}
 
 	#endregion
@@ -299,7 +299,7 @@ public class StrategyParamHelperTests : BaseTestClass
 		var param = new StrategyParam<int>("test");
 		param.SetOptimize(10, 1000, 10);
 
-		var values = param.GetRandomValues(10);
+		var values = param.GetRandomValues(10, DefaultRandomProvider.Instance);
 
 		AreEqual(10, values.Count);
 
@@ -319,7 +319,7 @@ public class StrategyParamHelperTests : BaseTestClass
 		var param = new StrategyParam<int>("test");
 		param.SetOptimize(10, 100, 5);
 
-		var values = param.GetRandomValues(20);
+		var values = param.GetRandomValues(20, DefaultRandomProvider.Instance);
 
 		foreach (var v in values)
 		{
@@ -335,7 +335,7 @@ public class StrategyParamHelperTests : BaseTestClass
 		var param = new StrategyParam<int>("test");
 		param.SetOptimize(1, 100, 1);
 
-		Throws<ArgumentOutOfRangeException>(() => param.GetRandomValues(0));
+		Throws<ArgumentOutOfRangeException>(() => param.GetRandomValues(0, DefaultRandomProvider.Instance));
 	}
 
 	#endregion
@@ -479,7 +479,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsInRange(value, 1.0f, 10.0f);
 
 			// The engine generates from + k*step. With from=1.0 and step=0.5 (both exact in binary),
@@ -498,7 +498,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 100; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsInRange(value, 0.0, 1.0);
 
 			// The engine generates from + k*step. 0.1 is not exactly representable, so allow a small
@@ -590,7 +590,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 50; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsTrue(expected.Contains(value));
 		}
 	}
@@ -662,7 +662,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 50; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsTrue(expected.Contains(value));
 		}
 	}
@@ -763,7 +763,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 10; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			// With step > range, should return from value or handle gracefully
 			IsTrue(value >= 10 && value <= 15, $"Value {value} is outside expected range [10, 15]");
 		}
@@ -777,7 +777,7 @@ public class StrategyParamHelperTests : BaseTestClass
 
 		for (var i = 0; i < 10; i++)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(DefaultRandomProvider.Instance);
 			IsTrue(value >= 1.0m && value <= 1.5m, $"Value {value} is outside expected range [1.0, 1.5]");
 		}
 	}

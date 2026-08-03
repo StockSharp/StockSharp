@@ -53,21 +53,28 @@ public static class StrategyParamHelper
 	/// </summary>
 	/// <typeparam name="T">The type of the parameter value.</typeparam>
 	/// <param name="param"><see cref="StrategyParam{T}"/></param>
+	/// <param name="provider">Where the value is drawn from.</param>
 	/// <returns>Random value within the optimization range.</returns>
 	/// <exception cref="InvalidOperationException">Thrown when parameter cannot be optimized or optimization range is not set.</exception>
-	public static T GetRandom<T>(this StrategyParam<T> param)
-		=> (T)GetRandom((IStrategyParam)param);
+	public static T GetRandom<T>(this StrategyParam<T> param, IRandomProvider provider)
+		=> (T)GetRandom((IStrategyParam)param, provider);
 
 	/// <summary>
 	/// Generate a random value within the optimization range for the parameter.
 	/// </summary>
 	/// <param name="param"><see cref="IStrategyParam"/></param>
+	/// <param name="provider">Where the value is drawn from. A search worth keeping the result of is
+	/// worth running again, so the caller states the source rather than a default deciding for it -
+	/// <see cref="Strategy.RandomProvider"/> is the one a strategy runs on.</param>
 	/// <returns>Random value within the optimization range.</returns>
 	/// <exception cref="InvalidOperationException">Thrown when parameter cannot be optimized or optimization range is not set.</exception>
-	public static object GetRandom(this IStrategyParam param)
+	public static object GetRandom(this IStrategyParam param, IRandomProvider provider)
 	{
 		if (param is null)
 			throw new ArgumentNullException(nameof(param));
+
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
 
 		if (!param.CanOptimize)
 			throw new InvalidOperationException($"Parameter '{param.Id}' cannot be optimized. Set CanOptimize to true.");
@@ -75,7 +82,7 @@ public static class StrategyParamHelper
 		// Check for explicit values first (for Security, DataType, etc.)
 		var explicitValues = param.OptimizeValues.Cast<object>().ToArray();
 		if (explicitValues.Length > 0)
-			return RandomGen.GetElement(explicitValues);
+			return provider.GetElement(explicitValues);
 
 		if (param.OptimizeFrom == null || param.OptimizeTo == null)
 			throw new InvalidOperationException($"Parameter '{param.Id}' optimization range is not set. Use SetOptimize or SetOptimizeValues method.");
@@ -84,89 +91,89 @@ public static class StrategyParamHelper
 
 		return type switch
 		{
-			_ when type == typeof(int) => GenerateRandomInt((int)param.OptimizeFrom, (int)param.OptimizeTo, (int?)param.OptimizeStep),
-			_ when type == typeof(long) => GenerateRandomLong((long)param.OptimizeFrom, (long)param.OptimizeTo, (long?)param.OptimizeStep),
-			_ when type == typeof(decimal) => GenerateRandomDecimal((decimal)param.OptimizeFrom, (decimal)param.OptimizeTo, (decimal?)param.OptimizeStep),
-			_ when type == typeof(double) => GenerateRandomDouble((double)param.OptimizeFrom, (double)param.OptimizeTo, (double?)param.OptimizeStep),
-			_ when type == typeof(float) => GenerateRandomFloat((float)param.OptimizeFrom, (float)param.OptimizeTo, (float?)param.OptimizeStep),
-			_ when type == typeof(bool) => GenerateRandomBool((bool)param.OptimizeFrom, (bool)param.OptimizeTo),
-			_ when type == typeof(TimeSpan) => GenerateRandomTimeSpan((TimeSpan)param.OptimizeFrom, (TimeSpan)param.OptimizeTo, (TimeSpan?)param.OptimizeStep),
-			_ when type == typeof(Unit) => GenerateRandomUnit((Unit)param.OptimizeFrom, (Unit)param.OptimizeTo, (Unit)param.OptimizeStep),
+			_ when type == typeof(int) => GenerateRandomInt((int)param.OptimizeFrom, (int)param.OptimizeTo, (int?)param.OptimizeStep, provider),
+			_ when type == typeof(long) => GenerateRandomLong((long)param.OptimizeFrom, (long)param.OptimizeTo, (long?)param.OptimizeStep, provider),
+			_ when type == typeof(decimal) => GenerateRandomDecimal((decimal)param.OptimizeFrom, (decimal)param.OptimizeTo, (decimal?)param.OptimizeStep, provider),
+			_ when type == typeof(double) => GenerateRandomDouble((double)param.OptimizeFrom, (double)param.OptimizeTo, (double?)param.OptimizeStep, provider),
+			_ when type == typeof(float) => GenerateRandomFloat((float)param.OptimizeFrom, (float)param.OptimizeTo, (float?)param.OptimizeStep, provider),
+			_ when type == typeof(bool) => GenerateRandomBool((bool)param.OptimizeFrom, (bool)param.OptimizeTo, provider),
+			_ when type == typeof(TimeSpan) => GenerateRandomTimeSpan((TimeSpan)param.OptimizeFrom, (TimeSpan)param.OptimizeTo, (TimeSpan?)param.OptimizeStep, provider),
+			_ when type == typeof(Unit) => GenerateRandomUnit((Unit)param.OptimizeFrom, (Unit)param.OptimizeTo, (Unit)param.OptimizeStep, provider),
 			_ => param.Value
 		};
 	}
 
-	private static bool GenerateRandomBool(bool from, bool to)
-		=> from == to ? from : RandomGen.GetBool();
+	private static bool GenerateRandomBool(bool from, bool to, IRandomProvider rnd)
+		=> from == to ? from : rnd.GetBool();
 
-	private static int GenerateRandomInt(int from, int to, int? step)
+	private static int GenerateRandomInt(int from, int to, int? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > 0)
 		{
 			var steps = (to - from) / step.Value;
-			return from + RandomGen.GetInt(0, steps) * step.Value;
+			return from + rnd.GetInt(0, steps) * step.Value;
 		}
 
-		return RandomGen.GetInt(from, to);
+		return rnd.GetInt(from, to);
 	}
 
-	private static long GenerateRandomLong(long from, long to, long? step)
+	private static long GenerateRandomLong(long from, long to, long? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > 0)
 		{
 			var steps = (to - from) / step.Value;
-			return from + RandomGen.GetInt(0, (int)steps) * step.Value;
+			return from + rnd.GetInt(0, (int)steps) * step.Value;
 		}
 
-		return RandomGen.GetLong(from, to);
+		return rnd.GetLong(from, to);
 	}
 
-	private static decimal GenerateRandomDecimal(decimal from, decimal to, decimal? step)
+	private static decimal GenerateRandomDecimal(decimal from, decimal to, decimal? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > 0)
 		{
 			var steps = (int)((to - from) / step.Value);
-			return from + RandomGen.GetInt(0, steps) * step.Value;
+			return from + rnd.GetInt(0, steps) * step.Value;
 		}
 
-		return RandomGen.GetDecimal(from, to, from.GetDecimalInfo().EffectiveScale);
+		return rnd.GetDecimal(from, to, from.GetDecimalInfo().EffectiveScale);
 	}
 
-	private static double GenerateRandomDouble(double from, double to, double? step)
+	private static double GenerateRandomDouble(double from, double to, double? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > 0)
 		{
 			var steps = (int)((to - from) / step.Value);
-			return from + RandomGen.GetInt(0, steps) * step.Value;
+			return from + rnd.GetInt(0, steps) * step.Value;
 		}
 
-		return RandomGen.GetDouble(from, to);
+		return rnd.GetDouble(from, to);
 	}
 
-	private static float GenerateRandomFloat(float from, float to, float? step)
+	private static float GenerateRandomFloat(float from, float to, float? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > 0)
 		{
 			var steps = (int)((to - from) / step.Value);
-			return from + RandomGen.GetInt(0, steps) * step.Value;
+			return from + rnd.GetInt(0, steps) * step.Value;
 		}
 
-		return RandomGen.GetFloat(from, to);
+		return rnd.GetFloat(from, to);
 	}
 
-	private static TimeSpan GenerateRandomTimeSpan(TimeSpan from, TimeSpan to, TimeSpan? step)
+	private static TimeSpan GenerateRandomTimeSpan(TimeSpan from, TimeSpan to, TimeSpan? step, IRandomProvider rnd)
 	{
 		if (step.HasValue && step.Value > TimeSpan.Zero)
 		{
 			var steps = (int)((to - from).Ticks / step.Value.Ticks);
-			return from + TimeSpan.FromTicks(RandomGen.GetInt(0, steps) * step.Value.Ticks);
+			return from + TimeSpan.FromTicks(rnd.GetInt(0, steps) * step.Value.Ticks);
 		}
 
 		var range = to - from;
-		return from + TimeSpan.FromTicks(RandomGen.GetLong(0, range.Ticks));
+		return from + TimeSpan.FromTicks(rnd.GetLong(0, range.Ticks));
 	}
 
-	private static Unit GenerateRandomUnit(Unit from, Unit to, Unit step)
+	private static Unit GenerateRandomUnit(Unit from, Unit to, Unit step, IRandomProvider rnd)
 	{
 		if (from.Type != to.Type)
 			throw new ArgumentException($"Unit types must match: from.Type={from.Type}, to.Type={to.Type}");
@@ -175,8 +182,8 @@ public static class StrategyParamHelper
 			throw new ArgumentException($"Step unit type must match range type: step.Type={step.Type}, range.Type={from.Type}");
 
 		var randomValue = step is not null && step.Value > 0
-			? GenerateRandomDecimal(from.Value, to.Value, step.Value)
-			: GenerateRandomDecimal(from.Value, to.Value, null);
+			? GenerateRandomDecimal(from.Value, to.Value, step.Value, rnd)
+			: GenerateRandomDecimal(from.Value, to.Value, null, rnd);
 
 		return new Unit(randomValue, from.Type);
 	}
@@ -681,7 +688,7 @@ public static class StrategyParamHelper
 
 			for (var i = 0; i < randomCount; i++)
 			{
-				var randomValue = param.GetRandom();
+				var randomValue = param.GetRandom(strategy.RandomProvider);
 				if (randomValue is not null)
 					values.Add(randomValue);
 			}
@@ -879,8 +886,9 @@ public static class StrategyParamHelper
 	/// <typeparam name="T">The type of the parameter value.</typeparam>
 	/// <param name="param"><see cref="StrategyParam{T}"/></param>
 	/// <param name="count">Number of random values to generate.</param>
+	/// <param name="provider">Where the values are drawn from.</param>
 	/// <returns>Set of unique random values.</returns>
-	public static HashSet<T> GetRandomValues<T>(this StrategyParam<T> param, int count)
+	public static HashSet<T> GetRandomValues<T>(this StrategyParam<T> param, int count, IRandomProvider provider)
 	{
 		if (param is null)
 			throw new ArgumentNullException(nameof(param));
@@ -896,7 +904,7 @@ public static class StrategyParamHelper
 
 		while (values.Count < count && attempts < maxAttempts)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(provider);
 			values.Add(value);
 			attempts++;
 		}
@@ -909,8 +917,9 @@ public static class StrategyParamHelper
 	/// </summary>
 	/// <param name="param"><see cref="IStrategyParam"/></param>
 	/// <param name="count">Number of random values to generate.</param>
+	/// <param name="provider">Where the values are drawn from.</param>
 	/// <returns>Set of unique random values.</returns>
-	public static HashSet<object> GetRandomValues(this IStrategyParam param, int count)
+	public static HashSet<object> GetRandomValues(this IStrategyParam param, int count, IRandomProvider provider)
 	{
 		if (param is null)
 			throw new ArgumentNullException(nameof(param));
@@ -926,7 +935,7 @@ public static class StrategyParamHelper
 
 		while (values.Count < count && attempts < maxAttempts)
 		{
-			var value = param.GetRandom();
+			var value = param.GetRandom(provider);
 			if (value is not null)
 				values.Add(value);
 			attempts++;

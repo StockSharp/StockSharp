@@ -24,7 +24,7 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 		var exchProvider = new InMemoryExchangeInfoProvider();
 
 		// Mock random for reproducible tests
-		var mockRandom = new MockRandomProvider();
+		var mockRandom = new MockEmulationRandomizer();
 
 		// V1
 		var emuV1 = new MarketEmulatorOld(secProvider, pfProvider, exchProvider, new IncrementalIdGenerator()) { VerifyMode = false };
@@ -943,7 +943,7 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 	/// <summary>
 	/// Tests that both emulators produce the same output when processing Level1 with quotes but no volume.
 	/// The old emulator uses RandomProvider to generate volume when not provided,
-	/// while the new emulator should behave the same way with MockRandomProvider.
+	/// while the new emulator should behave the same way with MockEmulationRandomizer.
 	/// </summary>
 	[TestMethod]
 	public async Task Level1_QuotesWithoutVolume_UsesRandomProvider()
@@ -956,14 +956,14 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 		var v1VolumeCalls = 0;
 		var v2VolumeCalls = 0;
 
-		var mockV1 = new MockRandomProvider
+		var mockV1 = new MockEmulationRandomizer
 		{
 			NextVolumeFunc = () => { v1VolumeCalls++; return 50; },
 			NextSpreadStepFunc = _ => 1,
 			ShouldMatchFunc = () => false,
 			ShouldFailFunc = _ => false
 		};
-		var mockV2 = new MockRandomProvider
+		var mockV2 = new MockEmulationRandomizer
 		{
 			NextVolumeFunc = () => { v2VolumeCalls++; return 50; },
 			NextSpreadStepFunc = _ => 1,
@@ -1022,14 +1022,14 @@ public class MarketEmulatorComparisonTests : BaseTestClass
 		var v1VolumeCalls = 0;
 		var v2VolumeCalls = 0;
 
-		var mockV1 = new MockRandomProvider
+		var mockV1 = new MockEmulationRandomizer
 		{
 			NextVolumeFunc = () => { v1VolumeCalls++; return 50; },
 			NextSpreadStepFunc = _ => 1,
 			ShouldMatchFunc = () => false,
 			ShouldFailFunc = _ => false
 		};
-		var mockV2 = new MockRandomProvider
+		var mockV2 = new MockEmulationRandomizer
 		{
 			NextVolumeFunc = () => { v2VolumeCalls++; return 50; },
 			NextSpreadStepFunc = _ => 1,

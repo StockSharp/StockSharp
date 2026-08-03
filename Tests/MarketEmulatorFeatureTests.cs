@@ -25,7 +25,7 @@ public class MarketEmulatorFeatureTests : BaseTestClass
 		var exchProvider = new InMemoryExchangeInfoProvider();
 
 		// Mock random for reproducible tests
-		var mockRandom = new MockRandomProvider();
+		var mockRandom = new MockEmulationRandomizer();
 
 		// V1
 		var idGen1 = new IncrementalIdGenerator();

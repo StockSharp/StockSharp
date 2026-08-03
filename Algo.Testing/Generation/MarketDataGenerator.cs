@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Testing.Generation;
+﻿namespace StockSharp.Algo.Testing.Generation;
 
 /// <summary>
 /// The market data generator.
@@ -31,6 +31,23 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 	/// </summary>
 	public int RandomArrayLength { get; set; }
 
+	private IRandomProvider _randomProvider = DefaultRandomProvider.Instance;
+
+	/// <summary>
+	/// Where the generated values come from.
+	/// </summary>
+	/// <remarks>
+	/// Left alone the series differs on every run, which is right for a demonstration and wrong for
+	/// a measurement: a backtest taken on generated data cannot be compared with another unless
+	/// both ran on the same series. Given a seeded source, <see cref="Init"/> lays out the same
+	/// numbers again.
+	/// </remarks>
+	public IRandomProvider RandomProvider
+	{
+		get => _randomProvider;
+		set => _randomProvider = value ?? throw new ArgumentNullException(nameof(value));
+	}
+
 	/// <summary>
 	/// To initialize the generator state.
 	/// </summary>
@@ -38,8 +55,8 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 	{
 		LastGenerationTime = DateTime.MinValue;
 
-		Volumes = new(MinVolume, MaxVolume, RandomArrayLength);
-		Steps = new(1, MaxPriceStepCount, RandomArrayLength);
+		Volumes = new(MinVolume, MaxVolume, RandomArrayLength, RandomProvider);
+		Steps = new(1, MaxPriceStepCount, RandomArrayLength, RandomProvider);
 
 		SecurityDefinition = null;
 	}
@@ -203,7 +220,9 @@ public abstract class MarketDataGenerator : Cloneable<MarketDataGenerator>
 		destination.MinVolume = MinVolume;
 		destination.MaxVolume = MaxVolume;
 		destination.MaxPriceStepCount = MaxPriceStepCount;
-		destination.Volumes = new(MinVolume, MaxVolume, RandomArrayLength);
-		destination.Steps = new(1, MaxPriceStepCount, RandomArrayLength);
+		// The copy draws from the same source, so a clone of a seeded generator is still seeded.
+		destination.RandomProvider = RandomProvider;
+		destination.Volumes = new(MinVolume, MaxVolume, RandomArrayLength, RandomProvider);
+		destination.Steps = new(1, MaxPriceStepCount, RandomArrayLength, RandomProvider);
 	}
 }

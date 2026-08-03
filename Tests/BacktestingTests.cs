@@ -2267,7 +2267,7 @@ public class BacktestingTests : BaseTestClass
 			using var connector = CreateDeterministicConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode);
 
 			var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
-			emulator.RandomProvider = new DefaultRandomProvider(randomSeed);
+			emulator.RandomProvider = new DefaultEmulationRandomizer(randomSeed);
 
 			// Set deterministic initial IDs — EmulationMessageAdapter constructor
 			// seeds these from DateTime.UtcNow.Ticks which changes between runs.
@@ -2355,7 +2355,7 @@ public class BacktestingTests : BaseTestClass
 			using var connector = CreateDeterministicConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode);
 
 			var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
-			emulator.RandomProvider = new DefaultRandomProvider(randomSeed);
+			emulator.RandomProvider = new DefaultEmulationRandomizer(randomSeed);
 
 			// Set deterministic initial IDs — EmulationMessageAdapter constructor
 			// seeds these from DateTime.UtcNow.Ticks which changes between runs.

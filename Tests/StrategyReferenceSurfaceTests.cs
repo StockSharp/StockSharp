@@ -800,7 +800,7 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		connector.CheckSteps = true;
 
 		var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
-		emulator.RandomProvider = new DefaultRandomProvider(42);
+		emulator.RandomProvider = new DefaultEmulationRandomizer(42);
 		connector.EmulationAdapter.Settings.InitialOrderId = 100;
 		connector.EmulationAdapter.Settings.InitialTradeId = 100;
 		connector.Adapter.LatencyManager = null;

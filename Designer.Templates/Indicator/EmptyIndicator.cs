@@ -39,6 +39,10 @@ public class EmptyIndicator : BaseIndicator
 	// formed indicator received all necessary inputs for be available for trading
 	private bool _isFormed;
 
+	// where the random decisions below come from - hand in a seeded source to repeat a run,
+	// or a stub to state in a test what the values will be
+	public IRandomProvider RandomProvider { get; set; } = DefaultRandomProvider.Instance;
+
 	protected override bool CalcIsFormed() => _isFormed;
 
 	public override void Reset()
@@ -52,7 +56,7 @@ public class EmptyIndicator : BaseIndicator
 	protected override IIndicatorValue OnProcess(IIndicatorValue input)
 	{
 		// every 10th call try return empty value
-		if (RandomGen.GetInt(0, 10) == 0)
+		if (RandomProvider.GetInt(0, 10) == 0)
 			return new DecimalIndicatorValue(this, input.Time);
 
 		if (_counter++ == 5)
@@ -65,13 +69,13 @@ public class EmptyIndicator : BaseIndicator
 
 		// random change on +20% or -20% current value
 
-		value += value * RandomGen.GetInt(-Change, Change) / 100.0m;
+		value += value * RandomProvider.GetInt(-Change, Change) / 100.0m;
 
 		return new DecimalIndicatorValue(this, value, input.Time)
 		{
 			// final value means that this value for the specified input
 			// is not changed anymore (for example, for candles that changes with last price)
-			IsFinal = RandomGen.GetBool()
+			IsFinal = RandomProvider.GetBool()
 		};
 	}
 

@@ -101,7 +101,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 		private readonly Dictionary<ExecutionMessage, TimeSpan> _pendingExecutions = [];
 		private DateTime _prevTime;
 		private readonly MarketEmulatorSettings _settings = parent.Settings;
-		private IRandomProvider RandomProvider => _parent.RandomProvider;
+		private IEmulationRandomizer RandomProvider => _parent.RandomProvider;
 		private int _volumeDecimals;
 		private readonly SortedDictionary<DateTime, List<(CandleMessage candle, (Sides? side, decimal price, decimal vol, DateTime time)[] ticks)>> _candleInfo = [];
 		private LogLevels? _logLevel;
@@ -3078,7 +3078,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	private readonly ICommissionManager _commissionManager = new CommissionManager();
 	private readonly Dictionary<string, SessionStates> _boardStates = new(StringComparer.InvariantCultureIgnoreCase);
 
-	private IRandomProvider _randomProvider = new DefaultRandomProvider();
+	private IEmulationRandomizer _randomProvider = new DefaultEmulationRandomizer();
 	private IncrementalIdGenerator _orderIdGenerator = new();
 	private IncrementalIdGenerator _tradeIdGenerator = new();
 
@@ -3116,7 +3116,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	public MarketEmulatorSettings Settings { get; } = new MarketEmulatorSettings();
 
 	/// <inheritdoc />
-	public IRandomProvider RandomProvider
+	public IEmulationRandomizer RandomProvider
 	{
 		get => _randomProvider;
 		set => _randomProvider = value ?? throw new ArgumentNullException(nameof(value));
