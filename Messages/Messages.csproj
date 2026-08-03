@@ -1,8 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\common_target_net.props" />
-  <PropertyGroup>
-    <ProjectGuid>{B47F9C23-A4BD-46A9-BF27-54CB3D653503}</ProjectGuid>
-  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Localization\Localization.csproj" />
   </ItemGroup>
