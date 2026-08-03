@@ -1132,38 +1132,30 @@ public class ConnectorRoutingTests : BaseTestClass
 		var btcSecurity = new Security { Id = binanceSecId.ToStringId() };
 		await connector.SendOutMessageAsync(btcSecurity.ToMessage(), CancellationToken);
 
-		const int expected = 5;
-		var online = new ConcurrentDictionary<long, bool>();
-		var onlineAll = AsyncHelper.CreateTaskCompletionSource<bool>();
+		// One subscription is all this needs. Several identical ones are merged into a single
+		// subscription at the adapter, which is given up only once the last of them is - so a test
+		// about cleanup would spend its time waiting on a merge it is not about. Duplicates have
+		// their own test.
+		var sub = new Subscription(DataType.Ticks, btcSecurity);
+		connector.Subscribe(sub);
 
-		// Gate the disconnect on every subscription actually going online instead of a timed delay.
-		// UnSubscribeAll only cleans subscriptions whose state is active, so a subscription that has
-		// not yet reached Online would be skipped and left uncleaned.
-		connector.SubscriptionOnline += sub =>
-		{
-			online[sub.TransactionId] = true;
-			if (online.Count >= expected)
-				onlineAll.TrySetResult(true);
-		};
+		// Wait for the state disconnect acts on: UnSubscribeAll collects only subscriptions that
+		// are active, so one still on its way is skipped and left behind - which is the failure
+		// this test looks for, and which it must not cause itself.
+		for (var waited = 0; waited < 10000 && !sub.State.IsActive(); waited += 20)
+			await Task.Delay(20, CancellationToken);
 
-		// Create several subscriptions
-		for (int i = 0; i < expected; i++)
-		{
-			var sub = new Subscription(DataType.Ticks, btcSecurity);
-			connector.Subscribe(sub);
-		}
-
-		// Wait until every subscription is online before disconnecting. Identical (Ticks, BTCUSDT)
-		// subscriptions are deduplicated by the connector's online manager into a single underlying
-		// adapter subscription, so the adapter sees at least one active subscription, not all five.
-		// The lifecycle gate guarantees that underlying subscription has reached Online (an active
-		// state), so UnSubscribeAll - which only cleans active subscriptions - will not skip it.
-		await onlineAll.Task.WithCancellation(CancellationToken);
+		sub.State.IsActive().AssertTrue($"the subscription never became active, it is {sub.State}");
 
 		(adapter.ActiveSubscriptionCount >= 1).AssertTrue("Should have active subscriptions");
 
 		// Disconnect - subscriptions should be cleaned up
 		await connector.DisconnectAsync(CancellationToken);
+
+		// Disconnect answers as soon as the connection is down; the unsubscribes it triggered are
+		// separate messages still on their way. Bounded, so a failure to clean still fails.
+		for (var waited = 0; waited < 10000 && adapter.ActiveSubscriptionCount > 0; waited += 20)
+			await Task.Delay(20, CancellationToken);
 
 		adapter.ActiveSubscriptionCount.AssertEqual(0);
 		adapter.TotalUnsubscribeReceived.AssertGreater(0);
