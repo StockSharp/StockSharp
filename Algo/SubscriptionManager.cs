@@ -282,7 +282,12 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 			{
 				var now = _logReceiver.CurrentTime;
 
-				if (message.From > now)
+				// An online subscription cannot begin before the data exists, so a start in the future
+				// becomes now. A bounded request is a different question - what is stored between these
+				// two points - and moving its lower bound answers one nobody asked: a single far-future
+				// day arrives at the venue as decades, which it either refuses outright or serves at
+				// length. Leave those as written; an empty answer is the venue's to give.
+				if (message.From > now && !message.IsHistoryOnly())
 				{
 					message = message.TypedClone();
 					message.From = now;

@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 [TestClass]
 public class SubscriptionManagerTests : BaseTestClass
@@ -31,6 +31,83 @@ public class SubscriptionManagerTests : BaseTestClass
 		var sent = (MarketDataMessage)toInner[0];
 		sent.From.AssertEqual(logReceiver.CurrentTime);
 		message.From.AssertEqual(logReceiver.CurrentTime.AddHours(1));
+	}
+
+	/// <summary>
+	/// Starting a live subscription now is only half of what the clamp is for; the other half is
+	/// that it stays a live subscription. If the request were answered here instead of travelling,
+	/// or the venue's online report not passed on, the client would hold a subscription that never
+	/// delivers - which is the very outcome a start in the future would otherwise produce.
+	/// </summary>
+	[TestMethod]
+	public void Subscribe_FromFuture_TravelsOnAndGoesOnline()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var message = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.Ticks,
+			From = logReceiver.CurrentTime.AddHours(1),
+		};
+
+		var (toInner, toOut) = manager.ProcessInMessage(message);
+
+		toOut.Length.AssertEqual(0, "nothing is answered here - the venue is the one with the data");
+		toInner.Length.AssertEqual(1);
+
+		var sent = (MarketDataMessage)toInner[0];
+		sent.From.AssertEqual(logReceiver.CurrentTime);
+		IsNull(sent.To, "an endless subscription keeps having no end");
+
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		var (forward, extraOut) = manager.ProcessOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = 100 });
+
+		IsNotNull(forward, "the client has to hear that its subscription is live");
+		forward.Type.AssertEqual(MessageTypes.SubscriptionOnline);
+		extraOut.Length.AssertEqual(0);
+	}
+
+	/// <summary>
+	/// A bounded request asks what is stored between two points, and both points are the question.
+	/// Pulling its lower bound forward to now answers a different one: a single far-future day
+	/// becomes decades, which the venue either refuses outright or serves at great length. An
+	/// online subscription is the case the clamp exists for - it cannot start before the data does
+	/// - and that stays as it was.
+	/// </summary>
+	[TestMethod]
+	public void Subscribe_BoundedRangeInFuture_KeepsItsBounds()
+	{
+		var logReceiver = new TestReceiver();
+		var transactionIdGenerator = new IncrementalIdGenerator();
+		var manager = new SubscriptionManager(logReceiver, transactionIdGenerator, () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+
+		var from = logReceiver.CurrentTime.AddYears(70);
+		var to = from.AddDays(1);
+
+		var message = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 101,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.Ticks,
+			From = from,
+			To = to,
+		};
+
+		var (toInner, toOut) = manager.ProcessInMessage(message);
+
+		toOut.Length.AssertEqual(0);
+		toInner.Length.AssertEqual(1);
+
+		var sent = (MarketDataMessage)toInner[0];
+		sent.From.AssertEqual(from);
+		sent.To.AssertEqual(to);
 	}
 
 	[TestMethod]
