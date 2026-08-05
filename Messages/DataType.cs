@@ -156,6 +156,11 @@ public class DataType : Equatable<DataType>, IPersistable
 	public static DataType CandlePnF { get; } = CreateImmutable<PnFCandleMessage>();
 
 	/// <summary>
+	/// <see cref="HeikinAshiCandleMessage"/> data type.
+	/// </summary>
+	public static DataType CandleHeikinAshi { get; } = CreateImmutable<HeikinAshiCandleMessage>();
+
+	/// <summary>
 	/// Security legs.
 	/// </summary>
 	public static DataType SecurityLegs { get; } = CreateImmutable<SecurityLegsInfoMessage>();
@@ -406,6 +411,7 @@ public class DataType : Equatable<DataType>, IPersistable
 		{ "tick_candle", CandleTick },
 		{ "range", CandleRange },
 		{ "pnf", CandlePnF },
+		{ "heikin_ashi", CandleHeikinAshi },
 	};
 
 	/// <summary>

@@ -137,6 +137,20 @@ public class DataTypeTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void SerializableString_EveryCandleTypeIsShort()
+	{
+		// A candle type is written wherever one is configured or stored, so leaving one without
+		// an alias spells it out by its message type while its siblings stay readable.
+		foreach (var type in Messages.Extensions.AllCandleTypes)
+		{
+			var dt = DataType.Create(type, null);
+
+			DataType.TryGetAlias(dt, out var alias).AssertTrue($"{type.Name} has no alias");
+			alias.Contains('.').AssertFalse($"the alias of {type.Name} is a type name: '{alias}'");
+		}
+	}
+
+	[TestMethod]
 	public void Save_Load_NonCandle()
 	{
 		var dt = DataType.Create<Level1ChangeMessage>();
