@@ -955,7 +955,13 @@ public class ConnectorRoutingTests : BaseTestClass
 		var btcSub = new Subscription(DataType.Ticks, btcSecurity);
 		connector.Subscribe(btcSub);
 
-		await Task.Delay(500, CancellationToken);
+		// Both adapters are reached on their own threads, and which of them gets there first is not
+		// the test's business - only that both do.
+		await Helper.WaitUntilAsync(
+			() => binanceAdapter.GetMessages<MarketDataMessage>().Any(m => m.IsSubscribe)
+				&& kucoinAdapter.GetMessages<MarketDataMessage>().Any(m => m.IsSubscribe),
+			TimeSpan.FromSeconds(10),
+			"a subscription with no mapping must reach every adapter");
 
 		var binanceMarketData = binanceAdapter.GetMessages<MarketDataMessage>().ToList();
 		var kucoinMarketData = kucoinAdapter.GetMessages<MarketDataMessage>().ToList();

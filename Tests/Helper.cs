@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using Ecng.Reflection;
 
@@ -1861,4 +1861,19 @@ static class Helper
 		=> [.. type
 			.GetProperties(BindingFlags.Instance | BindingFlags.Public)
 			.Where(p => p.IsModifiable())];
+
+	/// <summary>
+	/// Waits for a state something else reaches on its own thread. A sleep long enough on an idle
+	/// machine is not long enough on a loaded one, and the test then fails for the machine it ran on.
+	/// </summary>
+	public static async Task WaitUntilAsync(Func<bool> condition, TimeSpan timeout, string expectation)
+	{
+		var deadline = DateTime.UtcNow + timeout;
+
+		while (!condition() && DateTime.UtcNow < deadline)
+			await Task.Delay(10);
+
+		if (!condition())
+			throw new TimeoutException($"Timed out after {timeout}: {expectation}");
+	}
 }
