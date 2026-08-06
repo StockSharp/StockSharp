@@ -8,6 +8,16 @@ public interface ISnapshotHolder<TMessage>
 	where TMessage : Message
 {
 	/// <summary>
+	/// Securities a snapshot is held for.
+	/// </summary>
+	/// <remarks>
+	/// So a caller that has to walk everything held - answering a subscription for the whole
+	/// market, for instance - can ask rather than keep its own list of what it has passed in. Such
+	/// a list is a second copy of this one and drifts from it silently.
+	/// </remarks>
+	IEnumerable<SecurityId> Securities { get; }
+
+	/// <summary>
 	/// Try get snapshot for the specified security.
 	/// </summary>
 	/// <param name="securityId">Security ID.</param>
@@ -41,6 +51,16 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 	/// </summary>
 	public Level1SnapshotHolder()
 	{
+	}
+
+	/// <inheritdoc />
+	public IEnumerable<SecurityId> Securities
+	{
+		get
+		{
+			using (_snapshots.EnterScope())
+				return [.. _snapshots.Keys];
+		}
 	}
 
 	/// <inheritdoc />
@@ -144,6 +164,16 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 	/// </summary>
 	public OrderBookSnapshotHolder()
 	{
+	}
+
+	/// <inheritdoc />
+	public IEnumerable<SecurityId> Securities
+	{
+		get
+		{
+			using (_snapshots.EnterScope())
+				return [.. _snapshots.Keys];
+		}
 	}
 
 	/// <summary>
