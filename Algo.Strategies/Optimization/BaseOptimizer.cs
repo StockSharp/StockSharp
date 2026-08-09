@@ -300,9 +300,17 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			// below, so there is no need to resume their replay).
 			UnblockPauseWaiters();
 
+			// Disconnect outside the lock. A connector raises its state change on the calling thread,
+			// and the handler needs this same lock to drop the finished connector, so disconnecting
+			// while holding it deadlocks the cancellation against the completion it is waiting for.
+			HistoryEmulationConnector[] connectors;
+
 			using (_sync.EnterScope())
+				connectors = [.. _startedConnectors];
+
+			foreach (var connector in connectors)
 			{
-				foreach (var connector in _startedConnectors)
+				try
 				{
 					if (connector.State is
 						ChannelStates.Started or
@@ -310,6 +318,10 @@ public abstract class BaseOptimizer : BaseLogReceiver
 						ChannelStates.Suspended or
 						ChannelStates.Suspending)
 						connector.Disconnect();
+				}
+				catch (Exception ex)
+				{
+					this.AddErrorLog(ex);
 				}
 			}
 		});
