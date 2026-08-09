@@ -242,15 +242,10 @@ public static class Paths
 	public const string SetupName = "stocksharp_setup";
 
 	/// <summary>
-	/// Web site domain.
-	/// </summary>
-	public static string Domain => LocalizedStrings.StockSharpDomain;
-
-	/// <summary>
 	/// Get website url.
 	/// </summary>
 	/// <returns>Localized url.</returns>
-	public static string GetWebSiteUrl() => $"https://stocksharp.{Domain}";
+	public static string GetWebSiteUrl() => "https://stocksharp.com";
 
 	/// <summary>
 	/// Get logo url.
@@ -259,9 +254,35 @@ public static class Paths
 	public static string GetLogoUrl() => $"{GetWebSiteUrl()}/images/logo.png";
 
 	/// <summary>
-	/// Chat in Telegram.
+	/// Chat on the web site.
 	/// </summary>
-	public static string Chat => LocalizedStrings.StockSharpChatUrl;
+	public static string Chat => GetSitePageUrl("chat");
+
+	/// <summary>
+	/// Languages the web site is published in.
+	/// </summary>
+	/// <remarks>
+	/// The site itself reads them from its domain rows, which nothing outside it can reach; kept in step with
+	/// that list by hand. A language missing from here is shown in English rather than 404.
+	/// </remarks>
+	private static readonly string[] _siteLanguages = ["en", "ru", "zh", "es", "de", "pt", "ja"];
+
+	/// <summary>
+	/// Language segment the site expects in its addresses, for the language the application is running in.
+	/// </summary>
+	public static string SiteLanguage
+	{
+		get
+		{
+			var lang = LocalizedStrings.ActiveLanguage;
+
+			return _siteLanguages.Any(l => l.EqualsIgnoreCase(lang)) ? lang.ToLowerInvariant() : LocalizedStrings.EnCode;
+		}
+	}
+
+	// Every page on the site lives under its language; only files do not, and they are addressed from the root.
+	private static string GetSitePageUrl(string path)
+		=> $"{GetWebSiteUrl()}/{SiteLanguage}/{path}/";
 
 	/// <summary>
 	/// Bot in Telegram.
@@ -321,7 +342,11 @@ public static class Paths
 	/// <returns>Localized url.</returns>
 	public static string GetPageUrl(long id, object urlPart = default)
 	{
-		var url = GetWebSiteUrl() + "/";
+		// A file is served from the root whatever one is reading in: sending it through the language would only
+		// bounce back here, so it is the one page id that keeps the bare address.
+		var url = id == Pages.File
+			? GetWebSiteUrl() + "/"
+			: $"{GetWebSiteUrl()}/{SiteLanguage}/";
 
 		url += id switch
 		{
@@ -367,7 +392,28 @@ public static class Paths
 	/// </summary>
 	/// <param name="docUrl">Help topic.</param>
 	/// <returns>Localized url.</returns>
-	public static string GetDocUrl(string docUrl) => $"https://doc.stocksharp.{Domain}/{docUrl}";
+	public static string GetDocUrl(string docUrl)
+	{
+		var path = docUrl?.TrimStart('/') ?? string.Empty;
+
+		// Some paths arrive with the language already on them - the server stores its topic links that way - and
+		// prefixing those again asks for "/ru/ru/topics/...", which is nowhere.
+		var prefix = HasLanguagePrefix(path) ? string.Empty : $"{SiteLanguage}/";
+
+		return $"https://doc.stocksharp.com/{prefix}{path}";
+	}
+
+	private static bool HasLanguagePrefix(string path)
+	{
+		var slash = path.IndexOf('/');
+
+		if (slash < 0)
+			return false;
+
+		var head = path[..slash];
+
+		return _siteLanguages.Any(l => l.EqualsIgnoreCase(head));
+	}
 
 	/// <summary>
 	/// Entry assembly.

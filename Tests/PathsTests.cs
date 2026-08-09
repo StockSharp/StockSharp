@@ -1,4 +1,6 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
+
+using StockSharp.Localization;
 
 [TestClass]
 public class PathsTests : BaseTestClass
@@ -118,5 +120,61 @@ public class PathsTests : BaseTestClass
 	{
 		Paths.StorageDir.AssertNotNull();
 		Paths.StorageDir.StartsWithIgnoreCase(Paths.AppDataPath).AssertTrue();
+	}
+
+	// A language nothing has registered is refused by the setter, and a test host loads only what its own
+	// resources carry. Registering an empty translation is enough here: what is under test is the address built
+	// for a language, not how any word in it reads.
+	private static void UseLanguage(string code)
+	{
+		if (!LocalizedStrings.LangCodes.Any(l => l.EqualsIgnoreCase(code)))
+			LocalizedStrings.AddLanguage(code, new Dictionary<string, string>());
+
+		LocalizedStrings.ActiveLanguage = code;
+
+		AreEqual(code, LocalizedStrings.ActiveLanguage);
+	}
+
+	[TestMethod]
+	public void SiteAddresses_FollowTheLanguage()
+	{
+		// One test rather than three: the language is global state, and separate tests mutating it race each
+		// other into failures that say nothing about the addresses.
+		var previous = LocalizedStrings.ActiveLanguage;
+
+		try
+		{
+			UseLanguage(LocalizedStrings.RuCode);
+
+			AreEqual("https://stocksharp.com", Paths.GetWebSiteUrl());
+			AreEqual("ru", Paths.SiteLanguage);
+			IsTrue(Paths.GetPageUrl(Paths.Pages.Store).Contains("/ru/store/"));
+			IsTrue(Paths.GetDocUrl("topics/api.html").StartsWith("https://doc.stocksharp.com/"));
+			IsTrue(Paths.GetDocUrl("topics/api.html").EndsWith("/ru/topics/api.html"));
+			IsTrue(Paths.Chat.EndsWith("/ru/chat/"));
+
+			// The server stores its topic links with the language already on them, and prefixing those again
+			// asks for "/ru/ru/topics/..." - a page that does not exist.
+			IsTrue(Paths.GetDocUrl("ru/topics/api.html").EndsWith("/ru/topics/api.html"));
+			IsFalse(Paths.GetDocUrl("ru/topics/api.html").Contains("/ru/ru/"));
+
+			// Files are served from the root whatever one is reading in, and a language in front of one only
+			// bounces back to the bare address.
+			var file = Paths.GetPageUrl(Paths.Pages.File, 42);
+
+			IsFalse(file.Contains("/ru/"));
+			IsTrue(file.Contains("/file/42/"));
+
+			// The applications are translated into more languages than the site is published in; those readers
+			// get the English page rather than one that does not exist.
+			UseLanguage("cs");
+
+			AreEqual(LocalizedStrings.EnCode, Paths.SiteLanguage);
+			IsTrue(Paths.GetPageUrl(Paths.Pages.Store).Contains("/en/store/"));
+		}
+		finally
+		{
+			LocalizedStrings.ActiveLanguage = previous;
+		}
 	}
 }
