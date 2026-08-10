@@ -19,3 +19,5 @@ global using global::StockSharp.Messages;
 global using global::StockSharp.Localization;
 global using global::StockSharp.Fix.Native;
 global using DataType = global::StockSharp.Messages.DataType;
+global using FixExtensions = global::StockSharp.Fix.Native.Extensions;
+global using FixTimeInForce = global::StockSharp.Fix.Native.FixTimeInForce;
