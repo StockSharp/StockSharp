@@ -6,7 +6,61 @@ on:
   pull_request:
 
 jobs:
+  validate:
+    runs-on: windows-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout StockSharp
+        uses: actions/checkout@v4
+        with:
+          path: 'StockSharp (GitHub)'
+
+      - name: Checkout Connectors
+        uses: actions/checkout@v4
+        with:
+          repository: StockSharp/Connectors
+          path: Connectors
+
+      - name: Checkout documentation
+        uses: actions/checkout@v4
+        with:
+          repository: StockSharp/doc
+          path: doc
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Test validation scripts
+        working-directory: 'StockSharp (GitHub)'
+        run: python -m unittest discover -s scripts -p "test_*.py"
+
+      - name: Validate solution connector coverage
+        working-directory: 'StockSharp (GitHub)'
+        run: python scripts/check-solution-connectors.py
+
+      - name: Validate connector READMEs
+        working-directory: 'StockSharp (GitHub)'
+        run: python scripts/check-readme-connectors.py
+
+      - name: Validate README documentation links
+        working-directory: 'StockSharp (GitHub)'
+        run: python scripts/check-readme-doc-links.py
+
+      - name: Validate localization string counts
+        working-directory: 'StockSharp (GitHub)'
+        shell: powershell
+        run: ./scripts/validate-localization-strings.ps1
+
+      - name: Validate localization string ordering
+        working-directory: 'StockSharp (GitHub)'
+        shell: powershell
+        run: ./scripts/sort-localization-strings.ps1 -Check
+
   build:
+    needs: validate
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
