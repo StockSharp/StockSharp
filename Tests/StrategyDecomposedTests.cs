@@ -123,7 +123,9 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.ProcessStateChanged += _ => strategyStateChanged++;
 
 		var transition = strategy
-			.OnNewMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken)
+			.OnNewMessage(
+				new StrategyEngine.StrategyStateMessage(strategy.Id.To<string>(), ProcessStates.Started),
+				CancellationToken)
 			.AsTask();
 
 		await strategy.HookEntered.Task.WaitAsync(CancellationToken);
@@ -151,7 +153,36 @@ public class StrategyDecomposedTests : BaseTestClass
 		host.SentMessages.Count.AreEqual(1);
 		var msg = host.SentMessages[0] as StrategyEngine.StrategyStateMessage;
 		IsNotNull(msg);
+		msg.StrategyId.AreEqual(host.StrategyId);
 		msg.RequestedState.AreEqual(ProcessStates.Started);
+	}
+
+	[TestMethod]
+	public async Task StrategyEngine_StateMessages_AreScopedToOriginatingStrategy()
+	{
+		var firstHost = new FakeHost { StrategyId = "first" };
+		var secondHost = new FakeHost { StrategyId = "second" };
+		var first = new StrategyEngine(firstHost, new PnLManager());
+		var second = new StrategyEngine(secondHost, new PnLManager());
+
+		await first.RequestStartAsync(default);
+
+		var message = firstHost.SentMessages.Single() as StrategyEngine.StrategyStateMessage;
+		IsNotNull(message);
+		message.StrategyId.AreEqual(firstHost.StrategyId);
+
+		first.OnMessage(message);
+		second.OnMessage(message);
+
+		first.ProcessState.AreEqual(ProcessStates.Started);
+		second.ProcessState.AreEqual(ProcessStates.Stopped);
+
+		message.LocalTime = DateTime.UtcNow;
+		var clone = message.Clone() as StrategyEngine.StrategyStateMessage;
+		IsNotNull(clone);
+		clone.StrategyId.AreEqual(message.StrategyId);
+		clone.RequestedState.AreEqual(message.RequestedState);
+		clone.LocalTime.AreEqual(message.LocalTime);
 	}
 
 	[TestMethod]
@@ -171,10 +202,12 @@ public class StrategyDecomposedTests : BaseTestClass
 		host.SentMessages.Count.AreEqual(2);
 		var msg = host.SentMessages[0] as StrategyEngine.StrategyStateMessage;
 		IsNotNull(msg);
+		msg.StrategyId.AreEqual(host.StrategyId);
 		msg.RequestedState.AreEqual(ProcessStates.Stopping);
 
 		msg = host.SentMessages[1] as StrategyEngine.StrategyStateMessage;
 		IsNotNull(msg);
+		msg.StrategyId.AreEqual(host.StrategyId);
 		msg.RequestedState.AreEqual(ProcessStates.Stopped);
 	}
 

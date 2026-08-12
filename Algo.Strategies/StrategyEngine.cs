@@ -111,7 +111,7 @@ public class StrategyEngine
 	{
 		_processState = ProcessStates.Stopped; // ensure clean state
 		_stopRequested = false;
-		return _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Started), cancellationToken);
+		return _host.SendOutMessageAsync(new StrategyStateMessage(_host.StrategyId, ProcessStates.Started), cancellationToken);
 	}
 
 	/// <summary>
@@ -123,7 +123,7 @@ public class StrategyEngine
 			return;
 
 		_stopRequested = true;
-		await _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Stopping), cancellationToken);
+		await _host.SendOutMessageAsync(new StrategyStateMessage(_host.StrategyId, ProcessStates.Stopping), cancellationToken);
 		await TryFinalStopAsync(cancellationToken);
 	}
 
@@ -142,7 +142,7 @@ public class StrategyEngine
 			return default;
 
 		_stopRequested = false;
-		return _host.SendOutMessageAsync(new StrategyStateMessage(ProcessStates.Stopped), cancellationToken);
+		return _host.SendOutMessageAsync(new StrategyStateMessage(_host.StrategyId, ProcessStates.Stopped), cancellationToken);
 	}
 
 	/// <summary>
@@ -163,7 +163,13 @@ public class StrategyEngine
 			throw new ArgumentNullException(nameof(message));
 
 		if (message is StrategyStateMessage stateMessage)
+		{
+			if (!string.IsNullOrEmpty(stateMessage.StrategyId) &&
+				!string.Equals(stateMessage.StrategyId, _host.StrategyId, StringComparison.Ordinal))
+				return default;
+
 			return OnStateMessageAsync(stateMessage, cancellationToken);
+		}
 
 		OnMessageCore(message);
 		return default;
@@ -299,16 +305,43 @@ public class StrategyEngine
 	/// <summary>
 	/// Internal message for strategy state change requests.
 	/// </summary>
-	public class StrategyStateMessage(ProcessStates state)
-		: Message(_strategyChangeState)
+	public class StrategyStateMessage : Message, IStrategyIdMessage
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StrategyStateMessage"/> class.
+		/// </summary>
+		/// <param name="state">The requested state.</param>
+		public StrategyStateMessage(ProcessStates state)
+			: this(null, state)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="StrategyStateMessage"/> class.
+		/// </summary>
+		/// <param name="strategyId">Strategy identifier.</param>
+		/// <param name="state">The requested state.</param>
+		public StrategyStateMessage(string strategyId, ProcessStates state)
+			: base(_strategyChangeState)
+		{
+			StrategyId = strategyId;
+			RequestedState = state;
+		}
+
+		/// <inheritdoc />
+		public string StrategyId { get; set; }
+
 		/// <summary>
 		/// The requested state.
 		/// </summary>
-		public ProcessStates RequestedState { get; } = state;
+		public ProcessStates RequestedState { get; }
 
 		/// <inheritdoc />
 		public override Message Clone()
-			=> new StrategyStateMessage(RequestedState);
+		{
+			var clone = new StrategyStateMessage(StrategyId, RequestedState);
+			CopyTo(clone);
+			return clone;
+		}
 	}
 }

@@ -2424,6 +2424,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// </summary>
 	public async ValueTask OnNewMessage(Message msg, CancellationToken ct)
 	{
+		if (msg is StrategyEngine.StrategyStateMessage { StrategyId: null or "" })
+			return;
+
 		_isProcessingConnectorMessage = true;
 
 		try
