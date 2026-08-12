@@ -234,6 +234,39 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		manager.IsStarted.AssertEqual(false);
 	}
 
+	[TestMethod]
+	[Timeout(30000, CooperativeCancellation = true)]
+	public async Task Reset_ClearsPendingSubscriptions()
+	{
+		var securityId = CreateSecurityId();
+		var storage = new Mock<IMarketDataStorage<ExecutionMessage>>(MockBehavior.Strict);
+		var registry = new Mock<IStorageRegistry>(MockBehavior.Strict);
+
+		registry
+			.Setup(r => r.GetTickMessageStorage(
+				securityId,
+				It.IsAny<IMarketDataDrive>(),
+				It.IsAny<StorageFormats>()))
+			.Returns(storage.Object);
+
+		using var manager = CreateManager(
+			registry.Object,
+			new DateTime(2024, 1, 1),
+			new DateTime(2024, 1, 1));
+		await manager.SubscribeAsync(new MarketDataMessage
+		{
+			SecurityId = securityId,
+			DataType2 = DataType.Ticks,
+			TransactionId = 1,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		manager.Reset();
+		await manager.StartAsync([]).ToArrayAsync(CancellationToken);
+
+		storage.VerifyNoOtherCalls();
+	}
+
 	#endregion
 
 	#region GetSupportedDataTypes Tests
@@ -384,6 +417,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		{
 			await enumerator.DisposeAsync();
 		}
+
+		manager.IsStarted.AssertFalse();
 	}
 
 	[TestMethod]

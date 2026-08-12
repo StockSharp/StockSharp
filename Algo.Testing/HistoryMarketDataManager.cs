@@ -1,6 +1,7 @@
 namespace StockSharp.Algo.Testing;
 
 using StockSharp.Algo.Testing.Generation;
+
 using System.Runtime.CompilerServices;
 
 /// <summary>
@@ -189,7 +190,7 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 	{
 		return Impl();
 
-		async IAsyncEnumerable<DataType> Impl([EnumeratorCancellation]CancellationToken cancellationToken = default)
+		async IAsyncEnumerable<DataType> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			var dataTypes = new HashSet<DataType>();
 
@@ -222,101 +223,106 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 		var startDateTime = StartDate;
 		var stopDateTime = StopDate;
 
-		IsStarted = true;
-
 		return Impl();
 
 		async IAsyncEnumerable<Message> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
-			while (!IsDisposed && !cancellationToken.IsCancellationRequested)
+			IsStarted = true;
+
+			try
 			{
-				// Use timeout to allow cancellation check and prevent deadlock if no subscriptions arrive
-				if (!_syncRoot.WaitOne(TimeSpan.FromMilliseconds(100)))
-					continue;
-
-				_isChanged = false;
-
-				foreach (var (storage, subscriptionId) in _actions.CopyAndClear())
+				while (!IsDisposed && !cancellationToken.IsCancellationRequested)
 				{
-					if (storage != null)
-						_basketStorage.InnerStorages.Add(storage, subscriptionId);
-					else
-						_basketStorage.InnerStorages.Remove(subscriptionId);
-				}
+					// Use timeout to allow cancellation check and prevent deadlock if no subscriptions arrive
+					if (!_syncRoot.WaitOne(TimeSpan.FromMilliseconds(100)))
+						continue;
 
-				var currentTime = _currentTime == default ? startDateTime : _currentTime;
-				var loadDateInUtc = currentTime.Date;
-				var stopDateInUtc = stopDateTime.Date;
+					_isChanged = false;
 
-				var checkDates = CheckTradableDates && boardsArray.Length > 0;
-
-				while (loadDateInUtc <= stopDateInUtc && !_isChanged && !cancellationToken.IsCancellationRequested)
-				{
-					if (!checkDates || _timeLineGenerator.IsTradeDate(boardsArray, currentTime))
+					foreach (var (storage, subscriptionId) in _actions.CopyAndClear())
 					{
-						IAsyncEnumerable<Message> messages;
-						bool noData;
-
-						if (AdapterCache is not null)
-						{
-							messages = AdapterCache.GetMessagesAsync(default, default, loadDateInUtc, _basketStorage.LoadAsync);
-							noData = await messages.FirstOrDefaultAsync(cancellationToken) is null;
-						}
+						if (storage != null)
+							_basketStorage.InnerStorages.Add(storage, subscriptionId);
 						else
-						{
-							var enu = _basketStorage.LoadAsync(loadDateInUtc);
-							var dataTypes = await enu.GetDataTypesAsync(cancellationToken);
-							noData = !dataTypes.Except(messageTypes).Any();
-							messages = enu;
-						}
-
-						var source = noData
-							? new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boardsArray, currentTime))
-							: messages;
-
-						await foreach (var msg in FilterMessages(source, startDateTime, stopDateTime, currentTime).WithCancellation(cancellationToken))
-						{
-							if (msg.TryGetServerTime(out var serverTime))
-							{
-								_currentTime = serverTime;
-
-								// Drive the registered generators up to the current replay time and
-								// interleave their output ahead of the triggering message (same time).
-								if (_generators.Count > 0)
-								{
-									foreach (var generated in DriveGenerators(msg, serverTime))
-									{
-										LoadedMessageCount++;
-										yield return generated;
-									}
-								}
-							}
-
-							LoadedMessageCount++;
-
-							yield return msg;
-
-							if (_isChanged)
-								break;
-						}
+							_basketStorage.InnerStorages.Remove(subscriptionId);
 					}
 
-					loadDateInUtc += TimeSpan.FromDays(1);
-				}
+					var currentTime = _currentTime == default ? startDateTime : _currentTime;
+					var loadDateInUtc = currentTime.Date;
+					var stopDateInUtc = stopDateTime.Date;
 
-				if (!_isChanged)
-				{
-					yield return new EmulationStateMessage
+					var checkDates = CheckTradableDates && boardsArray.Length > 0;
+
+					while (loadDateInUtc <= stopDateInUtc && !_isChanged && !cancellationToken.IsCancellationRequested)
 					{
-						LocalTime = stopDateTime,
-						State = ChannelStates.Stopping,
-					};
+						if (!checkDates || _timeLineGenerator.IsTradeDate(boardsArray, currentTime))
+						{
+							IAsyncEnumerable<Message> messages;
+							bool noData;
 
-					break;
+							if (AdapterCache is not null)
+							{
+								messages = AdapterCache.GetMessagesAsync(default, default, loadDateInUtc, _basketStorage.LoadAsync);
+								noData = await messages.FirstOrDefaultAsync(cancellationToken) is null;
+							}
+							else
+							{
+								var enu = _basketStorage.LoadAsync(loadDateInUtc);
+								var dataTypes = await enu.GetDataTypesAsync(cancellationToken);
+								noData = !dataTypes.Except(messageTypes).Any();
+								messages = enu;
+							}
+
+							var source = noData
+								? new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boardsArray, currentTime))
+								: messages;
+
+							await foreach (var msg in FilterMessages(source, startDateTime, stopDateTime, currentTime).WithCancellation(cancellationToken))
+							{
+								if (msg.TryGetServerTime(out var serverTime))
+								{
+									_currentTime = serverTime;
+
+									// Drive the registered generators up to the current replay time and
+									// interleave their output ahead of the triggering message (same time).
+									if (_generators.Count > 0)
+									{
+										foreach (var generated in DriveGenerators(msg, serverTime))
+										{
+											LoadedMessageCount++;
+											yield return generated;
+										}
+									}
+								}
+
+								LoadedMessageCount++;
+
+								yield return msg;
+
+								if (_isChanged)
+									break;
+							}
+						}
+
+						loadDateInUtc += TimeSpan.FromDays(1);
+					}
+
+					if (!_isChanged)
+					{
+						yield return new EmulationStateMessage
+						{
+							LocalTime = stopDateTime,
+							State = ChannelStates.Stopping,
+						};
+
+						break;
+					}
 				}
 			}
-
-			IsStarted = false;
+			finally
+			{
+				IsStarted = false;
+			}
 		}
 	}
 
@@ -331,6 +337,8 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 	public void Reset()
 	{
 		_generators.Clear();
+		_actions.Clear();
+		_isChanged = false;
 		_currentTime = default;
 		_basketStorage.InnerStorages.Clear();
 		LoadedMessageCount = 0;
