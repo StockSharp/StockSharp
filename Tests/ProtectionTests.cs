@@ -850,58 +850,38 @@ public class ProtectionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void AbsoluteUnitType_TrailingGuardAndActivation()
+	public void AbsoluteUnitType_TrailingAndActivation()
 	{
-		// Test for ProtectiveProcessor class which is used internally by the behaviour.
-		// This verifies two things about the Absolute unit type:
-		//  1) trailing is incompatible with an Absolute stop level (the guard throws);
-		//  2) for a non-trailing Absolute level the activation direction follows isUpTrend.
+		// Absolute is an offset from the protected entry price and is therefore valid
+		// for both fixed and trailing protection.
 		var logReceiver = new LogReceiver();
 
 		IProtectiveBehaviourFactory factory = new LocalProtectiveBehaviourFactory(0.1m, 2);
 
-		// An Absolute take with trailing stop is allowed: the trailing guard only
-		// constrains the stop level, not the take level.
-		factory.Create(
-			new Unit(1m, UnitTypes.Absolute),
-			new Unit(1m, UnitTypes.Percent),
-			true, // Trailing stop enabled
+		var behaviour = factory.Create(
+			new Unit(),
+			new Unit(10m, UnitTypes.Absolute),
+			true,
 			TimeSpan.Zero, TimeSpan.Zero, false);
 
-		// An Absolute stop level combined with trailing is rejected by the factory.
-		ThrowsExactly<ArgumentException>(() =>
-			factory.Create(
-				new Unit(1m, UnitTypes.Percent),
-				new Unit(1m, UnitTypes.Absolute),
-				true, // Trailing stop enabled
-				TimeSpan.Zero, TimeSpan.Zero, false));
+		behaviour.Update(100m, 10m, DateTime.UtcNow);
+		behaviour.TryActivate(105m, DateTime.UtcNow).AssertNull();
+		behaviour.TryActivate(96m, DateTime.UtcNow).AssertNull();
 
-		// Non-trailing processor with an Absolute protective level is allowed
-		// (the Absolute-with-trailing guard only applies when isTrailing is true).
-		// Canonical (unified) semantics: an Absolute protective level is an OFFSET from the
-		// protected entry price, exactly like Percent (which the engine already treats as an
-		// offset). Here entry = 100, isUpTrend = false (downward/stop-like) and Absolute(10),
-		// so the activation price must be entry - 10 = 90: the stop fires when the price falls
-		// to/below 90 and stays inactive while it is still above 90. Because useMarketOrders = true,
-		// the reported close price is 0.
-		// TDD red until the engine unifies Absolute with Percent: the current engine treats
-		// Absolute as a raw price LEVEL (ProtectiveProcessor.cs:109-110), i.e. it would only fire
-		// below 10, so the "85 => 0" assertion below fails until that is fixed.
+		var trailingActivation = behaviour.TryActivate(95m, DateTime.UtcNow);
+		trailingActivation.AssertNotNull();
+		trailingActivation.Value.isTake.AssertFalse();
+		trailingActivation.Value.side.AssertEqual(Sides.Sell);
+		trailingActivation.Value.price.AssertEqual(95m);
+		trailingActivation.Value.volume.AssertEqual(10m);
+
+		// Fixed Absolute protection follows the same entry-minus-offset semantics.
 		var p = new ProtectiveProcessor(
 			Sides.Buy, 100m, false, false, new(10, UnitTypes.Absolute),
 			true, new Unit(), TimeSpan.Zero, DateTime.UtcNow, logReceiver);
 
-		// Below the offset activation price (entry - 10 = 90) the downward stop fires;
-		// the market-order close price is 0.
 		p.GetActivationPrice(85m, DateTime.UtcNow).AssertEqual(0m);
-		// Above the offset activation price there is no activation yet.
 		p.GetActivationPrice(95m, DateTime.UtcNow).AssertNull();
-
-		// Constructing a trailing processor with an Absolute level throws directly too.
-		ThrowsExactly<ArgumentException>(() =>
-			new ProtectiveProcessor(
-				Sides.Buy, 100m, false, true, new(10, UnitTypes.Absolute),
-				true, new Unit(), TimeSpan.Zero, DateTime.UtcNow, logReceiver));
 	}
 
 	[TestMethod]

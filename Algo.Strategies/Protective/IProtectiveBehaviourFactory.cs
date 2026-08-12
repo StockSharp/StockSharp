@@ -134,8 +134,6 @@ public class LocalProtectiveBehaviourFactory(decimal? priceStep, int? decimals) 
 			_priceStep = priceStep;
 			_decimals = decimals;
 
-			if (isStopTrailing && stopValue.Type == UnitTypes.Absolute)
-				throw new ArgumentException(LocalizedStrings.TrailingNotSupportLimitProtectiveLevel, nameof(stopValue));
 		}
 
 		public override decimal Position => _posValue;
