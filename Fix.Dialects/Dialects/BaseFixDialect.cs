@@ -436,7 +436,7 @@ public abstract partial class BaseFixDialect : BaseLogReceiver, IFixDialect
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	protected ValueTask RaiseNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		return _newOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		return _newOutMessageAsync.InvokeAsync(message, cancellationToken);
 	}
 
 	/// <summary>

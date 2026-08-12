@@ -100,7 +100,7 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	/// <param name="message">The message.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	protected ValueTask RaiseNewOutMessageAsync(Message message, CancellationToken cancellationToken)
-		=> NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		=> NewOutMessageAsync.InvokeAsync(message, cancellationToken);
 
 	/// <summary>
 	/// Auto send <see cref="Message.BackMode"/> messages to <see cref="InnerAdapter"/>.

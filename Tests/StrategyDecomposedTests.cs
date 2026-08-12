@@ -60,6 +60,12 @@ public class StrategyDecomposedTests : BaseTestClass
 		}
 	}
 
+	private sealed class ExposedConnector : Connector
+	{
+		public ValueTask ProcessOutAsync(Message message, CancellationToken cancellationToken)
+			=> OnProcessMessage(message, cancellationToken);
+	}
+
 	#endregion
 
 	#region StrategyEngine tests
@@ -183,6 +189,39 @@ public class StrategyDecomposedTests : BaseTestClass
 		clone.StrategyId.AreEqual(message.StrategyId);
 		clone.RequestedState.AreEqual(message.RequestedState);
 		clone.LocalTime.AreEqual(message.LocalTime);
+	}
+
+	[TestMethod]
+	public async Task Connector_StateMessage_AwaitsEveryStrategyHandler()
+	{
+		using var connector = new ExposedConnector();
+		using var owner = new AwaitableStateStrategy { Connector = connector };
+		using var foreign = new Strategy { Connector = connector };
+
+		await connector.ProcessOutAsync(
+			new StrategyEngine.StrategyStateMessage(ProcessStates.Started),
+			CancellationToken);
+		owner.ProcessState.AreEqual(ProcessStates.Stopped);
+		foreign.ProcessState.AreEqual(ProcessStates.Stopped);
+
+		var message = new StrategyEngine.StrategyStateMessage(owner.Id.To<string>(), ProcessStates.Started);
+		var dispatch = connector.ProcessOutAsync(message, CancellationToken).AsTask();
+
+		await owner.HookEntered.Task.WaitAsync(CancellationToken);
+
+		try
+		{
+			dispatch.IsCompleted.AssertFalse("Connector completed before the owning strategy's async state hook.");
+			foreign.ProcessState.AreEqual(ProcessStates.Stopped);
+		}
+		finally
+		{
+			owner.HookRelease.TrySetResult();
+			await dispatch;
+		}
+
+		owner.ProcessState.AreEqual(ProcessStates.Started);
+		foreign.ProcessState.AreEqual(ProcessStates.Stopped);
 	}
 
 	[TestMethod]

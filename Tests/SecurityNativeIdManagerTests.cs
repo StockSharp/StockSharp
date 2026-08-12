@@ -19,17 +19,17 @@ public class SecurityNativeIdManagerTests : BaseTestClass
 			return new([.. _bySecurityId.Select(p => (p.Key, p.Value))]);
 		}
 
-		public ValueTask<bool> TryAddAsync(SecurityId securityId, object nativeId, bool isPersistable = true, CancellationToken cancellationToken = default)
+		public async ValueTask<bool> TryAddAsync(SecurityId securityId, object nativeId, bool isPersistable = true, CancellationToken cancellationToken = default)
 		{
 			if (_bySecurityId.ContainsKey(securityId) || _byNativeId.ContainsKey(nativeId))
-				return new(false);
+				return false;
 
 			_bySecurityId[securityId] = nativeId;
 			_byNativeId[nativeId] = securityId;
 
-			Added?.Invoke(securityId, nativeId, cancellationToken);
+			await Added.InvokeAsync(securityId, nativeId, cancellationToken);
 
-			return new(true);
+			return true;
 		}
 
 		public ValueTask<SecurityId?> TryGetByNativeIdAsync(object nativeId, CancellationToken cancellationToken = default)

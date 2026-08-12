@@ -954,7 +954,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	protected virtual ValueTask OnSendOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		message.Adapter ??= this;
-		return NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		return NewOutMessageAsync.InvokeAsync(message, cancellationToken);
 	}
 
 	private void SecurityAdapterProviderOnChanged((SecurityId, DataType) key, Guid adapterId, bool isAdd)

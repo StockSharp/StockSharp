@@ -3759,5 +3759,5 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 	/// Send out message.
 	/// </summary>
 	public ValueTask SendOutMessageAsync(Message message, CancellationToken cancellationToken)
-		=> NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		=> NewOutMessageAsync.InvokeAsync(message, cancellationToken);
 }

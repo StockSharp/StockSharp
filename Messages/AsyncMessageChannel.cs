@@ -224,7 +224,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 
 	private ValueTask RaiseNewOutMessage(Message message, CancellationToken cancellationToken)
 	{
-		return NewOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		return NewOutMessageAsync.InvokeAsync(message, cancellationToken);
 	}
 
 	private Task ProcessMessagesAsync(CancellationToken token)

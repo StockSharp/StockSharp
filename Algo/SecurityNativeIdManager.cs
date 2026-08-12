@@ -619,7 +619,7 @@ public sealed class SecurityNativeIdManager : ISecurityNativeIdManager
 
 			var handler = ProcessSuspendedRequested;
 			if (handler != null)
-				await handler(temp, cancellationToken);
+				await handler.InvokeAsync(temp, cancellationToken);
 		}
 	}
 }

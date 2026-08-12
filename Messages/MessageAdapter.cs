@@ -626,7 +626,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 		if (message is DataTypeInfoMessage dtim && dtim.FileDataType is DataType dt && dt.IsMarketData)
 			this.AddSupportedMarketDataType(dt);
 
-		return _newOutMessageAsync?.Invoke(message, cancellationToken) ?? default;
+		return _newOutMessageAsync.InvokeAsync(message, cancellationToken);
 	}
 
 	/// <summary>
