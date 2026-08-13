@@ -1981,6 +1981,13 @@ public class IndicatorTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void PercentagePriceOscillatorCompositesUsePercentMeasure()
+	{
+		new PercentagePriceOscillatorSignal().Measure.AssertEqual(IndicatorMeasures.Percent);
+		new PercentagePriceOscillatorHistogram().Measure.AssertEqual(IndicatorMeasures.Percent);
+	}
+
+	[TestMethod]
 	public void DegenerateIndicatorSeriesRecover()
 	{
 		var start = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);

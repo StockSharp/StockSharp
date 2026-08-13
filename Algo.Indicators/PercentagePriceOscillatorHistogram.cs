@@ -12,6 +12,9 @@ namespace StockSharp.Algo.Indicators;
 [IndicatorOut(typeof(IPercentagePriceOscillatorHistogramValue))]
 public class PercentagePriceOscillatorHistogram : BaseComplexIndicator<IPercentagePriceOscillatorHistogramValue>
 {
+	/// <inheritdoc />
+	public override IndicatorMeasures Measure => IndicatorMeasures.Percent;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="PercentagePriceOscillatorHistogram"/>.
 	/// </summary>
