@@ -541,6 +541,69 @@ public class ConnectorRoutingTests : BaseTestClass
 		await connector.DisconnectAsync(CancellationToken);
 	}
 
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task Connector_OrderOperations_RejectDuplicateInstance()
+	{
+		var securityId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
+		using var connector = new Connector();
+		var adapter = new LiveFeedCryptoAdapter("Binance", [securityId], connector.TransactionIdGenerator);
+		connector.Adapter.InnerAdapters.Add(adapter);
+		connector.Adapter.PortfolioAdapterProvider.SetAdapter("Portfolio", adapter);
+
+		await connector.ConnectAsync(CancellationToken);
+
+		var security = new Security { Id = securityId.ToStringId() };
+		var portfolio = new Portfolio { Name = "Portfolio" };
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Side = Sides.Buy,
+			Price = 50000,
+			Volume = 1,
+			Type = OrderTypes.Limit,
+		};
+
+		connector.RegisterOrder(order);
+		await Helper.WaitUntilAsync(() => order.State == OrderStates.Active, TimeSpan.FromSeconds(5), "order activation");
+
+		var duplicate = new Order
+		{
+			Security = security,
+			Portfolio = portfolio,
+			TransactionId = order.TransactionId,
+			Id = order.Id,
+			State = order.State,
+			Side = order.Side,
+			Price = order.Price,
+			Volume = order.Volume,
+			Type = order.Type,
+		};
+
+		var failures = new List<OrderFail>();
+		connector.OrderCancelFailReceived += (_, fail) => failures.Add(fail);
+		connector.OrderEditFailReceived += (_, fail) => failures.Add(fail);
+		connector.OrderRegisterFailReceived += (_, fail) => failures.Add(fail);
+
+		var changes = new Order { Security = security, Portfolio = portfolio, Side = order.Side, Price = order.Price + 1, Volume = order.Volume, Type = order.Type };
+		var replacement = new Order { Security = security, Portfolio = portfolio, Side = order.Side, Price = order.Price + 1, Volume = order.Volume, Type = order.Type };
+
+		await ThrowsExactlyAsync<ArgumentException>(async () => await connector.CancelOrderAsync(duplicate, CancellationToken));
+		await ThrowsExactlyAsync<ArgumentException>(async () => await connector.EditOrderAsync(duplicate, changes, CancellationToken));
+		await ThrowsExactlyAsync<ArgumentException>(async () => await connector.ReRegisterOrderAsync(duplicate, replacement, CancellationToken));
+
+		adapter.TotalCancelsProcessed.AssertEqual(0);
+		adapter.GetMessages<OrderReplaceMessage>().Count().AssertEqual(0);
+		failures.Count.AssertEqual(0);
+		changes.TransactionId.AssertEqual(0L);
+		replacement.TransactionId.AssertEqual(0L);
+
+		await connector.DisconnectAsync(CancellationToken);
+	}
+
 	#endregion
 
 	#region Live Feed Stress Tests

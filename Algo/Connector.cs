@@ -600,11 +600,12 @@ public partial class Connector : BaseLogReceiver, IConnector
 		if (changes is null)
 			throw new ArgumentNullException(nameof(changes));
 
+		CheckOnOld(order);
+
 		try
 		{
 			this.AddOrderInfoLog(order, nameof(EditOrder));
 
-			CheckOnOld(order);
 			CheckOnNew(changes);
 
 			if (IsOrderEditable(order) != true)
@@ -640,6 +641,8 @@ public partial class Connector : BaseLogReceiver, IConnector
 		if (newOrder is null)
 			throw new ArgumentNullException(nameof(newOrder));
 
+		CheckOnOld(oldOrder);
+
 		try
 		{
 			this.AddOrderInfoLog(oldOrder, nameof(ReRegisterOrder));
@@ -647,7 +650,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 			if (oldOrder.Security != newOrder.Security)
 				throw new ArgumentException(LocalizedStrings.SecuritiesMismatch.Put(newOrder.Security.Id, oldOrder.Security.Id), nameof(newOrder));
 
-			CheckOnOld(oldOrder);
 			CheckOnNew(newOrder);
 
 			if (IsOrderReplaceable(oldOrder) != true)
@@ -682,13 +684,13 @@ public partial class Connector : BaseLogReceiver, IConnector
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	public async ValueTask CancelOrderAsync(Order order, CancellationToken cancellationToken = default)
 	{
+		CheckOnOld(order);
+
 		long transactionId = 0;
 
 		try
 		{
 			this.AddOrderInfoLog(order, nameof(CancelOrder));
-
-			CheckOnOld(order);
 
 			transactionId = TransactionIdGenerator.GetNextId();
 			_entityCache.AddOrderByCancelationId(order, transactionId);
@@ -759,12 +761,15 @@ public partial class Connector : BaseLogReceiver, IConnector
 		}
 	}
 
-	private static void CheckOnOld(Order order)
+	private void CheckOnOld(Order order)
 	{
 		CheckOrderState(order);
 
 		if (order.TransactionId == 0)
 			throw new ArgumentException(LocalizedStrings.OrderNoTransId, nameof(order));
+
+		if (!ReferenceEquals(_entityCache.TryGetOrder(order.TransactionId, OrderOperations.Register), order))
+			throw new ArgumentException(LocalizedStrings.OrderNotFound.Put(order.TransactionId), nameof(order));
 	}
 
 	private static void CheckOrderState(Order order)

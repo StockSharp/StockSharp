@@ -12,9 +12,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 {
 	private IConnector _connector;
 	private readonly StrategyPositionManager _posManager;
-	private readonly HashSet<long> _ownTransactionIds = [];
 	private readonly HashSet<Order> _pendingOwnOrders = [];
 	private readonly HashSet<long> _ordersAdjustedByTrade = [];
+	private readonly Action<MyTrade> _beforeTradeProcessing;
 	private readonly Dictionary<(SecurityId secId, string pfName), decimal> _positions = [];
 	private string _idStr;
 	private BoardMessage _boardMsg;
@@ -70,6 +70,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		Engine = new(this, PnLManager, OnEngineStateChangedAsync);
 		OrderProcessor = new(StatisticManager);
 		Trades = new(PnLManager, StatisticManager);
+		_beforeTradeProcessing = ProcessTrackedTrade;
 		Positions = new(StatisticManager);
 		Subscriptions = new(this);
 		RiskManager = new RiskManager();
@@ -884,6 +885,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		if (changes is null)
 			throw new ArgumentNullException(nameof(changes));
 
+		if (!OrderProcessor.IsTracked(order))
+			throw new ArgumentException(LocalizedStrings.OrderNotFromStrategy.Put(order.TransactionId, Name), nameof(order));
+
 		if (!CanTrade(order.Security ?? Security, order.Portfolio ?? Portfolio, order.Side, changes.Volume, out var reason))
 		{
 			ProcessOrderFail(order, new InvalidOperationException(reason));
@@ -912,6 +916,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 		if (newOrder is null)
 			throw new ArgumentNullException(nameof(newOrder));
+
+		if (!OrderProcessor.IsTracked(oldOrder))
+			throw new ArgumentException(LocalizedStrings.OrderNotFromStrategy.Put(oldOrder.TransactionId, Name), nameof(oldOrder));
 
 		if (!CanTrade(newOrder.Security ?? Security, newOrder.Portfolio ?? Portfolio, newOrder.Side, newOrder.Volume, out var reason))
 		{
@@ -1199,7 +1206,6 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		Subscriptions.Reset();
 		Engine.ForceStop();
 
-		_ownTransactionIds.Clear();
 		_pendingOwnOrders.Clear();
 		_ordersAdjustedByTrade.Clear();
 		_boardMsg = default;
@@ -1626,7 +1632,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		if (order.UserOrderId.EqualsIgnoreCase(EnsureGetId()))
 			return true;
 
-		return _ownTransactionIds.Contains(order.TransactionId);
+		return false;
 	}
 
 	private bool CanAttachUnclaimedPendingOrder(Order order)
@@ -1807,66 +1813,6 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			order.Balance = order.Volume;
 	}
 
-	private Order TryGetTrackedOrder(Order order)
-	{
-		if (order is null)
-			throw new ArgumentNullException(nameof(order));
-
-		return OrderProcessor.TryGetTracked(order);
-	}
-
-	private static void CopyOrderState(Order source, Order destination)
-	{
-		if (ReferenceEquals(source, destination))
-			return;
-
-		destination.Id = source.Id;
-		destination.StringId = source.StringId;
-		destination.BoardId = source.BoardId;
-		destination.Time = source.Time;
-		destination.ServerTime = source.ServerTime;
-		destination.LocalTime = source.LocalTime;
-		destination.CancelledTime = source.CancelledTime;
-		destination.MatchedTime = source.MatchedTime;
-		destination.State = source.State;
-		destination.Security = source.Security ?? destination.Security;
-		destination.Portfolio = source.Portfolio ?? destination.Portfolio;
-		destination.Price = source.Price;
-		destination.Volume = source.Volume;
-		destination.VisibleVolume = source.VisibleVolume;
-		destination.Side = source.Side;
-		destination.Balance = source.Balance;
-		destination.Status = source.Status;
-		destination.IsSystem = source.IsSystem;
-		destination.Comment = source.Comment;
-		destination.Type = source.Type;
-		destination.ExpiryDate = source.ExpiryDate;
-		destination.Condition = source.Condition;
-		destination.TimeInForce = source.TimeInForce;
-		destination.Commission = source.Commission;
-		destination.CommissionCurrency = source.CommissionCurrency;
-		destination.UserOrderId = source.UserOrderId;
-		destination.StrategyId = source.StrategyId;
-		destination.BrokerCode = source.BrokerCode;
-		destination.ClientCode = source.ClientCode;
-		destination.Currency = source.Currency;
-		destination.IsMarketMaker = source.IsMarketMaker;
-		destination.MarginMode = source.MarginMode;
-		destination.Slippage = source.Slippage;
-		destination.IsManual = source.IsManual;
-		destination.AveragePrice = source.AveragePrice;
-		destination.MarketPrice = source.MarketPrice;
-		destination.Yield = source.Yield;
-		destination.MinVolume = source.MinVolume;
-		destination.PositionEffect = source.PositionEffect;
-		destination.PostOnly = source.PostOnly;
-		destination.SeqNum = source.SeqNum;
-		destination.Leverage = source.Leverage;
-		destination.LatencyRegistration = source.LatencyRegistration;
-		destination.LatencyCancellation = source.LatencyCancellation;
-		destination.LatencyEdition = source.LatencyEdition;
-	}
-
 	private void ApplyTradeToOrder(MyTrade trade)
 	{
 		var order = trade.Order;
@@ -1909,6 +1855,12 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		return true;
 	}
 
+	private void ProcessTrackedTrade(MyTrade trade)
+	{
+		if (ShouldApplyTradeToOrder(trade.Order))
+			ApplyTradeToOrder(trade);
+	}
+
 	private void SubmitNewOrder(Order order, Action submit)
 	{
 		if (submit is null)
@@ -1923,9 +1875,6 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		finally
 		{
 			_pendingOwnOrders.Remove(order);
-
-			if (order.TransactionId != 0)
-				_ownTransactionIds.Add(order.TransactionId);
 		}
 	}
 
@@ -2185,26 +2134,21 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		if (!Subscriptions.CanProcess(sub))
 			return;
 
-		var trackedOrder = TryGetTrackedOrder(order);
-		var isOwnOrder = trackedOrder != null || CanAttach(order) || CanAttachUnclaimedPendingOrder(order);
+		var isOwnOrder = OrderProcessor.IsTracked(order) || CanAttach(order) || CanAttachUnclaimedPendingOrder(order);
 
 		if (isOwnOrder)
 		{
-			trackedOrder ??= order;
-			CopyOrderState(order, trackedOrder);
-			EnsureActiveOrderBalance(trackedOrder);
-			OrderProcessor.TryAttach(trackedOrder);
-			OrderProcessor.ProcessOrder(trackedOrder, isChanging: true);
+			EnsureActiveOrderBalance(order);
+			OrderProcessor.TryAttach(order);
+			OrderProcessor.ProcessOrder(order, isChanging: true);
 		}
 
 		OrderReceived?.Invoke(sub, order);
 
 		if (order.Volume > 0)
 		{
-			var positionOrder = trackedOrder ?? order;
-
-			EnsureActiveOrderBalance(positionOrder);
-			var res = _posManager.ProcessOrder(positionOrder);
+			EnsureActiveOrderBalance(order);
+			var res = _posManager.ProcessOrder(order);
 
 			if (res != StrategyPositionManager.OrderResults.OK && ErrorState == LogLevels.Info)
 				ErrorState = LogLevels.Warning;
@@ -2221,15 +2165,13 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// </summary>
 	public void OnTradeReceived(Subscription sub, MyTrade trade)
 	{
-		if (!Subscriptions.CanProcess(sub))
+		var order = trade.Order;
+
+		if (!order.StrategyId.IsEmpty() && !order.StrategyId.EqualsIgnoreCase(EnsureGetId()))
 			return;
 
-		var trackedOrder = TryGetTrackedOrder(trade.Order);
-
-		if (trackedOrder is null)
+		if (!OrderProcessor.IsTracked(order))
 			return;
-
-		trade.Order = trackedOrder;
 
 		var sec = trade.Order.Security;
 
@@ -2247,16 +2189,11 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			.TryAdd(Level1Fields.Multiplier, this.GetSecurityValue<decimal?>(sec, Level1Fields.Multiplier) ?? sec.Multiplier));
 		}
 
-		if (Trades.Contains(trade))
+		if (!Trades.TryAdd(trade, _beforeTradeProcessing))
 			return;
 
-		if (ShouldApplyTradeToOrder(trade.Order))
-			ApplyTradeToOrder(trade);
-
-		if (!Trades.TryAdd(trade))
-			return;
-
-		OwnTradeReceived?.Invoke(sub, trade);
+		var eventSub = Subscriptions.CanProcess(sub) ? sub : OrderLookup;
+		OwnTradeReceived?.Invoke(eventSub, trade);
 
 		ProcessRisk(trade.ToMessage());
 	}

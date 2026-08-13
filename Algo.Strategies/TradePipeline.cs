@@ -14,6 +14,7 @@ using StockSharp.Algo.Statistics;
 public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats)
 {
 	private readonly CachedSynchronizedSet<MyTrade> _myTrades = [];
+	private readonly HashSet<MyTrade> _processingTrades = [];
 	private IPnLManager _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
 	private IStatisticManager _stats = stats ?? throw new ArgumentNullException(nameof(stats));
 
@@ -66,12 +67,38 @@ public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats)
 	/// Processes PnL, commission, slippage.
 	/// </summary>
 	public bool TryAdd(MyTrade trade)
+		=> TryAdd(trade, null);
+
+	internal bool TryAdd(MyTrade trade, Action<MyTrade> beforeProcessing)
 	{
 		if (trade is null)
 			throw new ArgumentNullException(nameof(trade));
 
-		if (!_myTrades.TryAdd(trade))
-			return false;
+		using (_myTrades.EnterScope())
+		{
+			if (_myTrades.Contains(trade) || !_processingTrades.Add(trade))
+				return false;
+		}
+
+		try
+		{
+			beforeProcessing?.Invoke(trade);
+		}
+		catch
+		{
+			using (_myTrades.EnterScope())
+				_processingTrades.Remove(trade);
+
+			throw;
+		}
+
+		using (_myTrades.EnterScope())
+		{
+			if (!_processingTrades.Remove(trade))
+				return false;
+
+			_myTrades.Add(trade);
+		}
 
 		var isComChanged = false;
 		var isSlipChanged = false;
@@ -134,7 +161,12 @@ public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats)
 	/// </summary>
 	public void Reset()
 	{
-		_myTrades.Clear();
+		using (_myTrades.EnterScope())
+		{
+			_myTrades.Clear();
+			_processingTrades.Clear();
+		}
+
 		Commission = default;
 		Slippage = default;
 	}

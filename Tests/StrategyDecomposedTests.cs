@@ -409,6 +409,19 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void OrderPipeline_TracksOrdersByReference()
+	{
+		using var stats = new StatisticManager();
+		var pipeline = new OrderPipeline(stats);
+		var tracked = new Order { TransactionId = 42 };
+		var duplicate = new Order { TransactionId = tracked.TransactionId };
+
+		pipeline.TryAttach(tracked).AssertTrue();
+		pipeline.IsTracked(tracked).AssertTrue();
+		pipeline.IsTracked(duplicate).AssertFalse();
+	}
+
+	[TestMethod]
 	public void OrderPipeline_ProcessOrder_PendingToActive_FiresRegistered()
 	{
 		using var stats = new StatisticManager();
@@ -1080,6 +1093,130 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void Composite_TrackedTradeAcceptedFromConnectorOwnedSubscription()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+
+		var strategySub = strategy.OrderLookup;
+		strategy.Subscriptions.Subscribe(strategySub);
+		Subscription receivedSubscription = null;
+		MyTrade receivedByRule = null;
+		strategy.OwnTradeReceived += (subscription, _) => receivedSubscription = subscription;
+		strategy.WhenOwnTradeReceived().Do(trade => receivedByRule = trade).Apply(strategy);
+
+		var security = CreateSecurity();
+		var order = new Order
+		{
+			TransactionId = 1,
+			State = OrderStates.Active,
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 10m,
+			Balance = 10m,
+			Security = security,
+			Portfolio = CreatePortfolio(),
+			UserOrderId = strategy.Id.To<string>(),
+			StrategyId = strategy.Id.To<string>(),
+			Time = DateTime.UtcNow,
+		};
+
+		strategy.OnConnectorOrderReceived(strategySub, order);
+
+		var connectorSub = new Subscription(DataType.Transactions);
+		var trade = CreateNewFeatureTrade(order, 1, 100m, 10m);
+		strategy.OnTradeReceived(connectorSub, trade);
+
+		strategy.ReceivedTrades.Count.AreEqual(1);
+		strategy.Trades.MyTrades.Count().AreEqual(1);
+		receivedSubscription.AssertSame(strategySub);
+		receivedByRule.AssertSame(trade);
+	}
+
+	[TestMethod]
+	public void Composite_ConnectorOwnedTrade_IsolatedAndDeduplicated()
+	{
+		var connector = CreateMockConnector().Object;
+		using var owner = new BuyOnSignalStrategy { Connector = connector };
+		using var foreign = new BuyOnSignalStrategy { Connector = connector };
+		var ownerSubscription = owner.OrderLookup;
+		owner.Subscriptions.Subscribe(ownerSubscription);
+		foreign.Subscriptions.Subscribe(foreign.OrderLookup);
+
+		var order = new Order
+		{
+			TransactionId = 1,
+			State = OrderStates.Active,
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 10m,
+			Balance = 10m,
+			Security = CreateSecurity(),
+			Portfolio = CreatePortfolio(),
+			UserOrderId = owner.Id.To<string>(),
+			StrategyId = owner.Id.To<string>(),
+			Time = DateTime.UtcNow,
+		};
+
+		owner.OnConnectorOrderReceived(ownerSubscription, order);
+
+		var connectorSubscription = new Subscription(DataType.Transactions);
+		var trade = CreateNewFeatureTrade(order, 1, 100m, 4m);
+		var receivedCount = 0;
+		owner.OwnTradeReceived += (_, _) => receivedCount++;
+
+		foreign.OnTradeReceived(connectorSubscription, trade);
+		owner.OnTradeReceived(connectorSubscription, trade);
+		owner.OnTradeReceived(ownerSubscription, trade);
+
+		foreign.Trades.MyTrades.Any().AssertFalse();
+		owner.Trades.MyTrades.Count().AssertEqual(1);
+		order.Balance.AssertEqual(6m);
+		receivedCount.AssertEqual(1);
+	}
+
+	[TestMethod]
+	public void Composite_TradeReservation_IsNotPublishedDuringOrderCallbacks()
+	{
+		var connector = CreateMockConnector().Object;
+		using var strategy = new BuyOnSignalStrategy { Connector = connector };
+		var subscription = strategy.OrderLookup;
+		strategy.Subscriptions.Subscribe(subscription);
+		var order = new Order
+		{
+			TransactionId = 1,
+			State = OrderStates.Active,
+			Side = Sides.Buy,
+			Price = 100m,
+			Volume = 10m,
+			Balance = 10m,
+			Security = CreateSecurity(),
+			Portfolio = CreatePortfolio(),
+			UserOrderId = strategy.Id.To<string>(),
+			StrategyId = strategy.Id.To<string>(),
+			Time = DateTime.UtcNow,
+		};
+		strategy.OnConnectorOrderReceived(subscription, order);
+
+		var trade = CreateNewFeatureTrade(order, 1, 100m, 4m);
+		bool? publishedDuringOrderCallback = null;
+
+#pragma warning disable CS0618 // The compatibility event exposes the order callback boundary under test.
+		strategy.OrderChanged += _ =>
+		{
+			publishedDuringOrderCallback = strategy.Trades.Contains(trade) || strategy.Trades.MyTrades.Any();
+			strategy.OnTradeReceived(subscription, trade);
+		};
+#pragma warning restore CS0618
+
+		strategy.OnTradeReceived(subscription, trade);
+
+		publishedDuringOrderCallback.AssertEqual(false);
+		strategy.Trades.MyTrades.Single().AssertSame(trade);
+		order.Balance.AssertEqual(6m);
+	}
+
+	[TestMethod]
 	public async Task Composite_FullOrderLifecycle_AllValuesVerified()
 	{
 		var connMock = CreateMockConnector();
@@ -1345,18 +1482,10 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.PriceUpdates[1].Price.AreEqual(150m);
 		connMock.Verify(c => c.RegisterOrder(It.IsAny<Order>()), Times.Once);
 
-		// simulate order received from connector as pending
-		var order = new Order
-		{
-			TransactionId = 42,
-			State = OrderStates.Pending,
-			Side = Sides.Buy,
-			Price = 150m,
-			Volume = 5,
-			Security = security,
-			Portfolio = portfolio,
-			Time = DateTime.UtcNow,
-		};
+		// simulate the connector updating the same order instance as pending
+		var order = strategy.OrderProcessor.Orders.Single();
+		order.State = OrderStates.Pending;
+		connMock.Verify(c => c.RegisterOrder(order), Times.Once);
 
 		strategy.OnConnectorOrderReceived(sub, order);
 		strategy.OrderProcessor.IsTracked(order).AssertTrue();
@@ -2158,6 +2287,25 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void CancelOrder_DifferentReferenceWithSameTransactionId_Throws()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		MarkStarted(strategy);
+
+		var tracked = RegisterOwnActiveOrder(strategy, connMock);
+		var duplicate = new Order
+		{
+			TransactionId = tracked.TransactionId,
+			State = tracked.State,
+		};
+		connMock.Invocations.Clear();
+
+		ThrowsExactly<ArgumentException>(() => strategy.CancelOrder(duplicate));
+		connMock.Verify(c => c.CancelOrder(It.IsAny<Order>()), Times.Never);
+	}
+
+	[TestMethod]
 	public void CancelOrder_CalledTwice_ReachesConnectorOnce()
 	{
 		var connMock = CreateMockConnector();
@@ -2172,6 +2320,91 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.CancelOrder(order);
 
 		connMock.Verify(c => c.CancelOrder(order), Times.Once);
+	}
+
+	[TestMethod]
+	public void EditOrder_DifferentReferenceWithSameTransactionId_ThrowsBeforeProcessingChanges()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		MarkStarted(strategy);
+
+		var tracked = RegisterOwnActiveOrder(strategy, connMock);
+		var duplicate = new Order
+		{
+			TransactionId = tracked.TransactionId,
+			State = tracked.State,
+			Security = tracked.Security,
+			Portfolio = tracked.Portfolio,
+			Side = tracked.Side,
+			Price = tracked.Price,
+			Volume = tracked.Volume,
+			Type = tracked.Type,
+		};
+		var changes = new Order
+		{
+			Side = Sides.Sell,
+			Price = tracked.Price + 1,
+			Volume = tracked.Volume,
+			Type = tracked.Type,
+		};
+		connMock.Invocations.Clear();
+
+		ThrowsExactly<ArgumentException>(() => strategy.EditOrder(duplicate, changes));
+
+		connMock.Verify(c => c.EditOrder(It.IsAny<Order>(), It.IsAny<Order>()), Times.Never);
+		strategy.OrderProcessor.IsTracked(changes).AssertFalse();
+		changes.TransactionId.AssertEqual(0);
+		changes.State.AssertEqual(OrderStates.None);
+		changes.Security.AssertNull();
+		changes.Portfolio.AssertNull();
+		changes.Comment.IsEmpty().AssertTrue();
+		changes.UserOrderId.IsEmpty().AssertTrue();
+		changes.StrategyId.IsEmpty().AssertTrue();
+	}
+
+	[TestMethod]
+	public void ReRegisterOrder_DifferentReferenceWithSameTransactionId_ThrowsBeforePreparingReplacement()
+	{
+		var connMock = CreateMockConnector();
+		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
+		MarkStarted(strategy);
+
+		var tracked = RegisterOwnActiveOrder(strategy, connMock);
+		strategy.Security = tracked.Security;
+		strategy.Portfolio = tracked.Portfolio;
+
+		var duplicate = new Order
+		{
+			TransactionId = tracked.TransactionId,
+			State = tracked.State,
+			Security = tracked.Security,
+			Portfolio = tracked.Portfolio,
+			Side = tracked.Side,
+			Price = tracked.Price,
+			Volume = tracked.Volume,
+			Type = tracked.Type,
+		};
+		var replacement = new Order
+		{
+			Side = Sides.Sell,
+			Price = tracked.Price + 1,
+			Volume = tracked.Volume,
+			Type = tracked.Type,
+		};
+		connMock.Invocations.Clear();
+
+		ThrowsExactly<ArgumentException>(() => strategy.ReRegisterOrder(duplicate, replacement));
+
+		connMock.Verify(c => c.ReRegisterOrder(It.IsAny<Order>(), It.IsAny<Order>()), Times.Never);
+		strategy.OrderProcessor.IsTracked(replacement).AssertFalse();
+		replacement.TransactionId.AssertEqual(0);
+		replacement.State.AssertEqual(OrderStates.None);
+		replacement.Security.AssertNull();
+		replacement.Portfolio.AssertNull();
+		replacement.Comment.IsEmpty().AssertTrue();
+		replacement.UserOrderId.IsEmpty().AssertTrue();
+		replacement.StrategyId.IsEmpty().AssertTrue();
 	}
 
 	#endregion

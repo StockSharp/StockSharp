@@ -54,17 +54,20 @@ public class OrderPipeline(IStatisticManager stats) : IEnumerable<Order>
 	public decimal? Commission { get; private set; }
 
 	/// <summary>
-	/// Try to attach (track) an order. Returns false if already tracked.
+	/// Try to attach (track) an order. Returns false if the same instance is already tracked.
 	/// </summary>
 	public bool TryAttach(Order order)
 	{
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		if (TryGetTracked(order) != null)
-			return false;
+		using (_ordersInfo.EnterScope())
+		{
+			if (_ordersInfo.ContainsKey(order))
+				return false;
 
-		_ordersInfo.Add(order, new());
+			_ordersInfo.Add(order, new());
+		}
 		NewOrder?.Invoke(order);
 		return true;
 	}
@@ -122,27 +125,14 @@ public class OrderPipeline(IStatisticManager stats) : IEnumerable<Order>
 	}
 
 	/// <summary>
-	/// Check if an order is currently tracked.
+	/// Check if the exact order instance is currently tracked.
 	/// </summary>
-	public bool IsTracked(Order order) => TryGetTracked(order) != null;
-
-	/// <summary>
-	/// Try to find the tracked order instance by reference or transaction id.
-	/// </summary>
-	public Order TryGetTracked(Order order)
+	public bool IsTracked(Order order)
 	{
 		if (order is null)
 			throw new ArgumentNullException(nameof(order));
 
-		if (_ordersInfo.ContainsKey(order))
-			return order;
-
-		var transactionId = order.TransactionId;
-
-		if (transactionId == 0)
-			return null;
-
-		return _ordersInfo.CachedKeys.FirstOrDefault(o => o.TransactionId == transactionId);
+		return _ordersInfo.ContainsKey(order);
 	}
 
 	/// <summary>
