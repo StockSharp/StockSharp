@@ -73,6 +73,17 @@ public class WoodiesCCI : BaseComplexIndicator<IWoodiesCCIValue>
 	public override string ToString() => base.ToString() + $" CCI({Length}), SMA({SMALength})";
 
 	/// <inheritdoc />
+	protected override IIndicatorValue OnProcess(IIndicatorValue input)
+	{
+		var result = (IWoodiesCCIValue)base.OnProcess(input);
+
+		if (result.TryGet(Sma, out var smaValue))
+			smaValue.IsFinal = input.IsFinal;
+
+		return result;
+	}
+
+	/// <inheritdoc />
 	protected override IWoodiesCCIValue CreateValue(DateTime time)
 		=> new WoodiesCCIValue(this, time);
 }

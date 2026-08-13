@@ -26,10 +26,9 @@ public class DisparityIndex : SimpleMovingAverage
 	{
 		var smaValue = base.OnProcessDecimal(input);
 
-		if (IsFormed)
+		if (IsFormed && smaValue is decimal sma && sma != 0m)
 		{
 			var price = input.ToDecimal(Source);
-			var sma = smaValue.Value;
 			var disparityIndex = (price - sma) / sma * 100;
 			return disparityIndex;
 		}

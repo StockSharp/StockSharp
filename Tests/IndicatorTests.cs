@@ -472,6 +472,197 @@ public class IndicatorTests : BaseTestClass
 		}
 	}
 
+	[TestMethod]
+	public void ExtremeDecimalProfiles()
+	{
+		const int maxWarmup = 4096;
+		const decimal offsetBudget = 1_000_000_000_000m;
+
+		var errors = new List<string>();
+		var now = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		var secId = Helper.CreateSecurityId();
+		var tf = TimeSpan.FromMinutes(1);
+		var nonDeterministic = new HashSet<Type>
+		{
+			typeof(AdaptiveLaguerreFilter),
+			typeof(DemandIndex),
+		};
+
+		static string errorText(Exception error)
+			=> $"{error.GetType().Name}: {error.Message.ReplaceLineEndings(" ")}";
+
+		static IIndicatorValue createInput(
+			IndicatorType type,
+			IIndicator indicator,
+			SecurityId secId,
+			DateTime time,
+			TimeSpan tf,
+			decimal value,
+			int index,
+			bool isFinal,
+			bool isHighOffset)
+		{
+			if (type.InputValue == typeof(DecimalIndicatorValue))
+				return new DecimalIndicatorValue(indicator, value, time) { IsFinal = isFinal };
+
+			if (type.InputValue == typeof(CandleIndicatorValue))
+			{
+				decimal open;
+				decimal close;
+				decimal high;
+				decimal low;
+				decimal volume;
+
+				if (isHighOffset)
+				{
+					open = value;
+					close = value + index % 3 - 1;
+					var spread = 2m + index % 3;
+					high = open.Max(close) + spread;
+					low = open.Min(close) - spread;
+					volume = 1m + index % 3;
+				}
+				else if (value == 0m)
+				{
+					open = close = high = low = volume = 0m;
+				}
+				else
+				{
+					open = close = value;
+					high = value + 1m;
+					low = (value - 1m).Max(0m);
+					volume = 1m;
+				}
+
+				var candle = new TimeFrameCandleMessage
+				{
+					SecurityId = secId,
+					TypedArg = tf,
+					OpenTime = time,
+					CloseTime = time + tf,
+					OpenPrice = open,
+					HighPrice = high,
+					LowPrice = low,
+					ClosePrice = close,
+					TotalVolume = volume,
+					State = isFinal ? CandleStates.Finished : CandleStates.Active,
+				};
+
+				return new CandleIndicatorValue(indicator, candle) { IsFinal = isFinal };
+			}
+
+			throw new InvalidOperationException($"Unsupported input value {type.InputValue} for {type.Indicator}.");
+		}
+
+		foreach (var type in GetIndicatorTypes().OrderBy(t => t.Indicator.FullName, StringComparer.Ordinal))
+		{
+			var name = type.Indicator.FullName ?? type.Indicator.Name;
+
+			if (type.InputValue != typeof(DecimalIndicatorValue) &&
+				type.InputValue != typeof(CandleIndicatorValue))
+			{
+				errors.Add($"{name} | input | Unsupported input value {type.InputValue}.");
+				continue;
+			}
+
+			foreach (var profile in new[] { "high-offset", "zero-recovery" })
+			{
+				var isHighOffset = profile == "high-offset";
+				IIndicator actual;
+				IIndicator control;
+
+				try
+				{
+					actual = type.CreateIndicator();
+					control = type.CreateIndicator();
+				}
+				catch (Exception error)
+				{
+					errors.Add($"{name} | {profile} | create | {errorText(error)}");
+					continue;
+				}
+
+				var warmup = actual.NumValuesToInitialize.Max(control.NumValuesToInitialize).Max(1);
+
+				if (warmup > maxWarmup)
+				{
+					errors.Add($"{name} | {profile} | warmup | {warmup} exceeds the {maxWarmup} value safety limit.");
+					continue;
+				}
+
+				var finalCount = warmup + 3;
+				var highOffset = offsetBudget / (warmup + 8m);
+
+				bool process(IIndicator indicator, decimal value, int index, bool isFinal, string phase, out IIndicatorValue result)
+				{
+					try
+					{
+						var input = createInput(type, indicator, secId, now + tf.Multiply(index), tf, value, index, isFinal, isHighOffset);
+						result = indicator.Process(input);
+						result.ValidateValue();
+						return true;
+					}
+					catch (Exception error)
+					{
+						result = null;
+						errors.Add($"{name} | {profile} | {phase} | {errorText(error)}");
+						return false;
+					}
+				}
+
+				var initialized = true;
+
+				for (var i = 0; i < finalCount; i++)
+				{
+					var value = isHighOffset ? highOffset + i % 5 - 2 : 0m;
+
+					if (!process(actual, value, i, true, $"actual final {i}", out _) ||
+						!process(control, value, i, true, $"control final {i}", out _))
+					{
+						initialized = false;
+						break;
+					}
+				}
+
+				if (!initialized)
+					continue;
+
+				var nextIndex = finalCount;
+				var previewValue = isHighOffset ? highOffset + 11m : 1m;
+				var finalValue = isHighOffset ? highOffset - 7m : 2m;
+
+				if (!process(actual, previewValue, nextIndex, false, "preview", out _))
+					continue;
+
+				if (!process(actual, finalValue, nextIndex, true, "final after preview", out var actualFinal) ||
+					!process(control, finalValue, nextIndex, true, "control final", out var controlFinal))
+					continue;
+
+				if (nonDeterministic.Contains(type.Indicator))
+					continue;
+
+				try
+				{
+					actual.IsFormed.AssertEqual(control.IsFormed, name);
+					CompareValue(actualFinal, controlFinal, name, true);
+				}
+				catch (Exception error)
+				{
+					errors.Add($"{name} | {profile} | preview state | {errorText(error)}");
+				}
+			}
+		}
+
+		if (errors.Count > 0)
+		{
+			var report = errors
+				.OrderBy(error => error, StringComparer.Ordinal)
+				.JoinN();
+
+			Fail($"Extreme indicator profiles failed ({errors.Count}):{Environment.NewLine}{report}");
+		}
+	}
+
 	private static readonly HashSet<string> _ignoreProps =
 	[
 		nameof(IIndicator.Name),
@@ -1787,6 +1978,93 @@ public class IndicatorTests : BaseTestClass
 			vEmpty2.FromValues(arrEmpty);
 			vEmpty2.IsEmpty.AssertTrue();
 		}
+	}
+
+	[TestMethod]
+	public void DegenerateIndicatorSeriesRecover()
+	{
+		var start = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		static TimeFrameCandleMessage candle(DateTime time, decimal open, decimal close, decimal spread)
+			=> new()
+			{
+				OpenTime = time,
+				CloseTime = time,
+				OpenPrice = open,
+				HighPrice = open.Max(close) + spread,
+				LowPrice = open.Min(close) - spread,
+				ClosePrice = close,
+				TotalVolume = 1500m,
+				State = CandleStates.Finished,
+			};
+
+		var frama = new FractalAdaptiveMovingAverage();
+		IIndicatorValue framaValue = null;
+		for (var i = 0; i < 100; i++)
+		{
+			var input = candle(start.AddMinutes(i), 100m, 100m, 0m);
+			framaValue = frama.Process(new CandleIndicatorValue(frama, input) { IsFinal = true });
+		}
+		framaValue.IsEmpty.AssertFalse();
+		framaValue.GetValue<decimal>().AssertEqual(100m);
+
+		var wave = new WaveTrendOscillator();
+		var previous = 100m;
+		IWaveTrendOscillatorValue flatWave = null;
+		IWaveTrendOscillatorValue recoveredWave = null;
+		for (var i = 0; i < 100; i++)
+		{
+			var close = i == 40 ? 300m : 100m;
+			var spread = i == 40 ? 60m : 1m;
+			var input = candle(start.AddMinutes(i), previous, close, spread);
+			var value = (IWaveTrendOscillatorValue)wave.Process(new CandleIndicatorValue(wave, input) { IsFinal = true });
+			if (i == 39)
+				flatWave = value;
+			if (i == 40)
+				recoveredWave = value;
+			previous = close;
+		}
+		flatWave.Wt1Value.IsEmpty.AssertTrue();
+		flatWave.Wt2Value.IsEmpty.AssertTrue();
+		recoveredWave.Wt1Value.IsEmpty.AssertFalse();
+		recoveredWave.Wt2Value.IsEmpty.AssertFalse();
+
+		var chaikin = new ChaikinVolatility();
+		chaikin.Ema.Length = 2;
+		chaikin.Roc.Length = 2;
+		IIndicatorValue flatChaikin = null;
+		IIndicatorValue chaikinValue = null;
+		var spreads = new[] { 0m, 0m, 1m, 2m, 4m };
+		for (var i = 0; i < spreads.Length; i++)
+		{
+			var input = candle(start.AddMinutes(i), 100m, 100m, spreads[i]);
+			chaikinValue = chaikin.Process(new CandleIndicatorValue(chaikin, input) { IsFinal = true });
+			if (i == 1)
+				flatChaikin = chaikinValue;
+		}
+		flatChaikin.IsEmpty.AssertTrue();
+		chaikinValue.IsEmpty.AssertFalse();
+	}
+
+	[TestMethod]
+	public void FlatRsiInputPreservesPreviousValue()
+	{
+		var start = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		var rsi = new RelativeStrengthIndex { Length = 3 };
+		var prices = new[] { 100m, 110m, 105m, 107m };
+		IIndicatorValue previous = null;
+
+		for (var i = 0; i < prices.Length; i++)
+		{
+			previous = rsi.Process(new DecimalIndicatorValue(rsi, prices[i], start.AddMinutes(i)) { IsFinal = true });
+		}
+
+		var preview = rsi.Process(new DecimalIndicatorValue(rsi, prices[^1], start.AddMinutes(prices.Length)));
+		var final = rsi.Process(new DecimalIndicatorValue(rsi, prices[^1], start.AddMinutes(prices.Length)) { IsFinal = true });
+
+		previous.IsEmpty.AssertFalse();
+		preview.GetValue<decimal>().AssertEqual(previous.GetValue<decimal>());
+		final.GetValue<decimal>().AssertEqual(previous.GetValue<decimal>());
 	}
 }
 

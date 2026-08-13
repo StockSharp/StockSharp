@@ -30,6 +30,10 @@ public class ForecastOscillator : LinearReg
 		if (IsFormed)
 		{
 			var price = input.ToDecimal(Source);
+
+			if (price == 0m)
+				return null;
+
 			var forecastValue = baseResult.Value;
 			var fosc = ((price - forecastValue) / price) * 100;
 			return fosc;

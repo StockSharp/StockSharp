@@ -83,7 +83,7 @@ public class CenterOfGravityOscillator : DecimalLengthIndicator
 			sumWeightedPrice += i * price;
 		}
 
-		if (IsFormed)
+		if (IsFormed && sumPrice != 0m)
 		{
 			var cgo = (sumWeightedPrice / sumPrice) - _part;
 			return cgo;

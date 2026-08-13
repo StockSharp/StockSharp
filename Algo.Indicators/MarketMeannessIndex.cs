@@ -12,7 +12,6 @@ public class MarketMeannessIndex : DecimalLengthIndicator
 {
 	private int _priceChanges;
 	private int _directionChanges;
-	private int _prevDirection;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MarketMeannessIndex"/>.
@@ -33,71 +32,81 @@ public class MarketMeannessIndex : DecimalLengthIndicator
 		if (input.IsFinal)
 		{
 			if (Buffer.Count == Length)
-			{
-				var oldPrice = Buffer[0];
-				UpdateChanges(oldPrice, Buffer[1], true);
-			}
+				RemoveOldestDirection(ref _priceChanges, ref _directionChanges);
 
 			Buffer.PushBack(price);
 
 			if (Buffer.Count > 1)
-			{
-				UpdateChanges(Buffer[^2], price, false);
-			}
+				AddNewestDirection(ref _priceChanges, ref _directionChanges);
 		}
 
 		if (IsFormed)
 		{
-			decimal mmi;
+			var priceChanges = _priceChanges;
+			var directionChanges = _directionChanges;
 
-			if (input.IsFinal)
+			if (!input.IsFinal)
 			{
-				mmi = _priceChanges > 0 ? 100m * _directionChanges / _priceChanges : 0;
-			}
-			else
-			{
-				var tempPriceChanges = _priceChanges;
-				var tempDirectionChanges = _directionChanges;
+				if (Buffer.Count == Length)
+					RemoveOldestDirection(ref priceChanges, ref directionChanges);
 
-				if (Buffer.Count > 1 && price != Buffer[^1])
-				{
-					tempPriceChanges++;
-					
-					var tempDirection = Math.Sign(price - Buffer[^1]);
-
-					if (tempDirection != _prevDirection && _prevDirection != 0)
-						tempDirectionChanges++;
-				}
-
-				mmi = tempPriceChanges > 0 ? 100m * tempDirectionChanges / tempPriceChanges : 0;
+				AddPreviewDirection(price, ref priceChanges, ref directionChanges);
 			}
 
-			return mmi;
+			return priceChanges > 0 ? 100m * directionChanges / priceChanges : 0;
 		}
 
 		return null;
 	}
 
-	private void UpdateChanges(decimal prevPrice, decimal currentPrice, bool isRemoving)
+	private void RemoveOldestDirection(ref int priceChanges, ref int directionChanges)
 	{
-		var currentDirection = Math.Sign(currentPrice - prevPrice);
+		var removedDirection = GetDirection(Buffer[0], Buffer[1]);
 
-		if (currentDirection != 0)
-			_priceChanges += isRemoving ? -1 : 1;
+		if (removedDirection != 0)
+			priceChanges--;
 
-		if (currentDirection != _prevDirection && _prevDirection != 0)
-			_directionChanges += isRemoving ? -1 : 1;
-
-		if (!isRemoving)
-			_prevDirection = currentDirection;
+		if (Buffer.Count > 2 && IsDirectionChange(removedDirection, GetDirection(Buffer[1], Buffer[2])))
+			directionChanges--;
 	}
+
+	private void AddNewestDirection(ref int priceChanges, ref int directionChanges)
+	{
+		var direction = GetDirection(Buffer[^2], Buffer[^1]);
+		var previousDirection = Buffer.Count > 2 ? GetDirection(Buffer[^3], Buffer[^2]) : (int?)null;
+
+		AddDirection(direction, previousDirection, ref priceChanges, ref directionChanges);
+	}
+
+	private void AddPreviewDirection(decimal price, ref int priceChanges, ref int directionChanges)
+	{
+		var remainingPrices = Buffer.Count - (Buffer.Count == Length ? 1 : 0);
+		var previousDirection = remainingPrices > 1 ? GetDirection(Buffer[^2], Buffer[^1]) : (int?)null;
+		var direction = GetDirection(Buffer[^1], price);
+
+		AddDirection(direction, previousDirection, ref priceChanges, ref directionChanges);
+	}
+
+	private static void AddDirection(int direction, int? previousDirection, ref int priceChanges, ref int directionChanges)
+	{
+		if (direction != 0)
+			priceChanges++;
+
+		if (previousDirection is int previous && IsDirectionChange(previous, direction))
+			directionChanges++;
+	}
+
+	private static bool IsDirectionChange(int previousDirection, int direction)
+		=> previousDirection != 0 && direction != previousDirection;
+
+	private static int GetDirection(decimal previousPrice, decimal price)
+		=> price.CompareTo(previousPrice);
 
 	/// <inheritdoc />
 	public override void Reset()
 	{
 		_priceChanges = default;
 		_directionChanges = default;
-		_prevDirection = default;
 
 		base.Reset();
 	}

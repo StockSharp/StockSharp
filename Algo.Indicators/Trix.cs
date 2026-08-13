@@ -92,9 +92,11 @@ public class Trix : LengthIndicator<IIndicatorValue, CircularBufferEx<IIndicator
 
 		var ema3Value = _ema3.Process(ema2Value);
 
-		return _ema3.IsFormed
-			? 10m * _roc.Process(ema3Value).ToDecimal(Source)
-			: null;
+		if (!_ema3.IsFormed)
+			return null;
+
+		var roc = _roc.Process(ema3Value).ToNullableDecimal(Source);
+		return roc is null ? null : 10m * roc.Value;
 	}
 
 	/// <inheritdoc />

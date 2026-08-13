@@ -69,7 +69,10 @@ public class ChaikinVolatility : BaseIndicator
 		if (Ema.IsFormed)
 		{
 			var val = Roc.Process(emaValue);
-			return new DecimalIndicatorValue(this, val.ToDecimal(Source), input.Time);
+
+			return val.IsEmpty
+				? new DecimalIndicatorValue(this, input.Time)
+				: new DecimalIndicatorValue(this, val.ToDecimal(Source), input.Time);
 		}
 
 		return new DecimalIndicatorValue(this, input.Time);

@@ -39,7 +39,14 @@ public class McGinleyDynamic : DecimalLengthIndicator
 				}
 			}
 		}
-		else
+		else if (_prevMd == 0)
+		{
+			if (input.IsFinal)
+				_prevMd = price;
+
+			return price;
+		}
+		else if (price != 0)
 		{
 			var md = _prevMd + (price - _prevMd) / (0.6m * Length * (decimal)Math.Pow((double)(price / _prevMd), 4));
 
