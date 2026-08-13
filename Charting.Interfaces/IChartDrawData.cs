@@ -28,11 +28,10 @@ public interface IChartDrawData
 		/// <param name="highPrice">Highest price.</param>
 		/// <param name="lowPrice">Lowest price.</param>
 		/// <param name="closePrice">Closing price.</param>
-		/// <param name="totalVolume">Total candle volume.</param>
 		/// <param name="priceLevels">Price levels.</param>
 		/// <param name="state">Candle state.</param>
 		/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-		IChartDrawDataItem Add(IChartCandleElement element, DataType dataType, SecurityId secId, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal totalVolume, CandlePriceLevel[] priceLevels, CandleStates state);
+		IChartDrawDataItem Add(IChartCandleElement element, DataType dataType, SecurityId secId, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels, CandleStates state);
 
 		/// <summary>
 		/// Put the indicator data.

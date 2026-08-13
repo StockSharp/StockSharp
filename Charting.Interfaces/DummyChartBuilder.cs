@@ -138,7 +138,7 @@ public class DummyChartBuilder : IChartBuilder
 		}
 	}
 
-	private class DummyAxis : DummyPersistable, IChartAxis
+	private class DummyAxis : DummyPersistable, IChartManualRangeAxis
 	{
 		IChartArea IChartAxis.ChartArea => throw new NotSupportedException();
 
