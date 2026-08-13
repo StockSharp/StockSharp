@@ -58,7 +58,7 @@
     <TonSdkContractsVer>0.4.*</TonSdkContractsVer>
     <XrplVer>10.*</XrplVer>
     <SolanaVer>8.*</SolanaVer>
-    <AvaloniaVer>11.*</AvaloniaVer>
+    <AvaloniaVer>12.*</AvaloniaVer>
     <NewtonsoftVer>13.*</NewtonsoftVer>
     <ActiproVer>25.*</ActiproVer>
   </PropertyGroup>
