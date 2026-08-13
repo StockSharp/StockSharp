@@ -59,6 +59,26 @@ public static class IChartExtensions
 		=> axis.Id == DefaultXAxisId || axis.Id == DefaultYAxisId;
 
 	/// <summary>
+	/// Validate the manual numeric range configured for the axis.
+	/// </summary>
+	/// <param name="axis">Chart axis.</param>
+	/// <exception cref="ArgumentNullException"><paramref name="axis"/> is <see langword="null"/>.</exception>
+	/// <exception cref="InvalidOperationException">A disabled auto range has incomplete or unordered manual bounds.</exception>
+	public static void ValidateManualRange(this IChartAxis axis)
+	{
+		ArgumentNullException.ThrowIfNull(axis);
+
+		if (axis.AutoRange)
+			return;
+
+		if (axis.MinValue.HasValue != axis.MaxValue.HasValue)
+			throw new InvalidOperationException($"Chart axis '{axis.Id}' must define both manual range bounds or neither bound.");
+
+		if (axis.MinValue is { } minimum && axis.MaxValue is { } maximum && maximum <= minimum)
+			throw new InvalidOperationException($"Chart axis '{axis.Id}' manual range maximum must be greater than its minimum.");
+	}
+
+	/// <summary>
 	/// Put the chart data.
 	/// </summary>
 	/// <param name="item"><see cref="IChartDrawData.IChartDrawDataItem"/> instance.</param>
@@ -122,7 +142,7 @@ public static class IChartExtensions
 			return item;
 		}
 
-		return item.Add(element, candle, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.PriceLevels?.ToArray(), candle.State);
+		return item.Add(element, candle, candle.OpenPrice, candle.HighPrice, candle.LowPrice, candle.ClosePrice, candle.TotalVolume, candle.PriceLevels?.ToArray(), candle.State);
 	}
 
 	/// <summary>
@@ -135,10 +155,11 @@ public static class IChartExtensions
 	/// <param name="highPrice">Highest price.</param>
 	/// <param name="lowPrice">Lowest price.</param>
 	/// <param name="closePrice">Closing price.</param>
+	/// <param name="totalVolume">Total candle volume.</param>
 	/// <param name="priceLevels">Price levels.</param>
 	/// <param name="state">Candle state.</param>
 	/// <returns><see cref="IChartDrawDataItem"/> instance.</returns>
-	public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, CandlePriceLevel[] priceLevels, CandleStates state)
+	public static IChartDrawDataItem Add(this IChartDrawDataItem item, IChartCandleElement element, ICandleMessage candle, decimal openPrice, decimal highPrice, decimal lowPrice, decimal closePrice, decimal totalVolume, CandlePriceLevel[] priceLevels, CandleStates state)
 	{
 		if (candle == null)
 		{
@@ -146,7 +167,7 @@ public static class IChartExtensions
 			return item;
 		}
 
-		return item.Add(element, candle.DataType, candle.SecurityId, openPrice, highPrice, lowPrice, closePrice, priceLevels, state);
+		return item.Add(element, candle.DataType, candle.SecurityId, openPrice, highPrice, lowPrice, closePrice, totalVolume, priceLevels, state);
 	}
 
 	/// <summary>

@@ -20,7 +20,7 @@ public class DummyChartBuilder : IChartBuilder
 		}
 
 		public virtual void Load(SettingsStorage storage) { }
-		void IPersistable.Save(SettingsStorage storage) { }
+		public virtual void Save(SettingsStorage storage) { }
 	}
 
 	private class DummyPart<T> : DummyPersistable, IChartPart<T>
@@ -149,6 +149,8 @@ public class DummyChartBuilder : IChartBuilder
 		public bool SwitchAxisLocation { get; set; }
 		public ChartAxisType AxisType { get; set; }
 		public bool AutoRange { get; set; }
+		public decimal? MinValue { get; set; }
+		public decimal? MaxValue { get; set; }
 		public bool FlipCoordinates { get; set; }
 		public bool DrawMajorTicks { get; set; }
 		public bool DrawMajorGridLines { get; set; }
@@ -172,6 +174,8 @@ public class DummyChartBuilder : IChartBuilder
 			IsVisible = storage.GetValue<bool>(nameof(IsVisible));
 			Group = storage.GetValue<string>(nameof(Group));
 			AutoRange = storage.GetValue<bool>(nameof(AutoRange));
+			MinValue = storage.GetValue<decimal?>(nameof(MinValue));
+			MaxValue = storage.GetValue<decimal?>(nameof(MaxValue));
 			DrawMinorTicks = storage.GetValue<bool>(nameof(DrawMinorTicks));
 			DrawMajorTicks = storage.GetValue<bool>(nameof(DrawMajorTicks));
 			DrawMajorGridLines = storage.GetValue<bool>(nameof(DrawMajorGridLines));
@@ -183,6 +187,31 @@ public class DummyChartBuilder : IChartBuilder
 			SwitchAxisLocation = storage.GetValue<bool>(nameof(SwitchAxisLocation));
 			AxisType = storage.GetValue<ChartAxisType>(nameof(AxisType));
 			TimeZone = storage.GetValue<string>(nameof(TimeZone)).To<TimeZoneInfo>() ?? TimeZoneInfo.Local;
+			this.ValidateManualRange();
+		}
+
+		public override void Save(SettingsStorage storage)
+		{
+			this.ValidateManualRange();
+
+			storage.SetValue(nameof(Id), Id);
+			storage.SetValue(nameof(Title), Title);
+			storage.SetValue(nameof(IsVisible), IsVisible);
+			storage.SetValue(nameof(Group), Group);
+			storage.SetValue(nameof(AutoRange), AutoRange);
+			storage.SetValue(nameof(MinValue), MinValue);
+			storage.SetValue(nameof(MaxValue), MaxValue);
+			storage.SetValue(nameof(DrawMinorTicks), DrawMinorTicks);
+			storage.SetValue(nameof(DrawMajorTicks), DrawMajorTicks);
+			storage.SetValue(nameof(DrawMajorGridLines), DrawMajorGridLines);
+			storage.SetValue(nameof(DrawMinorGridLines), DrawMinorGridLines);
+			storage.SetValue(nameof(DrawLabels), DrawLabels);
+			storage.SetValue(nameof(TextFormatting), TextFormatting);
+			storage.SetValue(nameof(CursorTextFormatting), CursorTextFormatting);
+			storage.SetValue(nameof(SubDayTextFormatting), SubDayTextFormatting);
+			storage.SetValue(nameof(SwitchAxisLocation), SwitchAxisLocation);
+			storage.SetValue(nameof(AxisType), AxisType);
+			storage.SetValue(nameof(TimeZone), TimeZone?.Id);
 		}
 	}
 

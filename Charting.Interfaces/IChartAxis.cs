@@ -46,6 +46,16 @@ public interface IChartAxis : IPersistable, INotifyPropertyChangedEx, INotifyPro
 	bool AutoRange { get; set; }
 
 	/// <summary>
+	/// Manual numeric range minimum, or <see langword="null"/> when no manual range is configured.
+	/// </summary>
+	decimal? MinValue { get; set; }
+
+	/// <summary>
+	/// Manual numeric range maximum, or <see langword="null"/> when no manual range is configured.
+	/// </summary>
+	decimal? MaxValue { get; set; }
+
+	/// <summary>
 	/// Flip coordinates.
 	/// </summary>
 	bool FlipCoordinates { get; set; }
