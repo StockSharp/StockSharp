@@ -15,6 +15,20 @@ public class IchimokuLine : DecimalLengthIndicator
 	public IchimokuLine()
 	{
 		_buffer = new(Length);
+		Length = 2;
+	}
+
+	/// <inheritdoc />
+	public override int Length
+	{
+		get => base.Length;
+		set
+		{
+			if (value < 2)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			base.Length = value;
+		}
 	}
 
 	/// <summary>

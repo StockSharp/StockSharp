@@ -42,6 +42,9 @@ public class MassIndex : DecimalLengthIndicator
 		get => _singleEma.Length;
 		set
 		{
+			if (value < 2)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
 			_singleEma.Length = _doubleEma.Length = value;
 			Reset();
 		}

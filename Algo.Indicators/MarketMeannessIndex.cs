@@ -13,6 +13,19 @@ public class MarketMeannessIndex : DecimalLengthIndicator
 	private int _priceChanges;
 	private int _directionChanges;
 
+	/// <inheritdoc />
+	public override int Length
+	{
+		get => base.Length;
+		set
+		{
+			if (value < 2)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			base.Length = value;
+		}
+	}
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MarketMeannessIndex"/>.
 	/// </summary>

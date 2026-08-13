@@ -1988,6 +1988,22 @@ public class IndicatorTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void IndicatorLengthBoundsAreEnforced()
+	{
+		ThrowsExactly<ArgumentOutOfRangeException>(() => new FractalAdaptiveMovingAverage { Length = 3 });
+		ThrowsExactly<ArgumentOutOfRangeException>(() => new MassIndex { EmaLength = 1 });
+		ThrowsExactly<ArgumentOutOfRangeException>(() => new MarketMeannessIndex { Length = 1 });
+		ThrowsExactly<ArgumentOutOfRangeException>(() => new OptimalTracking { Length = 1 });
+		ThrowsExactly<ArgumentOutOfRangeException>(() => new IchimokuLine { Length = 1 });
+
+		new FractalAdaptiveMovingAverage { Length = 4 }.Length.AssertEqual(4);
+		new MassIndex { EmaLength = 2 }.EmaLength.AssertEqual(2);
+		new MarketMeannessIndex { Length = 2 }.Length.AssertEqual(2);
+		new OptimalTracking { Length = 2 }.Length.AssertEqual(2);
+		new IchimokuLine { Length = 2 }.Length.AssertEqual(2);
+	}
+
+	[TestMethod]
 	public void DegenerateIndicatorSeriesRecover()
 	{
 		var start = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
