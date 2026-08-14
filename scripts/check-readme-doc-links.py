@@ -8,6 +8,8 @@ import sys
 from pathlib import Path, PurePosixPath
 from urllib.parse import unquote, urlsplit
 
+from console_utf8 import force_utf8_stdio
+
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -55,6 +57,8 @@ def resolve_doc_path(url: str, doc_root: Path) -> tuple[str | None, Path | None]
 
 
 def main() -> int:
+    force_utf8_stdio()
+
     parser = argparse.ArgumentParser(
         description="Validate doc.stocksharp.com links in the localized root READMEs against the doc repository.",
     )

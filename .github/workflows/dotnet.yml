@@ -45,6 +45,10 @@ jobs:
         working-directory: 'StockSharp (GitHub)'
         run: python scripts/check-readme-connectors.py
 
+      - name: Validate connector coverage
+        working-directory: 'StockSharp (GitHub)'
+        run: python scripts/check-connector-coverage.py
+
       - name: Validate README documentation links
         working-directory: 'StockSharp (GitHub)'
         run: python scripts/check-readme-doc-links.py

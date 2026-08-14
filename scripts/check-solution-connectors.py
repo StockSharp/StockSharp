@@ -7,6 +7,8 @@ import xml.etree.ElementTree as ET
 from collections import Counter
 from pathlib import Path
 
+from console_utf8 import force_utf8_stdio
+
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -53,6 +55,8 @@ def read_solution_connector_projects(solution: Path, connectors_root: Path) -> l
 
 
 def main() -> int:
+    force_utf8_stdio()
+
     parser = argparse.ArgumentParser(
         description="Check that StockSharp.slnx contains every connector project from the sibling repository.",
     )

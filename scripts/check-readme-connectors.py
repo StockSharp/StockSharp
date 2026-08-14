@@ -3,9 +3,10 @@ from __future__ import annotations
 
 import argparse
 import re
-import subprocess
 import sys
 from pathlib import Path
+
+from console_utf8 import force_utf8_stdio
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -115,23 +116,6 @@ def parse_connector_rows(lines: list[str], title: str) -> list[tuple[str, str | 
     return rows
 
 
-def parse_all_connector_names(lines_by_lang: dict[str, list[str]]) -> dict[str, list[str]]:
-    names: dict[str, list[str]] = {lang: [] for lang in lines_by_lang}
-
-    for lang, lines in lines_by_lang.items():
-        names[lang].extend(parse_available_connections(lines) or [])
-
-    for titles in COMMON_SECTIONS.values():
-        for lang, title in titles.items():
-            names[lang].extend(name for name, _ in parse_connector_rows(lines_by_lang[lang], title))
-
-    for lang, titles in KNOWN_LOCAL_SECTIONS.items():
-        for title in titles:
-            names[lang].extend(name for name, _ in parse_connector_rows(lines_by_lang[lang], title))
-
-    return names
-
-
 def validate_logo_assets(lines_by_lang: dict[str, list[str]]) -> bool:
     rows: list[tuple[str, str, str | None]] = []
 
@@ -215,12 +199,12 @@ def compare_ordered(label: str, values: dict[str, list[str]], *, allow_duplicate
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--metadata-since",
-        help="Also check that connector metadata commits since the specified git date are present in every root README.",
+    force_utf8_stdio()
+
+    parser = argparse.ArgumentParser(
+        description="Check that the root READMEs list the same connectors, in the same order, with the same logos.",
     )
-    args = parser.parse_args()
+    parser.parse_args()
 
     lines_by_lang = {lang: read(path) for lang, path in README_FILES.items()}
     ok = True
@@ -259,49 +243,7 @@ def main() -> int:
 
     ok &= validate_logo_assets(lines_by_lang)
 
-    if args.metadata_since:
-        ok &= compare_recent_metadata(args.metadata_since, lines_by_lang)
-
     return 0 if ok else 1
-
-
-def compare_recent_metadata(since: str, lines_by_lang: dict[str, list[str]]) -> bool:
-    output = subprocess.check_output(
-        ["git", "log", f"--since={since}", "--format=%H%x09%s"],
-        cwd=ROOT,
-        encoding="utf-8",
-        errors="replace",
-    )
-
-    commits: list[tuple[str, str]] = []
-    for line in output.splitlines():
-        if "\t" not in line:
-            continue
-
-        commit, subject = line.split("\t", 1)
-        match = re.match(r"Add (.+) connector metadata$", subject)
-        if match:
-            commits.append((commit[:9], match.group(1)))
-
-    ok = True
-    names_by_lang = parse_all_connector_names(lines_by_lang)
-    print(f"INFO metadata commits since {since}: count={len(commits)}")
-
-    for commit, name in commits:
-        needle = name.casefold()
-        missing_langs = [
-            lang
-            for lang, names in names_by_lang.items()
-            if not any(needle in connector.casefold() for connector in names)
-        ]
-
-        if missing_langs:
-            ok = False
-            print(f"DIFF metadata {commit} {name}: missing in {', '.join(missing_langs)}")
-        else:
-            print(f"OK metadata {commit} {name}")
-
-    return ok
 
 
 if __name__ == "__main__":

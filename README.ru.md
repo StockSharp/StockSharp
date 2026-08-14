@@ -111,48 +111,32 @@ connector.Connect();
 |<img src="./Media/logos/bitexbook_logo.svg" height="30" /> |Bitexbook | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bitexbook.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitfinex_logo.svg" height="30" /> |Bitfinex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bitfinex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bithumb_logo.svg" height="30" /> |Bithumb | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bithumb.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/bitmax_logo.svg" height="30" /> |BitMax | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bitmax.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitmex_logo.svg" height="30" /> |BitMEX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bitmex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitstamp_logo.svg" height="30" /> |BitStamp | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bitstamp.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bittrex_logo.svg" height="30" /> |Bittrex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bittrex.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/bitz_logo.svg" height="30" /> |BitZ | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bitz.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bybit_logo.svg" height="30" /> |ByBit | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bybit.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/bw_logo.svg" height="30" /> |BW | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bw.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/cexio_logo.svg" height="30" /> |CEX.IO | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/cex.io.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/coinbase_logo.svg" height="30" /> |Coinbase | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinbase.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/coinbene_logo.svg" height="30" /> |CoinBene | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinbene.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/coincap_logo.svg" height="30" /> |CoinCap | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coincap.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/coincheck_logo.svg" height="30" /> |Coincheck | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coincheck.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/coinex_logo.svg" height="30" /> |CoinEx | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinex.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/coinexchange_logo.svg" height="30" /> |CoinExchange | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinexchange.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/coinigy_logo.svg" height="30" /> |Coinigy  | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinigy.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/coinhub_logo.svg" height="30" /> |CoinHub | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinhub.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/cryptocom_logo.svg" height="30" /> |Crypto.com Exchange | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/crypto_com.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/cryptopia_logo.svg" height="30" /> |Cryptopia | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/cryptopia.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/deribit_logo.svg" height="30" /> |Deribit | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/deribit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/digifinex_logo.svg" height="30" /> |DigiFinex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/digifinex.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/digitexfutures_logo.svg" height="30" /> |DigitexFutures | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/digitexfutures.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/exmo_logo.svg" height="30" /> |EXMO | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/exmo.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/fatbtc_logo.svg" height="30" /> |FatBTC | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/fatbtc.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/gateio_logo.svg" height="30" /> |GateIO | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/gateio.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/gdax_logo.svg" height="30" /> |GDAX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/gdax.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/gopax_logo.svg" height="30" /> |GOPAX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/gopax.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/hitbtc_logo.svg" height="30" /> |HitBTC | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/hitbtc.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/hotbit_logo.svg" height="30" /> |Hotbit | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/hotbit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/huobi_logo.svg" height="30" /> |Huobi | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/huobi.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/idax_logo.svg" height="30" /> |IDAX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/idax.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/kraken_logo.svg" height="30" /> |Kraken | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/kraken.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/kucoin_logo.svg" height="30" /> |KuCoin | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/kucoin.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/latoken_logo.svg" height="30" /> |LATOKEN | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/latoken.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/lbank_logo.svg" height="30" /> |LBank | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/lbank.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/liqui_logo.svg" height="30" /> |Liqui | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/liqui.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/livecoin_logo.svg" height="30" /> |Livecoin | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/livecoin.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/mexc_logo.svg" height="30" /> |MEXC | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/mexc.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/okcoin_logo.svg" height="30" /> |OKCoin | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/okcoin.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/okex_logo.svg" height="30" /> |OKEx | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/okex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/poloniex_logo.svg" height="30" /> |Poloniex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/poloniex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/prizmbit_logo.svg" height="30" /> |PrizmBit | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/prizmbit.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/liquid_logo.svg" height="30" /> |QuoineX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/quoinex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/tradeogre_logo.svg" height="30" /> |TradeOgre | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/tradeogre.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/upbit_logo.svg" height="30" /> |Upbit | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/upbit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/yobit_logo.svg" height="30" /> |YoBit | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/yobit.html" target="_blank">Docs</a> |
@@ -193,7 +177,7 @@ connector.Connect();
 |<img src="./Media/logos/saxo_logo.svg" height="30" /> |Saxo OpenAPI | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/saxo.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/questrade_logo.svg" height="30" /> |Questrade API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/questrade.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/longbridge_logo.svg" height="30" /> |Longbridge OpenAPI | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/longbridge.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/cqg_logo.svg" height="30" /> |CQG Web API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/cqg_web_api.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/cqg_logo.svg" height="30" /> |CQG | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/cqg.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/ig_logo.svg" height="30" /> |IG Markets API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/ig.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/etoro_logo.svg" height="30" /> |eToro Public API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/etoro.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/koreainvestment_logo.svg" height="30" /> |Korea Investment & Securities Open API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/korea_investment.html" target="_blank">Docs</a> |
@@ -257,22 +241,76 @@ connector.Connect();
 |<img src="./Media/logos/bvmt_logo.svg" height="30" /> |BVMT | — |
 |<img src="./Media/logos/alphavantage_logo.svg" height="30" /> |AlphaVantage | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/alphavantage.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/barchart_logo.svg" height="30" /> |BarChart | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/barchart.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/cqg_logo.svg" height="30" /> |CQG | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/cqg.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/etrade_logo.svg" height="30" /> |E*TRADE | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/e_trade.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/google_logo.svg" height="30" /> |Google | — |
-|<img src="./Media/logos/iex_logo.svg" height="30" /> |IEX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/iex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/iqfeed_logo.svg" height="30" /> |IQFeed | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/iqfeed.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/lse_logo.svg" height="30" /> |ITCH | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/itch.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/openecry_logo.svg" height="30" /> |OpenECry | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/openecry.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/quandl_logo.svg" height="30" /> |Quandl | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/quandl.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/quanthouse_logo.svg" height="30" /> |QuantFEED | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/quantfeed.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/rithmic_logo.svg" height="30" /> |Rithmic | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/rithmic.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/robinhood_logo.svg" height="30" /> |Robinhood | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/robinhood.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/sterling_logo.svg" height="30" /> |Sterling | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/sterling.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/tradier_logo.svg" height="30" /> |Tradier | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tradier.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/xignite_logo.svg" height="30" /> |Xignite | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/xignite.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/yahoo_logo.svg" height="30" /> |Yahoo | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/yahoo.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/blackwood_logo.svg" height="30" /> |Blackwood (Fusion) | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/blackwood_fusion.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/csv_logo.svg" height="30" /> |CSV | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/common/csv.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/rss_logo.svg" height="30" /> |RSS | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/common/rss.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/comdirect_logo.svg" height="30" /> |comdirect | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/europe/comdirect.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/directa_logo.svg" height="30" /> |Directa Darwin API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/europe/directa.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/exante_logo.svg" height="30" /> |EXANTE | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/europe/exante.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/tradernet_logo.svg" height="30" /> |Tradernet | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/europe/tradernet.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/b3up2data_logo.svg" height="30" /> |B3 UP2DATA Cloud | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/b3_up2data.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/bavest_logo.svg" height="30" /> |Bavest Market Data API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/bavest.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/bigul_logo.svg" height="30" /> |Bigul Connect | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/bigul.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/choicefinx_logo.svg" height="30" /> |Choice FinX OpenAPI | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/choice_finx.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/definedge_logo.svg" height="30" /> |Definedge Securities API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/definedge.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/dnse_logo.svg" height="30" /> |DNSE LightSpeed OpenAPI | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/dnse.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/edinet_logo.svg" height="30" /> |EDINET API v2 | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/edinet.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/esma_firds_logo.svg" height="30" /> |ESMA FIRDS | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/esma_firds.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/euronext_web_services_logo.svg" height="30" /> |Euronext Web Services | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/euronext_web_services.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/financial_datasets_logo.svg" height="30" /> |Financial Datasets | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/financial_datasets.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/finra_logo.svg" height="30" /> |FINRA Query API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/finra.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/firstock_logo.svg" height="30" /> |Firstock Developer API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/firstock.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/gleif_logo.svg" height="30" /> |GLEIF API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/gleif.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/gurufocus_logo.svg" height="30" /> |GuruFocus Data API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/gurufocus.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/hdfcsecurities_logo.svg" height="30" /> |HDFC Securities InvestRight | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/hdfc_securities.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/iifl_logo.svg" height="30" /> |IIFL Markets | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/iifl.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/invertironline_logo.svg" height="30" /> |IOL InvertirOnline | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/invertironline.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/jainam_logo.svg" height="30" /> |Jainam ProTrade Open API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/jainam.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/jpx_tdnet_logo.svg" height="30" /> |JPX TDnet API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/jpx_tdnet.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/jquants_logo.svg" height="30" /> |J-Quants | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/jquants.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/korean_fsc_logo.svg" height="30" /> |Korean FSC Stock Prices | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/korean_fsc.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/krx_open_api_logo.svg" height="30" /> |KRX Open API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/krx_open_api.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/marketaux_logo.svg" height="30" /> |Marketaux API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/marketaux.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/marketdataapp_logo.svg" height="30" /> |MarketData.app | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/marketdataapp.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/masterlink_logo.svg" height="30" /> |Taishin Nova API (formerly MasterLink) | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/masterlink.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/mastertrust_logo.svg" height="30" /> |Mastertrust Trade API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/mastertrust.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/mstock_logo.svg" height="30" /> |m.Stock | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/mstock.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/nubra_logo.svg" height="30" /> |Nubra API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/nubra.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/nuvama_logo.svg" height="30" /> |Nuvama API Connect | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/nuvama.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/open_dart_logo.svg" height="30" /> |Open DART | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/open_dart.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/openfigi_logo.svg" height="30" /> |OpenFIGI | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/openfigi.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/paytmmoney_logo.svg" height="30" /> |Paytm Money Open API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/paytm_money.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/ppi_logo.svg" height="30" /> |PPI API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/ppi.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/primary_logo.svg" height="30" /> |Primary API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/primary.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/quiver_quant_logo.svg" height="30" /> |Quiver Quantitative API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/quiver_quant.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/rupeezy_logo.svg" height="30" /> |Rupeezy Vortex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/rupeezy.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/samco_logo.svg" height="30" /> |Samco | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/samco.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/sec_api_logo.svg" height="30" /> |SEC-API.io | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/sec_api.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/sec_edgar_logo.svg" height="30" /> |SEC EDGAR | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/sec_edgar.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/set_market_data_logo.svg" height="30" /> |SET Market Data API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/set_market_data.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/settrade_logo.svg" height="30" /> |Settrade Open API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/settrade.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/simfin_logo.svg" height="30" /> |SimFin | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/simfin.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/ssi_logo.svg" height="30" /> |SSI FastConnect | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/ssi.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/stockdata_org_logo.svg" height="30" /> |StockData.org | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/stockdata_org.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/tase_data_hub_logo.svg" height="30" /> |TASE Data Hub API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tase_data_hub.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/tosssecurities_logo.svg" height="30" /> |Toss Securities Open API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/toss_securities.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/tpex_logo.svg" height="30" /> |TPEx End-of-Day API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tpex.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/tradejini_logo.svg" height="30" /> |Tradejini API v2 | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/tradejini.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/trading_economics_logo.svg" height="30" /> |Trading Economics | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/trading_economics.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/trading_technologies_logo.svg" height="30" /> |Trading Technologies | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/trading_technologies.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/twse_logo.svg" height="30" /> |TWSE OpenAPI | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/twse_openapi.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/unusual_whales_logo.svg" height="30" /> |Unusual Whales API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/unusual_whales.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/ventura_logo.svg" height="30" /> |Ventura EaseAPI | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/ventura.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/wisdomcapital_logo.svg" height="30" /> |Wisdom Capital Trading API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/wisdom_capital.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/xbrl_filings_logo.svg" height="30" /> |filings.xbrl.org | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/xbrl_filings.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/zebu_logo.svg" height="30" /> |Zebu MYNT API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/stock_market/zebu.html" target="_blank">Документация</a> |
 
 ## Российский рынок
 |Лого | Название |  Документация Ru|
@@ -282,7 +320,6 @@ connector.Connect();
 |<img src="./Media/logos/mfd_logo.svg" height="30" /> |Mfd | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/mfd.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/moex_logo.svg" height="30" /> |Micex (TEAP) | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/micex.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/moex_logo.svg" height="30" /> |Plaza II | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/plaza.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/quik_logo.svg" height="30" /> |Quik FIX |  <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/quikfix.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/itinvest_logo.svg" height="30" /> |SmartCOM | — |
 |<img src="./Media/logos/spbex_logo.svg" height="30" /> |SPB Exchange |  <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/spb_exchange.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/transaq_logo.svg" height="30" /> |Transaq |  <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/transaq.html" target="_blank">Ru</a> |
@@ -290,9 +327,12 @@ connector.Connect();
 |<img src="./Media/logos/ukrexh_logo.svg" height="30" /> |UX (сайт) | — |
 |<img src="./Media/logos/alor_logo.svg" height="30" /> |Алор История | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/alorhistory.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/alor_logo.svg" height="30" /> |Алор Брокер | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/alor.html" target="_blank">Ru</a> |
-|<img src="./Media/logos/alfadirect_logo.svg" height="30" /> |Альфа-Директ | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/alfadirect.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/moexlchi_logo.svg" height="30" /> |ЛЧИ | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/lci.html" target="_blank">Ru</a> |
 |<img src="./Media/logos/finam_logo.svg" height="30" /> |Финам | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/finam.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/bcs_logo.svg" height="30" /> |BCS | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/bcs.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/finam_logo.svg" height="30" /> |Finam Trade API | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/finam_trade.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/moex_logo.svg" height="30" /> |Moex ISS | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/moexiss.html" target="_blank">Ru</a> |
+|<img src="./Media/logos/moex_logo.svg" height="30" /> |SIMBA | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/russia/simba.html" target="_blank">Ru</a> |
 
 ## Форекс
 |Лого | Название | Документация |
@@ -311,6 +351,9 @@ connector.Connect();
 |<img src="./Media/logos/metaapi_logo.svg" height="30" /> |MetaApi | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/forex/metaapi.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/lmax_logo.svg" height="30" /> |LMAX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/forex/lmax.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/oanda_logo.svg" height="30" /> |Oanda | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/forex/oanda.html" target="_blank">Docs</a> |
+|<img src="./Media/logos/dukascopy_logo.svg" height="30" /> |Dukascopy | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/forex/dukascopy.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/finage_logo.svg" height="30" /> |Finage Forex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/forex/finage.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/tradermade_logo.svg" height="30" /> |TraderMade | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/forex/tradermade.html" target="_blank">Документация</a> |
 
 ## DEX exchanges
 |Лого | Название | Документация |
@@ -429,6 +472,50 @@ connector.Connect();
 |<img src="./Media/logos/ligther_logo.svg" height="30" /> |Ligther | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/ligther.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">Документация</a> |
 |<img src="./Media/logos/hyperliquid_logo.svg" height="30" /> |Hyperliquid | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/hyperliquid.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/altcointrader_logo.svg" height="30" /> |AltCoinTrader | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/altcointrader.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/ascendex_logo.svg" height="30" /> |AscendEX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/ascendex.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/bigone_logo.svg" height="30" /> |BigONE | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bigone.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/binance_logo.svg" height="30" /> |Binance-History | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/binance_history.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/birdeye_logo.svg" height="30" /> |Birdeye Data | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/birdeye.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/bitmart_logo.svg" height="30" /> |Spot | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bitmart.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/bitopro_logo.svg" height="30" /> |BitoPro | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bitopro.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/btcturk_logo.svg" height="30" /> |BtcTurk | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/btcturk.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/buda_logo.svg" height="30" /> |Buda.com | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/buda.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/bybit_logo.svg" height="30" /> |ByBit History | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/bybit_history.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/chainflip_logo.svg" height="30" /> |Chainflip | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/chainflip.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/coinalyze_logo.svg" height="30" /> |Coinalyze | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinalyze.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/coincall_logo.svg" height="30" /> |Coincall | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coincall.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/coincatch_logo.svg" height="30" /> |CoinCatch | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coincatch.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/coinglass_logo.svg" height="30" /> |CoinGlass | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinglass.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/coinmetro_logo.svg" height="30" /> |Coinmetro | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinmetro.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/coinpaprika_logo.svg" height="30" /> |CoinPaprika | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinpaprika.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/coinspot_logo.svg" height="30" /> |CoinSpot | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinspot.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/coinstore_logo.svg" height="30" /> |Coinstore | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinstore.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/coinswitch_logo.svg" height="30" /> |CoinSwitch PRO | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/coinswitch.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/cointr_logo.svg" height="30" /> |CoinTR | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/cointr.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/deepbook_logo.svg" height="30" /> |DeepBook | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/deepbook.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/deltaexchangeindia_logo.svg" height="30" /> |Delta Exchange India | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/delta_exchange_india.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/dexscreener_logo.svg" height="30" /> |DEX Screener | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/dex_screener.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/dexalot_logo.svg" height="30" /> |Dexalot | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/dexalot.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/ftx_logo.svg" height="30" /> |FTX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/ftx.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/gateio_logo.svg" height="30" /> |Gate.io History | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/gateio_history.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/kucoin_logo.svg" height="30" /> |Kucoin History | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/kucoin_history.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/kyber_swap_logo.svg" height="30" /> |KyberSwap | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/kyber_swap.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/lcx_logo.svg" height="30" /> |LCX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/lcx.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/maxexchange_logo.svg" height="30" /> |MAX Exchange | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/maxexchange.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/novadax_logo.svg" height="30" /> |NovaDAX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/novadax.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/okex_logo.svg" height="30" /> |OKX History | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/okex_history.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/pendle_logo.svg" height="30" /> |Pendle | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/pendle.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/quidax_logo.svg" height="30" /> |Quidax | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/quidax.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/stonfi_logo.svg" height="30" /> |STON.fi | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/stonfi.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/tokocrypto_logo.svg" height="30" /> |Tokocrypto | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/tokocrypto.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/velodrome_logo.svg" height="30" /> |Velodrome | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/velodrome.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/velora_logo.svg" height="30" /> |Velora | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/velora.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/wazirx_logo.svg" height="30" /> |WazirX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/wazirx.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/btce_logo.svg" height="30" /> |WEX (BTC-e) | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/wex_btc_e.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/xrpl_logo.svg" height="30" /> |XRPL DEX | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/xrpl.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/zero_x_logo.svg" height="30" /> |0x | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/zero_x.html" target="_blank">Документация</a> |
+|<img src="./Media/logos/zondacrypto_logo.svg" height="30" /> |zondacrypto | <a href="https://doc.stocksharp.com/ru/topics/api/connectors/crypto_exchanges/zondacrypto.html" target="_blank">Документация</a> |
 
   [1]: https://stocksharp.com/ru
   [4]: https://stocksharp.com/ru/edu/
