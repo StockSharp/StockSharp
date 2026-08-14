@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
 using System.Collections.Concurrent;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
@@ -1985,6 +1986,46 @@ public class IndicatorTests : BaseTestClass
 	{
 		new PercentagePriceOscillatorSignal().Measure.AssertEqual(IndicatorMeasures.Percent);
 		new PercentagePriceOscillatorHistogram().Measure.AssertEqual(IndicatorMeasures.Percent);
+	}
+
+	[TestMethod]
+	public void AShortAliasCoversEveryPartOfItsFamily()
+	{
+		// A short alias is a subclass that renames its base, so a caller can ask for "PPO" instead of
+		// spelling the type out. Line, signal and histogram are separate indicators with different
+		// output counts, so naming only some of them leaves the short vocabulary pointing at a member
+		// the caller did not mean - and the answer comes back with fewer series rather than refused.
+		var indicators = typeof(BaseIndicator)
+			.Assembly
+			.GetTypes()
+			.Where(t => !t.IsAbstract && typeof(IIndicator).IsAssignableFrom(t))
+			.ToArray();
+
+		var concrete = indicators.ToHashSet();
+
+		var aliasedBases = indicators
+			.Where(t => t.GetAttribute<BrowsableAttribute>()?.Browsable == false && t.BaseType is not null && concrete.Contains(t.BaseType))
+			.Select(t => t.BaseType)
+			.ToHashSet();
+
+		var unaliased = new List<string>();
+
+		foreach (var type in aliasedBases)
+		{
+			foreach (var suffix in new[] { "Signal", "Histogram" })
+			{
+				var part = indicators.FirstOrDefault(t => t.Name == type.Name + suffix);
+
+				// A hidden part is not addressable by name at all, so it needs no short name either.
+				if (part is null || part.GetAttribute<IndicatorHiddenAttribute>() is not null)
+					continue;
+
+				if (!aliasedBases.Contains(part))
+					unaliased.Add(part.Name);
+			}
+		}
+
+		unaliased.Count.AssertEqual(0, $"aliased families whose parts have no alias: {unaliased.JoinCommaSpace()}");
 	}
 
 	[TestMethod]
