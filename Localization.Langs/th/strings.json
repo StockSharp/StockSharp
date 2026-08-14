@@ -3591,6 +3591,7 @@
   "MiddlePrice": "ราคากลาง",
   "Milliseconds": "มิลลิวินาที",
   "Min": "ขั้นต่ำ",
+  "MinCommission": "มูลค่าค่าคอมมิชชั่นขั้นต่ำ.",
   "MinLatencyCancellation": "การยกเลิกความล่าช้าขั้นต่ำ",
   "MinLatencyCancellationDesc": "ค่าความล่าช้าขั้นต่ำเมื่อยกเลิกคำสั่งซื้อ",
   "MinLatencyRegistration": "การลงทะเบียนล่าช้าขั้นต่ำ",

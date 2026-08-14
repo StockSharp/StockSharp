@@ -3591,6 +3591,7 @@
   "MiddlePrice": "מחיר אמצע",
   "Milliseconds": "מילישניות",
   "Min": "מינימום",
+  "MinCommission": "ערך העמלה המינימלי.",
   "MinLatencyCancellation": "עיכוב מינימלי לביטול פקודה",
   "MinLatencyCancellationDesc": "ערך העיכוב המינימלי בעת ביטול פקודה.",
   "MinLatencyRegistration": "עיכוב מינימלי לרישום פקודה",

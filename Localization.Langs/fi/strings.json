@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Keskihinta",
   "Milliseconds": "Millisekuntia",
   "Min": "Min",
+  "MinCommission": "Palkkion vähimmäisarvo.",
   "MinLatencyCancellation": "Toimeksiannon peruutuksen vähimmäisviive",
   "MinLatencyCancellationDesc": "Vähimmäisviive toimeksiantoa peruttaessa.",
   "MinLatencyRegistration": "Toimeksiannon rekisteröinnin vähimmäisviive",

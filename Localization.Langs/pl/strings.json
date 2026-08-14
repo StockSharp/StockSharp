@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Cena środkowa",
   "Milliseconds": "Milisekundy",
   "Min": "Min",
+  "MinCommission": "Minimalna wartość prowizji.",
   "MinLatencyCancellation": "Min. opóźnienie anulowania zlecenia",
   "MinLatencyCancellationDesc": "Minimalna wartość opóźnienia przy anulowaniu zlecenia.",
   "MinLatencyRegistration": "Min. opóźnienie rejestracji zlecenia",

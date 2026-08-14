@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Средняя цена",
   "Milliseconds": "Миллисекунды",
   "Min": "Мин",
+  "MinCommission": "Минимальное значение комиссии.",
   "MinLatencyCancellation": "Min задержка отмены заявки",
   "MinLatencyCancellationDesc": "Минимальное значение задержки при отмене заявки.",
   "MinLatencyRegistration": "Min задержка регистрации заявки",

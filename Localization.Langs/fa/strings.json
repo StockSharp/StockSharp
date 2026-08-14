@@ -3591,6 +3591,7 @@
   "MiddlePrice": "قیمت میانی",
   "Milliseconds": "میلی‌ثانیه‌ها",
   "Min": "حداقل",
+  "MinCommission": "حداقل مقدار کمیسیون.",
   "MinLatencyCancellation": "حداقل تأخیر لغو سفارش",
   "MinLatencyCancellationDesc": "کمترین مقدار درنگ هنگام لغو سفارش.",
   "MinLatencyRegistration": "حداقل تأخیر ثبت سفارش",

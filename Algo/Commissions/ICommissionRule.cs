@@ -16,6 +16,11 @@ public interface ICommissionRule : IPersistable
 	Unit Value { get; }
 
 	/// <summary>
+	/// Lower bound on a charge this rule produces. Zero means no bound.
+	/// </summary>
+	decimal Min { get; }
+
+	/// <summary>
 	/// To reset the state.
 	/// </summary>
 	void Reset();
@@ -63,6 +68,28 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 		}
 	}
 
+	private decimal _min;
+
+	/// <inheritdoc />
+	[DataMember]
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.MinimumKey,
+		Description = LocalizedStrings.MinCommissionKey,
+		GroupName = LocalizedStrings.GeneralKey)]
+	public decimal Min
+	{
+		get => _min;
+		set
+		{
+			if (value < 0m)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_min = value;
+			NotifyChanged();
+		}
+	}
+
 	/// <summary>
 	/// Get title.
 	/// </summary>
@@ -93,7 +120,25 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 	}
 
 	/// <inheritdoc />
-	public abstract decimal? Process(ExecutionMessage message);
+	public decimal? Process(ExecutionMessage message)
+	{
+		var value = OnProcess(message);
+
+		// A rule that says nothing charges nothing, and the bound must not turn that into a
+		// charge. Applied only when there is one, so a rebate expressed as a negative value is
+		// not raised to zero by a rule that has no minimum.
+		if (value is not decimal charge || Min <= 0m || charge >= Min)
+			return value;
+
+		return Min;
+	}
+
+	/// <summary>
+	/// To calculate commission, before <see cref="Min"/> is applied.
+	/// </summary>
+	/// <param name="message">The message containing the information about the order or own trade.</param>
+	/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
+	protected abstract decimal? OnProcess(ExecutionMessage message);
 
 	/// <summary>
 	/// Load settings.
@@ -102,6 +147,7 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 	public virtual void Load(SettingsStorage storage)
 	{
 		Value = storage.GetValue<Unit>(nameof(Value));
+		Min = storage.GetValue(nameof(Min), Min);
 	}
 
 	/// <summary>
@@ -111,6 +157,7 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 	public virtual void Save(SettingsStorage storage)
 	{
 		storage.SetValue(nameof(Value), Value);
+		storage.SetValue(nameof(Min), Min);
 	}
 
 	/// <summary>

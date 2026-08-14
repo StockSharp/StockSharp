@@ -47,7 +47,7 @@ public class CommissionOrderCountRule : CommissionRule
 	}
 
 	/// <inheritdoc />
-	public override decimal? Process(ExecutionMessage message)
+	protected override decimal? OnProcess(ExecutionMessage message)
 	{
 		// Count only pure order messages. Own trades (partial fills) also carry order info,
 		// but must not increase orders counter.

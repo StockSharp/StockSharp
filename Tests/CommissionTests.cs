@@ -1017,10 +1017,73 @@ public class CommissionTests
 		result.AssertNull(); // percent commission needs volume for turnover calculation
 	}
 
+	[TestMethod]
+	public void MinRaisesACharge()
+	{
+		// A tariff quoted as a percentage still charges a floor, so a trade too small to reach it
+		// is not carried for free.
+		var now = DateTime.UtcNow;
+
+		var rule = new CommissionTradeVolumeRule
+		{
+			Value = new Unit { Value = 0.25m, Type = UnitTypes.Percent },
+			Min = 1m,
+		};
+
+		// 100 * 1 * 0.25% = 0.25, under the floor.
+		rule.Process(CreateTradeMessage(100m, 1m, Inc(ref now))).AssertEqual(1m);
+
+		// 100 * 100 * 0.25% = 25, over it.
+		rule.Process(CreateTradeMessage(100m, 100m, Inc(ref now))).AssertEqual(25m);
+	}
+
+	[TestMethod]
+	public void MinDoesNotInventACharge()
+	{
+		// The floor bounds a charge; it does not create one where the rule found nothing to
+		// charge for, and it leaves a rebate alone when no floor is set.
+		var now = DateTime.UtcNow;
+
+		var rule = new CommissionTradeVolumeRule
+		{
+			Value = new Unit { Value = 1m, Type = UnitTypes.Absolute },
+			Min = 5m,
+		};
+
+		rule.Process(CreateOrderMessage(100m, 1m, Inc(ref now))).AssertNull("a trade rule has nothing to say about an order");
+
+		var rebate = new CommissionTradeVolumeRule
+		{
+			Value = new Unit { Value = -0.5m, Type = UnitTypes.Absolute },
+		};
+
+		rebate.Process(CreateTradeMessage(100m, 2m, Inc(ref now))).AssertEqual(-1m);
+	}
+
+	[TestMethod]
+	public void MinSurvivesSaveAndLoad()
+	{
+		var rule = new CommissionTradeVolumeRule { Value = new Unit { Value = 2m }, Min = 3m };
+
+		var storage = new SettingsStorage();
+		rule.Save(storage);
+
+		var restored = new CommissionTradeVolumeRule();
+		restored.Load(storage);
+
+		restored.Min.AssertEqual(3m);
+	}
+
+	[TestMethod]
+	public void ANegativeMinIsRefused()
+	{
+		Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new CommissionTradeVolumeRule { Min = -1m });
+	}
+
 	// A custom rule class for testing
 	private class CustomCommissionRule : CommissionRule
 	{
-		public override decimal? Process(ExecutionMessage message)
+		protected override decimal? OnProcess(ExecutionMessage message)
 		{
 			return 1.0m; // Simple implementation for testing
 		}

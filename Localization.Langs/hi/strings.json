@@ -3591,6 +3591,7 @@
   "MiddlePrice": "मध्य मूल्य",
   "Milliseconds": "मिलीसेकंड",
   "Min": "न्यूनतम",
+  "MinCommission": "कमीशन का न्यूनतम मूल्य।",
   "MinLatencyCancellation": "न्यूनतम ऑर्डर रद्दीकरण लेटेंसी",
   "MinLatencyCancellationDesc": "ऑर्डर रद्द करने पर न्यूनतम विलंबता मान।",
   "MinLatencyRegistration": "न्यूनतम ऑर्डर पंजीकरण लेटेंसी",

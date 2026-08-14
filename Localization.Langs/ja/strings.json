@@ -3591,6 +3591,7 @@
   "MiddlePrice": "中間価格",
   "Milliseconds": "ミリ秒",
   "Min": "最小",
+  "MinCommission": "最小手数料の値。",
   "MinLatencyCancellation": "注文取消の最小レイテンシー",
   "MinLatencyCancellationDesc": "注文のキャンセル時の最小遅延値。",
   "MinLatencyRegistration": "注文登録の最小レイテンシー",

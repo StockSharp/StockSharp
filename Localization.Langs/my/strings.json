@@ -3591,6 +3591,7 @@
   "MiddlePrice": "အလယ်ဈေးနှုန်း",
   "Milliseconds": "မီလီစက္ကန့်များ",
   "Min": "အနည်းဆုံး",
+  "MinCommission": "အနည်းဆုံးကော်မရှင်တန်ဖိုး။",
   "MinLatencyCancellation": "အနည်းဆုံး အမိန့်ပယ်ဖျက်ခြင်း latency",
   "MinLatencyCancellationDesc": "အမိန့်ကို ပယ်ဖျက်သည့်အခါ အနည်းဆုံး latency တန်ဖိုး။",
   "MinLatencyRegistration": "အနည်းဆုံး အမိန့်မှတ်ပုံတင်ခြင်း latency",

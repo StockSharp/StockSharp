@@ -3591,6 +3591,7 @@
   "MiddlePrice": "মধ্য মূল্য",
   "Milliseconds": "মিলিসেকেন্ড",
   "Min": "সর্বনিম্ন",
+  "MinCommission": "কমিশনের সর্বনিম্ন মান।",
   "MinLatencyCancellation": "ন্যূনতম অর্ডার বাতিল লেটেন্সি",
   "MinLatencyCancellationDesc": "অর্ডার বাতিল করার সময় ন্যূনতম লেটেন্সি মান।",
   "MinLatencyRegistration": "ন্যূনতম অর্ডার নিবন্ধন লেটেন্সি",

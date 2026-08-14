@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Harga pertengahan",
   "Milliseconds": "Milisaat",
   "Min": "Min",
+  "MinCommission": "Nilai Komisen Minimum.",
   "MinLatencyCancellation": "Latensi pembatalan pesanan minimum",
   "MinLatencyCancellationDesc": "Latensi minimum apabila pesanan dibatalkan.",
   "MinLatencyRegistration": "Latensi pendaftaran pesanan minimum",

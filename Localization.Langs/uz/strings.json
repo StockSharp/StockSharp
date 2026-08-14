@@ -3591,6 +3591,7 @@
   "MiddlePrice": "O\u0027rtacha narx",
   "Milliseconds": "Millisekundlar",
   "Min": "Min",
+  "MinCommission": "Minimal komissiya qiymati.",
   "MinLatencyCancellation": "Eng kam kechikish bekor qilish",
   "MinLatencyCancellationDesc": "Buyurtma bekor qilishda minimal kechikish qiymati.",
   "MinLatencyRegistration": "Min ro\u0027yxatga olish kechikishi",

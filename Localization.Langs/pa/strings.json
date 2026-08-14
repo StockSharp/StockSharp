@@ -3591,6 +3591,7 @@
   "MiddlePrice": "ਮੱਧ ਕੀਮਤ",
   "Milliseconds": "ਮਿਲੀਸਕਿੰਟ",
   "Min": "ਘੱਟੋ ਘੱਟ",
+  "MinCommission": "ਕਮਿਸ਼ਨ ਦੀ ਘੱਟੋ-ਘੱਟ ਕੀਮਤ।",
   "MinLatencyCancellation": "ਆਰਡਰ ਕੈਂਸਲੇਸ਼ਨ ਦੀ ਘੱਟੋ-ਘੱਟ ਲੈਟੈਂਸੀ",
   "MinLatencyCancellationDesc": "ਆਰਡਰ ਰੱਦ ਹੋਣ ਵੇਲੇ ਘੱਟੋ-ਘੱਟ ਲੈਟੈਂਸੀ।",
   "MinLatencyRegistration": "ਆਰਡਰ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਦੀ ਘੱਟੋ-ਘੱਟ ਲੈਟੈਂਸੀ",

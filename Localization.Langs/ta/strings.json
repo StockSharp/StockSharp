@@ -3591,6 +3591,7 @@
   "MiddlePrice": "நடுத்தர விலை",
   "Milliseconds": "மில்லிசெகண்ட்",
   "Min": "குறைந்த",
+  "MinCommission": "குறைந்தபட்ச கமிஷன் மதிப்பு.",
   "MinLatencyCancellation": "குறைந்தபட்ச தாமத ரத்து",
   "MinLatencyCancellationDesc": "ஆர்டரை ரத்து செய்யும்போது குறைந்தபட்ச தாமத மதிப்பு.",
   "MinLatencyRegistration": "குறைந்தபட்ச பதிவுக் காலதாமதம்",

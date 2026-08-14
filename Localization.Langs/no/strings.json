@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Midtpris",
   "Milliseconds": "Millisekunder",
   "Min": "Min",
+  "MinCommission": "Minste provisjonsverdi.",
   "MinLatencyCancellation": "Min ordrekanselleringsforsinkelse",
   "MinLatencyCancellationDesc": "Minimumsverdi for forsinkelse ved kansellering av ordre.",
   "MinLatencyRegistration": "Min ordreregistreringsforsinkelse",

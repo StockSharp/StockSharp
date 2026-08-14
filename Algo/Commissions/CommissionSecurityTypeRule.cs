@@ -52,7 +52,7 @@ public class CommissionSecurityTypeRule : CommissionRule
 	}
 
 	/// <inheritdoc />
-	public override decimal? Process(ExecutionMessage message)
+	protected override decimal? OnProcess(ExecutionMessage message)
 	{
 		SecurityTypes? getSecType(SecurityId secId)
 		{

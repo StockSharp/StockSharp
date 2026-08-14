@@ -36,7 +36,7 @@ public class CommissionBoardCodeRule : CommissionRule
 	protected override string GetTitle() => _boardCode;
 
 	/// <inheritdoc />
-	public override decimal? Process(ExecutionMessage message)
+	protected override decimal? OnProcess(ExecutionMessage message)
 	{
 		if (message.HasTradeInfo() && message.SecurityId.BoardCode.EqualsIgnoreCase(_boardCode))
 			return GetValue(message.TradePrice, message.TradeVolume);

@@ -36,7 +36,7 @@ public class CommissionSecurityIdRule : CommissionRule
 	protected override string GetTitle() => (_securityId?.ToStringId()).IsEmpty(LocalizedStrings.NoSecurities);
 
 	/// <inheritdoc />
-	public override decimal? Process(ExecutionMessage message)
+	protected override decimal? OnProcess(ExecutionMessage message)
 	{
 		if (message.HasTradeInfo() && message.SecurityId == _securityId)
 			return GetValue(message.TradePrice, message.TradeVolume);

@@ -3591,6 +3591,7 @@
   "MiddlePrice": "중간 가격",
   "Milliseconds": "밀리초",
   "Min": "최소",
+  "MinCommission": "최소 수수료 값.",
   "MinLatencyCancellation": "최소 주문 취소 지연",
   "MinLatencyCancellationDesc": "주문 취소 시 최소 대기 시간 값입니다.",
   "MinLatencyRegistration": "최소 주문 등록 지연",

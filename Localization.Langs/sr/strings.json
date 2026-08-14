@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Средња цена",
   "Milliseconds": "Милисекунде",
   "Min": "Мин",
+  "MinCommission": "Минимална вредност провизије.",
   "MinLatencyCancellation": "Мин. кашњење отказивања налога",
   "MinLatencyCancellationDesc": "Минимална вредност кашњења при отказивању налога.",
   "MinLatencyRegistration": "Мин. кашњење регистрације налога",

@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Stredná cena",
   "Milliseconds": "Milisekundy",
   "Min": "Min",
+  "MinCommission": "Minimálna hodnota provízie.",
   "MinLatencyCancellation": "Min. odozva zrušenia pokynu",
   "MinLatencyCancellationDesc": "Minimálna hodnota odozvy pri zrušení pokynu.",
   "MinLatencyRegistration": "Min. odozva registrácie pokynu",

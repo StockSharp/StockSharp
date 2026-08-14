@@ -47,7 +47,7 @@ public class CommissionTradeCountRule : CommissionRule
 	}
 
 	/// <inheritdoc />
-	public override decimal? Process(ExecutionMessage message)
+	protected override decimal? OnProcess(ExecutionMessage message)
 	{
 		if (!message.HasTradeInfo())
 			return null;

@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Preț mediu",
   "Milliseconds": "Milisecunde",
   "Min": "Min",
+  "MinCommission": "Valoarea minimă a comisiei.",
   "MinLatencyCancellation": "Latență minimă la anularea ordinului",
   "MinLatencyCancellationDesc": "Valoarea minimă a latenței la anularea unui ordin.",
   "MinLatencyRegistration": "Latență minimă la înregistrarea ordinului",

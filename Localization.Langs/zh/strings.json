@@ -3591,6 +3591,7 @@
   "MiddlePrice": "中间价",
   "Milliseconds": "毫秒",
   "Min": "最小值",
+  "MinCommission": "最小佣金值。",
   "MinLatencyCancellation": "最小延迟取消",
   "MinLatencyCancellationDesc": "取消订单的最小延迟值。",
   "MinLatencyRegistration": "最小注册延迟",

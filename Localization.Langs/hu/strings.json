@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Középár",
   "Milliseconds": "Milliszekundumok",
   "Min": "Min",
+  "MinCommission": "Jutalék minimális értéke.",
   "MinLatencyCancellation": "Min megbízás-visszavonási késleltetés",
   "MinLatencyCancellationDesc": "Minimális késleltetési érték megbízás visszavonásakor.",
   "MinLatencyRegistration": "Min megbízás-regisztrációs késleltetés",

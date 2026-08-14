@@ -3591,6 +3591,7 @@
   "MiddlePrice": "السعر المتوسط",
   "Milliseconds": "ملي ثانية",
   "Min": "الحد الأدنى",
+  "MinCommission": "الحد الأدنى لقيمة العمولة.",
   "MinLatencyCancellation": "أدنى زمن تأخير لإلغاء الأمر",
   "MinLatencyCancellationDesc": "أدنى قيمة زمن تأخير عند إلغاء الأمر.",
   "MinLatencyRegistration": "أدنى زمن تأخير لتسجيل الأمر",

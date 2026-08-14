@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Prezzo medio",
   "Milliseconds": "Millisecondi",
   "Min": "Min",
+  "MinCommission": "Valore minimo della commissione.",
   "MinLatencyCancellation": "Latenza min cancellazione ordine",
   "MinLatencyCancellationDesc": "Valore minimo di latenza all\u0027annullamento di un ordine.",
   "MinLatencyRegistration": "Latenza min registrazione ordine",

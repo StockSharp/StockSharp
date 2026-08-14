@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Middenprijs",
   "Milliseconds": "Milliseconden",
   "Min": "Min",
+  "MinCommission": "Minimale commissiewaarde.",
   "MinLatencyCancellation": "Min. orderannuleringslatentie",
   "MinLatencyCancellationDesc": "Minimale latency wanneer een order wordt geannuleerd.",
   "MinLatencyRegistration": "Min. orderregistratielatentie",

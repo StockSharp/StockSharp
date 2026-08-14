@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Giá trung bình",
   "Milliseconds": "Mili giây",
   "Min": "Tối thiểu",
+  "MinCommission": "Giá trị hoa hồng tối thiểu.",
   "MinLatencyCancellation": "Huỷ bỏ độ trễ tối thiểu",
   "MinLatencyCancellationDesc": "Giá trị độ trễ tối thiểu khi hủy lệnh.",
   "MinLatencyRegistration": "Độ trễ đăng ký tối thiểu",

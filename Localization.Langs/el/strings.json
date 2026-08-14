@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Μέση τιμή",
   "Milliseconds": "Χιλιοστά του δευτερολέπτου",
   "Min": "Ελάχ",
+  "MinCommission": "Ελάχιστη αξία προμήθειας.",
   "MinLatencyCancellation": "Ελάχιστη καθυστέρηση ακύρωσης εντολής",
   "MinLatencyCancellationDesc": "Ελάχιστη τιμή καθυστέρησης κατά την ακύρωση εντολής.",
   "MinLatencyRegistration": "Ελάχιστη καθυστέρηση καταχώρισης εντολής",

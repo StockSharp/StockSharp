@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Orta fiyat",
   "Milliseconds": "Milisaniye",
   "Min": "Min",
+  "MinCommission": "Minimum Komisyon Değeri.",
   "MinLatencyCancellation": "Minimum Gecikme İptali",
   "MinLatencyCancellationDesc": "Emir iptali için minimum gecikme değeri.",
   "MinLatencyRegistration": "Minimum kayıt gecikmesi",

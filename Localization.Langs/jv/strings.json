@@ -3591,6 +3591,7 @@
   "MiddlePrice": "Rega tengah",
   "Milliseconds": "Milidetik",
   "Min": "Min",
+  "MinCommission": "Nilai Komisi Minimal.",
   "MinLatencyCancellation": "Latensi pembatalan order minimal",
   "MinLatencyCancellationDesc": "Latensi minimal nalika order dibatalake.",
   "MinLatencyRegistration": "Latensi registrasi order minimal",
