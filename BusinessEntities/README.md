@@ -53,7 +53,7 @@ public static IEnumerable<Exchange> EnumerateExchanges()
 `BusinessEntities.csproj` connects shared settings and package dependencies:
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_target_net.props" />
+  <Import Project="..\props\common_target_net.props" />
   <PropertyGroup>
     <ProjectGuid>{DCE69DB8-53CA-4B7F-9368-02F175A31074}</ProjectGuid>
   </PropertyGroup>

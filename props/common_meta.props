@@ -7,7 +7,7 @@
 
     <!--<CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>-->
 
-    <RepoGitHubPath>$(MSBuildThisFileDirectory)</RepoGitHubPath>
+    <RepoGitHubPath>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)..'))</RepoGitHubPath>
     <RepoAppsPath>$(RepoGitHubPath)..\StockSharpApps\</RepoAppsPath>
     <RepoWebPath>$(RepoGitHubPath)..\Web\</RepoWebPath>
     <ConnectorsGitHubPath>$(RepoGitHubPath)..\Connectors\</ConnectorsGitHubPath>

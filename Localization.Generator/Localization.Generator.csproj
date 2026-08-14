@@ -1,5 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_target_source_generator.props" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\props\common_target_source_generator.props" />
 	
   <ItemGroup>
     <PackageReference Include="System.Text.Json" Version="$(MsExtensionsVer)" GeneratePathProperty="true" PrivateAssets="all" />

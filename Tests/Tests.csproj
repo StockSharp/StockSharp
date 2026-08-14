@@ -1,5 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_target_tests.props" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\props\common_target_tests.props" />
   <ItemGroup>
     <Compile Include="..\Designer.Templates\Backtest\SmaStrategy.cs" Link="SmaStrategy.cs" />
     <Compile Include="..\Designer.Templates\Backtest\SmaServerStopStrategy.cs" Link="SmaServerStopStrategy.cs" />

@@ -1,5 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-  <Import Project="..\common_target_netwindows.props" />
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <Import Project="..\props\common_target_netwindows.props" />
   <PropertyGroup>
     <UseWPF>true</UseWPF>
   </PropertyGroup>

@@ -1,5 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\common_localization.props" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\props\common_localization.props" />
   <ItemGroup>
     <PackageReference Include="Ecng.ComponentModel" Version="$(EcngVer)" />
   </ItemGroup>

@@ -1,5 +1,5 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\common_localization.props" />
+  <Import Project="..\props\common_localization.props" />
   <PropertyGroup>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <IsSourcesAllow>false</IsSourcesAllow>
