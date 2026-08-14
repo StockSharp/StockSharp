@@ -1,5 +1,6 @@
 namespace StockSharp.Algo;
 
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 using StockSharp.Messages;
@@ -17,13 +18,20 @@ public sealed class OrderBookSpreadWidener
 	private readonly decimal _bidFactor;
 	private readonly decimal _askFactor;
 
-	private readonly Dictionary<SecurityId, EmittedBook> _lastEmitted = [];
-	private readonly Lock _stateLock = new();
+	private readonly ConcurrentDictionary<SecurityId, EmittedBook> _lastEmitted = [];
 
 	private sealed class EmittedBook
 	{
-		public readonly Dictionary<decimal, QuoteChange> Bids = [];
-		public readonly Dictionary<decimal, QuoteChange> Asks = [];
+		// One security's diff state is only ever touched by whoever is processing that security,
+		// so the lock is per book rather than one across all of them.
+		public readonly Lock Sync = new();
+
+		// Distinct from "both sides empty": a security whose book is genuinely empty must still
+		// get one snapshot and increments after it, not a snapshot every time.
+		public bool Seeded;
+
+		public Dictionary<decimal, QuoteChange> Bids = [];
+		public Dictionary<decimal, QuoteChange> Asks = [];
 	}
 
 	/// <summary>
@@ -64,13 +72,10 @@ public sealed class OrderBookSpreadWidener
 	/// <param name="securityId">Security to reset, or <see langword="default"/> to reset all securities.</param>
 	public void ResetSnapshot(SecurityId securityId)
 	{
-		using (_stateLock.EnterScope())
-		{
-			if (securityId == default)
-				_lastEmitted.Clear();
-			else
-				_lastEmitted.Remove(securityId);
-		}
+		if (securityId == default)
+			_lastEmitted.Clear();
+		else
+			_lastEmitted.TryRemove(securityId, out _);
 	}
 
 	/// <summary>
@@ -81,22 +86,34 @@ public sealed class OrderBookSpreadWidener
 	/// </summary>
 	/// <param name="securityId">Security to build the collapsed snapshot for.</param>
 	/// <param name="holder">Holder of the current raw order book state.</param>
+	/// <param name="priceStep">
+	/// Price step of the security, so the widened best lands on a price that can be traded.
+	/// <see langword="null"/> when the step is unknown, and the widened price is then left as
+	/// the arithmetic produced it.
+	/// </param>
 	/// <returns>
 	/// Collapsed snapshot, or <see langword="null"/> when widening is disabled or no
 	/// raw snapshot is available for <paramref name="securityId"/>.
 	/// </returns>
-	public QuoteChangeMessage Collapse(SecurityId securityId, OrderBookSnapshotHolder holder)
+	public QuoteChangeMessage Collapse(SecurityId securityId, OrderBookSnapshotHolder holder, decimal? priceStep)
 	{
 		if (!IsEnabled || holder is null)
 			return null;
 
-		if (!holder.TryGetSnapshot(securityId, out var raw))
+		if (!holder.TryPeekSnapshot(securityId, out var raw))
 			return null;
 
 		var copy = CopyHeader(raw);
-		copy.Bids = Collapse(raw.Bids, _bidFactor, descending: true);
-		copy.Asks = Collapse(raw.Asks, _askFactor, descending: false);
+		copy.Bids = Collapse(raw.Bids, _bidFactor, priceStep, descending: true);
+		copy.Asks = Collapse(raw.Asks, _askFactor, priceStep, descending: false);
 		copy.State = QuoteChangeStates.SnapshotComplete;
+
+		// The stored snapshot carries whichever subscription first filled it, and this reply is
+		// for a different subscriber - the caller addresses it.
+		copy.OriginalTransactionId = 0;
+		copy.SubscriptionId = 0;
+		copy.SubscriptionIds = [];
+
 		return copy;
 	}
 
@@ -109,12 +126,17 @@ public sealed class OrderBookSpreadWidener
 	/// </summary>
 	/// <param name="msg">Incoming order book change message.</param>
 	/// <param name="holder">Holder of the current raw order book state.</param>
+	/// <param name="priceStep">
+	/// Price step of the security, so the widened best lands on a price that can be traded.
+	/// <see langword="null"/> when the step is unknown, and the widened price is then left as
+	/// the arithmetic produced it.
+	/// </param>
 	/// <returns>
 	/// Collapsed message; the original message when widening is disabled or no raw
 	/// snapshot is available; or <see langword="null"/> if <paramref name="msg"/> is
 	/// <see langword="null"/>.
 	/// </returns>
-	public QuoteChangeMessage Apply(QuoteChangeMessage msg, OrderBookSnapshotHolder holder)
+	public QuoteChangeMessage Apply(QuoteChangeMessage msg, OrderBookSnapshotHolder holder, decimal? priceStep)
 	{
 		if (msg is null)
 			return null;
@@ -122,34 +144,39 @@ public sealed class OrderBookSpreadWidener
 		if (!IsEnabled || holder is null)
 			return msg;
 
-		if (!holder.TryGetSnapshot(msg.SecurityId, out var raw))
+		if (!holder.TryPeekSnapshot(msg.SecurityId, out var raw))
 			return msg;
 
-		var newBids = Collapse(raw.Bids, _bidFactor, descending: true);
-		var newAsks = Collapse(raw.Asks, _askFactor, descending: false);
+		var newBids = Collapse(raw.Bids, _bidFactor, priceStep, descending: true);
+		var newAsks = Collapse(raw.Asks, _askFactor, priceStep, descending: false);
 
 		var copy = CopyHeader(msg);
+		var book = _lastEmitted.GetOrAdd(msg.SecurityId, _ => new());
 
-		using (_stateLock.EnterScope())
+		using (book.Sync.EnterScope())
 		{
-			if (!_lastEmitted.TryGetValue(msg.SecurityId, out var prev))
-			{
-				prev = new EmittedBook();
-				_lastEmitted[msg.SecurityId] = prev;
+			// A client that has never been told the book cannot be sent changes against it.
+			var first = !book.Seeded;
+			book.Seeded = true;
 
+			var bidDelta = Diff(book.Bids, newBids, out var nextBids);
+			var askDelta = Diff(book.Asks, newAsks, out var nextAsks);
+
+			book.Bids = nextBids;
+			book.Asks = nextAsks;
+
+			if (first)
+			{
 				copy.Bids = newBids;
 				copy.Asks = newAsks;
 				copy.State = QuoteChangeStates.SnapshotComplete;
 			}
 			else
 			{
-				copy.Bids = BuildDelta(prev.Bids, newBids);
-				copy.Asks = BuildDelta(prev.Asks, newAsks);
+				copy.Bids = bidDelta;
+				copy.Asks = askDelta;
 				copy.State = QuoteChangeStates.Increment;
 			}
-
-			Replace(prev.Bids, newBids);
-			Replace(prev.Asks, newAsks);
 		}
 
 		return copy;
@@ -175,47 +202,51 @@ public sealed class OrderBookSpreadWidener
 		OfflineMode = src.OfflineMode,
 	};
 
-	private static void Replace(Dictionary<decimal, QuoteChange> dst, QuoteChange[] src)
+	/// <summary>
+	/// One walk produces both the changes against <paramref name="prev"/> and the state to keep
+	/// for the next call, so the emitted view is never built twice.
+	/// </summary>
+	private static QuoteChange[] Diff(Dictionary<decimal, QuoteChange> prev, QuoteChange[] @new, out Dictionary<decimal, QuoteChange> next)
 	{
-		dst.Clear();
-		foreach (var q in src)
-			dst[q.Price] = q;
-	}
+		next = new(@new.Length);
 
-	private static QuoteChange[] BuildDelta(Dictionary<decimal, QuoteChange> prev, QuoteChange[] @new)
-	{
-		var deltas = new List<QuoteChange>();
-		var seen = new HashSet<decimal>();
+		List<QuoteChange> deltas = null;
 
 		foreach (var q in @new)
 		{
-			seen.Add(q.Price);
+			next[q.Price] = q;
+
+			// Condition belongs here with volume and orders count: it is what marks a level as
+			// the client's own, and a level that stops being theirs changes nothing else.
 			if (!prev.TryGetValue(q.Price, out var was)
 				|| was.Volume != q.Volume
-				|| was.OrdersCount != q.OrdersCount)
+				|| was.OrdersCount != q.OrdersCount
+				|| was.Condition != q.Condition)
 			{
-				deltas.Add(q);
+				(deltas ??= new(@new.Length)).Add(q);
 			}
 		}
 
-		foreach (var p in prev.Keys)
+		foreach (var price in prev.Keys)
 		{
-			if (!seen.Contains(p))
-				deltas.Add(new QuoteChange(p, 0m));
+			if (!next.ContainsKey(price))
+				(deltas ??= []).Add(new QuoteChange(price, 0m));
 		}
 
-		return [.. deltas];
+		return deltas is null ? [] : [.. deltas];
 	}
 
-	private static QuoteChange[] Collapse(QuoteChange[] side, decimal factor, bool descending)
+	private static QuoteChange[] Collapse(QuoteChange[] side, decimal factor, decimal? priceStep, bool descending)
 	{
 		if (side is null || side.Length == 0)
-			return side ?? [];
+			return [];
 
+		// The array belongs to the holder and everyone else reading it, so nothing that leaves
+		// here is ever the one that came in.
 		if (side[0].Price <= 0m)
-			return side;
+			return [.. side];
 
-		var newBestPrice = side[0].Price * factor;
+		var newBestPrice = Snap(side[0].Price * factor, priceStep, down: descending);
 
 		decimal aggVolume = 0m;
 		var hasOrdersCount = false;
@@ -238,9 +269,8 @@ public sealed class OrderBookSpreadWidener
 			collapseCount++;
 		}
 
-		if (collapseCount == 0)
-			return side;
-
+		// The best level is always inside the widened spread by construction - widening moves the
+		// boundary away from it - so at least one level is collapsed and there is no empty case.
 		var topCondition = side[0].Condition;
 		var result = new QuoteChange[side.Length - collapseCount + 1];
 		result[0] = new QuoteChange(newBestPrice, aggVolume, hasOrdersCount ? aggOrdersCount : null, topCondition);
@@ -250,5 +280,24 @@ public sealed class OrderBookSpreadWidener
 			Array.Copy(side, collapseCount, result, 1, tail);
 
 		return result;
+	}
+
+	/// <summary>
+	/// Moves the widened price onto the step grid, away from the market: down for a bid, up for
+	/// an ask. Rounding to the nearest step instead would move it the other way half the time and
+	/// quote a spread tighter than the one asked for, which is the thing widening exists to stop.
+	/// </summary>
+	private static decimal Snap(decimal price, decimal? priceStep, bool down)
+	{
+		if (priceStep is not decimal step || step <= 0m)
+			return price;
+
+		var steps = price / step;
+		var whole = decimal.Truncate(steps);
+
+		if (steps == whole)
+			return price;
+
+		return (down ? whole : whole + 1m) * step;
 	}
 }

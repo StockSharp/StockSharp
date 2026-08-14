@@ -207,6 +207,35 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 		}
 	}
 
+	/// <summary>
+	/// The current snapshot of <paramref name="securityId"/> as the holder keeps it, without
+	/// copying it.
+	/// </summary>
+	/// <remarks>
+	/// For readers that only look at the book: a whole clone per update is a price worth avoiding
+	/// when the reader builds its own arrays anyway. Each update replaces the message and its
+	/// quote arrays rather than editing them, so what is handed out stays a consistent view - but
+	/// a caller must only read it, since everyone else is looking at the same instance. Use
+	/// <see cref="TryGetSnapshot"/> to get one that can be modified or sent on.
+	/// </remarks>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="snapshot">The holder's own snapshot instance.</param>
+	/// <returns><see langword="true"/> if a snapshot exists.</returns>
+	public bool TryPeekSnapshot(SecurityId securityId, out QuoteChangeMessage snapshot)
+	{
+		using (_snapshots.EnterScope())
+		{
+			if (!_snapshots.TryGetValue(securityId, out var s))
+			{
+				snapshot = null;
+				return false;
+			}
+
+			snapshot = s.Snapshot;
+			return true;
+		}
+	}
+
 	/// <inheritdoc />
 	public QuoteChangeMessage Process(QuoteChangeMessage quoteMsg)
 	{
