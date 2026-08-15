@@ -1672,8 +1672,20 @@ public class BacktestingTests : BaseTestClass
 
 		var dataCount = 0;
 
-		// every candle built from the replayed ticks bumps the counter
-		connector.CandleReceived += (sub, candle) => Interlocked.Increment(ref dataCount);
+		var firstCandleTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+		using var suspendIssued = new ManualResetEventSlim(false);
+
+		// Every candle built from the replayed ticks bumps the counter. The handler runs on the replay
+		// thread, so parking the first one here parks the replay, and the suspend below is issued
+		// against a run that is provably still going. The week replays in a few seconds, so without
+		// that latch the suspend only wins by being scheduled first, which a loaded machine decides.
+		connector.CandleReceived += (sub, candle) =>
+		{
+			Interlocked.Increment(ref dataCount);
+
+			if (firstCandleTcs.TrySetResult(true))
+				suspendIssued.Wait(TimeSpan.FromMinutes(1));
+		};
 
 		// Deliberately NOT IsFinishedOnly: the raw (still forming) candle stream is exactly the channel
 		// through which the "pause keeps feeding data" regression leaks.
@@ -1712,13 +1724,22 @@ public class BacktestingTests : BaseTestClass
 		await Task.WhenAny(startedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
 		IsTrue(startedTcs.Task.IsCompleted, "Backtest did not start in time");
 
-		// run until some data is produced so we suspend in the middle of the replay
-		for (var i = 0; i < 200 && Volatile.Read(ref dataCount) == 0; i++)
-			await Task.Delay(50, CancellationToken);
+		// Wait for the replay to reach its first candle and park there. The budget only bounds how long
+		// the replay may take to produce anything - once the latch is set it stays set, so a late
+		// wake-up here cannot make the test miss its moment.
+		await Task.WhenAny(firstCandleTcs.Task, Task.Delay(TimeSpan.FromMinutes(1), CancellationToken));
+		IsTrue(firstCandleTcs.Task.IsCompleted, "No data received before suspend");
 
-		IsTrue(Volatile.Read(ref dataCount) > 0, "No data received before suspend");
+		AreEqual(ChannelStates.Started, connector.State, "Replay must still be running when it is suspended");
 
-		await connector.SuspendAsync(CancellationToken);
+		try
+		{
+			await connector.SuspendAsync(CancellationToken);
+		}
+		finally
+		{
+			suspendIssued.Set();
+		}
 
 		await Task.WhenAny(suspendedTcs.Task, Task.Delay(TimeSpan.FromSeconds(10), CancellationToken));
 		IsTrue(suspendedTcs.Task.IsCompleted, "Backtest did not suspend in time");
