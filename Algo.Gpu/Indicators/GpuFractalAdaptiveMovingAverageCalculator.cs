@@ -177,12 +177,19 @@ public class GpuFractalAdaptiveMovingAverageCalculator : GpuIndicatorCalculatorB
 			var logN1N2 = MathF.Log(n1 + n2);
 			var logN3 = MathF.Log(n3);
 			var d = (logN1N2 - logN3) / MathF.Log(2f);
-			d = MathF.Max(MathF.Min(d, 2f), 1f);
+
+			// A flat window makes one of the ranges zero, and its logarithm is not a number. Clamping
+			// would carry that through instead of catching it, so the undefined dimension falls back
+			// to one - the value at which the average follows the price outright.
+			d = float.IsNaN(d) ? 1f : MathF.Max(MathF.Min(d, 2f), 1f);
 
 			var price = ExtractPrice(candle, priceType);
 
+			// The recursion has to start somewhere, and it starts at the price: seeding it with zero
+			// makes the first value alpha times the price - a couple of hundred where the series
+			// trades in thousands - and every later value inherits the gap while decaying towards it.
 			if (!hasPrev)
-				prevFrama = 0f;
+				prevFrama = price;
 
 			var alpha = MathF.Exp(-4.6f * (d - 1f));
 			var newFrama = alpha * price + (1f - alpha) * prevFrama;
