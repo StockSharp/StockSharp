@@ -226,7 +226,7 @@ public class ExecutionMessage : BaseSubscriptionIdMessage<ExecutionMessage>,
 	/// is required wherever the message is the only source of truth for an order: a registration, an
 	/// order log entry, or the first report of an order the receiver has not seen. It is absent from
 	/// reports that merely update an order the receiver already identifies by
-	/// <see cref="Message.OriginalTransactionId"/>. For the initiator of a trade see
+	/// <see cref="BaseSubscriptionIdMessage{TMessage}.OriginalTransactionId"/>. For the initiator of a trade see
 	/// <see cref="OriginSide"/>.
 	/// </remarks>
 	[DataMember]
