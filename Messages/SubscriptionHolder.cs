@@ -550,9 +550,13 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 					return GetSubscriptions(execMsg.DataType, execMsg.SecurityId, originTransId);
 				else if (execMsg.DataType == DataType.Transactions)
 				{
+					// An addressed reply names one subscription, so it goes there as soon as that
+					// subscription exists and is coming up. Waiting for Online would drop the answer
+					// to an order in the window between the request being confirmed and the stream
+					// being declared live.
 					if (originTransId != 0
 						&& TryGetById(originTransId, out var subscription)
-						&& subscription.State == SubscriptionStates.Online
+						&& subscription.State.IsActive()
 						&& !subscription.Suspend)
 					{
 						if (execMsg.TransactionId != 0)
@@ -590,7 +594,7 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 						if (orderOwners is { Count: > 0 })
 						{
 							var owners = orderOwners
-								.Where(s => s.State == SubscriptionStates.Online && !s.Suspend)
+								.Where(s => s.State.IsActive() && !s.Suspend)
 								.ToArray();
 							if (owners.Length > 0)
 								return owners;

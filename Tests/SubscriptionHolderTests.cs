@@ -605,6 +605,45 @@ public class SubscriptionHolderTests : BaseTestClass
 		};
 
 	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_AddressedToConfirmedSub_ReturnsIt()
+	{
+		// An addressed transactional execution names one subscription and only that one. A
+		// subscription that has been confirmed but has not reached Online is still the one it
+		// names, and dropping the reply in that window loses the answer to somebody's order.
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(100, "sessionA", SubscriptionStates.Active));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 100,
+			OrderState = OrderStates.Active,
+		};
+
+		var matched = holder.GetSubscriptions(exec).ToArray();
+
+		matched.Length.AssertEqual(1, "the reply reached nobody while its subscription was still coming up");
+		matched[0].Id.AssertEqual(100);
+	}
+
+	[TestMethod]
+	public void GetSubscriptions_TransactionsExecution_AddressedToStoppedSub_ReturnsNone()
+	{
+		// A stopped subscription is not coming up - it is over, and nothing should be handed to it.
+		using var holder = CreateHolder();
+		holder.Add(CreateOrderStatusSub(100, "sessionA", SubscriptionStates.Stopped));
+
+		var exec = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 100,
+			OrderState = OrderStates.Active,
+		};
+
+		holder.GetSubscriptions(exec).ToArray().Length.AssertEqual(0);
+	}
+
+	[TestMethod]
 	public void GetSubscriptions_TransactionsExecution_OrigTxIdNonZero_OnlineSub_ReturnsOne()
 	{
 		using var holder = CreateHolder();
