@@ -69,7 +69,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 		Engine = new(this, PnLManager, OnEngineStateChangedAsync);
 		OrderProcessor = new(StatisticManager);
-		Trades = new(PnLManager, StatisticManager);
+		Trades = new(PnLManager, StatisticManager, FeedSecurityToPnL);
 		_beforeTradeProcessing = ProcessTrackedTrade;
 		Positions = new(StatisticManager);
 		Subscriptions = new(this);
@@ -1861,6 +1861,23 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			ApplyTradeToOrder(trade);
 	}
 
+	private void FeedSecurityToPnL(MyTrade trade)
+	{
+		if (trade.Order.Security is not Security sec)
+			return;
+
+		// StepPrice and Multiplier are asked of the market-data provider first so a live definition wins
+		// over the security object; TryAdd drops whichever of them stays unresolved.
+		PnLManager.UpdateSecurity(new Level1ChangeMessage
+		{
+			SecurityId = sec.ToSecurityId(),
+			ServerTime = CurrentTime,
+		}
+		.TryAdd(Level1Fields.PriceStep, sec.PriceStep)
+		.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(sec, Level1Fields.StepPrice))
+		.TryAdd(Level1Fields.Multiplier, this.GetSecurityValue<decimal?>(sec, Level1Fields.Multiplier) ?? sec.Multiplier));
+	}
+
 	private void SubmitNewOrder(Order order, Action submit)
 	{
 		if (submit is null)
@@ -2165,6 +2182,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// </summary>
 	public void OnTradeReceived(Subscription sub, MyTrade trade)
 	{
+		if (!Subscriptions.CanProcess(sub))
+			return;
+
 		var order = trade.Order;
 
 		if (!order.StrategyId.IsEmpty() && !order.StrategyId.EqualsIgnoreCase(EnsureGetId()))
@@ -2173,27 +2193,10 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		if (!OrderProcessor.IsTracked(order))
 			return;
 
-		var sec = trade.Order.Security;
-
-		if (sec != null)
-		{
-			// Mirror the monolith's per-trade security feed: stamp with strategy CurrentTime and resolve
-			// StepPrice/Multiplier provider-first (falling back to the security's own Multiplier).
-			PnLManager.UpdateSecurity(new Level1ChangeMessage
-			{
-				SecurityId = sec.ToSecurityId(),
-				ServerTime = CurrentTime,
-			}
-			.TryAdd(Level1Fields.PriceStep, sec.PriceStep)
-			.TryAdd(Level1Fields.StepPrice, this.GetSecurityValue<decimal?>(sec, Level1Fields.StepPrice))
-			.TryAdd(Level1Fields.Multiplier, this.GetSecurityValue<decimal?>(sec, Level1Fields.Multiplier) ?? sec.Multiplier));
-		}
-
 		if (!Trades.TryAdd(trade, _beforeTradeProcessing))
 			return;
 
-		var eventSub = Subscriptions.CanProcess(sub) ? sub : OrderLookup;
-		OwnTradeReceived?.Invoke(eventSub, trade);
+		OwnTradeReceived?.Invoke(sub, trade);
 
 		ProcessRisk(trade.ToMessage());
 	}

@@ -11,10 +11,12 @@ using StockSharp.Algo.Statistics;
 /// </remarks>
 /// <param name="pnlManager">PnL manager.</param>
 /// <param name="stats">Statistic manager.</param>
-public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats)
+/// <param name="feedSecurity">Pushes the traded security's valuation snapshot into the PnL manager.</param>
+public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats, Action<MyTrade> feedSecurity)
 {
 	private readonly CachedSynchronizedSet<MyTrade> _myTrades = [];
 	private readonly HashSet<MyTrade> _processingTrades = [];
+	private readonly Action<MyTrade> _feedSecurity = feedSecurity ?? throw new ArgumentNullException(nameof(feedSecurity));
 	private IPnLManager _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
 	private IStatisticManager _stats = stats ?? throw new ArgumentNullException(nameof(stats));
 
@@ -109,6 +111,12 @@ public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats)
 			Commission += trade.Commission.Value;
 			isComChanged = true;
 		}
+
+		// The PnL queue values this trade with the security's price step, step price and multiplier,
+		// so the snapshot has to reach the manager before the trade does. It runs here, on the accepted
+		// path, rather than at the call site: the same fill is delivered once per matching subscription,
+		// and a snapshot pushed per delivery would mutate PnL state for fills the pipeline rejects.
+		_feedSecurity(trade);
 
 		var execMsg = trade.ToMessage();
 		DateTime? pnLChangeTime = null;

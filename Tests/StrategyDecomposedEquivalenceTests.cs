@@ -484,7 +484,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		// Replay through TradePipeline with a fresh PnLManager
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		foreach (var trade in trades)
 			pipeline.TryAdd(trade);
@@ -526,7 +526,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		// Add all trades — should all succeed
 		foreach (var trade in trades)

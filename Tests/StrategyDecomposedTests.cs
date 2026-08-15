@@ -537,7 +537,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		var trade = CreateMyTrade(1, 100m, 10m);
 
@@ -555,7 +555,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		var trade = CreateMyTrade(1, 100m, 10m);
 
@@ -568,7 +568,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		var trade1 = CreateMyTrade(1, 100m, 10m, commission: 2m);
 		var trade2 = CreateMyTrade(2, 101m, 5m, commission: 3m);
@@ -584,7 +584,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		var trade1 = CreateMyTrade(1, 100m, 10m, slippage: 0.5m);
 		var trade2 = CreateMyTrade(2, 101m, 5m, slippage: 0.3m);
@@ -600,7 +600,7 @@ public class StrategyDecomposedTests : BaseTestClass
 	{
 		var pnl = new PnLManager();
 		using var stats = new StatisticManager();
-		var pipeline = new TradePipeline(pnl, stats);
+		var pipeline = new TradePipeline(pnl, stats, _ => { });
 
 		var trade = CreateMyTrade(1, 100m, 10m, commission: 2m);
 		pipeline.TryAdd(trade);
@@ -1092,8 +1092,14 @@ public class StrategyDecomposedTests : BaseTestClass
 		IsNull(strategy.Trades.Commission);
 	}
 
+	/// <summary>
+	/// A fill is booked from the subscription the strategy owns, like every other notification it
+	/// receives. The connector addresses a fill to each subscription that owns the order, so a
+	/// started strategy - which subscribes its own order lookup - is always among them; acting on a
+	/// foreign delivery instead would book the same fill from whichever one happened to arrive first.
+	/// </summary>
 	[TestMethod]
-	public void Composite_TrackedTradeAcceptedFromConnectorOwnedSubscription()
+	public void Composite_TradeIsTakenFromTheStrategysOwnSubscription()
 	{
 		var connMock = CreateMockConnector();
 		var strategy = new BuyOnSignalStrategy { Connector = connMock.Object };
@@ -1123,9 +1129,16 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		strategy.OnConnectorOrderReceived(strategySub, order);
 
-		var connectorSub = new Subscription(DataType.Transactions);
 		var trade = CreateNewFeatureTrade(order, 1, 100m, 10m);
-		strategy.OnTradeReceived(connectorSub, trade);
+
+		strategy.OnTradeReceived(new Subscription(DataType.Transactions), trade);
+
+		strategy.ReceivedTrades.Count.AreEqual(0);
+		strategy.Trades.MyTrades.Any().AssertFalse();
+		IsNull(receivedSubscription);
+		IsNull(receivedByRule);
+
+		strategy.OnTradeReceived(strategySub, trade);
 
 		strategy.ReceivedTrades.Count.AreEqual(1);
 		strategy.Trades.MyTrades.Count().AreEqual(1);
