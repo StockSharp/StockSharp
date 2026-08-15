@@ -11,6 +11,9 @@ namespace StockSharp.Fix.Native;
 /// <param name="ownsStream">Whether to dispose the stream when this instance is disposed.</param>
 public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = false) : BaseFixReader(stream, encoding, ownsStream), IFixReader
 {
+	/// <inheritdoc />
+	public long? MsgSeqNum { get; private set; }
+
 	private static bool IsEnd(int letter)
 		=> letter == (int)AsciiSymbols.Soh || letter == -1;
 
@@ -35,6 +38,11 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 		}
 
 		LastTag = (FixTags)tag.Value;
+
+		// A new message starts at its version tag, and its sequence number is not known yet.
+		if (LastTag == FixTags.BeginString)
+			MsgSeqNum = null;
+
 		return LastTag;
 	}
 
@@ -85,6 +93,9 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 			throw new InvalidOperationException();
 
 		IsValueRead = true;
+
+		if (LastTag == FixTags.MsgSeqNum)
+			MsgSeqNum = result.Value;
 
 		return result.Value;
 	}

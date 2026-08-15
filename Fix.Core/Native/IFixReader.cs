@@ -16,6 +16,13 @@ public interface IFixReader : IFixBase
 	FixTags LastTag { get; }
 
 	/// <summary>
+	/// Sequence number of the message being read, or <see langword="null"/> before it has been
+	/// reached. A rejection has to name the message it refuses, and by the time one is written the
+	/// tag it came in has long been consumed.
+	/// </summary>
+	long? MsgSeqNum { get; }
+
+	/// <summary>
 	/// To read the following tag.
 	/// </summary>
 	/// <param name="cancellationToken">Cancellation token.</param>
