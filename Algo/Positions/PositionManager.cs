@@ -77,11 +77,18 @@ public class PositionManager(bool byOrders, IPositionManagerState state) : BaseL
 				{
 					if (execMsg.TransactionId != 0)
 					{
-						infoBalance = EnsureGetOrderBalance(execMsg, execMsg.Side, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0);
-						infoSecId = execMsg.SecurityId;
-						infoPfName = execMsg.PortfolioName;
-						infoSide = execMsg.Side;
-						hasInfo = true;
+						// The order is introduced here, and position state keys it by side. One that
+						// states none cannot be tracked, so its fills fall back to what they name.
+						if (execMsg.Side is Sides orderSide)
+						{
+							infoBalance = EnsureGetOrderBalance(execMsg, orderSide, execMsg.OrderVolume ?? 0, execMsg.Balance ?? 0);
+							infoSecId = execMsg.SecurityId;
+							infoPfName = execMsg.PortfolioName;
+							infoSide = orderSide;
+							hasInfo = true;
+						}
+						else
+							LogWarning("Order {0} states no side.", execMsg.TransactionId);
 					}
 					else
 					{
@@ -138,7 +145,16 @@ public class PositionManager(bool byOrders, IPositionManagerState state) : BaseL
 						break;
 					}
 
-					if (execMsg.Side == Sides.Sell)
+					// The order this fill belongs to knows the direction even when the fill does not
+					// state one. Without either the volume cannot be signed, and adding it unsigned
+					// would drift the position by twice the trade.
+					if ((execMsg.Side ?? (hasInfo ? infoSide : null)) is not Sides tradeSide)
+					{
+						LogWarning("Trade {0}/{1} of order {2} states no side.", execMsg.TradeId, execMsg.TradeStringId, execMsg.OriginalTransactionId);
+						break;
+					}
+
+					if (tradeSide == Sides.Sell)
 						tradeVol = -tradeVol;
 
 					var secId = hasInfo ? infoSecId : execMsg.SecurityId;

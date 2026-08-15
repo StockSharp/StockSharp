@@ -215,22 +215,31 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// Cast <see cref="OrderMessage"/> to the <see cref="ExecutionMessage"/>.
+	/// Create a rejection of the specified order request.
 	/// </summary>
 	/// <param name="message"><see cref="OrderMessage"/>.</param>
 	/// <param name="error">Error info.</param>
 	/// <returns><see cref="ExecutionMessage"/>.</returns>
-	public static ExecutionMessage CreateReply(this OrderMessage message, Exception error = null)
+	/// <exception cref="ArgumentException"><paramref name="message"/> asks for a snapshot rather than naming an order.</exception>
+	public static ExecutionMessage CreateReply(this OrderMessage message, Exception error)
 	{
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
 
+		if (error is null)
+			throw new ArgumentNullException(nameof(error));
+
+		// OrderStatusMessage is an OrderCancelMessage by inheritance, but it asks for a snapshot and
+		// names no order. Refusing it this way hands the receiver an order nobody placed.
+		if (message is OrderStatusMessage)
+			throw new ArgumentException($"{nameof(OrderStatusMessage)} names no order to reject.", nameof(message));
+
+		// The rejection names the request and nothing else. Both sides number their own orders, so
+		// the transaction identifies the order without repeating what the request already said.
 		var reply = message.TransactionId.CreateOrderReply(message.LocalTime);
 
 		reply.Error = error;
-
-		if (error != null)
-			reply.OrderState = OrderStates.Failed;
+		reply.OrderState = OrderStates.Failed;
 
 		return reply;
 	}
@@ -3640,6 +3649,11 @@ public static partial class Extensions
 		if (execMsg is null)
 			throw new ArgumentNullException(nameof(execMsg));
 
+		// The result is an order to place, and an order with no side cannot be placed. Refusing here
+		// names the message that lacks one, rather than sending a buy nobody asked for.
+		if (execMsg.Side is not Sides side)
+			throw new ArgumentException(LocalizedStrings.OrderSideNotSpecified, nameof(execMsg));
+
 		return new OrderRegisterMessage
 		{
 			SecurityId = execMsg.SecurityId,
@@ -3651,7 +3665,7 @@ public static partial class Extensions
 			ClientCode = execMsg.ClientCode,
 			BrokerCode = execMsg.BrokerCode,
 			Comment = execMsg.Comment,
-			Side = execMsg.Side,
+			Side = side,
 			TimeInForce = execMsg.TimeInForce,
 			TillDate = execMsg.ExpiryDate,
 			VisibleVolume = execMsg.VisibleVolume,

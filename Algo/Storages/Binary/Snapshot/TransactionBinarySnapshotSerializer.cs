@@ -5,6 +5,10 @@ namespace StockSharp.Algo.Storages.Binary.Snapshot;
 /// </summary>
 public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, ExecutionMessage>
 {
+	// The record is positional and read without version branching, so a stated side has to keep
+	// costing one byte. Sides has two values, which leaves every other value of that byte free.
+	private const byte _noSide = byte.MaxValue;
+
 	Version ISnapshotSerializer<string, ExecutionMessage>.Version { get; } = SnapshotVersions.V25;
 
 	string ISnapshotSerializer<string, ExecutionMessage>.Name => "Transactions";
@@ -190,7 +194,7 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 		WriteNullableLong(ref writer, message.ExpiryDate?.To<long>());
 		WriteNullableByte(ref writer, message.IsMarketMaker?.ToByte());
 
-		writer.WriteByte((byte)message.Side);
+		writer.WriteByte(message.Side is Sides side ? (byte)side : _noSide);
 
 		WriteNullableString(ref writer, orderBoardIdBytes);
 
@@ -507,7 +511,7 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 			IsMarketMaker = isMarketMaker?.ToBool(),
 			MarginMode = (MarginModes?)marginMode,
 			IsManual = isManual?.ToBool(),
-			Side = (Sides)side,
+			Side = side == _noSide ? null : (Sides)side,
 			OrderId = orderId,
 			OrderStringId = orderStringId,
 			OrderBoardId = orderBoardId,

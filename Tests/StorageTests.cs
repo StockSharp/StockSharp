@@ -2423,6 +2423,7 @@ public class StorageTests : BaseTestClass
 				LocalTime = dt.AddMilliseconds(10),
 				ServerTime = dt,
 				OrderVolume = 1,
+				Side = Sides.Buy,
 				TransactionId = 1,
 				PortfolioName = Messages.Extensions.AnonymousPortfolioName,
 			},
@@ -2436,6 +2437,7 @@ public class StorageTests : BaseTestClass
 				LocalTime = dt.AddMilliseconds(10),
 				ServerTime = dt,
 				OrderVolume = 1,
+				Side = Sides.Sell,
 				TransactionId = 2,
 				PortfolioName = Messages.Extensions.AnonymousPortfolioName,
 			},
@@ -2735,6 +2737,86 @@ public class StorageTests : BaseTestClass
 		(await storage.LoadAsync(DateTime.MinValue, default).ToArrayAsync(token)).Length.AssertEqual(0);
 	}
 
+	/// <summary>
+	/// A rejection of a cancel names no side, and Sides.Buy is the default of the enum - so a side
+	/// that was never stated has to come back unstated rather than as a buy.
+	/// </summary>
+	[TestMethod]
+	[DataRow(StorageFormats.Binary)]
+	[DataRow(StorageFormats.Csv)]
+	public async Task TransactionWithoutSide(StorageFormats format)
+	{
+		var security = Helper.CreateSecurity();
+		var secId = security.ToSecurityId();
+		var token = CancellationToken;
+		var now = DateTime.UtcNow.Truncate(TimeSpan.FromSeconds(1));
+
+		var transactions = new[]
+		{
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				HasOrderInfo = true,
+				SecurityId = secId,
+				ServerTime = now,
+				OriginalTransactionId = 1,
+				OrderState = OrderStates.Failed,
+				Error = new InvalidOperationException("test"),
+			},
+			new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				HasOrderInfo = true,
+				SecurityId = secId,
+				ServerTime = now.AddSeconds(1),
+				OriginalTransactionId = 2,
+				OrderState = OrderStates.Active,
+				Side = Sides.Sell,
+				OrderPrice = 10,
+				OrderVolume = 1,
+			},
+		};
+
+		var storage = GetStorageRegistry().GetTransactionStorage(secId, null, format);
+
+		await storage.SaveAsync(transactions, token);
+		var loaded = await storage.LoadAsync(DateTime.MinValue, default).ToArrayAsync(token);
+
+		loaded.Length.AssertEqual(2);
+		loaded[0].Side.AssertNull();
+		loaded[1].Side.AssertEqual(Sides.Sell);
+
+		await storage.DeleteAsync(default, default, token);
+	}
+
+	/// <summary>
+	/// The snapshot record is positional, so the absence has to travel inside the byte the side
+	/// already occupies rather than shifting every field written after it.
+	/// </summary>
+	[TestMethod]
+	public void SnapshotWithoutSide()
+	{
+		var secId = Helper.CreateStorageSecurity().ToSecurityId();
+		var serializer = new TransactionBinarySnapshotSerializer();
+
+		ISnapshotSerializer<string, ExecutionMessage> typed = serializer;
+
+		var withoutSide = Helper.RandomTransaction(secId, 1);
+		withoutSide.Side = null;
+
+		var restored = typed.Deserialize(typed.Version, typed.Serialize(typed.Version, withoutSide));
+
+		restored.Side.AssertNull();
+		restored.OrderBoardId.AssertEqual(withoutSide.OrderBoardId);
+		restored.OrderState.AssertEqual(withoutSide.OrderState);
+		restored.Balance.AssertEqual(withoutSide.Balance);
+
+		var withSide = Helper.RandomTransaction(secId, 2);
+		withSide.Side = Sides.Sell;
+
+		typed.Deserialize(typed.Version, typed.Serialize(typed.Version, withSide)).Side.AssertEqual(Sides.Sell);
+	}
+
 	[TestMethod]
 	[DataRow(StorageFormats.Binary)]
 	[DataRow(StorageFormats.Csv)]
@@ -2973,6 +3055,7 @@ public class StorageTests : BaseTestClass
 				OrderPrice = 0,
 				OrderVolume = 10,
 				OrderState = OrderStates.Active,
+				Side = Sides.Buy,
 				SecurityId = secId,
 				ServerTime = now
 			},
@@ -2983,6 +3066,7 @@ public class StorageTests : BaseTestClass
 				OrderPrice = 10,
 				OrderVolume = 0,
 				OrderState = OrderStates.Done,
+				Side = Sides.Sell,
 				SecurityId = secId,
 				ServerTime = now.AddSeconds(1)
 			}

@@ -663,6 +663,11 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 
 			if (registeredInfo == null)
 			{
+				// This branch builds an order nobody here has seen before, so the message is its only
+				// source of truth. Without a side there is no order to build.
+				if (message.Side is not Sides side)
+					throw new ArgumentException(LocalizedStrings.OrderSideNotSpecified, nameof(message));
+
 				var o = new Order
 				{
 					Security = security,
@@ -672,7 +677,7 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 					ServerTime = message.ServerTime,
 					Price = message.OrderPrice,
 					Volume = message.OrderVolume ?? 0,
-					Side = message.Side,
+					Side = side,
 					Comment = message.Comment,
 					ExpiryDate = message.ExpiryDate,
 					Condition = message.Condition,

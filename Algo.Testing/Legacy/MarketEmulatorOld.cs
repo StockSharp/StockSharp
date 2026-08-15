@@ -1738,6 +1738,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 				ServerTime = time,
 				LocalTime = time,
 				OriginalTransactionId = original.TransactionId,
+				Side = original.Side,
 				Error = error,
 			};
 
@@ -1817,7 +1818,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 
 					if (execution.PostOnly == true)
 					{
-						var quotes = GetQuotes(execution.Side.Invert());
+						var quotes = GetQuotes(execution.Side.Value.Invert());
 
 						var quote = quotes.FirstOrDefault();
 						var sign = execution.Side == Sides.Buy ? 1 : -1;
@@ -2055,7 +2056,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 
 			var isCrossTrade = false;
 
-			var quotesSide = order.Side.Invert();
+			var quotesSide = order.Side.Value.Invert();
 			var quotes = GetQuotes(quotesSide);
 
 			var executions = result is null ? null : new List<(decimal price, decimal volume)>();
@@ -2485,7 +2486,10 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 		{
 			Verify();
 
-			var quotes = GetQuotes(message.Side);
+			// Every row of the book belongs to one of its two halves, and a registered order has a side.
+			var side = message.Side ?? throw new ArgumentException($"Order {message.TransactionId}: {nameof(message.Side)} is not specified.", nameof(message));
+
+			var quotes = GetQuotes(side);
 
 			if (!quotes.TryGetValue(message.OrderPrice, out var pair))
 			{
@@ -2502,7 +2506,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 
 			if (register)
 			{
-				AddTotalVolume(message.Side, volume);
+				AddTotalVolume(side, volume);
 
 				quote.Volume += volume;
 				pair.Second = quote;
@@ -2532,13 +2536,13 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 						if (volume >= quote.Volume)
 						{
 							quotes.Remove(message.OrderPrice);
-							AddTotalVolume(message.Side, -quote.Volume);
+							AddTotalVolume(side, -quote.Volume);
 						}
 						else
 						{
 							quote.Volume -= volume;
 							pair.Second = quote;
-							AddTotalVolume(message.Side, -volume);
+							AddTotalVolume(side, -volume);
 						}
 					}
 					else
@@ -2550,7 +2554,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 							quote.Volume -= diff;
 							pair.Second = quote;
 
-							AddTotalVolume(message.Side, -diff);
+							AddTotalVolume(side, -diff);
 						}
 					}
 				}
@@ -2560,7 +2564,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 					{
 						var balance = order.GetBalance();
 
-						AddTotalVolume(message.Side, -balance);
+						AddTotalVolume(side, -balance);
 
 						quote.Volume -= balance;
 						pair.Second = quote;
@@ -2666,6 +2670,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 				Balance = message.Balance,
 				OrderVolume = message.OrderVolume,
 				OrderState = message.OrderState,
+				Side = message.Side,
 				PortfolioName = message.PortfolioName,
 				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
@@ -2702,7 +2707,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 			LogInfo("Trade {0} of order {1} P={2} V={3}.", tradeMsg.TradeId, tradeMsg.OriginalTransactionId, price, volume);
 			var info = _parent.GetPortfolioInfo(order.PortfolioName);
 
-			info.ProcessTrade(order.Side, tradeMsg, result);
+			info.ProcessTrade(order.Side.Value, tradeMsg, result);
 
 			if (_ticksSubscription is not null)
 			{

@@ -1474,8 +1474,10 @@ public class ExtensionsMethodsTests : BaseTestClass
 	#region CreateReply / CreateOrderReply
 
 	[TestMethod]
-	public void CreateReply_NoError_ReturnsReplyWithoutState()
+	public void CreateReply_NullErrorThrows()
 	{
+		// The method builds a rejection, and a rejection without a reason is not one. A reply that
+		// carries no error is CreateOrderReply.
 		var reg = new OrderRegisterMessage
 		{
 			TransactionId = 42,
@@ -1486,13 +1488,7 @@ public class ExtensionsMethodsTests : BaseTestClass
 			PortfolioName = "pf",
 		};
 
-		var reply = reg.CreateReply();
-
-		reply.OriginalTransactionId.AssertEqual(42L);
-		reply.DataTypeEx.AssertEqual(DataType.Transactions);
-		reply.HasOrderInfo.AssertTrue();
-		reply.Error.AssertNull();
-		reply.OrderState.AssertNull();
+		Throws<ArgumentNullException>(() => reg.CreateReply(null));
 	}
 
 	[TestMethod]
@@ -1514,6 +1510,22 @@ public class ExtensionsMethodsTests : BaseTestClass
 		reply.OriginalTransactionId.AssertEqual(42L);
 		reply.Error.AssertEqual(ex);
 		reply.OrderState.AssertEqual(OrderStates.Failed);
+	}
+
+	[TestMethod]
+	public void CreateReply_OrderStatusThrows()
+	{
+		// OrderStatusMessage derives from OrderCancelMessage, so it reaches this method as a cancel
+		// would. It asks for a snapshot and names no order: its refusal is a subscription response,
+		// and building an execution for it hands the receiver an order nobody placed.
+		var status = new OrderStatusMessage
+		{
+			TransactionId = 44,
+			SecurityId = Helper.CreateSecurityId(),
+			PortfolioName = "pf",
+		};
+
+		Throws<ArgumentException>(() => status.CreateReply(new InvalidOperationException("test")));
 	}
 
 	[TestMethod]

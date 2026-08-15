@@ -342,12 +342,17 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		{
 			if (execMsg.HasOrderInfo())
 			{
+				// An order that names no side cannot be placed, and choosing one here would place an
+				// order the sender never asked for.
+				if (execMsg.Side is not Sides side)
+					throw new ArgumentException($"Order {execMsg.TransactionId}: {nameof(execMsg.Side)} is not specified.", nameof(execMsg));
+
 				var regMsg = new OrderRegisterMessage
 				{
 					TransactionId = execMsg.TransactionId,
 					SecurityId = execMsg.SecurityId,
 					PortfolioName = execMsg.PortfolioName,
-					Side = execMsg.Side,
+					Side = side,
 					Price = execMsg.OrderPrice,
 					Volume = execMsg.OrderVolume ?? 0,
 					OrderType = execMsg.OrderType ?? OrderTypes.Limit,
@@ -415,6 +420,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			ServerTime = serverTime,
 			LocalTime = regMsg.LocalTime,
 			OriginalTransactionId = regMsg.TransactionId,
+			Side = regMsg.Side,
 			// Report acceptance as Active; expiry or a full fill overwrites this below, but an order that
 			// fills immediately against the candle still passes through Active so acceptance is reported.
 			OrderState = OrderStates.Active,
@@ -478,6 +484,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				Balance = matchResult.RemainingVolume,
 				OrderVolume = regMsg.Volume,
 				OrderState = OrderStates.Done,
+				Side = regMsg.Side,
 				PortfolioName = regMsg.PortfolioName,
 				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
@@ -522,6 +529,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					Balance = matchResult.RemainingVolume,
 					OrderVolume = regMsg.Volume,
 					OrderState = matchResult.FinalState,
+					Side = regMsg.Side,
 					PortfolioName = regMsg.PortfolioName,
 					HasOrderInfo = true,
 				});
@@ -559,6 +567,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					Balance = matchResult.RemainingVolume,
 					OrderVolume = regMsg.Volume,
 					OrderState = OrderStates.Done,
+					Side = regMsg.Side,
 					PortfolioName = regMsg.PortfolioName,
 					DataTypeEx = DataType.Transactions,
 					HasOrderInfo = true,
@@ -621,6 +630,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 					OriginalTransactionId = order.TransactionId,
 					OrderId = order.OrderId,
 					OrderState = OrderStates.Done,
+					Side = order.Side,
 					Balance = order.Balance,
 					OrderVolume = order.Volume,
 					PortfolioName = order.PortfolioName,
@@ -1074,18 +1084,22 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		if (ol.TradeId is not null)
 			return;
 
+		// A row of the book belongs to one of its two halves.
+		if (ol.Side is not Sides side)
+			return;
+
 		UpdateSteps(ol.OrderPrice, ol.OrderVolume);
 
 		var engineState = GetEngineState();
 
 		if (ol.IsCancellation)
 		{
-			engineState.OrderBook.UpdateLevel(ol.Side, ol.OrderPrice, 0);
+			engineState.OrderBook.UpdateLevel(side, ol.OrderPrice, 0);
 		}
 		else
 		{
-			var currentVol = engineState.OrderBook.GetVolumeAtPrice(ol.Side, ol.OrderPrice);
-			engineState.OrderBook.UpdateLevel(ol.Side, ol.OrderPrice, currentVol + (ol.OrderVolume ?? 0));
+			var currentVol = engineState.OrderBook.GetVolumeAtPrice(side, ol.OrderPrice);
+			engineState.OrderBook.UpdateLevel(side, ol.OrderPrice, currentVol + (ol.OrderVolume ?? 0));
 		}
 
 		if (_depthSubscription.HasValue)

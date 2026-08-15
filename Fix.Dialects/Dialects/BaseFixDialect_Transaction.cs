@@ -937,13 +937,18 @@ partial class BaseFixDialect
 			}
 		}
 
-		static Sides? LastLiquidityIndToSide(Sides side, int? value)
+		static Sides? LastLiquidityIndToSide(Sides? side, int? value)
 		{
+			// Which side initiated the trade is read off the order's own side, so a report that
+			// states none says nothing about the initiator either.
+			if (side is not Sides orderSide)
+				return null;
+
 			return value switch
 			{
 				null => null,
-				1 => (Sides?)side.Invert(),
-				2 or 3 => (Sides?)side,
+				1 => orderSide.Invert(),
+				2 or 3 => orderSide,
 				_ => throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue),
 			};
 		}

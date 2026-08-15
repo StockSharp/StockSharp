@@ -100,14 +100,18 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 					if (message.OrderPrice == 0)
 						return null;
 
+					// The depth is keyed by side, so a row naming none belongs to neither half of it.
+					if (message.Side is not Sides side)
+						return null;
+
 					var balance = message.Balance;
 
-					_ordersInfo[message.TransactionId] = RefTuple.Create(message.Side, message.OrderPrice, balance);
+					_ordersInfo[message.TransactionId] = RefTuple.Create(side, message.OrderPrice, balance);
 
 					if (balance == null)
 						return null;
 
-					var valKey = (message.Side, message.OrderPrice);
+					var valKey = (side, message.OrderPrice);
 
 					if (_totals.TryGetValue(valKey, out var total))
 					{

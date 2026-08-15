@@ -779,6 +779,8 @@ public class Order : NotifiableObject, IOrderMessage
 		Order = 37)]
 	public int? Leverage { get; set; }
 
+	// An order always has a side; a message reporting on one need not state it.
+	Sides? IOrderMessage.Side => Side;
 	OrderStates? IOrderMessage.State => State;
 	decimal? IOrderMessage.Balance => Balance;
 	decimal? IOrderMessage.Volume => Volume;

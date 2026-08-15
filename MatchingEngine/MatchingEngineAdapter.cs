@@ -324,7 +324,7 @@ public class MatchingEngineAdapter : IMessageTransport
 	/// placed. An identity already in the book is left alone rather than duplicated - being told
 	/// twice about the same order is ordinary, and the second telling must change nothing.
 	/// </remarks>
-	private void AdoptActiveOrder(ExecutionMessage execMsg, List<Message> results)
+	private void AdoptActiveOrder(ExecutionMessage execMsg, Sides side, List<Message> results)
 	{
 		var state = GetSecurityState(execMsg.SecurityId);
 
@@ -337,7 +337,7 @@ public class MatchingEngineAdapter : IMessageTransport
 		{
 			TransactionId = transactionId,
 			OrderId = execMsg.OrderId,
-			Side = execMsg.Side,
+			Side = side,
 			Price = execMsg.OrderPrice,
 			Volume = execMsg.OrderVolume ?? execMsg.Balance.Value,
 			Balance = execMsg.Balance.Value,
@@ -353,7 +353,7 @@ public class MatchingEngineAdapter : IMessageTransport
 		if (!execMsg.PortfolioName.IsEmpty())
 		{
 			var portfolio = GetPortfolio(execMsg.PortfolioName);
-			portfolio.ProcessOrderRegistration(execMsg.SecurityId, execMsg.Side, order.Balance, order.Price);
+			portfolio.ProcessOrderRegistration(execMsg.SecurityId, order.Side, order.Balance, order.Price);
 			AddPortfolioUpdate(portfolio, execMsg.LocalTime, results);
 		}
 
@@ -369,9 +369,25 @@ public class MatchingEngineAdapter : IMessageTransport
 			// it through registration would charge the account a second time for something it
 			// already owns, hand it a new identity, and cross it against the book on the way in -
 			// the engine would then be holding an order that does not exist anywhere else.
+			// Everything below treats the message as an order, and an order naming no side can
+			// neither join a book that has two halves nor be placed into one. Nothing downstream
+			// can pick one, and picking one here would place an order nobody asked for.
+			if (execMsg.Side is not Sides side)
+			{
+				var fail = execMsg.TransactionId.CreateOrderReply(execMsg.LocalTime);
+
+				fail.SecurityId = execMsg.SecurityId;
+				fail.PortfolioName = execMsg.PortfolioName;
+				fail.OrderState = OrderStates.Failed;
+				fail.Error = new InvalidOperationException($"Order {execMsg.TransactionId}: {nameof(execMsg.Side)} is not specified.");
+
+				results.Add(fail);
+				return;
+			}
+
 			if (IsAlreadyActive(execMsg))
 			{
-				AdoptActiveOrder(execMsg, results);
+				AdoptActiveOrder(execMsg, side, results);
 				return;
 			}
 
@@ -380,7 +396,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				TransactionId = execMsg.TransactionId,
 				SecurityId = execMsg.SecurityId,
 				PortfolioName = execMsg.PortfolioName,
-				Side = execMsg.Side,
+				Side = side,
 				Price = execMsg.OrderPrice,
 				Volume = execMsg.OrderVolume ?? 0,
 				OrderType = execMsg.OrderType ?? OrderTypes.Limit,
@@ -431,6 +447,7 @@ public class MatchingEngineAdapter : IMessageTransport
 			ServerTime = serverTime,
 			LocalTime = regMsg.LocalTime,
 			OriginalTransactionId = regMsg.TransactionId,
+			Side = regMsg.Side,
 			// Report acceptance as Active; a reject, expiry or full fill overwrites this below, but an
 			// order that fills immediately still passes through Active so every order reports acceptance.
 			OrderState = OrderStates.Active,
@@ -526,6 +543,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				Balance = matchResult.RemainingVolume,
 				OrderVolume = regMsg.Volume,
 				OrderState = OrderStates.Done,
+				Side = regMsg.Side,
 				PortfolioName = regMsg.PortfolioName,
 				DataTypeEx = DataType.Transactions,
 				HasOrderInfo = true,
@@ -570,6 +588,7 @@ public class MatchingEngineAdapter : IMessageTransport
 					Balance = matchResult.RemainingVolume,
 					OrderVolume = regMsg.Volume,
 					OrderState = matchResult.FinalState,
+					Side = regMsg.Side,
 					PortfolioName = regMsg.PortfolioName,
 					HasOrderInfo = true,
 				});
@@ -653,6 +672,7 @@ public class MatchingEngineAdapter : IMessageTransport
 					Balance = matchResult.RemainingVolume,
 					OrderVolume = regMsg.Volume,
 					OrderState = OrderStates.Done,
+					Side = regMsg.Side,
 					PortfolioName = regMsg.PortfolioName,
 					DataTypeEx = DataType.Transactions,
 					HasOrderInfo = true,
@@ -706,7 +726,7 @@ public class MatchingEngineAdapter : IMessageTransport
 		var serverTime = cancelMsg.LocalTime;
 
 		// Try cancelling stop order first
-		if (_stopOrderManager.Cancel(cancelMsg.OriginalTransactionId, out _))
+		if (_stopOrderManager.Cancel(cancelMsg.OriginalTransactionId, out var cancelledStopInfo))
 		{
 			results.Add(new ExecutionMessage
 			{
@@ -715,6 +735,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				ServerTime = serverTime,
 				OriginalTransactionId = cancelMsg.OriginalTransactionId,
 				OrderState = OrderStates.Done,
+				Side = cancelledStopInfo.Side,
 				HasOrderInfo = true,
 			});
 			return;
@@ -748,6 +769,7 @@ public class MatchingEngineAdapter : IMessageTransport
 			ServerTime = serverTime,
 			OriginalTransactionId = cancelMsg.OriginalTransactionId,
 			OrderState = OrderStates.Done,
+			Side = order.Side,
 			Balance = order.Balance,
 			OrderVolume = order.Volume,
 			HasOrderInfo = true,
@@ -774,6 +796,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				ServerTime = replaceMsg.LocalTime,
 				OriginalTransactionId = replaceMsg.OriginalTransactionId,
 				OrderState = OrderStates.Done,
+				Side = oldStopInfo.Side,
 				Balance = oldStopInfo.Volume,
 				OrderVolume = oldStopInfo.Volume,
 			});
@@ -862,6 +885,7 @@ public class MatchingEngineAdapter : IMessageTransport
 			ServerTime = serverTime,
 			OriginalTransactionId = replaceMsg.OriginalTransactionId,
 			OrderState = OrderStates.Done,
+			Side = oldOrder.Side,
 			Balance = oldOrder.Balance,
 			OrderVolume = oldOrder.Volume,
 			HasOrderInfo = true,
@@ -1119,6 +1143,7 @@ public class MatchingEngineAdapter : IMessageTransport
 					OriginalTransactionId = order.TransactionId,
 					OrderId = order.OrderId,
 					OrderState = OrderStates.Done,
+					Side = order.Side,
 					Balance = order.Balance,
 					OrderVolume = order.Volume,
 					PortfolioName = order.PortfolioName,
@@ -1181,6 +1206,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				ServerTime = time,
 				OriginalTransactionId = trigger.Info.TransactionId,
 				OrderState = OrderStates.Done,
+				Side = trigger.Info.Side,
 				Balance = 0,
 				OrderVolume = trigger.Info.Volume,
 			});
@@ -1270,6 +1296,7 @@ public class MatchingEngineAdapter : IMessageTransport
 			SecurityId = state.SecurityId,
 			OrderId = order.OrderId,
 			OriginalTransactionId = order.TransactionId,
+			Side = order.Side,
 			Balance = 0,
 			OrderVolume = order.Volume,
 			OrderState = OrderStates.Done,

@@ -908,11 +908,16 @@ public static partial class EntitiesExtensions
 		if (order == null)
 			throw new ArgumentNullException(nameof(order));
 
+		// An order always has a side. A message that states none describes an order it cannot build,
+		// and defaulting would give the caller a buy it never placed.
+		if (message.Side is not Sides side)
+			throw new ArgumentException(LocalizedStrings.OrderSideNotSpecified, nameof(message));
+
 		order.Id = message.OrderId;
 		order.StringId = message.OrderStringId;
 		order.TransactionId = message.TransactionId;
 		order.Portfolio = new Portfolio { Board = order.Security.Board, Name = message.PortfolioName };
-		order.Side = message.Side;
+		order.Side = side;
 		order.Price = message.OrderPrice;
 		order.Volume = message.OrderVolume ?? 0;
 		order.Balance = message.Balance ?? 0;

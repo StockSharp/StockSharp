@@ -8,9 +8,9 @@ public interface IOrderMessage :
 	IGeneratedMessage, ISeqNumMessage, ICurrencyMessage, ISystemMessage
 {
 	/// <summary>
-	/// <see cref="Sides"/>
+	/// <see cref="Sides"/>, or <see langword="null"/> when the message states none.
 	/// </summary>
-	Sides Side { get; }
+	Sides? Side { get; }
 
 	/// <summary>
 	/// Order state.
