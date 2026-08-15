@@ -1,9 +1,11 @@
 ﻿namespace StockSharp.Tests;
 
 using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Text.Json;
 
 using Ecng.Reflection;
 
@@ -1986,6 +1988,183 @@ public class IndicatorTests : BaseTestClass
 	{
 		new PercentagePriceOscillatorSignal().Measure.AssertEqual(IndicatorMeasures.Percent);
 		new PercentagePriceOscillatorHistogram().Measure.AssertEqual(IndicatorMeasures.Percent);
+	}
+
+	/// <summary>
+	/// Extensions over an indicator belong in one place. A second helper beside the first is
+	/// invisible at the call site - extension syntax never names the class - so it is only found by
+	/// looking, which is how two of them came to exist in the same namespace.
+	/// </summary>
+	[TestMethod]
+	public void IndicatorExtensionsLiveInOneClass()
+	{
+		Type[] contracts = [typeof(IIndicator), typeof(IIndicatorValue), typeof(IndicatorType)];
+
+		static bool IsExtensionOver(MethodInfo m, Type[] contracts)
+		{
+			if (!m.IsDefined(typeof(ExtensionAttribute), false))
+				return false;
+
+			var first = m.GetParameters().FirstOrDefault()?.ParameterType;
+
+			if (first is null)
+				return false;
+
+			var element = first.IsGenericType && first.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+				? first.GetGenericArguments()[0]
+				: first;
+
+			return contracts.Any(c => c.IsAssignableFrom(element));
+		}
+
+		// The namespace spans two assemblies - the contracts live below the implementations.
+		var holders = new[] { typeof(IIndicator).Assembly, typeof(BaseIndicator).Assembly }
+			.SelectMany(a => a.GetTypes())
+			.Where(t => t.Namespace == typeof(BaseIndicator).Namespace && t.IsAbstract && t.IsSealed)
+			.Where(t => t.GetMethods(BindingFlags.Public | BindingFlags.Static).Any(m => IsExtensionOver(m, contracts)))
+			.Select(t => t.Name)
+			.OrderBy(n => n)
+			.ToArray();
+
+		holders.AssertEqual([nameof(IndicatorHelper)]);
+	}
+
+	[TestMethod]
+	public void EveryOfferedIndicatorAnswersToItsOwnNameAndHasSeries()
+	{
+		var provider = new IndicatorProvider();
+		provider.Init();
+
+		var unreachable = new List<string>();
+
+		foreach (var offered in provider.All)
+		{
+			var name = offered.Indicator.Name;
+			var type = IndicatorProvider.TryFind(name);
+
+			if (type != offered.Indicator)
+			{
+				unreachable.Add($"{name} -> {type?.Name ?? "nothing"}");
+				continue;
+			}
+
+			// A plan with no series is one nobody can read.
+			if (type.CreateInstance<IIndicator>().GetOutputs().Count == 0)
+				unreachable.Add($"{name}: no series");
+		}
+
+		unreachable.Count.AssertEqual(0, unreachable.Take(25).JoinN());
+	}
+
+	[TestMethod]
+	public void AHiddenPartAnswersToNoName()
+	{
+		// The signal line exists to sit inside the relative vigor index, and the provider does not
+		// offer it. Resolving it by name would hand out an indicator the catalog never listed.
+		IndicatorProvider.TryFind(nameof(RelativeVigorIndexSignal)).AssertNull();
+		IndicatorProvider.TryFind("NoSuchIndicatorAnywhere").AssertNull();
+	}
+
+	[TestMethod]
+	public void SeriesAreNamedAfterTheCodeAndNotTheDisplayText()
+	{
+		// An inner indicator's Name is its localized caption. Using it as a series key would make
+		// the name depend on the language the process happens to be running in; these are the C#
+		// property names, which are the same everywhere.
+		new BollingerBands().GetOutputs().Select(o => o.Name).JoinComma().AssertEqual("MovingAverage,UpBand,LowBand");
+		new MovingAverageConvergenceDivergenceHistogram().GetOutputs().Select(o => o.Name).JoinComma().AssertEqual("Macd,SignalMa");
+	}
+
+	[TestMethod]
+	public void ACompositeReportsThePartsNestedInsideIt()
+	{
+		// The directional index sits inside the average directional index, and DI+ and DI- sit
+		// inside that. Reading only the first level returns two series instead of three and drops
+		// both directional lines without saying so.
+		new AverageDirectionalIndex().GetOutputs().Select(o => o.Name).JoinComma().AssertEqual("Dx.Plus,Dx.Minus,MovingAverage");
+	}
+
+	[TestMethod]
+	public void AParameterIsWhatTheIndicatorDeclaresItself()
+	{
+		var parameters = typeof(SimpleMovingAverage).GetParameters().Select(p => p.Name).ToArray();
+
+		parameters.Contains(nameof(SimpleMovingAverage.Length)).AssertTrue();
+
+		// Inherited identity and drawing hints are not something a caller may set.
+		parameters.Contains(nameof(IIndicator.Name)).AssertFalse();
+		parameters.Contains(nameof(IIndicator.Source)).AssertFalse();
+
+		var sma = new SimpleMovingAverage();
+		sma.ApplyParameters(new Dictionary<string, object> { ["length"] = 7, ["Name"] = "renamed", ["nosuch"] = 1 });
+
+		sma.Length.AssertEqual(7);
+		sma.Name.AssertNotEqual("renamed");
+	}
+
+	[TestMethod]
+	public void APartOfACompositeIsTunedByNamingThePathToIt()
+	{
+		// The stochastic oscillator holds its periods on the parts, and exposes those parts through
+		// get-only properties. Without a path there is no way to reach them at all.
+		var stoch = new StochasticOscillator();
+		stoch.ApplyParameters(new Dictionary<string, object> { ["K.Length"] = 21, ["d.length"] = 5 });
+
+		stoch.K.Length.AssertEqual(21);
+		stoch.D.Length.AssertEqual(5);
+	}
+
+	[TestMethod]
+	public void AParameterThatArrivesAsJsonStillLands()
+	{
+		// System.Text.Json hands values over as JsonElement, which is not IConvertible: converting
+		// it directly throws, and a swallowed failure leaves every indicator on its default - two
+		// moving averages of different periods drawing the same line.
+		using var json = JsonDocument.Parse("{\"length\":5}");
+
+		var sma = new SimpleMovingAverage();
+		sma.ApplyParameters(new Dictionary<string, object> { ["length"] = json.RootElement.GetProperty("length") });
+
+		sma.Length.AssertEqual(5);
+	}
+
+	[TestMethod]
+	public void EverySeriesOfACompositeCarriesAValue()
+	{
+		var start = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		foreach (var indicator in new IIndicator[] { new SimpleMovingAverage(), new BollingerBands(), new AverageDirectionalIndex(), new MovingAverageConvergenceDivergenceHistogram() })
+		{
+			var outputs = indicator.GetOutputs();
+			var parts = outputs.Select(o => o.Part).ToArray();
+			decimal?[] values = null;
+
+			for (var i = 0; i < 200; i++)
+			{
+				// A wave rather than a ramp: the directional index needs moves in both directions
+				// before either of its lines forms.
+				var price = 100m + (decimal)Math.Sin(i / 5.0) * 10m;
+
+				var candle = new TimeFrameCandleMessage
+				{
+					OpenTime = start.AddMinutes(i),
+					CloseTime = start.AddMinutes(i + 1),
+					OpenPrice = price,
+					HighPrice = price + 1m,
+					LowPrice = price - 1m,
+					ClosePrice = price,
+					TotalVolume = 100m,
+					State = CandleStates.Finished,
+				};
+
+				values = indicator.Process(candle).GetOutputValues(parts).Values;
+			}
+
+			values.Length.AssertEqual(outputs.Count, indicator.GetType().Name);
+
+			for (var i = 0; i < values.Length; i++)
+				values[i].AssertNotNull($"{indicator.GetType().Name}.{outputs[i].Name}");
+		}
 	}
 
 	[TestMethod]
