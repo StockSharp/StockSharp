@@ -819,7 +819,7 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		if (Paths.HistoryDataPath == null)
 		{
 			// Not a silent pass: without market data nothing below is meaningful.
-			Inconclusive("HistoryDataPath is null (stocksharp.samples.historydata not installed) - the surface cannot be verified");
+			Fail("HistoryDataPath is null (stocksharp.samples.historydata not installed) - the surface cannot be verified");
 		}
 	}
 

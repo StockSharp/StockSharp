@@ -25,7 +25,7 @@ using StockSharp.Algo.Statistics;
 /// cannot pass vacuously: the monolith reference run must produce a substantial amount
 /// of data (candles, orders, trades, states, protective orders in the protection
 /// scenario) before any comparison is considered meaningful, and missing history data
-/// yields Inconclusive, not silent pass. Families a scenario does not inherently drive
+/// fails rather than passing quietly. Families a scenario does not inherently drive
 /// are still cross-checked 1:1, and dedicated scenarios drive the rest: a forced
 /// register-fail (off-step price + CheckSteps), a mid-run stop with resting orders
 /// (cancel flow + live unsubscribe), a foreign connector-level order (attachment
@@ -1120,7 +1120,7 @@ public class StrategyDecomposedFullEquivalenceTests : BaseTestClass
 		{
 			// Not a silent pass: without market data a zero-vs-zero comparison would be
 			// meaningless, so the test is reported as inconclusive instead of green.
-			Inconclusive("HistoryDataPath is null (stocksharp.samples.historydata not installed) - equivalence cannot be verified");
+			Fail("HistoryDataPath is null (stocksharp.samples.historydata not installed) - equivalence cannot be verified");
 		}
 
 		var startTime = Paths.HistoryBeginDate;

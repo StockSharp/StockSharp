@@ -1026,14 +1026,11 @@ public class IndicatorTests : BaseTestClass
 
 		var mode = Environment.GetEnvironmentVariable(modeVar);
 
-		// Inconclusive rather than a bare return: this is a maintenance tool, not a check, and a
-		// tool that reports Passed while doing nothing is indistinguishable from one that ran and
-		// found nothing wrong. Run it deliberately, and only when a new indicator is added or the
-		// logic of an existing one changes - it REWRITES committed reference data.
-		if (mode.IsEmpty())
-			Inconclusive($"Reference-data maintenance tool; not part of the regression suite. Set {modeVar}=verify to compare without writing, {modeVar}=<Name>[,<Name>...] to rewrite specific files, or {modeVar}=* to rewrite every out-of-date one. Only needed when adding an indicator or changing an existing one's logic.");
-
-		var verify = mode.EqualsIgnoreCase(verifyMode);
+		// Verifying by default: left to itself this compares the committed reference data against
+		// what the indicators produce now and fails on a real difference. The rewrite modes have to
+		// be asked for, because they REWRITE committed data - set {modeVar} to a name, to a
+		// comma-separated list, or to * for every out-of-date file.
+		var verify = mode.IsEmpty() || mode.EqualsIgnoreCase(verifyMode);
 		var requested = verify || mode == allMode
 			? null
 			: mode.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToHashSet(StringComparer.InvariantCultureIgnoreCase);

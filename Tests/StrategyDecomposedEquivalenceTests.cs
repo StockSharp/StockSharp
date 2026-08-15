@@ -2805,8 +2805,8 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		// cancel-on-stop rule wiring, so it cannot defer Stopped. Behavioural comparison deferred (see region).
 		if (decoOrderRules == monoOrderRules)
 		{
-			// If a future change wires the rule, surface it so this test is upgraded to a strict assertion.
-			Inconclusive(
+			// If a future change wires the rule, fail so this test is upgraded to a strict assertion.
+			Fail(
 				$"Decomposed engine now wires {decoOrderRules} order-scoped rule(s) on registration, matching the " +
 				$"monolith - the WaitAllTrades divergence appears closed. Upgrade this test to assert the full " +
 				$"Stopped-deferral behaviour via the FullEquivalence backtest harness.");

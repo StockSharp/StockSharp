@@ -24,7 +24,7 @@ public class PathsTests : BaseTestClass
 		var historyPath = Paths.GetHistoryDataPath(packagesFolder);
 
 		if (historyPath == null)
-			Inconclusive("stocksharp.samples.historydata is not installed.");
+			Fail("stocksharp.samples.historydata is not installed. It is a test dependency, not an option: without it these checks verify nothing.");
 
 		Path.IsPathRooted(historyPath).AssertTrue();
 		historyPath.ContainsIgnoreCase("HistoryData").AssertTrue();
@@ -46,7 +46,7 @@ public class PathsTests : BaseTestClass
 		// HistoryDataPath is initialized in static constructor
 		// It will be null if package is not installed
 		if (Paths.HistoryDataPath == null)
-			Inconclusive("stocksharp.samples.historydata is not installed.");
+			Fail("stocksharp.samples.historydata is not installed. It is a test dependency, not an option: without it these checks verify nothing.");
 
 		Path.IsPathRooted(Paths.HistoryDataPath).AssertTrue();
 		Directory.Exists(Paths.HistoryDataPath).AssertTrue();
@@ -56,7 +56,7 @@ public class PathsTests : BaseTestClass
 	public void HistoryDataPath_ContainsDefaultSecurities()
 	{
 		if (Paths.HistoryDataPath == null)
-			Inconclusive("stocksharp.samples.historydata is not installed.");
+			Fail("stocksharp.samples.historydata is not installed. It is a test dependency, not an option: without it these checks verify nothing.");
 
 		// Securities are grouped by first character: SomePath\T\TONUSDT@BNBFT
 		var sec1 = Paths.HistoryDefaultSecurity;  // BTCUSDT@BNBFT
