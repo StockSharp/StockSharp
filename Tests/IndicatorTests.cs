@@ -431,6 +431,9 @@ public class IndicatorTests : BaseTestClass
 			typeof(ParabolicSar),
 			typeof(Median),
 			typeof(Fractals),
+
+			// reads only the direction, so with the last two prices equal no preview moves it
+			typeof(MarketMeannessIndex),
 		};
 
 		// Use a seeded RNG so the perturbation stream is reproducible and the test is deterministic
