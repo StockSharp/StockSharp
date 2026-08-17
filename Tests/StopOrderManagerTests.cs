@@ -146,6 +146,117 @@ public class StopOrderManagerTests : BaseTestClass
 		Assert.AreEqual(Sides.Buy, triggers[0].ResultingOrder.Side);
 	}
 
+	/// <summary>
+	/// A trailing stop carries a level before it has seen any price, and that level implies the
+	/// watermark it was built from. A first price below that watermark must not become one, or the
+	/// stop walks away from the level it was registered at - which is what the same stop reloaded
+	/// from storage refuses to do.
+	/// </summary>
+	[TestMethod]
+	public void TrailingStopSell_FirstPriceBelowTheLevelDoesNotMoveIt()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Sell, stopPrice: 95, isTrailing: true, trailingOffset: 5);
+		mgr.Register(info);
+
+		var triggers = mgr.CheckPrice(secId, 98, DateTime.UtcNow);
+
+		AreEqual(0, triggers.Count);
+		AreEqual(95m, info.StopPrice);
+		AreEqual(100m, info.BestSeenPrice);
+	}
+
+	/// <summary>
+	/// A trailing stop may be registered with an offset and no level at all - the offset is the
+	/// trigger. There is no level to imply a watermark, so the first price still becomes one.
+	/// </summary>
+	[TestMethod]
+	public void TrailingStopBuy_WithoutALevelStillTakesTheFirstPrice()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+		var info = CreateStopInfo(secId, Sides.Buy, stopPrice: 0, isTrailing: true, trailingOffset: 5);
+		mgr.Register(info);
+
+		var triggers = mgr.CheckPrice(secId, 100, DateTime.UtcNow);
+
+		AreEqual(0, triggers.Count);
+		AreEqual(105m, info.StopPrice);
+		AreEqual(100m, info.BestSeenPrice);
+	}
+
+	/// <summary>
+	/// A sell stop trails below its watermark, so a percentage that reaches 100 puts it at zero and
+	/// anything beyond puts it below. A buy stop trails above and stays reachable however far.
+	/// </summary>
+	[TestMethod]
+	public void InitialWatermark_IsTheOneTheLevelImplies()
+	{
+		AreEqual(100m, TrailingStopPriceCalculator.InitialWatermark(95m, 5m, false, Sides.Sell));
+		AreEqual(100m, TrailingStopPriceCalculator.InitialWatermark(105m, 5m, false, Sides.Buy));
+		AreEqual(100m, TrailingStopPriceCalculator.InitialWatermark(95m, 5m, true, Sides.Sell));
+
+		IsNull(TrailingStopPriceCalculator.InitialWatermark(0m, 5m, false, Sides.Buy),
+			"an offset-only stop has no level to imply one, and takes the first price it sees");
+	}
+
+	[TestMethod]
+	public void PercentOffsetReachability_DependsOnSide()
+	{
+		IsTrue(TrailingStopPriceCalculator.IsPercentOffsetReachable(5m, Sides.Sell));
+		IsFalse(TrailingStopPriceCalculator.IsPercentOffsetReachable(100m, Sides.Sell));
+		IsFalse(TrailingStopPriceCalculator.IsPercentOffsetReachable(150m, Sides.Sell));
+
+		IsTrue(TrailingStopPriceCalculator.IsPercentOffsetReachable(5m, Sides.Buy));
+		IsTrue(TrailingStopPriceCalculator.IsPercentOffsetReachable(150m, Sides.Buy));
+
+		IsFalse(TrailingStopPriceCalculator.IsPercentOffsetReachable(0m, Sides.Buy));
+		IsFalse(TrailingStopPriceCalculator.IsPercentOffsetReachable(-5m, Sides.Sell));
+	}
+
+	[TestMethod]
+	public void TrailingStopPrice_AbsoluteOffset_RoundTripsBothSides()
+	{
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, 5m, false, Sides.Sell).AssertEqual(95m);
+		TrailingStopPriceCalculator.ReconstructWatermark(95m, 5m, false, Sides.Sell).AssertEqual(100m);
+
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, 5m, false, Sides.Buy).AssertEqual(105m);
+		TrailingStopPriceCalculator.ReconstructWatermark(105m, 5m, false, Sides.Buy).AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void TrailingStopPrice_PercentOffset_RoundTripsBothSides()
+	{
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, 5m, true, Sides.Sell).AssertEqual(95m);
+		TrailingStopPriceCalculator.ReconstructWatermark(95m, 5m, true, Sides.Sell).AssertEqual(100m);
+
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, 5m, true, Sides.Buy).AssertEqual(105m);
+		TrailingStopPriceCalculator.ReconstructWatermark(105m, 5m, true, Sides.Buy).AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void TrailingStopPrice_NullOrZeroOffset_KeepsPrice()
+	{
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, null, false, Sides.Sell).AssertEqual(100m);
+		TrailingStopPriceCalculator.ReconstructWatermark(100m, null, false, Sides.Sell).AssertEqual(100m);
+
+		TrailingStopPriceCalculator.CalculateStopPrice(100m, 0m, true, Sides.Buy).AssertEqual(100m);
+		TrailingStopPriceCalculator.ReconstructWatermark(100m, 0m, true, Sides.Buy).AssertEqual(100m);
+	}
+
+	[TestMethod]
+	public void TrailingStopPrice_ZeroPercentFactor_CollapsesStopPrice()
+		=> TrailingStopPriceCalculator
+			.CalculateStopPrice(125m, 100m, true, Sides.Sell)
+			.AssertEqual(0m);
+
+	[TestMethod]
+	public void TrailingStopPrice_ZeroPercentFactor_KeepsPersistedStopPrice()
+		=> TrailingStopPriceCalculator
+			.ReconstructWatermark(25m, 100m, true, Sides.Sell)
+			.AssertEqual(25m);
+
 	[TestMethod]
 	public void Cancel_RemovesStopOrder()
 	{

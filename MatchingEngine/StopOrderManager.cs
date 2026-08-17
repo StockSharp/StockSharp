@@ -23,6 +23,10 @@ public class StopOrderManager : IStopOrderManager
 
 		using (_sync.EnterScope())
 		{
+			if (info.IsTrailing && info.BestSeenPrice is null)
+				info.BestSeenPrice = TrailingStopPriceCalculator.InitialWatermark(
+					info.StopPrice, info.TrailingOffset, info.IsTrailingOffsetPercent, info.Side);
+
 			_stopOrders[info.TransactionId] = info;
 
 			if (!_bySecurityId.TryGetValue(info.SecurityId, out var list))
@@ -121,17 +125,14 @@ public class StopOrderManager : IStopOrderManager
 
 	private static void UpdateTrailing(StopOrderInfo info, decimal price)
 	{
-		var offset = info.TrailingOffset ?? 0;
-
 		if (info.Side == Sides.Sell)
 		{
 			// Trailing sell: track max price
 			if (info.BestSeenPrice is null || price > info.BestSeenPrice)
 			{
 				info.BestSeenPrice = price;
-				info.StopPrice = info.IsTrailingOffsetPercent
-					? price * (1 - offset / 100m)
-					: price - offset;
+				info.StopPrice = TrailingStopPriceCalculator.CalculateStopPrice(
+					price, info.TrailingOffset, info.IsTrailingOffsetPercent, info.Side);
 			}
 		}
 		else
@@ -140,9 +141,8 @@ public class StopOrderManager : IStopOrderManager
 			if (info.BestSeenPrice is null || price < info.BestSeenPrice)
 			{
 				info.BestSeenPrice = price;
-				info.StopPrice = info.IsTrailingOffsetPercent
-					? price * (1 + offset / 100m)
-					: price + offset;
+				info.StopPrice = TrailingStopPriceCalculator.CalculateStopPrice(
+					price, info.TrailingOffset, info.IsTrailingOffsetPercent, info.Side);
 			}
 		}
 	}
