@@ -407,4 +407,104 @@ public class DataTypeTests : BaseTestClass
 		var s = dt.ToString();
 		s.AssertEqual("custom-name");
 	}
+
+	private static DataType Minute => TimeSpan.FromMinutes(1).TimeFrame();
+
+	private static IndicatorSpec Sma(DataType candleType, params (string Key, object Value)[] parameters)
+		=> IndicatorSpec.Create("SMA", candleType, parameters.Select(p => new KeyValuePair<string, object>(p.Key, p.Value)));
+
+	[TestMethod]
+	public void IndicatorSpec_SameComputation_IsTheSameSpec()
+	{
+		var one = Sma(Minute, ("Length", 20));
+		var two = Sma(Minute, ("Length", 20));
+
+		AreEqual(one, two);
+		AreEqual(one.GetHashCode(), two.GetHashCode());
+	}
+
+	[TestMethod]
+	public void IndicatorSpec_ParameterOrder_DoesNotChangeIt()
+	{
+		var one = Sma(Minute, ("Length", 20), ("Shift", 2));
+		var two = Sma(Minute, ("Shift", 2), ("Length", 20));
+
+		AreEqual(one, two);
+		AreEqual(one.GetHashCode(), two.GetHashCode(), "parameters are a set, so their order must not reach the hash");
+	}
+
+	[TestMethod]
+	public void IndicatorSpec_KindAndParameterNames_AreMatchedIgnoringCase()
+	{
+		var one = Sma(Minute, ("Length", 20));
+		var two = IndicatorSpec.Create("sma", Minute, [new("length", 20)]);
+
+		AreEqual(one, two);
+		AreEqual(one.GetHashCode(), two.GetHashCode());
+	}
+
+	[TestMethod]
+	public void IndicatorSpec_ADifferentSeries_IsADifferentComputation()
+	{
+		AreNotEqual(Sma(Minute, ("Length", 20)), Sma(TimeSpan.FromHours(1).TimeFrame(), ("Length", 20)));
+	}
+
+	[TestMethod]
+	public void IndicatorSpec_ADifferentParameterValue_IsADifferentComputation()
+	{
+		AreNotEqual(Sma(Minute, ("Length", 20)), Sma(Minute, ("Length", 10)));
+	}
+
+	/// <summary>
+	/// A length written in code is an int and the same length off a JSON frame is a long, and boxed
+	/// values of different types are never equal. Both have to name the same computation.
+	/// </summary>
+	[TestMethod]
+	public void IndicatorSpec_TheSameNumberWrittenDifferently_IsTheSameParameter()
+	{
+		var fromCode = Sma(Minute, ("Length", 20));
+		var fromWire = Sma(Minute, ("Length", 20L));
+
+		AreEqual(fromCode, fromWire);
+		AreEqual(fromCode.GetHashCode(), fromWire.GetHashCode());
+	}
+
+	[TestMethod]
+	public void IndicatorSpec_OneParameterNamedTwice_IsRefused()
+	{
+		Throws<ArgumentException>(() => IndicatorSpec.Create("SMA", Minute,
+		[
+			new("Length", 20),
+			new("length", 5),
+		]));
+	}
+
+	[TestMethod]
+	public void Indicator_NamesADataTypeTwoEqualRequestsShare()
+	{
+		var one = DataType.Indicator(Sma(Minute, ("Length", 20)));
+		var two = DataType.Indicator(Sma(Minute, ("Length", 20)));
+
+		AreEqual(one, two, "two clients asking for the same indicator must land on one subscription");
+		AreEqual(one.GetHashCode(), two.GetHashCode());
+		IsTrue(one.IsIndicator);
+
+		AreNotEqual(one, DataType.Indicator(Sma(Minute, ("Length", 10))));
+	}
+
+	[TestMethod]
+	public void Indicator_SurvivesBeingSavedAndLoaded()
+	{
+		var original = DataType.Indicator(Sma(Minute, ("Length", 20)));
+
+		var restored = original.Save().Load<DataType>();
+
+		AreEqual(original, restored);
+
+		var spec = (IndicatorSpec)restored.Arg;
+
+		AreEqual("SMA", spec.Kind);
+		AreEqual(Minute, spec.CandleType);
+		AreEqual(20, spec.Parameters["Length"].To<int>());
+	}
 }

@@ -228,6 +228,29 @@ public class DataType : Equatable<DataType>, IPersistable
 	}
 
 	/// <summary>
+	/// Indicator values computed from a candle series.
+	/// </summary>
+	/// <remarks>
+	/// The specification is the argument, so two requests for the same indicator on the same series
+	/// are the same data type and share one computation.
+	/// </remarks>
+	/// <param name="spec">Which indicator, with what parameters, on which series.</param>
+	/// <returns>Data type info.</returns>
+	/// <exception cref="ArgumentNullException"><paramref name="spec"/> is <see langword="null"/>.</exception>
+	public static DataType Indicator(IndicatorSpec spec)
+	{
+		if (spec is null)
+			throw new ArgumentNullException(nameof(spec));
+
+		return Create<IndicatorMessage>(spec);
+	}
+
+	/// <summary>
+	/// Whether this is <see cref="Indicator"/>.
+	/// </summary>
+	public bool IsIndicator => MessageType == typeof(IndicatorMessage);
+
+	/// <summary>
 	/// Compare <see cref="DataType"/> on the equivalence.
 	/// </summary>
 	/// <param name="other">Another value with which to compare.</param>
