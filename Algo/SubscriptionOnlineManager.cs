@@ -118,7 +118,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 					}
 					else
 					{
-						if (_state.TryGetAndRemoveSubscriptionById(originTransId, out var info))
+						if (_state.TryGetAndRemoveSubscriber(originTransId, out var info))
 						{
 							var isHistLive = info.HistLive.Contains(originTransId);
 
@@ -302,7 +302,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 		if (!state.IsActive())
 		{
-			_state.RemoveSubscriptionByKeyValue(info);
+			_state.StopSubscription(info);
 			_logReceiver.AddInfoLog(LocalizedStrings.SubscriptionRemoved, info.Subscription.TransactionId);
 		}
 
@@ -310,16 +310,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 	}
 
 	private void RemoveSubscriptionIds(ISubscriptionOnlineInfo info)
-	{
-		foreach (var subscriber in info.Subscribers.CachedKeys)
-			_state.RemoveSubscriptionById(subscriber);
-
-		if (info.IsLinked)
-			return;
-
-		foreach (var linked in info.Linked)
-			_state.RemoveSubscriptionById(linked);
-	}
+		=> _state.DiscardSubscription(info);
 
 	private void TryAddOrderTransaction(ISubscriptionOnlineInfo statusInfo, long transactionId, bool warnOnDuplicate = true)
 	{
@@ -336,7 +327,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 		{
 			var orderSubscription = _state.CreateLinkedSubscriptionInfo(statusInfo);
 
-			_state.AddSubscriptionById(transactionId, orderSubscription);
+			_state.AddAlias(transactionId, orderSubscription);
 
 			statusInfo.Linked.Add(transactionId);
 		}
@@ -401,15 +392,13 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 					var key = (dataType, secId);
 
-					if (!_state.TryGetSubscriptionByKey(key, out var info))
+					var info = _state.AddSubscriber(key, transId, message.TypedClone(), message.TypedClone, out var isOpener);
+
+					if (isOpener)
 					{
 						_logReceiver.AddDebugLog("Subscription {0} ({1}/{2}) initial.", transId, dataType, secId);
 
 						sendInMsg = message;
-
-						info = _state.CreateSubscriptionInfo(message.TypedClone());
-
-						_state.AddSubscriptionByKey(key, info);
 					}
 					else
 					{
@@ -437,10 +426,6 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 						}
 					}
 
-					_state.AddSubscriptionById(transId, info);
-
-					info.Subscribers.Add(transId, message.TypedClone());
-
 					if (extraFilter)
 						info.ExtraFilters.Add(transId);
 				}
@@ -460,7 +445,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 				if (_state.TryGetSubscriptionById(originId, out var info))
 				{
-					if (!info.Subscribers.Remove(originId))
+					if (!_state.RemoveSubscriber(originId, out _, out var wasLast))
 					{
 						sendOutMsgs =
 						[
@@ -473,17 +458,14 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 						info.ExtraFilters.Remove(originId);
 
-						if (info.Linked.Count > 0)
+						if (!info.IsLinked && info.Linked.Count > 0)
 						{
 							foreach (var linked in info.Linked)
-								_state.RemoveSubscriptionById(linked);
+								_state.RemoveAlias(linked);
 						}
 
-						if (info.Subscribers.Count == 0)
+						if (wasLast)
 						{
-							_state.RemoveSubscriptionByKeyValue(info);
-							_state.RemoveSubscriptionById(originId);
-
 							if (info.State.IsActive())
 							{
 								_state.AddUnsubscribeRequest(transId);

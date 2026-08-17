@@ -3,57 +3,85 @@ namespace StockSharp.Algo;
 /// <summary>
 /// State storage for <see cref="SubscriptionOnlineManager"/>.
 /// </summary>
+/// <remarks>
+/// Two things live here and they are not the same. One is who holds each shared subscription, which
+/// is plain bookkeeping. The other is what a reply has to be routed by - an order's own transaction
+/// aliased onto the order-status subscription that reports it, the requests passed straight through,
+/// and the unsubscribes still in flight - which exists only because messages are rewritten.
+/// </remarks>
 public interface ISubscriptionOnlineManagerState
 {
 	/// <summary>
-	/// Create new subscription info.
-	/// </summary>
-	ISubscriptionOnlineInfo CreateSubscriptionInfo(ISubscriptionMessage subscription);
-
-	/// <summary>
-	/// Create linked subscription info.
+	/// Create a linked view onto a subscription, for routing replies that name something else.
 	/// </summary>
 	ISubscriptionOnlineInfo CreateLinkedSubscriptionInfo(ISubscriptionOnlineInfo main);
 
 	/// <summary>
-	/// Try get subscription by key.
+	/// Try get the shared subscription of a data type and security.
 	/// </summary>
 	bool TryGetSubscriptionByKey((DataType dataType, SecurityId securityId) key, out ISubscriptionOnlineInfo info);
 
 	/// <summary>
-	/// Add subscription by key.
+	/// Record that a subscriber holds the shared subscription of a data type and security, opening it
+	/// when it is the first to ask.
 	/// </summary>
-	void AddSubscriptionByKey((DataType dataType, SecurityId securityId) key, ISubscriptionOnlineInfo info);
+	/// <param name="key">Data type and security the subscription carries.</param>
+	/// <param name="subscriberId">Transaction the subscriber asked under.</param>
+	/// <param name="request">What this subscriber asked for.</param>
+	/// <param name="createSubscription">Builds the subscription to send upstream, for a new one.</param>
+	/// <param name="isOpener">
+	/// <see langword="true"/> when this subscriber opened it and the request has to go upstream.
+	/// </param>
+	/// <returns>The subscription, or <see langword="null"/> when this subscriber already holds one.</returns>
+	ISubscriptionOnlineInfo AddSubscriber((DataType dataType, SecurityId securityId) key, long subscriberId, ISubscriptionMessage request, Func<ISubscriptionMessage> createSubscription, out bool isOpener);
 
 	/// <summary>
-	/// Remove subscription by key value.
+	/// Drop one subscriber.
 	/// </summary>
-	void RemoveSubscriptionByKeyValue(ISubscriptionOnlineInfo info);
+	/// <param name="subscriberId">Transaction the subscriber asked under.</param>
+	/// <param name="info">What it was holding.</param>
+	/// <param name="wasLast">
+	/// <see langword="true"/> when it was the last holder and the subscription has to be given up
+	/// upstream.
+	/// </param>
+	/// <returns><see langword="true"/> when it held anything.</returns>
+	bool RemoveSubscriber(long subscriberId, out ISubscriptionOnlineInfo info, out bool wasLast);
 
 	/// <summary>
-	/// Try get subscription by ID.
+	/// Stop a subscription being joined, while the subscribers it still has keep being answered.
+	/// </summary>
+	void StopSubscription(ISubscriptionOnlineInfo info);
+
+	/// <summary>
+	/// Give a subscription up entirely, subscribers and aliases with it.
+	/// </summary>
+	void DiscardSubscription(ISubscriptionOnlineInfo info);
+
+	/// <summary>
+	/// Try get a subscription by a subscriber's transaction or by an alias.
 	/// </summary>
 	bool TryGetSubscriptionById(long id, out ISubscriptionOnlineInfo info);
 
 	/// <summary>
-	/// Try get and remove subscription by ID.
-	/// </summary>
-	bool TryGetAndRemoveSubscriptionById(long id, out ISubscriptionOnlineInfo info);
-
-	/// <summary>
-	/// Check if contains subscription by ID.
+	/// Check whether a transaction names a subscriber or an alias.
 	/// </summary>
 	bool ContainsSubscriptionById(long id);
 
 	/// <summary>
-	/// Add subscription by ID.
+	/// Drop a subscriber and report what it was holding, for one whose subscription was refused.
 	/// </summary>
-	void AddSubscriptionById(long id, ISubscriptionOnlineInfo info);
+	bool TryGetAndRemoveSubscriber(long id, out ISubscriptionOnlineInfo info);
 
 	/// <summary>
-	/// Remove subscription by ID.
+	/// Alias a transaction onto a subscription, for replies that name an order rather than the
+	/// subscription reporting it.
 	/// </summary>
-	void RemoveSubscriptionById(long id);
+	void AddAlias(long id, ISubscriptionOnlineInfo info);
+
+	/// <summary>
+	/// Drop an alias.
+	/// </summary>
+	void RemoveAlias(long id);
 
 	/// <summary>
 	/// Add skip subscription.

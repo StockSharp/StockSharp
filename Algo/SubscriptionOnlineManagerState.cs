@@ -11,9 +11,10 @@ public class SubscriptionOnlineManagerState : ISubscriptionOnlineManagerState
 
 		public ISubscriptionMessage Subscription { get; }
 
-		public SubscriptionInfo(ISubscriptionMessage subscription)
+		public SubscriptionInfo(ISubscriptionMessage subscription, CachedSynchronizedDictionary<long, ISubscriptionMessage> subscribers)
 		{
 			Subscription = subscription ?? throw new ArgumentNullException(nameof(subscription));
+			Subscribers = subscribers ?? throw new ArgumentNullException(nameof(subscribers));
 			IsMarketData = subscription.DataType.IsMarketData;
 		}
 
@@ -44,7 +45,13 @@ public class SubscriptionOnlineManagerState : ISubscriptionOnlineManagerState
 		}
 
 		public HashSet<long> ExtraFilters { get; } = [];
-		public CachedSynchronizedDictionary<long, ISubscriptionMessage> Subscribers { get; private init; } = [];
+
+		/// <summary>
+		/// The registry's own holder collection, handed over when the subscription was opened. There
+		/// is one list of subscribers, not one here and one there.
+		/// </summary>
+		public CachedSynchronizedDictionary<long, ISubscriptionMessage> Subscribers { get; }
+
 		public CachedSynchronizedSet<long> OnlineSubscribers { get; } = [];
 		public SynchronizedSet<long> HistLive { get; } = [];
 		public bool IsMarketData { get; }
@@ -62,18 +69,23 @@ public class SubscriptionOnlineManagerState : ISubscriptionOnlineManagerState
 
 		public bool IsLinked => _main != null;
 
+		/// <summary>The registry record this info is the payload of. A linked view has none.</summary>
+		public SharedSubscriptionRegistry<(DataType, SecurityId), long, ISubscriptionMessage, SubscriptionInfo>.Entry Entry { get; set; }
+
 		public override string ToString() => (_main != null ? "Linked: " : string.Empty) + Subscription.ToString();
 	}
 
-	private readonly AsyncLock _sync = new();
-	private readonly PairSet<(DataType, SecurityId), SubscriptionInfo> _subscriptionsByKey = [];
-	private readonly Dictionary<long, SubscriptionInfo> _subscriptionsById = [];
+	// Who holds each shared subscription. The subscribers of one subscription, the lookup from a
+	// subscriber to what it holds, and the subscription itself all live here together.
+	private readonly SharedSubscriptionRegistry<(DataType, SecurityId), long, ISubscriptionMessage, SubscriptionInfo> _shared = new();
+
+	// An order's own transaction pointing at the order-status subscription that reports it. Not a
+	// holder of anything - it is an alias used to route replies, and it is removed with the
+	// subscription that owns it.
+	private readonly Dictionary<long, SubscriptionInfo> _aliases = [];
+
 	private readonly HashSet<long> _skipSubscriptions = [];
 	private readonly HashSet<long> _unsubscribeRequests = [];
-
-	/// <inheritdoc />
-	public ISubscriptionOnlineInfo CreateSubscriptionInfo(ISubscriptionMessage subscription)
-		=> new SubscriptionInfo(subscription);
 
 	/// <inheritdoc />
 	public ISubscriptionOnlineInfo CreateLinkedSubscriptionInfo(ISubscriptionOnlineInfo main)
@@ -82,9 +94,9 @@ public class SubscriptionOnlineManagerState : ISubscriptionOnlineManagerState
 	/// <inheritdoc />
 	public bool TryGetSubscriptionByKey((DataType dataType, SecurityId securityId) key, out ISubscriptionOnlineInfo info)
 	{
-		if (_subscriptionsByKey.TryGetValue(key, out var result))
+		if (_shared.TryGetByKey(key, out var entry))
 		{
-			info = result;
+			info = entry.Payload;
 			return true;
 		}
 
@@ -93,32 +105,62 @@ public class SubscriptionOnlineManagerState : ISubscriptionOnlineManagerState
 	}
 
 	/// <inheritdoc />
-	public void AddSubscriptionByKey((DataType dataType, SecurityId securityId) key, ISubscriptionOnlineInfo info)
-		=> _subscriptionsByKey.Add(key, (SubscriptionInfo)info);
+	public ISubscriptionOnlineInfo AddSubscriber((DataType dataType, SecurityId securityId) key, long subscriberId, ISubscriptionMessage request, Func<ISubscriptionMessage> createSubscription, out bool isOpener)
+	{
+		if (createSubscription is null)
+			throw new ArgumentNullException(nameof(createSubscription));
+
+		var entry = _shared.Add(key, subscriberId, request,
+			subscribers => new SubscriptionInfo(createSubscription(), subscribers), out isOpener);
+
+		if (entry is null)
+			return null;
+
+		entry.Payload.Entry = entry;
+
+		return entry.Payload;
+	}
 
 	/// <inheritdoc />
-	public void RemoveSubscriptionByKeyValue(ISubscriptionOnlineInfo info)
-		=> _subscriptionsByKey.RemoveByValue((SubscriptionInfo)info);
+	public bool RemoveSubscriber(long subscriberId, out ISubscriptionOnlineInfo info, out bool wasLast)
+	{
+		wasLast = _shared.Remove(subscriberId, out var entry);
+		info = entry?.Payload;
+
+		return info is not null;
+	}
+
+	/// <inheritdoc />
+	public void StopSubscription(ISubscriptionOnlineInfo info)
+	{
+		if (((SubscriptionInfo)info)?.Entry is { } entry)
+			_shared.Unkey(entry);
+	}
+
+	/// <inheritdoc />
+	public void DiscardSubscription(ISubscriptionOnlineInfo info)
+	{
+		if (((SubscriptionInfo)info)?.Entry is not { } entry)
+			return;
+
+		foreach (var alias in entry.Payload.IsLinked ? [] : entry.Payload.Linked)
+			_aliases.Remove(alias);
+
+		_shared.Drop(entry);
+	}
 
 	/// <inheritdoc />
 	public bool TryGetSubscriptionById(long id, out ISubscriptionOnlineInfo info)
 	{
-		if (_subscriptionsById.TryGetValue(id, out var result))
+		if (_shared.TryGetByHolder(id, out var entry))
 		{
-			info = result;
+			info = entry.Payload;
 			return true;
 		}
 
-		info = null;
-		return false;
-	}
-
-	/// <inheritdoc />
-	public bool TryGetAndRemoveSubscriptionById(long id, out ISubscriptionOnlineInfo info)
-	{
-		if (_subscriptionsById.TryGetAndRemove(id, out var result))
+		if (_aliases.TryGetValue(id, out var alias))
 		{
-			info = result;
+			info = alias;
 			return true;
 		}
 
@@ -128,15 +170,28 @@ public class SubscriptionOnlineManagerState : ISubscriptionOnlineManagerState
 
 	/// <inheritdoc />
 	public bool ContainsSubscriptionById(long id)
-		=> _subscriptionsById.ContainsKey(id);
+		=> _shared.TryGetByHolder(id, out _) || _aliases.ContainsKey(id);
 
 	/// <inheritdoc />
-	public void AddSubscriptionById(long id, ISubscriptionOnlineInfo info)
-		=> _subscriptionsById.Add(id, (SubscriptionInfo)info);
+	public bool TryGetAndRemoveSubscriber(long id, out ISubscriptionOnlineInfo info)
+	{
+		if (_shared.Remove(id, out var entry))
+		{
+			info = entry.Payload;
+			return true;
+		}
+
+		info = entry?.Payload;
+		return info is not null;
+	}
 
 	/// <inheritdoc />
-	public void RemoveSubscriptionById(long id)
-		=> _subscriptionsById.Remove(id);
+	public void AddAlias(long id, ISubscriptionOnlineInfo info)
+		=> _aliases.Add(id, (SubscriptionInfo)info);
+
+	/// <inheritdoc />
+	public void RemoveAlias(long id)
+		=> _aliases.Remove(id);
 
 	/// <inheritdoc />
 	public void AddSkipSubscription(long id)
@@ -161,8 +216,8 @@ public class SubscriptionOnlineManagerState : ISubscriptionOnlineManagerState
 	/// <inheritdoc />
 	public void Clear()
 	{
-		_subscriptionsByKey.Clear();
-		_subscriptionsById.Clear();
+		_shared.Clear();
+		_aliases.Clear();
 		_skipSubscriptions.Clear();
 		_unsubscribeRequests.Clear();
 	}
