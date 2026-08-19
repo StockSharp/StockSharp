@@ -1,8 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\props\common_target_net.props" />
   <PropertyGroup>
     <RootNamespace>StockSharp.Alerts</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ringbell.wav" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessEntities\BusinessEntities.csproj" />
   </ItemGroup>
