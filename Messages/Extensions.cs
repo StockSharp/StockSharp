@@ -807,7 +807,10 @@ public static partial class Extensions
 		_candleDataTypes.Add(type, messageType);
 		_dataTypeArgConverters.Add(messageType, (p1, p2));
 		_fileNames.Add(DataType.Create(messageType, null), fileName);
-		_candleArgTypes.Add(messageType, messageType.CreateInstance<ICandleMessage>().ArgType);
+		// The arg type is what this registration is generic over, so it needs no instance. Creating one
+		// reflectively also kept the parameterless constructor alive only by convention, which a trimmed or
+		// NativeAOT build does not honour.
+		_candleArgTypes.Add(messageType, typeof(TArg));
 		_candleArgValidators.Add(messageType, a => argValidator((TArg)a));
 
 		if (isBuildOnly)
@@ -2227,7 +2230,13 @@ public static partial class Extensions
 
 		try
 		{
-			return (name.To<CurrencyTypes>(), null);
+			// MICEX names the rouble in more than one way, and only one of them is the ISO code the enum
+			// carries, so the others are mapped here rather than left to fail parsing.
+			return (name switch
+			{
+				"SUR" or "RUR" => CurrencyTypes.RUB,
+				_ => name.To<CurrencyTypes>(),
+			}, null);
 		}
 		catch (Exception ex)
 		{

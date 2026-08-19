@@ -1177,6 +1177,59 @@ public class ExtensionsMethodsTests : BaseTestClass
 
 	#endregion
 
+	#region MicexCurrencyName
+
+	[TestMethod]
+	public void ToMicexCurrencyName_Rub_ReturnsSur()
+	{
+		CurrencyTypes.RUB.ToMicexCurrencyName().AssertEqual("SUR");
+	}
+
+	[TestMethod]
+	public void ToMicexCurrencyName_Other_ReturnsIsoCode()
+	{
+		CurrencyTypes.USD.ToMicexCurrencyName().AssertEqual("USD");
+	}
+
+	[TestMethod]
+	public void FromMicexCurrencyName_Sur_ReturnsRub()
+	{
+		"SUR".FromMicexCurrencyName().currency.AssertEqual(CurrencyTypes.RUB);
+	}
+
+	[TestMethod]
+	public void FromMicexCurrencyName_Rur_ReturnsRub()
+	{
+		"RUR".FromMicexCurrencyName().currency.AssertEqual(CurrencyTypes.RUB);
+	}
+
+	[TestMethod]
+	public void FromMicexCurrencyName_IsoCode_ReturnsSameCurrency()
+	{
+		"USD".FromMicexCurrencyName().currency.AssertEqual(CurrencyTypes.USD);
+	}
+
+	[TestMethod]
+	public void FromMicexCurrencyName_Empty_ReturnsNothing()
+	{
+		var (currency, error) = string.Empty.FromMicexCurrencyName();
+
+		currency.AssertNull();
+		error.AssertNull();
+	}
+
+	/// <summary>
+	/// The pair carries the rouble under a name of its own, so what one writes the other has to read back.
+	/// </summary>
+	[TestMethod]
+	public void MicexCurrencyName_RoundTrips()
+	{
+		foreach (var currency in new[] { CurrencyTypes.RUB, CurrencyTypes.USD, CurrencyTypes.EUR })
+			currency.ToMicexCurrencyName().FromMicexCurrencyName().currency.AssertEqual(currency);
+	}
+
+	#endregion
+
 	#region IsLookupAll
 
 	[TestMethod]
