@@ -59,11 +59,15 @@ public class MatchResult
 /// <summary>
 /// Trade resulting from order matching.
 /// </summary>
+/// <param name="Price">Price the trade was done at.</param>
+/// <param name="Volume">Traded volume.</param>
+/// <param name="InitiatorSide">Side of the order that initiated the trade.</param>
+/// <param name="CounterFills">Volume this trade took from each resting order on the other side.</param>
 public record MatchTrade(
 	decimal Price,
 	decimal Volume,
 	Sides InitiatorSide,
-	IReadOnlyList<EmulatorOrder> CounterOrders
+	IReadOnlyList<MatchFill> CounterFills
 );
 
 /// <summary>

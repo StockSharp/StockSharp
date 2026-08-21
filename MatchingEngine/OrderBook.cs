@@ -457,8 +457,8 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 	/// <param name="side">Side to consume from (opposite to order side).</param>
 	/// <param name="maxPrice">Maximum price for buy / minimum for sell.</param>
 	/// <param name="volume">Volume to consume.</param>
-	/// <returns>Executions (price, volume, affected orders).</returns>
-	public IEnumerable<(decimal price, decimal volume, IReadOnlyList<EmulatorOrder> orders)> ConsumeVolume(
+	/// <returns>Executions (price, volume, volume taken from each resting order).</returns>
+	public IEnumerable<(decimal price, decimal volume, IReadOnlyList<MatchFill> fills)> ConsumeVolume(
 		Sides side,
 		decimal? maxPrice,
 		decimal volume)
@@ -497,7 +497,9 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 				if (consumed <= 0)
 					continue;
 
-				var affectedOrders = level.Orders.ToList();
+				// Consuming removes emptied orders from the level, so the queue is snapshotted first.
+				var levelOrders = level.Orders.ToList();
+				var fills = new List<MatchFill>(levelOrders.Count);
 
 				// Reduce market volume first
 				var marketConsumed = consumed.Min(level.MarketVolume);
@@ -505,13 +507,16 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 				var orderConsumed = consumed - marketConsumed;
 
 				// Then reduce user orders
-				foreach (var order in affectedOrders)
+				foreach (var order in levelOrders)
 				{
 					if (orderConsumed <= 0)
 						break;
 
 					var orderConsume = level.ConsumeOrder(order, orderConsumed);
 					orderConsumed -= orderConsume;
+
+					if (orderConsume > 0)
+						fills.Add(new(order, orderConsume, order.Balance));
 				}
 
 				AddTotalVolume(side, -consumed);
@@ -520,7 +525,7 @@ public class OrderBook(SecurityId securityId) : IOrderBook
 				if (level.IsEmpty)
 					(toRemove ??= []).Add(price);
 
-				yield return (price, consumed, affectedOrders);
+				yield return (price, consumed, fills);
 			}
 		}
 		finally

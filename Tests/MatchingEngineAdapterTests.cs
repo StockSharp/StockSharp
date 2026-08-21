@@ -185,6 +185,34 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// When one client's order is filled by another client's resting order, the resting side must be
+	/// filled for the whole volume that was taken from it, not for nothing.
+	/// </summary>
+	[TestMethod]
+	public async Task AnInternalCrossFillsTheMakerForWhatTheTakerTook()
+	{
+		const string maker = "Maker";
+		const string taker = "Taker";
+		const long makerTx = 2001;
+		const long takerTx = 2002;
+
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(NewOrder(makerTx, maker, Sides.Sell, OrderTypes.Limit, 100m, 10m, _start), CancellationToken);
+		await run.SendAsync(NewOrder(takerTx, taker, Sides.Buy, OrderTypes.Limit, 100m, 10m, _start.AddSeconds(1)), CancellationToken);
+
+		var makerFill = run.Executions.FirstOrDefault(m => m.HasTradeInfo() && m.OriginalTransactionId == makerTx);
+
+		IsNotNull(makerFill, "the resting side of an internal cross must be told about its own fill");
+		AreEqual(10m, makerFill.TradeVolume, "the maker was consumed for 10, so its fill is for 10");
+		AreEqual(100m, makerFill.TradePrice, "both sides of one cross trade at the same price");
+
+		AreEqual(-10m, PositionOf(engine, maker), "the maker sold 10 and must be short 10");
+		AreEqual(10m, PositionOf(engine, taker), "the taker bought 10 and must be long 10");
+	}
+
+	/// <summary>
 	/// A market buy must reach as far into the book as the mirrored market sell does; the same order
 	/// on the other side cannot fill a hundredth of it.
 	/// </summary>

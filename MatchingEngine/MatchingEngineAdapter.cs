@@ -617,49 +617,52 @@ public class MatchingEngineAdapter : IMessageTransport
 
 			AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 
-			// Generate trades for matched counter orders
-			foreach (var counterOrder in trade.CounterOrders)
+			// Generate trades for the resting orders this trade actually took from
+			foreach (var fill in trade.CounterFills)
 			{
-				if (counterOrder.IsUserOrder)
+				var counterOrder = fill.Order;
+
+				if (!counterOrder.IsUserOrder)
+					continue;
+
+				var counterPortfolio = GetPortfolio(counterOrder.PortfolioName);
+
+				var counterMarketPrice = counterOrder.Side == Sides.Buy
+					? state.OrderBook.BestAsk?.price
+					: state.OrderBook.BestBid?.price;
+
+				var counterTradeMsg = new ExecutionMessage
 				{
-					var counterPortfolio = GetPortfolio(counterOrder.PortfolioName);
-					var counterVolume = trade.Volume.Min(counterOrder.Balance);
+					DataTypeEx = DataType.Transactions,
+					SecurityId = regMsg.SecurityId,
+					LocalTime = regMsg.LocalTime,
+					ServerTime = serverTime,
+					OriginalTransactionId = counterOrder.TransactionId,
+					OrderId = counterOrder.OrderId,
+					TradeId = tradeId,
+					TradePrice = trade.Price,
+					TradeVolume = fill.Volume,
+					Side = counterOrder.Side,
+					PortfolioName = counterOrder.PortfolioName,
+					MarketPrice = counterMarketPrice,
+				};
 
-					var counterMarketPrice = counterOrder.Side == Sides.Buy
-						? state.OrderBook.BestAsk?.price
-						: state.OrderBook.BestBid?.price;
+				var (_, _, counterPosition) = counterPortfolio.ProcessTrade(
+					regMsg.SecurityId, counterOrder.Side, trade.Price, fill.Volume, counterTradeMsg.Commission);
 
-					var counterTradeMsg = new ExecutionMessage
-					{
-						DataTypeEx = DataType.Transactions,
-						SecurityId = regMsg.SecurityId,
-						LocalTime = regMsg.LocalTime,
-						ServerTime = serverTime,
-						OriginalTransactionId = counterOrder.TransactionId,
-						TradeId = tradeId,
-						TradePrice = trade.Price,
-						TradeVolume = counterVolume,
-						Side = counterOrder.Side,
-						MarketPrice = counterMarketPrice,
-					};
+				results.Add(counterTradeMsg);
 
-					var (_, _, counterPosition) = counterPortfolio.ProcessTrade(
-						regMsg.SecurityId, counterOrder.Side, trade.Price, counterVolume, counterTradeMsg.Commission);
-
-					results.Add(counterTradeMsg);
-
-					results.Add(new PositionChangeMessage
-					{
-						SecurityId = regMsg.SecurityId,
-						ServerTime = serverTime,
-						LocalTime = regMsg.LocalTime,
-						PortfolioName = counterOrder.PortfolioName,
-					}
-					.Add(PositionChangeTypes.CurrentValue, counterPosition.CurrentValue)
-					.TryAdd(PositionChangeTypes.AveragePrice, counterPosition.AveragePrice));
-
-					AddPortfolioUpdate(counterPortfolio, regMsg.LocalTime, results);
+				results.Add(new PositionChangeMessage
+				{
+					SecurityId = regMsg.SecurityId,
+					ServerTime = serverTime,
+					LocalTime = regMsg.LocalTime,
+					PortfolioName = counterOrder.PortfolioName,
 				}
+				.Add(PositionChangeTypes.CurrentValue, counterPosition.CurrentValue)
+				.TryAdd(PositionChangeTypes.AveragePrice, counterPosition.AveragePrice));
+
+				AddPortfolioUpdate(counterPortfolio, regMsg.LocalTime, results);
 			}
 		}
 

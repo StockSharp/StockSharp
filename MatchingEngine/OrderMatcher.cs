@@ -53,11 +53,11 @@ public class OrderMatcher : IOrderMatcher
 		var remaining = order.Balance;
 
 		// Consume from opposite side at any price
-		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, null, remaining))
+		foreach (var (price, volume, fills) in ((OrderBook)book).ConsumeVolume(oppositeSide, null, remaining))
 		{
 			var consumed = volume.Min(remaining);
-			trades.Add(new MatchTrade(price, consumed, order.Side, orders));
-			matchedOrders.AddRange(orders.Where(o => o.IsUserOrder));
+			trades.Add(new MatchTrade(price, consumed, order.Side, fills));
+			matchedOrders.AddRange(fills.Where(f => f.Order.IsUserOrder).Select(f => f.Order));
 			remaining -= consumed;
 
 			if (remaining <= 0)
@@ -92,13 +92,13 @@ public class OrderMatcher : IOrderMatcher
 			return MatchFOK(order, book, settings);
 
 		// Get matchable volume
-		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
+		foreach (var (price, volume, fills) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
 		{
 			var consumed = volume.Min(remaining);
 			// Use order price for candle-based matching
 			var tradePrice = settings.UseOrderPriceForLimitTrades ? limitPrice : price;
-			trades.Add(new MatchTrade(tradePrice, consumed, order.Side, orders));
-			matchedOrders.AddRange(orders.Where(o => o.IsUserOrder));
+			trades.Add(new MatchTrade(tradePrice, consumed, order.Side, fills));
+			matchedOrders.AddRange(fills.Where(f => f.Order.IsUserOrder).Select(f => f.Order));
 			remaining -= consumed;
 
 			if (remaining <= 0)
@@ -181,12 +181,12 @@ public class OrderMatcher : IOrderMatcher
 		var matchedOrders = new List<EmulatorOrder>();
 		var remaining = order.Balance;
 
-		foreach (var (price, volume, orders) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
+		foreach (var (price, volume, fills) in ((OrderBook)book).ConsumeVolume(oppositeSide, limitPrice, remaining))
 		{
 			var consumed = volume.Min(remaining);
 			var tradePrice = settings.UseOrderPriceForLimitTrades ? limitPrice : price;
-			trades.Add(new MatchTrade(tradePrice, consumed, order.Side, orders));
-			matchedOrders.AddRange(orders.Where(o => o.IsUserOrder));
+			trades.Add(new MatchTrade(tradePrice, consumed, order.Side, fills));
+			matchedOrders.AddRange(fills.Where(f => f.Order.IsUserOrder).Select(f => f.Order));
 			remaining -= consumed;
 
 			if (remaining <= 0)
