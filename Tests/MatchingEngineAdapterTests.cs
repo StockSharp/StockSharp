@@ -81,6 +81,24 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	private static decimal PositionOf(MatchingEngineAdapter engine, string account)
 		=> engine.PortfolioManager.GetPortfolio(account).GetPosition(_securityId)?.CurrentValue ?? 0m;
 
+	/// <summary>
+	/// Sends one market order of <paramref name="side"/> into a book holding a single level per side
+	/// and answers how much of it was filled.
+	/// </summary>
+	private static async Task<decimal> FillAtMarketAsync(Sides side, decimal volume, CancellationToken cancellationToken)
+	{
+		const long tx = 4001;
+
+		var run = new EngineRun(new MatchingEngineAdapter());
+
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 1m)], [new QuoteChange(101m, 1m)]), cancellationToken);
+		await run.SendAsync(NewOrder(tx, "Client", side, OrderTypes.Market, 0m, volume, _start.AddSeconds(1)), cancellationToken);
+
+		return run.Executions
+			.Where(m => m.HasTradeInfo() && m.OriginalTransactionId == tx)
+			.Sum(m => m.TradeVolume ?? 0m);
+	}
+
 	#endregion
 
 	/// <summary>
@@ -164,5 +182,21 @@ public class MatchingEngineAdapterTests : BaseTestClass
 
 		AreEqual(0, fills.Length, "a rejected order must not trade");
 		AreEqual(0m, PositionOf(engine, account), "a rejected order must not move the account's position");
+	}
+
+	/// <summary>
+	/// A market buy must reach as far into the book as the mirrored market sell does; the same order
+	/// on the other side cannot fill a hundredth of it.
+	/// </summary>
+	[TestMethod]
+	public async Task AMarketBuyReachesAsDeepIntoTheBookAsAMarketSell()
+	{
+		const decimal volume = 100m;
+
+		var bought = await FillAtMarketAsync(Sides.Buy, volume, CancellationToken);
+		var sold = await FillAtMarketAsync(Sides.Sell, volume, CancellationToken);
+
+		AreEqual(sold, bought, $"the same order on either side of one book must fill the same: bought {bought}, sold {sold}");
+		AreEqual(volume, bought, "a market order against a book that is deepened for it fills in full");
 	}
 }

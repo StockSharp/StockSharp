@@ -1419,9 +1419,11 @@ public class MatchingEngineAdapter : IMessageTransport
 			return;
 
 		var bestOppPrice = oppositeBest.Value.price;
-		var canMatch = regMsg.Side == Sides.Buy
+
+		// A market order names no price and crosses by definition, on either side.
+		var canMatch = regMsg.OrderType == OrderTypes.Market || (regMsg.Side == Sides.Buy
 			? regMsg.Price >= bestOppPrice
-			: regMsg.Price <= bestOppPrice;
+			: regMsg.Price <= bestOppPrice);
 
 		var quotesVolume = regMsg.Side == Sides.Buy
 			? state.OrderBook.TotalAskVolume
