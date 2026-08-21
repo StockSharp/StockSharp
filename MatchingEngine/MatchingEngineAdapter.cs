@@ -631,6 +631,24 @@ public class MatchingEngineAdapter : IMessageTransport
 					? state.OrderBook.BestAsk?.price
 					: state.OrderBook.BestBid?.price;
 
+				// The resting order's own state goes out ahead of its trade, the same order the taker's
+				// rows use, so a maker eaten to nothing reports a final state.
+				results.Add(new ExecutionMessage
+				{
+					DataTypeEx = DataType.Transactions,
+					LocalTime = regMsg.LocalTime,
+					ServerTime = serverTime,
+					SecurityId = regMsg.SecurityId,
+					OrderId = counterOrder.OrderId,
+					OriginalTransactionId = counterOrder.TransactionId,
+					Balance = fill.Remaining,
+					OrderVolume = counterOrder.Volume,
+					OrderState = fill.Remaining <= 0 ? OrderStates.Done : OrderStates.Active,
+					Side = counterOrder.Side,
+					PortfolioName = counterOrder.PortfolioName,
+					HasOrderInfo = true,
+				});
+
 				var counterTradeMsg = new ExecutionMessage
 				{
 					DataTypeEx = DataType.Transactions,
@@ -663,6 +681,10 @@ public class MatchingEngineAdapter : IMessageTransport
 				.TryAdd(PositionChangeTypes.AveragePrice, counterPosition.AveragePrice));
 
 				AddPortfolioUpdate(counterPortfolio, regMsg.LocalTime, results);
+
+				// A maker consumed in full leaves the book; it must leave the active orders with it.
+				if (fill.Remaining <= 0)
+					state.OrderManager.TryRemoveOrder(counterOrder.TransactionId, out _);
 			}
 		}
 

@@ -213,6 +213,30 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// A resting order eaten down to nothing by an internal cross must be reported finished, so the
+	/// session that placed it stops waiting for it.
+	/// </summary>
+	[TestMethod]
+	public async Task AMakerConsumedToTheLastLotIsToldItsOrderIsFinished()
+	{
+		const string maker = "Maker";
+		const string taker = "Taker";
+		const long makerTx = 3001;
+		const long takerTx = 3002;
+
+		var run = new EngineRun(new MatchingEngineAdapter());
+
+		await run.SendAsync(NewOrder(makerTx, maker, Sides.Sell, OrderTypes.Limit, 100m, 10m, _start), CancellationToken);
+		await run.SendAsync(NewOrder(takerTx, taker, Sides.Buy, OrderTypes.Limit, 100m, 10m, _start.AddSeconds(1)), CancellationToken);
+
+		var makerFinal = run.Executions
+			.FirstOrDefault(m => m.HasOrderInfo() && m.OriginalTransactionId == makerTx && m.OrderState == OrderStates.Done);
+
+		IsNotNull(makerFinal, "an order consumed in full must reach a final state, whoever consumed it");
+		AreEqual(0m, makerFinal.Balance, "nothing is left of an order that was consumed in full");
+	}
+
+	/// <summary>
 	/// A market buy must reach as far into the book as the mirrored market sell does; the same order
 	/// on the other side cannot fill a hundredth of it.
 	/// </summary>
