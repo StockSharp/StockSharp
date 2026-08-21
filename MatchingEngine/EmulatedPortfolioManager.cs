@@ -10,14 +10,17 @@ public class EmulatedPortfolio : IPortfolio
 	private decimal _realizedPnL;
 	private decimal _totalBlockedMoney;
 	private decimal _commission;
+	private readonly IMarkPrices _markPrices;
 
 	/// <summary>
 	/// Initializes a new instance.
 	/// </summary>
 	/// <param name="name">Portfolio name.</param>
-	public EmulatedPortfolio(string name)
+	/// <param name="markPrices">Where the prices to revalue open positions come from.</param>
+	public EmulatedPortfolio(string name, IMarkPrices markPrices)
 	{
 		Name = name ?? throw new ArgumentNullException(nameof(name));
+		_markPrices = markPrices ?? throw new ArgumentNullException(nameof(markPrices));
 	}
 
 	/// <inheritdoc />
@@ -36,7 +39,34 @@ public class EmulatedPortfolio : IPortfolio
 	public decimal RealizedPnL => _realizedPnL;
 
 	/// <inheritdoc />
-	public decimal TotalPnL => _realizedPnL - _commission;
+	public decimal TotalPnL => _realizedPnL - _commission + UnrealizedPnL;
+
+	/// <inheritdoc />
+	public decimal UnrealizedPnL
+	{
+		get
+		{
+			var total = 0m;
+
+			foreach (var (securityId, pos) in _positions)
+			{
+				var volume = pos.CurrentValue;
+
+				if (volume == 0)
+					continue;
+
+				// A long is closed by selling into the bid, a short by buying from the ask.
+				var price = _markPrices.TryGetClosePrice(securityId, volume > 0 ? Sides.Sell : Sides.Buy);
+
+				if (price is null)
+					continue;
+
+				total += (price.Value - pos.AveragePrice) * volume;
+			}
+
+			return total;
+		}
+	}
 
 	/// <inheritdoc />
 	public decimal BlockedMoney => _totalBlockedMoney;
@@ -290,7 +320,7 @@ public class EmulatedPortfolio : IPortfolio
 /// <summary>
 /// Portfolio manager that creates emulated portfolios in-memory.
 /// </summary>
-public class EmulatedPortfolioManager : IPortfolioManager
+public class EmulatedPortfolioManager : IPortfolioManager, IMarkPrices
 {
 	// One account, one balance: the name is compared the way the rest of the engine compares it,
 	// or an order spelling it differently opens a second, empty portfolio next to the funded one.
@@ -301,12 +331,21 @@ public class EmulatedPortfolioManager : IPortfolioManager
 	/// </summary>
 	public IMarginController MarginController { get; set; }
 
+	/// <summary>
+	/// Where the prices to revalue open positions come from. Until the engine supplies them every
+	/// position is worth what it cost.
+	/// </summary>
+	public IMarkPrices MarkPrices { get; set; }
+
+	decimal? IMarkPrices.TryGetClosePrice(SecurityId securityId, Sides closeSide)
+		=> MarkPrices?.TryGetClosePrice(securityId, closeSide);
+
 	/// <inheritdoc />
 	public IPortfolio GetPortfolio(string name)
 	{
 		if (!_portfolios.TryGetValue(name, out var portfolio))
 		{
-			portfolio = new EmulatedPortfolio(name);
+			portfolio = new EmulatedPortfolio(name, this);
 			_portfolios[name] = portfolio;
 		}
 		return portfolio;

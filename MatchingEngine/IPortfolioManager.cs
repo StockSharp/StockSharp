@@ -95,6 +95,12 @@ public interface IPortfolio
 	decimal RealizedPnL { get; }
 
 	/// <summary>
+	/// What the open positions have gained or lost since they were taken, at the prices they could be
+	/// closed at now. A position the market has not priced counts for nothing.
+	/// </summary>
+	decimal UnrealizedPnL { get; }
+
+	/// <summary>
 	/// Total PnL (realized - commission).
 	/// </summary>
 	decimal TotalPnL { get; }

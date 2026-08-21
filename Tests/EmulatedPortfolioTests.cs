@@ -11,7 +11,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void Constructor_SetsName()
 	{
-		var portfolio = new EmulatedPortfolio("TestPortfolio");
+		var portfolio = new EmulatedPortfolio("TestPortfolio", NoMarkPrices.Instance);
 
 		AreEqual("TestPortfolio", portfolio.Name);
 	}
@@ -19,13 +19,13 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void Constructor_NullName_ThrowsArgumentNullException()
 	{
-		Throws<ArgumentNullException>(() => new EmulatedPortfolio(null));
+		Throws<ArgumentNullException>(() => new EmulatedPortfolio(null, NoMarkPrices.Instance));
 	}
 
 	[TestMethod]
 	public void SetMoney_SetsBeginMoney()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 
 		portfolio.SetMoney(10000m);
 
@@ -37,7 +37,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void InitialState_AllZero()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 
 		AreEqual(0m, portfolio.BeginMoney);
 		AreEqual(0m, portfolio.CurrentMoney);
@@ -55,7 +55,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void SetPosition_CreatesNewPosition()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		var secId = CreateSecId();
 
 		portfolio.SetPosition(secId, 100m, 50m);
@@ -71,7 +71,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void SetPosition_UpdatesExistingPosition()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		var secId = CreateSecId();
 
 		portfolio.SetPosition(secId, 100m, 50m);
@@ -85,7 +85,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void GetPosition_NonExisting_ReturnsNull()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		var secId = CreateSecId();
 
 		var pos = portfolio.GetPosition(secId);
@@ -96,7 +96,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void GetPositions_ReturnsAllPositions()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		var secId1 = CreateSecId();
 		var secId2 = CreateSecId();
 
@@ -111,7 +111,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void GetAllPositions_ReturnsPositionInfos()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		var secId = CreateSecId();
 
 		portfolio.SetPosition(secId, 100m, 50m);
@@ -129,7 +129,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_OpenLongPosition_UpdatesPositionAndAvgPrice()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -144,7 +144,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_OpenShortPosition_UpdatesPositionAndAvgPrice()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -159,7 +159,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_IncreaseLongPosition_RecalculatesAvgPrice()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -177,7 +177,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_IncreaseShortPosition_RecalculatesAvgPrice()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -199,7 +199,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_CloseLongPosition_CalculatesRealizedPnL()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -217,7 +217,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_CloseLongPosition_WithLoss()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -235,7 +235,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_CloseShortPosition_CalculatesRealizedPnL()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -252,7 +252,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_CloseShortPosition_WithLoss()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -269,7 +269,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_PartialCloseLongPosition_CalculatesPartialPnL()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -292,7 +292,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_FlipLongToShort_ClosesAndOpensNew()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -311,7 +311,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_FlipShortToLong_ClosesAndOpensNew()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -334,7 +334,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_WithCommission_UpdatesCommission()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -347,7 +347,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_MultipleCommissions_Accumulates()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -363,7 +363,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void CurrentMoney_IncludesPnL()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -381,7 +381,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOrderRegistration_BlocksFunds()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -394,7 +394,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOrderRegistration_MultipleBuyOrders_BlocksSum()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -409,7 +409,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOrderCancellation_UnblocksFunds()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -423,7 +423,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessOrderCancellation_PartialCancel_UnblocksPartially()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -437,7 +437,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_AfterRegistration_UpdatesBlockedCorrectly()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -491,7 +491,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_ZeroVolume_NoChange()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -504,7 +504,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_MultipleTrades_AccumulatesPnL()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId = CreateSecId();
 
@@ -522,7 +522,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 	[TestMethod]
 	public void ProcessTrade_MultipleSecurities_TrackedSeparately()
 	{
-		var portfolio = new EmulatedPortfolio("Test");
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
 		portfolio.SetMoney(10000m);
 		var secId1 = CreateSecId();
 		var secId2 = CreateSecId();

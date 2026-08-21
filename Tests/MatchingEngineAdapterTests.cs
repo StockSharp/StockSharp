@@ -197,6 +197,122 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// A position that moved against the account has spent money the account no longer has: what is
+	/// left to trade with must go down with it, or the account keeps buying on a loss it never took.
+	/// </summary>
+	[TestMethod]
+	public async Task APositionThatMovedAgainstTheAccountLeavesLessToTradeWith()
+	{
+		const string account = "Trader";
+		const decimal begin = 2000m;
+
+		var engine = new MatchingEngineAdapter();
+		engine.Settings.CheckMoney = true;
+
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(MoneyRow(account, begin, _start), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		// Buys the whole ask: 10 at 101, so the account is long 10 at an average of 101.
+		await run.SendAsync(NewOrder(1, account, Sides.Buy, OrderTypes.Limit, 101m, 10m, _start.AddSeconds(1)), CancellationToken);
+
+		AreEqual(10m, PositionOf(engine, account), "the opening buy has to fill, or there is no position to revalue");
+
+		// The market halves: the position is worth 500 where it cost 1010, a loss of 510.
+		await run.SendAsync(VenueBook(_securityId, _start.AddSeconds(2), [new QuoteChange(50m, 10m)], [new QuoteChange(51m, 10m)]), CancellationToken);
+
+		await run.SendAsync(NewOrder(2, account, Sides.Buy, OrderTypes.Limit, 50m, 10m, _start.AddSeconds(3)), CancellationToken);
+
+		var replies = run.Executions.Where(m => m.HasOrderInfo() && m.OriginalTransactionId == 2).ToArray();
+
+		IsTrue(replies.Length > 0, "the engine must answer the second registration");
+		IsTrue(replies.Any(m => m.OrderState == OrderStates.Failed && m.Error is not null),
+			$"the account opened with {begin}, is down 510 on an open position and already has 1010 committed to it, so a further 500 is money it does not have; states were {replies.Select(m => m.OrderState.ToString()).JoinComma()}");
+	}
+
+	/// <summary>
+	/// A short that the market ran away from has lost the same money a long would have, and what is
+	/// left to trade with must go down with it.
+	/// </summary>
+	[TestMethod]
+	public async Task AShortThatTheMarketRanAwayFromLeavesLessToTradeWith()
+	{
+		const string account = "Trader";
+
+		var engine = new MatchingEngineAdapter();
+		engine.Settings.CheckMoney = true;
+
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(MoneyRow(account, 2000m, _start), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		// Sells the whole bid: short 10 at 100.
+		await run.SendAsync(NewOrder(1, account, Sides.Sell, OrderTypes.Limit, 100m, 10m, _start.AddSeconds(1)), CancellationToken);
+
+		AreEqual(-10m, PositionOf(engine, account), "the opening sell has to fill, or there is no position to revalue");
+
+		// The market doubles: buying the short back now costs 2010 where it sold for 1000.
+		await run.SendAsync(VenueBook(_securityId, _start.AddSeconds(2), [new QuoteChange(200m, 10m)], [new QuoteChange(201m, 10m)]), CancellationToken);
+
+		await run.SendAsync(NewOrder(2, account, Sides.Buy, OrderTypes.Limit, 200m, 1m, _start.AddSeconds(3)), CancellationToken);
+
+		var replies = run.Executions.Where(m => m.HasOrderInfo() && m.OriginalTransactionId == 2).ToArray();
+
+		IsTrue(replies.Length > 0, "the engine must answer the second registration");
+		IsTrue(replies.Any(m => m.OrderState == OrderStates.Failed && m.Error is not null),
+			$"the account opened with 2000 and is down 1010 on the short, so it has nothing left for another 200; states were {replies.Select(m => m.OrderState.ToString()).JoinComma()}");
+	}
+
+	/// <summary>
+	/// A position in an instrument nobody has quoted is worth what it cost: the engine must not invent
+	/// a loss out of a price it does not have, and must not fall over asking for one.
+	/// </summary>
+	[TestMethod]
+	public void APositionTheMarketHasNotPricedIsWorthWhatItCost()
+	{
+		const string account = "Trader";
+
+		var engine = new MatchingEngineAdapter();
+		var portfolio = engine.PortfolioManager.GetPortfolio(account);
+
+		portfolio.SetMoney(1000m);
+		portfolio.SetPosition(_otherSecurityId, 5m, 20m);
+
+		AreEqual(0m, portfolio.UnrealizedPnL, "an unpriced position cannot have gained or lost anything");
+		AreEqual(1000m, portfolio.CurrentMoney, "and the account still holds what it started with");
+	}
+
+	/// <summary>
+	/// A position that moved the account's way is not punished for it: what it can trade with does not
+	/// shrink because the market went in its favour.
+	/// </summary>
+	[TestMethod]
+	public async Task APositionThatMovedTheAccountsWayIsNotPunished()
+	{
+		const string account = "Trader";
+
+		var engine = new MatchingEngineAdapter();
+		engine.Settings.CheckMoney = true;
+
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(MoneyRow(account, 2000m, _start), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		await run.SendAsync(NewOrder(1, account, Sides.Buy, OrderTypes.Limit, 101m, 10m, _start.AddSeconds(1)), CancellationToken);
+
+		var afterOpening = engine.PortfolioManager.GetPortfolio(account).AvailableMoney;
+
+		// The market rises: the position is worth more than it cost.
+		await run.SendAsync(VenueBook(_securityId, _start.AddSeconds(2), [new QuoteChange(150m, 10m)], [new QuoteChange(151m, 10m)]), CancellationToken);
+
+		IsTrue(engine.PortfolioManager.GetPortfolio(account).AvailableMoney >= afterOpening,
+			$"a position in profit must not cost the account anything: {afterOpening} before the rise, {engine.PortfolioManager.GetPortfolio(account).AvailableMoney} after");
+	}
+
+	/// <summary>
 	/// When one client's order is filled by another client's resting order, the resting side must be
 	/// filled for the whole volume that was taken from it, not for nothing.
 	/// </summary>

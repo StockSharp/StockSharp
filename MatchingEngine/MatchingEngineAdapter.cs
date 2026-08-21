@@ -1422,7 +1422,7 @@ public class MatchingEngineAdapter : IMessageTransport
 		if (chargedPrice is not decimal price)
 			return new InvalidOperationException($"Order {regMsg.TransactionId}: no price to charge, the {regMsg.Side.Invert()} side is empty.");
 
-		EnsureMarginController();
+		EnsurePortfolioServices();
 		return _portfolioManager.ValidateFunds(regMsg.PortfolioName, regMsg.SecurityId, price, regMsg.Volume);
 	}
 
@@ -1439,10 +1439,30 @@ public class MatchingEngineAdapter : IMessageTransport
 			: state.OrderBook.BestBid?.price;
 	}
 
-	private void EnsureMarginController()
+	private void EnsurePortfolioServices()
 	{
-		if (_portfolioManager is EmulatedPortfolioManager epm && epm.MarginController is null)
-			epm.MarginController = new MarginController();
+		if (_portfolioManager is not EmulatedPortfolioManager epm)
+			return;
+
+		epm.MarginController ??= new MarginController();
+		epm.MarkPrices ??= new BookMarkPrices(this);
+	}
+
+	/// <summary>
+	/// The engine's own books, read as the price an open position could be closed at.
+	/// </summary>
+	private sealed class BookMarkPrices(MatchingEngineAdapter engine) : IMarkPrices
+	{
+		public decimal? TryGetClosePrice(SecurityId securityId, Sides closeSide)
+		{
+			// Asking must not create a state for an instrument the engine has never seen.
+			if (!engine._securityStates.TryGetValue(securityId, out var state))
+				return null;
+
+			return closeSide == Sides.Sell
+				? state.OrderBook.BestBid?.price
+				: state.OrderBook.BestAsk?.price;
+		}
 	}
 
 	private IPortfolio GetPortfolio(string name)
@@ -1519,7 +1539,7 @@ public class MatchingEngineAdapter : IMessageTransport
 
 	private static void AddPortfolioUpdate(IPortfolio portfolio, DateTime time, List<Message> results)
 	{
-		var unrealizedPnL = 0m;
+		var unrealizedPnL = portfolio.UnrealizedPnL;
 		var totalPnL = portfolio.RealizedPnL - portfolio.Commission + unrealizedPnL;
 
 		results.Add(new PositionChangeMessage
