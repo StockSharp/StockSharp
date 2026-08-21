@@ -11,6 +11,7 @@ using StockSharp.MatchingEngine;
 public class MatchingEngineAdapterTests : BaseTestClass
 {
 	private static readonly SecurityId _securityId = new() { SecurityCode = "BTCUSDT", BoardCode = "IMEX" };
+	private static readonly SecurityId _otherSecurityId = new() { SecurityCode = "ETHUSDT", BoardCode = "IMEX" };
 	private static readonly DateTime _start = new(2026, 8, 20, 10, 0, 0, DateTimeKind.Utc);
 
 	#region Test helpers
@@ -64,6 +65,17 @@ public class MatchingEngineAdapterTests : BaseTestClass
 			ServerTime = time,
 		}
 		.Add(PositionChangeTypes.BeginValue, money);
+
+	private static PositionChangeMessage PositionRow(SecurityId securityId, string account, decimal volume, decimal averagePrice, DateTime time)
+		=> new PositionChangeMessage
+		{
+			SecurityId = securityId,
+			PortfolioName = account,
+			LocalTime = time,
+			ServerTime = time,
+		}
+		.Add(PositionChangeTypes.BeginValue, volume)
+		.Add(PositionChangeTypes.AveragePrice, averagePrice);
 
 	private static OrderRegisterMessage NewOrder(long transactionId, string account, Sides side, OrderTypes type, decimal price, decimal volume, DateTime time)
 		=> new()
@@ -271,6 +283,119 @@ public class MatchingEngineAdapterTests : BaseTestClass
 		var unattributed = run.Executions.Where(m => m.OriginalTransactionId == 0 && m.TransactionId == 0).ToArray();
 
 		AreEqual(0, unattributed.Length, "every transactional row the engine raises must name the order it belongs to");
+	}
+
+	/// <summary>
+	/// Positions closed by a group cancel are closed on someone's behalf, and the fills must say
+	/// whose - the closing order never passed through the caller, so nothing else can name it.
+	/// </summary>
+	[TestMethod]
+	public async Task ClosingAPositionOnGroupCancelNamesTheAccountItBelongsTo()
+	{
+		const string account = "Client";
+		const long groupTx = 6001;
+
+		var run = new EngineRun(new MatchingEngineAdapter());
+
+		await run.SendAsync(PositionRow(_securityId, account, 5m, 90m, _start), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		await run.SendAsync(new OrderGroupCancelMessage
+		{
+			TransactionId = groupTx,
+			PortfolioName = account,
+			Mode = OrderGroupCancelModes.ClosePositions,
+			LocalTime = _start.AddSeconds(1),
+		}, CancellationToken);
+
+		var fill = run.Executions.FirstOrDefault(m => m.HasTradeInfo());
+
+		IsNotNull(fill, "a long of 5 against a bid of 100 must be closed by a fill");
+		AreEqual(5m, fill.TradeVolume, "the whole position is closed");
+		AreEqual(account, fill.PortfolioName, "a fill the engine raised by itself must still name the account it closed");
+	}
+
+	/// <summary>
+	/// The closing order a group cancel raises is built inside the engine and reaches no caller on its
+	/// way in, so nothing outside can attach an account to it afterwards. Every row it raises - its
+	/// acceptance as much as its fills - must name the account, or it arrives unattributed and is
+	/// booked against nobody.
+	/// </summary>
+	[TestMethod]
+	public async Task EveryRowRaisedForAGroupCancelCloseNamesTheAccount()
+	{
+		const string account = "Client";
+		const long groupTx = 6101;
+
+		var run = new EngineRun(new MatchingEngineAdapter());
+
+		await run.SendAsync(PositionRow(_securityId, account, 5m, 90m, _start), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		await run.SendAsync(new OrderGroupCancelMessage
+		{
+			TransactionId = groupTx,
+			PortfolioName = account,
+			Mode = OrderGroupCancelModes.ClosePositions,
+			LocalTime = _start.AddSeconds(1),
+		}, CancellationToken);
+
+		var rows = run.Executions.ToArray();
+
+		IsTrue(rows.Any(m => m.HasTradeInfo()), "a long of 5 against a bid of 100 must be closed by a fill");
+		IsTrue(rows.Any(m => m.HasOrderInfo()), "the order that closes the position must report its own lifecycle");
+
+		var unnamed = rows.Where(m => m.PortfolioName.IsEmpty()).ToArray();
+		var unnamedKinds = unnamed.Select(m => m.HasTradeInfo() ? "trade" : $"order {m.OrderState}").JoinComma();
+
+		AreEqual(0, unnamed.Length,
+			$"the engine placed this order itself, so only it can say whose it is: {unnamedKinds}");
+	}
+
+	/// <summary>
+	/// One group cancel closes every position the account holds, and each closing order stands on its
+	/// own. Two orders alive at once cannot answer to one transaction id - whoever keys fills by it
+	/// books both against a single order and loses one of the two.
+	/// </summary>
+	[TestMethod]
+	public async Task TwoPositionsClosedByOneGroupCancelAnswerToTwoOrders()
+	{
+		const string account = "Client";
+		const long groupTx = 6201;
+
+		var run = new EngineRun(new MatchingEngineAdapter());
+
+		await run.SendAsync(PositionRow(_securityId, account, 5m, 90m, _start), CancellationToken);
+		await run.SendAsync(PositionRow(_otherSecurityId, account, 4m, 40m, _start), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+		await run.SendAsync(VenueBook(_otherSecurityId, _start, [new QuoteChange(50m, 10m)], [new QuoteChange(51m, 10m)]), CancellationToken);
+
+		await run.SendAsync(new OrderGroupCancelMessage
+		{
+			TransactionId = groupTx,
+			PortfolioName = account,
+			Mode = OrderGroupCancelModes.ClosePositions,
+			LocalTime = _start.AddSeconds(1),
+		}, CancellationToken);
+
+		var fills = run.Executions.Where(m => m.HasTradeInfo()).ToArray();
+
+		AreEqual(2, fills.Length, "both positions are closed, so each raises a fill of its own");
+
+		var first = fills.FirstOrDefault(m => m.SecurityId == _securityId);
+		var second = fills.FirstOrDefault(m => m.SecurityId == _otherSecurityId);
+
+		IsNotNull(first, "the position in the first instrument must be closed by a fill naming that instrument");
+		IsNotNull(second, "the position in the second instrument must be closed by a fill naming that instrument");
+
+		AreEqual(5m, first.TradeVolume, "the whole position in the first instrument is closed");
+		AreEqual(4m, second.TradeVolume, "the whole position in the second instrument is closed");
+
+		AreEqual(account, first.PortfolioName, "a fill the engine raised by itself must still name the account it closed");
+		AreEqual(account, second.PortfolioName, "a fill the engine raised by itself must still name the account it closed");
+
+		AreNotEqual(first.OriginalTransactionId, second.OriginalTransactionId,
+			$"two closing orders standing at once must be told apart, and both answer to {first.OriginalTransactionId}");
 	}
 
 	/// <summary>

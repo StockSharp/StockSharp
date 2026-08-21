@@ -575,6 +575,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				TradePrice = trade.Price,
 				TradeVolume = trade.Volume,
 				Side = regMsg.Side,
+				PortfolioName = regMsg.PortfolioName,
 				MarketPrice = marketPrice,
 			};
 
@@ -1026,9 +1027,10 @@ public class MatchingEngineAdapter : IMessageTransport
 						{
 							SecurityId = securityId,
 							LocalTime = groupMsg.LocalTime,
-							// The position-closing order carries the group request's transaction id so its
-							// executions report back against the request the caller actually sent.
-							TransactionId = groupMsg.TransactionId,
+							// One request closes every position the account holds, and each close is an
+							// order of its own: sharing the request's id would make two orders standing at
+							// once indistinguishable, and fills keyed by it would book against a single one.
+							TransactionId = TransactionIdGenerator.GetNextId(),
 							Side = closeSide,
 							Price = bestPrice.Value,
 							Volume = closeVolume,
@@ -1036,10 +1038,37 @@ public class MatchingEngineAdapter : IMessageTransport
 							PortfolioName = portfolio.Name,
 						};
 
+						var firstRow = results.Count;
+
 						ProcessOrderRegister(closeMsg, results);
+						NameAccountOn(results, firstRow, closeMsg);
 					}
 				}
 			}
+		}
+	}
+
+	/// <summary>
+	/// States the account and the instrument on each transactional row from <paramref name="from"/>
+	/// onwards that is missing them.
+	/// </summary>
+	/// <remarks>
+	/// An order the engine materialised on its own behalf crossed no caller on its way in, so no
+	/// map anywhere holds the account to put back on its rows afterwards - unattributed, they are
+	/// booked against nobody.
+	/// </remarks>
+	private static void NameAccountOn(List<Message> results, int from, OrderRegisterMessage regMsg)
+	{
+		for (var i = from; i < results.Count; i++)
+		{
+			if (results[i] is not ExecutionMessage row)
+				continue;
+
+			if (row.PortfolioName.IsEmpty())
+				row.PortfolioName = regMsg.PortfolioName;
+
+			if (row.SecurityId == default)
+				row.SecurityId = regMsg.SecurityId;
 		}
 	}
 

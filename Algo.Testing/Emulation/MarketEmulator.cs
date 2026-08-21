@@ -502,6 +502,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				TradePrice = trade.Price,
 				TradeVolume = trade.Volume,
 				Side = regMsg.Side,
+				PortfolioName = regMsg.PortfolioName,
 				MarketPrice = marketPrice,
 			};
 

@@ -2700,6 +2700,7 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 				DataTypeEx = DataType.Transactions,
 				ServerTime = GetServerTime(time),
 				Side = order.Side,
+				PortfolioName = order.PortfolioName,
 				MarketPrice = marketPrice,
 			};
 			result.Add(tradeMsg);
@@ -3302,7 +3303,10 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 
 							var orderMsg = new OrderRegisterMessage
 							{
-								TransactionId = cancelMsg.TransactionId,
+								// One request closes every position the account holds, and each close is
+								// an order of its own: sharing the request's id would make two orders
+								// standing at once indistinguishable.
+								TransactionId = TransactionIdGenerator.GetNextId(),
 								SecurityId = position.SecurityId,
 								PortfolioName = position.PortfolioName,
 								Side = orderSide,
@@ -3312,7 +3316,23 @@ public class MarketEmulatorOld : BaseLogReceiver, IMarketEmulator
 								UserOrderId = cancelMsg.UserOrderId,
 							};
 
+							var firstRow = retVal.Count;
+
 							GetEmulator(orderMsg.SecurityId).Process(orderMsg, retVal);
+
+							// This order crossed no caller on its way in, so no map anywhere holds the
+							// account to put back on its rows afterwards.
+							for (var i = firstRow; i < retVal.Count; i++)
+							{
+								if (retVal[i] is not ExecutionMessage row)
+									continue;
+
+								if (row.PortfolioName.IsEmpty())
+									row.PortfolioName = orderMsg.PortfolioName;
+
+								if (row.SecurityId == default)
+									row.SecurityId = orderMsg.SecurityId;
+							}
 						}
 					}
 				}
