@@ -1229,20 +1229,8 @@ public class MatchingEngineAdapter : IMessageTransport
 
 		foreach (var trigger in triggers)
 		{
-			results.Add(new ExecutionMessage
-			{
-				DataTypeEx = DataType.Transactions,
-				HasOrderInfo = true,
-				SecurityId = securityId,
-				LocalTime = time,
-				ServerTime = time,
-				OriginalTransactionId = trigger.Info.TransactionId,
-				OrderState = OrderStates.Done,
-				Side = trigger.Info.Side,
-				Balance = 0,
-				OrderVolume = trigger.Info.Volume,
-			});
-
+			// The derived order carries the stop's own transaction id, so the rows it raises are the
+			// stop's own lifecycle from here on.
 			ProcessOrderRegister(trigger.ResultingOrder, results);
 		}
 	}

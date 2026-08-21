@@ -163,7 +163,15 @@ public class StopOrderManager : IStopOrderManager
 			: price <= info.StopPrice;
 	}
 
-	private static OrderRegisterMessage CreateResultingOrder(StopOrderInfo info, DateTime time)
+	/// <summary>
+	/// Builds the order a stop places when it fires: a limit order at the price its condition asks
+	/// for, resolving a percentage against the level it fired at, or a market order when it names no
+	/// price at all.
+	/// </summary>
+	/// <param name="info">The stop that fired.</param>
+	/// <param name="time">When it fired.</param>
+	/// <returns>The order to place.</returns>
+	public static OrderRegisterMessage CreateResultingOrder(StopOrderInfo info, DateTime time)
 	{
 		decimal limit = 0;
 
@@ -176,6 +184,9 @@ public class StopOrderManager : IStopOrderManager
 
 		return new()
 		{
+			// The derived order continues the stop's own transaction: that is the only id the caller
+			// issued, so it is the only id its executions can be attributed to.
+			TransactionId = info.TransactionId,
 			SecurityId = info.SecurityId,
 			Side = info.Side,
 			Volume = info.Volume,

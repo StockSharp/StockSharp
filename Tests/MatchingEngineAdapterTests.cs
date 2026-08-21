@@ -237,6 +237,43 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// The order a triggered stop turns into must carry a transaction of its own, so its fills can be
+	/// told apart and delivered to the session that placed the stop.
+	/// </summary>
+	[TestMethod]
+	public async Task ATriggeredStopFillsUnderARealTransactionId()
+	{
+		const string account = "Client";
+		const long stopTx = 5001;
+
+		var run = new EngineRun(new MatchingEngineAdapter());
+
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		var stop = NewOrder(stopTx, account, Sides.Buy, OrderTypes.Conditional, 0m, 3m, _start.AddSeconds(1));
+		stop.Condition = new StopOrderCondition { ActivationPrice = 105m };
+
+		await run.SendAsync(stop, CancellationToken);
+
+		await run.SendAsync(new Level1ChangeMessage
+		{
+			SecurityId = _securityId,
+			LocalTime = _start.AddSeconds(2),
+			ServerTime = _start.AddSeconds(2),
+		}
+		.Add(Level1Fields.LastTradePrice, 106m), CancellationToken);
+
+		var fill = run.Executions.FirstOrDefault(m => m.HasTradeInfo());
+
+		IsNotNull(fill, "the stop was passed through its activation price, so its order must reach the book");
+		AreNotEqual(0L, fill.OriginalTransactionId, "a fill nobody can attribute is a fill that reaches every session or none");
+
+		var unattributed = run.Executions.Where(m => m.OriginalTransactionId == 0 && m.TransactionId == 0).ToArray();
+
+		AreEqual(0, unattributed.Length, "every transactional row the engine raises must name the order it belongs to");
+	}
+
+	/// <summary>
 	/// A market buy must reach as far into the book as the mirrored market sell does; the same order
 	/// on the other side cannot fill a hundredth of it.
 	/// </summary>
