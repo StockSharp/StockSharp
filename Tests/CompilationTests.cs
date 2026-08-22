@@ -18,8 +18,6 @@ using StockSharp.Diagram;
 [TestClass]
 public class CompilationTests : BaseTestClass
 {
-	// Synchronization object for Python script execution
-	// IronPython's ScriptEngine is not thread-safe
 	private static readonly string _analyticsFolder = "../../../../Algo.Analytics.{0}";
 	private static readonly (string name, byte[] body)[] _noReferenceImages = [];
 
