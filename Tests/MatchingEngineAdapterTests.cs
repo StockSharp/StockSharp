@@ -84,6 +84,22 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	#endregion
 
 	/// <summary>
+	/// An account is one account however its name is spelled: an order naming it differently has to
+	/// find the money it was funded with, not a second, empty book beside it.
+	/// </summary>
+	[TestMethod]
+	public async Task AnAccountIsTheSameAccountHoweverItsNameIsSpelled()
+	{
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(MoneyRow("Demo1", 1000m, _start), CancellationToken);
+
+		AreEqual(1000m, engine.PortfolioManager.GetPortfolio("DEMO1").BeginMoney,
+			"the account was funded under one spelling, so the other spelling must reach the same money");
+	}
+
+	/// <summary>
 	/// An instrument the venue has halted takes no orders at all, whatever the account can pay for.
 	/// </summary>
 	[TestMethod]

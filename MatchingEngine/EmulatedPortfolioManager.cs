@@ -292,7 +292,9 @@ public class EmulatedPortfolio : IPortfolio
 /// </summary>
 public class EmulatedPortfolioManager : IPortfolioManager
 {
-	private readonly Dictionary<string, EmulatedPortfolio> _portfolios = [];
+	// One account, one balance: the name is compared the way the rest of the engine compares it,
+	// or an order spelling it differently opens a second, empty portfolio next to the funded one.
+	private readonly Dictionary<string, EmulatedPortfolio> _portfolios = new(StringComparer.InvariantCultureIgnoreCase);
 
 	/// <summary>
 	/// Margin controller for order validation.
