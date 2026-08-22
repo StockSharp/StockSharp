@@ -399,18 +399,12 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		var portfolio = _engine.PortfolioManager.GetPortfolio(regMsg.PortfolioName);
 		var serverTime = regMsg.LocalTime;
 
-		// Validate
-		if (Settings.CheckMoney)
+		// Validate. In candle mode the charge comes from the candle, not from a book.
+		var error = _engine.ValidateRegistration(regMsg, GetCandleExecutionPrice(regMsg.OrderType, regMsg.Price, candle));
+		if (error != null)
 		{
-			if (_engine.PortfolioManager is EmulatedPortfolioManager epm && epm.MarginController is null)
-				epm.MarginController = new MarginController();
-
-			var error = _engine.PortfolioManager.ValidateFunds(regMsg.PortfolioName, regMsg.SecurityId, regMsg.Price, regMsg.Volume);
-			if (error != null)
-			{
-				results.Add(CreateOrderResponse(regMsg, OrderStates.Failed, error: error));
-				return;
-			}
+			results.Add(CreateOrderResponse(regMsg, OrderStates.Failed, error: error));
+			return;
 		}
 
 		var replyMsg = new ExecutionMessage
@@ -647,6 +641,20 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	}
 
 	/// <summary>
+	/// Price a candle fills an order at: the order's own price when it names one, the candle's mid
+	/// (its close when the mid falls outside the candle) for a market order.
+	/// </summary>
+	private static decimal GetCandleExecutionPrice(OrderTypes? orderType, decimal orderPrice, CandleMessage candle)
+	{
+		if (orderType != OrderTypes.Market)
+			return orderPrice;
+
+		var mid = (candle.HighPrice + candle.LowPrice) / 2;
+
+		return mid > candle.HighPrice || mid < candle.LowPrice ? candle.ClosePrice : mid;
+	}
+
+	/// <summary>
 	/// Match order against candle data directly.
 	/// </summary>
 	private static MatchResult MatchOrderByCandle(EmulatorOrder order, CandleMessage candle)
@@ -670,32 +678,20 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			};
 		}
 
-		decimal execPrice;
-
-		if (order.OrderType == OrderTypes.Market)
+		if (order.OrderType != OrderTypes.Market && (order.Price > candle.HighPrice || order.Price < candle.LowPrice))
 		{
-			execPrice = (candle.HighPrice + candle.LowPrice) / 2;
-
-			if (execPrice > candle.HighPrice || execPrice < candle.LowPrice)
-				execPrice = candle.ClosePrice;
-		}
-		else
-		{
-			if (order.Price > candle.HighPrice || order.Price < candle.LowPrice)
+			return new MatchResult
 			{
-				return new MatchResult
-				{
-					Order = order,
-					Trades = [],
-					MatchedOrders = [],
-					RemainingVolume = balance,
-					ShouldPlaceInBook = order.TimeInForce != TimeInForce.CancelBalance,
-					FinalState = order.TimeInForce == TimeInForce.CancelBalance ? OrderStates.Done : OrderStates.Active,
-				};
-			}
-
-			execPrice = order.Price;
+				Order = order,
+				Trades = [],
+				MatchedOrders = [],
+				RemainingVolume = balance,
+				ShouldPlaceInBook = order.TimeInForce != TimeInForce.CancelBalance,
+				FinalState = order.TimeInForce == TimeInForce.CancelBalance ? OrderStates.Done : OrderStates.Active,
+			};
 		}
+
+		var execPrice = GetCandleExecutionPrice(order.OrderType, order.Price, candle);
 
 		var tradeVolume = balance - leftBalance;
 		var trades = new List<MatchTrade>

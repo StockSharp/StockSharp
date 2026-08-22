@@ -432,7 +432,8 @@ public class MatchingEngineAdapter : IMessageTransport
 		var serverTime = regMsg.LocalTime;
 
 		// Validate registration
-		var error = ValidateRegistration(regMsg);
+		var chargedPrice = GetChargedPrice(regMsg, state);
+		var error = ValidateRegistration(regMsg, chargedPrice);
 		if (error != null)
 		{
 			results.Add(CreateOrderResponse(regMsg, OrderStates.Failed, error: error));
@@ -1350,15 +1351,40 @@ public class MatchingEngineAdapter : IMessageTransport
 		results.Add(new ResetMessage());
 	}
 
-	private InvalidOperationException ValidateRegistration(OrderRegisterMessage regMsg)
+	/// <summary>
+	/// Check whether the registration is allowed: the instrument is trading, and the account can
+	/// afford it.
+	/// </summary>
+	/// <param name="regMsg">Registration to check.</param>
+	/// <param name="chargedPrice">Price the order will actually be charged at, or <see langword="null"/> when it cannot be priced.</param>
+	/// <returns>The reason the registration must be refused, or <see langword="null"/> when it is allowed.</returns>
+	public InvalidOperationException ValidateRegistration(OrderRegisterMessage regMsg, decimal? chargedPrice)
 	{
-		if (Settings.CheckMoney)
-		{
-			EnsureMarginController();
-			return _portfolioManager.ValidateFunds(regMsg.PortfolioName, regMsg.SecurityId, regMsg.Price, regMsg.Volume);
-		}
+		if (regMsg is null)
+			throw new ArgumentNullException(nameof(regMsg));
 
-		return null;
+		if (!Settings.CheckMoney)
+			return null;
+
+		// An order with no price to charge cannot be paid for, so it cannot be let through.
+		if (chargedPrice is not decimal price)
+			return new InvalidOperationException($"Order {regMsg.TransactionId}: no price to charge, the {regMsg.Side.Invert()} side is empty.");
+
+		EnsureMarginController();
+		return _portfolioManager.ValidateFunds(regMsg.PortfolioName, regMsg.SecurityId, price, regMsg.Volume);
+	}
+
+	/// <summary>
+	/// Price the order will be charged at: its own price when it names one, the opposite best for a market order.
+	/// </summary>
+	private static decimal? GetChargedPrice(OrderRegisterMessage regMsg, SecurityState state)
+	{
+		if (regMsg.OrderType != OrderTypes.Market)
+			return regMsg.Price;
+
+		return regMsg.Side == Sides.Buy
+			? state.OrderBook.BestAsk?.price
+			: state.OrderBook.BestBid?.price;
 	}
 
 	private void EnsureMarginController()
