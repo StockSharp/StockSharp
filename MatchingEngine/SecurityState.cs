@@ -43,11 +43,25 @@ public class SecurityState(SecurityId securityId)
 	public bool HasDepthSubscription => _depthSubscription.HasValue;
 
 	/// <summary>
+	/// Trading state as the venue last stated it, or <see langword="null"/> when it never has.
+	/// </summary>
+	public SecurityStates? TradingState { get; private set; }
+
+	/// <summary>
 	/// Process security definition message.
 	/// </summary>
 	public void ProcessSecurity(SecurityMessage msg)
 	{
 		_securityDefinition = msg;
+	}
+
+	/// <summary>
+	/// Record the trading state the venue reports for this security.
+	/// </summary>
+	/// <param name="state">Trading state.</param>
+	public void ProcessTradingState(SecurityStates state)
+	{
+		TradingState = state;
 	}
 
 	/// <summary>

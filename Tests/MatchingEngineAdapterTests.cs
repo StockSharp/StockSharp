@@ -84,6 +84,41 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	#endregion
 
 	/// <summary>
+	/// An instrument the venue has halted takes no orders at all, whatever the account can pay for.
+	/// </summary>
+	[TestMethod]
+	public async Task AHaltedInstrumentTakesNoOrders()
+	{
+		const string account = "Trader";
+
+		var engine = new MatchingEngineAdapter();
+		engine.Settings.CheckTradingState = true;
+
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(MoneyRow(account, 10000m, _start), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		var halt = new Level1ChangeMessage
+		{
+			SecurityId = _securityId,
+			ServerTime = _start.AddSeconds(1),
+			LocalTime = _start.AddSeconds(1),
+		};
+		halt.Add(Level1Fields.State, SecurityStates.Stoped);
+
+		await run.SendAsync(halt, CancellationToken);
+
+		await run.SendAsync(NewOrder(1, account, Sides.Buy, OrderTypes.Limit, 100m, 1m, _start.AddSeconds(2)), CancellationToken);
+
+		var replies = run.Executions.Where(m => m.HasOrderInfo() && m.OriginalTransactionId == 1).ToArray();
+
+		IsTrue(replies.Length > 0, "the engine must answer the registration");
+		IsTrue(replies.Any(m => m.OrderState == OrderStates.Failed && m.Error is not null),
+			$"the venue has halted the instrument, so the order cannot stand whatever the account holds; states were {replies.Select(m => m.OrderState.ToString()).JoinComma()}");
+	}
+
+	/// <summary>
 	/// An account holding no cash must have its market buy rejected: a market order names no price,
 	/// but it still costs what the book charges for it.
 	/// </summary>

@@ -2,6 +2,8 @@ namespace StockSharp.MatchingEngine;
 
 using System.Threading.Tasks;
 
+using StockSharp.Localization;
+
 /// <summary>
 /// Message-based matching engine adapter.
 /// Contains pure matching logic without emulation (no random, no candle matching, no commissions).
@@ -202,6 +204,10 @@ public class MatchingEngineAdapter : IMessageTransport
 	private void ProcessLevel1(Level1ChangeMessage msg, List<Message> results)
 	{
 		var state = GetSecurityState(msg.SecurityId);
+
+		// Recorded whichever way the setting is set; only refusing an order on it is gated.
+		if (msg.Changes.TryGetValue(Level1Fields.State) is SecurityStates tradingState)
+			state.ProcessTradingState(tradingState);
 
 		var bidPrice = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestBidPrice);
 		var askPrice = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestAskPrice);
@@ -1362,6 +1368,10 @@ public class MatchingEngineAdapter : IMessageTransport
 	{
 		if (regMsg is null)
 			throw new ArgumentNullException(nameof(regMsg));
+
+		// A halted instrument takes no orders at all, whatever the account can pay for.
+		if (Settings.CheckTradingState && GetSecurityState(regMsg.SecurityId).TradingState == SecurityStates.Stoped)
+			return new InvalidOperationException(LocalizedStrings.SecurityStopped.Put(regMsg.SecurityId));
 
 		if (!Settings.CheckMoney)
 			return null;
