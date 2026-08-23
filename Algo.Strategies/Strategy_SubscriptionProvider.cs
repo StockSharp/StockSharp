@@ -4,7 +4,7 @@ partial class Strategy
 {
 	// ISubscriptionProvider surface.
 	//
-	// Most of this subsystem is already satisfied by the decomposed Strategy:
+	// Most of this subsystem lives elsewhere:
 	//  - the value/lifecycle events (SubscriptionReceived, Level1Received, OrderBookReceived,
 	//    TickTradeReceived, OrderLogReceived, SecurityReceived, BoardReceived, NewsReceived,
 	//    CandleReceived, OwnTradeReceived, OrderReceived, OrderRegisterFailReceived,
@@ -15,8 +15,8 @@ partial class Strategy
 	//  - subscription tracking (add / remove / suspend / resume / by-id) lives in SubscriptionRegistry,
 	//    exposed via the Subscriptions property and wired to the connector in the Strategy constructor.
 	//
-	// This file adds only the members that the decomposed Strategy does not yet expose:
-	//  - the public Subscribe/UnSubscribe entry points (with the monolith's live-trading history pre-roll),
+	// This file adds:
+	//  - the public Subscribe/UnSubscribe entry points (with the live-trading history pre-roll),
 	//  - the SecurityLookup/BoardLookup/OrderLookup/DataTypeLookup global lookup accessors,
 	//  - the explicit ISubscriptionProvider.Subscriptions projection (the public Subscriptions property is
 	//    the SubscriptionRegistry, not the IEnumerable<Subscription> the interface declares).
@@ -38,8 +38,8 @@ partial class Strategy
 	/// <inheritdoc />
 	public Subscription OrderLookup => _orderLookup ??= ToSubscription<OrderStatusMessage>();
 
-	// The monolith never assigns these — they are always null (the interface documents them as optional).
-	// Reproduced as explicit-interface auto-properties so consumers see the same (null) values.
+	// These are always null: the interface documents them as optional. Declared as explicit-interface
+	// auto-properties so they stay off the public surface.
 	Subscription ISubscriptionProvider.SecurityLookup { get; }
 	Subscription ISubscriptionProvider.BoardLookup { get; }
 	Subscription ISubscriptionProvider.DataTypeLookup { get; }
@@ -52,7 +52,7 @@ partial class Strategy
 	/// Optional history pre-roll applied to market-data subscriptions during live trading, so the strategy
 	/// is warmed up with the configured amount of history before "now". Returns <see cref="TimeSpan.Zero"/>
 	/// by default; subsystems that own a history setting (e.g. HistorySize / HistoryCalculated) and a
-	/// backtesting flag override the wiring points below to feed the monolith's behaviour.
+	/// backtesting flag override the wiring points below.
 	/// </summary>
 	/// <returns>History span to subtract from <see cref="IStrategyHost.CurrentTime"/>, or zero to disable.</returns>
 	private TimeSpan GetSubscribeHistoryPreroll()
@@ -70,8 +70,8 @@ partial class Strategy
 		return history > TimeSpan.Zero ? history : TimeSpan.Zero;
 	}
 
-	// Wiring points for the history pre-roll, fed from the ported settings (HistorySize / HistoryCalculated)
-	// and the backtesting flag, so Subscribe keeps the exact monolith warm-up shape.
+	// Wiring points for the history pre-roll, fed from the HistorySize / HistoryCalculated settings and the
+	// backtesting flag.
 
 	/// <summary>
 	/// Whether the strategy currently runs in backtesting (history emulation) mode.

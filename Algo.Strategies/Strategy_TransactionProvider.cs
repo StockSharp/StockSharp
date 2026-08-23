@@ -2,11 +2,9 @@ namespace StockSharp.Algo.Strategies;
 
 partial class Strategy
 {
-	// Backing delegates for the transaction-provider event surface. The decomposed engine already exposes
-	// strongly-typed events (OrderRegistered, NewMyTrade, OrderEdited, OrderRegisterFailed, OrderCancelFailed),
-	// which implicitly satisfy the matching ITransactionProvider members. The handlers below cover the events
-	// that have no decomposed counterpart yet: the per-order NewOrder/OrderChanged stream and the mass /
-	// lookup notifications that the new pipeline does not raise on its own.
+	// Backing delegates for the transaction-provider event surface: the per-order NewOrder/OrderChanged stream
+	// and the mass / lookup notifications the pipeline does not raise on its own. The remaining
+	// ITransactionProvider members are satisfied by the strongly-typed events declared in Strategy.cs.
 
 	private Action<Order> _txNewOrder;
 	private Action<Order> _txOrderChanged;
@@ -99,10 +97,8 @@ partial class Strategy
 		if (trade is null)
 			throw new ArgumentNullException(nameof(trade));
 
-		// Delegate deduplication, PnL/commission/slippage accounting and the TradeAdded fan-out to the
-		// trade pipeline. All the side effects the monolith performed inline (NewMyTrade, RaisePnLChanged,
-		// RaiseCommissionChanged, RaiseSlippageChanged, statistics, position stamping) are already wired
-		// from the pipeline's events in the Strategy constructor, so a successful TryAdd reproduces them.
+		// Delegate deduplication, PnL/commission/slippage accounting and the TradeAdded fan-out to the trade
+		// pipeline; its events are wired to the strategy's notifications in the Strategy constructor.
 		return Trades.TryAdd(trade);
 	}
 
@@ -185,7 +181,7 @@ partial class Strategy
 		{
 			case CommandTypes.Start:
 			{
-#pragma warning disable CS0618 // the Start()/Stop() shims drive the async entry points, matching the monolith.
+#pragma warning disable CS0618 // the Start()/Stop() shims drive the async entry points.
 				Start();
 #pragma warning restore CS0618
 				break;
@@ -193,7 +189,7 @@ partial class Strategy
 
 			case CommandTypes.Stop:
 			{
-#pragma warning disable CS0618 // the Start()/Stop() shims drive the async entry points, matching the monolith.
+#pragma warning disable CS0618 // the Start()/Stop() shims drive the async entry points.
 				Stop();
 #pragma warning restore CS0618
 				break;

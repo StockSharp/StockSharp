@@ -4,26 +4,23 @@ using StockSharp.Alerts;
 using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Testing;
 
-// HighLevelSubscriptions subsystem ported from the monolith StrategyOld onto the decomposed engine.
+// HighLevelSubscriptions subsystem.
 //
-// The public ISubscriptionHandler / ISubscriptionHandler<T> interfaces are NOT redeclared here:
-// they are namespace-level types already declared by the monolith (StrategyOld_HighLevel.cs) and
-// shared by both strategy implementations. This file only re-implements the high-level data
-// subscription helpers, the alert helpers, the indicator tracking list and the timer helpers on
-// top of the decomposed infrastructure.
+// Holds the high-level data subscription helpers, the alert helpers, the indicator tracking list
+// and the timer helpers. The ISubscriptionHandler / ISubscriptionHandler<T> interfaces are
+// namespace-level types declared elsewhere.
 //
 // The chart drawing surface (CreateChartArea / DrawCandles / DrawIndicator / DrawOwnTrades /
 // DrawOrders and the private DrawFlush used below) belongs to the HighLevelCharting subsystem and
-// is implemented in Strategy_HighLevelCharting.cs - it is intentionally not duplicated here.
+// is implemented in Strategy_HighLevelCharting.cs.
 public partial class Strategy
 {
-	// The monolith exposed an IndicatorList that also drove IsFormed. Here we keep a minimal tracking
-	// collection used by the high-level Bind* helpers. IsFormed remains controlled by the engine and is
-	// intentionally not re-derived from this list. The default-source wiring is attached in InitIndicators.
+	// Tracking collection used by the high-level Bind* helpers; IsFormed is controlled by the engine and is
+	// not derived from this list. The default-source wiring is attached in InitIndicators.
 	private readonly INotifyList<IIndicator> _indicators = new SynchronizedSet<IIndicator>();
 
-	// Mirror the monolith IndicatorList.OnAdded: any indicator added with no Source inherits IndicatorSource
-	// (??= at add-time, so its own Source is never overwritten). Added covers all mutation paths.
+	// Any indicator added with no Source inherits IndicatorSource at add-time, so its own Source is never
+	// overwritten. Added covers all mutation paths.
 	private void InitIndicators()
 	{
 		_indicators.Added += indicator => indicator.Source ??= IndicatorSource;
@@ -35,8 +32,7 @@ public partial class Strategy
 	[Browsable(false)]
 	public INotifyList<IIndicator> Indicators => _indicators;
 
-	// The decomposed Strategy does not own a backtesting flag in this subsystem, so it is derived from
-	// the connector type, exactly as the monolith StrategyOld.IsBacktesting did.
+	// There is no backtesting flag in this subsystem, so it is derived from the connector type.
 	private bool IsBacktestingMode
 		=> _connector is HistoryEmulationConnector;
 
@@ -653,9 +649,8 @@ public partial class Strategy
 		}
 	}
 
-	// Single-security protection activation used by the high-level handlers. Mirrors the monolith's
-	// _posController?.TryActivate(price, time) call against the protective controller already owned by
-	// the decomposed Strategy (declared in Strategy.cs).
+	// Single-security protection activation used by the high-level handlers, delegating to the protective
+	// controller declared in Strategy.cs.
 	private (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? PosControllerTryActivate(decimal price, DateTime time)
 		=> _posController?.TryActivate(price, time);
 
@@ -800,8 +795,8 @@ public partial class Strategy
 			if (IsStarted)
 				return this;
 
-			// The decomposed Strategy is both an ITimeProvider and an IMarketRuleContainer, so the timer is
-			// expressed with the same WhenIntervalElapsed market rule the monolith used.
+			// Strategy is both an ITimeProvider and an IMarketRuleContainer, so the timer is expressed as a
+			// WhenIntervalElapsed market rule.
 			_rule = ((ITimeProvider)_strategy)
 				.WhenIntervalElapsed(Interval)
 				.Do(_callback)

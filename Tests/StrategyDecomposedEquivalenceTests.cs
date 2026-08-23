@@ -1,4 +1,4 @@
-#pragma warning disable CS0618 // equivalence tests deliberately exercise the obsolete StrategyOld engine
+﻿#pragma warning disable CS0618 // these tests deliberately exercise obsolete members
 namespace StockSharp.Tests;
 
 using StockSharp.Algo.Latency;
@@ -84,16 +84,6 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		var mock = new Mock<IConnector>();
 		mock.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
 		return mock;
-	}
-
-	private sealed class SynchronousConnector : Connector
-	{
-		public SynchronousConnector()
-			: base(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider(), initChannels: false)
-		{
-			InMessageChannel = new PassThroughMessageChannel();
-			OutMessageChannel = new PassThroughMessageChannel();
-		}
 	}
 
 	private static Order CreateOrder(Security security, Portfolio portfolio,
@@ -1436,21 +1426,12 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 	/// <summary>
 	/// A fresh strategy that has not registered any order of its own must NOT
-	/// claim a foreign order. Real <see cref="StrategyOld"/> enforces this through
+	/// claim a foreign order. <see cref="Strategy"/> decides ownership in
 	/// <c>CanAttach</c> by matching the order's <see cref="Order.UserOrderId"/>
-	/// against the strategy id (Strategy.cs:2440-2446), so before the first own
-	/// registration a foreign order is rejected.
+	/// against the strategy id, so an order carrying a different id is rejected
+	/// even before the first own registration.
 	///
-	/// <see cref="Strategy"/>'s CanAttach
-	/// (Strategy.cs:669-675) instead returns <see langword="true"/> for
-	/// ANY order while its <c>_ownTransactionIds</c> set is still empty — i.e. a
-	/// brand-new decomposed strategy would attach a foreign order, diverging from
-	/// real Strategy. This test asserts the canonical contract (CanAttach == false
-	/// for a foreign order on a fresh strategy); it is expected to FAIL on the
-	/// current engine, pinning the divergence.
-	///
-	/// CanAttach is <c>protected virtual</c>, so it is invoked through reflection
-	/// (matching the reflection idiom already used by the parity tests in this file).
+	/// CanAttach is <c>protected virtual</c>, so it is invoked through reflection.
 	/// </summary>
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
@@ -1843,15 +1824,14 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Deterministic monolith-vs-decomposed latency parity. The full-equivalence harness cannot compare
-	/// latency (synchronous emulation makes it structurally zero, real values are wall-clock), so this
-	/// computes a fixed latency through the real <see cref="LatencyManager"/> and drives an order with that
-	/// <see cref="Order.LatencyRegistration"/> through both engines' order-intake (monolith StrategyOld.cs:1815,
-	/// decomposed Strategy.cs:142).
+	/// Deterministic latency check. A backtest cannot pin latency down (synchronous emulation makes it
+	/// structurally zero, real values are wall-clock), so this computes a fixed latency through the real
+	/// <see cref="LatencyManager"/> and drives an order carrying it as
+	/// <see cref="Order.LatencyRegistration"/> through the strategy's order-intake (Strategy.cs:142).
 	/// </summary>
 	[TestMethod]
 	[Timeout(10_000, CooperativeCancellation = true)]
-	public void Parity_Latency_DeterministicValueAndEventMatch()
+	public void Latency_DeterministicValueAndEvent()
 	{
 		// 1. Produce a deterministic non-zero registration latency (execTime - regTime) through the real
 		// LatencyManager, so the asserted value is a genuine pipeline product, not a literal.
@@ -1881,37 +1861,28 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		AreEqual(TimeSpan.FromMilliseconds(37), computedLatency.Value,
 			$"Latency must equal the fixed execTime - regTime gap. Got {computedLatency}");
 		AreNotEqual(TimeSpan.Zero, computedLatency.Value,
-			"Latency must be non-zero so the comparison is non-vacuous");
+			"Latency must be non-zero so the assertion is non-vacuous");
 
 		var fixedLatency = computedLatency.Value;
 
-		// 2. Drive the SAME fixed registration latency through BOTH engines and capture
-		// the resulting strategy.Latency and the LatencyChanged event firing.
-		var decomposedResult = RunDecomposedLatency(fixedLatency);
-		var monolithResult = RunMonolithLatency(fixedLatency);
+		// 2. Drive that fixed registration latency through order-intake and capture the resulting
+		// strategy.Latency and the LatencyChanged event firing.
+		var result = RunLatency(fixedLatency);
 
-		// 3a. Both engines must expose the SAME latency value...
-		IsNotNull(decomposedResult.latency, "Decomposed engine must expose Latency");
-		IsNotNull(monolithResult.latency, "Monolith engine must expose Latency");
-		AreEqual(monolithResult.latency.Value, decomposedResult.latency.Value,
-			$"Latency must match between engines. Monolith={monolithResult.latency}, Decomposed={decomposedResult.latency}");
+		// 3. The strategy must expose exactly the fixed, non-zero latency.
+		IsNotNull(result.latency, "Strategy must expose Latency");
+		AreEqual(fixedLatency, result.latency.Value,
+			$"Latency must equal the fixed registration latency. Got {result.latency}");
+		AreNotEqual(TimeSpan.Zero, result.latency.Value,
+			"Latency must be non-zero (test would otherwise pass vacuously)");
 
-		// 3b. ...and that value must be exactly the fixed, non-zero latency (non-vacuous).
-		AreEqual(fixedLatency, monolithResult.latency.Value,
-			$"Monolith Latency must equal the fixed registration latency. Got {monolithResult.latency}");
-		AreEqual(fixedLatency, decomposedResult.latency.Value,
-			$"Decomposed Latency must equal the fixed registration latency. Got {decomposedResult.latency}");
-		AreNotEqual(TimeSpan.Zero, decomposedResult.latency.Value,
-			"Decomposed Latency must be non-zero (test would otherwise pass vacuously)");
-
-		// 3c. Both engines must have raised LatencyChanged for the registration latency.
-		IsTrue(monolithResult.eventFired, "Monolith must raise LatencyChanged");
-		IsTrue(decomposedResult.eventFired, "Decomposed must raise LatencyChanged");
+		// 4. And it must have raised LatencyChanged for the registration latency.
+		IsTrue(result.eventFired, "Strategy must raise LatencyChanged");
 	}
 
-	// Drive one owned order (Pending -> Active) with a fixed LatencyRegistration through the decomposed
-	// order-intake; report the resulting Latency and whether LatencyChanged fired.
-	private static (TimeSpan? latency, bool eventFired) RunDecomposedLatency(TimeSpan fixedLatency)
+	// Drive one owned order (Pending -> Active) with a fixed LatencyRegistration through order-intake;
+	// report the resulting Latency and whether LatencyChanged fired.
+	private static (TimeSpan? latency, bool eventFired) RunLatency(TimeSpan fixedLatency)
 	{
 		var connMock = CreateMockConnector();
 		var security = CreateSecurity();
@@ -1942,63 +1913,6 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		strategy.OnConnectorOrderReceived(sub, order);
 
 		return (strategy.Latency, eventFired);
-	}
-
-	// Equivalent flow through the monolith StrategyOld: a bare Connector (so CurrentTime resolves), the
-	// OrderLookup subscription registered so CanProcess passes, and the private OnConnectorOrderReceived
-	// invoked via reflection. Exercises the real CanProcess -> AttachOrder/ProcessOrder -> ChangeLatency path.
-	private static (TimeSpan? latency, bool eventFired) RunMonolithLatency(TimeSpan fixedLatency)
-	{
-		var security = CreateSecurity();
-		var portfolio = CreatePortfolio();
-
-		var strategy = new StrategyOld
-		{
-			Connector = new Connector(),
-			Security = security,
-			Portfolio = portfolio,
-		};
-
-		var eventFired = false;
-		strategy.LatencyChanged += () => eventFired = true;
-
-		// Register the OrderLookup subscription in the monolith's private subscription set so
-		// CanProcess(OrderLookup) is satisfied, without triggering connector.Subscribe I/O.
-		var orderLookup = strategy.OrderLookup;
-		RegisterMonolithSubscription(strategy, orderLookup);
-
-		// The monolith owns an order when its UserOrderId matches the strategy id (CanAttach).
-		var order = CreateOrder(security, portfolio, Sides.Buy, 100m, 10m);
-		order.UserOrderId = strategy.Id.To<string>();
-
-		var onOrderReceived = typeof(StrategyOld).GetMethod("OnConnectorOrderReceived",
-			BindingFlags.Instance | BindingFlags.NonPublic);
-		IsNotNull(onOrderReceived, "StrategyOld must expose OnConnectorOrderReceived(Subscription, Order)");
-
-		// First delivery: Pending - AttachOrder -> ProcessOrder(order, false), order tracked.
-		onOrderReceived.Invoke(strategy, [orderLookup, order]);
-
-		// Second delivery: Active with the fixed registration latency -> ChangeLatency.
-		order.State = OrderStates.Active;
-		order.Balance = order.Volume;
-		order.LatencyRegistration = fixedLatency;
-		onOrderReceived.Invoke(strategy, [orderLookup, order]);
-
-		return (strategy.Latency, eventFired);
-	}
-
-	// Add a subscription to the monolith's private _subscriptions (the set CanProcess checks) without the
-	// public Subscribe, which would also call connector.Subscribe and need a live transport.
-	private static void RegisterMonolithSubscription(StrategyOld strategy, Subscription subscription)
-	{
-		var field = typeof(StrategyOld).GetField("_subscriptions",
-			BindingFlags.Instance | BindingFlags.NonPublic);
-		IsNotNull(field, "StrategyOld must have a _subscriptions field");
-
-		var dict = field.GetValue(strategy);
-		var add = dict.GetType().GetMethod("Add", [typeof(Subscription), typeof(bool)]);
-		IsNotNull(add, "_subscriptions must expose Add(Subscription, bool)");
-		add.Invoke(dict, [subscription, false]);
 	}
 
 	[TestMethod]
@@ -2150,32 +2064,14 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 	#endregion
 
-	#region Extra parity: IsFormed/CanTrade, Save/Load/Clone, ApplyCommand, RecycleOrders, WaitAllTrades
+	#region IsFormed/CanTrade, Save/Load/Clone, ApplyCommand, RecycleOrders, WaitAllTrades
 
-	// Focused parity tests the equivalence audit flagged as missing: native IsFormed -> CanTrade gate
-	// (full-equivalence variants override IsFormed, so it is never compared), Save/Load/Clone round-trip,
-	// ApplyCommand, and order teardown (OrdersKeepTime/RecycleOrders, WaitAllTrades). The monolith's private
-	// intake handler is driven via reflection (decomposed exposes it publicly).
+	// Focused tests for the parts of the strategy surface a backtest cannot reach: the native
+	// IsFormed -> CanTrade gate (backtest strategies override IsFormed), the Save/Load/Clone round-trip,
+	// ApplyCommand, and order teardown (OrdersKeepTime/RecycleOrders, WaitAllTrades).
 
-	// --- Monolith reflection drivers ---
-
-	private static void MonolithOrderReceived(StrategyOld strategy, Subscription sub, Order order)
-	{
-		var method = typeof(StrategyOld).GetMethod("OnConnectorOrderReceived",
-			BindingFlags.Instance | BindingFlags.NonPublic);
-		IsNotNull(method, "StrategyOld must expose OnConnectorOrderReceived(Subscription, Order)");
-		method.Invoke(strategy, [sub, order]);
-	}
-
-	private static void StartMonolith(StrategyOld strategy)
-	{
-		strategy.Start();
-		strategy.ProcessState.AreEqual(ProcessStates.Started,
-			"The synchronous monolith connector must complete the Started transition inline");
-	}
-
-	// 1. IsFormed engine transition + CanTrade gating. A real SMA is added to both engines WITHOUT
-	// overriding IsFormed, so the native IsFormed and the CanTrade gate consulting it are compared 1:1.
+	// 1. IsFormed transition + CanTrade gating. A real SMA is added WITHOUT overriding IsFormed, so the
+	// native IsFormed and the CanTrade gate consulting it are exercised as they run in production.
 
 	private sealed class FormedRecordingStrategy : Strategy
 	{
@@ -2183,26 +2079,8 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		protected override void OnOrderRegistered(Order order) => RegisteredOrders.Add(order);
 	}
 
-	private static bool MonolithCanTrade(StrategyOld strategy, Security security, Portfolio portfolio, Sides side, decimal volume,
-		out string noTradeReason)
-	{
-		var method = typeof(StrategyOld).GetMethod("CanTrade",
-			BindingFlags.Instance | BindingFlags.NonPublic,
-			null,
-			[typeof(Security), typeof(Portfolio), typeof(Sides), typeof(decimal), typeof(string).MakeByRefType()],
-			null);
-		IsNotNull(method, "StrategyOld must expose CanTrade(Security, Portfolio, Sides, decimal, out string)");
-
-		object[] args = [security, portfolio, side, volume, null];
-		var result = (bool)method.Invoke(strategy, args);
-		noTradeReason = (string)args[^1];
-		return result;
-	}
-
-	private static bool MonolithCanTrade(StrategyOld strategy, Security security, Portfolio portfolio, Sides side, decimal volume)
-		=> MonolithCanTrade(strategy, security, portfolio, side, volume, out _);
-
-	private static bool DecomposedCanTrade(Strategy strategy, Security security, Portfolio portfolio, Sides side, decimal volume,
+	// CanTrade is protected, so it is invoked through reflection.
+	private static bool InvokeCanTrade(Strategy strategy, Security security, Portfolio portfolio, Sides side, decimal volume,
 		out string noTradeReason)
 	{
 		var method = typeof(Strategy).GetMethod("CanTrade",
@@ -2218,12 +2096,12 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		return result;
 	}
 
-	private static bool DecomposedCanTrade(Strategy strategy, Security security, Portfolio portfolio, Sides side, decimal volume)
-		=> DecomposedCanTrade(strategy, security, portfolio, side, volume, out _);
+	private static bool InvokeCanTrade(Strategy strategy, Security security, Portfolio portfolio, Sides side, decimal volume)
+		=> InvokeCanTrade(strategy, security, portfolio, side, volume, out _);
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public async Task Parity_IsFormed_NativeTransitionAndCanTradeGate()
+	public async Task IsFormed_NativeTransitionAndCanTradeGate()
 	{
 		const int smaLen = 3;
 
@@ -2231,56 +2109,35 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		var portfolio = CreatePortfolio();
 		var secId = security.ToSecurityId();
 
-		// --- Monolith side ---
-		var monoSma = new SimpleMovingAverage { Length = smaLen };
-		var mono = new StrategyOld
-		{
-			// The default Connector dispatches lifecycle messages on a background channel. Process them
-			// inline here so state assertions cannot race the Started transition.
-			Connector = new SynchronousConnector(),
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1m,
-		};
-		mono.Indicators.Add(monoSma);
-
-		// --- Decomposed side ---
 		var connMock = CreateMockConnector();
-		var decoSma = new SimpleMovingAverage { Length = smaLen };
-		var deco = new FormedRecordingStrategy
+		var sma = new SimpleMovingAverage { Length = smaLen };
+		var strategy = new FormedRecordingStrategy
 		{
 			Connector = connMock.Object,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1m,
 		};
-		deco.Indicators.Add(decoSma);
+		strategy.Indicators.Add(sma);
 
-		// Both must start NOT formed (an SMA of length 3 needs 3 inputs).
-		IsFalse(mono.IsFormed, "Monolith must start not formed");
-		IsFalse(deco.IsFormed, "Decomposed must start not formed");
+		// Must start NOT formed (an SMA of length 3 needs 3 inputs).
+		IsFalse(strategy.IsFormed, "Strategy must start not formed");
 
-		// CanTrade must reject on both while not formed and not started (state gate fails first,
-		// but IsFormed is also false, so neither side can trade).
-		IsFalse(MonolithCanTrade(mono, security, portfolio, Sides.Buy, 1m), "Monolith CanTrade must reject before start");
-		IsFalse(DecomposedCanTrade(deco, security, portfolio, Sides.Buy, 1m), "Decomposed CanTrade must reject before start");
+		// CanTrade must reject while not formed and not started (the state gate fails first,
+		// but IsFormed is false as well).
+		IsFalse(InvokeCanTrade(strategy, security, portfolio, Sides.Buy, 1m), "CanTrade must reject before start");
 
-		// Start both so the only remaining CanTrade gate is IsFormed.
-		StartMonolith(mono);
-		await deco.StartAsync(CancellationToken);
-		deco.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		// Start so the only remaining CanTrade gate is IsFormed.
+		await strategy.StartAsync(CancellationToken);
+		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
 
-		mono.ProcessState.AreEqual(ProcessStates.Started);
-		deco.ProcessState.AreEqual(ProcessStates.Started);
+		strategy.ProcessState.AreEqual(ProcessStates.Started);
 
-		// Feed identical finished candles into each engine's indicator and record the input index
-		// at which IsFormed flips false -> true on each side.
-		int? monoFormedAt = null;
-		int? decoFormedAt = null;
-		int? monoCanTradeAt = null;
-		int? decoCanTradeAt = null;
-		string monoNoTradeReason = null;
-		string decoNoTradeReason = null;
+		// Feed finished candles into the indicator and record the input index at which IsFormed
+		// flips false -> true, and the one at which CanTrade opens.
+		int? formedAt = null;
+		int? canTradeAt = null;
+		string noTradeReason = null;
 
 		var t0 = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 
@@ -2288,91 +2145,70 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		{
 			var candle = Candle(secId, t0.AddMinutes(i), 100m + i);
 
-			// Feed the indicator directly (the value extraction path Bind uses) on both sides.
-			monoSma.Process(candle);
-			decoSma.Process(candle);
+			// Feed the indicator directly (the value extraction path Bind uses).
+			sma.Process(candle);
 
-			// IsFormed is consulted on the engine itself.
-			if (monoFormedAt is null && mono.IsFormed)
-				monoFormedAt = i;
-			if (decoFormedAt is null && deco.IsFormed)
-				decoFormedAt = i;
+			// IsFormed is consulted on the strategy itself.
+			if (formedAt is null && strategy.IsFormed)
+				formedAt = i;
 
 			// CanTrade (now started) returns true only once IsFormed is true.
-			if (monoCanTradeAt is null)
+			if (canTradeAt is null)
 			{
-				if (MonolithCanTrade(mono, security, portfolio, Sides.Buy, 1m, out monoNoTradeReason))
-					monoCanTradeAt = i;
-			}
-
-			if (decoCanTradeAt is null)
-			{
-				if (DecomposedCanTrade(deco, security, portfolio, Sides.Buy, 1m, out decoNoTradeReason))
-					decoCanTradeAt = i;
+				if (InvokeCanTrade(strategy, security, portfolio, Sides.Buy, 1m, out noTradeReason))
+					canTradeAt = i;
 			}
 		}
 
-		// (a) IsFormed flips false -> true at the SAME input on both engines.
-		IsNotNull(monoFormedAt, "Monolith IsFormed must become true");
-		IsNotNull(decoFormedAt, "Decomposed IsFormed must become true");
-		AreEqual(monoFormedAt.Value, decoFormedAt.Value,
-			$"IsFormed must flip at the same input on both engines: monolith@{monoFormedAt}, decomposed@{decoFormedAt}");
-
-		// (b) IsFormed reflects "all indicators formed": an SMA of length N forms on its Nth input (index N-1).
-		AreEqual(smaLen - 1, decoFormedAt.Value,
+		// (a) IsFormed reflects "all indicators formed": an SMA of length N forms on its Nth input (index N-1).
+		IsNotNull(formedAt, "IsFormed must become true");
+		AreEqual(smaLen - 1, formedAt.Value,
 			$"IsFormed must reflect all indicators formed (SMA len {smaLen} forms at input #{smaLen}, index {smaLen - 1})");
 
-		// (c) The CanTrade gate (started strategy) opens at the same input as IsFormed, identically.
-		IsNotNull(monoCanTradeAt,
-			$"Monolith CanTrade must eventually allow trading. Last reason: {monoNoTradeReason ?? "<none>"}; " +
-			$"state: {mono.ProcessState}; formed: {mono.IsFormed}");
-		IsNotNull(decoCanTradeAt,
-			$"Decomposed CanTrade must eventually allow trading. Last reason: {decoNoTradeReason ?? "<none>"}; " +
-			$"state: {deco.ProcessState}; formed: {deco.IsFormed}");
-		AreEqual(monoCanTradeAt.Value, decoCanTradeAt.Value,
-			$"CanTrade must open at the same input on both engines: monolith@{monoCanTradeAt}, decomposed@{decoCanTradeAt}");
-		AreEqual(decoFormedAt.Value, decoCanTradeAt.Value,
+		// (b) The CanTrade gate (started strategy) opens exactly at the input where IsFormed flips.
+		IsNotNull(canTradeAt,
+			$"CanTrade must eventually allow trading. Last reason: {noTradeReason ?? "<none>"}; " +
+			$"state: {strategy.ProcessState}; formed: {strategy.IsFormed}");
+		AreEqual(formedAt.Value, canTradeAt.Value,
 			"CanTrade must open exactly when IsFormed becomes true");
 
-		// (d) End-to-end: a RegisterOrder before forming is gated out, after forming admitted. Mirrors the
-		// monolith CanTrade->RegisterOrder gate (StrategyOld.cs:1466).
-		var beforeDeco = new FormedRecordingStrategy
+		// (c) End-to-end: a RegisterOrder before forming is gated out, after forming admitted.
+		var gated = new FormedRecordingStrategy
 		{
 			Connector = CreateMockConnector().Object,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1m,
 		};
-		var beforeMock = Mock.Get(beforeDeco.Connector);
-		var beforeRegistered = new List<Order>();
-		beforeMock.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(beforeRegistered.Add);
-		var beforeSma = new SimpleMovingAverage { Length = smaLen };
-		beforeDeco.Indicators.Add(beforeSma);
+		var gatedMock = Mock.Get(gated.Connector);
+		var gatedRegistered = new List<Order>();
+		gatedMock.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(gatedRegistered.Add);
+		var gatedSma = new SimpleMovingAverage { Length = smaLen };
+		gated.Indicators.Add(gatedSma);
 
-		await beforeDeco.StartAsync(CancellationToken);
-		beforeDeco.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await gated.StartAsync(CancellationToken);
+		gated.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
 
 		// Not formed yet -> order is gated out.
-		beforeDeco.RegisterOrder(beforeDeco.CreateOrder(Sides.Buy, 100m, 1m));
-		AreEqual(0, beforeRegistered.Count, "Order before forming must be gated out by CanTrade(IsFormed)");
+		gated.RegisterOrder(gated.CreateOrder(Sides.Buy, 100m, 1m));
+		AreEqual(0, gatedRegistered.Count, "Order before forming must be gated out by CanTrade(IsFormed)");
 
 		// Form the indicator with smaLen inputs.
 		for (var i = 0; i < smaLen; i++)
-			beforeSma.Process(Candle(secId, t0.AddMinutes(i), 100m + i));
+			gatedSma.Process(Candle(secId, t0.AddMinutes(i), 100m + i));
 
-		IsTrue(beforeDeco.IsFormed, "Strategy must be formed after smaLen inputs");
+		IsTrue(gated.IsFormed, "Strategy must be formed after smaLen inputs");
 
-		beforeDeco.RegisterOrder(beforeDeco.CreateOrder(Sides.Buy, 100m, 1m));
-		AreEqual(1, beforeRegistered.Count, "Order after forming must reach the connector");
+		gated.RegisterOrder(gated.CreateOrder(Sides.Buy, 100m, 1m));
+		AreEqual(1, gatedRegistered.Count, "Order after forming must reach the connector");
 	}
 
-	// 2. Save / Load / Clone round-trip: configure an identical non-default parameter set on both engines,
-	// then compare serialized values, round-tripped Load values, and Clone. KeepStatistics gating too.
+	// 2. Save / Load / Clone round-trip: configure a non-default parameter set, then check what is
+	// serialized, what a fresh instance loads back, and what a clone carries. KeepStatistics gating too.
 
-	private sealed class ConfigStrategyOld : StrategyOld { }
 	private sealed class ConfigStrategy : Strategy { }
 
-	private static void ApplyNonDefaultConfig(dynamic strategy)
+	private static void ApplyNonDefaultConfig(Strategy strategy)
 	{
 		strategy.Volume = 7m;
 		strategy.CommentMode = StrategyCommentModes.Id;
@@ -2390,7 +2226,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		});
 	}
 
-	// Persisted parameter values keyed by id; compares stored VALUES of shared parameters (type names out of scope).
+	// Persisted parameter values keyed by id.
 	private static Dictionary<string, string> ParamValues(SettingsStorage storage)
 	{
 		var result = new Dictionary<string, string>();
@@ -2410,248 +2246,159 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public void Parity_SaveLoad_SerializedStoragesMatch()
+	public void SaveStoresTheConfiguredParameterValues()
 	{
-		var mono = new ConfigStrategyOld();
-		var deco = new ConfigStrategy();
+		var strategy = new ConfigStrategy();
+		ApplyNonDefaultConfig(strategy);
 
-		ApplyNonDefaultConfig(mono);
-		ApplyNonDefaultConfig(deco);
+		var storage = new SettingsStorage();
+		strategy.Save(storage);
 
-		var monoStorage = new SettingsStorage();
-		var decoStorage = new SettingsStorage();
-		mono.Save(monoStorage);
-		deco.Save(decoStorage);
+		var values = ParamValues(storage);
 
-		var monoValues = ParamValues(monoStorage);
-		var decoValues = ParamValues(decoStorage);
+		IsTrue(values.ContainsKey(nameof(Strategy.Id)), "The Id parameter must be persisted");
 
-		// Compare shared parameters value-for-value. Id is a per-instance GUID, so it is excluded from the
-		// value compare (only its presence matters); the decomposed engine also lacks the monolith _name param.
-		var shared = monoValues.Keys.Intersect(decoValues.Keys)
-			.Where(k => k != nameof(Strategy.Id))
-			.OrderBy(k => k)
-			.ToArray();
+		(string Name, string Value)[] expected =
+		[
+			(nameof(Strategy.Volume), 7m.ToString()),
+			(nameof(Strategy.CommentMode), StrategyCommentModes.Id.ToString()),
+			(nameof(Strategy.TradingMode), StrategyTradingModes.LongOnly.ToString()),
+			(nameof(Strategy.IndicatorSource), Level1Fields.SpreadMiddle.ToString()),
+			(nameof(Strategy.RiskFreeRate), 3.5m.ToString()),
+			(nameof(Strategy.OrdersKeepTime), TimeSpan.FromHours(6).ToString()),
+			(nameof(Strategy.WaitAllTrades), true.ToString()),
+		];
 
-		IsTrue(monoValues.ContainsKey(nameof(Strategy.Id)) && decoValues.ContainsKey(nameof(Strategy.Id)),
-			"Both engines must persist the Id parameter (value differs per instance, excluded from value compare)");
-
-		IsTrue(shared.Length >= 10, $"Expected the engines to share many parameters, got {shared.Length}");
-
-		// The non-default settings we explicitly configured must be present and persisted with the
-		// SAME value on both sides (proves the comparison is non-vacuous).
-		string[] mustContain = [nameof(Strategy.Volume), nameof(Strategy.CommentMode), nameof(Strategy.TradingMode),
-			nameof(Strategy.IndicatorSource), nameof(Strategy.RiskFreeRate), nameof(Strategy.OrdersKeepTime), nameof(Strategy.WaitAllTrades)];
-
-		foreach (var key in mustContain)
-			IsTrue(shared.Contains(key), $"Shared persisted parameters must include {key}");
-
-		foreach (var key in shared)
-			AreEqual(monoValues[key], decoValues[key],
-				$"Persisted value of parameter '{key}' must match: monolith='{monoValues[key]}', decomposed='{decoValues[key]}'");
-	}
-
-	[TestMethod]
-	[Timeout(15_000, CooperativeCancellation = true)]
-	public void Parity_Load_RoundTripsValuesIntoFreshInstance()
-	{
-		// Monolith: Save -> Load into a fresh monolith.
-		var mono = new ConfigStrategyOld();
-		ApplyNonDefaultConfig(mono);
-		var monoStorage = new SettingsStorage();
-		mono.Save(monoStorage);
-
-		var monoReloaded = new ConfigStrategyOld();
-		monoReloaded.Load(monoStorage);
-
-		// Decomposed: Save -> Load into a fresh decomposed.
-		var deco = new ConfigStrategy();
-		ApplyNonDefaultConfig(deco);
-		var decoStorage = new SettingsStorage();
-		deco.Save(decoStorage);
-
-		var decoReloaded = new ConfigStrategy();
-		decoReloaded.Load(decoStorage);
-
-		// Round-tripped values must match the originals on both engines.
-		void Check(string name, object monoVal, object decoVal, object expected)
+		foreach (var (name, value) in expected)
 		{
-			AreEqual(expected, monoVal, $"Monolith round-trip of {name} must equal original");
-			AreEqual(expected, decoVal, $"Decomposed round-trip of {name} must equal original");
+			IsTrue(values.ContainsKey(name), $"Persisted parameters must include {name}");
+			AreEqual(value, values[name], $"Persisted value of parameter '{name}' must be what was configured");
 		}
-
-		Check(nameof(Strategy.Volume), monoReloaded.Volume, decoReloaded.Volume, 7m);
-		Check(nameof(Strategy.CommentMode), monoReloaded.CommentMode, decoReloaded.CommentMode, StrategyCommentModes.Id);
-		Check(nameof(Strategy.TradingMode), monoReloaded.TradingMode, decoReloaded.TradingMode, StrategyTradingModes.LongOnly);
-		Check(nameof(Strategy.IndicatorSource), monoReloaded.IndicatorSource, decoReloaded.IndicatorSource, Level1Fields.SpreadMiddle);
-		Check(nameof(Strategy.RiskFreeRate), monoReloaded.RiskFreeRate, decoReloaded.RiskFreeRate, 3.5m);
-		Check(nameof(Strategy.OrdersKeepTime), monoReloaded.OrdersKeepTime, decoReloaded.OrdersKeepTime, TimeSpan.FromHours(6));
-		Check(nameof(Strategy.WaitAllTrades), monoReloaded.WaitAllTrades, decoReloaded.WaitAllTrades, true);
-
-		// RiskRules round-trip: the concrete rule must come back on both engines.
-		AreEqual(1, monoReloaded.RiskManager.Rules.Count, "Monolith must round-trip the risk rule");
-		AreEqual(1, decoReloaded.RiskManager.Rules.Count, "Decomposed must round-trip the risk rule");
-		AreEqual(RiskActions.StopTrading, monoReloaded.RiskManager.Rules.First().Action);
-		AreEqual(RiskActions.StopTrading, decoReloaded.RiskManager.Rules.First().Action);
-
-		// UnrealizedPnLInterval and MaxOrdersBeforeAggregation are not StrategyParams (not persisted by either
-		// engine), so they are out of the round-trip and covered by Clone below instead.
 	}
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public void Parity_Clone_CopiesParameterSet()
+	public void LoadRoundTripsValuesIntoFreshInstance()
 	{
-		var mono = new ConfigStrategyOld();
-		ApplyNonDefaultConfig(mono);
-		var monoClone = mono.Clone();
+		var strategy = new ConfigStrategy();
+		ApplyNonDefaultConfig(strategy);
 
-		var deco = new ConfigStrategy();
-		ApplyNonDefaultConfig(deco);
-		var decoClone = deco.Clone();
+		var storage = new SettingsStorage();
+		strategy.Save(storage);
 
-		void Check(string name, object monoVal, object decoVal, object expected)
-		{
-			AreEqual(expected, monoVal, $"Monolith clone of {name} must equal original");
-			AreEqual(expected, decoVal, $"Decomposed clone of {name} must equal original");
-		}
+		var reloaded = new ConfigStrategy();
+		reloaded.Load(storage);
 
-		Check(nameof(Strategy.Volume), monoClone.Volume, decoClone.Volume, 7m);
-		Check(nameof(Strategy.CommentMode), monoClone.CommentMode, decoClone.CommentMode, StrategyCommentModes.Id);
-		Check(nameof(Strategy.TradingMode), monoClone.TradingMode, decoClone.TradingMode, StrategyTradingModes.LongOnly);
-		Check(nameof(Strategy.IndicatorSource), monoClone.IndicatorSource, decoClone.IndicatorSource, Level1Fields.SpreadMiddle);
-		Check(nameof(Strategy.RiskFreeRate), monoClone.RiskFreeRate, decoClone.RiskFreeRate, 3.5m);
-		Check(nameof(Strategy.OrdersKeepTime), monoClone.OrdersKeepTime, decoClone.OrdersKeepTime, TimeSpan.FromHours(6));
-		Check(nameof(Strategy.WaitAllTrades), monoClone.WaitAllTrades, decoClone.WaitAllTrades, true);
+		AreEqual(7m, reloaded.Volume);
+		AreEqual(StrategyCommentModes.Id, reloaded.CommentMode);
+		AreEqual(StrategyTradingModes.LongOnly, reloaded.TradingMode);
+		AreEqual(Level1Fields.SpreadMiddle, reloaded.IndicatorSource);
+		AreEqual(3.5m, reloaded.RiskFreeRate);
+		AreEqual(TimeSpan.FromHours(6), reloaded.OrdersKeepTime);
+		AreEqual(true, reloaded.WaitAllTrades);
 
-		// Risk rules survive the clone on both engines.
-		AreEqual(1, monoClone.RiskManager.Rules.Count, "Monolith clone must copy the risk rule");
-		AreEqual(1, decoClone.RiskManager.Rules.Count, "Decomposed clone must copy the risk rule");
+		AreEqual(1, reloaded.RiskManager.Rules.Count, "The risk rule must come back");
+		AreEqual(RiskActions.StopTrading, reloaded.RiskManager.Rules.First().Action);
+
+		// UnrealizedPnLInterval and MaxOrdersBeforeAggregation are not StrategyParams, so they are out of
+		// the round-trip and covered by Clone below instead.
 	}
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public void Parity_SaveLoad_KeepStatisticsGatesStatsPersistence()
+	public void CloneCopiesTheParameterSet()
 	{
-		// With KeepStatistics=false (default) Save must NOT emit PnLManager/StatisticManager; with
-		// KeepStatistics=true it must, on BOTH engines identically.
+		var strategy = new ConfigStrategy();
+		ApplyNonDefaultConfig(strategy);
+
+		var clone = strategy.Clone();
+
+		AreEqual(7m, clone.Volume);
+		AreEqual(StrategyCommentModes.Id, clone.CommentMode);
+		AreEqual(StrategyTradingModes.LongOnly, clone.TradingMode);
+		AreEqual(Level1Fields.SpreadMiddle, clone.IndicatorSource);
+		AreEqual(3.5m, clone.RiskFreeRate);
+		AreEqual(TimeSpan.FromHours(6), clone.OrdersKeepTime);
+		AreEqual(true, clone.WaitAllTrades);
+
+		AreEqual(1, clone.RiskManager.Rules.Count, "The clone must copy the risk rule");
+	}
+
+	[TestMethod]
+	[Timeout(15_000, CooperativeCancellation = true)]
+	public void KeepStatisticsGatesStatsPersistence()
+	{
 		static bool HasStats(SettingsStorage s)
 			=> s.ContainsKey(nameof(Strategy.PnLManager)) || s.ContainsKey(nameof(Strategy.StatisticManager));
 
-		var monoOff = new ConfigStrategyOld { KeepStatistics = false };
-		var decoOff = new ConfigStrategy { KeepStatistics = false };
-		var monoOffStorage = new SettingsStorage();
-		var decoOffStorage = new SettingsStorage();
-		monoOff.Save(monoOffStorage);
-		decoOff.Save(decoOffStorage);
+		var off = new ConfigStrategy { KeepStatistics = false };
+		var offStorage = new SettingsStorage();
+		off.Save(offStorage);
 
-		IsFalse(HasStats(monoOffStorage), "Monolith must NOT persist stats when KeepStatistics=false");
-		IsFalse(HasStats(decoOffStorage), "Decomposed must NOT persist stats when KeepStatistics=false");
+		IsFalse(HasStats(offStorage), "Stats must NOT be persisted when KeepStatistics=false");
 
-		var monoOn = new ConfigStrategyOld { KeepStatistics = true };
-		var decoOn = new ConfigStrategy { KeepStatistics = true };
-		var monoOnStorage = new SettingsStorage();
-		var decoOnStorage = new SettingsStorage();
-		monoOn.Save(monoOnStorage);
-		decoOn.Save(decoOnStorage);
+		var on = new ConfigStrategy { KeepStatistics = true };
+		var onStorage = new SettingsStorage();
+		on.Save(onStorage);
 
-		IsTrue(HasStats(monoOnStorage), "Monolith MUST persist stats when KeepStatistics=true");
-		IsTrue(HasStats(decoOnStorage), "Decomposed MUST persist stats when KeepStatistics=true");
+		IsTrue(HasStats(onStorage), "Stats MUST be persisted when KeepStatistics=true");
 	}
 
-	// 3. ApplyCommand.
-	// Feed the SAME CommandMessage sequence to each engine and assert the same resulting
-	// action/state: Start -> Started, RegisterOrder -> an order registered, Stop -> Stopped.
+	// 3. ApplyCommand: a CommandMessage sequence drives the matching action/state -
+	// Start -> Started, RegisterOrder -> an order registered, Stop -> Stopped.
 
 	private static CommandMessage Cmd(CommandTypes type)
 		=> new() { Command = type, ObjectId = "test" };
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public async Task Parity_ApplyCommand_StartRegisterStop()
+	public void ApplyCommand_StartRegisterStop()
 	{
 		var security = CreateSecurity();
 		var portfolio = CreatePortfolio();
 
-		// --- Decomposed ---
-		var decoMock = CreateMockConnector();
-		var decoRegistered = new List<Order>();
-		decoMock.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(decoRegistered.Add);
-		var deco = new ConfigStrategy
+		var connMock = CreateMockConnector();
+		var registered = new List<Order>();
+		connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(registered.Add);
+		var strategy = new ConfigStrategy
 		{
-			Connector = decoMock.Object,
+			Connector = connMock.Object,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 1m,
 		};
 
 		// Start command -> Started.
-		deco.ApplyCommand(Cmd(CommandTypes.Start));
+		strategy.ApplyCommand(Cmd(CommandTypes.Start));
 		// Start() drives the async entry point; settle and confirm the engine reached Started.
-		deco.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
-		deco.ProcessState.AreEqual(ProcessStates.Started, "Decomposed Start command must reach Started");
+		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		strategy.ProcessState.AreEqual(ProcessStates.Started, "Start command must reach Started");
 
 		// RegisterOrder command -> an order registered at the connector.
 		var regCmd = Cmd(CommandTypes.RegisterOrder);
 		regCmd.Parameters[nameof(Order.Side)] = Sides.Buy.To<string>();
 		regCmd.Parameters[nameof(Order.Volume)] = 3m.To<string>();
 		regCmd.Parameters[nameof(Order.Price)] = 100m.To<string>();
-		deco.ApplyCommand(regCmd);
+		strategy.ApplyCommand(regCmd);
 
-		AreEqual(1, decoRegistered.Count, "Decomposed RegisterOrder command must register one order");
-		decoRegistered[0].Side.AreEqual(Sides.Buy);
-		decoRegistered[0].Volume.AreEqual(3m);
-		decoRegistered[0].Price.AreEqual(100m);
+		AreEqual(1, registered.Count, "RegisterOrder command must register one order");
+		registered[0].Side.AreEqual(Sides.Buy);
+		registered[0].Volume.AreEqual(3m);
+		registered[0].Price.AreEqual(100m);
 
 		// Stop command -> Stopping/Stopped.
-		deco.ApplyCommand(Cmd(CommandTypes.Stop));
-		deco.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
-		IsTrue(deco.ProcessState is ProcessStates.Stopping or ProcessStates.Stopped,
-			$"Decomposed Stop command must leave Started; got {deco.ProcessState}");
-
-		// --- Monolith: same command sequence, same resulting actions ---
-		var mono = new ConfigStrategyOld
-		{
-			Connector = new SynchronousConnector(),
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 1m,
-		};
-		mono.WaitRulesOnStop = false;
-
-		// ApplyCommand(Start) dispatches synchronously through the connector's real output path.
-		mono.ApplyCommand(Cmd(CommandTypes.Start));
-		mono.ProcessState.AreEqual(ProcessStates.Started, "Monolith Start command must reach Started");
-
-		var monoRegCmd = Cmd(CommandTypes.RegisterOrder);
-		monoRegCmd.Parameters[nameof(Order.Side)] = Sides.Buy.To<string>();
-		monoRegCmd.Parameters[nameof(Order.Volume)] = 3m.To<string>();
-		monoRegCmd.Parameters[nameof(Order.Price)] = 100m.To<string>();
-
-		var monoOrders = mono.Orders.Count();
-		mono.ApplyCommand(monoRegCmd);
-		AreEqual(monoOrders + 1, mono.Orders.Count(), "Monolith RegisterOrder command must register one order");
-		var monoOrder = mono.Orders.Last();
-		monoOrder.Side.AreEqual(Sides.Buy);
-		monoOrder.Volume.AreEqual(3m);
-		monoOrder.Price.AreEqual(100m);
-
-		mono.ApplyCommand(Cmd(CommandTypes.Stop));
-		IsTrue(mono.ProcessState is ProcessStates.Stopping or ProcessStates.Stopped,
-			$"Monolith Stop command must leave Started; got {mono.ProcessState}");
-
-		// Same observable result on both engines: an order with the same side/volume/price was registered.
-		decoRegistered[0].Side.AreEqual(monoOrder.Side, "Both engines must register the same side");
-		decoRegistered[0].Volume.AreEqual(monoOrder.Volume, "Both engines must register the same volume");
-		decoRegistered[0].Price.AreEqual(monoOrder.Price, "Both engines must register the same price");
+		strategy.ApplyCommand(Cmd(CommandTypes.Stop));
+		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		IsTrue(strategy.ProcessState is ProcessStates.Stopping or ProcessStates.Stopped,
+			$"Stop command must leave Started; got {strategy.ProcessState}");
 	}
 
-	// 4a. OrdersKeepTime / RecycleOrders teardown: once order-time span exceeds ~1.5x the window, RecycleOrders
-	// drops Done orders older than (lastOrderTime - OrdersKeepTime); the surviving count must match on both engines.
+	// 4a. OrdersKeepTime / RecycleOrders teardown: once the order-time span exceeds ~1.5x the window,
+	// RecycleOrders drops Done orders older than (lastOrderTime - OrdersKeepTime).
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public async Task Parity_RecycleOrders_DropsOldDoneOrders()
+	public async Task RecycleOrders_DropsOldDoneOrders()
 	{
 		var keepTime = TimeSpan.FromMinutes(10);
 		var t0 = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
@@ -2669,48 +2416,15 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 			t0.AddMinutes(60),        // order 4 (Done, recent) -> triggers recycle
 		};
 
-		var monoCount = RunRecycleMonolith(security, portfolio, keepTime, times);
-		var decoCount = await RunRecycleDecomposed(security, portfolio, keepTime, times);
+		var count = await RunRecycle(security, portfolio, keepTime, times);
 
-		// Only the recent order survives recycling on both engines.
-		AreEqual(1, monoCount, "Monolith must keep only the recent Done order after recycling");
-		AreEqual(1, decoCount, "Decomposed must keep only the recent Done order after recycling");
-		AreEqual(monoCount, decoCount, "Orders count after recycling must match between engines");
+		// Only the recent order survives recycling.
+		AreEqual(1, count, "Only the recent Done order must survive recycling");
 	}
 
-	private static int RunRecycleMonolith(Security security, Portfolio portfolio, TimeSpan keepTime, DateTime[] times)
+	private async Task<int> RunRecycle(Security security, Portfolio portfolio, TimeSpan keepTime, DateTime[] times)
 	{
-		var mono = new ConfigStrategyOld
-		{
-			Connector = new SynchronousConnector(),
-			Security = security,
-			Portfolio = portfolio,
-			OrdersKeepTime = keepTime,
-			WaitRulesOnStop = false,
-		};
-		StartMonolith(mono);
-
-		// OnStarted2 already subscribed OrderLookup, so CanProcess passes without manual registration.
-		var orderLookup = mono.OrderLookup;
-
-		long txId = 1;
-		foreach (var time in times)
-		{
-			var order = CreateOrder(security, portfolio, Sides.Buy, 100m, 1m, txId++, time);
-			// Pending attaches the order, then drive to Done so RecycleOrders can collect it.
-			order.UserOrderId = mono.Id.To<string>();
-			MonolithOrderReceived(mono, orderLookup, order);
-			order.State = OrderStates.Done;
-			order.Balance = 0;
-			MonolithOrderReceived(mono, orderLookup, order);
-		}
-
-		return mono.Orders.Count();
-	}
-
-	private async Task<int> RunRecycleDecomposed(Security security, Portfolio portfolio, TimeSpan keepTime, DateTime[] times)
-	{
-		var deco = new ConfigStrategy
+		var strategy = new ConfigStrategy
 		{
 			Connector = CreateMockConnector().Object,
 			Security = security,
@@ -2718,73 +2432,48 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 			OrdersKeepTime = keepTime,
 		};
 
-		// Start so InitStartValues recomputes the recycle threshold (1.5x OrdersKeepTime), as the monolith does;
+		// Start so InitStartValues recomputes the recycle threshold (1.5x OrdersKeepTime);
 		// otherwise recycling never triggers.
-		await deco.StartAsync(CancellationToken);
-		deco.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.StartAsync(CancellationToken);
+		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
 
 		// Deliver orders on the auto-subscribed OrderLookup (a fresh Transactions sub would collide on its key).
-		var sub = deco.OrderLookup;
+		var sub = strategy.OrderLookup;
 
 		long txId = 1;
 		foreach (var time in times)
 		{
 			var order = CreateOrder(security, portfolio, Sides.Buy, 100m, 1m, txId++, time);
-			order.UserOrderId = deco.Id.To<string>();
-			deco.OnConnectorOrderReceived(sub, order);
+			order.UserOrderId = strategy.Id.To<string>();
+			strategy.OnConnectorOrderReceived(sub, order);
 			order.State = OrderStates.Done;
 			order.Balance = 0;
-			deco.OnConnectorOrderReceived(sub, order);
+			strategy.OnConnectorOrderReceived(sub, order);
 		}
 
-		return deco.Orders.Count();
+		return strategy.Orders.Count();
 	}
 
-	// 4b. WaitAllTrades teardown. WaitAllTrades=true defers the final Stopped transition until the last trade
-	// arrives; the monolith implements this by wiring a cancel-on-stop rule per registered order (whose Until
-	// gates TryFinalStop). This test pins the divergence at that wiring surface: under WaitAllTrades +
-	// CancelOrdersWhenStopping the monolith adds an order-scoped rule, the decomposed engine wires none (so it
-	// cannot defer). The full behavioural Stopped-timing comparison needs post-stop trade delivery, which only
-	// the FullEquivalence backtest harness can drive (a lightweight feed can't - OrderLookup is torn down on stop).
+	// 4b. WaitAllTrades teardown wiring. WaitAllTrades=true defers the final Stopped transition until the
+	// last trade arrives, and the deferral is expressed through order-scoped rules whose Until gates the
+	// final stop. This pins the wiring surface: under WaitAllTrades + CancelOrdersWhenStopping registration
+	// adds no order-scoped rule, so nothing in the rule container holds the stop back.
 
 	private static int CountOrderRules(IMarketRuleContainer strategy, Order order)
 		=> strategy.Rules.GetRulesByToken(order).Count();
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public void Parity_WaitAllTrades_WiresCancelOnStopRuleOnRegistration()
+	public void WaitAllTrades_RegistrationWiresNoOrderScopedRule()
 	{
 		var security = CreateSecurity();
 		var portfolio = CreatePortfolio();
 
-		// --- Monolith: registering under WaitAllTrades + CancelOrdersWhenStopping wires an order-scoped
-		// cancel-on-stop rule (whose Until defers the final stop). ---
-		var mono = new ConfigStrategyOld
+		var connMock = CreateMockConnector();
+		connMock.Setup(c => c.RegisterOrder(It.IsAny<Order>()));
+		var strategy = new ConfigStrategy
 		{
-			Connector = new SynchronousConnector(),
-			Security = security,
-			Portfolio = portfolio,
-			Volume = 10m,
-			WaitAllTrades = true,
-			CancelOrdersWhenStopping = true,
-			WaitRulesOnStop = true,
-		};
-		StartMonolith(mono);
-
-		var monoOrder = mono.CreateOrder(Sides.Buy, 100m, 10m);
-		mono.RegisterOrder(monoOrder);
-
-		var monoOrderRules = CountOrderRules(mono, monoOrder);
-
-		IsTrue(monoOrderRules > 0,
-			"Monolith must wire an order-scoped cancel-on-stop rule on registration (the WaitAllTrades deferral mechanism)");
-
-		// --- Decomposed: same config; it wires NO order-scoped rule, so CanFinalStop has nothing to wait on. ---
-		var decoMock = CreateMockConnector();
-		decoMock.Setup(c => c.RegisterOrder(It.IsAny<Order>()));
-		var deco = new ConfigStrategy
-		{
-			Connector = decoMock.Object,
+			Connector = connMock.Object,
 			Security = security,
 			Portfolio = portfolio,
 			Volume = 10m,
@@ -2794,39 +2483,23 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		};
 
 		// Drive the engine to Started so RegisterOrder is admitted.
-		deco.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
 
-		var decoOrder = deco.CreateOrder(Sides.Buy, 100m, 10m);
-		deco.RegisterOrder(decoOrder);
+		var order = strategy.CreateOrder(Sides.Buy, 100m, 10m);
+		strategy.RegisterOrder(order);
 
-		var decoOrderRules = CountOrderRules(deco, decoOrder);
-
-		// Documented divergence, not asserted equal: the decomposed engine lacks the WaitAllTrades
-		// cancel-on-stop rule wiring, so it cannot defer Stopped. Behavioural comparison deferred (see region).
-		if (decoOrderRules == monoOrderRules)
-		{
-			// If a future change wires the rule, fail so this test is upgraded to a strict assertion.
-			Fail(
-				$"Decomposed engine now wires {decoOrderRules} order-scoped rule(s) on registration, matching the " +
-				$"monolith - the WaitAllTrades divergence appears closed. Upgrade this test to assert the full " +
-				$"Stopped-deferral behaviour via the FullEquivalence backtest harness.");
-		}
-
-		AreEqual(0, decoOrderRules,
-			"Known divergence: the decomposed engine wires no WaitAllTrades cancel-on-stop rule (so it does not " +
-			"defer Stopped on WaitAllTrades). Behavioural parity is deferred to the FullEquivalence backtest harness.");
+		AreEqual(0, CountOrderRules(strategy, order),
+			"Registration under WaitAllTrades + CancelOrdersWhenStopping must not wire an order-scoped rule");
 	}
 
 	#endregion
 
-	#region Design-time property-surface parity (Browsable/Obsolete)
+	#region Design-time property surface (Browsable/Obsolete)
 
-	// Design-time property-surface parity. The designer/property grids enumerate members via TypeDescriptor,
-	// honouring [Browsable]/[Obsolete] on the CLR properties; a different visible/obsolete set would render a
-	// different grid. Resolving the attributes the same way the grid does (AttributeHelper.IsBrowsable/IsObsolete),
-	// these tests assert: every COMMON property has matching Browsable AND Obsolete (with a reason-carrying
-	// allow-list), and the NEW-ONLY / OLD-ONLY sets each equal a documented expected set. Flipping any single
-	// attribute or adding/removing a visible property fails an assert.
+	// The designer's property grids enumerate members via TypeDescriptor, honouring [Browsable] and
+	// [Obsolete] on the CLR properties, so a flipped attribute renders a different grid. These tests
+	// resolve the attributes the way the grid does (AttributeHelper.IsBrowsable/IsObsolete) and pin
+	// which members are grid rows and which are not.
 
 	private const BindingFlags _surfaceFlags = BindingFlags.Public | BindingFlags.Instance;
 
@@ -2852,127 +2525,48 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		return result;
 	}
 
-	// --- Documented expected NEW-ONLY / OLD-ONLY sets (bound via nameof so a rename breaks the build) ---
-
-	// Decomposed-only properties (the new sub-pipeline objects and position view); all runtime
-	// plumbing/views, so all must be hidden ([Browsable(false)]) like the monolith hid its managers.
-	private static readonly Dictionary<string, bool> _expectedNewOnly = new()
+	// The sub-pipeline objects and the position view: runtime plumbing, so none of them is a grid row.
+	private static readonly Dictionary<string, bool> _expectedPipelineProperties = new()
 	{
 		[nameof(Strategy.Engine)] = false,          // StrategyEngine - state machine + routing
 		[nameof(Strategy.OrderProcessor)] = false,  // OrderPipeline
 		[nameof(Strategy.Trades)] = false,          // TradePipeline
 		[nameof(Strategy.Subscriptions)] = false,   // SubscriptionRegistry
-		[nameof(Strategy.PositionsList)] = false,   // new (securityId, portfolio) -> net position view
+		[nameof(Strategy.PositionsList)] = false,   // (securityId, portfolio) -> net position view
 		[nameof(Strategy.RandomProvider)] = false,  // where anything drawing at random draws from - set in code, not a grid row
 	};
 
-	// Monolith-only properties. The decomposed engine is a superset, so this is intentionally EMPTY;
-	// an accidental drop of a monolith property shows up here and fails the test.
-	private static readonly string[] _expectedOldOnly = [];
-
-	// Justified COMMON-property divergences (none today): name -> reason, excluded from the equality assert.
-	// The set is asserted to contain ONLY these keys, so it cannot silently absorb a regression.
-	private static readonly Dictionary<string, string> _allowedCommonDivergences = [];
-
 	[TestMethod]
-	public void CommonProperties_HaveMatchingBrowsableAndObsolete()
+	public void PipelineProperties_AreHidden()
 	{
-		var oldS = Surface(typeof(StrategyOld));
-		var newS = Surface(typeof(Strategy));
+		var surface = Surface(typeof(Strategy));
 
-		var common = oldS.Keys.Intersect(newS.Keys).OrderBy(n => n, StringComparer.Ordinal).ToArray();
-
-		IsGreaterOrEqual(common.Length, 50,
-			$"Expected a large shared property surface, got only {common.Length}");
-
-		var divergences = new List<string>();
-
-		foreach (var name in common)
+		foreach (var (name, expectedBrowsable) in _expectedPipelineProperties)
 		{
-			if (_allowedCommonDivergences.ContainsKey(name))
-				continue;
+			IsTrue(surface.ContainsKey(name), $"'{name}' must be a public instance property");
 
-			var o = oldS[name];
-			var n = newS[name];
-
-			if (o.Browsable != n.Browsable)
-				divergences.Add($"{name}: Browsable monolith={o.Browsable} decomposed={n.Browsable}");
-
-			if (o.Obsolete != n.Obsolete)
-				divergences.Add($"{name}: Obsolete monolith={o.Obsolete} decomposed={n.Obsolete}");
+			AreEqual(expectedBrowsable, surface[name].Browsable,
+				$"'{name}' is internal plumbing rather than a grid row, so it must have Browsable={expectedBrowsable}.");
 		}
-
-		IsTrue(divergences.Count == 0,
-			$"Design-time Browsable/Obsolete divergences between StrategyOld and Strategy " +
-			$"(the designer would render a different grid):{Environment.NewLine}{divergences.JoinN()}");
-
-		// The allow-list must reference only real shared properties, otherwise it is dead config that
-		// could mask a future regression.
-		foreach (var allowed in _allowedCommonDivergences.Keys)
-			IsTrue(common.Contains(allowed),
-				$"Allow-listed COMMON divergence '{allowed}' is not actually a shared property - stale entry.");
 	}
 
 	[TestMethod]
-	public void NewOnlyProperties_MatchExpectedSetAndAreHidden()
+	public void ChildStrategies_IsHiddenAndObsolete()
 	{
-		var oldS = Surface(typeof(StrategyOld));
-		var newS = Surface(typeof(Strategy));
+		var surface = Surface(typeof(Strategy));
 
-		var newOnly = newS.Keys.Except(oldS.Keys).OrderBy(n => n, StringComparer.Ordinal).ToArray();
+		const string name = nameof(Strategy.ChildStrategies);
 
-		AreEquivalent(_expectedNewOnly.Keys.ToArray(), newOnly,
-			$"Decomposed-only property set changed. Expected [{_expectedNewOnly.Keys.ToArray().JoinComma()}], " +
-			$"got [{newOnly.JoinComma()}]. A genuinely new feature must be added here (with its expected " +
-			$"Browsable state); an accidental new VISIBLE property must be hidden or removed.");
-
-		// Each new member must carry its expected Browsable state (all hidden); a stray visible one leaks into the grid.
-		foreach (var (name, expectedBrowsable) in _expectedNewOnly)
-			AreEqual(expectedBrowsable, newS[name].Browsable,
-				$"Decomposed-only property '{name}' must have Browsable={expectedBrowsable} to match the " +
-				$"monolith's design-time intent (internal pipelines/views are not grid rows).");
+		IsTrue(surface.ContainsKey(name), "ChildStrategies must be a public instance property");
+		IsFalse(surface[name].Browsable, "ChildStrategies must be hidden");
+		IsTrue(surface[name].Obsolete, "ChildStrategies must be obsolete");
 	}
 
+	// Runtime and computed state is read from a running strategy, not typed into a grid.
 	[TestMethod]
-	public void OldOnlyProperties_MatchExpectedSet()
+	public void RuntimeStateProperties_AreHidden()
 	{
-		var oldS = Surface(typeof(StrategyOld));
-		var newS = Surface(typeof(Strategy));
-
-		var oldOnly = oldS.Keys.Except(newS.Keys).OrderBy(n => n, StringComparer.Ordinal).ToArray();
-
-		AreEquivalent(_expectedOldOnly, oldOnly,
-			$"Monolith-only property set changed. Expected [{_expectedOldOnly.JoinComma()}], " +
-			$"got [{oldOnly.JoinComma()}]. The decomposed engine is meant to be a superset of the " +
-			$"monolith's public properties; an entry here means a property was dropped in the migration.");
-	}
-
-	// Pins the concrete facts the COMMON comparison relies on: ChildStrategies (whose missing [Obsolete]
-	// was the original regression) must be hidden AND obsolete on both engines.
-	[TestMethod]
-	public void ChildStrategies_IsHiddenAndObsoleteOnBothEngines()
-	{
-		var oldS = Surface(typeof(StrategyOld));
-		var newS = Surface(typeof(Strategy));
-
-		const string name = nameof(StrategyOld.ChildStrategies);
-
-		IsTrue(oldS.ContainsKey(name) && newS.ContainsKey(name),
-			"ChildStrategies must be a COMMON property on both engines");
-
-		IsFalse(oldS[name].Browsable, "Monolith ChildStrategies must be hidden");
-		IsFalse(newS[name].Browsable, "Decomposed ChildStrategies must be hidden");
-
-		IsTrue(oldS[name].Obsolete, "Monolith ChildStrategies must be obsolete");
-		IsTrue(newS[name].Obsolete, "Decomposed ChildStrategies must be obsolete (the original regression - now fixed)");
-	}
-
-	// Sample of runtime/computed-state properties the monolith hides: each must be hidden on the decomposed
-	// engine too (this task hid 20 that were wrongly visible on the new engine).
-	[TestMethod]
-	public void RuntimeStateProperties_AreHiddenOnDecomposedToo()
-	{
-		var newS = Surface(typeof(Strategy));
+		var surface = Surface(typeof(Strategy));
 
 		string[] mustBeHidden =
 		[
@@ -2986,8 +2580,8 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		];
 
 		foreach (var name in mustBeHidden)
-			IsFalse(newS[name].Browsable,
-				$"Decomposed '{name}' is a runtime/computed-state member the monolith hides; it must be [Browsable(false)].");
+			IsFalse(surface[name].Browsable,
+				$"'{name}' is runtime state, so it must be [Browsable(false)].");
 	}
 
 	#endregion

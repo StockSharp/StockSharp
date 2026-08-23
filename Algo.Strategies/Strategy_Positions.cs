@@ -4,19 +4,17 @@ using StockSharp.Algo.PositionManagement;
 
 partial class Strategy
 {
-	// Positions subsystem ported from the monolith StrategyOld (StrategyOld_Positions.cs and
-	// StrategyOld_TargetPosition.cs) onto the decomposed engine.
+	// Positions subsystem.
 	//
-	// The decomposed Strategy.cs already owns most of the positions surface inline:
-	//   - the Position aggregate property and its (now non-obsolete) setter,
-	//   - GetPositionValue(Security, Portfolio) (returning decimal instead of the monolith's decimal?),
+	// Strategy.cs owns most of the positions surface inline:
+	//   - the Position aggregate property and its setter,
+	//   - GetPositionValue(Security, Portfolio),
 	//   - the PositionPipeline-typed Positions property,
 	//   - the IPositionProvider.Positions / NewPosition / PositionChanged / GetPosition members,
 	//   - the obsolete public PositionChanged event,
 	//   - ProcessStrategyPosition / RaisePositionChanged and the OnNewPosition / OnPositionChanged hooks.
-	// Those are intentionally NOT re-declared here.
 	//
-	// This file adds the still-missing parts of the original public API:
+	// This file adds:
 	//   - SetPositionValue,
 	//   - the OnPositionReceived(Position) virtual hook,
 	//   - the IPortfolioProvider surface,
@@ -89,9 +87,8 @@ partial class Strategy
 		if (_targetManager is not null)
 			return _targetManager;
 
-		// The decomposed Strategy implements ISubscriptionProvider, ITransactionProvider and
-		// IMarketRuleContainer (each via its own partial), so the strategy itself plays all three
-		// collaborator roles for the manager - exactly as the monolith passed "this, this, this".
+		// Strategy implements ISubscriptionProvider, ITransactionProvider and IMarketRuleContainer, so it
+		// plays all three collaborator roles for the manager.
 		_targetManager = new(
 			this, this, this,
 			getPosition: (s, p) => GetPositionValue(s, p),

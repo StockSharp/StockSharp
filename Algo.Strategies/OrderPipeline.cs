@@ -97,9 +97,8 @@ public class OrderPipeline(IStatisticManager stats) : IEnumerable<Order>
 		{
 			_stats.AddNewOrder(order);
 
-			// Fold the order commission into the running total only for non-conditional orders, matching
-			// the monolith ProcessOrder which counts conditional (stop/take) orders into statistics but
-			// never folds their commission.
+			// Conditional (stop/take) orders count into the statistics, but their commission is never
+			// folded into the running total.
 			if (order.Type != OrderTypes.Conditional && order.Commission != null)
 			{
 				Commission ??= 0;
@@ -150,7 +149,7 @@ public class OrderPipeline(IStatisticManager stats) : IEnumerable<Order>
 	/// <summary>
 	/// Mark a single tracked order as canceled. Returns <see langword="true"/> only on the transition
 	/// (i.e. the order was tracked and had not been marked canceled yet), so the caller can issue the
-	/// cancel exactly once - mirroring the monolith ProcessOrder stop-time re-cancel guard.
+	/// cancel exactly once.
 	/// </summary>
 	/// <param name="order">The order to mark.</param>
 	/// <returns><see langword="true"/> if the order was newly marked canceled.</returns>

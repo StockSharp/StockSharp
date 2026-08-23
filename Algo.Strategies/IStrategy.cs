@@ -3,14 +3,11 @@ namespace StockSharp.Algo.Strategies;
 using StockSharp.Reporting;
 
 /// <summary>
-/// Common external contract implemented by both the current <see cref="Strategy"/> and the legacy
-/// <see cref="StrategyOld"/>, so external code and shared infrastructure can work with either strategy engine.
+/// The external contract of a strategy: the provider surfaces it exposes plus the strategy-specific members.
 /// </summary>
 /// <remarks>
-/// The interface aggregates the provider contracts the monolith already exposes and adds the strategy-specific
-/// surface. The legacy <see cref="StrategyOld"/> satisfies it as-is; the decomposed <see cref="Strategy"/>
-/// implements the missing pieces until full parity is reached, after which usages of the concrete type are
-/// replaced by this interface.
+/// Shared infrastructure - market rules, name generation, parameter dictionaries - is written against this
+/// interface rather than <see cref="Strategy"/>, so it does not bind to the engine's concrete type.
 /// </remarks>
 public interface IStrategy :
 	INotifyPropertyChangedEx,

@@ -70,14 +70,13 @@ public class StrategyEngine
 	}
 
 	/// <summary>
-	/// Interval for unrealized PnL refresh. The default value is 1 minute, matching the monolith
-	/// strategy, so the out-of-the-box refresh cadence is identical even before the public
+	/// Interval for unrealized PnL refresh. The default value is 1 minute, applied until the public
 	/// <see cref="Strategy.UnrealizedPnLInterval"/> setter runs.
 	/// </summary>
 	public TimeSpan UnrealizedPnLInterval { get; set; } = TimeSpan.FromMinutes(1);
 
 	/// <summary>
-	/// Market time of the last unrealized-PnL refresh; used for statistic attribution to match the monolith.
+	/// Market time of the last unrealized-PnL refresh; used for statistic attribution.
 	/// </summary>
 	public DateTime LastPnLRefreshTime => _lastPnlRefreshTime;
 
@@ -88,9 +87,8 @@ public class StrategyEngine
 
 	/// <summary>
 	/// Gate for the final <see cref="ProcessStates.Stopping"/> -&gt; <see cref="ProcessStates.Stopped"/> transition.
-	/// Mirrors the monolith TryFinalStop: while it returns <see langword="false"/> the strategy stays in
-	/// <see cref="ProcessStates.Stopping"/> (e.g. outstanding rules under WaitRulesOnStop). When unset the
-	/// transition is never gated, preserving the previous immediate-stop behaviour.
+	/// While it returns <see langword="false"/> the strategy stays in <see cref="ProcessStates.Stopping"/>
+	/// (e.g. outstanding rules under WaitRulesOnStop). When unset the transition is never gated.
 	/// </summary>
 	public Func<bool> CanFinalStop { get; set; }
 
@@ -131,7 +129,7 @@ public class StrategyEngine
 	/// Attempt the final <see cref="ProcessStates.Stopping"/> -&gt; <see cref="ProcessStates.Stopped"/> transition,
 	/// honouring <see cref="CanFinalStop"/>. While the gate denies it the strategy stays in
 	/// <see cref="ProcessStates.Stopping"/>; the method is re-driven once the gating condition clears
-	/// (mirroring the monolith TryFinalStop re-entry from rule completion).
+	/// (e.g. on rule completion).
 	/// </summary>
 	public ValueTask TryFinalStopAsync(CancellationToken cancellationToken)
 	{

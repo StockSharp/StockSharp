@@ -6,9 +6,8 @@ using StockSharp.Algo.Risk;
 partial class Strategy
 {
 	// All persisted settings are backed by StrategyParam<T> so they are registered in Parameters,
-	// round-trip through Save/Load and carry Display/validation/optimization metadata, exactly as the
-	// monolith Strategy does. The parameters are created in the constructor (Strategy.cs) where the
-	// Parameters dictionary is initialized; the backing fields live here.
+	// round-trip through Save/Load and carry Display/validation/optimization metadata. The parameters
+	// are created in the constructor (Strategy.cs); the backing fields live here.
 
 	/// <summary>
 	/// Make <see cref="Security"/> and <see cref="Portfolio"/> as non-browsable.
@@ -326,7 +325,7 @@ partial class Strategy
 		}
 	}
 
-	// Registers every persisted setting as a StrategyParam, mirroring the monolith Strategy ctor.
+	// Registers every persisted setting as a StrategyParam.
 	// Called from the constructor right after Parameters is created.
 	private void InitParameters()
 	{

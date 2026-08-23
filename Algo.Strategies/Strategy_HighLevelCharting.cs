@@ -7,12 +7,7 @@ using StockSharp.Charting;
 
 partial class Strategy
 {
-	// HighLevelCharting subsystem ported from the monolith StrategyOld.
-	//
-	// The monolith stores the active IChart inside its Environment settings storage
-	// (StrategyOld_Extensions.GetChart/SetChart). The decomposed Strategy has no such
-	// Environment member, so a minimal private backing field is provided here and the
-	// same public GetChart/SetChart API is reproduced on top of it.
+	// HighLevelCharting subsystem.
 	private IChart _chart;
 	private bool _drawingFeedHooked;
 	private SynchronizedList<Order> _drawingOrders;
@@ -117,11 +112,8 @@ partial class Strategy
 		return elem;
 	}
 
-	// The monolith fed _drawingTrades / _drawingOrders from its connector own-trade/order
-	// handlers (only for the OrderLookup subscription). The decomposed Strategy surfaces the
-	// equivalent data via the OwnTradeReceived / OrderReceived events, so the drawing buffers
-	// are filled from there. The hook is installed lazily and only once, the first time a
-	// trade/order chart element is requested, so strategies that don't draw incur no overhead.
+	// The drawing buffers are filled from the OwnTradeReceived / OrderReceived events. The hook is
+	// installed lazily and only once, so strategies that don't draw incur no overhead.
 	private void EnsureDrawingFeed()
 	{
 		if (_drawingFeedHooked)

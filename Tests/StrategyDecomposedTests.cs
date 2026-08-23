@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.PositionManagement;
@@ -2422,14 +2422,12 @@ public class StrategyDecomposedTests : BaseTestClass
 
 	#endregion
 
-	#region IndicatorSource parity (monolith vs decomposed)
+	#region IndicatorSource
 
-	// Indicator added with null Source inherits IndicatorSource (??=); one with its own Source keeps it.
-	// Pinned 1:1 against the monolith StrategyOld.IndicatorList.OnAdded.
-#pragma warning disable CS0618 // parity test deliberately exercises the obsolete StrategyOld monolith engine
+	// An indicator added with no Source of its own inherits the strategy's; one that names a Source keeps it.
 
 	[TestMethod]
-	public void IndicatorSource_NullSource_Decomposed_InheritsStrategyDefault()
+	public void IndicatorSource_NullSource_InheritsStrategyDefault()
 	{
 		var strategy = new Strategy { IndicatorSource = Level1Fields.BestBidPrice };
 
@@ -2442,58 +2440,16 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void IndicatorSource_NullSource_Monolith_InheritsStrategyDefault()
+	public void IndicatorSource_NonNullSource_IsLeftAlone()
 	{
-		var strategy = new StrategyOld { IndicatorSource = Level1Fields.BestBidPrice };
+		var strategy = new Strategy { IndicatorSource = Level1Fields.BestBidPrice };
 
-		var indicator = new SimpleMovingAverage();
-		IsNull(indicator.Source);
+		var indicator = new SimpleMovingAverage { Source = Level1Fields.BestAskPrice };
 
 		strategy.Indicators.TryAdd(indicator);
 
-		indicator.Source.AreEqual(Level1Fields.BestBidPrice);
+		indicator.Source.AreEqual(Level1Fields.BestAskPrice);
 	}
-
-	[TestMethod]
-	public void IndicatorSource_NullSource_DecomposedMatchesMonolith()
-	{
-		const Level1Fields source = Level1Fields.BestBidPrice;
-
-		var monolith = new StrategyOld { IndicatorSource = source };
-		var decomposed = new Strategy { IndicatorSource = source };
-
-		var monolithIndicator = new SimpleMovingAverage();
-		var decomposedIndicator = new SimpleMovingAverage();
-
-		monolith.Indicators.TryAdd(monolithIndicator);
-		decomposed.Indicators.TryAdd(decomposedIndicator);
-
-		// Both engines must leave the indicator with Source == IndicatorSource (1:1).
-		monolithIndicator.Source.AreEqual(source);
-		decomposedIndicator.Source.AreEqual(monolithIndicator.Source);
-	}
-
-	[TestMethod]
-	public void IndicatorSource_NonNullSource_DecomposedMatchesMonolith()
-	{
-		const Level1Fields strategySource = Level1Fields.BestBidPrice;
-		const Level1Fields ownSource = Level1Fields.BestAskPrice;
-
-		var monolith = new StrategyOld { IndicatorSource = strategySource };
-		var decomposed = new Strategy { IndicatorSource = strategySource };
-
-		var monolithIndicator = new SimpleMovingAverage { Source = ownSource };
-		var decomposedIndicator = new SimpleMovingAverage { Source = ownSource };
-
-		monolith.Indicators.TryAdd(monolithIndicator);
-		decomposed.Indicators.TryAdd(decomposedIndicator);
-
-		// The ??= semantics keep an indicator's own Source untouched on both engines.
-		monolithIndicator.Source.AreEqual(ownSource);
-		decomposedIndicator.Source.AreEqual(monolithIndicator.Source);
-	}
-
-#pragma warning restore CS0618
 
 	#endregion
 

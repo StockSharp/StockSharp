@@ -26,7 +26,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	private TimeSpan _maxOrdersKeepTime = TimeSpan.FromTicks((long)(TimeSpan.TicksPerDay * 1.5));
 	private bool _isTradingBlocked;
 	// Set the moment a stop is requested (before the Stopping state round-trips through the engine) so
-	// CanTrade rejects new orders immediately, matching the monolith _stopping flag. Cleared on start/reset.
+	// CanTrade rejects new orders immediately. Cleared on start/reset.
 	private bool _stopping;
 	private bool _isOnline;
 	private decimal _position;
@@ -79,7 +79,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 		InitParameters();
 
-		// Wire the indicator collection's default-source inheritance (mirrors the monolith IndicatorList.OnAdded).
+		// Wire the indicator collection's default-source inheritance.
 		InitIndicators();
 
 		NameGenerator = new(this);
@@ -92,8 +92,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		Subscriptions.SubscriptionRequested += s => _connector?.Subscribe(s);
 		Subscriptions.UnsubscriptionRequested += s => _connector?.UnSubscribe(s);
 
-		// Gate the final Stopping -> Stopped transition exactly as the monolith TryFinalStop does:
-		// defer it only while WaitRulesOnStop is set and rules are still outstanding.
+		// Gate the final Stopping -> Stopped transition: defer it only while WaitRulesOnStop is set
+		// and rules are outstanding.
 		Engine.CanFinalStop = CanFinalStop;
 
 		Engine.CurrentPriceUpdated += (secId, price, serverTime, localTime) =>
@@ -112,7 +112,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		{
 			// Conditional (stop/take) orders never fold their commission into the strategy total
 			// (see OrderPipeline.ProcessOrder), so do not raise the commission-changed notification for
-			// them either - matching the monolith ProcessOrder. Latency is still applied for both kinds.
+			// them either. Latency is applied for both kinds.
 			if (order.Type != OrderTypes.Conditional && order.Commission is not null)
 				RaiseCommissionChanged();
 
@@ -123,8 +123,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		{
 			// An order can be confirmed after the strategy has already entered the Stopping state (the
 			// initial CancelAllActiveOrders sweep ran before it was acknowledged). Re-cancel such a freshly
-			// confirmed, still-cancelable order, exactly once - mirroring the monolith ProcessOrder stop-time
-			// re-cancel guarded by info.IsCanceled.
+			// confirmed, cancelable order exactly once.
 			if (ProcessState == ProcessStates.Stopping && CancelOrdersWhenStopping
 				&& !order.State.IsFinal() && OrderProcessor.TryMarkCanceled(order))
 			{
@@ -218,10 +217,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		get => _pnLManager;
 		set
 		{
-			// Match the monolith public setter: reject null. The decomposed engine and the trade pipeline
-			// capture the manager by reference, so re-point them when it is swapped (the dependents are
-			// null only during the very first assignment from the constructor, where they get the manager
-			// through their own constructors instead).
+			// A null manager is rejected. The engine and the trade pipeline capture the manager by reference,
+			// so re-point them when it is swapped; both are null only during the constructor's first assignment.
 			_pnLManager = value ?? throw new ArgumentNullException(nameof(value));
 
 			Engine?.SetPnLManager(_pnLManager);
@@ -238,8 +235,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		get => _statisticManager;
 		protected set
 		{
-			// Match the monolith protected setter: reject null and re-point the pipelines that capture the
-			// statistic manager by reference (null only during the constructor's first assignment).
+			// A null manager is rejected. Re-point the pipelines that capture the statistic manager by
+			// reference (they are null only during the constructor's first assignment).
 			_statisticManager = value ?? throw new ArgumentNullException(nameof(value));
 
 			OrderProcessor?.SetStatisticManager(_statisticManager);
@@ -259,8 +256,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		get => _riskManager;
 		set
 		{
-			// Match the monolith: reject a null manager and adopt the strategy as the rule parent
-			// (only when it is not already owned) so error-count / position risk rules resolve correctly.
+			// A null manager is rejected. The strategy is adopted as the rule parent (only when the manager
+			// has none) so error-count / position risk rules resolve correctly.
 			_riskManager = value ?? throw new ArgumentNullException(nameof(value));
 			_riskManager.Parent ??= this;
 		}
@@ -378,8 +375,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
 
-		// Promote ErrorState from logging exactly as the monolith Strategy does, so the ErrorState change
-		// stream matches it: a warning raises Info -> Warning, an error escalates straight to Error.
+		// Promote ErrorState from logging: a warning raises Info -> Warning, an error escalates straight
+		// to Error.
 		switch (message.Level)
 		{
 			case LogLevels.Warning:
@@ -433,8 +430,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// </summary>
 	/// <remarks>
 	/// Default implementation uses the <see cref="Indicators"/> collection to check that every tracked
-	/// indicator is formed. An empty collection is considered formed, matching the monolith strategy's
-	/// <c>AllFormed</c> semantics.
+	/// indicator is formed. An empty collection is considered formed.
 	/// </remarks>
 	[Browsable(false)]
 	public virtual bool IsFormed => _indicators.All(i => i.IsFormed);
@@ -751,7 +747,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// </summary>
 	public ValueTask StartAsync(CancellationToken cancellationToken = default)
 	{
-		// Clear the stop request so CanTrade allows orders again on (re)start, matching the monolith Start.
+		// Clear the stop request so CanTrade allows orders again on (re)start.
 		_stopping = false;
 		_maxOrdersKeepTime = TimeSpan.FromTicks((long)(OrdersKeepTime.Ticks * 1.5));
 		return Engine.RequestStartAsync(cancellationToken);
@@ -769,7 +765,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	public ValueTask StopAsync(CancellationToken cancellationToken = default)
 	{
 		// Flag the stop request before the Stopping state round-trips through the engine, so CanTrade
-		// rejects new orders immediately - matching the monolith Stop. Skip the no-op already-stopped case.
+		// rejects new orders immediately. Skip the no-op already-stopped case.
 		if (ProcessState != ProcessStates.Stopped)
 			_stopping = true;
 
@@ -896,7 +892,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 		if (RiskManager.Rules.Count > 0)
 		{
-			// A risk rule fired: skip the edit, mirroring the monolith which only edits when no action.
+			// Skip the edit when a risk rule fires on the resulting register message.
 			if (ProcessRisk(changes.CreateRegisterMessage()) is not null)
 				return;
 		}
@@ -1045,8 +1041,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// </summary>
 	private void CancelAllActiveOrders()
 	{
-		// Bypass the public CancelOrder Started-state guard (runs at stop time / on risk actions); IsCanceled
-		// dedup still respected via TryMarkCanceled. Mirrors the monolith ProcessCancelActiveOrders.
+		// Bypass the public CancelOrder Started-state guard (runs at stop time / on risk actions);
+		// TryMarkCanceled keeps the IsCanceled dedup.
 		foreach (var order in OrderProcessor.Orders.Where(o => o.State == OrderStates.Active))
 		{
 			if (OrderProcessor.TryMarkCanceled(order))
@@ -1073,8 +1069,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 #pragma warning restore CS0618
 		OnOrderChanged(order);
 
-		// Apply cancellation latency on a non-registration order change, matching the monolith ProcessOrder
-		// isChanging branch which calls ChangeLatency(order.LatencyCancellation).
+		// A non-registration order change contributes its cancellation latency to the running total.
 		ChangeLatency(order.LatencyCancellation);
 	}
 
@@ -1129,8 +1124,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		if (Portfolio is not null)
 			PnLReceived2?.Invoke(subscription, Portfolio, time, PnLManager.RealizedPnL, PnLManager.UnrealizedPnL, Commission);
 
-		// Attribute stats to the engine's PnL-refresh time (not the notification time), as the monolith does,
-		// so time-typed stats (MaxProfitDate/MaxDrawdownDate) stay identical.
+		// Attribute stats to the engine's PnL-refresh time rather than the notification time, so time-typed
+		// stats (MaxProfitDate/MaxDrawdownDate) point at the moment the PnL was measured.
 		StatisticManager.AddPnL(Engine.LastPnLRefreshTime, PnLManager.GetPnL(), Commission);
 	}
 
@@ -1153,7 +1148,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	}
 
 	// Accumulate the per-order latency (registration / cancellation / edition) into the running total and
-	// notify, matching the monolith ChangeLatency: a null or zero delta is ignored.
+	// notify. A null or zero delta is ignored.
 	private void ChangeLatency(TimeSpan? diff)
 	{
 		if (diff is not TimeSpan delta || delta == TimeSpan.Zero)
@@ -1185,7 +1180,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		Position[] positions = null;
 
 		// When KeepStatistics is set, preserve the accumulated trading statistics (orders, trades, PnL,
-		// positions, risk) across a restart - exactly as the monolith Strategy.Reset does.
+		// positions, risk) across a restart.
 		if (!KeepStatistics)
 		{
 			positions = _posManager.Positions;
@@ -1219,8 +1214,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		_stopping = false;
 		_lastCantTradeReason = default;
 
-		// Reset to Info (not the default Inherit) to match the monolith Strategy.Reset, so the ErrorState
-		// change stream is identical at reset instead of emitting an extra Info -> Inherit transition.
+		// Reset to Info rather than the default Inherit, so a reset does not emit an extra
+		// Info -> Inherit transition on the ErrorState change stream.
 		ErrorState = LogLevels.Info;
 
 		var totalWorkingTime = TotalWorkingTime;
@@ -1381,8 +1376,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		{
 			case ProcessStates.Started:
 			{
-				// StartedTime / TotalWorkingTime measure wall-clock operating time, so use base.CurrentTime as
-				// the monolith does (host CurrentTime is market time, still default before replay begins).
+				// StartedTime / TotalWorkingTime measure wall-clock operating time, so use base.CurrentTime:
+				// the host CurrentTime is market time and stays default until replay begins.
 				var startedTime = base.CurrentTime;
 				var notifyStartedTime = StartedTime == startedTime;
 
@@ -1395,8 +1390,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 				ErrorState = LogLevels.Info;
 				this.Notify(nameof(IsFormed));
 
-				// Seed start-of-run statistic values and the orders-keep window, matching the monolith
-				// which calls InitStartValues at the head of OnStarted2 before subscribing the lookups.
+				// Seed start-of-run statistic values and the orders-keep window before subscribing the lookups.
 				InitStartValues();
 
 				// Subscribe to own transactions (orders/trades) and portfolio/position updates so the connector
@@ -1405,9 +1399,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 				Subscriptions.Subscribe(PortfolioLookup, isGlobal: true);
 				Subscriptions.Subscribe(OrderLookup, isGlobal: true);
 
-				// Guard the user transition callback exactly as the monolith does: route any exception to
-				// OnError and auto-stop on a failed Started transition, so a throwing override does not
-				// escape the message loop and leave the strategy stuck in the Started state.
+				// Route any exception from the user transition callback to OnError and auto-stop, so a
+				// throwing override does not escape the message loop and leave the strategy in Started.
 				try
 				{
 					OnStarted2(StartedTime);
@@ -1458,8 +1451,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 					OnError(error);
 				}
 
-				// Match the monolith TryFinalStop: dispose the strategy once it has reached Stopped
-				// when DisposeOnStop is set (used by transient strategies such as quoting).
+				// With DisposeOnStop set the strategy is disposed once it has reached Stopped (used by
+				// transient strategies such as quoting).
 				if (DisposeOnStop)
 					Dispose();
 
@@ -1560,17 +1553,15 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 	/// <summary>
 	/// Called when one of the strategy's own orders is updated via the connector's order-lookup
-	/// subscription, matching the monolith user hook. See <see cref="OnOrderChanged(Order)"/> for the
-	/// difference between the two.
+	/// subscription. See <see cref="OnOrderChanged(Order)"/> for the difference between the two.
 	/// </summary>
 	/// <param name="order">Received order.</param>
 	protected virtual void OnOrderReceived(Order order) { }
 
 	/// <summary>
-	/// Called when one of the strategy's own trades is received. This is the user-overridable hook, named to
-	/// match the monolith <see cref="StrategyOld.OnOwnTradeReceived(MyTrade)"/> so subclass overrides bind. It
-	/// is the single real hook: the obsolete <see cref="NewMyTrade"/> event is raised alongside it for the same
-	/// trade (both wired from the trade pipeline's add), so user code is never invoked twice for one trade.
+	/// Called when one of the strategy's own trades is received. This is the single user-overridable hook:
+	/// the obsolete <see cref="NewMyTrade"/> event is raised alongside it for the same trade (both wired from
+	/// the trade pipeline's add), so user code is never invoked twice for one trade.
 	/// </summary>
 	/// <param name="trade">Received trade.</param>
 	protected virtual void OnOwnTradeReceived(MyTrade trade) { }
@@ -1607,8 +1598,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	{
 		LastError = error;
 
-		// Feed the error into the risk manager (so error-count rules see exceptions) and log it,
-		// matching the monolith OnError which calls ProcessRisk(error.ToErrorMessage()) and LogError.
+		// Feed the error into the risk manager so error-count rules see exceptions.
 		ProcessRisk(error.ToErrorMessage());
 
 		Error?.Invoke(this, error);
@@ -1665,7 +1655,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		bool canTrade(out string noTradeReason)
 		{
 			// Reject new orders the moment a stop is requested, before the Stopping state has round-tripped
-			// through the engine - matching the monolith which checks _stopping ahead of ProcessState.
+			// through the engine.
 			if (_stopping)
 			{
 				noTradeReason = "Strategy is stopping.";
@@ -2126,8 +2116,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			OrderEdited?.Invoke(transactionId, order);
 #pragma warning restore CS0618
 
-			// Apply edition latency, matching the monolith OnConnectorOrderEdited which calls
-			// ChangeLatency(order.LatencyEdition) for a tracked order.
+			// A tracked order contributes its edition latency to the running total.
 			ChangeLatency(order.LatencyEdition);
 		}
 	}
@@ -2171,8 +2160,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 				ErrorState = LogLevels.Warning;
 		}
 
-		// Invoke the user hook when one of the strategy's own orders updates, matching the monolith
-		// which calls OnOrderReceived(order) only for the OrderLookup subscription.
+		// The user hook fires only for updates arriving on the order-lookup subscription.
 		if (sub == OrderLookup)
 			OnOrderReceived(order);
 	}
@@ -2401,8 +2389,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <inheritdoc />
 	protected override void DisposeManaged()
 	{
-		// Mirror the monolith DisposeManaged: detach the connector (which unsubscribes its event
-		// handlers), dispose the parameters, unhook the position manager and dispose the statistics.
+		// Detaching the connector unsubscribes its event handlers.
 		Connector = null;
 
 		Parameters.Dispose();

@@ -17,7 +17,7 @@ partial class Strategy
 		get => base.Name;
 		set
 		{
-			// A manual name assignment turns off auto-generation (mirrors the monolith behavior).
+			// A manual name assignment turns off auto-generation.
 			NameGenerator.Value = value;
 			base.Name = value;
 		}

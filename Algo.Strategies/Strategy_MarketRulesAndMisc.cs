@@ -4,10 +4,9 @@ using StockSharp.Algo;
 using StockSharp.Alerts;
 using StockSharp.Reporting;
 
-// MarketRulesAndMisc subsystem ported from the monolith StrategyOld onto the decomposed engine.
+// MarketRulesAndMisc subsystem.
 //
-// This file re-implements, with identical public signatures, the parts of the monolith surface
-// that the decomposed Strategy.cs (and its already-present partials) does not yet provide:
+// This file implements:
 //
 //   - IMarketRuleContainer (Rules, IsRulesSuspended, SuspendRules, ResumeRules, ActivateRule);
 //   - IScheduledTask (WorkingTime, CanStart, CanStop);
@@ -17,12 +16,7 @@ using StockSharp.Reporting;
 //   - the misc members UnrealizedPnLInterval, PortfolioProvider, Environment, GetWorkingPortfolios,
 //     ToReportValue and the alert-service helpers (GetAlertService / SetAlertService).
 //
-// IPortfolioProvider is NOT re-declared here: the decomposed Strategy already lists it on its
-// primary declaration and implements it in Strategy_Positions.cs.
-//
-// Where the monolith stored state inside its Environment SettingsStorage (alert service), the
-// decomposed Strategy has no such member, so a minimal backing field is used instead - mirroring
-// the GetChart/SetChart precedent already established in Strategy_HighLevelCharting.cs.
+// IPortfolioProvider is listed on the primary declaration and implemented in Strategy_Positions.cs.
 partial class Strategy : IMarketRuleContainer, ICloneable<Strategy>, IScheduledTask, IReportSource, ICustomTypeDescriptor
 {
 	#region IMarketRuleContainer
@@ -32,8 +26,7 @@ partial class Strategy : IMarketRuleContainer, ICloneable<Strategy>, IScheduledT
 	private bool _ruleLifecycleHooked;
 
 	/// <summary>
-	/// Rule list backed by the strategy. Adding is blocked once the strategy is stopping, matching
-	/// the monolith StrategyRuleList behaviour.
+	/// Rule list backed by the strategy. Adding is blocked once the strategy is stopping.
 	/// </summary>
 	private sealed class StrategyRuleList(Strategy strategy)
 		: MarketRuleList(strategy)
@@ -60,10 +53,8 @@ partial class Strategy : IMarketRuleContainer, ICloneable<Strategy>, IScheduledT
 		}
 	}
 
-	// The monolith disposed rules from TryFinalStop (respecting WaitRulesOnStop) and cleared them on
-	// Reset / OnReseted. The decomposed engine drives the state machine itself, so the rule cleanup is
-	// attached lazily - and only once - the first time the rule list is materialised, leaving strategies
-	// that never use rules with no extra wiring.
+	// Rule cleanup is attached lazily - and only once - the first time the rule list is materialised,
+	// leaving strategies that never use rules with no extra wiring.
 	private void EnsureRuleLifecycleHook()
 	{
 		if (_ruleLifecycleHooked)
@@ -136,16 +127,16 @@ partial class Strategy : IMarketRuleContainer, ICloneable<Strategy>, IScheduledT
 		}
 		finally
 		{
-			// Mirror the monolith ActivateRule finally: a rule completing while stopping may have been the
-			// last gate, so re-drive the final stop. The engine no-ops unless still stopping and unblocked.
+			// A rule completing while stopping may have been the last gate, so re-drive the final stop.
+			// The engine no-ops unless the strategy is stopping and unblocked.
 			if (ProcessState == ProcessStates.Stopping)
 				Engine.TryFinalStopAsync(default).NoWait();
 		}
 	}
 
 	/// <summary>
-	/// Final-stop gate mirroring the monolith TryFinalStop: deny the Stopping -&gt; Stopped transition only
-	/// while <see cref="WaitRulesOnStop"/> is set and there are still outstanding rules to drain.
+	/// Final-stop gate: deny the Stopping -&gt; Stopped transition only while <see cref="WaitRulesOnStop"/>
+	/// is set and there are outstanding rules to drain.
 	/// </summary>
 	private bool CanFinalStop()
 		=> !(WaitRulesOnStop && GetRules().Length > 0);
@@ -274,8 +265,8 @@ partial class Strategy : IMarketRuleContainer, ICloneable<Strategy>, IScheduledT
 		if (copy is null)
 			throw new ArgumentNullException(nameof(copy));
 
-		// Round-trip full persisted state through Save/Load as the monolith CopyTo does (a parameter-by-id
-		// copy would drop the RiskManager). The clone keeps its OWN id, restored after Load.
+		// Round-trip full persisted state through Save/Load (a parameter-by-id copy would drop the
+		// RiskManager). The clone keeps its OWN id, restored after Load.
 		var id = copy.Id;
 		copy.Load(this.Save());
 		copy.Id = id;
@@ -344,7 +335,7 @@ partial class Strategy : IMarketRuleContainer, ICloneable<Strategy>, IScheduledT
 		_reportSource.Slippage = Slippage;
 		_reportSource.Latency = Latency;
 
-		// Projections built from the decomposed pipelines, since the monolith fed them incrementally.
+		// Report projections are rebuilt from the pipelines rather than fed incrementally.
 		_reportSource.ClearOrders();
 		foreach (var order in Orders)
 			AddOrderToReport(order);
