@@ -285,6 +285,34 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// A position is worth what the market would pay for it whether or not the venue checks money:
+	/// what an account is told it holds cannot depend on a setting about order acceptance.
+	/// </summary>
+	[TestMethod]
+	public async Task APositionIsRevaluedWhetherOrNotTheVenueChecksMoney()
+	{
+		const string account = "Trader";
+
+		// Money checks off, which is what an engine is built with.
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(MoneyRow(account, 2000m, _start), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		// Ten bought at 101, and the market then bids 150 for them.
+		await run.SendAsync(NewOrder(1, account, Sides.Buy, OrderTypes.Limit, 101m, 10m, _start.AddSeconds(1)), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start.AddSeconds(2), [new QuoteChange(150m, 10m)], [new QuoteChange(151m, 10m)]), CancellationToken);
+
+		var portfolio = engine.PortfolioManager.GetPortfolio(account);
+
+		AreEqual(490m, portfolio.UnrealizedPnL,
+			"the position cost 1010 and the bid would pay 1500 for it, so it stands 490 ahead");
+		AreEqual(2490m, portfolio.CurrentMoney,
+			"and what the account holds moves with it");
+	}
+
+	/// <summary>
 	/// A position that moved the account's way is not punished for it: what it can trade with does not
 	/// shrink because the market went in its favour.
 	/// </summary>

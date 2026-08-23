@@ -764,24 +764,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	}
 
 	private static void AddPortfolioUpdate(IPortfolio portfolio, DateTime time, List<Message> results)
-	{
-		var unrealizedPnL = 0m;
-		var totalPnL = portfolio.RealizedPnL - portfolio.Commission + unrealizedPnL;
-
-		results.Add(new PositionChangeMessage
-		{
-			SecurityId = SecurityId.Money,
-			ServerTime = time,
-			LocalTime = time,
-			PortfolioName = portfolio.Name,
-		}
-		.Add(PositionChangeTypes.RealizedPnL, portfolio.RealizedPnL)
-		.TryAdd(PositionChangeTypes.UnrealizedPnL, unrealizedPnL, true)
-		.Add(PositionChangeTypes.VariationMargin, totalPnL)
-		.Add(PositionChangeTypes.CurrentValue, portfolio.CurrentMoney)
-		.Add(PositionChangeTypes.BlockedValue, portfolio.BlockedMoney)
-		.Add(PositionChangeTypes.Commission, portfolio.Commission));
-	}
+		=> results.Add(MatchingEngineAdapter.CreatePortfolioUpdate(portfolio, time));
 
 	/// <inheritdoc />
 	public IEnumerable<MessageTypeInfo> PossibleSupportedMessages { get; } =

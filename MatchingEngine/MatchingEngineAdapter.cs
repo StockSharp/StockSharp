@@ -26,6 +26,7 @@ public class MatchingEngineAdapter : IMessageTransport
 	/// </summary>
 	public MatchingEngineAdapter()
 	{
+		EnsurePortfolioServices();
 	}
 
 	/// <summary>
@@ -57,7 +58,11 @@ public class MatchingEngineAdapter : IMessageTransport
 	public IPortfolioManager PortfolioManager
 	{
 		get => _portfolioManager;
-		set => _portfolioManager = value ?? throw new ArgumentNullException(nameof(value));
+		set
+		{
+			_portfolioManager = value ?? throw new ArgumentNullException(nameof(value));
+			EnsurePortfolioServices();
+		}
 	}
 
 	/// <summary>
@@ -1422,7 +1427,6 @@ public class MatchingEngineAdapter : IMessageTransport
 		if (chargedPrice is not decimal price)
 			return new InvalidOperationException($"Order {regMsg.TransactionId}: no price to charge, the {regMsg.Side.Invert()} side is empty.");
 
-		EnsurePortfolioServices();
 		return _portfolioManager.ValidateFunds(regMsg.PortfolioName, regMsg.SecurityId, price, regMsg.Volume);
 	}
 
@@ -1537,12 +1541,22 @@ public class MatchingEngineAdapter : IMessageTransport
 		};
 	}
 
-	private static void AddPortfolioUpdate(IPortfolio portfolio, DateTime time, List<Message> results)
+	/// <summary>
+	/// The money row stating what an account holds: its realized and unrealized result, what its
+	/// working orders hold, and what it can trade with now.
+	/// </summary>
+	/// <param name="portfolio">The account the row is about.</param>
+	/// <param name="time">Time to stamp the row with.</param>
+	/// <returns>The row.</returns>
+	public static PositionChangeMessage CreatePortfolioUpdate(IPortfolio portfolio, DateTime time)
 	{
+		if (portfolio is null)
+			throw new ArgumentNullException(nameof(portfolio));
+
 		var unrealizedPnL = portfolio.UnrealizedPnL;
 		var totalPnL = portfolio.RealizedPnL - portfolio.Commission + unrealizedPnL;
 
-		results.Add(new PositionChangeMessage
+		return new PositionChangeMessage
 		{
 			SecurityId = SecurityId.Money,
 			ServerTime = time,
@@ -1554,8 +1568,11 @@ public class MatchingEngineAdapter : IMessageTransport
 		.Add(PositionChangeTypes.VariationMargin, totalPnL)
 		.Add(PositionChangeTypes.CurrentValue, portfolio.CurrentMoney)
 		.Add(PositionChangeTypes.BlockedValue, portfolio.BlockedMoney)
-		.Add(PositionChangeTypes.Commission, portfolio.Commission));
+		.Add(PositionChangeTypes.Commission, portfolio.Commission);
 	}
+
+	private static void AddPortfolioUpdate(IPortfolio portfolio, DateTime time, List<Message> results)
+		=> results.Add(CreatePortfolioUpdate(portfolio, time));
 
 	/// <summary>
 	/// Send out message.
