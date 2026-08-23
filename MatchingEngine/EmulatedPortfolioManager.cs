@@ -3,7 +3,7 @@ namespace StockSharp.MatchingEngine;
 /// <summary>
 /// Emulated portfolio implementation that tracks positions and money in-memory.
 /// </summary>
-public class EmulatedPortfolio : IPortfolio
+public class EmulatedPortfolio
 {
 	private readonly Dictionary<SecurityId, PositionInfo> _positions = [];
 	private decimal _beginMoney;
@@ -23,25 +23,40 @@ public class EmulatedPortfolio : IPortfolio
 		_markPrices = markPrices ?? throw new ArgumentNullException(nameof(markPrices));
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Portfolio name.
+	/// </summary>
 	public string Name { get; }
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Initial money amount.
+	/// </summary>
 	public decimal BeginMoney => _beginMoney;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Current money (begin + PnL).
+	/// </summary>
 	public decimal CurrentMoney => _beginMoney + TotalPnL;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Available money (current - blocked).
+	/// </summary>
 	public decimal AvailableMoney => CurrentMoney - _totalBlockedMoney;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Total realized PnL.
+	/// </summary>
 	public decimal RealizedPnL => _realizedPnL;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Total PnL (realized - commission).
+	/// </summary>
 	public decimal TotalPnL => _realizedPnL - _commission + UnrealizedPnL;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// What the open positions have gained or lost since they were taken, at the prices they could be
+	/// closed at now. A position the market has not priced counts for nothing.
+	/// </summary>
 	public decimal UnrealizedPnL
 	{
 		get
@@ -68,28 +83,46 @@ public class EmulatedPortfolio : IPortfolio
 		}
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Blocked money for pending orders.
+	/// </summary>
 	public decimal BlockedMoney => _totalBlockedMoney;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Total commission paid.
+	/// </summary>
 	public decimal Commission => _commission;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Margin call level threshold. When margin level falls to this value, a warning is triggered.
+	/// </summary>
 	public decimal MarginCallLevel { get; set; } = 0.5m;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Stop-out level threshold. When margin level falls to this value, positions are liquidated.
+	/// </summary>
 	public decimal StopOutLevel { get; set; } = 0.2m;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Enable automatic position liquidation on stop-out.
+	/// </summary>
 	public bool EnableStopOut { get; set; }
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Set initial money.
+	/// </summary>
+	/// <param name="money">Money amount.</param>
 	public void SetMoney(decimal money)
 	{
 		_beginMoney = money;
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Set initial position.
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="volume">Position volume.</param>
+	/// <param name="avgPrice">Average entry price.</param>
 	public void SetPosition(SecurityId securityId, decimal volume, decimal avgPrice = 0)
 	{
 		var pos = GetOrCreatePosition(securityId);
@@ -108,13 +141,25 @@ public class EmulatedPortfolio : IPortfolio
 		return pos;
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Get position for security.
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	/// <returns>Position info or null.</returns>
 	public PositionInfo GetPosition(SecurityId securityId)
 	{
 		return _positions.TryGetValue(securityId, out var pos) ? pos : null;
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Process a trade execution.
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="side">Trade side.</param>
+	/// <param name="price">Trade price.</param>
+	/// <param name="volume">Trade volume.</param>
+	/// <param name="commission">Commission amount.</param>
+	/// <returns>Trade processing result.</returns>
 	public TradeProcessingResult ProcessTrade(SecurityId securityId, Sides side, decimal price, decimal volume, decimal? commission = null)
 	{
 		var pos = GetOrCreatePosition(securityId);
@@ -199,7 +244,13 @@ public class EmulatedPortfolio : IPortfolio
 		return new TradeProcessingResult(tradeRealizedPnL, positionDelta, pos);
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Process order registration (block funds).
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="side">Order side.</param>
+	/// <param name="volume">Order volume.</param>
+	/// <param name="price">Order price for margin calculation.</param>
 	public void ProcessOrderRegistration(SecurityId securityId, Sides side, decimal volume, decimal price)
 	{
 		var pos = GetOrCreatePosition(securityId);
@@ -219,7 +270,13 @@ public class EmulatedPortfolio : IPortfolio
 		UpdateBlockedMoney();
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Process order cancellation (unblock funds).
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="side">Order side.</param>
+	/// <param name="volume">Cancelled volume.</param>
+	/// <param name="price">Price used for margin calculation.</param>
 	public void ProcessOrderCancellation(SecurityId securityId, Sides side, decimal volume, decimal price = 0)
 	{
 		var pos = GetOrCreatePosition(securityId);
@@ -272,16 +329,25 @@ public class EmulatedPortfolio : IPortfolio
 		}
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Get all positions.
+	/// </summary>
+	/// <returns>Enumeration of positions.</returns>
 	public IEnumerable<(SecurityId securityId, decimal volume, decimal avgPrice)> GetPositions()
 	{
 		return _positions.Select(kvp => (kvp.Key, kvp.Value.CurrentValue, kvp.Value.AveragePrice));
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Get all position info objects.
+	/// </summary>
 	public IEnumerable<PositionInfo> GetAllPositions() => _positions.Values;
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Calculate unrealized PnL across all positions.
+	/// </summary>
+	/// <param name="getCurrentPrice">Function to get current market price for a security. Returns null if price unavailable.</param>
+	/// <returns>Total unrealized PnL.</returns>
 	public decimal CalculateUnrealizedPnL(Func<SecurityId, decimal?> getCurrentPrice)
 	{
 		if (getCurrentPrice is null)
@@ -320,7 +386,7 @@ public class EmulatedPortfolio : IPortfolio
 /// <summary>
 /// Portfolio manager that creates emulated portfolios in-memory.
 /// </summary>
-public class EmulatedPortfolioManager : IPortfolioManager, IMarkPrices
+public class EmulatedPortfolioManager : IMarkPrices
 {
 	// One account, one balance: the name is compared the way the rest of the engine compares it,
 	// or an order spelling it differently opens a second, empty portfolio next to the funded one.
@@ -340,8 +406,12 @@ public class EmulatedPortfolioManager : IPortfolioManager, IMarkPrices
 	decimal? IMarkPrices.TryGetClosePrice(SecurityId securityId, Sides closeSide)
 		=> MarkPrices?.TryGetClosePrice(securityId, closeSide);
 
-	/// <inheritdoc />
-	public IPortfolio GetPortfolio(string name)
+	/// <summary>
+	/// Get or create a portfolio by name.
+	/// </summary>
+	/// <param name="name">Portfolio name.</param>
+	/// <returns>Portfolio instance.</returns>
+	public EmulatedPortfolio GetPortfolio(string name)
 	{
 		if (!_portfolios.TryGetValue(name, out var portfolio))
 		{
@@ -351,19 +421,42 @@ public class EmulatedPortfolioManager : IPortfolioManager, IMarkPrices
 		return portfolio;
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Look an account up without opening one, unlike <see cref="GetPortfolio"/>, which creates the
+	/// account when the name is unknown.
+	/// </summary>
+	/// <param name="name">Portfolio name.</param>
+	/// <param name="portfolio">The account, or <see langword="null"/> when no account carries that name.</param>
+	/// <returns><see langword="true"/> when the account exists.</returns>
+	public virtual bool TryGetPortfolio(string name, out EmulatedPortfolio portfolio)
+		=> _portfolios.TryGetValue(name, out portfolio);
+
+	/// <summary>
+	/// Check if portfolio exists.
+	/// </summary>
+	/// <param name="name">Portfolio name.</param>
+	/// <returns>True if exists.</returns>
 	public bool HasPortfolio(string name)
 	{
 		return _portfolios.ContainsKey(name);
 	}
 
-	/// <inheritdoc />
-	public IEnumerable<IPortfolio> GetAllPortfolios()
+	/// <summary>
+	/// Get all portfolios.
+	/// </summary>
+	public IEnumerable<EmulatedPortfolio> GetAllPortfolios()
 	{
 		return _portfolios.Values;
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Validate that portfolio has sufficient funds for order registration.
+	/// </summary>
+	/// <param name="portfolioName">Portfolio name.</param>
+	/// <param name="securityId">Security ID (for per-position leverage).</param>
+	/// <param name="price">Order price.</param>
+	/// <param name="volume">Order volume.</param>
+	/// <returns>Error if insufficient funds, null otherwise.</returns>
 	public InvalidOperationException ValidateFunds(string portfolioName, SecurityId securityId, decimal price, decimal volume)
 	{
 		if (!HasPortfolio(portfolioName))
@@ -383,7 +476,9 @@ public class EmulatedPortfolioManager : IPortfolioManager, IMarkPrices
 		return null;
 	}
 
-	/// <inheritdoc />
+	/// <summary>
+	/// Clear all portfolio state.
+	/// </summary>
 	public void Clear()
 	{
 		_portfolios.Clear();

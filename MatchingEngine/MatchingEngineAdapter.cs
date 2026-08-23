@@ -12,7 +12,7 @@ using StockSharp.Localization;
 public class MatchingEngineAdapter : IMessageTransport
 {
 	private readonly Dictionary<SecurityId, SecurityState> _securityStates = [];
-	private IPortfolioManager _portfolioManager = new EmulatedPortfolioManager();
+	private readonly EmulatedPortfolioManager _portfolioManager = new();
 	private readonly IStopOrderManager _stopOrderManager = new StopOrderManager();
 
 	private IncrementalIdGenerator _orderIdGenerator = new();
@@ -26,7 +26,10 @@ public class MatchingEngineAdapter : IMessageTransport
 	/// </summary>
 	public MatchingEngineAdapter()
 	{
-		EnsurePortfolioServices();
+		_portfolioManager.MarginController = new MarginController();
+
+		// Open positions are revalued against the engine's own order books.
+		_portfolioManager.MarkPrices = new BookMarkPrices(this);
 	}
 
 	/// <summary>
@@ -55,15 +58,7 @@ public class MatchingEngineAdapter : IMessageTransport
 	/// <summary>
 	/// Portfolio manager for handling portfolio state.
 	/// </summary>
-	public IPortfolioManager PortfolioManager
-	{
-		get => _portfolioManager;
-		set
-		{
-			_portfolioManager = value ?? throw new ArgumentNullException(nameof(value));
-			EnsurePortfolioServices();
-		}
-	}
+	public EmulatedPortfolioManager PortfolioManager => _portfolioManager;
 
 	/// <summary>
 	/// Stop order manager (read-only access).
@@ -1443,15 +1438,6 @@ public class MatchingEngineAdapter : IMessageTransport
 			: state.OrderBook.BestBid?.price;
 	}
 
-	private void EnsurePortfolioServices()
-	{
-		if (_portfolioManager is not EmulatedPortfolioManager epm)
-			return;
-
-		epm.MarginController ??= new MarginController();
-		epm.MarkPrices ??= new BookMarkPrices(this);
-	}
-
 	/// <summary>
 	/// The engine's own books, read as the price an open position could be closed at.
 	/// </summary>
@@ -1469,7 +1455,7 @@ public class MatchingEngineAdapter : IMessageTransport
 		}
 	}
 
-	private IPortfolio GetPortfolio(string name)
+	private EmulatedPortfolio GetPortfolio(string name)
 	{
 		return _portfolioManager.GetPortfolio(name);
 	}
@@ -1548,7 +1534,7 @@ public class MatchingEngineAdapter : IMessageTransport
 	/// <param name="portfolio">The account the row is about.</param>
 	/// <param name="time">Time to stamp the row with.</param>
 	/// <returns>The row.</returns>
-	public static PositionChangeMessage CreatePortfolioUpdate(IPortfolio portfolio, DateTime time)
+	public static PositionChangeMessage CreatePortfolioUpdate(EmulatedPortfolio portfolio, DateTime time)
 	{
 		if (portfolio is null)
 			throw new ArgumentNullException(nameof(portfolio));
@@ -1571,7 +1557,7 @@ public class MatchingEngineAdapter : IMessageTransport
 		.Add(PositionChangeTypes.Commission, portfolio.Commission);
 	}
 
-	private static void AddPortfolioUpdate(IPortfolio portfolio, DateTime time, List<Message> results)
+	private static void AddPortfolioUpdate(EmulatedPortfolio portfolio, DateTime time, List<Message> results)
 		=> results.Add(CreatePortfolioUpdate(portfolio, time));
 
 	/// <summary>

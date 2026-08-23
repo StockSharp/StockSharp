@@ -131,7 +131,7 @@ public class MarginTradingTests : BaseTestClass
 
 	#endregion
 
-	#region IPortfolio margin settings
+	#region EmulatedPortfolio margin settings
 
 	[TestMethod]
 	public void EmulatedPortfolio_MarginCallLevel_Default()

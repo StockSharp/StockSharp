@@ -96,11 +96,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	/// <summary>
 	/// Portfolio manager for handling portfolio state.
 	/// </summary>
-	public IPortfolioManager PortfolioManager
-	{
-		get => _engine.PortfolioManager;
-		set => _engine.PortfolioManager = value;
-	}
+	public EmulatedPortfolioManager PortfolioManager => _engine.PortfolioManager;
 
 	private SecurityEmulator GetEmulator(SecurityId securityId)
 	{
@@ -763,7 +759,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		};
 	}
 
-	private static void AddPortfolioUpdate(IPortfolio portfolio, DateTime time, List<Message> results)
+	private static void AddPortfolioUpdate(EmulatedPortfolio portfolio, DateTime time, List<Message> results)
 		=> results.Add(MatchingEngineAdapter.CreatePortfolioUpdate(portfolio, time));
 
 	/// <inheritdoc />

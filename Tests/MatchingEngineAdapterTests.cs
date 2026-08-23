@@ -266,6 +266,33 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// An account the venue has never funded can pay for nothing: with the money check on, an order
+	/// naming a name the engine has never heard of has to be refused like any other unpayable one.
+	/// </summary>
+	[TestMethod]
+	public async Task AnAccountTheVenueHasNeverFundedCannotBuy()
+	{
+		const string account = "NeverFunded";
+		const long tx = 1201;
+
+		var engine = new MatchingEngineAdapter();
+		engine.Settings.CheckMoney = true;
+
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		// No money row for this account: the engine has never heard the name.
+		await run.SendAsync(NewOrder(tx, account, Sides.Buy, OrderTypes.Limit, 101m, 5m, _start.AddSeconds(1)), CancellationToken);
+
+		var replies = run.Executions.Where(m => m.HasOrderInfo() && m.OriginalTransactionId == tx).ToArray();
+
+		IsTrue(replies.Length > 0, "the engine must answer the registration");
+		IsTrue(replies.Any(m => m.OrderState == OrderStates.Failed && m.Error is not null),
+			$"an account with nothing behind it cannot pay 505 for this order; states were {replies.Select(m => m.OrderState.ToString()).JoinComma()}, errors were {replies.Select(m => m.Error?.Message ?? "<none>").JoinComma()}");
+	}
+
+	/// <summary>
 	/// A position in an instrument nobody has quoted is worth what it cost: the engine must not invent
 	/// a loss out of a price it does not have, and must not fall over asking for one.
 	/// </summary>
