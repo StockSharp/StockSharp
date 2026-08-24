@@ -99,6 +99,11 @@ public class Level1SnapshotHolder : BaseLogReceiver, ISnapshotHolder<Level1Chang
 					ServerTime = level1Msg.ServerTime,
 					LocalTime = level1Msg.LocalTime,
 					BuildFrom = level1Msg.BuildFrom,
+					// The diff answers the same subscription the message did. A venue that names the
+					// subscription and nothing else leaves a diff without it addressed to no one.
+					OriginalTransactionId = level1Msg.OriginalTransactionId,
+					SubscriptionId = level1Msg.SubscriptionId,
+					SubscriptionIds = level1Msg.SubscriptionIds,
 				};
 
 				var changes = snapshot.Changes;
@@ -264,6 +269,12 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 					try
 					{
 						var delta = info.Snapshot.GetDelta(quoteMsg);
+
+						// The delta answers the same subscription the message did. A venue that
+						// names the subscription and nothing else leaves a delta addressed to no one.
+						delta.OriginalTransactionId = quoteMsg.OriginalTransactionId;
+						delta.SubscriptionId = quoteMsg.SubscriptionId;
+						delta.SubscriptionIds = quoteMsg.SubscriptionIds;
 
 						// Validate a replacement full snapshot on a fresh builder so a failed
 						// positional update cannot corrupt the active builder state.

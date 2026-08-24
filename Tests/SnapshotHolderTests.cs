@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 [TestClass]
 public class SnapshotHolderTests : BaseTestClass
@@ -9,6 +9,32 @@ public class SnapshotHolderTests : BaseTestClass
 
 	#region Level1SnapshotHolder Tests
 
+	[TestMethod]
+	public void Level1_Diff_KeepsWhatTheMessageIsAnsweringFor()
+	{
+		// A venue that answers a subscription names it and needs name nothing else: the subscription
+		// already says which security it is for. A diff that drops the id leaves the message answering
+		// nothing, and a router with no security to go on has nowhere to send it.
+		const long subscriptionId = 4321L;
+
+		var holder = new Level1SnapshotHolder();
+
+		Level1ChangeMessage Quote(decimal bid)
+			=> new Level1ChangeMessage
+			{
+				OriginalTransactionId = subscriptionId,
+				ServerTime = _now,
+				LocalTime = _now,
+			}
+			.TryAdd(Level1Fields.BestBidPrice, bid);
+
+		holder.Process(Quote(99m)).OriginalTransactionId.AssertEqual(subscriptionId);
+
+		var diff = holder.Process(Quote(100m));
+
+		diff.Changes[Level1Fields.BestBidPrice].AssertEqual(100m);
+		diff.OriginalTransactionId.AssertEqual(subscriptionId);
+	}
 	[TestMethod]
 	public void Level1_FirstProcess_CreatesSnapshot()
 	{
@@ -348,6 +374,35 @@ public class SnapshotHolderTests : BaseTestClass
 	#endregion
 
 	#region Additional OrderBook tests
+
+	[TestMethod]
+	public void OrderBook_Delta_KeepsWhatTheMessageIsAnsweringFor()
+	{
+		// A book answers the subscription that asked for it, and the delta between two of them
+		// answers the same one: a reader that routes by subscription has nothing else to go on.
+		const long subscriptionId = 4321L;
+
+		var holder = new OrderBookSnapshotHolder();
+
+		QuoteChangeMessage Book(decimal bid)
+			=> new()
+			{
+				SecurityId = _secId1,
+				OriginalTransactionId = subscriptionId,
+				ServerTime = _now,
+				LocalTime = _now,
+				State = null,
+				Bids = [new QuoteChange(bid, 10)],
+				Asks = [new QuoteChange(bid + 1m, 10)],
+			};
+
+		holder.Process(Book(100m)).OriginalTransactionId.AssertEqual(subscriptionId);
+
+		var delta = holder.Process(Book(101m));
+
+		delta.AssertNotNull();
+		delta.OriginalTransactionId.AssertEqual(subscriptionId);
+	}
 
 	[TestMethod]
 	public void OrderBook_NewFullSnapshot_ReturnsCorrectDelta()
