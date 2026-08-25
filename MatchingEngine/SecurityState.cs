@@ -8,9 +8,14 @@ public class SecurityState(SecurityId securityId)
 {
 	private SecurityMessage _securityDefinition;
 
-	private bool _priceStepUpdated;
-	private bool _volumeStepUpdated;
+	// What the venue never stated, taken from the first thing it quoted. Kept here rather than
+	// written into its own definition of the instrument, which belongs to whoever sent it.
+	private decimal? _guessedPriceStep;
+	private decimal? _guessedVolumeStep;
 	private long? _depthSubscription;
+
+	// Built on the first incremental frame. A venue that publishes whole books never needs one.
+	private OrderBookIncrementBuilder _incrementBuilder;
 
 	/// <summary>
 	/// Security identifier.
@@ -30,12 +35,12 @@ public class SecurityState(SecurityId securityId)
 	/// <summary>
 	/// Price step from security definition or auto-detected.
 	/// </summary>
-	public decimal PriceStep => _securityDefinition?.PriceStep ?? 0.01m;
+	public decimal PriceStep => _securityDefinition?.PriceStep ?? _guessedPriceStep ?? 0.01m;
 
 	/// <summary>
 	/// Volume step from security definition or auto-detected.
 	/// </summary>
-	public decimal VolumeStep => _securityDefinition?.VolumeStep ?? 1m;
+	public decimal VolumeStep => _securityDefinition?.VolumeStep ?? _guessedVolumeStep ?? 1m;
 
 	/// <summary>
 	/// Whether depth subscription is active.
@@ -69,16 +74,22 @@ public class SecurityState(SecurityId securityId)
 	/// </summary>
 	public void ProcessQuoteChange(QuoteChangeMessage msg, List<Message> results)
 	{
-		if (!_priceStepUpdated || !_volumeStepUpdated)
-		{
-			var quote = msg.GetBestBid() ?? msg.GetBestAsk();
-			if (quote != null)
-				UpdateSteps(quote.Value.Price, quote.Value.Volume);
-		}
+		if ((msg.GetBestBid() ?? msg.GetBestAsk()) is { } quote)
+			UpdateSteps(quote.Price, quote.Volume);
 
+		// A venue either states the whole book in every frame, or states it once and sends what
+		// changed. The engine holds the book, so folding the second kind is its own work: dropping
+		// those frames would leave it matching against a market that never moves.
 		if (msg.State is null)
 		{
-			OrderBook.SetSnapshot(msg.Bids, msg.Asks);
+			OrderBook.SetSnapshot(msg.Bids ?? [], msg.Asks ?? []);
+		}
+		else
+		{
+			_incrementBuilder ??= new(SecurityId);
+
+			if (_incrementBuilder.TryApply(msg) is QuoteChangeMessage full)
+				OrderBook.SetSnapshot(full.Bids ?? [], full.Asks ?? []);
 		}
 
 		if (_depthSubscription.HasValue)
@@ -86,6 +97,13 @@ public class SecurityState(SecurityId securityId)
 			results.Add(OrderBook.ToMessage(msg.LocalTime, msg.ServerTime));
 		}
 	}
+
+	/// <summary>
+	/// Forgets the book stated so far, so an incremental feed has to state a whole one again before
+	/// its increments mean anything. What the engine currently holds is left standing.
+	/// </summary>
+	public void ForgetBook()
+		=> _incrementBuilder = null;
 
 	/// <summary>
 	/// Process market data subscriptions (depth only).
@@ -105,22 +123,16 @@ public class SecurityState(SecurityId securityId)
 	}
 
 	/// <summary>
-	/// Auto-detect price/volume step from market data.
+	/// Takes the steps from what the market quotes, for an instrument whose venue never stated them.
 	/// </summary>
+	/// <param name="price">Quoted price.</param>
+	/// <param name="volume">Quoted volume.</param>
 	public void UpdateSteps(decimal price, decimal? volume)
 	{
-		if (!_priceStepUpdated && price > 0)
-		{
-			_securityDefinition ??= new SecurityMessage { SecurityId = SecurityId };
-			_securityDefinition.PriceStep = price.GetDecimalInfo().EffectiveScale.GetPriceStep();
-			_priceStepUpdated = true;
-		}
+		if (_guessedPriceStep is null && price > 0)
+			_guessedPriceStep = price.GetDecimalInfo().EffectiveScale.GetPriceStep();
 
-		if (!_volumeStepUpdated && volume > 0)
-		{
-			_securityDefinition ??= new SecurityMessage { SecurityId = SecurityId };
-			_securityDefinition.VolumeStep = volume.Value.GetDecimalInfo().EffectiveScale.GetPriceStep();
-			_volumeStepUpdated = true;
-		}
+		if (_guessedVolumeStep is null && volume > 0)
+			_guessedVolumeStep = volume.Value.GetDecimalInfo().EffectiveScale.GetPriceStep();
 	}
 }

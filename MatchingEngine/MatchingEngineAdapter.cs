@@ -58,7 +58,19 @@ public class MatchingEngineAdapter : IMessageTransport
 	/// <summary>
 	/// Portfolio manager for handling portfolio state.
 	/// </summary>
-	public EmulatedPortfolioManager PortfolioManager => _portfolioManager;
+	public virtual EmulatedPortfolioManager PortfolioManager => _portfolioManager;
+
+	/// <summary>
+	/// Forgets the book stated so far for <paramref name="securityId"/>, so an incremental feed has
+	/// to state a whole one again before its increments are folded in. Used when a venue has gone
+	/// quiet on depth: what it sends after the break describes a market its old base no longer holds.
+	/// </summary>
+	/// <param name="securityId">Security whose stated book is forgotten.</param>
+	public void ForgetBook(SecurityId securityId)
+	{
+		if (_securityStates.TryGetValue(securityId, out var state))
+			state.ForgetBook();
+	}
 
 	/// <summary>
 	/// Stop order manager (read-only access).
@@ -205,103 +217,10 @@ public class MatchingEngineAdapter : IMessageTransport
 	{
 		var state = GetSecurityState(msg.SecurityId);
 
-		// Recorded whichever way the setting is set; only refusing an order on it is gated.
+		// A quote says where the market is and nothing about what rests behind it, so the only thing
+		// the engine takes from one is whether the instrument may be traded at all.
 		if (msg.Changes.TryGetValue(Level1Fields.State) is SecurityStates tradingState)
 			state.ProcessTradingState(tradingState);
-
-		var bidPrice = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestBidPrice);
-		var askPrice = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestAskPrice);
-		var bidVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestBidVolume);
-		if (bidVol == 0) bidVol = null;
-		bidVol ??= 1m;
-
-		var askVol = (decimal?)msg.Changes.TryGetValue(Level1Fields.BestAskVolume);
-		if (askVol == 0) askVol = null;
-		askVol ??= 1m;
-
-		state.UpdateSteps(bidPrice ?? askPrice ?? 0, bidVol.Value);
-
-		if (bidPrice.HasValue)
-		{
-			state.OrderBook.UpdateLevel(Sides.Buy, bidPrice.Value, bidVol.Value);
-			// Prune stale synthesized levels so the Level1-built book stays bounded (it would
-			// otherwise keep one level per distinct best price and grow without limit).
-			state.OrderBook.TrimSynthesizedDepth(Sides.Buy, Settings.MaxDepth);
-		}
-
-		if (askPrice.HasValue)
-		{
-			state.OrderBook.UpdateLevel(Sides.Sell, askPrice.Value, askVol.Value);
-			state.OrderBook.TrimSynthesizedDepth(Sides.Sell, Settings.MaxDepth);
-		}
-
-		if (state.HasDepthSubscription)
-		{
-			results.Add(state.OrderBook.ToMessage(msg.LocalTime, msg.ServerTime));
-		}
-	}
-
-	private void ProcessTick(ExecutionMessage tick, List<Message> results)
-	{
-		var state = GetSecurityState(tick.SecurityId);
-
-		var tradePrice = tick.TradePrice ?? 0;
-		var tradeVolume = tick.TradeVolume ?? 1m;
-
-		state.UpdateSteps(tradePrice, tradeVolume);
-
-		if (tradePrice <= 0)
-			return;
-
-		var priceStep = state.PriceStep;
-		var spread = priceStep * Settings.SpreadSize;
-
-		var bestBid = state.OrderBook.BestBid;
-		var bestAsk = state.OrderBook.BestAsk;
-
-		Sides originSide;
-		if (tick.OriginSide.HasValue)
-			originSide = tick.OriginSide.Value.Invert();
-		else if (bestBid.HasValue && !bestAsk.HasValue)
-			originSide = Sides.Sell;
-		else if (bestAsk.HasValue && !bestBid.HasValue)
-			originSide = Sides.Buy;
-		else
-			originSide = Sides.Sell;
-
-		if (state.OrderBook.BidLevels == 0 && state.OrderBook.AskLevels == 0)
-		{
-			state.OrderBook.UpdateLevel(originSide, tradePrice, tradeVolume);
-			var oppositePrice = tradePrice + spread * (originSide == Sides.Buy ? 1 : -1);
-			if (oppositePrice > 0)
-				state.OrderBook.UpdateLevel(originSide.Invert(), oppositePrice, tradeVolume);
-		}
-		else
-		{
-			if (bestBid.HasValue && tradePrice <= bestBid.Value.price)
-			{
-				state.OrderBook.UpdateLevel(Sides.Sell, tradePrice, tradeVolume);
-			}
-			else if (bestAsk.HasValue && tradePrice >= bestAsk.Value.price)
-			{
-				state.OrderBook.UpdateLevel(Sides.Buy, tradePrice, tradeVolume);
-			}
-			else
-			{
-				state.OrderBook.UpdateLevel(originSide, tradePrice, tradeVolume);
-			}
-		}
-
-		// Prune stale synthesized levels so the tick-built book stays bounded. A rising/varied tick
-		// stream adds a new level per distinct price, so without trimming the book grows without
-		// limit (the original source of the matching-engine memory leak).
-		state.OrderBook.TrimSynthesizedDepth(Sides.Buy, Settings.MaxDepth);
-		state.OrderBook.TrimSynthesizedDepth(Sides.Sell, Settings.MaxDepth);
-
-		if (state.HasDepthSubscription)
-		{
-			results.Add(state.OrderBook.ToMessage(tick.LocalTime, tick.ServerTime));
-		}
 	}
 
 	// Tells an order the engine is being told about from one it is being asked to place. Only the
@@ -415,7 +334,8 @@ public class MatchingEngineAdapter : IMessageTransport
 		}
 		else if (execMsg.DataType == DataType.Ticks)
 		{
-			ProcessTick(execMsg, results);
+			// A print is news about a trade that happened, not about the book: it says nothing about
+			// what is resting behind the touch, so the book it is matched against is left alone.
 			if (execMsg.TradePrice is { } tickPrice)
 				CheckStopOrders(execMsg.SecurityId, tickPrice, execMsg.LocalTime, results);
 		}
@@ -1262,128 +1182,6 @@ public class MatchingEngineAdapter : IMessageTransport
 			// stop's own lifecycle from here on.
 			ProcessOrderRegister(trigger.ResultingOrder, results);
 		}
-	}
-
-	/// <summary>
-	/// Re-evaluate resting limit orders against the current order book and execute the ones the
-	/// market has moved through. Unlike stop orders, limit orders are otherwise matched only at
-	/// registration time, so a tick/quote trading through a resting limit would leave it sitting
-	/// in the book and later fill at a price the market has left behind.
-	/// </summary>
-	public void CheckLimitOrders(SecurityId securityId, decimal? tradePrice, DateTime time, List<Message> results)
-	{
-		var state = GetSecurityState(securityId);
-
-		// Runs on every tick/quote. With no resting order there is nothing to sweep, so skip the
-		// BestBid/BestAsk reads and the scan entirely - the overwhelmingly common case.
-		if (state.OrderManager.Count == 0)
-			return;
-
-		// When triggered by a tick, fill at the traded price (always inside the candle). When
-		// triggered by a quote, fill at the opposite best (the current market).
-		var bestAsk = state.OrderBook.BestAsk?.price;
-		var bestBid = state.OrderBook.BestBid?.price;
-
-		// The active orders are scanned without copying. Crossed ones are collected into a lazily
-		// allocated list and filled after the scan, because filling removes them from the live
-		// collection - the common tick crosses nothing, so no list is allocated at all.
-		List<(EmulatorOrder order, decimal price)> toFill = null;
-
-		foreach (var order in state.OrderManager.GetActiveOrders(securityId))
-		{
-			if (order.OrderType != OrderTypes.Limit)
-				continue;
-
-			decimal fillPrice;
-
-			if (tradePrice is decimal tp)
-			{
-				if (order.Side == Sides.Buy ? tp > order.Price : tp < order.Price)
-					continue;
-
-				fillPrice = tp;
-			}
-			else
-			{
-				var opposite = order.Side == Sides.Buy ? bestAsk : bestBid;
-
-				if (opposite is not decimal opp || (order.Side == Sides.Buy ? opp > order.Price : opp < order.Price))
-					continue;
-
-				fillPrice = opp;
-			}
-
-			(toFill ??= []).Add((order, fillPrice));
-		}
-
-		if (toFill is null)
-			return;
-
-		foreach (var (order, fillPrice) in toFill)
-			FillRestingOrder(order, state, fillPrice, time, results);
-
-		if (state.HasDepthSubscription)
-			results.Add(state.OrderBook.ToMessage(time, time));
-	}
-
-	private void FillRestingOrder(EmulatorOrder order, SecurityState state, decimal fillPrice, DateTime time, List<Message> results)
-	{
-		// The market has traded through this resting limit. In a backtest the order is assumed to
-		// fill fully (not limited by the synthesized tick volume, which on fractional data would
-		// split one order into many micro-fills) at the passed price - the traded price for a tick
-		// or the current opposite best for a quote, both of which sit inside the current candle.
-		var volume = order.Balance;
-
-		state.OrderBook.RemoveQuote(order.TransactionId, order.Side, order.Price);
-		state.OrderManager.TryRemoveOrder(order.TransactionId, out _);
-
-		results.Add(new ExecutionMessage
-		{
-			DataTypeEx = DataType.Transactions,
-			LocalTime = time,
-			ServerTime = time,
-			SecurityId = state.SecurityId,
-			OrderId = order.OrderId,
-			OriginalTransactionId = order.TransactionId,
-			Side = order.Side,
-			Balance = 0,
-			OrderVolume = order.Volume,
-			OrderState = OrderStates.Done,
-			PortfolioName = order.PortfolioName,
-			HasOrderInfo = true,
-		});
-
-		var tradeMsg = new ExecutionMessage
-		{
-			DataTypeEx = DataType.Transactions,
-			SecurityId = state.SecurityId,
-			LocalTime = time,
-			ServerTime = time,
-			OriginalTransactionId = order.TransactionId,
-			OrderId = order.OrderId,
-			TradeId = TradeIdGenerator.GetNextId(),
-			TradePrice = fillPrice,
-			TradeVolume = volume,
-			Side = order.Side,
-			MarketPrice = fillPrice,
-		};
-
-		var portfolio = GetPortfolio(order.PortfolioName);
-		var (_, _, position) = portfolio.ProcessTrade(state.SecurityId, order.Side, fillPrice, volume, tradeMsg.Commission);
-
-		results.Add(tradeMsg);
-
-		results.Add(new PositionChangeMessage
-		{
-			SecurityId = state.SecurityId,
-			ServerTime = time,
-			LocalTime = time,
-			PortfolioName = order.PortfolioName,
-		}
-		.Add(PositionChangeTypes.CurrentValue, position.CurrentValue)
-		.TryAdd(PositionChangeTypes.AveragePrice, position.AveragePrice));
-
-		AddPortfolioUpdate(portfolio, time, results);
 	}
 
 	private void Reset(List<Message> results)

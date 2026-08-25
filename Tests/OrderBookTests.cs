@@ -340,32 +340,6 @@ public class OrderBookTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void TrimToDepth_RemovesWorstLevels()
-	{
-		var book = new OrderBook(CreateSecId());
-
-		for (int i = 0; i < 10; i++)
-		{
-			book.AddQuote(new EmulatorOrder
-			{
-				TransactionId = i + 1,
-				Side = Sides.Buy,
-				Price = 100 - i,
-				Balance = 10,
-				Volume = 10
-			});
-		}
-
-		AreEqual(10, book.BidLevels);
-
-		var removed = book.TrimToDepth(Sides.Buy, 5).ToList();
-
-		AreEqual(5, book.BidLevels);
-		AreEqual(5, removed.Count);
-		AreEqual(100m, book.BestBid.Value.price);
-	}
-
-	[TestMethod]
 	public void ConsumeVolume_ConsumesFromBestPrice()
 	{
 		var book = new OrderBook(CreateSecId());

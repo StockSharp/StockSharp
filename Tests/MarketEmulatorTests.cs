@@ -2059,86 +2059,75 @@ public class MarketEmulatorTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// When the matching engine synthesizes the order book from a long stream of distinct-price ticks
-	/// (no real order book history) it must stay bounded to <see cref="MatchingEngineSettings.MaxDepth"/>
-	/// levels per side. Reproduces the memory leak where <see cref="MatchingEngineAdapter.ProcessTick"/>
-	/// added a new level per distinct tick price and stale levels were never pruned, so the synthesized
-	/// book grew without limit (hundreds of thousands of levels in a backtest).
+	/// A book built from a long stream of prices follows the market: it stays bounded, and its touch
+	/// is the last thing quoted rather than the first. A book that only grows one way ends up quoting
+	/// the extremes of the session against each other.
 	/// </summary>
 	[TestMethod]
-	public void SynthesizedTickBookStaysBounded()
+	public async Task ABookBuiltFromTicksFollowsTheMarket()
 	{
-		var id = Helper.CreateSecurityId();
-		var engine = new MatchingEngineAdapter();
+		var secId = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(secId, out _);
+		var book = ((MarketEmulator)emu).GetSecurityState(secId).OrderBook;
 		var now = DateTime.UtcNow;
-
-		var maxDepth = engine.Settings.MaxDepth;
-
-		// feed a long stream of distinct-price ticks; with no order book history the engine builds the book from ticks
-		var results = new List<Message>();
 
 		for (var i = 0; i < 2000; i++)
 		{
 			now = now.AddSeconds(1);
 
-			engine.ProcessMessage(new ExecutionMessage
+			await emu.SendInMessageAsync(new ExecutionMessage
 			{
-				SecurityId = id,
+				SecurityId = secId,
 				LocalTime = now,
 				ServerTime = now,
 				DataTypeEx = DataType.Ticks,
 				TradePrice = 1000 + i,
 				TradeVolume = 10,
-			}, results);
+			}, CancellationToken);
 		}
 
-		var book = engine.GetSecurityState(id).OrderBook;
+		IsTrue(book.BidLevels <= emu.Settings.MaxDepth, $"bid depth {book.BidLevels} is unbounded");
+		IsTrue(book.AskLevels <= emu.Settings.MaxDepth, $"ask depth {book.AskLevels} is unbounded");
 
-		Console.WriteLine($"tick book bids={book.BidLevels} asks={book.AskLevels} maxDepth={maxDepth}");
-
-		IsTrue(book.BidLevels <= maxDepth, $"bid depth {book.BidLevels} exceeds MaxDepth {maxDepth}");
-		IsTrue(book.AskLevels <= maxDepth, $"ask depth {book.AskLevels} exceeds MaxDepth {maxDepth}");
+		IsTrue(book.BestBid?.price >= 2900m,
+			$"the market walked up to 2999, so the bid must be near it, not at {book.BestBid?.price}");
+		IsTrue(book.BestBid?.price < book.BestAsk?.price,
+			$"a book cannot cross itself: bid {book.BestBid?.price}, ask {book.BestAsk?.price}");
 	}
 
 	/// <summary>
-	/// Same bound for the Level1-synthesized book: a long stream of distinct best bid/ask updates fed
-	/// to <see cref="MatchingEngineAdapter.ProcessMessage"/> must not accumulate stale levels beyond
-	/// <see cref="MatchingEngineSettings.MaxDepth"/> per side.
+	/// The same of a book built from a stream of quotes: the touch a venue states is where the market
+	/// is, not one more level to keep beside the ones it stated before.
 	/// </summary>
 	[TestMethod]
-	public void SynthesizedLevel1BookStaysBounded()
+	public async Task ABookBuiltFromLevel1FollowsTheMarket()
 	{
-		var id = Helper.CreateSecurityId();
-		var engine = new MatchingEngineAdapter();
+		var secId = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(secId, out _);
+		var book = ((MarketEmulator)emu).GetSecurityState(secId).OrderBook;
 		var now = DateTime.UtcNow;
 
-		var maxDepth = engine.Settings.MaxDepth;
-
-		var results = new List<Message>();
-
-		// feed a long stream of distinct best bid/ask quotes via Level1
 		for (var i = 0; i < 2000; i++)
 		{
 			now = now.AddSeconds(1);
 
-			engine.ProcessMessage(new Level1ChangeMessage
+			await emu.SendInMessageAsync(new Level1ChangeMessage
 			{
-				SecurityId = id,
+				SecurityId = secId,
 				LocalTime = now,
 				ServerTime = now,
 			}
 			.Add(Level1Fields.BestBidPrice, 1000m + i)
 			.Add(Level1Fields.BestAskPrice, 1001m + i)
 			.Add(Level1Fields.BestBidVolume, 10m)
-			.Add(Level1Fields.BestAskVolume, 10m), results);
+			.Add(Level1Fields.BestAskVolume, 10m), CancellationToken);
 		}
 
-		var book = engine.GetSecurityState(id).OrderBook;
+		IsTrue(book.BidLevels <= emu.Settings.MaxDepth, $"bid depth {book.BidLevels} is unbounded");
+		IsTrue(book.AskLevels <= emu.Settings.MaxDepth, $"ask depth {book.AskLevels} is unbounded");
 
-		Console.WriteLine($"level1 book bids={book.BidLevels} asks={book.AskLevels} maxDepth={maxDepth}");
-
-		IsTrue(book.BidLevels <= maxDepth, $"bid depth {book.BidLevels} exceeds MaxDepth {maxDepth}");
-		IsTrue(book.AskLevels <= maxDepth, $"ask depth {book.AskLevels} exceeds MaxDepth {maxDepth}");
+		AreEqual(2999m, book.BestBid?.price, "the last quote stated a bid of 2999");
+		AreEqual(3000m, book.BestAsk?.price, "and an ask of 3000");
 	}
 
 	/// <summary>

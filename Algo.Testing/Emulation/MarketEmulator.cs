@@ -98,6 +98,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	/// </summary>
 	public EmulatedPortfolioManager PortfolioManager => _engine.PortfolioManager;
 
+	/// <summary>
+	/// State the emulation keeps for one security: its book, its orders and its definition.
+	/// </summary>
+	/// <param name="securityId">Security to read.</param>
+	/// <returns>The state.</returns>
+	public SecurityState GetSecurityState(SecurityId securityId) => _engine.GetSecurityState(securityId);
+
 	private SecurityEmulator GetEmulator(SecurityId securityId)
 	{
 		securityId.GetHashCode(); // force caching
@@ -173,8 +180,6 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		_engine.Settings.CheckMoney = Settings.CheckMoney;
 		_engine.Settings.CheckTradingState = Settings.CheckTradingState;
 		_engine.Settings.IncreaseDepthVolume = Settings.IncreaseDepthVolume;
-		_engine.Settings.SpreadSize = Settings.SpreadSize;
-		_engine.Settings.MaxDepth = Settings.MaxDepth;
 		_engine.Settings.InitialOrderId = Settings.InitialOrderId;
 		_engine.Settings.InitialTradeId = Settings.InitialTradeId;
 	}
@@ -220,7 +225,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 				// Sweep resting limit orders the quote has moved through, filling at the current
 				// market rather than the book best, which may hold stale own orders.
-				_engine.CheckLimitOrders(l1Msg.SecurityId, l1Mid ?? l1Last, l1Msg.LocalTime, results);
+				CheckLimitOrders(l1Msg.SecurityId, l1Mid ?? l1Last, l1Msg.LocalTime, results);
 
 				if (l1Last is { } l1LastPrice)
 					_engine.CheckStopOrders(l1Msg.SecurityId, l1LastPrice, l1Msg.LocalTime, results);
@@ -324,7 +329,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			if (execMsg.TradePrice is { } tickPrice)
 			{
 				_engine.CheckStopOrders(execMsg.SecurityId, tickPrice, execMsg.LocalTime, results);
-				_engine.CheckLimitOrders(execMsg.SecurityId, tickPrice, execMsg.LocalTime, results);
+				CheckLimitOrders(execMsg.SecurityId, tickPrice, execMsg.LocalTime, results);
 			}
 
 			if (emulator.HasTicksSubscription)
@@ -360,6 +365,128 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				ProcessOrderRegister(regMsg, results);
 			}
 		}
+	}
+
+	/// <summary>
+	/// Re-evaluate resting limit orders against the current order book and execute the ones the
+	/// market has moved through. Unlike stop orders, limit orders are otherwise matched only at
+	/// registration time, so a tick/quote trading through a resting limit would leave it sitting
+	/// in the book and later fill at a price the market has left behind.
+	/// </summary>
+	private void CheckLimitOrders(SecurityId securityId, decimal? tradePrice, DateTime time, List<Message> results)
+	{
+		var state = _engine.GetSecurityState(securityId);
+
+		// Runs on every tick/quote. With no resting order there is nothing to sweep, so skip the
+		// BestBid/BestAsk reads and the scan entirely - the overwhelmingly common case.
+		if (state.OrderManager.Count == 0)
+			return;
+
+		// When triggered by a tick, fill at the traded price (always inside the candle). When
+		// triggered by a quote, fill at the opposite best (the current market).
+		var bestAsk = state.OrderBook.BestAsk?.price;
+		var bestBid = state.OrderBook.BestBid?.price;
+
+		// The active orders are scanned without copying. Crossed ones are collected into a lazily
+		// allocated list and filled after the scan, because filling removes them from the live
+		// collection - the common tick crosses nothing, so no list is allocated at all.
+		List<(EmulatorOrder order, decimal price)> toFill = null;
+
+		foreach (var order in state.OrderManager.GetActiveOrders(securityId))
+		{
+			if (order.OrderType != OrderTypes.Limit)
+				continue;
+
+			decimal fillPrice;
+
+			if (tradePrice is decimal tp)
+			{
+				if (order.Side == Sides.Buy ? tp > order.Price : tp < order.Price)
+					continue;
+
+				fillPrice = tp;
+			}
+			else
+			{
+				var opposite = order.Side == Sides.Buy ? bestAsk : bestBid;
+
+				if (opposite is not decimal opp || (order.Side == Sides.Buy ? opp > order.Price : opp < order.Price))
+					continue;
+
+				fillPrice = opp;
+			}
+
+			(toFill ??= []).Add((order, fillPrice));
+		}
+
+		if (toFill is null)
+			return;
+
+		foreach (var (order, fillPrice) in toFill)
+			FillRestingOrder(order, state, fillPrice, time, results);
+
+		if (state.HasDepthSubscription)
+			results.Add(state.OrderBook.ToMessage(time, time));
+	}
+
+	private void FillRestingOrder(EmulatorOrder order, SecurityState state, decimal fillPrice, DateTime time, List<Message> results)
+	{
+		// The market has traded through this resting limit. In a backtest the order is assumed to
+		// fill fully (not limited by the synthesized tick volume, which on fractional data would
+		// split one order into many micro-fills) at the passed price - the traded price for a tick
+		// or the current opposite best for a quote, both of which sit inside the current candle.
+		var volume = order.Balance;
+
+		state.OrderBook.RemoveQuote(order.TransactionId, order.Side, order.Price);
+		state.OrderManager.TryRemoveOrder(order.TransactionId, out _);
+
+		results.Add(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			LocalTime = time,
+			ServerTime = time,
+			SecurityId = state.SecurityId,
+			OrderId = order.OrderId,
+			OriginalTransactionId = order.TransactionId,
+			Side = order.Side,
+			Balance = 0,
+			OrderVolume = order.Volume,
+			OrderState = OrderStates.Done,
+			PortfolioName = order.PortfolioName,
+			HasOrderInfo = true,
+		});
+
+		var tradeMsg = new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = state.SecurityId,
+			LocalTime = time,
+			ServerTime = time,
+			OriginalTransactionId = order.TransactionId,
+			OrderId = order.OrderId,
+			TradeId = _engine.TradeIdGenerator.GetNextId(),
+			TradePrice = fillPrice,
+			TradeVolume = volume,
+			Side = order.Side,
+			MarketPrice = fillPrice,
+		};
+
+		var portfolio = _engine.PortfolioManager.GetPortfolio(order.PortfolioName);
+		var (_, _, position) = portfolio.ProcessTrade(state.SecurityId, order.Side, fillPrice, volume, tradeMsg.Commission);
+
+		results.Add(tradeMsg);
+
+		results.Add(new PositionChangeMessage
+		{
+			SecurityId = state.SecurityId,
+			ServerTime = time,
+			LocalTime = time,
+			PortfolioName = order.PortfolioName,
+		}
+		.Add(PositionChangeTypes.CurrentValue, position.CurrentValue)
+		.TryAdd(PositionChangeTypes.AveragePrice, position.AveragePrice));
+
+		AddPortfolioUpdate(portfolio, time, results);
 	}
 
 	private void ProcessOrderRegister(OrderRegisterMessage regMsg, List<Message> results)

@@ -26,18 +26,16 @@ public class MatchingEngineSettings
 	public long InitialTradeId { get; set; }
 
 	/// <summary>
-	/// To add the additional volume into order book at registering orders with greater volume.
+	/// Extend the book past its worst level when an order asks for more volume than the market
+	/// holds, so that the order can be filled in full.
 	/// </summary>
-	public bool IncreaseDepthVolume { get; set; } = true;
+	/// <remarks>
+	/// The levels this adds were never quoted by anyone: it is emulation, for replaying history
+	/// where an order has to go through whatever the record shows. A venue matching real orders
+	/// leaves it off, and an order larger than the market is filled by as much market as there is.
+	/// </remarks>
+	public bool IncreaseDepthVolume { get; set; }
 
-	/// <summary>
-	/// The size of spread in price increments for generation of order book from tick trades.
-	/// </summary>
-	public int SpreadSize { get; set; } = 2;
 
-	/// <summary>
-	/// The maximal depth of order book synthesized from ticks/Level1 when there is no order book history.
-	/// Stale synthesized levels beyond this depth are pruned so the book cannot grow unbounded. Default is 5.
-	/// </summary>
-	public int MaxDepth { get; set; } = 5;
+
 }

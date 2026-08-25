@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using StockSharp.MatchingEngine;
 
@@ -56,6 +56,17 @@ public class MatchingEngineAdapterTests : BaseTestClass
 			Asks = asks,
 		};
 
+	private static QuoteChangeMessage IncrementalBook(SecurityId securityId, DateTime time, QuoteChangeStates state, QuoteChange[] bids, QuoteChange[] asks)
+		=> new()
+		{
+			SecurityId = securityId,
+			LocalTime = time,
+			ServerTime = time,
+			State = state,
+			Bids = bids,
+			Asks = asks,
+		};
+
 	private static PositionChangeMessage MoneyRow(string account, decimal money, DateTime time)
 		=> new PositionChangeMessage
 		{
@@ -97,11 +108,14 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	/// Sends one market order of <paramref name="side"/> into a book holding a single level per side
 	/// and answers how much of it was filled.
 	/// </summary>
-	private static async Task<decimal> FillAtMarketAsync(Sides side, decimal volume, CancellationToken cancellationToken)
+	private static async Task<decimal> FillAtMarketAsync(Sides side, decimal volume, bool extendBook, CancellationToken cancellationToken)
 	{
 		const long tx = 4001;
 
-		var run = new EngineRun(new MatchingEngineAdapter());
+		var engine = new MatchingEngineAdapter();
+		engine.Settings.IncreaseDepthVolume = extendBook;
+
+		var run = new EngineRun(engine);
 
 		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 1m)], [new QuoteChange(101m, 1m)]), cancellationToken);
 		await run.SendAsync(NewOrder(tx, "Client", side, OrderTypes.Market, 0m, volume, _start.AddSeconds(1)), cancellationToken);
@@ -127,6 +141,203 @@ public class MatchingEngineAdapterTests : BaseTestClass
 
 		AreEqual(1000m, engine.PortfolioManager.GetPortfolio("DEMO1").BeginMoney,
 			"the account was funded under one spelling, so the other spelling must reach the same money");
+	}
+
+	/// <summary>
+	/// A venue that publishes its book as increments must still reach the engine: the opening
+	/// snapshot stands, and every increment after it moves the book it stands on.
+	/// </summary>
+	[TestMethod]
+	public async Task AnIncrementalBookFeedReachesTheEngine()
+	{
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(IncrementalBook(_securityId, _start, QuoteChangeStates.SnapshotComplete,
+			[new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		var book = engine.GetSecurityState(_securityId).OrderBook;
+
+		AreEqual(100m, book.BestBid?.price, "the opening snapshot must stand as the book");
+		AreEqual(101m, book.BestAsk?.price, "on both sides");
+
+		// The venue moves its bid up, stating only what changed.
+		await run.SendAsync(IncrementalBook(_securityId, _start.AddSeconds(1), QuoteChangeStates.Increment,
+			[new QuoteChange(100.5m, 5m)], []), CancellationToken);
+
+		AreEqual(100.5m, engine.GetSecurityState(_securityId).OrderBook.BestBid?.price,
+			"an increment that improves the bid must move the book with it");
+	}
+
+	/// <summary>
+	/// A level an increment states at zero volume is gone from the book, which is how a venue
+	/// withdraws a price: the level behind it becomes the best.
+	/// </summary>
+	[TestMethod]
+	public async Task AnIncrementAtZeroVolumeTakesTheLevelOut()
+	{
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(IncrementalBook(_securityId, _start, QuoteChangeStates.SnapshotComplete,
+			[new QuoteChange(100m, 10m), new QuoteChange(99m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		await run.SendAsync(IncrementalBook(_securityId, _start.AddSeconds(1), QuoteChangeStates.Increment,
+			[new QuoteChange(100m, 0m)], []), CancellationToken);
+
+		AreEqual(99m, engine.GetSecurityState(_securityId).OrderBook.BestBid?.price,
+			"the withdrawn level is gone, so the one behind it is the best bid");
+	}
+
+	/// <summary>
+	/// A feed that went quiet has to state a whole book again before its increments mean anything:
+	/// folding them onto the base it left behind would price orders off a market that is gone.
+	/// </summary>
+	[TestMethod]
+	public async Task AnIncrementAfterAForgottenBookIsNotFoldedOntoIt()
+	{
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(IncrementalBook(_securityId, _start, QuoteChangeStates.SnapshotComplete,
+			[new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		engine.ForgetBook(_securityId);
+
+		// The venue comes back with an increment and no snapshot behind it, naming a bid that would
+		// become the best if it were folded into the book left behind.
+		await run.SendAsync(IncrementalBook(_securityId, _start.AddSeconds(1), QuoteChangeStates.Increment,
+			[new QuoteChange(105m, 5m)], []), CancellationToken);
+
+		AreEqual(100m, engine.GetSecurityState(_securityId).OrderBook.BestBid?.price,
+			"the increment had no book to fold into, so it must not have moved the one the engine holds");
+
+		// A whole book from the venue stands again.
+		await run.SendAsync(IncrementalBook(_securityId, _start.AddSeconds(2), QuoteChangeStates.SnapshotComplete,
+			[new QuoteChange(90m, 5m)], [new QuoteChange(91m, 5m)]), CancellationToken);
+
+		AreEqual(90m, engine.GetSecurityState(_securityId).OrderBook.BestBid?.price,
+			"and the feed picks up again from what it states whole");
+	}
+
+	/// <summary>
+	/// A quote states where the market is, not what is resting behind it, so it builds no book. An
+	/// engine that turned each one into a level quoted the extremes of the session against each other.
+	/// </summary>
+	[TestMethod]
+	public async Task AQuoteBuildsNoBook()
+	{
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		// The market walks down: 100/101, then 99/100, then 98/99.
+		for (var i = 0; i < 3; i++)
+		{
+			var touch = new Level1ChangeMessage
+			{
+				SecurityId = _securityId,
+				ServerTime = _start.AddSeconds(i),
+				LocalTime = _start.AddSeconds(i),
+			};
+			touch.Add(Level1Fields.BestBidPrice, 100m - i);
+			touch.Add(Level1Fields.BestAskPrice, 101m - i);
+
+			await run.SendAsync(touch, CancellationToken);
+		}
+
+		var book = engine.GetSecurityState(_securityId).OrderBook;
+
+		IsNull(book.BestBid, "a quote is not a book: nothing is resting at that bid");
+		IsNull(book.BestAsk, "nor at that ask");
+	}
+
+	/// <summary>
+	/// An order larger than the market cannot be filled by more market than there is: what is not
+	/// there does not appear because someone asked for it.
+	/// </summary>
+	[TestMethod]
+	public async Task AnOrderLargerThanTheBookDoesNotConjureTheRest()
+	{
+		const long tx = 5001;
+
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		// Five lots offered, and nothing behind them.
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 5m)], [new QuoteChange(101m, 5m)]), CancellationToken);
+
+		await run.SendAsync(NewOrder(tx, "Client", Sides.Buy, OrderTypes.Market, 0m, 50m, _start.AddSeconds(1)), CancellationToken);
+
+		var filled = run.Executions
+			.Where(m => m.HasTradeInfo() && m.OriginalTransactionId == tx)
+			.Sum(m => m.TradeVolume ?? 0m);
+
+		AreEqual(5m, filled, "five lots were offered, so five lots is what an order of fifty gets");
+
+		var fills = run.Executions.Where(m => m.HasTradeInfo() && m.OriginalTransactionId == tx).ToArray();
+
+		IsTrue(fills.All(m => m.TradePrice == 101m),
+			$"and all of it at the one price the market offered; prices were {fills.Select(m => m.TradePrice.ToString()).JoinComma()}");
+	}
+
+	/// <summary>
+	/// A step the venue states is the step, and the venue's own definition of the instrument is not
+	/// the engine's to write in.
+	/// </summary>
+	[TestMethod]
+	public async Task AStatedPriceStepIsNotGuessedOver()
+	{
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		var definition = new SecurityMessage
+		{
+			SecurityId = _securityId,
+			PriceStep = 1m,
+			VolumeStep = 1m,
+		};
+
+		await run.SendAsync(definition, CancellationToken);
+
+		// A price with two decimals: guessing off it would say the step is 0.01.
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(1000.25m, 3m)], [new QuoteChange(1001.25m, 3m)]), CancellationToken);
+
+		AreEqual(1m, engine.GetSecurityState(_securityId).PriceStep, "the venue stated the step, so the step is what it stated");
+		AreEqual(1m, definition.PriceStep, "and the venue's own definition is left as the venue wrote it");
+	}
+
+	/// <summary>
+	/// A print is news about a trade, not about the book: the depth a venue stated stands after one,
+	/// whole, and an order still walks the levels the venue actually published.
+	/// </summary>
+	[TestMethod]
+	public async Task ATickDoesNotCutTheBookTheVenueStated()
+	{
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		QuoteChange[] bids = [.. Enumerable.Range(0, 20).Select(i => new QuoteChange(100m - i, 10m))];
+		QuoteChange[] asks = [.. Enumerable.Range(0, 20).Select(i => new QuoteChange(101m + i, 10m))];
+
+		await run.SendAsync(VenueBook(_securityId, _start, bids, asks), CancellationToken);
+
+		AreEqual(20, engine.GetSecurityState(_securityId).OrderBook.BidLevels, "the venue stated twenty levels");
+
+		await run.SendAsync(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = _securityId,
+			ServerTime = _start.AddSeconds(1),
+			LocalTime = _start.AddSeconds(1),
+			TradePrice = 100.5m,
+			TradeVolume = 1m,
+			TradeId = 1,
+		}, CancellationToken);
+
+		var book = engine.GetSecurityState(_securityId).OrderBook;
+
+		AreEqual(20, book.BidLevels, "a print says nothing about the levels behind the touch");
+		AreEqual(20, book.AskLevels, "on either side");
 	}
 
 	/// <summary>
@@ -578,10 +789,72 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	{
 		const decimal volume = 100m;
 
-		var bought = await FillAtMarketAsync(Sides.Buy, volume, CancellationToken);
-		var sold = await FillAtMarketAsync(Sides.Sell, volume, CancellationToken);
+		// One lot is offered on each side, so one lot is what either side of the order gets.
+		var bought = await FillAtMarketAsync(Sides.Buy, volume, extendBook: false, CancellationToken);
+		var sold = await FillAtMarketAsync(Sides.Sell, volume, extendBook: false, CancellationToken);
 
 		AreEqual(sold, bought, $"the same order on either side of one book must fill the same: bought {bought}, sold {sold}");
-		AreEqual(volume, bought, "a market order against a book that is deepened for it fills in full");
+		AreEqual(1m, bought, "and neither side reaches past what the market holds");
+	}
+
+	/// <summary>
+	/// The same, of a book extended to meet the order: replaying history means filling what the
+	/// record shows, and both sides have to be extended alike.
+	/// </summary>
+	[TestMethod]
+	public async Task AnExtendedBookIsExtendedAlikeOnBothSides()
+	{
+		const decimal volume = 100m;
+
+		var bought = await FillAtMarketAsync(Sides.Buy, volume, extendBook: true, CancellationToken);
+		var sold = await FillAtMarketAsync(Sides.Sell, volume, extendBook: true, CancellationToken);
+
+		AreEqual(sold, bought, $"the same order on either side of one book must fill the same: bought {bought}, sold {sold}");
+		AreEqual(volume, bought, "a book extended for the order fills it in full");
+	}
+
+	/// <summary>
+	/// An order in this book is filled by a counterparty in this book and by nothing else. A print
+	/// reports a trade between two other parties: it takes no volume from any level here, so a
+	/// resting limit the print traded through is still resting, for its whole balance, afterwards.
+	/// </summary>
+	[TestMethod]
+	public async Task APrintThroughARestingLimitLeavesItResting()
+	{
+		const string account = "Trader";
+		const long tx = 5001;
+		const decimal volume = 10m;
+
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		// A buy at 90 stands well below the bid, so nothing in the book crosses it and it rests.
+		await run.SendAsync(NewOrder(tx, account, Sides.Buy, OrderTypes.Limit, 90m, volume, _start.AddSeconds(1)), CancellationToken);
+
+		IsTrue(engine.GetSecurityState(_securityId).OrderManager.TryGetOrder(tx, out _), "the order rests to begin with");
+
+		// A trade prints at 89 - below where the order stands, which is where it would have been
+		// filled had the print been a counterparty.
+		await run.SendAsync(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = _securityId,
+			ServerTime = _start.AddSeconds(2),
+			LocalTime = _start.AddSeconds(2),
+			TradePrice = 89m,
+			TradeVolume = 1m,
+			TradeId = 1,
+		}, CancellationToken);
+
+		IsNull(run.Executions.FirstOrDefault(m => m.HasTradeInfo() && m.OriginalTransactionId == tx),
+			"a print is not a counterparty, so it cannot have filled the order");
+
+		IsTrue(engine.GetSecurityState(_securityId).OrderManager.TryGetOrder(tx, out var order),
+			"and the order is still there to be filled by one");
+
+		AreEqual(volume, order.Balance, "for everything it was placed for");
+		AreEqual(0m, PositionOf(engine, account), "the account took on no position from someone else's trade");
 	}
 }
