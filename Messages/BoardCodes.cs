@@ -581,6 +581,12 @@ public static class BoardCodes
 	public const string Nasdaq = "NASDAQ";
 
 	/// <summary>
+	/// <see cref="Opra"/>. The consolidated tape of the American option exchanges, which is where a
+	/// listed option is quoted regardless of which of them it happens to trade on.
+	/// </summary>
+	public const string Opra = "OPRA";
+
+	/// <summary>
 	/// <see cref="Nqlx"/>.
 	/// </summary>
 	public const string Nqlx = "NQLX";
