@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using System.Collections.Concurrent;
 
@@ -685,6 +685,110 @@ public class AsyncExtensionsTests : BaseTestClass
 		await run.WithCancellation(CancellationToken);
 
 		adapter.SentMessages.OfType<MarketDataMessage>().Count(m => !m.IsSubscribe && m.OriginalTransactionId == id).AssertEqual(1);
+	}
+
+	/// <summary>
+	/// Emits data the way the shipped connectors do: tagged with <see cref="IOriginalTransactionIdMessage.OriginalTransactionId"/>
+	/// and nothing else.
+	/// </summary>
+	private class OriginalTransactionIdAdapter : MessageAdapter
+	{
+		public const int CandleCount = 5;
+
+		public override bool UseInChannel => false;
+		public override bool UseOutChannel => false;
+
+		public OriginalTransactionIdAdapter(IdGenerator transactionIdGenerator)
+			: base(transactionIdGenerator)
+		{
+			this.AddMarketDataSupport();
+			this.AddSupportedMarketDataType(DataType.CandleTimeFrame);
+			this.AddSupportedCandleTimeFrames([TimeSpan.FromMinutes(5)]);
+		}
+
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			switch (message.Type)
+			{
+				case MessageTypes.Connect:
+					await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
+					break;
+
+				case MessageTypes.Disconnect:
+					await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
+					break;
+
+				case MessageTypes.MarketData:
+				{
+					var mdMsg = (MarketDataMessage)message;
+
+					await SendOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
+
+					if (mdMsg.IsSubscribe)
+					{
+						var time = mdMsg.From ?? DateTime.UtcNow;
+
+						for (var i = 0; i < CandleCount; i++)
+						{
+							await SendOutMessageAsync(new TimeFrameCandleMessage
+							{
+								OpenPrice = 100,
+								HighPrice = 101,
+								LowPrice = 99,
+								ClosePrice = 100.5m,
+								TotalVolume = 1000,
+								OpenTime = time.AddMinutes(5 * i),
+								State = CandleStates.Finished,
+
+								// Exactly how every shipped connector tags what it sends out.
+								OriginalTransactionId = mdMsg.TransactionId,
+							}, cancellationToken);
+						}
+
+						await SendSubscriptionResultAsync(mdMsg, cancellationToken);
+					}
+
+					break;
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Data tagged only with the original transaction id must reach the caller.
+	/// </summary>
+	/// <remarks>
+	/// Every connector in the Connectors repository tags outgoing data this way and leaves
+	/// <see cref="ISubscriptionIdMessage.SubscriptionIds"/> alone; the identifiers are filled in later by
+	/// <see cref="BasketMessageAdapter"/>. Nothing fills them when an adapter is driven directly, which is
+	/// exactly what these helpers are for, so a filter that looks only at the subscription identifiers
+	/// silently discards every message and hands back nothing but the finish.
+	/// </remarks>
+	[TestMethod]
+	public async Task SubscribeAsync_DataTaggedByOriginalTransactionId_IsDelivered()
+	{
+		var adapter = new OriginalTransactionIdAdapter(new IncrementalIdGenerator());
+
+		var subscription = new MarketDataMessage
+		{
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			SecurityId = new() { SecurityCode = "TEST", BoardCode = "TEST" },
+			From = new DateTime(2026, 1, 2, 14, 30, 0, DateTimeKind.Utc),
+			To = new DateTime(2026, 1, 2, 15, 30, 0, DateTimeKind.Utc),
+			IsSubscribe = true,
+		};
+
+		var candles = new List<CandleMessage>();
+
+		await foreach (var candle in adapter
+			.ConnectAndDownloadAsync<CandleMessage>(subscription)
+			.WithCancellation(CancellationToken))
+		{
+			candles.Add(candle);
+		}
+
+		candles.Count.AssertEqual(OriginalTransactionIdAdapter.CandleCount,
+			"data tagged with the original transaction id was discarded by the subscription filter");
 	}
 
 	#region SubscribeAsync Bug Tests

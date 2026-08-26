@@ -1,4 +1,4 @@
-namespace StockSharp.Messages;
+﻿namespace StockSharp.Messages;
 
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
@@ -143,7 +143,15 @@ public static class IMessageAdapterAsyncExtensions
 			else if (msg is ISubscriptionIdMessage sid)
 			{
 				var ids = sid.GetSubscriptionIds();
-				if (ids.Contains(subId) && msg is T t)
+
+				// An adapter driven directly tags what it sends out with the original transaction id and
+				// leaves the subscription identifiers alone, because those are filled in later by
+				// BasketMessageAdapter. Nothing fills them here, so matching on them alone discards every
+				// message and leaves the caller with a subscription that finishes empty.
+				var matched = ids.Contains(subId) ||
+					(ids.Length == 0 && msg is IOriginalTransactionIdMessage orig && orig.OriginalTransactionId == subId);
+
+				if (matched && msg is T t)
 				{
 					channel.Writer.TryWrite(t);
 				}
