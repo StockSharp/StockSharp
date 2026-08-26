@@ -187,6 +187,18 @@ public class GeneticOptimizer : BaseOptimizer
 	public GeneticSettings Settings { get; } = new();
 
 	/// <summary>
+	/// The event of generation change. The argument is the number of generations the search
+	/// has been through, counted from one.
+	/// </summary>
+	/// <remarks>
+	/// A genetic search runs no known number of iterations - it ends when it stops improving,
+	/// and a chromosome whose fitness is already known costs no iteration at all - so
+	/// generations against <see cref="GeneticSettings.GenerationsMax"/> are the only measure
+	/// of how far it has come.
+	/// </remarks>
+	public event Action<int> GenerationChanged;
+
+	/// <summary>
 	/// Try to consume one iteration from the limit.
 	/// </summary>
 	/// <returns>True if iteration was consumed, false if limit reached.</returns>
@@ -411,6 +423,8 @@ public class GeneticOptimizer : BaseOptimizer
 
 			Reinsertion = Settings.Reinsertion.CreateInstance<IReinsertion>(),
 		};
+
+		_ga.GenerationRan += (s, e) => GenerationChanged?.Invoke(((IGeneticAlgorithm)s).GenerationsNumber);
 
 		return _ga;
 	}

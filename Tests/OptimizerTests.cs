@@ -578,6 +578,65 @@ public class OptimizerTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// A genetic search never runs a known number of iterations - it stops when it stops
+	/// improving, and a cached fitness costs no iteration at all - so the only thing a
+	/// caller can measure it against is how many of its generations have been through.
+	/// </summary>
+	[TestMethod]
+	public async Task GeneticRunAsyncReportsGenerations()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var storageRegistry = GetHistoryStorage();
+
+		using var optimizer = new GeneticOptimizer(secProvider, pfProvider, storageRegistry, Paths.FileSystem);
+
+		var startTime = Paths.HistoryBeginDate;
+		var stopTime = Paths.HistoryBeginDate.AddDays(6);
+
+		var strategy = new SmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		var generations = new SynchronizedList<int>();
+
+		optimizer.GenerationChanged += generations.Add;
+
+		optimizer.Settings.Population = 4;
+		optimizer.Settings.GenerationsMax = 3;
+		optimizer.Settings.GenerationsStagnation = 0;
+
+		var geneticParams = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
+		{
+			(strategy.Parameters[nameof(SmaStrategy.Short)], 20, 40, 5, null),
+			(strategy.Parameters[nameof(SmaStrategy.Long)], 60, 100, 10, null),
+		};
+
+		await foreach (var _ in optimizer.RunAsync(startTime, stopTime, strategy, geneticParams, s => s.PnL, cancellationToken: CancellationToken))
+		{
+		}
+
+		var ran = generations.SyncGet(c => c.ToArray());
+
+		IsTrue(ran.Length > 0, "A search that ran generations has to say so.");
+
+		// The number is what it is measured against, so it counts up and never repeats.
+		for (var i = 1; i < ran.Length; i++)
+			IsTrue(ran[i] > ran[i - 1], $"Generation {ran[i]} came after {ran[i - 1]}.");
+
+		IsTrue(ran[^1] <= optimizer.Settings.GenerationsMax, $"Ran {ran[^1]} of at most {optimizer.Settings.GenerationsMax} generations.");
+	}
+
+	/// <summary>
 	/// Tests that GeneticOptimizer.RunAsync can be cancelled.
 	/// </summary>
 	[TestMethod]
