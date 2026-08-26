@@ -907,8 +907,8 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 
 		using (await _connectedResponseLock.LockAsync(cancellationToken))
 		{
-			var (outMsgs, pendingToLoopback, notSupported) = _routingManager.ProcessConnect(
-				underlyingAdapter, wrapper, innerAdapter.SupportedInMessages, error);
+			var (outMsgs, pendingToLoopback, notSupported) = await _routingManager.ProcessConnectAsync(
+				underlyingAdapter, wrapper, innerAdapter.SupportedInMessages, error, cancellationToken);
 
 			extra.AddRange(outMsgs);
 			extra.AddRange(pendingToLoopback.Select(m => m.LoopBack(this)));

@@ -40,6 +40,12 @@ public class ConnectorRoutingTests : BaseTestClass
 		public int TotalUnsubscribeReceived;
 		public List<Exception> Errors { get; } = [];
 		public SecurityId? RejectSubscriptionFor { get; set; }
+
+		/// <summary>
+		/// When set, the adapter waits on it before answering a connect - which holds it in the
+		/// connecting state for as long as the test needs.
+		/// </summary>
+		public TaskCompletionSource ConnectHold { get; set; }
 		public event Action<long> OrderProcessingCompleted;
 
 		public LiveFeedCryptoAdapter(string exchangeName, SecurityId[] supportedSecurities, IdGenerator transactionIdGenerator)
@@ -125,6 +131,9 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		private async ValueTask ProcessConnect(CancellationToken cancellationToken)
 		{
+			if (ConnectHold is { } hold)
+				await hold.Task.WaitAsync(cancellationToken);
+
 			lock (_lock)
 			{
 				_isConnected = true;
@@ -1019,12 +1028,15 @@ public class ConnectorRoutingTests : BaseTestClass
 		connector.Subscribe(btcSub);
 
 		// Both adapters are reached on their own threads, and which of them gets there first is not
-		// the test's business - only that both do.
+		// the test's business - only that both do. The wait ends well before the method's own
+		// timeout so that the count below is what a failure reports: one adapter at zero says the
+		// subscription was fanned out while the other was still connecting, both at zero says it
+		// was held and never released.
 		await Helper.WaitUntilAsync(
 			() => binanceAdapter.GetMessages<MarketDataMessage>().Any(m => m.IsSubscribe)
 				&& kucoinAdapter.GetMessages<MarketDataMessage>().Any(m => m.IsSubscribe),
-			TimeSpan.FromSeconds(10),
-			"a subscription with no mapping must reach every adapter");
+			TimeSpan.FromSeconds(5),
+			$"a subscription with no mapping must reach every adapter (binance={binanceAdapter.GetMessages<MarketDataMessage>().Count(m => m.IsSubscribe)}, kucoin={kucoinAdapter.GetMessages<MarketDataMessage>().Count(m => m.IsSubscribe)})");
 
 		var binanceMarketData = binanceAdapter.GetMessages<MarketDataMessage>().ToList();
 		var kucoinMarketData = kucoinAdapter.GetMessages<MarketDataMessage>().ToList();
@@ -1034,6 +1046,66 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		binanceMarketData.Count(m => m.IsSubscribe).AssertEqual(1);
 		kucoinMarketData.Count(m => m.IsSubscribe).AssertEqual(1);
+
+		await connector.DisconnectAsync(CancellationToken);
+	}
+
+	/// <summary>
+	/// A basket reports itself connected as soon as its first adapter is up, so a subscription can
+	/// be placed while another adapter is still connecting. It has to reach that one too: the set of
+	/// adapters a subscription with no mapping belongs to is every adapter that supports it, and
+	/// nothing replays it to an adapter that arrives a moment later.
+	/// </summary>
+	[TestMethod]
+	[Timeout(30000, CooperativeCancellation = true)]
+	public async Task SubscriptionPlacedWhileAnAdapterConnectsReachesItToo()
+	{
+		var fastSecId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
+		var slowSecId = new SecurityId { SecurityCode = "ETHUSDT", BoardCode = "KUCOIN" };
+
+		var connector = new Connector();
+
+		var fastAdapter = new LiveFeedCryptoAdapter("Fast", [fastSecId], connector.TransactionIdGenerator);
+		var slowAdapter = new LiveFeedCryptoAdapter("Slow", [slowSecId], connector.TransactionIdGenerator)
+		{
+			ConnectHold = new(TaskCreationOptions.RunContinuationsAsynchronously),
+		};
+
+		connector.Adapter.InnerAdapters.Add(fastAdapter);
+		connector.Adapter.InnerAdapters.Add(slowAdapter);
+		connector.SubscriptionsOnConnect.Clear();
+
+		// The connect completes on the first adapter that answers, which is the whole point here:
+		// the second one is still inside its connect while the subscription below is placed.
+		await connector.ConnectAsync(CancellationToken);
+
+		await Helper.WaitUntilAsync(
+			() => fastAdapter.IsConnected,
+			TimeSpan.FromSeconds(10),
+			"the first adapter has to be up for the basket to report connected");
+
+		slowAdapter.IsConnected.AssertFalse("the second adapter is held inside its connect");
+
+		var security = new Security { Id = fastSecId.ToStringId() };
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
+
+		connector.Subscribe(new Subscription(DataType.Ticks, security));
+
+		// Deliberately give the router its chance to dispatch the subscription early: the defect this
+		// covers is exactly that, and without the pause a fast enough release hides it.
+		await Task.Delay(2000, CancellationToken);
+
+		slowAdapter.GetMessages<MarketDataMessage>().Any(m => m.IsSubscribe)
+			.AssertFalse("an adapter still inside its connect has been sent nothing");
+
+		// Let the second adapter finish connecting.
+		slowAdapter.ConnectHold.SetResult();
+
+		await Helper.WaitUntilAsync(
+			() => fastAdapter.GetMessages<MarketDataMessage>().Any(m => m.IsSubscribe)
+				&& slowAdapter.GetMessages<MarketDataMessage>().Any(m => m.IsSubscribe),
+			TimeSpan.FromSeconds(10),
+			"a subscription with no mapping must reach an adapter that was still connecting when it was placed");
 
 		await connector.DisconnectAsync(CancellationToken);
 	}

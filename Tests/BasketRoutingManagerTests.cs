@@ -805,7 +805,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 	#region ProcessConnect
 
 	[TestMethod]
-	public void ProcessConnect_AddsMessageTypeAdapters()
+	public async Task ProcessConnect_AddsMessageTypeAdapters()
 	{
 		var ctx = CreateTestContext();
 		var adapter = CreateAdapter();
@@ -814,8 +814,8 @@ public class BasketRoutingManagerTests : BaseTestClass
 		ctx.Manager.BeginConnect();
 
 		// Process successful connection
-		var (outMsgs, pending, notSupported) = ctx.Manager.ProcessConnect(
-			adapter, adapter, adapter.SupportedInMessages, null);
+		var (outMsgs, pending, notSupported) = await ctx.Manager.ProcessConnectAsync(
+			adapter, adapter, adapter.SupportedInMessages, null, CancellationToken);
 
 		// The first adapter going Connected must produce exactly one successful ConnectMessage
 		// (ConnectDisconnectEventOnFirstAdapter is true by default) and no pending/not-supported.
@@ -842,7 +842,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ProcessConnect_WithError_DoesNotAddAdapters()
+	public async Task ProcessConnect_WithError_DoesNotAddAdapters()
 	{
 		var ctx = CreateTestContext();
 		var adapter = CreateAdapter();
@@ -851,8 +851,8 @@ public class BasketRoutingManagerTests : BaseTestClass
 		ctx.Manager.BeginConnect();
 
 		// Process failed connection
-		var (outMsgs, pending, notSupported) = ctx.Manager.ProcessConnect(
-			adapter, adapter, adapter.SupportedInMessages, new Exception("Connection failed"));
+		var (outMsgs, pending, notSupported) = await ctx.Manager.ProcessConnectAsync(
+			adapter, adapter, adapter.SupportedInMessages, new Exception("Connection failed"), CancellationToken);
 
 		// Should not register adapters on error
 		var mdMsg = new MarketDataMessage
@@ -872,7 +872,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 	#region ProcessDisconnect
 
 	[TestMethod]
-	public void ProcessDisconnect_RemovesMessageTypeAdapters()
+	public async Task ProcessDisconnect_RemovesMessageTypeAdapters()
 	{
 		var ctx = CreateTestContext();
 		var adapter = CreateAdapter();
@@ -880,7 +880,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 		// First connect
 		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connecting, null);
 		ctx.Manager.BeginConnect();
-		ctx.Manager.ProcessConnect(adapter, adapter, adapter.SupportedInMessages, null);
+		await ctx.Manager.ProcessConnectAsync(adapter, adapter, adapter.SupportedInMessages, null, CancellationToken);
 
 		// Verify adapter is registered
 		var mdMsg = new MarketDataMessage
@@ -906,7 +906,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 	#region Reset
 
 	[TestMethod]
-	public void Reset_ClearsAllState()
+	public async Task Reset_ClearsAllState()
 	{
 		var ctx = CreateTestContext();
 		var adapter = CreateAdapter();
@@ -914,7 +914,7 @@ public class BasketRoutingManagerTests : BaseTestClass
 		// Add some state
 		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connecting, null);
 		ctx.Manager.BeginConnect();
-		ctx.Manager.ProcessConnect(adapter, adapter, adapter.SupportedInMessages, null);
+		await ctx.Manager.ProcessConnectAsync(adapter, adapter, adapter.SupportedInMessages, null, CancellationToken);
 
 		ctx.SubscriptionRouting.AddSubscription(100, new MarketDataMessage { TransactionId = 100 }, [adapter], DataType.Ticks);
 		ctx.PendingState.Add(new SecurityLookupMessage { TransactionId = 200 });

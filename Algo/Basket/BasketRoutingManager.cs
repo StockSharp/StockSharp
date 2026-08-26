@@ -100,31 +100,39 @@ public class BasketRoutingManager : IBasketRoutingManager
 	public void InitializeAdapter(IMessageAdapter adapter) => _connectionManager.InitializeAdapter(adapter);
 
 	/// <inheritdoc />
-	public (IEnumerable<Message> outMessages, Message[] pendingToLoopback, Message[] notSupportedMsgs) ProcessConnect(
+	public async ValueTask<(IEnumerable<Message> outMessages, Message[] pendingToLoopback, Message[] notSupportedMsgs)> ProcessConnectAsync(
 		IMessageAdapter adapter,
 		IMessageAdapter wrapper,
 		IEnumerable<MessageTypes> supportedMessages,
-		Exception error)
+		Exception error,
+		CancellationToken cancellationToken)
 	{
 		Message[] pendingToLoopback = null;
 		Message[] notSupportedMsgs = null;
+		IEnumerable<Message> outMsgs;
 
-		if (error == null)
+		// Under the routing lock, because routing decides to hold a message by reading the very
+		// state this changes: without it a message can be held right after the last adapter
+		// answered and the held ones were taken away, and then there is nothing left to release it.
+		using (await _lock.LockAsync(cancellationToken))
 		{
-			foreach (var type in supportedMessages)
-				_router.AddMessageTypeAdapter(type, wrapper);
-		}
+			if (error == null)
+			{
+				foreach (var type in supportedMessages)
+					_router.AddMessageTypeAdapter(type, wrapper);
+			}
 
-		var outMsgs = _connectionManager.ProcessConnect(adapter, error);
+			outMsgs = _connectionManager.ProcessConnect(adapter, error);
 
-		if (!_connectionState.HasPendingAdapters)
-		{
-			var pending = _pendingState.GetAndClear();
+			if (!_connectionState.HasPendingAdapters)
+			{
+				var pending = _pendingState.GetAndClear();
 
-			if (_connectionState.ConnectedCount > 0)
-				pendingToLoopback = pending;
-			else
-				notSupportedMsgs = pending;
+				if (_connectionState.ConnectedCount > 0)
+					pendingToLoopback = pending;
+				else
+					notSupportedMsgs = pending;
+			}
 		}
 
 		return (outMsgs, pendingToLoopback ?? [], notSupportedMsgs ?? []);
@@ -492,6 +500,17 @@ public class BasketRoutingManager : IBasketRoutingManager
 		using (await _lock.LockAsync(cancellationToken))
 		{
 			var (adapters, skipSupportedMessages) = _router.GetAdapters(message, adapterLookup);
+
+			// A subscription that names no adapter belongs to every adapter supporting it, and which
+			// those are is known only once they have all answered their connect: one still connecting
+			// has registered nothing, would be left out, and nothing hands the subscription to it
+			// afterwards. Held until the connect settles.
+			if (adapters != null && !skipSupportedMessages
+				&& message is ISubscriptionMessage { IsSubscribe: true }
+				&& _connectionState.HasPendingAdapters)
+			{
+				adapters = null;
+			}
 
 			if (adapters == null)
 			{
