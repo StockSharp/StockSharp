@@ -339,6 +339,18 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		}
 	}
 
+	/// <summary>
+	/// Cancel the current optimization run and let its producers drain.
+	/// </summary>
+	protected void CancelRun()
+		=> _linkedCts?.Cancel();
+
+	/// <summary>
+	/// Cancellation token for the current optimization run, including optimizer disposal and consumer cancellation.
+	/// </summary>
+	protected CancellationToken RunToken
+		=> _linkedCts?.Token ?? CancellationToken.None;
+
 	/// <inheritdoc />
 	protected override void DisposeManaged()
 	{

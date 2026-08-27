@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_avalonia.props" />
+  <ItemGroup>
+    <PackageReference Include="Ecng.Compilation.Roslyn" Version="$(EcngVer)" />
+    <PackageReference Include="StockSharp.Xaml.Charting.Avalonia" Version="$(StockSharpVer)" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
+  </ItemGroup>
+</Project>

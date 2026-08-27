@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_avalonia.props" />
+  <Import Project="..\..\..\Samples\common_connectors.props" />
+  <ItemGroup>
+    <PackageReference Include="StockSharp.Xaml.Charting.Avalonia" Version="$(StockSharpVer)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\Samples\06_Strategies\09_LiveOptionsQuoting\DummyProvider.cs" Link="DummyProvider.cs" />
+    <Compile Include="..\..\..\Samples\06_Strategies\09_LiveOptionsQuoting\Strategies\DeltaHedgeStrategy.cs" Link="Strategies\DeltaHedgeStrategy.cs" />
+    <Compile Include="..\..\..\Samples\06_Strategies\09_LiveOptionsQuoting\Strategies\HedgeStrategy.cs" Link="Strategies\HedgeStrategy.cs" />
+  </ItemGroup>
+</Project>

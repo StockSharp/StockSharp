@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xaml="using:StockSharp.Xaml.Avalonia"
+        xmlns:grids="using:StockSharp.Xaml.Grids.Avalonia"
+        xmlns:charts="using:StockSharp.Xaml.Charting.Avalonia.Specialized"
+        xmlns:windows="using:StockSharp.Xaml.Windows.Avalonia"
+        x:Class="StockSharp.Samples.Strategies.LiveOptionsQuoting.Avalonia.MainWindow"
+        Title="Live option quoting"
+        Width="1450"
+        Height="900"
+        MinWidth="980"
+        MinHeight="650"
+        WindowStartupLocation="CenterScreen">
+  <Grid Margin="5" RowDefinitions="Auto,Auto,*">
+    <Grid ColumnDefinitions="100,100,90,90,90,90,90,90,*">
+      <Button x:Name="SettingsButton" Margin="2" Content="Settings" Click="OnSettingsClick" />
+      <Button x:Name="ConnectButton" Grid.Column="1" Margin="2" Content="Connect" Click="OnConnectClick" />
+      <TextBlock Grid.Column="2" Margin="8,0,2,0" VerticalAlignment="Center" Text="Greeks:" />
+      <CheckBox x:Name="ImpliedVolatilityField" Grid.Column="3" VerticalAlignment="Center" Content="IV" Click="OnGreekSelectionChanged" />
+      <CheckBox x:Name="DeltaField" Grid.Column="4" VerticalAlignment="Center" Content="Delta" IsChecked="True" Click="OnGreekSelectionChanged" />
+      <CheckBox x:Name="GammaField" Grid.Column="5" VerticalAlignment="Center" Content="Gamma" IsChecked="True" Click="OnGreekSelectionChanged" />
+      <CheckBox x:Name="VegaField" Grid.Column="6" VerticalAlignment="Center" Content="Vega" IsChecked="True" Click="OnGreekSelectionChanged" />
+      <CheckBox x:Name="ThetaField" Grid.Column="7" VerticalAlignment="Center" Content="Theta" IsChecked="True" Click="OnGreekSelectionChanged" />
+      <StackPanel Grid.Column="8" Orientation="Horizontal">
+        <CheckBox x:Name="RhoField" VerticalAlignment="Center" Content="Rho" IsChecked="True" Click="OnGreekSelectionChanged" />
+        <TextBlock x:Name="StatusText" Margin="18,0,0,0" VerticalAlignment="Center" Text="Disconnected" />
+      </StackPanel>
+    </Grid>
+
+    <Grid Grid.Row="1" Margin="0,5" ColumnDefinitions="Auto,220,Auto,220,Auto,220,Auto,110,Auto,110,100,*">
+      <TextBlock VerticalAlignment="Center" Text="Underlying:" />
+      <ComboBox x:Name="AssetCombo" Grid.Column="1" Margin="4,0" SelectionChanged="OnAssetSelectionChanged" />
+      <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="Option:" />
+      <ComboBox x:Name="OptionCombo" Grid.Column="3" Margin="4,0" SelectionChanged="OnOptionSelectionChanged" />
+      <TextBlock Grid.Column="4" VerticalAlignment="Center" Text="Portfolio:" />
+      <grids:PortfolioEditor x:Name="PortfolioEditor" Grid.Column="5" Margin="4,0" />
+      <TextBlock Grid.Column="6" VerticalAlignment="Center" Text="IV:" />
+      <TextBox x:Name="ImpliedVolatilityText" Grid.Column="7" Margin="4,0" IsReadOnly="True" />
+      <TextBlock Grid.Column="8" VerticalAlignment="Center" Text="IV min:" />
+      <NumericUpDown x:Name="ImpliedVolatilityMin" Grid.Column="9" Margin="4,0" Minimum="0" Maximum="1000" Increment="0.1" />
+      <StackPanel Grid.Column="10" Orientation="Horizontal">
+        <TextBlock Margin="0,0,4,0" VerticalAlignment="Center" Text="max:" />
+        <NumericUpDown x:Name="ImpliedVolatilityMax" Width="72" Minimum="0" Maximum="1000" Increment="0.1" />
+      </StackPanel>
+      <Button x:Name="StartButton" Grid.Column="11" Width="100" HorizontalAlignment="Left" Content="Start quoting" Click="OnStartClick" IsEnabled="False" />
+    </Grid>
+
+    <TabControl Grid.Row="2">
+      <TabItem Header="Position">
+        <charts:OptionPositionChart x:Name="PositionChart" />
+      </TabItem>
+      <TabItem Header="Desk">
+        <xaml:OptionDesk x:Name="OptionDesk" />
+      </TabItem>
+      <TabItem Header="Smile">
+        <charts:OptionVolatilitySmileChart x:Name="SmileChart" />
+      </TabItem>
+      <TabItem Header="Orders &amp; own trades">
+        <Grid RowDefinitions="*,*" ColumnDefinitions="2*,*">
+          <grids:OrderGrid x:Name="OrderGrid" Grid.RowSpan="2" />
+          <grids:PortfolioGrid x:Name="PortfolioGrid" Grid.Column="1" />
+          <grids:MyTradeGrid x:Name="MyTradeGrid" Grid.Row="1" Grid.Column="1" />
+        </Grid>
+      </TabItem>
+      <TabItem Header="Monitor">
+        <windows:Monitor x:Name="LogMonitor" />
+      </TabItem>
+    </TabControl>
+  </Grid>
+</Window>

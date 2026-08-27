@@ -1,0 +1,66 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:charting="using:StockSharp.Xaml.Charting.Avalonia.Controls"
+        x:Class="StockSharp.Samples.Chart.Avalonia.MainWindow"
+        Title="Chart sample"
+        Width="1280"
+        Height="760"
+        MinWidth="900"
+        MinHeight="560"
+        WindowStartupLocation="CenterScreen">
+  <Grid RowDefinitions="Auto,*,Auto">
+    <Border Grid.Row="0" Padding="6" BorderThickness="0,0,0,1">
+      <StackPanel Spacing="5">
+        <WrapPanel Orientation="Horizontal">
+          <TextBlock Margin="0,0,4,0" VerticalAlignment="Center" Text="History:" />
+          <TextBox x:Name="HistoryPath" Width="280" VerticalContentAlignment="Center" />
+          <Button Margin="4,0,0,0" Content="Browse..." Click="OnBrowseClick" />
+          <Button Margin="4,0,10,0" Content="Refresh" Click="OnRefreshSecuritiesClick" />
+
+          <TextBlock Margin="0,0,4,0" VerticalAlignment="Center" Text="Security:" />
+          <ComboBox x:Name="Securities" Width="170" SelectionChanged="OnSecuritySelectionChanged" />
+
+          <TextBlock Margin="10,0,4,0" VerticalAlignment="Center" Text="Time frame:" />
+          <ComboBox x:Name="TimeFrame" Width="100" />
+
+          <TextBlock Margin="10,0,4,0" VerticalAlignment="Center" Text="Format:" />
+          <ComboBox x:Name="Format" Width="100" />
+
+          <CheckBox x:Name="BuildFromTicks" Margin="10,0,0,0" VerticalAlignment="Center" Content="Build from ticks" IsChecked="True" />
+          <Button x:Name="DrawButton" Margin="10,0,0,0" Width="70" Content="Draw" IsEnabled="False" Click="OnDrawClick" />
+        </WrapPanel>
+
+        <WrapPanel Orientation="Horizontal">
+          <Button Width="90" Content="Theme" Click="OnThemeClick" />
+          <CheckBox x:Name="IsRealtime" Margin="10,0,0,0" VerticalAlignment="Center" Content="Real time" />
+          <CheckBox x:Name="CustomColors" Margin="10,0,0,0" VerticalAlignment="Center" Content="Custom colors" IsCheckedChanged="OnCustomColorsChanged" />
+          <CheckBox x:Name="CustomColors2" Margin="10,0,0,0" VerticalAlignment="Center" Content="Custom colors 2" IsCheckedChanged="OnCustomColors2Changed" />
+
+          <TextBlock Margin="14,0,4,0" VerticalAlignment="Center" Text="Time zone:" />
+          <ComboBox x:Name="TimeZone" Width="190" SelectionChanged="OnTimeZoneChanged" />
+
+          <Button x:Name="AddIndicatorButton" Margin="10,0,0,0" Content="Add SMA" IsEnabled="False" Click="OnAddIndicatorClick" />
+          <Button x:Name="NewAnnotationButton" Margin="4,0,0,0" Content="New annotation" IsEnabled="False" Click="OnNewAnnotationClick" />
+          <Button x:Name="ModifyAnnotationButton" Margin="4,0,0,0" Content="Modify annotation" IsEnabled="False" Click="OnModifyAnnotationClick" />
+        </WrapPanel>
+
+        <WrapPanel Orientation="Horizontal">
+          <TextBlock Margin="0,0,8,0" VerticalAlignment="Center" Text="Allow settings:" />
+          <CheckBox x:Name="AllowInteraction" Content="interaction" IsChecked="True" IsCheckedChanged="OnCapabilitiesChanged" />
+          <CheckBox x:Name="AllowAreas" Margin="8,0,0,0" Content="areas" IsChecked="True" IsCheckedChanged="OnCapabilitiesChanged" />
+          <CheckBox x:Name="AllowAxes" Margin="8,0,0,0" Content="axes" IsChecked="True" IsCheckedChanged="OnCapabilitiesChanged" />
+          <CheckBox x:Name="AllowCandles" Margin="8,0,0,0" Content="candles" IsChecked="True" IsCheckedChanged="OnCapabilitiesChanged" />
+          <CheckBox x:Name="AllowIndicators" Margin="8,0,0,0" Content="indicators" IsChecked="True" IsCheckedChanged="OnCapabilitiesChanged" />
+          <CheckBox x:Name="AllowTrades" Margin="8,0,0,0" Content="trades" IsChecked="True" IsCheckedChanged="OnCapabilitiesChanged" />
+          <CheckBox x:Name="AllowOrders" Margin="8,0,0,0" Content="orders" IsChecked="True" IsCheckedChanged="OnCapabilitiesChanged" />
+        </WrapPanel>
+      </StackPanel>
+    </Border>
+
+    <charting:ChartPanel x:Name="Chart" Grid.Row="1" IsInteracted="True" />
+
+    <Border Grid.Row="2" Padding="6,3" BorderThickness="0,1,0,0">
+      <TextBlock x:Name="StatusText" Text="Choose a history folder and security." />
+    </Border>
+  </Grid>
+</Window>

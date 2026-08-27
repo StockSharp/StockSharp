@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:charting="using:StockSharp.Xaml.Charting.Avalonia.Controls"
+        x:Class="StockSharp.Samples.Chart.Performance.Avalonia.MainWindow"
+        Title="Chart performance sample"
+        Width="1100"
+        Height="680"
+        MinWidth="720"
+        MinHeight="480"
+        WindowStartupLocation="CenterScreen">
+  <Grid RowDefinitions="Auto,*">
+    <Border Grid.Row="0" Padding="8" BorderThickness="0,0,0,1">
+      <DockPanel LastChildFill="True">
+        <CheckBox x:Name="IsRealtime" DockPanel.Dock="Left" Content="Real time" VerticalAlignment="Center" />
+        <TextBlock x:Name="StatusText" Margin="14,0,0,0" VerticalAlignment="Center" Text="Waiting for history load..." />
+      </DockPanel>
+    </Border>
+
+    <Grid Grid.Row="1">
+      <charting:ChartPanel x:Name="Chart"
+                           IsInteracted="True"
+                           ShowPerfStats="True" />
+      <Border x:Name="BusyOverlay"
+              Background="#B0202020"
+              IsVisible="False">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+          <ProgressBar Width="320" IsIndeterminate="True" />
+          <TextBlock x:Name="LoadingText" HorizontalAlignment="Center" Foreground="White" Text="Loading history..." />
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Grid>
+</Window>

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\props\common_target_tests.props" />
+  <PropertyGroup>
+    <RootNamespace>StockSharp.Samples.Avalonia.Tests</RootNamespace>
+    <AssemblyName>StockSharp.Samples.Avalonia.Tests</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Common\ConnectorConfigurationCoordinator.cs" Link="Common\ConnectorConfigurationCoordinator.cs" />
+    <Compile Include="..\Common\EventSubscription.cs" Link="Common\EventSubscription.cs" />
+    <Compile Include="..\Common\SampleUiEventRouter.cs" Link="Common\SampleUiEventRouter.cs" />
+    <Compile Include="..\02_Candles\02_CombineHistoryRealtime\OwnedRuntimeLifetime.cs" Link="Candles\OwnedRuntimeLifetime.cs" />
+    <Compile Include="..\06_Strategies\10_LiveTerminal\TerminalStrategyPersistence.cs" Link="Strategies\TerminalStrategyPersistence.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Algo\Algo.csproj" />
+    <ProjectReference Include="..\..\Algo.Strategies\Algo.Strategies.csproj" />
+  </ItemGroup>
+</Project>

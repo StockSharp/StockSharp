@@ -454,6 +454,8 @@ public class GeneticOptimizer : BaseOptimizer
 		IMutation mutation = default,
 		[EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
+		cancellationToken.ThrowIfCancellationRequested();
+
 		var ga = SetupGA(startTime, stopTime, strategy, parameters, calcFitness, selection, crossover, mutation);
 
 		var estimatedIterations = Settings.Population * 1.Max(Settings.GenerationsMax);
@@ -462,33 +464,65 @@ public class GeneticOptimizer : BaseOptimizer
 			estimatedIterations = maxIters;
 
 		InitializeRunAsync(estimatedIterations, cancellationToken);
+		var runToken = RunToken;
 
-		// Stop GA when cancelled
-		cancellationToken.Register(() =>
+		void StopGa()
 		{
 			try { ga.Stop(); } catch (InvalidOperationException) { }
-		});
+		}
 
-		_ = Task.Run(() =>
+		void StopAfterInitialGeneration(object sender, EventArgs e)
+		{
+			if (runToken.IsCancellationRequested)
+				StopGa();
+		}
+
+		// Stop GA when cancelled
+		ga.GenerationRan += StopAfterInitialGeneration;
+		using var cancellationRegistration = runToken.Register(StopGa);
+
+		var gaCompletion = Task.Run(() =>
 		{
 			try
 			{
+				if (runToken.IsCancellationRequested)
+					return;
+
 				ga.Start();
 			}
-			catch (Exception ex) when (cancellationToken.IsCancellationRequested)
+			catch (Exception ex) when (runToken.IsCancellationRequested)
 			{
 				this.AddWarningLog("GA cancelled: {0}", ex.Message);
 			}
 			finally
 			{
+				ga.GenerationRan -= StopAfterInitialGeneration;
 				CompleteChannel();
 				_ga = null;
 			}
 		}, CancellationToken.None);
 
-		await foreach (var result in ReadResultsAsync(cancellationToken))
+		var readerCompleted = false;
+		try
 		{
-			yield return result;
+			await foreach (var result in ReadResultsAsync(cancellationToken))
+			{
+				yield return result;
+			}
+
+			readerCompleted = true;
+		}
+		finally
+		{
+			try
+			{
+				if (!readerCompleted)
+					CancelRun();
+			}
+			finally
+			{
+				await gaCompletion.ConfigureAwait(false);
+			}
 		}
 	}
 }

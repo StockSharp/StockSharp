@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_avalonia.props" />
+  <Import Project="..\..\..\Samples\common_connectors.props" />
+  <ItemGroup>
+    <ProjectReference Include="$(RepoAppsPath)Xaml.Avalonia\Xaml.Avalonia.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\Samples\06_Strategies\07_LiveSpread\MqSpreadStrategy.cs" Link="Strategies\MqSpreadStrategy.cs" />
+    <Compile Include="..\..\..\Samples\06_Strategies\07_LiveSpread\MqStrategy.cs" Link="Strategies\MqStrategy.cs" />
+    <Compile Include="..\..\..\Samples\06_Strategies\07_LiveSpread\StairsCountertrendStrategy.cs" Link="Strategies\StairsCountertrendStrategy.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:windows="using:StockSharp.Xaml.Windows.Avalonia"
+        x:Class="StockSharp.Samples.Strategies.HistoryMarketRule.Avalonia.MainWindow"
+        Title="Historical market-rule strategies"
+        Width="1000"
+        Height="680"
+        MinWidth="720"
+        MinHeight="460"
+        WindowStartupLocation="CenterScreen">
+  <Grid RowDefinitions="Auto,*">
+    <Grid Margin="4" ColumnDefinitions="170,170,90,90,180,*">
+      <DatePicker x:Name="DatePickerBegin" Margin="2" />
+      <DatePicker x:Name="DatePickerEnd" Grid.Column="1" Margin="2" />
+      <Button x:Name="StartButton" Grid.Column="2" Margin="2" Content="Start" Click="OnStartClick" />
+      <Button x:Name="StopButton" Grid.Column="3" Margin="2" Content="Stop" Click="OnStopClick" IsEnabled="False" />
+      <ProgressBar x:Name="Progress" Grid.Column="4" Margin="6,4,6,4" Minimum="0" Maximum="100" />
+      <TextBlock x:Name="Status" Grid.Column="5" Margin="8,0,8,0" VerticalAlignment="Center" Text="Ready" />
+    </Grid>
+    <windows:Monitor x:Name="LogMonitor" Grid.Row="1" Margin="4" />
+  </Grid>
+</Window>

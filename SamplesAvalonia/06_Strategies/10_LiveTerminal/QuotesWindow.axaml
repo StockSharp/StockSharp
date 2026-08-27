@@ -1,0 +1,11 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:grids="using:StockSharp.Xaml.Grids.Avalonia"
+        x:Class="StockSharp.Samples.Strategies.LiveTerminal.Avalonia.QuotesWindow"
+        Title="Market depth"
+        Width="340"
+        Height="620"
+        MinWidth="260"
+        MinHeight="360">
+  <grids:MarketDepthControl x:Name="DepthControl" />
+</Window>

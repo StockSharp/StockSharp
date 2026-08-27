@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:grids="using:StockSharp.Xaml.Grids.Avalonia"
+        x:Class="StockSharp.Samples.Basic.ConnectAndDownloadInstruments.Avalonia.MainWindow"
+        Title="Connect and download instruments"
+        Width="900"
+        Height="680"
+        MinWidth="640"
+        MinHeight="480">
+  <Grid RowDefinitions="Auto,*" ColumnDefinitions="180,180,*">
+    <Button x:Name="SettingsButton"
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="4"
+            Content="Settings"
+            Click="OnSettingsClick" />
+    <Button x:Name="ConnectButton"
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="4"
+            Content="Connect"
+            Click="OnConnectClick" />
+    <grids:SecurityPicker x:Name="SecurityPicker"
+                          Grid.Row="1"
+                          Grid.ColumnSpan="3"
+                          ShowCommonStatColumns="True" />
+  </Grid>
+</Window>

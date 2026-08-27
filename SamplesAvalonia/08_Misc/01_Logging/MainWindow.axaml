@@ -1,0 +1,27 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:windows="using:StockSharp.Xaml.Windows.Avalonia"
+        x:Class="StockSharp.Samples.Misc.Logging.Avalonia.MainWindow"
+        Title="Logging"
+        Width="720"
+        Height="480"
+        MinWidth="520"
+        MinHeight="340">
+  <Grid Margin="5" RowDefinitions="*,Auto">
+    <windows:Monitor x:Name="LogMonitor"
+                     ShowStrategies="False" />
+
+    <StackPanel Grid.Row="1"
+                Margin="0,5,0,0"
+                HorizontalAlignment="Left"
+                Orientation="Horizontal"
+                Spacing="5">
+      <Button Width="110"
+              Content="Test source"
+              Click="OnTestSourceClick" />
+      <Button Width="110"
+              Content="Test trace"
+              Click="OnTestTraceClick" />
+    </StackPanel>
+  </Grid>
+</Window>

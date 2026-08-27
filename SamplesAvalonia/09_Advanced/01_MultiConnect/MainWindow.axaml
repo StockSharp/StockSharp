@@ -1,0 +1,11 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="StockSharp.Samples.Advanced.MultiConnect.Avalonia.MainWindow"
+        Title="Multiple connections"
+        Width="1440"
+        Height="900"
+        MinWidth="960"
+        MinHeight="640"
+        WindowStartupLocation="CenterScreen">
+  <ContentControl x:Name="WorkspaceHost" />
+</Window>

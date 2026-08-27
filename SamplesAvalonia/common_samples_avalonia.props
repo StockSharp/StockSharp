@@ -1,0 +1,22 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\props\common_target_avalonia.props" />
+  <Import Project="..\Samples\common_samples.props" />
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <ApplicationIcon>$(MSBuildThisFileDirectory)..\stocksharp.ico</ApplicationIcon>
+    <DefineConstants>$(DefineConstants);CLS_DISABLE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="$(AvaloniaVer)" />
+    <PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVer)" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVer)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Common\*.cs" Link="Common\%(Filename)%(Extension)" />
+    <AvaloniaResource Include="$(MSBuildThisFileDirectory)Common\SampleApplication.axaml" Link="SampleApplication.axaml" />
+    <AvaloniaResource Include="$(MSBuildThisFileDirectory)..\stocksharp.ico" Link="Assets\stocksharp.ico" />
+  </ItemGroup>
+</Project>

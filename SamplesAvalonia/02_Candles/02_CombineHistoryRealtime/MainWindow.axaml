@@ -1,0 +1,36 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:charting="using:StockSharp.Xaml.Charting.Avalonia"
+        xmlns:editors="using:StockSharp.Xaml.PropertyGrid.Avalonia.Editors"
+        xmlns:grids="using:StockSharp.Xaml.Grids.Avalonia"
+        x:Class="StockSharp.Samples.Candles.CombineHistoryRealtime.Avalonia.MainWindow"
+        Title="History and realtime candles"
+        Width="900"
+        Height="715"
+        MinWidth="700"
+        MinHeight="520">
+  <Grid RowDefinitions="Auto,*,2*" ColumnDefinitions="180,180,*,300">
+    <Button x:Name="SettingsButton"
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="4"
+            Content="Settings"
+            Click="OnSettingsClick" />
+    <Button Grid.Row="0"
+            Grid.Column="1"
+            Margin="4"
+            Content="Connect"
+            Click="OnConnectClick" />
+    <editors:CandleDataTypeEdit x:Name="CandleDataTypeEdit"
+                                Grid.Row="0"
+                                Grid.Column="3"
+                                Margin="4" />
+    <grids:SecurityPicker x:Name="SecurityPicker"
+                          Grid.Row="1"
+                          Grid.ColumnSpan="4"
+                          ShowCommonStatColumns="True" />
+    <charting:ChartControl x:Name="Chart"
+                           Grid.Row="2"
+                           Grid.ColumnSpan="4" />
+  </Grid>
+</Window>

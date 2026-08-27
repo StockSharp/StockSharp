@@ -1,0 +1,26 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:windows="using:StockSharp.Xaml.Windows.Avalonia"
+        x:Class="StockSharp.Samples.Strategies.LiveTerminal.Avalonia.MainWindow"
+        Title="Live strategy terminal"
+        Width="800"
+        Height="560"
+        MinWidth="650"
+        MinHeight="430"
+        WindowStartupLocation="CenterScreen">
+  <Grid Margin="6" RowDefinitions="Auto,Auto,*">
+    <Grid ColumnDefinitions="110,110,110,*">
+      <Button x:Name="SettingsButton" Margin="2" Content="Settings" Click="OnSettingsClick" IsEnabled="False" />
+      <Button x:Name="ConnectButton" Grid.Column="1" Margin="2" Content="Connect" Click="OnConnectClick" IsEnabled="False" />
+      <Button Grid.Column="2" Margin="2" Content="Strategies" Click="OnShowStrategiesClick" />
+      <TextBlock x:Name="StatusText" Grid.Column="3" Margin="12,0" VerticalAlignment="Center" Text="Initializing storage" />
+    </Grid>
+    <StackPanel Grid.Row="1" Margin="0,5" Orientation="Horizontal">
+      <Button Width="120" Margin="2" Content="Securities" Click="OnShowSecuritiesClick" />
+      <Button Width="120" Margin="2" Content="Portfolios" Click="OnShowPortfoliosClick" />
+      <Button Width="120" Margin="2" Content="Own trades" Click="OnShowMyTradesClick" />
+      <Button Width="120" Margin="2" Content="Orders" Click="OnShowOrdersClick" />
+    </StackPanel>
+    <windows:Monitor x:Name="LogMonitor" Grid.Row="2" />
+  </Grid>
+</Window>

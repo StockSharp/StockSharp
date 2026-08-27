@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_avalonia.props" />
+  <Import Project="..\..\..\Samples\common_connectors.props" />
+  <ItemGroup>
+    <ProjectReference Include="$(RepoAppsPath)Xaml.Charting.Avalonia\Xaml.Charting.Avalonia.csproj" />
+    <PackageReference Include="StockSharp.Samples.HistoryData" Version="$(StockSharpVer)" />
+  </ItemGroup>
+</Project>

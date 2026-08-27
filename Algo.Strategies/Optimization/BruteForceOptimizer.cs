@@ -87,6 +87,7 @@ public class BruteForceOptimizer : BaseOptimizer
 		var totalIterations = maxIters > 0 ? maxIters : int.MaxValue;
 
 		InitializeRunAsync(totalIterations, cancellationToken);
+		var runToken = RunToken;
 
 		var batchSize = EmulationSettings.BatchSize;
 
@@ -101,7 +102,8 @@ public class BruteForceOptimizer : BaseOptimizer
 			{
 				try
 				{
-					while (await TryNextRunAsync(startTime, stopTime, tryGetNext, adapterCache, storageCache, cancellationToken))
+					runToken.ThrowIfCancellationRequested();
+					while (await TryNextRunAsync(startTime, stopTime, tryGetNext, adapterCache, storageCache, runToken))
 					{
 					}
 				}
@@ -110,11 +112,11 @@ public class BruteForceOptimizer : BaseOptimizer
 					FreeAdapterCache(adapterCache);
 					FreeStorageCache(storageCache);
 				}
-			}, cancellationToken);
+			}, CancellationToken.None);
 		}
 
 		// When all workers complete, complete the channel
-		_ = Task.Run(async () =>
+		var workersCompletion = Task.Run(async () =>
 		{
 			try
 			{
@@ -130,9 +132,27 @@ public class BruteForceOptimizer : BaseOptimizer
 			}
 		}, CancellationToken.None);
 
-		await foreach (var result in ReadResultsAsync(cancellationToken))
+		var readerCompleted = false;
+		try
 		{
-			yield return result;
+			await foreach (var result in ReadResultsAsync(cancellationToken))
+			{
+				yield return result;
+			}
+
+			readerCompleted = true;
+		}
+		finally
+		{
+			try
+			{
+				if (!readerCompleted)
+					CancelRun();
+			}
+			finally
+			{
+				await workersCompletion.ConfigureAwait(false);
+			}
 		}
 	}
 }

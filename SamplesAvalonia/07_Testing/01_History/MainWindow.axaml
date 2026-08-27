@@ -1,0 +1,165 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:charting="using:StockSharp.Xaml.Charting.Avalonia.Controls"
+        xmlns:editors="using:StockSharp.Xaml.PropertyGrid.Avalonia.Editors"
+        xmlns:grids="using:StockSharp.Xaml.Grids.Avalonia"
+        xmlns:specialized="using:StockSharp.Xaml.Charting.Avalonia.Specialized"
+        x:Class="StockSharp.Samples.Testing.History.Avalonia.MainWindow"
+        Title="Historical testing modes"
+        Width="1540"
+        Height="940"
+        MinWidth="1120"
+        MinHeight="700"
+        WindowStartupLocation="CenterScreen">
+  <Grid RowDefinitions="Auto,Auto,*">
+    <Border Margin="6,6,6,2" Padding="8" BorderBrush="Gray" BorderThickness="1" CornerRadius="4">
+      <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*,Auto,160,Auto,160,Auto,300">
+        <TextBlock Margin="4" VerticalAlignment="Center" Text="History path" />
+        <TextBox x:Name="HistoryPath" Grid.Column="1" Grid.ColumnSpan="5" Margin="4" />
+        <Button Grid.Column="6" Margin="4" Padding="14,4" Content="Browse..." Click="OnBrowseClick" />
+        <TextBlock x:Name="Status" Grid.Column="7" Margin="8,4" VerticalAlignment="Center" Text="Ready" TextTrimming="CharacterEllipsis" />
+
+        <TextBlock Grid.Row="1" Margin="4" VerticalAlignment="Center" Text="Security ID" />
+        <TextBox x:Name="SecurityId" Grid.Row="1" Grid.Column="1" Margin="4" />
+        <TextBlock Grid.Row="1" Grid.Column="2" Margin="4" VerticalAlignment="Center" Text="Begin" />
+        <CalendarDatePicker x:Name="BeginDate" Grid.Row="1" Grid.Column="3" Margin="4" SelectedDateFormat="Short" />
+        <TextBlock Grid.Row="1" Grid.Column="4" Margin="4" VerticalAlignment="Center" Text="End" />
+        <CalendarDatePicker x:Name="EndDate" Grid.Row="1" Grid.Column="5" Margin="4" SelectedDateFormat="Short" />
+        <TextBlock Grid.Row="1" Grid.Column="6" Margin="4" VerticalAlignment="Center" Text="Candles" />
+        <editors:CandleDataTypeEdit x:Name="CandleType" Grid.Row="1" Grid.Column="7" Margin="4" />
+
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="8" Margin="2" Orientation="Horizontal" Spacing="10">
+          <CheckBox x:Name="DebugLog" VerticalAlignment="Center" Content="Debug logging" />
+          <CheckBox x:Name="ServerStops" VerticalAlignment="Center" Content="Server-side stop orders" />
+          <CheckBox x:Name="GenerateDepths" VerticalAlignment="Center" Content="Generate market depth" Click="OnGeneratorChanged" />
+          <TextBlock VerticalAlignment="Center" Text="Max depth" />
+          <TextBox x:Name="MaxDepth" Width="55" Text="1" />
+          <TextBlock VerticalAlignment="Center" Text="Max volume" />
+          <TextBox x:Name="MaxVolume" Width="65" Text="1" />
+          <Button x:Name="StartButton" Width="90" Content="Start" Click="OnStartClick" />
+          <Button x:Name="PauseButton" Width="90" Content="Pause" Click="OnPauseClick" IsEnabled="False" />
+          <Button x:Name="StopButton" Width="90" Content="Stop" Click="OnStopClick" IsEnabled="False" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <Grid Grid.Row="1" Margin="6,2" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*,*,*">
+      <Border Margin="2" Padding="5" BorderBrush="Gray" BorderThickness="1" CornerRadius="3">
+        <Grid ColumnDefinitions="Auto,*">
+          <CheckBox x:Name="CandlesCheckBox" Content="Candles" IsChecked="True" Click="OnModeChanged" />
+          <ProgressBar x:Name="CandlesProgress" Grid.Column="1" Margin="8,2,2,2" Minimum="0" Maximum="100" />
+        </Grid>
+      </Border>
+      <Border Grid.Column="1" Margin="2" Padding="5" BorderBrush="Gray" BorderThickness="1" CornerRadius="3">
+        <Grid ColumnDefinitions="Auto,*">
+          <CheckBox x:Name="TicksCheckBox" Content="Ticks" Click="OnModeChanged" />
+          <ProgressBar x:Name="TicksProgress" Grid.Column="1" Margin="8,2,2,2" Minimum="0" Maximum="100" />
+        </Grid>
+      </Border>
+      <Border Grid.Column="2" Margin="2" Padding="5" BorderBrush="Gray" BorderThickness="1" CornerRadius="3">
+        <Grid ColumnDefinitions="Auto,*">
+          <CheckBox x:Name="TicksAndDepthsCheckBox" Content="Ticks + Depths" Click="OnModeChanged" />
+          <ProgressBar x:Name="TicksAndDepthsProgress" Grid.Column="1" Margin="8,2,2,2" Minimum="0" Maximum="100" />
+        </Grid>
+      </Border>
+      <Border Grid.Column="3" Margin="2" Padding="5" BorderBrush="Gray" BorderThickness="1" CornerRadius="3">
+        <Grid ColumnDefinitions="Auto,*">
+          <CheckBox x:Name="DepthsCheckBox" Content="Market Depths" Click="OnModeChanged" />
+          <ProgressBar x:Name="DepthsProgress" Grid.Column="1" Margin="8,2,2,2" Minimum="0" Maximum="100" />
+        </Grid>
+      </Border>
+
+      <Border Grid.Row="1" Margin="2" Padding="5" BorderBrush="Gray" BorderThickness="1" CornerRadius="3">
+        <Grid ColumnDefinitions="Auto,*">
+          <CheckBox x:Name="CandlesAndDepthsCheckBox" Content="Candles + Depths" Click="OnModeChanged" />
+          <ProgressBar x:Name="CandlesAndDepthsProgress" Grid.Column="1" Margin="8,2,2,2" Minimum="0" Maximum="100" />
+        </Grid>
+      </Border>
+      <Border Grid.Row="1" Grid.Column="1" Margin="2" Padding="5" BorderBrush="Gray" BorderThickness="1" CornerRadius="3">
+        <Grid ColumnDefinitions="Auto,*">
+          <CheckBox x:Name="OrderLogCheckBox" Content="Order Log" Click="OnModeChanged" />
+          <ProgressBar x:Name="OrderLogProgress" Grid.Column="1" Margin="8,2,2,2" Minimum="0" Maximum="100" />
+        </Grid>
+      </Border>
+      <Border Grid.Row="1" Grid.Column="2" Margin="2" Padding="5" BorderBrush="Gray" BorderThickness="1" CornerRadius="3">
+        <Grid ColumnDefinitions="Auto,*">
+          <CheckBox x:Name="LastTradeCheckBox" Content="Level1 Last Trade" Click="OnModeChanged" />
+          <ProgressBar x:Name="LastTradeProgress" Grid.Column="1" Margin="8,2,2,2" Minimum="0" Maximum="100" />
+        </Grid>
+      </Border>
+      <Border Grid.Row="1" Grid.Column="3" Margin="2" Padding="5" BorderBrush="Gray" BorderThickness="1" CornerRadius="3">
+        <Grid ColumnDefinitions="Auto,*">
+          <CheckBox x:Name="SpreadCheckBox" Content="Level1 Spread" Click="OnModeChanged" />
+          <ProgressBar x:Name="SpreadProgress" Grid.Column="1" Margin="8,2,2,2" Minimum="0" Maximum="100" />
+        </Grid>
+      </Border>
+    </Grid>
+
+    <TabControl x:Name="ModesTab" Grid.Row="2" Margin="6,2,6,6">
+      <TabItem x:Name="CandlesTab" Header="Candles">
+        <TabControl>
+          <TabItem Header="Chart"><charting:ChartPanel x:Name="CandlesChart" ShowOverview="False" /></TabItem>
+          <TabItem Header="Equity"><specialized:EquityCurveChart x:Name="CandlesEquity" /></TabItem>
+          <TabItem Header="Statistics"><grids:StatisticParameterGrid x:Name="CandlesStatistics" /></TabItem>
+          <TabItem Header="Position"><specialized:EquityCurveChart x:Name="CandlesPosition" /></TabItem>
+        </TabControl>
+      </TabItem>
+      <TabItem x:Name="TicksTab" Header="Ticks" IsVisible="False">
+        <TabControl>
+          <TabItem Header="Chart"><charting:ChartPanel x:Name="TicksChart" ShowOverview="False" /></TabItem>
+          <TabItem Header="Equity"><specialized:EquityCurveChart x:Name="TicksEquity" /></TabItem>
+          <TabItem Header="Statistics"><grids:StatisticParameterGrid x:Name="TicksStatistics" /></TabItem>
+          <TabItem Header="Position"><specialized:EquityCurveChart x:Name="TicksPosition" /></TabItem>
+        </TabControl>
+      </TabItem>
+      <TabItem x:Name="TicksAndDepthsTab" Header="Ticks + Depths" IsVisible="False">
+        <TabControl>
+          <TabItem Header="Chart"><charting:ChartPanel x:Name="TicksAndDepthsChart" ShowOverview="False" /></TabItem>
+          <TabItem Header="Equity"><specialized:EquityCurveChart x:Name="TicksAndDepthsEquity" /></TabItem>
+          <TabItem Header="Statistics"><grids:StatisticParameterGrid x:Name="TicksAndDepthsStatistics" /></TabItem>
+          <TabItem Header="Position"><specialized:EquityCurveChart x:Name="TicksAndDepthsPosition" /></TabItem>
+        </TabControl>
+      </TabItem>
+      <TabItem x:Name="DepthsTab" Header="Market Depths" IsVisible="False">
+        <TabControl>
+          <TabItem Header="Chart"><charting:ChartPanel x:Name="DepthsChart" ShowOverview="False" /></TabItem>
+          <TabItem Header="Equity"><specialized:EquityCurveChart x:Name="DepthsEquity" /></TabItem>
+          <TabItem Header="Statistics"><grids:StatisticParameterGrid x:Name="DepthsStatistics" /></TabItem>
+          <TabItem Header="Position"><specialized:EquityCurveChart x:Name="DepthsPosition" /></TabItem>
+        </TabControl>
+      </TabItem>
+      <TabItem x:Name="CandlesAndDepthsTab" Header="Candles + Depths" IsVisible="False">
+        <TabControl>
+          <TabItem Header="Chart"><charting:ChartPanel x:Name="CandlesAndDepthsChart" ShowOverview="False" /></TabItem>
+          <TabItem Header="Equity"><specialized:EquityCurveChart x:Name="CandlesAndDepthsEquity" /></TabItem>
+          <TabItem Header="Statistics"><grids:StatisticParameterGrid x:Name="CandlesAndDepthsStatistics" /></TabItem>
+          <TabItem Header="Position"><specialized:EquityCurveChart x:Name="CandlesAndDepthsPosition" /></TabItem>
+        </TabControl>
+      </TabItem>
+      <TabItem x:Name="OrderLogTab" Header="Order Log" IsVisible="False">
+        <TabControl>
+          <TabItem Header="Chart"><charting:ChartPanel x:Name="OrderLogChart" ShowOverview="False" /></TabItem>
+          <TabItem Header="Equity"><specialized:EquityCurveChart x:Name="OrderLogEquity" /></TabItem>
+          <TabItem Header="Statistics"><grids:StatisticParameterGrid x:Name="OrderLogStatistics" /></TabItem>
+          <TabItem Header="Position"><specialized:EquityCurveChart x:Name="OrderLogPosition" /></TabItem>
+        </TabControl>
+      </TabItem>
+      <TabItem x:Name="LastTradeTab" Header="Level1 Last Trade" IsVisible="False">
+        <TabControl>
+          <TabItem Header="Chart"><charting:ChartPanel x:Name="LastTradeChart" ShowOverview="False" /></TabItem>
+          <TabItem Header="Equity"><specialized:EquityCurveChart x:Name="LastTradeEquity" /></TabItem>
+          <TabItem Header="Statistics"><grids:StatisticParameterGrid x:Name="LastTradeStatistics" /></TabItem>
+          <TabItem Header="Position"><specialized:EquityCurveChart x:Name="LastTradePosition" /></TabItem>
+        </TabControl>
+      </TabItem>
+      <TabItem x:Name="SpreadTab" Header="Level1 Spread" IsVisible="False">
+        <TabControl>
+          <TabItem Header="Chart"><charting:ChartPanel x:Name="SpreadChart" ShowOverview="False" /></TabItem>
+          <TabItem Header="Equity"><specialized:EquityCurveChart x:Name="SpreadEquity" /></TabItem>
+          <TabItem Header="Statistics"><grids:StatisticParameterGrid x:Name="SpreadStatistics" /></TabItem>
+          <TabItem Header="Position"><specialized:EquityCurveChart x:Name="SpreadPosition" /></TabItem>
+        </TabControl>
+      </TabItem>
+    </TabControl>
+  </Grid>
+</Window>

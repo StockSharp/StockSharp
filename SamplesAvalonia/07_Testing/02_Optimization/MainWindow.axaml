@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:grids="using:StockSharp.Xaml.Grids.Avalonia"
+        xmlns:propertyGrid="using:StockSharp.Xaml.PropertyGrid.Avalonia"
+        x:Class="StockSharp.Samples.Testing.Optimization.Avalonia.MainWindow"
+        Title="Strategy optimization"
+        Width="1040"
+        Height="700"
+        MinWidth="780"
+        MinHeight="520"
+        WindowStartupLocation="CenterScreen">
+  <Grid Margin="8" RowDefinitions="Auto,Auto,Auto,Auto,*">
+    <Grid ColumnDefinitions="Auto,*,Auto">
+      <TextBlock Margin="0,0,8,0" VerticalAlignment="Center" Text="History path:" />
+      <TextBox x:Name="HistoryPath" Grid.Column="1" />
+      <Button x:Name="BrowseButton" Grid.Column="2" Margin="6,0,0,0" Padding="14,4"
+              Content="Browse..." Click="OnBrowseClick" />
+    </Grid>
+
+    <Grid x:Name="OptimizationOptions" Grid.Row="1" Margin="0,8,0,0"
+          ColumnDefinitions="Auto,Auto,18,Auto,Auto,Auto,*">
+      <RadioButton x:Name="BruteForce" GroupName="OptimizerType" IsChecked="True"
+                   Content="Brute force" Click="OnOptimizerTypeChanged" />
+      <RadioButton x:Name="Genetic" Grid.Column="1" Margin="12,0,0,0"
+                   GroupName="OptimizerType" Content="Genetic" Click="OnOptimizerTypeChanged" />
+      <CheckBox x:Name="RandomMode" Grid.Column="3" Content="Random combinations"
+                Click="OnRandomModeChanged" />
+      <TextBlock Grid.Column="4" Margin="12,0,5,0" VerticalAlignment="Center" Text="Count:" />
+      <NumericUpDown x:Name="RandomCount" Grid.Column="5" Width="80" Minimum="1" Maximum="1000" Value="10" />
+      <TextBlock Grid.Column="6" Margin="14,0,0,0" VerticalAlignment="Center"
+                 Text="Max iterations per optimizer run: 100" />
+    </Grid>
+
+    <Grid Grid.Row="2" Margin="0,8,0,0" ColumnDefinitions="Auto,150,Auto,150,*">
+      <TextBlock VerticalAlignment="Center" Text="Begin:" />
+      <DatePicker x:Name="BeginDate" Grid.Column="1" Margin="6,0,12,0" />
+      <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="End:" />
+      <DatePicker x:Name="EndDate" Grid.Column="3" Margin="6,0,12,0" />
+      <TextBlock x:Name="Status" Grid.Column="4" VerticalAlignment="Center" Text="Ready" />
+    </Grid>
+
+    <Grid Grid.Row="3" Margin="0,8,0,8" ColumnDefinitions="100,100,100,*,Auto">
+      <Button x:Name="StartButton" Margin="0,0,5,0" Content="Start" Click="OnStartClick" />
+      <Button x:Name="PauseButton" Grid.Column="1" Margin="0,0,5,0" Content="Pause"
+              Click="OnPauseClick" IsEnabled="False" />
+      <Button x:Name="StopButton" Grid.Column="2" Margin="0,0,8,0" Content="Stop"
+              Click="OnStopClick" IsEnabled="False" />
+      <ProgressBar x:Name="Progress" Grid.Column="3" Height="20" Minimum="0" Maximum="100" />
+      <TextBlock x:Name="ProgressText" Grid.Column="4" MinWidth="180" Margin="10,0,0,0"
+                 VerticalAlignment="Center" Text="0 / 0 iterations" />
+    </Grid>
+
+    <Grid Grid.Row="4" ColumnDefinitions="250,5,*">
+      <propertyGrid:PropertyGridEx x:Name="GeneticSettingsEditor" ShowToolbar="False" />
+      <GridSplitter Grid.Column="1" Width="5" ResizeDirection="Columns" Background="Gray" />
+      <grids:StrategiesStatisticsPanel x:Name="Statistics"
+                                      Grid.Column="2"
+                                      ShowProgress="True"
+                                      ShowPnLChart="True" />
+    </Grid>
+  </Grid>
+</Window>

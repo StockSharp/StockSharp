@@ -5,11 +5,28 @@ using System.Diagnostics;
 
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Optimization;
+using StockSharp.Algo.Testing;
 using StockSharp.Designer;
 
 [TestClass]
 public class OptimizerTests : BaseTestClass
 {
+	private sealed class BlockingStopSmaStrategy : SmaStrategy
+	{
+		public ManualResetEventSlim StopEntered { get; } = new(false);
+
+		public ManualResetEventSlim ReleaseStop { get; } = new(false);
+
+		protected override void OnStopping()
+		{
+			StopEntered.Set();
+			if (!ReleaseStop.Wait(TimeSpan.FromSeconds(10)))
+				throw new TimeoutException("The test did not release the blocked strategy stop.");
+
+			base.OnStopping();
+		}
+	}
+
 	private static Security CreateTestSecurity()
 	{
 		return new() { Id = Paths.HistoryDefaultSecurity };
@@ -200,6 +217,74 @@ public class OptimizerTests : BaseTestClass
 
 		IsTrue(count >= 2, $"Should have received at least 2 results, got {count}");
 		IsTrue(count < totalCount, $"Should have been cancelled before all {totalCount} iterations, got {count}");
+	}
+
+	[TestMethod]
+	[Timeout(30_000)]
+	[DoNotParallelize]
+	public async Task BruteForceCancellationDrainsInFlightIterationBeforeReturning()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+		var storageRegistry = GetHistoryStorage();
+
+		using var optimizer = new BruteForceOptimizer(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry);
+		optimizer.EmulationSettings.BatchSize = 1;
+
+		using var strategy = new BlockingStopSmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 10,
+		};
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		var cancellationRequested = 0;
+		optimizer.SingleProgressChanged += (_, _, progress) =>
+		{
+			if (progress is > 0 and < 100 && Interlocked.Exchange(ref cancellationRequested, 1) == 0)
+				cts.Cancel();
+		};
+
+		var enumeration = Task.Run(async () =>
+		{
+			try
+			{
+				await foreach (var _ in optimizer.RunAsync(
+					Paths.HistoryBeginDate,
+					Paths.HistoryBeginDate.AddDays(6),
+					[(strategy, [strategy.Parameters[nameof(SmaStrategy.Short)], strategy.Parameters[nameof(SmaStrategy.Long)]])],
+					cts.Token))
+				{
+				}
+			}
+			catch (OperationCanceledException) when (cts.IsCancellationRequested)
+			{
+			}
+		});
+
+		try
+		{
+			IsTrue(strategy.StopEntered.Wait(TimeSpan.FromSeconds(10)), "Cancellation never reached the in-flight strategy stop.");
+			await Task.Delay(100, CancellationToken);
+			IsFalse(enumeration.IsCompleted, "RunAsync returned before the in-flight optimizer worker finished stopping.");
+		}
+		finally
+		{
+			strategy.ReleaseStop.Set();
+		}
+
+		await enumeration.WaitAsync(TimeSpan.FromSeconds(10), CancellationToken);
+		var connector = strategy.Connector as HistoryEmulationConnector;
+		IsNotNull(connector);
+		AreEqual(ChannelStates.Stopped, connector.State);
+		strategy.Dispose();
+		connector.Dispose();
 	}
 
 	/// <summary>
@@ -698,6 +783,266 @@ public class OptimizerTests : BaseTestClass
 		IsTrue(count >= 2, $"Should have received at least 2 results before cancellation, got {count}");
 		IsTrue(count < optimizer.EmulationSettings.MaxIterations,
 			"Cancellation must stop the genetic optimizer before all iterations complete");
+	}
+
+	[TestMethod]
+	[Timeout(10_000)]
+	[DoNotParallelize]
+	public async Task GeneticPreCancelledRunDoesNotStartProducer()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+		using var optimizer = new GeneticOptimizer(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			GetHistoryStorage(),
+			Paths.FileSystem);
+		using var strategy = new SmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+		};
+		var parameters = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
+		{
+			(strategy.Parameters[nameof(SmaStrategy.Short)], 20, 40, 5, null),
+			(strategy.Parameters[nameof(SmaStrategy.Long)], 60, 100, 10, null),
+		};
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		cts.Cancel();
+		var initialized = 0;
+		optimizer.StrategyInitialized += (_, _) => Interlocked.Increment(ref initialized);
+
+		try
+		{
+			await foreach (var _ in optimizer.RunAsync(
+				Paths.HistoryBeginDate,
+				Paths.HistoryBeginDate.AddDays(1),
+				strategy,
+				parameters,
+				cancellationToken: cts.Token))
+			{
+			}
+		}
+		catch (OperationCanceledException) when (cts.IsCancellationRequested)
+		{
+		}
+
+		AreEqual(0, initialized);
+	}
+
+	[TestMethod]
+	[Timeout(30_000)]
+	[DoNotParallelize]
+	public async Task GeneticConsumerBreakCancelsAndDrainsFitnessProducer()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+		var storageRegistry = GetHistoryStorage();
+
+		using var optimizer = new GeneticOptimizer(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			storageRegistry,
+			Paths.FileSystem);
+		optimizer.EmulationSettings.BatchSize = 1;
+		optimizer.EmulationSettings.MaxIterations = 5;
+
+		using var strategy = new SmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+		var geneticParams = new (IStrategyParam param, object from, object to, object step, IEnumerable values)[]
+		{
+			(strategy.Parameters[nameof(SmaStrategy.Short)], 20, 40, 5, null),
+			(strategy.Parameters[nameof(SmaStrategy.Long)], 60, 100, 10, null),
+		};
+		using var fitnessEntered = new ManualResetEventSlim(false);
+		using var releaseFitness = new ManualResetEventSlim(false);
+		using var consumerBreaking = new ManualResetEventSlim(false);
+		Strategy yieldedStrategy = null;
+
+		var enumeration = Task.Run(async () =>
+		{
+			await foreach (var (result, _) in optimizer.RunAsync(
+				Paths.HistoryBeginDate,
+				Paths.HistoryBeginDate.AddDays(6),
+				strategy,
+				geneticParams,
+				resultStrategy =>
+				{
+					fitnessEntered.Set();
+					if (!releaseFitness.Wait(TimeSpan.FromSeconds(10)))
+						throw new TimeoutException("The test did not release the blocked fitness calculation.");
+					return resultStrategy.PnL;
+				},
+				cancellationToken: CancellationToken))
+			{
+				yieldedStrategy = result;
+				if (!fitnessEntered.Wait(TimeSpan.FromSeconds(10)))
+					throw new TimeoutException("The genetic producer never entered its post-result fitness calculation.");
+				consumerBreaking.Set();
+				break;
+			}
+		});
+
+		try
+		{
+			IsTrue(consumerBreaking.Wait(TimeSpan.FromSeconds(15)), "The genetic consumer never received its first result.");
+			await Task.Delay(100, CancellationToken);
+			IsFalse(enumeration.IsCompleted, "The async iterator returned while its genetic producer was still calculating fitness.");
+		}
+		finally
+		{
+			releaseFitness.Set();
+		}
+
+		await enumeration.WaitAsync(TimeSpan.FromSeconds(10), CancellationToken);
+		IsNotNull(yieldedStrategy);
+		var connector = yieldedStrategy.Connector as HistoryEmulationConnector;
+		IsNotNull(connector);
+		AreEqual(ChannelStates.Stopped, connector.State);
+		yieldedStrategy.Dispose();
+		connector.Dispose();
+	}
+
+	[TestMethod]
+	[Timeout(10_000)]
+	[DoNotParallelize]
+	public async Task BruteForcePreCancelledRunDoesNotStartProducer()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+		using var optimizer = new BruteForceOptimizer(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			GetHistoryStorage());
+		using var strategy = new SmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+		};
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		cts.Cancel();
+		var initialized = 0;
+		optimizer.StrategyInitialized += (_, _) => Interlocked.Increment(ref initialized);
+
+		try
+		{
+			await foreach (var _ in optimizer.RunAsync(
+				Paths.HistoryBeginDate,
+				Paths.HistoryBeginDate.AddDays(1),
+				[(strategy, [strategy.Parameters[nameof(SmaStrategy.Short)], strategy.Parameters[nameof(SmaStrategy.Long)]])],
+				cts.Token))
+			{
+			}
+		}
+		catch (OperationCanceledException) when (cts.IsCancellationRequested)
+		{
+		}
+
+		AreEqual(0, initialized);
+		IsNull(strategy.Connector);
+	}
+
+	[TestMethod]
+	[Timeout(30_000)]
+	[DoNotParallelize]
+	public async Task BruteForceConsumerBreakCancelsAndDrainsInFlightWorker()
+	{
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+		using var optimizer = new BruteForceOptimizer(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			GetHistoryStorage());
+		optimizer.EmulationSettings.BatchSize = 2;
+
+		var fast = new SmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 10,
+		};
+		var inFlight = new BlockingStopSmaStrategy
+		{
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 10,
+		};
+		using var inFlightStarted = new ManualResetEventSlim(false);
+		using var consumerBreaking = new ManualResetEventSlim(false);
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		inFlight.CandleReceived += (_, candle) =>
+		{
+			if (candle.State != CandleStates.Finished)
+				return;
+
+			inFlightStarted.Set();
+			Thread.Sleep(2);
+		};
+
+		var iterations = new (Strategy strategy, IStrategyParam[] parameters)[]
+		{
+			(fast, [fast.Parameters[nameof(SmaStrategy.Short)], fast.Parameters[nameof(SmaStrategy.Long)]]),
+			(inFlight, [inFlight.Parameters[nameof(SmaStrategy.Short)], inFlight.Parameters[nameof(SmaStrategy.Long)]]),
+		};
+		var enumeration = Task.Run(async () =>
+		{
+			await foreach (var _ in optimizer.RunAsync(
+				Paths.HistoryBeginDate,
+				Paths.HistoryBeginDate.AddDays(2),
+				iterations,
+				cts.Token))
+			{
+				if (!inFlightStarted.Wait(TimeSpan.FromSeconds(10)))
+					throw new TimeoutException("The parallel optimizer worker never started replaying history.");
+
+				consumerBreaking.Set();
+				break;
+			}
+		});
+
+		try
+		{
+			IsTrue(consumerBreaking.Wait(TimeSpan.FromSeconds(15)), "The brute-force consumer never received a result.");
+			IsTrue(inFlight.StopEntered.Wait(TimeSpan.FromSeconds(5)), "Consumer break did not stop the in-flight worker.");
+			await Task.Delay(100, CancellationToken);
+			IsFalse(enumeration.IsCompleted, "RunAsync returned before the in-flight worker finished stopping.");
+		}
+		finally
+		{
+			inFlight.ReleaseStop.Set();
+			cts.Cancel();
+		}
+
+		await enumeration.WaitAsync(TimeSpan.FromSeconds(10), CancellationToken);
+		var connectors = new[] { fast.Connector, inFlight.Connector }
+			.OfType<HistoryEmulationConnector>()
+			.Distinct()
+			.ToArray();
+		IsTrue(connectors.Length > 0);
+		foreach (var connector in connectors)
+			AreEqual(ChannelStates.Stopped, connector.State);
+
+		fast.Dispose();
+		inFlight.Dispose();
+		foreach (var connector in connectors)
+			connector.Dispose();
 	}
 
 	/// <summary>

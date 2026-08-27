@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:charting="using:StockSharp.Xaml.Charting.Avalonia"
+             xmlns:grids="using:StockSharp.Xaml.Grids.Avalonia"
+             xmlns:windows="using:StockSharp.Xaml.Windows.Avalonia"
+             x:Class="StockSharp.Samples.Advanced.Avalonia.AdvancedConnectorWorkspace">
+  <Grid RowDefinitions="Auto,Auto,*">
+    <WrapPanel Margin="4">
+      <Button x:Name="SettingsButton" Width="96" Margin="2" Content="Settings" Click="OnSettingsClick" />
+      <Button x:Name="ConnectButton" Width="96" Margin="2" Content="Connect" Click="OnConnectClick" />
+      <grids:PortfolioEditor x:Name="PortfolioEditor" Width="220" Margin="2" />
+      <TextBox x:Name="PriceTextBox" Width="110" Margin="2" Text="0" PlaceholderText="Price" />
+      <TextBox x:Name="VolumeTextBox" Width="90" Margin="2" Text="1" PlaceholderText="Volume" />
+      <Button Margin="2" Width="72" Content="Buy" Click="OnBuyClick" />
+      <Button Margin="2" Width="72" Content="Sell" Click="OnSellClick" />
+      <TextBlock x:Name="StatusText" Margin="10,0" VerticalAlignment="Center" Text="Disconnected" />
+    </WrapPanel>
+
+    <WrapPanel Grid.Row="1" Margin="4,0,4,4">
+      <Button x:Name="Level1Button" Width="92" Margin="2" Content="Level 1" Click="OnLevel1Click" IsEnabled="False" />
+      <Button x:Name="TicksButton" Width="92" Margin="2" Content="Ticks" Click="OnTicksClick" IsEnabled="False" />
+      <Button x:Name="DepthButton" Width="92" Margin="2" Content="Depth" Click="OnDepthClick" IsEnabled="False" />
+      <Button x:Name="OrderLogButton" Width="92" Margin="2" Content="Order log" Click="OnOrderLogClick" IsEnabled="False" />
+      <Button x:Name="CandlesButton" Width="92" Margin="2" Content="Candles" Click="OnCandlesClick" IsEnabled="False" />
+      <Button x:Name="NewsButton" Width="92" Margin="2" Content="News" Click="OnNewsClick" />
+    </WrapPanel>
+
+    <TabControl Grid.Row="2" Margin="4">
+      <TabItem Header="Securities">
+        <grids:SecurityPicker x:Name="SecurityPicker" />
+      </TabItem>
+      <TabItem Header="Depth &amp; candles">
+        <Grid ColumnDefinitions="320,*">
+          <grids:MarketDepthControl x:Name="MarketDepth" />
+          <charting:ChartControl x:Name="Chart" Grid.Column="1" />
+        </Grid>
+      </TabItem>
+      <TabItem Header="Portfolios">
+        <grids:PortfolioGrid x:Name="PortfolioGrid" />
+      </TabItem>
+      <TabItem Header="Orders &amp; own trades">
+        <Grid RowDefinitions="*,*">
+          <grids:OrderGrid x:Name="OrderGrid" />
+          <grids:MyTradeGrid x:Name="MyTradeGrid" Grid.Row="1" />
+        </Grid>
+      </TabItem>
+      <TabItem Header="Market data">
+        <Grid RowDefinitions="*,*" ColumnDefinitions="*,*">
+          <grids:TradeGrid x:Name="TradeGrid" />
+          <grids:OrderLogGrid x:Name="OrderLogGrid" Grid.Column="1" />
+          <grids:Level1Grid x:Name="Level1Grid" Grid.Row="1" />
+          <grids:NewsGrid x:Name="NewsGrid" Grid.Row="1" Grid.Column="1" />
+        </Grid>
+      </TabItem>
+      <TabItem Header="Monitor">
+        <windows:Monitor x:Name="LogMonitor" />
+      </TabItem>
+    </TabControl>
+  </Grid>
+</UserControl>

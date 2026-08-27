@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:charting="using:StockSharp.Xaml.Charting.Avalonia.Controls"
+        xmlns:editors="using:StockSharp.Xaml.PropertyGrid.Avalonia.Editors"
+        xmlns:windows="using:StockSharp.Xaml.Windows.Avalonia"
+        x:Class="StockSharp.Samples.Strategies.HistoryIndex.Avalonia.MainWindow"
+        Title="Historical expression index"
+        Width="1180"
+        Height="760"
+        MinWidth="820"
+        MinHeight="540"
+        WindowStartupLocation="CenterScreen">
+  <Grid RowDefinitions="Auto,Auto,*">
+    <Grid Margin="6" ColumnDefinitions="210,150,150,90,90,170,*">
+      <editors:CandleDataTypeEdit x:Name="CandleType" Margin="2" />
+      <DatePicker x:Name="BeginDate" Grid.Column="1" Margin="2" />
+      <DatePicker x:Name="EndDate" Grid.Column="2" Margin="2" />
+      <Button x:Name="StartButton" Grid.Column="3" Margin="2" Content="Start" Click="OnStartClick" />
+      <Button x:Name="StopButton" Grid.Column="4" Margin="2" Content="Stop" Click="OnStopClick" IsEnabled="False" />
+      <ProgressBar x:Name="Progress" Grid.Column="5" Margin="6,4" Minimum="0" Maximum="100" />
+      <TextBlock x:Name="Status" Grid.Column="6" Margin="8,0" VerticalAlignment="Center" Text="Ready" />
+    </Grid>
+
+    <Grid Grid.Row="1" Margin="8,0,8,5" ColumnDefinitions="Auto,*">
+      <TextBlock Margin="0,0,8,0" VerticalAlignment="Center" Text="Expression:" />
+      <TextBox x:Name="Expression" Grid.Column="1" />
+    </Grid>
+
+    <TabControl Grid.Row="2" Margin="5">
+      <TabItem Header="Compiled index candles">
+        <charting:ChartPanel x:Name="Chart" IsInteracted="True" />
+      </TabItem>
+      <TabItem Header="Monitor">
+        <windows:Monitor x:Name="Monitor" />
+      </TabItem>
+    </TabControl>
+  </Grid>
+</Window>

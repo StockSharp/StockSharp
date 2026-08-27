@@ -1,0 +1,11 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:grids="using:StockSharp.Xaml.Grids.Avalonia"
+        x:Class="StockSharp.Samples.Strategies.LiveTerminal.Avalonia.PortfoliosWindow"
+        Title="Portfolios and positions"
+        Width="720"
+        Height="360"
+        MinWidth="480"
+        MinHeight="220">
+  <grids:PortfolioGrid x:Name="PortfolioGrid" />
+</Window>

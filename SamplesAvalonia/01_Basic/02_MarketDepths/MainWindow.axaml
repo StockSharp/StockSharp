@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:grids="using:StockSharp.Xaml.Grids.Avalonia"
+        x:Class="StockSharp.Samples.Basic.MarketDepths.Avalonia.MainWindow"
+        Title="Market depths"
+        Width="1100"
+        Height="760"
+        MinWidth="760"
+        MinHeight="520">
+  <Grid RowDefinitions="Auto,2*,3*" ColumnDefinitions="180,180,2*,*">
+    <Button x:Name="SettingsButton"
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="4"
+            Content="Settings"
+            Click="OnSettingsClick" />
+    <Button x:Name="ConnectButton"
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="4"
+            Content="Connect"
+            Click="OnConnectClick" />
+    <grids:SecurityPicker x:Name="SecurityPicker"
+                          Grid.Row="1"
+                          Grid.Column="0"
+                          Grid.ColumnSpan="3"
+                          ShowCommonStatColumns="True" />
+    <grids:TradeGrid x:Name="TradeGrid"
+                     Grid.Row="2"
+                     Grid.Column="0"
+                     Grid.ColumnSpan="3" />
+    <grids:MarketDepthControl x:Name="MarketDepthControl"
+                              Grid.Row="1"
+                              Grid.RowSpan="2"
+                              Grid.Column="3" />
+  </Grid>
+</Window>

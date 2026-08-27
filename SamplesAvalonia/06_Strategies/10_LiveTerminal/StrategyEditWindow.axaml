@@ -1,0 +1,18 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:propertyGrid="using:StockSharp.Xaml.PropertyGrid.Avalonia"
+        x:Class="StockSharp.Samples.Strategies.LiveTerminal.Avalonia.StrategyEditWindow"
+        Title="Quoting strategy"
+        Width="520"
+        Height="680"
+        MinWidth="380"
+        MinHeight="420"
+        WindowStartupLocation="CenterOwner">
+  <Grid Margin="5" RowDefinitions="*,Auto">
+    <propertyGrid:PropertyGridEx x:Name="SettingsGrid" />
+    <StackPanel Grid.Row="1" Margin="0,5,0,0" HorizontalAlignment="Right" Orientation="Horizontal">
+      <Button Width="100" Margin="2" Content="Cancel" Click="OnCancelClick" />
+      <Button Width="100" Margin="2" Content="OK" Click="OnOkClick" />
+    </StackPanel>
+  </Grid>
+</Window>

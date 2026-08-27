@@ -1,0 +1,50 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:charting="using:StockSharp.Xaml.Charting.Avalonia"
+        xmlns:editors="using:StockSharp.Xaml.PropertyGrid.Avalonia.Editors"
+        xmlns:grids="using:StockSharp.Xaml.Grids.Avalonia"
+        xmlns:specialized="using:StockSharp.Xaml.Charting.Avalonia.Specialized"
+        xmlns:windows="using:StockSharp.Xaml.Windows.Avalonia"
+        x:Class="StockSharp.Samples.Strategies.HistoryTrend.Avalonia.MainWindow"
+        Title="Historical trend strategy"
+        Width="1400"
+        Height="900"
+        MinWidth="880"
+        MinHeight="600"
+        WindowStartupLocation="CenterScreen">
+  <Grid RowDefinitions="Auto,*">
+    <Grid Margin="4" ColumnDefinitions="210,170,170,90,90,180,*">
+      <editors:CandleDataTypeEdit x:Name="CandleDataTypeEdit" Margin="2" />
+      <DatePicker x:Name="DatePickerBegin" Grid.Column="1" Margin="2" />
+      <DatePicker x:Name="DatePickerEnd" Grid.Column="2" Margin="2" />
+      <Button x:Name="StartButton" Grid.Column="3" Margin="2" Content="Start" Click="OnStartClick" />
+      <Button x:Name="StopButton" Grid.Column="4" Margin="2" Content="Stop" Click="OnStopClick" IsEnabled="False" />
+      <ProgressBar x:Name="Progress" Grid.Column="5" Margin="6,4,6,4" Minimum="0" Maximum="100" />
+      <TextBlock x:Name="Status" Grid.Column="6" Margin="8,0,8,0" VerticalAlignment="Center" Text="Ready" />
+    </Grid>
+
+    <TabControl Grid.Row="1" Margin="4">
+      <TabItem Header="Chart &amp; market depth">
+        <Grid ColumnDefinitions="*,280">
+          <charting:ChartControl x:Name="Chart" />
+          <grids:MarketDepthControl x:Name="MarketDepth" Grid.Column="1" />
+        </Grid>
+      </TabItem>
+      <TabItem Header="Orders &amp; own trades">
+        <Grid RowDefinitions="*,*">
+          <grids:OrderGrid x:Name="OrderGrid" />
+          <grids:MyTradeGrid x:Name="MyTradeGrid" Grid.Row="1" />
+        </Grid>
+      </TabItem>
+      <TabItem Header="Statistics">
+        <Grid ColumnDefinitions="340,*">
+          <grids:StatisticParameterGrid x:Name="StatisticGrid" />
+          <specialized:EquityCurveChart x:Name="EquityCurve" Grid.Column="1" />
+        </Grid>
+      </TabItem>
+      <TabItem Header="Monitor">
+        <windows:Monitor x:Name="LogMonitor" />
+      </TabItem>
+    </TabControl>
+  </Grid>
+</Window>

@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common_samples_avalonia.props" />
+  <Import Project="..\..\..\Samples\common_connectors.props" />
+  <PropertyGroup>
+    <!-- Tool windows are created through dependency-bearing constructors, never by URI. -->
+    <NoWarn>$(NoWarn);AVLN3001</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(RepoAppsPath)Xaml.Avalonia\Xaml.Avalonia.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\Samples\06_Strategies\10_LiveTerminal\MarketQuotingProcessorStrategy.cs" Link="Strategies\MarketQuotingProcessorStrategy.cs" />
+  </ItemGroup>
+</Project>

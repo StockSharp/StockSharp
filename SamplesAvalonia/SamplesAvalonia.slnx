@@ -1,0 +1,51 @@
+<Solution>
+  <Folder Name="/01_Basic/">
+    <Project Path="01_Basic/01_ConnectAndDownloadInstruments/01_Basic.ConnectAndDownloadInstruments.Avalonia.csproj" />
+    <Project Path="01_Basic/02_MarketDepths/02_Basic.MarketDepths.Avalonia.csproj" />
+    <Project Path="01_Basic/03_Orders/03_Basic.Orders.Avalonia.csproj" />
+  </Folder>
+  <Folder Name="/02_Candles/">
+    <Project Path="02_Candles/01_Realtime/01_Candles.Realtime.Avalonia.csproj" />
+    <Project Path="02_Candles/02_CombineHistoryRealtime/02_Candles.CombineHistoryRealtime.Avalonia.csproj" />
+  </Folder>
+  <Folder Name="/03_Storage/">
+    <Project Path="03_Storage/04_HydraServerConnect/04_Storage.HydraServerConnect.Avalonia.csproj" />
+  </Folder>
+  <Folder Name="/04_Indicators/">
+    <Project Path="04_Indicators/01_SimpleSMA/01_Indicators.SimpleSMA.Avalonia.csproj" />
+    <Project Path="04_Indicators/02_ComplexBollinger/02_Indicators.ComplexBollinger.Avalonia.csproj" />
+    <Project Path="04_Indicators/03_CreateOwn/03_Indicators.CreateOwn.Avalonia.csproj" />
+  </Folder>
+  <Folder Name="/05_Chart/">
+    <Project Path="05_Chart/01_Chart/01_Chart.Avalonia.csproj" />
+    <Project Path="05_Chart/02_ActiveOrders/02_Chart.ActiveOrders.Avalonia.csproj" />
+    <Project Path="05_Chart/03_Performance/03_Chart.Performance.Avalonia.csproj" />
+  </Folder>
+  <Folder Name="/06_Strategies/">
+    <Project Path="06_Strategies/01_HistorySMA/01_Strategies.HistorySMA.Avalonia.csproj" />
+    <Project Path="06_Strategies/02_HistoryBollingerBands/02_Strategies.HistoryBollingerBands.Avalonia.csproj" />
+    <Project Path="06_Strategies/03_HistoryTrend/03_Strategies.HistoryTrend.Avalonia.csproj" />
+    <Project Path="06_Strategies/04_HistoryMarketRule/04_Strategies.HistoryMarketRule.Avalonia.csproj" />
+    <Project Path="06_Strategies/05_HistoryIndex/05_Strategies.HistoryIndex.Avalonia.csproj" />
+    <Project Path="06_Strategies/06_HistoryQuoting/06_Strategies.HistoryQuoting.Avalonia.csproj" />
+    <Project Path="06_Strategies/07_LiveSpread/07_Strategies.LiveSpread.Avalonia.csproj" />
+    <Project Path="06_Strategies/08_LiveArbitrage/08_Strategies.LiveArbitrage.Avalonia.csproj" />
+    <Project Path="06_Strategies/09_LiveOptionsQuoting/09_Strategies.LiveOptionsQuoting.Avalonia.csproj" />
+    <Project Path="06_Strategies/10_LiveTerminal/10_Strategies.LiveTerminal.Avalonia.csproj" />
+  </Folder>
+  <Folder Name="/07_Testing/">
+    <Project Path="07_Testing/01_History/01_Testing.History.Avalonia.csproj" />
+    <Project Path="07_Testing/02_Optimization/02_Testing.Optimization.Avalonia.csproj" />
+    <Project Path="07_Testing/03_RealTime/03_Testing.RealTime.Avalonia.csproj" />
+  </Folder>
+  <Folder Name="/08_Misc/">
+    <Project Path="08_Misc/01_Logging/01_Misc.Logging.Avalonia.csproj" />
+  </Folder>
+  <Folder Name="/09_Advanced/">
+    <Project Path="09_Advanced/01_MultiConnect/01_Advanced.MultiConnect.Avalonia.csproj" />
+    <Project Path="09_Advanced/02_StoreDataLocal/02_Advanced.SaveDataLocal.Avalonia.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="SamplesAvalonia.Tests/SamplesAvalonia.Tests.csproj" />
+  </Folder>
+</Solution>

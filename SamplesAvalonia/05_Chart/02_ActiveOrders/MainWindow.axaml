@@ -1,0 +1,59 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:charting="using:StockSharp.Xaml.Charting.Avalonia.Controls"
+        x:Class="StockSharp.Samples.Chart.ActiveOrders.Avalonia.MainWindow"
+        Title="Chart active orders sample"
+        Width="1100"
+        Height="760"
+        MinWidth="820"
+        MinHeight="560"
+        WindowStartupLocation="CenterScreen">
+  <Grid RowDefinitions="*,3,230">
+    <charting:ChartPanel x:Name="Chart"
+                         Grid.Row="0"
+                         IsInteracted="True"
+                         ChartTheme="ExpressionDark" />
+
+    <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Background="Gray" />
+
+    <Grid Grid.Row="2" ColumnDefinitions="180,2,*,2,*">
+      <StackPanel Grid.Column="0" Margin="6" Spacing="4">
+        <CheckBox x:Name="DelayTransactions" Content="Delay transactions" IsChecked="True" />
+        <CheckBox x:Name="FailTransactions" Content="Fail transactions" />
+        <CheckBox x:Name="ConfirmTransactions" Content="Confirm transactions" />
+        <CheckBox x:Name="SameOrderObject" Content="Use same order object for move" />
+        <TextBlock Margin="0,8,0,0" Text="Create: Ctrl+left/right click on chart, or use its quick-order toolbar." TextWrapping="Wrap" />
+      </StackPanel>
+
+      <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" Background="Gray" />
+
+      <Grid Grid.Column="2" Margin="6" RowDefinitions="*,Auto">
+        <ListBox x:Name="OrdersList" SelectionChanged="OnOrderSelectionChanged">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{ReflectionBinding Description}" />
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <WrapPanel Grid.Row="1" Margin="0,5,0,0" HorizontalAlignment="Center">
+          <Button x:Name="FillButton" Width="66" Margin="3,0" Content="Fill" IsEnabled="False" Click="OnFillClick" />
+          <Button x:Name="CancelButton" Width="66" Margin="3,0" Content="Cancel" IsEnabled="False" Click="OnCancelClick" />
+          <Button x:Name="MoveButton" Width="66" Margin="3,0" Content="Move" IsEnabled="False" Click="OnMoveClick" />
+          <Button Width="66" Margin="3,0" Content="Save" Click="OnSaveClick" />
+          <Button Width="66" Margin="3,0" Content="Load" Click="OnLoadClick" />
+        </WrapPanel>
+      </Grid>
+
+      <GridSplitter Grid.Column="3" VerticalAlignment="Stretch" Background="Gray" />
+
+      <TextBox x:Name="LogBox"
+               Grid.Column="4"
+               Margin="6"
+               AcceptsReturn="True"
+               IsReadOnly="True"
+               TextWrapping="NoWrap"
+               ScrollViewer.HorizontalScrollBarVisibility="Auto"
+               ScrollViewer.VerticalScrollBarVisibility="Auto" />
+    </Grid>
+  </Grid>
+</Window>

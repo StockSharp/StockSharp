@@ -1,0 +1,12 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:charting="using:StockSharp.Xaml.Charting.Avalonia"
+        x:Class="StockSharp.Samples.Indicators.ComplexBollinger.Avalonia.MainWindow"
+        Title="Complex Bollinger Bands"
+        Width="1085"
+        Height="610"
+        MinWidth="640"
+        MinHeight="420"
+        WindowStartupLocation="CenterScreen">
+  <charting:ChartControl x:Name="Chart" />
+</Window>

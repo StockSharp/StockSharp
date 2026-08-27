@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:charting="using:StockSharp.Xaml.Charting.Avalonia.Controls"
+        xmlns:editors="using:StockSharp.Xaml.PropertyGrid.Avalonia.Editors"
+        xmlns:grids="using:StockSharp.Xaml.Grids.Avalonia"
+        xmlns:windows="using:StockSharp.Xaml.Windows.Avalonia"
+        x:Class="StockSharp.Samples.Testing.RealTime.Avalonia.MainWindow"
+        Title="Real-time market emulation"
+        Width="1540"
+        Height="920"
+        MinWidth="1120"
+        MinHeight="700"
+        WindowStartupLocation="CenterScreen">
+  <Grid RowDefinitions="Auto,3,3*,3,2*">
+    <Border Grid.Row="0" Margin="6,6,6,3" Padding="6" BorderBrush="Gray" BorderThickness="1" CornerRadius="4">
+      <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,220,*">
+        <Button x:Name="SettingsButton" Grid.Column="0" Width="105" Margin="3" Content="Settings" Click="OnSettingsClick" />
+        <Button x:Name="ConnectButton" Grid.Column="1" Width="105" Margin="3" Content="Connect" Click="OnConnectClick" />
+        <Button x:Name="FindButton" Grid.Column="2" Width="105" Margin="3" Content="Find..." IsEnabled="False" Click="OnFindClick" />
+        <Button x:Name="NewOrderButton" Grid.Column="3" Width="105" Margin="3" Content="New order" IsEnabled="False" Click="OnNewOrderClick" />
+        <editors:CandleDataTypeEdit x:Name="CandleDataTypeEdit" Grid.Column="4" Margin="8,3,3,3" />
+        <TextBlock x:Name="StatusText" Grid.Column="5" Margin="12,3" VerticalAlignment="Center" Text="Ready" TextWrapping="Wrap" />
+      </Grid>
+    </Border>
+
+    <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Background="Gray" />
+
+    <Grid Grid.Row="2" Margin="6,3" ColumnDefinitions="3*,3,260,3,260,3,330">
+      <charting:ChartPanel x:Name="Chart" Grid.Column="0" IsInteracted="True" ChartTheme="ExpressionDark" />
+
+      <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" Background="Gray" />
+
+      <Grid Grid.Column="2" RowDefinitions="Auto,*">
+        <TextBlock Margin="4" HorizontalAlignment="Center" FontWeight="SemiBold" Text="Emulated order book" />
+        <grids:MarketDepthControl x:Name="EmulatedDepth" Grid.Row="1" MaxDepth="10" />
+      </Grid>
+
+      <GridSplitter Grid.Column="3" VerticalAlignment="Stretch" Background="Gray" />
+
+      <Grid Grid.Column="4" RowDefinitions="Auto,*">
+        <TextBlock Margin="4" HorizontalAlignment="Center" FontWeight="SemiBold" Text="Real order book" />
+        <grids:MarketDepthControl x:Name="RealDepth" Grid.Row="1" MaxDepth="10" />
+      </Grid>
+
+      <GridSplitter Grid.Column="5" VerticalAlignment="Stretch" Background="Gray" />
+
+      <Grid Grid.Column="6" RowDefinitions="Auto,*">
+        <TextBlock Margin="4" HorizontalAlignment="Center" FontWeight="SemiBold" Text="Portfolios and positions" />
+        <grids:PortfolioGrid x:Name="PortfolioGrid" Grid.Row="1" />
+      </Grid>
+    </Grid>
+
+    <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch" Background="Gray" />
+
+    <Grid Grid.Row="4" Margin="6,3,6,6" ColumnDefinitions="2*,3,*,3,*">
+      <grids:SecurityPicker x:Name="SecurityPicker" Grid.Column="0" Title="Securities" ShowCommonStatColumns="True" />
+      <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" Background="Gray" />
+      <TabControl Grid.Column="2">
+        <TabItem Header="Orders">
+          <grids:OrderGrid x:Name="OrderGrid" />
+        </TabItem>
+        <TabItem Header="Own trades">
+          <grids:MyTradeGrid x:Name="MyTradeGrid" />
+        </TabItem>
+      </TabControl>
+      <GridSplitter Grid.Column="3" VerticalAlignment="Stretch" Background="Gray" />
+      <windows:LogControl x:Name="LogControl" Grid.Column="4" />
+    </Grid>
+  </Grid>
+</Window>
