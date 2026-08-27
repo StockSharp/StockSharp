@@ -10,13 +10,13 @@ using System.Threading.Channels;
 public static class IMessageAdapterAsyncExtensions
 {
 	/// <summary>
-	/// Async connect for <see cref="IMessageAdapter"/> via <see cref="ConnectMessage"/>.
+	/// Async connect for <see cref="IMessageTransport"/> via <see cref="ConnectMessage"/>.
 	/// Completes when an outgoing <see cref="ConnectMessage"/> without error is received.
 	/// </summary>
-	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+	/// <param name="adapter"><see cref="IMessageTransport"/></param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see cref="ValueTask"/></returns>
-	public static async ValueTask ConnectAsync(this IMessageAdapter adapter, CancellationToken cancellationToken)
+	public static async ValueTask ConnectAsync(this IMessageTransport adapter, CancellationToken cancellationToken)
 	{
 		if (adapter is null)
 			throw new ArgumentNullException(nameof(adapter));
@@ -50,13 +50,13 @@ public static class IMessageAdapterAsyncExtensions
 	}
 
 	/// <summary>
-	/// Async disconnect for <see cref="IMessageAdapter"/> via <see cref="DisconnectMessage"/>.
+	/// Async disconnect for <see cref="IMessageTransport"/> via <see cref="DisconnectMessage"/>.
 	/// Completes when an outgoing <see cref="DisconnectMessage"/> without error is received.
 	/// </summary>
-	/// <param name="adapter"><see cref="IMessageAdapter"/></param>
+	/// <param name="adapter"><see cref="IMessageTransport"/></param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns><see cref="ValueTask"/></returns>
-	public static async ValueTask DisconnectAsync(this IMessageAdapter adapter, CancellationToken cancellationToken)
+	public static async ValueTask DisconnectAsync(this IMessageTransport adapter, CancellationToken cancellationToken)
 	{
 		if (adapter is null)
 			throw new ArgumentNullException(nameof(adapter));
