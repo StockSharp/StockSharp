@@ -9,6 +9,6 @@
     <Compile Include="..\01_MultiConnect\*.xaml.cs" Exclude="..\01_MultiConnect\App.xaml.cs;..\01_MultiConnect\MainWindow.xaml.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.Charting\Xaml.Charting.csproj" />
   </ItemGroup>
 </Project>

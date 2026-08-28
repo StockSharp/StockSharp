@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\..\common_samples_avalonia.props" />
   <ItemGroup>
-    <ProjectReference Include="$(RepoAppsPath)Xaml.Avalonia\Xaml.Avalonia.csproj" />
+    <ProjectReference Include="$(RepoAppsPath)Xaml\Xaml.Avalonia\Xaml.Avalonia.csproj" />
   </ItemGroup>
 </Project>

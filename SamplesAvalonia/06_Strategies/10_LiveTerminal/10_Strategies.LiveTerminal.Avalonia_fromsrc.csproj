@@ -6,7 +6,7 @@
     <NoWarn>$(NoWarn);AVLN3001</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="$(RepoAppsPath)Xaml.Avalonia\Xaml.Avalonia.csproj" />
+    <ProjectReference Include="$(RepoAppsPath)Xaml\Xaml.Avalonia\Xaml.Avalonia.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\Samples\06_Strategies\10_LiveTerminal\MarketQuotingProcessorStrategy.cs" Link="Strategies\MarketQuotingProcessorStrategy.cs" />

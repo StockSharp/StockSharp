@@ -2,6 +2,6 @@
   <Import Project="..\..\common_samples_netwindows.props" />
   <ItemGroup>
     <PackageReference Include="StockSharp.Web.Api.Client" Version="$(StockSharpVer)" />
-    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml.Charting\Xaml.Charting.csproj" />
+    <ProjectReference Include="..\..\..\..\StockSharpApps\Xaml\Xaml.Charting\Xaml.Charting.csproj" />
   </ItemGroup>
 </Project>

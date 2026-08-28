@@ -2,7 +2,7 @@
   <Import Project="..\..\common_samples_avalonia.props" />
   <Import Project="..\..\..\Samples\common_connectors.props" />
   <ItemGroup>
-    <ProjectReference Include="$(RepoAppsPath)Xaml.Avalonia\Xaml.Avalonia.csproj" />
+    <ProjectReference Include="$(RepoAppsPath)Xaml\Xaml.Avalonia\Xaml.Avalonia.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\Samples\06_Strategies\07_LiveSpread\MqSpreadStrategy.cs" Link="Strategies\MqSpreadStrategy.cs" />
