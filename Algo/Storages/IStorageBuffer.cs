@@ -110,4 +110,10 @@ public interface IStorageBuffer : IPersistable, ICloneable<IStorageBuffer>
 	/// </summary>
 	/// <param name="message">Message.</param>
 	void ProcessOutMessage(Message message);
+
+	/// <summary>
+	/// Puts back what could not be written, so the next round writes it rather than losing it.
+	/// </summary>
+	/// <param name="messages">What was taken and not written.</param>
+	void PutBack(IEnumerable<Message> messages);
 }

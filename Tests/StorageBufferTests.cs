@@ -159,6 +159,153 @@ public class StorageBufferTests : BaseTestClass
 
 	#endregion
 
+	#region What waits to be written
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void MaxBufferedMessages_Zero_KeepsEverything()
+	{
+		var buffer = new StorageBuffer();
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		for (var i = 0; i < 100; i++)
+			buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		buffer.DroppedMessages.AssertEqual(0L, "no limit was stated, so nothing is thrown away");
+		buffer.GetTicks()[secId].Count().AssertEqual(100);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void MaxBufferedMessages_Reached_DropsAndCounts()
+	{
+		// A storage that has stalled must cost data rather than the process: what cannot be written
+		// piles up, and past the limit new data is thrown away instead of growing without bound.
+		var buffer = new StorageBuffer { MaxBufferedMessages = 3 };
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		for (var i = 0; i < 10; i++)
+			buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		buffer.GetTicks()[secId].Count().AssertEqual(3, "three is what the limit allows to wait");
+		buffer.DroppedMessages.AssertEqual(7L, "and what is thrown away is counted, or the loss goes unnoticed");
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void MaxBufferedMessages_RoomIsFreedByDraining()
+	{
+		var buffer = new StorageBuffer { MaxBufferedMessages = 3 };
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		for (var i = 0; i < 3; i++)
+			buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		buffer.GetTicks().Count.AssertEqual(1);
+
+		buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		buffer.GetTicks()[secId].Count()
+			.AssertEqual(1, "what was taken out is no longer waiting, so there is room again");
+		buffer.DroppedMessages.AssertEqual(0L);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void MaxBufferedMessages_CountsEveryKind()
+	{
+		var buffer = new StorageBuffer { MaxBufferedMessages = 2 };
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+		buffer.ProcessOutMessage(new NewsMessage { ServerTime = time, Headline = "one" });
+		buffer.ProcessOutMessage(new NewsMessage { ServerTime = time, Headline = "two" });
+
+		buffer.DroppedMessages
+			.AssertEqual(1L, "the limit is on what waits to be written, whatever kind it is");
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void PutBack_WhatCouldNotBeWritten_IsGivenBack()
+	{
+		// Draining hands the data over and forgets it, so a write that then fails takes the data
+		// with it. What could not be written is put back and written on the next round instead.
+		var buffer = new StorageBuffer();
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		var taken = buffer.GetTicks()[secId].ToArray();
+
+		buffer.GetTicks().Count.AssertEqual(0, "it was handed over, so the buffer no longer holds it");
+
+		buffer.PutBack(taken);
+
+		var again = buffer.GetTicks();
+
+		again.Count.AssertEqual(1, "and it is back, to be written next time");
+		again[secId].Single().TradePrice.Value.AssertEqual(100m);
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void PutBack_CountsAgainstTheLimit()
+	{
+		var buffer = new StorageBuffer { MaxBufferedMessages = 1 };
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		buffer.ProcessOutMessage(CreateTick(secId, time, 100, 10));
+
+		var taken = buffer.GetTicks()[secId].ToArray();
+
+		buffer.ProcessOutMessage(CreateTick(secId, time, 101, 10));
+		buffer.PutBack(taken);
+
+		buffer.DroppedMessages
+			.AssertEqual(1L, "there was room for one, and the one put back has nowhere to go");
+	}
+
+	[TestMethod]
+	[Timeout(5_000)]
+	public void PutBack_EachKindGoesBackWhereItCameFrom()
+	{
+		var buffer = new StorageBuffer();
+		var secId = CreateSecurityId();
+		var time = DateTime.UtcNow;
+
+		var candle = new TimeFrameCandleMessage
+		{
+			SecurityId = secId,
+			DataType = DataType.TimeFrame(TimeSpan.FromMinutes(1)),
+			OpenTime = time,
+			State = CandleStates.Finished,
+		};
+
+		buffer.PutBack(
+		[
+			CreateTick(secId, time, 100, 10),
+			new Level1ChangeMessage { SecurityId = secId, ServerTime = time }.Add(Level1Fields.LastTradePrice, 1m),
+			new QuoteChangeMessage { SecurityId = secId, ServerTime = time },
+			candle,
+			new NewsMessage { ServerTime = time, Headline = "n" },
+		]);
+
+		buffer.GetTicks().Count.AssertEqual(1, "a tick goes back among the ticks");
+		buffer.GetLevel1().Count.AssertEqual(1);
+		buffer.GetOrderBooks().Count.AssertEqual(1);
+		buffer.GetCandles().Count.AssertEqual(1);
+		buffer.GetNews().Count().AssertEqual(1);
+	}
+
+	#endregion
+
 	#region ProcessOutMessage - Ticks Tests
 
 	[TestMethod]

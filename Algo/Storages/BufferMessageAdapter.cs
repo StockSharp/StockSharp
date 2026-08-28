@@ -285,6 +285,24 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 			var token = _cts.Token;
 			var interval = TimeSpan.FromSeconds(10);
 
+			// What the buffer hands over it forgets, so a write that fails would take the data with
+			// it. Each batch is written on its own, and one that cannot be written goes back to be
+			// written next round.
+			async ValueTask writeAsync(IEnumerable<Message> batch, Func<Task> write)
+			{
+				try
+				{
+					await write();
+				}
+				catch (Exception ex)
+				{
+					Buffer.PutBack(batch);
+
+					if (!token.IsCancellationRequested)
+						this.AddErrorLog(ex);
+				}
+			}
+
 			_storageTask = Task.Run(async () =>
 			{
 				while (!token.IsCancellationRequested)
@@ -297,13 +315,13 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 						foreach (var pair in Buffer.GetTicks())
 						{
 							if (incremental)
-								await Settings.GetStorage<ExecutionMessage>(pair.Key, DataType.Ticks).SaveAsync(pair.Value, token);
+								await writeAsync(pair.Value, async () => await Settings.GetStorage<ExecutionMessage>(pair.Key, DataType.Ticks).SaveAsync(pair.Value, token));
 						}
 
 						foreach (var pair in Buffer.GetOrderLog())
 						{
 							if (incremental)
-								await Settings.GetStorage<ExecutionMessage>(pair.Key, DataType.OrderLog).SaveAsync(pair.Value, token);
+								await writeAsync(pair.Value, async () => await Settings.GetStorage<ExecutionMessage>(pair.Key, DataType.OrderLog).SaveAsync(pair.Value, token));
 						}
 
 						foreach (var pair in Buffer.GetTransactions())
@@ -315,7 +333,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 								continue;
 
 							if (incremental)
-								await Settings.GetStorage<ExecutionMessage>(secId, DataType.Transactions).SaveAsync(pair.Value, token);
+								await writeAsync(pair.Value, async () => await Settings.GetStorage<ExecutionMessage>(secId, DataType.Transactions).SaveAsync(pair.Value, token));
 
 							if (snapshot)
 							{
@@ -381,7 +399,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 						foreach (var pair in Buffer.GetOrderBooks())
 						{
 							if (incremental)
-								await Settings.GetStorage<QuoteChangeMessage>(pair.Key, DataType.MarketDepth).SaveAsync(pair.Value, token);
+								await writeAsync(pair.Value, async () => await Settings.GetStorage<QuoteChangeMessage>(pair.Key, DataType.MarketDepth).SaveAsync(pair.Value, token));
 
 							if (snapshot)
 							{
@@ -397,7 +415,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 							var messages = pair.Value.Where(m => m.HasChanges()).ToArray();
 
 							if (incremental)
-								await Settings.GetStorage<Level1ChangeMessage>(pair.Key, DataType.Level1).SaveAsync(messages, token);
+								await writeAsync(messages, async () => await Settings.GetStorage<Level1ChangeMessage>(pair.Key, DataType.Level1).SaveAsync(messages, token));
 
 							if (Settings.IsMode(StorageModes.Snapshot))
 							{
@@ -410,7 +428,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 						foreach (var pair in Buffer.GetCandles())
 						{
-							await Settings.GetStorage(pair.Key.secId, pair.Key.dataType).SaveAsync(pair.Value, token);
+							await writeAsync(pair.Value, async () => await Settings.GetStorage(pair.Key.secId, pair.Key.dataType).SaveAsync(pair.Value, token));
 						}
 
 						foreach (var pair in Buffer.GetPositionChanges())
@@ -418,7 +436,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 							var messages = pair.Value.Where(m => m.HasChanges()).ToArray();
 
 							if (incremental)
-								await Settings.GetStorage<PositionChangeMessage>(pair.Key, DataType.PositionChanges).SaveAsync(messages, token);
+								await writeAsync(messages, async () => await Settings.GetStorage<PositionChangeMessage>(pair.Key, DataType.PositionChanges).SaveAsync(messages, token));
 
 							if (snapshot)
 							{
@@ -433,14 +451,14 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 						if (news.Length > 0)
 						{
-							await Settings.GetStorage<NewsMessage>(default, DataType.News).SaveAsync(news, token);
+							await writeAsync(news, async () => await Settings.GetStorage<NewsMessage>(default, DataType.News).SaveAsync(news, token));
 						}
 
 						var boardStates = Buffer.GetBoardStates().ToArray();
 
 						if (boardStates.Length > 0)
 						{
-							await Settings.GetStorage<BoardStateMessage>(default, DataType.BoardState).SaveAsync(boardStates, token);
+							await writeAsync(boardStates, async () => await Settings.GetStorage<BoardStateMessage>(default, DataType.BoardState).SaveAsync(boardStates, token));
 						}
 
 						await interval.Delay(token);

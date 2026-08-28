@@ -13,16 +13,33 @@ public class StorageBuffer : IStorageBuffer
 		public void Add(TKey key, TMarketData data)
 			=> _data.SyncDo(d => d.SafeAdd(key).Add(data));
 
-		public IDictionary<TKey, IEnumerable<TMarketData>> Get()
-			=> _data.SyncGet(d =>
+		// Says how much was handed over as well as what: the room it frees is room for that much
+		// more to be taken in.
+		public IDictionary<TKey, IEnumerable<TMarketData>> Get(out int count)
+		{
+			var taken = 0;
+
+			var retVal = _data.SyncGet(d =>
 			{
-				var retVal = d.ToDictionary(p => p.Key, p => (IEnumerable<TMarketData>)p.Value);
+				var v = d.ToDictionary(p => p.Key, p => (IEnumerable<TMarketData>)p.Value);
+				taken = d.Sum(p => p.Value.Count);
 				d.Clear();
-				return retVal;
+				return v;
 			});
 
-		public void Clear()
-			=> _data.Clear();
+			count = taken;
+			return retVal;
+		}
+
+		public int Clear()
+		{
+			return _data.SyncGet(d =>
+			{
+				var count = d.Sum(p => p.Value.Count);
+				d.Clear();
+				return count;
+			});
+		}
 	}
 
 	private readonly DataBuffer<SecurityId, ExecutionMessage> _ticksBuffer = new();
@@ -35,6 +52,49 @@ public class StorageBuffer : IStorageBuffer
 	private readonly DataBuffer<(SecurityId, DataType), CandleMessage> _candleBuffer = new();
 	private readonly SynchronizedSet<NewsMessage> _newsBuffer = [];
 	private readonly SynchronizedPairSet<long, (DataType dt, SecurityId secId)> _subscriptionsById = [];
+
+	// How much is waiting to be written, and what it has already cost to keep that bounded.
+	private long _buffered;
+	private long _dropped;
+
+	/// <summary>
+	/// How many messages may wait to be written before new ones are thrown away. Zero, the default,
+	/// is no limit at all.
+	/// </summary>
+	/// <remarks>
+	/// A storage that has stalled - a disk that is full, a server that is down - is not a reason to
+	/// take the process down with it. Past this, what arrives is dropped and counted in
+	/// <see cref="DroppedMessages"/>, which is data lost on purpose rather than memory lost by
+	/// accident.
+	/// </remarks>
+	public long MaxBufferedMessages { get; set; }
+
+	/// <summary>
+	/// How many messages were thrown away because <see cref="MaxBufferedMessages"/> was reached.
+	/// What is counted here is gone.
+	/// </summary>
+	public long DroppedMessages => Interlocked.Read(ref _dropped);
+
+	// Room for one more, taken before it is written down so two threads cannot both take the last.
+	private bool TryReserve()
+	{
+		var buffered = Interlocked.Increment(ref _buffered);
+		var max = MaxBufferedMessages;
+
+		if (max <= 0 || buffered <= max)
+			return true;
+
+		Interlocked.Decrement(ref _buffered);
+		Interlocked.Increment(ref _dropped);
+
+		return false;
+	}
+
+	private void Release(int count)
+	{
+		if (count > 0)
+			Interlocked.Add(ref _buffered, -count);
+	}
 
 	/// <summary>
 	/// Save data only for subscriptions.
@@ -90,63 +150,99 @@ public class StorageBuffer : IStorageBuffer
 	/// </summary>
 	/// <returns>Ticks.</returns>
 	public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetTicks()
-		=> _ticksBuffer.Get();
+	{
+		var retVal = _ticksBuffer.Get(out var count);
+		Release(count);
+		return retVal;
+	}
 
 	/// <summary>
 	/// Get accumulated <see cref="DataType.OrderLog"/>.
 	/// </summary>
 	/// <returns>Order log.</returns>
 	public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetOrderLog()
-		=> _orderLogBuffer.Get();
+	{
+		var retVal = _orderLogBuffer.Get(out var count);
+		Release(count);
+		return retVal;
+	}
 
 	/// <summary>
 	/// Get accumulated <see cref="DataType.Transactions"/>.
 	/// </summary>
 	/// <returns>Transactions.</returns>
 	public IDictionary<SecurityId, IEnumerable<ExecutionMessage>> GetTransactions()
-		=> _transactionsBuffer.Get();
+	{
+		var retVal = _transactionsBuffer.Get(out var count);
+		Release(count);
+		return retVal;
+	}
 
 	/// <summary>
 	/// Get accumulated <see cref="CandleMessage"/>.
 	/// </summary>
 	/// <returns>Candles.</returns>
 	public IDictionary<(SecurityId secId, DataType dataType), IEnumerable<CandleMessage>> GetCandles()
-		=> _candleBuffer.Get();
+	{
+		var retVal = _candleBuffer.Get(out var count);
+		Release(count);
+		return retVal;
+	}
 
 	/// <summary>
 	/// Get accumulated <see cref="Level1ChangeMessage"/>.
 	/// </summary>
 	/// <returns>Level1.</returns>
 	public IDictionary<SecurityId, IEnumerable<Level1ChangeMessage>> GetLevel1()
-		=> _level1Buffer.Get();
+	{
+		var retVal = _level1Buffer.Get(out var count);
+		Release(count);
+		return retVal;
+	}
 
 	/// <summary>
 	/// Get accumulated <see cref="PositionChangeMessage"/>.
 	/// </summary>
 	/// <returns>Position changes.</returns>
 	public IDictionary<SecurityId, IEnumerable<PositionChangeMessage>> GetPositionChanges()
-		=> _positionChangesBuffer.Get();
+	{
+		var retVal = _positionChangesBuffer.Get(out var count);
+		Release(count);
+		return retVal;
+	}
 
 	/// <summary>
 	/// Get accumulated <see cref="QuoteChangeMessage"/>.
 	/// </summary>
 	/// <returns>Order books.</returns>
 	public IDictionary<SecurityId, IEnumerable<QuoteChangeMessage>> GetOrderBooks()
-		=> _orderBooksBuffer.Get();
+	{
+		var retVal = _orderBooksBuffer.Get(out var count);
+		Release(count);
+		return retVal;
+	}
 
 	/// <summary>
 	/// Get accumulated <see cref="NewsMessage"/>.
 	/// </summary>
 	/// <returns>News.</returns>
 	public IEnumerable<NewsMessage> GetNews()
-		=> _newsBuffer.SyncGet(c => c.CopyAndClear());
+	{
+		var retVal = _newsBuffer.SyncGet(c => c.CopyAndClear());
+		Release(retVal.Length);
+		return retVal;
+	}
 
 	/// <summary>
 	/// Get accumulated <see cref="BoardStateMessage"/>.
 	/// </summary>
 	/// <returns>States.</returns>
 	public IEnumerable<BoardStateMessage> GetBoardStates()
-		=> _boardStatesBuffer.SyncGet(c => c.CopyAndClear());
+	{
+		var retVal = _boardStatesBuffer.SyncGet(c => c.CopyAndClear());
+		Release(retVal.Length);
+		return retVal;
+	}
 
 	private static bool CanStore(Message message, bool canStore, bool ignoreGenerated)
 	{
@@ -239,13 +335,14 @@ public class StorageBuffer : IStorageBuffer
 		{
 			case MessageTypes.Reset:
 			{
-				_ticksBuffer.Clear();
-				_orderBooksBuffer.Clear();
-				_orderLogBuffer.Clear();
-				_level1Buffer.Clear();
-				_positionChangesBuffer.Clear();
-				_transactionsBuffer.Clear();
-				_candleBuffer.Clear();
+				Release(_ticksBuffer.Clear());
+				Release(_orderBooksBuffer.Clear());
+				Release(_orderLogBuffer.Clear());
+				Release(_level1Buffer.Clear());
+				Release(_positionChangesBuffer.Clear());
+				Release(_transactionsBuffer.Clear());
+				Release(_candleBuffer.Clear());
+				Release(_newsBuffer.Count);
 				_newsBuffer.Clear();
 				_subscriptionsById.Clear();
 
@@ -259,7 +356,8 @@ public class StorageBuffer : IStorageBuffer
 				if (!CanStore(regMsg))
 					break;
 
-				_transactionsBuffer.Add(regMsg.SecurityId, regMsg.ToExec());
+				if (TryReserve())
+					_transactionsBuffer.Add(regMsg.SecurityId, regMsg.ToExec());
 				break;
 			}
 			case MessageTypes.OrderReplace:
@@ -269,7 +367,8 @@ public class StorageBuffer : IStorageBuffer
 				if (!CanStore(replaceMsg))
 					break;
 
-				_transactionsBuffer.Add(replaceMsg.SecurityId, replaceMsg.ToExec());
+				if (TryReserve())
+					_transactionsBuffer.Add(replaceMsg.SecurityId, replaceMsg.ToExec());
 				break;
 			}
 			//case MessageTypes.OrderCancel:
@@ -316,8 +415,66 @@ public class StorageBuffer : IStorageBuffer
 	private void TryStore<TMessage>(DataBuffer<SecurityId, TMessage> buffer, TMessage message)
 		where TMessage : Message, ISecurityIdMessage
 	{
-		if (CanStore(message))
+		if (CanStore(message) && TryReserve())
 			buffer.Add(message.SecurityId, message.TypedClone());
+	}
+
+	/// <summary>
+	/// Puts back what could not be written, so the next round writes it rather than losing it.
+	/// </summary>
+	/// <remarks>
+	/// Draining hands the data over and forgets it, which is what makes a failed write a loss. A
+	/// caller that could not write what it took gives it back here; what no longer fits is dropped
+	/// and counted, the same as anything else that arrives full.
+	/// </remarks>
+	/// <param name="messages">What was taken and not written.</param>
+	public void PutBack(IEnumerable<Message> messages)
+	{
+		if (messages is null)
+			throw new ArgumentNullException(nameof(messages));
+
+		foreach (var message in messages)
+		{
+			if (!TryReserve())
+				continue;
+
+			switch (message)
+			{
+				case ExecutionMessage execMsg:
+				{
+					var buffer = execMsg.DataType == DataType.Ticks
+						? _ticksBuffer
+						: execMsg.DataType == DataType.OrderLog
+							? _orderLogBuffer
+							: _transactionsBuffer;
+
+					buffer.Add(execMsg.SecurityId, execMsg);
+					break;
+				}
+				case Level1ChangeMessage l1Msg:
+					_level1Buffer.Add(l1Msg.SecurityId, l1Msg);
+					break;
+				case QuoteChangeMessage quoteMsg:
+					_orderBooksBuffer.Add(quoteMsg.SecurityId, quoteMsg);
+					break;
+				case PositionChangeMessage posMsg:
+					_positionChangesBuffer.Add(posMsg.SecurityId, posMsg);
+					break;
+				case CandleMessage candleMsg:
+					_candleBuffer.Add((candleMsg.SecurityId, candleMsg.DataType), candleMsg);
+					break;
+				case NewsMessage newsMsg:
+					_newsBuffer.Add(newsMsg);
+					break;
+				case BoardStateMessage stateMsg:
+					_boardStatesBuffer.Add(stateMsg);
+					break;
+				default:
+					// Nothing here ever held it, so nothing can take it back.
+					Release(1);
+					break;
+			}
+		}
 	}
 
 	/// <summary>
@@ -373,7 +530,8 @@ public class StorageBuffer : IStorageBuffer
 				var newsMsg = (NewsMessage)message;
 
 				if (CanStore(newsMsg))
-					_newsBuffer.Add(newsMsg.TypedClone());
+					if (TryReserve())
+						_newsBuffer.Add(newsMsg.TypedClone());
 
 				break;
 			}
@@ -382,7 +540,8 @@ public class StorageBuffer : IStorageBuffer
 				var stateMsg = (BoardStateMessage)message;
 
 				if (CanStore(stateMsg))
-					_boardStatesBuffer.Add(stateMsg.TypedClone());
+					if (TryReserve())
+						_boardStatesBuffer.Add(stateMsg.TypedClone());
 
 				break;
 			}
@@ -412,7 +571,7 @@ public class StorageBuffer : IStorageBuffer
 			{
 				if (message is CandleMessage candleMsg && candleMsg.State == CandleStates.Finished)
 				{
-					if (CanStore(candleMsg))
+					if (CanStore(candleMsg) && TryReserve())
 						_candleBuffer.Add((candleMsg.SecurityId, candleMsg.DataType), candleMsg.TypedClone());
 				}
 

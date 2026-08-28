@@ -75,6 +75,44 @@ public class BufferMessageAdapterTests : BaseTestClass
 		ValueTask ISnapshotRegistry.InitAsync(CancellationToken cancellationToken) => default;
 	}
 
+	// A storage that cannot take what it is given - a full disk, a server that is down. It says so
+	// the way one does: by throwing out of the write.
+	private sealed class RefusingExecutionStorage(SecurityId securityId) : IMarketDataStorage<ExecutionMessage>
+	{
+		private readonly SecurityId _securityId = securityId;
+
+		public TaskCompletionSource Tried { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		IAsyncEnumerable<DateTime> IMarketDataStorage.GetDatesAsync() => AsyncEnumerable.Empty<DateTime>();
+		DataType IMarketDataStorage.DataType => DataType.Ticks;
+		SecurityId IMarketDataStorage.SecurityId => _securityId;
+		IMarketDataStorageDrive IMarketDataStorage.Drive => Mock.Of<IMarketDataStorageDrive>();
+		bool IMarketDataStorage.AppendOnlyNew { get; set; }
+		IMarketDataSerializer IMarketDataStorage.Serializer => Mock.Of<IMarketDataSerializer>();
+
+		public IAsyncEnumerable<ExecutionMessage> LoadAsync(DateTime date)
+			=> AsyncEnumerable.Empty<ExecutionMessage>();
+
+		IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date) => LoadAsync(date);
+
+		ValueTask<int> IMarketDataStorage.SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken)
+			=> ((IMarketDataStorage<ExecutionMessage>)this).SaveAsync(data.Cast<ExecutionMessage>(), cancellationToken);
+
+		ValueTask IMarketDataStorage.DeleteAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => default;
+		ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken) => default;
+		ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken) => new((IMarketDataMetaInfo)null);
+
+		IMarketDataSerializer<ExecutionMessage> IMarketDataStorage<ExecutionMessage>.Serializer => Mock.Of<IMarketDataSerializer<ExecutionMessage>>();
+
+		public ValueTask DeleteAsync(IEnumerable<ExecutionMessage> data, CancellationToken cancellationToken) => default;
+
+		public ValueTask<int> SaveAsync(IEnumerable<ExecutionMessage> data, CancellationToken cancellationToken)
+		{
+			Tried.TrySetResult();
+			throw new InvalidOperationException("storage is down");
+		}
+	}
+
 	private sealed class TestExecutionStorage(SecurityId securityId) : IMarketDataStorage<ExecutionMessage>
 	{
 		private readonly SecurityId _securityId = securityId;
@@ -285,5 +323,64 @@ public class BufferMessageAdapterTests : BaseTestClass
 		saved[0].ServerTime.AssertEqual(tick.ServerTime);
 		saved[0].TradePrice.AssertEqual(tick.TradePrice);
 		saved[0].TradeVolume.AssertEqual(tick.TradeVolume);
+	}
+
+	[TestMethod]
+	public async Task ASaveThatFailsKeepsWhatItCouldNotWrite()
+	{
+		// Draining hands the data over and forgets it, so a write that throws used to take it with
+		// it - and a storage that is down for a while cost every message that arrived while it was.
+		// What cannot be written goes back, to be written when the storage is there again.
+		var token = CancellationToken;
+
+		var secId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var execStorage = new RefusingExecutionStorage(secId);
+
+		var registry = new Mock<IStorageRegistry>();
+		registry
+			.Setup(r => r.GetStorage(It.IsAny<SecurityId>(), It.IsAny<DataType>(), It.IsAny<IMarketDataDrive>(), It.IsAny<StorageFormats>()))
+			.Returns<SecurityId, DataType, IMarketDataDrive, StorageFormats>((_, dt, _, _) =>
+			{
+				if (dt == DataType.Ticks)
+					return execStorage;
+
+				throw new NotSupportedException(dt.ToString());
+			});
+
+		var settings = new StorageCoreSettings
+		{
+			StorageRegistry = registry.Object,
+			Mode = StorageModes.Incremental,
+			Format = StorageFormats.Binary,
+		};
+
+		var buffer = new StorageBuffer();
+		var tick = CreateTick(secId, DateTime.UtcNow);
+		buffer.ProcessOutMessage(tick);
+
+		var snapshotRegistry = new InMemorySnapshotRegistry();
+
+		var inner = new PassThroughMessageAdapter(new IncrementalIdGenerator());
+
+		using var adapter = new BufferMessageAdapter(inner, settings, buffer, snapshotRegistry);
+
+		await adapter.SendInMessageAsync(new ConnectMessage(), token);
+
+		var tried = await Task.WhenAny(execStorage.Tried.Task, Task.Delay(TimeSpan.FromSeconds(5), token));
+		(tried == execStorage.Tried.Task).AssertTrue("the round has to have tried to write it");
+
+		IDictionary<SecurityId, IEnumerable<ExecutionMessage>> back = null;
+
+		// Put back inside the catch, a moment after the write threw.
+		for (var i = 0; i < 100 && back is not { Count: > 0 }; i++)
+		{
+			back = buffer.GetTicks();
+
+			if (back.Count == 0)
+				await Task.Delay(50, token);
+		}
+
+		back.Count.AssertEqual(1, "what could not be written is still there to be written again");
+		back[secId].Single().TradePrice.AssertEqual(tick.TradePrice);
 	}
 }
