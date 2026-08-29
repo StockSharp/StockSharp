@@ -2608,7 +2608,7 @@
   "IndexRebuildInterval": "Інтервал перебудови індексу.",
   "IndexSample": "Приклад: log(SBER@TQBR) / log(LKOH@TQBR)",
   "IndexSecurity": "Індекс, побудований з комбінації кількох інструментів через математичну формулу.",
-  "IndexSecurityLegsDesc": "По одній нозі в рядку: SECID@BOARD=вага, від'ємна вага задає коротку ногу.",
+  "IndexSecurityLegsDesc": "По одній нозі в рядку: SECID@BOARD=вага, від\u0027ємна вага задає коротку ногу.",
   "IndexValue": "Значення індексу.",
   "IndexWasRebuildInSeconds": "Індекс був перебудований за {0} секунд.",
   "Indexer": "Індексатор",
