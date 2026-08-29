@@ -180,6 +180,7 @@ public class OptimizerTests : BaseTestClass
 	/// Tests that BruteForceOptimizer.RunAsync can be cancelled mid-run.
 	/// </summary>
 	[TestMethod]
+	[Timeout(60_000)]
 	public async Task BruteForceRunAsyncCancellation()
 	{
 		var security = CreateTestSecurity();
@@ -725,6 +726,7 @@ public class OptimizerTests : BaseTestClass
 	/// Tests that GeneticOptimizer.RunAsync can be cancelled.
 	/// </summary>
 	[TestMethod]
+	[Timeout(60_000)]
 	public async Task GeneticRunAsyncCancellation()
 	{
 		var security = CreateTestSecurity();
@@ -1049,6 +1051,7 @@ public class OptimizerTests : BaseTestClass
 	/// Tests cancellation by iteration count inside the loop (consumer-side limit).
 	/// </summary>
 	[TestMethod]
+	[Timeout(60_000)]
 	public async Task BruteForceRunAsyncCancelByIterationCount()
 	{
 		var security = CreateTestSecurity();
@@ -1092,6 +1095,7 @@ public class OptimizerTests : BaseTestClass
 	/// Tests cancellation by timeout (CancelAfter).
 	/// </summary>
 	[TestMethod]
+	[Timeout(60_000)]
 	public async Task BruteForceRunAsyncCancelByTimeout()
 	{
 		var security = CreateTestSecurity();
