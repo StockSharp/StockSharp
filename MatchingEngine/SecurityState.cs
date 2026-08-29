@@ -53,6 +53,13 @@ public class SecurityState(SecurityId securityId)
 	public SecurityStates? TradingState { get; private set; }
 
 	/// <summary>
+	/// The definition the venue stated for this security, or <see langword="null"/> when it has
+	/// stated none. What the engine matches against is derived from it; whoever has to answer what
+	/// the venue lists reads it here rather than keeping a second copy.
+	/// </summary>
+	public SecurityMessage Definition => _securityDefinition;
+
+	/// <summary>
 	/// Process security definition message.
 	/// </summary>
 	public void ProcessSecurity(SecurityMessage msg)

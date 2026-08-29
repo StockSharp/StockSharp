@@ -73,6 +73,16 @@ public class MatchingEngineAdapter : IMessageTransport
 	}
 
 	/// <summary>
+	/// Every security the venue has stated a definition for.
+	/// </summary>
+	/// <remarks>
+	/// The engine is told what an instrument is before anything is matched on it, so this is the
+	/// list of what the venue trades - and the answer to a client asking the same question.
+	/// </remarks>
+	public IEnumerable<SecurityMessage> Securities
+		=> _securityStates.Values.Select(s => s.Definition).Where(d => d is not null);
+
+	/// <summary>
 	/// Stop order manager (read-only access).
 	/// </summary>
 	public IStopOrderManager StopOrderManager => _stopOrderManager;
@@ -374,6 +384,7 @@ public class MatchingEngineAdapter : IMessageTransport
 			ServerTime = serverTime,
 			LocalTime = regMsg.LocalTime,
 			OriginalTransactionId = regMsg.TransactionId,
+			PortfolioName = regMsg.PortfolioName,
 			Side = regMsg.Side,
 			// Report acceptance as Active; a reject, expiry or full fill overwrites this below, but an
 			// order that fills immediately still passes through Active so every order reports acceptance.
@@ -687,6 +698,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				LocalTime = cancelMsg.LocalTime,
 				ServerTime = serverTime,
 				OriginalTransactionId = cancelMsg.OriginalTransactionId,
+				PortfolioName = cancelledStopInfo.PortfolioName,
 				OrderState = OrderStates.Done,
 				Side = cancelledStopInfo.Side,
 				HasOrderInfo = true,
@@ -703,6 +715,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				LocalTime = cancelMsg.LocalTime,
 				ServerTime = serverTime,
 				OriginalTransactionId = cancelMsg.TransactionId,
+				PortfolioName = cancelMsg.PortfolioName,
 				OrderState = OrderStates.Failed,
 				Error = new InvalidOperationException($"Order {cancelMsg.OriginalTransactionId} not found"),
 				HasOrderInfo = true,
@@ -721,6 +734,7 @@ public class MatchingEngineAdapter : IMessageTransport
 			LocalTime = cancelMsg.LocalTime,
 			ServerTime = serverTime,
 			OriginalTransactionId = cancelMsg.OriginalTransactionId,
+			PortfolioName = order.PortfolioName,
 			OrderState = OrderStates.Done,
 			Side = order.Side,
 			Balance = order.Balance,
@@ -748,6 +762,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				LocalTime = replaceMsg.LocalTime,
 				ServerTime = replaceMsg.LocalTime,
 				OriginalTransactionId = replaceMsg.OriginalTransactionId,
+				PortfolioName = oldStopInfo.PortfolioName,
 				OrderState = OrderStates.Done,
 				Side = oldStopInfo.Side,
 				Balance = oldStopInfo.Volume,
@@ -806,6 +821,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				LocalTime = replaceMsg.LocalTime,
 				ServerTime = serverTime,
 				OriginalTransactionId = replaceMsg.OriginalTransactionId,
+				PortfolioName = replaceMsg.PortfolioName,
 				OrderState = OrderStates.Done,
 				Balance = 0,
 				OrderVolume = 0,
@@ -819,6 +835,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				LocalTime = replaceMsg.LocalTime,
 				ServerTime = serverTime,
 				OriginalTransactionId = replaceMsg.TransactionId,
+				PortfolioName = replaceMsg.PortfolioName,
 				OrderState = OrderStates.Failed,
 				Error = error,
 				HasOrderInfo = true,
@@ -837,6 +854,7 @@ public class MatchingEngineAdapter : IMessageTransport
 			LocalTime = replaceMsg.LocalTime,
 			ServerTime = serverTime,
 			OriginalTransactionId = replaceMsg.OriginalTransactionId,
+			PortfolioName = oldOrder.PortfolioName,
 			OrderState = OrderStates.Done,
 			Side = oldOrder.Side,
 			Balance = oldOrder.Balance,

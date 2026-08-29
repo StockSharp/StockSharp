@@ -128,6 +128,105 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	#endregion
 
 	/// <summary>
+	/// The engine is told what an instrument is before anything is matched on it, so it can also
+	/// answer what the venue lists - and whoever needs that answer does not have to keep a second
+	/// copy of every definition it forwarded.
+	/// </summary>
+	[TestMethod]
+	public async Task TheEngineListsTheSecuritiesItWasTold()
+	{
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(new SecurityMessage { SecurityId = _securityId, PriceStep = 0.01m, VolumeStep = 1m }, CancellationToken);
+		await run.SendAsync(new SecurityMessage { SecurityId = _otherSecurityId, PriceStep = 0.1m, VolumeStep = 2m }, CancellationToken);
+
+		// A security the engine only ever saw a book for states no definition, and is not listed.
+		await run.SendAsync(VenueBook(new() { SecurityCode = "QUOTED", BoardCode = "IMEX" }, _start,
+			[new QuoteChange(1m, 1m)], [new QuoteChange(2m, 1m)]), CancellationToken);
+
+		var listed = engine.Securities.ToArray();
+
+		AreEqual(2, listed.Length, $"two definitions were stated, got [{listed.Select(s => s.SecurityId.ToString()).JoinComma()}]");
+		IsTrue(listed.Any(s => s.SecurityId == _securityId && s.PriceStep == 0.01m), "the first must be listed as stated");
+		IsTrue(listed.Any(s => s.SecurityId == _otherSecurityId && s.VolumeStep == 2m), "and the second too");
+	}
+
+	/// <summary>
+	/// Every order row the engine states names the account it is about. A consumer routes and books
+	/// by account, and a row that names none is a row it cannot place: the venue has to put the
+	/// account back from its own memory of the registration, or the wire drops the row outright.
+	/// </summary>
+	[TestMethod]
+	public async Task EveryOrderRowNamesTheAccountItIsAbout()
+	{
+		const string account = "NAMED-PF";
+
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(MoneyRow(account, 1_000_000m, _start), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start,
+			[new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		// A registration, a replace of it, a cancel of the replacement - and the same three against
+		// transactions the engine holds nothing for, which is the path that answers with a failure.
+		await run.SendAsync(NewOrder(5001, account, Sides.Buy, OrderTypes.Limit, 50m, 1m, _start), CancellationToken);
+
+		await run.SendAsync(new OrderReplaceMessage
+		{
+			TransactionId = 5002,
+			OriginalTransactionId = 5001,
+			SecurityId = _securityId,
+			PortfolioName = account,
+			Side = Sides.Buy,
+			OrderType = OrderTypes.Limit,
+			Price = 51m,
+			Volume = 1m,
+			LocalTime = _start,
+		}, CancellationToken);
+
+		await run.SendAsync(new OrderCancelMessage
+		{
+			TransactionId = 5003,
+			OriginalTransactionId = 5002,
+			SecurityId = _securityId,
+			PortfolioName = account,
+			LocalTime = _start,
+		}, CancellationToken);
+
+		await run.SendAsync(new OrderCancelMessage
+		{
+			TransactionId = 5004,
+			OriginalTransactionId = 9999,
+			SecurityId = _securityId,
+			PortfolioName = account,
+			LocalTime = _start,
+		}, CancellationToken);
+
+		await run.SendAsync(new OrderReplaceMessage
+		{
+			TransactionId = 5005,
+			OriginalTransactionId = 9998,
+			SecurityId = _securityId,
+			PortfolioName = account,
+			Side = Sides.Buy,
+			OrderType = OrderTypes.Limit,
+			Price = 52m,
+			Volume = 1m,
+			LocalTime = _start,
+		}, CancellationToken);
+
+		var unnamed = run.Executions
+			.Where(e => e.HasOrderInfo && e.PortfolioName.IsEmpty())
+			.Select(e => $"{e.OrderState} on {e.OriginalTransactionId}")
+			.ToArray();
+
+		AreEqual(0, unnamed.Length,
+			$"every order row must name its account; [{unnamed.JoinComma()}] named none");
+	}
+
+	/// <summary>
 	/// An account is one account however its name is spelled: an order naming it differently has to
 	/// find the money it was funded with, not a second, empty book beside it.
 	/// </summary>

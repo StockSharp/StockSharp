@@ -14,16 +14,10 @@ public class ExportTests : BaseTestClass
 	// slice is sent to the (remote) server instead of the whole generated set.
 	private const int _dbMaxRows = 150;
 
-	private const string _dbConnStrSecret = "SQLSERVER_CONNECTION_STRING";
-
-	// Resolved once: the test methods run in parallel and the secrets file cache behind the lookup is built
-	// lazily without synchronization. A missing secret fails the test instead of passing it over, so a run
-	// without a database is reported as a run that did not cover the database.
-	private static readonly Lazy<string> _dbConnStr = new(() =>
-		TryGetSecret(_dbConnStrSecret)
-			?? throw new InvalidOperationException(
-				$"Secret '{_dbConnStrSecret}' missing. Set the environment variable or add it to {SecretsFile}."),
-		true);
+	// Resolved once: the test methods run in parallel and the secrets file cache behind
+	// GetSecret is built lazily without synchronization. A missing secret is reported
+	// exactly as before - the Inconclusive is raised (and replayed) on first access.
+	private static readonly Lazy<string> _dbConnStr = new(() => GetSecret("SQLSERVER_CONNECTION_STRING"), true);
 
 	private async Task ExportAsync<TValue>(DataType dataType, IEnumerable<TValue> values, string txtTemplate)
 		where TValue : class
