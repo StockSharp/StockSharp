@@ -309,22 +309,29 @@ public abstract class BaseOptimizer : BaseLogReceiver
 				connectors = [.. _startedConnectors];
 
 			foreach (var connector in connectors)
-			{
-				try
-				{
-					if (connector.State is
-						ChannelStates.Started or
-						ChannelStates.Starting or
-						ChannelStates.Suspended or
-						ChannelStates.Suspending)
-						connector.Disconnect();
-				}
-				catch (Exception ex)
-				{
-					this.AddErrorLog(ex);
-				}
-			}
+				StopStartedConnector(connector);
 		});
+	}
+
+	/// <summary>
+	/// Disconnect a connector that is up, so its iteration reaches <see cref="ChannelStates.Stopped"/> and
+	/// signals the worker waiting on it. One that is already stopping gets there on its own.
+	/// </summary>
+	private void StopStartedConnector(HistoryEmulationConnector connector)
+	{
+		try
+		{
+			if (connector.State is
+				ChannelStates.Started or
+				ChannelStates.Starting or
+				ChannelStates.Suspended or
+				ChannelStates.Suspending)
+				connector.Disconnect();
+		}
+		catch (Exception ex)
+		{
+			this.AddErrorLog(ex);
+		}
 	}
 
 	/// <summary>
@@ -436,6 +443,13 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 		SetupIteration(connector, strategy, parameters, iterationId, tcs);
 		await StartIterationAsync(connector, strategy, parameters, cancellationToken);
+
+		// Cancellation disconnects what is running when it fires, and it fires once. A connector that was
+		// still starting then is either missed by that pass or takes the disconnect while it is coming up
+		// and comes up anyway - and nothing else would ever stop it, leaving the wait below with no end.
+		if (cancellationToken.IsCancellationRequested)
+			StopStartedConnector(connector);
+
 		return await tcs.Task;
 	}
 
