@@ -110,6 +110,8 @@ jobs:
 
       - name: Run tests
         working-directory: 'StockSharp (GitHub)'
+        env:
+          SQLSERVER_CONNECTION_STRING: ${{ secrets.SQLSERVER_CONNECTION_STRING }}
         # Seven minutes exceeds the longest per-test timeout (six minutes) while
         # still leaving time to upload a dump before the 30-minute job timeout.
         run: >
