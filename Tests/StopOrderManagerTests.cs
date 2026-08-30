@@ -360,6 +360,55 @@ public class StopOrderManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void GetStopIds_ListsWhatRestsOnThatSecurityOnly()
+	{
+		var mgr = new StopOrderManager();
+		var secId1 = CreateSecId();
+		var secId2 = CreateSecId();
+
+		mgr.Register(CreateStopInfo(secId1, Sides.Buy, stopPrice: 105, transactionId: 1));
+		mgr.Register(CreateStopInfo(secId1, Sides.Sell, stopPrice: 95, transactionId: 2));
+		mgr.Register(CreateStopInfo(secId2, Sides.Buy, stopPrice: 200, transactionId: 3));
+
+		AreEquivalent(new[] { 1L, 2L }, mgr.GetStopIds(secId1).ToArray(), "both stops on the first security");
+		AreEquivalent(new[] { 3L }, mgr.GetStopIds(secId2).ToArray(), "and only its own on the second");
+		HasCount(0, mgr.GetStopIds(CreateSecId()).ToArray(), "a security nothing rests on has nothing to list");
+	}
+
+	[TestMethod]
+	public void GetStopIds_ForgetsWhatWasCancelledOrTriggered()
+	{
+		var mgr = new StopOrderManager();
+		var secId = CreateSecId();
+
+		mgr.Register(CreateStopInfo(secId, Sides.Buy, stopPrice: 105, transactionId: 1));
+		mgr.Register(CreateStopInfo(secId, Sides.Buy, stopPrice: 110, transactionId: 2));
+		mgr.Register(CreateStopInfo(secId, Sides.Sell, stopPrice: 95, transactionId: 3));
+
+		IsTrue(mgr.Cancel(1, out _), "the first stop is cancelled");
+		AreEqual(1, mgr.CheckPrice(secId, 110, DateTime.UtcNow).Count, "and the second one fires");
+
+		AreEquivalent(new[] { 3L }, mgr.GetStopIds(secId).ToArray(), "only the stop that is still waiting is listed");
+
+		mgr.Clear();
+		HasCount(0, mgr.GetStopIds(secId).ToArray(), "and a cleared manager holds nothing at all");
+	}
+
+	[TestMethod]
+	public void GetStopIds_FollowsAReplaceOntoItsSecurity()
+	{
+		var mgr = new StopOrderManager();
+		var from = CreateSecId();
+		var to = CreateSecId();
+
+		mgr.Register(CreateStopInfo(from, Sides.Buy, stopPrice: 105, transactionId: 1));
+		IsTrue(mgr.Replace(1, CreateStopInfo(to, Sides.Buy, stopPrice: 105, transactionId: 2)), "the stop is replaced onto another security");
+
+		HasCount(0, mgr.GetStopIds(from).ToArray(), "nothing rests on the security it left");
+		AreEquivalent(new[] { 2L }, mgr.GetStopIds(to).ToArray(), "and the replacement rests on the one it names");
+	}
+
+	[TestMethod]
 	public void ResultingOrder_HasCorrectFields()
 	{
 		var mgr = new StopOrderManager();

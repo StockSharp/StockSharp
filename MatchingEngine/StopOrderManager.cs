@@ -114,6 +114,20 @@ public class StopOrderManager : IStopOrderManager
 	}
 
 	/// <inheritdoc />
+	public IReadOnlyList<long> GetStopIds(SecurityId securityId)
+	{
+		using (_sync.EnterScope())
+		{
+			if (!_bySecurityId.TryGetValue(securityId, out var list))
+				return [];
+
+			// Copied out, because the caller reads it after the lock while CheckPrice moves the live
+			// list. An id CheckPrice has not pruned yet names a stop that is already gone.
+			return [.. list.Where(_stopOrders.ContainsKey)];
+		}
+	}
+
+	/// <inheritdoc />
 	public void Clear()
 	{
 		using (_sync.EnterScope())

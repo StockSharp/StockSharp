@@ -120,6 +120,13 @@ public interface IStopOrderManager
 	IReadOnlyList<StopOrderTrigger> CheckPrice(SecurityId securityId, decimal price, DateTime time);
 
 	/// <summary>
+	/// Get the stop orders resting on the given security.
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	/// <returns>Transaction IDs of the stop orders registered for the security, empty when none rest on it.</returns>
+	IReadOnlyList<long> GetStopIds(SecurityId securityId);
+
+	/// <summary>
 	/// Clear all stop orders.
 	/// </summary>
 	void Clear();
