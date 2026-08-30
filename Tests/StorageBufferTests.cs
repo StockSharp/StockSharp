@@ -283,7 +283,7 @@ public class StorageBufferTests : BaseTestClass
 		var candle = new TimeFrameCandleMessage
 		{
 			SecurityId = secId,
-			DataType = DataType.TimeFrame(TimeSpan.FromMinutes(1)),
+			DataType = TimeSpan.FromMinutes(1).TimeFrame(),
 			OpenTime = time,
 			State = CandleStates.Finished,
 		};
