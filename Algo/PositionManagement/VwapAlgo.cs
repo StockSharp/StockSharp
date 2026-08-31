@@ -109,7 +109,11 @@ public sealed class VwapAlgo : IPositionModifyAlgo
 	/// <inheritdoc />
 	public void UpdateMarketData(DateTime time, decimal? price, decimal? volume)
 	{
-		_lastTime = time;
+		// The observed clock only moves forward: once it reached EndAt the algo is finished, and an
+		// out-of-order tick dated inside the window must not put it back to work.
+		if (time > _lastTime)
+			_lastTime = time;
+
 		if (time >= _startAt && volume is { } v && v > 0)
 			_marketVolumeSinceStart += v;
 	}
@@ -151,21 +155,19 @@ public sealed class VwapAlgo : IPositionModifyAlgo
 	{
 		// Recover sent counter - the failed in-flight slice never actually consumed market
 		// participation. Only that slice is rolled back, not the whole remaining order.
-		_sentVolume = SentVolumeAfterFailedSlice(_sentVolume, _filledVolume, _totalVolume);
+		_sentVolume = SentVolumeAfterFailedSlice(_sentVolume, _filledVolume);
 		_orderInFlight = false;
 	}
 
 	/// <summary>
 	/// The sent-volume counter after the current in-flight slice fails. Only the in-flight slice
-	/// (sent minus filled) is rolled back - subtracting the whole remaining order
-	/// (<paramref name="totalVolume"/> minus filled) would erase earlier sends and make the
-	/// algorithm re-send them, breaching the participation cap.
+	/// (sent minus filled) is rolled back - subtracting the whole remaining order would erase
+	/// earlier sends and make the algorithm re-send them, breaching the participation cap.
 	/// </summary>
 	/// <param name="sentVolume">Volume sent so far.</param>
 	/// <param name="filledVolume">Volume filled so far.</param>
-	/// <param name="totalVolume">Total volume the algo works.</param>
 	/// <returns>The sent-volume counter to carry on with.</returns>
-	public static decimal SentVolumeAfterFailedSlice(decimal sentVolume, decimal filledVolume, decimal totalVolume)
+	public static decimal SentVolumeAfterFailedSlice(decimal sentVolume, decimal filledVolume)
 	{
 		// The in-flight slice is everything sent but not yet filled; only it failed.
 		var inFlight = Math.Max(0m, sentVolume - filledVolume);
@@ -176,6 +178,10 @@ public sealed class VwapAlgo : IPositionModifyAlgo
 	public void OnOrderCanceled(decimal matchedVolume)
 	{
 		_filledVolume += matchedVolume;
+
+		// Only the part that traded consumed market participation; the unfilled remainder of the
+		// cancelled slice is rolled back off the counter so it can go out again.
+		_sentVolume = SentVolumeAfterFailedSlice(_sentVolume, _filledVolume);
 		_orderInFlight = false;
 	}
 

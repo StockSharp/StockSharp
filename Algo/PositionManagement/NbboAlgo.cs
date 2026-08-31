@@ -16,6 +16,12 @@ namespace StockSharp.Algo.PositionManagement;
 /// markets; here it is the best price the configured market-data feed
 /// reports, so the caller is responsible for pointing the feed at the
 /// right consolidator (or single venue for non-US instruments).
+///
+/// A crossed book (best bid above best ask) is quoted like any other:
+/// the slice goes to the best price on the side the algo works, which
+/// is the only touch it has. While the side it works carries no quote
+/// at all no new slice is sent, and an order already resting keeps its
+/// place until a best shows up again.
 /// </summary>
 public sealed class NbboAlgo : IPositionModifyAlgo
 {
@@ -26,9 +32,10 @@ public sealed class NbboAlgo : IPositionModifyAlgo
 	private decimal _filledVolume;
 	private decimal? _currentBestPrice;
 	private decimal? _restingPrice;
+	private bool _peggedSideQuoted;
 	private bool _orderInFlight;
 	private bool _cancelled;
-	private bool _needCancel;
+	private bool _cancelSent;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="NbboAlgo"/>.
@@ -86,13 +93,15 @@ public sealed class NbboAlgo : IPositionModifyAlgo
 			? depth.GetBestBid()?.Price
 			: depth.GetBestAsk()?.Price;
 
-		if (newBest is null) return;
+		if (newBest is null)
+		{
+			// A side that went empty is not a price move: the resting order keeps its place, but
+			// there is no touch to send a new slice to until a quote comes back.
+			_peggedSideQuoted = false;
+			return;
+		}
 
-		// Top-of-book moved, so the next GetNextAction has to cancel the resting
-		// order before it can re-register at the new best.
-		if (_restingPrice is not null && _restingPrice != newBest)
-			_needCancel = true;
-
+		_peggedSideQuoted = true;
 		_currentBestPrice = newBest;
 	}
 
@@ -101,16 +110,17 @@ public sealed class NbboAlgo : IPositionModifyAlgo
 	{
 		if (IsFinished) return PositionModifyAction.Finished();
 
-		// Reprice path: there is a resting order at a stale price, so cancel
-		// first and register again on the next tick.
-		if (_orderInFlight && _needCancel)
+		// Reprice path: cancel first, register again once the cancel is acknowledged. Staleness
+		// is measured against the current best on every call, so an order sitting at the best
+		// keeps its queue position however the book got there.
+		if (_orderInFlight && !_cancelSent && _restingPrice is not null && _restingPrice != _currentBestPrice)
 		{
-			_needCancel = false;
+			_cancelSent = true;
 			return PositionModifyAction.CancelOrder();
 		}
 
 		if (_orderInFlight) return PositionModifyAction.None();
-		if (_currentBestPrice is null) return PositionModifyAction.None();
+		if (!_peggedSideQuoted) return PositionModifyAction.None();
 
 		var slice = Math.Min(_sliceVolume, RemainingVolume);
 		if (slice <= 0) return PositionModifyAction.Finished();
@@ -126,6 +136,7 @@ public sealed class NbboAlgo : IPositionModifyAlgo
 		_filledVolume += matchedVolume;
 		_orderInFlight = false;
 		_restingPrice = null;
+		_cancelSent = false;
 	}
 
 	/// <inheritdoc />
@@ -133,6 +144,7 @@ public sealed class NbboAlgo : IPositionModifyAlgo
 	{
 		_orderInFlight = false;
 		_restingPrice = null;
+		_cancelSent = false;
 	}
 
 	/// <inheritdoc />
@@ -141,6 +153,7 @@ public sealed class NbboAlgo : IPositionModifyAlgo
 		_filledVolume += matchedVolume;
 		_orderInFlight = false;
 		_restingPrice = null;
+		_cancelSent = false;
 	}
 
 	/// <inheritdoc />

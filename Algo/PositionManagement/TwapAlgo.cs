@@ -8,12 +8,16 @@ namespace StockSharp.Algo.PositionManagement;
 /// .. <see cref="EndAt"/> elapses.
 ///
 /// Each slice is a Market order by default (immediate execution).
-/// Setting <see cref="LimitPrice"/> sends Limit orders instead, capped
-/// at the supplied price for buys / floored for sells.
+/// Setting <see cref="LimitPrice"/> sends every slice as a Limit order
+/// at that price, wherever the market is at the time - the algo does
+/// not move the price to follow it.
 ///
 /// Outstanding child orders are tracked by the caller; this algo only
 /// emits Register actions when the current slice is due and reports
 /// finished once the total volume is exhausted or EndAt has passed.
+/// What a slice failed to execute is folded into the slices that are
+/// still to come; once every one of them has been dispatched, what is
+/// left goes out on its own while the window is still open.
 /// </summary>
 public sealed class TwapAlgo : IPositionModifyAlgo
 {
@@ -85,10 +89,16 @@ public sealed class TwapAlgo : IPositionModifyAlgo
 	public decimal RemainingVolume => Math.Max(0, _totalVolume - _filledVolume);
 
 	/// <inheritdoc />
-	public bool IsFinished => _cancelled || _filledVolume >= _totalVolume || _slicesSent >= _sliceCount;
+	public bool IsFinished => _cancelled || _filledVolume >= _totalVolume || _lastTime >= _endAt;
 
 	/// <inheritdoc />
-	public void UpdateMarketData(DateTime time, decimal? price, decimal? volume) => _lastTime = time;
+	public void UpdateMarketData(DateTime time, decimal? price, decimal? volume)
+	{
+		// The observed clock only moves forward: once it reached EndAt the algo is finished, and an
+		// out-of-order tick dated inside the window must not put it back to work.
+		if (time > _lastTime)
+			_lastTime = time;
+	}
 
 	/// <inheritdoc />
 	public void UpdateOrderBook(IOrderBookMessage depth) { /* TWAP ignores book depth */ }
@@ -108,7 +118,11 @@ public sealed class TwapAlgo : IPositionModifyAlgo
 		var step = totalSpan / _sliceCount;
 		var elapsed = (_lastTime - _startAt).TotalSeconds;
 		var dueSlices = (int)Math.Floor(elapsed / step) + 1;
-		if (dueSlices <= _slicesSent) return PositionModifyAction.None();
+
+		// Once every slice has been dispatched, what the last one left unexecuted has no later slice
+		// to be folded into, so it goes out on its own while the window is still open.
+		if (dueSlices <= _slicesSent && _slicesSent < _sliceCount)
+			return PositionModifyAction.None();
 
 		var sliceVolume = RemainingVolume / Math.Max(1, _sliceCount - _slicesSent);
 		_slicesSent++;
