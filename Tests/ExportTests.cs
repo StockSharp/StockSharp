@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
 using Ecng.Data;
+using Ecng.Security;
 
 using StockSharp.Algo.Export;
 
@@ -15,6 +16,14 @@ public class ExportTests : BaseTestClass
 	private const int _dbMaxRows = 150;
 
 	private const string _dbConnStrSecret = "SQLSERVER_CONNECTION_STRING";
+
+	// Several environments run this suite against one server at the same time, so a table named after
+	// the test method alone is the same table in all of them - one run drops it while another is still
+	// inserting into it. The marker keeps them apart. It is derived rather than random so that a rerun
+	// of the same environment lands on the same tables and DropExisting recycles them, instead of
+	// leaving a fresh set behind on every run: nothing here can enumerate tables to clean up after.
+	private static readonly string _envMarker = (Environment.MachineName + AppContext.BaseDirectory)
+		.UTF8().Sha256()[..8].ToLowerInvariant();
 
 	// Resolved once: the test methods run in parallel and the secrets file cache behind the lookup is built
 	// lazily without synchronization. A missing secret fails the test instead of passing it over, so a run
@@ -93,8 +102,9 @@ public class ExportTests : BaseTestClass
 			DropExisting = true,
 			// Tests share target tables (Ticks and OrderLog both export ExecutionMessage)
 			// and each of them drops and recreates its table, so the name has to be unique
-			// per test for the class to run in parallel.
-			TableNamePrefix = $"SS_{TestContext.TestName}_",
+			// per test for the class to run in parallel, and per environment for the runs
+			// that share the server not to drop each other's tables.
+			TableNamePrefix = $"SS_{TestContext.TestName}_{_envMarker}_",
 			// Below the slice size on purpose: keeps the multi-batch path of the exporter
 			// covered, while the production default would send the slice as one batch.
 			BatchSize = 100,
