@@ -39,6 +39,9 @@ public class BufferedMarketDataDrive : BaseLogReceiver, IMarketDataDrive
 	private CancellationTokenSource _cts;
 	private long _dropped;
 	private long _failedFlushes;
+	private long _buffered;
+	private TimeSpan _flushInterval = TimeSpan.FromSeconds(10);
+	private int _maxBatchSize = 100000;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="BufferedMarketDataDrive"/>.
@@ -85,12 +88,34 @@ public class BufferedMarketDataDrive : BaseLogReceiver, IMarketDataDrive
 	/// <summary>
 	/// How long what has been given to the drive may wait before it is written.
 	/// </summary>
-	public TimeSpan FlushInterval { get; set; } = TimeSpan.FromSeconds(10);
+	public TimeSpan FlushInterval
+	{
+		get => _flushInterval;
+		set
+		{
+			// The loop waits this long between rounds, so anything but a positive interval turns it
+			// into a spin.
+			if (value <= TimeSpan.Zero)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_flushInterval = value;
+		}
+	}
 
 	/// <summary>
 	/// How many messages are taken from the queue before a write is forced.
 	/// </summary>
-	public int MaxBatchSize { get; set; } = 100000;
+	public int MaxBatchSize
+	{
+		get => _maxBatchSize;
+		set
+		{
+			if (value <= 0)
+				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
+
+			_maxBatchSize = value;
+		}
+	}
 
 	/// <summary>
 	/// How many messages had to be thrown away because the drive could not take them: the queue was
@@ -102,6 +127,11 @@ public class BufferedMarketDataDrive : BaseLogReceiver, IMarketDataDrive
 	/// How many writes the underlying storage refused. The data of a refused write is kept.
 	/// </summary>
 	public long FailedFlushes => Interlocked.Read(ref _failedFlushes);
+
+	/// <summary>
+	/// How many messages have been taken from the queue and are waiting in the batches to be written.
+	/// </summary>
+	public long BufferedMessages => Interlocked.Read(ref _buffered);
 
 	private Channel<Message> CreateQueue()
 		=> Channel.CreateBounded<Message>(new BoundedChannelOptions(_queueCapacity)
@@ -137,6 +167,9 @@ public class BufferedMarketDataDrive : BaseLogReceiver, IMarketDataDrive
 	/// <returns><see cref="ValueTask"/></returns>
 	public ValueTask StartAsync(CancellationToken cancellationToken)
 	{
+		if (IsDisposed)
+			throw new ObjectDisposedException(nameof(BufferedMarketDataDrive));
+
 		if (_loop != null)
 			return default;
 
@@ -221,8 +254,11 @@ public class BufferedMarketDataDrive : BaseLogReceiver, IMarketDataDrive
 	private async Task LoopAsync(CancellationToken cancellationToken)
 	{
 		var lastFlush = DateTime.UtcNow;
+		var takenSinceFlush = 0;
 		var buffers = new Dictionary<(SecurityId secId, DataType dataType), List<Message>>();
-		var bufferedCount = 0L;
+
+		// The batches belong to this loop, so a loop that starts has nothing waiting in them.
+		Interlocked.Exchange(ref _buffered, 0);
 
 		// The token is passed in rather than captured: the last write of all runs after the loop was
 		// cancelled, and writing with a cancelled token would throw away what it is there to save.
@@ -248,7 +284,7 @@ public class BufferedMarketDataDrive : BaseLogReceiver, IMarketDataDrive
 						// Cleared only after a confirmed write - a failed one has to keep the batch
 						// buffered for the next round instead of dropping market data.
 						list.Clear();
-						bufferedCount -= batchSize;
+						Interlocked.Add(ref _buffered, -batchSize);
 					}
 					catch (Exception ex)
 					{
@@ -267,6 +303,7 @@ public class BufferedMarketDataDrive : BaseLogReceiver, IMarketDataDrive
 			}
 
 			lastFlush = DateTime.UtcNow;
+			takenSinceFlush = 0;
 		}
 
 		void AddToBuffer(Message message)
@@ -276,14 +313,14 @@ public class BufferedMarketDataDrive : BaseLogReceiver, IMarketDataDrive
 
 			// If writes keep failing (the storage stalled) the batches grow without bound. Once the
 			// cap is reached, drop new data so memory stays bounded while the storage recovers.
-			if (bufferedCount >= _maxBufferedMessages)
+			if (Interlocked.Read(ref _buffered) >= _maxBufferedMessages)
 			{
 				Dropped();
 				return;
 			}
 
 			buffers.SafeAdd((secMsg.SecurityId, dataType.Immutable())).Add(message);
-			bufferedCount++;
+			Interlocked.Increment(ref _buffered);
 		}
 
 		while (!cancellationToken.IsCancellationRequested)
@@ -293,17 +330,14 @@ public class BufferedMarketDataDrive : BaseLogReceiver, IMarketDataDrive
 				var waitTask = _queue.Reader.WaitToReadAsync(cancellationToken).AsTask();
 				await Task.WhenAny(waitTask, FlushInterval.Delay(cancellationToken));
 
-				var batchCount = 0;
-
 				while (_queue.Reader.TryRead(out var message))
 				{
 					AddToBuffer(message);
 
-					if (++batchCount >= MaxBatchSize)
-					{
+					// Counted across reads, not within one: a batch that fills up over several of
+					// them still forces the write. Only a write resets the count.
+					if (++takenSinceFlush >= MaxBatchSize)
 						await FlushAsync(cancellationToken);
-						batchCount = 0;
-					}
 				}
 
 				if ((DateTime.UtcNow - lastFlush) >= FlushInterval)
