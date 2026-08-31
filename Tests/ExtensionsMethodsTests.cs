@@ -3308,6 +3308,62 @@ public class ExtensionsMethodsTests : BaseTestClass
 
 	#endregion
 
+	#region GetAnsweredSubscriptionIds
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_PrefersSubscriptionIds()
+	{
+		var msg = new TimeFrameCandleMessage { OriginalTransactionId = 11, SubscriptionId = 22, SubscriptionIds = [77] };
+
+		msg.GetAnsweredSubscriptionIds().AssertEqual([77L]);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_ReturnsEveryTaggedSubscription()
+	{
+		var msg = new TimeFrameCandleMessage { SubscriptionIds = [1L, 2L, 3L] };
+
+		msg.GetAnsweredSubscriptionIds().AssertEqual([1L, 2L, 3L]);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_FallsBackToSubscriptionId()
+	{
+		var msg = new TimeFrameCandleMessage { OriginalTransactionId = 11, SubscriptionId = 22 };
+
+		msg.GetAnsweredSubscriptionIds().AssertEqual([22L]);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_FallsBackToOriginalTransactionId()
+	{
+		var msg = new TimeFrameCandleMessage { OriginalTransactionId = 11 };
+
+		msg.GetAnsweredSubscriptionIds().AssertEqual([11L]);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_NotSubscriptionIdMessage_UsesOriginalTransactionId()
+	{
+		var msg = new SubscriptionOnlineMessage { OriginalTransactionId = 5 };
+
+		msg.GetAnsweredSubscriptionIds().AssertEqual([5L]);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_NoIds_ReturnsEmpty()
+	{
+		new TimeFrameCandleMessage().GetAnsweredSubscriptionIds().Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public void GetAnsweredSubscriptionIds_Null_Throws()
+	{
+		Throws<ArgumentNullException>(() => ((Message)null).GetAnsweredSubscriptionIds());
+	}
+
+	#endregion
+
 	#region HasOrderId (OrderStatusMessage)
 
 	[TestMethod]

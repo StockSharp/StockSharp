@@ -1859,6 +1859,39 @@ public static partial class Extensions
 	}
 
 	/// <summary>
+	/// Get identifiers of the requests the specified message answers.
+	/// </summary>
+	/// <remarks>
+	/// Extends <see cref="GetSubscriptionIds(ISubscriptionIdMessage)"/> by the case of a reply that carries
+	/// no subscription tag at all: such a message names only <see cref="IOriginalTransactionIdMessage.OriginalTransactionId"/>,
+	/// the transaction of the request it answers, and that transaction is the single subscription it belongs to.
+	/// Null is rejected the same way as by the neighbouring methods: a message being dispatched is never absent,
+	/// so a null here is a defect of the caller and must surface instead of passing for "answers nothing".
+	/// </remarks>
+	/// <param name="message">Message.</param>
+	/// <returns>Identifiers, empty when the message answers nothing.</returns>
+	/// <exception cref="ArgumentNullException"><paramref name="message"/> is <see langword="null"/>.</exception>
+	public static long[] GetAnsweredSubscriptionIds(this Message message)
+	{
+		if (message is null)
+			throw new ArgumentNullException(nameof(message));
+
+		if (message is ISubscriptionIdMessage subscrMsg)
+		{
+			if (subscrMsg.SubscriptionIds is { Length: > 0 } ids)
+				return ids;
+
+			if (subscrMsg.SubscriptionId != 0)
+				return [subscrMsg.SubscriptionId];
+		}
+
+		if (message is IOriginalTransactionIdMessage originMsg && originMsg.OriginalTransactionId != 0)
+			return [originMsg.OriginalTransactionId];
+
+		return [];
+	}
+
+	/// <summary>
 	/// Determines whether the <paramref name="execMsg"/> contains market-data info.
 	/// </summary>
 	/// <param name="execMsg">The message contains information about the execution.</param>
