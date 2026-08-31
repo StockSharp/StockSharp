@@ -385,11 +385,6 @@ public static class FixExtendedMessages
 
 	/// <summary>
 	/// </summary>
-	[Obsolete]		
-	public const string AvailableDataRequest = "ADR";
-
-	/// <summary>
-	/// </summary>
 	[Obsolete]
 	public const string AvailableDataInfo = "ADI";
 }
