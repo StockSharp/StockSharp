@@ -463,6 +463,9 @@ public class MatchingEngineAdapter : IMessageTransport
 
 		var isIOC = regMsg.TimeInForce == TimeInForce.CancelBalance;
 		var isFOK = regMsg.TimeInForce == TimeInForce.MatchOrCancel;
+		// A market order names no price, so nothing of it can rest in the book: what the book could
+		// not fill is cancelled with the order, the same way as for IOC and FOK.
+		var isMarket = regMsg.OrderType == OrderTypes.Market;
 		var hasTrades = matchResult.Trades.Count > 0;
 
 		var marketPrice = regMsg.Side == Sides.Buy
@@ -620,10 +623,10 @@ public class MatchingEngineAdapter : IMessageTransport
 			}
 		}
 
-		// Handle IOC/FOK cancelled portion
+		// Handle the cancelled portion of an order that cannot rest
 		var isCancelled = matchResult.FinalState == OrderStates.Done && matchResult.RemainingVolume > 0;
 
-		if ((isIOC || isFOK) && isCancelled)
+		if ((isIOC || isFOK || isMarket) && isCancelled)
 		{
 			if (!hasTrades)
 			{

@@ -913,6 +913,36 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// A market order the book cannot fill in full ends Done with a balance that rests nowhere: it
+	/// never enters the book, so no cancel and no expiry can reach it afterwards. The money blocked
+	/// for that balance at registration is released with the order, or the account loses that much
+	/// buying power for good on every partial market fill.
+	/// </summary>
+	[TestMethod]
+	public async Task AMarketOrderReleasesWhatItsUnfilledBalanceBlocked()
+	{
+		const long tx = 4101;
+		const string account = "Client";
+
+		var engine = new MatchingEngineAdapter();
+		engine.Settings.IncreaseDepthVolume = false;
+
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 1m)], [new QuoteChange(101m, 1m)]), CancellationToken);
+		await run.SendAsync(NewOrder(tx, account, Sides.Buy, OrderTypes.Market, 0m, 100m, _start.AddSeconds(1)), CancellationToken);
+
+		var state = run.Executions.Last(m => m.OriginalTransactionId == tx && m.HasOrderInfo && !m.HasTradeInfo());
+
+		AreEqual(OrderStates.Done, state.OrderState);
+		AreEqual(99m, state.Balance, "one lot was offered, so ninety-nine of the hundred found no liquidity");
+
+		// Registration blocked all hundred lots at the best bid of 100. What stays blocked afterwards
+		// is the one lot actually bought, at the price it was bought at.
+		AreEqual(101m, engine.PortfolioManager.GetPortfolio(account).BlockedMoney);
+	}
+
+	/// <summary>
 	/// An order in this book is filled by a counterparty in this book and by nothing else. A print
 	/// reports a trade between two other parties: it takes no volume from any level here, so a
 	/// resting limit the print traded through is still resting, for its whole balance, afterwards.

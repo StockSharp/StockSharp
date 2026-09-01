@@ -584,6 +584,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		var isIOC = regMsg.TimeInForce == TimeInForce.CancelBalance;
 		var isFOK = regMsg.TimeInForce == TimeInForce.MatchOrCancel;
+		// A market order cannot rest either, so its unfilled balance is cancelled the same way.
+		var isMarket = regMsg.OrderType == OrderTypes.Market;
 		var hasTrades = matchResult.Trades.Count > 0;
 
 		var marketPrice = regMsg.Side == Sides.Buy
@@ -672,7 +674,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		var isCancelled = matchResult.FinalState == OrderStates.Done && matchResult.RemainingVolume > 0;
 
-		if ((isIOC || isFOK) && isCancelled)
+		if ((isIOC || isFOK || isMarket) && isCancelled)
 		{
 			if (!hasTrades)
 			{
@@ -823,12 +825,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			new(execPrice, tradeVolume, order.Side, [])
 		};
 
-		var isFullyMatched = leftBalance <= 0;
-		var finalState = isFullyMatched ? OrderStates.Done : OrderStates.Active;
-		var shouldPlaceInBook = !isFullyMatched && order.TimeInForce != TimeInForce.CancelBalance;
+		// A market order names no price, so a balance it leaves has nowhere to rest: queuing it would
+		// put a level at zero into the book. It is cancelled instead, as OrderMatcher does for a
+		// market order the book cannot fill in full.
+		var isCancelBalance = order.TimeInForce == TimeInForce.CancelBalance || order.OrderType == OrderTypes.Market;
 
-		if (order.TimeInForce == TimeInForce.CancelBalance)
-			finalState = OrderStates.Done;
+		var isFullyMatched = leftBalance <= 0;
+		var finalState = isFullyMatched || isCancelBalance ? OrderStates.Done : OrderStates.Active;
+		var shouldPlaceInBook = !isFullyMatched && !isCancelBalance;
 
 		return new MatchResult
 		{

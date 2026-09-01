@@ -2398,4 +2398,121 @@ public class MarketEmulatorTests : BaseTestClass
 			State = ChannelStates.Stopping,
 		}, CancellationToken);
 	}
+
+	/// <summary>
+	/// A market order names no price, so nothing of it can rest in the order book. Candle matching
+	/// caps a fill at the candle's traded volume; queuing the balance left over puts a level at the
+	/// order's own zero price into the book, and once the candle subscription ends and the book
+	/// takes matching back, a later opposite order trades against that level at a price of zero.
+	/// </summary>
+	[TestMethod]
+	public async Task CandleMarketOrderRemainderIsNotQueued()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		var candleSubscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = candleSubscriptionId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = DataType.MarketDepth,
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		// The candle traded 0.32, far less than the order below asks for.
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OpenTime = now.AddMinutes(-5),
+			CloseTime = now,
+			OpenPrice = 100,
+			HighPrice = 105,
+			LowPrice = 95,
+			ClosePrice = 104,
+			TotalVolume = 0.32m,
+		}, CancellationToken);
+
+		var buy = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		};
+
+		await emu.SendInMessageAsync(buy, CancellationToken);
+
+		var buyTrades = res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == buy.TransactionId && m.HasTradeInfo())
+			.ToArray();
+
+		AreEqual(1, buyTrades.Length, "the candle fills the order once, for what it traded");
+		AreEqual(0.32m, buyTrades[0].TradeVolume);
+
+		var buyState = res
+			.OfType<ExecutionMessage>()
+			.Last(m => m.OriginalTransactionId == buy.TransactionId && m.HasOrderInfo && !m.HasTradeInfo());
+
+		AreEqual(OrderStates.Done, buyState.OrderState, "a market order that cannot be filled further is done, not active");
+		AreEqual(0.68m, buyState.Balance);
+
+		foreach (var book in res.OfType<QuoteChangeMessage>())
+		{
+			IsFalse(book.Bids.Any(q => q.Price <= 0), "a market order must leave no bid at its own zero price");
+			IsFalse(book.Asks.Any(q => q.Price <= 0), "a market order must leave no ask at its own zero price");
+		}
+
+		var position = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName).GetPosition(id);
+
+		AreEqual(0m, position.TotalBidsVolume, "the cancelled balance must hold nothing blocked against the account");
+
+		// The candle subscription ends, so the book matches again and whatever the buy left in it is
+		// reachable by the opposite order.
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			OriginalTransactionId = candleSubscriptionId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = false,
+		}, CancellationToken);
+
+		var sell = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now.AddSeconds(1),
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		};
+
+		await emu.SendInMessageAsync(sell, CancellationToken);
+
+		var trades = res.OfType<ExecutionMessage>().Where(m => m.HasTradeInfo()).ToArray();
+
+		IsFalse(trades.Any(m => m.TradePrice is not decimal price || price <= 0), "every trade carries a positive price");
+		AreEqual(1, trades.Count(m => m.OriginalTransactionId == buy.TransactionId), "the first order trades only against the candle");
+
+		var buyTradeIds = trades.Where(m => m.OriginalTransactionId == buy.TransactionId).Select(m => m.TradeId);
+		var sellTradeIds = trades.Where(m => m.OriginalTransactionId == sell.TransactionId).Select(m => m.TradeId);
+
+		IsFalse(buyTradeIds.Intersect(sellTradeIds).Any(), "the two orders must not be the two sides of one trade");
+	}
 }
