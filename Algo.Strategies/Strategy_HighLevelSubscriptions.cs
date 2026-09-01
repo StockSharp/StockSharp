@@ -209,13 +209,10 @@ public partial class Strategy
 		{
 			var type = typeof(T);
 
-			void tryActivateProtection(decimal price, DateTime time)
-			{
-				var info = _strategy.PosControllerTryActivate(price, time);
-
-				if (info is not null)
-					_strategy.ActiveProtection(info.Value);
-			}
+			// Protection is per (security, portfolio), so the incoming value's own security decides
+			// which controller may see the price.
+			void tryActivateProtection(SecurityId securityId, decimal price, DateTime time)
+				=> _strategy.TryActivateProtection(securityId, price, time, requireStarted: true);
 
 			void handle(object v, DateTime time, Func<ICandleMessage> getCandle)
 			{
@@ -238,8 +235,8 @@ public partial class Strategy
 						if (_strategy.ProcessState != ProcessStates.Started)
 							return;
 
-						tryActivateProtection(v.ClosePrice, _strategy.HighLevelCurrentTime);
-
+						// Protection for candles is activated by Strategy.OnCandleReceived, which raises
+						// the event this rule listens to; the branches below have no such counterpart.
 						handle(v, v.ServerTime, () => v);
 					})
 					.Apply(_strategy);
@@ -255,7 +252,7 @@ public partial class Strategy
 						if (_strategy.ProcessState != ProcessStates.Started)
 							return;
 
-						tryActivateProtection(v.Price, _strategy.HighLevelCurrentTime);
+						tryActivateProtection(v.SecurityId, v.Price, _strategy.HighLevelCurrentTime);
 
 						handle(v, v.ServerTime, () => new TickCandleMessage
 						{
@@ -295,7 +292,7 @@ public partial class Strategy
 						if (value is not decimal price)
 							return;
 
-						tryActivateProtection(price, _strategy.HighLevelCurrentTime);
+						tryActivateProtection(v.SecurityId, price, _strategy.HighLevelCurrentTime);
 
 						handle(v, v.ServerTime, () => new TickCandleMessage
 						{
@@ -326,7 +323,7 @@ public partial class Strategy
 						if (v.TryGet(field) is not decimal price)
 							return;
 
-						tryActivateProtection(price, _strategy.HighLevelCurrentTime);
+						tryActivateProtection(v.SecurityId, price, _strategy.HighLevelCurrentTime);
 
 						handle(v, v.ServerTime, () => new TickCandleMessage
 						{
@@ -648,11 +645,6 @@ public partial class Strategy
 			return this;
 		}
 	}
-
-	// Single-security protection activation used by the high-level handlers, delegating to the protective
-	// controller declared in Strategy.cs.
-	private (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition)? PosControllerTryActivate(decimal price, DateTime time)
-		=> _posController?.TryActivate(price, time);
 
 	/// <summary>
 	/// Subscribe to candles.

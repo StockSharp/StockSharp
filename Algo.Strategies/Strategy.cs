@@ -44,7 +44,10 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	private bool _protectiveUseMarketOrders;
 	private bool _isLocalStop;
 	private ProtectiveController _protectiveController;
-	private IProtectivePositionController _posController;
+	// Protection is per security and portfolio: one controller for each pair the strategy has traded,
+	// and the security each of them is registered under, so a price reaches the controller watching it.
+	private readonly SynchronizedDictionary<(Security security, Portfolio portfolio), IProtectivePositionController> _posControllers = [];
+	private readonly SynchronizedDictionary<SecurityId, Security> _protectedSecurities = [];
 
 	/// <summary>
 	/// Initializes a new instance <see cref="Strategy"/>.
@@ -147,17 +150,26 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			{
 				var security = trade.Order.Security;
 				var portfolio = trade.Order.Portfolio;
+				var key = (security, portfolio);
 
-				_posController ??= _protectiveController.GetController(
-					security.ToSecurityId(),
-					portfolio.Name,
-					GetProtectiveBehaviourFactory(security, portfolio),
-					_takeProfit ?? new(), _stopLoss ?? new(), _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
+				if (!_posControllers.TryGetValue(key, out var posController))
+				{
+					var securityId = security.ToSecurityId();
 
-				var info = _posController?.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
+					posController = _protectiveController.GetController(
+						securityId,
+						portfolio.Name,
+						GetProtectiveBehaviourFactory(security, portfolio),
+						_takeProfit ?? new(), _stopLoss ?? new(), _isStopTrailing, _takeTimeout, _stopTimeout, _protectiveUseMarketOrders);
+
+					_protectedSecurities[securityId] = security;
+					_posControllers[key] = posController;
+				}
+
+				var info = posController.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
 
 				if (info is not null)
-					ActiveProtection(info.Value);
+					ActiveProtection(security, info.Value);
 			}
 		};
 		Positions.NewPosition += OnNewPosition;
@@ -1227,7 +1239,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		StartedTime = default;
 
 		_protectiveController = default;
-		_posController = default;
+		_posControllers.Clear();
+		_protectedSecurities.Clear();
 		_takeProfit = default;
 		_stopLoss = default;
 		_isStopTrailing = default;
@@ -1298,9 +1311,9 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		_isLocalStop = isLocalStop;
 	}
 
-	private void ActiveProtection((bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition) info)
+	private void ActiveProtection(Security security, (bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition) info)
 	{
-		var order = CreateOrder(info.side, info.price, info.volume);
+		var order = CreateOrder(info.side, info.price, info.volume, security);
 
 		if (info.condition != null)
 		{
@@ -1320,7 +1333,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			return;
 
 		foreach (var info in _protectiveController.TryActivate(securityId, price, time))
-			ActiveProtection(info);
+			ActiveProtection(_protectedSecurities.TryGetValue(securityId), info);
 	}
 
 	private IProtectiveBehaviourFactory GetProtectiveBehaviourFactory(Security security, Portfolio portfolio)

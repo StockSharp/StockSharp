@@ -1079,4 +1079,280 @@ public class ProtectionTests : BaseTestClass
 		// Correct label for a stop-only registration is false; the engine wrongly reports true.
 		isTake.AssertFalse();
 	}
+
+	// Exposes the protected high-level subscription helpers, so a test can bind several securities.
+	private class HighLevelBindStrategy : Strategy
+	{
+		public ISubscriptionHandler<ICandleMessage> BindCandles(Security security)
+			=> SubscribeCandles(TimeSpan.FromMinutes(1), true, security).Bind(_ => { }).Start();
+
+		public ISubscriptionHandler<ITickTradeMessage> BindTicks(Security security)
+			=> SubscribeTicks(security).Bind(_ => { }).Start();
+	}
+
+	private static Security CreateProtectionSecurity(string code)
+	{
+		var secId = new SecurityId { SecurityCode = code, BoardCode = BoardCodes.Test };
+
+		return new()
+		{
+			Id = secId.ToStringId(),
+			Code = code,
+			Board = ExchangeBoard.Test,
+			PriceStep = 0.01m,
+		};
+	}
+
+	private static TimeFrameCandleMessage CreateProtectionCandle(Security security, decimal close, DateTime time)
+		=> new()
+		{
+			SecurityId = security.ToSecurityId(),
+			OpenTime = time,
+			LocalTime = time,
+			OpenPrice = close,
+			HighPrice = close,
+			LowPrice = close,
+			ClosePrice = close,
+			TotalVolume = 1m,
+			State = CandleStates.Finished,
+		};
+
+	private static ExecutionMessage CreateProtectionTick(Security security, decimal price, DateTime time)
+		=> new()
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = security.ToSecurityId(),
+			ServerTime = time,
+			LocalTime = time,
+			TradePrice = price,
+			TradeVolume = 1m,
+		};
+
+	// Opens a ten-lot long, filled in one trade, the way the strategy sees it come back from a connector.
+	private static void EnterProtectedLong(Strategy strategy, Subscription txSub, Security security, Portfolio portfolio, long transactionId, decimal price, DateTime time)
+	{
+		var entry = new Order
+		{
+			TransactionId = transactionId,
+			State = OrderStates.Pending,
+			Side = Sides.Buy,
+			Price = price,
+			Volume = 10m,
+			Security = security,
+			Portfolio = portfolio,
+			Time = time,
+		};
+
+		strategy.RegisterOrder(entry);
+		strategy.OnConnectorOrderReceived(txSub, entry);
+		entry.State = OrderStates.Active;
+		strategy.OnConnectorOrderReceived(txSub, entry);
+
+		strategy.OnTradeReceived(txSub, new MyTrade
+		{
+			Order = entry,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradeId = transactionId,
+				TradePrice = price,
+				TradeVolume = 10m,
+				SecurityId = security.ToSecurityId(),
+				ServerTime = time,
+			},
+		});
+	}
+
+	[TestMethod]
+	[Timeout(10_000)]
+	public async Task HighLevelBoundCandleActivatesOwnSecurityOnly()
+	{
+		// A strategy holds a protected long in one security and has high-level candle subscriptions
+		// bound for two. A candle of the unprotected security carries a price that would breach the
+		// protected position's stop; it must not reach the protected security's controller.
+		var protectedSec = CreateProtectionSecurity("PROT_OWN");
+		var otherSec = CreateProtectionSecurity("PROT_OTHER");
+		var portfolio = new Portfolio { Name = "protection_portfolio" };
+
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		var registered = new List<Order>();
+
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		connector.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(registered.Add);
+
+		var strategy = new HighLevelBindStrategy
+		{
+			Connector = connector.Object,
+			Security = protectedSec,
+			Portfolio = portfolio,
+			Volume = 10m,
+		};
+
+		// Local stop of 5%: a long entered at 100 is protected at 95, so 90 is deep in stop territory.
+		strategy.StartProtection(new Unit(), new Unit(5m, UnitTypes.Percent), isLocalStop: true);
+
+		await strategy.StartAsync(CancellationToken);
+		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+
+		var protectedSub = strategy.BindCandles(protectedSec).Subscription;
+		var otherSub = strategy.BindCandles(otherSec).Subscription;
+
+		// The protective position controller is created by the fill, not by StartProtection.
+		var txSub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(txSub);
+
+		EnterProtectedLong(strategy, txSub, protectedSec, portfolio, 1, 100m, time);
+
+		AreEqual(10m, strategy.Position, "the protected long must be open before any candle arrives");
+
+		var afterEntry = registered.Count;
+
+		// A candle of the other security at the protected position's stop price.
+		connector.Raise(c => c.CandleReceived += null, otherSub,
+			CreateProtectionCandle(otherSec, 90m, time.AddMinutes(1)));
+
+		AreEqual(afterEntry, registered.Count,
+			"a candle of another security must not activate protection of the protected one");
+
+		// The very same price on the protected security's own candle must activate the stop.
+		connector.Raise(c => c.CandleReceived += null, protectedSub,
+			CreateProtectionCandle(protectedSec, 90m, time.AddMinutes(2)));
+
+		AreEqual(afterEntry + 1, registered.Count,
+			"the protected security's own candle must activate the stop");
+
+		var protectiveOrder = registered[^1];
+		AreEqual(Sides.Sell, protectiveOrder.Side, "a stop closing a long must be a sell");
+		AreEqual(protectedSec, protectiveOrder.Security, "the stop must be registered for the protected security");
+	}
+
+	[TestMethod]
+	[Timeout(10_000)]
+	public async Task HighLevelBoundTickActivatesOwnSecurityOnly()
+	{
+		// The tick branch of a high-level subscription activates protection itself, without going
+		// through Strategy.OnCandleReceived, so it has to name the security of its own value.
+		var protectedSec = CreateProtectionSecurity("PROT_TICK_OWN");
+		var otherSec = CreateProtectionSecurity("PROT_TICK_OTHER");
+		var portfolio = new Portfolio { Name = "protection_portfolio" };
+
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		var registered = new List<Order>();
+
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		connector.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(registered.Add);
+
+		var strategy = new HighLevelBindStrategy
+		{
+			Connector = connector.Object,
+			Security = protectedSec,
+			Portfolio = portfolio,
+			Volume = 10m,
+		};
+
+		// Local stop of 5%: a long entered at 100 is protected at 95, so 90 is deep in stop territory.
+		strategy.StartProtection(new Unit(), new Unit(5m, UnitTypes.Percent), isLocalStop: true);
+
+		await strategy.StartAsync(CancellationToken);
+		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+
+		var protectedSub = strategy.BindTicks(protectedSec).Subscription;
+		var otherSub = strategy.BindTicks(otherSec).Subscription;
+
+		var txSub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(txSub);
+
+		EnterProtectedLong(strategy, txSub, protectedSec, portfolio, 1, 100m, time);
+
+		AreEqual(10m, strategy.Position, "the protected long must be open before any tick arrives");
+
+		var afterEntry = registered.Count;
+
+		connector.Raise(c => c.TickTradeReceived += null, otherSub,
+			CreateProtectionTick(otherSec, 90m, time.AddMinutes(1)));
+
+		AreEqual(afterEntry, registered.Count,
+			"a tick of another security must not activate protection of the protected one");
+
+		connector.Raise(c => c.TickTradeReceived += null, protectedSub,
+			CreateProtectionTick(protectedSec, 90m, time.AddMinutes(2)));
+
+		AreEqual(afterEntry + 1, registered.Count,
+			"the protected security's own tick must activate the stop");
+
+		var tickStop = registered[^1];
+		AreEqual(Sides.Sell, tickStop.Side, "a stop closing a long must be a sell");
+		AreEqual(protectedSec, tickStop.Security, "the stop must be registered for the protected security");
+	}
+
+	[TestMethod]
+	[Timeout(10_000)]
+	public async Task ProtectionActivatesForTheSecurityItsPositionIsIn()
+	{
+		// A strategy holds a protected long in each of two securities. Protection is per (security,
+		// portfolio): each position is measured from its own entry price and closed on its own security.
+		var first = CreateProtectionSecurity("PROT_FIRST");
+		var second = CreateProtectionSecurity("PROT_SECOND");
+		var portfolio = new Portfolio { Name = "protection_portfolio" };
+
+		var time = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		var registered = new List<Order>();
+
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		connector.Setup(c => c.RegisterOrder(It.IsAny<Order>())).Callback<Order>(registered.Add);
+
+		var strategy = new HighLevelBindStrategy
+		{
+			Connector = connector.Object,
+			Security = first,
+			Portfolio = portfolio,
+			Volume = 10m,
+		};
+
+		// Local stop of 5%: the long entered at 100 is protected at 95, the one entered at 200 at 190.
+		strategy.StartProtection(new Unit(), new Unit(5m, UnitTypes.Percent), isLocalStop: true);
+
+		await strategy.StartAsync(CancellationToken);
+		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+
+		var firstSub = strategy.BindCandles(first).Subscription;
+		var secondSub = strategy.BindCandles(second).Subscription;
+
+		var txSub = new Subscription(DataType.Transactions);
+		strategy.Subscriptions.Subscribe(txSub);
+
+		EnterProtectedLong(strategy, txSub, first, portfolio, 1, 100m, time);
+		EnterProtectedLong(strategy, txSub, second, portfolio, 2, 200m, time);
+
+		var afterEntries = registered.Count;
+
+		// The second security falls through its own stop while the first is nowhere near its own.
+		connector.Raise(c => c.CandleReceived += null, secondSub,
+			CreateProtectionCandle(second, 189m, time.AddMinutes(1)));
+
+		AreEqual(afterEntries + 1, registered.Count,
+			"the second security's position must be stopped by its own candle");
+
+		var secondStop = registered[^1];
+		AreEqual(second, secondStop.Security, "a stop must be registered for the security it protects");
+		AreEqual(Sides.Sell, secondStop.Side);
+		AreEqual(10m, secondStop.Volume, "a stop closes the position of its own security, not the total");
+
+		connector.Raise(c => c.CandleReceived += null, firstSub,
+			CreateProtectionCandle(first, 94m, time.AddMinutes(2)));
+
+		AreEqual(afterEntries + 2, registered.Count,
+			"the first security's position must be stopped by its own candle");
+
+		var firstStop = registered[^1];
+		AreEqual(first, firstStop.Security, "a stop must be registered for the security it protects");
+		AreEqual(Sides.Sell, firstStop.Side);
+		AreEqual(10m, firstStop.Volume, "a stop closes the position of its own security, not the total");
+	}
 }
