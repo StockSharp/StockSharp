@@ -3267,4 +3267,153 @@ public class BacktestingTests : BaseTestClass
 		AreEqual(storageCandles, finishedCandlesReceived,
 			$"All stored candles must be delivered exactly once. Storage: {storageCandles}, Received: {finishedCandlesReceived}");
 	}
+	/// <summary>
+	/// A strategy that opens only from a flat position, with market orders, over the real month.
+	///
+	/// This is the shape that exposed the candle-mode fill cap. Each leg sends the same volume;
+	/// if the fill is limited to whatever the bar happened to trade, the two legs come back as
+	/// different fractions, the position never returns to zero and the gate never opens again -
+	/// two trades in a month where the crossings called for dozens. IncreaseDepthVolume is on by
+	/// default, so the round trip closes and the strategy keeps working.
+	/// </summary>
+	[TestMethod]
+	public async Task FlatGatedStrategyKeepsTradingOnCandles()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		security.PriceStep = 0.01m;
+		var portfolio = CreateTestPortfolio();
+
+		using var connector = CreateConnector(
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			GetHistoryStorage(),
+			Paths.HistoryBeginDate,
+			Paths.HistoryEndDate);
+
+		IsTrue(connector.EmulationAdapter.Settings.IncreaseDepthVolume, "the default is what this asserts against");
+
+		var trades = new List<decimal>();
+		connector.OwnTradeReceived += (s, t) => trades.Add(t.Trade.Volume);
+
+		var strategy = new FlatGateStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		var stopped = new TaskCompletionSource<bool>();
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		await strategy.StartAsync(CancellationToken);
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		await Task.WhenAny(stopped.Task, Task.Delay(TimeSpan.FromMinutes(5), CancellationToken));
+		IsTrue(stopped.Task.IsCompleted, "backtest did not complete in time");
+
+		await strategy.StopAsync(CancellationToken);
+
+		IsTrue(strategy.Crossings > 50, $"the month has plenty of crossings, saw {strategy.Crossings}");
+		IsTrue(trades.Count >= 20, $"the strategy has to keep trading, it made {trades.Count} trades over {strategy.Crossings} crossings");
+		IsFalse(trades.Any(v => v != 1m), "every market order fills for the volume it asked for");
+		AreEqual(0m, strategy.Position % 1m, "no fraction of a position is left behind");
+	}
+
+	/// <summary>
+	/// SMA crossover that opens from flat and closes on the opposite cross, with market orders.
+	/// </summary>
+	private class FlatGateStrategy : Strategy
+	{
+		private bool? _isShortLessThenLong;
+
+		public FlatGateStrategy()
+		{
+			_candleType = Param(nameof(CandleType), TimeSpan.FromMinutes(1).TimeFrame());
+			_long = Param(nameof(Long), 80);
+			_short = Param(nameof(Short), 30);
+		}
+
+		private readonly StrategyParam<DataType> _candleType;
+
+		public DataType CandleType
+		{
+			get => _candleType.Value;
+			set => _candleType.Value = value;
+		}
+
+		private readonly StrategyParam<int> _long;
+
+		public int Long
+		{
+			get => _long.Value;
+			set => _long.Value = value;
+		}
+
+		private readonly StrategyParam<int> _short;
+
+		public int Short
+		{
+			get => _short.Value;
+			set => _short.Value = value;
+		}
+
+		/// <summary>How many times the two averages crossed over the run.</summary>
+		public int Crossings { get; private set; }
+
+		protected override void OnReseted()
+		{
+			base.OnReseted();
+
+			_isShortLessThenLong = null;
+			Crossings = 0;
+		}
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			SubscribeCandles(CandleType)
+				.Bind(new SMA { Length = Long }, new SMA { Length = Short }, OnProcess)
+				.Start();
+		}
+
+		private void OnProcess(ICandleMessage candle, decimal longValue, decimal shortValue)
+		{
+			if (candle.State != CandleStates.Finished)
+				return;
+
+			var isShortLessThenLong = shortValue < longValue;
+
+			if (_isShortLessThenLong is null)
+			{
+				_isShortLessThenLong = isShortLessThenLong;
+				return;
+			}
+
+			if (_isShortLessThenLong == isShortLessThenLong)
+				return;
+
+			_isShortLessThenLong = isShortLessThenLong;
+			Crossings++;
+
+			if (Position == 0)
+			{
+				if (!isShortLessThenLong)
+					BuyMarket(Volume);
+			}
+			else if (Position > 0 && isShortLessThenLong)
+				SellMarket(Volume);
+		}
+	}
 }

@@ -2412,6 +2412,10 @@ public class MarketEmulatorTests : BaseTestClass
 		var emu = CreateEmuWithEvents(id, out var res);
 		var now = DateTime.UtcNow;
 
+		// Off, so the candle's traded volume is what the order can fill and there is a remainder
+		// at all. With it on - the default - the order fills in full and leaves nothing to queue.
+		emu.Settings.IncreaseDepthVolume = false;
+
 		var candleSubscriptionId = _idGenerator.GetNextId();
 
 		await emu.SendInMessageAsync(new MarketDataMessage
@@ -2514,5 +2518,138 @@ public class MarketEmulatorTests : BaseTestClass
 		var sellTradeIds = trades.Where(m => m.OriginalTransactionId == sell.TransactionId).Select(m => m.TradeId);
 
 		IsFalse(buyTradeIds.Intersect(sellTradeIds).Any(), "the two orders must not be the two sides of one trade");
+	}
+	/// <summary>
+	/// A candle says how much the market traded over that minute; it does not say how much an order
+	/// is allowed to fill. That is what <see cref="MarketEmulatorSettings.IncreaseDepthVolume"/>
+	/// decides, and it is on by default — the order book path tops the book up past its worst level
+	/// so an order asking for more than the market holds still fills in full. Candle matching has to
+	/// answer the same setting the same way. While it did not, one strategy filled completely on
+	/// ticks and partially on candles, and was left holding the fraction the candle could not cover.
+	/// </summary>
+	[TestMethod]
+	public async Task CandleMarketOrderFillsInFullWhenDepthVolumeIncreases()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		IsTrue(emu.Settings.IncreaseDepthVolume, "the setting under test is the default one");
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		// The candle traded 0.32, less than a third of what the order below asks for.
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OpenTime = now.AddMinutes(-5),
+			CloseTime = now,
+			OpenPrice = 100,
+			HighPrice = 105,
+			LowPrice = 95,
+			ClosePrice = 104,
+			TotalVolume = 0.32m,
+		}, CancellationToken);
+
+		var buy = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = now,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			PortfolioName = _pfName,
+		};
+
+		await emu.SendInMessageAsync(buy, CancellationToken);
+
+		var trades = res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == buy.TransactionId && m.HasTradeInfo())
+			.ToArray();
+
+		AreEqual(1, trades.Length, "the order fills in one trade");
+		AreEqual(1m, trades[0].TradeVolume, "the whole order fills, not the candle's own volume");
+
+		var state = res
+			.OfType<ExecutionMessage>()
+			.Last(m => m.OriginalTransactionId == buy.TransactionId && m.HasOrderInfo && !m.HasTradeInfo());
+
+		AreEqual(OrderStates.Done, state.OrderState);
+		AreEqual(0m, state.Balance, "nothing is left to cancel");
+
+		var position = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName).GetPosition(id);
+
+		AreEqual(1m, position.BeginValue + position.CurrentValue, "the strategy holds exactly what it ordered");
+	}
+	/// <summary>
+	/// The reason the fill matters. A strategy that opens only from a flat position sends the same
+	/// volume out and back; if each leg fills for whatever its own candle traded, the two fractions
+	/// do not cancel and the position never returns to zero, so the strategy never opens again. It
+	/// took two trades in a month of history to find that, which is why it is asserted here.
+	/// </summary>
+	[TestMethod]
+	public async Task CandleRoundTripReturnsToFlat()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		// Two candles, each thinner than the order that trades against it, and thin by a different
+		// amount - the fractions left over would not even cancel each other out.
+		async Task TradeAsync(Sides side, decimal candleVolume, DateTime time)
+		{
+			await emu.SendInMessageAsync(new TimeFrameCandleMessage
+			{
+				SecurityId = id,
+				OpenTime = time.AddMinutes(-1),
+				CloseTime = time,
+				OpenPrice = 100,
+				HighPrice = 105,
+				LowPrice = 95,
+				ClosePrice = 104,
+				TotalVolume = candleVolume,
+			}, CancellationToken);
+
+			await emu.SendInMessageAsync(new OrderRegisterMessage
+			{
+				SecurityId = id,
+				LocalTime = time,
+				TransactionId = _idGenerator.GetNextId(),
+				Side = side,
+				Volume = 1,
+				OrderType = OrderTypes.Market,
+				PortfolioName = _pfName,
+			}, CancellationToken);
+		}
+
+		await TradeAsync(Sides.Buy, 0.414m, now);
+		await TradeAsync(Sides.Sell, 0.446m, now.AddMinutes(1));
+
+		var traded = res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.HasTradeInfo())
+			.Sum(m => (m.OriginSide ?? m.Side) == Sides.Sell ? -m.TradeVolume : m.TradeVolume);
+
+		AreEqual(0m, traded, "buying one and selling one leaves nothing behind");
+
+		var position = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName).GetPosition(id);
+
+		AreEqual(0m, position.BeginValue + position.CurrentValue, "a strategy that opens from flat can open again");
 	}
 }

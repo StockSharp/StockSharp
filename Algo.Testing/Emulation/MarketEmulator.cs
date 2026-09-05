@@ -569,7 +569,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		portfolio.ProcessOrderRegistration(regMsg.SecurityId, regMsg.Side, regMsg.Volume, marginPrice);
 		AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 
-		var matchResult = MatchOrderByCandle(order, candle);
+		var matchResult = MatchOrderByCandle(order, candle, Settings.IncreaseDepthVolume);
 
 		if (matchResult.IsRejected)
 		{
@@ -783,13 +783,17 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	/// <summary>
 	/// Match order against candle data directly.
 	/// </summary>
-	private static MatchResult MatchOrderByCandle(EmulatorOrder order, CandleMessage candle)
+	private static MatchResult MatchOrderByCandle(EmulatorOrder order, CandleMessage candle, bool increaseVolume)
 	{
 		var balance = order.Balance;
 
-		var leftBalance = candle.TotalVolume == 0
-			? 0
-			: 0m.Max(balance - candle.TotalVolume);
+		// A candle records what the market traded, not how much an order is allowed to fill. That
+		// is what MarketEmulatorSettings.IncreaseDepthVolume decides, the same setting the order
+		// book path answers by extending the book past its worst level, so an order asking for
+		// more than the market holds fills in full here too. With it off the candle's own volume
+		// is the cap, and a market order's remainder is cancelled below.
+		var available = increaseVolume || candle.TotalVolume == 0 ? balance : candle.TotalVolume;
+		var leftBalance = 0m.Max(balance - available);
 
 		if (leftBalance > 0 && order.TimeInForce == TimeInForce.MatchOrCancel)
 		{
