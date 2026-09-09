@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Testing;
+﻿namespace StockSharp.Algo.Testing;
 
 using StockSharp.Algo.Testing.Generation;
 
@@ -255,7 +255,13 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 
 					while (loadDateInUtc <= stopDateInUtc && !_isChanged && !cancellationToken.IsCancellationRequested)
 					{
-						if (!checkDates || _timeLineGenerator.IsTradeDate(boardsArray, currentTime))
+						// The replay moves _currentTime forward as messages go out, so each day is judged and
+						// filtered against where the run has actually got to. Reusing the value captured before
+						// the loop stands a closed day's synthetic timeline at the range's first moment, which
+						// the emulator refuses as time running backwards.
+						var dayTime = _currentTime == default ? currentTime : _currentTime;
+
+						if (!checkDates || _timeLineGenerator.IsTradeDate(boardsArray, loadDateInUtc))
 						{
 							IAsyncEnumerable<Message> messages;
 							bool noData;
@@ -274,10 +280,10 @@ public class HistoryMarketDataManager : Disposable, IHistoryMarketDataManager
 							}
 
 							var source = noData
-								? new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boardsArray, currentTime))
+								? new SyncAsyncEnumerable<Message>(GetSimpleTimeLine(boardsArray, loadDateInUtc))
 								: messages;
 
-							await foreach (var msg in FilterMessages(source, startDateTime, stopDateTime, currentTime).WithCancellation(cancellationToken))
+							await foreach (var msg in FilterMessages(source, startDateTime, stopDateTime, dayTime).WithCancellation(cancellationToken))
 							{
 								if (msg.TryGetServerTime(out var serverTime))
 								{
