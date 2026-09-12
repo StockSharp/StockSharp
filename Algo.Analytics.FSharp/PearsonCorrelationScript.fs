@@ -39,64 +39,82 @@ type PearsonCorrelationScript() =
             ) : Task =
 
             task {
+                cancellationToken.ThrowIfCancellationRequested()
+
                 // If no securities are selected, log a warning and finish
                 if securities.Length = 0 then
                     logs.LogWarning("No instruments.")
                 else
-                    // A list of arrays, each array containing double-precision close prices for a single security
-                    let closes = ResizeArray<float[]>()
+                    // Keep the timestamp with every close so gaps in different instruments do not
+                    // make unrelated candles look like a pair of observations.
+                    let closes = ResizeArray<Dictionary<DateTime, float>>()
                     let mutable idx = 0
+                    let mutable hasMissingData = false
 
                     for security in securities do
-                        if not cancellationToken.IsCancellationRequested then
-                            idx <- idx + 1
-                            logs.LogInfo("Processing {0} of {1}: {2}...", idx, securities.Length, security)
+                        cancellationToken.ThrowIfCancellationRequested()
 
-                            let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
-                            let pricesList = ResizeArray<float>()
-                            let mutable prevDate = DateOnly.MinValue
+                        idx <- idx + 1
+                        logs.LogInfo("Processing {0} of {1}: {2}...", idx, securities.Length, security)
+                        cancellationToken.ThrowIfCancellationRequested()
 
-                            do! candleStorage.LoadAsync(fromDate, toDate)
-                                |> TaskSeq.iter (fun candle ->
-                                    let currDate = DateOnly.FromDateTime(candle.OpenTime.Date)
-                                    if currDate <> prevDate then
-                                        prevDate <- currDate
-                                        logs.LogInfo("  {0}...", currDate)
+                        let candleStorage = storage.GetCandleMessageStorage(security, dataType, drive, format)
+                        let pricesByTime = Dictionary<DateTime, float>()
+                        let mutable prevDate = DateOnly.MinValue
 
-                                    pricesList.Add(float candle.ClosePrice)
-                                )
+                        do! candleStorage.LoadAsync(fromDate, toDate).WithEnforcedCancellation(cancellationToken)
+                            |> TaskSeq.iter (fun candle ->
+                                cancellationToken.ThrowIfCancellationRequested()
 
-                            let prices = pricesList.ToArray()
-                            if prices.Length = 0 then
-                                logs.LogWarning("No data for {0}", security)
-                            else
-                                closes.Add(prices)
+                                let currDate = DateOnly.FromDateTime(candle.OpenTime.Date)
+                                if currDate <> prevDate then
+                                    prevDate <- currDate
+                                    logs.LogInfo("  {0}...", currDate)
+                                    cancellationToken.ThrowIfCancellationRequested()
 
-                    if closes.Count > 0 then
-                        // All arrays must be same length, truncate longer ones
-                        let minLen =
-                            closes
-                            |> Seq.map (fun arr -> arr.Length)
-                            |> Seq.min
+                                pricesByTime.[candle.OpenTime] <- float candle.ClosePrice
+                            )
 
-                        let truncatedCloses =
-                            closes
-                            |> Seq.map (fun arr ->
-                              if arr.Length > minLen then arr.[0..(minLen - 1)] else arr)
-                            |> Seq.toList
+                        if pricesByTime.Count = 0 then
+                            logs.LogWarning("No data for {0}", security)
+                            hasMissingData <- true
+                        else
+                            closes.Add(pricesByTime)
 
-                        // Calculate correlation matrix
-                        let matrix = Correlation.PearsonMatrix(truncatedCloses :> seq<_>)
+                    cancellationToken.ThrowIfCancellationRequested()
 
-                        // Get security names for heatmap axes
-                        let ids =
-                            securities
-                            |> Seq.map (fun s -> s.ToStringId())
+                    if not hasMissingData && closes.Count > 0 then
+                        let commonTimes =
+                            closes.[0].Keys
+                            |> Seq.filter (fun time ->
+                                closes
+                                |> Seq.skip 1
+                                |> Seq.forall (fun series -> series.ContainsKey(time)))
+                            |> Seq.sort
                             |> Seq.toArray
 
-                        // Convert matrix to 2D array for drawing
-                        let arrMatrix = matrix.ToArray()
+                        if commonTimes.Length = 0 then
+                            logs.LogWarning("The instruments have no candles at the same time.")
+                        else
+                            let pairedCloses =
+                                closes
+                                |> Seq.map (fun series ->
+                                    commonTimes
+                                    |> Array.map (fun time -> series.[time]))
+                                |> Seq.toList
 
-                        // Draw result as heatmap
-                        panel.DrawHeatmap(ids, ids, arrMatrix)
+                            // Calculate correlation matrix
+                            let matrix = Correlation.PearsonMatrix(pairedCloses :> seq<_>)
+
+                            // Get security names for heatmap axes
+                            let ids =
+                                securities
+                                |> Seq.map (fun s -> s.ToStringId())
+                                |> Seq.toArray
+
+                            // Convert matrix to 2D array for drawing
+                            let arrMatrix = matrix.ToArray()
+
+                            // Draw result as heatmap
+                            panel.DrawHeatmap(ids, ids, arrMatrix)
             }

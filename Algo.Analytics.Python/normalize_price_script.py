@@ -17,6 +17,8 @@ from indicator_extensions import *
 # The analytic script, normalize securities close prices and shows on same chart.
 class normalize_price_script(IAnalyticsScript):
     def Run(self, logs, panel, securities, from_date, to_date, storage, drive, format, time_frame, cancellation_token):
+        cancellation_token.ThrowIfCancellationRequested()
+
         if not securities:
             logs.LogWarning("No instruments.")
             return Task.CompletedTask
@@ -24,11 +26,10 @@ class normalize_price_script(IAnalyticsScript):
         chart = create_chart(panel, datetime, float)
 
         for idx, security in enumerate(securities):
-            # stop calculation if user cancel script execution
-            if cancellation_token.IsCancellationRequested:
-                break
+            cancellation_token.ThrowIfCancellationRequested()
 
             logs.LogInfo("Processing {0} of {1}: {2}...", idx + 1, len(securities), security)
+            cancellation_token.ThrowIfCancellationRequested()
 
             series = {}
 
@@ -38,21 +39,29 @@ class normalize_price_script(IAnalyticsScript):
             first_close = None
             prev_date = None
 
-            for candle in iter_candles(candle_storage, from_date, to_date, cancellation_token):
-                # Log date change
-                curr_date = candle.OpenTime.Date
-                if curr_date != prev_date:
-                    prev_date = curr_date
-                    logs.LogInfo("  {0}...", curr_date.ToString("yyyy-MM-dd"))
+            candles = iter_candles(candle_storage, from_date, to_date, cancellation_token)
+            try:
+                for candle in candles:
+                    cancellation_token.ThrowIfCancellationRequested()
 
-                if first_close is None:
-                    first_close = candle.ClosePrice
+                    # Log date change
+                    curr_date = candle.OpenTime.Date
+                    if curr_date != prev_date:
+                        prev_date = curr_date
+                        logs.LogInfo("  {0}...", curr_date.ToString("yyyy-MM-dd"))
+                        cancellation_token.ThrowIfCancellationRequested()
 
-                # normalize close prices by dividing on first close
-                if first_close != 0:
-                    series[candle.OpenTime] = candle.ClosePrice / first_close
+                    if first_close is None:
+                        first_close = candle.ClosePrice
+
+                    # normalize close prices by dividing on first close
+                    if first_close != 0:
+                        series[candle.OpenTime] = candle.ClosePrice / first_close
+            finally:
+                candles.close()
 
             # draw series on chart
-            chart.Append(to_string_id(security), list(series.keys()), list(series.values()))
+            times = sorted(series.keys())
+            chart.Append(to_string_id(security), times, [series[time] for time in times])
 
         return Task.CompletedTask

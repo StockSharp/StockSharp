@@ -684,12 +684,9 @@ public class CompilationTests : BaseTestClass
 		AreSequenceEqual(new[] { 1m, 1.1m, 0.9m }, series.YValues, "y");
 	}
 
-	// A first close of zero leaves the series without a base - 0/0 for the first candle and 10/0
-	// for the second - and the three copies of the script answer that differently today. What the
-	// answer should be is still to be decided (see the C# zero base test above); what is not open
-	// is that one input may not mean three different charts. Whatever a caller is shown for closes
-	// 0,10, they must be shown the same thing whichever language the script was written in, and
-	// none of it may be a raw price wearing a normalized title.
+	// A first close of zero leaves the series without a base: neither 0/0 nor 10/0 defines a
+	// normalized value. All three implementations therefore draw the instrument's empty series,
+	// consistent with the multi-security C# case above, instead of inventing a ratio of one.
 	[TestMethod]
 	public async Task NormalizePriceZeroBaseAgreesAcrossLanguages()
 	{
@@ -712,15 +709,10 @@ public class CompilationTests : BaseTestClass
 			results.Add((fileExtension, x, y));
 		}
 
-		foreach (var (language, _, y) in results)
-			IsTrue(y.All(v => v != 0m && v != 10m), $"{language} plots the raw close under a normalized title: {string.Join(", ", y)}");
-
-		var reference = results[0];
-
-		foreach (var (language, x, y) in results.Skip(1))
+		foreach (var (language, x, y) in results)
 		{
-			AreSequenceEqual(reference.x, x, $"{reference.language} vs {language} x");
-			AreSequenceEqual(reference.y, y, $"{reference.language} vs {language} y");
+			AreEqual(0, x.Length, $"{language} assigned a time to a value that cannot be normalized");
+			AreEqual(0, y.Length, $"{language} plotted values without a non-zero normalization base: {string.Join(", ", y)}");
 		}
 	}
 
@@ -752,6 +744,78 @@ public class CompilationTests : BaseTestClass
 		var logs = new CancelOnLogCountReceiver(2, cts);
 
 		await ThrowsAsync<OperationCanceledException>(() => RunNormalizePrice(fileExtension, secId, [Flat(0, 100m), Flat(1, 110m), Flat(2, 120m), Flat(3, 130m)], logs, token, cts.Token));
+	}
+
+	// The F# TaskSeq consumer and the synchronous Python bridge choose the token passed to
+	// GetAsyncEnumerator. Checking the token only after a candle arrives cannot interrupt a reader
+	// that is still waiting for that candle, so both consumers are exercised against a storage that
+	// waits inside MoveNextAsync.
+	[TestMethod]
+	public Task FSharpNormalizeCancelsPendingStorageRead()
+		=> AnalyticsCancelsPendingStorageRead(FileExts.FSharp, "NormalizePriceScript");
+
+	[TestMethod]
+	public Task FSharpPearsonCancelsPendingStorageRead()
+		=> AnalyticsCancelsPendingStorageRead(FileExts.FSharp, "PearsonCorrelationScript");
+
+	[TestMethod]
+	public Task PythonNormalizeCancelsPendingStorageRead()
+		=> AnalyticsCancelsPendingStorageRead(FileExts.Python, "NormalizePriceScript");
+
+	[TestMethod]
+	public Task PythonPearsonCancelsPendingStorageRead()
+		=> AnalyticsCancelsPendingStorageRead(FileExts.Python, "PearsonCorrelationScript");
+
+	private async Task AnalyticsCancelsPendingStorageRead(string fileExtension, string scriptName)
+	{
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+		var dataType = TimeSpan.FromMinutes(1).TimeFrame();
+		var candleStorage = new BlockingCandleStorage(secId, dataType);
+		var registry = new Mock<IStorageRegistry>();
+
+		registry
+			.Setup(r => r.GetCandleMessageStorage(It.IsAny<SecurityId>(), It.IsAny<DataType>(), It.IsAny<IMarketDataDrive>(), It.IsAny<StorageFormats>()))
+			.Returns(candleStorage);
+
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
+
+		var run = RunAnalyticsScriptAgainstStorage(
+			fileExtension,
+			scriptName,
+			[secId],
+			registry.Object,
+			Mock.Of<IMarketDataDrive>(),
+			StorageFormats.Csv,
+			dataType,
+			_analyticsStart.Date,
+			_analyticsStart.Date.AddDays(1),
+			Helper.LogManager.Application,
+			token,
+			cts.Token);
+
+		try
+		{
+			await candleStorage.ReadStarted.WaitAsync(TimeSpan.FromSeconds(30), token);
+			await cts.CancelAsync();
+			await ThrowsAsync<OperationCanceledException>(() => run.WaitAsync(TimeSpan.FromSeconds(5), token));
+		}
+		finally
+		{
+			// Let an implementation that failed to pass the token leave its blocked read, so a
+			// failing assertion does not also leak a compiler context or a background operation.
+			candleStorage.Release();
+
+			try
+			{
+				await run.WaitAsync(TimeSpan.FromSeconds(5), token);
+			}
+			catch (OperationCanceledException)
+			{
+			}
+		}
+
+		AreEqual(1, candleStorage.Released, "the pending storage reader must be disposed exactly once");
 	}
 
 	// Runs the shipped normalize script over one instrument, so the plotted values can be checked
@@ -792,8 +856,12 @@ public class CompilationTests : BaseTestClass
 		class break_after_first_script(IAnalyticsScript):
 		    def Run(self, logs, panel, securities, from_date, to_date, storage, drive, format, time_frame, cancellation_token):
 		        candle_storage = get_candle_storage(storage, securities[0], time_frame, drive, format)
-		        for candle in iter_candles(candle_storage, from_date, to_date, cancellation_token):
-		            break
+		        candles = iter_candles(candle_storage, from_date, to_date, cancellation_token)
+		        try:
+		            for candle in candles:
+		                break
+		        finally:
+		            candles.close()
 		        return Task.CompletedTask
 		""";
 
@@ -853,9 +921,27 @@ public class CompilationTests : BaseTestClass
 		        return Task.CompletedTask
 		""";
 
+	// A first row with zero columns still defines the expected width. A later non-empty row is
+	// ragged and must not disappear behind the helper's empty-first-row shortcut.
+	private const string _pythonEmptyFirstRaggedTo2dArraySource = """
+		import clr
+
+		clr.AddReference("StockSharp.Algo.Analytics")
+
+		from System.Threading.Tasks import Task
+		from StockSharp.Algo.Analytics import IAnalyticsScript
+		from numpy_extensions import nx
+
+		class empty_first_ragged_to2darray_script(IAnalyticsScript):
+		    def Run(self, logs, panel, securities, from_date, to_date, storage, drive, format, time_frame, cancellation_token):
+		        nx.to2darray([[], [5.0]])
+		        return Task.CompletedTask
+		""";
+
 	// The bridge between a Python script and a .NET IAsyncEnumerable opens an enumerator over the
-	// storage, so it owns closing it. A consumer that reads one candle and stops must leave nothing
-	// open behind it and must not have pulled a second candle out of the storage.
+	// storage, so it owns closing it once the caller closes the Python generator. Python does not
+	// promise to close a generator merely because a for-loop breaks; the inline consumer therefore
+	// uses the supported try/finally + close pattern and must not pull a second candle while doing so.
 	[TestMethod]
 	public async Task PythonIterCandlesReleasesTheReaderWhenTheConsumerStops()
 	{
@@ -889,7 +975,8 @@ public class CompilationTests : BaseTestClass
 			caught = ex;
 		}
 
-		IsTrue(caught is not null, "a storage that fails must not look to the caller like a storage that ran out of data");
+		IsNotNull(caught, "a storage that fails must not look to the caller like a storage that ran out of data");
+		caught.ToString().AssertContains("the storage went away", "the storage failure must reach the caller; a later cleanup error is not an acceptable substitute");
 		AreEqual(1, candleStorage.Read, "only the candle before the failure can be delivered");
 		AreEqual(1, candleStorage.Released, "the storage reader must be closed exactly once when the read fails");
 	}
@@ -919,41 +1006,46 @@ public class CompilationTests : BaseTestClass
 		AreEqual(6d, matrix[1, 2]);
 	}
 
-	// Rows of different length are ambiguous, and which shape such an input should get is a
-	// decision that has not been made. What is not open is that a value handed to the conversion
-	// may not disappear from the result without a word: either the input is refused, or every
-	// value given is still there afterwards. Taking the width from the first row and quietly
-	// cutting the rest turns a caller's data into a smaller matrix that still looks complete.
+	// A rectangular System.Array cannot represent ragged rows without inventing missing values.
+	// The helper therefore rejects them explicitly; taking the width from the first row would
+	// silently discard values while returning a matrix that looks complete.
 	[TestMethod]
 	public async Task NumpyTo2dArrayDoesNotDropRaggedValuesSilently()
 	{
 		var token = CancellationToken;
 
-		TestAnalyticsPanel panel = null;
+		Exception caught = null;
 
 		try
 		{
-			panel = await RunInlinePythonScript("ragged_to2darray_script", _pythonRaggedTo2dArraySource, Helper.CreateSecurityId(), TimeSpan.FromMinutes(1).TimeFrame(), Mock.Of<IMarketDataStorage<CandleMessage>>(), token);
+			await RunInlinePythonScript("ragged_to2darray_script", _pythonRaggedTo2dArraySource, Helper.CreateSecurityId(), TimeSpan.FromMinutes(1).TimeFrame(), Mock.Of<IMarketDataStorage<CandleMessage>>(), token);
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
-			// Refusing the input is the other acceptable answer.
-			return;
+			caught = ex;
 		}
 
-		var matrix = panel.HeatmapData;
+		IsNotNull(caught, "ragged rows were accepted and their extra value was silently discarded");
+		caught.ToString().AssertContains("Every row must have the same length", "the run must fail for the ragged shape itself, not for an unrelated Python bridge error");
+	}
 
-		IsNotNull(matrix);
+	[TestMethod]
+	public async Task NumpyTo2dArrayDoesNotDropValuesAfterAnEmptyFirstRow()
+	{
+		var token = CancellationToken;
+		Exception caught = null;
 
-		var kept = new List<double>();
-
-		for (var i = 0; i < matrix.GetLength(0); i++)
+		try
 		{
-			for (var j = 0; j < matrix.GetLength(1); j++)
-				kept.Add(matrix[i, j]);
+			await RunInlinePythonScript("empty_first_ragged_to2darray_script", _pythonEmptyFirstRaggedTo2dArraySource, Helper.CreateSecurityId(), TimeSpan.FromMinutes(1).TimeFrame(), Mock.Of<IMarketDataStorage<CandleMessage>>(), token);
+		}
+		catch (Exception ex)
+		{
+			caught = ex;
 		}
 
-		IsTrue(kept.Contains(5d), $"the last value of the longer row was dropped without a word; kept {string.Join(", ", kept)}");
+		IsNotNull(caught, "a value after an empty first row was silently discarded");
+		caught.ToString().AssertContains("Every row must have the same length", "the run must fail for the ragged shape itself");
 	}
 
 	// A candle storage the test drives directly: it counts the candles it hands over and the times
@@ -1015,6 +1107,68 @@ public class CompilationTests : BaseTestClass
 		ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken) => default;
 		ValueTask<int> IMarketDataStorage<CandleMessage>.SaveAsync(IEnumerable<CandleMessage> data, CancellationToken cancellationToken) => new(0);
 		ValueTask IMarketDataStorage<CandleMessage>.DeleteAsync(IEnumerable<CandleMessage> data, CancellationToken cancellationToken) => default;
+	}
+
+	private sealed class BlockingCandleStorage(SecurityId securityId, DataType dataType) : IMarketDataStorage<CandleMessage>
+	{
+		private static readonly IMarketDataSerializer _serializer = Mock.Of<IMarketDataSerializer>(s => s.TimePrecision == TimeSpan.FromTicks(1));
+
+		private readonly TaskCompletionSource<bool> _readStarted = new(TaskCreationOptions.RunContinuationsAsynchronously);
+		private readonly TaskCompletionSource<bool> _release = new(TaskCreationOptions.RunContinuationsAsynchronously);
+		private int _released;
+
+		public Task ReadStarted => _readStarted.Task;
+		public int Released => _released;
+
+		public void Release() => _release.TrySetResult(true);
+
+		IAsyncEnumerable<DateTime> IMarketDataStorage.GetDatesAsync()
+			=> new[] { _analyticsStart.Date }.ToAsyncEnumerable();
+
+		DataType IMarketDataStorage.DataType => dataType;
+		SecurityId IMarketDataStorage.SecurityId => securityId;
+		IMarketDataStorageDrive IMarketDataStorage.Drive => Mock.Of<IMarketDataStorageDrive>();
+		bool IMarketDataStorage.AppendOnlyNew { get; set; }
+		IMarketDataSerializer IMarketDataStorage.Serializer => _serializer;
+		IMarketDataSerializer<CandleMessage> IMarketDataStorage<CandleMessage>.Serializer => Mock.Of<IMarketDataSerializer<CandleMessage>>();
+
+		public IAsyncEnumerable<CandleMessage> LoadAsync(DateTime date) => new BlockingEnumerable(this);
+		IAsyncEnumerable<Message> IMarketDataStorage.LoadAsync(DateTime date) => LoadAsync(date);
+
+		ValueTask<IMarketDataMetaInfo> IMarketDataStorage.GetMetaInfoAsync(DateTime date, CancellationToken cancellationToken)
+			=> new(Mock.Of<IMarketDataMetaInfo>(i => i.FirstTime == _analyticsStart && i.LastTime == _analyticsStart));
+
+		ValueTask<int> IMarketDataStorage.SaveAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => new(0);
+		ValueTask IMarketDataStorage.DeleteAsync(IEnumerable<Message> data, CancellationToken cancellationToken) => default;
+		ValueTask IMarketDataStorage.DeleteAsync(DateTime date, CancellationToken cancellationToken) => default;
+		ValueTask<int> IMarketDataStorage<CandleMessage>.SaveAsync(IEnumerable<CandleMessage> data, CancellationToken cancellationToken) => new(0);
+		ValueTask IMarketDataStorage<CandleMessage>.DeleteAsync(IEnumerable<CandleMessage> data, CancellationToken cancellationToken) => default;
+
+		private sealed class BlockingEnumerable(BlockingCandleStorage owner) : IAsyncEnumerable<CandleMessage>
+		{
+			IAsyncEnumerator<CandleMessage> IAsyncEnumerable<CandleMessage>.GetAsyncEnumerator(CancellationToken cancellationToken)
+				=> new BlockingEnumerator(owner, cancellationToken);
+		}
+
+		private sealed class BlockingEnumerator(BlockingCandleStorage owner, CancellationToken cancellationToken) : IAsyncEnumerator<CandleMessage>
+		{
+			CandleMessage IAsyncEnumerator<CandleMessage>.Current => throw new InvalidOperationException();
+
+			ValueTask<bool> IAsyncEnumerator<CandleMessage>.MoveNextAsync() => new(MoveNextCoreAsync());
+
+			private async Task<bool> MoveNextCoreAsync()
+			{
+				owner._readStarted.TrySetResult(true);
+				await owner._release.Task.WaitAsync(cancellationToken);
+				return false;
+			}
+
+			ValueTask IAsyncDisposable.DisposeAsync()
+			{
+				Interlocked.Increment(ref owner._released);
+				return default;
+			}
+		}
 	}
 
 	// Builds a storage of flat one-minute candles that reports what was read out of it.
@@ -1143,6 +1297,35 @@ public class CompilationTests : BaseTestClass
 			await storage.GetCandleMessageStorage(secId, dataType, drive, format).SaveAsync(candles, setupToken);
 		}
 
+		return await RunAnalyticsScriptAgainstStorage(
+			fileExtension,
+			scriptName,
+			[.. series.Select(s => s.secId)],
+			storage,
+			drive,
+			format,
+			dataType,
+			_analyticsStart.Date,
+			_analyticsStart.AddMinutes(lastMinute).Date.AddDays(1),
+			logs,
+			setupToken,
+			runToken);
+	}
+
+	private static async Task<TestAnalyticsPanel> RunAnalyticsScriptAgainstStorage(
+		string fileExtension,
+		string scriptName,
+		SecurityId[] securities,
+		IStorageRegistry storage,
+		IMarketDataDrive drive,
+		StorageFormats format,
+		DataType dataType,
+		DateTime from,
+		DateTime to,
+		ILogReceiver logs,
+		CancellationToken setupToken,
+		CancellationToken runToken)
+	{
 		var folderPath = _analyticsFolder.Put(fileExtension switch
 		{
 			FileExts.CSharp => "CSharp",
@@ -1183,9 +1366,9 @@ public class CompilationTests : BaseTestClass
 		await script.Run(
 			logs,
 			panel,
-			[.. series.Select(s => s.secId)],
-			_analyticsStart.Date,
-			_analyticsStart.AddMinutes(lastMinute).Date.AddDays(1),
+			securities,
+			from,
+			to,
 			storage,
 			drive,
 			format,
