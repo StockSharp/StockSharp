@@ -260,7 +260,12 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 							{
 								// cache latest snapshot per security for late subscribers
 								if (secIdMsg.SecurityId != default && message is IServerTimeMessage)
-									parent.Snapshots[secIdMsg.SecurityId] = message.TypedClone();
+								{
+									if (CanOpenLateSubscriber(message))
+										parent.Snapshots[secIdMsg.SecurityId] = message.TypedClone();
+									else
+										parent.Snapshots.Remove(secIdMsg.SecurityId);
+								}
 
 								if (!ApplySubscriptionIds(subscrMsg, parent, secIdMsg.SecurityId))
 									drop = true;
@@ -281,6 +286,20 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 
 		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
+
+	/// <summary>
+	/// A subscriber that arrives after the ALL subscription is already running is opened with the last
+	/// message cached for its security, so that message has to state where the market is. A trade is an
+	/// event that already happened, and a book increment is a difference against a book the subscriber
+	/// has never seen - an increment also makes whatever was cached before it stale.
+	/// </summary>
+	private static bool CanOpenLateSubscriber(Message message)
+		=> message switch
+		{
+			ExecutionMessage => false,
+			QuoteChangeMessage book => book.State is null or QuoteChangeStates.SnapshotComplete,
+			_ => true,
+		};
 
 	private static bool ApplySubscriptionIds(ISubscriptionIdMessage subscrMsg, ParentSubscription parent, SecurityId secId)
 	{

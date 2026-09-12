@@ -36,6 +36,12 @@ public static class CompilationExtensions
 	{
 		private readonly ILogReceiver _logs = logs ?? throw new ArgumentNullException(nameof(logs));
 
+		// The engine decides where to cut the byte stream, so a multi-byte character can arrive
+		// split between two writes. The decoder keeps such an incomplete tail until the rest of
+		// its bytes turn up, and the lock guards that state against concurrently running scripts.
+		private readonly Decoder _decoder = Encoding.UTF8.GetDecoder();
+		private readonly Lock _sync = new();
+
 		public override bool CanRead => false;
 		public override bool CanSeek => false;
 		public override bool CanWrite => true;
@@ -45,7 +51,25 @@ public static class CompilationExtensions
 
 		public override void Write(byte[] buffer, int offset, int count)
 		{
-			_logs.LogInfo(buffer.UTF8(offset, count));
+			ArgumentNullException.ThrowIfNull(buffer);
+
+			if (count <= 0)
+				return;
+
+			string text;
+
+			using (_sync.EnterScope())
+			{
+				var chars = new char[Encoding.UTF8.GetMaxCharCount(count)];
+				var charCount = _decoder.GetChars(buffer, offset, count, chars, 0, flush: false);
+
+				if (charCount == 0)
+					return;
+
+				text = new(chars, 0, charCount);
+			}
+
+			_logs.LogInfo(text);
 		}
 
 		public override void Flush()
@@ -142,6 +166,8 @@ public static class CompilationExtensions
 		ArgumentNullException.ThrowIfNull(fileSystem);
 		ArgumentNullException.ThrowIfNull(extraPythonCommon);
 
+		cancellationToken.ThrowIfCancellationRequested();
+
 		fileSystem.CreateDirectory(Paths.PythonUtilsPath);
 
 		var pythonEngine = Python.CreateEngine();
@@ -157,9 +183,17 @@ public static class CompilationExtensions
 
 		foreach (var (name, body) in extraPythonCommon.Concat(GetPythonCommon()))
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			try
 			{
 				await fileSystem.WriteAllTextAsync(Path.Combine(Paths.PythonUtilsPath, name), body, cancellationToken: cancellationToken);
+			}
+			catch (OperationCanceledException)
+			{
+				// A caller who cancelled must not be told the environment is ready, so this one
+				// leaves by the same door it came in instead of being logged as a write failure.
+				throw;
 			}
 			catch (Exception ex)
 			{

@@ -1,4 +1,4 @@
-namespace StockSharp.Algo;
+﻿namespace StockSharp.Algo;
 
 /// <summary>
 /// The interface, describing the rules list.
@@ -26,7 +26,7 @@ public interface IMarketRuleList : INotifyList<IMarketRule>, ISynchronizedCollec
 	/// A container may turn a rule away - a strategy takes none once it is stopping - and
 	/// <see cref="ICollection{T}.Add"/> cannot say so, having nothing to return.
 	/// </remarks>
-	bool TryAdd(IMarketRule rule);
+	bool TryRegister(IMarketRule rule);
 
 	/// <summary>
 	/// Delete all rules, for which <see cref="IMarketRule.Token"/> is equal to <paramref name="token" />.
@@ -48,18 +48,18 @@ public class MarketRuleList(IMarketRuleContainer container) : SynchronizedSet<IM
 	private readonly IMarketRuleContainer _container = container ?? throw new ArgumentNullException(nameof(container));
 	private readonly Dictionary<object, HashSet<IMarketRule>> _rulesByToken = [];
 
-	/// <summary>
-	/// Adding the element.
-	/// </summary>
-	/// <param name="item">Element.</param>
 	/// <inheritdoc />
-	public bool TryAdd(IMarketRule rule)
+	public bool TryRegister(IMarketRule rule)
 	{
 		Add(rule);
 
 		return Contains(rule);
 	}
 
+	/// <summary>
+	/// Adding the element.
+	/// </summary>
+	/// <param name="item">Element.</param>
 	protected override void OnAdded(IMarketRule item)
 	{
 		if (item.Token != null)

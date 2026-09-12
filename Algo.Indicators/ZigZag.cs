@@ -157,20 +157,30 @@ public class ZigZag : BaseIndicator
 		var lastExtremum = _lastExtremum ?? price;
 		var isUpTrend = _isUpTrend ?? price >= buffer[^2];
 
+		// Bars counted back from this bar to the one that holds the extremum: the first bar of a
+		// series holds its own, and every bar that does not beat it moves the extremum one further back.
+		var shift = _lastExtremum is null ? 0 : _shift + 1;
+
 		var threshold = lastExtremum * Deviation;
 		var changeTrend = false;
 
 		if (isUpTrend)
 		{
 			if (lastExtremum < price)
+			{
 				lastExtremum = price;
+				shift = 0;
+			}
 			else
 				changeTrend = price <= (lastExtremum - threshold);
 		}
 		else
 		{
 			if (lastExtremum > price)
+			{
 				lastExtremum = price;
+				shift = 0;
+			}
 			else
 				changeTrend = price >= (lastExtremum + threshold);
 		}
@@ -179,7 +189,7 @@ public class ZigZag : BaseIndicator
 		{
 			try
 			{
-				return new ZigZagIndicatorValue(this, lastExtremum, _shift, input.Time, isUpTrend);
+				return new ZigZagIndicatorValue(this, lastExtremum, shift, input.Time, isUpTrend);
 			}
 			finally
 			{
@@ -187,7 +197,8 @@ public class ZigZag : BaseIndicator
 				{
 					_isUpTrend = !isUpTrend;
 					_lastExtremum = price;
-					_shift = 1;
+					// The reversal starts the next leg from this bar's price, so this bar holds it.
+					_shift = 0;
 				}
 			}
 		}
@@ -197,7 +208,7 @@ public class ZigZag : BaseIndicator
 			{
 				_lastExtremum = lastExtremum;
 				_isUpTrend = isUpTrend;
-				_shift++;
+				_shift = shift;
 			}
 		}
 

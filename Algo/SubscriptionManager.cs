@@ -295,7 +295,10 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 
 				if (message.From >= message.To)
 				{
-					sendOutMsgs = [message.CreateResult()];
+					// An empty range is still a request, and a request is acknowledged before it is
+					// answered: the caller learns a subscription started from the response and from
+					// nothing else.
+					sendOutMsgs = [message.CreateResponse(), message.CreateResult()];
 				}
 				else
 				{
@@ -341,15 +344,21 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 			}
 			else if (_state.TryGetSubscription(originId, out var info, out var state))
 			{
-				if (state.IsActive())
+				// A request that went upstream is given up upstream too, confirmed or not - the venue is
+				// sending, or is about to send, a stream nobody holds any more. One the venue has already
+				// finished has nothing left to give up, so the caller is answered here instead. Either way
+				// the subscription is dropped rather than merely marked, so that a confirmation still in
+				// flight cannot hand data to a caller that has stopped listening.
+				if (state == SubscriptionStates.Finished)
+					sendOutMsgs = [message.CreateResult()];
+				else
 				{
 					// copy full subscription's details into unsubscribe request
 					sendInMsg = MakeUnsubscribe(info);
-					var newState = state.ChangeSubscriptionState(SubscriptionStates.Stopped, info.TransactionId, _logReceiver);
-					_state.UpdateSubscriptionState(originId, newState);
+					state.ChangeSubscriptionState(SubscriptionStates.Stopped, info.TransactionId, _logReceiver);
 				}
-				else
-					_logReceiver.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, state);
+
+				_state.RemoveSubscription(originId);
 			}
 			else
 			{

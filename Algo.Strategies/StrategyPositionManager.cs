@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies;
+﻿namespace StockSharp.Algo.Strategies;
 
 using System;
 using System.Collections.Generic;
@@ -45,12 +45,31 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		/// Ignored market order execution due to missing last price.
 		/// </summary>
 		NoMarketPrice,
+
+		/// <summary>
+		/// The order is already finished and the snapshot carries no execution beyond what was applied.
+		/// </summary>
+		AlreadyFinished,
 	}
+
+	/// <summary>
+	/// Whether the result reports a problem rather than ordinary order flow. A snapshot of an order
+	/// that is not active yet, one for an order with no position, and a repeat of a final snapshot are
+	/// all expected traffic; a fill going backwards or being dropped is not.
+	/// </summary>
+	/// <param name="result">Processing result.</param>
+	/// <returns>Check result.</returns>
+	public static bool IsProblem(OrderResults result)
+		=> result is OrderResults.Inconsistent or OrderResults.NoMarketPrice;
 
 	private readonly Lock _lock = new();
 	private readonly Dictionary<(SecurityId secId, Portfolio pf), Position> _positions = [];
 	private readonly Dictionary<long, OrderExecInfo> _orderExecInfos = [];
 	private readonly Dictionary<SecurityId, decimal> _lastPrices = [];
+
+	// What each finished order ended on. Orders arrive as cumulative snapshots and the final one can
+	// arrive more than once; without this the executions of a repeated snapshot would be applied again.
+	private readonly Dictionary<long, OrderExecInfo> _finishedOrders = [];
 
 	/// <summary>
 	/// Per-position aggregates cache (blocked volume and active orders counters).
@@ -181,6 +200,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 			_posAggs.Clear();
 			_orderTracks.Clear();
 			_lastPrices.Clear();
+			_finishedOrders.Clear();
 		}
 	}
 
@@ -318,6 +338,19 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 			var key = (order.Security.ToSecurityId(), order.Portfolio);
 			var posExists = _positions.ContainsKey(key);
 
+			if (_finishedOrders.TryGetValue(txId, out var finished))
+			{
+				// The order is done and this snapshot repeats what was already applied: the per-order
+				// execution info is gone by now, so going further would count the whole fill again.
+				if (order.State == OrderStates.Done && matchedAbs <= finished.MatchedVolume)
+					return OrderResults.AlreadyFinished;
+
+				// The order came back to life. What it had executed by the time it finished is applied
+				// already, so the execution info goes back with it and later deltas stay right.
+				_finishedOrders.Remove(txId);
+				_orderExecInfos[txId] = finished;
+			}
+
 			// If there are no executions yet and the order state is not Active and no position exists yet, ignore.
 			if (matchedAbs == 0 && order.State != OrderStates.Active && !posExists)
 				return OrderResults.UnknownOrder;
@@ -452,7 +485,10 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 			// cleanup per-order exec info on terminal state to avoid leaks (Done covers both full fill and cancellation)
 			if (order.State == OrderStates.Done)
+			{
 				_orderExecInfos.Remove(txId);
+				_finishedOrders[txId] = execInfo;
+			}
 		}
 
 		PositionProcessed?.Invoke(position, isNew);

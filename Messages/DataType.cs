@@ -602,6 +602,8 @@ public class DataType : Equatable<DataType>, IPersistable
 
 		if (storage.ContainsKey(nameof(IsSecurityRequired)))
 			_isSecurityRequired = storage.GetValue<bool>(nameof(IsSecurityRequired));
+
+		Name = storage.GetValue<string>(nameof(Name));
 	}
 
 	/// <summary>
@@ -629,5 +631,9 @@ public class DataType : Equatable<DataType>, IPersistable
 
 		if (_isSecurityRequired == true)
 			storage.SetValue(nameof(IsSecurityRequired), true);
+
+		// The name is what a custom data type prints as, so it is part of what is being saved.
+		if (!Name.IsEmpty())
+			storage.SetValue(nameof(Name), Name);
 	}
 }

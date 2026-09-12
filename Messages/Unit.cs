@@ -179,7 +179,13 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		if (this < other)
 			return -1;
 
-		return 1;
+		if (this > other)
+			return 1;
+
+		// A percent is worth nothing until it is applied to something, so it has no order against an
+		// absolute value. Such a pair is ordered by measure unit, which keeps the comparison
+		// antisymmetric and sorting deterministic.
+		return other is null ? 1 : Type.CompareTo(other.Type);
 	}
 
 	[Obsolete]

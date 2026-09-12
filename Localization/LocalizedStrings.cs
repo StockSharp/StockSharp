@@ -114,6 +114,13 @@ public static partial class LocalizedStrings
 
 		_langIds.Add(langCode, _langIds.Count);
 		_translations.Add(translation);
+
+		// the language the caller asked for is carried again, so texts cached from the fallback are stale.
+		if (_requestedLanguage.EqualsIgnoreCase(langCode))
+		{
+			ResetCache();
+			ActiveLanguageChanged?.Invoke();
+		}
 	}
 
 	/// <summary>
@@ -137,6 +144,13 @@ public static partial class LocalizedStrings
 				continue;
 
 			_langIds[p.Key] = p.Value - 1;
+		}
+
+		// the language being read is gone, so every text cached from it goes with it.
+		if (_requestedLanguage.EqualsIgnoreCase(langCode))
+		{
+			ResetCache();
+			ActiveLanguageChanged?.Invoke();
 		}
 
 		return true;
@@ -172,23 +186,36 @@ public static partial class LocalizedStrings
 	/// </summary>
 	public static event Action ActiveLanguageChanged;
 
-	private static string _activeLanguage = EnCode;
+	private static string _requestedLanguage = EnCode;
 
 	/// <summary>
-	/// Current language.
+	/// Current language. It is the language chosen by the caller for as long as that language is
+	/// registered; while it is not, a registered one answers in its place, so no lookup is made
+	/// against a language that carries no words.
 	/// </summary>
 	public static string ActiveLanguage
 	{
-		get => _activeLanguage;
+		get
+		{
+			var lang = _requestedLanguage;
+
+			if (_langIds.ContainsKey(lang))
+				return lang;
+
+			if (_langIds.ContainsKey(EnCode))
+				return EnCode;
+
+			return _langIds.Count > 0 ? _langIds.Keys.First() : lang;
+		}
 		set
 		{
 			if (value.IsEmpty())
 				throw new ArgumentNullException(nameof(value));
 
-			if (ActiveLanguage.EqualsIgnoreCase(value) || !_langIds.ContainsKey(value))
+			if (_requestedLanguage.EqualsIgnoreCase(value) || !_langIds.ContainsKey(value))
 				return;
 
-			_activeLanguage = value;
+			_requestedLanguage = value;
 			ResetCache();
 
 			try

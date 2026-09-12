@@ -255,13 +255,21 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 						var explicitSubId = subscrMsg.OriginalTransactionId;
 
+						long[] ids;
+
 						// Hist+live child history is private backfill and must not be broadcast to already-online subscribers.
-						var ids = explicitSubId != 0 && info.HistLive.Contains(explicitSubId)
-							? [explicitSubId]
-							// For market data in Online state, use OnlineSubscribers; for historical (Active state), use all Subscribers.
-							: info.IsMarketData && info.State == SubscriptionStates.Online
-							? info.OnlineSubscribers.Cache
-							: info.Subscribers.CachedKeys;
+						if (explicitSubId != 0 && info.HistLive.Contains(explicitSubId))
+							ids = [explicitSubId];
+						// For market data in Online state, use OnlineSubscribers; for historical (Active state), use all Subscribers.
+						else if (info.IsMarketData && info.State == SubscriptionStates.Online)
+							ids = info.OnlineSubscribers.Cache;
+						// The shared stream has a history phase of its own and has not finished it yet: that
+						// backfill belongs to the subscriber that asked for it, not to those who joined for
+						// live data only and are waiting to be put online with the stream.
+						else if (info.Subscription.From is not null)
+							ids = [info.Subscription.TransactionId];
+						else
+							ids = info.Subscribers.CachedKeys;
 
 						if (info.ExtraFilters.Count > 0)
 						{
@@ -414,15 +422,22 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 						{
 							_logReceiver.AddDebugLog("Subscription {0} joined to {1}.", transId, info.Subscription.TransactionId);
 
-							var resultMsg = message.CreateResult();
+							// The request is acknowledged at once, but the joiner goes online with the stream
+							// it joined and not before it: while the venue has not confirmed that stream it may
+							// still refuse it, and the stream may still be replaying history the joiner never
+							// asked for.
+							if (info.State == SubscriptionStates.Online)
+							{
+								sendOutMsgs =
+								[
+									message.CreateResponse(),
+									message.CreateResult(),
+								];
 
-							sendOutMsgs =
-							[
-								message.CreateResponse(),
-								resultMsg,
-							];
-
-							info.OnlineSubscribers.Add(transId);
+								info.OnlineSubscribers.Add(transId);
+							}
+							else
+								sendOutMsgs = [message.CreateResponse()];
 						}
 					}
 
@@ -466,15 +481,23 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 
 						if (wasLast)
 						{
-							if (info.State.IsActive())
+							// The stream is open upstream from the moment the opening request went out until
+							// the venue ends it, so giving it up has to reach the venue even while its
+							// confirmation is still on the way. Only a stream the venue has already ended has
+							// nothing left to give up, and there the caller is answered here instead.
+							if (info.State is SubscriptionStates.Error or SubscriptionStates.Finished)
+							{
+								_logReceiver.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, info.State);
+
+								sendOutMsgs = [message.CreateResult()];
+							}
+							else
 							{
 								_state.AddUnsubscribeRequest(transId);
 
 								// copy full subscription's details into unsubscribe request
 								sendInMsg = MakeUnsubscribe(info.Subscription.TypedClone(), info.Subscription.TransactionId);
 							}
-							else
-								_logReceiver.AddWarningLog(LocalizedStrings.SubscriptionInState, originId, info.State);
 						}
 						else
 						{

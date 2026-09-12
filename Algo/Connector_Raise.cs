@@ -544,6 +544,8 @@ partial class Connector
 		if (subscription == null)
 			throw new ArgumentNullException(nameof(subscription));
 
+		ReleaseLevel1Ownership(subscription);
+
 		SubscriptionStopped?.Invoke(subscription, error);
 	}
 

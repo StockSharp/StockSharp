@@ -222,21 +222,21 @@ public class EmulatedPortfolio
 			pos.AveragePrice = price;
 		}
 
-		// Update blocked volume/value for active orders (order was executed)
-		// Use the average blocked price, not the trade price, to properly unblock
+		// The lots that traded give back what they were holding, at the price stated for them, the way
+		// a cancelled balance does. Averaged over every order on the side instead, one order's fill
+		// releases part of another's block. The side gives back no more than it is holding.
+		var held = side == Sides.Buy ? pos.TotalBidsValue : pos.TotalAsksValue;
+		var released = (volume * price).Min(held.Max(0m));
+
 		if (side == Sides.Buy)
 		{
-			var avgBlockedPrice = pos.TotalBidsVolume > 0 ? pos.TotalBidsValue / pos.TotalBidsVolume : price;
-			var blockedValue = volume * avgBlockedPrice;
 			pos.TotalBidsVolume -= volume;
-			pos.TotalBidsValue -= blockedValue;
+			pos.TotalBidsValue -= released;
 		}
 		else
 		{
-			var avgBlockedPrice = pos.TotalAsksVolume > 0 ? pos.TotalAsksValue / pos.TotalAsksVolume : price;
-			var blockedValue = volume * avgBlockedPrice;
 			pos.TotalAsksVolume -= volume;
-			pos.TotalAsksValue -= blockedValue;
+			pos.TotalAsksValue -= released;
 		}
 
 		UpdateBlockedMoney();

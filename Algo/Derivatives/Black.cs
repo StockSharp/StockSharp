@@ -42,9 +42,14 @@ public class Black : BlackScholes
 	}
 
 	/// <inheritdoc />
-	public override decimal? Premium(DateTime currentTime, decimal? deviation = null, decimal? assetPrice = null)
+	protected override decimal CalcPremium(decimal deviation, decimal assetPrice, double timeToExp)
 	{
-		return GetExpRate(currentTime) * base.Premium(currentTime, deviation, assetPrice);
+		// The option is written on a forward, so both legs of the payoff are discounted once and by the
+		// same rate: C = e^(-rT) * (F * N(d1) - K * N(d2)). Pricing the legs at a zero rate and applying
+		// e^(-rT) to their difference is that formula, and it leaves the strike discounted exactly once.
+		var premium = DerivativesHelper.Premium(OptionType, GetStrike(), assetPrice, 0, 0, deviation, timeToExp, D1(deviation, assetPrice, timeToExp));
+
+		return (decimal)DerivativesHelper.ExpRate(RiskFree, timeToExp) * premium;
 	}
 
 	/// <inheritdoc />

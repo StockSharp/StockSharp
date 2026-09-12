@@ -378,7 +378,9 @@ public class StringToSecurityIdTypeConverter : TypeConverter
 		if (value is not string securityId)
 			return base.ConvertFrom(ctx, culture, value);
 
-		var isNullable = ctx.PropertyDescriptor?.PropertyType.IsNullable() == true;
+		// TypeDescriptor passes no context outside of a property grid, and converting an id from a
+		// config file or from code has to work all the same.
+		var isNullable = ctx?.PropertyDescriptor?.PropertyType.IsNullable() == true;
 
 		const string delimiter = "@";
 

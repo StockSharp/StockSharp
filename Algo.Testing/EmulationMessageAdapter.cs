@@ -30,16 +30,14 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	public EmulationMessageAdapter(IMessageAdapter innerAdapter, IMessageChannel inChannel, bool isEmulationOnly, ISecurityProvider securityProvider, IPortfolioProvider portfolioProvider, IExchangeInfoProvider exchangeInfoProvider)
 		: base(innerAdapter)
 	{
-		var seed = DateTime.UtcNow.Ticks;
-
+		// The identifier generators start where the settings say and nowhere else: a run seeded from
+		// the clock numbers its orders differently every time, and no two runs can be compared.
 		Emulator = new MarketEmulator(securityProvider, portfolioProvider, exchangeInfoProvider, TransactionIdGenerator)
 		{
 			Parent = this,
 			Settings =
 			{
 				ConvertTime = true,
-				InitialOrderId = seed,
-				InitialTradeId = seed,
 			}
 		};
 
@@ -53,27 +51,31 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 			_inAdapter = new PositionMessageAdapter(_inAdapter, new PositionManager(isPosEmu, new PositionManagerState()));
 
 		_inAdapter = new ChannelMessageAdapter(_inAdapter, inChannel, new PassThroughMessageChannel());
-		_inAdapter.NewOutMessageAsync += (message, cancellationToken) =>
-		{
-			// When a EmulationState message comes back from the emulator queue,
-			// it means all preceding messages (candles etc.) have been processed.
-			// Now forward the pending Stopping to the connector.
-			if (message is EmulationStateMessage && _pendingStopping is { } stopping)
-			{
-				_pendingStopping = null;
-				return RaiseNewOutMessageAsync(stopping, cancellationToken);
-			}
-
-			return RaiseNewOutMessageAsync(message, cancellationToken);
-		};
+		_inAdapter.NewOutMessageAsync += OnEmulatorNewOutMessageAsync;
 
 		_isEmulationOnly = isEmulationOnly;
+	}
+
+	private ValueTask OnEmulatorNewOutMessageAsync(Message message, CancellationToken cancellationToken)
+	{
+		// When a EmulationState message comes back from the emulator queue,
+		// it means all preceding messages (candles etc.) have been processed.
+		// Now forward the pending Stopping to the connector.
+		if (message is EmulationStateMessage && _pendingStopping is { } stopping)
+		{
+			_pendingStopping = null;
+			return RaiseNewOutMessageAsync(stopping, cancellationToken);
+		}
+
+		return RaiseNewOutMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
 	public override void Dispose()
 	{
-		_inAdapter.NewOutMessageAsync -= RaiseNewOutMessageAsync;
+		// The same handler the constructor attached, or the torn-down adapter keeps raising whatever
+		// still moves through the incoming channel.
+		_inAdapter.NewOutMessageAsync -= OnEmulatorNewOutMessageAsync;
 		base.Dispose();
 	}
 
@@ -113,8 +115,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 		{
 			case MessageTypes.OrderRegister:
 			{
-				var regMsg = (OrderRegisterMessage)message;
-				await ProcessOrderMessage(regMsg.PortfolioName, regMsg, cancellationToken);
+				await ProcessOrderMessage((OrderRegisterMessage)message, cancellationToken);
 				return;
 			}
 			case MessageTypes.OrderReplace:
@@ -346,25 +347,14 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 		}
 	}
 
-	private ValueTask ProcessOrderMessage(string portfolioName, OrderMessage message, CancellationToken cancellationToken)
+	private ValueTask ProcessOrderMessage(OrderMessage message, CancellationToken cancellationToken)
 	{
-		if (OwnInnerAdapter)
-		{
-			if (_isEmulationOnly || portfolioName.EqualsIgnoreCase(Extensions.SimulatorPortfolioName))
-			{
-				if (!_isEmulationOnly)
-					_emuOrderIds.Add(message.TransactionId);
-
-				return SendToEmulator(message, cancellationToken);
-			}
-			else
-				return base.OnSendInMessageAsync(message, cancellationToken);
-		}
-		else
-		{
+		// An emulator registers no order anywhere else, whatever account the order names: the real
+		// connection is here for market data, and an order reaching it is a live trade nobody asked for.
+		if (!_isEmulationOnly)
 			_emuOrderIds.Add(message.TransactionId);
-			return SendToEmulator(message, cancellationToken);
-		}
+
+		return SendToEmulator(message, cancellationToken);
 	}
 
 	private ValueTask ProcessOrderMessage(long transId, Message message, CancellationToken cancellationToken)
@@ -396,5 +386,19 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	/// </summary>
 	/// <returns>Copy.</returns>
 	public override IMessageAdapter Clone()
-		=> new EmulationMessageAdapter(InnerAdapter.TypedClone(), InChannel, _isEmulationOnly, Emulator.SecurityProvider, Emulator.PortfolioProvider, Emulator.ExchangeInfoProvider);
+	{
+		// A channel of its own: sharing one hands every message sent to either adapter to both
+		// emulators, so the copy fills orders out of work it was never given.
+		var clone = new EmulationMessageAdapter(InnerAdapter.TypedClone(), InChannel.Clone(), _isEmulationOnly,
+			Emulator.SecurityProvider, Emulator.PortfolioProvider, Emulator.ExchangeInfoProvider)
+		{
+			OwnInnerAdapter = OwnInnerAdapter,
+		};
+
+		// The copy emulates on the terms the original was given, carried by value so retuning one
+		// run does not retune the other.
+		clone.Settings.Load(Settings.Save());
+
+		return clone;
+	}
 }

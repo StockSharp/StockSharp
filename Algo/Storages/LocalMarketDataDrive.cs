@@ -148,8 +148,6 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			SaveDates(DatesDict.CachedValues);
 			ChangeIndex(date, true);
 
-			_availableDataTypes.Remove(_drive.Path);
-
 			return default;
 		}
 
@@ -165,16 +163,6 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			DatesDict[date] = date;
 			SaveDates(DatesDict.CachedValues);
 			ChangeIndex(date, false);
-
-			using (_availableDataTypes.EnterScope())
-			{
-				var tuple = _availableDataTypes.TryGetValue(_drive.Path);
-
-				if (tuple == null || !tuple.Second)
-					return default;
-
-				tuple.First.Add(_dataType);
-			}
 
 			return default;
 		}
@@ -848,8 +836,6 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		return Impl();
 	}
 
-	private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new(StringComparer.InvariantCultureIgnoreCase);
-
 	/// <inheritdoc />
 	public override IAsyncEnumerable<DataType> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format)
 	{
@@ -879,25 +865,17 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		if (securityId == default)
 		{
-			using (_availableDataTypes.EnterScope())
-			{
-				var tuple = _availableDataTypes.SafeAdd(Path, key => RefTuple.Create(new HashSet<DataType>(), false));
+			// What the drive holds is on disk, and another process or a restored backup writing into the
+			// same folder is the normal way data arrives, so the answer is read from there every time.
+			if (!_fileSystem.DirectoryExists(Path))
+				return AsyncEnumerable.Empty<DataType>();
 
-				if (!tuple.Second)
-				{
-					if (_fileSystem.DirectoryExists(Path))
-					{
-						tuple.First.AddRange(_fileSystem
-							.EnumerateDirectories(Path)
-							.SelectMany(d => _fileSystem.EnumerateDirectories(d))
-							.SelectMany(GetDataTypes));
-					}
-
-					tuple.Second = true;
-				}
-
-				return tuple.First.ToAsyncEnumerable();
-			}
+			return _fileSystem
+				.EnumerateDirectories(Path)
+				.SelectMany(d => _fileSystem.EnumerateDirectories(d))
+				.SelectMany(GetDataTypes)
+				.Distinct()
+				.ToAsyncEnumerable();
 		}
 
 		var s = GetSecurityPath(securityId);

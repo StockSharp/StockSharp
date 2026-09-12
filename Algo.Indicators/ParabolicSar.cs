@@ -20,6 +20,7 @@ public class ParabolicSar : BaseIndicator
 		private bool _longPosition;
 		private decimal _xp; // Extreme Price
 		private decimal _af; // Acceleration factor
+		private int _bar;
 		private int _prevBar;
 		private bool _afIncreased;
 		private int _reverseBar;
@@ -27,22 +28,20 @@ public class ParabolicSar : BaseIndicator
 		private decimal _prevSar;
 		private decimal _todaySar;
 
-		public decimal Calculate(List<ICandleMessage> candles, decimal currentValue, decimal acceleration, decimal accelerationMax, decimal accelerationStep, bool isFinal, ICandleMessage candle)
+		public decimal Calculate(List<ICandleMessage> candles, decimal currentValue, decimal acceleration, decimal accelerationMax, decimal accelerationStep)
 		{
-			if (candles.Count == 0)
-				candles.Add(candle);
-
-			if (isFinal)
-				candles.Add(candle);
-			else
-				candles[^1] = candle;
+			// Bars are counted here rather than taken from the buffer, which holds only the candles the
+			// calculation reads and so stops growing once the window is full.
+			_bar++;
 
 			_prevValue = currentValue;
 
-			if (candles.Count < 3)
+			// Wilder seeds the trend from a window of three bars, so nothing is published before the
+			// third candle has been seen.
+			if (_bar < _windowSize)
 				return _prevValue;
 
-			if (candles.Count == 3)
+			if (_bar == _windowSize)
 			{
 				_longPosition = candles[^1].HighPrice > candles[^2].HighPrice;
 				var max = candles.Max(t => t.HighPrice);
@@ -52,12 +51,12 @@ public class ParabolicSar : BaseIndicator
 				return _xp + (_longPosition ? -1 : 1) * (max - min) * _af;
 			}
 
-			if (_afIncreased && _prevBar != candles.Count)
+			if (_afIncreased && _prevBar != _bar)
 				_afIncreased = false;
 
 			var value = _prevValue;
 
-			if (_reverseBar != candles.Count)
+			if (_reverseBar != _bar)
 			{
 				_todaySar = TodaySar(candles, _prevValue + _af * (_xp - _prevValue), acceleration);
 
@@ -85,7 +84,7 @@ public class ParabolicSar : BaseIndicator
 
 				if (_longPosition)
 				{
-					if (_prevBar != candles.Count || candles[^1].LowPrice < _prevSar)
+					if (_prevBar != _bar || candles[^1].LowPrice < _prevSar)
 					{
 						value = _todaySar;
 						_prevSar = _todaySar;
@@ -101,7 +100,7 @@ public class ParabolicSar : BaseIndicator
 				}
 				else if (!_longPosition)
 				{
-					if (_prevBar != candles.Count || candles[^1].HighPrice > _prevSar)
+					if (_prevBar != _bar || candles[^1].HighPrice > _prevSar)
 					{
 						value = _todaySar;
 						_prevSar = _todaySar;
@@ -130,7 +129,7 @@ public class ParabolicSar : BaseIndicator
 					_reverseValue.Max(candles[^1].HighPrice), acceleration);
 			}
 
-			_prevBar = candles.Count;
+			_prevBar = _bar;
 
 			return value;
 		}
@@ -156,10 +155,10 @@ public class ParabolicSar : BaseIndicator
 			var todaySar = _xp;
 
 			if ((_longPosition && _prevSar > candles[^1].LowPrice) ||
-				(!_longPosition && _prevSar < candles[^1].HighPrice) || _prevBar != candles.Count)
+				(!_longPosition && _prevSar < candles[^1].HighPrice) || _prevBar != _bar)
 			{
 				_longPosition = !_longPosition;
-				_reverseBar = candles.Count;
+				_reverseBar = _bar;
 				_reverseValue = _xp;
 				_af = acceleration;
 				_xp = _longPosition ? candles[^1].HighPrice : candles[^1].LowPrice;
@@ -186,6 +185,7 @@ public class ParabolicSar : BaseIndicator
 			_longPosition = false;
 			_xp = 0;
 			_af = 0;
+			_bar = 0;
 			_prevBar = 0;
 			_afIncreased = false;
 			_reverseBar = 0;
@@ -194,6 +194,9 @@ public class ParabolicSar : BaseIndicator
 			_todaySar = 0;
 		}
 	}
+
+	// The calculation reads the last three candles and nothing before them.
+	private const int _windowSize = 3;
 
 	private CalcBuffer _buf;
 	private readonly List<ICandleMessage> _candles = [];
@@ -273,7 +276,25 @@ public class ParabolicSar : BaseIndicator
 
 		var candle = input.ToCandle();
 		var b = _buf;
-		var val = b.Calculate(input.IsFinal ? _candles : [.. _candles.Skip(1), candle], this.GetCurrentValue(), Acceleration, AccelerationMax, AccelerationStep, input.IsFinal, candle);
+
+		List<ICandleMessage> window;
+
+		if (input.IsFinal)
+		{
+			if (_candles.Count == _windowSize)
+				_candles.RemoveAt(0);
+
+			_candles.Add(candle);
+			window = _candles;
+		}
+		else
+		{
+			// A preview asks what the bar would be worth if it closed here, so it reads the confirmed
+			// candles before it and leaves both the buffer and the state untouched.
+			window = [.. _candles.Skip(_candles.Count == _windowSize ? 1 : 0), candle];
+		}
+
+		var val = b.Calculate(window, this.GetCurrentValue(), Acceleration, AccelerationMax, AccelerationStep);
 
 		if (input.IsFinal)
 			_buf = b;

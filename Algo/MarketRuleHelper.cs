@@ -1,4 +1,4 @@
-namespace StockSharp.Algo;
+﻿namespace StockSharp.Algo;
 
 /// <summary>
 /// Extension class for <see cref="IMarketRule"/>.
@@ -145,7 +145,7 @@ public static partial class MarketRuleHelper
 		// The rule stays alive for whoever built it - it is already subscribed to its source - so a
 		// container that would not take it puts it to sleep instead: an event arriving afterwards
 		// belongs to no one and must not act.
-		if (!container.Rules.TryAdd(rule))
+		if (!container.Rules.TryRegister(rule))
 			rule.IsSuspended = true;
 
 		return rule;

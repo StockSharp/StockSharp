@@ -269,8 +269,11 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 
 		var valuesByName = values.Where(p => p.Key != _inputSocket).ToDictionary(p => p.Key.Name, p => (object)(int)p.Value.GetValue<decimal>());
 
+		// The property was offered to the author from the socket's type, so it is read back under that type:
+		// a message implements an interface member explicitly, and one name can mean different values on
+		// different interfaces of the same class.
 		object getPropValue(object entity, string propName)
-			=> entity.GetPropValue(propName, (v, n) => v.TryGetVirtualValue(n, out var pv) ? pv : null, valuesByName);
+			=> entity.GetPropValue(Type?.Type, propName, (v, n) => v.TryGetVirtualValue(n, out var pv) ? pv : null, valuesByName);
 
 		if (nextValue is IComplexIndicatorValue complex)
 		{

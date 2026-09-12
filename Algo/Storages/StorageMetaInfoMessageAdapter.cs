@@ -235,7 +235,9 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 		{
 			outMsg.SetSubscriptionIds(subscriptionId: transId);
 
-			if (outMsg is IServerTimeMessage timeMsg)
+			// What storage holds carries the time it was last changed; only a record that never
+			// recorded one is stamped with the time of the lookup.
+			if (outMsg is IServerTimeMessage timeMsg && timeMsg.ServerTime == default)
 				timeMsg.ServerTime = now;
 
 			outMsg.OfflineMode = MessageOfflineModes.Ignore;

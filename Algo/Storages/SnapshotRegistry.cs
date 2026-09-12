@@ -61,8 +61,6 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 
 					try
 					{
-						var allError = true;
-
 						using (var stream = _fileSystem.OpenRead(_fileName))
 						{
 							_version = new Version(stream.ReadByte(), stream.ReadByte());
@@ -84,7 +82,6 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 								try
 								{
 									message = _serializer.Deserialize(_version, buffer);
-									allError = false;
 								}
 								catch (Exception ex)
 								{
@@ -100,17 +97,13 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 
 							//_currOffset = stream.Length;
 						}
-
-						if (allError)
-						{
-							_fileSystem.DeleteFile(_fileName);
-						}
 					}
 					catch (Exception ex)
 					{
+						// A file that cannot be read is reported and kept: it is the only copy of what it
+						// holds, and whatever was read before the damaged record stays available.
 						Debug.WriteLine($"Snapshot (ERROR): {ex.Message}");
 						ex.LogError();
-						_fileSystem.DeleteFile(_fileName);
 					}
 				}
 				else

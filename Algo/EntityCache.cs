@@ -1267,6 +1267,24 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 				CanLastTrade = false;
 			}
 		}
+
+		/// <summary>
+		/// Let the best quotes be taken from Level1 again, once the order book stream that owned them has ended.
+		/// </summary>
+		public void RestoreBestQuotes()
+		{
+			using (_sync.EnterScope())
+				CanBestQuotes = true;
+		}
+
+		/// <summary>
+		/// Let the last trade be taken from Level1 again, once the tick stream that owned it has ended.
+		/// </summary>
+		public void RestoreLastTrade()
+		{
+			using (_sync.EnterScope())
+				CanLastTrade = true;
+		}
 	}
 
 	private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = [];
@@ -1318,6 +1336,30 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 	/// <returns>Level1 info.</returns>
 	public Level1Info GetSecurityValues(Security security, DateTime serverTime)
 		=> _securityValues.SafeAdd(security, key => new Level1Info(security.ToSecurityId(), serverTime));
+
+	/// <summary>
+	/// Hand the Level1 fields an ended market data stream owned back to Level1. An order book owns the
+	/// best quotes and a tick stream owns the last trade only while it runs; once it is gone Level1 is
+	/// the only source left for them.
+	/// </summary>
+	/// <param name="security">Security the stream carried.</param>
+	/// <param name="dataType">Data type of the stream that ended.</param>
+	public void ReleaseLevel1Ownership(Security security, DataType dataType)
+	{
+		if (security is null)
+			throw new ArgumentNullException(nameof(security));
+
+		if (dataType is null)
+			throw new ArgumentNullException(nameof(dataType));
+
+		if (!_securityValues.TryGetValue(security, out var info))
+			return;
+
+		if (dataType == DataType.MarketDepth)
+			info.RestoreBestQuotes();
+		else if (dataType == DataType.Ticks)
+			info.RestoreLastTrade();
+	}
 
 	/// <summary>
 	/// Update cached order book snapshot for a security.

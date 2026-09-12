@@ -1,6 +1,7 @@
-﻿namespace StockSharp.Localization;
+namespace StockSharp.Localization;
 
 using System;
+using System.Globalization;
 using System.Linq;
 using System.IO;
 using System.Text;
@@ -8,10 +9,14 @@ using System.Text.Json;
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 [Generator]
 public class LocalizedStringsGenerator : IIncrementalGenerator
 {
+	// Members the emitted class declares on its own, which no resource may take.
+	private static readonly string[] _ownMembers = ["ResetCache", "_stringsFileName"];
+
 	void IIncrementalGenerator.Initialize(IncrementalGeneratorInitializationContext initContext)
 	{
 		//System.Diagnostics.Debugger.Launch();
@@ -41,20 +46,23 @@ public class LocalizedStringsGenerator : IIncrementalGenerator
 				}
 			}
 
+			var taken = new HashSet<string>(_ownMembers, StringComparer.Ordinal);
+
 			foreach (var p in dict)
 			{
-				var prop = p.Key;
-				var xmlComment = p.Value.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;");
+				var prop = GetMemberName(p.Key, taken);
+				var key = SymbolDisplay.FormatLiteral(p.Key, true);
+				var xmlComment = ToXmlComment(p.Value);
 
 				items.AppendLine($@"	/// <summary>
-	/// {xmlComment}
+{xmlComment}
 	/// </summary>
-	public const string {prop}Key = nameof({prop});
+	public const string {prop}Key = {key};
 
 	private static string _{prop};
 
 	/// <summary>
-	/// {xmlComment}
+{xmlComment}
 	/// </summary>
 	public static string {prop} => _{prop} ??= GetString({prop}Key);").AppendLine();
 
@@ -80,5 +88,51 @@ partial class LocalizedStrings
 	}}
 }}");
 		});
+	}
+
+	// A resource key is written by whoever adds the string: it can be a C# keyword, start with a digit
+	// or carry a dot. The member is named after it as closely as C# allows, and a name already spoken
+	// for - the key constant of another resource, for one - is numbered so every resource keeps a
+	// member of its own.
+	private static string GetMemberName(string key, HashSet<string> taken)
+	{
+		var name = new StringBuilder(key.Length);
+
+		foreach (var c in key)
+			name.Append(SyntaxFacts.IsIdentifierPartCharacter(c) ? c : '_');
+
+		if (name.Length == 0 || !SyntaxFacts.IsIdentifierStartCharacter(name[0]) || SyntaxFacts.GetKeywordKind(name.ToString()) != SyntaxKind.None)
+			name.Insert(0, '_');
+
+		var baseName = name.ToString();
+		var candidate = baseName;
+
+		for (var i = 2; !IsFree(candidate, taken); i++)
+			candidate = baseName + "_" + i.ToString(CultureInfo.InvariantCulture);
+
+		taken.Add(candidate);
+		taken.Add($"{candidate}Key");
+		taken.Add($"_{candidate}");
+
+		return candidate;
+	}
+
+	private static bool IsFree(string name, HashSet<string> taken)
+		=> !taken.Contains(name) && !taken.Contains($"{name}Key") && !taken.Contains($"_{name}");
+
+	// The text is copied into the documentation comment, and a line break there would end the comment
+	// and leave the rest of the sentence standing in the class body as code.
+	private static string ToXmlComment(string value)
+	{
+		var text = (value ?? string.Empty)
+			.Replace("&", "&amp;")
+			.Replace("<", "&lt;")
+			.Replace(">", "&gt;");
+
+		return string.Join("\n", text
+			.Replace("\r\n", "\n")
+			.Replace('\r', '\n')
+			.Split('\n')
+			.Select(line => $"\t/// {line}"));
 	}
 }

@@ -41,12 +41,23 @@ public class ExtendedInfoStorageMessageAdapter : MessageAdapterWrapper
 	/// <inheritdoc />
 	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		var secMsg = message as SecurityMessage;
-
-		//if (secMsg?.ExtensionInfo != null)
-		//	GetStorageAsync().Add(secMsg.SecurityId, secMsg.ExtensionInfo);
-
+		// The wrapper is transparent on the way out, so the message travels on before anything is
+		// recorded. Every security the adapter reports is then written into the storage named after that
+		// adapter, under the extended field schema it declares; a storage that hands back no item for
+		// this adapter has nowhere to keep them.
 		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+
+		if (message.Type != MessageTypes.Security)
+			return;
+
+		var secMsg = (SecurityMessage)message;
+
+		if (secMsg.SecurityId == default)
+			return;
+
+		var storage = await GetStorageAsync(cancellationToken);
+
+		storage?.Add(secMsg.SecurityId, new Dictionary<string, object>());
 	}
 
 	/// <summary>

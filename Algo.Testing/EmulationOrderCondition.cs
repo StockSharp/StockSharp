@@ -58,15 +58,20 @@ public class EmulationOrderCondition : OrderCondition, IStopLossOrderCondition, 
 		set => Parameters[nameof(IStopLossOrderCondition.IsTrailing)] = value;
 	}
 
+	// The two halves of a protective pair are stored apart: both interfaces name their price the same
+	// way, so under one key a take-profit price would move the stop-loss with it and the condition
+	// could never say which of the two it is.
+	private const string _takeProfit = nameof(ITakeProfitOrderCondition) + ".";
+
 	decimal? ITakeProfitOrderCondition.ClosePositionPrice
 	{
-		get => (decimal?)Parameters.TryGetValue(nameof(ITakeProfitOrderCondition.ClosePositionPrice));
-		set => Parameters[nameof(ITakeProfitOrderCondition.ClosePositionPrice)] = value;
+		get => (decimal?)Parameters.TryGetValue(_takeProfit + nameof(ITakeProfitOrderCondition.ClosePositionPrice));
+		set => Parameters[_takeProfit + nameof(ITakeProfitOrderCondition.ClosePositionPrice)] = value;
 	}
 
 	decimal? ITakeProfitOrderCondition.ActivationPrice
 	{
-		get => (decimal?)Parameters.TryGetValue(nameof(ITakeProfitOrderCondition.ActivationPrice));
-		set => Parameters[nameof(ITakeProfitOrderCondition.ActivationPrice)] = value;
+		get => (decimal?)Parameters.TryGetValue(_takeProfit + nameof(ITakeProfitOrderCondition.ActivationPrice));
+		set => Parameters[_takeProfit + nameof(ITakeProfitOrderCondition.ActivationPrice)] = value;
 	}
 }

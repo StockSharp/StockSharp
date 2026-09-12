@@ -377,11 +377,12 @@ public class XmlExporter(DataType dataType, Stream stream) : BaseExporter(dataTy
 			if (n.ExpiryDate != null)
 				await WriteAttrAsync(writer, "expiry", n.ExpiryDate.Value);
 
-			if (!n.Story.IsEmpty())
-				await writer.WriteCDataAsync(n.Story);
-
 			if (n.SeqNum != default)
 				await WriteAttrAsync(writer, "seqNum", n.SeqNum);
+
+			// The story is the element content, and no attribute may follow content.
+			if (!n.Story.IsEmpty())
+				await writer.WriteCDataAsync(n.Story);
 
 			await writer.WriteEndElementAsync();
 		}, cancellationToken);

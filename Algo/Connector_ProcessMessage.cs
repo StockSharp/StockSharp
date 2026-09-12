@@ -808,6 +808,34 @@ partial class Connector
 		ProcessSubscriptionResult(subscription, items);
 	}
 
+	/// <summary>
+	/// While an order book or a tick stream runs it is the authority on the Level1 fields it carries and
+	/// what Level1 says about them is ignored. That ends with the stream: once the last one for the
+	/// security is gone, Level1 is the only source left and has to report those fields again, or the
+	/// caller is shown the final value of a stream that ended as if it were the current market.
+	/// </summary>
+	private void ReleaseLevel1Ownership(Subscription subscription)
+	{
+		var dataType = subscription.DataType;
+
+		if (dataType != DataType.MarketDepth && dataType != DataType.Ticks)
+			return;
+
+		if (subscription.SecurityId is not SecurityId secId)
+			return;
+
+		foreach (var other in _subscriptionManager.Subscriptions)
+		{
+			if (other != subscription && other.DataType == dataType && other.SecurityId == secId && other.State.IsActive())
+				return;
+		}
+
+		var security = TryGetSecurity(secId);
+
+		if (security is not null)
+			_entityCache.ReleaseLevel1Ownership(security, dataType);
+	}
+
 	private void ProcessSubscriptionResult(Subscription subscription, object[] items)
 	{
 		T[] typed<T>() => items.Cast<T>().ToArray();
@@ -1014,7 +1042,7 @@ partial class Connector
 			}
 
 			if (changes.Count > 0)
-				RaiseValuesChanged(security, message.Changes, message.ServerTime, message.LocalTime);
+				RaiseValuesChanged(security, changes, message.ServerTime, message.LocalTime);
 		}
 	}
 

@@ -33,7 +33,10 @@ public class InMemoryMessageAdapterProvider : IMessageAdapterProvider
 		_transportAdapter = transportAdapter;
 
 		var idGenerator = new IncrementalIdGenerator();
-		PossibleAdapters = [.. Directory.GetCurrentDirectory().FindAdapters(ex => ex.LogError()).Select(t =>
+
+		// what a user may choose from is what ships with the application, so the scan follows the
+		// binaries rather than the folder the process happened to be started from.
+		PossibleAdapters = [.. AppContext.BaseDirectory.FindAdapters(ex => ex.LogError()).Select(t =>
 		{
 			try
 			{

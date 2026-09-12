@@ -82,24 +82,27 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 					}
 
 					await inners.Select(inner => base.OnSendInMessageAsync(inner, cancellationToken)).WhenAll();
+
+					// The client is answered under its own transaction once the venue has answered
+					// for the legs, not before: until then it is not known whether the basket can
+					// be served at all.
+					return;
 				}
-				else
+
+				if (!_subscriptionsByParentId.TryGetValue(mdMsg.OriginalTransactionId, out var unsubscribed))
+					break;
+
+				// TODO
+				//_subscriptionsByParentId.Remove(mdMsg.OriginalTransactionId);
+
+				foreach (var id in unsubscribed.LegsSubscriptions.CachedKeys)
 				{
-					if (!_subscriptionsByParentId.TryGetValue(mdMsg.OriginalTransactionId, out var info))
-						break;
-
-					// TODO
-					//_subscriptionsByParentId.Remove(mdMsg.OriginalTransactionId);
-
-					foreach (var id in info.LegsSubscriptions.CachedKeys)
+					await base.OnSendInMessageAsync(new MarketDataMessage
 					{
-						await base.OnSendInMessageAsync(new MarketDataMessage
-						{
-							TransactionId = TransactionIdGenerator.GetNextId(),
-							IsSubscribe = false,
-							OriginalTransactionId = id
-						}, cancellationToken);
-					}
+						TransactionId = TransactionIdGenerator.GetNextId(),
+						IsSubscribe = false,
+						OriginalTransactionId = id
+					}, cancellationToken);
 				}
 
 				await RaiseNewOutMessageAsync(new SubscriptionResponseMessage
@@ -130,23 +133,40 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 
 				if (_subscriptionsByChildId.TryGetValue(responseMsg.OriginalTransactionId, out var info))
 				{
+					SubscriptionResponseMessage parentMsg = null;
+
 					using (info.LegsSubscriptions.EnterScope())
 					{
 						if (responseMsg.IsOk())
 						{
 							info.LegsSubscriptions[responseMsg.OriginalTransactionId] = SubscriptionStates.Active;
 
-							if (info.State != SubscriptionStates.Active)
+							// The basket is served only when every leg behind it is.
+							if (info.State != SubscriptionStates.Active && info.LegsSubscriptions.CachedValues.All(s => s == SubscriptionStates.Active))
+							{
 								ChangeState(info, SubscriptionStates.Active);
+
+								parentMsg = new() { OriginalTransactionId = info.TransactionId };
+							}
 						}
 						else
 						{
 							info.LegsSubscriptions[responseMsg.OriginalTransactionId] = SubscriptionStates.Error;
 
+							// A leg the venue refused leaves the basket incomplete for good, so the
+							// client hears the refusal instead of waiting on a stream that will
+							// never start.
 							if (info.State != SubscriptionStates.Error)
+							{
 								ChangeState(info, SubscriptionStates.Error);
+
+								parentMsg = new() { OriginalTransactionId = info.TransactionId, Error = responseMsg.Error };
+							}
 						}
 					}
+
+					if (parentMsg is not null)
+						await RaiseNewOutMessageAsync(parentMsg, cancellationToken);
 				}
 
 				break;
@@ -162,12 +182,26 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 
 				if (_subscriptionsByChildId.TryGetValue(id, out var info))
 				{
+					var allLegs = false;
+
 					using (info.LegsSubscriptions.EnterScope())
 					{
 						info.LegsSubscriptions[id] = state;
 
-						if (info.LegsSubscriptions.CachedValues.All(s => s == state))
+						if (info.State != state && info.LegsSubscriptions.CachedValues.All(s => s == state))
+						{
 							ChangeState(info, state);
+							allLegs = true;
+						}
+					}
+
+					if (allLegs)
+					{
+						Message parentMsg = state == SubscriptionStates.Online
+							? new SubscriptionOnlineMessage { OriginalTransactionId = info.TransactionId }
+							: new SubscriptionFinishedMessage { OriginalTransactionId = info.TransactionId };
+
+						await RaiseNewOutMessageAsync(parentMsg, cancellationToken);
 					}
 				}
 
@@ -206,6 +240,8 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 	/// <returns>Copy.</returns>
 	public override IMessageAdapter Clone()
 	{
-		return new BasketSecurityMessageAdapter(InnerAdapter, _securityProvider, _processorProvider, _exchangeInfoProvider);
+		// A copy is a second adapter and needs a link of its own: sharing the original's would
+		// make the two answer each other's legs over one connection.
+		return new BasketSecurityMessageAdapter(InnerAdapter.TypedClone(), _securityProvider, _processorProvider, _exchangeInfoProvider);
 	}
 }

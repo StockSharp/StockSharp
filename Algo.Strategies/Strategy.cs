@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies;
+﻿namespace StockSharp.Algo.Strategies;
 
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Risk;
@@ -1837,7 +1837,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 		var res = _posManager.ProcessOrder(order);
 
-		if (res != StrategyPositionManager.OrderResults.OK && ErrorState == LogLevels.Info)
+		if (StrategyPositionManager.IsProblem(res) && ErrorState == LogLevels.Info)
 			ErrorState = LogLevels.Warning;
 	}
 
@@ -2169,7 +2169,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			EnsureActiveOrderBalance(order);
 			var res = _posManager.ProcessOrder(order);
 
-			if (res != StrategyPositionManager.OrderResults.OK && ErrorState == LogLevels.Info)
+			if (StrategyPositionManager.IsProblem(res) && ErrorState == LogLevels.Info)
 				ErrorState = LogLevels.Warning;
 		}
 

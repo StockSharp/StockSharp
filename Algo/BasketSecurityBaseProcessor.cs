@@ -94,6 +94,22 @@ public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity>(Security 
 				break;
 			}
 
+			case MessageTypes.Level1Change:
+			{
+				var l1Msg = (Level1ChangeMessage)message;
+
+				if (!ContainsLeg(l1Msg.SecurityId))
+					yield break;
+
+				if (!CanProcess(l1Msg.SecurityId, l1Msg.ServerTime,
+					l1Msg.TryGetDecimal(Level1Fields.LastTradePrice),
+					l1Msg.TryGetDecimal(Level1Fields.Volume),
+					l1Msg.TryGetDecimal(Level1Fields.OpenInterest)))
+					yield break;
+
+				break;
+			}
+
 			case MessageTypes.Execution:
 			{
 				var execMsg = (ExecutionMessage)message;
@@ -128,7 +144,9 @@ public abstract class ContinuousSecurityBaseProcessor<TBasketSecurity>(Security 
 					break;
 				}
 
-				throw new ArgumentOutOfRangeException(nameof(message), LocalizedStrings.UnknownType.Put(message.Type));
+				// Every message of a leg subscription is fed in, and what the series is not made
+				// of - news and the like - is not its data.
+				yield break;
 			}
 		}
 
@@ -174,7 +192,9 @@ public class ContinuousSecurityExpirationProcessor : ContinuousSecurityBaseProce
 		if (_finished)
 			return false;
 
-		if (serverTime > _expirationDate)
+		// Roll forward until the contract that is alive at this time is the current one: more
+		// than one expiration can lie behind a gap in the data.
+		while (serverTime > _expirationDate)
 		{
 			var next = BasketSecurity.ExpirationJumps.GetNextSecurity(_currId);
 
@@ -186,10 +206,11 @@ public class ContinuousSecurityExpirationProcessor : ContinuousSecurityBaseProce
 
 			_currId = next.Value;
 			_expirationDate = BasketSecurity.ExpirationJumps[_currId];
-			return true;
 		}
-		else
-			return securityId == _currId;
+
+		// Only the contract that carries the series is the series: a contract further out is
+		// another instrument.
+		return securityId == _currId;
 	}
 }
 
@@ -279,11 +300,7 @@ public class ContinuousSecurityVolumeProcessor : ContinuousSecurityBaseProcessor
 /// Base index securities processor.
 /// </summary>
 /// <typeparam name="TBasketSecurity">Basket security type.</typeparam>
-/// <remarks>
-/// Initializes a new instance of the <see cref="IndexSecurityBaseProcessor{TBasketSecurity}"/>.
-/// </remarks>
-/// <param name="security">Security.</param>
-public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security security) : BasketSecurityBaseProcessor<TBasketSecurity>(security)
+public abstract class IndexSecurityBaseProcessor<TBasketSecurity> : BasketSecurityBaseProcessor<TBasketSecurity>
 	where TBasketSecurity : IndexSecurity, new()
 {
 	private readonly SynchronizedDictionary<MessageTypes, object> _messages = [];
@@ -292,6 +309,23 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security secur
 	private readonly Dictionary<SecurityId, ExecutionMessage> _ol = [];
 
 	private readonly SortedDictionary<DateTime, Dictionary<SecurityId, CandleMessage>> _candles = [];
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="IndexSecurityBaseProcessor{TBasketSecurity}"/>.
+	/// </summary>
+	/// <param name="security">Security.</param>
+	protected IndexSecurityBaseProcessor(Security security)
+		: base(security)
+	{
+		// The basket the processor calculates on is a copy made of the fields every security
+		// has, so the options that drive the calculation are taken over separately.
+		if (security is IndexSecurity index)
+		{
+			BasketSecurity.IgnoreErrors = index.IgnoreErrors;
+			BasketSecurity.CalculateExtended = index.CalculateExtended;
+			BasketSecurity.FillGapsByZeros = index.FillGapsByZeros;
+		}
+	}
 
 	/// <inheritdoc />
 	public override IEnumerable<Message> Process(Message message)
@@ -385,9 +419,15 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security secur
 						.OrderBy(q => q.Price)
 						.ToArray();
 
+					// Legs quoting different spreads can lift the index bid above its own ask. The
+					// two sides are then exchanged and each re-sorted, so what is published is
+					// still a book: bids best price first and downwards, asks upwards.
 					if (bidsArr.FirstOr()?.Price > asksArr.FirstOr()?.Price)
 					{
-						(asksArr, bidsArr) = (bidsArr, asksArr);
+						var crossed = bidsArr;
+
+						bidsArr = [.. asksArr.OrderByDescending(q => q.Price)];
+						asksArr = [.. crossed.OrderBy(q => q.Price)];
 					}
 
 					return new QuoteChangeMessage
@@ -486,9 +526,13 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security secur
 						if (d.Count < BasketLegs.Length && !BasketSecurity.FillGapsByZeros)
 							continue;
 
+						var legCandles = GetLegCandles(d);
+
 						var indexCandle = new TimeFrameCandleMessage();
 
-						FillIndexCandle(indexCandle, candleMsg, [.. d.Values]);
+						// Every candle of the bucket, reported or stood in for, carries the
+						// bucket's own time frame and boundaries.
+						FillIndexCandle(indexCandle, legCandles[0], legCandles);
 
 						yield return indexCandle;
 					}
@@ -520,12 +564,45 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security secur
 		return (Dictionary<SecurityId, TMessage>)_messages.SafeAdd(type, _ => new Dictionary<SecurityId, TMessage>());
 	}
 
-	private void FillIndexCandle(CandleMessage indexCandle, CandleMessage candleMsg, CandleMessage[] candles)
+	// Lays a time bucket out in BasketLegs order, which is the order OnCalculate reads its values
+	// in. A leg that did not report for the bucket stands in as a candle of zero prices.
+	private CandleMessage[] GetLegCandles(Dictionary<SecurityId, CandleMessage> bucket)
+	{
+		var legs = BasketLegs;
+		var candles = new CandleMessage[legs.Length];
+
+		CandleMessage reported = null;
+
+		for (var i = 0; i < legs.Length; i++)
+		{
+			if (!bucket.TryGetValue(legs[i], out var legCandle))
+				continue;
+
+			candles[i] = legCandle;
+			reported ??= legCandle;
+		}
+
+		for (var i = 0; i < legs.Length; i++)
+		{
+			candles[i] ??= new TimeFrameCandleMessage
+			{
+				SecurityId = legs[i],
+				DataType = reported.DataType,
+				OpenTime = reported.OpenTime,
+				CloseTime = reported.CloseTime,
+				State = CandleStates.Finished,
+			};
+		}
+
+		return candles;
+	}
+
+	private void FillIndexCandle(CandleMessage indexCandle, CandleMessage template, CandleMessage[] candles)
 	{
 		indexCandle.SecurityId = SecurityId;
-		indexCandle.DataType = candleMsg.DataType;
-		indexCandle.OpenTime = candleMsg.OpenTime;
-		indexCandle.CloseTime = candleMsg.CloseTime;
+		indexCandle.DataType = template.DataType;
+		indexCandle.OpenTime = template.OpenTime;
+		indexCandle.CloseTime = template.CloseTime;
 
 		try
 		{
@@ -554,7 +631,8 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security secur
 			return;
 		}
 
-		// если некоторые свечи имеют неполные данные, то и индекс будет таким же неполным
+		// Legs that reported only part of their candle leave the index as incomplete: the prices
+		// that did arrive stand in for the ones that did not.
 		if (indexCandle.OpenPrice == 0 || indexCandle.HighPrice == 0 || indexCandle.LowPrice == 0 || indexCandle.ClosePrice == 0)
 		{
 			var nonZeroPrice = indexCandle.OpenPrice;
@@ -566,7 +644,7 @@ public abstract class IndexSecurityBaseProcessor<TBasketSecurity>(Security secur
 				nonZeroPrice = indexCandle.LowPrice;
 
 			if (nonZeroPrice == 0)
-				nonZeroPrice = indexCandle.LowPrice;
+				nonZeroPrice = indexCandle.ClosePrice;
 
 			if (nonZeroPrice != 0)
 			{
@@ -685,13 +763,19 @@ public class WeightedIndexSecurityProcessor(Security security) : IndexSecurityBa
 		if (values == null)
 			throw new ArgumentNullException(nameof(values));
 
-		if (values.Length != BasketLegs.Length)// || !InnerSecurities.All(prices.ContainsKey))
+		var legs = BasketLegs;
+
+		if (values.Length != legs.Length)
 			throw new ArgumentOutOfRangeException(nameof(values));
+
+		var weights = BasketSecurity.Weights;
 
 		var value = 0M;
 
+		// Each value belongs to the leg standing at the same position, so its weight is looked
+		// up by that security rather than taken from the same position among the weights.
 		for (var i = 0; i < values.Length; i++)
-			value += BasketSecurity.Weights.CachedValues[i] * values[i];
+			value += weights[legs[i]] * values[i];
 
 		return value;
 	}

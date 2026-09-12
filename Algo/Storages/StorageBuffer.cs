@@ -344,6 +344,8 @@ public class StorageBuffer : IStorageBuffer
 				Release(_candleBuffer.Clear());
 				Release(_newsBuffer.Count);
 				_newsBuffer.Clear();
+				Release(_boardStatesBuffer.Count);
+				_boardStatesBuffer.Clear();
 				_subscriptionsById.Clear();
 
 				//SendOutMessage(new ResetMessage());
@@ -353,7 +355,7 @@ public class StorageBuffer : IStorageBuffer
 			{
 				var regMsg = (OrderRegisterMessage)message;
 
-				if (!CanStore(regMsg))
+				if (!EnabledTransactions || !CanStore(regMsg))
 					break;
 
 				if (TryReserve())
@@ -364,7 +366,7 @@ public class StorageBuffer : IStorageBuffer
 			{
 				var replaceMsg = (OrderReplaceMessage)message;
 
-				if (!CanStore(replaceMsg))
+				if (!EnabledTransactions || !CanStore(replaceMsg))
 					break;
 
 				if (TryReserve())
@@ -516,7 +518,14 @@ public class StorageBuffer : IStorageBuffer
 				if (dataType == DataType.Ticks)
 					buffer = _ticksBuffer;
 				else if (dataType == DataType.Transactions)
+				{
+					// Transactions are switched on and off like level1 and order books are, rather than
+					// only when subscriptions are being filtered.
+					if (!EnabledTransactions)
+						break;
+
 					buffer = _transactionsBuffer;
+				}
 				else if (dataType == DataType.OrderLog)
 					buffer = _orderLogBuffer;
 				else

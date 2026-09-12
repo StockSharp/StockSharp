@@ -1105,12 +1105,18 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 			results.Add(CreateOpenState(candle, openTime));
 		}
 
+		// A state carries the extremes that had printed by the time it is stamped with, and no others:
+		// one carrying an extreme that prints later shows a strategy a move before it happened.
 		if (!stored.IsHighEmitted && IsActiveStateDue(highTime, currentTime, isCompleted))
 		{
 			stored.IsHighEmitted = true;
 
 			var highState = CreateOpenState(candle, openTime);
 			highState.HighPrice = candle.HighPrice;
+
+			if (lowTime <= highTime)
+				highState.LowPrice = candle.LowPrice;
+
 			highState.LocalTime = highTime;
 			results.Add(highState);
 		}
@@ -1120,7 +1126,11 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 			stored.IsLowEmitted = true;
 
 			var lowState = CreateOpenState(candle, openTime);
-			lowState.HighPrice = candle.HighPrice;
+			lowState.LowPrice = candle.LowPrice;
+
+			if (highTime <= lowTime)
+				lowState.HighPrice = candle.HighPrice;
+
 			lowState.LocalTime = lowTime;
 			results.Add(lowState);
 		}
