@@ -3,16 +3,20 @@ namespace StockSharp.Algo.Statistics;
 /// <summary>
 /// Base class for risk-adjusted ratios (Sharpe/Sortino).
 /// </summary>
-public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<decimal>, IRiskFreeRateStatisticParameter
+public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<decimal>, IRiskFreeRateStatisticParameter, IBeginValueStatisticParameter
 {
+	private decimal? _initialPnL;
 	private decimal? _previousPnL;
 	private double _periodsPerYear;
 
-	private decimal _sumReturn; // Sum of normalized returns
+	private decimal _sumReturn; // Sum of returns
 	private int _count;         // Number of returns
 
 	private decimal _riskFreeRate;
 	private TimeSpan _period;
+
+	/// <inheritdoc />
+	public decimal BeginValue { get; set; }
 
 	/// <inheritdoc />
 	public decimal RiskFreeRate
@@ -56,6 +60,7 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 	/// <inheritdoc />
 	public override void Reset()
 	{
+		_initialPnL = null;
 		_previousPnL = null;
 		_sumReturn = 0;
 		_count = 0;
@@ -68,26 +73,35 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 	{
 		if (_previousPnL != null)
 		{
-			// Normalize return by the scale of capital to make ratios scale-invariant and dimensionally consistent.
-			var delta = pnl - _previousPnL.Value;
-			var scale = _previousPnL.Value.Abs().Max(pnl.Abs());
-
-			decimal ret;
-
-			if (scale == 0)
+			if (BeginValue <= 0)
 			{
-				ret = 0; // both previous and current are zero
+				_previousPnL = pnl;
+				Value = 0;
+				return;
 			}
-			else
+
+			var previousEquity = BeginValue + _previousPnL.Value - _initialPnL.Value;
+
+			// A run that has lost its capital has no return to speak of: a return is a fraction of what
+			// was there to risk, and there was nothing. This arrives on the path that reports a position
+			// change, so a ratio that cannot be worked out reports no ratio rather than stopping the run
+			// that is reporting to it.
+			if (previousEquity <= 0)
 			{
-				ret = delta / scale;
+				_previousPnL = pnl;
+				Value = 0;
+				return;
 			}
+
+			var ret = (pnl - _previousPnL.Value) / previousEquity;
 
 			_sumReturn += ret;
 			_count++;
 
 			AddRiskSample(ret);
 		}
+		else
+			_initialPnL = pnl;
 
 		_previousPnL = pnl;
 
@@ -102,9 +116,16 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 		var risk = GetRisk(_count, _sumReturn);
 		var annualizedRisk = risk * (decimal)Math.Sqrt(_periodsPerYear);
 
+		var excessReturn = annualizedReturn - RiskFreeRate;
+
 		Value = annualizedRisk != 0
-			? (annualizedReturn - RiskFreeRate) / annualizedRisk
-			: 0;
+			? excessReturn / annualizedRisk
+			: excessReturn.Sign() switch
+			{
+				1 => decimal.MaxValue,
+				-1 => decimal.MinValue,
+				_ => 0,
+			};
 	}
 
 	/// <summary>
@@ -131,6 +152,8 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 	/// <inheritdoc />
 	public override void Save(SettingsStorage storage)
 	{
+		storage.SetValue(nameof(BeginValue), BeginValue);
+		storage.SetValue("InitialPnL", _initialPnL);
 		storage.SetValue("PreviousPnL", _previousPnL);
 		storage.SetValue("RiskFreeRate", RiskFreeRate);
 		storage.SetValue("Period", Period);
@@ -143,6 +166,8 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 	/// <inheritdoc />
 	public override void Load(SettingsStorage storage)
 	{
+		BeginValue = storage.GetValue<decimal>(nameof(BeginValue));
+		_initialPnL = storage.GetValue<decimal?>("InitialPnL");
 		RiskFreeRate = storage.GetValue<decimal>("RiskFreeRate");
 		Period = storage.GetValue<TimeSpan>("Period");
 		_previousPnL = storage.GetValue<decimal?>("PreviousPnL");

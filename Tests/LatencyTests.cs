@@ -50,7 +50,7 @@ public class LatencyTests
 	}
 
 	[TestMethod]
-	public void ReplaceTracksBothCancelAndRegister()
+	public void ReplaceTracksOneRegistrationRoundTrip()
 	{
 		var mgr = new LatencyManager(new LatencyManagerState());
 		var t0 = DateTime.UtcNow;
@@ -62,8 +62,7 @@ public class LatencyTests
 		};
 		mgr.ProcessMessage(replace).AssertNull();
 
-		// First execution for cancel part (tracked by TransactionId)
-		var cancelExec = new ExecutionMessage
+		var response = new ExecutionMessage
 		{
 			OriginalTransactionId = replace.TransactionId,
 			LocalTime = t0 + TimeSpan.FromMilliseconds(7),
@@ -71,15 +70,12 @@ public class LatencyTests
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true
 		};
-		var cancelLat = mgr.ProcessMessage(cancelExec);
-		// Gets register latency first (both tracked by same TransactionId).
-		cancelLat.AssertEqual(TimeSpan.FromMilliseconds(7));
-		// The first response is attributed to the registration bucket.
+		var latency = mgr.ProcessMessage(response);
+		latency.AssertEqual(TimeSpan.FromMilliseconds(7));
 		mgr.LatencyRegistration.AssertEqual(TimeSpan.FromMilliseconds(7));
 		mgr.LatencyCancellation.AssertEqual(TimeSpan.Zero);
 
-		// Second execution for new order (also tracked by TransactionId)
-		var regExec = new ExecutionMessage
+		var laterOrderUpdate = new ExecutionMessage
 		{
 			OriginalTransactionId = replace.TransactionId,
 			LocalTime = t0 + TimeSpan.FromMilliseconds(15),
@@ -87,12 +83,9 @@ public class LatencyTests
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true
 		};
-		var regLat = mgr.ProcessMessage(regExec);
-		// Gets cancel latency (register was already consumed).
-		regLat.AssertEqual(TimeSpan.FromMilliseconds(15));
-		// The second response falls into the cancellation bucket; registration stays at 7ms.
+		mgr.ProcessMessage(laterOrderUpdate).AssertNull();
 		mgr.LatencyRegistration.AssertEqual(TimeSpan.FromMilliseconds(7));
-		mgr.LatencyCancellation.AssertEqual(TimeSpan.FromMilliseconds(15));
+		mgr.LatencyCancellation.AssertEqual(TimeSpan.Zero);
 	}
 
 	[TestMethod]
@@ -118,7 +111,7 @@ public class LatencyTests
 	}
 
 	[TestMethod]
-	public void ReplaceUsesTransactionIdForCancelTracking()
+	public void ReplaceUsesTransactionIdForRoundTripTracking()
 	{
 		var mgr = new LatencyManager(new LatencyManagerState());
 		var t0 = DateTime.UtcNow;
@@ -132,43 +125,29 @@ public class LatencyTests
 		};
 		mgr.ProcessMessage(replace).AssertNull();
 
-		// On OrderReplace the engine tracks BOTH a registration and a cancellation under the
-		// SAME key (replaceMsg.TransactionId == 100). The Execution handler probes registration
-		// FIRST, so the first response consumes the registration entry (returns register-latency),
-		// not the cancellation. To actually prove the cancellation is keyed by TransactionId (the
-		// fix), we must feed a SECOND response under the same key and verify it consumes the
-		// cancellation. If the bug regressed (AddCancellation keyed by OriginalTransactionId=50),
-		// nothing would be tracked under 100 and the second response would return null.
-		var firstExec = new ExecutionMessage
+		var oldOrderUpdate = new ExecutionMessage
 		{
-			OriginalTransactionId = replace.TransactionId, // 100, not 50
+			OriginalTransactionId = replace.OriginalTransactionId,
 			LocalTime = t0 + TimeSpan.FromMilliseconds(5),
 			OrderState = OrderStates.Done,
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true
 		};
 
-		// First response consumes the registration entry under key 100 (register-latency = 5ms).
-		var firstLat = mgr.ProcessMessage(firstExec);
-		firstLat.AssertEqual(TimeSpan.FromMilliseconds(5));
-		mgr.LatencyRegistration.AssertEqual(TimeSpan.FromMilliseconds(5));
-		mgr.LatencyCancellation.AssertEqual(TimeSpan.Zero);
+		mgr.ProcessMessage(oldOrderUpdate).AssertNull();
 
-		// Second response under the SAME key 100 must consume the cancellation entry.
-		// This is the real regression guard: with the bug it would be null (cancellation
-		// would have been stored under key 50), here it must be the cancel-latency = 8ms.
-		var secondExec = new ExecutionMessage
+		var response = new ExecutionMessage
 		{
-			OriginalTransactionId = replace.TransactionId, // 100, not 50
+			OriginalTransactionId = replace.TransactionId,
 			LocalTime = t0 + TimeSpan.FromMilliseconds(8),
 			OrderState = OrderStates.Done,
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true
 		};
 
-		var secondLat = mgr.ProcessMessage(secondExec);
-		secondLat.AssertEqual(TimeSpan.FromMilliseconds(8));
-		mgr.LatencyCancellation.AssertEqual(TimeSpan.FromMilliseconds(8));
+		mgr.ProcessMessage(response).AssertEqual(TimeSpan.FromMilliseconds(8));
+		mgr.LatencyRegistration.AssertEqual(TimeSpan.FromMilliseconds(8));
+		mgr.LatencyCancellation.AssertEqual(TimeSpan.Zero);
 	}
 
 	/// <summary>

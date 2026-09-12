@@ -1,4 +1,6 @@
-﻿namespace StockSharp.Tests;
+namespace StockSharp.Tests;
+
+using System.Collections;
 
 using StockSharp.Algo.Commissions;
 
@@ -1313,5 +1315,53 @@ public class CommissionTests
 		{
 			return 1.0m; // Simple implementation for testing
 		}
+	}
+
+	/// <summary>
+	/// The rule charges an order once however many times the venue reports it, and remembers which
+	/// orders it has charged in order to do so. That memory is only ever cleared on reset, and a
+	/// connection resets when it is torn down - so on a stand that runs for weeks it would hold every
+	/// order the venue ever reported. What it holds has to stop growing, whatever the session does.
+	/// </summary>
+	[TestMethod]
+	public void WhatTheCountRuleRemembersStopsGrowingHoweverLongTheSessionRuns()
+	{
+		var rule = new CommissionOrderCountRule { Value = 1m, Count = 1 };
+
+		var now = DateTime.UtcNow;
+		var next = 0;
+
+		void Orders(int count)
+		{
+			for (var i = 0; i < count; i++)
+			{
+				var id = ++next;
+				var msg = CreateOrderMessage(100m, 1m, Inc(ref now));
+
+				// Every name a venue may know an order by, since each is remembered separately.
+				msg.OriginalTransactionId = id;
+				msg.OrderId = id;
+				msg.OrderStringId = id.To<string>();
+
+				rule.Process(msg);
+			}
+		}
+
+		static int Held(CommissionOrderCountRule rule)
+			=> typeof(CommissionOrderCountRule)
+				.GetFields(BindingFlags.Instance | BindingFlags.NonPublic)
+				.Where(f => typeof(ICollection).IsAssignableFrom(f.FieldType))
+				.Sum(f => ((ICollection)f.GetValue(rule)).Count);
+
+		const int batch = 20_000;
+
+		Orders(batch);
+		var afterOne = Held(rule);
+
+		Orders(batch);
+		var afterTwo = Held(rule);
+
+		afterTwo.AssertEqual(afterOne,
+			$"the rule held {afterOne} entries after {batch} orders and {afterTwo} after {batch * 2}, so what it remembers grows with the session rather than being bounded");
 	}
 }

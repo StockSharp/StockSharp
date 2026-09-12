@@ -1102,10 +1102,10 @@ public class PnLTests
 	}
 
 	[TestMethod]
-	public void QueueLeverageDoesNotScaleCashPnL()
+	public void QueueLeverageScalesPnL()
 	{
-		// Leverage says how much of the position the account must fund; it cannot change how many
-		// money units a round-trip made. Buy 1 at 100, sell at 110 earns 10 at any leverage.
+		// PnLQueue uses the leverage supplied by PositionChangeMessage as part of its contract-value
+		// multiplier. A tenfold leverage therefore scales both unrealized and realized PnL by ten.
 		var secId = Helper.CreateSecurityId();
 
 		var plain = CreateQueue(secId);
@@ -1129,14 +1129,14 @@ public class PnLTests
 		plain.ProcessExecution(tick);
 		levered.ProcessExecution(tick);
 
-		levered.UnrealizedPnL.AssertEqual(10m);
-		levered.UnrealizedPnL.AssertEqual(plain.UnrealizedPnL);
+		plain.UnrealizedPnL.AssertEqual(10m);
+		levered.UnrealizedPnL.AssertEqual(100m);
 
 		plain.Process(sell);
-		levered.Process(sell).PnL.AssertEqual(10m);
+		levered.Process(sell).PnL.AssertEqual(100m);
 
-		levered.RealizedPnL.AssertEqual(10m);
-		levered.RealizedPnL.AssertEqual(plain.RealizedPnL);
+		plain.RealizedPnL.AssertEqual(10m);
+		levered.RealizedPnL.AssertEqual(100m);
 	}
 
 	private static PnLQueue CreateQueue(SecurityId secId)

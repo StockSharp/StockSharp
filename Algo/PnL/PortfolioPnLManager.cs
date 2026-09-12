@@ -10,8 +10,8 @@ namespace StockSharp.Algo.PnL;
 /// <param name="getSecDefinition">Get security definition function.</param>
 public class PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1ChangeMessage> getSecDefinition) : IPnLManager
 {
-	private readonly Dictionary<string, PnLInfo> _tradeByStringIdInfos = new(StringComparer.InvariantCultureIgnoreCase);
-	private readonly Dictionary<long, PnLInfo> _tradeByIdInfos = [];
+	private readonly Dictionary<SecurityId, Dictionary<string, PnLInfo>> _tradeByStringIdInfos = [];
+	private readonly Dictionary<SecurityId, Dictionary<long, PnLInfo>> _tradeByIdInfos = [];
 	private readonly CachedSynchronizedDictionary<SecurityId, PnLQueue> _securityPnLs = [];
 	private readonly Func<SecurityId, Level1ChangeMessage> _getSecDefinition = getSecDefinition ?? throw new ArgumentNullException(nameof(getSecDefinition));
 
@@ -72,43 +72,50 @@ public class PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1Ch
 		if (trade == null)
 			throw new ArgumentNullException(nameof(trade));
 
-		info = null;
-
 		var tradeId = trade.TradeId;
 		var tradeStringId = trade.TradeStringId;
 
-		if (tradeId != null)
+		using var _ = _securityPnLs.EnterScope();
+
+		Dictionary<long, PnLInfo> byId = null;
+		Dictionary<string, PnLInfo> byStringId = null;
+		PnLInfo idInfo = null;
+		PnLInfo stringIdInfo = null;
+
+		var foundById = tradeId is not null
+			&& (byId = _tradeByIdInfos.SafeAdd(trade.SecurityId, key => [])).TryGetValue(tradeId.Value, out idInfo);
+
+		var foundByStringId = !tradeStringId.IsEmpty()
+			&& (byStringId = _tradeByStringIdInfos.SafeAdd(trade.SecurityId, key => new(StringComparer.InvariantCultureIgnoreCase))).TryGetValue(tradeStringId, out stringIdInfo);
+
+		if (foundById && foundByStringId && !ReferenceEquals(idInfo, stringIdInfo))
+			throw new InvalidOperationException("The numeric and string trade identifiers refer to different trades.");
+
+		if (foundById || foundByStringId)
 		{
-			using var _ = _securityPnLs.EnterScope();
-			
-			if (_tradeByIdInfos.TryGetValue(tradeId.Value, out info))
-				return false;
+			info = foundById ? idInfo : stringIdInfo;
 
-			var queue = _securityPnLs.SafeAdd(trade.SecurityId, CreateQueue);
+			if (tradeId is not null)
+				byId.TryAdd(tradeId.Value, info);
 
-			info = queue.Process(trade);
+			if (!tradeStringId.IsEmpty())
+				byStringId.TryAdd(tradeStringId, info);
 
-			_tradeByIdInfos.Add(tradeId.Value, info);
-			RealizedPnL += info.PnL;
-			return true;
-		}
-		else if (!tradeStringId.IsEmpty())
-		{
-			using var _ = _securityPnLs.EnterScope();
-			
-			if (_tradeByStringIdInfos.TryGetValue(tradeStringId, out info))
-				return false;
-
-			var queue = _securityPnLs.SafeAdd(trade.SecurityId, CreateQueue);
-
-			info = queue.Process(trade);
-
-			_tradeByStringIdInfos.Add(tradeStringId, info);
-			RealizedPnL += info.PnL;
-			return true;
+			return false;
 		}
 
-		return false;
+		var queue = _securityPnLs.SafeAdd(trade.SecurityId, CreateQueue);
+
+		info = queue.Process(trade);
+
+		if (tradeId is not null)
+			byId.Add(tradeId.Value, info);
+
+		if (!tradeStringId.IsEmpty())
+			byStringId.Add(tradeStringId, info);
+
+		RealizedPnL += info.PnL;
+		return true;
 	}
 
 	private bool TryGetQueue<TMsg>(TMsg msg, out PnLQueue queue)

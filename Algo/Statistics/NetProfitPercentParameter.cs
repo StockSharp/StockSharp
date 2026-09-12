@@ -31,4 +31,18 @@ public class NetProfitPercentParameter : BasePnLStatisticParameter<decimal>, IBe
 
 		Value = pnl * 100m / BeginValue;
 	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+		BeginValue = storage.GetValue(nameof(BeginValue), BeginValue);
+	}
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+		storage.SetValue(nameof(BeginValue), BeginValue);
+	}
 }

@@ -6,7 +6,43 @@ namespace StockSharp.Algo.Risk;
 public class RiskMessageAdapter : MessageAdapterWrapper
 {
 	private readonly IRiskManager _riskManager;
+	private readonly Lock _sync = new();
+	private readonly Dictionary<IRiskRule, RiskSubject> _blockingRules = [];
 	private bool _isTradingBlocked;
+
+	private readonly record struct RiskSubject(MessageTypes Type, SecurityId? SecurityId, string PortfolioName, bool MatchOrderFamily)
+	{
+		private static bool IsOrderMessage(MessageTypes type)
+			=> type is MessageTypes.OrderRegister or MessageTypes.OrderReplace;
+
+		public static RiskSubject Create(IRiskRule rule, Message message)
+		{
+			// Order price, volume and frequency rules are global and accept both registration and
+			// replacement as the same input family. Position rules remain scoped to their subject.
+			if (rule is RiskOrderPriceRule or RiskOrderVolumeRule or RiskOrderFreqRule)
+				return new(message.Type, null, null, true);
+
+			return new(
+				message.Type,
+				(message as ISecurityIdMessage)?.SecurityId,
+				(message as IPortfolioNameMessage)?.PortfolioName,
+				false);
+		}
+
+		public bool Matches(Message message)
+		{
+			var sameType = message.Type == Type
+				|| (MatchOrderFamily && IsOrderMessage(Type) && IsOrderMessage(message.Type));
+
+			if (!sameType)
+				return false;
+
+			if (SecurityId is not null && (message as ISecurityIdMessage)?.SecurityId != SecurityId)
+				return false;
+
+			return PortfolioName.IsEmpty() || (message as IPortfolioNameMessage)?.PortfolioName == PortfolioName;
+		}
+	}
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RiskMessageAdapter"/>.
@@ -23,8 +59,17 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 	/// <inheritdoc />
 	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		// Check if trading is blocked and reject order registration/modification
-		if (_isTradingBlocked)
+		var (extra, wasTradingBlocked, isTradingBlocked) = await ProcessRiskAsync(message, cancellationToken);
+
+		// Every triggered action is independent of whether the original order is accepted. In particular,
+		// a ClosePositions command must not be lost when an existing StopTrading block rejects the order.
+		if (extra is not null)
+			await base.OnSendInMessageAsync(extra, cancellationToken);
+
+		// A rule that was already blocking gets to inspect its next applicable order before the order is
+		// refused. This lets a message-scoped limit (for example order volume) release its own block while
+		// preserving the historical behavior in which the order that first triggers StopTrading is sent.
+		if (wasTradingBlocked && isTradingBlocked)
 		{
 			switch (message.Type)
 			{
@@ -59,74 +104,90 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 			}
 		}
 
-		var extra = await ProcessRiskAsync(message, cancellationToken);
-
-		if (extra is not null)
-			message = extra;
-
 		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		if (message.Type != MessageTypes.Reset)
+		var (extra, _, _) = await ProcessRiskAsync(message, cancellationToken);
+		if (extra is not null)
 		{
-			var extra = await ProcessRiskAsync(message, cancellationToken);
-			if (extra is not null)
-			{
-				extra.LoopBack(this);
-				await RaiseNewOutMessageAsync(extra, cancellationToken);
-			}
+			extra.LoopBack(this);
+			await RaiseNewOutMessageAsync(extra, cancellationToken);
 		}
 
 		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 	}
 
-	private async ValueTask<Message> ProcessRiskAsync(Message message, CancellationToken cancellationToken)
+	private async ValueTask<(Message extra, bool wasTradingBlocked, bool isTradingBlocked)> ProcessRiskAsync(Message message, CancellationToken cancellationToken)
 	{
 		Message retVal = null;
-		var triggeredRules = _riskManager.ProcessRules(message).ToArray();
+		List<Message> extraOut = null;
+		bool wasTradingBlocked;
+		bool isTradingBlocked;
 
-		foreach (var rule in triggeredRules)
+		using (_sync.EnterScope())
 		{
-			LogWarning(LocalizedStrings.ActivatingRiskRule,
-				rule.GetType().GetDisplayName(), rule.Title, rule.Action);
+			wasTradingBlocked = _isTradingBlocked;
 
-			switch (rule.Action)
+			var triggeredRules = _riskManager.ProcessRules(message).ToArray();
+			var triggeredSet = triggeredRules.ToHashSet();
+
+			if (message.Type == MessageTypes.Reset)
+				_blockingRules.Clear();
+
+			foreach (var rule in triggeredRules)
 			{
-				case RiskActions.ClosePositions:
+				LogWarning(LocalizedStrings.ActivatingRiskRule,
+					rule.GetType().GetDisplayName(), rule.Title, rule.Action);
+
+				switch (rule.Action)
 				{
-					// Delegate closing positions to the inner adapter
-					retVal = new OrderGroupCancelMessage
+					case RiskActions.ClosePositions:
 					{
-						TransactionId = TransactionIdGenerator.GetNextId(),
-						Mode = OrderGroupCancelModes.ClosePositions,
-					};
-					break;
+						// Delegate closing positions to the inner adapter.
+						retVal = new OrderGroupCancelMessage
+						{
+							TransactionId = TransactionIdGenerator.GetNextId(),
+							Mode = OrderGroupCancelModes.ClosePositions,
+						};
+						break;
+					}
+					case RiskActions.StopTrading:
+					{
+						_blockingRules[rule] = RiskSubject.Create(rule, message);
+						LogInfo(LocalizedStrings.TradingDisabled);
+						break;
+					}
+					case RiskActions.CancelOrders:
+						(extraOut ??= []).Add(new OrderGroupCancelMessage { TransactionId = TransactionIdGenerator.GetNextId() }.LoopBack(this));
+						break;
+					default:
+						throw new InvalidOperationException(rule.Action.To<string>());
 				}
-				case RiskActions.StopTrading:
-				{
-					_isTradingBlocked = true;
-					LogInfo(LocalizedStrings.TradingDisabled);
-					break;
-				}
-				case RiskActions.CancelOrders:
-					await RaiseNewOutMessageAsync(new OrderGroupCancelMessage { TransactionId = TransactionIdGenerator.GetNextId() }.LoopBack(this), cancellationToken);
-					break;
-				default:
-					throw new InvalidOperationException(rule.Action.To<string>());
 			}
+
+			foreach (var (rule, subject) in _blockingRules.ToArray())
+			{
+				if (!triggeredSet.Contains(rule) && subject.Matches(message))
+					_blockingRules.Remove(rule);
+			}
+
+			_isTradingBlocked = _blockingRules.Count > 0;
+			isTradingBlocked = _isTradingBlocked;
+
+			if (wasTradingBlocked && !isTradingBlocked)
+				LogInfo("Trading unblocked - risk limits no longer exceeded.");
 		}
 
-		// Check if trading should be unblocked: if no rules triggered, clear the flag
-		if (_isTradingBlocked && triggeredRules.Length == 0)
+		if (extraOut is not null)
 		{
-			_isTradingBlocked = false;
-			LogInfo("Trading unblocked - risk limits no longer exceeded.");
+			foreach (var extra in extraOut)
+				await RaiseNewOutMessageAsync(extra, cancellationToken);
 		}
 
-		return retVal;
+		return (retVal, wasTradingBlocked, isTradingBlocked);
 	}
 
 	/// <summary>

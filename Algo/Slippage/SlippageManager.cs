@@ -75,6 +75,16 @@ public class SlippageManager(ISlippageManagerState state) : ISlippageManager
 				break;
 			}
 
+			case MessageTypes.OrderReplace:
+			{
+				var replaceMsg = (OrderReplaceMessage)message;
+
+				if (_state.TryGetBestPrice(replaceMsg.SecurityId, replaceMsg.Side, out var price))
+					_state.AddPlannedPrice(replaceMsg.TransactionId, replaceMsg.Side, price);
+
+				break;
+			}
+
 			case MessageTypes.Execution:
 			{
 				var execMsg = (ExecutionMessage)message;

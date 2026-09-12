@@ -1,4 +1,4 @@
-﻿namespace StockSharp.Tests;
+namespace StockSharp.Tests;
 
 using StockSharp.Algo.PnL;
 using StockSharp.Algo.Statistics;
@@ -6,8 +6,8 @@ using StockSharp.Algo.Statistics;
 [TestClass]
 public class StatisticsTests : BaseTestClass
 {
-	// A book that loses a fifth of itself every period: every period is a downside one, so the downside
-	// deviation is the same number whether it is averaged over the losing periods or over all of them.
+	// With an initial capital of 100, this equity curve loses a fifth of its value every period.
+	// Every period is a downside one, so both downside-deviation denominators give the same result.
 	private static readonly decimal[] _allDownPnL = [100m, 80m, 64m, 51.2m, 40.96m];
 
 	[TestMethod]
@@ -1109,13 +1109,60 @@ public class StatisticsTests : BaseTestClass
 		parameter.Value.AssertEqual(newParameter.Value);
 	}
 
+	/// <summary>
+	/// A run that loses everything it had is an ordinary outcome of a backtest, and the ratio arrives
+	/// on the path that reports a position change. A return is a fraction of what there was to risk,
+	/// so with nothing left there is no ratio - and saying so must not stop the run that is reporting.
+	/// </summary>
+	[TestMethod]
+	public void ARunThatLosesItsCapitalReportsNoRatioRatherThanStopping()
+	{
+		var parameter = new SharpeRatioParameter { BeginValue = 100m, RiskFreeRate = 0m };
+		var t = DateTime.UtcNow;
+
+		parameter.Add(t, 0m, null);
+		parameter.Add(t, -50m, null);
+
+		// The whole of the capital is gone: equity is a hundred plus a loss of a hundred.
+		parameter.Add(t, -100m, null);
+		parameter.Add(t, -120m, null);
+
+		parameter.Value.AssertEqual(0m, "a ratio that cannot be worked out is no ratio, not an exception");
+	}
+
+	/// <summary>
+	/// The capital a run started with is seeded from the portfolio, and a portfolio that does not state
+	/// its current value leaves it unset. Both ratios then report zero for the whole run - which reads
+	/// in a report exactly like a run whose return matched the risk-free rate.
+	/// </summary>
+	[TestMethod]
+	public void RatiosWithNoStartingCapitalReportZeroAndCannotBeToldFromAHonestZero()
+	{
+		var t = DateTime.UtcNow;
+
+		var unset = new SharpeRatioParameter { RiskFreeRate = 0m };
+		var earned = new SharpeRatioParameter { BeginValue = 100m, RiskFreeRate = 0m };
+
+		foreach (var pnl in new[] { 0m, 1m, 2m, 3m })
+		{
+			unset.Add(t, pnl, null);
+			earned.Add(t, pnl, null);
+		}
+
+		unset.BeginValue.AssertEqual(0m, "nothing seeded it, which is what a portfolio of unknown value leaves behind");
+		unset.Value.AssertEqual(0m, "with no capital to measure against, no ratio is worked out");
+
+		(earned.Value > 0).AssertTrue(
+			"the same returns against a known capital do have a ratio - so the zero above is silence, and a reader cannot tell it from a run that merely matched the risk-free rate");
+	}
+
 	[TestMethod]
 	public void SharpeRatioPositive()
 	{
-		var parameter = new SharpeRatioParameter();
+		var parameter = new SharpeRatioParameter { BeginValue = 1m };
 		var t = DateTime.UtcNow;
 
-		// PnL: 0.0 → 0.1 → 0.3 → 0.5, returns: +0.1, +0.2, +0.2 (mean > 0)
+		// Every PnL change is positive, so the mean return is positive.
 		parameter.Add(t, 0.0m, null);
 		parameter.Add(t, 0.1m, null);
 		parameter.Add(t, 0.3m, null);
@@ -1127,10 +1174,10 @@ public class StatisticsTests : BaseTestClass
 	[TestMethod]
 	public void SharpeRatioNegative()
 	{
-		var parameter = new SharpeRatioParameter();
+		var parameter = new SharpeRatioParameter { BeginValue = 1m };
 		var t = DateTime.UtcNow;
 
-		// PnL: 0.0 → -0.1 → -0.2 → -0.5, returns: -0.1, -0.1, -0.3 (mean < 0)
+		// Every PnL change is negative, so the mean return is negative.
 		parameter.Add(t, 0.0m, null);
 		parameter.Add(t, -0.1m, null);
 		parameter.Add(t, -0.2m, null);
@@ -1142,10 +1189,10 @@ public class StatisticsTests : BaseTestClass
 	[TestMethod]
 	public void SharpeRatioZero()
 	{
-		var parameter = new SharpeRatioParameter();
+		var parameter = new SharpeRatioParameter { BeginValue = 1m };
 		var t = DateTime.UtcNow;
 
-		// PnL: 0.0 → 0.0 → 0.0 → 0.0, returns: 0, 0, 0 (mean = 0)
+		// A flat PnL curve has zero return and zero risk.
 		parameter.Add(t, 0.0m, null);
 		parameter.Add(t, 0.0m, null);
 		parameter.Add(t, 0.0m, null);
@@ -1157,10 +1204,10 @@ public class StatisticsTests : BaseTestClass
 	[TestMethod]
 	public void SortinoRatioMixed()
 	{
-		var parameter = new SortinoRatioParameter();
+		var parameter = new SortinoRatioParameter { BeginValue = 1m };
 		var t = DateTime.UtcNow;
 
-		// PnL: 0.0 → 0.1 → 0.3 → 0.2, returns: +0.1, +0.2, -0.1 (mean > 0, есть downside)
+		// The gains outweigh the final loss, while the final period supplies downside risk.
 		parameter.Add(t, 0.0m, null);
 		parameter.Add(t, 0.1m, null);
 		parameter.Add(t, 0.3m, null);
@@ -1172,10 +1219,10 @@ public class StatisticsTests : BaseTestClass
 	[TestMethod]
 	public void SortinoRatioNegative()
 	{
-		var parameter = new SortinoRatioParameter();
+		var parameter = new SortinoRatioParameter { BeginValue = 1m };
 		var t = DateTime.UtcNow;
 
-		// PnL: 0.0 → -0.1 → -0.3 → -0.5, returns: -0.1, -0.2, -0.2 (mean < 0, downside deviation > 0)
+		// Every PnL change is negative, so both mean return and downside samples are negative.
 		parameter.Add(t, 0.0m, null);
 		parameter.Add(t, -0.1m, null);
 		parameter.Add(t, -0.3m, null);
@@ -1195,8 +1242,8 @@ public class StatisticsTests : BaseTestClass
 	{
 		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		var flat = new SortinoRatioParameter { RiskFreeRate = 0m };
-		var rising = new SortinoRatioParameter { RiskFreeRate = 0m };
+		var flat = new SortinoRatioParameter { BeginValue = 1m, RiskFreeRate = 0m };
+		var rising = new SortinoRatioParameter { BeginValue = 1m, RiskFreeRate = 0m };
 
 		// PnL 0.0 -> 0.1 -> 0.3 -> 0.6: every period gained and none lost. The flat book is held at the
 		// same level the rising one ends on, so the two differ in what happened, not in where they sit.
@@ -1217,49 +1264,47 @@ public class StatisticsTests : BaseTestClass
 	[TestMethod]
 	public void SharpeRatio_AnnualizedValueFromDefinition()
 	{
-		var parameter = new SharpeRatioParameter { RiskFreeRate = 0m };
+		var parameter = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
 		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		// Daily cumulative PnL earned on 100000 of capital: five daily gains of +10, -5, +10, -5, +10.
-		decimal[] pnl = [100000m, 100010m, 100005m, 100015m, 100010m, 100020m];
+		// Five daily returns of +10%, -5%, +10%, -5%, +10% on initial capital of 100000.
+		decimal[] pnl = [100000m, 110000m, 104500m, 114950m, 109202.5m, 120122.75m];
 
 		for (var i = 0; i < pnl.Length; i++)
 			parameter.Add(t.AddDays(i), pnl[i], null);
 
 		// Sharpe = (mean return - rf) / stdev, annualized as mean * P and stdev * sqrt(P), P = 365.25 days.
-		// With rf = 0 the capital base cancels out of the quotient, so only the shape of the gains matters:
-		// mean = 20/5 = 4, sample stdev = sqrt((36+81+36+81+36)/4) = sqrt(67.5) = 8.2158384,
-		// 4 / 8.2158384 = 0.4868645, times sqrt(365.25) = 19.1115149 gives 9.30472.
+		// With returns [0.1, -0.05, 0.1, -0.05, 0.1], mean = 0.04 and sample standard
+		// deviation = 0.082158384. Their quotient times sqrt(365.25) is 9.30472.
 		((double)parameter.Value).AssertEqual(9.30472, 0.02);
 	}
 
 	[TestMethod]
 	public void SharpeRatio_DoesNotDependOnPnLLevel()
 	{
-		var parameter = new SharpeRatioParameter { RiskFreeRate = 0m };
+		var parameter = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
 		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		// The same daily gains of +10, -5, +10, -5, +10 on the same 100000 of capital, reported as
-		// cumulative PnL from a fresh start instead of from a book that was already up 100000.
-		decimal[] pnl = [0m, 10m, 5m, 15m, 10m, 20m];
+		// The same equity changes reported from a zero PnL baseline instead of a baseline of 100000.
+		decimal[] pnl = [0m, 10000m, 4500m, 14950m, 9202.5m, 20122.75m];
 
 		for (var i = 0; i < pnl.Length; i++)
 			parameter.Add(t.AddDays(i), pnl[i], null);
 
-		// Same capital, same gains, same days, so the same figure as SharpeRatio_AnnualizedValueFromDefinition:
-		// 4 / 8.2158384 * sqrt(365.25) = 9.30472. Where the curve happens to sit relative to zero is not
-		// part of the definition of a return.
+		// The first PnL sample establishes the reporting baseline. Same capital, changes and days therefore
+		// give the same figure as SharpeRatio_AnnualizedValueFromDefinition; the curve's vertical offset is
+		// not part of a return.
 		((double)parameter.Value).AssertEqual(9.30472, 0.02);
 	}
 
 	[TestMethod]
 	public void SharpeRatio_AnnualizationFollowsPeriod()
 	{
-		var parameter = new SharpeRatioParameter { RiskFreeRate = 0m, Period = TimeSpan.FromDays(7) };
+		var parameter = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m, Period = TimeSpan.FromDays(7) };
 		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		// The same +10, -5, +10, -5, +10 gains on 100000 of capital, observed weekly instead of daily.
-		decimal[] pnl = [100000m, 100010m, 100005m, 100015m, 100010m, 100020m];
+		// The same +10%, -5%, +10%, -5%, +10% returns, observed weekly instead of daily.
+		decimal[] pnl = [100000m, 110000m, 104500m, 114950m, 109202.5m, 120122.75m];
 
 		for (var i = 0; i < pnl.Length; i++)
 			parameter.Add(t.AddDays(7 * i), pnl[i], null);
@@ -1272,19 +1317,19 @@ public class StatisticsTests : BaseTestClass
 	[TestMethod]
 	public void SortinoRatio_DownsideDeviationAveragesOverAllPeriods()
 	{
-		var parameter = new SortinoRatioParameter { RiskFreeRate = 0m };
+		var parameter = new SortinoRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
 		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		// Daily cumulative PnL earned on 100000 of capital: five daily gains of +10, -5, +10, -5, +10.
-		decimal[] pnl = [100000m, 100010m, 100005m, 100015m, 100010m, 100020m];
+		// Five daily returns of +10%, -5%, +10%, -5%, +10% on initial capital of 100000.
+		decimal[] pnl = [100000m, 110000m, 104500m, 114950m, 109202.5m, 120122.75m];
 
 		for (var i = 0; i < pnl.Length; i++)
 			parameter.Add(t.AddDays(i), pnl[i], null);
 
 		// Downside deviation takes the shortfall below the target in every period - zero in a winning one -
-		// and averages the squares over all periods, not over the losing ones: sqrt((5^2 + 5^2)/5) = sqrt(10)
-		// = 3.1622777. With rf = 0 the capital base cancels: 4 / 3.1622777 = 1.2649111, times sqrt(365.25)
-		// = 19.1115149 gives 24.17437.
+		// and averages the squares over all periods, not over the losing ones:
+		// sqrt((0.05^2 + 0.05^2) / 5) = 0.031622777. With mean return 0.04, the annualized
+		// ratio is 0.04 / 0.031622777 * sqrt(365.25) = 24.17437.
 		((double)parameter.Value).AssertEqual(24.17437, 0.05);
 	}
 
@@ -1293,8 +1338,8 @@ public class StatisticsTests : BaseTestClass
 	{
 		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		var flat = new SortinoRatioParameter { RiskFreeRate = 0m };
-		var rising = new SortinoRatioParameter { RiskFreeRate = 0m };
+		var flat = new SortinoRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+		var rising = new SortinoRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
 
 		decimal[] flatPnL = [100000m, 100000m, 100000m, 100000m, 100000m];
 		decimal[] risingPnL = [100000m, 100010m, 100020m, 100030m, 100040m];
@@ -1318,8 +1363,8 @@ public class StatisticsTests : BaseTestClass
 	{
 		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-		var noRate = new SortinoRatioParameter { RiskFreeRate = 0m };
-		var withRate = new SortinoRatioParameter { RiskFreeRate = 0.5m };
+		var noRate = new SortinoRatioParameter { BeginValue = 100m, RiskFreeRate = 0m };
+		var withRate = new SortinoRatioParameter { BeginValue = 100m, RiskFreeRate = 0.5m };
 
 		for (var i = 0; i < _allDownPnL.Length; i++)
 		{
@@ -1327,7 +1372,7 @@ public class StatisticsTests : BaseTestClass
 			withRate.Add(t.AddDays(i), _allDownPnL[i], null);
 		}
 
-		// Each day gives back a fifth of the book, so all four returns are exactly -0.2: mean = -0.2 and
+		// Each period loses a fifth of the preceding equity, so all four returns are exactly -0.2: mean = -0.2 and
 		// downside deviation = sqrt(4 * 0.04 / 4) = 0.2. Over P = 365.25 daily periods the return
 		// annualizes to -73.05 and the risk to 0.2 * sqrt(365.25) = 3.8223030, so with no risk-free rate
 		// the ratio is -73.05 / 3.8223030 = -19.111515, which is -sqrt(365.25).
@@ -1342,13 +1387,13 @@ public class StatisticsTests : BaseTestClass
 	[TestMethod]
 	public void SortinoRatio_AnnualizationFollowsPeriod()
 	{
-		var parameter = new SortinoRatioParameter { RiskFreeRate = 0m, Period = TimeSpan.FromDays(7) };
+		var parameter = new SortinoRatioParameter { BeginValue = 100m, RiskFreeRate = 0m, Period = TimeSpan.FromDays(7) };
 		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		for (var i = 0; i < _allDownPnL.Length; i++)
 			parameter.Add(t.AddDays(7 * i), _allDownPnL[i], null);
 
-		// The same -0.2 per period, now observed weekly: P = 365.25/7 = 52.178571 periods a year. The
+		// The same -0.2 return per period, now observed weekly: P = 365.25/7 = 52.178571 periods a year. The
 		// return scales with P and the risk with sqrt(P), so the ratio scales with sqrt(P):
 		// -0.2 / 0.2 * sqrt(52.178571) = -7.2234736, the daily figure divided by sqrt(7).
 		((double)parameter.Value).AssertEqual(-7.2234736, 0.0001);
@@ -1694,14 +1739,14 @@ public class StatisticsTests : BaseTestClass
 	public void SharpeRatio_ScaledPnL()
 	{
 		// Arrange
-		var s1 = new SharpeRatioParameter { RiskFreeRate = 0.05m }; // 5% RF
-		var s2 = new SharpeRatioParameter { RiskFreeRate = 0.05m };
+		var s1 = new SharpeRatioParameter { BeginValue = 1000m, RiskFreeRate = 0.05m };
+		var s2 = new SharpeRatioParameter { BeginValue = 10000m, RiskFreeRate = 0.05m };
 		var t = DateTime.UtcNow;
 
-		// Baseline equity series (currency units)
-		decimal[] a = [1000m, 1100m, 1050m, 1200m]; // returns: +100, -50, +150
+		// Baseline PnL series and initial capital (currency units)
+		decimal[] a = [1000m, 1100m, 1050m, 1200m];
 		// Scaled by factor 10
-		decimal[] b = [10000m, 11000m, 10500m, 12000m]; // returns: +1000, -500, +1500
+		decimal[] b = [10000m, 11000m, 10500m, 12000m];
 
 		foreach (var v in a)
 			s1.Add(t, v, null);
@@ -1716,14 +1761,14 @@ public class StatisticsTests : BaseTestClass
 	public void SortinoRatio_ScaledPnL()
 	{
 		// Arrange
-		var r1 = new SortinoRatioParameter { RiskFreeRate = 0.05m };
-		var r2 = new SortinoRatioParameter { RiskFreeRate = 0.05m };
+		var r1 = new SortinoRatioParameter { BeginValue = 1000m, RiskFreeRate = 0.05m };
+		var r2 = new SortinoRatioParameter { BeginValue = 10000m, RiskFreeRate = 0.05m };
 		var t = DateTime.UtcNow;
 
-		// Baseline equity series (currency units) with negative period to ensure downside samples
-		decimal[] a = [1000m, 900m, 950m, 1100m]; // returns: -100, +50, +150 (has downside)
+		// Baseline PnL series and initial capital (currency units), including a losing period
+		decimal[] a = [1000m, 900m, 950m, 1100m];
 		// Scaled by factor 10
-		decimal[] b = [10000m, 9000m, 9500m, 11000m]; // returns: -1000, +500, +1500
+		decimal[] b = [10000m, 9000m, 9500m, 11000m];
 
 		foreach (var v in a)
 			r1.Add(t, v, null);

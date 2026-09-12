@@ -1626,6 +1626,214 @@ public class RiskTests : BaseTestClass
 			.AssertNotNull("the loss is back within the limit, so the order must pass");
 	}
 
+	[TestMethod]
+	public async Task AdapterOrderVolumeBlockCanBeLiftedByASafeOrder()
+	{
+		var token = CancellationToken;
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+
+		var messages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
+
+		riskManager.Rules.Add(new RiskOrderVolumeRule
+		{
+			Volume = 10,
+			Action = RiskActions.StopTrading,
+		});
+
+		var secId = Helper.CreateSecurityId();
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 1,
+			SecurityId = secId,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 20,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.Clear();
+		messages.Clear();
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 2,
+			SecurityId = secId,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 5,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.OfType<OrderRegisterMessage>()
+			.SingleOrDefault(m => m.TransactionId == 2)
+			.AssertNotNull("the same rule has observed a safe order, so trading must resume for it");
+
+		messages.OfType<ExecutionMessage>()
+			.SingleOrDefault(m => m.OriginalTransactionId == 2 && m.OrderState == OrderStates.Failed)
+			.AssertNull("an order that clears the volume rule must not be refused by the stale block");
+	}
+
+	[TestMethod]
+	public async Task AdapterOrderVolumeBlockCanBeLiftedByASafeReplace()
+	{
+		var token = CancellationToken;
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+		var messages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
+
+		riskManager.Rules.Add(new RiskOrderVolumeRule
+		{
+			Volume = 10,
+			Action = RiskActions.StopTrading,
+		});
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 1,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 20,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.Clear();
+		messages.Clear();
+
+		await adapter.SendInMessageAsync(new OrderReplaceMessage
+		{
+			TransactionId = 2,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 5,
+			PortfolioName = "ANOTHER_PORTFOLIO",
+		}, token);
+
+		testAdapter.ReceivedMessages.OfType<OrderReplaceMessage>()
+			.SingleOrDefault(m => m.TransactionId == 2)
+			.AssertNotNull("register and replace are inputs of the same global order-volume rule");
+
+		messages.OfType<ExecutionMessage>()
+			.SingleOrDefault(m => m.OriginalTransactionId == 2 && m.OrderState == OrderStates.Failed)
+			.AssertNull("the safe replacement must clear the stale global volume block");
+	}
+
+	[TestMethod]
+	public async Task AdapterBlockedOrderStillDispatchesOtherTriggeredRiskActions()
+	{
+		var token = CancellationToken;
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+		var messages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
+
+		riskManager.Rules.Add(new RiskOrderVolumeRule
+		{
+			Volume = 10,
+			Action = RiskActions.StopTrading,
+		});
+		riskManager.Rules.Add(new RiskOrderVolumeRule
+		{
+			Volume = 10,
+			Action = RiskActions.ClosePositions,
+		});
+
+		var secId = Helper.CreateSecurityId();
+
+		// The first breach establishes the StopTrading block.
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 1,
+			SecurityId = secId,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 20,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.Clear();
+		messages.Clear();
+
+		// The next breach is refused by StopTrading, but the other rule still owes ClosePositions.
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 2,
+			SecurityId = secId,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 20,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.OfType<OrderGroupCancelMessage>()
+			.SingleOrDefault(m => m.Mode == OrderGroupCancelModes.ClosePositions)
+			.AssertNotNull("ClosePositions is an independent triggered action and must still be dispatched");
+
+		testAdapter.ReceivedMessages.OfType<OrderRegisterMessage>()
+			.SingleOrDefault(m => m.TransactionId == 2)
+			.AssertNull("the existing StopTrading block must still refuse the original order");
+
+		messages.OfType<ExecutionMessage>()
+			.SingleOrDefault(m => m.OriginalTransactionId == 2 && m.OrderState == OrderStates.Failed)
+			.AssertNotNull("the refused order must receive a terminal response");
+	}
+
+	[TestMethod]
+	public async Task AdapterOutputResetClearsTradingBlock()
+	{
+		var token = CancellationToken;
+		var testAdapter = new TestInnerAdapter();
+		var riskManager = new RiskManager();
+		var adapter = new RiskMessageAdapter(testAdapter, riskManager);
+		var messages = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { messages.Add(m); return default; };
+
+		riskManager.Rules.Add(new RiskPnLRule
+		{
+			PnL = new() { Value = -1000, Type = UnitTypes.Absolute },
+			Action = RiskActions.StopTrading,
+		});
+
+		await adapter.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+		}.Add(PositionChangeTypes.CurrentValue, 0m), token);
+
+		await adapter.SendInMessageAsync(new PositionChangeMessage
+		{
+			SecurityId = SecurityId.Money,
+			PortfolioName = _pfName,
+		}.Add(PositionChangeTypes.CurrentValue, -1500m), token);
+
+		await testAdapter.EmitOutAsync(new ResetMessage(), token);
+
+		testAdapter.ReceivedMessages.Clear();
+		messages.Clear();
+
+		await adapter.SendInMessageAsync(new OrderRegisterMessage
+		{
+			TransactionId = 3,
+			SecurityId = Helper.CreateSecurityId(),
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 1,
+			PortfolioName = _pfName,
+		}, token);
+
+		testAdapter.ReceivedMessages.OfType<OrderRegisterMessage>()
+			.SingleOrDefault(m => m.TransactionId == 3)
+			.AssertNotNull("an inner reset must clear adapter-local StopTrading state");
+	}
+
 	/// <summary>
 	/// A user whose loss returns within the configured limit is entitled to trade again without
 	/// restarting anything: the next order must reach the inner adapter instead of being refused.
@@ -1798,6 +2006,9 @@ public class RiskTests : BaseTestClass
 			ReceivedMessages.Add(message);
 			return base.SendInMessageAsync(message, cancellationToken);
 		}
+
+		public ValueTask EmitOutAsync(Message message, CancellationToken cancellationToken)
+			=> SendOutMessageAsync(message, cancellationToken);
 
 		public override IMessageAdapter Clone() => new TestInnerAdapter();
 	}

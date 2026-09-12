@@ -6,7 +6,7 @@ namespace StockSharp.Algo.PnL;
 public class PnLQueue
 {
 	private Sides _openedPosSide;
-	private readonly SynchronizedStack<RefPair<decimal, decimal>> _openedTrades = [];
+	private readonly SynchronizedQueue<RefPair<decimal, decimal>> _openedTrades = [];
 	private decimal _multiplier;
 
 	private decimal? _lastPrice;
@@ -189,7 +189,7 @@ public class PnLQueue
 							continue;
 
 						currTrade = null;
-						_openedTrades.Pop();
+						_openedTrades.Dequeue();
 
 						if (_openedTrades.Count == 0)
 							break;
@@ -200,7 +200,7 @@ public class PnLQueue
 			if (volume > 0)
 			{
 				_openedPosSide = side;
-				_openedTrades.Push(RefTuple.Create(price, volume));
+				_openedTrades.Enqueue(RefTuple.Create(price, volume));
 			}
 
 			tradePnL = _multiplier * pnl;

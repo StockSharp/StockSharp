@@ -89,7 +89,7 @@ public class MarketTimer(ITimeProvider provider, Action activated) : Disposable
 			if (_elapsedTime < _interval)
 				return;
 
-			_elapsedTime = TimeSpan.Zero;
+			_elapsedTime -= _interval;
 			act = _activated;
 		}
 

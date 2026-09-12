@@ -43,6 +43,9 @@ public class RiskOrderVolumeRule : RiskRule
 	/// <inheritdoc />
 	public override bool ProcessMessage(Message message)
 	{
+		if (Volume == 0)
+			return false;
+
 		switch (message.Type)
 		{
 			case MessageTypes.OrderRegister:

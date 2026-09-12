@@ -43,6 +43,9 @@ public class RiskTradeVolumeRule : RiskRule
 	/// <inheritdoc />
 	public override bool ProcessMessage(Message message)
 	{
+		if (Volume == 0)
+			return false;
+
 		if (message.Type != MessageTypes.Execution)
 			return false;
 

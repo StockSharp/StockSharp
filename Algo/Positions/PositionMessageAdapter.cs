@@ -61,6 +61,7 @@ public class PositionMessageAdapter : MessageAdapterWrapper
 							_positionManager.ProcessMessage(message);
 					}
 
+					await RaiseNewOutMessageAsync(lookupMsg.CreateResponse(), cancellationToken);
 					await RaiseNewOutMessageAsync(lookupMsg.CreateResult(), cancellationToken);
 				}
 				else

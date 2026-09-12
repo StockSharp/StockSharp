@@ -109,7 +109,38 @@ public class PnLManager : IPnLManager
 				using (_managersByPf.EnterScope())
 				{
 					var manager = _managersByPf.SafeAdd(regMsg.PortfolioName, createManager);
-					_managersByTransId.Add(regMsg.TransactionId, manager);
+
+					if (_managersByTransId.TryGetValue(regMsg.TransactionId, out var existingManager))
+					{
+						if (!ReferenceEquals(existingManager, manager))
+							throw new InvalidOperationException("The transaction identifier is already associated with another portfolio.");
+					}
+					else
+						_managersByTransId.Add(regMsg.TransactionId, manager);
+				}
+
+				return null;
+			}
+
+			case MessageTypes.OrderReplace:
+			{
+				var replaceMsg = (OrderReplaceMessage)message;
+
+				using (_managersByPf.EnterScope())
+				{
+					if (!_managersByTransId.TryGetValue(replaceMsg.OriginalTransactionId, out var manager))
+						manager = _managersByPf.SafeAdd(replaceMsg.PortfolioName, createManager);
+					else if (!replaceMsg.PortfolioName.IsEmpty()
+						&& !string.Equals(manager.PortfolioName, replaceMsg.PortfolioName, StringComparison.InvariantCultureIgnoreCase))
+						throw new InvalidOperationException("The replacement order is associated with another portfolio.");
+
+					if (_managersByTransId.TryGetValue(replaceMsg.TransactionId, out var existingManager))
+					{
+						if (!ReferenceEquals(existingManager, manager))
+							throw new InvalidOperationException("The transaction identifier is already associated with another portfolio.");
+					}
+					else
+						_managersByTransId.Add(replaceMsg.TransactionId, manager);
 				}
 
 				return null;

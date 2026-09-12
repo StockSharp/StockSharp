@@ -32,6 +32,12 @@ public class PositionManager(bool byOrders, IPositionManagerState state) : BaseL
 
 		PositionChangeMessage UpdatePositions(SecurityId secId, string portfolioName, decimal diff, DateTime time)
 		{
+			if (portfolioName.IsEmpty())
+			{
+				LogWarning("Position change for {0} cannot be attributed to a portfolio.", secId);
+				return null;
+			}
+
 			var newPosition = _state.UpdatePosition(secId, portfolioName, diff);
 
 			return new PositionChangeMessage

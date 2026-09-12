@@ -13,7 +13,6 @@ namespace StockSharp.Algo.Statistics;
 public class SortinoRatioParameter : RiskAdjustedRatioParameter
 {
 	private decimal _downsideSumSq;
-	private int _downsideCount;
 
 	/// <summary>
 	/// Initialize a new instance of the <see cref="SortinoRatioParameter"/> class.
@@ -30,20 +29,19 @@ public class SortinoRatioParameter : RiskAdjustedRatioParameter
 			return;
 
 		_downsideSumSq += ret * ret;
-		_downsideCount++;
 	}
 
 	/// <inheritdoc />
 	protected override decimal GetRisk(int count, decimal sumReturn)
 	{
-		return _downsideCount > 0
-			? (decimal)Math.Sqrt((double)(_downsideSumSq / _downsideCount))
+		return count > 0
+			? (decimal)Math.Sqrt((double)(_downsideSumSq / count))
 			: 0;
 	}
 
 	/// <inheritdoc />
 	protected override bool HasEnoughRiskSamples(int count)
-		=> _downsideCount > 0;
+		=> count >= 2;
 
 	/// <inheritdoc />
 	public override void Reset()
@@ -51,7 +49,6 @@ public class SortinoRatioParameter : RiskAdjustedRatioParameter
 		base.Reset();
 
 		_downsideSumSq = 0;
-		_downsideCount = 0;
 	}
 
 	/// <inheritdoc />
@@ -60,7 +57,6 @@ public class SortinoRatioParameter : RiskAdjustedRatioParameter
 		base.Save(storage);
 
 		storage.Set("DownsideSumSq", _downsideSumSq);
-		storage.Set("DownsideCount", _downsideCount);
 	}
 
 	/// <inheritdoc />
@@ -69,6 +65,5 @@ public class SortinoRatioParameter : RiskAdjustedRatioParameter
 		base.Load(storage);
 
 		_downsideSumSq = storage.GetValue<decimal>("DownsideSumSq");
-		_downsideCount = storage.GetValue<int>("DownsideCount");
 	}
 }

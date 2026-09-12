@@ -21,6 +21,9 @@ public class CommissionOrderVolumeRule : CommissionRule
 
 		if (Value.Type == UnitTypes.Percent)
 		{
+			if (price is null or 0m)
+				return null;
+
 			// percent of turnover
 			return price * volume * (Value.Value / 100m);
 		}

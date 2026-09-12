@@ -310,13 +310,12 @@ public class PositionTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// A position change message can carry a field the entity has no home for - typically a field
-	/// added to the protocol before the entity caught up with it. Dropping such a change without a
-	/// word means the value the venue sent never reaches the position and nobody learns of it until
-	/// a portfolio is found to be wrong, with nothing in the logs to point at.
+	/// A newer sender can add a position field before this version of the entity has a home for it.
+	/// The understood changes in the same message still have to be applied so protocol evolution does
+	/// not make the whole position update unusable.
 	/// </summary>
 	[TestMethod]
-	public void ApplyChanges_UnknownChangeType_IsReported()
+	public void ApplyChanges_UnknownChangeType_DoesNotBlockKnownChanges()
 	{
 		var position = new Position
 		{
@@ -329,9 +328,13 @@ public class PositionTests : BaseTestClass
 			SecurityId = position.Security.ToSecurityId(),
 			PortfolioName = position.Portfolio.Name,
 			ServerTime = DateTime.UtcNow,
-		}.Add(PositionChangeTypes.CurrentValueInLots, 5m);
+		}
+		.Add(PositionChangeTypes.CurrentValue, 7m)
+		.Add((PositionChangeTypes)int.MaxValue, 5m);
 
-		Throws<InvalidOperationException>(() => position.ApplyChanges(message), "a change the position cannot store must be reported, not silently dropped");
+		position.ApplyChanges(message);
+
+		AreEqual(7m, position.CurrentValue, "a newer protocol field must not prevent understood fields from being applied");
 	}
 
 	private class TestInnerAdapter() : PassThroughMessageAdapter(new IncrementalIdGenerator())
@@ -364,8 +367,9 @@ public class PositionTests : BaseTestClass
 		var token = CancellationToken;
 
 		await adapter.SendInMessageAsync(lookup, token);
-		output.Count.AssertEqual(1);
-		output[0].AssertOfType<SubscriptionOnlineMessage>();
+		output.Count.AssertEqual(2);
+		output[0].AssertOfType<SubscriptionResponseMessage>();
+		output[1].AssertOfType<SubscriptionOnlineMessage>();
 		output.Clear();
 
 		var secId = new SecurityId { SecurityCode = "S", BoardCode = "X" };

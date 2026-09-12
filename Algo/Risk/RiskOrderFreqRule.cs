@@ -102,7 +102,11 @@ public class RiskOrderFreqRule : RiskRule
 					_current = 1;
 
 					//LogDebug("EndTime={0}", _endTime);
-					return false;
+					if (_current < Count)
+						return false;
+
+					_endTime = null;
+					return true;
 				}
 
 				if (time < _endTime)

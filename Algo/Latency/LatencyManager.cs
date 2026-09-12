@@ -38,7 +38,6 @@ public class LatencyManager(ILatencyManagerState state) : ILatencyManager
 			case MessageTypes.OrderReplace:
 			{
 				var replaceMsg = (OrderReplaceMessage)message;
-				_state.AddCancellation(replaceMsg.TransactionId, replaceMsg.LocalTime);
 				_state.AddRegistration(replaceMsg.TransactionId, replaceMsg.LocalTime);
 				break;
 			}
