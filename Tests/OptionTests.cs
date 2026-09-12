@@ -338,6 +338,45 @@ public class OptionTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void Black_GreeksMatchTheDiscountedPremiumDerivatives()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var expiration = now.AddDays(182.5);
+		const decimal deviation = 0.2m;
+		const decimal assetPrice = 100m;
+		const decimal priceStep = 0.001m;
+		const decimal volatilityStep = 0.0001m;
+		const decimal rateStep = 0.0001m;
+
+		var model = CreateBlack(OptionTypes.Call, 95m, expiration, 0.1m);
+
+		var deltaUp = model.Delta(now, deviation, assetPrice + priceStep).Value;
+		var deltaDown = model.Delta(now, deviation, assetPrice - priceStep).Value;
+		(model.Gamma(now, deviation, assetPrice).Value - (deltaUp - deltaDown) / (2 * priceStep))
+			.Abs().AssertLess(0.000001m, "gamma");
+
+		var premiumVolUp = model.Premium(now, deviation + volatilityStep, assetPrice).Value;
+		var premiumVolDown = model.Premium(now, deviation - volatilityStep, assetPrice).Value;
+		(model.Vega(now, deviation, assetPrice).Value - (premiumVolUp - premiumVolDown) / (2 * volatilityStep) * 0.01m)
+			.Abs().AssertLess(0.000001m, "vega");
+
+		var premiumTomorrow = model.Premium(now.AddHours(1), deviation, assetPrice).Value;
+		var premiumYesterday = model.Premium(now.AddHours(-1), deviation, assetPrice).Value;
+		(model.Theta(now, deviation, assetPrice).Value - (premiumTomorrow - premiumYesterday) * 12m)
+			.Abs().AssertLess(0.000001m, "theta");
+
+		var rate = model.RiskFree;
+		model.RiskFree = rate + rateStep;
+		var premiumRateUp = model.Premium(now, deviation, assetPrice).Value;
+		model.RiskFree = rate - rateStep;
+		var premiumRateDown = model.Premium(now, deviation, assetPrice).Value;
+		model.RiskFree = rate;
+
+		(model.Rho(now, deviation, assetPrice).Value - (premiumRateUp - premiumRateDown) / (2 * rateStep) * 0.01m)
+			.Abs().AssertLess(0.000001m, "rho");
+	}
+
+	[TestMethod]
 	public void Black_AtExpiry_ReportsNoValue()
 	{
 		var expiration = new DateTime(2024, 7, 1).UtcKind();
@@ -442,6 +481,42 @@ public class OptionTests : BaseTestClass
 
 		check(0m);
 		check(0.05m);
+	}
+
+	[TestMethod]
+	public void BlackScholes_GammaThetaAndRhoMatchPremiumDerivatives()
+	{
+		var now = new DateTime(2024, 1, 1).UtcKind();
+		var expiration = now.AddDays(182.5);
+		const decimal deviation = 0.2m;
+		const decimal assetPrice = 100m;
+		const decimal priceStep = 0.001m;
+		const decimal rateStep = 0.0001m;
+
+		foreach (var type in new[] { OptionTypes.Call, OptionTypes.Put })
+		{
+			var model = CreateBlackScholes(type, 100m, expiration, 0.05m, 0.04m);
+
+			var gamma = model.Gamma(now, deviation, assetPrice).Value;
+			var deltaUp = model.Delta(now, deviation, assetPrice + priceStep).Value;
+			var deltaDown = model.Delta(now, deviation, assetPrice - priceStep).Value;
+			(gamma - (deltaUp - deltaDown) / (2 * priceStep)).Abs().AssertLess(0.000001m, $"{type} gamma");
+
+			var theta = model.Theta(now, deviation, assetPrice).Value;
+			var premiumTomorrow = model.Premium(now.AddHours(1), deviation, assetPrice).Value;
+			var premiumYesterday = model.Premium(now.AddHours(-1), deviation, assetPrice).Value;
+			(theta - (premiumTomorrow - premiumYesterday) * 12m).Abs().AssertLess(0.000001m, $"{type} theta");
+
+			var rate = model.RiskFree;
+			model.RiskFree = rate + rateStep;
+			var premiumRateUp = model.Premium(now, deviation, assetPrice).Value;
+			model.RiskFree = rate - rateStep;
+			var premiumRateDown = model.Premium(now, deviation, assetPrice).Value;
+			model.RiskFree = rate;
+
+			(model.Rho(now, deviation, assetPrice).Value - (premiumRateUp - premiumRateDown) / (2 * rateStep) * 0.01m)
+				.Abs().AssertLess(0.000001m, $"{type} rho");
+		}
 	}
 
 	// A basket of +10 calls and -5 puts, both struck at 100, held together with +3 of the underlying.

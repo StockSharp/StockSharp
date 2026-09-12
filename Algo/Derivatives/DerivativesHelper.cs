@@ -735,6 +735,11 @@ public static class DerivativesHelper
 		var expDiv = ExpRate(dividend, timeToExp);
 		var expRate = ExpRate(riskFree, timeToExp);
 
+		// Without volatility, or with no time left, the forward is already known: the option either
+		// finishes in the money or it does not, so the premium is the discounted intrinsic value.
+		if ((double)deviation * timeToExp.Sqrt() == 0)
+			return (sign * (assetPrice * (decimal)expDiv - strike * (decimal)expRate)).Max(0);
+
 		return (assetPrice * (decimal)(expDiv * NormalDistr(d1 * sign)) -
 				strike * (decimal)(expRate * NormalDistr(D2(d1, deviation, timeToExp) * sign))) * sign;
 	}
@@ -801,16 +806,34 @@ public static class DerivativesHelper
 	/// <param name="daysInYear">Days per year.</param>
 	/// <returns>Option theta.</returns>
 	public static decimal Theta(OptionTypes optionType, decimal strike, decimal assetPrice, decimal riskFree, decimal deviation, double timeToExp, double d1, decimal daysInYear = 365)
+		=> Theta(optionType, strike, assetPrice, riskFree, 0, deviation, timeToExp, d1, daysInYear);
+
+	/// <summary>
+	/// To calculate the option theta with a continuous dividend yield.
+	/// </summary>
+	/// <param name="optionType">Option type.</param>
+	/// <param name="strike">The strike price.</param>
+	/// <param name="assetPrice">Underlying asset price.</param>
+	/// <param name="riskFree">The risk free interest rate.</param>
+	/// <param name="dividend">The continuous dividend yield.</param>
+	/// <param name="deviation">Standard deviation.</param>
+	/// <param name="timeToExp">The option period before the expiration.</param>
+	/// <param name="d1">The d1 parameter of the option fulfilment probability estimating.</param>
+	/// <param name="daysInYear">Days per year.</param>
+	/// <returns>Option theta.</returns>
+	public static decimal Theta(OptionTypes optionType, decimal strike, decimal assetPrice, decimal riskFree, decimal dividend, decimal deviation, double timeToExp, double d1, decimal daysInYear = 365)
 	{
 		var nd1 = InvertD1(d1);
 
 		var expRate = ExpRate(riskFree, timeToExp);
+		var expDiv = ExpRate(dividend, timeToExp);
 
 		var sign = optionType == OptionTypes.Call ? 1 : -1;
 
 		return
-			(-(assetPrice * deviation * (decimal)nd1) / (2 * (decimal)timeToExp.Sqrt()) -
-			sign * (strike * riskFree * (decimal)(expRate * NormalDistr(sign * D2(d1, deviation, timeToExp))))) / daysInYear;
+			(-(assetPrice * (decimal)expDiv * deviation * (decimal)nd1) / (2 * (decimal)timeToExp.Sqrt()) -
+			sign * (strike * riskFree * (decimal)(expRate * NormalDistr(sign * D2(d1, deviation, timeToExp)))) +
+			sign * (assetPrice * dividend * (decimal)(expDiv * NormalDistr(sign * d1)))) / daysInYear;
 	}
 
 	/// <summary>
@@ -838,7 +861,7 @@ public static class DerivativesHelper
 	/// </summary>
 	/// <param name="premium">The option premium.</param>
 	/// <param name="getPremium">To calculate the premium by volatility.</param>
-	/// <returns>The implied volatility. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
+	/// <returns>The implied volatility, in percent. If the value is equal to <see langword="null" />, then the value calculation currently is impossible.</returns>
 	public static decimal? ImpliedVolatility(decimal premium, Func<decimal, decimal?> getPremium)
 	{
 		if (getPremium == null)
@@ -846,21 +869,39 @@ public static class DerivativesHelper
 
 		const decimal min = 0.00001m;
 
-		var deviation = min;
-
-		//Если Премия оказывается меньше чем премия с нулевой волатильностью, то выходим
-		if (premium <= getPremium(deviation))
+		// A premium at or below the price of a motionless asset is explained by no positive volatility.
+		if (premium <= getPremium(min))
 			return null;
 
-		var high = 2m;
+		// The premium grows with the deviation, so the search starts from a bracket that already holds
+		// the answer: the ceiling is doubled until the premium it prices exceeds the one being inverted.
+		// Reporting a ceiling the search merely stopped at would be indistinguishable from a real quote.
+		const decimal maxDeviation = 1000m;
+
 		var low = 0m;
+		var high = 2m;
+
+		while (true)
+		{
+			if (getPremium(high) is not decimal atHigh)
+				return null;
+
+			if (atHigh >= premium)
+				break;
+
+			if (high >= maxDeviation)
+				return null;
+
+			low = high;
+			high = (high * 2).Min(maxDeviation);
+		}
 
 		const int maxIter = 10000;
 		var currIter = 0;
 
 		while ((high - low) > min)
 		{
-			deviation = (high + low) / 2;
+			var deviation = (high + low) / 2;
 
 			if (getPremium(deviation) > premium)
 				high = deviation;
