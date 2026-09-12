@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using StockSharp.Algo.Strategies;
 
@@ -210,5 +210,52 @@ public class StrategyNameGeneratorTests : BaseTestClass
 		s.Security = security;
 
 		s.Name.Contains(security.Id).AssertTrue();
+	}
+
+	/// <summary>
+	/// A name the caller gave the strategy is the caller's, and a saved strategy comes back under it.
+	/// Lost on the round trip, the strategy a user named and put away is not the one they open: it
+	/// comes back named after whatever instrument and portfolio it happens to hold.
+	/// </summary>
+	[TestMethod]
+	public void ANameTheCallerGaveSurvivesTheRoundTrip()
+	{
+		var s = new MyTestStrategy
+		{
+			Security = Helper.CreateStorageSecurity(),
+			Portfolio = Portfolio.CreateSimulator(),
+			Name = "Overnight carry",
+		};
+
+		var storage = s.Save();
+
+		var restored = new MyTestStrategy();
+		restored.Load(storage);
+
+		// Assigned after the load, as a strategy being put back to work is: the generator must not
+		// take the name back off a strategy that was named by hand.
+		restored.Security = s.Security;
+		restored.Portfolio = s.Portfolio;
+
+		restored.Name.AssertEqual("Overnight carry",
+			"the name the caller gave was not saved, so the strategy comes back named after its instrument and portfolio");
+	}
+
+	/// <summary>
+	/// And the other half of it: a strategy nobody named keeps generating its own name after a round
+	/// trip, rather than freezing on whatever it was called when it was put away.
+	/// </summary>
+	[TestMethod]
+	public void AStrategyNobodyNamedKeepsGeneratingAfterTheRoundTrip()
+	{
+		var s = new MyTestStrategy();
+
+		var restored = new MyTestStrategy();
+		restored.Load(s.Save());
+
+		restored.Security = Helper.CreateStorageSecurity();
+
+		restored.Name.Contains(restored.Security.Id).AssertTrue(
+			"nobody named this strategy, so its name still follows what it trades");
 	}
 }

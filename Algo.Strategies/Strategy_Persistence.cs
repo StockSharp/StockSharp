@@ -17,6 +17,9 @@ partial class Strategy
 			}
 		}
 
+		if (storage.ContainsKey(nameof(Name)))
+			Name = storage.GetValue<string>(nameof(Name));
+
 		RiskManager.LoadIfNotNull(storage, nameof(RiskManager));
 
 		if (!KeepStatistics)
@@ -49,6 +52,11 @@ partial class Strategy
 			.Set(nameof(Parameters), parameters.Select(p => p.Save()).ToArray())
 			.Set(nameof(RiskManager), RiskManager.Save())
 		;
+
+		// Only a name given by hand is the caller's to keep. A generated one is written down by
+		// nobody: restoring it would fix the strategy under the instrument it happened to hold.
+		if (!NameGenerator.AutoGenerateStrategyName)
+			storage.Set(nameof(Name), Name);
 
 		if (saveStatistics)
 		{
