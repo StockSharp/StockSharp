@@ -20,6 +20,17 @@ public class CsvReportGenerator : BaseReportGenerator
 	{
 		using var writer = new StreamWriter(stream, Encoding, leaveOpen: true);
 
+		string Escape(string value)
+		{
+			if (!value.Contains(_separator, StringComparison.Ordinal)
+				&& !value.Contains('"')
+				&& !value.Contains('\r')
+				&& !value.Contains('\n'))
+				return value;
+
+			return $"\"{value.Replace("\"", "\"\"")}\"";
+		}
+
 		async Task WriteValuesAsync(params object[] values)
 		{
 			if (values is null)
@@ -34,7 +45,7 @@ public class CsvReportGenerator : BaseReportGenerator
 				else if (value is TimeSpan ts)
 					value = ts.Format();
 
-				var str = value?.ToString() ?? string.Empty;
+				var str = Escape(value?.ToString() ?? string.Empty);
 
 				await writer.WriteAsync(str.AsMemory(), cancellationToken);
 

@@ -306,6 +306,29 @@ public class ExportTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task XmlDepth_IdenticalBidAndAskKeepTheirSides()
+	{
+		var quote = new QuoteChange(100m, 5m);
+		var depth = new QuoteChangeMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = _contentDay,
+			Bids = [quote],
+			Asks = [quote],
+		};
+
+		var quotes = (await ExportXmlAsync(DataType.MarketDepth, new[] { depth }))
+			.Elements("depth")
+			.Single()
+			.Elements("quote")
+			.ToArray();
+
+		quotes.Length.AssertEqual(2);
+		quotes.Count(q => Attr(q, "side") == Sides.Buy.ToString()).AssertEqual(1);
+		quotes.Count(q => Attr(q, "side") == Sides.Sell.ToString()).AssertEqual(1);
+	}
+
+	[TestMethod]
 	public async Task OrderLog_ExportContent()
 	{
 		// Only the row count was checked, so a shifted or swapped column survived. Every column the
@@ -568,6 +591,36 @@ public class ExportTests : BaseTestClass
 		items[0].Value.AssertEqual(news[0].Story);
 		Attr(items[0], "seqNum").AssertEqual(Cell(news[0].SeqNum));
 		Attr(items[0], "headline").AssertEqual(news[0].Headline);
+	}
+
+	[TestMethod]
+	public async Task News_StoryWithCDataTerminatorRoundTrips()
+	{
+		const string story = "First section ]]> second section ]]> final section.";
+		var news = new[]
+		{
+			new NewsMessage
+			{
+				ServerTime = _contentDay,
+				LocalTime = _contentDay,
+				Headline = "CDATA terminator",
+				Story = story,
+			},
+			new NewsMessage
+			{
+				ServerTime = _contentDay.AddSeconds(1),
+				LocalTime = _contentDay.AddSeconds(1),
+				Headline = "Following item",
+				Story = "Still exported",
+			},
+		};
+
+		var items = (await ExportXmlAsync(DataType.News, news)).Elements("item").ToArray();
+
+		items.Length.AssertEqual(2);
+		items[0].Value.AssertEqual(story);
+		items[1].Value.AssertEqual(news[1].Story);
+		Attr(items[1], "headline").AssertEqual(news[1].Headline);
 	}
 
 	/// <summary>

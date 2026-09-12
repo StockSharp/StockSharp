@@ -157,6 +157,11 @@ public class CsvParser : BaseLogReceiver
 
 			void FlushQuotes()
 			{
+				// Rows come in whatever order the file lists them, while a book is bids descending and
+				// asks ascending - which is what every reader of Bids[0]/Asks[0] relies on.
+				bids.Sort((x, y) => y.Price.CompareTo(x.Price));
+				asks.Sort((x, y) => x.Price.CompareTo(y.Price));
+
 				quoteMsg.Bids = [.. bids];
 				quoteMsg.Asks = [.. asks];
 				quoteMsg.HasPositions = hasPos;

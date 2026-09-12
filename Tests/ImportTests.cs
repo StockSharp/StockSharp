@@ -803,8 +803,16 @@ public class ImportTests : BaseTestClass
 		return (await storage.GetDatesAsync().ToArrayAsync(token), await storage.LoadAsync(default, default).ToArrayAsync(token));
 	}
 
-	private static string DescribeSide(QuoteChange[] quotes)
-		=> quotes.Select(q => $"{q.Price}:{q.Volume}").JoinComma();
+	private static void AssertSide(QuoteChange[] expected, QuoteChange[] actual, string side)
+	{
+		actual.Length.AssertEqual(expected.Length, $"{side} quote count");
+
+		for (var i = 0; i < expected.Length; i++)
+		{
+			actual[i].Price.AssertEqual(expected[i].Price, $"{side} price at {i}");
+			actual[i].Volume.AssertEqual(expected[i].Volume, $"{side} volume at {i}");
+		}
+	}
 
 	[TestMethod]
 	[Timeout(30_000, CooperativeCancellation = true)]
@@ -856,8 +864,8 @@ public class ImportTests : BaseTestClass
 
 			actual.Verify().AssertTrue($"book {i} is not a well-formed order book after the roundtrip");
 
-			DescribeSide(actual.Bids).AssertEqual(DescribeSide(expected.Bids));
-			DescribeSide(actual.Asks).AssertEqual(DescribeSide(expected.Asks));
+			AssertSide(expected.Bids, actual.Bids, $"book {i} bids");
+			AssertSide(expected.Asks, actual.Asks, $"book {i} asks");
 		}
 	}
 

@@ -13,6 +13,8 @@ public class ReportSource : IReportSource
 
 	private bool _ordersAggregationTriggered;
 	private bool _tradesAggregationTriggered;
+	private long _nextAggregatedOrderTransactionId;
+	private long _nextAggregatedTradeTransactionId;
 
 	private int _maxOrdersBeforeAggregation = 10000;
 	private int _maxTradesBeforeAggregation = 10000;
@@ -506,7 +508,7 @@ public class ReportSource : IReportSource
 		return null;
 	}
 
-	private static IEnumerable<ReportOrder> AggregateOrdersInternal(ReportOrder[] orders, TimeSpan interval)
+	private IEnumerable<ReportOrder> AggregateOrdersInternal(ReportOrder[] orders, TimeSpan interval)
 	{
 		if (orders.Length == 0)
 			return orders;
@@ -518,8 +520,6 @@ public class ReportSource : IReportSource
 			.ThenBy(g => g.Key.Side);
 
 		var result = new List<ReportOrder>();
-		long aggregatedTransactionId = -1;
-
 		foreach (var group in groups)
 		{
 			var items = group.ToList();
@@ -532,9 +532,10 @@ public class ReportSource : IReportSource
 
 			// Aggregate: sum volumes, weighted average price
 			var totalVolume = items.Sum(o => o.Volume ?? 0);
+			var itemsCount = items.Sum(o => o.AggregatedItemsCount);
 			var weightedPrice = totalVolume > 0
 				? items.Sum(o => o.Price * (o.Volume ?? 0)) / totalVolume
-				: items.Average(o => o.Price);
+				: items.Sum(o => o.Price * o.AggregatedItemsCount) / itemsCount;
 
 			// Use the earliest time in the group for the aggregated order
 			var aggregatedTime = interval > TimeSpan.Zero
@@ -543,7 +544,7 @@ public class ReportSource : IReportSource
 
 			result.Add(new ReportOrder(
 				Id: null,
-				TransactionId: aggregatedTransactionId--,
+				TransactionId: --_nextAggregatedOrderTransactionId,
 				SecurityId: group.Key.SecurityId,
 				Side: group.Key.Side,
 				Time: aggregatedTime,
@@ -552,13 +553,16 @@ public class ReportSource : IReportSource
 				Balance: null,
 				Volume: totalVolume > 0 ? totalVolume : null,
 				Type: group.Key.Type
-			));
+			)
+			{
+				AggregatedItemsCount = itemsCount,
+			});
 		}
 
 		return result;
 	}
 
-	private static IEnumerable<ReportTrade> AggregateTradesInternal(ReportTrade[] trades, TimeSpan interval)
+	private IEnumerable<ReportTrade> AggregateTradesInternal(ReportTrade[] trades, TimeSpan interval)
 	{
 		if (trades.Length == 0)
 			return trades;
@@ -570,8 +574,6 @@ public class ReportSource : IReportSource
 			.ThenBy(g => g.Key.Side);
 
 		var result = new List<ReportTrade>();
-		long aggregatedTransactionId = -1;
-
 		foreach (var group in groups)
 		{
 			var items = group.ToList();
@@ -584,12 +586,13 @@ public class ReportSource : IReportSource
 
 			// Aggregate: sum volumes, weighted average prices, sum PnL and slippage
 			var totalVolume = items.Sum(t => t.Volume);
+			var itemsCount = items.Sum(t => t.AggregatedItemsCount);
 			var weightedTradePrice = totalVolume > 0
 				? items.Sum(t => t.TradePrice * t.Volume) / totalVolume
-				: items.Average(t => t.TradePrice);
+				: items.Sum(t => t.TradePrice * t.AggregatedItemsCount) / itemsCount;
 			var weightedOrderPrice = totalVolume > 0
 				? items.Sum(t => t.OrderPrice * t.Volume) / totalVolume
-				: items.Average(t => t.OrderPrice);
+				: items.Sum(t => t.OrderPrice * t.AggregatedItemsCount) / itemsCount;
 
 			var totalPnL = items.Any(t => t.PnL.HasValue)
 				? items.Sum(t => t.PnL ?? 0)
@@ -600,10 +603,10 @@ public class ReportSource : IReportSource
 				: (decimal?)null;
 
 			// Position is the last position value in the group
-			var lastPosition = items
+			var lastPositionItem = items
 				.Where(t => t.Position.HasValue)
-				.OrderBy(t => t.Time)
-				.LastOrDefault()?.Position;
+				.OrderBy(t => t.LatestPositionTime)
+				.LastOrDefault();
 
 			// Use the earliest time in the group for the aggregated trade
 			var aggregatedTime = interval > TimeSpan.Zero
@@ -612,7 +615,7 @@ public class ReportSource : IReportSource
 
 			result.Add(new ReportTrade(
 				TradeId: null,
-				OrderTransactionId: aggregatedTransactionId--,
+				OrderTransactionId: --_nextAggregatedTradeTransactionId,
 				SecurityId: group.Key.SecurityId,
 				Time: aggregatedTime,
 				TradePrice: weightedTradePrice,
@@ -622,8 +625,12 @@ public class ReportSource : IReportSource
 				OrderId: null,
 				Slippage: totalSlippage,
 				PnL: totalPnL,
-				Position: lastPosition
-			));
+				Position: lastPositionItem?.Position
+			)
+			{
+				AggregatedItemsCount = itemsCount,
+				LatestPositionTime = lastPositionItem?.LatestPositionTime,
+			});
 		}
 
 		return result;
