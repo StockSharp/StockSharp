@@ -280,6 +280,7 @@ public static partial class EntitiesExtensions
 		{
 			OrderId = order.Id,
 			OrderStringId = order.StringId,
+			OrderBoardId = order.BoardId,
 			TransactionId = order.TransactionId,
 			OriginalTransactionId = order.TransactionId,
 			SecurityId = order.Security.ToSecurityId(),
@@ -299,13 +300,27 @@ public static partial class EntitiesExtensions
 			ExpiryDate = order.ExpiryDate,
 			UserOrderId = order.UserOrderId,
 			StrategyId = order.StrategyId,
+			BrokerCode = order.BrokerCode,
+			ClientCode = order.ClientCode,
+			Condition = order.Condition?.TypedClone(),
 			Commission = order.Commission,
 			CommissionCurrency = order.CommissionCurrency,
 			IsSystem = order.IsSystem,
 			Comment = order.Comment,
 			VisibleVolume = order.VisibleVolume,
 			Currency = order.Currency,
+			IsMarketMaker = order.IsMarketMaker,
+			MarginMode = order.MarginMode,
+			Slippage = order.Slippage,
+			IsManual = order.IsManual,
+			AveragePrice = order.AveragePrice,
+			MarketPrice = order.MarketPrice,
+			Yield = order.Yield,
+			MinVolume = order.MinVolume,
+			PositionEffect = order.PositionEffect,
+			PostOnly = order.PostOnly,
 			SeqNum = order.SeqNum,
+			Leverage = order.Leverage,
 		};
 
 		return message;
@@ -384,6 +399,9 @@ public static partial class EntitiesExtensions
 
 		order.Security.ToMessage(securityId).CopyTo(msg, false);
 
+		if (order.Currency is not null)
+			msg.Currency = order.Currency;
+
 		return msg;
 	}
 
@@ -447,7 +465,7 @@ public static partial class EntitiesExtensions
 			VisibleVolume = newOrder.VisibleVolume,
 			OrderType = newOrder.Type,
 			Comment = newOrder.Comment,
-			Condition = newOrder.Condition,
+			Condition = newOrder.Condition?.TypedClone(),
 			TimeInForce = newOrder.TimeInForce,
 			TillDate = newOrder.ExpiryDate,
 			//IsSystem = newOrder.IsSystem,
@@ -480,6 +498,9 @@ public static partial class EntitiesExtensions
 		};
 
 		oldOrder.Security.ToMessage(securityId).CopyTo(msg, false);
+
+		if (newOrder.Currency is not null)
+			msg.Currency = newOrder.Currency;
 
 		return msg;
 	}
@@ -905,6 +926,9 @@ public static partial class EntitiesExtensions
 	/// <returns>Order.</returns>
 	public static Order ToOrder(this ExecutionMessage message, Order order)
 	{
+		if (message == null)
+			throw new ArgumentNullException(nameof(message));
+
 		if (order == null)
 			throw new ArgumentNullException(nameof(order));
 
@@ -915,8 +939,12 @@ public static partial class EntitiesExtensions
 
 		order.Id = message.OrderId;
 		order.StringId = message.OrderStringId;
+		order.BoardId = message.OrderBoardId;
 		order.TransactionId = message.TransactionId;
-		order.Portfolio = new Portfolio { Board = order.Security.Board, Name = message.PortfolioName };
+
+		if (order.Portfolio is null && !message.PortfolioName.IsEmpty())
+			order.Portfolio = new Portfolio { Board = order.Security?.Board, Name = message.PortfolioName };
+
 		order.Side = side;
 		order.Price = message.OrderPrice;
 		order.Volume = message.OrderVolume ?? 0;
@@ -932,6 +960,9 @@ public static partial class EntitiesExtensions
 		order.ExpiryDate = message.ExpiryDate;
 		order.UserOrderId = message.UserOrderId;
 		order.StrategyId = message.StrategyId;
+		order.BrokerCode = message.BrokerCode;
+		order.ClientCode = message.ClientCode;
+		order.Condition = message.Condition?.TypedClone();
 		order.Comment = message.Comment;
 		order.Commission = message.Commission;
 		order.CommissionCurrency = message.CommissionCurrency;
@@ -963,8 +994,8 @@ public static partial class EntitiesExtensions
 	/// <param name="logs">Logs.</param>
 	public static void ApplyNewState(this Order order, OrderStates state, ILogReceiver logs = null)
 	{
-		((OrderStates?)order.State).VerifyOrderState(state, order.TransactionId, logs);
-		order.State = state;
+		if (((OrderStates?)order.State).VerifyOrderState(state, order.TransactionId, logs))
+			order.State = state;
 	}
 
 	/// <summary>
@@ -1156,6 +1187,8 @@ public static partial class EntitiesExtensions
 	/// <returns>News.</returns>
 	public static News ToNews(this NewsMessage message, IExchangeInfoProvider exchangeInfoProvider)
 	{
+		var securityId = message.SecurityId;
+
 		return new News
 		{
 			Id = message.Id,
@@ -1169,9 +1202,11 @@ public static partial class EntitiesExtensions
 			Priority = message.Priority,
 			Language = message.Language,
 			ExpiryDate = message.ExpiryDate,
-			Security = message.SecurityId == null ? null : new Security
+			Security = securityId == null ? null : new Security
 			{
-				Id = message.SecurityId.Value.SecurityCode
+				Id = securityId.Value.ToStringId(),
+				Code = securityId.Value.SecurityCode,
+				Board = securityId.Value.BoardCode.IsEmpty() ? null : exchangeInfoProvider?.GetOrCreateBoard(securityId.Value.BoardCode),
 			},
 			SeqNum = message.SeqNum,
 		};

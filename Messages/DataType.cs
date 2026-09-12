@@ -202,7 +202,7 @@ public class DataType : Equatable<DataType>, IPersistable
 			CheckImmutable();
 
 			_messageType = value;
-			ReInitHashCode();
+			ReInit();
 		}
 	}
 
@@ -223,7 +223,7 @@ public class DataType : Equatable<DataType>, IPersistable
 				throw new ArgumentException(value.To<string>(), nameof(value));
 
 			_arg = value;
-			ReInitHashCode();
+			ReInit();
 		}
 	}
 
@@ -262,12 +262,48 @@ public class DataType : Equatable<DataType>, IPersistable
 
 	private int _hashCode;
 
-	private void ReInitHashCode()
+	private void ReInit()
 	{
-		var h1 = MessageType?.GetHashCode() ?? 0;
-		var h2 = Arg?.GetHashCode() ?? 0;
+		var messageType = MessageType;
+		var arg = Arg;
+		var h1 = messageType?.GetHashCode() ?? 0;
+		var h2 = arg?.GetHashCode() ?? 0;
 
 		_hashCode = ((h1 << 5) + h1) ^ h2;
+
+		_isCandles = messageType?.IsCandleMessage() == true;
+		_isMarketData =
+		(
+			_isCandles ||
+			messageType == typeof(QuoteChangeMessage) ||
+			messageType == typeof(Level1ChangeMessage) ||
+#pragma warning disable CS0618 // Type or member is obsolete
+			(messageType == typeof(ExecutionMessage) && arg is ExecutionTypes type && type != ExecutionTypes.Transaction) ||
+#pragma warning restore CS0618 // Type or member is obsolete
+			messageType == typeof(NewsMessage) ||
+			messageType == typeof(BoardMessage) ||
+			messageType == typeof(BoardStateMessage) ||
+			messageType == typeof(SecurityLegsInfoMessage) ||
+			messageType == typeof(SecurityMappingMessage) ||
+			messageType == typeof(DataTypeInfoMessage)
+		);
+		_isSecurityRequiredByType =
+		(
+			_isCandles ||
+			messageType == typeof(QuoteChangeMessage) ||
+			messageType == typeof(Level1ChangeMessage) ||
+#pragma warning disable CS0618 // Type or member is obsolete
+			(messageType == typeof(ExecutionMessage) && arg is ExecutionTypes t1 && t1 != ExecutionTypes.Transaction)
+#pragma warning restore CS0618 // Type or member is obsolete
+		);
+		_isNonSecurity =
+		(
+			messageType == typeof(SecurityMessage) ||
+			messageType == typeof(NewsMessage) ||
+			messageType == typeof(BoardMessage) ||
+			messageType == typeof(BoardStateMessage) ||
+			messageType == typeof(DataTypeInfoMessage)
+		);
 	}
 
 	/// <summary>Serves as a hash function for a particular type. </summary>
@@ -285,11 +321,8 @@ public class DataType : Equatable<DataType>, IPersistable
 			_messageType = MessageType,
 			_arg = Arg,
 			_isSecurityRequired = _isSecurityRequired,
-			_isCandles = _isCandles,
-			_isMarketData = _isMarketData,
-			_isNonSecurity = _isNonSecurity,
 		};
-		clone.ReInitHashCode();
+		clone.ReInit();
 		return clone;
 	}
 
@@ -346,67 +379,39 @@ public class DataType : Equatable<DataType>, IPersistable
 		}
 	}
 
-	private bool? _isCandles;
+	private bool _isCandles;
 
 	/// <summary>
 	/// Determines whether the <see cref="MessageType"/> is derived from <see cref="CandleMessage"/>.
 	/// </summary>
-	public bool IsCandles => _isCandles ??= MessageType.IsCandleMessage();
+	public bool IsCandles => _isCandles;
 
 	/// <summary>
 	/// Determines whether the <see cref="MessageType"/> is <see cref="TimeFrameCandleMessage"/>.
 	/// </summary>
 	public bool IsTFCandles => MessageType == typeof(TimeFrameCandleMessage);
 
-	private bool? _isMarketData;
+	private bool _isMarketData;
 
 	/// <summary>
 	/// Determines whether the specified message type is market-data.
 	/// </summary>
-	public bool IsMarketData => _isMarketData ??=
-	(
-		IsCandles ||
-		MessageType == typeof(QuoteChangeMessage) ||
-		MessageType == typeof(Level1ChangeMessage) ||
-#pragma warning disable CS0618 // Type or member is obsolete
-		(MessageType == typeof(ExecutionMessage) && Arg is ExecutionTypes type && type != ExecutionTypes.Transaction) ||
-#pragma warning restore CS0618 // Type or member is obsolete
-		MessageType == typeof(NewsMessage) ||
-		MessageType == typeof(BoardMessage) ||
-		MessageType == typeof(BoardStateMessage) ||
-		MessageType == typeof(SecurityLegsInfoMessage) ||
-		MessageType == typeof(SecurityMappingMessage) ||
-		MessageType == typeof(DataTypeInfoMessage)
-	);
+	public bool IsMarketData => _isMarketData;
 
 	private bool? _isSecurityRequired;
+	private bool _isSecurityRequiredByType;
 
 	/// <summary>
 	/// Is the data type required security info.
 	/// </summary>
-	public bool IsSecurityRequired => _isSecurityRequired ??=
-	(
-		IsCandles ||
-		MessageType == typeof(QuoteChangeMessage) ||
-		MessageType == typeof(Level1ChangeMessage) ||
-#pragma warning disable CS0618 // Type or member is obsolete
-		(MessageType == typeof(ExecutionMessage) && Arg is ExecutionTypes t1 && t1 != ExecutionTypes.Transaction)
-#pragma warning restore CS0618 // Type or member is obsolete
-	);
+	public bool IsSecurityRequired => _isSecurityRequired ?? _isSecurityRequiredByType;
 
-	private bool? _isNonSecurity;
+	private bool _isNonSecurity;
 
 	/// <summary>
 	/// Is the data type never associated with security.
 	/// </summary>
-	public bool IsNonSecurity => _isNonSecurity ??=
-	(
-		MessageType == typeof(SecurityMessage) ||
-		MessageType == typeof(NewsMessage) ||
-		MessageType == typeof(BoardMessage) ||
-		MessageType == typeof(BoardStateMessage) ||
-		MessageType == typeof(DataTypeInfoMessage)
-	);
+	public bool IsNonSecurity => _isNonSecurity;
 
 	/// <summary>
 	/// Is the data type can be used as candles compression source.
@@ -564,6 +569,7 @@ public class DataType : Equatable<DataType>, IPersistable
 	public void Load(SettingsStorage storage)
 	{
 		MessageType = storage.GetValue<Type>(nameof(MessageType));
+		Arg = null;
 
 		if (storage.ContainsKey(nameof(Arg)))
 		{
@@ -600,8 +606,11 @@ public class DataType : Equatable<DataType>, IPersistable
 			}
 		}
 
-		if (storage.ContainsKey(nameof(IsSecurityRequired)))
-			_isSecurityRequired = storage.GetValue<bool>(nameof(IsSecurityRequired));
+		_isSecurityRequired = storage.ContainsKey(nameof(IsSecurityRequired))
+			? storage.GetValue<bool>(nameof(IsSecurityRequired))
+			: null;
+
+		Name = storage.GetValue<string>(nameof(Name));
 	}
 
 	/// <summary>
@@ -629,5 +638,9 @@ public class DataType : Equatable<DataType>, IPersistable
 
 		if (_isSecurityRequired == true)
 			storage.SetValue(nameof(IsSecurityRequired), true);
+
+		// The name is what a custom data type prints as, so it is part of what is being saved.
+		if (!Name.IsEmpty())
+			storage.SetValue(nameof(Name), Name);
 	}
 }

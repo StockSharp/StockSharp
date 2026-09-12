@@ -4110,13 +4110,27 @@ public class ExtensionsMethodsTests : BaseTestClass
 		unfilled.IsEmpty().AssertTrue($"{nameof(CreateLivingOrder)} leaves these properties at their default, so the round trip below proves nothing about them: {unfilled.JoinComma()}");
 
 		var restored = order.ToMessage().ToOrder(new Order { Security = order.Security });
+		restored.Condition.AssertNotSame(order.Condition, "the report and the restored order must not share the caller's mutable condition");
 
 		var lost = compared
-			.Where(p => !Equals(p.GetValue(order), p.GetValue(restored)))
+			.Where(p => !OrderPropertyEquals(p, order, restored))
 			.Select(p => $"{p.Name}: {p.GetValue(order) ?? "null"} -> {p.GetValue(restored) ?? "null"}")
 			.ToArray();
 
 		lost.IsEmpty().AssertTrue($"{lost.Length} of {compared.Length} properties did not survive Order -> ExecutionMessage -> Order:{Environment.NewLine}{lost.JoinN()}");
+	}
+
+	private static bool OrderPropertyEquals(PropertyInfo property, Order expected, Order actual)
+	{
+		var expectedValue = property.GetValue(expected);
+		var actualValue = property.GetValue(actual);
+
+		if (expectedValue is not OrderCondition expectedCondition || actualValue is not OrderCondition actualCondition)
+			return Equals(expectedValue, actualValue);
+
+		return expectedCondition.GetType() == actualCondition.GetType()
+			&& expectedCondition.Parameters.Count == actualCondition.Parameters.Count
+			&& expectedCondition.Parameters.All(p => actualCondition.Parameters.TryGetValue(p.Key, out var value) && Equals(p.Value, value));
 	}
 
 	#endregion

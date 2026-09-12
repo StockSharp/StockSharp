@@ -1,5 +1,7 @@
 namespace StockSharp.Messages;
 
+using System.Collections.ObjectModel;
+
 /// <summary>
 /// Which indicator to run, with what parameters, on which candle series.
 /// </summary>
@@ -15,7 +17,7 @@ namespace StockSharp.Messages;
 public class IndicatorSpec : Equatable<IndicatorSpec>, IPersistable
 {
 	private static readonly IReadOnlyDictionary<string, object> _noParameters
-		= new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+		= new ReadOnlyDictionary<string, object>(new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase));
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="IndicatorSpec"/>. For deserialization; use
@@ -68,7 +70,9 @@ public class IndicatorSpec : Equatable<IndicatorSpec>, IPersistable
 				throw new ArgumentException(LocalizedStrings.HasDuplicates.Put(key), nameof(parameters));
 		}
 
-		return frozen;
+		// Handed out as a read-only view: a caller that could cast the parameters back to a writable
+		// dictionary would be able to edit a specification other code already computes and looks up by.
+		return new ReadOnlyDictionary<string, object>(frozen);
 	}
 
 	// A length of 20 written in code is an int and the same length off a JSON frame is a long, and

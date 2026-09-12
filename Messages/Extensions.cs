@@ -2612,6 +2612,9 @@ public static partial class Extensions
 		if (criteria.SecurityId != default && criteria.SecurityId != transaction.SecurityId)
 			return false;
 
+		if (criteria.SecurityIds.Length > 0 && !criteria.SecurityIds.Contains(transaction.SecurityId))
+			return false;
+
 		if (states.Count > 0 && transaction.OrderState != null && !states.Contains(transaction.OrderState.Value))
 			return false;
 

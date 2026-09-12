@@ -1070,6 +1070,14 @@ static class Helper
 			a.Action.AssertEqual(e.Action);
 			a.StartPosition.AssertEqual(e.StartPosition);
 			a.EndPosition.AssertEqual(e.EndPosition);
+
+			var expectedInner = e.InnerQuotes ?? [];
+			var actualInner = a.InnerQuotes ?? [];
+
+			actualInner.Length.AssertEqual(expectedInner.Length);
+
+			for (var i = 0; i < expectedInner.Length; i++)
+				CheckEqual(expectedInner[i], actualInner[i], isMls, isSerializer);
 		}
 		else if (type == typeof(ExecutionMessage))
 		{
@@ -1254,12 +1262,9 @@ static class Helper
 
 			a.Count.AssertEqual(e.Count);
 
-			if (!isSerializer)
+			foreach (var key in a.Keys.OrderBy())
 			{
-				foreach (var key in a.Keys.OrderBy())
-				{
-					CheckEqual(a[key], e[key]);
-				}
+				CheckEqual(e[key], a[key], isMls, isSerializer);
 			}
 		}
 		else if (type == typeof(SettingsStorage[]))

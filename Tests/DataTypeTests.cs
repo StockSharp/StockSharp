@@ -178,6 +178,28 @@ public class DataTypeTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void Load_Replaces_Derived_State()
+	{
+		var dataType = DataType.Create<TimeFrameCandleMessage>(TimeSpan.FromMinutes(1));
+
+		dataType.IsCandles.AssertTrue();
+		dataType.IsMarketData.AssertTrue();
+		dataType.IsSecurityRequired.AssertTrue();
+		dataType.IsNonSecurity.AssertFalse();
+
+		var storage = new SettingsStorage();
+		DataType.Securities.Save(storage);
+		dataType.Load(storage);
+
+		dataType.AreEqual(DataType.Securities);
+		dataType.Arg.AssertNull();
+		dataType.IsCandles.AssertFalse();
+		dataType.IsMarketData.AssertFalse();
+		dataType.IsSecurityRequired.AssertFalse();
+		dataType.IsNonSecurity.AssertTrue();
+	}
+
+	[TestMethod]
 	public void Name_Does_Not_Affect_Equality_Or_Hash()
 	{
 		var dt1 = DataType.Create<Level1ChangeMessage>().SetName("A");

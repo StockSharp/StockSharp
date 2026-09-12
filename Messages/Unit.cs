@@ -179,7 +179,11 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		if (this < other)
 			return -1;
 
-		return 1;
+		if (this > other)
+			return 1;
+
+		// Incomparable measures still need a stable total order for IComparable.
+		return other is null ? 1 : Type.CompareTo(other.Type);
 	}
 
 	[Obsolete]

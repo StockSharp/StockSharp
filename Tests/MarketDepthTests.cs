@@ -154,7 +154,7 @@ public class MarketDepthTests
 				else if (bids.Length == 1)
 				{
 					var q = bids[0];
-					grouppedBids.Add(new QuoteChange { Price = q.Price, Volume = q.Volume });
+					grouppedBids.Add(new QuoteChange { Price = q.Price, InnerQuotes = [q] });
 				}
 
 				grouppedBids = [.. grouppedBids.OrderByDescending(q => q.Price)];
@@ -195,7 +195,7 @@ public class MarketDepthTests
 				else if (asks.Length == 1)
 				{
 					var q = asks[0];
-					grouppedAsks.Add(new QuoteChange { Price = q.Price, Volume = q.Volume });
+					grouppedAsks.Add(new QuoteChange { Price = q.Price, InnerQuotes = [q] });
 				}
 
 				grouppedAsks = [.. grouppedAsks.OrderBy(q => q.Price)];

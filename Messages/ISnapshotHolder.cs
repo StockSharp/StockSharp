@@ -281,7 +281,7 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 						var builder = new OrderBookIncrementBuilder(secId) { Parent = this };
 						_ = builder.TryApply(quoteMsg) ?? throw new InvalidOperationException();
 
-						info.Snapshot = quoteMsg;
+						info.Snapshot = quoteMsg.TypedClone();
 						info.Builder = builder;
 						info.ErrorCount = 0;
 
@@ -311,7 +311,7 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 						toThrow = new InvalidOperationException();
 					else
 					{
-						_snapshots.Add(secId, new() { Snapshot = quoteMsg, Builder = builder });
+						_snapshots.Add(secId, new() { Snapshot = quoteMsg.TypedClone(), Builder = builder });
 						result = quoteMsg.TypedClone(); // return clone for safety
 					}
 				}

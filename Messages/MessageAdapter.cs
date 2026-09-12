@@ -503,7 +503,7 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 	{
 		if (mdMsg.IsSubscribe)
 		{
-			var now = DateTime.UtcNow;
+			var now = CurrentTime;
 
 			var from = mdMsg.From;
 			var to = mdMsg.To;

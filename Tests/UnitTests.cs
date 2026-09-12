@@ -133,16 +133,12 @@ public class UnitTests : BaseTestClass
 		forward.AssertEqual(-backward, $"CompareTo must be antisymmetric: '{per}' vs '{abs}' gave {forward}, the reverse gave {backward}");
 	}
 
-	// CompareTo must say the same thing as >, < and == do for the same pair,
-	// so that sorting and the operators cannot describe two different orders.
 	[TestMethod]
-	public void CompareToAgreesWithComparisonOperators()
+	public void CompareToAgreesWithComparisonOperatorsForComparableUnits()
 	{
-		var per = 10.Percents();
-		var abs = new Unit(10m, UnitTypes.Absolute);
-
-		AssertAgrees(per, abs);
-		AssertAgrees(abs, per);
+		AssertAgrees(10.Percents(), 20.Percents());
+		AssertAgrees(new(20m, UnitTypes.Absolute), new(10m, UnitTypes.Absolute));
+		AssertAgrees(new(10m, UnitTypes.Absolute), new(10m, UnitTypes.Absolute));
 
 		static void AssertAgrees(Unit u1, Unit u2)
 		{

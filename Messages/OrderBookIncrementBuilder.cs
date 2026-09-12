@@ -70,6 +70,15 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 			switch (currState)
 			{
 				case _none:
+				{
+					if (newState is not QuoteChangeStates.SnapshotStarted and not QuoteChangeStates.SnapshotBuilding and not QuoteChangeStates.SnapshotComplete)
+					{
+						WriteWarning();
+						return false;
+					}
+
+					break;
+				}
 				case QuoteChangeStates.SnapshotStarted:
 				{
 					if (newState is not QuoteChangeStates.SnapshotBuilding and not QuoteChangeStates.SnapshotComplete)
@@ -106,7 +115,9 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 			return true;
 		}
 
-		var resetState = newState is QuoteChangeStates.SnapshotStarted or QuoteChangeStates.SnapshotComplete;
+		var resetState = newState == QuoteChangeStates.SnapshotStarted
+			|| (newState == QuoteChangeStates.SnapshotComplete
+				&& currState is not QuoteChangeStates.SnapshotStarted and not QuoteChangeStates.SnapshotBuilding);
 
 		if (currState != newState || resetState)
 		{

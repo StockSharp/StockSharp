@@ -98,7 +98,7 @@ public static class IChartExtensions
 			case IChartOrderElement orderElem:
 			{
 				var order = (Order)value;
-				return item.Add(orderElem, order, order.State != OrderStates.Failed ? null : LocalizedStrings.Failed);
+				return item.Add(orderElem, order, order?.State != OrderStates.Failed ? null : LocalizedStrings.Failed);
 			}
 			case IChartTradeElement tradeElem:
 				return item.Add(tradeElem, (MyTrade)value);

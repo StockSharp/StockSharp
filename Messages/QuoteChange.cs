@@ -167,6 +167,32 @@ public struct QuoteChange(decimal price, decimal volume, int? ordersCount = null
 		}
 	}
 
+	/// <summary>
+	/// Create a copy that shares nothing with this quote.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	/// <remarks>
+	/// The struct itself is copied by assignment, but <see cref="InnerQuotes"/> is an array and two
+	/// copies would otherwise write into one set of quotes.
+	/// </remarks>
+	public readonly QuoteChange Clone()
+	{
+		var clone = this;
+
+		if (_innerQuotes is not null)
+		{
+			var inner = new QuoteChange[_innerQuotes.Length];
+
+			for (var i = 0; i < inner.Length; i++)
+				inner[i] = _innerQuotes[i].Clone();
+
+			// Assigned to the field so the already copied Volume and OrdersCount are kept as they are.
+			clone._innerQuotes = inner;
+		}
+
+		return clone;
+	}
+
 	/// <inheritdoc />
 	public override readonly string ToString() => $"{Price} {Volume}";
 }

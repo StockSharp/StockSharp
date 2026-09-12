@@ -19,6 +19,22 @@ public class OrderSnapshotHolder : BaseLogReceiver
 	/// </summary>
 	public bool ThrowOnInvalidStateTransition { get; set; }
 
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage.SetValue(nameof(ThrowOnInvalidStateTransition), ThrowOnInvalidStateTransition);
+	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		ThrowOnInvalidStateTransition = storage.GetValue(nameof(ThrowOnInvalidStateTransition), ThrowOnInvalidStateTransition);
+	}
+
 	/// <summary>
 	/// Try get snapshot for the specified transaction id.
 	/// </summary>

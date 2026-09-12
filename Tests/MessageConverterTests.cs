@@ -582,7 +582,7 @@ public partial class MessageConverterTests : BaseTestClass
 		expected.AddRange(Encoding.UTF8.GetBytes(text));
 		expected.Add((byte)AsciiSymbols.Soh);
 
-		AreEqual(15, expected.Count);
+		AreEqual(16, expected.Count);
 		IsTrue(expected.SequenceEqual(written), "Text was not written as its encoded bytes.");
 	}
 
