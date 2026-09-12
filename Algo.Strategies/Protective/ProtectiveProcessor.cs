@@ -105,10 +105,10 @@ public class ProtectiveProcessor
 		{
 			var activationPrice = (decimal)(_isUpTrend ? _prevBestPrice + _protectiveLevel : _prevBestPrice - _protectiveLevel);
 
-			// protectiveLevel may has extra big value.
-			// In that case activationPrice may less that zero.
+			// A protective distance can extend beyond the positive price domain. Snapping such a
+			// level to an arbitrary penny would create a trigger the caller never requested.
 			if (activationPrice <= 0)
-				activationPrice = 0.01m;
+				return null;
 
 			if ((_isUpTrend && currPriceDec < activationPrice) || (!_isUpTrend && currPriceDec > activationPrice))
 				return null;

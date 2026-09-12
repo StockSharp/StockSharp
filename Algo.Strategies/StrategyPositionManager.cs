@@ -45,12 +45,31 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		/// Ignored market order execution due to missing last price.
 		/// </summary>
 		NoMarketPrice,
+
+		/// <summary>
+		/// The order is already finished and the snapshot carries no execution beyond what was applied.
+		/// </summary>
+		AlreadyFinished,
 	}
+
+	/// <summary>
+	/// Whether the result reports a problem rather than ordinary order flow. A snapshot of an order
+	/// that is not active yet, one for an order with no position, and a repeat of a final snapshot are
+	/// all expected traffic; a fill going backwards or being dropped is not.
+	/// </summary>
+	/// <param name="result">Processing result.</param>
+	/// <returns>Check result.</returns>
+	public static bool IsProblem(OrderResults result)
+		=> result is OrderResults.Inconsistent or OrderResults.NoMarketPrice;
 
 	private readonly Lock _lock = new();
 	private readonly Dictionary<(SecurityId secId, Portfolio pf), Position> _positions = [];
 	private readonly Dictionary<long, OrderExecInfo> _orderExecInfos = [];
 	private readonly Dictionary<SecurityId, decimal> _lastPrices = [];
+
+	// What each finished order ended on. Orders arrive as cumulative snapshots and the final one can
+	// arrive more than once; without this the executions of a repeated snapshot would be applied again.
+	private readonly Dictionary<long, OrderExecInfo> _finishedOrders = [];
 
 	/// <summary>
 	/// Per-position aggregates cache (blocked volume and active orders counters).
@@ -84,6 +103,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 		public decimal MatchedVolume; // cumulative executed volume (absolute)
 		public decimal Cost;          // cumulative cost (sum executed price * volume)
 		public decimal Commission;    // cumulative commission
+		public DateTime FinishedTime; // registration time used by the strategy's order-retention policy
 	}
 
 	/// <summary>
@@ -105,6 +125,20 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 	/// <summary>
 	/// </summary>
 	[Browsable(false)] public int TrackedAggsCount { get { using (_lock.EnterScope()) return _posAggs.Count; } }
+	/// <summary>
+	/// Number of terminal order states retained for replay detection.
+	/// </summary>
+	[Browsable(false)] public int TrackedFinishedOrdersCount { get { using (_lock.EnterScope()) return _finishedOrders.Count; } }
+
+	/// <summary>
+	/// Remove terminal order states older than <paramref name="time"/>.
+	/// </summary>
+	/// <param name="time">Minimum order time to keep.</param>
+	public void RemoveFinishedBefore(DateTime time)
+	{
+		using (_lock.EnterScope())
+			_finishedOrders.RemoveWhere(pair => pair.Value.FinishedTime != default && pair.Value.FinishedTime < time);
+	}
 
 	/// <summary>
 	/// Try get existing position instance for <paramref name="security"/> and <paramref name="portfolio"/>.
@@ -181,6 +215,7 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 			_posAggs.Clear();
 			_orderTracks.Clear();
 			_lastPrices.Clear();
+			_finishedOrders.Clear();
 		}
 	}
 
@@ -318,6 +353,23 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 			var key = (order.Security.ToSecurityId(), order.Portfolio);
 			var posExists = _positions.ContainsKey(key);
 
+			if (_finishedOrders.TryGetValue(txId, out var finished))
+			{
+				// A final snapshot with no newer fill is normally a replay. The one useful exception is
+				// an explicit correction to its cumulative commission, which goes through the ordinary
+				// zero-volume-delta path below. A missing commission carries no correction.
+				if (order.State == OrderStates.Done && matchedAbs <= finished.MatchedVolume
+					&& (matchedAbs < finished.MatchedVolume || commission is null || commission == finished.Commission))
+					return OrderResults.AlreadyFinished;
+				else if (matchedAbs < finished.MatchedVolume)
+					return OrderResults.Inconsistent;
+
+				// The order came back to life, reported a later fill, or supplied a commission correction.
+				// What it had accumulated by the terminal snapshot is already applied, so continue from it.
+				_finishedOrders.Remove(txId);
+				_orderExecInfos[txId] = finished;
+			}
+
 			// If there are no executions yet and the order state is not Active and no position exists yet, ignore.
 			if (matchedAbs == 0 && order.State != OrderStates.Active && !posExists)
 				return OrderResults.UnknownOrder;
@@ -332,26 +384,18 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 
 			if (deltaMatchedAbs > 0)
 			{
-				// determine execution price according to priority:
-				// 1) AveragePrice
-				// 2) Price (for non-market orders)
-				// 3) Last instrument price for market orders
-				// If still unknown -> ignore this execution and log a warning
 				if (effPrice == null)
 				{
-					if (order.Type == OrderTypes.Market)
-					{
-						if (!_lastPrices.TryGetValue(order.Security.ToSecurityId(), out var lastPrice))
-							return OrderResults.NoMarketPrice;
-
-						effPrice = lastPrice;
-						cumulativeBased = false; // last price may change between snapshots; use incremental cost to avoid skew
-					}
-					else
-					{
+					if (order.Type != OrderTypes.Market && order.Price > 0)
 						effPrice = order.Price;
-						cumulativeBased = true;
-					}
+					else if (_lastPrices.TryGetValue(order.Security.ToSecurityId(), out var lastPrice) && lastPrice > 0)
+						effPrice = lastPrice;
+					else
+						return OrderResults.NoMarketPrice;
+
+					// A fallback prices only the newly reported fill because earlier snapshots may
+					// have supplied a different cumulative average.
+					cumulativeBased = false;
 				}
 			}
 
@@ -364,7 +408,9 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 				_orderExecInfos[txId] = execInfo = new();
 
 			// compute commission delta against last seen cumulative commission for this order
-			var deltaCommission = (commission ?? 0m) - execInfo.Commission;
+			var deltaCommission = commission is decimal currentCommission
+				? currentCommission - execInfo.Commission
+				: 0m;
 
 			if (deltaMatchedAbs > 0)
 			{
@@ -450,9 +496,16 @@ public class StrategyPositionManager(Func<string> strategyIdGetter)
 			// update aggregates again in case balance changed after fill
 			UpdateAggregates(order, position);
 
-			// cleanup per-order exec info on terminal state to avoid leaks (Done covers both full fill and cancellation)
+			// Move terminal execution state out of the active-order map. It remains available to
+			// recognize replayed cumulative snapshots and to continue an explicitly reactivated order.
 			if (order.State == OrderStates.Done)
+			{
+				if (order.Time != default)
+					execInfo.FinishedTime = order.Time;
+
 				_orderExecInfos.Remove(txId);
+				_finishedOrders[txId] = execInfo;
+			}
 		}
 
 		PositionProcessed?.Invoke(position, isNew);

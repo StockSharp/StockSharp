@@ -1181,6 +1181,11 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			return;
 
 		_firstOrderTime = _lastOrderTime - OrdersKeepTime;
+
+		foreach (var order in OrderProcessor.Orders.Where(o => o.State == OrderStates.Done && o.Time < _firstOrderTime))
+			_ordersAdjustedByTrade.Remove(order.TransactionId);
+
+		_posManager.RemoveFinishedBefore(_firstOrderTime);
 		OrderProcessor.RemoveDoneBefore(_firstOrderTime);
 	}
 
@@ -1837,7 +1842,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 		var res = _posManager.ProcessOrder(order);
 
-		if (res != StrategyPositionManager.OrderResults.OK && ErrorState == LogLevels.Info)
+		if (StrategyPositionManager.IsProblem(res) && ErrorState == LogLevels.Info)
 			ErrorState = LogLevels.Warning;
 	}
 
@@ -2169,7 +2174,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			EnsureActiveOrderBalance(order);
 			var res = _posManager.ProcessOrder(order);
 
-			if (res != StrategyPositionManager.OrderResults.OK && ErrorState == LogLevels.Info)
+			if (StrategyPositionManager.IsProblem(res) && ErrorState == LogLevels.Info)
 				ErrorState = LogLevels.Warning;
 		}
 

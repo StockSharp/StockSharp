@@ -17,6 +17,7 @@ public interface IQuotingBehavior
 	/// <param name="bestAskPrice">The best ask price in the order book.</param>
 	/// <param name="lastTradePrice">The price of the last trade.</param>
 	/// <param name="lastTradeVolume">The volume of the last trade.</param>
+	/// <param name="lastTradeSeq">The identity of the last trade. It stays unchanged while the same trade is presented again, so a behavior that accumulates can count each trade once.</param>
 	/// <param name="bids">Array of bid quotes from the order book.</param>
 	/// <param name="asks">Array of ask quotes from the order book.</param>
 	/// <returns>The calculated best price for quoting, or null if unavailable.</returns>
@@ -28,6 +29,7 @@ public interface IQuotingBehavior
 		decimal? bestAskPrice,
 		decimal? lastTradePrice,
 		decimal? lastTradeVolume,
+		long lastTradeSeq,
 		QuoteChange[] bids,
 		QuoteChange[] asks);
 
@@ -67,7 +69,7 @@ public class MarketQuotingBehavior(Unit priceOffset, Unit bestPriceOffset, Marke
 	private readonly Unit _bestPriceOffset = bestPriceOffset ?? throw new ArgumentNullException(nameof(bestPriceOffset));
 
 	decimal? IQuotingBehavior.CalculateBestPrice(Security security, IMarketDataProvider provider, Sides quotingDirection, decimal? bestBidPrice, decimal? bestAskPrice,
-		decimal? lastTradePrice, decimal? lastTradeVolume, QuoteChange[] bids, QuoteChange[] asks)
+		decimal? lastTradePrice, decimal? lastTradeVolume, long lastTradeSeq, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		decimal? basePrice;
 
@@ -126,7 +128,7 @@ public class MarketQuotingBehavior(Unit priceOffset, Unit bestPriceOffset, Marke
 public class BestByPriceQuotingBehavior(Unit bestPriceOffset) : IQuotingBehavior
 {
 	decimal? IQuotingBehavior.CalculateBestPrice(Security security, IMarketDataProvider provider, Sides quotingDirection, decimal? bestBidPrice, decimal? bestAskPrice,
-		decimal? lastTradePrice, decimal? lastTradeVolume, QuoteChange[] bids, QuoteChange[] asks)
+		decimal? lastTradePrice, decimal? lastTradeVolume, long lastTradeSeq, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		// Use the best price based on direction
 		return (quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice) ?? lastTradePrice;
@@ -158,7 +160,7 @@ public class BestByPriceQuotingBehavior(Unit bestPriceOffset) : IQuotingBehavior
 public class LimitQuotingBehavior(decimal limitPrice) : IQuotingBehavior
 {
 	decimal? IQuotingBehavior.CalculateBestPrice(Security security, IMarketDataProvider provider, Sides quotingDirection, decimal? bestBidPrice, decimal? bestAskPrice,
-		decimal? lastTradePrice, decimal? lastTradeVolume, QuoteChange[] bids, QuoteChange[] asks)
+		decimal? lastTradePrice, decimal? lastTradeVolume, long lastTradeSeq, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		// Always return the fixed limit price
 		return limitPrice;
@@ -188,7 +190,7 @@ public class BestByVolumeQuotingBehavior(Unit volumeExchange) : IQuotingBehavior
 	private readonly Unit _volumeExchange = volumeExchange ?? new Unit();
 
 	decimal? IQuotingBehavior.CalculateBestPrice(Security security, IMarketDataProvider provider, Sides quotingDirection, decimal? bestBidPrice, decimal? bestAskPrice,
-		decimal? lastTradePrice, decimal? lastTradeVolume, QuoteChange[] bids, QuoteChange[] asks)
+		decimal? lastTradePrice, decimal? lastTradeVolume, long lastTradeSeq, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		var quotes = quotingDirection == Sides.Buy ? bids : asks;
 
@@ -237,7 +239,7 @@ public class LevelQuotingBehavior(Range<int> level, bool ownLevel) : IQuotingBeh
 	private readonly bool _ownLevel = ownLevel;
 
 	decimal? IQuotingBehavior.CalculateBestPrice(Security security, IMarketDataProvider provider, Sides quotingDirection, decimal? bestBidPrice, decimal? bestAskPrice,
-		decimal? lastTradePrice, decimal? lastTradeVolume, QuoteChange[] bids, QuoteChange[] asks)
+		decimal? lastTradePrice, decimal? lastTradeVolume, long lastTradeSeq, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		var quotes = quotingDirection == Sides.Buy ? bids : asks;
 
@@ -298,7 +300,7 @@ public class LastTradeQuotingBehavior(Unit bestPriceOffset) : IQuotingBehavior
 	private readonly Unit _bestPriceOffset = bestPriceOffset ?? new Unit();
 
 	decimal? IQuotingBehavior.CalculateBestPrice(Security security, IMarketDataProvider provider, Sides quotingDirection, decimal? bestBidPrice, decimal? bestAskPrice,
-		decimal? lastTradePrice, decimal? lastTradeVolume, QuoteChange[] bids, QuoteChange[] asks)
+		decimal? lastTradePrice, decimal? lastTradeVolume, long lastTradeSeq, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		// Always use the last trade price, regardless of useLastTradePrice flag
 		return lastTradePrice;
@@ -332,7 +334,7 @@ public class TheorPriceQuotingBehavior(Range<Unit> theorPriceOffset) : IQuotingB
 	private readonly Range<Unit> _theorPriceOffset = theorPriceOffset ?? throw new ArgumentNullException(nameof(theorPriceOffset));
 
 	decimal? IQuotingBehavior.CalculateBestPrice(Security security, IMarketDataProvider provider, Sides quotingDirection, decimal? bestBidPrice, decimal? bestAskPrice,
-		decimal? lastTradePrice, decimal? lastTradeVolume, QuoteChange[] bids, QuoteChange[] asks)
+		decimal? lastTradePrice, decimal? lastTradeVolume, long lastTradeSeq, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		// Use the best price from the order book, as in BestByPriceQuotingStrategy
 		return (quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice) ?? lastTradePrice;
@@ -371,7 +373,7 @@ public class VolatilityQuotingBehavior(Range<decimal> ivRange, IBlackScholes mod
 	private readonly IBlackScholes _model = model ?? throw new ArgumentNullException(nameof(model));
 
 	decimal? IQuotingBehavior.CalculateBestPrice(Security security, IMarketDataProvider provider, Sides quotingDirection, decimal? bestBidPrice, decimal? bestAskPrice,
-		decimal? lastTradePrice, decimal? lastTradeVolume, QuoteChange[] bids, QuoteChange[] asks)
+		decimal? lastTradePrice, decimal? lastTradeVolume, long lastTradeSeq, QuoteChange[] bids, QuoteChange[] asks)
 	{
 		// Use the best price from the order book, as in BestByPriceQuotingStrategy
 		return (quotingDirection == Sides.Buy ? bestBidPrice : bestAskPrice) ?? lastTradePrice;
@@ -409,15 +411,18 @@ public class VWAPQuotingBehavior(Unit bestPriceOffset) : IQuotingBehavior
 	private readonly Unit _bestPriceOffset = bestPriceOffset ?? new Unit();
 	private decimal _cumulativePriceVolume;
 	private decimal _cumulativeVolume;
+	private long? _accumulatedSeq;
 
 	decimal? IQuotingBehavior.CalculateBestPrice(Security security, IMarketDataProvider provider, Sides quotingDirection, decimal? bestBidPrice, decimal? bestAskPrice,
-		decimal? lastTradePrice, decimal? lastTradeVolume, QuoteChange[] bids, QuoteChange[] asks)
+		decimal? lastTradePrice, decimal? lastTradeVolume, long lastTradeSeq, QuoteChange[] bids, QuoteChange[] asks)
 	{
-		if (lastTradePrice is not decimal price || lastTradeVolume is not decimal volume)
-			return _cumulativeVolume != 0 ? _cumulativePriceVolume / _cumulativeVolume : null;
-
-		_cumulativePriceVolume += price * volume;
-		_cumulativeVolume += volume;
+		// The same trade can be presented several times, so weight it only on its first appearance.
+		if (_accumulatedSeq != lastTradeSeq && lastTradePrice is decimal price && lastTradeVolume is decimal volume)
+		{
+			_cumulativePriceVolume += price * volume;
+			_cumulativeVolume += volume;
+			_accumulatedSeq = lastTradeSeq;
+		}
 
 		return _cumulativeVolume != 0 ? _cumulativePriceVolume / _cumulativeVolume : null;
 	}
@@ -451,12 +456,17 @@ public class TWAPQuotingBehavior(TimeSpan timeInterval, int priceBufferSize = 10
 	private readonly TimeSpan _timeInterval = timeInterval > TimeSpan.Zero ? timeInterval : throw new ArgumentOutOfRangeException(nameof(timeInterval));
 	private readonly CircularBuffer<decimal> _prices = new(priceBufferSize);
 	private DateTime? _lastOrderTime;
+	private long? _accumulatedSeq;
 
 	decimal? IQuotingBehavior.CalculateBestPrice(Security security, IMarketDataProvider provider, Sides quotingDirection, decimal? bestBidPrice, decimal? bestAskPrice,
-		decimal? lastTradePrice, decimal? lastTradeVolume, QuoteChange[] bids, QuoteChange[] asks)
+		decimal? lastTradePrice, decimal? lastTradeVolume, long lastTradeSeq, QuoteChange[] bids, QuoteChange[] asks)
 	{
-		if (lastTradePrice is decimal price)
+		// The same trade can be presented several times, so it takes a slot in the window only once.
+		if (_accumulatedSeq != lastTradeSeq && lastTradePrice is decimal price)
+		{
 			_prices.PushBack(price);
+			_accumulatedSeq = lastTradeSeq;
+		}
 
 		return _prices.Count > 0 ? _prices.Sum() / _prices.Count : null;
 	}

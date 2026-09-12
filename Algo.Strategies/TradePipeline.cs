@@ -14,8 +14,23 @@ using StockSharp.Algo.Statistics;
 /// <param name="feedSecurity">Pushes the traded security's valuation snapshot into the PnL manager.</param>
 public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats, Action<MyTrade> feedSecurity)
 {
+	private sealed class ProcessingState
+	{
+		public bool BeforeProcessingCompleted { get; set; }
+		public bool CommissionCompleted { get; set; }
+		public bool SecurityFeedCompleted { get; set; }
+		public bool PnLCompleted { get; set; }
+		public bool StatisticsCompleted { get; set; }
+		public bool SlippageCompleted { get; set; }
+		public bool CommissionChanged { get; set; }
+		public bool SlippageChanged { get; set; }
+		public PnLInfo TradeInfo { get; set; }
+		public DateTime? PnLChangeTime { get; set; }
+	}
+
 	private readonly CachedSynchronizedSet<MyTrade> _myTrades = [];
 	private readonly HashSet<MyTrade> _processingTrades = [];
+	private readonly Dictionary<MyTrade, ProcessingState> _processingStates = [];
 	private readonly Action<MyTrade> _feedSecurity = feedSecurity ?? throw new ArgumentNullException(nameof(feedSecurity));
 	private IPnLManager _pnlManager = pnlManager ?? throw new ArgumentNullException(nameof(pnlManager));
 	private IStatisticManager _stats = stats ?? throw new ArgumentNullException(nameof(stats));
@@ -68,6 +83,10 @@ public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats, Acti
 	/// Try to add a trade. Returns false if duplicate.
 	/// Processes PnL, commission, slippage.
 	/// </summary>
+	/// <remarks>
+	/// If an internal processing stage throws, the same trade instance can be submitted again. Stages
+	/// that returned successfully are remembered and are not invoked again by that retry.
+	/// </remarks>
 	public bool TryAdd(MyTrade trade)
 		=> TryAdd(trade, null);
 
@@ -76,15 +95,78 @@ public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats, Acti
 		if (trade is null)
 			throw new ArgumentNullException(nameof(trade));
 
+		ProcessingState state;
+
 		using (_myTrades.EnterScope())
 		{
 			if (_myTrades.Contains(trade) || !_processingTrades.Add(trade))
 				return false;
+
+			if (!_processingStates.TryGetValue(trade, out state))
+				_processingStates.Add(trade, state = new());
 		}
 
 		try
 		{
-			beforeProcessing?.Invoke(trade);
+			if (!state.BeforeProcessingCompleted)
+			{
+				beforeProcessing?.Invoke(trade);
+				state.BeforeProcessingCompleted = true;
+			}
+
+			if (!state.CommissionCompleted)
+			{
+				if (trade.Commission != null)
+				{
+					Commission ??= 0;
+					Commission += trade.Commission.Value;
+					state.CommissionChanged = true;
+				}
+
+				state.CommissionCompleted = true;
+			}
+
+			// The PnL queue values this trade with the security's price step, step price and multiplier,
+			// so the snapshot has to reach the manager before the trade does. A successful stage is
+			// remembered so a retry after a later failure does not apply it twice.
+			if (!state.SecurityFeedCompleted)
+			{
+				_feedSecurity(trade);
+				state.SecurityFeedCompleted = true;
+			}
+
+			if (!state.PnLCompleted)
+			{
+				var execMsg = trade.ToMessage();
+				state.TradeInfo = _pnlManager.ProcessMessage(execMsg);
+
+				if (state.TradeInfo is { } tradeInfo && tradeInfo.PnL != 0)
+				{
+					state.PnLChangeTime = execMsg.LocalTime;
+					trade.PnL ??= tradeInfo.PnL;
+				}
+
+				state.PnLCompleted = true;
+			}
+
+			if (!state.StatisticsCompleted)
+			{
+				if (state.TradeInfo is not null)
+					_stats.AddMyTrade(state.TradeInfo);
+
+				state.StatisticsCompleted = true;
+			}
+
+			if (!state.SlippageCompleted)
+			{
+				if (trade.Slippage is decimal slippage)
+				{
+					Slippage = (Slippage ?? 0) + slippage;
+					state.SlippageChanged = true;
+				}
+
+				state.SlippageCompleted = true;
+			}
 		}
 		catch
 		{
@@ -99,56 +181,19 @@ public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats, Acti
 			if (!_processingTrades.Remove(trade))
 				return false;
 
+			_processingStates.Remove(trade);
 			_myTrades.Add(trade);
-		}
-
-		var isComChanged = false;
-		var isSlipChanged = false;
-
-		if (trade.Commission != null)
-		{
-			Commission ??= 0;
-			Commission += trade.Commission.Value;
-			isComChanged = true;
-		}
-
-		// The PnL queue values this trade with the security's price step, step price and multiplier,
-		// so the snapshot has to reach the manager before the trade does. It runs here, on the accepted
-		// path, rather than at the call site: the same fill is delivered once per matching subscription,
-		// and a snapshot pushed per delivery would mutate PnL state for fills the pipeline rejects.
-		_feedSecurity(trade);
-
-		var execMsg = trade.ToMessage();
-		DateTime? pnLChangeTime = null;
-
-		var tradeInfo = _pnlManager.ProcessMessage(execMsg);
-
-		if (tradeInfo != null)
-		{
-			if (tradeInfo.PnL != 0)
-			{
-				pnLChangeTime = execMsg.LocalTime;
-				trade.PnL ??= tradeInfo.PnL;
-			}
-
-			_stats.AddMyTrade(tradeInfo);
-		}
-
-		if (trade.Slippage is decimal slippage)
-		{
-			Slippage = (Slippage ?? 0) + slippage;
-			isSlipChanged = true;
 		}
 
 		TradeAdded?.Invoke(trade);
 
-		if (isComChanged)
+		if (state.CommissionChanged)
 			CommissionChanged?.Invoke();
 
-		if (pnLChangeTime is not null)
-			PnLChanged?.Invoke(pnLChangeTime.Value);
+		if (state.PnLChangeTime is not null)
+			PnLChanged?.Invoke(state.PnLChangeTime.Value);
 
-		if (isSlipChanged)
+		if (state.SlippageChanged)
 			SlippageChanged?.Invoke();
 
 		return true;
@@ -173,6 +218,7 @@ public class TradePipeline(IPnLManager pnlManager, IStatisticManager stats, Acti
 		{
 			_myTrades.Clear();
 			_processingTrades.Clear();
+			_processingStates.Clear();
 		}
 
 		Commission = default;

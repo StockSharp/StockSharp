@@ -254,6 +254,40 @@ public class GeneticOptimizer : BaseOptimizer
 		// strategy under search carries, so a caller seeds one thing and the whole run repeats.
 		var random = strategy.RandomProvider;
 
+		static decimal GetDecimalGridValue(IRandomProvider random, decimal from, decimal to, decimal step)
+		{
+			if (step == 0)
+				throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
+
+			var min = from.Min(to);
+			var max = from.Max(to);
+			step = step.Abs();
+
+			var maxIndex = decimal.Floor((max - min) / step);
+
+			if (maxIndex > long.MaxValue)
+				throw new ArgumentOutOfRangeException(nameof(step));
+
+			return min + random.GetLong(0, (long)maxIndex) * step;
+		}
+
+		static double GetDoubleGridValue(IRandomProvider random, double from, double to, double step)
+		{
+			if (step == 0)
+				throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
+
+			var min = from.Min(to);
+			var max = from.Max(to);
+			step = step.Abs();
+
+			var maxIndex = Math.Floor((max - min) / step);
+
+			if (double.IsNaN(maxIndex) || double.IsInfinity(maxIndex) || maxIndex > long.MaxValue)
+				throw new ArgumentOutOfRangeException(nameof(step));
+
+			return (min + random.GetLong(0, (long)maxIndex) * step).Min(max);
+		}
+
 		var paramArr = parameters.Select(t =>
 		{
 			var param = t.param;
@@ -280,90 +314,46 @@ public class GeneticOptimizer : BaseOptimizer
 				var tu = (Unit)to;
 				var su = (Unit)step;
 
-				if (su.Value == 0)
-					throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
-				else if (su.Value < 0)
-				{
-					(fu, tu) = (tu, fu);
-					su = new(su.Value.Abs(), su.Type);
-				}
+				if (fu.Type != tu.Type || su.Type != fu.Type)
+					throw new ArgumentException("Unit range and step types must match.");
 
-				var scale = su.Value.GetDecimalInfo().EffectiveScale;
-
-				getValue = () => new Unit(random.GetDecimal(fu.Value, tu.Value, scale).Round(su.Value, null), fu.Type);
+				getValue = () => new Unit(GetDecimalGridValue(random, fu.Value, tu.Value, su.Value), fu.Type);
 			}
 			else if (type == typeof(decimal))
 			{
-				var fd = (decimal)from;
-				var td = (decimal)to;
-				var sd = (decimal)step;
+				var fd = from.To<decimal>();
+				var td = to.To<decimal>();
+				var sd = step.To<decimal>();
 
-				if (sd == 0)
-					throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
-				else if (sd < 0)
-				{
-					(fd, td) = (td, fd);
-					sd = sd.Abs();
-				}
-
-				var scale = sd.GetDecimalInfo().EffectiveScale;
-
-				getValue = () => random.GetDecimal(fd, td, scale).Round(sd, null);
+				getValue = () => GetDecimalGridValue(random, fd, td, sd);
 			}
 			else if (type == typeof(bool))
 			{
-				getValue = () => random.GetBool();
+				var fb = from.To<bool>();
+				var tb = to.To<bool>();
+
+				getValue = () => fb == tb ? fb : random.GetBool();
 			}
 			else if (type.IsPrimitive() || type == typeof(TimeSpan))
 			{
 				if (type.IsNumeric() && !type.IsNumericInteger())
 				{
-					var fd = (decimal)from;
-					var td = (decimal)to;
-					var sd = step.To<decimal>();
+					var fd = from.To<double>();
+					var td = to.To<double>();
+					var sd = step.To<double>();
 
-					if (sd == 0)
-						throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
-					else if (sd < 0)
-					{
-						(fd, td) = (td, fd);
-						sd = sd.Abs();
-					}
-
-					var scale = sd.GetDecimalInfo().EffectiveScale;
-
-					getValue = () =>
-					{
-						var d = random.GetDecimal(fd, td, scale);
-
-						if (sd != 1)
-							d = (d / sd) * sd;
-
-						return d.To(type);
-					};
+					getValue = () => GetDoubleGridValue(random, fd, td, sd).To(type);
 				}
 				else
 				{
-					var fl = from.To<long>();
-					var tl = to.To<long>();
-					var sl = step.To<long>();
-
-					if (sl == 0)
-						throw new ArgumentException(LocalizedStrings.ChangeStepCannotBeZero);
-					else if (sl < 0)
-					{
-						(fl, tl) = (tl, fl);
-						sl = sl.Abs();
-					}
+					var fl = type == typeof(TimeSpan) ? ((TimeSpan)from).Ticks : from.To<decimal>();
+					var tl = type == typeof(TimeSpan) ? ((TimeSpan)to).Ticks : to.To<decimal>();
+					var sl = type == typeof(TimeSpan) ? ((TimeSpan)step).Ticks : step.To<decimal>();
 
 					getValue = () =>
 					{
-						var l = random.GetLong(fl, tl);
-
-						if (sl != 1)
-							l = (l / sl) * sl;
-
-						return l.To(type);
+						var value = GetDecimalGridValue(random, fl, tl, sl);
+						return type == typeof(TimeSpan) ? TimeSpan.FromTicks((long)value) : value.To(type);
 					};
 				}
 			}

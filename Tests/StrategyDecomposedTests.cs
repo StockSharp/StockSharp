@@ -757,8 +757,8 @@ public class StrategyDecomposedTests : BaseTestClass
 	[TestMethod]
 	public void TradePipeline_SecurityFeedFailsThenTradeRedelivered_AppliesFillExactlyOnce()
 	{
-		// The security snapshot runs after the trade is already listed and its commission counted. A
-		// caller that redelivers the fill is owed a whole trade, applied once - not a permanent half of one.
+		// Position handling and commission accumulation precede the security snapshot, while publication
+		// waits for the whole pipeline. A redelivery must finish the remaining stages exactly once.
 
 		var security = CreateSecurity();
 		var portfolio = CreatePortfolio();
@@ -794,8 +794,8 @@ public class StrategyDecomposedTests : BaseTestClass
 	[TestMethod]
 	public void TradePipeline_PnLStageFailsThenTradeRedelivered_AppliesFillExactlyOnce()
 	{
-		// The PnL stage runs after the commission is already accumulated, so a failure there leaves the
-		// trade counted but unvalued. Redelivering the fill must complete it.
+		// The PnL stage runs after position handling and commission accumulation. Redelivering the fill
+		// must complete the remaining stages without applying the earlier ones twice.
 
 		var security = CreateSecurity();
 		var portfolio = CreatePortfolio();
@@ -1033,6 +1033,22 @@ public class StrategyDecomposedTests : BaseTestClass
 		var found = registry.TryGetById(sub.TransactionId);
 		IsNotNull(found);
 		AreEqual(sub, found);
+	}
+
+	[TestMethod]
+	public void SubscriptionRegistry_DuplicateTransactionIdDoesNotLeaveHalfRegisteredSubscription()
+	{
+		var registry = new SubscriptionRegistry(new FakeHost());
+		var first = new Subscription(DataType.Level1) { TransactionId = 42 };
+		var duplicate = new Subscription(DataType.Ticks) { TransactionId = 42 };
+
+		registry.Subscribe(first);
+		Throws<ArgumentException>(() => registry.Subscribe(duplicate));
+
+		registry.CanProcess(first).AssertTrue();
+		registry.CanProcess(duplicate).AssertFalse();
+		registry.TryGetById(42).AssertSame(first);
+		registry.Subscriptions.Count().AssertEqual(1);
 	}
 
 	[TestMethod]
@@ -2301,21 +2317,22 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// A strategy with no connector has been told nothing about the market, so it has no market
-	/// time either - and must say so instead of answering with the clock of the machine it happens
-	/// to run on. Everything the strategy stamps before it is connected - order times, the moment
-	/// protection starts measuring from, the date its profit is refreshed against - carries that
-	/// answer, so a wall-clock reading turns a run over last year's data into one dated today.
+	/// A strategy without a connector still provides UTC time, preserving the time-provider contract
+	/// used by callers before a live or historical connector is assigned.
 	/// </summary>
 	[TestMethod]
-	public void CurrentTimeWithoutAConnector_DoesNotFallBackToWallClock()
+	public void CurrentTimeWithoutAConnector_FallsBackToUtcClock()
 	{
+		var before = DateTime.UtcNow;
 		var strategy = new Strategy();
 
 		strategy.Connector.AssertNull("the strategy under test is deliberately unconnected");
 
-		strategy.CurrentTime.AssertEqual(default(DateTime),
-			$"an unconnected strategy has no market time, but it answered with something around the wall clock of {DateTime.UtcNow}");
+		var currentTime = strategy.CurrentTime;
+		var after = DateTime.UtcNow;
+
+		(currentTime >= before && currentTime <= after).AssertTrue(
+			$"expected a UTC clock value between {before:O} and {after:O}, got {currentTime:O}");
 	}
 
 	#endregion

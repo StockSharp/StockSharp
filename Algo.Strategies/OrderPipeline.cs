@@ -191,7 +191,11 @@ public class OrderPipeline(IStatisticManager stats) : IEnumerable<Order>
 	/// <param name="time">Minimum order time to keep.</param>
 	public void RemoveDoneBefore(DateTime time)
 	{
-		_ordersInfo.SyncDo(orders => orders.RemoveWhere(pair => pair.Key.State == OrderStates.Done && pair.Key.Time < time));
+		using (_ordersInfo.EnterScope())
+		{
+			foreach (var order in _ordersInfo.CachedKeys.Where(order => order.State == OrderStates.Done && order.Time < time))
+				_ordersInfo.Remove(order);
+		}
 	}
 
 	/// <summary>
@@ -199,7 +203,11 @@ public class OrderPipeline(IStatisticManager stats) : IEnumerable<Order>
 	/// </summary>
 	public void RemoveDoneWithNonPositiveVolume()
 	{
-		_ordersInfo.SyncDo(orders => orders.RemoveWhere(pair => pair.Key.State == OrderStates.Done && pair.Key.Volume <= 0));
+		using (_ordersInfo.EnterScope())
+		{
+			foreach (var order in _ordersInfo.CachedKeys.Where(order => order.State == OrderStates.Done && order.Volume <= 0))
+				_ordersInfo.Remove(order);
+		}
 	}
 
 	/// <summary>

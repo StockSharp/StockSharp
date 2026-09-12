@@ -31,6 +31,8 @@ public class PairStrategy : Strategy
 
 		_security1 = Param<Security>(nameof(Security1));
 		_security2 = Param<Security>(nameof(Security2));
+		_long = Param(nameof(Long), 80);
+		_short = Param(nameof(Short), 30);
 
 		_takeValue = Param(nameof(TakeValue), new Unit(0, UnitTypes.Absolute));
 		_stopValue = Param(nameof(StopValue), new Unit(2, UnitTypes.Percent));

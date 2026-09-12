@@ -57,6 +57,7 @@ public class StrategyPositionManagerTests : BaseTestClass
 			AveragePrice = order.AveragePrice,
 			Commission = order.Commission,
 			State = order.State,
+			Time = order.Time,
 			LocalTime = order.LocalTime,
 			ServerTime = order.ServerTime,
 			TransactionId = order.TransactionId,
@@ -543,13 +544,13 @@ public class StrategyPositionManagerTests : BaseTestClass
 
 		var (order, sec, pf) = CreateOrder(Sides.Buy, 10m);
 		order.Balance = 0m;
-		order.AveragePrice = null; // Null price
+		order.AveragePrice = null;
 		order.State = OrderStates.Done;
-		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(order).AssertEqual(StrategyPositionManager.OrderResults.NoMarketPrice);
 
-		lastPos.CurrentValue.AssertEqual(10m);
-		(lastPos.AveragePrice ?? 0m).AssertEqual(0m); // Should default to 0
-		AssertCalcFieldsNonNull(lastPos);
+		lastPos.AssertNull();
+		mgr.TryGetPosition(sec, pf).AssertNull();
+		mgr.TrackedOrderExecInfosCount.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -1220,6 +1221,74 @@ public class StrategyPositionManagerTests : BaseTestClass
 		position.AveragePrice.AssertEqual(100m);
 		(position.Commission ?? 0).AssertEqual(0.5m);
 		(position.RealizedPnL ?? 0).AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void FinalSnapshotAppliesLateCommissionCorrectionWithoutRepeatingTheFill()
+	{
+		var mgr = new StrategyPositionManager(() => "LATE_COMMISSION");
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 4m);
+
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.5m;
+
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var correction = Resend(buy);
+		correction.Commission = 0.75m;
+
+		mgr.ProcessOrder(correction).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.ProcessOrder(correction).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(4m);
+		position.AveragePrice.AssertEqual(100m);
+		(position.Commission ?? 0m).AssertEqual(0.75m);
+		(position.RealizedPnL ?? 0m).AssertEqual(0m);
+	}
+
+	[TestMethod]
+	public void FinalSnapshotWithoutCommissionDoesNotEraseKnownCommission()
+	{
+		var mgr = new StrategyPositionManager(() => "MISSING_COMMISSION");
+		var (buy, sec, pf) = CreateOrder(Sides.Buy, 2m);
+
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.AveragePrice = 100m;
+		buy.Commission = 0.5m;
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+
+		var replay = Resend(buy);
+		replay.Commission = null;
+
+		mgr.ProcessOrder(replay).AssertEqual(StrategyPositionManager.OrderResults.AlreadyFinished);
+
+		var position = mgr.TryGetPosition(sec, pf);
+		position.CurrentValue.AssertEqual(2m);
+		(position.Commission ?? 0m).AssertEqual(0.5m);
+	}
+
+	[TestMethod]
+	public void FinishedReplayStateCanBePrunedWithTheOrderRetentionWindow()
+	{
+		var mgr = new StrategyPositionManager(() => "FINISHED_RETENTION");
+		var (buy, _, _) = CreateOrder(Sides.Buy, 1m);
+		var orderTime = new DateTime(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+
+		buy.Time = orderTime;
+		buy.State = OrderStates.Done;
+		buy.Balance = 0m;
+		buy.AveragePrice = 100m;
+
+		mgr.ProcessOrder(buy).AssertEqual(StrategyPositionManager.OrderResults.OK);
+		mgr.TrackedFinishedOrdersCount.AssertEqual(1);
+
+		mgr.RemoveFinishedBefore(orderTime.AddTicks(1));
+
+		mgr.TrackedFinishedOrdersCount.AssertEqual(0);
 	}
 
 	[TestMethod]

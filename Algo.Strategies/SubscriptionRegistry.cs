@@ -44,15 +44,24 @@ public class SubscriptionRegistry(IStrategyHost host)
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		_subscriptions.Add(subscription, isGlobal);
-
 		if (subscription.SubscriptionMessage is IStrategyIdMessage { StrategyId: null or "" } strategyMsg)
 			strategyMsg.StrategyId = _host.StrategyId;
 
 		if (subscription.TransactionId == default)
 			subscription.TransactionId = _host.GetNextTransactionId();
 
-		_subscriptionsById.Add(subscription.TransactionId, subscription);
+		_subscriptions.Add(subscription, isGlobal);
+
+		try
+		{
+			_subscriptionsById.Add(subscription.TransactionId, subscription);
+		}
+		catch
+		{
+			// Keep both indexes atomic when a caller supplies an already-used transaction id.
+			_subscriptions.Remove(subscription);
+			throw;
+		}
 
 		if (_rulesSuspendCount > 0)
 		{
@@ -97,7 +106,11 @@ public class SubscriptionRegistry(IStrategyHost host)
 			var subscription = pair.Key;
 			_subscriptions.Remove(subscription);
 			_subscriptionsById.Remove(subscription.TransactionId);
-			UnsubscriptionRequested?.Invoke(subscription);
+
+			// A subscription queued while rules are suspended has never reached the connector.
+			// Remove it from the resume queue, but do not send an unsubscribe for it.
+			if (!_suspendSubscriptions.Remove(subscription))
+				UnsubscriptionRequested?.Invoke(subscription);
 		}
 	}
 

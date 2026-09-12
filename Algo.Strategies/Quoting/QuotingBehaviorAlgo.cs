@@ -14,6 +14,7 @@ public class QuotingBehaviorAlgo : IPositionModifyAlgo
 
 	private decimal? _lastTradePrice;
 	private decimal? _lastTradeVolume;
+	private long _lastTradeSeq;
 	private decimal? _bestBidPrice;
 	private decimal? _bestAskPrice;
 	private QuoteChange[] _bids = [];
@@ -60,6 +61,7 @@ public class QuotingBehaviorAlgo : IPositionModifyAlgo
 	{
 		_lastTradePrice = price;
 		_lastTradeVolume = volume;
+		_lastTradeSeq++;
 		_lastUpdateTime = time;
 
 		// Call CalculateBestPrice to allow stateful behaviors (like VWAP) to accumulate data
@@ -72,6 +74,7 @@ public class QuotingBehaviorAlgo : IPositionModifyAlgo
 			_bestAskPrice,
 			_lastTradePrice,
 			_lastTradeVolume,
+			_lastTradeSeq,
 			_bids,
 			_asks);
 	}
@@ -99,6 +102,7 @@ public class QuotingBehaviorAlgo : IPositionModifyAlgo
 			_bestAskPrice,
 			_lastTradePrice,
 			_lastTradeVolume,
+			_lastTradeSeq,
 			_bids,
 			_asks);
 	}
