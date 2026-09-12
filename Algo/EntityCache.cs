@@ -92,18 +92,7 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 
 			var order = Order;
 
-			OrderChangeInfo retVal;
-
-			if (order.State == OrderStates.Done)
-			{
-				// данные о заявке могут приходить из маркет-дата и транзакционного адаптеров
-				retVal = new OrderChangeInfo(order, raiseNewOrder, false, false);
-				raiseNewOrder = false;
-				process(order);
-				yield return retVal;
-				//throw new InvalidOperationException("Изменение заявки в состоянии Done невозможно.");
-			}
-			else if (order.State == OrderStates.Failed)
+			if (order.State == OrderStates.Failed)
 			{
 				// some adapters can resend order's info
 
@@ -111,19 +100,8 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 				yield break;
 			}
 
+			var isDone = order.State == OrderStates.Done;
 			var isPending = order.State == OrderStates.Pending;
-
-			// is we have Pending order and received Done event
-			// add intermediate Active event
-			if (isPending && message.OrderState == OrderStates.Done)
-			{
-				var clone = message.TypedClone();
-				clone.OrderState = OrderStates.Active;
-				clone.Balance = null;
-
-				foreach (var i in ApplyChanges(clone, operation, process))
-					yield return i;
-			}
 
 			if (message.OrderId != null)
 				order.Id = message.OrderId.Value;
@@ -134,15 +112,11 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 			if (!message.OrderBoardId.IsEmpty())
 				order.BoardId = message.OrderBoardId;
 
-			if (message.Balance != null)
+			if (!isDone && message.Balance != null)
 				order.Balance = ((decimal?)order.Balance).ApplyNewBalance(message.Balance.Value, order.TransactionId, _parent._logReceiver);
 
-			if (message.OrderState != null)
-			{
-				// Do not allow state "resurrection" after Done (out-of-order updates can arrive).
-				if (order.State != OrderStates.Done || message.OrderState.Value == OrderStates.Done)
-					order.ApplyNewState(message.OrderState.Value, _parent._logReceiver);
-			}
+			if (!isDone && message.OrderState != null)
+				order.ApplyNewState(message.OrderState.Value, _parent._logReceiver);
 
 			if (order.Time == DateTime.MinValue)
 				order.Time = message.ServerTime;
@@ -161,10 +135,10 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 					order.MatchedTime ??= message.ServerTime;
 			}
 
-			if (message.OrderPrice != 0)
+			if (!isDone && message.OrderPrice != 0)
 				order.Price = message.OrderPrice;
 
-			if (message.OrderVolume != null)
+			if (!isDone && message.OrderVolume != null)
 				order.Volume = message.OrderVolume.Value;
 
 			if (message.Commission != default)
@@ -220,7 +194,7 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 			if (message.MarketPrice != default)
 				order.MarketPrice = message.MarketPrice;
 
-			retVal = new OrderChangeInfo(order, raiseNewOrder, true, operation == OrderOperations.Edit);
+			var retVal = new OrderChangeInfo(order, raiseNewOrder, true, operation == OrderOperations.Edit);
 			raiseNewOrder = false;
 			process(order);
 			yield return retVal;
@@ -891,8 +865,9 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 			throw new ArgumentOutOfRangeException(nameof(message), transactionId, LocalizedStrings.TransactionInvalid);
 
 		var tradeKey = (transactionId, message.TradeId ?? 0, message.TradeStringId ?? string.Empty);
+		var hasTradeId = message.TradeId is not null || !message.TradeStringId.IsEmpty();
 
-		if (securityData.MyTrades.TryGetValue(tradeKey, out var myTrade))
+		if (hasTradeId && securityData.MyTrades.TryGetValue(tradeKey, out var myTrade))
 			return (myTrade, false);
 
 		if (order == null)
@@ -926,10 +901,8 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 
 		var isNew = false;
 
-		myTrade = securityData.MyTrades.SafeAdd(tradeKey, key =>
+		MyTrade createTrade()
 		{
-			isNew = true;
-
 			var trade = (ITickTradeMessage)message.TypedClone();
 
 			if (message.SeqNum != default)
@@ -980,7 +953,24 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 			}
 
 			return t;
-		});
+		}
+
+		if (hasTradeId)
+		{
+			myTrade = securityData.MyTrades.SafeAdd(tradeKey, key =>
+			{
+				isNew = true;
+				return createTrade();
+			});
+		}
+		else
+		{
+			using (securityData.MyTrades.EnterScope())
+			{
+				isNew = true;
+				myTrade = createTrade();
+			}
+		}
 
 		return (myTrade, isNew);
 	}
@@ -1267,6 +1257,24 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 				CanLastTrade = false;
 			}
 		}
+
+		/// <summary>
+		/// Let the best quotes be taken from Level1 again, once the order book stream that owned them has ended.
+		/// </summary>
+		public void RestoreBestQuotes()
+		{
+			using (_sync.EnterScope())
+				CanBestQuotes = true;
+		}
+
+		/// <summary>
+		/// Let the last trade be taken from Level1 again, once the tick stream that owned it has ended.
+		/// </summary>
+		public void RestoreLastTrade()
+		{
+			using (_sync.EnterScope())
+				CanLastTrade = true;
+		}
 	}
 
 	private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = [];
@@ -1318,6 +1326,30 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 	/// <returns>Level1 info.</returns>
 	public Level1Info GetSecurityValues(Security security, DateTime serverTime)
 		=> _securityValues.SafeAdd(security, key => new Level1Info(security.ToSecurityId(), serverTime));
+
+	/// <summary>
+	/// Hand the Level1 fields an ended market data stream owned back to Level1. An order book owns the
+	/// best quotes and a tick stream owns the last trade only while it runs; once it is gone Level1 is
+	/// the only source left for them.
+	/// </summary>
+	/// <param name="security">Security the stream carried.</param>
+	/// <param name="dataType">Data type of the stream that ended.</param>
+	public void ReleaseLevel1Ownership(Security security, DataType dataType)
+	{
+		if (security is null)
+			throw new ArgumentNullException(nameof(security));
+
+		if (dataType is null)
+			throw new ArgumentNullException(nameof(dataType));
+
+		if (!_securityValues.TryGetValue(security, out var info))
+			return;
+
+		if (dataType == DataType.MarketDepth)
+			info.RestoreBestQuotes();
+		else if (dataType == DataType.Ticks)
+			info.RestoreLastTrade();
+	}
 
 	/// <summary>
 	/// Update cached order book snapshot for a security.

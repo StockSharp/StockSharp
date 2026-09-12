@@ -13,12 +13,43 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 	{
 		private readonly Dictionary<SecurityId, QuoteChangeMessage> _feeds = [];
 
+		private static void SetBoardCode(QuoteChange[] quotes, string boardCode)
+		{
+			for (var i = 0; i < quotes.Length; i++)
+			{
+				if (!quotes[i].BoardCode.IsEmpty())
+					continue;
+
+				quotes[i].BoardCode = boardCode;
+			}
+		}
+
+		private static QuoteChange Aggregate(decimal price, IEnumerable<QuoteChange> quotes)
+		{
+			var result = new QuoteChange { Price = price };
+			result.InnerQuotes = [.. quotes.Select(q => q.Clone())];
+			return result;
+		}
+
 		public QuoteChangeMessage Process(QuoteChangeMessage message)
 		{
-			_feeds[message.SecurityId] = message;
+			var feed = message.TypedClone();
+			SetBoardCode(feed.Bids, message.SecurityId.BoardCode);
+			SetBoardCode(feed.Asks, message.SecurityId.BoardCode);
+			_feeds[message.SecurityId] = feed;
 
-			var bids = _feeds.SelectMany(f => f.Value.Bids).ToArray();
-			var asks = _feeds.SelectMany(f => f.Value.Asks).ToArray();
+			var bids = _feeds
+				.SelectMany(f => f.Value.Bids)
+				.GroupBy(q => q.Price)
+				.Select(g => Aggregate(g.Key, g))
+				.OrderByDescending(q => q.Price)
+				.ToArray();
+			var asks = _feeds
+				.SelectMany(f => f.Value.Asks)
+				.GroupBy(q => q.Price)
+				.Select(g => Aggregate(g.Key, g))
+				.OrderBy(q => q.Price)
+				.ToArray();
 
 			return new QuoteChangeMessage
 			{
@@ -36,6 +67,15 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 	}
 
 	private readonly SynchronizedDictionary<string, QuoteChangeDepthBuilder> _quoteChangeDepthBuilders = new(StringComparer.InvariantCultureIgnoreCase);
+
+	/// <inheritdoc />
+	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	{
+		if (message.Type == MessageTypes.Reset)
+			_quoteChangeDepthBuilders.Clear();
+
+		return base.OnSendInMessageAsync(message, cancellationToken);
+	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
@@ -79,8 +119,10 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 				if (quoteMsg.SecurityId == default)
 					break;
 
-				//if (IsAssociated(quoteMsg.SecurityId.BoardCode))
-				//	return;
+				// An associated snapshot already contains the venue books. Feeding it back into the
+				// builder would count those levels once through their venues and once through ALL.
+				if (IsAssociated(quoteMsg.SecurityId.BoardCode))
+					break;
 
 				var builder = _quoteChangeDepthBuilders
 					.SafeAdd(quoteMsg.SecurityId.SecurityCode, c => new QuoteChangeDepthBuilder(c, SecurityId.AssociatedBoardCode));
@@ -143,6 +185,6 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 	/// <returns>Copy.</returns>
 	public override IMessageAdapter Clone()
 	{
-		return new AssociatedSecurityAdapter(InnerAdapter);
+		return new AssociatedSecurityAdapter(InnerAdapter.TypedClone());
 	}
 }

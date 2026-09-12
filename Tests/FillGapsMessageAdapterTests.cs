@@ -265,8 +265,7 @@ public class FillGapsMessageAdapterTests : BaseTestClass
 		gapEnd.AssertEqual(new DateTime(2020, 1, 7).EndOfDay());
 	}
 
-	// FillGapsMessageAdapter asks for the next window from the previous end-of-day plus a day,
-	// so From lands at 23:59:59.9999999 of 07th. That day is in the storage and is not a gap.
+	// A partial first day that is already present in storage must not be requested again.
 	[TestMethod]
 	public async Task StorageBehaviour_FromAtEndOfStoredDay_DoesNotRerequestThatDay()
 	{

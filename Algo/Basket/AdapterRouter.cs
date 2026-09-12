@@ -157,16 +157,8 @@ public class AdapterRouter : IAdapterRouter
 						if (mdMsg.BuildFrom == DataType.Level1 || mdMsg.BuildFrom == DataType.OrderLog)
 							return await a.IsMarketDataTypeSupportedAsync(mdMsg.BuildFrom, cancellationToken);
 						else if (mdMsg.BuildFrom == null)
-						{
-							if (await a.IsMarketDataTypeSupportedAsync(DataType.OrderLog, cancellationToken))
-								mdMsg.BuildFrom = DataType.OrderLog;
-							else if (await a.IsMarketDataTypeSupportedAsync(DataType.Level1, cancellationToken))
-								mdMsg.BuildFrom = DataType.Level1;
-							else
-								return false;
-
-							return true;
-						}
+							return await a.IsMarketDataTypeSupportedAsync(DataType.OrderLog, cancellationToken)
+								|| await a.IsMarketDataTypeSupportedAsync(DataType.Level1, cancellationToken);
 
 						return false;
 					}

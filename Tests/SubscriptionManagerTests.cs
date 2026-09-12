@@ -111,7 +111,7 @@ public class SubscriptionManagerTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// An empty range is still a request, and a request is acknowledged before it is answered:
+	/// A zero-length range is still a request, and a request is acknowledged before it is answered:
 	/// the connector raises "subscription started" from the response and from nothing else, so a
 	/// bare result leaves the caller holding a subscription it was never told it had.
 	/// </summary>
@@ -131,7 +131,7 @@ public class SubscriptionManagerTests : BaseTestClass
 			SecurityId = Helper.CreateSecurityId(),
 			DataType2 = DataType.Ticks,
 			From = from,
-			To = from.AddDays(-1),
+			To = from,
 		};
 
 		var (toInner, toOut) = manager.ProcessInMessage(message);
@@ -294,6 +294,39 @@ public class SubscriptionManagerTests : BaseTestClass
 
 		// Confirm resubscription
 		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 102 });
+	}
+
+	[TestMethod]
+	public void Unsubscribe_PreservesCurrentRequestTime()
+	{
+		var manager = new SubscriptionManager(
+			new TestReceiver(), new IncrementalIdGenerator(), () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+		var secId = Helper.CreateSecurityId();
+		var subscribeTime = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+		var unsubscribeTime = subscribeTime.AddMinutes(1);
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			LocalTime = subscribeTime,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
+
+		var (toInner, _) = manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 101,
+			OriginalTransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			LocalTime = unsubscribeTime,
+		});
+
+		toInner.Single().LocalTime.AssertEqual(unsubscribeTime,
+			"The upstream unsubscribe must carry the time of the current command, not the old subscribe time");
 	}
 
 	[TestMethod]

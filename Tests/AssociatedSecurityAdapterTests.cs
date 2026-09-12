@@ -109,6 +109,64 @@ public class AssociatedSecurityAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task AssociatedBookKeepsTheQuotesThatMadeACombinedLevel()
+	{
+		var inner = new RecordingPassThroughMessageAdapter([DataType.MarketDepth]);
+		using var adapter = new AssociatedSecurityAdapter(inner);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var boardA = CreateDepth(CreateId(_boardA), [], []);
+		boardA.Bids =
+		[
+			new QuoteChange(100m, 5m, 2, QuoteConditions.Indicative)
+			{
+				StartPosition = 3,
+				EndPosition = 4,
+				Action = QuoteChangeActions.Update,
+			},
+		];
+
+		await inner.SendOutMessageAsync(boardA, CancellationToken);
+
+		// The builder owns its snapshot; a producer is free to reuse the message after publishing it.
+		boardA.Bids[0].Volume = 500m;
+		boardA.Bids[0].OrdersCount = 20;
+
+		await inner.SendOutMessageAsync(CreateDepth(CreateId(_boardB), [(100m, 7m)], []), CancellationToken);
+
+		var level = TakeAssociated(output).Bids.Single();
+		level.Volume.AssertEqual(12m);
+		level.OrdersCount.AssertEqual(2);
+		level.InnerQuotes.AssertNotNull();
+		level.InnerQuotes.Length.AssertEqual(2);
+
+		var source = level.InnerQuotes.Single(q => q.BoardCode.EqualsIgnoreCase(_boardA));
+		source.Volume.AssertEqual(5m);
+		source.OrdersCount.AssertEqual(2);
+		source.Condition.AssertEqual(QuoteConditions.Indicative);
+		source.StartPosition.AssertEqual(3);
+		source.EndPosition.AssertEqual(4);
+		source.Action.AssertEqual(QuoteChangeActions.Update);
+	}
+
+	[TestMethod]
+	public async Task AnIncomingAssociatedBookIsNotCountedAsAnotherVenue()
+	{
+		var inner = new RecordingPassThroughMessageAdapter([DataType.MarketDepth]);
+		using var adapter = new AssociatedSecurityAdapter(inner);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		await inner.SendOutMessageAsync(CreateDepth(CreateId(_boardA), [(100m, 5m)], []), CancellationToken);
+		await inner.SendOutMessageAsync(CreateDepth(CreateId(SecurityId.AssociatedBoardCode), [(100m, 1000m)], []), CancellationToken);
+		await inner.SendOutMessageAsync(CreateDepth(CreateId(_boardB), [(100m, 3m)], []), CancellationToken);
+
+		TakeAssociated(output).Bids.Single().Volume.AssertEqual(8m,
+			"ALL is an aggregate of venues, not an extra venue whose liquidity can be added again");
+	}
+
+	[TestMethod]
 	public async Task AssociatedBookForgetsBoardsAfterReset()
 	{
 		var token = CancellationToken;

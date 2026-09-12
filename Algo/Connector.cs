@@ -1139,7 +1139,23 @@ public partial class Connector : BaseLogReceiver, IConnector
 		Adapter.Load(storage, nameof(Adapter));
 
 		MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
-		SupportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
+		TimeChange = storage.GetValue(nameof(TimeChange), TimeChange);
+
+		var supportBasketSecurities = storage.GetValue(nameof(SupportBasketSecurities), SupportBasketSecurities);
+		var supportSnapshots = storage.GetValue(nameof(SupportSnapshots), SupportSnapshots);
+		var supportAssociatedSecurity = storage.GetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
+		var supportFilteredMarketDepth = storage.GetValue(nameof(SupportFilteredMarketDepth), SupportFilteredMarketDepth);
+
+		// Rebuild these wrappers from the inside out so their order is the same as in Adapter's setter.
+		SupportFilteredMarketDepth = false;
+		SupportAssociatedSecurity = false;
+		SupportSnapshots = false;
+		SupportBasketSecurities = false;
+
+		SupportBasketSecurities = supportBasketSecurities;
+		SupportSnapshots = supportSnapshots;
+		SupportAssociatedSecurity = supportAssociatedSecurity;
+		SupportFilteredMarketDepth = supportFilteredMarketDepth;
 
 		var subscriptionsOnConnect = storage.GetValue<object>("LookupMessagesOnConnect") ?? storage.GetValue<object>(nameof(SubscriptionsOnConnect));
 		if (subscriptionsOnConnect is IEnumerable<SettingsStorage> subSettings)
@@ -1189,6 +1205,10 @@ public partial class Connector : BaseLogReceiver, IConnector
 		storage.SetValue(nameof(Adapter), Adapter.Save());
 
 		storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
+		storage.SetValue(nameof(TimeChange), TimeChange);
+		storage.SetValue(nameof(SupportBasketSecurities), SupportBasketSecurities);
+		storage.SetValue(nameof(SupportFilteredMarketDepth), SupportFilteredMarketDepth);
+		storage.SetValue(nameof(SupportSnapshots), SupportSnapshots);
 		storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
 		storage.SetValue(nameof(SubscriptionsOnConnect), _subscriptionManager.SubscriptionsOnConnect.Cache.Select(s => s.DataType.Save()).ToArray());

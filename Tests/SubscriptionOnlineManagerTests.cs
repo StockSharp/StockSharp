@@ -93,6 +93,103 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		extraOut.OfType<SubscriptionResponseMessage>().Count(msg => msg.OriginalTransactionId == 2 && msg.Error != null).AssertEqual(1);
 	}
 
+	[TestMethod]
+	public async Task DuplicateSubscriberId_IsRejectedWithoutReplacingOriginal()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var originalSecurity = Helper.CreateSecurityId();
+
+		var (firstInner, _) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = originalSecurity,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		firstInner.Length.AssertEqual(1);
+
+		var (duplicateInner, duplicateOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = new SecurityId { SecurityCode = "OTHER", BoardCode = BoardCodes.Test },
+			DataType2 = DataType.Level1,
+		}, token);
+
+		duplicateInner.Length.AssertEqual(0, "a duplicate transaction id must not open another upstream subscription");
+		var error = duplicateOut.OfType<SubscriptionResponseMessage>().Single();
+		error.OriginalTransactionId.AssertEqual(1);
+		error.Error.AssertNotNull();
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 1 }, token);
+
+		var data = new ExecutionMessage
+		{
+			SecurityId = originalSecurity,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 100m,
+			TradeVolume = 1m,
+			OriginalTransactionId = 1,
+		};
+
+		var (forward, _) = await manager.ProcessOutMessageAsync(data, token);
+
+		forward.AssertNotNull("rejecting the duplicate must leave the original subscription registered");
+		((ISubscriptionIdMessage)forward).GetSubscriptionIds().SequenceEqual([1L]).AssertTrue();
+	}
+
+	[TestMethod]
+	public async Task HistLiveChildUnsubscribe_CancelsItsUpstreamHistoryRequest()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		var (historyInner, _) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = logReceiver.CurrentTime.AddDays(-1),
+		}, token);
+
+		historyInner.Length.AssertEqual(1, "the joined subscriber has its own upstream history request");
+
+		var (unsubscribeInner, unsubscribeOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 201,
+			OriginalTransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		unsubscribeOut.Length.AssertEqual(0, "the upstream request owns the unsubscribe response");
+		var unsubscribe = unsubscribeInner.OfType<MarketDataMessage>().Single();
+		unsubscribe.IsSubscribe.AssertFalse();
+		unsubscribe.TransactionId.AssertEqual(201);
+		unsubscribe.OriginalTransactionId.AssertEqual(200);
+	}
+
 	#region Subscription Joining — No Duplicate Inner Requests
 
 	[TestMethod]
@@ -447,6 +544,40 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		var (toInner3, toOut3) = await manager.ProcessInMessageAsync(subscribe2, token);
 		toInner3.Length.AssertEqual(1); // New subscription sent to inner
 		toOut3.Length.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task Unsubscribe_PreservesCurrentRequestTime()
+	{
+		var manager = new SubscriptionOnlineManager(new TestReceiver(), _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+		var subscribeTime = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+		var unsubscribeTime = subscribeTime.AddMinutes(1);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			LocalTime = subscribeTime,
+		}, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		var (toInner, _) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 101,
+			OriginalTransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			LocalTime = unsubscribeTime,
+		}, token);
+
+		toInner.Single().LocalTime.AssertEqual(unsubscribeTime,
+			"The upstream unsubscribe must carry the time of the current command, not the stored opener time");
 	}
 
 	[TestMethod]

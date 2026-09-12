@@ -566,6 +566,9 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 		var unsubscribe = subscription.SubscriptionMessage.TypedClone();
 
 		unsubscribe.IsSubscribe = false;
+		// The clone can carry the subscribe request's timestamp. This is a new command, so leave it for
+		// Connector.SendInMessageAsync to stamp with the current time at the transport boundary.
+		((Message)unsubscribe).LocalTime = default;
 
 		// some subscription can be only for subscribe
 		if (unsubscribe.IsSubscribe)

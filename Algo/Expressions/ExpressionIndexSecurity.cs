@@ -30,6 +30,7 @@ public class ExpressionIndexSecurity : IndexSecurity, IDisposable
 	}
 
 	private ExpressionFormula<decimal> _formula = ExpressionFormula<decimal>.CreateError(LocalizedStrings.ExpressionNotSet);
+	private string _expression;
 
 	/// <summary>
 	/// Compiled mathematical formula.
@@ -50,9 +51,11 @@ public class ExpressionIndexSecurity : IndexSecurity, IDisposable
 	[Browsable(false)]
 	public string Expression
 	{
-		get => Formula.Expression;
+		get => _expression;
 		set
 		{
+			_expression = value;
+
 			if (value.IsEmpty())
 			{
 				Formula = ExpressionFormula<decimal>.CreateError(LocalizedStrings.ExpressionNotSet);
@@ -89,7 +92,11 @@ public class ExpressionIndexSecurity : IndexSecurity, IDisposable
 					new InvalidOperationException(Formula.Error).LogError();
 			}
 			else
-				new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler))).LogError();
+			{
+				var error = LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler));
+				Formula = ExpressionFormula<decimal>.CreateError(error);
+				new InvalidOperationException(error).LogError();
+			}
 		}
 	}
 

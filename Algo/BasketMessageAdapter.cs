@@ -916,7 +916,14 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 		}
 
 		foreach (var notSupportedMsg in notSupportedMsgs)
-			await SendOutErrorAsync(new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(notSupportedMsg.Type)), cancellationToken);
+		{
+			// A message held while the adapters connected and then left with nowhere to go is answered on
+			// its own terms - an order by its transaction, a subscription by its response - because a bare
+			// error names nothing and leaves the caller waiting for an answer that never comes.
+			var noAdapter = new InvalidOperationException(LocalizedStrings.NoAdapterFoundFor.Put(notSupportedMsg.Type));
+
+			await SendOutMessageAsync(notSupportedMsg.CreateErrorResponse(noAdapter, this, _routingManager.GetSubscribers), cancellationToken);
+		}
 
 		message.Adapter = underlyingAdapter;
 	}

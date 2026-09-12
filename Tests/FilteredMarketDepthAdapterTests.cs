@@ -5,6 +5,30 @@ public class FilteredMarketDepthAdapterTests : BaseTestClass
 {
 	private static readonly DateTime _time = new(2025, 5, 1, 10, 0, 0, DateTimeKind.Utc);
 
+	private sealed class SynchronousBookTerminalAdapter(bool finished) : MessageAdapter(new IncrementalIdGenerator())
+	{
+		public bool OrdersSubscriptionReceived { get; private set; }
+
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			if (message is MarketDataMessage { IsSubscribe: true, DataType2: var dataType } book && dataType == DataType.MarketDepth)
+			{
+				if (finished)
+					await SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = book.TransactionId }, cancellationToken);
+				else
+					await SendOutMessageAsync(new SubscriptionResponseMessage
+					{
+						OriginalTransactionId = book.TransactionId,
+						Error = new InvalidOperationException("book failed"),
+					}, cancellationToken);
+			}
+			else if (message is OrderStatusMessage { IsSubscribe: true })
+				OrdersSubscriptionReceived = true;
+		}
+
+		public override IMessageAdapter Clone() => new SynchronousBookTerminalAdapter(finished);
+	}
+
 	// The external book never changes between pushes, so every difference in the filtered
 	// result is caused by our own orders and by nothing else.
 	private static QuoteChangeMessage CreateBook(SecurityId secId, long bookId)
@@ -139,10 +163,6 @@ public class FilteredMarketDepthAdapterTests : BaseTestClass
 		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = bookUnsubscribeId }, token);
 		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = ordersUnsubscribeId }, token);
 	}
-
-	// Filtered books the caller was handed for one of its own subscription ids.
-	private static QuoteChangeMessage[] FilteredBooksFor(IEnumerable<Message> messages, long subscribeId)
-		=> [.. messages.OfType<QuoteChangeMessage>().Where(b => b.IsFiltered && b.GetSubscriptionIds().Contains(subscribeId))];
 
 	private static decimal VolumeAt(QuoteChange[] quotes, decimal price)
 		=> quotes.Where(q => q.Price == price).Sum(q => q.Volume);
@@ -421,8 +441,8 @@ public class FilteredMarketDepthAdapterTests : BaseTestClass
 
 		await inner.SendOutMessageAsync(CreateBook(secId, bookId), token);
 
-		// ...so nothing more belongs to it.
-		FilteredBooksFor(output, 1009).Length.AssertEqual(0);
+		// ...so the internal raw message is consumed as well, rather than leaking its private id.
+		output.Count.AssertEqual(0);
 	}
 
 	// The same for the own-orders half of a cancelled subscription: an order update arriving on the
@@ -450,7 +470,7 @@ public class FilteredMarketDepthAdapterTests : BaseTestClass
 
 		await PushOrderAsync(inner, OwnOrderUpdate(secId, 60, OrderStates.Done, 5m), ordersId, token);
 
-		FilteredBooksFor(output, 1011).Length.AssertEqual(0);
+		output.Count.AssertEqual(0);
 	}
 
 	// Finished states that the subscription has delivered everything it will ever deliver, so a book
@@ -480,8 +500,141 @@ public class FilteredMarketDepthAdapterTests : BaseTestClass
 
 		await inner.SendOutMessageAsync(CreateBook(secId, bookId), token);
 
-		// ...so there is nothing left for it to receive.
-		FilteredBooksFor(output, 1014).Length.AssertEqual(0);
+		// ...so there is nothing left for it to receive, including the raw internal message.
+		output.Count.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task AfterOrderStatusFinished_BothInnerTailsAreStoppedAndSuppressed()
+	{
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		var inner = new RecordingPassThroughMessageAdapter();
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var (bookId, ordersId) = await SubscribeAsync(inner, adapter, secId, 1016, token);
+		await PushBookAsync(inner, output, secId, bookId, token);
+
+		await inner.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = ordersId }, token);
+
+		output.OfType<SubscriptionFinishedMessage>().Any(f => f.OriginalTransactionId == 1016).AssertTrue();
+
+		var cleanup = inner.InMessages.OfType<MarketDataMessage>()
+			.Single(m => !m.IsSubscribe && m.OriginalTransactionId == bookId);
+
+		output.Clear();
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = cleanup.TransactionId }, token);
+		await inner.SendOutMessageAsync(CreateBook(secId, bookId), token);
+		await PushOrderAsync(inner, OwnOrderUpdate(secId, 70, OrderStates.Active, 3m), ordersId, token);
+
+		output.Count.AssertEqual(0);
+	}
+
+	[TestMethod]
+	public async Task SubscribeResponse_WaitsForBothLegsAndReportsOneError()
+	{
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		var inner = new RecordingPassThroughMessageAdapter();
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1020,
+			SecurityId = secId,
+			DataType2 = DataType.FilteredMarketDepth,
+		}, token);
+
+		var bookId = inner.InMessages.OfType<MarketDataMessage>().Single(m => m.IsSubscribe).TransactionId;
+		var ordersId = inner.InMessages.OfType<OrderStatusMessage>().Single(m => m.IsSubscribe).TransactionId;
+		output.Clear();
+
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = bookId }, token);
+		output.OfType<SubscriptionResponseMessage>().Any(r => r.OriginalTransactionId == 1020).AssertFalse("one accepted leg does not accept the composite subscription");
+
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = ordersId,
+			Error = new InvalidOperationException("orders failed"),
+		}, token);
+
+		var responses = output.OfType<SubscriptionResponseMessage>().Where(r => r.OriginalTransactionId == 1020).ToArray();
+		responses.Length.AssertEqual(1, "the parent receives one final result for its two inner requests");
+		responses[0].IsOk().AssertFalse();
+	}
+
+	[TestMethod]
+	public async Task UnsubscribeResponse_WaitsForBothLegsAndKeepsEitherError()
+	{
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+		var inner = new RecordingPassThroughMessageAdapter();
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		await SubscribeAsync(inner, adapter, secId, 1021, token);
+		output.Clear();
+		var before = inner.InMessages.Count;
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 1022,
+			OriginalTransactionId = 1021,
+		}, token);
+
+		var sent = inner.InMessages.Skip(before).ToArray();
+		var bookRequestId = sent.OfType<MarketDataMessage>().Single().TransactionId;
+		var ordersRequestId = sent.OfType<OrderStatusMessage>().Single().TransactionId;
+
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = bookRequestId }, token);
+		output.OfType<SubscriptionResponseMessage>().Any(r => r.OriginalTransactionId == 1022).AssertFalse("one stopped leg does not finish the composite cancellation");
+
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = ordersRequestId,
+			Error = new InvalidOperationException("orders unsubscribe failed"),
+		}, token);
+
+		var responses = output.OfType<SubscriptionResponseMessage>().Where(r => r.OriginalTransactionId == 1022).ToArray();
+		responses.Length.AssertEqual(1);
+		responses[0].IsOk().AssertFalse("an error from either leg is the result of the composite cancellation");
+	}
+
+	[TestMethod]
+	[DataRow(false)]
+	[DataRow(true)]
+	public async Task SynchronousBookTerminal_DoesNotDispatchAnOrphanOrderStatus(bool finished)
+	{
+		var inner = new SynchronousBookTerminalAdapter(finished);
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1023,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.FilteredMarketDepth,
+		}, CancellationToken);
+
+		inner.OrdersSubscriptionReceived.AssertFalse("the second leg is not sent after the first ended synchronously");
+
+		if (finished)
+			output.OfType<SubscriptionFinishedMessage>().Single().OriginalTransactionId.AssertEqual(1023L);
+		else
+			output.OfType<SubscriptionResponseMessage>().Single(r => r.OriginalTransactionId == 1023).IsOk().AssertFalse();
 	}
 
 	// A copy of a wrapper owns a copy of what it wraps - as every other wrapper's Clone does.

@@ -149,6 +149,25 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 			.AssertEqual(0, "Unsubscribed subscription should be removed");
 	}
 
+	[TestMethod]
+	public void Unsubscribe_DoesNotReuseSubscribeTime()
+	{
+		var manager = CreateManager();
+		var subscription = CreateTickSubscription();
+		var subscribeTime = new DateTime(2024, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+		((Message)subscription.SubscriptionMessage).LocalTime = subscribeTime;
+
+		SubscribeAndActivate(manager, subscription);
+
+		var actions = manager.UnSubscribe(subscription);
+		var unsubscribe = actions.Items
+			.Single(item => item.Type == ConnectorSubscriptionManager.Actions.Item.Types.SendInMessage)
+			.Message;
+
+		unsubscribe.LocalTime.AssertEqual(default,
+			"The connector must stamp a new unsubscribe with its current time instead of reusing the subscribe time");
+	}
+
 	#endregion
 
 	#region Unknown Subscription Edge Cases

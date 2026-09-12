@@ -86,6 +86,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 	private readonly AsyncManualResetEvent _processMessageEvt = new(false);
 	private readonly Lock _stateLock = new();
 	private CancellationTokenSource _globalCts = new();
+	private CancellationTokenSource _processorCts = new();
 	private Task _processorTask;
 
 	private bool _isConnectionStarted, _isDisconnecting;
@@ -121,7 +122,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 		CancellationToken token;
 
 		lock (_stateLock)
-			token = _globalCts.Token;
+			token = _processorCts.Token;
 
 		_processorTask = Task.Run(() => ProcessMessagesAsync(token), token);
 
@@ -140,6 +141,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 		catch { }
 
 		CancelAndReplaceGlobalCts();
+		CancelAndReplaceProcessorCts();
 
 		foreach (var kv in _subscriptionItems.CopyAndClear())
 		{
@@ -187,6 +189,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 	{
 		State = ChannelStates.Starting;
 		State = ChannelStates.Started;
+		_processMessageEvt.Set();
 	}
 
 	/// <inheritdoc />
@@ -571,6 +574,7 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 			while (true)
 			{
 				await _processMessageEvt.WaitAsync(token);
+				_processMessageEvt.Reset();
 
 				if (IsDisposeStarted)
 					break;
@@ -582,8 +586,6 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 
 					continue;
 				}
-
-				_processMessageEvt.Reset();
 
 				try
 				{
@@ -728,8 +730,11 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 		{
 			var item = kv.Value;
 
-			item.Cts.Cancel();
-			item.Cts.Dispose();
+			try { item.Cts?.Cancel(); }
+			catch (ObjectDisposedException) { }
+
+			try { item.Cts?.Dispose(); }
+			catch (ObjectDisposedException) { }
 		}
 
 		try
@@ -758,6 +763,19 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 		{
 			old = _globalCts;
 			_globalCts = new();
+		}
+
+		CancelGlobalCts(old);
+	}
+
+	private void CancelAndReplaceProcessorCts()
+	{
+		CancellationTokenSource old;
+
+		lock (_stateLock)
+		{
+			old = _processorCts;
+			_processorCts = new();
 		}
 
 		CancelGlobalCts(old);

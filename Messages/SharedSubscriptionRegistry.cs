@@ -256,6 +256,12 @@ public class SharedSubscriptionRegistry<TKey, THolder, THolderData, TPayload>
 	{
 		using (_sync.EnterScope())
 		{
+			foreach (var entry in _byKey.Values.Concat(_byHolder.Values).Distinct())
+			{
+				entry.IsKeyed = false;
+				entry.Holders.Clear();
+			}
+
 			_byKey.Clear();
 			_byHolder.Clear();
 		}

@@ -124,7 +124,7 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 		{
 			var current = info.Current;
 
-			var (gapsStart, gapsEnd) = await _behaviour.TryGetNextGapAsync(info.SecId, info.Original.DataType, current.To.Value.AddDays(1), info.Original.To ?? CurrentTime, info.Days, cancellationToken);
+			var (gapsStart, gapsEnd) = await _behaviour.TryGetNextGapAsync(info.SecId, info.Original.DataType, current.To.Value.Date.AddDays(1), info.Original.To ?? CurrentTime, info.Days, cancellationToken);
 
 			if (gapsStart is null)
 			{

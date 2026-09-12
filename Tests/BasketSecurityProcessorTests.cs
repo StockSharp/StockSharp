@@ -908,17 +908,15 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		result.Length.AssertEqual(1);
 		var basketCandle = (CandleMessage)result[0];
 
-		// Raw weighted parts (before normalization):
+		// A negative leg contributes its opposite extreme to the basket range:
 		//   Open  = 10*1 + 12*(-1) = -2
-		//   High  = 10*1 + 20*(-1) = -10
-		//   Low   =  9*1 +  5*(-1) =  4
+		//   High  = 10*1 +  5*(-1) = 5
+		//   Low   =  9*1 + 20*(-1) = -11
 		//   Close = 10*1 + 12*(-1) = -2
-		// High (-10) < Low (4) -> swap fires -> High = 4, Low = -10.
-		// Open/Close (-2) lie inside [-10, 4], so no further clamping occurs.
 		basketCandle.OpenPrice.AssertEqual(-2m);
 		basketCandle.ClosePrice.AssertEqual(-2m);
-		basketCandle.HighPrice.AssertEqual(4m);
-		basketCandle.LowPrice.AssertEqual(-10m);
+		basketCandle.HighPrice.AssertEqual(5m);
+		basketCandle.LowPrice.AssertEqual(-11m);
 
 		// Sanity: invariant restored by the swap.
 		(basketCandle.HighPrice >= basketCandle.LowPrice).AssertTrue();
@@ -943,15 +941,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Legs with different spreads make an index quote a bid above its own ask. Whatever the
-	/// processor does about that, what it hands out must still be a book: a consumer reading the
-	/// touch of a crossed index sees a spread that appears to pay it to trade both sides.
+	/// Selling a basket with a negative leg requires buying that leg at its ask, while buying the
+	/// basket requires selling the negative leg at its bid.
 	/// </summary>
 	[TestMethod]
-	public void WeightedIndex_CrossedLegs_BestBidDoesNotExceedBestAsk()
+	public void WeightedIndex_NegativeWeightUsesOppositeBookSides()
 	{
-		// LKOH (+1) quotes a one-point spread, SBER (-1) a ten-point one, so subtracting SBER
-		// lifts the index bid (200 - 100 = 100) above the index ask (201 - 110 = 91).
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
 		var processor = CreateProcessor(basket);
 
@@ -968,6 +963,8 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		result.Length.AssertEqual(1);
 		var basketDepth = (QuoteChangeMessage)result[0];
 
+		basketDepth.Bids[0].Price.AssertEqual(90m);
+		basketDepth.Asks[0].Price.AssertEqual(101m);
 		(basketDepth.Bids[0].Price <= basketDepth.Asks[0].Price).AssertTrue("an index must not quote a bid above its own ask");
 		basketDepth.Verify().AssertTrue("the index must publish a well-formed order book");
 	}
@@ -985,9 +982,8 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		var serverTime = DateTime.UtcNow;
 
-		// Index bids: 200 - 100 = 100 and 198 - 95 = 103.
-		// Index asks: 201 - 110 = 91 and 203 - 111 = 92.
-		// The best bid (103) lands above the best ask (91), so the index book arrives crossed.
+		// Index bids use SBER asks: 200 - 110 = 90 and 198 - 111 = 87.
+		// Index asks use SBER bids: 201 - 100 = 101 and 203 - 95 = 108.
 		processor.Process(CreateOrderBook(lkoh, serverTime,
 			bids: [(200m, 30m), (198m, 40m)],
 			asks: [(201m, 30m), (203m, 40m)])).ToArray();
@@ -1001,6 +997,8 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 		basketDepth.Bids.Length.AssertEqual(2);
 		basketDepth.Asks.Length.AssertEqual(2);
+		basketDepth.Bids.Select(q => q.Price).AssertEqual([90m, 87m]);
+		basketDepth.Asks.Select(q => q.Price).AssertEqual([101m, 108m]);
 
 		(basketDepth.Bids[0].Price > basketDepth.Bids[1].Price).AssertTrue("bids must run from the best price downwards");
 		(basketDepth.Asks[0].Price < basketDepth.Asks[1].Price).AssertTrue("asks must run from the best price upwards");

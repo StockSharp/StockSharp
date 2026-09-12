@@ -101,6 +101,9 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 					var oldest = _unsubscribeOrder.Dequeue();
 					_unsubscribeRequests.Remove(oldest);
 				}
+
+				while (_subscriptionsByOrderId.Count > _maxTrackedItems)
+					_subscriptionsByOrderId.Remove(_subscriptionsByOrderId.Keys.First());
 			}
 			finally
 			{
@@ -566,6 +569,9 @@ public class SubscriptionHolder<TSubscription, TSession>(ILogReceiver logs) : Di
 							try
 							{
 								_subscriptionsByOrderId.SafeAdd(execMsg.TransactionId).Add(subscription);
+
+								while (_subscriptionsByOrderId.Count > _maxTrackedItems)
+									_subscriptionsByOrderId.Remove(_subscriptionsByOrderId.Keys.First());
 							}
 							finally
 							{

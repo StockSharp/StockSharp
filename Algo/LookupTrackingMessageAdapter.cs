@@ -11,9 +11,12 @@ namespace StockSharp.Algo;
 public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupTrackingManagerState state) : MessageAdapterWrapper(innerAdapter)
 {
 	private readonly ILookupTrackingManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
+	private readonly Lock _timeoutSync = new();
+	private readonly Dictionary<long, (CancellationTokenSource source, TimeSpan timeout)> _timeoutSources = [];
 	private static readonly TimeSpan _defaultTimeOut = TimeSpan.FromSeconds(10);
 
 	private TimeSpan? _timeOut;
+	private bool _isDisposed;
 
 	/// <summary>
 	/// Securities and portfolios lookup timeout.
@@ -34,7 +37,12 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 		{
 			case MessageTypes.Reset:
 			{
-				_state.Clear();
+				using (_timeoutSync.EnterScope())
+				{
+					_state.Clear();
+					CancelAllTimeouts();
+				}
+
 				break;
 			}
 
@@ -73,7 +81,14 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 
 				if (this.IsResultMessageNotSupported(message.Type) && TimeOut > TimeSpan.Zero)
 				{
-					_state.AddLookup(transId, message.TypedClone(), TimeOut);
+					var timeout = TimeOut;
+
+					using (_timeoutSync.EnterScope())
+					{
+						_state.AddLookup(transId, message.TypedClone(), timeout);
+						RestartTimeout(transId, timeout);
+					}
+
 					isStarted = true;
 				}
 			}
@@ -93,18 +108,19 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 	/// <inheritdoc />
 	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
-
 		long[] ignoreIds = null;
 		Message nextLookup = null;
 
-		if (message is IOriginalTransactionIdMessage originIdMsg)
+		if (message is IOriginalTransactionIdMessage originIdMsg &&
+			(originIdMsg is SubscriptionFinishedMessage ||
+			 originIdMsg is SubscriptionOnlineMessage ||
+			 originIdMsg is SubscriptionResponseMessage resp && !resp.IsOk()))
 		{
-			if (originIdMsg is SubscriptionFinishedMessage ||
-				originIdMsg is SubscriptionOnlineMessage ||
-				originIdMsg is SubscriptionResponseMessage resp && !resp.IsOk())
+			var id = originIdMsg.OriginalTransactionId;
+
+			using (_timeoutSync.EnterScope())
 			{
-				var id = originIdMsg.OriginalTransactionId;
+				CancelTimeout(id);
 
 				if (_state.TryGetAndRemoveLookup(id, out var info))
 				{
@@ -116,12 +132,49 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 					nextLookup = _state.TryDequeueFromAnyType(id);
 				}
 			}
-			else if (message is ISubscriptionIdMessage subscrMsg)
+		}
+		else if (message is ISubscriptionIdMessage subscrMsg)
+		{
+			ignoreIds = subscrMsg.GetSubscriptionIds();
+
+			using (_timeoutSync.EnterScope())
 			{
-				ignoreIds = subscrMsg.GetSubscriptionIds();
 				_state.IncreaseTimeOut(ignoreIds);
+
+				foreach (var id in ignoreIds)
+				{
+					if (_timeoutSources.TryGetValue(id, out var registration))
+						RestartTimeout(id, registration.timeout);
+				}
 			}
 		}
+
+		List<(ISubscriptionMessage subscription, Message nextInQueue)> timedOut = null;
+
+		if (message.LocalTime != default)
+		{
+			using (_timeoutSync.EnterScope())
+			{
+				if (_state.PreviousTime == default)
+				{
+					_state.PreviousTime = message.LocalTime;
+				}
+				else if (message.LocalTime > _state.PreviousTime)
+				{
+					var diff = message.LocalTime - _state.PreviousTime;
+					_state.PreviousTime = message.LocalTime;
+					timedOut = [.. _state.ProcessTimeouts(diff, ignoreIds)];
+
+					foreach (var (subscription, _) in timedOut)
+						CancelTimeout(subscription.TransactionId);
+				}
+			}
+		}
+
+		// Update all timeout state before invoking user handlers. A slow handler must not let a lookup
+		// expire after a row arrived, and a reentrant reset must not be overwritten by this message's
+		// old clock after the handler returns.
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
 		if (nextLookup != null)
 		{
@@ -129,21 +182,11 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 			await base.OnInnerAdapterNewOutMessageAsync(nextLookup, cancellationToken);
 		}
 
-		if (message.LocalTime == default)
-			return;
-
 		List<Message> nextLookups = null;
 
-		if (_state.PreviousTime == default)
+		if (timedOut != null)
 		{
-			_state.PreviousTime = message.LocalTime;
-		}
-		else if (message.LocalTime > _state.PreviousTime)
-		{
-			var diff = message.LocalTime - _state.PreviousTime;
-			_state.PreviousTime = message.LocalTime;
-
-			foreach (var (subscription, nextInQueue) in _state.ProcessTimeouts(diff, ignoreIds))
+			foreach (var (subscription, nextInQueue) in timedOut)
 			{
 				var transId = subscription.TransactionId;
 
@@ -167,6 +210,103 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 				await base.OnInnerAdapterNewOutMessageAsync(lookup, cancellationToken);
 			}
 		}
+	}
+
+	private void RestartTimeout(long transactionId, TimeSpan timeout)
+	{
+		CancelTimeout(transactionId);
+
+		if (_isDisposed)
+			return;
+
+		var source = new CancellationTokenSource();
+		_timeoutSources.Add(transactionId, (source, timeout));
+		_ = WaitForTimeoutAsync(transactionId, timeout, source);
+	}
+
+	private async Task WaitForTimeoutAsync(long transactionId, TimeSpan timeout, CancellationTokenSource source)
+	{
+		try
+		{
+			await Task.Delay(timeout, source.Token);
+		}
+		catch (OperationCanceledException)
+		{
+			return;
+		}
+
+		ISubscriptionMessage subscription;
+		Message nextLookup;
+
+		using (_timeoutSync.EnterScope())
+		{
+			if (!_timeoutSources.TryGetValue(transactionId, out var current) || !ReferenceEquals(current.source, source))
+				return;
+
+			_timeoutSources.Remove(transactionId);
+			source.Dispose();
+
+			if (!_state.TryGetAndRemoveLookup(transactionId, out subscription))
+				return;
+
+			nextLookup = _state.TryDequeueNext(subscription.Type, subscription.TransactionId);
+		}
+
+		try
+		{
+			LogInfo("Lookup timeout {0}.", transactionId);
+			await base.OnInnerAdapterNewOutMessageAsync(subscription.CreateResult(), default);
+
+			if (nextLookup != null)
+			{
+				nextLookup.LoopBack(this);
+				await base.OnInnerAdapterNewOutMessageAsync(nextLookup, default);
+			}
+		}
+		catch (Exception ex)
+		{
+			this.AddErrorLog(ex);
+		}
+	}
+
+	private void CancelTimeout(long transactionId)
+	{
+		if (!_timeoutSources.Remove(transactionId, out var registration))
+			return;
+
+		try { registration.source.Cancel(); }
+		catch (ObjectDisposedException) { }
+
+		registration.source.Dispose();
+	}
+
+	private void CancelAllTimeouts()
+	{
+		foreach (var (source, _) in _timeoutSources.Values)
+		{
+			try { source.Cancel(); }
+			catch (ObjectDisposedException) { }
+
+			source.Dispose();
+		}
+
+		_timeoutSources.Clear();
+	}
+
+	/// <inheritdoc />
+	public override void Dispose()
+	{
+		using (_timeoutSync.EnterScope())
+		{
+			if (_isDisposed)
+				return;
+
+			_isDisposed = true;
+			_state.Clear();
+			CancelAllTimeouts();
+		}
+
+		base.Dispose();
 	}
 
 	/// <summary>

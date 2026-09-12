@@ -280,7 +280,13 @@ public sealed class SecurityNativeIdManager : ISecurityNativeIdManager
 			case MessageTypes.QuoteChange:
 			{
 				var quotesMsg = (QuoteChangeMessage)message;
-				return ProcessSecurityIdMessage(quotesMsg, (prev, curr) => curr);
+
+				// A full book supersedes the one held before it, so only the last of them need be kept.
+				// An incremental book is a difference against the one before it and is meaningful only as
+				// the whole sequence, so every one of them is held, in arrival order.
+				return quotesMsg.State is null
+					? ProcessSecurityIdMessage(quotesMsg, (prev, curr) => curr)
+					: ProcessSecurityIdMessage<QuoteChangeMessage>(quotesMsg, null);
 			}
 
 			case MessageTypes.News:

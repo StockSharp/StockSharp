@@ -53,7 +53,15 @@ public class LookupTrackingMessageAdapterTests : BaseTestClass
 	};
 
 	private static int CountResults(List<Message> output, long transactionId)
-		=> output.OfType<SubscriptionOnlineMessage>().Count(m => m.OriginalTransactionId == transactionId);
+		=> output.Count(m => IsResult(m, transactionId));
+
+	private static bool IsResult(Message message, long transactionId)
+		=> message switch
+		{
+			SubscriptionOnlineMessage online => online.OriginalTransactionId == transactionId,
+			SubscriptionFinishedMessage finished => finished.OriginalTransactionId == transactionId,
+			_ => false,
+		};
 
 	/// <summary>
 	/// A lookup the adapter underneath never answers must still be closed, so that whoever asked
@@ -159,7 +167,7 @@ public class LookupTrackingMessageAdapterTests : BaseTestClass
 
 		adapter.NewOutMessageAsync += (m, _) =>
 		{
-			if (m is SubscriptionOnlineMessage online && online.OriginalTransactionId == 1)
+			if (IsResult(m, 1))
 				closed.TrySetResult();
 
 			return default;
@@ -172,5 +180,36 @@ public class LookupTrackingMessageAdapterTests : BaseTestClass
 
 		(completed == closed.Task).AssertTrue("a silent connection is what the timeout is for, so the lookup has to be closed without any other message arriving");
 		CountResults(output, 1).AssertEqual(1);
+	}
+
+	[TestMethod]
+	public async Task ReentrantReset_DoesNotRestoreTheOldTimeoutClock()
+	{
+		var (adapter, inner, output) = CreateSut();
+		var reset = false;
+
+		adapter.NewOutMessageAsync += async (message, token) =>
+		{
+			if (message is TimeMessage && !reset)
+			{
+				reset = true;
+				await adapter.SendInMessageAsync(new ResetMessage(), token);
+			}
+		};
+
+		var beforeReset = new DateTime(2026, 09, 11, 10, 00, 00, DateTimeKind.Utc);
+		await inner.SendOutMessageAsync(new TimeMessage { LocalTime = beforeReset }, CancellationToken);
+
+		await adapter.SendInMessageAsync(CreateLookup(2), CancellationToken);
+
+		var firstClockAfterReset = beforeReset.AddSeconds(20);
+		await inner.SendOutMessageAsync(new TimeMessage { LocalTime = firstClockAfterReset }, CancellationToken);
+
+		CountResults(output, 2).AssertEqual(0,
+			"the first clock message after reset anchors the new session and must not charge its lookup for time before it existed");
+
+		await inner.SendOutMessageAsync(new TimeMessage { LocalTime = firstClockAfterReset.AddSeconds(11) }, CancellationToken);
+
+		CountResults(output, 2).AssertEqual(1, "the lookup still expires after ten seconds in the new session");
 	}
 }

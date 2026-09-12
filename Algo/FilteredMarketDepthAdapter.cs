@@ -9,6 +9,54 @@ namespace StockSharp.Algo;
 /// <param name="innerAdapter">Inner message adapter.</param>
 public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
 {
+	// Completion can race data already queued by the inner adapter. Remember enough recently closed
+	// subscriptions to consume that tail without retaining every transaction id for the adapter's lifetime.
+	private const int MaxInactiveIds = 1_024;
+
+	private sealed class RecentIdSet(int capacity)
+	{
+		private readonly Dictionary<long, LinkedListNode<long>> _nodes = [];
+		private readonly LinkedList<long> _order = [];
+
+		public int Count => _nodes.Count;
+
+		public bool Contains(long id) => _nodes.ContainsKey(id);
+
+		public void Add(long id)
+		{
+			if (_nodes.TryGetValue(id, out var existing))
+			{
+				_order.Remove(existing);
+				_order.AddLast(existing);
+				return;
+			}
+
+			var node = _order.AddLast(id);
+			_nodes.Add(id, node);
+
+			if (_nodes.Count <= capacity)
+				return;
+
+			var oldest = _order.First;
+			_order.RemoveFirst();
+			_nodes.Remove(oldest.Value);
+		}
+
+		public void Remove(long id)
+		{
+			if (!_nodes.Remove(id, out var node))
+				return;
+
+			_order.Remove(node);
+		}
+
+		public void Clear()
+		{
+			_nodes.Clear();
+			_order.Clear();
+		}
+	}
+
 	private class FilteredMarketDepthInfo(long subscribeId, Subscription bookSubscription, Subscription ordersSubscription)
 	{
 		private readonly Dictionary<ValueTuple<Sides, decimal>, decimal> _totals = [];
@@ -16,8 +64,50 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 		private QuoteChangeMessage _lastSnapshot;
 
+		private void ChangeTotal(Sides side, decimal price, decimal delta)
+		{
+			var key = (side, price);
+			_totals.TryGetValue(key, out var total);
+
+			total += delta;
+
+			if (total > 0)
+				_totals[key] = total;
+			else
+				_totals.Remove(key);
+		}
+
+		private void SetOrder(long transactionId, Sides side, decimal price, decimal? balance)
+		{
+			if (_ordersInfo.TryGetValue(transactionId, out var previous) && previous.Third is decimal previousBalance)
+				ChangeTotal(previous.First, previous.Second, -previousBalance);
+
+			_ordersInfo[transactionId] = RefTuple.Create(side, price, balance);
+
+			if (balance is decimal currentBalance && currentBalance > 0)
+				ChangeTotal(side, price, currentBalance);
+		}
+
+		private bool RemoveOrder(long transactionId)
+		{
+			if (!_ordersInfo.Remove(transactionId, out var previous))
+				return false;
+
+			if (previous.Third is decimal previousBalance)
+				ChangeTotal(previous.First, previous.Second, -previousBalance);
+
+			return true;
+		}
+
 		public long SubscribeId { get; } = subscribeId;
 		public long UnSubscribeId { get; set; }
+		public bool BookDispatched { get; set; }
+		public bool OrdersDispatched { get; set; }
+		public bool SubscribeResponseSent { get; set; }
+		public bool OnlineSent { get; set; }
+		public int PendingUnsubscribeResponses { get; set; }
+		public Exception UnsubscribeError { get; set; }
+		public bool UnsubscribeResponseSent { get; set; }
 
 		public Subscription BookSubscription { get; } = bookSubscription ?? throw new ArgumentNullException(nameof(bookSubscription));
 		public Subscription OrdersSubscription { get; } = ordersSubscription ?? throw new ArgumentNullException(nameof(ordersSubscription));
@@ -76,13 +166,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 			if (message is null)
 				throw new ArgumentNullException(nameof(message));
 
-			_ordersInfo[message.TransactionId] = RefTuple.Create(message.Side, message.Price, (decimal?)message.Volume);
-
-			var valKey = (message.Side, message.Price);
-
-			_totals.TryGetValue(valKey, out var total);
-			total += message.Volume;
-			_totals[valKey] = total;
+			SetOrder(message.TransactionId, message.Side, message.Price, message.Volume);
 		}
 
 		public QuoteChangeMessage Process(ExecutionMessage message)
@@ -95,101 +179,41 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 			if (message.TransactionId != 0)
 			{
-				if (message.OrderState is not OrderStates.Done and not OrderStates.Failed)
+				if (message.OrderState is OrderStates.Done or OrderStates.Failed)
 				{
-					if (message.OrderPrice == 0)
+					if (!RemoveOrder(message.TransactionId))
+						return null;
+				}
+				else
+				{
+					if (message.OrderPrice == 0 || message.Balance is not decimal balance)
 						return null;
 
 					// The depth is keyed by side, so a row naming none belongs to neither half of it.
 					if (message.Side is not Sides side)
 						return null;
 
-					var balance = message.Balance;
-
-					_ordersInfo[message.TransactionId] = RefTuple.Create(side, message.OrderPrice, balance);
-
-					if (balance == null)
-						return null;
-
-					var valKey = (side, message.OrderPrice);
-
-					if (_totals.TryGetValue(valKey, out var total))
-					{
-						total += balance.Value;
-						_totals[valKey] = total;
-					}
-					else
-						_totals.Add(valKey, balance.Value);
+					SetOrder(message.TransactionId, side, message.OrderPrice, balance);
 				}
 			}
 			else if (_ordersInfo.TryGetValue(message.OriginalTransactionId, out var key))
 			{
-				var valKey = (key.First, key.Second);
-
 				switch (message.OrderState)
 				{
 					case OrderStates.Done:
 					case OrderStates.Failed:
-					{
-						_ordersInfo.Remove(message.OriginalTransactionId);
-
-						var balance = key.Third;
-
-						if (balance == null)
-							return null;
-
-						if (!_totals.TryGetValue(valKey, out var total))
-							return null;
-
-						total -= balance.Value;
-
-						if (total > 0)
-							_totals[valKey] = total;
-						else
-							_totals.Remove(valKey);
-
+						RemoveOrder(message.OriginalTransactionId);
 						break;
-					}
 
 					case OrderStates.Active:
 					{
-						var newBalance = message.Balance;
-
-						if (newBalance == null)
+						if (message.Balance is not decimal newBalance)
 							return null;
 
-						var prevBalance = key.Third;
-						key.Third = newBalance;
+						if (key.Third == newBalance)
+							return null;
 
-						if (prevBalance == null)
-						{
-							if (_totals.TryGetValue(valKey, out var total))
-							{
-								total += newBalance.Value;
-								_totals[valKey] = total;
-							}
-							else
-								_totals.Add(valKey, newBalance.Value);
-						}
-						else
-						{
-							if (_totals.TryGetValue(valKey, out var total))
-							{
-								var delta = prevBalance.Value - newBalance.Value;
-
-								if (delta == 0)
-									return null;
-
-								total -= delta;
-
-								if (total > 0)
-									_totals[valKey] = total;
-								else
-									_totals.Remove(valKey);
-							}
-							else if (newBalance > 0)
-								_totals.Add(valKey, newBalance.Value);
-						}
+						SetOrder(message.OriginalTransactionId, key.First, key.Second, newBalance);
 
 						break;
 					}
@@ -217,6 +241,40 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 	private readonly Dictionary<long, FilteredMarketDepthInfo> _byOrderStatusId = [];
 	private readonly Dictionary<SecurityId, OnlineInfo> _online = [];
 	private readonly Dictionary<long, (FilteredMarketDepthInfo info, bool isOrderBook)> _unsubscribeRequests = [];
+	private readonly RecentIdSet _inactiveBookIds = new(MaxInactiveIds);
+	private readonly RecentIdSet _inactiveOrderStatusIds = new(MaxInactiveIds);
+
+	private void RegisterUnsubscribe(FilteredMarketDepthInfo info, long requestId, bool isOrderBook)
+	{
+		_unsubscribeRequests.Add(requestId, (info, isOrderBook));
+		info.PendingUnsubscribeResponses++;
+	}
+
+	private void Deactivate(FilteredMarketDepthInfo info)
+	{
+		_byId.Remove(info.SubscribeId);
+
+		var bookId = info.BookSubscription.TransactionId;
+		var orderStatusId = info.OrdersSubscription.TransactionId;
+
+		_byBookId.Remove(bookId);
+		_byOrderStatusId.Remove(orderStatusId);
+		_inactiveBookIds.Add(bookId);
+		_inactiveOrderStatusIds.Add(orderStatusId);
+
+		var online = info.Online;
+
+		if (online is null)
+			return;
+
+		online.BookSubscribers.Remove(bookId);
+		online.OrdersSubscribers.Remove(orderStatusId);
+		online.Subscribers.Remove(info.SubscribeId);
+		info.Online = null;
+
+		if (online.Subscribers.Count == 0)
+			_online.Remove(info.BookSubscription.SecurityId.Value);
+	}
 
 	/// <inheritdoc />
 	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
@@ -253,6 +311,8 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 					_byOrderStatusId.Clear();
 					_online.Clear();
 					_unsubscribeRequests.Clear();
+					_inactiveBookIds.Clear();
+					_inactiveOrderStatusIds.Clear();
 				}
 
 				break;
@@ -291,10 +351,17 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 						SecurityId = mdMsg.SecurityId,
 					};
 
-					var info = new FilteredMarketDepthInfo(transId, new Subscription(mdMsg, mdMsg), new Subscription(orderStatus, orderStatus));
+					var info = new FilteredMarketDepthInfo(transId, new Subscription(mdMsg, mdMsg), new Subscription(orderStatus, orderStatus))
+					{
+						BookDispatched = true,
+					};
 
 					using (_sync.EnterScope())
 					{
+						// Transaction ids are normally monotonic, but a custom generator may reuse one after
+						// a reset. An active subscription always takes precedence over an old tombstone.
+						_inactiveBookIds.Remove(mdMsg.TransactionId);
+						_inactiveOrderStatusIds.Remove(orderStatus.TransactionId);
 						_byId.Add(transId, info);
 						_byBookId.Add(mdMsg.TransactionId, info);
 						_byOrderStatusId.Add(orderStatus.TransactionId, info);
@@ -303,7 +370,19 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 					LogInfo("Filtered book {0} started (Book={1} / Orders={2}).", transId, mdMsg.TransactionId, orderStatus.TransactionId);
 
 					await base.OnSendInMessageAsync(mdMsg, cancellationToken);
-					await base.OnSendInMessageAsync(orderStatus, cancellationToken);
+
+					var dispatchOrders = false;
+
+					using (_sync.EnterScope())
+					{
+						dispatchOrders = _byId.TryGetValue(transId, out var activeInfo) && ReferenceEquals(activeInfo, info);
+
+						if (dispatchOrders)
+							info.OrdersDispatched = true;
+					}
+
+					if (dispatchOrders)
+						await base.OnSendInMessageAsync(orderStatus, cancellationToken);
 
 					return;
 				}
@@ -319,7 +398,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 						info.UnSubscribeId = mdMsg.TransactionId;
 
-						if (info.BookSubscription.State.IsActive())
+						if (info.BookDispatched && info.BookSubscription.State is not SubscriptionStates.Error and not SubscriptionStates.Finished)
 						{
 							bookUnsubscribe = new MarketDataMessage
 							{
@@ -328,10 +407,10 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 								IsSubscribe = false,
 							};
 
-							_unsubscribeRequests.Add(bookUnsubscribe.TransactionId, (info, true));
+							RegisterUnsubscribe(info, bookUnsubscribe.TransactionId, true);
 						}
 
-						if (info.OrdersSubscription.State.IsActive())
+						if (info.OrdersDispatched && info.OrdersSubscription.State is not SubscriptionStates.Error and not SubscriptionStates.Finished)
 						{
 							ordersUnsubscribe = new OrderStatusMessage
 							{
@@ -340,8 +419,11 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 								IsSubscribe = false,
 							};
 
-							_unsubscribeRequests.Add(ordersUnsubscribe.TransactionId, (info, false));
+							RegisterUnsubscribe(info, ordersUnsubscribe.TransactionId, false);
 						}
+
+						if (bookUnsubscribe != null || ordersUnsubscribe != null)
+							Deactivate(info);
 					}
 
 					if (bookUnsubscribe == null && ordersUnsubscribe == null)
@@ -374,17 +456,24 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 	/// <inheritdoc />
 	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
+		Message cleanupRequest = null;
+		Message additionalStateMessage = null;
+
 		Message TryApplyState(IOriginalTransactionIdMessage msg, SubscriptionStates state)
 		{
-			void TryCheckOnline(FilteredMarketDepthInfo info)
+			Message TryCompleteStart(FilteredMarketDepthInfo info)
 			{
-				if (state != SubscriptionStates.Online)
-					return;
-
 				var book = info.BookSubscription;
 				var orders = info.OrdersSubscription;
+				Message result = null;
 
-				if (info.BookSubscription.State == SubscriptionStates.Online && orders.State == SubscriptionStates.Online)
+				if (!info.SubscribeResponseSent && book.State.IsActive() && orders.State.IsActive())
+				{
+					info.SubscribeResponseSent = true;
+					result = new SubscriptionResponseMessage { OriginalTransactionId = info.SubscribeId };
+				}
+
+				if (!info.OnlineSent && book.State == SubscriptionStates.Online && orders.State == SubscriptionStates.Online)
 				{
 					var online = _online.SafeAdd(book.SecurityId.Value);
 
@@ -393,7 +482,60 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 					online.OrdersSubscribers.Add(orders.TransactionId);
 
 					info.Online = online;
+					info.OnlineSent = true;
+
+					var onlineMessage = new SubscriptionOnlineMessage { OriginalTransactionId = info.SubscribeId };
+
+					if (result is null)
+						result = onlineMessage;
+					else
+						additionalStateMessage = onlineMessage;
 				}
+
+				return result;
+			}
+
+			Message CompleteParent(FilteredMarketDepthInfo info, bool failedBook)
+			{
+				var counterpart = failedBook ? info.OrdersSubscription : info.BookSubscription;
+				var counterpartDispatched = failedBook ? info.OrdersDispatched : info.BookDispatched;
+
+				if (counterpartDispatched && counterpart.State is not SubscriptionStates.Error and not SubscriptionStates.Finished)
+				{
+					if (failedBook)
+					{
+						var unsubscribe = new OrderStatusMessage
+						{
+							TransactionId = TransactionIdGenerator.GetNextId(),
+							OriginalTransactionId = counterpart.TransactionId,
+							IsSubscribe = false,
+						};
+
+						RegisterUnsubscribe(info, unsubscribe.TransactionId, false);
+						cleanupRequest = unsubscribe;
+					}
+					else
+					{
+						var unsubscribe = new MarketDataMessage
+						{
+							TransactionId = TransactionIdGenerator.GetNextId(),
+							OriginalTransactionId = counterpart.TransactionId,
+							IsSubscribe = false,
+						};
+
+						RegisterUnsubscribe(info, unsubscribe.TransactionId, true);
+						cleanupRequest = unsubscribe;
+					}
+				}
+
+				Deactivate(info);
+
+				return state switch
+				{
+					SubscriptionStates.Error => new SubscriptionResponseMessage { OriginalTransactionId = info.SubscribeId, Error = (msg as IErrorMessage)?.Error },
+					SubscriptionStates.Finished => new SubscriptionFinishedMessage { OriginalTransactionId = info.SubscribeId },
+					_ => null,
+				};
 			}
 
 			var id = msg.OriginalTransactionId;
@@ -406,69 +548,54 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 					book.State = book.State.ChangeSubscriptionState(state, id, this);
 
-					var subscribeId = info.SubscribeId;
-
 					if (!state.IsActive())
-					{
-						if (info.Online != null)
-						{
-							info.Online.BookSubscribers.Remove(id);
-							info.Online.OrdersSubscribers.Remove(info.OrdersSubscription.TransactionId);
+						return CompleteParent(info, true);
 
-							info.Online.Subscribers.Remove(subscribeId);
-							info.Online = null;
-						}
-					}
-					else
-						TryCheckOnline(info);
-
-					switch (book.State)
-					{
-						case SubscriptionStates.Stopped:
-						case SubscriptionStates.Active:
-						case SubscriptionStates.Error:
-							return new SubscriptionResponseMessage { OriginalTransactionId = subscribeId, Error = (msg as IErrorMessage)?.Error };
-						case SubscriptionStates.Finished:
-							return new SubscriptionFinishedMessage { OriginalTransactionId = subscribeId };
-						case SubscriptionStates.Online:
-							return new SubscriptionOnlineMessage { OriginalTransactionId = subscribeId };
-						default:
-							throw new ArgumentOutOfRangeException(book.State.ToString());
-					}
+					return TryCompleteStart(info);
 				}
 				else if (_byOrderStatusId.TryGetValue(id, out info))
 				{
 					info.OrdersSubscription.State = info.OrdersSubscription.State.ChangeSubscriptionState(state, id, this);
 
 					if (!state.IsActive())
-						info.Online?.OrdersSubscribers.Remove(id);
-					else
-						TryCheckOnline(info);
+						return CompleteParent(info, false);
 
-					return null;
+					return TryCompleteStart(info);
 				}
 				else if (_unsubscribeRequests.TryGetAndRemove(id, out var tuple))
 				{
 					info = tuple.info;
+					var error = (msg as IErrorMessage)?.Error;
 
 					if (tuple.isOrderBook)
 					{
 						var book = info.BookSubscription;
 						book.State = book.State.ChangeSubscriptionState(SubscriptionStates.Stopped, book.TransactionId, this);
-
-						return new SubscriptionResponseMessage
-						{
-							OriginalTransactionId = info.UnSubscribeId,
-							Error = (msg as IErrorMessage)?.Error,
-						};
+						_inactiveBookIds.Add(id);
 					}
 					else
 					{
 						var orders = info.OrdersSubscription;
 						orders.State = orders.State.ChangeSubscriptionState(SubscriptionStates.Stopped, orders.TransactionId, this);
-						return null;
+						_inactiveOrderStatusIds.Add(id);
 					}
+
+					info.UnsubscribeError ??= error;
+					info.PendingUnsubscribeResponses--;
+
+					if (info.UnSubscribeId == 0 || info.PendingUnsubscribeResponses > 0 || info.UnsubscribeResponseSent)
+						return null;
+
+					info.UnsubscribeResponseSent = true;
+
+					return new SubscriptionResponseMessage
+					{
+						OriginalTransactionId = info.UnSubscribeId,
+						Error = info.UnsubscribeError,
+					};
 				}
+				else if (_inactiveBookIds.Contains(id) || _inactiveOrderStatusIds.Contains(id))
+					return null;
 				else
 					return (Message)msg;
 			}
@@ -508,7 +635,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 				using (_sync.EnterScope())
 				{
-					if (_byBookId.Count == 0)
+					if (_byBookId.Count == 0 && _inactiveBookIds.Count == 0)
 						break;
 
 					var ids = quoteMsg.GetSubscriptionIds();
@@ -516,6 +643,13 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 					foreach (var id in ids)
 					{
+						if (_inactiveBookIds.Contains(id))
+						{
+							leftIds ??= [.. ids];
+							leftIds.Remove(id);
+							continue;
+						}
+
 						if (processed != null && processed.Contains(id))
 							continue;
 
@@ -563,7 +697,7 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 				using (_sync.EnterScope())
 				{
-					if (_byOrderStatusId.Count == 0)
+					if (_byOrderStatusId.Count == 0 && _inactiveOrderStatusIds.Count == 0)
 						break;
 
 					var ids = execMsg.GetSubscriptionIds();
@@ -571,6 +705,13 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 
 					foreach (var id in ids)
 					{
+						if (_inactiveOrderStatusIds.Contains(id))
+						{
+							leftIds ??= [.. ids];
+							leftIds.Remove(id);
+							continue;
+						}
+
 						if (processed != null && processed.Contains(id))
 							continue;
 
@@ -612,6 +753,12 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 		if (message != null)
 			await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 
+		if (additionalStateMessage != null)
+			await base.OnInnerAdapterNewOutMessageAsync(additionalStateMessage, cancellationToken);
+
+		if (cleanupRequest != null)
+			await base.OnSendInMessageAsync(cleanupRequest, cancellationToken);
+
 		if (filtered != null)
 		{
 			foreach (var book in filtered)
@@ -623,5 +770,5 @@ public class FilteredMarketDepthAdapter(IMessageAdapter innerAdapter) : MessageA
 	/// Create a copy of <see cref="FilteredMarketDepthAdapter"/>.
 	/// </summary>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone() => new FilteredMarketDepthAdapter(InnerAdapter);
+	public override IMessageAdapter Clone() => new FilteredMarketDepthAdapter(InnerAdapter.TypedClone());
 }

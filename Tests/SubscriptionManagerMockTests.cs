@@ -95,7 +95,7 @@ public class SubscriptionManagerMockTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Unsubscribe_ExistingSubscription_UpdatesState()
+	public void Unsubscribe_ExistingSubscription_RemovesState()
 	{
 		var stateMock = new Mock<ISubscriptionManagerState>();
 		var subscription = (ISubscriptionMessage)new MarketDataMessage
@@ -119,7 +119,8 @@ public class SubscriptionManagerMockTests : BaseTestClass
 
 		var (toInner, toOut) = mgr.ProcessInMessage(unsubMsg);
 
-		stateMock.Verify(s => s.UpdateSubscriptionState(1, SubscriptionStates.Stopped), Times.Once);
+		stateMock.Verify(s => s.RemoveSubscription(1), Times.Once);
+		stateMock.Verify(s => s.UpdateSubscriptionState(1, It.IsAny<SubscriptionStates>()), Times.Never);
 		toInner.Length.AssertEqual(1);
 		var sent = toInner[0].To<MarketDataMessage>();
 		sent.IsSubscribe.AssertFalse();
