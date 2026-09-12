@@ -289,7 +289,7 @@ public class OrderRegisterDiagramElement : OrderRegisterBaseDiagramElement
 
 					if (_isFinishedSocket)
 					{
-						RaiseProcessOutput(_orderFinishedSocket, fail.ServerTime, fail);
+						RaiseProcessOutput(_orderFinishedSocket, fail.ServerTime, order);
 						Strategy.Flush(fail);
 					}
 				})
@@ -312,13 +312,13 @@ public class OrderRegisterDiagramElement : OrderRegisterBaseDiagramElement
 					{
 						if (_isMatchedSocket)
 						{
-							RaiseProcessOutput(_orderMatchedSocket, trade.Trade.ServerTime, trade);
+							RaiseProcessOutput(_orderMatchedSocket, trade.Trade.ServerTime, order);
 							Strategy.Flush(trade.Trade);
 						}
 
 						if (_isFinishedSocket)
 						{
-							RaiseProcessOutput(_orderFinishedSocket, trade.Trade.ServerTime, trade);
+							RaiseProcessOutput(_orderFinishedSocket, trade.Trade.ServerTime, order);
 							Strategy.Flush(trade.Trade);
 						}
 					}

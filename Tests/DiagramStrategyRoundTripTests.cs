@@ -60,7 +60,35 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	{
 		public RecordingDiagramElement()
 		{
-			AddInput(StaticSocketIds.Input, "In", DiagramSocketType.Any, Received.Add);
+			AddInput(StaticSocketIds.Input, "In", DiagramSocketType.Any, v =>
+			{
+				AssertCameFromASocketThatCarriesIt(v);
+				Received.Add(v);
+			});
+		}
+
+		/// <summary>
+		/// A socket states what it carries, and everything wired behind it is entitled to that. An
+		/// element that emits something else hands the next element a value it will cast - the cast
+		/// throws at a point that names neither the element that emitted nor the socket it left by.
+		/// Checked here so every test that records an output checks it, rather than each one
+		/// remembering to.
+		/// </summary>
+		private static void AssertCameFromASocketThatCarriesIt(DiagramSocketValue value)
+		{
+			// The value arriving at this input was made when it crossed the link; the one it was made
+			// from is the value as the upstream element emitted it, under the socket it emitted from.
+			var emitted = value.Source;
+
+			if (emitted?.Socket?.Type is not DiagramSocketType declared)
+				return;
+
+			// Any is the socket that promises nothing, and a socket carrying nothing breaks no promise.
+			if (declared == DiagramSocketType.Any || emitted.Value is null)
+				return;
+
+			declared.Type.IsInstanceOfType(emitted.Value).AssertTrue(
+				$"socket '{emitted.Socket}' is declared as {declared.Type.Name}, so what leaves it must be one - it emitted {emitted.Value.GetType().Name}");
 		}
 
 		public override Guid TypeId { get; } = "6E3C9A18-24D5-4B0F-8E77-C1A93F5B2D66".To<Guid>();
@@ -2502,16 +2530,17 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	{
 		var run = StartDebuggerGraph(fails: false);
 
-		DiagramSocket reported = null;
-		run.Debugger.Break += s => reported = s;
+		var reported = new TaskCompletionSource<DiagramSocket>(TaskCreationOptions.RunContinuationsAsynchronously);
+		run.Debugger.Break += s => reported.TrySetResult(s);
 
 		var worker = Task.Run(() => run.Source.Emit(_time, "value"), CancellationToken);
 
 		SpinWait.SpinUntil(() => run.Debugger.IsWaitingOnInput, _debuggerWait)
 			.AssertTrue("a breakpoint must stop the run at the socket it is set on");
+		var reportedSocket = await reported.Task.WaitAsync(_debuggerWait, CancellationToken);
 
 		run.Recorded.Received.Count.AssertEqual(0, "a run stopped at a socket must not have delivered the value behind it");
-		reported.AssertSame(run.Stopped, "the debugger must report the socket it stopped on");
+		reportedSocket.AssertSame(run.Stopped, "the debugger must report the socket it stopped on");
 
 		run.Debugger.Continue();
 
@@ -2566,16 +2595,17 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	{
 		var run = StartDebuggerGraph(fails: true);
 
-		DiagramElement reported = null;
-		run.Debugger.Error += e => reported = e;
+		var reported = new TaskCompletionSource<DiagramElement>(TaskCreationOptions.RunContinuationsAsynchronously);
+		run.Debugger.Error += e => reported.TrySetResult(e);
 
 		var worker = Task.Run(() => run.Source.Emit(_time, "value"), CancellationToken);
 
 		SpinWait.SpinUntil(() => run.Debugger.IsWaitingOnInput, _debuggerWait)
 			.AssertTrue("an element that threw must stop the debugger, not let the run carry on past the failure");
+		var reportedElement = await reported.Task.WaitAsync(_debuggerWait, CancellationToken);
 
 		run.Debugger.IsWaitingOnError.AssertTrue("the stop must be reported as a stop on an error, not as an ordinary breakpoint");
-		reported.AssertSame(run.Failing, "the debugger must name the element that threw");
+		reportedElement.AssertSame(run.Failing, "the debugger must name the element that threw");
 
 		run.Debugger.Continue();
 

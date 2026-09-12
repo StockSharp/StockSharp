@@ -24,6 +24,8 @@ public class PositionProtectDiagramElement : DiagramElement
 	private Portfolio _posPortfolio;
 	private string _posClientCode;
 	private string _posBrokerCode;
+	private readonly HashSet<(Order order, long tradeId)> _processedTradeIds = [];
+	private readonly Dictionary<Order, HashSet<string>> _processedTradeStringIds = [];
 
 	private bool _canTradeSocket;
 
@@ -204,6 +206,8 @@ public class PositionProtectDiagramElement : DiagramElement
 		_posPortfolio = default;
 		_posClientCode = default;
 		_posBrokerCode = default;
+		_processedTradeIds.Clear();
+		_processedTradeStringIds.Clear();
 	}
 
 	/// <inheritdoc />
@@ -283,6 +287,9 @@ public class PositionProtectDiagramElement : DiagramElement
 				throw new InvalidOperationException(LocalizedStrings.WrongPortfolioId.Put(pfName, _posController.PortfolioName));
 		}
 
+		if (!TryAddTrade(trade))
+			return;
+
 		var info = _posController.Update(
 			trade.Trade.Price,
 			trade.GetPosition(),
@@ -291,6 +298,21 @@ public class PositionProtectDiagramElement : DiagramElement
 
 		if (info is not null)
 			ActiveProtection(info.Value);
+	}
+
+	private bool TryAddTrade(MyTrade trade)
+	{
+		if (trade.Trade.Id is long tradeId)
+			return _processedTradeIds.Add((trade.Order, tradeId));
+
+		var tradeStringId = trade.Trade.StringId;
+
+		if (!tradeStringId.IsEmpty())
+			return _processedTradeStringIds
+				.SafeAdd(trade.Order, _ => new(StringComparer.InvariantCultureIgnoreCase))
+				.Add(tradeStringId);
+
+		return true;
 	}
 
 	private void ActiveProtection((bool isTake, Sides side, decimal price, decimal volume, OrderCondition condition) info)
@@ -303,7 +325,9 @@ public class PositionProtectDiagramElement : DiagramElement
 			BrokerCode = _posBrokerCode,
 			Volume = info.volume,
 			Side = info.side,
-			Type = info.price == 0 ? OrderTypes.Market : OrderTypes.Limit,
+			Type = info.condition is null
+				? info.price == 0 ? OrderTypes.Market : OrderTypes.Limit
+				: OrderTypes.Conditional,
 			Price = info.price,
 			Condition = info.condition,
 		};
@@ -321,7 +345,8 @@ public class PositionProtectDiagramElement : DiagramElement
 			.WhenNewTrade(Strategy)
 			.Do(trade =>
 			{
-				_posController?.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
+				if (TryAddTrade(trade))
+					_posController?.Update(trade.Trade.Price, trade.GetPosition(), trade.Trade.ServerTime);
 
 				if (_canTradeSocket)
 				{

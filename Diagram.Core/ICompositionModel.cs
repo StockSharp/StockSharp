@@ -302,6 +302,7 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 
 			case ModelChange.FinishedRedo:
 			case ModelChange.FinishedUndo:
+			case ModelChange.InvalidateRelationships:
 				changed = true;
 				break;
 
