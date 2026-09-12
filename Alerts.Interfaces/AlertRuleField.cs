@@ -104,13 +104,15 @@ public class AlertRuleField : Equatable<AlertRuleField>, IPersistable
 		else
 		{
 			DisplayName = ExtraField.GetDisplayName();
-			
-			ValueType = typeof(decimal);
 
-			if (ExtraField is Level1Fields l1)
+			// the extra field names an entry inside a change dictionary, so the type to compare
+			// through is the one that entry really holds and not the money-like default.
+			ValueType = ExtraField switch
 			{
-				ValueType = l1.ToType();
-			}
+				Level1Fields l1 => l1.ToType(),
+				PositionChangeTypes pos => pos.ToType(),
+				_ => typeof(decimal),
+			};
 		}
 	}
 

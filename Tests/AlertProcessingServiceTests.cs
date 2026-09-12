@@ -340,14 +340,14 @@ public class AlertProcessingServiceTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(30_000, CooperativeCancellation = true)]
-	public async Task Process_DoesNotSilentlyDropMessages_WhenQueueIsFull()
+	public async Task Process_BoundsPendingMessages_WhenQueueIsFull()
 	{
-		// Process takes a message and reports nothing back to the caller, so every
-		// accepted message must reach the schemas; a full queue may delay it, not lose it.
+		// Process is a non-blocking feed. Its configured bound must remain a real memory bound while
+		// delivery is stalled: one message is in flight and one waits in this queue.
 		using var service = new AlertProcessingService(1);
 
 		// Equal thresholds 100, 200 ... make message i match schema i and nothing
-		// else, so the expected count equals the number of messages sent: 5.
+		// else, so we can see exactly which messages survived the bounded queue.
 		const int count = 5;
 
 		for (var i = 1; i <= count; i++)
@@ -372,9 +372,9 @@ public class AlertProcessingServiceTests : BaseTestClass
 			gate.SetResult();
 		}
 
-		await WaitForNotification(count, 10_000);
+		await WaitForNotification(2, 10_000);
 
-		_notificationService.NotifyCount.AssertEqual(count, "Messages accepted by Process must not be dropped when the queue is full");
+		_notificationService.NotifyCount.AssertEqual(2, "the bounded queue keeps one pending message while one is being delivered");
 	}
 
 	[TestMethod]

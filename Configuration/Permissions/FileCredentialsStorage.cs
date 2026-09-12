@@ -82,7 +82,15 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 		if (!credentials.Email.IsValidLogin(_asEmail))
 			throw new ArgumentException(credentials.Email, nameof(credentials));
 
-		_credentials[credentials.Email] = credentials;
+		// what the storage answers is what was written down; the caller keeps its own object and
+		// may go on changing it without granting anything.
+		var saved = credentials.Clone();
+
+		// every instance pointed at this file holds the same accounts, so the account is added to
+		// what the file carries now and not to what this instance last read.
+		LoadFromFile();
+
+		_credentials[saved.Email] = saved;
 
 		SaveToFile();
 
@@ -93,12 +101,24 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 	{
 		EnsureInitialized();
 
-		var res = _credentials.Remove(login);
+		LoadFromFile();
 
-		if (res)
+		if (!_credentials.TryGetAndRemove(login, out var removed))
+			return new(false);
+
+		try
+		{
 			SaveToFile();
+		}
+		catch
+		{
+			// the file still carries the login, so it still grants it: reporting the delete as done
+			// would revoke it only until the next restart.
+			_credentials[removed.Email] = removed;
+			throw;
+		}
 
-		return new(res);
+		return new(true);
 	}
 
 	private void LoadFromFile()
@@ -139,19 +159,14 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 		}
 	}
 
+	// A change that never reached the file is not a change, so the failure reaches the caller
+	// instead of being logged behind a call that answered as if it had worked.
 	private void SaveToFile()
 	{
-		try
+		Do.Invariant(() =>
 		{
-			Do.Invariant(() =>
-			{
-				var arr = _credentials.CachedValues.Select(i => i.Save()).ToArray();
-				arr.Serialize(_fileSystem, _fileName);
-			});
-		}
-		catch (Exception ex)
-		{
-			LogError("Save credentials error:\n{0}", ex);
-		}
+			var arr = _credentials.CachedValues.Select(i => i.Save()).ToArray();
+			arr.Serialize(_fileSystem, _fileName);
+		});
 	}
 }

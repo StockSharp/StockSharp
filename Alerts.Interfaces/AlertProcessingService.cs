@@ -10,7 +10,9 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 	private readonly CachedSynchronizedDictionary<Type, CachedSynchronizedSet<AlertSchema>> _schemas = [];
 	private readonly Channel<Message> _channel;
 	private readonly CancellationTokenSource _cts = new();
-	private readonly SynchronizedSet<AlertSchema> _activated = [];
+
+	// Schemas whose alert reached the user, and which therefore stop matching.
+	private readonly SynchronizedSet<AlertSchema> _delivered = [];
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AlertProcessingService"/>.
@@ -19,72 +21,53 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 	public AlertProcessingService(int maxQueue)
 	{
 		_channel = Channel.CreateBounded<Message>(maxQueue);
-		var reader = _channel.Reader;
+
+		var messages = _channel.Reader;
 		var token = _cts.Token;
 
 		Task.Run(async () =>
 		{
 			try
 			{
-				const int maxErrors = 5;
-				var errorCount = 0;
-
-				await foreach (var message in reader.ReadAllAsync(token))
+				await foreach (var message in messages.ReadAllAsync(token))
 				{
 					if (!_schemas.TryGetValue(message.GetType(), out var schemas))
 						continue;
 
-					foreach (var schema in schemas.Cache.Where(s => s.IsEnabled && !_activated.Contains(s)))
+					foreach (var schema in schemas.Cache)
 					{
-						var type = schema.AlertType;
-
-						if (type is null)
+						if (!schema.IsEnabled || schema.AlertType is null || _delivered.Contains(schema))
 							continue;
 
-						var canAlert = schema.Rules.All(rule =>
+						bool isMatch;
+
+						try
 						{
-							var field = rule.Field;
-
-							var value = field.Invoke(message);
-
-							if (value == null)
-								return false;
-
-							var valueType = field.ValueType;
-							int Compare() => valueType.GetOperator().Compare(value, rule.Value);
-
-							return rule.Operator switch
-							{
-								ComparisonOperator.Equal =>				rule.Value.Equals(value),
-								ComparisonOperator.NotEqual =>			!rule.Value.Equals(value),
-
-								ComparisonOperator.Greater =>			Compare() > 0,
-								ComparisonOperator.GreaterOrEqual =>	Compare() >= 0,
-								ComparisonOperator.Less =>				Compare() < 0,
-								ComparisonOperator.LessOrEqual =>		Compare() <= 0,
-
-								ComparisonOperator.Any => true,
-								_ => throw new ArgumentOutOfRangeException(nameof(rule), rule.Operator.ToString()),
-							};
-						});
-
-						if (canAlert && _activated.TryAdd(schema))
+							isMatch = IsMatch(schema, message);
+						}
+						catch (Exception ex)
 						{
-							try
-							{
-								await AlertServicesRegistry.NotificationService.NotifyAsync(type.Value, schema.ExternalId, schema.LogLevel, schema.Caption, schema.Message, message.LocalTime, token);
-								errorCount = 0;
-							}
-							catch (Exception ex)
-							{
-								if (token.IsCancellationRequested)
-									break;
+							// a schema that cannot be evaluated says nothing about the ones next to it.
+							LogError(ex);
+							continue;
+						}
 
-								LogError(ex);
+						if (!isMatch)
+							continue;
 
-								if (++errorCount >= maxErrors)
-									break;
-							}
+						try
+						{
+							await AlertServicesRegistry.NotificationService.NotifyAsync(schema.AlertType.Value,
+								schema.ExternalId, schema.LogLevel, schema.Caption, schema.Message, message.LocalTime, token);
+							_delivered.Add(schema);
+						}
+						catch (Exception ex)
+						{
+							if (token.IsCancellationRequested)
+								break;
+
+							// A refused delivery leaves the schema eligible for the next matching message.
+							LogError(ex);
 						}
 					}
 				}
@@ -94,7 +77,36 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 				if (!token.IsCancellationRequested)
 					LogError(ex);
 			}
-		}, _cts.Token);
+		}, token);
+	}
+
+	private static bool IsMatch(AlertSchema schema, Message message)
+	{
+		return schema.Rules.All(rule =>
+		{
+			var field = rule.Field;
+
+			var value = field.Invoke(message);
+
+			if (value == null)
+				return false;
+
+			int Compare() => field.ValueType.GetOperator().Compare(value, rule.Value);
+
+			return rule.Operator switch
+			{
+				ComparisonOperator.Equal =>				rule.Value.Equals(value),
+				ComparisonOperator.NotEqual =>			!rule.Value.Equals(value),
+
+				ComparisonOperator.Greater =>			Compare() > 0,
+				ComparisonOperator.GreaterOrEqual =>	Compare() >= 0,
+				ComparisonOperator.Less =>				Compare() < 0,
+				ComparisonOperator.LessOrEqual =>		Compare() <= 0,
+
+				ComparisonOperator.Any => true,
+				_ => throw new ArgumentOutOfRangeException(nameof(rule), rule.Operator.ToString()),
+			};
+		});
 	}
 
 	/// <inheritdoc />
@@ -123,7 +135,7 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 		if (_schemas.TryGetValue(schema.MessageType, out var schemas) && schemas.Remove(schema))
 			UnRegistered?.Invoke(schema);
 
-		_activated.Remove(schema);
+		_delivered.Remove(schema);
 	}
 
 	void IAlertProcessingService.Process(Message message)
@@ -147,6 +159,7 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 	void IPersistable.Load(SettingsStorage storage)
 	{
 		_schemas.Clear();
+		_delivered.Clear();
 
 		foreach (var schemaSettings in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Schemas)))
 			Register(schemaSettings.Load<AlertSchema>());
@@ -163,6 +176,9 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 	protected override void DisposeManaged()
 	{
 		_cts.Cancel();
+
+		_channel.Writer.TryComplete();
+
 		base.DisposeManaged();
 	}
 }
