@@ -164,6 +164,23 @@ public class FixProtocolTests : BaseTestClass
 		actual.AssertEqual(expected);
 	}
 
+	/// <summary>
+	/// The most negative long has no positive counterpart, so writing it by negating it overflows.
+	/// A sequence number or a quantity that arrives at that value has to survive the wire like any
+	/// other, rather than taking the session down on the way out.
+	/// </summary>
+	[TestMethod]
+	public async Task LongMinValueIsWrittenAndReadBack()
+	{
+		var (reader, writer, stream) = Create();
+
+		await writer.WriteAsync(long.MinValue, CancellationToken);
+		stream.Position = 0;
+
+		(await reader.ReadLongAsync(CancellationToken)).AssertEqual(long.MinValue,
+			"the most negative long is a number like any other on the wire");
+	}
+
 	#endregion
 
 	#region Text Format Specific Tests

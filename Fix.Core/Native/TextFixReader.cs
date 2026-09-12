@@ -14,14 +14,18 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 	/// <inheritdoc />
 	public long? MsgSeqNum { get; private set; }
 
-	private static bool IsEnd(int letter)
-		=> letter == (int)AsciiSymbols.Soh || letter == -1;
-
 	private async ValueTask<int> ReadWithDumpAsync(CancellationToken cancellationToken)
 	{
-		var value = await ReadByteAsync(cancellationToken).NoWait();
-		Dump(value);
-		return value;
+		try
+		{
+			var value = await ReadByteAsync(cancellationToken).NoWait();
+			Dump(value);
+			return value;
+		}
+		catch (EndOfStreamException)
+		{
+			return -1;
+		}
 	}
 
 	async ValueTask<FixTags> IFixReader.ReadTagAsync(CancellationToken cancellationToken)
@@ -29,13 +33,17 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 		IsValueRead = false;
 
 		var nextByte = await ReadWithDumpAsync(cancellationToken).NoWait();
-		var (tag, _) = await ReadIntWithSignAsync(nextByte, cancellationToken).NoWait();
 
-		if (tag == null)
+		if (nextByte == -1)
 		{
 			LastTag = Extensions.EmptyTag;
 			return LastTag;
 		}
+
+		var (tag, separator) = await ReadIntWithSignAsync(nextByte, cancellationToken).NoWait();
+
+		if (tag is null || tag <= 0 || separator != (int)AsciiSymbols.Eq)
+			throw new InvalidOperationException("Invalid FIX tag.");
 
 		LastTag = (FixTags)tag.Value;
 
@@ -50,14 +58,7 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 	{
 		var str = await ((IFixReader)this).ReadStringAsync(cancellationToken).NoWait();
 
-		try
-		{
-			return parser.Parse(str);
-		}
-		catch
-		{
-			return default;
-		}
+		return parser.Parse(str);
 	}
 
 	async ValueTask<TimeSpan> IFixReader.ReadTimeSpanAsync(FastTimeSpanParser parser, CancellationToken cancellationToken)
@@ -76,7 +77,7 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 
 		var (result, finalByte) = await ReadIntWithSignAsync(next, cancellationToken).NoWait();
 
-		if (result == null || !IsEnd(finalByte))
+		if (result == null || finalByte != (int)AsciiSymbols.Soh)
 			throw new InvalidOperationException();
 
 		IsValueRead = true;
@@ -89,7 +90,7 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 		var next = await ReadWithDumpAsync(cancellationToken).NoWait();
 		var (result, finalByte) = await ReadInt64WithSignAsync(next, cancellationToken).NoWait();
 
-		if (result == null || !IsEnd(finalByte))
+		if (result == null || finalByte != (int)AsciiSymbols.Soh)
 			throw new InvalidOperationException();
 
 		IsValueRead = true;
@@ -105,7 +106,7 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 		var next = await ReadWithDumpAsync(cancellationToken).NoWait();
 		var (result, finalByte) = await ReadDecimalInternalAsync(next, cancellationToken).NoWait();
 
-		if (result == null || !IsEnd(finalByte))
+		if (result == null || finalByte != (int)AsciiSymbols.Soh)
 			throw new InvalidOperationException();
 
 		IsValueRead = true;
@@ -117,12 +118,12 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 	{
 		var letter = await ReadWithDumpAsync(cancellationToken).NoWait();
 
-		if (IsEnd(letter))
+		if (letter == -1 || letter == (int)AsciiSymbols.Soh)
 			throw new InvalidOperationException();
 
 		var end = await ReadWithDumpAsync(cancellationToken).NoWait();
 
-		if (!IsEnd(end))
+		if (end != (int)AsciiSymbols.Soh)
 			throw new InvalidOperationException();
 
 		IsValueRead = true;
@@ -132,29 +133,24 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 
 	async ValueTask<string> IFixReader.ReadStringAsync(CancellationToken cancellationToken)
 	{
-		try
+		var chars = new List<byte>();
+
+		while (true)
 		{
-			var chars = new List<byte>();
+			var letter = await ReadWithDumpAsync(cancellationToken).NoWait();
 
-			while (true)
-			{
-				var letter = await ReadWithDumpAsync(cancellationToken).NoWait();
+			if (letter == -1)
+				throw new EndOfStreamException("The FIX value is not terminated by SOH.");
 
-				if (IsEnd(letter))
-					break;
+			if (letter == (int)AsciiSymbols.Soh)
+				break;
 
-				chars.Add((byte)letter);
-			}
-
-			if (!chars.Any())
-				return null;
-
-			return Encoding.GetString([.. chars]);
+			chars.Add((byte)letter);
 		}
-		finally
-		{
-			IsValueRead = true;
-		}
+
+		IsValueRead = true;
+
+		return chars.Count == 0 ? null : Encoding.GetString([.. chars]);
 	}
 
 	async ValueTask<bool> IFixReader.ReadBoolAsync(CancellationToken cancellationToken)
@@ -169,8 +165,15 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 
 	async ValueTask IFixReader.SkipValueAsync(CancellationToken cancellationToken)
 	{
-		while (await ReadWithDumpAsync(cancellationToken).NoWait() != (int)AsciiSymbols.Soh)
+		while (true)
 		{
+			var letter = await ReadWithDumpAsync(cancellationToken).NoWait();
+
+			if (letter == -1)
+				throw new EndOfStreamException("The FIX value is not terminated by SOH.");
+
+			if (letter == (int)AsciiSymbols.Soh)
+				break;
 		}
 
 		IsValueRead = true;
@@ -195,18 +198,21 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 			return (null, nextByte);
 
 		var (minus, byteAfterSign) = await GetMinusOrPlusAsync(nextByte, cancellationToken).NoWait();
-		var (result, finalByte) = await ReadIntInternalAsync(byteAfterSign, cancellationToken).NoWait();
+		var maxMagnitude = minus == true ? (uint)int.MaxValue + 1 : int.MaxValue;
+		var (magnitude, finalByte) = await ReadUInt32InternalAsync(byteAfterSign, maxMagnitude, cancellationToken).NoWait();
 
-		if (minus != null)
+		if (magnitude is null)
 		{
-			if (result == null) //есть знак но нет числа.
-				throw new InvalidOperationException();
+			if (minus != null)
+				throw new InvalidOperationException("A sign must be followed by digits.");
 
-			if (minus.Value)
-				result = -result.Value;
+			return (null, finalByte);
 		}
 
-		return (result, finalByte);
+		if (minus != true)
+			return ((int)magnitude.Value, finalByte);
+
+		return (magnitude.Value == (uint)int.MaxValue + 1 ? int.MinValue : -(int)magnitude.Value, finalByte);
 	}
 
 	private async ValueTask<(long? result, int nextByte)> ReadInt64WithSignAsync(int nextByte, CancellationToken cancellationToken)
@@ -215,18 +221,21 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 			return (null, nextByte);
 
 		var (minus, byteAfterSign) = await GetMinusOrPlusAsync(nextByte, cancellationToken).NoWait();
-		var (result, finalByte) = await ReadInt64InternalAsync(byteAfterSign, cancellationToken).NoWait();
+		var maxMagnitude = minus == true ? (ulong)long.MaxValue + 1 : long.MaxValue;
+		var (magnitude, finalByte) = await ReadUInt64InternalAsync(byteAfterSign, maxMagnitude, cancellationToken).NoWait();
 
-		if (minus != null)
+		if (magnitude is null)
 		{
-			if (result == null) //есть знак но нет числа.
-				throw new InvalidOperationException();
+			if (minus != null)
+				throw new InvalidOperationException("A sign must be followed by digits.");
 
-			if (minus.Value)
-				result = -result.Value;
+			return (null, finalByte);
 		}
 
-		return (result, finalByte);
+		if (minus != true)
+			return ((long)magnitude.Value, finalByte);
+
+		return (magnitude.Value == (ulong)long.MaxValue + 1 ? long.MinValue : -(long)magnitude.Value, finalByte);
 	}
 
 	private async ValueTask<(decimal? result, int nextByte)> ReadDecimalInternalAsync(int nextByte, CancellationToken cancellationToken)
@@ -271,50 +280,51 @@ public class TextFixReader(Stream stream, Encoding encoding, bool ownsStream = f
 		return (result, currentByte);
 	}
 
-	private async ValueTask<(int? result, int nextByte)> ReadIntInternalAsync(int nextByte, CancellationToken cancellationToken)
+	private async ValueTask<(uint? result, int nextByte)> ReadUInt32InternalAsync(int nextByte, uint maxValue, CancellationToken cancellationToken)
 	{
-		var result = nextByte - (int)AsciiSymbols.Zero;
+		var digit = nextByte - (int)AsciiSymbols.Zero;
 
-		if (result < 0 || 9 < result)
+		if (digit < 0 || 9 < digit)
 			return (null, nextByte);
+
+		var result = (uint)digit;
 
 		while (true)
 		{
 			var letter = await ReadWithDumpAsync(cancellationToken).NoWait();
-			var val = letter - (int)AsciiSymbols.Zero;
+			digit = letter - (int)AsciiSymbols.Zero;
 
-			if (val < 0 || 9 < val)
-			{
+			if (digit < 0 || 9 < digit)
 				return (result, letter);
-			}
 
-			checked
-			{
-				result = result * 10 + val;
-			}
+			if (result > (maxValue - (uint)digit) / 10)
+				throw new OverflowException();
+
+			result = result * 10 + (uint)digit;
 		}
 	}
 
-	private async ValueTask<(long? result, int nextByte)> ReadInt64InternalAsync(int nextByte, CancellationToken cancellationToken)
+	private async ValueTask<(ulong? result, int nextByte)> ReadUInt64InternalAsync(int nextByte, ulong maxValue, CancellationToken cancellationToken)
 	{
-		long result = nextByte - (int)AsciiSymbols.Zero;
-		if (result < 0 || 9 < result)
+		var digit = nextByte - (int)AsciiSymbols.Zero;
+
+		if (digit < 0 || 9 < digit)
 			return (null, nextByte);
+
+		var result = (ulong)digit;
 
 		while (true)
 		{
 			var letter = await ReadWithDumpAsync(cancellationToken).NoWait();
-			var val = letter - (int)AsciiSymbols.Zero;
+			digit = letter - (int)AsciiSymbols.Zero;
 
-			if (val < 0 || 9 < val)
-			{
+			if (digit < 0 || 9 < digit)
 				return (result, letter);
-			}
 
-			checked
-			{
-				result = result * 10 + val;
-			}
+			if (result > (maxValue - (ulong)digit) / 10)
+				throw new OverflowException();
+
+			result = result * 10 + (ulong)digit;
 		}
 	}
 

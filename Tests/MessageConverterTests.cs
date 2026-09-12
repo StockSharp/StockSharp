@@ -213,6 +213,24 @@ public partial class MessageConverterTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// A tag is a positive number followed by an equals sign. Anything else is not a field, and
+	/// reading it as one would name a field nobody sent and carry the bytes that followed into it -
+	/// so the frame is refused rather than half understood.
+	/// </summary>
+	[TestMethod]
+	public async Task TextFixReader_MalformedTag_IsRefused()
+	{
+		using (var reader = CreateFixReader("0=FIX.4.4|"))
+			await ThrowsAsync<Exception>(async () => await reader.ReadTagAsync(CancellationToken), "A tag of zero names no field.");
+
+		using (var reader = CreateFixReader("-8=FIX.4.4|"))
+			await ThrowsAsync<Exception>(async () => await reader.ReadTagAsync(CancellationToken), "A negative tag names no field.");
+
+		using (var reader = CreateFixReader("8|"))
+			await ThrowsAsync<Exception>(async () => await reader.ReadTagAsync(CancellationToken), "A tag with no value is not a field.");
+	}
+
+	/// <summary>
 	/// Pins that a value which is not the number the field promises is reported rather than turned
 	/// into a plausible one.
 	/// </summary>

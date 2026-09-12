@@ -1,6 +1,7 @@
 ﻿namespace StockSharp.Fix.Native;
 
 using System.Globalization;
+using System.Numerics;
 
 /// <summary>
 /// Scaled numbers, like floating point numbers are represented as a mantissa and an exponent.
@@ -31,7 +32,7 @@ public readonly struct ScaledNumber(int exponent, long mantissa)
 	/// <summary>
 	/// The numerical value is obtained by multiplying the mantissa with the base-10 power of the exponent.
 	/// </summary>
-	public decimal AsDecimal => new(AsDouble);
+	public decimal AsDecimal => MathHelper.ToDecimal(Mantissa, Exponent);
 
 	/// <inheritdoc />
 	public override string ToString() => Exponent == 0 ? Mantissa.ToString() : AsDouble.ToString(CultureInfo.InvariantCulture);
@@ -44,6 +45,51 @@ public readonly struct ScaledNumber(int exponent, long mantissa)
 	/// <returns>The result of addition.</returns>
 	public static ScaledNumber operator +(ScaledNumber n1, ScaledNumber n2)
 	{
-		return new ScaledNumber(n1.Exponent + n2.Exponent, n1.Mantissa + n2.Mantissa);
+		if (n1.Mantissa == 0)
+			return n2;
+
+		if (n2.Mantissa == 0)
+			return n1;
+
+		var higher = n1.Exponent >= n2.Exponent ? n1 : n2;
+		var lower = n1.Exponent >= n2.Exponent ? n2 : n1;
+		var exponentDifference = (long)higher.Exponent - lower.Exponent;
+
+		// A long mantissa carries at most 19 decimal digits. Past this gap the lower-scaled
+		// operand cannot affect the rounded representation of the higher-scaled operand.
+		if (exponentDifference > 38)
+			return higher;
+
+		var sum = (BigInteger)higher.Mantissa * BigInteger.Pow(10, (int)exponentDifference) + lower.Mantissa;
+		return FromBigInteger(sum, lower.Exponent);
+	}
+
+	private static ScaledNumber FromBigInteger(BigInteger value, int exponent)
+	{
+		if (value.IsZero)
+			return new ScaledNumber(0, 0);
+
+		var resultExponent = (long)exponent;
+		var divisor = BigInteger.One;
+
+		while (true)
+		{
+			var mantissa = BigInteger.DivRem(value, divisor, out var remainder);
+
+			if (mantissa >= long.MinValue && mantissa <= long.MaxValue)
+			{
+				if (divisor > BigInteger.One && BigInteger.Abs(remainder) * 2 >= divisor)
+					mantissa += value.Sign;
+
+				if (mantissa >= long.MinValue && mantissa <= long.MaxValue)
+					return new ScaledNumber(checked((int)resultExponent), (long)mantissa);
+			}
+
+			if (resultExponent == int.MaxValue)
+				throw new OverflowException("The scaled number exponent is too large.");
+
+			divisor *= 10;
+			resultExponent++;
+		}
 	}
 }

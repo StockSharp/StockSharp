@@ -62,7 +62,25 @@ public partial class DefaultFixDialect(IdGenerator transactionIdGenerator) : Bas
 	/// </summary>
 	public bool ConvertToLatin { get; set; }
 
-	private string Convert(string value) => ConvertToLatin ? value.ToLatin() : value;
+	// Only what cannot travel as latin is transliterated: a counterparty matching the text back to
+	// its own record needs the latin part of it character for character, case included.
+	private string Convert(string value)
+	{
+		if (!ConvertToLatin || value.IsEmpty())
+			return value;
+
+		var converted = new StringBuilder(value.Length);
+
+		foreach (var c in value)
+		{
+			if (char.IsAscii(c))
+				converted.Append(c);
+			else
+				converted.Append(c.ToString().ToLatin());
+		}
+
+		return converted.ToString();
+	}
 
 	/// <inheritdoc />
 	public override bool IsSupportCandlesUpdates(MarketDataMessage subscription) => true;

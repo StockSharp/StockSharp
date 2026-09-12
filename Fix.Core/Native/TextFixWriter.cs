@@ -19,26 +19,30 @@ public class TextFixWriter(Stream stream, Encoding encoding, bool ownsStream = f
 
 	private async ValueTask WriteNumberAsync(long value, CancellationToken cancellationToken)
 	{
+		ulong magnitude;
+
 		if (value < 0)
 		{
-			value = value.Abs();
 			await WriteWithDumpAsync((byte)AsciiSymbols.Minus, cancellationToken);
+			magnitude = (ulong)(-(value + 1)) + 1;
 		}
+		else
+			magnitude = (ulong)value;
 
-		if (value < 10)
+		if (magnitude < 10)
 		{
-			await WriteWithDumpAsync((byte)((int)value + AsciiSymbols.Zero), cancellationToken);
+			await WriteWithDumpAsync((byte)((int)magnitude + AsciiSymbols.Zero), cancellationToken);
 			return;
 		}
-		else if (value == 10)
+		else if (magnitude == 10)
 		{
 			await WriteWithDumpAsync((byte)(1 + AsciiSymbols.Zero), cancellationToken);
 			await WriteWithDumpAsync((byte)(0 + AsciiSymbols.Zero), cancellationToken);
 			return;
 		}
 
-		var m = 1L;
-		var num = value;
+		var m = 1UL;
+		var num = magnitude;
 		while (num >= 10)
 		{
 			num /= 10;
@@ -47,14 +51,14 @@ public class TextFixWriter(Stream stream, Encoding encoding, bool ownsStream = f
 
 		while (m != 0)
 		{
-			var digit = (int)(value / m);
+			var digit = (int)(magnitude / m);
 
 			if (digit < 0 || digit > 9)
 				throw new InvalidOperationException();
 
 			await WriteWithDumpAsync((byte)(digit + AsciiSymbols.Zero), cancellationToken);
 
-			value -= digit * m;
+			magnitude -= (ulong)digit * m;
 			m /= 10;
 		}
 	}

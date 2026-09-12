@@ -1545,16 +1545,6 @@ public static partial class Extensions
 		if (logs is null)
 			throw new ArgumentNullException(nameof(logs));
 
-		if (dialect.StartsWithIgnoreCase("StockSharp.Fix.Dialects."))
-		{
-			dialect = dialect
-				.Replace(", StockSharp.Fix.Core", ", StockSharp.Fix.Dialects")
-				.Replace(", StockSharp.Fix,", ", StockSharp.Fix.Dialects,");
-
-			if (dialect.EndsWithIgnoreCase(", StockSharp.Fix"))
-				dialect = dialect[..^", StockSharp.Fix".Length] + ", StockSharp.Fix.Dialects";
-		}
-
 		try
 		{
 			return dialect.To<Type>();

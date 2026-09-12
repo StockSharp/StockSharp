@@ -158,15 +158,17 @@ partial class BaseFixDialect
 			_quotes.Clear();
 		}
 
-		public QuoteChangeMessage ClearOrderBook(SecurityId securityId, DateTime time)
+		public QuoteChangeMessage ClearOrderBook(SecurityId securityId, DateTime time, long? mdReqId)
 		{
-			_quotes.Clear();
+			// an empty book is told about one security, so what is known about the others stays.
+			_quotes.Remove(securityId);
 
 			return new QuoteChangeMessage
 			{
 				SecurityId = securityId,
 				ServerTime = time,
 				State = QuoteChangeStates.SnapshotComplete,
+				OriginalTransactionId = mdReqId ?? 0,
 			};
 		}
 	}
@@ -363,7 +365,7 @@ partial class BaseFixDialect
 						};
 					}
 
-					msgs.Add(_depthBuilder.ClearOrderBook(securityId.Value, sendingTime));
+					msgs.Add(_depthBuilder.ClearOrderBook(securityId.Value, sendingTime, mdReqId));
 
 					break;
 				}
