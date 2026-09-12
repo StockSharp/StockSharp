@@ -151,6 +151,39 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	#endregion
 
 	/// <summary>
+	/// Sweeping several price levels produces several trades but only one terminal transition for the
+	/// order that caused them. A Done row between fills makes the later fills arrive for an order the
+	/// caller has already discarded.
+	/// </summary>
+	[TestMethod]
+	public async Task AFillAcrossSeveralLevelsFinishesTheOrderOnce()
+	{
+		const long transactionId = 101;
+
+		var engine = new MatchingEngineAdapter();
+		engine.Settings.IncreaseDepthVolume = false;
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(VenueBook(_securityId, _start,
+			[new QuoteChange(100m, 10m)],
+			[new QuoteChange(101m, 2m), new QuoteChange(102m, 3m)]), CancellationToken);
+
+		await run.SendAsync(NewOrder(transactionId, "Client", Sides.Buy, OrderTypes.Limit,
+			102m, 5m, _start.AddSeconds(1)), CancellationToken);
+
+		var rows = run.Executions.Where(m => m.OriginalTransactionId == transactionId).ToArray();
+		var trades = rows.Where(m => m.HasTradeInfo()).ToArray();
+		var terminal = rows.Where(m => m.HasOrderInfo() && m.OrderState?.IsFinal() == true).ToArray();
+
+		AreEqual(2, trades.Length, "the order sweeps the two ask levels");
+		AreEqual(5m, trades.Sum(m => m.TradeVolume ?? 0m));
+		AreEqual(1, terminal.Length, "one order reaches its terminal state once");
+		AreEqual(0m, terminal[0].Balance);
+		IsTrue(rows.IndexOf(terminal[0]) > rows.IndexOf(trades[^1]),
+			"the terminal transition follows every fill that produced it");
+	}
+
+	/// <summary>
 	/// The engine is told what an instrument is before anything is matched on it, so it can also
 	/// answer what the venue lists - and whoever needs that answer does not have to keep a second
 	/// copy of every definition it forwarded.

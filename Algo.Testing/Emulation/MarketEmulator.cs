@@ -509,11 +509,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			TradePrice = fillPrice,
 			TradeVolume = volume,
 			Side = order.Side,
+			PortfolioName = order.PortfolioName,
 			MarketPrice = fillPrice,
 		};
 
 		var portfolio = _engine.PortfolioManager.GetPortfolio(order.PortfolioName);
-		var (_, _, position) = portfolio.ProcessTrade(state.SecurityId, order.Side, fillPrice, volume, tradeMsg.Commission);
+		var (_, _, position) = portfolio.ProcessTrade(
+			state.SecurityId, order.Side, fillPrice, volume, tradeMsg.Commission, order.MarginPrice);
 
 		// The fill before the state it produced: a reader releasing per-order state on a final
 		// state must still hold it when the trade arrives.
@@ -556,32 +558,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 	private void ProcessTime(DateTime time, List<Message> results)
 	{
-		// Process expired orders via engine's security states
-		foreach (var (secId, _) in _securityEmulators)
-		{
-			var state = _engine.GetSecurityState(secId);
-			var expired = state.OrderManager.ProcessTime(time);
-			foreach (var order in expired)
-			{
-				state.OrderBook.RemoveQuote(order.TransactionId, order.Side, order.Price);
-
-				results.Add(new ExecutionMessage
-				{
-					DataTypeEx = DataType.Transactions,
-					SecurityId = state.SecurityId,
-					LocalTime = time,
-					ServerTime = time,
-					OriginalTransactionId = order.TransactionId,
-					OrderId = order.OrderId,
-					OrderState = OrderStates.Done,
-					Side = order.Side,
-					Balance = order.Balance,
-					OrderVolume = order.Volume,
-					PortfolioName = order.PortfolioName,
-					HasOrderInfo = true,
-				});
-			}
-		}
+		// Expiry is an engine lifecycle transition. Keeping a second implementation here previously
+		// omitted its margin release and only visited securities with an emulation helper already made.
+		_engine.ProcessTime(time, results);
 
 		// Emulation handles stored candles
 		foreach (var (secId, emulator) in _securityEmulators)
@@ -1105,12 +1084,18 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 			results.Add(CreateOpenState(candle, openTime));
 		}
 
+		// A state carries the extremes that had printed by the time it is stamped with, and no others:
+		// one carrying an extreme that prints later shows a strategy a move before it happened.
 		if (!stored.IsHighEmitted && IsActiveStateDue(highTime, currentTime, isCompleted))
 		{
 			stored.IsHighEmitted = true;
 
 			var highState = CreateOpenState(candle, openTime);
 			highState.HighPrice = candle.HighPrice;
+
+			if (lowTime <= highTime)
+				highState.LowPrice = candle.LowPrice;
+
 			highState.LocalTime = highTime;
 			results.Add(highState);
 		}
@@ -1120,7 +1105,11 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 			stored.IsLowEmitted = true;
 
 			var lowState = CreateOpenState(candle, openTime);
-			lowState.HighPrice = candle.HighPrice;
+			lowState.LowPrice = candle.LowPrice;
+
+			if (highTime <= lowTime)
+				lowState.HighPrice = candle.HighPrice;
+
 			lowState.LocalTime = lowTime;
 			results.Add(lowState);
 		}

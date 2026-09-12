@@ -148,7 +148,7 @@ public class OrderLogGenerator : MarketDataGenerator
 				SecurityId = SecurityId,
 				ServerTime = time,
 				OrderState = OrderStates.Active,
-				OrderVolume = v * (SecurityDefinition.VolumeStep ?? 1m),
+				OrderVolume = v * (SecurityDefinition.VolumeStep is > 0 ? SecurityDefinition.VolumeStep.Value : 1m),
 				Side = RandomProvider.GetEnum<Sides>(),
 				OrderPrice = _lastOrderPrice,
 				DataTypeEx = DataType.OrderLog,
@@ -171,7 +171,17 @@ public class OrderLogGenerator : MarketDataGenerator
 				item = activeOrder.TypedClone();
 				item.ServerTime = time;
 
-				item.TradeVolume = RandomProvider.GetInt(1, (int)activeOrder.SafeGetVolume());
+				var volumeStep = SecurityDefinition.VolumeStep is > 0 ? SecurityDefinition.VolumeStep.Value : 1m;
+				var availableSteps = (int)decimal.Floor(activeOrder.SafeGetVolume() / volumeStep);
+
+				if (availableSteps <= 0)
+				{
+					_activeOrders.Dequeue();
+					LastGenerationTime = time;
+					return null;
+				}
+
+				item.TradeVolume = RandomProvider.GetInt(1, availableSteps) * volumeStep;
 
 				item.TradeId = trade.TradeId;
 				item.TradePrice = trade.TradePrice;

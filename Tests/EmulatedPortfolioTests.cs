@@ -474,7 +474,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 		AreEqual(300m, portfolio.BlockedMoney);
 
 		// The 200 order fills: it blocked 200 and releases 200, leaving the 100 order blocked
-		portfolio.ProcessTrade(secId, Sides.Buy, 200m, 1m);
+		portfolio.ProcessTrade(secId, Sides.Buy, 200m, 1m, marginPrice: 200m);
 
 		// Position 1 at 200 = 200, plus the outstanding buy of 100
 		AreEqual(300m, portfolio.BlockedMoney);
@@ -489,7 +489,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 		// Long position 200 against a sell order of 250 - the larger of the two
 		AreEqual(250m, portfolio.BlockedMoney);
 
-		portfolio.ProcessTrade(secId, Sides.Sell, 250m, 1m);
+		portfolio.ProcessTrade(secId, Sides.Sell, 250m, 1m, marginPrice: 250m);
 
 		// No position and no orders
 		AreEqual(0m, portfolio.BlockedMoney);
@@ -515,7 +515,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 		AreEqual(300m, portfolio.BlockedMoney);
 
 		// The 100 order fills: it blocked 100 and releases 100, leaving the 200 order blocked
-		portfolio.ProcessTrade(secId, Sides.Sell, 100m, 1m);
+		portfolio.ProcessTrade(secId, Sides.Sell, 100m, 1m, marginPrice: 100m);
 
 		// Position -1 at 100 = 100, plus the outstanding sell of 200
 		AreEqual(300m, portfolio.BlockedMoney);
@@ -530,7 +530,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 		// Short position 100 against a buy order of 80 - the larger of the two
 		AreEqual(100m, portfolio.BlockedMoney);
 
-		portfolio.ProcessTrade(secId, Sides.Buy, 80m, 1m);
+		portfolio.ProcessTrade(secId, Sides.Buy, 80m, 1m, marginPrice: 80m);
 
 		// No position and no orders
 		AreEqual(0m, portfolio.BlockedMoney);
@@ -556,7 +556,7 @@ public class EmulatedPortfolioTests : BaseTestClass
 		AreEqual(600m, portfolio.BlockedMoney);
 
 		// Half of the 200 order fills
-		portfolio.ProcessTrade(secId, Sides.Buy, 200m, 1m);
+		portfolio.ProcessTrade(secId, Sides.Buy, 200m, 1m, marginPrice: 200m);
 
 		// Position 1 at 200 = 200, plus 1 left at 200 and 2 at 100 still outstanding
 		AreEqual(600m, portfolio.BlockedMoney);
@@ -576,12 +576,45 @@ public class EmulatedPortfolioTests : BaseTestClass
 		portfolio.ProcessOrderRegistration(secId, Sides.Sell, 1m, 210m);
 		AreEqual(210m, portfolio.BlockedMoney);
 
-		portfolio.ProcessTrade(secId, Sides.Sell, 210m, 1m);
+		portfolio.ProcessTrade(secId, Sides.Sell, 210m, 1m, marginPrice: 210m);
 
 		// No position and no orders
 		AreEqual(0m, portfolio.BlockedMoney);
 		// PnL = (210 - 200) * 1 = 10
 		AreEqual(10010m, portfolio.AvailableMoney);
+	}
+
+	[TestMethod]
+	public void ProcessTrade_BetterExecution_ReleasesTheOrderReservation()
+	{
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
+		portfolio.SetMoney(10000m);
+		var secId = CreateSecId();
+
+		portfolio.ProcessOrderRegistration(secId, Sides.Buy, 2m, 100m);
+		portfolio.ProcessTrade(secId, Sides.Buy, 90m, 1m, marginPrice: 100m);
+
+		var position = portfolio.GetPosition(secId);
+		AreEqual(1m, position.TotalBidsVolume);
+		AreEqual(100m, position.TotalBidsValue,
+			"the unfilled lot keeps one reservation at the order price");
+	}
+
+	[TestMethod]
+	public void ProcessTrade_WithoutMarginPrice_PreservesAggregateReservation()
+	{
+		var portfolio = new EmulatedPortfolio("Test", NoMarkPrices.Instance);
+		portfolio.SetMoney(10000m);
+		var secId = CreateSecId();
+
+		portfolio.ProcessOrderRegistration(secId, Sides.Buy, 1m, 100m);
+		portfolio.ProcessOrderRegistration(secId, Sides.Buy, 1m, 200m);
+		portfolio.ProcessTrade(secId, Sides.Buy, 90m, 1m);
+
+		var position = portfolio.GetPosition(secId);
+		AreEqual(1m, position.TotalBidsVolume);
+		AreEqual(150m, position.TotalBidsValue,
+			"without an order identity the public API releases the aggregate average reservation");
 	}
 
 	#endregion

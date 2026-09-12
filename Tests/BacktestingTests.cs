@@ -2743,6 +2743,87 @@ public class BacktestingTests : BaseTestClass
 		};
 	}
 
+	[TestMethod]
+	public async Task EmulationAdapter_MixedMode_RoutesOrdersByPortfolio()
+	{
+		var security = CreateTestSecurity();
+		var livePortfolio = new Portfolio { Name = "LIVE" };
+		var simulatorPortfolio = Portfolio.CreateSimulator();
+		var inner = new RecordingPassThroughMessageAdapter();
+
+		using var adapter = new EmulationMessageAdapter(
+			inner,
+			new PassThroughMessageChannel(),
+			isEmulationOnly: false,
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([livePortfolio, simulatorPortfolio]),
+			new InMemoryExchangeInfoProvider())
+		{
+			OwnInnerAdapter = true,
+		};
+
+		static OrderRegisterMessage Order(long transactionId, SecurityId securityId, string portfolioName)
+			=> new()
+			{
+				TransactionId = transactionId,
+				SecurityId = securityId,
+				PortfolioName = portfolioName,
+				Side = Sides.Buy,
+				Price = 100m,
+				Volume = 1m,
+			};
+
+		var before = adapter.Emulator.ProcessedMessageCount;
+
+		await adapter.SendInMessageAsync(Order(7001, security.ToSecurityId(), livePortfolio.Name), CancellationToken);
+
+		inner.InMessages.OfType<OrderRegisterMessage>().Select(m => m.TransactionId).AssertEqual([7001L]);
+		adapter.Emulator.ProcessedMessageCount.AssertEqual(before,
+			"a live portfolio order belongs to the live inner adapter in mixed mode");
+
+		await adapter.SendInMessageAsync(Order(7002, security.ToSecurityId(), simulatorPortfolio.Name), CancellationToken);
+
+		inner.InMessages.OfType<OrderRegisterMessage>().Select(m => m.TransactionId).AssertEqual([7001L],
+			"the Simulator order must not be sent to the live venue");
+		IsGreater(adapter.Emulator.ProcessedMessageCount, before,
+			"the Simulator portfolio selects the emulator even when a live inner adapter is owned");
+
+		var afterOrders = adapter.Emulator.ProcessedMessageCount;
+
+		await adapter.SendInMessageAsync(new OrderGroupCancelMessage
+		{
+			TransactionId = 7003,
+			PortfolioName = livePortfolio.Name,
+		}, CancellationToken);
+
+		inner.InMessages.OfType<OrderGroupCancelMessage>().Select(m => m.TransactionId).AssertEqual([7003L]);
+		adapter.Emulator.ProcessedMessageCount.AssertEqual(afterOrders,
+			"a group cancellation for a live portfolio belongs to the live inner adapter");
+
+		await adapter.SendInMessageAsync(new OrderGroupCancelMessage
+		{
+			TransactionId = 7004,
+			PortfolioName = simulatorPortfolio.Name,
+		}, CancellationToken);
+
+		inner.InMessages.OfType<OrderGroupCancelMessage>().Select(m => m.TransactionId).AssertEqual([7003L],
+			"a group cancellation for Simulator must not reach the live venue");
+		IsGreater(adapter.Emulator.ProcessedMessageCount, afterOrders,
+			"a group cancellation for Simulator belongs to the emulator");
+
+		var beforeUnscopedCancel = adapter.Emulator.ProcessedMessageCount;
+
+		await adapter.SendInMessageAsync(new OrderGroupCancelMessage
+		{
+			TransactionId = 7005,
+		}, CancellationToken);
+
+		inner.InMessages.OfType<OrderGroupCancelMessage>().Select(m => m.TransactionId).AssertEqual([7003L, 7005L],
+			"an unscoped group cancellation covers the live side of mixed mode");
+		IsGreater(adapter.Emulator.ProcessedMessageCount, beforeUnscopedCancel,
+			"an unscoped group cancellation also covers the emulated side of mixed mode");
+	}
+
 	/// <summary>
 	/// A copy of a configured emulation adapter emulates on the same terms as the original.
 	/// </summary>

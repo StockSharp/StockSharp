@@ -894,25 +894,25 @@ public class MarketEmulatorTests : BaseTestClass
 		};
 		await emu.SendInMessageAsync(reg, CancellationToken);
 
+		var portfolio = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName);
+		portfolio.BlockedMoney.AssertEqual(100m, "the live balance holds its limit-price reservation");
+
 		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Active);
 
 		res.Clear();
-		await emu.SendInMessageAsync(new ExecutionMessage
+		await emu.SendInMessageAsync(new TimeMessage
 		{
-			SecurityId = id,
 			LocalTime = expiry.AddSeconds(1),
 			ServerTime = expiry.AddSeconds(1),
-			DataTypeEx = DataType.Ticks,
-			TradePrice = 105,
-			TradeVolume = 2
 		}, CancellationToken);
 		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId);
 		m.AssertNotNull();
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertNotNull();
 		m.Balance.AssertEqual(m.OrderVolume);
+		portfolio.BlockedMoney.AssertEqual(0m, "expiry removes the balance and gives its reservation back");
 	}
 
 	[TestMethod]
@@ -942,6 +942,8 @@ public class MarketEmulatorTests : BaseTestClass
 		m.OrderState.AssertEqual(OrderStates.Done);
 		m.Balance.AssertNotNull();
 		m.Balance.AssertEqual(m.OrderVolume);
+		((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName).BlockedMoney.AssertEqual(0m,
+			"an order whose lifetime already ended never reserves funds");
 	}
 
 	[TestMethod]
@@ -2416,6 +2418,8 @@ public class MarketEmulatorTests : BaseTestClass
 
 		trade.AssertNotNull("an adopted order takes part in matching like any other");
 		trade.TradePrice.AssertEqual(100m);
+		engine.PortfolioManager.GetPortfolio(_pfName).BlockedMoney.AssertEqual(0m,
+			"once both sides have filled, an adopted order leaves no reservation behind");
 	}
 
 	/// <summary>
@@ -2908,6 +2912,7 @@ public class MarketEmulatorTests : BaseTestClass
 		AreEqual(1, fills.Length, $"the market traded through the order once, so it is filled once; volumes were {fills.Select(m => m.TradeVolume.ToString()).JoinComma()}");
 		AreEqual(10m, fills[0].TradeVolume, "for the whole order, not for the single lot the print happened to carry");
 		AreEqual(94m, fills[0].TradePrice, "at the price that traded through it");
+		AreEqual(_pfName, fills[0].PortfolioName, "the fill stays attributable to the account that owned the order");
 
 		var state = res
 			.OfType<ExecutionMessage>()
@@ -2915,6 +2920,11 @@ public class MarketEmulatorTests : BaseTestClass
 
 		AreEqual(OrderStates.Done, state.OrderState, "an order filled in full is finished, not still working");
 		AreEqual(0m, state.Balance, "with nothing left of it for the strategy to carry");
+
+		var position = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName).GetPosition(id);
+		AreEqual(0m, position.TotalBidsVolume, "no live buy balance remains after the full fill");
+		AreEqual(0m, position.TotalBidsValue,
+			"the fill at 94 releases the reservation made at the order's 95 limit, not only 94 per lot");
 	}
 
 	/// <summary>

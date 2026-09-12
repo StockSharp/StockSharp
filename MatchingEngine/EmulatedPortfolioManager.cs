@@ -159,8 +159,9 @@ public class EmulatedPortfolio
 	/// <param name="price">Trade price.</param>
 	/// <param name="volume">Trade volume.</param>
 	/// <param name="commission">Commission amount.</param>
+	/// <param name="marginPrice">Price at which the filled order reserved funds.</param>
 	/// <returns>Trade processing result.</returns>
-	public TradeProcessingResult ProcessTrade(SecurityId securityId, Sides side, decimal price, decimal volume, decimal? commission = null)
+	public TradeProcessingResult ProcessTrade(SecurityId securityId, Sides side, decimal price, decimal volume, decimal? commission = null, decimal? marginPrice = null)
 	{
 		var pos = GetOrCreatePosition(securityId);
 
@@ -222,21 +223,25 @@ public class EmulatedPortfolio
 			pos.AveragePrice = price;
 		}
 
-		// Update blocked volume/value for active orders (order was executed)
-		// Use the average blocked price, not the trade price, to properly unblock
+		// A fill releases the reservation made by that order. Its execution price can be better than
+		// its limit, so using the trade price would leave part of the reservation behind.
+		var heldVolume = side == Sides.Buy ? pos.TotalBidsVolume : pos.TotalAsksVolume;
+		var releasedVolume = volume.Min(heldVolume.Max(0m));
+		var heldValue = side == Sides.Buy ? pos.TotalBidsValue : pos.TotalAsksValue;
+		// Older callers do not identify the order whose fill they report. Preserve their aggregate
+		// behaviour by releasing the average reservation; engine callers pass the exact order price.
+		var releasePrice = marginPrice ?? (heldVolume > 0 ? heldValue / heldVolume : price);
+		var releasedValue = (releasedVolume * releasePrice).Min(heldValue.Max(0m));
+
 		if (side == Sides.Buy)
 		{
-			var avgBlockedPrice = pos.TotalBidsVolume > 0 ? pos.TotalBidsValue / pos.TotalBidsVolume : price;
-			var blockedValue = volume * avgBlockedPrice;
-			pos.TotalBidsVolume -= volume;
-			pos.TotalBidsValue -= blockedValue;
+			pos.TotalBidsVolume -= releasedVolume;
+			pos.TotalBidsValue -= releasedValue;
 		}
 		else
 		{
-			var avgBlockedPrice = pos.TotalAsksVolume > 0 ? pos.TotalAsksValue / pos.TotalAsksVolume : price;
-			var blockedValue = volume * avgBlockedPrice;
-			pos.TotalAsksVolume -= volume;
-			pos.TotalAsksValue -= blockedValue;
+			pos.TotalAsksVolume -= releasedVolume;
+			pos.TotalAsksValue -= releasedValue;
 		}
 
 		UpdateBlockedMoney();
