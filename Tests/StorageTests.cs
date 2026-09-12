@@ -3044,12 +3044,11 @@ public class StorageTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// A snapshot file that cannot be read is a file to report, not a file to throw away. Reading is
-	/// not the moment to destroy the only copy of the data: a half-written file may still hold most
-	/// of the session, and once the reader has deleted it there is nothing left to repair or inspect.
+	/// A wholly corrupt snapshot file must not remain active and fail on every registry start. Keep
+	/// its bytes as a backup for inspection while allowing the registry to create a clean snapshot.
 	/// </summary>
 	[TestMethod]
-	public void UnreadableSnapshotFileIsKept()
+	public void CorruptSnapshotFileIsQuarantined()
 	{
 		var fs = Helper.MemorySystem;
 		var path = fs.GetSubTemp();
@@ -3070,7 +3069,8 @@ public class StorageTests : BaseTestClass
 		// Reading is what trips over the damaged record.
 		storage.Get(new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test });
 
-		fs.FileExists(fileName).AssertTrue("the snapshot file the reader could not parse has to still be there");
+		fs.FileExists(fileName).AssertFalse("a wholly corrupt snapshot must not remain at the active path");
+		fs.FileExists(fileName.MakeBackup()).AssertTrue("the corrupt bytes must be retained for inspection");
 	}
 
 	[TestMethod]
@@ -3672,6 +3672,45 @@ public class StorageTests : BaseTestClass
 		var dataTypes = await drive.GetAvailableDataTypesAsync(default, StorageFormats.Binary).ToArrayAsync(token);
 
 		dataTypes.AssertContains(DataType.Ticks, "data that is on disk has to be listed");
+	}
+
+	/// <summary>
+	/// Listing what a whole drive holds walks every instrument, every day and every file under it, so
+	/// a store where that cost matters can hold the answer for a while. The deal it buys is precise:
+	/// what this drive writes itself is listed at once, and only what another writer put into the same
+	/// folder waits out the period.
+	/// </summary>
+	[TestMethod]
+	public async Task AvailableDataTypesAreHeldForTheConfiguredPeriodButNeverForThisDrivesOwnWrites()
+	{
+		var fs = Helper.MemorySystem;
+		var drive = CreateDrive();
+		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var date = DateTime.UtcNow.Date;
+		var token = CancellationToken;
+
+		// Long enough that nothing below can expire it by running slowly.
+		drive.AvailableDataTypesCachePeriod = TimeSpan.FromMinutes(10);
+
+		await SetupTestDataAsync(drive, securityId, DataType.Ticks, StorageFormats.Binary, [date]);
+
+		(await drive.GetAvailableDataTypesAsync(default, StorageFormats.Binary).ToArrayAsync(token))
+			.AssertContains(DataType.Ticks);
+
+		// Another writer on the same folder, which this drive learns of only when the period is out.
+		var other = CreateDrive(drive.Path);
+		await SetupTestDataAsync(other, securityId, DataType.MarketDepth, StorageFormats.Binary, [date]);
+
+		var held = await drive.GetAvailableDataTypesAsync(default, StorageFormats.Binary).ToArrayAsync(token);
+
+		held.AssertContains(DataType.Ticks);
+		held.Contains(DataType.MarketDepth).AssertFalse("the answer is held for the period it was given");
+
+		// What this drive writes is another matter: it knows about it and says so straight away.
+		await SetupTestDataAsync(drive, securityId, DataType.Level1, StorageFormats.Binary, [date]);
+
+		(await drive.GetAvailableDataTypesAsync(default, StorageFormats.Binary).ToArrayAsync(token))
+			.AssertContains(DataType.Level1, "a type this drive has just written cannot be missing from its own answer");
 	}
 
 	[TestMethod]

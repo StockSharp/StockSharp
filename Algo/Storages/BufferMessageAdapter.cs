@@ -52,6 +52,10 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		where TMessage : Message
 		=> GetSnapshotStorage<SecurityId, TMessage>(dataType);
 
+	// Snapshot mode is a setting while a snapshot store is optional, so the setting alone never means
+	// there is a store to read from or write to.
+	private bool UseSnapshots => SnapshotRegistry != null && Settings.IsMode(StorageModes.Snapshot);
+
 	/// <inheritdoc />
 	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
@@ -68,7 +72,11 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				break;
 
 			case MessageTypes.Disconnect:
-				StopStorageTimer();
+				// Whatever arrived since the last round has no next round once the connection is down,
+				// so it is written out here or it is lost.
+				if (StopStorageTimer())
+					await FlushAsync(cancellationToken);
+
 				break;
 
 			case MessageTypes.OrderStatus:
@@ -77,7 +85,10 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 					break;
 
 				if (Buffer.EnabledTransactions)
-					message = await ProcessOrderStatusAsync((OrderStatusMessage)message, cancellationToken);
+				{
+					await ProcessOrderStatusAsync((OrderStatusMessage)message, cancellationToken);
+					return;
+				}
 
 				break;
 			}
@@ -116,8 +127,17 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				break;
 			}
 			case MessageTypes.MarketData:
-				await ProcessMarketDataAsync((MarketDataMessage)message, cancellationToken);
+			{
+				var mdMsg = (MarketDataMessage)message;
+
+				Buffer.ProcessInMessage(mdMsg);
+
+				// The persisted state must be emitted before opening the live stream. An inner adapter
+				// can publish current data synchronously while handling the request, and replaying an
+				// older snapshot afterwards would roll the subscriber back.
+				await SendSnapshotsAsync(mdMsg, cancellationToken);
 				break;
+			}
 		}
 
 		if (message == null)
@@ -126,137 +146,129 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
-	private async ValueTask ProcessMarketDataAsync(MarketDataMessage message, CancellationToken cancellationToken)
+	private async ValueTask SendSnapshotsAsync(MarketDataMessage message, CancellationToken cancellationToken)
 	{
-		if (message is null)
-			throw new ArgumentNullException(nameof(message));
+		if (!message.IsSubscribe || message.From != null || message.To != null || !UseSnapshots)
+			return;
 
-		Buffer.ProcessInMessage(message);
-
-		if (message.IsSubscribe && message.From == null && message.To == null && Settings.IsMode(StorageModes.Snapshot))
+		async ValueTask SendSnapshotAsync<TMessage>(TMessage msg)
+			where TMessage : Message, ISubscriptionIdMessage
 		{
-			async ValueTask SendSnapshotAsync<TMessage>(TMessage msg)
-				where TMessage : Message, ISubscriptionIdMessage
+			msg.SetSubscriptionIds(subscriptionId: message.TransactionId);
+			await RaiseNewOutMessageAsync(msg, cancellationToken);
+		}
+
+		async ValueTask SendAllAsync<TMessage>(ISnapshotStorage<SecurityId, TMessage> storage)
+			where TMessage : Message, ISubscriptionIdMessage
+		{
+			if (message.SecurityId == default)
 			{
-				msg.SetSubscriptionIds(subscriptionId: message.TransactionId);
-				await RaiseNewOutMessageAsync(msg, cancellationToken);
+				foreach (var msg in storage.GetAll())
+					await SendSnapshotAsync(msg);
 			}
-
-			if (message.DataType2 == DataType.Level1)
+			else
 			{
-				var l1Storage = GetSnapshotStorage<Level1ChangeMessage>(message.DataType2);
+				var msg = storage.Get(message.SecurityId);
 
-				if (message.SecurityId == default)
-				{
-					foreach (var msg in l1Storage.GetAll())
-						await SendSnapshotAsync(msg);
-				}
-				else
-				{
-					var level1Msg = l1Storage.Get(message.SecurityId);
-
-					if (level1Msg != null)
-					{
-						//SendReply();
-						await SendSnapshotAsync(level1Msg);
-					}
-				}
-			}
-			else if (message.DataType2 == DataType.MarketDepth)
-			{
-				var quotesStorage = GetSnapshotStorage<QuoteChangeMessage>(message.DataType2);
-
-				if (message.SecurityId == default)
-				{
-					foreach (var msg in quotesStorage.GetAll())
-						await SendSnapshotAsync(msg);
-				}
-				else
-				{
-					var quotesMsg = quotesStorage.Get(message.SecurityId);
-
-					if (quotesMsg != null)
-					{
-						//SendReply();
-						await SendSnapshotAsync(quotesMsg);
-					}
-				}
+				if (msg != null)
+					await SendSnapshotAsync(msg);
 			}
 		}
+
+		if (message.DataType2 == DataType.Level1)
+			await SendAllAsync(GetSnapshotStorage<Level1ChangeMessage>(message.DataType2));
+		else if (message.DataType2 == DataType.MarketDepth)
+			await SendAllAsync(GetSnapshotStorage<QuoteChangeMessage>(message.DataType2));
 	}
 
 	/// <summary>
-	/// Process <see cref="OrderStatusMessage"/>.
+	/// Process <see cref="OrderStatusMessage"/>: serve what storage holds for it, then either pass the
+	/// request on or close the subscription here.
 	/// </summary>
 	/// <param name="message">A message requesting current registered orders and trades.</param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-	/// <returns>A message requesting current registered orders and trades.</returns>
-	private async ValueTask<OrderStatusMessage> ProcessOrderStatusAsync(OrderStatusMessage message, CancellationToken cancellationToken)
+	private async ValueTask ProcessOrderStatusAsync(OrderStatusMessage message, CancellationToken cancellationToken)
 	{
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
 		if (!message.IsSubscribe)
-			return message;
+		{
+			await base.OnSendInMessageAsync(message, cancellationToken);
+			return;
+		}
 
 		var transId = message.TransactionId;
 
 		_orderStatusIds.Add(transId);
+
+		var served = new List<ExecutionMessage>();
+		var covered = false;
 
 		if (!message.HasOrderId() && message.OriginalTransactionId == 0 /*&& Settings.DaysLoad > TimeSpan.Zero*/)
 		{
 			var from = message.From ?? CurrentTime.Date/* - Settings.DaysLoad*/;
 			var to = message.To;
 
-			if (Settings.IsMode(StorageModes.Snapshot))
+			var states = message.States.ToHashSet();
+			var ordersIds = new HashSet<long>();
+
+			bool Take(ExecutionMessage stored)
 			{
-				var states = message.States.ToHashSet();
+				if (stored.HasOrderInfo)
+				{
+					if (!stored.IsMatch(message, states))
+						return false;
 
-				var ordersIds = new HashSet<long>();
+					ordersIds.Add(stored.TransactionId);
+				}
+				else if (!ordersIds.Contains(stored.TransactionId))
+					return false;
 
+				stored.OriginalTransactionId = transId;
+				stored.SetSubscriptionIds(subscriptionId: transId);
+				served.Add(stored);
+				return true;
+			}
+
+			if (UseSnapshots)
+			{
 				var storage = GetSnapshotStorage<string, ExecutionMessage>(DataType.Transactions);
 
 				foreach (var snapshot in storage.GetAll(from, to))
 				{
-					if (snapshot.HasOrderInfo)
-					{
-						if (!snapshot.IsMatch(message, states))
-							continue;
-
-						ordersIds.Add(snapshot.TransactionId);
-					}
-					else if (!ordersIds.Contains(snapshot.TransactionId))
-						continue;
-
-					snapshot.OriginalTransactionId = transId;
-					snapshot.SetSubscriptionIds(subscriptionId: transId);
-					await RaiseNewOutMessageAsync(snapshot, cancellationToken);
-
-					from = snapshot.ServerTime;
+					if (Take(snapshot))
+						from = snapshot.ServerTime;
 				}
 
-				if (from >= to)
-					return null;
-
-				// do not fill From field to avoid muptiple requests
-				// in SubscriptionOnlineMessageAdapter
-				//
-				//message.From = from;
+				covered = from >= to;
 			}
-			else if (Settings.IsMode(StorageModes.Incremental))
+			else if (Settings.IsMode(StorageModes.Incremental) && message.SecurityId != default)
 			{
-				if (message.SecurityId != default)
-				{
-					// TODO restore last actual state from incremental messages
+				var storage = Settings.GetStorage<ExecutionMessage>(message.SecurityId, DataType.Transactions);
 
-					//GetStorage<ExecutionMessage>(msg.SecurityId, ExecutionTypes.Transaction)
-					//	.Load(from, to)
-					//	.ForEach(RaiseStorageMessage);
-				}
+				await foreach (var stored in storage.LoadAsync(from, to).WithEnforcedCancellation(cancellationToken))
+					Take(stored);
 			}
 		}
 
-		return message;
+		// A fully local subscription is acknowledged before its data. For a partial range, replay
+		// stored state before opening the live stream so an immediate live update cannot be followed
+		// by an older stored value.
+		if (covered)
+			await RaiseNewOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = transId }, cancellationToken);
+
+		foreach (var msg in served)
+			await RaiseNewOutMessageAsync(msg, cancellationToken);
+
+		if (covered)
+			await RaiseNewOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = transId }, cancellationToken);
+		else
+		{
+			// do not fill From field to avoid muptiple requests
+			// in SubscriptionOnlineMessageAdapter
+			await base.OnSendInMessageAsync(message, cancellationToken);
+		}
 	}
 
 	/// <inheritdoc />
@@ -271,6 +283,184 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 	private Task _storageTask;
 	private readonly Lock _timerSync = new();
 
+	private static readonly TimeSpan _storageInterval = TimeSpan.FromSeconds(10);
+
+	// What the buffer hands over it forgets, so a write that fails would take the data with it. Each
+	// batch is written on its own, and one that cannot be written goes back to be written next round.
+	private async ValueTask WriteAsync(IEnumerable<Message> batch, Func<Task> write, CancellationToken cancellationToken)
+	{
+		try
+		{
+			await write();
+		}
+		catch (Exception ex)
+		{
+			Buffer.PutBack(batch);
+
+			if (!cancellationToken.IsCancellationRequested)
+				this.AddErrorLog(ex);
+		}
+	}
+
+	/// <summary>
+	/// Write out everything the buffer holds right now.
+	/// </summary>
+	private async ValueTask FlushAsync(CancellationToken cancellationToken)
+	{
+		var incremental = Settings.IsMode(StorageModes.Incremental);
+		var snapshot = UseSnapshots;
+
+		foreach (var pair in Buffer.GetTicks())
+		{
+			if (incremental)
+				await WriteAsync(pair.Value, async () => await Settings.GetStorage<ExecutionMessage>(pair.Key, DataType.Ticks).SaveAsync(pair.Value, cancellationToken), cancellationToken);
+		}
+
+		foreach (var pair in Buffer.GetOrderLog())
+		{
+			if (incremental)
+				await WriteAsync(pair.Value, async () => await Settings.GetStorage<ExecutionMessage>(pair.Key, DataType.OrderLog).SaveAsync(pair.Value, cancellationToken), cancellationToken);
+		}
+
+		foreach (var pair in Buffer.GetTransactions())
+		{
+			var secId = pair.Key;
+
+			// failed order's response doesn't contain sec id
+			if (secId == default)
+				continue;
+
+			if (incremental)
+				await WriteAsync(pair.Value, async () => await Settings.GetStorage<ExecutionMessage>(secId, DataType.Transactions).SaveAsync(pair.Value, cancellationToken), cancellationToken);
+
+			if (snapshot)
+			{
+				var snapshotStorage = GetSnapshotStorage<string, ExecutionMessage>(DataType.Transactions);
+
+				foreach (var message in pair.Value)
+				{
+					// do not store cancellation commands into snapshot
+					if (message.IsCancellation)
+					{
+						LogWarning("Cancellation transaction: {0}", message);
+						continue;
+					}
+
+					var originTransId = message.OriginalTransactionId;
+
+					if (originTransId == 0)
+						continue;
+
+					if (_cancellationTransactions.TryGetValue(originTransId, out var cancelledId))
+					{
+						// do not store cancellation errors
+						if (!message.IsOk())
+							continue;
+
+						// override cancel trans id by original order's registration trans id
+						originTransId = cancelledId;
+					}
+					else if (_orderStatusIds.Contains(originTransId))
+					{
+						// override status request trans id by original order's registration trans id
+						originTransId = message.TransactionId;
+					}
+					else if (_replaceTransactions.TryGetAndRemove(originTransId, out var replacedId))
+					{
+						if (message.IsOk())
+						{
+							var replaced = (ExecutionMessage)snapshotStorage.Get(replacedId.To<string>());
+
+							if (replaced == null)
+								LogWarning("Replaced order {0} not found.", replacedId);
+							else if (replaced.OrderState != OrderStates.Done)
+							{
+								// the storage hands out copies, so the ended state is written back
+								replaced.OrderState = OrderStates.Done;
+								snapshotStorage.Update(replaced);
+							}
+						}
+					}
+
+					message.SecurityId = secId;
+
+					if (message.TransactionId == 0)
+						message.TransactionId = originTransId;
+
+					message.OriginalTransactionId = 0;
+
+					if (message.TransactionId != 0)
+						SaveTransaction(snapshotStorage, message);
+				}
+			}
+		}
+
+		foreach (var pair in Buffer.GetOrderBooks())
+		{
+			if (incremental)
+				await WriteAsync(pair.Value, async () => await Settings.GetStorage<QuoteChangeMessage>(pair.Key, DataType.MarketDepth).SaveAsync(pair.Value, cancellationToken), cancellationToken);
+
+			if (snapshot)
+			{
+				var snapshotStorage = GetSnapshotStorage<QuoteChangeMessage>(DataType.MarketDepth);
+
+				foreach (var message in pair.Value)
+					snapshotStorage.Update(message);
+			}
+		}
+
+		foreach (var pair in Buffer.GetLevel1())
+		{
+			var messages = pair.Value.Where(m => m.HasChanges()).ToArray();
+
+			if (incremental)
+				await WriteAsync(messages, async () => await Settings.GetStorage<Level1ChangeMessage>(pair.Key, DataType.Level1).SaveAsync(messages, cancellationToken), cancellationToken);
+
+			if (snapshot)
+			{
+				var snapshotStorage = GetSnapshotStorage<Level1ChangeMessage>(DataType.Level1);
+
+				foreach (var message in messages)
+					snapshotStorage.Update(message);
+			}
+		}
+
+		foreach (var pair in Buffer.GetCandles())
+		{
+			await WriteAsync(pair.Value, async () => await Settings.GetStorage(pair.Key.secId, pair.Key.dataType).SaveAsync(pair.Value, cancellationToken), cancellationToken);
+		}
+
+		foreach (var pair in Buffer.GetPositionChanges())
+		{
+			var messages = pair.Value.Where(m => m.HasChanges()).ToArray();
+
+			if (incremental)
+				await WriteAsync(messages, async () => await Settings.GetStorage<PositionChangeMessage>(pair.Key, DataType.PositionChanges).SaveAsync(messages, cancellationToken), cancellationToken);
+
+			if (snapshot)
+			{
+				var snapshotStorage = GetSnapshotStorage<(SecurityId, string, string), PositionChangeMessage>(DataType.PositionChanges);
+
+				foreach (var message in messages)
+					snapshotStorage.Update(message);
+			}
+		}
+
+		var news = Buffer.GetNews().ToArray();
+
+		if (news.Length > 0)
+		{
+			await WriteAsync(news, async () => await Settings.GetStorage<NewsMessage>(default, DataType.News).SaveAsync(news, cancellationToken), cancellationToken);
+		}
+
+		var boardStates = Buffer.GetBoardStates().ToArray();
+
+		if (boardStates.Length > 0)
+		{
+			await WriteAsync(boardStates, async () => await Settings.GetStorage<BoardStateMessage>(default, DataType.BoardState).SaveAsync(boardStates, cancellationToken), cancellationToken);
+		}
+	}
+
 	/// <summary>
 	/// Start storage auto-save thread.
 	/// </summary>
@@ -283,25 +473,6 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 			_cts = new();
 			var token = _cts.Token;
-			var interval = TimeSpan.FromSeconds(10);
-
-			// What the buffer hands over it forgets, so a write that fails would take the data with
-			// it. Each batch is written on its own, and one that cannot be written goes back to be
-			// written next round.
-			async ValueTask writeAsync(IEnumerable<Message> batch, Func<Task> write)
-			{
-				try
-				{
-					await write();
-				}
-				catch (Exception ex)
-				{
-					Buffer.PutBack(batch);
-
-					if (!token.IsCancellationRequested)
-						this.AddErrorLog(ex);
-				}
-			}
 
 			_storageTask = Task.Run(async () =>
 			{
@@ -309,159 +480,9 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				{
 					try
 					{
-						var incremental = Settings.IsMode(StorageModes.Incremental);
-						var snapshot = Settings.IsMode(StorageModes.Snapshot);
+						await FlushAsync(token);
 
-						foreach (var pair in Buffer.GetTicks())
-						{
-							if (incremental)
-								await writeAsync(pair.Value, async () => await Settings.GetStorage<ExecutionMessage>(pair.Key, DataType.Ticks).SaveAsync(pair.Value, token));
-						}
-
-						foreach (var pair in Buffer.GetOrderLog())
-						{
-							if (incremental)
-								await writeAsync(pair.Value, async () => await Settings.GetStorage<ExecutionMessage>(pair.Key, DataType.OrderLog).SaveAsync(pair.Value, token));
-						}
-
-						foreach (var pair in Buffer.GetTransactions())
-						{
-							var secId = pair.Key;
-
-							// failed order's response doesn't contain sec id
-							if (secId == default)
-								continue;
-
-							if (incremental)
-								await writeAsync(pair.Value, async () => await Settings.GetStorage<ExecutionMessage>(secId, DataType.Transactions).SaveAsync(pair.Value, token));
-
-							if (snapshot)
-							{
-								var snapshotStorage = GetSnapshotStorage<string, ExecutionMessage>(DataType.Transactions);
-
-								foreach (var message in pair.Value)
-								{
-									// do not store cancellation commands into snapshot
-									if (message.IsCancellation)
-									{
-										LogWarning("Cancellation transaction: {0}", message);
-										continue;
-									}
-
-									var originTransId = message.OriginalTransactionId;
-
-									if (originTransId == 0)
-										continue;
-
-									if (_cancellationTransactions.TryGetValue(originTransId, out var cancelledId))
-									{
-										// do not store cancellation errors
-										if (!message.IsOk())
-											continue;
-
-										// override cancel trans id by original order's registration trans id
-										originTransId = cancelledId;
-									}
-									else if (_orderStatusIds.Contains(originTransId))
-									{
-										// override status request trans id by original order's registration trans id
-										originTransId = message.TransactionId;
-									}
-									else if (_replaceTransactions.TryGetAndRemove(originTransId, out var replacedId))
-									{
-										if (message.IsOk())
-										{
-											var replaced = (ExecutionMessage)snapshotStorage.Get(replacedId.To<string>());
-
-											if (replaced == null)
-												LogWarning("Replaced order {0} not found.", replacedId);
-											else
-											{
-												if (replaced.OrderState != OrderStates.Done)
-													replaced.OrderState = OrderStates.Done;
-											}
-										}
-									}
-
-									message.SecurityId = secId;
-
-									if (message.TransactionId == 0)
-										message.TransactionId = originTransId;
-
-									message.OriginalTransactionId = 0;
-
-									if (message.TransactionId != 0)
-										SaveTransaction(snapshotStorage, message);
-								}
-							}
-						}
-
-						foreach (var pair in Buffer.GetOrderBooks())
-						{
-							if (incremental)
-								await writeAsync(pair.Value, async () => await Settings.GetStorage<QuoteChangeMessage>(pair.Key, DataType.MarketDepth).SaveAsync(pair.Value, token));
-
-							if (snapshot)
-							{
-								var snapshotStorage = GetSnapshotStorage<QuoteChangeMessage>(DataType.MarketDepth);
-
-								foreach (var message in pair.Value)
-									snapshotStorage.Update(message);
-							}
-						}
-
-						foreach (var pair in Buffer.GetLevel1())
-						{
-							var messages = pair.Value.Where(m => m.HasChanges()).ToArray();
-
-							if (incremental)
-								await writeAsync(messages, async () => await Settings.GetStorage<Level1ChangeMessage>(pair.Key, DataType.Level1).SaveAsync(messages, token));
-
-							if (Settings.IsMode(StorageModes.Snapshot))
-							{
-								var snapshotStorage = GetSnapshotStorage<Level1ChangeMessage>(DataType.Level1);
-
-								foreach (var message in messages)
-									snapshotStorage.Update(message);
-							}
-						}
-
-						foreach (var pair in Buffer.GetCandles())
-						{
-							await writeAsync(pair.Value, async () => await Settings.GetStorage(pair.Key.secId, pair.Key.dataType).SaveAsync(pair.Value, token));
-						}
-
-						foreach (var pair in Buffer.GetPositionChanges())
-						{
-							var messages = pair.Value.Where(m => m.HasChanges()).ToArray();
-
-							if (incremental)
-								await writeAsync(messages, async () => await Settings.GetStorage<PositionChangeMessage>(pair.Key, DataType.PositionChanges).SaveAsync(messages, token));
-
-							if (snapshot)
-							{
-								var snapshotStorage = GetSnapshotStorage<(SecurityId, string, string), PositionChangeMessage>(DataType.PositionChanges);
-
-								foreach (var message in messages)
-									snapshotStorage.Update(message);
-							}
-						}
-
-						var news = Buffer.GetNews().ToArray();
-
-						if (news.Length > 0)
-						{
-							await writeAsync(news, async () => await Settings.GetStorage<NewsMessage>(default, DataType.News).SaveAsync(news, token));
-						}
-
-						var boardStates = Buffer.GetBoardStates().ToArray();
-
-						if (boardStates.Length > 0)
-						{
-							await writeAsync(boardStates, async () => await Settings.GetStorage<BoardStateMessage>(default, DataType.BoardState).SaveAsync(boardStates, token));
-						}
-
-						await interval.Delay(token);
+						await _storageInterval.Delay(token);
 					}
 					catch (Exception ex)
 					{
@@ -473,14 +494,18 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		}
 	}
 
-	private void StopStorageTimer()
+	/// <summary>
+	/// Stop the storage auto-save thread.
+	/// </summary>
+	/// <returns><see langword="true"/> if it was running.</returns>
+	private bool StopStorageTimer()
 	{
 		using (_timerSync.EnterScope())
 		{
 			var cts = _cts;
 
 			if (cts == null)
-				return;
+				return false;
 
 			_cts = null;
 
@@ -503,6 +528,8 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 			catch { }
 
 			_storageTask = null;
+
+			return true;
 		}
 	}
 

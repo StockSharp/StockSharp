@@ -215,8 +215,13 @@ public class CandleSeries : NotifiableObject, IPersistable
 	/// <inheritdoc />
 	public override string ToString()
 	{
-		return CandleType?.Name + "_" + Security + "_" + (Arg is null ? "NULL" : typeof(TimeFrameCandleMessage).DataTypeArgToString(Arg));
+		return CandleType?.Name + "_" + Security + "_" + (Arg is null ? "NULL" : GetMessageType().DataTypeArgToString(Arg));
 	}
+
+	private Type GetMessageType()
+		=> CandleType is null || typeof(TimeFrameCandle).IsAssignableFrom(CandleType)
+			? typeof(TimeFrameCandleMessage)
+			: CandleType;
 
 	/// <summary>
 	/// Load settings.
@@ -246,7 +251,7 @@ public class CandleSeries : NotifiableObject, IPersistable
 		}
 
 		if (CandleType != null)
-			Arg = typeof(TimeFrameCandleMessage).ToDataTypeArg(storage.GetValue<string>(nameof(Arg)));
+			Arg = GetMessageType().ToDataTypeArg(storage.GetValue<string>(nameof(Arg)));
 
 		From = storage.GetValue(nameof(From), From);
 		To = storage.GetValue(nameof(To), To);
@@ -280,7 +285,7 @@ public class CandleSeries : NotifiableObject, IPersistable
 			storage.SetValue(nameof(CandleType), CandleType.GetTypeName(false));
 
 		if (Arg != null && CandleType != null)
-			storage.SetValue(nameof(Arg), typeof(TimeFrameCandleMessage).DataTypeArgToString(Arg));
+			storage.SetValue(nameof(Arg), GetMessageType().DataTypeArgToString(Arg));
 
 		storage.SetValue(nameof(From), From);
 		storage.SetValue(nameof(To), To);

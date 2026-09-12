@@ -702,12 +702,12 @@ public class BufferMessageAdapterTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// A snapshot is data for a subscription, and data for a subscription that has not been passed on
-	/// yet belongs to nobody: a consumer that starts collecting when the subscription is acknowledged
-	/// has nowhere to put what arrived before it, so the first picture of the book or of the quotes is lost.
+	/// A live adapter may publish current data while it handles a subscription. The persisted snapshot
+	/// must precede that call, otherwise its older state can arrive after the current state and roll the
+	/// subscriber back.
 	/// </summary>
 	[TestMethod]
-	public async Task TheSnapshotArrivesAfterTheSubscriptionItBelongsToWasPassedOn()
+	public async Task TheSnapshotArrivesBeforeTheLiveSubscriptionCanProduceData()
 	{
 		var token = CancellationToken;
 
@@ -728,7 +728,7 @@ public class BufferMessageAdapterTests : BaseTestClass
 		};
 
 		var buffer = new StorageBuffer();
-		// echoes back what it is sent, so the echo marks the moment the subscription reached it
+		// Echoes what it is sent, marking the earliest point at which live output could be produced.
 		var inner = new RecordingPassThroughMessageAdapter();
 
 		using var adapter = new BufferMessageAdapter(inner, settings, buffer, snapshotRegistry);
@@ -749,7 +749,7 @@ public class BufferMessageAdapterTests : BaseTestClass
 
 		IsGreaterOrEqual(forwarded, 0, "the subscription has to reach the inner adapter");
 		IsGreaterOrEqual(snapshot, 0, "the snapshot has to be sent out");
-		IsGreater(snapshot, forwarded, "the snapshot has to follow the subscription it belongs to, not precede it");
+		IsLess(snapshot, forwarded, "persisted state must be applied before the live stream can publish newer data");
 	}
 
 	/// <summary>

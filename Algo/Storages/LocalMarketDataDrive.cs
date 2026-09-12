@@ -147,8 +147,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			DatesDict.Remove(date);
 			SaveDates(DatesDict.CachedValues);
 			ChangeIndex(date, true);
-
-			_availableDataTypes.Remove(_drive.Path);
+			_drive.ChangeCachedDataType(_format, _dataType, true);
 
 			return default;
 		}
@@ -165,16 +164,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 			DatesDict[date] = date;
 			SaveDates(DatesDict.CachedValues);
 			ChangeIndex(date, false);
-
-			using (_availableDataTypes.EnterScope())
-			{
-				var tuple = _availableDataTypes.TryGetValue(_drive.Path);
-
-				if (tuple == null || !tuple.Second)
-					return default;
-
-				tuple.First.Add(_dataType);
-			}
+			_drive.ChangeCachedDataType(_format, _dataType, false);
 
 			return default;
 		}
@@ -755,10 +745,78 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		using (_indexLock.EnterScope())
 			_index = null;
+
+		using (_dataTypesSync.EnterScope())
+			_dataTypesCache.Clear();
 	}
 
 	private readonly Lock _indexLock = new();
 	private Index _index;
+
+	/// <summary>
+	/// How long the answer to "what does this whole drive hold" is reused before the folders are
+	/// walked again. <see cref="TimeSpan.Zero"/>, the default, walks them on every question.
+	/// </summary>
+	/// <remarks>
+	/// Answering that question means listing every instrument, every day it has and every file in
+	/// those days, which on a large store is millions of directory reads. Set this where the cost
+	/// matters and the store is written by this process alone or by a collector whose data may be
+	/// seen a moment late: what this drive writes itself is folded in at once, and only what another
+	/// process puts into the same folder waits out the period.
+	/// </remarks>
+	public TimeSpan AvailableDataTypesCachePeriod { get; set; }
+
+	private readonly Lock _dataTypesSync = new();
+	private readonly Dictionary<StorageFormats, (DataType[] types, DateTime readAt)> _dataTypesCache = [];
+
+	private DataType[] TryGetCachedDataTypes(StorageFormats format)
+	{
+		var period = AvailableDataTypesCachePeriod;
+
+		if (period <= TimeSpan.Zero)
+			return null;
+
+		using (_dataTypesSync.EnterScope())
+		{
+			return _dataTypesCache.TryGetValue(format, out var cached) && (DateTime.UtcNow - cached.readAt) <= period
+				? cached.types
+				: null;
+		}
+	}
+
+	private DataType[] SetCachedDataTypes(StorageFormats format, DataType[] types)
+	{
+		if (AvailableDataTypesCachePeriod > TimeSpan.Zero)
+		{
+			using (_dataTypesSync.EnterScope())
+				_dataTypesCache[format] = (types, DateTime.UtcNow);
+		}
+
+		return types;
+	}
+
+	/// <summary>
+	/// A day written for a data type proves the drive holds it, and the held answer can be told so
+	/// without walking the folders again. A day removed may have been the last of its type, and only
+	/// a fresh walk can tell, so the answer is given up instead. The read time is kept as it was: a
+	/// type added here says nothing new about the rest of the drive.
+	/// </summary>
+	private void ChangeCachedDataType(StorageFormats format, DataType dataType, bool remove)
+	{
+		using (_dataTypesSync.EnterScope())
+		{
+			if (remove)
+			{
+				_dataTypesCache.Remove(format);
+				return;
+			}
+
+			if (!_dataTypesCache.TryGetValue(format, out var cached) || cached.types.Contains(dataType))
+				return;
+
+			_dataTypesCache[format] = ([.. cached.types, dataType], cached.readAt);
+		}
+	}
 
 	private string IndexFullPath => IOPath.Combine(Path, "index.bin");
 
@@ -848,8 +906,6 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		return Impl();
 	}
 
-	private static readonly SynchronizedDictionary<string, RefPair<HashSet<DataType>, bool>> _availableDataTypes = new(StringComparer.InvariantCultureIgnoreCase);
-
 	/// <inheritdoc />
 	public override IAsyncEnumerable<DataType> GetAvailableDataTypesAsync(SecurityId securityId, StorageFormats format)
 	{
@@ -879,25 +935,19 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 
 		if (securityId == default)
 		{
-			using (_availableDataTypes.EnterScope())
-			{
-				var tuple = _availableDataTypes.SafeAdd(Path, key => RefTuple.Create(new HashSet<DataType>(), false));
+			if (TryGetCachedDataTypes(format) is DataType[] cached)
+				return cached.ToAsyncEnumerable();
 
-				if (!tuple.Second)
-				{
-					if (_fileSystem.DirectoryExists(Path))
-					{
-						tuple.First.AddRange(_fileSystem
-							.EnumerateDirectories(Path)
-							.SelectMany(d => _fileSystem.EnumerateDirectories(d))
-							.SelectMany(GetDataTypes));
-					}
+			if (!_fileSystem.DirectoryExists(Path))
+				return AsyncEnumerable.Empty<DataType>();
 
-					tuple.Second = true;
-				}
-
-				return tuple.First.ToAsyncEnumerable();
-			}
+			// Walked into an array rather than handed over lazily: the caller enumerates the answer
+			// more than once, and each pass would walk the whole drive again.
+			return SetCachedDataTypes(format, [.. _fileSystem
+				.EnumerateDirectories(Path)
+				.SelectMany(d => _fileSystem.EnumerateDirectories(d))
+				.SelectMany(GetDataTypes)
+				.Distinct()]).ToAsyncEnumerable();
 		}
 
 		var s = GetSecurityPath(securityId);

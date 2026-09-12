@@ -2632,6 +2632,18 @@ public class CandleTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void CandleSeries_LegacyTimeFrameArg_SurvivesSaveLoad()
+	{
+		var security = Helper.CreateSecurity();
+		var series = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromMinutes(5));
+
+		var restored = RoundTrip(series);
+
+		restored.CandleType.AssertEqual(typeof(TimeFrameCandle));
+		restored.Arg.AssertEqual(TimeSpan.FromMinutes(5));
+	}
+
+	[TestMethod]
 	public void CandleSeries_TickArg_SurvivesSaveLoad()
 	{
 		// A series the class itself accepted must be persistable. Tick candles are counted in trades,

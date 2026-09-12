@@ -632,6 +632,48 @@ public class CandleBuilderTests : BaseTestClass
 		IsLessOrEqual(produced, brickLimit, "the bricks one tick may produce must be capped");
 	}
 
+	[TestMethod]
+	public void RenkoCandleBuilder_CappedGapPreservesVolumeAndContinuesAtTheObservedPrice()
+	{
+		var provider = new MockExchangeInfoProvider();
+		var builder = new RenkoCandleBuilder(provider);
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(1m)),
+			}
+		};
+
+		var time = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		builder.Process(subscription, new MockTransform { Price = 100m, Volume = 2m, Time = time }).ToArray();
+
+		var gap = builder.Process(subscription, new MockTransform
+		{
+			Price = 20_100m,
+			Volume = 3m,
+			Time = time.AddSeconds(1),
+		}).Select(c => c.TypedClone()).ToArray();
+
+		IsLessOrEqual(gap.Length, 10_000, "one source value has a bounded output cost");
+		gap.Sum(c => c.TotalVolume).AssertEqual(5m, "the old brick and the gapped tick keep all their volume");
+
+		var current = (RenkoCandleMessage)subscription.CurrentCandle;
+		current.OpenPrice.AssertEqual(20_100m, "a truncated gap is acknowledged instead of being regenerated on every following tick");
+		var carriedVolume = current.TotalVolume;
+
+		var next = builder.Process(subscription, new MockTransform
+		{
+			Price = 20_100.5m,
+			Volume = 1m,
+			Time = time.AddSeconds(2),
+		}).ToArray();
+
+		next.Length.AssertEqual(1, "a sub-box move after the gap updates the current brick once");
+		((RenkoCandleMessage)subscription.CurrentCandle).TotalVolume.AssertEqual(carriedVolume + 1m);
+	}
+
 	/// <summary>
 	/// RenkoCandleBuilder: small price movements don't create new bricks.
 	/// </summary>

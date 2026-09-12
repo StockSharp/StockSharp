@@ -58,13 +58,14 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 				if (_fileSystem.FileExists(_fileName))
 				{
 					Debug.WriteLine($"Snapshot (Load): {_fileName}");
+					var streamOpened = false;
+					var hasInvalidSnapshot = false;
 
 					try
 					{
-						var allError = true;
-
 						using (var stream = _fileSystem.OpenRead(_fileName))
 						{
+							streamOpened = true;
 							_version = new Version(stream.ReadByte(), stream.ReadByte());
 
 							if (_version > _serializer.Version)
@@ -84,10 +85,10 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 								try
 								{
 									message = _serializer.Deserialize(_version, buffer);
-									allError = false;
 								}
 								catch (Exception ex)
 								{
+									hasInvalidSnapshot = true;
 									ex.LogError();
 									continue;
 								}
@@ -101,16 +102,22 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 							//_currOffset = stream.Length;
 						}
 
-						if (allError)
+						if (hasInvalidSnapshot && _snapshots.Count == 0)
 						{
-							_fileSystem.DeleteFile(_fileName);
+							MoveCorruptFileToBackup();
+							_version = _serializer.Version;
 						}
 					}
 					catch (Exception ex)
 					{
 						Debug.WriteLine($"Snapshot (ERROR): {ex.Message}");
 						ex.LogError();
-						_fileSystem.DeleteFile(_fileName);
+
+						if (streamOpened && _snapshots.Count == 0)
+							MoveCorruptFileToBackup();
+
+						if (_snapshots.Count == 0)
+							_version = _serializer.Version;
 					}
 				}
 				else
@@ -118,6 +125,18 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 					_version = _serializer.Version;
 
 					//_currOffset = _versionLen;
+				}
+			}
+
+			private void MoveCorruptFileToBackup()
+			{
+				try
+				{
+					_fileName.MoveToBackup(_fileSystem);
+				}
+				catch (Exception ex)
+				{
+					ex.LogError();
 				}
 			}
 

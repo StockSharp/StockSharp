@@ -30,8 +30,46 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 
 		IMarketDataDrive IMarketDataStorageDrive.Drive => _parent;
 
-		private IEnumerable<DateTime> _dates;
+		private static readonly TimeSpan _datesCachePeriod = TimeSpan.FromSeconds(3);
+
+		private readonly Lock _datesSync = new();
+		private DateTime[] _dates;
 		private DateTime _prevDatesSync;
+
+		// Each change replaces the array rather than editing it, so a reader half way through the days
+		// finishes the list it started on.
+		private DateTime[] TryGetCachedDates()
+		{
+			using (_datesSync.EnterScope())
+				return _dates is not null && (DateTime.UtcNow - _prevDatesSync) <= _datesCachePeriod ? _dates : null;
+		}
+
+		private DateTime[] SetDates(DateTime[] dates)
+		{
+			using (_datesSync.EnterScope())
+			{
+				_dates = dates;
+				_prevDatesSync = DateTime.UtcNow;
+
+				return dates;
+			}
+		}
+
+		private void ChangeDate(DateTime date, bool remove)
+		{
+			date = date.UtcKind();
+
+			using (_datesSync.EnterScope())
+			{
+				if (_dates is null)
+					return;
+
+				if (remove)
+					_dates = [.. _dates.Where(d => d != date)];
+				else if (!_dates.Contains(date))
+					_dates = [.. _dates.Append(date).OrderBy(d => d)];
+			}
+		}
 
 		IAsyncEnumerable<DateTime> IMarketDataStorageDrive.GetDatesAsync()
 		{
@@ -39,14 +77,10 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 
 			async IAsyncEnumerable<DateTime> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 			{
-				if (_prevDatesSync == default || (DateTime.UtcNow - _prevDatesSync).TotalSeconds > 3)
-				{
-					_dates = await _parent.Client.GetDatesAsync(_securityId, _dataType, _format, cancellationToken);
+				var dates = TryGetCachedDates()
+					?? SetDates([.. await _parent.Client.GetDatesAsync(_securityId, _dataType, _format, cancellationToken)]);
 
-					_prevDatesSync = DateTime.UtcNow;
-				}
-
-				foreach (var date in _dates)
+				foreach (var date in dates)
 				{
 					cancellationToken.ThrowIfCancellationRequested();
 					yield return date;
@@ -56,17 +90,30 @@ public class RemoteMarketDataDrive : BaseMarketDataDrive
 
 		ValueTask IMarketDataStorageDrive.ClearDatesCacheAsync(CancellationToken cancellationToken)
 		{
-			_dates = null;
-			_prevDatesSync = default;
+			using (_datesSync.EnterScope())
+			{
+				_dates = null;
+				_prevDatesSync = default;
+			}
 
 			return default;
 		}
 
-		ValueTask IMarketDataStorageDrive.DeleteAsync(DateTime date, CancellationToken cancellationToken)
-			=> _parent.Client.DeleteAsync(_securityId, _dataType, _format, date, cancellationToken);
+		async ValueTask IMarketDataStorageDrive.DeleteAsync(DateTime date, CancellationToken cancellationToken)
+		{
+			await _parent.Client.DeleteAsync(_securityId, _dataType, _format, date, cancellationToken);
 
-		ValueTask IMarketDataStorageDrive.SaveStreamAsync(DateTime date, Stream stream, CancellationToken cancellationToken)
-			=> _parent.Client.SaveStreamAsync(_securityId, _dataType, _format, date, stream, cancellationToken);
+			// A caller reads these days to decide what still has to be written, so a day this drive
+			// removed is out of them at once rather than after the cache expires.
+			ChangeDate(date, true);
+		}
+
+		async ValueTask IMarketDataStorageDrive.SaveStreamAsync(DateTime date, Stream stream, CancellationToken cancellationToken)
+		{
+			await _parent.Client.SaveStreamAsync(_securityId, _dataType, _format, date, stream, cancellationToken);
+
+			ChangeDate(date, false);
+		}
 
 		ValueTask<Stream> IMarketDataStorageDrive.LoadStreamAsync(DateTime date, bool readOnly, CancellationToken cancellationToken)
 			=> _parent.Client.LoadStreamAsync(_securityId, _dataType, _format, date, cancellationToken);
