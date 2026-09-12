@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Strategies;
+﻿namespace StockSharp.Algo.Strategies;
 
 /// <summary>
 /// Extension class for <see cref="Strategy"/>.
@@ -537,5 +537,27 @@ public static partial class StrategyHelper
 			if (finalResult == canceled)
 				strategy.Stop();
 		}
+	}
+
+	/// <summary>
+	/// The volume that leaves the strategy holding <see cref="Strategy.Volume"/> on the other side of zero.
+	/// </summary>
+	/// <param name="strategy">The strategy that is reversing.</param>
+	/// <returns>Volume to trade, never more than twice <see cref="Strategy.Volume"/>.</returns>
+	/// <remarks>
+	/// The obvious form is Volume + |Position|, and it has no ceiling. That matters because a position is not
+	/// moved by the strategy's own fills alone - in emulation, stored candle processing, order matching and
+	/// ProcessTime each report one - so <see cref="Strategy.Position"/> can read larger than what the strategy
+	/// put on. Uncapped, the next reversal then trades about twice what the last one did, and a month of
+	/// crossovers ends in a position no money could hold.
+	/// </remarks>
+	public static decimal ReversalVolume(this Strategy strategy)
+	{
+		if (strategy is null)
+			throw new ArgumentNullException(nameof(strategy));
+
+		var position = strategy.Position;
+
+		return position == 0 ? strategy.Volume : position.Abs().Min(strategy.Volume) * 2;
 	}
 }
