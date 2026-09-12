@@ -571,26 +571,23 @@ public class IndicatorEdgeTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ParabolicSarNeedsThreeCandlesBeforeItsFirstValue()
+	public void ParabolicSarUsesTheFirstCandleAsLookback()
 	{
 		var sar = new ParabolicSar();
 
-		// The seed window is three bars wide (Wilder's definition, and the indicator's own
-		// "candles.Count < 3" guard), so two candles cannot yet produce a value.
+		// The first bar establishes the initial extreme; the second bar is the first one for which
+		// a stop can be published.
 		IsTrue(Process(sar, 0, 10m, 8m, true).IsEmpty, "One candle produced a SAR value.");
-		IsTrue(Process(sar, 1, 12m, 9m, true).IsEmpty, "Two candles produced a SAR value: the first candle fills two slots of the window.");
-		IsFalse(Process(sar, 2, 14m, 11m, true).IsEmpty, "The third candle completed the window but no SAR value was published.");
+		IsFalse(Process(sar, 1, 12m, 9m, true).IsEmpty, "The second candle did not produce the first SAR value.");
 	}
 
 	[TestMethod]
-	public void ParabolicSarFirstValueReflectsTheThirdCandle()
+	public void ParabolicSarFirstValueReflectsTheSecondCandle()
 	{
-		// Two streams that differ only in the third candle: the seed reads [c1, c2, c3], so the first
-		// published value has to differ as well. Equal values mean c3 was outside the window.
-		var near = FirstSarValue([(10m, 8m), (12m, 9m), (14m, 11m)]);
-		var far = FirstSarValue([(10m, 8m), (12m, 9m), (20m, 11m)]);
+		var near = FirstSarValue([(10m, 8m), (12m, 9m)]);
+		var far = FirstSarValue([(10m, 8m), (20m, 9m)]);
 
-		AreNotEqual(near, far, $"Both streams seeded at {near}, so the first SAR value ignored the third candle.");
+		AreNotEqual(near, far, $"Both streams seeded at {near}, so the first SAR value ignored the second candle.");
 	}
 
 	[TestMethod]

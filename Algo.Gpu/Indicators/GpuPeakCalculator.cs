@@ -42,7 +42,7 @@ public struct GpuPeakResult : IGpuIndicatorResult
 	public float Value;
 
 	/// <summary>
-	/// Shift (number of bars since the previous extremum).
+	/// Number of bars back to the reported extremum.
 	/// </summary>
 	public int Shift;
 
@@ -252,6 +252,7 @@ public class GpuPeakCalculator : GpuIndicatorCalculatorBase<Peak, GpuPeakParams,
 
 			var lastExt = hasLastExtremum ? lastExtremum : price;
 			var upTrend = hasTrend ? isUpTrend : price >= prevPrice;
+			var currentShift = hasLastExtremum ? shift + 1 : 0;
 			var threshold = lastExt * deviation;
 			var changeTrend = false;
 
@@ -260,6 +261,7 @@ public class GpuPeakCalculator : GpuIndicatorCalculatorBase<Peak, GpuPeakParams,
 				if (lastExt < price)
 				{
 					lastExt = price;
+					currentShift = 0;
 				}
 				else if (price <= (lastExt - threshold))
 				{
@@ -271,6 +273,7 @@ public class GpuPeakCalculator : GpuIndicatorCalculatorBase<Peak, GpuPeakParams,
 				if (lastExt > price)
 				{
 					lastExt = price;
+					currentShift = 0;
 				}
 				else if (price >= (lastExt + threshold))
 				{
@@ -284,7 +287,7 @@ public class GpuPeakCalculator : GpuIndicatorCalculatorBase<Peak, GpuPeakParams,
 				{
 					hasValue = 1;
 					value = lastExt;
-					shiftValue = shift;
+					shiftValue = currentShift;
 					isUpValue = 1;
 				}
 
@@ -292,7 +295,7 @@ public class GpuPeakCalculator : GpuIndicatorCalculatorBase<Peak, GpuPeakParams,
 				hasLastExtremum = true;
 				isUpTrend = !upTrend;
 				hasTrend = true;
-				shift = 1;
+				shift = 0;
 			}
 			else
 			{
@@ -300,8 +303,7 @@ public class GpuPeakCalculator : GpuIndicatorCalculatorBase<Peak, GpuPeakParams,
 				hasLastExtremum = true;
 				isUpTrend = upTrend;
 				hasTrend = true;
-				if (shift < int.MaxValue)
-					shift++;
+				shift = currentShift;
 			}
 
 			prevPrice = price;

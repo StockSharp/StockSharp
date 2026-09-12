@@ -183,14 +183,11 @@ public class GpuParabolicSarCalculator : GpuIndicatorCalculatorBase<ParabolicSar
 
 			if (count == 2)
 			{
-				// CPU adds first candle twice, so at bar 1 the CPU list is [c0, c0, c1].
-				// Emulate by using the previous candle for both prev1 and prev2.
-				var prev1 = flatCandles[globalIdx - 1];
-				var prev2 = prev1;
+				var previous = flatCandles[globalIdx - 1];
 
-				longPosition = candle.High > prev1.High;
-				var maxHigh = MathF.Max(candle.High, MathF.Max(prev1.High, prev2.High));
-				var minLow = MathF.Min(candle.Low, MathF.Min(prev1.Low, prev2.Low));
+				longPosition = candle.High > previous.High;
+				var maxHigh = MathF.Max(candle.High, previous.High);
+				var minLow = MathF.Min(candle.Low, previous.Low);
 				xp = longPosition ? maxHigh : minLow;
 				af = acceleration;
 				value = xp + (longPosition ? -1f : 1f) * (maxHigh - minLow) * af;

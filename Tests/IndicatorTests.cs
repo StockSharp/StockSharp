@@ -1683,6 +1683,181 @@ public class IndicatorTests : BaseTestClass
 		}
 	}
 
+	// Both input sums are exact in float32, but dividing them by different window lengths can round
+	// two distinct averages to the same value. A crossover is categorical, so retain the sign while
+	// calculating the averages and only convert the resulting -1/0/+1 signal to float.
+	[TestMethod]
+	public void GpuMovingAverageCrossoverKeepsNarrowAverageDifference()
+	{
+		var start = new DateTime(2020, 1, 1).UtcKind();
+		var closes = Enumerable.Repeat(7_000m, 65).ToArray();
+
+		for (var i = 0; i < 4; i++)
+			closes[i]++;
+
+		for (var i = 29; i < 34; i++)
+			closes[i]++;
+
+		var cpu = new MovingAverageCrossover
+		{
+			ShortPeriod = 65,
+			LongPeriod = 36,
+		};
+		var cpuValues = closes
+			.Select((close, i) => cpu.Process(new DecimalIndicatorValue(cpu, close, start.AddMinutes(i)) { IsFinal = true }))
+			.ToArray();
+
+		var bars = closes
+			.Select((close, i) => new GpuCandle(start.AddMinutes(i), close, close, close, close, 1m))
+			.ToArray();
+
+		GpuIndicatorResult[] gpuValues;
+		var (gpuContext, gpuAccelerator) = GetGpu();
+
+		using (_gpuLock.EnterScope())
+		{
+			gpuValues = new GpuMovingAverageCrossoverCalculator(gpuContext, gpuAccelerator)
+				.Calculate([bars], [new GpuMovingAverageCrossoverParams(65, 36, (byte)Level1Fields.ClosePrice)])[0][0];
+		}
+
+		cpuValues[^1].IsFormed.AssertTrue();
+		cpuValues[^1].ToDecimal().AssertEqual(-1m);
+		gpuValues[^1].IsFormed.AssertEqual((byte)1);
+		((decimal)gpuValues[^1].Value).AssertEqual(-1m);
+	}
+
+	// Whole-number inputs are represented exactly by float32, but the two EMA states that make up
+	// MACD can still accumulate enough rounding error for a small positive slope to disappear. The
+	// impulse is categorical, so 0 and +1 cannot be covered by the numeric GPU tolerance.
+	[TestMethod]
+	public void GpuElderImpulseSystemKeepsSmallPositiveMacdSlope()
+	{
+		var start = new DateTime(2020, 1, 1).UtcKind();
+		decimal[] closes = [3_999_996m, 3_999_996m, 3_999_997m, 3_999_998m];
+
+		var bars = closes
+			.Select((close, i) => new GpuCandle(start.AddMinutes(i), close, close, close, close, 1m))
+			.ToArray();
+
+		var cpu = new ElderImpulseSystem();
+		cpu.Ema.Length = 2;
+		cpu.Macd.LongMa.Length = 3;
+		cpu.Macd.ShortMa.Length = 2;
+
+		var cpuValues = closes
+			.Select((close, i) => cpu.Process(new DecimalIndicatorValue(cpu, close, start.AddMinutes(i)) { IsFinal = true }))
+			.ToArray();
+
+		GpuIndicatorResult[] gpuValues;
+		var (gpuContext, gpuAccelerator) = GetGpu();
+
+		using (_gpuLock.EnterScope())
+		{
+			var parameters = new[]
+			{
+				new GpuElderImpulseSystemParams(2, 3, 2, (byte)Level1Fields.ClosePrice),
+			};
+
+			gpuValues = new GpuElderImpulseSystemCalculator(gpuContext, gpuAccelerator)
+				.Calculate([bars], parameters)[0][0];
+		}
+
+		gpuValues.Length.AssertEqual(cpuValues.Length);
+
+		for (var i = 0; i < cpuValues.Length; i++)
+		{
+			gpuValues[i].IsFormed.AssertEqual(cpuValues[i].IsFormed ? (byte)1 : (byte)0, $"bar {i}");
+
+			if (cpuValues[i].IsFormed)
+				((decimal)gpuValues[i].Value).AssertEqual(cpuValues[i].ToDecimal(), $"bar {i}");
+		}
+
+		cpuValues[^1].ToDecimal().AssertEqual(1m, "the final EMA and MACD slopes are both positive");
+	}
+
+	// The input integers are represented exactly by float32. Rounding the six recursive Laguerre
+	// states to float32 after every bar still destroys small price moves around a large price level.
+	[TestMethod]
+	public void GpuLaguerreRsiPreservesSmallMovesAtLargePriceLevel()
+	{
+		var start = new DateTime(2020, 1, 1).UtcKind();
+		decimal[] closes =
+		[
+			1_000_000m, 1_000_002m, 1_000_001m, 1_000_003m, 1_000_004m, 1_000_004m,
+			1_000_003m, 1_000_001m, 1_000_001m, 1_000_002m, 1_000_002m,
+		];
+
+		var cpu = new LaguerreRSI { Gamma = 0.0159805023325431167766m };
+		var cpuValues = closes
+			.Select((close, i) => cpu.Process(new DecimalIndicatorValue(cpu, close, start.AddMinutes(i)) { IsFinal = true }))
+			.ToArray();
+
+		var bars = closes
+			.Select((close, i) => new GpuCandle(start.AddMinutes(i), close, close, close, close, 1m))
+			.ToArray();
+
+		GpuIndicatorResult[] gpuValues;
+		var (gpuContext, gpuAccelerator) = GetGpu();
+
+		using (_gpuLock.EnterScope())
+		{
+			var parameters = new[]
+			{
+				new GpuLaguerreRsiParams((float)cpu.Gamma, (byte)Level1Fields.ClosePrice),
+			};
+
+			gpuValues = new GpuLaguerreRsiCalculator(gpuContext, gpuAccelerator)
+				.Calculate([bars], parameters)[0][0];
+		}
+
+		gpuValues.Length.AssertEqual(cpuValues.Length);
+
+		var cpuFinal = cpuValues[^1].ToDecimal();
+		var gpuFinal = (decimal)gpuValues[^1].Value;
+
+		(gpuFinal - cpuFinal).Abs().AssertLess(0.001m, $"GPU={gpuFinal} CPU={cpuFinal}");
+	}
+
+	[TestMethod]
+	public void ShiftCpuAndGpuFormOnTheDeclaredValueCount()
+	{
+		var start = new DateTime(2020, 1, 1).UtcKind();
+		decimal[] closes = [10m, 20m, 30m, 40m];
+		var cpu = new Shift { Length = 3 };
+
+		cpu.NumValuesToInitialize.AssertEqual(3);
+
+		var cpuValues = closes
+			.Select((close, i) => cpu.Process(new DecimalIndicatorValue(cpu, close, start.AddMinutes(i)) { IsFinal = true }))
+			.ToArray();
+
+		cpuValues[0].IsEmpty.AssertTrue("CPU bar 0");
+		cpuValues[1].IsEmpty.AssertTrue("CPU bar 1");
+		cpuValues[2].IsFormed.AssertTrue("CPU bar 2");
+		cpuValues[2].ToDecimal().AssertEqual(30m, "CPU bar 2");
+		cpuValues[3].ToDecimal().AssertEqual(40m, "CPU bar 3");
+
+		var bars = closes
+			.Select((close, i) => new GpuCandle(start.AddMinutes(i), close, close, close, close, 1m))
+			.ToArray();
+
+		GpuIndicatorResult[] gpuValues;
+		var (gpuContext, gpuAccelerator) = GetGpu();
+
+		using (_gpuLock.EnterScope())
+		{
+			gpuValues = new GpuShiftCalculator(gpuContext, gpuAccelerator)
+				.Calculate([bars], [new GpuShiftParams(3, (byte)Level1Fields.ClosePrice)])[0][0];
+		}
+
+		gpuValues[0].IsFormed.AssertEqual((byte)0, "GPU bar 0");
+		gpuValues[1].IsFormed.AssertEqual((byte)0, "GPU bar 1");
+		gpuValues[2].IsFormed.AssertEqual((byte)1, "GPU bar 2");
+		((decimal)gpuValues[2].Value).AssertEqual(30m, "GPU bar 2");
+		gpuValues[3].IsFormed.AssertEqual((byte)1, "GPU bar 3");
+		((decimal)gpuValues[3].Value).AssertEqual(40m, "GPU bar 3");
+	}
+
 	[TestMethod]
 	public void GpuProviderInit()
 	{

@@ -154,36 +154,42 @@ public class GpuCommodityChannelIndexCalculator : GpuIndicatorCalculatorBase<Com
 			if (i < L - 1)
 				continue;
 
-			var sumTp = 0f;
+			// Work relative to one price in the window. Summing prices around several thousand in
+			// float32 loses the small difference CCI ultimately divides by the mean deviation.
+			var origin = GetTypicalPrice(flatCandles[globalIdx - L + 1]);
+			var sumOffset = 0d;
 			for (var j = 0; j < L; j++)
 			{
 				var c = flatCandles[globalIdx - j];
-				sumTp += (c.High + c.Low + c.Close) / 3f;
+				sumOffset += GetTypicalPrice(c) - origin;
 			}
 
-			var sma = sumTp / L;
+			var meanOffset = sumOffset / L;
 
-			var devSum = 0f;
+			var devSum = 0d;
 			for (var j = 0; j < L; j++)
 			{
 				var c = flatCandles[globalIdx - j];
-				var tp = (c.High + c.Low + c.Close) / 3f;
-				devSum += MathF.Abs(tp - sma);
+				var offsetPrice = GetTypicalPrice(c) - origin;
+				devSum += Math.Abs(offsetPrice - meanOffset);
 			}
 
 			var md = devSum / L;
-			if (md == 0f)
+			if (md == 0d)
 				continue;
 
-			var currentTp = (candle.High + candle.Low + candle.Close) / 3f;
-			var cci = (currentTp - sma) / (0.015f * md);
+			var currentOffset = GetTypicalPrice(candle) - origin;
+			var cci = (currentOffset - meanOffset) / (0.015d * md);
 
 			flatResults[resIndex] = new GpuIndicatorResult
 			{
 				Time = candle.Time,
-				Value = cci,
+				Value = (float)cci,
 				IsFormed = 1
 			};
 		}
 	}
+
+	private static double GetTypicalPrice(GpuCandle candle)
+		=> ((double)candle.High + candle.Low + candle.Close) / 3d;
 }

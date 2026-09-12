@@ -169,22 +169,22 @@ public class GpuElderImpulseSystemCalculator : GpuIndicatorCalculatorBase<ElderI
 		if (macdShortLength <= 0)
 			macdShortLength = 1;
 
-		var emaMultiplier = 2f / (emaLength + 1f);
-		var macdLongMultiplier = 2f / (macdLongLength + 1f);
-		var macdShortMultiplier = 2f / (macdShortLength + 1f);
+		var emaMultiplier = 2d / (emaLength + 1d);
+		var macdLongMultiplier = 2d / (macdLongLength + 1d);
+		var macdShortMultiplier = 2d / (macdShortLength + 1d);
 
 		var priceType = (Level1Fields)prm.PriceType;
 
-		float ema = 0f;
-		float emaSum = 0f;
+		double ema = 0d;
+		double emaSum = 0d;
 		var emaFormed = false;
 
-		float macdShort = 0f;
-		float macdShortSum = 0f;
+		double macdShort = 0d;
+		double macdShortSum = 0d;
 		var macdShortFormed = false;
 
-		float macdLong = 0f;
-		float macdLongSum = 0f;
+		double macdLong = 0d;
+		double macdLongSum = 0d;
 		var macdLongFormed = false;
 
 		for (var i = 0; i < len; i++)
@@ -195,7 +195,7 @@ public class GpuElderImpulseSystemCalculator : GpuIndicatorCalculatorBase<ElderI
 			var prevEma = ema;
 			var prevMacd = macdShort - macdLong;
 
-			var price = ExtractPrice(candle, priceType);
+			var price = (double)ExtractPrice(candle, priceType);
 
 			if (!emaFormed)
 			{

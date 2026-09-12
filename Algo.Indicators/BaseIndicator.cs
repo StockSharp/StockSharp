@@ -68,6 +68,11 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 		get => _source;
 		set
 		{
+			// Reading the same price as before asks for nothing to change, so the accumulated values
+			// stay: a settings round-trip writes every property, the untouched ones included.
+			if (_source == value)
+				return;
+
 			_source = value;
 
 			Reset();
@@ -226,12 +231,10 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 		if (IsPreloaded)
 			throw new InvalidOperationException("Indicator is already preloaded.");
 
-		_preloaded = [];
-
-		var numToInitLeft = NumValuesToInitialize;
-
-		if (numToInitLeft <= 0)
-			numToInitLeft = 1;
+		// The whole batch is checked and indexed before any of it is kept, so a load that reports
+		// failure has taken no effect: the indicator can be loaded again or fed the ordinary way.
+		var preloaded = new Dictionary<DateTime, (IIndicatorValue input, IIndicatorValue output)>();
+		var pairs = new List<(IIndicatorValue input, IIndicatorValue output)>();
 
 		foreach (var (input, output) in values)
 		{
@@ -244,18 +247,31 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 			if (!output.IsFinal)
 				throw new ArgumentException($"Output value {output.Time} is not final.", nameof(values));
 
+			if (!preloaded.TryAdd(input.Time, (input, output)))
+				throw new ArgumentException($"Value {input.Time} is specified more than once.", nameof(values));
+
+			pairs.Add((input, output));
+		}
+
+		var numToInitLeft = NumValuesToInitialize;
+
+		if (numToInitLeft <= 0)
+			numToInitLeft = 1;
+
+		foreach (var (input, output) in pairs)
+		{
 			if (numToInitLeft > 0)
 				numToInitLeft--;
-			
+
 			if (numToInitLeft == 0)
 				output.IsFormed = true;
-
-			_preloaded.Add(input.Time, (input, output));
 
 			Container.AddValue(input, output);
 
 			OnPreload(input, output);
 		}
+
+		_preloaded = preloaded;
 
 		IsFormed = numToInitLeft == 0;
 	}

@@ -293,25 +293,26 @@ public class GpuWoodiesCciCalculator : GpuIndicatorCalculatorBase<WoodiesCCI, Gp
 		if (candleIdx < cciLength - 1)
 			return float.NaN;
 
-		var sum = 0f;
+		var origin = GetTypicalPrice(candles[globalIdx - cciLength + 1]);
+		var sumOffset = 0d;
 		for (var i = 0; i < cciLength; i++)
-			sum += GetTypicalPrice(candles[globalIdx - i]);
+			sumOffset += GetTypicalPrice(candles[globalIdx - i]) - origin;
 
-		var mean = sum / cciLength;
-		var deviation = 0f;
+		var meanOffset = sumOffset / cciLength;
+		var deviation = 0d;
 		for (var i = 0; i < cciLength; i++)
 		{
-			var tp = GetTypicalPrice(candles[globalIdx - i]);
-			deviation += MathF.Abs(tp - mean);
+			var offsetPrice = GetTypicalPrice(candles[globalIdx - i]) - origin;
+			deviation += Math.Abs(offsetPrice - meanOffset);
 		}
 
 		deviation /= cciLength;
-		if (deviation == 0f)
+		if (deviation == 0d)
 			return float.NaN;
 
 		isFormed = 1;
-		var currentTp = GetTypicalPrice(candles[globalIdx]);
-		return (currentTp - mean) / (0.015f * deviation);
+		var currentOffset = GetTypicalPrice(candles[globalIdx]) - origin;
+		return (float)((currentOffset - meanOffset) / (0.015d * deviation));
 	}
 
 	private static float ComputeSmaOfCci(
@@ -343,7 +344,7 @@ public class GpuWoodiesCciCalculator : GpuIndicatorCalculatorBase<WoodiesCCI, Gp
 		if (candleIdx < minIndex)
 			return float.NaN;
 
-		var sum = currentCci;
+		var sum = (double)currentCci;
 		for (var i = 1; i < smaLength; i++)
 		{
 			var idx = globalIdx - i;
@@ -355,9 +356,9 @@ public class GpuWoodiesCciCalculator : GpuIndicatorCalculatorBase<WoodiesCCI, Gp
 		}
 
 		isFormed = 1;
-		return sum / smaLength;
+		return (float)(sum / smaLength);
 	}
 
-	private static float GetTypicalPrice(GpuCandle candle)
-	=> (candle.High + candle.Low + candle.Close) / 3f;
+	private static double GetTypicalPrice(GpuCandle candle)
+		=> ((double)candle.High + candle.Low + candle.Close) / 3d;
 }

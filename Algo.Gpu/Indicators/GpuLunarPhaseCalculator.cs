@@ -20,8 +20,9 @@ public struct GpuLunarPhaseParams : IGpuIndicatorParams
 /// </summary>
 public class GpuLunarPhaseCalculator : GpuIndicatorCalculatorBase<LunarPhase, GpuLunarPhaseParams, GpuIndicatorResult>
 {
-	private const long EpochTicks = 630827792400000000L;
-	private const double SynodicMonthDays = 29.530588853;
+	// DateTime.GetLunarPhase uses Julian day 2451549.5 (2000-01-06) and a 29.53-day cycle.
+	private const long EpochTicks = 630827136000000000L;
+	private const double SynodicMonthDays = 29.53;
 	private const double TicksPerDay = 864000000000d;
 
 	private readonly Action<Index3D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>> _kernel;
@@ -151,13 +152,13 @@ public class GpuLunarPhaseCalculator : GpuIndicatorCalculatorBase<LunarPhase, Gp
 	/// <returns>Lunar phase index as float for GPU result storage.</returns>
 	private static float CalculatePhase(long ticks)
 	{
-		var daysSinceEpoch = (ticks - EpochTicks) / TicksPerDay;
-		var normalized = daysSinceEpoch % SynodicMonthDays;
-		if (normalized < 0)
-			normalized += SynodicMonthDays;
+		var cycles = (ticks - EpochTicks) / TicksPerDay / SynodicMonthDays;
+		var wholeCycles = (long)cycles;
 
-		var scaled = normalized / SynodicMonthDays * 8.0;
-		var index = (int)(scaled + 0.5) & 7;
-		return index;
+		// A cast truncates toward zero, whereas the CPU calculation uses Floor for negative dates.
+		if (cycles < wholeCycles)
+			wholeCycles--;
+
+		return (int)((cycles - wholeCycles) * 8.0);
 	}
 }

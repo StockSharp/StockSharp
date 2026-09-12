@@ -30,7 +30,7 @@ public struct GpuDemandIndexParams(int length) : IGpuIndicatorParams
 /// </summary>
 public class GpuDemandIndexCalculator : GpuIndicatorCalculatorBase<DemandIndex, GpuDemandIndexParams, GpuIndicatorResult>
 {
-	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuDemandIndexParams>, ArrayView<float>, int> _kernel;
+	private readonly Action<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuDemandIndexParams>, ArrayView<double>, int> _kernel;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="GpuDemandIndexCalculator"/> class.
@@ -41,7 +41,7 @@ public class GpuDemandIndexCalculator : GpuIndicatorCalculatorBase<DemandIndex, 
 		: base(context, accelerator)
 	{
 		_kernel = Accelerator.LoadAutoGroupedStreamKernel
-			<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuDemandIndexParams>, ArrayView<float>, int>(DemandIndexParamsSeriesKernel);
+			<Index2D, ArrayView<GpuCandle>, ArrayView<GpuIndicatorResult>, ArrayView<int>, ArrayView<int>, ArrayView<GpuDemandIndexParams>, ArrayView<double>, int>(DemandIndexParamsSeriesKernel);
 	}
 
 	/// <inheritdoc />
@@ -97,7 +97,7 @@ public class GpuDemandIndexCalculator : GpuIndicatorCalculatorBase<DemandIndex, 
 		using var offsetsBuffer = Accelerator.Allocate1D(seriesOffsets);
 		using var lengthsBuffer = Accelerator.Allocate1D(seriesLengths);
 		using var paramsBuffer = Accelerator.Allocate1D(parameters);
-		using var windowBuffer = Accelerator.Allocate1D<float>(parameters.Length * seriesCount * maxParamLength);
+		using var windowBuffer = Accelerator.Allocate1D<double>(parameters.Length * seriesCount * maxParamLength);
 		using var outputBuffer = Accelerator.Allocate1D<GpuIndicatorResult>(totalSize * parameters.Length);
 
 		var extent = new Index2D(parameters.Length, seriesCount);
@@ -138,7 +138,7 @@ public class GpuDemandIndexCalculator : GpuIndicatorCalculatorBase<DemandIndex, 
 		ArrayView<int> offsets,
 		ArrayView<int> lengths,
 		ArrayView<GpuDemandIndexParams> parameters,
-		ArrayView<float> windowStorage,
+		ArrayView<double> windowStorage,
 		int maxParamLength)
 	{
 		var paramIdx = index.X;
@@ -160,12 +160,12 @@ public class GpuDemandIndexCalculator : GpuIndicatorCalculatorBase<DemandIndex, 
 		var windowBase = (paramIdx * lengths.Length + seriesIdx) * maxParamLength;
 		var window = windowStorage.SubView(windowBase, maxParamLength);
 
-		float sum = 0f;
+		double sum = 0d;
 		int count = 0;
 		int head = 0;
-		float prevClose = 0f;
-		float prevVolume = 0f;
-		float prevResult = 0f;
+		double prevClose = 0d;
+		double prevVolume = 0d;
+		double prevResult = 0d;
 		byte prevIsFormed = 0;
 		var hasPrevResult = false;
 
@@ -189,7 +189,7 @@ public class GpuDemandIndexCalculator : GpuIndicatorCalculatorBase<DemandIndex, 
 				continue;
 			}
 
-			if (prevClose == 0f || prevVolume == 0f)
+			if (prevClose == 0d || prevVolume == 0d)
 			{
 				prevClose = candle.Close;
 				prevVolume = candle.Volume;
@@ -199,34 +199,32 @@ public class GpuDemandIndexCalculator : GpuIndicatorCalculatorBase<DemandIndex, 
 			var deltaP = candle.Close - prevClose;
 			var deltaV = candle.Volume - prevVolume;
 
-			if (deltaP == 0f || deltaV == 0f)
+			if (deltaP == 0d || deltaV == 0d)
 			{
-				var value = hasPrevResult ? prevResult : 0f;
+				var value = hasPrevResult ? prevResult : 0d;
 				var formed = hasPrevResult ? prevIsFormed : (byte)0;
 				flatResults[resIndex] = new()
 				{
 					Time = candle.Time,
-					Value = value,
+					Value = (float)value,
 					IsFormed = formed,
 				};
 
-				prevClose = candle.Close;
-				prevVolume = candle.Volume;
 				continue;
 			}
 
-			var absDeltaP = MathF.Abs(deltaP);
-			var absDeltaV = MathF.Abs(deltaV);
-			var logDeltaP = MathF.Log(absDeltaP);
-			var logDeltaV = MathF.Log(absDeltaV);
+			var absDeltaP = Math.Abs(deltaP);
+			var absDeltaV = Math.Abs(deltaV);
+			var logDeltaP = Math.Log(absDeltaP);
+			var logDeltaV = Math.Log(absDeltaV);
 			var a = logDeltaP * logDeltaV;
 			var b = logDeltaP - logDeltaV;
-			var demandIndex = 0f;
+			var demandIndex = 0d;
 
-			if (b != 0f)
+			if (b != 0d)
 				demandIndex = a / b;
 
-			var sign = deltaP > 0f ? 1f : (deltaP < 0f ? -1f : 0f);
+			var sign = deltaP > 0d ? 1d : (deltaP < 0d ? -1d : 0d);
 			demandIndex *= sign;
 
 			if (count < L)
@@ -245,13 +243,13 @@ public class GpuDemandIndexCalculator : GpuIndicatorCalculatorBase<DemandIndex, 
 					head = 0;
 			}
 
-			var avg = count > 0 ? sum / L : float.NaN;
+			var avg = count > 0 ? sum / L : double.NaN;
 			var formedNow = (byte)(count >= L ? 1 : 0);
 
 			flatResults[resIndex] = new()
 			{
 				Time = candle.Time,
-				Value = avg,
+				Value = (float)avg,
 				IsFormed = formedNow,
 			};
 

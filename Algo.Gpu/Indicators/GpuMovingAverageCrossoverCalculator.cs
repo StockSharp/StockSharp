@@ -175,18 +175,18 @@ public class GpuMovingAverageCrossoverCalculator : GpuIndicatorCalculatorBase<Mo
 		if (candleIdx < required - 1)
 			return;
 
-		var shortSum = 0f;
+		var shortSum = 0d;
 		for (var j = 0; j < shortLen; j++)
 			shortSum += ExtractPrice(flatCandles[globalIdx - j], priceType);
 
-		var longSum = 0f;
+		var longSum = 0d;
 		for (var j = 0; j < longLen; j++)
 			longSum += ExtractPrice(flatCandles[globalIdx - j], priceType);
 
 		var shortMa = shortSum / shortLen;
 		var longMa = longSum / longLen;
 		var diff = shortMa - longMa;
-		var signal = diff > 0f ? 1f : diff < 0f ? -1f : 0f;
+		var signal = diff > 0d ? 1f : diff < 0d ? -1f : 0f;
 
 		flatResults[resIndex] = new() { Time = candle.Time, Value = signal, IsFormed = 1 };
 	}
