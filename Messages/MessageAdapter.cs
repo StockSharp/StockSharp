@@ -185,10 +185,6 @@ public abstract partial class MessageAdapter : BaseLogReceiver, IMessageAdapter,
 
 	/// <inheritdoc />
 	[Browsable(false)]
-	public virtual IEnumerable<(string, Type)> SecurityExtendedFields { get; } = [];
-
-	/// <inheritdoc />
-	[Browsable(false)]
 	public virtual IEnumerable<int> SupportedOrderBookDepths => [];
 
 	/// <inheritdoc />

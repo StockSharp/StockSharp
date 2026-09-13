@@ -101,11 +101,6 @@ public interface IMessageAdapter : IMessageTransport, IPersistable, ILogReceiver
 	MessageAdapterCategories Categories { get; }
 
 	/// <summary>
-	/// Names of extended security fields in <see cref="SecurityMessage"/>.
-	/// </summary>
-	IEnumerable<(string name, Type type)> SecurityExtendedFields { get; }
-
-	/// <summary>
 	/// Available options for <see cref="MarketDataMessage.MaxDepth"/>.
 	/// </summary>
 	IEnumerable<int> SupportedOrderBookDepths { get; }

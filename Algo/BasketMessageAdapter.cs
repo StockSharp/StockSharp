@@ -218,11 +218,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	}
 
 	/// <summary>
-	/// Extended info storage.
-	/// </summary>
-	public IExtendedInfoStorage ExtendedInfoStorage { get; set; }
-
-	/// <summary>
 	/// Orders registration delay calculation manager.
 	/// </summary>
 	public ILatencyManager LatencyManager { get; set; }
@@ -302,8 +297,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	bool IMessageAdapter.IsSupportCandlesUpdates(MarketDataMessage subscription) => GetSortedAdapters().Any(a => a.IsSupportCandlesUpdates(subscription));
 
 	bool IMessageAdapter.IsSupportCandlesPriceLevels(MarketDataMessage subscription) => GetSortedAdapters().Any(a => a.IsSupportCandlesPriceLevels(subscription));
-
-	IEnumerable<(string, Type)> IMessageAdapter.SecurityExtendedFields => GetSortedAdapters().SelectMany(a => a.SecurityExtendedFields).Distinct();
 
 	IEnumerable<int> IMessageAdapter.SupportedOrderBookDepths => GetSortedAdapters().SelectMany(a => a.SupportedOrderBookDepths).Distinct().OrderBy();
 
@@ -498,7 +491,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			CommissionManager = CommissionManager,
 			NativeIdStorage = NativeIdStorage,
 			MappingProvider = MappingProvider,
-			ExtendedInfoStorage = ExtendedInfoStorage,
 			StorageProcessor = StorageProcessor,
 			Buffer = Buffer,
 			FillGapsBehaviour = FillGapsBehaviour,
@@ -1046,7 +1038,6 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	{
 		var clone = new BasketMessageAdapter(TransactionIdGenerator, StorageProcessor.CandleBuilderProvider, SecurityAdapterProvider, PortfolioAdapterProvider, Buffer)
 		{
-			ExtendedInfoStorage = ExtendedInfoStorage,
 			SupportCandlesCompression = SupportCandlesCompression,
 			Level1Extend = Level1Extend,
 			SuppressReconnectingErrors = SuppressReconnectingErrors,

@@ -230,9 +230,6 @@ public abstract partial class BaseFixDialect : BaseLogReceiver, IFixDialect
 	protected virtual bool IsSupportMarketDataResponse => false;
 
 	/// <inheritdoc />
-	public virtual IEnumerable<(string, Type)> SecurityExtendedFields { get; } = [];
-
-	/// <inheritdoc />
 	public virtual bool IsNativeIdentifiersPersistable => true;
 
 	/// <inheritdoc />

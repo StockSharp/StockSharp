@@ -123,11 +123,6 @@ public record AdapterWrapperConfiguration
 	public ISecurityMappingStorageProvider MappingProvider { get; init; }
 
 	/// <summary>
-	/// Extended info storage.
-	/// </summary>
-	public IExtendedInfoStorage ExtendedInfoStorage { get; init; }
-
-	/// <summary>
 	/// Storage processor.
 	/// </summary>
 	public IStorageProcessor StorageProcessor { get; init; }

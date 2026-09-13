@@ -52,9 +52,6 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 		public bool SupportExecutionsPnL { get; set; }
 		public override bool IsSupportExecutionsPnL => SupportExecutionsPnL;
 
-		public IEnumerable<(string, Type)> ExtendedFields { get; set; } = [];
-		public override IEnumerable<(string, Type)> SecurityExtendedFields => ExtendedFields;
-
 		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 			=> default;
 
@@ -580,63 +577,6 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 		var fillGapsWrapper = (FillGapsMessageAdapter)result;
 		IsTrue(fillGapsWrapper.InnerAdapter is MessageAdapterWrapper, "FillGaps should wrap another wrapper in this configuration");
 		IsTrue(fillGapsWrapper.OwnInnerAdapter, "FillGaps wrapper must own its inner wrapper so Dispose cascades through the pipeline");
-	}
-
-	[TestMethod]
-	public async Task Build_WithExtendedInfoStorage_IncludesExtendedInfoStorageAdapter()
-	{
-		var builder = CreateBuilder();
-		var inner = new TestPipelineAdapter { ExtendedFields = [("Field1", typeof(string))] };
-		var extStorage = new Mock<IExtendedInfoStorage>();
-		var config = CreateDefaultConfig() with
-		{
-			ExtendedInfoStorage = extStorage.Object,
-		};
-
-		var result = await builder.BuildAsync(inner, config, CancellationToken);
-
-		IsNotNull(result);
-		IsTrue(HasWrapper<ExtendedInfoStorageMessageAdapter>(result));
-	}
-
-	[TestMethod]
-	public void ExtendedInfoStorageAdapter_RefusesAdapterWithoutStorageName()
-	{
-		var inner = new Mock<IMessageAdapter>();
-		var extStorage = new Mock<IExtendedInfoStorage>();
-
-		// The storage is keyed by the adapter's StorageName, so an adapter that has none cannot be
-		// wrapped: it would either overwrite an unrelated storage or create a nameless one.
-		ThrowsExactly<ArgumentException>(() => { new ExtendedInfoStorageMessageAdapter(inner.Object, extStorage.Object); });
-	}
-
-	[TestMethod]
-	public void ExtendedInfoStorageAdapter_RefusesNullStorage()
-	{
-		var inner = new TestPipelineAdapter { ExtendedFields = [("Field1", typeof(string))] };
-
-		ThrowsExactly<ArgumentNullException>(() => { new ExtendedInfoStorageMessageAdapter(inner, null); });
-	}
-
-	[TestMethod]
-	public async Task ExtendedInfoStorageAdapter_ForwardsOutMessagesUnchanged()
-	{
-		var inner = new TestPipelineAdapter { ExtendedFields = [("Field1", typeof(string))] };
-		var extStorage = new Mock<IExtendedInfoStorage>();
-
-		using var adapter = new ExtendedInfoStorageMessageAdapter(inner, extStorage.Object);
-
-		var output = new List<Message>();
-		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
-
-		var secMsg = new SecurityMessage { SecurityId = Helper.CreateSecurityId() };
-
-		await inner.SendOutMessageAsync(secMsg, CancellationToken);
-
-		// Whatever the wrapper records on the side, it is transparent on the way out: the consumer of
-		// the pipeline gets the message the underlying adapter produced, not a copy and not a filtered one.
-		output.Count.AssertEqual(1);
-		AreSame(secMsg, output[0]);
 	}
 
 	#endregion

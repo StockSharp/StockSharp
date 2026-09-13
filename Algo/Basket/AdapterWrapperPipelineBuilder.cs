@@ -158,11 +158,6 @@ public class AdapterWrapperPipelineBuilder : IAdapterWrapperPipelineBuilder
 			});
 		}
 
-		if (config.ExtendedInfoStorage != null && !adapter.SecurityExtendedFields.IsEmpty())
-		{
-			adapter = ApplyOwnInner(new ExtendedInfoStorageMessageAdapter(adapter, config.ExtendedInfoStorage));
-		}
-
 		if (config.FillGapsBehaviour is not null)
 		{
 			adapter = ApplyOwnInner(new FillGapsMessageAdapter(adapter, config.FillGapsBehaviour));
