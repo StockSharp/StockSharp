@@ -308,45 +308,18 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 	/// <returns>A hash code.</returns>
 	public override int GetHashCode() => Type.GetHashCode() ^ Value.GetHashCode();
 
-	private bool? EqualsImpl(Unit other)
-	{
-		if (Type == other.Type)
-			return Value == other.Value;
-
-		if (Type == UnitTypes.Percent || other.Type == UnitTypes.Percent)
-			return false;
-
-#pragma warning disable CS0618
-		if (Type == UnitTypes.Limit || other.Type == UnitTypes.Limit)
-			return false;
-#pragma warning restore CS0618
-
-		var curr = this;
-
-		if (other.Type == UnitTypes.Absolute)
-		{
-			curr = Convert(other.Type);
-
-			if (curr is null)
-				return null;
-		}
-		else
-		{
-			other = other.Convert(Type);
-
-			if (other is null)
-				return null;
-		}
-
-		return curr.Value == other.Value;
-	}
+	// A percent, a point, a step and an absolute measure different things and nothing here turns one
+	// into another, so only two of the same kind can be told apart by their number. This is also what
+	// GetHashCode is built from, and what CompareTo orders by.
+	private bool EqualsImpl(Unit other)
+		=> Type == other.Type && Value == other.Value;
 
 	/// <summary>
 	/// Compare <see cref="Unit"/> on the equivalence.
 	/// </summary>
 	/// <param name="other">Another value with which to compare.</param>
 	/// <returns><see langword="true" />, if the specified object is equal to the current object, otherwise, <see langword="false" />.</returns>
-	protected override bool OnEquals(Unit other) => EqualsImpl(other) == true;
+	protected override bool OnEquals(Unit other) => EqualsImpl(other);
 
 	/// <summary>
 	/// Compare <see cref="Unit"/> on the equivalence.
@@ -369,12 +342,7 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 		if (u2 is null)
 			return true;
 
-		var res = u1.EqualsImpl(u2);
-
-		if (res == null)
-			return false;
-
-		return !res.Value;
+		return !u1.EqualsImpl(u2);
 	}
 
 	/// <summary>

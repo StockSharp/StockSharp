@@ -153,6 +153,38 @@ public class UnitTests : BaseTestClass
 		}
 	}
 
+	/// <summary>
+	/// Equality and ordering have to tell the same story. A pair the equality operator calls equal
+	/// cannot be ordered apart, and a pair CompareTo puts in the same place cannot be unequal: where
+	/// the two disagree, a collection keyed by one and sorted by the other holds the same value twice,
+	/// and neither answer is wrong on its own terms.
+	/// </summary>
+	[TestMethod]
+	public void EqualityAndCompareToAgreeOnEveryPair()
+	{
+#pragma warning disable CS0618
+		Unit[] values =
+		[
+			new(10m, UnitTypes.Absolute),
+			new(20m, UnitTypes.Absolute),
+			10.Percents(),
+			new(10m, UnitTypes.Point),
+			new(10m, UnitTypes.Step),
+			new(10m, UnitTypes.Limit),
+		];
+#pragma warning restore CS0618
+
+		foreach (var first in values)
+		foreach (var second in values)
+		{
+			var equal = first == second;
+			var compared = first.CompareTo(second);
+
+			equal.AssertEqual(compared == 0,
+				$"'{first}' vs '{second}': == says {equal}, CompareTo says {compared}");
+		}
+	}
+
 	[TestMethod]
 	public void CompareToProvidesATransitiveOrderForMixedUnits()
 	{
