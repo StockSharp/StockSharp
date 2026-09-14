@@ -1270,4 +1270,20 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 		using (var file = _fileSystem.OpenWrite(IndexFullPath))
 			stream.CopyTo(file);
 	}
+
+	/// <inheritdoc />
+	public override void Load(SettingsStorage storage)
+	{
+		base.Load(storage);
+
+		AvailableDataTypesCachePeriod = storage.GetValue(nameof(AvailableDataTypesCachePeriod), AvailableDataTypesCachePeriod);
+	}
+
+	/// <inheritdoc />
+	public override void Save(SettingsStorage storage)
+	{
+		base.Save(storage);
+
+		storage.SetValue(nameof(AvailableDataTypesCachePeriod), AvailableDataTypesCachePeriod);
+	}
 }
