@@ -317,7 +317,10 @@ partial class Connector
 				return;
 
 			if (value)
-				EnableAdapter(a => new BasketSecurityMessageAdapter(a, this, BasketSecurityProcessorProvider, ExchangeInfoProvider) { OwnInnerAdapter = true }, typeof(BufferMessageAdapter));
+				EnableAdapter(
+					a => new BasketSecurityMessageAdapter(a, this, BasketSecurityProcessorProvider, ExchangeInfoProvider) { OwnInnerAdapter = true },
+					typeof(BufferMessageAdapter),
+					typeof(SnapshotHolderMessageAdapter), typeof(AssociatedSecurityAdapter), typeof(FilteredMarketDepthAdapter));
 			else
 				DisableAdapter<BasketSecurityMessageAdapter>();
 
@@ -361,7 +364,10 @@ partial class Connector
 				return;
 
 			if (value)
-				EnableAdapter(a => new SnapshotHolderMessageAdapter(a, _entityCache) { OwnInnerAdapter = true }, typeof(BasketSecurityMessageAdapter));
+				EnableAdapter(
+					a => new SnapshotHolderMessageAdapter(a, _entityCache) { OwnInnerAdapter = true },
+					typeof(BasketSecurityMessageAdapter),
+					typeof(AssociatedSecurityAdapter), typeof(FilteredMarketDepthAdapter));
 			else
 				DisableAdapter<SnapshotHolderMessageAdapter>();
 
@@ -383,7 +389,10 @@ partial class Connector
 				return;
 
 			if (value)
-				EnableAdapter(a => new AssociatedSecurityAdapter(a) { OwnInnerAdapter = true }, typeof(SnapshotHolderMessageAdapter));
+				EnableAdapter(
+					a => new AssociatedSecurityAdapter(a) { OwnInnerAdapter = true },
+					typeof(SnapshotHolderMessageAdapter),
+					typeof(FilteredMarketDepthAdapter));
 			else
 				DisableAdapter<AssociatedSecurityAdapter>();
 
@@ -433,12 +442,12 @@ partial class Connector
 		return GetAdapter(typeof(T));
 	}
 
-	private void EnableAdapter(Func<IMessageAdapter, IMessageAdapterWrapper> create, Type type)
+	private void EnableAdapter(Func<IMessageAdapter, IMessageAdapterWrapper> create, Type innerType, params Type[] outerTypes)
 	{
 		if (_inAdapter == null)
 			return;
 
-		var tuple = type != null ? GetAdapter(type) : default;
+		var tuple = innerType != null ? GetAdapter(innerType) : default;
 		var adapter = tuple.adapter;
 
 		if (adapter != null)
@@ -465,7 +474,18 @@ partial class Connector
 			//}
 		}
 		else
+		{
+			foreach (var outerType in outerTypes)
+			{
+				if (GetAdapter(outerType).adapter is not IMessageAdapterWrapper outer)
+					continue;
+
+				outer.InnerAdapter = create(outer.InnerAdapter);
+				return;
+			}
+
 			AddAdapter(create);
+		}
 	}
 
 	private void AddAdapter(Func<IMessageAdapter, IMessageAdapterWrapper> create)

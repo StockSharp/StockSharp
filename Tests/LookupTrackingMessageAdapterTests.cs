@@ -183,6 +183,71 @@ public class LookupTrackingMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task Dispose_CancelsPendingLookupTimeout()
+	{
+		var (adapter, inner, output) = CreateSut();
+		inner.Timeout = TimeSpan.FromMilliseconds(200);
+
+		await adapter.SendInMessageAsync(CreateLookup(1), CancellationToken);
+		adapter.Dispose();
+
+		await Task.Delay(TimeSpan.FromMilliseconds(500), CancellationToken);
+
+		CountResults(output, 1).AssertEqual(0);
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task LookupRowIsNotTimedOutWhileItsHandlerIsRunning()
+	{
+		var (adapter, inner, output) = CreateSut();
+		using (adapter)
+		{
+			inner.Timeout = TimeSpan.FromMilliseconds(200);
+
+			var handlerStarted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+			var releaseHandler = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+			var lookupClosed = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
+			adapter.NewOutMessageAsync += async (message, _) =>
+			{
+				if (message is SecurityMessage)
+				{
+					handlerStarted.TrySetResult();
+					await releaseHandler.Task;
+				}
+				else if (IsResult(message, 1))
+					lookupClosed.TrySetResult();
+			};
+
+			await adapter.SendInMessageAsync(CreateLookup(1), CancellationToken);
+
+			var row = new SecurityMessage { SecurityId = Helper.CreateSecurityId() };
+			row.SetSubscriptionIds(subscriptionId: 1);
+
+			var rowTask = inner.SendOutMessageAsync(row, CancellationToken).AsTask();
+
+			try
+			{
+				await handlerStarted.Task.WaitAsync(TimeSpan.FromSeconds(1), CancellationToken);
+				await Task.Delay(TimeSpan.FromMilliseconds(500), CancellationToken);
+
+				CountResults(output, 1).AssertEqual(0, "a received row keeps its lookup alive while downstream processes it");
+			}
+			finally
+			{
+				releaseHandler.TrySetResult();
+				await rowTask;
+			}
+
+			var completed = await Task.WhenAny(lookupClosed.Task, Task.Delay(TimeSpan.FromSeconds(2), CancellationToken));
+			(completed == lookupClosed.Task).AssertTrue("the timeout is rearmed after the row finishes processing");
+			CountResults(output, 1).AssertEqual(1);
+		}
+	}
+
+	[TestMethod]
 	public async Task ReentrantReset_DoesNotRestoreTheOldTimeoutClock()
 	{
 		var (adapter, inner, output) = CreateSut();

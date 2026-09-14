@@ -367,7 +367,7 @@ public sealed class SubscriptionManager(ILogReceiver logReceiver, IdGenerator tr
 			{
 				sendOutMsgs =
 				[
-					(originId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId))))
+					(transId.CreateSubscriptionResponse(new InvalidOperationException(LocalizedStrings.SubscriptionNonExist.Put(originId))))
 				];
 			}
 		}

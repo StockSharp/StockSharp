@@ -206,15 +206,35 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 
 	private static async Task<long> SubscribeOnlineAndWait(Connector connector, MockMarketDataAdapter adapter, DataType dataType, SecurityId secId, CancellationToken cancellationToken)
 	{
-		var sub = new Subscription(dataType, new Security { Id = secId.ToStringId() });
+		var (_, id) = await SubscribeOnlineAndWaitSubscription(connector, adapter, dataType, secId, cancellationToken);
+		return id;
+	}
+
+	private static async Task<(Subscription subscription, long id)> SubscribeOnlineAndWaitSubscription(
+		Connector connector, MockMarketDataAdapter adapter, DataType dataType, SecurityId secId, CancellationToken cancellationToken)
+	{
+		var subscription = new Subscription(dataType, new Security { Id = secId.ToStringId() });
 
 		var online = AsyncHelper.CreateTaskCompletionSource<bool>();
-		connector.SubscriptionOnline += s => { if (ReferenceEquals(s, sub)) online.TrySetResult(true); };
+		connector.SubscriptionOnline += s => { if (ReferenceEquals(s, subscription)) online.TrySetResult(true); };
 
-		_ = connector.SubscribeAsync(sub, cancellationToken).AsTask();
+		_ = connector.SubscribeAsync(subscription, cancellationToken).AsTask();
 		await online.Task.WithCancellation(cancellationToken);
 
-		return adapter.LastSubscribedId;
+		return (subscription, adapter.LastSubscribedId);
+	}
+
+	private static async Task UnsubscribeAndWait(Connector connector, Subscription subscription, CancellationToken cancellationToken)
+	{
+		var stopped = AsyncHelper.CreateTaskCompletionSource<bool>();
+		connector.SubscriptionStopped += (s, _) =>
+		{
+			if (ReferenceEquals(s, subscription))
+				stopped.TrySetResult(true);
+		};
+
+		connector.UnSubscribe(subscription);
+		await stopped.Task.WithCancellation(cancellationToken);
 	}
 
 	#endregion
@@ -544,6 +564,101 @@ public class ConnectorMarketDataProtectionTests : BaseTestClass
 	#endregion
 
 	#region Protection ends with the stream that claimed the fields
+
+	private static async Task VerifyLevel1OwnershipIsHeldUntilLastSubscriptionEnds(DataType ownerType, CancellationToken cancellationToken)
+	{
+		var (connector, adapter) = CreateConnector();
+		var secId = Helper.CreateSecurityId();
+
+		await connector.ConnectAsync(cancellationToken);
+
+		using var level1Cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+		var level1SubId = await SubscribeOnlineAndWait(connector, adapter, DataType.Level1, secId, level1Cts.Token);
+		var security = await connector.GetSecurityAsync(secId, cancellationToken);
+
+		var (first, _) = await SubscribeOnlineAndWaitSubscription(connector, adapter, ownerType, secId, cancellationToken);
+		var (second, ownerId) = await SubscribeOnlineAndWaitSubscription(connector, adapter, ownerType, secId, cancellationToken);
+
+		var ownerApplied = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var firstLevel1Applied = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var secondLevel1Applied = AsyncHelper.CreateTaskCompletionSource<bool>();
+
+		connector.ValuesChanged += (_, changes, _, _) =>
+		{
+			var openInterest = changes.FirstOrDefault(p => p.Key == Level1Fields.OpenInterest).Value;
+
+			if (Equals(openInterest, 7m))
+				firstLevel1Applied.TrySetResult(true);
+			else if (Equals(openInterest, 8m))
+				secondLevel1Applied.TrySetResult(true);
+			else
+				ownerApplied.TrySetResult(true);
+		};
+
+		var ownerTime = new DateTime(2026, 3, 2, 10, 0, 0, DateTimeKind.Utc);
+
+		if (ownerType == DataType.MarketDepth)
+			await adapter.SendOrderBook(ownerId, secId, ownerTime, cancellationToken);
+		else
+			await adapter.SendTick(ownerId, secId, ownerTime, cancellationToken);
+
+		await ownerApplied.Task.WithCancellation(cancellationToken);
+		await UnsubscribeAndWait(connector, first, cancellationToken);
+
+		var protectedFields = ownerType == DataType.MarketDepth
+			? new Dictionary<Level1Fields, object>
+			{
+				{ Level1Fields.BestBidPrice, 51m },
+				{ Level1Fields.BestAskPrice, 53m },
+				{ Level1Fields.OpenInterest, 7m },
+			}
+			: new Dictionary<Level1Fields, object>
+			{
+				{ Level1Fields.LastTradePrice, 51m },
+				{ Level1Fields.OpenInterest, 7m },
+			};
+
+		await adapter.SendLevel1(level1SubId, secId, ownerTime.AddSeconds(1), protectedFields, cancellationToken);
+		await firstLevel1Applied.Task.WithCancellation(cancellationToken);
+
+		if (ownerType == DataType.MarketDepth)
+		{
+			connector.GetSecurityValue(security, Level1Fields.BestBidPrice).AssertEqual((object)99m,
+				"closing one of two books must not release the remaining book's best bid");
+			connector.GetSecurityValue(security, Level1Fields.BestAskPrice).AssertEqual((object)101m,
+				"closing one of two books must not release the remaining book's best ask");
+		}
+		else
+		{
+			connector.GetSecurityValue(security, Level1Fields.LastTradePrice).AssertEqual((object)42m,
+				"closing one of two tick streams must not release the remaining stream's last trade");
+		}
+
+		await UnsubscribeAndWait(connector, second, cancellationToken);
+		protectedFields[Level1Fields.OpenInterest] = 8m;
+		await adapter.SendLevel1(level1SubId, secId, ownerTime.AddSeconds(2), protectedFields, cancellationToken);
+		await secondLevel1Applied.Task.WithCancellation(cancellationToken);
+
+		if (ownerType == DataType.MarketDepth)
+		{
+			connector.GetSecurityValue(security, Level1Fields.BestBidPrice).AssertEqual((object)51m);
+			connector.GetSecurityValue(security, Level1Fields.BestAskPrice).AssertEqual((object)53m);
+		}
+		else
+			connector.GetSecurityValue(security, Level1Fields.LastTradePrice).AssertEqual((object)51m);
+
+		level1Cts.Cancel();
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public Task Level1BestQuotesStayProtectedUntilTheLastOrderBookEnds()
+		=> VerifyLevel1OwnershipIsHeldUntilLastSubscriptionEnds(DataType.MarketDepth, CancellationToken);
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public Task Level1LastTradeStaysProtectedUntilTheLastTickStreamEnds()
+		=> VerifyLevel1OwnershipIsHeldUntilLastSubscriptionEnds(DataType.Ticks, CancellationToken);
 
 	/// <summary>
 	/// A live order book is the better source of the best bid and ask, so while one is running the

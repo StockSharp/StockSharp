@@ -326,5 +326,34 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 			.AssertEqual(1, "and the caller is told the request is done instead of being left waiting for data that cannot come");
 	}
 
+	[TestMethod]
+	public async Task MarketData_FromInThePast_ReachesTheAdapter()
+	{
+		var adapter = new ClockedAdapter
+		{
+			Now = new DateTime(2020, 03, 04, 09, 30, 00, DateTimeKind.Utc),
+		};
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, _) => { output.Add(m); return default; };
+
+		var subscribe = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 2,
+			SecurityId = Helper.CreateSecurityId(),
+			DataType2 = DataType.Ticks,
+			From = adapter.Now.AddDays(-30),
+			To = adapter.Now.AddDays(-29),
+		};
+
+		await adapter.SendInMessageAsync(subscribe, CancellationToken);
+
+		adapter.Subscribed.Single().AssertSame(subscribe,
+			"a range that already happened on the adapter's clock must reach the data source");
+		output.OfType<SubscriptionFinishedMessage>().Count().AssertEqual(0,
+			"the base adapter must not finish a past range before the data source handles it");
+	}
+
 	#endregion
 }

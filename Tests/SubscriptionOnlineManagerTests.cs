@@ -717,6 +717,73 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		response.OriginalTransactionId.AssertEqual(100);
 	}
 
+	[TestMethod]
+	public async Task UnsubscribeAfterFinished_IsAnsweredLocally()
+	{
+		var manager = new SubscriptionOnlineManager(new TestReceiver(), _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 1 }, token);
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		toInner.Length.AssertEqual(0, "a finished upstream stream has nothing left to cancel");
+		var response = toOut.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNull();
+	}
+
+	[TestMethod]
+	public async Task UnsubscribeAfterError_ReturnsNotFoundBecauseTheSubscriptionWasRemoved()
+	{
+		var manager = new SubscriptionOnlineManager(new TestReceiver(), _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 1,
+			Error = new InvalidOperationException("refused"),
+		}, token);
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		toInner.Length.AssertEqual(0);
+		var response = toOut.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNotNull("the failed subscription was already removed and must not report a false unsubscribe success");
+	}
+
 	/// <summary>
 	/// The only holder of a stream gives it up before the venue has confirmed it. Answering the
 	/// caller here or passing the unsubscribe on are both defensible; doing neither leaves the

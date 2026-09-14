@@ -13,6 +13,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 	private readonly ILookupTrackingManagerState _state = state ?? throw new ArgumentNullException(nameof(state));
 	private readonly Lock _timeoutSync = new();
 	private readonly Dictionary<long, (CancellationTokenSource source, TimeSpan timeout)> _timeoutSources = [];
+	private readonly Dictionary<long, (int count, TimeSpan timeout)> _processingTimeouts = [];
 	private static readonly TimeSpan _defaultTimeOut = TimeSpan.FromSeconds(10);
 
 	private TimeSpan? _timeOut;
@@ -109,6 +110,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		long[] ignoreIds = null;
+		List<long> pausedTimeoutIds = null;
 		Message nextLookup = null;
 
 		if (message is IOriginalTransactionIdMessage originIdMsg &&
@@ -141,10 +143,13 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 			{
 				_state.IncreaseTimeOut(ignoreIds);
 
-				foreach (var id in ignoreIds)
+				foreach (var id in ignoreIds.Distinct())
 				{
-					if (_timeoutSources.TryGetValue(id, out var registration))
-						RestartTimeout(id, registration.timeout);
+					if (PauseTimeout(id))
+					{
+						pausedTimeoutIds ??= [];
+						pausedTimeoutIds.Add(id);
+					}
 				}
 			}
 		}
@@ -163,7 +168,13 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 				{
 					var diff = message.LocalTime - _state.PreviousTime;
 					_state.PreviousTime = message.LocalTime;
-					timedOut = [.. _state.ProcessTimeouts(diff, ignoreIds)];
+
+					var timeoutIgnoreIds = ignoreIds;
+
+					if (_processingTimeouts.Count > 0)
+						timeoutIgnoreIds = [.. (timeoutIgnoreIds ?? []).Concat(_processingTimeouts.Keys).Distinct()];
+
+					timedOut = [.. _state.ProcessTimeouts(diff, timeoutIgnoreIds)];
 
 					foreach (var (subscription, _) in timedOut)
 						CancelTimeout(subscription.TransactionId);
@@ -171,10 +182,21 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 			}
 		}
 
-		// Update all timeout state before invoking user handlers. A slow handler must not let a lookup
-		// expire after a row arrived, and a reentrant reset must not be overwritten by this message's
-		// old clock after the handler returns.
-		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+		try
+		{
+			await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+		}
+		finally
+		{
+			if (pausedTimeoutIds != null)
+			{
+				using (_timeoutSync.EnterScope())
+				{
+					foreach (var id in pausedTimeoutIds)
+						ResumeTimeout(id);
+				}
+			}
+		}
 
 		if (nextLookup != null)
 		{
@@ -224,6 +246,37 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 		_ = WaitForTimeoutAsync(transactionId, timeout, source);
 	}
 
+	private bool PauseTimeout(long transactionId)
+	{
+		if (_processingTimeouts.TryGetValue(transactionId, out var processing))
+		{
+			_processingTimeouts[transactionId] = (processing.count + 1, processing.timeout);
+			return true;
+		}
+
+		if (!_timeoutSources.TryGetValue(transactionId, out var registration))
+			return false;
+
+		CancelArmedTimeout(transactionId);
+		_processingTimeouts.Add(transactionId, (1, registration.timeout));
+		return true;
+	}
+
+	private void ResumeTimeout(long transactionId)
+	{
+		if (!_processingTimeouts.TryGetValue(transactionId, out var processing))
+			return;
+
+		if (processing.count > 1)
+		{
+			_processingTimeouts[transactionId] = (processing.count - 1, processing.timeout);
+			return;
+		}
+
+		_processingTimeouts.Remove(transactionId);
+		RestartTimeout(transactionId, processing.timeout);
+	}
+
 	private async Task WaitForTimeoutAsync(long transactionId, TimeSpan timeout, CancellationTokenSource source)
 	{
 		try
@@ -271,6 +324,12 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 
 	private void CancelTimeout(long transactionId)
 	{
+		_processingTimeouts.Remove(transactionId);
+		CancelArmedTimeout(transactionId);
+	}
+
+	private void CancelArmedTimeout(long transactionId)
+	{
 		if (!_timeoutSources.Remove(transactionId, out var registration))
 			return;
 
@@ -291,6 +350,7 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 		}
 
 		_timeoutSources.Clear();
+		_processingTimeouts.Clear();
 	}
 
 	/// <inheritdoc />

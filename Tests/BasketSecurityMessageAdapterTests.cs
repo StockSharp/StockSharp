@@ -38,6 +38,14 @@ public class BasketSecurityMessageAdapterTests : BaseTestClass
 		public override IMessageAdapter Clone() => new LegAdapter();
 	}
 
+	public sealed class EmptyBasketProcessor(Security security) : IBasketSecurityProcessor
+	{
+		public SecurityId SecurityId { get; } = security.ToSecurityId();
+		public string BasketExpression { get; } = security.BasketExpression;
+		public SecurityId[] BasketLegs => [];
+		public IEnumerable<Message> Process(Message message) => [];
+	}
+
 	private static ExpirationContinuousSecurity Basket()
 	{
 		var basket = new ExpirationContinuousSecurity
@@ -52,7 +60,20 @@ public class BasketSecurityMessageAdapterTests : BaseTestClass
 		return basket;
 	}
 
-	private static (BasketSecurityMessageAdapter adapter, LegAdapter inner, List<Message> output) CreateSut(Security basket)
+	private static ExpirationContinuousSecurity SingleLegBasket()
+	{
+		var basket = new ExpirationContinuousSecurity
+		{
+			Id = "RI@FORTS",
+			Board = ExchangeBoard.Forts,
+		};
+
+		basket.ExpirationJumps.Add(_riu, new DateTime(2024, 9, 15, 0, 0, 0, DateTimeKind.Utc));
+		return basket;
+	}
+
+	private static (BasketSecurityMessageAdapter adapter, LegAdapter inner, List<Message> output) CreateSut(
+		Security basket, IBasketSecurityProcessorProvider processorProvider = null)
 	{
 		var securities = new CollectionSecurityProvider([basket]);
 		var inner = new LegAdapter();
@@ -60,7 +81,7 @@ public class BasketSecurityMessageAdapterTests : BaseTestClass
 		var adapter = new BasketSecurityMessageAdapter(
 			inner,
 			securities,
-			new BasketSecurityProcessorProvider(),
+			processorProvider ?? new BasketSecurityProcessorProvider(),
 			new InMemoryExchangeInfoProvider());
 
 		var output = new List<Message>();
@@ -179,6 +200,15 @@ public class BasketSecurityMessageAdapterTests : BaseTestClass
 			Error = new InvalidOperationException("this contract is not served here"),
 		}, CancellationToken);
 
+		var cleanup = inner.InMessages
+			.OfType<MarketDataMessage>()
+			.Where(m => !m.IsSubscribe)
+			.ToArray();
+
+		cleanup.Length.AssertEqual(legs.Length, "every requested leg is cancelled when the basket cannot be completed");
+		cleanup.Select(m => m.OriginalTransactionId).OrderBy(id => id).ToArray()
+			.AssertEqual(legs.OrderBy(id => id).ToArray(), "cleanup must target the venue's child subscriptions");
+
 		IsTrue(output.OfType<SubscriptionResponseMessage>().Any(m => m.OriginalTransactionId == parentTx && m.Error is not null),
 			"a leg the venue refused leaves the basket incomplete, and the client was told nothing about it");
 
@@ -208,11 +238,28 @@ public class BasketSecurityMessageAdapterTests : BaseTestClass
 		foreach (var leg in legs)
 			await inner.AnswerAsync(new SubscriptionResponseMessage { OriginalTransactionId = leg }, CancellationToken);
 
-		foreach (var leg in legs)
-			await inner.AnswerAsync(new SubscriptionFinishedMessage { OriginalTransactionId = leg }, CancellationToken);
+		var firstNext = new DateTime(2024, 9, 2, 0, 0, 0, DateTimeKind.Utc);
+		var secondNext = firstNext.AddDays(1);
+
+		await inner.AnswerAsync(new SubscriptionFinishedMessage
+		{
+			OriginalTransactionId = legs[0],
+			NextFrom = firstNext,
+			Body = [1, 2],
+		}, CancellationToken);
+		await inner.AnswerAsync(new SubscriptionFinishedMessage
+		{
+			OriginalTransactionId = legs[1],
+			NextFrom = secondNext,
+			Body = [3, 4],
+		}, CancellationToken);
 
 		output.OfType<SubscriptionResponseMessage>().Count(m => m.OriginalTransactionId == parentTx).AssertEqual(1);
 		output.OfType<SubscriptionFinishedMessage>().Count(m => m.OriginalTransactionId == parentTx).AssertEqual(1);
+
+		var finished = output.OfType<SubscriptionFinishedMessage>().Single(m => m.OriginalTransactionId == parentTx);
+		finished.NextFrom.AssertEqual(firstNext, "the parent resumes at the earliest child cursor, independent of finish order");
+		finished.Body.Length.AssertEqual(0, "opaque per-leg archives cannot be represented as one multi-leg basket archive");
 		AssertNoIds(output, legs);
 
 		output.Clear();
@@ -220,6 +267,118 @@ public class BasketSecurityMessageAdapterTests : BaseTestClass
 		await inner.AnswerAsync(Tick(_riu, new DateTime(2024, 9, 1, 10, 0, 0, DateTimeKind.Utc), 100m, legs[0]), CancellationToken);
 
 		IsEmpty(output, "finished child ids are retired and cannot revive the basket or leak outside");
+	}
+
+	[TestMethod]
+	public async Task SingleLegParentFinish_DoesNotRelabelTheLegArchive()
+	{
+		const long parentTx = 4007;
+		byte[] body = [1, 3, 5, 7];
+
+		var basket = SingleLegBasket();
+		var (adapter, inner, output) = CreateSut(basket);
+
+		await adapter.SendInMessageAsync(SubscribeTo(basket, parentTx), CancellationToken);
+		var leg = inner.LegSubscriptions.Single();
+		await inner.AnswerAsync(new SubscriptionResponseMessage { OriginalTransactionId = leg }, CancellationToken);
+		await inner.AnswerAsync(new SubscriptionFinishedMessage
+		{
+			OriginalTransactionId = leg,
+			Body = body,
+		}, CancellationToken);
+
+		output.OfType<SubscriptionFinishedMessage>().Single(m => m.OriginalTransactionId == parentTx)
+			.Body.Length.AssertEqual(0, "an opaque leg archive cannot be labelled as data for the synthetic basket");
+	}
+
+	[TestMethod]
+	public async Task EmptyBasketSubscription_IsRejectedWithoutAnInnerRequest()
+	{
+		const long parentTx = 4008;
+
+		var basket = Basket();
+		var provider = new Mock<IBasketSecurityProcessorProvider>();
+		var processorType = typeof(EmptyBasketProcessor);
+		provider.Setup(p => p.TryGetProcessorType(It.IsAny<string>(), out processorType)).Returns(true);
+
+		var (adapter, inner, output) = CreateSut(basket, provider.Object);
+		await adapter.SendInMessageAsync(SubscribeTo(basket, parentTx), CancellationToken);
+
+		inner.LegSubscriptions.Length.AssertEqual(0, "the processor has no legs to forward");
+		inner.InMessages.OfType<MarketDataMessage>().Any()
+			.AssertFalse("an empty basket has no inner stream to cancel");
+
+		var response = output.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(parentTx);
+		response.Error.AssertNotNull("a subscription that can never produce data must not remain pending forever");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task RetiredInternalIds_AreBoundedAndRecentRepliesStayPrivate()
+	{
+		var basket = Basket();
+		var (adapter, inner, output) = CreateSut(basket);
+		long recentCleanupId = 0;
+
+		for (var i = 0; i < 300; i++)
+		{
+			await adapter.SendInMessageAsync(SubscribeTo(basket, 10_000 + i), CancellationToken);
+			var legs = inner.LegSubscriptions[^2..];
+
+			await inner.AnswerAsync(new SubscriptionResponseMessage
+			{
+				OriginalTransactionId = legs[0],
+				Error = new InvalidOperationException("refused"),
+			}, CancellationToken);
+
+			recentCleanupId = inner.InMessages.OfType<MarketDataMessage>().Last(m => !m.IsSubscribe).TransactionId;
+		}
+
+		var ids = typeof(BasketSecurityMessageAdapter)
+			.GetField("_internalIds", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
+			.GetValue(adapter);
+		var count = (int)ids.GetType().GetProperty("Count").GetValue(ids);
+
+		count.AssertEqual(1_024, "retired child transactions must not accumulate for the adapter's lifetime");
+
+		output.Clear();
+		await inner.AnswerAsync(new SubscriptionResponseMessage { OriginalTransactionId = recentCleanupId }, CancellationToken);
+		IsEmpty(output, "a recent cleanup reply is internal even after the tombstone set reaches capacity");
+	}
+
+	[TestMethod]
+	public async Task PublicSubscriptionCanReuseARetiredInternalId()
+	{
+		const long parentTx = 40_009;
+		var basket = Basket();
+		var (adapter, inner, output) = CreateSut(basket);
+
+		await adapter.SendInMessageAsync(SubscribeTo(basket, parentTx), CancellationToken);
+		var legs = inner.LegSubscriptions;
+
+		foreach (var leg in legs)
+		{
+			await inner.AnswerAsync(new SubscriptionResponseMessage { OriginalTransactionId = leg }, CancellationToken);
+			await inner.AnswerAsync(new SubscriptionFinishedMessage { OriginalTransactionId = leg }, CancellationToken);
+		}
+
+		var reusedId = legs[0];
+		var publicSecurity = new SecurityId { SecurityCode = "PUBLIC", BoardCode = BoardCodes.Test };
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = reusedId,
+			SecurityId = publicSecurity,
+			DataType2 = DataType.Ticks,
+		}, CancellationToken);
+
+		output.Clear();
+		await inner.AnswerAsync(Tick(publicSecurity, DateTime.UtcNow, 10m, reusedId), CancellationToken);
+
+		output.OfType<ExecutionMessage>().Single().GetSubscriptionIds().AssertEqual([reusedId],
+			"a public subscription must take ownership of an id that was previously internal");
 	}
 
 	[TestMethod]

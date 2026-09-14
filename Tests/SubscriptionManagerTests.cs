@@ -462,6 +462,73 @@ public class SubscriptionManagerTests : BaseTestClass
 		((SubscriptionResponseMessage)toOut[0]).Error.AssertNotNull();
 	}
 
+	[TestMethod]
+	public void UnsubscribeAfterFinished_IsAnsweredLocally()
+	{
+		var manager = new SubscriptionManager(
+			new TestReceiver(), new IncrementalIdGenerator(), () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+		var secId = Helper.CreateSecurityId();
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 1 });
+		manager.ProcessOutMessage(new SubscriptionFinishedMessage { OriginalTransactionId = 1 });
+
+		var (toInner, toOut) = manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+
+		toInner.Length.AssertEqual(0, "a finished upstream stream has nothing left to cancel");
+		var response = toOut.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNull();
+	}
+
+	[TestMethod]
+	public void UnsubscribeAfterError_ReturnsNotFoundBecauseTheSubscriptionWasRemoved()
+	{
+		var manager = new SubscriptionManager(
+			new TestReceiver(), new IncrementalIdGenerator(), () => new ProcessSuspendedMessage(), new SubscriptionManagerState());
+		var secId = Helper.CreateSecurityId();
+
+		manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+		manager.ProcessOutMessage(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 1,
+			Error = new InvalidOperationException("refused"),
+		});
+
+		var (toInner, toOut) = manager.ProcessInMessage(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		});
+
+		toInner.Length.AssertEqual(0);
+		var response = toOut.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNotNull("the failed subscription was already removed and must not report a false unsubscribe success");
+	}
+
 	/// <summary>
 	/// A caller may give up on a subscription while it is still waiting for the venue's answer, and
 	/// that request has to go somewhere - passed on, or answered here. Dropping it with a log line

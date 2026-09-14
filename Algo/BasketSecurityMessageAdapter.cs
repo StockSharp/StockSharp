@@ -12,6 +12,74 @@ namespace StockSharp.Algo;
 /// <param name="exchangeInfoProvider">Exchanges and trading boards provider.</param>
 public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurityProvider securityProvider, IBasketSecurityProcessorProvider processorProvider, IExchangeInfoProvider exchangeInfoProvider) : MessageAdapterWrapper(innerAdapter)
 {
+	private const int MaxInternalIds = 1_024;
+
+	private sealed class RecentIdSet(int capacity)
+	{
+		private readonly Dictionary<long, LinkedListNode<long>> _nodes = [];
+		private readonly LinkedList<long> _order = [];
+		private readonly Lock _sync = new();
+
+		public int Count
+		{
+			get
+			{
+				using (_sync.EnterScope())
+					return _nodes.Count;
+			}
+		}
+
+		public bool Contains(long id)
+		{
+			using (_sync.EnterScope())
+				return _nodes.ContainsKey(id);
+		}
+
+		public bool Remove(long id)
+		{
+			using (_sync.EnterScope())
+			{
+				if (!_nodes.Remove(id, out var node))
+					return false;
+
+				_order.Remove(node);
+				return true;
+			}
+		}
+
+		public void Add(long id)
+		{
+			using (_sync.EnterScope())
+			{
+				if (_nodes.TryGetValue(id, out var existing))
+				{
+					_order.Remove(existing);
+					_order.AddLast(existing);
+					return;
+				}
+
+				var node = _order.AddLast(id);
+				_nodes.Add(id, node);
+
+				if (_nodes.Count <= capacity)
+					return;
+
+				var oldest = _order.First;
+				_order.RemoveFirst();
+				_nodes.Remove(oldest.Value);
+			}
+		}
+
+		public void Clear()
+		{
+			using (_sync.EnterScope())
+			{
+				_nodes.Clear();
+				_order.Clear();
+			}
+		}
+	}
+
 	private class SubscriptionInfo(IBasketSecurityProcessor processor, MarketDataMessage subscription)
 	{
 		public IBasketSecurityProcessor Processor { get; } = processor ?? throw new ArgumentNullException(nameof(processor));
@@ -23,7 +91,6 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 		public bool ResponseSent { get; set; }
 		public SubscriptionStates State { get; set; } = SubscriptionStates.Stopped;
 		public DateTime? NextFrom { get; set; }
-		public byte[] FinishedBody { get; set; } = [];
 	}
 
 	private class UnsubscriptionInfo(long transactionId, long[] childIds)
@@ -38,7 +105,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByChildId = [];
 	private readonly SynchronizedDictionary<long, SubscriptionInfo> _subscriptionsByParentId = [];
 	private readonly SynchronizedDictionary<long, UnsubscriptionInfo> _unsubscriptionsByChildId = [];
-	private readonly SynchronizedSet<long> _internalIds = [];
+	private readonly RecentIdSet _internalIds = new(MaxInternalIds);
 
 	private readonly ISecurityProvider _securityProvider = securityProvider ?? throw new ArgumentNullException(nameof(securityProvider));
 	private readonly IBasketSecurityProcessorProvider _processorProvider = processorProvider ?? throw new ArgumentNullException(nameof(processorProvider));
@@ -47,6 +114,9 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 	/// <inheritdoc />
 	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
+		if (message is ISubscriptionMessage { IsSubscribe: true } subscription)
+			_internalIds.Remove(subscription.TransactionId);
+
 		switch (message.Type)
 		{
 			case MessageTypes.Reset:
@@ -69,12 +139,6 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 					RemoveChildMappings(unsubscribed);
 
 					var childMessages = CreateLegUnsubscribeMessages(unsubscribed, mdMsg);
-
-					if (childMessages.Length == 0)
-					{
-						await RaiseNewOutMessageAsync(mdMsg.TransactionId.CreateSubscriptionResponse(), cancellationToken);
-						return;
-					}
 
 					var unsubscribe = new UnsubscriptionInfo(mdMsg.TransactionId, [.. childMessages.Select(m => m.TransactionId)]);
 
@@ -103,6 +167,14 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 				if (mdMsg.IsSubscribe)
 				{
 					var processor = _processorProvider.CreateProcessor(security);
+
+					if (processor.BasketLegs.Length == 0)
+					{
+						await RaiseNewOutMessageAsync(mdMsg.TransactionId.CreateSubscriptionResponse(
+							new ArgumentException(LocalizedStrings.SecurityDoNotContainsLegs.Put(processor.BasketExpression))), cancellationToken);
+						return;
+					}
+
 					var info = new SubscriptionInfo(processor, mdMsg.TypedClone());
 
 					_subscriptionsByParentId.Add(mdMsg.TransactionId, info);
@@ -120,7 +192,6 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 
 						info.LegsSubscriptions.Add(inner.TransactionId, SubscriptionStates.Stopped);
 						_subscriptionsByChildId.Add(inner.TransactionId, info);
-						_internalIds.Add(inner.TransactionId);
 					}
 
 					await inners.Select(inner => base.OnSendInMessageAsync(inner, cancellationToken)).WhenAll();
@@ -161,8 +232,16 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 	private void RemoveChildMappings(SubscriptionInfo info)
 	{
 		foreach (var childId in info.LegsSubscriptions.CachedKeys)
+		{
+			_internalIds.Add(childId);
 			_subscriptionsByChildId.Remove(childId);
+		}
 	}
+
+	private bool IsInternalId(long id)
+		=> _subscriptionsByChildId.ContainsKey(id)
+			|| _unsubscriptionsByChildId.ContainsKey(id)
+			|| _internalIds.Contains(id);
 
 	private void RemoveSubscription(SubscriptionInfo info)
 	{
@@ -199,7 +278,8 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 			{
 				OriginalTransactionId = info.TransactionId,
 				NextFrom = info.NextFrom,
-				Body = info.FinishedBody,
+				// Child archives describe leg data and cannot be relabelled as a synthetic basket.
+				Body = [],
 			});
 			isFinished = true;
 		}
@@ -230,7 +310,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 
 					using (info.LegsSubscriptions.EnterScope())
 					{
-						if (info.RespondedLegs.Add(id))
+						if (!info.ResponseSent && info.RespondedLegs.Add(id))
 						{
 							if (responseMsg.IsOk())
 							{
@@ -294,7 +374,10 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 					if (completed)
 					{
 						foreach (var childId in unsubscribe.ChildIds)
+						{
+							_internalIds.Add(childId);
 							_unsubscriptionsByChildId.Remove(childId);
+						}
 
 						await RaiseNewOutMessageAsync(unsubscribe.TransactionId.CreateSubscriptionResponse(error), cancellationToken);
 					}
@@ -302,7 +385,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 					return;
 				}
 
-				if (_internalIds.Contains(id))
+				if (IsInternalId(id))
 					return;
 
 				break;
@@ -324,8 +407,13 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 						if (message is SubscriptionFinishedMessage finishedMessage)
 						{
 							info.LegsSubscriptions[id] = SubscriptionStates.Finished;
-							info.NextFrom = finishedMessage.NextFrom;
-							info.FinishedBody = finishedMessage.Body;
+							if (finishedMessage.NextFrom is { } nextFrom &&
+								(info.NextFrom is null || nextFrom < info.NextFrom))
+							{
+								// Resume from the earliest leg cursor. A later cursor can skip data
+								// that an earlier leg still has to provide.
+								info.NextFrom = nextFrom;
+							}
 						}
 						else
 							info.LegsSubscriptions[id] = SubscriptionStates.Online;
@@ -345,7 +433,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 					return;
 				}
 
-				if (_internalIds.Contains(id))
+				if (IsInternalId(id))
 					return;
 
 				break;
@@ -378,7 +466,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 								(basketMessages ??= []).Add((basketMessage, info));
 						}
 					}
-					else if (_internalIds.Contains(id))
+					else if (IsInternalId(id))
 						hasInternalIds = true;
 					else
 						publicIds.Add(id);
@@ -395,7 +483,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 						{
 							basketSubscription.SetSubscriptionIds(subscriptionId: info.TransactionId);
 
-							if (_internalIds.Contains(basketSubscription.OriginalTransactionId))
+							if (IsInternalId(basketSubscription.OriginalTransactionId))
 								basketSubscription.OriginalTransactionId = info.TransactionId;
 						}
 
@@ -408,7 +496,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 
 				subscrMsg.SetSubscriptionIds([.. publicIds]);
 
-				if (_internalIds.Contains(subscrMsg.OriginalTransactionId))
+				if (IsInternalId(subscrMsg.OriginalTransactionId))
 					subscrMsg.OriginalTransactionId = publicIds[0];
 
 				break;
