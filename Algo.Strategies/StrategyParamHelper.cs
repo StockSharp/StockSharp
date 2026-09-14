@@ -1,4 +1,6 @@
-namespace StockSharp.Algo.Strategies;
+﻿namespace StockSharp.Algo.Strategies;
+
+using System.Numerics;
 
 using Ecng.Reflection;
 
@@ -203,28 +205,44 @@ public static class StrategyParamHelper
 		if (!param.CanOptimize)
 			return 1;
 
+		// A shape that walks nowhere still leaves the parameter its own value, and a run needs one.
+		return GetIterationsCount(param.Type, param.OptimizeFrom, param.OptimizeTo, param.OptimizeStep, param.OptimizeValues).Max(1);
+	}
+
+	/// <summary>
+	/// Get the number of optimization iterations for a parameter shape.
+	/// </summary>
+	/// <param name="type">The type of the parameter value.</param>
+	/// <param name="from">Initial value, or <see langword="null" />.</param>
+	/// <param name="to">Final value, or <see langword="null" />.</param>
+	/// <param name="step">Increment value, or <see langword="null" />.</param>
+	/// <param name="values">Explicit values, or <see langword="null" />. Win over the range when not empty.</param>
+	/// <returns>Number of iterations, zero when the shape defines no values of its own.</returns>
+	public static int GetIterationsCount(Type type, object from, object to, object step, IEnumerable values)
+	{
+		if (type is null)
+			throw new ArgumentNullException(nameof(type));
+
 		// Check for explicit values first (for Security, DataType, etc.)
-		var explicitValues = param.OptimizeValues.Cast<object>().ToArray();
+		var explicitValues = values?.Cast<object>().ToArray() ?? [];
 		if (explicitValues.Length > 0)
 			return explicitValues.Length;
 
-		var from = param.OptimizeFrom;
-		var to = param.OptimizeTo;
-		var step = param.OptimizeStep;
-
 		if (from is null || to is null)
-			return 1;
+			return 0;
 
-		var type = param.Type.GetUnderlyingType() ?? param.Type;
+		type = type.GetUnderlyingType() ?? type;
 
 		if (step is null && type != typeof(bool))
-			return 1;
+			return 0;
 
+		// A step of zero walks nowhere, and Walk yields nothing for it; the count says the same instead
+		// of dividing by it.
 		static int getIterCountDec(decimal fromVal, decimal toVal, decimal stepVal)
-			=> (int)decimal.Floor(Math.Abs(toVal - fromVal) / Math.Abs(stepVal)) + 1;
+			=> stepVal == 0 ? 0 : (int)decimal.Floor(Math.Abs(toVal - fromVal) / Math.Abs(stepVal)) + 1;
 
 		static int getIterCountLong(long fromVal, long toVal, long stepVal)
-			=> (int)(Math.Abs(toVal - fromVal) / Math.Abs(stepVal)) + 1;
+			=> stepVal == 0 ? 0 : (int)(Math.Abs(toVal - fromVal) / Math.Abs(stepVal)) + 1;
 
 		if (type == typeof(bool))
 			return from.Equals(to) ? 1 : 2;
@@ -265,13 +283,34 @@ public static class StrategyParamHelper
 			throw new ArgumentNullException(nameof(param));
 
 		if (!param.CanOptimize)
-		{
-			yield return param.Value;
-			yield break;
-		}
+			return [param.Value];
 
+		// A shape that walks nowhere still leaves the parameter its own value, and a run needs one.
+		return GetOptimizationValues(param.Type, param.OptimizeFrom, param.OptimizeTo, param.OptimizeStep, param.OptimizeValues)
+			.DefaultIfEmpty(param.Value);
+	}
+
+	/// <summary>
+	/// Get all optimization values for a parameter shape.
+	/// </summary>
+	/// <param name="type">The type of the parameter value.</param>
+	/// <param name="from">Initial value, or <see langword="null" />.</param>
+	/// <param name="to">Final value, or <see langword="null" />.</param>
+	/// <param name="step">Increment value, or <see langword="null" />.</param>
+	/// <param name="values">Explicit values, or <see langword="null" />. Win over the range when not empty.</param>
+	/// <returns>Enumerable of all optimization values, empty when the shape defines none of its own.</returns>
+	public static IEnumerable<object> GetOptimizationValues(Type type, object from, object to, object step, IEnumerable values)
+	{
+		if (type is null)
+			throw new ArgumentNullException(nameof(type));
+
+		return Walk(type.GetUnderlyingType() ?? type, from, to, step, values);
+	}
+
+	private static IEnumerable<object> Walk(Type type, object from, object to, object step, IEnumerable values)
+	{
 		// Check for explicit values first (for Security, DataType, etc.)
-		var explicitValues = param.OptimizeValues.Cast<object>().ToArray();
+		var explicitValues = values?.Cast<object>().ToArray() ?? [];
 		if (explicitValues.Length > 0)
 		{
 			foreach (var v in explicitValues)
@@ -279,48 +318,13 @@ public static class StrategyParamHelper
 			yield break;
 		}
 
-		var from = param.OptimizeFrom;
-		var to = param.OptimizeTo;
-		var step = param.OptimizeStep;
-
 		if (from is null || to is null)
-		{
-			yield return param.Value;
 			yield break;
-		}
-
-		var type = param.Type.GetUnderlyingType() ?? param.Type;
 
 		if (step is null && type != typeof(bool))
-		{
-			yield return param.Value;
 			yield break;
-		}
 
-		if (type == typeof(decimal))
-		{
-			var fromTyped = (decimal)from;
-			var toTyped = (decimal)to;
-			var stepTyped = (decimal)step;
-
-			if (fromTyped > toTyped)
-			{
-				while (fromTyped > toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
-			else
-			{
-				while (fromTyped <= toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
-		}
-		else if (type == typeof(bool))
+		if (type == typeof(bool))
 		{
 			var fromTyped = (bool)from;
 			var toTyped = (bool)to;
@@ -333,120 +337,60 @@ public static class StrategyParamHelper
 		else if (type == typeof(Unit))
 		{
 			var fromTyped = (Unit)from;
-			var toTyped = (Unit)to;
-			var stepTyped = (Unit)step;
 
-			if (fromTyped > toTyped)
-			{
-				while (fromTyped > toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
-			else
-			{
-				while (fromTyped <= toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
+			foreach (var value in Range(fromTyped.Value, ((Unit)to).Value, ((Unit)step).Value))
+				yield return new Unit(value, fromTyped.Type);
 		}
 		else if (type == typeof(TimeSpan))
 		{
-			var fromTyped = (TimeSpan)from;
-			var toTyped = (TimeSpan)to;
-			var stepTyped = (TimeSpan)step;
-
-			if (fromTyped > toTyped)
-			{
-				while (fromTyped > toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
-			else
-			{
-				while (fromTyped <= toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
+			foreach (var ticks in Range(((TimeSpan)from).Ticks, ((TimeSpan)to).Ticks, ((TimeSpan)step).Ticks))
+				yield return TimeSpan.FromTicks(ticks);
+		}
+		else if (type == typeof(decimal))
+		{
+			foreach (var value in Range((decimal)from, (decimal)to, (decimal)step))
+				yield return value;
 		}
 		else if (type == typeof(double))
 		{
-			var fromTyped = (double)from;
-			var toTyped = (double)to;
-			var stepTyped = (double)step;
-
-			if (fromTyped > toTyped)
-			{
-				while (fromTyped > toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
-			else
-			{
-				while (fromTyped <= toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
+			foreach (var value in Range((double)from, (double)to, (double)step))
+				yield return value;
 		}
 		else if (type == typeof(float))
 		{
-			var fromTyped = (float)from;
-			var toTyped = (float)to;
-			var stepTyped = (float)step;
-
-			if (fromTyped > toTyped)
-			{
-				while (fromTyped > toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
-			else
-			{
-				while (fromTyped <= toTyped)
-				{
-					yield return fromTyped;
-					fromTyped += stepTyped;
-				}
-			}
+			foreach (var value in Range((float)from, (float)to, (float)step))
+				yield return value;
 		}
 		else if (type.IsNumericInteger())
 		{
-			var fromTyped = from.To<long>();
-			var toTyped = to.To<long>();
-			var stepTyped = step.To<long>();
-
-			if (fromTyped > toTyped)
-			{
-				while (fromTyped > toTyped)
-				{
-					yield return fromTyped.To(type);
-					fromTyped += stepTyped;
-				}
-			}
-			else
-			{
-				while (fromTyped <= toTyped)
-				{
-					yield return fromTyped.To(type);
-					fromTyped += stepTyped;
-				}
-			}
+			foreach (var value in Range(from.To<long>(), to.To<long>(), step.To<long>()))
+				yield return value.To(type);
 		}
 		else
 			throw new NotSupportedException(LocalizedStrings.TypeNotSupported.Put(type));
+	}
+
+	// A descending shape reaches here as from > to with a step of either sign, because that is what an
+	// editor writes. GetIterationsCount reads the step by modulus and counts both bounds, so the walk
+	// does the same, or the editor's count and the engine's runs disagree.
+	private static IEnumerable<T> Range<T>(T from, T to, T step)
+		where T : INumber<T>
+	{
+		var delta = T.Abs(step);
+
+		if (delta == T.Zero)
+			yield break;
+
+		if (from > to)
+		{
+			for (var value = from; value >= to; value -= delta)
+				yield return value;
+		}
+		else
+		{
+			for (var value = from; value <= to; value += delta)
+				yield return value;
+		}
 	}
 
 	#endregion

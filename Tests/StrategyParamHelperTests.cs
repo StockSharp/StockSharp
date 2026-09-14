@@ -859,4 +859,136 @@ public class StrategyParamHelperTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Shape-based overloads
+
+	// A UI edits a parameter shape long before there is a strategy parameter to put it on, and the number it
+	// shows has to be the number the run produces. These pin the shape-based overloads to the IStrategyParam
+	// ones so the two cannot drift apart.
+
+	private static void AssertSameCount<T>(T from, T to, T step)
+	{
+		var param = new StrategyParam<T>("test");
+		param.SetOptimize(from, to, step);
+
+		AreEqual(
+			param.GetIterationsCount(),
+			StrategyParamHelper.GetIterationsCount(typeof(T), from, to, step, null),
+			$"Shape count for {typeof(T).Name} disagrees with the parameter count.");
+	}
+
+	private static void AssertSameValues<T>(T from, T to, T step)
+	{
+		var param = new StrategyParam<T>("test");
+		param.SetOptimize(from, to, step);
+
+		IsTrue(
+			param.GetOptimizationValues().SequenceEqual(
+				StrategyParamHelper.GetOptimizationValues(typeof(T), from, to, step, null)),
+			$"Shape values for {typeof(T).Name} disagree with the parameter values.");
+	}
+
+	[TestMethod]
+	public void ShapeCount_MatchesParamCount()
+	{
+		AssertSameCount(10, 50, 10);
+		AssertSameCount(1.0m, 2.0m, 0.5m);
+		AssertSameCount(false, true, default);
+		AssertSameCount(false, false, default);
+		AssertSameCount(TimeSpan.FromMinutes(5), TimeSpan.FromHours(1), TimeSpan.FromMinutes(5));
+		AssertSameCount(new Unit(1), new Unit(10), new Unit(1));
+	}
+
+	[TestMethod]
+	public void ShapeValues_MatchParamValues()
+	{
+		AssertSameValues(10, 50, 10);
+		AssertSameValues(1.0m, 2.0m, 0.5m);
+		AssertSameValues(false, true, default);
+		AssertSameValues(TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(20), TimeSpan.FromMinutes(5));
+	}
+
+	[TestMethod]
+	public void ADescendingShapeWalksDownwards()
+	{
+		// SetOptimize refuses from > to, so a descending range only ever reaches the engine as a shape -
+		// which is exactly what an editor writes, and what the editor's own count has to agree with.
+		object[] expected = [.. Enumerable.Range(0, 10).Select(i => (object)(10m - i))];
+
+		AreEqual(10, StrategyParamHelper.GetIterationsCount(typeof(decimal), 10m, 1m, -1m, null));
+		IsTrue(StrategyParamHelper
+			.GetOptimizationValues(typeof(decimal), 10m, 1m, -1m, null)
+			.SequenceEqual(expected));
+
+		// The direction is the one the bounds describe, so the sign of the step neither adds to it nor
+		// contradicts it - the count already reads the step by modulus.
+		AreEqual(10, StrategyParamHelper.GetIterationsCount(typeof(decimal), 10m, 1m, 1m, null));
+		IsTrue(StrategyParamHelper
+			.GetOptimizationValues(typeof(decimal), 10m, 1m, 1m, null)
+			.SequenceEqual(expected));
+
+		AreEqual(10, StrategyParamHelper.GetIterationsCount(typeof(int), 10, 1, -1, null));
+		IsTrue(StrategyParamHelper
+			.GetOptimizationValues(typeof(int), 10, 1, -1, null)
+			.SequenceEqual(Enumerable.Range(0, 10).Select(i => (object)(10 - i))));
+
+		AreEqual(10, StrategyParamHelper.GetIterationsCount(typeof(TimeSpan),
+			TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(-1), null));
+		IsTrue(StrategyParamHelper
+			.GetOptimizationValues(typeof(TimeSpan), TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(-1), null)
+			.SequenceEqual(Enumerable.Range(0, 10).Select(i => (object)TimeSpan.FromMinutes(10 - i))));
+	}
+
+	[TestMethod]
+	public void AZeroStepWalksNowhereAndCountsNothing()
+	{
+		AreEqual(0, StrategyParamHelper.GetIterationsCount(typeof(decimal), 1m, 10m, 0m, null));
+		AreEqual(0, StrategyParamHelper.GetOptimizationValues(typeof(decimal), 1m, 10m, 0m, null).Count());
+
+		AreEqual(0, StrategyParamHelper.GetIterationsCount(typeof(int), 1, 10, 0, null));
+		AreEqual(0, StrategyParamHelper.GetOptimizationValues(typeof(int), 1, 10, 0, null).Count());
+	}
+
+	[TestMethod]
+	public void ShapeExplicitValues_WinOverTheRange()
+	{
+		object[] values = [3, 7, 11];
+
+		AreEqual(3, StrategyParamHelper.GetIterationsCount(typeof(int), 10, 50, 10, values));
+		IsTrue(StrategyParamHelper.GetOptimizationValues(typeof(int), 10, 50, 10, values).SequenceEqual(values));
+	}
+
+	[TestMethod]
+	public void AShapeThatDefinesNothingHasNoValues()
+	{
+		AreEqual(0, StrategyParamHelper.GetIterationsCount(typeof(int), null, null, null, null));
+		AreEqual(0, StrategyParamHelper.GetOptimizationValues(typeof(int), null, null, null, null).Count());
+
+		// A step is what a range is walked by; without one there is no range - except for a bool, whose two
+		// bounds are its two values.
+		AreEqual(0, StrategyParamHelper.GetIterationsCount(typeof(int), 1, 10, null, null));
+		AreEqual(2, StrategyParamHelper.GetIterationsCount(typeof(bool), false, true, null, null));
+	}
+
+	[TestMethod]
+	public void AParameterWithNothingToWalkStillRunsOnce()
+	{
+		// The shape defines nothing, but the parameter still has its own value, and a run needs one.
+		var param = new StrategyParam<int>("test") { Value = 42, CanOptimize = true };
+
+		AreEqual(1, param.GetIterationsCount());
+		IsTrue(param.GetOptimizationValues().SequenceEqual([(object)42]));
+	}
+
+	[TestMethod]
+	public void AnEnumShapeRunsOnItsExplicitValues()
+	{
+		// The optimizer offers no range for an enum, but a chosen set of members is just a value list.
+		object[] values = [DayOfWeek.Monday, DayOfWeek.Friday];
+
+		AreEqual(2, StrategyParamHelper.GetIterationsCount(typeof(DayOfWeek), null, null, null, values));
+		IsTrue(StrategyParamHelper.GetOptimizationValues(typeof(DayOfWeek), null, null, null, values).SequenceEqual(values));
+	}
+
+	#endregion
 }
