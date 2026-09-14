@@ -1,6 +1,7 @@
 namespace StockSharp.Samples.Candles.CombineHistoryRealtime;
 
 using System;
+using System.Threading;
 using Ecng.Xaml;
 
 using Avalonia.Controls;

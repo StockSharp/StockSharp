@@ -21,6 +21,7 @@ using Ecng.Serialization;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Optimization;
 using StockSharp.Configuration;
+using StockSharp.Xaml;
 using StockSharp.Samples;
 
 public partial class MainWindow : Window
