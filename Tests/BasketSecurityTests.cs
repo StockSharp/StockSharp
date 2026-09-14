@@ -55,7 +55,7 @@ public class BasketSecurityTests : BaseTestClass
 
 		basket.Formula.Error.IsEmpty().AssertTrue("the first formula must compile");
 
-		var previous = basket.Expression;
+		const string replacement = "SBER@TQBR * 2";
 
 		var compilers = ConfigManager.TryGetService<CompilerProvider>();
 		compilers.AssertNotNull("the suite registers a compiler provider");
@@ -67,10 +67,12 @@ public class BasketSecurityTests : BaseTestClass
 			// With C# gone from the provider nothing can turn the new text into a formula.
 			compilers.Remove(FileExts.CSharp);
 
-			basket.Expression = "SBER@TQBR * 2";
+			basket.Expression = replacement;
 
 			basket.Formula.Error.IsEmpty().AssertFalse("an index that could not compile the formula it was given must report that it cannot calculate");
-			basket.Expression.AssertNotEqual(previous, "the replaced formula must not stay in force");
+			basket.Expression.AssertEqual(replacement, "the uncompiled text must remain available for correction and persistence");
+			ThrowsExactly<ArgumentException>(() => new ExpressionIndexSecurityProcessor(basket),
+				"an expression without a compiler must not produce a processor that silently emits no values");
 		}
 		finally
 		{

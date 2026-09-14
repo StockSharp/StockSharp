@@ -637,6 +637,87 @@ public class FilteredMarketDepthAdapterTests : BaseTestClass
 			output.OfType<SubscriptionResponseMessage>().Single(r => r.OriginalTransactionId == 1023).IsOk().AssertFalse();
 	}
 
+	[TestMethod]
+	public async Task InactiveSubscriptionIdsRemainBounded()
+	{
+		const int capacity = 1_024;
+
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+		var inner = new RecordingPassThroughMessageAdapter();
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		long firstBookId = 0;
+		long lastBookId = 0;
+		long firstOrdersId = 0;
+		long lastOrdersId = 0;
+
+		for (var i = 0; i <= capacity; i++)
+		{
+			var before = inner.InMessages.Count;
+
+			await adapter.SendInMessageAsync(new MarketDataMessage
+			{
+				IsSubscribe = true,
+				TransactionId = 10_000 + i,
+				SecurityId = secId,
+				DataType2 = DataType.FilteredMarketDepth,
+			}, token);
+
+			var sent = inner.InMessages.Skip(before).ToArray();
+			var bookId = sent.OfType<MarketDataMessage>().Single(m => m.IsSubscribe).TransactionId;
+			var ordersId = sent.OfType<OrderStatusMessage>().Single(m => m.IsSubscribe).TransactionId;
+
+			if (i == 0)
+			{
+				firstBookId = bookId;
+				firstOrdersId = ordersId;
+			}
+
+			lastBookId = bookId;
+			lastOrdersId = ordersId;
+			await inner.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = bookId }, token);
+		}
+
+		output.Clear();
+
+		await inner.SendOutMessageAsync(CreateBook(secId, firstBookId), token);
+		await inner.SendOutMessageAsync(CreateBook(secId, lastBookId), token);
+		await PushOrderAsync(inner, ServerSideOrder(secId, 30_001, Sides.Buy, 100m, 1m, 1m), firstOrdersId, token);
+		await PushOrderAsync(inner, ServerSideOrder(secId, 30_002, Sides.Buy, 100m, 1m, 1m), lastOrdersId, token);
+
+		var remaining = output.OfType<QuoteChangeMessage>().Single();
+		remaining.SubscriptionId.AssertEqual(firstBookId, "the oldest tombstone is evicted once the bounded tail is full");
+		output.OfType<ExecutionMessage>().Single().SubscriptionId.AssertEqual(firstOrdersId);
+	}
+
+	[TestMethod]
+	public async Task ReusedInnerSubscriptionIdOverridesItsOldTombstone()
+	{
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+		var inner = new RecordingPassThroughMessageAdapter();
+		using var adapter = new FilteredMarketDepthAdapter(inner);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var (oldBookId, _) = await SubscribeAsync(inner, adapter, secId, 20_001, token);
+		await inner.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = oldBookId }, token);
+
+		((IncrementalIdGenerator)inner.TransactionIdGenerator).Current = 0;
+
+		var (newBookId, _) = await SubscribeAsync(inner, adapter, secId, 20_002, token);
+		newBookId.AssertEqual(oldBookId);
+
+		output.Clear();
+		await inner.SendOutMessageAsync(CreateBook(secId, newBookId), token);
+
+		var book = output.OfType<QuoteChangeMessage>().Single();
+		book.SubscriptionId.AssertEqual(20_002L);
+	}
+
 	// A copy of a wrapper owns a copy of what it wraps - as every other wrapper's Clone does.
 	// Sharing the inner adapter makes the copy a second reader of one connection, not a copy.
 	[TestMethod]

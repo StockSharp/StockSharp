@@ -337,8 +337,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 	/// <summary>
 	/// A continuous security is one contract at a time. When the front contract expires the next one
-	/// takes over - but only that one: a trade in a contract further out is still not the continuous
-	/// security's trade, and passing it on writes a price from another instrument into the series.
+	/// takes over, while a trade in a contract further out is still not part of the series.
 	/// </summary>
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
@@ -364,14 +363,36 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		processor.Process(CreateTick(riu, beforeExpiry, price: 100000m, volume: 100m)).ToArray()
 			.Length.AssertEqual(1, "the front contract is the series while it lives");
 
-		// The front contract has expired, so the series is RIZ8 now. RIH9 is two contracts out.
 		var afterExpiry = new DateTime(2024, 9, 16);
 
 		processor.Process(CreateTick(rih, afterExpiry, price: 111000m, volume: 5m)).ToArray()
 			.Length.AssertEqual(0, "a trade in a contract further out is not the continuous security's trade");
 
 		processor.Process(CreateTick(riz, afterExpiry, price: 101000m, volume: 80m)).ToArray()
-			.Length.AssertEqual(1, "and the contract that did take over still is");
+			.Length.AssertEqual(1, "the next contract takes over after the front contract expires");
+	}
+
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public void ContinuousProcessor_GapAcrossTwoExpirations_AdvancesToTheThirdContract()
+	{
+		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
+		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
+		var rih = CreateFuture("RIH9", new DateTime(2025, 3, 15));
+
+		var basket = new ExpirationContinuousSecurity { Id = "RI@FORTS", Board = ExchangeBoard.Forts };
+		basket.ExpirationJumps.Add(riu.ToSecurityId(), riu.ExpiryDate.Value);
+		basket.ExpirationJumps.Add(riz.ToSecurityId(), riz.ExpiryDate.Value);
+		basket.ExpirationJumps.Add(rih.ToSecurityId(), rih.ExpiryDate.Value);
+
+		var processor = CreateProcessor(basket);
+		var afterTwoExpirations = new DateTime(2024, 12, 16);
+
+		processor.Process(CreateTick(rih, afterTwoExpirations, price: 111000m, volume: 5m)).ToArray()
+			.Length.AssertEqual(1, "a gap across two expiries must advance directly to the third contract");
+
+		processor.Process(CreateTick(riz, afterTwoExpirations, price: 101000m, volume: 80m)).ToArray()
+			.Length.AssertEqual(0, "the second contract is already expired at the incoming trade time");
 	}
 
 	[TestMethod]

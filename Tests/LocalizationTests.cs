@@ -297,6 +297,11 @@ public class LocalizationTests : BaseTestClass
 		const string code = "q1";
 
 		var previous = LocalizedStrings.ActiveLanguage;
+		var changeCount = 0;
+
+		void onChanged() => changeCount++;
+
+		LocalizedStrings.ActiveLanguageChanged += onChanged;
 
 		try
 		{
@@ -313,6 +318,7 @@ public class LocalizationTests : BaseTestClass
 
 			AreNotEqual("L-ONE", LocalizedStrings.Language, "a removed language still answers through the cached property");
 			AreEqual(LocalizedStrings.GetString(LocalizedStrings.LanguageKey), LocalizedStrings.Language);
+			changeCount = 0;
 
 			LocalizedStrings.AddLanguage(code, new Dictionary<string, string>
 			{
@@ -322,9 +328,11 @@ public class LocalizationTests : BaseTestClass
 
 			AreEqual("L-TWO", LocalizedStrings.GetString(LocalizedStrings.LanguageKey));
 			AreEqual("L-TWO", LocalizedStrings.Language);
+			AreEqual(1, changeCount, "re-registering the requested language must notify active-language listeners exactly once");
 		}
 		finally
 		{
+			LocalizedStrings.ActiveLanguageChanged -= onChanged;
 			LocalizedStrings.ActiveLanguage = previous;
 			LocalizedStrings.RemoveLanguage(code);
 			LocalizedStrings.ResetCache();

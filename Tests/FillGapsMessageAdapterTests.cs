@@ -276,4 +276,40 @@ public class FillGapsMessageAdapterTests : BaseTestClass
 		gapStart.AssertEqual(new DateTime(2020, 1, 8), "07th has data, so the next gap starts at 08th");
 		gapEnd.AssertEqual(new DateTime(2020, 1, 9).EndOfDay(), "10th has data, so the gap ends at the end of 09th");
 	}
+
+	[TestMethod]
+	public async Task StorageBehaviour_WeekdayGapStopsAtFridayWhenLaterDataExists()
+	{
+		var from = new DateTime(2020, 1, 6);
+		var to = new DateTime(2020, 1, 13).EndOfDay();
+
+		var (gapStart, gapEnd) = await GetNextGapAsync([new DateTime(2020, 1, 13)], from, to, FillGapsDays.Weekdays, CancellationToken);
+
+		gapStart.AssertEqual(from);
+		gapEnd.AssertEqual(new DateTime(2020, 1, 10).EndOfDay());
+	}
+
+	[TestMethod]
+	public async Task StorageBehaviour_FirstMissingDayKeepsExactFromTime()
+	{
+		var from = new DateTime(2020, 1, 6, 10, 30, 0);
+		var to = new DateTime(2020, 1, 10);
+
+		var (gapStart, gapEnd) = await GetNextGapAsync([new DateTime(2020, 1, 8)], from, to, FillGapsDays.All, CancellationToken);
+
+		gapStart.AssertEqual(from);
+		gapEnd.AssertEqual(new DateTime(2020, 1, 7).EndOfDay());
+	}
+
+	[TestMethod]
+	public async Task StorageBehaviour_TrailingGapKeepsExactToTime()
+	{
+		var from = new DateTime(2020, 1, 6, 10, 0, 0);
+		var to = new DateTime(2020, 1, 8, 15, 30, 0);
+
+		var (gapStart, gapEnd) = await GetNextGapAsync([new DateTime(2020, 1, 6)], from, to, FillGapsDays.All, CancellationToken);
+
+		gapStart.AssertEqual(new DateTime(2020, 1, 7));
+		gapEnd.AssertEqual(to);
+	}
 }

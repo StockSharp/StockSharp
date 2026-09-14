@@ -724,6 +724,79 @@ public class SnapshotHolderTests : BaseTestClass
 		obSnap2.Bids.Single().Price.AssertEqual(100m);
 	}
 
+	/// <summary>
+	/// The holder keeps a book of its own. A book that already states it is complete is stored as it
+	/// arrives, so without a copy the holder would keep the caller's instance - and the caller goes on
+	/// filling those same arrays for the next book, quietly rewriting the snapshot every later
+	/// subscriber is served from.
+	/// </summary>
+	[TestMethod]
+	public void OrderBook_FirstMessage_IsCloned()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		// Already complete, so nothing on the way in has a reason to copy it.
+		var original = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [new QuoteChange(100m, 10m)],
+			Asks = [new QuoteChange(101m, 5m)],
+		};
+
+		holder.Process(original);
+
+		holder.TryPeekSnapshot(_secId1, out var stored).AssertTrue();
+		stored.AssertNotSame(original, "the holder has to hold a book of its own");
+
+		// The caller reuses its message, the way a feed building the next book does.
+		original.Bids[0].Volume = 999m;
+		original.Bids = [new QuoteChange(1m, 1m)];
+
+		stored.Bids.Length.AssertEqual(1);
+		stored.Bids[0].Price.AssertEqual(100m);
+		stored.Bids[0].Volume.AssertEqual(10m, "what the holder keeps is the book it was handed, not the one the caller went on to build");
+	}
+
+	/// <summary>
+	/// And the same for a book that replaces one the holder already had: it is stored too, so it has
+	/// to be stored as a copy, or from the second book onwards the holder shares arrays with whoever
+	/// sent it.
+	/// </summary>
+	[TestMethod]
+	public void OrderBook_ReplacementSnapshot_IsCloned()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [new QuoteChange(100m, 10m)],
+			Asks = [new QuoteChange(101m, 5m)],
+		});
+
+		var replacement = new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.SnapshotComplete,
+			Bids = [new QuoteChange(99m, 20m)],
+			Asks = [new QuoteChange(102m, 7m)],
+		};
+
+		holder.Process(replacement);
+
+		holder.TryPeekSnapshot(_secId1, out var stored).AssertTrue();
+		stored.AssertNotSame(replacement, "the replacement is held as a book of the holder's own");
+
+		replacement.Bids[0].Volume = 999m;
+
+		stored.Bids[0].Volume.AssertEqual(20m, "the replacement kept is the one that arrived");
+	}
+
 	[TestMethod]
 	public void OrderBook_TryGetSnapshot_NoSnapshot_ReturnsNull()
 	{
@@ -1934,6 +2007,28 @@ public class SnapshotHolderTests : BaseTestClass
 		original.OrderPrice = 200m;
 
 		snapshot.OrderPrice.AssertEqual(100m);
+	}
+
+	[TestMethod]
+	[DataRow(false)]
+	[DataRow(true)]
+	public void Order_SaveLoad_PreservesThrowOnInvalidStateTransition(bool value)
+	{
+		var holder = new OrderSnapshotHolder
+		{
+			ThrowOnInvalidStateTransition = value,
+		};
+
+		var settings = new SettingsStorage();
+		holder.Save(settings);
+
+		var restored = new OrderSnapshotHolder
+		{
+			ThrowOnInvalidStateTransition = !value,
+		};
+		restored.Load(settings);
+
+		restored.ThrowOnInvalidStateTransition.AssertEqual(value);
 	}
 
 	[TestMethod]

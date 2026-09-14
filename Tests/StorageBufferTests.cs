@@ -892,6 +892,7 @@ public class StorageBufferTests : BaseTestClass
 			EnabledTransactions = false,
 			FilterSubscription = true,
 			DisableStorageTimer = true,
+			MaxBufferedMessages = 12345,
 		};
 
 		var storage = new SettingsStorage();
@@ -907,6 +908,7 @@ public class StorageBufferTests : BaseTestClass
 		buffer2.EnabledTransactions.AssertEqual(buffer.EnabledTransactions);
 		buffer2.FilterSubscription.AssertEqual(buffer.FilterSubscription);
 		buffer2.DisableStorageTimer.AssertEqual(buffer.DisableStorageTimer);
+		buffer2.MaxBufferedMessages.AssertEqual(buffer.MaxBufferedMessages);
 	}
 
 	[TestMethod]
@@ -1010,6 +1012,23 @@ public class StorageBufferTests : BaseTestClass
 		});
 
 		buffer.GetTransactions().Count.AssertEqual(0, "transactions are turned off, so the order is not kept");
+	}
+
+	[TestMethod]
+	public void ProcessInMessage_OrderReplace_NotBufferedWhenTransactionsDisabled()
+	{
+		var buffer = new StorageBuffer { EnabledTransactions = false };
+
+		buffer.ProcessInMessage(new OrderReplaceMessage
+		{
+			SecurityId = CreateSecurityId(),
+			TransactionId = 124,
+			OriginalTransactionId = 123,
+			Price = 101,
+			Volume = 15,
+		});
+
+		buffer.GetTransactions().Count.AssertEqual(0, "transactions are turned off, so the replacement is not kept");
 	}
 
 	#endregion

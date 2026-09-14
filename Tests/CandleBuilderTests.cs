@@ -419,6 +419,54 @@ public class CandleBuilderTests : BaseTestClass
 
 	#region RenkoCandleBuilder Tests
 
+	[TestMethod]
+	[DataRow(0)]
+	[DataRow(-1)]
+	public void RenkoCandleBuilder_NonPositiveBoxSize_IsRejected(int boxSize)
+	{
+		var builder = new RenkoCandleBuilder(new MockExchangeInfoProvider());
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(boxSize)),
+			}
+		};
+
+		ThrowsExactly<ArgumentOutOfRangeException>(() => builder.Process(subscription, new MockTransform
+		{
+			Price = 100m,
+			Volume = 1m,
+			Time = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind(),
+		}).ToArray());
+	}
+
+	[TestMethod]
+	public void RenkoCandleBuilder_BoxTooLargeForThePerValueLimit_IsHandled()
+	{
+		var builder = new RenkoCandleBuilder(new MockExchangeInfoProvider());
+		var subscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage
+			{
+				SecurityId = CreateSecurityId(),
+				DataType2 = DataType.Create<RenkoCandleMessage>(new Unit(decimal.MaxValue / 2m)),
+			}
+		};
+
+		var time = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+
+		builder.Process(subscription, new MockTransform { Price = 0m, Volume = 1m, Time = time }).ToArray();
+		var result = builder.Process(subscription, new MockTransform { Price = 1m, Volume = 2m, Time = time.AddSeconds(1) }).ToArray();
+
+		result.Length.AssertEqual(1);
+		var current = (RenkoCandleMessage)subscription.CurrentCandle;
+		current.State.AssertEqual(CandleStates.Active);
+		current.ClosePrice.AssertEqual(1m);
+		current.TotalVolume.AssertEqual(3m);
+	}
+
 	/// <summary>
 	/// RenkoCandleBuilder: generates multiple bricks on large price movement.
 	/// </summary>
