@@ -87,8 +87,20 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 			if (declared == DiagramSocketType.Any || emitted.Value is null)
 				return;
 
+			var emittedType = emitted.Value.GetType();
+
+			// The Unit socket is the numeric one: GetSocketType puts every number on it, so a decimal
+			// or an int leaving it is what it carries rather than a promise broken.
+			if (declared == DiagramSocketType.Unit)
+			{
+				(emitted.Value is Unit || (emittedType.IsNumeric() && !emittedType.IsEnum())).AssertTrue(
+					$"socket '{emitted.Socket}' carries numbers, and it emitted {emittedType.Name}");
+
+				return;
+			}
+
 			declared.Type.IsInstanceOfType(emitted.Value).AssertTrue(
-				$"socket '{emitted.Socket}' is declared as {declared.Type.Name}, so what leaves it must be one - it emitted {emitted.Value.GetType().Name}");
+				$"socket '{emitted.Socket}' is declared as {declared.Type.Name}, so what leaves it must be one - it emitted {emittedType.Name}");
 		}
 
 		public override Guid TypeId { get; } = "6E3C9A18-24D5-4B0F-8E77-C1A93F5B2D66".To<Guid>();

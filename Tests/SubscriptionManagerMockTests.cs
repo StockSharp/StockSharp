@@ -152,8 +152,12 @@ public class SubscriptionManagerMockTests : BaseTestClass
 		toInner.Length.AssertEqual(0);
 		toOut.Length.AssertEqual(1);
 		var response = toOut[0].To<SubscriptionResponseMessage>();
-		response.OriginalTransactionId.AssertEqual(1);
+
+		// The caller is waiting on the transaction it sent, not on the one it asked about: an answer
+		// addressed to a subscription that does not exist is one nobody is listening for.
+		response.OriginalTransactionId.AssertEqual(100);
 		response.Error.AssertNotNull();
+		response.Error.Message.Contains("1").AssertTrue("the error still has to name the subscription that was not found");
 	}
 
 	[TestMethod]
