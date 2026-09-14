@@ -154,6 +154,45 @@ public class UnitTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void CompareToProvidesATransitiveOrderForMixedUnits()
+	{
+#pragma warning disable CS0618
+		Unit[] values =
+		[
+			new(3m, UnitTypes.Limit),
+			5.Percents(),
+			new(-1m, UnitTypes.Absolute),
+			new(1m, UnitTypes.Limit),
+			1.Percents(),
+			new(2m, UnitTypes.Absolute),
+		];
+#pragma warning restore CS0618
+
+		foreach (var first in values)
+		foreach (var second in values)
+		foreach (var third in values)
+		{
+			if (first.CompareTo(second) <= 0 && second.CompareTo(third) <= 0)
+				(first.CompareTo(third) <= 0).AssertTrue($"CompareTo is not transitive for '{first}', '{second}', '{third}'");
+		}
+
+		var sorted = values.ToList();
+		sorted.Sort();
+
+		sorted.Select(v => (v.Type, v.Value)).AssertEqual(
+		[
+			(UnitTypes.Absolute, -1m),
+			(UnitTypes.Absolute, 2m),
+			(UnitTypes.Percent, 1m),
+			(UnitTypes.Percent, 5m),
+#pragma warning disable CS0618
+			(UnitTypes.Limit, 1m),
+			(UnitTypes.Limit, 3m),
+#pragma warning restore CS0618
+		]);
+	}
+
+	[TestMethod]
 	public void NullCast()
 	{
 		Unit value = null;

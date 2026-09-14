@@ -173,17 +173,14 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 	/// <returns>The result of the comparison.</returns>
 	public override int CompareTo(Unit other)
 	{
-		if (this == other)
+		if (ReferenceEquals(this, other))
 			return 0;
 
-		if (this < other)
-			return -1;
-
-		if (this > other)
+		if (other is null)
 			return 1;
 
-		// Incomparable measures still need a stable total order for IComparable.
-		return other is null ? 1 : Type.CompareTo(other.Type);
+		var type = Type.CompareTo(other.Type);
+		return type != 0 ? type : Value.CompareTo(other.Value);
 	}
 
 	[Obsolete]
