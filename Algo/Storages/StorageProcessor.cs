@@ -67,7 +67,7 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 
 	void IStorageProcessor.Reset()
 	{
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			_fullyProcessedSubscriptions.Clear();
 			_servedSubscriptions.Clear();
@@ -89,7 +89,7 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 		if (subscriptionId == 0)
 			return;
 
-		lock (_sync)
+		using (_sync.EnterScope())
 		{
 			_servedSubscriptions.Remove(subscriptionId);
 			_fullyProcessedSubscriptions.Remove(subscriptionId);
@@ -121,7 +121,7 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 
 			if (message.SecurityId != default)
 			{
-				lock (_sync)
+				using (_sync.EnterScope())
 					shouldLoad = _servedSubscriptions.Add(message.TransactionId);
 			}
 
@@ -137,7 +137,7 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 				// the asked-for Count ran out - a remainder of an exhausted Count is a request for nothing.
 				if (context.HasData && (context.Left == 0 || (message.To != null && message.To <= context.LastDate)))
 				{
-					lock (_sync)
+					using (_sync.EnterScope())
 					{
 						if (_servedSubscriptions.Remove(transactionId))
 							_fullyProcessedSubscriptions.Add(transactionId);
@@ -163,7 +163,7 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 		{
 			bool fullyProcessed;
 
-			lock (_sync)
+			using (_sync.EnterScope())
 			{
 				_servedSubscriptions.Remove(message.OriginalTransactionId);
 				fullyProcessed = _fullyProcessedSubscriptions.Remove(message.OriginalTransactionId);
