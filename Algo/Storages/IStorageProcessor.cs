@@ -32,4 +32,10 @@ public interface IStorageProcessor
 	/// the resulting <see cref="MarketDataMessage"/> is returned as the last message in the sequence.
 	/// </returns>
 	IAsyncEnumerable<Message> ProcessMarketData(MarketDataMessage message, CancellationToken cancellationToken);
+
+	/// <summary>
+	/// Process a result produced by an upstream market-data subscription.
+	/// </summary>
+	/// <param name="message">Subscription result.</param>
+	void ProcessSubscriptionResult(Message message) { }
 }

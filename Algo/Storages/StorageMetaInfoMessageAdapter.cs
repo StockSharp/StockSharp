@@ -78,6 +78,8 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 	/// <inheritdoc />
 	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
+		_storageProcessor.ProcessSubscriptionResult(message);
+
 		switch (message.Type)
 		{
 			case MessageTypes.Security:

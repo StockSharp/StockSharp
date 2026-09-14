@@ -12,8 +12,52 @@ using StockSharp.Algo.Candles.Compression;
 /// <param name="candleBuilderProvider">Candle builders provider.</param>
 public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvider candleBuilderProvider) : IStorageProcessor
 {
-	private readonly SynchronizedSet<long> _fullyProcessedSubscriptions = [];
-	private readonly SynchronizedSet<long> _servedSubscriptions = [];
+	private const int MaxTrackedItems = 1_000;
+
+	private sealed class RecentIdSet(int capacity)
+	{
+		private readonly Dictionary<long, LinkedListNode<long>> _nodes = [];
+		private readonly LinkedList<long> _order = [];
+
+		public void Add(long id)
+		{
+			if (_nodes.TryGetValue(id, out var existing))
+			{
+				_order.Remove(existing);
+				_order.AddLast(existing);
+				return;
+			}
+
+			var node = _order.AddLast(id);
+			_nodes.Add(id, node);
+
+			if (_nodes.Count <= capacity)
+				return;
+
+			var oldest = _order.First;
+			_order.RemoveFirst();
+			_nodes.Remove(oldest.Value);
+		}
+
+		public bool Remove(long id)
+		{
+			if (!_nodes.Remove(id, out var node))
+				return false;
+
+			_order.Remove(node);
+			return true;
+		}
+
+		public void Clear()
+		{
+			_nodes.Clear();
+			_order.Clear();
+		}
+	}
+
+	private readonly Lock _sync = new();
+	private readonly RecentIdSet _fullyProcessedSubscriptions = new(MaxTrackedItems);
+	private readonly HashSet<long> _servedSubscriptions = [];
 
 	/// <inheritdoc/>
 	public StorageCoreSettings Settings { get; } = settings ?? throw new ArgumentNullException(nameof(settings));
@@ -23,8 +67,33 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 
 	void IStorageProcessor.Reset()
 	{
-		_fullyProcessedSubscriptions.Clear();
-		_servedSubscriptions.Clear();
+		lock (_sync)
+		{
+			_fullyProcessedSubscriptions.Clear();
+			_servedSubscriptions.Clear();
+		}
+	}
+
+	void IStorageProcessor.ProcessSubscriptionResult(Message message)
+	{
+		if (message == null)
+			throw new ArgumentNullException(nameof(message));
+
+		var subscriptionId = message switch
+		{
+			SubscriptionFinishedMessage finished => finished.OriginalTransactionId,
+			SubscriptionResponseMessage response when !response.IsOk() => response.OriginalTransactionId,
+			_ => 0,
+		};
+
+		if (subscriptionId == 0)
+			return;
+
+		lock (_sync)
+		{
+			_servedSubscriptions.Remove(subscriptionId);
+			_fullyProcessedSubscriptions.Remove(subscriptionId);
+		}
 	}
 
 	async IAsyncEnumerable<Message> IStorageProcessor.ProcessMarketData(MarketDataMessage message, [EnumeratorCancellation] CancellationToken cancellationToken)
@@ -48,7 +117,15 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 		{
 			// One processor can sit in more than one wrapper of the same pipeline, and history a
 			// subscriber asked for once has to arrive once: the second pass only passes the request on.
-			if (message.SecurityId != default && _servedSubscriptions.TryAdd(message.TransactionId))
+			var shouldLoad = false;
+
+			if (message.SecurityId != default)
+			{
+				lock (_sync)
+					shouldLoad = _servedSubscriptions.Add(message.TransactionId);
+			}
+
+			if (shouldLoad)
 			{
 				var transactionId = message.TransactionId;
 				var context = new StorageLoadContext();
@@ -60,7 +137,12 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 				// the asked-for Count ran out - a remainder of an exhausted Count is a request for nothing.
 				if (context.HasData && (context.Left == 0 || (message.To != null && message.To <= context.LastDate)))
 				{
-					_fullyProcessedSubscriptions.Add(transactionId);
+					lock (_sync)
+					{
+						if (_servedSubscriptions.Remove(transactionId))
+							_fullyProcessedSubscriptions.Add(transactionId);
+					}
+
 					yield return new SubscriptionFinishedMessage { OriginalTransactionId = transactionId };
 					forwardMessage = null;
 				}
@@ -79,9 +161,15 @@ public class StorageProcessor(StorageCoreSettings settings, CandleBuilderProvide
 		}
 		else
 		{
-			_servedSubscriptions.Remove(message.OriginalTransactionId);
+			bool fullyProcessed;
 
-			if (_fullyProcessedSubscriptions.Remove(message.OriginalTransactionId))
+			lock (_sync)
+			{
+				_servedSubscriptions.Remove(message.OriginalTransactionId);
+				fullyProcessed = _fullyProcessedSubscriptions.Remove(message.OriginalTransactionId);
+			}
+
+			if (fullyProcessed)
 			{
 				yield return new SubscriptionResponseMessage
 				{

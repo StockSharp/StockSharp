@@ -622,6 +622,157 @@ public class StorageMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task UpstreamFinished_ReleasesServedSubscription()
+	{
+		var token = CancellationToken;
+		var (settings, processor, secId) = CreateRealEnv();
+		var date = new DateTime(2025, 10, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		await settings.GetStorage<ExecutionMessage>(secId, DataType.Ticks).SaveAsync(
+		[
+			CreateTick(secId, date, tradeId: 1, price: 100),
+		], token);
+
+		var inner = new RecordingPassThroughMessageAdapter();
+		var adapter = CreateSharedProcessorChain(processor, inner);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var subscription = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 900,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = date,
+			To = date.AddMinutes(1),
+		};
+
+		await adapter.SendInMessageAsync(subscription, token);
+		output.OfType<ExecutionMessage>().Count().AssertEqual(1);
+
+		await inner.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 900 }, token);
+
+		output.Clear();
+		inner.InMessages.Clear();
+
+		await adapter.SendInMessageAsync(subscription.TypedClone(), token);
+
+		output.OfType<ExecutionMessage>().Count().AssertEqual(1,
+			"A completed subscription id must not remain marked as already served.");
+	}
+
+	[TestMethod]
+	public async Task UpstreamError_ReleasesServedSubscription()
+	{
+		var token = CancellationToken;
+		var (settings, processor, secId) = CreateRealEnv();
+		var date = new DateTime(2025, 11, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		await settings.GetStorage<ExecutionMessage>(secId, DataType.Ticks).SaveAsync(
+		[
+			CreateTick(secId, date, tradeId: 1, price: 100),
+		], token);
+
+		var inner = new RecordingPassThroughMessageAdapter();
+		var adapter = CreateSharedProcessorChain(processor, inner);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var subscription = new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 901,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = date,
+			To = date.AddMinutes(1),
+		};
+
+		await adapter.SendInMessageAsync(subscription, token);
+		output.OfType<ExecutionMessage>().Count().AssertEqual(1);
+
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage
+		{
+			OriginalTransactionId = 901,
+			Error = new InvalidOperationException("Rejected."),
+		}, token);
+
+		output.Clear();
+		inner.InMessages.Clear();
+
+		await adapter.SendInMessageAsync(subscription.TypedClone(), token);
+
+		output.OfType<ExecutionMessage>().Count().AssertEqual(1,
+			"A rejected subscription id must not remain marked as already served.");
+	}
+
+	[TestMethod]
+	public async Task CompletedStorageSubscriptions_KeepOnlyRecentUnsubscribeIds()
+	{
+		var token = CancellationToken;
+		var (settings, processor, secId) = CreateRealEnv();
+		var date = new DateTime(2025, 12, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		await settings.GetStorage<ExecutionMessage>(secId, DataType.Ticks).SaveAsync(
+		[
+			CreateTick(secId, date, tradeId: 1, price: 100),
+			CreateTick(secId, date.AddMinutes(1), tradeId: 2, price: 101),
+		], token);
+
+		var inner = new RecordingPassThroughMessageAdapter();
+		var adapter = new StorageMessageAdapter(inner, processor);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		for (var id = 1L; id <= 1_001; id++)
+		{
+			await adapter.SendInMessageAsync(new MarketDataMessage
+			{
+				IsSubscribe = true,
+				TransactionId = id,
+				SecurityId = secId,
+				DataType2 = DataType.Ticks,
+				From = date,
+				To = date.AddMinutes(1),
+			}, token);
+
+			output.Clear();
+		}
+
+		inner.InMessages.Count.AssertEqual(0);
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2_001,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		inner.InMessages.OfType<MarketDataMessage>().Count(m => m.TransactionId == 2_001).AssertEqual(1,
+			"The oldest completed id must be evicted instead of retained forever.");
+
+		inner.InMessages.Clear();
+		output.Clear();
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2_002,
+			OriginalTransactionId = 1_001,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		inner.InMessages.OfType<MarketDataMessage>().Count().AssertEqual(0);
+		output.OfType<SubscriptionResponseMessage>()
+			.Count(m => m.OriginalTransactionId == 2_002 && m.IsOk()).AssertEqual(1,
+				"A recent completed subscription must still answer unsubscribe locally.");
+	}
+
+	[TestMethod]
 	public async Task GetSupportedMarketDataTypes_IncludesDriveDataTypes()
 	{
 		var token = CancellationToken;

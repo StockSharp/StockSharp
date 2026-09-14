@@ -825,7 +825,9 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 			CurrentValue = 10,
 		});
 
+		var lookupStarted = adapter.CurrentTime;
 		await adapter.SendInMessageAsync(new PortfolioLookupMessage { TransactionId = 7, IsSubscribe = true }, CancellationToken);
+		var lookupFinished = adapter.CurrentTime;
 
 		var pfMsg = heard.OfType<PortfolioMessage>().FirstOrDefault(m => m.PortfolioName == "PF1");
 		IsNotNull(pfMsg, "the portfolio held in storage answers the lookup on its own");
@@ -835,6 +837,8 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 		IsNotNull(posMsg, "so does the position it holds");
 		AreEqual(7L, posMsg.SubscriptionId);
 		AreEqual<decimal?>(10m, posMsg.TryGetDecimal(PositionChangeTypes.CurrentValue), "with the value that was recorded for it");
+		IsTrue(posMsg.ServerTime >= lookupStarted && posMsg.ServerTime <= lookupFinished,
+			"a stored position without its own time is stamped with the time of this lookup");
 
 		HasCount(1, inner.InMessages.OfType<PortfolioLookupMessage>().ToArray(), "the lookup still reaches the connection: storage answers first, it does not answer instead");
 	}

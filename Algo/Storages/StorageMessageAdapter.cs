@@ -68,6 +68,13 @@ public class StorageMessageAdapter(IMessageAdapter innerAdapter, IStorageProcess
 		return RaiseNewOutMessageAsync(message, cancellationToken);
 	}
 
+	/// <inheritdoc />
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
+	{
+		_storageProcessor.ProcessSubscriptionResult(message);
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+	}
+
 	/// <summary>
 	/// Create a copy of <see cref="StorageMessageAdapter"/>.
 	/// </summary>

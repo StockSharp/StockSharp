@@ -12,15 +12,75 @@ namespace StockSharp.Algo.Storages;
 /// <param name="snapshotRegistry">Snapshot storage registry.</param>
 public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSettings settings, IStorageBuffer buffer, ISnapshotRegistry snapshotRegistry) : MessageAdapterWrapper(innerAdapter)
 {
+	private const int MaxPendingReplayMessages = 1_024;
+
+	private sealed class PendingSnapshotReplay(Message[] snapshots)
+	{
+		public Message[] Snapshots { get; } = snapshots;
+		public List<Message> BufferedMessages { get; } = [];
+		public bool IsFlushing { get; set; }
+		public bool IsCancelled { get; set; }
+	}
+
+	private sealed class RecentIdSet(int capacity)
+	{
+		private readonly Dictionary<long, LinkedListNode<long>> _nodes = [];
+		private readonly LinkedList<long> _order = [];
+
+		public void Add(long id)
+		{
+			if (_nodes.TryGetValue(id, out var existing))
+			{
+				_order.Remove(existing);
+				_order.AddLast(existing);
+				return;
+			}
+
+			var node = _order.AddLast(id);
+			_nodes.Add(id, node);
+
+			if (_nodes.Count <= capacity)
+				return;
+
+			var oldest = _order.First;
+			_order.RemoveFirst();
+			_nodes.Remove(oldest.Value);
+		}
+
+		public bool Remove(long id)
+		{
+			if (!_nodes.Remove(id, out var node))
+				return false;
+
+			_order.Remove(node);
+			return true;
+		}
+
+		public void Clear()
+		{
+			_nodes.Clear();
+			_order.Clear();
+		}
+	}
+
 	private readonly SynchronizedSet<long> _orderStatusIds = [];
 	private readonly SynchronizedDictionary<long, long> _cancellationTransactions = [];
 	private readonly SynchronizedDictionary<long, long> _replaceTransactions = [];
 	private readonly SynchronizedDictionary<long, long> _replaceTransactionsByTransId = [];
+	private readonly Lock _snapshotSync = new();
+	private readonly Dictionary<long, PendingSnapshotReplay> _pendingSnapshotReplays = [];
+	private readonly RecentIdSet _normalizedResponseIds = new(MaxPendingReplayMessages);
+	private long _droppedPendingReplayMessages;
 
 	/// <summary>
 	/// Storage buffer.
 	/// </summary>
 	public IStorageBuffer Buffer { get; } = buffer ?? throw new ArgumentNullException(nameof(buffer));
+
+	/// <summary>
+	/// Number of early live messages dropped while an inner adapter delayed the subscription state.
+	/// </summary>
+	public long DroppedPendingReplayMessages => Interlocked.Read(ref _droppedPendingReplayMessages);
 
 	/// <summary>
 	/// Snapshot storage registry.
@@ -41,6 +101,9 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		_cancellationTransactions.Clear();
 		_replaceTransactions.Clear();
 		_replaceTransactionsByTransId.Clear();
+
+		CancelAllPendingSnapshotReplays();
+
 		StopStorageTimer();
 	}
 
@@ -59,6 +122,12 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 	/// <inheritdoc />
 	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
+		if (message is ISubscriptionMessage { IsSubscribe: true } subscription)
+		{
+			using (_snapshotSync.EnterScope())
+				_normalizedResponseIds.Remove(subscription.TransactionId);
+		}
+
 		switch (message.Type)
 		{
 			case MessageTypes.Reset:
@@ -72,6 +141,8 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				break;
 
 			case MessageTypes.Disconnect:
+				CancelAllPendingSnapshotReplays();
+
 				// Whatever arrived since the last round has no next round once the connection is down,
 				// so it is written out here or it is lost.
 				if (StopStorageTimer())
@@ -132,11 +203,35 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 
 				Buffer.ProcessInMessage(mdMsg);
 
-				// The persisted state must be emitted before opening the live stream. An inner adapter
-				// can publish current data synchronously while handling the request, and replaying an
-				// older snapshot afterwards would roll the subscriber back.
-				await SendSnapshotsAsync(mdMsg, cancellationToken);
-				break;
+				if (!mdMsg.IsSubscribe)
+				{
+					CancelPendingSnapshotReplay(mdMsg.OriginalTransactionId);
+
+					break;
+				}
+
+				var snapshots = GetSnapshots(mdMsg);
+
+				if (snapshots.Length == 0)
+					break;
+
+				var replay = new PendingSnapshotReplay(snapshots);
+
+				using (_snapshotSync.EnterScope())
+					_pendingSnapshotReplays.Add(mdMsg.TransactionId, replay);
+
+				try
+				{
+					await base.OnSendInMessageAsync(message, cancellationToken);
+				}
+				catch
+				{
+					CancelPendingSnapshotReplay(mdMsg.TransactionId, replay);
+
+					throw;
+				}
+
+				return;
 			}
 		}
 
@@ -146,39 +241,72 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		await base.OnSendInMessageAsync(message, cancellationToken);
 	}
 
-	private async ValueTask SendSnapshotsAsync(MarketDataMessage message, CancellationToken cancellationToken)
+	private void CancelPendingSnapshotReplay(long subscriptionId, PendingSnapshotReplay expected = null)
+	{
+		using (_snapshotSync.EnterScope())
+		{
+			if (!_pendingSnapshotReplays.TryGetValue(subscriptionId, out var replay) ||
+				expected != null && !ReferenceEquals(replay, expected))
+				return;
+
+			replay.IsCancelled = true;
+			replay.BufferedMessages.Clear();
+			_pendingSnapshotReplays.Remove(subscriptionId);
+		}
+	}
+
+	private void CancelAllPendingSnapshotReplays()
+	{
+		using (_snapshotSync.EnterScope())
+		{
+			foreach (var replay in _pendingSnapshotReplays.Values)
+			{
+				replay.IsCancelled = true;
+				replay.BufferedMessages.Clear();
+			}
+
+			_pendingSnapshotReplays.Clear();
+			_normalizedResponseIds.Clear();
+		}
+	}
+
+	private Message[] GetSnapshots(MarketDataMessage message)
 	{
 		if (!message.IsSubscribe || message.From != null || message.To != null || !UseSnapshots)
-			return;
+			return [];
 
-		async ValueTask SendSnapshotAsync<TMessage>(TMessage msg)
+		var snapshots = new List<Message>();
+
+		void AddSnapshot<TMessage>(TMessage msg)
 			where TMessage : Message, ISubscriptionIdMessage
 		{
 			msg.SetSubscriptionIds(subscriptionId: message.TransactionId);
-			await RaiseNewOutMessageAsync(msg, cancellationToken);
+			snapshots.Add(msg);
 		}
 
-		async ValueTask SendAllAsync<TMessage>(ISnapshotStorage<SecurityId, TMessage> storage)
+		void AddAll<TMessage>(ISnapshotStorage<SecurityId, TMessage> storage)
 			where TMessage : Message, ISubscriptionIdMessage
 		{
 			if (message.SecurityId == default)
 			{
 				foreach (var msg in storage.GetAll())
-					await SendSnapshotAsync(msg);
+					AddSnapshot(msg);
 			}
 			else
 			{
 				var msg = storage.Get(message.SecurityId);
 
 				if (msg != null)
-					await SendSnapshotAsync(msg);
+					AddSnapshot(msg);
 			}
 		}
 
 		if (message.DataType2 == DataType.Level1)
-			await SendAllAsync(GetSnapshotStorage<Level1ChangeMessage>(message.DataType2));
+			AddAll(GetSnapshotStorage<Level1ChangeMessage>(message.DataType2));
 		else if (message.DataType2 == DataType.MarketDepth)
-			await SendAllAsync(GetSnapshotStorage<QuoteChangeMessage>(message.DataType2));
+			AddAll(GetSnapshotStorage<QuoteChangeMessage>(message.DataType2));
+
+		return [.. snapshots];
 	}
 
 	/// <summary>
@@ -272,11 +400,201 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 	}
 
 	/// <inheritdoc />
-	protected override ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		Buffer.ProcessOutMessage(message);
 
-		return base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+		if (message is SubscriptionResponseMessage normalizedResponse && TryConsumeNormalizedResponse(normalizedResponse.OriginalTransactionId))
+		{
+			if (!normalizedResponse.IsOk())
+				await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+
+			return;
+		}
+
+		if (message is DisconnectMessage)
+			CancelAllPendingSnapshotReplays();
+		else if (message is SubscriptionFinishedMessage finished)
+			CancelPendingSnapshotReplay(finished.OriginalTransactionId);
+
+		if (message is SubscriptionResponseMessage response &&
+			TryStartPendingSnapshotReplay(response.OriginalTransactionId, normalizeResponse: false, out var responseReplay))
+		{
+			if (response.IsOk())
+				await FlushPendingSnapshotReplayAsync(response.OriginalTransactionId, responseReplay, [message], cancellationToken);
+			else
+			{
+				try
+				{
+					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+				}
+				finally
+				{
+					CancelPendingSnapshotReplay(response.OriginalTransactionId, responseReplay);
+				}
+			}
+
+			return;
+		}
+
+		if (message is SubscriptionOnlineMessage online &&
+			TryStartPendingSnapshotReplay(online.OriginalTransactionId, normalizeResponse: true, out var onlineReplay))
+		{
+			await FlushPendingSnapshotReplayAsync(online.OriginalTransactionId, onlineReplay,
+			[
+				new SubscriptionResponseMessage { OriginalTransactionId = online.OriginalTransactionId },
+				message,
+			], cancellationToken);
+			return;
+		}
+
+		if (message is ISubscriptionIdMessage subscriptionMessage)
+		{
+			Message passThrough = message;
+			var ids = subscriptionMessage.GetSubscriptionIds();
+			var warnAboutDrop = false;
+
+			using (_snapshotSync.EnterScope())
+			{
+				List<long> remainingIds = null;
+				var hasPending = false;
+
+				foreach (var id in ids.Distinct())
+				{
+					if (_pendingSnapshotReplays.TryGetValue(id, out var replay))
+					{
+						hasPending = true;
+						var clone = message.Clone();
+						((ISubscriptionIdMessage)clone).SetSubscriptionIds(subscriptionId: id);
+
+						if (replay.BufferedMessages.Count >= MaxPendingReplayMessages)
+						{
+							replay.BufferedMessages.RemoveAt(0);
+							warnAboutDrop |= Interlocked.Increment(ref _droppedPendingReplayMessages) == 1;
+						}
+
+						replay.BufferedMessages.Add(clone);
+					}
+					else
+					{
+						remainingIds ??= [];
+						remainingIds.Add(id);
+					}
+				}
+
+				if (hasPending)
+				{
+					if (remainingIds is null || remainingIds.Count == 0)
+						passThrough = null;
+					else
+					{
+						passThrough = message.Clone();
+						((ISubscriptionIdMessage)passThrough).SetSubscriptionIds([.. remainingIds]);
+					}
+				}
+			}
+
+			if (warnAboutDrop)
+				LogWarning("An inner adapter produced more than {0} live messages before confirming a subscription. Old messages are being dropped.", MaxPendingReplayMessages);
+
+			if (passThrough is null)
+				return;
+
+			message = passThrough;
+		}
+
+		await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
+	}
+
+	private bool TryConsumeNormalizedResponse(long subscriptionId)
+	{
+		using (_snapshotSync.EnterScope())
+			return _normalizedResponseIds.Remove(subscriptionId);
+	}
+
+	private bool TryStartPendingSnapshotReplay(long subscriptionId, bool normalizeResponse, out PendingSnapshotReplay replay)
+	{
+		using (_snapshotSync.EnterScope())
+		{
+			if (_pendingSnapshotReplays.TryGetValue(subscriptionId, out replay) && !replay.IsFlushing && !replay.IsCancelled)
+			{
+				replay.IsFlushing = true;
+
+				if (normalizeResponse)
+					_normalizedResponseIds.Add(subscriptionId);
+
+				return true;
+			}
+
+			replay = null;
+			return false;
+		}
+	}
+
+	private bool IsPendingSnapshotReplayCancelled(PendingSnapshotReplay replay)
+	{
+		using (_snapshotSync.EnterScope())
+			return replay.IsCancelled;
+	}
+
+	private async ValueTask FlushPendingSnapshotReplayAsync(long subscriptionId, PendingSnapshotReplay replay, Message[] stateMessages, CancellationToken cancellationToken)
+	{
+		try
+		{
+			for (var i = 0; i < stateMessages.Length; i++)
+			{
+				if (i > 0 && IsPendingSnapshotReplayCancelled(replay))
+					return;
+
+				await base.OnInnerAdapterNewOutMessageAsync(stateMessages[i], cancellationToken);
+			}
+
+			foreach (var snapshot in replay.Snapshots)
+			{
+				if (IsPendingSnapshotReplayCancelled(replay))
+					return;
+
+				await base.OnInnerAdapterNewOutMessageAsync(snapshot, cancellationToken);
+			}
+
+			while (true)
+			{
+				Message[] buffered;
+
+				using (_snapshotSync.EnterScope())
+				{
+					if (replay.IsCancelled)
+						return;
+
+					if (replay.BufferedMessages.Count == 0)
+					{
+						if (_pendingSnapshotReplays.TryGetValue(subscriptionId, out var current) && ReferenceEquals(current, replay))
+							_pendingSnapshotReplays.Remove(subscriptionId);
+
+						return;
+					}
+
+					buffered = [.. replay.BufferedMessages];
+					replay.BufferedMessages.Clear();
+				}
+
+				foreach (var bufferedMessage in buffered)
+				{
+					if (IsPendingSnapshotReplayCancelled(replay))
+						return;
+
+					await base.OnInnerAdapterNewOutMessageAsync(bufferedMessage, cancellationToken);
+				}
+			}
+		}
+		finally
+		{
+			using (_snapshotSync.EnterScope())
+			{
+				if (_pendingSnapshotReplays.TryGetValue(subscriptionId, out var current) && ReferenceEquals(current, replay))
+					_pendingSnapshotReplays.Remove(subscriptionId);
+			}
+		}
 	}
 
 	private CancellationTokenSource _cts;

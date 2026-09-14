@@ -3,6 +3,36 @@ namespace StockSharp.Tests;
 [TestClass]
 public class BufferMessageAdapterTests : BaseTestClass
 {
+	private sealed class SynchronousLevel1Adapter(SecurityId securityId, bool dataBeforeResponse) : MessageAdapter(new IncrementalIdGenerator())
+	{
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			if (message is not MarketDataMessage { IsSubscribe: true, DataType2: var dataType } subscription || dataType != DataType.Level1)
+				return;
+
+			var live = new Level1ChangeMessage
+			{
+				SecurityId = securityId,
+				ServerTime = DateTime.UtcNow.AddSeconds(1),
+			};
+			live.Add(Level1Fields.LastTradePrice, 2m);
+			live.SetSubscriptionIds(subscriptionId: subscription.TransactionId);
+
+			if (dataBeforeResponse)
+				await SendOutMessageAsync(live, cancellationToken);
+
+			await SendOutMessageAsync(new SubscriptionResponseMessage
+			{
+				OriginalTransactionId = subscription.TransactionId,
+			}, cancellationToken);
+
+			if (!dataBeforeResponse)
+				await SendOutMessageAsync(live, cancellationToken);
+		}
+
+		public override IMessageAdapter Clone() => new SynchronousLevel1Adapter(securityId, dataBeforeResponse);
+	}
+
 	// The real storage keeps copies of its own: Update stores a clone of what it is given, and Get
 	// and GetAll hand out clones. Whoever changes what Get returned has to Update it to keep it.
 	private sealed class InMemorySnapshotStorage<TKey, TMessage>(Func<TMessage, TKey> getKey) : ISnapshotStorage<TKey, TMessage>
@@ -256,6 +286,7 @@ public class BufferMessageAdapterTests : BaseTestClass
 			DataType2 = DataType.Level1,
 			SecurityId = default,
 		}, token);
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 10 }, token);
 
 		var l1Out = output.OfType<Level1ChangeMessage>().ToArray();
 		l1Out.Length.AssertEqual(2);
@@ -317,6 +348,7 @@ public class BufferMessageAdapterTests : BaseTestClass
 			DataType2 = DataType.MarketDepth,
 			SecurityId = sec2,
 		}, token);
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 11 }, token);
 
 		var quotesOut = output.OfType<QuoteChangeMessage>().ToArray();
 		quotesOut.Length.AssertEqual(1);
@@ -703,8 +735,8 @@ public class BufferMessageAdapterTests : BaseTestClass
 
 	/// <summary>
 	/// A live adapter may publish current data while it handles a subscription. The persisted snapshot
-	/// must precede that call, otherwise its older state can arrive after the current state and roll the
-	/// subscriber back.
+	/// must reach the accepted subscriber before that newer data, otherwise the subscriber either misses
+	/// the snapshot or is rolled back by it.
 	/// </summary>
 	[TestMethod]
 	public async Task TheSnapshotArrivesBeforeTheLiveSubscriptionCanProduceData()
@@ -728,8 +760,7 @@ public class BufferMessageAdapterTests : BaseTestClass
 		};
 
 		var buffer = new StorageBuffer();
-		// Echoes what it is sent, marking the earliest point at which live output could be produced.
-		var inner = new RecordingPassThroughMessageAdapter();
+		var inner = new SynchronousLevel1Adapter(secId, dataBeforeResponse: true);
 
 		using var adapter = new BufferMessageAdapter(inner, settings, buffer, snapshotRegistry);
 
@@ -744,12 +775,192 @@ public class BufferMessageAdapterTests : BaseTestClass
 			SecurityId = secId,
 		}, token);
 
-		var forwarded = output.FindIndex(m => m is MarketDataMessage);
-		var snapshot = output.FindIndex(m => m is Level1ChangeMessage);
+		var response = output.FindIndex(m => m is SubscriptionResponseMessage { OriginalTransactionId: 31 });
+		var snapshot = output.FindIndex(m => m is Level1ChangeMessage l1Msg && l1Msg.TryGetDecimal(Level1Fields.LastTradePrice) == 1m);
+		var live = output.FindIndex(m => m is Level1ChangeMessage l1Msg && l1Msg.TryGetDecimal(Level1Fields.LastTradePrice) == 2m);
 
-		IsGreaterOrEqual(forwarded, 0, "the subscription has to reach the inner adapter");
+		IsGreaterOrEqual(response, 0, "the subscription has to be acknowledged");
 		IsGreaterOrEqual(snapshot, 0, "the snapshot has to be sent out");
-		IsLess(snapshot, forwarded, "persisted state must be applied before the live stream can publish newer data");
+		IsGreaterOrEqual(live, 0, "live data has to be sent out");
+		IsLess(response, snapshot, "a response-gated consumer must be ready before snapshot replay starts");
+		IsLess(snapshot, live, "persisted state must be applied before newer live data");
+	}
+
+	[TestMethod]
+	public async Task OnlineBeforeResponse_ReleasesSnapshotBeforeBufferedLiveData()
+	{
+		var token = CancellationToken;
+		var secId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var l1Storage = new InMemorySnapshotStorage<SecurityId, Level1ChangeMessage>(m => m.SecurityId);
+		var snapshot = new Level1ChangeMessage { SecurityId = secId, ServerTime = DateTime.UtcNow };
+		snapshot.Add(Level1Fields.LastTradePrice, 1m);
+		l1Storage.Update(snapshot);
+
+		var snapshotRegistry = new InMemorySnapshotRegistry().Add(DataType.Level1, l1Storage);
+		var settings = new StorageCoreSettings { Mode = StorageModes.Snapshot, Format = StorageFormats.Binary };
+		var inner = new RecordingPassThroughMessageAdapter();
+
+		using var adapter = new BufferMessageAdapter(inner, settings, new StorageBuffer(), snapshotRegistry);
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (message, _) => { output.Add(message); return default; };
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 32,
+			DataType2 = DataType.Level1,
+			SecurityId = secId,
+		}, token);
+
+		var live = new Level1ChangeMessage { SecurityId = secId, ServerTime = DateTime.UtcNow.AddSeconds(1) };
+		live.Add(Level1Fields.LastTradePrice, 2m);
+		live.SetSubscriptionIds(subscriptionId: 32);
+
+		await inner.SendOutMessageAsync(live, token);
+		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 32 }, token);
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 32 }, token);
+
+		var responseIndex = output.FindIndex(m => m is SubscriptionResponseMessage { OriginalTransactionId: 32 });
+		var onlineIndex = output.FindIndex(m => m is SubscriptionOnlineMessage);
+		var snapshotIndex = output.FindIndex(m => m is Level1ChangeMessage level1 && level1.TryGetDecimal(Level1Fields.LastTradePrice) == 1m);
+		var liveIndex = output.FindIndex(m => m is Level1ChangeMessage level1 && level1.TryGetDecimal(Level1Fields.LastTradePrice) == 2m);
+
+		IsLess(responseIndex, onlineIndex, "Online implies acceptance, so an early Online normalizes the missing response first");
+		IsLess(onlineIndex, snapshotIndex, "Online is a positive subscription gate and must precede replay");
+		IsLess(snapshotIndex, liveIndex, "the snapshot must precede live data buffered before Online");
+		output.OfType<SubscriptionResponseMessage>().Count(m => m.OriginalTransactionId == 32).AssertEqual(1,
+			"the real response arriving after Online must not duplicate the normalized response");
+	}
+
+	[TestMethod]
+	public async Task FinishedBeforeResponse_CancelsPendingSnapshotReplay()
+	{
+		var token = CancellationToken;
+		var secId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var l1Storage = new InMemorySnapshotStorage<SecurityId, Level1ChangeMessage>(m => m.SecurityId);
+		var snapshot = new Level1ChangeMessage { SecurityId = secId, ServerTime = DateTime.UtcNow };
+		snapshot.Add(Level1Fields.LastTradePrice, 1m);
+		l1Storage.Update(snapshot);
+
+		var inner = new RecordingPassThroughMessageAdapter();
+		using var adapter = new BufferMessageAdapter(inner,
+			new StorageCoreSettings { Mode = StorageModes.Snapshot, Format = StorageFormats.Binary },
+			new StorageBuffer(), new InMemorySnapshotRegistry().Add(DataType.Level1, l1Storage));
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (message, _) => { output.Add(message); return default; };
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 33,
+			DataType2 = DataType.Level1,
+			SecurityId = secId,
+		}, token);
+
+		var live = new Level1ChangeMessage { SecurityId = secId, ServerTime = DateTime.UtcNow.AddSeconds(1) };
+		live.Add(Level1Fields.LastTradePrice, 2m);
+		live.SetSubscriptionIds(subscriptionId: 33);
+
+		await inner.SendOutMessageAsync(live, token);
+		await inner.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 33 }, token);
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 33 }, token);
+
+		output.OfType<SubscriptionFinishedMessage>().Count().AssertEqual(1);
+		output.OfType<SubscriptionResponseMessage>().Count().AssertEqual(1);
+		output.OfType<Level1ChangeMessage>().Count().AssertEqual(0,
+			"a terminal subscription must not be revived by a late response and stale replay");
+	}
+
+	[TestMethod]
+	public async Task ReentrantUnsubscribeDuringResponse_CancelsSnapshotReplay()
+	{
+		var token = CancellationToken;
+		var secId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var l1Storage = new InMemorySnapshotStorage<SecurityId, Level1ChangeMessage>(m => m.SecurityId);
+		var snapshot = new Level1ChangeMessage { SecurityId = secId, ServerTime = DateTime.UtcNow };
+		snapshot.Add(Level1Fields.LastTradePrice, 1m);
+		l1Storage.Update(snapshot);
+
+		var inner = new RecordingPassThroughMessageAdapter();
+		using var adapter = new BufferMessageAdapter(inner,
+			new StorageCoreSettings { Mode = StorageModes.Snapshot, Format = StorageFormats.Binary },
+			new StorageBuffer(), new InMemorySnapshotRegistry().Add(DataType.Level1, l1Storage));
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += async (message, cancellationToken) =>
+		{
+			output.Add(message);
+
+			if (message is SubscriptionResponseMessage { OriginalTransactionId: 34 })
+			{
+				await adapter.SendInMessageAsync(new MarketDataMessage
+				{
+					IsSubscribe = false,
+					TransactionId = 35,
+					OriginalTransactionId = 34,
+					DataType2 = DataType.Level1,
+					SecurityId = secId,
+				}, cancellationToken);
+			}
+		};
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 34,
+			DataType2 = DataType.Level1,
+			SecurityId = secId,
+		}, token);
+
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 34 }, token);
+
+		output.OfType<Level1ChangeMessage>().Count().AssertEqual(0,
+			"an unsubscribe issued by the response handler must stop the replay before it starts");
+		inner.InMessages.OfType<MarketDataMessage>().Count(m => !m.IsSubscribe && m.OriginalTransactionId == 34)
+			.AssertEqual(1);
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task LiveDataBeforeResponse_IsBoundedAndAccountedFor()
+	{
+		var token = CancellationToken;
+		var secId = new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test };
+		var l1Storage = new InMemorySnapshotStorage<SecurityId, Level1ChangeMessage>(m => m.SecurityId);
+		var snapshot = new Level1ChangeMessage { SecurityId = secId, ServerTime = DateTime.UtcNow };
+		snapshot.Add(Level1Fields.LastTradePrice, 1m);
+		l1Storage.Update(snapshot);
+
+		var inner = new RecordingPassThroughMessageAdapter();
+		using var adapter = new BufferMessageAdapter(inner,
+			new StorageCoreSettings { Mode = StorageModes.Snapshot, Format = StorageFormats.Binary },
+			new StorageBuffer(), new InMemorySnapshotRegistry().Add(DataType.Level1, l1Storage));
+
+		var output = new List<Message>();
+		adapter.NewOutMessageAsync += (message, _) => { output.Add(message); return default; };
+
+		await adapter.SendInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 36,
+			DataType2 = DataType.Level1,
+			SecurityId = secId,
+		}, token);
+
+		for (var i = 0; i < 1_025; i++)
+		{
+			var live = new Level1ChangeMessage { SecurityId = secId, ServerTime = DateTime.UtcNow.AddSeconds(i + 1) };
+			live.Add(Level1Fields.LastTradePrice, i + 2m);
+			live.SetSubscriptionIds(subscriptionId: 36);
+			await inner.SendOutMessageAsync(live, token);
+		}
+
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 36 }, token);
+
+		adapter.DroppedPendingReplayMessages.AssertEqual(1L);
+		output.OfType<Level1ChangeMessage>().Count().AssertEqual(1_025,
+			"the stored snapshot and the bounded tail of early live data are emitted after acceptance");
 	}
 
 	/// <summary>
