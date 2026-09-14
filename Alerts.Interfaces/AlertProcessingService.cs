@@ -10,6 +10,7 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 	private readonly CachedSynchronizedDictionary<Type, CachedSynchronizedSet<AlertSchema>> _schemas = [];
 	private readonly Channel<Message> _channel;
 	private readonly CancellationTokenSource _cts = new();
+	private long _droppedMessages;
 
 	// Schemas whose alert reached the user, and which therefore stop matching.
 	private readonly SynchronizedSet<AlertSchema> _delivered = [];
@@ -20,7 +21,11 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 	/// <param name="maxQueue">Max queue for process.</param>
 	public AlertProcessingService(int maxQueue)
 	{
-		_channel = Channel.CreateBounded<Message>(maxQueue);
+		_channel = Channel.CreateBounded<Message>(new BoundedChannelOptions(maxQueue)
+		{
+			FullMode = BoundedChannelFullMode.Wait,
+			SingleReader = true,
+		});
 
 		var messages = _channel.Reader;
 		var token = _cts.Token;
@@ -115,6 +120,11 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 	/// <inheritdoc />
 	public event Action<AlertSchema> UnRegistered;
 
+	/// <summary>
+	/// Number of messages dropped because the processing queue was full.
+	/// </summary>
+	public long DroppedMessages => Interlocked.Read(ref _droppedMessages);
+
 	/// <inheritdoc />
 	public void Register(AlertSchema schema)
 	{
@@ -143,7 +153,11 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 		if (message == null)
 			throw new ArgumentNullException(nameof(message));
 
-		_channel.Writer.TryWrite(message);
+		if (_channel.Writer.TryWrite(message) || _cts.IsCancellationRequested)
+			return;
+
+		if (Interlocked.Increment(ref _droppedMessages) == 1)
+			LogWarning("Alert processing queue is full. Messages are being dropped.");
 	}
 
 	/// <inheritdoc />

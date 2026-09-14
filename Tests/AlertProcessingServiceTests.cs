@@ -340,11 +340,18 @@ public class AlertProcessingServiceTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(30_000, CooperativeCancellation = true)]
-	public async Task Process_BoundsPendingMessages_WhenQueueIsFull()
+	public async Task Process_AccountsForMessagesDroppedWhenQueueIsFull()
 	{
 		// Process is a non-blocking feed. Its configured bound must remain a real memory bound while
-		// delivery is stalled: one message is in flight and one waits in this queue.
+		// delivery is stalled: one message is in flight and one waits in this queue. Anything beyond
+		// that bound must be visible instead of disappearing silently.
 		using var service = new AlertProcessingService(1);
+		var warnings = 0;
+		service.Log += message =>
+		{
+			if (message.Level == LogLevels.Warning)
+				Interlocked.Increment(ref warnings);
+		};
 
 		// Equal thresholds 100, 200 ... make message i match schema i and nothing
 		// else, so we can see exactly which messages survived the bounded queue.
@@ -375,6 +382,8 @@ public class AlertProcessingServiceTests : BaseTestClass
 		await WaitForNotification(2, 10_000);
 
 		_notificationService.NotifyCount.AssertEqual(2, "the bounded queue keeps one pending message while one is being delivered");
+		service.DroppedMessages.AssertEqual(count - 2L, "every message refused by the bounded queue must be counted");
+		warnings.AssertEqual(1, "the first dropped alert message must make the loss visible without flooding the log");
 	}
 
 	[TestMethod]
