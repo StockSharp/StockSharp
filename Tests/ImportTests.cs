@@ -1201,7 +1201,9 @@ public class ImportTests : BaseTestClass
 	private static string RewriteWithBrokenRow(string sourcePath, string name, int rowIndex)
 	{
 		var fs = Helper.MemorySystem;
-		var lines = fs.ReadAllText(sourcePath).Split(StringHelper.RN, StringSplitOptions.RemoveEmptyEntries);
+		// The source was written with WriteLine, so its terminator is whatever the platform uses:
+		// splitting on a fixed pair finds one line on a system that ends them with a single character.
+		var lines = fs.ReadAllText(sourcePath).Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
 
 		lines[rowIndex] = lines[rowIndex].Split(';')[0];
 
