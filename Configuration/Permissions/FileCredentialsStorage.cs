@@ -90,9 +90,22 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 		// what the file carries now and not to what this instance last read.
 		LoadFromFile();
 
+		var hadPrevious = _credentials.TryGetValue(saved.Email, out var previous);
 		_credentials[saved.Email] = saved;
 
-		SaveToFile();
+		try
+		{
+			SaveToFile();
+		}
+		catch
+		{
+			if (hadPrevious)
+				_credentials[saved.Email] = previous;
+			else
+				_credentials.Remove(saved.Email);
+
+			throw;
+		}
 
 		return default;
 	}

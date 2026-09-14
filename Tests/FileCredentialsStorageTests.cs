@@ -335,6 +335,43 @@ public class FileCredentialsStorageTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task Save_WhenPersistFails_RestoresLiveCache()
+	{
+		var fs = CreateFileSystem();
+		var filePath = "/credentials.json";
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
+
+		await storage.SaveAsync(CreateCredentials("persisted@example.com"), CancellationToken);
+		fs.SetReadOnly(filePath, true);
+
+		var failed = false;
+
+		try
+		{
+			await storage.SaveAsync(CreateCredentials("rejected@example.com"), CancellationToken);
+		}
+		catch
+		{
+			failed = true;
+		}
+		finally
+		{
+			fs.SetReadOnly(filePath, false);
+		}
+
+		failed.AssertTrue("a save that cannot reach the file must fail");
+
+		var live = (await storage.SearchAsync("*").ToArrayAsync(CancellationToken))
+			.Select(c => c.Email).OrderBy(e => e).ToArray();
+		IPermissionCredentialsStorage reopened = new FileCredentialsStorage(fs, filePath, asEmail: true);
+		var persisted = (await reopened.SearchAsync("*").ToArrayAsync(CancellationToken))
+			.Select(c => c.Email).OrderBy(e => e).ToArray();
+
+		live.AssertEqual(persisted, "the running storage must not grant credentials whose save failed");
+		persisted.AssertEqual(["persisted@example.com"]);
+	}
+
+	[TestMethod]
 	public async Task Save_MutationAfterSave_DoesNotChangePermissions()
 	{
 		var fs = CreateFileSystem();
