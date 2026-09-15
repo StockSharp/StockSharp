@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using System.Collections;
 using System.Diagnostics;
@@ -9,6 +9,9 @@ using StockSharp.Algo.Testing;
 using StockSharp.Designer;
 
 [TestClass]
+// The optimizer spreads its own iterations across every core, so running these beside other tests
+// oversubscribes the machine and the ones bounded by wall clock stop making their deadlines.
+[DoNotParallelize]
 public class OptimizerTests : BaseTestClass
 {
 	private sealed class BlockingStopSmaStrategy : SmaStrategy

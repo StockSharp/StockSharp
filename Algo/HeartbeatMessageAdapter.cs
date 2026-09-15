@@ -1,4 +1,4 @@
-namespace StockSharp.Algo;
+﻿namespace StockSharp.Algo;
 
 /// <summary>
 /// The messages adapter controlling the connection.
@@ -30,6 +30,10 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 	private ControllablePeriodicTimer _timer;
 
+	// When the link last carried anything either way. The probe below is for an idle link only, so
+	// it is what the interval is counted from.
+	private DateTime _lastMessageTime;
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="HeartbeatMessageAdapter"/>.
 	/// </summary>
@@ -60,6 +64,8 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	/// <inheritdoc />
 	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
+		_lastMessageTime = CurrentTime;
+
 		switch (message.Type)
 		{
 			case MessageTypes.Connect:
@@ -165,6 +171,10 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	/// <inheritdoc />
 	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
+		// The probe is not traffic: counting it would keep the link looking busy for ever.
+		if (message != _timeMessage)
+			_lastMessageTime = CurrentTime;
+
 		var isStartTimer = false;
 
 		switch (message.Type)
@@ -280,6 +290,8 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 		var time = CurrentTime;
 		var lastHeartBeatTime = time;
+
+		_lastMessageTime = time;
 
 		var sync = new Lock();
 		var isProcessing = false;
@@ -460,8 +472,22 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		}
 	}
 
-	private async ValueTask ProcessHeartbeat(CancellationToken cancellationToken)
+	/// <summary>
+	/// Asks the connection to answer, when it has been idle long enough to be worth asking.
+	/// </summary>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Task.</returns>
+	/// <remarks>
+	/// A link carrying messages has already answered the question, and on a protocol that keeps its
+	/// own session alive an unnecessary probe is a second one beside the adapter's own.
+	/// </remarks>
+	public async ValueTask ProcessHeartbeat(CancellationToken cancellationToken)
 	{
+		var heartbeat = HeartbeatInterval;
+
+		if (heartbeat > TimeSpan.Zero && (CurrentTime - _lastMessageTime) < heartbeat)
+			return;
+
 		using (await _sync.LockAsync(cancellationToken))
 		{
 			if (_state.CurrentState != ConnectionStates.Connected && !InnerAdapter.HeartbeatBeforeConnect)

@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 [TestClass]
 public class HeartbeatReconnectScheduleTests : BaseTestClass
@@ -342,4 +342,85 @@ public class HeartbeatReconnectScheduleTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Probing only an idle link
+
+	/// <summary>
+	/// A link that is carrying messages has already answered the only question a heartbeat asks, so
+	/// asking it again puts a probe on the wire for nothing - and on a protocol that runs its own
+	/// session keepalive, a second one beside the adapter's.
+	/// </summary>
+	[TestMethod]
+	public async Task ALinkThatIsCarryingMessagesIsNotProbed()
+	{
+		var (adapter, inner, outMessages) = CreateSut(_midday, new HeartbeatManagerState
+		{
+			CurrentState = ConnectionStates.Connected,
+			CanSendTime = true,
+		});
+
+		adapter.HeartbeatInterval = TimeSpan.FromSeconds(10);
+
+		await adapter.SendInMessageAsync(new TimeFrameCandleMessage(), CancellationToken);
+
+		inner.Time = _midday.AddSeconds(5);
+		outMessages.Clear();
+
+		await adapter.ProcessHeartbeat(CancellationToken);
+
+		IsFalse(outMessages.OfType<TimeMessage>().Any(), "the link spoke within the interval, so there is nothing to ask it");
+	}
+
+	/// <summary>
+	/// A link that has gone quiet for longer than the interval is asked, which is what tells a live
+	/// but silent connection from one that is gone.
+	/// </summary>
+	[TestMethod]
+	public async Task ALinkThatHasGoneQuietIsProbed()
+	{
+		var (adapter, inner, outMessages) = CreateSut(_midday, new HeartbeatManagerState
+		{
+			CurrentState = ConnectionStates.Connected,
+			CanSendTime = true,
+		});
+
+		adapter.HeartbeatInterval = TimeSpan.FromSeconds(10);
+
+		await adapter.SendInMessageAsync(new TimeFrameCandleMessage(), CancellationToken);
+
+		inner.Time = _midday.AddSeconds(30);
+		outMessages.Clear();
+
+		await adapter.ProcessHeartbeat(CancellationToken);
+
+		IsTrue(outMessages.OfType<TimeMessage>().Any(), "nothing has come for three intervals, so the link has to be asked");
+	}
+
+	/// <summary>
+	/// What the inner adapter sends up counts as the link speaking, the same as what is sent down it.
+	/// </summary>
+	[TestMethod]
+	public async Task WhatArrivesFromTheVenueCountsAsTheLinkSpeaking()
+	{
+		var (adapter, inner, outMessages) = CreateSut(_midday, new HeartbeatManagerState
+		{
+			CurrentState = ConnectionStates.Connected,
+			CanSendTime = true,
+		});
+
+		adapter.HeartbeatInterval = TimeSpan.FromSeconds(10);
+
+		inner.Time = _midday.AddSeconds(30);
+		await inner.SendOutMessageAsync(new TimeFrameCandleMessage(), CancellationToken);
+
+		inner.Time = _midday.AddSeconds(35);
+		outMessages.Clear();
+
+		await adapter.ProcessHeartbeat(CancellationToken);
+
+		IsFalse(outMessages.OfType<TimeMessage>().Any(), "the venue spoke within the interval, so there is nothing to ask it");
+	}
+
+	#endregion
+
 }

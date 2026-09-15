@@ -609,8 +609,11 @@ public abstract partial class BaseFixDialect : BaseLogReceiver, IFixDialect
 	{
 		var messageType = await _reader.ReadHeaderAsync(Version, cancellationToken);
 
+		// No header where one was due means the stream ended, which on a session that was not asked
+		// to end is the other side hanging up. Returning nothing instead would be read as a message
+		// that carried nothing, and the caller would come straight back for the next one.
 		if (messageType == null)
-			yield break;
+			throw new IOException("The other side closed the connection.");
 
 		await foreach (var msg in OnReadAsync(_reader, messageType, cancellationToken).WithEnforcedCancellation(cancellationToken))
 		{

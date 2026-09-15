@@ -671,8 +671,11 @@ public class ConnectorRoutingTests : BaseTestClass
 		binanceAdapter.StartLiveFeed(tickIntervalMs: 50, basePrice: 50000);
 		kucoinAdapter.StartLiveFeed(tickIntervalMs: 50, basePrice: 3000);
 
-		// Run for 3 seconds
-		await Task.Delay(3000, CancellationToken);
+		// Run until both feeds have delivered what is asserted below, rather than for a fixed span:
+		// the feeds tick on a timer, and on a loaded machine a fixed span decides how many ticks the
+		// test asks for. The method's own timeout is what fails a feed that never delivers.
+		while (btcTicks.Count < 30 || ethTicks.Count < 30)
+			await Task.Delay(50, CancellationToken);
 
 		await connector.DisconnectAsync(CancellationToken);
 

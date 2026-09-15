@@ -1796,7 +1796,7 @@ public class AsyncExtensionsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[Timeout(6000, CooperativeCancellation = true)]
+	[Timeout(30000, CooperativeCancellation = true)]
 	public async Task Connector_RegisterOrderAsync_OrderAccepted_ReturnsEvents()
 	{
 		using var connector = new TestConnector();
@@ -1821,7 +1821,15 @@ public class AsyncExtensionsTests : BaseTestClass
 
 		// track all OrderReceived events
 		var allOrderReceived = new List<Order>();
-		connector.OrderReceived += (_, o) => allOrderReceived.Add(o);
+		var bothReceived = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.OrderReceived += (_, o) =>
+		{
+			allOrderReceived.Add(o);
+
+			if (allOrderReceived.Count >= 2)
+				bothReceived.TrySetResult();
+		};
 
 		var enumTask = Task.Run(async () =>
 		{
@@ -1848,11 +1856,10 @@ public class AsyncExtensionsTests : BaseTestClass
 				await Task.Delay(10, CancellationToken);
 		}, CancellationToken);
 
-		// Wait for both notifications rather than guessing how long they take: the order reaching
-		// Active is raised before the notification for it has been delivered, so a fixed pause is
-		// a bet on the machine. Bounded, so a notification that never comes still fails.
-		for (var waited = 0; waited < 3000 && allOrderReceived.Count < 2; waited += 10)
-			await Task.Delay(10, CancellationToken);
+		// Waited for, not polled for: the order reaching Active is raised before the notification for
+		// it has been delivered, and a poll bounded by a fixed number of milliseconds is a bet on how
+		// loaded the machine is. The method's own timeout is what fails a notification that never comes.
+		await bothReceived.Task.WithCancellation(CancellationToken);
 
 		allOrderReceived.Count.AssertEqual(2, $"OrderReceived should have fired. Order state: {order.State}, Id: {order.Id}");
 
