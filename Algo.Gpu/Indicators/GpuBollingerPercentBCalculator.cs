@@ -167,33 +167,34 @@ public class GpuBollingerPercentBCalculator : GpuIndicatorCalculatorBase<Bolling
 			return;
 
 		var priceType = (Level1Fields)prm.PriceType;
+		var currentPrice = ExtractPrice(candle, priceType);
 
-		var sum = 0f;
+		// Work relative to the current price. A small deviation multiplier makes the band a tiny
+		// fraction of a price of several thousand, and float32 rounds prices at that magnitude by more
+		// than a few percent of such a band.
+		var sumOffset = 0d;
 		for (var j = 0; j < L; j++)
-			sum += ExtractPrice(flatCandles[globalIdx - j], priceType);
+			sumOffset += ExtractPrice(flatCandles[globalIdx - j], priceType) - currentPrice;
 
-		var mean = sum / L;
+		var meanOffset = sumOffset / L;
 
-		var variance = 0f;
+		var variance = 0d;
 		for (var j = 0; j < L; j++)
 		{
-			var price = ExtractPrice(flatCandles[globalIdx - j], priceType);
-			var diff = price - mean;
+			var diff = (ExtractPrice(flatCandles[globalIdx - j], priceType) - currentPrice) - meanOffset;
 			variance += diff * diff;
 		}
 
-		var stdDev = (float)ILGPU.Algorithms.XMath.Sqrt(variance / L);
-		var width = prm.StdDevMultiplier;
-		var upperBand = mean + width * stdDev;
-		var lowerBand = mean - width * stdDev;
-		var bandWidth = upperBand - lowerBand;
+		var stdDev = Math.Sqrt(variance / L);
+		var halfBand = prm.StdDevMultiplier * stdDev;
 
-		if (bandWidth == 0f)
+		if (halfBand == 0d)
 			return;
 
-		var currentPrice = ExtractPrice(candle, priceType);
-		var percentB = (currentPrice - lowerBand) / bandWidth * 100f;
+		// The same quantity as (price - lower) / (upper - lower) * 100, with both band edges cancelled
+		// out so that neither is ever formed as an absolute price. meanOffset is mean - price.
+		var percentB = 50d - 50d * meanOffset / halfBand;
 
-		flatResults[resIndex] = new() { Time = candle.Time, Value = percentB, IsFormed = 1 };
+		flatResults[resIndex] = new() { Time = candle.Time, Value = (float)percentB, IsFormed = 1 };
 	}
 }

@@ -263,28 +263,34 @@ public class GpuBollingerBandsCalculator : GpuIndicatorCalculatorBase<BollingerB
 
 		var priceType = (Level1Fields)prm.PriceType;
 
-		var sum = 0f;
-		var sumSq = 0f;
+		// Work relative to one price in the window. Taking the deviation as sumSq/L - mean^2 recovers a
+		// spread of a few units by subtracting two numbers around ten million once prices run to several
+		// thousand, and float32 steps by more than the answer there.
+		var origin = ExtractPrice(flatCandles[globalIdx - L + 1], priceType);
+		var sumOffset = 0d;
+
+		for (var j = 0; j < L; j++)
+			sumOffset += ExtractPrice(flatCandles[globalIdx - j], priceType) - origin;
+
+		var meanOffset = sumOffset / L;
+		var variance = 0d;
 
 		for (var j = 0; j < L; j++)
 		{
-			var price = ExtractPrice(flatCandles[globalIdx - j], priceType);
-			sum += price;
-			sumSq += price * price;
+			var diff = (ExtractPrice(flatCandles[globalIdx - j], priceType) - origin) - meanOffset;
+			variance += diff * diff;
 		}
 
-		var lengthF = (float)L;
-		var mean = sum / lengthF;
-		var variance = MathF.Max((sumSq / lengthF) - (mean * mean), 0f);
-		var stdDev = MathF.Sqrt(variance);
-		var width = prm.Width;
+		var stdDev = Math.Sqrt(variance / L);
+		var mean = origin + meanOffset;
+		var halfBand = prm.Width * stdDev;
 
 		flatResults[resIndex] = new GpuBollingerBandsResult
 		{
 			Time = candle.Time,
-			Middle = mean,
-			Upper = mean + (width * stdDev),
-			Lower = mean - (width * stdDev),
+			Middle = (float)mean,
+			Upper = (float)(mean + halfBand),
+			Lower = (float)(mean - halfBand),
 			IsFormed = 1,
 		};
 	}

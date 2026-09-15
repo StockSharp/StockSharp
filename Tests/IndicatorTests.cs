@@ -1818,6 +1818,176 @@ public class IndicatorTests : BaseTestClass
 		(gpuFinal - cpuFinal).Abs().AssertLess(0.001m, $"GPU={gpuFinal} CPU={cpuFinal}");
 	}
 
+	// Shift counts bars back to the bar that holds the extremum, not bars back to the reversal that
+	// started the leg. The two only coincide when the low is made on the very first bar of the leg,
+	// so the lows here put the low three bars before the reversal and five bars after the previous one.
+	[TestMethod]
+	public void GpuTroughShiftCountsBarsBackToTheExtremumBar()
+	{
+		var start = new DateTime(2020, 1, 1).UtcKind();
+		decimal[] lows = [100m, 99m, 98m, 97m, 97.5m, 97.5m, 98.5m];
+
+		var cpu = new Trough { Deviation = 0.01m };
+		var cpuValues = lows
+			.Select((low, i) => cpu.Process(new TimeFrameCandleMessage
+			{
+				OpenTime = start.AddMinutes(i),
+				OpenPrice = low,
+				HighPrice = low,
+				LowPrice = low,
+				ClosePrice = low,
+				TotalVolume = 1m,
+				State = CandleStates.Finished,
+			}))
+			.ToArray();
+
+		var bars = lows
+			.Select((low, i) => new GpuCandle(start.AddMinutes(i), low, low, low, low, 1m))
+			.ToArray();
+
+		GpuTroughResult[] gpuValues;
+		var (gpuContext, gpuAccelerator) = GetGpu();
+
+		using (_gpuLock.EnterScope())
+		{
+			gpuValues = new GpuTroughCalculator(gpuContext, gpuAccelerator)
+				.Calculate([bars], [new GpuTroughParams((float)cpu.Deviation)])[0][0];
+		}
+
+		var cpuTrough = (ZigZagIndicatorValue)cpuValues[^1];
+		var gpuTrough = (ZigZagIndicatorValue)gpuValues[^1].ToValue(cpu);
+
+		cpuTrough.IsEmpty.AssertFalse("CPU trough");
+		gpuTrough.IsEmpty.AssertFalse("GPU trough");
+
+		cpuTrough.ToDecimal().AssertEqual(97m, "CPU value");
+		gpuTrough.ToDecimal().AssertEqual(97m, "GPU value");
+
+		cpuTrough.Shift.AssertEqual(3, "CPU shift");
+		gpuTrough.Shift.AssertEqual(3, "GPU shift");
+	}
+
+	// %B measures where the price sits inside a band that a small deviation multiplier makes a tiny
+	// fraction of the price itself. These closes put the price 0.0135 above a lower band around 7112,
+	// and one float32 step there is 4.9e-4 - so bands built as absolute prices hold that distance on
+	// 28 representable values.
+	[TestMethod]
+	public void GpuBollingerPercentBKeepsNarrowBandAgainstPriceScaleRounding()
+	{
+		var start = new DateTime(2020, 1, 1).UtcKind();
+		decimal[] closes = [7108m, 7109m, 7112m, 7111m, 7114m, 7114m, 7114m, 7114m, 7114m, 7112m];
+
+		var cpu = new BollingerPercentB
+		{
+			Length = closes.Length,
+			StdDevMultiplier = 0.1m,
+		};
+
+		var cpuValues = closes
+			.Select((close, i) => cpu.Process(new TimeFrameCandleMessage
+			{
+				OpenTime = start.AddMinutes(i),
+				OpenPrice = close,
+				HighPrice = close,
+				LowPrice = close,
+				ClosePrice = close,
+				TotalVolume = 1m,
+				State = CandleStates.Finished,
+			}))
+			.ToArray();
+
+		var bars = closes
+			.Select((close, i) => new GpuCandle(start.AddMinutes(i), close, close, close, close, 1m))
+			.ToArray();
+
+		GpuIndicatorResult[] gpuValues;
+		var (gpuContext, gpuAccelerator) = GetGpu();
+
+		using (_gpuLock.EnterScope())
+		{
+			var parameters = new[]
+			{
+				new GpuBollingerPercentBParams(closes.Length, (float)cpu.StdDevMultiplier, (byte)Level1Fields.ClosePrice),
+			};
+
+			gpuValues = new GpuBollingerPercentBCalculator(gpuContext, gpuAccelerator)
+				.Calculate([bars], parameters)[0][0];
+		}
+
+		gpuValues[^1].IsFormed.AssertEqual((byte)1, "GPU formed");
+		cpuValues[^1].IsFormed.AssertTrue("CPU formed");
+
+		var cpuFinal = cpuValues[^1].ToDecimal();
+		var gpuFinal = (decimal)gpuValues[^1].Value;
+
+		// The expected answer is pinned as well, so the two sides cannot agree by drifting together.
+		(cpuFinal - 3.1707094m).Abs().AssertLess(0.000001m, $"CPU={cpuFinal}");
+		(gpuFinal - cpuFinal).Abs().AssertLess(0.001m, $"GPU={gpuFinal} CPU={cpuFinal}");
+	}
+
+	// Deviation taken as sumSq/L - mean^2 has to recover a variance of 4.6 by subtracting two numbers
+	// near 5.06e7, where a float32 step is already 4. These closes deviate by 2.1354 around a price of
+	// 7112, and most of that is lost in the subtraction, leaving both bands whole units out.
+	[TestMethod]
+	public void GpuBollingerBandsKeepsDeviationAtLargePriceLevel()
+	{
+		var start = new DateTime(2020, 1, 1).UtcKind();
+		decimal[] closes = [7108m, 7109m, 7112m, 7111m, 7114m, 7114m, 7114m, 7114m, 7114m, 7112m];
+
+		var cpu = new BollingerBands
+		{
+			Length = closes.Length,
+			Width = 2m,
+		};
+
+		var cpuValues = closes
+			.Select((close, i) => cpu.Process(new TimeFrameCandleMessage
+			{
+				OpenTime = start.AddMinutes(i),
+				OpenPrice = close,
+				HighPrice = close,
+				LowPrice = close,
+				ClosePrice = close,
+				TotalVolume = 1m,
+				State = CandleStates.Finished,
+			}))
+			.ToArray();
+
+		var bars = closes
+			.Select((close, i) => new GpuCandle(start.AddMinutes(i), close, close, close, close, 1m))
+			.ToArray();
+
+		GpuBollingerBandsResult[] gpuValues;
+		var (gpuContext, gpuAccelerator) = GetGpu();
+
+		using (_gpuLock.EnterScope())
+		{
+			var parameters = new[]
+			{
+				new GpuBollingerBandsParams(closes.Length, (float)cpu.Width, (byte)Level1Fields.ClosePrice),
+			};
+
+			gpuValues = new GpuBollingerBandsCalculator(gpuContext, gpuAccelerator)
+				.Calculate([bars], parameters)[0][0];
+		}
+
+		gpuValues[^1].IsFormed.AssertEqual((byte)1, "GPU formed");
+
+		var cpuBands = (IBollingerBandsValue)cpuValues[^1];
+		var gpuBands = (IBollingerBandsValue)gpuValues[^1].ToValue(cpu);
+
+		var cpuWidth = cpuBands.UpBand.Value - cpuBands.LowBand.Value;
+		var gpuWidth = gpuBands.UpBand.Value - gpuBands.LowBand.Value;
+
+		// Four population deviations of 2.1354 wide, pinned so a zero deviation cannot pass unnoticed.
+		(cpuWidth - 8.5416626m).Abs().AssertLess(0.000001m, $"CPU width={cpuWidth}");
+
+		(gpuBands.MovingAverage.Value - cpuBands.MovingAverage.Value).Abs().AssertLess(0.01m, $"GPU middle={gpuBands.MovingAverage}");
+		(gpuBands.UpBand.Value - cpuBands.UpBand.Value).Abs().AssertLess(0.01m, $"GPU upper={gpuBands.UpBand}");
+		(gpuBands.LowBand.Value - cpuBands.LowBand.Value).Abs().AssertLess(0.01m, $"GPU lower={gpuBands.LowBand}");
+		(gpuWidth - cpuWidth).Abs().AssertLess(0.01m, $"GPU width={gpuWidth} CPU width={cpuWidth}");
+	}
+
 	[TestMethod]
 	public void ShiftCpuAndGpuFormOnTheDeclaredValueCount()
 	{
