@@ -1197,96 +1197,161 @@ public class BacktestingTests : BaseTestClass
 			string.Join(Environment.NewLine, violations.Take(30)));
 	}
 
+	// Where a Designer template lands once it is compiled in: every file of Designer.Templates\Backtest
+	// declares "namespace StockSharp.Designer", and nothing else in this assembly uses that namespace.
+	private const string _templatesNamespace = "StockSharp.Designer";
+
+	// Folder the mask in Tests.csproj reads, relative to the test output directory.
+	private const string _templatesFolder = "../../../../Designer.Templates/Backtest/";
+
+	// Templates that send no order by design, each with what it does instead. This list is the only
+	// way past the order promise below, and it is asserted in both directions: a listed template that
+	// starts trading fails until it is taken off the list.
+	private static readonly Dictionary<string, string> _nonTradingTemplates = new(StringComparer.Ordinal)
+	{
+		[nameof(EmptyStrategy)] = "a blank starting point - it declares one parameter, logs on start and subscribes to nothing, so it has no signal to trade on",
+	};
+
 	/// <summary>
-	/// The pair template names two instruments: <see cref="PairStrategy.Security1"/> and
-	/// <see cref="PairStrategy.Security2"/> are both strategy parameters a user fills in, saves,
-	/// and optimizes over. A strategy that calls itself a pair trades the pair - whatever the second
-	/// leg is for, hedge or spread, it reaches the market. A replay in which not one order is sent
-	/// against Security2 keeps half of that promise and quietly runs a single-instrument strategy
-	/// under a pair strategy's name.
+	/// Every strategy template the Designer.Templates mask compiles into this assembly.
+	/// </summary>
+	public static IEnumerable<object[]> TemplateStrategies
+		=> typeof(BacktestingTests)
+			.Assembly
+			.GetTypes()
+			.Where(t => t.Namespace == _templatesNamespace && !t.IsAbstract && typeof(Strategy).IsAssignableFrom(t))
+			.OrderBy(t => t.Name)
+			.Select(t => new object[] { t });
+
+	/// <summary>
+	/// The templates are compiled in by mask, and this is what makes the mask worth having: a file
+	/// added to the templates folder must arrive as a type in this assembly, or it is a template
+	/// nobody tests. One type per file, named after the file, is the rule the templates follow.
 	/// </summary>
 	[TestMethod]
-	[Timeout(60_000, CooperativeCancellation = true)]
-	public async Task PairStrategyTradesBothLegs()
+	public void EveryTemplateFileIsCompiledIn()
+	{
+		var onDisk = Directory
+			.GetFiles(_templatesFolder, "*.cs")
+			.Select(Path.GetFileNameWithoutExtension)
+			.ToArray();
+
+		IsTrue(onDisk.Length > 0, $"no template source found under {Path.GetFullPath(_templatesFolder)}");
+
+		var compiled = typeof(BacktestingTests)
+			.Assembly
+			.GetTypes()
+			.Where(t => t.Namespace == _templatesNamespace)
+			.Select(t => t.Name)
+			.ToHashSet(StringComparer.Ordinal);
+
+		var missing = onDisk.Where(name => !compiled.Contains(name)).ToArray();
+
+		IsTrue(missing.Length == 0,
+			$"{missing.Length} template file(s) never reached the test assembly: {string.Join(", ", missing)}. " +
+			$"The mask in Tests.csproj is what pulls them in, so a template it misses is compiled nowhere and tested by nothing.");
+	}
+
+	/// <summary>
+	/// A template's parameters are a promise: each instrument it declares is one a user fills in,
+	/// saves and optimizes over, so each one has to reach the market. A template that names two and
+	/// trades one quietly runs a single-instrument strategy under a pair strategy's name - which is
+	/// exactly what <see cref="PairStrategy"/> did. Every template the mask pulls in is replayed here
+	/// and held to its own declaration, so the next one is covered the day it is added.
+	/// </summary>
+	/// <param name="templateType">Strategy template to replay.</param>
+	[TestMethod]
+	[DynamicData(nameof(TemplateStrategies))]
+	[Timeout(120_000, CooperativeCancellation = true)]
+	public async Task TemplateStrategyTradesEveryDeclaredSecurity(Type templateType)
 	{
 		const int candleCount = 60;
+		const int allowedLength = 8;
 
-		var security1 = Helper.CreateSecurity(100);
-		var security2 = Helper.CreateSecurity(100);
-		var portfolio = Helper.CreatePortfolio();
+		var strategy = templateType.CreateInstance<Strategy>();
 
-		var timeFrame = TimeSpan.FromMinutes(5);
-		var start = new DateTime(2026, 1, 5, 10, 0, 0, DateTimeKind.Utc);
+		// Only the parameters the template adds are read as a statement about what it trades; the ones
+		// Strategy brings with it (OrdersKeepTime, HistorySize and the rest) say nothing about that.
+		var ownParams = GetTemplateParams(strategy);
 
-		// A triangle wave: the fast average crosses the slow one at every turn, so the template's
-		// crossing branch fires several times inside the replayed window.
-		static decimal PriceAt(int index)
+		// A template ships production indicator lengths - 80 and 30 in the SMA family - and an average
+		// that long never forms inside the replayed window. They are scaled down together, so a
+		// fast/slow pair stays a fast/slow pair.
+		var lengths = ownParams.Where(p => p.Type == typeof(int) && p.Value is int and > 0).ToArray();
+
+		if (lengths.Length > 0)
 		{
-			var phase = index % 20;
-			return 100m + (phase < 10 ? phase : 20 - phase);
+			var longest = lengths.Max(p => (int)p.Value);
+
+			foreach (var param in lengths)
+				param.Value = Math.Max(2, (int)Math.Round((int)param.Value * (double)allowedLength / longest));
 		}
 
-		static TimeFrameCandleMessage[] BuildCandles(SecurityId securityId, TimeSpan tf, DateTime from, int count)
-			=> [.. Enumerable.Range(0, count).Select(i =>
-			{
-				var openTime = from + TimeSpan.FromTicks(tf.Ticks * i);
-				var price = PriceAt(i);
+		// An instrument a template trades is an instrument it declares as a parameter of its own; a
+		// template that declares none trades Strategy.Security, the one instrument every strategy has.
+		var declared = new List<Security>();
 
-				return new TimeFrameCandleMessage
-				{
-					SecurityId = securityId,
-					TypedArg = tf,
-					DataType = tf.TimeFrame(),
-					OpenTime = openTime,
-					HighTime = openTime,
-					LowTime = openTime,
-					CloseTime = openTime + tf,
-					OpenPrice = price,
-					HighPrice = price + 1,
-					LowPrice = price - 1,
-					ClosePrice = price,
-					TotalVolume = 100,
-					State = CandleStates.Finished,
-				};
-			})];
+		foreach (var param in ownParams.Where(p => p.Type == typeof(Security)))
+		{
+			var leg = Helper.CreateSecurity(100);
+			param.Value = leg;
+			declared.Add(leg);
+		}
+
+		if (declared.Count == 0)
+			declared.Add(Helper.CreateSecurity(100));
+
+		// An order sent without naming an instrument goes to Strategy.Security.
+		strategy.Security = declared[0];
+
+		// Which series to lay down is read off the template too: a candle DataType or a plain TimeSpan
+		// parameter is a timeframe it will subscribe to.
+		var timeFrames = new HashSet<TimeSpan>();
+
+		foreach (var param in ownParams)
+		{
+			if (param.Type == typeof(DataType) && param.Value is DataType dt && dt.IsTFCandles)
+				timeFrames.Add(dt.GetTimeFrame());
+			else if (param.Type == typeof(TimeSpan) && param.Value is TimeSpan tf && tf > TimeSpan.Zero)
+				timeFrames.Add(tf);
+		}
+
+		if (timeFrames.Count == 0)
+			timeFrames.Add(TimeSpan.FromMinutes(1));
+
+		var portfolio = Helper.CreatePortfolio();
+		var start = new DateTime(2026, 1, 5, 10, 0, 0, DateTimeKind.Utc);
 
 		var fs = Helper.MemorySystem;
 		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
 
-		// Both legs are priced through the whole window, so the only thing that can keep an order
-		// away from the second one is the strategy itself.
-		foreach (var security in new[] { security1, security2 })
+		// Every declared instrument is priced through the whole window on every timeframe the template
+		// asks for, so the only thing that can keep an order away from one of them is the template.
+		foreach (var leg in declared)
 		{
-			var secId = security.ToSecurityId();
+			var secId = leg.ToSecurityId();
 
-			await storageRegistry
-				.GetTimeFrameCandleMessageStorage(secId, timeFrame)
-				.SaveAsync(BuildCandles(secId, timeFrame, start, candleCount), CancellationToken);
+			foreach (var timeFrame in timeFrames)
+			{
+				await storageRegistry
+					.GetTimeFrameCandleMessageStorage(secId, timeFrame)
+					.SaveAsync(BuildTriangleWave(secId, timeFrame, start, candleCount), CancellationToken);
+			}
 		}
 
-		var secProvider = new CollectionSecurityProvider([security1, security2]);
-		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+		var window = timeFrames.Max();
 
 		using var connector = CreateDeterministicConnector(
-			secProvider,
-			pfProvider,
+			new CollectionSecurityProvider(declared),
+			new CollectionPortfolioProvider([portfolio]),
 			storageRegistry,
 			start,
-			start + TimeSpan.FromTicks(timeFrame.Ticks * (candleCount + 1)));
+			start + TimeSpan.FromTicks(window.Ticks * (candleCount + 1)));
 
-		var strategy = new PairStrategy
-		{
-			Connector = connector,
-			Security = security1,
-			Portfolio = portfolio,
-			Volume = 1,
-			TimeFrame = timeFrame,
-			Security1 = security1,
-			Security2 = security2,
-			Long = 5,
-			Short = 2,
-			WaitRulesOnStop = false,
-		};
+		strategy.Connector = connector;
+		strategy.Portfolio = portfolio;
+		strategy.Volume = 1;
+		strategy.WaitRulesOnStop = false;
 
 		var sync = new Lock();
 		var registered = new List<string>();
@@ -1320,32 +1385,102 @@ public class BacktestingTests : BaseTestClass
 		strategy.Reset();
 		await strategy.StartAsync(CancellationToken);
 		connector.Connect();
+
+		// The emulator replays only what someone asked for, and with nothing asked for it never reaches
+		// the end of the window. The window is subscribed to here, so the replay is driven by the test
+		// rather than by whether the template happens to subscribe to anything.
+		foreach (var leg in declared)
+		{
+			foreach (var timeFrame in timeFrames)
+				connector.Subscribe(new Subscription(timeFrame.TimeFrame(), leg));
+		}
+
 		await connector.StartAsync(CancellationToken);
 
 		var completed = await Task.WhenAny(
 			stopped.Task,
-			Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
+			Task.Delay(TimeSpan.FromSeconds(60), CancellationToken));
 
 		if (completed != stopped.Task)
 		{
 			connector.Disconnect();
-			Fail("Pair strategy backtest did not complete in time.");
+			Fail($"{templateType.Name} did not finish its backtest in time.");
 		}
 
 		string[] orderedSecurities;
+		string[] failures;
 
 		using (sync.EnterScope())
+		{
 			orderedSecurities = [.. registered];
+			failures = [.. errors];
+		}
 
-		var leg1 = orderedSecurities.Count(id => id == security1.Id);
-		var leg2 = orderedSecurities.Count(id => id == security2.Id);
+		IsTrue(failures.Length == 0,
+			$"{templateType.Name} reported {failures.Length} error(s) while replaying: {string.Join("; ", failures)}");
 
-		// Told apart on purpose: a window that produced no signal at all would be a broken test, not
-		// a one-legged strategy.
-		IsTrue(leg1 > 0, $"The replay produced no order against Security1 ({security1.Id}) at all, so it says nothing about the second leg. Errors: {string.Join("; ", errors)}");
+		if (_nonTradingTemplates.TryGetValue(templateType.Name, out var reason))
+		{
+			// The exemption holds in the other direction too: a listed template has to really send
+			// nothing, otherwise it belongs under the promise below.
+			AreEqual(0, orderedSecurities.Length,
+				$"{templateType.Name} is listed as non-trading ({reason}) yet sent {orderedSecurities.Length} order(s); hold it to the instruments it declares instead of excusing it.");
 
-		IsTrue(leg2 > 0, $"PairStrategy traded one leg only: {leg1} order(s) against Security1 ({security1.Id}) and {leg2} against Security2 ({security2.Id}), which is declared as a strategy parameter and never reaches the market.");
+			return;
+		}
+
+		// Told apart on purpose: a window that produced no signal at all would be a broken harness,
+		// not a template that forgets a leg.
+		IsTrue(orderedSecurities.Length > 0,
+			$"{templateType.Name} sent no order at all over {candleCount} candle(s), so the replay says nothing about the {declared.Count} instrument(s) it declares. Errors: {string.Join("; ", failures)}");
+
+		var untouched = declared.Where(s => !orderedSecurities.Contains(s.Id)).Select(s => s.Id).ToArray();
+
+		IsTrue(untouched.Length == 0,
+			$"{templateType.Name} declares {declared.Count} instrument(s) and traded {declared.Count - untouched.Length} of them: nothing was sent against {string.Join(", ", untouched)}, which a user fills in, saves and optimizes over.");
 	}
+
+	// The parameters a template adds on top of Strategy. Every public property a template declares is
+	// registered as a StrategyParam under the same name, which CompilationTests holds templates to.
+	private static IStrategyParam[] GetTemplateParams(Strategy strategy)
+	{
+		var declaredNames = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+
+		for (var type = strategy.GetType(); type != null && type != typeof(Strategy); type = type.BaseType)
+		{
+			foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+				declaredNames.Add(prop.Name);
+		}
+
+		return [.. strategy.Parameters.CachedValues.Where(p => declaredNames.Contains(p.Id))];
+	}
+
+	// A triangle wave with a period of 20 candles: a fast average crosses a slow one at every turn, so
+	// a crossing template signals several times inside the short replayed window.
+	private static TimeFrameCandleMessage[] BuildTriangleWave(SecurityId securityId, TimeSpan timeFrame, DateTime from, int count)
+		=> [.. Enumerable.Range(0, count).Select(i =>
+		{
+			var phase = i % 20;
+			var price = 100m + (phase < 10 ? phase : 20 - phase);
+			var openTime = from + TimeSpan.FromTicks(timeFrame.Ticks * i);
+
+			return new TimeFrameCandleMessage
+			{
+				SecurityId = securityId,
+				TypedArg = timeFrame,
+				DataType = timeFrame.TimeFrame(),
+				OpenTime = openTime,
+				HighTime = openTime,
+				LowTime = openTime,
+				CloseTime = openTime + timeFrame,
+				OpenPrice = price,
+				HighPrice = price + 1,
+				LowPrice = price - 1,
+				ClosePrice = price,
+				TotalVolume = 100,
+				State = CandleStates.Finished,
+			};
+		})];
 
 	/// <summary>
 	/// Tests that orders are generated during backtesting when SMA crossover occurs.

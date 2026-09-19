@@ -474,9 +474,10 @@ public class ConnectorRoutingTests : BaseTestClass
 		connector.Subscribe(btcSubscription);
 		connector.Subscribe(ethSubscription);
 
+		// The request reaching an adapter is not the same as the subscription being live, and a tick
+		// emitted before it is has nowhere to arrive.
 		await Helper.WaitUntilAsync(
-			() => binanceAdapter.GetMessages<MarketDataMessage>().Any(m => m.IsSubscribe) &&
-				kucoinAdapter.GetMessages<MarketDataMessage>().Any(m => m.IsSubscribe),
+			() => binanceAdapter.ActiveSubscriptionCount > 0 && kucoinAdapter.ActiveSubscriptionCount > 0,
 			CancellationToken);
 
 		await binanceAdapter.EmitTick(binanceSecId, 50000, 1, btcSubscription.TransactionId, CancellationToken);
