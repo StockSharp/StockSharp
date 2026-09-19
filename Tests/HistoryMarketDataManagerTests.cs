@@ -29,8 +29,6 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		return manager;
 	}
 
-	private static SecurityId CreateSecurityId() => Helper.CreateSecurityId();
-
 	#region Property Tests
 
 	[TestMethod]
@@ -85,7 +83,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public void RegisterGenerator_AddsGenerator()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var dataType = DataType.Ticks;
 		var generator = new RandomWalkTradeGenerator(secId);
 
@@ -98,7 +96,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public void RegisterGenerator_ThrowsOnNullGenerator()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		ThrowsExactly<ArgumentNullException>(() =>
 			manager.RegisterGenerator(secId, DataType.Ticks, null, 123));
@@ -108,7 +106,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public void HasGenerator_ReturnsFalseWhenNotRegistered()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		manager.HasGenerator(secId, DataType.Ticks).AssertFalse();
 	}
@@ -117,7 +115,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public void UnregisterGenerator_RemovesGenerator()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var dataType = DataType.Ticks;
 		var generator = new RandomWalkTradeGenerator(secId);
 		long transId = 123;
@@ -150,7 +148,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task SubscribeAsync_ReturnsErrorWithoutStorageRegistry()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var message = new MarketDataMessage
 		{
@@ -181,7 +179,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task SubscribeAsync_ThrowsOnUnsubscribeMessage()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var message = new MarketDataMessage
 		{
@@ -212,7 +210,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public void Reset_ClearsGenerators()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 
 		manager.RegisterGenerator(secId, DataType.Ticks, generator, 1);
@@ -238,7 +236,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	[Timeout(30000, CooperativeCancellation = true)]
 	public async Task Reset_ClearsPendingSubscriptions()
 	{
-		var securityId = CreateSecurityId();
+		var securityId = Helper.CreateSecurityId();
 		var storage = new Mock<IMarketDataStorage<ExecutionMessage>>(MockBehavior.Strict);
 		var registry = new Mock<IStorageRegistry>(MockBehavior.Strict);
 
@@ -275,7 +273,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task GetSupportedDataTypes_ReturnsEmptyWithoutDriveAndGenerators()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var dataTypes = await manager.GetSupportedDataTypesAsync(secId).ToArrayAsync(CancellationToken);
 
@@ -286,7 +284,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task GetSupportedDataTypes_IncludesGeneratorDataTypes()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 
 		manager.RegisterGenerator(secId, DataType.Ticks, generator, 1);
@@ -300,7 +298,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task GetSupportedDataTypes_WithoutDrive_ReturnsOnlyGenerators()
 	{
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		manager.RegisterGenerator(secId, DataType.Ticks, new RandomWalkTradeGenerator(secId), 1);
 		manager.RegisterGenerator(secId, DataType.Level1, new RandomWalkTradeGenerator(secId), 2);
@@ -316,8 +314,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	public async Task GetSupportedDataTypes_FiltersGeneratorsBySecurityId()
 	{
 		using var manager = CreateManager();
-		var secId1 = CreateSecurityId();
-		var secId2 = CreateSecurityId();
+		var secId1 = Helper.CreateSecurityId();
+		var secId2 = Helper.CreateSecurityId();
 
 		manager.RegisterGenerator(secId1, DataType.Ticks, new RandomWalkTradeGenerator(secId1), 1);
 		manager.RegisterGenerator(secId2, DataType.Level1, new RandomWalkTradeGenerator(secId2), 2);
@@ -882,7 +880,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		// Note: HistoryMarketDataManager tracks generator registration for HasGenerator() and
 		// GetSupportedDataTypes() checks, but actual message generation happens in MarketEmulator.
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var generator = new RandomWalkTradeGenerator(secId)
 		{
@@ -908,7 +906,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	{
 		// Verify that different data type generators are tracked separately
 		using var manager = CreateManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var tickGen = new RandomWalkTradeGenerator(secId);
 		var depthGen = new TrendMarketDepthGenerator(secId);
@@ -942,7 +940,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 			return;
 
 		var secId = Paths.HistoryDefaultSecurity.ToSecurityId();
-		var generatorSecId = CreateSecurityId();
+		var generatorSecId = Helper.CreateSecurityId();
 
 		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(1));
 
@@ -1039,8 +1037,8 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 	{
 		// Verify that generators for different securities are tracked separately
 		using var manager = CreateManager();
-		var secId1 = CreateSecurityId();
-		var secId2 = CreateSecurityId();
+		var secId1 = Helper.CreateSecurityId();
+		var secId2 = Helper.CreateSecurityId();
 
 		var gen1 = new RandomWalkTradeGenerator(secId1);
 		var gen2 = new RandomWalkTradeGenerator(secId2);
@@ -1125,7 +1123,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 		// Historical security
 		var histSecId = Paths.HistoryDefaultSecurity.ToSecurityId();
 		// Generator security
-		var genSecId = CreateSecurityId();
+		var genSecId = Helper.CreateSecurityId();
 
 		using var manager = CreateManager(storageRegistry, Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddHours(6));
 
@@ -1197,7 +1195,7 @@ public class HistoryMarketDataManagerTests : BaseTestClass
 
 		var secId1 = Paths.HistoryDefaultSecurity.ToSecurityId();
 		var secId2 = Paths.HistoryDefaultSecurity2.ToSecurityId();
-		var genSecId = CreateSecurityId();
+		var genSecId = Helper.CreateSecurityId();
 
 		// Security 2 candle data in the sample set only starts intraday (around 12:31), so the replay window
 		// must extend past it; a 2-hour window from midnight would contain ticks but no candles at all.

@@ -124,11 +124,15 @@ public class PathsTests : BaseTestClass
 
 	// A language nothing has registered is refused by the setter, and a test host loads only what its own
 	// resources carry. Registering an empty translation is enough here: what is under test is the address built
-	// for a language, not how any word in it reads.
-	private static void UseLanguage(string code)
+	// for a language, not how any word in it reads. The registry is process-wide, so a code registered here is
+	// recorded for the caller to take back out of it.
+	private static void UseLanguage(string code, ICollection<string> registered)
 	{
 		if (!LocalizedStrings.LangCodes.Any(l => l.EqualsIgnoreCase(code)))
+		{
 			LocalizedStrings.AddLanguage(code, new Dictionary<string, string>());
+			registered.Add(code);
+		}
 
 		LocalizedStrings.ActiveLanguage = code;
 
@@ -143,9 +147,16 @@ public class PathsTests : BaseTestClass
 		// other into failures that say nothing about the addresses.
 		var previous = LocalizedStrings.ActiveLanguage;
 
+		// Setting the active language also puts that language's culture on this thread, and the thread is
+		// handed back to the pool for the next test.
+		var culture = CultureInfo.CurrentCulture;
+		var uiCulture = CultureInfo.CurrentUICulture;
+
+		var registered = new List<string>();
+
 		try
 		{
-			UseLanguage(LocalizedStrings.RuCode);
+			UseLanguage(LocalizedStrings.RuCode, registered);
 
 			AreEqual("https://stocksharp.com", Paths.GetWebSiteUrl());
 			AreEqual("ru", Paths.SiteLanguage);
@@ -168,7 +179,7 @@ public class PathsTests : BaseTestClass
 
 			// The applications are translated into more languages than the site is published in; those readers
 			// get the English page rather than one that does not exist.
-			UseLanguage("cs");
+			UseLanguage("cs", registered);
 
 			AreEqual(LocalizedStrings.EnCode, Paths.SiteLanguage);
 			IsTrue(Paths.GetPageUrl(Paths.Pages.Store).Contains("/en/store/"));
@@ -176,6 +187,12 @@ public class PathsTests : BaseTestClass
 		finally
 		{
 			LocalizedStrings.ActiveLanguage = previous;
+
+			foreach (var code in registered)
+				LocalizedStrings.RemoveLanguage(code);
+
+			CultureInfo.CurrentCulture = culture;
+			CultureInfo.CurrentUICulture = uiCulture;
 		}
 	}
 }

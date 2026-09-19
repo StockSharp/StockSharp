@@ -234,7 +234,7 @@ public class GpuIchimokuCalculator : GpuIndicatorCalculatorBase<Ichimoku, GpuIch
 				var senkouBLength = prm.SenkouBLength.Max(1);
 
 				var senkouAQueue = new Queue<float>(kijunLength);
-				var senkouBQueue = new Queue<float>(kijunLength);
+				var senkouBQueue = new Queue<float>(senkouBLength.Max(kijunLength));
 
 				var arr = new GpuIchimokuResult[len];
 
@@ -267,18 +267,23 @@ public class GpuIchimokuCalculator : GpuIndicatorCalculatorBase<Ichimoku, GpuIch
 
 					var kijunFormed = i >= (kijunLength - 1);
 
+					// The shift store holds at most the Senkou B length and drops its oldest entry once that is
+					// reached, so with equal Kijun and Senkou B lengths the entry read one bar later is already
+					// gone. Store, then read the front, then trim to the Kijun length - in that order.
 					float senkouBValue = float.NaN;
-					if (senkouBQueue.Count > 0)
+					if (!rawSenkouB.IsNaN())
 					{
+						if (kijunFormed)
+						{
+							if (senkouBQueue.Count == senkouBLength)
+								senkouBQueue.Dequeue();
+
+							senkouBQueue.Enqueue(rawSenkouB);
+						}
+
 						if (senkouBQueue.Count >= kijunLength)
 							senkouBValue = senkouBQueue.Peek();
-						else if (kijunFormed && !rawSenkouB.IsNaN() && senkouBQueue.Count == (kijunLength - 1))
-							senkouBValue = senkouBQueue.Peek();
-					}
 
-					if (kijunFormed && !rawSenkouB.IsNaN())
-					{
-						senkouBQueue.Enqueue(rawSenkouB);
 						if (senkouBQueue.Count > kijunLength)
 							senkouBQueue.Dequeue();
 					}

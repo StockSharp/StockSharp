@@ -439,7 +439,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	#region Basic Routing Tests
 
 	[TestMethod]
-	[Timeout(10000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task Connector_MarketDataRouting_ToCorrectAdapter()
 	{
 		var binanceSecId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -473,11 +473,16 @@ public class ConnectorRoutingTests : BaseTestClass
 		var ethSubscription = new Subscription(DataType.Ticks, ethSecurity);
 		connector.Subscribe(btcSubscription);
 		connector.Subscribe(ethSubscription);
-		await Task.Delay(200, CancellationToken);
+
+		await Helper.WaitUntilAsync(
+			() => binanceAdapter.GetMessages<MarketDataMessage>().Any(m => m.IsSubscribe) &&
+				kucoinAdapter.GetMessages<MarketDataMessage>().Any(m => m.IsSubscribe),
+			CancellationToken);
 
 		await binanceAdapter.EmitTick(binanceSecId, 50000, 1, btcSubscription.TransactionId, CancellationToken);
 		await kucoinAdapter.EmitTick(kucoinSecId, 3000, 2, ethSubscription.TransactionId, CancellationToken);
-		await Task.Delay(500, CancellationToken);
+
+		await Helper.WaitUntilAsync(() => receivedTicks.Count >= 2, CancellationToken);
 
 		var binanceMarketData = binanceAdapter.GetMessages<MarketDataMessage>().ToList();
 		var kucoinMarketData = kucoinAdapter.GetMessages<MarketDataMessage>().ToList();
@@ -493,7 +498,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[Timeout(10000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task Connector_OrderRouting_ToCorrectAdapter()
 	{
 		var binanceSecId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -537,7 +542,10 @@ public class ConnectorRoutingTests : BaseTestClass
 			Type = OrderTypes.Limit,
 		});
 
-		await Task.Delay(500, CancellationToken);
+		await Helper.WaitUntilAsync(
+			() => binanceAdapter.GetMessages<OrderRegisterMessage>().Any() &&
+				kucoinAdapter.GetMessages<OrderRegisterMessage>().Any(),
+			CancellationToken);
 
 		var binanceOrders = binanceAdapter.GetMessages<OrderRegisterMessage>().ToList();
 		var kucoinOrders = kucoinAdapter.GetMessages<OrderRegisterMessage>().ToList();
@@ -551,7 +559,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	}
 
 	[TestMethod]
-	[Timeout(10000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task Connector_OrderOperations_RejectDuplicateInstance()
 	{
 		var securityId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -622,7 +630,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	/// Verifies data integrity under sustained load.
 	/// </summary>
 	[TestMethod]
-	[Timeout(30000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task LiveFeed_MultipleExchanges_DataIntegrity()
 	{
 		var binanceSecId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -665,7 +673,9 @@ public class ConnectorRoutingTests : BaseTestClass
 		connector.Subscribe(btcSub);
 		connector.Subscribe(ethSub);
 
-		await Task.Delay(300, CancellationToken);
+		await Helper.WaitUntilAsync(
+			() => binanceAdapter.ActiveSubscriptionCount > 0 && kucoinAdapter.ActiveSubscriptionCount > 0,
+			CancellationToken);
 
 		// Start live feeds - 50ms interval = 20 ticks/second per exchange
 		binanceAdapter.StartLiveFeed(tickIntervalMs: 50, basePrice: 50000);
@@ -673,9 +683,8 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		// Run until both feeds have delivered what is asserted below, rather than for a fixed span:
 		// the feeds tick on a timer, and on a loaded machine a fixed span decides how many ticks the
-		// test asks for. The method's own timeout is what fails a feed that never delivers.
-		while (btcTicks.Count < 30 || ethTicks.Count < 30)
-			await Task.Delay(50, CancellationToken);
+		// test asks for.
+		await Helper.WaitUntilAsync(() => btcTicks.Count >= 30 && ethTicks.Count >= 30, CancellationToken);
 
 		await connector.DisconnectAsync(CancellationToken);
 
@@ -702,7 +711,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	/// High frequency trading scenario - rapid order submission.
 	/// </summary>
 	[TestMethod]
-	[Timeout(30000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task StressTest_RapidOrderSubmission()
 	{
 		var binanceSecId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -795,7 +804,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	/// Subscribes to 10 securities, waits for online confirmation, then unsubscribes.
 	/// </summary>
 	[TestMethod]
-	[Timeout(30000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task Subscriptions_SequentialWithConfirmation_AllProcessed()
 	{
 		var securities = Enumerable.Range(0, 10)
@@ -823,7 +832,7 @@ public class ConnectorRoutingTests : BaseTestClass
 			securityObjects.Add(sec);
 		}
 
-		await Task.Delay(200, CancellationToken);
+		await Helper.WaitUntilAsync(() => connector.Securities.Count() >= securities.Length, CancellationToken);
 
 		// Subscribe to all and wait for online confirmation
 		var subscriptions = new List<Subscription>();
@@ -834,9 +843,8 @@ public class ConnectorRoutingTests : BaseTestClass
 			connector.Subscribe(sub);
 		}
 
-		// Wait for all subscriptions to go online
-		for (int i = 0; i < 50 && onlineSubscriptions.Count < securities.Length; i++)
-			await Task.Delay(100, CancellationToken);
+		// Wait for all subscriptions to reach the adapter
+		await Helper.WaitUntilAsync(() => adapter.TotalSubscribeReceived >= securities.Length, CancellationToken);
 
 		Console.WriteLine($"Online subscriptions: {onlineSubscriptions.Count}");
 		Console.WriteLine($"Subscribe requests received by adapter: {adapter.TotalSubscribeReceived}");
@@ -849,7 +857,9 @@ public class ConnectorRoutingTests : BaseTestClass
 			connector.UnSubscribe(sub);
 
 		// Wait for unsubscribe processing
-		await Task.Delay(500, CancellationToken);
+		await Helper.WaitUntilAsync(
+			() => adapter.TotalUnsubscribeReceived >= securities.Length && adapter.ActiveSubscriptionCount == 0,
+			CancellationToken);
 
 		Console.WriteLine($"Unsubscribe requests received by adapter: {adapter.TotalUnsubscribeReceived}");
 		Console.WriteLine($"Active subscriptions remaining: {adapter.ActiveSubscriptionCount}");
@@ -963,7 +973,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	/// Test behavior when adapter returns error for subscription.
 	/// </summary>
 	[TestMethod]
-	[Timeout(10000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task EdgeCase_SubscriptionError_Handled()
 	{
 		var binanceSecId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -989,7 +999,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		var sub = new Subscription(DataType.Ticks, unknownSec);
 		connector.Subscribe(sub);
 
-		await Task.Delay(500, CancellationToken);
+		await Helper.WaitUntilAsync(() => !subscriptionErrors.IsEmpty, CancellationToken);
 
 		await connector.DisconnectAsync(CancellationToken);
 
@@ -1005,7 +1015,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	/// Without mapping, subscription should go to all adapters that support the data type.
 	/// </summary>
 	[TestMethod]
-	[Timeout(10000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task EdgeCase_NoSecurityMapping_FallbackToAll()
 	{
 		var binanceSecId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -1060,7 +1070,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	/// nothing replays it to an adapter that arrives a moment later.
 	/// </summary>
 	[TestMethod]
-	[Timeout(30000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task SubscriptionPlacedWhileAnAdapterConnectsReachesItToo()
 	{
 		var fastSecId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -1117,7 +1127,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	/// Test that orders with same portfolio go to same adapter.
 	/// </summary>
 	[TestMethod]
-	[Timeout(10000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task EdgeCase_MultipleOrdersSamePortfolio_SameAdapter()
 	{
 		var binanceSecId1 = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -1161,7 +1171,9 @@ public class ConnectorRoutingTests : BaseTestClass
 			Type = OrderTypes.Limit,
 		});
 
-		await Task.Delay(500, CancellationToken);
+		await Helper.WaitUntilAsync(
+			() => binanceAdapter.GetMessages<OrderRegisterMessage>().Count() >= 2,
+			CancellationToken);
 
 		var binanceOrders = binanceAdapter.GetMessages<OrderRegisterMessage>().ToList();
 		var otherOrders = otherAdapter.GetMessages<OrderRegisterMessage>().ToList();
@@ -1180,7 +1192,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	/// Test behavior with duplicate subscriptions to same security.
 	/// </summary>
 	[TestMethod]
-	[Timeout(10000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task EdgeCase_DuplicateSubscriptions()
 	{
 		var binanceSecId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -1205,13 +1217,13 @@ public class ConnectorRoutingTests : BaseTestClass
 		connector.Subscribe(sub1);
 		connector.Subscribe(sub2);
 
-		await Task.Delay(300, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.ActiveSubscriptionCount >= 1, CancellationToken);
 
 		// Emit one tick
 		await adapter.EmitTick(binanceSecId, 50000, 1, sub1.TransactionId, CancellationToken);
 		await adapter.EmitTick(binanceSecId, 50001, 1, sub2.TransactionId, CancellationToken);
 
-		await Task.Delay(500, CancellationToken);
+		await Helper.WaitUntilAsync(() => receivedTicks.Count >= 2, CancellationToken);
 
 		Console.WriteLine($"Subscriptions in adapter: {adapter.ActiveSubscriptionCount}");
 		Console.WriteLine($"Ticks received: {receivedTicks.Count}");
@@ -1286,8 +1298,8 @@ public class ConnectorRoutingTests : BaseTestClass
 		// Wait for the state disconnect acts on: UnSubscribeAll collects only subscriptions that
 		// are active, so one still on its way is skipped and left behind - which is the failure
 		// this test looks for, and which it must not cause itself.
-		for (var waited = 0; waited < 10000 && !sub.State.IsActive(); waited += 20)
-			await Task.Delay(20, CancellationToken);
+		await Helper.WaitUntilAsync(() => sub.State.IsActive(), TimeSpan.FromSeconds(10), CancellationToken,
+			"the subscription becomes active");
 
 		sub.State.IsActive().AssertTrue($"the subscription never became active, it is {sub.State}");
 
@@ -1298,8 +1310,8 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		// Disconnect answers as soon as the connection is down; the unsubscribes it triggered are
 		// separate messages still on their way. Bounded, so a failure to clean still fails.
-		for (var waited = 0; waited < 10000 && adapter.ActiveSubscriptionCount > 0; waited += 20)
-			await Task.Delay(20, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.ActiveSubscriptionCount == 0, TimeSpan.FromSeconds(10), CancellationToken,
+			"the unsubscribes triggered by disconnect reach the adapter");
 
 		adapter.ActiveSubscriptionCount.AssertEqual(0);
 		adapter.TotalUnsubscribeReceived.AssertGreater(0);
@@ -1313,7 +1325,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	/// Verify that tick data is not corrupted during routing.
 	/// </summary>
 	[TestMethod]
-	[Timeout(10000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task DataIntegrity_TickDataPreserved()
 	{
 		var binanceSecId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -1334,7 +1346,7 @@ public class ConnectorRoutingTests : BaseTestClass
 		var sub = new Subscription(DataType.Ticks, btcSecurity);
 		connector.Subscribe(sub);
 
-		await Task.Delay(200, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.ActiveSubscriptionCount >= 1, CancellationToken);
 
 		// Emit specific ticks with known values
 		var expectedTicks = new List<(decimal price, decimal volume)>
@@ -1350,7 +1362,7 @@ public class ConnectorRoutingTests : BaseTestClass
 			await adapter.EmitTick(binanceSecId, price, volume, sub.TransactionId, CancellationToken);
 		}
 
-		await Task.Delay(500, CancellationToken);
+		await Helper.WaitUntilAsync(() => receivedTicks.Count >= expectedTicks.Count, CancellationToken);
 
 		await connector.DisconnectAsync(CancellationToken);
 
@@ -1372,7 +1384,7 @@ public class ConnectorRoutingTests : BaseTestClass
 	/// Verify order data is not corrupted during routing.
 	/// </summary>
 	[TestMethod]
-	[Timeout(10000, CooperativeCancellation = true)]
+	[Timeout(60000, CooperativeCancellation = true)]
 	public async Task DataIntegrity_OrderDataPreserved()
 	{
 		var binanceSecId = new SecurityId { SecurityCode = "BTCUSDT", BoardCode = "BINANCE" };
@@ -1401,7 +1413,7 @@ public class ConnectorRoutingTests : BaseTestClass
 
 		connector.RegisterOrder(originalOrder);
 
-		await Task.Delay(500, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.GetMessages<OrderRegisterMessage>().Any(), CancellationToken);
 
 		await connector.DisconnectAsync(CancellationToken);
 

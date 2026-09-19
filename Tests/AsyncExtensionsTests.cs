@@ -292,11 +292,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		connector.RegisterOrder(order);
 
 		// Wait for Pending state
-		await Task.Run(async () =>
-		{
-			while (order.State == OrderStates.None)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => order.State != OrderStates.None, CancellationToken);
 
 		AreEqual(OrderStates.Pending, order.State);
 		AreNotEqual(0L, order.TransactionId);
@@ -305,17 +301,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.SimulateOrderExecution(order.TransactionId, CancellationToken, OrderStates.Active, orderId: 123);
 
 		// Wait for Active state
-		await Task.Run(async () =>
-		{
-			while (order.State != OrderStates.Active)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => order.State == OrderStates.Active, CancellationToken);
 
 		AreEqual(OrderStates.Active, order.State);
 		AreEqual(123L, order.Id);
 
-		// Give event handlers time to process
-		await Task.Delay(100, CancellationToken);
+		// Wait for the event handlers to catch up with both updates
+		await Helper.WaitUntilAsync(() => orderReceived.Count >= 2, CancellationToken);
 
 		// OrderReceived fires once per real order update:
 		// None->Pending (registration) + Pending->Active = 2.
@@ -367,8 +359,7 @@ public class AsyncExtensionsTests : BaseTestClass
 				await adapter.SimulateData(id, l1, CancellationToken);
 			}
 
-			while (got.Count < expectedTimes.Length)
-				await Task.Delay(10, CancellationToken);
+			await Helper.WaitUntilAsync(() => got.Count >= expectedTimes.Length, CancellationToken);
 		}
 		finally
 		{
@@ -388,8 +379,9 @@ public class AsyncExtensionsTests : BaseTestClass
 		received.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
 			.AssertTrue("Live adapter subscription should preserve message order without duplicates");
 
-		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
-			await Task.Delay(10, CancellationToken);
+		await Helper.WaitUntilAsync(
+			() => adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id),
+			CancellationToken);
 	}
 
 	[TestMethod]
@@ -469,8 +461,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Wait until subscription is started (online message received)
 		await started.Task.WithCancellation(CancellationToken);
 
-		// Give time for enumeration to start
-		await Task.Delay(200, CancellationToken);
+		// Wait until enumeration reached the adapter
+		await Helper.WaitUntilAsync(() => adapter.LastSubscribedId != 0, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
@@ -480,8 +472,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
-		while (got.Count < expectedTimes.Length)
-			await Task.Delay(10, CancellationToken);
+		await Helper.WaitUntilAsync(() => got.Count >= expectedTimes.Length, CancellationToken);
 
 		await Task.Delay(100, CancellationToken);
 		enumCts.Cancel();
@@ -491,8 +482,9 @@ public class AsyncExtensionsTests : BaseTestClass
 		got.Select(m => m.ServerTime).SequenceEqual(expectedTimes)
 			.AssertTrue("Live connector subscription should preserve message order without duplicates");
 
-		while (!adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id))
-			await Task.Delay(10, CancellationToken);
+		await Helper.WaitUntilAsync(
+			() => adapter.SentMessages.OfType<MarketDataMessage>().Any(m => !m.IsSubscribe && m.OriginalTransactionId == id),
+			CancellationToken);
 	}
 
 	[TestMethod]
@@ -522,14 +514,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for subscription to be processed
-		await Task.Run(async () =>
-		{
-			while (adapter.ActiveSubscriptions.Count == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
-		// Give time for subscription to fully activate
-		await Task.Delay(100, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.ActiveSubscriptions.Count > 0, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
@@ -580,8 +565,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Wait until subscription is started (online message received)
 		await started.Task.WithCancellation(CancellationToken);
 
-		// Give time for enumeration to start
-		await Task.Delay(200, CancellationToken);
+		// Wait until enumeration reached the adapter
+		await Helper.WaitUntilAsync(() => adapter.LastSubscribedId != 0, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
@@ -591,8 +576,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			await adapter.SimulateData(id, l1, CancellationToken);
 		}
 
-		while (got.Count < expectedTimes.Length)
-			await Task.Delay(10, CancellationToken);
+		await Helper.WaitUntilAsync(() => got.Count >= expectedTimes.Length, CancellationToken);
 
 		await Task.Delay(100, CancellationToken);
 		enumCts.Cancel();
@@ -630,14 +614,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for subscription to be processed
-		await Task.Run(async () =>
-		{
-			while (adapter.ActiveSubscriptions.Count == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
-
-		// Give time for subscription to fully activate
-		await Task.Delay(100, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.ActiveSubscriptions.Count > 0, CancellationToken);
 
 		var id = adapter.LastSubscribedId;
 
@@ -1063,7 +1040,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Send some data
 		await adapter.SendLevel1Data(subscription.TransactionId, CancellationToken);
 
-		await Task.Delay(100, CancellationToken);
+		await Helper.WaitUntilAsync(() => items.Count > 0, CancellationToken);
 
 		// Cancel
 		cts.Cancel();
@@ -1449,11 +1426,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 456);
 
 		// Wait for cancel to be sent
-		await Task.Run(async () =>
-		{
-			while (adapter.LastCancel == null)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastCancel != null, CancellationToken);
 
 		// Send done after cancel
 		await adapter.SendOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 456);
@@ -1838,11 +1811,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for order to reach Pending state (connector processed registration)
-		await Task.Run(async () =>
-		{
-			while (order.State == OrderStates.None)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => order.State != OrderStates.None, CancellationToken);
 
 		var transId = order.TransactionId;
 
@@ -1850,11 +1819,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 123);
 
 		// Wait for state change via order object
-		await Task.Run(async () =>
-		{
-			while (order.State != OrderStates.Active)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => order.State == OrderStates.Active, CancellationToken);
 
 		// Waited for, not polled for: the order reaching Active is raised before the notification for
 		// it has been delivered, and a poll bounded by a fixed number of milliseconds is a bet on how
@@ -1905,11 +1870,7 @@ public class AsyncExtensionsTests : BaseTestClass
 				events.Add(evt);
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastOrderTransactionId != 0, CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 
@@ -1979,11 +1940,7 @@ public class AsyncExtensionsTests : BaseTestClass
 			}
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastOrderTransactionId != 0, CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 
@@ -1991,11 +1948,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Active, orderId: 456);
 
 		// Wait for cancel message to be sent
-		await Task.Run(async () =>
-		{
-			while (adapter.LastCancelMessage == null)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastCancelMessage != null, CancellationToken);
 
 		// Simulate order cancelled
 		await adapter.SimulateOrderExecution(transId, CancellationToken, OrderStates.Done, orderId: 456);
@@ -2039,11 +1992,7 @@ public class AsyncExtensionsTests : BaseTestClass
 				events.Add(evt);
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastOrderTransactionId != 0, CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 		var otherTransId1 = transId + 100;
@@ -2118,11 +2067,7 @@ public class AsyncExtensionsTests : BaseTestClass
 				events.Add(evt);
 		}, CancellationToken);
 
-		await Task.Run(async () =>
-		{
-			while (adapter.LastOrderTransactionId == 0)
-				await Task.Delay(10, CancellationToken);
-		}, CancellationToken);
+		await Helper.WaitUntilAsync(() => adapter.LastOrderTransactionId != 0, CancellationToken);
 
 		var transId = adapter.LastOrderTransactionId;
 
@@ -2215,13 +2160,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for connect message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		// Emit connect response
 		await adapter.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Wait for subscription message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		var subMsg = adapter.InMessages.OfType<MarketDataMessage>().First();
 		var subId = subMsg.TransactionId;
@@ -2286,13 +2231,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for connect message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		// Emit connect response
 		await adapter.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Wait for subscription message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		var subMsg = adapter.InMessages.OfType<MarketDataMessage>().First();
 		var subId = subMsg.TransactionId;
@@ -2310,7 +2255,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for message to be received
-		await WaitForConditionAsync(() => messages.Count > 0, TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => messages.Count > 0, TimeSpan.FromSeconds(5), CancellationToken);
 
 		// Cancel
 		cts.Cancel();
@@ -2326,7 +2271,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}
 
 		// Verify disconnect was sent
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 		adapter.InMessages.OfType<DisconnectMessage>().Count().AssertEqual(1);
 	}
 
@@ -2350,7 +2295,7 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for connect message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		// Emit connect error
 		await adapter.SendOutMessageAsync(new ConnectMessage { Error = new InvalidOperationException("Connection failed") }, CancellationToken);
@@ -2379,13 +2324,13 @@ public class AsyncExtensionsTests : BaseTestClass
 		}, CancellationToken);
 
 		// Wait for connect message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<ConnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		// Emit connect response
 		await adapter.SendOutMessageAsync(new ConnectMessage(), CancellationToken);
 
 		// Wait for subscription message
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<MarketDataMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 
 		var subMsg = adapter.InMessages.OfType<MarketDataMessage>().First();
 		var subId = subMsg.TransactionId;
@@ -2401,15 +2346,8 @@ public class AsyncExtensionsTests : BaseTestClass
 		await ThrowsAsync<InvalidOperationException>(async () => await enumerationTask.WaitAsync(TimeSpan.FromSeconds(5), CancellationToken));
 
 		// Verify disconnect was sent (finally block should execute)
-		await WaitForConditionAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5));
+		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 		adapter.InMessages.OfType<DisconnectMessage>().Count().AssertEqual(1);
-	}
-
-	private async Task WaitForConditionAsync(Func<bool> condition, TimeSpan timeout)
-	{
-		var deadline = DateTime.UtcNow + timeout;
-		while (!condition() && DateTime.UtcNow < deadline)
-			await Task.Delay(10, CancellationToken);
 	}
 
 	#endregion

@@ -1580,6 +1580,7 @@ public class RemoteStorageClientTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(10000, CooperativeCancellation = true)]
+	[DoNotParallelize] // The registered IMessageAdapterProvider is process-wide, and sibling tests read it.
 	public async Task Drive_Dispose_DisposesSelfCreatedTransportAdapter()
 	{
 		// Bug #1: the self-creating ctor (RemoteMarketDataDrive(EndPoint)) builds its own

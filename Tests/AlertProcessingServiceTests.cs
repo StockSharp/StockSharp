@@ -650,25 +650,13 @@ public class AlertProcessingServiceTests : BaseTestClass
 		return msg;
 	}
 
-	private async Task WaitForNotification(int targetCount = 1, int maxWaitMs = 3000)
-	{
-		var waited = 0;
-		while (_notificationService.NotifyCount < targetCount && waited < maxWaitMs)
-		{
-			await Task.Delay(50);
-			waited += 50;
-		}
-	}
+	private Task WaitForNotification(int targetCount = 1, int maxWaitMs = 3000)
+		=> Helper.WaitUntilAsync(() => _notificationService.NotifyCount >= targetCount,
+			TimeSpan.FromMilliseconds(maxWaitMs), CancellationToken, $"{targetCount} notification(s) delivered");
 
-	private async Task WaitForAttempts(int targetCount, int maxWaitMs = 3000)
-	{
-		var waited = 0;
-		while (_notificationService.AttemptCount < targetCount && waited < maxWaitMs)
-		{
-			await Task.Delay(50);
-			waited += 50;
-		}
-	}
+	private Task WaitForAttempts(int targetCount, int maxWaitMs = 3000)
+		=> Helper.WaitUntilAsync(() => _notificationService.AttemptCount >= targetCount,
+			TimeSpan.FromMilliseconds(maxWaitMs), CancellationToken, $"{targetCount} delivery attempt(s) made");
 
 	#endregion
 

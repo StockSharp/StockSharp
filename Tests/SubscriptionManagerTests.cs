@@ -3,10 +3,6 @@
 [TestClass]
 public class SubscriptionManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	[TestMethod]
 	public void Subscribe_FromFuture_ClampsToNow()
 	{

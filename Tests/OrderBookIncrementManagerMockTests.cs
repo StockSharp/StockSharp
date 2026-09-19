@@ -5,8 +5,6 @@ public class OrderBookIncrementManagerMockTests : BaseTestClass
 {
 	private static readonly SecurityId _secId = Helper.CreateSecurityId();
 
-	private sealed class TestReceiver : TestLogReceiver { }
-
 	private static OrderBookIncrementManager CreateManager(Mock<IOrderBookIncrementManagerState> stateMock)
 	{
 		return new OrderBookIncrementManager(new TestReceiver(), stateMock.Object);

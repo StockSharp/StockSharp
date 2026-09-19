@@ -23,13 +23,13 @@ public class SharpeRatioParameter : RiskAdjustedRatioParameter
 	}
 
 	/// <inheritdoc />
-	protected override void AddRiskSample(decimal ret)
+	protected override void AddRiskSample(decimal ret, long count)
 	{
-		_sumSq += ret * ret;
+		_sumSq += ret * ret * count;
 	}
 
 	/// <inheritdoc />
-	protected override decimal GetRisk(int count, decimal sumReturn)
+	protected override decimal GetRisk(long count, decimal sumReturn)
 	{
 		if (count < 2)
 			return 0;
@@ -40,7 +40,7 @@ public class SharpeRatioParameter : RiskAdjustedRatioParameter
 	}
 
 	/// <inheritdoc />
-	protected override bool HasEnoughRiskSamples(int count)
+	protected override bool HasEnoughRiskSamples(long count)
 		=> count >= 2;
 
 	/// <inheritdoc />

@@ -1137,8 +1137,13 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 			PnLReceived2?.Invoke(subscription, Portfolio, time, PnLManager.RealizedPnL, PnLManager.UnrealizedPnL, Commission);
 
 		// Attribute stats to the engine's PnL-refresh time rather than the notification time, so time-typed
-		// stats (MaxProfitDate/MaxDrawdownDate) point at the moment the PnL was measured.
-		StatisticManager.AddPnL(Engine.LastPnLRefreshTime, PnLManager.GetPnL(), Commission);
+		// stats (MaxProfitDate/MaxDrawdownDate) point at the moment the PnL was measured. Until the engine has
+		// refreshed once - and again after a reset, which drops that time - there is no such moment, and a PnL
+		// reported at no time is not an observation of one.
+		var pnlTime = Engine.LastPnLRefreshTime;
+
+		if (pnlTime != default)
+			StatisticManager.AddPnL(pnlTime, PnLManager.GetPnL(), Commission);
 	}
 
 	private void RaiseCommissionChanged()

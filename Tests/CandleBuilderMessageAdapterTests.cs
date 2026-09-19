@@ -188,7 +188,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 	private static SecurityId CreateSecurityId()
 	{
-		return new SecurityId { SecurityCode = "SBER", BoardCode = "TQBR" };
+		return Helper.CreateSecurityId("SBER", "TQBR");
 	}
 
 	private static TimeFrameCandleMessage CreateTimeFrameCandle(
@@ -2437,7 +2437,8 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 		};
 		exec2.SetSubscriptionIds([parentTransId]);
 		await inner.SendOutMessageAsync(exec2, token);
-		await Task.Delay(50, token);
+
+		await Helper.WaitUntilAsync(() => output.OfType<CandleMessage>().Any(), token);
 
 		// Should have produced a candle
 		var candles = output.OfType<CandleMessage>().ToArray();

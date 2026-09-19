@@ -3,10 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class SecurityNativeIdManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	private sealed class MockNativeIdStorage : INativeIdStorage
 	{
 		private readonly SynchronizedDictionary<SecurityId, object> _bySecurityId = [];

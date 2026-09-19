@@ -3,6 +3,7 @@
   <ItemGroup>
     <Compile Include="..\Designer.Templates\Backtest\SmaStrategy.cs" Link="SmaStrategy.cs" />
     <Compile Include="..\Designer.Templates\Backtest\SmaServerStopStrategy.cs" Link="SmaServerStopStrategy.cs" />
+    <Compile Include="..\Designer.Templates\Backtest\PairStrategy.cs" Link="PairStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ecng.Excel.OpenXml" Version="$(EcngVer)" />

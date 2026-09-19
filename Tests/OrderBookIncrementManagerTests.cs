@@ -3,10 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class OrderBookIncrementManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	private static QuoteChangeMessage CreateIncrement(SecurityId securityId, DateTime serverTime, QuoteChangeStates state, long[] subscriptionIds, QuoteChange[] bids = null, QuoteChange[] asks = null)
 	{
 		var msg = new QuoteChangeMessage

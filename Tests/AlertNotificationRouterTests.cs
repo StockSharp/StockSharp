@@ -1,5 +1,7 @@
 namespace StockSharp.Tests;
 
+using System.Runtime.CompilerServices;
+
 using StockSharp.Alerts;
 
 /// <summary>
@@ -360,13 +362,9 @@ public class AlertNotificationRouterTests : BaseTestClass
 	private static ValueTask Notify(IAlertNotificationService router, AlertNotifications type, CancellationToken token)
 		=> router.NotifyAsync(type, null, LogLevels.Warning, "caption", "message", DateTime.UtcNow, token);
 
-	private static async Task WaitFor(Func<bool> condition, CancellationToken token)
-	{
-		for (var i = 0; i < 100 && !condition(); i++)
-			await Task.Delay(50, token);
-
-		condition().AssertTrue("Timed out waiting for the expected state");
-	}
+	private static Task WaitFor(Func<bool> condition, CancellationToken token,
+		[CallerArgumentExpression(nameof(condition))] string expectation = null)
+		=> Helper.WaitUntilAsync(condition, TimeSpan.FromSeconds(5), token, expectation);
 
 	private sealed class CountingSound : BaseLogReceiver, IAlertSoundService
 	{

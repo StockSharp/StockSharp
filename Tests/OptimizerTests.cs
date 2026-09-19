@@ -1485,10 +1485,11 @@ public class OptimizerTests : BaseTestClass
 
 		IsTrue(count < strategies.Count, $"Should have been cancelled by timeout before all {strategies.Count} iterations, got {count}");
 
-		// The timeout must actually tear the run down, not just be observed at some later point:
-		// the enumeration has to end shortly after it fires. The margin covers connector shutdown
-		// of the in-flight backtests and scheduling noise on a loaded machine.
-		var maxDuration = timeout + TimeSpan.FromSeconds(20);
+		// The timeout must actually tear the run down, not just be observed at some later point.
+		// The margin covers shutting down the backtests already in flight; it is wide because the
+		// whole suite may be running beside this one, and it still separates a torn-down run from
+		// one that went to completion, which takes minutes.
+		var maxDuration = timeout + TimeSpan.FromSeconds(60);
 		IsTrue(watch.Elapsed < maxDuration, $"Enumeration should have ended within {maxDuration} after a {timeout} timeout, but took {watch.Elapsed}");
 	}
 }

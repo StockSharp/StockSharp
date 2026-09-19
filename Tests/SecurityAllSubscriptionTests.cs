@@ -147,11 +147,8 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 
 	private static async Task<long> WaitForSubscription(SecurityAllTestAdapter adapter, CancellationToken ct, int timeoutMs = 5000)
 	{
-		using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
-		cts.CancelAfter(timeoutMs);
-
-		while (adapter.ActiveSubscriptions.Count == 0)
-			await Task.Delay(10, cts.Token);
+		await Helper.WaitUntilAsync(() => adapter.ActiveSubscriptions.Count > 0,
+			TimeSpan.FromMilliseconds(timeoutMs), ct, "the subscription reaches the adapter");
 
 		await Task.Delay(50, ct);
 		return adapter.ActiveSubscriptions.Keys.First();
@@ -209,7 +206,8 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		// now emit real data — children are online
 		await adapter.EmitTick(subId, AaplId, 150m, 10, now.AddSeconds(1), CancellationToken);
 		await adapter.EmitTick(subId, GoogId, 2800m, 5, now.AddSeconds(2), CancellationToken);
-		await Task.Delay(200, CancellationToken);
+
+		await Helper.WaitUntilAsync(() => receivedTicks.Count >= 2, CancellationToken);
 
 		IsTrue(receivedTicks.Count >= 2, $"Expected at least 2 ticks, got {receivedTicks.Count}");
 		IsTrue(receivedTicks.Any(t => ((ISecurityIdMessage)t.tick).SecurityId == AaplId), "Expected AAPL tick");
@@ -255,7 +253,8 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		await adapter.EmitTick(subId, AaplId, 150m, 10, now.AddSeconds(1), CancellationToken);
 		await adapter.EmitTick(subId, GoogId, 2800m, 5, now.AddSeconds(2), CancellationToken);
 		await adapter.EmitTick(subId, MsftId, 300m, 7, now.AddSeconds(3), CancellationToken);
-		await Task.Delay(200, CancellationToken);
+
+		await Helper.WaitUntilAsync(() => receivedTicks.Count >= 3, CancellationToken);
 
 		var aaplCount = receivedTicks.Count(t => ((ISecurityIdMessage)t.tick).SecurityId == AaplId);
 		var googCount = receivedTicks.Count(t => ((ISecurityIdMessage)t.tick).SecurityId == GoogId);
@@ -352,7 +351,8 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 
 		await adapter.EmitLevel1(subId, AaplId, 150m, now.AddSeconds(1), CancellationToken);
 		await adapter.EmitLevel1(subId, GoogId, 2800m, now.AddSeconds(2), CancellationToken);
-		await Task.Delay(200, CancellationToken);
+
+		await Helper.WaitUntilAsync(() => receivedL1.Count >= 2, CancellationToken);
 
 		IsTrue(receivedL1.Count >= 2, $"Expected at least 2 Level1 messages, got {receivedL1.Count}");
 		IsTrue(receivedL1.Any(l => l.msg.SecurityId == AaplId), "Expected AAPL Level1");
@@ -417,7 +417,7 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		await adapter.EmitTick(subId, AaplId, 160m, 10, baseTime.AddMinutes(1).AddSeconds(1), CancellationToken);
 		await adapter.EmitTick(subId, GoogId, 2810m, 5, baseTime.AddMinutes(1).AddSeconds(1), CancellationToken);
 
-		await Task.Delay(500, CancellationToken);
+		await Helper.WaitUntilAsync(() => receivedCandles.Count >= 2, CancellationToken);
 
 		IsTrue(receivedCandles.Count >= 2, $"Expected at least 2 candles, got {receivedCandles.Count}");
 		IsTrue(receivedCandles.Any(c => ((ISecurityIdMessage)c.candle).SecurityId == AaplId), "Expected AAPL candle");
@@ -462,7 +462,7 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 			bids: [new(2800m, 5), new(2799m, 8)],
 			asks: [new(2801m, 3), new(2802m, 7)], CancellationToken);
 
-		await Task.Delay(300, CancellationToken);
+		await Helper.WaitUntilAsync(() => receivedBooks.Count > 0, CancellationToken);
 
 		// Verify AAPL books received
 		IsTrue(receivedBooks.Any(b => ((ISecurityIdMessage)b.book).SecurityId == AaplId), "AAPL book should arrive");

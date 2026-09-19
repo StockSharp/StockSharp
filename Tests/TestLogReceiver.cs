@@ -13,3 +13,10 @@ internal abstract class TestLogReceiver : BaseLogReceiver
 
 	public override DateTime CurrentTime => Time;
 }
+
+/// <summary>
+/// Instantiable <see cref="TestLogReceiver"/> for tests that only need a log receiver to pass in.
+/// </summary>
+internal sealed class TestReceiver : TestLogReceiver
+{
+}

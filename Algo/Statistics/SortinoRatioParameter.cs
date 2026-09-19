@@ -23,16 +23,16 @@ public class SortinoRatioParameter : RiskAdjustedRatioParameter
 	}
 
 	/// <inheritdoc />
-	protected override void AddRiskSample(decimal ret)
+	protected override void AddRiskSample(decimal ret, long count)
 	{
 		if (ret >= 0)
 			return;
 
-		_downsideSumSq += ret * ret;
+		_downsideSumSq += ret * ret * count;
 	}
 
 	/// <inheritdoc />
-	protected override decimal GetRisk(int count, decimal sumReturn)
+	protected override decimal GetRisk(long count, decimal sumReturn)
 	{
 		return count > 0
 			? (decimal)Math.Sqrt((double)(_downsideSumSq / count))
@@ -40,7 +40,7 @@ public class SortinoRatioParameter : RiskAdjustedRatioParameter
 	}
 
 	/// <inheritdoc />
-	protected override bool HasEnoughRiskSamples(int count)
+	protected override bool HasEnoughRiskSamples(long count)
 		=> count >= 2;
 
 	/// <inheritdoc />

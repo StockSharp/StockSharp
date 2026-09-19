@@ -6,8 +6,6 @@ using StockSharp.Algo.Testing.Generation;
 [TestClass]
 public class MarketDataGeneratorTests : BaseTestClass
 {
-	private static SecurityId CreateSecurityId() => Helper.CreateSecurityId();
-
 	private static SecurityMessage CreateSecurityMessage(SecurityId secId, decimal priceStep = 0.01m, decimal volumeStep = 1m)
 	{
 		return new SecurityMessage
@@ -43,7 +41,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_Init_SetsDefaultValues()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 
 		generator.Init();
@@ -58,7 +56,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_Process_RequiresSecurityMessage()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 
@@ -72,7 +70,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_Process_GeneratesTradeAfterSecurityMessage()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -103,7 +101,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_Process_RespectsInterval()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.FromSeconds(10);
@@ -137,7 +135,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_Process_UsesExecutionMessagePrice()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -164,7 +162,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_GenerateOriginSide_GeneratesSide()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -212,7 +210,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_Price_NeverGoesNegative()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -248,7 +246,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_Clone_CreatesIndependentCopy()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.GenerateOriginSide = true;
@@ -269,7 +267,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	public void TradeGenerator_Clone_HasIndependentIdGenerator()
 	{
 		// Clone should have independent IdGenerator to avoid duplicate IDs
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -283,7 +281,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_VolumeStep_AppliedToTradeVolume()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -311,7 +309,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_Process_HandlesTimeMessage()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -338,7 +336,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_Process_ReturnNullForBoardMessage()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -365,7 +363,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_Init_SetsDefaultValues()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 
 		generator.Init();
@@ -383,7 +381,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_Process_RequiresBoardMessage()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.Init();
 
@@ -404,7 +402,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_Process_GeneratesDepthAfterTradeData()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -436,7 +434,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_MaxGenerations_LimitsGenerationWithoutNewTrades()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -477,7 +475,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_GenerateDepthOnEachTrade_GeneratesOnTrade()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.FromHours(1);
@@ -515,7 +513,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_Clone_CreatesIndependentCopy()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.Init();
 		generator.MinSpreadStepCount = 3;
@@ -540,7 +538,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	public void DepthGenerator_Clone_CopiesGenerateDepthOnEachTrade()
 	{
 		// Clone should copy GenerateDepthOnEachTrade
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.Init();
 		generator.GenerateDepthOnEachTrade = true;
@@ -554,7 +552,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	public void DepthGenerator_Clone_CopiesGenerateOrdersCount()
 	{
 		// Clone should copy GenerateOrdersCount
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.Init();
 		generator.GenerateOrdersCount = true;
@@ -567,7 +565,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_OriginSide_AffectsBestQuotes()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.MaxPriceStepCount = 1;
 		generator.Init();
@@ -611,7 +609,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_Price_NeverGoesNegative()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -655,7 +653,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_GenerateOrdersCount_GeneratesOrdersCount()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -712,7 +710,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void OrderLogGenerator_Init_SetsDefaultValues()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new OrderLogGenerator(secId);
 
 		generator.Init();
@@ -724,7 +722,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void OrderLogGenerator_Process_GeneratesNewOrders()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new OrderLogGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -758,7 +756,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	{
 		// OrderLogGenerator should generate trades for existing orders.
 		// With enough iterations, entries with TradeId should appear.
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new OrderLogGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -850,7 +848,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 		const decimal volumeStep = 0.1m;
 		const decimal orderVolume = 2.5m;
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = CreateScriptedOrderLogGenerator(secId, volumeStep, 25, max => max);
 
 		var time = new DateTime(2026, 09, 09, 10, 00, 00, DateTimeKind.Utc);
@@ -893,7 +891,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 		const decimal volumeStep = 0.3m;
 		const decimal orderVolume = 2.1m;
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = CreateScriptedOrderLogGenerator(secId, volumeStep, 7, max => max);
 
 		var time = new DateTime(2026, 09, 09, 10, 00, 00, DateTimeKind.Utc);
@@ -920,7 +918,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 		const decimal volumeStep = 1m;
 		const decimal orderVolume = 3m;
 
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = CreateScriptedOrderLogGenerator(secId, volumeStep, 3, max => 1);
 
 		var time = new DateTime(2026, 09, 09, 10, 00, 00, DateTimeKind.Utc);
@@ -949,7 +947,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void OrderLogGenerator_Clone_CreatesIndependentCopy()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new OrderLogGenerator(secId);
 		generator.Init();
 		generator.MinVolume = 10;
@@ -965,7 +963,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void OrderLogGenerator_Process_HandlesExecutionMessage()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new OrderLogGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -996,7 +994,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void Generator_MinVolume_ThrowsOnZero()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		ThrowsExactly<ArgumentOutOfRangeException>(() => generator.MinVolume = 0);
 	}
@@ -1004,7 +1002,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void Generator_MaxVolume_ThrowsOnZero()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		ThrowsExactly<ArgumentOutOfRangeException>(() => generator.MaxVolume = 0);
 	}
@@ -1012,7 +1010,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void Generator_MaxPriceStepCount_ThrowsOnZero()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		ThrowsExactly<ArgumentOutOfRangeException>(() => generator.MaxPriceStepCount = 0);
 	}
@@ -1020,7 +1018,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_MinSpreadStepCount_ThrowsOnZero()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		ThrowsExactly<ArgumentOutOfRangeException>(() => generator.MinSpreadStepCount = 0);
 	}
@@ -1028,7 +1026,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_MaxSpreadStepCount_ThrowsOnZero()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		ThrowsExactly<ArgumentOutOfRangeException>(() => generator.MaxSpreadStepCount = 0);
 	}
@@ -1036,7 +1034,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_MaxBidsDepth_AcceptsZero()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.MaxBidsDepth = 0;
 		generator.MaxBidsDepth.AssertEqual(0);
@@ -1045,7 +1043,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_MaxAsksDepth_AcceptsZero()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.MaxAsksDepth = 0;
 		generator.MaxAsksDepth.AssertEqual(0);
@@ -1055,7 +1053,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	public void Generator_MinVolumeGreaterThanMaxVolume_ThrowsOnInit()
 	{
 		// MinVolume > MaxVolume throws ArgumentException during Init() when RandomArray is created
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.MaxVolume = 5;
 		generator.MinVolume = 10; // min > max
@@ -1066,7 +1064,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	public void DepthGenerator_MinSpreadGreaterThanMaxSpread_ThrowsOnInit()
 	{
 		// MinSpreadStepCount > MaxSpreadStepCount throws ArgumentException during Init()
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.MaxSpreadStepCount = 2;
 		generator.MinSpreadStepCount = 5; // min > max
@@ -1076,7 +1074,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void Generator_Volumes_ThrowsIfNotInitialized()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		ThrowsExactly<InvalidOperationException>(() => { var _ = generator.Volumes; });
 	}
@@ -1084,7 +1082,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void Generator_Steps_ThrowsIfNotInitialized()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		ThrowsExactly<InvalidOperationException>(() => { var _ = generator.Steps; });
 	}
@@ -1092,7 +1090,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void Generator_Process_ThrowsOnNull()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		ThrowsExactly<ArgumentNullException>(() => generator.Process(null));
@@ -1105,7 +1103,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void GeneratorMessage_Clone_ClonesGenerator()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.MinVolume = 5;
@@ -1135,7 +1133,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void GeneratorMessage_Clone_HandlesNullGenerator()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var msg = new GeneratorMessage
 		{
 			Generator = null,
@@ -1156,7 +1154,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_LargeNumberOfTrades_NoMemoryLeak()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -1206,7 +1204,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_PriceStability_AfterManyIterations()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -1245,7 +1243,7 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void DepthGenerator_EmptyDepth_WhenDepthZero()
 	{
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new TrendMarketDepthGenerator(secId);
 		generator.Init();
 		generator.Interval = TimeSpan.Zero;
@@ -1278,8 +1276,8 @@ public class MarketDataGeneratorTests : BaseTestClass
 	[TestMethod]
 	public void TradeGenerator_MultipleSecurities_Independent()
 	{
-		var secId1 = CreateSecurityId();
-		var secId2 = CreateSecurityId();
+		var secId1 = Helper.CreateSecurityId();
+		var secId2 = Helper.CreateSecurityId();
 
 		var generator1 = new RandomWalkTradeGenerator(secId1);
 		var generator2 = new RandomWalkTradeGenerator(secId2);

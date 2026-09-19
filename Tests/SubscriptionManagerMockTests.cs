@@ -3,8 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class SubscriptionManagerMockTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver { }
-
 	private static SubscriptionManager CreateManager(Mock<ISubscriptionManagerState> stateMock)
 	{
 		return new SubscriptionManager(

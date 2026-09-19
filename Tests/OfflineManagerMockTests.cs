@@ -3,8 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class OfflineManagerMockTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver { }
-
 	private static Mock<IOfflineManagerState> CreateStateMock(bool isConnected = false)
 	{
 		var mock = new Mock<IOfflineManagerState>(MockBehavior.Loose);

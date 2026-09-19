@@ -5,11 +5,7 @@ using System.Runtime.CompilerServices;
 [TestClass]
 public class MarketDataStorageCacheTests : BaseTestClass
 {
-	private static SecurityId CreateSecurityId(string code = "TEST") => new()
-	{
-		SecurityCode = code,
-		BoardCode = BoardCodes.Test,
-	};
+	private static SecurityId CreateSecurityId(string code = "TEST") => Helper.CreateSecurityId(code, BoardCodes.Test);
 
 	private static ExecutionMessage CreateTick(SecurityId securityId, DateTime serverTime) => new()
 	{

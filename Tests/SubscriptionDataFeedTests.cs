@@ -179,10 +179,6 @@ class DataFeedEmulator : IDisposable
 [TestClass]
 public class SubscriptionDataFeedTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	#region SubscriptionOnlineManager Tests
 
 	[TestMethod]

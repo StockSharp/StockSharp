@@ -51,7 +51,7 @@ public class CandleBuilderTests : BaseTestClass
 		public bool Process(Message message) => true;
 	}
 
-	private static SecurityId CreateSecurityId() => new() { SecurityCode = "TEST", BoardCode = "BOARD" };
+	private static SecurityId CreateSecurityId() => Helper.CreateSecurityId("TEST", "BOARD");
 
 	#endregion
 
@@ -1377,6 +1377,32 @@ public class CandleBuilderTests : BaseTestClass
 
 		openTimes.Contains(open.AddMinutes(1)).AssertFalse("nothing must be invented for a period without trades");
 		openTimes.Contains(open.AddMinutes(2)).AssertFalse("nothing must be invented for a period without trades");
+	}
+
+	/// <summary>
+	/// TimeFrameCandleBuilder: the builder offers no setting it cannot honour.
+	/// </summary>
+	/// <remarks>
+	/// A public settable option is a promise: set it and the builder behaves differently. The one named
+	/// Timeout promised to close an unfinished candle a given shift past the period end, and the timer
+	/// that did it worked off a Connector and a CandleSeries. A builder reaches neither today: it is a
+	/// stateless instance registered once in <see cref="CandleBuilderProvider"/> and shared by every
+	/// subscription, and it is only ever entered from <see cref="ICandleBuilder.Process"/>, whose
+	/// incoming value is its only notion of time - a period in which nothing arrives never enters the
+	/// builder at all. Delivering periods without trades is what <see cref="TimeFrameCandleBuilder.GenerateEmptyCandles"/>
+	/// does, and nothing in the library reads Timeout. A value that is accepted, validated, stored and
+	/// round-tripped while changing nothing is worse than no setting at all, so the promise is kept by
+	/// removing it.
+	/// </remarks>
+	[TestMethod]
+	public void TimeFrameCandleBuilder_HasNoTimeoutSetting()
+	{
+		var dead = typeof(TimeFrameCandleBuilder)
+			.GetMember("Timeout", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+			.Select(m => $"{m.MemberType} {m.DeclaringType.Name}.{m.Name}")
+			.ToArray();
+
+		AreEqual(0, dead.Length, $"TimeFrameCandleBuilder still offers a setting nothing acts on: {string.Join(", ", dead)}.");
 	}
 
 	#endregion

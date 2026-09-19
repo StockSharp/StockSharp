@@ -9,10 +9,6 @@ using StockSharp.Algo.Positions;
 [TestClass]
 public class ManagerCloneTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	private static readonly SecurityId _secId = Helper.CreateSecurityId();
 
 	#region Tracking state subclasses (for type preservation verification)

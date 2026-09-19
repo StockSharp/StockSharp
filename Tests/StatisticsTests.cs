@@ -1118,14 +1118,14 @@ public class StatisticsTests : BaseTestClass
 	public void ARunThatLosesItsCapitalReportsNoRatioRatherThanStopping()
 	{
 		var parameter = new SharpeRatioParameter { BeginValue = 100m, RiskFreeRate = 0m };
-		var t = DateTime.UtcNow;
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		parameter.Add(t, 0m, null);
-		parameter.Add(t, -50m, null);
+		parameter.Add(t.AddDays(1), -50m, null);
 
 		// The whole of the capital is gone: equity is a hundred plus a loss of a hundred.
-		parameter.Add(t, -100m, null);
-		parameter.Add(t, -120m, null);
+		parameter.Add(t.AddDays(2), -100m, null);
+		parameter.Add(t.AddDays(3), -120m, null);
 
 		parameter.Value.AssertEqual(0m, "a ratio that cannot be worked out is no ratio, not an exception");
 	}
@@ -1138,15 +1138,17 @@ public class StatisticsTests : BaseTestClass
 	[TestMethod]
 	public void RatiosWithNoStartingCapitalReportZeroAndCannotBeToldFromAHonestZero()
 	{
-		var t = DateTime.UtcNow;
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		var unset = new SharpeRatioParameter { RiskFreeRate = 0m };
 		var earned = new SharpeRatioParameter { BeginValue = 100m, RiskFreeRate = 0m };
 
-		foreach (var pnl in new[] { 0m, 1m, 2m, 3m })
+		decimal[] pnl = [0m, 1m, 2m, 3m];
+
+		for (var i = 0; i < pnl.Length; i++)
 		{
-			unset.Add(t, pnl, null);
-			earned.Add(t, pnl, null);
+			unset.Add(t.AddDays(i), pnl[i], null);
+			earned.Add(t.AddDays(i), pnl[i], null);
 		}
 
 		unset.BeginValue.AssertEqual(0m, "nothing seeded it, which is what a portfolio of unknown value leaves behind");
@@ -1160,13 +1162,13 @@ public class StatisticsTests : BaseTestClass
 	public void SharpeRatioPositive()
 	{
 		var parameter = new SharpeRatioParameter { BeginValue = 1m };
-		var t = DateTime.UtcNow;
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		// Every PnL change is positive, so the mean return is positive.
 		parameter.Add(t, 0.0m, null);
-		parameter.Add(t, 0.1m, null);
-		parameter.Add(t, 0.3m, null);
-		parameter.Add(t, 0.5m, null);
+		parameter.Add(t.AddDays(1), 0.1m, null);
+		parameter.Add(t.AddDays(2), 0.3m, null);
+		parameter.Add(t.AddDays(3), 0.5m, null);
 
 		(parameter.Value > 0).AssertTrue();
 	}
@@ -1175,13 +1177,13 @@ public class StatisticsTests : BaseTestClass
 	public void SharpeRatioNegative()
 	{
 		var parameter = new SharpeRatioParameter { BeginValue = 1m };
-		var t = DateTime.UtcNow;
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		// Every PnL change is negative, so the mean return is negative.
 		parameter.Add(t, 0.0m, null);
-		parameter.Add(t, -0.1m, null);
-		parameter.Add(t, -0.2m, null);
-		parameter.Add(t, -0.5m, null);
+		parameter.Add(t.AddDays(1), -0.1m, null);
+		parameter.Add(t.AddDays(2), -0.2m, null);
+		parameter.Add(t.AddDays(3), -0.5m, null);
 
 		(parameter.Value < 0).AssertTrue();
 	}
@@ -1190,13 +1192,13 @@ public class StatisticsTests : BaseTestClass
 	public void SharpeRatioZero()
 	{
 		var parameter = new SharpeRatioParameter { BeginValue = 1m };
-		var t = DateTime.UtcNow;
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		// A flat PnL curve has zero return and zero risk.
 		parameter.Add(t, 0.0m, null);
-		parameter.Add(t, 0.0m, null);
-		parameter.Add(t, 0.0m, null);
-		parameter.Add(t, 0.0m, null);
+		parameter.Add(t.AddDays(1), 0.0m, null);
+		parameter.Add(t.AddDays(2), 0.0m, null);
+		parameter.Add(t.AddDays(3), 0.0m, null);
 
 		parameter.Value.AssertEqual(0);
 	}
@@ -1205,13 +1207,13 @@ public class StatisticsTests : BaseTestClass
 	public void SortinoRatioMixed()
 	{
 		var parameter = new SortinoRatioParameter { BeginValue = 1m };
-		var t = DateTime.UtcNow;
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		// The gains outweigh the final loss, while the final period supplies downside risk.
 		parameter.Add(t, 0.0m, null);
-		parameter.Add(t, 0.1m, null);
-		parameter.Add(t, 0.3m, null);
-		parameter.Add(t, 0.2m, null);
+		parameter.Add(t.AddDays(1), 0.1m, null);
+		parameter.Add(t.AddDays(2), 0.3m, null);
+		parameter.Add(t.AddDays(3), 0.2m, null);
 
 		(parameter.Value > 0).AssertTrue();
 	}
@@ -1220,13 +1222,13 @@ public class StatisticsTests : BaseTestClass
 	public void SortinoRatioNegative()
 	{
 		var parameter = new SortinoRatioParameter { BeginValue = 1m };
-		var t = DateTime.UtcNow;
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		// Every PnL change is negative, so both mean return and downside samples are negative.
 		parameter.Add(t, 0.0m, null);
-		parameter.Add(t, -0.1m, null);
-		parameter.Add(t, -0.3m, null);
-		parameter.Add(t, -0.5m, null);
+		parameter.Add(t.AddDays(1), -0.1m, null);
+		parameter.Add(t.AddDays(2), -0.3m, null);
+		parameter.Add(t.AddDays(3), -0.5m, null);
 
 		(parameter.Value < 0).AssertTrue();
 	}
@@ -1397,6 +1399,357 @@ public class StatisticsTests : BaseTestClass
 		// return scales with P and the risk with sqrt(P), so the ratio scales with sqrt(P):
 		// -0.2 / 0.2 * sqrt(52.178571) = -7.2234736, the daily figure divided by sqrt(7).
 		((double)parameter.Value).AssertEqual(-7.2234736, 0.0001);
+	}
+
+	/// <summary>
+	/// The ratio annualizes from <see cref="RiskAdjustedRatioParameter.Period"/> alone - the time each observation
+	/// arrived with is never read - so one TimeSpan stands for every gap in the sample. PnL is reported on a position
+	/// change, and position changes do not arrive on a timer: the gaps are uneven, and no single period describes
+	/// them. Five returns collected over a year are a poorer year than the same five collected in five days, and a
+	/// per-year figure has to say so. Whichever way that is answered - a smaller ratio worked out from the elapsed
+	/// time, or no ratio at all because an uneven sample cannot be annualized - the answer cannot be the figure an
+	/// evenly spaced sample earns.
+	/// </summary>
+	[TestMethod]
+	public void SharpeRatio_IrregularObservationsAreNotScoredAsEvenlySpacedOnes()
+	{
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		// The returns of SharpeRatio_AnnualizedValueFromDefinition: +10%, -5%, +10%, -5%, +10%.
+		decimal[] pnl = [100000m, 110000m, 104500m, 114950m, 109202.5m, 120122.75m];
+
+		// The same PnL read twice: a day between observations, and a year of silence before the last one.
+		int[] evenDays = [0, 1, 2, 3, 4, 5];
+		int[] unevenDays = [0, 1, 2, 3, 4, 369];
+
+		var even = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+		var uneven = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+
+		for (var i = 0; i < pnl.Length; i++)
+		{
+			even.Add(t.AddDays(evenDays[i]), pnl[i], null);
+			uneven.Add(t.AddDays(unevenDays[i]), pnl[i], null);
+		}
+
+		(uneven.Value < even.Value).AssertTrue(
+			$"five returns spread over {unevenDays[^1]} days scored {uneven.Value} against {even.Value} for the same five returns over five days");
+	}
+
+	/// <summary>
+	/// Sortino annualizes its downside deviation the same way Sharpe annualizes its standard deviation, and reads the
+	/// observation times just as little. The losing periods here are the two -5% ones whatever the calendar says, so
+	/// what separates the two samples is only how long the run took - which is the whole of what an annual figure is
+	/// about.
+	/// </summary>
+	[TestMethod]
+	public void SortinoRatio_IrregularObservationsAreNotScoredAsEvenlySpacedOnes()
+	{
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		decimal[] pnl = [100000m, 110000m, 104500m, 114950m, 109202.5m, 120122.75m];
+
+		int[] evenDays = [0, 1, 2, 3, 4, 5];
+		int[] unevenDays = [0, 1, 2, 3, 4, 369];
+
+		var even = new SortinoRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+		var uneven = new SortinoRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+
+		for (var i = 0; i < pnl.Length; i++)
+		{
+			even.Add(t.AddDays(evenDays[i]), pnl[i], null);
+			uneven.Add(t.AddDays(unevenDays[i]), pnl[i], null);
+		}
+
+		(uneven.Value < even.Value).AssertTrue(
+			$"five returns spread over {unevenDays[^1]} days scored {uneven.Value} against {even.Value} for the same five returns over five days");
+	}
+
+	/// <summary>
+	/// Standing still is something a strategy did, not something it failed to report. A week in which the book
+	/// never moved earns seven returns of zero, because the capital was tied up for those seven days and earned
+	/// nothing - so the same three moves spread across a fortnight must score below the same three made back to
+	/// back.
+	/// </summary>
+	[TestMethod]
+	public void SharpeRatio_IdlePeriodsAreReturnsOfZeroRatherThanNoObservationAtAll()
+	{
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		// +10%, -5%, +10% on a capital of 100000.
+		decimal[] pnl = [100000m, 110000m, 104500m, 114950m];
+
+		int[] busyDays = [0, 1, 2, 3];
+		int[] idleDays = [0, 1, 2, 10];
+
+		var busy = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+		var idle = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+
+		for (var i = 0; i < pnl.Length; i++)
+		{
+			busy.Add(t.AddDays(busyDays[i]), pnl[i], null);
+			idle.Add(t.AddDays(idleDays[i]), pnl[i], null);
+		}
+
+		(idle.Value > 0).AssertTrue("the idle run still gained, so it still has a ratio");
+
+		(idle.Value < busy.Value).AssertTrue(
+			$"the same three moves took ten days instead of three and scored {idle.Value} against {busy.Value}");
+	}
+
+	/// <summary>
+	/// A return is the move a period made, so what happened inside one period is one return however many times
+	/// PnL was reported along the way. Two books with identical daily closes are the same book, whether one of
+	/// them changed position four times a day or none.
+	/// </summary>
+	[TestMethod]
+	public void SharpeRatio_ChangesWithinOnePeriodCloseOneReturn()
+	{
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		var daily = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+		var intraday = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+
+		decimal[] closes = [100000m, 110000m, 104500m, 114950m];
+
+		for (var i = 0; i < closes.Length; i++)
+			daily.Add(t.AddDays(i), closes[i], null);
+
+		// The same daily closes, reached through swings that are all inside a single day.
+		intraday.Add(t, 100000m, null);
+		intraday.Add(t.AddHours(6), 103000m, null);
+		intraday.Add(t.AddHours(18), 107000m, null);
+		intraday.Add(t.AddDays(1), 110000m, null);
+		intraday.Add(t.AddDays(1).AddHours(12), 100000m, null);
+		intraday.Add(t.AddDays(2), 104500m, null);
+		intraday.Add(t.AddDays(2).AddHours(8), 120000m, null);
+		intraday.Add(t.AddDays(3), 114950m, null);
+
+		(daily.Value > 0).AssertTrue("the daily book gained, so it has a ratio to compare against");
+		intraday.Value.AssertEqual(daily.Value, "reporting more often inside a period does not add periods");
+	}
+
+	/// <summary>
+	/// A run ends when it ends, which is rarely on a period boundary. The part-period it stops in is not a
+	/// period: a half-day return annualized by the same factor as the full days around it would overstate both
+	/// the return and the risk, which is the very error the grid exists to remove. What that tail did is not
+	/// thrown away, it is only unmeasured until its own period closes.
+	/// </summary>
+	[TestMethod]
+	public void SharpeRatio_IncompleteFinalPeriodIsMeasuredOnlyOnceItCloses()
+	{
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		decimal[] closes = [100000m, 110000m, 104500m, 114950m];
+
+		var whole = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+		var withTail = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+
+		for (var i = 0; i < closes.Length; i++)
+		{
+			whole.Add(t.AddDays(i), closes[i], null);
+			withTail.Add(t.AddDays(i), closes[i], null);
+		}
+
+		// Half a day past the last boundary the book gains again, and the run stops there.
+		withTail.Add(t.AddDays(3).AddHours(12), 126445m, null);
+
+		withTail.Value.AssertEqual(whole.Value, "half a period is not a period and does not become a return");
+
+		// Once the fourth day closes, that gain is measured - as the fourth period's return, not as a fourth
+		// observation of unknown length.
+		withTail.Add(t.AddDays(4), 126445m, null);
+
+		(withTail.Value != whole.Value).AssertTrue("the closed period has to change the figure the tail could not");
+	}
+
+	/// <summary>
+	/// The grid is part of what the parameter knows: where it opened, which boundary it last closed on and at
+	/// what level. A run restored from saved state has to go on measuring the same periods the saved one would
+	/// have, not open a fresh grid at whatever time the next report happens to carry.
+	/// </summary>
+	[TestMethod]
+	public void SharpeRatio_SavedStateCarriesTheGrid()
+	{
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		decimal[] closes = [100000m, 110000m, 104500m, 114950m];
+
+		var parameter = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+
+		for (var i = 0; i < closes.Length; i++)
+			parameter.Add(t.AddDays(i), closes[i], null);
+
+		var restored = new SharpeRatioParameter();
+		restored.Load(parameter.Save());
+
+		restored.Value.AssertEqual(parameter.Value);
+
+		// Two more days on both, one of them idle, so the restored grid has to agree about boundaries it never saw.
+		parameter.Add(t.AddDays(6), 109202.5m, null);
+		restored.Add(t.AddDays(6), 109202.5m, null);
+
+		(parameter.Value != 0).AssertTrue("the continued run has a ratio for the agreement to be about");
+		restored.Value.AssertEqual(parameter.Value);
+	}
+
+	/// <summary>
+	/// A strategy reset reports its zeroed PnL at no time at all: Strategy.Reset stops the engine, which drops
+	/// its PnL-refresh time, and the reset then reports PnL against that dropped time. A report carrying no time
+	/// says nothing about when anything happened, so it is not an observation: it must neither open the grid nor
+	/// close a period. An optimizer resets the strategy before every iteration, so a grid opened in year one
+	/// would close some seven hundred thousand empty periods before the run's first real observation and bury
+	/// the result.
+	/// </summary>
+	[TestMethod]
+	public void SharpeRatio_AReportWithNoTimeDoesNotOpenTheGrid()
+	{
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		decimal[] pnl = [100000m, 110000m, 104500m, 114950m, 109202.5m, 120122.75m];
+
+		var clean = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+		var afterReset = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+
+		// What a strategy reset reports: a PnL of zero, at no time at all.
+		afterReset.Add(default, 0m, null);
+
+		for (var i = 0; i < pnl.Length; i++)
+		{
+			clean.Add(t.AddDays(i), pnl[i], null);
+			afterReset.Add(t.AddDays(i), pnl[i], null);
+		}
+
+		((double)clean.Value).AssertEqual(9.30472, 0.02);
+
+		afterReset.Value.AssertEqual(clean.Value,
+			$"the reset report scored the same observations {afterReset.Value} instead of {clean.Value}");
+	}
+
+	/// <summary>
+	/// The same holds once the grid is open: a report with no time cannot close a boundary, and it cannot
+	/// become the level the grid is holding either, because a boundary crossed between two reports closes on
+	/// the last level that was actually observed. The reports here fall half a day off the boundaries, so that
+	/// held level is what every boundary is measured on.
+	/// </summary>
+	[TestMethod]
+	public void SharpeRatio_AReportWithNoTimeClosesNoPeriodAndDoesNotBecomeTheHeldLevel()
+	{
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		decimal[] pnl = [110000m, 104500m, 114950m, 109202.5m, 120122.75m];
+
+		var clean = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+		var interrupted = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+
+		clean.Add(t, 100000m, null);
+		interrupted.Add(t, 100000m, null);
+
+		for (var i = 0; i < pnl.Length; i++)
+		{
+			clean.Add(t.AddDays(i + 0.5), pnl[i], null);
+			interrupted.Add(t.AddDays(i + 0.5), pnl[i], null);
+
+			// A figure far outside the series, so a boundary closing on it would be plain in the result.
+			interrupted.Add(default, 1000000m, null);
+		}
+
+		(clean.Value != 0).AssertTrue("the clean run has a ratio for the comparison to be about");
+		interrupted.Value.AssertEqual(clean.Value,
+			$"the timeless reports scored {interrupted.Value} instead of {clean.Value}");
+	}
+
+	/// <summary>
+	/// Sortino reads the report time exactly as Sharpe does, so a timeless report has to be as invisible to the
+	/// downside deviation as it is to the standard deviation.
+	/// </summary>
+	[TestMethod]
+	public void SortinoRatio_AReportWithNoTimeDoesNotOpenTheGrid()
+	{
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		decimal[] pnl = [100000m, 110000m, 104500m, 114950m, 109202.5m, 120122.75m];
+
+		var clean = new SortinoRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+		var afterReset = new SortinoRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+
+		afterReset.Add(default, 0m, null);
+
+		for (var i = 0; i < pnl.Length; i++)
+		{
+			clean.Add(t.AddDays(i), pnl[i], null);
+			afterReset.Add(t.AddDays(i), pnl[i], null);
+		}
+
+		(clean.Value > 0).AssertTrue("the clean run gained, so it has a ratio for the comparison to be about");
+		afterReset.Value.AssertEqual(clean.Value,
+			$"the reset report scored the same observations {afterReset.Value} instead of {clean.Value}");
+	}
+
+	/// <summary>
+	/// Every boundary of the grid is measured at one length, so the length cannot be changed while the grid is
+	/// open: the periods already closed were measured at the old one, and the count that annualizes them does
+	/// not know which length each of them had. Setting the length it already has is not a change and stays
+	/// legal, because restoring saved state does exactly that.
+	/// </summary>
+	[TestMethod]
+	public void RiskAdjustedRatio_PeriodCannotChangeWhileTheGridIsOpen()
+	{
+		var parameter = new SharpeRatioParameter { BeginValue = 100000m, RiskFreeRate = 0m };
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		parameter.Period = TimeSpan.FromDays(7);
+		parameter.Add(t, 100000m, null);
+
+		parameter.Period = TimeSpan.FromDays(7);
+
+		Throws<InvalidOperationException>(() => parameter.Period = TimeSpan.FromDays(1));
+		parameter.Period.AssertEqual(TimeSpan.FromDays(7), "the refused change must leave the grid as it was");
+
+		// Reset closes the grid, and a closed grid can be reopened at any length.
+		parameter.Reset();
+		parameter.Period = TimeSpan.FromDays(1);
+		parameter.Period.AssertEqual(TimeSpan.FromDays(1));
+	}
+
+	/// <summary>
+	/// A return is a fraction of the capital its period opened with, so a period that opened with none has no
+	/// return to record - it is not a return of zero. That is a judgement about one period and not about the
+	/// run: capital lost by one boundary can be back by the next, and the periods the book then stands still
+	/// through are honest zeros. Both runs here lose the whole of the capital, make it back, and then stand
+	/// still - one of them for three days longer, which has to show.
+	/// </summary>
+	[TestMethod]
+	public void SharpeRatio_PeriodsStandingStillOnCapitalThatCameBackAreZeros()
+	{
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		var shorter = new SharpeRatioParameter { BeginValue = 100m, RiskFreeRate = 0m };
+		var longer = new SharpeRatioParameter { BeginValue = 100m, RiskFreeRate = 0m };
+
+		foreach (var parameter in new[] { shorter, longer })
+		{
+			parameter.Add(t, 0m, null);
+
+			// The first day loses the whole capital: equity at the close of day one is a hundred less a
+			// hundred, so day two has nothing to earn a return on.
+			parameter.Add(t.AddDays(1), -100m, null);
+
+			// Halfway through day two it is all back and more, and then the book stands still.
+			parameter.Add(t.AddDays(1.5), 50m, null);
+		}
+
+		// The standing still runs to the fifth boundary for one and to the eighth for the other, and both then
+		// gain the same ten before a last boundary measures it.
+		shorter.Add(t.AddDays(5), 60m, null);
+		shorter.Add(t.AddDays(6), 70m, null);
+
+		longer.Add(t.AddDays(8), 60m, null);
+		longer.Add(t.AddDays(9), 70m, null);
+
+		(shorter.Value < 0).AssertTrue("both runs are down over the whole of their length, so both score below zero");
+
+		(longer.Value > shorter.Value).AssertTrue(
+			$"three further days of standing still on funded equity scored {longer.Value} against {shorter.Value}, so they were not counted");
 	}
 
 	[TestMethod]
@@ -1741,19 +2094,20 @@ public class StatisticsTests : BaseTestClass
 		// Arrange
 		var s1 = new SharpeRatioParameter { BeginValue = 1000m, RiskFreeRate = 0.05m };
 		var s2 = new SharpeRatioParameter { BeginValue = 10000m, RiskFreeRate = 0.05m };
-		var t = DateTime.UtcNow;
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		// Baseline PnL series and initial capital (currency units)
 		decimal[] a = [1000m, 1100m, 1050m, 1200m];
 		// Scaled by factor 10
 		decimal[] b = [10000m, 11000m, 10500m, 12000m];
 
-		foreach (var v in a)
-			s1.Add(t, v, null);
+		for (var i = 0; i < a.Length; i++)
+		{
+			s1.Add(t.AddDays(i), a[i], null);
+			s2.Add(t.AddDays(i), b[i], null);
+		}
 
-		foreach (var v in b)
-			s2.Add(t, v, null);
-
+		(s1.Value != 0).AssertTrue("the two series have to produce a ratio for their agreement to mean anything");
 		(s1.Value - s2.Value).Abs().AssertEqual(0m);
 	}
 
@@ -1763,19 +2117,20 @@ public class StatisticsTests : BaseTestClass
 		// Arrange
 		var r1 = new SortinoRatioParameter { BeginValue = 1000m, RiskFreeRate = 0.05m };
 		var r2 = new SortinoRatioParameter { BeginValue = 10000m, RiskFreeRate = 0.05m };
-		var t = DateTime.UtcNow;
+		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 		// Baseline PnL series and initial capital (currency units), including a losing period
 		decimal[] a = [1000m, 900m, 950m, 1100m];
 		// Scaled by factor 10
 		decimal[] b = [10000m, 9000m, 9500m, 11000m];
 
-		foreach (var v in a)
-			r1.Add(t, v, null);
+		for (var i = 0; i < a.Length; i++)
+		{
+			r1.Add(t.AddDays(i), a[i], null);
+			r2.Add(t.AddDays(i), b[i], null);
+		}
 
-		foreach (var v in b)
-			r2.Add(t, v, null);
-
+		(r1.Value != 0).AssertTrue("the two series have to produce a ratio for their agreement to mean anything");
 		(r1.Value - r2.Value).Abs().AssertEqual(0m);
 	}
 

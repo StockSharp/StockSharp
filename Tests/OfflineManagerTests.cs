@@ -3,10 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class OfflineManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	[TestMethod]
 	public void Reset_ClearsState()
 	{

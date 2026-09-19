@@ -24,6 +24,7 @@ using StockSharp.Charting;
 public class PairStrategy : Strategy
 {
 	private bool? _isShortLessThenLong;
+	private decimal? _lastPrice2;
 
 	public PairStrategy()
 	{
@@ -94,11 +95,16 @@ public class PairStrategy : Strategy
 		set => _stopValue.Value = value;
 	}
 
+	// to show in Designer what securities and data types are used
+	public override IEnumerable<(Security sec, DataType dt)> GetWorkingSecurities()
+		=> [(Security1, TimeFrame.TimeFrame()), (Security2, TimeFrame.TimeFrame())];
+
 	protected override void OnReseted()
 	{
 		base.OnReseted();
 
 		_isShortLessThenLong = null;
+		_lastPrice2 = null;
 	}
 
 	protected override void OnStarted2(DateTime time)
@@ -114,27 +120,43 @@ public class PairStrategy : Strategy
 
 		// --- bind candles set and indicators ----
 
-		var subscription = SubscribeCandles(TimeFrame, security: Security1)
+		// the crossing signal is taken from the first leg only
+		var subscription1 = SubscribeCandles(TimeFrame, security: Security1)
 			// bind indicators to the candles
 			.Bind(longSma, shortSma, OnProcess)
 			// start processing
+			.Start();
+
+		// the second leg is followed for its own price, which the opposite order is quoted at
+		var subscription2 = SubscribeCandles(TimeFrame, security: Security2)
+			.Bind(candle => _lastPrice2 = candle.ClosePrice)
 			.Start();
 
 		// ----------------------------------------
 
 		// ----------- configure chart ------------
 
-		var area = CreateChartArea();
+		var area1 = CreateChartArea();
 
 		// area can be null in case of no GUI (strategy hosted in Runner or in own console app)
-		if (area != null)
+		if (area1 != null)
 		{
-			DrawCandles(area, subscription);
+			DrawCandles(area1, subscription1);
 
-			DrawIndicator(area, shortSma, System.Drawing.Color.Coral);
-			DrawIndicator(area, longSma);
+			DrawIndicator(area1, shortSma, System.Drawing.Color.Coral);
+			DrawIndicator(area1, longSma);
 
-			DrawOwnTrades(area);
+			DrawOwnTrades(area1);
+		}
+
+		// each leg gets its own area, they are priced independently
+		var area2 = CreateChartArea();
+
+		if (area2 != null)
+		{
+			DrawCandles(area2, subscription2);
+
+			DrawOwnTrades(area2);
 		}
 
 		// ----------------------------------------
@@ -155,6 +177,10 @@ public class PairStrategy : Strategy
 		if (candle.State != CandleStates.Finished)
 			return;
 
+		// the pair is traded as a whole, so nothing is sent until the second leg is priced as well
+		if (_lastPrice2 is not decimal price2)
+			return;
+
 		// calc new values for short and long
 		var isShortLessThenLong = shortValue < longValue;
 
@@ -169,21 +195,31 @@ public class PairStrategy : Strategy
 			// if short less than long, the sale, otherwise buy
 			var direction = isShortLessThenLong ? Sides.Sell : Sides.Buy;
 
-			// calc size for open position or revert
-			var volume = Position == 0 ? Volume : Position.Abs().Min(Volume) * 2;
-
-			var priceStep = GetSecurity().PriceStep ?? 1;
-
-			// calc order price as a close price + offset
-			var price = candle.ClosePrice + (direction == Sides.Buy ? priceStep : -priceStep);
-
-			if (direction == Sides.Buy)
-				BuyLimit(price, volume);
-			else
-				SellLimit(price, volume);
+			// the pair is market neutral: the signal leg takes the direction, the second one takes the opposite
+			RegisterLeg(Security1, direction, candle.ClosePrice);
+			RegisterLeg(Security2, direction.Invert(), price2);
 
 			// store current values for short and long
 			_isShortLessThenLong = isShortLessThenLong;
 		}
+	}
+
+	private void RegisterLeg(Security security, Sides direction, decimal lastPrice)
+	{
+		// each leg carries its own position, so the size is counted per leg
+		var position = GetPositionValue(security, Portfolio) ?? 0;
+
+		// calc size for open position or revert
+		var volume = position == 0 ? Volume : position.Abs().Min(Volume) * 2;
+
+		var priceStep = security.PriceStep ?? 1;
+
+		// calc order price as a close price + offset
+		var price = lastPrice + (direction == Sides.Buy ? priceStep : -priceStep);
+
+		if (direction == Sides.Buy)
+			BuyLimit(price, volume, security);
+		else
+			SellLimit(price, volume, security);
 	}
 }

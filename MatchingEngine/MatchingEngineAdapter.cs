@@ -360,10 +360,21 @@ public class MatchingEngineAdapter : IMessageTransport
 	public void ProcessOrderRegister(OrderRegisterMessage regMsg, List<Message> results)
 	{
 		// Intercept conditional (stop) orders
-		if (regMsg.OrderType == OrderTypes.Conditional && CreateStopInfo(regMsg) is StopOrderInfo stopInfo)
+		if (regMsg.OrderType == OrderTypes.Conditional)
 		{
-			RegisterStopOrder(regMsg, stopInfo, results);
-			return;
+			var stopInfo = CreateStopInfo(regMsg, out var stopError);
+
+			if (stopInfo is not null)
+			{
+				RegisterStopOrder(regMsg, stopInfo, results);
+				return;
+			}
+
+			if (stopError is not null)
+			{
+				results.Add(CreateOrderResponse(regMsg, OrderStates.Failed, error: new InvalidOperationException(stopError)));
+				return;
+			}
 		}
 
 		var state = GetSecurityState(regMsg.SecurityId);
@@ -847,9 +858,15 @@ public class MatchingEngineAdapter : IMessageTransport
 				PortfolioName = replaceMsg.PortfolioName ?? oldStopInfo.PortfolioName,
 			};
 
-			if (CreateStopInfo(stopRegMsg) is StopOrderInfo newStopInfo)
+			var newStopInfo = CreateStopInfo(stopRegMsg, out var stopError);
+
+			if (newStopInfo is not null)
 			{
 				RegisterStopOrder(stopRegMsg, newStopInfo, results);
+			}
+			else if (stopError is not null)
+			{
+				results.Add(CreateOrderResponse(stopRegMsg, OrderStates.Failed, error: new InvalidOperationException(stopError)));
 			}
 			else
 			{
@@ -1251,39 +1268,77 @@ public class MatchingEngineAdapter : IMessageTransport
 	}
 
 	/// <summary>
+	/// The price the instrument last traded at, as far as this engine has been told.
+	/// </summary>
+	/// <param name="securityId">Instrument to read.</param>
+	/// <returns>The price, or <see langword="null"/> when the venue has stated none.</returns>
+	private decimal? TryGetLastTradePrice(SecurityId securityId)
+		// Asking must not create a state for an instrument the engine has never seen.
+		=> _securityStates.TryGetValue(securityId, out var state) ? state.LastTradePrice : null;
+
+	/// <summary>
+	/// The level a stop rests at when its activation price states a distance from the market rather
+	/// than a price of its own: that far above the market for one that fires on a rise, that far
+	/// below it for one that fires on a fall.
+	/// </summary>
+	/// <param name="marketPrice">Price the instrument is at.</param>
+	/// <param name="percent">Distance from it, in percent.</param>
+	/// <param name="side">Order side.</param>
+	/// <param name="invertTrigger">Whether the stop fires on the opposite move, as a take-profit does.</param>
+	/// <returns>The absolute level.</returns>
+	private static decimal ResolveActivationPercent(decimal marketPrice, decimal percent, Sides side, bool invertTrigger)
+	{
+		// The same pairing of side and direction the trigger itself reads, so the level a stop is
+		// armed at is on the side the price has to move to reach it.
+		var firesOnRise = invertTrigger ? side == Sides.Sell : side == Sides.Buy;
+
+		return marketPrice * (firesOnRise ? 1m + percent / 100m : 1m - percent / 100m);
+	}
+
+	/// <summary>
 	/// Reads the stop the registration's condition describes, or <see langword="null"/> when it
 	/// describes none and the order is an ordinary one.
 	/// </summary>
+	/// <param name="regMsg">Registration to read.</param>
+	/// <param name="error">Why the condition describes a stop that cannot be placed, or
+	/// <see langword="null"/> when it describes one that can, or none at all.</param>
+	/// <returns>The stop to rest, or <see langword="null"/>.</returns>
 	/// <remarks>
 	/// A condition can carry both halves of a protective pair, so which half this order is, is told
 	/// by the one that names an activation price: read as the other it would rest at 0, a level every
 	/// price is already past, and fire on the first quote it sees. A take-profit rests exactly as a
 	/// stop-loss does, and differs only in the direction the price has to move to reach it.
 	/// </remarks>
-	private static StopOrderInfo CreateStopInfo(OrderRegisterMessage regMsg)
+	private StopOrderInfo CreateStopInfo(OrderRegisterMessage regMsg, out string error)
 	{
+		error = null;
+
 		var stopCond = regMsg.Condition as IStopLossOrderCondition;
 		var takeCond = regMsg.Condition as ITakeProfitOrderCondition;
 
-		if (stopCond?.ActivationPrice is null && takeCond?.ActivationPrice is not null)
-		{
-			return new()
-			{
-				TransactionId = regMsg.TransactionId,
-				SecurityId = regMsg.SecurityId,
-				Side = regMsg.Side,
-				Volume = regMsg.Volume,
-				PortfolioName = regMsg.PortfolioName,
-				StopPrice = takeCond.ActivationPrice.Value,
-				LimitPrice = takeCond.ClosePositionPrice,
-				InvertTrigger = true,
-			};
-		}
+		var isTake = stopCond?.ActivationPrice is null && takeCond?.ActivationPrice is not null;
 
-		if (stopCond is null)
+		if (!isTake && stopCond is null)
 			return null;
 
+		var activationPrice = (isTake ? takeCond.ActivationPrice : stopCond.ActivationPrice) ?? 0;
 		var percent = regMsg.Condition as IPercentStopOrderCondition;
+
+		if (percent?.IsActivationPricePercent == true)
+		{
+			// The condition states a distance from the market, so the price the instrument is at is
+			// snapshotted here and the stop rests at the absolute that distance resolves to. It is
+			// taken from the price stops are measured against, which is the one the venue prints: an
+			// instrument it has never printed states no such price, and the stop cannot be armed at
+			// all - arming it at the raw number would put it at a level the first print is past.
+			if (TryGetLastTradePrice(regMsg.SecurityId) is not decimal marketPrice)
+			{
+				error = $"Order {regMsg.TransactionId}: activation price is a percent of the market, and {regMsg.SecurityId} has no traded price to take it from.";
+				return null;
+			}
+
+			activationPrice = ResolveActivationPercent(marketPrice, activationPrice, regMsg.Side, isTake);
+		}
 
 		return new()
 		{
@@ -1292,10 +1347,11 @@ public class MatchingEngineAdapter : IMessageTransport
 			Side = regMsg.Side,
 			Volume = regMsg.Volume,
 			PortfolioName = regMsg.PortfolioName,
-			StopPrice = stopCond.ActivationPrice ?? 0,
-			LimitPrice = stopCond.ClosePositionPrice,
-			IsTrailing = stopCond.IsTrailing,
-			TrailingOffset = stopCond is StopOrderCondition soc ? soc.TrailingOffset : null,
+			StopPrice = activationPrice,
+			LimitPrice = isTake ? takeCond.ClosePositionPrice : stopCond.ClosePositionPrice,
+			InvertTrigger = isTake,
+			IsTrailing = !isTake && stopCond.IsTrailing,
+			TrailingOffset = regMsg.Condition is StopOrderCondition soc ? soc.TrailingOffset : null,
 			// A price stated as a percent stays a percent here; resolved to an absolute only when the
 			// stop fires, against the level it fired at.
 			IsLimitPricePercent = percent?.IsClosePositionPricePercent == true,
@@ -1330,6 +1386,11 @@ public class MatchingEngineAdapter : IMessageTransport
 	/// </summary>
 	public void CheckStopOrders(SecurityId securityId, decimal price, DateTime time, List<Message> results)
 	{
+		// Every price a stop is measured against arrives here, so this is also where the instrument's
+		// own price is kept: a distance stated as a percent of the market is then resolved from the
+		// same stream that later reaches it.
+		GetSecurityState(securityId).ProcessTradePrice(price);
+
 		var triggers = _stopOrderManager.CheckPrice(securityId, price, time);
 
 		foreach (var trigger in triggers)

@@ -10,7 +10,7 @@ public class StorageBufferTests : BaseTestClass
 
 	private static SecurityId CreateSecurityId(string code = "SBER")
 	{
-		return new SecurityId { SecurityCode = code, BoardCode = "TQBR" };
+		return Helper.CreateSecurityId(code, "TQBR");
 	}
 
 	private static ExecutionMessage CreateTick(SecurityId securityId, DateTime serverTime, decimal price, decimal volume)

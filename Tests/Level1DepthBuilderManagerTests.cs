@@ -3,10 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class Level1DepthBuilderManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	private static Level1ChangeMessage CreateBestBidAsk(SecurityId securityId, DateTime time, long[] subscriptionIds, decimal? bidPrice, decimal? askPrice, decimal? bidVolume = null, decimal? askVolume = null)
 	{
 		var msg = new Level1ChangeMessage

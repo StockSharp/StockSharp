@@ -9,8 +9,6 @@ using StockSharp.Algo.Testing.Generation;
 [TestClass]
 public class HistoryMessageAdapterTests : BaseTestClass
 {
-	private static SecurityId CreateSecurityId() => Helper.CreateSecurityId();
-
 	private class TestSecurityProvider : ISecurityProvider
 	{
 		private readonly List<Security> _securities = [];
@@ -392,7 +390,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	{
 		var secProvider = CreateSecurityProvider();
 		var manager = new TestHistoryMarketDataManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 
 		using var adapter = new HistoryMessageAdapter(
@@ -419,7 +417,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	{
 		var secProvider = CreateSecurityProvider();
 		var manager = new TestHistoryMarketDataManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var generator = new RandomWalkTradeGenerator(secId);
 
 		manager.RegisterGenerator(secId, DataType.Ticks, generator, 1);
@@ -542,7 +540,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	{
 		var secProvider = CreateSecurityProvider();
 		var manager = new TestHistoryMarketDataManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
@@ -568,7 +566,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	{
 		var secProvider = CreateSecurityProvider();
 		var manager = new TestHistoryMarketDataManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
@@ -599,7 +597,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	{
 		var secProvider = CreateSecurityProvider();
 		var manager = new TestHistoryMarketDataManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		manager.RegisterGenerator(secId, DataType.Ticks, new RandomWalkTradeGenerator(secId), 1);
 		manager.RegisterGenerator(secId, DataType.Level1, new RandomWalkTradeGenerator(secId), 2);
@@ -1352,14 +1350,14 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			ExceptionToThrow = new InvalidOperationException("Test error")
 		};
 
-		var outMessages = new List<Message>();
+		var outMessages = new ConcurrentQueue<Message>();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
 			secProvider,
 			manager);
 
-		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Enqueue(m); return default; };
 
 		var stateMsg = new EmulationStateMessage
 		{
@@ -1368,8 +1366,9 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
 
-		// Give time for background task to process
-		await Task.Delay(100, CancellationToken);
+		await Helper.WaitUntilAsync(
+			() => outMessages.OfType<EmulationStateMessage>().Any(m => m.State == ChannelStates.Stopping && m.Error != null),
+			CancellationToken);
 
 		// Should have EmulationStateMessage with Stopping state
 		var stoppingState = outMessages.OfType<EmulationStateMessage>()
@@ -1394,14 +1393,14 @@ public class HistoryMessageAdapterTests : BaseTestClass
 			ShouldWaitForCancellation = true
 		};
 
-		var outMessages = new List<Message>();
+		var outMessages = new ConcurrentQueue<Message>();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
 			secProvider,
 			manager);
 
-		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Enqueue(m); return default; };
 
 		var stateMsg = new EmulationStateMessage
 		{
@@ -1410,14 +1409,15 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
 
-		// Give time for background task to start
-		await Task.Delay(50, CancellationToken);
+		// Wait for the background task to reach the manager
+		await manager.StartEntered.Task.WithCancellation(CancellationToken);
 
 		// Stop the adapter
 		await adapter.SendInMessageAsync(new EmulationStateMessage { State = ChannelStates.Stopping }, CancellationToken);
 
-		// Give time for cancellation to propagate
-		await Task.Delay(100, CancellationToken);
+		await Helper.WaitUntilAsync(
+			() => outMessages.OfType<EmulationStateMessage>().Any(m => m.State == ChannelStates.Stopping),
+			CancellationToken);
 
 		// Should have EmulationStateMessage with Stopping state
 		var stoppingState = outMessages.OfType<EmulationStateMessage>()
@@ -1430,7 +1430,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	public async Task StartAsync_YieldsMessages_SendsThemViaNewOutMessage()
 	{
 		var secProvider = CreateSecurityProvider();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var manager = new TestHistoryMarketDataManager();
 
 		var tickMessage = new ExecutionMessage
@@ -1444,14 +1444,14 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		manager.MessagesToYield.Add(tickMessage);
 
-		var outMessages = new List<Message>();
+		var outMessages = new ConcurrentQueue<Message>();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
 			secProvider,
 			manager);
 
-		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Enqueue(m); return default; };
 
 		var stateMsg = new EmulationStateMessage
 		{
@@ -1460,8 +1460,9 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
 
-		// Give time for background task to process
-		await Task.Delay(100, CancellationToken);
+		await Helper.WaitUntilAsync(
+			() => outMessages.OfType<ExecutionMessage>().Any(m => m.DataTypeEx == DataType.Ticks),
+			CancellationToken);
 
 		// Should have received the tick message
 		var receivedTick = outMessages.OfType<ExecutionMessage>()
@@ -1479,7 +1480,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	public async Task StartAsync_ManagerYieldedTick_ForwardsData()
 	{
 		var secProvider = CreateSecurityProvider();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var manager = new TestHistoryMarketDataManager();
 
@@ -1493,14 +1494,14 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		};
 		manager.MessagesToYield.Add(generatedTick);
 
-		var outMessages = new List<Message>();
+		var outMessages = new ConcurrentQueue<Message>();
 
 		using var adapter = new HistoryMessageAdapter(
 			new IncrementalIdGenerator(),
 			secProvider,
 			manager);
 
-		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Add(m); return default; };
+		adapter.NewOutMessageAsync += (m, ct) => { outMessages.Enqueue(m); return default; };
 
 		var stateMsg = new EmulationStateMessage
 		{
@@ -1509,8 +1510,9 @@ public class HistoryMessageAdapterTests : BaseTestClass
 
 		await adapter.SendInMessageAsync(stateMsg, CancellationToken);
 
-		// Give time for background task to process
-		await Task.Delay(100, CancellationToken);
+		await Helper.WaitUntilAsync(
+			() => outMessages.OfType<ExecutionMessage>().Any(m => m.DataTypeEx == DataType.Ticks),
+			CancellationToken);
 
 		// Should have received generator-produced tick
 		var receivedTick = outMessages.OfType<ExecutionMessage>()
@@ -1526,7 +1528,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	{
 		var secProvider = CreateSecurityProvider();
 		var manager = new TestHistoryMarketDataManager();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		// No storage, only generator
 		manager.RegisterGenerator(secId, DataType.Ticks, new RandomWalkTradeGenerator(secId), 1);
@@ -1546,7 +1548,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	public async Task StartAsync_WithMultipleGenerators_YieldsAllData()
 	{
 		var secProvider = CreateSecurityProvider();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 
 		var manager = new TestHistoryMarketDataManager();
 
@@ -1608,7 +1610,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 	public async Task StartAsync_GeneratorRegisteredAfterStart_ManagerTracksIt()
 	{
 		var secProvider = CreateSecurityProvider();
-		var secId = CreateSecurityId();
+		var secId = Helper.CreateSecurityId();
 		var manager = new TestHistoryMarketDataManager();
 
 		using var adapter = new HistoryMessageAdapter(
@@ -1619,7 +1621,7 @@ public class HistoryMessageAdapterTests : BaseTestClass
 		// Start the adapter first, so the generator is registered AFTER start (as the test name states).
 		adapter.NewOutMessageAsync += (m, ct) => default;
 		await adapter.SendInMessageAsync(new EmulationStateMessage { State = ChannelStates.Starting }, CancellationToken);
-		await Task.Delay(50, CancellationToken);
+		await manager.StartEntered.Task.WithCancellation(CancellationToken);
 
 		// Query supported types BEFORE the generator is registered (populates the adapter's per-security cache).
 		var before = await adapter.GetSupportedMarketDataTypesAsync(secId, null, null).ToListAsync(CancellationToken);

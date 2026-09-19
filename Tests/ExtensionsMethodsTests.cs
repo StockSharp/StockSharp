@@ -388,8 +388,6 @@ public class ExtensionsMethodsTests : BaseTestClass
 
 	#region CreateErrorResponse
 
-	private sealed class TestReceiver : TestLogReceiver { }
-
 	[TestMethod]
 	public void CreateErrorResponse_ConnectMessage_ReturnsConnectError()
 	{

@@ -303,35 +303,6 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 		return currentCandle;
 	}
 
-	///// <summary>
-	///// To finish the candle forcibly.
-	///// </summary>
-	///// <param name="message">Market-data message (uses as a subscribe/unsubscribe in outgoing case, confirmation event in incoming case).</param>
-	///// <param name="candleMessage">Candle.</param>
-	//protected void ForceFinishCandle(MarketDataMessage message, CandleMessage candleMessage)
-	//{
-	//	var info = _info.TryGetValue(message);
-
-	//	if (info == null)
-	//		return;
-
-	//	var isNone = candleMessage.State == CandleStates.None;
-
-	//	// если успела прийти новая свеча
-	//	if (isNone && info.CurrentCandle != null)
-	//		return;
-
-	//	if (!isNone && info.CurrentCandle != candleMessage)
-	//		return;
-
-	//	info.CurrentCandle = isNone ? null : candleMessage;
-
-	//	if (!isNone)
-	//		candleMessage.State = CandleStates.Finished;
-
-	//	RaiseProcessing(series, candleMessage);
-	//}
-
 	/// <summary>
 	/// To cut the price, to make it multiple of minimal step, also to limit number of signs after the comma.
 	/// </summary>
@@ -381,98 +352,6 @@ public abstract class CandleBuilder<TCandleMessage>(IExchangeInfoProvider exchan
 /// <param name="exchangeInfoProvider">The exchange boards provider.</param>
 public class TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) : CandleBuilder<TimeFrameCandleMessage>(exchangeInfoProvider)
 {
-	//private sealed class TimeoutInfo : Disposable
-	//{
-	//	private readonly MarketTimer _timer;
-	//	private DateTime _emptyCandleTime;
-	//	private readonly TimeSpan _timeFrame;
-	//	private readonly TimeSpan _offset;
-	//	private DateTime _nextTime;
-
-	//	public TimeoutInfo(CandleSeries series, TimeFrameCandleBuilder builder)
-	//	{
-	//		if (series == null)
-	//			throw new ArgumentNullException(nameof(series));
-
-	//		if (builder == null)
-	//			throw new ArgumentNullException(nameof(builder));
-
-	//		_timeFrame = (TimeSpan)series.Arg;
-	//		_offset = TimeSpan.FromTicks((long)((decimal)((decimal)_timeFrame.Ticks + builder.Timeout)));
-
-	//		var security = series.Security;
-	//		var connector = security.Connector;
-
-	//		var isFirstTime = true;
-
-	//		_timer = new MarketTimer(connector, () =>
-	//		{
-	//			if (isFirstTime)
-	//			{
-	//				isFirstTime = false;
-
-	//				var bounds = _timeFrame.GetCandleBounds(security);
-
-	//				_emptyCandleTime = bounds.Min;
-	//				_nextTime = GetLimitTime(bounds.Min);
-
-	//				return;
-	//			}
-
-	//			if (security.GetMarketTime() >= _nextTime)
-	//			{
-	//				_nextTime += _timeFrame;
-
-	//				var candle = LastCandle;
-
-	//				if (candle == null)
-	//				{
-	//					candle = new TimeFrameCandle
-	//					{
-	//						Security = security,
-	//						TimeFrame = _timeFrame,
-	//						OpenTime = _emptyCandleTime,
-	//						CloseTime = _emptyCandleTime + _timeFrame,
-	//					};
-
-	//					_emptyCandleTime += _timeFrame;
-
-	//					if (!builder.GenerateEmptyCandles)
-	//						return;
-	//				}
-
-	//				builder.ForceFinishCandle(series, candle);
-	//			}
-	//		}).Interval(_timeFrame).Start();
-	//	}
-
-	//	private TimeFrameCandle _lastCandle;
-
-	//	public TimeFrameCandle LastCandle
-	//	{
-	//		private get { return _lastCandle; }
-	//		set
-	//		{
-	//			_lastCandle = value;
-	//			_emptyCandleTime = value.OpenTime + _timeFrame;
-	//			_nextTime = GetLimitTime(value.OpenTime);
-	//		}
-	//	}
-
-	//	private DateTime GetLimitTime(DateTime currentCandleTime)
-	//	{
-	//		return currentCandleTime + _offset;
-	//	}
-
-	//	protected override void DisposeManaged()
-	//	{
-	//		base.DisposeManaged();
-	//		_timer.Dispose();
-	//	}
-	//}
-
-	//private readonly SynchronizedDictionary<CandleSeries, TimeoutInfo> _timeoutInfos = new SynchronizedDictionary<CandleSeries, TimeoutInfo>();
-
 	/// <summary>
 	/// Whether to create empty candles (<see cref="CandleStates.None"/>) in the lack of trades. The default mode is enabled.
 	/// </summary>
@@ -520,36 +399,6 @@ public class TimeFrameCandleBuilder(IExchangeInfoProvider exchangeInfoProvider) 
 			}
 		}
 	}
-
-	private Unit _timeout = UnitHelper.Percents(10);
-
-	/// <summary>
-	/// The time shift from the time frame end after which a signal is sent to close the unclosed candle forcibly. The default is 10% of the time frame.
-	/// </summary>
-	public Unit Timeout
-	{
-		get => _timeout;
-		set
-		{
-			if (value == null)
-				throw new ArgumentNullException(nameof(value));
-
-			if (value < 0)
-				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.OffsetValueIncorrect);
-
-			_timeout = value;
-		}
-	}
-
-	///// <summary>
-	///// Reset state.
-	///// </summary>
-	//public override void Reset()
-	//{
-	//	base.Reset();
-
-	//	_timeoutInfos.Clear();
-	//}
 
 	/// <inheritdoc />
 	protected override TimeFrameCandleMessage CreateCandle(ICandleBuilderSubscription subscription, ICandleBuilderValueTransform transform)

@@ -39,10 +39,6 @@ public class CandleBuilderManagerTests : BaseTestClass
 			=> _supported.ToAsyncEnumerable();
 	}
 
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	[TestMethod]
 	public async Task Subscribe_BuildFromTicks_ReturnsInnerSubscription()
 	{

@@ -132,14 +132,11 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 		}
 
 		// Wait for processing to complete
-		var maxWait = DateTime.UtcNow.AddSeconds(10);
-		while (ticksProcessed < 1000 && DateTime.UtcNow < maxWait)
-		{
-			await Task.Delay(50, CancellationToken);
-		}
+		await Helper.WaitUntilAsync(() => ticksProcessed >= 1000, TimeSpan.FromSeconds(10), CancellationToken,
+			"every tick is processed");
 
-		// Give time for final orders to process
-		await Task.Delay(500, CancellationToken);
+		// Wait for the final orders to process
+		await Helper.WaitUntilAsync(() => ordersRegistered >= 20 && acceptedOrders.Count >= 20, CancellationToken);
 
 		// Verify results
 		ticksProcessed.AssertEqual(1000, "Should have processed all ticks");
@@ -279,8 +276,8 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 		// Wait for producers
 		await Task.WhenAll(producerTasks);
 
-		// Give consumer time to finish draining
-		await Task.Delay(2000, CancellationToken);
+		// Wait for the consumer to finish draining
+		await Helper.WaitUntilAsync(() => dequeued.Count >= totalMessages, CancellationToken);
 		cts.Cancel();
 
 		try { await consumerTask; } catch (OperationCanceledException) { }
@@ -372,11 +369,8 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 		}
 
 		// Wait for processing to complete
-		var maxWait = DateTime.UtcNow.AddSeconds(30);
-		while (processedCount < messageCount && DateTime.UtcNow < maxWait)
-		{
-			await Task.Delay(100, CancellationToken);
-		}
+		await Helper.WaitUntilAsync(() => processedCount >= messageCount, TimeSpan.FromSeconds(30), CancellationToken,
+			$"all {messageCount} messages are processed");
 
 		processedCount.AssertEqual(messageCount, $"Should process all {messageCount} messages");
 	}

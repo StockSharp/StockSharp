@@ -101,6 +101,22 @@ public class MatchingEngineAdapterTests : BaseTestClass
 			LocalTime = time,
 		};
 
+	/// <summary>
+	/// A trade the venue printed - the most direct statement there is of what the instrument is
+	/// trading at, and what the engine measures its stops against.
+	/// </summary>
+	private static ExecutionMessage Print(SecurityId securityId, decimal price, DateTime time)
+		=> new()
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = securityId,
+			LocalTime = time,
+			ServerTime = time,
+			TradePrice = price,
+			TradeVolume = 1m,
+			TradeId = 1,
+		};
+
 	private static decimal PositionOf(MatchingEngineAdapter engine, string account)
 		=> PositionOf(engine, account, _securityId);
 
@@ -2126,5 +2142,198 @@ public class MatchingEngineAdapterTests : BaseTestClass
 
 		AreEqual(3m, byQuote, "a last price past the activation price arms and fills the stop in full");
 		AreEqual(byQuote, byPrint, $"and a print at the same price has to do the same: printed {byPrint}, quoted {byQuote}");
+	}
+
+	/// <summary>
+	/// An activation price marked as a percent states a distance from the market, not a price of its
+	/// own. The percent is taken against the price the instrument is at when the stop is registered -
+	/// the touch the stop's own order would trade against, which here is also the price it last
+	/// printed - and a buy stop rests that far above it. Read as an absolute instead, "five percent"
+	/// becomes a level of five, which the market is already far past, and the stop fires on the first
+	/// price it sees rather than on the move it was placed for.
+	/// </summary>
+	[TestMethod]
+	public async Task APercentActivationPriceIsADistanceFromTheMarketNotAPriceOfItsOwn()
+	{
+		const string account = "Client";
+		const long stopTx = 9801;
+
+		var run = new EngineRun(new MatchingEngineAdapter());
+
+		// The market is at 100: the ask a buy would take, and the price the instrument last printed.
+		await run.SendAsync(VenueBook(_securityId, _start,
+			[new QuoteChange(99.5m, 10m)], [new QuoteChange(100m, 10m)]), CancellationToken);
+		await run.SendAsync(Print(_securityId, 100m, _start.AddSeconds(1)), CancellationToken);
+
+		var stop = NewOrder(stopTx, account, Sides.Buy, OrderTypes.Conditional, 0m, 3m, _start.AddSeconds(2));
+		stop.Condition = new StopOrderCondition { ActivationPrice = 5m, IsActivationPricePercent = true };
+
+		await run.SendAsync(stop, CancellationToken);
+
+		decimal Filled() => run.Executions
+			.Where(m => m.HasTradeInfo() && m.OriginalTransactionId == stopTx)
+			.Sum(m => m.TradeVolume ?? 0m);
+
+		await run.SendAsync(Print(_securityId, 101m, _start.AddSeconds(3)), CancellationToken);
+
+		AreEqual(0m, Filled(), $"the market moved one percent and the stop was armed five percent away, yet {Filled()} traded");
+
+		await run.SendAsync(Print(_securityId, 104.99m, _start.AddSeconds(4)), CancellationToken);
+
+		AreEqual(0m, Filled(), $"a hair short of five percent above 100 is still short of it, yet {Filled()} traded");
+
+		await run.SendAsync(Print(_securityId, 105m, _start.AddSeconds(5)), CancellationToken);
+
+		AreEqual(3m, Filled(), "five percent above a market of 100 is 105, and the stop has to fire there in full");
+		AreEqual(3m, PositionOf(run.Engine, account), "and the account has to end up holding what the stop bought");
+	}
+
+	/// <summary>
+	/// The percent runs the way the stop protects: a sell stop rests that far below the market, as a
+	/// buy stop rests that far above it. Taking the number as an absolute puts a sell stop's trigger
+	/// at five, a level the market will never fall to, so the protection the trader paid for never
+	/// fires at all - the mirror image of the buy case, and the half that fails silently.
+	/// </summary>
+	[TestMethod]
+	public async Task APercentActivationPriceRestsBelowTheMarketForASellStop()
+	{
+		const string account = "Client";
+		const long stopTx = 9802;
+
+		var run = new EngineRun(new MatchingEngineAdapter());
+
+		// The market is at 100: the bid a sell would hit, and the price the instrument last printed.
+		await run.SendAsync(VenueBook(_securityId, _start,
+			[new QuoteChange(100m, 10m)], [new QuoteChange(100.5m, 10m)]), CancellationToken);
+		await run.SendAsync(Print(_securityId, 100m, _start.AddSeconds(1)), CancellationToken);
+
+		var stop = NewOrder(stopTx, account, Sides.Sell, OrderTypes.Conditional, 0m, 3m, _start.AddSeconds(2));
+		stop.Condition = new StopOrderCondition { ActivationPrice = 5m, IsActivationPricePercent = true };
+
+		await run.SendAsync(stop, CancellationToken);
+
+		decimal Filled() => run.Executions
+			.Where(m => m.HasTradeInfo() && m.OriginalTransactionId == stopTx)
+			.Sum(m => m.TradeVolume ?? 0m);
+
+		await run.SendAsync(Print(_securityId, 95.01m, _start.AddSeconds(3)), CancellationToken);
+
+		AreEqual(0m, Filled(), $"a hair above five percent below 100 has not reached the stop, yet {Filled()} traded");
+
+		await run.SendAsync(Print(_securityId, 95m, _start.AddSeconds(4)), CancellationToken);
+
+		AreEqual(3m, Filled(), "five percent below a market of 100 is 95, and the stop has to fire there in full");
+	}
+
+	/// <summary>
+	/// A percent needs something to be a percent of. Stated for an instrument the engine has seen no
+	/// price for, there is nothing to snapshot at registration time, so the stop cannot be armed:
+	/// either the registration is refused, or it waits until it can be. What it may not do is keep
+	/// the number as an absolute level - two, for two percent - because the first price the market
+	/// ever states is already past it, and the stop fires on the instant instead of on a move.
+	/// </summary>
+	[TestMethod]
+	public async Task APercentActivationPriceWithNoMarketToTakeItFromIsNotArmedAtTheRawNumber()
+	{
+		const string account = "Client";
+		const long stopTx = 9803;
+
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		// Nothing has been quoted or printed for this instrument yet.
+		var stop = NewOrder(stopTx, account, Sides.Buy, OrderTypes.Conditional, 0m, 3m, _start);
+		stop.Condition = new StopOrderCondition { ActivationPrice = 2m, IsActivationPricePercent = true };
+
+		await run.SendAsync(stop, CancellationToken);
+
+		await run.SendAsync(VenueBook(_securityId, _start.AddSeconds(1),
+			[new QuoteChange(99.5m, 10m)], [new QuoteChange(100m, 10m)]), CancellationToken);
+		await run.SendAsync(Print(_securityId, 100m, _start.AddSeconds(2)), CancellationToken);
+
+		var filled = run.Executions
+			.Where(m => m.HasTradeInfo() && m.OriginalTransactionId == stopTx)
+			.Sum(m => m.TradeVolume ?? 0m);
+
+		AreEqual(0m, filled, $"the market has not moved two percent off anything, so nothing may trade; {filled} did");
+
+		var restsAsStop = engine.StopOrderManager.GetStopIds(_securityId).Contains(stopTx);
+		var refused = run.Executions.Any(m => m.HasOrderInfo() && m.OriginalTransactionId == stopTx && m.OrderState == OrderStates.Failed);
+
+		IsTrue(restsAsStop || refused,
+			"a percent stated against a market the engine has never seen is either refused or still waiting - it may not be quietly armed at the raw number and spent on the first price");
+	}
+
+	/// <summary>
+	/// <see cref="IPercentStopOrderCondition"/> is the whole of what a venue may say about reading a
+	/// stop's numbers as percents, so every flag on it has to reach the stop the engine rests:
+	/// raising one and changing nothing is the engine agreeing to a condition it then ignores. The
+	/// flags are walked off the interface rather than named one by one, so a fourth one added to the
+	/// contract fails here until it is carried through as well.
+	/// </summary>
+	[TestMethod]
+	public async Task EveryPercentFlagAStopConditionStatesReachesTheStopTheEngineRests()
+	{
+		// Every number the flags speak about is stated, so raising any one of them has something to
+		// act on and the runs differ only in the flag itself.
+		static StopOrderCondition Condition(PropertyInfo raised)
+		{
+			var condition = new StopOrderCondition
+			{
+				ActivationPrice = 5m,
+				ClosePositionPrice = 1m,
+				IsTrailing = true,
+				TrailingOffset = 2m,
+			};
+
+			raised?.SetValue(condition, true);
+
+			return condition;
+		}
+
+		async Task<StopOrderInfo> RestedAsync(PropertyInfo raised)
+		{
+			const long tx = 9804;
+
+			var engine = new MatchingEngineAdapter();
+			var run = new EngineRun(engine);
+
+			await run.SendAsync(VenueBook(_securityId, _start,
+				[new QuoteChange(99.5m, 10m)], [new QuoteChange(100m, 10m)]), CancellationToken);
+			await run.SendAsync(Print(_securityId, 100m, _start.AddSeconds(1)), CancellationToken);
+
+			var stop = NewOrder(tx, "Client", Sides.Buy, OrderTypes.Conditional, 0m, 3m, _start.AddSeconds(2));
+			stop.Condition = Condition(raised);
+
+			await run.SendAsync(stop, CancellationToken);
+
+			IsTrue(engine.StopOrderManager.Cancel(tx, out var info),
+				$"the stop had to rest before {raised?.Name ?? "anything"} could be read off it");
+
+			return info;
+		}
+
+		// Read off the resting stop by reflection too: a flag answered by a field this test does not
+		// name is still a flag answered.
+		static string Describe(StopOrderInfo info)
+			=> typeof(StopOrderInfo)
+				.GetProperties()
+				.OrderBy(p => p.Name)
+				.Select(p => $"{p.Name}={p.GetValue(info)}")
+				.JoinComma();
+
+		var flags = typeof(IPercentStopOrderCondition).GetProperties();
+
+		IsTrue(flags.Length > 0, "the contract has to state at least one percent flag to be worth honouring");
+
+		var silent = Describe(await RestedAsync(null));
+
+		foreach (var flag in flags)
+		{
+			var raised = Describe(await RestedAsync(flag));
+
+			AreNotEqual(silent, raised,
+				$"{flag.Name} is stated by the condition and the stop the engine rests is the same either way: {raised}");
+		}
 	}
 }

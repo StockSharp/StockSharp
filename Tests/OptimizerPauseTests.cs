@@ -151,8 +151,8 @@ public class OptimizerPauseTests : BaseTestClass
 		// resume -> it must continue (the suspended backtests finish their remaining replay first,
 		// which can take a few seconds, so poll rather than assume a fixed delay)
 		await optimizer.Resume();
-		for (var i = 0; i < 500 && Volatile.Read(ref completed) <= afterPause; i++)
-			await Task.Delay(50, CancellationToken);
+		await Helper.WaitUntilAsync(() => Volatile.Read(ref completed) > afterPause, TimeSpan.FromSeconds(25), CancellationToken,
+			"a resumed optimizer completes more iterations");
 		IsTrue(Volatile.Read(ref completed) > afterPause, "resume did not continue the optimization");
 
 		// stop the (large) run
@@ -239,8 +239,8 @@ public class OptimizerPauseTests : BaseTestClass
 		IsFalse(runTask.IsCompleted, "genetic run completed while paused");
 
 		await optimizer.Resume();
-		for (var i = 0; i < 500 && Volatile.Read(ref completed) <= afterPause; i++)
-			await Task.Delay(50, CancellationToken);
+		await Helper.WaitUntilAsync(() => Volatile.Read(ref completed) > afterPause, TimeSpan.FromSeconds(25), CancellationToken,
+			"a resumed genetic optimizer completes more iterations");
 		IsTrue(Volatile.Read(ref completed) > afterPause, "resume did not continue the genetic optimization");
 
 		cts.Cancel();

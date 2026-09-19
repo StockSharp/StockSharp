@@ -1198,6 +1198,156 @@ public class BacktestingTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// The pair template names two instruments: <see cref="PairStrategy.Security1"/> and
+	/// <see cref="PairStrategy.Security2"/> are both strategy parameters a user fills in, saves,
+	/// and optimizes over. A strategy that calls itself a pair trades the pair - whatever the second
+	/// leg is for, hedge or spread, it reaches the market. A replay in which not one order is sent
+	/// against Security2 keeps half of that promise and quietly runs a single-instrument strategy
+	/// under a pair strategy's name.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task PairStrategyTradesBothLegs()
+	{
+		const int candleCount = 60;
+
+		var security1 = Helper.CreateSecurity(100);
+		var security2 = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+
+		var timeFrame = TimeSpan.FromMinutes(5);
+		var start = new DateTime(2026, 1, 5, 10, 0, 0, DateTimeKind.Utc);
+
+		// A triangle wave: the fast average crosses the slow one at every turn, so the template's
+		// crossing branch fires several times inside the replayed window.
+		static decimal PriceAt(int index)
+		{
+			var phase = index % 20;
+			return 100m + (phase < 10 ? phase : 20 - phase);
+		}
+
+		static TimeFrameCandleMessage[] BuildCandles(SecurityId securityId, TimeSpan tf, DateTime from, int count)
+			=> [.. Enumerable.Range(0, count).Select(i =>
+			{
+				var openTime = from + TimeSpan.FromTicks(tf.Ticks * i);
+				var price = PriceAt(i);
+
+				return new TimeFrameCandleMessage
+				{
+					SecurityId = securityId,
+					TypedArg = tf,
+					DataType = tf.TimeFrame(),
+					OpenTime = openTime,
+					HighTime = openTime,
+					LowTime = openTime,
+					CloseTime = openTime + tf,
+					OpenPrice = price,
+					HighPrice = price + 1,
+					LowPrice = price - 1,
+					ClosePrice = price,
+					TotalVolume = 100,
+					State = CandleStates.Finished,
+				};
+			})];
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		// Both legs are priced through the whole window, so the only thing that can keep an order
+		// away from the second one is the strategy itself.
+		foreach (var security in new[] { security1, security2 })
+		{
+			var secId = security.ToSecurityId();
+
+			await storageRegistry
+				.GetTimeFrameCandleMessageStorage(secId, timeFrame)
+				.SaveAsync(BuildCandles(secId, timeFrame, start, candleCount), CancellationToken);
+		}
+
+		var secProvider = new CollectionSecurityProvider([security1, security2]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+
+		using var connector = CreateDeterministicConnector(
+			secProvider,
+			pfProvider,
+			storageRegistry,
+			start,
+			start + TimeSpan.FromTicks(timeFrame.Ticks * (candleCount + 1)));
+
+		var strategy = new PairStrategy
+		{
+			Connector = connector,
+			Security = security1,
+			Portfolio = portfolio,
+			Volume = 1,
+			TimeFrame = timeFrame,
+			Security1 = security1,
+			Security2 = security2,
+			Long = 5,
+			Short = 2,
+			WaitRulesOnStop = false,
+		};
+
+		var sync = new Lock();
+		var registered = new List<string>();
+		var errors = new List<string>();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		strategy.OrderRegistering += order =>
+		{
+			using (sync.EnterScope())
+				registered.Add(order.Security?.Id);
+		};
+
+		strategy.Error += (_, error) =>
+		{
+			using (sync.EnterScope())
+				errors.Add($"Strategy: {error.Message}");
+		};
+
+		connector.Error += error =>
+		{
+			using (sync.EnterScope())
+				errors.Add($"Connector: {error.Message}");
+		};
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(
+			stopped.Task,
+			Task.Delay(TimeSpan.FromSeconds(30), CancellationToken));
+
+		if (completed != stopped.Task)
+		{
+			connector.Disconnect();
+			Fail("Pair strategy backtest did not complete in time.");
+		}
+
+		string[] orderedSecurities;
+
+		using (sync.EnterScope())
+			orderedSecurities = [.. registered];
+
+		var leg1 = orderedSecurities.Count(id => id == security1.Id);
+		var leg2 = orderedSecurities.Count(id => id == security2.Id);
+
+		// Told apart on purpose: a window that produced no signal at all would be a broken test, not
+		// a one-legged strategy.
+		IsTrue(leg1 > 0, $"The replay produced no order against Security1 ({security1.Id}) at all, so it says nothing about the second leg. Errors: {string.Join("; ", errors)}");
+
+		IsTrue(leg2 > 0, $"PairStrategy traded one leg only: {leg1} order(s) against Security1 ({security1.Id}) and {leg2} against Security2 ({security2.Id}), which is declared as a strategy parameter and never reaches the market.");
+	}
+
+	/// <summary>
 	/// Tests that orders are generated during backtesting when SMA crossover occurs.
 	/// </summary>
 	[TestMethod]

@@ -247,7 +247,7 @@ public class MessageQueueTests : BaseTestClass
 		var tasks = shuffled.Select(m => queue.Enqueue(m, CancellationToken).AsTask());
 		await Task.WhenAll(tasks);
 
-		await Task.Delay(200, CancellationToken);
+		await Helper.WaitUntilAsync(() => queue.Count == 100, CancellationToken);
 
 		// Dequeue and verify order
 		var dequeued = new List<Message>();
@@ -305,7 +305,7 @@ public class MessageQueueTests : BaseTestClass
 		await queue.Enqueue(msg2, CancellationToken);
 		await queue.Enqueue(msg3, CancellationToken);
 
-		await Task.Delay(100, CancellationToken);
+		await Helper.WaitUntilAsync(() => queue.Count == 3, CancellationToken);
 
 		// Should dequeue in FIFO order (order of enqueue), not by LocalTime
 		var first = await queue.DequeueAsync(CancellationToken);
@@ -350,7 +350,7 @@ public class MessageQueueTests : BaseTestClass
 		}
 		await Task.WhenAll(enqueueTasks);
 
-		await Task.Delay(500, CancellationToken);
+		await Helper.WaitUntilAsync(() => queue.Count == messageCount, CancellationToken);
 
 		// Dequeue all and verify
 		var dequeued = new List<Message>();
@@ -407,9 +407,9 @@ public class MessageQueueTests : BaseTestClass
 			}
 		}, cts.Token);
 
-		// Wait for producer to finish, then give consumer time to catch up
+		// Wait for producer to finish, then for the consumer to catch up
 		await producer;
-		await Task.Delay(500, CancellationToken);
+		await Helper.WaitUntilAsync(() => dequeued.Count >= iterations, CancellationToken);
 		cts.Cancel();
 
 		try { await consumer; } catch (OperationCanceledException) { }

@@ -69,7 +69,7 @@ public class FillGapsMessageAdapterTests : BaseTestClass
 	private static async Task DrainLoopbacksAsync(IMessageAdapter adapter, Queue<Message> loopbacks, CancellationToken cancellationToken)
 	{
 		// Wait for async gap detection to complete
-		await Task.Delay(50, cancellationToken);
+		await Helper.WaitUntilAsync(() => loopbacks.Count > 0, cancellationToken);
 
 		while (loopbacks.TryDequeue(out var loopback))
 			await adapter.SendInMessageAsync(loopback, cancellationToken);

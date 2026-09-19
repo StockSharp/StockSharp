@@ -174,7 +174,6 @@ public class GpuJmaCalculator : GpuIndicatorCalculatorBase<JurikMovingAverage, G
 		if (formedIndex < 0)
 			formedIndex = 0;
 
-		var hasPrev = false;
 		var prevMa1 = 0f;
 		var prevMa2 = 0f;
 
@@ -182,39 +181,34 @@ public class GpuJmaCalculator : GpuIndicatorCalculatorBase<JurikMovingAverage, G
 		{
 			var candle = flatCandles[offset + i];
 			var price = ExtractPrice(candle, priceType);
-			GpuIndicatorResult result;
+			float value;
 
-			if (!hasPrev)
+			// The smoothing starts only once the indicator is formed: until then every bar re-seeds
+			// both stages with the price itself and is reported unchanged.
+			if (i < length)
 			{
 				prevMa1 = price;
 				prevMa2 = price;
-				hasPrev = true;
-				result = new GpuIndicatorResult
-				{
-					Time = candle.Time,
-					Value = price,
-					IsFormed = (byte)(i >= formedIndex ? 1 : 0)
-				};
+				value = price;
 			}
 			else
 			{
 				var ma1 = prevMa1 + beta * (price - prevMa1);
 				var ma2 = prevMa2 + beta * (ma1 - prevMa2);
-				var jma = ma2 + phaseRatio * (ma2 - prevMa2);
+
+				value = ma2 + phaseRatio * (ma2 - prevMa2);
 
 				prevMa1 = ma1;
 				prevMa2 = ma2;
-
-				result = new GpuIndicatorResult
-				{
-					Time = candle.Time,
-					Value = jma,
-					IsFormed = (byte)(i >= formedIndex ? 1 : 0)
-				};
 			}
 
 			var resIndex = paramIdx * flatCandles.Length + (offset + i);
-			flatResults[resIndex] = result;
+			flatResults[resIndex] = new GpuIndicatorResult
+			{
+				Time = candle.Time,
+				Value = value,
+				IsFormed = (byte)(i >= formedIndex ? 1 : 0)
+			};
 		}
 	}
 }

@@ -5,8 +5,6 @@ public class Level1DepthBuilderManagerMockTests : BaseTestClass
 {
 	private static readonly SecurityId _secId = Helper.CreateSecurityId();
 
-	private sealed class TestReceiver : TestLogReceiver { }
-
 	private static Level1DepthBuilderManager CreateManager(Mock<ILevel1DepthBuilderManagerState> stateMock)
 	{
 		return new Level1DepthBuilderManager(new TestReceiver(), stateMock.Object);

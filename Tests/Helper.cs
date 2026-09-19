@@ -1,5 +1,7 @@
 ﻿namespace StockSharp.Tests;
 
+using System.Runtime.CompilerServices;
+
 using Ecng.Reflection;
 
 using StockSharp.Algo.Storages.Csv;
@@ -710,6 +712,18 @@ static class Helper
 	public static SecurityId CreateSecurityId()
 	{
 		return new() { SecurityCode = "TestSecurity" + Guid.NewGuid().GetFileNameWithoutExtension(null), BoardCode = BoardCodes.Test };
+	}
+
+	/// <summary>
+	/// Creates an id with the given codes. Unlike <see cref="CreateSecurityId()"/> it is stable
+	/// across calls, which tests comparing or storing the same security by id depend on.
+	/// </summary>
+	/// <param name="code">Security code.</param>
+	/// <param name="boardCode">Board code.</param>
+	/// <returns>Security id.</returns>
+	public static SecurityId CreateSecurityId(string code, string boardCode)
+	{
+		return new() { SecurityCode = code, BoardCode = boardCode };
 	}
 
 	public static Security CreateSecurity(decimal lastTickPrice = default)
@@ -1848,17 +1862,51 @@ static class Helper
 			.Where(p => p.IsModifiable())];
 
 	/// <summary>
+	/// The budget a wait gets when the caller names none. Generous, because the suite runs its test
+	/// methods in parallel and a wait sized for an idle machine measures the scheduler.
+	/// </summary>
+	public static TimeSpan DefaultWaitTimeout { get; } = TimeSpan.FromSeconds(30);
+
+	/// <summary>
 	/// Waits for a state something else reaches on its own thread. A sleep long enough on an idle
 	/// machine is not long enough on a loaded one, and the test then fails for the machine it ran on.
 	/// </summary>
-	public static async Task WaitUntilAsync(Func<bool> condition, TimeSpan timeout, string expectation)
+	/// <param name="condition">Condition to wait for.</param>
+	/// <param name="timeout">How long it is given.</param>
+	/// <param name="expectation">What the condition stands for, reported on timeout.</param>
+	/// <exception cref="TimeoutException">The condition did not come true within <paramref name="timeout"/>.</exception>
+	public static Task WaitUntilAsync(Func<bool> condition, TimeSpan timeout, string expectation)
+		=> WaitUntilAsync(condition, timeout, default, expectation);
+
+	/// <summary>
+	/// Waits on the default budget, naming the condition's own source text when it does not come true.
+	/// </summary>
+	/// <param name="condition">Condition to wait for.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <param name="expectation">Supplied by the compiler from <paramref name="condition"/>.</param>
+	/// <exception cref="TimeoutException">The condition did not come true in time.</exception>
+	public static Task WaitUntilAsync(Func<bool> condition, CancellationToken cancellationToken,
+		[CallerArgumentExpression(nameof(condition))] string expectation = null)
+		=> WaitUntilAsync(condition, DefaultWaitTimeout, cancellationToken, expectation);
+
+	/// <summary>
+	/// Waits for a condition on a named budget, naming the condition's own source text when it does
+	/// not come true.
+	/// </summary>
+	/// <param name="condition">Condition to wait for.</param>
+	/// <param name="timeout">How long it is given.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <param name="expectation">Supplied by the compiler from <paramref name="condition"/>.</param>
+	/// <exception cref="TimeoutException">The condition did not come true within <paramref name="timeout"/>.</exception>
+	public static async Task WaitUntilAsync(Func<bool> condition, TimeSpan timeout, CancellationToken cancellationToken,
+		[CallerArgumentExpression(nameof(condition))] string expectation = null)
 	{
 		var deadline = DateTime.UtcNow + timeout;
 
 		while (!condition() && DateTime.UtcNow < deadline)
-			await Task.Delay(10);
+			await Task.Delay(10, cancellationToken);
 
 		if (!condition())
-			throw new TimeoutException($"Timed out after {timeout}: {expectation}");
+			throw new TimeoutException($"Timed out after {timeout} waiting for: {expectation}");
 	}
 }

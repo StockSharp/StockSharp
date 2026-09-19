@@ -3,10 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class SubscriptionOnlineManagerTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	/// <summary>
 	/// A subscriber joining a stream that is not itself online yet is acknowledged at once, but goes
 	/// online with the stream, not before it: until the venue has confirmed the shared subscription

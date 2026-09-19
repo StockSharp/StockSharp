@@ -5,8 +5,6 @@ public class OrderBookTruncateManagerMockTests : BaseTestClass
 {
 	private static readonly SecurityId _secId = Helper.CreateSecurityId();
 
-	private sealed class TestReceiver : TestLogReceiver { }
-
 	private static OrderBookTruncateManager CreateManager(Mock<IOrderBookTruncateManagerState> stateMock, Func<int, int?> nearestDepth = null)
 	{
 		return new OrderBookTruncateManager(

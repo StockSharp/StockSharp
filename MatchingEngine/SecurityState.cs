@@ -53,6 +53,13 @@ public class SecurityState(SecurityId securityId)
 	public SecurityStates? TradingState { get; private set; }
 
 	/// <summary>
+	/// The price the instrument last traded at, or <see langword="null"/> when the venue has stated
+	/// none. This is the price a stop is measured against, so it is also what a distance stated as a
+	/// percent of the market is resolved from.
+	/// </summary>
+	public decimal? LastTradePrice { get; private set; }
+
+	/// <summary>
 	/// The definition the venue stated for this security, or <see langword="null"/> when it has
 	/// stated none. What the engine matches against is derived from it; whoever has to answer what
 	/// the venue lists reads it here rather than keeping a second copy.
@@ -74,6 +81,15 @@ public class SecurityState(SecurityId securityId)
 	public void ProcessTradingState(SecurityStates state)
 	{
 		TradingState = state;
+	}
+
+	/// <summary>
+	/// Record the price the venue reports the instrument traded at.
+	/// </summary>
+	/// <param name="price">Traded price.</param>
+	public void ProcessTradePrice(decimal price)
+	{
+		LastTradePrice = price;
 	}
 
 	/// <summary>

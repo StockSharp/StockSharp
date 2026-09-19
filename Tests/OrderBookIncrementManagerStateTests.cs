@@ -3,10 +3,6 @@ namespace StockSharp.Tests;
 [TestClass]
 public class OrderBookIncrementManagerStateTests : BaseTestClass
 {
-	private sealed class TestReceiver : TestLogReceiver
-	{
-	}
-
 	private static readonly SecurityId _secId = Helper.CreateSecurityId();
 
 	private static QuoteChangeMessage CreateSnapshot(SecurityId securityId, long[] subscriptionIds)
