@@ -139,7 +139,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 #pragma warning disable CS0618 // the NewMyTrade event is obsolete but still part of the strategy surface.
 		Trades.TradeAdded += t => NewMyTrade?.Invoke(t);
 #pragma warning restore CS0618
-		Trades.PnLChanged += RaisePnLChanged;
+		Trades.PnLChanged += ObservePnL;
 		Trades.CommissionChanged += RaiseCommissionChanged;
 		Trades.SlippageChanged += RaiseSlippageChanged;
 		Trades.TradeAdded += trade =>
@@ -177,7 +177,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		Engine.PnLRefreshRequired += time =>
 		{
 			if (((IStrategyHost)this).HasPositions)
-				RaisePnLChanged(time);
+				ObservePnL(time);
 		};
 	}
 
@@ -1108,21 +1108,19 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		else
 			_positionChanged?.Invoke(position);
 
-		RaisePositionChanged(position.LocalTime);
+		ObservePosition();
 
 		foreach (var subscription in Subscriptions.Subscriptions.Where(s => s.SubscriptionMessage is PortfolioLookupMessage))
 			PositionReceived?.Invoke(subscription, position);
 	}
 
-	private void RaisePositionChanged(DateTime time)
+	private void RaisePositionChanged()
 	{
 		this.Notify(nameof(Position));
 		PositionChanged?.Invoke();
-		StatisticManager.AddPosition(time, Position);
-		StatisticManager.AddPnL(time, PnLManager.GetPnL(), Commission);
 	}
 
-	private void RaisePnLChanged(DateTime time)
+	private void RaisePnLChanged(DateTime eventTime)
 	{
 		this.Notify(nameof(PnL));
 		PnLChanged?.Invoke();
@@ -1134,16 +1132,28 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 #pragma warning restore CS0618
 
 		if (Portfolio is not null)
-			PnLReceived2?.Invoke(subscription, Portfolio, time, PnLManager.RealizedPnL, PnLManager.UnrealizedPnL, Commission);
+			PnLReceived2?.Invoke(subscription, Portfolio, eventTime, PnLManager.RealizedPnL, PnLManager.UnrealizedPnL, Commission);
+	}
 
-		// Attribute stats to the engine's PnL-refresh time rather than the notification time, so time-typed
-		// stats (MaxProfitDate/MaxDrawdownDate) point at the moment the PnL was measured. Until the engine has
-		// refreshed once - and again after a reset, which drops that time - there is no such moment, and a PnL
-		// reported at no time is not an observation of one.
-		var pnlTime = Engine.LastPnLRefreshTime;
+	// A report is an observation of the equity curve at a moment, and the moment is the strategy's clock -
+	// emulation time in a backtest, UTC live. Both reporting paths take it from there, so the period
+	// boundaries of the risk-adjusted ratios and the dates of the time-typed stats fall on one clock that
+	// cannot go back. A reset is not an observation: it clears the statistics and only notifies.
+	private void ObservePosition()
+	{
+		RaisePositionChanged();
 
-		if (pnlTime != default)
-			StatisticManager.AddPnL(pnlTime, PnLManager.GetPnL(), Commission);
+		var time = ((IStrategyHost)this).CurrentTime;
+
+		StatisticManager.AddPosition(time, Position);
+		StatisticManager.AddPnL(time, PnLManager.GetPnL(), Commission);
+	}
+
+	private void ObservePnL(DateTime eventTime)
+	{
+		RaisePnLChanged(eventTime);
+
+		StatisticManager.AddPnL(((IStrategyHost)this).CurrentTime, PnLManager.GetPnL(), Commission);
 	}
 
 	private void RaiseCommissionChanged()
@@ -1265,9 +1275,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 		if (!KeepStatistics)
 		{
-			var time = ((IStrategyHost)this).CurrentTime;
-
-			RaisePnLChanged(time);
+			RaisePnLChanged(((IStrategyHost)this).CurrentTime);
 			RaiseCommissionChanged();
 			RaiseLatencyChanged();
 			RaiseSlippageChanged();
@@ -1278,7 +1286,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 				_positionChanged?.Invoke(position);
 			}
 
-			RaisePositionChanged(time);
+			RaisePositionChanged();
 		}
 	}
 

@@ -76,7 +76,7 @@ public class StrategyEngine
 	public TimeSpan UnrealizedPnLInterval { get; set; } = TimeSpan.FromMinutes(1);
 
 	/// <summary>
-	/// Market time of the last unrealized-PnL refresh; used for statistic attribution.
+	/// Market time of the last unrealized-PnL refresh. The next one is due <see cref="UnrealizedPnLInterval"/> after it.
 	/// </summary>
 	public DateTime LastPnLRefreshTime => _lastPnlRefreshTime;
 

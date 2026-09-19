@@ -3496,4 +3496,244 @@ public class StrategyDecomposedTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Statistics clock
+
+	// Says what the PnL is at each step, so a test about when a report is made does not depend on how
+	// the value in it is computed. A non-zero TradePnL is what makes the trade pipeline report at all.
+	private sealed class ScriptedPnLManager : IPnLManager
+	{
+		public decimal RealizedPnL { get; set; }
+
+		public decimal UnrealizedPnL { get; set; }
+
+		public decimal TradePnL { get; set; }
+
+		public void Reset()
+		{
+			RealizedPnL = default;
+			UnrealizedPnL = default;
+		}
+
+		public void UpdateSecurity(Level1ChangeMessage l1Msg) { }
+
+		public PnLInfo ProcessMessage(Message message, ICollection<PortfolioPnLManager> changedPortfolios = null)
+			=> message is ExecutionMessage { TradeId: not null } execMsg && execMsg.DataType == DataType.Transactions
+				? new PnLInfo(execMsg.ServerTime, 0m, TradePnL)
+				: null;
+
+		public IPnLManager Clone()
+			=> new ScriptedPnLManager { RealizedPnL = RealizedPnL, UnrealizedPnL = UnrealizedPnL, TradePnL = TradePnL };
+
+		object ICloneable.Clone() => Clone();
+
+		public void Load(SettingsStorage storage) { }
+
+		public void Save(SettingsStorage storage) { }
+	}
+
+	// Keeps, next to every reported PnL, the market time in force when the strategy reported it, so a
+	// test can measure the same observations on the times the market gave them.
+	private sealed class ClockRecordingStatisticManager(IStatisticManager inner, Func<DateTime> marketTime) : IStatisticManager
+	{
+		private readonly IStatisticManager _inner = inner ?? throw new ArgumentNullException(nameof(inner));
+		private readonly Func<DateTime> _marketTime = marketTime ?? throw new ArgumentNullException(nameof(marketTime));
+
+		public List<(DateTime Stamped, DateTime Market, decimal PnL, decimal? Commission)> PnLReports { get; } = [];
+
+		public IStatisticParameter[] Parameters => _inner.Parameters;
+
+		public void AddPnL(DateTime time, decimal pnl, decimal? commission)
+		{
+			PnLReports.Add((time, _marketTime(), pnl, commission));
+			_inner.AddPnL(time, pnl, commission);
+		}
+
+		public void AddPosition(DateTime time, decimal position) => _inner.AddPosition(time, position);
+
+		public void AddMyTrade(PnLInfo info) => _inner.AddMyTrade(info);
+
+		public void AddNewOrder(Order order) => _inner.AddNewOrder(order);
+
+		public void AddChangedOrder(Order order) => _inner.AddChangedOrder(order);
+
+		public void AddRegisterFailedOrder(OrderFail fail) => _inner.AddRegisterFailedOrder(fail);
+
+		public void AddFailedOrderCancel(OrderFail fail) => _inner.AddFailedOrderCancel(fail);
+
+		public void Reset() => _inner.Reset();
+
+		public void Load(SettingsStorage storage) => _inner.Load(storage);
+
+		public void Save(SettingsStorage storage) => _inner.Save(storage);
+
+		public void Dispose() => _inner.Dispose();
+	}
+
+	private const decimal _statsBeginValue = 100000m;
+
+	private static readonly DateTime _statsStart = new(2024, 1, 3, 15, 0, 0, DateTimeKind.Utc);
+
+	private static ExecutionMessage CreateStatsTick(Security security, DateTime time, decimal price)
+		=> new()
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = security.ToSecurityId(),
+			TradeId = time.Ticks,
+			TradePrice = price,
+			TradeVolume = 1m,
+			ServerTime = time,
+			LocalTime = time,
+		};
+
+	private static MyTrade CreateStatsFill(Security security, Portfolio portfolio, long tradeId, DateTime time)
+	{
+		var order = new Order
+		{
+			TransactionId = tradeId * 100,
+			State = OrderStates.Active,
+			Side = Sides.Sell,
+			Price = 100m,
+			Volume = 1m,
+			Balance = 1m,
+			Security = security,
+			Portfolio = portfolio,
+			Time = time,
+			LocalTime = time,
+		};
+
+		return new MyTrade
+		{
+			Order = order,
+			Trade = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Ticks,
+				TradeId = tradeId,
+				TradePrice = 100m,
+				TradeVolume = 1m,
+				SecurityId = security.ToSecurityId(),
+				ServerTime = time,
+				LocalTime = time,
+			},
+		};
+	}
+
+	// Drives the two places a strategy reports its PnL from - a position re-mark and a realizing fill -
+	// over a week of market time, with the engine's unrealized-PnL refresh happening only on the very
+	// first message. The market time is the mock connector's clock, so the strategy has one available.
+	private async Task<ClockRecordingStatisticManager> ReportOnBothPathsAsync()
+	{
+		var marketTime = _statsStart;
+
+		var connMock = CreateMockConnector();
+		connMock.As<ITimeProvider>().SetupGet(p => p.CurrentTime).Returns(() => marketTime);
+
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+		var pnl = new ScriptedPnLManager();
+
+		using var strategy = new StatsSwapStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+			PnLManager = pnl,
+			UnrealizedPnLInterval = TimeSpan.FromDays(30),
+		};
+
+		var recorder = new ClockRecordingStatisticManager(new StatisticManager(), () => marketTime);
+		strategy.UseStatisticManager(recorder);
+
+		var sharpe = recorder.Parameters.OfType<SharpeRatioParameter>().First();
+		sharpe.BeginValue = _statsBeginValue;
+		sharpe.RiskFreeRate = 0m;
+
+		strategy.SetPositionValue(security, portfolio, 10m, _statsStart);
+
+		// Day offset, the strategy's total PnL at that moment, and which of the two paths reports it.
+		(double Day, decimal PnL, bool IsFill)[] steps =
+		[
+			(0.0, 0m, false),
+			(0.5, 10000m, false),
+			(1.5, 20000m, true),
+			(2.5, 30000m, false),
+			(3.5, 25000m, false),
+			(4.5, 40000m, true),
+			(5.5, 38000m, false),
+			(6.5, 50000m, false),
+		];
+
+		var tradeId = 0L;
+
+		foreach (var (day, value, isFill) in steps)
+		{
+			marketTime = _statsStart.AddDays(day);
+
+			if (isFill)
+			{
+				pnl.TradePnL = value - (pnl.RealizedPnL + pnl.UnrealizedPnL);
+				pnl.RealizedPnL = value;
+				pnl.UnrealizedPnL = 0m;
+
+				strategy.Trades.TryAdd(CreateStatsFill(security, portfolio, ++tradeId, marketTime))
+					.AssertTrue("the fill has to be taken for its PnL to be reported");
+			}
+			else
+			{
+				pnl.UnrealizedPnL = value - pnl.RealizedPnL;
+
+				await strategy.OnNewMessage(CreateStatsTick(security, marketTime, 100m + (decimal)day), CancellationToken);
+			}
+		}
+
+		(recorder.PnLReports.Count > 0).AssertTrue("the strategy has to report something for the comparison to be about");
+
+		return recorder;
+	}
+
+	/// <summary>
+	/// A strategy reports its PnL from a position re-mark and from a realizing fill, and the
+	/// risk-adjusted ratios lay their period grid on the times those reports carry. Both paths report
+	/// the same equity curve, so both have to name the same moment - the strategy's own clock. A path
+	/// stamping from a clock of its own puts a report in a neighbouring period, and the ratio is then
+	/// measured on boundaries that never happened.
+	/// </summary>
+	[TestMethod]
+	public async Task Statistics_BothReportingPaths_MeasureTheRatioOnTheStrategyClock()
+	{
+		var recorder = await ReportOnBothPathsAsync();
+
+		var measured = recorder.Parameters.OfType<SharpeRatioParameter>().First();
+
+		var implied = new SharpeRatioParameter { BeginValue = _statsBeginValue, RiskFreeRate = 0m };
+
+		foreach (var report in recorder.PnLReports)
+			implied.Add(report.Market, report.PnL, report.Commission);
+
+		(implied.Value != 0).AssertTrue("the market times have to imply a ratio for the comparison to be about");
+
+		measured.Value.AssertEqual(implied.Value,
+			$"the strategy measured {measured.Value} where its own market times imply {implied.Value}");
+	}
+
+	/// <summary>
+	/// The grid a risk-adjusted ratio lays on the reports only holds while the reports advance: a report
+	/// stamped behind one already made closes no boundary, and it replaces the level the open period is
+	/// holding, so the boundary that does close, closes on a level from the wrong side of it.
+	/// </summary>
+	[TestMethod]
+	public async Task Statistics_Reports_NeverGoBackInTime()
+	{
+		var recorder = await ReportOnBothPathsAsync();
+
+		var stamps = recorder.PnLReports;
+
+		for (var i = 1; i < stamps.Count; i++)
+		{
+			(stamps[i].Stamped >= stamps[i - 1].Stamped).AssertTrue(
+				$"report {i} of {stamps[i].PnL} at {stamps[i].Market} was stamped {stamps[i].Stamped}, behind the {stamps[i - 1].Stamped} of the report before it");
+		}
+	}
+
+	#endregion
 }
