@@ -29,6 +29,22 @@ public class OrderMatcher : IOrderMatcher
 			};
 		}
 
+		// A market order names no price, so only the book can give it one: nothing quoted on the side
+		// it takes from means there is no market for it, and a plain Done would be indistinguishable
+		// from an order filled as far as it asked.
+		if (order.OrderType == OrderTypes.Market && GetMarketPrice(order.Side, book) is null)
+		{
+			return new MatchResult
+			{
+				Order = order,
+				IsRejected = true,
+				RejectionReason = $"No market for the {order.Side} market order: the {order.Side.Invert()} side of the book is empty.",
+				FinalState = OrderStates.Done,
+				RemainingVolume = order.Balance,
+				ShouldPlaceInBook = false,
+			};
+		}
+
 		// Fill-or-kill is a property of the order, not of the price it names, so a market order
 		// carrying it is killed whole exactly as a limit one is.
 		if (order.TimeInForce == TimeInForce.MatchOrCancel)
@@ -69,8 +85,6 @@ public class OrderMatcher : IOrderMatcher
 				break;
 		}
 
-		var hasExecution = trades.Count > 0;
-
 		return new MatchResult
 		{
 			Order = order,
@@ -107,7 +121,6 @@ public class OrderMatcher : IOrderMatcher
 				break;
 		}
 
-		var hasExecution = trades.Count > 0;
 		var isFullyMatched = remaining <= 0;
 
 		// Determine final state based on TimeInForce

@@ -96,11 +96,6 @@ public class MatchingSettings
 	public int MaxDepth { get; init; } = 10;
 
 	/// <summary>
-	/// Whether to match market orders at any price.
-	/// </summary>
-	public bool AllowMarketOrdersWithoutBook { get; init; } = true;
-
-	/// <summary>
 	/// When true, use order price instead of market price for limit order trades.
 	/// This is used for candle-based matching.
 	/// </summary>

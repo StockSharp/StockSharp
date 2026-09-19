@@ -1415,11 +1415,11 @@ public class MatchingEngineAdapter : IMessageTransport
 	}
 
 	/// <summary>
-	/// Check whether the registration is allowed: the instrument is trading, and the account can
-	/// afford it.
+	/// Check whether the registration is allowed: the instrument is trading, there is a market to
+	/// price the order at, and the account can afford it.
 	/// </summary>
 	/// <param name="regMsg">Registration to check.</param>
-	/// <param name="chargedPrice">Price the order will actually be charged at, or <see langword="null"/> when it cannot be priced.</param>
+	/// <param name="chargedPrice">Price the order will actually be charged at, or <see langword="null"/> when the book offers none.</param>
 	/// <returns>The reason the registration must be refused, or <see langword="null"/> when it is allowed.</returns>
 	public InvalidOperationException ValidateRegistration(OrderRegisterMessage regMsg, decimal? chargedPrice)
 	{
@@ -1430,12 +1430,14 @@ public class MatchingEngineAdapter : IMessageTransport
 		if (Settings.CheckTradingState && GetSecurityState(regMsg.SecurityId).TradingState == SecurityStates.Stoped)
 			return new InvalidOperationException(LocalizedStrings.SecurityStopped.Put(regMsg.SecurityId));
 
+		// A market order names no price, so only the book can give it one: nothing quoted on the side
+		// it takes from means there is no market for it to trade at, and whether the account could
+		// pay for it never arises. Letting it through finishes it untraded and says nothing.
+		if (chargedPrice is not decimal price)
+			return new InvalidOperationException($"Order {regMsg.TransactionId}: no price to trade at, the {regMsg.Side.Invert()} side of the book is empty.");
+
 		if (!Settings.CheckMoney)
 			return null;
-
-		// An order with no price to charge cannot be paid for, so it cannot be let through.
-		if (chargedPrice is not decimal price)
-			return new InvalidOperationException($"Order {regMsg.TransactionId}: no price to charge, the {regMsg.Side.Invert()} side is empty.");
 
 		return _portfolioManager.ValidateFunds(regMsg.PortfolioName, regMsg.SecurityId, price, regMsg.Volume);
 	}

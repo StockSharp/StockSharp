@@ -1505,12 +1505,21 @@ public class MarketEmulatorTests : BaseTestClass
 		};
 		await emu.SendInMessageAsync(reg, CancellationToken);
 
-		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && !em.HasTradeInfo());
-		m.AssertNotNull();
-		m.OrderState.AssertEqual(OrderStates.Done);
-		m.Balance.AssertEqual(2);
+		// The log entry quoted an offer, so the book holds asks and no bids at all. A market sell
+		// names no price and takes from the bids, so this one has no market to sell into, and the
+		// emulator has to say so: a Done row with the whole volume still outstanding and no reason
+		// attached reads exactly like an order that finished its work.
+		var rows = res
+			.OfType<ExecutionMessage>()
+			.Where(x => x.OriginalTransactionId == reg.TransactionId && x.HasOrderInfo())
+			.ToArray();
 
-		m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
+		IsTrue(rows.Length > 0, "the emulator has to answer the registration at all");
+
+		IsTrue(rows.Any(x => x.OrderState == OrderStates.Failed || x.Error is not null),
+			$"nothing was bid for, so there was nothing to sell into; the emulator answered {rows.Select(x => $"{x.OrderState}/balance {x.Balance}/error {x.Error?.Message ?? "none"}").JoinComma()}");
+
+		var m = (ExecutionMessage)res.FindLast(x => x is ExecutionMessage em && em.OriginalTransactionId == reg.TransactionId && em.HasTradeInfo());
 		m.AssertNull();
 
 		res.Clear();

@@ -260,7 +260,7 @@ public class OrderMatcherTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Match_MarketOrder_NoLiquidity_NoMatch()
+	public void Match_MarketOrder_NoLiquidity_IsRefusedWithAReason()
 	{
 		var book = new OrderBook(CreateSecId()); // Empty book
 		var matcher = new OrderMatcher();
@@ -279,7 +279,73 @@ public class OrderMatcherTests : BaseTestClass
 		IsFalse(result.HasTrades);
 		AreEqual(5m, result.RemainingVolume);
 		IsFalse(result.ShouldPlaceInBook);
+
+		// A market order names no price, so the book is the only thing that can give it one, and the
+		// matcher is the one place that knows this order never reached a market at all. A clean Done
+		// carries that knowledge nowhere: it is the same answer a fully filled order gets, and the
+		// caller cannot tell the two apart from the result alone. Refusal is the answer the matcher
+		// already has a way to state - it is how a post-only order that would cross is turned away.
+		IsTrue(result.IsRejected,
+			$"an empty book gave this order no market to take from, yet the matcher answered a plain {result.FinalState}");
+		IsFalse(result.RejectionReason.IsEmpty(), "and a refusal that states no reason leaves the caller where it started");
+	}
+
+	[TestMethod]
+	public void Match_MarketOrder_OnlyOwnSideInBook_IsRefusedWithAReason()
+	{
+		// Bids, and nothing offered: a buyer takes from the asks, so this book offers it nothing.
+		var book = new OrderBook(CreateSecId());
+		book.UpdateLevel(Sides.Buy, 100, 10);
+
+		var matcher = new OrderMatcher();
+
+		var order = new EmulatorOrder
+		{
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Balance = 5,
+			Volume = 5,
+			OrderType = OrderTypes.Market,
+		};
+
+		var result = matcher.Match(order, book, DefaultSettings);
+
+		IsFalse(result.HasTrades);
+		AreEqual(5m, result.RemainingVolume);
+
+		// The side the order takes from is the only side that counts. Reading "the book holds quotes"
+		// as "there is a market" is what lets this case through while the empty book is caught.
+		IsTrue(result.IsRejected,
+			$"only the buyer's own side is quoted, so there is nothing to buy from, yet the matcher answered a plain {result.FinalState}");
+		IsFalse(result.RejectionReason.IsEmpty(), "and a refusal that states no reason leaves the caller where it started");
+	}
+
+	[TestMethod]
+	public void Match_MarketOrder_PartialLiquidity_IsNotRefused()
+	{
+		var book = CreateBookWithSpread(bid: 100, ask: 101, volume: 3);
+		var matcher = new OrderMatcher();
+
+		var order = new EmulatorOrder
+		{
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Balance = 10, // Wants ten, three are offered
+			Volume = 10,
+			OrderType = OrderTypes.Market,
+		};
+
+		var result = matcher.Match(order, book, DefaultSettings);
+
+		// The edge a refusal must not swallow: this order did find a market and did trade in it. Its
+		// unfillable remainder rests nowhere and is cancelled with the order, which is the venue's
+		// answer rather than a failure.
+		IsTrue(result.HasTrades);
+		AreEqual(3m, result.Trades.Sum(t => t.Volume));
+		AreEqual(7m, result.RemainingVolume);
+		IsFalse(result.ShouldPlaceInBook);
 		AreEqual(OrderStates.Done, result.FinalState);
+		IsFalse(result.IsRejected, $"part of this order traded, so it was not refused: {result.RejectionReason}");
 	}
 
 	[TestMethod]

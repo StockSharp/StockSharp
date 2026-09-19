@@ -2336,4 +2336,156 @@ public class MatchingEngineAdapterTests : BaseTestClass
 				$"{flag.Name} is stated by the condition and the stop the engine rests is the same either way: {raised}");
 		}
 	}
+
+	/// <summary>
+	/// Describes every order row the engine stated about one transaction, for a message that has to
+	/// say what the engine actually answered rather than only that the answer was wrong.
+	/// </summary>
+	private static string DescribeRows(EngineRun run, long transactionId)
+		=> run.Executions
+			.Where(m => m.HasOrderInfo() && m.OriginalTransactionId == transactionId)
+			.Select(m => $"{m.OrderState}/balance {m.Balance}/error {m.Error?.Message ?? "none"}")
+			.JoinComma();
+
+	/// <summary>
+	/// A market order names no price, so the book is the only thing that can give it one. Offered
+	/// nothing on the side it has to take from, there is no market to trade at, and the engine knows
+	/// that before the order is ever live - the same position it is in when an activation price is a
+	/// percent of a market it has never seen, which it refuses outright. What it may not do is
+	/// finish the order quietly: Done with the whole balance still outstanding and no reason
+	/// attached is indistinguishable from an order that was filled as far as it asked to be, so the
+	/// caller learns neither that it did not execute nor why.
+	/// </summary>
+	[TestMethod]
+	public async Task AMarketOrderWithNoBookToPriceItIsRefusedWithAReason()
+	{
+		const string account = "Client";
+		const long tx = 9901;
+
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		// Nothing has ever been quoted for this instrument: the book has neither side.
+		await run.SendAsync(NewOrder(tx, account, Sides.Buy, OrderTypes.Market, 0m, 5m, _start), CancellationToken);
+
+		var rows = run.Executions.Where(m => m.HasOrderInfo() && m.OriginalTransactionId == tx).ToArray();
+
+		IsTrue(rows.Length > 0, "the engine has to answer the registration at all");
+
+		var filled = run.Executions
+			.Where(m => m.HasTradeInfo() && m.OriginalTransactionId == tx)
+			.Sum(m => m.TradeVolume ?? 0m);
+
+		AreEqual(0m, filled, $"nothing was offered, so nothing may have traded; {filled} did");
+
+		IsTrue(rows.Any(m => m.OrderState == OrderStates.Failed || m.Error is not null),
+			$"an empty book leaves a market order no price to trade at, so the registration has to be refused with a reason; the engine answered {DescribeRows(run, tx)}");
+
+		AreEqual(0m, PositionOf(engine, account), "an order that never traded moves no position");
+	}
+
+	/// <summary>
+	/// The same emptiness, stated by a book that is not empty: a buy takes from the asks, and a book
+	/// holding bids alone offers it nothing. Reading "the book has quotes" as "there is a market" is
+	/// how this one slips through - the side the order has to take from is the only side that counts.
+	/// </summary>
+	[TestMethod]
+	public async Task AMarketOrderIntoABookHoldingOnlyItsOwnSideIsRefusedWithAReason()
+	{
+		const string account = "Client";
+		const long tx = 9902;
+
+		var engine = new MatchingEngineAdapter();
+		engine.Settings.IncreaseDepthVolume = false;
+
+		var run = new EngineRun(engine);
+
+		// Ten lots bid for, and nothing offered.
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], []), CancellationToken);
+
+		await run.SendAsync(NewOrder(tx, account, Sides.Buy, OrderTypes.Market, 0m, 5m, _start.AddSeconds(1)), CancellationToken);
+
+		var rows = run.Executions.Where(m => m.HasOrderInfo() && m.OriginalTransactionId == tx).ToArray();
+
+		IsTrue(rows.Length > 0, "the engine has to answer the registration at all");
+
+		var filled = run.Executions
+			.Where(m => m.HasTradeInfo() && m.OriginalTransactionId == tx)
+			.Sum(m => m.TradeVolume ?? 0m);
+
+		AreEqual(0m, filled, $"nothing was offered to a buyer, so nothing may have traded; {filled} did");
+
+		IsTrue(rows.Any(m => m.OrderState == OrderStates.Failed || m.Error is not null),
+			$"a book quoting only the buyer's own side offers the buyer nothing, so the registration has to be refused with a reason; the engine answered {DescribeRows(run, tx)}");
+	}
+
+	/// <summary>
+	/// The other edge of the same rule, and the one a refusal must not swallow: a market order the
+	/// book fills only part of did find a market and did trade. Its unfillable remainder rests
+	/// nowhere and is cancelled with the order, which is the venue's answer and not a failure - so
+	/// this order ends Done, with what it bought, and with nothing to apologise for.
+	/// </summary>
+	[TestMethod]
+	public async Task AMarketOrderTheBookPartlyFillsIsNotRefused()
+	{
+		const string account = "Client";
+		const long tx = 9903;
+
+		var engine = new MatchingEngineAdapter();
+		engine.Settings.IncreaseDepthVolume = false;
+
+		var run = new EngineRun(engine);
+
+		// One lot offered, against an order asking for ten.
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 1m)], [new QuoteChange(101m, 1m)]), CancellationToken);
+
+		await run.SendAsync(NewOrder(tx, account, Sides.Buy, OrderTypes.Market, 0m, 10m, _start.AddSeconds(1)), CancellationToken);
+
+		var rows = run.Executions.Where(m => m.HasOrderInfo() && m.OriginalTransactionId == tx).ToArray();
+
+		var filled = run.Executions
+			.Where(m => m.HasTradeInfo() && m.OriginalTransactionId == tx)
+			.Sum(m => m.TradeVolume ?? 0m);
+
+		AreEqual(1m, filled, "the one lot offered is the one lot bought");
+
+		IsFalse(rows.Any(m => m.OrderState == OrderStates.Failed || m.Error is not null),
+			$"part of this order traded, so there was a market and the order did not fail; the engine answered {DescribeRows(run, tx)}");
+
+		var last = rows[^1];
+
+		AreEqual(OrderStates.Done, last.OrderState, "nothing of a market order rests, so it ends here");
+		AreEqual(9m, last.Balance, "and the nine lots the book could not offer were cancelled with it");
+	}
+
+	/// <summary>
+	/// A limit order carries its own price, so an empty book takes nothing away from it: it is the
+	/// order that makes the market rather than the order that needs one. Refusing it for the same
+	/// emptiness that refuses a market order would stop a strategy from ever placing the first quote
+	/// in a book.
+	/// </summary>
+	[TestMethod]
+	public async Task ALimitOrderWithNoBookToTradeAgainstRests()
+	{
+		const string account = "Client";
+		const long tx = 9904;
+
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		// Nothing has ever been quoted for this instrument.
+		await run.SendAsync(NewOrder(tx, account, Sides.Buy, OrderTypes.Limit, 100m, 5m, _start), CancellationToken);
+
+		var rows = run.Executions.Where(m => m.HasOrderInfo() && m.OriginalTransactionId == tx).ToArray();
+
+		IsTrue(rows.Length > 0, "the engine has to answer the registration at all");
+
+		IsFalse(rows.Any(m => m.OrderState == OrderStates.Failed || m.Error is not null),
+			$"a limit order names the price it wants and needs no market to state it; the engine answered {DescribeRows(run, tx)}");
+
+		AreEqual(OrderStates.Active, rows[^1].OrderState, "an order nothing crossed is working, not finished");
+
+		IsTrue(engine.GetSecurityState(_securityId).OrderBook.HasLevel(Sides.Buy, 100m),
+			"and it is the book's only bid, because it is the only thing in the book");
+	}
 }
