@@ -1197,6 +1197,227 @@ public class BacktestingTests : BaseTestClass
 			string.Join(Environment.NewLine, violations.Take(30)));
 	}
 
+	// What one candle callback saw.
+	private readonly record struct BarSighting(
+		CandleStates State,
+		DateTime OpenTime,
+		DateTime CloseTime,
+		DateTime LocalTime,
+		DateTime StrategyTime);
+
+	/// <summary>
+	/// Records every candle it is shown and buys at market on the first finished bar of the run.
+	/// </summary>
+	private sealed class FirstBarStrategy : Strategy
+	{
+		private readonly Lock _sync = new();
+		private readonly List<BarSighting> _sightings = [];
+
+		public BarSighting[] Sightings
+		{
+			get
+			{
+				using (_sync.EnterScope())
+					return [.. _sightings];
+			}
+		}
+
+		public TimeSpan TimeFrame { get; set; }
+		public Order EntryOrder { get; private set; }
+		public DateTime? EntryTime { get; private set; }
+
+		protected override void OnStarted2(DateTime time)
+		{
+			base.OnStarted2(time);
+
+			SubscribeCandles(TimeFrame, isFinishedOnly: false)
+				.Bind(ProcessCandle)
+				.Start();
+		}
+
+		private void ProcessCandle(ICandleMessage candle)
+		{
+			using (_sync.EnterScope())
+				_sightings.Add(new(candle.State, candle.OpenTime, candle.CloseTime, candle.LocalTime, CurrentTime));
+
+			if (candle.State != CandleStates.Finished || EntryOrder is not null)
+				return;
+
+			EntryTime = CurrentTime;
+			EntryOrder = BuyMarket(Volume);
+		}
+	}
+
+	// Six contiguous bars, each a step above the one before it, so a fill can be traced to the bar
+	// whose prints it came from.
+	private static TimeFrameCandleMessage[] CreateContiguousBars(SecurityId secId, DateTime start, TimeSpan timeFrame, int count)
+		=> [.. Enumerable.Range(0, count).Select(i =>
+		{
+			var openTime = start + TimeSpan.FromTicks(timeFrame.Ticks * i);
+			var open = 100m + i;
+
+			return new TimeFrameCandleMessage
+			{
+				SecurityId = secId,
+				TypedArg = timeFrame,
+				DataType = timeFrame.TimeFrame(),
+				OpenTime = openTime,
+				HighTime = openTime + TimeSpan.FromTicks(timeFrame.Ticks / 5 * 2),
+				LowTime = openTime + TimeSpan.FromTicks(timeFrame.Ticks / 5 * 4),
+				CloseTime = openTime + timeFrame,
+				OpenPrice = open,
+				HighPrice = open + 2,
+				LowPrice = open - 1,
+				ClosePrice = open + 1,
+				TotalVolume = 100,
+				State = CandleStates.Finished,
+			};
+		})];
+
+	/// <summary>
+	/// Replays <paramref name="barCount"/> contiguous bars of stored history through the emulator and
+	/// returns the strategy that watched them, having bought at market on the first finished bar.
+	/// </summary>
+	private async Task<FirstBarStrategy> ReplayContiguousBarsAsync(int barCount, List<string> failures)
+	{
+		var security = Helper.CreateSecurity(100);
+		var portfolio = Helper.CreatePortfolio();
+		var secId = security.ToSecurityId();
+		var timeFrame = TimeSpan.FromMinutes(5);
+		var start = new DateTime(2026, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+
+		var fs = Helper.MemorySystem;
+		var storageRegistry = fs.GetStorage(fs.GetSubTemp());
+
+		await storageRegistry
+			.GetTimeFrameCandleMessageStorage(secId, timeFrame)
+			.SaveAsync(CreateContiguousBars(secId, start, timeFrame, barCount), CancellationToken);
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+
+		using var connector = CreateDeterministicConnector(
+			secProvider,
+			pfProvider,
+			storageRegistry,
+			start,
+			start + TimeSpan.FromTicks(timeFrame.Ticks * (barCount + 1)));
+
+		var strategy = new FirstBarStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			TimeFrame = timeFrame,
+			WaitRulesOnStop = false,
+		};
+
+		var sync = new Lock();
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+		};
+
+		connector.Error += error =>
+		{
+			using (sync.EnterScope())
+				failures.Add($"Connector: {error.Message}");
+		};
+
+		connector.OrderRegisterFailed += fail =>
+		{
+			using (sync.EnterScope())
+				failures.Add($"Order {fail.Order.TransactionId} was refused: {fail.Error.Message}");
+		};
+
+		strategy.Error += (_, error) =>
+		{
+			using (sync.EnterScope())
+				failures.Add($"Strategy: {error.Message}");
+		};
+
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		var completed = await Task.WhenAny(
+			stopped.Task,
+			Task.Delay(TimeSpan.FromSeconds(15), CancellationToken));
+
+		if (completed != stopped.Task)
+		{
+			connector.Disconnect();
+			Fail("The candle replay did not reach its stop date in time.");
+		}
+
+		return strategy;
+	}
+
+	/// <summary>
+	/// A bar becomes known when it closes. Everything it reports - its high, its low, its close - is
+	/// settled only at that moment, so a finished bar covering [T, T+1) belongs to the strategy's
+	/// clock at T+1. Handing it over stamped T shows the strategy the whole of a bar at the instant
+	/// that bar begins, which is knowledge of the future written into the data itself, and a live
+	/// connector never does it: <see cref="StockSharp.Algo.Candles.Compression.CandleBuilder"/> marks
+	/// a candle finished and stamps it with the time of the value that closed it.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AFinishedBarReachesAStrategyStampedAtItsCloseNotAtItsOpen()
+	{
+		var failures = new List<string>();
+		var strategy = await ReplayContiguousBarsAsync(6, failures);
+
+		var finished = strategy.Sightings.Where(s => s.State == CandleStates.Finished).ToArray();
+
+		// Five of the six, because the closing bar of a replay is the one whose delivery depends on the
+		// run outliving it; the stamp of the rest is what this test is about.
+		IsTrue(finished.Length >= 5,
+			$"The replay stored six bars and the strategy saw {finished.Length} finished one(s).");
+
+		var wrong = finished.Where(s => s.LocalTime != s.CloseTime).ToArray();
+
+		IsTrue(wrong.Length == 0,
+			$"{wrong.Length} of {finished.Length} finished bar(s) reached the strategy stamped at " +
+			$"something other than their close: " +
+			wrong.Take(5).Select(s => $"[{s.OpenTime:HH:mm}-{s.CloseTime:HH:mm}) arrived at {s.LocalTime:HH:mm}").JoinComma());
+
+		var early = finished.Where(s => s.StrategyTime < s.CloseTime).ToArray();
+
+		IsTrue(early.Length == 0,
+			$"{early.Length} finished bar(s) were handed over while the strategy's clock still stood " +
+			$"before their close: " +
+			early.Take(5).Select(s => $"[{s.OpenTime:HH:mm}-{s.CloseTime:HH:mm}) at strategy time {s.StrategyTime:HH:mm}").JoinComma());
+	}
+
+	/// <summary>
+	/// The prints a bar is made of reach the book when the bar closes, so a strategy shown that bar at
+	/// its close is shown it against a book that already holds those prints. The first finished bar of
+	/// a run is where this is decided: if the bar arrives before its own prints do, the market order
+	/// it prompts meets an empty book and the opening bar of every candle backtest is untradeable.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AnOrderSentOnTheFirstFinishedBarOfARunCanTrade()
+	{
+		var failures = new List<string>();
+		var strategy = await ReplayContiguousBarsAsync(6, failures);
+
+		IsNotNull(strategy.EntryOrder, "The strategy saw no finished bar to buy on.");
+
+		var trades = strategy.MyTrades.ToArray();
+
+		IsTrue(trades.Length > 0,
+			$"The market order sent on the first finished bar (at {strategy.EntryTime:HH:mm}) did not trade. " +
+			$"Order state is {strategy.EntryOrder.State}, balance {strategy.EntryOrder.Balance} of {strategy.EntryOrder.Volume}. " +
+			(failures.Count > 0 ? string.Join("; ", failures.Take(5)) : "No failure was reported."));
+	}
+
 	// Where a Designer template lands once it is compiled in: every file of Designer.Templates\Backtest
 	// declares "namespace StockSharp.Designer", and nothing else in this assembly uses that namespace.
 	private const string _templatesNamespace = "StockSharp.Designer";
@@ -3878,27 +4099,37 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		// Count candles in storage
 		var storageCandles = await storageRegistry
 			.GetTimeFrameCandleMessageStorage(security.Id.ToSecurityId(), TimeSpan.FromMinutes(1))
 			.LoadAsync(startTime, stopTime)
-			.CountAsync(CancellationToken);
+			.ToArrayAsync(CancellationToken);
 
-		IsTrue(storageCandles > 0, "No candles in storage");
+		IsTrue(storageCandles.Length > 0, "No candles in storage");
+
+		// A bar becomes known when it closes, so what a run of [start, stop] delivers is the bars
+		// that close inside it. The storage window also holds the bar that merely opens on the
+		// run's last moment - it closes a minute later, after the run is over, and a run cannot
+		// report a bar it did not live to see close. Counting it as delivered is what the old
+		// timestamp made look right: a finished bar handed over at its open needs nothing but its
+		// open to be inside the window.
+		var expected = storageCandles
+			.Where(c => c.CloseTime <= stopTime)
+			.Select(c => c.OpenTime)
+			.ToArray();
 
 		// The shared run replays exactly this window with the same 1m candle subscription and records
 		// one entry per finished candle delivered to the connector.
-		var finishedCandlesReceived = run.FinishedCandleOpenTimes.Count;
+		var received = run.FinishedCandleOpenTimes.ToArray();
 
-		Console.WriteLine($"Storage candles: {storageCandles}, Received finished candles: {finishedCandlesReceived}");
+		Console.WriteLine($"Storage candles: {storageCandles.Length}, closing inside the window: {expected.Length}, received finished candles: {received.Length}");
 
-		// Every stored candle must be delivered exactly once: no candle lost in the adapter
-		// pipeline and no duplicates. The previous tolerance ("&gt;= storageCandles - 1", with no
-		// upper bound) accepted both a dropped last candle and arbitrary duplicates; the engine
-		// actually delivers an exact 1:1 mapping (subscribers also receive a direct forward of the
-		// final candle), so assert exact equality.
-		AreEqual(storageCandles, finishedCandlesReceived,
-			$"All stored candles must be delivered exactly once. Storage: {storageCandles}, Received: {finishedCandlesReceived}");
+		IsTrue(expected.Length > 0, "No stored candle closes inside the replayed window.");
+
+		// Every one of them exactly once: no candle lost in the adapter pipeline and none
+		// duplicated. Comparing the open times rather than the counts is what keeps a loss and a
+		// duplicate from cancelling each other out.
+		AreEquivalent(expected, received,
+			$"Every stored candle closing inside the window must be delivered exactly once. Expected: {expected.Length}, received: {received.Length}");
 	}
 	/// <summary>
 	/// A strategy that opens only from a flat position, with market orders, over the real month.

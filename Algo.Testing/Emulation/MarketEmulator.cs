@@ -191,6 +191,18 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	{
 		SyncEngineSettings();
 
+		if (message is EmulationStateMessage { State: ChannelStates.Stopping } stopMsg)
+		{
+			// A run ends with its last data message, and the bar that message belongs to closes
+			// later than the message itself: nothing else will ever carry the clock over that
+			// close. The leftovers are handed over here, each at its own close rather than at the
+			// moment the run was told to stop, so the last bar of a run is stamped as every other
+			// bar is. Bars that would only close after that moment are not part of the run and stay
+			// where they are.
+			ReleaseStoredCandles(stopMsg.LocalTime, results);
+			return;
+		}
+
 		// A bar that closed by now reaches the book before this message acts on it. Forward only:
 		// an order is stamped with the bar it reacted to, which is behind where the run has got to.
 		if (message.LocalTime >= _currentTime)
@@ -204,10 +216,8 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				break;
 
 			case MessageTypes.EmulationState:
-				// Arrives here on purpose, and there is nothing to do with it. The stop signal is
-				// put through this queue as a marker so that it comes back only once everything
-				// ahead of it has been processed - that round trip IS the soft stop. The emulator
-				// itself keeps no run state, so passing through is the whole of its part.
+				// Every state other than the stop signal handled above arrives here on purpose, and
+				// there is nothing to do with it: the emulator keeps no run state of its own.
 				break;
 
 			case MessageTypes.Time:
@@ -566,7 +576,40 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		foreach (var (secId, emulator) in _securityEmulators)
 		{
 			foreach (var candle in emulator.ProcessStoredCandles(time, results) ?? [])
+			{
+				// The prices the bar recorded go into the book first, and the bar is handed over
+				// after them: that is the order a live feed has, where the prints are what the bar
+				// is made of and the bar is declared finished only once they have all arrived. What
+				// those prices did to a resting order is therefore reported before the bar did it.
 				ReplayCandle(secId, emulator, candle, time, results);
+				results.Add(candle);
+			}
+		}
+	}
+
+	/// <summary>
+	/// Hand over every bar still held whose close falls no later than <paramref name="stopTime"/>,
+	/// each at its own close and in order.
+	/// </summary>
+	private void ReleaseStoredCandles(DateTime stopTime, List<Message> results)
+	{
+		while (true)
+		{
+			DateTime? next = null;
+
+			foreach (var (_, emulator) in _securityEmulators)
+			{
+				if (emulator.NextStoredCandleReleaseTime is not DateTime releaseTime || releaseTime > stopTime)
+					continue;
+
+				if (next is null || releaseTime < next)
+					next = releaseTime;
+			}
+
+			if (next is null)
+				break;
+
+			ProcessTime(next.Value, results);
 		}
 	}
 
@@ -968,8 +1011,34 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 	}
 
 	/// <summary>
-	/// Release the candles that have closed by <paramref name="currentTime"/>, and hand them back so
-	/// the caller can replay each as the prices it recorded.
+	/// The earliest moment at which a candle still held here becomes known, or <see langword="null"/>
+	/// when none is held.
+	/// </summary>
+	public DateTime? NextStoredCandleReleaseTime
+	{
+		get
+		{
+			DateTime? next = null;
+
+			foreach (var pair in _storedCandles)
+			{
+				foreach (var stored in pair.Value)
+				{
+					var releaseTime = GetReleaseTime(stored.Candle);
+
+					if (next is null || releaseTime < next)
+						next = releaseTime;
+				}
+			}
+
+			return next;
+		}
+	}
+
+	/// <summary>
+	/// Release the candles that have closed by <paramref name="currentTime"/>, stamped with the moment
+	/// they became known, and hand them back so the caller can put the prices each one recorded into
+	/// the book before publishing it.
 	/// </summary>
 	public List<CandleMessage> ProcessStoredCandles(DateTime currentTime, List<Message> results)
 	{
@@ -1010,12 +1079,10 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 
 			foreach (var stored in completed)
 			{
-				var candle = stored.Candle;
-				var finalCandle = candle.TypedClone();
+				var finalCandle = stored.Candle.TypedClone();
 				finalCandle.LocalTime = currentTime;
-				candleResults.Add(finalCandle);
 
-				(released ??= []).Add(candle);
+				(released ??= []).Add(finalCandle);
 				pair.Value.Remove(stored);
 			}
 
@@ -1035,9 +1102,9 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		if (candleResults.Count == 0)
 			return released;
 
-		// A single trigger can release phases from several candle series. Keep those phases
-		// chronological while preserving the legacy position of candle output after any
-		// order/execution results already produced by the triggering message.
+		// A single trigger can release phases from several candle series, and each phase belongs to
+		// the moment it stands for rather than to the trigger. Keep them chronological, after any
+		// order/execution results the triggering message has already produced.
 		var ordered = candleResults
 			.OrderBy(message => message.LocalTime == default ? currentTime : message.LocalTime)
 			.ToArray();
@@ -1046,18 +1113,23 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		return released;
 	}
 
-	private static bool IsCandleCompleted(CandleMessage candle, DateTime currentTime)
+	/// <summary>
+	/// The moment a bar becomes known, which is its close. A bar that states no meaningful close -
+	/// a non-time one supplied from outside, say - becomes known at the first instant after its open,
+	/// which is the earliest moment anything can be said about it.
+	/// </summary>
+	private static DateTime GetReleaseTime(CandleMessage candle)
 	{
 		var openTime = candle.OpenTime != default ? candle.OpenTime : candle.LocalTime;
 		var closeTime = candle.CloseTime;
 
-		// Time-frame and other time-bounded candles must remain pending until their own
-		// close. Falling back to the legacy next-message rule keeps candles without a
-		// meaningful CloseTime (for example externally supplied non-time candles) working.
 		return closeTime != default && closeTime > openTime
-			? closeTime <= currentTime
-			: openTime < currentTime;
+			? closeTime
+			: openTime.AddTicks(1);
 	}
+
+	private static bool IsCandleCompleted(CandleMessage candle, DateTime currentTime)
+		=> GetReleaseTime(candle) <= currentTime;
 
 	private static bool IsActiveStateDue(DateTime stateTime, DateTime currentTime, bool isCompleted)
 		=> stateTime < currentTime || (isCompleted && stateTime <= currentTime);

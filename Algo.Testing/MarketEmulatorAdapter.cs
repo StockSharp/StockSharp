@@ -40,17 +40,21 @@ public class MarketEmulatorAdapter : MessageAdapter
 	public override DateTime CurrentTime => Emulator.CurrentTime;
 
 	/// <inheritdoc />
-	protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 	{
 		// EmulationState(Stopping) is sent through the channel queue as a drain marker.
 		// By the time it arrives here, all prior queued messages (candles etc.) have been processed.
-		// Echo it back as output without sending to the emulator, so it doesn't pollute
-		// emulator.NewOutMessageAsync and break comparison tests.
-		if (message.Type == MessageTypes.EmulationState
-			&& ((EmulationStateMessage)message).State == ChannelStates.Stopping)
-			return SendOutMessageAsync(message, cancellationToken);
+		var isStopping = message.Type == MessageTypes.EmulationState
+			&& ((EmulationStateMessage)message).State == ChannelStates.Stopping;
 
-		return Emulator.SendInMessageAsync(message, cancellationToken);
+		// The emulator gets the marker too: the bar the run's last data message belongs to closes
+		// after that message, so it is handed over on the marker or not at all.
+		await Emulator.SendInMessageAsync(message, cancellationToken);
+
+		// The emulator produces no output for the marker itself, so the echo is what puts it back
+		// on the stream - after whatever the line above has just handed over.
+		if (isStopping)
+			await SendOutMessageAsync(message, cancellationToken);
 	}
 
 	private ValueTask OnEmulatorNewOutMessage(Message message, CancellationToken cancellationToken)

@@ -330,6 +330,14 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 				if (message is ISubscriptionIdMessage subscrMsg)
 					await TrySendToEmulator(subscrMsg, cancellationToken);
 
+				// A bar becomes known when it closes, and in a run where the emulator owns the clock
+				// it is the emulator that hands the bar over: at its close, with the prices the bar
+				// recorded already in the book. The stored copy carries the time the bar opened, so
+				// letting it past here as well would show a strategy the whole of a bar - its high,
+				// its low, its close - at the instant that bar began.
+				if (_isEmulationOnly && message is CandleMessage)
+					break;
+
 				if (OwnInnerAdapter)
 					await base.OnInnerAdapterNewOutMessageAsync(message, cancellationToken);
 

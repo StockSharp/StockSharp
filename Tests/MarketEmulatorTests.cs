@@ -1271,6 +1271,152 @@ public class MarketEmulatorTests : BaseTestClass
 		AreEqual(110m, highState.HighPrice, "the state emitted at the high time must report the high the candle reached");
 	}
 
+	/// <summary>
+	/// A finished bar belongs to the moment it closed, but the states that stood for it while it was
+	/// still forming belong to the moments they describe - the open, the low, the high - and moving
+	/// the finished bar to the close must not drag them along. Each active state is the bar as it was
+	/// at its own time, so a state stamped with the close would report a price the bar had not yet
+	/// printed when the strategy is told it did.
+	/// </summary>
+	[TestMethod]
+	public async Task AnActiveCandleStateKeepsTheTimeOfWhatItStandsFor()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		var openTime = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var lowTime = openTime.AddMinutes(1);
+		var highTime = openTime.AddMinutes(3);
+		var closeTime = openTime.AddMinutes(5);
+
+		var subscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+			IsFinishedOnly = false,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OriginalTransactionId = subscriptionId,
+			TypedArg = TimeSpan.FromMinutes(5),
+			LocalTime = openTime,
+			OpenTime = openTime,
+			HighTime = highTime,
+			LowTime = lowTime,
+			CloseTime = closeTime,
+			OpenPrice = 100,
+			HighPrice = 110,
+			LowPrice = 90,
+			ClosePrice = 105,
+			TotalVolume = 10,
+			State = CandleStates.Finished,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = closeTime }, CancellationToken);
+
+		var candles = res.OfType<TimeFrameCandleMessage>().ToArray();
+
+		var activeTimes = candles
+			.Where(c => c.State == CandleStates.Active)
+			.Select(c => c.LocalTime)
+			.ToArray();
+
+		AreEqual(3, activeTimes.Length,
+			$"the open, the low and the high are the three states of a bar in flight, got {activeTimes.Select(t => $"{t:HH:mm}").JoinComma()}");
+
+		IsTrue(activeTimes.Contains(openTime), $"no state at the open time {openTime:HH:mm}");
+		IsTrue(activeTimes.Contains(lowTime), $"no state at the low time {lowTime:HH:mm}");
+		IsTrue(activeTimes.Contains(highTime), $"no state at the high time {highTime:HH:mm}");
+
+		IsFalse(activeTimes.Contains(closeTime),
+			$"a state of a bar in flight was stamped with the bar's close {closeTime:HH:mm}, which is after every price it stands for");
+
+		var finished = candles.Where(c => c.State == CandleStates.Finished).ToArray();
+
+		AreEqual(1, finished.Length, "the bar closes once");
+		AreEqual(closeTime, finished[0].LocalTime, "the finished bar belongs to the moment it closed");
+	}
+
+	/// <summary>
+	/// Moving a finished bar to its close lets a strategy trade the bar it has just been shown, and
+	/// must not let it reach any further: the next bar is still unknown at that moment, and its prices
+	/// have to stay out of the book until it closes in its turn.
+	/// </summary>
+	[TestMethod]
+	public async Task AnOrderCannotTradeAgainstABarThatHasNotBeenShownYet()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		var firstOpen = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var secondOpen = firstOpen.AddMinutes(5);
+		var secondClose = secondOpen.AddMinutes(5);
+
+		async Task SendBarAsync(DateTime openTime, decimal open, decimal high, decimal low, decimal close)
+		{
+			await emu.SendInMessageAsync(new TimeFrameCandleMessage
+			{
+				SecurityId = id,
+				TypedArg = TimeSpan.FromMinutes(5),
+				LocalTime = openTime,
+				OpenTime = openTime,
+				// High first, so the sell below is reached as soon as this bar is replayed at all.
+				HighTime = openTime.AddMinutes(1),
+				LowTime = openTime.AddMinutes(3),
+				CloseTime = openTime.AddMinutes(5),
+				OpenPrice = open,
+				HighPrice = high,
+				LowPrice = low,
+				ClosePrice = close,
+				TotalVolume = 100,
+				State = CandleStates.Finished,
+			}, CancellationToken);
+		}
+
+		// The first bar trades around 100 and the second one far above it, so 215 is a price only the
+		// second bar ever reaches.
+		await SendBarAsync(firstOpen, 100, 110, 90, 105);
+		await SendBarAsync(secondOpen, 200, 220, 195, 210);
+
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = secondOpen,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Sell,
+			Price = 215,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		ExecutionMessage[] TradesOfTheOrder() => [.. res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == reg.TransactionId && m.HasTradeInfo())];
+
+		var tooEarly = TradesOfTheOrder();
+
+		IsTrue(tooEarly.Length == 0,
+			$"the order was filled at {tooEarly.FirstOrDefault()?.TradePrice} against a bar that closes at " +
+			$"{secondClose:HH:mm} and has not been shown yet");
+
+		// The second bar has closed now, so it is replayed and its high reaches the order.
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = secondClose }, CancellationToken);
+
+		var trades = TradesOfTheOrder();
+
+		AreEqual(1, trades.Length, "the bar traded up to 220, which is through the sell standing at 215");
+		AreEqual(220m, trades[0].TradePrice, "the sell is filled at the high the bar recorded");
+	}
+
 	[TestMethod]
 	public async Task CandleExecution()
 	{
