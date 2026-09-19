@@ -102,19 +102,33 @@ public class LocalizedStringsGeneratorTests : BaseTestClass
 		IsEmpty(errors, $"Generated source does not parse: {errors.Select(e => e.ToString()).Join("; ")}{Environment.NewLine}{source}");
 	}
 
-	// Every name the emitted class puts into its own scope: the key constants, the cache fields and
-	// the properties. Two members sharing a name is what a duplicate resource looks like from here.
-	private static string[] GetDeclaredMemberNames(string source)
-	{
-		var root = CSharpSyntaxTree.ParseText(source).GetRoot();
+	private static IEnumerable<TypeDeclarationSyntax> GetTypeDeclarations(string source)
+		=> CSharpSyntaxTree.ParseText(source).GetRoot().DescendantNodes().OfType<TypeDeclarationSyntax>();
 
-		return
-		[
-			.. root.DescendantNodes().OfType<FieldDeclarationSyntax>().SelectMany(f => f.Declaration.Variables).Select(v => v.Identifier.ValueText),
-			.. root.DescendantNodes().OfType<PropertyDeclarationSyntax>().Select(p => p.Identifier.ValueText),
-			.. root.DescendantNodes().OfType<MethodDeclarationSyntax>().Select(m => m.Identifier.ValueText),
-		];
-	}
+	// Everything a type declaration puts into its own scope: the key constants, the properties, the
+	// methods, the cached texts and the type that holds them.
+	private static IEnumerable<string> GetMemberNames(MemberDeclarationSyntax member)
+		=> member switch
+		{
+			FieldDeclarationSyntax f => f.Declaration.Variables.Select(v => v.Identifier.ValueText),
+			PropertyDeclarationSyntax p => [p.Identifier.ValueText],
+			MethodDeclarationSyntax m => [m.Identifier.ValueText],
+			TypeDeclarationSyntax t => [t.Identifier.ValueText],
+			_ => [],
+		};
+
+	// The names one named type declares, and only that type: a property and the cached text behind it
+	// share a name by design, and they are members of different types.
+	private static string[] GetDeclaredMemberNames(string source, string typeName)
+		=> [.. GetTypeDeclarations(source).Where(t => t.Identifier.ValueText == typeName).SelectMany(t => t.Members.SelectMany(GetMemberNames))];
+
+	// A name declared twice by one type is what a duplicate resource looks like from here.
+	private static string[] GetDuplicateMemberNames(string source)
+		=> [.. GetTypeDeclarations(source).SelectMany(t => t.Members
+			.SelectMany(GetMemberNames)
+			.GroupBy(n => n, StringComparer.Ordinal)
+			.Where(g => g.Count() > 1)
+			.Select(g => $"{t.Identifier.ValueText}.{g.Key} x{g.Count()}"))];
 
 	// Whichever way the driver reports a generator that refused its input - the exception it caught,
 	// or an error diagnostic in its place - what matters is that the build stops and the text says why.
@@ -156,7 +170,7 @@ public class LocalizedStringsGeneratorTests : BaseTestClass
 
 		AssertParses(source);
 
-		var names = GetDeclaredMemberNames(source);
+		var names = GetDeclaredMemberNames(source, nameof(LocalizedStrings));
 
 		Contains(names, "AlphaKey");
 		Contains(names, "Alpha");
@@ -179,7 +193,7 @@ public class LocalizedStringsGeneratorTests : BaseTestClass
 
 		AssertParses(source);
 
-		var names = GetDeclaredMemberNames(source);
+		var names = GetDeclaredMemberNames(source, nameof(LocalizedStrings));
 
 		Contains(names, "PlainKey", $"the well-formed key lost its constant:{Environment.NewLine}{source}");
 		Contains(names, "Plain", $"the well-formed key lost its property:{Environment.NewLine}{source}");
@@ -198,7 +212,7 @@ public class LocalizedStringsGeneratorTests : BaseTestClass
 
 		AssertParses(source);
 
-		Contains(GetDeclaredMemberNames(source), "Multi");
+		Contains(GetDeclaredMemberNames(source, nameof(LocalizedStrings)), "Multi");
 	}
 
 	/// <summary>
@@ -214,13 +228,33 @@ public class LocalizedStringsGeneratorTests : BaseTestClass
 
 		AssertParses(source);
 
-		var duplicates = GetDeclaredMemberNames(source)
-			.GroupBy(n => n, StringComparer.Ordinal)
-			.Where(g => g.Count() > 1)
-			.Select(g => $"{g.Key} x{g.Count()}")
-			.ToArray();
+		var duplicates = GetDuplicateMemberNames(source);
 
 		IsEmpty(duplicates, $"Duplicate members: {duplicates.Join(", ")}{Environment.NewLine}{source}");
+	}
+
+	/// <summary>
+	/// The emitted class declares members of its own - the reset method and the cache the properties
+	/// answer from - and a resource key is free to be spelled exactly like one of them. The resource
+	/// gets a member of its own rather than colliding with the machinery, which would otherwise be a
+	/// build the whole product cannot complete over one added string.
+	/// </summary>
+	[TestMethod]
+	public void ResourceNamedAfterTheMachineryGetsAMemberOfItsOwn()
+	{
+		var source = GetSource(Run(ToJson(("Cache", "a word"), ("ResetCache", "another word"), ("Plain", "well formed"))));
+
+		AssertParses(source);
+
+		var duplicates = GetDuplicateMemberNames(source);
+
+		IsEmpty(duplicates, $"Duplicate members: {duplicates.Join(", ")}{Environment.NewLine}{source}");
+
+		var names = GetDeclaredMemberNames(source, nameof(LocalizedStrings));
+		var keyConstants = names.Where(n => n.EndsWith("Key", StringComparison.Ordinal)).ToArray();
+
+		HasCount(3, keyConstants, $"a resource lost its key constant: {keyConstants.Join(", ")}");
+		Contains(names, "Plain", $"the resource that shares no name with the machinery lost its property:{Environment.NewLine}{source}");
 	}
 
 	/// <summary>

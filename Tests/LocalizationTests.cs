@@ -1,5 +1,6 @@
 namespace StockSharp.Tests;
 
+using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 
 using StockSharp.Localization;
@@ -566,6 +567,171 @@ public class LocalizationTests : BaseTestClass
 		{
 			LocalizedStrings.RemoveLanguage("qa");
 			LocalizedStrings.RemoveLanguage("qb");
+		}
+	}
+
+	/// <summary>
+	/// The registry is read by every thread that puts a word on screen, and written whenever a language
+	/// pack is registered or dropped, so the two meet. A reader may find a probe language present or
+	/// absent - both are true at some instant - but it may never be handed another language's text under
+	/// the code it asked for, nor an exception, and a language nobody touched must keep answering.
+	/// </summary>
+	[TestMethod]
+	[DoNotParallelize]
+	public void Registry_WrittenWhileRead_NeverAnswersWithAnotherLanguagesText()
+	{
+		const string key = "LocalizationTests_RaceKey";
+
+		// The second is registered after the first and dropped after it: that order is what a registry
+		// addressing a language by its position, rather than by its code, gets wrong.
+		const string first = "z1";
+		const string second = "z2";
+
+		const string firstText = "FIRST";
+		const string secondText = "SECOND";
+
+		const int cycles = 3000;
+
+		var english = LocalizedStrings.GetString(LocalizedStrings.LanguageKey, LocalizedStrings.EnCode);
+
+		// Counted apart so that neither kind of failure can crowd the other out of the report.
+		var wrong = new ConcurrentQueue<string>();
+		var thrown = new ConcurrentQueue<string>();
+		var reads = 0L;
+
+		static void report(ConcurrentQueue<string> problems, string problem)
+		{
+			if (problems.Count < 10)
+				problems.Enqueue(problem);
+		}
+
+		try
+		{
+			var writer = Task.Run(() =>
+			{
+				try
+				{
+					for (var i = 0; i < cycles; i++)
+					{
+						LocalizedStrings.AddLanguage(first, new Dictionary<string, string> { { key, firstText } });
+						LocalizedStrings.AddLanguage(second, new Dictionary<string, string> { { key, secondText } });
+						LocalizedStrings.RemoveLanguage(first);
+						LocalizedStrings.RemoveLanguage(second);
+					}
+				}
+				catch (Exception ex)
+				{
+					report(thrown, $"writer: {ex.GetType().Name}: {ex.Message}");
+				}
+			});
+
+			var readers = Enumerable.Range(0, 4).Select(_ => Task.Run(() =>
+			{
+				while (!writer.IsCompleted)
+				{
+					try
+					{
+						var v1 = LocalizedStrings.GetString(key, first);
+
+						if (v1 != firstText && v1 != key)
+							report(wrong, $"'{first}' answered '{v1}'");
+
+						var v2 = LocalizedStrings.GetString(key, second);
+
+						if (v2 != secondText && v2 != key)
+							report(wrong, $"'{second}' answered '{v2}'");
+
+						var en = LocalizedStrings.GetString(LocalizedStrings.LanguageKey, LocalizedStrings.EnCode);
+
+						if (en != english)
+							report(wrong, $"'{LocalizedStrings.EnCode}' answered '{en}'");
+
+						Interlocked.Increment(ref reads);
+					}
+					catch (Exception ex)
+					{
+						report(thrown, $"reader: {ex.GetType().Name}: {ex.Message}");
+					}
+				}
+			})).ToArray();
+
+			var all = readers.Append(writer).ToArray();
+
+			IsTrue(Task.WaitAll(all, TimeSpan.FromMinutes(2)), "the registry never let the readers or the writer finish");
+		}
+		finally
+		{
+			LocalizedStrings.RemoveLanguage(first);
+			LocalizedStrings.RemoveLanguage(second);
+		}
+
+		var wrongAnswers = wrong.ToArray();
+		var exceptions = thrown.ToArray();
+
+		IsTrue(Interlocked.Read(ref reads) > cycles, $"the readers managed {reads} reads against {cycles} write cycles, too few to have met the writer");
+		IsEmpty(wrongAnswers, wrongAnswers.JoinN());
+		IsEmpty(exceptions, exceptions.JoinN());
+	}
+
+	/// <summary>
+	/// A generated property answers from a cache that a change of language drops, and the value it caches
+	/// is computed before it is stored. The answer a reader already holds may be the one it started with,
+	/// but it may not be left behind in the cache the next reader takes: once the registry has settled,
+	/// every property speaks the language that is now active. The missing-key report is the point inside
+	/// the lookup where the registry is changed here, which is what a reader on another thread does at an
+	/// arbitrary point anyway.
+	/// </summary>
+	[TestMethod]
+	[DoNotParallelize]
+	public void CachedProperty_RegistryChangedWhileRead_KeepsNoWordFromTheLanguageThatWentAway()
+	{
+		const string code = "z3";
+
+		var previous = LocalizedStrings.ActiveLanguage;
+
+		// Its English text is not the key itself, so a key coming back is unambiguous.
+		var english = LocalizedStrings.GetString(LocalizedStrings.CultureCodeKey, LocalizedStrings.EnCode);
+		var dropped = false;
+
+		void onMissing(string text, bool isText)
+		{
+			if (dropped || text != LocalizedStrings.CultureCodeKey)
+				return;
+
+			dropped = true;
+			LocalizedStrings.RemoveLanguage(code);
+		}
+
+		try
+		{
+			// The probe carries no culture of its own, so asking for one reports the key missing.
+			LocalizedStrings.AddLanguage(code, new Dictionary<string, string>
+			{
+				{ LocalizedStrings.LanguageKey, "L-ONE" },
+			});
+
+			LocalizedStrings.ActiveLanguage = code;
+			LocalizedStrings.ResetCache();
+
+			LocalizedStrings.Missing += onMissing;
+
+			try
+			{
+				AreEqual(LocalizedStrings.CultureCodeKey, LocalizedStrings.CultureCode, "the probe language answered for a key it does not carry");
+			}
+			finally
+			{
+				LocalizedStrings.Missing -= onMissing;
+			}
+
+			IsTrue(dropped, "the lookup never reported the missing key, so nothing was dropped under it");
+			AreEqual(english, LocalizedStrings.CultureCode, "the property kept a word computed for a language that was dropped while it was being read");
+		}
+		finally
+		{
+			LocalizedStrings.ActiveLanguage = previous;
+			LocalizedStrings.RemoveLanguage(code);
+			LocalizedStrings.ResetCache();
 		}
 	}
 

@@ -418,30 +418,41 @@ public class CommissionTests
 	{
 		var now = DateTime.UtcNow;
 
-		var secId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Nasdaq };
+		// The rule reads the type off the security the process-wide registry answers with, so the
+		// security has to be in there - under an id of its own, and only while this test runs.
+		var secId = Helper.CreateSecurityId();
 		var appl = new Security { Id = secId.ToStringId(), Type = SecurityTypes.Stock };
 
 		var provider = (CollectionSecurityProvider)ServicesRegistry.SecurityProvider;
 		provider.Add(appl);
 
-		// Arrange
-		var rule = new CommissionSecurityTypeRule
+		try
 		{
-			Value = 20m,
-			SecurityType = appl.Type.Value
-		};
+			// Arrange
+			var rule = new CommissionSecurityTypeRule
+			{
+				Value = 20m,
+				SecurityType = appl.Type.Value
+			};
 
-		var tradeMsg = new ExecutionMessage
+			var tradeMsg = new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				SecurityId = secId,
+				TradePrice = 150m,
+				TradeVolume = 2,
+				ServerTime = Inc(ref now)
+			};
+
+			var result = rule.Process(tradeMsg);
+			result.AssertEqual(20);
+		}
+		finally
 		{
-			DataTypeEx = DataType.Transactions,
-			SecurityId = secId,
-			TradePrice = 150m,
-			TradeVolume = 2,
-			ServerTime = Inc(ref now)
-		};
+			provider.Remove(appl);
+		}
 
-		var result = rule.Process(tradeMsg);
-		result.AssertEqual(20);
+		provider.LookupById(secId).AssertNull($"{secId} was left in the provider the whole assembly shares");
 	}
 
 	public static CommissionManager CreateManager()
@@ -762,66 +773,81 @@ public class CommissionTests
 	[TestMethod]
 	public void RuleSerialization()
 	{
+		// A rule holding a security saves its id and reads the security back through the process-wide
+		// registry, so every security this test invents has to be in there while it runs.
 		var secProvider = (CollectionSecurityProvider)ServicesRegistry.SecurityProvider;
+		var added = new List<Security>();
 		var boards = ServicesRegistry.ExchangeInfoProvider.Boards.ToArray();
 		ICommissionRuleProvider provider = new InMemoryCommissionRuleProvider();
 
 		// Arrange
 		var rules = provider.All.ToArray();
 
-		foreach (var type in rules)
+		try
 		{
-			var rule = type.CreateInstance<ICommissionRule>();
-
-			var props = type.GetModifiableProps();
-
-			foreach (var prop in props)
+			foreach (var type in rules)
 			{
-				var propType = prop.PropertyType;
-				propType = propType.GetUnderlyingType() ?? prop.PropertyType;
+				var rule = type.CreateInstance<ICommissionRule>();
 
-				object value;
+				var props = type.GetModifiableProps();
 
-				if (propType == typeof(Unit))
-					value = new Unit { Value = RandomGen.GetInt(), Type = UnitTypes.Percent };
-				else if (propType.IsNumeric())
-					value = RandomGen.GetInt().To(propType);
-				else if (propType.IsEnum)
-					value = RandomGen.GetEnum(propType);
-				else if (propType == typeof(SecurityId))
-					value = Helper.CreateSecurityId();
-				else if (propType == typeof(Security))
+				foreach (var prop in props)
 				{
-					var sec = new Security { Id = Helper.CreateSecurityId().ToStringId() };
-					secProvider.Add(sec);
-					value = sec;
+					var propType = prop.PropertyType;
+					propType = propType.GetUnderlyingType() ?? prop.PropertyType;
+
+					object value;
+
+					if (propType == typeof(Unit))
+						value = new Unit { Value = RandomGen.GetInt(), Type = UnitTypes.Percent };
+					else if (propType.IsNumeric())
+						value = RandomGen.GetInt().To(propType);
+					else if (propType.IsEnum)
+						value = RandomGen.GetEnum(propType);
+					else if (propType == typeof(SecurityId))
+						value = Helper.CreateSecurityId();
+					else if (propType == typeof(Security))
+					{
+						var sec = new Security { Id = Helper.CreateSecurityId().ToStringId() };
+						secProvider.Add(sec);
+						added.Add(sec);
+						value = sec;
+					}
+					else if (propType == typeof(ExchangeBoard))
+						value = RandomGen.GetElement(boards);
+					else if (propType == typeof(string))
+						value = RandomGen.GetString(3, 7);
+					else
+						throw new InvalidOperationException(propType.FullName);
+
+					prop.SetValue(rule, value);
 				}
-				else if (propType == typeof(ExchangeBoard))
-					value = RandomGen.GetElement(boards);
-				else if (propType == typeof(string))
-					value = RandomGen.GetString(3, 7);
-				else
-					throw new InvalidOperationException(propType.FullName);
 
-				prop.SetValue(rule, value);
-			}
+				// Save
+				var storage = rule.Save();
 
-			// Save
-			var storage = rule.Save();
+				// Create new instance of the same type
+				var restored = type.CreateInstance<ICommissionRule>();
+				restored.Load(storage);
 
-			// Create new instance of the same type
-			var restored = type.CreateInstance<ICommissionRule>();
-			restored.Load(storage);
+				// Compare all public settable properties
+				foreach (var prop in props)
+				{
+					var origValue = prop.GetValue(rule);
+					var restoredValue = prop.GetValue(restored);
 
-			// Compare all public settable properties
-			foreach (var prop in props)
-			{
-				var origValue = prop.GetValue(rule);
-				var restoredValue = prop.GetValue(restored);
-
-				origValue.AssertEqual(restoredValue);
+					origValue.AssertEqual(restoredValue);
+				}
 			}
 		}
+		finally
+		{
+			foreach (var sec in added)
+				secProvider.Remove(sec);
+		}
+
+		added.Count(s => secProvider.LookupById(s.ToSecurityId()) is not null)
+			.AssertEqual(0, "securities were left in the provider the whole assembly shares");
 	}
 
 	[TestMethod]

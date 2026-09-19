@@ -10,20 +10,34 @@ public class AlertProcessingServiceTests : BaseTestClass
 {
 	private static readonly MockAlertNotificationService _notificationService = new();
 
+	// What the assembly registered as the alert transport, put back when this class is done with it.
+	private static IAlertNotificationService _previousNotificationService;
+
 	private AlertProcessingService _service;
 
 	[ClassInitialize]
 	public static void ClassInit(TestContext _)
 	{
+		// Delivery resolves its transport through the process-wide registry, so a transport that
+		// counts deliveries has to be that registration. The class is [DoNotParallelize] and holds
+		// it alone, and ClassCleanup puts back what it displaced.
+		_previousNotificationService = ConfigManager.TryGetService<IAlertNotificationService>();
 		ConfigManager.RegisterService<IAlertNotificationService>(_notificationService);
+	}
+
+	[ClassCleanup]
+	public static void ClassClean()
+	{
+		ConfigManager.RegisterService(_previousNotificationService);
+
+		ConfigManager.TryGetService<IAlertNotificationService>()
+			.AssertEqual(_previousNotificationService, "the transport this class displaced must be back in place");
 	}
 
 	[TestInitialize]
 	public void Setup()
 	{
 		_notificationService.Reset();
-		// re-register in case another test class overwrote it
-		ConfigManager.RegisterService<IAlertNotificationService>(_notificationService);
 		_service = new AlertProcessingService(100);
 	}
 

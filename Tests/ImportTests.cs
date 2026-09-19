@@ -48,6 +48,12 @@ public class ImportTests : BaseTestClass
 			throw new ArgumentOutOfRangeException(nameof(dataType), dataType, "Unsupported data type for import test.");
 	}
 
+	// An import files every security it meets and every board it has to create. Handed the services the
+	// assembly registers it would file them where the rest of the suite reads, so each import is given a
+	// pair of its own. A fresh exchange provider knows the same boards the shared one started with.
+	private static (ISecurityStorage securities, IExchangeInfoProvider exchanges) NewImportTargets()
+		=> (new InMemorySecurityStorage(), new InMemoryExchangeInfoProvider());
+
 	private async Task Import<TValue>(DataType dataType, bool addSecId, IEnumerable<TValue> values, FieldMapping[] fields, TimeSpan truncate, int? exportCnt = default, int? importCnt = default, DateTime? lastTime2 = default)
 		where TValue : class
 	{
@@ -102,7 +108,9 @@ public class ImportTests : BaseTestClass
 		// Importer check
 		using (var stream = fs.OpenRead(filePath))
 		{
-			var importer = new CsvImporter(dataType, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storageRegistry.GetStorage(secId, dataType))
+			var (securities, exchanges) = NewImportTargets();
+
+			var importer = new CsvImporter(dataType, fields, securities, exchanges, secId => storageRegistry.GetStorage(secId, dataType))
 			{
 				ColumnSeparator = ";"
 			};
@@ -627,7 +635,9 @@ public class ImportTests : BaseTestClass
 
 		var storage = fs.GetStorage(fs.GetSubTemp());
 
-		var importer = new CsvImporter(DataType.Ticks, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storage.GetTickMessageStorage(secId))
+		var (securities, exchanges) = NewImportTargets();
+
+		var importer = new CsvImporter(DataType.Ticks, fields, securities, exchanges, secId => storage.GetTickMessageStorage(secId))
 		{
 			ColumnSeparator = ";"
 		};
@@ -691,7 +701,9 @@ public class ImportTests : BaseTestClass
 
 		var storage = fs.GetStorage(fs.GetSubTemp());
 
-		var importer = new CsvImporter(DataType.Ticks, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storage.GetTickMessageStorage(secId))
+		var (securities, exchanges) = NewImportTargets();
+
+		var importer = new CsvImporter(DataType.Ticks, fields, securities, exchanges, secId => storage.GetTickMessageStorage(secId))
 		{
 			ColumnSeparator = ";"
 		};
@@ -748,13 +760,69 @@ public class ImportTests : BaseTestClass
 
 		var storage = fs.GetStorage(fs.GetSubTemp());
 
-		var importer = new CsvImporter(DataType.Ticks, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => storage.GetTickMessageStorage(secId))
+		var (securities, exchanges) = NewImportTargets();
+
+		var importer = new CsvImporter(DataType.Ticks, fields, securities, exchanges, secId => storage.GetTickMessageStorage(secId))
 		{
 			ColumnSeparator = ";"
 		};
 
 		using (var stream = fs.OpenRead(filePath))
 			await ThrowsExactlyAsync<InvalidOperationException>(() => importer.Import(stream, _ => { }, CancellationToken).AsTask());
+	}
+
+	[TestMethod]
+	[Timeout(30_000, CooperativeCancellation = true)]
+	public async Task Import_FilesItsSecuritiesOutsideTheAssemblyStorage()
+	{
+		// An import creates a security for every id it meets. Written into the storage the whole
+		// assembly shares, those securities outlive the test and answer lookups made by tests that
+		// never imported anything.
+		var security = Helper.CreateStorageSecurity();
+		var secId = security.ToSecurityId();
+
+		var (_, importer) = CreateImporter(DataType.Ticks, TickFields(false));
+		var path = await ExportTicksAsync("ticks_shared_storage_import.csv", security.RandomTicks(10, true));
+
+		using (var stream = Helper.MemorySystem.OpenRead(path))
+			await importer.Import(stream, _ => { }, CancellationToken);
+
+		(await ServicesRegistry.SecurityStorage.LookupByIdAsync(secId, CancellationToken))
+			.AssertNull($"{secId} was filed in the storage the whole assembly shares");
+	}
+
+	[TestMethod]
+	[Timeout(30_000, CooperativeCancellation = true)]
+	public async Task Import_FilesItsBoardsOutsideTheAssemblyProvider()
+	{
+		// Boards arrive the same way securities do, into the exchange provider the assembly shares,
+		// where every test that resolves a board code by name can see them.
+		var boards = Helper.RandomBoards(3);
+
+		var allFields = FieldMappingRegistry.CreateFields(DataType.Board).ToArray();
+		var fields = new[]
+		{
+			allFields.First(f => f.Name == "ExchangeCode"),
+			allFields.First(f => f.Name == "Code"),
+		};
+
+		for (var i = 0; i < fields.Length; i++)
+			fields[i].Order = i;
+
+		var fs = Helper.MemorySystem;
+		var filePath = fs.GetSubTemp("boards_shared_provider_import.csv");
+
+		using (var stream = fs.OpenWrite(filePath))
+			await new TextExporter(DataType.Board, stream, GetTemplate(DataType.Board), null).Export(boards.ToAsyncEnumerable(), CancellationToken);
+
+		var (_, importer) = CreateImporter(DataType.Board, fields);
+
+		using (var stream = fs.OpenRead(filePath))
+			await importer.Import(stream, _ => { }, CancellationToken);
+
+		foreach (var board in boards)
+			ServicesRegistry.ExchangeInfoProvider.TryGetExchangeBoard(board.Code)
+				.AssertNull($"{board.Code} was filed in the exchange provider the whole assembly shares");
 	}
 
 	// The count the importer returns is what it read out of the file, not what the storage kept, and a
@@ -783,7 +851,9 @@ public class ImportTests : BaseTestClass
 
 		using (var stream = fs.OpenRead(filePath))
 		{
-			var importer = new CsvImporter(dataType, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => registry.GetStorage(secId, dataType))
+			var (securities, exchanges) = NewImportTargets();
+
+			var importer = new CsvImporter(dataType, fields, securities, exchanges, secId => registry.GetStorage(secId, dataType))
 			{
 				ColumnSeparator = ";"
 			};
@@ -1174,7 +1244,9 @@ public class ImportTests : BaseTestClass
 		var fs = Helper.MemorySystem;
 		var registry = fs.GetStorage(fs.GetSubTemp());
 
-		var importer = new CsvImporter(dataType, fields, ServicesRegistry.SecurityStorage, ServicesRegistry.ExchangeInfoProvider, secId => registry.GetStorage(secId, dataType))
+		var (securities, exchanges) = NewImportTargets();
+
+		var importer = new CsvImporter(dataType, fields, securities, exchanges, secId => registry.GetStorage(secId, dataType))
 		{
 			ColumnSeparator = ";"
 		};

@@ -7,6 +7,7 @@ using Ecng.Data;
 
 using Microsoft.Data.SqlClient;
 
+using StockSharp.Alerts;
 using StockSharp.Algo.Compilation;
 
 [TestClass]
@@ -51,6 +52,16 @@ public static class AsmInit
 		// app there is no UI thread to marshal to, and the dummy one runs callbacks inline.
 		ConfigManager.RegisterService<IDispatcher>(new DummyDispatcher());
 
+		// An indicator element resolves the indicator it was saved with through this provider as it
+		// loads; without one it comes back with nothing behind it.
+		var indicators = new IndicatorProvider();
+		indicators.Init();
+		ConfigManager.RegisterService<IIndicatorProvider>(indicators);
+
+		// An alert is delivered through whatever transport is registered here at the moment it fires.
+		// A test that counts deliveries puts its own in this place and restores this one afterwards.
+		ConfigManager.RegisterService<IAlertNotificationService>(new SilentAlertNotificationService());
+
 		// The extensions are handed over only when they are on disk. Their absence disables the
 		// scripting tests, and it must not take the rest of the assembly with it - which is exactly
 		// what an exception out of an assembly initializer does to every test in the run.
@@ -74,5 +85,12 @@ public static class AsmInit
 	public static void UnInit()
 	{
 		Helper.FileSystem.ClearTemp();
+	}
+
+	// Takes every alert and does nothing with it, so the transport is always there to resolve.
+	private class SilentAlertNotificationService : BaseLogReceiver, IAlertNotificationService
+	{
+		ValueTask IAlertNotificationService.NotifyAsync(AlertNotifications type, long? externalId, LogLevels logLevel, string caption, string message, DateTime time, CancellationToken cancellationToken)
+			=> default;
 	}
 }

@@ -9,7 +9,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 
-using Ecng.Collections;
 using Ecng.Common;
 using Ecng.Serialization;
 
@@ -29,21 +28,32 @@ public static partial class LocalizedStrings
 
 	private class Translation
 	{
-		private readonly Dictionary<string, string> _stringsById = [];
-		private readonly Dictionary<string, string> _idsByString = [];
+		private readonly Dictionary<string, string> _stringsById;
+		private readonly Dictionary<string, string> _idsByString;
 
-		public void Add(string id, string text)
+		public Translation(IDictionary<string, string> strings)
 		{
-			_stringsById.Add(id, text);
-			_idsByString[text] = id;
+			_stringsById = new(strings.Count);
+			_idsByString = new(strings.Count);
+
+			foreach (var pair in strings)
+			{
+				_stringsById.Add(pair.Key, pair.Value);
+				_idsByString[pair.Value] = pair.Key;
+			}
 		}
 
 		public string GetTextById(string id) => _stringsById.TryGetValue(id, out var text) ? text : null;
 		public string GetIdByText(string text) => _idsByString.TryGetValue(text, out var id) ? id : null;
 	}
 
-	private static readonly List<Translation> _translations = [];
-	private static readonly Dictionary<string, int> _langIds = new(StringComparer.InvariantCultureIgnoreCase);
+	private static readonly Lock _sync = new();
+
+	// The registry is read from every thread that puts a word on screen and written whenever a language
+	// pack is registered or dropped. Writers build the next map and publish it in one assignment under
+	// _sync, and never edit a published one; a reader takes the map once and reads that one to the end.
+	// A language is addressed by its code throughout, so nothing is renumbered when another one goes.
+	private static volatile Dictionary<string, Translation> _translations = new(StringComparer.InvariantCultureIgnoreCase);
 
 	static LocalizedStrings()
 	{
@@ -107,20 +117,28 @@ public static partial class LocalizedStrings
 		if (strings is null)
 			throw new ArgumentNullException(nameof(strings));
 
-		var translation = new Translation();
+		var translation = new Translation(strings);
+		bool activeChanged;
 
-		foreach (var pair in strings)
-			translation.Add(pair.Key, pair.Value);
-
-		_langIds.Add(langCode, _langIds.Count);
-		_translations.Add(translation);
-
-		// the language the caller asked for is carried again, so texts cached from the fallback are stale.
-		if (_requestedLanguage.EqualsIgnoreCase(langCode))
+		using (_sync.EnterScope())
 		{
-			ResetCache();
-			ActiveLanguageChanged?.Invoke();
+			var next = new Dictionary<string, Translation>(_translations, StringComparer.InvariantCultureIgnoreCase);
+
+			// A code that is already registered throws here, before anything is published.
+			next.Add(langCode, translation);
+
+			_translations = next;
+
+			// the language the caller asked for is carried again, so texts cached from the fallback are stale.
+			activeChanged = _requestedLanguage.EqualsIgnoreCase(langCode);
+
+			if (activeChanged)
+				ResetCache();
 		}
+
+		// A handler relabels what is already on screen and may take locks of its own, so it runs with _sync released.
+		if (activeChanged)
+			ActiveLanguageChanged?.Invoke();
 	}
 
 	/// <summary>
@@ -133,25 +151,27 @@ public static partial class LocalizedStrings
 		if (langCode.IsEmpty())
 			throw new ArgumentNullException(nameof(langCode));
 
-		if (!_langIds.TryGetAndRemove(langCode, out var langId))
-			return false;
+		bool activeChanged;
 
-		_translations.RemoveAt(langId);
-
-		foreach (var p in _langIds.ToArray())
+		using (_sync.EnterScope())
 		{
-			if (p.Value < langId)
-				continue;
+			if (!_translations.ContainsKey(langCode))
+				return false;
 
-			_langIds[p.Key] = p.Value - 1;
+			var next = new Dictionary<string, Translation>(_translations, StringComparer.InvariantCultureIgnoreCase);
+			next.Remove(langCode);
+
+			_translations = next;
+
+			// the language being read is gone, so every text cached from it goes with it.
+			activeChanged = _requestedLanguage.EqualsIgnoreCase(langCode);
+
+			if (activeChanged)
+				ResetCache();
 		}
 
-		// the language being read is gone, so every text cached from it goes with it.
-		if (_requestedLanguage.EqualsIgnoreCase(langCode))
-		{
-			ResetCache();
+		if (activeChanged)
 			ActiveLanguageChanged?.Invoke();
-		}
 
 		return true;
 	}
@@ -169,7 +189,7 @@ public static partial class LocalizedStrings
 	/// <summary>
 	/// Get all available languages.
 	/// </summary>
-	public static IEnumerable<string> LangCodes => _langIds.Keys;
+	public static IEnumerable<string> LangCodes => _translations.Keys;
 
 	/// <summary>
 	/// Initialization error.
@@ -186,7 +206,7 @@ public static partial class LocalizedStrings
 	/// </summary>
 	public static event Action ActiveLanguageChanged;
 
-	private static string _requestedLanguage = EnCode;
+	private static volatile string _requestedLanguage = EnCode;
 
 	/// <summary>
 	/// Current language. It is the language chosen by the caller for as long as that language is
@@ -195,28 +215,20 @@ public static partial class LocalizedStrings
 	/// </summary>
 	public static string ActiveLanguage
 	{
-		get
-		{
-			var lang = _requestedLanguage;
-
-			if (_langIds.ContainsKey(lang))
-				return lang;
-
-			if (_langIds.ContainsKey(EnCode))
-				return EnCode;
-
-			return _langIds.Count > 0 ? _langIds.Keys.First() : lang;
-		}
+		get => GetActiveLanguage(_translations);
 		set
 		{
 			if (value.IsEmpty())
 				throw new ArgumentNullException(nameof(value));
 
-			if (_requestedLanguage.EqualsIgnoreCase(value) || !_langIds.ContainsKey(value))
-				return;
+			using (_sync.EnterScope())
+			{
+				if (_requestedLanguage.EqualsIgnoreCase(value) || !_translations.ContainsKey(value))
+					return;
 
-			_requestedLanguage = value;
-			ResetCache();
+				_requestedLanguage = value;
+				ResetCache();
+			}
 
 			try
 			{
@@ -234,6 +246,21 @@ public static partial class LocalizedStrings
 		}
 	}
 
+	// The language a lookup answers in when the caller names none, resolved against the very map that
+	// lookup reads, so the code handed back is one that map carries.
+	private static string GetActiveLanguage(Dictionary<string, Translation> translations)
+	{
+		var lang = _requestedLanguage;
+
+		if (translations.ContainsKey(lang))
+			return lang;
+
+		if (translations.ContainsKey(EnCode))
+			return EnCode;
+
+		return translations.Count > 0 ? translations.Keys.First() : lang;
+	}
+
 	/// <summary>
 	/// Try update <see cref="ActiveLanguage"/>.
 	/// </summary>
@@ -246,7 +273,7 @@ public static partial class LocalizedStrings
 
 		currCulture = currCulture.SplitBySep("-").First().ToLowerInvariant();
 
-		if (_langIds.ContainsKey(currCulture))
+		if (_translations.ContainsKey(currCulture))
 			ActiveLanguage = currCulture;
 	}
 
@@ -256,9 +283,6 @@ public static partial class LocalizedStrings
 	public static CultureInfo CurrentCulture
 		=> CultureInfo.GetCultureInfo(CultureCode);
 
-	private static int GetLangCode(string lang)
-		=> _langIds.TryGetValue(lang, out var langCode) ? langCode : -1;
-
 	/// <summary>
 	/// Get localized string.
 	/// </summary>
@@ -267,14 +291,15 @@ public static partial class LocalizedStrings
 	/// <returns>Localized string.</returns>
 	public static string GetString(string resourceId, string language = null)
 	{
-		var langId = GetLangCode(language.IsEmpty(ActiveLanguage));
-		if (langId < 0)
+		var translations = _translations;
+
+		if (!translations.TryGetValue(language.IsEmpty() ? GetActiveLanguage(translations) : language, out var translation))
 		{
 			RaiseMissing(resourceId, false);
 			return resourceId;
 		}
 
-		var result = _translations[langId].GetTextById(resourceId);
+		var result = translation.GetTextById(resourceId);
 		if (result != null)
 			return result;
 
@@ -291,25 +316,25 @@ public static partial class LocalizedStrings
 	/// <returns>Localized string.</returns>
 	public static string Translate(this string text, string from = EnCode, string to = null)
 	{
-		var langIdFrom = GetLangCode(from);
-		var langIdTo = GetLangCode(to.IsEmpty(ActiveLanguage));
+		var translations = _translations;
 
-		if (langIdFrom < 0 || langIdTo < 0)
+		if (!translations.TryGetValue(from, out var fromTranslation) ||
+			!translations.TryGetValue(to.IsEmpty() ? GetActiveLanguage(translations) : to, out var toTranslation))
 		{
 			RaiseMissing(text, true);
 			return text;
 		}
-		else if (langIdFrom == langIdTo)
+		else if (fromTranslation == toTranslation)
 			return text;
 
-		var id = _translations[langIdFrom].GetIdByText(text);
+		var id = fromTranslation.GetIdByText(text);
 		if (id.IsEmpty())
 		{
 			RaiseMissing(text, true);
 			return text;
 		}
 
-		var result = _translations[langIdTo].GetTextById(id);
+		var result = toTranslation.GetTextById(id);
 		if (result.IsEmpty())
 		{
 			RaiseMissing(text, true);

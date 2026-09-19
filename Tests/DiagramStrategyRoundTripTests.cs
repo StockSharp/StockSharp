@@ -2298,14 +2298,10 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	public void ShippedJsonCompositions_StillLoad()
 	{
 		// An indicator element resolves the indicator it was saved with through the provider its host
-		// registers. Without one the element still loads, but with no indicator behind it - which is
-		// the very thing this test is meant to notice, so the provider is supplied here.
-		if (ConfigManager.TryGetService<IIndicatorProvider>() is null)
-		{
-			var indicators = new IndicatorProvider();
-			indicators.Init();
-			ConfigManager.RegisterService<IIndicatorProvider>(indicators);
-		}
+		// registers; the assembly initializer stands in for the host here. Without one the element
+		// still loads, but with no indicator behind it - the very thing this test is meant to notice.
+		ConfigManager.TryGetService<IIndicatorProvider>()
+			.AssertNotNull("an indicator element has no indicator behind it unless a provider is registered");
 
 		foreach (var fileName in _shippedCompositions)
 		{
