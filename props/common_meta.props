@@ -20,7 +20,6 @@
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version)</FileVersion>
     <Copyright>Copyright @ $(Company) 2010 - $([System.DateTime]::Now.ToString(yyyy))</Copyright>
-    <InformationalVersion>$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</InformationalVersion>
   </PropertyGroup>
   
   <!-- workaround for https://github.com/dotnet/wpf/issues/5711 -->
@@ -37,8 +36,19 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>portable</DebugType>
   </PropertyGroup>
+  <!-- The publisher builds a symbols package out of the pdb beside the assembly; with none built
+       there is nothing to publish and the package ships without symbols. -->
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <!-- Keeps the build machine's paths out of the published pdb; sources come from the repository
+       instead. Derived from no environment variable: the machine that builds the packages is not a
+       build server and exports none of them. -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
   <ItemGroup>
