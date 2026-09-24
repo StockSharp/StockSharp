@@ -978,7 +978,7 @@ public static partial class Extensions
 		if (messageType == null)
 			throw new ArgumentNullException(nameof(messageType));
 
-		return messageType.IsSubclassOf(typeof(CandleMessage));
+		return DataType.IsCandleMessageType(messageType);
 	}
 
 	/// <summary>

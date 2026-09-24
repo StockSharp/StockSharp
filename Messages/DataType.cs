@@ -262,6 +262,12 @@ public class DataType : Equatable<DataType>, IPersistable
 
 	private int _hashCode;
 
+	// The same test as Extensions.IsCandleMessage, answered here because that class builds its tables
+	// out of these static instances: a process touching DataType first would otherwise run Extensions'
+	// initializer from inside this one and read the instances it is still filling in.
+	internal static bool IsCandleMessageType(Type messageType)
+		=> messageType.IsSubclassOf(typeof(CandleMessage));
+
 	private void ReInit()
 	{
 		var messageType = MessageType;
@@ -271,7 +277,7 @@ public class DataType : Equatable<DataType>, IPersistable
 
 		_hashCode = ((h1 << 5) + h1) ^ h2;
 
-		_isCandles = messageType?.IsCandleMessage() == true;
+		_isCandles = messageType is not null && IsCandleMessageType(messageType);
 		_isMarketData =
 		(
 			_isCandles ||
@@ -515,7 +521,7 @@ public class DataType : Equatable<DataType>, IPersistable
 		if (!_aliasToType.TryGetKey(Create(type, null), out var typeName))
 			typeName = type?.GetTypeName(false);
 
-		return $"{typeName}:{(type?.IsCandleMessage() == true ? (arg is null ? null : type.DataTypeArgToString(arg)) : $"{arg?.GetType().GetTypeName(false)}:{arg?.ToString()}")}";
+		return $"{typeName}:{(type is not null && IsCandleMessageType(type) ? (arg is null ? null : type.DataTypeArgToString(arg)) : $"{arg?.GetType().GetTypeName(false)}:{arg?.ToString()}")}";
 	}
 
 	/// <summary>
@@ -547,7 +553,7 @@ public class DataType : Equatable<DataType>, IPersistable
 
 		object arg;
 
-		if (msgType?.IsCandleMessage() == true)
+		if (msgType is not null && IsCandleMessageType(msgType))
 			arg = msgType.ToDataTypeArg(parts[1]);
 		else
 		{
@@ -590,13 +596,13 @@ public class DataType : Equatable<DataType>, IPersistable
 				{
 					var value = ss.GetValue<object>("value");
 
-					if (MessageType?.IsCandleMessage() == true && value is string str)
+					if (MessageType is not null && IsCandleMessageType(MessageType) && value is string str)
 						Arg = MessageType.ToDataTypeArg(str);
 					else
 						Arg = value.To(type);
 				}
 			}
-			else if (MessageType?.IsCandleMessage() == true && arg is string str)
+			else if (MessageType is not null && IsCandleMessageType(MessageType) && arg is string str)
 			{
 				Arg = MessageType.ToDataTypeArg(str);
 			}
@@ -628,7 +634,7 @@ public class DataType : Equatable<DataType>, IPersistable
 
 			if (Arg is IPersistable per)
 				ss.SetValue("value", per.Save());
-			else if (MessageType?.IsCandleMessage() == true)
+			else if (MessageType is not null && IsCandleMessageType(MessageType))
 				ss.SetValue("value", MessageType.DataTypeArgToString(Arg));
 			else
 				ss.SetValue("value", Arg.To<string>());
