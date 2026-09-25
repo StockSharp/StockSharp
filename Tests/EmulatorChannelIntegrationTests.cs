@@ -151,12 +151,12 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Tests that sending a message with backward time to the emulator throws an exception.
-	/// When a strategy processes tick at T+50 and sends order with time T+50,
-	/// but emulator has already processed ticks up to T+99, the emulator must reject it.
+	/// A strategy that answers a tick at T+50 while the feed has already run to T+99 sends an order
+	/// stamped T+50. That lag is how a run works, not a fault: the order is taken, and it acts on the
+	/// book as it stands at T+99.
 	/// </summary>
 	[TestMethod]
-	public async Task RaceCondition_OrderWithPastTime_EmulatorRejects()
+	public async Task RaceCondition_OrderWithPastTime_EmulatorTakesIt()
 	{
 		var securityId = new SecurityId { SecurityCode = "TEST", BoardCode = "TEST" };
 
@@ -166,7 +166,8 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 
 		var emulator = new MarketEmulator(secProvider, pfProvider, exchangeProvider, new IncrementalIdGenerator());
 
-		emulator.NewOutMessageAsync += (msg, ct) => default;
+		var outMsgs = new List<Message>();
+		emulator.NewOutMessageAsync += (msg, ct) => { outMsgs.Add(msg); return default; };
 
 		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 
@@ -188,21 +189,28 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 			}, CancellationToken);
 		}
 
-		// Emulator is now at T+99. Sending order with time T+50 should throw.
-		await ThrowsAsync<InvalidOperationException>(async () =>
+		outMsgs.Clear();
+
+		// Emulator is now at T+99, the strategy answers what it saw at T+50.
+		await ((IMessageTransport)emulator).SendInMessageAsync(new OrderRegisterMessage
 		{
-			await ((IMessageTransport)emulator).SendInMessageAsync(new OrderRegisterMessage
-			{
-				SecurityId = securityId,
-				PortfolioName = "TestPortfolio",
-				LocalTime = baseTime.AddSeconds(50),
-				TransactionId = 1,
-				Side = Sides.Buy,
-				Price = 100,
-				Volume = 1,
-				OrderType = OrderTypes.Limit,
-			}, CancellationToken);
-		});
+			SecurityId = securityId,
+			PortfolioName = Messages.Extensions.SimulatorPortfolioName,
+			LocalTime = baseTime.AddSeconds(50),
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+		}, CancellationToken);
+
+		var replies = outMsgs
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == 1 && m.HasOrderInfo())
+			.ToArray();
+
+		(replies.Length > 0).AssertTrue("the order was never answered");
+		IsNull(replies.FirstOrDefault(m => m.OrderState == OrderStates.Failed), "the order was refused for being behind the feed");
 	}
 
 	/// <summary>
@@ -490,11 +498,13 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// Tests that sending an order with time in the past is rejected by the emulator.
-	/// The emulator must throw InvalidOperationException for backward-time messages.
+	/// An order is not a reading of the market: a strategy answers the data it has been shown, so its
+	/// order carries the time of that data while the feed has already moved on. The emulator matches
+	/// it against the book as the book stands now - which is never earlier - so the order is taken,
+	/// and the clock the emulator reports still only moves forward.
 	/// </summary>
 	[TestMethod]
-	public async Task EmulatorDirect_OrderWithOldTime_ThrowsException()
+	public async Task EmulatorDirect_OrderWithOldTime_IsAccepted()
 	{
 		var security = new Security { Id = "TEST@TEST" };
 		var portfolio = Portfolio.CreateSimulator();
@@ -505,7 +515,8 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 
 		var emulator = new MarketEmulator(secProvider, pfProvider, exchangeProvider, new IncrementalIdGenerator());
 
-		emulator.NewOutMessageAsync += (msg, ct) => default;
+		var outMsgs = new List<Message>();
+		emulator.NewOutMessageAsync += (msg, ct) => { outMsgs.Add(msg); return default; };
 
 		// Reset
 		await ((IMessageTransport)emulator).SendInMessageAsync(new ResetMessage(), CancellationToken);
@@ -524,21 +535,28 @@ public class EmulatorChannelIntegrationTests : BaseTestClass
 			TradeVolume = 1,
 		}, CancellationToken);
 
-		// Now send order with time T+50 (in the past!) — should throw
-		await ThrowsAsync<InvalidOperationException>(async () =>
+		outMsgs.Clear();
+
+		// Now send order with time T+50, behind the feed
+		await ((IMessageTransport)emulator).SendInMessageAsync(new OrderRegisterMessage
 		{
-			await ((IMessageTransport)emulator).SendInMessageAsync(new OrderRegisterMessage
-			{
-				SecurityId = securityId,
-				PortfolioName = portfolio.Name,
-				LocalTime = baseTime.AddSeconds(50),
-				TransactionId = 1,
-				Side = Sides.Buy,
-				Price = 100,
-				Volume = 1,
-				OrderType = OrderTypes.Limit,
-			}, CancellationToken);
-		});
+			SecurityId = securityId,
+			PortfolioName = portfolio.Name,
+			LocalTime = baseTime.AddSeconds(50),
+			TransactionId = 1,
+			Side = Sides.Buy,
+			Price = 100,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+		}, CancellationToken);
+
+		var replies = outMsgs
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == 1 && m.HasOrderInfo())
+			.ToArray();
+
+		(replies.Length > 0).AssertTrue("the order was never answered");
+		IsNull(replies.FirstOrDefault(m => m.OrderState == OrderStates.Failed), "the order was refused for being behind the feed");
 	}
 
 	#endregion

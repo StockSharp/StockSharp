@@ -1417,6 +1417,133 @@ public class MarketEmulatorTests : BaseTestClass
 		AreEqual(220m, trades[0].TradePrice, "the sell is filled at the high the bar recorded");
 	}
 
+	/// <summary>
+	/// A strategy acts on the bar it has just been shown and stamps its order with that bar's time,
+	/// which is behind the feed: the bar that told the strategy anything closed while later data was
+	/// already on its way in. An order is not a reading of the market and must not be judged against
+	/// the data clock - otherwise every order placed off a compressed series is refused.
+	/// </summary>
+	[TestMethod]
+	public async Task AnOrderIsTakenAtTheTimeOfTheBarItReactedTo()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+
+		var firstOpen = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var secondOpen = firstOpen.AddMinutes(5);
+
+		var subscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = TimeSpan.FromMinutes(5).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+			IsFinishedOnly = false,
+		}, CancellationToken);
+
+		// A stored bar carries the time it opened, exactly as the history feed hands it over.
+		async Task SendBarAsync(DateTime openTime, decimal open, decimal high, decimal low, decimal close)
+		{
+			await emu.SendInMessageAsync(new TimeFrameCandleMessage
+			{
+				SecurityId = id,
+				OriginalTransactionId = subscriptionId,
+				TypedArg = TimeSpan.FromMinutes(5),
+				LocalTime = openTime,
+				OpenTime = openTime,
+				HighTime = openTime.AddMinutes(1),
+				LowTime = openTime.AddMinutes(3),
+				CloseTime = openTime.AddMinutes(5),
+				OpenPrice = open,
+				HighPrice = high,
+				LowPrice = low,
+				ClosePrice = close,
+				TotalVolume = 100,
+				State = CandleStates.Finished,
+			}, CancellationToken);
+		}
+
+		await SendBarAsync(firstOpen, 100, 110, 90, 105);
+		await SendBarAsync(secondOpen, 106, 112, 104, 108);
+
+		// The state the strategy read the first bar off is stamped inside that bar, so this is the
+		// time the order is placed at while the feed has already moved on to the second one. The
+		// price is out of reach of both bars: the order has to be taken, not filled.
+		var reg = new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = firstOpen,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			Price = 50,
+			Volume = 1,
+			OrderType = OrderTypes.Limit,
+			PortfolioName = _pfName,
+		};
+
+		var clockBeforeOrder = emu.CurrentTime;
+
+		await emu.SendInMessageAsync(reg, CancellationToken);
+
+		var replies = res
+			.OfType<ExecutionMessage>()
+			.Where(m => m.OriginalTransactionId == reg.TransactionId && m.HasOrderInfo())
+			.ToArray();
+
+		IsTrue(replies.Length > 0, "the order was never answered");
+
+		var failed = replies.FirstOrDefault(m => m.OrderState == OrderStates.Failed);
+
+		IsNull(failed, $"the order was refused: {failed?.Error?.Message}");
+
+		IsTrue(emu.CurrentTime >= clockBeforeOrder,
+			$"taking an order stamped behind the feed dragged the clock back from {clockBeforeOrder:HH:mm} to {emu.CurrentTime:HH:mm}");
+	}
+
+	/// <summary>
+	/// A bar is still data and is still held to the data clock, which a bar carries the wrong end of:
+	/// it is stamped with the moment it opened, while anything printed inside it is stamped later. On a
+	/// feed carrying both, every bar arrives behind the ticks of the interval it covers.
+	/// </summary>
+	[TestMethod]
+	public async Task ABarArrivingAfterATickInsideItIsStillJudgedAsData()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out _);
+
+		var open = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+
+		await emu.SendInMessageAsync(new ExecutionMessage
+		{
+			SecurityId = id,
+			DataTypeEx = DataType.Ticks,
+			LocalTime = open.AddMinutes(4),
+			ServerTime = open.AddMinutes(4),
+			TradePrice = 100,
+			TradeVolume = 1,
+		}, CancellationToken);
+
+		var bar = new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			TypedArg = TimeSpan.FromMinutes(5),
+			LocalTime = open,
+			OpenTime = open,
+			CloseTime = open.AddMinutes(5),
+			OpenPrice = 100,
+			HighPrice = 110,
+			LowPrice = 90,
+			ClosePrice = 105,
+			TotalVolume = 100,
+			State = CandleStates.Finished,
+		};
+
+		await ThrowsAsync<InvalidOperationException>(
+			async () => await emu.SendInMessageAsync(bar, CancellationToken));
+	}
+
 	[TestMethod]
 	public async Task CandleExecution()
 	{

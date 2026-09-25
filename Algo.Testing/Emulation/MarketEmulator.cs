@@ -1,4 +1,4 @@
-namespace StockSharp.Algo.Testing.Emulation;
+﻿namespace StockSharp.Algo.Testing.Emulation;
 
 using StockSharp.Algo.Commissions;
 using StockSharp.MatchingEngine;
@@ -132,16 +132,16 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
 
-		// Control messages are not data and are not held to the data clock. The stop signal in
-		// particular is pushed through this queue on purpose, as a marker that comes back only once
-		// everything ahead of it has been processed - and it carries the time the run was told to
-		// stop at, which by then is behind where the emulator has got to. Judging it as data ends
-		// an ordinary shutdown with an exception instead of a finish.
-		var isSystem = message.Type is MessageTypes.Reset or MessageTypes.EmulationState
-			|| message is BaseConnectionMessage;
+		// Only data is held to the data clock. The stop signal is pushed through this queue on
+		// purpose, as a marker that comes back once everything ahead of it has been processed, and it
+		// carries the time the run was told to stop at - by then behind where the emulator has got to.
+		// An order carries the time of the bar it reacted to, which is behind the feed that has
+		// already moved on. Judging either as data ends an ordinary run with an exception.
+		var isData = message.Type is not (MessageTypes.Reset or MessageTypes.EmulationState)
+			&& message is not (BaseConnectionMessage or OrderMessage);
 		var hasTime = message.LocalTime != default;
 
-		if (!isSystem && hasTime)
+		if (isData && hasTime)
 		{
 			if (_lastInputTime != default && message.LocalTime < _lastInputTime)
 				throw new InvalidOperationException($"Message {message.Type} time {message.LocalTime:O} is less than current emulator time {_lastInputTime:O}");
@@ -173,7 +173,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			if (!allowStore)
 				msg.OfflineMode = MessageOfflineModes.Ignore;
 
-			_currentTime = msg.LocalTime;
+			// Forward only: a transaction and a state of a bar in flight are both stamped with the
+			// moment they belong to, which is behind the feed, and the clock must not follow them back.
+			if (msg.LocalTime > _currentTime)
+				_currentTime = msg.LocalTime;
+
 			await SendOutMessageAsync(msg, cancellationToken);
 		}
 	}
