@@ -591,6 +591,8 @@ public class LocalizationTests : BaseTestClass
 		const string secondText = "SECOND";
 
 		const int cycles = 3000;
+		const int readerCount = 4;
+		const int readsPerReader = 500;
 
 		var english = LocalizedStrings.GetString(LocalizedStrings.LanguageKey, LocalizedStrings.EnCode);
 
@@ -605,29 +607,20 @@ public class LocalizationTests : BaseTestClass
 				problems.Enqueue(problem);
 		}
 
+		// The two are tied to each other so that the meeting the test is named for cannot be missed:
+		// the writer does not start until every reader is in its loop, and does not stop until every
+		// reader is out of it. Left to the scheduler, a writer that ran to completion first would leave
+		// the readers with nothing to race and the run would prove nothing.
+		using var readersReady = new CountdownEvent(readerCount);
+		var readersDone = 0;
+
 		try
 		{
-			var writer = Task.Run(() =>
+			var readers = Enumerable.Range(0, readerCount).Select(_ => Task.Run(() =>
 			{
-				try
-				{
-					for (var i = 0; i < cycles; i++)
-					{
-						LocalizedStrings.AddLanguage(first, new Dictionary<string, string> { { key, firstText } });
-						LocalizedStrings.AddLanguage(second, new Dictionary<string, string> { { key, secondText } });
-						LocalizedStrings.RemoveLanguage(first);
-						LocalizedStrings.RemoveLanguage(second);
-					}
-				}
-				catch (Exception ex)
-				{
-					report(thrown, $"writer: {ex.GetType().Name}: {ex.Message}");
-				}
-			});
+				readersReady.Signal();
 
-			var readers = Enumerable.Range(0, 4).Select(_ => Task.Run(() =>
-			{
-				while (!writer.IsCompleted)
+				for (var i = 0; i < readsPerReader; i++)
 				{
 					try
 					{
@@ -653,7 +646,29 @@ public class LocalizationTests : BaseTestClass
 						report(thrown, $"reader: {ex.GetType().Name}: {ex.Message}");
 					}
 				}
+
+				Interlocked.Increment(ref readersDone);
 			})).ToArray();
+
+			var writer = Task.Run(() =>
+			{
+				try
+				{
+					readersReady.Wait();
+
+					for (var i = 0; i < cycles || Volatile.Read(ref readersDone) < readerCount; i++)
+					{
+						LocalizedStrings.AddLanguage(first, new Dictionary<string, string> { { key, firstText } });
+						LocalizedStrings.AddLanguage(second, new Dictionary<string, string> { { key, secondText } });
+						LocalizedStrings.RemoveLanguage(first);
+						LocalizedStrings.RemoveLanguage(second);
+					}
+				}
+				catch (Exception ex)
+				{
+					report(thrown, $"writer: {ex.GetType().Name}: {ex.Message}");
+				}
+			});
 
 			var all = readers.Append(writer).ToArray();
 
@@ -668,9 +683,13 @@ public class LocalizationTests : BaseTestClass
 		var wrongAnswers = wrong.ToArray();
 		var exceptions = thrown.ToArray();
 
-		IsTrue(Interlocked.Read(ref reads) > cycles, $"the readers managed {reads} reads against {cycles} write cycles, too few to have met the writer");
+		// What went wrong is stated before whether enough went on, or a reader that threw on every pass
+		// is reported as a run that did too little rather than as the failure it was.
 		IsEmpty(wrongAnswers, wrongAnswers.JoinN());
 		IsEmpty(exceptions, exceptions.JoinN());
+
+		AreEqual((long)readerCount * readsPerReader, Interlocked.Read(ref reads),
+			"every read was to land while the registry was being written, and this many did not");
 	}
 
 	/// <summary>
