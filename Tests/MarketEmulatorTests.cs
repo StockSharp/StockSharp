@@ -1504,8 +1504,10 @@ public class MarketEmulatorTests : BaseTestClass
 
 	/// <summary>
 	/// A bar is still data and is still held to the data clock, which a bar carries the wrong end of:
-	/// it is stamped with the moment it opened, while anything printed inside it is stamped later. On a
-	/// feed carrying both, every bar arrives behind the ticks of the interval it covers.
+	/// it is stamped with the moment it opened, while anything printed inside it is stamped later.
+	/// The shipped history feed does not produce this - it merges on server time and restamps local
+	/// time to match, so a bar sorts ahead of its own ticks - but nothing between the emulator and an
+	/// inner adapter of someone else's making enforces that, and this is what happens when it is not.
 	/// </summary>
 	[TestMethod]
 	public async Task ABarArrivingAfterATickInsideItIsStillJudgedAsData()
@@ -1542,6 +1544,57 @@ public class MarketEmulatorTests : BaseTestClass
 
 		await ThrowsAsync<InvalidOperationException>(
 			async () => await emu.SendInMessageAsync(bar, CancellationToken));
+	}
+
+	/// <summary>
+	/// A subscription is not a reading of the market either, and is still judged as one. It carries the
+	/// connector's clock, which runs behind the emulator's: the connector's time is the last thing it
+	/// was handed back, while the emulator's is the last thing it was given. A bar the emulator is
+	/// holding until its close has moved the second and not the first, so a subscription opened in that
+	/// window arrives stamped behind the feed and is refused.
+	/// </summary>
+	/// <remarks>
+	/// This is the same lag the order case was about - a strategy subscribing to another instrument
+	/// partway through a run walks into it - and the narrowing that fixed orders stopped short of it.
+	/// Stated here as it stands, not as it should be.
+	/// </remarks>
+	[TestMethod]
+	public async Task ASubscriptionStampedBehindTheFeedIsStillJudgedAsData()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out _);
+
+		var open = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+
+		// The feed hands over a bar, which moves the emulator's input clock to the bar's open.
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			TypedArg = TimeSpan.FromMinutes(5),
+			LocalTime = open,
+			OpenTime = open,
+			CloseTime = open.AddMinutes(5),
+			OpenPrice = 100,
+			HighPrice = 110,
+			LowPrice = 90,
+			ClosePrice = 105,
+			TotalVolume = 100,
+			State = CandleStates.Finished,
+		}, CancellationToken);
+
+		// A connector whose own clock has not caught up stamps what the strategy sends with its time,
+		// which is what this subscription carries.
+		var subscribe = new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = DataType.Ticks,
+			SecurityId = id,
+			IsSubscribe = true,
+			LocalTime = open.AddMinutes(-1),
+		};
+
+		await ThrowsAsync<InvalidOperationException>(
+			async () => await emu.SendInMessageAsync(subscribe, CancellationToken));
 	}
 
 	[TestMethod]
