@@ -1414,17 +1414,24 @@ public class MarketEmulatorTests : BaseTestClass
 		var trades = TradesOfTheOrder();
 
 		AreEqual(1, trades.Length, "the bar traded up to 220, which is through the sell standing at 215");
-		AreEqual(220m, trades[0].TradePrice, "the sell is filled at the high the bar recorded");
+		AreEqual(215m, trades[0].TradePrice,
+			"at its own price: the bar reached past it, which it could only do having taken this order first");
 	}
 
 	/// <summary>
-	/// A strategy acts on the bar it has just been shown and stamps its order with that bar's time,
-	/// which is behind the feed: the bar that told the strategy anything closed while later data was
-	/// already on its way in. An order is not a reading of the market and must not be judged against
-	/// the data clock - otherwise every order placed off a compressed series is refused.
+	/// An order carries the connector's clock, and the connector's clock runs behind the emulator's
+	/// input clock whenever the emulator is holding data it has taken. A bar is held until its close,
+	/// so between taking one and releasing it the emulator has moved on and the connector has not -
+	/// and an order placed in that window arrives stamped behind the feed. An order is not a reading
+	/// of the market and must not be judged against the data clock.
 	/// </summary>
+	/// <remarks>
+	/// The strategy does not stamp the order itself, and the bar it reacted to is not what the order
+	/// carries: a compressed bar takes the local time of the source bar that completed it, so the
+	/// strategy's view and the feed agree. The gap is the emulator's own buffering, and nothing else.
+	/// </remarks>
 	[TestMethod]
-	public async Task AnOrderIsTakenAtTheTimeOfTheBarItReactedTo()
+	public async Task AnOrderPlacedWhileTheEmulatorIsHoldingDataIsStillTaken()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out var res);
@@ -1468,9 +1475,9 @@ public class MarketEmulatorTests : BaseTestClass
 		await SendBarAsync(firstOpen, 100, 110, 90, 105);
 		await SendBarAsync(secondOpen, 106, 112, 104, 108);
 
-		// The state the strategy read the first bar off is stamped inside that bar, so this is the
-		// time the order is placed at while the feed has already moved on to the second one. The
-		// price is out of reach of both bars: the order has to be taken, not filled.
+		// The connector has not been handed the second bar yet - the emulator is holding it until its
+		// close - so this is the time it stamps an order with while the feed has moved on. The price
+		// is out of reach of both bars: the order has to be taken, not filled.
 		var reg = new OrderRegisterMessage
 		{
 			SecurityId = id,
@@ -1503,14 +1510,14 @@ public class MarketEmulatorTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// A bar is still data and is still held to the data clock, which a bar carries the wrong end of:
-	/// it is stamped with the moment it opened, while anything printed inside it is stamped later.
-	/// The shipped history feed does not produce this - it merges on server time and restamps local
-	/// time to match, so a bar sorts ahead of its own ticks - but nothing between the emulator and an
-	/// inner adapter of someone else's making enforces that, and this is what happens when it is not.
+	/// A bar is a reading of the market, so it is held to the data clock like any other: one arriving
+	/// behind what the emulator has already taken is refused rather than matched against a book that
+	/// has moved past it. The shipped history feed never produces this - it merges on server time and
+	/// restamps local time to match - but nothing between the emulator and an inner adapter of
+	/// somebody else's making enforces that, which is what this guards.
 	/// </summary>
 	[TestMethod]
-	public async Task ABarArrivingAfterATickInsideItIsStillJudgedAsData()
+	public async Task ABarArrivingBehindTheFeedIsRefused()
 	{
 		var id = Helper.CreateSecurityId();
 		var emu = CreateEmuWithEvents(id, out _);
@@ -1547,22 +1554,16 @@ public class MarketEmulatorTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// A subscription is not a reading of the market either, and is still judged as one. It carries the
-	/// connector's clock, which runs behind the emulator's: the connector's time is the last thing it
-	/// was handed back, while the emulator's is the last thing it was given. A bar the emulator is
-	/// holding until its close has moved the second and not the first, so a subscription opened in that
-	/// window arrives stamped behind the feed and is refused.
+	/// A subscription is not a reading of the market and is not judged against the data clock. It
+	/// carries the connector's clock, which only follows what the emulator has handed back, so while
+	/// the emulator is holding a bar until its close the two are apart - and a strategy subscribing to
+	/// another instrument in that window would otherwise be refused for being behind the feed.
 	/// </summary>
-	/// <remarks>
-	/// This is the same lag the order case was about - a strategy subscribing to another instrument
-	/// partway through a run walks into it - and the narrowing that fixed orders stopped short of it.
-	/// Stated here as it stands, not as it should be.
-	/// </remarks>
 	[TestMethod]
-	public async Task ASubscriptionStampedBehindTheFeedIsStillJudgedAsData()
+	public async Task ASubscriptionStampedBehindTheFeedIsStillTaken()
 	{
 		var id = Helper.CreateSecurityId();
-		var emu = CreateEmuWithEvents(id, out _);
+		var emu = CreateEmuWithEvents(id, out var res);
 
 		var open = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
 
@@ -1582,8 +1583,6 @@ public class MarketEmulatorTests : BaseTestClass
 			State = CandleStates.Finished,
 		}, CancellationToken);
 
-		// A connector whose own clock has not caught up stamps what the strategy sends with its time,
-		// which is what this subscription carries.
 		var subscribe = new MarketDataMessage
 		{
 			TransactionId = _idGenerator.GetNextId(),
@@ -1593,8 +1592,37 @@ public class MarketEmulatorTests : BaseTestClass
 			LocalTime = open.AddMinutes(-1),
 		};
 
-		await ThrowsAsync<InvalidOperationException>(
-			async () => await emu.SendInMessageAsync(subscribe, CancellationToken));
+		await emu.SendInMessageAsync(subscribe, CancellationToken);
+
+		// The emulator answers no subscription of its own - it records it - so what says it was taken
+		// is that a print made after it now reaches the client, which without the subscription it
+		// would not.
+		res.Clear();
+
+		await emu.SendInMessageAsync(new ExecutionMessage
+		{
+			SecurityId = id,
+			DataTypeEx = DataType.Ticks,
+			LocalTime = open.AddMinutes(6),
+			ServerTime = open.AddMinutes(6),
+			TradePrice = 101,
+			TradeVolume = 1,
+		}, CancellationToken);
+
+		IsTrue(res.OfType<ExecutionMessage>().Any(m => m.DataType == DataType.Ticks && m.TradePrice == 101),
+			"the subscription was taken but the print it asked for never reached the client");
+
+		// And an unsubscribe, whose time is blanked on purpose upstream and restamped with the
+		// connector's clock, travels the same way.
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			OriginalTransactionId = subscribe.TransactionId,
+			DataType2 = DataType.Ticks,
+			SecurityId = id,
+			IsSubscribe = false,
+			LocalTime = open.AddMinutes(-1),
+		}, CancellationToken);
 	}
 
 	[TestMethod]
@@ -3246,7 +3274,9 @@ public class MarketEmulatorTests : BaseTestClass
 
 		AreEqual(1, fills.Length, $"the market traded through the order once, so it is filled once; volumes were {fills.Select(m => m.TradeVolume.ToString()).JoinComma()}");
 		AreEqual(10m, fills[0].TradeVolume, "for the whole order, not for the single lot the print happened to carry");
-		AreEqual(94m, fills[0].TradePrice, "at the price that traded through it");
+		AreEqual(95m, fills[0].TradePrice,
+			"at its own price: a resting order is the passive side, and for the market to print through it " +
+			"this order has been taken first");
 		AreEqual(_pfName, fills[0].PortfolioName, "the fill stays attributable to the account that owned the order");
 
 		var state = res
@@ -3259,7 +3289,7 @@ public class MarketEmulatorTests : BaseTestClass
 		var position = ((MarketEmulator)emu).PortfolioManager.GetPortfolio(_pfName).GetPosition(id);
 		AreEqual(0m, position.TotalBidsVolume, "no live buy balance remains after the full fill");
 		AreEqual(0m, position.TotalBidsValue,
-			"the fill at 94 releases the reservation made at the order's 95 limit, not only 94 per lot");
+			"and the reservation made at that same price is released whole");
 	}
 
 	/// <summary>
@@ -3334,8 +3364,9 @@ public class MarketEmulatorTests : BaseTestClass
 			IsNotNull(buy, "the bar traded down to 90, which is through the buy standing at 95");
 			IsNotNull(sell, "and up to 110, which is through the sell standing at 105");
 
-			AreEqual(90m, buy.TradePrice, "the buy is filled at the low the bar recorded");
-			AreEqual(110m, sell.TradePrice, "and the sell at its high");
+			AreEqual(95m, buy.TradePrice,
+				"each fills at its own price: the bar reached past both, which it could only do having taken them first");
+			AreEqual(105m, sell.TradePrice, "and the sell at its own, for the same reason");
 
 			return (trades.IndexOf(buy), trades.IndexOf(sell));
 		}

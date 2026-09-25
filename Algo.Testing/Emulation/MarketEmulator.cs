@@ -132,13 +132,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		if (message is null)
 			throw new ArgumentNullException(nameof(message));
 
-		// Only data is held to the data clock. The stop signal is pushed through this queue on
-		// purpose, as a marker that comes back once everything ahead of it has been processed, and it
-		// carries the time the run was told to stop at - by then behind where the emulator has got to.
-		// An order carries the time of the bar it reacted to, which is behind the feed that has
-		// already moved on. Judging either as data ends an ordinary run with an exception.
+		// Only a reading of the market is held to the data clock. Everything else reaches the emulator
+		// carrying a time that is behind it by construction: the stop signal carries the moment the run
+		// was told to stop at, and an order or a subscription carries the connector's clock, which only
+		// follows what the emulator has handed back. A bar held until its close moves the emulator's
+		// clock and not the connector's, so anything sent in that window is stamped behind. Judging
+		// such a message as data ends an ordinary run with an exception.
 		var isData = message.Type is not (MessageTypes.Reset or MessageTypes.EmulationState)
-			&& message is not (BaseConnectionMessage or OrderMessage);
+			&& message is not (BaseConnectionMessage or OrderMessage or ISubscriptionMessage);
 		var hasTime = message.LocalTime != default;
 
 		if (isData && hasTime)
@@ -468,14 +469,10 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			if (order.OrderType != OrderTypes.Limit)
 				continue;
 
-			decimal fillPrice;
-
 			if (tradePrice is decimal tp)
 			{
 				if (order.Side == Sides.Buy ? tp > order.Price : tp < order.Price)
 					continue;
-
-				fillPrice = tp;
 			}
 			else
 			{
@@ -483,11 +480,14 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 				if (opposite is not decimal opp || (order.Side == Sides.Buy ? opp > order.Price : opp < order.Price))
 					continue;
-
-				fillPrice = opp;
 			}
 
-			(toFill ??= []).Add((order, fillPrice));
+			// At its own price, because a resting order is the passive side and the passive side sets
+			// what a trade prints at. For the market to reach past this order, everything it is standing
+			// in front of has been taken first - including this. Filling it at how far the market went
+			// hands a backtest a better price than the run could have had, on every resting order it
+			// ever places.
+			(toFill ??= []).Add((order, order.Price));
 		}
 
 		if (toFill is null)
