@@ -125,8 +125,34 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 		FileSystem.CreateDirectory(dir);
 
 		var stream = new TransactionFileStream(FileSystem, FileName, FileMode.Append);
-		_writer = stream.CreateCsvWriter(Registry.Encoding, false);
+		_writer = stream.CreateCsvWriter(AppendEncoding(), false);
 	}
+
+	/// <summary>
+	/// The encoding an append is written in.
+	/// </summary>
+	/// <returns>The registry's encoding, without its preamble when the file already carries one.</returns>
+	/// <remarks>
+	/// A writer emits the preamble unless the stream it is given says it is past its start, and
+	/// <see cref="TransactionFileStream"/> cannot seek, so it never does. A second preamble lands in the
+	/// middle of the file, where it becomes part of the first value of the row it opens - and that row,
+	/// and every entity it refers to, no longer reads back.
+	/// </remarks>
+	private Encoding AppendEncoding()
+	{
+		var encoding = Registry.Encoding;
+
+		return FileSystem.FileExists(FileName) ? WithoutPreamble(encoding) : encoding;
+	}
+
+	private static Encoding WithoutPreamble(Encoding encoding)
+		=> encoding switch
+		{
+			UTF8Encoding when !encoding.Preamble.IsEmpty => new UTF8Encoding(false),
+			UnicodeEncoding when !encoding.Preamble.IsEmpty => new UnicodeEncoding(encoding.CodePage == 1201, false),
+			UTF32Encoding when !encoding.Preamble.IsEmpty => new UTF32Encoding(encoding.CodePage == 12001, false),
+			_ => encoding,
+		};
 
 	private void ResetStream()
 	{

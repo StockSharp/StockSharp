@@ -1,4 +1,4 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
 
 using System.Collections.Concurrent;
 using System.Text;
@@ -907,6 +907,19 @@ public class CsvStorageTests : BaseTestClass
 	#endregion
 
 	#region CsvExtendedInfoStorage Tests
+
+	[TestMethod]
+	public void CsvExtendedInfo_NothingStoredYetIsNoneRatherThanNothingAtAll()
+	{
+		var executor = CreateExecutor(CancellationToken);
+		var (fs, path) = CreateFs("extinfo-empty");
+		var storage = (IExtendedInfoStorage)new CsvExtendedInfoStorage(fs, path, executor);
+
+		// Read before anything has been stored and before the storage has been initialized, which is when
+		// an editor bound to this list is built.
+		IsNotNull(storage.Storages);
+		AreEqual(0, storage.Storages.Count());
+	}
 
 	[TestMethod]
 	public async Task CsvExtendedInfo_CreateAndAdd()

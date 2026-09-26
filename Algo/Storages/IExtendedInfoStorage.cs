@@ -314,7 +314,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 	private readonly AsyncReaderWriterLock _itemsLock = new();
 	private readonly Dictionary<string, CsvExtendedInfoStorageItem> _items = new(StringComparer.InvariantCultureIgnoreCase);
-	private CsvExtendedInfoStorageItem[] _itemsCache;
+	private CsvExtendedInfoStorageItem[] _itemsCache = [];
 
 	private readonly string _path;
 	private readonly ChannelExecutor _executor;

@@ -1,4 +1,6 @@
-namespace StockSharp.Tests;
+﻿namespace StockSharp.Tests;
+
+using StockSharp.Algo.Storages.Csv;
 
 /// <summary>
 /// Securities, transactions and positions storage.
@@ -36,6 +38,70 @@ partial class StorageTests
 		(await storage.LookupAllAsync().ToArrayAsync(token)).Count().AssertEqual(0);
 
 		await registry.DisposeAsync();
+	}
+
+	/// <summary>
+	/// A run appends to the file the run before it left behind. The writer is handed a stream that cannot
+	/// seek, so it writes the encoding preamble again - in the middle of the file, where it becomes part of
+	/// the first value of the row it opens and that row no longer reads back as what was saved.
+	/// </summary>
+	[TestMethod]
+	public async Task EntitiesAppendedToAFileAnEarlierRunWroteStillLoad()
+	{
+		var token = CancellationToken;
+		var fs = Helper.MemorySystem;
+		var path = fs.GetSubTemp();
+		var exchangeProvider = ServicesRegistry.ExchangeInfoProvider;
+		var securities = Helper.RandomSecurities().Select(s => s.ToSecurity(exchangeProvider)).Take(4).ToArray();
+
+		await SaveAsync(securities.Take(2));
+		await SaveAsync(securities.Skip(2));
+
+		var executor = TimeSpan.FromSeconds(5).CreateExecutorAndRun(err => { }, token);
+		var registry = new CsvEntityRegistry(fs, path, executor);
+		var errors = await registry.InitAsync(token);
+		errors.Count.AssertEqual(0);
+
+		var loaded = await registry.Securities.LookupAllAsync().ToArrayAsync(token);
+		Ids(loaded).AssertEqual(Ids(securities));
+
+		var preamble = registry.Encoding.GetPreamble();
+		await registry.DisposeAsync();
+
+		// Stated over the bytes as well, so the test cannot pass by never having appended at all.
+		using var body = new MemoryStream();
+		using (var file = fs.OpenRead(Path.Combine(path, "security.csv")))
+			await file.CopyToAsync(body, token);
+
+		Preambles(body.ToArray(), preamble).AssertEqual(1);
+
+		async Task SaveAsync(IEnumerable<Security> batch)
+		{
+			var runExecutor = TimeSpan.FromSeconds(5).CreateExecutorAndRun(err => { }, token);
+			var run = new CsvEntityRegistry(fs, path, runExecutor);
+			(await run.InitAsync(token)).Count.AssertEqual(0);
+
+			foreach (var security in batch)
+				await run.Securities.SaveAsync(security, true, token);
+
+			await run.DisposeAsync();
+		}
+
+		static string Ids(IEnumerable<Security> values)
+			=> values.Select(s => s.Id).OrderBy(id => id, StringComparer.Ordinal).JoinComma();
+
+		static int Preambles(byte[] body, byte[] preamble)
+		{
+			var count = 0;
+
+			for (var i = 0; i + preamble.Length <= body.Length; i++)
+			{
+				if (body.AsSpan(i, preamble.Length).SequenceEqual(preamble))
+					count++;
+			}
+
+			return count;
+		}
 	}
 
 	[TestMethod]
