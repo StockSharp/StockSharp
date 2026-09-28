@@ -10,7 +10,7 @@
 
 **StockSharp**（简称 **S#**）是一个**免费**的全球市场交易平台（加密货币交易所、美国、欧洲、亚洲、俄罗斯股票、期货、期权、比特币、外汇等）。您可以进行手动交易或自动交易（算法交易机器人、常规或高频交易 HFT）。
 
-**可用连接**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, BitMEX, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED, Aster, edgeX, Ligther, Paradex, Hyperliquid 等等。
+**可用连接**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED, Aster, edgeX, Ligther, Paradex, Hyperliquid 等等。
 
 连接器源代码和完整连接器列表可在 [StockSharp Connectors 仓库](https://github.com/StockSharp/Connectors) 中找到。
 
@@ -111,7 +111,6 @@ connector.Connect();
 |<img src="./Media/logos/bitexbook_logo.svg" height="30" /> |Bitexbook | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitexbook.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitfinex_logo.svg" height="30" /> |Bitfinex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitfinex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bithumb_logo.svg" height="30" /> |Bithumb | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bithumb.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/bitmex_logo.svg" height="30" /> |BitMEX | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitmex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitstamp_logo.svg" height="30" /> |BitStamp | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitstamp.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bittrex_logo.svg" height="30" /> |Bittrex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bittrex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bybit_logo.svg" height="30" /> |ByBit | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bybit.html" target="_blank">Docs</a> |

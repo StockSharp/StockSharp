@@ -10,7 +10,7 @@
 
 **StockSharp** (**S#** for short) – is a **free** platform for trading on any market in the world (crypto exchanges, American, European, Asian, Russian, stocks, futures, options, Bitcoins, forex, etc.). You will be able to trade manually or automatically (algorithmic trading robots, conventional or HFT).
 
-**Available connections**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, BitMEX, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED, Aster, edgeX, Ligther, Paradex, Hyperliquid and many others.
+**Available connections**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED, Aster, edgeX, Ligther, Paradex, Hyperliquid and many others.
 
 Connector source code and the full connector list are available in the [StockSharp Connectors repository](https://github.com/StockSharp/Connectors).
 
@@ -110,7 +110,6 @@ connector.Connect();
 |<img src="./Media/logos/bitexbook_logo.svg" height="30" /> |Bitexbook | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/bitexbook.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitfinex_logo.svg" height="30" /> |Bitfinex | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/bitfinex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bithumb_logo.svg" height="30" /> |Bithumb | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/bithumb.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/bitmex_logo.svg" height="30" /> |BitMEX | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/bitmex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitstamp_logo.svg" height="30" /> |BitStamp | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/bitstamp.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bittrex_logo.svg" height="30" /> |Bittrex | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/bittrex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bybit_logo.svg" height="30" /> |ByBit | <a href="https://doc.stocksharp.com/en/topics/api/connectors/crypto_exchanges/bybit.html" target="_blank">Docs</a> |
