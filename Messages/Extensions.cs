@@ -4516,9 +4516,11 @@ public static partial class Extensions
 	}
 
 	/// <summary>
-	/// get icon uri
+	/// The drawing under a key, as the <c>pack://</c> address WPF resolves.
 	/// </summary>
-	public static Uri MakeVectorIconUri(this string key) => new($"pack://application:,,,/StockSharp.Xaml;component/IconsSvg/{key}.svg");
+	/// <param name="key">Icon key.</param>
+	/// <returns>Icon url.</returns>
+	public static Uri MakeVectorIconUri(this string key) => new($"pack://application:,,,{VectorIconPath(key)}");
 
 	/// <summary>
 	/// Try get <see cref="VectorIconAttribute.Icon"/> path.
@@ -4526,14 +4528,7 @@ public static partial class Extensions
 	/// <param name="type">Component type with applied <see cref="VectorIconAttribute"/>.</param>
 	/// <returns>Icon url.</returns>
 	public static Uri TryGetVectorIcon(this Type type)
-	{
-		var attr = type.GetAttribute<VectorIconAttribute>();
-
-		if (attr is null)
-			return null;
-
-		return MakeVectorIconUri(attr.Icon);
-	}
+		=> type.VectorIcon(MakeVectorIconUri);
 
 	/// <summary>
 	///
@@ -4542,6 +4537,29 @@ public static partial class Extensions
 	/// <returns>Icon url.</returns>
 	public static Uri TryGetIconUrl(this Type type)
 		=> type.GetIconUrl() ?? type.TryGetVectorIcon();
+
+	/// <summary>
+	/// The drawing under a key, as a path relative to the assembly that carries it - the form a logo
+	/// attribute uses, which every platform resolves.
+	/// </summary>
+	/// <param name="key">Icon key.</param>
+	/// <returns>Icon path.</returns>
+	public static Uri MakeVectorIconPath(this string key)
+		=> new(VectorIconPath(key), UriKind.Relative);
+
+	/// <summary>
+	/// The icon a type names - a logo or a drawing - as a path every platform resolves.
+	/// </summary>
+	/// <param name="type">Component type.</param>
+	/// <returns>Icon path, or <see langword="null"/> when the type names none.</returns>
+	public static Uri TryGetIconPath(this Type type)
+		=> type.GetIconUrl() ?? type.VectorIcon(MakeVectorIconPath);
+
+	private static string VectorIconPath(string key)
+		=> $"/StockSharp.Xaml;component/IconsSvg/{key}.svg";
+
+	private static Uri VectorIcon(this Type type, Func<string, Uri> address)
+		=> type.GetAttribute<VectorIconAttribute>() is { } attr ? address(attr.Icon) : null;
 
 	/// <summary>
 	/// Get typed <see cref="CommandMessage.ObjectId"/>.

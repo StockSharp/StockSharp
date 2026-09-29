@@ -1,5 +1,7 @@
 namespace StockSharp.Tests;
 
+using System.IO.Packaging;
+
 using StockSharp.Fix;
 using StockSharp.Messages;
 
@@ -3618,6 +3620,30 @@ public class ExtensionsMethodsTests : BaseTestClass
 
 		"test_icon".MakeVectorIconUri().ToString().AssertEqual($"pack://application:,,,/StockSharp.Xaml;component/IconsSvg/test_icon.svg");
 	}
+
+	[TestMethod]
+	public void MakeVectorIconPath_NamesTheSameDrawingWithoutThePackScheme()
+	{
+		_ = PackUriHelper.UriSchemePack;
+
+		var path = "test_icon".MakeVectorIconPath();
+
+		path.IsAbsoluteUri.AssertFalse();
+		path.ToString().AssertEqual("/StockSharp.Xaml;component/IconsSvg/test_icon.svg");
+		"test_icon".MakeVectorIconUri().ToString().AssertEqual($"pack://application:,,,{path}");
+	}
+
+	[TestMethod]
+	public void TryGetIconPath_AddressesADrawingTheWayEveryPlatformReadsIt()
+	{
+		typeof(WithDrawing).TryGetIconPath().ToString().AssertEqual("/StockSharp.Xaml;component/IconsSvg/test_icon.svg");
+		typeof(WithoutIcon).TryGetIconPath().AssertNull();
+	}
+
+	[VectorIcon("test_icon")]
+	private sealed class WithDrawing;
+
+	private sealed class WithoutIcon;
 
 	#endregion
 
