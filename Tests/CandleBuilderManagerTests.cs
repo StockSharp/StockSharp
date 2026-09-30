@@ -415,6 +415,44 @@ public class CandleBuilderManagerTests : BaseTestClass
 		finished.OriginalTransactionId.AssertEqual(1);
 	}
 
+	/// <summary>
+	/// A series that finished on its own is answered here when the caller gives it up afterwards: nothing is left
+	/// upstream to unsubscribe from, and the adapter below no longer knows the id.
+	/// </summary>
+	[TestMethod]
+	public async Task Unsubscribe_AfterSeriesFinished_IsAnsweredWithoutGoingUpstream()
+	{
+		var manager = CreateManager(out _, out _);
+
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			BuildMode = MarketDataBuildModes.Build,
+			BuildFrom = DataType.Ticks,
+		}, CancellationToken);
+
+		// The source ends and finishes the series while the caller's unsubscribe is already on its way.
+		await manager.ProcessOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 1 }, CancellationToken);
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+		}, CancellationToken);
+
+		toInner.Length.AssertEqual(0, "A finished series has nothing left upstream to give up.");
+		toOut.Length.AssertEqual(1);
+		var response = (SubscriptionResponseMessage)toOut[0];
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNull("Giving up a series that has already finished is not an error.");
+	}
+
 	[TestMethod]
 	public async Task SubscriptionOnline_ForwardedCorrectly()
 	{

@@ -427,7 +427,14 @@ public sealed class CandleBuilderManager : ICandleBuilderManager
 		{
 			var series = await TryRemoveSeries(mdMsg.OriginalTransactionId, cancellationToken, markFinished: false);
 			if (series is null)
+			{
+				// A series that finished on its own has nothing left upstream to give up, and the adapter below no
+				// longer knows its id, so the caller is answered here like for any finished subscription.
+				if (await IsFinishedSubscriptionAsync(mdMsg.OriginalTransactionId, cancellationToken))
+					return ([], [mdMsg.CreateResult()]);
+
 				return ([mdMsg], []);
+			}
 
 			var extraOut = new List<Message>();
 
