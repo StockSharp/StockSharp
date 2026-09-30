@@ -197,16 +197,12 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 
 			candle = null;
 
-			if (_currentCandle != null && _currentCandle.OpenTime == message.OpenTime)
-			{
-				if (_currentCandle.State == CandleStates.Finished)
-					return false;
+			// Only a time-frame candle is identified by its open time. Other candles can finish several at one instant and
+			// carry no identity (identical tick candles are legitimate), so any message after a finished one passes, repeats too.
+			if (message is ITimeFrameCandleMessage && _currentCandle?.State == CandleStates.Finished && _currentCandle.OpenTime == message.OpenTime)
+				return false;
 
-				_currentCandle = message;
-			}
-			else
-				_currentCandle = message;
-
+			_currentCandle = message;
 			candle = _currentCandle;
 			return true;
 		}

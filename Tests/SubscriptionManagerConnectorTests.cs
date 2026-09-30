@@ -1048,4 +1048,144 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Candles
+
+	/// <summary>
+	/// A time-frame candle type of its own, not derived from <see cref="TimeFrameCandleMessage"/>.
+	/// </summary>
+	private sealed class CustomTimeFrameCandleMessage() : TypedCandleMessage<TimeSpan>(MessageTypes.CandleTimeFrame, TimeSpan.FromMinutes(1)), ITimeFrameCandleMessage
+	{
+		public override Message Clone() => CopyTo(new CustomTimeFrameCandleMessage());
+	}
+
+	private static CandleMessage CreateCandle(string kind)
+		=> kind switch
+		{
+			nameof(RenkoCandleMessage) => new RenkoCandleMessage { TypedArg = new Unit(10m) },
+			nameof(RangeCandleMessage) => new RangeCandleMessage { TypedArg = new Unit(10m) },
+			nameof(PnFCandleMessage) => new PnFCandleMessage { TypedArg = new PnFArg { BoxSize = new Unit(10m), ReversalAmount = 3 } },
+			nameof(TickCandleMessage) => new TickCandleMessage { TypedArg = 100 },
+			nameof(VolumeCandleMessage) => new VolumeCandleMessage { TypedArg = 100m },
+			nameof(TimeFrameCandleMessage) => new TimeFrameCandleMessage { TypedArg = TimeSpan.FromMinutes(1) },
+			nameof(HeikinAshiCandleMessage) => new HeikinAshiCandleMessage { TypedArg = TimeSpan.FromMinutes(1) },
+			nameof(CustomTimeFrameCandleMessage) => new CustomTimeFrameCandleMessage(),
+			_ => throw new ArgumentOutOfRangeException(nameof(kind), kind, "Unknown candle type."),
+		};
+
+	private static CandleMessage CreateCandle(string kind, SecurityId securityId, long subscriptionId,
+		DateTime openTime, DateTime closeTime, decimal openPrice, decimal closePrice, CandleStates state)
+	{
+		var candle = CreateCandle(kind);
+
+		candle.SecurityId = securityId;
+		candle.OpenTime = openTime;
+		candle.CloseTime = closeTime;
+		candle.OpenPrice = openPrice;
+		candle.ClosePrice = closePrice;
+		candle.HighPrice = openPrice.Max(closePrice);
+		candle.LowPrice = openPrice.Min(closePrice);
+		candle.State = state;
+		candle.SetSubscriptionIds([subscriptionId]);
+
+		return candle;
+	}
+
+	private static Subscription CreateCandleSubscription(string kind, SecurityId securityId)
+	{
+		var prototype = CreateCandle(kind);
+
+		return new(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			SecurityId = securityId,
+			DataType2 = DataType.Create(prototype.GetType(), prototype.Arg),
+		});
+	}
+
+	/// <summary>
+	/// One price update can finish several candles of a type that is not bound to time, and every candle after the
+	/// first opens at that update's time. Each of them has to reach the subscription.
+	/// </summary>
+	[TestMethod]
+	[DataRow(nameof(RenkoCandleMessage))]
+	[DataRow(nameof(RangeCandleMessage))]
+	[DataRow(nameof(PnFCandleMessage))]
+	[DataRow(nameof(TickCandleMessage))]
+	[DataRow(nameof(VolumeCandleMessage))]
+	public void UpdateCandles_CandlesOpeningAtOneInstant_AllReachTheSubscription(string kind)
+	{
+		var manager = CreateManager();
+		var securityId = Helper.CreateSecurityId();
+		var transId = SubscribeAndGoOnline(manager, CreateCandleSubscription(kind, securityId));
+
+		var start = new DateTime(2024, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+		var update = start.AddSeconds(10);
+
+		CandleMessage[] candles =
+		[
+			CreateCandle(kind, securityId, transId, start, update, 100m, 110m, CandleStates.Finished),
+			CreateCandle(kind, securityId, transId, update, update, 110m, 120m, CandleStates.Finished),
+			CreateCandle(kind, securityId, transId, update, update, 120m, 130m, CandleStates.Finished),
+			CreateCandle(kind, securityId, transId, update, update, 130m, 131m, CandleStates.Active),
+		];
+
+		var delivered = candles.SelectMany(manager.UpdateCandles).Select(r => r.candle).ToArray();
+
+		delivered.Length.AssertEqual(candles.Length, $"Every candle of the update must reach the subscription, got the ones opening at {string.Join(", ", delivered.Select(c => c.OpenPrice))}.");
+
+		for (var i = 0; i < candles.Length; i++)
+			ReferenceEquals(delivered[i], candles[i]).AssertTrue($"Candle {i} must be delivered in its place.");
+	}
+
+	/// <summary>
+	/// A candle that is not bound to time carries no identity, and identical ones legitimately follow each other at
+	/// one instant (tick candles of identical trades), so a repeat is delivered like any other candle.
+	/// </summary>
+	[TestMethod]
+	[DataRow(nameof(RenkoCandleMessage))]
+	[DataRow(nameof(RangeCandleMessage))]
+	[DataRow(nameof(PnFCandleMessage))]
+	[DataRow(nameof(TickCandleMessage))]
+	[DataRow(nameof(VolumeCandleMessage))]
+	public void UpdateCandles_IdenticalCandlesNotBoundToTime_AreAllDelivered(string kind)
+	{
+		var manager = CreateManager();
+		var securityId = Helper.CreateSecurityId();
+		var transId = SubscribeAndGoOnline(manager, CreateCandleSubscription(kind, securityId));
+
+		var instant = new DateTime(2024, 3, 1, 0, 0, 10, DateTimeKind.Utc);
+
+		CandleMessage[] candles =
+		[
+			CreateCandle(kind, securityId, transId, instant, instant, 100m, 100m, CandleStates.Finished),
+			CreateCandle(kind, securityId, transId, instant, instant, 100m, 100m, CandleStates.Finished),
+		];
+
+		candles.SelectMany(manager.UpdateCandles).Count().AssertEqual(candles.Length, "Identical candles at one instant are both delivered.");
+	}
+
+	/// <summary>
+	/// A time-frame candle is identified by its open time: once it has finished, a later message for the same
+	/// period is not delivered again, while the next period is. This holds for any type that is a time-frame candle.
+	/// </summary>
+	[TestMethod]
+	[DataRow(nameof(TimeFrameCandleMessage))]
+	[DataRow(nameof(HeikinAshiCandleMessage))]
+	[DataRow(nameof(CustomTimeFrameCandleMessage))]
+	public void UpdateCandles_TimeFrameCandleAfterItFinished_IsNotDeliveredAgain(string kind)
+	{
+		var manager = CreateManager();
+		var securityId = Helper.CreateSecurityId();
+		var transId = SubscribeAndGoOnline(manager, CreateCandleSubscription(kind, securityId));
+
+		var period = new DateTime(2024, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+		var next = period.AddMinutes(1);
+
+		manager.UpdateCandles(CreateCandle(kind, securityId, transId, period, next, 100m, 110m, CandleStates.Finished)).Count().AssertEqual(1, "The finished candle is delivered.");
+		manager.UpdateCandles(CreateCandle(kind, securityId, transId, period, next, 100m, 112m, CandleStates.Active)).Count().AssertEqual(0, "A finished period is not reopened.");
+		manager.UpdateCandles(CreateCandle(kind, securityId, transId, next, next, 110m, 111m, CandleStates.Active)).Count().AssertEqual(1, "The next period is delivered.");
+	}
+
+	#endregion
 }

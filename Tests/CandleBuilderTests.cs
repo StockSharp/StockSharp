@@ -529,6 +529,51 @@ public class CandleBuilderTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// RenkoCandleBuilder: every brick of a large move reaches the connector subscription, although all bricks after
+	/// the first open at the same instant.
+	/// </summary>
+	[TestMethod]
+	public void RenkoCandleBuilder_BricksOfOneLargeMove_AllReachTheSubscription()
+	{
+		var securityId = CreateSecurityId();
+		var dataType = DataType.Create<RenkoCandleMessage>(new Unit(10m));
+
+		var builder = new RenkoCandleBuilder(new MockExchangeInfoProvider());
+		var builderSubscription = new MockCandleBuilderSubscription
+		{
+			Message = new MarketDataMessage { SecurityId = securityId, DataType2 = dataType }
+		};
+
+		var manager = new ConnectorSubscriptionManager(new TestReceiver(), new IncrementalIdGenerator(), true);
+		var subscription = new Subscription(new MarketDataMessage { IsSubscribe = true, SecurityId = securityId, DataType2 = dataType });
+		manager.Subscribe(subscription);
+		manager.ProcessResponse(new SubscriptionResponseMessage { OriginalTransactionId = subscription.TransactionId }, out _, out _, out _);
+
+		var baseTime = new DateTime(2024, 1, 1, 10, 0, 0).UtcKind();
+		var built = new List<decimal>();
+		var delivered = new List<decimal>();
+
+		// 100 -> 145 with a 10 point box finishes four bricks in one update.
+		foreach (var (price, time) in new[] { (100m, baseTime), (145m, baseTime.AddSeconds(1)) })
+		{
+			foreach (var candle in builder.Process(builderSubscription, new MockTransform { Price = price, Volume = 1, Time = time }))
+			{
+				// The builder adapter forwards a copy of every candle the builder yields.
+				var copy = candle.TypedClone();
+				copy.SetSubscriptionIds([subscription.TransactionId]);
+
+				if (copy.State == CandleStates.Finished)
+					built.Add(copy.OpenPrice);
+
+				delivered.AddRange(manager.UpdateCandles(copy).Where(r => r.candle.State == CandleStates.Finished).Select(r => r.candle.OpenPrice));
+			}
+		}
+
+		built.SequenceEqual([100m, 110m, 120m, 130m]).AssertTrue($"The builder finishes four bricks, got {string.Join(", ", built)}.");
+		delivered.SequenceEqual(built).AssertTrue($"Every finished brick must reach the subscription, got the ones opening at {string.Join(", ", delivered)}.");
+	}
+
+	/// <summary>
 	/// RenkoCandleBuilder: a box finer than the price grid still advances the brick series.
 	/// </summary>
 	[TestMethod]
