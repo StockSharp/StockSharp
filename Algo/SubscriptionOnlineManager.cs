@@ -96,7 +96,9 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 				if (message is ConnectionRestoredMessage restoredMsg && !restoredMsg.IsResetState)
 					break;
 
-				await ClearState(cancellationToken);
+				using (await _sync.LockAsync(cancellationToken))
+					_state.EndWithConnection();
+
 				break;
 			}
 
@@ -530,6 +532,11 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 				else if (_state.RemoveSkipSubscription(originId))
 				{
 					sendInMsg = message;
+				}
+				else if (_state.RemoveEndedWithConnection(originId))
+				{
+					// The subscription ended with the connection, so there is nothing left upstream to give up.
+					sendOutMsgs = [message.CreateResult()];
 				}
 				else
 				{

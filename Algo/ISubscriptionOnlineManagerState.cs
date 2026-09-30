@@ -109,7 +109,20 @@ public interface ISubscriptionOnlineManagerState
 	bool ContainsUnsubscribeRequest(long id);
 
 	/// <summary>
-	/// Clear all state.
+	/// Forget every subscription because the connection ended, remembering the ids that held them until the
+	/// connection ends again, so that an unsubscribe already on its way can still be answered.
+	/// </summary>
+	void EndWithConnection();
+
+	/// <summary>
+	/// Forget one id that held a subscription when the connection ended.
+	/// </summary>
+	/// <param name="id">The id.</param>
+	/// <returns><see langword="true"/> if the id held a subscription that ended with the connection.</returns>
+	bool RemoveEndedWithConnection(long id);
+
+	/// <summary>
+	/// Clear all state, including the ids of subscriptions that ended with the connection.
 	/// </summary>
 	void Clear();
 }

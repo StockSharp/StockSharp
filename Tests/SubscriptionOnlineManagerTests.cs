@@ -745,6 +745,76 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		response.Error.AssertNull();
 	}
 
+	/// <summary>
+	/// A subscription ends with the connection. An unsubscribe that was already on its way when the adapter
+	/// disconnected is answered here: there is nothing left upstream to give up, and it is not an error.
+	/// </summary>
+	[TestMethod]
+	public async Task UnsubscribeAfterDisconnect_IsAnsweredLocally()
+	{
+		var manager = new SubscriptionOnlineManager(new TestReceiver(), _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Level1,
+		}, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 1 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 1 }, token);
+
+		// A second holder joins the same stream, as two Level1 subscriptions of one strategy do.
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 3,
+			SecurityId = secId,
+			DataType2 = DataType.Level1,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new DisconnectMessage(), token);
+
+		var (toInner, toOut) = await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = false,
+			TransactionId = 2,
+			OriginalTransactionId = 1,
+			SecurityId = secId,
+			DataType2 = DataType.Level1,
+		}, token);
+
+		toInner.Length.AssertEqual(0, "a stream that ended with the connection has nothing left to cancel");
+		var response = toOut.OfType<SubscriptionResponseMessage>().Single();
+		response.OriginalTransactionId.AssertEqual(2);
+		response.Error.AssertNull("Giving up a subscription that ended with the connection is not an error.");
+	}
+
+	/// <summary>
+	/// After a reconnect subscriptions are opened again under new ids, so only the connection that ended last
+	/// has to be remembered, and the memory does not grow with every reconnect.
+	/// </summary>
+	[TestMethod]
+	public void EndWithConnection_RemembersOnlyTheLastConnection()
+	{
+		var state = new SubscriptionOnlineManagerState();
+		var key = (DataType.Level1, Helper.CreateSecurityId());
+
+		ISubscriptionMessage Request(long id) => new MarketDataMessage { IsSubscribe = true, TransactionId = id, DataType2 = DataType.Level1 };
+
+		state.AddSubscriber(key, 1, Request(1), () => Request(1), out _);
+		state.EndWithConnection();
+
+		state.AddSubscriber(key, 5, Request(5), () => Request(5), out _);
+		state.EndWithConnection();
+
+		state.RemoveEndedWithConnection(1).AssertFalse();
+		state.RemoveEndedWithConnection(5).AssertTrue();
+		state.RemoveEndedWithConnection(5).AssertFalse("an id is answered for once");
+	}
+
 	[TestMethod]
 	public async Task UnsubscribeAfterError_ReturnsNotFoundBecauseTheSubscriptionWasRemoved()
 	{

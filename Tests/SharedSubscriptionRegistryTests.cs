@@ -202,4 +202,20 @@ public class SharedSubscriptionRegistryTests : BaseTestClass
 		IsFalse(entry.Holders.ContainsKey("a"));
 		IsFalse(entry.Holders.ContainsKey("b"));
 	}
+
+	[TestMethod]
+	public void Holders_IncludeThoseOfASubscriptionThatCanNoLongerBeJoined()
+	{
+		var registry = CreateRegistry();
+
+		var ticks = registry.Add("ticks", "a", "a", _ => 1L, out _);
+		registry.Add("depth", "b", "b", _ => 2L, out _);
+		registry.Unkey(ticks);
+
+		var holders = registry.Holders();
+
+		AreEqual(2, holders.Count);
+		IsTrue(holders.Contains("a"), "a stopped subscription is still held until its holder lets go");
+		IsTrue(holders.Contains("b"));
+	}
 }

@@ -87,6 +87,9 @@ public class SubscriptionOnlineManagerState : ISubscriptionOnlineManagerState
 	private readonly HashSet<long> _skipSubscriptions = [];
 	private readonly HashSet<long> _unsubscribeRequests = [];
 
+	// Ids that held a subscription when the connection last ended; an unsubscribe for one of them has nothing left to give up.
+	private readonly HashSet<long> _endedWithConnection = [];
+
 	/// <inheritdoc />
 	public ISubscriptionOnlineInfo CreateLinkedSubscriptionInfo(ISubscriptionOnlineInfo main)
 		=> new SubscriptionInfo((SubscriptionInfo)main);
@@ -214,7 +217,29 @@ public class SubscriptionOnlineManagerState : ISubscriptionOnlineManagerState
 		=> _unsubscribeRequests.Contains(id);
 
 	/// <inheritdoc />
+	public void EndWithConnection()
+	{
+		var ended = _shared.Holders().Concat(_skipSubscriptions).ToArray();
+
+		ClearSubscriptions();
+
+		// Only the last connection is remembered, so the set does not grow with every reconnect.
+		_endedWithConnection.Clear();
+		_endedWithConnection.UnionWith(ended);
+	}
+
+	/// <inheritdoc />
+	public bool RemoveEndedWithConnection(long id)
+		=> _endedWithConnection.Remove(id);
+
+	/// <inheritdoc />
 	public void Clear()
+	{
+		ClearSubscriptions();
+		_endedWithConnection.Clear();
+	}
+
+	private void ClearSubscriptions()
 	{
 		_shared.Clear();
 		_aliases.Clear();

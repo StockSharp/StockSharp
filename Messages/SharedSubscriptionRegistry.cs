@@ -250,6 +250,16 @@ public class SharedSubscriptionRegistry<TKey, THolder, THolderData, TPayload>
 	}
 
 	/// <summary>
+	/// Everyone currently holding a subscription, including holders of one that can no longer be found by its key.
+	/// </summary>
+	/// <returns>The holders.</returns>
+	public IReadOnlyCollection<THolder> Holders()
+	{
+		using (_sync.EnterScope())
+			return [.. _byHolder.Keys];
+	}
+
+	/// <summary>
 	/// Forgets everything.
 	/// </summary>
 	public void Clear()
