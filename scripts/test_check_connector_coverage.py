@@ -173,6 +173,27 @@ class CheckConnectorCoverageTests(unittest.TestCase):
         self.assertEqual(1, result.returncode)
         self.assertIn(f"MISSING en {external} (applications repository)", result.stdout)
 
+    def test_a_closed_venue_needs_no_row(self) -> None:
+        self.create_connector("Alpha", "topics/api/connectors/stock_market/alpha.html")
+        self.add_row("Alpha", "topics/api/connectors/stock_market/alpha.html")
+        self.create_connector("Bitmex", "topics/api/connectors/crypto_exchanges/bitmex.html")
+
+        result = self.run_script()
+
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+
+    def test_reports_a_row_that_still_links_a_closed_venue(self) -> None:
+        self.create_connector("Alpha", "topics/api/connectors/stock_market/alpha.html")
+        self.add_row("Alpha", "topics/api/connectors/stock_market/alpha.html")
+        self.create_connector("Bitmex", "topics/api/connectors/crypto_exchanges/bitmex.html")
+        self.add_row("BitMEX", "topics/api/connectors/crypto_exchanges/bitmex.html")
+
+        result = self.run_script()
+
+        self.assertEqual(1, result.returncode)
+        self.assertIn("RETIRED en BitMEX: topics/api/connectors/crypto_exchanges/bitmex.html", result.stdout)
+        self.assertNotIn("STALE", result.stdout)
+
     def test_fails_when_the_connector_repository_is_absent(self) -> None:
         self.create_connector("Alpha", "topics/api/connectors/stock_market/alpha.html")
         self.add_row("Alpha", "topics/api/connectors/stock_market/alpha.html")

@@ -10,7 +10,7 @@
 
 **StockSharp**（简称 **S#**）是一个**免费**的全球市场交易平台（加密货币交易所、美国、欧洲、亚洲、俄罗斯股票、期货、期权、比特币、外汇等）。您可以进行手动交易或自动交易（算法交易机器人、常规或高频交易 HFT）。
 
-**可用连接**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, GDAX, Bittrex, Bithumb, OKX, Coincheck, CEX.IO, YoBit, Livecoin, EXMO, Deribit, HTX, KuCoin, QuantFEED, Aster, edgeX, Ligther, Paradex, Hyperliquid 等等。
+**可用连接**: Binance, MT4, MT5, FIX/FAST, PolygonIO, Trading Technologies, Alpaca Markets, BarChart, CQG, E*Trade, IQFeed, InteractiveBrokers, LMAX, MatLab, Oanda, FXCM, Rithmic, cTrader, DXtrade, BitStamp, Bitfinex, Coinbase, Kraken, Poloniex, Bithumb, OKX, Coincheck, CEX.IO, YoBit, EXMO, Deribit, HTX, KuCoin, QuantFEED, Aster, edgeX, Ligther, Paradex, Hyperliquid 等等。
 
 连接器源代码和完整连接器列表可在 [StockSharp Connectors 仓库](https://github.com/StockSharp/Connectors) 中找到。
 
@@ -102,17 +102,14 @@ connector.Connect();
 ## 加密货币交易所
 |图标 | 名称 | 文档|
 |:---:|:----:|:------:|
-|<img src="./Media/logos/bibox_logo.svg" height="30" /> |Bibox | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bibox.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/binance_logo.svg" height="30" /> |Binance | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/binance.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bingx_logo.svg" height="30" /> |BingX | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bingx.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/bitalong_logo.svg" height="30" /> |Bitalong | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitalong.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitbank_logo.svg" height="30" /> |Bitbank | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitbank.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitget_logo.svg" height="30" /> |Bitget | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitget.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitexbook_logo.svg" height="30" /> |Bitexbook | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitexbook.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitfinex_logo.svg" height="30" /> |Bitfinex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitfinex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bithumb_logo.svg" height="30" /> |Bithumb | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bithumb.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bitstamp_logo.svg" height="30" /> |BitStamp | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bitstamp.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/bittrex_logo.svg" height="30" /> |Bittrex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bittrex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/bybit_logo.svg" height="30" /> |ByBit | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bybit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/cexio_logo.svg" height="30" /> |CEX.IO | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/cex.io.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/coinbase_logo.svg" height="30" /> |Coinbase | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/coinbase.html" target="_blank">Docs</a> |
@@ -135,12 +132,10 @@ connector.Connect();
 |<img src="./Media/logos/mexc_logo.svg" height="30" /> |MEXC | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/mexc.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/okex_logo.svg" height="30" /> |OKEx | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/okex.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/poloniex_logo.svg" height="30" /> |Poloniex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/poloniex.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/prizmbit_logo.svg" height="30" /> |PrizmBit | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/prizmbit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/tradeogre_logo.svg" height="30" /> |TradeOgre | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/tradeogre.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/upbit_logo.svg" height="30" /> |Upbit | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/upbit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/yobit_logo.svg" height="30" /> |YoBit | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/yobit.html" target="_blank">Docs</a> |
 |<img src="./Media/logos/zaif_logo.svg" height="30" /> |Zaif | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/zaif.html" target="_blank">Docs</a> |
-|<img src="./Media/logos/zb_logo.svg" height="30" /> |ZB | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/zb.html" target="_blank">Docs</a> |
 
 *[所有加密货币交易所的完整列表 - 请参阅英文版 README](README.md#crypto-exchanges)*
 
@@ -454,7 +449,6 @@ connector.Connect();
 |<img src="./Media/logos/paradex_logo.svg" height="30" /> |Paradex | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/paradex.html" target="_blank">文档</a> |
 |<img src="./Media/logos/hyperliquid_logo.svg" height="30" /> |Hyperliquid | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/hyperliquid.html" target="_blank">文档</a> |
 |<img src="./Media/logos/altcointrader_logo.svg" height="30" /> |AltCoinTrader | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/altcointrader.html" target="_blank">文档</a> |
-|<img src="./Media/logos/ascendex_logo.svg" height="30" /> |AscendEX | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/ascendex.html" target="_blank">文档</a> |
 |<img src="./Media/logos/bigone_logo.svg" height="30" /> |BigONE | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/bigone.html" target="_blank">文档</a> |
 |<img src="./Media/logos/binance_logo.svg" height="30" /> |Binance-History | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/binance_history.html" target="_blank">文档</a> |
 |<img src="./Media/logos/birdeye_logo.svg" height="30" /> |Birdeye Data | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/birdeye.html" target="_blank">文档</a> |
@@ -478,7 +472,6 @@ connector.Connect();
 |<img src="./Media/logos/deltaexchangeindia_logo.svg" height="30" /> |Delta Exchange India | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/delta_exchange_india.html" target="_blank">文档</a> |
 |<img src="./Media/logos/dexscreener_logo.svg" height="30" /> |DEX Screener | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/dex_screener.html" target="_blank">文档</a> |
 |<img src="./Media/logos/dexalot_logo.svg" height="30" /> |Dexalot | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/dexalot.html" target="_blank">文档</a> |
-|<img src="./Media/logos/ftx_logo.svg" height="30" /> |FTX | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/ftx.html" target="_blank">文档</a> |
 |<img src="./Media/logos/gateio_logo.svg" height="30" /> |Gate.io History | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/gateio_history.html" target="_blank">文档</a> |
 |<img src="./Media/logos/kucoin_logo.svg" height="30" /> |Kucoin History | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/kucoin_history.html" target="_blank">文档</a> |
 |<img src="./Media/logos/kyber_swap_logo.svg" height="30" /> |KyberSwap | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/kyber_swap.html" target="_blank">文档</a> |
@@ -493,7 +486,6 @@ connector.Connect();
 |<img src="./Media/logos/velodrome_logo.svg" height="30" /> |Velodrome | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/velodrome.html" target="_blank">文档</a> |
 |<img src="./Media/logos/velora_logo.svg" height="30" /> |Velora | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/velora.html" target="_blank">文档</a> |
 |<img src="./Media/logos/wazirx_logo.svg" height="30" /> |WazirX | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/wazirx.html" target="_blank">文档</a> |
-|<img src="./Media/logos/btce_logo.svg" height="30" /> |WEX (BTC-e) | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/wex_btc_e.html" target="_blank">文档</a> |
 |<img src="./Media/logos/xrpl_logo.svg" height="30" /> |XRPL DEX | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/xrpl.html" target="_blank">文档</a> |
 |<img src="./Media/logos/zero_x_logo.svg" height="30" /> |0x | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/zero_x.html" target="_blank">文档</a> |
 |<img src="./Media/logos/zondacrypto_logo.svg" height="30" /> |zondacrypto | <a href="https://doc.stocksharp.com/zh/topics/api/connectors/crypto_exchanges/zondacrypto.html" target="_blank">文档</a> |

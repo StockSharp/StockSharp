@@ -45,6 +45,41 @@ EXTERNAL_CONNECTORS = {
     "topics/api/connectors/stock_market/yahoo.html",
 }
 
+# Venues that closed or withdrew the API their connector speaks. The documentation keeps their pages,
+# carrying a notice, and drops every link to them (see _retiredConnectors in the doc repository's
+# tests/DocumentationValidationTests.cs); a README row is such a link, so for these a row is the error.
+RETIRED_CONNECTORS = {
+    f"topics/api/connectors/{name}.html"
+    for name in (
+        "crypto_exchanges/ascendex",
+        "crypto_exchanges/bibox",
+        "crypto_exchanges/bitalong",
+        "crypto_exchanges/bitmax",
+        "crypto_exchanges/bitmex",
+        "crypto_exchanges/bittrex",
+        "crypto_exchanges/bitz",
+        "crypto_exchanges/bw",
+        "crypto_exchanges/coinbene",
+        "crypto_exchanges/coinexchange",
+        "crypto_exchanges/coinhub",
+        "crypto_exchanges/cryptopia",
+        "crypto_exchanges/digitexfutures",
+        "crypto_exchanges/fatbtc",
+        "crypto_exchanges/ftx",
+        "crypto_exchanges/gdax",
+        "crypto_exchanges/hotbit",
+        "crypto_exchanges/idax",
+        "crypto_exchanges/liqui",
+        "crypto_exchanges/livecoin",
+        "crypto_exchanges/okcoin",
+        "crypto_exchanges/prizmbit",
+        "crypto_exchanges/quoinex",
+        "crypto_exchanges/wex_btc_e",
+        "crypto_exchanges/zb",
+        "stock_market/iex",
+    )
+}
+
 BUILD_OUTPUT = {"bin", "obj"}
 
 
@@ -138,6 +173,7 @@ def main() -> int:
 
     missing = 0
     stale = 0
+    retired = 0
 
     for language, file_name in README_FILES.items():
         readme = readme_root / file_name
@@ -147,20 +183,24 @@ def main() -> int:
             return 2
 
         rows = read_readme_rows(readme)
-        expected = expected_connectors(connectors, language)
+        expected = expected_connectors(connectors, language) - RETIRED_CONNECTORS
 
         for doc_path in sorted(expected - set(rows)):
             missing += 1
             print(f"MISSING {language} {doc_path} ({connectors[doc_path]})")
 
-        for doc_path in sorted(set(rows) - set(connectors)):
+        for doc_path in sorted(set(rows) & RETIRED_CONNECTORS):
+            retired += 1
+            print(f"RETIRED {language} {rows[doc_path]}: {doc_path}")
+
+        for doc_path in sorted(set(rows) - set(connectors) - RETIRED_CONNECTORS):
             stale += 1
             print(f"STALE {language} {rows[doc_path]}: {doc_path}")
 
-    if missing or stale:
+    if missing or stale or retired:
         print(
             "DIFF connector coverage: "
-            f"connectors={len(connectors)}, missing={missing}, stale={stale}"
+            f"connectors={len(connectors)}, missing={missing}, stale={stale}, retired={retired}"
         )
         return 1
 
