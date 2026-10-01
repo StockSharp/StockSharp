@@ -346,9 +346,9 @@ public class HeartbeatReconnectScheduleTests : BaseTestClass
 	#region Probing only an idle link
 
 	/// <summary>
-	/// A link that is carrying messages has already answered the only question a heartbeat asks, so
-	/// asking it again puts a probe on the wire for nothing - and on a protocol that runs its own
-	/// session keepalive, a second one beside the adapter's.
+	/// A message just sent down the link has already told the other side it is alive, so a probe within
+	/// the interval goes on the wire for nothing - and on a protocol that runs its own session keepalive,
+	/// beside the adapter's.
 	/// </summary>
 	[TestMethod]
 	public async Task ALinkThatIsCarryingMessagesIsNotProbed()
@@ -397,10 +397,12 @@ public class HeartbeatReconnectScheduleTests : BaseTestClass
 	}
 
 	/// <summary>
-	/// What the inner adapter sends up counts as the link speaking, the same as what is sent down it.
+	/// The other side hears only what is sent to it. A link that only receives - a subscriber to a
+	/// continuous feed - still owes its probe every interval, or a server that keeps a session alive by
+	/// the client's own frames drops it as dead however much data it is streaming to it.
 	/// </summary>
 	[TestMethod]
-	public async Task WhatArrivesFromTheVenueCountsAsTheLinkSpeaking()
+	public async Task ALinkThatOnlyReceivesIsStillProbed()
 	{
 		var (adapter, inner, outMessages) = CreateSut(_midday, new HeartbeatManagerState
 		{
@@ -410,15 +412,19 @@ public class HeartbeatReconnectScheduleTests : BaseTestClass
 
 		adapter.HeartbeatInterval = TimeSpan.FromSeconds(10);
 
-		inner.Time = _midday.AddSeconds(30);
-		await inner.SendOutMessageAsync(new TimeFrameCandleMessage(), CancellationToken);
+		await adapter.SendInMessageAsync(new TimeFrameCandleMessage(), CancellationToken);
 
-		inner.Time = _midday.AddSeconds(35);
+		for (var second = 1; second <= 15; second++)
+		{
+			inner.Time = _midday.AddSeconds(second);
+			await inner.SendOutMessageAsync(new TimeFrameCandleMessage(), CancellationToken);
+		}
+
 		outMessages.Clear();
 
 		await adapter.ProcessHeartbeat(CancellationToken);
 
-		IsFalse(outMessages.OfType<TimeMessage>().Any(), "the venue spoke within the interval, so there is nothing to ask it");
+		IsTrue(outMessages.OfType<TimeMessage>().Any(), "nothing has been sent for longer than the interval, so the probe is due however busy the feed is");
 	}
 
 	#endregion

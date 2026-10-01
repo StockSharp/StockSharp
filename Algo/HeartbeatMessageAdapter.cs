@@ -30,9 +30,9 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 
 	private ControllablePeriodicTimer _timer;
 
-	// When the link last carried anything either way. The probe below is for an idle link only, so
-	// it is what the interval is counted from.
-	private DateTime _lastMessageTime;
+	// When a message last went down the link. The other side hears only what is sent to it, so this,
+	// not what arrives, is what the probe interval is counted from.
+	private DateTime _lastSentTime;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="HeartbeatMessageAdapter"/>.
@@ -64,8 +64,6 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	/// <inheritdoc />
 	protected override async ValueTask OnInnerAdapterNewOutMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		_lastMessageTime = CurrentTime;
-
 		switch (message.Type)
 		{
 			case MessageTypes.Connect:
@@ -173,7 +171,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	{
 		// The probe is not traffic: counting it would keep the link looking busy for ever.
 		if (message != _timeMessage)
-			_lastMessageTime = CurrentTime;
+			_lastSentTime = CurrentTime;
 
 		var isStartTimer = false;
 
@@ -291,7 +289,7 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 		var time = CurrentTime;
 		var lastHeartBeatTime = time;
 
-		_lastMessageTime = time;
+		_lastSentTime = time;
 
 		var sync = new Lock();
 		var isProcessing = false;
@@ -473,19 +471,19 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <summary>
-	/// Asks the connection to answer, when it has been idle long enough to be worth asking.
+	/// Probes the connection once nothing has been sent down it for the heartbeat interval.
 	/// </summary>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Task.</returns>
 	/// <remarks>
-	/// A link carrying messages has already answered the question, and on a protocol that keeps its
-	/// own session alive an unnecessary probe is a second one beside the adapter's own.
+	/// The probe is also what keeps the session alive for the other side, which hears only what is sent
+	/// to it: a message sent within the interval makes it unnecessary, data arriving does not.
 	/// </remarks>
 	public async ValueTask ProcessHeartbeat(CancellationToken cancellationToken)
 	{
 		var heartbeat = HeartbeatInterval;
 
-		if (heartbeat > TimeSpan.Zero && (CurrentTime - _lastMessageTime) < heartbeat)
+		if (heartbeat > TimeSpan.Zero && (CurrentTime - _lastSentTime) < heartbeat)
 			return;
 
 		using (await _sync.LockAsync(cancellationToken))
