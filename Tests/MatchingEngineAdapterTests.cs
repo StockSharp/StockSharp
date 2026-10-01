@@ -722,6 +722,35 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// A venue tells the account what each position has gained or lost, not only the total. A strategy
+	/// that manages a basket closes it on the floating profit of the positions it holds, so the emulated
+	/// venue has to report a position again whenever the market moves the price it would close at.
+	/// </summary>
+	[TestMethod]
+	public async Task APositionReportsItsFloatingProfitWhenTheMarketMovesIt()
+	{
+		const string account = "Trader";
+
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(MoneyRow(account, 2000m, _start), CancellationToken);
+		await run.SendAsync(VenueBook(_securityId, _start, [new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+		await run.SendAsync(NewOrder(1, account, Sides.Buy, OrderTypes.Limit, 101m, 10m, _start.AddSeconds(1)), CancellationToken);
+
+		run.Out.Clear();
+
+		// Ten bought at 101, and the market then bids 150 for them.
+		await run.SendAsync(VenueBook(_securityId, _start.AddSeconds(2), [new QuoteChange(150m, 10m)], [new QuoteChange(151m, 10m)]), CancellationToken);
+
+		var position = run.Out.OfType<PositionChangeMessage>().LastOrDefault(m => m.SecurityId == _securityId && m.PortfolioName == account);
+
+		IsNotNull(position, "the position must be reported again once the market moves the price it would close at");
+		AreEqual(490m, position.TryGetDecimal(PositionChangeTypes.UnrealizedPnL),
+			"the position cost 1010 and the bid would pay 1500 for it, so it stands 490 ahead");
+	}
+
+	/// <summary>
 	/// A position that moved the account's way is not punished for it: what it can trade with does not
 	/// shrink because the market went in its favour.
 	/// </summary>

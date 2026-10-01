@@ -53,9 +53,6 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 
 		_inAdapter = new SubscriptionOnlineMessageAdapter(_emulatorAdapter);
 
-		if (_emulatorAdapter.IsPositionsEmulationRequired is bool isPosEmu)
-			_inAdapter = new PositionMessageAdapter(_inAdapter, new PositionManager(isPosEmu, new PositionManagerState()));
-
 		_inAdapter = new ChannelMessageAdapter(_inAdapter, inChannel, new PassThroughMessageChannel());
 		_inAdapter.NewOutMessageAsync += OnEmulatorNewOutMessageAsync;
 

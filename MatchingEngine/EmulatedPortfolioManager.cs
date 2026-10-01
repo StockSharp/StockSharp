@@ -63,21 +63,8 @@ public class EmulatedPortfolio
 		{
 			var total = 0m;
 
-			foreach (var (securityId, pos) in _positions)
-			{
-				var volume = pos.CurrentValue;
-
-				if (volume == 0)
-					continue;
-
-				// A long is closed by selling into the bid, a short by buying from the ask.
-				var price = _markPrices.TryGetClosePrice(securityId, volume > 0 ? Sides.Sell : Sides.Buy);
-
-				if (price is null)
-					continue;
-
-				total += (price.Value - pos.AveragePrice) * volume;
-			}
+			foreach (var pos in _positions.Values)
+				total += GetUnrealizedPnL(pos) ?? 0m;
 
 			return total;
 		}
@@ -92,6 +79,12 @@ public class EmulatedPortfolio
 	/// Total commission paid.
 	/// </summary>
 	public decimal Commission => _commission;
+
+	/// <summary>
+	/// Changes whenever an order, a fill or the opening state changes the account, so a report on it can be told
+	/// from a newer one.
+	/// </summary>
+	public long Version { get; private set; }
 
 	/// <summary>
 	/// Margin call level threshold. When margin level falls to this value, a warning is triggered.
@@ -115,6 +108,7 @@ public class EmulatedPortfolio
 	public void SetMoney(decimal money)
 	{
 		_beginMoney = money;
+		Version++;
 	}
 
 	/// <summary>
@@ -129,6 +123,7 @@ public class EmulatedPortfolio
 		pos.BeginValue = volume;
 		pos.Diff = 0;
 		pos.AveragePrice = avgPrice;
+		Version++;
 	}
 
 	private PositionInfo GetOrCreatePosition(SecurityId securityId)
@@ -164,6 +159,7 @@ public class EmulatedPortfolio
 	public TradeProcessingResult ProcessTrade(SecurityId securityId, Sides side, decimal price, decimal volume, decimal? commission = null, decimal? marginPrice = null)
 	{
 		var pos = GetOrCreatePosition(securityId);
+		Version++;
 
 		// Update commission
 		if (commission.HasValue)
@@ -273,6 +269,7 @@ public class EmulatedPortfolio
 		}
 
 		UpdateBlockedMoney();
+		Version++;
 	}
 
 	/// <summary>
@@ -299,6 +296,7 @@ public class EmulatedPortfolio
 		}
 
 		UpdateBlockedMoney();
+		Version++;
 	}
 
 	private void UpdateBlockedMoney()
@@ -349,6 +347,35 @@ public class EmulatedPortfolio
 	public IEnumerable<PositionInfo> GetAllPositions() => _positions.Values;
 
 	/// <summary>
+	/// What one position has gained or lost since it was taken, at the price it could be closed at now.
+	/// </summary>
+	/// <param name="securityId">Security ID.</param>
+	/// <returns>The floating profit, zero for a flat position, or <see langword="null"/> when the market has not priced an open one.</returns>
+	public decimal? GetUnrealizedPnL(SecurityId securityId)
+		=> _positions.TryGetValue(securityId, out var pos) ? GetUnrealizedPnL(pos) : 0m;
+
+	/// <summary>
+	/// What one position has gained or lost since it was taken, at the price it could be closed at now.
+	/// </summary>
+	/// <param name="position">A position of this portfolio.</param>
+	/// <returns>The floating profit, zero for a flat position, or <see langword="null"/> when the market has not priced an open one.</returns>
+	public decimal? GetUnrealizedPnL(PositionInfo position)
+	{
+		if (position is null)
+			throw new ArgumentNullException(nameof(position));
+
+		var volume = position.CurrentValue;
+
+		if (volume == 0)
+			return 0m;
+
+		// A long is closed by selling into the bid, a short by buying from the ask.
+		var price = _markPrices.TryGetClosePrice(position.SecurityId, volume > 0 ? Sides.Sell : Sides.Buy);
+
+		return price is null ? null : (price.Value - position.AveragePrice) * volume;
+	}
+
+	/// <summary>
 	/// Calculate unrealized PnL across all positions.
 	/// </summary>
 	/// <param name="getCurrentPrice">Function to get current market price for a security. Returns null if price unavailable.</param>
@@ -395,7 +422,7 @@ public class EmulatedPortfolioManager : IMarkPrices
 {
 	// One account, one balance: the name is compared the way the rest of the engine compares it,
 	// or an order spelling it differently opens a second, empty portfolio next to the funded one.
-	private readonly Dictionary<string, EmulatedPortfolio> _portfolios = new(StringComparer.InvariantCultureIgnoreCase);
+	private readonly Dictionary<string, EmulatedPortfolio> _portfolios = new(StringComparer.OrdinalIgnoreCase);
 
 	/// <summary>
 	/// Margin controller for order validation.
@@ -407,6 +434,12 @@ public class EmulatedPortfolioManager : IMarkPrices
 	/// position is worth what it cost.
 	/// </summary>
 	public IMarkPrices MarkPrices { get; set; }
+
+	/// <summary>
+	/// The money an account holds when it is opened, by the account's name, or <see langword="null"/> for an account
+	/// that opens empty.
+	/// </summary>
+	public Func<string, decimal?> InitialMoney { get; set; }
 
 	decimal? IMarkPrices.TryGetClosePrice(SecurityId securityId, Sides closeSide)
 		=> MarkPrices?.TryGetClosePrice(securityId, closeSide);
@@ -421,6 +454,10 @@ public class EmulatedPortfolioManager : IMarkPrices
 		if (!_portfolios.TryGetValue(name, out var portfolio))
 		{
 			portfolio = new EmulatedPortfolio(name, this);
+
+			if (InitialMoney?.Invoke(name) is decimal money)
+				portfolio.SetMoney(money);
+
 			_portfolios[name] = portfolio;
 		}
 		return portfolio;

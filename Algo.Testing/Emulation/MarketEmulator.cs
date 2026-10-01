@@ -33,6 +33,11 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		TransactionIdGenerator = transactionIdGenerator ?? throw new ArgumentNullException(nameof(transactionIdGenerator));
 
 		_engine.TransactionIdGenerator = transactionIdGenerator;
+
+		// The emulated account is the portfolio it stands for and starts with that portfolio's money.
+		_engine.PortfolioManager.InitialMoney = name => PortfolioProvider.LookupByPortfolioName(name) is { } portfolio
+			? portfolio.CurrentValue ?? portfolio.BeginValue
+			: null;
 	}
 
 	/// <inheritdoc />
@@ -168,9 +173,18 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			ProcessedMessageCount++;
 
 		var allowStore = Settings.AllowStoreGenerateMessages;
+		// The accounts as the batch left them; most batches report on none and need no record of them.
+		var accounts = results.Exists(static m => m is PositionChangeMessage)
+			? _engine.PortfolioManager.GetAllPortfolios().ToDictionary(account => account, account => account.Version)
+			: null;
 
 		foreach (var msg in results)
 		{
+			// An order a subscriber sends in reaction to a message runs before the rest of the batch is delivered and
+			// reports the account it leaves, so what the batch still holds about that account is older.
+			if (accounts is not null && msg is PositionChangeMessage report && IsOutdated(report, accounts))
+				continue;
+
 			if (!allowStore)
 				msg.OfflineMode = MessageOfflineModes.Ignore;
 
@@ -335,6 +349,12 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		// Process time-based events
 		ProcessTime(message.LocalTime, results);
 	}
+
+	private bool IsOutdated(PositionChangeMessage report, Dictionary<EmulatedPortfolio, long> accounts)
+		=> !report.PortfolioName.IsEmpty()
+			&& _engine.PortfolioManager.TryGetPortfolio(report.PortfolioName, out var account)
+			&& accounts.TryGetValue(account, out var version)
+			&& account.Version != version;
 
 	/// <summary>
 	/// Replay a closed candle as the prices it recorded, in the order it recorded them.
@@ -528,7 +548,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		};
 
 		var portfolio = _engine.PortfolioManager.GetPortfolio(order.PortfolioName);
-		var (_, _, position) = portfolio.ProcessTrade(
+		portfolio.ProcessTrade(
 			state.SecurityId, order.Side, fillPrice, volume, tradeMsg.Commission, order.MarginPrice);
 
 		// The fill before the state it produced: a reader releasing per-order state on a final
@@ -551,15 +571,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			HasOrderInfo = true,
 		});
 
-		results.Add(new PositionChangeMessage
-		{
-			SecurityId = state.SecurityId,
-			ServerTime = time,
-			LocalTime = time,
-			PortfolioName = order.PortfolioName,
-		}
-		.Add(PositionChangeTypes.CurrentValue, position.CurrentValue)
-		.TryAdd(PositionChangeTypes.AveragePrice, position.AveragePrice));
+		results.Add(_engine.CreatePositionUpdate(portfolio, state.SecurityId, time, time));
 
 		AddPortfolioUpdate(portfolio, time, results);
 	}
@@ -584,8 +596,10 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				// The prices the bar recorded go into the book first, and the bar is handed over
 				// after them: that is the order a live feed has, where the prints are what the bar
 				// is made of and the bar is declared finished only once they have all arrived. What
-				// those prices did to a resting order is therefore reported before the bar did it.
+				// those prices did to a resting order and to an open position is therefore reported
+				// before the bar did it.
 				ReplayCandle(secId, emulator, candle, time, results);
+				_engine.AddPositionRevaluations(time, results);
 				results.Add(candle);
 			}
 		}

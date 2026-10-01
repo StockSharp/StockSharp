@@ -740,6 +740,22 @@ public class EmulatedPortfolioManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void GetPortfolio_NameInAnotherCase_ReturnsSame()
+	{
+		var manager = new EmulatedPortfolioManager();
+
+		AreSame(manager.GetPortfolio("Test"), manager.GetPortfolio("TEST"));
+	}
+
+	[TestMethod]
+	public void GetPortfolio_NameWithAnInvisibleCharacter_ReturnsDifferent()
+	{
+		var manager = new EmulatedPortfolioManager();
+
+		AreNotSame(manager.GetPortfolio("Test"), manager.GetPortfolio("Te\u00ADst"));
+	}
+
+	[TestMethod]
 	public void HasPortfolio_Existing_ReturnsTrue()
 	{
 		var manager = new EmulatedPortfolioManager();

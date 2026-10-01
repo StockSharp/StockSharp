@@ -1103,6 +1103,189 @@ public class MarketEmulatorTests : BaseTestClass
 		m.Balance.AssertEqual(m.OrderVolume);
 	}
 
+	/// <summary>
+	/// A backtest built from candles synthesizes the book from each bar's prices, so a position opened there has a
+	/// price it could be closed at like any other. Its floating profit is reported with the fill and again once the
+	/// next bar moves that price.
+	/// </summary>
+	[TestMethod]
+	public async Task APositionOpenedOnCandlesReportsItsFloatingProfit()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var start = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var subscriptionId = _idGenerator.GetNextId();
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		Task SendBar(DateTime open, decimal price)
+			=> emu.SendInMessageAsync(new TimeFrameCandleMessage
+			{
+				SecurityId = id,
+				OriginalTransactionId = subscriptionId,
+				TypedArg = TimeSpan.FromMinutes(1),
+				LocalTime = open,
+				OpenTime = open,
+				CloseTime = open.AddMinutes(1),
+				OpenPrice = price,
+				HighPrice = price,
+				LowPrice = price,
+				ClosePrice = price,
+				TotalVolume = 10,
+				State = CandleStates.Finished,
+			}, CancellationToken).AsTask();
+
+		string Trace() => string.Join(" | ", res.Select(m => m is PositionChangeMessage p
+			? $"Position {p.SecurityId.SecurityCode} {string.Join(",", p.Changes.Select(c => $"{c.Key}={c.Value}"))}"
+			: m.Type.ToString()));
+
+		await SendBar(start, 100m);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(1) }, CancellationToken);
+
+		res.Clear();
+
+		await emu.SendInMessageAsync(new OrderRegisterMessage
+		{
+			SecurityId = id,
+			LocalTime = start.AddMinutes(1),
+			TransactionId = _idGenerator.GetNextId(),
+			Side = Sides.Buy,
+			OrderType = OrderTypes.Market,
+			Volume = 1,
+			PortfolioName = _pfName,
+		}, CancellationToken);
+
+		var opened = res.OfType<PositionChangeMessage>().LastOrDefault(m => m.SecurityId == id)?.TryGetDecimal(PositionChangeTypes.UnrealizedPnL);
+
+		IsNotNull(opened, $"a position the book can price has a floating profit from the moment it opens: {Trace()}");
+
+		res.Clear();
+
+		await SendBar(start.AddMinutes(1), 110m);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(2) }, CancellationToken);
+
+		var moved = res.OfType<PositionChangeMessage>().LastOrDefault(m => m.SecurityId == id)?.TryGetDecimal(PositionChangeTypes.UnrealizedPnL);
+
+		IsNotNull(moved, $"the next bar moves the price the position would close at, so it is reported again: {Trace()}");
+		AreEqual(opened + 10m, moved, "the market rose ten, so the long position gained ten");
+	}
+
+	/// <summary>
+	/// A subscriber acts on a bar as soon as it is handed over, and an order it sends then runs before the rest of
+	/// the batch is delivered. What the bar's prices did to a position therefore has to be reported before the bar:
+	/// the subscriber reads the position the bar produced, and nothing reported afterwards undoes what its order did.
+	/// </summary>
+	[TestMethod]
+	public async Task APositionIsRevaluedBeforeTheBarThatMovedIt()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var start = new DateTime(2026, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+		var subscriptionId = _idGenerator.GetNextId();
+		decimal? profitAtTheBar = null;
+		var closed = false;
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = subscriptionId,
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		await SendFlatBar(emu, id, subscriptionId, start, 100m);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(1) }, CancellationToken);
+		await emu.SendInMessageAsync(MarketOrder(id, Sides.Buy, start.AddMinutes(1)), CancellationToken);
+
+		// On the second finished bar the subscriber reads the position and closes it, as a strategy does.
+		emu.NewOutMessageAsync += async (message, ct) =>
+		{
+			if (closed || message is not CandleMessage { State: CandleStates.Finished, OpenTime: var open } || open != start.AddMinutes(1))
+				return;
+
+			closed = true;
+			profitAtTheBar = res.OfType<PositionChangeMessage>().Last(m => m.SecurityId == id).TryGetDecimal(PositionChangeTypes.UnrealizedPnL);
+			await emu.SendInMessageAsync(MarketOrder(id, Sides.Sell, start.AddMinutes(2)), ct);
+		};
+
+		var opened = res.OfType<PositionChangeMessage>().Last(m => m.SecurityId == id).TryGetDecimal(PositionChangeTypes.UnrealizedPnL);
+
+		await SendFlatBar(emu, id, subscriptionId, start.AddMinutes(1), 110m);
+		await emu.SendInMessageAsync(new TimeMessage { LocalTime = start.AddMinutes(2) }, CancellationToken);
+
+		IsTrue(closed, "the second bar must be handed over");
+		AreEqual(opened + 10m, profitAtTheBar, "when the bar is handed over its rise of ten is already in the position");
+		AreEqual(0m, res.OfType<PositionChangeMessage>().Last(m => m.SecurityId == id).TryGetDecimal(PositionChangeTypes.CurrentValue),
+			"the last report on the position is the one the closing order made");
+	}
+
+	/// <summary>
+	/// An order a subscriber sends when it is told of a fill runs before the rest of that fill's batch is delivered.
+	/// The account reports left in the batch describe the account before that order, and the order has already
+	/// reported the account after it, so they must not follow and put the older account back.
+	/// </summary>
+	[TestMethod]
+	public async Task AnOrderSentOnAFillIsNotUndoneByTheRestOfItsBatch()
+	{
+		var id = Helper.CreateSecurityId();
+		var emu = CreateEmuWithEvents(id, out var res);
+		var now = DateTime.UtcNow;
+		var reversed = false;
+
+		await AddBookAsync(emu, id, now, 99m, 101m);
+
+		// Told of the buy, the subscriber sells two, as a strategy reversing its position does.
+		emu.NewOutMessageAsync += async (message, ct) =>
+		{
+			if (reversed || message is not ExecutionMessage { TradeVolume: not null, Side: Sides.Buy })
+				return;
+
+			reversed = true;
+			await emu.SendInMessageAsync(MarketOrder(id, Sides.Sell, now, 2m), ct);
+		};
+
+		await emu.SendInMessageAsync(MarketOrder(id, Sides.Buy, now), CancellationToken);
+
+		IsTrue(reversed, "the buy must be filled");
+		AreEqual(-1m, res.OfType<PositionChangeMessage>().Last(m => m.SecurityId == id).TryGetDecimal(PositionChangeTypes.CurrentValue),
+			"bought one and sold two: the last report on the position is the short the reversal left");
+	}
+
+	private Task SendFlatBar(IMarketEmulator emu, SecurityId id, long subscriptionId, DateTime open, decimal price)
+		=> emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OriginalTransactionId = subscriptionId,
+			TypedArg = TimeSpan.FromMinutes(1),
+			LocalTime = open,
+			OpenTime = open,
+			CloseTime = open.AddMinutes(1),
+			OpenPrice = price,
+			HighPrice = price,
+			LowPrice = price,
+			ClosePrice = price,
+			TotalVolume = 10,
+			State = CandleStates.Finished,
+		}, CancellationToken).AsTask();
+
+	private static OrderRegisterMessage MarketOrder(SecurityId id, Sides side, DateTime time, decimal volume = 1m)
+		=> new()
+		{
+			SecurityId = id,
+			LocalTime = time,
+			TransactionId = _idGenerator.GetNextId(),
+			Side = side,
+			OrderType = OrderTypes.Market,
+			Volume = volume,
+			PortfolioName = _pfName,
+		};
+
 	[TestMethod]
 	public async Task CandleUpdates_MultipleTimeFrames_DoNotMoveTimeBackwards()
 	{

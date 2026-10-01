@@ -19,7 +19,7 @@ public class InMemoryPortfolioMessageAdapterProvider : IPortfolioMessageAdapterP
 	{
 	}
 
-	private readonly CachedSynchronizedDictionary<string, Guid> _adapters = new(StringComparer.InvariantCultureIgnoreCase);
+	private readonly CachedSynchronizedDictionary<string, Guid> _adapters = new(StringComparer.OrdinalIgnoreCase);
 
 	/// <inheritdoc />
 	public IEnumerable<KeyValuePair<string, Guid>> Adapters => _adapters.CachedPairs;

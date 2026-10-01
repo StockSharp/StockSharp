@@ -19,7 +19,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	private class CopyPortfolioProvider : IPortfolioProvider
 	{
 		private readonly IPortfolioProvider _provider;
-		private readonly SynchronizedDictionary<string, Portfolio> _copies = new(StringComparer.InvariantCultureIgnoreCase);
+		private readonly SynchronizedDictionary<string, Portfolio> _copies = new(StringComparer.OrdinalIgnoreCase);
 
 		public CopyPortfolioProvider(IPortfolioProvider provider)
 		{

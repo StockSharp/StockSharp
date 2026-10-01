@@ -3233,6 +3233,108 @@ public class BacktestingTests : BaseTestClass
 		IsTrue(execWithIds.Count > 0, "Expected ExecutionMessage to have subscription IDs from OrderStatus subscription");
 	}
 
+	/// <summary>
+	/// A venue reports the account it keeps: every position with its entry price and floating profit, under the
+	/// portfolio subscription that asked for it. The emulated venue keeps that account itself, so its reports have
+	/// to reach the subscriber rather than be replaced by positions recounted from the trades on the way out.
+	/// </summary>
+	[TestMethod]
+	public async Task EmulationAdapter_ReportsThePositionsOfTheEmulatedAccount()
+	{
+		var security = CreateTestSecurity();
+		var secId = security.ToSecurityId();
+		var portfolio = CreateTestPortfolio();
+		var messages = new List<Message>();
+		var adapter = CreateAccountEmulationAdapter(security, portfolio, messages);
+		var now = DateTime.UtcNow;
+
+		await adapter.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await adapter.SendInMessageAsync(new PortfolioLookupMessage { TransactionId = _accountLookupId, IsSubscribe = true }, CancellationToken);
+		await adapter.SendInMessageAsync(Quote(secId, now, 99m, 101m), CancellationToken);
+		await adapter.SendInMessageAsync(MarketBuy(secId, portfolio, now), CancellationToken);
+
+		var opened = messages.OfType<PositionChangeMessage>().LastOrDefault(m => m.SecurityId == secId);
+
+		IsNotNull(opened, "the emulated venue must report the position the fill opened");
+		IsTrue(opened.GetSubscriptionIds().Contains(_accountLookupId), "the position is reported under the portfolio subscription");
+		AreEqual(101m, opened.TryGetDecimal(PositionChangeTypes.AveragePrice));
+		AreEqual(-2m, opened.TryGetDecimal(PositionChangeTypes.UnrealizedPnL), "bought at the ask of 101, the position is marked at the bid of 99");
+	}
+
+	/// <summary>
+	/// The emulated account is the portfolio it stands for, so it starts with that portfolio's money: after a fill
+	/// the venue reports the portfolio's money moved by the fill, not a balance counted up from nothing.
+	/// </summary>
+	[TestMethod]
+	public async Task EmulationAdapter_TheEmulatedAccountStartsWithThePortfolioMoney()
+	{
+		var security = CreateTestSecurity();
+		var secId = security.ToSecurityId();
+		var portfolio = CreateTestPortfolio();
+		portfolio.CurrentValue = 1000m;
+		var messages = new List<Message>();
+		var adapter = CreateAccountEmulationAdapter(security, portfolio, messages);
+		var now = DateTime.UtcNow;
+
+		await adapter.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await adapter.SendInMessageAsync(new PortfolioLookupMessage { TransactionId = _accountLookupId, IsSubscribe = true }, CancellationToken);
+		await adapter.SendInMessageAsync(Quote(secId, now, 99m, 101m), CancellationToken);
+		await adapter.SendInMessageAsync(MarketBuy(secId, portfolio, now), CancellationToken);
+
+		var account = messages.OfType<PositionChangeMessage>().LastOrDefault(m => m.IsMoney());
+
+		IsNotNull(account, "the fill must report the account");
+		AreEqual(998m, account.TryGetDecimal(PositionChangeTypes.CurrentValue),
+			"a thousand in the portfolio, and the position bought at 101 is worth 99 at the bid");
+	}
+
+	private const long _accountLookupId = 1000;
+
+	// An emulation-only adapter of its own over one security and one portfolio, recording what it sends out.
+	private static IMessageAdapter CreateAccountEmulationAdapter(Security security, Portfolio portfolio, List<Message> messages)
+	{
+		var adapter = new EmulationMessageAdapter(
+			new PassThroughMessageAdapter(new IncrementalIdGenerator()),
+			new PassThroughMessageChannel(),
+			isEmulationOnly: true,
+			new CollectionSecurityProvider([security]),
+			new CollectionPortfolioProvider([portfolio]),
+			new InMemoryExchangeInfoProvider())
+		{
+			OwnInnerAdapter = false,
+		};
+
+		adapter.NewOutMessageAsync += (message, _) =>
+		{
+			messages.Add(message);
+			return default;
+		};
+
+		return adapter;
+	}
+
+	private static Level1ChangeMessage Quote(SecurityId securityId, DateTime time, decimal bid, decimal ask)
+		=> new Level1ChangeMessage
+		{
+			SecurityId = securityId,
+			ServerTime = time,
+			LocalTime = time,
+		}
+		.TryAdd(Level1Fields.BestBidPrice, bid)
+		.TryAdd(Level1Fields.BestAskPrice, ask);
+
+	private static OrderRegisterMessage MarketBuy(SecurityId securityId, Portfolio portfolio, DateTime time)
+		=> new()
+		{
+			TransactionId = 2000,
+			SecurityId = securityId,
+			PortfolioName = portfolio.Name,
+			Side = Sides.Buy,
+			Volume = 1,
+			OrderType = OrderTypes.Market,
+			LocalTime = time,
+		};
+
 	// An emulation adapter built the way a live one is: an inner adapter of its own, an incoming
 	// channel, and the three providers the emulator needs.
 	private static EmulationMessageAdapter CreateEmulationAdapter(IMessageChannel channel)

@@ -15,6 +15,9 @@ public class MatchingEngineAdapter : IMessageTransport
 	private readonly EmulatedPortfolioManager _portfolioManager = new();
 	private readonly IStopOrderManager _stopOrderManager = new StopOrderManager();
 
+	// The floating profit each position was last reported with; a position is reported again only when it moves.
+	private readonly Dictionary<PositionInfo, decimal> _reportedUnrealizedPnL = [];
+
 	private IncrementalIdGenerator _orderIdGenerator = new();
 	private IncrementalIdGenerator _tradeIdGenerator = new();
 
@@ -133,6 +136,7 @@ public class MatchingEngineAdapter : IMessageTransport
 		try
 		{
 			ProcessMessage(message, results);
+			AddPositionRevaluations(message.LocalTime, results);
 		}
 		catch (Exception ex)
 		{
@@ -550,7 +554,7 @@ public class MatchingEngineAdapter : IMessageTransport
 
 			tradeMsg.Commission = chargeCommission?.Invoke(tradeMsg);
 
-			var (_, _, position) = portfolio.ProcessTrade(
+			portfolio.ProcessTrade(
 				regMsg.SecurityId, regMsg.Side, trade.Price, trade.Volume, tradeMsg.Commission, order.MarginPrice);
 
 			// The fill before the state it produced: a reader releasing per-order state on a final
@@ -559,15 +563,7 @@ public class MatchingEngineAdapter : IMessageTransport
 
 			// Position change. Named after the traded instrument, not money: the value carried
 			// here is a lot quantity, and the account's cash follows on its own row just below.
-			results.Add(new PositionChangeMessage
-			{
-				SecurityId = regMsg.SecurityId,
-				ServerTime = serverTime,
-				LocalTime = regMsg.LocalTime,
-				PortfolioName = regMsg.PortfolioName,
-			}
-			.Add(PositionChangeTypes.CurrentValue, position.CurrentValue)
-			.TryAdd(PositionChangeTypes.AveragePrice, position.AveragePrice));
+			results.Add(CreatePositionUpdate(portfolio, regMsg.SecurityId, serverTime, regMsg.LocalTime));
 
 			AddPortfolioUpdate(portfolio, regMsg.LocalTime, results);
 
@@ -605,7 +601,7 @@ public class MatchingEngineAdapter : IMessageTransport
 				// through the same seam; what it charges either side is its own business.
 				counterTradeMsg.Commission = chargeCommission?.Invoke(counterTradeMsg);
 
-				var (_, _, counterPosition) = counterPortfolio.ProcessTrade(
+				counterPortfolio.ProcessTrade(
 					regMsg.SecurityId, counterOrder.Side, trade.Price, fill.Volume, counterTradeMsg.Commission, counterOrder.MarginPrice);
 
 				results.Add(counterTradeMsg);
@@ -627,15 +623,7 @@ public class MatchingEngineAdapter : IMessageTransport
 					HasOrderInfo = true,
 				});
 
-				results.Add(new PositionChangeMessage
-				{
-					SecurityId = regMsg.SecurityId,
-					ServerTime = serverTime,
-					LocalTime = regMsg.LocalTime,
-					PortfolioName = counterOrder.PortfolioName,
-				}
-				.Add(PositionChangeTypes.CurrentValue, counterPosition.CurrentValue)
-				.TryAdd(PositionChangeTypes.AveragePrice, counterPosition.AveragePrice));
+				results.Add(CreatePositionUpdate(counterPortfolio, regMsg.SecurityId, serverTime, regMsg.LocalTime));
 
 				AddPortfolioUpdate(counterPortfolio, regMsg.LocalTime, results);
 
@@ -1172,20 +1160,12 @@ public class MatchingEngineAdapter : IMessageTransport
 				OriginalTransactionId = lookupMsg.TransactionId,
 			});
 
-			foreach (var (securityId, volume, avgPrice) in portfolio.GetPositions())
+			foreach (var (securityId, volume, _) in portfolio.GetPositions())
 			{
 				if (volume == 0)
 					continue;
 
-				results.Add(new PositionChangeMessage
-				{
-					SecurityId = securityId,
-					ServerTime = lookupMsg.LocalTime,
-					LocalTime = lookupMsg.LocalTime,
-					PortfolioName = portfolio.Name,
-				}
-				.Add(PositionChangeTypes.CurrentValue, volume)
-				.TryAdd(PositionChangeTypes.AveragePrice, avgPrice));
+				results.Add(CreatePositionUpdate(portfolio, securityId, lookupMsg.LocalTime, lookupMsg.LocalTime));
 			}
 		}
 
@@ -1405,6 +1385,7 @@ public class MatchingEngineAdapter : IMessageTransport
 	{
 		_securityStates.Clear();
 		_portfolioManager.Clear();
+		_reportedUnrealizedPnL.Clear();
 		_stopOrderManager.Clear();
 		_lastInputTime = default;
 
@@ -1583,6 +1564,66 @@ public class MatchingEngineAdapter : IMessageTransport
 
 	private static void AddPortfolioUpdate(EmulatedPortfolio portfolio, DateTime time, List<Message> results)
 		=> results.Add(CreatePortfolioUpdate(portfolio, time));
+
+	/// <summary>
+	/// Create the message that reports one position of an account: its size, entry price and floating profit.
+	/// </summary>
+	/// <param name="portfolio">The account.</param>
+	/// <param name="securityId">Security ID.</param>
+	/// <param name="serverTime">Server time.</param>
+	/// <param name="localTime">Local time.</param>
+	/// <returns>The position update.</returns>
+	public PositionChangeMessage CreatePositionUpdate(EmulatedPortfolio portfolio, SecurityId securityId, DateTime serverTime, DateTime localTime)
+	{
+		if (portfolio is null)
+			throw new ArgumentNullException(nameof(portfolio));
+
+		var position = portfolio.GetPosition(securityId);
+
+		return CreatePositionUpdate(portfolio, securityId, position, position is null ? 0m : portfolio.GetUnrealizedPnL(position), serverTime, localTime);
+	}
+
+	private PositionChangeMessage CreatePositionUpdate(EmulatedPortfolio portfolio, SecurityId securityId, PositionInfo position, decimal? unrealizedPnL, DateTime serverTime, DateTime localTime)
+	{
+		if (position is not null && unrealizedPnL is decimal reported)
+			_reportedUnrealizedPnL[position] = reported;
+
+		return new PositionChangeMessage
+		{
+			SecurityId = securityId,
+			ServerTime = serverTime,
+			LocalTime = localTime,
+			PortfolioName = portfolio.Name,
+		}
+		.Add(PositionChangeTypes.CurrentValue, position?.CurrentValue ?? 0m)
+		.TryAdd(PositionChangeTypes.AveragePrice, position?.AveragePrice)
+		.TryAdd(PositionChangeTypes.UnrealizedPnL, unrealizedPnL, true);
+	}
+
+	/// <summary>
+	/// Report again every open position whose floating profit the market has moved since it was last reported.
+	/// </summary>
+	/// <param name="time">Time of the move.</param>
+	/// <param name="results">Messages to add the reports to.</param>
+	public void AddPositionRevaluations(DateTime time, List<Message> results)
+	{
+		if (results is null)
+			throw new ArgumentNullException(nameof(results));
+
+		foreach (var portfolio in _portfolioManager.GetAllPortfolios())
+		{
+			foreach (var position in portfolio.GetAllPositions())
+			{
+				if (position.CurrentValue == 0 || portfolio.GetUnrealizedPnL(position) is not decimal unrealizedPnL)
+					continue;
+
+				if (_reportedUnrealizedPnL.TryGetValue(position, out var reported) && reported == unrealizedPnL)
+					continue;
+
+				results.Add(CreatePositionUpdate(portfolio, position.SecurityId, position, unrealizedPnL, time, time));
+			}
+		}
+	}
 
 	/// <summary>
 	/// Send out message.

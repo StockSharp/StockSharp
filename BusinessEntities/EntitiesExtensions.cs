@@ -1055,7 +1055,7 @@ public static partial class EntitiesExtensions
 
 			// http://stocksharp.com/forum/yaf_postst5143findunread_API-4-2-4-0-Nie-vystavliaiutsia-zaiavki-po-niekotorym-instrumientam-FORTS.aspx
 			// для Quik необходимо соблюдение регистра в коде инструмента при выставлении заявок
-			if (secCode.EqualsIgnoreCase(security.Code))
+			if (string.Equals(secCode, security.Code, StringComparison.OrdinalIgnoreCase))
 				secCode = security.Code;
 
 			//if (!boardCode.EqualsIgnoreCase(ExchangeBoard.Test.Code))
@@ -1339,7 +1339,7 @@ public static partial class EntitiesExtensions
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
 
-		return security == AllSecurity || security.Id.EqualsIgnoreCase(AllSecurity.Id);
+		return security == AllSecurity || string.Equals(security.Id, AllSecurity.Id, StringComparison.OrdinalIgnoreCase);
 	}
 
 	/// <summary>

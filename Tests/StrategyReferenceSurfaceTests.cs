@@ -123,7 +123,7 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		Ev.OrderEdited,
 		Ev.NewMyTrade, Ev.OwnTradeReceived, Ev.OrderReceived,
 		// Positions and money.
-		Ev.PositionChanged, Ev.PositionChangedTyped, Ev.NewPosition, Ev.PositionReceived,
+		Ev.PositionChanged, Ev.PositionChangedTyped, Ev.NewPosition, Ev.PositionReceived, Ev.PortfolioReceived,
 		Ev.PnLChanged, Ev.PnLReceived, Ev.PnLReceived2,
 		Ev.CommissionChanged, Ev.SlippageChanged,
 		// Market data relays.
@@ -144,7 +144,6 @@ public class StrategyReferenceSurfaceTests : BaseTestClass
 		(Ev.OrderEditFailReceived, "same contract as OrderEditFailed: a correct edit must succeed"),
 		(Ev.SubscriptionFailed, "no failing subscription in the scenario"),
 		(Ev.DataTypeReceived, "no data-type lookup subscription in the scenario"),
-		(Ev.PortfolioReceived, "the emulator reports account money as Money-security position changes (PositionReceived), never as portfolio messages"),
 		(Ev.MassOrderCanceled, "orders are canceled one by one; no mass-cancel API is exercised"),
 		(Ev.MassOrderCanceled2, "same as MassOrderCanceled"),
 		(Ev.MassOrderCancelFailed, "same as MassOrderCanceled"),

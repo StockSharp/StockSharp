@@ -1176,6 +1176,34 @@ public class ExtensionsMethodsTests : BaseTestClass
 		Helper.CreateSecurityId().IsAllSecurity().AssertFalse();
 	}
 
+	[TestMethod]
+	public void IsAllSecurity_SecurityWithTheIdInAnotherCase_ReturnsTrue()
+	{
+		new Security { Id = EntitiesExtensions.AllSecurity.Id.ToLowerInvariant() }.IsAllSecurity().AssertTrue();
+	}
+
+	[TestMethod]
+	public void IsAllSecurity_SecurityWhoseIdDiffersByAnInvisibleCharacter_ReturnsFalse()
+	{
+		new Security { Id = EntitiesExtensions.AllSecurity.Id + "\u00AD" }.IsAllSecurity().AssertFalse();
+	}
+
+	#endregion
+
+	#region ToSecurityId
+
+	[TestMethod]
+	public void ToSecurityId_CodeInAnotherCase_KeepsTheCaseOfTheCode()
+	{
+		new Security { Id = "SBER@TQBR", Code = "Sber" }.ToSecurityId().SecurityCode.AssertEqual("Sber");
+	}
+
+	[TestMethod]
+	public void ToSecurityId_CodeWithAnInvisibleCharacter_KeepsTheCodeOfTheId()
+	{
+		new Security { Id = "SBER@TQBR", Code = "SB\u00ADER" }.ToSecurityId().SecurityCode.AssertEqual("SBER");
+	}
+
 	#endregion
 
 	#region MicexCurrencyName

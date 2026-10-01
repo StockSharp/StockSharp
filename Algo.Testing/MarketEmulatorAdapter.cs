@@ -25,9 +25,6 @@ public class MarketEmulatorAdapter : MessageAdapter
 	public IMarketEmulator Emulator { get; }
 
 	/// <inheritdoc />
-	public override bool? IsPositionsEmulationRequired => true;
-
-	/// <inheritdoc />
 	public override bool IsSupportTransactionLog => false;
 
 	/// <inheritdoc />
