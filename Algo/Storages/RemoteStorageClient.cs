@@ -8,7 +8,10 @@ public class RemoteStorageClient : Disposable
 	private readonly IMessageAdapter _adapter;
 	private readonly int _securityBatchSize;
 
-	private bool _isConnected;
+	// Requests run at once - a source asks for the dates of every kind of data it downloads together - and a
+	// transport refuses to be connected a second time while the first connect is still under way.
+	private readonly AsyncLock _connectLock = new();
+	private volatile bool _isConnected;
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
@@ -325,6 +328,21 @@ public class RemoteStorageClient : Disposable
 		}, cancellationToken);
 	}
 
+	private async ValueTask EnsureConnectedAsync(CancellationToken cancellationToken)
+	{
+		if (_isConnected)
+			return;
+
+		using (await _connectLock.LockAsync(cancellationToken))
+		{
+			if (_isConnected)
+				return;
+
+			await _adapter.ConnectAsync(cancellationToken);
+			_isConnected = true;
+		}
+	}
+
 	private async ValueTask<(TResult[] results, bool isFull)> DoAsync<TResult>(ITransactionIdMessage request, CancellationToken cancellationToken = default)
 		where TResult : Message
 	{
@@ -341,12 +359,7 @@ public class RemoteStorageClient : Disposable
 		// create subscription from request
 		var subscrMsg = ((ISubscriptionMessage)request).TypedClone();
 
-		// ensure adapter is connected
-		if (!_isConnected)
-		{
-			await _adapter.ConnectAsync(cancellationToken);
-			_isConnected = true;
-		}
+		await EnsureConnectedAsync(cancellationToken);
 
 		var result = new List<Message>();
 		var isFull = false;

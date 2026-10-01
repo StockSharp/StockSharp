@@ -437,6 +437,36 @@ public class RemoteStorageClientTests : BaseTestClass
 		AreEqual(date3, dates[2]);
 	}
 
+	/// <summary>
+	/// A source asks for the dates of every kind of data it downloads at once, over one client.
+	/// </summary>
+	/// <remarks>
+	/// Each request connected the client if it was not connected yet, so the second of two requests made while
+	/// the first was still connecting connected it again - which a transport refuses until it is disconnected.
+	/// </remarks>
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task GetDatesAsync_TwoAtOnce_ShareOneConnection()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator()) { ConnectDelay = TimeSpan.FromMilliseconds(200) };
+
+		var secId = new SecurityId { SecurityCode = "GAZP", BoardCode = "TQBR" };
+		var date = new DateTime(2025, 4, 1);
+
+		adapter.DataTypeLookupHandler = lookup => [new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [date] }];
+
+		using var client = new RemoteStorageClient(adapter, 100);
+
+		var results = await Task.WhenAll(
+			client.GetDatesAsync(secId, DataType.Ticks, StorageFormats.Binary, CancellationToken).AsTask(),
+			client.GetDatesAsync(secId, TimeSpan.FromMinutes(1).TimeFrame(), StorageFormats.Binary, CancellationToken).AsTask());
+
+		foreach (var dates in results)
+			AreEqual(date, dates.Single());
+
+		AreEqual(1, adapter.SentMessages.Count(m => m.Type == MessageTypes.Connect));
+	}
+
 	#endregion
 
 	#region SaveSecuritiesAsync Tests
@@ -1644,6 +1674,13 @@ class MockRemoteAdapter : MessageAdapter,
 	public Func<RemoteFileCommandMessage, RemoteFileMessage> FileCommandHandler { get; set; }
 	public bool SimulateTimeout { get; set; }
 
+	/// <summary>
+	/// How long connecting takes, during which a second connect is refused as a transport refuses it.
+	/// </summary>
+	public TimeSpan ConnectDelay { get; set; }
+
+	private int _connections;
+
 	// IAddressAdapter<EndPoint>
 	public System.Net.EndPoint Address { get; set; }
 
@@ -1672,11 +1709,18 @@ class MockRemoteAdapter : MessageAdapter,
 		switch (message.Type)
 		{
 			case MessageTypes.Connect:
+				if (Interlocked.Increment(ref _connections) > 1)
+					throw new InvalidOperationException("Connected again without disconnecting.");
+
+				if (ConnectDelay > TimeSpan.Zero)
+					await Task.Delay(ConnectDelay, cancellationToken);
+
 				if (!SimulateTimeout)
 					await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
 				break;
 
 			case MessageTypes.Disconnect:
+				Interlocked.Exchange(ref _connections, 0);
 				await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
 				break;
 
