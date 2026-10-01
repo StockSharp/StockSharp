@@ -3,6 +3,8 @@
   <PropertyGroup>
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
+    <!-- A machine that builds for the desktop alone - without the mobile workloads - says so, and the phones are left out. -->
+    <StockSharpTargets Condition="'$(StockSharpTargets)' == '' and '$(MauiDesktopOnly)' == 'true' and $([MSBuild]::IsOSPlatform('windows'))">$(NetTfm)-windows10.0.19041.0</StockSharpTargets>
     <StockSharpTargets Condition="'$(StockSharpTargets)' == ''">$(NetTfm)-android;$(NetTfm)-ios</StockSharpTargets>
     <StockSharpTargets Condition="'$(StockSharpTargets)' == '$(NetTfm)-android;$(NetTfm)-ios' and $([MSBuild]::IsOSPlatform('windows'))">$(StockSharpTargets);$(NetTfm)-windows10.0.19041.0</StockSharpTargets>
     <TargetFrameworks>$(StockSharpTargets)</TargetFrameworks>
