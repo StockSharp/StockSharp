@@ -192,8 +192,24 @@ public static partial class EntitiesExtensions
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <param name="id">Security ID.</param>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	[Obsolete("Use LookupByIdAsync method instead.")]
 	public static Security LookupById(this ISecurityProvider provider, string id)
 		=> provider.LookupById(id.ToSecurityId());
+
+	/// <summary>
+	/// To get the instrument by the identifier.
+	/// </summary>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="id">Security ID.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	public static ValueTask<Security> LookupByIdAsync(this ISecurityProvider provider, string id, CancellationToken cancellationToken)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return provider.LookupByIdAsync(id.ToSecurityId(), cancellationToken);
+	}
 
 	private const BindingFlags _publicStatic = BindingFlags.Public | BindingFlags.Static;
 
@@ -2398,6 +2414,7 @@ public static partial class EntitiesExtensions
 	/// <param name="provider"><see cref="ISecurityProvider"/></param>
 	/// <param name="id">Security ID.</param>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	[Obsolete("Use LookupByIdAsync method instead.")]
 	public static Security LookupById(this ISecurityProvider provider, SecurityId id)
 	{
 		if (provider is null)
@@ -2412,6 +2429,7 @@ public static partial class EntitiesExtensions
 	/// <param name="provider"><see cref="ISecurityProvider"/></param>
 	/// <param name="criteria">Message security lookup for specified criteria.</param>
 	/// <returns>Found instruments.</returns>
+	[Obsolete("Use LookupAsync method instead.")]
 	public static IEnumerable<Security> Lookup(this ISecurityProvider provider, SecurityLookupMessage criteria)
 	{
 		if (provider is null)

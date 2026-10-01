@@ -1222,4 +1222,80 @@ public class SecurityProviderTests : BaseTestClass
 		found.Length.AssertEqual(1, "a security stored once is found once");
 		AreSame(apple, found[0], "search must answer with the security the trie holds");
 	}
+
+	[TestMethod]
+	public async Task SecurityStorage_GetOrCreateAsync_LooksTheSecurityUpWithTheCallersToken()
+	{
+		var security = Helper.CreateSecurity();
+		var id = security.ToSecurityId();
+
+		var underlying = new Mock<ISecurityProvider>();
+		underlying.Setup(p => p.LookupByIdAsync(id, It.IsAny<CancellationToken>())).ReturnsAsync(security);
+
+		var (found, isNew) = await new InMemorySecurityStorage(underlying.Object).GetOrCreateAsync(id, _ => throw new InvalidOperationException("a held security is not created again"), CancellationToken);
+
+		AreSame(security, found);
+		IsFalse(isNew);
+		underlying.Verify(p => p.LookupByIdAsync(id, CancellationToken), Times.Once());
+	}
+
+	[TestMethod]
+	public async Task SecurityStorage_GetOrCreateAsync_CreatesAndKeepsWhatTheStorageDoesNotHold()
+	{
+		var id = new SecurityId { SecurityCode = "NEW", BoardCode = BoardCodes.Test };
+
+		var underlying = new Mock<ISecurityProvider>();
+		underlying.Setup(p => p.LookupByIdAsync(id, It.IsAny<CancellationToken>())).ReturnsAsync((Security)null);
+
+		var storage = new InMemorySecurityStorage(underlying.Object);
+
+		var (created, isNew) = await storage.GetOrCreateAsync(id, key => new Security { Id = key, Code = id.SecurityCode, Board = ExchangeBoard.Test }, CancellationToken);
+
+		IsTrue(isNew);
+		AreEqual(id.ToStringId(), created.Id);
+		AreSame(created, await storage.LookupByIdAsync(id, CancellationToken));
+		underlying.Verify(p => p.LookupByIdAsync(id, CancellationToken), Times.Once());
+	}
+
+	[TestMethod]
+	public async Task SecurityProvider_LookupByIdAsync_FindsTheSecurityByItsStringId()
+	{
+		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
+		var provider = new CollectionSecurityProvider([aapl, CreateSecurityWithCode("MSFT", "NASDAQ")]);
+
+		AreSame(aapl, await provider.LookupByIdAsync("AAPL@NASDAQ", CancellationToken));
+	}
+
+	[TestMethod]
+	public async Task SecurityProvider_LookupAsync_FiltersByTheFieldsOfTheCriteria()
+	{
+		var msft = CreateSecurityWithCode("MSFT", "NASDAQ");
+		var provider = new CollectionSecurityProvider([CreateSecurityWithCode("AAPL", "NASDAQ"), msft]);
+
+		var found = await provider.LookupAsync(new Security { Code = "MSFT" }).ToArrayAsync(CancellationToken);
+
+		AreEqual(1, found.Length);
+		AreSame(msft, found[0]);
+	}
+
+	[TestMethod]
+	public async Task SecurityProvider_LookupByCodeAsync_FindsByTheCodeOrEverythingWithoutOne()
+	{
+		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
+		var provider = new CollectionSecurityProvider([aapl, CreateSecurityWithCode("MSFT", "NASDAQ")]);
+
+		var byCode = await provider.LookupByCodeAsync("AAPL").ToArrayAsync(CancellationToken);
+
+		AreEqual(1, byCode.Length);
+		AreSame(aapl, byCode[0]);
+		AreEqual(2, (await provider.LookupByCodeAsync(null).ToArrayAsync(CancellationToken)).Length);
+	}
+
+	[TestMethod]
+	public async Task SecurityProvider_GetAllSecurityAsync_FindsTheAllSecuritiesPlaceholder()
+	{
+		var provider = new CollectionSecurityProvider([EntitiesExtensions.AllSecurity, CreateSecurityWithCode("AAPL", "NASDAQ")]);
+
+		AreSame(EntitiesExtensions.AllSecurity, await provider.GetAllSecurityAsync(CancellationToken));
+	}
 }

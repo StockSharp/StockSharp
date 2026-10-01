@@ -472,12 +472,27 @@ public static partial class TraderHelper
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
 	/// <returns>Found instruments.</returns>
+	[Obsolete("Use LookupAsync method instead.")]
 	public static IEnumerable<Security> Lookup(this ISecurityProvider provider, Security criteria)
 	{
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
 
 		return provider.Lookup(criteria.ToLookupMessage());
+	}
+
+	/// <summary>
+	/// Lookup securities by criteria <paramref name="criteria" />.
+	/// </summary>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="criteria">The instrument whose fields will be used as a filter.</param>
+	/// <returns>Found instruments.</returns>
+	public static IAsyncEnumerable<Security> LookupAsync(this ISecurityProvider provider, Security criteria)
+	{
+		if (provider == null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return provider.LookupAsync(criteria.ToLookupMessage());
 	}
 
 	/// <summary>
@@ -512,14 +527,25 @@ public static partial class TraderHelper
 	/// <param name="code">Security code.</param>
 	/// <param name="type">Security type.</param>
 	/// <returns>The got instrument. If there is no instrument by given criteria, <see langword="null" /> is returned.</returns>
+	[Obsolete("Use LookupByCodeAsync method instead.")]
 	public static IEnumerable<Security> LookupByCode(this ISecurityProvider provider, string code, SecurityTypes? type = null)
+		=> provider.LookupByCodeAsync(code, type).ToBlockingEnumerable();
+
+	/// <summary>
+	/// To get the instruments by the instrument code.
+	/// </summary>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="code">Security code.</param>
+	/// <param name="type">Security type.</param>
+	/// <returns>Found instruments, or all of them when neither the code nor the type is given.</returns>
+	public static IAsyncEnumerable<Security> LookupByCodeAsync(this ISecurityProvider provider, string code, SecurityTypes? type = null)
 	{
 		if (provider == null)
 			throw new ArgumentNullException(nameof(provider));
 
 		return code.IsEmpty() && type == null
-			? provider.LookupAll()
-			: provider.Lookup(new Security { Code = code, Type = type });
+			? provider.LookupAllAsync()
+			: provider.LookupAsync(new Security { Code = code, Type = type });
 	}
 
 	/// <summary>
@@ -527,6 +553,7 @@ public static partial class TraderHelper
 	/// </summary>
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <returns>All available instruments.</returns>
+	[Obsolete("Use LookupAllAsync method instead.")]
 	public static IEnumerable<Security> LookupAll(this ISecurityProvider provider)
 		=> LookupAllAsync(provider).ToBlockingEnumerable();
 
@@ -578,7 +605,7 @@ public static partial class TraderHelper
 		if (creator is null)
 			throw new ArgumentNullException(nameof(creator));
 
-		var security = storage.LookupById(id);
+		var security = await storage.LookupByIdAsync(id, cancellationToken);
 
 		if (security != null)
 			return (security, false);
@@ -590,7 +617,7 @@ public static partial class TraderHelper
 		await storage.SaveAsync(security, false, cancellationToken);
 
 		// In case of a concurrent creation, return the canonical stored instance.
-		var stored = storage.LookupById(id);
+		var stored = await storage.LookupByIdAsync(id, cancellationToken);
 
 		if (stored != null && !ReferenceEquals(stored, security))
 			return (stored, false);
@@ -735,9 +762,24 @@ public static partial class TraderHelper
 	/// </summary>
 	/// <param name="provider">The provider of information about instruments.</param>
 	/// <returns>Found instance.</returns>
+	[Obsolete("Use GetAllSecurityAsync method instead.")]
 	public static Security GetAllSecurity(this ISecurityProvider provider)
 	{
 		return provider.LookupById(default(SecurityId));
+	}
+
+	/// <summary>
+	/// Find <see cref="EntitiesExtensions.AllSecurity"/> instance in the specified provider.
+	/// </summary>
+	/// <param name="provider">The provider of information about instruments.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Found instance.</returns>
+	public static ValueTask<Security> GetAllSecurityAsync(this ISecurityProvider provider, CancellationToken cancellationToken)
+	{
+		if (provider == null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return provider.LookupByIdAsync(default(SecurityId), cancellationToken);
 	}
 
 	/// <summary>
