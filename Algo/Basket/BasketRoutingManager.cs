@@ -410,7 +410,7 @@ public class BasketRoutingManager : IBasketRoutingManager
 			}
 
 			// Keep the parent unsubscribe request until all child responses are aggregated.
-			_subscriptionRouting.AddRequest(mdMsg.TransactionId, mdMsg.TypedClone(), null);
+			_subscriptionRouting.AddUnsubscribe(mdMsg.TransactionId, mdMsg.TypedClone());
 		}
 
 		var routing = ToChild(mdMsg, adapters);
@@ -643,12 +643,12 @@ public class BasketRoutingManager : IBasketRoutingManager
 		{
 			if (!originMsg.IsSubscribe && needParentResponse)
 			{
-				if (_subscriptionRouting.TryGetRequest(parentId.Value, out var parentRequest, out _))
+				if (_subscriptionRouting.TryGetUnsubscribe(parentId.Value, out var parentRequest))
 				{
 					if (!allError)
 						_subscriptionRouting.RemoveSubscription(parentRequest.OriginalTransactionId);
 
-					_subscriptionRouting.RemoveRequest(parentId.Value);
+					_subscriptionRouting.RemoveUnsubscribe(parentId.Value);
 				}
 
 				_parentChildMap.RemoveMappings(parentId.Value);

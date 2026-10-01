@@ -358,6 +358,69 @@ public class BasketRoutingManagerTests : BaseTestClass
 		transformed.OriginalTransactionId.AssertEqual(parentTransId, "Should remap to parent ID");
 	}
 
+	/// <summary>
+	/// The basket numbers the requests it sends on from its own sequence, while the subscriptions it is given
+	/// come numbered from the caller's, so the two can meet. An unsubscribe the venue never answers must not
+	/// take the answer to a later request that happens to carry its number: the subscription behind that
+	/// request would lose its link to it, never come alive and get none of its data.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task AnAnswerNumberedLikeAPendingUnsubscribeReachesItsOwnSubscription()
+	{
+		var childIds = new IncrementalIdGenerator();
+		// The caller runs a step ahead of the basket, as the market data gate did beside its own basket.
+		var parentIds = new IncrementalIdGenerator { Current = 1 };
+		var ctx = CreateTestContext(childIds);
+
+		var adapter = CreateAdapter(childIds);
+		ctx.Router.AddMessageTypeAdapter(MessageTypes.MarketData, adapter);
+		ctx.ConnectionState.SetAdapterState(adapter, ConnectionStates.Connected, null);
+
+		var first = parentIds.GetNextId();
+		var firstResult = await ctx.Manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			SecurityId = _secId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = first,
+		}, a => a, CancellationToken);
+
+		var firstChild = ((ISubscriptionMessage)firstResult.RoutingDecisions[0].Message).TransactionId;
+		await ctx.Manager.ProcessOutMessageAsync(adapter,
+			new SubscriptionResponseMessage { OriginalTransactionId = firstChild }, a => a, CancellationToken);
+
+		// Unsubscribed, and the venue never answers it.
+		var unsubscribe = parentIds.GetNextId();
+		await ctx.Manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			SecurityId = _secId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = false,
+			TransactionId = unsubscribe,
+			OriginalTransactionId = first,
+		}, a => a, CancellationToken);
+
+		var second = parentIds.GetNextId();
+		var secondResult = await ctx.Manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			SecurityId = _secId1,
+			DataType2 = DataType.Ticks,
+			IsSubscribe = true,
+			TransactionId = second,
+		}, a => a, CancellationToken);
+
+		var secondChild = ((ISubscriptionMessage)secondResult.RoutingDecisions[0].Message).TransactionId;
+		secondChild.AssertEqual(unsubscribe, "the case needs the new request to carry the pending unsubscribe's number");
+
+		var answer = await ctx.Manager.ProcessOutMessageAsync(adapter,
+			new SubscriptionResponseMessage { OriginalTransactionId = secondChild }, a => a, CancellationToken);
+
+		((SubscriptionResponseMessage)answer.TransformedMessage).OriginalTransactionId.AssertEqual(second, "the answer did not reach the subscription it belongs to");
+		ctx.ParentChildMap.TryGetParent(secondChild, out var parent).AssertTrue("the subscription lost its link to the request that carries its data");
+		parent.AssertEqual(second);
+	}
+
 	#endregion
 
 	#region ProcessOutMessage — SubscriptionFinished

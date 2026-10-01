@@ -1244,7 +1244,7 @@ public class BasketMarketDataTests : BasketTestBase
 			.AssertFalse("Successful unsubscribe must remove the parent subscription");
 		parentChildMap.TryGetParent(childUnsubId, out _)
 			.AssertFalse("Child unsubscribe mapping must be removed after aggregation");
-		subscriptionRouting.TryGetRequest(unsubId, out _, out _)
+		subscriptionRouting.TryGetUnsubscribe(unsubId, out _)
 			.AssertFalse("Parent unsubscribe request must be removed after aggregation");
 		connectionState.ConnectedCount.AssertEqual(1, "Connection unchanged");
 		pendingState.Count.AssertEqual(0);
@@ -1594,7 +1594,7 @@ public class BasketMarketDataTests : BasketTestBase
 			.AssertFalse("First unsubscribe child mapping must be removed");
 		parentChildMap.TryGetParent(unsub2.TransactionId, out _)
 			.AssertFalse("Second unsubscribe child mapping must be removed");
-		subscriptionRouting.TryGetRequest(unsubId, out _, out _)
+		subscriptionRouting.TryGetUnsubscribe(unsubId, out _)
 			.AssertFalse("Parent broadcast unsubscribe request must be removed");
 		connectionState.ConnectedCount.AssertEqual(2);
 		pendingState.Count.AssertEqual(0);
