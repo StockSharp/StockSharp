@@ -2316,6 +2316,37 @@ public class StrategyDecomposedTests : BaseTestClass
 		strategy.OrderProcessor.IsTracked(order).AssertFalse();
 	}
 
+	[TestMethod]
+	public void PositionReceived_WithoutRiskRules_DoesNotConsultTheRiskManager()
+	{
+		var connMock = CreateMockConnector();
+		var security = CreateSecurity();
+		var portfolio = CreatePortfolio();
+
+		var riskManager = new Mock<IRiskManager>();
+		riskManager.SetupGet(r => r.Rules).Returns(new CachedSynchronizedList<IRiskRule>());
+
+		var strategy = new BuyOnSignalStrategy
+		{
+			Connector = connMock.Object,
+			Security = security,
+			Portfolio = portfolio,
+			RiskManager = riskManager.Object,
+		};
+
+		var positionSub = new Subscription(DataType.PositionChanges);
+		strategy.Subscriptions.Subscribe(positionSub);
+		strategy.OnPositionReceived(positionSub, new Position
+		{
+			Security = security,
+			Portfolio = portfolio,
+			CurrentValue = 10m,
+			LocalTime = DateTime.UtcNow,
+		});
+
+		riskManager.Verify(r => r.ProcessRules(It.IsAny<PositionChangeMessage>()), Times.Never());
+	}
+
 	/// <summary>
 	/// A strategy without a connector still provides UTC time, preserving the time-provider contract
 	/// used by callers before a live or historical connector is assigned.

@@ -1101,7 +1101,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 				_position = position.CurrentValue ?? 0;
 		}
 
-		ProcessRisk(position.ToChangeMessage());
+		ProcessPositionRisk(position);
 
 		if (isNew)
 			_newPosition?.Invoke(position);
@@ -2020,13 +2020,28 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 		}
 
 		// No rule triggered on this pass: if trading was previously blocked, unblock it.
-		if (_isTradingBlocked && triggeredCnt == 0)
-		{
-			_isTradingBlocked = false;
-			LogInfo("Trading unblocked - risk limits no longer exceeded.");
-		}
+		if (triggeredCnt == 0)
+			UnblockTrading();
 
 		return null;
+	}
+
+	private void ProcessPositionRisk(Position position)
+	{
+		// A position is reported on every price move, so its message is built only when a rule will check it.
+		if (RiskManager.Rules.Count > 0)
+			ProcessRisk(position.ToChangeMessage());
+		else
+			UnblockTrading();
+	}
+
+	private void UnblockTrading()
+	{
+		if (!_isTradingBlocked)
+			return;
+
+		_isTradingBlocked = false;
+		LogInfo("Trading unblocked - risk limits no longer exceeded.");
 	}
 
 	private void SubscribeConnector()
@@ -2230,7 +2245,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 
 		Positions.Process(pos);
 
-		ProcessRisk(pos.ToChangeMessage());
+		ProcessPositionRisk(pos);
 	}
 
 	private void OnSubscriptionStarted(Subscription subscription)
