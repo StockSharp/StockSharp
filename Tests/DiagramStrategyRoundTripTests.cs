@@ -1,5 +1,8 @@
 namespace StockSharp.Tests;
 
+using System.Runtime.CompilerServices;
+using System.Runtime.Loader;
+
 using StockSharp.Diagram;
 using StockSharp.Diagram.Elements;
 
@@ -2100,6 +2103,45 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 
 		run.Results.Received.Count.AssertEqual(1, "input the validation accepts must be computed");
 		run.Results.Received[0].GetValue<decimal>().AssertEqual(3m, "6 divided by 2 is 3");
+	}
+
+	/// <summary>
+	/// A formula is compiled into an assembly of its own, and an element that is done with must take it along: a
+	/// host that builds elements to describe them - the web designer does, on every edit of a formula - otherwise
+	/// keeps every formula ever typed loaded for the rest of its life.
+	/// </summary>
+	[TestMethod]
+	[DoNotParallelize] // Reads the process-wide list of assembly load contexts.
+	public async Task A_disposed_formula_element_unloads_the_assembly_its_formula_was_compiled_into()
+	{
+		var compiledInto = CompileAndDispose("a + b * 2");
+
+		IsTrue(compiledInto.Length > 0, "the formula was not compiled into a context of its own, so there is nothing to look at");
+
+		await Helper.WaitUntilAsync(() =>
+		{
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
+			return compiledInto.All(c => !c.IsAlive);
+		}, TimeSpan.FromSeconds(30), CancellationToken, "the assembly of a disposed element's formula is unloaded");
+	}
+
+	// Kept out of line, so nothing of the element outlives the call on the caller's stack.
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private static WeakReference[] CompileAndDispose(string expression)
+	{
+		var before = AssemblyLoadContext.All.ToHashSet();
+
+		var math = new MathDiagramElement { Expression = expression };
+
+		var compiledInto = AssemblyLoadContext.All
+			.Where(c => c.IsCollectible && !before.Contains(c))
+			.Select(c => new WeakReference(c))
+			.ToArray();
+
+		math.Dispose();
+
+		return compiledInto;
 	}
 
 	#endregion

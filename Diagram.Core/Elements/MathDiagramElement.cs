@@ -202,6 +202,19 @@ public class MathDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
+	protected override void DisposeManaged()
+	{
+		_formula = null;
+		_validator = null;
+
+		// The compiled formulas live in assemblies of their own, which stay loaded until unloaded.
+		_formulaCtx.Dispose();
+		_validatorCtx.Dispose();
+
+		base.DisposeManaged();
+	}
+
+	/// <inheritdoc />
 	protected override void OnReseted()
 	{
 		base.OnReseted();

@@ -1095,11 +1095,6 @@ public static partial class TraderHelper
 	public static Task<ExpressionFormula<decimal>> CompileAsync(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
 		=> CompileAsync<decimal>(expression, fileSystem, tracker, cancellationToken);
 
-	private static class CacheHolder<TResult>
-	{
-		public static readonly SynchronizedDictionary<string, ExpressionFormula<TResult>> Cache = [];
-	}
-
 	/// <summary>
 	/// Compile mathematical formula.
 	/// </summary>
@@ -1120,18 +1115,12 @@ public static partial class TraderHelper
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
-	public static async Task<ExpressionFormula<TResult>> CompileAsync<TResult>(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
-	{
-		var cache = CacheHolder<TResult>.Cache;
-
-		if (cache.TryGetValue(expression, out var formula))
-			return formula;
-
-		formula = await CodeExtensions.GetCSharpCompiler().Compile<TResult>(tracker, fileSystem, expression, ServicesRegistry.TryCompilerCache, cancellationToken);
-		cache[expression] = formula;
-
-		return formula;
-	}
+	/// <remarks>
+	/// The formula is loaded into <paramref name="tracker"/> and lives as long as it does, so it is not kept for the next
+	/// caller: what saves compiling the same text again is the registered <see cref="ICompilerCache"/>.
+	/// </remarks>
+	public static Task<ExpressionFormula<TResult>> CompileAsync<TResult>(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker, CancellationToken cancellationToken)
+		=> CodeExtensions.GetCSharpCompiler().Compile<TResult>(tracker, fileSystem, expression, ServicesRegistry.TryCompilerCache, cancellationToken);
 
 	/// <summary>
 	/// Create <see cref="IMessageAdapter"/>.
