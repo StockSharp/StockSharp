@@ -1412,9 +1412,22 @@ public class ConnectorRoutingTests : BaseTestClass
 			Comment = "Test order",
 		};
 
+		// A refused registration answers at once and says why, instead of leaving the wait below to run out.
+		var refusals = new ConcurrentQueue<OrderFail>();
+		connector.OrderRegisterFailReceived += (_, fail) => refusals.Enqueue(fail);
+
 		connector.RegisterOrder(originalOrder);
 
-		await Helper.WaitUntilAsync(() => adapter.GetMessages<OrderRegisterMessage>().Any(), CancellationToken);
+		try
+		{
+			await Helper.WaitUntilAsync(() => adapter.GetMessages<OrderRegisterMessage>().Any() || !refusals.IsEmpty, CancellationToken);
+		}
+		catch (TimeoutException ex)
+		{
+			throw new TimeoutException($"{ex.Message} Order state: {originalOrder.State}. The adapter got: {adapter.ReceivedMessages.Select(m => m.Type.ToString()).Join(", ")}.", ex);
+		}
+
+		refusals.Count.AssertEqual(0, $"The registration was refused: {refusals.Select(r => r.Error?.Message).Join("; ")}");
 
 		await connector.DisconnectAsync(CancellationToken);
 
