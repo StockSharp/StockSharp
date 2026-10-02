@@ -1,12 +1,11 @@
 namespace StockSharp.Tests;
 
-using System.Collections.Concurrent;
+using System.Threading.Channels;
 
 class DataFeedEmulator : IDisposable
 {
 	private readonly CancellationTokenSource _cts = new();
-	private readonly BlockingCollection<Message> _outputQueue = [];
-	private readonly TaskCompletionSource<bool> _firstMessage = AsyncHelper.CreateTaskCompletionSource<bool>();
+	private readonly Channel<Message> _output = Channel.CreateUnbounded<Message>(new() { SingleReader = true, SingleWriter = true });
 	private Task _generatorTask;
 
 	public SecurityId SecurityId { get; }
@@ -29,16 +28,13 @@ class DataFeedEmulator : IDisposable
 		_subscriptionId = subscriptionId;
 	}
 
-	public async Task StartAsync(CancellationToken cancellationToken = default)
+	public void Start()
 	{
 		if (_isGenerating)
 			return;
 
 		_isGenerating = true;
-		_generatorTask = Task.Run(GenerateDataLoop, cancellationToken);
-
-		// Wait until the first message is actually produced instead of guessing with a fixed delay.
-		await _firstMessage.Task.WaitAsync(TimeSpan.FromSeconds(5), cancellationToken);
+		_generatorTask = Task.Run(GenerateDataLoop);
 	}
 
 	public void Stop()
@@ -63,10 +59,7 @@ class DataFeedEmulator : IDisposable
 					msg.OriginalTransactionId = _subscriptionId;
 					if (StampSubscriptionIds)
 						msg.SetSubscriptionIds([_subscriptionId]);
-					_outputQueue.Add((Message)msg);
-
-					// Signal that the first message has been produced so StartAsync can return deterministically.
-					_firstMessage.TrySetResult(true);
+					_output.Writer.TryWrite((Message)msg);
 				}
 			}
 
@@ -127,47 +120,15 @@ class DataFeedEmulator : IDisposable
 		return null;
 	}
 
-	public bool TryGetMessage(TimeSpan timeout, out Message message)
-	{
-		return _outputQueue.TryTake(out message, timeout);
-	}
-
-	public async Task<Message> WaitForMessageAsync(TimeSpan timeout, CancellationToken token)
-	{
-		var cts = CancellationTokenSource.CreateLinkedTokenSource(token);
-		cts.CancelAfter(timeout);
-
-		try
-		{
-			while (!cts.Token.IsCancellationRequested)
-			{
-				if (_outputQueue.TryTake(out var msg, 10, token))
-					return msg;
-				await Task.Delay(5, cts.Token);
-			}
-		}
-		catch (OperationCanceledException) { }
-
-		return null;
-	}
-
-	public async Task<List<Message>> CollectMessagesAsync(int count, TimeSpan perMessageTimeout, CancellationToken token)
-	{
-		var result = new List<Message>();
-		for (int i = 0; i < count; i++)
-		{
-			var msg = await WaitForMessageAsync(perMessageTimeout, token);
-			if (msg != null)
-				result.Add(msg);
-		}
-		return result;
-	}
+	// Waits without holding a thread: a test blocked on the feed takes one from the generator it waits for.
+	public ValueTask<Message> NextAsync(CancellationToken cancellationToken)
+		=> _output.Reader.ReadAsync(cancellationToken);
 
 	public void Dispose()
 	{
 		_cts.Cancel();
 		_generatorTask?.Wait(1000);
-		_outputQueue.Dispose();
+		_output.Writer.TryComplete();
 		_cts.Dispose();
 	}
 }
@@ -179,6 +140,66 @@ class DataFeedEmulator : IDisposable
 [TestClass]
 public class SubscriptionDataFeedTests : BaseTestClass
 {
+	// A feed message comes within milliseconds; the margin is for a test host short of threads, where the feed can
+	// stall for seconds.
+	private static readonly TimeSpan _patience = TimeSpan.FromSeconds(30);
+
+	private Func<Message, ValueTask<Message>> Through(SubscriptionOnlineManager manager)
+		=> async message => (await manager.ProcessOutMessageAsync(message, CancellationToken)).forward;
+
+	private static Func<Message, ValueTask<Message>> Through(SubscriptionManager manager)
+		=> message => ValueTask.FromResult(manager.ProcessOutMessage(message).forward);
+
+	// Passes feed messages through until `count` of them come out.
+	private async Task<List<T>> ForwardedAsync<T>(DataFeedEmulator feed, Func<Message, ValueTask<Message>> process, int count)
+		where T : class
+	{
+		using var deadline = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		deadline.CancelAfter(_patience);
+
+		var forwarded = new List<T>();
+
+		try
+		{
+			while (forwarded.Count < count)
+			{
+				if (await process(await feed.NextAsync(deadline.Token)) is T message)
+					forwarded.Add(message);
+			}
+		}
+		catch (OperationCanceledException) when (!CancellationToken.IsCancellationRequested)
+		{
+			Fail($"{forwarded.Count} of {count} messages came through in {_patience}.");
+		}
+
+		return forwarded;
+	}
+
+	// Passes the next `count` feed messages through and returns those that came out.
+	private async Task<List<Message>> PassNextAsync(DataFeedEmulator feed, Func<Message, ValueTask<Message>> process, int count)
+	{
+		using var deadline = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+		deadline.CancelAfter(_patience);
+
+		var forwarded = new List<Message>();
+		var passed = 0;
+
+		try
+		{
+			for (; passed < count; passed++)
+			{
+				if (await process(await feed.NextAsync(deadline.Token)) is { } message)
+					forwarded.Add(message);
+			}
+		}
+		catch (OperationCanceledException) when (!CancellationToken.IsCancellationRequested)
+		{
+			Fail($"The feed gave {passed} of {count} messages in {_patience}.");
+		}
+
+		return forwarded;
+	}
+
 	#region SubscriptionOnlineManager Tests
 
 	[TestMethod]
@@ -206,28 +227,12 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		// Start feed
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync(CancellationToken);
+		feed.Start();
 
-		// Collect messages
-		var receivedMessages = new List<ISubscriptionIdMessage>();
-		var collectTask = Task.Run(async () =>
-		{
-			for (int i = 0; i < 10; i++)
-			{
-				if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-				{
-					var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
-					if (forward is ISubscriptionIdMessage subMsg)
-						receivedMessages.Add(subMsg);
-				}
-			}
-		}, token);
-
-		await collectTask;
+		var receivedMessages = await ForwardedAsync<ISubscriptionIdMessage>(feed, Through(manager), 10);
 		feed.Stop();
 
 		// Verify
-		receivedMessages.Count.AssertGreater(0, "Should receive messages");
 		foreach (var msg in receivedMessages)
 		{
 			msg.GetSubscriptionIds().Count(id => id == 100).AssertEqual(1, "All messages should have subscription ID 100");
@@ -256,21 +261,10 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync(CancellationToken);
+		feed.Start();
 
 		// Receive some messages while subscribed
-		var messagesBeforeUnsubscribe = new List<ISubscriptionIdMessage>();
-		for (int i = 0; i < 5; i++)
-		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
-				if (forward is ISubscriptionIdMessage subMsg)
-					messagesBeforeUnsubscribe.Add(subMsg);
-			}
-		}
-
-		messagesBeforeUnsubscribe.Count.AssertGreater(0, "Should receive messages before unsubscribe");
+		await ForwardedAsync<ISubscriptionIdMessage>(feed, Through(manager), 5);
 
 		// Unsubscribe
 		await manager.ProcessInMessageAsync(new MarketDataMessage
@@ -283,16 +277,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}, token);
 
 		// Continue receiving - messages should not have subscription ID 100
-		var messagesAfterUnsubscribe = new List<ISubscriptionIdMessage>();
-		for (int i = 0; i < 5; i++)
-		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
-				if (forward is ISubscriptionIdMessage subMsg)
-					messagesAfterUnsubscribe.Add(subMsg);
-			}
-		}
+		var messagesAfterUnsubscribe = await PassNextAsync(feed, Through(manager), 5);
 
 		feed.Stop();
 
@@ -330,24 +315,13 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}, token);
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync(CancellationToken);
+		feed.Start();
 
-		// Collect messages
-		var receivedMessages = new List<ISubscriptionIdMessage>();
-		for (int i = 0; i < 10; i++)
-		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
-				if (forward is ISubscriptionIdMessage subMsg)
-					receivedMessages.Add(subMsg);
-			}
-		}
+		var receivedMessages = await ForwardedAsync<ISubscriptionIdMessage>(feed, Through(manager), 10);
 
 		feed.Stop();
 
 		// All messages should have BOTH subscription IDs
-		receivedMessages.Count.AssertGreater(0, "Should receive messages");
 		foreach (var msg in receivedMessages)
 		{
 			var ids = msg.GetSubscriptionIds();
@@ -386,21 +360,11 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}, token);
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync(CancellationToken);
+		feed.Start();
 
 		// Verify both IDs present
-		var messagesBefore = new List<ISubscriptionIdMessage>();
-		for (int i = 0; i < 3; i++)
-		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
-				if (forward is ISubscriptionIdMessage subMsg)
-					messagesBefore.Add(subMsg);
-			}
-		}
+		var messagesBefore = await ForwardedAsync<ISubscriptionIdMessage>(feed, Through(manager), 3);
 
-		messagesBefore.Count.AssertGreater(0);
 		messagesBefore[0].GetSubscriptionIds().Length.AssertEqual(2, "Should have both IDs before unsubscribe");
 
 		// Unsubscribe first
@@ -414,20 +378,10 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}, token);
 
 		// Now only second subscription should receive
-		var messagesAfter = new List<ISubscriptionIdMessage>();
-		for (int i = 0; i < 5; i++)
-		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
-				if (forward is ISubscriptionIdMessage subMsg)
-					messagesAfter.Add(subMsg);
-			}
-		}
+		var messagesAfter = await ForwardedAsync<ISubscriptionIdMessage>(feed, Through(manager), 5);
 
 		feed.Stop();
 
-		messagesAfter.Count.AssertGreater(0);
 		foreach (var msg in messagesAfter)
 		{
 			var ids = msg.GetSubscriptionIds();
@@ -458,21 +412,11 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync(CancellationToken);
+		feed.Start();
 
 		// Phase 1: Subscribed - should receive with ID 100
-		var phase1 = new List<long[]>();
-		for (int i = 0; i < 3; i++)
-		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
-				if (forward is ISubscriptionIdMessage subMsg)
-					phase1.Add(subMsg.GetSubscriptionIds());
-			}
-		}
+		var phase1 = (await ForwardedAsync<ISubscriptionIdMessage>(feed, Through(manager), 3)).Select(m => m.GetSubscriptionIds()).ToList();
 
-		phase1.Count.AssertGreater(0);
 		phase1.All(ids => ids.Count(id => id == 100) == 1).AssertTrue("Phase 1: all should have ID 100");
 
 		// Unsubscribe
@@ -486,18 +430,9 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}, token);
 
 		// Phase 2: Unsubscribed - messages should NOT be forwarded (forward = null)
-		var phase2ForwardedCount = 0;
-		for (int i = 0; i < 3; i++)
-		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
-				if (forward != null)
-					phase2ForwardedCount++;
-			}
-		}
+		var phase2Forwarded = await PassNextAsync(feed, Through(manager), 3);
 
-		phase2ForwardedCount.AssertEqual(0, "Phase 2: no messages should be forwarded after unsubscribe");
+		phase2Forwarded.Count.AssertEqual(0, "Phase 2: no messages should be forwarded after unsubscribe");
 
 		// Resubscribe with new ID
 		await manager.ProcessInMessageAsync(new MarketDataMessage
@@ -514,20 +449,10 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		feed.SetSubscriptionId(200);
 
 		// Phase 3: Resubscribed - should receive with ID 200
-		var phase3 = new List<long[]>();
-		for (int i = 0; i < 3; i++)
-		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
-				if (forward is ISubscriptionIdMessage subMsg)
-					phase3.Add(subMsg.GetSubscriptionIds());
-			}
-		}
+		var phase3 = (await ForwardedAsync<ISubscriptionIdMessage>(feed, Through(manager), 3)).Select(m => m.GetSubscriptionIds()).ToList();
 
 		feed.Stop();
 
-		phase3.Count.AssertGreater(0);
 		phase3.All(ids => ids.Count(id => id == 200) == 1).AssertTrue("Phase 3: all should have ID 200");
 	}
 
@@ -556,23 +481,12 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync(CancellationToken);
+		feed.Start();
 
-		// Collect messages
-		var receivedMessages = new List<ISubscriptionIdMessage>();
-		for (int i = 0; i < 10; i++)
-		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = manager.ProcessOutMessage(msg);
-				if (forward is ISubscriptionIdMessage subMsg)
-					receivedMessages.Add(subMsg);
-			}
-		}
+		var receivedMessages = await ForwardedAsync<ISubscriptionIdMessage>(feed, Through(manager), 10);
 
 		feed.Stop();
 
-		receivedMessages.Count.AssertGreater(0, "Should receive messages");
 		foreach (var msg in receivedMessages)
 		{
 			msg.GetSubscriptionIds().Length.AssertEqual(0, "SubscriptionManager does not set subscription IDs for live subscriptions");
@@ -603,21 +517,11 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		manager.ProcessOutMessage(new SubscriptionResponseMessage { OriginalTransactionId = 100 });
 
 		feed.SetSubscriptionId(100);
-		await feed.StartAsync(CancellationToken);
+		feed.Start();
 
 		// Receive some messages while subscribed
-		var messagesBeforeUnsubscribe = new List<ISubscriptionIdMessage>();
-		for (int i = 0; i < 5; i++)
-		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = manager.ProcessOutMessage(msg);
-				if (forward is ISubscriptionIdMessage subMsg)
-					messagesBeforeUnsubscribe.Add(subMsg);
-			}
-		}
+		var messagesBeforeUnsubscribe = await ForwardedAsync<ISubscriptionIdMessage>(feed, Through(manager), 5);
 
-		messagesBeforeUnsubscribe.Count.AssertGreater(0, "Should receive messages before unsubscribe");
 		foreach (var msg in messagesBeforeUnsubscribe)
 			msg.GetSubscriptionIds().SequenceEqual([100L]).AssertTrue();
 
@@ -632,16 +536,7 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		});
 
 		// Messages after unsubscribe should not have ID 100
-		var messagesAfterUnsubscribe = new List<ISubscriptionIdMessage>();
-		for (int i = 0; i < 5; i++)
-		{
-			if (feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = manager.ProcessOutMessage(msg);
-				if (forward is ISubscriptionIdMessage subMsg)
-					messagesAfterUnsubscribe.Add(subMsg);
-			}
-		}
+		var messagesAfterUnsubscribe = await PassNextAsync(feed, Through(manager), 5);
 
 		feed.Stop();
 
@@ -688,29 +583,12 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		feed1.SetSubscriptionId(100);
 		feed2.SetSubscriptionId(101);
-		await feed1.StartAsync(CancellationToken);
-		await feed2.StartAsync(CancellationToken);
+		feed1.Start();
+		feed2.Start();
 
 		// Collect messages from both feeds
-		var messages1 = new List<ISubscriptionIdMessage>();
-		var messages2 = new List<ISubscriptionIdMessage>();
-
-		for (int i = 0; i < 10; i++)
-		{
-			if (feed1.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg1))
-			{
-				var (forward, _) = manager.ProcessOutMessage(msg1);
-				if (forward is ISubscriptionIdMessage subMsg)
-					messages1.Add(subMsg);
-			}
-
-			if (feed2.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg2))
-			{
-				var (forward, _) = manager.ProcessOutMessage(msg2);
-				if (forward is ISubscriptionIdMessage subMsg)
-					messages2.Add(subMsg);
-			}
-		}
+		var messages1 = await ForwardedAsync<ISubscriptionIdMessage>(feed1, Through(manager), 10);
+		var messages2 = await ForwardedAsync<ISubscriptionIdMessage>(feed2, Through(manager), 10);
 
 		// Unsubscribe from first
 		manager.ProcessInMessage(new MarketDataMessage
@@ -722,32 +600,13 @@ public class SubscriptionDataFeedTests : BaseTestClass
 			DataType2 = DataType.Ticks,
 		});
 
-		var firstAfter = new List<ISubscriptionIdMessage>();
-		var secondAfter = new List<ISubscriptionIdMessage>();
-		for (int i = 0; i < 5; i++)
-		{
-			if (feed1.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg1))
-			{
-				var (forward, _) = manager.ProcessOutMessage(msg1);
-				if (forward is ISubscriptionIdMessage subMsg)
-					firstAfter.Add(subMsg);
-			}
-
-			if (feed2.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg2))
-			{
-				var (forward, _) = manager.ProcessOutMessage(msg2);
-				if (forward is ISubscriptionIdMessage subMsg)
-					secondAfter.Add(subMsg);
-			}
-		}
+		var firstAfter = await PassNextAsync(feed1, Through(manager), 5);
+		var secondAfter = await ForwardedAsync<ISubscriptionIdMessage>(feed2, Through(manager), 5);
 
 		feed1.Stop();
 		feed2.Stop();
 
-		messages1.Count.AssertGreater(0);
-		messages2.Count.AssertGreater(0);
 		firstAfter.Count.AssertEqual(0);
-		secondAfter.Count.AssertGreater(0);
 
 		foreach (var msg in messages1)
 			msg.GetSubscriptionIds().SequenceEqual([100L]).AssertTrue();
@@ -796,29 +655,12 @@ public class SubscriptionDataFeedTests : BaseTestClass
 
 		ticksFeed.SetSubscriptionId(100);
 		level1Feed.SetSubscriptionId(101);
-		await ticksFeed.StartAsync(CancellationToken);
-		await level1Feed.StartAsync(CancellationToken);
+		ticksFeed.Start();
+		level1Feed.Start();
 
 		// Collect messages
-		var ticksMessages = new List<ExecutionMessage>();
-		var level1Messages = new List<Level1ChangeMessage>();
-
-		for (int i = 0; i < 10; i++)
-		{
-			if (ticksFeed.TryGetMessage(TimeSpan.FromMilliseconds(50), out var tickMsg))
-			{
-				var (forward, _) = await manager.ProcessOutMessageAsync(tickMsg, token);
-				if (forward is ExecutionMessage exec)
-					ticksMessages.Add(exec);
-			}
-
-			if (level1Feed.TryGetMessage(TimeSpan.FromMilliseconds(50), out var l1Msg))
-			{
-				var (forward, _) = await manager.ProcessOutMessageAsync(l1Msg, token);
-				if (forward is Level1ChangeMessage l1)
-					level1Messages.Add(l1);
-			}
-		}
+		await ForwardedAsync<ExecutionMessage>(ticksFeed, Through(manager), 10);
+		await ForwardedAsync<Level1ChangeMessage>(level1Feed, Through(manager), 10);
 
 		// Unsubscribe from Ticks only
 		await manager.ProcessInMessageAsync(new MarketDataMessage
@@ -831,23 +673,10 @@ public class SubscriptionDataFeedTests : BaseTestClass
 		}, token);
 
 		// Level1 should still work
-		var level1After = new List<Level1ChangeMessage>();
-		for (int i = 0; i < 5; i++)
-		{
-			if (level1Feed.TryGetMessage(TimeSpan.FromMilliseconds(200), out var msg))
-			{
-				var (forward, _) = await manager.ProcessOutMessageAsync(msg, token);
-				if (forward is Level1ChangeMessage l1)
-					level1After.Add(l1);
-			}
-		}
+		var level1After = await ForwardedAsync<Level1ChangeMessage>(level1Feed, Through(manager), 5);
 
 		ticksFeed.Stop();
 		level1Feed.Stop();
-
-		ticksMessages.Count.AssertGreater(0, "Should receive ticks");
-		level1Messages.Count.AssertGreater(0, "Should receive level1");
-		level1After.Count.AssertGreater(0, "Level1 should still work after ticks unsubscribed");
 
 		foreach (var msg in level1After)
 		{
