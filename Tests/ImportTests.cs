@@ -124,6 +124,26 @@ public class ImportTests : BaseTestClass
 		}
 	}
 
+	/// <summary>
+	/// Import settings name every kind of data they can import.
+	/// </summary>
+	/// <remarks>
+	/// Settings for news, boards or board states threw when asked for their name, so a property editor that shows
+	/// import settings by their name fell over the moment one of those kinds was chosen.
+	/// </remarks>
+	[TestMethod]
+	public void SettingsNameEveryKindOfDataTheyImport()
+	{
+		DataType[] kinds =
+		[
+			DataType.Securities, DataType.Ticks, DataType.OrderLog, DataType.Transactions, TimeSpan.FromMinutes(1).TimeFrame(),
+			DataType.MarketDepth, DataType.Level1, DataType.PositionChanges, DataType.News, DataType.Board, DataType.BoardState,
+		];
+
+		foreach (var kind in kinds)
+			IsFalse(new ImportSettings { DataType = kind }.ToString().IsEmpty(), $"{kind}");
+	}
+
 	[TestMethod]
 	public Task Ticks()
 	{

@@ -12,6 +12,19 @@ using DataType = StockSharp.Messages.DataType;
 [TypeConverter(typeof(ExpandableObjectConverter))]
 public class ImportSettings : NotifiableObject, IAsyncPersistable
 {
+	private class LineSeparatorsSource : ItemsSourceBase<string>
+	{
+		protected override IEnumerable<string> GetValues() => ["\r\n", "\n", "\r"];
+
+		protected override string GetName(string value) => value switch
+		{
+			"\r\n" => "CR LF",
+			"\n" => "LF",
+			"\r" => "CR",
+			_ => value,
+		};
+	}
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ImportSettings"/>.
 	/// </summary>
@@ -188,6 +201,7 @@ public class ImportSettings : NotifiableObject, IAsyncPersistable
 		GroupName = LocalizedStrings.CommonKey,
 		Order = 6)]
 	[BasicSetting]
+	[ItemsSource(typeof(LineSeparatorsSource))]
 	public string LineSeparator
 	{
 		get => _lineSeparator;
@@ -457,8 +471,6 @@ public class ImportSettings : NotifiableObject, IAsyncPersistable
 	/// <inheritdoc />
 	public override string ToString()
 	{
-		var msgType = DataType.MessageType;
-
 		if (DataType == DataType.Securities)
 			return LocalizedStrings.Securities;
 		else if (DataType == DataType.Level1)
@@ -476,7 +488,7 @@ public class ImportSettings : NotifiableObject, IAsyncPersistable
 		else if (DataType == DataType.Transactions)
 			return LocalizedStrings.Transactions;
 		else
-			throw new ArgumentOutOfRangeException(nameof(DataType.MessageType), msgType, LocalizedStrings.InvalidValue);
+			return DataType.ToString();
 	}
 
 	/// <summary>
