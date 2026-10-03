@@ -17,6 +17,9 @@ public class SecurityState(SecurityId securityId)
 	// Built on the first incremental frame. A venue that publishes whole books never needs one.
 	private OrderBookIncrementBuilder _incrementBuilder;
 
+	// The builder has handed over a whole book, so the increments after it are folded straight into the engine's.
+	private bool _isBookStated;
+
 	/// <summary>
 	/// Security identifier.
 	/// </summary>
@@ -107,11 +110,26 @@ public class SecurityState(SecurityId securityId)
 		{
 			OrderBook.SetSnapshot(msg.Bids ?? [], msg.Asks ?? []);
 		}
+		else if (msg.State == QuoteChangeStates.Increment && !msg.HasPositions && _isBookStated)
+		{
+			// Only the levels an increment names change. Rebuilding the whole book for each one costs as
+			// much as the book is deep, and a venue that sends increments keeps thousands of levels.
+			foreach (var bid in msg.Bids ?? [])
+				OrderBook.UpdateLevel(Sides.Buy, bid.Price, bid.Volume);
+
+			foreach (var ask in msg.Asks ?? [])
+				OrderBook.UpdateLevel(Sides.Sell, ask.Price, ask.Volume);
+		}
 		else
 		{
 			_incrementBuilder ??= new(SecurityId);
 
-			if (_incrementBuilder.TryApply(msg) is QuoteChangeMessage full)
+			// A snapshot stated in parts is no book until its last part, and an increment folded into
+			// one that is not whole yet would be lost when it is.
+			var full = _incrementBuilder.TryApply(msg);
+			_isBookStated = full is not null;
+
+			if (full is not null)
 				OrderBook.SetSnapshot(full.Bids ?? [], full.Asks ?? []);
 		}
 
@@ -126,7 +144,10 @@ public class SecurityState(SecurityId securityId)
 	/// its increments mean anything. What the engine currently holds is left standing.
 	/// </summary>
 	public void ForgetBook()
-		=> _incrementBuilder = null;
+	{
+		_incrementBuilder = null;
+		_isBookStated = false;
+	}
 
 	/// <summary>
 	/// Process market data subscriptions (depth only).

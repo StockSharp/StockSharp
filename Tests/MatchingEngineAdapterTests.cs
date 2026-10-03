@@ -392,6 +392,135 @@ public class MatchingEngineAdapterTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// A book folded from increments is the book they state: a level named takes the volume named for it, a level
+	/// named at zero leaves, and the levels nobody named stay as they were.
+	/// </summary>
+	[TestMethod]
+	public async Task ABookFoldedFromIncrementsIsTheBookTheyState()
+	{
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		var bids = new Dictionary<decimal, decimal>();
+		var asks = new Dictionary<decimal, decimal>();
+
+		static void Fold(Dictionary<decimal, decimal> side, QuoteChange[] changes)
+		{
+			foreach (var change in changes)
+			{
+				if (change.Volume == 0)
+					side.Remove(change.Price);
+				else
+					side[change.Price] = change.Volume;
+			}
+		}
+
+		var snapshotBids = Enumerable.Range(1, 50).Select(i => new QuoteChange(100m - i, i)).ToArray();
+		var snapshotAsks = Enumerable.Range(1, 50).Select(i => new QuoteChange(100m + i, i)).ToArray();
+
+		await run.SendAsync(IncrementalBook(_securityId, _start, QuoteChangeStates.SnapshotComplete, snapshotBids, snapshotAsks), CancellationToken);
+		Fold(bids, snapshotBids);
+		Fold(asks, snapshotAsks);
+
+		var random = new Random(7);
+
+		// Levels inside the snapshot and beyond it, moved, added and withdrawn, sometimes twice in one frame.
+		QuoteChange[] Changes(int sign)
+			=> [.. Enumerable.Range(0, 5).Select(_ => new QuoteChange(100m + sign * random.Next(1, 70), random.Next(0, 3) == 0 ? 0m : random.Next(1, 50)))];
+
+		for (var i = 0; i < 200; i++)
+		{
+			var incrementBids = Changes(-1);
+			var incrementAsks = Changes(1);
+
+			await run.SendAsync(IncrementalBook(_securityId, _start.AddSeconds(i + 1), QuoteChangeStates.Increment, incrementBids, incrementAsks), CancellationToken);
+			Fold(bids, incrementBids);
+			Fold(asks, incrementAsks);
+		}
+
+		var book = engine.GetSecurityState(_securityId).OrderBook;
+
+		void AssertSide(Dictionary<decimal, decimal> expected, Sides side)
+		{
+			var ordered = side == Sides.Buy ? expected.OrderByDescending(p => p.Key) : expected.OrderBy(p => p.Key);
+			var levels = book.GetLevels(side).Select(l => (l.Price, l.Volume)).ToArray();
+
+			AreEqual(expected.Count, levels.Length, $"{side}: levels");
+
+			foreach (var (level, (price, volume)) in levels.Zip(ordered.Select(p => (p.Key, p.Value))))
+				AreEqual((price, volume), level, $"{side}: the level at {price}");
+
+			AreEqual(expected.Values.Sum(), book.GetTotalVolume(side), $"{side}: total volume");
+		}
+
+		AssertSide(bids, Sides.Buy);
+		AssertSide(asks, Sides.Sell);
+	}
+
+	/// <summary>
+	/// An order a client rests on a level stays in the book whatever the venue states for that level: an increment
+	/// moves only the venue's volume there, and the venue leaving the level leaves the order standing.
+	/// </summary>
+	[TestMethod]
+	public async Task AClientsRestingOrderOutlivesTheIncrementsOnItsLevel()
+	{
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(IncrementalBook(_securityId, _start, QuoteChangeStates.SnapshotComplete,
+			[new QuoteChange(100m, 10m), new QuoteChange(99m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		// Below the best ask, so it rests rather than trades.
+		await run.SendAsync(NewOrder(1, "Client", Sides.Buy, OrderTypes.Limit, 99m, 2m, _start.AddSeconds(1)), CancellationToken);
+
+		var book = engine.GetSecurityState(_securityId).OrderBook;
+
+		AreEqual(12m, book.GetVolumeAtPrice(Sides.Buy, 99m), "the venue's 10 and the client's 2");
+
+		await run.SendAsync(IncrementalBook(_securityId, _start.AddSeconds(2), QuoteChangeStates.Increment,
+			[new QuoteChange(99m, 4m)], []), CancellationToken);
+
+		AreEqual(6m, book.GetVolumeAtPrice(Sides.Buy, 99m), "the venue's volume moves, the client's stays");
+
+		await run.SendAsync(IncrementalBook(_securityId, _start.AddSeconds(3), QuoteChangeStates.Increment,
+			[new QuoteChange(99m, 0m)], []), CancellationToken);
+
+		AreEqual(2m, book.GetVolumeAtPrice(Sides.Buy, 99m), "the venue left the level, the client's order did not");
+		IsTrue(book.GetOrdersAtPrice(Sides.Buy, 99m).Any(o => o.TransactionId == 1), "the order is still on its level");
+		AreEqual(12m, book.TotalBidVolume, "the venue's 10 at 100 and the client's 2 at 99");
+	}
+
+	/// <summary>
+	/// While the venue restates its book in parts there is no whole book to fold an increment into, so the one the
+	/// engine holds stays until the parts add up to a new one.
+	/// </summary>
+	[TestMethod]
+	public async Task AnIncrementWhileTheBookIsRestatedIsNotFolded()
+	{
+		var engine = new MatchingEngineAdapter();
+		var run = new EngineRun(engine);
+
+		await run.SendAsync(IncrementalBook(_securityId, _start, QuoteChangeStates.SnapshotComplete,
+			[new QuoteChange(100m, 10m)], [new QuoteChange(101m, 10m)]), CancellationToken);
+
+		await run.SendAsync(IncrementalBook(_securityId, _start.AddSeconds(1), QuoteChangeStates.SnapshotStarted,
+			[new QuoteChange(90m, 5m)], []), CancellationToken);
+
+		await run.SendAsync(IncrementalBook(_securityId, _start.AddSeconds(2), QuoteChangeStates.Increment,
+			[new QuoteChange(105m, 5m)], []), CancellationToken);
+
+		var book = engine.GetSecurityState(_securityId).OrderBook;
+
+		AreEqual(100m, book.BestBid?.price, "the increment must not move the book while it is being restated");
+
+		await run.SendAsync(IncrementalBook(_securityId, _start.AddSeconds(3), QuoteChangeStates.SnapshotComplete,
+			[], [new QuoteChange(91m, 5m)]), CancellationToken);
+
+		AreEqual(90m, book.BestBid?.price, "the restated book stands once it is whole");
+		AreEqual(91m, book.BestAsk?.price, "on both sides");
+	}
+
+	/// <summary>
 	/// A quote states where the market is, not what is resting behind it, so it builds no book. An
 	/// engine that turned each one into a level quoted the extremes of the session against each other.
 	/// </summary>
