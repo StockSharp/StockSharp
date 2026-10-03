@@ -430,6 +430,31 @@ public class DataTypeTests : BaseTestClass
 		s.AssertEqual("custom-name");
 	}
 
+	/// <summary>
+	/// A data type is named in words, not by the class of its messages.
+	/// </summary>
+	/// <remarks>
+	/// The list a data type is chosen from offered "BoardMessage" between the securities and the transactions, and an
+	/// import of board states would have been called "BoardStateMessage".
+	/// </remarks>
+	[TestMethod]
+	public void EveryDataTypeIsNamedInWords()
+	{
+		DataType[] types =
+		[
+			DataType.Ticks, DataType.Level1, DataType.OrderLog, DataType.MarketDepth, DataType.Transactions,
+			DataType.PositionChanges, DataType.News, DataType.Securities, DataType.Board, DataType.BoardState,
+		];
+
+		foreach (var type in types)
+		{
+			var name = type.ToString();
+
+			IsFalse(name.IsEmpty(), $"{type.MessageType.Name}");
+			IsFalse(name.EndsWith(nameof(Message)), name);
+		}
+	}
+
 	private static DataType Minute => TimeSpan.FromMinutes(1).TimeFrame();
 
 	private static IndicatorSpec Sma(DataType candleType, params (string Key, object Value)[] parameters)
