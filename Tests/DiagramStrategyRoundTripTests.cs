@@ -1093,6 +1093,37 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// The instruments a start finds belong to that run. A reset forgets them, so the strategy carries
+	/// nothing of the run into the next one.
+	/// </summary>
+	[TestMethod]
+	public async Task A_reset_forgets_the_instruments_the_start_found()
+	{
+		var strategy = new DiagramStrategy { Composition = NewComposition("the started one") };
+
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+
+		strategy.Connector = connector.Object;
+		strategy.Security = Helper.CreateSecurity();
+		strategy.Portfolio = Helper.CreatePortfolio();
+
+		await strategy.StartAsync(CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+
+		StartSecuritiesOf(strategy).Contains(strategy.Security).AssertTrue("the start collects the strategy's own instrument");
+
+		strategy.Reset();
+
+		StartSecuritiesOf(strategy).Count.AssertEqual(0, "a reset leaves nothing of the run behind");
+	}
+
+	private static IReadOnlyList<Security> StartSecuritiesOf(DiagramStrategy strategy)
+		=> (IReadOnlyList<Security>)typeof(DiagramStrategy)
+			.GetProperty("StartSecurities", BindingFlags.Instance | BindingFlags.NonPublic)
+			.GetValue(strategy);
+
+	/// <summary>
 	/// A reset is what a backtest does between runs, and every run has to trade like the first. An element
 	/// that forgets which of its outputs anyone is listening to registers orders that nothing downstream
 	/// ever hears about - the second run of the same diagram silently does nothing.

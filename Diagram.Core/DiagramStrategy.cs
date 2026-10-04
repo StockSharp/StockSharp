@@ -464,6 +464,8 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 		if (composition != null && !composition.HasErrors)
 			composition.Reset();
 
+		_startSecurities = [];
+
 		base.OnReseted();
 	}
 
