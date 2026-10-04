@@ -873,19 +873,17 @@ public class BacktestingTests : BaseTestClass
 
 		await using var connector = CreateConnector(secProvider, pfProvider, GetHistoryStorage(), Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(2));
 
-		var errors = new SynchronizedList<string>();
-		var reportedOutsideTheStateLock = new SynchronizedList<bool>();
+		// what each report of an error found: its text, and whether the state lock was free by then
+		var reports = new SynchronizedList<(string Error, bool IsStateLockFree)>();
 
 		connector.Error += error =>
 		{
-			errors.Add(error.Message);
-
 			// A state message that changes nothing still has to take the state lock, and it comes from
 			// another thread here: it gets through only if the lock is not held while the error is reported.
 			var state = connector.State;
 			var probe = Task.Run(() => connector.SendOutMessageAsync(new EmulationStateMessage { State = state }, CancellationToken).AsTask());
 
-			reportedOutsideTheStateLock.Add(probe.Wait(TimeSpan.FromSeconds(5)));
+			reports.Add((error.Message, probe.Wait(TimeSpan.FromSeconds(5))));
 		};
 
 		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -920,13 +918,16 @@ public class BacktestingTests : BaseTestClass
 
 		await stopped.Task.WaitAsync(TimeSpan.FromSeconds(30), CancellationToken);
 
-		await Helper.WaitUntilAsync(() => errors.Count >= 2, TimeSpan.FromSeconds(10), CancellationToken,
+		// a report is counted once its probe is over, so nothing is still being added when the list is read
+		await Helper.WaitUntilAsync(() => reports.Count >= 2, TimeSpan.FromSeconds(20), CancellationToken,
 			"both failures of the handler are reported");
 
-		IsTrue(errors.Contains($"handler failed at {ChannelStates.Started}"), "the failure at the start is reported");
-		IsTrue(errors.Contains($"handler failed at {ChannelStates.Stopped}"), "the failure at the stop is reported");
+		var seen = reports.SyncGet(r => r.ToArray());
+
+		IsTrue(seen.Any(r => r.Error == $"handler failed at {ChannelStates.Started}"), "the failure at the start is reported");
+		IsTrue(seen.Any(r => r.Error == $"handler failed at {ChannelStates.Stopped}"), "the failure at the stop is reported");
 		AreEqual(ChannelStates.Stopped, connector.State);
-		IsTrue(reportedOutsideTheStateLock.All(isOutside => isOutside), "an error must be reported once the state lock is let go");
+		IsTrue(seen.All(r => r.IsStateLockFree), "an error must be reported once the state lock is let go");
 	}
 
 	// Reports a machine that never restored the sample history package as inconclusive and names it.
