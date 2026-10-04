@@ -12,24 +12,24 @@ jobs:
 
     steps:
       - name: Checkout StockSharp
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: 'StockSharp (GitHub)'
 
       - name: Checkout Connectors
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: StockSharp/Connectors
           path: Connectors
 
       - name: Checkout documentation
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: StockSharp/doc
           path: doc
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
@@ -78,12 +78,12 @@ jobs:
       # must sit side by side and this repo's folder must be named "StockSharp (GitHub)".
       # Reproduce that layout by checking each repo into its own sibling folder.
       - name: Checkout StockSharp
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: 'StockSharp (GitHub)'
 
       - name: Checkout Connectors
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: StockSharp/Connectors
           path: Connectors
@@ -92,7 +92,7 @@ jobs:
           # token: ${{ secrets.CONNECTORS_TOKEN }}
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: |
             6.0.x
@@ -127,7 +127,7 @@ jobs:
 
       - name: Upload test diagnostics
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-diagnostics-${{ matrix.os }}
           path: |
