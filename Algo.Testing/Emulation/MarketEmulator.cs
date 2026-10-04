@@ -944,13 +944,20 @@ internal class SecurityEmulator(MarketEmulator parent, MatchingEngineAdapter eng
 		if (_synthAskPrice is decimal prevAsk)
 			engineState.OrderBook.UpdateLevel(Sides.Sell, prevAsk, 0);
 
-		// Place the traded side at the trade price and the opposite side a spread away, so the
-		// synthesized bid/ask bracket the current trade price.
-		var originSide = tick.OriginSide?.Invert() ?? Sides.Sell;
-
+		// A print that names the side it traded on puts that side at its price and the other a spread
+		// away. A print that names no side - every price replayed from a candle - says nothing about
+		// which side was there: by default the spread is placed below it, and with IsSpreadCentered it
+		// is split around it so a buy and a sell pay alike.
 		decimal bidPrice, askPrice;
 
-		if (originSide == Sides.Buy)
+		if (tick.OriginSide is null && _parent.Settings.IsSpreadCentered)
+		{
+			var below = _parent.Settings.SpreadSize / 2;
+
+			bidPrice = tradePrice - priceStep * below;
+			askPrice = tradePrice + priceStep * (_parent.Settings.SpreadSize - below);
+		}
+		else if (tick.OriginSide?.Invert() == Sides.Buy)
 		{
 			bidPrice = tradePrice;
 			askPrice = tradePrice + spread;

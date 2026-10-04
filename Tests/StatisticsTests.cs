@@ -2428,4 +2428,117 @@ public class StatisticsTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Time in market, holding time, largest trade share
+
+	/// <summary>
+	/// A position held for three of the four hours between the first and the last observation is in
+	/// the market seventy-five percent of the time.
+	/// </summary>
+	[TestMethod]
+	public void TimeInMarket()
+	{
+		var parameter = new TimeInMarketParameter();
+		var start = new DateTime(2026, 3, 2, 10, 0, 0, DateTimeKind.Utc);
+
+		parameter.Add(start, 0);
+		parameter.Add(start.AddHours(1), 5);
+		parameter.Add(start.AddHours(2), 0);
+		parameter.Add(start.AddHours(3), -2);
+		parameter.Add(start.AddHours(4), -2);
+
+		// Flat for the first hour, long for the second, flat for the third, short for the fourth: half.
+		parameter.Value.AssertEqual(50m);
+
+		parameter.Add(start.AddHours(5), 0);
+
+		// Short through the fifth hour as well: three of five.
+		parameter.Value.AssertEqual(60m);
+	}
+
+	/// <summary>Nothing observed over no time is in the market for none of it.</summary>
+	[TestMethod]
+	public void TimeInMarketWithoutTime()
+	{
+		var parameter = new TimeInMarketParameter();
+
+		parameter.Add(DateTime.UtcNow, 5);
+
+		parameter.Value.AssertEqual(0m);
+	}
+
+	/// <summary>
+	/// A position is held from the moment it leaves zero to the moment it returns there; a reversal
+	/// through zero ends one holding and starts the next.
+	/// </summary>
+	[TestMethod]
+	public void AverageHoldingTime()
+	{
+		var parameter = new AverageHoldingTimeParameter();
+		var start = new DateTime(2026, 3, 2, 10, 0, 0, DateTimeKind.Utc);
+
+		parameter.Add(start, 0);
+		parameter.Add(start.AddMinutes(10), 5);
+		parameter.Add(start.AddMinutes(20), 10);
+		parameter.Add(start.AddMinutes(40), 0);
+
+		// One holding of thirty minutes.
+		parameter.Value.AssertEqual(TimeSpan.FromMinutes(30));
+
+		parameter.Add(start.AddMinutes(50), -3);
+		parameter.Add(start.AddMinutes(60), 4);
+		parameter.Add(start.AddMinutes(80), 0);
+
+		// Thirty, then ten short, then twenty long after the reversal: sixty over three.
+		parameter.Value.AssertEqual(TimeSpan.FromMinutes(20));
+	}
+
+	/// <summary>
+	/// Three closing trades of 100, 300 and -100 make 300, of which the best trade alone is all.
+	/// </summary>
+	[TestMethod]
+	public void LargestTradeShare()
+	{
+		var parameter = new LargestTradeShareParameter();
+		var time = DateTime.UtcNow;
+
+		parameter.Add(new(time, 1, 100));
+		parameter.Value.AssertEqual(100m);
+
+		parameter.Add(new(time, 1, 300));
+		parameter.Value.AssertEqual(75m);
+
+		parameter.Add(new(time, 1, -100));
+		parameter.Value.AssertEqual(100m);
+
+		// An opening fill closes nothing and changes nothing.
+		parameter.Add(new(time, 0, 0));
+		parameter.Value.AssertEqual(100m);
+	}
+
+	/// <summary>A run that lost money has no share of a result to speak of.</summary>
+	[TestMethod]
+	public void LargestTradeShareOfALoss()
+	{
+		var parameter = new LargestTradeShareParameter();
+		var time = DateTime.UtcNow;
+
+		parameter.Add(new(time, 1, 50));
+		parameter.Add(new(time, 1, -80));
+
+		parameter.Value.AssertEqual(0m);
+	}
+
+	/// <summary>The new parameters are part of what a strategy reports.</summary>
+	[TestMethod]
+	public void NewParametersAreRegistered()
+	{
+		var types = StatisticParameterRegistry.CreateAll().Select(p => p.Type).ToArray();
+
+		types.Contains(StatisticParameterTypes.TimeInMarket).AssertTrue();
+		types.Contains(StatisticParameterTypes.AverageHoldingTime).AssertTrue();
+		types.Contains(StatisticParameterTypes.LargestTradeShare).AssertTrue();
+	}
+
+	#endregion
 }

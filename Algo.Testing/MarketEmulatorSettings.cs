@@ -206,7 +206,7 @@ public class MarketEmulatorSettings : NotifiableObject, IAsyncPersistable
 	private int _spreadSize = 2;
 
 	/// <summary>
-	/// The size of spread in price increments. It used at determination of spread for generation of order book from tick trades. By default equals to 2.
+	/// The size of spread in price increments. It used at determination of spread for generation of order book from tick trades and candles. Zero quotes both sides at the traded price. By default equals to 2.
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
@@ -219,7 +219,7 @@ public class MarketEmulatorSettings : NotifiableObject, IAsyncPersistable
 		get => _spreadSize;
 		set
 		{
-			if (value < 1)
+			if (value < 0)
 				throw new ArgumentOutOfRangeException(nameof(value), value, LocalizedStrings.InvalidValue);
 
 			_spreadSize = value;
@@ -359,6 +359,29 @@ public class MarketEmulatorSettings : NotifiableObject, IAsyncPersistable
 		}
 	}
 
+	private bool _isSpreadCentered;
+
+	/// <summary>
+	/// To split <see cref="SpreadSize"/> evenly around prices that do not say which side traded, such as the
+	/// prices a candle is replayed as, so a buy and a sell pay the same half of it. Off by default, when the
+	/// whole spread is placed below such a price.
+	/// </summary>
+	[Display(
+		ResourceType = typeof(LocalizedStrings),
+		Name = LocalizedStrings.SpreadCenteredKey,
+		Description = LocalizedStrings.SpreadCenteredDescKey,
+		GroupName = LocalizedStrings.BacktestExtraKey,
+		Order = 217)]
+	public bool IsSpreadCentered
+	{
+		get => _isSpreadCentered;
+		set
+		{
+			_isSpreadCentered = value;
+			NotifyChanged();
+		}
+	}
+
 	private bool _checkTradingState;
 
 	/// <summary>
@@ -486,6 +509,7 @@ public class MarketEmulatorSettings : NotifiableObject, IAsyncPersistable
 			.Set(nameof(ConvertTime), ConvertTime)
 			.Set(nameof(PriceLimitOffset), PriceLimitOffset)
 			.Set(nameof(IncreaseDepthVolume), IncreaseDepthVolume)
+			.Set(nameof(IsSpreadCentered), IsSpreadCentered)
 			.Set(nameof(CheckTradingState), CheckTradingState)
 			.Set(nameof(CheckMoney), CheckMoney)
 			.Set(nameof(CheckShortable), CheckShortable)
@@ -523,6 +547,7 @@ public class MarketEmulatorSettings : NotifiableObject, IAsyncPersistable
 		ConvertTime = storage.GetValue(nameof(ConvertTime), ConvertTime);
 		PriceLimitOffset = await storage.GetValueAsync(nameof(PriceLimitOffset), PriceLimitOffset, cancellationToken);
 		IncreaseDepthVolume = storage.GetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
+		IsSpreadCentered = storage.GetValue(nameof(IsSpreadCentered), IsSpreadCentered);
 		CheckTradingState = storage.GetValue(nameof(CheckTradingState), CheckTradingState);
 		CheckMoney = storage.GetValue(nameof(CheckMoney), CheckMoney);
 		CheckShortable = storage.GetValue(nameof(CheckShortable), CheckShortable);

@@ -3245,6 +3245,101 @@ public class MarketEmulatorTests : BaseTestClass
 		AreEqual(1m, position.BeginValue + position.CurrentValue, "the strategy holds exactly what it ordered");
 	}
 	/// <summary>
+	/// A candle does not say which side traded at its prices. With the spread centred, the book built
+	/// around them puts half of it on each side: a market buy pays half the spread above the last price
+	/// and a market sell half below it, rather than buys trading free and sells paying all of it.
+	/// </summary>
+	[TestMethod]
+	public async Task CandleMarketOrdersPayHalfTheSpreadEachWay()
+	{
+		var (buy, sell) = await FillBothWaysOnACandleAsync(spreadSize: 4, isSpreadCentered: true);
+
+		AreEqual(106m, buy, "a buy pays half of a four-step spread above the last price of 104");
+		AreEqual(102m, sell, "a sell pays half of a four-step spread below the last price of 104");
+	}
+
+	/// <summary>
+	/// A spread of no steps quotes both sides at the last price, so a buy and a sell both trade there:
+	/// a run that charges the spread some other way can switch the book's spread off instead of paying
+	/// it twice.
+	/// </summary>
+	[TestMethod]
+	public async Task CandleMarketOrdersWithNoSpreadTradeAtTheLastPrice()
+	{
+		var (buy, sell) = await FillBothWaysOnACandleAsync(spreadSize: 0, isSpreadCentered: false);
+
+		AreEqual(104m, buy);
+		AreEqual(104m, sell);
+	}
+
+	private async Task<(decimal Buy, decimal Sell)> FillBothWaysOnACandleAsync(int spreadSize, bool isSpreadCentered)
+	{
+		var id = Helper.CreateSecurityId();
+		var emulator = new MarketEmulator(
+			new CollectionSecurityProvider([new Security { Id = id.ToStringId(), PriceStep = 1m }]),
+			new CollectionPortfolioProvider([Portfolio.CreateSimulator()]),
+			new InMemoryExchangeInfoProvider(),
+			new IncrementalIdGenerator())
+		{
+			VerifyMode = true,
+			RandomProvider = new MockEmulationRandomizer(),
+		};
+
+		emulator.Settings.SpreadSize = spreadSize;
+		emulator.Settings.IsSpreadCentered = isSpreadCentered;
+
+		IMarketEmulator emu = emulator;
+
+		var res = new List<Message>();
+		emu.NewOutMessageAsync += (m, ct) => { res.Add(m); return default; };
+
+		var now = DateTime.UtcNow;
+
+		await emu.SendInMessageAsync(new MarketDataMessage
+		{
+			TransactionId = _idGenerator.GetNextId(),
+			DataType2 = TimeSpan.FromMinutes(1).TimeFrame(),
+			SecurityId = id,
+			IsSubscribe = true,
+		}, CancellationToken);
+
+		await emu.SendInMessageAsync(new TimeFrameCandleMessage
+		{
+			SecurityId = id,
+			OpenTime = now.AddMinutes(-1),
+			CloseTime = now,
+			OpenPrice = 100,
+			HighPrice = 105,
+			LowPrice = 95,
+			ClosePrice = 104,
+			TotalVolume = 10,
+		}, CancellationToken);
+
+		async Task<decimal> FillAsync(Sides side)
+		{
+			var order = new OrderRegisterMessage
+			{
+				SecurityId = id,
+				LocalTime = now,
+				TransactionId = _idGenerator.GetNextId(),
+				Side = side,
+				Volume = 1,
+				OrderType = OrderTypes.Market,
+				PortfolioName = _pfName,
+			};
+
+			await emu.SendInMessageAsync(order, CancellationToken);
+
+			return res
+				.OfType<ExecutionMessage>()
+				.Single(m => m.OriginalTransactionId == order.TransactionId && m.HasTradeInfo())
+				.TradePrice.Value;
+		}
+
+		return (await FillAsync(Sides.Buy), await FillAsync(Sides.Sell));
+	}
+
+	/// <summary>
 	/// The reason the fill matters. A strategy that opens only from a flat position sends the same
 	/// volume out and back; if each leg fills for whatever its own candle traded, the two fractions
 	/// do not cancel and the position never returns to zero, so the strategy never opens again. It

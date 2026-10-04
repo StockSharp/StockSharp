@@ -3448,6 +3448,7 @@ public class BacktestingTests : BaseTestClass
 		settings.CheckShortable = true;
 		settings.MaxDepth = 7;
 		settings.SpreadSize = 3;
+		settings.IsSpreadCentered = true;
 		settings.Failing = 12.5;
 		settings.CandlePrice = EmulationCandlePrices.Close;
 
@@ -3462,6 +3463,7 @@ public class BacktestingTests : BaseTestClass
 		IsTrue(clone.Settings.CheckShortable, "the copy checks shortable, as the original does");
 		AreEqual(7, clone.Settings.MaxDepth);
 		AreEqual(3, clone.Settings.SpreadSize);
+		IsTrue(clone.Settings.IsSpreadCentered, "the copy centres the spread, as the original does");
 		AreEqual(12.5, clone.Settings.Failing);
 		AreEqual(EmulationCandlePrices.Close, clone.Settings.CandlePrice);
 	}
