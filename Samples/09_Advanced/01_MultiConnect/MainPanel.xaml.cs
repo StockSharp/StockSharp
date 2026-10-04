@@ -233,7 +233,7 @@ public partial class MainPanel
 
 			try
 			{
-				AsyncHelper.Run(() => nativeIdStorage.InitAsync(default));
+				await nativeIdStorage.InitAsync(default);
 			}
 			catch (Exception ex)
 			{
@@ -243,17 +243,14 @@ public partial class MainPanel
 
 		if (Connector.StorageAdapter != null)
 		{
-			AsyncHelper.Run(async () =>
-			{
-				await LoggingHelper.DoWithLogAsync(ServicesRegistry.EntityRegistry.InitAsync);
-				await LoggingHelper.DoWithLogAsync(ServicesRegistry.ExchangeInfoProvider.InitAsync);
-			});
+			await LoggingHelper.DoWithLogAsync(ServicesRegistry.EntityRegistry.InitAsync);
+			await LoggingHelper.DoWithLogAsync(ServicesRegistry.ExchangeInfoProvider.InitAsync);
 
 			//Connector.Adapter.StorageSettings.DaysLoad = TimeSpan.FromDays(3);
 			Connector.Adapter.StorageSettings.Mode = StorageModes.Snapshot;
 			Connector.LookupAll();
 
-			AsyncHelper.Run(() => Connector.SnapshotRegistry.InitAsync(default));
+			await Connector.SnapshotRegistry.InitAsync(default);
 		}
 
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));

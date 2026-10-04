@@ -231,14 +231,15 @@ public class GeneticOptimizer : BaseOptimizer
 		}
 	}
 
-	private GeneticAlgorithm SetupGA(
+	private async ValueTask<GeneticAlgorithm> SetupGAAsync(
 		DateTime startTime, DateTime stopTime,
 		Strategy strategy,
 		IEnumerable<(IStrategyParam param, object from, object to, object step, IEnumerable values)> parameters,
 		Func<Strategy, decimal> calcFitness,
 		ISelection selection,
 		ICrossover crossover,
-		IMutation mutation)
+		IMutation mutation,
+		CancellationToken cancellationToken)
 	{
 		if (strategy is null)
 			throw new ArgumentNullException(nameof(strategy));
@@ -365,7 +366,7 @@ public class GeneticOptimizer : BaseOptimizer
 
 		var population = new Population(Settings.Population, Settings.PopulationMax, new StrategyParametersChromosome(paramArr));
 
-		calcFitness ??= _formulaProvider.Compile(Settings.Fitness);
+		calcFitness ??= await _formulaProvider.CompileAsync(Settings.Fitness, cancellationToken);
 		selection ??= Settings.Selection.CreateInstance<ISelection>();
 		crossover ??= Settings.Crossover.CreateInstance<ICrossover>();
 		mutation ??= Settings.Mutation.CreateInstance<IMutation>();
@@ -446,7 +447,7 @@ public class GeneticOptimizer : BaseOptimizer
 	{
 		cancellationToken.ThrowIfCancellationRequested();
 
-		var ga = SetupGA(startTime, stopTime, strategy, parameters, calcFitness, selection, crossover, mutation);
+		var ga = await SetupGAAsync(startTime, stopTime, strategy, parameters, calcFitness, selection, crossover, mutation, cancellationToken);
 
 		var estimatedIterations = Settings.Population * 1.Max(Settings.GenerationsMax);
 		var maxIters = EmulationSettings.MaxIterations;

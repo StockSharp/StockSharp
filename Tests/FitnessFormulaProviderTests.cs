@@ -62,11 +62,11 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Compile_SimpleFormula_ReturnsFunction()
+	public async Task Compile_SimpleFormula_ReturnsFunction()
 	{
 		var provider = CreateProvider();
 
-		var fitness = provider.Compile("PnL");
+		var fitness = await provider.CompileAsync("PnL", CancellationToken);
 
 		IsNotNull(fitness);
 	}
@@ -75,7 +75,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_SimpleFormula_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL");
+		var fitness = await provider.CompileAsync("PnL", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 1000m);
 
 		var result = fitness(strategy);
@@ -87,7 +87,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_FormulaWithMultiplication_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL * 2");
+		var fitness = await provider.CompileAsync("PnL * 2", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 1000m);
 
 		var result = fitness(strategy);
@@ -99,7 +99,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_FormulaWithDivision_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL / TCount");
+		var fitness = await provider.CompileAsync("PnL / TCount", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 1000m, tradeCount: 10);
 
 		var result = fitness(strategy);
@@ -111,7 +111,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_FormulaWithSubtraction_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL - MaxDD");
+		var fitness = await provider.CompileAsync("PnL - MaxDD", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 1000m, maxDD: 200m);
 
 		var result = fitness(strategy);
@@ -120,50 +120,50 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Compile_EmptyFormula_ThrowsArgumentNullException()
+	public async Task Compile_EmptyFormula_ThrowsArgumentNullException()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<ArgumentNullException>(() => provider.Compile(""));
+		await ThrowsExactlyAsync<ArgumentNullException>(() => provider.CompileAsync("", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Compile_NullFormula_ThrowsArgumentNullException()
+	public async Task Compile_NullFormula_ThrowsArgumentNullException()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<ArgumentNullException>(() => provider.Compile(null));
+		await ThrowsExactlyAsync<ArgumentNullException>(() => provider.CompileAsync(null, CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Compile_UnknownVariable_ThrowsArgumentOutOfRangeException()
+	public async Task Compile_UnknownVariable_ThrowsArgumentOutOfRangeException()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<ArgumentOutOfRangeException>(() => provider.Compile("UnknownVar"));
+		await ThrowsExactlyAsync<ArgumentOutOfRangeException>(() => provider.CompileAsync("UnknownVar", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Compile_InvalidSyntax_ThrowsInvalidOperationException()
+	public async Task Compile_InvalidSyntax_ThrowsInvalidOperationException()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<InvalidOperationException>(() => provider.Compile("PnL +* Recovery"));
+		await ThrowsExactlyAsync<InvalidOperationException>(() => provider.CompileAsync("PnL +* Recovery", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Compile_UnbalancedParentheses_ThrowsInvalidOperationException()
+	public async Task Compile_UnbalancedParentheses_ThrowsInvalidOperationException()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<InvalidOperationException>(() => provider.Compile("(PnL + Recovery"));
+		await ThrowsExactlyAsync<InvalidOperationException>(() => provider.CompileAsync("(PnL + Recovery", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
 	public async Task Compile_DivisionByZero_ThrowsAtEvaluation()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL / TCount");
+		var fitness = await provider.CompileAsync("PnL / TCount", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 1000m, tradeCount: 0);
 
 		// Division by zero should throw at evaluation time
@@ -174,7 +174,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_NegativeValues_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL");
+		var fitness = await provider.CompileAsync("PnL", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: -500m);
 
 		var result = fitness(strategy);
@@ -186,7 +186,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_ComplexExpression_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("(PnL + MaxDD) * 2");
+		var fitness = await provider.CompileAsync("(PnL + MaxDD) * 2", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m, maxDD: 50m);
 
 		var result = fitness(strategy);
@@ -201,7 +201,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// PnL / MaxDD - common risk-adjusted metric
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL / MaxDD");
+		var fitness = await provider.CompileAsync("PnL / MaxDD", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 1000m, maxDD: 200m);
 
 		var result = fitness(strategy);
@@ -214,7 +214,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// WinTrades / LosTrades - profit factor approximation
 		var provider = CreateProvider();
-		var fitness = provider.Compile("WinTrades / LosTrades");
+		var fitness = await provider.CompileAsync("WinTrades / LosTrades", CancellationToken);
 		var strategy = await CreateStrategyWithAllStatsAsync(winTrades: 60, losTrades: 40);
 
 		var result = fitness(strategy);
@@ -227,7 +227,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// PnL * TCount / 100 - weighted by trade activity
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL * TCount / 100");
+		var fitness = await provider.CompileAsync("PnL * TCount / 100", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 500m, tradeCount: 20);
 
 		var result = fitness(strategy);
@@ -240,7 +240,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// PnL * 2 - MaxDD - combines pnl with drawdown penalty
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL * 2 - MaxDD");
+		var fitness = await provider.CompileAsync("PnL * 2 - MaxDD", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 1000m, maxDD: 500m);
 
 		var result = fitness(strategy);
@@ -255,7 +255,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// Recovery * PnL - tests Recovery variable
 		var provider = CreateProvider();
-		var fitness = provider.Compile("Recovery * PnL");
+		var fitness = await provider.CompileAsync("Recovery * PnL", CancellationToken);
 		var strategy = await CreateStrategyWithAllStatsAsync(pnl: 1000m, recovery: 2m, maxDD: 500m);
 
 		var result = fitness(strategy);
@@ -268,7 +268,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// Recovery * PnL - MaxDD - combines recovery with drawdown penalty
 		var provider = CreateProvider();
-		var fitness = provider.Compile("Recovery * PnL - MaxDD");
+		var fitness = await provider.CompileAsync("Recovery * PnL - MaxDD", CancellationToken);
 		var strategy = await CreateStrategyWithAllStatsAsync(pnl: 1000m, recovery: 2m, maxDD: 500m);
 
 		var result = fitness(strategy);
@@ -281,7 +281,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// Just Recovery variable
 		var provider = CreateProvider();
-		var fitness = provider.Compile("Recovery");
+		var fitness = await provider.CompileAsync("Recovery", CancellationToken);
 		var strategy = await CreateStrategyWithAllStatsAsync(pnl: 800m, maxDD: 400m, recovery: 2m);
 
 		var result = fitness(strategy);
@@ -293,7 +293,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_RecoveryInComplexFormula_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("(PnL + Recovery) * 2");
+		var fitness = await provider.CompileAsync("(PnL + Recovery) * 2", CancellationToken);
 		var strategy = await CreateStrategyWithAllStatsAsync(pnl: 100m, recovery: 50m, maxDD: 200m);
 
 		var result = fitness(strategy);
@@ -307,7 +307,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_NestedParentheses_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("((PnL + MaxDD) * (TCount - 5)) / 10");
+		var fitness = await provider.CompileAsync("((PnL + MaxDD) * (TCount - 5)) / 10", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m, maxDD: 50m, tradeCount: 15);
 
 		var result = fitness(strategy);
@@ -319,7 +319,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_DeeplyNestedParentheses_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("(((PnL)))");
+		var fitness = await provider.CompileAsync("(((PnL)))", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 777m);
 
 		var result = fitness(strategy);
@@ -332,7 +332,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// (PnL * 3) / (MaxDD + 1)
 		var provider = CreateProvider();
-		var fitness = provider.Compile("(PnL * 3) / (MaxDD + 1)");
+		var fitness = await provider.CompileAsync("(PnL * 3) / (MaxDD + 1)", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 500m, maxDD: 499m);
 
 		var result = fitness(strategy);
@@ -346,7 +346,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_OrderOfOperations_MultiplicationBeforeAddition()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL + MaxDD * TCount");
+		var fitness = await provider.CompileAsync("PnL + MaxDD * TCount", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m, maxDD: 10m, tradeCount: 5);
 
 		var result = fitness(strategy);
@@ -358,7 +358,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_OrderOfOperations_DivisionBeforeSubtraction()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL - MaxDD / TCount");
+		var fitness = await provider.CompileAsync("PnL - MaxDD / TCount", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m, maxDD: 50m, tradeCount: 10);
 
 		var result = fitness(strategy);
@@ -370,7 +370,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_OrderOfOperations_ParenthesesOverride()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("(PnL + MaxDD) * TCount");
+		var fitness = await provider.CompileAsync("(PnL + MaxDD) * TCount", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m, maxDD: 10m, tradeCount: 5);
 
 		var result = fitness(strategy);
@@ -384,7 +384,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_VeryLargeNumbers_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL * 1000");
+		var fitness = await provider.CompileAsync("PnL * 1000", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 1_000_000_000m);
 
 		var result = fitness(strategy);
@@ -396,7 +396,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_VerySmallNumbers_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL / TCount");
+		var fitness = await provider.CompileAsync("PnL / TCount", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 0.001m, tradeCount: 1000);
 
 		var result = fitness(strategy);
@@ -408,7 +408,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_ZeroValue_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL * MaxDD");
+		var fitness = await provider.CompileAsync("PnL * MaxDD", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 0m, maxDD: 100m);
 
 		var result = fitness(strategy);
@@ -420,7 +420,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_NegativePnlAndZeroTradeCount_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL + TCount");
+		var fitness = await provider.CompileAsync("PnL + TCount", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: -100m, tradeCount: 0);
 
 		var result = fitness(strategy);
@@ -432,7 +432,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_MixedPositiveNegative_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL - MaxDD");
+		var fitness = await provider.CompileAsync("PnL - MaxDD", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: -100m, maxDD: 50m);
 
 		var result = fitness(strategy);
@@ -446,7 +446,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_FormulaWithConstant_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL * 2");
+		var fitness = await provider.CompileAsync("PnL * 2", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m);
 
 		var result = fitness(strategy);
@@ -459,7 +459,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// Decimal literals are auto-converted (0.5 → 0.5m) by ExpressionHelper
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL * 0.5");
+		var fitness = await provider.CompileAsync("PnL * 0.5", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m);
 
 		var result = fitness(strategy);
@@ -471,7 +471,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_FormulaWithNegativeConstant_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL + (-100)");
+		var fitness = await provider.CompileAsync("PnL + (-100)", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 250m);
 
 		var result = fitness(strategy);
@@ -483,7 +483,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_ComplexWithMultipleConstants_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("(PnL - 50) * 2 + 100");
+		var fitness = await provider.CompileAsync("(PnL - 50) * 2 + 100", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m);
 
 		var result = fitness(strategy);
@@ -497,7 +497,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_AllFourArithmeticOperators_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL + 50 - MaxDD * TCount / 10");
+		var fitness = await provider.CompileAsync("PnL + 50 - MaxDD * TCount / 10", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m, maxDD: 20m, tradeCount: 10);
 
 		var result = fitness(strategy);
@@ -510,7 +510,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_MultipleVariablesSameType_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("WinTrades - LosTrades");
+		var fitness = await provider.CompileAsync("WinTrades - LosTrades", CancellationToken);
 		var strategy = await CreateStrategyWithAllStatsAsync(winTrades: 70, losTrades: 30);
 
 		var result = fitness(strategy);
@@ -521,67 +521,67 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	// ========== Error cases - more variations ==========
 
 	[TestMethod]
-	public void Compile_EmptyParentheses_ThrowsInvalidOperationException()
+	public async Task Compile_EmptyParentheses_ThrowsInvalidOperationException()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<InvalidOperationException>(() => provider.Compile("PnL + ()"));
+		await ThrowsExactlyAsync<InvalidOperationException>(() => provider.CompileAsync("PnL + ()", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Compile_MissingOperator_ThrowsInvalidOperationException()
+	public async Task Compile_MissingOperator_ThrowsInvalidOperationException()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<InvalidOperationException>(() => provider.Compile("PnL Recovery"));
+		await ThrowsExactlyAsync<InvalidOperationException>(() => provider.CompileAsync("PnL Recovery", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Compile_TrailingOperator_ThrowsInvalidOperationException()
+	public async Task Compile_TrailingOperator_ThrowsInvalidOperationException()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<InvalidOperationException>(() => provider.Compile("PnL +"));
+		await ThrowsExactlyAsync<InvalidOperationException>(() => provider.CompileAsync("PnL +", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Compile_LeadingOperator_ThrowsInvalidOperationException()
+	public async Task Compile_LeadingOperator_ThrowsInvalidOperationException()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<InvalidOperationException>(() => provider.Compile("* PnL"));
+		await ThrowsExactlyAsync<InvalidOperationException>(() => provider.CompileAsync("* PnL", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Compile_DoubleOperator_ThrowsInvalidOperationException()
+	public async Task Compile_DoubleOperator_ThrowsInvalidOperationException()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<InvalidOperationException>(() => provider.Compile("PnL ++ Recovery"));
+		await ThrowsExactlyAsync<InvalidOperationException>(() => provider.CompileAsync("PnL ++ Recovery", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Compile_WhitespaceOnly()
+	public async Task Compile_WhitespaceOnly()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<ArgumentException>(() => provider.Compile("   "));
+		await ThrowsExactlyAsync<ArgumentException>(() => provider.CompileAsync("   ", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Compile_TabsOnly()
+	public async Task Compile_TabsOnly()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<ArgumentException>(() => provider.Compile("\t\t"));
+		await ThrowsExactlyAsync<ArgumentException>(() => provider.CompileAsync("\t\t", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Compile_NewlinesOnly()
+	public async Task Compile_NewlinesOnly()
 	{
 		var provider = CreateProvider();
 
-		ThrowsExactly<ArgumentException>(() => provider.Compile("\n\n"));
+		await ThrowsExactlyAsync<ArgumentException>(() => provider.CompileAsync("\n\n", CancellationToken).AsTask());
 	}
 
 	[TestMethod]
@@ -589,7 +589,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// Variables are case-insensitive
 		var provider = CreateProvider();
-		var fitness = provider.Compile("pnl");
+		var fitness = await provider.CompileAsync("pnl", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m);
 
 		var result = fitness(strategy);
@@ -601,7 +601,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_MixedCaseVariable_EvaluatesCorrectly()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PNL");
+		var fitness = await provider.CompileAsync("PNL", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m);
 
 		var result = fitness(strategy);
@@ -616,7 +616,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// Decimal literals are auto-converted (0.5 → 0.5m) by ExpressionHelper
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL / 0.5");
+		var fitness = await provider.CompileAsync("PnL / 0.5", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m);
 
 		var result = fitness(strategy);
@@ -629,7 +629,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	{
 		// Decimal literals are auto-converted (0.1 → 0.1m) by ExpressionHelper
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL + 0.1");
+		var fitness = await provider.CompileAsync("PnL + 0.1", CancellationToken);
 		var strategy = await CreateStrategyWithStatsAsync(pnl: 100m);
 
 		var result = fitness(strategy);
@@ -643,7 +643,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_OrderOfOperations_RecoveryMultiplicationBeforeAddition()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("PnL + Recovery * TCount");
+		var fitness = await provider.CompileAsync("PnL + Recovery * TCount", CancellationToken);
 		var strategy = await CreateStrategyWithAllStatsAsync(pnl: 100m, recovery: 10m, maxDD: 100m, tradeCount: 5);
 
 		var result = fitness(strategy);
@@ -655,7 +655,7 @@ public class FitnessFormulaProviderTests : BaseTestClass
 	public async Task Compile_OrderOfOperations_RecoveryParenthesesOverride()
 	{
 		var provider = CreateProvider();
-		var fitness = provider.Compile("(PnL + Recovery) * TCount");
+		var fitness = await provider.CompileAsync("(PnL + Recovery) * TCount", CancellationToken);
 		var strategy = await CreateStrategyWithAllStatsAsync(pnl: 100m, recovery: 10m, maxDD: 100m, tradeCount: 5);
 
 		var result = fitness(strategy);

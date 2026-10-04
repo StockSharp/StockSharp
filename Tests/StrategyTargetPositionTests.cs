@@ -69,7 +69,7 @@ public class StrategyTargetPositionTests : BaseTestClass
 	// Started, but deliberately never driven online: canTrade stays false, so the target manager emits
 	// no orders and the only thing left under test is the target-reached event. Started matters because
 	// a rule whose container is not Started finishes after its first activation.
-	private static Strategy CreateStartedStrategy(Security security, Portfolio portfolio)
+	private static async Task<Strategy> CreateStartedStrategyAsync(Security security, Portfolio portfolio, CancellationToken cancellationToken)
 	{
 		var connMock = new Mock<IConnector>();
 		connMock.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
@@ -81,7 +81,7 @@ public class StrategyTargetPositionTests : BaseTestClass
 			Portfolio = portfolio,
 		};
 
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), cancellationToken);
 
 		strategy.ProcessState.AreEqual(ProcessStates.Started);
 		IsFalse(strategy.IsOnline);
@@ -98,11 +98,11 @@ public class StrategyTargetPositionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WhenTargetReached_FiresOnce_WhenTargetAlreadyMet()
+	public async Task WhenTargetReached_FiresOnce_WhenTargetAlreadyMet()
 	{
 		var security = new Security { Id = "SBER@TQBR" };
 		var portfolio = new Portfolio { Name = "test" };
-		var strategy = CreateStartedStrategy(security, portfolio);
+		var strategy = await CreateStartedStrategyAsync(security, portfolio, CancellationToken);
 
 		strategy.SetPositionValue(security, portfolio, 5m, _posTime);
 
@@ -118,11 +118,11 @@ public class StrategyTargetPositionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WhenTargetReached_DoesNotFire_UntilTargetIsExactlyMet()
+	public async Task WhenTargetReached_DoesNotFire_UntilTargetIsExactlyMet()
 	{
 		var security = new Security { Id = "SBER@TQBR" };
 		var portfolio = new Portfolio { Name = "test" };
-		var strategy = CreateStartedStrategy(security, portfolio);
+		var strategy = await CreateStartedStrategyAsync(security, portfolio, CancellationToken);
 
 		var hits = Track(strategy.TargetPositionManager.WhenTargetReached(), strategy);
 
@@ -142,11 +142,11 @@ public class StrategyTargetPositionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WhenTargetReached_DoesNotFire_WhenPositionOvershootsTarget()
+	public async Task WhenTargetReached_DoesNotFire_WhenPositionOvershootsTarget()
 	{
 		var security = new Security { Id = "SBER@TQBR" };
 		var portfolio = new Portfolio { Name = "test" };
-		var strategy = CreateStartedStrategy(security, portfolio);
+		var strategy = await CreateStartedStrategyAsync(security, portfolio, CancellationToken);
 
 		var hits = Track(strategy.TargetPositionManager.WhenTargetReached(), strategy);
 
@@ -163,11 +163,11 @@ public class StrategyTargetPositionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WhenTargetReached_FiresAgain_OnEveryAttainment()
+	public async Task WhenTargetReached_FiresAgain_OnEveryAttainment()
 	{
 		var security = new Security { Id = "SBER@TQBR" };
 		var portfolio = new Portfolio { Name = "test" };
-		var strategy = CreateStartedStrategy(security, portfolio);
+		var strategy = await CreateStartedStrategyAsync(security, portfolio, CancellationToken);
 
 		strategy.SetPositionValue(security, portfolio, 5m, _posTime);
 
@@ -188,11 +188,11 @@ public class StrategyTargetPositionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WhenTargetReached_CancelTarget_IsNotAnAttainment()
+	public async Task WhenTargetReached_CancelTarget_IsNotAnAttainment()
 	{
 		var security = new Security { Id = "SBER@TQBR" };
 		var portfolio = new Portfolio { Name = "test" };
-		var strategy = CreateStartedStrategy(security, portfolio);
+		var strategy = await CreateStartedStrategyAsync(security, portfolio, CancellationToken);
 
 		strategy.SetPositionValue(security, portfolio, 5m, _posTime);
 
@@ -212,12 +212,12 @@ public class StrategyTargetPositionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WhenTargetReached_WithSecurity_FiresOnlyForThatSecurity()
+	public async Task WhenTargetReached_WithSecurity_FiresOnlyForThatSecurity()
 	{
 		var sec1 = new Security { Id = "SBER@TQBR" };
 		var sec2 = new Security { Id = "GAZP@TQBR" };
 		var portfolio = new Portfolio { Name = "test" };
-		var strategy = CreateStartedStrategy(sec1, portfolio);
+		var strategy = await CreateStartedStrategyAsync(sec1, portfolio, CancellationToken);
 
 		var manager = strategy.TargetPositionManager;
 		var filtered = Track(manager.WhenTargetReached(sec1), strategy);
@@ -240,12 +240,12 @@ public class StrategyTargetPositionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WhenTargetReached_WithPortfolio_FiresOnlyForThatPortfolio()
+	public async Task WhenTargetReached_WithPortfolio_FiresOnlyForThatPortfolio()
 	{
 		var security = new Security { Id = "SBER@TQBR" };
 		var pf1 = new Portfolio { Name = "pf1" };
 		var pf2 = new Portfolio { Name = "pf2" };
-		var strategy = CreateStartedStrategy(security, pf1);
+		var strategy = await CreateStartedStrategyAsync(security, pf1, CancellationToken);
 
 		var manager = strategy.TargetPositionManager;
 		var filtered = Track(manager.WhenTargetReached(portfolio: pf2), strategy);
@@ -266,12 +266,12 @@ public class StrategyTargetPositionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WhenTargetReached_HonoursPositionTolerance()
+	public async Task WhenTargetReached_HonoursPositionTolerance()
 	{
 		var sec1 = new Security { Id = "SBER@TQBR" };
 		var sec2 = new Security { Id = "GAZP@TQBR" };
 		var portfolio = new Portfolio { Name = "test" };
-		var strategy = CreateStartedStrategy(sec1, portfolio);
+		var strategy = await CreateStartedStrategyAsync(sec1, portfolio, CancellationToken);
 
 		var manager = strategy.TargetPositionManager;
 		manager.PositionTolerance = 0.5m;
@@ -291,11 +291,11 @@ public class StrategyTargetPositionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WhenTargetReached_Disposed_StopsFiring()
+	public async Task WhenTargetReached_Disposed_StopsFiring()
 	{
 		var security = new Security { Id = "SBER@TQBR" };
 		var portfolio = new Portfolio { Name = "test" };
-		var strategy = CreateStartedStrategy(security, portfolio);
+		var strategy = await CreateStartedStrategyAsync(security, portfolio, CancellationToken);
 
 		strategy.SetPositionValue(security, portfolio, 5m, _posTime);
 

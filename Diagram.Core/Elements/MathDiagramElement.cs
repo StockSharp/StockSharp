@@ -124,7 +124,10 @@ public class MathDiagramElement : DiagramElement
 					return;
 				}
 
+				// the formula is set by a parameter, which cannot wait for the compiler
+#pragma warning disable CS0618
 				_formula = value.Compile(Paths.FileSystem, _formulaCtx);
+#pragma warning restore CS0618
 
 				if (!_formula.Error.IsEmpty())
 					return;
@@ -160,7 +163,10 @@ public class MathDiagramElement : DiagramElement
 				if (value.IsEmpty())
 					return;
 
+				// the validation is set by a parameter, which cannot wait for the compiler
+#pragma warning disable CS0618
 				_validator = value.Compile<bool>(Paths.FileSystem, _validatorCtx);
+#pragma warning restore CS0618
 
 				if (!_validator.Error.IsEmpty())
 					return;

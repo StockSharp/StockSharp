@@ -1195,7 +1195,7 @@ public class ProtectionTests : BaseTestClass
 		strategy.StartProtection(new Unit(), new Unit(5m, UnitTypes.Percent), isLocalStop: true);
 
 		await strategy.StartAsync(CancellationToken);
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		var protectedSub = strategy.BindCandles(protectedSec).Subscription;
 		var otherSub = strategy.BindCandles(otherSec).Subscription;
@@ -1259,7 +1259,7 @@ public class ProtectionTests : BaseTestClass
 		strategy.StartProtection(new Unit(), new Unit(5m, UnitTypes.Percent), isLocalStop: true);
 
 		await strategy.StartAsync(CancellationToken);
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		var protectedSub = strategy.BindTicks(protectedSec).Subscription;
 		var otherSub = strategy.BindTicks(otherSec).Subscription;
@@ -1320,7 +1320,7 @@ public class ProtectionTests : BaseTestClass
 		strategy.StartProtection(new Unit(), new Unit(5m, UnitTypes.Percent), isLocalStop: true);
 
 		await strategy.StartAsync(CancellationToken);
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		var firstSub = strategy.BindCandles(first).Subscription;
 		var secondSub = strategy.BindCandles(second).Subscription;

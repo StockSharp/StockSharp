@@ -1,10 +1,27 @@
 ﻿namespace StockSharp.Algo.Strategies;
 
+using StockSharp.Algo.Strategies.Optimization;
+
 /// <summary>
 /// Extension class for <see cref="Strategy"/>.
 /// </summary>
 public static partial class StrategyHelper
 {
+	/// <summary>
+	/// Compile a fitness formula string into an evaluation function.
+	/// </summary>
+	/// <param name="provider"><see cref="IFitnessFormulaProvider"/></param>
+	/// <param name="formula">The formula string (e.g., "PnL", "PnL * SharpeRatio").</param>
+	/// <returns>A function that evaluates a strategy and returns a fitness value.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CompileAsync instead.")]
+	public static Func<Strategy, decimal> Compile(this IFitnessFormulaProvider provider, string formula)
+	{
+		if (provider is null)
+			throw new ArgumentNullException(nameof(provider));
+
+		return AsyncHelper.Run(() => provider.CompileAsync(formula, default));
+	}
+
 	#region Strategy rules
 
 	private abstract class StrategyRule<TArg>(IStrategy strategy) : MarketRule<IStrategy, TArg>(strategy)

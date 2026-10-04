@@ -237,7 +237,10 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		}
 		catch (Exception ex)
 		{
+			// the state is set by a property, which cannot wait for the error to be sent
+#pragma warning disable CS0618
 			SendOutError(ex);
+#pragma warning restore CS0618
 		}
 	}
 

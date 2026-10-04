@@ -24,17 +24,17 @@ public class GeneticOptimizerTests : BaseTestClass
 		public int CompileCallCount { get; private set; }
 		public string LastFormula { get; private set; }
 
-		public Func<Strategy, decimal> Compile(string formula)
+		public ValueTask<Func<Strategy, decimal>> CompileAsync(string formula, CancellationToken cancellationToken)
 		{
 			CompileCallCount++;
 			LastFormula = formula;
 
 			if (_compileFunc != null)
-				return _compileFunc(formula);
+				return new(_compileFunc(formula));
 
 			// Default: a trivial constant fitness so the GA can run without
 			// depending on real statistics being populated.
-			return _ => 0m;
+			return new(_ => 0m);
 		}
 	}
 
@@ -51,7 +51,7 @@ public class GeneticOptimizerTests : BaseTestClass
 
 		public int CompileCallCount { get; private set; }
 
-		public Func<Strategy, decimal> Compile(string formula)
+		public ValueTask<Func<Strategy, decimal>> CompileAsync(string formula, CancellationToken cancellationToken)
 		{
 			CompileCallCount++;
 			throw _exception;

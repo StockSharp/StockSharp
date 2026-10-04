@@ -436,7 +436,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		strategy.Portfolio = Helper.CreatePortfolio();
 
 		await strategy.StartAsync(CancellationToken);
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		var orders = new Subscription(DataType.Transactions);
 		strategy.Subscriptions.Subscribe(orders);
@@ -1256,7 +1256,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		run.Strategy.Portfolio = run.Portfolio;
 
 		await run.Strategy.StartAsync(CancellationToken);
-		run.Strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await run.Strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		run.Orders = new Subscription(DataType.Transactions);
 		run.Strategy.Subscriptions.Subscribe(run.Orders);

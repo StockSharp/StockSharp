@@ -1173,6 +1173,7 @@ public static partial class TraderHelper
 	/// <param name="fileSystem">File system.</param>
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CompileAsync instead.")]
 	public static ExpressionFormula<decimal> Compile(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker)
 		=> AsyncContext.Run(() => CompileAsync(expression, fileSystem, tracker, default));
 
@@ -1195,6 +1196,7 @@ public static partial class TraderHelper
 	/// <param name="fileSystem">File system.</param>
 	/// <param name="tracker"><see cref="AssemblyLoadContextTracker"/></param>
 	/// <returns>Compiled mathematical formula.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CompileAsync instead.")]
 	public static ExpressionFormula<TResult> Compile<TResult>(this string expression, IFileSystem fileSystem, AssemblyLoadContextTracker tracker)
 		=> AsyncContext.Run(() => CompileAsync<TResult>(expression, fileSystem, tracker, default));
 

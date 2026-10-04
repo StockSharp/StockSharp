@@ -208,6 +208,7 @@ public class CodeInfo : NotifiableObject, IAsyncPersistable, IDisposable
 	/// <param name="isTypeCompatible">Is type compatible.</param>
 	/// <param name="typeName">Type name.</param>
 	/// <returns><see cref="CompilationResult"/></returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CompileAsync instead.")]
 	public IEnumerable<CompilationError> Compile(Func<Type, bool> isTypeCompatible = default, string typeName = default)
 		=> AsyncContext.Run(() => CompileAsync(isTypeCompatible, typeName, default));
 

@@ -145,7 +145,10 @@ public class CandleExpressionCondition : IAsyncPersistable
 		if (CodeExtensions.TryGetCSharpCompiler() is null)
 			throw new InvalidOperationException(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)));
 
+		// the condition is compiled by its constructor or at its first evaluation, neither of which can wait
+#pragma warning disable CS0618
 		_formula = Expression.Compile<bool>(_fileSystem, _context);
+#pragma warning restore CS0618
 
 		if (!_formula.Error.IsEmpty())
 			throw new InvalidOperationException(_formula.Error);

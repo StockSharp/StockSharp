@@ -591,6 +591,7 @@ partial class Connector
 	/// Send error message.
 	/// </summary>
 	/// <param name="error">Error details.</param>
+	[Obsolete("Blocking sync-over-async wrapper. Use SendOutErrorAsync instead.")]
 	public void SendOutError(Exception error)
 		=> AsyncHelper.Run(() => SendOutErrorAsync(error, default));
 

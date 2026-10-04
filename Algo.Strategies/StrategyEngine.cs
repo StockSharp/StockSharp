@@ -146,6 +146,7 @@ public class StrategyEngine
 	/// <summary>
 	/// Process incoming message — state transitions + market data routing.
 	/// </summary>
+	[Obsolete("Blocking sync-over-async wrapper. Use OnMessageAsync instead.")]
 	public void OnMessage(Message message)
 		=> AsyncHelper.Run(() => OnMessageAsync(message, default));
 

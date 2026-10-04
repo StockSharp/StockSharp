@@ -65,7 +65,10 @@ public class ExpressionIndexSecurity : IndexSecurity, IDisposable
 
 			if (CodeExtensions.TryGetCSharpCompiler() is not null)
 			{
+				// the expression is set by a property, which cannot wait for the compiler
+#pragma warning disable CS0618
 				Formula = value.Compile(Paths.FileSystem, _context);
+#pragma warning restore CS0618
 
 				if (Formula.Error.IsEmpty())
 				{
