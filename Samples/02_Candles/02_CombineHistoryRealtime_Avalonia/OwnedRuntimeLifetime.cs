@@ -4,20 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using System.Threading;
-
-using Ecng.Common;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Releases the connector and its externally owned storage runtime in dependency order.
 /// </summary>
 internal sealed class OwnedRuntimeLifetime(
-	IDisposable connectorContext,
+	IAsyncDisposable connectorContext,
 	IAsyncDisposable entityRegistry,
 	IDisposable storageRegistry,
 	IDisposable snapshotRegistry,
-	IAsyncDisposable executor) : IDisposable
+	IAsyncDisposable executor) : IAsyncDisposable
 {
-	private readonly IDisposable _connectorContext = connectorContext
+	private readonly IAsyncDisposable _connectorContext = connectorContext
 		?? throw new ArgumentNullException(nameof(connectorContext));
 	private readonly IAsyncDisposable _entityRegistry = entityRegistry
 		?? throw new ArgumentNullException(nameof(entityRegistry));
@@ -29,20 +28,20 @@ internal sealed class OwnedRuntimeLifetime(
 		?? throw new ArgumentNullException(nameof(executor));
 	private int _disposed;
 
-	public void Dispose()
+	public async ValueTask DisposeAsync()
 	{
 		if (Interlocked.Exchange(ref _disposed, 1) != 0)
 			return;
 
-		List<Exception> errors = null;
+		var errors = new List<Exception>();
 
-		TryDispose(_connectorContext.Dispose, ref errors);
-		TryDispose(() => AsyncHelper.Run(_entityRegistry.DisposeAsync), ref errors);
-		TryDispose(_storageRegistry.Dispose, ref errors);
-		TryDispose(_snapshotRegistry.Dispose, ref errors);
-		TryDispose(() => AsyncHelper.Run(_executor.DisposeAsync), ref errors);
+		await TryDisposeAsync(_connectorContext, errors);
+		await TryDisposeAsync(_entityRegistry, errors);
+		TryDispose(_storageRegistry.Dispose, errors);
+		TryDispose(_snapshotRegistry.Dispose, errors);
+		await TryDisposeAsync(_executor, errors);
 
-		if (errors is null)
+		if (errors.Count == 0)
 			return;
 
 		if (errors.Count == 1)
@@ -51,7 +50,7 @@ internal sealed class OwnedRuntimeLifetime(
 		throw new AggregateException("One or more combined candle runtime resources failed to dispose.", errors);
 	}
 
-	private static void TryDispose(Action dispose, ref List<Exception> errors)
+	private static void TryDispose(Action dispose, List<Exception> errors)
 	{
 		try
 		{
@@ -59,7 +58,19 @@ internal sealed class OwnedRuntimeLifetime(
 		}
 		catch (Exception error)
 		{
-			(errors ??= []).Add(error);
+			errors.Add(error);
+		}
+	}
+
+	private static async ValueTask TryDisposeAsync(IAsyncDisposable resource, List<Exception> errors)
+	{
+		try
+		{
+			await resource.DisposeAsync();
+		}
+		catch (Exception error)
+		{
+			errors.Add(error);
 		}
 	}
 }

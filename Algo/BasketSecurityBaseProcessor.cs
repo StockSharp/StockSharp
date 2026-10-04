@@ -47,6 +47,9 @@ public abstract class BasketSecurityBaseProcessor<TBasketSecurity> : IBasketSecu
 	public SecurityId[] BasketLegs => _basketLegs.Cache;
 
 	/// <inheritdoc />
+	public virtual ValueTask InitAsync(CancellationToken cancellationToken) => default;
+
+	/// <inheritdoc />
 	public abstract IEnumerable<Message> Process(Message message);
 
 	/// <summary>

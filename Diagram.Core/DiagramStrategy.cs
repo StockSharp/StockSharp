@@ -51,6 +51,10 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 			await ApplyPendingCompositionSettingsAsync(composition, cancellationToken);
 	}
 
+	// The elements run inside handlers of the connector, which cannot wait for the stop.
+	internal void RequestStopByElement(Exception error)
+		=> RequestStop(error);
+
 	private readonly StrategyParam<int> _overflowLimit;
 
 	/// <summary>

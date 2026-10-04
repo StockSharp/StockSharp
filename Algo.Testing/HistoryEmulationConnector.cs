@@ -122,7 +122,6 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		//MaxMessageCount = 1000;
 
 		CurrentTimeChanged += OnCurrentTimeChanged;
-		Disconnected += OnDisconnected;
 
 		SupportFilteredMarketDepth = false;
 		UpdatePortfolioByChange = false;
@@ -156,18 +155,11 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	/// <summary>
 	/// The emulator state.
 	/// </summary>
-	public ChannelStates State
-	{
-		get => _state;
-		private set
-		{
-			using (_stateSync.EnterScope())
-				SetStateInternal(value);
-		}
-	}
+	public ChannelStates State => _state;
 
-	// Applies a single state transition. Must be called while holding _stateSync.
-	private void SetStateInternal(ChannelStates value)
+	// Applies a single state transition. Must be called while holding _stateSync. What a handler of the
+	// change throws is collected: it is sent out by the caller, once the lock is released.
+	private void SetStateInternal(ChannelStates value, ref List<Exception> errors)
 	{
 		if (_state == value)
 			return;
@@ -237,11 +229,27 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		}
 		catch (Exception ex)
 		{
-			// the state is set by a property, which cannot wait for the error to be sent
-#pragma warning disable CS0618
-			SendOutError(ex);
-#pragma warning restore CS0618
+			(errors ??= []).Add(ex);
 		}
+	}
+
+	private async ValueTask SetStateAsync(ChannelStates value, CancellationToken cancellationToken)
+	{
+		List<Exception> errors = null;
+
+		using (_stateSync.EnterScope())
+			SetStateInternal(value, ref errors);
+
+		await SendOutErrorsAsync(errors, cancellationToken);
+	}
+
+	private async ValueTask SendOutErrorsAsync(List<Exception> errors, CancellationToken cancellationToken)
+	{
+		if (errors is null)
+			return;
+
+		foreach (var error in errors)
+			await SendOutErrorAsync(error, cancellationToken);
 	}
 
 	/// <summary>
@@ -375,18 +383,19 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		return default;
 	}
 
-	private void OnDisconnected()
+	/// <inheritdoc />
+	protected override async ValueTask OnDisconnectedAsync(CancellationToken cancellationToken)
 	{
-		State = ChannelStates.Stopped;
+		await SetStateAsync(ChannelStates.Stopped, cancellationToken);
+		await base.OnDisconnectedAsync(cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override void DisposeManaged()
+	protected override async ValueTask DisposeManagedAsync()
 	{
 		CurrentTimeChanged -= OnCurrentTimeChanged;
-		Disconnected -= OnDisconnected;
 
-		base.DisposeManaged();
+		await base.DisposeManagedAsync();
 
 		MarketDataAdapter.DoDispose();
 	}
@@ -422,11 +431,9 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 	{
 		var message = new EmulationStateMessage { State = state };
 
-		if (EmulationAdapter.OwnInnerAdapter)
-			return SendInMessageAsync(message, cancellationToken);
-
-		ProcessEmulationStateMessage(message);
-		return default;
+		return EmulationAdapter.OwnInnerAdapter
+			? SendInMessageAsync(message, cancellationToken)
+			: ProcessEmulationStateMessageAsync(message, cancellationToken);
 	}
 
 	/// <inheritdoc />
@@ -437,7 +444,7 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 			switch (message.Type)
 			{
 				case MessageTypes.EmulationState:
-					ProcessEmulationStateMessage((EmulationStateMessage)message);
+					await ProcessEmulationStateMessageAsync((EmulationStateMessage)message, cancellationToken);
 					break;
 
 				default:
@@ -454,51 +461,64 @@ public class HistoryEmulationConnector : BaseEmulationConnector
 		}
 	}
 
-	private void ProcessEmulationStateMessage(EmulationStateMessage message)
+	private async ValueTask ProcessEmulationStateMessageAsync(EmulationStateMessage message, CancellationToken cancellationToken)
 	{
-		// Hold the state lock across the whole decision and the resulting side-effects so a
-		// terminal Stopping and a concurrent resume Starting cannot interleave a half-applied
-		// transition. State writes below go through SetStateInternal (not the locked setter),
-		// because Lock is non-reentrant and the lock is already held here.
+		List<Exception> errors = null;
+		bool isStopping;
+
+		// Hold the state lock across the whole decision so a terminal Stopping and a concurrent
+		// resume Starting cannot interleave a half-applied transition. What has to be awaited - the
+		// disconnect, the errors of the handlers - is done once the lock is released: by then the
+		// state is Stopping, which no other transition gets past.
 		using (_stateSync.EnterScope())
-			ProcessEmulationStateMessageNoLock(message);
+			isStopping = ProcessEmulationStateMessageNoLock(message, ref errors);
+
+		if (isStopping)
+		{
+			// change ConnectionState to Disconnecting
+			if (ConnectionState != ConnectionStates.Disconnecting)
+				Disconnect();
+
+			// base method cannot be invoked from OnDisconnect HistConnector.OnDisconnect
+			await base.OnDisconnectAsync(cancellationToken);
+		}
+
+		await SendOutErrorsAsync(errors, cancellationToken);
 	}
 
-	// Core of the emulation-state handling. Must be called while holding _stateSync.
-	private void ProcessEmulationStateMessageNoLock(EmulationStateMessage message)
+	// Core of the emulation-state handling. Must be called while holding _stateSync. Tells whether
+	// the emulation went into Stopping, which the caller follows with the disconnect.
+	private bool ProcessEmulationStateMessageNoLock(EmulationStateMessage message, ref List<Exception> errors)
 	{
-		SetStateInternal(message.State);
+		SetStateInternal(message.State, ref errors);
+
+		var isStopping = false;
 
 		switch (State)
 		{
 			case ChannelStates.Stopping:
 			{
 				IsFinished = message.IsOk();
-
-				// change ConnectionState to Disconnecting
-				if (ConnectionState != ConnectionStates.Disconnecting)
-					Disconnect();
-
-				// base method cannot be invoked from OnDisconnect HistConnector.OnDisconnect
-				AsyncHelper.Run(() => base.OnDisconnectAsync(default));
-
+				isStopping = true;
 				break;
 			}
 
 			case ChannelStates.Starting:
 			{
-				SetStateInternal(ChannelStates.Started);
+				SetStateInternal(ChannelStates.Started, ref errors);
 				break;
 			}
 
 			case ChannelStates.Suspending:
 			{
-				SetStateInternal(ChannelStates.Suspended);
+				SetStateInternal(ChannelStates.Suspended, ref errors);
 				break;
 			}
 		}
 
 		if (_stopPending && (State is ChannelStates.Started or ChannelStates.Suspended))
-			ProcessEmulationStateMessageNoLock(new() { State = ChannelStates.Stopping });
+			isStopping |= ProcessEmulationStateMessageNoLock(new() { State = ChannelStates.Stopping }, ref errors);
+
+		return isStopping;
 	}
 }

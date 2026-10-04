@@ -14,6 +14,30 @@ public class AsyncExtensionsTests : BaseTestClass
 			OutMessageChannel = new PassThroughMessageChannel();
 			TimeChange = false;
 		}
+
+		/// <summary>
+		/// The steps of a release, the way a connector derived from <see cref="Connector"/> takes part in it.
+		/// </summary>
+		public List<string> Released { get; } = [];
+
+		/// <summary>
+		/// What the connector put into its incoming channel, in order.
+		/// </summary>
+		public List<MessageTypes> Sent { get; } = [];
+
+		public void RecordWhatIsSent()
+			=> InMessageChannel.NewOutMessageAsync += (message, _) =>
+			{
+				Sent.Add(message.Type);
+				return default;
+			};
+
+		protected override async ValueTask DisposeManagedAsync()
+		{
+			Released.Add("before the connector");
+			await base.DisposeManagedAsync();
+			Released.Add("after the connector");
+		}
 	}
 
 	private class MockAdapter : MessageAdapter
@@ -2349,6 +2373,190 @@ public class AsyncExtensionsTests : BaseTestClass
 		// Verify disconnect was sent (finally block should execute)
 		await Helper.WaitUntilAsync(() => adapter.InMessages.OfType<DisconnectMessage>().Any(), TimeSpan.FromSeconds(5), CancellationToken);
 		adapter.InMessages.OfType<DisconnectMessage>().Count().AssertEqual(1);
+	}
+
+	#endregion
+
+	#region Connector release
+
+	private sealed class RecordingAdapter : MessageAdapter
+	{
+		private readonly TaskCompletionSource _disconnectGate;
+
+		public RecordingAdapter(IdGenerator transactionIdGenerator, bool holdDisconnect)
+			: base(transactionIdGenerator)
+		{
+			this.AddMarketDataSupport();
+			this.AddTransactionalSupport();
+
+			if (holdDisconnect)
+				_disconnectGate = new(TaskCreationOptions.RunContinuationsAsynchronously);
+		}
+
+		public override bool UseInChannel => false;
+		public override bool UseOutChannel => false;
+
+		public ConcurrentQueue<MessageTypes> Received { get; } = [];
+
+		public void ReleaseDisconnect() => _disconnectGate.TrySetResult();
+
+		protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			Received.Enqueue(message.Type);
+
+			switch (message.Type)
+			{
+				case MessageTypes.Connect:
+					await SendOutMessageAsync(new ConnectMessage(), cancellationToken);
+					break;
+
+				case MessageTypes.Disconnect:
+					if (_disconnectGate is not null)
+						await _disconnectGate.Task;
+
+					await SendOutMessageAsync(new DisconnectMessage(), cancellationToken);
+					break;
+			}
+		}
+
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new RecordingAdapter(TransactionIdGenerator, _disconnectGate is not null));
+	}
+
+	private async Task<(TestConnector connector, RecordingAdapter adapter)> CreateConnectedAsync(bool holdDisconnect)
+	{
+		var connector = new TestConnector();
+		var adapter = new RecordingAdapter(connector.TransactionIdGenerator, holdDisconnect);
+		connector.Adapter.InnerAdapters.Add(adapter);
+
+		await connector.ConnectAsync(CancellationToken);
+		connector.ConnectionState.AssertEqual(ConnectionStates.Connected);
+
+		adapter.Received.Clear();
+
+		return (connector, adapter);
+	}
+
+	/// <summary>
+	/// The release sends a disconnect and then waits for the adapter to take it. Awaited, it has to
+	/// stay pending for as long as the adapter holds the disconnect - not block the caller, and not
+	/// report the connector released before it is.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Connector_DisposeAsync_WaitsForWhatTheReleaseSends()
+	{
+		var (connector, adapter) = await CreateConnectedAsync(holdDisconnect: true);
+
+		var releasing = connector.DisposeAsync().AsTask();
+
+		releasing.IsCompleted.AssertFalse("the adapter has not let the disconnect through yet");
+		connector.IsDisposed.AssertFalse("a connector whose release is still going on is not released");
+		connector.IsDisposeStarted.AssertTrue();
+
+		// a release asked for again while the first one is going on has nothing to do and nothing to wait for
+		connector.Dispose();
+		connector.Released.Count.AssertEqual(1, "the release that is going on must not be started a second time");
+
+		adapter.ReleaseDisconnect();
+		await releasing.WaitAsync(CancellationToken);
+
+		connector.IsDisposed.AssertTrue();
+		connector.Released.Count.AssertEqual(2, "the release has to run once");
+		adapter.Received.ToArray().AssertEqual(new[] { MessageTypes.Disconnect, MessageTypes.Reset },
+			"the connector disconnects and then tells its adapters to take themselves apart");
+	}
+
+	/// <summary>
+	/// Blocking and awaiting are two ways of waiting for one release: a class derived from the connector
+	/// releases what is its own in a single place, and both ways have to go through it and send the same.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Connector_Dispose_BlockingAndAwaitingRunTheSameRelease()
+	{
+		var (awaited, awaitedAdapter) = await CreateConnectedAsync(holdDisconnect: false);
+		var (blocked, blockedAdapter) = await CreateConnectedAsync(holdDisconnect: false);
+
+		await awaited.DisposeAsync();
+		blocked.Dispose();
+
+		awaited.IsDisposed.AssertTrue();
+		blocked.IsDisposed.AssertTrue();
+
+		var expected = new[] { "before the connector", "after the connector" };
+
+		awaited.Released.ToArray().AssertEqual(expected, "the awaited release has to run what the derived connector releases");
+		blocked.Released.ToArray().AssertEqual(expected, "the blocking release has to run what the derived connector releases");
+
+		awaitedAdapter.Received.ToArray().AssertEqual(blockedAdapter.Received.ToArray(), "both releases have to send the same messages");
+	}
+
+	/// <summary>
+	/// A connector is released once, whichever way is asked first and however many times.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Connector_Dispose_ReleasesOnce()
+	{
+		var (awaitedFirst, _) = await CreateConnectedAsync(holdDisconnect: false);
+
+		await awaitedFirst.DisposeAsync();
+		await awaitedFirst.DisposeAsync();
+		awaitedFirst.Dispose();
+
+		awaitedFirst.Released.Count.AssertEqual(2, "the release has to run once");
+
+		var (blockedFirst, _) = await CreateConnectedAsync(holdDisconnect: false);
+
+		blockedFirst.Dispose();
+		await blockedFirst.DisposeAsync();
+
+		blockedFirst.Released.Count.AssertEqual(2, "the release has to run once");
+	}
+
+	/// <summary>
+	/// A connector that was never connected has nothing to disconnect from: all its release sends is
+	/// the message that takes the adapters apart. A connected one sends the disconnect before it.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Connector_DisposeAsync_NotConnected_SendsNoDisconnect()
+	{
+		var idle = new TestConnector();
+		idle.RecordWhatIsSent();
+
+		await idle.DisposeAsync();
+
+		idle.IsDisposed.AssertTrue();
+		idle.Sent.ToArray().AssertEqual(new[] { MessageTypes.Reset }, "a connector that is not connected only takes its adapters apart");
+
+		var (connected, _) = await CreateConnectedAsync(holdDisconnect: false);
+		connected.RecordWhatIsSent();
+
+		await connected.DisposeAsync();
+
+		// a connected one takes its subscriptions down and disconnects before that
+		connected.Sent.Count(t => t == MessageTypes.Disconnect).AssertEqual(1);
+		connected.Sent.Count(t => t == MessageTypes.Reset).AssertEqual(1);
+		connected.Sent[^1].AssertEqual(MessageTypes.Reset, "taking the adapters apart is the last thing the release sends");
+	}
+
+	/// <summary>
+	/// A strategy or an application holds a connector by <see cref="IConnector"/> and has to be able to
+	/// release it by await without knowing the class behind it.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Connector_DisposeAsync_HeldByItsInterface_ReleasesByAwait()
+	{
+		var (connector, _) = await CreateConnectedAsync(holdDisconnect: false);
+		IConnector held = connector;
+
+		await held.DisposeAsync();
+
+		connector.IsDisposed.AssertTrue();
+		connector.Released.Count.AssertEqual(2, "the release has to go through the chain of the connector");
 	}
 
 	#endregion

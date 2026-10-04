@@ -44,7 +44,7 @@ public class BasketSecurityTests : BaseTestClass
 	/// </summary>
 	[TestMethod]
 	[DoNotParallelize] // Takes C# out of the process-wide compiler provider for the duration.
-	public void ExpressionIndex_WithoutACompiler_RefusesTheExpressionInsteadOfKeepingTheOld()
+	public async Task ExpressionIndex_WithoutACompiler_RefusesTheExpressionInsteadOfKeepingTheOld()
 	{
 		var basket = new ExpressionIndexSecurity
 		{
@@ -53,7 +53,7 @@ public class BasketSecurityTests : BaseTestClass
 			Expression = "LKOH@TQBR - 10 * SBER@TQBR",
 		};
 
-		basket.Formula.Error.IsEmpty().AssertTrue("the first formula must compile");
+		(await basket.GetFormulaAsync(CancellationToken)).Error.IsEmpty().AssertTrue("the first formula must compile");
 
 		const string replacement = "SBER@TQBR * 2";
 
@@ -69,9 +69,9 @@ public class BasketSecurityTests : BaseTestClass
 
 			basket.Expression = replacement;
 
-			basket.Formula.Error.IsEmpty().AssertFalse("an index that could not compile the formula it was given must report that it cannot calculate");
+			(await basket.GetFormulaAsync(CancellationToken)).Error.IsEmpty().AssertFalse("an index that could not compile the formula it was given must report that it cannot calculate");
 			basket.Expression.AssertEqual(replacement, "the uncompiled text must remain available for correction and persistence");
-			ThrowsExactly<ArgumentException>(() => new ExpressionIndexSecurityProcessor(basket),
+			await ThrowsExactlyAsync<InvalidOperationException>(() => new BasketSecurityProcessorProvider().CreateProcessorAsync(basket, CancellationToken).AsTask(),
 				"an expression without a compiler must not produce a processor that silently emits no values");
 		}
 		finally
@@ -86,7 +86,7 @@ public class BasketSecurityTests : BaseTestClass
 	/// producing the index the caller cloned.
 	/// </summary>
 	[TestMethod]
-	public void ExpressionIndex_Clone_KeepsTheFormulaAndItsInnerSecurities()
+	public async Task ExpressionIndex_Clone_KeepsTheFormulaAndItsInnerSecurities()
 	{
 		var basket = new ExpressionIndexSecurity
 		{
@@ -101,7 +101,7 @@ public class BasketSecurityTests : BaseTestClass
 		var clone = (ExpressionIndexSecurity)basket.Clone();
 
 		clone.Expression.AssertEqual(basket.Expression, "a clone calculates the same formula");
-		clone.Formula.Error.IsEmpty().AssertTrue("a clone must be able to calculate");
+		(await clone.GetFormulaAsync(CancellationToken)).Error.IsEmpty().AssertTrue("a clone must be able to calculate");
 		clone.InnerSecurityIds.ToArray().AssertEqual(inner, "a clone subscribes to the same legs");
 		clone.Id.AssertEqual(basket.Id);
 	}
@@ -263,7 +263,7 @@ public class BasketSecurityTests : BaseTestClass
 		})
 		{
 			var innerCandles = securities.SelectMany(s => ticks[s].ToCandles(new Subscription(dt, s))).OrderBy(c => c.OpenTime).ToArray();
-			var basketCandles = innerCandles.ToBasket(basketSecurity, processorProvider).ToArray();
+			var basketCandles = await innerCandles.ToAsyncEnumerable().ToBasket(basketSecurity, processorProvider).ToArrayAsync(CancellationToken);
 			foreach (var candle in basketCandles)
 			{
 				var innerValues = innerCandles.Where(c => c.OpenTime == candle.OpenTime).ToArray();
@@ -277,27 +277,6 @@ public class BasketSecurityTests : BaseTestClass
 		var prices = innerValues.Select(getDecimal).ToArray();
 		var expected = validateFormula(prices);
 		getDecimal(basketValue).AssertEqual(expected);
-	}
-
-	[TestMethod]
-	public void ToBasket_Sync_EmptyCollection_ReturnsEmpty()
-	{
-		CreateSpot(out var lkoh, out var sber);
-
-		var basket = new WeightedIndexSecurity
-		{
-			Id = "LKOH_SBER_WEI@TQBR",
-			Board = ExchangeBoard.Associated,
-		};
-		basket.Weights[lkoh.ToSecurityId()] = 1;
-		basket.Weights[sber.ToSecurityId()] = 1;
-
-		var processorProvider = new BasketSecurityProcessorProvider();
-		var messages = Array.Empty<ExecutionMessage>();
-
-		var result = messages.ToBasket(basket, processorProvider).ToArray();
-
-		result.Length.AssertEqual(0);
 	}
 
 	[TestMethod]
@@ -338,106 +317,6 @@ public class BasketSecurityTests : BaseTestClass
 		IAsyncEnumerable<ExecutionMessage> messages = null;
 
 		ThrowsExactly<ArgumentNullException>(() => messages.ToBasket(basket, processorProvider));
-	}
-
-	[TestMethod]
-	public async Task ToBasket_Sync_AndAsync_ProduceSameResults()
-	{
-		CreateSpot(out var lkoh, out var sber);
-
-		var basket = new WeightedIndexSecurity
-		{
-			Id = "LKOH_SBER_WEI@TQBR",
-			Board = ExchangeBoard.Associated,
-		};
-		basket.Weights[lkoh.ToSecurityId()] = 1;
-		basket.Weights[sber.ToSecurityId()] = -1;
-
-		var processorProvider = new BasketSecurityProcessorProvider();
-		var serverTime = DateTime.UtcNow;
-
-		var ticks = new ExecutionMessage[]
-		{
-			new()
-			{
-				SecurityId = lkoh.ToSecurityId(),
-				DataTypeEx = DataType.Ticks,
-				ServerTime = serverTime,
-				TradePrice = 100,
-				TradeVolume = 10,
-			},
-			new()
-			{
-				SecurityId = sber.ToSecurityId(),
-				DataTypeEx = DataType.Ticks,
-				ServerTime = serverTime,
-				TradePrice = 50,
-				TradeVolume = 20,
-			},
-		};
-
-		var syncResult = ticks.ToBasket(basket, processorProvider).ToArray();
-		var asyncResult = await ticks.ToAsyncEnumerable().ToBasket(basket, processorProvider).ToArrayAsync(CancellationToken);
-
-		syncResult.Length.AssertEqual(asyncResult.Length);
-		syncResult.Length.AssertEqual(1);
-
-		var syncTick = syncResult[0];
-		var asyncTick = asyncResult[0];
-		syncTick.SecurityId.AssertEqual(asyncTick.SecurityId);
-		syncTick.DataTypeEx.AssertEqual(asyncTick.DataTypeEx);
-		syncTick.ServerTime.AssertEqual(asyncTick.ServerTime);
-		syncTick.TradePrice.AssertEqual(asyncTick.TradePrice);
-		syncTick.TradeVolume.AssertEqual(asyncTick.TradeVolume);
-		syncTick.TradePrice.AssertEqual(50m);
-		syncTick.TradeVolume.AssertEqual(-10m);
-	}
-
-	[TestMethod]
-	public void ToBasket_Sync_WithTicks_ProcessesMessages()
-	{
-		CreateSpot(out var lkoh, out var sber);
-
-		var basket = new WeightedIndexSecurity
-		{
-			Id = "LKOH_SBER_WEI@TQBR",
-			Board = ExchangeBoard.Associated,
-		};
-		basket.Weights[lkoh.ToSecurityId()] = 1;
-		basket.Weights[sber.ToSecurityId()] = -1;
-
-		var processorProvider = new BasketSecurityProcessorProvider();
-		var serverTime = DateTime.UtcNow;
-
-		var ticks = new ExecutionMessage[]
-		{
-			new()
-			{
-				SecurityId = lkoh.ToSecurityId(),
-				DataTypeEx = DataType.Ticks,
-				ServerTime = serverTime,
-				TradePrice = 100,
-				TradeVolume = 10,
-			},
-			new()
-			{
-				SecurityId = sber.ToSecurityId(),
-				DataTypeEx = DataType.Ticks,
-				ServerTime = serverTime,
-				TradePrice = 50,
-				TradeVolume = 20,
-			},
-		};
-
-		var result = ticks.ToBasket(basket, processorProvider).ToArray();
-
-		result.Length.AssertEqual(1);
-		var basketTick = result[0];
-		basketTick.SecurityId.AssertEqual(basket.ToSecurityId());
-		basketTick.DataTypeEx.AssertEqual(DataType.Ticks);
-		basketTick.ServerTime.AssertEqual(serverTime);
-		basketTick.TradePrice.AssertEqual(50m);
-		basketTick.TradeVolume.AssertEqual(-10m);
 	}
 
 	[TestMethod]

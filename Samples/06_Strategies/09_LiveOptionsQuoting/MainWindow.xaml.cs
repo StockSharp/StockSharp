@@ -560,12 +560,12 @@ public partial class MainWindow
 		hedge.ChildStrategies.Add(quoting);
 
 		// start hedging
-		hedge.Start();
+		await hedge.StartAsync();
 
-		wnd.Closed += (s1, e1) =>
+		wnd.Closed += async (s1, e1) =>
 		{
 			// force close all strategies while the DOM was closed
-			hedge.Stop();
+			await hedge.StopAsync();
 		};
 
 		// show DOM

@@ -20,7 +20,7 @@ using StockSharp.Messages;
 /// <summary>
 /// Owns the connector and the shared transactional settings workflow for a sample window.
 /// </summary>
-internal sealed class SampleConnectorContext : IDisposable
+internal sealed class SampleConnectorContext : IDisposable, IAsyncDisposable
 {
 	private readonly IMessageAdapterProvider _adapterProvider;
 	private readonly bool _ownsAdapterProvider;
@@ -118,6 +118,32 @@ internal sealed class SampleConnectorContext : IDisposable
 		var errors = new List<Exception>();
 		TryRelease(_lifetimeCancellation.Cancel, errors);
 		TryRelease(Connector.Dispose, errors);
+		CompleteRelease(errors);
+	}
+
+	public async ValueTask DisposeAsync()
+	{
+		if (_disposed)
+			return;
+
+		_disposed = true;
+		var errors = new List<Exception>();
+		TryRelease(_lifetimeCancellation.Cancel, errors);
+
+		try
+		{
+			await Connector.DisposeAsync();
+		}
+		catch (Exception error)
+		{
+			errors.Add(error);
+		}
+
+		CompleteRelease(errors);
+	}
+
+	private void CompleteRelease(List<Exception> errors)
+	{
 		ReleaseOwnedAdapterCatalog(errors);
 		TryRelease(_lifetimeCancellation.Dispose, errors);
 

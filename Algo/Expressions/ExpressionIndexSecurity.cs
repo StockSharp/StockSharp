@@ -14,6 +14,8 @@ using Ecng.Compilation;
 public class ExpressionIndexSecurity : IndexSecurity, IDisposable
 {
 	private readonly AssemblyLoadContextTracker _context = new();
+	private readonly AsyncLock _compileLock = new();
+	private readonly Lock _sync = new();
 
 	void IDisposable.Dispose()
 	{
@@ -29,77 +31,115 @@ public class ExpressionIndexSecurity : IndexSecurity, IDisposable
 	{
 	}
 
-	private ExpressionFormula<decimal> _formula = ExpressionFormula<decimal>.CreateError(LocalizedStrings.ExpressionNotSet);
+	// The formula compiled from the current text, or null while that text has not been compiled yet.
+	private volatile ExpressionFormula<decimal> _formula = ExpressionFormula<decimal>.CreateError(LocalizedStrings.ExpressionNotSet);
 	private string _expression;
 
 	/// <summary>
 	/// Compiled mathematical formula.
 	/// </summary>
-	public ExpressionFormula<decimal> Formula
+	[Obsolete("Blocking sync-over-async wrapper. Use GetFormulaAsync instead.")]
+	public ExpressionFormula<decimal> Formula => _formula ?? AsyncHelper.Run(() => GetFormulaAsync(default));
+
+	/// <summary>
+	/// Get the mathematical formula compiled from <see cref="Expression"/>.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Compiled mathematical formula. A text that cannot be compiled gives a formula whose <see cref="ExpressionFormula{TResult}.Error"/> says why.</returns>
+	public async ValueTask<ExpressionFormula<decimal>> GetFormulaAsync(CancellationToken cancellationToken)
 	{
-		get => _formula;
-		private set
+		var formula = _formula;
+
+		if (formula is not null)
+			return formula;
+
+		using (await _compileLock.LockAsync(cancellationToken))
 		{
-			_formula = value ?? throw new ArgumentNullException(nameof(value));
-			_innerSecurityIds.Clear();
+			string expression;
+
+			using (_sync.EnterScope())
+			{
+				formula = _formula;
+				expression = _expression;
+			}
+
+			if (formula is not null)
+				return formula;
+
+			formula = CodeExtensions.TryGetCSharpCompiler() is null
+				? ExpressionFormula<decimal>.CreateError(LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler)))
+				: await expression.CompileAsync(Paths.FileSystem, _context, cancellationToken);
+
+			if (!formula.Error.IsEmpty())
+				new InvalidOperationException(formula.Error).LogError();
+
+			using (_sync.EnterScope())
+			{
+				// the text may have been replaced while it was being compiled
+				if (_expression == expression)
+					_formula = formula;
+			}
+
+			return formula;
 		}
 	}
 
 	/// <summary>
 	/// The mathematical formula of index.
 	/// </summary>
+	/// <remarks>
+	/// The instruments the text names are known at once (<see cref="InnerSecurityIds"/>); the text is compiled
+	/// by <see cref="GetFormulaAsync"/>.
+	/// </remarks>
 	[Browsable(false)]
 	public string Expression
 	{
 		get => _expression;
 		set
 		{
-			_expression = value;
+			var ids = new List<SecurityId>();
+			List<Exception> errors = null;
 
-			if (value.IsEmpty())
+			if (!value.IsEmpty())
 			{
-				Formula = ExpressionFormula<decimal>.CreateError(LocalizedStrings.ExpressionNotSet);
-				return;
-				//throw new ArgumentNullException(nameof(value));
-			}
-
-			if (CodeExtensions.TryGetCSharpCompiler() is not null)
-			{
-				// the expression is set by a property, which cannot wait for the compiler
-#pragma warning disable CS0618
-				Formula = value.Compile(Paths.FileSystem, _context);
-#pragma warning restore CS0618
-
-				if (Formula.Error.IsEmpty())
+				foreach (var v in GetVariables(value))
 				{
-					List<Exception> errors = null;
-
-					foreach (var v in Formula.Variables)
+					try
 					{
-						try
-						{
-							var secId = v.ToSecurityId();
-							_innerSecurityIds.Add(secId);
-						}
-						catch (Exception ex)
-						{
-							errors ??= [];
-							errors.Add(ex);
-						}
+						ids.Add(v.ToSecurityId());
 					}
-
-					if (errors is not null)
-						throw new AggregateException(LocalizedStrings.InvalidValue, errors);
+					catch (Exception ex)
+					{
+						errors ??= [];
+						errors.Add(ex);
+					}
 				}
-				else
-					new InvalidOperationException(Formula.Error).LogError();
 			}
-			else
+
+			using (_sync.EnterScope())
 			{
-				var error = LocalizedStrings.ServiceNotRegistered.Put(nameof(ICompiler));
-				Formula = ExpressionFormula<decimal>.CreateError(error);
-				new InvalidOperationException(error).LogError();
+				_expression = value;
+				_formula = value.IsEmpty() ? ExpressionFormula<decimal>.CreateError(LocalizedStrings.ExpressionNotSet) : null;
+
+				_innerSecurityIds.Clear();
+				_innerSecurityIds.AddRange(ids);
 			}
+
+			if (errors is not null)
+				throw new AggregateException(LocalizedStrings.InvalidValue, errors);
+		}
+	}
+
+	// A text that cannot be read names no instruments; what is wrong with it is said by the compiler.
+	private static string[] GetVariables(string expression)
+	{
+		try
+		{
+			return ExpressionHelper.GetVariables(expression);
+		}
+		catch (Exception ex) when (ex is InvalidOperationException or ArgumentException)
+		{
+			return [];
 		}
 	}
 

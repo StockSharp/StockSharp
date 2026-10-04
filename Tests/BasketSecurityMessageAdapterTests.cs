@@ -44,6 +44,7 @@ public class BasketSecurityMessageAdapterTests : BaseTestClass
 		public SecurityId SecurityId { get; } = security.ToSecurityId();
 		public string BasketExpression { get; } = security.BasketExpression;
 		public SecurityId[] BasketLegs => [];
+		public ValueTask InitAsync(CancellationToken cancellationToken) => default;
 		public IEnumerable<Message> Process(Message message) => [];
 	}
 

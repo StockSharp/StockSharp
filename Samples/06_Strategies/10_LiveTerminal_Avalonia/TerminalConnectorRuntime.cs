@@ -20,7 +20,7 @@ using StockSharp.Configuration;
 using StockSharp.Messages;
 using StockSharp.Samples;
 
-internal sealed class TerminalConnectorRuntime : IDisposable
+internal sealed class TerminalConnectorRuntime : IAsyncDisposable
 {
 	private readonly ChannelExecutor _executor;
 	private readonly CsvEntityRegistry _entityRegistry;
@@ -60,8 +60,6 @@ internal sealed class TerminalConnectorRuntime : IDisposable
 
 	public static TerminalConnectorRuntime Create()
 	{
-		ChannelExecutor executor = null;
-		CsvEntityRegistry entityRegistry = null;
 		StorageRegistry storageRegistry = null;
 		SnapshotRegistry snapshotRegistry = null;
 		SampleConnectorContext context = null;
@@ -70,9 +68,8 @@ internal sealed class TerminalConnectorRuntime : IDisposable
 		{
 			const string dataPath = "Data";
 			var fileSystem = Paths.FileSystem;
-			executor = new ChannelExecutor(error => error.LogError(), TimeSpan.FromSeconds(1));
-			_ = executor.RunAsync();
-			entityRegistry = new CsvEntityRegistry(fileSystem, dataPath, executor);
+			var executor = new ChannelExecutor(error => error.LogError(), TimeSpan.FromSeconds(1));
+			var entityRegistry = new CsvEntityRegistry(fileSystem, dataPath, executor);
 			var exchangeInfoProvider = new StorageExchangeInfoProvider(entityRegistry);
 			storageRegistry = new StorageRegistry(exchangeInfoProvider)
 			{
@@ -91,6 +88,10 @@ internal sealed class TerminalConnectorRuntime : IDisposable
 			};
 			connector.Adapter.StorageSettings.Mode = StorageModes.Snapshot;
 			context = new SampleConnectorContext(connector);
+
+			// The executor is started last: a construction that fails before this point leaves nothing
+			// running and nothing queued, so the registry and the executor have nothing to release.
+			_ = executor.RunAsync();
 			return new(dataPath, executor, entityRegistry, storageRegistry, snapshotRegistry, context);
 		}
 		catch (Exception initializationError)
@@ -98,12 +99,10 @@ internal sealed class TerminalConnectorRuntime : IDisposable
 			var errors = new List<Exception> { initializationError };
 			if (context is not null)
 				TryRelease(context.Dispose, errors);
-			TryRelease(entityRegistry is null ? null : () => AsyncHelper.Run(entityRegistry.DisposeAsync), errors);
 			if (storageRegistry is not null)
 				TryRelease(storageRegistry.Dispose, errors);
 			if (snapshotRegistry is not null)
 				TryRelease(snapshotRegistry.Dispose, errors);
-			TryRelease(executor is null ? null : () => AsyncHelper.Run(executor.DisposeAsync), errors);
 
 			if (errors.Count > 1)
 				throw new AggregateException("The live terminal runtime failed to initialize and release its resources.", errors);
@@ -139,17 +138,17 @@ internal sealed class TerminalConnectorRuntime : IDisposable
 		}
 	}
 
-	public void Dispose()
+	public async ValueTask DisposeAsync()
 	{
 		if (Interlocked.Exchange(ref _disposed, 1) != 0)
 			return;
 
 		var errors = new List<Exception>();
-		TryRelease(Context.Dispose, errors);
-		TryRelease(() => AsyncHelper.Run(_entityRegistry.DisposeAsync), errors);
+		await TryReleaseAsync(Context, errors);
+		await TryReleaseAsync(_entityRegistry, errors);
 		TryRelease(_storageRegistry.Dispose, errors);
 		TryRelease(_snapshotRegistry.Dispose, errors);
-		TryRelease(() => AsyncHelper.Run(_executor.DisposeAsync), errors);
+		await TryReleaseAsync(_executor, errors);
 		TryRelease(_initializeGate.Dispose, errors);
 
 		if (errors.Count == 1)
@@ -160,12 +159,21 @@ internal sealed class TerminalConnectorRuntime : IDisposable
 
 	private static void TryRelease(Action release, ICollection<Exception> errors)
 	{
-		if (release is null)
-			return;
-
 		try
 		{
 			release();
+		}
+		catch (Exception error)
+		{
+			errors.Add(error);
+		}
+	}
+
+	private static async ValueTask TryReleaseAsync(IAsyncDisposable resource, ICollection<Exception> errors)
+	{
+		try
+		{
+			await resource.DisposeAsync();
 		}
 		catch (Exception error)
 		{

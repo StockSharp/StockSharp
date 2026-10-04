@@ -59,6 +59,10 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 	private readonly Lock _sync = new();
 	private readonly AsyncLock _nextLock = new();
+
+	// Pause, Resume and an iteration that has just come up take their turn here, so each of them
+	// finds the connectors in the state the previous one left them in.
+	private readonly AsyncLock _pauseLock = new();
 	private bool _cancelEmulation;
 	private bool _allIterationsStarted;
 
@@ -190,15 +194,17 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <returns><see cref="Task"/></returns>
 	public async Task Pause()
 	{
-		// CompareExchange returns the previous value; if it was already set we are already paused.
-		// Setting the gate is synchronous, so new iteration starts are blocked immediately; the running
-		// backtests are then suspended below.
-		if (Interlocked.CompareExchange(ref _pauseTcs, new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously), null) is not null)
-			return;
+		using (await _pauseLock.LockAsync())
+		{
+			// CompareExchange returns the previous value; if it was already set we are already paused.
+			// The gate blocks new iteration starts; the running backtests are suspended below.
+			if (Interlocked.CompareExchange(ref _pauseTcs, new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously), null) is not null)
+				return;
 
-		// A "soft" pause that only blocks new starts would still let the whole in-flight batch run
-		// to completion - and each iteration can take seconds - so suspend the running connectors too.
-		await SetConnectorsSuspendedAsync(true);
+			// A "soft" pause that only blocks new starts would still let the whole in-flight batch run
+			// to completion - and each iteration can take seconds - so suspend the running connectors too.
+			await SetConnectorsSuspendedAsync(true);
+		}
 	}
 
 	/// <summary>
@@ -207,9 +213,12 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <returns><see cref="Task"/></returns>
 	public async Task Resume()
 	{
-		// Resume the suspended backtests, then release the gate that blocks new iteration starts.
-		await SetConnectorsSuspendedAsync(false);
-		UnblockPauseWaiters();
+		using (await _pauseLock.LockAsync())
+		{
+			// Resume the suspended backtests, then release the gate that blocks new iteration starts.
+			await SetConnectorsSuspendedAsync(false);
+			UnblockPauseWaiters();
+		}
 	}
 
 	// Releases the gate that parks new iteration starts in TryNextRunAsync without touching the running
@@ -239,15 +248,9 @@ public abstract class BaseOptimizer : BaseLogReceiver
 			try
 			{
 				if (suspend)
-				{
-					if (connector.State == ChannelStates.Started)
-						await connector.SuspendAsync();
-				}
-				else
-				{
-					if (connector.State is ChannelStates.Suspended or ChannelStates.Suspending)
-						await connector.StartAsync();
-				}
+					await SuspendConnectorAsync(connector);
+				else if (connector.State is ChannelStates.Suspended or ChannelStates.Suspending)
+					await connector.StartAsync();
 			}
 			catch (Exception ex)
 			{
@@ -256,6 +259,55 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		}
 
 		await Task.WhenAll(connectors.Select(ApplyAsync));
+	}
+
+	// Asks a replaying connector to suspend and waits until it has. The request travels through the
+	// connector's own queue, and whoever comes next - the resume, an iteration checking the pause for
+	// itself - goes by the state the connector is in.
+	private static async Task SuspendConnectorAsync(HistoryEmulationConnector connector)
+	{
+		var suspended = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		void OnStateChanged(ChannelStates state)
+		{
+			if (state is ChannelStates.Suspended or ChannelStates.Stopping or ChannelStates.Stopped)
+				suspended.TrySetResult();
+		}
+
+		connector.StateChanged2 += OnStateChanged;
+
+		try
+		{
+			if (connector.State != ChannelStates.Started)
+				return;
+
+			await connector.SuspendAsync();
+			await suspended.Task;
+		}
+		finally
+		{
+			connector.StateChanged2 -= OnStateChanged;
+		}
+	}
+
+	// A pause that arrived while an iteration was coming up found no replay to suspend, so the
+	// iteration looks at the pause for itself once its connector is up.
+	private async ValueTask SuspendIfPausedAsync(HistoryEmulationConnector connector)
+	{
+		using (await _pauseLock.LockAsync())
+		{
+			if (!IsPaused)
+				return;
+
+			try
+			{
+				await SuspendConnectorAsync(connector);
+			}
+			catch (Exception ex)
+			{
+				this.AddErrorLog(ex);
+			}
+		}
 	}
 
 	/// <summary>
@@ -460,14 +512,21 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		await connector.EmulationSettings.LoadAsync(await EmulationSettings.SaveAsync(cancellationToken), cancellationToken);
 
 		var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
-		SetupIteration(connector, strategy, parameters, iterationId, tcs);
+		var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+		SetupIteration(connector, strategy, parameters, iterationId, tcs, started);
 		await StartIterationAsync(connector, strategy, parameters, cancellationToken);
+
+		// The replay is started by a message, so the connector comes up some time after the call that
+		// asked for it. A cancellation or a pause that looked at it before that found it not started.
+		await started.Task;
 
 		// Cancellation disconnects what is running when it fires, and it fires once. A connector that was
 		// still starting then is either missed by that pass or takes the disconnect while it is coming up
 		// and comes up anyway - and nothing else would ever stop it, leaving the wait below with no end.
 		if (cancellationToken.IsCancellationRequested)
 			StopStartedConnector(connector);
+		else
+			await SuspendIfPausedAsync(connector);
 
 		return await tcs.Task;
 	}
@@ -513,7 +572,8 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		Strategy strategy,
 		IStrategyParam[] parameters,
 		Guid iterationId,
-		TaskCompletionSource<bool> tcs)
+		TaskCompletionSource<bool> tcs,
+		TaskCompletionSource started)
 	{
 		var lastStep = 0;
 
@@ -521,6 +581,10 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 		connector.StateChanged2 += state =>
 		{
+			// up, or over before it got there
+			if (state is ChannelStates.Started or ChannelStates.Stopping or ChannelStates.Stopped)
+				started.TrySetResult();
+
 			if (state != ChannelStates.Stopped)
 				return;
 

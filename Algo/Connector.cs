@@ -1081,17 +1081,23 @@ public partial class Connector : BaseLogReceiver, IConnector
 	}
 
 	/// <summary>
-	/// To release allocated resources. In particular, to disconnect from the trading system via <see cref="Disconnect"/>.
+	/// To release allocated resources. In particular, to disconnect from the trading system.
+	/// It is what both <see cref="IDisposable.Dispose"/> and <see cref="DisposeAsync"/> run.
 	/// </summary>
-	protected override void DisposeManaged()
+	/// <returns><see cref="ValueTask"/></returns>
+	protected virtual async ValueTask DisposeManagedAsync()
 	{
 		_isDisposing = true;
 
 		if (ConnectionState == ConnectionStates.Connected)
 		{
+			LogInfo(nameof(Disconnect));
+
+			ConnectionState = ConnectionStates.Disconnecting;
+
 			try
 			{
-				Disconnect();
+				await OnDisconnectAsync(CancellationToken.None);
 			}
 			catch (Exception ex)
 			{
@@ -1107,9 +1113,32 @@ public partial class Connector : BaseLogReceiver, IConnector
 		//if (ExportState == ConnectionStates.Disconnected || ExportState == ConnectionStates.Failed)
 		//	MarketDataAdapter = null;
 
-		AsyncHelper.Run(() => SendInMessageAsync(_disposeMessage, CancellationToken.None));
+		await SendInMessageAsync(_disposeMessage, CancellationToken.None);
 
 		CloseTimer();
+	}
+
+	/// <summary>
+	/// The release as <see cref="IDisposable"/> requires it: the caller is blocked until <see cref="DisposeManagedAsync"/> is over.
+	/// </summary>
+	protected sealed override void DisposeManaged()
+		=> AsyncHelper.Run(DisposeManagedAsync);
+
+	/// <inheritdoc />
+	public async ValueTask DisposeAsync()
+	{
+		if (!TryBeginDispose())
+			return;
+
+		try
+		{
+			await DisposeManagedAsync();
+			DisposeNative();
+		}
+		finally
+		{
+			EndDispose();
+		}
 	}
 
 	/// <summary>

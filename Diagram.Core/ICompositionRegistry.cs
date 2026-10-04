@@ -4,6 +4,8 @@ using System.Security;
 
 using Ecng.Security;
 
+using Nito.AsyncEx;
+
 using StockSharp.Configuration;
 
 /// <summary>
@@ -15,6 +17,17 @@ public interface ICompositionRegistry
 	/// List of elements.
 	/// </summary>
 	INotifyList<DiagramElement> DiagramElements { get; }
+
+	/// <summary>
+	/// Load the elements of the composition that waited for their type. A composition deserialized before
+	/// a type was added to <see cref="DiagramElements"/> keeps an empty node in place of each element of
+	/// that type; the node gets its element here, in the nested compositions as well. An element that
+	/// cannot be loaded keeps waiting, and the error is thrown.
+	/// </summary>
+	/// <param name="composition"><see cref="CompositionDiagramElement"/></param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask LoadNotLoadedElementsAsync(CompositionDiagramElement composition, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To serialize the composite element.
@@ -69,10 +82,10 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 
 	private static readonly byte[] _initVectorBytes = "ss14fgty650h8u82".ASCII();
 
-	private readonly SynchronizedDictionary<Guid, List<(TNode element, SettingsStorage settings)>> _notLoadedElements = [];
+	private readonly AsyncLock _loadLock = new();
 	private readonly Func<ICompositionModelBehavior<TNode, TLink>> _createBehavior;
 
-	private readonly SynchronizedSet<DiagramElement> _diagramElements;
+	private readonly SynchronizedSet<DiagramElement> _diagramElements = [];
 
 	/// <inheritdoc />
 	public INotifyList<DiagramElement> DiagramElements => _diagramElements;
@@ -84,31 +97,72 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 	public CompositionRegistry(Func<ICompositionModelBehavior<TNode, TLink>> createBehavior)
 	{
 		_createBehavior = createBehavior ?? throw new ArgumentNullException(nameof(createBehavior));
-
-		_diagramElements = [];
-		_diagramElements.Added += item =>
-		{
-			if (!_notLoadedElements.TryGetAndRemove(item.TypeId, out var list))
-				return;
-
-			// the list raises the event synchronously, so the elements that waited for this type load in the background
-			foreach (var (element, settings) in list)
-				_ = LoadNotLoadedAsync(item, element, settings);
-		};
 	}
 
-	private static async Task LoadNotLoadedAsync(DiagramElement template, TNode node, SettingsStorage settings)
+	/// <inheritdoc />
+	public async ValueTask LoadNotLoadedElementsAsync(CompositionDiagramElement composition, CancellationToken cancellationToken)
 	{
-		try
+		if (composition is null)
+			throw new ArgumentNullException(nameof(composition));
+
+		var errors = new List<Exception>();
+
+		// one load at a time: two of them would give the same node two elements
+		using (await _loadLock.LockAsync(cancellationToken))
+			await LoadNotLoadedElementsAsync((CompositionModel<TNode, TLink>)composition.Model, errors, cancellationToken);
+
+		if (errors.Count > 0)
+			throw errors.SingleOrAggr();
+	}
+
+	private async ValueTask<bool> LoadNotLoadedElementsAsync(CompositionModel<TNode, TLink> model, List<Exception> errors, CancellationToken cancellationToken)
+	{
+		var isLoaded = false;
+
+		foreach (var node in model.Nodes.ToArray())
 		{
-			var clone = await template.CloneAsync(false, default);
-			await clone.LoadAsync(settings, default);
-			node.Element = clone;
+			if (node.Element is CompositionDiagramElement { Model: CompositionModel<TNode, TLink> innerModel })
+			{
+				// an element loaded inside a composition can make it publish sockets its links were waiting for
+				if (await LoadNotLoadedElementsAsync(innerModel, errors, cancellationToken))
+				{
+					model.ConnectLinks(node);
+					isLoaded = true;
+				}
+
+				continue;
+			}
+
+			if (node.Element is not null)
+				continue;
+
+			var template = DiagramElements.FirstOrDefault(e => e.TypeId == node.TypeId);
+
+			if (template is null)
+				continue;
+
+			try
+			{
+				var element = await template.CloneAsync(false, cancellationToken);
+
+				if (node.ElementSettings != null)
+					await element.LoadAsync(node.ElementSettings, cancellationToken);
+
+				node.Element = element;
+				node.ElementSettings = null;
+				node.Text = null;
+
+				model.AttachElement(node);
+				isLoaded = true;
+			}
+			catch (Exception ex) when (ex is not OperationCanceledException)
+			{
+				// the node keeps its settings, so a later attempt can use them and a save does not lose them
+				errors.Add(ex);
+			}
 		}
-		catch (Exception ex)
-		{
-			ex.LogError();
-		}
+
+		return isLoaded;
 	}
 
 	private CompositionModel<TNode, TLink> CreateModel() => new(_createBehavior());
@@ -239,13 +293,8 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 			{
 				storage.SetValue(Keys.TypeId, item.TypeId);
 
-				if (!_notLoadedElements.TryGetValue(item.TypeId, out var elements))
-					return storage;
-
-				var element = elements.Where(i => ReferenceEquals(i.element, item)).FirstOr();
-
-				if (element != null)
-					storage.SetValue(Keys.Settings, element.Value.settings);
+				if (item.ElementSettings != null)
+					storage.SetValue(Keys.Settings, item.ElementSettings);
 			}
 
 			return storage;
@@ -274,13 +323,10 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 
 		async Task<TNode> DeserializeNodeAsync(SettingsStorage storage)
 		{
-			void AddNotLoadedElement(Guid typeId, TNode baseElement, SettingsStorage settings, string error)
+			static void SetNotLoaded(TNode baseElement, SettingsStorage settings, string error)
 			{
-				_notLoadedElements
-					.SafeAdd(typeId)
-					.Add((baseElement, settings));
-
 				baseElement.Element = null;
+				baseElement.ElementSettings = settings;
 				baseElement.Text = error;
 			}
 
@@ -320,11 +366,11 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 					{
 						excp.LogError();
 
-						AddNotLoadedElement(typeId, baseElement, settings, excp.Message);
+						SetNotLoaded(baseElement, settings, excp.Message);
 					}
 				}
 				else
-					AddNotLoadedElement(typeId, baseElement, settings, LocalizedStrings.ElementWithTypeNotFound.Put(typeId));
+					SetNotLoaded(baseElement, settings, LocalizedStrings.ElementWithTypeNotFound.Put(typeId));
 			}
 			else
 			{

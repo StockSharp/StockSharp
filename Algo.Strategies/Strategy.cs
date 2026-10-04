@@ -28,6 +28,8 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	// Set the moment a stop is requested (before the Stopping state round-trips through the engine) so
 	// CanTrade rejects new orders immediately. Cleared on start/reset.
 	private bool _stopping;
+	// Set by RequestStop. The stop itself is carried out by OnNewMessage, which can wait for it.
+	private volatile bool _isStopRequested;
 	private bool _isOnline;
 	private decimal _position;
 	private LogLevels _errorState;
@@ -798,6 +800,33 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	}
 
 	/// <summary>
+	/// Ask the strategy to stop from code that cannot wait for <see cref="StopAsync(CancellationToken)"/>,
+	/// such as a handler of market data. New orders are refused from this call on; the strategy is stopped
+	/// when it handles the next message of the connector.
+	/// </summary>
+	protected void RequestStop()
+	{
+		if (ProcessState == ProcessStates.Stopped)
+			return;
+
+		_stopping = true;
+		_isStopRequested = true;
+	}
+
+	/// <summary>
+	/// Ask the strategy to stop because of the error, from code that cannot wait for
+	/// <see cref="StopAsync(Exception, CancellationToken)"/>. The error is reported at once.
+	/// </summary>
+	/// <param name="error">The error that caused the stop.</param>
+	protected void RequestStop(Exception error)
+	{
+		ArgumentNullException.ThrowIfNull(error);
+
+		OnError(error);
+		RequestStop();
+	}
+
+	/// <summary>
 	/// Stop the strategy.
 	/// </summary>
 	[Obsolete("Use StopAsync instead.")]
@@ -1436,6 +1465,10 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 				{
 					await OnStartedAsync(StartedTime, cancellationToken).NoWait();
 					OnStarted2(StartedTime);
+
+					// What the indicators have to await is done here, before the first value reaches them.
+					foreach (var indicator in Indicators.ToArray())
+						await indicator.PrepareAsync(cancellationToken).NoWait();
 				}
 				catch (Exception error)
 				{
@@ -2410,6 +2443,12 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	{
 		if (msg is StrategyEngine.StrategyStateMessage { StrategyId: null or "" })
 			return;
+
+		if (_isStopRequested)
+		{
+			_isStopRequested = false;
+			await StopAsync(ct).NoWait();
+		}
 
 		_isProcessingConnectorMessage = true;
 

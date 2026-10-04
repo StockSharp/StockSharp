@@ -48,11 +48,12 @@ internal sealed class HistoryIndexSession : IAsyncDisposable
 
 	public Subscription IndexSubscription { get; }
 
-	public static HistoryIndexSession Create(
+	public static async Task<HistoryIndexSession> CreateAsync(
 		DateTime startDate,
 		DateTime stopDate,
 		DataType candleType,
-		string expression)
+		string expression,
+		CancellationToken cancellationToken)
 	{
 		if (stopDate < startDate)
 			throw new ArgumentOutOfRangeException(nameof(stopDate), "The end date must not precede the begin date.");
@@ -78,8 +79,9 @@ internal sealed class HistoryIndexSession : IAsyncDisposable
 				Expression = expression,
 				Board = ExchangeBoard.Binance,
 			};
-			if (!string.IsNullOrEmpty(indexSecurity.Formula.Error))
-				throw new InvalidOperationException(indexSecurity.Formula.Error);
+			var formula = await indexSecurity.GetFormulaAsync(cancellationToken);
+			if (!string.IsNullOrEmpty(formula.Error))
+				throw new InvalidOperationException(formula.Error);
 
 			var portfolio = new Portfolio
 			{

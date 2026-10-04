@@ -11,6 +11,7 @@ using StockSharp.Algo.Indicators;
 using StockSharp.Algo.Storages;
 using StockSharp.Algo.Strategies;
 using StockSharp.Algo.Strategies.Optimization;
+using StockSharp.Algo.Testing;
 using StockSharp.BusinessEntities;
 using StockSharp.Messages;
 using StockSharp.Configuration;
@@ -156,6 +157,89 @@ public class OptimizerPauseTests : BaseTestClass
 		IsTrue(Volatile.Read(ref completed) > afterPause, "resume did not continue the optimization");
 
 		// stop the (large) run
+		cts.Cancel();
+		await runTask;
+		optimizer.Dispose();
+	}
+
+	/// <summary>
+	/// A pause that arrives while an iteration is still coming up - its connector made, its replay not
+	/// started yet - finds nothing to suspend at that moment. The iteration must not run through the
+	/// pause because of that: it is suspended as soon as it is up, and goes on after the resume.
+	/// </summary>
+	[TestMethod]
+	[DoNotParallelize]
+	public async Task PauseSuspendsAnIterationThatWasComingUp()
+	{
+		if (AsmInit.SampleHistoryUnavailableReason is string reason)
+			Inconclusive(reason);
+
+		var storageRegistry = new StorageRegistry { DefaultDrive = new LocalMarketDataDrive(Paths.FileSystem, Paths.HistoryDataPath) };
+		var security = new Security { Id = Paths.HistoryDefaultSecurity, PriceStep = 0.01m };
+		var portfolio = Portfolio.CreateSimulator();
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+
+		var start = Paths.HistoryBeginDate;
+		var stop = Paths.HistoryBeginDate.AddDays(14);
+
+		var optimizer = new BruteForceOptimizer(secProvider, pfProvider, storageRegistry);
+		optimizer.EmulationSettings.BatchSize = 1;
+		optimizer.AdapterCache = new();
+
+		var completed = 0;
+		optimizer.SingleProgressChanged += (s, p, prog) => { if (prog == 100) Interlocked.Increment(ref completed); };
+
+		// The first iteration is held right before its replay is started until the optimizer is paused.
+		var comingUp = new TaskCompletionSource<HistoryEmulationConnector>(TaskCreationOptions.RunContinuationsAsynchronously);
+		using var paused = new ManualResetEventSlim(false);
+
+		optimizer.ConnectorInitialized += connector =>
+		{
+			if (comingUp.TrySetResult((HistoryEmulationConnector)connector))
+				paused.Wait(TimeSpan.FromSeconds(60));
+		};
+
+		var baseStrategy = new PauseSma
+		{
+			Volume = 1,
+			Security = security,
+			Portfolio = portfolio,
+			CandleType = TimeSpan.FromMinutes(5).TimeFrame(),
+			UnrealizedPnLInterval = ((stop - start).Ticks / 1000).To<TimeSpan>(),
+		};
+
+		var longParam = (StrategyParam<int>)baseStrategy.Parameters[nameof(baseStrategy.LongSma)];
+		var shortParam = (StrategyParam<int>)baseStrategy.Parameters[nameof(baseStrategy.ShortSma)];
+		var strategies = baseStrategy.ToBruteForceAsync(new IStrategyParam[] { longParam, shortParam }, out _, out _);
+
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+
+		var runTask = Task.Run(async () =>
+		{
+			try
+			{
+				await foreach (var _ in optimizer.RunAsync(start, stop, strategies, cts.Token)) { }
+			}
+			catch (OperationCanceledException) { }
+		}, CancellationToken);
+
+		var starting = await comingUp.Task.WaitAsync(TimeSpan.FromSeconds(60), CancellationToken);
+
+		await optimizer.Pause();
+		paused.Set();
+
+		// Nothing else holds the iteration back now: it either gets suspended or runs to its end.
+		await Helper.WaitUntilAsync(() => starting.State == ChannelStates.Suspended || Volatile.Read(ref completed) > 0,
+			TimeSpan.FromSeconds(60), CancellationToken, "the iteration is suspended or runs to its end");
+
+		AreEqual(ChannelStates.Suspended, starting.State, "an iteration that was coming up when the pause arrived must be suspended once it is up");
+		AreEqual(0, Volatile.Read(ref completed), "nothing completes while the optimizer is paused");
+
+		await optimizer.Resume();
+		await Helper.WaitUntilAsync(() => Volatile.Read(ref completed) > 0, TimeSpan.FromSeconds(60), CancellationToken,
+			"the suspended iteration completes after the resume");
+
 		cts.Cancel();
 		await runTask;
 		optimizer.Dispose();

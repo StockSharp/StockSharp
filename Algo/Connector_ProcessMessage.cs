@@ -626,7 +626,7 @@ partial class Connector
 					break;
 
 				case MessageTypes.Disconnect:
-					ProcessDisconnectMessage((DisconnectMessage)message);
+					await ProcessDisconnectMessageAsync((DisconnectMessage)message, cancellationToken);
 					break;
 
 				case MessageTypes.ConnectionLost:
@@ -910,7 +910,7 @@ partial class Connector
 		}
 	}
 
-	private void ProcessDisconnectMessage(DisconnectMessage message)
+	private async ValueTask ProcessDisconnectMessageAsync(DisconnectMessage message, CancellationToken cancellationToken)
 	{
 		var adapter = message.Adapter;
 		var error = message.Error;
@@ -918,7 +918,7 @@ partial class Connector
 		if (error == null)
 		{
 			if (adapter == Adapter)
-				RaiseDisconnected();
+				await RaiseDisconnectedAsync(cancellationToken);
 			else
 				RaiseDisconnectedEx(adapter);
 		}

@@ -139,6 +139,13 @@ public interface IIndicator : IAsyncPersistable
 	Color? Color => null;
 
 	/// <summary>
+	/// Prepare the indicator for <see cref="Process"/>: do what has to be awaited before the first value.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask PrepareAsync(CancellationToken cancellationToken) => default;
+
+	/// <summary>
 	/// Indicates whether the indicator has been preloaded with historical/external values.
 	/// </summary>
 	bool IsPreloaded => false;

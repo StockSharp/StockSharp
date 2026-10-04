@@ -140,8 +140,10 @@ public partial class SecuritiesWindow
 
 	private static Connector Connector => MainWindow.Instance.MainPanel.Connector;
 
-	private void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
+	private async void SecuritiesWindow_OnLoaded(object sender, RoutedEventArgs e)
 	{
+		var adapterTimeFrames = await Connector.Adapter.GetTimeFramesAsync().ToArrayAsync();
+
 		UpdateTimeFrames(new[]
 		{
 			TimeSpan.FromMinutes(1),
@@ -150,9 +152,7 @@ public partial class SecuritiesWindow
 			TimeSpan.FromMinutes(30),
 			TimeSpan.FromHours(1),
 			TimeSpan.FromDays(1),
-#pragma warning disable CS0618 // Type or member is obsolete
-		}.Concat(Connector.Adapter.GetTimeFrames()).OrderBy().Distinct());
-#pragma warning restore CS0618 // Type or member is obsolete
+		}.Concat(adapterTimeFrames).OrderBy().Distinct());
 	}
 
 	public void UpdateTimeFrames(IEnumerable<TimeSpan> timeFrames)

@@ -331,7 +331,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(2);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var ordersReceived = 0;
 		var execMessagesWithIds = 0;
@@ -456,7 +456,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(2);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var candleCount = 0;
 
@@ -520,7 +520,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(2);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var candleCount = 0;
 
@@ -592,7 +592,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(7);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var candleCount = 0;
 		var lastProgress = 0;
@@ -671,7 +671,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var lastProgress = 0;
 		var orderErrors = 0;
@@ -762,7 +762,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = startTime.AddDays(3);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var orderErrors = 0;
 		var orderCount = 0;
@@ -851,6 +851,82 @@ public class BacktestingTests : BaseTestClass
 	{
 		var fs = Helper.FileSystem;
 		return fs.GetStorage(Paths.HistoryDataPath);
+	}
+
+	/// <summary>
+	/// What a handler of the emulator's state change throws is not lost and does not break the run:
+	/// it is reported through the connector's error event, for the change that came with the start as
+	/// well as for the one that comes with the disconnect. It is reported once the lock that guards the
+	/// state is let go - a handler of the error is not made to run inside it.
+	/// </summary>
+	[TestMethod]
+	[Timeout(60_000, CooperativeCancellation = true)]
+	public async Task AnErrorOfAStateChangeHandlerIsReportedAsAConnectorError()
+	{
+		if (SkipIfNoHistoryData()) return;
+
+		var security = CreateTestSecurity();
+		var portfolio = CreateTestPortfolio();
+
+		var secProvider = new CollectionSecurityProvider([security]);
+		var pfProvider = new CollectionPortfolioProvider([portfolio]);
+
+		await using var connector = CreateConnector(secProvider, pfProvider, GetHistoryStorage(), Paths.HistoryBeginDate, Paths.HistoryBeginDate.AddDays(2));
+
+		var errors = new SynchronizedList<string>();
+		var reportedOutsideTheStateLock = new SynchronizedList<bool>();
+
+		connector.Error += error =>
+		{
+			errors.Add(error.Message);
+
+			// A state message that changes nothing still has to take the state lock, and it comes from
+			// another thread here: it gets through only if the lock is not held while the error is reported.
+			var state = connector.State;
+			var probe = Task.Run(() => connector.SendOutMessageAsync(new EmulationStateMessage { State = state }, CancellationToken).AsTask());
+
+			reportedOutsideTheStateLock.Add(probe.Wait(TimeSpan.FromSeconds(5)));
+		};
+
+		var stopped = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+		connector.StateChanged2 += state =>
+		{
+			if (state == ChannelStates.Stopped)
+				stopped.TrySetResult(true);
+
+			if (state is ChannelStates.Started or ChannelStates.Stopped)
+				throw new InvalidOperationException($"handler failed at {state}");
+		};
+
+		// the replay runs to its end only when something asks it for data
+		var strategy = new SmaStrategy
+		{
+			Connector = connector,
+			Security = security,
+			Portfolio = portfolio,
+			Volume = 1,
+			CandleType = TimeSpan.FromMinutes(1).TimeFrame(),
+			Long = 80,
+			Short = 30,
+		};
+
+		strategy.WaitRulesOnStop = false;
+		strategy.Reset();
+		await strategy.StartAsync(CancellationToken);
+
+		connector.Connect();
+		await connector.StartAsync(CancellationToken);
+
+		await stopped.Task.WaitAsync(TimeSpan.FromSeconds(30), CancellationToken);
+
+		await Helper.WaitUntilAsync(() => errors.Count >= 2, TimeSpan.FromSeconds(10), CancellationToken,
+			"both failures of the handler are reported");
+
+		IsTrue(errors.Contains($"handler failed at {ChannelStates.Started}"), "the failure at the start is reported");
+		IsTrue(errors.Contains($"handler failed at {ChannelStates.Stopped}"), "the failure at the stop is reported");
+		AreEqual(ChannelStates.Stopped, connector.State);
+		IsTrue(reportedOutsideTheStateLock.All(isOutside => isOutside), "an error must be reported once the state lock is let go");
 	}
 
 	// Reports a machine that never restored the sample history package as inconclusive and names it.
@@ -1072,7 +1148,7 @@ public class BacktestingTests : BaseTestClass
 		var secProvider = new CollectionSecurityProvider([security]);
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 
-		using var connector = CreateDeterministicConnector(
+		await using var connector = CreateDeterministicConnector(
 			secProvider,
 			pfProvider,
 			storageRegistry,
@@ -1296,7 +1372,7 @@ public class BacktestingTests : BaseTestClass
 		var secProvider = new CollectionSecurityProvider([security]);
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 
-		using var connector = CreateDeterministicConnector(
+		await using var connector = CreateDeterministicConnector(
 			secProvider,
 			pfProvider,
 			storageRegistry,
@@ -1562,7 +1638,7 @@ public class BacktestingTests : BaseTestClass
 
 		var window = timeFrames.Max();
 
-		using var connector = CreateDeterministicConnector(
+		await using var connector = CreateDeterministicConnector(
 			new CollectionSecurityProvider(declared),
 			new CollectionPortfolioProvider([portfolio]),
 			storageRegistry,
@@ -1949,7 +2025,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		// Add commission rule: a flat ABSOLUTE 0.001 currency units per trade.
 		// CommissionTradeRule.Value is a Unit; with the default Absolute type it is NOT a percent -
@@ -2024,7 +2100,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(6); // Short period for faster test
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -2104,7 +2180,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaStrategy
 		{
@@ -2205,7 +2281,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(7);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var dataCount = 0;
 
@@ -2430,7 +2506,7 @@ public class BacktestingTests : BaseTestClass
 		var pfProvider = new CollectionPortfolioProvider([portfolio]);
 		var storageRegistry = GetHistoryStorage();
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var candles = new List<(DateTimeOffset open, decimal low, decimal high)>();
 		var trades = new List<(DateTimeOffset time, decimal price, decimal limit, Sides side)>();
@@ -2538,7 +2614,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(14);
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		// Track finished candles per security so we can prove BOTH instruments were actually
 		// replayed - not just that the strategies were stopped (which the handler does itself).
@@ -2743,7 +2819,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryBeginDate.AddDays(7); // Short period
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode: true);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode: true);
 
 		var strategy = new SmaStrategy
 		{
@@ -2822,7 +2898,7 @@ public class BacktestingTests : BaseTestClass
 		{
 			var messages = new List<Message>();
 
-			using var connector = CreateDeterministicConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode);
+			await using var connector = CreateDeterministicConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode);
 
 			var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
 			emulator.RandomProvider = new DefaultEmulationRandomizer(randomSeed);
@@ -2910,7 +2986,7 @@ public class BacktestingTests : BaseTestClass
 		{
 			var messages = new List<Message>();
 
-			using var connector = CreateDeterministicConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode);
+			await using var connector = CreateDeterministicConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime, verifyMode);
 
 			var emulator = (MarketEmulator)connector.EmulationAdapter.Emulator;
 			emulator.RandomProvider = new DefaultEmulationRandomizer(randomSeed);
@@ -4138,7 +4214,7 @@ public class BacktestingTests : BaseTestClass
 		var startTime = Paths.HistoryBeginDate;
 		var stopTime = Paths.HistoryEndDate;
 
-		using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
+		await using var connector = CreateConnector(secProvider, pfProvider, storageRegistry, startTime, stopTime);
 
 		var strategy = new SmaServerStopStrategy
 		{
@@ -4253,7 +4329,7 @@ public class BacktestingTests : BaseTestClass
 		security.PriceStep = 0.01m;
 		var portfolio = CreateTestPortfolio();
 
-		using var connector = CreateConnector(
+		await using var connector = CreateConnector(
 			new CollectionSecurityProvider([security]),
 			new CollectionPortfolioProvider([portfolio]),
 			GetHistoryStorage(),

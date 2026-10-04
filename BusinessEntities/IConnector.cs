@@ -6,7 +6,7 @@ namespace StockSharp.BusinessEntities;
 public interface IConnector : IMessageTransport, IAsyncPersistable, ILogReceiver,
 	IMarketDataProvider, ITransactionProvider, ISecurityProvider,
 	ISubscriptionProvider, ITimeProvider,
-	IPortfolioProvider, IPositionProvider
+	IPortfolioProvider, IPositionProvider, IAsyncDisposable
 {
 	/// <summary>
 	/// Connected.

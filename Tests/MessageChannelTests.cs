@@ -182,6 +182,50 @@ public class MessageChannelTests : BaseTestClass
 		await messageProcessed.Task.WithCancellation(CancellationToken);
 	}
 
+	/// <summary>
+	/// A channel suspended by the handler of one of its messages stops there. By the time the handler
+	/// returns the next message is already in the queue and the channel is still going through that
+	/// queue: it must not hand the message over because it had started before the suspend.
+	/// </summary>
+	[TestMethod]
+	[DataRow(ChannelType.InMemory)]
+	[DataRow(ChannelType.Async)]
+	[Timeout(30_000, CooperativeCancellation = true)]
+	public async Task Suspend_FromAHandler_KeepsTheNextMessageUntilResume(ChannelType channelType)
+	{
+		using var channel = CreateChannel(channelType);
+		var suspended = AsyncHelper.CreateTaskCompletionSource<bool>();
+		var messageProcessed = AsyncHelper.CreateTaskCompletionSource<bool>();
+
+		channel.NewOutMessageAsync += (msg, ct) =>
+		{
+			switch (msg)
+			{
+				case ConnectMessage:
+					channel.Suspend();
+					var sent = channel.SendInMessageAsync(CreateTimeMessage(DateTime.UtcNow), ct);
+					suspended.TrySetResult(true);
+					return sent;
+
+				case TimeMessage:
+					messageProcessed.TrySetResult(true);
+					break;
+			}
+
+			return default;
+		};
+
+		channel.Open();
+		await channel.SendInMessageAsync(new ConnectMessage(), CancellationToken);
+		await suspended.Task.WithCancellation(CancellationToken);
+
+		await Task.Delay(300, CancellationToken);
+		messageProcessed.Task.IsCompleted.AssertFalse("a suspended channel must not hand over the next message");
+
+		channel.Resume();
+		await messageProcessed.Task.WithCancellation(CancellationToken);
+	}
+
 	[TestMethod]
 	[DataRow(ChannelType.InMemory)]
 	[DataRow(ChannelType.Async)]

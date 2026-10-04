@@ -92,7 +92,7 @@ public class CandlePatternIndicator : BaseIndicator
 	private readonly List<ICandleMessage> _buffer = [];
 
 	/// <summary>
-	/// Candle pattern.
+	/// Candle pattern. It is prepared by <see cref="PrepareAsync"/>.
 	/// </summary>
 	[Display(
 		ResourceType = typeof(LocalizedStrings),
@@ -142,6 +142,11 @@ public class CandlePatternIndicator : BaseIndicator
 
 	/// <inheritdoc />
 	public override int NumValuesToInitialize => Pattern?.CandlesCount ?? 0;
+
+	/// <inheritdoc />
+	public override ValueTask PrepareAsync(CancellationToken cancellationToken)
+		// a pattern without candles is never evaluated by the indicator
+		=> Pattern is { CandlesCount: > 0 } pattern ? pattern.PrepareAsync(cancellationToken) : default;
 
 	/// <inheritdoc />
 	public sealed override void Reset()

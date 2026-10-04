@@ -283,7 +283,7 @@ public class IndicatorDiagramElement : DiagramElement
 							else
 							{
 								pattern = await storage.GetValue<SettingsStorage>(Pattern).LoadEntireAsync<ICandlePattern>(cancellationToken);
-								provider.Save(pattern);
+								await provider.SaveAsync(pattern, cancellationToken);
 							}
 						}
 
@@ -325,6 +325,15 @@ public class IndicatorDiagramElement : DiagramElement
 		base.OnReseted();
 
 		Indicator?.Reset();
+	}
+
+	/// <inheritdoc />
+	protected override async ValueTask OnPrepareAsync(CancellationToken cancellationToken)
+	{
+		if (Indicator is { } indicator)
+			await indicator.PrepareAsync(cancellationToken);
+
+		await base.OnPrepareAsync(cancellationToken);
 	}
 
 	/// <inheritdoc />

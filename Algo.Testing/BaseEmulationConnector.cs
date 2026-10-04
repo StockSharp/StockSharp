@@ -83,12 +83,12 @@ public abstract class BaseEmulationConnector : Connector
 	}
 
 	/// <inheritdoc />
-	protected override void DisposeManaged()
+	protected override async ValueTask DisposeManagedAsync()
 	{
 		if (EmulationAdapter.OwnInnerAdapter)
 			EmulationAdapter.Dispose();
 
-		base.DisposeManaged();
+		await base.DisposeManagedAsync();
 	}
 
 	/// <summary>

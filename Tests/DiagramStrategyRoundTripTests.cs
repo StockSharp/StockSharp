@@ -3,8 +3,10 @@ namespace StockSharp.Tests;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 
+using StockSharp.Algo.Candles.Patterns;
 using StockSharp.Diagram;
 using StockSharp.Diagram.Elements;
+using StockSharp.Localization;
 
 /// <summary>
 /// A diagram strategy is two promises. The first is a hand-off: the composition field can take settings
@@ -196,6 +198,39 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// The property assigns a composition and cannot wait, so settings loaded before it stay with the
+	/// strategy. They have to reach the composition by the time the strategy runs.
+	/// </summary>
+	[TestMethod]
+	public async Task SettingsThatWaitedForACompositionAssignedThroughThePropertyReachItAtTheStart()
+	{
+		var saved = new SettingsStorage();
+
+		var source = new DiagramStrategy { Composition = NewComposition("the one that was saved") };
+		await source.SaveAsync(saved, CancellationToken);
+
+		var loaded = new DiagramStrategy();
+		await loaded.LoadAsync(saved, CancellationToken);
+		loaded.Composition = NewComposition("the one that turned up later");
+
+		loaded.Composition.Name.AssertEqual("the one that turned up later",
+			"the property assigns the composition as it was given");
+
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+
+		loaded.Connector = connector.Object;
+		loaded.Security = Helper.CreateSecurity();
+		loaded.Portfolio = Helper.CreatePortfolio();
+
+		await loaded.StartAsync(CancellationToken);
+		await loaded.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
+
+		loaded.Composition.Name.AssertEqual("the one that was saved",
+			"settings that waited for a composition have to reach it by the time the strategy runs");
+	}
+
+	/// <summary>
 	/// Settings loaded into a composition that is already there are the newest word: the ones that
 	/// were still waiting for the start are dropped, not applied over them later.
 	/// </summary>
@@ -338,6 +373,218 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		actual.Count.AssertEqual(expected.Count, "a restored graph must put out as many values as the graph that was saved");
 		actual[0].GetValue<bool>().AssertEqual(expected[0].GetValue<bool>(),
 			"a restored graph must answer what the graph that was saved answered");
+	}
+
+	private static CompositionRegistry<InMemoryCompositionModelNode, InMemoryCompositionModelLink> NewRegistry(params DiagramElement[] types)
+	{
+		var registry = new CompositionRegistry<InMemoryCompositionModelNode, InMemoryCompositionModelLink>(() => new InMemoryCompositionModelBehavior());
+		registry.DiagramElements.AddRange(types);
+		return registry;
+	}
+
+	private async Task<SettingsStorage> SaveThroughText(ICompositionRegistry registry, CompositionDiagramElement composition)
+	{
+		var text = await (await registry.SerializeAsync(composition, true, null, CancellationToken)).SerializeInvariantAsync(true, CancellationToken);
+		return await text.DeserializeInvariantAsync(CancellationToken);
+	}
+
+	private async Task<CompositionDiagramElement> Restore(ICompositionRegistry registry, SettingsStorage saved)
+		=> (await registry.DeserializeAsync(saved, ICompositionRegistryExtensions.NotSupported, CancellationToken)).element;
+
+	/// <summary>
+	/// A graph can be read before every type it uses is known: a custom element is registered when its
+	/// code is compiled, which is later than the graphs are read. Such an element waits as an empty
+	/// node. Once its type is there the registry loads it when it is asked to, with the settings it was
+	/// saved with - so the graph answers what the saved one answered.
+	/// </summary>
+	[TestMethod]
+	public async Task An_element_whose_type_comes_later_is_loaded_when_the_registry_is_asked()
+	{
+		var saved = await SaveThroughText(
+			NewRegistry(new SourceDiagramElement(), new ComparisonDiagramElement(), new LogicalConditionDiagramElement()),
+			BuildThresholdComposition());
+
+		var registry = NewRegistry(new SourceDiagramElement());
+		var restored = await Restore(registry, saved);
+
+		restored.Elements.Count().AssertEqual(2, "only the elements whose type is known can be there yet");
+
+		var announced = new List<DiagramElement>();
+		restored.ElementAdded += announced.Add;
+
+		registry.DiagramElements.Add(new ComparisonDiagramElement());
+		registry.DiagramElements.Add(new LogicalConditionDiagramElement());
+
+		restored.Elements.Count().AssertEqual(2, "adding a type loads nothing by itself: the load is awaited, not left running behind");
+
+		await registry.LoadNotLoadedElementsAsync(restored, CancellationToken);
+
+		restored.Elements.Count().AssertEqual(4, "the elements that waited for their type have to be there now");
+		announced.Count.AssertEqual(2, "an element that arrives later is announced by its composition as an added one");
+
+		await registry.LoadNotLoadedElementsAsync(restored, CancellationToken);
+
+		announced.Count.AssertEqual(2, "asking again must not load or announce what is already there");
+
+		// The restored composition needs a strategy of its own before it can run.
+		var restoredStrategy = new DiagramStrategy { Composition = restored };
+		restoredStrategy.Composition.AssertSame(restored);
+
+		var expected = await RunThreshold(BuildThresholdComposition(), 10, 5, CancellationToken);
+		var actual = await RunThreshold(restored, 10, 5, CancellationToken);
+
+		actual.Count.AssertEqual(expected.Count, "a graph completed later must put out as many values as the graph that was saved");
+		actual[0].GetValue<bool>().AssertEqual(expected[0].GetValue<bool>(),
+			"an element loaded later must have the settings it was saved with");
+	}
+
+	/// <summary>
+	/// An element that still waits for its type must not be lost by a save: its node goes out with the
+	/// settings it came in with, and a registry that knows the type reads the whole graph back.
+	/// </summary>
+	[TestMethod]
+	public async Task An_element_that_still_waits_for_its_type_is_saved_with_its_settings()
+	{
+		var full = NewRegistry(new SourceDiagramElement(), new ComparisonDiagramElement(), new LogicalConditionDiagramElement());
+		var saved = await SaveThroughText(full, BuildThresholdComposition());
+
+		var partial = NewRegistry(new SourceDiagramElement());
+		var savedAgain = await SaveThroughText(partial, await Restore(partial, saved));
+
+		var restored = await Restore(full, savedAgain);
+
+		restored.Elements.Count().AssertEqual(4, "a save made while elements waited for their type must not drop them");
+
+		// The restored composition needs a strategy of its own before it can run.
+		var restoredStrategy = new DiagramStrategy { Composition = restored };
+		restoredStrategy.Composition.AssertSame(restored);
+
+		var expected = await RunThreshold(BuildThresholdComposition(), 10, 5, CancellationToken);
+		var actual = await RunThreshold(restored, 10, 5, CancellationToken);
+
+		actual[0].GetValue<bool>().AssertEqual(expected[0].GetValue<bool>(),
+			"an element saved while it waited must come back with the settings it had");
+	}
+
+	/// <summary>
+	/// An element whose settings can be made unreadable, to see what the registry does with an element
+	/// it cannot load.
+	/// </summary>
+	private sealed class FragileDiagramElement : DiagramElement
+	{
+		public static bool IsBroken { get; set; }
+
+		public override Guid TypeId { get; } = "C7A2E4F1-5B38-4D69-A1C0-9E3F6B2D8A54".To<Guid>();
+
+		public override string IconName { get; } = "Pi";
+
+		public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			if (IsBroken)
+				throw new InvalidOperationException("the settings cannot be read");
+
+			await base.LoadAsync(storage, cancellationToken);
+		}
+	}
+
+	/// <summary>
+	/// An element that cannot be loaded when its type arrives is an error the caller has to hear about,
+	/// and not the end of the element: it keeps waiting with its settings, so a later attempt can load
+	/// it and a save in between does not drop it.
+	/// </summary>
+	[TestMethod]
+	public async Task An_element_that_cannot_be_loaded_is_reported_and_keeps_waiting()
+	{
+		FragileDiagramElement.IsBroken = false;
+
+		try
+		{
+			var graph = new Graph();
+			graph.Add(new FragileDiagramElement { Name = "kept" });
+
+			var saved = await SaveThroughText(NewRegistry(new FragileDiagramElement()), graph.Composition);
+
+			var registry = NewRegistry();
+			var restored = await Restore(registry, saved);
+
+			restored.Elements.Count().AssertEqual(0, "the type is not known yet");
+
+			registry.DiagramElements.Add(new FragileDiagramElement());
+
+			FragileDiagramElement.IsBroken = true;
+			await ThrowsExactlyAsync<InvalidOperationException>(() => registry.LoadNotLoadedElementsAsync(restored, CancellationToken).AsTask());
+
+			restored.Elements.Count().AssertEqual(0, "an element that could not be loaded is still not there");
+
+			FragileDiagramElement.IsBroken = false;
+
+			var savedAgain = await SaveThroughText(registry, restored);
+			var reread = await Restore(NewRegistry(new FragileDiagramElement()), savedAgain);
+
+			reread.Elements.Single().Name.AssertEqual("kept", "a failed load must not cost the element its settings");
+
+			await registry.LoadNotLoadedElementsAsync(restored, CancellationToken);
+
+			restored.Elements.Single().Name.AssertEqual("kept", "the element has to load once its settings can be read");
+		}
+		finally
+		{
+			FragileDiagramElement.IsBroken = false;
+		}
+	}
+
+	/// <summary>
+	/// A composition inside a composition publishes the open sockets of its own elements, and the outer
+	/// links run to those. While an inner element waits for its type its sockets are not published, so
+	/// the outer links wait too. Loading the inner element has to bring all of it together: the socket
+	/// is published and the outer links are connected to it - the one from an element that is itself
+	/// loaded only afterwards included.
+	/// </summary>
+	[TestMethod]
+	public async Task An_element_loaded_later_inside_a_nested_composition_gets_the_outer_links_too()
+	{
+		var inputId = SocketId(StaticSocketIds.Input);
+		var outputId = SocketId(StaticSocketIds.Output);
+
+		// what an element saved with its sockets shown looks like to the node that waits for it
+		var relaySettings = await new RelayDiagramElement { ShowSockets = true }.SaveAsync(CancellationToken);
+		var relayTypeId = new RelayDiagramElement().TypeId;
+
+		var innerModel = new CompositionModel<InMemoryCompositionModelNode, InMemoryCompositionModelLink>(new InMemoryCompositionModelBehavior());
+		var inner = new CompositionDiagramElement(innerModel) { Name = "inner" };
+		var relayNode = new InMemoryCompositionModelNode { Key = "relay", TypeId = relayTypeId, ElementSettings = relaySettings };
+		innerModel.AddNode(relayNode);
+
+		var outer = new Graph();
+
+		var results = new RecordingDiagramElement();
+
+		// the source waits for its type as well and stands after the composition, so it is loaded when the
+		// socket its link runs to has already been published
+		var innerNode = outer.Add(inner);
+		var sourceNode = new InMemoryCompositionModelNode { Key = "source", TypeId = new SourceDiagramElement().TypeId };
+		outer.Model.AddNode(sourceNode);
+		var resultsNode = outer.Add(results);
+
+		// the sockets the inner composition will publish once the relay is there
+		outer.Link(sourceNode, outputId, innerNode, $"{relayNode.Key}_{inputId}");
+		outer.Link(innerNode, $"{relayNode.Key}_{outputId}", resultsNode, inputId);
+
+		var registry = NewRegistry(new RelayDiagramElement(), new SourceDiagramElement());
+
+		await registry.LoadNotLoadedElementsAsync(outer.Composition, CancellationToken);
+
+		inner.Elements.Count().AssertEqual(1, "the inner element has to be loaded through the outer composition");
+
+		var source = (SourceDiagramElement)sourceNode.Element;
+
+		await outer.Composition.PrepareAsync(CancellationToken);
+		outer.Composition.Start(_time);
+
+		source.Emit(_time.AddSeconds(1), 7m);
+
+		results.Received.Count.AssertEqual(1, "a value has to pass through the element that was loaded later");
+		results.Received[0].GetValue<decimal>().AssertEqual(7m);
 	}
 
 	#endregion
@@ -2022,6 +2269,94 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 
 	#endregion
 
+	#region A ring of elements
+
+	/// <summary>
+	/// Passes on whatever reaches either of its inputs. Two of them wired into a ring feed each other
+	/// for ever, which is what the overflow limit of the strategy is there to cut.
+	/// </summary>
+	private sealed class RelayDiagramElement : DiagramElement
+	{
+		public const string RingId = "ring";
+
+		private readonly DiagramSocket _output;
+
+		public RelayDiagramElement()
+		{
+			AddInput(StaticSocketIds.Input, "In", DiagramSocketType.Any, Relay);
+			AddInput(RingId, "Ring", DiagramSocketType.Any, Relay);
+			_output = AddOutput(StaticSocketIds.Output, "Out", DiagramSocketType.Any);
+		}
+
+		public override Guid TypeId { get; } = "4D1B7C2E-9A63-4F58-B0E1-6C2A8D5F3B17".To<Guid>();
+
+		public override string IconName { get; } = "Pi";
+
+		public int Relayed { get; private set; }
+
+		private void Relay(DiagramSocketValue value)
+		{
+			Relayed++;
+			RaiseProcessOutput(_output, value.Time, value.Value, value);
+		}
+	}
+
+	/// <summary>
+	/// A ring of elements would recurse until the stack is gone, so the strategy sets a limit and stops
+	/// with an error when an element is entered deeper than that. The elements run inside a handler of
+	/// the connector, where nothing can wait: the ring is cut and the stop is asked for there, and it is
+	/// the next message of the connector that carries it out.
+	/// </summary>
+	[TestMethod]
+	public async Task A_ring_of_elements_is_cut_and_the_strategy_stops_with_the_next_message()
+	{
+		var graph = new Graph();
+
+		var source = new SourceDiagramElement();
+		var first = new RelayDiagramElement();
+		var second = new RelayDiagramElement();
+
+		var sourceNode = graph.Add(source);
+		var firstNode = graph.Add(first);
+		var secondNode = graph.Add(second);
+
+		var inputId = SocketId(StaticSocketIds.Input);
+		var outputId = SocketId(StaticSocketIds.Output);
+
+		graph.Link(sourceNode, outputId, firstNode, inputId);
+		graph.Link(firstNode, outputId, secondNode, inputId);
+		graph.Link(secondNode, outputId, firstNode, RelayDiagramElement.RingId);
+
+		var strategy = graph.Strategy;
+		strategy.OverflowLimit = 5;
+
+		// hands every outgoing message straight back to the strategy, the way the message loop of a connector does
+		var connector = new Mock<IConnector>();
+		connector.Setup(c => c.TransactionIdGenerator).Returns(new IncrementalIdGenerator());
+		connector
+			.Setup(c => c.SendOutMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()))
+			.Returns((Message message, CancellationToken token) => strategy.OnNewMessage(message, token));
+
+		strategy.Connector = connector.Object;
+		strategy.Security = Helper.CreateSecurity();
+		strategy.Portfolio = Helper.CreatePortfolio();
+
+		await strategy.StartAsync(CancellationToken);
+		strategy.ProcessState.AssertEqual(ProcessStates.Started);
+
+		source.Emit(_time, 1m);
+
+		first.Relayed.AssertEqual(5, "the ring has to be cut at the limit");
+		strategy.LastError.AssertNotNull("the overflow has to be reported as an error of the strategy");
+		strategy.ProcessState.AssertEqual(ProcessStates.Started, "an element cannot wait for the stop, so the strategy is not stopped yet");
+
+		await strategy.OnNewMessage(new TimeMessage { ServerTime = _time }, CancellationToken);
+
+		strategy.ProcessState.AssertEqual(ProcessStates.Stopped, "the stop the element asked for has to be carried out with the next message");
+	}
+
+	#endregion
+
 	#region An indicator element
 
 	private sealed class IndicatorRun
@@ -2082,6 +2417,35 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// A candle pattern is a formula that has to be compiled, and the element evaluates it where nothing
+	/// can wait. The preparation of the element is what compiles it: a diagram whose pattern was never
+	/// prepared by hand must recognize all the same.
+	/// </summary>
+	[TestMethod]
+	public async Task An_indicator_element_prepares_what_its_indicator_has_to_compile()
+	{
+		var pattern = new ExpressionCandlePattern("White", [new CandleExpressionCondition(Helper.FileSystem, "O < C")]);
+
+		var run = await StartIndicatorGraph(new CandlePatternIndicator { Pattern = pattern }, finalOnly: false, formedOnly: false, CancellationToken);
+
+		run.Input.Emit(_time.AddMinutes(1), new TimeFrameCandleMessage
+		{
+			SecurityId = "AAPL@NASDAQ".ToSecurityId(),
+			DataType = TimeSpan.FromMinutes(1).TimeFrame(),
+			OpenTime = _time,
+			OpenPrice = 100m,
+			HighPrice = 110m,
+			LowPrice = 100m,
+			ClosePrice = 108m,
+			TotalVolume = 1m,
+			State = CandleStates.Finished,
+		});
+
+		run.Values.Received.Count.AssertEqual(1, "the candle the element was given must be answered");
+		((CandlePatternIndicatorValue)run.Values.Received[0].Value).Value.AssertTrue("a rising candle is what the pattern describes");
+	}
+
+	/// <summary>
 	/// An indicator that has not seen enough values yet answers with a number all the same, and that number
 	/// is not the indicator - it is an average of two when three were asked for. Set to formed values only,
 	/// the element must hold those back, or a strategy trades on a warm-up.
@@ -2127,14 +2491,27 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 
 	private sealed class FormulaRun
 	{
+		public DiagramStrategy Strategy { get; set; }
+		public CompositionDiagramElement Composition { get; set; }
+		public MathDiagramElement Math { get; set; }
 		public SourceDiagramElement First { get; set; }
 		public SourceDiagramElement Second { get; set; }
 		public RecordingDiagramElement Results { get; set; }
 	}
 
+	private static async Task<FormulaRun> StartFormulaGraph(string expression, string validation, CancellationToken cancellationToken)
+	{
+		var run = BuildFormulaGraph(expression, validation);
+
+		await run.Composition.PrepareAsync(cancellationToken);
+		run.Composition.Start(_time);
+
+		return run;
+	}
+
 	// The element makes one input socket per variable the formula names, so the sockets to wire are
 	// whatever the formula asked for - found by the variable's own name.
-	private static async Task<FormulaRun> StartFormulaGraph(string expression, string validation, CancellationToken cancellationToken)
+	private static FormulaRun BuildFormulaGraph(string expression, string validation)
 	{
 		var graph = new Graph();
 
@@ -2158,10 +2535,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		graph.Link(secondNode, outputId, mathNode, math.InputSockets.First(s => s.Name == "b").Id);
 		graph.Link(mathNode, outputId, resultsNode, SocketId(StaticSocketIds.Input));
 
-		await graph.Composition.PrepareAsync(cancellationToken);
-		graph.Composition.Start(_time);
-
-		return new FormulaRun { First = first, Second = second, Results = results };
+		return new FormulaRun { Strategy = graph.Strategy, Composition = graph.Composition, Math = math, First = first, Second = second, Results = results };
 	}
 
 	/// <summary>
@@ -2208,6 +2582,174 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// The inputs of a formula element are named by the text of the formula, so they are there as soon as
+	/// the text is - nothing is compiled for that, and a host that builds an element only to describe
+	/// its sockets loads no assembly.
+	/// </summary>
+	[TestMethod]
+	[DoNotParallelize] // Reads the process-wide list of assembly load contexts.
+	public void A_formula_element_names_its_inputs_by_the_text_without_compiling_it()
+	{
+		var before = AssemblyLoadContext.All.ToHashSet();
+
+		using var math = new MathDiagramElement { Expression = "price * volume" };
+
+		math.InputSockets.Select(s => s.Name).OrderBy(n => n).JoinComma().AssertEqual("price,volume");
+
+		AssemblyLoadContext.All.Count(c => c.IsCollectible && !before.Contains(c))
+			.AssertEqual(0, "naming the inputs must not compile the formula");
+
+		math.Expression = "price - cost";
+
+		math.InputSockets.Select(s => s.Name).OrderBy(n => n).JoinComma().AssertEqual("cost,price",
+			"the inputs follow the variables of the new text");
+	}
+
+	/// <summary>
+	/// A reset lets the compiled formula go with its assembly. The text is still there, so the element
+	/// compiles it again when it is prepared for the next start.
+	/// </summary>
+	[TestMethod]
+	public async Task A_formula_element_computes_again_after_a_reset()
+	{
+		var graph = new Graph();
+
+		var first = new SourceDiagramElement();
+		var second = new SourceDiagramElement();
+		var math = new MathDiagramElement { Expression = "a - b" };
+		var results = new RecordingDiagramElement();
+
+		var firstNode = graph.Add(first);
+		var secondNode = graph.Add(second);
+		var mathNode = graph.Add(math);
+		var resultsNode = graph.Add(results);
+
+		var outputId = SocketId(StaticSocketIds.Output);
+
+		graph.Link(firstNode, outputId, mathNode, math.InputSockets.First(s => s.Name == "a").Id);
+		graph.Link(secondNode, outputId, mathNode, math.InputSockets.First(s => s.Name == "b").Id);
+		graph.Link(mathNode, outputId, resultsNode, SocketId(StaticSocketIds.Input));
+
+		await graph.Composition.PrepareAsync(CancellationToken);
+		graph.Composition.Start(_time);
+		graph.Composition.Stop();
+
+		graph.Composition.Reset();
+
+		await graph.Composition.PrepareAsync(CancellationToken);
+		graph.Composition.Start(_time);
+
+		first.Emit(_time.AddSeconds(1), 10m);
+		second.Emit(_time.AddSeconds(1), 4m);
+
+		results.Received.Count.AssertEqual(1, "a formula element that was reset must compute again once it is prepared");
+		results.Received[0].GetValue<decimal>().AssertEqual(6m);
+	}
+
+	/// <summary>
+	/// A formula that does not compile is reported when the element is prepared, with what the
+	/// compiler said about it.
+	/// </summary>
+	[TestMethod]
+	public async Task A_formula_that_does_not_compile_is_reported_when_the_element_is_prepared()
+	{
+		using var math = new MathDiagramElement { Expression = "a + * b" };
+
+		var error = await ThrowsExactlyAsync<InvalidOperationException>(() => math.PrepareAsync(CancellationToken).AsTask());
+
+		error.Message.IsEmpty().AssertFalse("the compiler's words are what the error has to carry");
+		error.Message.AssertNotEqual(LocalizedStrings.NotInitializedParams.Put(LocalizedStrings.Formula),
+			"a formula that is there and does not compile is not a formula that is missing");
+	}
+
+	/// <summary>
+	/// A formula typed half-way names fewer inputs than the finished one. An input that is wired has to
+	/// outlive such a text: removing it takes its link along, and finishing the formula brings the input
+	/// back without the link.
+	/// </summary>
+	[TestMethod]
+	public async Task A_wired_input_outlives_a_formula_that_is_not_finished()
+	{
+		var run = BuildFormulaGraph("a - b", null);
+
+		run.Math.Expression = "a -";
+
+		run.Math.InputSockets.Any(s => s.Name == "b").AssertTrue("an input that is wired must not go with an unfinished text");
+
+		run.Math.Expression = "a - b";
+
+		await run.Composition.PrepareAsync(CancellationToken);
+		run.Composition.Start(_time);
+
+		run.First.Emit(_time.AddSeconds(1), 10m);
+		run.Second.Emit(_time.AddSeconds(1), 4m);
+
+		run.Results.Received.Count.AssertEqual(1, "the link of the input has to be still there");
+		run.Results.Received[0].GetValue<decimal>().AssertEqual(6m);
+	}
+
+	/// <summary>
+	/// An input the formula stopped naming stays for as long as it is wired and the text is not known to
+	/// compile. Preparing the element compiles the text, and the input goes then: a formula must not wait
+	/// for a value it does not use.
+	/// </summary>
+	[TestMethod]
+	public async Task An_input_the_formula_stopped_naming_goes_when_the_element_is_prepared()
+	{
+		var run = BuildFormulaGraph("a - b", null);
+
+		run.Math.Expression = "a * 2";
+
+		run.Math.InputSockets.Any(s => s.Name == "b").AssertTrue("a wired input stays until the text is known to compile");
+
+		await run.Composition.PrepareAsync(CancellationToken);
+		run.Composition.Start(_time);
+
+		run.Math.InputSockets.Select(s => s.Name).JoinComma().AssertEqual("a", "the compiled formula names one input");
+
+		run.First.Emit(_time.AddSeconds(1), 10m);
+
+		run.Results.Received.Count.AssertEqual(1, "the formula must not wait for an input it no longer names");
+		run.Results.Received[0].GetValue<decimal>().AssertEqual(20m);
+	}
+
+	/// <summary>
+	/// A formula or a validation replaced while the element runs is not compiled until the element is
+	/// prepared again: nothing in a running diagram can wait for the compiler. Until then the element
+	/// says so on every value, rather than compute by a formula that is no longer the one in its text or
+	/// skip a validation that was just tightened.
+	/// </summary>
+	[TestMethod]
+	public async Task A_formula_replaced_under_a_running_element_is_an_error_until_it_is_prepared_again()
+	{
+		var run = await StartFormulaGraph("a / b", "b > 0", CancellationToken);
+
+		run.Math.Validation = "b > 1";
+
+		run.First.Emit(_time.AddSeconds(1), 6m);
+		ThrowsExactly<InvalidOperationException>(() => run.Second.Emit(_time.AddSeconds(1), 1m));
+
+		run.Results.Received.Count.AssertEqual(0, "input the new validation rejects must not be computed by the old one");
+
+		// what a source does once a message has gone through: the values the element could not use are let go
+		run.Strategy.Flush(_time.AddSeconds(1));
+
+		run.Math.Expression = "a * b";
+
+		run.Composition.Stop();
+		run.Composition.Reset();
+
+		await run.Composition.PrepareAsync(CancellationToken);
+		run.Composition.Start(_time);
+
+		run.First.Emit(_time.AddSeconds(2), 6m);
+		run.Second.Emit(_time.AddSeconds(2), 2m);
+
+		run.Results.Received.Count.AssertEqual(1, "prepared again, the element computes by the text it now has");
+		run.Results.Received[0].GetValue<decimal>().AssertEqual(12m);
+	}
+
+	/// <summary>
 	/// A formula is compiled into an assembly of its own, and an element that is done with must take it along: a
 	/// host that builds elements to describe them - the web designer does, on every edit of a formula - otherwise
 	/// keeps every formula ever typed loaded for the rest of its life.
@@ -2216,7 +2758,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	[DoNotParallelize] // Reads the process-wide list of assembly load contexts.
 	public async Task A_disposed_formula_element_unloads_the_assembly_its_formula_was_compiled_into()
 	{
-		var compiledInto = CompileAndDispose("a + b * 2");
+		var compiledInto = await CompileAndDisposeAsync("a + b * 2", CancellationToken);
 
 		IsTrue(compiledInto.Length > 0, "the formula was not compiled into a context of its own, so there is nothing to look at");
 
@@ -2230,11 +2772,14 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 
 	// Kept out of line, so nothing of the element outlives the call on the caller's stack.
 	[MethodImpl(MethodImplOptions.NoInlining)]
-	private static WeakReference[] CompileAndDispose(string expression)
+	private static async Task<WeakReference[]> CompileAndDisposeAsync(string expression, CancellationToken cancellationToken)
 	{
 		var before = AssemblyLoadContext.All.ToHashSet();
 
 		var math = new MathDiagramElement { Expression = expression };
+
+		// the formula is compiled when the element is prepared
+		await math.PrepareAsync(cancellationToken);
 
 		var compiledInto = AssemblyLoadContext.All
 			.Where(c => c.IsCollectible && !before.Contains(c))
@@ -2421,6 +2966,28 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 
 		panel.CandleElements.Count.AssertEqual(0, "unwiring the candles must take the element off the panel");
 		panel.InputSockets.Count.AssertEqual(1, "the socket that lost its element goes with it, leaving the free one");
+	}
+
+	/// <summary>
+	/// Indicator values wired into a panel become an indicator series the same way candles become a
+	/// candle series - also on the panel that draws nothing, which a run without a window uses.
+	/// </summary>
+	[TestMethod]
+	public void A_chart_panel_turns_indicator_values_wired_into_it_into_a_series()
+	{
+		var graph = new Graph();
+
+		var values = new SourceDiagramElement(DiagramSocketType.IndicatorValue);
+		var panel = new DummyChartDiagramElement();
+
+		var valuesNode = graph.Add(values);
+		var panelNode = graph.Add(panel);
+
+		graph.Link(valuesNode, SocketId(StaticSocketIds.Output), panelNode, panel.InputSockets.First().Id);
+
+		panel.IndicatorElements.Count.AssertEqual(1, "wiring indicator values into a panel must put an indicator series on it");
+		((IChartIndicatorElementWrapper)panel.IndicatorElements.First()).Element.AssertNotNull("the series has a chart element behind it");
+		panel.InputSockets.Count.AssertEqual(2, "the panel must offer a free input again once one has been taken");
 	}
 
 	#endregion

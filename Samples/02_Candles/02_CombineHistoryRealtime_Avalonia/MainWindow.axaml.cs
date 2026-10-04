@@ -29,6 +29,8 @@ public partial class MainWindow : Window
 	private Subscription _subscription;
 	private IChartCandleElement _candleElement;
 	private bool _connectStarted;
+	private bool _isClosing;
+	private bool _closeApproved;
 
 	public MainWindow()
 	{
@@ -44,7 +46,7 @@ public partial class MainWindow : Window
 
 		_securityPicker.SecuritySelected += OnSecuritySelected;
 		Opened += OnOpened;
-		Closed += OnClosed;
+		Closing += OnClosing;
 		_connectorEvents = new(
 			() => _context.Connector.CandleReceived += OnCandleReceived,
 			() => _context.Connector.CandleReceived -= OnCandleReceived);
@@ -129,15 +131,34 @@ public partial class MainWindow : Window
 		_context.Connector.UnSubscribe(subscription);
 	}
 
-	private void OnClosed(object sender, EventArgs e)
+	private async void OnClosing(object sender, WindowClosingEventArgs e)
 	{
-		Opened -= OnOpened;
-		Closed -= OnClosed;
-		_securityPicker.SecuritySelected -= OnSecuritySelected;
-		_connectorEvents.Dispose();
-		_uiEvents.Dispose();
-		UnsubscribeCurrent();
-		_securityPicker.Dispose();
-		_runtime.Dispose();
+		if (_closeApproved)
+			return;
+
+		// the window stays open until the runtime has written out what it queued
+		e.Cancel = true;
+
+		if (_isClosing)
+			return;
+
+		_isClosing = true;
+		IsEnabled = false;
+
+		try
+		{
+			Opened -= OnOpened;
+			_securityPicker.SecuritySelected -= OnSecuritySelected;
+			_connectorEvents.Dispose();
+			_uiEvents.Dispose();
+			UnsubscribeCurrent();
+			_securityPicker.Dispose();
+			await _runtime.DisposeAsync();
+		}
+		finally
+		{
+			_closeApproved = true;
+			Close();
+		}
 	}
 }

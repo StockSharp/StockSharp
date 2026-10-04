@@ -504,11 +504,13 @@ public partial class MainWindow : Window
 			((IChart)Chart).Draw(data);
 		}, DispatcherPriority.Background, cancellationToken);
 
-	private void OnSubscribeIndicatorElement(
+	private async void OnSubscribeIndicatorElement(
 		IChartIndicatorElement element,
 		Subscription subscription,
 		IIndicator indicator)
 	{
+		await indicator.PrepareAsync(CancellationToken.None);
+
 		indicator.Reset();
 		var data = new ChartDrawDataImpl();
 		foreach (var candle in _allCandles.Values)

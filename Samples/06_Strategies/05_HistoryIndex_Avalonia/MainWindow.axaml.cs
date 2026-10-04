@@ -98,7 +98,7 @@ public partial class MainWindow : Window
 
 			var start = (BeginDate.SelectedDate ?? throw new InvalidOperationException("Select a begin date.")).Date.ChangeKind(DateTimeKind.Utc);
 			var stop = (EndDate.SelectedDate ?? throw new InvalidOperationException("Select an end date.")).Date.ChangeKind(DateTimeKind.Utc);
-			var session = HistoryIndexSession.Create(start, stop, CandleType.DataType, Expression.Text);
+			var session = await HistoryIndexSession.CreateAsync(start, stop, CandleType.DataType, Expression.Text, _lifetimeCancellation.Token);
 			var cancellation = CancellationTokenSource.CreateLinkedTokenSource(_lifetimeCancellation.Token);
 			_session = session;
 			_sessionCancellation = cancellation;

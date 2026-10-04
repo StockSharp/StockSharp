@@ -3,7 +3,9 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 using Ecng.Common;
 using Ecng.Configuration;
@@ -41,6 +43,11 @@ public partial class MainWindow
 	private readonly string _settingsFile;
 
 	private readonly ChannelExecutor _executor;
+	private readonly IEntityRegistry _entityRegistry;
+	private readonly ISnapshotRegistry _snapshotRegistry;
+	private Task _loading = Task.CompletedTask;
+	private bool _isClosing;
+	private bool _isReleased;
 
 	public readonly IFileSystem FileSystem = Paths.FileSystem;
 
@@ -48,6 +55,9 @@ public partial class MainWindow
 	{
 		InitializeComponent();
 		Instance = this;
+
+		// connecting waits until the stored entities are read
+		ConnectBtn.IsEnabled = false;
 
 		Title = Title.Put(LocalizedStrings.Strategies);
 
@@ -78,6 +88,9 @@ public partial class MainWindow
 
 		var snapshotRegistry = new SnapshotRegistry(fs, Path.Combine(path, "Snapshots"));
 
+		_entityRegistry = entityRegistry;
+		_snapshotRegistry = snapshotRegistry;
+
 		Connector = new Connector(entityRegistry.Securities, entityRegistry.PositionStorage, storageRegistry.ExchangeInfoProvider, storageRegistry, snapshotRegistry, new StorageBuffer())
 		{
 			Adapter =
@@ -96,7 +109,7 @@ public partial class MainWindow
 		_portfoliosWindow = new PortfoliosWindow();
 		_myTradesWindow = new MyTradesWindow();
 
-		InitConnector(entityRegistry, snapshotRegistry);
+		InitConnector();
 
 		_strategiesWindow = new StrategiesWindow();
 
@@ -109,7 +122,26 @@ public partial class MainWindow
 
 	private async void OnLoaded(object sender, RoutedEventArgs e)
 	{
+		_loading = LoadAsync();
+		await _loading;
+	}
+
+	private async Task LoadAsync()
+	{
 		ThemeExtensions.ApplyDefaultTheme();
+
+		if (Connector.StorageAdapter != null)
+		{
+			await _entityRegistry.InitAsync(default);
+			await _snapshotRegistry.InitAsync(default);
+
+			if (_isClosing)
+				return;
+
+			Connector.LookupAll();
+		}
+
+		ConnectBtn.IsEnabled = true;
 
 		try
 		{
@@ -130,10 +162,13 @@ public partial class MainWindow
 			ex.LogError();
 		}
 
+		if (_isClosing)
+			return;
+
 		await _strategiesWindow.LoadStrategiesAsync(Path.GetDirectoryName(_settingsFile), default);
 	}
 
-	private void InitConnector(IEntityRegistry entityRegistry, ISnapshotRegistry snapshotRegistry)
+	private void InitConnector()
 	{
 		// subscribe on connection successfully event
 		Connector.Connected += () =>
@@ -183,37 +218,56 @@ public partial class MainWindow
 		if (Connector.StorageAdapter == null)
 			return;
 
-		AsyncHelper.Run(async () =>
-		{
-			await entityRegistry.InitAsync(default);
-			await snapshotRegistry.InitAsync(default);
-		});
-
-		Connector.LookupAll();
-
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
-
 	}
 
-	protected override void OnClosing(CancelEventArgs e)
+	protected override async void OnClosing(CancelEventArgs e)
 	{
-		_ordersWindow.DeleteHideable();
-		_myTradesWindow.DeleteHideable();
-		_strategiesWindow.DeleteHideable();
-		_securitiesWindow.DeleteHideable();
-		_portfoliosWindow.DeleteHideable();
+		if (_isReleased)
+		{
+			base.OnClosing(e);
+			return;
+		}
 
-		_securitiesWindow.Close();
-		_strategiesWindow.Close();
-		_myTradesWindow.Close();
-		_ordersWindow.Close();
-		_portfoliosWindow.Close();
+		// the window stays open until the queued writes are on the disk
+		e.Cancel = true;
 
-		Connector.Dispose();
+		if (_isClosing)
+			return;
 
-		AsyncHelper.Run(_executor.DisposeAsync);
+		_isClosing = true;
+		IsEnabled = false;
 
-		base.OnClosing(e);
+		// what is being loaded has to be over before the connector it loads into is released;
+		// a failure of the load is reported by the load itself
+		await Task.WhenAny(_loading);
+
+		try
+		{
+			_ordersWindow.DeleteHideable();
+			_myTradesWindow.DeleteHideable();
+			_strategiesWindow.DeleteHideable();
+			_securitiesWindow.DeleteHideable();
+			_portfoliosWindow.DeleteHideable();
+
+			_securitiesWindow.Close();
+			_strategiesWindow.Close();
+			_myTradesWindow.Close();
+			_ordersWindow.Close();
+			_portfoliosWindow.Close();
+
+			await Connector.DisposeAsync();
+
+			await _executor.DisposeAsync();
+		}
+		finally
+		{
+			_isReleased = true;
+
+			// a window refuses Close while it is still handling the first attempt to close it
+			await Dispatcher.Yield();
+			Close();
+		}
 	}
 
 	private async void SettingsClick(object sender, RoutedEventArgs e)

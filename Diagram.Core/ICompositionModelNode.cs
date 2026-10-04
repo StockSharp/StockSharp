@@ -35,6 +35,12 @@ public interface ICompositionModelNode
 	Guid TypeId { get; set; }
 
 	/// <summary>
+	/// Settings of the element the node stands for, while <see cref="Element"/> is not loaded: its type was
+	/// not known when the composition was read, or its settings could not be read. A save writes them back.
+	/// </summary>
+	SettingsStorage ElementSettings { get; set; }
+
+	/// <summary>
 	/// Figure id.
 	/// </summary>
 	string Figure { get; set; }
@@ -58,6 +64,8 @@ public class InMemoryCompositionModelNode : ICompositionModelNode
 	public PointF Location { get; set; }
 	/// <inheritdoc/>
 	public Guid TypeId { get; set; }
+	/// <inheritdoc/>
+	public SettingsStorage ElementSettings { get; set; }
 
 	/// <inheritdoc/>
 	public string Figure { get; set; }

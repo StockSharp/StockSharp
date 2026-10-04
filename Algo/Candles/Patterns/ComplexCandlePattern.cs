@@ -36,6 +36,13 @@ public class ComplexCandlePattern : ICandlePattern
 
 	private void UpdateCount() => CandlesCount = Inner.Sum(c => c.CandlesCount);
 
+	/// <inheritdoc />
+	public async ValueTask PrepareAsync(CancellationToken cancellationToken)
+	{
+		foreach (var inner in _inner)
+			await inner.PrepareAsync(cancellationToken);
+	}
+
 	bool ICandlePattern.Recognize(ReadOnlySpan<ICandleMessage> candles)
 	{
 		if(candles.Length != CandlesCount)

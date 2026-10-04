@@ -21,6 +21,13 @@ public interface IBasketSecurityProcessor
 	SecurityId[] BasketLegs { get; }
 
 	/// <summary>
+	/// Prepare the processor for <see cref="Process"/>: whatever it needs that has to be waited for.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask InitAsync(CancellationToken cancellationToken);
+
+	/// <summary>
 	/// Process message.
 	/// </summary>
 	/// <param name="message">Input message.</param>

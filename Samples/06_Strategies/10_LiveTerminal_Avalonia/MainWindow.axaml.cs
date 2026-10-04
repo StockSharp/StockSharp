@@ -346,7 +346,6 @@ public partial class MainWindow : Window
 		}
 		finally
 		{
-			Closing -= OnClosing;
 			Opened -= OnOpened;
 			_connectorEvents.Dispose();
 			_toolWindowEvents.Dispose();
@@ -371,8 +370,9 @@ public partial class MainWindow : Window
 			TryRemoveLogSource(Connector);
 			TryDispose(_logManager);
 			TryDispose(_monitor);
-			TryDispose(_runtime);
+			await TryDisposeAsync(_runtime);
 			TryDispose(_lifetimeCancellation);
+			Closing -= OnClosing;
 			_closeApproved = true;
 			Close();
 		}
@@ -395,6 +395,17 @@ public partial class MainWindow : Window
 		{
 			if (value is IDisposable disposable)
 				disposable.Dispose();
+		}
+		catch
+		{
+		}
+	}
+
+	private static async ValueTask TryDisposeAsync(IAsyncDisposable value)
+	{
+		try
+		{
+			await value.DisposeAsync();
 		}
 		catch
 		{

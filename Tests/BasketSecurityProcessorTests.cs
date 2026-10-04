@@ -12,12 +12,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_Ticks_CalculatesCorrectly(string processorName)
+	public async Task IndexProcessor_Ticks_CalculatesCorrectly(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, expectedPrice) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 2);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -43,12 +43,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_Ticks_MultipleRounds(string processorName)
+	public async Task IndexProcessor_Ticks_MultipleRounds(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time1 = DateTime.UtcNow;
 		var time2 = time1.AddSeconds(1);
@@ -69,12 +69,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_OrderBook_CalculatesCorrectDepth(string processorName)
+	public async Task IndexProcessor_OrderBook_CalculatesCorrectDepth(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -106,12 +106,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_Candles_CalculatesOHLC(string processorName)
+	public async Task IndexProcessor_Candles_CalculatesOHLC(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 2);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var openTime = new DateTime(2024, 1, 1, 10, 0, 0);
 
@@ -146,12 +146,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_IncompleteLegs_NoOutput(string processorName)
+	public async Task IndexProcessor_IncompleteLegs_NoOutput(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		// Only one leg - no output
 		var result = processor.Process(CreateTick(lkoh, DateTime.UtcNow, 100m, 10m)).ToArray();
@@ -162,12 +162,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_OrderBook_IgnoresStateMessages(string processorName)
+	public async Task IndexProcessor_OrderBook_IgnoresStateMessages(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		// State message (reset)
 		var stateMsg = new QuoteChangeMessage
@@ -186,12 +186,12 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_Candles_ZeroPricesFilledFromClose(string processorName)
+	public async Task IndexProcessor_Candles_ZeroPricesFilledFromClose(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 2);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var openTime = new DateTime(2024, 1, 1, 10, 0, 0);
 
@@ -213,13 +213,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(WeightedIndexSecurityProcessor))]
 	[DataRow(nameof(ExpressionIndexSecurityProcessor))]
-	public void IndexProcessor_FillGapsByZeros_MissingLegCountsAsZero(string processorName)
+	public async Task IndexProcessor_FillGapsByZeros_MissingLegCountsAsZero(string processorName)
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
 		var (basket, _) = CreateIndexBasket(processorName, lkoh, sber, weight1: 1, weight2: 2);
 		((IndexSecurity)basket).FillGapsByZeros = true;
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time1 = new DateTime(2024, 1, 1, 10, 0, 0);
 		var time2 = time1.AddMinutes(1);
@@ -251,7 +251,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void IndexProcessor_KeepsIndexSettings()
+	public async Task IndexProcessor_KeepsIndexSettings()
 	{
 		var (basket, _, _) = CreateWeightedBasket(lkohWeight: 1, sberWeight: 2);
 
@@ -260,7 +260,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		index.IgnoreErrors = true;
 		index.CalculateExtended = true;
 
-		var processor = (WeightedIndexSecurityProcessor)CreateProcessor(basket);
+		var processor = (WeightedIndexSecurityProcessor)await CreateProcessorAsync(basket);
 
 		// The processor rebuilds its own copy of the index security; the options that drive
 		// gap filling, error tolerance and extended fields must survive that copy.
@@ -277,13 +277,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_SwitchesToNextContract(string processorName)
+	public async Task ContinuousProcessor_SwitchesToNextContract(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var basketId = basket.ToSecurityId();
 
@@ -341,7 +341,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	/// </summary>
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void ContinuousProcessor_AfterExpiration_OnlyTheNextContractPasses()
+	public async Task ContinuousProcessor_AfterExpiration_OnlyTheNextContractPasses()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
@@ -356,7 +356,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		foreach (var leg in new[] { riu, riz, rih })
 			basket.ExpirationJumps.Add(leg.ToSecurityId(), leg.ExpiryDate!.Value);
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var beforeExpiry = new DateTime(2024, 9, 10);
 
@@ -374,7 +374,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void ContinuousProcessor_GapAcrossTwoExpirations_AdvancesToTheThirdContract()
+	public async Task ContinuousProcessor_GapAcrossTwoExpirations_AdvancesToTheThirdContract()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
@@ -385,7 +385,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basket.ExpirationJumps.Add(riz.ToSecurityId(), riz.ExpiryDate.Value);
 		basket.ExpirationJumps.Add(rih.ToSecurityId(), rih.ExpiryDate.Value);
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 		var afterTwoExpirations = new DateTime(2024, 12, 16);
 
 		processor.Process(CreateTick(rih, afterTwoExpirations, price: 111000m, volume: 5m)).ToArray()
@@ -398,14 +398,14 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_IgnoresNonLegSecurities(string processorName)
+	public async Task ContinuousProcessor_IgnoresNonLegSecurities(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 		var other = CreateTestSecurity("OTHER", "FORTS");
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time = new DateTime(2024, 9, 10);
 		var result = processor.Process(CreateTick(other, time, price: 50000m, volume: 50m)).ToArray();
@@ -418,13 +418,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_ProcessesCandles(string processorName)
+	public async Task ContinuousProcessor_ProcessesCandles(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var openTime = new DateTime(2024, 9, 10, 10, 0, 0);
 
@@ -453,13 +453,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_ProcessesOrderBook(string processorName)
+	public async Task ContinuousProcessor_ProcessesOrderBook(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = new DateTime(2024, 9, 10);
 
@@ -494,13 +494,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[Timeout(5_000, CooperativeCancellation = true)]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_OrderBook_SumsBidAndAskVolumes(string processorName)
+	public async Task ContinuousProcessor_OrderBook_SumsBidAndAskVolumes(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time = new DateTime(2024, 9, 10);
 
@@ -536,7 +536,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	/// </summary>
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void VolumeContinuous_OrderBook_BidPlusAskVolume_DrivesSwitch()
+	public async Task VolumeContinuous_OrderBook_BidPlusAskVolume_DrivesSwitch()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
@@ -550,7 +550,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basket.InnerSecurities.Add(riu.ToSecurityId());
 		basket.InnerSecurities.Add(riz.ToSecurityId());
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time = new DateTime(2024, 9, 10);
 
@@ -575,14 +575,14 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	[TestMethod]
 	[DataRow(nameof(ContinuousSecurityExpirationProcessor))]
 	[DataRow(nameof(ContinuousSecurityVolumeProcessor))]
-	public void ContinuousProcessor_Level1AndNews_DoNotBreakProcessing(string processorName)
+	public async Task ContinuousProcessor_Level1AndNews_DoNotBreakProcessing(string processorName)
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
 		var other = CreateTestSecurity("OTHER", "FORTS");
 
 		var basket = CreateContinuousBasket(processorName, riu, riz);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time = new DateTime(2024, 9, 10);
 
@@ -621,7 +621,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region Volume Continuous Specific Tests
 
 	[TestMethod]
-	public void VolumeContinuous_SwitchesWhenNextVolumeExceeds()
+	public async Task VolumeContinuous_SwitchesWhenNextVolumeExceeds()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
@@ -635,7 +635,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basket.InnerSecurities.Add(riu.ToSecurityId());
 		basket.InnerSecurities.Add(riz.ToSecurityId());
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time = new DateTime(2024, 9, 10);
 
@@ -664,7 +664,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	/// </summary>
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void VolumeContinuous_UsesOpenInterest_WhenConfigured()
+	public async Task VolumeContinuous_UsesOpenInterest_WhenConfigured()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
@@ -679,7 +679,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basket.InnerSecurities.Add(riu.ToSecurityId());
 		basket.InnerSecurities.Add(riz.ToSecurityId());
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var time = new DateTime(2024, 9, 10);
 
@@ -738,7 +738,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	/// </summary>
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void VolumeContinuous_ThreeContracts_SwitchesToSecond()
+	public async Task VolumeContinuous_ThreeContracts_SwitchesToSecond()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
@@ -754,7 +754,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basket.InnerSecurities.Add(riz.ToSecurityId());
 		basket.InnerSecurities.Add(rih.ToSecurityId());
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 		var basketId = basket.ToSecurityId();
 
 		var time = new DateTime(2024, 9, 10);
@@ -800,7 +800,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	/// </summary>
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void VolumeContinuous_TickOfNewActiveLeg_AfterSwitch_StaysActive()
+	public async Task VolumeContinuous_TickOfNewActiveLeg_AfterSwitch_StaysActive()
 	{
 		var riu = CreateFuture("RIU8", new DateTime(2024, 9, 15));
 		var riz = CreateFuture("RIZ8", new DateTime(2024, 12, 15));
@@ -816,7 +816,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basket.InnerSecurities.Add(riz.ToSecurityId());
 		basket.InnerSecurities.Add(rih.ToSecurityId());
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 		var basketId = basket.ToSecurityId();
 
 		var time = new DateTime(2024, 9, 10);
@@ -842,10 +842,10 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region WeightedIndexSecurity Specific Tests
 
 	[TestMethod]
-	public void WeightedIndex_Ticks_NegativeWeight()
+	public async Task WeightedIndex_Ticks_NegativeWeight()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -859,10 +859,10 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WeightedIndex_Ticks_FractionalWeights()
+	public async Task WeightedIndex_Ticks_FractionalWeights()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 0.5m, sberWeight: 0.5m);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -876,10 +876,10 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WeightedIndex_OrderBook_DifferentDepths()
+	public async Task WeightedIndex_OrderBook_DifferentDepths()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -905,13 +905,13 @@ public class BasketSecurityProcessorTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void WeightedIndex_Candles_HighLowNormalization()
+	public async Task WeightedIndex_Candles_HighLowNormalization()
 	{
 		// When the weighted calculation produces High < Low (because a leg with a negative
 		// weight has a wider range than the positive leg), FillIndexCandle must swap them so
 		// the basket candle stays consistent (BasketSecurityBaseProcessor: HighPrice < LowPrice).
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var openTime = new DateTime(2024, 1, 1, 10, 0, 0);
 
@@ -944,10 +944,10 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void WeightedIndex_ClonedMessages()
+	public async Task WeightedIndex_ClonedMessages()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: 1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 		var originalTick = CreateTick(lkoh, serverTime, 100m, 10m);
@@ -966,10 +966,10 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	/// basket requires selling the negative leg at its bid.
 	/// </summary>
 	[TestMethod]
-	public void WeightedIndex_NegativeWeightUsesOppositeBookSides()
+	public async Task WeightedIndex_NegativeWeightUsesOppositeBookSides()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -996,10 +996,10 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	/// such walk start at the worst price and call it the best one.
 	/// </summary>
 	[TestMethod]
-	public void WeightedIndex_CrossedLegs_BidsStayDescendingAndAsksAscending()
+	public async Task WeightedIndex_CrossedLegs_BidsStayDescendingAndAsksAscending()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 
 		var serverTime = DateTime.UtcNow;
 
@@ -1061,7 +1061,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region ExpressionIndexSecurity Specific Tests
 
 	[TestMethod]
-	public void ExpressionIndex_Ticks_SubtractionExpression()
+	public async Task ExpressionIndex_Ticks_SubtractionExpression()
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
@@ -1073,7 +1073,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			BasketExpression = "LKOH@TQBR - 2 * SBER@TQBR",
 		};
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 		var serverTime = DateTime.UtcNow;
 
 		processor.Process(CreateTick(lkoh, serverTime, price: 100m, volume: 10m)).ToArray();
@@ -1087,7 +1087,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ExpressionIndex_Ticks_DivisionExpression()
+	public async Task ExpressionIndex_Ticks_DivisionExpression()
 	{
 		var lkoh = CreateTestSecurity("LKOH", "TQBR");
 		var sber = CreateTestSecurity("SBER", "TQBR");
@@ -1099,7 +1099,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			BasketExpression = "LKOH@TQBR / SBER@TQBR",
 		};
 
-		var processor = CreateProcessor(basket);
+		var processor = await CreateProcessorAsync(basket);
 		var serverTime = DateTime.UtcNow;
 
 		processor.Process(CreateTick(lkoh, serverTime, price: 100m, volume: 10m)).ToArray();
@@ -1139,7 +1139,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	/// entitled to hear about the broken formula at the moment it asks for the processor.
 	/// </summary>
 	[TestMethod]
-	public void ExpressionIndex_UncompilableFormula_RefusesToBuildAProcessor()
+	public async Task ExpressionIndex_UncompilableFormula_RefusesToBuildAProcessor()
 	{
 		var basket = new ExpressionIndexSecurity
 		{
@@ -1148,9 +1148,9 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			Expression = "LKOH@TQBR +",
 		};
 
-		basket.Formula.Error.IsEmpty().AssertFalse("an index that could not compile its formula must report that it cannot calculate");
+		(await basket.GetFormulaAsync(CancellationToken)).Error.IsEmpty().AssertFalse("an index that could not compile its formula must report that it cannot calculate");
 
-		ThrowsExactly<ArgumentException>(() => new ExpressionIndexSecurityProcessor(basket), "an index with no legs to subscribe to must not produce a processor");
+		await ThrowsExactlyAsync<InvalidOperationException>(() => CreateProcessorAsync(basket), "an index whose formula does not compile must not produce a processor");
 	}
 
 	#endregion
@@ -1158,7 +1158,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region ToBasket Extension Method Tests
 
 	[TestMethod]
-	public void ToBasket_Sync_ProcessesTickSequence()
+	public async Task ToBasket_Async_ProcessesTickSequenceOfTwoTimes()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: -1);
 		var processorProvider = new BasketSecurityProcessorProvider();
@@ -1172,7 +1172,9 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			CreateTick(sber, serverTime.AddSeconds(1), 32m, 6m),
 		};
 
-		var result = ticks.ToBasket(basket, processorProvider).ToArray();
+		var result = await ticks.ToAsyncEnumerable()
+			.ToBasket(basket, processorProvider)
+			.ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(2);
 		((ExecutionMessage)result[0]).TradePrice.AssertEqual(70m);  // 100 - 30
@@ -1201,7 +1203,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ToBasket_Sync_ProcessesCandleSequence()
+	public async Task ToBasket_Async_ProcessesCandleSequence()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: 1);
 		var processorProvider = new BasketSecurityProcessorProvider();
@@ -1214,7 +1216,9 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			CreateCandle(sber, openTime, 50m, 55m, 45m, 52m, 500m),
 		};
 
-		var result = candles.ToBasket(basket, processorProvider).ToArray();
+		var result = await candles.ToAsyncEnumerable()
+			.ToBasket(basket, processorProvider)
+			.ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(1);
 		var basketCandle = (CandleMessage)result[0];
@@ -1223,7 +1227,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ToBasket_Sync_ProcessesOrderBookSequence()
+	public async Task ToBasket_Async_ProcessesOrderBookSequence()
 	{
 		var (basket, lkoh, sber) = CreateWeightedBasket(lkohWeight: 1, sberWeight: 1);
 		var processorProvider = new BasketSecurityProcessorProvider();
@@ -1235,7 +1239,9 @@ public class BasketSecurityProcessorTests : BaseTestClass
 			CreateOrderBook(sber, serverTime, [(50m, 5m)], [(51m, 8m)]),
 		};
 
-		var result = orderBooks.ToBasket(basket, processorProvider).ToArray();
+		var result = await orderBooks.ToAsyncEnumerable()
+			.ToBasket(basket, processorProvider)
+			.ToArrayAsync(CancellationToken);
 
 		result.Length.AssertEqual(1);
 		var basketDepth = (QuoteChangeMessage)result[0];
@@ -1358,10 +1364,8 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		};
 	}
 
-	private static IBasketSecurityProcessor CreateProcessor(Security basket)
-	{
-		return new BasketSecurityProcessorProvider().CreateProcessor(basket);
-	}
+	private async Task<IBasketSecurityProcessor> CreateProcessorAsync(Security basket)
+		=> await new BasketSecurityProcessorProvider().CreateProcessorAsync(basket, CancellationToken);
 
 	private static ExecutionMessage CreateTick(Security security, DateTime serverTime, decimal price, decimal volume)
 	{
@@ -1575,7 +1579,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 	#region Custom Basket Processor Tests
 
 	[TestMethod]
-	public void CustomProcessor_ProcessesTicks()
+	public async Task CustomProcessor_ProcessesTicks()
 	{
 		IBasketSecurityProcessorProvider provider = new BasketSecurityProcessorProvider();
 
@@ -1593,7 +1597,7 @@ public class BasketSecurityProcessorTests : BaseTestClass
 		basket.SecurityIds.Add(lkoh.ToSecurityId());
 		basket.SecurityIds.Add(sber.ToSecurityId());
 
-		var processor = provider.CreateProcessor(basket);
+		var processor = await provider.CreateProcessorAsync(basket, CancellationToken);
 		processor.GetType().AssertEqual(typeof(CustomBasketProcessor));
 
 		var serverTime = DateTime.UtcNow;

@@ -90,6 +90,13 @@ public abstract class BaseComplexIndicator<TValue> : BaseIndicator, IComplexIndi
 	protected override bool CalcIsFormed() => InnerIndicators.All(i => i.IsFormed);
 
 	/// <inheritdoc />
+	public override async ValueTask PrepareAsync(CancellationToken cancellationToken)
+	{
+		foreach (var inner in InnerIndicators)
+			await inner.PrepareAsync(cancellationToken);
+	}
+
+	/// <inheritdoc />
 	public override IIndicatorValue Process(IIndicatorValue input)
 	{
 		var output = base.Process(input);

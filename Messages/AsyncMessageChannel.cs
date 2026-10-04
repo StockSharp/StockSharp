@@ -238,6 +238,11 @@ public class AsyncMessageChannel(IMessageAdapter adapter) : Disposable, IMessage
 
 			using (_messages.EnterScope())
 			{
+				// The state is read with the queue locked: a message put there after Suspend returned is
+				// seen together with the state Suspend left, so it is not started until Resume.
+				if (State != ChannelStates.Started)
+					return false;
+
 				var isControlProcessing = false;
 				var isPingProcessing = false;
 				var isLookupProcessing = false;

@@ -3,6 +3,7 @@ namespace StockSharp.Samples.Candles.CombineHistoryRealtime;
 using System;
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
+using System.Threading.Tasks;
 
 using Ecng.Common;
 using Ecng.ComponentModel;
@@ -21,7 +22,7 @@ using StockSharp.Samples;
 /// <summary>
 /// Owns every storage dependency injected into the combined history/realtime connector.
 /// </summary>
-internal sealed class CombineHistoryRealtimeRuntime : IDisposable
+internal sealed class CombineHistoryRealtimeRuntime : IAsyncDisposable
 {
 	private readonly OwnedRuntimeLifetime _lifetime;
 
@@ -37,17 +38,14 @@ internal sealed class CombineHistoryRealtimeRuntime : IDisposable
 
 	public static CombineHistoryRealtimeRuntime Create()
 	{
-		ChannelExecutor executor = null;
-		CsvEntityRegistry entityRegistry = null;
 		StorageRegistry storageRegistry = null;
 		SnapshotRegistry snapshotRegistry = null;
 		SampleConnectorContext context = null;
 
 		try
 		{
-			executor = new ChannelExecutor(ex => ex.LogError(), TimeSpan.FromSeconds(1));
-			_ = executor.RunAsync();
-			entityRegistry = new(Paths.FileSystem, Paths.HistoryDataPath, executor);
+			var executor = new ChannelExecutor(ex => ex.LogError(), TimeSpan.FromSeconds(1));
+			var entityRegistry = new CsvEntityRegistry(Paths.FileSystem, Paths.HistoryDataPath, executor);
 			storageRegistry = new();
 			storageRegistry.DefaultDrive = new LocalMarketDataDrive(Paths.FileSystem, Paths.HistoryDataPath);
 			snapshotRegistry = new(Paths.FileSystem, "SnapshotRegistry");
@@ -67,6 +65,10 @@ internal sealed class CombineHistoryRealtimeRuntime : IDisposable
 				storageRegistry,
 				snapshotRegistry,
 				executor);
+
+			// The executor is started last: a construction that fails before this point leaves nothing
+			// running and nothing queued, so the registry and the executor have nothing to release.
+			_ = executor.RunAsync();
 			return new(context, lifetime);
 		}
 		catch (Exception initializationError)
@@ -75,14 +77,10 @@ internal sealed class CombineHistoryRealtimeRuntime : IDisposable
 
 			if (context is not null)
 				TryRelease(context.Dispose, errors);
-			if (entityRegistry is not null)
-				TryRelease(() => AsyncHelper.Run(entityRegistry.DisposeAsync), errors);
 			if (storageRegistry is not null)
 				TryRelease(storageRegistry.Dispose, errors);
 			if (snapshotRegistry is not null)
 				TryRelease(snapshotRegistry.Dispose, errors);
-			if (executor is not null)
-				TryRelease(() => AsyncHelper.Run(executor.DisposeAsync), errors);
 
 			if (errors.Count > 1)
 				throw new AggregateException(
@@ -106,6 +104,6 @@ internal sealed class CombineHistoryRealtimeRuntime : IDisposable
 		}
 	}
 
-	public void Dispose()
-		=> _lifetime.Dispose();
+	public ValueTask DisposeAsync()
+		=> _lifetime.DisposeAsync();
 }

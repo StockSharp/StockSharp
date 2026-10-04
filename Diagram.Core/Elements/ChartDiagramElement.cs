@@ -905,21 +905,32 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 	}
 
 	// What the element is made of at the moment the snapshot is taken: the chart elements (an indicator
-	// one as the wrapper it is kept in) and the axes.
-	private sealed class ChartParts(object[] elements, IChartAxis[] xAxes, IChartAxis[] yAxes)
+	// one as the wrapper it is kept in) and the axes, and what those of them that can copy their settings
+	// were set to.
+	private sealed class ChartParts(object[] elements, IChartAxis[] xAxes, IChartAxis[] yAxes, (IChartSnapshotPart Part, object Settings)[] settings)
 	{
 		public object[] Elements { get; } = elements;
 		public IChartAxis[] XAxes { get; } = xAxes;
 		public IChartAxis[] YAxes { get; } = yAxes;
+		public (IChartSnapshotPart Part, object Settings)[] Settings { get; } = settings;
 	}
 
-	// The parts are kept as they are, not copied: undo puts back which of them the element is made
-	// of, not what each of them was set to.
+	// A part that is not IChartSnapshotPart is kept as it is: undo puts back that the element is made
+	// of it, not what it was set to.
 	private protected override object CaptureObjects()
-		=> new ChartParts(
-			[.. _candleElements, .. _indicatorElements, .. _orderElements, .. _tradeElements],
-			[.. _xAxes],
-			[.. _yAxes]);
+	{
+		object[] elements = [.. _candleElements, .. _indicatorElements, .. _orderElements, .. _tradeElements];
+		IChartAxis[] xAxes = [.. _xAxes];
+		IChartAxis[] yAxes = [.. _yAxes];
+
+		var parts = elements
+			.Select(e => e is IChartIndicatorElementWrapper wrapper ? wrapper.Element : e)
+			.Concat(xAxes)
+			.Concat(yAxes)
+			.OfType<IChartSnapshotPart>();
+
+		return new ChartParts(elements, xAxes, yAxes, [.. parts.Select(p => (p, p.CaptureSettings()))]);
+	}
 
 	private protected override void RestoreObjects(object objects)
 	{
@@ -937,6 +948,9 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 		TryAddDefaultAxes();
 
 		parts.Elements.ForEach(AddElementImpl);
+
+		foreach (var (part, settings) in parts.Settings)
+			part.RestoreSettings(settings);
 
 		EnsureEmptySocket();
 	}
@@ -979,6 +993,7 @@ public class DummyChartDiagramElement : ChartDiagramElement<DummyChartDiagramEle
 		/// Initializes a new instance of the <see cref="DummyChartIndicatorElementWrapper"/>.
 		/// </summary>
 		public DummyChartIndicatorElementWrapper()
+			: this(((IChartBuilder)new DummyChartBuilder()).CreateIndicatorElement())
 		{
 		}
 

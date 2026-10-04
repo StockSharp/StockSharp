@@ -110,10 +110,10 @@ static class Program
 		var indexCandles = innerCandleList
 			.SelectMany(i => i)
 			.OrderBy(t => t.OpenTime)
-			.Select(c => c)
+			.ToAsyncEnumerable()
 			.ToBasket(basketSecurity, processorProvider);
 
-		foreach (var candle in indexCandles)
+		await foreach (var candle in indexCandles.WithCancellation(token))
 		{
 			Console.WriteLine(candle);
 		}

@@ -1,7 +1,9 @@
 ﻿namespace StockSharp.Samples.Candles.CombineHistoryRealtime;
 
 using System;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Threading;
 
 using Ecng.Common;
 using Ecng.Serialization;
@@ -35,6 +37,8 @@ public partial class MainWindow
 	private ChartCandleElement _candleElement;
 
 	private readonly ChannelExecutor _executor;
+	private bool _isClosing;
+	private bool _isReleased;
 
 	public MainWindow()
 	{
@@ -64,12 +68,36 @@ public partial class MainWindow
 			await _connector.LoadAsync(await _connectorFile.DeserializeAsync<SettingsStorage>(_fileSystem, default), default);
 	}
 
-    protected override void OnClosed(EventArgs e)
-    {
-		AsyncHelper.Run(_executor.DisposeAsync);
+	protected override async void OnClosing(CancelEventArgs e)
+	{
+		if (_isReleased)
+		{
+			base.OnClosing(e);
+			return;
+		}
 
-		base.OnClosed(e);
-    }
+		// the window stays open until the queued writes are on the disk
+		e.Cancel = true;
+
+		if (_isClosing)
+			return;
+
+		_isClosing = true;
+		IsEnabled = false;
+
+		try
+		{
+			await _executor.DisposeAsync();
+		}
+		finally
+		{
+			_isReleased = true;
+
+			// a window refuses Close while it is still handling the first attempt to close it
+			await Dispatcher.Yield();
+			Close();
+		}
+	}
 
     private async void Setting_Click(object sender, RoutedEventArgs e)
 	{

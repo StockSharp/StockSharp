@@ -166,7 +166,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 
 				if (mdMsg.IsSubscribe)
 				{
-					var processor = _processorProvider.CreateProcessor(security);
+					var processor = await _processorProvider.CreateProcessorAsync(security, cancellationToken);
 
 					if (processor.BasketLegs.Length == 0)
 					{

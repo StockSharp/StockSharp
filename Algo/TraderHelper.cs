@@ -1021,6 +1021,7 @@ public static partial class TraderHelper
 	/// <param name="security">Basket security.</param>
 	/// <param name="processorProvider">Basket security processors provider.</param>
 	/// <returns>Messages of basket securities.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use the IAsyncEnumerable overload instead.")]
 	public static IEnumerable<TMessage> ToBasket<TMessage>(this IEnumerable<TMessage> innerSecMessages, Security security, IBasketSecurityProcessorProvider processorProvider)
 		where TMessage : Message
 	{
@@ -1043,12 +1044,18 @@ public static partial class TraderHelper
 		if (innerSecMessages is null)
 			throw new ArgumentNullException(nameof(innerSecMessages));
 
-		var processor = processorProvider.CreateProcessor(security);
+		if (processorProvider is null)
+			throw new ArgumentNullException(nameof(processorProvider));
 
-		return Impl(innerSecMessages, processor);
+		if (security is null)
+			throw new ArgumentNullException(nameof(security));
 
-		static async IAsyncEnumerable<TMessage> Impl(IAsyncEnumerable<TMessage> messages, IBasketSecurityProcessor processor, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+		return Impl(innerSecMessages, security, processorProvider);
+
+		static async IAsyncEnumerable<TMessage> Impl(IAsyncEnumerable<TMessage> messages, Security security, IBasketSecurityProcessorProvider processorProvider, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
+			var processor = await processorProvider.CreateProcessorAsync(security, cancellationToken);
+
 			await foreach (var msg in messages.WithCancellation(cancellationToken))
 			{
 				foreach (var result in processor.Process(msg))
@@ -1066,7 +1073,18 @@ public static partial class TraderHelper
 	/// <param name="processorProvider">Basket security processors provider.</param>
 	/// <param name="security">Basket security.</param>
 	/// <returns>Market data processor for basket securities.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CreateProcessorAsync instead.")]
 	public static IBasketSecurityProcessor CreateProcessor(this IBasketSecurityProcessorProvider processorProvider, Security security)
+		=> AsyncHelper.Run(() => processorProvider.CreateProcessorAsync(security, default));
+
+	/// <summary>
+	/// Create market data processor for basket securities and prepare it for processing.
+	/// </summary>
+	/// <param name="processorProvider">Basket security processors provider.</param>
+	/// <param name="security">Basket security.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Market data processor for basket securities.</returns>
+	public static async ValueTask<IBasketSecurityProcessor> CreateProcessorAsync(this IBasketSecurityProcessorProvider processorProvider, Security security, CancellationToken cancellationToken)
 	{
 		if (processorProvider == null)
 			throw new ArgumentNullException(nameof(processorProvider));
@@ -1074,7 +1092,9 @@ public static partial class TraderHelper
 		if (security == null)
 			throw new ArgumentNullException(nameof(security));
 
-		return processorProvider.GetProcessorType(security.BasketCode).CreateInstance<IBasketSecurityProcessor>(security);
+		var processor = processorProvider.GetProcessorType(security.BasketCode).CreateInstance<IBasketSecurityProcessor>(security);
+		await processor.InitAsync(cancellationToken);
+		return processor;
 	}
 
 	/// <summary>

@@ -845,7 +845,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 		{
 			if (++ProcessingLevel > Strategy.OverflowLimit || !RuntimeHelpers.TryEnsureSufficientExecutionStack())
 			{
-				AsyncHelper.Run(() => Strategy.StopAsync(new InvalidOperationException($"!!!{LocalizedStrings.Overflow}!!!")));
+				Strategy.RequestStopByElement(new InvalidOperationException($"!!!{LocalizedStrings.Overflow}!!!"));
 				return;
 			}
 
@@ -1489,6 +1489,11 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 	private class UndoHelper : Disposable
 	{
 		private readonly DiagramElement _parent;
+
+		// Whether this scope went into the element's level: one opened with no undo manager in sight,
+		// or by the manager's own undo, did not, and must not take the level down when it closes.
+		private readonly bool _isCounted;
+
 		public object State {get;} // for debug purposes
 
 		public UndoHelper(DiagramElement parent, object state = null)
@@ -1500,6 +1505,8 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 			if (parent.IsUndoRedoing || !parent.HasUndoManager)
 				return;
 
+			_isCounted = true;
+
 			if (Interlocked.Increment(ref parent._undoStateLevel) == 1)
 			{
 				_parent._savedUndoState = _parent.CaptureSnapshot();
@@ -1509,7 +1516,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 
 		protected override void DisposeManaged()
 		{
-			if (_parent != null && Interlocked.Decrement(ref _parent._undoStateLevel) == 0)
+			if (_isCounted && Interlocked.Decrement(ref _parent._undoStateLevel) == 0)
 			{
 				var oldState = _parent._savedUndoState;
 				_parent._savedUndoState = null;

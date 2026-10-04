@@ -292,6 +292,9 @@ public abstract class BaseIndicator : IIndicator
 	protected virtual void OnPreload(IIndicatorValue input, IIndicatorValue output) { }
 
 	/// <inheritdoc />
+	public virtual ValueTask PrepareAsync(CancellationToken cancellationToken) => default;
+
+	/// <inheritdoc />
 	public virtual IIndicatorValue Process(IIndicatorValue input)
 	{
 		ArgumentNullException.ThrowIfNull(input);

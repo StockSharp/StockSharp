@@ -60,6 +60,19 @@ public class StrategyDecomposedTests : BaseTestClass
 		}
 	}
 
+	private sealed class SelfStoppingStrategy : Strategy
+	{
+		public void AskToStop() => RequestStop();
+
+		public void AskToStop(Exception error) => RequestStop(error);
+
+		public string WhyItCannotTrade()
+		{
+			CanTrade(Security, Portfolio, Sides.Buy, 1, out var reason);
+			return reason;
+		}
+	}
+
 	private sealed class ExposedConnector : Connector
 	{
 		public ValueTask ProcessOutAsync(Message message, CancellationToken cancellationToken)
@@ -145,6 +158,147 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		engineStateChanged.AreEqual(1);
 		strategyStateChanged.AreEqual(1);
+	}
+
+	/// <summary>
+	/// A strategy on a connector that hands every outgoing message straight back to it, the way the
+	/// message loop of a connector does.
+	/// </summary>
+	private static SelfStoppingStrategy CreateSelfStoppingStrategy()
+	{
+		var strategy = new SelfStoppingStrategy
+		{
+			Security = CreateSecurity(),
+			Portfolio = CreatePortfolio(),
+		};
+
+		var connector = CreateMockConnector();
+		connector
+			.Setup(c => c.SendOutMessageAsync(It.IsAny<Message>(), It.IsAny<CancellationToken>()))
+			.Returns((Message message, CancellationToken token) => strategy.OnNewMessage(message, token));
+
+		strategy.Connector = connector.Object;
+
+		return strategy;
+	}
+
+	private static TimeMessage NextConnectorMessage() => new() { ServerTime = DateTime.UtcNow };
+
+	/// <summary>
+	/// A strategy is stopped by <see cref="Strategy.StopAsync(CancellationToken)"/>, which has to be awaited.
+	/// The handlers of market data and orders are synchronous and cannot await it, so they ask for the stop
+	/// instead: the request returns at once and the strategy carries it out when the connector hands it
+	/// the next message.
+	/// </summary>
+	[TestMethod]
+	public async Task Strategy_RequestStop_IsCarriedOutWithTheNextConnectorMessage()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+
+		await strategy.StartAsync(CancellationToken);
+		strategy.ProcessState.AssertEqual(ProcessStates.Started);
+
+		strategy.AskToStop();
+
+		strategy.ProcessState.AssertEqual(ProcessStates.Started, "the request does not wait, so it cannot have stopped the strategy yet");
+
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+
+		strategy.ProcessState.AssertEqual(ProcessStates.Stopped, "the strategy has to stop when it handles the next message");
+	}
+
+	[TestMethod]
+	public async Task Strategy_RequestStop_RefusesNewOrdersAtOnce()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+
+		await strategy.StartAsync(CancellationToken);
+
+		strategy.AskToStop();
+
+		strategy.WhyItCannotTrade().AssertEqual("Strategy is stopping.",
+			"orders have to be refused from the request on, not from the moment the stop is carried out");
+	}
+
+	[TestMethod]
+	public async Task Strategy_RequestStop_ReportsTheErrorThatCausedIt()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+		var reported = new List<Exception>();
+		strategy.Error += (_, error) => reported.Add(error);
+
+		await strategy.StartAsync(CancellationToken);
+
+		var cause = new InvalidOperationException("the handler cannot go on");
+		strategy.AskToStop(cause);
+
+		reported.Count.AssertEqual(1, "the error has to be reported when the stop is asked for");
+		reported[0].AssertSame(cause);
+		strategy.LastError.AssertSame(cause);
+		strategy.ProcessState.AssertEqual(ProcessStates.Started);
+
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+
+		strategy.ProcessState.AssertEqual(ProcessStates.Stopped);
+		reported.Count.AssertEqual(1, "carrying the stop out must not report the error again");
+	}
+
+	[TestMethod]
+	public async Task Strategy_RequestStop_IsCarriedOutOnce()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+		var states = new List<ProcessStates>();
+		strategy.ProcessStateChanged += _ => states.Add(strategy.ProcessState);
+
+		await strategy.StartAsync(CancellationToken);
+
+		strategy.AskToStop();
+		strategy.AskToStop();
+
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+
+		states.Count(s => s == ProcessStates.Stopping).AssertEqual(1, "two requests are one stop");
+		strategy.ProcessState.AssertEqual(ProcessStates.Stopped);
+	}
+
+	[TestMethod]
+	public async Task Strategy_RequestStop_LeftFromAPreviousRun_DoesNotStopTheNextOne()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+
+		await strategy.StartAsync(CancellationToken);
+		strategy.AskToStop();
+
+		// the engine is told to stop directly, so no message of the connector has carried the request out
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopped), CancellationToken);
+		strategy.ProcessState.AssertEqual(ProcessStates.Stopped);
+
+		var states = new List<ProcessStates>();
+		strategy.ProcessStateChanged += _ => states.Add(strategy.ProcessState);
+
+		await strategy.StartAsync(CancellationToken);
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+
+		strategy.ProcessState.AssertEqual(ProcessStates.Started, "a request made in the previous run must not reach the next one");
+		strategy.WhyItCannotTrade().AssertNotEqual("Strategy is stopping.", "the new run is not stopping");
+		states.ToArray().AssertEqual(new[] { ProcessStates.Started }, "the new run must only have started");
+	}
+
+	[TestMethod]
+	public async Task Strategy_RequestStop_OnAStoppedStrategy_DoesNothing()
+	{
+		var strategy = CreateSelfStoppingStrategy();
+
+		strategy.AskToStop();
+
+		strategy.WhyItCannotTrade().AssertNotEqual("Strategy is stopping.", "a strategy that is not running has no stop to wait for");
+
+		await strategy.StartAsync(CancellationToken);
+		await strategy.OnNewMessage(NextConnectorMessage(), CancellationToken);
+
+		strategy.ProcessState.AssertEqual(ProcessStates.Started, "there was nothing to stop when the request was made");
 	}
 
 	[TestMethod]
