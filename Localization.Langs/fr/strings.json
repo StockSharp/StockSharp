@@ -5955,7 +5955,7 @@
   "SpotWs": "Spot WS",
   "Spread": "Spread",
   "SpreadCentered": "Écart centré",
-  "SpreadCenteredDesc": "Répartir l'écart à parts égales autour des prix qui n'indiquent pas quel côté a négocié, comme les prix rejoués à partir de bougies, afin qu'un achat et une vente en paient la même moitié.",
+  "SpreadCenteredDesc": "Répartir l\u0027écart à parts égales autour des prix qui n\u0027indiquent pas quel côté a négocié, comme les prix rejoués à partir de bougies, afin qu\u0027un achat et une vente en paient la même moitié.",
   "SpreadChart": "Graphique de spread",
   "SpreadMiddle": "Milieu du spread",
   "SpreadMove": "Mouvement du spread",
