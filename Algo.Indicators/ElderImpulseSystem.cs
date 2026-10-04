@@ -98,23 +98,23 @@ public class ElderImpulseSystem : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage
-			.Set(nameof(Ema), Ema.Save())
-			.Set(nameof(Macd), Macd.Save())
+			.Set(nameof(Ema), await Ema.SaveAsync(cancellationToken))
+			.Set(nameof(Macd), await Macd.SaveAsync(cancellationToken))
 		;
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		Ema.Load(storage, nameof(Ema));
-		Macd.Load(storage, nameof(Macd));
+		await Ema.LoadAsync(storage, nameof(Ema), cancellationToken);
+		await Macd.LoadAsync(storage, nameof(Macd), cancellationToken);
 	}
 
 	/// <inheritdoc />

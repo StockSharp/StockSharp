@@ -25,7 +25,7 @@ public enum StorageModes
 /// <summary>
 /// Storage settings.
 /// </summary>
-public class StorageCoreSettings : IPersistable
+public class StorageCoreSettings : IAsyncPersistable
 {
 	/// <summary>
 	/// The storage of market data.
@@ -79,15 +79,19 @@ public class StorageCoreSettings : IPersistable
 	/// <returns>Check result.</returns>
 	public bool IsMode(StorageModes mode) => Mode.HasFlag(mode);
 
-	void IPersistable.Load(SettingsStorage storage)
+	Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Mode = storage.GetValue(nameof(Mode), Mode);
 		Format = storage.GetValue(nameof(Format), Format);
+
+		return Task.CompletedTask;
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Mode), Mode);
 		storage.SetValue(nameof(Format), Format);
+
+		return Task.CompletedTask;
 	}
 }

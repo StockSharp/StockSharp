@@ -53,6 +53,8 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		public override string IconName { get; } = "Pi";
 
 		public void Emit(DateTime time, object value) => RaiseProcessOutput(_output, time, value);
+
+		public void Emit(DateTime time, object value, Subscription subscription) => RaiseProcessOutput(_output, time, value, null, subscription);
 	}
 
 	/// <summary>
@@ -150,20 +152,78 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// afterwards is empty.
 	/// </summary>
 	[TestMethod]
-	public void SettingsThatArriveBeforeACompositionAreGivenToItWhenItComes()
+	public async Task SettingsThatArriveBeforeACompositionAreGivenToItWhenItComes()
 	{
 		var saved = new SettingsStorage();
 
 		var source = new DiagramStrategy { Composition = NewComposition("the one that was saved") };
-		source.Save(saved);
+		await source.SaveAsync(saved, CancellationToken);
 
 		var loaded = new DiagramStrategy();
-		loaded.Load(saved);
+		await loaded.LoadAsync(saved, CancellationToken);
 
-		loaded.Composition = NewComposition("the one that turned up later");
+		await loaded.SetCompositionAsync(NewComposition("the one that turned up later"), CancellationToken);
 
 		loaded.Composition.Name.AssertEqual("the one that was saved",
 			"settings loaded before a composition existed have to reach the composition that arrives");
+	}
+
+	/// <summary>
+	/// Settings loaded before a composition existed wait for the start. A save made while they wait
+	/// has to write them down, not the untouched composition that was assigned in the meantime.
+	/// </summary>
+	[TestMethod]
+	public async Task SettingsStillWaitingAreWhatASaveWritesDown()
+	{
+		var saved = new SettingsStorage();
+
+		var source = new DiagramStrategy { Composition = NewComposition("the one that was saved") };
+		await source.SaveAsync(saved, CancellationToken);
+
+		var loaded = new DiagramStrategy();
+		await loaded.LoadAsync(saved, CancellationToken);
+		loaded.Composition = NewComposition("the one that turned up later");
+
+		var savedAgain = new SettingsStorage();
+		await loaded.SaveAsync(savedAgain, CancellationToken);
+
+		var restored = new DiagramStrategy();
+		await restored.LoadAsync(savedAgain, CancellationToken);
+		await restored.SetCompositionAsync(NewComposition("a blank one"), CancellationToken);
+
+		restored.Composition.Name.AssertEqual("the one that was saved",
+			"settings that were waiting for the start must survive a save made before it");
+	}
+
+	/// <summary>
+	/// Settings loaded into a composition that is already there are the newest word: the ones that
+	/// were still waiting for the start are dropped, not applied over them later.
+	/// </summary>
+	[TestMethod]
+	public async Task SettingsLoadedIntoACompositionReplaceTheOnesStillWaiting()
+	{
+		var first = new SettingsStorage();
+		await new DiagramStrategy { Composition = NewComposition("the first one") }.SaveAsync(first, CancellationToken);
+
+		var second = new SettingsStorage();
+		await new DiagramStrategy { Composition = NewComposition("the second one") }.SaveAsync(second, CancellationToken);
+
+		var loaded = new DiagramStrategy();
+		await loaded.LoadAsync(first, CancellationToken);
+		loaded.Composition = NewComposition("a blank one");
+		await loaded.LoadAsync(second, CancellationToken);
+
+		loaded.Composition.Name.AssertEqual("the second one");
+
+		var savedAgain = new SettingsStorage();
+		await loaded.SaveAsync(savedAgain, CancellationToken);
+
+		var restored = new DiagramStrategy();
+		await restored.LoadAsync(savedAgain, CancellationToken);
+		await restored.SetCompositionAsync(NewComposition("another blank one"), CancellationToken);
+
+		restored.Composition.Name.AssertEqual("the second one",
+			"settings superseded by a later load must not come back");
 	}
 
 	/// <summary>
@@ -171,12 +231,12 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// what it described, and the next composition to arrive would be loaded from it.
 	/// </summary>
 	[TestMethod]
-	public void SavingLeavesNothingBehindForTheNextCompositionToSwallow()
+	public async Task SavingLeavesNothingBehindForTheNextCompositionToSwallow()
 	{
 		var source = new DiagramStrategy { Composition = NewComposition("first") };
-		source.Save(new SettingsStorage());
+		await source.SaveAsync(new SettingsStorage(), CancellationToken);
 
-		source.Composition = NewComposition("second");
+		await source.SetCompositionAsync(NewComposition("second"), CancellationToken);
 
 		source.Composition.Name.AssertEqual("second",
 			"a save must not leave settings that the next composition is then loaded from");
@@ -215,12 +275,12 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	private static SourceDiagramElement FindSource(CompositionDiagramElement composition, string name)
 		=> composition.Elements.OfType<SourceDiagramElement>().First(e => e.Name == name);
 
-	private static List<DiagramSocketValue> RunThreshold(CompositionDiagramElement composition, decimal input, decimal threshold)
+	private static async Task<List<DiagramSocketValue>> RunThreshold(CompositionDiagramElement composition, decimal input, decimal threshold, CancellationToken cancellationToken)
 	{
 		var outputs = new List<DiagramSocketValue>();
 		composition.ProcessOutput += outputs.Add;
 
-		composition.Prepare();
+		await composition.PrepareAsync(cancellationToken);
 		composition.Start(_time);
 
 		FindSource(composition, _inputName).Emit(_time, new Unit(input));
@@ -235,14 +295,14 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// carried nothing.
 	/// </summary>
 	[TestMethod]
-	public void A_graph_carries_a_value_through_every_element_to_its_output()
+	public async Task A_graph_carries_a_value_through_every_element_to_its_output()
 	{
-		var above = RunThreshold(BuildThresholdComposition(), 10, 5);
+		var above = await RunThreshold(BuildThresholdComposition(), 10, 5, CancellationToken);
 
 		above.Count.AssertEqual(1, "one pass of the inputs must put exactly one value out");
 		above[0].GetValue<bool>().AssertFalse("10 is above 5, and the negation of that is what the last element must emit");
 
-		var below = RunThreshold(BuildThresholdComposition(), 3, 5);
+		var below = await RunThreshold(BuildThresholdComposition(), 3, 5, CancellationToken);
 
 		below.Count.AssertEqual(1, "one pass of the inputs must put exactly one value out");
 		below[0].GetValue<bool>().AssertTrue("3 is not above 5, and the negation of that is what the last element must emit");
@@ -253,7 +313,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// back with every element and link it had, and answer the same thing when it is run again.
 	/// </summary>
 	[TestMethod]
-	public void A_saved_graph_restores_and_runs_to_the_same_result()
+	public async Task A_saved_graph_restores_and_runs_to_the_same_result()
 	{
 		var registry = new CompositionRegistry<InMemoryCompositionModelNode, InMemoryCompositionModelLink>(() => new InMemoryCompositionModelBehavior());
 
@@ -261,9 +321,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		registry.DiagramElements.Add(new ComparisonDiagramElement());
 		registry.DiagramElements.Add(new LogicalConditionDiagramElement());
 
-		var saved = registry.Serialize(BuildThresholdComposition()).SerializeInvariant();
+		var saved = await (await registry.SerializeAsync(BuildThresholdComposition(), true, null, CancellationToken)).SerializeInvariantAsync(true, CancellationToken);
 
-		var restored = registry.Deserialize(saved.DeserializeInvariant(), ICompositionRegistryExtensions.NotSupported).element;
+		var restored = (await registry.DeserializeAsync(await saved.DeserializeInvariantAsync(CancellationToken), ICompositionRegistryExtensions.NotSupported, CancellationToken)).element;
 
 		restored.Elements.Count().AssertEqual(4, "a saved graph must come back with every element it had");
 
@@ -271,8 +331,8 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		var restoredStrategy = new DiagramStrategy { Composition = restored };
 		restoredStrategy.Composition.AssertSame(restored, "the restored graph must be the one the strategy runs");
 
-		var expected = RunThreshold(BuildThresholdComposition(), 10, 5);
-		var actual = RunThreshold(restored, 10, 5);
+		var expected = await RunThreshold(BuildThresholdComposition(), 10, 5, CancellationToken);
+		var actual = await RunThreshold(restored, 10, 5, CancellationToken);
 
 		expected.Count.AssertEqual(1, "the graph that was saved puts out one value for one pass of its inputs");
 		actual.Count.AssertEqual(expected.Count, "a restored graph must put out as many values as the graph that was saved");
@@ -802,7 +862,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		run.Registered.Received.Count.AssertEqual(1, "the first run must report the order it registered");
 
 		run.Composition.Reset();
-		run.Composition.Prepare();
+		await run.Composition.PrepareAsync(CancellationToken);
 		run.Composition.Start(_time);
 
 		var later = _time.AddMinutes(1);
@@ -837,7 +897,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 
 	// The element makes a new socket pair as soon as the last one is taken, so the pairs have to be
 	// wired one at a time: link an input, link the output that goes with it, then move on.
-	private static SyncRun StartSyncGraph(TimeSpan interval, bool clearSockets)
+	private static async Task<SyncRun> StartSyncGraph(TimeSpan interval, bool clearSockets, CancellationToken cancellationToken)
 	{
 		var graph = new Graph();
 
@@ -861,7 +921,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		graph.Link(secondNode, outputId, syncNode, "in 2");
 		graph.Link(syncNode, "out 2", secondOutNode, inputId);
 
-		graph.Composition.Prepare();
+		await graph.Composition.PrepareAsync(cancellationToken);
 		graph.Composition.Start(_time);
 
 		return new SyncRun
@@ -879,9 +939,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// pass nothing on, and when the last one arrives all of them go out together, as one moment.
 	/// </summary>
 	[TestMethod]
-	public void A_sync_element_emits_nothing_until_every_input_has_a_value_for_the_interval()
+	public async Task A_sync_element_emits_nothing_until_every_input_has_a_value_for_the_interval()
 	{
-		var run = StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true);
+		var run = await StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true, CancellationToken);
 
 		run.First.Emit(_time.AddSeconds(30), "first");
 
@@ -905,9 +965,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// keep them apart, and release an interval only when that interval's own missing value arrives.
 	/// </summary>
 	[TestMethod]
-	public void A_sync_element_keeps_intervals_apart_and_releases_one_when_its_late_value_arrives()
+	public async Task A_sync_element_keeps_intervals_apart_and_releases_one_when_its_late_value_arrives()
 	{
-		var run = StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true);
+		var run = await StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true, CancellationToken);
 
 		run.First.Emit(_time.AddSeconds(30), "first minute");
 		run.Second.Emit(_time.AddSeconds(70), "second minute");
@@ -931,9 +991,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// strategy behind it every time one input speaks - it waits for a whole new set and releases that.
 	/// </summary>
 	[TestMethod]
-	public void A_released_set_is_spent_when_the_element_clears_its_sockets()
+	public async Task A_released_set_is_spent_when_the_element_clears_its_sockets()
 	{
-		var run = StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true);
+		var run = await StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true, CancellationToken);
 
 		run.First.Emit(_time.AddSeconds(30), "first");
 		run.Second.Emit(_time.AddSeconds(45), "second");
@@ -959,9 +1019,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// so a new value on one input is paired with the partner's standing value and released.
 	/// </summary>
 	[TestMethod]
-	public void Without_clearing_the_standing_value_of_an_input_is_paired_again()
+	public async Task Without_clearing_the_standing_value_of_an_input_is_paired_again()
 	{
-		var run = StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: false);
+		var run = await StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: false, CancellationToken);
 
 		run.First.Emit(_time.AddSeconds(30), "first");
 		run.Second.Emit(_time.AddSeconds(45), "second");
@@ -983,9 +1043,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// and the next candle starts over. A mismatched pair would hand a strategy two different moments.
 	/// </summary>
 	[TestMethod]
-	public void Candle_updates_are_released_as_matching_pairs_and_the_closed_pair_is_its_own_set()
+	public async Task Candle_updates_are_released_as_matching_pairs_and_the_closed_pair_is_its_own_set()
 	{
-		var run = StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true);
+		var run = await StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true, CancellationToken);
 
 		var openTime = _time;
 		var nextOpenTime = _time.AddMinutes(1);
@@ -1046,9 +1106,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// strategy behind the element sees time run backwards.
 	/// </summary>
 	[TestMethod]
-	public void Intervals_leave_in_order_and_a_late_value_releases_what_waited_behind_it()
+	public async Task Intervals_leave_in_order_and_a_late_value_releases_what_waited_behind_it()
 	{
-		var run = StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true);
+		var run = await StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true, CancellationToken);
 
 		run.First.Emit(_time.AddSeconds(30), "minute one");
 		run.First.Emit(_time.AddSeconds(70), "minute two");
@@ -1078,16 +1138,16 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// arrives after it, or the first set of the new run is half made of the old one.
 	/// </summary>
 	[TestMethod]
-	public void A_reset_forgets_a_half_set_so_it_cannot_be_completed_afterwards()
+	public async Task A_reset_forgets_a_half_set_so_it_cannot_be_completed_afterwards()
 	{
-		var run = StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true);
+		var run = await StartSyncGraph(TimeSpan.FromMinutes(1), clearSockets: true, CancellationToken);
 
 		run.First.Emit(_time.AddSeconds(30), "before the reset");
 
 		run.FirstOut.Received.Count.AssertEqual(0, "half a set is not released");
 
 		run.Composition.Reset();
-		run.Composition.Prepare();
+		await run.Composition.PrepareAsync(CancellationToken);
 		run.Composition.Start(_time);
 
 		run.Second.Emit(_time.AddSeconds(45), "after the reset");
@@ -1575,7 +1635,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		public RecordingDiagramElement Signals { get; set; }
 	}
 
-	private static CrossingRun StartCrossingGraph()
+	private static async Task<CrossingRun> StartCrossingGraph(CancellationToken cancellationToken)
 	{
 		var graph = new Graph();
 
@@ -1595,7 +1655,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		graph.Link(downNode, outputId, crossingNode, "Input Down");
 		graph.Link(crossingNode, outputId, signalsNode, SocketId(StaticSocketIds.Input));
 
-		graph.Composition.Prepare();
+		await graph.Composition.PrepareAsync(cancellationToken);
 		graph.Composition.Start(_time);
 
 		return new CrossingRun { Up = up, Down = down, Signals = signals };
@@ -1615,9 +1675,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// repeats the previous order has changed nothing.
 	/// </summary>
 	[TestMethod]
-	public void A_crossing_is_declared_only_where_the_two_inputs_change_order()
+	public async Task A_crossing_is_declared_only_where_the_two_inputs_change_order()
 	{
-		var run = StartCrossingGraph();
+		var run = await StartCrossingGraph(CancellationToken);
 
 		Observe(run, 10m, 5m, _time.AddSeconds(1));
 
@@ -1642,9 +1702,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// was seen exactly level on the way. Two signals for one move, or none, would both be wrong.
 	/// </summary>
 	[TestMethod]
-	public void A_move_that_passes_through_equal_values_is_one_crossing()
+	public async Task A_move_that_passes_through_equal_values_is_one_crossing()
 	{
-		var upwards = StartCrossingGraph();
+		var upwards = await StartCrossingGraph(CancellationToken);
 
 		Observe(upwards, 1m, 5m, _time.AddSeconds(1));
 		Observe(upwards, 5m, 5m, _time.AddSeconds(2));
@@ -1653,7 +1713,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		upwards.Signals.Received.Count.AssertEqual(1, "below, level, above is one move upwards and so one crossing");
 		upwards.Signals.Received[0].GetValue<bool>().AssertTrue("the first line ended above the second, so the crossing is an upward one");
 
-		var downwards = StartCrossingGraph();
+		var downwards = await StartCrossingGraph(CancellationToken);
 
 		Observe(downwards, 9m, 5m, _time.AddSeconds(1));
 		Observe(downwards, 5m, 5m, _time.AddSeconds(2));
@@ -1669,9 +1729,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// never happened.
 	/// </summary>
 	[TestMethod]
-	public void A_value_replaced_before_its_partner_arrives_is_never_paired()
+	public async Task A_value_replaced_before_its_partner_arrives_is_never_paired()
 	{
-		var run = StartCrossingGraph();
+		var run = await StartCrossingGraph(CancellationToken);
 
 		Observe(run, 1m, 5m, _time.AddSeconds(1));
 
@@ -1701,7 +1761,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		public RecordingDiagramElement Signals { get; set; }
 	}
 
-	private static DelayRun StartDelayGraph(int n)
+	private static async Task<DelayRun> StartDelayGraph(int n, CancellationToken cancellationToken)
 	{
 		var graph = new Graph();
 
@@ -1722,10 +1782,52 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		graph.Link(inputNode, outputId, delayNode, inputId);
 		graph.Link(delayNode, outputId, signalsNode, inputId);
 
-		graph.Composition.Prepare();
+		await graph.Composition.PrepareAsync(cancellationToken);
 		graph.Composition.Start(_time);
 
 		return new DelayRun { Trigger = trigger, Input = input, Signals = signals };
+	}
+
+	/// <summary>
+	/// A sparse depth is stepped by the price step of the security, and the depth itself carries only the
+	/// identifier. The step is the one the subscription was made with, so nothing is looked up while values flow.
+	/// </summary>
+	[TestMethod]
+	public async Task A_sparse_depth_steps_by_the_price_step_of_the_subscribed_security()
+	{
+		var graph = new Graph();
+
+		var source = new SourceDiagramElement(DiagramSocketType.MarketDepth);
+		var sparse = new MarketDepthSparsedDiagramElement { PriceRange = 1 };
+		var output = new RecordingDiagramElement();
+
+		var sourceNode = graph.Add(source);
+		var sparseNode = graph.Add(sparse);
+		var outputNode = graph.Add(output);
+
+		graph.Link(sourceNode, SocketId(StaticSocketIds.Output), sparseNode, SocketId(StaticSocketIds.MarketDepth));
+		graph.Link(sparseNode, SocketId(StaticSocketIds.Output), outputNode, SocketId(StaticSocketIds.Input));
+
+		await graph.Composition.PrepareAsync(CancellationToken);
+		graph.Composition.Start(_time);
+
+		var security = new Security { Id = "SPARSE@TEST", PriceStep = 0.5m };
+
+		var depth = new QuoteChangeMessage
+		{
+			SecurityId = security.ToSecurityId(),
+			ServerTime = _time,
+			Bids = [new(100m, 1)],
+			Asks = [new(101m, 1)],
+		};
+
+		source.Emit(_time, depth, new Subscription(DataType.MarketDepth, security));
+
+		var expected = depth.Sparse(1, 0.5m);
+		var actual = output.Received.Single().GetValue<IOrderBookMessage>();
+
+		actual.Bids.Select(q => q.Price).ToArray().AssertEqual(expected.Bids.Select(q => q.Price).ToArray());
+		actual.Asks.Select(q => q.Price).ToArray().AssertEqual(expected.Asks.Select(q => q.Price).ToArray());
 	}
 
 	private static TimeFrameCandleMessage Candle(DateTime time, CandleStates state)
@@ -1741,9 +1843,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// and to nothing after it - the delay is spent once it has fired.
 	/// </summary>
 	[TestMethod]
-	public void A_delay_of_one_releases_the_signal_on_the_very_next_value()
+	public async Task A_delay_of_one_releases_the_signal_on_the_very_next_value()
 	{
-		var run = StartDelayGraph(1);
+		var run = await StartDelayGraph(1, CancellationToken);
 
 		run.Trigger.Emit(_time.AddSeconds(1), true);
 
@@ -1765,9 +1867,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// silent, values after it are silent, and the signal carries the moment of the third value.
 	/// </summary>
 	[TestMethod]
-	public void A_delay_of_N_releases_one_signal_on_the_Nth_value()
+	public async Task A_delay_of_N_releases_one_signal_on_the_Nth_value()
 	{
-		var run = StartDelayGraph(3);
+		var run = await StartDelayGraph(3, CancellationToken);
 
 		run.Trigger.Emit(_time, true);
 
@@ -1791,9 +1893,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// third, whatever arrives on the trigger meanwhile.
 	/// </summary>
 	[TestMethod]
-	public void A_trigger_that_arrives_while_the_delay_is_running_changes_nothing()
+	public async Task A_trigger_that_arrives_while_the_delay_is_running_changes_nothing()
 	{
-		var run = StartDelayGraph(3);
+		var run = await StartDelayGraph(3, CancellationToken);
 
 		run.Trigger.Emit(_time, true);
 
@@ -1817,9 +1919,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// must leave the count where it was.
 	/// </summary>
 	[TestMethod]
-	public void Only_values_that_say_they_are_finished_count_down_the_delay()
+	public async Task Only_values_that_say_they_are_finished_count_down_the_delay()
 	{
-		var run = StartDelayGraph(2);
+		var run = await StartDelayGraph(2, CancellationToken);
 
 		run.Trigger.Emit(_time, true);
 
@@ -1847,9 +1949,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// false would fire on values nobody asked about.
 	/// </summary>
 	[TestMethod]
-	public void A_false_trigger_does_not_start_the_delay()
+	public async Task A_false_trigger_does_not_start_the_delay()
 	{
-		var run = StartDelayGraph(1);
+		var run = await StartDelayGraph(1, CancellationToken);
 
 		run.Trigger.Emit(_time.AddSeconds(1), false);
 		run.Input.Emit(_time.AddSeconds(2), 1m);
@@ -1875,7 +1977,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// two things, and the element emits nothing while the diagram still looks correctly wired.
 	/// </summary>
 	[TestMethod]
-	public void ConverterElement_ReadsAPropertyUnderItsSocketType()
+	public async Task ConverterElement_ReadsAPropertyUnderItsSocketType()
 	{
 		var graph = new Graph();
 
@@ -1898,7 +2000,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		graph.Link(sourceNode, outputId, converterNode, inputId);
 		graph.Link(converterNode, outputId, recordedNode, inputId);
 
-		graph.Composition.Prepare();
+		await graph.Composition.PrepareAsync(CancellationToken);
 		graph.Composition.Start(_time);
 
 		// One message carrying both meanings of "Price": 100 as a trade, 7 as an order.
@@ -1928,7 +2030,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		public RecordingDiagramElement Values { get; set; }
 	}
 
-	private static IndicatorRun StartIndicatorGraph(IIndicator indicator, bool finalOnly, bool formedOnly)
+	private static async Task<IndicatorRun> StartIndicatorGraph(IIndicator indicator, bool finalOnly, bool formedOnly, CancellationToken cancellationToken)
 	{
 		var graph = new Graph();
 
@@ -1951,7 +2053,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		graph.Link(inputNode, outputId, elementNode, inputId);
 		graph.Link(elementNode, outputId, valuesNode, inputId);
 
-		graph.Composition.Prepare();
+		await graph.Composition.PrepareAsync(cancellationToken);
 		graph.Composition.Start(_time);
 
 		return new IndicatorRun { Input = input, Values = values };
@@ -1966,9 +2068,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// untouched, or answered only at the end, would leave the rest of the diagram working off prices.
 	/// </summary>
 	[TestMethod]
-	public void An_indicator_element_puts_out_what_the_indicator_made_of_each_value()
+	public async Task An_indicator_element_puts_out_what_the_indicator_made_of_each_value()
 	{
-		var run = StartIndicatorGraph(new SimpleMovingAverage { Length = 3 }, finalOnly: false, formedOnly: false);
+		var run = await StartIndicatorGraph(new SimpleMovingAverage { Length = 3 }, finalOnly: false, formedOnly: false, CancellationToken);
 
 		run.Input.Emit(_time.AddSeconds(1), 1m);
 		run.Input.Emit(_time.AddSeconds(2), 2m);
@@ -1985,9 +2087,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// the element must hold those back, or a strategy trades on a warm-up.
 	/// </summary>
 	[TestMethod]
-	public void Set_to_formed_only_an_indicator_element_stays_silent_until_the_indicator_has_formed()
+	public async Task Set_to_formed_only_an_indicator_element_stays_silent_until_the_indicator_has_formed()
 	{
-		var run = StartIndicatorGraph(new SimpleMovingAverage { Length = 3 }, finalOnly: false, formedOnly: true);
+		var run = await StartIndicatorGraph(new SimpleMovingAverage { Length = 3 }, finalOnly: false, formedOnly: true, CancellationToken);
 
 		run.Input.Emit(_time.AddSeconds(1), 1m);
 		run.Input.Emit(_time.AddSeconds(2), 2m);
@@ -2006,9 +2108,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// or a strategy acts on a level that the candle's next tick takes away again.
 	/// </summary>
 	[TestMethod]
-	public void Set_to_final_only_an_indicator_element_ignores_a_candle_that_is_still_open()
+	public async Task Set_to_final_only_an_indicator_element_ignores_a_candle_that_is_still_open()
 	{
-		var run = StartIndicatorGraph(new SimpleMovingAverage { Length = 2 }, finalOnly: true, formedOnly: false);
+		var run = await StartIndicatorGraph(new SimpleMovingAverage { Length = 2 }, finalOnly: true, formedOnly: false, CancellationToken);
 
 		run.Input.Emit(_time.AddSeconds(1), Candle(_time.AddSeconds(1), CandleStates.Active));
 
@@ -2032,7 +2134,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 
 	// The element makes one input socket per variable the formula names, so the sockets to wire are
 	// whatever the formula asked for - found by the variable's own name.
-	private static FormulaRun StartFormulaGraph(string expression, string validation)
+	private static async Task<FormulaRun> StartFormulaGraph(string expression, string validation, CancellationToken cancellationToken)
 	{
 		var graph = new Graph();
 
@@ -2056,7 +2158,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		graph.Link(secondNode, outputId, mathNode, math.InputSockets.First(s => s.Name == "b").Id);
 		graph.Link(mathNode, outputId, resultsNode, SocketId(StaticSocketIds.Input));
 
-		graph.Composition.Prepare();
+		await graph.Composition.PrepareAsync(cancellationToken);
 		graph.Composition.Start(_time);
 
 		return new FormulaRun { First = first, Second = second, Results = results };
@@ -2068,9 +2170,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// variable is a plausible number that nothing in the diagram shows to be wrong.
 	/// </summary>
 	[TestMethod]
-	public void A_formula_element_answers_its_formula_over_the_values_on_its_variable_sockets()
+	public async Task A_formula_element_answers_its_formula_over_the_values_on_its_variable_sockets()
 	{
-		var run = StartFormulaGraph("a - b", null);
+		var run = await StartFormulaGraph("a - b", null, CancellationToken);
 
 		run.First.Emit(_time.AddSeconds(1), 10m);
 
@@ -2089,9 +2191,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// diagram that said in advance how to recognise input it did not want.
 	/// </summary>
 	[TestMethod]
-	public void A_formula_guarded_by_a_validation_answers_nothing_for_input_the_validation_rejects()
+	public async Task A_formula_guarded_by_a_validation_answers_nothing_for_input_the_validation_rejects()
 	{
-		var run = StartFormulaGraph("a / b", "b > 0");
+		var run = await StartFormulaGraph("a / b", "b > 0", CancellationToken);
 
 		run.First.Emit(_time.AddSeconds(1), 6m);
 		run.Second.Emit(_time.AddSeconds(1), 0m);
@@ -2154,7 +2256,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// a window that excluded its own bounds would refuse the first and last moments of every day.
 	/// </summary>
 	[TestMethod]
-	public void A_working_time_element_answers_yes_inside_its_window_and_no_outside_it()
+	public async Task A_working_time_element_answers_yes_inside_its_window_and_no_outside_it()
 	{
 		var graph = new Graph();
 
@@ -2173,7 +2275,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		graph.Link(sourceNode, SocketId(StaticSocketIds.Output), checkNode, SocketId(StaticSocketIds.Time));
 		graph.Link(checkNode, SocketId(StaticSocketIds.Output), answersNode, SocketId(StaticSocketIds.Input));
 
-		graph.Composition.Prepare();
+		await graph.Composition.PrepareAsync(CancellationToken);
 		graph.Composition.Start(_time);
 
 		// The session runs 10:00 to 18:00, and _time is the opening.
@@ -2202,7 +2304,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		public RecordingDiagramElement Previous { get; set; }
 	}
 
-	private static PreviousRun StartPreviousGraph(int shift, bool finishedOnly)
+	private static async Task<PreviousRun> StartPreviousGraph(int shift, bool finishedOnly, CancellationToken cancellationToken)
 	{
 		var graph = new Graph();
 
@@ -2224,7 +2326,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		graph.Link(inputNode, outputId, previousNode, inputId);
 		graph.Link(previousNode, outputId, recordedNode, inputId);
 
-		graph.Composition.Prepare();
+		await graph.Composition.PrepareAsync(cancellationToken);
 		graph.Composition.Start(_time);
 
 		return new PreviousRun { Input = input, Previous = recorded };
@@ -2236,9 +2338,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// the newest one instead would compare a moment with itself.
 	/// </summary>
 	[TestMethod]
-	public void A_previous_value_element_hands_on_the_value_from_N_places_back()
+	public async Task A_previous_value_element_hands_on_the_value_from_N_places_back()
 	{
-		var run = StartPreviousGraph(shift: 2, finishedOnly: false);
+		var run = await StartPreviousGraph(shift: 2, finishedOnly: false, CancellationToken);
 
 		run.Input.Emit(_time.AddSeconds(1), 1m);
 		run.Input.Emit(_time.AddSeconds(2), 2m);
@@ -2263,9 +2365,9 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// then hands out is one place nearer than the diagram asked for.
 	/// </summary>
 	[TestMethod]
-	public void A_value_that_is_still_forming_does_not_move_the_previous_value_window()
+	public async Task A_value_that_is_still_forming_does_not_move_the_previous_value_window()
 	{
-		var run = StartPreviousGraph(shift: 1, finishedOnly: true);
+		var run = await StartPreviousGraph(shift: 1, finishedOnly: true, CancellationToken);
 
 		var first = Candle(_time.AddSeconds(1), CandleStates.Finished);
 
@@ -2337,7 +2439,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// them, links landing on sockets that are gone - and the user is the one who finds out.
 	/// </summary>
 	[TestMethod]
-	public void ShippedJsonCompositions_StillLoad()
+	public async Task ShippedJsonCompositions_StillLoad()
 	{
 		// An indicator element resolves the indicator it was saved with through the provider its host
 		// registers; the assembly initializer stands in for the host here. Without one the element
@@ -2356,7 +2458,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 
 			// The Designer stamps a fresh identifier into the template before reading it.
 			var text = File.ReadAllText(Path.Combine(_templatesFolder, fileName)).Replace("%NEW_ID%", Guid.NewGuid().ToString());
-			var file = text.UTF8().DeserializeInvariant();
+			var file = await text.UTF8().DeserializeInvariantAsync(CancellationToken);
 
 			file.AssertNotNull($"{fileName} must be readable");
 
@@ -2365,7 +2467,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 
 			scheme.AssertNotNull($"{fileName} must carry a diagram to load");
 
-			var composition = registry.Deserialize(scheme, ICompositionRegistryExtensions.NotSupported).element;
+			var composition = (await registry.DeserializeAsync(scheme, ICompositionRegistryExtensions.NotSupported, CancellationToken)).element;
 			var model = (CompositionModel<InMemoryCompositionModelNode, InMemoryCompositionModelLink>)composition.Model;
 
 			var nodes = model.Nodes.ToArray();
@@ -2475,10 +2577,10 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	/// leave the other answering exactly what it answered before.
 	/// </summary>
 	[TestMethod]
-	public void A_cloned_composition_is_a_graph_of_its_own()
+	public async Task A_cloned_composition_is_a_graph_of_its_own()
 	{
 		var original = BuildThresholdComposition();
-		var clone = (CompositionDiagramElement)original.Clone();
+		var clone = (CompositionDiagramElement)await original.CloneAsync(CancellationToken);
 
 		// A clone comes without a strategy; it needs one of its own before it can run.
 		var cloneStrategy = new DiagramStrategy { Composition = clone };
@@ -2492,12 +2594,12 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		// negation has had them the two graphs must answer opposite things.
 		clone.Elements.OfType<ComparisonDiagramElement>().First().Operator = ComparisonOperator.Less;
 
-		var fromClone = RunThreshold(clone, 10, 5);
+		var fromClone = await RunThreshold(clone, 10, 5, CancellationToken);
 
 		fromClone.Count.AssertEqual(1, "one pass of the inputs must put exactly one value out");
 		fromClone[0].GetValue<bool>().AssertTrue("10 is not less than 5, and the negation of that is true");
 
-		var fromOriginal = RunThreshold(original, 10, 5);
+		var fromOriginal = await RunThreshold(original, 10, 5, CancellationToken);
 
 		fromOriginal.Count.AssertEqual(1, "one pass of the inputs must put exactly one value out");
 		fromOriginal[0].GetValue<bool>().AssertFalse("10 is greater than 5, and the negation of that is false - editing the clone must not reach back into the graph it came from");
@@ -2538,7 +2640,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 
 	// The debugger takes over the elements that are in the composition when it is built, so it is built
 	// after the graph is wired and before the graph is started.
-	private static DebugRun StartDebuggerGraph(bool fails)
+	private static async Task<DebugRun> StartDebuggerGraph(bool fails, CancellationToken cancellationToken)
 	{
 		var graph = new Graph();
 
@@ -2558,7 +2660,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 		if (!fails)
 			debugger.AddBreak(stopped).AssertTrue("a breakpoint must be accepted on a socket that has none");
 
-		graph.Composition.Prepare();
+		await graph.Composition.PrepareAsync(cancellationToken);
 		graph.Composition.Start(_time);
 
 		return new DebugRun
@@ -2578,7 +2680,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	[TestMethod]
 	public async Task A_breakpoint_holds_the_value_until_the_debugger_is_continued()
 	{
-		var run = StartDebuggerGraph(fails: false);
+		var run = await StartDebuggerGraph(fails: false, CancellationToken);
 
 		var reported = new TaskCompletionSource<DiagramSocket>(TaskCreationOptions.RunContinuationsAsynchronously);
 		run.Debugger.Break += s => reported.TrySetResult(s);
@@ -2610,7 +2712,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	[TestMethod]
 	public async Task A_debugger_continued_from_its_own_break_lets_the_run_go_on()
 	{
-		var run = StartDebuggerGraph(fails: false);
+		var run = await StartDebuggerGraph(fails: false, CancellationToken);
 
 		run.Debugger.Break += _ => run.Debugger.Continue();
 
@@ -2643,7 +2745,7 @@ public class DiagramStrategyRoundTripTests : BaseTestClass
 	[TestMethod]
 	public async Task An_element_that_throws_stops_the_debugger_and_names_itself()
 	{
-		var run = StartDebuggerGraph(fails: true);
+		var run = await StartDebuggerGraph(fails: true, CancellationToken);
 
 		var reported = new TaskCompletionSource<DiagramElement>(TaskCreationOptions.RunContinuationsAsynchronously);
 		run.Debugger.Error += e => reported.TrySetResult(e);

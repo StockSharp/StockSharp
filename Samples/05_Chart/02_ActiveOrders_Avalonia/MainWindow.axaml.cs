@@ -533,13 +533,13 @@ public partial class MainWindow : Window
 		return await dialog.ShowDialog<bool>(this);
 	}
 
-	private void OnSaveClick(object sender, RoutedEventArgs e)
+	private async void OnSaveClick(object sender, RoutedEventArgs e)
 	{
 		try
 		{
 			var settings = new SettingsStorage();
 			Chart.Save(settings);
-			settings.Serialize(_fileSystem, SettingsPath);
+			await settings.SerializeAsync(_fileSystem, SettingsPath, true, default);
 			Log($"Chart settings saved to {SettingsPath}");
 		}
 		catch (Exception error)
@@ -548,7 +548,7 @@ public partial class MainWindow : Window
 		}
 	}
 
-	private void OnLoadClick(object sender, RoutedEventArgs e)
+	private async void OnLoadClick(object sender, RoutedEventArgs e)
 	{
 		try
 		{
@@ -558,7 +558,7 @@ public partial class MainWindow : Window
 				return;
 			}
 
-			var settings = SettingsPath.Deserialize<SettingsStorage>(_fileSystem);
+			var settings = await SettingsPath.DeserializeAsync<SettingsStorage>(_fileSystem, default);
 			Chart.Load(settings);
 			var chart = (IChart)Chart;
 			_area = chart.Areas.First();

@@ -122,7 +122,7 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 	}
 
 	/// <inheritdoc/>
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage
 			.Set("MaxEquity", _maxEquity)
@@ -133,11 +133,11 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 			.Set("DrawdownCount", _drawdownCount)
 			;
 
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc/>
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		_maxEquity = storage.GetValue<decimal>("MaxEquity");
 		_drawdownStart = storage.GetValue<decimal>("DrawdownStart");
@@ -146,6 +146,6 @@ public class AverageDrawdownParameter : BasePnLStatisticParameter<decimal>
 		_drawdownSum = storage.GetValue<decimal>("DrawdownSum");
 		_drawdownCount = storage.GetValue<int>("DrawdownCount");
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 }

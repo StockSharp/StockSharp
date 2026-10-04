@@ -260,35 +260,41 @@ public class PnLManager : IPnLManager
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		UseCandles = storage.GetValue(nameof(UseCandles), UseCandles);
 		UseLevel1 = storage.GetValue(nameof(UseLevel1), UseLevel1);
 		UseOrderBook = storage.GetValue(nameof(UseOrderBook), UseOrderBook);
 		UseOrderLog = storage.GetValue(nameof(UseOrderLog), UseOrderLog);
 		UseTick = storage.GetValue(nameof(UseTick), UseTick);
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.Set(nameof(UseCandles), UseCandles);
 		storage.Set(nameof(UseLevel1), UseLevel1);
 		storage.Set(nameof(UseOrderBook), UseOrderBook);
 		storage.Set(nameof(UseOrderLog), UseOrderLog);
 		storage.Set(nameof(UseTick), UseTick);
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc />
-	public IPnLManager Clone()
+	public async ValueTask<IPnLManager> CloneAsync(CancellationToken cancellationToken)
 	{
 		var clone = new PnLManager();
-		clone.Load(this.Save());
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
 		return clone;
 	}
-
-	object ICloneable.Clone() => Clone();
 }

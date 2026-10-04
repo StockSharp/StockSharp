@@ -5,6 +5,8 @@ global using System.ComponentModel.DataAnnotations;
 global using System.Reflection;
 global using System.ComponentModel;
 global using System.Drawing;
+global using System.Threading;
+global using System.Threading.Tasks;
 
 global using Ecng.Common;
 global using Ecng.ComponentModel;

@@ -353,9 +353,9 @@ public class OrderRegisterDiagramElement : OrderRegisterBaseDiagramElement
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	protected override void LoadState(SettingsStorage storage)
 	{
-		base.Load(storage);
+		base.LoadState(storage);
 
 		UpdatePriceSocket();
 	}

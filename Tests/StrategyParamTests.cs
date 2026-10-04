@@ -320,14 +320,14 @@ public class StrategyParamTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Step_SaveLoad_NoStep()
+	public async Task Step_SaveLoad_NoStep()
 	{
 		var p = new StrategyParam<int>("p", 3);
 		var storage = new SettingsStorage();
-		p.Save(storage);
+		await p.SaveAsync(storage, CancellationToken);
 
 		var p2 = new StrategyParam<int>("p");
-		p2.Load(storage);
+		await p2.LoadAsync(storage, CancellationToken);
 		p2.Value.AssertEqual(3);
 		p2.Value = 7; // any value accepted (no step restriction)
 	}
@@ -426,28 +426,28 @@ public class StrategyParamTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Step_SaveLoad_Decimal()
+	public async Task Step_SaveLoad_Decimal()
 	{
 		var p = new StrategyParam<decimal>("p", 0.5m).SetStep(0.25m, 0.5m);
 		var storage = new SettingsStorage();
-		p.Save(storage);
+		await p.SaveAsync(storage, CancellationToken);
 		var p2 = new StrategyParam<decimal>("p").SetStep(0.25m, 0.5m);
-		p2.Load(storage);
+		await p2.LoadAsync(storage, CancellationToken);
 		p2.Value.AssertEqual(0.5m);
 		p2.Value = 1.0m;
 		AssertInvalid(() => p2.Value = 0.6m);
 	}
 
 	[TestMethod]
-	public void Step_SaveLoad_TimeSpan()
+	public async Task Step_SaveLoad_TimeSpan()
 	{
 		var baseTs = TimeSpan.FromMinutes(10);
 		var step = TimeSpan.FromMinutes(5);
 		var p = new StrategyParam<TimeSpan>("p", baseTs).SetStep(step, baseTs);
 		var storage = new SettingsStorage();
-		p.Save(storage);
+		await p.SaveAsync(storage, CancellationToken);
 		var p2 = new StrategyParam<TimeSpan>("p").SetStep(step, baseTs);
-		p2.Load(storage);
+		await p2.LoadAsync(storage, CancellationToken);
 		p2.Value.AssertEqual(baseTs);
 		p2.Value = TimeSpan.FromMinutes(20);
 		AssertInvalid(() => p2.Value = TimeSpan.FromMinutes(23));
@@ -812,7 +812,7 @@ public class StrategyParamTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Clone_PreservesSecurityAndPortfolio()
+	public async Task Clone_PreservesSecurityAndPortfolio()
 	{
 		var security = new Security { Id = "AAPL@NASDAQ", PriceStep = 0.01m };
 		var portfolio = Portfolio.CreateSimulator();
@@ -827,12 +827,87 @@ public class StrategyParamTests : BaseTestClass
 			Short = 30,
 		};
 
-		var clone = (SmaStrategy)original.Clone();
+		var clone = (SmaStrategy)await original.CloneAsync(CancellationToken);
 
 		AreEqual(security.Id, clone.Security?.Id, "Security must survive Clone");
 		AreEqual(portfolio.Name, clone.Portfolio?.Name, "Portfolio must survive Clone");
 		AreEqual(80, clone.Long, "Long param must survive Clone");
 		AreEqual(30, clone.Short, "Short param must survive Clone");
+	}
+
+	private static Security AddKnownSecurity()
+	{
+		var security = new Security { Id = $"{Guid.NewGuid():N}@TEST", PriceStep = 0.5m };
+		((CollectionSecurityProvider)ServicesRegistry.SecurityProvider).Add(security);
+		return security;
+	}
+
+	[TestMethod]
+	public async Task LoadAsync_ResolvesSecurityThroughProvider()
+	{
+		var security = AddKnownSecurity();
+
+		var source = new StrategyParam<Security>("sec", security);
+		var restored = new StrategyParam<Security>("sec");
+
+		await restored.LoadAsync(await source.SaveAsync(CancellationToken), CancellationToken);
+
+		AreSame(security, restored.Value);
+	}
+
+	[TestMethod]
+	public async Task StrategyLoadAsync_ResolvesSecurityAndRunsLoadOverride()
+	{
+		var security = AddKnownSecurity();
+
+		var source = new PersistedStrategy { Security = security, Extra = "kept" };
+		var restored = new PersistedStrategy();
+
+		await restored.LoadAsync(await source.SaveAsync(CancellationToken), CancellationToken);
+
+		AreSame(security, restored.Security);
+		AreEqual("kept", restored.Extra);
+	}
+
+	[TestMethod]
+	public async Task Clone_KeepsSecurityParameterWithoutLookingItUp()
+	{
+		var other = new Security { Id = $"{Guid.NewGuid():N}@UNKNOWN" };
+
+		var source = new PersistedStrategy { Other = other };
+		var clone = (PersistedStrategy)await source.CloneAsync(CancellationToken);
+
+		AreSame(other, clone.Other);
+	}
+
+	private class PersistedStrategy : Strategy
+	{
+		private readonly StrategyParam<Security> _other;
+
+		public PersistedStrategy()
+		{
+			_other = Param<Security>(nameof(Other));
+		}
+
+		public Security Other
+		{
+			get => _other.Value;
+			set => _other.Value = value;
+		}
+
+		public string Extra { get; set; }
+
+		public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await base.LoadAsync(storage, cancellationToken);
+			Extra = storage.GetValue<string>(nameof(Extra));
+		}
+
+		public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await base.SaveAsync(storage, cancellationToken);
+			storage.Set(nameof(Extra), Extra);
+		}
 	}
 
 	private class TestStrategy : Strategy

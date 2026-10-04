@@ -4,7 +4,7 @@ using StockSharp.Alerts;
 using StockSharp.Localization;
 
 [TestClass]
-public class AlertSchemaTemplatesTests
+public class AlertSchemaTemplatesTests : BaseTestClass
 {
 	private static readonly SecurityId _testSecId = "AAPL@NASDAQ".ToSecurityId();
 
@@ -27,6 +27,47 @@ public class AlertSchemaTemplatesTests
 		schema.Rules[1].Operator.AssertEqual(ComparisonOperator.Greater);
 		schema.Rules[1].Value.AssertEqual(150m);
 		schema.Rules[1].Field.ExtraField.AssertEqual(Level1Fields.LastTradePrice);
+	}
+
+	[TestMethod]
+	public async Task SecurityFilter_SurvivesSaveAndLoad()
+	{
+		var schema = AlertSchemaTemplates.PriceAbove(_testSecId, 150m);
+
+		var restored = await (await schema.SaveAsync(default)).LoadAsync<AlertSchema>(default);
+
+		restored.Rules.Count.AssertEqual(2);
+		restored.Rules[0].Value.AssertEqual(_testSecId);
+		restored.Rules[1].Value.AssertEqual(150m);
+	}
+
+	[TestMethod]
+	public async Task Clone_CopiesEverythingAndSharesNoRule()
+	{
+		var schema = AlertSchemaTemplates.PriceAbove(_testSecId, 150m);
+		schema.Caption = "caption";
+		schema.ExternalId = 42;
+		schema.Rules[0].Value = new Security { Id = _testSecId.ToStringId() };
+
+		var clone = await schema.CloneAsync(CancellationToken);
+
+		clone.Id.AssertEqual(schema.Id);
+		clone.MessageType.AssertEqual(schema.MessageType);
+		clone.Caption.AssertEqual("caption");
+		clone.ExternalId.AssertEqual(42L);
+		clone.AlertType.AssertEqual(schema.AlertType);
+		clone.Rules.Count.AssertEqual(2);
+
+		for (var i = 0; i < schema.Rules.Count; i++)
+		{
+			ReferenceEquals(clone.Rules[i], schema.Rules[i]).AssertFalse("a rule is shared, so editing the copy changes the original");
+			clone.Rules[i].Field.AssertEqual(schema.Rules[i].Field);
+			clone.Rules[i].Operator.AssertEqual(schema.Rules[i].Operator);
+			clone.Rules[i].Value.AssertEqual(schema.Rules[i].Value);
+		}
+
+		clone.Rules[1].Value = 1m;
+		schema.Rules[1].Value.AssertEqual(150m, "editing the copy changed the original");
 	}
 
 	[TestMethod]

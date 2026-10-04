@@ -185,12 +185,12 @@ public partial class MainWindow
 				var isRandomMode = RandomMode.IsChecked == true;
 				var randomCount = isRandomMode ? RandomCount.Text.To<int>() : 0;
 
-				IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies;
+				IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies;
 
 				if (isRandomMode)
-					strategies = strategy.ToBruteForceRandom(optimizeParams, randomCount, out _, out _);
+					strategies = strategy.ToBruteForceRandomAsync(optimizeParams, randomCount, out _, out _);
 				else
-					strategies = strategy.ToBruteForce(optimizeParams, out _, out _);
+					strategies = strategy.ToBruteForceAsync(optimizeParams, out _, out _);
 
 				await foreach (var (s, _) in btOptimizer.RunAsync(startTime, stopTime, strategies, _cts.Token))
 				{
@@ -201,7 +201,7 @@ public partial class MainWindow
 			else
 			{
 				var go = (GeneticOptimizer)optimizer;
-				go.Settings.Apply((GeneticSettings)GeneticSettings.SelectedObject);
+				await go.Settings.ApplyAsync((GeneticSettings)GeneticSettings.SelectedObject);
 
 				var geneticParams = strategy.ToGeneticParameters([
 					(tfParam, new[] { TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(15) }),

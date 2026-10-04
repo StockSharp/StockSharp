@@ -34,7 +34,6 @@ public class EntityCacheTests : BaseTestClass
 
 		_cache = new EntityCache(
 			_logReceiver.Object,
-			_ => _security,
 			_exchangeInfoProvider.Object,
 			_positionProvider.Object);
 	}
@@ -619,6 +618,28 @@ public class EntityCacheTests : BaseTestClass
 		_cache.Orders.Count().AssertEqual(1, "one venue order must become one entity");
 	}
 
+	/// <summary>
+	/// A Level1 subscription is answered from what the cache holds for its instrument, found by the
+	/// instrument's id rather than by asking anybody for the instrument itself.
+	/// </summary>
+	[TestMethod]
+	public void GetSnapshot_Level1IsFoundByTheSubscriptionsSecurityId()
+	{
+		var info = _cache.GetSecurityValues(_security, DateTime.UtcNow);
+
+		info.SetValue(DateTime.UtcNow, Level1Fields.LastTradePrice, 101m);
+
+		var snapshot = ((ISnapshotHolder)_cache).GetSnapshot(new MarketDataMessage
+		{
+			DataType2 = DataType.Level1,
+			SecurityId = _security.ToSecurityId(),
+			IsSubscribe = true,
+		}).Cast<Level1ChangeMessage>().ToArray();
+
+		snapshot.Length.AssertEqual(1);
+		snapshot[0].TryGetDecimal(Level1Fields.LastTradePrice).AssertEqual(101m);
+	}
+
 	private ExecutionMessage[] GetTransactionsSnapshot(OrderStatusMessage subscription)
 		=> [.. ((ISnapshotHolder)_cache).GetSnapshot(subscription).Cast<ExecutionMessage>()];
 
@@ -832,7 +853,6 @@ public class EntityCacheTests : BaseTestClass
 		// Create EntityCache
 		var cache = new EntityCache(
 			logReceiver.Object,
-			_ => security,
 			exchangeInfoProvider.Object,
 			positionProvider.Object);
 
@@ -872,7 +892,7 @@ public class EntityCacheTests : BaseTestClass
 		var positionProvider = new Mock<IPositionProvider>();
 
 		var security = new Security { Id = "AAPL@NASDAQ", Code = "AAPL", Board = ExchangeBoard.Nasdaq };
-		var cache = new EntityCache(logReceiver.Object, _ => security, exchangeInfoProvider.Object, positionProvider.Object);
+		var cache = new EntityCache(logReceiver.Object, exchangeInfoProvider.Object, positionProvider.Object);
 
 		var order = new Order { Security = security, Portfolio = new Portfolio { Name = "Test" }, TransactionId = 123, Type = OrderTypes.Limit, Price = 100m, Volume = 10m, State = OrderStates.Active };
 
@@ -898,7 +918,7 @@ public class EntityCacheTests : BaseTestClass
 		var positionProvider = new Mock<IPositionProvider>();
 
 		var security = new Security { Id = "AAPL@NASDAQ", Code = "AAPL", Board = ExchangeBoard.Nasdaq };
-		var cache = new EntityCache(logReceiver.Object, _ => security, exchangeInfoProvider.Object, positionProvider.Object);
+		var cache = new EntityCache(logReceiver.Object, exchangeInfoProvider.Object, positionProvider.Object);
 
 		var order = new Order { Security = security, Portfolio = new Portfolio { Name = "Test" }, TransactionId = 124, Type = OrderTypes.Limit, Price = 100m, Volume = 10m, State = OrderStates.Active };
 
@@ -924,7 +944,7 @@ public class EntityCacheTests : BaseTestClass
 		var positionProvider = new Mock<IPositionProvider>();
 
 		var security = new Security { Id = "AAPL@NASDAQ", Code = "AAPL", Board = ExchangeBoard.Nasdaq };
-		var cache = new EntityCache(logReceiver.Object, _ => security, exchangeInfoProvider.Object, positionProvider.Object);
+		var cache = new EntityCache(logReceiver.Object, exchangeInfoProvider.Object, positionProvider.Object);
 
 		var order = new Order { Security = security, Portfolio = new Portfolio { Name = "Test" }, TransactionId = 125, Type = OrderTypes.Limit, Price = 100m, Volume = 10m, State = OrderStates.Active };
 
@@ -950,7 +970,7 @@ public class EntityCacheTests : BaseTestClass
 		var positionProvider = new Mock<IPositionProvider>();
 
 		var security = new Security { Id = "AAPL@NASDAQ", Code = "AAPL", Board = ExchangeBoard.Nasdaq };
-		var cache = new EntityCache(logReceiver.Object, _ => security, exchangeInfoProvider.Object, positionProvider.Object);
+		var cache = new EntityCache(logReceiver.Object, exchangeInfoProvider.Object, positionProvider.Object);
 
 		var order = new Order { Security = security, Portfolio = new Portfolio { Name = "Test" }, TransactionId = 126, Type = OrderTypes.Limit, Price = 100m, Volume = 10m, State = OrderStates.Active };
 
@@ -976,7 +996,7 @@ public class EntityCacheTests : BaseTestClass
 		var positionProvider = new Mock<IPositionProvider>();
 
 		var security = new Security { Id = "AAPL@NASDAQ", Code = "AAPL", Board = ExchangeBoard.Nasdaq };
-		var cache = new EntityCache(logReceiver.Object, _ => security, exchangeInfoProvider.Object, positionProvider.Object);
+		var cache = new EntityCache(logReceiver.Object, exchangeInfoProvider.Object, positionProvider.Object);
 
 		var order = new Order { Security = security, Portfolio = new Portfolio { Name = "Test" }, TransactionId = 127, Type = OrderTypes.Limit, Price = 100m, Volume = 10m, State = OrderStates.Active };
 

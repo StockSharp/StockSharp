@@ -89,10 +89,11 @@ public class SubscriptionMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="SubscriptionMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new SubscriptionMessageAdapter(InnerAdapter.TypedClone())
+		return new SubscriptionMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken))
 		{
 			IsRestoreSubscriptionOnErrorReconnect = IsRestoreSubscriptionOnErrorReconnect,
 		};

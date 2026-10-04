@@ -77,10 +77,10 @@ public partial class StrategiesWindow : Window, IDisposable
 				cancellationToken.ThrowIfCancellationRequested();
 				try
 				{
-					var storage = fileName.Deserialize<SettingsStorage>(_fileSystem);
+					var storage = await fileName.DeserializeAsync<SettingsStorage>(_fileSystem, cancellationToken);
 					var strategy = storage is null
 						? null
-						: TerminalStrategyPersistence.Load(storage, _resolveSecurity, _resolvePortfolio);
+						: await TerminalStrategyPersistence.LoadAsync(storage, _resolveSecurity, _resolvePortfolio, cancellationToken);
 					if (strategy is not null)
 						AddStrategy(strategy);
 				}
@@ -116,7 +116,7 @@ public partial class StrategiesWindow : Window, IDisposable
 			AddStrategy(quoting);
 			var added = quoting;
 			quoting = null;
-			SaveStrategy(added);
+			await SaveStrategyAsync(added, _lifetimeCancellation.Token);
 		}
 		catch (OperationCanceledException) when (_lifetimeCancellation.IsCancellationRequested)
 		{
@@ -151,7 +151,7 @@ public partial class StrategiesWindow : Window, IDisposable
 
 		try
 		{
-			using var edited = strategy.TypedClone();
+			using var edited = await strategy.CloneAsync(_lifetimeCancellation.Token);
 			using var window = new StrategyEditWindow(_connector, _portfolios)
 			{
 				Strategy = edited,
@@ -160,9 +160,9 @@ public partial class StrategiesWindow : Window, IDisposable
 				return;
 
 			var id = strategy.Id;
-			strategy.Apply(edited);
+			await strategy.ApplyAsync(edited, _lifetimeCancellation.Token);
 			strategy.Id = id;
-			SaveStrategy(strategy);
+			await SaveStrategyAsync(strategy, _lifetimeCancellation.Token);
 		}
 		catch (OperationCanceledException) when (_lifetimeCancellation.IsCancellationRequested)
 		{
@@ -173,14 +173,13 @@ public partial class StrategiesWindow : Window, IDisposable
 		}
 	}
 
-	private void SaveStrategy(Strategy strategy)
+	private async Task SaveStrategyAsync(Strategy strategy, CancellationToken cancellationToken)
 	{
 		if (strategy is null)
 			throw new ArgumentNullException(nameof(strategy));
 
-		strategy
-			.SaveEntire(false)
-			.Serialize(_fileSystem, Path.Combine(_strategiesDirectory, $"{strategy.Id}{Paths.DefaultSettingsExt}"));
+		var storage = await strategy.SaveEntireAsync(false, cancellationToken);
+		await storage.SerializeAsync(_fileSystem, Path.Combine(_strategiesDirectory, $"{strategy.Id}{Paths.DefaultSettingsExt}"), true, cancellationToken);
 	}
 
 	public async Task StopAllAsync()

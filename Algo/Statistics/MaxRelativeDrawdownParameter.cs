@@ -77,18 +77,18 @@ public class MaxRelativeDrawdownParameter : BasePnLStatisticParameter<decimal>
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.Set("PosPeak", _posPeak);
 		storage.Set("NegPeak", _negPeak);
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		_posPeak = storage.GetValue<decimal>("PosPeak");
 		_negPeak = storage.GetValue<decimal?>("NegPeak");
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 }

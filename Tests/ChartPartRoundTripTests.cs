@@ -19,7 +19,7 @@ public class ChartPartRoundTripTests : BaseTestClass
 	/// <summary>
 	/// Every part the builder makes, by the name of the method that makes it.
 	/// </summary>
-	private static IEnumerable<(string Name, Func<IPersistable> Create)> Parts()
+	private static IEnumerable<(string Name, Func<IAsyncPersistable> Create)> Parts()
 	{
 		yield return (nameof(IChartBuilder.CreateArea), _builder.CreateArea);
 		yield return (nameof(IChartBuilder.CreateAxis), _builder.CreateAxis);
@@ -37,7 +37,7 @@ public class ChartPartRoundTripTests : BaseTestClass
 	/// <summary>
 	/// The parts a panel finds by an identifier: an area, and every element drawn in one.
 	/// </summary>
-	private static IEnumerable<(string Name, Func<IPersistable> Create, Func<IPersistable, Guid> Id)> IdentifiedParts()
+	private static IEnumerable<(string Name, Func<IAsyncPersistable> Create, Func<IAsyncPersistable, Guid> Id)> IdentifiedParts()
 	{
 		yield return (nameof(IChartBuilder.CreateArea), _builder.CreateArea, p => ((IChartArea)p).Id);
 
@@ -53,17 +53,17 @@ public class ChartPartRoundTripTests : BaseTestClass
 	/// that drew it loses its end.
 	/// </summary>
 	[TestMethod]
-	public void EveryPartComesBackUnderTheIdentifierItWasSavedWith()
+	public async Task EveryPartComesBackUnderTheIdentifierItWasSavedWith()
 	{
 		foreach (var (name, create, id) in IdentifiedParts())
 		{
 			var saved = create();
 
 			var storage = new SettingsStorage();
-			saved.Save(storage);
+			await saved.SaveAsync(storage, CancellationToken);
 
 			var loaded = create();
-			loaded.Load(storage);
+			await loaded.LoadAsync(storage, CancellationToken);
 
 			id(loaded).AssertEqual(id(saved),
 				$"{name} has to write the identifier it reads back, or a schema saved without a window renames every part in it");
@@ -80,7 +80,7 @@ public class ChartPartRoundTripTests : BaseTestClass
 	/// its defaults: two saves of an untouched part agree on nothing being there.
 	/// </remarks>
 	[TestMethod]
-	public void EveryPartSurvivesBeingSavedLoadedAndSavedAgain()
+	public async Task EveryPartSurvivesBeingSavedLoadedAndSavedAgain()
 	{
 		var lost = new List<string>();
 
@@ -91,13 +91,13 @@ public class ChartPartRoundTripTests : BaseTestClass
 			Fill(part);
 
 			var first = new SettingsStorage();
-			part.Save(first);
+			await part.SaveAsync(first, CancellationToken);
 
 			var again = create();
-			again.Load(first);
+			await again.LoadAsync(first, CancellationToken);
 
 			var second = new SettingsStorage();
-			again.Save(second);
+			await again.SaveAsync(second, CancellationToken);
 
 			var differences = Differences(first, second).OrderBy(d => d).ToArray();
 
@@ -114,19 +114,19 @@ public class ChartPartRoundTripTests : BaseTestClass
 	/// see this one: a value written by nobody is absent from both saves, and two absences agree.
 	/// </summary>
 	[TestMethod]
-	public void EveryPartWritesEverythingItReadsBack()
+	public async Task EveryPartWritesEverythingItReadsBack()
 	{
 		var gaps = new List<string>();
 
 		foreach (var (name, create) in Parts())
 		{
 			var written = new SettingsStorage();
-			create().Save(written);
+			await create().SaveAsync(written, CancellationToken);
 
 			// Loaded from a storage that answers everything with nothing and remembers what it was
 			// asked for: the keys a part names are the keys its own Save has to have written.
 			var asked = new AskedKeysStorage();
-			create().Load(asked);
+			await create().LoadAsync(asked, CancellationToken);
 
 			var missing = asked.Asked.Where(key => !written.ContainsKey(key)).OrderBy(k => k).ToArray();
 

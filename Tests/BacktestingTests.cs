@@ -1328,7 +1328,7 @@ public class BacktestingTests : BaseTestClass
 				failures.Add($"Connector: {error.Message}");
 		};
 
-		connector.OrderRegisterFailed += fail =>
+		connector.OrderRegisterFailReceived += (_, fail) =>
 		{
 			using (sync.EnterScope())
 				failures.Add($"Order {fail.Order.TransactionId} was refused: {fail.Error.Message}");
@@ -3436,7 +3436,7 @@ public class BacktestingTests : BaseTestClass
 	/// A copy of a configured emulation adapter emulates on the same terms as the original.
 	/// </summary>
 	[TestMethod]
-	public void EmulationAdapter_Clone_KeepsSettings()
+	public async Task EmulationAdapter_Clone_KeepsSettings()
 	{
 		var adapter = CreateEmulationAdapter(new PassThroughMessageChannel());
 
@@ -3451,7 +3451,7 @@ public class BacktestingTests : BaseTestClass
 		settings.Failing = 12.5;
 		settings.CandlePrice = EmulationCandlePrices.Close;
 
-		var clone = (EmulationMessageAdapter)adapter.Clone();
+		var clone = (EmulationMessageAdapter)await adapter.CloneAsync(CancellationToken);
 
 		// These are the same values Save/Load carries across a restart, so they are what the
 		// adapter is: a copy that fills on touch when the original does not, or checks money when
@@ -3470,12 +3470,12 @@ public class BacktestingTests : BaseTestClass
 	/// The copy carries its own settings, not a second reference to the original's.
 	/// </summary>
 	[TestMethod]
-	public void EmulationAdapter_Clone_SettingsAreItsOwn()
+	public async Task EmulationAdapter_Clone_SettingsAreItsOwn()
 	{
 		var adapter = CreateEmulationAdapter(new PassThroughMessageChannel());
 		adapter.Settings.MaxDepth = 7;
 
-		var clone = (EmulationMessageAdapter)adapter.Clone();
+		var clone = (EmulationMessageAdapter)await adapter.CloneAsync(CancellationToken);
 		clone.Settings.MaxDepth = 9;
 
 		// Retuning one run must not retune the other.
@@ -3491,7 +3491,7 @@ public class BacktestingTests : BaseTestClass
 	public async Task EmulationAdapter_Clone_DoesNotShareTheWork()
 	{
 		var adapter = CreateEmulationAdapter(new PassThroughMessageChannel());
-		var clone = (EmulationMessageAdapter)adapter.Clone();
+		var clone = (EmulationMessageAdapter)await adapter.CloneAsync(CancellationToken);
 
 		var time = new DateTime(2026, 09, 09, 10, 00, 00, DateTimeKind.Utc);
 

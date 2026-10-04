@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Commissions;
 /// <summary>
 /// The commission calculating rule interface.
 /// </summary>
-public interface ICommissionRule : IPersistable
+public interface ICommissionRule : IAsyncPersistable
 {
 	/// <summary>
 	/// Title.
@@ -29,8 +29,9 @@ public interface ICommissionRule : IPersistable
 	/// To calculate commission.
 	/// </summary>
 	/// <param name="message">The message containing the information about the order or own trade.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
-	decimal? Process(ExecutionMessage message);
+	ValueTask<decimal?> ProcessAsync(ExecutionMessage message, CancellationToken cancellationToken);
 }
 
 /// <summary>
@@ -120,9 +121,9 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 	}
 
 	/// <inheritdoc />
-	public decimal? Process(ExecutionMessage message)
+	public async ValueTask<decimal?> ProcessAsync(ExecutionMessage message, CancellationToken cancellationToken)
 	{
-		var value = OnProcess(message);
+		var value = await OnProcessAsync(message, cancellationToken);
 
 		// A rule that says nothing charges nothing, and the bound must not turn that into a
 		// charge. Applied only when there is one, so a rebate expressed as a negative value is
@@ -137,16 +138,19 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 	/// To calculate commission, before <see cref="Min"/> is applied.
 	/// </summary>
 	/// <param name="message">The message containing the information about the order or own trade.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>The commission. If the commission cannot be calculated then <see langword="null" /> will be returned.</returns>
-	protected abstract decimal? OnProcess(ExecutionMessage message);
+	protected abstract ValueTask<decimal?> OnProcessAsync(ExecutionMessage message, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		Value = storage.GetValue<Unit>(nameof(Value));
+		Value = await storage.GetValueAsync<Unit>(nameof(Value), cancellationToken: cancellationToken);
 		Min = storage.GetValue(nameof(Min), Min);
 	}
 
@@ -154,10 +158,14 @@ public abstract class CommissionRule : NotifiableObject, ICommissionRule
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Value), Value);
 		storage.SetValue(nameof(Min), Min);
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>

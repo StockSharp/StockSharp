@@ -26,7 +26,8 @@ public class FilteredMarketDepthAdapterTests : BaseTestClass
 				OrdersSubscriptionReceived = true;
 		}
 
-		public override IMessageAdapter Clone() => new SynchronousBookTerminalAdapter(finished);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new SynchronousBookTerminalAdapter(finished));
 	}
 
 	// The external book never changes between pushes, so every difference in the filtered
@@ -721,12 +722,12 @@ public class FilteredMarketDepthAdapterTests : BaseTestClass
 	// A copy of a wrapper owns a copy of what it wraps - as every other wrapper's Clone does.
 	// Sharing the inner adapter makes the copy a second reader of one connection, not a copy.
 	[TestMethod]
-	public void Clone_HasItsOwnInnerAdapter()
+	public async Task Clone_HasItsOwnInnerAdapter()
 	{
 		var inner = new RecordingPassThroughMessageAdapter();
 		using var adapter = new FilteredMarketDepthAdapter(inner);
 
-		using var clone = (FilteredMarketDepthAdapter)adapter.Clone();
+		using var clone = (FilteredMarketDepthAdapter)await adapter.CloneAsync(CancellationToken);
 
 		AreNotSame(adapter.InnerAdapter, clone.InnerAdapter);
 	}
@@ -745,7 +746,7 @@ public class FilteredMarketDepthAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		using var clone = (FilteredMarketDepthAdapter)adapter.Clone();
+		using var clone = (FilteredMarketDepthAdapter)await adapter.CloneAsync(CancellationToken);
 
 		await clone.SendInMessageAsync(new MarketDataMessage
 		{

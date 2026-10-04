@@ -379,9 +379,9 @@ public class BufferedMarketDataDrive : BaseLogReceiver, IMarketDataDrive
 		=> Underlying.LookupSecuritiesAsync(criteria, securityProvider);
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		Format = storage.GetValue(nameof(Format), Format);
 		FlushInterval = storage.GetValue(nameof(FlushInterval), FlushInterval);
@@ -389,9 +389,9 @@ public class BufferedMarketDataDrive : BaseLogReceiver, IMarketDataDrive
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(Format), Format);
 		storage.SetValue(nameof(FlushInterval), FlushInterval);

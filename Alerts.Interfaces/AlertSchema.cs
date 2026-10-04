@@ -3,7 +3,7 @@ namespace StockSharp.Alerts;
 /// <summary>
 /// Schema.
 /// </summary>
-public class AlertSchema : IPersistable
+public class AlertSchema : IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="AlertSchema"/>.
@@ -70,10 +70,19 @@ public class AlertSchema : IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Rules.Clear();
-		Rules.AddRange(storage.GetValue<SettingsStorage[]>(nameof(Rules)).Select(s => s.Load<AlertRule>()).Where(r => r.Value != null));
+
+		foreach (var settings in storage.GetValue<SettingsStorage[]>(nameof(Rules)))
+		{
+			var rule = await settings.LoadAsync<AlertRule>(cancellationToken);
+
+			if (rule.Value != null)
+				Rules.Add(rule);
+		}
 
 		var alertType = storage.GetValue<string>(nameof(AlertType));
 
@@ -94,10 +103,17 @@ public class AlertSchema : IPersistable
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
+		var rules = new List<SettingsStorage>();
+
+		foreach (var rule in Rules)
+			rules.Add(await rule.SaveAsync(cancellationToken));
+
 		storage
-			.Set(nameof(Rules), Rules.Select(r => r.Save()).ToArray())
+			.Set(nameof(Rules), rules.ToArray())
 			.Set(nameof(AlertType), AlertType.To<string>())
 			.Set(nameof(ExternalId), ExternalId)
 			.Set(nameof(Caption), Caption)

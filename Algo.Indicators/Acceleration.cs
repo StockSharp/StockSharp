@@ -81,21 +81,21 @@ public class Acceleration : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		Sma.LoadIfNotNull(storage, nameof(Sma));
-		Ao.LoadIfNotNull(storage, nameof(Ao));
+		await Sma.LoadIfNotNullAsync(storage, nameof(Sma), cancellationToken);
+		await Ao.LoadIfNotNullAsync(storage, nameof(Ao), cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
-		storage.SetValue(nameof(Sma), Sma.Save());
-		storage.SetValue(nameof(Ao), Ao.Save());
+		storage.SetValue(nameof(Sma), await Sma.SaveAsync(cancellationToken));
+		storage.SetValue(nameof(Ao), await Ao.SaveAsync(cancellationToken));
 	}
 
 	/// <inheritdoc />

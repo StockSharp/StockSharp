@@ -36,7 +36,8 @@ public class Level1ExtendBuilderAdapterTests : BaseTestClass
 			return default;
 		}
 
-		public override IMessageAdapter Clone() => new TestInnerAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestInnerAdapter(TransactionIdGenerator));
 
 		/// <summary>
 		/// Simulate inner adapter emitting an outgoing message.

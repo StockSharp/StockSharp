@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -112,14 +113,14 @@ public partial class MainWindow
 
 		var loaded = false;
 
-		Loaded += (sender, args) =>
+		Loaded += async (sender, args) =>
 		{
 			if(loaded) return;
 
 			loaded = true;
 
-			DrawTestData();
-			InitConnector();
+			await DrawTestDataAsync();
+			await InitConnectorAsync();
 		};
 	}
 
@@ -128,7 +129,7 @@ public partial class MainWindow
 		ThemeExtensions.ApplyDefaultTheme();
 	}
 
-	private void DrawTestData()
+	private async Task DrawTestDataAsync()
 	{
 		//
 		// prepare test data
@@ -209,7 +210,7 @@ public partial class MainWindow
 
 		foreach (var s in securities.Where(s => s.OptionType == OptionTypes.Call || s.OptionType == OptionTypes.Put))
 		{
-			var ua = s.GetUnderlyingAsset(dummyProvider);
+			var ua = await s.GetUnderlyingAssetAsync(dummyProvider, default);
 			model.InnerModels.Add(new(s, ua, dummyProvider));
 		}
 
@@ -255,7 +256,7 @@ public partial class MainWindow
 		return s;
 	}
 
-	private void InitConnector()
+	private async Task InitConnectorAsync()
 	{
 		// subscribe on connection successfully event
 		Connector.Connected += () =>
@@ -324,7 +325,7 @@ public partial class MainWindow
 				ctx.Error += ex => ex.LogError();
 
 				using (ctx.ToScope())
-					Connector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>(_fileSystem));
+					await Connector.LoadIfNotNullAsync(await _settingsFile.DeserializeAsync<SettingsStorage>(_fileSystem, default), default);
 			}
 		}
 		catch
@@ -341,10 +342,10 @@ public partial class MainWindow
 		ConnectBtn.IsEnabled = true;
 	}
 
-	private void SettingsClick(object sender, RoutedEventArgs e)
+	private async void SettingsClick(object sender, RoutedEventArgs e)
 	{
 		if (Connector.Configure(this))
-			Connector.Save().Serialize(_fileSystem, _settingsFile);
+			await (await Connector.SaveAsync(default)).SerializeAsync(_fileSystem, _settingsFile, true, default);
 	}
 
 	private void Level1FieldsCtrl_OnEditValueChanged(object sender, EditValueChangedEventArgs e)
@@ -439,9 +440,12 @@ public partial class MainWindow
 	}
 
 	private readonly List<Subscription> _prevSubscriptions = new();
+	private int _assetSelection;
 
-	private void Assets_OnSelectionChanged(object sender, EditValueChangedEventArgs e)
+	private async void Assets_OnSelectionChanged(object sender, EditValueChangedEventArgs e)
 	{
+		var selection = ++_assetSelection;
+
 		foreach (var subscription in _prevSubscriptions)
 		{
 			Connector.UnSubscribe(subscription);
@@ -472,10 +476,12 @@ public partial class MainWindow
 		_model.Clear();
 		_options.Clear();
 
-		var options = asset.GetDerivatives(Connector);
-
-		foreach (var security in options)
+		await foreach (var security in asset.GetDerivativesAsync(Connector, null))
 		{
+			// a later selection has taken over while the options were being read
+			if (selection != _assetSelection)
+				return;
+
 			_model.Add(security);
 			_options.Add(security);
 
@@ -519,7 +525,7 @@ public partial class MainWindow
 		Start.IsEnabled = option != null;
 	}
 
-	private void StartClick(object sender, RoutedEventArgs e)
+	private async void StartClick(object sender, RoutedEventArgs e)
 	{
 		var option = SelectedOption;
 
@@ -532,7 +538,7 @@ public partial class MainWindow
 		// create delta hedge strategy
 		var hedge = new DeltaHedgeStrategy(PosChart.Model)
 		{
-			Security = option.GetUnderlyingAsset(Connector),
+			Security = await option.GetUnderlyingAssetAsync(Connector, default),
 			Portfolio = Portfolio.SelectedPortfolio,
 			Connector = Connector,
 		};
@@ -566,11 +572,18 @@ public partial class MainWindow
 		wnd.Show();
 	}
 
-	private void TryUpdateDepth(Subscription subscription, IOrderBookMessage depth)
+	private async void TryUpdateDepth(Subscription subscription, IOrderBookMessage depth)
 	{
 		if (!_quotesWindows.TryGetValue(depth.SecurityId, out var wnd))
 			return;
 
-		wnd.Update(depth.ImpliedVolatility(Connector, Connector, depth.ServerTime));
+		try
+		{
+			wnd.Update(await depth.ImpliedVolatilityAsync(Connector, Connector, depth.ServerTime, 0, 0, default));
+		}
+		catch (Exception ex)
+		{
+			ex.LogError();
+		}
 	}
 }

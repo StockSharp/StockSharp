@@ -3,7 +3,7 @@
 /// <summary>
 /// The diagram element parameter.
 /// </summary>
-public interface IDiagramElementParam : IPersistable, INotifyPropertyChanging, INotifyPropertyChanged, IAttributesEntity
+public interface IDiagramElementParam : IAsyncPersistable, INotifyPropertyChanging, INotifyPropertyChanged, IAttributesEntity
 {
 	/// <summary>
 	/// Parameter name.

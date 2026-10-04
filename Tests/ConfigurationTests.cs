@@ -4,7 +4,7 @@ namespace StockSharp.Tests;
 public class ConfigurationTests : BaseTestClass
 {
 	[TestMethod]
-	public void SubscriptionConfig_RoundTrip_KeepsEverySetting()
+	public async Task SubscriptionConfig_RoundTrip_KeepsEverySetting()
 	{
 		// A tick is 100ns, so the fraction below carries both microseconds and the odd 7 ticks.
 		var from = new DateTime(2026, 3, 1, 23, 45, 30, DateTimeKind.Utc).AddTicks(1234567);
@@ -15,7 +15,7 @@ public class ConfigurationTests : BaseTestClass
 			Security = "SBER@TQBR".ToSecurityId(),
 			DataType = DataType.Create(typeof(PnFCandleMessage), new PnFArg { BoxSize = new Unit(2), ReversalAmount = 3 }),
 			BuildMode = MarketDataBuildModes.Build,
-			BuildFrom = DataType.TimeFrame(TimeSpan.FromMinutes(5)),
+			BuildFrom = TimeSpan.FromMinutes(5).TimeFrame(),
 			BuildField = Level1Fields.BestBidPrice,
 			From = from,
 			To = to,
@@ -24,13 +24,13 @@ public class ConfigurationTests : BaseTestClass
 			MaxDepth = 20,
 		};
 
-		var storage = config.Save();
+		var storage = await config.SaveAsync(CancellationToken);
 
 		// Times are persisted as ticks, so the stored number is the tick count itself.
 		storage.GetValue<long>(nameof(SubscriptionConfig.From)).AssertEqual(from.Ticks);
 		storage.GetValue<long>(nameof(SubscriptionConfig.To)).AssertEqual(to.Ticks);
 
-		var loaded = storage.Load<SubscriptionConfig>();
+		var loaded = await storage.LoadAsync<SubscriptionConfig>(CancellationToken);
 
 		loaded.Security.AssertEqual(config.Security);
 		loaded.DataType.AssertEqual(config.DataType);
@@ -52,13 +52,13 @@ public class ConfigurationTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SubscriptionConfig_RoundTrip_LeavesUnsetOptionsUnset()
+	public async Task SubscriptionConfig_RoundTrip_LeavesUnsetOptionsUnset()
 	{
 		// Only the data type is chosen; everything else is "no opinion" and must stay that way,
 		// because a default that appears out of nowhere silently narrows the subscription.
 		var config = new SubscriptionConfig { DataType = DataType.Level1 };
 
-		var loaded = config.Save().Load<SubscriptionConfig>();
+		var loaded = await (await config.SaveAsync(CancellationToken)).LoadAsync<SubscriptionConfig>(CancellationToken);
 
 		loaded.DataType.AssertEqual(DataType.Level1);
 		loaded.Security.AssertNull();
@@ -74,13 +74,13 @@ public class ConfigurationTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SubscriptionConfig_Load_RefusesADataTypeItCannotRead()
+	public async Task SubscriptionConfig_Load_RefusesADataTypeItCannotRead()
 	{
 		var storage = new SettingsStorage();
 		storage.Set(nameof(SubscriptionConfig.DataType), "NoSuchMessage:0");
 
 		// A config naming a data type that does not exist must not load as a usable subscription.
-		Throws<Exception>(() => storage.Load<SubscriptionConfig>());
+		await ThrowsAsync<Exception>(async () => await storage.LoadAsync<SubscriptionConfig>(CancellationToken));
 	}
 
 	[TestMethod]
@@ -271,11 +271,11 @@ public class ConfigurationTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InvariantSerializer_WritesTheSameTextInAnyCulture()
+	public async Task InvariantSerializer_WritesTheSameTextInAnyCulture()
 	{
 		var settings = CreateCultureSensitiveSettings();
 
-		var reference = settings.SerializeInvariant(bom: false).UTF8();
+		var reference = (await settings.SerializeInvariantAsync(false, CancellationToken)).UTF8();
 
 		// ru-RU writes a decimal comma, de-DE a dotted date, th-TH a Buddhist year (2569, not 2026).
 		// A config file must read the same on every machine, so none of that may reach the file.
@@ -284,27 +284,27 @@ public class ConfigurationTests : BaseTestClass
 			string written;
 
 			using (Do.WithCulture(CultureInfo.GetCultureInfo(name)))
-				written = settings.SerializeInvariant(bom: false).UTF8();
+				written = (await settings.SerializeInvariantAsync(false, CancellationToken)).UTF8();
 
 			written.AssertEqual(reference, name);
 		}
 	}
 
 	[TestMethod]
-	public void InvariantSerializer_ReadsBackWhatItWroteUnderAnotherCulture()
+	public async Task InvariantSerializer_ReadsBackWhatItWroteUnderAnotherCulture()
 	{
 		var fs = new MemoryFileSystem();
 		var fileName = "/settings.json";
 		var stamp = new DateTime(2026, 3, 1, 23, 45, 30, DateTimeKind.Utc).AddTicks(1234567);
 
 		using (Do.WithCulture(CultureInfo.GetCultureInfo("ru-RU")))
-			CreateCultureSensitiveSettings().SerializeInvariant(fs, fileName);
+			await CreateCultureSensitiveSettings().SerializeInvariantAsync(fs, fileName, true, CancellationToken);
 
 		SettingsStorage restored;
 
 		// Written on one machine, read on another with a different culture.
 		using (Do.WithCulture(CultureInfo.GetCultureInfo("th-TH")))
-			restored = fs.DeserializeInvariant(fileName);
+			restored = await fs.DeserializeInvariantAsync(fileName, CancellationToken);
 
 		restored.GetValue<decimal>("price").AssertEqual(1234.5678m);
 		restored.GetValue<double>("ratio").AssertEqual(0.15d);
@@ -318,19 +318,19 @@ public class ConfigurationTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void InvariantSerializer_BomIsTheOnlyDifferenceBetweenTheTwoForms()
+	public async Task InvariantSerializer_BomIsTheOnlyDifferenceBetweenTheTwoForms()
 	{
 		var settings = CreateCultureSensitiveSettings();
 
-		var withBom = settings.SerializeInvariant(bom: true);
-		var withoutBom = settings.SerializeInvariant(bom: false);
+		var withBom = (await settings.SerializeInvariantAsync(true, CancellationToken));
+		var withoutBom = (await settings.SerializeInvariantAsync(false, CancellationToken));
 
 		// The UTF8 preamble is three bytes and nothing else about the file changes.
 		withBom.Length.AssertEqual(withoutBom.Length + 3);
 
 		// Whether the preamble is there or not, the same settings come back.
-		withBom.DeserializeInvariant().GetValue<decimal>("price").AssertEqual(1234.5678m);
-		withoutBom.DeserializeInvariant().GetValue<decimal>("price").AssertEqual(1234.5678m);
+		(await withBom.DeserializeInvariantAsync(CancellationToken)).GetValue<decimal>("price").AssertEqual(1234.5678m);
+		(await withoutBom.DeserializeInvariantAsync(CancellationToken)).GetValue<decimal>("price").AssertEqual(1234.5678m);
 	}
 
 	// A language other than the one the process is running in, so a value that never travelled
@@ -351,7 +351,7 @@ public class ConfigurationTests : BaseTestClass
 	/// comes up speaking another language or stamping times hours away from the ones just seen.
 	/// </summary>
 	[TestMethod]
-	public void AppStartSettings_RoundTrip_KeepsTheChoicesTheUserMade()
+	public async Task AppStartSettings_RoundTrip_KeepsTheChoicesTheUserMade()
 	{
 		var language = AnotherLanguage();
 		var zone = AnotherTimeZone();
@@ -363,7 +363,7 @@ public class ConfigurationTests : BaseTestClass
 			TimeZone = zone,
 		};
 
-		var loaded = settings.Save().Load<AppStartSettings>();
+		var loaded = await (await settings.SaveAsync(CancellationToken)).LoadAsync<AppStartSettings>(CancellationToken);
 
 		loaded.Language.AssertEqual(language);
 		loaded.Online.AssertFalse("the user asked to start offline");
@@ -378,7 +378,7 @@ public class ConfigurationTests : BaseTestClass
 	/// connection mode it was left in, with a usable zone rather than none.
 	/// </summary>
 	[TestMethod]
-	public void AppStartSettings_Load_KeepsTheOtherSettingsWhenTheTimeZoneIsUnknownHere()
+	public async Task AppStartSettings_Load_KeepsTheOtherSettingsWhenTheTimeZoneIsUnknownHere()
 	{
 		var language = AnotherLanguage();
 
@@ -388,7 +388,7 @@ public class ConfigurationTests : BaseTestClass
 		storage.Set(nameof(AppStartSettings.Online), false);
 		storage.Set(nameof(AppStartSettings.TimeZone), "No/Such_Zone_On_This_Machine");
 
-		var loaded = storage.Load<AppStartSettings>();
+		var loaded = await storage.LoadAsync<AppStartSettings>(CancellationToken);
 
 		loaded.Language.AssertEqual(language);
 		loaded.Online.AssertFalse("an unreadable time zone must not drag the connection mode with it");
@@ -401,9 +401,9 @@ public class ConfigurationTests : BaseTestClass
 	/// into a crash on launch.
 	/// </summary>
 	[TestMethod]
-	public void AppStartSettings_TryLoad_SaysThereIsNothingSavedOnAFirstStart()
+	public async Task AppStartSettings_TryLoad_SaysThereIsNothingSavedOnAFirstStart()
 	{
-		AppStartSettings.TryLoad(new MemoryFileSystem()).AssertNull();
+		(await AppStartSettings.TryLoadAsync(new MemoryFileSystem(), CancellationToken)).AssertNull();
 	}
 
 	/// <summary>
@@ -411,21 +411,21 @@ public class ConfigurationTests : BaseTestClass
 	/// pair: what one wrote, the other has to find and bring back unchanged.
 	/// </summary>
 	[TestMethod]
-	public void AppStartSettings_TrySave_IsReadBackByTryLoad()
+	public async Task AppStartSettings_TrySave_IsReadBackByTryLoad()
 	{
 		var fs = new MemoryFileSystem();
 
 		var language = AnotherLanguage();
 		var zone = AnotherTimeZone();
 
-		new AppStartSettings
+		await new AppStartSettings
 		{
 			Language = language,
 			Online = false,
 			TimeZone = zone,
-		}.TrySave(fs);
+		}.TrySaveAsync(fs, CancellationToken);
 
-		var loaded = AppStartSettings.TryLoad(fs);
+		var loaded = await AppStartSettings.TryLoadAsync(fs, CancellationToken);
 
 		loaded.AssertNotNull("the settings were just written, so the next start must find them");
 		loaded.Language.AssertEqual(language);
@@ -450,9 +450,9 @@ public class ConfigurationTests : BaseTestClass
 	/// from somewhere inside does not.
 	/// </summary>
 	[TestMethod]
-	public void AppStartSettings_RefusesToWorkWithoutAFileSystem()
+	public async Task AppStartSettings_RefusesToWorkWithoutAFileSystem()
 	{
-		ThrowsExactly<ArgumentNullException>(() => AppStartSettings.TryLoad(null));
-		ThrowsExactly<ArgumentNullException>(() => new AppStartSettings().TrySave(null));
+		await ThrowsExactlyAsync<ArgumentNullException>(() => AppStartSettings.TryLoadAsync(null, CancellationToken).AsTask());
+		await ThrowsExactlyAsync<ArgumentNullException>(() => new AppStartSettings().TrySaveAsync(null, CancellationToken).AsTask());
 	}
 }

@@ -5,8 +5,15 @@ using System.Drawing;
 /// <summary>
 /// Node.
 /// </summary>
-public interface ICompositionModelNode : ICloneable
+public interface ICompositionModelNode
 {
+	/// <summary>
+	/// Create a copy of the node together with its element.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<ICompositionModelNode> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// Key.
 	/// </summary>
@@ -57,7 +64,8 @@ public class InMemoryCompositionModelNode : ICompositionModelNode
 	/// <inheritdoc/>
 	public string Text { get; set; }
 
-	object ICloneable.Clone()
+	/// <inheritdoc />
+	public async ValueTask<ICompositionModelNode> CloneAsync(CancellationToken cancellationToken)
 	{
 		if (Element is null)
 			throw new InvalidOperationException(LocalizedStrings.ElementNotLoaded.Put(Text));
@@ -65,7 +73,7 @@ public class InMemoryCompositionModelNode : ICompositionModelNode
 		return new InMemoryCompositionModelNode
 		{
 			Key = Key,
-			Element = Element.Clone(),
+			Element = await Element.CloneAsync(true, cancellationToken),
 			Location = Location,
 			TypeId = TypeId,
 			Figure = Figure,

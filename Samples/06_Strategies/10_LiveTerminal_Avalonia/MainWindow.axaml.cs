@@ -150,10 +150,15 @@ public partial class MainWindow : Window
 			if (_isClosing)
 				return;
 
+			await _runtime.Context.LoadAsync(_lifetimeCancellation.Token);
+			if (_isClosing)
+				return;
+
 			_initialized = true;
 			_settingsButton.IsEnabled = true;
 			_connectButton.IsEnabled = true;
 			_status.Text = "Disconnected";
+
 			if (_runtime.Context.IsAutoConnect)
 				StartConnect();
 		}

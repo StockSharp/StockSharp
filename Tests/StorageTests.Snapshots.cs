@@ -16,7 +16,7 @@ partial class StorageTests
 	}
 
 	[TestMethod]
-	public void SnapshotWithoutSide()
+	public async Task SnapshotWithoutSide()
 	{
 		var secId = Helper.CreateStorageSecurity().ToSecurityId();
 		var serializer = new TransactionBinarySnapshotSerializer();
@@ -26,7 +26,7 @@ partial class StorageTests
 		var withoutSide = Helper.RandomTransaction(secId, 1);
 		withoutSide.Side = null;
 
-		var restored = typed.Deserialize(typed.Version, typed.Serialize(typed.Version, withoutSide));
+		var restored = await typed.DeserializeAsync(typed.Version, await typed.SerializeAsync(typed.Version, withoutSide, CancellationToken), CancellationToken);
 
 		restored.Side.AssertNull();
 		restored.OrderBoardId.AssertEqual(withoutSide.OrderBoardId);
@@ -36,17 +36,17 @@ partial class StorageTests
 		var withSide = Helper.RandomTransaction(secId, 2);
 		withSide.Side = Sides.Sell;
 
-		typed.Deserialize(typed.Version, typed.Serialize(typed.Version, withSide)).Side.AssertEqual(Sides.Sell);
+		(await typed.DeserializeAsync(typed.Version, await typed.SerializeAsync(typed.Version, withSide, CancellationToken), CancellationToken)).Side.AssertEqual(Sides.Sell);
 	}
 
 
 	[TestMethod]
-	public void Snapshot()
+	public async Task Snapshot()
 	{
-		static void Check<TKey, TMessage>(ISnapshotSerializer<TKey, TMessage> serializer, TMessage message, bool skipOriginalTransactionId = false)
+		async Task CheckAsync<TKey, TMessage>(ISnapshotSerializer<TKey, TMessage> serializer, TMessage message, bool skipOriginalTransactionId = false)
 			where TMessage : Message
 		{
-			Helper.CheckEqual(message, serializer.Deserialize(serializer.Version, serializer.Serialize(serializer.Version, message)), skipOriginalTransactionId: skipOriginalTransactionId);
+			Helper.CheckEqual(message, await serializer.DeserializeAsync(serializer.Version, await serializer.SerializeAsync(serializer.Version, message, CancellationToken), CancellationToken), skipOriginalTransactionId: skipOriginalTransactionId);
 		}
 
 		var security = Helper.CreateStorageSecurity();
@@ -55,22 +55,22 @@ partial class StorageTests
 
 		foreach (var book in books)
 		{
-			Check(new QuotesBinarySnapshotSerializer(), book);
+			await CheckAsync(new QuotesBinarySnapshotSerializer(), book);
 		}
 
 		for (var i = 0; i < 100; i++)
 		{
-			Check(new Level1BinarySnapshotSerializer(), Helper.RandomLevel1(security, secId, DateTime.UtcNow, RandomGen.GetBool(), RandomGen.GetBool(), () => 1m));
+			await CheckAsync(new Level1BinarySnapshotSerializer(), Helper.RandomLevel1(security, secId, DateTime.UtcNow, RandomGen.GetBool(), RandomGen.GetBool(), () => 1m));
 		}
 
 		for (var i = 0; i < 100; i++)
 		{
-			Check(new PositionBinarySnapshotSerializer(), Helper.RandomPositionChange(secId));
+			await CheckAsync(new PositionBinarySnapshotSerializer(), Helper.RandomPositionChange(secId));
 		}
 
 		for (var i = 0; i < 100; i++)
 		{
-			Check(new TransactionBinarySnapshotSerializer(), Helper.RandomTransaction(secId, i), skipOriginalTransactionId: true);
+			await CheckAsync(new TransactionBinarySnapshotSerializer(), Helper.RandomTransaction(secId, i), skipOriginalTransactionId: true);
 		}
 	}
 
@@ -79,7 +79,7 @@ partial class StorageTests
 	/// its bytes as a backup for inspection while allowing the registry to create a clean snapshot.
 	/// </summary>
 	[TestMethod]
-	public void CorruptSnapshotFileIsQuarantined()
+	public async Task CorruptSnapshotFileIsQuarantined()
 	{
 		var fs = Helper.MemorySystem;
 		var path = fs.GetSubTemp();
@@ -98,7 +98,7 @@ partial class StorageTests
 		var storage = ((ISnapshotRegistry)registry).GetSnapshotStorage(DataType.Level1);
 
 		// Reading is what trips over the damaged record.
-		storage.Get(new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test });
+		await storage.GetAsync(new SecurityId { SecurityCode = "TEST", BoardCode = BoardCodes.Test }, CancellationToken);
 
 		fs.FileExists(fileName).AssertFalse("a wholly corrupt snapshot must not remain at the active path");
 		fs.FileExists(fileName.MakeBackup()).AssertTrue("the corrupt bytes must be retained for inspection");
@@ -110,7 +110,7 @@ partial class StorageTests
 	/// </summary>
 	[TestMethod]
 	[DoNotParallelize]
-	public void PartiallyCorruptSnapshotFile_KeepsReadableRowsAndActiveFile()
+	public async Task PartiallyCorruptSnapshotFile_KeepsReadableRowsAndActiveFile()
 	{
 		var fs = Helper.MemorySystem;
 		var path = fs.GetSubTemp();
@@ -136,7 +136,7 @@ partial class StorageTests
 				new Level1ChangeMessage { SecurityId = secId2, ServerTime = date.AddHours(11), LocalTime = date.AddHours(11) }
 					.TryAdd(Level1Fields.LastTradePrice, 202m),
 			})
-				stream.WriteEx(serializer.Serialize(serializer.Version, message));
+				stream.WriteEx(await serializer.SerializeAsync(serializer.Version, message, CancellationToken));
 
 			stream.WriteEx(new byte[] { 1, 2, 3 });
 		}
@@ -150,8 +150,8 @@ partial class StorageTests
 			var storage = (ISnapshotStorage<SecurityId, Level1ChangeMessage>)
 				((ISnapshotRegistry)registry).GetSnapshotStorage(DataType.Level1);
 
-			var first = storage.Get(secId1);
-			var second = storage.Get(secId2);
+			var first = (await storage.GetAsync(secId1, CancellationToken));
+			var second = (await storage.GetAsync(secId2, CancellationToken));
 
 			first.AssertNotNull("the valid row before the damaged row remains readable");
 			second.AssertNotNull("all valid rows remain readable");

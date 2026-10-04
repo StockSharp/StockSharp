@@ -236,6 +236,8 @@ public class OrderLogMessageAdapter(IMessageAdapter innerAdapter) : MessageAdapt
 	/// <summary>
 	/// Create a copy of <see cref="OrderLogMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone() => new OrderLogMessageAdapter(InnerAdapter.TypedClone());
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new OrderLogMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken));
 }

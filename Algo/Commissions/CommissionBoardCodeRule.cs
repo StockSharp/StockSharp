@@ -36,7 +36,10 @@ public class CommissionBoardCodeRule : CommissionRule
 	protected override string GetTitle() => _boardCode;
 
 	/// <inheritdoc />
-	protected override decimal? OnProcess(ExecutionMessage message)
+	protected override ValueTask<decimal?> OnProcessAsync(ExecutionMessage message, CancellationToken cancellationToken)
+		=> new(Calculate(message));
+
+	private decimal? Calculate(ExecutionMessage message)
 	{
 		if (message.HasTradeInfo() && message.SecurityId.BoardCode.EqualsIgnoreCase(_boardCode))
 			return GetValue(message.TradePrice, message.TradeVolume);
@@ -45,18 +48,18 @@ public class CommissionBoardCodeRule : CommissionRule
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		if (Board != null)
 			storage.SetValue(nameof(Board), Board.Code);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		Board = null;
 

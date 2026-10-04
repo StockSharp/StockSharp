@@ -210,7 +210,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 					break;
 				}
 
-				var snapshots = GetSnapshots(mdMsg);
+				var snapshots = await GetSnapshotsAsync(mdMsg, cancellationToken);
 
 				if (snapshots.Length == 0)
 					break;
@@ -270,7 +270,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		}
 	}
 
-	private Message[] GetSnapshots(MarketDataMessage message)
+	private async ValueTask<Message[]> GetSnapshotsAsync(MarketDataMessage message, CancellationToken cancellationToken)
 	{
 		if (!message.IsSubscribe || message.From != null || message.To != null || !UseSnapshots)
 			return [];
@@ -284,17 +284,17 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 			snapshots.Add(msg);
 		}
 
-		void AddAll<TMessage>(ISnapshotStorage<SecurityId, TMessage> storage)
+		async ValueTask AddAllAsync<TMessage>(ISnapshotStorage<SecurityId, TMessage> storage)
 			where TMessage : Message, ISubscriptionIdMessage
 		{
 			if (message.SecurityId == default)
 			{
-				foreach (var msg in storage.GetAll())
+				await foreach (var msg in storage.GetAllAsync().WithCancellation(cancellationToken))
 					AddSnapshot(msg);
 			}
 			else
 			{
-				var msg = storage.Get(message.SecurityId);
+				var msg = await storage.GetAsync(message.SecurityId, cancellationToken);
 
 				if (msg != null)
 					AddSnapshot(msg);
@@ -302,9 +302,9 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		}
 
 		if (message.DataType2 == DataType.Level1)
-			AddAll(GetSnapshotStorage<Level1ChangeMessage>(message.DataType2));
+			await AddAllAsync(GetSnapshotStorage<Level1ChangeMessage>(message.DataType2));
 		else if (message.DataType2 == DataType.MarketDepth)
-			AddAll(GetSnapshotStorage<QuoteChangeMessage>(message.DataType2));
+			await AddAllAsync(GetSnapshotStorage<QuoteChangeMessage>(message.DataType2));
 
 		return [.. snapshots];
 	}
@@ -363,7 +363,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 			{
 				var storage = GetSnapshotStorage<string, ExecutionMessage>(DataType.Transactions);
 
-				foreach (var snapshot in storage.GetAll(from, to))
+				await foreach (var snapshot in storage.GetAllAsync(from, to).WithCancellation(cancellationToken))
 				{
 					if (Take(snapshot))
 						from = snapshot.ServerTime;
@@ -687,7 +687,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 					{
 						if (message.IsOk())
 						{
-							var replaced = (ExecutionMessage)snapshotStorage.Get(replacedId.To<string>());
+							var replaced = await snapshotStorage.GetAsync(replacedId.To<string>(), cancellationToken);
 
 							if (replaced == null)
 								LogWarning("Replaced order {0} not found.", replacedId);
@@ -695,7 +695,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 							{
 								// the storage hands out copies, so the ended state is written back
 								replaced.OrderState = OrderStates.Done;
-								snapshotStorage.Update(replaced);
+								await snapshotStorage.UpdateAsync(replaced, cancellationToken);
 							}
 						}
 					}
@@ -708,7 +708,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 					message.OriginalTransactionId = 0;
 
 					if (message.TransactionId != 0)
-						SaveTransaction(snapshotStorage, message);
+						await SaveTransactionAsync(snapshotStorage, message, cancellationToken);
 				}
 			}
 		}
@@ -723,7 +723,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				var snapshotStorage = GetSnapshotStorage<QuoteChangeMessage>(DataType.MarketDepth);
 
 				foreach (var message in pair.Value)
-					snapshotStorage.Update(message);
+					await snapshotStorage.UpdateAsync(message, cancellationToken);
 			}
 		}
 
@@ -739,7 +739,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				var snapshotStorage = GetSnapshotStorage<Level1ChangeMessage>(DataType.Level1);
 
 				foreach (var message in messages)
-					snapshotStorage.Update(message);
+					await snapshotStorage.UpdateAsync(message, cancellationToken);
 			}
 		}
 
@@ -760,7 +760,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 				var snapshotStorage = GetSnapshotStorage<(SecurityId, string, string), PositionChangeMessage>(DataType.PositionChanges);
 
 				foreach (var message in messages)
-					snapshotStorage.Update(message);
+					await snapshotStorage.UpdateAsync(message, cancellationToken);
 			}
 		}
 
@@ -851,7 +851,7 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 		}
 	}
 
-	private static void SaveTransaction(ISnapshotStorage snapshotStorage, ExecutionMessage message)
+	private static async ValueTask SaveTransactionAsync(ISnapshotStorage snapshotStorage, ExecutionMessage message, CancellationToken cancellationToken)
 	{
 		ExecutionMessage sepTrade = null;
 
@@ -881,19 +881,20 @@ public class BufferMessageAdapter(IMessageAdapter innerAdapter, StorageCoreSetti
 			message.OriginSide = null;
 		}
 
-		snapshotStorage.Update(message);
+		await snapshotStorage.UpdateAsync(message, cancellationToken);
 
 		if (sepTrade != null)
-			snapshotStorage.Update(sepTrade);
+			await snapshotStorage.UpdateAsync(sepTrade, cancellationToken);
 	}
 
 	/// <summary>
 	/// Create a copy of <see cref="BufferMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new BufferMessageAdapter(InnerAdapter.TypedClone(), Settings, Buffer.Clone(), SnapshotRegistry);
+		return new BufferMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), Settings, await Buffer.CloneAsync(cancellationToken), SnapshotRegistry);
 	}
 
 	/// <inheritdoc />

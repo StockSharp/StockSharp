@@ -54,25 +54,25 @@ public class ManagerCloneTests : BaseTestClass
 	#region LatencyManager
 
 	[TestMethod]
-	public void LatencyManager_Clone_CreatesNewInstance()
+	public async Task LatencyManager_Clone_CreatesNewInstance()
 	{
 		var manager = new LatencyManager(new LatencyManagerState());
 
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 
 		clone.AssertNotNull();
 		clone.AssertNotSame(manager);
 	}
 
 	[TestMethod]
-	public void LatencyManager_Clone_StateIsIndependent()
+	public async Task LatencyManager_Clone_StateIsIndependent()
 	{
 		var manager = new LatencyManager(new LatencyManagerState());
 		var t0 = DateTime.UtcNow;
 
 		manager.ProcessMessage(new OrderRegisterMessage { TransactionId = 1, LocalTime = t0 });
 
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 
 		// clone state should be empty — registration for transId=1 should not exist
 		var latency = clone.ProcessMessage(new ExecutionMessage
@@ -88,10 +88,10 @@ public class ManagerCloneTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void LatencyManager_Clone_StateIsFunctional()
+	public async Task LatencyManager_Clone_StateIsFunctional()
 	{
 		var manager = new LatencyManager(new LatencyManagerState());
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 
 		var t0 = DateTime.UtcNow;
 		var t1 = t0 + TimeSpan.FromMilliseconds(100);
@@ -116,29 +116,29 @@ public class ManagerCloneTests : BaseTestClass
 	#region SlippageManager
 
 	[TestMethod]
-	public void SlippageManager_Clone_CreatesNewInstance()
+	public async Task SlippageManager_Clone_CreatesNewInstance()
 	{
 		var manager = new SlippageManager(new SlippageManagerState());
 
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 
 		clone.AssertNotNull();
 		clone.AssertNotSame(manager);
 	}
 
 	[TestMethod]
-	public void SlippageManager_Clone_PreservesSettings()
+	public async Task SlippageManager_Clone_PreservesSettings()
 	{
 		var manager = new SlippageManager(new SlippageManagerState());
 		manager.CalculateNegative = false;
 
-		var clone = (SlippageManager)manager.Clone();
+		var clone = (SlippageManager)await manager.CloneAsync(CancellationToken);
 
 		clone.CalculateNegative.AssertEqual(false);
 	}
 
 	[TestMethod]
-	public void SlippageManager_Clone_StateIsIndependent()
+	public async Task SlippageManager_Clone_StateIsIndependent()
 	{
 		var manager = new SlippageManager(new SlippageManagerState());
 
@@ -168,16 +168,16 @@ public class ManagerCloneTests : BaseTestClass
 		});
 		manager.Slippage.AssertEqual(1m);
 
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 
 		clone.Slippage.AssertEqual(0);
 	}
 
 	[TestMethod]
-	public void SlippageManager_Clone_StateIsFunctional()
+	public async Task SlippageManager_Clone_StateIsFunctional()
 	{
 		var manager = new SlippageManager(new SlippageManagerState());
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 
 		// Feed Level1 to set best prices in clone state
 		var l1 = new Level1ChangeMessage
@@ -222,28 +222,28 @@ public class ManagerCloneTests : BaseTestClass
 	#region PositionManager
 
 	[TestMethod]
-	public void PositionManager_Clone_CreatesNewInstance()
+	public async Task PositionManager_Clone_CreatesNewInstance()
 	{
 		var manager = new PositionManager(true, new PositionManagerState());
 
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 
 		clone.AssertNotNull();
 		clone.AssertNotSame(manager);
 	}
 
 	[TestMethod]
-	public void PositionManager_Clone_PreservesByOrders()
+	public async Task PositionManager_Clone_PreservesByOrders()
 	{
 		var manager = new PositionManager(true, new PositionManagerState());
 
-		var clone = (PositionManager)manager.Clone();
+		var clone = (PositionManager)await manager.CloneAsync(CancellationToken);
 
 		clone.ByOrders.AssertTrue();
 	}
 
 	[TestMethod]
-	public void PositionManager_Clone_StateIsIndependent()
+	public async Task PositionManager_Clone_StateIsIndependent()
 	{
 		var manager = new PositionManager(false, new PositionManagerState());
 
@@ -260,7 +260,7 @@ public class ManagerCloneTests : BaseTestClass
 			ServerTime = DateTime.UtcNow,
 		});
 
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 
 		// Clone should start from zero position
 		var result = clone.ProcessMessage(new ExecutionMessage
@@ -282,10 +282,10 @@ public class ManagerCloneTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void PositionManager_Clone_StateIsFunctional()
+	public async Task PositionManager_Clone_StateIsFunctional()
 	{
 		var manager = new PositionManager(false, new PositionManagerState());
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 
 		var result = clone.ProcessMessage(new ExecutionMessage
 		{
@@ -479,22 +479,22 @@ public class ManagerCloneTests : BaseTestClass
 	#region CommissionManager & PnLManager (no injectable state)
 
 	[TestMethod]
-	public void CommissionManager_Clone_CreatesNewInstance()
+	public async Task CommissionManager_Clone_CreatesNewInstance()
 	{
 		var manager = new CommissionManager();
 
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 
 		clone.AssertNotNull();
 		clone.AssertNotSame(manager);
 	}
 
 	[TestMethod]
-	public void PnLManager_Clone_CreatesNewInstance()
+	public async Task PnLManager_Clone_CreatesNewInstance()
 	{
 		var manager = new PnLManager();
 
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 
 		clone.AssertNotNull();
 		clone.AssertNotSame(manager);
@@ -505,14 +505,14 @@ public class ManagerCloneTests : BaseTestClass
 	#region Clone preserves custom state type
 
 	[TestMethod]
-	public void LatencyManager_Clone_PreservesStateType()
+	public async Task LatencyManager_Clone_PreservesStateType()
 	{
 		TrackingLatencyManagerState.InstanceCount = 0;
 
 		var manager = new LatencyManager(new TrackingLatencyManagerState());
 		AreEqual(1, TrackingLatencyManagerState.InstanceCount);
 
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 		AreEqual(2, TrackingLatencyManagerState.InstanceCount, "Clone should create TrackingLatencyManagerState, not default LatencyManagerState");
 
 		// verify clone state is functional
@@ -530,14 +530,14 @@ public class ManagerCloneTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SlippageManager_Clone_PreservesStateType()
+	public async Task SlippageManager_Clone_PreservesStateType()
 	{
 		TrackingSlippageManagerState.InstanceCount = 0;
 
 		var manager = new SlippageManager(new TrackingSlippageManagerState());
 		AreEqual(1, TrackingSlippageManagerState.InstanceCount);
 
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 		AreEqual(2, TrackingSlippageManagerState.InstanceCount, "Clone should create TrackingSlippageManagerState, not default SlippageManagerState");
 
 		// verify clone state is functional — Reset calls _state.Clear()
@@ -546,14 +546,14 @@ public class ManagerCloneTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void PositionManager_Clone_PreservesStateType()
+	public async Task PositionManager_Clone_PreservesStateType()
 	{
 		TrackingPositionManagerState.InstanceCount = 0;
 
 		var manager = new PositionManager(false, new TrackingPositionManagerState());
 		AreEqual(1, TrackingPositionManagerState.InstanceCount);
 
-		var clone = manager.Clone();
+		var clone = await manager.CloneAsync(CancellationToken);
 		AreEqual(2, TrackingPositionManagerState.InstanceCount, "Clone should create TrackingPositionManagerState, not default PositionManagerState");
 
 		// verify clone state is functional

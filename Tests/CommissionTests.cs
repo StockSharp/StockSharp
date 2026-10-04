@@ -5,7 +5,7 @@ using System.Collections;
 using StockSharp.Algo.Commissions;
 
 [TestClass]
-public class CommissionTests
+public class CommissionTests : BaseTestClass
 {
 	private static DateTime Inc(ref DateTime time)
 	{
@@ -37,7 +37,7 @@ public class CommissionTests
 	}
 
 	[TestMethod]
-	public void PerOrderRule()
+	public async Task PerOrderRule()
 	{
 		var now = DateTime.UtcNow;
 
@@ -49,22 +49,22 @@ public class CommissionTests
 
 		// Act & Assert
 		var orderMsg = CreateOrderMessage(100m, 10m, Inc(ref now));
-		var result = rule.Process(orderMsg);
+		var result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertEqual(10m);
 
 		// Test null when not order info
 		var tradeMsg = CreateTradeMessage(100m, 10m, Inc(ref now));
-		result = rule.Process(tradeMsg);
+		result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertNull();
 
 		// Test percent-based commission
 		rule.Value = new Unit { Value = 5m, Type = UnitTypes.Percent };
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertEqual(50m); // 5% of 100 * 10 = 50
 	}
 
 	[TestMethod]
-	public void PerTradeRule()
+	public async Task PerTradeRule()
 	{
 		var now = DateTime.UtcNow;
 
@@ -76,22 +76,22 @@ public class CommissionTests
 
 		// Act & Assert
 		var tradeMsg = CreateTradeMessage(200m, 5m, Inc(ref now));
-		var result = rule.Process(tradeMsg);
+		var result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertEqual(15m);
 
 		// Test null when not trade info
 		var orderMsg = CreateOrderMessage(200m, 5m, Inc(ref now));
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertNull();
 
 		// Test percent-based commission
 		rule.Value = new Unit { Value = 2.5m, Type = UnitTypes.Percent };
-		result = rule.Process(tradeMsg);
+		result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertEqual(25m); // 2.5% of 200 * 5 = 25
 	}
 
 	[TestMethod]
-	public void PerOrderVolumeRule()
+	public async Task PerOrderVolumeRule()
 	{
 		var now = DateTime.UtcNow;
 
@@ -103,17 +103,17 @@ public class CommissionTests
 
 		// Act & Assert
 		var orderMsg = CreateOrderMessage(150m, 20m, Inc(ref now));
-		var result = rule.Process(orderMsg);
+		var result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertEqual(10m); // 0.5 * 20 = 10
 
 		// Test null when not order info
 		var tradeMsg = CreateTradeMessage(150m, 20m, Inc(ref now));
-		result = rule.Process(tradeMsg);
+		result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertNull();
 	}
 
 	[TestMethod]
-	public void PerTradeVolumeRule()
+	public async Task PerTradeVolumeRule()
 	{
 		var now = DateTime.UtcNow;
 
@@ -125,17 +125,17 @@ public class CommissionTests
 
 		// Act & Assert
 		var tradeMsg = CreateTradeMessage(300m, 40m, Inc(ref now));
-		var result = rule.Process(tradeMsg);
+		var result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertEqual(10m); // 0.25 * 40 = 10
 
 		// Test null when not trade info
 		var orderMsg = CreateOrderMessage(300m, 40m, Inc(ref now));
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertNull();
 	}
 
 	[TestMethod]
-	public void PerOrderCountRule()
+	public async Task PerOrderCountRule()
 	{
 		var now = DateTime.UtcNow;
 
@@ -150,34 +150,34 @@ public class CommissionTests
 		var orderMsg = CreateOrderMessage(100m, 1m, Inc(ref now));
 
 		// First 2 orders should return null
-		var result = rule.Process(orderMsg);
+		var result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertNull();
 
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertNull();
 
 		// 3rd order should apply commission
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertEqual(25m);
 
 		// 4th order should be null again
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertNull();
 
 		// Test reset functionality
 		rule.Reset();
 
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertNull();
 
 		// Test null when not order info
 		var tradeMsg = CreateTradeMessage(100m, 1m, Inc(ref now));
-		result = rule.Process(tradeMsg);
+		result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertNull();
 	}
 
 	[TestMethod]
-	public void PerTradeCountRule()
+	public async Task PerTradeCountRule()
 	{
 		var now = DateTime.UtcNow;
 
@@ -192,31 +192,31 @@ public class CommissionTests
 		var tradeMsg = CreateTradeMessage(200m, 1m, Inc(ref now));
 
 		// First order should return null
-		var result = rule.Process(tradeMsg);
+		var result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertNull();
 
 		// 2nd order should apply commission
-		result = rule.Process(tradeMsg);
+		result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertEqual(30m);
 
 		// 3rd order should be null again
-		result = rule.Process(tradeMsg);
+		result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertNull();
 
 		// Test reset functionality
 		rule.Reset();
 
-		result = rule.Process(tradeMsg);
+		result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertNull();
 
 		// Test null when not trade info
 		var orderMsg = CreateOrderMessage(200m, 1m, Inc(ref now));
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertNull();
 	}
 
 	[TestMethod]
-	public void PerTradePriceRule()
+	public async Task PerTradePriceRule()
 	{
 		var now = DateTime.UtcNow;
 
@@ -228,28 +228,47 @@ public class CommissionTests
 
 		// Act & Assert
 		var tradeMsg = CreateTradeMessage(100m, 5m, Inc(ref now));
-		var result = rule.Process(tradeMsg);
+		var result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertEqual(5m); // 100 * 5 * 0.01 = 5
 
 		// Test null when not trade info
 		var orderMsg = CreateOrderMessage(100m, 5m, Inc(ref now));
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertNull();
 	}
 
 	[TestMethod]
-	public void SecurityIdRule()
+	public async Task SecurityIdRule_SurvivesSaveAndLoad()
+	{
+		var securityId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Nasdaq };
+
+		var storage = await new CommissionSecurityIdRule { Value = 10m, SecurityId = securityId }.SaveAsync(CancellationToken);
+		var restored = await storage.LoadAsync<CommissionSecurityIdRule>(CancellationToken);
+
+		restored.SecurityId.AssertEqual(securityId);
+
+		(await restored.ProcessAsync(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Transactions,
+			SecurityId = securityId,
+			TradePrice = 150m,
+			TradeVolume = 2,
+			ServerTime = DateTime.UtcNow,
+		}, CancellationToken)).AssertEqual(10m);
+	}
+
+	[TestMethod]
+	public async Task SecurityIdRule()
 	{
 		var now = DateTime.UtcNow;
 
 		// Arrange
 		var securityId = new SecurityId { SecurityCode = "AAPL", BoardCode = BoardCodes.Nasdaq };
-		var security = new Security { Id = securityId.ToStringId() };
 
 		var rule = new CommissionSecurityIdRule
 		{
 			Value = 10m,
-			Security = security
+			SecurityId = securityId
 		};
 
 		// Act & Assert
@@ -262,7 +281,7 @@ public class CommissionTests
 			ServerTime = Inc(ref now)
 		};
 
-		var result = rule.Process(tradeMsg);
+		var result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertEqual(10m);
 
 		// Test null for different security ID
@@ -274,12 +293,12 @@ public class CommissionTests
 			ServerTime = Inc(ref now)
 		};
 
-		result = rule.Process(differentSecurityMsg);
+		result = await rule.ProcessAsync(differentSecurityMsg, CancellationToken);
 		result.AssertNull();
 
 		// Test percent-based commission
 		rule.Value = new Unit { Value = 1m, Type = UnitTypes.Percent };
-		result = rule.Process(tradeMsg);
+		result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertEqual(3m); // 1% of (150 * 2) = 3
 
 		// Test null when not trade info
@@ -292,12 +311,12 @@ public class CommissionTests
 			ServerTime = Inc(ref now)
 		};
 
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertNull();
 	}
 
 	[TestMethod]
-	public void BoardCodeRule()
+	public async Task BoardCodeRule()
 	{
 		var now = DateTime.UtcNow;
 
@@ -320,7 +339,7 @@ public class CommissionTests
 			ServerTime = Inc(ref now),
 		};
 
-		var result = rule.Process(tradeMsg);
+		var result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertEqual(15m);
 
 		// Test null for different board
@@ -332,12 +351,12 @@ public class CommissionTests
 			ServerTime = Inc(ref now)
 		};
 
-		result = rule.Process(differentBoardMsg);
+		result = await rule.ProcessAsync(differentBoardMsg, CancellationToken);
 		result.AssertNull();
 
 		// Test percent-based commission
 		rule.Value = new() { Value = 2m, Type = UnitTypes.Percent };
-		result = rule.Process(tradeMsg);
+		result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertEqual(8m); // 2% of (200 * 2) = 8
 
 		// Test null when not trade info
@@ -350,12 +369,12 @@ public class CommissionTests
 			ServerTime = Inc(ref now)
 		};
 
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertNull();
 	}
 
 	[TestMethod]
-	public void TurnOverRule()
+	public async Task TurnOverRule()
 	{
 		var now = DateTime.UtcNow;
 
@@ -368,28 +387,28 @@ public class CommissionTests
 
 		// Act & Assert
 		var tradeMsg1 = CreateTradeMessage(100m, 5m, Inc(ref now)); // 500
-		var result = rule.Process(tradeMsg1);
+		var result = await rule.ProcessAsync(tradeMsg1, CancellationToken);
 		result.AssertNull(); // Turnover not reached yet
 
 		var tradeMsg2 = CreateTradeMessage(200m, 3m, Inc(ref now)); // 600 (total 1100)
-		result = rule.Process(tradeMsg2);
+		result = await rule.ProcessAsync(tradeMsg2, CancellationToken);
 		result.AssertEqual(50m); // Turnover reached
 
 		// Test reset functionality
 		rule.Reset();
 
 		var tradeMsg3 = CreateTradeMessage(100m, 5m, Inc(ref now)); // 500
-		result = rule.Process(tradeMsg3);
+		result = await rule.ProcessAsync(tradeMsg3, CancellationToken);
 		result.AssertNull(); // Turnover not reached after reset
 
 		// Test null when not trade info
 		var orderMsg = CreateOrderMessage(100m, 5m, Inc(ref now));
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertNull();
 	}
 
 	[TestMethod]
-	public void SecurityTypeRule_UnknownSecurity_ReturnsNull()
+	public async Task SecurityTypeRule_UnknownSecurity_ReturnsNull()
 	{
 		var now = DateTime.UtcNow;
 
@@ -409,12 +428,12 @@ public class CommissionTests
 			ServerTime = Inc(ref now)
 		};
 
-		var result = rule.Process(tradeMsg);
+		var result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 		result.AssertNull();
 	}
 
 	[TestMethod]
-	public void SecurityTypeRuleSecProvider()
+	public async Task SecurityTypeRuleSecProvider()
 	{
 		var now = DateTime.UtcNow;
 
@@ -444,7 +463,7 @@ public class CommissionTests
 				ServerTime = Inc(ref now)
 			};
 
-			var result = rule.Process(tradeMsg);
+			var result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 			result.AssertEqual(20);
 		}
 		finally
@@ -452,7 +471,7 @@ public class CommissionTests
 			provider.Remove(appl);
 		}
 
-		provider.LookupById(secId).AssertNull($"{secId} was left in the provider the whole assembly shares");
+		(await provider.LookupByIdAsync(secId, CancellationToken)).AssertNull($"{secId} was left in the provider the whole assembly shares");
 	}
 
 	public static CommissionManager CreateManager()
@@ -475,7 +494,7 @@ public class CommissionTests
 	}
 
 	[TestMethod]
-	public void ManagerOrderMessage()
+	public async Task ManagerOrderMessage()
 	{
 		var now = DateTime.UtcNow;
 
@@ -492,7 +511,7 @@ public class CommissionTests
 		};
 
 		// Act
-		var commission = manager.Process(orderMsg);
+		var commission = await manager.ProcessAsync(orderMsg, CancellationToken);
 
 		// Assert
 		commission.AssertEqual(10m);
@@ -500,7 +519,7 @@ public class CommissionTests
 	}
 
 	[TestMethod]
-	public void ManagerTradeMessage()
+	public async Task ManagerTradeMessage()
 	{
 		var now = DateTime.UtcNow;
 
@@ -516,7 +535,7 @@ public class CommissionTests
 		};
 
 		// Act
-		var commission = manager.Process(tradeMsg);
+		var commission = await manager.ProcessAsync(tradeMsg, CancellationToken);
 
 		// Assert
 		commission.AssertEqual(15m);
@@ -524,7 +543,7 @@ public class CommissionTests
 	}
 
 	[TestMethod]
-	public void ManagerOrderAndTradeMessages()
+	public async Task ManagerOrderAndTradeMessages()
 	{
 		var now = DateTime.UtcNow;
 
@@ -549,15 +568,15 @@ public class CommissionTests
 		};
 
 		// Act
-		manager.Process(orderMsg);
-		manager.Process(tradeMsg);
+		await manager.ProcessAsync(orderMsg, CancellationToken);
+		await manager.ProcessAsync(tradeMsg, CancellationToken);
 
 		// Assert
 		manager.Commission.AssertEqual(25m); // 10m + 15m
 	}
 
 	[TestMethod]
-	public void ManagerResetMessage()
+	public async Task ManagerResetMessage()
 	{
 		var now = DateTime.UtcNow;
 
@@ -573,20 +592,20 @@ public class CommissionTests
 			ServerTime = Inc(ref now)
 		};
 
-		manager.Process(orderMsg);
+		await manager.ProcessAsync(orderMsg, CancellationToken);
 		manager.Commission.AssertEqual(10m);
 
 		var resetMsg = new ResetMessage();
 
 		// Act
-		manager.Process(resetMsg);
+		await manager.ProcessAsync(resetMsg, CancellationToken);
 
 		// Assert
 		manager.Commission.AssertEqual(0m);
 	}
 
 	[TestMethod]
-	public void ManagerEmptyRules()
+	public async Task ManagerEmptyRules()
 	{
 		var now = DateTime.UtcNow;
 
@@ -604,7 +623,7 @@ public class CommissionTests
 		};
 
 		// Act
-		var commission = manager.Process(orderMsg);
+		var commission = await manager.ProcessAsync(orderMsg, CancellationToken);
 
 		// Assert
 		commission.AssertNull();
@@ -612,7 +631,7 @@ public class CommissionTests
 	}
 
 	[TestMethod]
-	public void ManagerNonExecutionMessage()
+	public async Task ManagerNonExecutionMessage()
 	{
 		var manager = CreateManager();
 
@@ -622,7 +641,7 @@ public class CommissionTests
 		};
 
 		// Act
-		var commission = manager.Process(quoteMsg);
+		var commission = await manager.ProcessAsync(quoteMsg, CancellationToken);
 
 		// Assert
 		commission.AssertNull();
@@ -630,7 +649,7 @@ public class CommissionTests
 	}
 
 	[TestMethod]
-	public void ManagerSaveLoad()
+	public async Task ManagerSaveLoad()
 	{
 		var manager = CreateManager();
 
@@ -638,10 +657,10 @@ public class CommissionTests
 		var storage = new SettingsStorage();
 
 		// Act
-		manager.Save(storage);
+		await manager.SaveAsync(storage, CancellationToken);
 
 		var newManager = new CommissionManager();
-		newManager.Load(storage);
+		await newManager.LoadAsync(storage, CancellationToken);
 
 		// Assert
 		newManager.Rules.Count.AssertEqual(2);
@@ -658,7 +677,7 @@ public class CommissionTests
 	}
 
 	[TestMethod]
-	public void ManagerReset()
+	public async Task ManagerReset()
 	{
 		var now = DateTime.UtcNow;
 
@@ -682,7 +701,7 @@ public class CommissionTests
 		};
 
 		// Process first order to increase the counter in countRule
-		manager.Process(orderMsg);
+		await manager.ProcessAsync(orderMsg, CancellationToken);
 
 		// Act
 		manager.Reset();
@@ -692,8 +711,8 @@ public class CommissionTests
 
 		// Process one more order, it should not trigger countRule commission yet
 		// since the counter should have been reset
-		manager.Process(orderMsg);
-		var commission = manager.Process(orderMsg);
+		await manager.ProcessAsync(orderMsg, CancellationToken);
+		var commission = await manager.ProcessAsync(orderMsg, CancellationToken);
 
 		// This should be just the orderRule commission (10m) + countRule (5m) that triggered on second order after reset
 		commission.AssertEqual(15m);
@@ -771,7 +790,7 @@ public class CommissionTests
 	}
 
 	[TestMethod]
-	public void RuleSerialization()
+	public async Task RuleSerialization()
 	{
 		// A rule holding a security saves its id and reads the security back through the process-wide
 		// registry, so every security this test invents has to be in there while it runs.
@@ -824,11 +843,11 @@ public class CommissionTests
 				}
 
 				// Save
-				var storage = rule.Save();
+				var storage = await rule.SaveAsync(CancellationToken);
 
 				// Create new instance of the same type
 				var restored = type.CreateInstance<ICommissionRule>();
-				restored.Load(storage);
+				await restored.LoadAsync(storage, CancellationToken);
 
 				// Compare all public settable properties
 				foreach (var prop in props)
@@ -846,12 +865,19 @@ public class CommissionTests
 				secProvider.Remove(sec);
 		}
 
-		added.Count(s => secProvider.LookupById(s.ToSecurityId()) is not null)
-			.AssertEqual(0, "securities were left in the provider the whole assembly shares");
+		var left = 0;
+
+		foreach (var sec in added)
+		{
+			if (await secProvider.LookupByIdAsync(sec.ToSecurityId(), CancellationToken) is not null)
+				left++;
+		}
+
+		left.AssertEqual(0, "securities were left in the provider the whole assembly shares");
 	}
 
 	[TestMethod]
-	public void PerOrderCountRulePartialFill()
+	public async Task PerOrderCountRulePartialFill()
 	{
 		var now = DateTime.UtcNow;
 		var rule = new CommissionOrderCountRule
@@ -863,7 +889,7 @@ public class CommissionTests
 		var orderId = 123L;
 
 		// Order registration (order info only)
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -871,10 +897,10 @@ public class CommissionTests
 			OrderPrice = 100m,
 			OrderVolume = 10m,
 			ServerTime = Inc(ref now)
-		}).AssertEqual(10m);
+		}, CancellationToken)).AssertEqual(10m);
 
 		// First partial fill (own trade message with order info present)
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -882,10 +908,10 @@ public class CommissionTests
 			TradePrice = 100m,
 			TradeVolume = 3m,
 			ServerTime = Inc(ref now)
-		}).AssertNull();
+		}, CancellationToken)).AssertNull();
 
 		// Second partial fill for the same order
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -893,11 +919,11 @@ public class CommissionTests
 			TradePrice = 101m,
 			TradeVolume = 7m,
 			ServerTime = Inc(ref now)
-		}).AssertNull();
+		}, CancellationToken)).AssertNull();
 	}
 
 	[TestMethod]
-	public void PerOrderCountRuleChargesOncePerOrderAcrossSeparateMessages()
+	public async Task PerOrderCountRuleChargesOncePerOrderAcrossSeparateMessages()
 	{
 		// The emulator reports one order as several messages - registration, then a standalone
 		// trade, then a balance update, then the final state. One order is charged once.
@@ -913,7 +939,7 @@ public class CommissionTests
 		var orderId = 111L;
 
 		// Registration acknowledged.
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -924,10 +950,10 @@ public class CommissionTests
 			Balance = 10m,
 			OrderState = OrderStates.Active,
 			ServerTime = Inc(ref now)
-		}).AssertEqual(10m);
+		}, CancellationToken)).AssertEqual(10m);
 
 		// Own trade delivered on its own, without order info.
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			OriginalTransactionId = transId,
@@ -936,10 +962,10 @@ public class CommissionTests
 			TradePrice = 100m,
 			TradeVolume = 4m,
 			ServerTime = Inc(ref now)
-		}).AssertNull("a trade is not a new order");
+		}, CancellationToken)).AssertNull("a trade is not a new order");
 
 		// Balance update for the very same order.
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -950,10 +976,10 @@ public class CommissionTests
 			Balance = 6m,
 			OrderState = OrderStates.Active,
 			ServerTime = Inc(ref now)
-		}).AssertNull("a balance update is not a new order");
+		}, CancellationToken)).AssertNull("a balance update is not a new order");
 
 		// Final state of the very same order.
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -964,11 +990,11 @@ public class CommissionTests
 			Balance = 0m,
 			OrderState = OrderStates.Done,
 			ServerTime = Inc(ref now)
-		}).AssertNull("a final state is not a new order");
+		}, CancellationToken)).AssertNull("a final state is not a new order");
 	}
 
 	[TestMethod]
-	public void PerOrderCountRuleCountsOrdersNotNotifications()
+	public async Task PerOrderCountRuleCountsOrdersNotNotifications()
 	{
 		// Two orders reported in interleaved messages: the charge lands on the second distinct
 		// order, not on the second message about the first one.
@@ -981,7 +1007,7 @@ public class CommissionTests
 		};
 
 		// First order registered.
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -992,10 +1018,10 @@ public class CommissionTests
 			Balance = 10m,
 			OrderState = OrderStates.Active,
 			ServerTime = Inc(ref now)
-		}).AssertNull();
+		}, CancellationToken)).AssertNull();
 
 		// Balance update for the first order - still one order seen.
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -1006,10 +1032,10 @@ public class CommissionTests
 			Balance = 4m,
 			OrderState = OrderStates.Active,
 			ServerTime = Inc(ref now)
-		}).AssertNull("a second message about the first order is not a second order");
+		}, CancellationToken)).AssertNull("a second message about the first order is not a second order");
 
 		// Second order registered - the second order completes the pair.
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -1020,10 +1046,10 @@ public class CommissionTests
 			Balance = 5m,
 			OrderState = OrderStates.Active,
 			ServerTime = Inc(ref now)
-		}).AssertEqual(10m);
+		}, CancellationToken)).AssertEqual(10m);
 
 		// Trades and final states of both orders bring no further orders.
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			OriginalTransactionId = 2L,
@@ -1032,9 +1058,9 @@ public class CommissionTests
 			TradePrice = 200m,
 			TradeVolume = 5m,
 			ServerTime = Inc(ref now)
-		}).AssertNull();
+		}, CancellationToken)).AssertNull();
 
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -1045,9 +1071,9 @@ public class CommissionTests
 			Balance = 0m,
 			OrderState = OrderStates.Done,
 			ServerTime = Inc(ref now)
-		}).AssertNull();
+		}, CancellationToken)).AssertNull();
 
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -1058,10 +1084,10 @@ public class CommissionTests
 			Balance = 0m,
 			OrderState = OrderStates.Done,
 			ServerTime = Inc(ref now)
-		}).AssertNull();
+		}, CancellationToken)).AssertNull();
 
 		// A third distinct order starts the next pair.
-		rule.Process(new ExecutionMessage
+		(await rule.ProcessAsync(new ExecutionMessage
 		{
 			DataTypeEx = DataType.Transactions,
 			HasOrderInfo = true,
@@ -1072,11 +1098,11 @@ public class CommissionTests
 			Balance = 1m,
 			OrderState = OrderStates.Active,
 			ServerTime = Inc(ref now)
-		}).AssertNull();
+		}, CancellationToken)).AssertNull();
 	}
 
 	[TestMethod]
-	public void PerOrderTradeTurnover()
+	public async Task PerOrderTradeTurnover()
 	{
 		var now = DateTime.UtcNow;
 		var rule = new CommissionOrderRule
@@ -1097,11 +1123,11 @@ public class CommissionTests
 			ServerTime = Inc(ref now)
 		};
 
-		rule.Process(msg).AssertEqual(4.8m);
+		(await rule.ProcessAsync(msg, CancellationToken)).AssertEqual(4.8m);
 	}
 
 	[TestMethod]
-	public void TurnOverRuleRepeatedTrigger()
+	public async Task TurnOverRuleRepeatedTrigger()
 	{
 		var now = DateTime.UtcNow;
 
@@ -1115,24 +1141,24 @@ public class CommissionTests
 		// Act & Assert
 		// First trade: 500 turnover (below threshold)
 		var tradeMsg1 = CreateTradeMessage(100m, 5m, Inc(ref now));
-		var result = rule.Process(tradeMsg1);
+		var result = await rule.ProcessAsync(tradeMsg1, CancellationToken);
 		result.AssertNull(); // Turnover not reached yet
 
 		// Second trade: +600 = 1100 total (above threshold)
 		var tradeMsg2 = CreateTradeMessage(200m, 3m, Inc(ref now));
-		result = rule.Process(tradeMsg2);
+		result = await rule.ProcessAsync(tradeMsg2, CancellationToken);
 		result.AssertEqual(50m); // Turnover reached, commission applied
 
 		// After commission application the accumulated turnover is decreased by the threshold (1000),
 		// so the remainder is100. Next small trade won't reach the threshold again and should return null.
 		var tradeMsg3 = CreateTradeMessage(100m, 1m, Inc(ref now));
-		result = rule.Process(tradeMsg3);
+		result = await rule.ProcessAsync(tradeMsg3, CancellationToken);
 		// Expected: null (need1000 more turnover)
 		result.AssertNull();
 	}
 
 	[TestMethod]
-	public void PerOrderVolumeRuleWithPercent()
+	public async Task PerOrderVolumeRuleWithPercent()
 	{
 		var now = DateTime.UtcNow;
 
@@ -1144,16 +1170,16 @@ public class CommissionTests
 
 		// Act & Assert
 		var orderMsg = CreateOrderMessage(100m, 20m, Inc(ref now));
-		var result = rule.Process(orderMsg);
+		var result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertEqual(100m);
 
 		rule.Value = new Unit { Value = 10m, Type = UnitTypes.Percent };
-		result = rule.Process(orderMsg);
+		result = await rule.ProcessAsync(orderMsg, CancellationToken);
 		result.AssertEqual(200m);
 
 		// A different price distinguishes turnover percentage from volume multiplied by the raw percent.
 		var orderMsg2 = CreateOrderMessage(50m, 10m, Inc(ref now));
-		result = rule.Process(orderMsg2);
+		result = await rule.ProcessAsync(orderMsg2, CancellationToken);
 		result.AssertEqual(50m);
 	}
 
@@ -1166,7 +1192,7 @@ public class CommissionTests
 	/// the rules turns "not known" into "known to be nothing" for every other rule in the set.
 	/// </summary>
 	[TestMethod]
-	public void APercentRuleChargesNothingItCannotWorkOutOnAPricelessOrder()
+	public async Task APercentRuleChargesNothingItCannotWorkOutOnAPricelessOrder()
 	{
 		var now = DateTime.UtcNow;
 
@@ -1186,7 +1212,7 @@ public class CommissionTests
 			ServerTime = Inc(ref now)
 		};
 
-		rule.Process(marketOrder).AssertNull("a share of a turnover nobody knows yet is not zero, it is unknown");
+		(await rule.ProcessAsync(marketOrder, CancellationToken)).AssertNull("a share of a turnover nobody knows yet is not zero, it is unknown");
 
 		// Once the order fills the turnover is known, and the same rule charges its share of it.
 		var filled = new ExecutionMessage
@@ -1201,11 +1227,11 @@ public class CommissionTests
 			ServerTime = Inc(ref now)
 		};
 
-		rule.Process(filled).AssertEqual(110m);
+		(await rule.ProcessAsync(filled, CancellationToken)).AssertEqual(110m);
 	}
 
 	[TestMethod]
-	public void PerTradeVolumeRuleWithPercent()
+	public async Task PerTradeVolumeRuleWithPercent()
 	{
 		var now = DateTime.UtcNow;
 
@@ -1217,14 +1243,14 @@ public class CommissionTests
 
 		// Act & Assert
 		var tradeMsg = CreateTradeMessage(50m, 10m, Inc(ref now));
-		var result = rule.Process(tradeMsg);
+		var result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 
 		// Expected (with GetValue): (50 * 10 * 10) / 100 = 50
 		result.AssertEqual(50m);
 	}
 
 	[TestMethod]
-	public void PerTradePriceRuleWithPercent()
+	public async Task PerTradePriceRuleWithPercent()
 	{
 		var now = DateTime.UtcNow;
 
@@ -1236,14 +1262,14 @@ public class CommissionTests
 
 		// Act & Assert
 		var tradeMsg = CreateTradeMessage(100m, 5m, Inc(ref now));
-		var result = rule.Process(tradeMsg);
+		var result = await rule.ProcessAsync(tradeMsg, CancellationToken);
 
 		// Expected (with GetValue): (100 * 5 * 10) / 100 = 50
 		result.AssertEqual(50m);
 	}
 
 	[TestMethod]
-	public void PerOrderVolumeRuleWithNullValues()
+	public async Task PerOrderVolumeRuleWithNullValues()
 	{
 		var now = DateTime.UtcNow;
 
@@ -1262,17 +1288,17 @@ public class CommissionTests
 			OrderVolume = null,
 			ServerTime = Inc(ref now)
 		};
-		var result = rule.Process(orderMsgNullVolume);
+		var result = await rule.ProcessAsync(orderMsgNullVolume, CancellationToken);
 		result.AssertNull();
 
 		// Test with percent-based commission and null volume
 		rule.Value = new Unit { Value = 10m, Type = UnitTypes.Percent };
-		result = rule.Process(orderMsgNullVolume);
+		result = await rule.ProcessAsync(orderMsgNullVolume, CancellationToken);
 		result.AssertNull(); // percent commission needs volume for turnover calculation
 	}
 
 	[TestMethod]
-	public void MinRaisesACharge()
+	public async Task MinRaisesACharge()
 	{
 		// A tariff quoted as a percentage still charges a floor, so a trade too small to reach it
 		// is not carried for free.
@@ -1285,14 +1311,14 @@ public class CommissionTests
 		};
 
 		// 100 * 1 * 0.25% = 0.25, under the floor.
-		rule.Process(CreateTradeMessage(100m, 1m, Inc(ref now))).AssertEqual(1m);
+		(await rule.ProcessAsync(CreateTradeMessage(100m, 1m, Inc(ref now)), CancellationToken)).AssertEqual(1m);
 
 		// 100 * 100 * 0.25% = 25, over it.
-		rule.Process(CreateTradeMessage(100m, 100m, Inc(ref now))).AssertEqual(25m);
+		(await rule.ProcessAsync(CreateTradeMessage(100m, 100m, Inc(ref now)), CancellationToken)).AssertEqual(25m);
 	}
 
 	[TestMethod]
-	public void MinDoesNotInventACharge()
+	public async Task MinDoesNotInventACharge()
 	{
 		// The floor bounds a charge; it does not create one where the rule found nothing to
 		// charge for, and it leaves a rebate alone when no floor is set.
@@ -1304,26 +1330,26 @@ public class CommissionTests
 			Min = 5m,
 		};
 
-		rule.Process(CreateOrderMessage(100m, 1m, Inc(ref now))).AssertNull("a trade rule has nothing to say about an order");
+		(await rule.ProcessAsync(CreateOrderMessage(100m, 1m, Inc(ref now)), CancellationToken)).AssertNull("a trade rule has nothing to say about an order");
 
 		var rebate = new CommissionTradeVolumeRule
 		{
 			Value = new Unit { Value = -0.5m, Type = UnitTypes.Absolute },
 		};
 
-		rebate.Process(CreateTradeMessage(100m, 2m, Inc(ref now))).AssertEqual(-1m);
+		(await rebate.ProcessAsync(CreateTradeMessage(100m, 2m, Inc(ref now)), CancellationToken)).AssertEqual(-1m);
 	}
 
 	[TestMethod]
-	public void MinSurvivesSaveAndLoad()
+	public async Task MinSurvivesSaveAndLoad()
 	{
 		var rule = new CommissionTradeVolumeRule { Value = new Unit { Value = 2m }, Min = 3m };
 
 		var storage = new SettingsStorage();
-		rule.Save(storage);
+		await rule.SaveAsync(storage, CancellationToken);
 
 		var restored = new CommissionTradeVolumeRule();
-		restored.Load(storage);
+		await restored.LoadAsync(storage, CancellationToken);
 
 		restored.Min.AssertEqual(3m);
 	}
@@ -1337,10 +1363,8 @@ public class CommissionTests
 	// A custom rule class for testing
 	private class CustomCommissionRule : CommissionRule
 	{
-		protected override decimal? OnProcess(ExecutionMessage message)
-		{
-			return 1.0m; // Simple implementation for testing
-		}
+		protected override ValueTask<decimal?> OnProcessAsync(ExecutionMessage message, CancellationToken cancellationToken)
+			=> new(1.0m);
 	}
 
 	/// <summary>
@@ -1350,14 +1374,14 @@ public class CommissionTests
 	/// order the venue ever reported. What it holds has to stop growing, whatever the session does.
 	/// </summary>
 	[TestMethod]
-	public void WhatTheCountRuleRemembersStopsGrowingHoweverLongTheSessionRuns()
+	public async Task WhatTheCountRuleRemembersStopsGrowingHoweverLongTheSessionRuns()
 	{
 		var rule = new CommissionOrderCountRule { Value = 1m, Count = 1 };
 
 		var now = DateTime.UtcNow;
 		var next = 0;
 
-		void Orders(int count)
+		async Task Orders(int count)
 		{
 			for (var i = 0; i < count; i++)
 			{
@@ -1369,7 +1393,7 @@ public class CommissionTests
 				msg.OrderId = id;
 				msg.OrderStringId = id.To<string>();
 
-				rule.Process(msg);
+				await rule.ProcessAsync(msg, CancellationToken);
 			}
 		}
 
@@ -1381,10 +1405,10 @@ public class CommissionTests
 
 		const int batch = 20_000;
 
-		Orders(batch);
+		await Orders(batch);
 		var afterOne = Held(rule);
 
-		Orders(batch);
+		await Orders(batch);
 		var afterTwo = Held(rule);
 
 		afterTwo.AssertEqual(afterOne,

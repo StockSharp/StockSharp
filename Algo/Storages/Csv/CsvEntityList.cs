@@ -302,8 +302,9 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 	/// Read data from CSV.
 	/// </summary>
 	/// <param name="reader">CSV reader.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Trade object.</returns>
-	protected abstract TEntity Read(FastCsvReader reader);
+	protected abstract ValueTask<TEntity> ReadAsync(FastCsvReader reader, CancellationToken cancellationToken);
 
 	/// <inheritdoc />
 	public override bool Contains(TEntity item)
@@ -434,7 +435,7 @@ public abstract class CsvEntityList<TKey, TEntity> : SynchronizedList<TEntity>, 
 			{
 				try
 				{
-					var item = Read(reader);
+					var item = await ReadAsync(reader, cancellationToken);
 					var key = GetNormalizedKey(item);
 
 					using (EnterScope())

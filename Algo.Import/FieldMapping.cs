@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Import;
 /// <summary>
 /// Importing field description.
 /// </summary>
-public abstract class FieldMapping : NotifiableObject, IPersistable, ICloneable
+public abstract class FieldMapping : NotifiableObject, IAsyncPersistable, ICloneable
 {
 	private FastDateTimeParser _dateParser;
 	private FastTimeSpanParser _timeParser;
@@ -176,11 +176,13 @@ public abstract class FieldMapping : NotifiableObject, IPersistable, ICloneable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Name = storage.GetValue<string>(nameof(Name));
 		IsExtended = storage.GetValue<bool>(nameof(IsExtended));
-		Values = [.. storage.GetValue<SettingsStorage[]>(nameof(Values)).Select(s => s.Load<FieldMappingValue>())];
+		Values = [.. await storage.GetValue<SettingsStorage[]>(nameof(Values)).LoadAllAsync<FieldMappingValue>(cancellationToken)];
 		DefaultValue = storage.GetValue<string>(nameof(DefaultValue));
 		Format = storage.GetValue<string>(nameof(Format));
 		ZeroAsNull = storage.GetValue<bool>(nameof(ZeroAsNull));
@@ -196,11 +198,11 @@ public abstract class FieldMapping : NotifiableObject, IPersistable, ICloneable
 		AdapterType = storage.GetValue<string>(nameof(AdapterType)).To<Type>();
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	async Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Name), Name);
 		storage.SetValue(nameof(IsExtended), IsExtended);
-		storage.SetValue(nameof(Values), Values.Select(v => v.Save()).ToArray());
+		storage.SetValue(nameof(Values), await Values.SaveAllAsync(cancellationToken));
 		storage.SetValue(nameof(DefaultValue), DefaultValue);
 		storage.SetValue(nameof(Format), Format);
 		//storage.SetValue(nameof(IsEnabled), IsEnabled);
@@ -348,6 +350,29 @@ public abstract class FieldMapping : NotifiableObject, IPersistable, ICloneable
 	public abstract object Clone();
 
 	/// <summary>
+	/// Copy the settings into <paramref name="destination"/>.
+	/// </summary>
+	/// <param name="destination">The field that receives the settings.</param>
+	protected void CopyTo(FieldMapping destination)
+	{
+		if (destination is null)
+			throw new ArgumentNullException(nameof(destination));
+
+		destination.IsExtended = IsExtended;
+		destination.Values = [.. Values.Select(v => new FieldMappingValue
+		{
+			ValueFile = v.ValueFile,
+			ValueStockSharp = v.ValueStockSharp is ICloneable cloneable ? cloneable.Clone() : v.ValueStockSharp,
+		})];
+		destination.DefaultValue = DefaultValue;
+		destination.Format = Format;
+		destination.ZeroAsNull = ZeroAsNull;
+		destination.Order = Order;
+		destination.IsAdapter = IsAdapter;
+		destination.AdapterType = AdapterType;
+	}
+
+	/// <summary>
 	/// Reset state.
 	/// </summary>
 	public void Reset()
@@ -412,7 +437,7 @@ public class FieldMapping<TInstance, TValue> : FieldMapping
 	public override object Clone()
 	{
 		var clone = new FieldMapping<TInstance, TValue>(Name, GetDisplayName, GetDescription, Type, _apply);
-		clone.Load(this.Save());
+		CopyTo(clone);
 		return clone;
 	}
 }

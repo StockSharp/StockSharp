@@ -56,7 +56,7 @@ public enum EmulationCandlePrices
 /// <summary>
 /// Settings of exchange emulator.
 /// </summary>
-public class MarketEmulatorSettings : NotifiableObject, IPersistable
+public class MarketEmulatorSettings : NotifiableObject, IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="MarketEmulatorSettings"/>.
@@ -469,7 +469,9 @@ public class MarketEmulatorSettings : NotifiableObject, IPersistable
 	/// To save the state of paper trading parameters.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public virtual void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage
 			.Set(nameof(CandlePrice), CandlePrice)
@@ -488,18 +490,26 @@ public class MarketEmulatorSettings : NotifiableObject, IPersistable
 			.Set(nameof(CheckMoney), CheckMoney)
 			.Set(nameof(CheckShortable), CheckShortable)
 			.Set(nameof(AllowStoreGenerateMessages), AllowStoreGenerateMessages)
-			.Set(nameof(CheckTradableDates), CheckTradableDates)
-			.Set(nameof(CommissionRules), CommissionRules.Select(c => c.SaveEntire(false)).ToArray());
+			.Set(nameof(CheckTradableDates), CheckTradableDates);
 
 		if (TimeZone != null)
 			storage.Set(nameof(TimeZone), TimeZone);
+
+		var commissionRules = new List<SettingsStorage>();
+
+		foreach (var rule in CommissionRules)
+			commissionRules.Add(await rule.SaveEntireAsync(false, cancellationToken));
+
+		storage.Set(nameof(CommissionRules), commissionRules.ToArray());
 	}
 
 	/// <summary>
 	/// To load the state of paper trading parameters.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public virtual void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		CandlePrice = storage.GetValue(nameof(CandlePrice), CandlePrice);
 		MatchOnTouch = storage.GetValue(nameof(MatchOnTouch), MatchOnTouch);
@@ -511,7 +521,7 @@ public class MarketEmulatorSettings : NotifiableObject, IPersistable
 		MaxDepth = storage.GetValue(nameof(MaxDepth), MaxDepth);
 		PortfolioRecalcInterval = storage.GetValue(nameof(PortfolioRecalcInterval), PortfolioRecalcInterval);
 		ConvertTime = storage.GetValue(nameof(ConvertTime), ConvertTime);
-		PriceLimitOffset = storage.GetValue(nameof(PriceLimitOffset), PriceLimitOffset);
+		PriceLimitOffset = await storage.GetValueAsync(nameof(PriceLimitOffset), PriceLimitOffset, cancellationToken);
 		IncreaseDepthVolume = storage.GetValue(nameof(IncreaseDepthVolume), IncreaseDepthVolume);
 		CheckTradingState = storage.GetValue(nameof(CheckTradingState), CheckTradingState);
 		CheckMoney = storage.GetValue(nameof(CheckMoney), CheckMoney);
@@ -527,9 +537,14 @@ public class MarketEmulatorSettings : NotifiableObject, IPersistable
 		{
 			try
 			{
-				CommissionRules = [.. commRules.Select(i => i.LoadEntire<ICommissionRule>())];
+				var rules = new List<ICommissionRule>();
+
+				foreach (var s in commRules)
+					rules.Add(await s.LoadEntireAsync<ICommissionRule>(cancellationToken));
+
+				CommissionRules = [.. rules];
 			}
-			catch (Exception ex)
+			catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
 			{
 				ex.LogError();
 			}

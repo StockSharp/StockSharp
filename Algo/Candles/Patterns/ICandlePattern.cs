@@ -3,7 +3,7 @@
 /// <summary>
 /// The interfaces describes candle pattern.
 /// </summary>
-public interface ICandlePattern : IPersistable
+public interface ICandlePattern : IAsyncPersistable
 {
 	/// <summary>
 	/// Name.

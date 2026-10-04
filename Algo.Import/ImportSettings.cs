@@ -10,7 +10,7 @@ using DataType = StockSharp.Messages.DataType;
 /// </summary>
 [Display(ResourceType = typeof(LocalizedStrings), Name = LocalizedStrings.ImportSettingsKey)]
 [TypeConverter(typeof(ExpandableObjectConverter))]
-public class ImportSettings : NotifiableObject, IPersistable
+public class ImportSettings : NotifiableObject, IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ImportSettings"/>.
@@ -383,15 +383,17 @@ public class ImportSettings : NotifiableObject, IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		DataType = storage.GetValue<SettingsStorage>(nameof(DataType)).Load<DataType>();
+		DataType = await storage.GetValue<SettingsStorage>(nameof(DataType)).LoadAsync<DataType>(cancellationToken);
 
 		var extendedStorage = storage.GetValue<string>(nameof(ExtendedStorage));
 		if (!extendedStorage.IsEmpty() && ServicesRegistry.TryExtendedInfoStorage is IExtendedInfoStorage eis)
-			ExtendedStorage = AsyncHelper.Run(() => eis.GetAsync(extendedStorage, default));
+			ExtendedStorage = await eis.GetAsync(extendedStorage, cancellationToken);
 
-		SelectedFields = LoadSelectedFields(storage.GetValue<SettingsStorage[]>("Fields") ?? storage.GetValue<SettingsStorage[]>(nameof(SelectedFields)));
+		SelectedFields = await LoadSelectedFieldsAsync(storage.GetValue<SettingsStorage[]>("Fields") ?? storage.GetValue<SettingsStorage[]>(nameof(SelectedFields)), cancellationToken);
 
 		FileName = storage.GetValue<string>(nameof(FileName));
 		Directory = storage.GetValue(nameof(Directory), Directory);
@@ -409,11 +411,13 @@ public class ImportSettings : NotifiableObject, IPersistable
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		storage.SetValue(nameof(DataType), DataType.Save());
+		storage.SetValue(nameof(DataType), await DataType.SaveAsync(cancellationToken));
 		storage.SetValue(nameof(ExtendedStorage), ExtendedStorage?.StorageName);
-		storage.SetValue(nameof(SelectedFields), SelectedFields.Select(f => f.Save()).ToArray());
+		storage.SetValue(nameof(SelectedFields), await SelectedFields.SaveAllAsync(cancellationToken));
 
 		storage.SetValue(nameof(FileName), FileName);
 		storage.SetValue(nameof(Directory), Directory);
@@ -427,7 +431,7 @@ public class ImportSettings : NotifiableObject, IPersistable
 		storage.SetValue(nameof(Interval), Interval);
 	}
 
-	private IEnumerable<FieldMapping> LoadSelectedFields(IEnumerable<SettingsStorage> storages)
+	private async ValueTask<IEnumerable<FieldMapping>> LoadSelectedFieldsAsync(IEnumerable<SettingsStorage> storages, CancellationToken cancellationToken)
 	{
 		ArgumentNullException.ThrowIfNull(storages);
 
@@ -443,7 +447,7 @@ public class ImportSettings : NotifiableObject, IPersistable
 
 			field = field.GetOrClone();
 
-			field.Load(fieldSettings);
+			await field.LoadAsync(fieldSettings, cancellationToken);
 			selectedFields.Add(field);
 		}
 

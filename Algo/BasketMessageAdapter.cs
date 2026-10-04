@@ -965,39 +965,58 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			id => InnerAdapters.SyncGet(c => c.FindById(id)));
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
+		(IMessageAdapter adapter, int priority)[] adapters;
+
 		using (InnerAdapters.EnterScope())
+			adapters = [.. InnerAdapters.Select(a => (a, InnerAdapters[a]))];
+
+		var settings = new List<SettingsStorage>();
+
+		foreach (var (adapter, priority) in adapters)
 		{
-			storage.SetValue(nameof(InnerAdapters), InnerAdapters.Select(a =>
-			{
-				var s = new SettingsStorage();
-				s.SetValue("AdapterType", a.GetType().GetTypeName(false));
-				s.SetValue("AdapterSettings", a.Save());
-				s.SetValue("Priority", InnerAdapters[a]);
-				return s;
-			}).ToArray());
+			var s = new SettingsStorage();
+			s.SetValue("AdapterType", adapter.GetType().GetTypeName(false));
+			s.SetValue("AdapterSettings", await adapter.SaveAsync(cancellationToken));
+			s.SetValue("Priority", priority);
+			settings.Add(s);
 		}
 
-		base.Save(storage);
+		storage.SetValue(nameof(InnerAdapters), settings.ToArray());
+
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
+		var loaded = new List<(IMessageAdapter adapter, int priority)>();
+		var adapters = new Dictionary<Guid, IMessageAdapter>();
+
+		foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(InnerAdapters)))
+		{
+			try
+			{
+				var adapter = s.GetValue<Type>("AdapterType").CreateAdapter(TransactionIdGenerator);
+				await adapter.LoadAsync(s, "AdapterSettings", cancellationToken);
+				loaded.Add((adapter, s.GetValue<int>("Priority")));
+			}
+			catch (Exception e) when (e is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+			{
+				LogError(e);
+			}
+		}
+
 		using (InnerAdapters.EnterScope())
 		{
 			InnerAdapters.Clear();
 
-			var adapters = new Dictionary<Guid, IMessageAdapter>();
-
-			foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(InnerAdapters)))
+			foreach (var (adapter, priority) in loaded)
 			{
 				try
 				{
-					var adapter = s.GetValue<Type>("AdapterType").CreateAdapter(TransactionIdGenerator);
-					adapter.Load(s, "AdapterSettings");
-					InnerAdapters[adapter] = s.GetValue<int>("Priority");
+					InnerAdapters[adapter] = priority;
 					adapters.Add(adapter.Id, adapter);
 				}
 				catch (Exception e)
@@ -1017,7 +1036,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 					.Select(p => (p.Key, adapters[p.Value])));
 		}
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 
 	/// <summary>
@@ -1034,7 +1053,9 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="BasketMessageAdapter"/>.
 	/// </summary>
-	public IMessageAdapter Clone()
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	public async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
 		var clone = new BasketMessageAdapter(TransactionIdGenerator, StorageProcessor.CandleBuilderProvider, SecurityAdapterProvider, PortfolioAdapterProvider, Buffer)
 		{
@@ -1057,9 +1078,7 @@ public class BasketMessageAdapter : BaseLogReceiver, IMessageAdapterWrapper
 			GenerateOrderBookFromLevel1 = GenerateOrderBookFromLevel1,
 		};
 
-		clone.Load(this.Save());
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
 		return clone;
 	}
-
-	object ICloneable.Clone() => Clone();
 }

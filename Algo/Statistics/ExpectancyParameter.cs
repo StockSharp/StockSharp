@@ -69,24 +69,24 @@ public class ExpectancyParameter : BaseStatisticParameter<decimal>, ITradeStatis
 	}
 
 	/// <inheritdoc/>
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.Set("WinCount", _winCount);
 		storage.Set("LossCount", _lossCount);
 		storage.Set("WinSum", _winSum);
 		storage.Set("LossSum", _lossSum);
 
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc/>
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		_winCount = storage.GetValue<int>("WinCount");
 		_lossCount = storage.GetValue<int>("LossCount");
 		_winSum = storage.GetValue<decimal>("WinSum");
 		_lossSum = storage.GetValue<decimal>("LossSum");
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 }

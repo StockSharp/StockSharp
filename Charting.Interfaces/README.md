@@ -9,7 +9,7 @@ Charting.Interfaces contains a set of interface definitions and helper classes u
 - A `DummyChartBuilder` implementation that produces simple placeholder chart parts. This is useful for testing or scenarios where a lightweight chart implementation is required.
 - Extension methods in `ChartingInterfacesExtensions` that simplify creation of chart areas and elements, as well as drawing data on a chart.
 - Interfaces for specialized chart elements such as orders, trades, indicators, bands, and annotations.
-- Support for persistent settings via `IPersistable` so that chart layouts can be saved and restored.
+- Support for persistent settings via `IAsyncPersistable` so that chart layouts can be saved and restored.
 
 
 ## Usage

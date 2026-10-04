@@ -96,12 +96,14 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 			if (value == null)
 				return false;
 
-			int Compare() => field.ValueType.GetOperator().Compare(value, rule.Value);
+			var expected = rule.Value;
+
+			int Compare() => field.ValueType.GetOperator().Compare(value, expected);
 
 			return rule.Operator switch
 			{
-				ComparisonOperator.Equal =>				rule.Value.Equals(value),
-				ComparisonOperator.NotEqual =>			!rule.Value.Equals(value),
+				ComparisonOperator.Equal =>				expected.Equals(value),
+				ComparisonOperator.NotEqual =>			!expected.Equals(value),
 
 				ComparisonOperator.Greater =>			Compare() > 0,
 				ComparisonOperator.GreaterOrEqual =>	Compare() >= 0,
@@ -170,20 +172,32 @@ public class AlertProcessingService : BaseLogReceiver, IAlertProcessingService
 			.SelectMany(v => v.Cache)
 			.FirstOrDefault(v => v.Id == id);
 
-	void IPersistable.Load(SettingsStorage storage)
+	/// <inheritdoc />
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
+		var schemas = new List<AlertSchema>();
+
+		foreach (var schemaSettings in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Schemas)))
+			schemas.Add(await schemaSettings.LoadAsync<AlertSchema>(cancellationToken));
+
+		// Replaced only once everything has been read, so settings that cannot be read leave what was
+		// registered as it was.
 		_schemas.Clear();
 		_delivered.Clear();
 
-		foreach (var schemaSettings in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Schemas)))
-			Register(schemaSettings.Load<AlertSchema>());
+		foreach (var schema in schemas)
+			Register(schema);
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	/// <inheritdoc />
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		storage.SetValue(nameof(Schemas), Schemas
-			.Select(s => s.Save())
-			.ToArray());
+		var schemas = new List<SettingsStorage>();
+
+		foreach (var schema in Schemas)
+			schemas.Add(await schema.SaveAsync(cancellationToken));
+
+		storage.SetValue(nameof(Schemas), schemas.ToArray());
 	}
 
 	/// <inheritdoc />

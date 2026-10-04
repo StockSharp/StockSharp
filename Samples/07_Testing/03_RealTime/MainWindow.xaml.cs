@@ -74,9 +74,30 @@ public partial class MainWindow
 		GuiDispatcher.GlobalDispatcher.AddPeriodicalAction(ProcessCandles);
 	}
 
-	private void OnLoaded(object sender, RoutedEventArgs e)
+	private async void OnLoaded(object sender, RoutedEventArgs e)
 	{
 		ThemeExtensions.ApplyDefaultTheme();
+
+		try
+		{
+			if (_settingsFile.IsConfigExists(_fileSystem))
+			{
+				var settings = await _settingsFile.DeserializeAsync<SettingsStorage>(_fileSystem, default);
+
+				var ctx = new ContinueOnExceptionContext();
+				ctx.Error += ex => ex.LogError();
+
+				using (ctx.ToScope())
+					if (settings is not null)
+						await _realConnector.LoadAsync(settings, default);
+			}
+		}
+		catch (Exception ex)
+		{
+			ex.LogError();
+		}
+
+		SecurityPicker.SecurityProvider = await FilterableSecurityProvider.CreateAsync(_realConnector, default);
 	}
 
 	private void InitRealConnector()
@@ -95,22 +116,6 @@ public partial class MainWindow
 
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_realConnector.Adapter.InnerAdapters));
 
-		try
-		{
-			if (_settingsFile.IsConfigExists(_fileSystem))
-			{
-				var ctx = new ContinueOnExceptionContext();
-				ctx.Error += ex => ex.LogError();
-
-				using (ctx.ToScope())
-					_realConnector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>(_fileSystem));
-			}
-		}
-		catch
-		{
-		}
-
-		SecurityPicker.SecurityProvider = new FilterableSecurityProvider(_realConnector);
 	}
 
 	private void InitEmuConnector()
@@ -210,12 +215,12 @@ public partial class MainWindow
 		base.OnClosing(e);
 	}
 
-	private void SettingsClick(object sender, RoutedEventArgs e)
+	private async void SettingsClick(object sender, RoutedEventArgs e)
 	{
 		if (!_realConnector.Configure(this))
 			return;
 
-		_realConnector.Save().Serialize(_fileSystem, _settingsFile);
+		await (await _realConnector.SaveAsync(default)).SerializeAsync(_fileSystem, _settingsFile, true, default);
 		InitEmuConnector();
 	}
 

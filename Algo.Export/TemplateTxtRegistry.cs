@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 /// Txt templates registry.
 /// </summary>
 [TypeConverter(typeof(ExpandableObjectConverter))]
-public class TemplateTxtRegistry : IPersistable
+public class TemplateTxtRegistry : IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="TemplateTxtRegistry"/>.
@@ -173,7 +173,7 @@ public class TemplateTxtRegistry : IPersistable
 		Order = 12)]
 	public bool DoNotShowAgain { get; set; }
 
-	void IPersistable.Load(SettingsStorage storage)
+	Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		TemplateTxtDepth = storage.GetValue(nameof(TemplateTxtDepth), TemplateTxtDepth);
 		TemplateTxtTick = storage.GetValue(nameof(TemplateTxtTick), TemplateTxtTick);
@@ -190,9 +190,11 @@ public class TemplateTxtRegistry : IPersistable
 		TemplateTxtPositionChange = storage.GetValue(nameof(TemplateTxtPositionChange), TemplateTxtPositionChange);
 
 		DoNotShowAgain = storage.GetValue(nameof(DoNotShowAgain), DoNotShowAgain);
+
+		return Task.CompletedTask;
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(TemplateTxtDepth), TemplateTxtDepth);
 		storage.SetValue(nameof(TemplateTxtTick), TemplateTxtTick);
@@ -209,5 +211,7 @@ public class TemplateTxtRegistry : IPersistable
 		storage.SetValue(nameof(TemplateTxtPositionChange), TemplateTxtPositionChange);
 
 		storage.SetValue(nameof(DoNotShowAgain), DoNotShowAgain);
+
+		return Task.CompletedTask;
 	}
 }

@@ -5,8 +5,15 @@ using System.Drawing;
 /// <summary>
 /// <see cref="CompositionDiagramElement"/> model.
 /// </summary>
-public interface ICompositionModel : ICloneable<ICompositionModel>
+public interface ICompositionModel
 {
+	/// <summary>
+	/// Create a copy of the model.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<ICompositionModel> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// <see cref="ICompositionModelBehavior{TNode, TLink}"/>
 	/// </summary>
@@ -587,19 +594,22 @@ public class CompositionModel<TNode, TLink> : ICompositionModel
 		}
 	}
 
-	private CompositionModel<TNode, TLink> Clone()
+	/// <inheritdoc />
+	public async ValueTask<ICompositionModel> CloneAsync(CancellationToken cancellationToken)
 	{
 		var model = new CompositionModel<TNode, TLink>((ICompositionModelBehavior<TNode, TLink>)_behavior.Clone());
 
+		var nodes = new List<TNode>();
+
+		foreach (var node in Nodes)
+			nodes.Add((TNode)await node.CloneAsync(cancellationToken));
+
 		model.ExecuteTransaction("Clone", m =>
 		{
-			m.Nodes = new ObservableCollection<TNode>(Nodes.Select(n => (TNode)n.Clone()));
+			m.Nodes = new ObservableCollection<TNode>(nodes);
 			m.Links = new ObservableCollection<TLink>(Links.Select(l => l.TypedClone()));
 		});
 
 		return model;
 	}
-
-	ICompositionModel ICloneable<ICompositionModel>.Clone() => Clone();
-	object ICloneable.Clone() => Clone();
 }

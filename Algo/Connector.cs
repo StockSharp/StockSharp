@@ -52,7 +52,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		SecurityStorage = securityStorage ?? throw new ArgumentNullException(nameof(securityStorage));
 		PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
 
-		_entityCache = new(this, TryGetSecurity, exchangeInfoProvider, PositionStorage);
+		_entityCache = new(this, exchangeInfoProvider, PositionStorage);
 
 		var transactionIdGenerator = new MillisecondIncrementalIdGenerator();
 
@@ -965,10 +965,6 @@ public partial class Connector : BaseLogReceiver, IConnector
 		// Sync bridge over the async path kept only for the deprecated IConnector contract.
 		=> AsyncHelper.Run(() => GetSecurityAsync(securityId, default));
 
-	private Security TryGetSecurity(SecurityId? securityId)
-		// Pure lookup used by the entity cache snapshots: it must not create/persist a security.
-		=> securityId == null || securityId.Value == default ? null : SecurityStorage.LookupById(securityId.Value);
-
 	private async ValueTask<Security> EnsureGetSecurityAsync<TMessage>(TMessage message, CancellationToken cancellationToken)
 		where TMessage : ISecurityIdMessage, ISubscriptionIdMessage
 	{
@@ -1116,8 +1112,13 @@ public partial class Connector : BaseLogReceiver, IConnector
 		CloseTimer();
 	}
 
-	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	/// <summary>
+	/// Load settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
@@ -1134,9 +1135,9 @@ public partial class Connector : BaseLogReceiver, IConnector
 		CheckSteps = storage.GetValue(nameof(CheckSteps), CheckSteps);
 
 		if (storage.ContainsKey(nameof(RiskManager)))
-			RiskManager = storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntire<IRiskManager>();
+			RiskManager = await storage.GetValue<SettingsStorage>(nameof(RiskManager)).LoadEntireAsync<IRiskManager>(cancellationToken);
 
-		Adapter.Load(storage, nameof(Adapter));
+		await Adapter.LoadAsync(storage, nameof(Adapter), cancellationToken);
 
 		MarketTimeChangedInterval = storage.GetValue<TimeSpan>(nameof(MarketTimeChangedInterval));
 		TimeChange = storage.GetValue(nameof(TimeChange), TimeChange);
@@ -1161,7 +1162,7 @@ public partial class Connector : BaseLogReceiver, IConnector
 		if (subscriptionsOnConnect is IEnumerable<SettingsStorage> subSettings)
 		{
 			SubscriptionsOnConnect.Clear();
-			SubscriptionsOnConnect.AddRange(subSettings.Select(s => new Subscription(s.Load<DataType>())));
+			SubscriptionsOnConnect.AddRange((await subSettings.LoadAllAsync<DataType>(cancellationToken)).Select(dt => new Subscription(dt)));
 		}
 		else if (subscriptionsOnConnect is string str)
 		{
@@ -1177,13 +1178,18 @@ public partial class Connector : BaseLogReceiver, IConnector
 		IsAutoUnSubscribeOnDisconnect = storage.GetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 
 		if (Buffer != null && storage.ContainsKey(nameof(Buffer)))
-			Buffer.Load(storage, nameof(Buffer));
+			await Buffer.LoadAsync(storage, nameof(Buffer), cancellationToken);
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 
-	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
@@ -1200,9 +1206,9 @@ public partial class Connector : BaseLogReceiver, IConnector
 		storage.SetValue(nameof(CheckSteps), CheckSteps);
 
 		if (RiskManager != null)
-			storage.SetValue(nameof(RiskManager), RiskManager.SaveEntire(false));
+			storage.SetValue(nameof(RiskManager), await RiskManager.SaveEntireAsync(false, cancellationToken));
 
-		storage.SetValue(nameof(Adapter), Adapter.Save());
+		storage.SetValue(nameof(Adapter), await Adapter.SaveAsync(cancellationToken));
 
 		storage.SetValue(nameof(MarketTimeChangedInterval), MarketTimeChangedInterval);
 		storage.SetValue(nameof(TimeChange), TimeChange);
@@ -1211,13 +1217,13 @@ public partial class Connector : BaseLogReceiver, IConnector
 		storage.SetValue(nameof(SupportSnapshots), SupportSnapshots);
 		storage.SetValue(nameof(SupportAssociatedSecurity), SupportAssociatedSecurity);
 
-		storage.SetValue(nameof(SubscriptionsOnConnect), _subscriptionManager.SubscriptionsOnConnect.Cache.Select(s => s.DataType.Save()).ToArray());
+		storage.SetValue(nameof(SubscriptionsOnConnect), await _subscriptionManager.SubscriptionsOnConnect.Cache.Select(s => s.DataType).SaveAllAsync(cancellationToken));
 		storage.SetValue(nameof(IsRestoreSubscriptionOnNormalReconnect), IsRestoreSubscriptionOnNormalReconnect);
 		storage.SetValue(nameof(IsAutoUnSubscribeOnDisconnect), IsAutoUnSubscribeOnDisconnect);
 
 		if (Buffer != null)
-			storage.SetValue(nameof(Buffer), Buffer.Save());
+			storage.SetValue(nameof(Buffer), await Buffer.SaveAsync(cancellationToken));
 
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 }

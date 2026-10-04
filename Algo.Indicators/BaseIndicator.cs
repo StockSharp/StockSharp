@@ -9,7 +9,7 @@ using Ecng.Drawing;
 /// </summary>
 [IndicatorIn(typeof(DecimalIndicatorValue))]
 [IndicatorOut(typeof(DecimalIndicatorValue))]
-public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
+public abstract class BaseIndicator : IIndicator
 {
 	private class InnerIndicatorResetScope
 	{
@@ -169,18 +169,26 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		SaveValues(storage);
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		LoadValues(storage);
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc />
@@ -347,9 +355,14 @@ public abstract class BaseIndicator : Cloneable<IIndicator>, IIndicator
 	/// <summary>
 	/// Create a copy of <see cref="IIndicator"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IIndicator Clone()
-		=> PersistableHelper.Clone(this);
+	public virtual async ValueTask<IIndicator> CloneAsync(CancellationToken cancellationToken)
+	{
+		var clone = GetType().CreateInstance<IIndicator>();
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
+		return clone;
+	}
 
 	/// <inheritdoc />
 	public override string ToString() => Name;

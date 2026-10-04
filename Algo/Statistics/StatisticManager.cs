@@ -127,7 +127,7 @@ public class StatisticManager : Disposable, IStatisticManager
 	void IStatisticManager.Reset()
 		=> _parameters.Cache.ForEach(p => p.Reset());
 
-	void IPersistable.Load(SettingsStorage storage)
+	async Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		foreach (var ps in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Parameters)))
 		{
@@ -137,18 +137,22 @@ public class StatisticManager : Disposable, IStatisticManager
 				continue;
 
 			if (_parameters.TryGetValue(type.Value, out var p))
-				p.Load(ps);
+				await p.LoadAsync(ps, cancellationToken);
 		}
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	async Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		storage.Set(nameof(Parameters), Parameters.Select(p =>
+		var parameters = new List<SettingsStorage>();
+
+		foreach (var p in Parameters)
 		{
-			var s = p.Save();
+			var s = await p.SaveAsync(cancellationToken);
 			s.Set(nameof(p.Type), (int)p.Type);
-			return s;
-		}).ToArray());
+			parameters.Add(s);
+		}
+
+		storage.Set(nameof(Parameters), parameters.ToArray());
 	}
 
 	/// <inheritdoc />

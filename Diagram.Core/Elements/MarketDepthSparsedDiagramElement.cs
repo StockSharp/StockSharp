@@ -54,9 +54,7 @@ public class MarketDepthSparsedDiagramElement : DiagramElement
 	{
 		var depth = value.GetValue<IOrderBookMessage>();
 
-		var security = Strategy.LookupById(depth.SecurityId);
-
-		var result = depth.Sparse(PriceRange, security?.PriceStep);
+		var result = depth.Sparse(PriceRange, value.SubscribedSecurity?.PriceStep);
 
 		RaiseProcessOutput(_outputSocket, value.Time, result, value);
 	}

@@ -18,11 +18,11 @@ public class HeartbeatReconnectScheduleTests : BaseTestClass
 
 		public override DateTime CurrentTime => Time;
 
-		public override IMessageAdapter Clone()
-			=> new TimeControlledPassThroughMessageAdapter
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TimeControlledPassThroughMessageAdapter
 			{
 				Time = Time,
-			};
+			});
 	}
 
 	[TestMethod]

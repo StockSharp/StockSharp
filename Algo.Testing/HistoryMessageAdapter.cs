@@ -267,12 +267,12 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 				var lookupMsg = (SecurityLookupMessage)message;
 
 				var securities = lookupMsg.SecurityId == default
-					? SecurityProvider.LookupAll()
-					: SecurityProvider.Lookup(lookupMsg);
+					? SecurityProvider.LookupAllAsync()
+					: SecurityProvider.LookupAsync(lookupMsg);
 
 				var processedBoards = new HashSet<ExchangeBoard>();
 
-				foreach (var security in securities)
+				await foreach (var security in securities.WithEnforcedCancellation(cancellationToken))
 				{
 					if (security.Board != null && processedBoards.Add(security.Board))
 						await SendOutMessageAsync(security.Board.ToMessage(), cancellationToken);
@@ -390,12 +390,15 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 			await SendSubscriptionResultAsync(message, cancellationToken);
 	}
 
-	private BoardMessage[] GetBoards()
-		=> [.. SecurityProvider
-			.LookupAll()
-			.Select(s => s.Board)
-			.Distinct()
-			.Select(b => b.ToMessage())];
+	private async ValueTask<BoardMessage[]> GetBoardsAsync(CancellationToken cancellationToken)
+	{
+		var boards = new HashSet<ExchangeBoard>();
+
+		await foreach (var security in SecurityProvider.LookupAllAsync().WithEnforcedCancellation(cancellationToken))
+			boards.Add(security.Board);
+
+		return [.. boards.Select(b => b.ToMessage())];
+	}
 
 	private bool IsProcessing()
 	{
@@ -447,7 +450,6 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 
 			var (cts, token) = cancellationToken.CreateChildToken();
 			var run = new ReplayRun(cts, token);
-			var boards = CheckTradableDates ? GetBoards() : [];
 			var startPublication = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 
 			run.StartPublicationSource = startPublication;
@@ -455,7 +457,7 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 
 			_processingRun = run;
 			run.ReplayTask = Task.Run(
-				() => RunReplayAsync(run, boards, stopDate, startPublication.Task),
+				() => RunReplayAsync(run, stopDate, startPublication.Task),
 				CancellationToken.None);
 			run.LifecycleTask = Task.Run(() => CompleteLifecycleAsync(run), CancellationToken.None);
 
@@ -509,7 +511,6 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 
 	private async Task<EmulationStateMessage> RunReplayAsync(
 		ReplayRun run,
-		BoardMessage[] boards,
 		DateTime stopDate,
 		Task<bool> startPublication)
 	{
@@ -521,6 +522,8 @@ public class HistoryMessageAdapter : MessageAdapter, IEmulationMessageAdapter
 				return null;
 
 			token.ThrowIfCancellationRequested();
+
+			var boards = CheckTradableDates ? await GetBoardsAsync(token).ConfigureAwait(false) : [];
 
 			EmulationStateMessage terminalState = null;
 

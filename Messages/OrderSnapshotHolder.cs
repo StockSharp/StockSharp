@@ -20,17 +20,17 @@ public class OrderSnapshotHolder : BaseLogReceiver
 	public bool ThrowOnInvalidStateTransition { get; set; }
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(ThrowOnInvalidStateTransition), ThrowOnInvalidStateTransition);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		ThrowOnInvalidStateTransition = storage.GetValue(nameof(ThrowOnInvalidStateTransition), ThrowOnInvalidStateTransition);
 	}

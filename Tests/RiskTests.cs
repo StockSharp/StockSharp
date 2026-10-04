@@ -82,7 +82,7 @@ public class RiskTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ManagerSaveLoad()
+	public async Task ManagerSaveLoad()
 	{
 		var manager = new RiskManager();
 
@@ -102,10 +102,10 @@ public class RiskTests : BaseTestClass
 		manager.Rules.Add(positionRule);
 
 		var storage = new SettingsStorage();
-		manager.Save(storage);
+		await manager.SaveAsync(storage, CancellationToken);
 
 		var newManager = new RiskManager();
-		newManager.Load(storage);
+		await newManager.LoadAsync(storage, CancellationToken);
 
 		newManager.Rules.Count.AssertEqual(2);
 
@@ -1131,7 +1131,7 @@ public class RiskTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SaveLoad()
+	public async Task SaveLoad()
 	{
 		var originalRule = new RiskPnLRule
 		{
@@ -1139,10 +1139,10 @@ public class RiskTests : BaseTestClass
 			Action = RiskActions.StopTrading
 		};
 
-		var storage = originalRule.Save();
+		var storage = await originalRule.SaveAsync(CancellationToken);
 
 		var restoredRule = new RiskPnLRule();
-		restoredRule.Load(storage);
+		await restoredRule.LoadAsync(storage, CancellationToken);
 
 		restoredRule.PnL.Value.AssertEqual(1500);
 		restoredRule.PnL.Type.AssertEqual(UnitTypes.Percent);
@@ -1189,7 +1189,7 @@ public class RiskTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Serialization()
+	public async Task Serialization()
 	{
 		IRiskRuleProvider provider = new InMemoryRiskRuleProvider();
 
@@ -1232,10 +1232,10 @@ public class RiskTests : BaseTestClass
 				prop.SetValue(rule, value);
 			}
 
-			var storage = rule.Save();
+			var storage = await rule.SaveAsync(CancellationToken);
 
 			var restored = ruleType.CreateInstance<IRiskRule>();
-			restored.Load(storage);
+			await restored.LoadAsync(storage, CancellationToken);
 
 			foreach (var prop in props)
 			{
@@ -2010,7 +2010,8 @@ public class RiskTests : BaseTestClass
 		public ValueTask EmitOutAsync(Message message, CancellationToken cancellationToken)
 			=> SendOutMessageAsync(message, cancellationToken);
 
-		public override IMessageAdapter Clone() => new TestInnerAdapter();
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestInnerAdapter());
 	}
 
 	[TestMethod]

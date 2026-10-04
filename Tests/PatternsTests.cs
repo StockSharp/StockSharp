@@ -429,7 +429,7 @@ public class PatternsTests : BaseTestClass
 		ThrowsExactly<ArgumentException>(() => CandlePatternRegistry.Piercing.Recognize([singleCandle]));
 	}
 	[TestMethod]
-	public void SaveLoad()
+	public async Task SaveLoad()
 	{
 		var fs = Helper.FileSystem;
 
@@ -440,10 +440,10 @@ public class PatternsTests : BaseTestClass
 		]);
 
 		var storage = new SettingsStorage();
-		((IPersistable)pattern).Save(storage);
+		await ((IAsyncPersistable)pattern).SaveAsync(storage, CancellationToken);
 
 		var loaded = new ExpressionCandlePattern("Loaded", []);
-		((IPersistable)loaded).Load(storage);
+		await ((IAsyncPersistable)loaded).LoadAsync(storage, CancellationToken);
 
 		loaded.Name.AssertEqual(pattern.Name);
 		loaded.Conditions.Length.AssertEqual(pattern.Conditions.Length);
@@ -455,7 +455,7 @@ public class PatternsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SaveLoadWithCustomName()
+	public async Task SaveLoadWithCustomName()
 	{
 		// Compiling a formula reads the reference assemblies from this file system, so it has to be the real one.
 		var fs = Helper.FileSystem;
@@ -466,10 +466,10 @@ public class PatternsTests : BaseTestClass
 		]);
 
 		var storage = new SettingsStorage();
-		((IPersistable)pattern).Save(storage);
+		await ((IAsyncPersistable)pattern).SaveAsync(storage, CancellationToken);
 
 		var loaded = new ExpressionCandlePattern("OtherName", []);
-		((IPersistable)loaded).Load(storage);
+		await ((IAsyncPersistable)loaded).LoadAsync(storage, CancellationToken);
 
 		loaded.Name.AssertEqual(pattern.Name);
 		loaded.Conditions.Length.AssertEqual(1);
@@ -652,7 +652,7 @@ public class PatternsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void LoadedConditionIsCompiled()
+	public async Task LoadedConditionIsCompiled()
 	{
 		// Compiling a formula reads the reference assemblies from this file system, so it has to be the real one.
 		var fs = Helper.FileSystem;
@@ -664,10 +664,10 @@ public class PatternsTests : BaseTestClass
 		]);
 
 		var storage = new SettingsStorage();
-		((IPersistable)pattern).Save(storage);
+		await ((IAsyncPersistable)pattern).SaveAsync(storage, CancellationToken);
 
 		var loaded = new ExpressionCandlePattern("Loaded", []);
-		((IPersistable)loaded).Load(storage);
+		await ((IAsyncPersistable)loaded).LoadAsync(storage, CancellationToken);
 
 		loaded.Conditions.Length.AssertEqual(1);
 		loaded.Conditions[0].ToString().AssertEqual("O < C");

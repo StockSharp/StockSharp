@@ -232,7 +232,8 @@ public class AsyncExtensionsTests : BaseTestClass
 				await SendOutMessageAsync(mdMsg.CreateResult(), cancellationToken);
 		}
 
-		public override IMessageAdapter Clone() => new MockAsyncAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new MockAsyncAdapter(TransactionIdGenerator));
 	}
 
 	[TestMethod]

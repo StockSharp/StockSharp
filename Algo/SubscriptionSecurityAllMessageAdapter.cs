@@ -330,9 +330,10 @@ public class SubscriptionSecurityAllMessageAdapter(IMessageAdapter innerAdapter)
 	/// <summary>
 	/// Create a copy of <see cref="SubscriptionSecurityAllMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new SubscriptionSecurityAllMessageAdapter(InnerAdapter.TypedClone());
+		return new SubscriptionSecurityAllMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken));
 	}
 }

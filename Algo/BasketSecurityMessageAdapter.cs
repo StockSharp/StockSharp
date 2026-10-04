@@ -152,7 +152,7 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 				if (mdMsg.SecurityId == default)
 					break;
 
-				var security = _securityProvider.LookupById(mdMsg.SecurityId);
+				var security = await _securityProvider.LookupByIdAsync(mdMsg.SecurityId, cancellationToken);
 
 				if (security == null)
 				{
@@ -509,11 +509,12 @@ public class BasketSecurityMessageAdapter(IMessageAdapter innerAdapter, ISecurit
 	/// <summary>
 	/// Create a copy of <see cref="BasketSecurityMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
 		// A copy is a second adapter and needs a link of its own: sharing the original's would
 		// make the two answer each other's legs over one connection.
-		return new BasketSecurityMessageAdapter(InnerAdapter.TypedClone(), _securityProvider, _processorProvider, _exchangeInfoProvider);
+		return new BasketSecurityMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), _securityProvider, _processorProvider, _exchangeInfoProvider);
 	}
 }

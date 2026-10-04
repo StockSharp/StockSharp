@@ -306,13 +306,13 @@ public class OfflineMessageAdapterTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Clone_CreatesNewAdapter()
+	public async Task Clone_CreatesNewAdapter()
 	{
 		var inner = new RecordingMessageAdapter();
 
 		using var adapter = new OfflineMessageAdapter(inner);
 
-		var cloned = adapter.Clone();
+		var cloned = await adapter.CloneAsync(CancellationToken);
 
 		cloned.AssertNotNull();
 		cloned.AssertNotSame(adapter);

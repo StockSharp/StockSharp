@@ -151,34 +151,34 @@ public class DataTypeTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Save_Load_NonCandle()
+	public async Task Save_Load_NonCandle()
 	{
 		var dt = DataType.Create<Level1ChangeMessage>();
 		var storage = new SettingsStorage();
-		dt.Save(storage);
+		await dt.SaveAsync(storage, CancellationToken);
 
 		var loaded = new DataType();
-		loaded.Load(storage);
+		await loaded.LoadAsync(storage, CancellationToken);
 
 		loaded.AreEqual(dt);
 		loaded.AreEqual(DataType.Level1);
 	}
 
 	[TestMethod]
-	public void Save_Load()
+	public async Task Save_Load()
 	{
 		var dt = DataType.Create<TimeFrameCandleMessage>(TimeSpan.FromMinutes(1));
 		var storage = new SettingsStorage();
-		dt.Save(storage);
+		await dt.SaveAsync(storage, CancellationToken);
 
 		var loaded = new DataType();
-		loaded.Load(storage);
+		await loaded.LoadAsync(storage, CancellationToken);
 
 		loaded.AreEqual(dt);
 	}
 
 	[TestMethod]
-	public void Load_Replaces_Derived_State()
+	public async Task Load_Replaces_Derived_State()
 	{
 		var dataType = DataType.Create<TimeFrameCandleMessage>(TimeSpan.FromMinutes(1));
 
@@ -188,8 +188,8 @@ public class DataTypeTests : BaseTestClass
 		dataType.IsNonSecurity.AssertFalse();
 
 		var storage = new SettingsStorage();
-		DataType.Securities.Save(storage);
-		dataType.Load(storage);
+		await DataType.Securities.SaveAsync(storage, CancellationToken);
+		await dataType.LoadAsync(storage, CancellationToken);
 
 		dataType.AreEqual(DataType.Securities);
 		dataType.Arg.AssertNull();
@@ -515,11 +515,11 @@ public class DataTypeTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Indicator_SurvivesBeingSavedAndLoaded()
+	public async Task Indicator_SurvivesBeingSavedAndLoaded()
 	{
 		var original = DataType.Indicator(Sma(Minute, ("Length", 20)));
 
-		var restored = original.Save().Load<DataType>();
+		var restored = await (await original.SaveAsync(CancellationToken)).LoadAsync<DataType>(CancellationToken);
 
 		AreEqual(original, restored);
 

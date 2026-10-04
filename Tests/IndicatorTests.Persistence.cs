@@ -218,7 +218,7 @@ partial class IndicatorTests
 	}
 
 	[TestMethod]
-	public void SaveLoad()
+	public async Task SaveLoad()
 	{
 		void ComparePropsRecursive(IIndicator obj1, IIndicator obj2)
 		{
@@ -270,10 +270,10 @@ partial class IndicatorTests
 					reseted = false;
 				});
 
-				var storage = indicator.Save();
+				var storage = await indicator.SaveAsync(CancellationToken);
 
 				var restoredIndicator = type.CreateIndicator();
-				restoredIndicator.Load(storage);
+				await restoredIndicator.LoadAsync(storage, CancellationToken);
 
 				ComparePropsRecursive(indicator, restoredIndicator);
 			}

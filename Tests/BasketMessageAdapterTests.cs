@@ -678,4 +678,27 @@ public class BasketMessageAdapterTests : BasketTestBase
 	}
 
 	#endregion
+
+	#region Settings
+
+	/// <summary>
+	/// Saved settings of one adapter that cannot be applied do not stop the others from being loaded.
+	/// </summary>
+	[TestMethod]
+	public async Task Load_AdapterWithBrokenPriority_DoesNotStopTheOthers()
+	{
+		var (source, _, _) = CreateBasket();
+		var storage = await source.SaveAsync(CancellationToken);
+
+		var saved = storage.GetValue<SettingsStorage[]>(nameof(BasketMessageAdapter.InnerAdapters));
+		saved.Length.AssertEqual(2);
+		saved[0].SetValue("Priority", -5);
+
+		var (basket, _, _) = CreateBasket();
+		await basket.LoadAsync(storage, CancellationToken);
+
+		basket.InnerAdapters.Count().AssertEqual(1);
+	}
+
+	#endregion
 }

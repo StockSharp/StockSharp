@@ -1,6 +1,8 @@
 namespace StockSharp.Samples.Strategies.LiveTerminal;
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Ecng.Common;
 using Ecng.Serialization;
@@ -12,16 +14,17 @@ internal static class TerminalStrategyPersistence
 {
 	private const string SettingsKey = "settings";
 
-	public static Strategy Load(
+	public static async Task<Strategy> LoadAsync(
 		SettingsStorage envelope,
 		Func<string, Security> resolveSecurity,
-		Func<string, Portfolio> resolvePortfolio)
+		Func<string, Portfolio> resolvePortfolio,
+		CancellationToken cancellationToken)
 	{
 		ArgumentNullException.ThrowIfNull(envelope);
 		ArgumentNullException.ThrowIfNull(resolveSecurity);
 		ArgumentNullException.ThrowIfNull(resolvePortfolio);
 
-		var strategy = envelope.LoadEntire<Strategy>();
+		var strategy = await envelope.LoadEntireAsync<Strategy>(cancellationToken);
 		try
 		{
 			var strategyStorage = envelope.GetValue<SettingsStorage>(SettingsKey);

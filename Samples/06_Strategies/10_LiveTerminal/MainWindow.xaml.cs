@@ -99,7 +99,6 @@ public partial class MainWindow
 		InitConnector(entityRegistry, snapshotRegistry);
 
 		_strategiesWindow = new StrategiesWindow();
-		_strategiesWindow.LoadStrategies(path);
 
 		_ordersWindow.MakeHideable();
 		_myTradesWindow.MakeHideable();
@@ -108,9 +107,30 @@ public partial class MainWindow
 		_portfoliosWindow.MakeHideable();
 	}
 
-	private void OnLoaded(object sender, RoutedEventArgs e)
+	private async void OnLoaded(object sender, RoutedEventArgs e)
 	{
 		ThemeExtensions.ApplyDefaultTheme();
+
+		try
+		{
+			if (_settingsFile.IsConfigExists(FileSystem))
+			{
+				var settings = await _settingsFile.DeserializeAsync<SettingsStorage>(FileSystem, default);
+
+				var ctx = new ContinueOnExceptionContext();
+				ctx.Error += ex => ex.LogError();
+
+				using (ctx.ToScope())
+					if (settings is not null)
+						await Connector.LoadAsync(settings, default);
+			}
+		}
+		catch (Exception ex)
+		{
+			ex.LogError();
+		}
+
+		await _strategiesWindow.LoadStrategiesAsync(Path.GetDirectoryName(_settingsFile), default);
 	}
 
 	private void InitConnector(IEntityRegistry entityRegistry, ISnapshotRegistry snapshotRegistry)
@@ -173,20 +193,6 @@ public partial class MainWindow
 
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(Connector.Adapter.InnerAdapters));
 
-		try
-		{
-			if (_settingsFile.IsConfigExists(FileSystem))
-			{
-				var ctx = new ContinueOnExceptionContext();
-				ctx.Error += ex => ex.LogError();
-
-				using (ctx.ToScope())
-					Connector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>(FileSystem));
-			}
-		}
-		catch
-		{
-		}
 	}
 
 	protected override void OnClosing(CancelEventArgs e)
@@ -210,10 +216,10 @@ public partial class MainWindow
 		base.OnClosing(e);
 	}
 
-	private void SettingsClick(object sender, RoutedEventArgs e)
+	private async void SettingsClick(object sender, RoutedEventArgs e)
 	{
 		if (Connector.Configure(this))
-			Connector.Save().Serialize(FileSystem, _settingsFile);
+			await (await Connector.SaveAsync(default)).SerializeAsync(FileSystem, _settingsFile, true, default);
 	}
 
 	private void ConnectClick(object sender, RoutedEventArgs e)

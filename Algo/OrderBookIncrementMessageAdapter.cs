@@ -64,9 +64,10 @@ public class OrderBookIncrementMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="OrderBookIncrementMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new OrderBookIncrementMessageAdapter(InnerAdapter.TypedClone());
+		return new OrderBookIncrementMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken));
 	}
 }

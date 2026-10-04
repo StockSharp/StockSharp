@@ -41,7 +41,8 @@ public class BasketRoutingManagerTests : BaseTestClass
 		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken ct)
 			=> default;
 
-		public override IMessageAdapter Clone() => new TestRoutingAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestRoutingAdapter(TransactionIdGenerator));
 	}
 
 	#endregion

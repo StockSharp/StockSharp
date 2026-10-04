@@ -41,7 +41,7 @@ public class GeneticOptimizer : BaseOptimizer
 			Strategy strategy;
 
 			using (new Scope<StrategyContext>(new() { ExcludeUI = true }))
-				strategy = _strategy.Clone();
+				strategy = await _strategy.CloneAsync(cancellationToken);
 
 			strategy.Security = _strategy.Security;
 
@@ -72,11 +72,11 @@ public class GeneticOptimizer : BaseOptimizer
 			try
 			{
 				await _optimizer.TryNextRunAsync(_startTime, _stopTime,
-					pfProvider =>
+					(pfProvider, _) =>
 					{
 						strategy.Portfolio = pfProvider.LookupByPortfolioName((_strategy.Portfolio?.Name).IsEmpty(Extensions.SimulatorPortfolioName));
 
-						return (strategy, parameters);
+						return new((strategy, parameters));
 					},
 					adapterCache,
 					storageCache,

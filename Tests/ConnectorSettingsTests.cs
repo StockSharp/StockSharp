@@ -59,7 +59,7 @@ public class ConnectorSettingsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SaveLoad_PreservesProcessingFlagsAndWrapperOrder()
+	public async Task SaveLoad_PreservesProcessingFlagsAndWrapperOrder()
 	{
 		using var source = new Connector();
 		DisableManagedWrappers(source);
@@ -73,10 +73,10 @@ public class ConnectorSettingsTests : BaseTestClass
 		source.TimeChange = false;
 
 		var storage = new SettingsStorage();
-		source.Save(storage);
+		await source.SaveAsync(storage, CancellationToken);
 
 		using var restored = new Connector();
-		restored.Load(storage);
+		await restored.LoadAsync(storage, CancellationToken);
 
 		restored.SupportBasketSecurities.AssertTrue();
 		restored.SupportSnapshots.AssertTrue();

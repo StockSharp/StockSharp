@@ -372,7 +372,8 @@ public class LookupTrackingMessageAdapter(IMessageAdapter innerAdapter, ILookupT
 	/// <summary>
 	/// Create a copy of <see cref="LookupTrackingMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
-		=> new LookupTrackingMessageAdapter(InnerAdapter.TypedClone(), _state.GetType().CreateInstance<ILookupTrackingManagerState>()) { _timeOut = _timeOut };
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new LookupTrackingMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), _state.GetType().CreateInstance<ILookupTrackingManagerState>()) { _timeOut = _timeOut };
 }

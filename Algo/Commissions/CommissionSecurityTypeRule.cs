@@ -52,52 +52,50 @@ public class CommissionSecurityTypeRule : CommissionRule
 	}
 
 	/// <inheritdoc />
-	protected override decimal? OnProcess(ExecutionMessage message)
+	protected override async ValueTask<decimal?> OnProcessAsync(ExecutionMessage message, CancellationToken cancellationToken)
 	{
-		SecurityTypes? getSecType(SecurityId secId)
-		{
-			if (secId.IsAllSecurity())
-				return null;
-
-			var provider = ServicesRegistry.TrySecurityProvider;
-
-			if (provider is null)
-				return null;
-
-			SecurityTypes? secType;
-
-			using (EnterScope())
-			{
-				if (_secTypes.TryGetValue(secId, out secType))
-					return secType;
-			}
-
-			secType = provider.LookupById(secId)?.Type;
-
-			using (EnterScope())
-				_secTypes.TryAdd(secId, secType);
-
-			return secType;
-		}
-
-		if (message.HasTradeInfo() && getSecType(message.SecurityId) == SecurityType)
+		if (message.HasTradeInfo() && await GetSecurityTypeAsync(message.SecurityId, cancellationToken) == SecurityType)
 			return GetValue(message.TradePrice, message.TradeVolume);
 
 		return null;
 	}
 
-	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	private async ValueTask<SecurityTypes?> GetSecurityTypeAsync(SecurityId secId, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		if (secId.IsAllSecurity())
+			return null;
+
+		var provider = ServicesRegistry.TrySecurityProvider;
+
+		if (provider is null)
+			return null;
+
+		using (EnterScope())
+		{
+			if (_secTypes.TryGetValue(secId, out var known))
+				return known;
+		}
+
+		var secType = (await provider.LookupByIdAsync(secId, cancellationToken))?.Type;
+
+		using (EnterScope())
+			_secTypes.TryAdd(secId, secType);
+
+		return secType;
+	}
+
+	/// <inheritdoc />
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+	{
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(SecurityType), SecurityType);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		SecurityType = storage.GetValue<SecurityTypes>(nameof(SecurityType));
 	}

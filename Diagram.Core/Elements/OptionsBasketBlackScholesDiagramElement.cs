@@ -13,6 +13,7 @@
 public class OptionsBasketBlackScholesDiagramElement : DiagramElement
 {
 	private readonly DiagramSocket _outputSocket;
+	private readonly UnderlyingAssetCache _underlyings = new();
 
 	private BasketBlackScholes _blackScholes;
 	private Security[] _options;
@@ -50,6 +51,13 @@ public class OptionsBasketBlackScholesDiagramElement : DiagramElement
 	}
 
 	/// <inheritdoc />
+	protected override async ValueTask OnPrepareAsync(CancellationToken cancellationToken)
+	{
+		await base.OnPrepareAsync(cancellationToken);
+		await _underlyings.LoadAsync(Strategy, cancellationToken);
+	}
+
+	/// <inheritdoc />
 	protected override void OnReseted()
 	{
 		base.OnReseted();
@@ -69,7 +77,7 @@ public class OptionsBasketBlackScholesDiagramElement : DiagramElement
 
 		foreach (var option in _options)
 		{
-			var underlying = option.GetUnderlyingAsset(Strategy);
+			var underlying = _underlyings.Get(option);
 
 			var model = UseBlackModel
 				? new Black(option, underlying, Strategy)

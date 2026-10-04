@@ -48,8 +48,10 @@ public partial class MainWindow : Window
 	private void OnConnectClick(object sender, RoutedEventArgs e)
 		=> StartConnect();
 
-	private void OnOpened(object sender, EventArgs e)
+	private async void OnOpened(object sender, EventArgs e)
 	{
+		await _context.LoadAsync(CancellationToken.None);
+
 		if (_context.IsAutoConnect)
 			StartConnect();
 	}

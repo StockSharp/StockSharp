@@ -334,6 +334,52 @@ public class FileCredentialsStorageTests : BaseTestClass
 		(reportedDeleted && stillUsable).AssertFalse();
 	}
 
+	/// <summary>
+	/// A first read of the file that was cancelled is not taken for a file that holds nobody: the
+	/// next call reads it again.
+	/// </summary>
+	[TestMethod]
+	public async Task FirstReadThatWasCancelled_IsMadeAgain()
+	{
+		var inner = CreateFileSystem();
+		var filePath = "/credentials.json";
+
+		IPermissionCredentialsStorage writer = new FileCredentialsStorage(inner, filePath, asEmail: true);
+		await writer.SaveAsync(CreateCredentials("test@example.com"), CancellationToken);
+
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+
+		var fs = new HookedFileSystem(inner)
+		{
+			Opening = (_, access) =>
+			{
+				if (access == FileAccess.Read)
+					cts.Cancel();
+			},
+		};
+
+		IPermissionCredentialsStorage storage = new FileCredentialsStorage(fs, filePath, asEmail: true);
+
+		var isCancelled = false;
+
+		try
+		{
+			await storage.SearchAsync("*").ToArrayAsync(cts.Token);
+		}
+		catch (OperationCanceledException)
+		{
+			isCancelled = true;
+		}
+
+		isCancelled.AssertTrue("a cancelled read must not be answered with an empty list");
+
+		fs.Opening = null;
+
+		var found = await storage.SearchAsync("test@example.com").ToArrayAsync(CancellationToken);
+
+		found.Length.AssertEqual(1);
+	}
+
 	[TestMethod]
 	public async Task Save_WhenPersistFails_RestoresLiveCache()
 	{

@@ -3,7 +3,7 @@ namespace StockSharp.Charting;
 /// <summary>
 /// The interface describing the indicator renderer on the chart (for example, lines, histograms, etc.).
 /// </summary>
-public interface IChartIndicatorPainter : IPersistable
+public interface IChartIndicatorPainter : IAsyncPersistable
 {
 	/// <summary>
 	/// The chart element representing the indicator.

@@ -30,7 +30,8 @@ public class BufferMessageAdapterTests : BaseTestClass
 				await SendOutMessageAsync(live, cancellationToken);
 		}
 
-		public override IMessageAdapter Clone() => new SynchronousLevel1Adapter(securityId, dataBeforeResponse);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new SynchronousLevel1Adapter(securityId, dataBeforeResponse));
 	}
 
 	// The real storage keeps copies of its own: Update stores a clone of what it is given, and Get
@@ -46,13 +47,26 @@ public class BufferMessageAdapterTests : BaseTestClass
 
 		IEnumerable<DateTime> ISnapshotStorage.Dates => [.. _data.Values.OfType<IServerTimeMessage>().Select(m => m.ServerTime.Date).Distinct()];
 
-		void ISnapshotStorage.ClearAll() => _data.Clear();
+		ValueTask ISnapshotStorage.ClearAllAsync(CancellationToken cancellationToken)
+		{
+			_data.Clear();
+			return default;
+		}
 
-		void ISnapshotStorage.Clear(object key) => Clear((TKey)key);
+		ValueTask ISnapshotStorage.ClearAsync(object key, CancellationToken cancellationToken)
+			=> ((ISnapshotStorage<TKey, TMessage>)this).ClearAsync((TKey)key, cancellationToken);
 
-		public void Clear(TKey key) => _data.Remove(key);
+		ValueTask ISnapshotStorage<TKey, TMessage>.ClearAsync(TKey key, CancellationToken cancellationToken)
+		{
+			_data.Remove(key);
+			return default;
+		}
 
-		void ISnapshotStorage.Update(Message message) => Update((TMessage)message);
+		ValueTask ISnapshotStorage.UpdateAsync(Message message, CancellationToken cancellationToken)
+		{
+			Update((TMessage)message);
+			return default;
+		}
 
 		public void Update(TMessage message)
 		{
@@ -64,12 +78,19 @@ public class BufferMessageAdapterTests : BaseTestClass
 			Updated?.Invoke(message);
 		}
 
-		Message ISnapshotStorage.Get(object key) => Get((TKey)key);
+		ValueTask<Message> ISnapshotStorage.GetAsync(object key, CancellationToken cancellationToken)
+			=> new(Get((TKey)key));
+
+		ValueTask<TMessage> ISnapshotStorage<TKey, TMessage>.GetAsync(TKey key, CancellationToken cancellationToken)
+			=> new(Get(key));
 
 		public TMessage Get(TKey key) => (TMessage)_data.TryGetValue(key)?.Clone();
 
-		IEnumerable<Message> ISnapshotStorage.GetAll(DateTime? from, DateTime? to)
-			=> GetAll(from, to).Cast<Message>();
+		IAsyncEnumerable<Message> ISnapshotStorage.GetAllAsync(DateTime? from, DateTime? to)
+			=> GetAll(from, to).Cast<Message>().ToAsyncEnumerable();
+
+		IAsyncEnumerable<TMessage> ISnapshotStorage<TKey, TMessage>.GetAllAsync(DateTime? from, DateTime? to)
+			=> GetAll(from, to).ToAsyncEnumerable();
 
 		public IEnumerable<TMessage> GetAll(DateTime? from = null, DateTime? to = null)
 		{

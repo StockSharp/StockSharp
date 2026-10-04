@@ -2610,48 +2610,48 @@ public class CandleTests : BaseTestClass
 
 #pragma warning disable CS0618 // Type or member is obsolete
 
-	private static CandleSeries RoundTrip(CandleSeries series)
+	private async Task<CandleSeries> RoundTripAsync(CandleSeries series)
 	{
 		var restored = new CandleSeries();
-		restored.Load(series.Save());
+		await restored.LoadAsync(await series.SaveAsync(CancellationToken), CancellationToken);
 		return restored;
 	}
 
 	[TestMethod]
-	public void CandleSeries_TimeFrameArg_SurvivesSaveLoad()
+	public async Task CandleSeries_TimeFrameArg_SurvivesSaveLoad()
 	{
 		// The arg has to come back as the value it went in as, not as its text: consumers read it as
 		// a TimeSpan. Saved text is "00-05-00" (the ':' is not usable in a folder name), parsed back
 		// to 5 minutes.
 		var series = new CandleSeries { CandleType = typeof(TimeFrameCandleMessage), Arg = TimeSpan.FromMinutes(5) };
 
-		var restored = RoundTrip(series);
+		var restored = await RoundTripAsync(series);
 
 		restored.CandleType.AssertEqual(typeof(TimeFrameCandleMessage));
 		restored.Arg.AssertEqual(TimeSpan.FromMinutes(5));
 	}
 
 	[TestMethod]
-	public void CandleSeries_LegacyTimeFrameArg_SurvivesSaveLoad()
+	public async Task CandleSeries_LegacyTimeFrameArg_SurvivesSaveLoad()
 	{
 		var security = Helper.CreateSecurity();
 		var series = new CandleSeries(typeof(TimeFrameCandle), security, TimeSpan.FromMinutes(5));
 
-		var restored = RoundTrip(series);
+		var restored = await RoundTripAsync(series);
 
 		restored.CandleType.AssertEqual(typeof(TimeFrameCandle));
 		restored.Arg.AssertEqual(TimeSpan.FromMinutes(5));
 	}
 
 	[TestMethod]
-	public void CandleSeries_TickArg_SurvivesSaveLoad()
+	public async Task CandleSeries_TickArg_SurvivesSaveLoad()
 	{
 		// A series the class itself accepted must be persistable. Tick candles are counted in trades,
 		// so the arg is the int 100 and it must return as the int 100 - the type of the arg is picked
 		// by the candle type of the series, not fixed to the time-frame one.
 		var series = new CandleSeries { CandleType = typeof(TickCandleMessage), Arg = 100 };
 
-		var restored = RoundTrip(series);
+		var restored = await RoundTripAsync(series);
 
 		restored.CandleType.AssertEqual(typeof(TickCandleMessage));
 		restored.Arg.AssertEqual(100);

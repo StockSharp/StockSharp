@@ -277,14 +277,14 @@ public class SecurityMappingMessageAdapterTests : BaseTestClass
 	#region Clone Tests
 
 	[TestMethod]
-	public void Clone_ReturnsNewInstanceWithSameProvider()
+	public async Task Clone_ReturnsNewInstanceWithSameProvider()
 	{
 		var inner = new RecordingMessageAdapter();
 		var provider = CreateProvider();
 
 		using var adapter = new SecurityMappingMessageAdapter(inner, provider);
 
-		var clone = (SecurityMappingMessageAdapter)adapter.Clone();
+		var clone = (SecurityMappingMessageAdapter)await adapter.CloneAsync(CancellationToken);
 
 		clone.AssertNotNull();
 		clone.AssertNotSame(adapter);

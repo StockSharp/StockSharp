@@ -2301,15 +2301,26 @@ public static partial class EntitiesExtensions
 	/// <param name="subscription"><see cref="Subscription"/></param>
 	/// <param name="provider"><see cref="ISecurityProvider"/></param>
 	/// <returns><see cref="Security"/></returns>
+	[Obsolete("Use TryGetSecurityAsync method instead.")]
 	public static Security TryGetSecurity(this Subscription subscription, ISecurityProvider provider = null)
+		=> AsyncHelper.Run(() => subscription.TryGetSecurityAsync(provider ?? TrySecurityProvider, default));
+
+	/// <summary>
+	/// Try to get the security for the specified subscription.
+	/// </summary>
+	/// <param name="subscription"><see cref="Subscription"/></param>
+	/// <param name="provider"><see cref="ISecurityProvider"/>, or <see langword="null"/> when there is none.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Security"/>, or <see langword="null"/> when the subscription names none or none is found.</returns>
+	public static async ValueTask<Security> TryGetSecurityAsync(this Subscription subscription, ISecurityProvider provider, CancellationToken cancellationToken)
 	{
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		if (subscription.SecurityId is not SecurityId secId)
+		if (subscription.SecurityId is not SecurityId secId || provider is null)
 			return null;
 
-		return (provider ?? TrySecurityProvider)?.LookupById(secId);
+		return await provider.LookupByIdAsync(secId, cancellationToken);
 	}
 
 	/// <summary>

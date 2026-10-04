@@ -11,7 +11,10 @@ public class PositionBinarySnapshotSerializer : ISnapshotSerializer<Key, Positio
 
 	string ISnapshotSerializer<Key, PositionChangeMessage>.Name => "Positions";
 
-	byte[] ISnapshotSerializer<Key, PositionChangeMessage>.Serialize(Version version, PositionChangeMessage message)
+	ValueTask<byte[]> ISnapshotSerializer<Key, PositionChangeMessage>.SerializeAsync(Version version, PositionChangeMessage message, CancellationToken cancellationToken)
+		=> new(Serialize(version, message));
+
+	private static byte[] Serialize(Version version, PositionChangeMessage message)
 	{
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));
@@ -155,7 +158,10 @@ public class PositionBinarySnapshotSerializer : ISnapshotSerializer<Key, Positio
 		return writer.GetWrittenSpan().ToArray();
 	}
 
-	PositionChangeMessage ISnapshotSerializer<Key, PositionChangeMessage>.Deserialize(Version version, byte[] buffer)
+	ValueTask<PositionChangeMessage> ISnapshotSerializer<Key, PositionChangeMessage>.DeserializeAsync(Version version, byte[] buffer, CancellationToken cancellationToken)
+		=> new(Deserialize(version, buffer));
+
+	private static PositionChangeMessage Deserialize(Version version, byte[] buffer)
 	{
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));

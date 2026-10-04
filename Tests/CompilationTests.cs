@@ -1908,7 +1908,7 @@ public class CompilationTests : BaseTestClass
 		=> CSharpCompile<DiagramExternalElement>("Custom/EmptyDiagramElement.cs", InvokeDiagramElem);
 
 	private async Task CSharpCompile<T>(string fileName, Action<Type, T> custom = null)
-		where T : IPersistable
+		where T : IAsyncPersistable
 	{
 		var token = CancellationToken;
 
@@ -1926,7 +1926,7 @@ public class CompilationTests : BaseTestClass
 		var s = type.CreateInstance<T>();
 		
 		s.AssertNotNull();
-		s.Load(s.Save());
+		await s.LoadAsync(await s.SaveAsync(CancellationToken), CancellationToken);
 
 		custom?.Invoke(type, s);
 	}
@@ -1948,7 +1948,7 @@ public class CompilationTests : BaseTestClass
 		=> FSharpCompile<DiagramExternalElement>("Custom/EmptyDiagramElement.fs", InvokeDiagramElem);
 
 	private async Task FSharpCompile<T>(string fileName, Action<Type, T> custom = null)
-		where T : IPersistable
+		where T : IAsyncPersistable
 	{
 		var token = CancellationToken;
 
@@ -1966,7 +1966,7 @@ public class CompilationTests : BaseTestClass
 		var s = type.CreateInstance<T>();
 
 		s.AssertNotNull();
-		s.Load(s.Save());
+		await s.LoadAsync(await s.SaveAsync(CancellationToken), CancellationToken);
 
 		custom?.Invoke(type, s);
 	}
@@ -1990,7 +1990,7 @@ public class CompilationTests : BaseTestClass
 		=> PythonCompile<DiagramExternalElement>("Custom/empty_diagram_element.py", false, InvokeDiagramElem);
 
 	private async Task PythonCompile<T>(string fileName, bool recompile, Action<Type, T> custom = null)
-		where T : IPersistable
+		where T : IAsyncPersistable
 	{
 		var token = CancellationToken;
 
@@ -2061,7 +2061,7 @@ public class CompilationTests : BaseTestClass
 
 		custom?.Invoke(type, instance);
 
-		pythonClass.Load(pythonClass.Save());
+		await pythonClass.LoadAsync(await pythonClass.SaveAsync(CancellationToken), CancellationToken);
 	}
 
 	private static readonly string _pythonCommonFolder = "../../../../Algo.Analytics.Python/common";

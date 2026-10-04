@@ -174,7 +174,8 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 
 		public bool HasActiveSubscription(long id) => _activeSubscriptions.ContainsKey(id);
 
-		public override IMessageAdapter Clone() => new MockCandleAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new MockCandleAdapter(TransactionIdGenerator));
 	}
 
 	#endregion
@@ -1747,7 +1748,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 	#region Clone Tests
 
 	[TestMethod]
-	public void Clone_CreatesNewInstanceWithSameSettings()
+	public async Task Clone_CreatesNewInstanceWithSameSettings()
 	{
 		var idGen = new IncrementalIdGenerator();
 		var inner = new MockCandleAdapter(idGen);
@@ -1757,7 +1758,7 @@ public class CandleBuilderMessageAdapterTests : BaseTestClass
 			SendFinishedCandlesImmediatelly = true,
 		};
 
-		var cloned = adapter.Clone() as CandleBuilderMessageAdapter;
+		var cloned = await adapter.CloneAsync(CancellationToken) as CandleBuilderMessageAdapter;
 
 		IsNotNull(cloned);
 		AreNotSame(adapter, cloned);

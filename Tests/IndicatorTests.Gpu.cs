@@ -244,19 +244,25 @@ partial class IndicatorTests
 			// Every (series, parameter set) cell runs its own freshly cloned CPU indicator over a
 			// read-only candle array and touches no GPU state, so the whole matrix is compared in
 			// parallel - this is the bulk of the test's time.
-			var cells =
+			var cells = (
 				from s in Enumerable.Range(0, msgSeries.Length)
 				from p in Enumerable.Range(0, indicators.Length)
-				select (series: s, param: p);
+				select (series: s, param: p)).ToArray();
 
 			try
 			{
-				Parallel.ForEach(cells, cell =>
+				// fresh indicator instance for CPU with same settings, one per cell
+				var cpuIndicators = new IIndicator[cells.Length];
+
+				for (var i = 0; i < cells.Length; i++)
+					cpuIndicators[i] = await indicators[cells[i].param].CloneAsync(CancellationToken);
+
+				Parallel.For(0, cells.Length, index =>
 				{
+					var cell = cells[index];
 					var gpuOut = gpuAll[cell.series][cell.param];
 
-					// fresh indicator instance for CPU with same settings
-					var indCpu = indicators[cell.param].TypedClone();
+					var indCpu = cpuIndicators[index];
 					var cpu = runCpu(indCpu, msgSeries[cell.series]);
 
 					// The kernel's error is bounded by the largest quantity it touches: the prices it reads,

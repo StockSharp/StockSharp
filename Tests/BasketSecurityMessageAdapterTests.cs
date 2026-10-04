@@ -35,7 +35,8 @@ public class BasketSecurityMessageAdapterTests : BaseTestClass
 		public ValueTask AnswerAsync(Message message, CancellationToken cancellationToken)
 			=> SendOutMessageAsync(message, cancellationToken);
 
-		public override IMessageAdapter Clone() => new LegAdapter();
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new LegAdapter());
 	}
 
 	public sealed class EmptyBasketProcessor(Security security) : IBasketSecurityProcessor
@@ -465,12 +466,12 @@ public class BasketSecurityMessageAdapterTests : BaseTestClass
 	/// disturbs the other.
 	/// </summary>
 	[TestMethod]
-	public void ACopyOfTheAdapterWrapsACopyOfTheLink()
+	public async Task ACopyOfTheAdapterWrapsACopyOfTheLink()
 	{
 		var basket = Basket();
 		var (adapter, inner, _) = CreateSut(basket);
 
-		var clone = (BasketSecurityMessageAdapter)adapter.Clone();
+		var clone = (BasketSecurityMessageAdapter)await adapter.CloneAsync(CancellationToken);
 
 		AreNotSame(inner, clone.InnerAdapter, "the copy has to have a link of its own, not the original's");
 	}
@@ -490,7 +491,7 @@ public class BasketSecurityMessageAdapterTests : BaseTestClass
 		var basket = Basket();
 		var (adapter, inner, output) = CreateSut(basket);
 
-		var clone = (BasketSecurityMessageAdapter)adapter.Clone();
+		var clone = (BasketSecurityMessageAdapter)await adapter.CloneAsync(CancellationToken);
 
 		await clone.SendInMessageAsync(SubscribeTo(basket, cloneTx), CancellationToken);
 

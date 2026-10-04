@@ -28,23 +28,21 @@ public partial class MainWindow
 
 		// registering all connectors
 		ConfigManager.RegisterService<IMessageAdapterProvider>(new InMemoryMessageAdapterProvider(_connector.Adapter.InnerAdapters));
-
-		if (_fileSystem.FileExists(_connectorFile))
-		{
-			_connector.Load(_connectorFile.Deserialize<SettingsStorage>(_fileSystem));
-		}
 	}
 
-	private void OnLoaded(object sender, RoutedEventArgs e)
+	private async void OnLoaded(object sender, RoutedEventArgs e)
 	{
 		ThemeExtensions.ApplyDefaultTheme();
+
+		if (_fileSystem.FileExists(_connectorFile))
+			await _connector.LoadAsync(await _connectorFile.DeserializeAsync<SettingsStorage>(_fileSystem, default), default);
 	}
 
-	private void Setting_Click(object sender, RoutedEventArgs e)
+	private async void Setting_Click(object sender, RoutedEventArgs e)
 	{
 		if (_connector.Configure(this))
 		{
-			_connector.Save().Serialize(_fileSystem, _connectorFile);
+			await (await _connector.SaveAsync(default)).SerializeAsync(_fileSystem, _connectorFile, true, default);
 		}
 	}
 

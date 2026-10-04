@@ -288,7 +288,8 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 			return SendSubscriptionReplyAsync(mdMsg.TransactionId, cancellationToken);
 		}
 
-		public override IMessageAdapter Clone() => new ClockedAdapter { Now = Now };
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new ClockedAdapter { Now = Now });
 	}
 
 	/// <summary>

@@ -69,21 +69,21 @@ public class RangeActionVerificationIndex : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		ShortSma.LoadIfNotNull(storage, nameof(ShortSma));
-		LongSma.LoadIfNotNull(storage, nameof(LongSma));
+		await ShortSma.LoadIfNotNullAsync(storage, nameof(ShortSma), cancellationToken);
+		await LongSma.LoadIfNotNullAsync(storage, nameof(LongSma), cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
-		storage.SetValue(nameof(ShortSma), ShortSma.Save());
-		storage.SetValue(nameof(LongSma), LongSma.Save());
+		storage.SetValue(nameof(ShortSma), await ShortSma.SaveAsync(cancellationToken));
+		storage.SetValue(nameof(LongSma), await LongSma.SaveAsync(cancellationToken));
 	}
 
 	/// <inheritdoc />

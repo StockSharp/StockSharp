@@ -90,7 +90,7 @@ public class DriveCacheTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SaveLoad_Roundtrip_PreservesDrives()
+	public async Task SaveLoad_Roundtrip_PreservesDrives()
 	{
 		var fs = Helper.MemorySystem;
 		using var cache = new DriveCache(fs);
@@ -103,10 +103,10 @@ public class DriveCacheTests : BaseTestClass
 		IsTrue(remoteDrive is RemoteMarketDataDrive, $"Expected RemoteMarketDataDrive for '{remotePath}', got '{remoteDrive?.GetType().FullName}' (Path='{remoteDrive?.Path}').");
 
 		var storage = new SettingsStorage();
-		cache.Save(storage);
+		await cache.SaveAsync(storage, CancellationToken);
 
 		using var cache2 = new DriveCache(fs);
-		cache2.Load(storage);
+		await cache2.LoadAsync(storage, CancellationToken);
 
 		var loaded = cache2.Drives.ToArray();
 		var localFullPath = localPath.ToFullPath();

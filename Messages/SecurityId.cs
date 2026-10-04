@@ -7,7 +7,7 @@ using System.Globalization;
 /// </summary>
 [DataContract]
 [Serializable]
-public struct SecurityId : IEquatable<SecurityId>, IPersistable
+public struct SecurityId : IEquatable<SecurityId>, IAsyncPersistable
 {
 	static SecurityId()
 	{
@@ -284,20 +284,28 @@ public struct SecurityId : IEquatable<SecurityId>, IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		SecurityCode = storage.GetValue<string>(nameof(SecurityCode));
 		BoardCode = storage.GetValue<string>(nameof(BoardCode));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public readonly void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(SecurityCode), SecurityCode);
 		storage.SetValue(nameof(BoardCode), BoardCode);
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>

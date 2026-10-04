@@ -84,6 +84,7 @@ public partial class MainWindow : Window
 	private readonly TextBlock _status;
 	private Task _configurationTask = Task.CompletedTask;
 	private int _quoteGeneration;
+	private int _assetSelection;
 	private int _isDirty;
 	private bool _eventsAttached;
 	private bool _connectStarted;
@@ -206,8 +207,10 @@ public partial class MainWindow : Window
 		}
 	}
 
-	private void OnOpened(object sender, EventArgs e)
+	private async void OnOpened(object sender, EventArgs e)
 	{
+		await _context.LoadAsync(CancellationToken.None);
+
 		if (_context.IsAutoConnect)
 			StartConnect();
 	}
@@ -332,7 +335,7 @@ public partial class MainWindow : Window
 				RefreshPositionChart();
 		});
 
-	private void OnOrderBookReceived(Subscription subscription, IOrderBookMessage depth)
+	private async void OnOrderBookReceived(Subscription subscription, IOrderBookMessage depth)
 	{
 		QuoteSession session;
 		lock (_quoteSync)
@@ -341,11 +344,23 @@ public partial class MainWindow : Window
 		if (session is null)
 			return;
 
-		_uiEvents.TryAddAction(() =>
+		try
 		{
-			if (IsCurrent(session, session.Generation))
-				session.Window.Update(depth.ImpliedVolatility(Connector, Connector, depth.ServerTime));
-		});
+			var volatility = await depth.ImpliedVolatilityAsync(Connector, Connector, depth.ServerTime, 0, 0, _lifetimeCancellation.Token);
+
+			_uiEvents.TryAddAction(() =>
+			{
+				if (IsCurrent(session, session.Generation))
+					session.Window.Update(volatility);
+			});
+		}
+		catch (OperationCanceledException) when (_lifetimeCancellation.IsCancellationRequested)
+		{
+		}
+		catch (Exception error)
+		{
+			error.LogError();
+		}
 	}
 
 	private void OnRefreshTick(object sender, EventArgs e)
@@ -388,10 +403,12 @@ public partial class MainWindow : Window
 			_model.EvaluateFields.Add(field);
 	}
 
-	private void OnAssetSelectionChanged(object sender, SelectionChangedEventArgs e)
+	private async void OnAssetSelectionChanged(object sender, SelectionChangedEventArgs e)
 	{
 		if (_isClosing)
 			return;
+
+		var selection = ++_assetSelection;
 
 		UnsubscribeMarketData();
 		_options.Clear();
@@ -412,8 +429,12 @@ public partial class MainWindow : Window
 		SubscribeMarketData(asset);
 
 		var basket = new BasketBlackScholes(asset, Connector, Connector);
-		foreach (var option in asset.GetDerivatives(Connector))
+		await foreach (var option in asset.GetDerivativesAsync(Connector, null))
 		{
+			// a later selection has taken over while the options were being read
+			if (_isClosing || selection != _assetSelection)
+				return;
+
 			_model.Add(option);
 			_options.Add(option);
 			SubscribeMarketData(option);
@@ -513,7 +534,7 @@ public partial class MainWindow : Window
 				return;
 			}
 
-			var underlying = option.GetUnderlyingAsset(Connector) ?? SelectedAsset;
+			var underlying = await option.GetUnderlyingAssetAsync(Connector, _lifetimeCancellation.Token) ?? SelectedAsset;
 			if (underlying is null)
 			{
 				_status.Text = "The option has no underlying asset.";

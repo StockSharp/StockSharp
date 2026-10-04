@@ -22,6 +22,6 @@ public sealed class LoopBackMessageAdapter(IMessageAdapter innerAdapter) : Messa
 	}
 
 	/// <inheritdoc />
-	public override IMessageAdapter Clone()
-		=> new LoopBackMessageAdapter(InnerAdapter.Clone());
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new LoopBackMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken));
 }

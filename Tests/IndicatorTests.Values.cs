@@ -6,7 +6,7 @@ namespace StockSharp.Tests;
 partial class IndicatorTests
 {
 	[TestMethod]
-	public void StateNonFinalInput()
+	public async Task StateNonFinalInput()
 	{
 		var now = DateTime.UtcNow;
 		var secId = Helper.CreateSecurityId();
@@ -56,7 +56,7 @@ partial class IndicatorTests
 				a.AssertEqual(b);
 			}
 
-			var before = indicator.TypedClone();
+			var before = await indicator.CloneAsync(CancellationToken);
 
 			for (var i = 0; i < 100; i++)
 			{

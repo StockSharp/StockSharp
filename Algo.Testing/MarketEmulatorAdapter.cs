@@ -58,7 +58,7 @@ public class MarketEmulatorAdapter : MessageAdapter
 		=> SendOutMessageAsync(message, cancellationToken);
 
 	/// <inheritdoc />
-	public override IMessageAdapter Clone()
+	public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 		=> throw new NotSupportedException();
 
 	/// <inheritdoc />

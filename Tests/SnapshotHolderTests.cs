@@ -2012,7 +2012,7 @@ public class SnapshotHolderTests : BaseTestClass
 	[TestMethod]
 	[DataRow(false)]
 	[DataRow(true)]
-	public void Order_SaveLoad_PreservesThrowOnInvalidStateTransition(bool value)
+	public async Task Order_SaveLoad_PreservesThrowOnInvalidStateTransition(bool value)
 	{
 		var holder = new OrderSnapshotHolder
 		{
@@ -2020,13 +2020,13 @@ public class SnapshotHolderTests : BaseTestClass
 		};
 
 		var settings = new SettingsStorage();
-		holder.Save(settings);
+		await holder.SaveAsync(settings, CancellationToken);
 
 		var restored = new OrderSnapshotHolder
 		{
 			ThrowOnInvalidStateTransition = !value,
 		};
-		restored.Load(settings);
+		await restored.LoadAsync(settings, CancellationToken);
 
 		restored.ThrowOnInvalidStateTransition.AssertEqual(value);
 	}

@@ -655,4 +655,18 @@ public static class IndicatorHelper
 			return null;
 		}
 	}
+
+	/// <summary>
+	/// Create a copy of the indicator.
+	/// </summary>
+	/// <param name="indicator">Indicator.</param>
+	/// <returns>Copy.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CloneAsync instead.")]
+	public static IIndicator Clone(this IIndicator indicator)
+	{
+		if (indicator is null)
+			throw new ArgumentNullException(nameof(indicator));
+
+		return AsyncHelper.Run(() => indicator.CloneAsync(default));
+	}
 }

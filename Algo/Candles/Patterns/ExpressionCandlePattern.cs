@@ -8,7 +8,7 @@ using Ecng.Compilation.Expressions;
 /// <summary>
 /// Formula for a single candle inside pattern.
 /// </summary>
-public class CandleExpressionCondition : IPersistable
+public class CandleExpressionCondition : IAsyncPersistable
 {
 	/// <summary>
 	/// </summary>
@@ -240,7 +240,7 @@ public class CandleExpressionCondition : IPersistable
 	}
 
 	/// <inheritdoc />
-	public void Load(SettingsStorage storage)
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		EnsureEmpty();
 
@@ -251,10 +251,16 @@ public class CandleExpressionCondition : IPersistable
 
 		if (!_compileOnDemand)
 			EnsureCompiled();
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc />
-	public void Save(SettingsStorage storage) => storage.SetValue(nameof(Expression), Expression);
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+	{
+		storage.SetValue(nameof(Expression), Expression);
+		return Task.CompletedTask;
+	}
 
 	/// <inheritdoc />
 	public override string ToString() => Expression.IsEmpty(LocalizedStrings.Empty);
@@ -346,23 +352,27 @@ public class ExpressionCandlePattern : ICandlePattern
 		return true;
 	}
 
-	void IPersistable.Load(SettingsStorage storage)
+	async Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Name = storage.GetValue<string>(nameof(Name));
 
-		Conditions = [.. storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Conditions)).Select(ss =>
+		var conditions = new List<CandleExpressionCondition>();
+
+		foreach (var ss in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Conditions)))
 		{
 			var cond = new CandleExpressionCondition(Paths.FileSystem, null);
-			cond.Load(ss);
-			return cond;
-		})];
+			await cond.LoadAsync(ss, cancellationToken);
+			conditions.Add(cond);
+		}
+
+		Conditions = [.. conditions];
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	async Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage
 			.Set(nameof(Name), Name)
-			.Set(nameof(Conditions), Conditions.Select(c => c.Save()).ToArray())
+			.Set(nameof(Conditions), await Conditions.SaveAllAsync(cancellationToken))
 		;
 	}
 

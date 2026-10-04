@@ -878,10 +878,10 @@ public class StorageBufferTests : BaseTestClass
 
 	#endregion
 
-	#region IPersistable Tests
+	#region IAsyncPersistable Tests
 
 	[TestMethod]
-	public void Save_Load_PreservesSettings()
+	public async Task Save_Load_PreservesSettings()
 	{
 		var buffer = new StorageBuffer
 		{
@@ -896,10 +896,10 @@ public class StorageBufferTests : BaseTestClass
 		};
 
 		var storage = new SettingsStorage();
-		((IPersistable)buffer).Save(storage);
+		await ((IAsyncPersistable)buffer).SaveAsync(storage, CancellationToken);
 
 		var buffer2 = new StorageBuffer();
-		((IPersistable)buffer2).Load(storage);
+		await ((IAsyncPersistable)buffer2).LoadAsync(storage, CancellationToken);
 
 		buffer2.Enabled.AssertEqual(buffer.Enabled);
 		buffer2.EnabledLevel1.AssertEqual(buffer.EnabledLevel1);
@@ -913,7 +913,7 @@ public class StorageBufferTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(5_000)]
-	public void Save_Load_PreservesIgnoreGenerated()
+	public async Task Save_Load_PreservesIgnoreGenerated()
 	{
 		// IgnoreGenerated is serialized/deserialized by Save/Load (StorageBuffer.cs),
 		// so a non-default set must round-trip exactly.
@@ -923,10 +923,10 @@ public class StorageBufferTests : BaseTestClass
 		buffer.IgnoreGenerated.Add(DataType.OrderLog);
 
 		var storage = new SettingsStorage();
-		((IPersistable)buffer).Save(storage);
+		await ((IAsyncPersistable)buffer).SaveAsync(storage, CancellationToken);
 
 		var buffer2 = new StorageBuffer();
-		((IPersistable)buffer2).Load(storage);
+		await ((IAsyncPersistable)buffer2).LoadAsync(storage, CancellationToken);
 
 		buffer2.IgnoreGenerated.Count.AssertEqual(2);
 		buffer2.IgnoreGenerated.Contains(DataType.Ticks).AssertTrue();

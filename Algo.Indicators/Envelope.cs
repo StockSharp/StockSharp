@@ -15,7 +15,7 @@ public class Envelope : BaseComplexIndicator<IEnvelopeValue>
 	/// Initializes a new instance of the <see cref="Envelope"/>.
 	/// </summary>
 	public Envelope()
-		: this(new SimpleMovingAverage())
+		: this(new SimpleMovingAverage(), new SimpleMovingAverage(), new SimpleMovingAverage())
 	{
 	}
 
@@ -23,14 +23,43 @@ public class Envelope : BaseComplexIndicator<IEnvelopeValue>
 	/// Initializes a new instance of the <see cref="Envelope"/>.
 	/// </summary>
 	/// <param name="ma">Middle line.</param>
+	[Obsolete("Blocking sync-over-async wrapper. Use CreateAsync instead.")]
 	public Envelope(DecimalLengthIndicator ma)
+		: this(ma, (DecimalLengthIndicator)ma.Clone(), (DecimalLengthIndicator)ma.Clone())
 	{
-		AddInner(Middle = ma);
-		AddInner(Upper = ma.TypedClone());
-		AddInner(Lower = ma.TypedClone());
+	}
+
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Envelope"/>.
+	/// </summary>
+	/// <param name="middle">Middle line.</param>
+	/// <param name="upper">Upper line.</param>
+	/// <param name="lower">Lower line.</param>
+	public Envelope(DecimalLengthIndicator middle, DecimalLengthIndicator upper, DecimalLengthIndicator lower)
+	{
+		AddInner(Middle = middle ?? throw new ArgumentNullException(nameof(middle)));
+		AddInner(Upper = upper ?? throw new ArgumentNullException(nameof(upper)));
+		AddInner(Lower = lower ?? throw new ArgumentNullException(nameof(lower)));
 
 		Upper.Name = nameof(Upper);
 		Lower.Name = nameof(Lower);
+	}
+
+	/// <summary>
+	/// Create <see cref="Envelope"/> whose upper and lower lines are copies of the middle one.
+	/// </summary>
+	/// <param name="ma">Middle line.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Envelope"/></returns>
+	public static async ValueTask<Envelope> CreateAsync(DecimalLengthIndicator ma, CancellationToken cancellationToken)
+	{
+		if (ma is null)
+			throw new ArgumentNullException(nameof(ma));
+
+		var upper = (DecimalLengthIndicator)await ma.CloneAsync(cancellationToken);
+		var lower = (DecimalLengthIndicator)await ma.CloneAsync(cancellationToken);
+
+		return new(ma, upper, lower);
 	}
 
 	/// <summary>
@@ -107,16 +136,16 @@ public class Envelope : BaseComplexIndicator<IEnvelopeValue>
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 		Shift = storage.GetValue<decimal>(nameof(Shift));
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 		storage.SetValue(nameof(Shift), Shift);
 	}
 

@@ -5,7 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
-public class SecurityIdMapping : IPersistable
+public class SecurityIdMapping : IAsyncPersistable
 {
 	/// <summary>
 	/// StockSharp format.
@@ -46,6 +46,12 @@ public class SecurityIdMapping : IPersistable
 		return new KeyValuePair<SecurityId, SecurityId>(mapping.StockSharpId, mapping.AdapterId);
 	}
 
+	/// <summary>
+	/// Create a copy of <see cref="SecurityIdMapping"/>.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	public SecurityIdMapping Clone() => (SecurityIdMapping)MemberwiseClone();
+
 	/// <inheritdoc />
 	public override string ToString()
 	{
@@ -56,19 +62,23 @@ public class SecurityIdMapping : IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		StockSharpId = storage.GetValue<SettingsStorage>(nameof(StockSharpId)).Load<SecurityId>();
-		AdapterId = storage.GetValue<SettingsStorage>(nameof(AdapterId)).Load<SecurityId>();
+		StockSharpId = await storage.GetValue<SettingsStorage>(nameof(StockSharpId)).LoadAsync<SecurityId>(cancellationToken);
+		AdapterId = await storage.GetValue<SettingsStorage>(nameof(AdapterId)).LoadAsync<SecurityId>(cancellationToken);
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		storage.SetValue(nameof(StockSharpId), StockSharpId.Save());
-		storage.SetValue(nameof(AdapterId), AdapterId.Save());
+		storage.SetValue(nameof(StockSharpId), await StockSharpId.SaveAsync(cancellationToken));
+		storage.SetValue(nameof(AdapterId), await AdapterId.SaveAsync(cancellationToken));
 	}
 }

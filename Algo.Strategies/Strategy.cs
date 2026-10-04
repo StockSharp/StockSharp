@@ -8,7 +8,7 @@ using StockSharp.Algo.Strategies.Protective;
 /// <summary>
 /// The base class for all trade strategies.
 /// </summary>
-public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvider, INotifyPropertyChangedEx, ITimeProvider, IStrategy, ICloneable<Strategy>, ICustomTypeDescriptor, IScheduledTask
+public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvider, INotifyPropertyChangedEx, ITimeProvider, IStrategy, ICustomTypeDescriptor, IScheduledTask
 {
 	private IConnector _connector;
 	private readonly StrategyPositionManager _posManager;
@@ -1434,6 +1434,7 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 				// throwing override does not escape the message loop and leave the strategy in Started.
 				try
 				{
+					await OnStartedAsync(StartedTime, cancellationToken).NoWait();
 					OnStarted2(StartedTime);
 				}
 				catch (Exception error)
@@ -1498,6 +1499,15 @@ public partial class Strategy : BaseLogReceiver, IStrategyHost, IPositionProvide
 	/// <param name="state">New state.</param>
 	[Obsolete("Use OnStateChangedAsync instead.")]
 	protected virtual void OnStateChanged(ProcessStates state) { }
+
+	/// <summary>
+	/// The method is called when the strategy has entered the started state, before <see cref="OnStarted2"/>.
+	/// An exception stops the strategy the same way as one thrown from <see cref="OnStarted2"/>.
+	/// </summary>
+	/// <param name="time">The strategy start time.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns><see cref="ValueTask"/></returns>
+	protected virtual ValueTask OnStartedAsync(DateTime time, CancellationToken cancellationToken) => default;
 
 	/// <summary>
 	/// The method is called when the strategy has entered the started state.

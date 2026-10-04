@@ -72,12 +72,68 @@ public class BruteForceOptimizer : BaseOptimizer
 	/// </summary>
 	/// <param name="startTime">Date in history for starting the paper trading.</param>
 	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
+	/// <param name="strategies">The strategies and parameters used for optimization.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Async enumerable of completed (strategy, parameters) pairs.</returns>
+	public IAsyncEnumerable<(Strategy Strategy, IStrategyParam[] Parameters)> RunAsync(
+		DateTime startTime, DateTime stopTime,
+		IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies,
+		CancellationToken cancellationToken = default)
+	{
+		if (strategies is null)
+			throw new ArgumentNullException(nameof(strategies));
+
+		return Impl(cancellationToken);
+
+		async IAsyncEnumerable<(Strategy Strategy, IStrategyParam[] Parameters)> Impl([EnumeratorCancellation] CancellationToken token)
+		{
+			await using var enumerator = strategies.GetAsyncEnumerator(token);
+
+			await foreach (var result in RunAsync(startTime, stopTime, async (pfProvider, _) =>
+			{
+				if (!await enumerator.MoveNextAsync())
+					return null;
+
+				var strategy = enumerator.Current.strategy;
+				strategy.Portfolio = pfProvider.LookupByPortfolioName((strategy.Portfolio?.Name).IsEmpty(Messages.Extensions.SimulatorPortfolioName));
+				return enumerator.Current;
+			}, token).WithCancellation(token))
+			{
+				yield return result;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Run optimization and yield completed iterations as they finish.
+	/// </summary>
+	/// <param name="startTime">Date in history for starting the paper trading.</param>
+	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
+	/// <param name="tryGetNext">Handler to try to get next strategy object.</param>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns>Async enumerable of completed (strategy, parameters) pairs.</returns>
+	public IAsyncEnumerable<(Strategy Strategy, IStrategyParam[] Parameters)> RunAsync(
+		DateTime startTime, DateTime stopTime,
+		Func<IPortfolioProvider, (Strategy strategy, IStrategyParam[] parameters)?> tryGetNext,
+		CancellationToken cancellationToken = default)
+	{
+		if (tryGetNext is null)
+			throw new ArgumentNullException(nameof(tryGetNext));
+
+		return RunAsync(startTime, stopTime, (pfProvider, _) => new(tryGetNext(pfProvider)), cancellationToken);
+	}
+
+	/// <summary>
+	/// Run optimization and yield completed iterations as they finish.
+	/// </summary>
+	/// <param name="startTime">Date in history for starting the paper trading.</param>
+	/// <param name="stopTime">Date in history to stop the paper trading (date is included).</param>
 	/// <param name="tryGetNext">Handler to try to get next strategy object.</param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	/// <returns>Async enumerable of completed (strategy, parameters) pairs.</returns>
 	public async IAsyncEnumerable<(Strategy Strategy, IStrategyParam[] Parameters)> RunAsync(
 		DateTime startTime, DateTime stopTime,
-		Func<IPortfolioProvider, (Strategy strategy, IStrategyParam[] parameters)?> tryGetNext,
+		Func<IPortfolioProvider, CancellationToken, ValueTask<(Strategy strategy, IStrategyParam[] parameters)?>> tryGetNext,
 		[EnumeratorCancellation] CancellationToken cancellationToken = default)
 	{
 		if (tryGetNext is null)

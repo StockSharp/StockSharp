@@ -31,8 +31,8 @@ public class LookupTrackingMessageAdapterTests : BaseTestClass
 			return default;
 		}
 
-		public override IMessageAdapter Clone()
-			=> new LookupInnerAdapter { Timeout = Timeout };
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new LookupInnerAdapter { Timeout = Timeout });
 	}
 
 	private static (LookupTrackingMessageAdapter adapter, LookupInnerAdapter inner, List<Message> output) CreateSut()

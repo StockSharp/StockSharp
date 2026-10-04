@@ -70,15 +70,19 @@ public abstract class RiskRule : IRiskRule, INotifyPropertyChanged
 	public abstract bool ProcessMessage(Message message);
 
 	/// <inheritdoc />
-	public virtual void Load(SettingsStorage storage)
+	public virtual Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Action = storage.GetValue<RiskActions>(nameof(Action));
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc />
-	public virtual void Save(SettingsStorage storage)
+	public virtual Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Action), Action.To<string>());
+
+		return Task.CompletedTask;
 	}
 
 	private PropertyChangedEventHandler _propertyChanged;

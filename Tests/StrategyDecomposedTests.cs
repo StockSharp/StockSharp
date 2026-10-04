@@ -653,13 +653,17 @@ public class StrategyDecomposedTests : BaseTestClass
 			return info;
 		}
 
-		public void Load(SettingsStorage storage) => _inner.Load(storage);
+		public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.LoadAsync(storage, cancellationToken);
+		}
 
-		public void Save(SettingsStorage storage) => _inner.Save(storage);
+		public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.SaveAsync(storage, cancellationToken);
+		}
 
-		public IPnLManager Clone() => _inner.Clone();
-
-		object ICloneable.Clone() => Clone();
+		public ValueTask<IPnLManager> CloneAsync(CancellationToken cancellationToken) => _inner.CloneAsync(cancellationToken);
 	}
 
 	// The same idea for the statistics stage, which runs last.
@@ -696,9 +700,15 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		public void Reset() => _inner.Reset();
 
-		public void Load(SettingsStorage storage) => _inner.Load(storage);
+		public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.LoadAsync(storage, cancellationToken);
+		}
 
-		public void Save(SettingsStorage storage) => _inner.Save(storage);
+		public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.SaveAsync(storage, cancellationToken);
+		}
 
 		public void Dispose() => _inner.Dispose();
 	}
@@ -3553,14 +3563,14 @@ public class StrategyDecomposedTests : BaseTestClass
 				? new PnLInfo(execMsg.ServerTime, 0m, TradePnL)
 				: null;
 
-		public IPnLManager Clone()
-			=> new ScriptedPnLManager { RealizedPnL = RealizedPnL, UnrealizedPnL = UnrealizedPnL, TradePnL = TradePnL };
+		public ValueTask<IPnLManager> CloneAsync(CancellationToken cancellationToken)
+			=> new(new ScriptedPnLManager { RealizedPnL = RealizedPnL, UnrealizedPnL = UnrealizedPnL, TradePnL = TradePnL });
 
-		object ICloneable.Clone() => Clone();
+		public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+			=> Task.CompletedTask;
 
-		public void Load(SettingsStorage storage) { }
-
-		public void Save(SettingsStorage storage) { }
+		public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+			=> Task.CompletedTask;
 	}
 
 	// Keeps, next to every reported PnL, the market time in force when the strategy reported it, so a
@@ -3594,9 +3604,15 @@ public class StrategyDecomposedTests : BaseTestClass
 
 		public void Reset() => _inner.Reset();
 
-		public void Load(SettingsStorage storage) => _inner.Load(storage);
+		public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.LoadAsync(storage, cancellationToken);
+		}
 
-		public void Save(SettingsStorage storage) => _inner.Save(storage);
+		public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			await _inner.SaveAsync(storage, cancellationToken);
+		}
 
 		public void Dispose() => _inner.Dispose();
 	}

@@ -26,6 +26,7 @@ internal sealed class SampleConnectorContext : IDisposable
 	private readonly bool _ownsAdapterProvider;
 	private readonly IMessageAdapter[] _ownedAdapterCatalog = [];
 	private readonly ConnectorConfigurator _configuration;
+	private readonly JsonSampleConnectorSettingsStore _settingsStore = new(Paths.FileSystem);
 	private readonly CancellationTokenSource _lifetimeCancellation = new();
 	private bool _disposed;
 
@@ -56,8 +57,7 @@ internal sealed class SampleConnectorContext : IDisposable
 			_configuration = new(
 				Connector,
 				_adapterProvider,
-				new JsonSampleConnectorSettingsStore(Paths.FileSystem));
-			_configuration.Load();
+				_settingsStore);
 		}
 		catch (Exception initializationError)
 		{
@@ -78,6 +78,19 @@ internal sealed class SampleConnectorContext : IDisposable
 
 	/// <summary>Connector owned by this context.</summary>
 	public Connector Connector { get; }
+
+	/// <summary>
+	/// Reads the stored connector configuration and applies it.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(CancellationToken cancellationToken)
+	{
+		ObjectDisposedException.ThrowIf(_disposed, this);
+
+		await _settingsStore.LoadAsync(cancellationToken);
+		_configuration.Load();
+	}
 
 	public bool IsAutoConnect => _configuration.IsAutoConnect;
 

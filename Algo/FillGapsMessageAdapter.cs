@@ -168,7 +168,8 @@ public class FillGapsMessageAdapter(IMessageAdapter innerAdapter, IFillGapsBehav
 	/// <summary>
 	/// Create a copy of <see cref="FillGapsMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
-		=> new FillGapsMessageAdapter(InnerAdapter.TypedClone(), _behaviour);
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new FillGapsMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), _behaviour);
 }

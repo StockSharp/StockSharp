@@ -7,10 +7,10 @@ using Ecng.Reflection;
 using StockSharp.Algo.Storages.Binary.Snapshot;
 
 [TestClass]
-public class SerializationTests
+public class SerializationTests : BaseTestClass
 {
 	[TestMethod]
-	public void SerializeBoard()
+	public async Task SerializeBoard()
 	{
 		var boards = typeof(ExchangeBoard)
 			.GetProperties(BindingFlags.Static | BindingFlags.Public)
@@ -19,11 +19,11 @@ public class SerializationTests
 			.ToArray();
 
 		foreach (var board in boards)
-			SerializeEntity(board);
+			await SerializeEntityAsync(board, CancellationToken);
 	}
 
 	[TestMethod]
-	public void SerializeExchange()
+	public async Task SerializeExchange()
 	{
 		var exchanges = typeof(Exchange)
 			.GetProperties(BindingFlags.Static | BindingFlags.Public)
@@ -33,7 +33,7 @@ public class SerializationTests
 
 		foreach (var exchange in exchanges)
 		{
-			SerializeEntity(exchange);
+			await SerializeEntityAsync(exchange, CancellationToken);
 		}
 	}
 
@@ -41,7 +41,7 @@ public class SerializationTests
 	// is absent from both sides and passes. Every entity is therefore given values distinct from
 	// its defaults first, and the restored object is compared property by property.
 	[TestMethod]
-	public void SerializePersistables()
+	public async Task SerializePersistables()
 	{
 		var assemblies = new[]
 		{
@@ -51,11 +51,11 @@ public class SerializationTests
 		};
 
 		var objects = assemblies
-			.SelectMany(a => a.FindImplementations<IPersistable>(false, false, extraFilter: t => t.GetConstructor(Type.EmptyTypes) != null))
-			.Select(t => t.CreateInstance<IPersistable>())
+			.SelectMany(a => a.FindImplementations<IAsyncPersistable>(false, false, extraFilter: t => t.GetConstructor(Type.EmptyTypes) != null))
+			.Select(t => t.CreateInstance<IAsyncPersistable>())
 			.ToArray();
 
-		var genMethod = GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Static).First(m => m.Name == nameof(FillAndRoundTrip));
+		var genMethod = GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Static).First(m => m.Name == nameof(FillAndRoundTripAsync));
 
 		var failures = new List<string>();
 		var skipped = new List<string>();
@@ -69,7 +69,7 @@ public class SerializationTests
 			if (o is IIndicator ind)
 				ind.Reset();
 
-			var result = (PersistenceSweepResult)genMethod.Make(o.GetType()).Invoke(null, [o]);
+			var result = await (Task<PersistenceSweepResult>)genMethod.Make(o.GetType()).Invoke(null, [o, CancellationToken]);
 
 			compared += result.Filled.Count;
 
@@ -121,9 +121,9 @@ public class SerializationTests
 	// must be reported for exactly the forgotten one.
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void PersistableSweepReportsUnsavedProperty()
+	public async Task PersistableSweepReportsUnsavedProperty()
 	{
-		var result = FillAndRoundTrip(new ForgetfulSettings());
+		var result = await FillAndRoundTripAsync(new ForgetfulSettings(), CancellationToken);
 
 		result.Filled.Count.AssertEqual(2);
 		result.Failures.Count.AssertEqual(1, result.Failures.JoinN());
@@ -132,16 +132,24 @@ public class SerializationTests
 
 	// A settings object that forgets one of its properties on save, used to pin the sweep's own
 	// detection instead of trusting it.
-	private class ForgetfulSettings : IPersistable
+	private class ForgetfulSettings : IAsyncPersistable
 	{
 		public int Kept { get; set; }
 		public int Dropped { get; set; }
 
-		void IPersistable.Load(SettingsStorage storage)
-			=> Kept = storage.GetValue<int>(nameof(Kept));
+		Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			Kept = storage.GetValue<int>(nameof(Kept));
 
-		void IPersistable.Save(SettingsStorage storage)
-			=> storage.SetValue(nameof(Kept), Kept);
+			return Task.CompletedTask;
+		}
+
+		Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		{
+			storage.SetValue(nameof(Kept), Kept);
+
+			return Task.CompletedTask;
+		}
 	}
 
 	// What one entity's round-trip produced: the properties that carried a value into it, the ones
@@ -153,18 +161,18 @@ public class SerializationTests
 		public List<string> Failures { get; } = [];
 	}
 
-	private static void SerializeEntity<T>(T entity)
-		where T : class, IPersistable
+	private static async Task SerializeEntityAsync<T>(T entity, CancellationToken cancellationToken)
+		where T : class, IAsyncPersistable
 	{
 		ArgumentNullException.ThrowIfNull(entity);
 
 		var ser = Paths.CreateSerializer<T>();
 
-		Helper.CheckEqual(entity.Save(), ser.Deserialize(ser.Serialize(entity)).Save());
+		Helper.CheckEqual(await entity.SaveAsync(cancellationToken), await (await ser.DeserializeAsync(await entity.SerializeAsync(true, cancellationToken), cancellationToken)).SaveAsync(cancellationToken));
 	}
 
-	private static PersistenceSweepResult FillAndRoundTrip<T>(T entity)
-		where T : class, IPersistable
+	private static async Task<PersistenceSweepResult> FillAndRoundTripAsync<T>(T entity, CancellationToken cancellationToken)
+		where T : class, IAsyncPersistable
 	{
 		ArgumentNullException.ThrowIfNull(entity);
 
@@ -179,7 +187,7 @@ public class SerializationTests
 
 		try
 		{
-			restored = ser.Deserialize(ser.Serialize(entity));
+			restored = await ser.DeserializeAsync(await entity.SerializeAsync(true, cancellationToken), cancellationToken);
 		}
 		catch (Exception ex)
 		{
@@ -209,7 +217,7 @@ public class SerializationTests
 		// the storages must still agree as well, so a value dropped by both sides stays visible
 		try
 		{
-			Helper.CheckEqual(entity.Save(), restored.Save());
+			Helper.CheckEqual(await entity.SaveAsync(cancellationToken), await restored.SaveAsync(cancellationToken));
 		}
 		catch (Exception ex)
 		{
@@ -432,12 +440,12 @@ public class SerializationTests
 		};
 	}
 
-	private static ExecutionMessage RoundTrip(ExecutionMessage origin)
+	private async Task<ExecutionMessage> RoundTripAsync(ExecutionMessage origin)
 	{
 		ISnapshotSerializer<string, ExecutionMessage> serializer = new TransactionBinarySnapshotSerializer();
 
-		var bytes = serializer.Serialize(serializer.Version, origin);
-		return serializer.Deserialize(serializer.Version, bytes);
+		var bytes = await serializer.SerializeAsync(serializer.Version, origin, CancellationToken);
+		return await serializer.DeserializeAsync(serializer.Version, bytes, CancellationToken);
 	}
 
 	// Verifies the previously completely unguarded condition-parameter serialization
@@ -448,7 +456,7 @@ public class SerializationTests
 	// are compared explicitly.
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void TransactionsSnapshotConditionSupportedTypes()
+	public async Task TransactionsSnapshotConditionSupportedTypes()
 	{
 		var condition = new StopOrderCondition
 		{
@@ -461,7 +469,7 @@ public class SerializationTests
 
 		var expected = condition.Parameters.Where(p => p.Value != null).ToArray();
 
-		var loaded = RoundTrip(CreateTransaction(condition));
+		var loaded = await RoundTripAsync(CreateTransaction(condition));
 
 		loaded.Condition.AssertNotNull();
 		loaded.Condition.GetType().AssertEqual(typeof(StopOrderCondition));
@@ -492,7 +500,7 @@ public class SerializationTests
 	// longer discards string-typed condition parameters).
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void TransactionsSnapshotConditionStringParamRoundTrip()
+	public async Task TransactionsSnapshotConditionStringParamRoundTrip()
 	{
 		const string key = "RawStringParam";
 		const string value = "hello-world-42";
@@ -501,7 +509,7 @@ public class SerializationTests
 		// store a raw string value directly through the parameter bag
 		condition.Parameters[key] = value;
 
-		var loaded = RoundTrip(CreateTransaction(condition));
+		var loaded = await RoundTripAsync(CreateTransaction(condition));
 
 		loaded.Condition.AssertNotNull();
 		loaded.Condition.Parameters.TryGetValue(key, out var actual)
@@ -514,7 +522,7 @@ public class SerializationTests
 	// with both value and CLR type preserved.
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void TransactionsSnapshotConditionLongParamRoundTrip()
+	public async Task TransactionsSnapshotConditionLongParamRoundTrip()
 	{
 		const string key = "LongParam";
 		const long value = 9_876_543_210L;
@@ -522,7 +530,7 @@ public class SerializationTests
 		var condition = new StopOrderCondition();
 		condition.Parameters[key] = value;
 
-		var loaded = RoundTrip(CreateTransaction(condition));
+		var loaded = await RoundTripAsync(CreateTransaction(condition));
 
 		loaded.Condition.AssertNotNull();
 		loaded.Condition.Parameters.TryGetValue(key, out var actual)
@@ -535,7 +543,7 @@ public class SerializationTests
 	// in its own slot with its own values, and a name read from the wrong key would swap them silently.
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void WithdrawInfoKeepsItsThreeSetsOfBankDetailsApart()
+	public async Task WithdrawInfoKeepsItsThreeSetsOfBankDetailsApart()
 	{
 		var info = new WithdrawInfo
 		{
@@ -551,7 +559,7 @@ public class SerializationTests
 			CompanyDetails = CreateBankDetails("company", CurrencyTypes.GBP),
 		};
 
-		var restored = info.Save().Load<WithdrawInfo>();
+		var restored = await (await info.SaveAsync(CancellationToken)).LoadAsync<WithdrawInfo>(CancellationToken);
 
 		restored.Type.AssertEqual(WithdrawTypes.BankWire);
 		restored.Express.AssertEqual(true);
@@ -636,9 +644,9 @@ public class SerializationTests
 	// conditionType string is empty, so no condition is reconstructed).
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void TransactionsSnapshotNoCondition()
+	public async Task TransactionsSnapshotNoCondition()
 	{
-		var loaded = RoundTrip(CreateTransaction(null));
+		var loaded = await RoundTripAsync(CreateTransaction(null));
 
 		loaded.Condition.AssertNull();
 	}

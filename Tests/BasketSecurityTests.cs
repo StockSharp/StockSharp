@@ -6,7 +6,7 @@ using Ecng.Compilation;
 public class BasketSecurityTests : BaseTestClass
 {
 	[TestMethod]
-	public void WeightedIndex()
+	public async Task WeightedIndex()
 	{
 		CreateSpot(out var lkoh, out var sber);
 
@@ -18,11 +18,11 @@ public class BasketSecurityTests : BaseTestClass
 		basket.Weights[lkoh.ToSecurityId()] = 1;
 		basket.Weights[sber.ToSecurityId()] = -10;
 
-		Do(basket, prices => prices[0] * 1 + prices[1] * (-10), lkoh, sber);
+		await DoAsync(basket, prices => prices[0] * 1 + prices[1] * (-10), lkoh, sber);
 	}
 
 	[TestMethod]
-	public void ExpressionIndex()
+	public async Task ExpressionIndex()
 	{
 		CreateSpot(out var lkoh, out var sber);
 
@@ -33,7 +33,7 @@ public class BasketSecurityTests : BaseTestClass
 			BasketExpression = "LKOH@TQBR - 10 * SBER@TQBR",
 		};
 
-		Do(basket, prices => prices[0] - 10 * prices[1], lkoh, sber);
+		await DoAsync(basket, prices => prices[0] - 10 * prices[1], lkoh, sber);
 	}
 
 	/// <summary>
@@ -107,7 +107,7 @@ public class BasketSecurityTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void ExpirationContinuous_PreExpiryUsesFrontContract()
+	public async Task ExpirationContinuous_PreExpiryUsesFrontContract()
 	{
 		CreateFut(out var riu, out var riz);
 
@@ -122,11 +122,11 @@ public class BasketSecurityTests : BaseTestClass
 
 		// The generated window starts five hours before expiry and remains pre-expiry.
 		// Contract switching itself is covered by ContinuousProcessor_SwitchesToNextContract.
-		Do(basket, prices => prices[0], riu, riz);
+		await DoAsync(basket, prices => prices[0], riu, riz);
 	}
 
 	[TestMethod]
-	public void VolumeContinuous()
+	public async Task VolumeContinuous()
 	{
 		CreateFut(out var riu, out var riz);
 
@@ -141,7 +141,7 @@ public class BasketSecurityTests : BaseTestClass
 		basket.InnerSecurities.Add(riu.ToSecurityId());
 		basket.InnerSecurities.Add(riz.ToSecurityId());
 
-		Do(basket, prices => prices[0], riu, riz);
+		await DoAsync(basket, prices => prices[0], riu, riz);
 	}
 
 	private static void CreateFut(out Security riu, out Security riz)
@@ -210,11 +210,11 @@ public class BasketSecurityTests : BaseTestClass
 		};
 	}
 
-	private static void Do(BasketSecurity basketSecurity, Func<decimal[], decimal> validateFormula, params Security[] securities)
+	private async Task DoAsync(BasketSecurity basketSecurity, Func<decimal[], decimal> validateFormula, params Security[] securities)
 	{
 		var processorProvider = new BasketSecurityProcessorProvider();
 		var secProvider = new CollectionSecurityProvider(securities);
-		securities = [.. basketSecurity.GetInnerSecurities(secProvider)];
+		securities = await basketSecurity.GetInnerSecuritiesAsync(secProvider, CancellationToken);
 		var legsCount = securities.Length;
 
 		var start = securities.First().ExpiryDate?.Subtract(TimeSpan.FromHours(5)) ?? DateTime.UtcNow;

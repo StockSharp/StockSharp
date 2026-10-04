@@ -138,18 +138,18 @@ public class KaufmanAdaptiveMovingAverage : DecimalLengthIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		FastSCPeriod = storage.GetValue(nameof(FastSCPeriod), FastSCPeriod);
 		SlowSCPeriod = storage.GetValue(nameof(SlowSCPeriod), SlowSCPeriod);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(FastSCPeriod), FastSCPeriod);
 		storage.SetValue(nameof(SlowSCPeriod), SlowSCPeriod);

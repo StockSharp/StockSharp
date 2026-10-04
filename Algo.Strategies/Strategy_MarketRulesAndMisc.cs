@@ -12,12 +12,12 @@ using StockSharp.Reporting;
 //   - IScheduledTask (WorkingTime, CanStart, CanStop);
 //   - IReportSource (ReportSource aggregation + Prepare + the report projections);
 //   - ICustomTypeDescriptor (parameters projected as property descriptors, GetParameters);
-//   - ICloneable<Strategy> (Clone / CreateClone / CopyTo);
+//   - cloning (CloneAsync / CreateClone / CopyToAsync);
 //   - the misc members UnrealizedPnLInterval, PortfolioProvider, Environment, GetWorkingPortfolios,
 //     ToReportValue and the alert-service helpers (GetAlertService / SetAlertService).
 //
 // IPortfolioProvider is listed on the primary declaration and implemented in Strategy_Positions.cs.
-partial class Strategy : IMarketRuleContainer, ICloneable<Strategy>, IScheduledTask, IReportSource, ICustomTypeDescriptor
+partial class Strategy : IMarketRuleContainer, IScheduledTask, IReportSource, ICustomTypeDescriptor
 {
 	#region IMarketRuleContainer
 
@@ -237,15 +237,25 @@ partial class Strategy : IMarketRuleContainer, ICloneable<Strategy>, IScheduledT
 
 	#endregion
 
-	#region ICloneable<Strategy>
+	#region Clone
 
-	object ICloneable.Clone() => Clone();
+	/// <summary>
+	/// Create a copy of the strategy.
+	/// </summary>
+	/// <returns>Copy.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CloneAsync instead.")]
+	public Strategy Clone()
+		=> AsyncHelper.Run(() => CloneAsync(default));
 
-	/// <inheritdoc />
-	public virtual Strategy Clone()
+	/// <summary>
+	/// Create a copy of the strategy.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	public virtual async ValueTask<Strategy> CloneAsync(CancellationToken cancellationToken)
 	{
 		var clone = CreateClone();
-		CopyTo(clone);
+		await CopyToAsync(clone, cancellationToken);
 		return clone;
 	}
 
@@ -260,7 +270,9 @@ partial class Strategy : IMarketRuleContainer, ICloneable<Strategy>, IScheduledT
 	/// Copy settings into <paramref name="copy"/>.
 	/// </summary>
 	/// <param name="copy"><see cref="Strategy"/></param>
-	protected virtual void CopyTo(Strategy copy)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	protected virtual async ValueTask CopyToAsync(Strategy copy, CancellationToken cancellationToken)
 	{
 		if (copy is null)
 			throw new ArgumentNullException(nameof(copy));
@@ -268,13 +280,21 @@ partial class Strategy : IMarketRuleContainer, ICloneable<Strategy>, IScheduledT
 		// Round-trip full persisted state through Save/Load (a parameter-by-id copy would drop the
 		// RiskManager). The clone keeps its OWN id, restored after Load.
 		var id = copy.Id;
-		copy.Load(this.Save());
+		await copy.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
 		copy.Id = id;
 
 		// set after Load to avoid being overwritten by the deserialized values
 		copy.Security = Security;
 		copy.Portfolio = Portfolio;
 		copy.PortfolioProvider = PortfolioProvider;
+
+		// Any other security or portfolio is saved by its identifier too, and loads as nothing when
+		// no provider knows it, so the copy is given the object the original holds.
+		foreach (var param in GetParameters())
+		{
+			if ((param.Type.Is<Security>() || param.Type.Is<Portfolio>()) && copy.Parameters.TryGetValue(param.Id, out var target))
+				target.Value = param.Value;
+		}
 
 		copy.Environment.AddRange(Environment);
 	}

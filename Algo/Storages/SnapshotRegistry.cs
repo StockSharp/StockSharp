@@ -16,13 +16,13 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 {
 	private abstract class SnapshotStorage : ISnapshotStorage
 	{
-		public abstract List<Exception> FlushChanges();
+		public abstract ValueTask<List<Exception>> FlushChangesAsync(CancellationToken cancellationToken);
 		public abstract IEnumerable<DateTime> Dates { get; }
-		public abstract void ClearAll();
-		public abstract void Clear(object key);
-		public abstract void Update(Message message);
-		public abstract Message Get(object key);
-		public abstract IEnumerable<Message> GetAll(DateTime? from, DateTime? to);
+		public abstract ValueTask ClearAllAsync(CancellationToken cancellationToken);
+		public abstract ValueTask ClearAsync(object key, CancellationToken cancellationToken);
+		public abstract ValueTask UpdateAsync(Message message, CancellationToken cancellationToken);
+		public abstract ValueTask<Message> GetAsync(object key, CancellationToken cancellationToken);
+		public abstract IAsyncEnumerable<Message> GetAllAsync(DateTime? from, DateTime? to);
 	}
 
 	private class SnapshotStorage<TKey, TMessage> : SnapshotStorage, ISnapshotStorage<TKey, TMessage>
@@ -35,8 +35,8 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 			private readonly Dictionary<TKey, byte[]> _buffers = [];
 			private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
 			private readonly IFileSystem _fileSystem;
-			private readonly Version _version;
 			private readonly string _fileName;
+			private Version _version;
 			//private long _currOffset;
 			private bool _resetFile;
 
@@ -54,7 +54,10 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 				_fileName = fileName;
 				_serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
 				_fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+			}
 
+			public async Task LoadAsync(CancellationToken cancellationToken)
+			{
 				if (_fileSystem.FileExists(_fileName))
 				{
 					Debug.WriteLine($"Snapshot (Load): {_fileName}");
@@ -84,7 +87,7 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 
 								try
 								{
-									message = _serializer.Deserialize(_version, buffer);
+									message = await _serializer.DeserializeAsync(_version, buffer, cancellationToken);
 								}
 								catch (Exception ex)
 								{
@@ -218,47 +221,78 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 				}
 			}
 
-			public void FlushChanges()
+			public async ValueTask FlushChangesAsync(CancellationToken cancellationToken)
 			{
 				// TODO Optimize memory
 
-				IEnumerable<byte[]> buffers;
+				(TKey key, TMessage message)[] changed;
+				bool resetFile;
 
 				using (_snapshots.EnterScope())
 				{
-					if (!_resetFile)
-					{
-						if (_dirtyKeys.Count == 0)
-							return;
+					resetFile = _resetFile;
 
-						foreach (var key in _dirtyKeys)
-							_buffers[key] = _serializer.Serialize(_version, _snapshots[key]);
-					}
-					else
-					{
-						_buffers.Clear();
+					if (!resetFile && _dirtyKeys.Count == 0)
+						return;
 
-						foreach (var pair in _snapshots)
-							_buffers.Add(pair.Key, _serializer.Serialize(_version, pair.Value));
-					}
+					changed = resetFile
+						? [.. _snapshots.Select(p => (p.Key, p.Value.TypedClone()))]
+						: [.. _dirtyKeys.Select(k => (k, _snapshots[k].TypedClone()))];
 
 					_dirtyKeys.Clear();
-
-					buffers = [.. _buffers.Values];
+					_resetFile = false;
 				}
 
-				_fileSystem.CreateDirectory(Path.GetDirectoryName(_fileName));
-
-				Debug.WriteLine($"Snapshot (Save): {_fileName}");
-
-				using var stream = _fileSystem.OpenWrite(_fileName);
-
-				stream.WriteByte((byte)_version.Major);
-				stream.WriteByte((byte)_version.Minor);
-
-				foreach (var buffer in buffers)
+				try
 				{
-					stream.WriteEx(buffer);
+					var serialized = new List<(TKey key, byte[] buffer)>(changed.Length);
+
+					foreach (var (key, message) in changed)
+						serialized.Add((key, await _serializer.SerializeAsync(_version, message, cancellationToken)));
+
+					IEnumerable<byte[]> buffers;
+
+					using (_snapshots.EnterScope())
+					{
+						if (resetFile)
+							_buffers.Clear();
+
+						foreach (var (key, buffer) in serialized)
+							_buffers[key] = buffer;
+
+						buffers = [.. _buffers.Values];
+					}
+
+					_fileSystem.CreateDirectory(Path.GetDirectoryName(_fileName));
+
+					Debug.WriteLine($"Snapshot (Save): {_fileName}");
+
+					using var stream = _fileSystem.OpenWrite(_fileName);
+
+					stream.WriteByte((byte)_version.Major);
+					stream.WriteByte((byte)_version.Minor);
+
+					foreach (var buffer in buffers)
+					{
+						stream.WriteEx(buffer);
+					}
+				}
+				catch
+				{
+					// What was taken is not known to be in the file, so it stays due for the next flush.
+					using (_snapshots.EnterScope())
+					{
+						if (resetFile)
+							_resetFile = true;
+
+						foreach (var (key, _) in changed)
+						{
+							if (_snapshots.ContainsKey(key))
+								_dirtyKeys.Add(key);
+						}
+					}
+
+					throw;
 				}
 			}
 		}
@@ -271,7 +305,9 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 
 		private readonly Lock _cacheSync = new();
 
+		// Loaded dates, which are the ones a flush writes; a date is read once, the first time it is asked for.
 		private readonly CachedSynchronizedDictionary<DateTime, SnapshotStorageDate> _dates = [];
+		private readonly CachedSynchronizedDictionary<DateTime, Task<SnapshotStorageDate>> _loading = [];
 
 		private readonly ISnapshotSerializer<TKey, TMessage> _serializer;
 		private readonly IFileSystem _fileSystem;
@@ -331,22 +367,22 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 			ResetCache();
 		}
 
-		public override void ClearAll()
+		public override async ValueTask ClearAllAsync(CancellationToken cancellationToken)
 		{
-			_dates.CachedValues.ForEach(d => d.ClearAll());
+			foreach (var date in await LoadedAsync(cancellationToken))
+				date.ClearAll();
 		}
 
-		void ISnapshotStorage<TKey, TMessage>.Clear(TKey key)
+		async ValueTask ISnapshotStorage<TKey, TMessage>.ClearAsync(TKey key, CancellationToken cancellationToken)
 		{
-			_dates.CachedValues.ForEach(d => d.Clear(key));
+			foreach (var date in await LoadedAsync(cancellationToken))
+				date.Clear(key);
 		}
 
-		public override void Clear(object key)
-		{
-			((ISnapshotStorage<TKey, TMessage>)this).Clear((TKey)key);
-		}
+		public override ValueTask ClearAsync(object key, CancellationToken cancellationToken)
+			=> ((ISnapshotStorage<TKey, TMessage>)this).ClearAsync((TKey)key, cancellationToken);
 
-		public override void Update(Message message)
+		public override async ValueTask UpdateAsync(Message message, CancellationToken cancellationToken)
 		{
 			if (message == null)
 				throw new ArgumentNullException(nameof(message));
@@ -358,7 +394,7 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 			if (date == default)
 				throw new ArgumentException(message.ToString());
 
-			GetStorageDate(date).Update(curr);
+			(await GetStorageDateAsync(date, cancellationToken)).Update(curr);
 
 			using (DatesDict.EnterScope())
 			{
@@ -367,11 +403,11 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 			}
 		}
 
-		TMessage ISnapshotStorage<TKey, TMessage>.Get(TKey key)
+		async ValueTask<TMessage> ISnapshotStorage<TKey, TMessage>.GetAsync(TKey key, CancellationToken cancellationToken)
 		{
 			foreach (var date in Dates.OrderByDescending())
 			{
-				var snapshot = GetStorageDate(date).Get(key);
+				var snapshot = (await GetStorageDateAsync(date, cancellationToken)).Get(key);
 
 				if (snapshot != null)
 					return snapshot;
@@ -380,12 +416,13 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 			return null;
 		}
 
-		public override Message Get(object key)
-		{
-			return ((ISnapshotStorage<TKey, TMessage>)this).Get((TKey)key);
-		}
+		public override async ValueTask<Message> GetAsync(object key, CancellationToken cancellationToken)
+			=> await ((ISnapshotStorage<TKey, TMessage>)this).GetAsync((TKey)key, cancellationToken);
 
-		IEnumerable<TMessage> ISnapshotStorage<TKey, TMessage>.GetAll(DateTime? from, DateTime? to)
+		IAsyncEnumerable<TMessage> ISnapshotStorage<TKey, TMessage>.GetAllAsync(DateTime? from, DateTime? to)
+			=> GetAllCoreAsync(from, to);
+
+		private async IAsyncEnumerable<TMessage> GetAllCoreAsync(DateTime? from, DateTime? to, [EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			var dates = Dates;
 
@@ -398,23 +435,39 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 			if (toDate != null)
 				dates = dates.Where(d => d <= toDate.Value);
 
-			return dates.SelectMany(d =>
+			foreach (var d in dates.ToArray())
 			{
 				var f = d == fromDate ? from : null;
 				var t = d == toDate ? to : null;
-				return GetStorageDate(d).GetAll(f, t);
-			});
+
+				foreach (var snapshot in (await GetStorageDateAsync(d, cancellationToken)).GetAll(f, t))
+					yield return snapshot;
+			}
 		}
 
-		public override IEnumerable<Message> GetAll(DateTime? from, DateTime? to)
+		public override async IAsyncEnumerable<Message> GetAllAsync(DateTime? from, DateTime? to)
 		{
-			return ((ISnapshotStorage<TKey, TMessage>)this).GetAll(from, to);
+			await foreach (var snapshot in GetAllCoreAsync(from, to))
+				yield return snapshot;
 		}
 
-		private SnapshotStorageDate GetStorageDate(DateTime date)
+		private Task<SnapshotStorageDate> GetStorageDateAsync(DateTime date, CancellationToken cancellationToken)
+			=> _loading.SafeAdd(date, key => Task.Run(() => LoadStorageDateAsync(key))).WaitAsync(cancellationToken);
+
+		// Read without the caller's token: the result is shared by every later caller of the same date.
+		private async Task<SnapshotStorageDate> LoadStorageDateAsync(DateTime date)
 		{
-			return _dates.SafeAdd(date, key => new SnapshotStorageDate(Path.Combine(_path, LocalMarketDataDrive.GetDirName(key), _fileNameWithExtension), _serializer, _fileSystem));
+			var storage = new SnapshotStorageDate(Path.Combine(_path, LocalMarketDataDrive.GetDirName(date), _fileNameWithExtension), _serializer, _fileSystem);
+
+			await storage.LoadAsync(CancellationToken.None);
+
+			_dates[date] = storage;
+
+			return storage;
 		}
+
+		private async ValueTask<SnapshotStorageDate[]> LoadedAsync(CancellationToken cancellationToken)
+			=> await Task.WhenAll(_loading.CachedValues).WaitAsync(cancellationToken);
 
 		private IEnumerable<DateTime> LoadDates()
 		{
@@ -486,21 +539,21 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 			_datesDict.Reset();
 		}
 
-		public override List<Exception> FlushChanges()
+		public override async ValueTask<List<Exception>> FlushChangesAsync(CancellationToken cancellationToken)
 		{
 			var errors = new List<Exception>();
 
-			_dates.CachedValues.ForEach(d =>
+			foreach (var d in _dates.CachedValues)
 			{
 				try
 				{
-					d.FlushChanges();
+					await d.FlushChangesAsync(cancellationToken);
 				}
 				catch (Exception ex)
 				{
 					errors.Add(ex);
 				}
-			});
+			}
 
 			var saveDates = false;
 
@@ -543,7 +596,7 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 		var isFlushing = false;
 		var flushLock = new Lock();
 
-		_timer = AsyncHelper.CreatePeriodicTimer(() =>
+		_timer = AsyncHelper.CreatePeriodicTimer(async () =>
 		{
 			using (flushLock.EnterScope())
 			{
@@ -555,9 +608,12 @@ public class SnapshotRegistry(IFileSystem fileSystem, string path) : Disposable,
 
 			try
 			{
-				var errors = _snapshotStorages.CachedValues.SelectMany(s => s.FlushChanges()).ToArray();
+				var errors = new List<Exception>();
 
-				if (errors.Length > 0)
+				foreach (var storage in _snapshotStorages.CachedValues)
+					errors.AddRange(await storage.FlushChangesAsync(cancellationToken));
+
+				if (errors.Count > 0)
 					throw new AggregateException(errors);
 			}
 			catch (Exception ex)

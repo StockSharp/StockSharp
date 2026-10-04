@@ -506,9 +506,10 @@ public class HeartbeatMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="HeartbeatMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new HeartbeatMessageAdapter(InnerAdapter.TypedClone()) { SuppressReconnectingErrors = SuppressReconnectingErrors };
+		return new HeartbeatMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken)) { SuppressReconnectingErrors = SuppressReconnectingErrors };
 	}
 }

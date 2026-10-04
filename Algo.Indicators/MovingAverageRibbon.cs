@@ -107,9 +107,9 @@ public class MovingAverageRibbon : BaseComplexIndicator<IMovingAverageRibbonValu
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		//base.Save(storage);
+		//await base.SaveAsync(storage, cancellationToken);
 		SaveValues(storage);
 
 		storage.SetValue(nameof(ShortPeriod), ShortPeriod);
@@ -118,9 +118,9 @@ public class MovingAverageRibbon : BaseComplexIndicator<IMovingAverageRibbonValu
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		//base.Load(storage);
+		//await base.LoadAsync(storage, cancellationToken);
 		LoadValues(storage);
 
 		ShortPeriod = storage.GetValue<int>(nameof(ShortPeriod));

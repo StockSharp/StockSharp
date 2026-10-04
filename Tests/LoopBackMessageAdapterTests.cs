@@ -32,7 +32,8 @@ public class LoopBackMessageAdapterTests : BaseTestClass
 		public ValueTask EmitAsync(Message message, CancellationToken cancellationToken)
 			=> SendOutMessageAsync(message, cancellationToken);
 
-		public override IMessageAdapter Clone() => new RecordingAdapter();
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new RecordingAdapter());
 	}
 
 	private static (LoopBackMessageAdapter adapter, RecordingAdapter inner, List<Message> output) CreateSut()
@@ -121,7 +122,7 @@ public class LoopBackMessageAdapterTests : BaseTestClass
 	{
 		var (adapter, inner, _) = CreateSut();
 
-		var clone = (LoopBackMessageAdapter)adapter.Clone();
+		var clone = (LoopBackMessageAdapter)await adapter.CloneAsync(CancellationToken);
 
 		AreNotSame(inner, clone.InnerAdapter, "a clone must carry its own pipeline, not share the original's");
 

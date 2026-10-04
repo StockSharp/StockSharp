@@ -55,8 +55,8 @@ public class AdapterWrapperPipelineBuilderTests : BaseTestClass
 		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 			=> default;
 
-		public override IMessageAdapter Clone()
-			=> new TestPipelineAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestPipelineAdapter(TransactionIdGenerator));
 	}
 
 	#endregion

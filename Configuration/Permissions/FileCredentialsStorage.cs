@@ -21,27 +21,19 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 
 	private bool _initialized;
 
-	private void EnsureInitialized()
+	private async ValueTask EnsureInitializedAsync(CancellationToken cancellationToken)
 	{
 		if (_initialized)
 			return;
-
-		_initialized = true;
 
 		var dir = Path.GetDirectoryName(_fileName);
 		if (!dir.IsEmpty())
 			_fileSystem.CreateDirectory(dir);
 
-		LoadFromFile();
-	}
+		await LoadFromFileAsync(cancellationToken);
 
-	private PermissionCredentials[] Cache
-	{
-		get
-		{
-			EnsureInitialized();
-			return _credentials.CachedValues;
-		}
+		// set once the file has been read, so a first read that was cancelled is made again
+		_initialized = true;
 	}
 
 	IAsyncEnumerable<PermissionCredentials> IPermissionCredentialsStorage.SearchAsync(string loginPattern)
@@ -50,52 +42,56 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 
 		async IAsyncEnumerable<PermissionCredentials> Impl([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
+			await EnsureInitializedAsync(cancellationToken);
+
+			var cache = _credentials.CachedValues;
+
 			IEnumerable<PermissionCredentials> results;
 
 			if (loginPattern.IsEmpty() || loginPattern == "*")
 			{
-				results = Cache.Select(c => c.Clone());
+				results = cache;
 			}
 			else
 			{
 				var pattern = "^" + Regex.Escape(loginPattern).Replace("\\*", ".*") + "$";
 				var re = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
-				results = Cache.Where(c => re.IsMatch(c.Email ?? string.Empty)).Select(c => c.Clone());
+				results = cache.Where(c => re.IsMatch(c.Email ?? string.Empty));
 			}
 
 			foreach (var result in results)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
-				yield return result;
+				yield return await result.CopyAsync(cancellationToken);
 			}
 		}
 	}
 
-	ValueTask IPermissionCredentialsStorage.SaveAsync(PermissionCredentials credentials, CancellationToken cancellationToken)
+	async ValueTask IPermissionCredentialsStorage.SaveAsync(PermissionCredentials credentials, CancellationToken cancellationToken)
 	{
 		if (credentials == null)
 			throw new ArgumentNullException(nameof(credentials));
 
-		EnsureInitialized();
+		await EnsureInitializedAsync(cancellationToken);
 
 		if (!credentials.Email.IsValidLogin(_asEmail))
 			throw new ArgumentException(credentials.Email, nameof(credentials));
 
 		// what the storage answers is what was written down; the caller keeps its own object and
 		// may go on changing it without granting anything.
-		var saved = credentials.Clone();
+		var saved = await credentials.CopyAsync(cancellationToken);
 
 		// every instance pointed at this file holds the same accounts, so the account is added to
 		// what the file carries now and not to what this instance last read.
-		LoadFromFile();
+		await LoadFromFileAsync(cancellationToken);
 
 		var hadPrevious = _credentials.TryGetValue(saved.Email, out var previous);
 		_credentials[saved.Email] = saved;
 
 		try
 		{
-			SaveToFile();
+			await SaveToFileAsync(cancellationToken);
 		}
 		catch
 		{
@@ -106,22 +102,20 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 
 			throw;
 		}
-
-		return default;
 	}
 
-	ValueTask<bool> IPermissionCredentialsStorage.DeleteAsync(string login, CancellationToken cancellationToken)
+	async ValueTask<bool> IPermissionCredentialsStorage.DeleteAsync(string login, CancellationToken cancellationToken)
 	{
-		EnsureInitialized();
+		await EnsureInitializedAsync(cancellationToken);
 
-		LoadFromFile();
+		await LoadFromFileAsync(cancellationToken);
 
 		if (!_credentials.TryGetAndRemove(login, out var removed))
-			return new(false);
+			return false;
 
 		try
 		{
-			SaveToFile();
+			await SaveToFileAsync(cancellationToken);
 		}
 		catch
 		{
@@ -131,19 +125,20 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 			throw;
 		}
 
-		return new(true);
+		return true;
 	}
 
-	private void LoadFromFile()
+	private async ValueTask LoadFromFileAsync(CancellationToken cancellationToken)
 	{
 		try
 		{
 			if (!_fileName.IsConfigExists(_fileSystem))
 				return;
 
-			Do.Invariant(() =>
+			var storages = await _fileName.DeserializeInvariantAsync<SettingsStorage[]>(_fileSystem, cancellationToken);
+
+			await Do.InvariantAsync(async () =>
 			{
-				var storages = _fileName.Deserialize<SettingsStorage[]>(_fileSystem);
 				if (storages == null)
 					return;
 
@@ -154,7 +149,7 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 				using (ctx.ToScope())
 				{
 					foreach (var s in storages)
-						loaded.Add(s.Load<PermissionCredentials>());
+						loaded.Add(await s.LoadAsync<PermissionCredentials>(cancellationToken));
 				}
 
 				using (_credentials.EnterScope())
@@ -166,7 +161,7 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 				}
 			});
 		}
-		catch (Exception ex)
+		catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
 		{
 			LogError("Load credentials error:\n{0}", ex);
 		}
@@ -174,12 +169,14 @@ public class FileCredentialsStorage(IFileSystem fileSystem, string fileName, boo
 
 	// A change that never reached the file is not a change, so the failure reaches the caller
 	// instead of being logged behind a call that answered as if it had worked.
-	private void SaveToFile()
-	{
-		Do.Invariant(() =>
+	private Task SaveToFileAsync(CancellationToken cancellationToken)
+		=> Do.InvariantAsync(async () =>
 		{
-			var arr = _credentials.CachedValues.Select(i => i.Save()).ToArray();
-			arr.Serialize(_fileSystem, _fileName);
+			var arr = new List<SettingsStorage>();
+
+			foreach (var credentials in _credentials.CachedValues)
+				arr.Add(await credentials.SaveAsync(cancellationToken));
+
+			await arr.ToArray().SerializeAsync(_fileSystem, _fileName, true, cancellationToken);
 		});
-	}
 }

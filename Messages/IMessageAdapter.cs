@@ -5,8 +5,15 @@ using System.Security;
 /// <summary>
 /// Base message adapter interface which convert messages <see cref="Message"/> to native commands and back.
 /// </summary>
-public interface IMessageAdapter : IMessageTransport, IPersistable, ILogReceiver, ICloneable<IMessageAdapter>
+public interface IMessageAdapter : IMessageTransport, IAsyncPersistable, ILogReceiver
 {
+	/// <summary>
+	/// Create a copy of the adapter.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// Transaction id generator.
 	/// </summary>

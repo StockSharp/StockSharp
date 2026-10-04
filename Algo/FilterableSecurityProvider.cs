@@ -13,15 +13,38 @@ public class FilterableSecurityProvider : Disposable, ISecurityProvider
 	/// Initializes a new instance of the <see cref="FilterableSecurityProvider"/>.
 	/// </summary>
 	/// <param name="provider">Security meta info provider.</param>
+	[Obsolete("Use CreateAsync method instead.")]
 	public FilterableSecurityProvider(ISecurityProvider provider)
+		: this(provider, true)
+	{
+		AddSecurities(_provider.LookupAllAsync().ToBlockingEnumerable());
+	}
+
+	private FilterableSecurityProvider(ISecurityProvider provider, bool subscribe)
 	{
 		_provider = provider ?? throw new ArgumentNullException(nameof(provider));
+
+		if (!subscribe)
+			return;
 
 		_provider.Added += AddSecurities;
 		_provider.Removed += RemoveSecurities;
 		_provider.Cleared += ClearSecurities;
+	}
 
-		AddSecurities(_provider.LookupAll());
+	/// <summary>
+	/// Creates the provider over everything <paramref name="provider"/> holds now, kept in step with it afterwards.
+	/// </summary>
+	/// <param name="provider">Security meta info provider.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The provider.</returns>
+	public static async ValueTask<FilterableSecurityProvider> CreateAsync(ISecurityProvider provider, CancellationToken cancellationToken)
+	{
+		var filterable = new FilterableSecurityProvider(provider, true);
+
+		filterable.AddSecurities(await provider.LookupAllAsync().ToArrayAsync(cancellationToken));
+
+		return filterable;
 	}
 
 	/// <inheritdoc />

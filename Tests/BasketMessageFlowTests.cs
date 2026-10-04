@@ -358,7 +358,8 @@ public class BasketMessageFlowTests : BaseTestClass
 			await SendOutWithLog(tick, ct);
 		}
 
-		public override IMessageAdapter Clone() => new LoggingInnerAdapter(TransactionIdGenerator, _logger, _name);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new LoggingInnerAdapter(TransactionIdGenerator, _logger, _name));
 	}
 
 	#endregion
@@ -937,8 +938,8 @@ public class BasketMessageFlowTests : BaseTestClass
 			}
 		}
 
-		public override IMessageAdapter Clone()
-			=> new EmulatorLikeWrapper(InnerAdapter.Clone(), _logger, _name);
+		public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new EmulatorLikeWrapper(await InnerAdapter.CloneAsync(cancellationToken), _logger, _name);
 	}
 
 	private (BasketMessageAdapter basket, LoggingInnerAdapter innerAdapter, EmulatorLikeWrapper wrapper)

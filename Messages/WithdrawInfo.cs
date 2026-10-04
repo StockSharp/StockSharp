@@ -30,8 +30,11 @@ public enum WithdrawTypes
 [Serializable]
 [DataContract]
 [TypeConverter(typeof(ExpandableObjectConverter))]
-public class BankDetails : IPersistable
+public class BankDetails : Cloneable<BankDetails>, IAsyncPersistable
 {
+	/// <inheritdoc />
+	public override BankDetails Clone() => (BankDetails)MemberwiseClone();
+
 	/// <summary>
 	/// Bank account.
 	/// </summary>
@@ -157,7 +160,9 @@ public class BankDetails : IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Account = storage.GetValue<string>(nameof(Account));
 		AccountName = storage.GetValue<string>(nameof(AccountName));
@@ -170,13 +175,17 @@ public class BankDetails : IPersistable
 		Iban = storage.GetValue<string>(nameof(Iban));
 		PostalCode = storage.GetValue<string>(nameof(PostalCode));
 		Currency = storage.GetValue<CurrencyTypes>(nameof(Currency));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Account), Account);
 		storage.SetValue(nameof(AccountName), AccountName);
@@ -189,6 +198,8 @@ public class BankDetails : IPersistable
 		storage.SetValue(nameof(Iban), Iban);
 		storage.SetValue(nameof(PostalCode), PostalCode);
 		storage.SetValue(nameof(Currency), Currency);
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc />
@@ -204,8 +215,20 @@ public class BankDetails : IPersistable
 [Serializable]
 [DataContract]
 [TypeConverter(typeof(ExpandableObjectConverter))]
-public class WithdrawInfo : IPersistable
+public class WithdrawInfo : Cloneable<WithdrawInfo>, IAsyncPersistable
 {
+	/// <inheritdoc />
+	public override WithdrawInfo Clone()
+	{
+		var clone = (WithdrawInfo)MemberwiseClone();
+
+		clone.BankDetails = BankDetails?.Clone();
+		clone.IntermediaryBankDetails = IntermediaryBankDetails?.Clone();
+		clone.CompanyDetails = CompanyDetails?.Clone();
+
+		return clone;
+	}
+
 	/// <summary>
 	/// Withdraw type.
 	/// </summary>
@@ -348,14 +371,16 @@ public class WithdrawInfo : IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Type = storage.GetValue<WithdrawTypes>(nameof(Type));
 		Express = storage.GetValue<bool>(nameof(Express));
 		ChargeFee = storage.GetValue<decimal?>(nameof(ChargeFee));
-		BankDetails = storage.GetValue<BankDetails>(nameof(BankDetails));
-		IntermediaryBankDetails = storage.GetValue<BankDetails>(nameof(IntermediaryBankDetails));
-		CompanyDetails = storage.GetValue<BankDetails>(nameof(CompanyDetails));
+		BankDetails = await storage.GetValueAsync<BankDetails>(nameof(BankDetails), cancellationToken: cancellationToken);
+		IntermediaryBankDetails = await storage.GetValueAsync<BankDetails>(nameof(IntermediaryBankDetails), cancellationToken: cancellationToken);
+		CompanyDetails = await storage.GetValueAsync<BankDetails>(nameof(CompanyDetails), cancellationToken: cancellationToken);
 		CardNumber = storage.GetValue<string>(nameof(CardNumber));
 		PaymentId = storage.GetValue<string>(nameof(PaymentId));
 		CryptoAddress = storage.GetValue<string>(nameof(CryptoAddress));
@@ -366,14 +391,16 @@ public class WithdrawInfo : IPersistable
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Type), Type);
 		storage.SetValue(nameof(Express), Express);
 		storage.SetValue(nameof(ChargeFee), ChargeFee);
-		storage.SetValue(nameof(BankDetails), BankDetails?.Save());
-		storage.SetValue(nameof(IntermediaryBankDetails), IntermediaryBankDetails?.Save());
-		storage.SetValue(nameof(CompanyDetails), CompanyDetails?.Save());
+		storage.SetValue(nameof(BankDetails), BankDetails is null ? null : await BankDetails.SaveAsync(cancellationToken));
+		storage.SetValue(nameof(IntermediaryBankDetails), IntermediaryBankDetails is null ? null : await IntermediaryBankDetails.SaveAsync(cancellationToken));
+		storage.SetValue(nameof(CompanyDetails), CompanyDetails is null ? null : await CompanyDetails.SaveAsync(cancellationToken));
 		storage.SetValue(nameof(CardNumber), CardNumber);
 		storage.SetValue(nameof(PaymentId), PaymentId);
 		storage.SetValue(nameof(CryptoAddress), CryptoAddress);

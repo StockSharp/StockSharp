@@ -153,9 +153,9 @@ public class CandlePatternIndicator : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		EnsureProvider();
 		var patternName = storage.GetValue<string>(nameof(Pattern));
@@ -173,9 +173,9 @@ public class CandlePatternIndicator : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		if(Pattern != null)
 			storage.SetValue(nameof(Pattern), Pattern.Name);

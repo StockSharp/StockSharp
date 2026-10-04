@@ -396,30 +396,31 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
-		storage.SetValue(nameof(MarketEmulator), Settings.Save());
+		storage.SetValue(nameof(MarketEmulator), await Settings.SaveAsync(cancellationToken));
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		Settings.Load(storage, nameof(MarketEmulator));
+		await Settings.LoadAsync(storage, nameof(MarketEmulator), cancellationToken);
 	}
 
 	/// <summary>
 	/// Create a copy of <see cref="EmulationMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
 		// A channel of its own: sharing one hands every message sent to either adapter to both
 		// emulators, so the copy fills orders out of work it was never given.
-		var clone = new EmulationMessageAdapter(InnerAdapter.TypedClone(), InChannel.Clone(), _isEmulationOnly,
+		var clone = new EmulationMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), InChannel.Clone(), _isEmulationOnly,
 			Emulator.SecurityProvider, Emulator.PortfolioProvider, Emulator.ExchangeInfoProvider, _isOrderEmulationOnly)
 		{
 			OwnInnerAdapter = OwnInnerAdapter,
@@ -427,7 +428,7 @@ public class EmulationMessageAdapter : MessageAdapterWrapper, IEmulationMessageA
 
 		// The copy emulates on the terms the original was given, carried by value so retuning one
 		// run does not retune the other.
-		clone.Settings.Load(Settings.Save());
+		await clone.Settings.LoadAsync(await Settings.SaveAsync(cancellationToken), cancellationToken);
 
 		return clone;
 	}

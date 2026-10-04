@@ -202,17 +202,13 @@ public class PortfolioPnLManager(string portfolioName, Func<SecurityId, Level1Ch
 		return false;
 	}
 
-	void IPersistable.Load(SettingsStorage storage)
-	{
-	}
+	Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		=> Task.CompletedTask;
 
-	void IPersistable.Save(SettingsStorage storage)
-	{
-	}
+	Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		=> Task.CompletedTask;
 
 	/// <inheritdoc />
-	public IPnLManager Clone()
-		=> new PortfolioPnLManager(PortfolioName, _getSecDefinition);
-
-	object ICloneable.Clone() => Clone();
+	public ValueTask<IPnLManager> CloneAsync(CancellationToken cancellationToken)
+		=> new(new PortfolioPnLManager(PortfolioName, _getSecDefinition));
 }

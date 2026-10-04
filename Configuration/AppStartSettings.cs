@@ -3,7 +3,7 @@
 /// <summary>
 /// Application start configuration.
 /// </summary>
-public class AppStartSettings : IPersistable
+public class AppStartSettings : IAsyncPersistable
 {
 	/// <summary>
 	/// Selected application language.
@@ -26,7 +26,7 @@ public class AppStartSettings : IPersistable
 		set => _timeZone = value ?? throw new ArgumentNullException(nameof(value));
 	}
 
-	void IPersistable.Load(SettingsStorage storage)
+	Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Online = storage.GetValue(nameof(Online), Online);
 		Language = storage.GetValue(nameof(Language), Language);
@@ -43,21 +43,35 @@ public class AppStartSettings : IPersistable
 				// ignore invalid/unknown tz on current OS
 			}
 		}
+
+		return Task.CompletedTask;
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage
 			.Set(nameof(Language), Language)
 			.Set(nameof(Online), Online)
 			.Set(nameof(TimeZone), TimeZone.Id)
 		;
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Try load settings, if config file exists.
 	/// </summary>
+	[Obsolete("Blocking sync-over-async wrapper. Use TryLoadAsync instead.")]
 	public static AppStartSettings TryLoad(IFileSystem fileSystem)
+		=> AsyncHelper.Run(() => TryLoadAsync(fileSystem, default));
+
+	/// <summary>
+	/// Try load settings, if config file exists.
+	/// </summary>
+	/// <param name="fileSystem">File system.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>The settings, or <see langword="null"/> when there are none.</returns>
+	public static async ValueTask<AppStartSettings> TryLoadAsync(IFileSystem fileSystem, CancellationToken cancellationToken)
 	{
 		if (fileSystem is null)
 			throw new ArgumentNullException(nameof(fileSystem));
@@ -67,13 +81,25 @@ public class AppStartSettings : IPersistable
 		if (configFile.IsEmptyOrWhiteSpace() || !configFile.IsConfigExists(fileSystem))
 			return null;
 
-		return configFile.Deserialize<SettingsStorage>(fileSystem)?.Load<AppStartSettings>();
+		var storage = await configFile.DeserializeAsync<SettingsStorage>(fileSystem, cancellationToken);
+
+		return storage is null ? null : await storage.LoadAsync<AppStartSettings>(cancellationToken);
 	}
 
 	/// <summary>
 	/// Save settings into <see cref="Paths.PlatformConfigurationFile"/> if it is defined.
 	/// </summary>
+	[Obsolete("Blocking sync-over-async wrapper. Use TrySaveAsync instead.")]
 	public void TrySave(IFileSystem fileSystem)
+		=> AsyncHelper.Run(() => TrySaveAsync(fileSystem, default));
+
+	/// <summary>
+	/// Save settings into <see cref="Paths.PlatformConfigurationFile"/>.
+	/// </summary>
+	/// <param name="fileSystem"><see cref="IFileSystem"/></param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	public async ValueTask TrySaveAsync(IFileSystem fileSystem, CancellationToken cancellationToken)
 	{
 		if (fileSystem is null)
 			throw new ArgumentNullException(nameof(fileSystem));
@@ -83,6 +109,6 @@ public class AppStartSettings : IPersistable
 			return;
 
 		fileSystem.CreateDirIfNotExists(configFile);
-		this.Save().Serialize(fileSystem, configFile);
+		await (await this.SaveAsync(cancellationToken)).SerializeAsync(fileSystem, configFile, true, cancellationToken);
 	}
 }

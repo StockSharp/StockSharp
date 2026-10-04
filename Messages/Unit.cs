@@ -51,7 +51,7 @@ public enum UnitTypes
 /// </summary>
 [Serializable]
 [DataContract]
-public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFormattable
+public partial class Unit : Equatable<Unit>, IOperable<Unit>, IAsyncPersistable, IFormattable
 {
 	private class UnitOperator : BaseOperator<Unit>
 	{
@@ -536,19 +536,27 @@ public partial class Unit : Equatable<Unit>, IOperable<Unit>, IPersistable, IFor
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Type = storage.GetValue<UnitTypes>(nameof(Type));
 		Value = storage.GetValue<decimal>(nameof(Value));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Type), Type.To<string>());
 		storage.SetValue(nameof(Value), Value);
+
+		return Task.CompletedTask;
 	}
 }

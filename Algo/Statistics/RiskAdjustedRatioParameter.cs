@@ -247,7 +247,7 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 	protected abstract bool HasEnoughRiskSamples(long count);
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(BeginValue), BeginValue);
 		storage.SetValue("GridStart", _gridStart);
@@ -260,11 +260,11 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 		storage.SetValue("SumReturn", _sumReturn);
 		storage.SetValue("Count", _count);
 
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		BeginValue = storage.GetValue<decimal>(nameof(BeginValue));
 		_gridStart = storage.GetValue<DateTime?>("GridStart");
@@ -277,6 +277,6 @@ public abstract class RiskAdjustedRatioParameter : BasePnLStatisticParameter<dec
 		_sumReturn = storage.GetValue<decimal>("SumReturn");
 		_count = storage.GetValue<long>("Count");
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 }

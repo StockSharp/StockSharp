@@ -8,6 +8,34 @@ using Ecng.Reflection;
 public static class CompositionHelper
 {
 	/// <summary>
+	/// Create a copy of the model.
+	/// </summary>
+	/// <param name="model"><see cref="ICompositionModel"/></param>
+	/// <returns>Copy.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CloneAsync instead.")]
+	public static ICompositionModel Clone(this ICompositionModel model)
+	{
+		if (model is null)
+			throw new ArgumentNullException(nameof(model));
+
+		return AsyncHelper.Run(() => model.CloneAsync(default));
+	}
+
+	/// <summary>
+	/// Create a copy of the node together with its element.
+	/// </summary>
+	/// <param name="node"><see cref="ICompositionModelNode"/></param>
+	/// <returns>Copy.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use CloneAsync instead.")]
+	public static ICompositionModelNode Clone(this ICompositionModelNode node)
+	{
+		if (node is null)
+			throw new ArgumentNullException(nameof(node));
+
+		return AsyncHelper.Run(() => node.CloneAsync(default));
+	}
+
+	/// <summary>
 	/// Fill <see cref="ICompositionRegistry.DiagramElements"/> by <see cref="GetDiagramElements"/>.
 	/// </summary>
 	/// <param name="registry"><see cref="ICompositionRegistry"/>.</param>
@@ -200,6 +228,33 @@ public static class CompositionHelper
 	public static DiagramSocket FindById(this IEnumerable<DiagramSocket> sockets, string id)
 	{
 		return sockets.FirstOrDefault(s => s.Id.EqualsIgnoreCase(id));
+	}
+
+	internal static async ValueTask SafeGetValueAsync<T>(this SettingsStorage storage, string key, Func<T, Task> action, bool processNull = false)
+		where T : class
+	{
+		if (storage == null)
+			throw new ArgumentNullException(nameof(storage));
+
+		if (key == null)
+			throw new ArgumentNullException(nameof(key));
+
+		if (action == null)
+			throw new ArgumentNullException(nameof(action));
+
+		var value = storage.GetValue<T>(key);
+
+		if (value == null && !processNull)
+			return;
+
+		try
+		{
+			await action(value);
+		}
+		catch (Exception ex)
+		{
+			ex.LogError();
+		}
 	}
 
 	internal static void SafeGetValue<T>(this SettingsStorage storage, string key, Action<T> action, bool processNull = false)

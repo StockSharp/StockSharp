@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Import;
 /// <summary>
 /// Mapping value.
 /// </summary>
-public class FieldMappingValue : IPersistable
+public class FieldMappingValue : IAsyncPersistable
 {
 	/// <summary>
 	/// File value.
@@ -15,15 +15,15 @@ public class FieldMappingValue : IPersistable
 	/// </summary>
 	public object ValueStockSharp { get; set; }
 
-	void IPersistable.Load(SettingsStorage storage)
+	async Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		ValueFile = storage.GetValue<string>(nameof(ValueFile));
-		ValueStockSharp = storage.GetValue<SettingsStorage>(nameof(ValueStockSharp))?.FromStorage();
+		ValueStockSharp = storage.GetValue<SettingsStorage>(nameof(ValueStockSharp)) is { } valueStockSharpStorage ? await valueStockSharpStorage.FromStorageAsync(cancellationToken) : null;
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	async Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(ValueFile), ValueFile);
-		storage.SetValue(nameof(ValueStockSharp), ValueStockSharp?.ToStorage());
+		storage.SetValue(nameof(ValueStockSharp), ValueStockSharp is null ? null : await ValueStockSharp.ToStorageAsync(false, cancellationToken));
 	}
 }

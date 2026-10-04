@@ -589,7 +589,7 @@ public class StorageBuffer : IStorageBuffer
 		}
 	}
 
-	void IPersistable.Save(SettingsStorage storage)
+	async Task IAsyncPersistable.SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Enabled), Enabled);
 		storage.SetValue(nameof(EnabledLevel1), EnabledLevel1);
@@ -599,10 +599,10 @@ public class StorageBuffer : IStorageBuffer
 		storage.SetValue(nameof(FilterSubscription), FilterSubscription);
 		storage.SetValue(nameof(DisableStorageTimer), DisableStorageTimer);
 		storage.SetValue(nameof(MaxBufferedMessages), MaxBufferedMessages);
-		storage.SetValue(nameof(IgnoreGenerated), IgnoreGenerated.Select(dt => dt.Save()).ToArray());
+		storage.SetValue(nameof(IgnoreGenerated), await IgnoreGenerated.SaveAllAsync(cancellationToken));
 	}
 
-	void IPersistable.Load(SettingsStorage storage)
+	async Task IAsyncPersistable.LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Enabled = storage.GetValue(nameof(Enabled), Enabled);
 		EnabledLevel1 = storage.GetValue(nameof(EnabledLevel1), EnabledLevel1);
@@ -614,16 +614,14 @@ public class StorageBuffer : IStorageBuffer
 		MaxBufferedMessages = storage.GetValue(nameof(MaxBufferedMessages), MaxBufferedMessages);
 
 		IgnoreGenerated.Clear();
-		IgnoreGenerated.AddRange((storage.GetValue<IEnumerable<SettingsStorage>>(nameof(IgnoreGenerated)) ?? []).Select(s => s.Load<DataType>()));
+		IgnoreGenerated.AddRange(await (storage.GetValue<IEnumerable<SettingsStorage>>(nameof(IgnoreGenerated)) ?? []).LoadAllAsync<DataType>(cancellationToken));
 	}
 
 	/// <inheritdoc />
-	public IStorageBuffer Clone()
+	public async ValueTask<IStorageBuffer> CloneAsync(CancellationToken cancellationToken)
 	{
 		var clone = new StorageBuffer();
-		((IPersistable)clone).Load(((IPersistable)this).Save());
+		await ((IAsyncPersistable)clone).LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
 		return clone;
 	}
-
-	object ICloneable.Clone() => Clone();
 }

@@ -430,8 +430,8 @@ public class ConnectorRoutingTests : BaseTestClass
 			}, cancellationToken);
 		}
 
-		public override IMessageAdapter Clone()
-			=> new LiveFeedCryptoAdapter(_exchangeName, _supportedSecurities, TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new LiveFeedCryptoAdapter(_exchangeName, _supportedSecurities, TransactionIdGenerator));
 	}
 
 	#endregion

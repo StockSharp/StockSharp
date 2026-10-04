@@ -225,7 +225,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 	private bool _processCollectionChanged = true;
 	private ChartElementSocket _emptySocket;
 
-	private readonly Dictionary<SecurityId, Security> _foundSecIds = [];
+	private readonly Dictionary<SecurityId, decimal> _priceSteps = [];
 
 	private readonly CachedSynchronizedDictionary<IChartIndicatorElement, IndicatorTimes> _indicatorTimes = [];
 
@@ -416,7 +416,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 		_chartValues.Clear();
 		_indicatorTimes.Clear();
 		_unitIndicators.Clear();
-		_foundSecIds.Clear();
+		_priceSteps.Clear();
 
 		GetChart(chart => Dispatcher.Invoke(() =>
 		{
@@ -455,11 +455,8 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 				{
 					if (element is IChartCandleElement candleElement)
 					{
-						if (candleElement.PriceStep is null)
-						{
-							var security = _foundSecIds.SafeAdd(((ICandleMessage)value).SecurityId, Strategy.LookupById);
-							candleElement.PriceStep = security?.PriceStep;
-						}
+						if (candleElement.PriceStep is null && _priceSteps.TryGetValue(((ICandleMessage)value).SecurityId, out var priceStep))
+							candleElement.PriceStep = priceStep;
 
 						foreach (var (_, it) in _indicatorTimes.CachedPairs)
 						{
@@ -600,6 +597,9 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 		switch (inputValue)
 		{
 			case ICandleMessage c:
+				if (value.SubscribedSecurity?.PriceStep is decimal priceStep)
+					_priceSteps.TryAdd(c.SecurityId, priceStep);
+
 				addChartValue(c.OpenTime, c);
 				break;
 			case IIndicatorValue v:
@@ -826,38 +826,45 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 	private void RaiseElementPropertyChanging(object sender, PropertyChangingEventArgs e) => RaisePropertyChanging(this, e);
 	private void RaiseElementPropertyChanged(object sender, PropertyChangedEventArgs e) => RaisePropertyChanged(this, e);
 
-	private static void Load<T>(SettingsStorage storage, string name, Func<T> creator, Action<T> action)
-		where T : IPersistable
-		=> storage.GetValue<SettingsStorage[]>(name)?.Select(e =>
+	private static async ValueTask<T[]> LoadPartsAsync<T>(SettingsStorage storage, string name, Func<T> creator, CancellationToken cancellationToken)
+		where T : IAsyncPersistable
+	{
+		var parts = new List<T>();
+
+		foreach (var s in storage.GetValue<SettingsStorage[]>(name) ?? [])
 		{
-			var obj = creator();
-			obj.Load(e);
-			return obj;
-		}).ForEach(action);
+			var part = creator();
+			await part.LoadAsync(s, cancellationToken);
+			parts.Add(part);
+		}
+
+		return [.. parts];
+	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		var newElements = new Dictionary<Guid, IChartElement>();
 
-		Load(storage, nameof(CandleElements), _chartBuilder.CreateCandleElement, e => newElements[e.Id] = e);
-		Load(storage, nameof(IndicatorElements), _chartBuilder.CreateIndicatorElement, e => newElements[e.Id] = e);
-		Load(storage, nameof(OrderElements), _chartBuilder.CreateOrderElement, e => newElements[e.Id] = e);
-		Load(storage, nameof(TradeElements), _chartBuilder.CreateTradeElement, e => newElements[e.Id] = e);
+		foreach (var e in await LoadPartsAsync(storage, nameof(CandleElements), _chartBuilder.CreateCandleElement, cancellationToken))
+			newElements[e.Id] = e;
 
-		var newIds = newElements.Select(e => e.Value.Id).ToHashSet();
+		foreach (var e in await LoadPartsAsync(storage, nameof(IndicatorElements), _chartBuilder.CreateIndicatorElement, cancellationToken))
+			newElements[e.Id] = e;
 
-		_candleElements.RemoveWhere(e => !newIds.Contains(e.Id));
-		_indicatorElements.RemoveWhere(e => !newIds.Contains(e.Element.Id));
-		_orderElements.RemoveWhere(e => !newIds.Contains(e.Id));
-		_tradeElements.RemoveWhere(e => !newIds.Contains(e.Id));
+		foreach (var e in await LoadPartsAsync(storage, nameof(OrderElements), _chartBuilder.CreateOrderElement, cancellationToken))
+			newElements[e.Id] = e;
 
+		foreach (var e in await LoadPartsAsync(storage, nameof(TradeElements), _chartBuilder.CreateTradeElement, cancellationToken))
+			newElements[e.Id] = e;
+
+		RemoveElementsExcept([.. newElements.Keys]);
 		RemoveAxes();
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		Load(storage, nameof(XAxes), _chartBuilder.CreateAxis, _xAxes.Add);
-		Load(storage, nameof(YAxes), _chartBuilder.CreateAxis, _yAxes.Add);
+		_xAxes.AddRange(await LoadPartsAsync(storage, nameof(XAxes), _chartBuilder.CreateAxis, cancellationToken));
+		_yAxes.AddRange(await LoadPartsAsync(storage, nameof(YAxes), _chartBuilder.CreateAxis, cancellationToken));
 
 		TryAddDefaultAxes();
 
@@ -866,7 +873,7 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 			var socket = InputSockets.OfType<ChartElementSocket>().FirstOrDefault(s => s.ChartElement?.Id == e.Id);
 			if (socket != null)
 			{
-				socket.ChartElement.Load(e.Save());
+				await socket.ChartElement.LoadAsync(await e.SaveAsync(cancellationToken), cancellationToken);
 				newElements.Remove(e.Id);
 			}
 		}
@@ -877,16 +884,74 @@ public abstract class ChartDiagramElement<TChartIndicatorElementWrapper> : Diagr
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
-		storage.SetValue(nameof(CandleElements), _candleElements.Select(e => e.Save()).ToArray());
-		storage.SetValue(nameof(IndicatorElements), _indicatorElements.Select(e => e.Element.Save()).ToArray());
-		storage.SetValue(nameof(OrderElements), _orderElements.Select(e => e.Save()).ToArray());
-		storage.SetValue(nameof(TradeElements), _tradeElements.Select(e => e.Save()).ToArray());
-		storage.SetValue(nameof(XAxes), _xAxes.Select(a => a.Save()).ToArray());
-		storage.SetValue(nameof(YAxes), _yAxes.Select(a => a.Save()).ToArray());
+		storage.SetValue(nameof(CandleElements), await _candleElements.SaveAllAsync(cancellationToken));
+		storage.SetValue(nameof(IndicatorElements), await _indicatorElements.Select(e => e.Element).SaveAllAsync(cancellationToken));
+		storage.SetValue(nameof(OrderElements), await _orderElements.SaveAllAsync(cancellationToken));
+		storage.SetValue(nameof(TradeElements), await _tradeElements.SaveAllAsync(cancellationToken));
+		storage.SetValue(nameof(XAxes), await _xAxes.SaveAllAsync(cancellationToken));
+		storage.SetValue(nameof(YAxes), await _yAxes.SaveAllAsync(cancellationToken));
+	}
+
+	private void RemoveElementsExcept(HashSet<Guid> ids)
+	{
+		_candleElements.RemoveWhere(e => !ids.Contains(e.Id));
+		_indicatorElements.RemoveWhere(e => !ids.Contains(e.Element.Id));
+		_orderElements.RemoveWhere(e => !ids.Contains(e.Id));
+		_tradeElements.RemoveWhere(e => !ids.Contains(e.Id));
+	}
+
+	// What the element is made of at the moment the snapshot is taken: the chart elements (an indicator
+	// one as the wrapper it is kept in) and the axes.
+	private sealed class ChartParts(object[] elements, IChartAxis[] xAxes, IChartAxis[] yAxes)
+	{
+		public object[] Elements { get; } = elements;
+		public IChartAxis[] XAxes { get; } = xAxes;
+		public IChartAxis[] YAxes { get; } = yAxes;
+	}
+
+	// The parts are kept as they are, not copied: undo puts back which of them the element is made
+	// of, not what each of them was set to.
+	private protected override object CaptureObjects()
+		=> new ChartParts(
+			[.. _candleElements, .. _indicatorElements, .. _orderElements, .. _tradeElements],
+			[.. _xAxes],
+			[.. _yAxes]);
+
+	private protected override void RestoreObjects(object objects)
+	{
+		var parts = (ChartParts)objects;
+		var kept = new HashSet<object>(parts.Elements, ReferenceEqualityComparer.Instance);
+
+		_candleElements.RemoveWhere(e => !kept.Contains(e));
+		_indicatorElements.RemoveWhere(e => !kept.Contains(e));
+		_orderElements.RemoveWhere(e => !kept.Contains(e));
+		_tradeElements.RemoveWhere(e => !kept.Contains(e));
+
+		SetAxes(_xAxes, parts.XAxes);
+		SetAxes(_yAxes, parts.YAxes);
+
+		TryAddDefaultAxes();
+
+		parts.Elements.ForEach(AddElementImpl);
+
+		EnsureEmptySocket();
+	}
+
+	// An axis that stays is left where it is: taking it out and putting it back would subscribe to it twice.
+	private static void SetAxes(ObsCollection<IChartAxis> axes, IChartAxis[] snapshot)
+	{
+		foreach (var axis in axes.Except(snapshot).ToArray())
+			axes.Remove(axis);
+
+		foreach (var axis in snapshot)
+		{
+			if (!axes.Contains(axis))
+				axes.Add(axis);
+		}
 	}
 
 	/// <inheritdoc/>

@@ -850,10 +850,7 @@ partial class Connector
 				return;
 		}
 
-		var security = TryGetSecurity(secId);
-
-		if (security is not null)
-			_entityCache.ReleaseLevel1Ownership(security, dataType);
+		_entityCache.ReleaseLevel1Ownership(secId, dataType);
 	}
 
 	private void ProcessSubscriptionResult(Subscription subscription, object[] items)
@@ -877,7 +874,7 @@ partial class Connector
 
 		var securityId = message.SecurityId;
 
-		var security = SecurityStorage.LookupById(securityId);
+		var security = await SecurityStorage.LookupByIdAsync(securityId, cancellationToken);
 
 		if (security != null)
 		{

@@ -3,8 +3,15 @@ namespace StockSharp.Algo.Slippage;
 /// <summary>
 /// The interface for the slippage calculation manager.
 /// </summary>
-public interface ISlippageManager : IPersistable, ICloneable<ISlippageManager>
+public interface ISlippageManager : IAsyncPersistable
 {
+	/// <summary>
+	/// Create a copy of the manager.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	ValueTask<ISlippageManager> CloneAsync(CancellationToken cancellationToken);
+
 	/// <summary>
 	/// Total slippage.
 	/// </summary>

@@ -10,9 +10,11 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 
 	private CompositionDiagramElement _composition;
 	private SettingsStorage _compositionSettings;
+	private Security[] _startSecurities = [];
 
 	/// <summary>
-	/// The strategy diagram.
+	/// The strategy diagram. Settings loaded before a diagram was set are applied by
+	/// <see cref="SetCompositionAsync"/>, or at the start of the strategy.
 	/// </summary>
 	[Browsable(false)]
 	public CompositionDiagramElement Composition
@@ -33,6 +35,20 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 			if (value is not null)
 				CreateComposition(value);
 		}
+	}
+
+	/// <summary>
+	/// Set <see cref="Composition"/> and apply to it the settings loaded before it was set.
+	/// </summary>
+	/// <param name="composition">The strategy diagram.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	public async ValueTask SetCompositionAsync(CompositionDiagramElement composition, CancellationToken cancellationToken)
+	{
+		Composition = composition;
+
+		if (composition is not null)
+			await ApplyPendingCompositionSettingsAsync(composition, cancellationToken);
 	}
 
 	private readonly StrategyParam<int> _overflowLimit;
@@ -160,15 +176,6 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 		if (composition is null)
 			throw new ArgumentNullException(nameof(composition));
 
-		if (_compositionSettings != null)
-		{
-			composition.Load(_compositionSettings);
-
-			// The field carries settings across the gap where no composition exists. Once a composition
-			// has taken them it holds them itself, and a copy left behind here would outlive the truth.
-			_compositionSettings = null;
-		}
-
 		composition.Changed += OnCompositionChanged;
 		composition.PropertiesChanged += RaisePropertiesChanged;
 
@@ -204,9 +211,13 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 	}
 
 	/// <inheritdoc />
-	protected override void OnStarted2(DateTime time)
+	protected override async ValueTask OnStartedAsync(DateTime time, CancellationToken cancellationToken)
 	{
+		await base.OnStartedAsync(time, cancellationToken);
+
 		var composition = Composition ?? throw new InvalidOperationException(LocalizedStrings.DiagramNotSet);
+
+		await ApplyPendingCompositionSettingsAsync(composition, cancellationToken);
 
 		if (composition.HasErrors)
 			throw new InvalidOperationException(LocalizedStrings.DiagramContainsErrors);
@@ -242,7 +253,65 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 			}
 		}
 
-		composition.Prepare();
+		_startSecurities = await GetStartSecuritiesAsync(composition, cancellationToken);
+
+		await composition.PrepareAsync(cancellationToken);
+	}
+
+	/// <summary>
+	/// Securities the diagram refers to at the start: <see cref="Strategy.Security"/> and the security values
+	/// of the elements' parameters, resolved through the security provider. Available to the elements
+	/// from <see cref="DiagramElement.PrepareAsync"/>.
+	/// </summary>
+	internal IReadOnlyList<Security> StartSecurities => _startSecurities;
+
+	private async ValueTask<Security[]> GetStartSecuritiesAsync(CompositionDiagramElement composition, CancellationToken cancellationToken)
+	{
+		var found = new Dictionary<SecurityId, Security>();
+
+		void add(Security security)
+		{
+			if (security is not null && !security.IsAllSecurity())
+				found.TryAdd(security.ToSecurityId(), security);
+		}
+
+		void walk(CompositionDiagramElement parent)
+		{
+			foreach (var element in parent.Elements)
+			{
+				foreach (var param in element.Parameters)
+				{
+					switch (param.Value)
+					{
+						case Security security:
+							add(security);
+							break;
+						case IEnumerable<Security> securities:
+							securities.ForEach(add);
+							break;
+					}
+				}
+
+				if (element is CompositionDiagramElement child)
+					walk(child);
+			}
+		}
+
+		add(Security);
+		walk(composition);
+
+		var result = new List<Security>(found.Count);
+
+		foreach (var (id, security) in found)
+			result.Add(await this.LookupByIdAsync(id, cancellationToken) ?? security);
+
+		return [.. result];
+	}
+
+	/// <inheritdoc />
+	protected override void OnStarted2(DateTime time)
+	{
+		var composition = Composition ?? throw new InvalidOperationException(LocalizedStrings.DiagramNotSet);
 
 		base.OnStarted2(time);
 
@@ -397,38 +466,57 @@ public class DiagramStrategy : Strategy, INotifyPropertiesChanged
 	private const string _compositionKey = "CompositionSettings";
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
-		var composition = Composition;
+		// Settings still waiting to be applied are what the strategy was given, so they are what it saves.
+		if (_compositionSettings != null)
+			storage.SetValue(_compositionKey, _compositionSettings);
+		else if (Composition is { } composition)
+			storage.SetValue(_compositionKey, await composition.SaveAsync(cancellationToken));
+	}
 
-		if (composition != null)
-			storage.SetValue(_compositionKey, composition.Save());
+	// The field carries settings across the gap where no composition exists. Once a composition
+	// has taken them it holds them itself, and a copy left behind here would outlive the truth.
+	private async ValueTask ApplyPendingCompositionSettingsAsync(CompositionDiagramElement composition, CancellationToken cancellationToken)
+	{
+		var settings = _compositionSettings;
+
+		if (settings is null)
+			return;
+
+		_compositionSettings = null;
+		await composition.LoadAsync(settings, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (Composition is null)
 		{
-			// Settings can arrive before a composition does -- a clone is loaded before its diagram is
-			// copied in -- so they wait here until there is something to load them into.
+			// Settings can arrive before a composition does, so they wait here and are applied at the start.
 			if (storage.ContainsKey(_compositionKey))
 				_compositionSettings = storage.GetValue<SettingsStorage>(_compositionKey);
 		}
-		else
-			Composition.LoadIfNotNull(storage, _compositionKey);
+		else if (storage.GetValue<SettingsStorage>(_compositionKey) is { } compositionSettings)
+		{
+			// what is loaded now replaces settings that were still waiting for the start
+			_compositionSettings = null;
+			await Composition.LoadAsync(compositionSettings, cancellationToken);
+		}
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	protected override void CopyTo(Strategy copy)
+	protected override async ValueTask CopyToAsync(Strategy copy, CancellationToken cancellationToken)
 	{
-		base.CopyTo(copy);
+		await base.CopyToAsync(copy, cancellationToken);
 
-		((DiagramStrategy)copy).Composition = (CompositionDiagramElement)Composition.Clone();
+		var diagramCopy = (DiagramStrategy)copy;
+		diagramCopy._compositionSettings = _compositionSettings;
+		diagramCopy.Composition = Composition is null ? null : (CompositionDiagramElement)await Composition.CloneAsync(true, cancellationToken);
 	}
 
 	#region INotifyPropertiesChanged

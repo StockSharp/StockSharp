@@ -85,7 +85,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 			case MessageTypes.Security:
 			{
 				var secMsg = (SecurityMessage)message;
-				var security = _securityStorage.LookupById(secMsg.SecurityId);
+				var security = await _securityStorage.LookupByIdAsync(secMsg.SecurityId, cancellationToken);
 
 				if (security == null)
 					security = secMsg.ToSecurity(_exchangeInfoProvider);
@@ -193,7 +193,7 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 
 		var transId = msg.TransactionId;
 
-		foreach (var security in _securityStorage.Lookup(msg))
+		await foreach (var security in _securityStorage.LookupAsync(msg).WithEnforcedCancellation(cancellationToken))
 			await RaiseNewOutMessageAsync(security.ToMessage(originalTransactionId: transId).SetSubscriptionIds(subscriptionId: transId), cancellationToken);
 
 		await base.OnSendInMessageAsync(msg, cancellationToken);
@@ -270,10 +270,10 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 
 	private async ValueTask<Position> GetPositionAsync(SecurityId securityId, string portfolioName, string strategyId, Sides? side, CancellationToken cancellationToken)
 	{
-		var security = (!securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty() ? _securityStorage.LookupById(securityId) : _securityStorage.Lookup(new Security
-		{
-			Code = securityId.SecurityCode,
-		}).FirstOrDefault()) ?? await TryCreateSecurityAsync(securityId, cancellationToken);
+		var security = (!securityId.SecurityCode.IsEmpty() && !securityId.BoardCode.IsEmpty()
+			? await _securityStorage.LookupByIdAsync(securityId, cancellationToken)
+			: await _securityStorage.LookupAsync(new Security { Code = securityId.SecurityCode }).FirstOrDefaultAsync(cancellationToken))
+			?? await TryCreateSecurityAsync(securityId, cancellationToken);
 
 		if (security == null)
 			return null;
@@ -317,17 +317,17 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		OverrideSecurityData = storage.GetValue(nameof(OverrideSecurityData), OverrideSecurityData);
 	}
@@ -335,10 +335,11 @@ public class StorageMetaInfoMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="StorageMetaInfoMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new StorageMetaInfoMessageAdapter(InnerAdapter.TypedClone(), _securityStorage, _positionStorage, _exchangeInfoProvider, _storageProcessor)
+		return new StorageMetaInfoMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), _securityStorage, _positionStorage, _exchangeInfoProvider, _storageProcessor)
 		{
 			OverrideSecurityData = OverrideSecurityData,
 		};

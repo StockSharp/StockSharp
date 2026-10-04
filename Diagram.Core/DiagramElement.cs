@@ -8,7 +8,7 @@ using Ecng.Configuration;
 /// <summary>
 /// The diagram element.
 /// </summary>
-public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging, INotifyPropertyChanged, ICustomTypeDescriptor, INotifyPropertiesChanged, IPersistable
+public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging, INotifyPropertyChanged, ICustomTypeDescriptor, INotifyPropertiesChanged, IAsyncPersistable
 {
 	private readonly ObservableCollection<DiagramSocket> _inputSockets = [];
 	private readonly ObservableCollection<DiagramSocket> _outputSockets = [];
@@ -435,7 +435,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 	/// <param name="process">The action is called at the processing of the new incoming value for socket.</param>
 	/// <param name="linkableMax">The maximum number of connections.</param>
 	/// <param name="index">Index in sockets list.</param>
-	/// <param name="isDynamic">Dynamic sockets are removed during <see cref="Load"/>.</param>
+	/// <param name="isDynamic">Dynamic sockets are removed during <see cref="LoadAsync"/>.</param>
 	/// <param name="allowGet">Return existing socket if it's already exist.</param>
 	/// <returns>Connection.</returns>
 	protected (DiagramSocket socket, bool isNew) GetOrAddSocket(string socketId, DiagramSocketDirection dir, string name, DiagramSocketType type, Action<DiagramSocketValue> process, int linkableMax, int index, bool isDynamic, bool allowGet)
@@ -940,11 +940,14 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 	/// <summary>
 	/// To prepare for starting the diagram element algorithm.
 	/// </summary>
-	public void Prepare()
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns><see cref="ValueTask"/></returns>
+	public async ValueTask PrepareAsync(CancellationToken cancellationToken)
 	{
 		try
 		{
 			OnPrepare();
+			await OnPrepareAsync(cancellationToken);
 		}
 		catch (Exception excp)
 		{
@@ -959,6 +962,14 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 	protected virtual void OnPrepare()
 	{
 	}
+
+	/// <summary>
+	/// Resolves what the element needs from asynchronous sources (securities, underlying assets, derivatives)
+	/// before the start, so that value processing stays synchronous. Called after <see cref="OnPrepare"/>.
+	/// </summary>
+	/// <param name="cancellationToken">Cancellation token.</param>
+	/// <returns><see cref="ValueTask"/></returns>
+	protected virtual ValueTask OnPrepareAsync(CancellationToken cancellationToken) => default;
 
 	/// <summary>
 	/// To start for start the diagram element algorithm.
@@ -1218,11 +1229,29 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 	/// </summary>
 	/// <param name="cloneSockets">To create copies of connections.</param>
 	/// <returns>Copy.</returns>
-	public virtual DiagramElement Clone(bool cloneSockets = true)
+	[Obsolete("Blocking sync-over-async wrapper. Use CloneAsync instead.")]
+	public DiagramElement Clone(bool cloneSockets = true)
+		=> AsyncHelper.Run(() => CloneAsync(cloneSockets, default));
+
+	/// <summary>
+	/// Create a copy of <see cref="DiagramElement"/> together with its connections.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	public ValueTask<DiagramElement> CloneAsync(CancellationToken cancellationToken)
+		=> CloneAsync(true, cancellationToken);
+
+	/// <summary>
+	/// Create a copy of <see cref="DiagramElement"/>.
+	/// </summary>
+	/// <param name="cloneSockets">To create copies of connections.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	public virtual async ValueTask<DiagramElement> CloneAsync(bool cloneSockets, CancellationToken cancellationToken)
 	{
 		var clone = CreateCopy();
 
-		var settings = this.Save();
+		var settings = await this.SaveAsync(cancellationToken);
 
 		if (!cloneSockets)
 		{
@@ -1232,43 +1261,142 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 			settings.Remove(nameof(Id));
 		}
 
-		clone!.Load(settings);
+		await clone!.LoadAsync(settings, cancellationToken);
 
 		return clone;
 	}
 
-	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	/// <summary>
+	/// The state of an element held in memory, so an edit can be undone without saving and loading it.
+	/// </summary>
+	internal sealed class Snapshot(SettingsStorage state, (string Name, object Value)[] values, object objects)
 	{
-		storage.SetValue(nameof(Id), Id);
+		public SettingsStorage State { get; } = state;
+		public (string Name, object Value)[] Values { get; } = values;
+		public object Objects { get; } = objects;
+	}
 
-		storage.SetValue(nameof(CanAutoName), CanAutoName);
+	internal Snapshot CaptureSnapshot()
+	{
+		var state = new SettingsStorage();
+		SaveState(state);
+
+		return new(state, [.. Parameters.Where(p => !p.IgnoreOnSave).Select(p => (p.Name, CaptureValue(p)))], CaptureObjects());
+	}
+
+	/// <summary>
+	/// Captures what the element keeps as objects and <see cref="SaveState"/> does not write.
+	/// </summary>
+	/// <returns>The captured objects, restored by <see cref="RestoreObjects"/>.</returns>
+	private protected virtual object CaptureObjects() => null;
+
+	/// <summary>
+	/// Puts back what <see cref="CaptureObjects"/> captured; called once the rest of the state is restored.
+	/// </summary>
+	/// <param name="objects">The captured objects.</param>
+	private protected virtual void RestoreObjects(object objects)
+	{
+	}
+
+	// What a handler saved, to be loaded by the handler of the parameter it is restored into.
+	private sealed class HandledValue(SettingsStorage storage)
+	{
+		public SettingsStorage Storage { get; } = storage;
+	}
+
+	private static object CaptureValue(IDiagramElementParam param)
+		=> param is IHandledDiagramElementParam { HasSyncHandlers: true } handled
+			? new HandledValue(handled.SaveByHandler())
+			: CopyValue(param, param.Value);
+
+	internal void Restore(Snapshot snapshot)
+	{
+		if (snapshot is null)
+			throw new ArgumentNullException(nameof(snapshot));
+
+		_suppressSocketEvents = true;
+
+		try
+		{
+			BeginLoad(snapshot.State);
+
+			foreach (var (name, value) in snapshot.Values)
+			{
+				// the set of parameters can change while they are being loaded
+				var param = Parameters.FirstOrDefault(p => p.Name.EqualsIgnoreCase(name));
+
+				if (param == null)
+					continue;
+
+				try
+				{
+					if (value is HandledValue handledValue && param is IHandledDiagramElementParam { HasSyncHandlers: true } handled)
+						handled.LoadByHandler(handledValue.Storage);
+					else
+						param.Value = CopyValue(param, value);
+				}
+				catch (Exception excp)
+				{
+					LogError("Load {0} param error:\n{1}", param.Name, excp);
+				}
+			}
+
+			if (!CanAutoName)
+				ElementName = Name;
+		}
+		finally
+		{
+			_suppressSocketEvents = false;
+		}
+
+		LoadState(snapshot.State);
+		RestoreObjects(snapshot.Objects);
+	}
+
+	// A value that saving would write out in full is copied, so a later edit of it does not reach the
+	// snapshot; one kept by a save/load handler or by reference (securities, portfolios, ...) stays shared.
+	private static object CopyValue(IDiagramElementParam param, object value)
+		=> param is not IHandledDiagramElementParam { HasPersistenceHandlers: true } && value is ICloneable cloneable && value.GetType().IsPersistable()
+			? cloneable.Clone()
+			: value;
+
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+	{
+		SaveState(storage);
 
 		var paramStorage = new SettingsStorage();
 
 		foreach (var param in Parameters.Where(p => !p.IgnoreOnSave).ToArray())
-			paramStorage.SetValue(param.Name, param.Save());
+			paramStorage.SetValue(param.Name, await param.SaveAsync(cancellationToken));
 
 		storage.SetValue(nameof(Parameters), paramStorage);
 	}
 
-	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	/// <summary>
+	/// Load settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		_suppressSocketEvents = true;
 
 		try
 		{
-			Id = storage.GetValue(nameof(Id), Id);
-			CanAutoName = storage.GetValue(nameof(CanAutoName), CanAutoName);
+			BeginLoad(storage);
 
-			RemoveSockets(false);
-
-			storage.SafeGetValue<SettingsStorage>(nameof(Parameters), parameters =>
+			await storage.SafeGetValueAsync<SettingsStorage>(nameof(Parameters), async parameters =>
 			{
 				foreach (var pair in parameters)
 				{
-					// набор параметров может изменяться в процессе загрузки
+					// the set of parameters can change while they are being loaded
 					var param = Parameters.FirstOrDefault(p => p.Name.EqualsIgnoreCase(pair.Key));
 
 					if (param == null)
@@ -1276,7 +1404,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 
 					try
 					{
-						param.Load((SettingsStorage)pair.Value);
+						await param.LoadAsync((SettingsStorage)pair.Value, cancellationToken);
 					}
 					catch (Exception excp)
 					{
@@ -1292,6 +1420,44 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 		{
 			_suppressSocketEvents = false;
 		}
+
+		LoadState(storage);
+	}
+
+	private void BeginLoad(SettingsStorage storage)
+	{
+		Id = storage.GetValue(nameof(Id), Id);
+		CanAutoName = storage.GetValue(nameof(CanAutoName), CanAutoName);
+
+		RemoveSockets(false);
+
+		OnLoading(storage);
+	}
+
+	/// <summary>
+	/// Saves the state of the element other than its parameters.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	protected virtual void SaveState(SettingsStorage storage)
+	{
+		storage.SetValue(nameof(Id), Id);
+		storage.SetValue(nameof(CanAutoName), CanAutoName);
+	}
+
+	/// <summary>
+	/// Reads the state the parameters depend on; called before the parameters are loaded.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	protected virtual void OnLoading(SettingsStorage storage)
+	{
+	}
+
+	/// <summary>
+	/// Loads the state of the element other than its parameters; called after the parameters are loaded.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	protected virtual void LoadState(SettingsStorage storage)
+	{
 	}
 
 	#region INotifyPropertiesChanged
@@ -1317,7 +1483,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 	#region undo helper
 
 	private int _undoStateLevel;
-	private SettingsStorage _savedUndoState;
+	private Snapshot _savedUndoState;
 	private readonly List<UndoHelper> _ongoingPropertyChanges = [];
 
 	private class UndoHelper : Disposable
@@ -1336,7 +1502,7 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 
 			if (Interlocked.Increment(ref parent._undoStateLevel) == 1)
 			{
-				_parent._savedUndoState = _parent.Save();
+				_parent._savedUndoState = _parent.CaptureSnapshot();
 				_parent.StartedUndoableOperation?.Invoke();
 			}
 		}
@@ -1347,25 +1513,25 @@ public abstract class DiagramElement : BaseLogReceiver, INotifyPropertyChanging,
 			{
 				var oldState = _parent._savedUndoState;
 				_parent._savedUndoState = null;
-				_parent.CommittedUndoableOperation?.Invoke(_parent, new UndoData(_parent, oldState, _parent.Save()));
+				_parent.CommittedUndoableOperation?.Invoke(_parent, new UndoData(_parent, oldState, _parent.CaptureSnapshot()));
 			}
 
 			base.DisposeManaged();
 		}
 	}
 
-	private readonly struct UndoData(IPersistable obj, SettingsStorage oldData, SettingsStorage newData) : IUndoableEdit
+	private readonly struct UndoData(DiagramElement element, Snapshot oldData, Snapshot newData) : IUndoableEdit
 	{
-		private IPersistable Object { get; } = obj;
-		private SettingsStorage OldData { get; } = oldData;
-		private SettingsStorage NewData { get; } = newData;
+		private DiagramElement Element { get; } = element;
+		private Snapshot OldData { get; } = oldData;
+		private Snapshot NewData { get; } = newData;
 
 		void IUndoableEdit.Clear() { }
 		bool IUndoableEdit.CanUndo() => OldData != null;
 		bool IUndoableEdit.CanRedo() => NewData != null;
 
-		void IUndoableEdit.Undo() => Object.Load(OldData);
-		void IUndoableEdit.Redo() => Object.Load(NewData);
+		void IUndoableEdit.Undo() => Element.Restore(OldData);
+		void IUndoableEdit.Redo() => Element.Restore(NewData);
 	}
 
 	private void OnPropertyChanging(object _, PropertyChangingEventArgs e) => _ongoingPropertyChanges.Add((UndoHelper) SaveUndoState(e.PropertyName));

@@ -113,7 +113,7 @@ public class OptimizerPauseTests : BaseTestClass
 		var shortParam = (StrategyParam<int>)baseStrategy.Parameters[nameof(baseStrategy.ShortSma)];
 		longParam.SetOptimize(50, 100, 5);  // 11
 		shortParam.SetOptimize(20, 40, 1);  // 21  => 231 combos (big queue, won't finish during the test)
-		var strategies = baseStrategy.ToBruteForce(new IStrategyParam[] { longParam, shortParam }, out _, out _);
+		var strategies = baseStrategy.ToBruteForceAsync(new IStrategyParam[] { longParam, shortParam }, out _, out _);
 
 		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
 

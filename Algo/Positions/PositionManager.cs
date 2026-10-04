@@ -177,11 +177,9 @@ public class PositionManager(bool byOrders, IPositionManagerState state) : BaseL
 	}
 
 	/// <inheritdoc />
-	public IPositionManager Clone()
+	public ValueTask<IPositionManager> CloneAsync(CancellationToken cancellationToken)
 	{
 		var newState = _state.GetType().CreateInstance<IPositionManagerState>();
-		return new PositionManager(ByOrders, newState);
+		return new(new PositionManager(ByOrders, newState));
 	}
-
-	object ICloneable.Clone() => Clone();
 }

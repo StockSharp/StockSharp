@@ -5,7 +5,7 @@ namespace StockSharp.Messages;
 /// </summary>
 [DataContract]
 [Serializable]
-public class DataType : Equatable<DataType>, IPersistable
+public class DataType : Equatable<DataType>, IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="DataType"/>.
@@ -572,7 +572,9 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		MessageType = storage.GetValue<Type>(nameof(MessageType));
 		Arg = null;
@@ -585,10 +587,10 @@ public class DataType : Equatable<DataType>, IPersistable
 			{
 				var type = ss.GetValue<Type>("type");
 
-				if (type.Is<IPersistable>())
+				if (type.Is<IAsyncPersistable>())
 				{
-					var instance = type.CreateInstance<IPersistable>();
-					instance.Load(ss, "value");
+					var instance = type.CreateInstance<IAsyncPersistable>();
+					await instance.LoadAsync(ss, "value", cancellationToken);
 
 					Arg = instance;
 				}
@@ -623,7 +625,9 @@ public class DataType : Equatable<DataType>, IPersistable
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(MessageType), MessageType?.GetTypeName(false));
 
@@ -632,8 +636,8 @@ public class DataType : Equatable<DataType>, IPersistable
 			var ss = new SettingsStorage();
 			ss.SetValue("type", Arg.GetType().GetTypeName(false));
 
-			if (Arg is IPersistable per)
-				ss.SetValue("value", per.Save());
+			if (Arg is IAsyncPersistable per)
+				ss.SetValue("value", await per.SaveAsync(cancellationToken));
 			else if (MessageType is not null && IsCandleMessageType(MessageType))
 				ss.SetValue("value", MessageType.DataTypeArgToString(Arg));
 			else

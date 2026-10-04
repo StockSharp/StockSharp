@@ -7,7 +7,7 @@ using System.Xml;
 /// </summary>
 [Serializable]
 [DataContract]
-public partial class ExchangeBoard : Equatable<ExchangeBoard>, IPersistable, INotifyPropertyChanged
+public partial class ExchangeBoard : Equatable<ExchangeBoard>, IAsyncPersistable, INotifyPropertyChanged
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="ExchangeBoard"/>.
@@ -209,12 +209,14 @@ public partial class ExchangeBoard : Equatable<ExchangeBoard>, IPersistable, INo
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		Exchange = storage.GetValue<SettingsStorage>(nameof(Exchange))?.Load<Exchange>();
+		Exchange = await storage.GetValueAsync<Exchange>(nameof(Exchange), cancellationToken: cancellationToken);
 		Code = storage.GetValue<string>(nameof(Code));
 		ExpiryTime = storage.GetValue<TimeSpan>(nameof(ExpiryTime));
-		WorkingTime = storage.GetValue<SettingsStorage>(nameof(WorkingTime)).Load<WorkingTime>();
+		WorkingTime = await storage.GetValue<SettingsStorage>(nameof(WorkingTime)).LoadAsync<WorkingTime>(cancellationToken);
 		TimeZone = storage.GetValue(nameof(TimeZone), TimeZone);
 	}
 
@@ -222,14 +224,16 @@ public partial class ExchangeBoard : Equatable<ExchangeBoard>, IPersistable, INo
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		storage.SetValue(nameof(Exchange), Exchange?.Save());
+		storage.SetValue(nameof(Exchange), Exchange is null ? null : await Exchange.SaveAsync(cancellationToken));
 		storage.SetValue(nameof(Code), Code);
 		//storage.SetValue(nameof(IsSupportMarketOrders), IsSupportMarketOrders);
 		//storage.SetValue(nameof(IsSupportAtomicReRegister), IsSupportAtomicReRegister);
 		storage.SetValue(nameof(ExpiryTime), ExpiryTime);
-		storage.SetValue(nameof(WorkingTime), WorkingTime.Save());
+		storage.SetValue(nameof(WorkingTime), await WorkingTime.SaveAsync(cancellationToken));
 		storage.SetValue(nameof(TimeZone), TimeZone);
 	}
 }

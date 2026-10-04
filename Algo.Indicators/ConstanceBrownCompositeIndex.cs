@@ -237,9 +237,9 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 		=> new ConstanceBrownCompositeIndexValue(this, time);
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		RsiLength = storage.GetValue<int>(nameof(RsiLength));
 		RocLength = storage.GetValue<int>(nameof(RocLength));
@@ -250,9 +250,9 @@ public class ConstanceBrownCompositeIndex : BaseComplexIndicator<IConstanceBrown
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage
 			.Set(nameof(RsiLength), RsiLength)

@@ -1380,9 +1380,12 @@ public abstract partial class BaseFixDialect : BaseLogReceiver, IFixDialect
 	}
 
 	/// <inheritdoc />
-	public virtual IMessageAdapter Clone() => PersistableHelper.Clone(this);
-
-	object ICloneable.Clone() => Clone();
+	public virtual async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+	{
+		var clone = GetType().CreateInstance<IMessageAdapter>();
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
+		return clone;
+	}
 
 	ValueTask IMessageAdapter.SendOutMessageAsync(Message message, CancellationToken cancellationToken)
 		=> RaiseNewOutMessageAsync(message, cancellationToken);

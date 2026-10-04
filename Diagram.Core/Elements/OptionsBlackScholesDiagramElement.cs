@@ -13,6 +13,7 @@
 public class OptionsBlackScholesDiagramElement : DiagramElement
 {
 	private readonly DiagramSocket _outputSocket;
+	private readonly UnderlyingAssetCache _underlyings = new();
 
 	private IBlackScholes _model;
 
@@ -55,7 +56,7 @@ public class OptionsBlackScholesDiagramElement : DiagramElement
 
 		if (_model == null)
 		{
-			var underlying = option.GetUnderlyingAsset(Strategy);
+			var underlying = _underlyings.Get(option);
 
 			_model = UseBlackModel
 				? new Black(option, underlying, Strategy)
@@ -63,6 +64,13 @@ public class OptionsBlackScholesDiagramElement : DiagramElement
 		}
 
 		RaiseProcessOutput(_outputSocket, value.Time, _model, value);
+	}
+
+	/// <inheritdoc />
+	protected override async ValueTask OnPrepareAsync(CancellationToken cancellationToken)
+	{
+		await base.OnPrepareAsync(cancellationToken);
+		await _underlyings.LoadAsync(Strategy, cancellationToken);
 	}
 
 	/// <inheritdoc />

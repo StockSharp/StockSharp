@@ -312,12 +312,12 @@ public class AssociatedSecurityAdapterTests : BaseTestClass
 	/// disturbs the other.
 	/// </summary>
 	[TestMethod]
-	public void ACopyOfTheAdapterWrapsACopyOfTheLink()
+	public async Task ACopyOfTheAdapterWrapsACopyOfTheLink()
 	{
 		var inner = new PassThroughMessageAdapter(new IncrementalIdGenerator());
 		using var adapter = new AssociatedSecurityAdapter(inner);
 
-		using var clone = (AssociatedSecurityAdapter)adapter.Clone();
+		using var clone = (AssociatedSecurityAdapter)await adapter.CloneAsync(CancellationToken);
 
 		AreNotSame(adapter.InnerAdapter, clone.InnerAdapter, "the copy has to have a link of its own, not the original's");
 	}
@@ -339,7 +339,7 @@ public class AssociatedSecurityAdapterTests : BaseTestClass
 		var output = new List<Message>();
 		adapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
 
-		using var clone = (AssociatedSecurityAdapter)adapter.Clone();
+		using var clone = (AssociatedSecurityAdapter)await adapter.CloneAsync(CancellationToken);
 
 		await clone.SendInMessageAsync(new MarketDataMessage
 		{

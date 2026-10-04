@@ -61,6 +61,8 @@ public class OrderBookTruncateMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="OrderBookTruncateMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone() => new OrderBookTruncateMessageAdapter(InnerAdapter.TypedClone());
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new OrderBookTruncateMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken));
 }

@@ -157,18 +157,18 @@ public class VolumeProfileIndicator : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(Step), Step);
 		storage.SetValue(nameof(UseTotalVolume), UseTotalVolume);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		Step = storage.GetValue<decimal>(nameof(Step));
 		UseTotalVolume = storage.GetValue<bool>(nameof(UseTotalVolume));

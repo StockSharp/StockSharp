@@ -70,7 +70,7 @@ public class PathsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Serialize_CreatesMissingDirectory()
+	public async Task Serialize_CreatesMissingDirectory()
 	{
 		// Real LocalFileSystem so the missing-parent behaviour is actually exercised; all filesystem
 		// access goes through IFileSystem.
@@ -86,7 +86,7 @@ public class PathsTests : BaseTestClass
 
 			// The regression is HERE: without the fix this throws DirectoryNotFoundException because the
 			// parent folder does not exist and OpenWrite does not create it. The fix creates it first.
-			settings.Serialize(fileSystem, path);
+			await settings.SerializeAsync(fileSystem, path, true, CancellationToken);
 
 			// The fix created the missing folder and the file was written into it.
 			fileSystem.DirectoryExists(dir).AssertTrue();
@@ -96,6 +96,130 @@ public class PathsTests : BaseTestClass
 		{
 			if (fileSystem.DirectoryExists(dir))
 				fileSystem.DeleteDirectory(dir, true);
+		}
+	}
+
+	/// <summary>
+	/// Opening a file for writing empties it, so cancellation that arrives after that point does not
+	/// stop the write: the file ends up holding what was being saved, not nothing.
+	/// </summary>
+	[TestMethod]
+	public async Task Serialize_CancelledOnceTheFileIsOpen_StillWritesIt()
+	{
+		var fs = new HookedFileSystem(new MemoryFileSystem());
+		const string file = "/settings.json";
+
+		await new SettingsStorage().Set("value", 1).SerializeAsync(fs, file, true, CancellationToken);
+
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+
+		fs.Opening = (_, access) =>
+		{
+			if (access != FileAccess.Read)
+				cts.Cancel();
+		};
+
+		await new SettingsStorage().Set("value", 2).SerializeAsync(fs, file, true, cts.Token);
+
+		fs.Opening = null;
+
+		var read = await file.DeserializeAsync<SettingsStorage>(fs, CancellationToken);
+
+		read.AssertNotNull();
+		read.GetValue<int>("value").AssertEqual(2);
+	}
+
+	/// <summary>
+	/// The same promise for the culture-invariant form.
+	/// </summary>
+	[TestMethod]
+	public async Task SerializeInvariant_CancelledOnceTheFileIsOpen_StillWritesIt()
+	{
+		var fs = new HookedFileSystem(new MemoryFileSystem());
+		const string file = "/settings.json";
+
+		await new SettingsStorage().Set("value", 1).SerializeInvariantAsync(fs, file, true, CancellationToken);
+
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+
+		fs.Opening = (_, access) =>
+		{
+			if (access != FileAccess.Read)
+				cts.Cancel();
+		};
+
+		await new SettingsStorage().Set("value", 2).SerializeInvariantAsync(fs, file, true, cts.Token);
+
+		fs.Opening = null;
+
+		var read = await fs.DeserializeInvariantAsync(file, CancellationToken);
+
+		read.AssertNotNull();
+		read.GetValue<int>("value").AssertEqual(2);
+	}
+
+	/// <summary>
+	/// A read that was cancelled says so instead of answering that the file holds nothing.
+	/// </summary>
+	[TestMethod]
+	public async Task Deserialize_Cancelled_Throws()
+	{
+		var fs = new HookedFileSystem(new MemoryFileSystem());
+		const string file = "/settings.json";
+
+		await new SettingsStorage().Set("value", 1).SerializeAsync(fs, file, true, CancellationToken);
+
+		using var cts = CancellationTokenSource.CreateLinkedTokenSource(CancellationToken);
+
+		fs.Opening = (_, access) =>
+		{
+			if (access == FileAccess.Read)
+				cts.Cancel();
+		};
+
+		var isCancelled = false;
+
+		try
+		{
+			await file.DeserializeAsync<SettingsStorage>(fs, cts.Token);
+		}
+		catch (OperationCanceledException)
+		{
+			isCancelled = true;
+		}
+
+		isCancelled.AssertTrue("a cancelled read must not be answered with an empty result");
+	}
+
+	/// <summary>
+	/// The installed version is the one the installer recorded for the directory the product runs from.
+	/// </summary>
+	[TestMethod]
+	public async Task InstalledVersion_IsWhatTheInstallerRecorded()
+	{
+		var fs = new MemoryFileSystem();
+
+		fs.CreateDirectory(Paths.InstallerDir);
+
+		await new SettingsStorage()
+			.Set("Installations", new[]
+			{
+				new SettingsStorage()
+					.Set("InstallDirectory", Directory.GetCurrentDirectory())
+					.Set("Version", "9.8.7"),
+			})
+			.SerializeInvariantAsync(fs, Paths.InstallerInstallationsConfigPath, true, CancellationToken);
+
+		Paths.ResetInstalledVersionCache();
+
+		try
+		{
+			(await Paths.GetInstalledVersionAsync(fs, CancellationToken)).AssertEqual("9.8.7");
+			(await Paths.GetAppNameWithVersionAsync(fs, CancellationToken)).AssertEqual($"{Paths.AppName} v9.8.7");
+		}
+		finally
+		{
+			Paths.ResetInstalledVersionCache();
 		}
 	}
 

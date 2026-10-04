@@ -95,7 +95,6 @@ public partial class MainWindow : Window
 		};
 		adapter.ChangeSupported(false, false);
 		connector.Adapter.InnerAdapters.Add(adapter);
-		connector.Save().Serialize(fileSystem, _connectorFile);
 		return connector;
 	}
 
@@ -114,8 +113,13 @@ public partial class MainWindow : Window
 	private void OnConnectClick(object sender, RoutedEventArgs e)
 		=> StartConnect();
 
-	private void OnOpened(object sender, EventArgs e)
+	private async void OnOpened(object sender, EventArgs e)
 	{
+		if (!Paths.FileSystem.FileExists(_connectorFile))
+			await (await _context.Connector.SaveAsync(default)).SerializeAsync(Paths.FileSystem, _connectorFile, true, default);
+
+		await _context.LoadAsync(CancellationToken.None);
+
 		if (_context.IsAutoConnect)
 			StartConnect();
 	}

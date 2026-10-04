@@ -4,6 +4,8 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Ecng.Common;
 using Ecng.Serialization;
@@ -81,15 +83,15 @@ public class EmptyIndicator : BaseIndicator
 
 	// persist our properties to save for further the app restarts
 
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 		Change = storage.GetValue<int>(nameof(Change));
 	}
 
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 		storage.SetValue(nameof(Change), Change);
 	}
 

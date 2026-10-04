@@ -46,7 +46,8 @@ public class AdapterRouterTests : BaseTestClass
 		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken ct)
 			=> default;
 
-		public override IMessageAdapter Clone() => new TestRouterAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestRouterAdapter(TransactionIdGenerator));
 	}
 
 	#endregion

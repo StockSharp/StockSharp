@@ -5,7 +5,7 @@
 /// </summary>
 public class DummyChartBuilder : IChartBuilder
 {
-	private class DummyPersistable : IPersistable, INotifyPropertyChanged, INotifyPropertyChanging
+	private class DummyPersistable : IAsyncPersistable, INotifyPropertyChanged, INotifyPropertyChanging
 	{
 		event PropertyChangingEventHandler INotifyPropertyChanging.PropertyChanging
 		{
@@ -19,8 +19,10 @@ public class DummyChartBuilder : IChartBuilder
 			remove { }
 		}
 
-		public virtual void Load(SettingsStorage storage) { }
-		public virtual void Save(SettingsStorage storage) { }
+		public virtual Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+			=> Task.CompletedTask;
+		public virtual Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+			=> Task.CompletedTask;
 	}
 
 	private class DummyPart<T> : DummyPersistable, IChartPart<T>
@@ -28,16 +30,16 @@ public class DummyChartBuilder : IChartBuilder
 	{
 		public Guid Id { get; private set; } = Guid.NewGuid();
 
-		public override void Load(SettingsStorage storage)
+		public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Load(storage);
+			await base.LoadAsync(storage, cancellationToken);
 
 			Id = storage.GetValue<Guid>(nameof(Id));
 		}
 
-		public override void Save(SettingsStorage storage)
+		public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Save(storage);
+			await base.SaveAsync(storage, cancellationToken);
 
 			storage.SetValue(nameof(Id), Id);
 		}
@@ -55,9 +57,9 @@ public class DummyChartBuilder : IChartBuilder
 		public IChartArea ChartArea { get; set; }
 		IChartArea IChartElement.PersistentChartArea => throw new NotSupportedException();
 
-		public override void Load(SettingsStorage storage)
+		public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Load(storage);
+			await base.LoadAsync(storage, cancellationToken);
 
 			FullTitle = storage.GetValue<string>(nameof(FullTitle));
 			IsVisible = storage.GetValue<bool>(nameof(IsVisible));
@@ -66,9 +68,9 @@ public class DummyChartBuilder : IChartBuilder
 			YAxisId = storage.GetValue<string>(nameof(YAxisId));
 		}
 
-		public override void Save(SettingsStorage storage)
+		public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Save(storage);
+			await base.SaveAsync(storage, cancellationToken);
 
 			storage.SetValue(nameof(FullTitle), FullTitle);
 			storage.SetValue(nameof(IsVisible), IsVisible);
@@ -91,9 +93,9 @@ public class DummyChartBuilder : IChartBuilder
 		public Color ForegroundColor { get; set; }
 		public bool IsAnimationEnabled { get; set; }
 
-		public override void Load(SettingsStorage storage)
+		public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Load(storage);
+			await base.LoadAsync(storage, cancellationToken);
 
 			BuyColor = storage.GetValue<int>(nameof(BuyColor)).ToColor();
 			BuyBlinkColor = storage.GetValue<int>(nameof(BuyBlinkColor)).ToColor();
@@ -107,9 +109,9 @@ public class DummyChartBuilder : IChartBuilder
 			IsAnimationEnabled = storage.GetValue<bool>(nameof(IsAnimationEnabled));
 		}
 
-		public override void Save(SettingsStorage storage)
+		public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Save(storage);
+			await base.SaveAsync(storage, cancellationToken);
 
 			storage.SetValue(nameof(BuyColor), BuyColor.ToArgb());
 			storage.SetValue(nameof(BuyBlinkColor), BuyBlinkColor.ToArgb());
@@ -128,16 +130,16 @@ public class DummyChartBuilder : IChartBuilder
 	{
 		public ChartAnnotationTypes Type { get; set; }
 
-		public override void Load(SettingsStorage storage)
+		public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Load(storage);
+			await base.LoadAsync(storage, cancellationToken);
 
 			Type = storage.GetValue<ChartAnnotationTypes>(nameof(Type));
 		}
 
-		public override void Save(SettingsStorage storage)
+		public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Save(storage);
+			await base.SaveAsync(storage, cancellationToken);
 
 			storage.SetValue(nameof(Type), Type);
 		}
@@ -168,9 +170,9 @@ public class DummyChartBuilder : IChartBuilder
 		public string GroupId { get; set; }
 		IChart IChartArea.Chart { get; set; }
 
-		public override void Load(SettingsStorage storage)
+		public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Load(storage);
+			await base.LoadAsync(storage, cancellationToken);
 
 			Title = storage.GetValue<string>(nameof(Title));
 			GroupId = storage.GetValue<string>(nameof(GroupId));
@@ -178,9 +180,9 @@ public class DummyChartBuilder : IChartBuilder
 			XAxisType = storage.GetValue<ChartAxisType>(nameof(XAxisType));
 		}
 
-		public override void Save(SettingsStorage storage)
+		public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Save(storage);
+			await base.SaveAsync(storage, cancellationToken);
 
 			storage.SetValue(nameof(Title), Title);
 			storage.SetValue(nameof(GroupId), GroupId);
@@ -219,9 +221,9 @@ public class DummyChartBuilder : IChartBuilder
 		void INotifyPropertyChangedEx.NotifyPropertyChanged(string propertyName)
 			=> throw new NotSupportedException();
 
-		public override void Load(SettingsStorage storage)
+		public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Load(storage);
+			await base.LoadAsync(storage, cancellationToken);
 
 			Id = storage.GetValue<string>(nameof(Id));
 			Title = storage.GetValue<string>(nameof(Title));
@@ -244,7 +246,7 @@ public class DummyChartBuilder : IChartBuilder
 			this.ValidateManualRange();
 		}
 
-		public override void Save(SettingsStorage storage)
+		public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
 			this.ValidateManualRange();
 
@@ -289,9 +291,9 @@ public class DummyChartBuilder : IChartBuilder
 		public DrawStyles Style { get; set; }
 		public bool ShowAxisMarker { get; set; }
 
-		public override void Load(SettingsStorage storage)
+		public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Load(storage);
+			await base.LoadAsync(storage, cancellationToken);
 
 			Color = storage.GetValue<int>(nameof(Color)).ToColor();
 			AdditionalColor = storage.GetValue<int>(nameof(AdditionalColor)).ToColor();
@@ -301,9 +303,9 @@ public class DummyChartBuilder : IChartBuilder
 			ShowAxisMarker = storage.GetValue<bool>(nameof(ShowAxisMarker));
 		}
 
-		public override void Save(SettingsStorage storage)
+		public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Save(storage);
+			await base.SaveAsync(storage, cancellationToken);
 
 			storage.SetValue(nameof(Color), Color.ToArgb());
 			storage.SetValue(nameof(AdditionalColor), AdditionalColor.ToArgb());
@@ -349,9 +351,9 @@ public class DummyChartBuilder : IChartBuilder
 		public Color? BuyColor { get; set; }
 		public Color? SellColor { get; set; }
 
-		public override void Load(SettingsStorage storage)
+		public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Load(storage);
+			await base.LoadAsync(storage, cancellationToken);
 
 			DrawStyle = storage.GetValue<ChartCandleDrawStyles>(nameof(DrawStyle));
 
@@ -389,9 +391,9 @@ public class DummyChartBuilder : IChartBuilder
 			SellColor = storage.GetValue<int?>(nameof(SellColor))?.ToColor();
 		}
 
-		public override void Save(SettingsStorage storage)
+		public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Save(storage);
+			await base.SaveAsync(storage, cancellationToken);
 
 			storage.SetValue(nameof(DrawStyle), DrawStyle);
 			storage.SetValue(nameof(UpFillColor), UpFillColor.ToArgb());
@@ -436,9 +438,9 @@ public class DummyChartBuilder : IChartBuilder
 		public bool UseAltIcon { get; set; }
 		public double DrawSize { get; set; }
 
-		public override void Load(SettingsStorage storage)
+		public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Load(storage);
+			await base.LoadAsync(storage, cancellationToken);
 
 			BuyColor = storage.GetValue<int>(nameof(BuyColor)).ToColor();
 			BuyStrokeColor = storage.GetValue<int>(nameof(BuyStrokeColor)).ToColor();
@@ -449,9 +451,9 @@ public class DummyChartBuilder : IChartBuilder
 			DrawSize = storage.GetValue<double>(nameof(DrawSize));
 		}
 
-		public override void Save(SettingsStorage storage)
+		public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 		{
-			base.Save(storage);
+			await base.SaveAsync(storage, cancellationToken);
 
 			storage.SetValue(nameof(BuyColor), BuyColor.ToArgb());
 			storage.SetValue(nameof(BuyStrokeColor), BuyStrokeColor.ToArgb());

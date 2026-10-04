@@ -50,7 +50,8 @@ public class MessageAdapterTests : BaseTestClass
 			return default;
 		}
 
-		public override IMessageAdapter Clone() => new TestAdapter();
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestAdapter());
 	}
 
 	private static (TestAdapter adapter, List<Message> output) CreateSut()
@@ -291,7 +292,7 @@ public class MessageAdapterTests : BaseTestClass
 	/// has to carry, because the copy is made by writing them down and reading them into a new adapter.
 	/// </summary>
 	[TestMethod]
-	public void ACopyOfAnAdapterArrivesWithTheSettingsItWasCopiedFrom()
+	public async Task ACopyOfAnAdapterArrivesWithTheSettingsItWasCopiedFrom()
 	{
 		var original = new PassThroughMessageAdapter(new IncrementalIdGenerator())
 		{
@@ -306,7 +307,7 @@ public class MessageAdapterTests : BaseTestClass
 			SupportedInMessages = [MessageTypes.Connect, MessageTypes.Disconnect, MessageTypes.MarketData],
 		};
 
-		var clone = (MessageAdapter)original.Clone();
+		var clone = (MessageAdapter)await original.CloneAsync(CancellationToken);
 
 		AreNotSame(original, clone, "a copy is a second adapter, not the same one handed back");
 		IsInstanceOfType<PassThroughMessageAdapter>(clone, "a copy of an adapter is an adapter of the same kind");

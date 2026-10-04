@@ -79,21 +79,21 @@ public class ChaikinVolatility : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		Ema.LoadIfNotNull(storage, nameof(Ema));
-		Roc.LoadIfNotNull(storage, nameof(Roc));
+		await Ema.LoadIfNotNullAsync(storage, nameof(Ema), cancellationToken);
+		await Roc.LoadIfNotNullAsync(storage, nameof(Roc), cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
-		storage.SetValue(nameof(Ema), Ema.Save());
-		storage.SetValue(nameof(Roc), Roc.Save());
+		storage.SetValue(nameof(Ema), await Ema.SaveAsync(cancellationToken));
+		storage.SetValue(nameof(Roc), await Roc.SaveAsync(cancellationToken));
 	}
 
 	/// <inheritdoc />

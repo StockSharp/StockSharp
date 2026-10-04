@@ -248,6 +248,8 @@ public class SnapshotHolderMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="SnapshotHolderMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone() => new SnapshotHolderMessageAdapter(InnerAdapter.TypedClone(), _holder);
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new SnapshotHolderMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), _holder);
 }

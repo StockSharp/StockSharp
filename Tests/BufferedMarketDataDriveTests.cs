@@ -462,12 +462,12 @@ public class BufferedMarketDataDriveTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Load_WritingSettingsOutOfRange_Throws()
+	public async Task Load_WritingSettingsOutOfRange_Throws()
 	{
 		var storage = new SettingsStorage();
 		storage.SetValue(nameof(BufferedMarketDataDrive.FlushInterval), TimeSpan.Zero);
 
-		Throws<ArgumentOutOfRangeException>(() => new Harness(1000, 1000).Drive.Load(storage));
+		await ThrowsAsync<ArgumentOutOfRangeException>(() => new Harness(1000, 1000).Drive.LoadAsync(storage, CancellationToken));
 	}
 
 	[TestMethod]
@@ -1047,7 +1047,7 @@ public class BufferedMarketDataDriveTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SaveLoad_TheWritingSettings_RoundTrip()
+	public async Task SaveLoad_TheWritingSettings_RoundTrip()
 	{
 		var drive = new Harness(1000, 1000).Drive;
 
@@ -1056,10 +1056,10 @@ public class BufferedMarketDataDriveTests : BaseTestClass
 		drive.MaxBatchSize = 7;
 
 		var storage = new SettingsStorage();
-		drive.Save(storage);
+		await drive.SaveAsync(storage, CancellationToken);
 
 		var loaded = new Harness(1000, 1000).Drive;
-		loaded.Load(storage);
+		await loaded.LoadAsync(storage, CancellationToken);
 
 		AreEqual(StorageFormats.Csv, loaded.Format);
 		AreEqual(TimeSpan.FromMilliseconds(1234), loaded.FlushInterval);

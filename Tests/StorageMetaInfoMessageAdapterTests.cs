@@ -615,12 +615,12 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 	#region Clone Tests
 
 	[TestMethod]
-	public void Clone_CopiesProperties()
+	public async Task Clone_CopiesProperties()
 	{
 		var (adapter, _, _, _, _) = CreateAdapter();
 		adapter.OverrideSecurityData = true;
 
-		var clone = (StorageMetaInfoMessageAdapter)adapter.Clone();
+		var clone = (StorageMetaInfoMessageAdapter)await adapter.CloneAsync(CancellationToken);
 
 		clone.AssertNotNull();
 		AreEqual(true, clone.OverrideSecurityData);
@@ -631,16 +631,16 @@ public class StorageMetaInfoMessageAdapterTests : BaseTestClass
 	#region Save/Load Settings Tests
 
 	[TestMethod]
-	public void SaveLoad_PreservesSettings()
+	public async Task SaveLoad_PreservesSettings()
 	{
 		var (adapter, _, _, _, _) = CreateAdapter();
 		adapter.OverrideSecurityData = true;
 
 		var storage = new SettingsStorage();
-		adapter.Save(storage);
+		await adapter.SaveAsync(storage, CancellationToken);
 
 		var (adapter2, _, _, _, _) = CreateAdapter();
-		adapter2.Load(storage);
+		await adapter2.LoadAsync(storage, CancellationToken);
 
 		AreEqual(true, adapter2.OverrideSecurityData);
 	}

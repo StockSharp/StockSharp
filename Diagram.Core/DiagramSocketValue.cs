@@ -34,6 +34,12 @@ public class DiagramSocketValue(DiagramSocket socket, DateTime time, object valu
 	public Subscription Subscription { get; } = subscription;
 
 	/// <summary>
+	/// Security the <see cref="Subscription"/> was made for, with the properties (price step and so on)
+	/// it had at the subscription time. <see langword="null"/> when the value has no market data subscription.
+	/// </summary>
+	public SecurityMessage SubscribedSecurity => Subscription?.SubscriptionMessage as SecurityMessage;
+
+	/// <summary>
 	/// Value.
 	/// </summary>
 	public object Value { get; } = value;

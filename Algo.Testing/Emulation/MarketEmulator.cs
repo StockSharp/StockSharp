@@ -110,7 +110,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	/// <returns>The state.</returns>
 	public SecurityState GetSecurityState(SecurityId securityId) => _engine.GetSecurityState(securityId);
 
-	private SecurityEmulator GetEmulator(SecurityId securityId)
+	private async ValueTask<SecurityEmulator> GetEmulatorAsync(SecurityId securityId, CancellationToken cancellationToken)
 	{
 		securityId.GetHashCode(); // force caching
 
@@ -119,7 +119,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			emulator = new SecurityEmulator(this, _engine, securityId);
 			_securityEmulators[securityId] = emulator;
 
-			var sec = SecurityProvider.LookupById(securityId);
+			var sec = await SecurityProvider.LookupByIdAsync(securityId, cancellationToken);
 			if (sec != null)
 			{
 				var secMsg = sec.ToMessage();
@@ -159,10 +159,10 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 
 		try
 		{
-			ProcessMessage(message, results);
+			await ProcessMessageAsync(message, results, cancellationToken);
 
 			// Once per batch: the manager accumulates, so a trade swept twice is charged twice.
-			ApplyCommissions(results);
+			await ApplyCommissionsAsync(results, cancellationToken);
 		}
 		catch (Exception ex)
 		{
@@ -206,7 +206,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		_engine.Settings.InitialTradeId = Settings.InitialTradeId;
 	}
 
-	private void ProcessMessage(Message message, List<Message> results)
+	private async ValueTask ProcessMessageAsync(Message message, List<Message> results, CancellationToken cancellationToken)
 	{
 		SyncEngineSettings();
 
@@ -246,7 +246,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			case MessageTypes.QuoteChange:
 			{
 				var quoteMsg = (QuoteChangeMessage)message;
-				GetEmulator(quoteMsg.SecurityId).OnQuoteChange();
+				(await GetEmulatorAsync(quoteMsg.SecurityId, cancellationToken)).OnQuoteChange();
 				// Delegate to engine's SecurityState
 				_engine.GetSecurityState(quoteMsg.SecurityId).ProcessQuoteChange(quoteMsg, results);
 				break;
@@ -255,7 +255,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			case MessageTypes.Level1Change:
 			{
 				var l1Msg = (Level1ChangeMessage)message;
-				var emulator = GetEmulator(l1Msg.SecurityId);
+				var emulator = await GetEmulatorAsync(l1Msg.SecurityId, cancellationToken);
 				// Emulation: L1 → update order book; the returned quote mid is the current market.
 				var l1Mid = emulator.ProcessLevel1(l1Msg, results);
 				var l1Last = l1Msg.TryGetDecimal(Level1Fields.LastTradePrice);
@@ -270,7 +270,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			}
 
 			case MessageTypes.Execution:
-				ProcessExecution((ExecutionMessage)message, results);
+				await ProcessExecutionAsync((ExecutionMessage)message, results, cancellationToken);
 				break;
 
 			case MessageTypes.OrderRegister:
@@ -312,7 +312,7 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 			case MessageTypes.Security:
 			{
 				var secMsg = (SecurityMessage)message;
-				GetEmulator(secMsg.SecurityId).ProcessSecurity(secMsg);
+				(await GetEmulatorAsync(secMsg.SecurityId, cancellationToken)).ProcessSecurity(secMsg);
 				_engine.GetSecurityState(secMsg.SecurityId).ProcessSecurity(secMsg);
 				break;
 			}
@@ -330,19 +330,20 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 				var mdMsg = (MarketDataMessage)message;
 				if (!mdMsg.SecurityId.IsAllSecurity())
 				{
-					GetEmulator(mdMsg.SecurityId).ProcessMarketData(mdMsg);
+					(await GetEmulatorAsync(mdMsg.SecurityId, cancellationToken)).ProcessMarketData(mdMsg);
 					_engine.GetSecurityState(mdMsg.SecurityId).ProcessMarketData(mdMsg);
 				}
 				break;
 			}
 
 			case HistoryMessageTypes.CommissionRule:
-				_commissionManager.Rules.Add(((CommissionRuleMessage)message).Rule);
+				// A rule accumulates what it has charged for, so the emulator counts on a copy of its own.
+				_commissionManager.Rules.Add(await ((CommissionRuleMessage)message).Rule.CloneAsync(cancellationToken));
 				break;
 
 			default:
 				if (message is CandleMessage candleMsg)
-					GetEmulator(candleMsg.SecurityId).ProcessCandle(candleMsg, results);
+					(await GetEmulatorAsync(candleMsg.SecurityId, cancellationToken)).ProcessCandle(candleMsg, results);
 				break;
 		}
 
@@ -411,9 +412,9 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 		}
 	}
 
-	private void ProcessExecution(ExecutionMessage execMsg, List<Message> results)
+	private async ValueTask ProcessExecutionAsync(ExecutionMessage execMsg, List<Message> results, CancellationToken cancellationToken)
 	{
-		var emulator = GetEmulator(execMsg.SecurityId);
+		var emulator = await GetEmulatorAsync(execMsg.SecurityId, cancellationToken);
 
 		if (execMsg.DataType == DataType.Ticks)
 		{
@@ -646,13 +647,13 @@ public class MarketEmulator : BaseLogReceiver, IMarketEmulator
 	/// <summary>
 	/// Price every trade in this batch. Called once, where the batch leaves the emulator.
 	/// </summary>
-	private void ApplyCommissions(List<Message> messages)
+	private async ValueTask ApplyCommissionsAsync(List<Message> messages, CancellationToken cancellationToken)
 	{
 		for (var i = 0; i < messages.Count; i++)
 		{
 			if (messages[i] is ExecutionMessage exec && exec.DataType == DataType.Transactions && exec.TradeId is not null)
 			{
-				exec.Commission = _commissionManager.Process(exec);
+				exec.Commission = await _commissionManager.ProcessAsync(exec, cancellationToken);
 			}
 		}
 	}

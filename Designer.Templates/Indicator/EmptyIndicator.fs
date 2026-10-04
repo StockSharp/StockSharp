@@ -3,6 +3,8 @@
 namespace StockSharp.Designer
 
 open System
+open System.Threading
+open System.Threading.Tasks
 open Ecng.Common
 open Ecng.Serialization
 
@@ -91,16 +93,24 @@ type EmptyIndicator() as this =
     /// <summary>
     /// Load indicator settings from a given <see cref="SettingsStorage"/>.
     /// </summary>
-    override this.Load(storage: SettingsStorage) =
-        base.Load(storage)
-        this.Change <- storage.GetValue<int>(nameof(this.Change))
+    override this.LoadAsync(storage: SettingsStorage, cancellationToken: CancellationToken) : Task =
+        let baseLoad = base.LoadAsync(storage, cancellationToken)
+
+        task {
+            do! baseLoad
+            this.Change <- storage.GetValue<int>(nameof(this.Change))
+        } :> Task
 
     /// <summary>
     /// Save indicator settings to a given <see cref="SettingsStorage"/>.
     /// </summary>
-    override this.Save(storage: SettingsStorage) =
-        base.Save(storage)
-        storage.SetValue(nameof(this.Change), this.Change)
+    override this.SaveAsync(storage: SettingsStorage, cancellationToken: CancellationToken) : Task =
+        let baseSave = base.SaveAsync(storage, cancellationToken)
+
+        task {
+            do! baseSave
+            storage.SetValue(nameof(this.Change), this.Change)
+        } :> Task
 
     /// <summary>
     /// A string representation that includes the current <see cref="Change"/> value.

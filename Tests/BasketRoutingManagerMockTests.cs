@@ -74,7 +74,8 @@ public class BasketRoutingManagerMockTests : BaseTestClass
 			}
 		}
 
-		public override IMessageAdapter Clone() => new TestMockInnerAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestMockInnerAdapter(TransactionIdGenerator));
 	}
 
 	#endregion

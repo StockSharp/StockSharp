@@ -30,7 +30,7 @@ public class SnapshotRegistryTests : BaseTestClass
 	};
 
 	[TestMethod]
-	public void Level1_Update_Get_ReturnsLatestAcrossDates()
+	public async Task Level1_Update_Get_ReturnsLatestAcrossDates()
 	{
 		var fs = Helper.MemorySystem;
 		var path = fs.GetSubTemp();
@@ -45,10 +45,10 @@ public class SnapshotRegistryTests : BaseTestClass
 		var t2 = t1.AddMinutes(1);
 		var t3 = t1.AddDays(1);
 
-		storage.Update(CreateLevel1(secId, t1, seqNum: 1, (Level1Fields.LastTradePrice, 100m), (Level1Fields.BestBidPrice, 99m)));
-		storage.Update(CreateLevel1(secId, t2, seqNum: 2, (Level1Fields.LastTradePrice, 101m), (Level1Fields.LastTradeVolume, 5m), (Level1Fields.BestBidPrice, 100m)));
+		await storage.UpdateAsync(CreateLevel1(secId, t1, seqNum: 1, (Level1Fields.LastTradePrice, 100m), (Level1Fields.BestBidPrice, 99m)), CancellationToken);
+		await storage.UpdateAsync(CreateLevel1(secId, t2, seqNum: 2, (Level1Fields.LastTradePrice, 101m), (Level1Fields.LastTradeVolume, 5m), (Level1Fields.BestBidPrice, 100m)), CancellationToken);
 
-		var snapDay1 = storage.Get(secId);
+		var snapDay1 = (await storage.GetAsync(secId, CancellationToken));
 		snapDay1.AssertNotNull();
 		snapDay1.ServerTime.AssertEqual(t2);
 		snapDay1.SeqNum.AssertEqual(2L);
@@ -59,26 +59,26 @@ public class SnapshotRegistryTests : BaseTestClass
 		storage.Dates.Count().AssertEqual(1);
 		storage.Dates.Count(d => d == t1.Date).AssertEqual(1);
 
-		storage.Update(CreateLevel1(secId, t3, seqNum: 3, (Level1Fields.LastTradePrice, 200m)));
+		await storage.UpdateAsync(CreateLevel1(secId, t3, seqNum: 3, (Level1Fields.LastTradePrice, 200m)), CancellationToken);
 
 		storage.Dates.Count().AssertEqual(2);
 		storage.Dates.Count(d => d == t1.Date).AssertEqual(1);
 		storage.Dates.Count(d => d == t3.Date).AssertEqual(1);
 
-		var latest = storage.Get(secId);
+		var latest = (await storage.GetAsync(secId, CancellationToken));
 		latest.AssertNotNull();
 		latest.ServerTime.AssertEqual(t3);
 		latest.SeqNum.AssertEqual(3L);
 		((decimal)latest.Changes[Level1Fields.LastTradePrice]).AssertEqual(200m);
 
-		var all = storage.GetAll().ToArray();
+		var all = (await storage.GetAllAsync().ToArrayAsync(CancellationToken));
 		all.Length.AssertEqual(2);
 		all.Count(m => m.ServerTime == t2).AssertEqual(1);
 		all.Count(m => m.ServerTime == t3).AssertEqual(1);
 	}
 
 	[TestMethod]
-	public void Level1_Clear_And_ClearAll()
+	public async Task Level1_Clear_And_ClearAll()
 	{
 		var fs = Helper.MemorySystem;
 		var path = fs.GetSubTemp();
@@ -92,27 +92,27 @@ public class SnapshotRegistryTests : BaseTestClass
 
 		var t1 = new DateTime(2025, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 
-		storage.Update(CreateLevel1(secId1, t1, seqNum: 1, (Level1Fields.LastTradePrice, 100m)));
-		storage.Update(CreateLevel1(secId2, t1, seqNum: 2, (Level1Fields.LastTradePrice, 200m)));
+		await storage.UpdateAsync(CreateLevel1(secId1, t1, seqNum: 1, (Level1Fields.LastTradePrice, 100m)), CancellationToken);
+		await storage.UpdateAsync(CreateLevel1(secId2, t1, seqNum: 2, (Level1Fields.LastTradePrice, 200m)), CancellationToken);
 
-		storage.Get(secId1).AssertNotNull();
-		storage.Get(secId2).AssertNotNull();
+		(await storage.GetAsync(secId1, CancellationToken)).AssertNotNull();
+		(await storage.GetAsync(secId2, CancellationToken)).AssertNotNull();
 
-		storage.Clear(secId1);
-		storage.Get(secId1).AssertNull();
-		storage.Get(secId2).AssertNotNull();
+		await storage.ClearAsync(secId1, CancellationToken);
+		(await storage.GetAsync(secId1, CancellationToken)).AssertNull();
+		(await storage.GetAsync(secId2, CancellationToken)).AssertNotNull();
 
-		storage.ClearAll();
-		storage.Get(secId1).AssertNull();
-		storage.Get(secId2).AssertNull();
-		storage.GetAll().Count().AssertEqual(0);
+		await storage.ClearAllAsync(CancellationToken);
+		(await storage.GetAsync(secId1, CancellationToken)).AssertNull();
+		(await storage.GetAsync(secId2, CancellationToken)).AssertNull();
+		(await storage.GetAllAsync().CountAsync(CancellationToken)).AssertEqual(0);
 
 		// Dates are tracked separately and are not removed by Clear/ClearAll.
 		storage.Dates.Count(d => d == t1.Date).AssertEqual(1);
 	}
 
 	[TestMethod]
-	public void MarketDepth_Update_Get_And_ClonesSnapshots()
+	public async Task MarketDepth_Update_Get_And_ClonesSnapshots()
 	{
 		var fs = Helper.MemorySystem;
 		var path = fs.GetSubTemp();
@@ -126,15 +126,15 @@ public class SnapshotRegistryTests : BaseTestClass
 		var t1 = new DateTime(2025, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 		var t2 = t1.AddMinutes(1);
 
-		storage.Update(CreateOrderBook(secId, t1, seqNum: 1,
+		await storage.UpdateAsync(CreateOrderBook(secId, t1, seqNum: 1,
 			bids: [new QuoteChange(99m, 10m), new QuoteChange(98m, 5m)],
-			asks: [new QuoteChange(101m, 7m), new QuoteChange(102m, 3m)]));
+			asks: [new QuoteChange(101m, 7m), new QuoteChange(102m, 3m)]), CancellationToken);
 
-		storage.Update(CreateOrderBook(secId, t2, seqNum: 2,
+		await storage.UpdateAsync(CreateOrderBook(secId, t2, seqNum: 2,
 			bids: [new QuoteChange(100m, 11m)],
-			asks: [new QuoteChange(101m, 1m)]));
+			asks: [new QuoteChange(101m, 1m)]), CancellationToken);
 
-		var snap1 = storage.Get(secId);
+		var snap1 = (await storage.GetAsync(secId, CancellationToken));
 		snap1.AssertNotNull();
 		snap1.ServerTime.AssertEqual(t2);
 		snap1.SeqNum.AssertEqual(2L);
@@ -148,11 +148,58 @@ public class SnapshotRegistryTests : BaseTestClass
 		// Verify Get returns clones (mutating returned snapshot must not affect stored state).
 		snap1.Bids[0] = new QuoteChange(1m, 1m);
 
-		var snap2 = storage.Get(secId);
+		var snap2 = (await storage.GetAsync(secId, CancellationToken));
 		snap2.AssertNotNull();
 		snap2.Bids[0].Price.AssertEqual(100m);
 		snap2.Bids[0].Volume.AssertEqual(11m);
 	}
+
+	/// <summary>
+	/// A flush that could not write its file leaves what it took due, so the next flush writes it.
+	/// </summary>
+	[TestMethod]
+	public async Task Level1_FlushThatFailed_IsRepeatedByTheNextOne()
+	{
+		var isFailing = false;
+
+		var fs = new HookedFileSystem(Helper.MemorySystem)
+		{
+			Opening = (file, access) =>
+			{
+				if (isFailing && access != FileAccess.Read && file.EndsWithIgnoreCase(".bin"))
+					throw new IOException($"'{file}' cannot be written.");
+			},
+		};
+		var path = fs.GetSubTemp();
+
+		var secId = Helper.CreateSecurityId();
+		var time = new DateTime(2025, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+		using (var registry = new SnapshotRegistry(fs, path))
+		{
+			var storage = (ISnapshotStorage<SecurityId, Level1ChangeMessage>)((ISnapshotRegistry)registry).GetSnapshotStorage(DataType.Level1);
+
+			await storage.UpdateAsync(CreateLevel1(secId, time, seqNum: 1, (Level1Fields.LastTradePrice, 100m)), CancellationToken);
+
+			isFailing = true;
+			(await FlushAsync(storage)).Count.AssertEqual(1);
+
+			isFailing = false;
+			(await FlushAsync(storage)).Count.AssertEqual(0);
+		}
+
+		using var reopened = new SnapshotRegistry(fs, path);
+		var reopenedStorage = (ISnapshotStorage<SecurityId, Level1ChangeMessage>)((ISnapshotRegistry)reopened).GetSnapshotStorage(DataType.Level1);
+
+		var restored = await reopenedStorage.GetAsync(secId, CancellationToken);
+
+		restored.AssertNotNull("the snapshot taken by the failed flush must reach the file with the next one");
+		((decimal)restored.Changes[Level1Fields.LastTradePrice]).AssertEqual(100m);
+	}
+
+	// The registry flushes on a timer of its own; a test asks for the same flush directly.
+	private ValueTask<List<Exception>> FlushAsync(ISnapshotStorage storage)
+		=> (ValueTask<List<Exception>>)storage.GetType().GetMethod("FlushChangesAsync").Invoke(storage, [CancellationToken]);
 
 	[TestMethod]
 	public void UnsupportedDataType_Throws()

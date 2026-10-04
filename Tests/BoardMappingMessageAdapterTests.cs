@@ -23,7 +23,8 @@ public class BoardMappingMessageAdapterTests : BaseTestClass
 		public ValueTask SayAsync(Message message, CancellationToken cancellationToken)
 			=> SendOutMessageAsync(message, cancellationToken);
 
-		public override IMessageAdapter Clone() => new VenueAdapter();
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new VenueAdapter());
 	}
 
 	private static (BoardMappingMessageAdapter mapped, VenueAdapter venue, List<Message> heard) Create()
@@ -166,7 +167,7 @@ public class BoardMappingMessageAdapterTests : BaseTestClass
 	{
 		var (mapped, _, _) = Create();
 
-		var clone = (BoardMappingMessageAdapter)mapped.Clone();
+		var clone = (BoardMappingMessageAdapter)await mapped.CloneAsync(CancellationToken);
 
 		await clone.SendInMessageAsync(new OrderRegisterMessage { SecurityId = Id("ETHBTC", "SS_FUT") }, CancellationToken);
 

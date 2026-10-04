@@ -21,6 +21,8 @@ using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventA
 
 public partial class SecuritiesWindow
 {
+	// SettingsWindow of the published StockSharp.Xaml package takes its settings as IPersistable.
+#pragma warning disable CS0618
 	private class DatesSettings : NotifiableObject, IPersistable
 	{
 		private DateTime? _from;
@@ -123,6 +125,7 @@ public partial class SecuritiesWindow
 			throw new NotSupportedException();
 		}
 	}
+#pragma warning restore CS0618
 
 	private readonly SynchronizedDictionary<SecurityId, CachedSynchronizedList<QuotesWindow>> _quotesWindows = new();
 	private readonly SynchronizedDictionary<Subscription, QuotesWindow> _quotesWindowsBySubscription = new();

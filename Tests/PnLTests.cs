@@ -3,7 +3,7 @@
 using StockSharp.Algo.PnL;
 
 [TestClass]
-public class PnLTests
+public class PnLTests : BaseTestClass
 {
 	[TestMethod]
 	public void QueueRealizedUnrealized()
@@ -531,7 +531,7 @@ public class PnLTests
 	}
 
 	[TestMethod]
-	public void SaveLoad()
+	public async Task SaveLoad()
 	{
 		var manager = new PnLManager
 		{
@@ -542,11 +542,11 @@ public class PnLTests
 			UseTick = true,
 		};
 
-		var storage = manager.Save();
+		var storage = await manager.SaveAsync(CancellationToken);
 
 		var manager2 = new PnLManager();
 
-		manager2.Load(storage);
+		await manager2.LoadAsync(storage, CancellationToken);
 		manager2.UseCandles.AssertTrue();
 		manager2.UseLevel1.AssertFalse();
 		manager2.UseOrderBook.AssertTrue();

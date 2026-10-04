@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Risk;
 /// <summary>
 /// The interface, describing risk-rule.
 /// </summary>
-public interface IRiskRule : IPersistable
+public interface IRiskRule : IAsyncPersistable
 {
 	/// <summary>
 	/// Header.

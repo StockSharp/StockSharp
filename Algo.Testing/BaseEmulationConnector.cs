@@ -47,21 +47,21 @@ public abstract class BaseEmulationConnector : Connector
 	public EmulationMessageAdapter EmulationAdapter => (EmulationMessageAdapter)Adapter.InnerAdapters.First();
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (EmulationAdapter.OwnInnerAdapter)
-			EmulationAdapter.Load(storage, nameof(EmulationAdapter));
+			await EmulationAdapter.LoadAsync(storage, nameof(EmulationAdapter), cancellationToken);
 
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (EmulationAdapter.OwnInnerAdapter)
-			storage.SetValue(nameof(EmulationAdapter), EmulationAdapter.Save());
+			storage.SetValue(nameof(EmulationAdapter), await EmulationAdapter.SaveAsync(cancellationToken));
 
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 	}
 
 	/// <inheritdoc />

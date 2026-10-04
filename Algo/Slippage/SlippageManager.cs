@@ -143,30 +143,37 @@ public class SlippageManager(ISlippageManagerState state) : ISlippageManager
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		CalculateNegative = storage.GetValue<bool>(nameof(CalculateNegative));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(CalculateNegative), CalculateNegative);
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Creates a clone of this manager with new state.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Cloned manager.</returns>
-	public ISlippageManager Clone()
+	public async ValueTask<ISlippageManager> CloneAsync(CancellationToken cancellationToken)
 	{
 		var clone = new SlippageManager(_state.GetType().CreateInstance<ISlippageManagerState>());
-		clone.Load(this.Save());
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
 		return clone;
 	}
-
-	object ICloneable.Clone() => Clone();
 }

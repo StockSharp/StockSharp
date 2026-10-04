@@ -526,8 +526,8 @@ public class SecurityAllSubscriptionTests : BaseTestClass
 		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)
 			=> default;
 
-		public override IMessageAdapter Clone()
-			=> new NoSecurityFilterAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new NoSecurityFilterAdapter(TransactionIdGenerator));
 	}
 
 	/// <summary>

@@ -44,9 +44,10 @@ public class LatencyMessageAdapter(IMessageAdapter innerAdapter, ILatencyManager
 	/// <summary>
 	/// Create a copy of <see cref="LatencyMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new LatencyMessageAdapter(InnerAdapter.TypedClone(), _latencyManager.Clone());
+		return new LatencyMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), await _latencyManager.CloneAsync(cancellationToken));
 	}
 }

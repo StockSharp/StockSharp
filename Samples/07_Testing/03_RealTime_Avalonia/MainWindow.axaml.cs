@@ -322,8 +322,10 @@ public partial class MainWindow : Window
 		=> _subscriptionGenerations.TryGetValue(subscription, out var generation) &&
 			generation == _selectionGeneration;
 
-	private void OnOpened(object sender, EventArgs e)
+	private async void OnOpened(object sender, EventArgs e)
 	{
+		await _realContext.LoadAsync(CancellationToken.None);
+
 		if (_realContext.IsAutoConnect)
 			StartConnect();
 	}

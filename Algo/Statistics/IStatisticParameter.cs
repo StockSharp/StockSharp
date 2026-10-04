@@ -3,7 +3,7 @@ namespace StockSharp.Algo.Statistics;
 /// <summary>
 /// The interface, describing statistic parameter.
 /// </summary>
-public interface IStatisticParameter : IPersistable, INotifyPropertyChanged, IDisposable
+public interface IStatisticParameter : IAsyncPersistable, INotifyPropertyChanged, IDisposable
 {
 	/// <summary>
 	/// Parameter name.
@@ -188,18 +188,26 @@ public abstract class BaseStatisticParameter<TValue> : NotifiableObject, IStatis
 	/// To load the state of statistic parameter.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public virtual void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Value = storage.GetValue(nameof(Value), default(TValue));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// To save the state of statistic parameter.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public virtual void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Value), Value);
+
+		return Task.CompletedTask;
 	}
 
 	/// <inheritdoc />

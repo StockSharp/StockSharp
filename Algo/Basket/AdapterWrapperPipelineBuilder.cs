@@ -53,12 +53,12 @@ public class AdapterWrapperPipelineBuilder : IAdapterWrapperPipelineBuilder
 
 		if (config.LatencyManager != null)
 		{
-			adapter = ApplyOwnInner(new LatencyMessageAdapter(adapter, config.LatencyManager.Clone()));
+			adapter = ApplyOwnInner(new LatencyMessageAdapter(adapter, await config.LatencyManager.CloneAsync(cancellationToken)));
 		}
 
 		if (config.SlippageManager != null)
 		{
-			adapter = ApplyOwnInner(new SlippageMessageAdapter(adapter, config.SlippageManager.Clone()));
+			adapter = ApplyOwnInner(new SlippageMessageAdapter(adapter, await config.SlippageManager.CloneAsync(cancellationToken)));
 		}
 
 		if (adapter.IsNativeIdentifiers)
@@ -108,12 +108,12 @@ public class AdapterWrapperPipelineBuilder : IAdapterWrapperPipelineBuilder
 
 		if (config.PnLManager != null && !adapter.IsSupportExecutionsPnL)
 		{
-			adapter = ApplyOwnInner(new PnLMessageAdapter(adapter, config.PnLManager.Clone()));
+			adapter = ApplyOwnInner(new PnLMessageAdapter(adapter, await config.PnLManager.CloneAsync(cancellationToken)));
 		}
 
 		if (config.CommissionManager != null)
 		{
-			adapter = ApplyOwnInner(new CommissionMessageAdapter(adapter, config.CommissionManager.Clone()));
+			adapter = ApplyOwnInner(new CommissionMessageAdapter(adapter, await config.CommissionManager.CloneAsync(cancellationToken)));
 		}
 
 		if (adapter.IsSupportSubscriptions)

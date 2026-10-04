@@ -104,10 +104,11 @@ public class CandleBuilderMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="CandleBuilderMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new CandleBuilderMessageAdapter(InnerAdapter.TypedClone(), _candleBuilderProvider, _cloneOutCandles)
+		return new CandleBuilderMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), _candleBuilderProvider, _cloneOutCandles)
 		{
 			SendFinishedCandlesImmediatelly = SendFinishedCandlesImmediatelly,
 			Buffer = Buffer,

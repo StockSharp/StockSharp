@@ -8,7 +8,7 @@ using StockSharp.BusinessEntities;
 /// Candles series.
 /// </summary>
 [Obsolete("Use Subscription class.")]
-public class CandleSeries : NotifiableObject, IPersistable
+public class CandleSeries : NotifiableObject, IAsyncPersistable
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="CandleSeries"/>.
@@ -227,7 +227,9 @@ public class CandleSeries : NotifiableObject, IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		var secProvider = EntitiesExtensions.TrySecurityProvider;
 
@@ -255,14 +257,14 @@ public class CandleSeries : NotifiableObject, IPersistable
 
 		From = storage.GetValue(nameof(From), From);
 		To = storage.GetValue(nameof(To), To);
-		WorkingTime = storage.GetValue<SettingsStorage>(nameof(WorkingTime))?.Load<WorkingTime>();
+		WorkingTime = await storage.GetValueAsync<WorkingTime>(nameof(WorkingTime), cancellationToken: cancellationToken);
 
 		IsCalcVolumeProfile = storage.GetValue(nameof(IsCalcVolumeProfile), IsCalcVolumeProfile);
 
 		BuildCandlesMode = storage.GetValue(nameof(BuildCandlesMode), BuildCandlesMode);
 
 		if (storage.ContainsKey(nameof(BuildCandlesFrom2)))
-			BuildCandlesFrom2 = storage.GetValue<SettingsStorage>(nameof(BuildCandlesFrom2)).Load<Messages.DataType>();
+			BuildCandlesFrom2 = await storage.GetValue<SettingsStorage>(nameof(BuildCandlesFrom2)).LoadAsync<Messages.DataType>(cancellationToken);
 
 		BuildCandlesField = storage.GetValue(nameof(BuildCandlesField), BuildCandlesField);
 		AllowBuildFromSmallerTimeFrame = storage.GetValue(nameof(AllowBuildFromSmallerTimeFrame), AllowBuildFromSmallerTimeFrame);
@@ -276,7 +278,9 @@ public class CandleSeries : NotifiableObject, IPersistable
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (Security != null)
 			storage.SetValue(nameof(SecurityId), Security.Id);
@@ -306,5 +310,7 @@ public class CandleSeries : NotifiableObject, IPersistable
 		storage.SetValue(nameof(Count), Count);
 		storage.SetValue(nameof(IsFinishedOnly), IsFinishedOnly);
 		//storage.SetValue(nameof(FillGaps), FillGaps);
+
+		return Task.CompletedTask;
 	}
 }

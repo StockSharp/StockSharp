@@ -193,9 +193,10 @@ public class RiskMessageAdapter : MessageAdapterWrapper
 	/// <summary>
 	/// Create a copy of <see cref="RiskMessageAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new RiskMessageAdapter(InnerAdapter.TypedClone(), _riskManager.Clone());
+		return new RiskMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), await _riskManager.CloneAsync(cancellationToken));
 	}
 }

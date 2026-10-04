@@ -245,7 +245,7 @@ public class TransactionOrderingMessageAdapterTests : BaseTestClass
 
 		using var adapter = new TransactionOrderingMessageAdapter(inner);
 
-		var clone = adapter.Clone();
+		var clone = await adapter.CloneAsync(CancellationToken);
 
 		clone.AssertNotNull();
 		(clone is TransactionOrderingMessageAdapter).AssertTrue();

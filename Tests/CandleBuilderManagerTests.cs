@@ -12,8 +12,8 @@ public class CandleBuilderManagerTests : BaseTestClass
 		{
 		}
 
-		public override IMessageAdapter Clone()
-			=> new TestWrapper(InnerAdapter.TypedClone());
+		public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new TestWrapper(await InnerAdapter.CloneAsync(cancellationToken));
 	}
 
 	private sealed class TestInnerAdapter : MessageAdapter

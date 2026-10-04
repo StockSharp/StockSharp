@@ -2,6 +2,8 @@ namespace StockSharp.Samples.Strategies.LiveTerminal;
 
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 using Ecng.Common;
@@ -29,7 +31,7 @@ public partial class StrategiesWindow
 		Dashboard.Portfolios = new PortfolioDataSource(connector);
 	}
 
-	public void LoadStrategies(string path)
+	public async Task LoadStrategiesAsync(string path, CancellationToken cancellationToken)
 	{
 		_dir = Path.Combine(path, "Strategies");
 
@@ -40,10 +42,12 @@ public partial class StrategiesWindow
 		{
 			try
 			{
-				var strategy = xml.Deserialize<SettingsStorage>(fs)?.LoadEntire<Strategy>();
+				var storage = await xml.DeserializeAsync<SettingsStorage>(fs, cancellationToken);
 
-				if (strategy is null)
+				if (storage is null)
 					continue;
+
+				var strategy = await storage.LoadEntireAsync<Strategy>(cancellationToken);
 
 				AddStrategy(strategy);
 			}
@@ -54,7 +58,7 @@ public partial class StrategiesWindow
 		}
 	}
 
-	private void QuotingClick(object sender, RoutedEventArgs e)
+	private async void QuotingClick(object sender, RoutedEventArgs e)
 	{
 		var quoting = new MarketQuotingProcessorStrategy();
 
@@ -97,7 +101,7 @@ public partial class StrategiesWindow
 
 		AddStrategy(quoting);
 
-		SaveStrategy(quoting);
+		await SaveStrategyAsync(quoting, default);
 	}
 
 	private void AddStrategy(Strategy strategy)
@@ -107,31 +111,41 @@ public partial class StrategiesWindow
 
 		Dashboard.Items.Add(new StrategiesDashboardItem(strategy)
 		{
-			SettingsCommand = new DelegateCommand(_ =>
-			{
-				var wnd = new StrategyEditWindow
-				{
-					Strategy = strategy.TypedClone(),
-				};
-
-				if (!wnd.ShowModal(this))
-					return;
-
-				var id = strategy.Id;
-				strategy.Apply(wnd.Strategy);
-				strategy.Id = id;
-				SaveStrategy(strategy);
-			}, _ => strategy.ProcessState == ProcessStates.Stopped)
+			SettingsCommand = new AsyncCommand(() => EditStrategyAsync(strategy), () => strategy.ProcessState == ProcessStates.Stopped)
 		});
 		MainWindow.Instance.LogManager.Sources.Add(strategy);
 	}
 
-	private void SaveStrategy(Strategy strategy)
+	private async Task EditStrategyAsync(Strategy strategy)
+	{
+		try
+		{
+			var wnd = new StrategyEditWindow
+			{
+				Strategy = await strategy.CloneAsync(default),
+			};
+
+			if (!wnd.ShowModal(this))
+				return;
+
+			var id = strategy.Id;
+			await strategy.ApplyAsync(wnd.Strategy);
+			strategy.Id = id;
+			await SaveStrategyAsync(strategy, default);
+		}
+		catch (Exception ex)
+		{
+			ex.LogError();
+		}
+	}
+
+	private async Task SaveStrategyAsync(Strategy strategy, CancellationToken cancellationToken)
 	{
 		if (strategy is null)
 			throw new ArgumentNullException(nameof(strategy));
 
 		var fs = MainWindow.Instance.FileSystem;
-		strategy.SaveEntire(false).Serialize(fs, Path.Combine(_dir, $"{strategy.Id}{Paths.DefaultSettingsExt}"));
+		var storage = await strategy.SaveEntireAsync(false, cancellationToken);
+		await storage.SerializeAsync(fs, Path.Combine(_dir, $"{strategy.Id}{Paths.DefaultSettingsExt}"), true, cancellationToken);
 	}
 }

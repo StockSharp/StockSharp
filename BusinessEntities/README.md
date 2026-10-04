@@ -16,7 +16,7 @@ The library declares base interfaces for interacting with various data sources a
 - `IConnector` is the main interface combining connectivity, subscriptions, orders and data access. It inherits from `IMarketDataProvider`, `ITransactionProvider`, `ISecurityProvider` and others. A fragment of the interface:
 
 ```csharp
-public interface IConnector : IMessageChannel, IPersistable, ILogReceiver,
+public interface IConnector : IMessageTransport, IAsyncPersistable, ILogReceiver,
         IMarketDataProvider, ITransactionProvider, ISecurityProvider,
         ISubscriptionProvider, ITimeProvider,
         IPortfolioProvider, IPositionProvider

@@ -73,26 +73,36 @@ public abstract class DiagramExternalElement : BaseLogReceiver
 	{
 	}
 
-	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		var paramsStorage = new SettingsStorage();
 
 		foreach (var param in Parameters)
 		{
 			if (!param.IgnoreOnSave)
-				paramsStorage.Set(param.Name, param.Save());
+				paramsStorage.Set(param.Name, await param.SaveAsync(cancellationToken));
 		}
 
 		storage.Set(nameof(Parameters), paramsStorage);
 	}
 
-	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	/// <summary>
+	/// Load settings.
+	/// </summary>
+	/// <param name="storage">Settings storage.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		var paramsStorage = storage.GetValue<SettingsStorage>(nameof(Parameters));
 
@@ -101,8 +111,8 @@ public abstract class DiagramExternalElement : BaseLogReceiver
 
 		foreach (var param in Parameters)
 		{
-			if (!param.IgnoreOnSave)
-				param.LoadIfNotNull(paramsStorage, param.Name);
+			if (!param.IgnoreOnSave && paramsStorage.GetValue<SettingsStorage>(param.Name) is { } paramStorage)
+				await param.LoadAsync(paramStorage, cancellationToken);
 		}
 	}
 }

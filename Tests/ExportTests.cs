@@ -669,7 +669,7 @@ public class ExportTests : BaseTestClass
 
 		using var stream = new MemoryStream();
 
-		var (count, lastTime) = await new ExcelExporter(provider, DataType.TimeFrame(tf), stream, () => { })
+		var (count, lastTime) = await new ExcelExporter(provider, tf.TimeFrame(), stream, () => { })
 			.Export(candles.ToAsyncEnumerable(), CancellationToken);
 
 		count.AssertEqual(candles.Length);
@@ -843,7 +843,7 @@ public class ExportTests : BaseTestClass
 			],
 		};
 
-		var candles = await ExportJsonAsync(DataType.TimeFrame(tf), new[] { plain, extended });
+		var candles = await ExportJsonAsync(tf.TimeFrame(), new[] { plain, extended });
 
 		candles.Count.AssertEqual(2);
 
@@ -1243,7 +1243,7 @@ public class ExportTests : BaseTestClass
 
 		var provider = new RecordingDatabaseProvider();
 
-		var (count, lastTime) = await CreateDbExporter(provider, DataType.TimeFrame(tf))
+		var (count, lastTime) = await CreateDbExporter(provider, tf.TimeFrame())
 			.Export(new[] { plain, extended }.ToAsyncEnumerable(), CancellationToken);
 
 		count.AssertEqual(2);

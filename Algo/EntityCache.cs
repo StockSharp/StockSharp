@@ -25,10 +25,9 @@ public enum OrderOperations
 /// Entity cache for storing orders, trades, news and other trading entities.
 /// </summary>
 /// <param name="logReceiver">Log receiver for logging messages.</param>
-/// <param name="tryGetSecurity">Function to get security by id.</param>
 /// <param name="exchangeInfoProvider">Exchange info provider.</param>
 /// <param name="positionProvider">Position provider.</param>
-public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> tryGetSecurity, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider) : ISnapshotHolder
+public class EntityCache(ILogReceiver logReceiver, IExchangeInfoProvider exchangeInfoProvider, IPositionProvider positionProvider) : ISnapshotHolder
 {
 	/// <summary>
 	/// Information about order state change.
@@ -311,7 +310,6 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 	public IEnumerable<OrderFail> OrderEditFails => _orderEditFails.SyncGet(c => c.ToArray());
 
 	private readonly ILogReceiver _logReceiver = logReceiver ?? throw new ArgumentNullException(nameof(logReceiver));
-	private readonly Func<SecurityId?, Security> _tryGetSecurity = tryGetSecurity ?? throw new ArgumentNullException(nameof(tryGetSecurity));
 	private readonly IPositionProvider _positionProvider = positionProvider ?? throw new ArgumentNullException(nameof(positionProvider));
 
 	/// <summary>
@@ -340,6 +338,7 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 		_orderEditFails.Clear();
 
 		_securityValues.Clear();
+		_securityValuesById.Clear();
 		_orderBookSnapshots.Clear();
 	}
 
@@ -1278,6 +1277,9 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 	}
 
 	private readonly SynchronizedDictionary<Security, Level1Info> _securityValues = [];
+
+	// The same entries by instrument id, for callers that hold a subscription rather than an instrument.
+	private readonly SynchronizedDictionary<SecurityId, Level1Info> _securityValuesById = [];
 	private readonly SynchronizedDictionary<SecurityId, QuoteChangeMessage> _orderBookSnapshots = [];
 
 	/// <summary>
@@ -1325,24 +1327,29 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 	/// <param name="serverTime">Server time.</param>
 	/// <returns>Level1 info.</returns>
 	public Level1Info GetSecurityValues(Security security, DateTime serverTime)
-		=> _securityValues.SafeAdd(security, key => new Level1Info(security.ToSecurityId(), serverTime));
+		=> _securityValues.SafeAdd(security, key =>
+		{
+			var securityId = security.ToSecurityId();
+			var info = new Level1Info(securityId, serverTime);
+
+			_securityValuesById[securityId] = info;
+
+			return info;
+		});
 
 	/// <summary>
 	/// Hand the Level1 fields an ended market data stream owned back to Level1. An order book owns the
 	/// best quotes and a tick stream owns the last trade only while it runs; once it is gone Level1 is
 	/// the only source left for them.
 	/// </summary>
-	/// <param name="security">Security the stream carried.</param>
+	/// <param name="securityId">Security the stream carried.</param>
 	/// <param name="dataType">Data type of the stream that ended.</param>
-	public void ReleaseLevel1Ownership(Security security, DataType dataType)
+	public void ReleaseLevel1Ownership(SecurityId securityId, DataType dataType)
 	{
-		if (security is null)
-			throw new ArgumentNullException(nameof(security));
-
 		if (dataType is null)
 			throw new ArgumentNullException(nameof(dataType));
 
-		if (!_securityValues.TryGetValue(security, out var info))
+		if (!_securityValuesById.TryGetValue(securityId, out var info))
 			return;
 
 		if (dataType == DataType.MarketDepth)
@@ -1368,16 +1375,15 @@ public class EntityCache(ILogReceiver logReceiver, Func<SecurityId?, Security> t
 		if (subscription is null)
 			throw new ArgumentNullException(nameof(subscription));
 
-		var security = subscription is ISecurityIdMessage secIdMsg ? _tryGetSecurity(secIdMsg.SecurityId) : null;
-		var securityId = subscription is ISecurityIdMessage secIdMsg2 ? secIdMsg2.SecurityId : default;
+		var securityId = subscription is ISecurityIdMessage secIdMsg ? secIdMsg.SecurityId : default;
 		var dataType = subscription.DataType;
 
 		if (dataType == DataType.Level1)
 		{
-			if (security == null)
+			if (securityId == default)
 				return [];
 
-			if (_securityValues.TryGetValue(security, out var info))
+			if (_securityValuesById.TryGetValue(securityId, out var info))
 				return [info.GetCopy()];
 		}
 		else if (dataType == DataType.MarketDepth)

@@ -2,8 +2,13 @@ namespace StockSharp.Algo.Strategies;
 
 partial class Strategy
 {
-	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	/// <summary>
+	/// Load settings.
+	/// </summary>
+	/// <param name="storage"><see cref="SettingsStorage"/></param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		var parameters = storage.GetValue<SettingsStorage[]>(nameof(Parameters));
 
@@ -13,27 +18,30 @@ partial class Strategy
 			foreach (var s in parameters)
 			{
 				if (Parameters.TryGetValue(s.GetValue<string>(nameof(IStrategyParam.Id)), out var param))
-					param.Load(s);
+					await param.LoadAsync(s, cancellationToken);
 			}
 		}
 
 		if (storage.ContainsKey(nameof(Name)))
 			Name = storage.GetValue<string>(nameof(Name));
 
-		RiskManager.LoadIfNotNull(storage, nameof(RiskManager));
+		await RiskManager.LoadIfNotNullAsync(storage, nameof(RiskManager), cancellationToken);
 
 		if (!KeepStatistics)
 			return;
 
-		PnLManager.LoadIfNotNull(storage, nameof(PnLManager));
-		StatisticManager.LoadIfNotNull(storage, nameof(StatisticManager));
+		await PnLManager.LoadIfNotNullAsync(storage, nameof(PnLManager), cancellationToken);
+		await StatisticManager.LoadIfNotNullAsync(storage, nameof(StatisticManager), cancellationToken);
 	}
 
-	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
-	{
-		Save(storage, KeepStatistics, true);
-	}
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="storage"><see cref="SettingsStorage"/></param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public override Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		=> SaveAsync(storage, KeepStatistics, true, cancellationToken);
 
 	/// <summary>
 	/// Save settings.
@@ -41,7 +49,19 @@ partial class Strategy
 	/// <param name="storage"><see cref="SettingsStorage"/></param>
 	/// <param name="saveStatistics"><see cref="KeepStatistics"/></param>
 	/// <param name="saveSystemParameters">Save system parameters.</param>
+	[Obsolete("Blocking sync-over-async wrapper. Use SaveAsync instead.")]
 	public void Save(SettingsStorage storage, bool saveStatistics, bool saveSystemParameters)
+		=> AsyncHelper.Run(() => SaveAsync(storage, saveStatistics, saveSystemParameters, default).AsValueTask());
+
+	/// <summary>
+	/// Save settings.
+	/// </summary>
+	/// <param name="storage"><see cref="SettingsStorage"/></param>
+	/// <param name="saveStatistics"><see cref="KeepStatistics"/></param>
+	/// <param name="saveSystemParameters">Save system parameters.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, bool saveStatistics, bool saveSystemParameters, CancellationToken cancellationToken)
 	{
 		var parameters = GetParameters();
 
@@ -49,8 +69,8 @@ partial class Strategy
 			parameters = [.. parameters.Except(_systemParams)];
 
 		storage
-			.Set(nameof(Parameters), parameters.Select(p => p.Save()).ToArray())
-			.Set(nameof(RiskManager), RiskManager.Save())
+			.Set(nameof(Parameters), await parameters.SaveAllAsync(cancellationToken))
+			.Set(nameof(RiskManager), await RiskManager.SaveAsync(cancellationToken))
 		;
 
 		// Only a name given by hand is the caller's to keep. A generated one is written down by
@@ -61,8 +81,8 @@ partial class Strategy
 		if (saveStatistics)
 		{
 			storage
-				.Set(nameof(PnLManager), PnLManager.Save())
-				.Set(nameof(StatisticManager), StatisticManager.Save())
+				.Set(nameof(PnLManager), await PnLManager.SaveAsync(cancellationToken))
+				.Set(nameof(StatisticManager), await StatisticManager.SaveAsync(cancellationToken))
 			;
 		}
 	}

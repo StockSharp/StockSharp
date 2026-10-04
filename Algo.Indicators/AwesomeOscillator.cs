@@ -92,23 +92,23 @@ public class AwesomeOscillator : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		LongMa.LoadIfNotNull(storage, nameof(LongMa));
-		ShortMa.LoadIfNotNull(storage, nameof(ShortMa));
-		MedianPrice.LoadIfNotNull(storage, nameof(MedianPrice));
+		await LongMa.LoadIfNotNullAsync(storage, nameof(LongMa), cancellationToken);
+		await ShortMa.LoadIfNotNullAsync(storage, nameof(ShortMa), cancellationToken);
+		await MedianPrice.LoadIfNotNullAsync(storage, nameof(MedianPrice), cancellationToken);
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
-		storage.SetValue(nameof(LongMa), LongMa.Save());
-		storage.SetValue(nameof(ShortMa), ShortMa.Save());
-		storage.SetValue(nameof(MedianPrice), MedianPrice.Save());
+		storage.SetValue(nameof(LongMa), await LongMa.SaveAsync(cancellationToken));
+		storage.SetValue(nameof(ShortMa), await ShortMa.SaveAsync(cancellationToken));
+		storage.SetValue(nameof(MedianPrice), await MedianPrice.SaveAsync(cancellationToken));
 	}
 
 	/// <inheritdoc />

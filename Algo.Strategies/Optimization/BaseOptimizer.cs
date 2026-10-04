@@ -1,5 +1,7 @@
 namespace StockSharp.Algo.Strategies.Optimization;
 
+using Nito.AsyncEx;
+
 using StockSharp.Algo.Testing;
 
 /// <summary>
@@ -56,6 +58,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	private CacheAllocator _storageCacheAllocator;
 
 	private readonly Lock _sync = new();
+	private readonly AsyncLock _nextLock = new();
 	private bool _cancelEmulation;
 	private bool _allIterationsStarted;
 
@@ -385,7 +388,7 @@ public abstract class BaseOptimizer : BaseLogReceiver
 	/// <param name="storageCache"><see cref="HistoryMessageAdapter.StorageCache"/></param>
 	/// <param name="cancellationToken">Cancellation token.</param>
 	protected internal async ValueTask<bool> TryNextRunAsync(DateTime startTime, DateTime stopTime,
-		Func<IPortfolioProvider, (Strategy strategy, IStrategyParam[] parameters)?> tryGetNext,
+		Func<IPortfolioProvider, CancellationToken, ValueTask<(Strategy strategy, IStrategyParam[] parameters)?>> tryGetNext,
 		MarketDataStorageCache adapterCache, MarketDataStorageCache storageCache,
 		CancellationToken cancellationToken = default)
 	{
@@ -402,43 +405,59 @@ public abstract class BaseOptimizer : BaseLogReceiver
 		HistoryEmulationConnector connector;
 		Guid iterationId;
 
-		using (_sync.EnterScope())
+		// The next strategy is awaited, and a lock cannot be held across that, so the workers take
+		// their turn here and the state is guarded only while it is read and written.
+		using (await _nextLock.LockAsync(cancellationToken))
 		{
-			if (_cancelEmulation || _allIterationsStarted)
+			using (_sync.EnterScope())
 			{
-				CheckFinished();
-				return false;
-			}
+				if (_cancelEmulation || _allIterationsStarted)
+				{
+					CheckFinished();
+					return false;
+				}
 
-			if (!_batchManager.CanStartNext)
-			{
-				_allIterationsStarted = true;
-				CheckFinished();
-				return false;
+				if (!_batchManager.CanStartNext)
+				{
+					_allIterationsStarted = true;
+					CheckFinished();
+					return false;
+				}
 			}
 
 			// Try to get next strategy
 			var pfProvider = new CopyPortfolioProvider(PortfolioProvider);
-			var next = tryGetNext(pfProvider);
+			var next = await tryGetNext(pfProvider, cancellationToken);
 
-			if (next is null)
+			using (_sync.EnterScope())
 			{
-				_allIterationsStarted = true;
-				CheckFinished();
-				return false;
+				if (next is null)
+				{
+					_allIterationsStarted = true;
+					CheckFinished();
+					return false;
+				}
+
+				if (_cancelEmulation)
+				{
+					CheckFinished();
+					return false;
+				}
+
+				(strategy, parameters) = next.Value;
+
+				// Reserve slot in batch
+				if (!_batchManager.TryReserveSlot(out iterationId))
+					return false;
+
+				strategy.Parent ??= this;
+
+				connector = CreateConnector(pfProvider, adapterCache, storageCache, startTime, stopTime);
+				_startedConnectors.Add(connector);
 			}
-
-			(strategy, parameters) = next.Value;
-
-			// Reserve slot in batch
-			if (!_batchManager.TryReserveSlot(out iterationId))
-				return false;
-
-			strategy.Parent ??= this;
-
-			connector = CreateConnector(pfProvider, adapterCache, storageCache, startTime, stopTime);
-			_startedConnectors.Add(connector);
 		}
+
+		await connector.EmulationSettings.LoadAsync(await EmulationSettings.SaveAsync(cancellationToken), cancellationToken);
 
 		var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 		SetupIteration(connector, strategy, parameters, iterationId, tcs);
@@ -485,8 +504,6 @@ public abstract class BaseOptimizer : BaseLogReceiver
 
 			MaxMessageCount = EmulationSettings.MaxMessageCount,
 		};
-
-		connector.EmulationSettings.Load(EmulationSettings.Save());
 
 		return connector;
 	}

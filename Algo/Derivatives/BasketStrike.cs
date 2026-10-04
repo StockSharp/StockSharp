@@ -11,6 +11,8 @@ namespace StockSharp.Algo.Derivatives;
 /// <param name="dataProvider">The market data provider.</param>
 public abstract class BasketStrike(Security underlyingAsset, ISecurityProvider securityProvider, IMarketDataProvider dataProvider) : BasketSecurity
 {
+	private Security[] _derivatives;
+
 	/// <summary>
 	/// The provider of information about instruments.
 	/// </summary>
@@ -26,12 +28,28 @@ public abstract class BasketStrike(Security underlyingAsset, ISecurityProvider s
 	/// </summary>
 	public Security UnderlyingAsset { get; } = underlyingAsset ?? throw new ArgumentNullException(nameof(underlyingAsset));
 
+	/// <summary>
+	/// Derivatives of <see cref="UnderlyingAsset"/> loaded by <see cref="LoadDerivativesAsync"/>.
+	/// </summary>
+	/// <exception cref="InvalidOperationException">The derivatives are not loaded yet.</exception>
+	protected IEnumerable<Security> Derivatives
+		=> _derivatives ?? throw new InvalidOperationException($"{nameof(LoadDerivativesAsync)} must be called first.");
+
+	/// <summary>
+	/// Loads the derivatives of <see cref="UnderlyingAsset"/> the strikes are chosen from.
+	/// Must be called before <see cref="InnerSecurityIds"/> is read.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	public async ValueTask LoadDerivativesAsync(CancellationToken cancellationToken)
+		=> _derivatives = await UnderlyingAsset.GetDerivativesAsync(SecurityProvider, ExpiryDate).ToArrayAsync(cancellationToken);
+
 	/// <inheritdoc />
 	public override IEnumerable<SecurityId> InnerSecurityIds
 	{
 		get
 		{
-			var derivatives = UnderlyingAsset.GetDerivatives(SecurityProvider, ExpiryDate);
+			var derivatives = Derivatives;
 
 			var type = OptionType;
 
@@ -73,7 +91,7 @@ public class OffsetBasketStrike(Security underlyingSecurity, ISecurityProvider s
 	protected override IEnumerable<Security> FilterStrikes(IEnumerable<Security> allStrikes, decimal assetPrice)
 	{
 		if (_strikeStep == 0)
-			_strikeStep = UnderlyingAsset.GetStrikeStep(SecurityProvider, ExpiryDate);
+			_strikeStep = Derivatives.GetStrikeStep();
 
 		allStrikes = [.. allStrikes];
 

@@ -3588,7 +3588,8 @@ public class ExtensionsMethodsTests : BaseTestClass
 
 		protected override ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken) => default;
 
-		public override IMessageAdapter Clone() => new TestMessageAdapter();
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestMessageAdapter());
 	}
 
 	#endregion

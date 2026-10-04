@@ -12,7 +12,10 @@ public class CsvEntityRegistry : AsyncDisposable, IEntityRegistry
 			return item.Name;
 		}
 
-		protected override Exchange Read(FastCsvReader reader)
+		protected override ValueTask<Exchange> ReadAsync(FastCsvReader reader, CancellationToken cancellationToken)
+			=> new(Read(reader));
+
+		private Exchange Read(FastCsvReader reader)
 		{
 			var board = new Exchange
 			{
@@ -57,9 +60,9 @@ public class CsvEntityRegistry : AsyncDisposable, IEntityRegistry
 			return Registry.Exchanges.ReadById(exchangeCode) ?? throw new InvalidOperationException(LocalizedStrings.BoardNotFound.Put(exchangeCode));
 		}
 
-		protected override ExchangeBoard Read(FastCsvReader reader)
+		protected override async ValueTask<ExchangeBoard> ReadAsync(FastCsvReader reader, CancellationToken cancellationToken)
 		{
-			var msg = reader.ReadBoard(Registry.Encoding);
+			var msg = await reader.ReadBoardAsync(Registry.Encoding, cancellationToken);
 
 			var board = msg.ToBoard();
 			board.Exchange = GetExchange(msg.ExchangeCode);
@@ -378,7 +381,10 @@ public class CsvEntityRegistry : AsyncDisposable, IEntityRegistry
 			UpdateCache(_cache[item.ToSecurityId()], item);
 		}
 
-		protected override Security Read(FastCsvReader reader)
+		protected override ValueTask<Security> ReadAsync(FastCsvReader reader, CancellationToken cancellationToken)
+			=> new(Read(reader));
+
+		private Security Read(FastCsvReader reader)
 		{
 			var msg = reader.ReadSecurity();
 
@@ -496,7 +502,10 @@ public class CsvEntityRegistry : AsyncDisposable, IEntityRegistry
 			return item.Name;
 		}
 
-		protected override Portfolio Read(FastCsvReader reader)
+		protected override ValueTask<Portfolio> ReadAsync(FastCsvReader reader, CancellationToken cancellationToken)
+			=> new(Read(reader));
+
+		private Portfolio Read(FastCsvReader reader)
 		{
 			var portfolio = new Portfolio
 			{
@@ -588,7 +597,10 @@ public class CsvEntityRegistry : AsyncDisposable, IEntityRegistry
 			return security ?? throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(id));
 		}
 
-		protected override Position Read(FastCsvReader reader)
+		protected override ValueTask<Position> ReadAsync(FastCsvReader reader, CancellationToken cancellationToken)
+			=> new(Read(reader));
+
+		private Position Read(FastCsvReader reader)
 		{
 			var pfName = reader.ReadString();
 			var secId = reader.ReadString();
@@ -745,7 +757,10 @@ public class CsvEntityRegistry : AsyncDisposable, IEntityRegistry
 			], cancellationToken);
 		}
 
-		protected override MarketDataMessage Read(FastCsvReader reader)
+		protected override ValueTask<MarketDataMessage> ReadAsync(FastCsvReader reader, CancellationToken cancellationToken)
+			=> new(Read(reader));
+
+		private MarketDataMessage Read(FastCsvReader reader)
 		{
 			reader.Skip();
 

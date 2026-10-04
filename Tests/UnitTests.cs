@@ -549,15 +549,15 @@ public class UnitTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void LoadSaveTest()
+	public async Task LoadSaveTest()
 	{
 		var storage = new SettingsStorage();
 		var unit = new Unit(200m, UnitTypes.Percent);
 
-		unit.Save(storage);
+		await unit.SaveAsync(storage, CancellationToken);
 
 		var loadedUnit = new Unit();
-		loadedUnit.Load(storage);
+		await loadedUnit.LoadAsync(storage, CancellationToken);
 
 		loadedUnit.AssertEqual(unit);
 	}

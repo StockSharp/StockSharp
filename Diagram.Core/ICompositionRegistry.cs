@@ -23,8 +23,9 @@ public interface ICompositionRegistry
 	/// <param name="storage">Settings storage.</param>
 	/// <param name="includeCoordinates">Include coordinates.</param>
 	/// <param name="password">Password.</param>
-	/// <returns>Settings storage.</returns>
-	void Serialize(CompositionDiagramElement element, SettingsStorage storage, bool includeCoordinates, SecureString password);
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	ValueTask SerializeAsync(CompositionDiagramElement element, SettingsStorage storage, bool includeCoordinates, SecureString password, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// To deserialize the composite element.
@@ -32,8 +33,9 @@ public interface ICompositionRegistry
 	/// <param name="element"><see cref="CompositionDiagramElement"/></param>
 	/// <param name="storage">Settings storage.</param>
 	/// <param name="getPassword">Get password handler.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Is encryption used.</returns>
-	bool Deserialize(CompositionDiagramElement element, SettingsStorage storage, Func<SecureString> getPassword);
+	ValueTask<bool> DeserializeAsync(CompositionDiagramElement element, SettingsStorage storage, Func<SecureString> getPassword, CancellationToken cancellationToken);
 
 	/// <summary>
 	/// Create <see cref="CompositionDiagramElement"/> instance.
@@ -89,13 +91,24 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 			if (!_notLoadedElements.TryGetAndRemove(item.TypeId, out var list))
 				return;
 
+			// the list raises the event synchronously, so the elements that waited for this type load in the background
 			foreach (var (element, settings) in list)
-			{
-				var clone = item.Clone(false);
-				clone.Load(settings);
-				element.Element = clone;
-			}
+				_ = LoadNotLoadedAsync(item, element, settings);
 		};
+	}
+
+	private static async Task LoadNotLoadedAsync(DiagramElement template, TNode node, SettingsStorage settings)
+	{
+		try
+		{
+			var clone = await template.CloneAsync(false, default);
+			await clone.LoadAsync(settings, default);
+			node.Element = clone;
+		}
+		catch (Exception ex)
+		{
+			ex.LogError();
+		}
 	}
 
 	private CompositionModel<TNode, TLink> CreateModel() => new(_createBehavior());
@@ -104,12 +117,12 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 	public CompositionDiagramElement CreateComposition() => new(CreateModel());
 
 	/// <inheritdoc />
-	public void Serialize(CompositionDiagramElement element, SettingsStorage container, bool includeCoordinates, SecureString password)
+	public async ValueTask SerializeAsync(CompositionDiagramElement element, SettingsStorage container, bool includeCoordinates, SecureString password, CancellationToken cancellationToken)
 	{
 		if (element is null)	throw new ArgumentNullException(nameof(element));
 		if (container is null)	throw new ArgumentNullException(nameof(container));
 
-		var settings = SaveElement(element, includeCoordinates);
+		var settings = await SaveElementAsync(element, includeCoordinates, cancellationToken);
 
 		container.Set(Keys.Version, _minVersion.ToString());
 
@@ -119,8 +132,7 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 		}
 		else
 		{
-			var encryptedStr = settings
-				.SerializeInvariant()
+			var encryptedStr = (await settings.SerializeInvariantAsync(true, cancellationToken))
 				.Encrypt(password.UnSecure(), _initVectorBytes, _initVectorBytes)
 				.Base64();
 
@@ -131,7 +143,7 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 	}
 
 	/// <inheritdoc />
-	public bool Deserialize(CompositionDiagramElement element, SettingsStorage container, Func<SecureString> getPassword)
+	public async ValueTask<bool> DeserializeAsync(CompositionDiagramElement element, SettingsStorage container, Func<SecureString> getPassword, CancellationToken cancellationToken)
 	{
 		if (element is null)		throw new ArgumentNullException(nameof(element));
 		if (container is null)		throw new ArgumentNullException(nameof(container));
@@ -154,18 +166,18 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 		{
 			var scheme = container.GetValue<string>(Keys.Scheme);
 
-			storage = scheme
+			storage = await scheme
 				.Base64()
 				.Decrypt(getPassword().UnSecure(), _initVectorBytes, _initVectorBytes)
-				.DeserializeInvariant();
+				.DeserializeInvariantAsync(cancellationToken);
 		}
 
-		LoadElement(element, storage);
+		await LoadElementAsync(element, storage, cancellationToken);
 
 		return isEncrypted;
 	}
 
-	private void LoadElement(CompositionDiagramElement element, SettingsStorage storage)
+	private async Task LoadElementAsync(CompositionDiagramElement element, SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (element is null)
 			throw new ArgumentNullException(nameof(element));
@@ -176,11 +188,11 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 		element.SchemaVersion = storage.GetValue(nameof(element.SchemaVersion), element.SchemaVersion);
 		element.Category = storage.GetValue(nameof(element.Category), string.Empty);
 		element.DocUrl = storage.GetValue(nameof(element.DocUrl), string.Empty);
-		element.Model = DeserializeModel(storage.GetValue<SettingsStorage>(nameof(element.Model)));
-		element.Load(storage, Keys.Composition);
+		element.Model = await DeserializeModelAsync(storage.GetValue<SettingsStorage>(nameof(element.Model)), cancellationToken);
+		await element.LoadAsync(storage.GetValue<SettingsStorage>(Keys.Composition), cancellationToken);
 	}
 
-	private SettingsStorage SaveElement(CompositionDiagramElement element, bool includeCoordinates)
+	private async Task<SettingsStorage> SaveElementAsync(CompositionDiagramElement element, bool includeCoordinates, CancellationToken cancellationToken)
 	{
 		if (element is null)
 			throw new ArgumentNullException(nameof(element));
@@ -191,16 +203,16 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 			.Set(nameof(element.SchemaVersion), element.SchemaVersion)
 			.Set(nameof(element.Category), element.Category)
 			.Set(nameof(element.DocUrl), element.DocUrl)
-			.Set(Keys.Composition, element.Save())
-			.Set(nameof(element.Model), SerializeModel((CompositionModel<TNode, TLink>)element.Model, includeCoordinates))
+			.Set(Keys.Composition, await element.SaveAsync(cancellationToken))
+			.Set(nameof(element.Model), await SerializeModelAsync((CompositionModel<TNode, TLink>)element.Model, includeCoordinates, cancellationToken))
 		;
 
 		return storage;
 	}
 
-	private SettingsStorage SerializeModel(CompositionModel<TNode, TLink> model, bool includeCoordinates)
+	private async Task<SettingsStorage> SerializeModelAsync(CompositionModel<TNode, TLink> model, bool includeCoordinates, CancellationToken cancellationToken)
 	{
-		SettingsStorage SerializeNode(TNode item)
+		async Task<SettingsStorage> SerializeNodeAsync(TNode item)
 		{
 			var storage = new SettingsStorage();
 
@@ -221,7 +233,7 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 			{
 				storage
 					.Set(Keys.TypeId, item.Element.TypeId)
-					.Set(Keys.Settings, item.Element.Save());
+					.Set(Keys.Settings, await item.Element.SaveAsync(cancellationToken));
 			}
 			else
 			{
@@ -246,16 +258,21 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 			.Set(nameof(item.ToPort), item.ToPort)
 		;
 
+		var nodes = new List<SettingsStorage>();
+
+		foreach (var node in model.Nodes)
+			nodes.Add(await SerializeNodeAsync(node));
+
 		return new SettingsStorage()
-			.Set(nameof(model.Nodes), model.Nodes.Select(SerializeNode).ToArray())
+			.Set(nameof(model.Nodes), nodes.ToArray())
 			.Set(nameof(model.Links), model.Links.Select(SerializeLink).ToArray());
 	}
 
-	private ICompositionModel DeserializeModel(SettingsStorage storage)
+	private async Task<ICompositionModel> DeserializeModelAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		var model = CreateModel();
 
-		TNode DeserializeNode(SettingsStorage storage)
+		async Task<TNode> DeserializeNodeAsync(SettingsStorage storage)
 		{
 			void AddNotLoadedElement(Guid typeId, TNode baseElement, SettingsStorage settings, string error)
 			{
@@ -292,10 +309,10 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 				{
 					try
 					{
-						element = element.Clone(false);
+						element = await element.CloneAsync(false, cancellationToken);
 
 						if (settings != null)
-							element.Load(settings);
+							await element.LoadAsync(settings, cancellationToken);
 
 						baseElement.Element = element;
 					}
@@ -314,7 +331,7 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 				var settings = storage.GetValue<SettingsStorage>(Keys.ElementModel);
 				var element = CreateComposition();
 
-				LoadElement(element, settings);
+				await LoadElementAsync(element, settings, cancellationToken);
 
 				baseElement.Element = element;
 			}
@@ -330,9 +347,14 @@ public class CompositionRegistry<TNode, TLink> : ICompositionRegistry
 			ToPort = storage.GetValue<string>(nameof(ICompositionModelLink.ToPort))
 		};
 
+		var nodes = new List<TNode>();
+
+		foreach (var nodeStorage in storage.GetValue<SettingsStorage[]>(nameof(model.Nodes)))
+			nodes.Add(await DeserializeNodeAsync(nodeStorage));
+
 		model.ExecuteTransaction("Load", m =>
 		{
-			m.Nodes = new ObservableCollection<TNode>(storage.GetValue<SettingsStorage[]>(nameof(m.Nodes)).Select(DeserializeNode));
+			m.Nodes = new ObservableCollection<TNode>(nodes);
 			m.Links = new ObservableCollection<TLink>(storage.GetValue<SettingsStorage[]>(nameof(m.Links)).Select(DeserializeLink));
 		});
 

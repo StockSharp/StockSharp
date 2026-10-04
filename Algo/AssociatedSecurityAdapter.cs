@@ -182,9 +182,10 @@ public class AssociatedSecurityAdapter(IMessageAdapter innerAdapter) : MessageAd
 	/// <summary>
 	/// Create a copy of <see cref="AssociatedSecurityAdapter"/>.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Copy.</returns>
-	public override IMessageAdapter Clone()
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
 	{
-		return new AssociatedSecurityAdapter(InnerAdapter.TypedClone());
+		return new AssociatedSecurityAdapter(await InnerAdapter.CloneAsync(cancellationToken));
 	}
 }

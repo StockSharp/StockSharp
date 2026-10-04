@@ -89,13 +89,11 @@ public class ChartingInterfacesCompatibilityTests : BaseTestClass
 		public string SubDayTextFormatting { get; set; }
 		public TimeZoneInfo TimeZone { get; set; }
 
-		public void Load(SettingsStorage storage)
-		{
-		}
+		public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+			=> Task.CompletedTask;
 
-		public void Save(SettingsStorage storage)
-		{
-		}
+		public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+			=> Task.CompletedTask;
 
 		void INotifyPropertyChangedEx.NotifyPropertyChanged(string propertyName)
 		{

@@ -1251,7 +1251,7 @@ public class RemoteStorageClientTests : BaseTestClass
 	#region RemoteMarketDataDrive Save/Load Tests
 
 	[TestMethod]
-	public void Drive_SaveLoad_PreservesSettings()
+	public async Task Drive_SaveLoad_PreservesSettings()
 	{
 		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
 		using var drive = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter);
@@ -1265,12 +1265,12 @@ public class RemoteStorageClientTests : BaseTestClass
 
 		// Save
 		var storage = new SettingsStorage();
-		drive.Save(storage);
+		await drive.SaveAsync(storage, CancellationToken);
 
 		// Create new drive and load
 		var adapter2 = new MockRemoteAdapter(new IncrementalIdGenerator());
 		using var drive2 = new RemoteMarketDataDrive(RemoteMarketDataDrive.DefaultAddress, adapter2);
-		drive2.Load(storage);
+		await drive2.LoadAsync(storage, CancellationToken);
 
 		// Verify
 		AreEqual("CustomTarget", drive2.TargetCompId);

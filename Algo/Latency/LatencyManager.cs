@@ -100,28 +100,29 @@ public class LatencyManager(ILatencyManagerState state) : ILatencyManager
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public void Load(SettingsStorage storage)
-	{
-	}
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		=> Task.CompletedTask;
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Storage.</param>
-	public void Save(SettingsStorage storage)
-	{
-	}
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
+		=> Task.CompletedTask;
 
 	/// <summary>
 	/// Creates a clone of this manager with new state.
 	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
 	/// <returns>Cloned manager.</returns>
-	public ILatencyManager Clone()
+	public async ValueTask<ILatencyManager> CloneAsync(CancellationToken cancellationToken)
 	{
 		var clone = new LatencyManager(_state.GetType().CreateInstance<ILatencyManagerState>());
-		clone.Load(this.Save());
+		await clone.LoadAsync(await this.SaveAsync(cancellationToken), cancellationToken);
 		return clone;
 	}
-
-	object ICloneable.Clone() => Clone();
 }

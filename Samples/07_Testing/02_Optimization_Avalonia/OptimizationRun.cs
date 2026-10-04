@@ -3,6 +3,7 @@ namespace StockSharp.Samples.Testing.Optimization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -244,17 +245,17 @@ internal sealed class OptimizationRun : IAsyncDisposable
 			if (_mode == OptimizationMode.BruteForce)
 			{
 				var optimizer = (BruteForceOptimizer)_optimizer;
-				IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies;
+				IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> strategies;
 
 				if (randomMode)
-					strategies = _seedStrategy.ToBruteForceRandom(OptimizeParameters, randomCount, out _, out total);
+					strategies = _seedStrategy.ToBruteForceRandomAsync(OptimizeParameters, randomCount, out _, out total);
 				else
-					strategies = _seedStrategy.ToBruteForce(OptimizeParameters, out _, out total);
+					strategies = _seedStrategy.ToBruteForceAsync(OptimizeParameters, out _, out total);
 
 				total = Math.Min(total, _optimizer.EmulationSettings.MaxIterations);
 				TotalIterationsKnown?.Invoke(total);
 				await foreach (var (strategy, _) in optimizer
-					.RunAsync(_startTime, _stopTime, Track(strategies), token)
+					.RunAsync(_startTime, _stopTime, TrackAsync(strategies, token), token)
 					.WithCancellation(token))
 				{
 					Track(strategy);
@@ -266,7 +267,7 @@ internal sealed class OptimizationRun : IAsyncDisposable
 			{
 				var optimizer = (GeneticOptimizer)_optimizer;
 				TotalIterationsKnown?.Invoke(total);
-				optimizer.Settings.Apply(_geneticSettings);
+				await optimizer.Settings.ApplyAsync(_geneticSettings, cancellationToken);
 				var longParam = OptimizeParameters.Single(parameter => parameter.Id == nameof(SmaStrategy.LongSma));
 				var shortParam = OptimizeParameters.Single(parameter => parameter.Id == nameof(SmaStrategy.ShortSma));
 				var timeFrameParam = OptimizeParameters.Single(parameter => parameter.Id == nameof(SmaStrategy.CandleTimeFrame));
@@ -300,10 +301,11 @@ internal sealed class OptimizationRun : IAsyncDisposable
 	public Task ResumeAsync()
 		=> _optimizer.Resume();
 
-	private IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> Track(
-		IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> source)
+	private async IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> TrackAsync(
+		IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> source,
+		[EnumeratorCancellation] CancellationToken cancellationToken)
 	{
-		foreach (var item in source)
+		await foreach (var item in source.WithCancellation(cancellationToken))
 		{
 			Track(item.strategy);
 			yield return item;

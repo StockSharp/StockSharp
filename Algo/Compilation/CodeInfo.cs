@@ -6,7 +6,7 @@ using Ecng.Reflection;
 /// <summary>
 /// Code info.
 /// </summary>
-public class CodeInfo : NotifiableObject, IPersistable, IDisposable
+public class CodeInfo : NotifiableObject, IAsyncPersistable, IDisposable
 {
 	private ICompilerContext _context;
 
@@ -337,7 +337,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	}
 
 	/// <inheritdoc />
-	public void Load(SettingsStorage storage)
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Id = storage.GetValue(nameof(Id), Id);
 		Name = storage.GetValue(nameof(Name), Name);
@@ -350,7 +350,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 
 		var asmRefs = storage.GetValue<IEnumerable<SettingsStorage>>(nameof(AssemblyReferences)) ?? storage.GetValue<IEnumerable<SettingsStorage>>("References");
 		if (asmRefs is not null)
-			_assemblyReferences.AddRange(asmRefs.Select(s => s.Load<AssemblyReference>()));
+			_assemblyReferences.AddRange(await asmRefs.LoadAllAsync<AssemblyReference>(cancellationToken));
 
 		// TODO 2025-02-04 Remove 1 year later
 		var oldLogging = _assemblyReferences.Cache.FirstOrDefault(r => r.FileName.EqualsIgnoreCase("StockSharp.Logging.dll"));
@@ -363,7 +363,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 		_nugetReferences.Clear();
 
 		if (storage.ContainsKey(nameof(NuGetReferences)))
-			_nugetReferences.AddRange(storage.GetValue<IEnumerable<SettingsStorage>>(nameof(NuGetReferences)).Select(s => s.Load<NuGetReference>()));
+			_nugetReferences.AddRange(await storage.GetValue<IEnumerable<SettingsStorage>>(nameof(NuGetReferences)).LoadAllAsync<NuGetReference>(cancellationToken));
 
 		_projectReferences.Clear();
 
@@ -378,7 +378,7 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 	}
 
 	/// <inheritdoc />
-	public void Save(SettingsStorage storage)
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage
 			.Set(nameof(Id), Id)
@@ -387,8 +387,8 @@ public class CodeInfo : NotifiableObject, IPersistable, IDisposable
 			.Set(nameof(ExtraSources), ExtraSources)
 			.Set(nameof(Text), Text)
 			.Set(nameof(ModuleName), ModuleName)
-			.Set(nameof(AssemblyReferences), _assemblyReferences.Cache.Select(r => r.Save()).ToArray())
-			.Set(nameof(NuGetReferences), _nugetReferences.Cache.Select(r => r.Save()).ToArray())
+			.Set(nameof(AssemblyReferences), await _assemblyReferences.Cache.SaveAllAsync(cancellationToken))
+			.Set(nameof(NuGetReferences), await _nugetReferences.Cache.SaveAllAsync(cancellationToken))
 			.Set(nameof(ProjectReferences), _projectReferences.Cache.Select(r => r.Id).ToArray())
 		;
 	}

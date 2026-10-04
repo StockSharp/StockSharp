@@ -8,7 +8,7 @@ using Ecng.Net;
 /// <summary>
 /// <see cref="IMarketDataDrive"/> cache.
 /// </summary>
-public class DriveCache : Disposable, IPersistable
+public class DriveCache : Disposable, IAsyncPersistable
 {
 	private class PathComparer : IEqualityComparer<PathPair>
 	{
@@ -152,12 +152,14 @@ public class DriveCache : Disposable, IPersistable
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		var drives = storage
-			.GetValue<IEnumerable<SettingsStorage>>(nameof(Drives))
-			.Select(s => s.LoadEntire<IMarketDataDrive>())
-			.ToArray();
+		var drives = new List<IMarketDataDrive>();
+
+		foreach (var s in storage.GetValue<IEnumerable<SettingsStorage>>(nameof(Drives)))
+			drives.Add(await s.LoadEntireAsync<IMarketDataDrive>(cancellationToken));
 
 		using (_drives.EnterScope())
 		{
@@ -170,9 +172,16 @@ public class DriveCache : Disposable, IPersistable
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		storage.SetValue(nameof(Drives), Drives.Select(s => s.SaveEntire(false)).ToArray());
+		var drives = new List<SettingsStorage>();
+
+		foreach (var drive in Drives)
+			drives.Add(await drive.SaveEntireAsync(false, cancellationToken));
+
+		storage.SetValue(nameof(Drives), drives.ToArray());
 	}
 
 	/// <summary>

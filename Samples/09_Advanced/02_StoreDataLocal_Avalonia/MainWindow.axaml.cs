@@ -1,6 +1,7 @@
 namespace StockSharp.Samples.Advanced.SaveDataLocal;
 
 using System;
+using System.Threading;
 
 using Avalonia.Controls;
 
@@ -32,8 +33,8 @@ public partial class MainWindow : Window
 		}
 	}
 
-	private void OnOpened(object sender, EventArgs e)
-		=> _workspace.Open();
+	private async void OnOpened(object sender, EventArgs e)
+		=> await _workspace.OpenAsync(CancellationToken.None);
 
 	private void OnClosed(object sender, EventArgs e)
 	{

@@ -3,7 +3,7 @@
 using StockSharp.Algo.Slippage;
 
 [TestClass]
-public class SlippageTests
+public class SlippageTests : BaseTestClass
 {
 	private static readonly SecurityId _secId = Helper.CreateSecurityId();
 
@@ -320,7 +320,7 @@ public class SlippageTests
 	}
 
 	[TestMethod]
-	public void SaveLoadSettings()
+	public async Task SaveLoadSettings()
 	{
 		var mgr = new SlippageManager(new SlippageManagerState())
 		{
@@ -328,14 +328,14 @@ public class SlippageTests
 		};
 
 		var storage = new SettingsStorage();
-		mgr.Save(storage);
+		await mgr.SaveAsync(storage, CancellationToken);
 
 		var mgr2 = new SlippageManager(new SlippageManagerState())
 		{
 			CalculateNegative = true
 		};
 
-		mgr2.Load(storage);
+		await mgr2.LoadAsync(storage, CancellationToken);
 
 		mgr2.CalculateNegative.AssertFalse();
 	}

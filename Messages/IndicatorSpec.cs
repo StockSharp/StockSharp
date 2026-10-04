@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 /// </remarks>
 [DataContract]
 [Serializable]
-public class IndicatorSpec : Equatable<IndicatorSpec>, IPersistable
+public class IndicatorSpec : Equatable<IndicatorSpec>, IAsyncPersistable
 {
 	private static readonly IReadOnlyDictionary<string, object> _noParameters
 		= new ReadOnlyDictionary<string, object>(new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase));
@@ -152,13 +152,15 @@ public class IndicatorSpec : Equatable<IndicatorSpec>, IPersistable
 		};
 
 	/// <inheritdoc />
-	public void Load(SettingsStorage storage)
+	public async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
 
 		Kind = storage.GetValue<string>(nameof(Kind));
-		CandleType = storage.GetValue<SettingsStorage>(nameof(CandleType))?.Load<DataType>();
+		CandleType = storage.GetValue<SettingsStorage>(nameof(CandleType)) is { } candleType
+			? await candleType.LoadAsync<DataType>(cancellationToken)
+			: null;
 
 		var parameters = storage.GetValue<SettingsStorage>(nameof(Parameters));
 
@@ -168,13 +170,13 @@ public class IndicatorSpec : Equatable<IndicatorSpec>, IPersistable
 	}
 
 	/// <inheritdoc />
-	public void Save(SettingsStorage storage)
+	public async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
 
 		storage.SetValue(nameof(Kind), Kind);
-		storage.SetValue(nameof(CandleType), CandleType?.Save());
+		storage.SetValue(nameof(CandleType), CandleType is null ? null : await CandleType.SaveAsync(cancellationToken));
 
 		var parameters = new SettingsStorage();
 

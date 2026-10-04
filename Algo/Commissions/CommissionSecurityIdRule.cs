@@ -10,8 +10,9 @@ namespace StockSharp.Algo.Commissions;
 	GroupName = LocalizedStrings.SecuritiesKey)]
 public class CommissionSecurityIdRule : CommissionRule
 {
+	private const string _storageKey = "Security";
+
 	private SecurityId? _securityId;
-	private Security _security;
 
 	/// <summary>
 	/// Security ID.
@@ -21,13 +22,12 @@ public class CommissionSecurityIdRule : CommissionRule
 		Name = LocalizedStrings.SecurityIdKey,
 		Description = LocalizedStrings.SecurityIdKey,
 		GroupName = LocalizedStrings.GeneralKey)]
-	public Security Security
+	public SecurityId? SecurityId
 	{
-		get => _security;
+		get => _securityId;
 		set
 		{
-			_security = value;
-			_securityId = _security?.ToSecurityId();
+			_securityId = value;
 			UpdateTitle();
 		}
 	}
@@ -36,7 +36,10 @@ public class CommissionSecurityIdRule : CommissionRule
 	protected override string GetTitle() => (_securityId?.ToStringId()).IsEmpty(LocalizedStrings.NoSecurities);
 
 	/// <inheritdoc />
-	protected override decimal? OnProcess(ExecutionMessage message)
+	protected override ValueTask<decimal?> OnProcessAsync(ExecutionMessage message, CancellationToken cancellationToken)
+		=> new(Calculate(message));
+
+	private decimal? Calculate(ExecutionMessage message)
 	{
 		if (message.HasTradeInfo() && message.SecurityId == _securityId)
 			return GetValue(message.TradePrice, message.TradeVolume);
@@ -45,36 +48,21 @@ public class CommissionSecurityIdRule : CommissionRule
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		if (_securityId != null)
-			storage.SetValue(nameof(Security), _securityId.Value.ToStringId());
+			storage.SetValue(_storageKey, _securityId.Value.ToStringId());
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
-		Security = null;
+		var secId = storage.GetValue<string>(_storageKey);
 
-		if (storage.Contains(nameof(Security)))
-		{
-			var secId = storage.GetValue<string>(nameof(Security));
-
-			if (!secId.IsEmpty())
-			{
-				_securityId = secId.ToSecurityId();
-
-				var secProvider = ServicesRegistry.TrySecurityProvider;
-
-				if (secProvider is not null)
-					_security = secProvider.LookupById(secId);
-
-				UpdateTitle();
-			}
-		}
+		SecurityId = secId.IsEmpty() ? null : secId.ToSecurityId();
 	}
 }

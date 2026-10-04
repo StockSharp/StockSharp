@@ -73,7 +73,7 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void PermissionCredentials_SaveLoad_PreservesData()
+	public async Task PermissionCredentials_SaveLoad_PreservesData()
 	{
 		var original = new PermissionCredentials
 		{
@@ -97,10 +97,10 @@ public class PermissionsTests : BaseTestClass
 		original.Permissions[UserPermissions.Trading] = dict;
 
 		var storage = new SettingsStorage();
-		original.Save(storage);
+		await original.SaveAsync(storage, CancellationToken);
 
 		var loaded = new PermissionCredentials();
-		loaded.Load(storage);
+		await loaded.LoadAsync(storage, CancellationToken);
 
 		loaded.Email.AssertEqual(original.Email);
 		loaded.Password.IsEqualTo(original.Password).AssertTrue();
@@ -124,7 +124,7 @@ public class PermissionsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void PermissionCredentials_SaveLoad_EmptyPermissions()
+	public async Task PermissionCredentials_SaveLoad_EmptyPermissions()
 	{
 		var original = new PermissionCredentials
 		{
@@ -134,10 +134,10 @@ public class PermissionsTests : BaseTestClass
 		};
 
 		var storage = new SettingsStorage();
-		original.Save(storage);
+		await original.SaveAsync(storage, CancellationToken);
 
 		var loaded = new PermissionCredentials();
-		loaded.Load(storage);
+		await loaded.LoadAsync(storage, CancellationToken);
 
 		loaded.Permissions.Count.AssertEqual(0);
 		loaded.IpRestrictions.Count().AssertEqual(0);

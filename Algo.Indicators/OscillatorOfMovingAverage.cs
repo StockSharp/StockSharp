@@ -93,18 +93,18 @@ public class OscillatorOfMovingAverage : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(ShortPeriod), ShortPeriod);
 		storage.SetValue(nameof(LongPeriod), LongPeriod);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		ShortPeriod = storage.GetValue<int>(nameof(ShortPeriod));
 		LongPeriod = storage.GetValue<int>(nameof(LongPeriod));

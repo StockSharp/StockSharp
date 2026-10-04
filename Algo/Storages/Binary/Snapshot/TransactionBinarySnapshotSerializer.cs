@@ -13,7 +13,42 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 
 	string ISnapshotSerializer<string, ExecutionMessage>.Name => "Transactions";
 
-	byte[] ISnapshotSerializer<string, ExecutionMessage>.Serialize(Version version, ExecutionMessage message)
+	async ValueTask<byte[]> ISnapshotSerializer<string, ExecutionMessage>.SerializeAsync(Version version, ExecutionMessage message, CancellationToken cancellationToken)
+	{
+		// Ranges and persistable values are serialized up front: the span writer below cannot live across an await.
+		var serializedParams = new Dictionary<string, byte[]>();
+
+		foreach (var (name, value) in message?.Condition?.Parameters.ToArray() ?? [])
+		{
+			SettingsStorage storage;
+
+			switch (value)
+			{
+				case IRange r:
+					storage = new SettingsStorage();
+
+					if (r.HasMinValue)
+						storage.SetValue("Min", await r.MinObj.ToStorageAsync(false, cancellationToken));
+
+					if (r.HasMaxValue)
+						storage.SetValue("Max", await r.MaxObj.ToStorageAsync(false, cancellationToken));
+
+					break;
+				case IAsyncPersistable p:
+					storage = await p.SaveAsync(cancellationToken);
+					break;
+				default:
+					continue;
+			}
+
+			if (storage.Count > 0)
+				serializedParams[name] = await storage.SerializeAsync(true, cancellationToken);
+		}
+
+		return Serialize(version, message, serializedParams);
+	}
+
+	private static byte[] Serialize(Version version, ExecutionMessage message, Dictionary<string, byte[]> serializedParams)
 	{
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));
@@ -298,18 +333,9 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 					writer.WriteSpan(stringValue);
 					break;
 
-				case IRange r:
+				case IRange:
 				{
-					var storage = new SettingsStorage();
-
-					if (r.HasMinValue)
-						storage.SetValue("Min", r.MinObj.ToStorage());
-
-					if (r.HasMaxValue)
-						storage.SetValue("Max", r.MaxObj.ToStorage());
-
-					if (storage.Count > 0)
-						stringValue = storage.Serialize();
+					stringValue = serializedParams.TryGetValue(conParam.Key);
 
 					writer.WriteByte((byte)TypeCode.String);
 					writer.WriteInt32(stringValue?.Length ?? 0);
@@ -318,12 +344,9 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 					break;
 				}
 
-				case IPersistable p:
+				case IAsyncPersistable:
 				{
-					var storage = p.Save();
-
-					if (storage.Count > 0)
-						stringValue = storage.Serialize();
+					stringValue = serializedParams.TryGetValue(conParam.Key);
 
 					writer.WriteByte((byte)TypeCode.String);
 					writer.WriteInt32(stringValue?.Length ?? 0);
@@ -344,7 +367,48 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 		return writer.GetWrittenSpan().ToArray();
 	}
 
-	ExecutionMessage ISnapshotSerializer<string, ExecutionMessage>.Deserialize(Version version, byte[] buffer)
+	async ValueTask<ExecutionMessage> ISnapshotSerializer<string, ExecutionMessage>.DeserializeAsync(Version version, byte[] buffer, CancellationToken cancellationToken)
+	{
+		var (execMsg, serialized) = Parse(version, buffer);
+
+		foreach (var (paramName, paramType, bytes) in serialized)
+		{
+			try
+			{
+				var storage = await bytes.DeserializeAsync<SettingsStorage>(cancellationToken)
+					?? throw new InvalidOperationException($"unable to deserialize the value of '{paramName}'");
+
+				execMsg.Condition.Parameters.Add(paramName, (await ToParamValueAsync(paramType, storage, cancellationToken)).To(paramType));
+			}
+			catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+			{
+				ex.LogError();
+			}
+		}
+
+		return execMsg;
+	}
+
+	private static async ValueTask<object> ToParamValueAsync(Type paramType, SettingsStorage storage, CancellationToken cancellationToken)
+	{
+		if (paramType.IsPersistable())
+			return await storage.LoadAsync(paramType, cancellationToken);
+
+		var range = paramType.CreateInstance<IRange>();
+
+		if (storage.ContainsKey("Min"))
+			range.MinObj = await storage.GetValue<SettingsStorage>("Min").FromStorageAsync(cancellationToken);
+
+		if (storage.ContainsKey("Max"))
+			range.MaxObj = await storage.GetValue<SettingsStorage>("Max").FromStorageAsync(cancellationToken);
+
+		return range;
+	}
+
+	// Condition parameters holding a persistable or a range are kept in the serializer's own format,
+	// which is read asynchronously; the reader over the buffer cannot live across that, so those values
+	// are handed back still serialized.
+	private static (ExecutionMessage Message, List<(string Name, Type Type, byte[] Bytes)> Serialized) Parse(Version version, byte[] buffer)
 	{
 		if (version == null)
 			throw new ArgumentNullException(nameof(version));
@@ -559,6 +623,7 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 		}
 
 		var conditionParamsCount = reader.ReadInt32();
+		var serialized = new List<(string Name, Type Type, byte[] Bytes)>();
 
 		for (var i = 0; i < conditionParamsCount; i++)
 		{
@@ -608,23 +673,10 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 						}
 						else if (strBytes is not null)
 						{
-							if (paramType.IsPersistable())
+							if (paramType.IsPersistable() || paramType.Is<IRange>())
 							{
-								value = strBytes.Deserialize<SettingsStorage>()?.Load(paramType) ?? throw new InvalidOperationException("unable to deserialize param value");
-							}
-							else if (paramType.Is<IRange>())
-							{
-								var range = paramType.CreateInstance<IRange>();
-
-								var storage = strBytes.Deserialize<SettingsStorage>() ?? throw new InvalidOperationException("unable to deserialize IRange param value");
-
-								if (storage.ContainsKey("Min"))
-									range.MinObj = storage.GetValue<SettingsStorage>("Min").FromStorage();
-
-								if (storage.ContainsKey("Max"))
-									range.MaxObj = storage.GetValue<SettingsStorage>("Max").FromStorage();
-
-								value = range;
+								serialized.Add((paramName, paramType, strBytes));
+								value = null;
 							}
 							else
 							{
@@ -653,7 +705,7 @@ public class TransactionBinarySnapshotSerializer : ISnapshotSerializer<string, E
 			}
 		}
 
-		return execMsg;
+		return (execMsg, serialized);
 	}
 
 	string ISnapshotSerializer<string, ExecutionMessage>.GetKey(ExecutionMessage message)

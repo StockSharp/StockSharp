@@ -10,7 +10,7 @@ namespace StockSharp.BusinessEntities;
 [KnownType(typeof(TimeZoneInfo.AdjustmentRule[]))]
 [KnownType(typeof(TimeZoneInfo.TransitionTime))]
 [KnownType(typeof(DayOfWeek))]
-public partial class Exchange : Equatable<Exchange>, IPersistable, INotifyPropertyChanged
+public partial class Exchange : Equatable<Exchange>, IAsyncPersistable, INotifyPropertyChanged
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Exchange"/>.
@@ -132,21 +132,29 @@ public partial class Exchange : Equatable<Exchange>, IPersistable, INotifyProper
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		Name = storage.GetValue<string>(nameof(Name));
 		FullNameLoc = storage.GetValue<string>(nameof(FullNameLoc));
 		CountryCode = storage.GetValue<CountryCodes?>(nameof(CountryCode));
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
 		storage.SetValue(nameof(Name), Name);
 		storage.SetValue(nameof(FullNameLoc), FullNameLoc);
 		storage.SetValue(nameof(CountryCode), CountryCode.To<string>());
+
+		return Task.CompletedTask;
 	}
 }

@@ -218,7 +218,7 @@ public class StrategyNameGeneratorTests : BaseTestClass
 	/// comes back named after whatever instrument and portfolio it happens to hold.
 	/// </summary>
 	[TestMethod]
-	public void ANameTheCallerGaveSurvivesTheRoundTrip()
+	public async Task ANameTheCallerGaveSurvivesTheRoundTrip()
 	{
 		var s = new MyTestStrategy
 		{
@@ -227,10 +227,10 @@ public class StrategyNameGeneratorTests : BaseTestClass
 			Name = "Overnight carry",
 		};
 
-		var storage = s.Save();
+		var storage = await s.SaveAsync(CancellationToken);
 
 		var restored = new MyTestStrategy();
-		restored.Load(storage);
+		await restored.LoadAsync(storage, CancellationToken);
 
 		// Assigned after the load, as a strategy being put back to work is: the generator must not
 		// take the name back off a strategy that was named by hand.
@@ -246,12 +246,12 @@ public class StrategyNameGeneratorTests : BaseTestClass
 	/// trip, rather than freezing on whatever it was called when it was put away.
 	/// </summary>
 	[TestMethod]
-	public void AStrategyNobodyNamedKeepsGeneratingAfterTheRoundTrip()
+	public async Task AStrategyNobodyNamedKeepsGeneratingAfterTheRoundTrip()
 	{
 		var s = new MyTestStrategy();
 
 		var restored = new MyTestStrategy();
-		restored.Load(s.Save());
+		await restored.LoadAsync(await s.SaveAsync(CancellationToken), CancellationToken);
 
 		restored.Security = Helper.CreateStorageSecurity();
 

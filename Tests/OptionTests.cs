@@ -611,7 +611,7 @@ public class OptionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Synthetic_BuyCall_IsLongUnderlyingPlusLongPut()
+	public async Task Synthetic_BuyCall_IsLongUnderlyingPlusLongPut()
 	{
 		var expiration = new DateTime(2024, 7, 1).UtcKind();
 		var underlying = CreateUnderlying();
@@ -623,7 +623,7 @@ public class OptionTests : BaseTestClass
 
 		// Put-call parity: a long call is a long underlying plus a long put of the same strike and expiry,
 		// so the decoy strike and the decoy series must both be passed over.
-		var legs = new Synthetic(call, provider).Buy();
+		var legs = await new Synthetic(call, provider).BuyAsync(CancellationToken);
 
 		legs.Length.AssertEqual(2);
 		SideOf(legs, underlying).AssertEqual(Sides.Buy);
@@ -631,7 +631,7 @@ public class OptionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Synthetic_SellPut_IsLongUnderlyingPlusShortCall()
+	public async Task Synthetic_SellPut_IsLongUnderlyingPlusShortCall()
 	{
 		var expiration = new DateTime(2024, 7, 1).UtcKind();
 		var underlying = CreateUnderlying();
@@ -642,7 +642,7 @@ public class OptionTests : BaseTestClass
 			CreateOption(OptionTypes.Call, 110m, expiration), CreateOption(OptionTypes.Call, 100m, _underlyingExpiry)]);
 
 		// A long put is a short underlying plus a long call, so selling one is a long underlying and a short call.
-		var legs = new Synthetic(put, provider).Sell();
+		var legs = await new Synthetic(put, provider).SellAsync(CancellationToken);
 
 		legs.Length.AssertEqual(2);
 		SideOf(legs, underlying).AssertEqual(Sides.Buy);
@@ -650,7 +650,7 @@ public class OptionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Synthetic_OppositeOptionMissing_Throws()
+	public async Task Synthetic_OppositeOptionMissing_Throws()
 	{
 		var expiration = new DateTime(2024, 7, 1).UtcKind();
 		var underlying = CreateUnderlying();
@@ -661,11 +661,11 @@ public class OptionTests : BaseTestClass
 		var provider = new CollectionSecurityProvider([underlying, call,
 			CreateOption(OptionTypes.Put, 110m, expiration), CreateOption(OptionTypes.Put, 100m, _underlyingExpiry)]);
 
-		ThrowsExactly<ArgumentException>(() => new Synthetic(call, provider).Buy());
+		await ThrowsExactlyAsync<ArgumentException>(() => new Synthetic(call, provider).BuyAsync(CancellationToken).AsTask());
 	}
 
 	[TestMethod]
-	public void Synthetic_Underlying_BuyAndSell_UseRequestedStrikeAndExpiry()
+	public async Task Synthetic_Underlying_BuyAndSell_UseRequestedStrikeAndExpiry()
 	{
 		var expiration = new DateTime(2024, 7, 1).UtcKind();
 		var underlying = CreateUnderlying();
@@ -680,13 +680,13 @@ public class OptionTests : BaseTestClass
 
 		// A synthetic long forward is a long call and a short put at one strike and one expiry; selling it
 		// flips both legs. The requested 100 / 1 July pair must be picked out of the other strike and series.
-		var buy = synthetic.Buy(100m, expiration);
+		var buy = await synthetic.BuyAsync(100m, expiration, CancellationToken);
 
 		buy.Length.AssertEqual(2);
 		SideOf(buy, call).AssertEqual(Sides.Buy);
 		SideOf(buy, put).AssertEqual(Sides.Sell);
 
-		var sell = synthetic.Sell(100m, expiration);
+		var sell = await synthetic.SellAsync(100m, expiration, CancellationToken);
 
 		sell.Length.AssertEqual(2);
 		SideOf(sell, call).AssertEqual(Sides.Sell);
@@ -694,7 +694,7 @@ public class OptionTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void Synthetic_Underlying_BuyWithoutExpiry_UsesInstrumentExpiry()
+	public async Task Synthetic_Underlying_BuyWithoutExpiry_UsesInstrumentExpiry()
 	{
 		var otherExpiration = new DateTime(2024, 7, 1).UtcKind();
 		var underlying = CreateUnderlying();
@@ -706,10 +706,52 @@ public class OptionTests : BaseTestClass
 
 		// Without a date the series comes from the instrument being replicated, so the legs expire with it
 		// on 19 September and not in the earlier series that is also listed.
-		var legs = new Synthetic(underlying, provider).Buy(100m);
+		var legs = await new Synthetic(underlying, provider).BuyAsync(100m, CancellationToken);
 
 		legs.Length.AssertEqual(2);
 		SideOf(legs, call).AssertEqual(Sides.Buy);
 		SideOf(legs, put).AssertEqual(Sides.Sell);
+	}
+
+	[TestMethod]
+	public async Task OffsetBasketStrike_ChoosesStrikesFromLoadedDerivatives()
+	{
+		var underlying = new Security { Id = "BASKETU@TEST" };
+		var expiry = new DateTime(2030, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		Security option(OptionTypes type, decimal strike) => new()
+		{
+			Id = $"BASKETU{type}{strike}@TEST",
+			Type = SecurityTypes.Option,
+			OptionType = type,
+			Strike = strike,
+			UnderlyingSecurityId = underlying.Id,
+			ExpiryDate = expiry,
+		};
+
+		var call100 = option(OptionTypes.Call, 100);
+		var put100 = option(OptionTypes.Put, 100);
+
+		var provider = new CollectionSecurityProvider(
+		[
+			underlying,
+			option(OptionTypes.Call, 90), call100, option(OptionTypes.Call, 110),
+			option(OptionTypes.Put, 90), put100, option(OptionTypes.Put, 110),
+		]);
+
+		var dataProvider = new Mock<IMarketDataProvider>();
+		dataProvider.Setup(p => p.GetSecurityValue(underlying, Level1Fields.LastTradePrice)).Returns(100m);
+
+		var basket = new OffsetBasketStrike(underlying, provider, dataProvider.Object, new(0, 0));
+
+		Throws<InvalidOperationException>(() => basket.InnerSecurityIds.ToArray());
+
+		await basket.LoadDerivativesAsync(CancellationToken);
+
+		var ids = basket.InnerSecurityIds.ToHashSet();
+
+		AreEqual(2, ids.Count);
+		IsTrue(ids.Contains(call100.ToSecurityId()));
+		IsTrue(ids.Contains(put100.ToSecurityId()));
 	}
 }

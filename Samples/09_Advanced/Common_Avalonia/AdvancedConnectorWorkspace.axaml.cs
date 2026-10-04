@@ -2,6 +2,7 @@ namespace StockSharp.Samples.Advanced;
 
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -105,9 +106,12 @@ internal partial class AdvancedConnectorWorkspace : UserControl, IDisposable
 		_events.Attach();
 	}
 
-	public void Open()
+	public async Task OpenAsync(CancellationToken cancellationToken)
 	{
 		ObjectDisposedException.ThrowIf(_disposed, this);
+
+		await _context.LoadAsync(cancellationToken);
+
 		if (_context.IsAutoConnect)
 			StartConnect();
 	}

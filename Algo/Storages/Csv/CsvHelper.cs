@@ -200,7 +200,7 @@ static class CsvHelper
 
 	private static readonly SynchronizedDictionary<Type, ISerializer> _legacyBoardSerializers = [];
 
-	public static BoardMessage ReadBoard(this FastCsvReader reader, Encoding encoding)
+	public static async ValueTask<BoardMessage> ReadBoardAsync(this FastCsvReader reader, Encoding encoding, CancellationToken cancellationToken)
 	{
 		var board = new BoardMessage
 		{
@@ -219,7 +219,7 @@ static class CsvHelper
 			ISerializer<TItem> getSerializer<TItem>()
 				=> (ISerializer<TItem>)_legacyBoardSerializers.SafeAdd(typeof(TItem), k => new JsonSerializer<TItem> { Indent = false, EnumAsString = true });
 
-			TItem deserialize<TItem>(string value)
+			async ValueTask<TItem> deserialize<TItem>(string value)
 				where TItem : class
 			{
 				if (value.IsEmpty())
@@ -228,12 +228,12 @@ static class CsvHelper
 				var serializer = getSerializer<TItem>();
 				var bytes = encoding.GetBytes(value.Replace("'", "\""));
 
-				return serializer.Deserialize(bytes);
+				return await serializer.DeserializeAsync(bytes, cancellationToken);
 			}
 
-			time.Periods = deserialize<List<WorkingTimePeriod>>(reader.ReadString());
-			time.SpecialWorkingDays = [.. deserialize<IEnumerable<DateTime>>(reader.ReadString())];
-			time.SpecialHolidays = [.. deserialize<IEnumerable<DateTime>>(reader.ReadString())];
+			time.Periods = await deserialize<List<WorkingTimePeriod>>(reader.ReadString());
+			time.SpecialWorkingDays = [.. await deserialize<IEnumerable<DateTime>>(reader.ReadString())];
+			time.SpecialHolidays = [.. await deserialize<IEnumerable<DateTime>>(reader.ReadString())];
 		}
 		else
 		{

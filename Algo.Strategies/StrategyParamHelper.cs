@@ -405,7 +405,23 @@ public static class StrategyParamHelper
 	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
 	/// <param name="totalCount">Output: total number of iterations.</param>
 	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use ToBruteForceAsync instead.")]
 	public static IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForce(
+		this Strategy strategy,
+		IStrategyParam[] parameters,
+		out IStrategyParam[] optimizedParams,
+		out int totalCount)
+		=> strategy.ToBruteForceAsync(parameters, out optimizedParams, out totalCount).ToBlockingEnumerable();
+
+	/// <summary>
+	/// Generate all strategy clones with parameter permutations for brute force optimization.
+	/// </summary>
+	/// <param name="strategy">The base strategy to clone.</param>
+	/// <param name="parameters">The parameters to optimize.</param>
+	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
+	/// <param name="totalCount">Output: total number of iterations.</param>
+	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	public static IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForceAsync(
 		this Strategy strategy,
 		IStrategyParam[] parameters,
 		out IStrategyParam[] optimizedParams,
@@ -451,7 +467,7 @@ public static class StrategyParamHelper
 		totalCount = optimizeDict.Aggregate(1, (c, p) => c * p.Value.iterCount);
 		optimizedParams = [.. singleParams.Concat(optimizeDict.Values.Select(p => p.param)).Distinct()];
 
-		IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _()
+		async IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			if (optimizeDict.IsEmpty())
 			{
@@ -467,7 +483,7 @@ public static class StrategyParamHelper
 				Strategy iter;
 
 				using (new Scope<StrategyContext>(new() { ExcludeUI = true }))
-					iter = strategy.Clone();
+					iter = await strategy.CloneAsync(cancellationToken);
 
 				var resultParams = new List<IStrategyParam>();
 
@@ -494,7 +510,24 @@ public static class StrategyParamHelper
 	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
 	/// <param name="totalCount">Output: total number of iterations.</param>
 	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use ToBruteForceAsync instead.")]
 	public static IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForce(
+		this Strategy strategy,
+		IEnumerable<(IStrategyParam param, IEnumerable values)> parameters,
+		out IStrategyParam[] optimizedParams,
+		out int totalCount)
+		=> strategy.ToBruteForceAsync(parameters, out optimizedParams, out totalCount).ToBlockingEnumerable();
+
+	/// <summary>
+	/// Generate all strategy clones with parameter permutations for brute force optimization.
+	/// Supports explicit value lists for parameters like Security, DataType.
+	/// </summary>
+	/// <param name="strategy">The base strategy to clone.</param>
+	/// <param name="parameters">The parameters with optional explicit values to use instead of range.</param>
+	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
+	/// <param name="totalCount">Output: total number of iterations.</param>
+	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	public static IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForceAsync(
 		this Strategy strategy,
 		IEnumerable<(IStrategyParam param, IEnumerable values)> parameters,
 		out IStrategyParam[] optimizedParams,
@@ -555,7 +588,7 @@ public static class StrategyParamHelper
 		totalCount = optimizeDict.Aggregate(1, (c, p) => c * p.Value.iterCount);
 		optimizedParams = [.. singleParams.Concat(optimizeDict.Values.Select(p => p.param)).Distinct()];
 
-		IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _()
+		async IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			if (optimizeDict.IsEmpty())
 			{
@@ -571,7 +604,7 @@ public static class StrategyParamHelper
 				Strategy iter;
 
 				using (new Scope<StrategyContext>(new() { ExcludeUI = true }))
-					iter = strategy.Clone();
+					iter = await strategy.CloneAsync(cancellationToken);
 
 				var resultParams = new List<IStrategyParam>();
 
@@ -598,7 +631,25 @@ public static class StrategyParamHelper
 	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
 	/// <param name="totalCount">Output: total number of iterations.</param>
 	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	[Obsolete("Blocking sync-over-async wrapper. Use ToBruteForceRandomAsync instead.")]
 	public static IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForceRandom(
+		this Strategy strategy,
+		IStrategyParam[] parameters,
+		int randomCount,
+		out IStrategyParam[] optimizedParams,
+		out int totalCount)
+		=> strategy.ToBruteForceRandomAsync(parameters, randomCount, out optimizedParams, out totalCount).ToBlockingEnumerable();
+
+	/// <summary>
+	/// Generate all strategy clones with random parameter values for brute force optimization.
+	/// </summary>
+	/// <param name="strategy">The base strategy to clone.</param>
+	/// <param name="parameters">The parameters to optimize.</param>
+	/// <param name="randomCount">Number of random samples per parameter.</param>
+	/// <param name="optimizedParams">Output: all parameters involved in optimization.</param>
+	/// <param name="totalCount">Output: total number of iterations.</param>
+	/// <returns>Lazy enumerable of strategy clones with their parameter arrays.</returns>
+	public static IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> ToBruteForceRandomAsync(
 		this Strategy strategy,
 		IStrategyParam[] parameters,
 		int randomCount,
@@ -654,7 +705,7 @@ public static class StrategyParamHelper
 		totalCount = optimizeDict.Aggregate(1, (c, p) => c * p.Value.values.Count);
 		optimizedParams = [.. singleParams.Concat(optimizeDict.Values.Select(p => p.param)).Distinct()];
 
-		IEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _()
+		async IAsyncEnumerable<(Strategy strategy, IStrategyParam[] parameters)> _([EnumeratorCancellation] CancellationToken cancellationToken = default)
 		{
 			if (optimizeDict.IsEmpty())
 			{
@@ -674,7 +725,7 @@ public static class StrategyParamHelper
 				Strategy iter;
 
 				using (new Scope<StrategyContext>(new() { ExcludeUI = true }))
-					iter = strategy.Clone();
+					iter = await strategy.CloneAsync(cancellationToken);
 
 				var resultParams = new List<IStrategyParam>();
 

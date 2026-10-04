@@ -1080,7 +1080,7 @@ public class StatisticsTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SaveAndLoad()
+	public async Task SaveAndLoad()
 	{
 		// Arrange
 		var parameter = new PerMonthTradeParameter();
@@ -1092,11 +1092,11 @@ public class StatisticsTests : BaseTestClass
 		parameter.Add(new(baseTime.AddMonths(1), 8, -30));
 
 		// Act - save state
-		var storage = parameter.Save();
+		var storage = await parameter.SaveAsync(CancellationToken);
 
 		// Create new parameter and load state
 		var newParameter = new PerMonthTradeParameter();
-		newParameter.Load(storage);
+		await newParameter.LoadAsync(storage, CancellationToken);
 
 		// Assert - state should be preserved
 		newParameter.Value.AssertEqual(parameter.Value);
@@ -1568,7 +1568,7 @@ public class StatisticsTests : BaseTestClass
 	/// have, not open a fresh grid at whatever time the next report happens to carry.
 	/// </summary>
 	[TestMethod]
-	public void SharpeRatio_SavedStateCarriesTheGrid()
+	public async Task SharpeRatio_SavedStateCarriesTheGrid()
 	{
 		var t = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
@@ -1580,7 +1580,7 @@ public class StatisticsTests : BaseTestClass
 			parameter.Add(t.AddDays(i), closes[i], null);
 
 		var restored = new SharpeRatioParameter();
-		restored.Load(parameter.Save());
+		await restored.LoadAsync(await parameter.SaveAsync(CancellationToken), CancellationToken);
 
 		restored.Value.AssertEqual(parameter.Value);
 

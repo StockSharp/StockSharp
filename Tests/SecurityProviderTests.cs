@@ -1048,7 +1048,7 @@ public class SecurityProviderTests : BaseTestClass
 		var msft = CreateSecurityWithCode("MSFT", "NASDAQ");
 		var source = new CollectionSecurityProvider([aapl]);
 
-		using var provider = new FilterableSecurityProvider(source);
+		using var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
 
 		provider.Count.AssertEqual(1);
 
@@ -1076,7 +1076,7 @@ public class SecurityProviderTests : BaseTestClass
 		var msft = CreateSecurityWithCode("MSFT", "NASDAQ");
 		var source = new CollectionSecurityProvider([aapl, msft]);
 
-		using var provider = new FilterableSecurityProvider(source);
+		using var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
 
 		source.Remove(aapl).AssertTrue();
 
@@ -1104,7 +1104,7 @@ public class SecurityProviderTests : BaseTestClass
 		var msft = CreateSecurityWithCode("MSFT", "NASDAQ");
 		var source = new CollectionSecurityProvider([aapl, msft]);
 
-		using var provider = new FilterableSecurityProvider(source);
+		using var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
 
 		var cleared = 0;
 		provider.Cleared += () => cleared++;
@@ -1127,12 +1127,12 @@ public class SecurityProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void FilterableSecurityProvider_ReRaisesAddedOfAOneShotSequence()
+	public async Task FilterableSecurityProvider_ReRaisesAddedOfAOneShotSequence()
 	{
 		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
 		var source = new DrainOnceSecurityProvider();
 
-		using var provider = new FilterableSecurityProvider(source);
+		using var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
 
 		var added = new List<Security>();
 		provider.Added += securities => added.AddRange(securities);
@@ -1148,13 +1148,13 @@ public class SecurityProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void FilterableSecurityProvider_ReRaisesRemovedOfAOneShotSequence()
+	public async Task FilterableSecurityProvider_ReRaisesRemovedOfAOneShotSequence()
 	{
 		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
 		var source = new DrainOnceSecurityProvider();
 		source.AddDrainOnce(aapl);
 
-		using var provider = new FilterableSecurityProvider(source);
+		using var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
 
 		var removed = new List<Security>();
 		provider.Removed += securities => removed.AddRange(securities);
@@ -1169,14 +1169,14 @@ public class SecurityProviderTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void FilterableSecurityProvider_DisposeStopsFollowingTheSource()
+	public async Task FilterableSecurityProvider_DisposeStopsFollowingTheSource()
 	{
 		var aapl = CreateSecurityWithCode("AAPL", "NASDAQ");
 		var msft = CreateSecurityWithCode("MSFT", "NASDAQ");
 		var source = new DrainOnceSecurityProvider();
 		source.AddDrainOnce(aapl);
 
-		var provider = new FilterableSecurityProvider(source);
+		var provider = await FilterableSecurityProvider.CreateAsync(source, CancellationToken);
 
 		var events = 0;
 		provider.Added += _ => events++;

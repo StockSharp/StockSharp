@@ -170,7 +170,17 @@ partial class Strategy
 	/// Apply an incoming remote command to the strategy.
 	/// </summary>
 	/// <param name="cmdMsg"><see cref="CommandMessage"/>.</param>
-	public virtual void ApplyCommand(CommandMessage cmdMsg)
+	[Obsolete("Use ApplyCommandAsync method instead.")]
+	public void ApplyCommand(CommandMessage cmdMsg)
+		=> AsyncHelper.Run(() => ApplyCommandAsync(cmdMsg, default));
+
+	/// <summary>
+	/// Apply an incoming remote command to the strategy.
+	/// </summary>
+	/// <param name="cmdMsg"><see cref="CommandMessage"/>.</param>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="ValueTask"/></returns>
+	public virtual async ValueTask ApplyCommandAsync(CommandMessage cmdMsg, CancellationToken cancellationToken)
 	{
 		if (cmdMsg == null)
 			throw new ArgumentNullException(nameof(cmdMsg));
@@ -181,17 +191,13 @@ partial class Strategy
 		{
 			case CommandTypes.Start:
 			{
-#pragma warning disable CS0618 // the Start()/Stop() shims drive the async entry points.
-				Start();
-#pragma warning restore CS0618
+				await StartAsync(cancellationToken);
 				break;
 			}
 
 			case CommandTypes.Stop:
 			{
-#pragma warning disable CS0618 // the Start()/Stop() shims drive the async entry points.
-				Stop();
-#pragma warning restore CS0618
+				await StopAsync(cancellationToken);
 				break;
 			}
 
@@ -214,7 +220,7 @@ partial class Strategy
 
 				var order = new Order
 				{
-					Security = secId.IsEmpty() ? Security : this.LookupById(secId),
+					Security = secId.IsEmpty() ? Security : await this.LookupByIdAsync(secId.ToSecurityId(), cancellationToken),
 					Portfolio = pfName.IsEmpty() ? Portfolio : Connector.LookupByPortfolioName(pfName),
 					Side = side,
 					Volume = volume,

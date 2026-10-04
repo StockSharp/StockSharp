@@ -319,20 +319,20 @@ public class ConverterDiagramElement : TypedDiagramElement<ConverterDiagramEleme
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	protected override void SaveState(SettingsStorage storage)
 	{
-		base.Save(storage);
+		base.SaveState(storage);
 
 		if (Scope<CopyPasteContext>.IsDefined)
 			storage.SetValue(nameof(_indicatorType), _indicatorType);
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	protected override void OnLoading(SettingsStorage storage)
 	{
+		base.OnLoading(storage);
+
 		if (Scope<CopyPasteContext>.IsDefined)
 			_indicatorType = storage.GetValue<Type>(nameof(_indicatorType));
-
-		base.Load(storage);
 	}
 }

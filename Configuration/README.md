@@ -16,16 +16,17 @@ The assembly is titled **S#.Configuration** and described as "Configuration comp
   【F:Configuration/Paths.cs†L14-L26】
 - **Start‑up settings** – `AppStartSettings` stores language preference and online/offline mode and can be loaded or saved from the platform configuration file:
   ```csharp
-  public class AppStartSettings : IPersistable
+  public class AppStartSettings : IAsyncPersistable
   {
       public string Language { get; set; } = LocalizedStrings.ActiveLanguage;
       public bool Online { get; set; } = true;
-      public static AppStartSettings TryLoad()
+      public static async ValueTask<AppStartSettings> TryLoadAsync(IFileSystem fileSystem, CancellationToken cancellationToken)
       {
           var configFile = Paths.PlatformConfigurationFile;
-          if (configFile.IsEmptyOrWhiteSpace() || !configFile.IsConfigExists())
+          if (configFile.IsEmptyOrWhiteSpace() || !configFile.IsConfigExists(fileSystem))
               return null;
-          return configFile.Deserialize<SettingsStorage>()?.Load<AppStartSettings>();
+          var storage = await configFile.DeserializeAsync<SettingsStorage>(fileSystem, cancellationToken);
+          return storage is null ? null : await storage.LoadAsync<AppStartSettings>(cancellationToken);
       }
   }
   ```

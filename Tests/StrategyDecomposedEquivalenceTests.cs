@@ -702,7 +702,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		// making the assertions self-fulfilling). The engine must apply its own
 		// guards internally and end up with exactly the canonical sequence.
 		foreach (var state in strategyStates)
-			engine.OnMessage(new StrategyEngine.StrategyStateMessage(state));
+			await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(state), CancellationToken);
 
 		IsTrue(strategyStates.Count > 0, "Strategy should have had state transitions");
 
@@ -754,7 +754,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	/// </summary>
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void StrategyEngine_StateMachine_ExactTransitions()
+	public async Task StrategyEngine_StateMachine_ExactTransitions()
 	{
 		var host = new FakeHost();
 		var pnl = new PnLManager();
@@ -767,28 +767,28 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		AreEqual(ProcessStates.Stopped, engine.ProcessState);
 
 		// Stopping request on a Stopped engine is a no-op (guarded), not a throw.
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
 		AreEqual(ProcessStates.Stopped, engine.ProcessState);
 		AreEqual(0, states.Count, "Ignored request must not raise StateChanged");
 
 		// Stopped -> Started.
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 		AreEqual(ProcessStates.Started, engine.ProcessState);
 
 		// Repeated Started is idempotent: no second event.
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 		AreEqual(ProcessStates.Started, engine.ProcessState);
 
 		// Started -> Stopping.
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
 		AreEqual(ProcessStates.Stopping, engine.ProcessState);
 
 		// Repeated Stopping is idempotent.
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
 		AreEqual(ProcessStates.Stopping, engine.ProcessState);
 
 		// Started request while Stopping is ignored (only Stopped->Started accepted).
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 		AreEqual(ProcessStates.Stopping, engine.ProcessState);
 
 		// Exactly two transitions were emitted, in order.
@@ -890,7 +890,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		var engine = new StrategyEngine(host, pnl);
 
 		// Start the engine
-		engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		var priceUpdates = 0;
 		var pnlRefreshes = 0;
@@ -898,7 +898,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		engine.PnLRefreshRequired += _ => pnlRefreshes++;
 
 		foreach (var msg in capturedMessages)
-			engine.OnMessage(msg);
+			await engine.OnMessageAsync(msg, CancellationToken);
 
 		Console.WriteLine($"Replayed {capturedMessages.Count} messages through StrategyEngine");
 		Console.WriteLine($"Price updates: {priceUpdates}, PnL refreshes: {pnlRefreshes}");
@@ -927,7 +927,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 	/// </summary>
 	[TestMethod]
 	[Timeout(5_000, CooperativeCancellation = true)]
-	public void StrategyEngine_PnLRefresh_ThrottledByInterval()
+	public async Task StrategyEngine_PnLRefresh_ThrottledByInterval()
 	{
 		var host = new FakeHost();
 		var pnl = new PnLManager();
@@ -953,28 +953,28 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		// First timestamped message: gap from default refresh time (MinValue) is
 		// huge, so it must trigger exactly one refresh at t0.
-		engine.OnMessage(L1(t0, 100m));
+		await engine.OnMessageAsync(L1(t0, 100m), CancellationToken);
 		AreEqual(1, refreshTimes.Count);
 		AreEqual(t0, refreshTimes[0]);
 
 		// +0.5s: within the interval -> NO refresh.
-		engine.OnMessage(L1(t0.AddMilliseconds(500), 101m));
+		await engine.OnMessageAsync(L1(t0.AddMilliseconds(500), 101m), CancellationToken);
 		AreEqual(1, refreshTimes.Count, "Sub-interval message must not refresh PnL");
 
 		// +0.9s (=1.4s from last refresh): now >= 1s past last refresh -> refresh.
 		var t1 = t0.AddMilliseconds(1400);
-		engine.OnMessage(L1(t1, 102m));
+		await engine.OnMessageAsync(L1(t1, 102m), CancellationToken);
 		AreEqual(2, refreshTimes.Count, "Message past the interval must refresh PnL");
 		AreEqual(t1, refreshTimes[1]);
 
 		// Exactly at the boundary (+1s from last refresh) -> refresh ( >= test).
 		var t2 = t1.AddSeconds(1);
-		engine.OnMessage(L1(t2, 103m));
+		await engine.OnMessageAsync(L1(t2, 103m), CancellationToken);
 		AreEqual(3, refreshTimes.Count, "Message exactly one interval later must refresh PnL");
 		AreEqual(t2, refreshTimes[2]);
 
 		// Just before the next boundary -> NO refresh.
-		engine.OnMessage(L1(t2.AddMilliseconds(999), 104m));
+		await engine.OnMessageAsync(L1(t2.AddMilliseconds(999), 104m), CancellationToken);
 		AreEqual(3, refreshTimes.Count, "Message just under the interval must not refresh PnL");
 	}
 
@@ -1049,7 +1049,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		decomposed.Connector = connMock.Object;
 		decomposed.Init();
 		await decomposed.StartAsync();
-		decomposed.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await decomposed.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		// 3. Feed unique finished candles to DecomposedSmaStrategy
 		foreach (var candle in finishedCandles)
@@ -1147,14 +1147,14 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		// start
 		await decomposed.StartAsync();
-		decomposed.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await decomposed.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 		decomposed.ProcessState.AreEqual(ProcessStates.Started);
 		decomposed.StateHistory.Count.AreEqual(1);
 		decomposed.StateHistory[0].AreEqual(ProcessStates.Started);
 
 		// stop
 		await decomposed.StopAsync();
-		decomposed.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		await decomposed.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
 		decomposed.ProcessState.AreEqual(ProcessStates.Stopping);
 		decomposed.StateHistory.Count.AreEqual(2);
 		decomposed.StateHistory[1].AreEqual(ProcessStates.Stopping);
@@ -1673,7 +1673,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		// Start strategy
 		await strategy.StartAsync();
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		var sub = new Subscription(DataType.Transactions);
 		strategy.Subscriptions.Subscribe(sub);
@@ -1685,7 +1685,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		// Stop the strategy
 		await strategy.StopAsync();
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
 
 		// Active orders should be cancelled
 		connMock.Verify(c => c.CancelOrder(It.IsAny<Order>()), Times.AtLeastOnce(),
@@ -1714,7 +1714,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		// Start strategy
 		await strategy.StartAsync();
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		// Subscribe to market data
 		var ticksSub = new Subscription(DataType.Ticks, security);
@@ -1722,7 +1722,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		// Stop the strategy
 		await strategy.StopAsync();
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
 
 		// Market data should be unsubscribed
 		IsTrue(unsubscribed.Count > 0,
@@ -2024,7 +2024,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 			}
 
 			await strategy.StartAsync();
-			strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+			await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 			var sub = new Subscription(DataType.Transactions);
 			strategy.Subscriptions.Subscribe(sub);
@@ -2039,12 +2039,12 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 			// Adverse price move (stop territory): drives CurrentPriceUpdated ->
 			// ProtectiveController.TryActivate for the protected strategy.
-			strategy.Engine.OnMessage(new Level1ChangeMessage
+			await strategy.Engine.OnMessageAsync(new Level1ChangeMessage
 			{
 				SecurityId = security.ToSecurityId(),
 				ServerTime = DateTime.UtcNow,
 				LocalTime = DateTime.UtcNow,
-			}.TryAdd(Level1Fields.LastTradePrice, 94m));
+			}.TryAdd(Level1Fields.LastTradePrice, 94m), CancellationToken);
 
 			return registered;
 		}
@@ -2139,7 +2139,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 		// Start so the only remaining CanTrade gate is IsFormed.
 		await strategy.StartAsync(CancellationToken);
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		strategy.ProcessState.AreEqual(ProcessStates.Started);
 
@@ -2197,7 +2197,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		gated.Indicators.Add(gatedSma);
 
 		await gated.StartAsync(CancellationToken);
-		gated.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await gated.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		// Not formed yet -> order is gated out.
 		gated.RegisterOrder(gated.CreateOrder(Sides.Buy, 100m, 1m));
@@ -2256,13 +2256,13 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public void SaveStoresTheConfiguredParameterValues()
+	public async Task SaveStoresTheConfiguredParameterValues()
 	{
 		var strategy = new ConfigStrategy();
 		ApplyNonDefaultConfig(strategy);
 
 		var storage = new SettingsStorage();
-		strategy.Save(storage);
+		await strategy.SaveAsync(storage, CancellationToken);
 
 		var values = ParamValues(storage);
 
@@ -2288,16 +2288,16 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public void LoadRoundTripsValuesIntoFreshInstance()
+	public async Task LoadRoundTripsValuesIntoFreshInstance()
 	{
 		var strategy = new ConfigStrategy();
 		ApplyNonDefaultConfig(strategy);
 
 		var storage = new SettingsStorage();
-		strategy.Save(storage);
+		await strategy.SaveAsync(storage, CancellationToken);
 
 		var reloaded = new ConfigStrategy();
-		reloaded.Load(storage);
+		await reloaded.LoadAsync(storage, CancellationToken);
 
 		AreEqual(7m, reloaded.Volume);
 		AreEqual(StrategyCommentModes.Id, reloaded.CommentMode);
@@ -2316,12 +2316,12 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public void CloneCopiesTheParameterSet()
+	public async Task CloneCopiesTheParameterSet()
 	{
 		var strategy = new ConfigStrategy();
 		ApplyNonDefaultConfig(strategy);
 
-		var clone = strategy.Clone();
+		var clone = await strategy.CloneAsync(CancellationToken);
 
 		AreEqual(7m, clone.Volume);
 		AreEqual(StrategyCommentModes.Id, clone.CommentMode);
@@ -2336,20 +2336,20 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public void KeepStatisticsGatesStatsPersistence()
+	public async Task KeepStatisticsGatesStatsPersistence()
 	{
 		static bool HasStats(SettingsStorage s)
 			=> s.ContainsKey(nameof(Strategy.PnLManager)) || s.ContainsKey(nameof(Strategy.StatisticManager));
 
 		var off = new ConfigStrategy { KeepStatistics = false };
 		var offStorage = new SettingsStorage();
-		off.Save(offStorage);
+		await off.SaveAsync(offStorage, CancellationToken);
 
 		IsFalse(HasStats(offStorage), "Stats must NOT be persisted when KeepStatistics=false");
 
 		var on = new ConfigStrategy { KeepStatistics = true };
 		var onStorage = new SettingsStorage();
-		on.Save(onStorage);
+		await on.SaveAsync(onStorage, CancellationToken);
 
 		IsTrue(HasStats(onStorage), "Stats MUST be persisted when KeepStatistics=true");
 	}
@@ -2362,7 +2362,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public void ApplyCommand_StartRegisterStop()
+	public async Task ApplyCommand_StartRegisterStop()
 	{
 		var security = CreateSecurity();
 		var portfolio = CreatePortfolio();
@@ -2379,9 +2379,9 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		};
 
 		// Start command -> Started.
-		strategy.ApplyCommand(Cmd(CommandTypes.Start));
+		await strategy.ApplyCommandAsync(Cmd(CommandTypes.Start), CancellationToken);
 		// Start() drives the async entry point; settle and confirm the engine reached Started.
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 		strategy.ProcessState.AreEqual(ProcessStates.Started, "Start command must reach Started");
 
 		// RegisterOrder command -> an order registered at the connector.
@@ -2389,7 +2389,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		regCmd.Parameters[nameof(Order.Side)] = Sides.Buy.To<string>();
 		regCmd.Parameters[nameof(Order.Volume)] = 3m.To<string>();
 		regCmd.Parameters[nameof(Order.Price)] = 100m.To<string>();
-		strategy.ApplyCommand(regCmd);
+		await strategy.ApplyCommandAsync(regCmd, CancellationToken);
 
 		AreEqual(1, registered.Count, "RegisterOrder command must register one order");
 		registered[0].Side.AreEqual(Sides.Buy);
@@ -2397,8 +2397,8 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		registered[0].Price.AreEqual(100m);
 
 		// Stop command -> Stopping/Stopped.
-		strategy.ApplyCommand(Cmd(CommandTypes.Stop));
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping));
+		await strategy.ApplyCommandAsync(Cmd(CommandTypes.Stop), CancellationToken);
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Stopping), CancellationToken);
 		IsTrue(strategy.ProcessState is ProcessStates.Stopping or ProcessStates.Stopped,
 			$"Stop command must leave Started; got {strategy.ProcessState}");
 	}
@@ -2445,7 +2445,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		// Start so InitStartValues recomputes the recycle threshold (1.5x OrdersKeepTime);
 		// otherwise recycling never triggers.
 		await strategy.StartAsync(CancellationToken);
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		// Deliver orders on the auto-subscribed OrderLookup (a fresh Transactions sub would collide on its key).
 		var sub = strategy.OrderLookup;
@@ -2474,7 +2474,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 
 	[TestMethod]
 	[Timeout(15_000, CooperativeCancellation = true)]
-	public void WaitAllTrades_RegistrationWiresNoOrderScopedRule()
+	public async Task WaitAllTrades_RegistrationWiresNoOrderScopedRule()
 	{
 		var security = CreateSecurity();
 		var portfolio = CreatePortfolio();
@@ -2493,7 +2493,7 @@ public class StrategyDecomposedEquivalenceTests : BaseTestClass
 		};
 
 		// Drive the engine to Started so RegisterOrder is admitted.
-		strategy.Engine.OnMessage(new StrategyEngine.StrategyStateMessage(ProcessStates.Started));
+		await strategy.Engine.OnMessageAsync(new StrategyEngine.StrategyStateMessage(ProcessStates.Started), CancellationToken);
 
 		var order = strategy.CreateOrder(Sides.Buy, 100m, 10m);
 		strategy.RegisterOrder(order);

@@ -70,23 +70,29 @@ class empty_indicator(BaseIndicator):
         result.IsFinal = bool(self.random_source.getrandbits(1))
         return result
 
-    def Load(self, storage):
+    def LoadAsync(self, storage, cancellationToken):
         """
         Loads the indicator parameters from persistent storage.
         
         :param storage: The settings storage to load from.
+        :param cancellationToken: The token that cancels the load.
+        :return: The task of the load.
         """
-        super(empty_indicator, self).Load(storage)
+        task = super(empty_indicator, self).LoadAsync(storage, cancellationToken)
         self.Change = storage.GetValue("Change", self.Change)
+        return task
 
-    def Save(self, storage):
+    def SaveAsync(self, storage, cancellationToken):
         """
         Saves the indicator parameters to persistent storage.
         
         :param storage: The settings storage to save to.
+        :param cancellationToken: The token that cancels the save.
+        :return: The task of the save.
         """
-        super(empty_indicator, self).Save(storage)
+        task = super(empty_indicator, self).SaveAsync(storage, cancellationToken)
         storage.SetValue("Change", self.Change)
+        return task
 
     def __str__(self):
         return f"Change: {self.Change}"

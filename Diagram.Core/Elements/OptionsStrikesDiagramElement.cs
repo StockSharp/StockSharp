@@ -15,6 +15,7 @@ public class OptionsStrikesDiagramElement : DiagramElement
 	private readonly DiagramSocket _outputSocket;
 
 	private Security _asset;
+	private readonly Dictionary<SecurityId, Security[]> _derivatives = [];
 
 	/// <inheritdoc />
 	public override Guid TypeId { get; } = "7B62274F-AD0C-4EF6-812A-C6D9CA733AFD".To<Guid>();
@@ -102,7 +103,9 @@ public class OptionsStrikesDiagramElement : DiagramElement
 		if (_asset.GetCurrentPrice(ServicesRegistry.MarketDataProvider) is not decimal assetPrice)
 			return;
 
-		var options = _asset.GetDerivatives(ServicesRegistry.SecurityProvider, ExpirationDate);
+		IEnumerable<Security> options = _derivatives.TryGetValue(_asset.ToSecurityId(), out var derivatives)
+			? derivatives
+			: throw new InvalidOperationException(LocalizedStrings.SecurityNoFound.Put(_asset.Id));
 
 		var optionType = OptionType;
 
@@ -141,6 +144,23 @@ public class OptionsStrikesDiagramElement : DiagramElement
 		options = arr;
 
 		RaiseProcessOutput(_outputSocket, value.Time, options, value);
+	}
+
+	/// <inheritdoc/>
+	protected override async ValueTask OnPrepareAsync(CancellationToken cancellationToken)
+	{
+		await base.OnPrepareAsync(cancellationToken);
+
+		_derivatives.Clear();
+
+		var expirationDate = ExpirationDate;
+
+		foreach (var asset in Strategy.StartSecurities)
+		{
+			_derivatives[asset.ToSecurityId()] = await asset
+				.GetDerivativesAsync(ServicesRegistry.SecurityProvider, expirationDate)
+				.ToArrayAsync(cancellationToken);
+		}
 	}
 
 	/// <inheritdoc/>

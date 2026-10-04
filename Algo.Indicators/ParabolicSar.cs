@@ -311,9 +311,9 @@ public class ParabolicSar : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Load(SettingsStorage storage)
+	public override async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Load(storage);
+		await base.LoadAsync(storage, cancellationToken);
 
 		Acceleration = storage.GetValue(nameof(Acceleration), 0.02M);
 		AccelerationMax = storage.GetValue(nameof(AccelerationMax), 0.2M);
@@ -321,9 +321,9 @@ public class ParabolicSar : BaseIndicator
 	}
 
 	/// <inheritdoc />
-	public override void Save(SettingsStorage storage)
+	public override async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		base.Save(storage);
+		await base.SaveAsync(storage, cancellationToken);
 
 		storage.SetValue(nameof(Acceleration), Acceleration);
 		storage.SetValue(nameof(AccelerationMax), AccelerationMax);

@@ -126,7 +126,8 @@ public class BasketMessageAdapterRoutingTests : BaseTestClass
 			}
 		}
 
-		public override IMessageAdapter Clone() => new TestRoutingInnerAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestRoutingInnerAdapter(TransactionIdGenerator));
 	}
 
 	#endregion

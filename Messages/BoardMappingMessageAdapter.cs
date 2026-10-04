@@ -81,6 +81,6 @@ public class BoardMappingMessageAdapter : MessageAdapterWrapper
 	}
 
 	/// <inheritdoc />
-	public override IMessageAdapter Clone()
-		=> new BoardMappingMessageAdapter(InnerAdapter.TypedClone(), _boards, _defaultVenueBoard);
+	public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+		=> new BoardMappingMessageAdapter(await InnerAdapter.CloneAsync(cancellationToken), _boards, _defaultVenueBoard);
 }

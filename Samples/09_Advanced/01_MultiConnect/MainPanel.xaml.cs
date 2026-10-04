@@ -75,7 +75,7 @@ public partial class MainPanel
 
 	public event Func<string, Connector> CreateConnector;
 
-	private void MainPanel_OnLoaded(object sender, RoutedEventArgs e)
+	private async void MainPanel_OnLoaded(object sender, RoutedEventArgs e)
 	{
 		var logManager = new LogManager();
 		logManager.Listeners.Add(new FileLogListener { LogDirectory = Path.Combine(_defaultDataPath, "Logs") });
@@ -86,8 +86,16 @@ public partial class MainPanel
 
 		ConfigManager.RegisterService<ILastDirSelector>(new InMemoryLastDirSelector());
 
-		InitWeb();
-		InitConnector();
+		try
+		{
+			await InitWebAsync();
+		}
+		catch (Exception ex)
+		{
+			MessageBox.Show(this.GetWindow(), ex.ToString());
+		}
+
+		await InitConnectorAsync();
 	}
 
 	public void Close()
@@ -116,7 +124,7 @@ public partial class MainPanel
 	/// <summary>
 	/// For connectors depends on StockSharp WebAPI.
 	/// </summary>
-	private void InitWeb()
+	private async Task InitWebAsync()
 	{
 		IApiServiceProvider webApiProvider = new ApiServiceProvider();
 		ConfigManager.RegisterService(webApiProvider);
@@ -124,38 +132,32 @@ public partial class MainPanel
 		ICredentialsProvider credProvider = new DefaultCredentialsProvider();
 		ConfigManager.RegisterService(credProvider);
 
-		ConfigManager.ServiceFallback += (type, name) =>
+		var autoLogon = true;
+		var credentials = await credProvider.TryLoadAsync(default);
+
+		if (credentials?.CanAutoLogin() != true)
 		{
-			if (type != typeof(IInstrumentInfoService))
-				return null;
+			var (c, a) = await CredentialsWindow.TryShow(this, new CurrentClientFetcher(), credentials);
 
-			var autoLogon = true;
+			if (c is null)
+				return;
 
-			if (!credProvider.TryLoad(out var credentials))
-			{
-				//var clientSvc = WebApiServicesRegistry.GetServiceAsAnonymous<IClientService>();
-				var (c, a) = this.GuiSync(() => AsyncContext.Run(() => CredentialsWindow.TryShow(this, new CurrentClientFetcher(), credentials)));
+			credentials = c;
+			autoLogon = a;
+		}
 
-				if (c is null)
-					return null;
+		var token = credentials.Token.UnSecure();
 
-				credentials = c;
-				autoLogon = a;
-			}
+		if (token.IsEmpty())
+			throw new InvalidOperationException("Token is empty.");
 
-			var token = credentials.Token.UnSecure();
+		credentials.Password = default;
+		await credProvider.SaveAsync(credentials, autoLogon, default);
 
-			if (token.IsEmpty())
-				throw new InvalidOperationException("Token is empty.");
-
-			credentials.Password = default;
-			credProvider.Save(credentials, autoLogon);
-
-			return webApiProvider.GetService<IInstrumentInfoService>(token);
-		};
+		ConfigManager.RegisterService(webApiProvider.GetService<IInstrumentInfoService>(token));
 	}
 
-	private void InitConnector()
+	private async Task InitConnectorAsync()
 	{
 		// subscribe on connection successfully event
 		Connector.Connected += async () =>
@@ -263,11 +265,14 @@ public partial class MainPanel
 		{
 			if (_settingsFile.IsConfigExists(_fileSystem))
 			{
+				var settings = await _settingsFile.DeserializeAsync<SettingsStorage>(_fileSystem, default);
+
 				var ctx = new ContinueOnExceptionContext();
 				ctx.Error += ex => ex.LogError();
 
 				using (ctx.ToScope())
-					Connector.LoadIfNotNull(_settingsFile.Deserialize<SettingsStorage>(_fileSystem));
+					if (settings is not null)
+						await Connector.LoadAsync(settings, default);
 			}
 		}
 		catch
@@ -302,10 +307,10 @@ public partial class MainPanel
 		});
 	}
 
-	private void SettingsClick(object sender, RoutedEventArgs e)
+	private async void SettingsClick(object sender, RoutedEventArgs e)
 	{
 		if (Connector.Configure(this.GetWindow()))
-			Connector.Save().Serialize(_fileSystem, _settingsFile);
+			await (await Connector.SaveAsync(default)).SerializeAsync(_fileSystem, _settingsFile, true, default);
 	}
 
 	private void ConnectClick(object sender, RoutedEventArgs e)

@@ -252,7 +252,7 @@ public class IndicatorDiagramElement : DiagramElement
 				const string Pattern = nameof(Pattern);
 
 				var param = ((DiagramElementParam<ICandlePattern>)createParam(typeof(ICandlePattern)))
-					.SetSaveLoadHandlers(pattern =>
+					.SetSaveLoadHandlers(async (pattern, cancellationToken) =>
 					{
 						var ss = new SettingsStorage();
 
@@ -260,13 +260,13 @@ public class IndicatorDiagramElement : DiagramElement
 						{
 							ss
 								.Set(PatternName, pattern.Name)
-								.Set(Pattern, pattern.SaveEntire(false))
+								.Set(Pattern, await pattern.SaveEntireAsync(false, cancellationToken))
 							;
 						}
 
 						return ss;
 					},
-					storage =>
+					async (storage, cancellationToken) =>
 					{
 						var patternName = storage.GetValue<string>(PatternName);
 						if (patternName.IsEmptyOrWhiteSpace())
@@ -282,7 +282,7 @@ public class IndicatorDiagramElement : DiagramElement
 							}
 							else
 							{
-								pattern = storage.GetValue<SettingsStorage>(Pattern).LoadEntire<ICandlePattern>();
+								pattern = await storage.GetValue<SettingsStorage>(Pattern).LoadEntireAsync<ICandlePattern>(cancellationToken);
 								provider.Save(pattern);
 							}
 						}

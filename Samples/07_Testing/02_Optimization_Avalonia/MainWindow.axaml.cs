@@ -111,7 +111,7 @@ public partial class MainWindow : Window
 				.Date.ChangeKind(DateTimeKind.Utc);
 			var mode = Genetic.IsChecked == true ? OptimizationMode.Genetic : OptimizationMode.BruteForce;
 			var geneticSettings = new GeneticSettings();
-			geneticSettings.Apply((GeneticSettings)GeneticSettingsEditor.GetSelectedObject());
+			await geneticSettings.ApplyAsync((GeneticSettings)GeneticSettingsEditor.GetSelectedObject());
 			var run = createdRun = OptimizationRun.Create(HistoryPath.Text, mode, geneticSettings, begin, end);
 			var cancellation = createdCancellation = CancellationTokenSource.CreateLinkedTokenSource(_lifetimeCancellation.Token);
 

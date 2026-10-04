@@ -149,7 +149,8 @@ public abstract class BasketTestBase : BaseTestClass
 			}
 		}
 
-		public override IMessageAdapter Clone() => new TestBasketInnerAdapter(TransactionIdGenerator);
+		public override ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new(new TestBasketInnerAdapter(TransactionIdGenerator));
 	}
 
 	protected static readonly SecurityId SecId1 = "AAPL@NASDAQ".ToSecurityId();

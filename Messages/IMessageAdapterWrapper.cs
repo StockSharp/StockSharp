@@ -14,8 +14,15 @@ public interface IMessageAdapterWrapper : IMessageAdapter
 /// <summary>
 /// Base implementation of <see cref="IMessageAdapterWrapper"/>.
 /// </summary>
-public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessageAdapterWrapper
+public abstract class MessageAdapterWrapper : IMessageAdapterWrapper
 {
+	/// <summary>
+	/// Create a copy of the adapter.
+	/// </summary>
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns>Copy.</returns>
+	public abstract ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken);
+
 	private IMessageAdapter _innerAdapter;
 
 	/// <summary>
@@ -162,18 +169,22 @@ public abstract class MessageAdapterWrapper : Cloneable<IMessageAdapter>, IMessa
 	/// Load settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Load(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual async Task LoadAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		InnerAdapter.Load(storage);
+		await InnerAdapter.LoadAsync(storage, cancellationToken);
 	}
 
 	/// <summary>
 	/// Save settings.
 	/// </summary>
 	/// <param name="storage">Settings storage.</param>
-	public virtual void Save(SettingsStorage storage)
+	/// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+	/// <returns><see cref="Task"/></returns>
+	public virtual async Task SaveAsync(SettingsStorage storage, CancellationToken cancellationToken)
 	{
-		InnerAdapter.Save(storage);
+		await InnerAdapter.SaveAsync(storage, cancellationToken);
 	}
 
 	Guid ILogSource.Id => InnerAdapter.Id;

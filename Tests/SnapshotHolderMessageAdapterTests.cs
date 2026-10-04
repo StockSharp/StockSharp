@@ -135,7 +135,7 @@ public class SnapshotHolderMessageAdapterTests : BaseTestClass
 		var holder = new TestSnapshotHolder { Snapshot = snapshot };
 
 		using var adapter = new SnapshotHolderMessageAdapter(inner, holder);
-		using var clone = adapter.Clone().To<SnapshotHolderMessageAdapter>();
+		using var clone = (await adapter.CloneAsync(CancellationToken)).To<SnapshotHolderMessageAdapter>();
 
 		clone.AssertNotSame(adapter);
 		clone.InnerAdapter.AssertNotSame(adapter.InnerAdapter);

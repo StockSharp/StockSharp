@@ -249,7 +249,7 @@ public class AlertProcessingServiceTests : BaseTestClass
 	}
 
 	[TestMethod]
-	public void SaveLoad_RoundTrip()
+	public async Task SaveLoad_RoundTrip()
 	{
 		var schema = CreatePriceSchema(ComparisonOperator.Greater, 42m);
 		schema.AlertType = AlertNotifications.Telegram;
@@ -258,11 +258,11 @@ public class AlertProcessingServiceTests : BaseTestClass
 		_service.Register(schema);
 
 		var storage = new SettingsStorage();
-		((IPersistable)_service).Save(storage);
+		await _service.SaveAsync(storage, CancellationToken);
 
 		// create new service and load
 		using var service2 = new AlertProcessingService(100);
-		((IPersistable)service2).Load(storage);
+		await service2.LoadAsync(storage, CancellationToken);
 
 		service2.Schemas.Count().AssertEqual(1);
 		var loaded = service2.Schemas.First();
@@ -291,8 +291,8 @@ public class AlertProcessingServiceTests : BaseTestClass
 		_notificationService.NotifyCount.AssertEqual(1, "The first matching message must deliver the alert");
 
 		var storage = new SettingsStorage();
-		((IPersistable)_service).Save(storage);
-		((IPersistable)_service).Load(storage);
+		await _service.SaveAsync(storage, CancellationToken);
+		await _service.LoadAsync(storage, CancellationToken);
 
 		_service.Schemas.Count().AssertEqual(1, "Load must bring the saved schema back");
 
@@ -571,6 +571,77 @@ public class AlertProcessingServiceTests : BaseTestClass
 	}
 
 	#region Helpers
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task Process_SecurityChosenAsSecurity_Matches()
+	{
+		// The settings panel puts the Security the user picked into the rule, while the message
+		// carries its SecurityId; the two must still be the same instrument.
+		var schema = AlertSchemaTemplates.PriceAbove("AAPL@NASDAQ".ToSecurityId(), 100m);
+		schema.AlertType = AlertNotifications.Log;
+		schema.Rules[0].Value = new Security { Id = "AAPL@NASDAQ" };
+		_service.Register(schema);
+
+		((IAlertProcessingService)_service).Process(CreateLevel1Message("AAPL@NASDAQ", Level1Fields.LastTradePrice, 150m));
+
+		await WaitForNotification();
+
+		_notificationService.NotifyCount.AssertEqual(1, "A rule holding the chosen Security must match its messages");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task SaveLoad_KnownSecurity_ComesBackAsSecurityIdAndFires()
+	{
+		var id = $"ALRT{Guid.NewGuid():N}@NASDAQ";
+		var security = new Security { Id = id };
+		((CollectionSecurityProvider)ServicesRegistry.TrySecurityProvider).Add(security);
+
+		var loaded = await ReloadAsync(AlertSchemaTemplates.PriceAbove(id.ToSecurityId(), 100m));
+
+		loaded.Rules[0].Value.AssertEqual(id.ToSecurityId(), "the rule keeps the instrument in the form the message carries it, whatever the provider holds");
+
+		((IAlertProcessingService)_service).Process(CreateLevel1Message(id, Level1Fields.LastTradePrice, 150m));
+
+		await WaitForNotification();
+
+		_notificationService.NotifyCount.AssertEqual(1, "A reloaded security filter must still match its messages");
+	}
+
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task SaveLoad_UnknownSecurity_KeepsTheRuleAndFires()
+	{
+		// An instrument the provider does not hold yet is still the instrument the rule is about;
+		// dropping the rule would silently widen the alert to every instrument.
+		var id = $"ALRT{Guid.NewGuid():N}@NASDAQ";
+
+		var loaded = await ReloadAsync(AlertSchemaTemplates.PriceAbove(id.ToSecurityId(), 100m));
+
+		loaded.Rules.Count.AssertEqual(2, "the security filter was dropped");
+		loaded.Rules[0].Value.AssertEqual(id.ToSecurityId());
+
+		((IAlertProcessingService)_service).Process(CreateLevel1Message(id, Level1Fields.LastTradePrice, 150m));
+
+		await WaitForNotification();
+
+		_notificationService.NotifyCount.AssertEqual(1, "A reloaded security filter must still match its messages");
+	}
+
+	// Saves the schema through the service and loads it into the service again, the way an
+	// application restores its alerts.
+	private async Task<AlertSchema> ReloadAsync(AlertSchema schema)
+	{
+		schema.AlertType = AlertNotifications.Log;
+		_service.Register(schema);
+
+		var storage = new SettingsStorage();
+		await _service.SaveAsync(storage, CancellationToken);
+		await _service.LoadAsync(storage, CancellationToken);
+
+		return _service.Schemas.Single();
+	}
 
 	private static AlertSchema CreatePriceSchema(ComparisonOperator op, decimal price)
 	{
