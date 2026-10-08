@@ -13,7 +13,7 @@ static partial class StorageHelper
 	/// <returns>Data types.</returns>
 	[Obsolete("Use GetAvailableDataTypesAsync method instead.")]
 	public static IEnumerable<DataType> GetAvailableDataTypes(this IMarketDataDrive drive, SecurityId securityId, StorageFormats format)
-		=> drive.GetAvailableDataTypesAsync(securityId, format).ToBlockingEnumerable();
+		=> drive.GetAvailableDataTypesAsync(securityId, format).ToSyncEnumerable();
 
 	/// <summary>
 	/// To create an iterative loader of market data for the time range.
@@ -26,7 +26,7 @@ static partial class StorageHelper
 	[Obsolete("Use LoadAsync method instead.")]
 	public static IEnumerable<TMessage> Load<TMessage>(this IMarketDataStorage<TMessage> storage, DateTime? from, DateTime? to)
 		where TMessage : Message, IServerTimeMessage
-		=> LoadAsync(storage, from, to).ToBlockingEnumerable();
+		=> LoadAsync(storage, from, to).ToSyncEnumerable();
 
 	/// <summary>
 	/// To delete market data from the storage for the specified time period.
@@ -77,7 +77,7 @@ static partial class StorageHelper
 	/// <returns>All available data within the range.</returns>
 	[Obsolete("Use GetDatesAsync method instead.")]
 	public static IEnumerable<DateTime> GetDates(this IMarketDataStorage storage, DateTime? from, DateTime? to)
-		=> GetDatesAsync(storage, from, to).ToBlockingEnumerable();
+		=> GetDatesAsync(storage, from, to).ToSyncEnumerable();
 
 	/// <summary>
 	/// Load messages.
@@ -281,7 +281,7 @@ static partial class StorageHelper
 		if (drive is null)
 			throw new ArgumentNullException(nameof(drive));
 
-		return drive.GetDatesAsync().ToBlockingEnumerable();
+		return drive.GetDatesAsync().ToSyncEnumerable();
 	}
 
 	/// <summary>
@@ -358,7 +358,7 @@ static partial class StorageHelper
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
 
-		return storage.GetDatesAsync().ToBlockingEnumerable();
+		return storage.GetDatesAsync().ToSyncEnumerable();
 	}
 
 	/// <summary>
@@ -416,7 +416,7 @@ static partial class StorageHelper
 	/// <remarks>Calls async method via <see cref="AsyncHelper.Run{T}(Func{ValueTask{T}})"/> for backward compatibility.</remarks>
 	[Obsolete("Use LoadAsync method instead.")]
 	public static IEnumerable<Message> Load(this IMarketDataStorage storage, DateTime date)
-		=> storage.CheckOnNull(nameof(storage)).LoadAsync(date).ToBlockingEnumerable();
+		=> storage.CheckOnNull(nameof(storage)).LoadAsync(date).ToSyncEnumerable();
 
 	/// <summary>
 	/// Synchronous wrapper for <see cref="IMarketDataStorage.GetMetaInfoAsync(DateTime, CancellationToken)"/>.
@@ -484,7 +484,7 @@ static partial class StorageHelper
 		if (storage is null)
 			throw new ArgumentNullException(nameof(storage));
 
-		return storage.LoadAsync(date).ToBlockingEnumerable();
+		return storage.LoadAsync(date).ToSyncEnumerable();
 	}
 
 	/// <summary>
@@ -504,4 +504,76 @@ static partial class StorageHelper
 	[Obsolete("Use InitAsync method instead.")]
 	public static void Init(this IExchangeInfoProvider provider)
 		=> AsyncHelper.Run(() => provider.InitAsync(default));
+
+	// Takes the caller's synchronization context away for as long as it lives.
+	private readonly struct NoContext : IDisposable
+	{
+		private readonly SynchronizationContext _caller;
+
+		public NoContext()
+		{
+			_caller = SynchronizationContext.Current;
+			SynchronizationContext.SetSynchronizationContext(null);
+		}
+
+		void IDisposable.Dispose()
+			=> SynchronizationContext.SetSynchronizationContext(_caller);
+	}
+
+	/// <summary>
+	/// Reads an asynchronous sequence for a caller that cannot await it.
+	/// </summary>
+	/// <remarks>
+	/// Every step is started without the caller's synchronization context. A thread blocked here - a window's
+	/// own, most often - cannot run what a sequence that answers later would post back to it, and the read
+	/// would never end.
+	/// </remarks>
+	/// <typeparam name="T">The type of the items.</typeparam>
+	/// <param name="source">The sequence to read.</param>
+	/// <returns>The same items, each waited for when it is asked for.</returns>
+	internal static IEnumerable<T> ToSyncEnumerable<T>(this IAsyncEnumerable<T> source)
+	{
+		if (source is null)
+			throw new ArgumentNullException(nameof(source));
+
+		return Impl(source);
+
+		static IEnumerable<T> Impl(IAsyncEnumerable<T> source)
+		{
+			var enumerator = source.GetAsyncEnumerator();
+
+			try
+			{
+				while (MoveNext(enumerator))
+					yield return enumerator.Current;
+			}
+			finally
+			{
+				Dispose(enumerator);
+			}
+		}
+
+		static bool MoveNext(IAsyncEnumerator<T> enumerator)
+		{
+			ValueTask<bool> moving;
+
+			using (new NoContext())
+				moving = enumerator.MoveNextAsync();
+
+			return moving.IsCompleted ? moving.Result : moving.AsTask().GetAwaiter().GetResult();
+		}
+
+		static void Dispose(IAsyncEnumerator<T> enumerator)
+		{
+			ValueTask disposing;
+
+			using (new NoContext())
+				disposing = enumerator.DisposeAsync();
+
+			if (disposing.IsCompleted)
+				disposing.GetAwaiter().GetResult();
+			else
+				disposing.AsTask().GetAwaiter().GetResult();
+		}
+	}
 }
