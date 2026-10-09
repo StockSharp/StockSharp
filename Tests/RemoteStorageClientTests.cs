@@ -499,6 +499,37 @@ public class RemoteStorageClientTests : BaseTestClass
 		AreEqual(date, (await client.GetDatesAsync(new SecurityId { SecurityCode = "GAZP", BoardCode = "TQBR" }, DataType.Ticks, StorageFormats.Binary, CancellationToken)).Single());
 	}
 
+	/// <summary>
+	/// Requests made at once reach the transport one after another.
+	/// </summary>
+	/// <remarks>
+	/// A transport writes a message as it is handed one, the way a connector hands them over: one at a time.
+	/// Handed two at the same moment from two threads, it writes them into each other, and the server can
+	/// read neither.
+	/// </remarks>
+	[TestMethod]
+	[Timeout(10000, CooperativeCancellation = true)]
+	public async Task GetDatesAsync_TwoAtOnce_ReachTheTransportOneAfterAnother()
+	{
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator()) { SendDelay = TimeSpan.FromMilliseconds(100) };
+
+		var secId = new SecurityId { SecurityCode = "GAZP", BoardCode = "TQBR" };
+		var date = new DateTime(2025, 4, 1);
+
+		adapter.DataTypeLookupHandler = lookup => [new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [date] }];
+
+		using var client = new RemoteStorageClient(adapter, 100);
+
+		var results = await Task.WhenAll(
+			Task.Run(() => client.GetDatesAsync(secId, DataType.Ticks, StorageFormats.Binary, CancellationToken).AsTask(), CancellationToken),
+			Task.Run(() => client.GetDatesAsync(secId, TimeSpan.FromMinutes(1).TimeFrame(), StorageFormats.Binary, CancellationToken).AsTask(), CancellationToken));
+
+		foreach (var dates in results)
+			AreEqual(date, dates.Single());
+
+		AreEqual(1, adapter.MostSendsAtOnce);
+	}
+
 	#endregion
 
 	#region SaveSecuritiesAsync Tests
@@ -1713,6 +1744,19 @@ class MockRemoteAdapter : MessageAdapter,
 
 	private int _connections;
 
+	/// <summary>
+	/// How long the transport takes to write a message, during which it must not be handed another.
+	/// </summary>
+	public TimeSpan SendDelay { get; set; }
+
+	/// <summary>
+	/// The most messages the transport was ever writing at one moment.
+	/// </summary>
+	public int MostSendsAtOnce => Volatile.Read(ref _mostSends);
+
+	private int _sends;
+	private int _mostSends;
+
 	// IAddressAdapter<EndPoint>
 	public System.Net.EndPoint Address { get; set; }
 
@@ -1732,6 +1776,26 @@ class MockRemoteAdapter : MessageAdapter,
 
 		this.AddSupportedMarketDataType(DataType.Securities);
 		this.AddSupportedMarketDataType(DataType.Level1);
+	}
+
+	public override async ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+	{
+		var sends = Interlocked.Increment(ref _sends);
+
+		for (var most = Volatile.Read(ref _mostSends); sends > most; most = Volatile.Read(ref _mostSends))
+			Interlocked.CompareExchange(ref _mostSends, sends, most);
+
+		try
+		{
+			if (SendDelay > TimeSpan.Zero)
+				await Task.Delay(SendDelay, cancellationToken);
+
+			await base.SendInMessageAsync(message, cancellationToken);
+		}
+		finally
+		{
+			Interlocked.Decrement(ref _sends);
+		}
 	}
 
 	protected override async ValueTask OnSendInMessageAsync(Message message, CancellationToken cancellationToken)

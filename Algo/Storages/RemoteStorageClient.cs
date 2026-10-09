@@ -5,6 +5,22 @@
 /// </summary>
 public class RemoteStorageClient : Disposable
 {
+	// A transport writes a message as it is handed one and expects them one after another, the way a connector
+	// hands them over. Requests made at once from several threads would be written into each other.
+	private sealed class OneAtATimeAdapter(IMessageAdapter innerAdapter) : MessageAdapterWrapper(innerAdapter)
+	{
+		private readonly AsyncLock _sendLock = new();
+
+		public override async ValueTask SendInMessageAsync(Message message, CancellationToken cancellationToken)
+		{
+			using (await _sendLock.LockAsync(cancellationToken))
+				await base.SendInMessageAsync(message, cancellationToken);
+		}
+
+		public override async ValueTask<IMessageAdapter> CloneAsync(CancellationToken cancellationToken)
+			=> new OneAtATimeAdapter(await InnerAdapter.CloneAsync(cancellationToken));
+	}
+
 	private readonly IMessageAdapter _adapter;
 	private readonly int _securityBatchSize;
 
@@ -31,7 +47,7 @@ public class RemoteStorageClient : Disposable
 		if (adapter is null)
 			throw new ArgumentNullException(nameof(adapter));
 
-		_adapter = new SubscriptionMessageAdapter(adapter);
+		_adapter = new OneAtATimeAdapter(new SubscriptionMessageAdapter(adapter)) { OwnInnerAdapter = true };
 		_adapter.NewOutMessageAsync += OnTransportMessage;
 
 		_securityBatchSize = securityBatchSize;
