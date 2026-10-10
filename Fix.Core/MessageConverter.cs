@@ -114,6 +114,23 @@ public partial class MessageConverter : IMessageConverter
 	}
 
 	/// <summary>
+	/// Read the client code out of FIX Parties: the party under <see cref="PartyRole.ClientId"/>.
+	/// </summary>
+	protected static string GetClientCode(FixParty[] parties)
+	{
+		if (parties is null)
+			return null;
+
+		foreach (var party in parties)
+		{
+			if (party?.PartyRole == PartyRole.ClientId)
+				return party.PartyId;
+		}
+
+		return null;
+	}
+
+	/// <summary>
 	/// Get position effect from FIX char code.
 	/// </summary>
 	protected virtual OrderPositionEffects? GetPositionEffect(char? positionEffect)

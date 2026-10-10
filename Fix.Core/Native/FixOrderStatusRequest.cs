@@ -21,4 +21,10 @@ public record struct FixOrderStatusRequest(
 	/// user (0 = the OrderRouter's mass feed).
 	/// </summary>
 	public long UserId { get; set; }
+
+	/// <summary>
+	/// Parties of the request. A gate that asks on behalf of a client names that client here under
+	/// <see cref="PartyRole.ClientId"/>, which is what tells the server whose orders are asked for.
+	/// </summary>
+	public FixParty[] Parties { get; set; }
 }

@@ -611,6 +611,55 @@ partial class MessageConverterTests
 		Helper.CheckEqual(original, result);
 	}
 
+	// A gate asks on behalf of the client behind it, and the client code is the only thing in the
+	// request that says which of them: without it the server answers for the gate's own login.
+	[TestMethod]
+	public void OrderStatusMessage_MassStatus_ClientCode_RoundTrip()
+	{
+		var original = new OrderStatusMessage
+		{
+			TransactionId = 12384,
+			IsSubscribe = true,
+			ClientCode = "client-1",
+		};
+
+		var fix = Converter.ToFixOrderMassStatusRequest(original);
+		var result = Converter.ToMessage(fix);
+
+		Helper.CheckEqual(original, result);
+		AreEqual("client-1", result.ClientCode);
+	}
+
+	[TestMethod]
+	public void OrderStatusMessage_OneOrder_ClientCode_RoundTrip()
+	{
+		var original = new OrderStatusMessage
+		{
+			TransactionId = 12385,
+			IsSubscribe = true,
+			OrderId = 42,
+			ClientCode = "client-1",
+		};
+
+		var fix = Converter.ToFixOrderStatusRequest(original);
+		var result = Converter.ToMessage(fix);
+
+		Helper.CheckEqual(original, result);
+		AreEqual("client-1", result.ClientCode);
+	}
+
+	[TestMethod]
+	public void OrderStatusMessage_WithNoClientCode_NamesNoParty()
+	{
+		var mass = Converter.ToFixOrderMassStatusRequest(new OrderStatusMessage { TransactionId = 12386, IsSubscribe = true });
+		var one = Converter.ToFixOrderStatusRequest(new OrderStatusMessage { TransactionId = 12387, IsSubscribe = true, OrderId = 42 });
+
+		IsNull(mass.Parties);
+		IsNull(one.Parties);
+		IsNull(Converter.ToMessage(mass).ClientCode);
+		IsNull(Converter.ToMessage(one).ClientCode);
+	}
+
 	#endregion
 
 	#region OrderReplace wire fields

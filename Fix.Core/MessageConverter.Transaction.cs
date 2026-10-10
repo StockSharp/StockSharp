@@ -370,6 +370,7 @@ partial class MessageConverter
 			TransactionId = fix.OrdStatusReqId.ToLong(),
 			OrderId = fix.OrderId,
 			IsSubscribe = GetIsSubscribe(fix.SubscriptionRequestType),
+			ClientCode = GetClientCode(fix.Parties),
 		};
 
 		if (!fix.OrderStringId.IsEmpty())
@@ -402,7 +403,10 @@ partial class MessageConverter
 			SubscriptionRequestType: ToFixSubscriptionType(message.IsSubscribe),
 			OrderId: message.OrderId,
 			OrderStringId: message.OrderStringId.IsEmpty() ? null : message.OrderStringId,
-			ClOrdId: clOrdId);
+			ClOrdId: clOrdId)
+		{
+			Parties = BuildParties(message.ClientCode, brokerCode: null),
+		};
 	}
 
 	/// <inheritdoc />
@@ -421,6 +425,7 @@ partial class MessageConverter
 			IsIncremental = fix.IsIncremental ?? false,
 			UserId = fix.UserId,
 			Skip = fix.Skip,
+			ClientCode = GetClientCode(fix.Parties),
 		};
 
 		if (!fix.OrigClOrdId.IsEmpty())
@@ -461,6 +466,11 @@ partial class MessageConverter
 			IsIncremental: message.IsIncremental ? true : null,
 			UserId: message.UserId,
 			SecurityIds: message.SecurityIds,
-			Skip: message.Skip);
+			Skip: message.Skip)
+		{
+			// The client the request is asked for travels in the Parties block, as it does on
+			// every order command and on the request for positions.
+			Parties = BuildParties(message.ClientCode, brokerCode: null),
+		};
 	}
 }

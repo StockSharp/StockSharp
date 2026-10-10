@@ -33,4 +33,10 @@ public record struct FixOrderMassStatusRequest(
 	/// StopOrder snapshot to that user (0 = the OrderRouter's trusted mass feed).
 	/// </summary>
 	public long OwnerUserId { get; set; }
+
+	/// <summary>
+	/// Parties of the request. A gate that asks on behalf of a client names that client here under
+	/// <see cref="PartyRole.ClientId"/>, which is what tells the server whose orders are asked for.
+	/// </summary>
+	public FixParty[] Parties { get; set; }
 }
