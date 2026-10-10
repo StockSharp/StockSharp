@@ -298,7 +298,7 @@ public class OrderBookSnapshotHolder : BaseLogReceiver, ISnapshotHolder<QuoteCha
 	/// when the reader builds its own arrays anyway. Each update replaces the message and its
 	/// quote arrays rather than editing them, so what is handed out stays a consistent view - but
 	/// a caller must only read it, since everyone else is looking at the same instance. Use
-	/// <see cref="TryGetSnapshot"/> to get one that can be modified or sent on.
+	/// <see cref="TryGetSnapshot(SecurityId, out QuoteChangeMessage)"/> to get one that can be modified or sent on.
 	/// </remarks>
 	/// <param name="securityId">Security ID.</param>
 	/// <param name="snapshot">The holder's own snapshot instance.</param>
