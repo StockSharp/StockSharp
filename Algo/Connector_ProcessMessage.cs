@@ -209,6 +209,8 @@ partial class Connector
 
 			if (_adapter != null)
 			{
+				_subscriptionManager.TransactionIdGenerator = _adapter.TransactionIdGenerator;
+
 				_adapter.InnerAdapters.Added += InnerAdaptersOnAdded;
 				_adapter.InnerAdapters.Removed += InnerAdaptersOnRemoved;
 				_adapter.InnerAdapters.Cleared += InnerAdaptersOnCleared;

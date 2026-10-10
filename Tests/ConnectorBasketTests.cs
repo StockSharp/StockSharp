@@ -73,11 +73,25 @@ public class ConnectorBasketTests : BaseTestClass
 	private sealed class TestConnector : Connector
 	{
 		public TestConnector(BasketMessageAdapter adapter)
+			: this()
+		{
+			Adapter = adapter;
+		}
+
+		/// <summary>
+		/// A connector whose adapter chain is assigned as a whole, the way an application composes its own.
+		/// </summary>
+		public TestConnector(IMessageAdapterWrapper chain)
+			: this()
+		{
+			InnerAdapter = chain;
+		}
+
+		private TestConnector()
 			: base(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider(), initAdapter: false, initChannels: false)
 		{
 			InMessageChannel = new PassThroughMessageChannel();
 			OutMessageChannel = new PassThroughMessageChannel();
-			Adapter = adapter;
 		}
 	}
 
@@ -561,6 +575,37 @@ public class ConnectorBasketTests : BaseTestClass
 		// --- State after unsubscribe ---
 		state.ConnectionState.ConnectedCount.AssertEqual(1, "Still connected");
 		state.PendingState.Count.AssertEqual(0);
+	}
+
+	#endregion
+
+	#region Chain Assigned As A Whole
+
+	[TestMethod]
+	public void ConnectorBasket_ChainAssignedAsAWhole_NumbersSubscriptionsByItsBasket()
+	{
+		var basketIds = new IncrementalIdGenerator { Current = 1000 };
+
+		var basket = new BasketMessageAdapter(
+			basketIds,
+			new CandleBuilderProvider(new InMemoryExchangeInfoProvider()),
+			new InMemorySecurityMessageAdapterProvider(),
+			new InMemoryPortfolioMessageAdapterProvider(),
+			null);
+
+		using var connector = new TestConnector(new ChannelMessageAdapter(basket, new PassThroughMessageChannel(), new PassThroughMessageChannel())
+		{
+			OwnInnerAdapter = true,
+		});
+
+		var subscription = new Subscription(new SecurityLookupMessage());
+
+		connector.Subscribe(subscription);
+
+		// A subscription sent to a named adapter keeps its number on the way down, where the basket numbers the
+		// others: two sequences would meet there.
+		AreEqual(1001, subscription.TransactionId);
+		AreSame(basketIds, connector.TransactionIdGenerator);
 	}
 
 	#endregion
