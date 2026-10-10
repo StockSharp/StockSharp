@@ -346,7 +346,7 @@ public class CsvExtendedInfoStorage : IExtendedInfoStorage
 
 		_executor = executor ?? throw new ArgumentNullException(nameof(executor));
 		_path = path.ToFullPath();
-		_fileSystem.CreateDirectory(path);
+		_fileSystem.CreateDirectory(_path);
 	}
 
 	async ValueTask<IExtendedInfoStorageItem> IExtendedInfoStorage.CreateAsync(string storageName, IEnumerable<(string, Type)> fields, CancellationToken cancellationToken)

@@ -922,6 +922,21 @@ public class CsvStorageTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public async Task CsvExtendedInfo_ARelativePathIsOneDirectoryForAllTheStorageDoes()
+	{
+		var token = CancellationToken;
+		var executor = CreateExecutor(token);
+		var fs = new MemoryFileSystem();
+		var storage = new CsvExtendedInfoStorage(fs, Path.Combine("extinfo-relative", "Extended info"), executor);
+
+		// The directory the constructor makes is the one that is read afterwards.
+		var errors = await storage.InitAsync(token);
+
+		AreEqual(0, errors.Count);
+		AreEqual(0, ((IExtendedInfoStorage)storage).Storages.Count());
+	}
+
+	[TestMethod]
 	public async Task CsvExtendedInfo_CreateAndAdd()
 	{
 		var token = CancellationToken;
