@@ -20,6 +20,9 @@ public class OrderBookIncrementBuilderTests : BaseTestClass
 
 	private static QuoteChange Quote(decimal price, decimal volume) => new(price, volume);
 
+	private static string Levels(QuoteChange[] quotes)
+		=> quotes.Select(q => FormattableString.Invariant($"{q.Price}:{q.Volume}")).JoinComma();
+
 	// Everything the builder warned about, in the order it said it.
 	private static List<string> RecordWarnings(OrderBookIncrementBuilder builder)
 	{
@@ -32,6 +35,132 @@ public class OrderBookIncrementBuilderTests : BaseTestClass
 		};
 
 		return warnings;
+	}
+
+	// A cache that only keeps the book up to date has no use for the whole book after every change: stating it
+	// costs as much as the book is deep, and the change itself a level or two.
+	[TestMethod]
+	public void Fold_ThenSnapshot_StatesWhatApplyStates()
+	{
+		var applied = new OrderBookIncrementBuilder(CreateSec());
+		var folded = new OrderBookIncrementBuilder(CreateSec());
+
+		var snapshot = CreateBook(QuoteChangeStates.SnapshotComplete, [Quote(99, 2), Quote(100, 1)], [Quote(102, 4), Quote(101, 3)]);
+		var increment = CreateBook(QuoteChangeStates.Increment, [Quote(100, 0), Quote(98, 5)], [Quote(101, 7)]);
+
+		applied.TryApply(snapshot);
+		var stated = applied.TryApply(increment);
+
+		IsTrue(folded.TryFold(snapshot));
+		IsTrue(folded.TryFold(increment));
+
+		var asked = folded.GetSnapshot(null);
+
+		AreEqual("99:2,98:5", Levels(asked.Bids));
+		AreEqual("101:7,102:4", Levels(asked.Asks));
+		AreEqual(Levels(stated.Bids), Levels(asked.Bids));
+		AreEqual(Levels(stated.Asks), Levels(asked.Asks));
+		AreEqual(CreateSec(), asked.SecurityId);
+	}
+
+	[TestMethod]
+	public void Snapshot_CutToADepth_StatesTheBestLevelsOfEachSide()
+	{
+		var builder = new OrderBookIncrementBuilder(CreateSec());
+
+		IsTrue(builder.TryFold(CreateBook(QuoteChangeStates.SnapshotComplete,
+			[Quote(98, 1), Quote(100, 2), Quote(99, 3)],
+			[Quote(103, 4), Quote(101, 5), Quote(102, 6)])));
+
+		var best = builder.GetSnapshot(2);
+
+		AreEqual("100:2,99:3", Levels(best.Bids));
+		AreEqual("101:5,102:6", Levels(best.Asks));
+
+		var all = builder.GetSnapshot(10);
+
+		AreEqual("100:2,99:3,98:1", Levels(all.Bids));
+		AreEqual("101:5,102:6,103:4", Levels(all.Asks));
+	}
+
+	[TestMethod]
+	public void Fold_OfAChangeTheBookCannotTake_LeavesNoBook()
+	{
+		var builder = new OrderBookIncrementBuilder(CreateSec());
+
+		IsFalse(builder.TryFold(CreateBook(QuoteChangeStates.Increment, [Quote(100, 1)], [])));
+	}
+
+	[TestMethod]
+	public void Fold_OfASnapshotStillBeingSent_LeavesNoBookUntilItIsComplete()
+	{
+		var builder = new OrderBookIncrementBuilder(CreateSec());
+
+		IsFalse(builder.TryFold(CreateBook(QuoteChangeStates.SnapshotStarted, [Quote(100, 1)], [])));
+		IsFalse(builder.TryFold(CreateBook(QuoteChangeStates.SnapshotBuilding, [Quote(99, 2)], [Quote(101, 3)])));
+		IsTrue(builder.TryFold(CreateBook(QuoteChangeStates.SnapshotComplete, [], [Quote(102, 4)])));
+
+		var book = builder.GetSnapshot(null);
+
+		AreEqual("100:1,99:2", Levels(book.Bids));
+		AreEqual("101:3,102:4", Levels(book.Asks));
+	}
+
+	[TestMethod]
+	public void Fold_OfABookKeptByPosition_StatesItByPosition()
+	{
+		var builder = new OrderBookIncrementBuilder(CreateSec());
+
+		IsTrue(builder.TryFold(new QuoteChangeMessage
+		{
+			State = QuoteChangeStates.SnapshotComplete,
+			HasPositions = true,
+			Bids =
+			[
+				new QuoteChange { Price = 100m, Volume = 10m, Action = QuoteChangeActions.New, StartPosition = 0 },
+				new QuoteChange { Price = 99m, Volume = 20m, Action = QuoteChangeActions.New, StartPosition = 1 },
+			],
+			Asks = [],
+		}));
+
+		IsTrue(builder.TryFold(new QuoteChangeMessage
+		{
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [new QuoteChange { Price = 99m, Volume = 25m, Action = QuoteChangeActions.Update, StartPosition = 1 }],
+			Asks = [],
+		}));
+
+		AreEqual("100:10,99:25", Levels(builder.GetSnapshot(null).Bids));
+		AreEqual("100:10", Levels(builder.GetSnapshot(1).Bids));
+	}
+
+	// The point of folding: what a change costs must not grow with the book it lands in.
+	[TestMethod]
+	public void Fold_OfOneLevel_DoesNotCostTheWholeBook()
+	{
+		const int depth = 20000;
+
+		var builder = new OrderBookIncrementBuilder(CreateSec());
+
+		IsTrue(builder.TryFold(CreateBook(QuoteChangeStates.SnapshotComplete,
+			[.. Enumerable.Range(0, depth).Select(i => Quote(100000 - i, 1))],
+			[.. Enumerable.Range(1, depth).Select(i => Quote(100000 + i, 1))])));
+
+		var increment = CreateBook(QuoteChangeStates.Increment, [Quote(100000, 2), Quote(100000.5m, 1)], [Quote(100001, 0)]);
+
+		// Once before it is measured, so nothing that is done once is counted.
+		IsTrue(builder.TryFold(increment));
+
+		var before = GC.GetAllocatedBytesForCurrentThread();
+
+		for (var i = 0; i < 100; i++)
+			IsTrue(builder.TryFold(increment));
+
+		var perFold = (GC.GetAllocatedBytesForCurrentThread() - before) / 100;
+
+		// Stating a book of this depth takes megabytes; a level or two takes a few hundred bytes.
+		IsTrue(perFold < 16 * 1024, $"Folding one change into a book of {depth} levels a side allocated {perFold} bytes.");
 	}
 
 	[TestMethod]

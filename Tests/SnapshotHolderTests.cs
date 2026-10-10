@@ -878,6 +878,218 @@ public class SnapshotHolderTests : BaseTestClass
 		obSnap5.AssertNull();
 	}
 
+	private static QuoteChangeMessage Book(QuoteChangeStates? state, QuoteChange[] bids, QuoteChange[] asks, int seconds = 0) => new()
+	{
+		SecurityId = _secId1,
+		ServerTime = _now.AddSeconds(seconds),
+		State = state,
+		Bids = bids,
+		Asks = asks,
+	};
+
+	private static string Levels(QuoteChange[] quotes)
+		=> quotes.Select(q => FormattableString.Invariant($"{q.Price}:{q.Volume}")).JoinComma();
+
+	[TestMethod]
+	public void OrderBook_AfterIncrements_TheSnapshotIsTheBookTheyLeave()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null, [new(100m, 10), new(99m, 5)], [new(101m, 20)]));
+		holder.Process(Book(QuoteChangeStates.Increment, [new(100m, 0), new(98m, 7)], [new(102m, 3)], 1));
+		holder.Process(Book(QuoteChangeStates.Increment, [new(99m, 6)], [], 2));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, out var snapshot));
+
+		AreEqual("99:6,98:7", Levels(snapshot.Bids));
+		AreEqual("101:20,102:3", Levels(snapshot.Asks));
+		AreEqual(_now.AddSeconds(2), snapshot.ServerTime);
+		AreEqual(QuoteChangeStates.SnapshotComplete, snapshot.State);
+	}
+
+	// A reader that was handed the holder's own book keeps looking at the book as it was: a change that comes
+	// after must not move the levels under it.
+	[TestMethod]
+	public void OrderBook_APeekedSnapshot_IsNotMovedByALaterIncrement()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null, [new(100m, 10)], [new(101m, 20)]));
+		holder.Process(Book(QuoteChangeStates.Increment, [new(99m, 5)], [], 1));
+
+		IsTrue(holder.TryPeekSnapshot(_secId1, out var peeked));
+		AreEqual("100:10,99:5", Levels(peeked.Bids));
+
+		holder.Process(Book(QuoteChangeStates.Increment, [new(100m, 0)], [new(101m, 0), new(102m, 1)], 2));
+
+		AreEqual("100:10,99:5", Levels(peeked.Bids));
+		AreEqual("101:20", Levels(peeked.Asks));
+
+		IsTrue(holder.TryPeekSnapshot(_secId1, out var later));
+		AreEqual("99:5", Levels(later.Bids));
+		AreEqual("102:1", Levels(later.Asks));
+	}
+
+	[TestMethod]
+	public void OrderBook_HasSnapshot_SaysWhetherABookIsHeld()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		IsFalse(holder.HasSnapshot(_secId1));
+
+		// An increment with no book to land in builds none.
+		holder.Process(Book(QuoteChangeStates.Increment, [new(100m, 10)], []));
+		IsFalse(holder.HasSnapshot(_secId1));
+
+		holder.Process(Book(null, [new(100m, 10)], [new(101m, 20)]));
+
+		IsTrue(holder.HasSnapshot(_secId1));
+		IsFalse(holder.HasSnapshot(_secId2));
+
+		holder.ResetSnapshot(_secId1);
+		IsFalse(holder.HasSnapshot(_secId1));
+	}
+
+	[TestMethod]
+	public void OrderBook_TryGetSnapshot_CutToADepth_StatesTheBestLevels()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null, [new(100m, 1), new(99m, 2), new(98m, 3)], [new(101m, 4), new(102m, 5), new(103m, 6)]));
+		holder.Process(Book(QuoteChangeStates.Increment, [new(100.5m, 9)], [new(101m, 0)], 1));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, 2, out var best));
+
+		AreEqual("100.5:9,100:1", Levels(best.Bids));
+		AreEqual("102:5,103:6", Levels(best.Asks));
+		AreEqual(_secId1, best.SecurityId);
+		AreEqual(_now.AddSeconds(1), best.ServerTime);
+		AreEqual(QuoteChangeStates.SnapshotComplete, best.State);
+
+		// What is handed out is the caller's to change.
+		best.Bids[0] = new(1m, 1);
+
+		IsTrue(holder.TryGetSnapshot(_secId1, 2, out var again));
+		AreEqual("100.5:9,100:1", Levels(again.Bids));
+
+		IsFalse(holder.TryGetSnapshot(_secId2, 2, out var none));
+		IsNull(none);
+	}
+
+	[TestMethod]
+	public void OrderBook_TryGetSnapshot_CutToADepth_OfABookNoIncrementTouched()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null, [new(100m, 1), new(99m, 2), new(98m, 3)], [new(101m, 4), new(102m, 5)]));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, 1, out var best));
+
+		AreEqual("100:1", Levels(best.Bids));
+		AreEqual("101:4", Levels(best.Asks));
+	}
+
+	// A snapshot sent in parts takes the book apart as it comes: until it is complete, the book that stands is
+	// the last whole one, read whole or cut to a depth.
+	[TestMethod]
+	public void OrderBook_WhileASnapshotComesInParts_TheLastWholeBookIsStated()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null, [new(100m, 1), new(99m, 2), new(98m, 3)], [new(101m, 4), new(102m, 5)]));
+		holder.Process(Book(QuoteChangeStates.Increment, [new(100.5m, 9)], [], 1));
+
+		holder.Process(Book(QuoteChangeStates.SnapshotStarted, [new(50m, 1)], [new(60m, 1)], 2));
+		holder.Process(Book(QuoteChangeStates.SnapshotBuilding, [new(49m, 1)], [new(61m, 1)], 3));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, out var whole));
+		AreEqual("100.5:9,100:1,99:2,98:3", Levels(whole.Bids));
+		AreEqual("101:4,102:5", Levels(whole.Asks));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, 2, out var best));
+		AreEqual("100.5:9,100:1", Levels(best.Bids));
+		AreEqual("101:4,102:5", Levels(best.Asks));
+		AreEqual(_now.AddSeconds(1), best.ServerTime);
+		AreEqual(QuoteChangeStates.SnapshotComplete, best.State);
+	}
+
+	// A change by position can be taken by one side of the book and refused by the other. The book stated after
+	// it is the last whole one, not the half that was changed.
+	[TestMethod]
+	public void OrderBook_APositionalChangeTheBookRefuses_LeavesTheLastWholeBookStated()
+	{
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now,
+			State = QuoteChangeStates.SnapshotComplete,
+			HasPositions = true,
+			Bids = [new QuoteChange(100m, 1) { Action = QuoteChangeActions.New, StartPosition = 0 }],
+			Asks = [new QuoteChange(101m, 1) { Action = QuoteChangeActions.New, StartPosition = 0 }],
+		});
+
+		IsNotNull(holder.Process(new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(1),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [new QuoteChange(99m, 2) { Action = QuoteChangeActions.New, StartPosition = 1 }],
+			Asks = [],
+		}));
+
+		IsNull(holder.Process(new QuoteChangeMessage
+		{
+			SecurityId = _secId1,
+			ServerTime = _now.AddSeconds(2),
+			State = QuoteChangeStates.Increment,
+			HasPositions = true,
+			Bids = [new QuoteChange(98m, 3) { Action = QuoteChangeActions.New, StartPosition = 2 }],
+			Asks = [new QuoteChange(105m, 1) { Action = QuoteChangeActions.Update, StartPosition = 7 }],
+		}));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, out var whole));
+		AreEqual("100:1,99:2", Levels(whole.Bids));
+		AreEqual("101:1", Levels(whole.Asks));
+
+		IsTrue(holder.TryGetSnapshot(_secId1, 5, out var best));
+		AreEqual("100:1,99:2", Levels(best.Bids));
+		AreEqual("101:1", Levels(best.Asks));
+	}
+
+	// What keeping a deep book up to date costs must not grow with the book.
+	[TestMethod]
+	public void OrderBook_AnIncrement_DoesNotCostTheWholeBook()
+	{
+		const int depth = 20000;
+
+		var holder = new OrderBookSnapshotHolder();
+
+		holder.Process(Book(null,
+			[.. Enumerable.Range(0, depth).Select(i => new QuoteChange(100000 - i, 1))],
+			[.. Enumerable.Range(1, depth).Select(i => new QuoteChange(100000 + i, 1))]));
+
+		var increment = Book(QuoteChangeStates.Increment, [new(100000m, 2), new(100000.5m, 1)], [new(100001m, 0)], 1);
+
+		holder.Process(increment);
+
+		var before = GC.GetAllocatedBytesForCurrentThread();
+
+		for (var i = 0; i < 100; i++)
+			holder.Process(increment);
+
+		var perIncrement = (GC.GetAllocatedBytesForCurrentThread() - before) / 100;
+
+		IsTrue(perIncrement < 16 * 1024, $"One increment into a book of {depth} levels a side allocated {perIncrement} bytes.");
+
+		// And the book is still there for whoever asks.
+		IsTrue(holder.TryGetSnapshot(_secId1, 2, out var best));
+		AreEqual("100000.5:1,100000:2", Levels(best.Bids));
+		AreEqual("100002:1,100003:1", Levels(best.Asks));
+	}
+
 	[TestMethod]
 	public void OrderBook_Process_Increment_AppliesChange()
 	{

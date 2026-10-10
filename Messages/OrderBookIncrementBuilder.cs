@@ -8,11 +8,16 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 	private const QuoteChangeStates _none = (QuoteChangeStates)(-1);
 	private QuoteChangeStates _state = _none;
 
-	private readonly SortedList<decimal, QuoteChange> _bids = new(new BackwardComparer<decimal>());
-	private readonly SortedList<decimal, QuoteChange> _asks = [];
+	// Trees, not sorted arrays: a book changes at its best prices, which is where an array has to move
+	// every level it holds to make room for one.
+	private readonly SortedDictionary<decimal, QuoteChange> _bids = new(new BackwardComparer<decimal>());
+	private readonly SortedDictionary<decimal, QuoteChange> _asks = [];
 
 	private readonly List<QuoteChange> _bidsByPos = [];
 	private readonly List<QuoteChange> _asksByPos = [];
+
+	// Whether the book that stands is the one kept by position: the change applied last says which.
+	private bool _isByPos;
 
 	private readonly HashSet<long> _invalidSubscriptions = [];
 
@@ -40,6 +45,32 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 	/// <param name="subscriptionId">Subscription.</param>
 	/// <returns>Full book.</returns>
 	public QuoteChangeMessage TryApply(QuoteChangeMessage change, long subscriptionId = default)
+	{
+		if (!TryFold(change, subscriptionId))
+			return null;
+
+		var book = GetSnapshot(null);
+
+		book.ServerTime = change.ServerTime;
+		book.OriginalTransactionId = change.OriginalTransactionId;
+
+		return book;
+	}
+
+	/// <summary>
+	/// Applies a change to the book without stating the book it leaves.
+	/// </summary>
+	/// <remarks>
+	/// For a caller that only keeps the book up to date: stating the whole book costs as much as the book is
+	/// deep, and a change is a level or two. <see cref="GetSnapshot"/> states it when it is wanted.
+	/// </remarks>
+	/// <param name="change">Book change.</param>
+	/// <param name="subscriptionId">Subscription.</param>
+	/// <returns>
+	/// <see langword="true"/> when a whole book stands after the change; <see langword="false"/> when the
+	/// change was refused, or belongs to a snapshot that is still being sent.
+	/// </returns>
+	public bool TryFold(QuoteChangeMessage change, long subscriptionId = default)
 	{
 		if (change is null)
 			throw new ArgumentNullException(nameof(change));
@@ -122,7 +153,7 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 		if (currState != newState || resetState)
 		{
 			if (!CheckSwitch())
-				return null;
+				return false;
 
 			if (currState == _none || resetState)
 			{
@@ -138,7 +169,7 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 			_state = currState = newState;
 		}
 
-		static void Apply(IEnumerable<QuoteChange> from, SortedList<decimal, QuoteChange> to)
+		static void Apply(IEnumerable<QuoteChange> from, SortedDictionary<decimal, QuoteChange> to)
 		{
 			foreach (var quote in from)
 			{
@@ -219,7 +250,7 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 		if (change.HasPositions)
 		{
 			if (!ApplyByPos(change.Bids, _bidsByPos) || !ApplyByPos(change.Asks, _asksByPos))
-				return null;
+				return false;
 		}
 		else
 		{
@@ -228,7 +259,7 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 		}
 
 		if (currState is QuoteChangeStates.SnapshotStarted or QuoteChangeStates.SnapshotBuilding)
-			return null;
+			return false;
 
 		if (currState == QuoteChangeStates.SnapshotComplete)
 		{
@@ -239,27 +270,35 @@ public class OrderBookIncrementBuilder : BaseLogReceiver
 			}
 		}
 
-		QuoteChange[] bids;
-		QuoteChange[] asks;
+		_isByPos = change.HasPositions;
 
-		if (change.HasPositions)
-		{
-			bids = [.. _bidsByPos];
-			asks = [.. _asksByPos];
-		}
-		else
-		{
-			bids = [.. _bids.Values];
-			asks = [.. _asks.Values];
-		}
+		return true;
+	}
+
+	/// <summary>
+	/// The book as it stands.
+	/// </summary>
+	/// <remarks>
+	/// After a change <see cref="TryFold"/> answered <see langword="false"/> for, this is not a whole book: it
+	/// is the part of a snapshot that has come so far, or a book the refused change left half-changed.
+	/// </remarks>
+	/// <param name="maxDepth">
+	/// How many of the best levels of each side to state; every level when <see langword="null"/>.
+	/// </param>
+	/// <returns>The book. It carries no time: when it was so is the caller's to say.</returns>
+	public QuoteChangeMessage GetSnapshot(int? maxDepth)
+	{
+		if (maxDepth is <= 0)
+			throw new ArgumentOutOfRangeException(nameof(maxDepth), maxDepth, LocalizedStrings.InvalidValue);
+
+		static QuoteChange[] Cut(IEnumerable<QuoteChange> levels, int count, int? maxDepth)
+			=> maxDepth is int depth && depth < count ? [.. levels.Take(depth)] : [.. levels];
 
 		return new()
 		{
 			SecurityId = SecurityId,
-			Bids = bids,
-			Asks = asks,
-			ServerTime = change.ServerTime,
-			OriginalTransactionId = change.OriginalTransactionId,
+			Bids = _isByPos ? Cut(_bidsByPos, _bidsByPos.Count, maxDepth) : Cut(_bids.Values, _bids.Count, maxDepth),
+			Asks = _isByPos ? Cut(_asksByPos, _asksByPos.Count, maxDepth) : Cut(_asks.Values, _asks.Count, maxDepth),
 		};
 	}
 }
