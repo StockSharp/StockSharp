@@ -261,6 +261,71 @@ public class SubscriptionMessageAdapterTests : BaseTestClass
 			$"Tick without ID should be resolved by key, got {output.Count} messages: {output.Select(m => $"{m.Type}").JoinCommaSpace()}");
 	}
 
+	/// <summary>
+	/// Two subscribers ask for one series with its history. The stream the first opened stays the live source
+	/// of both, and the second is read a history of its own by a bounded request. Whoever asks second is told
+	/// its subscription started and is served that history, as the first was.
+	/// </summary>
+	[TestMethod]
+	public async Task CombinedChain_SecondSubscriberWithHistory_IsConfirmedAndServedItsHistory()
+	{
+		var inner = new RecordingMessageAdapter();
+		var onlineAdapter = new SubscriptionOnlineMessageAdapter(inner);
+		using var subscrAdapter = new SubscriptionMessageAdapter(onlineAdapter);
+
+		var output = new List<Message>();
+		subscrAdapter.NewOutMessageAsync += (m, ct) => { output.Add(m); return default; };
+
+		var secId = Helper.CreateSecurityId();
+		var from = DateTime.UtcNow.AddHours(-1);
+
+		MarketDataMessage Ask(long transactionId) => new()
+		{
+			IsSubscribe = true,
+			TransactionId = transactionId,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = from,
+		};
+
+		await subscrAdapter.SendInMessageAsync(Ask(100), CancellationToken);
+
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, CancellationToken);
+		await inner.SendOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, CancellationToken);
+
+		await subscrAdapter.SendInMessageAsync(Ask(200), CancellationToken);
+
+		inner.InMessages.OfType<MarketDataMessage>().Count(m => m.TransactionId == 200 && m.IsSubscribe && m.To is not null)
+			.AssertEqual(1, "The second subscriber's history should be asked for by a bounded request of its own");
+
+		output.Clear();
+
+		await inner.SendOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 200 }, CancellationToken);
+
+		await inner.SendOutMessageAsync(new ExecutionMessage
+		{
+			DataTypeEx = DataType.Ticks,
+			SecurityId = secId,
+			TradePrice = 42m,
+			TradeVolume = 1m,
+			ServerTime = from.AddMinutes(1),
+			OriginalTransactionId = 200,
+		}, CancellationToken);
+
+		await inner.SendOutMessageAsync(new SubscriptionFinishedMessage { OriginalTransactionId = 200 }, CancellationToken);
+
+		var came = output.Select(m => $"{m.Type}").JoinCommaSpace();
+
+		output.OfType<SubscriptionResponseMessage>().Count(m => m.OriginalTransactionId == 200 && m.IsOk())
+			.AssertEqual(1, $"The second subscriber should be told its subscription started, got: {came}");
+
+		output.OfType<ExecutionMessage>().Count(m => m.TradePrice == 42m && m.GetSubscriptionIds().Contains(200L))
+			.AssertEqual(1, $"The second subscriber should be served its history, got: {came}");
+
+		output.OfType<SubscriptionOnlineMessage>().Count(m => m.OriginalTransactionId == 200)
+			.AssertEqual(1, $"The second subscriber should go online once its history is over, got: {came}");
+	}
+
 	#endregion
 
 	#region The adapter's own clock

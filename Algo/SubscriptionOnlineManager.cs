@@ -112,11 +112,11 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 				{
 					if (responseMsg.IsOk())
 					{
-						if (_state.TryGetSubscriptionById(originTransId, out var info))
-						{
-							if (!ChangeState(info, originTransId, _state.ContainsUnsubscribeRequest(originTransId) ? SubscriptionStates.Stopped : SubscriptionStates.Active))
-								return (null, []);
-						}
+						// A hist+live child's confirmation says nothing of the shared stream and is its own
+						// subscriber's to see: above this manager a subscription counts as started from its
+						// confirmation, and the rows of one that never got it are dropped there.
+						if (_state.TryGetSubscriptionById(originTransId, out var info) && !info.HistLive.Contains(originTransId))
+							ChangeState(info, originTransId, _state.ContainsUnsubscribeRequest(originTransId) ? SubscriptionStates.Stopped : SubscriptionStates.Active);
 					}
 					else
 					{

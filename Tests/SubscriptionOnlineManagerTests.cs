@@ -1904,6 +1904,67 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 	}
 
 	/// <summary>
+	/// A hist+live subscription joined onto a key that is already served is still a subscription of
+	/// its own to whoever sent it, and its confirmation is theirs to see: above this manager a
+	/// subscription counts as started from its confirmation and from nothing else, and one that never
+	/// gets it has every row of its history dropped there. The confirmation says nothing of the shared
+	/// stream, which stays as it was.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5_000, CooperativeCancellation = true)]
+	public async Task HistLiveChildConfirmation_ShouldBeForwardedToHistLiveSubscriber()
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		var secId = Helper.CreateSecurityId();
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		await manager.ProcessInMessageAsync(new MarketDataMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 200,
+			SecurityId = secId,
+			DataType2 = DataType.Ticks,
+			From = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+		}, token);
+
+		var (forward, extraOut) = await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 200 }, token);
+
+		var allMessages = new List<Message>();
+		if (forward != null) allMessages.Add(forward);
+		allMessages.AddRange(extraOut);
+
+		allMessages.OfType<SubscriptionResponseMessage>()
+			.Count(m => m.OriginalTransactionId == 200 && m.IsOk())
+			.AssertEqual(1, "Hist+live subscriber (200) must be told its own subscription started");
+
+		// The stream it joined is untouched by that: live data still reaches its first subscriber.
+		var (liveForward, _) = await manager.ProcessOutMessageAsync(new ExecutionMessage
+		{
+			SecurityId = secId,
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Ticks,
+			TradePrice = 200m,
+			TradeVolume = 2m,
+		}, token);
+
+		liveForward.AssertNotNull("Live data should be forwarded");
+		((ISubscriptionIdMessage)liveForward).GetSubscriptionIds().Count(id => id == 100).AssertEqual(1, "The first subscriber should still receive live data");
+	}
+
+	/// <summary>
 	/// When a MAIN subscription that has joined subscribers fails, the joined subscribers' ids
 	/// must no longer be routable: the whole key dies and each joined subscriber is notified of
 	/// the error, so a later data message must not be stamped with a stale joined id.
