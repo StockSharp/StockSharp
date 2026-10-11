@@ -1188,4 +1188,48 @@ public class SubscriptionManagerConnectorTests : BaseTestClass
 	}
 
 	#endregion
+
+	#region Reconnect
+
+	/// <summary>
+	/// A connection that is closed takes every subscription off, and one that is opened again restores them under
+	/// new identifiers. A restored subscription is subscribed again: what comes on it is delivered, although
+	/// closing the connection had asked for it to be taken off.
+	/// </summary>
+	[TestMethod]
+	public void HandleConnected_AfterDisconnect_RestoredSubscriptionReceivesData()
+	{
+		var manager = CreateManager();
+		manager.ConnectionState = ConnectionStates.Connected;
+		manager.HandleConnected([]);
+
+		var subscription = CreateTickSubscription();
+		var first = SubscribeAndGoOnline(manager, subscription);
+
+		// the connection is closed: the subscription is taken off, and the venue confirms that
+		foreach (var item in manager.UnSubscribeAll().Items)
+		{
+			if (item.Message is ISubscriptionMessage { IsSubscribe: false } request)
+				manager.ProcessResponse(new SubscriptionResponseMessage { OriginalTransactionId = request.TransactionId }, out _, out _, out _);
+		}
+
+		manager.ConnectionState = ConnectionStates.Disconnected;
+
+		// and opened again
+		manager.ConnectionState = ConnectionStates.Connected;
+		manager.HandleConnected([]);
+
+		var second = subscription.TransactionId;
+		second.AssertNotEqual(first, "A restored subscription is asked for under a new identifier.");
+
+		manager.ProcessResponse(new SubscriptionResponseMessage { OriginalTransactionId = second }, out _, out _, out _);
+		manager.ProcessSubscriptionOnlineMessage(new SubscriptionOnlineMessage { OriginalTransactionId = second }, out _);
+
+		var received = manager.GetSubscriptions(CreateDataMessage(second)).ToArray();
+
+		received.Length.AssertEqual(1, "Data on a restored subscription is delivered to it.");
+		received[0].AssertSame(subscription);
+	}
+
+	#endregion
 }

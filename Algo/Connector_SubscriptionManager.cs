@@ -687,6 +687,9 @@ public class ConnectorSubscriptionManager(ILogReceiver logReceiver, IdGenerator 
 				}
 
 				info.HasResult = false;
+
+				// Closing the connection asked for the subscription to be taken off. It is asked for again here.
+				info.IsUnsubscribing = false;
 				info.Subscription.TransactionId = newId;
 				requests.Add(info.CreateSubscriptionContinue(), info);
 			}
