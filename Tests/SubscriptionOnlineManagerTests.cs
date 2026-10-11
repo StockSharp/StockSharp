@@ -1837,6 +1837,58 @@ public class SubscriptionOnlineManagerTests : BaseTestClass
 		ids.Count(id => id == 101).AssertEqual(0, "a live-only subscriber must not be handed another subscription's backfill");
 	}
 
+	/// <summary>
+	/// Orders are a shared stream like any other. One that was asked for from a point in time - the way a
+	/// connection that opens again asks for everything it had before it closed - replays what is newer to
+	/// whoever asked for it. Once that is done the stream is live, and an order goes to everybody on it: to a
+	/// subscriber that joined it as well.
+	/// </summary>
+	[TestMethod]
+	[DataRow(false)]
+	[DataRow(true)]
+	public async Task JoinedSubscriberOfOrders_ReceivesLiveOrders_OnceTheStreamIsLive(bool isMainHistLive)
+	{
+		var logReceiver = new TestReceiver();
+		var manager = new SubscriptionOnlineManager(logReceiver, _ => true, new SubscriptionOnlineManagerState());
+		var token = CancellationToken;
+
+		await manager.ProcessInMessageAsync(new OrderStatusMessage
+		{
+			IsSubscribe = true,
+			TransactionId = 100,
+			From = isMainHistLive ? new DateTime(2023, 1, 1, 0, 0, 0, DateTimeKind.Utc) : null,
+		}, token);
+
+		await manager.ProcessOutMessageAsync(new SubscriptionResponseMessage { OriginalTransactionId = 100 }, token);
+
+		// somebody else asks for orders too, and is joined to the stream that is already open
+		var (toInner, _) = await manager.ProcessInMessageAsync(new OrderStatusMessage { IsSubscribe = true, TransactionId = 101 }, token);
+
+		toInner.Length.AssertEqual(0, "the joiner reuses the stream that is already open");
+
+		await manager.ProcessOutMessageAsync(new SubscriptionOnlineMessage { OriginalTransactionId = 100 }, token);
+
+		// an order registered now, which the venue reports under the identifier of its registration
+		var (forward, _) = await manager.ProcessOutMessageAsync(new ExecutionMessage
+		{
+			SecurityId = Helper.CreateSecurityId(),
+			ServerTime = logReceiver.CurrentTime,
+			DataTypeEx = DataType.Transactions,
+			OriginalTransactionId = 200,
+			TransactionId = 200,
+			OrderId = 1,
+			OrderState = OrderStates.Active,
+			HasOrderInfo = true,
+		}, token);
+
+		forward.AssertNotNull("an order passes through");
+
+		var ids = ((ISubscriptionIdMessage)forward).GetSubscriptionIds();
+
+		ids.Count(id => id == 100).AssertEqual(1, "the subscriber that opened the stream gets the order");
+		ids.Count(id => id == 101).AssertEqual(1, "a subscriber that joined the stream gets the order once the stream is live");
+	}
+
 	#endregion
 
 	#region Subscription Error Routing Tests

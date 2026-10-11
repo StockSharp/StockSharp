@@ -268,7 +268,7 @@ public sealed class SubscriptionOnlineManager(ILogReceiver logReceiver, Func<Dat
 						// The shared stream has a history phase of its own and has not finished it yet: that
 						// backfill belongs to the subscriber that asked for it, not to those who joined for
 						// live data only and are waiting to be put online with the stream.
-						else if (info.Subscription.From is not null)
+						else if (info.Subscription.From is not null && info.State != SubscriptionStates.Online)
 							ids = [info.Subscription.TransactionId];
 						else
 							ids = info.Subscribers.CachedKeys;
