@@ -3,6 +3,8 @@ namespace StockSharp.Fix.Dialects;
 using System.Security;
 using System.Text.RegularExpressions;
 
+using Nito.AsyncEx;
+
 using FixExtensions = StockSharp.Fix.Native.Extensions;
 
 /// <summary>
@@ -392,6 +394,8 @@ public abstract partial class BaseFixDialect : BaseLogReceiver, IFixDialect
 
 	private readonly Regex _parseSeqNum = new(@"MsgSeqNum too (low|high), expecting (?<expected>(\d+))");
 
+	private readonly AsyncLock _writeLock = new();
+
 	/// <inheritdoc />
 	public virtual long? TryParseNextMsqSeqNum(string errorMessage)
 	{
@@ -561,48 +565,59 @@ public abstract partial class BaseFixDialect : BaseLogReceiver, IFixDialect
 
 	private async ValueTask WriteMessageAsync(Message message, CancellationToken cancellationToken)
 	{
-		var writing = false;
+		MarketDataMessage answered = null;
 
-		try
+		// One frame at a time. The writers, the checksum and the sequence are the session's, and a frame
+		// begun before another has ended is one the counterparty cannot read.
+		using (await _writeLock.LockAsync(cancellationToken))
 		{
-			_writer.FlushDump();
-			_writer.ClearState();
+			var writing = false;
 
-			var msgType = await OnWriteAsync(_bodyWriter2, message, cancellationToken);
-
-			if (msgType == null)
+			try
 			{
-				_bodyWriter2.Stream.Position = 0;
-				return;
+				_writer.FlushDump();
+				_writer.ClearState();
+
+				var msgType = await OnWriteAsync(_bodyWriter2, message, cancellationToken);
+
+				if (msgType == null)
+				{
+					_bodyWriter2.Stream.Position = 0;
+					return;
+				}
+
+				var seqNum = _idGenerator.GetNextId();
+
+				if (NewOrderSingleErrorsAsReject && message is OrderRegisterMessage regMsg)
+					_orderRegisterTransactions.Add(seqNum, regMsg.TransactionId);
+
+				var mdMsg = message as MarketDataMessage;
+
+				if (mdMsg != null)
+				{
+					if (!mdMsg.SecurityId.SecurityCode.IsEmpty())
+						_requestSecurities.Add(mdMsg.TransactionId, mdMsg.SecurityId);
+				}
+
+				writing = true;
+				await _writer.WriteFixMessageAsync(_bodyWriter, Version, msgType, SenderCompId, TargetCompId, TimeStampParser, seqNum, async (writer, ct) =>
+				{
+					await writer.WriteStreamAsync(_bodyWriter2, ct);
+				}, cancellationToken);
+
+				if (mdMsg != null && !IsSupportMarketDataResponse)
+					answered = mdMsg;
 			}
-
-			var seqNum = _idGenerator.GetNextId();
-
-			if (NewOrderSingleErrorsAsReject && message is OrderRegisterMessage regMsg)
-				_orderRegisterTransactions.Add(seqNum, regMsg.TransactionId);
-
-			var mdMsg = message as MarketDataMessage;
-
-			if (mdMsg != null)
+			finally
 			{
-				if (!mdMsg.SecurityId.SecurityCode.IsEmpty())
-					_requestSecurities.Add(mdMsg.TransactionId, mdMsg.SecurityId);
+				if (writing && _writer.IsDump)
+					LogDebug("To server: {0}", _writer.FlushDump());
 			}
-
-			writing = true;
-			await _writer.WriteFixMessageAsync(_bodyWriter, Version, msgType, SenderCompId, TargetCompId, TimeStampParser, seqNum, async (writer, ct) =>
-			{
-				await writer.WriteStreamAsync(_bodyWriter2, ct);
-			}, cancellationToken);
-
-			if (mdMsg != null && !IsSupportMarketDataResponse)
-				await RaiseNewOutMessageAsync(mdMsg.CreateResponse(), cancellationToken);
 		}
-		finally
-		{
-			if (writing && _writer.IsDump)
-				LogDebug("To server: {0}", _writer.FlushDump());
-		}
+
+		// Told outside the lock: whoever hears it may send the next request at once.
+		if (answered != null)
+			await RaiseNewOutMessageAsync(answered.CreateResponse(), cancellationToken);
 	}
 
 	async IAsyncEnumerable<Message> IFixDialect.ReadAsync([EnumeratorCancellation]CancellationToken cancellationToken)

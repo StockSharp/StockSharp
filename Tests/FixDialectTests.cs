@@ -1015,6 +1015,73 @@ public class FixDialectTests : BaseTestClass
 		AreEqual("NYSE", Tag(written[1], FixTags.SecurityExchange));
 	}
 
+	// A stream that takes the bytes and gives control back before they are down, as a socket does.
+	private sealed class SlowStream : MemoryStream
+	{
+		public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+		{
+			var taken = buffer.AsSpan(offset, count).ToArray();
+
+			await Task.Yield();
+
+			Write(taken, 0, taken.Length);
+		}
+
+		public override async ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
+		{
+			var taken = buffer.ToArray();
+
+			await Task.Yield();
+
+			Write(taken, 0, taken.Length);
+		}
+	}
+
+	/// <summary>
+	/// A session is one stream of frames, whoever sends: requests started together go out one whole
+	/// frame after another. Written into each other they are a frame the counterparty cannot read -
+	/// it drops the session, and none of them is ever answered.
+	/// </summary>
+	[TestMethod]
+	public async Task Dialect_RequestsSentAtOnce_GoOutAsWholeFrames()
+	{
+		CreateDialect();
+
+		_outStream = new SlowStream();
+		_writer = new TextFixWriter(_outStream, Encoding.UTF8);
+		_dialect.Init(_writer, _reader, _address);
+
+		var ids = Enumerable.Range(3001, 5).ToArray();
+
+		await Task.WhenAll(ids.Select(id => Task.Run(() => SendAsync(new DataTypeLookupMessage { TransactionId = id, SecurityId = _aapl }).AsTask(), CancellationToken)));
+
+		var written = Written();
+		var all = written.JoinNL();
+
+		AreEqual(ids.Length, written.Length, $"The requests did not go out a frame each:{Environment.NewLine}{all}");
+
+		var soh = (char)AsciiSymbols.Soh;
+
+		foreach (var frame in written)
+		{
+			AreEqual(FixExtendedMessages.DataTypeLookup, Tag(frame, FixTags.MsgType), $"Not a frame of a request:{Environment.NewLine}{all}");
+
+			// A whole frame says how long its body is and sums to its own checksum.
+			var bytes = frame.Replace('|', soh);
+			var trailer = bytes.LastIndexOf($"{soh}{(int)FixTags.CheckSum}=", StringComparison.Ordinal) + 1;
+			var body = bytes.IndexOf(soh, bytes.IndexOf($"{soh}{(int)FixTags.BodyLength}=", StringComparison.Ordinal) + 1) + 1;
+
+			IsTrue(trailer > 0 && body > 0 && body <= trailer, $"A frame without its length or its checksum:{Environment.NewLine}{all}");
+
+			AreEqual(Tag(frame, FixTags.BodyLength), Encoding.UTF8.GetByteCount(bytes[body..trailer]).To<string>(), $"A frame of another length than it says:{Environment.NewLine}{all}");
+			AreEqual($"{Encoding.UTF8.GetBytes(bytes[..trailer]).Sum(b => b) % 256:000}", Tag(frame, FixTags.CheckSum), $"A frame that does not sum to its checksum:{Environment.NewLine}{all}");
+		}
+
+		// Every request went out once, and the session numbered its frames in the order they left.
+		IsTrue(written.Select(f => Tag(f, FixTags.MDReqID).To<int>()).Order().SequenceEqual(ids), $"Not every request went out once:{Environment.NewLine}{all}");
+		IsTrue(written.Select(f => Tag(f, FixTags.MsgSeqNum).To<long>()).SequenceEqual(Enumerable.Range(1, ids.Length).Select(n => (long)n)), $"The frames are not numbered in the order they left:{Environment.NewLine}{all}");
+	}
+
 	#endregion
 
 	#region FixTags
