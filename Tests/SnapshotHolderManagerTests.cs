@@ -245,6 +245,24 @@ public class SnapshotHolderManagerTests : BaseTestClass
 	}
 
 	[TestMethod]
+	public void IsPending_SaysWhetherASubscriptionStillWaitsToGoOnline()
+	{
+		var manager = new SnapshotHolderManager(new TestSnapshotHolder());
+
+		var subscribe = new OrderStatusMessage { IsSubscribe = true, TransactionId = 100 };
+
+		manager.IsPending(subscribe.TransactionId).AssertFalse();
+
+		manager.ProcessInMessage(subscribe);
+
+		manager.IsPending(subscribe.TransactionId).AssertTrue();
+
+		manager.ProcessOutMessage(new SubscriptionOnlineMessage { OriginalTransactionId = subscribe.TransactionId });
+
+		manager.IsPending(subscribe.TransactionId).AssertFalse();
+	}
+
+	[TestMethod]
 	public async Task ConcurrentAccess_ThreadSafe()
 	{
 		var holder = new TestSnapshotHolder();

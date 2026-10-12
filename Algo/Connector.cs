@@ -17,6 +17,12 @@ public partial class Connector : BaseLogReceiver, IConnector
 	private readonly EntityCache _entityCache;
 	private readonly ConnectorSubscriptionManager _subscriptionManager;
 
+	// Orders and positions are answered from the cache where messages are applied to it, in the order they
+	// came. An adapter in the chain reads the cache ahead of the messages still waiting to be applied, so it
+	// is left the market data and the orders an adapter above it asks for by itself.
+	private readonly SnapshotHolderManager _stateSnapshots;
+	private readonly ISnapshotHolder _chainSnapshots;
+
 	// backward compatibility for NewXXX events
 	private readonly CachedSynchronizedSet<Security> _existingSecurities = [];
 	private readonly CachedSynchronizedSet<Portfolio> _existingPortfolios = [];
@@ -53,6 +59,8 @@ public partial class Connector : BaseLogReceiver, IConnector
 		PositionStorage = positionStorage ?? throw new ArgumentNullException(nameof(positionStorage));
 
 		_entityCache = new(this, exchangeInfoProvider, PositionStorage);
+		_stateSnapshots = new(new CacheSnapshots(_entityCache, IsState));
+		_chainSnapshots = new CacheSnapshots(_entityCache, subscription => !IsState(subscription) || !_stateSnapshots.IsPending(subscription.TransactionId));
 
 		var transactionIdGenerator = new MillisecondIncrementalIdGenerator();
 

@@ -47,6 +47,17 @@ public sealed class SnapshotHolderManager(ISnapshotHolder holder) : ISnapshotHol
 
 	private readonly ISnapshotHolder _holder = holder ?? throw new ArgumentNullException(nameof(holder));
 
+	/// <summary>
+	/// Whether a subscription is waiting to go online and be answered with a snapshot.
+	/// </summary>
+	/// <param name="transactionId">The transaction id of the subscription.</param>
+	/// <returns><see langword="true"/> if the subscription is waiting, otherwise <see langword="false"/>.</returns>
+	public bool IsPending(long transactionId)
+	{
+		using (_sync.EnterScope())
+			return _pending.ContainsKey(transactionId);
+	}
+
 	/// <inheritdoc />
 	public (Message[] toInner, Message[] toOut) ProcessInMessage(Message message)
 	{

@@ -72,8 +72,8 @@ public class ConnectorBasketTests : BaseTestClass
 	/// </summary>
 	private sealed class TestConnector : Connector
 	{
-		public TestConnector(BasketMessageAdapter adapter)
-			: this()
+		public TestConnector(BasketMessageAdapter adapter, IMessageChannel outChannel)
+			: this(outChannel)
 		{
 			Adapter = adapter;
 		}
@@ -82,21 +82,21 @@ public class ConnectorBasketTests : BaseTestClass
 		/// A connector whose adapter chain is assigned as a whole, the way an application composes its own.
 		/// </summary>
 		public TestConnector(IMessageAdapterWrapper chain)
-			: this()
+			: this(new PassThroughMessageChannel())
 		{
 			InnerAdapter = chain;
 		}
 
-		private TestConnector()
+		private TestConnector(IMessageChannel outChannel)
 			: base(new InMemorySecurityStorage(), new InMemoryPositionStorage(), new InMemoryExchangeInfoProvider(), initAdapter: false, initChannels: false)
 		{
 			InMessageChannel = new PassThroughMessageChannel();
-			OutMessageChannel = new PassThroughMessageChannel();
+			OutMessageChannel = outChannel;
 		}
 	}
 
 	/// <summary>
-	/// Mock adapter identical to AsyncExtensionsTests.MockAdapter.
+	/// Mock adapter after AsyncExtensionsTests.MockAdapter, with order books as well.
 	/// </summary>
 	private sealed class MockAdapter : MessageAdapter
 	{
@@ -122,6 +122,7 @@ public class ConnectorBasketTests : BaseTestClass
 			this.AddMarketDataSupport();
 			this.AddTransactionalSupport();
 			this.AddSupportedMarketDataType(DataType.Level1);
+			this.AddSupportedMarketDataType(DataType.MarketDepth);
 		}
 
 		public override bool IsAllDownloadingSupported(DataType dataType)
@@ -262,7 +263,7 @@ public class ConnectorBasketTests : BaseTestClass
 		}
 	}
 
-	private static (TestConnector connector, MockAdapter adapter, BasketState state) CreateConnectorWithBasketState()
+	private static (TestConnector connector, MockAdapter adapter, BasketState state) CreateConnectorWithBasketState(IMessageChannel outChannel)
 	{
 		var state = new BasketState();
 
@@ -289,7 +290,7 @@ public class ConnectorBasketTests : BaseTestClass
 		basket.SlippageManager = null;
 		basket.CommissionManager = null;
 
-		var connector = new TestConnector(basket);
+		var connector = new TestConnector(basket, outChannel);
 
 		var adapter = new MockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);
@@ -305,7 +306,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_ConnectAsync()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		// --- Before connect ---
 		state.ConnectionState.ConnectedCount.AssertEqual(0, "ConnectedCount before connect");
@@ -340,7 +341,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrder_Basic()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 
@@ -402,7 +403,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_Subscription_Live()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 
@@ -486,7 +487,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_Subscription_History()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 
@@ -543,7 +544,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_Subscription_Lifecycle()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 
@@ -616,7 +617,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrderAsync_OrderAccepted_ReturnsEvents()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -697,7 +698,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrderAsync_WithTrades_ReturnsTradeEvents()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -759,7 +760,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrderAsync_CancellationSendsCancelOrder()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -825,7 +826,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrderAsync_FiltersOtherOrders()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -891,7 +892,7 @@ public class ConnectorBasketTests : BaseTestClass
 	[Timeout(10_000, CooperativeCancellation = true)]
 	public async Task ConnectorBasket_RegisterOrderAsync_FullLifecycle()
 	{
-		var (connector, adapter, state) = CreateConnectorWithBasketState();
+		var (connector, adapter, state) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
 
 		await connector.ConnectAsync(CancellationToken);
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
@@ -955,6 +956,146 @@ public class ConnectorBasketTests : BaseTestClass
 		state.ConnectionState.ConnectedCount.AssertEqual(1);
 		state.PendingState.Count.AssertEqual(0);
 		state.OrderRouting.TryGetOrderAdapter(transId, out _).AssertTrue("Mapping preserved after full lifecycle");
+	}
+
+	#endregion
+
+	#region Orders Already Held
+
+	/// <summary>
+	/// Connects and leaves one order to buy ten at a hundred resting at the venue, known to the connector.
+	/// </summary>
+	private async Task<Order> RestOrderAsync(TestConnector connector, MockAdapter adapter, Security security)
+	{
+		await connector.ConnectAsync(CancellationToken);
+		await connector.SendOutMessageAsync(security.ToMessage(), CancellationToken);
+
+		var order = new Order
+		{
+			Security = security,
+			Portfolio = new Portfolio { Name = "Test" },
+			Price = 100,
+			Volume = 10,
+			Side = Sides.Buy,
+		};
+
+		var reported = new ProgressSignal();
+		connector.OrderReceived += (_, _) => reported.Raise();
+
+		connector.RegisterOrder(order);
+		await adapter.SimulateOrderExecution(order.TransactionId, CancellationToken, OrderStates.Active, orderId: 123);
+
+		await WaitFor(reported, () => order.State == OrderStates.Active, () => $"The venue's acceptance did not reach the order: {order.State}.", CancellationToken);
+
+		return order;
+	}
+
+	/// <summary>
+	/// The venue reports that an order was partly filled, and before the connector has got to that message
+	/// somebody else asks it for orders. Whoever asked is told what the venue said last, and the order keeps
+	/// it - not what the order had been when the question arrived.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_OrdersAskedForAgain_AreToldAsTheVenueSaidLast()
+	{
+		var errors = new SynchronizedList<Exception>();
+		var (connector, adapter, _) = CreateConnectorWithBasketState(new InMemoryMessageChannel(new MessageByOrderQueue(), "Connector Out", errors.Add));
+
+		try
+		{
+			var security = new Security { Id = "AAPL@TEST" };
+			var order = await RestOrderAsync(connector, adapter, security);
+
+			// From here the connector does not get to what it is sent, until it is let go.
+			connector.OutMessageChannel.Suspend();
+
+			await adapter.SimulateData(order.TransactionId, new ExecutionMessage
+			{
+				DataTypeEx = DataType.Transactions,
+				HasOrderInfo = true,
+				SecurityId = security.ToSecurityId(),
+				OrderId = 123,
+				Balance = 4m,
+				OrderState = OrderStates.Active,
+				ServerTime = DateTime.UtcNow,
+			}, CancellationToken);
+
+			var asked = new Subscription(DataType.Transactions);
+			var told = new SynchronizedList<decimal?>();
+			var answered = new ProgressSignal();
+
+			connector.OrderReceived += (subscription, o) =>
+			{
+				if (!ReferenceEquals(subscription, asked))
+					return;
+
+				told.Add(o.Balance);
+				answered.Raise();
+			};
+
+			connector.Subscribe(asked);
+
+			connector.OutMessageChannel.Resume();
+
+			await WaitFor(answered, () => told.Count > 0, () => "Whoever asked for orders was told of none.", CancellationToken);
+
+			AreEqual(4m, told[0], "Whoever asked is told what the order is now.");
+			AreEqual(4m, order.Balance, "The order holds what the venue said last.");
+			AreEqual(0, errors.Count, errors.Select(e => e.Message).Join("; "));
+		}
+		finally
+		{
+			connector.Dispose();
+		}
+	}
+
+	/// <summary>
+	/// A filtered order book leaves the account's own orders out. What computes it learns of them by asking
+	/// for the active orders itself, from inside the adapter chain, and an order that was resting before the
+	/// book was asked for is one of them.
+	/// </summary>
+	[TestMethod]
+	[Timeout(10_000, CooperativeCancellation = true)]
+	public async Task ConnectorBasket_FilteredBook_LeavesOutAnOrderThatWasAlreadyResting()
+	{
+		var (connector, adapter, _) = CreateConnectorWithBasketState(new PassThroughMessageChannel());
+
+		var security = new Security { Id = "AAPL@TEST" };
+		await RestOrderAsync(connector, adapter, security);
+
+		var filtered = new Subscription(DataType.FilteredMarketDepth, security);
+		var books = new SynchronizedList<IOrderBookMessage>();
+
+		connector.OrderBookReceived += (subscription, book) =>
+		{
+			if (ReferenceEquals(subscription, filtered))
+				books.Add(book);
+		};
+
+		connector.Subscribe(filtered);
+
+		await WaitFor(adapter.Progress, () => adapter.ActiveSubscriptions.Values.Any(m => m.DataType2 == DataType.MarketDepth),
+			() => "The venue was not asked for the order book.", CancellationToken);
+
+		var bookId = adapter.ActiveSubscriptions.First(p => p.Value.DataType2 == DataType.MarketDepth).Key;
+
+		// The own order is the whole of the best bid.
+		await adapter.SimulateData(bookId, new QuoteChangeMessage
+		{
+			SecurityId = security.ToSecurityId(),
+			ServerTime = DateTime.UtcNow,
+			Bids = [new QuoteChange(100m, 10m), new QuoteChange(99m, 7m)],
+			Asks = [new QuoteChange(101m, 5m)],
+		}, CancellationToken);
+
+		IsTrue(books.Count > 0, "The filtered book did not come.");
+
+		var bids = books.Last().Bids;
+
+		AreEqual(1, bids.Length, $"Bids of the filtered book: {bids.Select(q => $"{q.Price}x{q.Volume}").Join(", ")}.");
+		AreEqual(99m, bids[0].Price);
+		AreEqual(7m, bids[0].Volume);
 	}
 
 	#endregion
@@ -1083,7 +1224,7 @@ public class ConnectorBasketTests : BaseTestClass
 		basket.SlippageManager = null;
 		basket.CommissionManager = null;
 
-		var connector = new TestConnector(basket);
+		var connector = new TestConnector(basket, new PassThroughMessageChannel());
 
 		var adapter = new CandleMockAdapter(connector.TransactionIdGenerator);
 		connector.Adapter.InnerAdapters.Add(adapter);

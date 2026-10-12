@@ -145,8 +145,28 @@ partial class Connector
 		}
 	}
 
+	/// <summary>
+	/// What of the cache one of the two places a request passes answers with.
+	/// </summary>
+	private sealed class CacheSnapshots(ISnapshotHolder cache, Func<ISubscriptionMessage, bool> isAnswered) : ISnapshotHolder
+	{
+		IEnumerable<Message> ISnapshotHolder.GetSnapshot(ISubscriptionMessage subscription)
+		{
+			if (subscription is null)
+				throw new ArgumentNullException(nameof(subscription));
+
+			return isAnswered(subscription) ? cache.GetSnapshot(subscription) : [];
+		}
+	}
+
+	private static bool IsState(ISubscriptionMessage subscription)
+		=> subscription.DataType == DataType.Transactions || subscription.DataType == DataType.PositionChanges;
+
 	private async ValueTask InMessageChannelOnNewOutMessage(Message message, CancellationToken cancellationToken)
 	{
+		if (SupportSnapshots)
+			_stateSnapshots.ProcessInMessage(message);
+
 		await (_inAdapter?.SendInMessageAsync(message, cancellationToken) ?? default);
 
 		if (message != _disposeMessage)
@@ -159,7 +179,22 @@ partial class Connector
 
 	private ValueTask OutMessageChannelOnNewOutMessage(Message message, CancellationToken cancellationToken)
 	{
-		return OnProcessMessage(message, cancellationToken);
+		if (!SupportSnapshots)
+			return OnProcessMessage(message, cancellationToken);
+
+		var (forward, snapshots) = _stateSnapshots.ProcessOutMessage(message);
+
+		return snapshots.Length == 0
+			? OnProcessMessage(forward, cancellationToken)
+			: ProcessWithSnapshotsAsync(forward, snapshots, cancellationToken);
+	}
+
+	private async ValueTask ProcessWithSnapshotsAsync(Message message, Message[] snapshots, CancellationToken cancellationToken)
+	{
+		await OnProcessMessage(message, cancellationToken);
+
+		foreach (var snapshot in snapshots)
+			await OnProcessMessage(snapshot, cancellationToken);
 	}
 
 	private IMessageAdapterWrapper _inAdapter;
@@ -292,7 +327,7 @@ partial class Connector
 					_inAdapter = new BasketSecurityMessageAdapter(_inAdapter, this, BasketSecurityProcessorProvider, ExchangeInfoProvider) { OwnInnerAdapter = true };
 
 				if (SupportSnapshots)
-					_inAdapter = new SnapshotHolderMessageAdapter(_inAdapter, _entityCache) { OwnInnerAdapter = true };
+					_inAdapter = new SnapshotHolderMessageAdapter(_inAdapter, _chainSnapshots) { OwnInnerAdapter = true };
 
 				if (SupportAssociatedSecurity)
 					_inAdapter = new AssociatedSecurityAdapter(_inAdapter) { OwnInnerAdapter = true };
@@ -367,7 +402,7 @@ partial class Connector
 
 			if (value)
 				EnableAdapter(
-					a => new SnapshotHolderMessageAdapter(a, _entityCache) { OwnInnerAdapter = true },
+					a => new SnapshotHolderMessageAdapter(a, _chainSnapshots) { OwnInnerAdapter = true },
 					typeof(BasketSecurityMessageAdapter),
 					typeof(AssociatedSecurityAdapter), typeof(FilteredMarketDepthAdapter));
 			else
