@@ -860,7 +860,7 @@ public class LocalMarketDataDrive : BaseMarketDataDrive
 	/// </summary>
 	[Obsolete("Use GetAvailableSecuritiesAsync instead.")]
 	public IEnumerable<SecurityId> AvailableSecurities
-		=> GetAvailableSecuritiesAsync().ToSyncEnumerable();
+		=> GetAvailableSecuritiesAsync().ToBlockingEnumerable(default);
 
 	/// <inheritdoc />
 	public override IAsyncEnumerable<SecurityId> GetAvailableSecuritiesAsync()
