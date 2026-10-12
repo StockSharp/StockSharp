@@ -13,6 +13,11 @@ public class RemoteStorageClient : Disposable
 	private readonly AsyncLock _connectLock = new();
 	private volatile bool _isConnected;
 
+	// Cancelled when the connection is lost, for the requests in flight at that moment: a transport that
+	// reconnects sends again what is still subscribed, and a request for what is stored is not that.
+	private readonly Lock _lostLock = new();
+	private CancellationTokenSource _lost = new();
+
 	/// <summary>
 	/// Initializes a new instance of the <see cref="RemoteStorageClient"/>.
 	/// </summary>
@@ -27,6 +32,7 @@ public class RemoteStorageClient : Disposable
 			throw new ArgumentNullException(nameof(adapter));
 
 		_adapter = new SubscriptionMessageAdapter(adapter);
+		_adapter.NewOutMessageAsync += OnTransportMessage;
 
 		_securityBatchSize = securityBatchSize;
 	}
@@ -34,8 +40,27 @@ public class RemoteStorageClient : Disposable
 	/// <inheritdoc />
 	protected override void DisposeManaged()
 	{
+		_adapter.NewOutMessageAsync -= OnTransportMessage;
 		_adapter.Dispose();
 		base.DisposeManaged();
+	}
+
+	private ValueTask OnTransportMessage(Message message, CancellationToken cancellationToken)
+	{
+		if (message is not ConnectionLostMessage)
+			return default;
+
+		CancellationTokenSource lost;
+
+		using (_lostLock.EnterScope())
+		{
+			lost = _lost;
+			_lost = new();
+		}
+
+		lost.Cancel();
+
+		return default;
 	}
 
 	/// <summary>
@@ -363,10 +388,18 @@ public class RemoteStorageClient : Disposable
 
 		var result = new List<Message>();
 		var isFull = false;
+		var isAnswered = false;
+
+		CancellationToken lost;
+
+		using (_lostLock.EnterScope())
+			lost = _lost.Token;
+
+		using var waiting = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, lost);
 
 		try
 		{
-			await foreach (var msg in _adapter.SubscribeAsync<Message>(subscrMsg).WithEnforcedCancellation(cancellationToken))
+			await foreach (var msg in _adapter.SubscribeAsync<Message>(subscrMsg).WithEnforcedCancellation(waiting.Token))
 			{
 				if (msg is SubscriptionFinishedMessage finishedMsg)
 				{
@@ -390,10 +423,12 @@ public class RemoteStorageClient : Disposable
 						}
 					}
 
+					isAnswered = true;
 					break;
 				}
 				else if (msg is SubscriptionOnlineMessage || msg is TimeMessage)
 				{
+					isAnswered = true;
 					break;
 				}
 				else
@@ -403,10 +438,18 @@ public class RemoteStorageClient : Disposable
 				}
 			}
 		}
+		catch (OperationCanceledException) when (lost.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
+		{
+			// The wait was ended by the lost connection, not by the caller: said below.
+		}
 		catch (Exception ex) when (ex is not OperationCanceledException)
 		{
 			throw new InvalidOperationException(LocalizedStrings.SomeConnectionFailed, ex);
 		}
+
+		// What came before the connection was lost is not the answer: the rest of it never will come.
+		if (!isAnswered && lost.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
+			throw new InvalidOperationException(LocalizedStrings.ConnectionLost);
 
 		return (result.OfType<TResult>().ToArray(), isFull);
 	}

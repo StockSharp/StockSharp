@@ -467,6 +467,38 @@ public class RemoteStorageClientTests : BaseTestClass
 		AreEqual(1, adapter.SentMessages.Count(m => m.Type == MessageTypes.Connect));
 	}
 
+	/// <summary>
+	/// A request the server had not answered when the connection was lost is not answered after it comes
+	/// back either: a transport that reconnects sends again what is still subscribed, and a request for
+	/// what is stored is not that. Its caller is told it failed rather than left waiting for ever.
+	/// </summary>
+	[TestMethod]
+	[Timeout(5000, CooperativeCancellation = true)]
+	public async Task GetDatesAsync_WhenTheConnectionIsLost_FailsInsteadOfWaiting()
+	{
+		// No handler: the lookup is taken and never answered.
+		var adapter = new MockRemoteAdapter(new IncrementalIdGenerator());
+
+		using var client = new RemoteStorageClient(adapter, 100);
+
+		var asking = client.GetDatesAsync(new SecurityId { SecurityCode = "GAZP", BoardCode = "TQBR" }, DataType.Ticks, StorageFormats.Binary, CancellationToken).AsTask();
+
+		while (!adapter.SentMessages.Any(m => m.Type == MessageTypes.DataTypeLookup))
+			await Task.Delay(10, CancellationToken);
+
+		await adapter.SendOutMessageAsync(new ConnectionLostMessage(), CancellationToken);
+		await adapter.SendOutMessageAsync(new ConnectionRestoredMessage(), CancellationToken);
+
+		await ThrowsAsync<InvalidOperationException>(() => asking);
+
+		// The client is as good as new for the next request.
+		var date = new DateTime(2025, 4, 1);
+
+		adapter.DataTypeLookupHandler = lookup => [new DataTypeInfoMessage { FileDataType = DataType.Ticks, Dates = [date] }];
+
+		AreEqual(date, (await client.GetDatesAsync(new SecurityId { SecurityCode = "GAZP", BoardCode = "TQBR" }, DataType.Ticks, StorageFormats.Binary, CancellationToken)).Single());
+	}
+
 	#endregion
 
 	#region SaveSecuritiesAsync Tests
